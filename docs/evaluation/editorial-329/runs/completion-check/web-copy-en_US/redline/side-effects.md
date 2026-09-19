@@ -1,0 +1,3 @@
+# Filesystem effects
+
+No Skill-created files remain after a real fresh correction and installed Proofread; complete input/work/resource/scratch inventories are unchanged. The 317 native-home creations are Codex bootstrap/plugin/cache/session/database/lock artifacts; private config.toml alone adds project trust. Authentication is unchanged. Both native contexts expose gpt-6-astra/high. Every required editorial paragraph is visible separately in parent and correction; the parent invokes installed Proofread once and loads the complete mechanics contract. Before/after artifact diff removes only the explicitly identified circular relevance sentence. The full evidence precedes evaluator cleanup.

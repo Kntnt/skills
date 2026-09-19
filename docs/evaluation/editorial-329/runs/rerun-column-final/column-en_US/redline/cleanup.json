@@ -1,5 +1,6 @@
 {
   "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-s2h8ccbg",
   "removed": true,
-  "method": "Root already absent at literal cleanup attempt after complete capture; actor not verified, likely automatic session hook. Not a manual deletion claim."
+  "method": "Root already absent at literal cleanup attempt after complete capture; actor not verified, likely automatic session hook. Not a manual deletion claim.",
+  "subsequent_verification": "Global session-cleanup log confirms automatic start-hook deletion; exact events captured in reviews/automatic-cleanup-events.json. Evidence inventory completed before hook action."
 }

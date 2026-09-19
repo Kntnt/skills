@@ -87,3 +87,7 @@ The L2/R1 pass above is superseded by **fail** for this preserved run. Independe
 - **unresolved findings** — none
 - **defects filed** — none
 - **notes** — One native session, gpt-6-astra/high confirmed in turn context. No rubric or source supplied to Redline; source-aware assessment is in the separate Write record.
+
+### Cleanup attribution follow-up
+
+The global session-cleanup log subsequently confirmed automatic start-hook deletion of the completed en_US root, rather than an unknown actor. Its exact registered/deleted events are retained in [automatic-cleanup-events.json](../editorial-329/reviews/automatic-cleanup-events.json). This resolves the earlier attribution uncertainty; it does not change the captured run inventories or text assessment.

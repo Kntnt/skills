@@ -1,0 +1,21 @@
+{
+  "pid": 93521,
+  "process_group": 93521,
+  "argv": [
+    "uv",
+    "run",
+    "docs/evaluation/editorial-329/harness/run.py",
+    "--revision",
+    "29ff2047ad2dac330dd705feccdb3f2d0778831b",
+    "--corpus-revision",
+    "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+    "--prompt",
+    "docs/evaluation/editorial-329/runs/completion-check/web-copy-en_US/redline-invocation.txt",
+    "--input",
+    "docs/evaluation/editorial-329/runs/completion-check/web-copy-en_US/draft.md",
+    "--input-name",
+    "input.md",
+    "--output",
+    "docs/evaluation/editorial-329/runs/completion-check/web-copy-en_US/redline"
+  ]
+}

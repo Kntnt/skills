@@ -1,0 +1,1 @@
+Whole-root before/after inventory: 316 created paths, all in isolated home; one changed config.toml adds only harness workspace trust. Auth unchanged. Work and scratch unchanged. Native gpt-6-astra/high; actual selected opinion, base, web-craft, delivery and en_US composition read. Registered root manually removed after capture.

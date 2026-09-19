@@ -1,0 +1,1 @@
+Första utkastet levereras här som artikel på svenska, utan särskild teknik; genren anger ingen. Underlaget räcker för den efterfrågade vinkeln, men saknar svar om orsak, varaktighet, upplevelse och åtgärdseffekt. Inga filer har ändrats eller lämnats kvar av körningen.

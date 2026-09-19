@@ -56,3 +56,30 @@ All three opinion locales use the exact frozen source and unchanged candidate pr
 - **unresolved findings** — Upstream #349 costing-absence claim remains in pipeline; Redline cannot know source mismatch.
 - **defects filed** — No new Redline defect.
 - **notes** — Native rollout confirms gpt-6-astra/high. Instruction commit 93758f4. Source-aware and source-blind outcomes kept separate.
+
+## `opinion-en_US`
+
+- **fixture** — `opinion-en_US`
+- **invocation** — `/redline --output=response input.md`
+- **contextual instruction** — `none`
+- **output target** — `response`
+- **observed delivery** — No-change status; complete input retained at `../editorial-329/runs/rerun-349/opinion-en_US/final.md`.
+- **side effects** — 320 native home entries plus config trust; root removed.
+- **criteria** —
+  - `G1` — `pass` — Persuasive accountable opinion remains.
+  - `G2` — `pass` — Complete thesis, evidence, real objection and named board action.
+  - `P1` — `pass` — Visible argument coherent; source-only absence defect unknowable here.
+  - `W1` — `pass` — Functional headings and paragraphs preserved.
+  - `L1` — `pass` — Idiomatic US English retained.
+  - `L2` — `pass` — Final US mechanics no-change.
+  - `T1` — `pass` — Metadata opinion/none/en_US matches actual selected/shared scopes; no extra genre or technique.
+  - `R1` — `pass` — No visible mandatory defect or taste edit; no removed claims.
+  - `R2` — `pass` — Review items5–7; no correction; installed Proofread exactly once item10 plus shared/locale mechanics items11–12.
+  - `O1` — `pass` — Complete inventory and root cleanup; response-only.
+- **unresolved findings** — Source-aware Write failure #349 remains in pipeline; Redline did not receive its source.
+- **defects filed** — No new Redline defect.
+- **notes** — Native rollout confirms gpt-6-astra/high. Entire pair uses93758f4; d0 source-check verification is separate.
+
+## Completed 93758f4 series
+
+All three pairs are complete, all native roots inventoried and removed. Write F1fails#349 in every locale; Redline correctly retains each internally coherent text without unseen-source verification. The knowledge-state wording clarification alone is not verified to repair this behaviour. New d0b2c99 source-support completion verification has separate 349-source-check-opinion records and rerun-349-source-check paths. No original outcome is overwritten.

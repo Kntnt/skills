@@ -10,11 +10,12 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ### Changed
 
+- Write’s completion condition explicitly requires checking source support during composition, and the shared claim boundary distinguishes unknown or unclaimed work from established absence. Evaluation still finds the latter error; these clarifications are not a verified fix for #349.
 - Write and Redline use concise, distinct briefs for article, case-study, column, opinion and web-copy, with shared Swedish professional craft, idiomatic target-language writing and advisory web dimensions. These genres no longer select a technique automatically; explicit choices and existing metadata retain their priority. ABT allows a genuine question and PAC analysis may begin in facts (#329–337).
 
 ### Fixed
 
-- Write completes its draft only after checking factual and attributed claims against the supplied material as part of composition; the shared claim-strength boundary distinguishes unknown or unclaimed work from established absence (#349).
+- The evaluation prose-contract test scans the corpus, protocol and record template, preserving observed output and historical records as evidence rather than treating their wording as requirements (#351).
 - Swedish mechanical proofreading preserves valid upper- or lowercase readings of an unquoted question after a colon (#348).
 - Redline keeps whole-sentence duplication in the editorial correction and diagnoses context-visible idiom problems inside customer quotations (#346, #341).
 - Web-copy distinguishes a link to a form from a form included on the page, including in Redline’s interface checks (#345).

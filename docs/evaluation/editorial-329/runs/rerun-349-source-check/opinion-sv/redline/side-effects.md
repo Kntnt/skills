@@ -1,0 +1,1 @@
+Whole-root inventory created314 home-only, removed0, changed1 trust config. No work/scratch changes; auth unchanged. Last rg exits1 because no cache/lock matches, not a failed Skill stage. Native gpt-6-astra/high. Complete root removed.

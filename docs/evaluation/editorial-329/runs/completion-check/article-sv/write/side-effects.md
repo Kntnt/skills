@@ -1,0 +1,3 @@
+# Filesystem effects
+
+No surviving Skill-created entries; source/work/resources/scratch are unchanged. The 316 native-home creations are Codex bootstrap/plugin/cache/session/database/lock artifacts; private config.toml alone adds project trust. Authentication is unchanged. The single native context exposes gpt-6-astra/high. Actual calls load only the chosen composition contract plus quotation support, with no review half, mechanics scope or peer editorial pass. An initial shell trap was rejected before execution and the agent adapted to Python private-directory cleanup. Full before/after inventories were captured before evaluator cleanup.

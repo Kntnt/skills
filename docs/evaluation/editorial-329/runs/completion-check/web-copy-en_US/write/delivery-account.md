@@ -1,0 +1,1 @@
+Delivered here as US English web copy, with no technique selected; the genre specifies none. Payment terms and the summary’s delivery timeframe were not supplied and remain unspecified. No draft file was saved; temporary directories were removed.

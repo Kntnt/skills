@@ -1,0 +1,1 @@
+Reviewed as US English web copy, with no technique, as specified in the metadata. Correction 1 removed the circular claim that the review is relevant to boards wanting to examine their booking routine within its defined scope. No unresolved findings or mechanical errors remain. No files were changed.

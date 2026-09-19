@@ -1,0 +1,1 @@
+*Första utkastet levereras här i svaret: debattartikel (`opinion`) på svenska, utan särskild teknik, med Kntnt-metadata. Inga filer har sparats; tillfälliga körningskataloger är borttagna. Underlaget saknar tidsmätning, besparingsberäkning och kostnadsberäkning för det föreslagna försöket. Dessa luckor är bevarade i texten.*

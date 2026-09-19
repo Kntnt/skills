@@ -1,0 +1,1 @@
+Whole-root inventory created314 home-only, removed0, changed1 trust config. No work/scratch changes; auth unchanged. Native gpt-6-astra/high; new SKILL step6 and revised Claims visibly loaded. Command item7 exit1 is rg finding no scratch files after successful quotation guidance read. Complete root removed.

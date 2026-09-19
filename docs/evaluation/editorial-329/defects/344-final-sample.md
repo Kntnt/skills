@@ -1,0 +1,5 @@
+#344:s bevarade ursprungsfel kvarstår i d60-recordet. En ny case-study-en_GB Write→Redline på `29ff2047ad2dac330dd705feccdb3f2d0778831b`, samma frysta corpus `6e531f5`, oförändrade prompts och ärvd gpt-6-astra/high, anger nu uttryckligen beslutet i september 2025 och tillskriver inte försöksstarten den månaden. Alla övriga Write-kriterier passerar; källblind Redline lämnar den fulla artefakten oförändrad efter verklig review och en installerad Proofread-pass. Rötterna är städade efter full evidensfångst.
+
+Evidens: `docs/evaluation/editorial-329/runs/rerun-341-translation/case-study-en_GB/` samt separata `write-`/`redline-gpt-2026-09-19-341-translation-part-article-case.md` under records.
+
+Den här revisionen innehåller en operativ kontroll av Writes befintliga Source Fidelity samt precisering av citatöversättning. Ingen regel om just månad eller försöksstart har tillkommit. Ett lyckat nytt stickprov bevisar varken vilken ändring som påverkade utfallet eller garanterad reparation av framtida stokastiska kronologiavvikelser.

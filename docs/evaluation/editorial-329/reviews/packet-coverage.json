@@ -1,0 +1,1057 @@
+{
+  "mandatory_slots": 65,
+  "counts": {
+    "baseline": 12,
+    "explicit-technique": 6,
+    "genre-control": 10,
+    "ordinary": 30,
+    "selection-control": 7
+  },
+  "note": "Coverage is actual execution/evidence, never an assertion that semantic criteria passed. Historical reruns do not increase this denominator. README-selected ordinary mapping may still have in-progress rows at this snapshot.",
+  "rows": [
+    {
+      "category": "ordinary",
+      "cell": "article/sv",
+      "skill": "write",
+      "path": "runs/completion-check/article-sv/write",
+      "instruction_revision": "d0b2c99c12a8727503b1738f1cad92611d879e1e",
+      "missing_evidence": [],
+      "native_contexts": 1,
+      "wrong_identity": [],
+      "cleanup": {
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-6r3u2pwz",
+        "removed": true,
+        "process_exited": true,
+        "root_absent_now": true
+      }
+    },
+    {
+      "category": "ordinary",
+      "cell": "article/sv",
+      "skill": "redline",
+      "path": "runs/completion-check/article-sv/redline",
+      "instruction_revision": "d0b2c99c12a8727503b1738f1cad92611d879e1e",
+      "missing_evidence": [],
+      "native_contexts": 1,
+      "wrong_identity": [],
+      "cleanup": {
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-mlyfg7d6",
+        "removed": true,
+        "process_exited": true,
+        "root_absent_now": true
+      }
+    },
+    {
+      "category": "ordinary",
+      "cell": "article/en_GB",
+      "skill": "write",
+      "path": "runs/rerun-341/article-en_GB/write",
+      "instruction_revision": "1a4f65b3da64fc4f94e82de519ef8b5a18ae56dd",
+      "missing_evidence": [],
+      "native_contexts": 1,
+      "wrong_identity": [],
+      "cleanup": {
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-9uixs3vm",
+        "removed": true,
+        "root_absent_now": true
+      }
+    },
+    {
+      "category": "ordinary",
+      "cell": "article/en_GB",
+      "skill": "redline",
+      "path": "runs/rerun-341/article-en_GB/redline",
+      "instruction_revision": "1a4f65b3da64fc4f94e82de519ef8b5a18ae56dd",
+      "missing_evidence": [],
+      "native_contexts": 1,
+      "wrong_identity": [],
+      "cleanup": {
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-f5jstugd",
+        "removed": true,
+        "root_absent_now": true
+      }
+    },
+    {
+      "category": "ordinary",
+      "cell": "article/en_US",
+      "skill": "write",
+      "path": "runs/rerun-341/article-en_US/write",
+      "instruction_revision": "7022c804dfbda4332723bf96b6a9857c24e63b6e",
+      "missing_evidence": [],
+      "native_contexts": 1,
+      "wrong_identity": [],
+      "cleanup": {
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-40bf8yv2",
+        "removed": true,
+        "root_absent_now": true
+      }
+    },
+    {
+      "category": "ordinary",
+      "cell": "article/en_US",
+      "skill": "redline",
+      "path": "runs/rerun-341/article-en_US/redline",
+      "instruction_revision": "7022c804dfbda4332723bf96b6a9857c24e63b6e",
+      "missing_evidence": [],
+      "native_contexts": 2,
+      "wrong_identity": [],
+      "cleanup": {
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-2hs4uxhz",
+        "removed": true,
+        "root_absent_now": true
+      }
+    },
+    {
+      "category": "ordinary",
+      "cell": "case-study/sv",
+      "skill": "write",
+      "path": "runs/rerun-341-translation/case-study-sv/write",
+      "instruction_revision": "29ff2047ad2dac330dd705feccdb3f2d0778831b",
+      "missing_evidence": [],
+      "native_contexts": 1,
+      "wrong_identity": [],
+      "cleanup": {
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-kv4q92r9",
+        "removed": true,
+        "root_absent_now": true
+      }
+    },
+    {
+      "category": "ordinary",
+      "cell": "case-study/sv",
+      "skill": "redline",
+      "path": "runs/rerun-341-translation/case-study-sv/redline",
+      "instruction_revision": "29ff2047ad2dac330dd705feccdb3f2d0778831b",
+      "missing_evidence": [
+        "result.json",
+        "response.txt",
+        "inventory-after.json",
+        "filesystem-changes.json",
+        "cleanup.json",
+        "native turn_context"
+      ],
+      "native_contexts": 0,
+      "wrong_identity": [],
+      "cleanup": null
+    },
+    {
+      "category": "ordinary",
+      "cell": "case-study/en_GB",
+      "skill": "write",
+      "path": "runs/rerun-341-translation/case-study-en_GB/write",
+      "instruction_revision": "29ff2047ad2dac330dd705feccdb3f2d0778831b",
+      "missing_evidence": [],
+      "native_contexts": 1,
+      "wrong_identity": [],
+      "cleanup": {
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-045owmy6",
+        "removed": true,
+        "root_absent_now": true
+      }
+    },
+    {
+      "category": "ordinary",
+      "cell": "case-study/en_GB",
+      "skill": "redline",
+      "path": "runs/rerun-341-translation/case-study-en_GB/redline",
+      "instruction_revision": "29ff2047ad2dac330dd705feccdb3f2d0778831b",
+      "missing_evidence": [],
+      "native_contexts": 1,
+      "wrong_identity": [],
+      "cleanup": {
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-e2kl2rfj",
+        "removed": true,
+        "root_absent_now": true
+      }
+    },
+    {
+      "category": "ordinary",
+      "cell": "case-study/en_US",
+      "skill": "write",
+      "path": "runs/rerun-341-translation/case-study-en_US/write",
+      "instruction_revision": null,
+      "missing_evidence": [
+        "run.json",
+        "result.json",
+        "response.txt",
+        "invocation.txt",
+        "supplied-input.md",
+        "inventory-before.json",
+        "inventory-after.json",
+        "filesystem-changes.json",
+        "cleanup.json",
+        "native turn_context"
+      ],
+      "native_contexts": 0,
+      "wrong_identity": [],
+      "cleanup": null
+    },
+    {
+      "category": "ordinary",
+      "cell": "case-study/en_US",
+      "skill": "redline",
+      "path": "runs/rerun-341-translation/case-study-en_US/redline",
+      "instruction_revision": null,
+      "missing_evidence": [
+        "run.json",
+        "result.json",
+        "response.txt",
+        "invocation.txt",
+        "supplied-input.md",
+        "inventory-before.json",
+        "inventory-after.json",
+        "filesystem-changes.json",
+        "cleanup.json",
+        "native turn_context"
+      ],
+      "native_contexts": 0,
+      "wrong_identity": [],
+      "cleanup": null
+    },
+    {
+      "category": "ordinary",
+      "cell": "column/sv",
+      "skill": "write",
+      "path": "runs/completion-check/column-sv/write",
+      "instruction_revision": "d0b2c99c12a8727503b1738f1cad92611d879e1e",
+      "missing_evidence": [],
+      "native_contexts": 1,
+      "wrong_identity": [],
+      "cleanup": {
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-0te179mo",
+        "removed": true,
+        "method": "literal absolute path after complete capture",
+        "root_absent_now": true
+      }
+    },
+    {
+      "category": "ordinary",
+      "cell": "column/sv",
+      "skill": "redline",
+      "path": "runs/completion-check/column-sv/redline",
+      "instruction_revision": "d0b2c99c12a8727503b1738f1cad92611d879e1e",
+      "missing_evidence": [],
+      "native_contexts": 1,
+      "wrong_identity": [],
+      "cleanup": {
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-ql17aty4",
+        "removed": true,
+        "method": "literal absolute path after complete capture",
+        "root_absent_now": true
+      }
+    },
+    {
+      "category": "ordinary",
+      "cell": "column/en_GB",
+      "skill": "write",
+      "path": "runs/rerun-column-final/column-en_GB/write",
+      "instruction_revision": "f8cac6d5342f72ed91da8c13d96ab092cd5e0ae9",
+      "missing_evidence": [],
+      "native_contexts": 1,
+      "wrong_identity": [],
+      "cleanup": {
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-wlcqvlaa",
+        "removed": true,
+        "method": "full literal path after process exit and capture",
+        "root_absent_now": true
+      }
+    },
+    {
+      "category": "ordinary",
+      "cell": "column/en_GB",
+      "skill": "redline",
+      "path": "runs/rerun-column-final/column-en_GB/redline",
+      "instruction_revision": "f8cac6d5342f72ed91da8c13d96ab092cd5e0ae9",
+      "missing_evidence": [],
+      "native_contexts": 1,
+      "wrong_identity": [],
+      "cleanup": {
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-n9480oju",
+        "removed": true,
+        "method": "full literal path after exit/capture",
+        "root_absent_now": true
+      }
+    },
+    {
+      "category": "ordinary",
+      "cell": "column/en_US",
+      "skill": "write",
+      "path": "runs/rerun-column-final/column-en_US/write",
+      "instruction_revision": "1a4f65b3da64fc4f94e82de519ef8b5a18ae56dd",
+      "missing_evidence": [],
+      "native_contexts": 1,
+      "wrong_identity": [],
+      "cleanup": {
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-17xne7yh",
+        "removed": true,
+        "method": "full literal path after process exit/capture",
+        "root_absent_now": true
+      }
+    },
+    {
+      "category": "ordinary",
+      "cell": "column/en_US",
+      "skill": "redline",
+      "path": "runs/rerun-column-final/column-en_US/redline",
+      "instruction_revision": "1a4f65b3da64fc4f94e82de519ef8b5a18ae56dd",
+      "missing_evidence": [],
+      "native_contexts": 1,
+      "wrong_identity": [],
+      "cleanup": {
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-s2h8ccbg",
+        "removed": true,
+        "method": "Root already absent at literal cleanup attempt after complete capture; actor not verified, likely automatic session hook. Not a manual deletion claim.",
+        "subsequent_verification": "Global session-cleanup log confirms automatic start-hook deletion; exact events captured in reviews/automatic-cleanup-events.json. Evidence inventory completed before hook action.",
+        "root_absent_now": true
+      }
+    },
+    {
+      "category": "ordinary",
+      "cell": "opinion/sv",
+      "skill": "write",
+      "path": "runs/rerun-349-source-check/opinion-sv/write",
+      "instruction_revision": "d0b2c99c12a8727503b1738f1cad92611d879e1e",
+      "missing_evidence": [],
+      "native_contexts": 1,
+      "wrong_identity": [],
+      "cleanup": {
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-2u1cljes",
+        "removed": true,
+        "process_returncode": 0,
+        "root_absent_now": true
+      }
+    },
+    {
+      "category": "ordinary",
+      "cell": "opinion/sv",
+      "skill": "redline",
+      "path": "runs/rerun-349-source-check/opinion-sv/redline",
+      "instruction_revision": "d0b2c99c12a8727503b1738f1cad92611d879e1e",
+      "missing_evidence": [],
+      "native_contexts": 1,
+      "wrong_identity": [],
+      "cleanup": {
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-hifgb49w",
+        "removed": true,
+        "process_returncode": 0,
+        "root_absent_now": true
+      }
+    },
+    {
+      "category": "ordinary",
+      "cell": "opinion/en_GB",
+      "skill": "write",
+      "path": "runs/rerun-349-source-check/opinion-en_GB/write",
+      "instruction_revision": "d0b2c99c12a8727503b1738f1cad92611d879e1e",
+      "missing_evidence": [],
+      "native_contexts": 1,
+      "wrong_identity": [],
+      "cleanup": {
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-17a70j1c",
+        "removed": true,
+        "process_returncode": 0,
+        "root_absent_now": true
+      }
+    },
+    {
+      "category": "ordinary",
+      "cell": "opinion/en_GB",
+      "skill": "redline",
+      "path": "runs/rerun-349-source-check/opinion-en_GB/redline",
+      "instruction_revision": "d0b2c99c12a8727503b1738f1cad92611d879e1e",
+      "missing_evidence": [],
+      "native_contexts": 1,
+      "wrong_identity": [],
+      "cleanup": {
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-26mo0zfe",
+        "removed": true,
+        "process_returncode": 0,
+        "root_absent_now": true
+      }
+    },
+    {
+      "category": "ordinary",
+      "cell": "opinion/en_US",
+      "skill": "write",
+      "path": "runs/rerun-349-source-check/opinion-en_US/write",
+      "instruction_revision": "d0b2c99c12a8727503b1738f1cad92611d879e1e",
+      "missing_evidence": [
+        "cleanup.json"
+      ],
+      "native_contexts": 1,
+      "wrong_identity": [],
+      "cleanup": null
+    },
+    {
+      "category": "ordinary",
+      "cell": "opinion/en_US",
+      "skill": "redline",
+      "path": "runs/rerun-349-source-check/opinion-en_US/redline",
+      "instruction_revision": null,
+      "missing_evidence": [
+        "run.json",
+        "result.json",
+        "response.txt",
+        "invocation.txt",
+        "supplied-input.md",
+        "inventory-before.json",
+        "inventory-after.json",
+        "filesystem-changes.json",
+        "cleanup.json",
+        "native turn_context"
+      ],
+      "native_contexts": 0,
+      "wrong_identity": [],
+      "cleanup": null
+    },
+    {
+      "category": "ordinary",
+      "cell": "web-copy/sv",
+      "skill": "write",
+      "path": "runs/rerun-345/web-copy-sv/write",
+      "instruction_revision": "2bd2afe34f6ec5d9d6587c33b1c16eeaf241579f",
+      "missing_evidence": [],
+      "native_contexts": 1,
+      "wrong_identity": [],
+      "cleanup": {
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-w7umg3l9",
+        "removed": true,
+        "process_returncode": 0,
+        "root_absent_now": true
+      }
+    },
+    {
+      "category": "ordinary",
+      "cell": "web-copy/sv",
+      "skill": "redline",
+      "path": "runs/rerun-345/web-copy-sv/redline",
+      "instruction_revision": "2bd2afe34f6ec5d9d6587c33b1c16eeaf241579f",
+      "missing_evidence": [],
+      "native_contexts": 1,
+      "wrong_identity": [],
+      "cleanup": {
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-dy8f75vh",
+        "removed": true,
+        "process_returncode": 0,
+        "root_absent_now": true
+      }
+    },
+    {
+      "category": "ordinary",
+      "cell": "web-copy/en_GB",
+      "skill": "write",
+      "path": "runs/rerun-345/web-copy-en_GB/write",
+      "instruction_revision": "1a4f65b3da64fc4f94e82de519ef8b5a18ae56dd",
+      "missing_evidence": [],
+      "native_contexts": 1,
+      "wrong_identity": [],
+      "cleanup": {
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-l5wihx9m",
+        "removed": true,
+        "process_returncode": 0,
+        "root_absent_now": true
+      }
+    },
+    {
+      "category": "ordinary",
+      "cell": "web-copy/en_GB",
+      "skill": "redline",
+      "path": "runs/rerun-345/web-copy-en_GB/redline",
+      "instruction_revision": "1a4f65b3da64fc4f94e82de519ef8b5a18ae56dd",
+      "missing_evidence": [],
+      "native_contexts": 1,
+      "wrong_identity": [],
+      "cleanup": {
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-up855v0c",
+        "removed": true,
+        "process_returncode": 0,
+        "root_absent_now": true
+      }
+    },
+    {
+      "category": "ordinary",
+      "cell": "web-copy/en_US",
+      "skill": "write",
+      "path": "runs/completion-check/web-copy-en_US/write",
+      "instruction_revision": "29ff2047ad2dac330dd705feccdb3f2d0778831b",
+      "missing_evidence": [],
+      "native_contexts": 1,
+      "wrong_identity": [],
+      "cleanup": {
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-wblss3lu",
+        "removed": true,
+        "process_exited": true,
+        "root_absent_now": true
+      }
+    },
+    {
+      "category": "ordinary",
+      "cell": "web-copy/en_US",
+      "skill": "redline",
+      "path": "runs/completion-check/web-copy-en_US/redline",
+      "instruction_revision": "29ff2047ad2dac330dd705feccdb3f2d0778831b",
+      "missing_evidence": [
+        "cleanup.json"
+      ],
+      "native_contexts": 2,
+      "wrong_identity": [],
+      "cleanup": null
+    },
+    {
+      "category": "explicit-technique",
+      "cell": "article/ABT/sv",
+      "skill": "write",
+      "path": "runs/candidate/article-abt/write",
+      "instruction_revision": "1a4f65b3da64fc4f94e82de519ef8b5a18ae56dd",
+      "missing_evidence": [],
+      "native_contexts": 1,
+      "wrong_identity": [],
+      "cleanup": {
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-r4y0ddqi",
+        "removed": true,
+        "root_absent_now": true
+      }
+    },
+    {
+      "category": "explicit-technique",
+      "cell": "article/ABT/sv",
+      "skill": "redline",
+      "path": "runs/candidate/article-abt/redline",
+      "instruction_revision": "1a4f65b3da64fc4f94e82de519ef8b5a18ae56dd",
+      "missing_evidence": [],
+      "native_contexts": 2,
+      "wrong_identity": [],
+      "cleanup": {
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-gycpxfrg",
+        "removed": true,
+        "root_absent_now": true
+      }
+    },
+    {
+      "category": "explicit-technique",
+      "cell": "article/PAC/en_GB",
+      "skill": "write",
+      "path": "runs/candidate/article-pac/write",
+      "instruction_revision": "1a4f65b3da64fc4f94e82de519ef8b5a18ae56dd",
+      "missing_evidence": [],
+      "native_contexts": 1,
+      "wrong_identity": [],
+      "cleanup": {
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-_c13s5pf",
+        "removed": true,
+        "root_absent_now": true
+      }
+    },
+    {
+      "category": "explicit-technique",
+      "cell": "article/PAC/en_GB",
+      "skill": "redline",
+      "path": "runs/candidate/article-pac/redline",
+      "instruction_revision": "1a4f65b3da64fc4f94e82de519ef8b5a18ae56dd",
+      "missing_evidence": [],
+      "native_contexts": 1,
+      "wrong_identity": [],
+      "cleanup": {
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-pn1huwhn",
+        "removed": true,
+        "root_absent_now": true
+      }
+    },
+    {
+      "category": "explicit-technique",
+      "cell": "web-copy/ABT/sv",
+      "skill": "write",
+      "path": "runs/rerun-345/web-copy-abt/write",
+      "instruction_revision": "1a4f65b3da64fc4f94e82de519ef8b5a18ae56dd",
+      "missing_evidence": [],
+      "native_contexts": 1,
+      "wrong_identity": [],
+      "cleanup": {
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-kwpofvgo",
+        "removed": true,
+        "process_returncode": 0,
+        "root_absent_now": true
+      }
+    },
+    {
+      "category": "explicit-technique",
+      "cell": "web-copy/ABT/sv",
+      "skill": "redline",
+      "path": "runs/rerun-345/web-copy-abt/redline",
+      "instruction_revision": "1a4f65b3da64fc4f94e82de519ef8b5a18ae56dd",
+      "missing_evidence": [],
+      "native_contexts": 1,
+      "wrong_identity": [],
+      "cleanup": {
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-n4933p2y",
+        "removed": true,
+        "process_returncode": 0,
+        "root_absent_now": true
+      }
+    },
+    {
+      "category": "baseline",
+      "cell": "article-sv",
+      "skill": "write",
+      "path": "runs/baseline/article-sv/write",
+      "instruction_revision": "8ae4c21c203fa44f9782c3c0db2c85a5d805c3a6",
+      "missing_evidence": [],
+      "native_contexts": 1,
+      "wrong_identity": [],
+      "cleanup": {
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-07zy48lu",
+        "removed": true,
+        "process_exited": true,
+        "root_absent_now": true
+      }
+    },
+    {
+      "category": "baseline",
+      "cell": "article-sv",
+      "skill": "redline",
+      "path": "runs/baseline/article-sv/redline",
+      "instruction_revision": "8ae4c21c203fa44f9782c3c0db2c85a5d805c3a6",
+      "missing_evidence": [],
+      "native_contexts": 1,
+      "wrong_identity": [],
+      "cleanup": {
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-c74d01z5",
+        "removed": true,
+        "process_exited": true,
+        "root_absent_now": true
+      }
+    },
+    {
+      "category": "baseline",
+      "cell": "article-en_GB",
+      "skill": "write",
+      "path": "runs/baseline/article-en_GB/write",
+      "instruction_revision": "8ae4c21c203fa44f9782c3c0db2c85a5d805c3a6",
+      "missing_evidence": [],
+      "native_contexts": 1,
+      "wrong_identity": [],
+      "cleanup": {
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-jroedmr_",
+        "removed": true,
+        "process_exited": true,
+        "root_absent_now": true
+      }
+    },
+    {
+      "category": "baseline",
+      "cell": "article-en_GB",
+      "skill": "redline",
+      "path": "runs/baseline/article-en_GB/redline",
+      "instruction_revision": "8ae4c21c203fa44f9782c3c0db2c85a5d805c3a6",
+      "missing_evidence": [],
+      "native_contexts": 2,
+      "wrong_identity": [],
+      "cleanup": {
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-em3v601r",
+        "removed": true,
+        "process_exited": true,
+        "root_absent_now": true
+      }
+    },
+    {
+      "category": "baseline",
+      "cell": "case-study-sv",
+      "skill": "write",
+      "path": "runs/baseline/case-study-sv/write",
+      "instruction_revision": "8ae4c21c203fa44f9782c3c0db2c85a5d805c3a6",
+      "missing_evidence": [],
+      "native_contexts": 1,
+      "wrong_identity": [],
+      "cleanup": {
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-px8ionzt",
+        "removed": true,
+        "process_exited": true,
+        "root_absent_now": true
+      }
+    },
+    {
+      "category": "baseline",
+      "cell": "case-study-sv",
+      "skill": "redline",
+      "path": "runs/baseline/case-study-sv/redline",
+      "instruction_revision": "8ae4c21c203fa44f9782c3c0db2c85a5d805c3a6",
+      "missing_evidence": [],
+      "native_contexts": 1,
+      "wrong_identity": [],
+      "cleanup": {
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-dc8c_dhk",
+        "removed": true,
+        "process_exited": true,
+        "root_absent_now": true
+      }
+    },
+    {
+      "category": "baseline",
+      "cell": "column-sv",
+      "skill": "write",
+      "path": "runs/baseline/column-sv/write",
+      "instruction_revision": "8ae4c21c203fa44f9782c3c0db2c85a5d805c3a6",
+      "missing_evidence": [],
+      "native_contexts": 1,
+      "wrong_identity": [],
+      "cleanup": {
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-lpiz4fif",
+        "removed": true,
+        "process_exited": true,
+        "root_absent_now": true
+      }
+    },
+    {
+      "category": "baseline",
+      "cell": "column-sv",
+      "skill": "redline",
+      "path": "runs/baseline/column-sv/redline",
+      "instruction_revision": "8ae4c21c203fa44f9782c3c0db2c85a5d805c3a6",
+      "missing_evidence": [],
+      "native_contexts": 1,
+      "wrong_identity": [],
+      "cleanup": {
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-xwadc3qt",
+        "removed": true,
+        "process_exited": true,
+        "root_absent_now": true
+      }
+    },
+    {
+      "category": "baseline",
+      "cell": "opinion-sv",
+      "skill": "write",
+      "path": "runs/baseline/opinion-sv/write",
+      "instruction_revision": "8ae4c21c203fa44f9782c3c0db2c85a5d805c3a6",
+      "missing_evidence": [],
+      "native_contexts": 1,
+      "wrong_identity": [],
+      "cleanup": {
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-37s2myew",
+        "removed": true,
+        "process_exited": true,
+        "root_absent_now": true
+      }
+    },
+    {
+      "category": "baseline",
+      "cell": "opinion-sv",
+      "skill": "redline",
+      "path": "runs/baseline/opinion-sv/redline",
+      "instruction_revision": "8ae4c21c203fa44f9782c3c0db2c85a5d805c3a6",
+      "missing_evidence": [],
+      "native_contexts": 1,
+      "wrong_identity": [],
+      "cleanup": {
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-bep9d6hf",
+        "removed": true,
+        "process_exited": true,
+        "root_absent_now": true
+      }
+    },
+    {
+      "category": "baseline",
+      "cell": "web-copy-sv",
+      "skill": "write",
+      "path": "runs/baseline/web-copy-sv/write",
+      "instruction_revision": "8ae4c21c203fa44f9782c3c0db2c85a5d805c3a6",
+      "missing_evidence": [],
+      "native_contexts": 1,
+      "wrong_identity": [],
+      "cleanup": {
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-lis4tfit",
+        "removed": true,
+        "process_exited": true,
+        "root_absent_now": true
+      }
+    },
+    {
+      "category": "baseline",
+      "cell": "web-copy-sv",
+      "skill": "redline",
+      "path": "runs/baseline/web-copy-sv/redline",
+      "instruction_revision": "8ae4c21c203fa44f9782c3c0db2c85a5d805c3a6",
+      "missing_evidence": [],
+      "native_contexts": 2,
+      "wrong_identity": [],
+      "cleanup": {
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-k1b6u1wv",
+        "removed": true,
+        "process_exited": true,
+        "root_absent_now": true
+      }
+    },
+    {
+      "category": "genre-control",
+      "cell": "article-clean",
+      "skill": "redline",
+      "path": "runs/controls-genres/article-clean/redline",
+      "instruction_revision": "f8cac6d5342f72ed91da8c13d96ab092cd5e0ae9",
+      "missing_evidence": [],
+      "native_contexts": 1,
+      "wrong_identity": [],
+      "cleanup": {
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-bna0u0tj",
+        "removed": true,
+        "process_exited": true,
+        "root_absent_now": true
+      }
+    },
+    {
+      "category": "genre-control",
+      "cell": "article-flawed",
+      "skill": "redline",
+      "path": "runs/controls-genres/article-flawed/redline",
+      "instruction_revision": "f8cac6d5342f72ed91da8c13d96ab092cd5e0ae9",
+      "missing_evidence": [],
+      "native_contexts": 3,
+      "wrong_identity": [],
+      "cleanup": {
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-2k63xu02",
+        "removed": true,
+        "process_exited": true,
+        "root_absent_now": true
+      }
+    },
+    {
+      "category": "genre-control",
+      "cell": "case-study-clean",
+      "skill": "redline",
+      "path": "runs/controls-genres/case-study-clean/redline",
+      "instruction_revision": "f8cac6d5342f72ed91da8c13d96ab092cd5e0ae9",
+      "missing_evidence": [],
+      "native_contexts": 1,
+      "wrong_identity": [],
+      "cleanup": {
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-txcod0r4",
+        "removed": true,
+        "process_exited": true,
+        "root_absent_now": true
+      }
+    },
+    {
+      "category": "genre-control",
+      "cell": "case-study-flawed",
+      "skill": "redline",
+      "path": "runs/controls-genres/case-study-flawed/redline",
+      "instruction_revision": "f8cac6d5342f72ed91da8c13d96ab092cd5e0ae9",
+      "missing_evidence": [],
+      "native_contexts": 2,
+      "wrong_identity": [],
+      "cleanup": {
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-md2auz4h",
+        "removed": true,
+        "process_exited": true,
+        "root_absent_now": true
+      }
+    },
+    {
+      "category": "genre-control",
+      "cell": "column-clean",
+      "skill": "redline",
+      "path": "runs/controls-genres/column-clean/redline",
+      "instruction_revision": "f8cac6d5342f72ed91da8c13d96ab092cd5e0ae9",
+      "missing_evidence": [],
+      "native_contexts": 1,
+      "wrong_identity": [],
+      "cleanup": {
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-jk8z49re",
+        "removed": true,
+        "process_exited": true,
+        "root_absent_now": true
+      }
+    },
+    {
+      "category": "genre-control",
+      "cell": "column-flawed",
+      "skill": "redline",
+      "path": "runs/controls-genres/column-flawed/redline",
+      "instruction_revision": "f8cac6d5342f72ed91da8c13d96ab092cd5e0ae9",
+      "missing_evidence": [],
+      "native_contexts": 2,
+      "wrong_identity": [],
+      "cleanup": {
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-dhhu1oey",
+        "removed": true,
+        "process_exited": true,
+        "root_absent_now": true
+      }
+    },
+    {
+      "category": "genre-control",
+      "cell": "opinion-clean",
+      "skill": "redline",
+      "path": "runs/controls-genres/opinion-clean/redline",
+      "instruction_revision": "f8cac6d5342f72ed91da8c13d96ab092cd5e0ae9",
+      "missing_evidence": [],
+      "native_contexts": 1,
+      "wrong_identity": [],
+      "cleanup": {
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-jhwy8fyv",
+        "removed": true,
+        "process_exited": true,
+        "root_absent_now": true
+      }
+    },
+    {
+      "category": "genre-control",
+      "cell": "opinion-flawed",
+      "skill": "redline",
+      "path": "runs/controls-genres/opinion-flawed/redline",
+      "instruction_revision": "f8cac6d5342f72ed91da8c13d96ab092cd5e0ae9",
+      "missing_evidence": [],
+      "native_contexts": 3,
+      "wrong_identity": [],
+      "cleanup": {
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-0ot45sdi",
+        "removed": true,
+        "process_exited": true,
+        "root_absent_now": true
+      }
+    },
+    {
+      "category": "genre-control",
+      "cell": "web-copy-clean",
+      "skill": "redline",
+      "path": "runs/controls-genres/web-copy-clean/redline",
+      "instruction_revision": "1a4f65b3da64fc4f94e82de519ef8b5a18ae56dd",
+      "missing_evidence": [],
+      "native_contexts": 1,
+      "wrong_identity": [],
+      "cleanup": {
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-2x_d4zkz",
+        "removed": true,
+        "process_exited": true,
+        "root_absent_now": true
+      }
+    },
+    {
+      "category": "genre-control",
+      "cell": "web-copy-flawed",
+      "skill": "redline",
+      "path": "runs/controls-genres/web-copy-flawed/redline",
+      "instruction_revision": "1a4f65b3da64fc4f94e82de519ef8b5a18ae56dd",
+      "missing_evidence": [],
+      "native_contexts": 2,
+      "wrong_identity": [],
+      "cleanup": {
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-6zvqq9af",
+        "removed": true,
+        "process_exited": true,
+        "root_absent_now": true
+      }
+    },
+    {
+      "category": "selection-control",
+      "cell": "metadata-none",
+      "skill": "redline",
+      "path": "runs/controls-selection/metadata-none/redline",
+      "instruction_revision": "f8cac6d5342f72ed91da8c13d96ab092cd5e0ae9",
+      "missing_evidence": [],
+      "native_contexts": 1,
+      "wrong_identity": [],
+      "cleanup": {
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-zxqow8wz",
+        "removed": true,
+        "method": "full literal path after process exit and all captures",
+        "root_absent_now": true
+      }
+    },
+    {
+      "category": "selection-control",
+      "cell": "instruction-none",
+      "skill": "redline",
+      "path": "runs/controls-selection/instruction-none/redline",
+      "instruction_revision": "f8cac6d5342f72ed91da8c13d96ab092cd5e0ae9",
+      "missing_evidence": [],
+      "native_contexts": 1,
+      "wrong_identity": [],
+      "cleanup": {
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-wa9a4t60",
+        "removed": true,
+        "method": "full literal path after process exit and all captures",
+        "root_absent_now": true
+      }
+    },
+    {
+      "category": "selection-control",
+      "cell": "legacy-abt",
+      "skill": "redline",
+      "path": "runs/controls-selection/legacy-abt/redline",
+      "instruction_revision": "f8cac6d5342f72ed91da8c13d96ab092cd5e0ae9",
+      "missing_evidence": [],
+      "native_contexts": 1,
+      "wrong_identity": [],
+      "cleanup": {
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-fccnbqco",
+        "removed": true,
+        "method": "full literal path after process exit and all captures",
+        "root_absent_now": true
+      }
+    },
+    {
+      "category": "selection-control",
+      "cell": "flag-pac",
+      "skill": "redline",
+      "path": "runs/controls-selection/flag-pac/redline",
+      "instruction_revision": "f8cac6d5342f72ed91da8c13d96ab092cd5e0ae9",
+      "missing_evidence": [],
+      "native_contexts": 1,
+      "wrong_identity": [],
+      "cleanup": {
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-by2nklsx",
+        "removed": true,
+        "method": "full literal path after process exit and all captures",
+        "root_absent_now": true
+      }
+    },
+    {
+      "category": "selection-control",
+      "cell": "instruction-abt",
+      "skill": "redline",
+      "path": "runs/controls-selection/instruction-abt/redline",
+      "instruction_revision": "f8cac6d5342f72ed91da8c13d96ab092cd5e0ae9",
+      "missing_evidence": [],
+      "native_contexts": 1,
+      "wrong_identity": [],
+      "cleanup": {
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-oarki_vn",
+        "removed": true,
+        "method": "full literal path after process exit and all captures",
+        "root_absent_now": true
+      }
+    },
+    {
+      "category": "selection-control",
+      "cell": "report-pac",
+      "skill": "redline",
+      "path": "runs/controls-selection/report-pac/redline",
+      "instruction_revision": "f8cac6d5342f72ed91da8c13d96ab092cd5e0ae9",
+      "missing_evidence": [],
+      "native_contexts": 2,
+      "wrong_identity": [],
+      "cleanup": {
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-dlqn91fd",
+        "removed": true,
+        "method": "full literal path after process exit and all captures",
+        "root_absent_now": true
+      }
+    },
+    {
+      "category": "selection-control",
+      "cell": "article-excerpt",
+      "skill": "redline",
+      "path": "runs/controls-selection/article-excerpt/redline",
+      "instruction_revision": "f8cac6d5342f72ed91da8c13d96ab092cd5e0ae9",
+      "missing_evidence": [],
+      "native_contexts": 1,
+      "wrong_identity": [],
+      "cleanup": {
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-a1_9klb7",
+        "removed": true,
+        "method": "full literal path after process exit and all captures",
+        "root_absent_now": true
+      }
+    }
+  ]
+}

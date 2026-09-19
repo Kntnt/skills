@@ -1,0 +1,40 @@
+[
+  {
+    "at": "2026-09-19T19:02:26+00:00",
+    "event": "recorded",
+    "id": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-s2h8ccbg",
+    "kind": "path",
+    "reason": "Editorial #338 isolated native evaluation",
+    "session": "terminal-42101"
+  },
+  {
+    "at": "2026-09-19T19:09:22+00:00",
+    "event": "recorded",
+    "id": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-oc0bvl8y",
+    "kind": "path",
+    "reason": "Editorial #338 isolated native evaluation",
+    "session": "terminal-47860"
+  },
+  {
+    "at": "2026-09-19T19:11:05+00:00",
+    "detail": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-s2h8ccbg",
+    "event": "acted",
+    "id": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-s2h8ccbg",
+    "kind": "path",
+    "outcome": "deleted",
+    "reason": "Editorial #338 isolated native evaluation",
+    "session": "terminal-42101",
+    "why": "start"
+  },
+  {
+    "at": "2026-09-19T19:11:05+00:00",
+    "detail": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-oc0bvl8y",
+    "event": "acted",
+    "id": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-oc0bvl8y",
+    "kind": "path",
+    "outcome": "deleted",
+    "reason": "Editorial #338 isolated native evaluation",
+    "session": "terminal-47860",
+    "why": "start"
+  }
+]

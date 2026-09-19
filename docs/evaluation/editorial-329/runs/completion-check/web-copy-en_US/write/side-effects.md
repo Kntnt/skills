@@ -1,0 +1,3 @@
+# Filesystem effects
+
+No Skill-created file remains; source/work/resources/scratch unchanged. The 320 native-home creations are Codex bootstrap/plugin/cache/session/database/lock artifacts; private config.toml alone adds project trust. Authentication is unchanged. The single native context exposes gpt-6-astra/high. Actual calls load only selected web-copy/base/web-craft and en_US composition; no quotation support, review half, mechanics or peer pass is invoked. A shell rm trap was rejected before execution and replaced with Python try/finally cleanup. Full inventories were captured before evaluator cleanup. The outer Markdown fence and separate account are evaluator-extracted presentation wrappers, not changes to the supplied artifact prose.

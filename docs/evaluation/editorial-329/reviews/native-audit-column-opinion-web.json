@@ -1,147 +1,422 @@
 [
   {
+    "run": "docs/evaluation/editorial-329/runs/candidate/column-en_GB/redline",
+    "identities": [
+      [
+        "gpt-6-astra",
+        "high"
+      ]
+    ],
+    "children": [],
+    "cleanup_evidence": true,
+    "complete_input_exactly_preserved": true
+  },
+  {
+    "run": "docs/evaluation/editorial-329/runs/candidate/column-en_GB/write",
+    "identities": [
+      [
+        "gpt-6-astra",
+        "high"
+      ]
+    ],
+    "children": [],
+    "cleanup_evidence": true
+  },
+  {
+    "run": "docs/evaluation/editorial-329/runs/candidate/column-sv/redline",
+    "identities": [
+      [
+        "gpt-6-astra",
+        "high"
+      ]
+    ],
+    "children": [],
+    "cleanup_evidence": true,
+    "complete_input_exactly_preserved": true
+  },
+  {
+    "run": "docs/evaluation/editorial-329/runs/candidate/column-sv/write",
+    "identities": [
+      [
+        "gpt-6-astra",
+        "high"
+      ]
+    ],
+    "children": [],
+    "cleanup_evidence": true
+  },
+  {
+    "run": "docs/evaluation/editorial-329/runs/candidate/opinion-en_GB/redline",
+    "identities": [
+      [
+        "gpt-6-astra",
+        "high"
+      ]
+    ],
+    "children": [],
+    "cleanup_evidence": true,
+    "complete_input_exactly_preserved": true
+  },
+  {
+    "run": "docs/evaluation/editorial-329/runs/candidate/opinion-en_GB/write",
+    "identities": [
+      [
+        "gpt-6-astra",
+        "high"
+      ]
+    ],
+    "children": [],
+    "cleanup_evidence": true
+  },
+  {
+    "run": "docs/evaluation/editorial-329/runs/candidate/opinion-sv/redline",
+    "identities": [
+      [
+        "gpt-6-astra",
+        "high"
+      ]
+    ],
+    "children": [],
+    "cleanup_evidence": true,
+    "complete_input_exactly_preserved": true
+  },
+  {
+    "run": "docs/evaluation/editorial-329/runs/candidate/opinion-sv/write",
+    "identities": [
+      [
+        "gpt-6-astra",
+        "high"
+      ]
+    ],
+    "children": [],
+    "cleanup_evidence": true
+  },
+  {
+    "run": "docs/evaluation/editorial-329/runs/candidate/web-copy-en_GB/redline",
+    "identities": [
+      [
+        "gpt-6-astra",
+        "high"
+      ]
+    ],
+    "children": [],
+    "cleanup_evidence": true,
+    "complete_input_exactly_preserved": true
+  },
+  {
+    "run": "docs/evaluation/editorial-329/runs/candidate/web-copy-en_GB/write",
+    "identities": [
+      [
+        "gpt-6-astra",
+        "high"
+      ]
+    ],
+    "children": [],
+    "cleanup_evidence": true
+  },
+  {
+    "run": "docs/evaluation/editorial-329/runs/candidate/web-copy-en_US/redline",
+    "identities": [
+      [
+        "gpt-6-astra",
+        "high"
+      ]
+    ],
+    "children": [],
+    "cleanup_evidence": true,
+    "complete_input_exactly_preserved": true
+  },
+  {
+    "run": "docs/evaluation/editorial-329/runs/candidate/web-copy-en_US/write",
+    "identities": [
+      [
+        "gpt-6-astra",
+        "high"
+      ]
+    ],
+    "children": [],
+    "cleanup_evidence": true
+  },
+  {
+    "run": "docs/evaluation/editorial-329/runs/candidate/web-copy-sv/redline",
+    "identities": [
+      [
+        "gpt-6-astra",
+        "high"
+      ]
+    ],
+    "children": [],
+    "cleanup_evidence": true,
+    "complete_input_exactly_preserved": true
+  },
+  {
+    "run": "docs/evaluation/editorial-329/runs/candidate/web-copy-sv/write",
+    "identities": [
+      [
+        "gpt-6-astra",
+        "high"
+      ]
+    ],
+    "children": [],
+    "cleanup_evidence": true
+  },
+  {
+    "run": "docs/evaluation/editorial-329/runs/rerun-345/web-copy-abt/redline",
+    "identities": [
+      [
+        "gpt-6-astra",
+        "high"
+      ]
+    ],
+    "children": [],
+    "cleanup_evidence": true,
+    "complete_input_exactly_preserved": true
+  },
+  {
     "run": "docs/evaluation/editorial-329/runs/rerun-345/web-copy-abt/write",
-    "sessions": [
-      {
-        "file": "rollout-2026-09-19T21-06-11-01a0bb0f-d257-75a1-b6f1-367ab90927f6.jsonl",
-        "identities": [
-          [
-            "gpt-6-astra",
-            "high"
-          ]
-        ],
-        "dispatch": [],
-        "exec_calls": 5
-      }
-    ]
+    "identities": [
+      [
+        "gpt-6-astra",
+        "high"
+      ]
+    ],
+    "children": [],
+    "cleanup_evidence": true
   },
   {
     "run": "docs/evaluation/editorial-329/runs/rerun-345/web-copy-en_GB/redline",
-    "sessions": [
-      {
-        "file": "rollout-2026-09-19T21-01-25-01a0bb0b-742f-74f2-9784-f2bdd906934e.jsonl",
-        "identities": [
-          [
-            "gpt-6-astra",
-            "high"
-          ]
-        ],
-        "dispatch": [],
-        "exec_calls": 10
-      }
-    ]
+    "identities": [
+      [
+        "gpt-6-astra",
+        "high"
+      ]
+    ],
+    "children": [],
+    "cleanup_evidence": true,
+    "complete_input_exactly_preserved": true
   },
   {
     "run": "docs/evaluation/editorial-329/runs/rerun-345/web-copy-en_GB/write",
-    "sessions": [
-      {
-        "file": "rollout-2026-09-19T21-00-03-01a0bb0a-3598-72f1-a338-537be18b4ba8.jsonl",
-        "identities": [
-          [
-            "gpt-6-astra",
-            "high"
-          ]
-        ],
-        "dispatch": [],
-        "exec_calls": 5
-      }
-    ]
+    "identities": [
+      [
+        "gpt-6-astra",
+        "high"
+      ]
+    ],
+    "children": [],
+    "cleanup_evidence": true
   },
   {
     "run": "docs/evaluation/editorial-329/runs/rerun-345/web-copy-en_GB-regression/redline",
-    "sessions": [
+    "identities": [
+      [
+        "gpt-6-astra",
+        "high"
+      ]
+    ],
+    "children": [
       {
-        "file": "rollout-2026-09-19T20-52-00-01a0bb02-d4e1-7b13-ab7b-61980b19cf60.jsonl",
-        "identities": [
-          [
-            "gpt-6-astra",
-            "high"
-          ]
-        ],
-        "dispatch": [
-          {
-            "task_name": "correction",
-            "fork_turns": "none",
-            "message_encrypted": true
-          }
-        ],
-        "exec_calls": 10
-      },
-      {
-        "file": "rollout-2026-09-19T20-53-51-01a0bb04-8696-7ff3-9cb8-c81e5e63200c.jsonl",
-        "identities": [
-          [
-            "gpt-6-astra",
-            "high"
-          ]
-        ],
-        "dispatch": [],
-        "exec_calls": 2
+        "task_name": "correction",
+        "fork_turns": "none",
+        "message_encrypted": true
       }
-    ]
+    ],
+    "cleanup_evidence": true,
+    "complete_input_exactly_preserved": true
   },
   {
     "run": "docs/evaluation/editorial-329/runs/rerun-345/web-copy-en_US/redline",
-    "sessions": [
-      {
-        "file": "rollout-2026-09-19T21-04-30-01a0bb0e-4673-78c0-9d87-4bda67225d10.jsonl",
-        "identities": [
-          [
-            "gpt-6-astra",
-            "high"
-          ]
-        ],
-        "dispatch": [],
-        "exec_calls": 9
-      }
-    ]
+    "identities": [
+      [
+        "gpt-6-astra",
+        "high"
+      ]
+    ],
+    "children": [],
+    "cleanup_evidence": true,
+    "complete_input_exactly_preserved": true
   },
   {
     "run": "docs/evaluation/editorial-329/runs/rerun-345/web-copy-en_US/write",
-    "sessions": [
-      {
-        "file": "rollout-2026-09-19T21-03-02-01a0bb0c-f0d5-7373-ab07-46c3ee581dc1.jsonl",
-        "identities": [
-          [
-            "gpt-6-astra",
-            "high"
-          ]
-        ],
-        "dispatch": [],
-        "exec_calls": 5
-      }
-    ]
+    "identities": [
+      [
+        "gpt-6-astra",
+        "high"
+      ]
+    ],
+    "children": [],
+    "cleanup_evidence": true
   },
   {
     "run": "docs/evaluation/editorial-329/runs/rerun-345/web-copy-sv/redline",
-    "sessions": [
-      {
-        "file": "rollout-2026-09-19T20-58-35-01a0bb08-dbf2-7292-a279-553ada2ddd63.jsonl",
-        "identities": [
-          [
-            "gpt-6-astra",
-            "high"
-          ]
-        ],
-        "dispatch": [],
-        "exec_calls": 9
-      }
-    ]
+    "identities": [
+      [
+        "gpt-6-astra",
+        "high"
+      ]
+    ],
+    "children": [],
+    "cleanup_evidence": true,
+    "complete_input_exactly_preserved": true
   },
   {
     "run": "docs/evaluation/editorial-329/runs/rerun-345/web-copy-sv/write",
-    "sessions": [
-      {
-        "file": "rollout-2026-09-19T20-55-29-01a0bb06-04d3-7ad1-9467-2552a281c84d.jsonl",
-        "identities": [
-          [
-            "gpt-6-astra",
-            "high"
-          ]
-        ],
-        "dispatch": [],
-        "exec_calls": 5
-      }
-    ]
+    "identities": [
+      [
+        "gpt-6-astra",
+        "high"
+      ]
+    ],
+    "children": [],
+    "cleanup_evidence": true
+  },
+  {
+    "run": "docs/evaluation/editorial-329/runs/rerun-343/opinion-en_GB/redline",
+    "identities": [
+      [
+        "gpt-6-astra",
+        "high"
+      ]
+    ],
+    "children": [],
+    "cleanup_evidence": true,
+    "complete_input_exactly_preserved": true
+  },
+  {
+    "run": "docs/evaluation/editorial-329/runs/rerun-343/opinion-en_GB/write",
+    "identities": [
+      [
+        "gpt-6-astra",
+        "high"
+      ]
+    ],
+    "children": [],
+    "cleanup_evidence": true
+  },
+  {
+    "run": "docs/evaluation/editorial-329/runs/rerun-343/opinion-sv/redline",
+    "identities": [
+      [
+        "gpt-6-astra",
+        "high"
+      ]
+    ],
+    "children": [],
+    "cleanup_evidence": true,
+    "complete_input_exactly_preserved": true
+  },
+  {
+    "run": "docs/evaluation/editorial-329/runs/rerun-343/opinion-sv/write",
+    "identities": [
+      [
+        "gpt-6-astra",
+        "high"
+      ]
+    ],
+    "children": [],
+    "cleanup_evidence": true
+  },
+  {
+    "run": "docs/evaluation/editorial-329/runs/rerun-349/opinion-en_GB/redline",
+    "identities": [
+      [
+        "gpt-6-astra",
+        "high"
+      ]
+    ],
+    "children": [],
+    "cleanup_evidence": true,
+    "complete_input_exactly_preserved": true
+  },
+  {
+    "run": "docs/evaluation/editorial-329/runs/rerun-349/opinion-en_GB/write",
+    "identities": [
+      [
+        "gpt-6-astra",
+        "high"
+      ]
+    ],
+    "children": [],
+    "cleanup_evidence": true
+  },
+  {
+    "run": "docs/evaluation/editorial-329/runs/rerun-349/opinion-en_US/redline",
+    "identities": [
+      [
+        "gpt-6-astra",
+        "high"
+      ]
+    ],
+    "children": [],
+    "cleanup_evidence": true,
+    "complete_input_exactly_preserved": true
+  },
+  {
+    "run": "docs/evaluation/editorial-329/runs/rerun-349/opinion-en_US/write",
+    "identities": [
+      [
+        "gpt-6-astra",
+        "high"
+      ]
+    ],
+    "children": [],
+    "cleanup_evidence": true
+  },
+  {
+    "run": "docs/evaluation/editorial-329/runs/rerun-349/opinion-sv/redline",
+    "identities": [
+      [
+        "gpt-6-astra",
+        "high"
+      ]
+    ],
+    "children": [],
+    "cleanup_evidence": true,
+    "complete_input_exactly_preserved": true
+  },
+  {
+    "run": "docs/evaluation/editorial-329/runs/rerun-349/opinion-sv/write",
+    "identities": [
+      [
+        "gpt-6-astra",
+        "high"
+      ]
+    ],
+    "children": [],
+    "cleanup_evidence": true
+  },
+  {
+    "run": "docs/evaluation/editorial-329/runs/rerun-349-source-check/opinion-en_GB/write",
+    "identities": [
+      [
+        "gpt-6-astra",
+        "high"
+      ]
+    ],
+    "children": [],
+    "cleanup_evidence": false
+  },
+  {
+    "run": "docs/evaluation/editorial-329/runs/rerun-349-source-check/opinion-sv/redline",
+    "identities": [
+      [
+        "gpt-6-astra",
+        "high"
+      ]
+    ],
+    "children": [],
+    "cleanup_evidence": true,
+    "complete_input_exactly_preserved": true
+  },
+  {
+    "run": "docs/evaluation/editorial-329/runs/rerun-349-source-check/opinion-sv/write",
+    "identities": [
+      [
+        "gpt-6-astra",
+        "high"
+      ]
+    ],
+    "children": [],
+    "cleanup_evidence": true
   }
 ]

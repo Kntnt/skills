@@ -8,7 +8,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[4]
 BASELINE = "8ae4c21c203fa44f9782c3c0db2c85a5d805c3a6"
-CANDIDATE = "93758f4"
+CANDIDATE = "29ff204"
 LIBRARY = "skills/kntnt/library/references/"
 GENRES = ("article", "case-study", "column", "opinion", "web-copy")
 LOCALES = ("sv", "en_GB", "en_US")

@@ -1,6 +1,6 @@
 # Reading load — #331–337
 
-Whitespace-delimited words: baseline `8ae4c21c203fa44f9782c3c0db2c85a5d805c3a6` versus candidate `93758f4`. These are context costs, not quality targets or new rules. Reproduce with `python3 docs/evaluation/editorial-329/harness/reading_load.py`. The three language resources supply all scopes directly; scope counts match the resolver's body-only output. JSON wrappers, invocation results, supplied texts and findings are excluded because their lengths vary by run.
+Whitespace-delimited words: baseline `8ae4c21c203fa44f9782c3c0db2c85a5d805c3a6` versus candidate `29ff204`. These are context costs, not quality targets or new rules. Reproduce with `python3 docs/evaluation/editorial-329/harness/reading_load.py`. The three language resources supply all scopes directly; scope counts match the resolver's body-only output. JSON wrappers, invocation results, supplied texts and findings are excluded because their lengths vary by run.
 
 ## Authored editorial resources
 
@@ -53,21 +53,21 @@ The editorial contract alone is not the full invocation. Write and review each a
 
 | File | Before | After |
 |---|---:|---:|
-| skills/editorial/write/SKILL.md | 1852 | 1896 |
+| skills/editorial/write/SKILL.md | 1852 | 1914 |
 | skills/editorial/redline/SKILL.md | 3366 | 3449 |
 | skills/editorial/redline/references/correction.md | 1236 | 1288 |
 | skills/editorial/proofread/SKILL.md | 1961 | 1961 |
 | skills/kntnt/library/references/delivery.md | 1721 | 1721 |
 | skills/kntnt/library/references/editorial/mechanics.md | 2015 | 2015 |
 | skills/kntnt/library/references/invocation-envelope.md | 950 | 950 |
-| skills/editorial/write/references/quotations.md | 619 | 676 |
+| skills/editorial/write/references/quotations.md | 619 | 671 |
 
 | Complete stage / pipeline | Before range | After range |
 |---|---:|---:|
-| Write | 8717–9369 | 4891–5314 |
+| Write | 8717–9369 | 4909–5332 |
 | Review | 17522–19003 | 8576–9373 |
 | Correction | 13671–15152 | 4694–5491 |
-| Pipeline | 32215–34967 | 19445–21345 |
+| Pipeline | 32215–34967 | 19463–21363 |
 
 | Final Proofread | Before | After |
 |---|---:|---:|

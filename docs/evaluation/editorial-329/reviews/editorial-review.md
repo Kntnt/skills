@@ -14,9 +14,9 @@ Granskad 2026-09-19: arbetskopian på `editorial-329`, med `6e531f5fe0b610e046ae
 
 **Disposition — rättat och verifierat 2026-09-19:** Review-stycket kräver nu textintern inkonsekvens, säger uttryckligen att flytande språk inte belägger ett reparerat citat och tillåter att skilda markeringar fyller skilda funktioner. Den rättningen undanröjer E1 utan att lägga till en annan provenienskontroll. Fyndet är stängt.
 
-## Helhetsbedömning
+## Första helhetsbedömningen
 
-Efter rättningen av E1 kvarstår ingen blockerande redaktionell motsägelse i det lästa paketet. Basen, webbgrunden, de fem genrerna och teknikerna är koncentrerade och lämnar vinkelns utförande, rytm och retoriska val åt skribenten. Webbskalan är uttryckligen vägledande. Artikelns form, kundens eget omdöme, krönikans personliga perspektiv, debattartikelns ståndpunkt och webbcopyns läsaruppgift är åtskilda utan nya block- eller citatkvoter.
+Efter rättningen av E1 noterades då ingen blockerande redaktionell motsägelse i det lästa paketet. Den senare omprövningen E2 nedan bevaras separat. Basen, webbgrunden, de fem genrerna och teknikerna är koncentrerade och lämnar vinkelns utförande, rytm och retoriska val åt skribenten. Webbskalan är uttryckligen vägledande. Artikelns form, kundens eget omdöme, krönikans personliga perspektiv, debattartikelns ståndpunkt och webbcopyns läsaruppgift är åtskilda utan nya block- eller citatkvoter.
 
 Svenskt hantverk och målspråkets uttryck hålls isär. `none` är ordinarie teknik i femgruppen; explicit ABT/PAC har fortsatt en begriplig uppgift. Ingressen nås utan teaser-laddning. Write, Redline och den färska korrigeringsagenten har förenliga och avgränsade laddningsvägar. Source Fidelity, innehållsbevarande och en avslutande Proofread-pass kvarstår.
 
@@ -45,3 +45,15 @@ Ingen av dessa riktade ändringar införde en ny dispositions-, exempel- eller s
 **Påverkan:** En läsare av det samlade kontraktet får två olika signaler om sådana ordtillägg. Den tidigare bedömningen att ingressundantaget ensamt undanröjde konflikten omprövas. Det kvarvarande #341-utfallet visar ett praktiskt problem men bevisar inte ensamt vilken instruktion som orsakade modellvalet.
 
 **Minimal rättning:** Formulera tilläggsförbudet som förbud mot ny betydelse, fakta, hållning, säkerhet, namn, siffror eller samband. Bind ordändringar till tillåtna reparationer och översättningar som återger samma betydelse. Behåll övriga skydd för särpräglad röst och den uttömmande reparationslistan. Inga produktfiler ändrade av granskaren.
+
+**Disposition E2 — rättat och verifierat vid `29ff2047ad2dac330dd705feccdb3f2d0778831b`:** Bulletspråket förbjuder nu ny betydelse och binder ordändring till *permitted repair or translation*. Översättningens kontextvillkor och skydden för betydelse, hållning, säkerhet och särpräglad röst står kvar. Den konkurrerande absoluta ordregeln är därmed borttagen; praktisk verifiering följer i separata tre språkpar och är inte förutsatt av dispositionen.
+
+Writes färdigkriterium i `d0b2c99` kräver också att sakliga och tillskrivna påståenden kontrolleras mot underlaget som del av skrivandet. Det gör befintlig Source Fidelity verksam i samma utkaststeg; det laddar ingen review-resurs, inför ingen redaktionell eftergranskning och använder ingen annan Skill. Öppningens och leveransstegets gräns mot en separat review-/Proofread-pass förblir förenlig.
+
+## Oberoende läsning av kompletterande utvärdering
+
+Läst hela root-column-källan och de tre slutliga Write-artefakterna under `rerun-column-final`, båda `342-column-final`-recorden och `348-colon`-recordet. Deras åtskillnad mellan källstödd personlig reflektion och uppfunnen egen vana håller i de faktiska texterna. Den svenska kolonkorrigeringens äldre pass är uttryckligen ersatt av fail, medan exakt replay redovisas separat; det är korrekt bevisföring. Även hela senare `completion-check/column-sv/write/response.txt` lästes mot källan: den generiska kalenderillustrationen ”Vi har avsatt en timme” påstår ingen identifierbar mötesepisod eller författarvana och är tillåten reflekterande gestaltning, F1 pass.
+
+Läst hela `338-selection`-recordet, de fem selektionskontrollernas gemensamma artikeltext, report-pac före/efter samt excerpt-texten. Faktisk diff och teknik-/Proofread-kommandon stöder utfallet: none och äldre metadata prioriteras som dokumenterat, PAC ersätter bara den formellt överstyrda teknikmetadata, tidigt svar står kvar i rapporten och utdrag får ingen påhittad helartikelform. Rapportens tre lokala referensförtydliganden har stöd i befintlig text och dess särskilda genrekrav. Detta är en oberoende text- och recordgranskning, inte en ny körning av dessa kontrollceller.
+
+Läsbelastningsredovisningen har också lästs. Den skiljer den korta redaktionella briefen från den större operativa laddningen, de tre språkens scopes, faktisk korrigering och den avslutande Proofread-passen. Ordminskningen är kontextkostnad, inte ett kvalitetsmått; textutfallen avgör vilka kriterier som faktiskt passerar.

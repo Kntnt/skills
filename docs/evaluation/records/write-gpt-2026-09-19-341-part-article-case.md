@@ -8,7 +8,7 @@
 - **model** — `gpt-6-astra`, inherited `high`, verified against native turn contexts
 - **harness** — Codex CLI 0.155.1, fresh isolated invocation per stage
 - **corpus commit** — `6e531f5fe0b610e046ae58787f246cc6239acbcc`
-- **instruction commits** — `1a4f65b3da64fc4f94e82de519ef8b5a18ae56dd` for article-en_GB; `7022c804dfbda4332723bf96b6a9857c24e63b6e` for article-en_US; `93758f485614c3b0e79b1bcce9fb8080de755d08` for the two case-study reruns. Changes across these revisions are Swedish colon variants and the base clarification that unknown/unclaimed does not mean known absent; each pair uses one immutable revision.
+- **instruction commits** — `1a4f65b3da64fc4f94e82de519ef8b5a18ae56dd` for article-en_GB; `7022c804dfbda4332723bf96b6a9857c24e63b6e` for article-en_US; `93758f485614c3b0e79b1bcce9fb8080de755d08` for case-study-sv. Changes across these revisions are Swedish colon variants and the base clarification that unknown/unclaimed does not mean known absent; each pair uses one immutable revision.
 - **method** — Same frozen matrix and source packages, no added prompt hints. New runs preserve the earlier d60 failures. No other provider's records consulted. Chronology is already covered by Source Fidelity: an observed pass on this revision is not proof of a targeted fix or future reliability.
 
 ## article-en_GB
@@ -83,3 +83,6 @@
 - **defects filed** — #341, existing defect; rerun outcome added without replacing earlier failure.
 - **notes** — All other prose reads naturally. No strengthened evaluation prompt or expected phrase was supplied. A fluent synonym for the source verb does not by itself establish idiomatic translation of the referent.
 
+## case-study-en_GB — planned earlier-revision rerun not started
+
+Skipped at this revision: before invocation, the final quotation-boundary revision became available. The chronology rerun is performed as part of all three case-study locale pairs in the separate `341-translation-part-article-case` record. The original d60 chronology failure remains unchanged; no missing run is counted as a pass here.

@@ -1,0 +1,41 @@
+Reviewed as US English web copy, with no technique, as specified in the metadata. Correction 1 removed the circular claim that the review is relevant to boards wanting to examine their booking routine within its defined scope. No unresolved findings or mechanical errors remain. No files were changed.
+
+```markdown
+---
+kntnt:
+  genre: web-copy
+  technique: none
+  language: en_US
+---
+
+# A clearer picture of your shared room’s booking routine
+
+Svale helps boards of smaller Swedish tenant-owner associations review how residents book a shared room. The review gives your board a shared understanding of the current routine and two possible ways to simplify it.
+
+## What the review includes
+
+The service covers one shared room in one association. It includes:
+
+- A 45-minute video meeting with two board representatives.
+- A written summary of the current booking steps, points that are unclear, and two possible simplifications.
+
+The focus is on understanding the routine you already have. The written summary gives your board a basis for considering the two possible changes.
+
+## What your board needs to prepare
+
+Your board needs to be able to describe its existing booking rules and show the instructions currently provided to residents. Two board representatives take part in the video meeting.
+
+## Price and scope
+
+The fixed price is **SEK 4,800, including VAT**, for one room in one association.
+
+The review does not include legal advice, installation of a booking system, or interviews with residents. Svale does not guarantee a specific time saving or fewer conflicts.
+
+## Express interest and find out what happens next
+
+[Submit an expression of interest](https://example.invalid/svale/intresse)
+
+The linked form asks for your name, association, and email address. Submitting it is not an order, does not book a meeting, and requires no payment details.
+
+Svale will respond by email within three business days to check whether the service is a suitable fit and suggest a meeting time.
+```

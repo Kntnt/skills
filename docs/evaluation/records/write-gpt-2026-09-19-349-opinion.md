@@ -79,3 +79,7 @@ All three opinion locales use the exact frozen source and unchanged candidate pr
 - **unresolved findings** — #349 remains in all three locale samples on 93758f4.
 - **defects filed** — #349 — en_US recurrence.
 - **notes** — Native rollout confirms gpt-6-astra/high. This pair began before d0b2c99 was supplied and stays wholly on93758f4. New source-check stage verification will use separate paths/records.
+
+## Completed 93758f4 series
+
+All three pairs are complete, all native roots inventoried and removed. Write F1fails#349 in every locale; Redline correctly retains each internally coherent text without unseen-source verification. The knowledge-state wording clarification alone is not verified to repair this behaviour. New d0b2c99 source-support completion verification has separate 349-source-check-opinion records and rerun-349-source-check paths. No original outcome is overwritten.

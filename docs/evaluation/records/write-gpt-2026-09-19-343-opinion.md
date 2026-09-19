@@ -73,3 +73,7 @@ For opinion-sv, the registered native root was already absent at the evaluator's
 ## Stage completion and next revision
 
 The sv and en_GB pairs on 1a4f65b are complete and preserved, with Write F1 failures #349 and appropriate source-blind no-change Redline outcomes. opinion-en_US was not started on this revision. Parent requested a clarification of the existing base Claims state-of-knowledge boundary and new unchanged-source/prompt pairs in all three locales; these will have separate 349 records. Original #343 stance is fixed in both completed samples. All completed roots are absent, with the sv Write removal actor unproven as recorded above.
+
+## Cleanup attribution resolved
+
+The prior uncertain attribution for opinion-sv is now resolved by `../editorial-329/reviews/automatic-cleanup-events.json`: the global session-cleanup start hook deleted the registered oc0bvl8y root at2026-09-19T19:11:05+00:00. This supersedes the earlier unproven-actor note. Complete inventories and native captures predated deletion; no evidence was lost and no evaluator manual deletion is claimed.

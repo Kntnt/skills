@@ -767,10 +767,11 @@ def test_nothing_in_the_corpus_or_the_protocol_asserts_exact_prose() -> None:
     that was true.
     """
 
-    sources = sorted(EVALUATION.rglob("*.md"))
+    sources = [PROTOCOL, TEMPLATE, *sorted(CORPUS.rglob("*.md"))]
 
+    # Observed outputs and historical records are evidence, not requirements.
     # A corpus moved out from under this glob would leave nothing to judge.
-    assert sources
+    assert any(path.is_relative_to(CORPUS) for path in sources)
 
     offending: dict[str, list[str]] = {}
     for path in sources:

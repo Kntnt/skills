@@ -8,7 +8,7 @@
 - **model** — `gpt-6-astra`, inherited `high`, verified against native turn contexts
 - **harness** — Codex CLI 0.155.1, fresh isolated invocation per stage
 - **corpus commit** — `6e531f5fe0b610e046ae58787f246cc6239acbcc`
-- **instruction commits** — `1a4f65b3da64fc4f94e82de519ef8b5a18ae56dd` for article-en_GB; `7022c804dfbda4332723bf96b6a9857c24e63b6e` for article-en_US; `93758f485614c3b0e79b1bcce9fb8080de755d08` for the two case-study reruns. Changes across these revisions are Swedish colon variants and the base clarification that unknown/unclaimed does not mean known absent; each pair uses one immutable revision.
+- **instruction commits** — `1a4f65b3da64fc4f94e82de519ef8b5a18ae56dd` for article-en_GB; `7022c804dfbda4332723bf96b6a9857c24e63b6e` for article-en_US; `93758f485614c3b0e79b1bcce9fb8080de755d08` for case-study-sv. Changes across these revisions are Swedish colon variants and the base clarification that unknown/unclaimed does not mean known absent; each pair uses one immutable revision.
 - **method** — Same frozen matrix and source packages, no added prompt hints. New runs preserve the earlier d60 failures. No other provider's records consulted. Chronology is already covered by Source Fidelity: an observed pass on this revision is not proof of a targeted fix or future reliability.
 
 ## article-en_GB
@@ -59,3 +59,30 @@
 - **defects filed** — none
 - **notes** — Both native identities confirmed in consolidated audit. Native spawn brief is encrypted; child executed instructions and no-change return are visible, rather than claimed plaintext handoff verification.
 
+## case-study-sv
+
+- **fixture** — case-study-sv, affected translation rerun
+- **instruction commit** — 93758f485614c3b0e79b1bcce9fb8080de755d08
+- **invocation** — `/redline --output=response input.md`
+- **contextual instruction** — none
+- **output target** — response
+- **observed delivery** — No-change status; entire input retained in `editorial-329/runs/rerun-341/case-study-sv/redline/artifact.md`.
+- **side effects** — No work/export/scratch changes; inventoried native home effects, authentication unchanged, root removed.
+- **criteria** —
+  - G1 — pass — Customer-led account, third-person supplier and publisher disclosure retained.
+  - G2 — pass — Customer choices/results/appraisal and true checklist action remain; no manufactured quote quota or drama.
+  - P1 — pass — Qualifications visibly constrain measured differences; team decision and next-step conditions remain.
+  - W1 — pass — Connected readable narrative preserved without imposing headings or numerical guidelines.
+  - L1 — fail — “innan nästa byggnad kommer i gång” still leaves the trial/use referent unstated. The ordinary reader must reconstruct what starts; this is not resolved merely by changing the verb or enclosing speech in quotation form.
+  - L2 — pass — Shared/sv mechanics loaded; correct typography unchanged. The referent defect is editorial idiom.
+  - T1 — pass — Case-study/none/sv metadata honoured, no technique; installed filename inventory does not read unselected genre contents.
+  - R1 — fail — Mandatory visible idiom finding is neither repaired nor reported despite the revised case-study review diagnostic actually being loaded. No other claim, quotation or functioning voice was changed.
+  - R2 — pass — Full selected/shared review contract and language scopes loaded. No correction delegated because none was identified; exactly one installed flags-only Proofread invocation with shared/sv mechanics, no later edit. Failed detection is scored R1 rather than misdescribed as a missing mechanical pass.
+  - O1 — pass — Complete before/after inventories and private transient cleanup establish no surviving Skill file or source mutation.
+- **unresolved findings** — Skill reported none; evaluator records the unresolved mandatory #341 L1 finding.
+- **defects filed** — #341, repeated in both stages after the first translation clarification.
+- **notes** — Source-blind fresh native invocation; identical input bytes prove preservation, not freedom from defects.
+
+## case-study-en_GB — planned earlier-revision rerun not started
+
+Skipped at this revision: before invocation, the final quotation-boundary revision became available. The chronology rerun is performed as part of all three case-study locale pairs in the separate `341-translation-part-article-case` record. The original d60 chronology failure remains unchanged; no missing run is counted as a pass here.
