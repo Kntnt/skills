@@ -1,0 +1,1 @@
+Draft delivered here in British English, using the supplied fictional material. Genre: case study; technique: none. Source comparison passed. No measured performance outcomes were supplied. Temporary files have been removed; no draft file was retained.

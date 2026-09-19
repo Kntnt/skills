@@ -1,0 +1,18 @@
+## What to build
+
+Part of #329. Preserve functioning quoted wording during source-blind Redline review. At ae24f9b3 and the exact positive-control replay at 3f21d9b1, Redline expands “I would set that time aside before the next building starts.” into “I would set that time aside before the trial starts in the next building.” The complete English context already establishes the repair-log trial and possible expansion. Independent readers identify no concrete English obstruction. F1 meaning survives, but R1 preservation fails. This differs from the Swedish idiom defect in #341.
+
+Complete evidence is in docs/evaluation/editorial-329/followup/runs/quotation-candidate/case-study-en_US-r2/redline/ and runs/final-quotation-original/case-study-en_US-r2/redline/. The exact original artifact is runs/third-candidate/case-study-en_US-r2/draft.md. Latest quotation-transport-audit.json verifies complete artifact and scoped guidance reads by both focused readers. The native reader proposes the needless finding, the correction applies it and the re-reader approves. Both formal quotation-original records preserve the failure.
+
+Assess whether the new fresh-reader mechanism earns its preservation and reading cost; reverting that mechanism is an admissible repair. Do not impose a fixture-specific wording rule or a general ban on metonymy. Preserve source-aware translated quotation checking and the independent Swedish defect.
+
+## Acceptance criteria
+
+- [ ] Preserve both complete failures and unchanged R1 judgments.
+- [ ] Full-artifact source-blind controls at the final revision preserve functioning English wording and distinctive voice outside concrete findings.
+- [ ] Retain genuine Swedish idiom controls and report residual failures without weakening the criterion.
+- [ ] Capture actual loads, complete outputs, single closing Proofread and full-root effects/cleanup.
+- [ ] Run the four CONTRIBUTING checks for the integrated change.
+
+---
+Written against cd375d4f

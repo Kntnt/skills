@@ -1,0 +1,6 @@
+[
+  {
+    "command": "/opt/homebrew/bin/bash -lc \"python3 - <<'PY'\nfrom pathlib import Path\nscratch = Path('/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-4sqnhtq_/scratch')\nrun = scratch / 'write-check.wlaw0wav'\n(run / 'disposition.md').write_text('Read and validated the complete comparison against the draft and source. No findings were raised; none accepted or rejected. No prose changes. Current prose passed the completed source comparison.\\\\n')\nfor name in ('draft.md', 'report.md', 'disposition.md'):\n    (run / name).unlink()\nrun.rmdir()\nprint('Remaining run-created scratch paths:', [str(p) for p in scratch.iterdir() if p.name.startswith(('write-invoke.', 'write-language.', 'write-check.'))])\nprint('Workspace root entries:', ', '.join(sorted(p.name for p in Path.cwd().iterdir())))\nPY\"",
+    "output": "Remaining run-created scratch paths: []\nWorkspace root entries: .agents, .git, AGENTS.md, source.md\n"
+  }
+]

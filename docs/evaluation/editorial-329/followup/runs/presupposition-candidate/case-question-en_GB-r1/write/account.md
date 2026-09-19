@@ -1,0 +1,1 @@
+*British English case study; no technique selected. Delivered here from fictional source material, with no files retained. Source comparison passed. The material covered the brief; no author name or call to action was supplied.*

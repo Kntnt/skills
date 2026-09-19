@@ -1,0 +1,1 @@
+Utkastet är en fallstudie på svenska, utan särskild berättarteknik, levererad här i svaret. Källjämförelsen och citatkontrollen är klara. Underlaget saknar leverantörsjämförelse samt mätningar av kostnader, boendenöjdhet och slutförandetid. Inga arbetsfiler finns kvar.

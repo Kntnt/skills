@@ -151,3 +151,7 @@ Every completed native invocation retains full input/response, parent and child 
 - **unresolved findings** — not applicable to an uninvoked Redline.
 - **defects filed** — none newly exposed by Redline.
 - **notes** — The final draft retains the nonidiomatic translated quotation “innan nästa byggnad kommer i gång”. The second checker correctly reports this concrete Swedish activity-reference obstruction; withholding is required at the two-comparison bound. [Withholding receipt](../editorial-329/followup/runs/third-candidate/case-study-sv-r1/withheld.json). A skipped invocation is never a pass.
+
+## Measurement-domain defect filing addendum
+
+The previously recorded substitutions of disability for functional ability and capability/proficiency for digital familiarity are tracked in [#360](https://github.com/Kntnt/skills/issues/360). This links the first candidate’s superseding F1 failures and the third US opinion’s valid withholding basis, without revising earlier judgements or converting a refusal into a pass.

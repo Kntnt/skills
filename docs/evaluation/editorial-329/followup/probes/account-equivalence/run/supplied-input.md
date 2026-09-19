@@ -1,0 +1,184 @@
+# Complete supplied source
+
+# Case-study brief and source
+
+SYNTHETIC EVALUATION MATERIAL. This is the entire fictional source package. Source language: English. No external facts or quotations may be added.
+
+## Brief
+
+Write a journalistic customer case for operations managers at small housing companies. The publisher is the supplier, Svale Systems. The customer, Elm Quay Housing, should remain the acting party. Approximately 400 words, as material allows. Markdown. No author name supplied. The optional next step is the supplied implementation checklist at https://example.invalid/svale/checklist; it is a document to read, not a consultation booking or a product trial.
+
+## Material
+
+Elm Quay Housing manages 640 flats. In September 2025 its own maintenance team decided to trial a shared repair log in two buildings. Previously telephone reports and emails were stored separately. The team wanted staff on different shifts to see the same information. It chose Svale Systems after testing whether the log could show the status of each repair. No comparison with another supplier is available.
+
+The maintenance team designed its categories and kept telephone reporting open for residents. Svale configured the log and trained six staff during two sessions. The trial lasted eight weeks. Elm Quay's internal trial note, 4 December 2025, says that 31 repair reports were entered. It excludes emergencies and work ordered before the trial. Median time from report to assignment was two working days during the trial and three in the preceding eight-week period. The periods had different workloads, and the note explicitly does not attribute the difference to the software. There are no cost, resident-satisfaction or completion-time measurements.
+
+Customer interview with maintenance supervisor Maya Lind, complete usable quotations:
+
+- “We wanted the evening shift to see what the morning shift had already done. The categories were ours; Svale helped us put them into the log.”
+- “We spent more time agreeing on the categories than entering the first reports. I would set that time aside before the next building starts.”
+- “I would choose to do the trial again. Having one view of the reports helps us, but I would leave an extra week for preparation.”
+
+Lind did not recommend Svale to every housing company. Her final quotation is her actual, qualified assessment. It is not an inference from the figures. The trial has not yet expanded; the team will decide after checking how the categories work for larger repairs. The supplier approved publication of this case as supplier-published material; it is not independent journalism. All interviews occurred by email, and no physical scene, emotion or remembered dialogue is provided. Translation of the quotations is permitted, preserving stance and qualification.
+
+## Forbidden inferences / judging
+
+No claim that software caused the shorter assignment time, saved money, delighted residents or rescued a helpless customer. Do not turn assignment time into completion time. The customer's reservation must survive. Judge whether quotations contribute experience beyond the surrounding narrative, whether supplier narration stays in third person and whether the suggested link accurately describes its destination.
+
+
+# Complete current draft
+
+---
+kntnt:
+  genre: case-study
+  technique: none
+  language: en_US
+---
+
+# Elm Quay brings repair reports into one shared view
+
+Elm Quay Housing’s maintenance team tested a shared repair log in two buildings so staff on different shifts could see the same information. The eight-week trial gave the team one view of its reports, which maintenance supervisor Maya Lind found helpful. Before expanding, the team will check how its categories work for larger repairs.
+
+*Fictional case study for publication by Svale Systems.*
+
+Elm Quay manages 640 apartments. Before the trial, telephone reports and emails were stored separately. In September 2025, its maintenance team decided to try a shared log and chose Svale Systems after testing whether the log could show each repair’s status.
+
+The team designed the categories and kept telephone reporting open for residents. Svale configured the log and trained six staff members over two sessions. In an email interview, Lind described the preparation involved:
+
+“We spent more time agreeing on the categories than entering the first reports. I would set that time aside before the next building starts.”
+
+For operations managers considering a similar trial, that is a preparation task to plan for: agreeing on the categories staff will use. At Elm Quay, those decisions belonged to the maintenance team, with Svale helping put them into the log.
+
+Elm Quay’s internal trial note, dated December 4, 2025, records 31 repair reports entered during the eight weeks. The figures exclude emergencies and work ordered before the trial. Median time from report to assignment was two working days, compared with three in the preceding eight-week period.
+
+The periods had different workloads, and the note explicitly does not attribute the difference to the software. The measure concerns assignment, not repair completion; there are no completion-time, cost, or resident-satisfaction measurements in the supplied material.
+
+Lind’s assessment combines a reason to repeat the trial with a reservation about the time allowed:
+
+“I would choose to do the trial again. Having one view of the reports helps us, but I would leave an extra week for preparation.”
+
+That is a qualified judgment of Elm Quay’s experience. Lind did not recommend Svale to every housing company. The trial has not yet expanded, and the team’s decision will follow its check of the categories for larger repairs.
+
+For a next step, read [Svale’s implementation checklist](https://example.invalid/svale/checklist).
+
+
+
+# Complete comparison report
+
+# Source-support comparison
+
+Compared the complete supplied draft with the entire supplied source and brief. Scope: factual and attributed claims, implications, quotation fidelity, and pronoun information. No external sources used. General editorial and mechanical review excluded.
+
+## Supporting source passages
+
+- S1: “SYNTHETIC EVALUATION MATERIAL. This is the entire fictional source package.”
+- S2: “The publisher is the supplier, Svale Systems.”
+- S3: “The optional next step is the supplied implementation checklist at https://example.invalid/svale/checklist; it is a document to read, not a consultation booking or a product trial.”
+- S4: “Elm Quay Housing manages 640 flats.”
+- S5: “In September 2025 its own maintenance team decided to trial a shared repair log in two buildings.”
+- S6: “Previously telephone reports and emails were stored separately.”
+- S7: “The team wanted staff on different shifts to see the same information.”
+- S8: “It chose Svale Systems after testing whether the log could show the status of each repair.”
+- S9: “The maintenance team designed its categories and kept telephone reporting open for residents.”
+- S10: “Svale configured the log and trained six staff during two sessions.”
+- S11: “The trial lasted eight weeks.”
+- S12: “Elm Quay's internal trial note, 4 December 2025, says that 31 repair reports were entered. It excludes emergencies and work ordered before the trial.”
+- S13: “Median time from report to assignment was two working days during the trial and three in the preceding eight-week period.”
+- S14: “The periods had different workloads, and the note explicitly does not attribute the difference to the software.”
+- S15: “There are no cost, resident-satisfaction or completion-time measurements.”
+- S16: “Customer interview with maintenance supervisor Maya Lind, complete usable quotations”.
+- S17: “We wanted the evening shift to see what the morning shift had already done. The categories were ours; Svale helped us put them into the log.”
+- S18: “We spent more time agreeing on the categories than entering the first reports. I would set that time aside before the next building starts.”
+- S19: “I would choose to do the trial again. Having one view of the reports helps us, but I would leave an extra week for preparation.”
+- S20: “Lind did not recommend Svale to every housing company. Her final quotation is her actual, qualified assessment. It is not an inference from the figures.”
+- S21: “The trial has not yet expanded; the team will decide after checking how the categories work for larger repairs.”
+- S22: “The supplier approved publication of this case as supplier-published material; it is not independent journalism.”
+- S23: “All interviews occurred by email”.
+
+For each supported proposition below, the cited source passage is the supplied statement that rules out the precise negation. A source reference is not an assertion of independent verification: the account is bounded by this fictional source package. None of the supported rows requires a source-compatible counterexample because its negation is ruled out. The recommendations and attributed judgments are distinguished explicitly.
+
+## Complete proposition accounting
+
+| ID | Draft passage | Complete standalone proposition | Precise negation, with subject and scope fixed | Support and result |
+|---|---|---|---|---|
+| 1 | Title: “Elm Quay brings repair reports into one shared view” | Elm Quay brought repair reports into one shared view in the described trial. | Elm Quay did not bring repair reports into one shared view in the described trial. | S5, S12, S19: shared log, entered reports, and Lind’s explicit experience of one view. Supported headline framing; no wider rollout asserted. |
+| 2 | “maintenance team tested a shared repair log in two buildings” | Elm Quay Housing’s maintenance team tested a shared repair log in two buildings. | Elm Quay Housing’s maintenance team did not test a shared repair log in two buildings. | S5, S11, S12 establish the planned trial occurred. Supported. |
+| 3 | “so staff on different shifts could see the same information” | The maintenance team’s purpose in testing the log was to let staff on different shifts see the same information. | The maintenance team’s purpose in testing the log was not to let staff on different shifts see the same information. | S7. Purpose, not a measured change in shift performance. Supported. |
+| 4 | “The eight-week trial” | The trial lasted eight weeks. | The trial did not last eight weeks. | S11. Supported, including duration modifier. |
+| 5 | “gave the team one view of its reports” | During the trial the team had one view of its repair reports through the shared log. | During the trial the team did not have one view of its repair reports through the shared log. | S5, S12, S19. Supported functional description; no claim of causal improvement in assignment time. “Its reports” refers to trial reports, not all possible reports without exclusions. |
+| 6 | “maintenance supervisor Maya Lind” | Maya Lind is the customer’s maintenance supervisor. | Maya Lind is not the customer’s maintenance supervisor. | S16. Supported. |
+| 7 | “which … Maya Lind found helpful” | Lind’s assessment was that the team’s having one view of the reports was helpful. | Lind’s assessment was not that the team’s having one view of the reports was helpful. | S19: “helps us.” Supported attribution of a favorable assessment, not a measured benefit or an invented emotional state. |
+| 8 | “Before expanding, the team will check how its categories work for larger repairs” | The team will check how its categories work for larger repairs before any expansion decision. | The team will not check how its categories work for larger repairs before any expansion decision. | S21. Supported chronology; this does not promise that expansion will occur. |
+| 9 | “Fictional case study” | This case study describes fictional material. | This case study does not describe fictional material. | S1. Supported. |
+| 10 | “for publication by Svale Systems” | The intended publisher of this case study is Svale Systems. | The intended publisher of this case study is not Svale Systems. | S2, S22. Supported; no claim of completed publication or editorial independence. |
+| 11 | “Elm Quay manages 640 apartments” | Elm Quay Housing manages 640 apartments. | Elm Quay Housing does not manage 640 apartments. | S4. “Apartments” preserves “flats” in en_US. Supported. |
+| 12 | “Before the trial, telephone reports and emails were stored separately” | Before the trial, telephone reports and emails were stored separately. | Before the trial, telephone reports and emails were not stored separately. | S6. Supported. |
+| 13 | “In September 2025, its maintenance team decided to try a shared log” | Elm Quay’s maintenance team decided in September 2025 to try a shared log. | Elm Quay’s maintenance team did not decide in September 2025 to try a shared log. | S5. Supported date and agency. |
+| 14 | “and chose Svale Systems” | Elm Quay’s maintenance team chose Svale Systems for the shared-log trial. | Elm Quay’s maintenance team did not choose Svale Systems for the shared-log trial. | S8. Supported. |
+| 15 | “after testing whether the log could show each repair’s status” | The maintenance team tested whether the log could show each repair’s status before choosing Svale Systems. | The maintenance team did not test whether the log could show each repair’s status before choosing Svale Systems. | S8. Supported sequence and scope; no comparative vendor test or successful test result is added. The September date belongs expressly to the decision to try; the sentence does not supply a separate dated selection event. |
+| 16 | “The team designed the categories” | The maintenance team designed the categories used for its log. | The maintenance team did not design the categories used for its log. | S9. Supported. |
+| 17 | “kept telephone reporting open for residents” | The maintenance team kept telephone reporting available to residents during the trial. | The maintenance team did not keep telephone reporting available to residents during the trial. | S9. Supported continuity, audience, and trial context. |
+| 18 | “Svale configured the log” | Svale configured the trial log. | Svale did not configure the trial log. | S10. Supported. |
+| 19 | “trained six staff members over two sessions” | Svale trained six staff members during two sessions. | Svale did not train six staff members during two sessions. | S10. Supported count, trainer, and session count. |
+| 20 | “In an email interview, Lind described the preparation involved” | Lind’s quoted remarks about preparation came from an email interview. | Lind’s quoted remarks about preparation did not come from an email interview. | S16, S18, S23. Supported medium and attribution. |
+| 21 | “We spent more time agreeing on the categories than entering the first reports” | Lind said that her team spent more time agreeing on the categories than entering the first reports. | Lind did not say that her team spent more time agreeing on the categories than entering the first reports. | S18, exact quotation. Supported statement of her experience. No absolute duration supplied. |
+| 22 | “I would set that time aside before the next building starts” | Lind said she would allocate that category-agreement time before the next building starts. | Lind did not say she would allocate that category-agreement time before the next building starts. | S18, exact quotation. Supported hypothetical recommendation, not a confirmed expansion schedule. |
+| 23 | “For operations managers considering a similar trial, that is a preparation task to plan for: agreeing on the categories staff will use” | The article advises operations managers considering a similar trial to plan time for agreement on the categories staff will use. | The article does not advise operations managers considering a similar trial to plan time for agreement on the categories staff will use. | Advocacy in the draft, grounded in S18. Not presented as a measured universal result or as a recommendation of Svale by Lind. The descriptive premise that agreeing categories is preparation is supported by S9, S18, S19. |
+| 24 | “At Elm Quay, those decisions belonged to the maintenance team” | At Elm Quay the maintenance team made the category-design decisions. | At Elm Quay the maintenance team did not make the category-design decisions. | S9, S17. Supported. |
+| 25 | “with Svale helping put them into the log” | Svale helped the maintenance team put the team’s categories into the log. | Svale did not help the maintenance team put the team’s categories into the log. | S17. Supported; no invented replacement of customer agency. |
+| 26 | “Elm Quay’s internal trial note” | Elm Quay has an internal note documenting this trial. | Elm Quay does not have an internal note documenting this trial. | S12. Supported source identity and internal status. |
+| 27 | “dated December 4, 2025” | Elm Quay’s internal trial note is dated December 4, 2025. | Elm Quay’s internal trial note is not dated December 4, 2025. | S12. Supported en_US date rendering. |
+| 28 | “records 31 repair reports entered during the eight weeks” | The internal trial note records that 31 repair reports were entered during the eight-week trial. | The internal trial note does not record that 31 repair reports were entered during the eight-week trial. | S11, S12. Supported attributed count and duration. |
+| 29 | “The figures exclude emergencies” | The reported trial figures exclude emergencies. | The reported trial figures do not exclude emergencies. | S12. Supported exclusion. The note’s exclusions are applied to its reported trial figures; no claim about unreported emergencies is made. |
+| 30 | “and work ordered before the trial” | The reported trial figures exclude work ordered before the trial. | The reported trial figures do not exclude work ordered before the trial. | S12. Supported exclusion, with the temporal condition retained. |
+| 31 | “Median time from report to assignment was two working days” | Median time from report to assignment during the trial was two working days. | Median time from report to assignment during the trial was not two working days. | S13. Supported metric, unit, statistic, and trial scope supplied by the paragraph. |
+| 32 | “compared with three in the preceding eight-week period” | Median time from report to assignment in the preceding eight-week period was three working days. | Median time from report to assignment in the preceding eight-week period was not three working days. | S13. Supported; carries forward “median,” report-to-assignment scope, and “working days.” |
+| 33 | “The periods had different workloads” | The trial period and preceding eight-week period had different workloads. | The trial period and preceding eight-week period did not have different workloads. | S14. Supported qualification. |
+| 34 | “the note explicitly does not attribute the difference to the software” | The internal trial note explicitly refrains from attributing the difference in median assignment time to the software. | The internal trial note does not explicitly refrain from attributing the difference in median assignment time to the software. | S14. Supported knowledge/attribution claim. This is not the different proposition that the software had no effect. |
+| 35 | “The measure concerns assignment, not repair completion” | The reported time measure is report-to-assignment time rather than repair-completion time. | The reported time measure is not report-to-assignment time rather than repair-completion time. | S13. Supported definition; explicitly prevents completion-time inference. |
+| 36 | “there are no completion-time … measurements in the supplied material” | The supplied material contains no completion-time measurements. | The supplied material contains at least one completion-time measurement. | S15 and inspection of complete source. Supported absence within supplied material only. |
+| 37 | “there are no … cost … measurements in the supplied material” | The supplied material contains no cost measurements. | The supplied material contains at least one cost measurement. | S15 and inspection of complete source. Supported absence within supplied material only. |
+| 38 | “there are no … resident-satisfaction measurements in the supplied material” | The supplied material contains no resident-satisfaction measurements. | The supplied material contains at least one resident-satisfaction measurement. | S15 and inspection of complete source. Supported absence within supplied material only. |
+| 39 | “Lind’s assessment combines a reason to repeat the trial” | Lind’s assessment expresses willingness to repeat the trial and identifies the helpful shared view as a positive feature of the experience. | Lind’s assessment does not express willingness to repeat the trial and identify the helpful shared view as a positive feature of the experience. | S19. Supported interpretive description of the quotation; not an inference from the assignment figures. |
+| 40 | “with a reservation about the time allowed” | Lind’s assessment includes a reservation about the time allocated to preparation. | Lind’s assessment includes no reservation about the time allocated to preparation. | S19, S20. Supported interpretive description of wanting an extra preparation week. |
+| 41 | “I would choose to do the trial again” | Lind said she would choose to do the trial again. | Lind did not say she would choose to do the trial again. | S19, exact quotation. Supported hypothetical choice, not a claim that another trial is planned. |
+| 42 | “Having one view of the reports helps us” | Lind said having one view of the reports helps her team. | Lind did not say having one view of the reports helps her team. | S19, exact quotation. Supported attributed experiential judgment; no particular measured performance improvement asserted. |
+| 43 | “but I would leave an extra week for preparation” | Lind said she would leave one extra week for preparation if doing the trial again. | Lind did not say she would leave one extra week for preparation if doing the trial again. | S19, exact quotation with reservation intact. Supported conditional judgment, increment, and purpose. |
+| 44 | “That is a qualified judgment of Elm Quay’s experience” | Lind’s immediately preceding quotation is her qualified judgment of Elm Quay’s trial experience. | Lind’s immediately preceding quotation is not her qualified judgment of Elm Quay’s trial experience. | S19, S20. Supported characterization; actual stance retained. |
+| 45 | “Lind did not recommend Svale to every housing company” | Lind did not recommend Svale to every housing company. | Lind recommended Svale to every housing company. | S20 directly rules out the negation. Supported categorical statement expressly given by the source; not an absence inferred from missing material. Does not claim she recommended Svale to no company. |
+| 46 | “The trial has not yet expanded” | As of the account, the trial has not yet expanded. | As of the account, the trial has already expanded. | S21. Supported status; no claim that expansion will never occur. |
+| 47 | “the team’s decision will follow its check of the categories for larger repairs” | The maintenance team will make its expansion decision after checking how the categories work for larger repairs. | The maintenance team will not make its expansion decision after checking how the categories work for larger repairs. | S21. Supported agency, chronology, and decision prerequisite; no outcome predicted. |
+| 48 | “For a next step, read [Svale’s implementation checklist]” | An implementation checklist is supplied as an optional next-step document to read at the linked address. | An implementation checklist is not supplied as an optional next-step document to read at the linked address. | S3 and supplier-published context S2. Supported destination description and optional invitation. No consultation or trial booking asserted. “Svale’s” identifies its role as the supplier’s next-step resource, not a separate claim about legal ownership. |
+
+## Pronoun and reference-feature accounting
+
+The draft contains no third-person pronoun that independently asserts a person’s natural gender. Lind’s quotations use first-person forms, which themselves carry no natural-gender feature. The source additionally uses “Her” of Lind, so gendered wording would not need to be inferred from the name, but the draft does not depend on such an inference.
+
+| Draft forms and occurrences | Person, number, and reference proposition | Precise negation | Support and result |
+|---|---|---|---|
+| “Elm Quay Housing’s maintenance team”; “its reports”; “its categories”; “its maintenance team”; “its check” | These possessive references concern one institutional customer or one maintenance team, grammatically third-person singular, and the reports/categories/check associated with it. | These possessive references do not concern the identified institutional customer or maintenance team and its associated reports/categories/check. | S5, S7, S9, S19, S21. Supported singular organization/team reference; singular grammar makes no assertion of one human team member or natural gender. |
+| “which maintenance supervisor Maya Lind found helpful” | “Which” refers to the team’s having one view of the reports, not to a separately claimed object or person. | “Which” does not refer to the team’s having one view of the reports. | S19 and local antecedent. Supported; no personal-gender feature. |
+| “We spent more time” | Lind’s quoted “we” is a first-person plural group including Lind in the customer-side category-agreement work. | Lind’s quoted “we” is not a first-person plural group including Lind in that work. | S18 exact wording and S9/S17 settle the team context. Supported plural speaker membership; no group size or member gender inferred. |
+| “I would set that time aside” | “I” is the singular interview speaker Maya Lind, speaking about her own conditional allocation of time. | “I” is not the singular interview speaker Maya Lind speaking about her own conditional allocation of time. | S16, S18. Supported first-person singular attribution; “her” here follows source S20 rather than inference from the draft pronoun. |
+| “that time”; “that is a preparation task”; “those decisions” | These demonstratives refer respectively to time spent agreeing categories, agreement on categories, and category-design decisions. | These demonstratives do not refer respectively to those established antecedents. | S9, S18. Supported references; “those” is plural decisions, not multiple independently asserted projects or people. |
+| “staff will use” | The categories in this advice are categories intended for use by the staff involved in the contemplated trial. | The categories in this advice are not intended for use by the staff involved in the contemplated trial. | S7, S9 and the explicitly advisory sentence. Supported purpose in the hypothetical advice; no actual future trial asserted. |
+| “put them into the log” | “Them” is third-person plural referring to the team’s categories. | “Them” does not refer to the team’s categories. | S17’s “put them into the log,” with “categories” as antecedent. Supported number and reference; no natural gender. |
+| “I would choose”; “I would leave” | Both first-person singular pronouns refer to the same singular interview speaker, Maya Lind. | Both first-person singular pronouns do not refer to the same singular interview speaker, Maya Lind. | S16, S19. Supported exact quotation. |
+| “helps us” | “Us” is first-person plural referring to Lind and the customer-side team benefiting in her assessment from the shared view. | “Us” is not first-person plural referring to Lind and the customer-side team in that assessment. | S19 in customer interview context, S7, S17. Supported; no exact team size, personal-gender distribution, or universal resident benefit inferred. |
+| “That is a qualified judgment” | “That” refers to Lind’s immediately preceding complete quotation. | “That” does not refer to Lind’s immediately preceding complete quotation. | S19, S20 and immediate antecedent. Supported. |
+
+## Findings
+
+No source-support defect identified. Counts, exclusions, timing, agency, source identity, purpose, and qualifications are preserved. The numerical comparison is accompanied by the different-workloads qualification and explicit non-attribution of the difference to software. The title and lead claim the shared view actually described by Lind, without attaching that functional result to shorter assignment time. No cost savings, resident satisfaction, completion-time improvement, supplier comparison, actual future expansion, physical scene, or universal endorsement is introduced.
+
+The draft states source-supported negatives at the correct scope: the supplied material lacks specified measurements; the note does not attribute causation; Lind did not recommend Svale to every housing company; the trial has not yet expanded. None converts an unknown outcome into an assertion that the outcome never happened.
+
+The preparation advice is authorial advocacy grounded in Lind’s advice and experience. Lind’s favorable evaluation remains attributed, and the extra-week reservation is retained verbatim. No repair is required.
+
+## Quotation and translation findings
+
+Both displayed quotations reproduce complete usable source quotations exactly. The attribution to an email interview accurately signals the medium. No speech cleanup, welding, translation, or referent insertion occurred. Target language and source language are both English; translation evaluation is therefore not applicable. The quoted first-person perspectives and qualifications remain intact. This comparison does not establish quote approval.
+
+Completion status: COMPLETE. Unresolved source-support findings: none. Unresolved translation findings: none.
+

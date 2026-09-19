@@ -1,0 +1,1 @@
+Review completed as a case study in American English, with no technique selected by the metadata. No unresolved findings remain. Correction 1 removed the bridge’s redundant summary of Lind’s reason to repeat the trial and her reservation about preparation time; both points remain in her quotation.

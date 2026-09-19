@@ -1,0 +1,1 @@
+Draft delivered here in American English as a case study, with no selected technique. Source comparison passed. The fictional source package supports the requested length; time savings, costs, and public-access outcomes remain unmeasured in the supplied note. All temporary files were removed.

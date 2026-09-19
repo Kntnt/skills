@@ -14,3 +14,5 @@ Complete artifact and base/genre-guidance reads are directly visible. Exact chil
 - [Inventory](quotation-original-inventory.json): two invocations, six native sessions, exact input copies and all roots absent.
 
 Whole-root before/after inventories show no surviving Skill effects, unchanged input/authentication and only native home-state differences. Both private roots were removed by literal absolute paths after full capture. No product edits or commits were made. Later quotation revisions have separate records and do not retroactively improve this result.
+
+The quotation-preservation failure recorded above is now filed as [#358](https://github.com/Kntnt/skills/issues/358). No earlier outcome is changed by this filing.

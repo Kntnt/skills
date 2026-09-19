@@ -1,0 +1,58 @@
+[
+  {
+    "case": "case-unprompted-en_US-r1",
+    "selected": true,
+    "reason": "Three complete Ortiz email quotations.",
+    "artifact": "docs/evaluation/editorial-329/followup/runs/presupposition-candidate/case-unprompted-en_US-r1/write/artifact.md",
+    "sha256": "0daaacf80d32053cbbc83f277f75528e88f0b5f41ce5a65412f69a48a1c503ad"
+  },
+  {
+    "case": "case-unprompted-en_US-r2",
+    "selected": true,
+    "reason": "Three complete Ortiz email quotations.",
+    "artifact": "docs/evaluation/editorial-329/followup/runs/presupposition-candidate/case-unprompted-en_US-r2/write/artifact.md",
+    "sha256": "00b326c65967557da0e59eba9d2f1c8e62afcb3e1ede21bc74e5031500738885"
+  },
+  {
+    "case": "case-question-en_GB-r1",
+    "selected": true,
+    "reason": "Two complete Vale email-interview quotations.",
+    "artifact": "docs/evaluation/editorial-329/followup/runs/presupposition-candidate/case-question-en_GB-r1/write/artifact.md",
+    "sha256": "005ded14fecb60dc36bc2b2b2f3dde6fde9052bd1d4b375b32bf0dc7e1d0d9e5"
+  },
+  {
+    "case": "opinion-absence-en_GB-r1",
+    "selected": false,
+    "reason": "No quoted person statement; Reed position is paraphrased.",
+    "artifact": "docs/evaluation/editorial-329/followup/runs/presupposition-candidate/opinion-absence-en_GB-r1/write/artifact.md",
+    "sha256": "9a46c70ab57af59176d1649c6c3637ef866c4b0ab5f43f7ad0207ed3c38b9a6c"
+  },
+  {
+    "case": "case-question-en_GB-r2",
+    "selected": true,
+    "reason": "Two complete Vale email-interview quotations.",
+    "artifact": "docs/evaluation/editorial-329/followup/runs/presupposition-candidate/case-question-en_GB-r2/write/artifact.md",
+    "sha256": "72be26f367ca0ab2b9fa7a3be72c52ae55c7b9bc38db31afbebe023750ddd657"
+  },
+  {
+    "case": "article-sv-r1",
+    "selected": true,
+    "reason": "Rask statement introduced by Swedish speech dash.",
+    "artifact": "docs/evaluation/editorial-329/followup/runs/presupposition-candidate/article-sv-r1/write/artifact.md",
+    "sha256": "5d0dd90bec36c2fba582c70e82457362bdc7a580314d53595470762165e3baee"
+  },
+  {
+    "case": "column-sv-r2",
+    "selected": false,
+    "reason": "Proposed template question is embedded in reflection, not a quoted person statement.",
+    "artifact": "docs/evaluation/editorial-329/followup/runs/presupposition-candidate/column-sv-r2/write/artifact.md",
+    "sha256": "8ec82d270e2c2a64d2585e04afd21807620773b83db09a96f0f3f0e251eb4931"
+  },
+  {
+    "case": "column-sv-r1",
+    "selected": false,
+    "reason": "Proposed template question is embedded in reflection, not a quoted person statement.",
+    "artifact": "docs/evaluation/editorial-329/followup/runs/presupposition-candidate/column-sv-r1/write/artifact.md",
+    "sha256": "a95b4ffaabac27a99b4dc49d09d18477ebbf81e6a849b9f9e733f46c101c8539"
+  }
+]

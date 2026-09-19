@@ -1,0 +1,215 @@
+{
+  "method": "Whitespace counts of complete mandatory parent resources, no technique; language composition heading omitted; excludes caller source/draft, invocation-envelope conditional load, child repeated input and generated claim reports. Child costs are additional, not hidden by this count.",
+  "rows": [
+    {
+      "genre": "article",
+      "language": "sv",
+      "words": {
+        "7ff6ec0": {
+          "write_parent_no_quote_words": 5287,
+          "with_quote_words": 5958
+        },
+        "cd375d4f": {
+          "write_parent_no_quote_words": 6120,
+          "with_quote_words": 6791
+        }
+      }
+    },
+    {
+      "genre": "article",
+      "language": "en_GB",
+      "words": {
+        "7ff6ec0": {
+          "write_parent_no_quote_words": 4979,
+          "with_quote_words": 5650
+        },
+        "cd375d4f": {
+          "write_parent_no_quote_words": 5812,
+          "with_quote_words": 6483
+        }
+      }
+    },
+    {
+      "genre": "article",
+      "language": "en_US",
+      "words": {
+        "7ff6ec0": {
+          "write_parent_no_quote_words": 4909,
+          "with_quote_words": 5580
+        },
+        "cd375d4f": {
+          "write_parent_no_quote_words": 5742,
+          "with_quote_words": 6413
+        }
+      }
+    },
+    {
+      "genre": "case-study",
+      "language": "sv",
+      "words": {
+        "7ff6ec0": {
+          "write_parent_no_quote_words": 5332,
+          "with_quote_words": 6003
+        },
+        "cd375d4f": {
+          "write_parent_no_quote_words": 6165,
+          "with_quote_words": 6836
+        }
+      }
+    },
+    {
+      "genre": "case-study",
+      "language": "en_GB",
+      "words": {
+        "7ff6ec0": {
+          "write_parent_no_quote_words": 5024,
+          "with_quote_words": 5695
+        },
+        "cd375d4f": {
+          "write_parent_no_quote_words": 5857,
+          "with_quote_words": 6528
+        }
+      }
+    },
+    {
+      "genre": "case-study",
+      "language": "en_US",
+      "words": {
+        "7ff6ec0": {
+          "write_parent_no_quote_words": 4954,
+          "with_quote_words": 5625
+        },
+        "cd375d4f": {
+          "write_parent_no_quote_words": 5787,
+          "with_quote_words": 6458
+        }
+      }
+    },
+    {
+      "genre": "column",
+      "language": "sv",
+      "words": {
+        "7ff6ec0": {
+          "write_parent_no_quote_words": 5295,
+          "with_quote_words": 5966
+        },
+        "cd375d4f": {
+          "write_parent_no_quote_words": 6128,
+          "with_quote_words": 6799
+        }
+      }
+    },
+    {
+      "genre": "column",
+      "language": "en_GB",
+      "words": {
+        "7ff6ec0": {
+          "write_parent_no_quote_words": 4987,
+          "with_quote_words": 5658
+        },
+        "cd375d4f": {
+          "write_parent_no_quote_words": 5820,
+          "with_quote_words": 6491
+        }
+      }
+    },
+    {
+      "genre": "column",
+      "language": "en_US",
+      "words": {
+        "7ff6ec0": {
+          "write_parent_no_quote_words": 4917,
+          "with_quote_words": 5588
+        },
+        "cd375d4f": {
+          "write_parent_no_quote_words": 5750,
+          "with_quote_words": 6421
+        }
+      }
+    },
+    {
+      "genre": "opinion",
+      "language": "sv",
+      "words": {
+        "7ff6ec0": {
+          "write_parent_no_quote_words": 5289,
+          "with_quote_words": 5960
+        },
+        "cd375d4f": {
+          "write_parent_no_quote_words": 6122,
+          "with_quote_words": 6793
+        }
+      }
+    },
+    {
+      "genre": "opinion",
+      "language": "en_GB",
+      "words": {
+        "7ff6ec0": {
+          "write_parent_no_quote_words": 4981,
+          "with_quote_words": 5652
+        },
+        "cd375d4f": {
+          "write_parent_no_quote_words": 5814,
+          "with_quote_words": 6485
+        }
+      }
+    },
+    {
+      "genre": "opinion",
+      "language": "en_US",
+      "words": {
+        "7ff6ec0": {
+          "write_parent_no_quote_words": 4911,
+          "with_quote_words": 5582
+        },
+        "cd375d4f": {
+          "write_parent_no_quote_words": 5744,
+          "with_quote_words": 6415
+        }
+      }
+    },
+    {
+      "genre": "web-copy",
+      "language": "sv",
+      "words": {
+        "7ff6ec0": {
+          "write_parent_no_quote_words": 5321,
+          "with_quote_words": 5992
+        },
+        "cd375d4f": {
+          "write_parent_no_quote_words": 6154,
+          "with_quote_words": 6825
+        }
+      }
+    },
+    {
+      "genre": "web-copy",
+      "language": "en_GB",
+      "words": {
+        "7ff6ec0": {
+          "write_parent_no_quote_words": 5013,
+          "with_quote_words": 5684
+        },
+        "cd375d4f": {
+          "write_parent_no_quote_words": 5846,
+          "with_quote_words": 6517
+        }
+      }
+    },
+    {
+      "genre": "web-copy",
+      "language": "en_US",
+      "words": {
+        "7ff6ec0": {
+          "write_parent_no_quote_words": 4943,
+          "with_quote_words": 5614
+        },
+        "cd375d4f": {
+          "write_parent_no_quote_words": 5776,
+          "with_quote_words": 6447
+        }
+      }
+    }
+  ]
+}

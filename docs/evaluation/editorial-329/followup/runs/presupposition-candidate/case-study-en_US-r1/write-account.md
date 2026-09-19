@@ -1,0 +1,1 @@
+Delivered here: an en_US case study with no technique, consistent with the genre’s default. Source comparison passed. The material supplies no cost, satisfaction, or completion-time results. No files retained.

@@ -1,0 +1,23 @@
+{
+  "pid": 7650,
+  "process_group": 7650,
+  "argv": [
+    "uv",
+    "run",
+    "/Users/thomas/Projects/skills/docs/evaluation/editorial-329/followup/harness/candidate_new_batch.py",
+    "write",
+    "--revision",
+    "cd375d4f",
+    "--wave",
+    "presupposition-candidate",
+    "--matrix",
+    "fifth",
+    "--workers",
+    "2",
+    "--cases",
+    "case-unprompted-en_US-r2",
+    "case-question-en_GB-r2",
+    "opinion-absence-en_GB-r1",
+    "column-sv-r2"
+  ]
+}

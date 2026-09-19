@@ -270,3 +270,7 @@ Eleven fresh source-blind pairs. Each input is exactly the corresponding complet
 The later independent source-variable review supersedes the source-aware F1-pass notes for `opinion-en_GB-r1`, `opinion-en_GB-r2`, `opinion-en_US-r1` and `opinion-en_US-r2`: **their final artifacts fail F1**. All four retain Write's unsupported assertion that the report does not measure disability where the source says functional ability; the first three additionally change digital familiarity to digital skills. See the [Write judgement addendum](write-gpt-2026-09-19-349-followup-original.md#superseding-f1-judgement--source-variables-in-four-english-opinions).
 
 No Redline criterion is changed by this finding: the source material is intentionally unavailable to these invocations and the variable substitution is not an internal contradiction. Their no-change artifacts remain exact; their source-aware failure is attributed to Write. The six opinion finals still preserve the correct #349 no-claim knowledge state, which is a separate, narrower result.
+
+## Measurement-domain defect filing addendum
+
+The previously recorded substitutions of disability for functional ability and capability/proficiency for digital familiarity are tracked in [#360](https://github.com/Kntnt/skills/issues/360). This links the first candidate’s superseding F1 failures and the third US opinion’s valid withholding basis, without revising earlier judgements or converting a refusal into a pass.

@@ -1,0 +1,16 @@
+{
+  "hypothesis": "A second reader can detect the comparison report narrowing the actual draft even where it returns no findings; tests parent full-account validation, not new draft rules.",
+  "hidden_expected_finding": "Existing #344: September modifier covers coordinated chose; report items14/15 omit/narrow it.",
+  "success_condition": "Identify that exact report-versus-draft scope mismatch from complete neutral input, without inventing unrelated defects.",
+  "failure_condition": "Approve ledger, silently repair proposition, or give only generic cautions. No new instruction follows failure.",
+  "revision": "cd375d4f",
+  "origin": "docs/evaluation/editorial-329/followup/runs/presupposition-candidate/case-study-en_US-r1",
+  "source_sha256": "75188596831d5a0a28364ea4da4d1053f69900ca25237f08859696058c579f11",
+  "draft_sha256": "eaef8848e4cff872139ca98502a27992d78dde123f5a0cea6c4624a73e8f1b51",
+  "report_sha256": "4ebdfee26a41c32d94d43ae5eb1753aa3b7daf3b3584f9eba8763dea98903053",
+  "input_sha256": "0acf67cfd643dc2f22c16d2bf3a04a1bacc4a08babcb75cab0bb3ea3fc13504d",
+  "prompt_sha256": "b459d6058ccf457a5c09dc06b77dafbb5a53779bf145e74d3ce9e1f2aa7ba4ea",
+  "no_target_hint_in_prompt": true,
+  "runs": 1,
+  "does_not_replace_matrix": "All current final pairs continue unchanged."
+}

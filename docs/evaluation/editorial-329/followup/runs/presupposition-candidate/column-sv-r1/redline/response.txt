@@ -1,0 +1,1 @@
+Inga ändringar behövdes. Texten är granskad som svensk krönika utan särskild berättarteknik, enligt metadata, och korrekturläst. Inga anmärkningar kvarstår. `input.md` är oförändrad.

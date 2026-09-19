@@ -1,0 +1,1 @@
+*Första utkast: debattartikel på svenska, utan särskild berättarteknik. Levererat här i svaret och källkontrollerat utan kvarstående anmärkningar. Underlaget lämnar kostnader, besparingar och användarnas skäl öppna. Inga filer har lämnats kvar.*

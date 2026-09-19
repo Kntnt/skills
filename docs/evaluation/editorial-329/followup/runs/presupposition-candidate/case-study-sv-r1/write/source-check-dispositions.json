@@ -1,0 +1,10 @@
+[
+  {
+    "command": "/opt/homebrew/bin/bash -lc \"python3 - <<'PY'\nfrom pathlib import Path\np=Path('/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-pgt346xh/scratch/write-check-q6k5s7kz')\nf=p/'draft.md'\ns=f.read_text().replace('I september 2025 beslutade bolagets eget underhållsteam att prova en gemensam logg under åtta veckor.', 'I september 2025 beslutade bolagets eget underhållsteam att prova en gemensam logg. Försöket pågick i åtta veckor.').replace('## Lind vill ge förberedelserna mer tid', '## Lind skulle avsätta mer tid för förberedelser')\nf.write_text(s)\n(p/'dispositions.md').write_text('F1 accepted. Draft decision complement included “under åtta veckor”, while source separately states September decision and actual duration “The trial lasted eight weeks.” Split decision and actual duration as proposed.\\\\nF2 accepted. Heading “Lind vill ge förberedelserna mer tid” removes conditional stance of source “I would leave an extra week for preparation.” Changed to “Lind skulle avsätta mer tid för förberedelser”.\\\\nAll remaining accounting reviewed against complete source and draft; no other unresolved claims found. Translation comparison supports all three quotations.\\\\n')\nPY\"",
+    "output": ""
+  },
+  {
+    "command": "/opt/homebrew/bin/bash -lc \"python3 - <<'PY'\nfrom pathlib import Path\nimport shutil\np=Path('/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-pgt346xh/scratch/write-check-q6k5s7kz')\nwith (p/'dispositions.md').open('a') as f:\n    f.write('Final comparison read completely and validated against the current prose and original material. No source or translation findings remain. No prose changes made after final comparison.\\\\n')\nshutil.rmtree(p)\nscratch=p.parent\nprint('Comparison scratch removed:',not p.exists())\nprint('Remaining run-specific temporary paths:', [q.name for q in scratch.iterdir() if q.name.startswith(('write-invoke-', 'write-language-', 'write-check-'))])\nPY\"",
+    "output": "Comparison scratch removed: True\nRemaining run-specific temporary paths: []\n"
+  }
+]

@@ -1,0 +1,179 @@
+{
+  "native_invocations": 6,
+  "max_concurrent_parents": 2,
+  "launchers_ended": [
+    90680,
+    92576
+  ],
+  "runs": [
+    {
+      "case": "column",
+      "stage": "repair",
+      "duration_seconds": 38.12,
+      "returncode": 0,
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-u_hsbzxh",
+      "exists_after": false,
+      "sessions": [
+        {
+          "identity": [
+            {
+              "model": "gpt-6-astra",
+              "effort": "high"
+            }
+          ],
+          "complete_input_read": true,
+          "spawns": []
+        }
+      ],
+      "outside_native_home_changes": {
+        "created": [
+          "work/revised.md"
+        ],
+        "removed": [],
+        "changed": []
+      },
+      "authentication_changed": false
+    },
+    {
+      "case": "column",
+      "stage": "check",
+      "duration_seconds": 450.99,
+      "returncode": 0,
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-ix3ka7_2",
+      "exists_after": false,
+      "sessions": [
+        {
+          "identity": [
+            {
+              "model": "gpt-6-astra",
+              "effort": "high"
+            }
+          ],
+          "complete_input_read": true,
+          "spawns": []
+        }
+      ],
+      "outside_native_home_changes": {
+        "created": [
+          "work/report.md"
+        ],
+        "removed": [],
+        "changed": []
+      },
+      "authentication_changed": false
+    },
+    {
+      "case": "opinion-sv",
+      "stage": "repair",
+      "duration_seconds": 27.56,
+      "returncode": 0,
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-lqp50xk6",
+      "exists_after": false,
+      "sessions": [
+        {
+          "identity": [
+            {
+              "model": "gpt-6-astra",
+              "effort": "high"
+            }
+          ],
+          "complete_input_read": true,
+          "spawns": []
+        }
+      ],
+      "outside_native_home_changes": {
+        "created": [
+          "work/revised.md"
+        ],
+        "removed": [],
+        "changed": []
+      },
+      "authentication_changed": false
+    },
+    {
+      "case": "opinion-sv",
+      "stage": "check",
+      "duration_seconds": 545.87,
+      "returncode": 0,
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-0uhmnitv",
+      "exists_after": false,
+      "sessions": [
+        {
+          "identity": [
+            {
+              "model": "gpt-6-astra",
+              "effort": "high"
+            }
+          ],
+          "complete_input_read": true,
+          "spawns": []
+        }
+      ],
+      "outside_native_home_changes": {
+        "created": [
+          "work/report.md"
+        ],
+        "removed": [],
+        "changed": []
+      },
+      "authentication_changed": false
+    },
+    {
+      "case": "opinion-en_US",
+      "stage": "repair",
+      "duration_seconds": 28.97,
+      "returncode": 0,
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-ps53g7ew",
+      "exists_after": false,
+      "sessions": [
+        {
+          "identity": [
+            {
+              "model": "gpt-6-astra",
+              "effort": "high"
+            }
+          ],
+          "complete_input_read": true,
+          "spawns": []
+        }
+      ],
+      "outside_native_home_changes": {
+        "created": [
+          "work/revised.md"
+        ],
+        "removed": [],
+        "changed": []
+      },
+      "authentication_changed": false
+    },
+    {
+      "case": "opinion-en_US",
+      "stage": "check",
+      "duration_seconds": 550.95,
+      "returncode": 0,
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-pg57w5qh",
+      "exists_after": false,
+      "sessions": [
+        {
+          "identity": [
+            {
+              "model": "gpt-6-astra",
+              "effort": "high"
+            }
+          ],
+          "complete_input_read": true,
+          "spawns": []
+        }
+      ],
+      "outside_native_home_changes": {
+        "created": [
+          "work/report.md"
+        ],
+        "removed": [],
+        "changed": []
+      },
+      "authentication_changed": false
+    }
+  ],
+  "method": "Fresh strict checks receive exact captured revised prose and complete source; no earlier report, repair account or expectation. All semantic judgements are independent; no extra repair or comparison."
+}

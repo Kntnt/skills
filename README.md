@@ -114,7 +114,7 @@ Run `/proofread [--language=LANGUAGE] [--output=TARGET] [text|path|url]` or use 
 
 ### redline
 
-Review one text against the editorial contract, with a fresh focused reader for quoted statements, correct findings within a bounded correction budget, and finish with one proofreading pass. Remaining findings are reported with the delivered text.
+Review one text against the editorial contract, correct findings within a bounded correction budget, and finish with one proofreading pass. Remaining findings are reported with the delivered text.
 
 Run `/redline [--genre=GENRE] [--technique=TECHNIQUE] [--language=LANGUAGE] [--max=N] [--output=TARGET] [text|path|url]` or use `--in-place path`.
 

@@ -33,3 +33,7 @@
 - **unresolved findings** — None reported. The independently judged unnecessary quotation edit remains delivered and unreported.
 - **defects filed** — Persistent preservation failure reported to implementation owner; previous fourth failure remains separate history.
 - **notes** — The actual [reader reports](../editorial-329/followup/runs/final-quotation-original/case-study-en_US-r2/redline/quotation-reports.json) again identify only a literal building-as-actor reading. Full context supplies ordinary English trial-rollout shorthand; unchanged facts do not justify a gratuitous voice change. The parent, two focused readers, corrector and mechanical reader all inherit the same identity with no history or model override. Native safety rejects an initial shell command containing an `rm` cleanup trap before it executes; a safe retry runs the shim once successfully. This is retained execution evidence, not two mechanical passes. [Audit](../editorial-329/followup/runs/final-quotation-original/case-study-en_US-r2/redline/trace-audit.json), [full trace](../editorial-329/followup/runs/final-quotation-original/case-study-en_US-r2/redline/trace.jsonl) and [identity](../editorial-329/followup/runs/final-quotation-original/case-study-en_US-r2/redline/run.json).
+
+## Defect filing addendum
+
+The independently confirmed needless edit of functioning English quoted speech is filed as [#358](https://github.com/Kntnt/skills/issues/358). This links the already-recorded R1 preservation failure; F1 and L1 judgements remain unchanged.

@@ -11,8 +11,9 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ### Changed
 
-- Write’s independent comparison reconstructs complete claims, including pronoun features, tests their precise negations against source support, and checks translated quotations. The writer validates findings against exact contextual evidence after either of the two bounded comparisons; Redline gives quoted statements a fresh focused reader with explicit scoped inputs and separate attention to idiom and recoverable meaning and distinguishes advocated targets from factual predictions.
+- Write’s independent comparison reconstructs complete claims, including pronoun features, tests their precise negations against source support, and checks translated quotations. The writer validates complete claim accounting and findings against exact contextual evidence after either of the two bounded comparisons; Redline reviews reported speech explicitly and distinguishes advocated targets from factual predictions.
 - Shared delivery instructions define how unresolved findings accompany unchanged response, in-place and separate-file artifacts consistently across review Skills.
+- Redline passes its complete accepted artifact to Proofread through a private input file and reads a separate complete result even after no-change, making the final mechanical handoff inspectable (#359).
 - Write compares its complete draft with the supplied material through a fresh source checker before delivery, keeping editorial review and proofreading separate. Supported repairs receive one final independent comparison; unresolved or unavailable checking stops delivery. Write now requires subagent capability (#349, #352).
 - Write and Redline use concise, distinct briefs for article, case-study, column, opinion and web-copy, with shared Swedish professional craft, idiomatic target-language writing and advisory web dimensions. These genres no longer select a technique automatically; explicit choices and existing metadata retain their priority. ABT allows a genuine question and PAC analysis may begin in facts (#329–337).
 

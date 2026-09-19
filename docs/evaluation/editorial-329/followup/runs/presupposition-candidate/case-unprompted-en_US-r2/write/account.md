@@ -1,0 +1,1 @@
+*Fictional case-study draft in American English, delivered here with no technique selected. Source comparison completed without unresolved findings. The supplied material supports no quantified efficiency, cost, or public-access results. Temporary files were removed; no draft was saved.*

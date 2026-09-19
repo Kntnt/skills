@@ -26,11 +26,9 @@ Source material is outside the contract. The review judges only the supplied tex
 
 A code sample is quoted material. Fenced blocks, indented blocks, and inline code are neither reviewed nor changed; prose about code is ordinary prose.
 
-The final `proofread` pass runs exactly once with the resolved language. No substantive edit follows it, and only mechanically relevant guidance is forwarded.
+The final `proofread` pass runs exactly once with the resolved language. Its complete result is required for delivery; an incomplete pass is reported as an obstacle. No substantive edit follows it, and only mechanically relevant guidance is forwarded.
 
 The Correction Budget is any non-negative integer and defaults to one. `0` reports findings without substantive correction but still runs the final mechanical pass. A larger value is a ceiling, not a quota.
-
-Quoted statements by people receive a focused reading from a fresh subagent as part of each review and re-review. It checks visible idiom and clarity against the loaded contract, without source verification or edits; this adds execution time where quotations occur. The main reviewer validates its findings. An incomplete focused reading is reported as a coverage gap, separately from text findings; it does not spend correction budget.
 
 Each correction uses a fresh subagent with the complete current text and current findings. Returned text is compared with the pre-round text and reviewed again before acceptance.
 

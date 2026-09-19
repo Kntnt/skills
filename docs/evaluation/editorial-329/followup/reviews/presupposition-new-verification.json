@@ -1,0 +1,674 @@
+{
+  "write_revision": "cd375d4f",
+  "redline_revision": "3f21d9b1",
+  "skill_invocations": 16,
+  "native_sessions": 34,
+  "writes_delivered": 8,
+  "independent_F1_pass": 8,
+  "redlines_unchanged": 8,
+  "source_comparisons": 10,
+  "accepted_findings": 4,
+  "definite_factual_repairs": 1,
+  "disputed_conservative_restrictions": 3,
+  "rejected_findings": 0,
+  "refusals": 0,
+  "launchers_ended": [
+    7639,
+    7650,
+    26566,
+    28681,
+    30432,
+    34275
+  ],
+  "runs": [
+    {
+      "case": "case-unprompted-en_US-r1",
+      "stage": "write",
+      "returncode": 0,
+      "duration_seconds": 284.71,
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-vn2fh2wu",
+      "exists_after": false,
+      "sessions": 2,
+      "identities": [
+        [
+          {
+            "model": "gpt-6-astra",
+            "effort": "high"
+          }
+        ],
+        [
+          {
+            "model": "gpt-6-astra",
+            "effort": "high"
+          }
+        ]
+      ],
+      "full_input_read": [
+        true,
+        true
+      ],
+      "delivered_prose_visible": [
+        true,
+        true
+      ],
+      "outside_native_home_changes": {
+        "created": [],
+        "removed": [],
+        "changed": []
+      },
+      "authentication_changed": false,
+      "redline_input_equals_write_artifact": null,
+      "final_preserved": null
+    },
+    {
+      "case": "case-unprompted-en_US-r1",
+      "stage": "redline",
+      "returncode": 0,
+      "duration_seconds": 195.55,
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-c49izzqy",
+      "exists_after": false,
+      "sessions": 3,
+      "identities": [
+        [
+          {
+            "model": "gpt-6-astra",
+            "effort": "high"
+          }
+        ],
+        [
+          {
+            "model": "gpt-6-astra",
+            "effort": "high"
+          }
+        ],
+        [
+          {
+            "model": "gpt-6-astra",
+            "effort": "high"
+          }
+        ]
+      ],
+      "full_input_read": [
+        true,
+        true,
+        false
+      ],
+      "delivered_prose_visible": [
+        null,
+        null,
+        null
+      ],
+      "outside_native_home_changes": {
+        "created": [],
+        "removed": [],
+        "changed": []
+      },
+      "authentication_changed": false,
+      "redline_input_equals_write_artifact": true,
+      "final_preserved": true
+    },
+    {
+      "case": "case-unprompted-en_US-r2",
+      "stage": "write",
+      "returncode": 0,
+      "duration_seconds": 248.89,
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-_ji37x1j",
+      "exists_after": false,
+      "sessions": 2,
+      "identities": [
+        [
+          {
+            "model": "gpt-6-astra",
+            "effort": "high"
+          }
+        ],
+        [
+          {
+            "model": "gpt-6-astra",
+            "effort": "high"
+          }
+        ]
+      ],
+      "full_input_read": [
+        true,
+        true
+      ],
+      "delivered_prose_visible": [
+        false,
+        true
+      ],
+      "outside_native_home_changes": {
+        "created": [],
+        "removed": [],
+        "changed": []
+      },
+      "authentication_changed": false,
+      "redline_input_equals_write_artifact": null,
+      "final_preserved": null
+    },
+    {
+      "case": "case-unprompted-en_US-r2",
+      "stage": "redline",
+      "returncode": 0,
+      "duration_seconds": 139.14,
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-9muwwcxx",
+      "exists_after": false,
+      "sessions": 2,
+      "identities": [
+        [
+          {
+            "model": "gpt-6-astra",
+            "effort": "high"
+          }
+        ],
+        [
+          {
+            "model": "gpt-6-astra",
+            "effort": "high"
+          }
+        ]
+      ],
+      "full_input_read": [
+        true,
+        true
+      ],
+      "delivered_prose_visible": [
+        null,
+        null
+      ],
+      "outside_native_home_changes": {
+        "created": [],
+        "removed": [],
+        "changed": []
+      },
+      "authentication_changed": false,
+      "redline_input_equals_write_artifact": true,
+      "final_preserved": true
+    },
+    {
+      "case": "case-question-en_GB-r1",
+      "stage": "write",
+      "returncode": 0,
+      "duration_seconds": 260.52,
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-rgmbh8wu",
+      "exists_after": false,
+      "sessions": 2,
+      "identities": [
+        [
+          {
+            "model": "gpt-6-astra",
+            "effort": "high"
+          }
+        ],
+        [
+          {
+            "model": "gpt-6-astra",
+            "effort": "high"
+          }
+        ]
+      ],
+      "full_input_read": [
+        true,
+        true
+      ],
+      "delivered_prose_visible": [
+        false,
+        true
+      ],
+      "outside_native_home_changes": {
+        "created": [],
+        "removed": [],
+        "changed": []
+      },
+      "authentication_changed": false,
+      "redline_input_equals_write_artifact": null,
+      "final_preserved": null
+    },
+    {
+      "case": "case-question-en_GB-r1",
+      "stage": "redline",
+      "returncode": 0,
+      "duration_seconds": 144.61,
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-n6b4eoic",
+      "exists_after": false,
+      "sessions": 2,
+      "identities": [
+        [
+          {
+            "model": "gpt-6-astra",
+            "effort": "high"
+          }
+        ],
+        [
+          {
+            "model": "gpt-6-astra",
+            "effort": "high"
+          }
+        ]
+      ],
+      "full_input_read": [
+        true,
+        true
+      ],
+      "delivered_prose_visible": [
+        null,
+        null
+      ],
+      "outside_native_home_changes": {
+        "created": [],
+        "removed": [],
+        "changed": []
+      },
+      "authentication_changed": false,
+      "redline_input_equals_write_artifact": true,
+      "final_preserved": true
+    },
+    {
+      "case": "opinion-absence-en_GB-r1",
+      "stage": "write",
+      "returncode": 0,
+      "duration_seconds": 263.56,
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-x8yu8klh",
+      "exists_after": false,
+      "sessions": 2,
+      "identities": [
+        [
+          {
+            "model": "gpt-6-astra",
+            "effort": "high"
+          }
+        ],
+        [
+          {
+            "model": "gpt-6-astra",
+            "effort": "high"
+          }
+        ]
+      ],
+      "full_input_read": [
+        true,
+        true
+      ],
+      "delivered_prose_visible": [
+        false,
+        true
+      ],
+      "outside_native_home_changes": {
+        "created": [],
+        "removed": [],
+        "changed": []
+      },
+      "authentication_changed": false,
+      "redline_input_equals_write_artifact": null,
+      "final_preserved": null
+    },
+    {
+      "case": "opinion-absence-en_GB-r1",
+      "stage": "redline",
+      "returncode": 0,
+      "duration_seconds": 71.41,
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-ay_exsd2",
+      "exists_after": false,
+      "sessions": 1,
+      "identities": [
+        [
+          {
+            "model": "gpt-6-astra",
+            "effort": "high"
+          }
+        ]
+      ],
+      "full_input_read": [
+        true
+      ],
+      "delivered_prose_visible": [
+        null
+      ],
+      "outside_native_home_changes": {
+        "created": [],
+        "removed": [],
+        "changed": []
+      },
+      "authentication_changed": false,
+      "redline_input_equals_write_artifact": true,
+      "final_preserved": true
+    },
+    {
+      "case": "case-question-en_GB-r2",
+      "stage": "write",
+      "returncode": 0,
+      "duration_seconds": 283.77,
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-ms18mcya",
+      "exists_after": false,
+      "sessions": 2,
+      "identities": [
+        [
+          {
+            "model": "gpt-6-astra",
+            "effort": "high"
+          }
+        ],
+        [
+          {
+            "model": "gpt-6-astra",
+            "effort": "high"
+          }
+        ]
+      ],
+      "full_input_read": [
+        true,
+        true
+      ],
+      "delivered_prose_visible": [
+        false,
+        true
+      ],
+      "outside_native_home_changes": {
+        "created": [],
+        "removed": [],
+        "changed": []
+      },
+      "authentication_changed": false,
+      "redline_input_equals_write_artifact": null,
+      "final_preserved": null
+    },
+    {
+      "case": "case-question-en_GB-r2",
+      "stage": "redline",
+      "returncode": 0,
+      "duration_seconds": 123.3,
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-kb3qnf0r",
+      "exists_after": false,
+      "sessions": 2,
+      "identities": [
+        [
+          {
+            "model": "gpt-6-astra",
+            "effort": "high"
+          }
+        ],
+        [
+          {
+            "model": "gpt-6-astra",
+            "effort": "high"
+          }
+        ]
+      ],
+      "full_input_read": [
+        true,
+        true
+      ],
+      "delivered_prose_visible": [
+        null,
+        null
+      ],
+      "outside_native_home_changes": {
+        "created": [],
+        "removed": [],
+        "changed": []
+      },
+      "authentication_changed": false,
+      "redline_input_equals_write_artifact": true,
+      "final_preserved": true
+    },
+    {
+      "case": "article-sv-r1",
+      "stage": "write",
+      "returncode": 0,
+      "duration_seconds": 366.93,
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-lvmme8uv",
+      "exists_after": false,
+      "sessions": 2,
+      "identities": [
+        [
+          {
+            "model": "gpt-6-astra",
+            "effort": "high"
+          }
+        ],
+        [
+          {
+            "model": "gpt-6-astra",
+            "effort": "high"
+          }
+        ]
+      ],
+      "full_input_read": [
+        true,
+        true
+      ],
+      "delivered_prose_visible": [
+        false,
+        true
+      ],
+      "outside_native_home_changes": {
+        "created": [],
+        "removed": [],
+        "changed": []
+      },
+      "authentication_changed": false,
+      "redline_input_equals_write_artifact": null,
+      "final_preserved": null
+    },
+    {
+      "case": "article-sv-r1",
+      "stage": "redline",
+      "returncode": 0,
+      "duration_seconds": 213.24,
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-63v7l75i",
+      "exists_after": false,
+      "sessions": 3,
+      "identities": [
+        [
+          {
+            "model": "gpt-6-astra",
+            "effort": "high"
+          }
+        ],
+        [
+          {
+            "model": "gpt-6-astra",
+            "effort": "high"
+          }
+        ],
+        [
+          {
+            "model": "gpt-6-astra",
+            "effort": "high"
+          },
+          {
+            "model": "gpt-6-astra",
+            "effort": "high"
+          }
+        ]
+      ],
+      "full_input_read": [
+        true,
+        true,
+        false
+      ],
+      "delivered_prose_visible": [
+        null,
+        null,
+        null
+      ],
+      "outside_native_home_changes": {
+        "created": [],
+        "removed": [],
+        "changed": []
+      },
+      "authentication_changed": false,
+      "redline_input_equals_write_artifact": true,
+      "final_preserved": true
+    },
+    {
+      "case": "column-sv-r2",
+      "stage": "write",
+      "returncode": 0,
+      "duration_seconds": 514.36,
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-8h9on1_z",
+      "exists_after": false,
+      "sessions": 3,
+      "identities": [
+        [
+          {
+            "model": "gpt-6-astra",
+            "effort": "high"
+          }
+        ],
+        [
+          {
+            "model": "gpt-6-astra",
+            "effort": "high"
+          }
+        ],
+        [
+          {
+            "model": "gpt-6-astra",
+            "effort": "high"
+          }
+        ]
+      ],
+      "full_input_read": [
+        true,
+        true,
+        true
+      ],
+      "delivered_prose_visible": [
+        true,
+        false,
+        true
+      ],
+      "outside_native_home_changes": {
+        "created": [],
+        "removed": [],
+        "changed": []
+      },
+      "authentication_changed": false,
+      "redline_input_equals_write_artifact": null,
+      "final_preserved": null
+    },
+    {
+      "case": "column-sv-r2",
+      "stage": "redline",
+      "returncode": 0,
+      "duration_seconds": 73.32,
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-sq41k3gh",
+      "exists_after": false,
+      "sessions": 1,
+      "identities": [
+        [
+          {
+            "model": "gpt-6-astra",
+            "effort": "high"
+          }
+        ]
+      ],
+      "full_input_read": [
+        true
+      ],
+      "delivered_prose_visible": [
+        null
+      ],
+      "outside_native_home_changes": {
+        "created": [],
+        "removed": [],
+        "changed": []
+      },
+      "authentication_changed": false,
+      "redline_input_equals_write_artifact": true,
+      "final_preserved": true
+    },
+    {
+      "case": "column-sv-r1",
+      "stage": "write",
+      "returncode": 0,
+      "duration_seconds": 687.94,
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-ig0ok7aa",
+      "exists_after": false,
+      "sessions": 3,
+      "identities": [
+        [
+          {
+            "model": "gpt-6-astra",
+            "effort": "high"
+          }
+        ],
+        [
+          {
+            "model": "gpt-6-astra",
+            "effort": "high"
+          }
+        ],
+        [
+          {
+            "model": "gpt-6-astra",
+            "effort": "high"
+          }
+        ]
+      ],
+      "full_input_read": [
+        true,
+        true,
+        true
+      ],
+      "delivered_prose_visible": [
+        true,
+        false,
+        true
+      ],
+      "outside_native_home_changes": {
+        "created": [],
+        "removed": [],
+        "changed": []
+      },
+      "authentication_changed": false,
+      "redline_input_equals_write_artifact": null,
+      "final_preserved": null
+    },
+    {
+      "case": "column-sv-r1",
+      "stage": "redline",
+      "returncode": 0,
+      "duration_seconds": 108.53,
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-7st5bp8m",
+      "exists_after": false,
+      "sessions": 2,
+      "identities": [
+        [
+          {
+            "model": "gpt-6-astra",
+            "effort": "high"
+          }
+        ],
+        [
+          {
+            "model": "gpt-6-astra",
+            "effort": "high"
+          }
+        ]
+      ],
+      "full_input_read": [
+        true,
+        false
+      ],
+      "delivered_prose_visible": [
+        null,
+        null
+      ],
+      "outside_native_home_changes": {
+        "created": [],
+        "removed": [],
+        "changed": []
+      },
+      "authentication_changed": false,
+      "redline_input_equals_write_artifact": true,
+      "final_preserved": true
+    }
+  ],
+  "method_limitations": [
+    "Exact encrypted dispatch wording is not independently visible.",
+    "Conversational final Proofread payloads do not provide a separate mechanical file-byte boundary; this is not inferred from no-change responses."
+  ],
+  "scope": "Independent new/general eight-row subset only; no conclusion about other original rows or closure of source fidelity issues."
+}

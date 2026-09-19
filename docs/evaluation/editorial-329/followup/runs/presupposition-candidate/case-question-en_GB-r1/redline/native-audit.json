@@ -1,0 +1,122 @@
+{
+  "sessions": [
+    {
+      "file": "native-sessions/2026/09/20/rollout-2026-09-20T01-10-50-01a0bbef-d046-7551-8d3b-02d94f5bd823.jsonl",
+      "session": {
+        "id": "01a0bbef-d046-7551-8d3b-02d94f5bd823",
+        "parent_thread_id": null,
+        "source": "exec"
+      },
+      "identities": [
+        {
+          "model": "gpt-6-astra",
+          "effort": "high"
+        }
+      ],
+      "spawns": [
+        {
+          "task_name": "quotation_review",
+          "fork_turns": "none",
+          "model": null,
+          "reasoning_effort": null,
+          "message_encrypted": true
+        }
+      ],
+      "calls": [
+        "text(await tools.exec_command({cmd:\"cat .agents/skills/redline/SKILL.md\",\"max_output_tokens\":12000}));\ntext(await tools.exec_command({cmd:\"cat input.md\",\"max_output_tokens\":12000}));\n",
+        "text(await tools.exec_command({cmd:\"task_tmp=$(mktemp -d /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-n6b4eoic/scratch/redline.XXXXXX)\\nTMPDIR=\\\"$task_tmp\\\" UV_NO_CACHE=1 UV_NO_PROJECT=1 uv run .agents/skills/redline/scripts/invoke.py <<'EOF'\\n--output=response input.md\\nEOF\\ntask_status=$?\\nrm -rf \\\"$task_tmp\\\"\\nexit \\\"$task_status\\\"\",\"max_output_tokens\":10000}));\n",
+        "text(await tools.exec_command({cmd:\"python3 - <<'PY'\\nimport os, subprocess, tempfile\\nwith tempfile.TemporaryDirectory(prefix='redline.', dir='/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-n6b4eoic/scratch') as tmp:\\n    result = subprocess.run(['uv', 'run', '.agents/skills/redline/scripts/invoke.py'], input='--output=response input.md\\\\n', text=True, env=dict(os.environ, TMPDIR=tmp, UV_NO_CACHE='1', UV_NO_PROJECT='1'))\\nraise SystemExit(result.returncode)\\nPY\",\"max_output_tokens\":10000}));\n",
+        "text(await tools.exec_command({cmd:\"cat .agents/skills/kntnt/library/references/delivery.md .agents/skills/kntnt/library/references/editorial/genres/case-study.md .agents/skills/redline/references/quotation-review.md\",\"max_output_tokens\":13000}));\ntext(await tools.exec_command({cmd:\"python3 - <<'PY'\\nimport os, subprocess, tempfile\\nwith tempfile.TemporaryDirectory(prefix='redline-language.', dir='/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-n6b4eoic/scratch') as tmp:\\n    result = subprocess.run(['uv', 'run', '--no-cache', '--no-project', '.agents/skills/kntnt/library/scripts/languages.py', 'resolve', '--scope=composition', '--scope=review', '--scope=anti-slop', 'en_GB'], env=dict(os.environ, TMPDIR=tmp))\\nraise SystemExit(result.returncode)\\nPY\",\"max_output_tokens\":5000}));\n",
+        "text(await tools.exec_command({cmd:\"cat .agents/skills/kntnt/library/references/editorial/base.md .agents/skills/kntnt/library/references/editorial/base.review.md .agents/skills/kntnt/library/references/editorial/genres/case-study.review.md .agents/skills/kntnt/library/references/editorial/anti-slop.md .agents/skills/kntnt/library/references/editorial/web-craft.md .agents/skills/kntnt/library/references/editorial/web-craft.review.md\",\"max_output_tokens\":18000}));\ntext(await tools.exec_command({cmd:\"rg --files .agents/skills/kntnt/library/references/editorial/techniques .agents/skills/kntnt/library/references/editorial/genres .agents/skills/kntnt/library | rg 'en_GB|languages|case-study|techniques/'\",\"max_output_tokens\":3000}));\n",
+        "text(await tools.exec_command({cmd:\"python3 - <<'PY'\\nfrom pathlib import Path\\nimport tempfile\\nscratch=Path(tempfile.mkdtemp(prefix='redline-quotes.', dir='/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-n6b4eoic/scratch'))\\n(scratch/'artifact.md').write_text(Path('input.md').read_text())\\nbase=Path('.agents/skills/kntnt/library/references/editorial')\\nfiles=['base.md','base.review.md','genres/case-study.md','genres/case-study.review.md']\\nlanguage='''# British English — composition\\nBritish general-interest prose is understated. It states a strong claim plainly and lets the claim carry the emphasis, where American register would reach for an intensifier. Irony and litotes are available and are not read as evasion.\\n\\nCollective nouns take plural agreement when the members are acting and singular when the body is acting as one: *the team are arguing about it*, *the committee has published its report*. Both are correct; what matters is that the choice is consistent within a passage.\\n\\nThe present perfect covers a recent past that still bears on now: *I've just seen the figures*, *have you eaten?* The simple past in those positions reads as American.\\n\\n*Have got* is ordinary British usage for possession and obligation — *I've got the file*, *you've got to see this* — and is not an informality to be edited out of general prose.\\n\\nPrepositions differ in a small, fixed set of places: *at the weekend*, *in hospital*, *different from* or *different to*, *write to somebody*, *meet somebody* rather than *meet with*. None of these is a preference; each is the British form.\\n\\nSpelling is *-ise* or *-ize* by house style — both are correct British English, *-ise* being the majority convention and *-ize* the Oxford one — but a document uses one throughout. The *-yse* group is invariant: *analyse*, *paralyse*, *catalyse*, in Oxford spelling as in any other.\\n\\nQuotation marks are single as the outer mark in most British house styles, with double inside; some publications invert this. Follow the document's own choice and make it consistent.\\n\\n# British English — review\\nRead for American vocabulary that has drifted in: *gotten*, *math*, *fall* for autumn, *elevator*, *sidewalk*, *movie theater*, *diaper*, *vacation*, *check* for a restaurant bill. A single one is a slip; a scatter of them means the text was drafted in another variety.\\n\\nRead for mixed formats in one document — dates written both *24 August 2026* and *August 24, 2026*, currency in both *£* and *$*, times in both *2.30pm* and *2:30 p.m.* Format drift is the clearest evidence of assembly from several sources.\\n\\nCheck *-ise* and *-ize* consistency across the whole document, not paragraph by paragraph. Generated British English is frequently American English with some suffixes changed, and the ones that were missed are where it shows.\\n\\nBritish institutional and business prose slides into passive nominal style: *It is anticipated that a review will be undertaken*. Give it back its subject and its verb: *We expect to review it*.\\n\\nWatch for hedges in chains — *somewhat rather more likely*, *it may perhaps be the case that* — where British understatement has stopped being restraint and become evasion. One hedge does work; three cancel each other.\\n\\nCheck that punctuation inside and outside quotation marks follows one convention. British practice places a mark inside the quotation only when it belongs to the quoted matter.\\n\\nCheck title capitalisation is one system throughout. British house styles differ over whether headings take sentence case or title case, and a document that alternates has chosen neither.\\n'''\\n(scratch/'guidance.md').write_text('\\\\n\\\\n'.join((base/p).read_text() for p in files)+'\\\\n\\\\n'+language)\\nprint(scratch)\\nPY\",\"max_output_tokens\":1000}));\n",
+        "text(await tools.exec_command({cmd:\"cat .agents/skills/proofread/SKILL.md\",\"max_output_tokens\":12000}));\n",
+        "text(await tools.exec_command({cmd:\"cat /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-n6b4eoic/scratch/redline-quotes.45znz937/report.md\",\"max_output_tokens\":3000}));\ntext(await tools.exec_command({cmd:\"python3 - <<'PY'\\nfrom pathlib import Path\\nimport shutil\\np=Path('/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-n6b4eoic/scratch/redline-quotes.45znz937')\\nshutil.rmtree(p)\\nprint('Quotation scratch removed:', not p.exists())\\nPY\",\"max_output_tokens\":1000}));\n",
+        "text(await tools.exec_command({cmd:\"python3 - <<'PY'\\nimport os, subprocess, tempfile\\nwith tempfile.TemporaryDirectory(prefix='proofread.', dir='/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-n6b4eoic/scratch') as tmp:\\n    result = subprocess.run(['uv', 'run', '.agents/skills/proofread/scripts/invoke.py'], input='--language=en_GB --output=response\\\\n', text=True, env=dict(os.environ, TMPDIR=tmp, UV_NO_CACHE='1', UV_NO_PROJECT='1'))\\nraise SystemExit(result.returncode)\\nPY\",\"max_output_tokens\":5000}));\n",
+        "const results=await Promise.allSettled([\ntools.exec_command({cmd:\"python3 - <<'PY'\\nimport os, subprocess, tempfile\\nwith tempfile.TemporaryDirectory(prefix='proofread-language.', dir='/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-n6b4eoic/scratch') as tmp:\\n    result = subprocess.run(['uv', 'run', '--no-cache', '--no-project', '.agents/skills/kntnt/library/scripts/languages.py', 'resolve', '--scope=mechanics', 'en_GB'], env=dict(os.environ, TMPDIR=tmp))\\nraise SystemExit(result.returncode)\\nPY\",\"max_output_tokens\":6000}),\ntools.exec_command({cmd:\"cat .agents/skills/kntnt/library/references/editorial/mechanics.md\",\"max_output_tokens\":5000})\n]); for(let i=0;i<results.length;i++)text({i,result:results[i]});\n",
+        "text(await tools.exec_command({cmd:\"python3 - <<'PY'\\nfrom pathlib import Path\\nscratch=Path('/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-n6b4eoic/scratch')\\nprefixes=('redline.', 'redline-language.', 'redline-quotes.', 'proofread.', 'proofread-language.')\\nremaining=[str(p) for p in scratch.iterdir() if p.name.startswith(prefixes)]\\nprint('Run scratch remaining:', remaining)\\nPY\",\"max_output_tokens\":1000}));\n"
+      ],
+      "complete_supplied_input_visible": true,
+      "delivered_prose_visible": null,
+      "missing_resource_paragraphs": {
+        "base.md": 0,
+        "base.review.md": 0,
+        "web-craft.md": 0,
+        "web-craft.review.md": 0,
+        "anti-slop.md": 0,
+        "mechanics.md": 0,
+        "genres/opinion.md": 6,
+        "genres/opinion.review.md": 4,
+        "genres/case-study.md": 0,
+        "genres/case-study.review.md": 0,
+        "genres/article.md": 5,
+        "genres/article.review.md": 4,
+        "genres/column.md": 6,
+        "genres/column.review.md": 4,
+        "genres/web-copy.md": 6,
+        "genres/web-copy.review.md": 5,
+        "genres/general.md": 11
+      }
+    },
+    {
+      "file": "native-sessions/2026/09/20/rollout-2026-09-20T01-12-17-01a0bbf1-20d0-73f3-ad11-007618d84830.jsonl",
+      "session": {
+        "id": "01a0bbf1-20d0-73f3-ad11-007618d84830",
+        "parent_thread_id": "01a0bbef-d046-7551-8d3b-02d94f5bd823",
+        "source": {
+          "subagent": {
+            "thread_spawn": {
+              "parent_thread_id": "01a0bbef-d046-7551-8d3b-02d94f5bd823",
+              "depth": 1,
+              "agent_path": "/root/quotation_review",
+              "agent_nickname": "Ptolemy",
+              "agent_role": null
+            }
+          }
+        }
+      },
+      "identities": [
+        {
+          "model": "gpt-6-astra",
+          "effort": "high"
+        }
+      ],
+      "spawns": [],
+      "calls": [
+        "text(await tools.exec_command({cmd:\"cat /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-n6b4eoic/scratch/redline-quotes.45znz937/artifact.md /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-n6b4eoic/scratch/redline-quotes.45znz937/guidance.md\",max_output_tokens:16000}));\n",
+        "text(await tools.exec_command({cmd:\"cat > /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-n6b4eoic/scratch/redline-quotes.45znz937/report.md <<'EOF'\\n# Focused quotation reading\\n\\nCompleted an independent reading of both attributed quotations in the context of the complete artifact, applying the supplied case-study and British English guidance.\\n\\nNo findings. Both quotations use natural British English, and their references and qualifications are recoverable without an obstructive reconstruction. In the first quotation, the preceding explanation of the workshop's statuses supplies the context for ‘ready for work’, and the distinction between a part arriving in the building and reaching the appropriate bench is clear. In the final quotation, ‘it’ refers intelligibly to the scheduling software already introduced; the bridge establishes the hypothetical repeat decision. ‘Allow another week’, ‘status names’ and ‘adding the backlog’ express a clear, qualified customer appraisal within the established trial context.\\n\\nNo repair is needed under the focused quotation-reading contract. No text was changed, and no external verification was performed.\\nEOF\",\"max_output_tokens\":1000}));\n"
+      ],
+      "complete_supplied_input_visible": true,
+      "delivered_prose_visible": null,
+      "missing_resource_paragraphs": {
+        "base.md": 0,
+        "base.review.md": 0,
+        "web-craft.md": 7,
+        "web-craft.review.md": 4,
+        "anti-slop.md": 19,
+        "mechanics.md": 26,
+        "genres/opinion.md": 6,
+        "genres/opinion.review.md": 4,
+        "genres/case-study.md": 0,
+        "genres/case-study.review.md": 0,
+        "genres/article.md": 5,
+        "genres/article.review.md": 4,
+        "genres/column.md": 6,
+        "genres/column.review.md": 4,
+        "genres/web-copy.md": 6,
+        "genres/web-copy.review.md": 5,
+        "genres/general.md": 11
+      }
+    }
+  ],
+  "parent_visible_reports": [
+    "observed-report-1.md",
+    "observed-report-2.md"
+  ],
+  "outside_native_home_changes": {
+    "created": {},
+    "removed": {},
+    "changed": {}
+  },
+  "authentication_changed": false,
+  "note": "Observed facts only. Encrypted dispatch alone cannot establish full prompt or draft transport. Delivered prose visibility removes leading metadata and final newline separators only; manually confirm the relevant draft read and last approving checker."
+}

@@ -1,0 +1,28 @@
+---
+kntnt:
+  genre: case-study
+  technique: none
+  language: en_US
+---
+
+# Briar County volunteers share records in catalog pilot
+
+Briar County Theater Archive cataloged 47 incoming donations during an eight-week pilot of Index Lantern. Volunteers could consult the same records, according to the archive’s pilot note. A decision on moving older records will follow a review of the field definitions.
+
+The archive holds donated programs, photographs, and posters from local productions. Volunteers had described new donations in separate spreadsheets. In February 2026, the collection team chose to test a shared catalog for incoming donations; existing collections were outside the pilot.
+
+The team agreed on fields for production title, year, donor, and location, retaining a free-text note for uncertain dates. Index Lantern imported the team’s spreadsheet template and provided one remote training session for five volunteers. The archive chose the descriptions and checked the imported records.
+
+“Agreeing on the fields took two meetings. The import was the short part,” collection coordinator Lena Ortiz wrote in an email headed “Catalog pilot: notes for publication.”
+
+## Uncertain dates remain visible
+
+The archive’s May 6 pilot note records 11 records with uncertain dates. Ortiz explained the choice in the same email: “We kept the uncertain dates visible. An empty field and an estimated year tell the next volunteer different things.”
+
+The note contains no before-and-after time measurement, cost calculation, or assessment of public access. It and Ortiz’s email are the materials the archive supplied for this case, published by Index Lantern.
+
+Ortiz offered a qualified assessment: “I would use the shared catalog again for new donations. I would test the descriptions on more posters before we bring in the older collection.”
+
+---
+
+Draft delivered here in American English as a case study, with no selected technique. Source comparison passed. The fictional source package supports the requested length; time savings, costs, and public-access outcomes remain unmeasured in the supplied note. All temporary files were removed.

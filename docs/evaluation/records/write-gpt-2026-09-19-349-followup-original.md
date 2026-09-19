@@ -287,3 +287,7 @@ The source states that the pilot does not measure “ålder, funktionsförmåga 
 This is the protocol's unsupported-fact rejection, not a preference for one English synonym. All four first-wave source checkers failed to identify it. The factual error survives their delivered drafts and source-blind paired finals. Root owns tracker disposition for this additional defect class.
 
 The original-half overall Write F1 result is therefore **4/11 pass, 7/11 fail**: four English opinions fail the source-variable assertion; three en_US case studies fail chronology; the two Swedish opinions and two Swedish cases pass source fidelity (the latter still fail L1 separately). The #349-specific knowledge-state outcome remains **0/6 delivered occurrences**, with five observed precheck repairs. Fixing that specific defect did not make every other assertion faithful. None of the original artifacts, source bytes or checker reports has been changed.
+
+## Measurement-domain defect filing addendum
+
+The previously recorded substitutions of disability for functional ability and capability/proficiency for digital familiarity are tracked in [#360](https://github.com/Kntnt/skills/issues/360). This links the first candidate’s superseding F1 failures and the third US opinion’s valid withholding basis, without revising earlier judgements or converting a refusal into a pass.

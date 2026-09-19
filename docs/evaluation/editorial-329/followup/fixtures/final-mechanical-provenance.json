@@ -1,0 +1,32 @@
+{
+  "frozen_from_revision": "3f21d9b1",
+  "criterion": "Existing L2/R1 exact final preservation; no original corpus or rubric change",
+  "clean": {
+    "path": "docs/evaluation/editorial-329/followup/fixtures/final-mechanical-clean.md",
+    "sha256": "bc4b6530abc815b30efb4a14db7181ccfefffda70049acaf7a124ddfa3d21e6e",
+    "bytes": 1389,
+    "native_trace": "docs/evaluation/editorial-329/followup/runs/final-quotation-controls/frozen-clean-r1/redline/native-sessions/2026/09/20/rollout-2026-09-20T00-34-38-01a0bbce-a84f-7ca2-8ce9-30922e3b75f7.jsonl",
+    "native_trace_sha256": "668e6a26c53f6585dddcdbd4d106a11871d409added5f383e42c74475cb94f07",
+    "jsonl_line": 13,
+    "payload_field": "payload.item.stdout",
+    "extraction": "Exact prefix before unique following guidance marker; all artifact characters and terminal newline retained",
+    "guidance_boundary": "Resolved genre: case-study. Language: sv. Technique: none.\n",
+    "correction_trace": "docs/evaluation/editorial-329/followup/runs/final-quotation-controls/frozen-clean-r1/redline/native-sessions/2026/09/20/rollout-2026-09-20T00-33-34-01a0bbcd-b01a-7f53-966b-d414ba83fb7f.jsonl",
+    "correction_trace_sha256": "5d64255ff8b8f6e8f5d7d9f56135aa90106cdf15c6b2d73d5f97ef2cfcb5b18f",
+    "independent_match": "Complete correction artifact matches after stripping outer whitespace only; no manual reconstruction"
+  },
+  "error": {
+    "path": "docs/evaluation/editorial-329/followup/fixtures/final-mechanical-error.md",
+    "sha256": "4c35cf893a1f39d6bff978a355ac88db6ad4badaa0448c6cd7c46beac7e3c918",
+    "bytes": 1392,
+    "source": "docs/evaluation/editorial-329/followup/runs/final-quotation-controls/frozen-clean-r1/redline/response.txt",
+    "source_sha256": "4c35cf893a1f39d6bff978a355ac88db6ad4badaa0448c6cd7c46beac7e3c918",
+    "extraction": "Byte-for-byte copy of complete final response; response contains only artifact"
+  },
+  "difference": "Only arbetsbelastning -> arbetsbelastningning in the Perioderna paragraph, after outer-whitespace normalization",
+  "expectations": {
+    "clean": "No mechanical change; complete separate private Proofread result still exists; outer final artifact preserved.",
+    "error": "Mechanical correction removes duplicated suffix; all other artifact wording preserved."
+  },
+  "no_runs_launched": true
+}

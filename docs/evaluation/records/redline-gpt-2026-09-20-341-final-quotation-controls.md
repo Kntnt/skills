@@ -47,3 +47,8 @@ O1 passes for every row: whole-root before/after inventories show unchanged inpu
 **quote-free-bypass.** British-English opinion, no quoted-person speech. Short no-change response, no focused reader, one final Proofread, entire input preserved. No invented finding or unresolved condition.
 
 Total native run time: 1,331.98 seconds; overlapping execution means this is not elapsed batch wall time. No run error or timeout. Neither failed row was retried or replaced.
+
+
+## Tracker attribution added after filing
+
+The existing judgments are unchanged. The distinct observed defects now have native #329 child/blocker issues: [#358 — unnecessary changes to functioning quoted wording](https://github.com/Kntnt/skills/issues/358), [#359 — final artifact corruption across the mechanical/delivery boundary](https://github.com/Kntnt/skills/issues/359), and [#360 — translated measurement-construct substitution](https://github.com/Kntnt/skills/issues/360). The fixed-control typo belongs to #359; the unresolved Swedish idiom remains [#341](https://github.com/Kntnt/skills/issues/341). No disputed diagnostic finding is promoted to a definite defect by these links.

@@ -1,0 +1,6 @@
+[
+  {
+    "command": "/opt/homebrew/bin/bash -lc \"python3 - <<'PY'\nfrom pathlib import Path\nimport shutil\np=Path('/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-ag5m0943/scratch/write-check-y2ih1yp2')\n(p/'disposition.md').write_text('Rapporten l\u00e4st i sin helhet och validerad mot utkast och k\u00e4lla. Inga fynd att acceptera eller avvisa. P\u00e5st\u00e5endet om kostnadsfrihet \u00e4r en uppmaning att inte anta kostnadsfrihet, inte ett p\u00e5st\u00e5ende om fastst\u00e4lld kostnad; k\u00e4llan anger att kommunstyrelsen beh\u00f6ver ta st\u00e4llning till kostnaden. Inga \u00e4ndringar efter j\u00e4mf\u00f6relsen. Fullst\u00e4ndig kontroll avslutad utan ol\u00f6sta fynd.\\\\n')\nshutil.rmtree(p)\nscratch=p.parent\nprint('Scratch after cleanup:')\nfor q in sorted(scratch.rglob('*')):\n    print(q.relative_to(scratch), 'directory' if q.is_dir() else 'file')\nprint('Working directory top level:')\nfor q in sorted(Path.cwd().iterdir()):\n    print(q.name)\nprint('Run temporary directories remaining:', list(scratch.glob('write-*')))\nPY\"",
+    "output": "Scratch after cleanup:\ncache directory\ndata directory\ntmp directory\nuv-cache directory\nWorking directory top level:\n.agents\n.git\nAGENTS.md\nsource.md\nRun temporary directories remaining: []\n"
+  }
+]

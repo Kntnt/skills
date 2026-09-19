@@ -1,0 +1,59 @@
+{
+  "sessions": [
+    {
+      "file": "native-sessions/2026/09/20/rollout-2026-09-20T01-07-52-01a0bbed-152e-7cd0-a730-4184c9fe1be0.jsonl",
+      "session": {
+        "id": "01a0bbed-152e-7cd0-a730-4184c9fe1be0",
+        "parent_thread_id": null,
+        "source": "exec"
+      },
+      "identities": [
+        {
+          "model": "gpt-6-astra",
+          "effort": "high"
+        }
+      ],
+      "spawns": [],
+      "calls": [
+        "text(await tools.exec_command({cmd:\"cat .agents/skills/redline/SKILL.md\",\"max_output_tokens\":12000}));\ntext(await tools.exec_command({cmd:\"cat input.md\",\"max_output_tokens\":16000}));\n",
+        "text(await tools.exec_command({cmd:\"run_tmp=$(mktemp -d /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-sq41k3gh/scratch/redline.XXXXXX)\\ntrap 'rm -rf \\\"$run_tmp\\\"' EXIT\\nprintf '%s' '--output=response input.md' | TMPDIR=\\\"$run_tmp\\\" UV_NO_CACHE=1 UV_NO_PROJECT=1 uv run .agents/skills/redline/scripts/invoke.py\",\"max_output_tokens\":10000}));\n",
+        "text(await tools.exec_command({cmd:\"python3 - <<'PY'\\nimport os, subprocess, tempfile\\nwith tempfile.TemporaryDirectory(prefix='redline-', dir='/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-sq41k3gh/scratch') as tmp:\\n    env = dict(os.environ, TMPDIR=tmp, UV_NO_CACHE='1', UV_NO_PROJECT='1')\\n    result = subprocess.run(['uv', 'run', '.agents/skills/redline/scripts/invoke.py'], input='--output=response input.md', text=True, env=env)\\n    raise SystemExit(result.returncode)\\nPY\",\"max_output_tokens\":10000}));\n",
+        "text(await tools.exec_command({cmd:\"cat .agents/skills/kntnt/library/references/delivery.md .agents/skills/kntnt/library/references/editorial/genres/column.md\\npython3 - <<'PY'\\nimport os, subprocess, tempfile\\nwith tempfile.TemporaryDirectory(prefix='redline-', dir='/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-sq41k3gh/scratch') as tmp:\\n    env = dict(os.environ, TMPDIR=tmp, UV_NO_CACHE='1', UV_NO_PROJECT='1')\\n    result = subprocess.run(['uv', 'run', '--no-cache', '--no-project', '.agents/skills/kntnt/library/scripts/languages.py', 'resolve', '--scope=composition', '--scope=review', '--scope=anti-slop', 'sv'], env=env)\\n    raise SystemExit(result.returncode)\\nPY\",\"max_output_tokens\":11000}));\n",
+        "text(await tools.exec_command({cmd:\"cat .agents/skills/kntnt/library/references/editorial/base.md .agents/skills/kntnt/library/references/editorial/base.review.md .agents/skills/kntnt/library/references/editorial/genres/column.review.md .agents/skills/kntnt/library/references/editorial/anti-slop.md .agents/skills/kntnt/library/references/editorial/web-craft.md .agents/skills/kntnt/library/references/editorial/web-craft.review.md\",\"max_output_tokens\":19000}));\n",
+        "text(await tools.exec_command({cmd:\"cat .agents/skills/proofread/SKILL.md\",\"max_output_tokens\":13000}));\n",
+        "text(await tools.exec_command({cmd:\"python3 - <<'PY'\\nimport os, subprocess, tempfile\\nwith tempfile.TemporaryDirectory(prefix='proofread-', dir='/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-sq41k3gh/scratch') as tmp:\\n    env = dict(os.environ, TMPDIR=tmp, UV_NO_CACHE='1', UV_NO_PROJECT='1')\\n    result = subprocess.run(['uv', 'run', '.agents/skills/proofread/scripts/invoke.py'], input='--language=sv --output=response', text=True, env=env)\\n    raise SystemExit(result.returncode)\\nPY\",\"max_output_tokens\":3000}));\n",
+        "text(await tools.exec_command({cmd:\"python3 - <<'PY'\\nimport os, subprocess, tempfile\\nwith tempfile.TemporaryDirectory(prefix='proofread-', dir='/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-sq41k3gh/scratch') as tmp:\\n    env = dict(os.environ, TMPDIR=tmp, UV_NO_CACHE='1', UV_NO_PROJECT='1')\\n    result = subprocess.run(['uv', 'run', '--no-cache', '--no-project', '.agents/skills/kntnt/library/scripts/languages.py', 'resolve', '--scope=mechanics', 'sv'], env=env)\\n    raise SystemExit(result.returncode)\\nPY\\ncat .agents/skills/kntnt/library/references/editorial/mechanics.md\",\"max_output_tokens\":11000}));\n",
+        "text(await tools.exec_command({cmd:\"python3 - <<'PY'\\nfrom pathlib import Path\\nscratch = Path('/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-sq41k3gh/scratch')\\nprint('Kvarvarande temporära kataloger:', [p.name for p in scratch.iterdir() if p.name.startswith(('redline-', 'redline.', 'proofread-'))])\\nPY\\ngit status --short\",\"max_output_tokens\":2000}));\n"
+      ],
+      "complete_supplied_input_visible": true,
+      "delivered_prose_visible": null,
+      "missing_resource_paragraphs": {
+        "base.md": 0,
+        "base.review.md": 0,
+        "web-craft.md": 0,
+        "web-craft.review.md": 0,
+        "anti-slop.md": 0,
+        "mechanics.md": 0,
+        "genres/opinion.md": 6,
+        "genres/opinion.review.md": 4,
+        "genres/case-study.md": 6,
+        "genres/case-study.review.md": 4,
+        "genres/article.md": 5,
+        "genres/article.review.md": 4,
+        "genres/column.md": 0,
+        "genres/column.review.md": 0,
+        "genres/web-copy.md": 6,
+        "genres/web-copy.review.md": 5,
+        "genres/general.md": 11
+      }
+    }
+  ],
+  "parent_visible_reports": [],
+  "outside_native_home_changes": {
+    "created": {},
+    "removed": {},
+    "changed": {}
+  },
+  "authentication_changed": false,
+  "note": "Observed facts only. Encrypted dispatch alone cannot establish full prompt or draft transport. Delivered prose visibility removes leading metadata and final newline separators only; manually confirm the relevant draft read and last approving checker."
+}

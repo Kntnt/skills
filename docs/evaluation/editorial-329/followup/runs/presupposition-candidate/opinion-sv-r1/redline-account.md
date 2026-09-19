@@ -1,0 +1,1 @@
+Inga ändringar behövdes efter redaktionell granskning och korrekturläsning. Texten granskades som svensk debattartikel utan särskild berättarteknik, enligt metadata. `input.md` är oförändrad.

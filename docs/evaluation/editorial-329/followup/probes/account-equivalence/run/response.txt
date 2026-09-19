@@ -1,0 +1,38 @@
+The report covers every substantive draft passage, but its accounting is not fully faithful: it omits the selection date communicated by the draft’s grammar, and its standalone numerical reconstruction loses an explicit population qualification. The first leaves a source-support question unresolved; the second is a report-formulation defect, not evidence that the draft’s figures are unsupported.
+
+1. **The report drops September 2025 from the supplier-selection claim.**
+
+   **Draft:** “In September 2025, its maintenance team decided to try a shared log **and chose Svale Systems** after testing whether the log could show each repair’s status.” [Draft evidence](/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-4nj2b9ky/work/input.md:45)
+
+   The introductory date ordinarily applies to both coordinated actions, “decided” and “chose.” Nothing in the complete draft limits it to the first action.
+
+   **Report:** Row 13 retains September for the decision to try. Row 14 reconstructs only the undated proposition that the team chose Svale. Row 15 expressly says: “The September date belongs expressly to the decision to try; the sentence does not supply a separate dated selection event.” That explanation does not preserve the draft’s grammatical qualification. [Report evidence](/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-4nj2b9ky/work/input.md:117)
+
+   **Source:** “In September 2025 its own maintenance team decided to trial a shared repair log in two buildings.” Later: “It chose Svale Systems after testing whether the log could show the status of each repair.” The source establishes the September decision, selection and testing sequence, but does not settle the selection month. [Source evidence](/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-4nj2b9ky/work/input.md:13)
+
+   The missing proposition is: **Elm Quay’s maintenance team chose Svale Systems in September 2025.** Its precise negation is: **Elm Quay’s maintenance team did not choose Svale Systems in September 2025.**
+
+   The source does not rule that negation out. For example, a September decision followed by an early October selection is compatible with the supplied chronology. This establishes unresolved support for a real contextual claim—not that the selection actually occurred outside September. Rows 14–15’s undated selection and testing propositions remain supported.
+
+2. **The standalone median proposition does not retain the stated exclusions.**
+
+   **Draft:** Immediately before the medians, it says: “The figures exclude emergencies and work ordered before the trial.” The two-day figure therefore describes the qualified reporting population, not an unrestricted population of repairs. [Draft evidence](/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-4nj2b9ky/work/input.md:53)
+
+   **Report:** Rows 29–30 account for those exclusions separately. However, row 31’s purportedly “Complete standalone proposition” is simply: “Median time from report to assignment during the trial was two working days.” Its negation likewise omits the reporting population and exclusions. The support explanation says it preserves “trial scope,” but duration alone does not specify which reports enter the statistic. [Report evidence](/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-4nj2b9ky/work/input.md:133)
+
+   **Source:** The internal note “excludes emergencies and work ordered before the trial,” followed by the two-day and three-day medians. This supports the qualified statistic. [Source evidence](/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-4nj2b9ky/work/input.md:15)
+
+   A faithful standalone proposition would be: **Among Elm Quay’s trial repair reports included in the internal note, excluding emergencies and work ordered before the trial, median report-to-assignment time was two working days.** Its negation must retain that identical population and change “was” to “was not.”
+
+   This is a limitation of the standalone accounting. Read together, the report’s rows preserve the exclusions, and the draft expressly supplies them. An allegation that the **draft** asserts an unrestricted median is therefore not established. The source supports the qualified figure; it cannot establish a broader median merely because the reconstruction leaves the population unspecified.
+
+The remaining support judgments hold in complete context:
+
+- The shared-view headline and lead describe the trial and Lind’s experience. They do not claim universal report coverage or attribute the shorter assignment time to software.
+- The workload qualification, non-attribution, assignment/completion distinction and absence of specified measurements are preserved. Non-attribution does not mean the software had no effect.
+- The expansion language remains conditional on the team’s checks and decision; it does not announce an expansion.
+- Both displayed quotations match the source exactly. Preparation advice, Lind’s favorable assessment and her extra-week reservation remain properly distinguished and supported.
+- Customer agency, supplier involvement, email attribution, fictional publication context and checklist destination are supported. “Apartments” preserves “flats”; the pronoun interpretations introduce no unsupported gender or group-size claims.
+- No additional substantive omission or unsupported judgment is established. The metadata does not introduce an unaccounted customer-case fact.
+
+**Completion status: COMPLETE.** The report’s blanket “no repair is required” and “unresolved source-support findings: none” conclusions are not justified because selection-date support remains unresolved. The numerical finding concerns reconstruction completeness. No inputs were edited; no browsing, Skill invocation or delegation occurred.

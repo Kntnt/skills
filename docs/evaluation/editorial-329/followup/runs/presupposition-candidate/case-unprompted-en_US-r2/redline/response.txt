@@ -1,0 +1,1 @@
+No changes needed. Reviewed as a case study in American English, with no technique applied, as specified in the metadata. Quotation review and proofreading found no issues. No files changed.

@@ -1,0 +1,30 @@
+{
+  "identity_contexts": [
+    {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    }
+  ],
+  "commands": [
+    [
+      "/opt/homebrew/bin/bash",
+      "-lc",
+      "cat input.md"
+    ],
+    [
+      "/opt/homebrew/bin/bash",
+      "-lc",
+      "nl -ba input.md"
+    ]
+  ],
+  "functions": [],
+  "full_input_visible": true,
+  "non_home_effects": {
+    "created": [],
+    "changed": [],
+    "removed": []
+  },
+  "authentication_changed": false,
+  "input_sha256": "0acf67cfd643dc2f22c16d2bf3a04a1bacc4a08babcb75cab0bb3ea3fc13504d",
+  "judgement": "Detected inherited September scope loss; median reconstruction omission distinguished from supported draft; no unrelated false-positive finding; hypothesis supported for bounded candidate evaluation, not product outcome."
+}

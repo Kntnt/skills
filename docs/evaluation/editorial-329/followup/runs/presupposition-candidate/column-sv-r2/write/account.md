@@ -1,0 +1,1 @@
+*Svensk krönika utan särskild berättarteknik, källkontrollerad och levererad här. Inga filer har lämnats kvar. Texten är cirka 320 ord; närmare 350 skulle kräva ytterligare egna reflektioner från Nora. Underlaget innehåller inga mötesscener eller belägg för rutans effekt.*

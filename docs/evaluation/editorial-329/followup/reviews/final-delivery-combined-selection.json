@@ -1,0 +1,110 @@
+{
+  "note": "All12oldWrite rows plus1exactEnglish and2mechanical controls;10selected Redline invocations. Sources/criteria unchanged; oldSvRedline may complete concurrently but is mandatory before integration.",
+  "rows": [
+    {
+      "case": "case-unprompted-en_US-r1",
+      "selected": true,
+      "reason": "Three complete Ortiz email quotations.",
+      "artifact": "docs/evaluation/editorial-329/followup/runs/presupposition-candidate/case-unprompted-en_US-r1/write/artifact.md",
+      "sha256": "0daaacf80d32053cbbc83f277f75528e88f0b5f41ce5a65412f69a48a1c503ad"
+    },
+    {
+      "case": "case-unprompted-en_US-r2",
+      "selected": true,
+      "reason": "Three complete Ortiz email quotations.",
+      "artifact": "docs/evaluation/editorial-329/followup/runs/presupposition-candidate/case-unprompted-en_US-r2/write/artifact.md",
+      "sha256": "00b326c65967557da0e59eba9d2f1c8e62afcb3e1ede21bc74e5031500738885"
+    },
+    {
+      "case": "case-question-en_GB-r1",
+      "selected": true,
+      "reason": "Two complete Vale email-interview quotations.",
+      "artifact": "docs/evaluation/editorial-329/followup/runs/presupposition-candidate/case-question-en_GB-r1/write/artifact.md",
+      "sha256": "005ded14fecb60dc36bc2b2b2f3dde6fde9052bd1d4b375b32bf0dc7e1d0d9e5"
+    },
+    {
+      "case": "opinion-absence-en_GB-r1",
+      "selected": false,
+      "reason": "No quoted person statement; Reed position is paraphrased.",
+      "artifact": "docs/evaluation/editorial-329/followup/runs/presupposition-candidate/opinion-absence-en_GB-r1/write/artifact.md",
+      "sha256": "9a46c70ab57af59176d1649c6c3637ef866c4b0ab5f43f7ad0207ed3c38b9a6c"
+    },
+    {
+      "case": "case-question-en_GB-r2",
+      "selected": true,
+      "reason": "Two complete Vale email-interview quotations.",
+      "artifact": "docs/evaluation/editorial-329/followup/runs/presupposition-candidate/case-question-en_GB-r2/write/artifact.md",
+      "sha256": "72be26f367ca0ab2b9fa7a3be72c52ae55c7b9bc38db31afbebe023750ddd657"
+    },
+    {
+      "case": "article-sv-r1",
+      "selected": true,
+      "reason": "Rask statement introduced by Swedish speech dash.",
+      "artifact": "docs/evaluation/editorial-329/followup/runs/presupposition-candidate/article-sv-r1/write/artifact.md",
+      "sha256": "5d0dd90bec36c2fba582c70e82457362bdc7a580314d53595470762165e3baee"
+    },
+    {
+      "case": "column-sv-r2",
+      "selected": false,
+      "reason": "Proposed template question is embedded in reflection, not a quoted person statement.",
+      "artifact": "docs/evaluation/editorial-329/followup/runs/presupposition-candidate/column-sv-r2/write/artifact.md",
+      "sha256": "8ec82d270e2c2a64d2585e04afd21807620773b83db09a96f0f3f0e251eb4931"
+    },
+    {
+      "case": "column-sv-r1",
+      "selected": false,
+      "reason": "Proposed template question is embedded in reflection, not a quoted person statement.",
+      "artifact": "docs/evaluation/editorial-329/followup/runs/presupposition-candidate/column-sv-r1/write/artifact.md",
+      "sha256": "a95b4ffaabac27a99b4dc49d09d18477ebbf81e6a849b9f9e733f46c101c8539"
+    },
+    {
+      "id": "opinion-sv-r1",
+      "source": "/Users/thomas/Projects/skills/docs/evaluation/editorial-329/followup/runs/presupposition-candidate/opinion-sv-r1/draft.md",
+      "sha256": "8b2e4551d628774e125750a93654a48475ffa4f284818a4271b7ea26782f1ecc",
+      "selected": false,
+      "reason": "Delivered opinion contains no quoted statement by a person."
+    },
+    {
+      "id": "opinion-en_US-r1",
+      "source": "/Users/thomas/Projects/skills/docs/evaluation/editorial-329/followup/runs/presupposition-candidate/opinion-en_US-r1/draft.md",
+      "sha256": "1c5b92cf7258ce526a3525f2f6e3ac2f88915937282e6e77b10840c53eff95cc",
+      "selected": false,
+      "reason": "Delivered opinion contains no quoted statement by a person."
+    },
+    {
+      "id": "case-study-en_US-r1",
+      "source": "/Users/thomas/Projects/skills/docs/evaluation/editorial-329/followup/runs/presupposition-candidate/case-study-en_US-r1/draft.md",
+      "sha256": "eaef8848e4cff872139ca98502a27992d78dde123f5a0cea6c4624a73e8f1b51",
+      "selected": true,
+      "reason": "Delivered complete artifact contains quoted statements by Maya Lind; inherited F1/L1 failures retained separately."
+    },
+    {
+      "id": "case-study-sv-r1",
+      "source": "/Users/thomas/Projects/skills/docs/evaluation/editorial-329/followup/runs/presupposition-candidate/case-study-sv-r1/draft.md",
+      "sha256": "6648de46956c4796cff8c1fb1f3cc3a195b1a57f7cc5a4511e298f49fa1b6a36",
+      "selected": true,
+      "reason": "Delivered complete artifact contains quoted statements by Maya Lind; inherited F1/L1 failures retained separately."
+    },
+    {
+      "id": "english-preservation-control",
+      "source": "/Users/thomas/Projects/skills/docs/evaluation/editorial-329/followup/runs/third-candidate/case-study-en_US-r2/draft.md",
+      "sha256": "244c339d163059150237f2ae3a17a5bf70b4ee242a4d0a1f57fc52bb91c36a26",
+      "selected": true,
+      "reason": "Exact original third-candidate US r2 Write artifact; functioning English quotation was unnecessarily changed in both reader revisions."
+    },
+    {
+      "id": "final-mechanical-clean",
+      "source": "/Users/thomas/Projects/skills/docs/evaluation/editorial-329/followup/fixtures/final-mechanical-clean.md",
+      "sha256": "bc4b6530abc815b30efb4a14db7181ccfefffda70049acaf7a124ddfa3d21e6e",
+      "selected": true,
+      "reason": "Fixed complete-artifact mechanical transport control."
+    },
+    {
+      "id": "final-mechanical-error",
+      "source": "/Users/thomas/Projects/skills/docs/evaluation/editorial-329/followup/fixtures/final-mechanical-error.md",
+      "sha256": "4c35cf893a1f39d6bff978a355ac88db6ad4badaa0448c6cd7c46beac7e3c918",
+      "selected": true,
+      "reason": "Fixed complete-artifact mechanical transport control."
+    }
+  ]
+}

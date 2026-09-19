@@ -1,0 +1,18 @@
+## What to build
+
+Part of #329. Preserve the meanings of measured variables across translation in Write and its source comparison. Four first-candidate English opinion drafts at 8f92e12 translate the source’s report-wide statement “Den mäter inte ålder, funktionsförmåga eller digital vana” into an assertion that disability was not measured; three also substitute digital skills. Functional ability differs from disability status, and familiarity or experience differs from skill or proficiency. A report can measure one without measuring the other.
+
+Complete failed sources, drafts and approving checker traces are in docs/evaluation/editorial-329/followup/runs/candidate/opinion-en_GB-r1/, opinion-en_GB-r2/, opinion-en_US-r1/ and opinion-en_US-r2/. The fourth preserves familiarity but still substitutes disability. Earlier F1 passes have visible superseding failures. This is distinct from #349’s no-claim/absence distinction and #341’s idiom.
+
+Second-wave checking demonstrably repairs this distinction in some drafts. Third-wave US opinion is validly withheld for source defects; the separate third-comparison diagnostic fixes disability but retains digital proficiency, which a fresh checker incorrectly accepts by reconstructing familiarity OR proficiency. Preserve these phase distinctions. Diagnose the comparison operation without a fixed synonym list or a canonical article sentence.
+
+## Acceptance criteria
+
+- [ ] Preserve complete failed artifacts, source passages, approving reports and superseded judgments under the unchanged F1 criterion.
+- [ ] Compare the actual measurement construct rather than an associated trait or a silently broadened proposition.
+- [ ] Fresh unchanged-source English opinion runs preserve measurement meanings; retain Swedish and warranted quantitative-limit controls with separate source-blind Redline stages.
+- [ ] Report genuine withholding, false-positive refusal and delivered fidelity separately; diagnostic detection alone does not establish a Write repair.
+- [ ] Run the four CONTRIBUTING checks for the integrated change.
+
+---
+Written against cd375d4f

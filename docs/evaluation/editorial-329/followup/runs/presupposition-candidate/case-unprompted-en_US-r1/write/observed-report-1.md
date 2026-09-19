@@ -1,0 +1,117 @@
+# Source comparison report
+
+Compared the complete draft with the complete supplied source and brief, and read the supplied quotation guidance. Language: en_US; source language: English. No translation is involved. This report judges source support only.
+
+## Claim accounting
+
+Each entry gives the draft passage, its independently checkable proposition, its precise negation, and the supplied statement that excludes that negation. Attributed statements are tested as attributed statements, without converting an individual's interpretation or preference into independently verified fact.
+
+1. **Draft:** “Briar County volunteers share records in catalog pilot.” **Proposition:** Volunteers at Briar County Theater Archive could consult shared records during its catalog pilot. **Negation:** Volunteers at Briar County Theater Archive could not consult shared records during its catalog pilot. **Support:** “The note reports that volunteers could consult the same records.” The headline's present tense is ordinary headline presentation of the reported pilot, not an additional assertion about post-pilot activity. Supported.
+
+2. **Draft:** “Briar County Theater Archive cataloged 47 incoming donations.” **Proposition:** The archive cataloged 47 incoming donations in the pilot. **Negation:** The archive did not catalog 47 incoming donations in the pilot. **Support:** “The archive's pilot note, dated May 6, records 47 incoming donations cataloged during the eight-week pilot.” Supported; no claim about cataloging its whole collection is added.
+
+3. **Draft:** “during an eight-week pilot of Index Lantern.” **Proposition:** The pilot during which those 47 incoming donations were cataloged lasted eight weeks. **Negation:** That pilot did not last eight weeks. **Support:** “47 incoming donations cataloged during the eight-week pilot.” Supported.
+
+4. **Draft:** “pilot of Index Lantern.” **Proposition:** That shared-catalog pilot used Index Lantern. **Negation:** That shared-catalog pilot did not use Index Lantern. **Support:** The team chose “to test a shared catalog for incoming donations, using Index Lantern,” followed by the account of “the eight-week pilot.” Supported.
+
+5. **Draft:** “Volunteers could consult the same records, according to the archive’s pilot note.” **Proposition:** The archive's pilot note reports that volunteers could consult the same records. **Negation:** The archive's pilot note does not report that volunteers could consult the same records. **Support:** “The note reports that volunteers could consult the same records.” Supported with the attribution intact; neither simultaneous use nor measured efficiency is asserted.
+
+6. **Draft:** “A decision on moving older records will follow a review of the field definitions.” **Proposition:** The archive will review field definitions before deciding whether to move older records into the catalog. **Negation:** The archive will not review field definitions before deciding whether to move older records into the catalog. **Support:** “The archive will review the field definitions before deciding whether to move older records into the catalog.” Supported. “A decision on moving” does not assert a decision to move them.
+
+7. **Draft:** “The archive holds donated programs … from local productions.” **Proposition:** Briar County Theater Archive holds donated programs from local productions. **Negation:** The archive does not hold donated programs from local productions. **Support:** “Briar County Theater Archive holds donated programs, photographs, and posters from local productions.” Supported.
+
+8. **Draft:** “The archive holds donated … photographs … from local productions.” **Proposition:** The archive holds donated photographs from local productions. **Negation:** The archive does not hold donated photographs from local productions. **Support:** The same source sentence in entry 7. Supported; both “donated” and “from local productions” carry across the list.
+
+9. **Draft:** “The archive holds donated … posters from local productions.” **Proposition:** The archive holds donated posters from local productions. **Negation:** The archive does not hold donated posters from local productions. **Support:** The same source sentence in entry 7. Supported.
+
+10. **Draft:** “Volunteers had described new donations in separate spreadsheets.” **Proposition:** Before the shared-catalog pilot, volunteers had described new donations in separate spreadsheets. **Negation:** Before the shared-catalog pilot, volunteers had not described new donations in separate spreadsheets. **Support:** “Volunteers had described new donations in separate spreadsheets,” preceding the February choice to test the shared catalog. Supported.
+
+11. **Draft:** “In February 2026, the collection team chose to test a shared catalog for incoming donations.” **Proposition:** In February 2026, the archive's collection team chose to test a shared catalog for incoming donations. **Negation:** In February 2026, the archive's collection team did not choose to test a shared catalog for incoming donations. **Support:** “In February 2026 the archive's collection team chose to test a shared catalog for incoming donations, using Index Lantern.” Supported. This dates the choice, not an invented precise pilot start date.
+
+12. **Draft:** “existing collections were outside the pilot.” **Proposition:** Existing collections were excluded from the pilot's scope. **Negation:** Existing collections were not excluded from the pilot's scope. **Support:** “Existing collections were outside the pilot.” Supported.
+
+13. **Draft:** “The team agreed on fields for production title.” **Proposition:** The collection team agreed on a production-title field. **Negation:** The collection team did not agree on a production-title field. **Support:** “The team agreed on fields for production title, year, donor, and location.” Supported.
+
+14. **Draft:** “The team agreed on fields for … year.” **Proposition:** The collection team agreed on a year field. **Negation:** The collection team did not agree on a year field. **Support:** The source sentence in entry 13. Supported.
+
+15. **Draft:** “The team agreed on fields for … donor.” **Proposition:** The collection team agreed on a donor field. **Negation:** The collection team did not agree on a donor field. **Support:** The source sentence in entry 13. Supported.
+
+16. **Draft:** “The team agreed on fields for … location.” **Proposition:** The collection team agreed on a location field. **Negation:** The collection team did not agree on a location field. **Support:** The source sentence in entry 13. Supported.
+
+17. **Draft:** “retaining a free-text note for uncertain dates.” **Proposition:** The collection team retained a free-text note for uncertain dates in its agreed catalog description arrangement. **Negation:** The collection team did not retain a free-text note for uncertain dates in that arrangement. **Support:** “It retained a free-text note for uncertain dates.” “It” refers to the team in the preceding source sentence. Supported; the draft makes no assertion that the note resolved any dates.
+
+18. **Draft:** “Index Lantern imported the team’s spreadsheet template.” **Proposition:** Index Lantern imported the collection team's spreadsheet template. **Negation:** Index Lantern did not import the collection team's spreadsheet template. **Support:** “Index Lantern imported the team's spreadsheet template.” Supported.
+
+19. **Draft:** “and provided one remote training session for five volunteers.” **Proposition:** Index Lantern provided exactly one remote training session for five volunteers. **Negation:** Index Lantern did not provide exactly one remote training session for five volunteers. **Support:** “and provided one remote training session for five volunteers.” Supported. The count, manner, beneficiary count, and actor all match; this does not claim five volunteers were the entire archive workforce.
+
+20. **Draft:** “The archive chose the descriptions.” **Proposition:** The archive decided which descriptions to use. **Negation:** The archive did not decide which descriptions to use. **Support:** “The archive decided which descriptions to use.” Supported.
+
+21. **Draft:** “and checked the imported records.” **Proposition:** The archive checked the imported records. **Negation:** The archive did not check the imported records. **Support:** “and checked the imported records.” Supported. The draft does not assert perfect accuracy as the outcome of checking.
+
+22. **Draft:** “collection coordinator Lena Ortiz.” **Proposition:** Lena Ortiz is the archive's collection coordinator. **Negation:** Lena Ortiz is not the archive's collection coordinator. **Support:** “Collection coordinator Lena Ortiz sent the following complete quotations…” within the archive material. Supported. No natural gender is inferred from the name.
+
+23. **Draft:** “Lena Ortiz wrote in an email headed ‘Catalog pilot: notes for publication.’” **Proposition:** Ortiz supplied the quoted words in an email with that heading. **Negation:** Ortiz did not supply the quoted words in an email with that heading. **Support:** “Collection coordinator Lena Ortiz sent the following complete quotations in an email headed ‘Catalog pilot: notes for publication’.” Supported. The draft accurately identifies written correspondence, without implying an interview or observed speech.
+
+24. **Draft:** “‘Agreeing on the fields took two meetings.’” **Proposition:** Ortiz wrote that agreeing on the fields took two meetings. **Negation:** Ortiz did not write that agreeing on the fields took two meetings. **Support:** The complete supplied quotation: “Agreeing on the fields took two meetings. The import was the short part.” Supported as Ortiz's account, with duration expressed in meetings and no invented elapsed time.
+
+25. **Draft:** “‘The import was the short part.’” **Proposition:** Ortiz characterized the import as the short part of the described preparation/import process. **Negation:** Ortiz did not characterize the import as the short part of that process. **Support:** “The import was the short part.” Supported as attributed interpretation, not an independently measured timing result or supplier comparison.
+
+26. **Draft:** “Uncertain dates remain visible.” **Proposition:** The archive's pilot preserved the visibility of uncertain dates. **Negation:** The archive's pilot did not preserve the visibility of uncertain dates. **Support:** “Eleven records retained uncertain dates” and Ortiz's “We kept the uncertain dates visible.” Supported. The heading refers to the practice and pilot records discussed beneath it; it does not claim that dates became known or establish a later operational status.
+
+27. **Draft:** “The archive’s May 6 pilot note.” **Proposition:** The archive's pilot note is dated May 6. **Negation:** The archive's pilot note is not dated May 6. **Support:** “The archive's pilot note, dated May 6…” Supported.
+
+28. **Draft:** “pilot note records 11 records with uncertain dates.” **Proposition:** The pilot note records that 11 pilot records retained uncertain dates. **Negation:** The pilot note does not record that 11 pilot records retained uncertain dates. **Support:** “The archive's pilot note … records 47 incoming donations cataloged during the eight-week pilot. Eleven records retained uncertain dates.” Supported; no evaluative characterization of the count is added.
+
+29. **Draft:** “Ortiz explained the choice in the same email.” **Proposition:** In that same email, Ortiz gave an explanation for preserving uncertain dates. **Negation:** In that same email, Ortiz did not give an explanation for preserving uncertain dates. **Support:** All three quotations are expressly supplied as part of the same headed email; the relevant one says, “We kept the uncertain dates visible. An empty field and an estimated year tell the next volunteer different things.” The second sentence supplies the distinction behind the choice. Supported as the content of the explanation, without an invented emotional manner.
+
+30. **Draft:** “‘We kept the uncertain dates visible.’” **Proposition:** Ortiz wrote that the archive team kept uncertain dates visible. **Negation:** Ortiz did not write that the archive team kept uncertain dates visible. **Support:** Exact supplied quotation: “We kept the uncertain dates visible.” The archival context settles the collective referent. Supported as an attributed account.
+
+31. **Draft:** “‘An empty field and an estimated year tell the next volunteer different things.’” **Proposition:** Ortiz wrote that an empty field and an estimated year convey different information to the next volunteer. **Negation:** Ortiz did not write that an empty field and an estimated year convey different information to the next volunteer. **Support:** The identical supplied sentence. Supported as Ortiz's explanation; no invented instance of a particular next volunteer is asserted.
+
+32. **Draft:** “The note contains no before-and-after time measurement.” **Proposition:** The pilot note contains no before-and-after time measurement. **Negation:** The pilot note contains at least one before-and-after time measurement. **Support:** The note “contains no before-and-after time measurement, cost calculation, or assessment of public access.” Supported. The scope is the note, not every measurement the archive might ever have made.
+
+33. **Draft:** “The note contains no … cost calculation.” **Proposition:** The pilot note contains no cost calculation. **Negation:** The pilot note contains at least one cost calculation. **Support:** The same source passage in entry 32. Supported. No claim that costs did not exist or were never calculated is added.
+
+34. **Draft:** “The note contains no … assessment of public access.” **Proposition:** The pilot note contains no assessment of public access. **Negation:** The pilot note contains at least one assessment of public access. **Support:** The same source passage in entry 32. Supported. No claim that public access did not change is added.
+
+35. **Draft:** “It and Ortiz’s email are the materials the archive supplied for this case.” **Proposition:** The archive supplied the pilot note and Ortiz's email as the reporting materials for this case. **Negation:** The archive did not supply the pilot note and Ortiz's email as the reporting materials for this case. **Support:** “The archive supplied that email and the pilot note for this supplier-published case.” Supported.
+
+36. **Draft:** “are the materials the archive supplied for this case.” **Proposition:** The pilot note and Ortiz's email constitute the supplied correspondence and reporting materials for this case. **Negation:** The supplied correspondence and reporting materials for this case include something other than the pilot note and Ortiz's email. **Support:** “These are the only correspondence and reporting materials supplied.” Supported. The assertion is about reporting material and does not erase the supplied editorial brief.
+
+37. **Draft:** “this case, published by Index Lantern.” **Proposition:** Index Lantern is the publisher of this customer case. **Negation:** Index Lantern is not the publisher of this customer case. **Support:** Brief: “The publisher is catalog software supplier Index Lantern”; material: “this supplier-published case.” Supported as publication context, not an assertion that a separate publication event has already occurred.
+
+38. **Draft:** “Ortiz offered a qualified assessment.” **Proposition:** Ortiz's assessment endorses using the shared catalog again for new donations while conditioning extension to older collections on further description testing. **Negation:** Ortiz's assessment does not endorse using the shared catalog again for new donations while conditioning extension to older collections on further description testing. **Support:** “I would use the shared catalog again for new donations. I would test the descriptions on more posters before we bring in the older collection.” Supported interpretation of the quoted distinction. “Qualified” describes actual qualifications rather than adding unsupported praise or criticism.
+
+39. **Draft:** “‘I would use the shared catalog again for new donations.’” **Proposition:** Ortiz wrote that Ortiz would use the shared catalog again for new donations. **Negation:** Ortiz did not write that Ortiz would use the shared catalog again for new donations. **Support:** Exact supplied sentence. Supported as a conditional personal assessment, not a completed decision or guaranteed future action.
+
+40. **Draft:** “‘I would test the descriptions on more posters before we bring in the older collection.’” **Proposition:** Ortiz wrote that Ortiz would test the descriptions on additional posters before the archive team brings in the older collection. **Negation:** Ortiz did not write that Ortiz would test the descriptions on additional posters before the archive team brings in the older collection. **Support:** Exact supplied sentence. Supported with its conditional stance, chronology, further-testing scope, and collective implementation intact. Quoting this assessment does not assert that the archive has decided to import older collections.
+
+## Separate pronoun accounting
+
+The draft contains the following explicit pronouns. Their person, number, referent, and natural-gender implications are checked separately from their clauses' event claims.
+
+P1. **“We”** in “We kept the uncertain dates visible.” **Proposition:** In Ortiz's quoted wording, the subject is a first-person plural collective including the speaker and associated with the archive's catalog work. **Negation:** In Ortiz's quoted wording, the subject is not a first-person plural collective including the speaker and associated with the archive's catalog work. **Support excluding negation:** The source supplies exactly “We kept the uncertain dates visible,” following the account of the archive team's treatment of dates. The plural is directly supplied, not inferred solely from identifying a referent. No natural gender is asserted; English “we” has no gender distinction. Membership beyond the speaker and contextually identified collective is unspecified and remains so.
+
+P2. **“It”** in “It and Ortiz’s email are the materials…” **Proposition:** This third-person singular inanimate pronoun refers to the singular pilot note in the previous sentence. **Negation:** This pronoun does not refer in the third-person singular to that inanimate pilot note. **Support excluding negation:** The source supplies a singular document, “the pilot note,” and explicitly says, “The archive supplied that email and the pilot note.” The draft's immediately preceding sentence supplies the identical note antecedent. Person and number are supported by the singular document; no natural gender is conveyed. The larger coordination is plural because it comprises the note and the email, exactly the two supplied reporting materials.
+
+P3. **“I”** in “I would use the shared catalog again…” **Proposition:** Ortiz's quoted preference has Ortiz as its first-person singular subject. **Negation:** Ortiz's quoted preference does not have Ortiz as its first-person singular subject. **Support excluding negation:** The source attributes to Ortiz the exact first-person sentence “I would use the shared catalog again for new donations.” Singular person is directly supplied by the quotation and its attribution, not assumed from the name. No natural gender is asserted.
+
+P4. **“I”** in “I would test the descriptions…” **Proposition:** Ortiz's quoted testing preference has Ortiz as its first-person singular subject. **Negation:** Ortiz's quoted testing preference does not have Ortiz as its first-person singular subject. **Support excluding negation:** The source attributes to Ortiz the exact sentence beginning “I would test the descriptions…” Person and number are directly supplied. No natural gender is asserted.
+
+P5. **“we”** in “before we bring in the older collection.” **Proposition:** The quoted potential importing action has a first-person plural subject including Ortiz and the archive collective. **Negation:** The quoted potential importing action does not have a first-person plural subject including Ortiz and the archive collective. **Support excluding negation:** The source supplies exactly “before we bring in the older collection,” attributed to Ortiz; the surrounding source identifies the archive as the entity considering older records. Plural first person is explicit. No natural gender is asserted, and no further membership is invented.
+
+No other personal or gendered pronouns occur. “The team’s,” “the archive’s,” and “Ortiz’s” are noun possessives, not pronouns; their referents and relationships are supported above. “Same” modifies records/email and does not establish any new person's attributes. The draft contains no grammatical-gender form that asserts an individual's natural gender.
+
+## Quotations and implication checks
+
+All three supplied quotations appear in full. Their words, first-person stance, uncertainty, certainty, and distinctive phrases are preserved. The comma replacing the final period before the first attribution is quotation integration punctuation, with no semantic change. The heading of the email is also reproduced exactly. No spoken scene, interview transcript, emotional description, quotation approval, invented personal experience, or invented source is implied. There are no translated quotations and hence no translation findings.
+
+The draft preserves the exclusion of existing collections, the uncertain-date count, and the absence of specified analyses from the pilot note. It does not transform these documentary absences into claims about what never happened. The shared-record benefit remains explicitly attributed to the note. No causal claim about speed, cost, access, donation counts, or software impact is added. The first quotation's comparative “short” is Ortiz's supplied characterization, not an unsupported editorial timing judgment. Counts are not characterized as high, low, or otherwise evaluative. The final quotation keeps endorsement limited to incoming donations and records the further testing Ortiz would undertake before older collections.
+
+## Findings and completion
+
+Source-support findings: none. Every reconstructed proposition is supported by the supplied material at its stated attribution, scope, and strength. No source-compatible counterexample is needed because the supplied statements exclude each listed negation. No repair is proposed.
+
+Translation findings: none; no translation occurred.
+
+Completion status: complete. Unresolved findings: none.

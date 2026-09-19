@@ -1,0 +1,1 @@
+*Delivered here: British English opinion draft; no technique selected. Source comparison completed with no unresolved findings. The supplied material supported the requested length and scope. No files retained; source unchanged.*

@@ -1,0 +1,1 @@
+*Första utkast: artikel på svenska, utan särskild berättarteknik, levererat här i svaret. Källkontrollen är slutförd utan kvarstående fynd. Det fiktiva underlaget ger inga svar om kylans orsak, elevernas upplevelse eller justeringars effekt. Inga filer från körningen finns kvar.*

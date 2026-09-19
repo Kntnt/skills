@@ -1,0 +1,42 @@
+{
+  "revision": "pending frozen combined candidate",
+  "predicate": "Every delivered cd375d4f original Write artifact with quoted-person statements plus declared exact English preservation control",
+  "entries": [
+    {
+      "id": "opinion-sv-r1",
+      "source": "/Users/thomas/Projects/skills/docs/evaluation/editorial-329/followup/runs/presupposition-candidate/opinion-sv-r1/draft.md",
+      "sha256": "8b2e4551d628774e125750a93654a48475ffa4f284818a4271b7ea26782f1ecc",
+      "selected": false,
+      "reason": "Delivered opinion contains no quoted statement by a person."
+    },
+    {
+      "id": "opinion-en_US-r1",
+      "source": "/Users/thomas/Projects/skills/docs/evaluation/editorial-329/followup/runs/presupposition-candidate/opinion-en_US-r1/draft.md",
+      "sha256": "1c5b92cf7258ce526a3525f2f6e3ac2f88915937282e6e77b10840c53eff95cc",
+      "selected": false,
+      "reason": "Delivered opinion contains no quoted statement by a person."
+    },
+    {
+      "id": "case-study-en_US-r1",
+      "source": "/Users/thomas/Projects/skills/docs/evaluation/editorial-329/followup/runs/presupposition-candidate/case-study-en_US-r1/draft.md",
+      "sha256": "eaef8848e4cff872139ca98502a27992d78dde123f5a0cea6c4624a73e8f1b51",
+      "selected": true,
+      "reason": "Delivered complete artifact contains quoted statements by Maya Lind; inherited F1/L1 failures retained separately."
+    },
+    {
+      "id": "case-study-sv-r1",
+      "source": "/Users/thomas/Projects/skills/docs/evaluation/editorial-329/followup/runs/presupposition-candidate/case-study-sv-r1/draft.md",
+      "sha256": "6648de46956c4796cff8c1fb1f3cc3a195b1a57f7cc5a4511e298f49fa1b6a36",
+      "selected": true,
+      "reason": "Delivered complete artifact contains quoted statements by Maya Lind; inherited F1/L1 failures retained separately."
+    },
+    {
+      "id": "english-preservation-control",
+      "source": "/Users/thomas/Projects/skills/docs/evaluation/editorial-329/followup/runs/third-candidate/case-study-en_US-r2/draft.md",
+      "sha256": "244c339d163059150237f2ae3a17a5bf70b4ee242a4d0a1f57fc52bb91c36a26",
+      "selected": true,
+      "reason": "Exact original third-candidate US r2 Write artifact; functioning English quotation was unnecessarily changed in both reader revisions."
+    }
+  ],
+  "swedish_fallback": "Not needed: delivered cd375d4f Swedish case has three quoted statements."
+}

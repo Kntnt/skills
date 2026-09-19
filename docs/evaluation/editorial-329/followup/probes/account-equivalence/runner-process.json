@@ -1,0 +1,21 @@
+{
+  "pid": 33870,
+  "process_group": 33870,
+  "argv": [
+    "uv",
+    "run",
+    "docs/evaluation/editorial-329/harness/run.py",
+    "--revision",
+    "cd375d4f",
+    "--corpus-revision",
+    "bf14dc2",
+    "--prompt",
+    "/Users/thomas/Projects/skills/docs/evaluation/editorial-329/followup/probes/account-equivalence/prompt.txt",
+    "--input",
+    "/Users/thomas/Projects/skills/docs/evaluation/editorial-329/followup/probes/account-equivalence/input.md",
+    "--input-name",
+    "input.md",
+    "--output",
+    "/Users/thomas/Projects/skills/docs/evaluation/editorial-329/followup/probes/account-equivalence/run"
+  ]
+}

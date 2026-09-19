@@ -155,3 +155,7 @@ The frozen [quotation matrix](../editorial-329/followup/matrix-quotation.md) sel
 - **unresolved findings** — not applicable to an uninvoked replay.
 - **defects filed** — none from this uninvoked replay.
 - **notes** — Retained checked prose from a withheld Write is evidence, not a delivered artifact and not a substitute input.
+
+## Defect filing addendum
+
+The independently confirmed needless edit of functioning English quoted speech is filed as [#358](https://github.com/Kntnt/skills/issues/358). This links the already-recorded R1 preservation failure; F1 and L1 judgements remain unchanged.

@@ -25,3 +25,5 @@ All 11 source-checker sessions are fresh, inherit gpt-6-astra/high, read the com
 - [Inventory](third-original-inventory.json): nine invocations, twenty native sessions, inherited identities, actual source access and all roots absent.
 
 Every all-root inventory shows zero surviving Skill effects outside native home state, with input and authentication unchanged. Every private root was removed by a literal absolute path after capture. The original batch ended. No product changes or commits were made by this evaluator, and baseline/other-provider outcomes did not inform these judgements.
+
+The measurement-domain substitution failures and valid refusal basis discussed above are now tracked in [#360](https://github.com/Kntnt/skills/issues/360); historical judgements remain unchanged.

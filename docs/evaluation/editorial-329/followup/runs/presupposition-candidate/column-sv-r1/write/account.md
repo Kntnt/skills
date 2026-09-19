@@ -1,0 +1,1 @@
+Första utkast till svensk webbkrönika, utan särskild berättarteknik, levererat här i svaret. Källkontrollen är klar utan kvarstående fynd. Underlaget räckte för önskad längd. Inga nya filer finns kvar.

@@ -1,0 +1,621 @@
+{
+  "status": "Rolling audit; final matrix has 24 declared slots",
+  "completed_native": 23,
+  "aggregate_native_seconds": 6383.34,
+  "rows": [
+    {
+      "run": "runs/presupposition-candidate/article-sv-r1/redline",
+      "identities": [
+        [
+          "gpt-6-astra",
+          "high"
+        ]
+      ],
+      "spawns": [
+        {
+          "task_name": "quotation_review",
+          "fork_turns": "none"
+        },
+        {
+          "task_name": "proofread_pass",
+          "fork_turns": "none"
+        }
+      ],
+      "returncode": 0,
+      "timed_out": false,
+      "duration_seconds": 213.24,
+      "input_unchanged": true,
+      "authentication_changed": false,
+      "nonhome_changes": {
+        "created": [],
+        "changed": [],
+        "removed": []
+      },
+      "root_absent": true
+    },
+    {
+      "run": "runs/presupposition-candidate/article-sv-r1/write",
+      "identities": [
+        [
+          "gpt-6-astra",
+          "high"
+        ]
+      ],
+      "spawns": [
+        {
+          "task_name": "source_check",
+          "fork_turns": "none"
+        }
+      ],
+      "returncode": 0,
+      "timed_out": false,
+      "duration_seconds": 366.93,
+      "input_unchanged": true,
+      "authentication_changed": false,
+      "nonhome_changes": {
+        "created": [],
+        "changed": [],
+        "removed": []
+      },
+      "root_absent": true
+    },
+    {
+      "run": "runs/presupposition-candidate/case-question-en_GB-r1/redline",
+      "identities": [
+        [
+          "gpt-6-astra",
+          "high"
+        ]
+      ],
+      "spawns": [
+        {
+          "task_name": "quotation_review",
+          "fork_turns": "none"
+        }
+      ],
+      "returncode": 0,
+      "timed_out": false,
+      "duration_seconds": 144.61,
+      "input_unchanged": true,
+      "authentication_changed": false,
+      "nonhome_changes": {
+        "created": [],
+        "changed": [],
+        "removed": []
+      },
+      "root_absent": true
+    },
+    {
+      "run": "runs/presupposition-candidate/case-question-en_GB-r1/write",
+      "identities": [
+        [
+          "gpt-6-astra",
+          "high"
+        ]
+      ],
+      "spawns": [
+        {
+          "task_name": "source_check",
+          "fork_turns": "none"
+        }
+      ],
+      "returncode": 0,
+      "timed_out": false,
+      "duration_seconds": 260.52,
+      "input_unchanged": true,
+      "authentication_changed": false,
+      "nonhome_changes": {
+        "created": [],
+        "changed": [],
+        "removed": []
+      },
+      "root_absent": true
+    },
+    {
+      "run": "runs/presupposition-candidate/case-question-en_GB-r2/redline",
+      "identities": [
+        [
+          "gpt-6-astra",
+          "high"
+        ]
+      ],
+      "spawns": [
+        {
+          "task_name": "quotation_reading",
+          "fork_turns": "none"
+        }
+      ],
+      "returncode": 0,
+      "timed_out": false,
+      "duration_seconds": 123.3,
+      "input_unchanged": true,
+      "authentication_changed": false,
+      "nonhome_changes": {
+        "created": [],
+        "changed": [],
+        "removed": []
+      },
+      "root_absent": true
+    },
+    {
+      "run": "runs/presupposition-candidate/case-question-en_GB-r2/write",
+      "identities": [
+        [
+          "gpt-6-astra",
+          "high"
+        ]
+      ],
+      "spawns": [
+        {
+          "task_name": "source_check",
+          "fork_turns": "none"
+        }
+      ],
+      "returncode": 0,
+      "timed_out": false,
+      "duration_seconds": 283.77,
+      "input_unchanged": true,
+      "authentication_changed": false,
+      "nonhome_changes": {
+        "created": [],
+        "changed": [],
+        "removed": []
+      },
+      "root_absent": true
+    },
+    {
+      "run": "runs/presupposition-candidate/case-study-en_US-r1/redline",
+      "identities": [
+        [
+          "gpt-6-astra",
+          "high"
+        ]
+      ],
+      "spawns": [
+        {
+          "task_name": "quotation_review",
+          "fork_turns": "none"
+        },
+        {
+          "task_name": "correction",
+          "fork_turns": "none"
+        },
+        {
+          "task_name": "quotation_verification",
+          "fork_turns": "none"
+        },
+        {
+          "task_name": "proofread",
+          "fork_turns": "none"
+        }
+      ],
+      "returncode": 0,
+      "timed_out": false,
+      "duration_seconds": 373.95,
+      "input_unchanged": true,
+      "authentication_changed": false,
+      "nonhome_changes": {
+        "created": [],
+        "changed": [],
+        "removed": []
+      },
+      "root_absent": false
+    },
+    {
+      "run": "runs/presupposition-candidate/case-study-en_US-r1/write",
+      "identities": [
+        [
+          "gpt-6-astra",
+          "high"
+        ]
+      ],
+      "spawns": [
+        {
+          "task_name": "source_check",
+          "fork_turns": "none"
+        }
+      ],
+      "returncode": 0,
+      "timed_out": false,
+      "duration_seconds": 309.04,
+      "input_unchanged": true,
+      "authentication_changed": false,
+      "nonhome_changes": {
+        "created": [],
+        "changed": [],
+        "removed": []
+      },
+      "root_absent": true
+    },
+    {
+      "run": "runs/presupposition-candidate/case-study-sv-r1/write",
+      "identities": [
+        [
+          "gpt-6-astra",
+          "high"
+        ]
+      ],
+      "spawns": [
+        {
+          "task_name": "source_check",
+          "fork_turns": "none"
+        },
+        {
+          "task_name": "final_source_check",
+          "fork_turns": "none"
+        }
+      ],
+      "returncode": 0,
+      "timed_out": false,
+      "duration_seconds": 643.6,
+      "input_unchanged": true,
+      "authentication_changed": false,
+      "nonhome_changes": {
+        "created": [],
+        "changed": [],
+        "removed": []
+      },
+      "root_absent": false
+    },
+    {
+      "run": "runs/presupposition-candidate/case-unprompted-en_US-r1/redline",
+      "identities": [
+        [
+          "gpt-6-astra",
+          "high"
+        ]
+      ],
+      "spawns": [
+        {
+          "task_name": "quotation_reading",
+          "fork_turns": "none"
+        },
+        {
+          "task_name": "final_proofread",
+          "fork_turns": "none"
+        }
+      ],
+      "returncode": 0,
+      "timed_out": false,
+      "duration_seconds": 195.55,
+      "input_unchanged": true,
+      "authentication_changed": false,
+      "nonhome_changes": {
+        "created": [],
+        "changed": [],
+        "removed": []
+      },
+      "root_absent": true
+    },
+    {
+      "run": "runs/presupposition-candidate/case-unprompted-en_US-r1/write",
+      "identities": [
+        [
+          "gpt-6-astra",
+          "high"
+        ]
+      ],
+      "spawns": [
+        {
+          "task_name": "source_check",
+          "fork_turns": "none"
+        }
+      ],
+      "returncode": 0,
+      "timed_out": false,
+      "duration_seconds": 284.71,
+      "input_unchanged": true,
+      "authentication_changed": false,
+      "nonhome_changes": {
+        "created": [],
+        "changed": [],
+        "removed": []
+      },
+      "root_absent": true
+    },
+    {
+      "run": "runs/presupposition-candidate/case-unprompted-en_US-r2/redline",
+      "identities": [
+        [
+          "gpt-6-astra",
+          "high"
+        ]
+      ],
+      "spawns": [
+        {
+          "task_name": "quotation_review",
+          "fork_turns": "none"
+        }
+      ],
+      "returncode": 0,
+      "timed_out": false,
+      "duration_seconds": 139.14,
+      "input_unchanged": true,
+      "authentication_changed": false,
+      "nonhome_changes": {
+        "created": [],
+        "changed": [],
+        "removed": []
+      },
+      "root_absent": true
+    },
+    {
+      "run": "runs/presupposition-candidate/case-unprompted-en_US-r2/write",
+      "identities": [
+        [
+          "gpt-6-astra",
+          "high"
+        ]
+      ],
+      "spawns": [
+        {
+          "task_name": "source_check",
+          "fork_turns": "none"
+        }
+      ],
+      "returncode": 0,
+      "timed_out": false,
+      "duration_seconds": 248.89,
+      "input_unchanged": true,
+      "authentication_changed": false,
+      "nonhome_changes": {
+        "created": [],
+        "changed": [],
+        "removed": []
+      },
+      "root_absent": true
+    },
+    {
+      "run": "runs/presupposition-candidate/column-sv-r1/redline",
+      "identities": [
+        [
+          "gpt-6-astra",
+          "high"
+        ]
+      ],
+      "spawns": [
+        {
+          "task_name": "mechanical_pass",
+          "fork_turns": "none"
+        }
+      ],
+      "returncode": 0,
+      "timed_out": false,
+      "duration_seconds": 108.53,
+      "input_unchanged": true,
+      "authentication_changed": false,
+      "nonhome_changes": {
+        "created": [],
+        "changed": [],
+        "removed": []
+      },
+      "root_absent": true
+    },
+    {
+      "run": "runs/presupposition-candidate/column-sv-r1/write",
+      "identities": [
+        [
+          "gpt-6-astra",
+          "high"
+        ]
+      ],
+      "spawns": [
+        {
+          "task_name": "source_check",
+          "fork_turns": "none"
+        },
+        {
+          "task_name": "final_source_check",
+          "fork_turns": "none"
+        }
+      ],
+      "returncode": 0,
+      "timed_out": false,
+      "duration_seconds": 687.94,
+      "input_unchanged": true,
+      "authentication_changed": false,
+      "nonhome_changes": {
+        "created": [],
+        "changed": [],
+        "removed": []
+      },
+      "root_absent": true
+    },
+    {
+      "run": "runs/presupposition-candidate/column-sv-r2/redline",
+      "identities": [
+        [
+          "gpt-6-astra",
+          "high"
+        ]
+      ],
+      "spawns": [],
+      "returncode": 0,
+      "timed_out": false,
+      "duration_seconds": 73.32,
+      "input_unchanged": true,
+      "authentication_changed": false,
+      "nonhome_changes": {
+        "created": [],
+        "changed": [],
+        "removed": []
+      },
+      "root_absent": true
+    },
+    {
+      "run": "runs/presupposition-candidate/column-sv-r2/write",
+      "identities": [
+        [
+          "gpt-6-astra",
+          "high"
+        ]
+      ],
+      "spawns": [
+        {
+          "task_name": "source_check",
+          "fork_turns": "none"
+        },
+        {
+          "task_name": "final_source_check",
+          "fork_turns": "none"
+        }
+      ],
+      "returncode": 0,
+      "timed_out": false,
+      "duration_seconds": 514.36,
+      "input_unchanged": true,
+      "authentication_changed": false,
+      "nonhome_changes": {
+        "created": [],
+        "changed": [],
+        "removed": []
+      },
+      "root_absent": true
+    },
+    {
+      "run": "runs/presupposition-candidate/opinion-absence-en_GB-r1/redline",
+      "identities": [
+        [
+          "gpt-6-astra",
+          "high"
+        ]
+      ],
+      "spawns": [],
+      "returncode": 0,
+      "timed_out": false,
+      "duration_seconds": 71.41,
+      "input_unchanged": true,
+      "authentication_changed": false,
+      "nonhome_changes": {
+        "created": [],
+        "changed": [],
+        "removed": []
+      },
+      "root_absent": true
+    },
+    {
+      "run": "runs/presupposition-candidate/opinion-absence-en_GB-r1/write",
+      "identities": [
+        [
+          "gpt-6-astra",
+          "high"
+        ]
+      ],
+      "spawns": [
+        {
+          "task_name": "source_check",
+          "fork_turns": "none"
+        }
+      ],
+      "returncode": 0,
+      "timed_out": false,
+      "duration_seconds": 263.56,
+      "input_unchanged": true,
+      "authentication_changed": false,
+      "nonhome_changes": {
+        "created": [],
+        "changed": [],
+        "removed": []
+      },
+      "root_absent": true
+    },
+    {
+      "run": "runs/presupposition-candidate/opinion-en_US-r1/redline",
+      "identities": [
+        [
+          "gpt-6-astra",
+          "high"
+        ]
+      ],
+      "spawns": [],
+      "returncode": 0,
+      "timed_out": false,
+      "duration_seconds": 73.88,
+      "input_unchanged": true,
+      "authentication_changed": false,
+      "nonhome_changes": {
+        "created": [],
+        "changed": [],
+        "removed": []
+      },
+      "root_absent": true
+    },
+    {
+      "run": "runs/presupposition-candidate/opinion-en_US-r1/write",
+      "identities": [
+        [
+          "gpt-6-astra",
+          "high"
+        ]
+      ],
+      "spawns": [
+        {
+          "task_name": "source_check",
+          "fork_turns": "none"
+        },
+        {
+          "task_name": "final_source_check",
+          "fork_turns": "none"
+        }
+      ],
+      "returncode": 0,
+      "timed_out": false,
+      "duration_seconds": 585.89,
+      "input_unchanged": true,
+      "authentication_changed": false,
+      "nonhome_changes": {
+        "created": [],
+        "changed": [],
+        "removed": []
+      },
+      "root_absent": true
+    },
+    {
+      "run": "runs/presupposition-candidate/opinion-sv-r1/redline",
+      "identities": [
+        [
+          "gpt-6-astra",
+          "high"
+        ]
+      ],
+      "spawns": [],
+      "returncode": 0,
+      "timed_out": false,
+      "duration_seconds": 71.55,
+      "input_unchanged": true,
+      "authentication_changed": false,
+      "nonhome_changes": {
+        "created": [],
+        "changed": [],
+        "removed": []
+      },
+      "root_absent": true
+    },
+    {
+      "run": "runs/presupposition-candidate/opinion-sv-r1/write",
+      "identities": [
+        [
+          "gpt-6-astra",
+          "high"
+        ]
+      ],
+      "spawns": [
+        {
+          "task_name": "source_check",
+          "fork_turns": "none"
+        }
+      ],
+      "returncode": 0,
+      "timed_out": false,
+      "duration_seconds": 345.65,
+      "input_unchanged": true,
+      "authentication_changed": false,
+      "nonhome_changes": {
+        "created": [],
+        "changed": [],
+        "removed": []
+      },
+      "root_absent": true
+    }
+  ]
+}
