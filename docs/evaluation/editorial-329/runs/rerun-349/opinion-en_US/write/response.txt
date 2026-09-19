@@ -1,0 +1,40 @@
+---
+kntnt:
+  genre: opinion
+  technique: none
+  language: en_US
+---
+
+# Lervik should test both booking options before cutting one
+
+By Sanna Ek, spokesperson for Öppna beslut
+
+Lervik’s municipal executive board should postpone a permanent switch to online-only booking for community venues. Before removing phone booking, it should authorize a six-month trial with both options available at all seven venues. The existing evidence leaves unanswered the questions that should determine the decision: how much work each option requires and why people use it.
+
+## The pilot counts bookings, not barriers
+
+The municipality’s April 8, 2026, report, *Bokning av föreningslokaler*, records 96 online bookings and 24 phone bookings during an eight-week pilot at two venues. Those figures show that both options were used.
+
+They count bookings, not individual users. The report does not measure age, disability, or digital proficiency. We cannot use the phone bookings to claim that a particular share of Lervik’s residents cannot book online.
+
+But a phone booking is a reason to investigate why someone chose that option. Removing it without answering that question would leave the board unable to weigh its value to users against the work it creates.
+
+## Administrative work deserves a measurement
+
+The staff report prepared for the board’s June 18 meeting proposes ending phone booking at all seven venues in September. Its stated reason is to spare staff from entering information through two separate workflows.
+
+That is a practical objection that deserves a serious answer. Keeping both options requires the board to consider the administrative burden. Yet the documents contain neither a measurement of staff time nor a calculation of financial savings. A reason to investigate efficiency is being used to support a permanent change before the relevant costs have been measured.
+
+I do not oppose online booking. I oppose making this decision with too little evidence to judge the tradeoff.
+
+## Six months to establish what each option costs
+
+Öppna beslut proposes keeping phone and online booking throughout a six-month trial at all seven venues. Staff would record the time spent on each booking method and invite users to explain voluntarily why they chose it.
+
+Our association has neither costed nor funded this proposal. The board must assess the expense; the trial cannot be presented as free or guaranteed to save money.
+
+The board should postpone the permanent removal of phone booking, determine the cost of the proposed trial, and authorize it with both options retained. After six months, it can use the findings to decide whether to remove, change, or retain a booking option.
+
+---
+
+*Draft delivered here in American English as an opinion piece, with no selected technique; the opinion genre supplies none. The source supports the requested length but provides no trial cost estimate or measured savings. No files remain from this run.*

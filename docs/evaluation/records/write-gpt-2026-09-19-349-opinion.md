@@ -56,3 +56,26 @@ All three opinion locales use the exact frozen source and unchanged candidate pr
 - **unresolved findings** — #349 unsupported absence of costing remains. Funding's no-claim status now retained.
 - **defects filed** — #349 remains after clarification.
 - **notes** — Native rollout confirms gpt-6-astra/high. Instruction commit 93758f4. The faulty sentence is third person, limiting any explanation attributing the failure solely to first-person grammar. Assessed independently before Redline.
+
+## `opinion-en_US`
+
+- **fixture** — `opinion-en_US`
+- **invocation** — `/write --genre=opinion --language=en_US --output=response source.md`
+- **contextual instruction** — `none`
+- **output target** — `response`
+- **observed delivery** — Complete YAML-bearing draft with separate account in `../editorial-329/runs/rerun-349/opinion-en_US/write/response.txt`.
+- **side effects** — 316 native home entries plus config trust; root removed.
+- **criteria** —
+  - `F1` — `fail` — 'Our association has neither costed nor funded this proposal' converts unclaimed work into asserted absence, repeating #349 in en_US. Figures, pilot limits, cost responsibility and non-opposition otherwise retained.
+  - `G1` — `pass` — Sharp accountable debate article for local residents.
+  - `G2` — `pass` — Early thesis/byline, report attribution, genuine objection and board action preserve complete form.
+  - `P1` — `pass` — Booking denominator and missing administrative evidence support proposed trial; external no-claim mismatch scored F1.
+  - `W1` — `pass` — Useful headings and coherent argument paragraphs.
+  - `L1` — `pass` — Idiomatic US English; 'costed' is less usual in US usage but intelligible professional language, not a hard dialect defect.
+  - `L2` — `pass` — American dates, authorize, tradeoff, serial commas.
+  - `T1` — `pass` — opinion/none/en_US and scoped actual genre/base/web/composition reads.
+  - `R2` — `pass` — Installed Write one draft, new base Claims actually read; no review half or second pass.
+  - `O1` — `pass` — Complete root evidence and cleanup; response-only.
+- **unresolved findings** — #349 remains in all three locale samples on 93758f4.
+- **defects filed** — #349 — en_US recurrence.
+- **notes** — Native rollout confirms gpt-6-astra/high. This pair began before d0b2c99 was supplied and stays wholly on93758f4. New source-check stage verification will use separate paths/records.

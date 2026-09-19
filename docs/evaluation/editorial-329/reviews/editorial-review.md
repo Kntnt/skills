@@ -28,10 +28,20 @@ Följande ändringar granskades självständigt medan den praktiska utvärdering
 
 - Column avgränsar författarens tillskrivna tankar, känslor, erfarenheter och handlingar till underlaget; en observation om en praxis blir inte en egen bekännelse. Uttryck, rytm och reflektion förblir skribentens redaktionella val.
 - Opinion skiljer skarp framställning från ändrad faktisk hållning. Att inte motsätta sig något får inte göras till aktivt stöd. Det är en precisering av sakligt innehåll, ingen retorisk mall.
-- Quotations skiljer idiomatisk tillåten översättning från nytillkommet innehåll. En implicit referent får förtydligas bara när kontexten avgör den. Det löser motsättningen mot den äldre ord-för-ord-tolkningen av tilläggsförbudet utan att tillåta uppfinning.
+- Quotations skiljer idiomatisk tillåten översättning från nytillkommet innehåll. En implicit referent får förtydligas bara när kontexten avgör den. Det tydliggör avsikten utan att tillåta uppfinning. En senare omprövning fann dock att den absoluta ordalydelsen i Anything additive fortfarande konkurrerar med detta undantag; se E2 nedan.
 - Base.review fördelar ansvaret för upprepade hela meningar/passager till redaktionell granskning, medan Proofread äger dubblerade ord. Nästa styckes skydd av funktionell repetition och kravet på faktisk läsarförlust kvarstår.
 - Case-study.review gör ett synligt referentproblem i citerat målspråk granskningsbart. Endast omgivande text får bära ett förtydligande; övriga luckor rapporteras. Basens och korrigeringsbriefens skydd för betydelse, säkerhet och särpräglad röst gäller fortfarande.
 - Base Claims skiljer okänt eller opåstått från känt frånvarande. Det preciserar den befintliga saklighetsgränsen utan att kräva försiktigare språk där säkerhet är belagd; #349:s kvarvarande modellfel måste därför redovisas som utfallsfel, inte döljas av att instruktionen är förenlig.
 - Svensk Mechanics tillåter gemen efter kolon när en fullständig mening är en nära specificering, inklusive en integrerad fråga, och skiljer det från anföring respektive flera efterföljande meningar. Avgränsningen kontrollerades mot [Språkrådets svar om kolon](https://frageladan.isof.se/faqs/25422). Reglerna för bevarande av etablerad variation ligger fortsatt i det gemensamma mechanics-kontraktet.
 
 Ingen av dessa riktade ändringar införde en ny dispositions-, exempel- eller stilkvot eller krävde frånvarande källmaterial av Redline. De praktiska utfallen redovisas separat i de daterade Write-/Redline-recorden; en förenlig instruktion är inte i sig bevis för felfria texter.
+
+## Fynd E2 — absolut ordtilläggsförbud konkurrerar med tillåten översättning
+
+**Resurs:** Write `references/quotations.md`, bullet **Anything additive**, granskad på `d0b2c99`. Efter det nya översättningsstycket säger bulleten fortfarande ”No word” och att allt inom citatmarkeringen måste ha sagts. Den senare absoluta regeln avser ord, inte bara sakligt innehåll.
+
+**Kravkälla:** #334 och #337 kräver bevarad kundröst i idiomatiskt målspråk; Writes Source Fidelity kräver bevarad betydelse och kvalifikationer. Tillåten översättning kan kräva ett ord som gör en entydig implicit referent uttrycklig.
+
+**Påverkan:** En läsare av det samlade kontraktet får två olika signaler om sådana ordtillägg. Den tidigare bedömningen att ingressundantaget ensamt undanröjde konflikten omprövas. Det kvarvarande #341-utfallet visar ett praktiskt problem men bevisar inte ensamt vilken instruktion som orsakade modellvalet.
+
+**Minimal rättning:** Formulera tilläggsförbudet som förbud mot ny betydelse, fakta, hållning, säkerhet, namn, siffror eller samband. Bind ordändringar till tillåtna reparationer och översättningar som återger samma betydelse. Behåll övriga skydd för särpräglad röst och den uttömmande reparationslistan. Inga produktfiler ändrade av granskaren.

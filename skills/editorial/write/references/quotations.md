@@ -24,7 +24,7 @@ That is the whole list. Everything on it is noise the speaker did not intend to 
 
 **A self-correction.** Where a speaker gives a number or a fact and then corrects it, the correction is what they said. Quoting the first version is a misquotation; quoting a version that never existed — the correction with the correcting away — is worse.
 
-**Anything additive.** No word, clause, fact, name, figure, or connective enters a quotation because it makes the sentence read better. A quotation is a record of what was said, and everything inside the marks has to have been said.
+**Anything additive.** Add no new meaning: no fact, stance, certainty, name, figure or connection that the speaker did not supply. A permitted repair or translation may change words only to render that same meaning.
 
 ## When to paraphrase instead
 

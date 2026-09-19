@@ -1,0 +1,114 @@
+[
+  {
+    "case": "article-clean",
+    "group": "controls-genres",
+    "instructions": "f8cac6d5342f72ed91da8c13d96ab092cd5e0ae9",
+    "input_sha256": "432144f8ea12fb013a65ad21961a2feeda6f228244c97697bfd76c09d050d55c",
+    "native_sessions": 1,
+    "cleaned": true
+  },
+  {
+    "case": "article-flawed",
+    "group": "controls-genres",
+    "instructions": "f8cac6d5342f72ed91da8c13d96ab092cd5e0ae9",
+    "input_sha256": "1c0e3b3ef98e06b220058b9811864ebdae4c89b0618eb2f8405b63b0dd6504a0",
+    "native_sessions": 3,
+    "cleaned": true
+  },
+  {
+    "case": "case-study-clean",
+    "group": "controls-genres",
+    "instructions": "f8cac6d5342f72ed91da8c13d96ab092cd5e0ae9",
+    "input_sha256": "8821f2ea42f723956ccb5d1127b212227d04c7035b3944e4a81be990dda82e66",
+    "native_sessions": 1,
+    "cleaned": true
+  },
+  {
+    "case": "case-study-flawed",
+    "group": "controls-genres",
+    "instructions": "f8cac6d5342f72ed91da8c13d96ab092cd5e0ae9",
+    "input_sha256": "ce574061bd09328ed80109a3cca07875683c2fd77d55f41d5631dc2cdcb18767",
+    "native_sessions": 2,
+    "cleaned": true
+  },
+  {
+    "case": "column-clean",
+    "group": "controls-genres",
+    "instructions": "f8cac6d5342f72ed91da8c13d96ab092cd5e0ae9",
+    "input_sha256": "de72deb546c4dba2de1e429788ceaf36ebe861a1ddffe40440909fddf2ec2c4c",
+    "native_sessions": 1,
+    "cleaned": true
+  },
+  {
+    "case": "column-flawed",
+    "group": "controls-genres",
+    "instructions": "f8cac6d5342f72ed91da8c13d96ab092cd5e0ae9",
+    "input_sha256": "9b12ad3fb2cb74011c974feda1d7aafa8c0394ac6899417be2dbdd40ad0e96ab",
+    "native_sessions": 2,
+    "cleaned": true
+  },
+  {
+    "case": "opinion-clean",
+    "group": "controls-genres",
+    "instructions": "f8cac6d5342f72ed91da8c13d96ab092cd5e0ae9",
+    "input_sha256": "5979be356e9e00d58ad313fded30bc02217dbd15ff70d104687a560bb2350739",
+    "native_sessions": 1,
+    "cleaned": true
+  },
+  {
+    "case": "opinion-flawed",
+    "group": "controls-genres",
+    "instructions": "f8cac6d5342f72ed91da8c13d96ab092cd5e0ae9",
+    "input_sha256": "ab033d9f4c817c9eaa0efa32db93819a99291a3b22e29fb39f0d640e830ed990",
+    "native_sessions": 3,
+    "cleaned": true
+  },
+  {
+    "case": "web-copy-clean",
+    "group": "controls-genres",
+    "instructions": "1a4f65b3da64fc4f94e82de519ef8b5a18ae56dd",
+    "input_sha256": "8de234f1c80fe947361503113e4c84361427e8a52b836aa9e5d03550431fff15",
+    "native_sessions": 1,
+    "cleaned": true
+  },
+  {
+    "case": "web-copy-flawed",
+    "group": "controls-genres",
+    "instructions": "1a4f65b3da64fc4f94e82de519ef8b5a18ae56dd",
+    "input_sha256": "a5470e4b3aea20a09e4cbfe8a9598885399460897025781c130f7c76228ca184",
+    "native_sessions": 2,
+    "cleaned": true
+  },
+  {
+    "case": "article-clean",
+    "group": "controls-genres-rerun",
+    "instructions": "1a4f65b3da64fc4f94e82de519ef8b5a18ae56dd",
+    "input_sha256": "432144f8ea12fb013a65ad21961a2feeda6f228244c97697bfd76c09d050d55c",
+    "native_sessions": 1,
+    "cleaned": true
+  },
+  {
+    "case": "article-flawed",
+    "group": "controls-genres-rerun",
+    "instructions": "1a4f65b3da64fc4f94e82de519ef8b5a18ae56dd",
+    "input_sha256": "1c0e3b3ef98e06b220058b9811864ebdae4c89b0618eb2f8405b63b0dd6504a0",
+    "native_sessions": 3,
+    "cleaned": true
+  },
+  {
+    "case": "case-study-clean",
+    "group": "controls-genres-rerun",
+    "instructions": "1a4f65b3da64fc4f94e82de519ef8b5a18ae56dd",
+    "input_sha256": "8821f2ea42f723956ccb5d1127b212227d04c7035b3944e4a81be990dda82e66",
+    "native_sessions": 2,
+    "cleaned": true
+  },
+  {
+    "case": "column-clean",
+    "group": "controls-348",
+    "instructions": "7022c804dfbda4332723bf96b6a9857c24e63b6e",
+    "input_sha256": "de72deb546c4dba2de1e429788ceaf36ebe861a1ddffe40440909fddf2ec2c4c",
+    "native_sessions": 1,
+    "cleaned": true
+  }
+]

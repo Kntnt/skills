@@ -59,3 +59,27 @@
 - **defects filed** — none
 - **notes** — Judgment before Redline; inherited model/effort confirmed in native turn contexts.
 
+## case-study-sv
+
+- **fixture** — case-study-sv, affected quotation-translation rerun
+- **instruction commit** — 93758f485614c3b0e79b1bcce9fb8080de755d08
+- **invocation** — `/write --genre=case-study --language=sv --output=response source.md`
+- **contextual instruction** — none
+- **output target** — response
+- **observed delivery** — Full customer case/metadata and separate account in `editorial-329/runs/rerun-341/case-study-sv/write/`.
+- **side effects** — No work/export/scratch change; native home effects inventoried, authentication unchanged, root removed.
+- **criteria** —
+  - F1 — pass — Decision remains September; exact 640/31/two-building/eight-week facts, six staff/two sessions, exclusions, assignment rather than completion, noncausality and qualified appraisal preserved.
+  - G1 — pass — Customer-led account for operations managers, supplier in third person with explicit publication context.
+  - G2 — pass — Headline/ingress introduce shared visibility and preparation reservation; choices, results and customer's own assessment develop coherently; checklist is a document link.
+  - P1 — pass — Contrasting periods retain workload caveat; cost/satisfaction/completion gaps prevent overstating utility. The proposed expansion remains undecided.
+  - W1 — pass — Coherent short narrative with readable paragraph jobs; absence of H2s is not a quota failure in this case form.
+  - L1 — fail — “innan nästa byggnad kommer i gång” still transfers the English building-as-starting-unit ellipsis. The reader must reconstruct that it is the trial/use in the next building that starts. #341's visible idiom defect remains despite a different verb; this is the contract's mandatory target-language requirement, not an exact-wording comparison.
+  - L2 — pass — Swedish dates, speech dashes, compounds and punctuation consistent; the L1 referent issue is not mechanical.
+  - T1 — pass — Case-study/none/sv metadata and actual selected/shared resources agree; no technique loaded.
+  - R2 — pass — Full Write base, case, web-craft, updated quotation translation policy and sv composition actually read; no review half or peer pass.
+  - O1 — pass — Full inventories establish preserved source/resources and no enduring Skill files.
+- **unresolved findings** — #341 persists in this Write artifact; unchanged source-blind paired Redline will test the visible problem separately.
+- **defects filed** — #341, existing defect; rerun outcome added without replacing earlier failure.
+- **notes** — All other prose reads naturally. No strengthened evaluation prompt or expected phrase was supplied. A fluent synonym for the source verb does not by itself establish idiomatic translation of the referent.
+
