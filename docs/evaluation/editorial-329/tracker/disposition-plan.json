@@ -1,0 +1,117 @@
+{
+  "330": {
+    "action": "close",
+    "assessment": "Källor, språkbriefs, positiva/negativa kontroller och semantisk matris frystes i6e531f5 före produktändring. Oberoende källgranskning godkände förankringen.",
+    "evidence": "source-map.md; reviews/source-audit.md; ../corpus/editorial-quality/README.md"
+  },
+  "331": {
+    "action": "close",
+    "assessment": "Gemensam kort webb- och hantverksgrund, strikt avgränsad till de fem genrerna, når Write, Redline och färsk korrigeringsagent. Språkscopes och läsbelastning är redovisade.",
+    "evidence": "reading-load.md; reviews/technical-review.md; ../records/redline-gpt-2026-09-19-338-selection.md"
+  },
+  "332": {
+    "action": "close",
+    "assessment": "Femgruppens standard är none utan ny flagggrammatik. ABT/PAC är korta och förenliga med tidigt besked och självständiga sektioner; explicit val och metadataföreträde verifierade i faktisk laddning.",
+    "evidence": "../records/redline-gpt-2026-09-19-338-selection.md; runs/candidate/article-pac/; runs/rerun-350/"
+  },
+  "333": {
+    "action": "close",
+    "assessment": "Article har omskriven form med självständig ingress och kompletterande lead. Tre språk, ABT/PAC och rena/bristfälliga kontroller är prövade; helmeningsdublett repareras redaktionellt.",
+    "evidence": "../records/redline-gpt-2026-09-19-346-controls-genres.md; runs/completion-check/article-sv/"
+  },
+  "334": {
+    "action": "close",
+    "assessment": "Kundcase-resurs och review är omskrivna kring kundens erfarenhet, eget kvalificerat omdöme och leverantör i tredje person. Citatkonflikten är borttagen. Kvarstående utfallsfel #341 och #352 hålls öppna; detta avslutar instruktionsleveransen, inte godkänner dessa texter.",
+    "evidence": "reviews/editorial-review.md; runs/rerun-341-translation/"
+  },
+  "335": {
+    "action": "close",
+    "assessment": "Column förenar personlig reflektion med källbundet författarperspektiv. Tidigare tankevane-fel är bevarade; de tre efterföljande språkproven och en senare svensk kontroll behåller den givna observationen och osäkerheten.",
+    "evidence": "../records/write-gpt-2026-09-19-342-column-final.md; ../records/write-gpt-2026-09-19-349-source-check-column.md"
+  },
+  "336": {
+    "action": "close",
+    "assessment": "Opinion ger tidig tes, sakligt skarp argumentation, rättvis invändning och möjlig aktör/handling. Författarens faktiska position bevaras efter #343. Det återkommande källtrohetsfelet #349 är inte löst och hålls öppet.",
+    "evidence": "runs/rerun-349-source-check/; ../records/redline-gpt-2026-09-19-338-controls-genres.md"
+  },
+  "337": {
+    "action": "close",
+    "assessment": "Web-copy är omskriven kring faktisk läsaruppgift, villkor, gränssnitt och handlingens följd. Länkad och inbäddad funktion skiljs åt; tre språk, ABT samt ren och bristfällig kontroll prövade.",
+    "evidence": "runs/rerun-345/; runs/completion-check/web-copy-en_US/"
+  },
+  "338": {
+    "action": "close",
+    "assessment": "Hela den frysta 65-invokationsmatrisen är genomförd, med sex baslinjepar, femton ordinarie par, tre teknikpar och sjutton Redline-kontroller. Ytterligare omkörningar bevaras. Utförd utvärdering är inte ett godkännande av kvarstående F1/L1-fel #341/#349/#352.",
+    "evidence": "README.md; reviews/protocol-final.md; ../records/README.md"
+  },
+  "339": {
+    "action": "close",
+    "assessment": "d60c4fc skiljer Proofreads flags-only invocation från hela texten. Många verkliga metadataförsedda körningar avslutar nu exakt en installerad Proofread-pass; fem misslyckade baslinjer finns kvar.",
+    "evidence": "runs/controls-selection/; reviews/baseline.md"
+  },
+  "340": {
+    "action": "close",
+    "assessment": "d60c4fc avgränsar och städar korrigeringsagentens UV-miljö. Verkliga färska korrigeringar har inventerats över alla skrivbara rötter och lämnar inga Skill-rester. Baslinjens två 125-posters scratchfel finns kvar.",
+    "evidence": "reviews/controls-genres.md; runs/controls-selection/report-pac/"
+  },
+  "341": {
+    "action": "open",
+    "assessment": "Den motstridiga ordtilläggsregeln är rättad i29ff204, men senaste Write/sv återger fortfarande nästa byggnad som det som börjar. Senaste Redline reparerar referensen korrekt; tidigare source-blind kontroller missade den. Ingen verifierad förebyggande Write-rättning påstås.",
+    "evidence": "runs/rerun-341-translation/case-study-sv/; ../records/redline-gpt-2026-09-19-341-control-case-study.md"
+  },
+  "342": {
+    "action": "close",
+    "assessment": "f8cac6d avgränsar författarens tankar, känslor och handlingar till det givna perspektivet. Tre språk och senare svensk regression passerar utan den tidigare tillskrivna tankevanan; första misslyckade rättningen finns kvar.",
+    "evidence": "../records/write-gpt-2026-09-19-342-column-final.md; runs/completion-check/column-sv/"
+  },
+  "343": {
+    "action": "close",
+    "assessment": "f8cac6d bevarar styrkan i författarens position: inget motstånd blir inte aktivt stöd. Tre senare språkprov bevarar denna hållning; deras separata kunskapslägesfel ligger kvar öppet i #349.",
+    "evidence": "../records/write-gpt-2026-09-19-349-source-check-opinion.md; runs/rerun-349-source-check/"
+  },
+  "344": {
+    "action": "close",
+    "assessment": "Den ursprungliga felaktiga startdateringen är bevarad. Nytt case-study/en_GB på29ff204 håller september som beslutstid, utan att hävda en deterministisk reparation av framtida modellfel. Källblind Redline bedöms separat.",
+    "evidence": "runs/rerun-341-translation/case-study-en_GB/"
+  },
+  "345": {
+    "action": "close",
+    "assessment": "2bd2afe skiljer levererad sidfunktion från en länkad destination. Exakt felutkast korrigeras minimalt och tre språk samt negativa/positiva webbkontroller bevarar erbjudande och villkor.",
+    "evidence": "runs/rerun-345/web-copy-en_GB-regression/; runs/completion-check/web-copy-en_US/"
+  },
+  "346": {
+    "action": "close",
+    "assessment": "1a4f65b lägger hela dubblerade meningar inom den redaktionella korrigeringen. Samma negativa kontroll repareras, medan ren artikel är oförändrad.",
+    "evidence": "../records/redline-gpt-2026-09-19-346-controls-genres.md"
+  },
+  "347": {
+    "action": "close",
+    "assessment": "Det felaktiga hur-påståendet och Writes F1/P1-fel är bevarade. Källblind Redline upptäckte den textinterna motsägelsen och ändrade endast hur till om. Befintligt kontrakt räckte för den observerade kedjereparationen; ingen allmän Write-garanti följer.",
+    "evidence": "defects/347-pipeline-outcome.md; runs/candidate/article-abt/"
+  },
+  "348": {
+    "action": "close",
+    "assessment": "7022c80 preciserar giltig svensk kolonvariation. Exakt indata/invocation och den frysta rena krönikan bevaras efter faktisk Proofread med nya sv Mechanics; ursprungligt felaktigt pass är uttryckligt supersederat av fail.",
+    "evidence": "../records/redline-gpt-2026-09-19-348-colon.md; ../records/redline-gpt-2026-09-19-348-control-column.md"
+  },
+  "349": {
+    "action": "open",
+    "assessment": "Okänt/inte påstått kostnadsarbete blir belagd frånvaro i baslinjen och flera kandidater. Kunskapsgräns och explicit källkontroll under skrivandet har prövats utan att undanröja felet i något av de tre sista språkproven. Alla misslyckanden och omprövade bedömningar är bevarade; ingen ytterligare belagd instruktionskonflikt har hittats.",
+    "evidence": "runs/rerun-349-source-check/; reviews/baseline.md"
+  },
+  "350": {
+    "action": "close",
+    "assessment": "En onödig läsning av andra genrers inledningar är registrerad som R2-fel. Exakt samma input/prompt passerar i ny körning utan sådan läsning. Ingen selectorregel ändrades; gammalt fel eller framtida tillförlitlighet skrivs inte bort.",
+    "evidence": "../records/redline-gpt-2026-09-19-350-genre-selection.md; runs/rerun-350/"
+  },
+  "351": {
+    "action": "close",
+    "assessment": "bda07f7 avgränsar normtestet till corpus, protokoll och recordmall. Sparade modellutdata är oförändrade. Fokuserat test och alla fyra CONTRIBUTING-kontroller passerar, inklusive1873 tester.",
+    "evidence": "validation/integration-pytest.log; validation/final-results.json; tests/test_evaluation.py"
+  },
+  "352": {
+    "action": "open",
+    "assessment": "Sista US-kundcaset lägger till Asked to assess the experience, trots att källan inte ger denna intervjufråga. Det är ett bevarat F1-fel under befintlig tydlig källgräns. Källblind Redline bedöms på sitt faktiska underlag; ingen ny stilregel införs för att dölja felet.",
+    "evidence": "runs/rerun-341-translation/case-study-en_US/"
+  }
+}

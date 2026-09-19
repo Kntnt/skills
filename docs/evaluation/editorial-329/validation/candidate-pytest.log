@@ -1,0 +1,74 @@
+warning: No `requires-python` value found in the workspace. Defaulting to `>=3.12`.
+============================= test session starts ==============================
+platform darwin -- Python 3.12.13, pytest-9.1.1, pluggy-1.6.0
+rootdir: /Users/thomas/Projects/skills
+configfile: pyproject.toml
+testpaths: tests
+plugins: xdist-3.8.0
+created: 14/14 workers
+14 workers [1873 items]
+
+........................................................................ [  3%]
+........................................................................ [  7%]
+........................................................................ [ 11%]
+........................................................................ [ 15%]
+...........................................................F............ [ 19%]
+........................................................................ [ 23%]
+........................................................................ [ 26%]
+........................................................................ [ 30%]
+........................................................................ [ 34%]
+........................................................................ [ 38%]
+........................................................................ [ 42%]
+........................................................................ [ 46%]
+........................................................................ [ 49%]
+........................................................................ [ 53%]
+........................................................................ [ 57%]
+........................................................................ [ 61%]
+........................................................................ [ 65%]
+........................................................................ [ 69%]
+........................................................................ [ 73%]
+........................................................................ [ 76%]
+........................................................................ [ 80%]
+........................................................................ [ 84%]
+........................................................................ [ 88%]
+........................................................................ [ 92%]
+........................................................................ [ 96%]
+........................................................................ [ 99%]
+.                                                                        [100%]
+=================================== FAILURES ===================================
+___ test_the_licence_sits_where_the_genre_is_resolved_and_widens_no_loading ____
+[gw6] darwin -- Python 3.12.13 /Users/thomas/.cache/uv/builds-v0/.tmpyID10f/bin/python
+
+    def test_the_licence_sits_where_the_genre_is_resolved_and_widens_no_loading() -> None:
+        """Anything inference reads is licensed where inference happens.
+    
+        The resolution step owns the question, so the licence is stated there and
+        the loading step still admits what it always admitted: the base contract,
+        the resolved genre, the language scopes the resolver returned, and an
+        optional technique — with the review halves Redline already loads beside
+        them (ADR-0178).
+        """
+    
+        for path in (WRITE, REDLINE):
+            text = path.read_text(encoding="utf-8")
+            resolution = text.partition("\n## Resolution\n")[2].partition("\n## Steps\n")[0]
+    
+            assert GENRE_INFERENCE_LICENCE in resolution, (
+                f"{path}: what inference may read is licensed outside"
+                f" `## Resolution`, which is where the genre is settled"
+                f" (ADR-0178). See {STANDARD}."
+            )
+    
+            for clause in LOADING_CLAUSES[path.parent.name]:
+>               assert clause in text, (
+                    f"{path}: the loading step no longer carries {clause!r}, so"
+                    f" the door the licence above must not widen is open"
+                    f" (ADR-0178). See {STANDARD}."
+                )
+E               AssertionError: /Users/thomas/Projects/skills/skills/editorial/write/SKILL.md: the loading step no longer carries 'Done when those four are loaded and nothing else has been.', so the door the licence above must not widen is open (ADR-0178). See docs/rules/skills.md.
+E               assert 'Done when those four are loaded and nothing else has been.' in '---\nname: write\ndescription: Turn a brief and its source material into one truthful first draft in the target langu...s afterwards; perform neither, and offer neither as a next step of this run. Done when the draft has been delivered.\n'
+
+tests/test_kntnt.py:7235: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_kntnt.py::test_the_licence_sits_where_the_genre_is_resolved_and_widens_no_loading
+================== 1 failed, 1872 passed in 95.37s (0:01:35) ===================

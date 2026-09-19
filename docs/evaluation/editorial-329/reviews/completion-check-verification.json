@@ -1,0 +1,159 @@
+[
+  {
+    "case": "article-sv",
+    "skill": "write",
+    "revision": "d0b2c99c12a8727503b1738f1cad92611d879e1e",
+    "corpus": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+    "source_is_frozen": true,
+    "input_name": "source.md",
+    "staged_input_files": [
+      "supplied-input.md"
+    ],
+    "sessions": [
+      {
+        "file": "native-sessions/2026/09/19/rollout-2026-09-19T21-31-43-01a0bb27-3192-7b60-a38e-b47957d167b3.jsonl",
+        "identities": [
+          [
+            "gpt-6-astra",
+            "high"
+          ]
+        ]
+      }
+    ],
+    "cleanup": {
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-6r3u2pwz",
+      "removed": true,
+      "process_exited": true
+    },
+    "root_absent": true,
+    "result": {
+      "returncode": 0,
+      "timed_out": false,
+      "duration_seconds": 85.75,
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-6r3u2pwz",
+      "cleanup_required": true
+    },
+    "input_bytes_match": true,
+    "process_exit_verified": true
+  },
+  {
+    "case": "article-sv",
+    "skill": "redline",
+    "revision": "d0b2c99c12a8727503b1738f1cad92611d879e1e",
+    "corpus": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+    "source_is_frozen": true,
+    "input_name": "input.md",
+    "staged_input_files": [
+      "supplied-input.md"
+    ],
+    "sessions": [
+      {
+        "file": "native-sessions/2026/09/19/rollout-2026-09-19T21-33-59-01a0bb29-45ec-7830-8615-a5689c25e0e9.jsonl",
+        "identities": [
+          [
+            "gpt-6-astra",
+            "high"
+          ]
+        ]
+      }
+    ],
+    "cleanup": {
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-mlyfg7d6",
+      "removed": true,
+      "process_exited": true
+    },
+    "root_absent": true,
+    "result": {
+      "returncode": 0,
+      "timed_out": false,
+      "duration_seconds": 83.51,
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-mlyfg7d6",
+      "cleanup_required": true
+    },
+    "input_bytes_match": true,
+    "process_exit_verified": true
+  },
+  {
+    "case": "web-copy-en_US",
+    "skill": "write",
+    "revision": "29ff2047ad2dac330dd705feccdb3f2d0778831b",
+    "corpus": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+    "source_is_frozen": true,
+    "input_name": "source.md",
+    "staged_input_files": [
+      "supplied-input.md"
+    ],
+    "sessions": [
+      {
+        "file": "native-sessions/2026/09/19/rollout-2026-09-19T21-36-33-01a0bb2b-9f43-7d90-8d85-c845918d8a36.jsonl",
+        "identities": [
+          [
+            "gpt-6-astra",
+            "high"
+          ]
+        ]
+      }
+    ],
+    "cleanup": {
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-wblss3lu",
+      "removed": true,
+      "process_exited": true
+    },
+    "root_absent": true,
+    "result": {
+      "returncode": 0,
+      "timed_out": false,
+      "duration_seconds": 61.38,
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-wblss3lu",
+      "cleanup_required": true
+    },
+    "input_bytes_match": true,
+    "process_exit_verified": true
+  },
+  {
+    "case": "web-copy-en_US",
+    "skill": "redline",
+    "revision": "29ff2047ad2dac330dd705feccdb3f2d0778831b",
+    "corpus": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+    "source_is_frozen": true,
+    "input_name": "input.md",
+    "staged_input_files": [
+      "supplied-input.md"
+    ],
+    "sessions": [
+      {
+        "file": "native-sessions/2026/09/19/rollout-2026-09-19T21-39-04-01a0bb2d-ee3c-7eb2-b44d-4ab44269ca4b.jsonl",
+        "identities": [
+          [
+            "gpt-6-astra",
+            "high"
+          ]
+        ]
+      },
+      {
+        "file": "native-sessions/2026/09/19/rollout-2026-09-19T21-40-58-01a0bb2f-aa72-7c81-a032-3886cdef7be7.jsonl",
+        "identities": [
+          [
+            "gpt-6-astra",
+            "high"
+          ]
+        ]
+      }
+    ],
+    "cleanup": {
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-4ukbcl7o",
+      "removed": true,
+      "process_exited": true
+    },
+    "root_absent": true,
+    "result": {
+      "returncode": 0,
+      "timed_out": false,
+      "duration_seconds": 197.85,
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-4ukbcl7o",
+      "cleanup_required": true
+    },
+    "input_bytes_match": true,
+    "process_exit_verified": true
+  }
+]

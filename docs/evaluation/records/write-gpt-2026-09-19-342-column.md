@@ -12,7 +12,7 @@
 
 ## Conditions
 
-The [frozen matrix](../corpus/editorial-quality/README.md) is unchanged. After candidate column-sv and column-en_GB shifted the author's perspective, #342 clarified the existing ghostwriting boundary. Those failed runs and the evaluator's explicit reassessment remain in [the first column record](./write-gpt-2026-09-19-338-part-column-opinion-web.md). These are new fresh invocations; en_US is its first declared cell, the other two are affected reruns. All three use the same revised resource.
+The [frozen matrix](../corpus/editorial-quality/README.md) is unchanged. After candidate column-sv and column-en_GB shifted the author's perspective, #342 clarified the existing ghostwriting boundary. Those failed runs and the evaluator's explicit reassessment remain in [the first column record](./write-gpt-2026-09-19-338-part-column-opinion-web.md). These are two fresh affected invocations, sv and en_GB, using the same revised resource. The en_US first declared cell is recorded separately in the later final-resource record.
 
 Only the original source package is supplied to Write. Redline receives the complete extracted artifact with metadata, without the source or delivery account. No expected result or reviewer finding is supplied. Same native runner/isolation as the first candidate; all writable roots inventoried and native correction sessions retained. Full outputs and evidence live under [rerun-column](../editorial-329/runs/rerun-column/). Judgements are made against the fixed rubric before comparison; no other provider's record is consulted.
 
@@ -61,3 +61,7 @@ Only the original source package is supplied to Write. Redline receives the comp
 - **unresolved findings** — The delivered account does not report its invented personal propensity; F1 remains a hard rejection.
 - **defects filed** — #342, retained as a failed repair; subsequent correction/rerun required.
 - **notes** — Observed model gpt-6-astra/high. Judged before reading paired Redline; no altered prompt or corpus. en_US was not run at this superseded revision and remains pending at the revised one.
+
+### Record bookkeeping correction
+
+Final coverage audit corrected the introductory run count: this record contains sv and en_GB only. The original introduction prematurely described en_US as a third run here; its real first invocation is in the later `342-column-final` record. No invocation, output or criterion assessment moved or changed.

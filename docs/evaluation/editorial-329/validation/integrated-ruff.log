@@ -1,0 +1,30 @@
+ISC004 Unparenthesized implicit string concatenation in collection
+    --> tests/test_kntnt.py:7146:9
+     |
+7144 |       "write": (
+7145 |           "Load the contract, and nothing besides it",
+7146 | /         "This is the only additional genre support file: follow no other genre links"
+7147 | |         " and load no unselected genre or technique.",
+     | |_____________________________________________________^
+7148 |           "Done when this bounded contract is loaded, with no review half.",
+7149 |       ),
+     |
+help: Did you forget a comma?
+help: Wrap implicitly concatenated strings in parentheses
+
+ISC004 Unparenthesized implicit string concatenation in collection
+    --> tests/test_kntnt.py:7152:9
+     |
+7150 |       "redline": (
+7151 |           "Load what the review is read against, and nothing besides it",
+7152 | /         "These are the only additional genre support files: follow no other genre"
+7153 | |         " links and load no unselected genre or technique.",
+     | |___________________________________________________________^
+7154 |           "Done when those are loaded and nothing else has been.",
+7155 |       ),
+     |
+help: Did you forget a comma?
+help: Wrap implicitly concatenated strings in parentheses
+
+Found 2 errors.
+No fixes available (2 hidden fixes can be enabled with the `--unsafe-fixes` option).

@@ -1,0 +1,961 @@
+{
+  "total_invocations": 119,
+  "mandatory_invocations": 65,
+  "additional_invocations": 54,
+  "private_roots_remaining": 0,
+  "runs": [
+    {
+      "path": "runs/baseline/article-en_GB/redline",
+      "instruction_revision": "8ae4c21c203fa44f9782c3c0db2c85a5d805c3a6",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/baseline/article-en_GB/write",
+      "instruction_revision": "8ae4c21c203fa44f9782c3c0db2c85a5d805c3a6",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/baseline/article-sv/redline",
+      "instruction_revision": "8ae4c21c203fa44f9782c3c0db2c85a5d805c3a6",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/baseline/article-sv/write",
+      "instruction_revision": "8ae4c21c203fa44f9782c3c0db2c85a5d805c3a6",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/baseline/case-study-sv/redline",
+      "instruction_revision": "8ae4c21c203fa44f9782c3c0db2c85a5d805c3a6",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/baseline/case-study-sv/write",
+      "instruction_revision": "8ae4c21c203fa44f9782c3c0db2c85a5d805c3a6",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/baseline/column-sv/redline",
+      "instruction_revision": "8ae4c21c203fa44f9782c3c0db2c85a5d805c3a6",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/baseline/column-sv/write",
+      "instruction_revision": "8ae4c21c203fa44f9782c3c0db2c85a5d805c3a6",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/baseline/opinion-sv/redline",
+      "instruction_revision": "8ae4c21c203fa44f9782c3c0db2c85a5d805c3a6",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/baseline/opinion-sv/write",
+      "instruction_revision": "8ae4c21c203fa44f9782c3c0db2c85a5d805c3a6",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/baseline/web-copy-sv/redline",
+      "instruction_revision": "8ae4c21c203fa44f9782c3c0db2c85a5d805c3a6",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/baseline/web-copy-sv/write",
+      "instruction_revision": "8ae4c21c203fa44f9782c3c0db2c85a5d805c3a6",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/candidate/article-abt/redline",
+      "instruction_revision": "1a4f65b3da64fc4f94e82de519ef8b5a18ae56dd",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/candidate/article-abt/write",
+      "instruction_revision": "1a4f65b3da64fc4f94e82de519ef8b5a18ae56dd",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/candidate/article-en_GB/redline",
+      "instruction_revision": "d60c4fcc0228ae37b348c57374f4d8c6ead5a0bd",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/candidate/article-en_GB/write",
+      "instruction_revision": "d60c4fcc0228ae37b348c57374f4d8c6ead5a0bd",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/candidate/article-en_US/redline",
+      "instruction_revision": "d60c4fcc0228ae37b348c57374f4d8c6ead5a0bd",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/candidate/article-en_US/write",
+      "instruction_revision": "d60c4fcc0228ae37b348c57374f4d8c6ead5a0bd",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/candidate/article-pac/redline",
+      "instruction_revision": "1a4f65b3da64fc4f94e82de519ef8b5a18ae56dd",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/candidate/article-pac/write",
+      "instruction_revision": "1a4f65b3da64fc4f94e82de519ef8b5a18ae56dd",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/candidate/article-sv/redline",
+      "instruction_revision": "d60c4fcc0228ae37b348c57374f4d8c6ead5a0bd",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/candidate/article-sv/write",
+      "instruction_revision": "d60c4fcc0228ae37b348c57374f4d8c6ead5a0bd",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/candidate/case-study-en_GB/redline",
+      "instruction_revision": "d60c4fcc0228ae37b348c57374f4d8c6ead5a0bd",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/candidate/case-study-en_GB/write",
+      "instruction_revision": "d60c4fcc0228ae37b348c57374f4d8c6ead5a0bd",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/candidate/case-study-en_US/redline",
+      "instruction_revision": "f8cac6d5342f72ed91da8c13d96ab092cd5e0ae9",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/candidate/case-study-en_US/write",
+      "instruction_revision": "f8cac6d5342f72ed91da8c13d96ab092cd5e0ae9",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/candidate/case-study-sv/redline",
+      "instruction_revision": "d60c4fcc0228ae37b348c57374f4d8c6ead5a0bd",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/candidate/case-study-sv/write",
+      "instruction_revision": "d60c4fcc0228ae37b348c57374f4d8c6ead5a0bd",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/candidate/column-en_GB/redline",
+      "instruction_revision": "d60c4fcc0228ae37b348c57374f4d8c6ead5a0bd",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/candidate/column-en_GB/write",
+      "instruction_revision": "d60c4fcc0228ae37b348c57374f4d8c6ead5a0bd",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/candidate/column-sv/redline",
+      "instruction_revision": "d60c4fcc0228ae37b348c57374f4d8c6ead5a0bd",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/candidate/column-sv/write",
+      "instruction_revision": "d60c4fcc0228ae37b348c57374f4d8c6ead5a0bd",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/candidate/opinion-en_GB/redline",
+      "instruction_revision": "d60c4fcc0228ae37b348c57374f4d8c6ead5a0bd",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/candidate/opinion-en_GB/write",
+      "instruction_revision": "d60c4fcc0228ae37b348c57374f4d8c6ead5a0bd",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/candidate/opinion-sv/redline",
+      "instruction_revision": "d60c4fcc0228ae37b348c57374f4d8c6ead5a0bd",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/candidate/opinion-sv/write",
+      "instruction_revision": "d60c4fcc0228ae37b348c57374f4d8c6ead5a0bd",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/candidate/web-copy-en_GB/redline",
+      "instruction_revision": "d60c4fcc0228ae37b348c57374f4d8c6ead5a0bd",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/candidate/web-copy-en_GB/write",
+      "instruction_revision": "d60c4fcc0228ae37b348c57374f4d8c6ead5a0bd",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/candidate/web-copy-en_US/redline",
+      "instruction_revision": "d60c4fcc0228ae37b348c57374f4d8c6ead5a0bd",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/candidate/web-copy-en_US/write",
+      "instruction_revision": "d60c4fcc0228ae37b348c57374f4d8c6ead5a0bd",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/candidate/web-copy-sv/redline",
+      "instruction_revision": "d60c4fcc0228ae37b348c57374f4d8c6ead5a0bd",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/candidate/web-copy-sv/write",
+      "instruction_revision": "d60c4fcc0228ae37b348c57374f4d8c6ead5a0bd",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/completion-check/article-sv/redline",
+      "instruction_revision": "d0b2c99c12a8727503b1738f1cad92611d879e1e",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/completion-check/article-sv/write",
+      "instruction_revision": "d0b2c99c12a8727503b1738f1cad92611d879e1e",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/completion-check/column-sv/redline",
+      "instruction_revision": "d0b2c99c12a8727503b1738f1cad92611d879e1e",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/completion-check/column-sv/write",
+      "instruction_revision": "d0b2c99c12a8727503b1738f1cad92611d879e1e",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/completion-check/web-copy-en_US/redline",
+      "instruction_revision": "29ff2047ad2dac330dd705feccdb3f2d0778831b",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/completion-check/web-copy-en_US/write",
+      "instruction_revision": "29ff2047ad2dac330dd705feccdb3f2d0778831b",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/controls-348/column-clean/redline",
+      "instruction_revision": "7022c804dfbda4332723bf96b6a9857c24e63b6e",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/controls-genres/article-clean/redline",
+      "instruction_revision": "f8cac6d5342f72ed91da8c13d96ab092cd5e0ae9",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/controls-genres/article-flawed/redline",
+      "instruction_revision": "f8cac6d5342f72ed91da8c13d96ab092cd5e0ae9",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/controls-genres/case-study-clean/redline",
+      "instruction_revision": "f8cac6d5342f72ed91da8c13d96ab092cd5e0ae9",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/controls-genres/case-study-flawed/redline",
+      "instruction_revision": "f8cac6d5342f72ed91da8c13d96ab092cd5e0ae9",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/controls-genres/column-clean/redline",
+      "instruction_revision": "f8cac6d5342f72ed91da8c13d96ab092cd5e0ae9",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/controls-genres/column-flawed/redline",
+      "instruction_revision": "f8cac6d5342f72ed91da8c13d96ab092cd5e0ae9",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/controls-genres/opinion-clean/redline",
+      "instruction_revision": "f8cac6d5342f72ed91da8c13d96ab092cd5e0ae9",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/controls-genres/opinion-flawed/redline",
+      "instruction_revision": "f8cac6d5342f72ed91da8c13d96ab092cd5e0ae9",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/controls-genres/web-copy-clean/redline",
+      "instruction_revision": "1a4f65b3da64fc4f94e82de519ef8b5a18ae56dd",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/controls-genres/web-copy-flawed/redline",
+      "instruction_revision": "1a4f65b3da64fc4f94e82de519ef8b5a18ae56dd",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/controls-genres-rerun/article-clean/redline",
+      "instruction_revision": "1a4f65b3da64fc4f94e82de519ef8b5a18ae56dd",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/controls-genres-rerun/article-flawed/redline",
+      "instruction_revision": "1a4f65b3da64fc4f94e82de519ef8b5a18ae56dd",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/controls-genres-rerun/case-study-clean/redline",
+      "instruction_revision": "1a4f65b3da64fc4f94e82de519ef8b5a18ae56dd",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/controls-selection/article-excerpt/redline",
+      "instruction_revision": "f8cac6d5342f72ed91da8c13d96ab092cd5e0ae9",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/controls-selection/flag-pac/redline",
+      "instruction_revision": "f8cac6d5342f72ed91da8c13d96ab092cd5e0ae9",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/controls-selection/instruction-abt/redline",
+      "instruction_revision": "f8cac6d5342f72ed91da8c13d96ab092cd5e0ae9",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/controls-selection/instruction-none/redline",
+      "instruction_revision": "f8cac6d5342f72ed91da8c13d96ab092cd5e0ae9",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/controls-selection/legacy-abt/redline",
+      "instruction_revision": "f8cac6d5342f72ed91da8c13d96ab092cd5e0ae9",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/controls-selection/metadata-none/redline",
+      "instruction_revision": "f8cac6d5342f72ed91da8c13d96ab092cd5e0ae9",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/controls-selection/report-pac/redline",
+      "instruction_revision": "f8cac6d5342f72ed91da8c13d96ab092cd5e0ae9",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/rerun-341/article-en_GB/redline",
+      "instruction_revision": "1a4f65b3da64fc4f94e82de519ef8b5a18ae56dd",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/rerun-341/article-en_GB/write",
+      "instruction_revision": "1a4f65b3da64fc4f94e82de519ef8b5a18ae56dd",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/rerun-341/article-en_US/redline",
+      "instruction_revision": "7022c804dfbda4332723bf96b6a9857c24e63b6e",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/rerun-341/article-en_US/write",
+      "instruction_revision": "7022c804dfbda4332723bf96b6a9857c24e63b6e",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/rerun-341/case-study-sv/redline",
+      "instruction_revision": "93758f485614c3b0e79b1bcce9fb8080de755d08",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/rerun-341/case-study-sv/write",
+      "instruction_revision": "93758f485614c3b0e79b1bcce9fb8080de755d08",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/rerun-341-translation/case-study-en_GB/redline",
+      "instruction_revision": "29ff2047ad2dac330dd705feccdb3f2d0778831b",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/rerun-341-translation/case-study-en_GB/write",
+      "instruction_revision": "29ff2047ad2dac330dd705feccdb3f2d0778831b",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/rerun-341-translation/case-study-en_US/redline",
+      "instruction_revision": "29ff2047ad2dac330dd705feccdb3f2d0778831b",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/rerun-341-translation/case-study-en_US/write",
+      "instruction_revision": "29ff2047ad2dac330dd705feccdb3f2d0778831b",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/rerun-341-translation/case-study-sv/redline",
+      "instruction_revision": "29ff2047ad2dac330dd705feccdb3f2d0778831b",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/rerun-341-translation/case-study-sv/write",
+      "instruction_revision": "29ff2047ad2dac330dd705feccdb3f2d0778831b",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/rerun-343/opinion-en_GB/redline",
+      "instruction_revision": "1a4f65b3da64fc4f94e82de519ef8b5a18ae56dd",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/rerun-343/opinion-en_GB/write",
+      "instruction_revision": "1a4f65b3da64fc4f94e82de519ef8b5a18ae56dd",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/rerun-343/opinion-sv/redline",
+      "instruction_revision": "1a4f65b3da64fc4f94e82de519ef8b5a18ae56dd",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/rerun-343/opinion-sv/write",
+      "instruction_revision": "1a4f65b3da64fc4f94e82de519ef8b5a18ae56dd",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/rerun-345/web-copy-abt/redline",
+      "instruction_revision": "1a4f65b3da64fc4f94e82de519ef8b5a18ae56dd",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/rerun-345/web-copy-abt/write",
+      "instruction_revision": "1a4f65b3da64fc4f94e82de519ef8b5a18ae56dd",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/rerun-345/web-copy-en_GB/redline",
+      "instruction_revision": "1a4f65b3da64fc4f94e82de519ef8b5a18ae56dd",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/rerun-345/web-copy-en_GB/write",
+      "instruction_revision": "1a4f65b3da64fc4f94e82de519ef8b5a18ae56dd",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/rerun-345/web-copy-en_GB-regression/redline",
+      "instruction_revision": "2bd2afe34f6ec5d9d6587c33b1c16eeaf241579f",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/rerun-345/web-copy-en_US/redline",
+      "instruction_revision": "1a4f65b3da64fc4f94e82de519ef8b5a18ae56dd",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/rerun-345/web-copy-en_US/write",
+      "instruction_revision": "1a4f65b3da64fc4f94e82de519ef8b5a18ae56dd",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/rerun-345/web-copy-sv/redline",
+      "instruction_revision": "2bd2afe34f6ec5d9d6587c33b1c16eeaf241579f",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/rerun-345/web-copy-sv/write",
+      "instruction_revision": "2bd2afe34f6ec5d9d6587c33b1c16eeaf241579f",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/rerun-348/column-sv/redline",
+      "instruction_revision": "7022c804dfbda4332723bf96b6a9857c24e63b6e",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/rerun-348-exact/column-sv/redline",
+      "instruction_revision": "7022c804dfbda4332723bf96b6a9857c24e63b6e",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/rerun-349/opinion-en_GB/redline",
+      "instruction_revision": "93758f485614c3b0e79b1bcce9fb8080de755d08",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/rerun-349/opinion-en_GB/write",
+      "instruction_revision": "93758f485614c3b0e79b1bcce9fb8080de755d08",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/rerun-349/opinion-en_US/redline",
+      "instruction_revision": "93758f485614c3b0e79b1bcce9fb8080de755d08",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/rerun-349/opinion-en_US/write",
+      "instruction_revision": "93758f485614c3b0e79b1bcce9fb8080de755d08",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/rerun-349/opinion-sv/redline",
+      "instruction_revision": "93758f485614c3b0e79b1bcce9fb8080de755d08",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/rerun-349/opinion-sv/write",
+      "instruction_revision": "93758f485614c3b0e79b1bcce9fb8080de755d08",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/rerun-349-source-check/opinion-en_GB/redline",
+      "instruction_revision": "d0b2c99c12a8727503b1738f1cad92611d879e1e",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/rerun-349-source-check/opinion-en_GB/write",
+      "instruction_revision": "d0b2c99c12a8727503b1738f1cad92611d879e1e",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/rerun-349-source-check/opinion-en_US/redline",
+      "instruction_revision": "d0b2c99c12a8727503b1738f1cad92611d879e1e",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/rerun-349-source-check/opinion-en_US/write",
+      "instruction_revision": "d0b2c99c12a8727503b1738f1cad92611d879e1e",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/rerun-349-source-check/opinion-sv/redline",
+      "instruction_revision": "d0b2c99c12a8727503b1738f1cad92611d879e1e",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/rerun-349-source-check/opinion-sv/write",
+      "instruction_revision": "d0b2c99c12a8727503b1738f1cad92611d879e1e",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/rerun-350/web-copy-abt/redline",
+      "instruction_revision": "d0b2c99c12a8727503b1738f1cad92611d879e1e",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/rerun-column/column-en_GB/redline",
+      "instruction_revision": "eb4a26efd4f8ea54599972b0a74033b2c9811c23",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/rerun-column/column-en_GB/write",
+      "instruction_revision": "eb4a26efd4f8ea54599972b0a74033b2c9811c23",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/rerun-column/column-sv/redline",
+      "instruction_revision": "eb4a26efd4f8ea54599972b0a74033b2c9811c23",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/rerun-column/column-sv/write",
+      "instruction_revision": "eb4a26efd4f8ea54599972b0a74033b2c9811c23",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/rerun-column-final/column-en_GB/redline",
+      "instruction_revision": "f8cac6d5342f72ed91da8c13d96ab092cd5e0ae9",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/rerun-column-final/column-en_GB/write",
+      "instruction_revision": "f8cac6d5342f72ed91da8c13d96ab092cd5e0ae9",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/rerun-column-final/column-en_US/redline",
+      "instruction_revision": "1a4f65b3da64fc4f94e82de519ef8b5a18ae56dd",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/rerun-column-final/column-en_US/write",
+      "instruction_revision": "1a4f65b3da64fc4f94e82de519ef8b5a18ae56dd",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/rerun-column-final/column-sv/redline",
+      "instruction_revision": "f8cac6d5342f72ed91da8c13d96ab092cd5e0ae9",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    },
+    {
+      "path": "runs/rerun-column-final/column-sv/write",
+      "instruction_revision": "f8cac6d5342f72ed91da8c13d96ab092cd5e0ae9",
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "process_exit": 0,
+      "timed_out": false,
+      "root_absent": true
+    }
+  ],
+  "note": "Process completion and evaluator cleanup do not mean semantic pass; original failures and Skill side effects are judged in the records."
+}

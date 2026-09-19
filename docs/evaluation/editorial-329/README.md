@@ -1,37 +1,37 @@
 # Redaktionell leverans #329 — läspaket
 
-Slutredovisningen färdigställs medan de sista riktade omkörningarna pågår. Historiska fel och senare försök redovisas sida vid sida.
+Implementation och föreskriven utvärdering är genomförda. **Tre kvalitetsfel står kvar öppna: #341, #349 och #352.** Historiska fel och senare försök redovisas sida vid sida; de underkända texterna räknas inte som godkända.
 
-Källor och bedömningsmatris frystes i `6e531f5` före omskrivningen. Baslinjen är `8ae4c21`; varje körning anger sin egen oföränderliga instruktionsrevision i `run.json` och sitt record. Den sista produktrevisionen hittills är `29ff204`. Endast native Codex CLI 0.155.1 med faktiskt observerad `gpt-6-astra`, reasoning `high`, används. Inga andra providerresultat ingår.
+Källor och bedömningsmatris frystes i `6e531f5` före omskrivningen. Baslinjen är `8ae4c21`; varje körning anger sin egen oföränderliga instruktionsrevision i `run.json` och sitt record. Slutliga produktresurser finns i `29ff204`; testavgränsningen rättas i `bda07f7`. Endast native Codex CLI 0.155.1 med faktiskt observerad `gpt-6-astra`, reasoning `high`, används. Inga andra providerresultat ingår.
 
-[Beställning](sources/issue-329.md) · [Källförankring](source-map.md) · [Fryst matris](../corpus/editorial-quality/README.md) · [Läsbelastning](reading-load.md) · [Teknisk granskning](reviews/technical-review.md) · [Redaktionell granskning](reviews/editorial-review.md) · [Källgranskning](reviews/source-audit.md) · [Metod](reviews/harness-setup.md)
+[Beställning](sources/issue-329.md) · [Källförankring](source-map.md) · [Fryst matris](../corpus/editorial-quality/README.md) · [Läsbelastning](reading-load.md) · [Teknisk granskning](reviews/technical-review.md) · [Redaktionell granskning](reviews/editorial-review.md) · [Källgranskning](reviews/source-audit.md) · [Metod](reviews/harness-setup.md) · [Protokoll- och täckningsgranskning](reviews/protocol-final.md)
 
 ## Journalistiska genrer
 
-Här visas de senaste ordinarie proven per språk. Länken till första utkastet innehåller hela texten; sluttexten efter ett korrekt no-change är samma artefakt. Redline får utkast och metadata, aldrig källpaketet. Tidigare försök finns kvar i [alla records](../records/README.md) och respektive körningskatalog. Alla källor är avsiktligt avgränsade och syntetiska.
+Här visas de senaste ordinarie proven per språk. Länken till första utkastet innehåller hela texten; sluttexten efter ett korrekt no-change är samma artefakt. Redline får utkast och metadata, aldrig källpaketet. Fullständiga råsvar och leveranskonton finns i körningsmapparna. Tidigare försök finns kvar i [alla records](../records/README.md) och respektive körningskatalog. Alla källor är avsiktligt avgränsade och syntetiska.
 
 | Genre / språk | Källa och brief | Första utkast | Efter Redline |
 |---|---|---|---|
-| article / sv | [källa](../corpus/editorial-quality/sources/article.md) | [Write](runs/completion-check/article-sv/write/response.txt) | [Redline](runs/completion-check/article-sv/redline/response.txt) |
-| article / en_GB | [källa](../corpus/editorial-quality/sources/article.md) | [Write](runs/rerun-341/article-en_GB/write/response.txt) | [Redline](runs/rerun-341/article-en_GB/redline/response.txt) |
-| article / en_US | [källa](../corpus/editorial-quality/sources/article.md) | [Write](runs/rerun-341/article-en_US/write/response.txt) | [Redline](runs/rerun-341/article-en_US/redline/response.txt) |
-| case-study / sv | [källa](../corpus/editorial-quality/sources/case-study.md) | [Write](runs/rerun-341-translation/case-study-sv/write/response.txt) | [Redline](runs/rerun-341-translation/case-study-sv/redline/response.txt) |
-| case-study / en_GB | [källa](../corpus/editorial-quality/sources/case-study.md) | [Write](runs/rerun-341-translation/case-study-en_GB/write/response.txt) | [Redline](runs/rerun-341-translation/case-study-en_GB/redline/response.txt) |
-| case-study / en_US | [källa](../corpus/editorial-quality/sources/case-study.md) | [Write](runs/rerun-341-translation/case-study-en_US/write/response.txt) | [Redline](runs/rerun-341-translation/case-study-en_US/redline/response.txt) |
-| column / sv | [källa](../corpus/editorial-quality/sources/column.md) | [Write](runs/completion-check/column-sv/write/response.txt) | [Redline](runs/completion-check/column-sv/redline/response.txt) |
-| column / en_GB | [källa](../corpus/editorial-quality/sources/column.md) | [Write](runs/rerun-column-final/column-en_GB/write/response.txt) | [Redline](runs/rerun-column-final/column-en_GB/redline/response.txt) |
-| column / en_US | [källa](../corpus/editorial-quality/sources/column.md) | [Write](runs/rerun-column-final/column-en_US/write/response.txt) | [Redline](runs/rerun-column-final/column-en_US/redline/response.txt) |
-| opinion / sv | [källa](../corpus/editorial-quality/sources/opinion.md) | [Write](runs/rerun-349-source-check/opinion-sv/write/response.txt) | [Redline](runs/rerun-349-source-check/opinion-sv/redline/response.txt) |
-| opinion / en_GB | [källa](../corpus/editorial-quality/sources/opinion.md) | [Write](runs/rerun-349-source-check/opinion-en_GB/write/response.txt) | [Redline](runs/rerun-349-source-check/opinion-en_GB/redline/response.txt) |
-| opinion / en_US | [källa](../corpus/editorial-quality/sources/opinion.md) | [Write](runs/rerun-349-source-check/opinion-en_US/write/response.txt) | [Redline](runs/rerun-349-source-check/opinion-en_US/redline/response.txt) |
+| article / sv | [källa](../corpus/editorial-quality/sources/article.md) | [Write](runs/completion-check/article-sv/draft.md) | [Redline](runs/completion-check/article-sv/final.md) |
+| article / en_GB | [källa](../corpus/editorial-quality/sources/article.md) | [Write](runs/rerun-341/article-en_GB/write/artifact.md) | [Redline](runs/rerun-341/article-en_GB/redline/artifact.md) |
+| article / en_US | [källa](../corpus/editorial-quality/sources/article.md) | [Write](runs/rerun-341/article-en_US/write/artifact.md) | [Redline](runs/rerun-341/article-en_US/redline/artifact.md) |
+| case-study / sv | [källa](../corpus/editorial-quality/sources/case-study.md) | [Write](runs/rerun-341-translation/case-study-sv/write/artifact.md) | [Redline](runs/rerun-341-translation/case-study-sv/redline/artifact.md) |
+| case-study / en_GB | [källa](../corpus/editorial-quality/sources/case-study.md) | [Write](runs/rerun-341-translation/case-study-en_GB/write/artifact.md) | [Redline](runs/rerun-341-translation/case-study-en_GB/redline/artifact.md) |
+| case-study / en_US | [källa](../corpus/editorial-quality/sources/case-study.md) | [Write](runs/rerun-341-translation/case-study-en_US/write/artifact.md) | [Redline](runs/rerun-341-translation/case-study-en_US/redline/artifact.md) |
+| column / sv | [källa](../corpus/editorial-quality/sources/column.md) | [Write](runs/completion-check/column-sv/write/artifact.md) | [Redline](runs/completion-check/column-sv/redline/artifact.md) |
+| column / en_GB | [källa](../corpus/editorial-quality/sources/column.md) | [Write](runs/rerun-column-final/column-en_GB/write/artifact.md) | [Redline](runs/rerun-column-final/column-en_GB/redline/artifact.md) |
+| column / en_US | [källa](../corpus/editorial-quality/sources/column.md) | [Write](runs/rerun-column-final/column-en_US/write/artifact.md) | [Redline](runs/rerun-column-final/column-en_US/redline/artifact.md) |
+| opinion / sv | [källa](../corpus/editorial-quality/sources/opinion.md) | [Write](runs/rerun-349-source-check/opinion-sv/artifact.md) | [Redline](runs/rerun-349-source-check/opinion-sv/final.md) |
+| opinion / en_GB | [källa](../corpus/editorial-quality/sources/opinion.md) | [Write](runs/rerun-349-source-check/opinion-en_GB/artifact.md) | [Redline](runs/rerun-349-source-check/opinion-en_GB/final.md) |
+| opinion / en_US | [källa](../corpus/editorial-quality/sources/opinion.md) | [Write](runs/rerun-349-source-check/opinion-en_US/artifact.md) | [Redline](runs/rerun-349-source-check/opinion-en_US/final.md) |
 
 ## Copy och UX
 
 | Genre / språk | Källa och brief | Första utkast | Efter Redline |
 |---|---|---|---|
-| web-copy / sv | [källa](../corpus/editorial-quality/sources/web-copy.md) | [Write](runs/rerun-345/web-copy-sv/write/response.txt) | [Redline](runs/rerun-345/web-copy-sv/redline/response.txt) |
-| web-copy / en_GB | [källa](../corpus/editorial-quality/sources/web-copy.md) | [Write](runs/rerun-345/web-copy-en_GB/write/response.txt) | [Redline](runs/rerun-345/web-copy-en_GB/redline/response.txt) |
-| web-copy / en_US | [källa](../corpus/editorial-quality/sources/web-copy.md) | [Write](runs/completion-check/web-copy-en_US/write/response.txt) | [Redline](runs/completion-check/web-copy-en_US/redline/response.txt) |
+| web-copy / sv | [källa](../corpus/editorial-quality/sources/web-copy.md) | [Write](runs/rerun-345/web-copy-sv/artifact.md) | [Redline](runs/rerun-345/web-copy-sv/final.md) |
+| web-copy / en_GB | [källa](../corpus/editorial-quality/sources/web-copy.md) | [Write](runs/rerun-345/web-copy-en_GB/artifact.md) | [Redline](runs/rerun-345/web-copy-en_GB/final.md) |
+| web-copy / en_US | [källa](../corpus/editorial-quality/sources/web-copy.md) | [Write](runs/completion-check/web-copy-en_US/draft.md) | [Redline](runs/completion-check/web-copy-en_US/final.md) |
 
 ## Teknikval och kontroller
 
@@ -39,9 +39,9 @@ De uttryckliga teknikproven bevarar både teknikens relationer och genrens form.
 
 | Prov | Write | Redline | Observerat |
 |---|---|---|---|
-| article / ABT / sv | [utkast](runs/candidate/article-abt/write/response.txt) | [sluttext](runs/candidate/article-abt/redline/response.txt) | Write bytte okänd förekomst mot hur elever frös; Redline rättade endast hur till om (#347). |
-| article / PAC / en_GB | [utkast](runs/candidate/article-pac/write/response.txt) | [svar](runs/candidate/article-pac/redline/response.txt) | Fakta, analys och begränsad slutsats med tidigt besked. |
-| web-copy / ABT / sv | [utkast](runs/rerun-345/web-copy-abt/write/response.txt) | [svar](runs/rerun-345/web-copy-abt/redline/response.txt) | Fungerande sektionsfrågor; en onödig genredefinitionsläsning registrerad separat (#350). |
+| article / ABT / sv | [utkast](runs/candidate/article-abt/write/artifact.md) | [sluttext](runs/candidate/article-abt/redline/artifact.md) | Write bytte okänd förekomst mot hur elever frös; Redline rättade endast hur till om (#347). |
+| article / PAC / en_GB | [utkast](runs/candidate/article-pac/write/artifact.md) | [svar](runs/candidate/article-pac/redline/artifact.md) | Fakta, analys och begränsad slutsats med tidigt besked. |
+| web-copy / ABT / sv | [utkast](runs/rerun-345/web-copy-abt/artifact.md) | [svar](runs/rerun-345/web-copy-abt/final.md) | Fungerande sektionsfrågor; en onödig genredefinitionsläsning registrerad separat (#350). |
 
 [Sju separata urvalskontroller](../records/redline-gpt-2026-09-19-338-selection.md) prövar metadata/instruktion med none, äldre ABT-metadata, flaggans prioritet, namngiven ABT-instruktion, PAC-rapportens tidiga besked och ett artikelutdrag. Faktiska läsningar verifierar urvalet. Report laddar inte femgruppens webbgrund.
 
@@ -57,7 +57,11 @@ Väsentliga påvisade rättningar omfattar krönikans författarperspektiv (#342
 
 Kundcitatets svenska kalkering (#341) återkommer även i sista Write-provet. Där reparerar Redline den lokala referensen till ”innan försöket börjar i nästa byggnad”, med kundens betydelse och reservationer bevarade. Tidigare Redline-prov, även omkörningen av den frysta case-study-clean-texten, missade bristen. Writes L1-fel och de tidigare missarna står kvar; en lyckad korrigering gör dem inte godkända. Utvärderingen räknar inte nya synonymer, kortare stycken eller likhet med en mall som förbättring.
 
+**Även #352 står öppet:** sista amerikanska kundcase-utkastet tillskriver mejlintervjun frågan ”Asked to assess the experience”, som källan inte belägger. Det är ett separat F1-fel trots i övrigt korrekta citat och fakta.
+
 ## Vad evidensen visar
+
+Den frysta matrisens **65 invokationer** är genomförda: 15 ordinarie Write→Redline-par, tre teknikpar, sex baslinjepar och 17 separata Redline-kontroller. Totalt **119 invokationer** omfattar även 54 riktade omkörningar och bevarade tidigare försök. [Täckningsaudit](reviews/packet-coverage.json) identifierar varje obligatorisk cell. Antalet är täckning, inte antal godkända texter.
 
 Varje körningsmapp innehåller exakt invocation, fullständigt svar, given indata, revisions-/modellidentitet, native-spår för förälder och barn samt inventering före/efter av samtliga skrivbara rötter. Utvärderarens fångade artefakter är deklarerade leverabler. Response-targeted Skills får inte själva lämna dem efter sig. Privat installation, autentiseringskopians förändringsflagga, scratch, arbetskopia och resurser kontrolleras separat; native klientbootstrap klassificeras som Harness-effekt.
 

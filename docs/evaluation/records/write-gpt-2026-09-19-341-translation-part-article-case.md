@@ -58,3 +58,26 @@ Three fresh case-study locale pairs use the frozen source, unchanged prompts and
 - **defects filed** — #341, final-revision repeated failure, original evidence retained.
 - **notes** — No expanded evaluation prompt or suggested translation; semantic assessment before paired Redline. The quotation's meaning/voice remains recoverable, but this does not make the transfer idiomatic Swedish.
 
+## case-study-en_US
+
+- **fixture** — case-study-en_US, final quotation-boundary verification
+- **invocation** — `/write --genre=case-study --language=en_US --output=response source.md`
+- **contextual instruction** — none
+- **output target** — response
+- **observed delivery** — Full American case/metadata and separate account in `editorial-329/runs/rerun-341-translation/case-study-en_US/write/`.
+- **side effects** — No work/export/scratch changes; native home effects inventoried, authentication unchanged, root removed.
+- **criteria** —
+  - F1 — fail (unsupported circumstance) — “Asked to assess the experience” states that Lind was prompted for this assessment. Source provides an email interview and her actual assessment but no question or account of such a request. The claim could be removed while retaining “Lind offered a qualified judgment”. All numbers, chronology, caveats and three verbatim quotations otherwise preserve the source.
+  - G1 — pass — Customer-led supplier-published case for operations managers, no rescue story or universal recommendation.
+  - G2 — pass — Benefit/visibility headline, independent ingress, customer situation/choices/implementation/results/appraisal and accurate checklist action.
+  - P1 — pass — Assignment and completion remain distinct; workload and missing outcome measures visibly bound the results. The source-only interview circumstance is scored F1.
+  - W1 — pass — Connected paragraph jobs and useful quotation transitions; no mandatory H2 quota applies to this short case.
+  - L1 — pass — Idiomatic American narration, including “a lesson to carry forward”; original speaker's English quotes retained without translation.
+  - L2 — pass — American apartments, organizes, date with following comma and double quotation punctuation consistent.
+  - T1 — pass — Case-study/none/en_US flags/metadata agree with actual selected/shared resources, no technique.
+  - R2 — pass — New completion criterion, revised quotation substance boundary and composition-only language resource actually read; no review resource or extra pass.
+  - O1 — pass — Complete inventories and transient cleanup prove unchanged source/resources and no lasting Skill files.
+- **unresolved findings** — Unsupported interview prompt; source-blind Redline cannot be expected to reconstruct the unseen source omission.
+- **defects filed** — #352, unsupported interview prompt; earlier #341 is not present as an English translation defect.
+- **notes** — Whole draft independently assessed before Redline. A plausible interview question remains an added factual circumstance under the frozen F1 criterion.
+

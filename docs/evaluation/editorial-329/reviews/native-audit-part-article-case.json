@@ -724,5 +724,247 @@
       "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-sw5cb66b",
       "removed": true
     }
+  },
+  {
+    "batch": "rerun-341",
+    "case": "case-study-sv",
+    "stage": "redline",
+    "instruction_revision": "93758f485614c3b0e79b1bcce9fb8080de755d08",
+    "identities": [
+      {
+        "rollout": "native-sessions/2026/09/19/rollout-2026-09-19T21-30-10-01a0bb25-c66e-7513-a957-aa5c3345d839.jsonl",
+        "contexts": [
+          {
+            "model": "gpt-6-astra",
+            "effort": "high"
+          }
+        ]
+      }
+    ],
+    "non_home_changes": {
+      "created": [],
+      "changed": [],
+      "removed": []
+    },
+    "home_counts": {
+      "created": 314,
+      "changed": 1,
+      "removed": 0
+    },
+    "authentication_changed": false,
+    "cleanup": {
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-ls1g5ro7",
+      "removed": true
+    }
+  },
+  {
+    "batch": "rerun-341-translation",
+    "case": "case-study-sv",
+    "stage": "write",
+    "instruction_revision": "29ff2047ad2dac330dd705feccdb3f2d0778831b",
+    "identities": [
+      {
+        "rollout": "native-sessions/2026/09/19/rollout-2026-09-19T21-37-05-01a0bb2c-1dba-7ba2-922e-fbcc7c1b56bc.jsonl",
+        "contexts": [
+          {
+            "model": "gpt-6-astra",
+            "effort": "high"
+          }
+        ]
+      }
+    ],
+    "non_home_changes": {
+      "created": [],
+      "changed": [],
+      "removed": []
+    },
+    "home_counts": {
+      "created": 316,
+      "changed": 1,
+      "removed": 0
+    },
+    "authentication_changed": false,
+    "cleanup": {
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-kv4q92r9",
+      "removed": true
+    }
+  },
+  {
+    "batch": "rerun-341-translation",
+    "case": "case-study-sv",
+    "stage": "redline",
+    "instruction_revision": "29ff2047ad2dac330dd705feccdb3f2d0778831b",
+    "identities": [
+      {
+        "rollout": "native-sessions/2026/09/19/rollout-2026-09-19T21-39-09-01a0bb2e-02d4-7bc3-99d9-2351fbb5c416.jsonl",
+        "contexts": [
+          {
+            "model": "gpt-6-astra",
+            "effort": "high"
+          }
+        ]
+      },
+      {
+        "rollout": "native-sessions/2026/09/19/rollout-2026-09-19T21-41-20-01a0bb2f-ff2e-7fb2-aa37-70525a23ff01.jsonl",
+        "contexts": [
+          {
+            "model": "gpt-6-astra",
+            "effort": "high"
+          }
+        ]
+      }
+    ],
+    "non_home_changes": {
+      "created": [],
+      "changed": [],
+      "removed": []
+    },
+    "home_counts": {
+      "created": 317,
+      "changed": 1,
+      "removed": 0
+    },
+    "authentication_changed": false,
+    "cleanup": {
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-_s_tjml6",
+      "removed": true
+    }
+  },
+  {
+    "batch": "rerun-341-translation",
+    "case": "case-study-en_GB",
+    "stage": "write",
+    "instruction_revision": "29ff2047ad2dac330dd705feccdb3f2d0778831b",
+    "identities": [
+      {
+        "rollout": "native-sessions/2026/09/19/rollout-2026-09-19T21-32-48-01a0bb28-30d6-7d21-b257-a1442c41d3c0.jsonl",
+        "contexts": [
+          {
+            "model": "gpt-6-astra",
+            "effort": "high"
+          }
+        ]
+      }
+    ],
+    "non_home_changes": {
+      "created": [],
+      "changed": [],
+      "removed": []
+    },
+    "home_counts": {
+      "created": 316,
+      "changed": 1,
+      "removed": 0
+    },
+    "authentication_changed": false,
+    "cleanup": {
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-045owmy6",
+      "removed": true
+    }
+  },
+  {
+    "batch": "rerun-341-translation",
+    "case": "case-study-en_GB",
+    "stage": "redline",
+    "instruction_revision": "29ff2047ad2dac330dd705feccdb3f2d0778831b",
+    "identities": [
+      {
+        "rollout": "native-sessions/2026/09/19/rollout-2026-09-19T21-35-02-01a0bb2a-3dda-77a0-aad1-384f4c5baf96.jsonl",
+        "contexts": [
+          {
+            "model": "gpt-6-astra",
+            "effort": "high"
+          }
+        ]
+      }
+    ],
+    "non_home_changes": {
+      "created": [],
+      "changed": [],
+      "removed": []
+    },
+    "home_counts": {
+      "created": 316,
+      "changed": 1,
+      "removed": 0
+    },
+    "authentication_changed": false,
+    "cleanup": {
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-e2kl2rfj",
+      "removed": true
+    }
+  },
+  {
+    "batch": "rerun-341-translation",
+    "case": "case-study-en_US",
+    "stage": "write",
+    "instruction_revision": "29ff2047ad2dac330dd705feccdb3f2d0778831b",
+    "identities": [
+      {
+        "rollout": "native-sessions/2026/09/19/rollout-2026-09-19T21-43-51-01a0bb32-4d58-7d63-b8aa-ea8914ff682c.jsonl",
+        "contexts": [
+          {
+            "model": "gpt-6-astra",
+            "effort": "high"
+          }
+        ]
+      }
+    ],
+    "non_home_changes": {
+      "created": [],
+      "changed": [],
+      "removed": []
+    },
+    "home_counts": {
+      "created": 316,
+      "changed": 1,
+      "removed": 0
+    },
+    "authentication_changed": false,
+    "cleanup": {
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-6u1xh3mj",
+      "removed": true
+    }
+  },
+  {
+    "batch": "rerun-341-translation",
+    "case": "case-study-en_US",
+    "stage": "redline",
+    "instruction_revision": "29ff2047ad2dac330dd705feccdb3f2d0778831b",
+    "identities": [
+      {
+        "rollout": "native-sessions/2026/09/19/rollout-2026-09-19T21-46-27-01a0bb34-b0f0-7c90-b290-5f8d5f1abcad.jsonl",
+        "contexts": [
+          {
+            "model": "gpt-6-astra",
+            "effort": "high"
+          }
+        ]
+      },
+      {
+        "rollout": "native-sessions/2026/09/19/rollout-2026-09-19T21-48-25-01a0bb36-7ca3-7363-9e22-caf0f3be3206.jsonl",
+        "contexts": [
+          {
+            "model": "gpt-6-astra",
+            "effort": "high"
+          }
+        ]
+      }
+    ],
+    "non_home_changes": {
+      "created": [],
+      "changed": [],
+      "removed": []
+    },
+    "home_counts": {
+      "created": 319,
+      "changed": 1,
+      "removed": 0
+    },
+    "authentication_changed": false,
+    "cleanup": {
+      "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-g0ghv1zq",
+      "removed": true
+    }
   }
 ]

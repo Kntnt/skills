@@ -79,3 +79,7 @@ The frozen source, invocations and candidate prompts are unchanged. Write step6 
 - **unresolved findings** — #349 persists in all three locales on d0b2c99; repair not verified.
 - **defects filed** — #349 repeated after source-support completion change.
 - **notes** — Native rollout confirms gpt-6-astra/high. Same frozen source/prompts. Instruction commit d0b2c99c12a8727503b1738f1cad92611d879e1e. Third-person faulty sentence again rules out first-person conversion as a sufficient explanation.
+
+## Completion
+
+All three locale pairs are complete on d0b2c99. Every Write sample fails F1 for #349; all three source-blind Redline samples pass their applicable criteria and preserve the input. This supersedes earlier pending-language notes, without changing their historical assessments. All six native roots have been inventoried and removed. No successful repair claim follows from these runs.

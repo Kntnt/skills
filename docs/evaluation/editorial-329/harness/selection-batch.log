@@ -1,0 +1,21 @@
+{"started": "metadata-none"}
+{"returncode": 0, "timed_out": false, "duration_seconds": 72.2, "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-zxqow8wz", "cleanup_required": true}
+{"completed": "metadata-none", "exit": 0}
+{"started": "instruction-none"}
+{"returncode": 0, "timed_out": false, "duration_seconds": 72.64, "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-wa9a4t60", "cleanup_required": true}
+{"completed": "instruction-none", "exit": 0}
+{"started": "legacy-abt"}
+{"returncode": 0, "timed_out": false, "duration_seconds": 83.06, "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-fccnbqco", "cleanup_required": true}
+{"completed": "legacy-abt", "exit": 0}
+{"started": "flag-pac"}
+{"returncode": 0, "timed_out": false, "duration_seconds": 77.07, "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-by2nklsx", "cleanup_required": true}
+{"completed": "flag-pac", "exit": 0}
+{"started": "instruction-abt"}
+{"returncode": 0, "timed_out": false, "duration_seconds": 74.78, "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-oarki_vn", "cleanup_required": true}
+{"completed": "instruction-abt", "exit": 0}
+{"started": "report-pac"}
+{"returncode": 0, "timed_out": false, "duration_seconds": 185.62, "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-dlqn91fd", "cleanup_required": true}
+{"completed": "report-pac", "exit": 0}
+{"started": "article-excerpt"}
+{"returncode": 0, "timed_out": false, "duration_seconds": 82.78, "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-a1_9klb7", "cleanup_required": true}
+{"completed": "article-excerpt", "exit": 0}

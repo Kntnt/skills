@@ -56,3 +56,30 @@ The frozen source, invocations and candidate prompts are unchanged. Write step6 
 - **unresolved findings** — Upstream #349 remains in final pipeline; source unavailable to Redline.
 - **defects filed** — No new Redline defect.
 - **notes** — Native rollout confirms gpt-6-astra/high. Instruction commit d0b2c99. Complete artifact preserved byte for byte.
+
+## `opinion-en_US`
+
+- **fixture** — `opinion-en_US`
+- **invocation** — `/redline --output=response input.md`
+- **contextual instruction** — `none`
+- **output target** — `response`
+- **observed delivery** — No-change status; complete input retained at `../editorial-329/runs/rerun-349-source-check/opinion-en_US/final.md`.
+- **side effects** — 322 native home additions plus config trust; root removed.
+- **criteria** —
+  - `G1` — `pass` — Accountable opinion voice preserved.
+  - `G2` — `pass` — Early thesis/byline, real objection, attributed evidence and board action retained.
+  - `P1` — `pass` — Coherent internal argument; source-only absence failure not detectable.
+  - `W1` — `pass` — Functional headings and connected paragraphs.
+  - `L1` — `pass` — Idiomatic US English unchanged.
+  - `L2` — `pass` — Correct en_US mechanics; no change.
+  - `T1` — `pass` — opinion/none/en_US metadata and scoped actual loads agree.
+  - `R1` — `pass` — No visible defect or unnecessary rewriting; no removed claims.
+  - `R2` — `pass` — Complete review items5–7; no correction; installed Proofread exactly once item10 with separate artifact, shared/locale mechanics items11–12.
+  - `O1` — `pass` — Complete inventory and cleanup establish response-only effects.
+- **unresolved findings** — Upstream Write #349 survives the pipeline; source unavailable to Redline.
+- **defects filed** — No new Redline defect.
+- **notes** — Native rollout confirms gpt-6-astra/high. Instruction commit d0b2c99. All three source-check opinion pairs now complete; all Write F1 fail, paired source-blind Redline passes.
+
+## Completion
+
+All three locale pairs are complete on d0b2c99. Every Write sample fails F1 for #349; all three source-blind Redline samples pass their applicable criteria and preserve the input. This supersedes earlier pending-language notes, without changing their historical assessments. All six native roots have been inventoried and removed. No successful repair claim follows from these runs.

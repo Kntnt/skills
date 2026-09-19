@@ -1,0 +1,11 @@
+{"event": "started", "case": "case-study-clean"}
+{"returncode": 0, "timed_out": false, "duration_seconds": 69.63, "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-txcod0r4", "cleanup_required": true}
+{"event": "completed", "case": "case-study-clean", "returncode": 0}
+{"event": "started", "case": "case-study-flawed"}
+{"returncode": 0, "timed_out": false, "duration_seconds": 215.72, "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-md2auz4h", "cleanup_required": true}
+{"event": "completed", "case": "case-study-flawed", "returncode": 0}
+{"event": "started", "case": "column-clean"}
+{"returncode": 0, "timed_out": false, "duration_seconds": 78.02, "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-jk8z49re", "cleanup_required": true}
+{"event": "completed", "case": "column-clean", "returncode": 0}
+{"event": "started", "case": "column-flawed"}
+{"returncode": 0, "timed_out": false, "duration_seconds": 194.91, "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-dhhu1oey", "cleanup_required": true}

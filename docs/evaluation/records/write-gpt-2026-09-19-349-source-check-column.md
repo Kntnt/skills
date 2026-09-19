@@ -28,6 +28,7 @@ The Write completion condition now operationalises existing Source Fidelity as p
   - L1 — pass — Natural Swedish phrasing, including “rutornas fortbestånd”, carries useful humour without a translated metaphor or generic moral.
   - L2 — pass — Swedish punctuation, byline and question-initial case are valid. Write may choose valid capitalisation; Redline preserves that choice.
   - T1 — pass — Explicit column/sv and genre default none; actual loads are selected column, base, web-craft and sv Composition only. No review half or technique is read.
+  - R2 — pass — The native trace reads installed Write and executes its formal shim, then loads only the selected/base/web-craft writing contract and sv Composition. No review half, correction agent, peer editorial review or Proofread invocation occurs.
   - O1 — pass — Full writable-root inventory supports response-only delivery, unchanged source and installed resources, and no surviving Skill scratch.
 - **unresolved findings** — none
 - **defects filed** — none in this sample; #349 motivates the process regression but concerns the separate opinion samples.

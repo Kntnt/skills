@@ -1,0 +1,30 @@
+{
+  "revision": "bda07f7",
+  "resource_revision": "29ff204",
+  "results": [
+    {
+      "check": "ruff",
+      "command": "uvx ruff check .",
+      "exit": 0,
+      "log": "docs/evaluation/editorial-329/validation/final-ruff.log"
+    },
+    {
+      "check": "format",
+      "command": "uvx ruff format --check .",
+      "exit": 0,
+      "log": "docs/evaluation/editorial-329/validation/final-format.log"
+    },
+    {
+      "check": "mypy",
+      "command": "uvx --with types-PyYAML --with pytest --with httpx==0.28.1 --with selectolax==0.4.11 --with types-tinycss2 --with types-regex mypy skills/kntnt/scripts/kntnt.py skills/kntnt/library/scripts/argument_grammar.py skills/kntnt/library/scripts/ship.py skills/kntnt/library/scripts/integrations.py skills/kntnt/library/scripts/languages.py skills/models/model-selector/scripts/catalogue.py skills/models/model-selector/scripts/profiles.py skills/models/model-selector/scripts/evidence.py skills/models/model-selector/scripts/launch.py skills/models/model-selector/scripts/selection.py skills/models/model-selector/scripts/record.py skills/models/model-selector/scripts/capture.py skills/models/model-selector/scripts/grade.py skills/models/model-selector/scripts/setup_apply.py skills/code/orchestrate/scripts/run.py skills/producivity/rename-invoices/scripts/rename_invoices.py skills/agents/explain/scripts/invoke.py skills/web/mirror/scripts/mirror.py tests",
+      "exit": 0,
+      "log": "docs/evaluation/editorial-329/validation/final-mypy.log"
+    },
+    {
+      "check": "pytest",
+      "command": "uv run --with pytest --with pytest-xdist --with pyyaml pytest -n auto",
+      "exit": 0,
+      "log": "docs/evaluation/editorial-329/validation/final-pytest.log"
+    }
+  ]
+}

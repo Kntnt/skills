@@ -1,0 +1,14 @@
+{
+  "removed": [
+    "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/pytest-of-thomas/pytest-222",
+    "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/pytest-of-thomas/pytest-223",
+    "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/pytest-of-thomas/pytest-224"
+  ],
+  "method": "literal absolute paths, after final test process exited; earlier temporary roots were removed by pytest/session-cleanup",
+  "preserved_preexisting": [
+    "pytest-42",
+    "pytest-43",
+    "pytest-78"
+  ],
+  "current_symlink": "removed only if still pointing at own pytest-224"
+}

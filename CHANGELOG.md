@@ -6,6 +6,7 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ### Added
 
+- A native GPT evaluation packet for all five editorial genres in Swedish, British English and American English, with baseline comparisons, independent reviews, preserved failures and explicit open quality findings (#338).
 - A source-grounded editorial evaluation corpus for five web genres, with Swedish and English briefs, positive and negative controls, fixed baseline cases and a frozen semantic assessment matrix (#330).
 
 ### Changed

@@ -58,3 +58,26 @@ Three fresh case-study locale pairs use the frozen source, unchanged prompts and
 - **defects filed** — #341: source-blind pipeline repair observed, not verified reliable prevention in Write.
 - **notes** — Both native sessions gpt-6-astra/high. Encrypted handoff message prevents direct plaintext brief comparison; fresh-session metadata, actual full resource reads, complete return and effects are visible. This one successful repair does not erase earlier misses or guarantee future repair.
 
+## case-study-en_US
+
+- **fixture** — case-study-en_US, final quotation-boundary verification
+- **invocation** — `/redline --output=response input.md`
+- **contextual instruction** — none
+- **output target** — response
+- **observed delivery** — Full corrected case plus separate account of two redundant claims removed, preserved in `editorial-329/runs/rerun-341-translation/case-study-en_US/redline/`.
+- **side effects** — No work/export/scratch changes; native home effects inventoried, authentication unchanged, root removed.
+- **criteria** —
+  - G1 — pass — Customer agency, qualified appraisal and supplier disclosure maintained.
+  - G2 — pass — Preparation quotation now follows minimal “Lind said:” attribution; concrete next step remains without its generic restatement. Complete case functions preserved.
+  - P1 — pass — All counts, exclusions, assignment/completion boundary and noncausality remain. Unsupported source-only interview prompt is not an internal contradiction this review can discover.
+  - W1 — pass — Removing the preparatory paraphrase and closing restatement avoids two redundant restarts; paragraphing and independent ingress retained.
+  - L1 — pass — Natural American language and original quoted voice unchanged.
+  - L2 — pass — Actual shared/en_US mechanics pass leaves valid date, quotation and dash usage intact.
+  - T1 — pass — Case-study/none/en_US honoured; parent/corrector load only selected/shared review resources and resolved scopes, no technique.
+  - R1 — pass — Full diff shows exactly the two findings repaired. The lesson and next-decision substance remain in quotation/concrete preceding sentence; parent explicitly reports both removed redundant claims. Other facts, qualifications, quotations and metadata preserved. No unavailable-source caveat.
+  - R2 — pass — One fresh correction with fork_turns=none, complete child resource/language reads and return, parent re-review, one actual installed flags-only Proofread invocation and shared/en_US mechanics. No later substantive edit.
+  - O1 — pass — All writable-root inventories and transient cleanup show no lasting Skill file or source/resource mutation.
+- **unresolved findings** — None under Redline's text-only scope. Upstream Write #352 (“Asked to assess”) remains in the final artifact and is not thereby validated.
+- **defects filed** — #352 is the source-aware Write defect, not a new Redline defect.
+- **notes** — Both native identities gpt-6-astra/high. Raw spawn brief is encrypted; fresh-session metadata, full child reads, complete return and effects are visible. All three source quotations remain verbatim.
+

@@ -1,0 +1,5 @@
+{"event": "started", "case": "article-clean"}
+{"returncode": 0, "timed_out": false, "duration_seconds": 81.32, "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-bna0u0tj", "cleanup_required": true}
+{"event": "completed", "case": "article-clean", "returncode": 0}
+{"event": "started", "case": "article-flawed"}
+{"returncode": 0, "timed_out": false, "duration_seconds": 308.5, "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-2k63xu02", "cleanup_required": true}

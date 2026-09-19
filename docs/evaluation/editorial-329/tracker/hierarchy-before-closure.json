@@ -1,0 +1,232 @@
+[
+  {
+    "number": 330,
+    "state": "open",
+    "title": "Förankra redaktionella kvalitetskrav i originalen och frys en utvärderingsmatris",
+    "sub_issues_summary": {
+      "total": 0,
+      "completed": 0,
+      "percent_completed": 0
+    }
+  },
+  {
+    "number": 331,
+    "state": "open",
+    "title": "Gör svensk skrivtradition och webbkrav till en gemensam, faktiskt laddad skrivgrund",
+    "sub_issues_summary": {
+      "total": 0,
+      "completed": 0,
+      "percent_completed": 0
+    }
+  },
+  {
+    "number": 332,
+    "state": "open",
+    "title": "Förenkla ABT och PAC och ta bort automatiskt teknikval för de fem webbgenrerna",
+    "sub_issues_summary": {
+      "total": 0,
+      "completed": 0,
+      "percent_completed": 0
+    }
+  },
+  {
+    "number": 333,
+    "state": "open",
+    "title": "Skriv om article till ett konkret arbetsblad för journalistiska webbtexter",
+    "sub_issues_summary": {
+      "total": 0,
+      "completed": 0,
+      "percent_completed": 0
+    }
+  },
+  {
+    "number": 334,
+    "state": "open",
+    "title": "Skriv om case-study till ett journalistiskt kundcase som bärs av kundens erfarenhet",
+    "sub_issues_summary": {
+      "total": 0,
+      "completed": 0,
+      "percent_completed": 0
+    }
+  },
+  {
+    "number": 335,
+    "state": "open",
+    "title": "Skriv om column till en personlig webbkrönika med journalistisk precision",
+    "sub_issues_summary": {
+      "total": 0,
+      "completed": 0,
+      "percent_completed": 0
+    }
+  },
+  {
+    "number": 336,
+    "state": "open",
+    "title": "Skriv om opinion till en tydlig svensk debattartikel för webben",
+    "sub_issues_summary": {
+      "total": 0,
+      "completed": 0,
+      "percent_completed": 0
+    }
+  },
+  {
+    "number": 337,
+    "state": "open",
+    "title": "Skriv om web-copy till precis copy och UX-text som hjälper läsaren att handla",
+    "sub_issues_summary": {
+      "total": 0,
+      "completed": 0,
+      "percent_completed": 0
+    }
+  },
+  {
+    "number": 338,
+    "state": "open",
+    "title": "Pröva de fem omskrivna genrerna med Write och Redline på svenska och engelska",
+    "sub_issues_summary": {
+      "total": 0,
+      "completed": 0,
+      "percent_completed": 0
+    }
+  },
+  {
+    "number": 340,
+    "state": "open",
+    "title": "Clean up UV effects from Redline’s fresh correction agent",
+    "sub_issues_summary": {
+      "total": 0,
+      "completed": 0,
+      "percent_completed": 0
+    }
+  },
+  {
+    "number": 339,
+    "state": "open",
+    "title": "Preserve YAML-bearing text across Redline’s closing Proofread invocation",
+    "sub_issues_summary": {
+      "total": 0,
+      "completed": 0,
+      "percent_completed": 0
+    }
+  },
+  {
+    "number": 341,
+    "state": "open",
+    "title": "Preserve idiomatic Swedish in translated customer quotations",
+    "sub_issues_summary": {
+      "total": 0,
+      "completed": 0,
+      "percent_completed": 0
+    }
+  },
+  {
+    "number": 342,
+    "state": "open",
+    "title": "Preserve author perspective when ghostwriting reflective columns",
+    "sub_issues_summary": {
+      "total": 0,
+      "completed": 0,
+      "percent_completed": 0
+    }
+  },
+  {
+    "number": 343,
+    "state": "open",
+    "title": "Preserve the supplied author stance in opinion writing",
+    "sub_issues_summary": {
+      "total": 0,
+      "completed": 0,
+      "percent_completed": 0
+    }
+  },
+  {
+    "number": 344,
+    "state": "open",
+    "title": "Preserve the event associated with a supplied date in customer cases",
+    "sub_issues_summary": {
+      "total": 0,
+      "completed": 0,
+      "percent_completed": 0
+    }
+  },
+  {
+    "number": 345,
+    "state": "open",
+    "title": "Check web-copy references against the delivered interface surface",
+    "sub_issues_summary": {
+      "total": 0,
+      "completed": 0,
+      "percent_completed": 0
+    }
+  },
+  {
+    "number": 346,
+    "state": "open",
+    "title": "Redline: keep whole-sentence duplication in the editorial correction boundary",
+    "sub_issues_summary": {
+      "total": 0,
+      "completed": 0,
+      "percent_completed": 0
+    }
+  },
+  {
+    "number": 347,
+    "state": "open",
+    "title": "Preserve whether-versus-how uncertainty in article headings",
+    "sub_issues_summary": {
+      "total": 0,
+      "completed": 0,
+      "percent_completed": 0
+    }
+  },
+  {
+    "number": 348,
+    "state": "open",
+    "title": "Proofread: preserve valid Swedish lowercase specifications after a colon",
+    "sub_issues_summary": {
+      "total": 0,
+      "completed": 0,
+      "percent_completed": 0
+    }
+  },
+  {
+    "number": 349,
+    "state": "open",
+    "title": "Write: do not turn absent funding claims into categorical absence",
+    "sub_issues_summary": {
+      "total": 0,
+      "completed": 0,
+      "percent_completed": 0
+    }
+  },
+  {
+    "number": 350,
+    "state": "open",
+    "title": "Redline: avoid genre inference discovery after metadata settles genre",
+    "sub_issues_summary": {
+      "total": 0,
+      "completed": 0,
+      "percent_completed": 0
+    }
+  },
+  {
+    "number": 351,
+    "state": "open",
+    "title": "Keep observed evaluation artifacts outside normative prose assertions",
+    "sub_issues_summary": {
+      "total": 0,
+      "completed": 0,
+      "percent_completed": 0
+    }
+  },
+  {
+    "number": 352,
+    "state": "open",
+    "title": "Write adds an unsupplied question to an email interview",
+    "sub_issues_summary": {
+      "total": 0,
+      "completed": 0,
+      "percent_completed": 0
+    }
+  }
+]

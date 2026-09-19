@@ -7,7 +7,7 @@
     "ordinary": 30,
     "selection-control": 7
   },
-  "note": "Coverage is actual execution/evidence, never an assertion that semantic criteria passed. Historical reruns do not increase this denominator. README-selected ordinary mapping may still have in-progress rows at this snapshot.",
+  "note": "Final selected coverage: 65 actual invocations; coverage is not semantic approval. 54 additional historical/targeted invocations remain separately inventoried. Every invocation has a distinct private root, result, cleanup record and absent root. Mandatory selected inputs and native model identities are independently checked.",
   "rows": [
     {
       "category": "ordinary",
@@ -23,7 +23,29 @@
         "removed": true,
         "process_exited": true,
         "root_absent_now": true
-      }
+      },
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "harness": "Codex CLI 0.155.1",
+      "native_sessions": [
+        {
+          "path": "native-sessions/2026/09/19/rollout-2026-09-19T21-31-43-01a0bb27-3192-7b60-a38e-b47957d167b3.jsonl",
+          "identities": [
+            [
+              "gpt-6-astra",
+              "high"
+            ]
+          ]
+        }
+      ],
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 85.75,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-6r3u2pwz",
+        "cleanup_required": true
+      },
+      "frozen_source_matches": true,
+      "invocation": "/write --genre=article --language=sv --output=response source.md"
     },
     {
       "category": "ordinary",
@@ -39,7 +61,31 @@
         "removed": true,
         "process_exited": true,
         "root_absent_now": true
-      }
+      },
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "harness": "Codex CLI 0.155.1",
+      "native_sessions": [
+        {
+          "path": "native-sessions/2026/09/19/rollout-2026-09-19T21-33-59-01a0bb29-45ec-7830-8615-a5689c25e0e9.jsonl",
+          "identities": [
+            [
+              "gpt-6-astra",
+              "high"
+            ]
+          ]
+        }
+      ],
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 83.51,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-mlyfg7d6",
+        "cleanup_required": true
+      },
+      "staged_draft_matches": [
+        "runs/completion-check/article-sv/draft.md"
+      ],
+      "invocation": "/redline --output=response input.md"
     },
     {
       "category": "ordinary",
@@ -54,7 +100,29 @@
         "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-9uixs3vm",
         "removed": true,
         "root_absent_now": true
-      }
+      },
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "harness": "Codex CLI 0.155.1",
+      "native_sessions": [
+        {
+          "path": "native-sessions/2026/09/19/rollout-2026-09-19T21-10-54-01a0bb14-233a-7193-90e5-dbc31687872c.jsonl",
+          "identities": [
+            [
+              "gpt-6-astra",
+              "high"
+            ]
+          ]
+        }
+      ],
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 62.22,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-9uixs3vm",
+        "cleanup_required": true
+      },
+      "frozen_source_matches": true,
+      "invocation": "/write --genre=article --language=en_GB --output=response source.md"
     },
     {
       "category": "ordinary",
@@ -69,7 +137,31 @@
         "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-f5jstugd",
         "removed": true,
         "root_absent_now": true
-      }
+      },
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "harness": "Codex CLI 0.155.1",
+      "native_sessions": [
+        {
+          "path": "native-sessions/2026/09/19/rollout-2026-09-19T21-13-13-01a0bb16-42a7-7220-a4de-c6cc44d8ec53.jsonl",
+          "identities": [
+            [
+              "gpt-6-astra",
+              "high"
+            ]
+          ]
+        }
+      ],
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 64.7,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-f5jstugd",
+        "cleanup_required": true
+      },
+      "staged_draft_matches": [
+        "runs/rerun-341/article-en_GB/write/artifact.md"
+      ],
+      "invocation": "/redline --output=response input.md"
     },
     {
       "category": "ordinary",
@@ -84,7 +176,29 @@
         "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-40bf8yv2",
         "removed": true,
         "root_absent_now": true
-      }
+      },
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "harness": "Codex CLI 0.155.1",
+      "native_sessions": [
+        {
+          "path": "native-sessions/2026/09/19/rollout-2026-09-19T21-15-01-01a0bb17-e7d0-7003-a820-0167e91eb271.jsonl",
+          "identities": [
+            [
+              "gpt-6-astra",
+              "high"
+            ]
+          ]
+        }
+      ],
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 66.83,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-40bf8yv2",
+        "cleanup_required": true
+      },
+      "frozen_source_matches": true,
+      "invocation": "/write --genre=article --language=en_US --output=response source.md"
     },
     {
       "category": "ordinary",
@@ -99,7 +213,40 @@
         "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-2hs4uxhz",
         "removed": true,
         "root_absent_now": true
-      }
+      },
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "harness": "Codex CLI 0.155.1",
+      "native_sessions": [
+        {
+          "path": "native-sessions/2026/09/19/rollout-2026-09-19T21-25-06-01a0bb21-249b-7ab1-85f6-f22dac90ccc2.jsonl",
+          "identities": [
+            [
+              "gpt-6-astra",
+              "high"
+            ]
+          ]
+        },
+        {
+          "path": "native-sessions/2026/09/19/rollout-2026-09-19T21-26-20-01a0bb22-45d8-7323-924a-ba3647cd66f3.jsonl",
+          "identities": [
+            [
+              "gpt-6-astra",
+              "high"
+            ]
+          ]
+        }
+      ],
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 139.29,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-2hs4uxhz",
+        "cleanup_required": true
+      },
+      "staged_draft_matches": [
+        "runs/rerun-341/article-en_US/write/artifact.md"
+      ],
+      "invocation": "/redline --output=response input.md"
     },
     {
       "category": "ordinary",
@@ -114,7 +261,29 @@
         "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-kv4q92r9",
         "removed": true,
         "root_absent_now": true
-      }
+      },
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "harness": "Codex CLI 0.155.1",
+      "native_sessions": [
+        {
+          "path": "native-sessions/2026/09/19/rollout-2026-09-19T21-37-05-01a0bb2c-1dba-7ba2-922e-fbcc7c1b56bc.jsonl",
+          "identities": [
+            [
+              "gpt-6-astra",
+              "high"
+            ]
+          ]
+        }
+      ],
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 72.95,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-kv4q92r9",
+        "cleanup_required": true
+      },
+      "frozen_source_matches": true,
+      "invocation": "/write --genre=case-study --language=sv --output=response source.md"
     },
     {
       "category": "ordinary",
@@ -122,17 +291,47 @@
       "skill": "redline",
       "path": "runs/rerun-341-translation/case-study-sv/redline",
       "instruction_revision": "29ff2047ad2dac330dd705feccdb3f2d0778831b",
-      "missing_evidence": [
-        "result.json",
-        "response.txt",
-        "inventory-after.json",
-        "filesystem-changes.json",
-        "cleanup.json",
-        "native turn_context"
-      ],
-      "native_contexts": 0,
+      "missing_evidence": [],
+      "native_contexts": 2,
       "wrong_identity": [],
-      "cleanup": null
+      "cleanup": {
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-_s_tjml6",
+        "removed": true,
+        "root_absent_now": true
+      },
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "harness": "Codex CLI 0.155.1",
+      "native_sessions": [
+        {
+          "path": "native-sessions/2026/09/19/rollout-2026-09-19T21-39-09-01a0bb2e-02d4-7bc3-99d9-2351fbb5c416.jsonl",
+          "identities": [
+            [
+              "gpt-6-astra",
+              "high"
+            ]
+          ]
+        },
+        {
+          "path": "native-sessions/2026/09/19/rollout-2026-09-19T21-41-20-01a0bb2f-ff2e-7fb2-aa37-70525a23ff01.jsonl",
+          "identities": [
+            [
+              "gpt-6-astra",
+              "high"
+            ]
+          ]
+        }
+      ],
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 233.92,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-_s_tjml6",
+        "cleanup_required": true
+      },
+      "staged_draft_matches": [
+        "runs/rerun-341-translation/case-study-sv/write/artifact.md"
+      ],
+      "invocation": "/redline --output=response input.md"
     },
     {
       "category": "ordinary",
@@ -147,7 +346,29 @@
         "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-045owmy6",
         "removed": true,
         "root_absent_now": true
-      }
+      },
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "harness": "Codex CLI 0.155.1",
+      "native_sessions": [
+        {
+          "path": "native-sessions/2026/09/19/rollout-2026-09-19T21-32-48-01a0bb28-30d6-7d21-b257-a1442c41d3c0.jsonl",
+          "identities": [
+            [
+              "gpt-6-astra",
+              "high"
+            ]
+          ]
+        }
+      ],
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 62.21,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-045owmy6",
+        "cleanup_required": true
+      },
+      "frozen_source_matches": true,
+      "invocation": "/write --genre=case-study --language=en_GB --output=response source.md"
     },
     {
       "category": "ordinary",
@@ -162,51 +383,116 @@
         "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-e2kl2rfj",
         "removed": true,
         "root_absent_now": true
-      }
+      },
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "harness": "Codex CLI 0.155.1",
+      "native_sessions": [
+        {
+          "path": "native-sessions/2026/09/19/rollout-2026-09-19T21-35-02-01a0bb2a-3dda-77a0-aad1-384f4c5baf96.jsonl",
+          "identities": [
+            [
+              "gpt-6-astra",
+              "high"
+            ]
+          ]
+        }
+      ],
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 71.22,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-e2kl2rfj",
+        "cleanup_required": true
+      },
+      "staged_draft_matches": [
+        "runs/rerun-341-translation/case-study-en_GB/write/artifact.md"
+      ],
+      "invocation": "/redline --output=response input.md"
     },
     {
       "category": "ordinary",
       "cell": "case-study/en_US",
       "skill": "write",
       "path": "runs/rerun-341-translation/case-study-en_US/write",
-      "instruction_revision": null,
-      "missing_evidence": [
-        "run.json",
-        "result.json",
-        "response.txt",
-        "invocation.txt",
-        "supplied-input.md",
-        "inventory-before.json",
-        "inventory-after.json",
-        "filesystem-changes.json",
-        "cleanup.json",
-        "native turn_context"
-      ],
-      "native_contexts": 0,
+      "instruction_revision": "29ff2047ad2dac330dd705feccdb3f2d0778831b",
+      "missing_evidence": [],
+      "native_contexts": 1,
       "wrong_identity": [],
-      "cleanup": null
+      "cleanup": {
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-6u1xh3mj",
+        "removed": true,
+        "root_absent_now": true
+      },
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "harness": "Codex CLI 0.155.1",
+      "native_sessions": [
+        {
+          "path": "native-sessions/2026/09/19/rollout-2026-09-19T21-43-51-01a0bb32-4d58-7d63-b8aa-ea8914ff682c.jsonl",
+          "identities": [
+            [
+              "gpt-6-astra",
+              "high"
+            ]
+          ]
+        }
+      ],
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 66.67,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-6u1xh3mj",
+        "cleanup_required": true
+      },
+      "frozen_source_matches": true,
+      "invocation": "/write --genre=case-study --language=en_US --output=response source.md"
     },
     {
       "category": "ordinary",
       "cell": "case-study/en_US",
       "skill": "redline",
       "path": "runs/rerun-341-translation/case-study-en_US/redline",
-      "instruction_revision": null,
-      "missing_evidence": [
-        "run.json",
-        "result.json",
-        "response.txt",
-        "invocation.txt",
-        "supplied-input.md",
-        "inventory-before.json",
-        "inventory-after.json",
-        "filesystem-changes.json",
-        "cleanup.json",
-        "native turn_context"
-      ],
-      "native_contexts": 0,
+      "instruction_revision": "29ff2047ad2dac330dd705feccdb3f2d0778831b",
+      "missing_evidence": [],
+      "native_contexts": 2,
       "wrong_identity": [],
-      "cleanup": null
+      "cleanup": {
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-g0ghv1zq",
+        "removed": true,
+        "root_absent_now": true
+      },
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "harness": "Codex CLI 0.155.1",
+      "native_sessions": [
+        {
+          "path": "native-sessions/2026/09/19/rollout-2026-09-19T21-46-27-01a0bb34-b0f0-7c90-b290-5f8d5f1abcad.jsonl",
+          "identities": [
+            [
+              "gpt-6-astra",
+              "high"
+            ]
+          ]
+        },
+        {
+          "path": "native-sessions/2026/09/19/rollout-2026-09-19T21-48-25-01a0bb36-7ca3-7363-9e22-caf0f3be3206.jsonl",
+          "identities": [
+            [
+              "gpt-6-astra",
+              "high"
+            ]
+          ]
+        }
+      ],
+      "staged_draft_matches": [
+        "runs/rerun-341-translation/case-study-en_US/write/artifact.md"
+      ],
+      "invocation": "/redline --output=response input.md",
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 217.25,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-g0ghv1zq",
+        "cleanup_required": true
+      }
     },
     {
       "category": "ordinary",
@@ -222,7 +508,29 @@
         "removed": true,
         "method": "literal absolute path after complete capture",
         "root_absent_now": true
-      }
+      },
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "harness": "Codex CLI 0.155.1",
+      "native_sessions": [
+        {
+          "path": "native-sessions/2026/09/19/rollout-2026-09-19T21-30-31-01a0bb26-1a48-7063-ab24-c43f263bea9b.jsonl",
+          "identities": [
+            [
+              "gpt-6-astra",
+              "high"
+            ]
+          ]
+        }
+      ],
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 67.0,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-0te179mo",
+        "cleanup_required": true
+      },
+      "frozen_source_matches": true,
+      "invocation": "/write --genre=column --language=sv --output=response source.md"
     },
     {
       "category": "ordinary",
@@ -238,7 +546,31 @@
         "removed": true,
         "method": "literal absolute path after complete capture",
         "root_absent_now": true
-      }
+      },
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "harness": "Codex CLI 0.155.1",
+      "native_sessions": [
+        {
+          "path": "native-sessions/2026/09/19/rollout-2026-09-19T21-33-03-01a0bb28-6a32-7480-8d67-de4198b9b60c.jsonl",
+          "identities": [
+            [
+              "gpt-6-astra",
+              "high"
+            ]
+          ]
+        }
+      ],
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 78.81,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-ql17aty4",
+        "cleanup_required": true
+      },
+      "staged_draft_matches": [
+        "runs/completion-check/column-sv/write/artifact.md"
+      ],
+      "invocation": "/redline --output=response input.md"
     },
     {
       "category": "ordinary",
@@ -254,7 +586,29 @@
         "removed": true,
         "method": "full literal path after process exit and capture",
         "root_absent_now": true
-      }
+      },
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "harness": "Codex CLI 0.155.1",
+      "native_sessions": [
+        {
+          "path": "native-sessions/2026/09/19/rollout-2026-09-19T20-45-14-01a0bafc-a299-7fa1-81d7-296c81ef612c.jsonl",
+          "identities": [
+            [
+              "gpt-6-astra",
+              "high"
+            ]
+          ]
+        }
+      ],
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 58.14,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-wlcqvlaa",
+        "cleanup_required": true
+      },
+      "frozen_source_matches": true,
+      "invocation": "/write --genre=column --language=en_GB --output=response source.md"
     },
     {
       "category": "ordinary",
@@ -270,7 +624,31 @@
         "removed": true,
         "method": "full literal path after exit/capture",
         "root_absent_now": true
-      }
+      },
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "harness": "Codex CLI 0.155.1",
+      "native_sessions": [
+        {
+          "path": "native-sessions/2026/09/19/rollout-2026-09-19T20-46-47-01a0bafe-1122-70d0-8c95-ba29996db2f2.jsonl",
+          "identities": [
+            [
+              "gpt-6-astra",
+              "high"
+            ]
+          ]
+        }
+      ],
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 120.24,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-n9480oju",
+        "cleanup_required": true
+      },
+      "staged_draft_matches": [
+        "runs/rerun-column-final/column-en_GB/write/artifact.md"
+      ],
+      "invocation": "/redline --output=response input.md"
     },
     {
       "category": "ordinary",
@@ -286,7 +664,29 @@
         "removed": true,
         "method": "full literal path after process exit/capture",
         "root_absent_now": true
-      }
+      },
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "harness": "Codex CLI 0.155.1",
+      "native_sessions": [
+        {
+          "path": "native-sessions/2026/09/19/rollout-2026-09-19T20-59-38-01a0bb09-d1fd-73d1-b221-1844984bd36c.jsonl",
+          "identities": [
+            [
+              "gpt-6-astra",
+              "high"
+            ]
+          ]
+        }
+      ],
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 58.34,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-17xne7yh",
+        "cleanup_required": true
+      },
+      "frozen_source_matches": true,
+      "invocation": "/write --genre=column --language=en_US --output=response source.md"
     },
     {
       "category": "ordinary",
@@ -303,7 +703,31 @@
         "method": "Root already absent at literal cleanup attempt after complete capture; actor not verified, likely automatic session hook. Not a manual deletion claim.",
         "subsequent_verification": "Global session-cleanup log confirms automatic start-hook deletion; exact events captured in reviews/automatic-cleanup-events.json. Evidence inventory completed before hook action.",
         "root_absent_now": true
-      }
+      },
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "harness": "Codex CLI 0.155.1",
+      "native_sessions": [
+        {
+          "path": "native-sessions/2026/09/19/rollout-2026-09-19T21-02-27-01a0bb0c-667c-7273-9651-729b716fc9b9.jsonl",
+          "identities": [
+            [
+              "gpt-6-astra",
+              "high"
+            ]
+          ]
+        }
+      ],
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 78.24,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-s2h8ccbg",
+        "cleanup_required": true
+      },
+      "staged_draft_matches": [
+        "runs/rerun-column-final/column-en_US/write/artifact.md"
+      ],
+      "invocation": "/redline --output=response input.md"
     },
     {
       "category": "ordinary",
@@ -319,7 +743,29 @@
         "removed": true,
         "process_returncode": 0,
         "root_absent_now": true
-      }
+      },
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "harness": "Codex CLI 0.155.1",
+      "native_sessions": [
+        {
+          "path": "native-sessions/2026/09/19/rollout-2026-09-19T21-32-17-01a0bb27-b97c-7642-adaf-540c8d7a4182.jsonl",
+          "identities": [
+            [
+              "gpt-6-astra",
+              "high"
+            ]
+          ]
+        }
+      ],
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 72.99,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-2u1cljes",
+        "cleanup_required": true
+      },
+      "frozen_source_matches": true,
+      "invocation": "/write --genre=opinion --language=sv --output=response source.md"
     },
     {
       "category": "ordinary",
@@ -335,7 +781,31 @@
         "removed": true,
         "process_returncode": 0,
         "root_absent_now": true
-      }
+      },
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "harness": "Codex CLI 0.155.1",
+      "native_sessions": [
+        {
+          "path": "native-sessions/2026/09/19/rollout-2026-09-19T21-34-16-01a0bb29-8970-7663-898d-d4fcca763637.jsonl",
+          "identities": [
+            [
+              "gpt-6-astra",
+              "high"
+            ]
+          ]
+        }
+      ],
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 71.91,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-hifgb49w",
+        "cleanup_required": true
+      },
+      "staged_draft_matches": [
+        "runs/rerun-349-source-check/opinion-sv/artifact.md"
+      ],
+      "invocation": "/redline --output=response input.md"
     },
     {
       "category": "ordinary",
@@ -351,7 +821,29 @@
         "removed": true,
         "process_returncode": 0,
         "root_absent_now": true
-      }
+      },
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "harness": "Codex CLI 0.155.1",
+      "native_sessions": [
+        {
+          "path": "native-sessions/2026/09/19/rollout-2026-09-19T21-35-53-01a0bb2b-03ac-7e83-886e-41a8d3a2dbcd.jsonl",
+          "identities": [
+            [
+              "gpt-6-astra",
+              "high"
+            ]
+          ]
+        }
+      ],
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 63.12,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-17a70j1c",
+        "cleanup_required": true
+      },
+      "frozen_source_matches": true,
+      "invocation": "/write --genre=opinion --language=en_GB --output=response source.md"
     },
     {
       "category": "ordinary",
@@ -367,7 +859,31 @@
         "removed": true,
         "process_returncode": 0,
         "root_absent_now": true
-      }
+      },
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "harness": "Codex CLI 0.155.1",
+      "native_sessions": [
+        {
+          "path": "native-sessions/2026/09/19/rollout-2026-09-19T21-37-48-01a0bb2c-c380-7b21-8980-bd67211ea71c.jsonl",
+          "identities": [
+            [
+              "gpt-6-astra",
+              "high"
+            ]
+          ]
+        }
+      ],
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 73.44,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-26mo0zfe",
+        "cleanup_required": true
+      },
+      "staged_draft_matches": [
+        "runs/rerun-349-source-check/opinion-en_GB/artifact.md"
+      ],
+      "invocation": "/redline --output=response input.md"
     },
     {
       "category": "ordinary",
@@ -375,34 +891,77 @@
       "skill": "write",
       "path": "runs/rerun-349-source-check/opinion-en_US/write",
       "instruction_revision": "d0b2c99c12a8727503b1738f1cad92611d879e1e",
-      "missing_evidence": [
-        "cleanup.json"
-      ],
+      "missing_evidence": [],
       "native_contexts": 1,
       "wrong_identity": [],
-      "cleanup": null
+      "cleanup": {
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-g6vsmcv8",
+        "removed": true,
+        "process_returncode": 0,
+        "root_absent_now": true
+      },
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "harness": "Codex CLI 0.155.1",
+      "native_sessions": [
+        {
+          "path": "native-sessions/2026/09/19/rollout-2026-09-19T21-39-43-01a0bb2e-86b8-7ec3-8118-0f0355284f6c.jsonl",
+          "identities": [
+            [
+              "gpt-6-astra",
+              "high"
+            ]
+          ]
+        }
+      ],
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 75.76,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-g6vsmcv8",
+        "cleanup_required": true
+      },
+      "frozen_source_matches": true,
+      "invocation": "/write --genre=opinion --language=en_US --output=response source.md"
     },
     {
       "category": "ordinary",
       "cell": "opinion/en_US",
       "skill": "redline",
       "path": "runs/rerun-349-source-check/opinion-en_US/redline",
-      "instruction_revision": null,
-      "missing_evidence": [
-        "run.json",
-        "result.json",
-        "response.txt",
-        "invocation.txt",
-        "supplied-input.md",
-        "inventory-before.json",
-        "inventory-after.json",
-        "filesystem-changes.json",
-        "cleanup.json",
-        "native turn_context"
-      ],
-      "native_contexts": 0,
+      "instruction_revision": "d0b2c99c12a8727503b1738f1cad92611d879e1e",
+      "missing_evidence": [],
+      "native_contexts": 1,
       "wrong_identity": [],
-      "cleanup": null
+      "cleanup": {
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-_x98g1nd",
+        "removed": true,
+        "process_returncode": 0,
+        "root_absent_now": true
+      },
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "harness": "Codex CLI 0.155.1",
+      "native_sessions": [
+        {
+          "path": "native-sessions/2026/09/19/rollout-2026-09-19T21-44-22-01a0bb32-c863-70d0-ab10-72c6b8c91dae.jsonl",
+          "identities": [
+            [
+              "gpt-6-astra",
+              "high"
+            ]
+          ]
+        }
+      ],
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 88.5,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-_x98g1nd",
+        "cleanup_required": true
+      },
+      "staged_draft_matches": [
+        "runs/rerun-349-source-check/opinion-en_US/artifact.md"
+      ],
+      "invocation": "/redline --output=response input.md"
     },
     {
       "category": "ordinary",
@@ -418,7 +977,29 @@
         "removed": true,
         "process_returncode": 0,
         "root_absent_now": true
-      }
+      },
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "harness": "Codex CLI 0.155.1",
+      "native_sessions": [
+        {
+          "path": "native-sessions/2026/09/19/rollout-2026-09-19T20-55-29-01a0bb06-04d3-7ad1-9467-2552a281c84d.jsonl",
+          "identities": [
+            [
+              "gpt-6-astra",
+              "high"
+            ]
+          ]
+        }
+      ],
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 59.95,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-w7umg3l9",
+        "cleanup_required": true
+      },
+      "frozen_source_matches": true,
+      "invocation": "/write --genre=web-copy --language=sv --output=response source.md"
     },
     {
       "category": "ordinary",
@@ -434,7 +1015,31 @@
         "removed": true,
         "process_returncode": 0,
         "root_absent_now": true
-      }
+      },
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "harness": "Codex CLI 0.155.1",
+      "native_sessions": [
+        {
+          "path": "native-sessions/2026/09/19/rollout-2026-09-19T20-58-35-01a0bb08-dbf2-7292-a279-553ada2ddd63.jsonl",
+          "identities": [
+            [
+              "gpt-6-astra",
+              "high"
+            ]
+          ]
+        }
+      ],
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 70.29,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-dy8f75vh",
+        "cleanup_required": true
+      },
+      "staged_draft_matches": [
+        "runs/rerun-345/web-copy-sv/artifact.md"
+      ],
+      "invocation": "/redline --output=response input.md"
     },
     {
       "category": "ordinary",
@@ -450,7 +1055,29 @@
         "removed": true,
         "process_returncode": 0,
         "root_absent_now": true
-      }
+      },
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "harness": "Codex CLI 0.155.1",
+      "native_sessions": [
+        {
+          "path": "native-sessions/2026/09/19/rollout-2026-09-19T21-00-03-01a0bb0a-3598-72f1-a338-537be18b4ba8.jsonl",
+          "identities": [
+            [
+              "gpt-6-astra",
+              "high"
+            ]
+          ]
+        }
+      ],
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 51.18,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-l5wihx9m",
+        "cleanup_required": true
+      },
+      "frozen_source_matches": true,
+      "invocation": "/write --genre=web-copy --language=en_GB --output=response source.md"
     },
     {
       "category": "ordinary",
@@ -466,7 +1093,31 @@
         "removed": true,
         "process_returncode": 0,
         "root_absent_now": true
-      }
+      },
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "harness": "Codex CLI 0.155.1",
+      "native_sessions": [
+        {
+          "path": "native-sessions/2026/09/19/rollout-2026-09-19T21-01-25-01a0bb0b-742f-74f2-9784-f2bdd906934e.jsonl",
+          "identities": [
+            [
+              "gpt-6-astra",
+              "high"
+            ]
+          ]
+        }
+      ],
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 87.68,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-up855v0c",
+        "cleanup_required": true
+      },
+      "staged_draft_matches": [
+        "runs/rerun-345/web-copy-en_GB/artifact.md"
+      ],
+      "invocation": "/redline --output=response input.md"
     },
     {
       "category": "ordinary",
@@ -482,7 +1133,29 @@
         "removed": true,
         "process_exited": true,
         "root_absent_now": true
-      }
+      },
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "harness": "Codex CLI 0.155.1",
+      "native_sessions": [
+        {
+          "path": "native-sessions/2026/09/19/rollout-2026-09-19T21-36-33-01a0bb2b-9f43-7d90-8d85-c845918d8a36.jsonl",
+          "identities": [
+            [
+              "gpt-6-astra",
+              "high"
+            ]
+          ]
+        }
+      ],
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 61.38,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-wblss3lu",
+        "cleanup_required": true
+      },
+      "frozen_source_matches": true,
+      "invocation": "/write --genre=web-copy --language=en_US --output=response source.md"
     },
     {
       "category": "ordinary",
@@ -490,12 +1163,48 @@
       "skill": "redline",
       "path": "runs/completion-check/web-copy-en_US/redline",
       "instruction_revision": "29ff2047ad2dac330dd705feccdb3f2d0778831b",
-      "missing_evidence": [
-        "cleanup.json"
-      ],
+      "missing_evidence": [],
       "native_contexts": 2,
       "wrong_identity": [],
-      "cleanup": null
+      "cleanup": {
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-4ukbcl7o",
+        "removed": true,
+        "process_exited": true,
+        "root_absent_now": true
+      },
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "harness": "Codex CLI 0.155.1",
+      "native_sessions": [
+        {
+          "path": "native-sessions/2026/09/19/rollout-2026-09-19T21-39-04-01a0bb2d-ee3c-7eb2-b44d-4ab44269ca4b.jsonl",
+          "identities": [
+            [
+              "gpt-6-astra",
+              "high"
+            ]
+          ]
+        },
+        {
+          "path": "native-sessions/2026/09/19/rollout-2026-09-19T21-40-58-01a0bb2f-aa72-7c81-a032-3886cdef7be7.jsonl",
+          "identities": [
+            [
+              "gpt-6-astra",
+              "high"
+            ]
+          ]
+        }
+      ],
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 197.85,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-4ukbcl7o",
+        "cleanup_required": true
+      },
+      "staged_draft_matches": [
+        "runs/completion-check/web-copy-en_US/draft.md"
+      ],
+      "invocation": "/redline --output=response input.md"
     },
     {
       "category": "explicit-technique",
@@ -510,7 +1219,29 @@
         "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-r4y0ddqi",
         "removed": true,
         "root_absent_now": true
-      }
+      },
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "harness": "Codex CLI 0.155.1",
+      "native_sessions": [
+        {
+          "path": "native-sessions/2026/09/19/rollout-2026-09-19T20-59-27-01a0bb09-a859-75e0-a4eb-1e0a8e9ce4f1.jsonl",
+          "identities": [
+            [
+              "gpt-6-astra",
+              "high"
+            ]
+          ]
+        }
+      ],
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 74.43,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-r4y0ddqi",
+        "cleanup_required": true
+      },
+      "frozen_source_matches": true,
+      "invocation": "/write --genre=article --technique=abt --language=sv --output=response source.md"
     },
     {
       "category": "explicit-technique",
@@ -525,7 +1256,40 @@
         "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-gycpxfrg",
         "removed": true,
         "root_absent_now": true
-      }
+      },
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "harness": "Codex CLI 0.155.1",
+      "native_sessions": [
+        {
+          "path": "native-sessions/2026/09/19/rollout-2026-09-19T21-01-32-01a0bb0b-90f0-7523-9ac5-5a61625c624b.jsonl",
+          "identities": [
+            [
+              "gpt-6-astra",
+              "high"
+            ]
+          ]
+        },
+        {
+          "path": "native-sessions/2026/09/19/rollout-2026-09-19T21-03-52-01a0bb0d-b2de-7790-925f-4bf679a25d86.jsonl",
+          "identities": [
+            [
+              "gpt-6-astra",
+              "high"
+            ]
+          ]
+        }
+      ],
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 256.43,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-gycpxfrg",
+        "cleanup_required": true
+      },
+      "staged_draft_matches": [
+        "runs/candidate/article-abt/write/artifact.md"
+      ],
+      "invocation": "/redline --output=response input.md"
     },
     {
       "category": "explicit-technique",
@@ -540,7 +1304,29 @@
         "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-_c13s5pf",
         "removed": true,
         "root_absent_now": true
-      }
+      },
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "harness": "Codex CLI 0.155.1",
+      "native_sessions": [
+        {
+          "path": "native-sessions/2026/09/19/rollout-2026-09-19T21-07-07-01a0bb10-ae87-7cf1-968f-c9fcfada87df.jsonl",
+          "identities": [
+            [
+              "gpt-6-astra",
+              "high"
+            ]
+          ]
+        }
+      ],
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 66.49,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-_c13s5pf",
+        "cleanup_required": true
+      },
+      "frozen_source_matches": true,
+      "invocation": "/write --genre=article --technique=pac --language=en_GB --output=response source.md"
     },
     {
       "category": "explicit-technique",
@@ -555,7 +1341,31 @@
         "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-pn1huwhn",
         "removed": true,
         "root_absent_now": true
-      }
+      },
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "harness": "Codex CLI 0.155.1",
+      "native_sessions": [
+        {
+          "path": "native-sessions/2026/09/19/rollout-2026-09-19T21-08-57-01a0bb12-5a8a-7cc3-b381-4e18af754acd.jsonl",
+          "identities": [
+            [
+              "gpt-6-astra",
+              "high"
+            ]
+          ]
+        }
+      ],
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 78.86,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-pn1huwhn",
+        "cleanup_required": true
+      },
+      "staged_draft_matches": [
+        "runs/candidate/article-pac/write/artifact.md"
+      ],
+      "invocation": "/redline --output=response input.md"
     },
     {
       "category": "explicit-technique",
@@ -571,7 +1381,29 @@
         "removed": true,
         "process_returncode": 0,
         "root_absent_now": true
-      }
+      },
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "harness": "Codex CLI 0.155.1",
+      "native_sessions": [
+        {
+          "path": "native-sessions/2026/09/19/rollout-2026-09-19T21-06-11-01a0bb0f-d257-75a1-b6f1-367ab90927f6.jsonl",
+          "identities": [
+            [
+              "gpt-6-astra",
+              "high"
+            ]
+          ]
+        }
+      ],
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 74.03,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-kwpofvgo",
+        "cleanup_required": true
+      },
+      "frozen_source_matches": true,
+      "invocation": "/write --genre=web-copy --technique=abt --language=sv --output=response source.md"
     },
     {
       "category": "explicit-technique",
@@ -587,7 +1419,31 @@
         "removed": true,
         "process_returncode": 0,
         "root_absent_now": true
-      }
+      },
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "harness": "Codex CLI 0.155.1",
+      "native_sessions": [
+        {
+          "path": "native-sessions/2026/09/19/rollout-2026-09-19T21-07-57-01a0bb11-70a5-74d3-a1cd-8570c2a40392.jsonl",
+          "identities": [
+            [
+              "gpt-6-astra",
+              "high"
+            ]
+          ]
+        }
+      ],
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 73.84,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-n4933p2y",
+        "cleanup_required": true
+      },
+      "staged_draft_matches": [
+        "runs/rerun-345/web-copy-abt/artifact.md"
+      ],
+      "invocation": "/redline --output=response input.md"
     },
     {
       "category": "baseline",
@@ -603,7 +1459,29 @@
         "removed": true,
         "process_exited": true,
         "root_absent_now": true
-      }
+      },
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "harness": "Codex CLI 0.155.1",
+      "native_sessions": [
+        {
+          "path": "native-sessions/2026/09/19/rollout-2026-09-19T20-14-08-01a0bae0-2b46-7322-98c7-706d6fa7d152.jsonl",
+          "identities": [
+            [
+              "gpt-6-astra",
+              "high"
+            ]
+          ]
+        }
+      ],
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 77.56,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-07zy48lu",
+        "cleanup_required": true
+      },
+      "frozen_source_matches": true,
+      "invocation": "/write --genre=article --language=sv --output=response source.md"
     },
     {
       "category": "baseline",
@@ -619,7 +1497,31 @@
         "removed": true,
         "process_exited": true,
         "root_absent_now": true
-      }
+      },
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "harness": "Codex CLI 0.155.1",
+      "native_sessions": [
+        {
+          "path": "native-sessions/2026/09/19/rollout-2026-09-19T20-15-59-01a0bae1-dc1a-7d13-a2d4-82689e7bfce1.jsonl",
+          "identities": [
+            [
+              "gpt-6-astra",
+              "high"
+            ]
+          ]
+        }
+      ],
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 77.65,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-c74d01z5",
+        "cleanup_required": true
+      },
+      "staged_draft_matches": [
+        "runs/baseline/article-sv/draft.md"
+      ],
+      "invocation": "/redline --output=response input.md"
     },
     {
       "category": "baseline",
@@ -635,7 +1537,29 @@
         "removed": true,
         "process_exited": true,
         "root_absent_now": true
-      }
+      },
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "harness": "Codex CLI 0.155.1",
+      "native_sessions": [
+        {
+          "path": "native-sessions/2026/09/19/rollout-2026-09-19T20-17-53-01a0bae3-9910-7b70-a6e3-35e984518030.jsonl",
+          "identities": [
+            [
+              "gpt-6-astra",
+              "high"
+            ]
+          ]
+        }
+      ],
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 67.22,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-jroedmr_",
+        "cleanup_required": true
+      },
+      "frozen_source_matches": true,
+      "invocation": "/write --genre=article --language=en_GB --output=response source.md"
     },
     {
       "category": "baseline",
@@ -651,7 +1575,40 @@
         "removed": true,
         "process_exited": true,
         "root_absent_now": true
-      }
+      },
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "harness": "Codex CLI 0.155.1",
+      "native_sessions": [
+        {
+          "path": "native-sessions/2026/09/19/rollout-2026-09-19T20-20-04-01a0bae5-9a38-7c72-9559-e32b0a6a2dbb.jsonl",
+          "identities": [
+            [
+              "gpt-6-astra",
+              "high"
+            ]
+          ]
+        },
+        {
+          "path": "native-sessions/2026/09/19/rollout-2026-09-19T20-22-07-01a0bae7-7c5e-7392-8770-338e04e3660b.jsonl",
+          "identities": [
+            [
+              "gpt-6-astra",
+              "high"
+            ]
+          ]
+        }
+      ],
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 216.1,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-em3v601r",
+        "cleanup_required": true
+      },
+      "staged_draft_matches": [
+        "runs/baseline/article-en_GB/draft.md"
+      ],
+      "invocation": "/redline --output=response input.md"
     },
     {
       "category": "baseline",
@@ -667,7 +1624,29 @@
         "removed": true,
         "process_exited": true,
         "root_absent_now": true
-      }
+      },
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "harness": "Codex CLI 0.155.1",
+      "native_sessions": [
+        {
+          "path": "native-sessions/2026/09/19/rollout-2026-09-19T20-24-09-01a0bae9-5860-7e11-a259-62533cc95cc1.jsonl",
+          "identities": [
+            [
+              "gpt-6-astra",
+              "high"
+            ]
+          ]
+        }
+      ],
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 71.6,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-px8ionzt",
+        "cleanup_required": true
+      },
+      "frozen_source_matches": true,
+      "invocation": "/write --genre=case-study --language=sv --output=response source.md"
     },
     {
       "category": "baseline",
@@ -683,7 +1662,31 @@
         "removed": true,
         "process_exited": true,
         "root_absent_now": true
-      }
+      },
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "harness": "Codex CLI 0.155.1",
+      "native_sessions": [
+        {
+          "path": "native-sessions/2026/09/19/rollout-2026-09-19T20-27-54-01a0baec-c4d1-7b13-8571-d021fb022f8e.jsonl",
+          "identities": [
+            [
+              "gpt-6-astra",
+              "high"
+            ]
+          ]
+        }
+      ],
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 90.5,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-dc8c_dhk",
+        "cleanup_required": true
+      },
+      "staged_draft_matches": [
+        "runs/baseline/case-study-sv/draft.md"
+      ],
+      "invocation": "/redline --output=response input.md"
     },
     {
       "category": "baseline",
@@ -699,7 +1702,29 @@
         "removed": true,
         "process_exited": true,
         "root_absent_now": true
-      }
+      },
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "harness": "Codex CLI 0.155.1",
+      "native_sessions": [
+        {
+          "path": "native-sessions/2026/09/19/rollout-2026-09-19T20-29-44-01a0baee-7505-7be0-b356-704343fe7ba5.jsonl",
+          "identities": [
+            [
+              "gpt-6-astra",
+              "high"
+            ]
+          ]
+        }
+      ],
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 66.81,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-lpiz4fif",
+        "cleanup_required": true
+      },
+      "frozen_source_matches": true,
+      "invocation": "/write --genre=column --language=sv --output=response source.md"
     },
     {
       "category": "baseline",
@@ -715,7 +1740,31 @@
         "removed": true,
         "process_exited": true,
         "root_absent_now": true
-      }
+      },
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "harness": "Codex CLI 0.155.1",
+      "native_sessions": [
+        {
+          "path": "native-sessions/2026/09/19/rollout-2026-09-19T20-32-56-01a0baf1-60e7-7581-bab1-d7c0913bb90b.jsonl",
+          "identities": [
+            [
+              "gpt-6-astra",
+              "high"
+            ]
+          ]
+        }
+      ],
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 74.22,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-xwadc3qt",
+        "cleanup_required": true
+      },
+      "staged_draft_matches": [
+        "runs/baseline/column-sv/draft.md"
+      ],
+      "invocation": "/redline --output=response input.md"
     },
     {
       "category": "baseline",
@@ -731,7 +1780,29 @@
         "removed": true,
         "process_exited": true,
         "root_absent_now": true
-      }
+      },
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "harness": "Codex CLI 0.155.1",
+      "native_sessions": [
+        {
+          "path": "native-sessions/2026/09/19/rollout-2026-09-19T20-34-25-01a0baf2-bd5b-7931-95bd-860b7b2fe55a.jsonl",
+          "identities": [
+            [
+              "gpt-6-astra",
+              "high"
+            ]
+          ]
+        }
+      ],
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 78.78,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-37s2myew",
+        "cleanup_required": true
+      },
+      "frozen_source_matches": true,
+      "invocation": "/write --genre=opinion --language=sv --output=response source.md"
     },
     {
       "category": "baseline",
@@ -747,7 +1818,31 @@
         "removed": true,
         "process_exited": true,
         "root_absent_now": true
-      }
+      },
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "harness": "Codex CLI 0.155.1",
+      "native_sessions": [
+        {
+          "path": "native-sessions/2026/09/19/rollout-2026-09-19T20-36-26-01a0baf4-969d-7fd2-b908-b688959492a9.jsonl",
+          "identities": [
+            [
+              "gpt-6-astra",
+              "high"
+            ]
+          ]
+        }
+      ],
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 67.15,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-bep9d6hf",
+        "cleanup_required": true
+      },
+      "staged_draft_matches": [
+        "runs/baseline/opinion-sv/draft.md"
+      ],
+      "invocation": "/redline --output=response input.md"
     },
     {
       "category": "baseline",
@@ -763,7 +1858,29 @@
         "removed": true,
         "process_exited": true,
         "root_absent_now": true
-      }
+      },
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "harness": "Codex CLI 0.155.1",
+      "native_sessions": [
+        {
+          "path": "native-sessions/2026/09/19/rollout-2026-09-19T20-38-04-01a0baf6-1333-7941-a723-6eb792d84e6d.jsonl",
+          "identities": [
+            [
+              "gpt-6-astra",
+              "high"
+            ]
+          ]
+        }
+      ],
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 66.6,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-lis4tfit",
+        "cleanup_required": true
+      },
+      "frozen_source_matches": true,
+      "invocation": "/write --genre=web-copy --language=sv --output=response source.md"
     },
     {
       "category": "baseline",
@@ -779,7 +1896,40 @@
         "removed": true,
         "process_exited": true,
         "root_absent_now": true
-      }
+      },
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "harness": "Codex CLI 0.155.1",
+      "native_sessions": [
+        {
+          "path": "native-sessions/2026/09/19/rollout-2026-09-19T20-40-21-01a0baf8-2a35-7d83-b973-921b47b22185.jsonl",
+          "identities": [
+            [
+              "gpt-6-astra",
+              "high"
+            ]
+          ]
+        },
+        {
+          "path": "native-sessions/2026/09/19/rollout-2026-09-19T20-42-32-01a0bafa-2b12-7610-8350-769509d88c5b.jsonl",
+          "identities": [
+            [
+              "gpt-6-astra",
+              "high"
+            ]
+          ]
+        }
+      ],
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 204.06,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-k1b6u1wv",
+        "cleanup_required": true
+      },
+      "staged_draft_matches": [
+        "runs/baseline/web-copy-sv/draft.md"
+      ],
+      "invocation": "/redline --output=response input.md"
     },
     {
       "category": "genre-control",
@@ -795,7 +1945,29 @@
         "removed": true,
         "process_exited": true,
         "root_absent_now": true
-      }
+      },
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "harness": "Codex CLI 0.155.1",
+      "native_sessions": [
+        {
+          "path": "native-sessions/2026/09/19/rollout-2026-09-19T20-46-17-01a0bafd-991b-7212-884e-409271e55496.jsonl",
+          "identities": [
+            [
+              "gpt-6-astra",
+              "high"
+            ]
+          ]
+        }
+      ],
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 81.32,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-bna0u0tj",
+        "cleanup_required": true
+      },
+      "frozen_control_matches": true,
+      "invocation": "/redline --genre=article --language=sv --output=response input.md"
     },
     {
       "category": "genre-control",
@@ -811,7 +1983,47 @@
         "removed": true,
         "process_exited": true,
         "root_absent_now": true
-      }
+      },
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "harness": "Codex CLI 0.155.1",
+      "native_sessions": [
+        {
+          "path": "native-sessions/2026/09/19/rollout-2026-09-19T20-47-38-01a0bafe-d7bb-7e02-b6f3-7e478d95ad17.jsonl",
+          "identities": [
+            [
+              "gpt-6-astra",
+              "high"
+            ]
+          ]
+        },
+        {
+          "path": "native-sessions/2026/09/19/rollout-2026-09-19T20-50-00-01a0bb01-035f-7480-ba8e-1fcaef629e27.jsonl",
+          "identities": [
+            [
+              "gpt-6-astra",
+              "high"
+            ]
+          ]
+        },
+        {
+          "path": "native-sessions/2026/09/19/rollout-2026-09-19T20-51-22-01a0bb02-43bb-7ae3-a4e7-59e2f30df364.jsonl",
+          "identities": [
+            [
+              "gpt-6-astra",
+              "high"
+            ]
+          ]
+        }
+      ],
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 308.5,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-2k63xu02",
+        "cleanup_required": true
+      },
+      "frozen_control_matches": true,
+      "invocation": "/redline --genre=article --language=sv --output=response input.md"
     },
     {
       "category": "genre-control",
@@ -827,7 +2039,29 @@
         "removed": true,
         "process_exited": true,
         "root_absent_now": true
-      }
+      },
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "harness": "Codex CLI 0.155.1",
+      "native_sessions": [
+        {
+          "path": "native-sessions/2026/09/19/rollout-2026-09-19T20-52-55-01a0bb03-ab5a-7bc3-a368-d38ac46cc06c.jsonl",
+          "identities": [
+            [
+              "gpt-6-astra",
+              "high"
+            ]
+          ]
+        }
+      ],
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 69.63,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-txcod0r4",
+        "cleanup_required": true
+      },
+      "frozen_control_matches": true,
+      "invocation": "/redline --genre=case-study --language=sv --output=response input.md"
     },
     {
       "category": "genre-control",
@@ -843,7 +2077,38 @@
         "removed": true,
         "process_exited": true,
         "root_absent_now": true
-      }
+      },
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "harness": "Codex CLI 0.155.1",
+      "native_sessions": [
+        {
+          "path": "native-sessions/2026/09/19/rollout-2026-09-19T20-54-04-01a0bb04-bbde-7493-a817-a76b492f5075.jsonl",
+          "identities": [
+            [
+              "gpt-6-astra",
+              "high"
+            ]
+          ]
+        },
+        {
+          "path": "native-sessions/2026/09/19/rollout-2026-09-19T20-56-13-01a0bb06-b32d-7f63-b309-b18ff025bab3.jsonl",
+          "identities": [
+            [
+              "gpt-6-astra",
+              "high"
+            ]
+          ]
+        }
+      ],
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 215.72,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-md2auz4h",
+        "cleanup_required": true
+      },
+      "frozen_control_matches": true,
+      "invocation": "/redline --genre=case-study --language=sv --output=response input.md"
     },
     {
       "category": "genre-control",
@@ -859,7 +2124,29 @@
         "removed": true,
         "process_exited": true,
         "root_absent_now": true
-      }
+      },
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "harness": "Codex CLI 0.155.1",
+      "native_sessions": [
+        {
+          "path": "native-sessions/2026/09/19/rollout-2026-09-19T20-57-40-01a0bb08-0757-70f0-9f62-1b68ce50d11e.jsonl",
+          "identities": [
+            [
+              "gpt-6-astra",
+              "high"
+            ]
+          ]
+        }
+      ],
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 78.02,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-jk8z49re",
+        "cleanup_required": true
+      },
+      "frozen_control_matches": true,
+      "invocation": "/redline --genre=column --language=sv --output=response input.md"
     },
     {
       "category": "genre-control",
@@ -875,7 +2162,38 @@
         "removed": true,
         "process_exited": true,
         "root_absent_now": true
-      }
+      },
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "harness": "Codex CLI 0.155.1",
+      "native_sessions": [
+        {
+          "path": "native-sessions/2026/09/19/rollout-2026-09-19T20-58-58-01a0bb09-3882-70e2-8bb0-da1aa391b5ac.jsonl",
+          "identities": [
+            [
+              "gpt-6-astra",
+              "high"
+            ]
+          ]
+        },
+        {
+          "path": "native-sessions/2026/09/19/rollout-2026-09-19T21-00-54-01a0bb0a-fa6a-79c2-8340-fb4c7995b221.jsonl",
+          "identities": [
+            [
+              "gpt-6-astra",
+              "high"
+            ]
+          ]
+        }
+      ],
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 194.91,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-dhhu1oey",
+        "cleanup_required": true
+      },
+      "frozen_control_matches": true,
+      "invocation": "/redline --genre=column --language=sv --output=response input.md"
     },
     {
       "category": "genre-control",
@@ -891,7 +2209,29 @@
         "removed": true,
         "process_exited": true,
         "root_absent_now": true
-      }
+      },
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "harness": "Codex CLI 0.155.1",
+      "native_sessions": [
+        {
+          "path": "native-sessions/2026/09/19/rollout-2026-09-19T21-02-18-01a0bb0c-4429-7621-b042-9c08b14afcba.jsonl",
+          "identities": [
+            [
+              "gpt-6-astra",
+              "high"
+            ]
+          ]
+        }
+      ],
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 83.07,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-jhwy8fyv",
+        "cleanup_required": true
+      },
+      "frozen_control_matches": true,
+      "invocation": "/redline --genre=opinion --language=sv --output=response input.md"
     },
     {
       "category": "genre-control",
@@ -907,7 +2247,47 @@
         "removed": true,
         "process_exited": true,
         "root_absent_now": true
-      }
+      },
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "harness": "Codex CLI 0.155.1",
+      "native_sessions": [
+        {
+          "path": "native-sessions/2026/09/19/rollout-2026-09-19T21-03-41-01a0bb0d-8998-75c3-a74f-eeeda74ebae4.jsonl",
+          "identities": [
+            [
+              "gpt-6-astra",
+              "high"
+            ]
+          ]
+        },
+        {
+          "path": "native-sessions/2026/09/19/rollout-2026-09-19T21-05-50-01a0bb0f-80e1-7891-9a4b-fe69a42c4d71.jsonl",
+          "identities": [
+            [
+              "gpt-6-astra",
+              "high"
+            ]
+          ]
+        },
+        {
+          "path": "native-sessions/2026/09/19/rollout-2026-09-19T21-06-53-01a0bb10-771c-7572-a00a-629228d17b2a.jsonl",
+          "identities": [
+            [
+              "gpt-6-astra",
+              "high"
+            ]
+          ]
+        }
+      ],
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 277.28,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-0ot45sdi",
+        "cleanup_required": true
+      },
+      "frozen_control_matches": true,
+      "invocation": "/redline --genre=opinion --language=sv --output=response input.md"
     },
     {
       "category": "genre-control",
@@ -923,7 +2303,29 @@
         "removed": true,
         "process_exited": true,
         "root_absent_now": true
-      }
+      },
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "harness": "Codex CLI 0.155.1",
+      "native_sessions": [
+        {
+          "path": "native-sessions/2026/09/19/rollout-2026-09-19T21-08-19-01a0bb11-c546-73d1-875a-08e5547192cd.jsonl",
+          "identities": [
+            [
+              "gpt-6-astra",
+              "high"
+            ]
+          ]
+        }
+      ],
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 76.81,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-2x_d4zkz",
+        "cleanup_required": true
+      },
+      "frozen_control_matches": true,
+      "invocation": "/redline --genre=web-copy --language=sv --output=response input.md"
     },
     {
       "category": "genre-control",
@@ -939,7 +2341,38 @@
         "removed": true,
         "process_exited": true,
         "root_absent_now": true
-      }
+      },
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "harness": "Codex CLI 0.155.1",
+      "native_sessions": [
+        {
+          "path": "native-sessions/2026/09/19/rollout-2026-09-19T21-09-36-01a0bb12-f203-7052-91d1-f6cce2d16e57.jsonl",
+          "identities": [
+            [
+              "gpt-6-astra",
+              "high"
+            ]
+          ]
+        },
+        {
+          "path": "native-sessions/2026/09/19/rollout-2026-09-19T21-11-24-01a0bb14-99b0-7db0-a978-8e8395919d17.jsonl",
+          "identities": [
+            [
+              "gpt-6-astra",
+              "high"
+            ]
+          ]
+        }
+      ],
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 184.23,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-6zvqq9af",
+        "cleanup_required": true
+      },
+      "frozen_control_matches": true,
+      "invocation": "/redline --genre=web-copy --language=en_US --output=response input.md"
     },
     {
       "category": "selection-control",
@@ -955,7 +2388,28 @@
         "removed": true,
         "method": "full literal path after process exit and all captures",
         "root_absent_now": true
-      }
+      },
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "harness": "Codex CLI 0.155.1",
+      "native_sessions": [
+        {
+          "path": "native-sessions/2026/09/19/rollout-2026-09-19T20-46-08-01a0bafd-775a-7170-93d2-cc4baaebae31.jsonl",
+          "identities": [
+            [
+              "gpt-6-astra",
+              "high"
+            ]
+          ]
+        }
+      ],
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 72.2,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-zxqow8wz",
+        "cleanup_required": true
+      },
+      "invocation": "/redline --output=response input.md -- Use ABT."
     },
     {
       "category": "selection-control",
@@ -971,7 +2425,28 @@
         "removed": true,
         "method": "full literal path after process exit and all captures",
         "root_absent_now": true
-      }
+      },
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "harness": "Codex CLI 0.155.1",
+      "native_sessions": [
+        {
+          "path": "native-sessions/2026/09/19/rollout-2026-09-19T20-47-20-01a0bafe-91c5-7c51-a395-653acbeb1bed.jsonl",
+          "identities": [
+            [
+              "gpt-6-astra",
+              "high"
+            ]
+          ]
+        }
+      ],
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 72.64,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-wa9a4t60",
+        "cleanup_required": true
+      },
+      "invocation": "/redline --genre=article --language=sv --output=response input.md -- Use no technique (none)."
     },
     {
       "category": "selection-control",
@@ -987,7 +2462,28 @@
         "removed": true,
         "method": "full literal path after process exit and all captures",
         "root_absent_now": true
-      }
+      },
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "harness": "Codex CLI 0.155.1",
+      "native_sessions": [
+        {
+          "path": "native-sessions/2026/09/19/rollout-2026-09-19T20-48-33-01a0baff-aded-7021-8888-7ce0e6495c56.jsonl",
+          "identities": [
+            [
+              "gpt-6-astra",
+              "high"
+            ]
+          ]
+        }
+      ],
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 83.06,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-fccnbqco",
+        "cleanup_required": true
+      },
+      "invocation": "/redline --output=response input.md -- Use no technique (none)."
     },
     {
       "category": "selection-control",
@@ -1003,7 +2499,28 @@
         "removed": true,
         "method": "full literal path after process exit and all captures",
         "root_absent_now": true
-      }
+      },
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "harness": "Codex CLI 0.155.1",
+      "native_sessions": [
+        {
+          "path": "native-sessions/2026/09/19/rollout-2026-09-19T20-49-56-01a0bb00-f322-7b43-a110-de4c0d032817.jsonl",
+          "identities": [
+            [
+              "gpt-6-astra",
+              "high"
+            ]
+          ]
+        }
+      ],
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 77.07,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-by2nklsx",
+        "cleanup_required": true
+      },
+      "invocation": "/redline --technique=pac --output=response input.md"
     },
     {
       "category": "selection-control",
@@ -1019,7 +2536,28 @@
         "removed": true,
         "method": "full literal path after process exit and all captures",
         "root_absent_now": true
-      }
+      },
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "harness": "Codex CLI 0.155.1",
+      "native_sessions": [
+        {
+          "path": "native-sessions/2026/09/19/rollout-2026-09-19T20-51-14-01a0bb02-2130-73c2-95bd-f1f259f4d02c.jsonl",
+          "identities": [
+            [
+              "gpt-6-astra",
+              "high"
+            ]
+          ]
+        }
+      ],
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 74.78,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-oarki_vn",
+        "cleanup_required": true
+      },
+      "invocation": "/redline --genre=article --language=sv --output=response input.md -- Use ABT."
     },
     {
       "category": "selection-control",
@@ -1035,7 +2573,37 @@
         "removed": true,
         "method": "full literal path after process exit and all captures",
         "root_absent_now": true
-      }
+      },
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "harness": "Codex CLI 0.155.1",
+      "native_sessions": [
+        {
+          "path": "native-sessions/2026/09/19/rollout-2026-09-19T20-52-28-01a0bb03-45b9-75a3-a9c6-27b827902817.jsonl",
+          "identities": [
+            [
+              "gpt-6-astra",
+              "high"
+            ]
+          ]
+        },
+        {
+          "path": "native-sessions/2026/09/19/rollout-2026-09-19T20-54-21-01a0bb04-fcc9-7ef0-8c25-d7de081a2d70.jsonl",
+          "identities": [
+            [
+              "gpt-6-astra",
+              "high"
+            ]
+          ]
+        }
+      ],
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 185.62,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-dlqn91fd",
+        "cleanup_required": true
+      },
+      "invocation": "/redline --genre=report --language=en_GB --output=response input.md"
     },
     {
       "category": "selection-control",
@@ -1051,7 +2619,1324 @@
         "removed": true,
         "method": "full literal path after process exit and all captures",
         "root_absent_now": true
-      }
+      },
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "harness": "Codex CLI 0.155.1",
+      "native_sessions": [
+        {
+          "path": "native-sessions/2026/09/19/rollout-2026-09-19T20-55-34-01a0bb06-1b81-76b1-85af-6a6830a39ac0.jsonl",
+          "identities": [
+            [
+              "gpt-6-astra",
+              "high"
+            ]
+          ]
+        }
+      ],
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 82.78,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-329-run-a1_9klb7",
+        "cleanup_required": true
+      },
+      "invocation": "/redline --genre=article --language=sv --output=response input.md -- This is an excerpt, not a complete article."
     }
-  ]
+  ],
+  "all_invocations": [
+    {
+      "path": "runs/baseline/article-en_GB/redline",
+      "selected_mandatory_slot": true,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "8ae4c21c203fa44f9782c3c0db2c85a5d805c3a6",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/baseline/article-en_GB/write",
+      "selected_mandatory_slot": true,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "8ae4c21c203fa44f9782c3c0db2c85a5d805c3a6",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/baseline/article-sv/redline",
+      "selected_mandatory_slot": true,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "8ae4c21c203fa44f9782c3c0db2c85a5d805c3a6",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/baseline/article-sv/write",
+      "selected_mandatory_slot": true,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "8ae4c21c203fa44f9782c3c0db2c85a5d805c3a6",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/baseline/case-study-sv/redline",
+      "selected_mandatory_slot": true,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "8ae4c21c203fa44f9782c3c0db2c85a5d805c3a6",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/baseline/case-study-sv/write",
+      "selected_mandatory_slot": true,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "8ae4c21c203fa44f9782c3c0db2c85a5d805c3a6",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/baseline/column-sv/redline",
+      "selected_mandatory_slot": true,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "8ae4c21c203fa44f9782c3c0db2c85a5d805c3a6",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/baseline/column-sv/write",
+      "selected_mandatory_slot": true,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "8ae4c21c203fa44f9782c3c0db2c85a5d805c3a6",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/baseline/opinion-sv/redline",
+      "selected_mandatory_slot": true,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "8ae4c21c203fa44f9782c3c0db2c85a5d805c3a6",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/baseline/opinion-sv/write",
+      "selected_mandatory_slot": true,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "8ae4c21c203fa44f9782c3c0db2c85a5d805c3a6",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/baseline/web-copy-sv/redline",
+      "selected_mandatory_slot": true,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "8ae4c21c203fa44f9782c3c0db2c85a5d805c3a6",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/baseline/web-copy-sv/write",
+      "selected_mandatory_slot": true,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "8ae4c21c203fa44f9782c3c0db2c85a5d805c3a6",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/candidate/article-abt/redline",
+      "selected_mandatory_slot": true,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "1a4f65b3da64fc4f94e82de519ef8b5a18ae56dd",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/candidate/article-abt/write",
+      "selected_mandatory_slot": true,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "1a4f65b3da64fc4f94e82de519ef8b5a18ae56dd",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/candidate/article-en_GB/redline",
+      "selected_mandatory_slot": false,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "d60c4fcc0228ae37b348c57374f4d8c6ead5a0bd",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/candidate/article-en_GB/write",
+      "selected_mandatory_slot": false,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "d60c4fcc0228ae37b348c57374f4d8c6ead5a0bd",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/candidate/article-en_US/redline",
+      "selected_mandatory_slot": false,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "d60c4fcc0228ae37b348c57374f4d8c6ead5a0bd",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/candidate/article-en_US/write",
+      "selected_mandatory_slot": false,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "d60c4fcc0228ae37b348c57374f4d8c6ead5a0bd",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/candidate/article-pac/redline",
+      "selected_mandatory_slot": true,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "1a4f65b3da64fc4f94e82de519ef8b5a18ae56dd",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/candidate/article-pac/write",
+      "selected_mandatory_slot": true,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "1a4f65b3da64fc4f94e82de519ef8b5a18ae56dd",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/candidate/article-sv/redline",
+      "selected_mandatory_slot": false,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "d60c4fcc0228ae37b348c57374f4d8c6ead5a0bd",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/candidate/article-sv/write",
+      "selected_mandatory_slot": false,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "d60c4fcc0228ae37b348c57374f4d8c6ead5a0bd",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/candidate/case-study-en_GB/redline",
+      "selected_mandatory_slot": false,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "d60c4fcc0228ae37b348c57374f4d8c6ead5a0bd",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/candidate/case-study-en_GB/write",
+      "selected_mandatory_slot": false,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "d60c4fcc0228ae37b348c57374f4d8c6ead5a0bd",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/candidate/case-study-en_US/redline",
+      "selected_mandatory_slot": false,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "f8cac6d5342f72ed91da8c13d96ab092cd5e0ae9",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/candidate/case-study-en_US/write",
+      "selected_mandatory_slot": false,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "f8cac6d5342f72ed91da8c13d96ab092cd5e0ae9",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/candidate/case-study-sv/redline",
+      "selected_mandatory_slot": false,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "d60c4fcc0228ae37b348c57374f4d8c6ead5a0bd",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/candidate/case-study-sv/write",
+      "selected_mandatory_slot": false,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "d60c4fcc0228ae37b348c57374f4d8c6ead5a0bd",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/candidate/column-en_GB/redline",
+      "selected_mandatory_slot": false,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "d60c4fcc0228ae37b348c57374f4d8c6ead5a0bd",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/candidate/column-en_GB/write",
+      "selected_mandatory_slot": false,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "d60c4fcc0228ae37b348c57374f4d8c6ead5a0bd",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/candidate/column-sv/redline",
+      "selected_mandatory_slot": false,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "d60c4fcc0228ae37b348c57374f4d8c6ead5a0bd",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/candidate/column-sv/write",
+      "selected_mandatory_slot": false,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "d60c4fcc0228ae37b348c57374f4d8c6ead5a0bd",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/candidate/opinion-en_GB/redline",
+      "selected_mandatory_slot": false,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "d60c4fcc0228ae37b348c57374f4d8c6ead5a0bd",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/candidate/opinion-en_GB/write",
+      "selected_mandatory_slot": false,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "d60c4fcc0228ae37b348c57374f4d8c6ead5a0bd",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/candidate/opinion-sv/redline",
+      "selected_mandatory_slot": false,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "d60c4fcc0228ae37b348c57374f4d8c6ead5a0bd",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/candidate/opinion-sv/write",
+      "selected_mandatory_slot": false,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "d60c4fcc0228ae37b348c57374f4d8c6ead5a0bd",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/candidate/web-copy-en_GB/redline",
+      "selected_mandatory_slot": false,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "d60c4fcc0228ae37b348c57374f4d8c6ead5a0bd",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/candidate/web-copy-en_GB/write",
+      "selected_mandatory_slot": false,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "d60c4fcc0228ae37b348c57374f4d8c6ead5a0bd",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/candidate/web-copy-en_US/redline",
+      "selected_mandatory_slot": false,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "d60c4fcc0228ae37b348c57374f4d8c6ead5a0bd",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/candidate/web-copy-en_US/write",
+      "selected_mandatory_slot": false,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "d60c4fcc0228ae37b348c57374f4d8c6ead5a0bd",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/candidate/web-copy-sv/redline",
+      "selected_mandatory_slot": false,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "d60c4fcc0228ae37b348c57374f4d8c6ead5a0bd",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/candidate/web-copy-sv/write",
+      "selected_mandatory_slot": false,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "d60c4fcc0228ae37b348c57374f4d8c6ead5a0bd",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/completion-check/article-sv/redline",
+      "selected_mandatory_slot": true,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "d0b2c99c12a8727503b1738f1cad92611d879e1e",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/completion-check/article-sv/write",
+      "selected_mandatory_slot": true,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "d0b2c99c12a8727503b1738f1cad92611d879e1e",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/completion-check/column-sv/redline",
+      "selected_mandatory_slot": true,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "d0b2c99c12a8727503b1738f1cad92611d879e1e",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/completion-check/column-sv/write",
+      "selected_mandatory_slot": true,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "d0b2c99c12a8727503b1738f1cad92611d879e1e",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/completion-check/web-copy-en_US/redline",
+      "selected_mandatory_slot": true,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "29ff2047ad2dac330dd705feccdb3f2d0778831b",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/completion-check/web-copy-en_US/write",
+      "selected_mandatory_slot": true,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "29ff2047ad2dac330dd705feccdb3f2d0778831b",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/controls-348/column-clean/redline",
+      "selected_mandatory_slot": false,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "7022c804dfbda4332723bf96b6a9857c24e63b6e",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/controls-genres/article-clean/redline",
+      "selected_mandatory_slot": true,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "f8cac6d5342f72ed91da8c13d96ab092cd5e0ae9",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/controls-genres/article-flawed/redline",
+      "selected_mandatory_slot": true,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "f8cac6d5342f72ed91da8c13d96ab092cd5e0ae9",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/controls-genres/case-study-clean/redline",
+      "selected_mandatory_slot": true,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "f8cac6d5342f72ed91da8c13d96ab092cd5e0ae9",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/controls-genres/case-study-flawed/redline",
+      "selected_mandatory_slot": true,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "f8cac6d5342f72ed91da8c13d96ab092cd5e0ae9",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/controls-genres/column-clean/redline",
+      "selected_mandatory_slot": true,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "f8cac6d5342f72ed91da8c13d96ab092cd5e0ae9",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/controls-genres/column-flawed/redline",
+      "selected_mandatory_slot": true,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "f8cac6d5342f72ed91da8c13d96ab092cd5e0ae9",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/controls-genres/opinion-clean/redline",
+      "selected_mandatory_slot": true,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "f8cac6d5342f72ed91da8c13d96ab092cd5e0ae9",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/controls-genres/opinion-flawed/redline",
+      "selected_mandatory_slot": true,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "f8cac6d5342f72ed91da8c13d96ab092cd5e0ae9",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/controls-genres/web-copy-clean/redline",
+      "selected_mandatory_slot": true,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "1a4f65b3da64fc4f94e82de519ef8b5a18ae56dd",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/controls-genres/web-copy-flawed/redline",
+      "selected_mandatory_slot": true,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "1a4f65b3da64fc4f94e82de519ef8b5a18ae56dd",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/controls-genres-rerun/article-clean/redline",
+      "selected_mandatory_slot": false,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "1a4f65b3da64fc4f94e82de519ef8b5a18ae56dd",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/controls-genres-rerun/article-flawed/redline",
+      "selected_mandatory_slot": false,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "1a4f65b3da64fc4f94e82de519ef8b5a18ae56dd",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/controls-genres-rerun/case-study-clean/redline",
+      "selected_mandatory_slot": false,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "1a4f65b3da64fc4f94e82de519ef8b5a18ae56dd",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/controls-selection/article-excerpt/redline",
+      "selected_mandatory_slot": true,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "f8cac6d5342f72ed91da8c13d96ab092cd5e0ae9",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/controls-selection/flag-pac/redline",
+      "selected_mandatory_slot": true,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "f8cac6d5342f72ed91da8c13d96ab092cd5e0ae9",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/controls-selection/instruction-abt/redline",
+      "selected_mandatory_slot": true,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "f8cac6d5342f72ed91da8c13d96ab092cd5e0ae9",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/controls-selection/instruction-none/redline",
+      "selected_mandatory_slot": true,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "f8cac6d5342f72ed91da8c13d96ab092cd5e0ae9",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/controls-selection/legacy-abt/redline",
+      "selected_mandatory_slot": true,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "f8cac6d5342f72ed91da8c13d96ab092cd5e0ae9",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/controls-selection/metadata-none/redline",
+      "selected_mandatory_slot": true,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "f8cac6d5342f72ed91da8c13d96ab092cd5e0ae9",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/controls-selection/report-pac/redline",
+      "selected_mandatory_slot": true,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "f8cac6d5342f72ed91da8c13d96ab092cd5e0ae9",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/rerun-341/article-en_GB/redline",
+      "selected_mandatory_slot": true,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "1a4f65b3da64fc4f94e82de519ef8b5a18ae56dd",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/rerun-341/article-en_GB/write",
+      "selected_mandatory_slot": true,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "1a4f65b3da64fc4f94e82de519ef8b5a18ae56dd",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/rerun-341/article-en_US/redline",
+      "selected_mandatory_slot": true,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "7022c804dfbda4332723bf96b6a9857c24e63b6e",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/rerun-341/article-en_US/write",
+      "selected_mandatory_slot": true,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "7022c804dfbda4332723bf96b6a9857c24e63b6e",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/rerun-341/case-study-sv/redline",
+      "selected_mandatory_slot": false,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "93758f485614c3b0e79b1bcce9fb8080de755d08",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/rerun-341/case-study-sv/write",
+      "selected_mandatory_slot": false,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "93758f485614c3b0e79b1bcce9fb8080de755d08",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/rerun-341-translation/case-study-en_GB/redline",
+      "selected_mandatory_slot": true,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "29ff2047ad2dac330dd705feccdb3f2d0778831b",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/rerun-341-translation/case-study-en_GB/write",
+      "selected_mandatory_slot": true,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "29ff2047ad2dac330dd705feccdb3f2d0778831b",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/rerun-341-translation/case-study-en_US/redline",
+      "selected_mandatory_slot": true,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "29ff2047ad2dac330dd705feccdb3f2d0778831b",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/rerun-341-translation/case-study-en_US/write",
+      "selected_mandatory_slot": true,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "29ff2047ad2dac330dd705feccdb3f2d0778831b",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/rerun-341-translation/case-study-sv/redline",
+      "selected_mandatory_slot": true,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "29ff2047ad2dac330dd705feccdb3f2d0778831b",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/rerun-341-translation/case-study-sv/write",
+      "selected_mandatory_slot": true,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "29ff2047ad2dac330dd705feccdb3f2d0778831b",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/rerun-343/opinion-en_GB/redline",
+      "selected_mandatory_slot": false,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "1a4f65b3da64fc4f94e82de519ef8b5a18ae56dd",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/rerun-343/opinion-en_GB/write",
+      "selected_mandatory_slot": false,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "1a4f65b3da64fc4f94e82de519ef8b5a18ae56dd",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/rerun-343/opinion-sv/redline",
+      "selected_mandatory_slot": false,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "1a4f65b3da64fc4f94e82de519ef8b5a18ae56dd",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/rerun-343/opinion-sv/write",
+      "selected_mandatory_slot": false,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "1a4f65b3da64fc4f94e82de519ef8b5a18ae56dd",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/rerun-345/web-copy-abt/redline",
+      "selected_mandatory_slot": true,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "1a4f65b3da64fc4f94e82de519ef8b5a18ae56dd",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/rerun-345/web-copy-abt/write",
+      "selected_mandatory_slot": true,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "1a4f65b3da64fc4f94e82de519ef8b5a18ae56dd",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/rerun-345/web-copy-en_GB/redline",
+      "selected_mandatory_slot": true,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "1a4f65b3da64fc4f94e82de519ef8b5a18ae56dd",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/rerun-345/web-copy-en_GB/write",
+      "selected_mandatory_slot": true,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "1a4f65b3da64fc4f94e82de519ef8b5a18ae56dd",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/rerun-345/web-copy-en_GB-regression/redline",
+      "selected_mandatory_slot": false,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "2bd2afe34f6ec5d9d6587c33b1c16eeaf241579f",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/rerun-345/web-copy-en_US/redline",
+      "selected_mandatory_slot": false,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "1a4f65b3da64fc4f94e82de519ef8b5a18ae56dd",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/rerun-345/web-copy-en_US/write",
+      "selected_mandatory_slot": false,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "1a4f65b3da64fc4f94e82de519ef8b5a18ae56dd",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/rerun-345/web-copy-sv/redline",
+      "selected_mandatory_slot": true,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "2bd2afe34f6ec5d9d6587c33b1c16eeaf241579f",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/rerun-345/web-copy-sv/write",
+      "selected_mandatory_slot": true,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "2bd2afe34f6ec5d9d6587c33b1c16eeaf241579f",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/rerun-348/column-sv/redline",
+      "selected_mandatory_slot": false,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "7022c804dfbda4332723bf96b6a9857c24e63b6e",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/rerun-348-exact/column-sv/redline",
+      "selected_mandatory_slot": false,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "7022c804dfbda4332723bf96b6a9857c24e63b6e",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/rerun-349/opinion-en_GB/redline",
+      "selected_mandatory_slot": false,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "93758f485614c3b0e79b1bcce9fb8080de755d08",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/rerun-349/opinion-en_GB/write",
+      "selected_mandatory_slot": false,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "93758f485614c3b0e79b1bcce9fb8080de755d08",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/rerun-349/opinion-en_US/redline",
+      "selected_mandatory_slot": false,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "93758f485614c3b0e79b1bcce9fb8080de755d08",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/rerun-349/opinion-en_US/write",
+      "selected_mandatory_slot": false,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "93758f485614c3b0e79b1bcce9fb8080de755d08",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/rerun-349/opinion-sv/redline",
+      "selected_mandatory_slot": false,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "93758f485614c3b0e79b1bcce9fb8080de755d08",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/rerun-349/opinion-sv/write",
+      "selected_mandatory_slot": false,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "93758f485614c3b0e79b1bcce9fb8080de755d08",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/rerun-349-source-check/opinion-en_GB/redline",
+      "selected_mandatory_slot": true,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "d0b2c99c12a8727503b1738f1cad92611d879e1e",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/rerun-349-source-check/opinion-en_GB/write",
+      "selected_mandatory_slot": true,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "d0b2c99c12a8727503b1738f1cad92611d879e1e",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/rerun-349-source-check/opinion-en_US/redline",
+      "selected_mandatory_slot": true,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "d0b2c99c12a8727503b1738f1cad92611d879e1e",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/rerun-349-source-check/opinion-en_US/write",
+      "selected_mandatory_slot": true,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "d0b2c99c12a8727503b1738f1cad92611d879e1e",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/rerun-349-source-check/opinion-sv/redline",
+      "selected_mandatory_slot": true,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "d0b2c99c12a8727503b1738f1cad92611d879e1e",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/rerun-349-source-check/opinion-sv/write",
+      "selected_mandatory_slot": true,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "d0b2c99c12a8727503b1738f1cad92611d879e1e",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/rerun-350/web-copy-abt/redline",
+      "selected_mandatory_slot": false,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "d0b2c99c12a8727503b1738f1cad92611d879e1e",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/rerun-column/column-en_GB/redline",
+      "selected_mandatory_slot": false,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "eb4a26efd4f8ea54599972b0a74033b2c9811c23",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/rerun-column/column-en_GB/write",
+      "selected_mandatory_slot": false,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "eb4a26efd4f8ea54599972b0a74033b2c9811c23",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/rerun-column/column-sv/redline",
+      "selected_mandatory_slot": false,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "eb4a26efd4f8ea54599972b0a74033b2c9811c23",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/rerun-column/column-sv/write",
+      "selected_mandatory_slot": false,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "eb4a26efd4f8ea54599972b0a74033b2c9811c23",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/rerun-column-final/column-en_GB/redline",
+      "selected_mandatory_slot": true,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "f8cac6d5342f72ed91da8c13d96ab092cd5e0ae9",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/rerun-column-final/column-en_GB/write",
+      "selected_mandatory_slot": true,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "f8cac6d5342f72ed91da8c13d96ab092cd5e0ae9",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/rerun-column-final/column-en_US/redline",
+      "selected_mandatory_slot": true,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "1a4f65b3da64fc4f94e82de519ef8b5a18ae56dd",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/rerun-column-final/column-en_US/write",
+      "selected_mandatory_slot": true,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "1a4f65b3da64fc4f94e82de519ef8b5a18ae56dd",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/rerun-column-final/column-sv/redline",
+      "selected_mandatory_slot": false,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "f8cac6d5342f72ed91da8c13d96ab092cd5e0ae9",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    },
+    {
+      "path": "runs/rerun-column-final/column-sv/write",
+      "selected_mandatory_slot": false,
+      "corpus_revision": "6e531f5fe0b610e046ae58787f246cc6239acbcc",
+      "instruction_revision": "f8cac6d5342f72ed91da8c13d96ab092cd5e0ae9",
+      "completed": true,
+      "cleanup_recorded": true,
+      "root_absent_now": true
+    }
+  ],
+  "total_invocations": 119,
+  "additional_invocations": 54,
+  "final_packet_artifact_links": [
+    {
+      "path": "runs/completion-check/article-sv/draft.md",
+      "skill": "write",
+      "complete_metadata": true,
+      "selected_cell_matches": true
+    },
+    {
+      "path": "runs/completion-check/article-sv/final.md",
+      "skill": "redline",
+      "complete_metadata": true,
+      "selected_cell_matches": true
+    },
+    {
+      "path": "runs/rerun-341/article-en_GB/write/artifact.md",
+      "skill": "write",
+      "complete_metadata": true,
+      "selected_cell_matches": true
+    },
+    {
+      "path": "runs/rerun-341/article-en_GB/redline/artifact.md",
+      "skill": "redline",
+      "complete_metadata": true,
+      "selected_cell_matches": true
+    },
+    {
+      "path": "runs/rerun-341/article-en_US/write/artifact.md",
+      "skill": "write",
+      "complete_metadata": true,
+      "selected_cell_matches": true
+    },
+    {
+      "path": "runs/rerun-341/article-en_US/redline/artifact.md",
+      "skill": "redline",
+      "complete_metadata": true,
+      "selected_cell_matches": true
+    },
+    {
+      "path": "runs/rerun-341-translation/case-study-sv/write/artifact.md",
+      "skill": "write",
+      "complete_metadata": true,
+      "selected_cell_matches": true
+    },
+    {
+      "path": "runs/rerun-341-translation/case-study-sv/redline/artifact.md",
+      "skill": "redline",
+      "complete_metadata": true,
+      "selected_cell_matches": true
+    },
+    {
+      "path": "runs/rerun-341-translation/case-study-en_GB/write/artifact.md",
+      "skill": "write",
+      "complete_metadata": true,
+      "selected_cell_matches": true
+    },
+    {
+      "path": "runs/rerun-341-translation/case-study-en_GB/redline/artifact.md",
+      "skill": "redline",
+      "complete_metadata": true,
+      "selected_cell_matches": true
+    },
+    {
+      "path": "runs/rerun-341-translation/case-study-en_US/write/artifact.md",
+      "skill": "write",
+      "complete_metadata": true,
+      "selected_cell_matches": true
+    },
+    {
+      "path": "runs/rerun-341-translation/case-study-en_US/redline/artifact.md",
+      "skill": "redline",
+      "complete_metadata": true,
+      "selected_cell_matches": true
+    },
+    {
+      "path": "runs/completion-check/column-sv/write/artifact.md",
+      "skill": "write",
+      "complete_metadata": true,
+      "selected_cell_matches": true
+    },
+    {
+      "path": "runs/completion-check/column-sv/redline/artifact.md",
+      "skill": "redline",
+      "complete_metadata": true,
+      "selected_cell_matches": true
+    },
+    {
+      "path": "runs/rerun-column-final/column-en_GB/write/artifact.md",
+      "skill": "write",
+      "complete_metadata": true,
+      "selected_cell_matches": true
+    },
+    {
+      "path": "runs/rerun-column-final/column-en_GB/redline/artifact.md",
+      "skill": "redline",
+      "complete_metadata": true,
+      "selected_cell_matches": true
+    },
+    {
+      "path": "runs/rerun-column-final/column-en_US/write/artifact.md",
+      "skill": "write",
+      "complete_metadata": true,
+      "selected_cell_matches": true
+    },
+    {
+      "path": "runs/rerun-column-final/column-en_US/redline/artifact.md",
+      "skill": "redline",
+      "complete_metadata": true,
+      "selected_cell_matches": true
+    },
+    {
+      "path": "runs/rerun-349-source-check/opinion-sv/artifact.md",
+      "skill": "write",
+      "complete_metadata": true,
+      "selected_cell_matches": true
+    },
+    {
+      "path": "runs/rerun-349-source-check/opinion-sv/final.md",
+      "skill": "redline",
+      "complete_metadata": true,
+      "selected_cell_matches": true
+    },
+    {
+      "path": "runs/rerun-349-source-check/opinion-en_GB/artifact.md",
+      "skill": "write",
+      "complete_metadata": true,
+      "selected_cell_matches": true
+    },
+    {
+      "path": "runs/rerun-349-source-check/opinion-en_GB/final.md",
+      "skill": "redline",
+      "complete_metadata": true,
+      "selected_cell_matches": true
+    },
+    {
+      "path": "runs/rerun-349-source-check/opinion-en_US/artifact.md",
+      "skill": "write",
+      "complete_metadata": true,
+      "selected_cell_matches": true
+    },
+    {
+      "path": "runs/rerun-349-source-check/opinion-en_US/final.md",
+      "skill": "redline",
+      "complete_metadata": true,
+      "selected_cell_matches": true
+    },
+    {
+      "path": "runs/rerun-345/web-copy-sv/artifact.md",
+      "skill": "write",
+      "complete_metadata": true,
+      "selected_cell_matches": true
+    },
+    {
+      "path": "runs/rerun-345/web-copy-sv/final.md",
+      "skill": "redline",
+      "complete_metadata": true,
+      "selected_cell_matches": true
+    },
+    {
+      "path": "runs/rerun-345/web-copy-en_GB/artifact.md",
+      "skill": "write",
+      "complete_metadata": true,
+      "selected_cell_matches": true
+    },
+    {
+      "path": "runs/rerun-345/web-copy-en_GB/final.md",
+      "skill": "redline",
+      "complete_metadata": true,
+      "selected_cell_matches": true
+    },
+    {
+      "path": "runs/completion-check/web-copy-en_US/draft.md",
+      "skill": "write",
+      "complete_metadata": true,
+      "selected_cell_matches": true
+    },
+    {
+      "path": "runs/completion-check/web-copy-en_US/final.md",
+      "skill": "redline",
+      "complete_metadata": true,
+      "selected_cell_matches": true
+    },
+    {
+      "path": "runs/candidate/article-abt/write/artifact.md",
+      "skill": "write",
+      "complete_metadata": true,
+      "selected_cell_matches": true
+    },
+    {
+      "path": "runs/candidate/article-abt/redline/artifact.md",
+      "skill": "redline",
+      "complete_metadata": true,
+      "selected_cell_matches": true
+    },
+    {
+      "path": "runs/candidate/article-pac/write/artifact.md",
+      "skill": "write",
+      "complete_metadata": true,
+      "selected_cell_matches": true
+    },
+    {
+      "path": "runs/candidate/article-pac/redline/artifact.md",
+      "skill": "redline",
+      "complete_metadata": true,
+      "selected_cell_matches": true
+    },
+    {
+      "path": "runs/rerun-345/web-copy-abt/artifact.md",
+      "skill": "write",
+      "complete_metadata": true,
+      "selected_cell_matches": true
+    },
+    {
+      "path": "runs/rerun-345/web-copy-abt/final.md",
+      "skill": "redline",
+      "complete_metadata": true,
+      "selected_cell_matches": true
+    }
+  ],
+  "final_record_count": 33,
+  "record_index_complete": true,
+  "local_packet_links_resolve": true
 }

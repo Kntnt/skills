@@ -1,0 +1,78 @@
+warning: No `requires-python` value found in the workspace. Defaulting to `>=3.12`.
+============================= test session starts ==============================
+platform darwin -- Python 3.12.13, pytest-9.1.1, pluggy-1.6.0
+rootdir: /Users/thomas/Projects/skills
+configfile: pyproject.toml
+testpaths: tests
+plugins: xdist-3.8.0
+created: 14/14 workers
+14 workers [1873 items]
+
+........................................................................ [  3%]
+........................................................................ [  7%]
+......F................................................................. [ 11%]
+........................................................................ [ 15%]
+........................................................................ [ 19%]
+........................................................................ [ 23%]
+........................................................................ [ 26%]
+........................................................................ [ 30%]
+........................................................................ [ 34%]
+........................................................................ [ 38%]
+........................................................................ [ 42%]
+........................................................................ [ 46%]
+........................................................................ [ 49%]
+........................................................................ [ 53%]
+........................................................................ [ 57%]
+........................................................................ [ 61%]
+........................................................................ [ 65%]
+........................................................................ [ 69%]
+........................................................................ [ 73%]
+........................................................................ [ 76%]
+........................................................................ [ 80%]
+........................................................................ [ 84%]
+........................................................................ [ 88%]
+........................................................................ [ 92%]
+........................................................................ [ 96%]
+........................................................................ [ 99%]
+.                                                                        [100%]
+=================================== FAILURES ===================================
+________ test_nothing_in_the_corpus_or_the_protocol_asserts_exact_prose ________
+[gw3] darwin -- Python 3.12.13 /Users/thomas/.cache/uv/builds-v0/.tmpzqF1MN/bin/python
+
+    def test_nothing_in_the_corpus_or_the_protocol_asserts_exact_prose() -> None:
+        """Fixture material, not a snapshot of sentences a model has to write.
+    
+        The corpus states what the material is and what must not happen to it. A
+        fixture that also carried the answer would turn a semantic criterion into
+        a string comparison and would fail every model that wrote something else
+        that was true.
+        """
+    
+        sources = sorted(EVALUATION.rglob("*.md"))
+    
+        # A corpus moved out from under this glob would leave nothing to judge.
+        assert sources
+    
+        offending: dict[str, list[str]] = {}
+        for path in sources:
+            text = path.read_text(encoding="utf-8").lower()
+            found = [phrase for phrase in FORBIDDEN if phrase in text]
+            if found:
+                offending[str(path.relative_to(REPO_ROOT))] = found
+    
+>       assert offending == {}
+E       AssertionError: assert {'docs/evalua...aranteed to']} == {}
+E         
+E         Left contains 3 more items:
+E         {'docs/evaluation/editorial-329/runs/rerun-349/opinion-en_US/artifact.md': ['guaranteed '
+E                                                                                     'to'],
+E          'docs/evaluation/editorial-329/runs/rerun-349/opinion-en_US/final.md': ['guaranteed '
+E                                                                                  'to'],
+E          'docs/evaluation/editorial-329/runs/rerun-349/opinion-en_US/redline/supplied-input.md': ['guaranteed '
+E                                                                                                   'to']}
+E         Use -v to get more diff
+
+tests/test_evaluation.py:782: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_evaluation.py::test_nothing_in_the_corpus_or_the_protocol_asserts_exact_prose
+================== 1 failed, 1872 passed in 111.41s (0:01:51) ==================
