@@ -1,0 +1,161 @@
+{
+  "parent": {
+    "closedAt": "2026-09-19T19:58:26Z",
+    "number": 329,
+    "state": "CLOSED",
+    "title": "Återställ svenskt redaktionellt hantverk i Write och Redlines fem webbgenrer",
+    "url": "https://github.com/Kntnt/skills/issues/329"
+  },
+  "closed_count_including_parent": 21,
+  "open_quality_issues": [
+    341,
+    349,
+    352
+  ],
+  "children": [
+    {
+      "number": 330,
+      "state": "closed",
+      "title": "Förankra redaktionella kvalitetskrav i originalen och frys en utvärderingsmatris",
+      "url": "https://github.com/Kntnt/skills/issues/330"
+    },
+    {
+      "number": 331,
+      "state": "closed",
+      "title": "Gör svensk skrivtradition och webbkrav till en gemensam, faktiskt laddad skrivgrund",
+      "url": "https://github.com/Kntnt/skills/issues/331"
+    },
+    {
+      "number": 332,
+      "state": "closed",
+      "title": "Förenkla ABT och PAC och ta bort automatiskt teknikval för de fem webbgenrerna",
+      "url": "https://github.com/Kntnt/skills/issues/332"
+    },
+    {
+      "number": 333,
+      "state": "closed",
+      "title": "Skriv om article till ett konkret arbetsblad för journalistiska webbtexter",
+      "url": "https://github.com/Kntnt/skills/issues/333"
+    },
+    {
+      "number": 334,
+      "state": "closed",
+      "title": "Skriv om case-study till ett journalistiskt kundcase som bärs av kundens erfarenhet",
+      "url": "https://github.com/Kntnt/skills/issues/334"
+    },
+    {
+      "number": 335,
+      "state": "closed",
+      "title": "Skriv om column till en personlig webbkrönika med journalistisk precision",
+      "url": "https://github.com/Kntnt/skills/issues/335"
+    },
+    {
+      "number": 336,
+      "state": "closed",
+      "title": "Skriv om opinion till en tydlig svensk debattartikel för webben",
+      "url": "https://github.com/Kntnt/skills/issues/336"
+    },
+    {
+      "number": 337,
+      "state": "closed",
+      "title": "Skriv om web-copy till precis copy och UX-text som hjälper läsaren att handla",
+      "url": "https://github.com/Kntnt/skills/issues/337"
+    },
+    {
+      "number": 338,
+      "state": "closed",
+      "title": "Pröva de fem omskrivna genrerna med Write och Redline på svenska och engelska",
+      "url": "https://github.com/Kntnt/skills/issues/338"
+    },
+    {
+      "number": 340,
+      "state": "closed",
+      "title": "Clean up UV effects from Redline’s fresh correction agent",
+      "url": "https://github.com/Kntnt/skills/issues/340"
+    },
+    {
+      "number": 339,
+      "state": "closed",
+      "title": "Preserve YAML-bearing text across Redline’s closing Proofread invocation",
+      "url": "https://github.com/Kntnt/skills/issues/339"
+    },
+    {
+      "number": 341,
+      "state": "open",
+      "title": "Preserve idiomatic Swedish in translated customer quotations",
+      "url": "https://github.com/Kntnt/skills/issues/341"
+    },
+    {
+      "number": 342,
+      "state": "closed",
+      "title": "Preserve author perspective when ghostwriting reflective columns",
+      "url": "https://github.com/Kntnt/skills/issues/342"
+    },
+    {
+      "number": 343,
+      "state": "closed",
+      "title": "Preserve the supplied author stance in opinion writing",
+      "url": "https://github.com/Kntnt/skills/issues/343"
+    },
+    {
+      "number": 344,
+      "state": "closed",
+      "title": "Preserve the event associated with a supplied date in customer cases",
+      "url": "https://github.com/Kntnt/skills/issues/344"
+    },
+    {
+      "number": 345,
+      "state": "closed",
+      "title": "Check web-copy references against the delivered interface surface",
+      "url": "https://github.com/Kntnt/skills/issues/345"
+    },
+    {
+      "number": 346,
+      "state": "closed",
+      "title": "Redline: keep whole-sentence duplication in the editorial correction boundary",
+      "url": "https://github.com/Kntnt/skills/issues/346"
+    },
+    {
+      "number": 347,
+      "state": "closed",
+      "title": "Preserve whether-versus-how uncertainty in article headings",
+      "url": "https://github.com/Kntnt/skills/issues/347"
+    },
+    {
+      "number": 348,
+      "state": "closed",
+      "title": "Proofread: preserve valid Swedish lowercase specifications after a colon",
+      "url": "https://github.com/Kntnt/skills/issues/348"
+    },
+    {
+      "number": 349,
+      "state": "open",
+      "title": "Write: do not turn absent funding claims into categorical absence",
+      "url": "https://github.com/Kntnt/skills/issues/349"
+    },
+    {
+      "number": 350,
+      "state": "closed",
+      "title": "Redline: avoid genre inference discovery after metadata settles genre",
+      "url": "https://github.com/Kntnt/skills/issues/350"
+    },
+    {
+      "number": 351,
+      "state": "closed",
+      "title": "Keep observed evaluation artifacts outside normative prose assertions",
+      "url": "https://github.com/Kntnt/skills/issues/351"
+    },
+    {
+      "number": 352,
+      "state": "open",
+      "title": "Write adds an unsupplied question to an email interview",
+      "url": "https://github.com/Kntnt/skills/issues/352"
+    }
+  ],
+  "integrated_evidence_commit": "579ec85ee9d49c0ec65039e96d005c11fb7c98ac",
+  "not_performed": [
+    "push",
+    "release",
+    "global installation update"
+  ]
+}

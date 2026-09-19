@@ -71,4 +71,8 @@ Källpaketen innehåller tydliga briefs och faktagränser. Proven visar hur hela
 
 ## Lokal leverans
 
-Integration, slutliga kontrollsummor, antal körningar och issueavslut fylls i efter de sista omkörningarna. Push, release och uppdatering av aktiv global installation ingår inte. [Arbetsloggen](WORKLOG.md) bevarar beslut, misslyckanden och fortsättningsstatus.
+Leveransen är integrerad genom fast-forward i lokal `main`, med komplett implementations- och evidenscommit `579ec85ee9d49c0ec65039e96d005c11fb7c98ac`. Arbetsbranchen `editorial-329` finns kvar som spårbar leverans. [De fyra slutkontrollerna](validation/final-results.json) passerar, inklusive **1 873 tester**; produktresurser, testkod och frysta källor har verifierats oförändrade efter respektive granskad revision.
+
+[Det kontrollerade trackerutfallet](tracker/final-state.json) visar **#329 och 20 uppfyllda underärenden avslutade**. [#341](https://github.com/Kntnt/skills/issues/341), [#349](https://github.com/Kntnt/skills/issues/349) och [#352](https://github.com/Kntnt/skills/issues/352) är öppna. Varje ärende har en konkret slutkommentar med lokal commit och evidens; [kvittot](tracker/operations.json) länkar kommentarerna. Att ursprungsleveransen är avslutad innebär inte att de tre kvalitetsfelen är rättade.
+
+Alla 119 privata körmiljöer är borttagna, egna processer avslutade och kvarvarande egen testscratch städad. Skyddad `rework` och dess worktree är orörda. Inget har pushats, releasats eller uppdaterats i aktiv global installation. [Arbetsloggen](WORKLOG.md) bevarar besluten och hela genomförandets historia.

@@ -1,0 +1,7 @@
+Beställd implementation och verklig utvärdering är slutförda och lokalt integrerade i `main` vid `579ec85ee9d49c0ec65039e96d005c11fb7c98ac`. De fem genrerna, gemensam grund, ABT/PAC, laddning och review är omskrivna som en sammanhängande leverans. Oberoende käll-, teknisk-, redaktionell- och protokollgranskning är genomförda.
+
+Alla 65 föreskrivna invokationer plus 54 bevarade extrakörningar är dokumenterade, med baslinje, fullständiga utkast/sluttexter, spår och inventeringar. Alla 119 privata miljöer är borttagna. Fyra CONTRIBUTING-kontroller passerar, inklusive 1 873 tester. Källor och fryst matris är oförändrade.
+
+20 uppfyllda underärenden är avslutade. **#341, #349 och #352 förblir öppna kvalitetsfel.** Svensk citatidiomatik brister fortfarande i Write (senaste Redline reparerar lokalt); debattutkasten upprepar en obelagd frånvaro av kostnadsarbete/finansiering; sista amerikanska kundcaset lägger till en obelagd intervjufråga. De underkända exemplen förblir underkända. Ursprungligt #329/#338 tillåter avslutad implementation/utvärdering med tydligt redovisade uppföljningar; inget generellt kvalitetsgodkännande eller personligt godkännandestopp införs.
+
+Läspaket och samtliga records: `docs/evaluation/editorial-329/README.md`. Slutgranskningar: `reviews/technical-review.md`, `reviews/editorial-review.md` och `reviews/protocol-final.md` under samma katalog. Commits och evidens är lokala; inget är pushat, releasat eller globalt installerat. Skyddad rework-branch/worktree är orörda.
