@@ -497,10 +497,11 @@ def capability_notes(names: list[str]) -> list[dict[str, str]]:
 # What no Digest may see, on the producing side and the consuming side alike.
 # The generator walks a working tree carrying the maintainer's own bytecode
 # cache; the consumer walks an installed directory carrying the one running the
-# skill created. Neither has a git to ask which files are the collection's, so
-# the two can agree only through this list (ADR-0175). A pattern ending in `/`
+# skill created. Finder may leave .DS_Store in either tree. Neither has a git to
+# ask which files are the collection's, so the two can agree only through this
+# list (ADR-0175). A pattern ending in `/`
 # is a directory name skipped wherever it occurs; any other matches a filename.
-DIGEST_IGNORE = ("__pycache__/", "*.pyc")
+DIGEST_IGNORE = ("__pycache__/", "*.pyc", ".DS_Store")
 MANAGER_DIGEST_IGNORE = frozenset({"catalog.json"})
 
 

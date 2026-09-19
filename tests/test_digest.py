@@ -9,6 +9,8 @@ import sys
 from pathlib import Path
 from types import ModuleType
 
+import pytest
+
 REPO_ROOT = Path(__file__).resolve().parent.parent
 KNTNT_PY = REPO_ROOT / "skills" / "kntnt" / "scripts" / "kntnt.py"
 CATALOG_JSON = REPO_ROOT / "skills" / "kntnt" / "catalog.json"
@@ -129,10 +131,28 @@ def test_the_maintainer_s_own_cache_does_not_deviate_either(tmp_path: Path) -> N
     assert kntnt.directory_digest(installed) == kntnt.directory_digest(source)
 
 
-def test_the_ignore_list_is_exactly_the_two_python_artefacts() -> None:
+@pytest.mark.parametrize("relative", [".DS_Store", "references/.DS_Store"])
+@pytest.mark.parametrize("side", ["collection", "harness"])
+def test_finder_metadata_does_not_change_a_skill_digest(
+    tmp_path: Path, relative: str, side: str
+) -> None:
+    """Finder may visit either copy, including any of its subdirectories."""
+
+    # Begin with identical copies, then let Finder leave metadata in one.
+    source = _skill(tmp_path / "collection" / "alpha")
+    installed = shutil.copytree(source, tmp_path / "harness" / "alpha")
+    metadata = tmp_path / side / "alpha" / relative
+    metadata.parent.mkdir(parents=True, exist_ok=True)
+    metadata.write_bytes(b"Finder folder settings")
+
+    assert kntnt.directory_digest(installed) == kntnt.directory_digest(source)
+    assert kntnt.digest_ignores(relative)
+
+
+def test_the_ignore_list_is_exactly_the_python_and_finder_artefacts() -> None:
     """One list, defined once, or the two sides could never agree."""
 
-    assert kntnt.DIGEST_IGNORE == ("__pycache__/", "*.pyc")
+    assert kntnt.DIGEST_IGNORE == ("__pycache__/", "*.pyc", ".DS_Store")
 
 
 def test_every_catalog_entry_carries_a_digest_and_the_manager_carries_none() -> None:

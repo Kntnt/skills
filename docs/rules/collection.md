@@ -62,7 +62,7 @@ The rules whose reasoning is settled in a decision record are named here in a ph
 
 **Each Catalog entry carries a Digest of that entry's directory as the collection ships it** (ADR-0175). It is computed over the sorted relative paths and the contents of the files, so a rename, an edit, an added file and a removed file each change it, and it is generated when the Catalog is generated — no release depends on remembering to bump anything and no version number is introduced. The same computation over what is on disk answers the one freshness question the Manager can answer honestly: are these the same files.
 
-**The ignore list is exactly `__pycache__/` and `*.pyc`, applied identically on the producing and the consuming side** (ADR-0175). This is a correctness requirement: disagree by a single artefact and every Skill shipping a script reports itself as Deviating forever.
+**The ignore list is exactly `__pycache__/`, `*.pyc` and `.DS_Store`, applied identically on the producing and the consuming side** (ADR-0175). This is a correctness requirement: disagree by a single artefact and every Skill shipping a script reports itself as Deviating forever.
 
 **A mismatch is Deviating, and never *out of date*** (ADR-0175). The comparison sees two states and no history, so it cannot establish a direction, and outside a lagging Project copy the commonest cause is the user's own edit. Update refreshes what Deviates, and any offer to re-copy says in the same breath that local changes are overwritten.
 
