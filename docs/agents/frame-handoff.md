@@ -2,7 +2,7 @@ Read when preparing or implementing the first Frame delivery on main.
 
 # Frame implementation handoff
 
-Implement the first delivery in [the engineering workflow plan](../docs/plans/engineering-workflow.md). Read that plan and the current `AGENTS.md` first. The plan owns direction, status, source addresses, and owner decisions; this handoff scopes the next implementation session.
+Implement the first delivery in [the engineering workflow plan](../plans/engineering-workflow.md). Read that plan and the current `AGENTS.md` first. The plan owns direction, status, source addresses, and owner decisions; this handoff scopes the next implementation session.
 
 [Ticket #326](https://github.com/Kntnt/skills/issues/326) is the placement prerequisite: it moves this handoff to `docs/agents/frame-handoff.md` and updates its references. Follow the current `AGENTS.md` pointer to find it. Source inspection and preparation can proceed while #326 is pending; make the affected Frame implementation tickets depend on its completed migration using the tracker's dependency convention.
 

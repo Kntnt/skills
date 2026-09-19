@@ -10,11 +10,13 @@ agents-md - tend a project's always-loaded agent instructions
 
 ## DESCRIPTION
 
-`agents-md` reviews the current Project's `AGENTS.md`, `CLAUDE.md`, `agents.d/`, documentation, and tracked Project Skills after a task. It writes only facts that are true, needed by a later session, not discoverable from the Project, and not already recorded elsewhere. With no *PATH*, it tends the repository root.
+`agents-md` reviews the current Project's `AGENTS.md`, `CLAUDE.md`, `docs/agents/`, documentation, and tracked Project Skills after a task. It writes only facts that are true, needed by a later session, not discoverable from the Project, and not already recorded elsewhere. With no *PATH*, it tends the repository root.
 
-`AGENTS.md` remains a compact table of contents and set of ground rules. Concern-specific material belongs under `agents.d/` and is reached through a pointer that states when to read it. If no fact justifies always-loaded text or a referenced file, nothing is written.
+`AGENTS.md` remains a compact table of contents and set of ground rules. Concern-specific material belongs under `docs/agents/` and is reached through a pointer that states when to read it. If no fact justifies always-loaded text or a referenced file, nothing is written.
 
-The Skill may create or update `AGENTS.md`, files under `agents.d/`, and the `CLAUDE.md` bridge: a symbolic link to `AGENTS.md`, so Claude Code reads the same file without importing it, and a session started in a subdirectory is not asked to approve an external import. It never changes instructions outside the current repository and never writes proposed documentation prose under `docs/`; it may report a proposed location and purpose for a human to write.
+A Project that still keeps these files in a legacy `agents.d/` has them moved to the same paths under `docs/agents/`, with every pointer and link to them rewritten and their other content unchanged. A file already present under `docs/agents/` is kept; an identical copy in the legacy directory is removed. Where the two directories hold different files at the same path, the Skill moves nothing, changes neither directory nor any pointer to them, and reports both paths so a person can choose.
+
+The Skill may create or update `AGENTS.md`, files under `docs/agents/`, and the `CLAUDE.md` bridge: a symbolic link to `AGENTS.md`, so Claude Code reads the same file without importing it, and a session started in a subdirectory is not asked to approve an external import. It never changes instructions outside the current repository and never writes proposed documentation prose under `docs/` outside `docs/agents/`; it may report a proposed location and purpose for a human to write.
 
 ## POSITIONAL ARGUMENTS
 
@@ -26,21 +28,23 @@ A directory inside the current repository. The repository root is the default. A
 
 **--force**
 
-Create the minimum structure even when no fact qualifies: the `CLAUDE.md` bridge, an `AGENTS.md` title and ground-rules section, and an empty `agents.d/` directory.
+Create the minimum structure even when no fact qualifies: the `CLAUDE.md` bridge, an `AGENTS.md` title and ground-rules section, and an empty `docs/agents/` directory.
 
 **--yes**
 
-Assume yes for every proposed change instead of waiting for confirmation. Documentation prose under `docs/` remains a proposal.
+Assume yes for every proposed change instead of waiting for confirmation. Documentation prose under `docs/` outside `docs/agents/` remains a proposal, and a collision between a legacy `agents.d/` file and a different `docs/agents/` file is still only reported.
 
 ## OUTPUT
 
-The report names every retained, moved, replaced, or rejected fact and the source that settles it. It also reports the character count of the always-loaded files and the total including `agents.d/`, before and after.
+The report names every retained, moved, replaced, or rejected fact and the source that settles it. It also reports the character count of the always-loaded files and the total including `docs/agents/`, before and after.
 
 ## DIAGNOSTICS
 
 An invalid path, unknown option, or option combination is refused rather than ignored. The Skill names the error, prints the SYNOPSIS, changes nothing, and points to `/agents-md --help`. An operand written before an option is out of order and is refused the same way.
 
 A Project with no qualifying fact is a successful no-op and is reported as such.
+
+A legacy `agents.d/` file whose `docs/agents/` counterpart holds different content is a collision: the Skill names both paths, says that they differ, and leaves both directories and their pointers as they were.
 
 ## INVOCATION ENVELOPE
 

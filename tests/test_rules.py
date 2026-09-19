@@ -433,3 +433,14 @@ def test_every_pointer_a_prose_change_meets_names_the_module_binding_it() -> Non
                 f" to what is already written, so it routes them past the"
                 f" rules binding them."
             )
+
+
+def test_the_docs_module_places_agent_only_documents_under_docs_agents() -> None:
+    """Agent-only instructions have their own directory beside the shared docs.
+
+    Shared documentation is written for people and read by agents too;
+    `docs/agents/` holds the compact instructions only an agent's work needs,
+    and the module that says where a document goes names it (issue #326).
+    """
+
+    assert "`docs/agents/`" in _docs()

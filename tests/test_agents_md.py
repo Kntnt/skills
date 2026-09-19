@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import re
+import subprocess
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -175,3 +176,75 @@ def test_agents_md_sends_a_reader_to_the_archive_for_why_and_not_for_law() -> No
 
     assert ARCHIVE in references
     assert "tracing why a rule became" in references[ARCHIVE]
+
+
+# The directory this repository's agent-only documents live in, and the one
+# they were moved out of (issue #326). The retired name survives only where it
+# is history, an input the migration reads, or user-scoped persistence, which
+# the project move never covered.
+AGENT_DOCUMENTS = "docs/agents/"
+RETIRED = "agents.d/"
+RETIRED_MENTIONS_ALLOWED = (
+    "CHANGELOG.md",
+    "docs/adr/",
+    "docs/archive/",
+    "tests/",
+    # The migration input agents-md reads, and the Skill's pointer to it.
+    "skills/agents/agents-md/SKILL.md",
+    "skills/agents/agents-md/help.md",
+    "skills/agents/agents-md/references/migrate.md",
+    "skills/agents/agents-md/references/writes.md",
+    "skills/agents/agents-md/references/gates.md",
+    # Delegation's user scope, which keeps the location beside the global file.
+    "skills/agents/delegation/help.md",
+    "skills/agents/delegation/help/on.md",
+    "skills/agents/delegation/references/persist.md",
+)
+
+
+def test_project_agent_documents_live_under_docs_agents() -> None:
+    """Every agent-only document is referenced where it now lives.
+
+    The retired directory left standing beside the new one is two places for
+    one document, and a reader following an old pointer reads whichever copy
+    was not maintained (issue #326).
+    """
+
+    references = _references()
+
+    assert not (REPO_ROOT / RETIRED).exists()
+    assert [path for path in references if path.startswith(RETIRED)] == []
+    for name in ("frame-handoff.md", "user-configuration.md"):
+        assert AGENT_DOCUMENTS + name in references
+
+
+def test_no_active_file_names_the_retired_agent_directory() -> None:
+    """An instruction naming the old directory recreates it on its next use.
+
+    What remains is history left as it stood, the migration's own input, and
+    user-scoped persistence; anything else is a producer or a reader the move
+    missed (issue #326).
+    """
+
+    tracked = subprocess.run(
+        ["git", "ls-files", "-z"],
+        cwd=REPO_ROOT,
+        capture_output=True,
+        check=True,
+        text=True,
+    ).stdout.split("\0")
+    stray = []
+    for path in filter(None, tracked):
+        if path.startswith(RETIRED_MENTIONS_ALLOWED):
+            continue
+        file = REPO_ROOT / path
+        if not file.is_file():
+            continue
+        try:
+            text = file.read_text(encoding="utf-8")
+        except UnicodeDecodeError:
+            continue
+        if RETIRED in text:
+            stray.append(path)
+
+    assert stray == []

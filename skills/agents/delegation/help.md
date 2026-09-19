@@ -72,13 +72,13 @@ Optional session scratch state used across context compaction.
 
 **Project and user context files**
 
-The Skill keeps a managed `@agents.d/kntnt-delegation.md` pointer and a read-when line for the fence in the loaded context file.
+The Skill keeps a managed `@docs/agents/kntnt-delegation.md` pointer and a read-when line for the fence in the loaded context file. In user scope the companions are in `agents.d/` beside the global context file, and the pointer names that directory instead.
 
-**agents.d/kntnt-delegation.md**
+**docs/agents/kntnt-delegation.md**
 
 The companion contains the mode.
 
-**agents.d/kntnt-delegation-fence.md**
+**docs/agents/kntnt-delegation-fence.md**
 
 The companion contains the canonical fence. The Skill shows all three managed files before writing unless **--yes** is present; `on` refreshes stale state.
 

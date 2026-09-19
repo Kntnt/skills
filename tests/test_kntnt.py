@@ -9060,13 +9060,15 @@ def test_delegation_documents_both_persistent_companions_everywhere() -> None:
         },
         "help.md": {
             "two companion files",
-            "**agents.d/kntnt-delegation-fence.md**",
+            "**docs/agents/kntnt-delegation-fence.md**",
+            "`agents.d/` beside the global context file",
             "all three managed files",
         },
         "help/on.md": {
             "leaving any persistent trio alone",
             "mode and fence companion files",
             "refreshes an existing or stale pointer and both companions",
+            "managed `@docs/agents/kntnt-delegation.md` pointer",
         },
         "help/off.md": {
             "deletes both companion files",
@@ -9217,9 +9219,13 @@ def test_delegation_routes_execution_without_changing_the_main_seat() -> None:
     # Keep one pointer and two refreshable companion files.
     required_persistence_fragments = {
         "one managed context pointer and two companion files",
-        "@agents.d/kntnt-delegation.md",
-        "- `agents.d/kntnt-delegation.md` — read when delegation mode is on.",
-        ("- `agents.d/kntnt-delegation-fence.md` — read when briefing a subagent."),
+        "@{dir}/kntnt-delegation.md",
+        "- `{dir}/kntnt-delegation.md` — read when delegation mode is on.",
+        ("- `{dir}/kntnt-delegation-fence.md` — read when briefing a subagent."),
+        # The Project trio lives with the Project's other agent documents; the
+        # user scope keeps its place beside the global file (issue #326).
+        "`docs/agents` under the Project root for `project`",
+        "`agents.d` under the directory holding the user context file for `user`",
         "{the entire content of $HERE/references/mode.md, verbatim}",
         "{the entire content of $HERE/references/fence.md, verbatim}",
         "Never inline the mode text in the context file",

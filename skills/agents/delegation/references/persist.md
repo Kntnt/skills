@@ -15,7 +15,7 @@ The pointer must land in a context file this harness loads automatically in ever
 3. No `AGENTS.md`, but this harness has its own Project file (`CLAUDE.md`, `GEMINI.md`, …) → write the pointer there.
 4. No context file at all → create `AGENTS.md` with the title line `# <project> — agent guide` and the pointer, plus this harness's bridge. Name every file in one confirmation. The user has asked for a standing instruction, so the `agents-md` Skill's write-nothing default does not apply.
 
-The companions are `agents.d/kntnt-delegation.md` and `agents.d/kntnt-delegation-fence.md` under the Project root or under the directory holding the user context file. The context pointer always addresses both. A pointer with either companion missing or either companion without its pointer is a conflict: change nothing, report it, and ask.
+The companions are `kntnt-delegation.md` and `kntnt-delegation-fence.md` in the scope's companion directory, written `{dir}` below: `docs/agents` under the Project root for `project`, and `agents.d` under the directory holding the user context file for `user`. The context pointer always addresses both. A pointer with either companion missing or either companion without its pointer is a conflict: change nothing, report it, and ask.
 
 ## Managed files
 
@@ -23,15 +23,15 @@ Write exactly this pointer block last in the context file, with one blank line a
 
 ```markdown
 <!-- kntnt:delegation -->
-- Delegate per @agents.d/kntnt-delegation.md.
-- `agents.d/kntnt-delegation-fence.md` — read when briefing a subagent.
+- Delegate per @{dir}/kntnt-delegation.md.
+- `{dir}/kntnt-delegation-fence.md` — read when briefing a subagent.
 <!-- /kntnt:delegation -->
 ```
 
 Write exactly this mode companion file:
 
 ```markdown
-- `agents.d/kntnt-delegation.md` — read when delegation mode is on.
+- `{dir}/kntnt-delegation.md` — read when delegation mode is on.
 
 {the entire content of $HERE/references/mode.md, verbatim}
 ```

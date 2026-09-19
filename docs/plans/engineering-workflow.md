@@ -18,8 +18,8 @@ Orchestrate may remain the executor permanently. Replacing it is not a condition
 
 | Step | Deliverable | Status and next action |
 | --- | --- | --- |
-| 0 | Move project agent documents to `docs/agents/` and make `agents-md` maintain that placement. | Ready for an agent: [#326](https://github.com/Kntnt/skills/issues/326). Placement and reference changes only; the glossary migration belongs to step 1. |
-| 1 | An owned `frame`, adapted from rework, replacing `grill-with-docs` in this workflow and taking responsibility for its interview and domain-documentation work. | After #326. Source implementation exists on rework; no Frame has been added to main. Use the [Frame handoff](../../agents.d/frame-handoff.md), which #326 moves with the other agent documents. Apply the agreed glossary convention below. |
+| 0 | Move project agent documents to `docs/agents/` and make `agents-md` maintain that placement. | Done: [#326](https://github.com/Kntnt/skills/issues/326) moved this repository's agent documents to `docs/agents/`, and `agents-md` now creates them there and moves them out of the retired project directory. `CONTEXT.md` is unchanged; the glossary migration belongs to step 1. |
+| 1 | An owned `frame`, adapted from rework, replacing `grill-with-docs` in this workflow and taking responsibility for its interview and domain-documentation work. | Next: frame the first delivery and file its implementation tickets on main. Source implementation exists on rework; no Frame has been added to main. Use the [Frame handoff](../agents/frame-handoff.md), now under `docs/agents/`. Apply the agreed glossary convention below. |
 | 2 | An owned `to-slices`, producing the decision issue and executable child tickets together. | Planned after Frame. Replaces `to-spec` and `to-tickets`; its tickets must work with the retained executor. |
 | 3 | A workflow whose direct and indirect dependencies are maintained here. | Audit incrementally during steps 1 and 2, then verify the complete chain. Cover documentation, testing guidance, setup/configuration, and runtime references; do not recreate the entire external collection. |
 | 4 | Measured improvements to execution cost and elapsed time, including automatic completion. | Deferred until the planning replacement works. Start from current Orchestrate; selectively adopt useful preparation and closure ideas from rework. |
@@ -50,7 +50,7 @@ The first delivery covers framing, relevant glossary and decision documentation,
 
 ## Agreed documentation and glossary conventions
 
-On 2026-09-19 Thomas chose `docs/agents/` for compact instructions addressed specifically to agents. Other project documentation under `docs/` is written for humans and used by agents as the same source. `AGENTS.md` stays at the root as the entry point. Ticket #326 owns the placement migration and the corresponding Skill changes; it preserves document contents except for necessary path/link changes and changes only paths in `AGENTS.md`.
+On 2026-09-19 Thomas chose `docs/agents/` for compact instructions addressed specifically to agents. Other project documentation under `docs/` is written for humans and used by agents as the same source. `AGENTS.md` stays at the root as the entry point. Ticket #326 carried out the placement migration and the corresponding Skill changes; it preserved document contents except for necessary path/link changes and changed only paths in `AGENTS.md`.
 
 Thomas also chose `docs/glossary.md` to replace root `CONTEXT.md`, as part of the Frame delivery. It is a human-readable shared vocabulary used by people and agents, and contains only term definitions, including preferred names and distinctions needed to identify their meaning. Requirements, behavioural rules, implementation instructions, architecture decisions, and general project background belong in their respective documents, not in the glossary.
 

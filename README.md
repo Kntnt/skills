@@ -58,7 +58,7 @@ These summaries help you choose a skill. Each skill's `--help` page contains its
 
 ### agents-md
 
-Keep a project's `AGENTS.md`, `CLAUDE.md`, and `agents.d/` concise and current. It records only useful facts that later sessions cannot discover elsewhere.
+Keep a project's `AGENTS.md`, `CLAUDE.md`, and `docs/agents/` concise and current. It records only useful facts that later sessions cannot discover elsewhere.
 
 Run `/agents-md [--force] [--yes] [path]`.
 

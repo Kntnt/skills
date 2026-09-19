@@ -5,8 +5,8 @@
     {
       "name": "agents-md",
       "category": "agents",
-      "description": "AGENTS.md: create, shrink, or tend the current project's always-loaded file and agents.d/ after a task when a non-discoverable fact is new, a line is stale or sprawling, or a pointer is missing; also `/agents-md` and `--force`.",
-      "digest": "a1ffd7ea50f6b3110845af5c1058f4f9a7d5fbb617768af1b7d762e5fa42748e",
+      "description": "AGENTS.md: create, shrink, or tend the current project's always-loaded file and docs/agents/ after a task when a non-discoverable fact is new, a line is stale or sprawling, or a pointer is missing; also `/agents-md` and `--force`.",
+      "digest": "08ca4c2686758cb11db2ddc1818b44b6512c38fcf730bde0b763deb8acbb6f43",
       "binaries": [
         "git",
         "uv"
@@ -19,7 +19,7 @@
       "name": "delegation",
       "category": "agents",
       "description": "Turn delegation mode on or off — you orchestrate, subagents execute — for this session, this project, or your user account.",
-      "digest": "e2b5e5ba1a8201b72bc5f7621890fa90a9f563bf43970e965b8addbc487246c6",
+      "digest": "db9cafa1a0493b985efe3b1b52667d7885260c3ade9470c1e5e8cc642d00c108",
       "binaries": [
         "uv"
       ],

@@ -14,7 +14,7 @@ delegation on - enable delegation mode in the selected scope
 
 The mode takes effect on the turn that switches it on, whichever scope was selected, so the mode does not wait for a restart. Without a scope flag the scope is this session alone, and context compaction may drop it — the Skill records the session state in the Harness's per-session scratch directory when one exists, so that it does not.
 
-With `--project` or `--user`, the Skill shows the context file's managed `@agents.d/kntnt-delegation.md` pointer, the mode and fence companion files, and any bridge before writing. A committed Project trio applies to everyone using the repository.
+With `--project` or `--user`, the Skill shows the context file's managed `@docs/agents/kntnt-delegation.md` pointer (`@agents.d/kntnt-delegation.md` in user scope), the mode and fence companion files, and any bridge before writing. A committed Project trio applies to everyone using the repository.
 
 Repeating `on` refreshes an existing or stale pointer and both companions.
 

@@ -29,4 +29,4 @@ Fewest tokens that keep the meaning. Load `writing-for-agents` when it is reacha
 - A pointer is `read when <situation>`. Situation is the class of work. Completeness test in [`placement.md`](placement.md).
 - Correctness beats brevity. A load-bearing qualifier stays.
 
-Relocating prose into `agents.d/` without shrinking it is a failed run.
+Relocating prose into `docs/agents/` without shrinking it is a failed run. Moving a legacy `agents.d/` file unchanged per [`migrate.md`](migrate.md) is migration, not relocation.
