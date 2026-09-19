@@ -12,6 +12,8 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ### Fixed
 
+- Finder's `.DS_Store` files no longer change a Skill's digest, whether they appear at the top level or in a subdirectory. The shared ignore list applies to both the collection and installed copies (#314).
+
 - The recorded Codex exchange under `tests/support/model_selector_refresh/` no longer carries the maintainer's Codex installation ID or machine name. `installationId` is now the all-zero UUID and `serverName` is `redacted`, and the refresh tests list every redacted field and fail on any other recorded UUID or home-directory path. The old values remain in the Git history (issue #315).
 
 ## [0.32.0] – 2026-09-19
