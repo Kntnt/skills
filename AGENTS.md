@@ -20,6 +20,8 @@ Precedence over any conflicting skill, README, or other doc unless the user over
 
 ## References
 
+- `docs/plans/engineering-workflow.md` — read when planning, continuing, or reporting progress on the independent engineering workflow and the use of rework source material
+- `agents.d/frame-handoff.md` — read when preparing or implementing the first Frame delivery on main
 - `CONTEXT.md` — read when using a Collection term
 - `docs/adr/` — read when tracing why a rule became what it is
 - `docs/rules/general.md` — read when writing code
