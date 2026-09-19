@@ -1,0 +1,34 @@
+---
+kntnt:
+  genre: case-study
+  technique: abt
+  language: sv
+---
+
+# Elm Quay Housing samlade felanmälningarna i en gemensam logg
+
+Elm Quay Housing testade en gemensam reparationslogg i två byggnader under åtta veckor. Arbetsledaren Maya Lind ser nytta i att ha anmälningarna samlade, men skulle avsätta mer tid för förberedelser om hon gjorde om försöket.
+
+Elm Quay Housing förvaltar 640 lägenheter. Tidigare förvarades felanmälningar via telefon och mejl separat. I september 2025 beslutade bolagets egen underhållsgrupp att prova en gemensam logg, så att medarbetare på olika skift skulle kunna se samma information.
+
+– Vi ville att kvällsskiftet skulle kunna se vad morgonskiftet redan hade gjort. Kategorierna var våra; Svale hjälpte oss att lägga in dem i loggen, skriver underhållsgruppens arbetsledare Maya Lind i en mejlintervju.
+
+Gruppen valde Svale Systems efter att ha testat om loggen kunde visa status för varje reparation. Underlaget innehåller ingen jämförelse med någon annan leverantör.
+
+Underhållsgruppen utformade kategorierna och behöll möjligheten för de boende att felanmäla via telefon. Svale konfigurerade loggen och utbildade sex medarbetare vid två tillfällen.
+
+– Vi lade mer tid på att enas om kategorierna än på att registrera de första anmälningarna. Jag skulle avsätta den tiden innan nästa byggnad börjar, skriver Maya Lind.
+
+Enligt Elm Quays interna försöksanteckning, daterad den 4 december 2025, registrerades 31 felanmälningar under de åtta veckorna. Akuta ärenden och arbeten som beställts före försöket ingår inte i uppgifterna.
+
+Mediantiden från felanmälan till tilldelning av ärendet var två arbetsdagar under försöket, jämfört med tre under den föregående åttaveckorsperioden. Arbetsbelastningen skilde sig mellan perioderna. Anteckningen tillskriver uttryckligen inte programvaran skillnaden.
+
+Tiderna gäller tilldelning, inte hur lång tid det tog att slutföra reparationerna. Det finns heller inga mätningar av kostnader eller av hur nöjda de boende var.
+
+Försöket har ännu inte utökats till fler byggnader. Innan gruppen fattar beslut ska den kontrollera hur kategorierna fungerar för större reparationer.
+
+Maya Linds bedömning gäller det egna försöket:
+
+– Jag skulle välja att göra försöket igen. Att ha en samlad vy över anmälningarna hjälper oss, men jag skulle avsätta en extra vecka för förberedelser.
+
+För dig som vill läsa vidare finns [Svale Systems checklista för införande](https://example.invalid/svale/checklist).

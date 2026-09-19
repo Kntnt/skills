@@ -1,0 +1,1 @@
+The artifact is the complete response preceding its final horizontal separator and italic delivery account. Leading YAML and all artifact wording/formatting are retained; only that separate account is excluded from the Redline input.

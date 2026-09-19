@@ -14,6 +14,8 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ### Fixed
 
+- Column ghostwriting keeps an observation about a practice separate from a claim about the named author’s own conduct (#342).
+- Redline correction agents clean their temporary resolver environment and disable UV cache/project discovery (#340).
 - Swedish editorial review no longer infers that a quotation was altered merely because it is fluent (#331, #334).
 - Redline passes the complete text separately from the closing Proofread invocation grammar, so YAML frontmatter cannot be mistaken for a flag (#339).
 

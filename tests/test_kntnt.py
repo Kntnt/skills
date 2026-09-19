@@ -7143,14 +7143,18 @@ GENRE_INFERENCE_BOUND = "Read that far and no further."
 LOADING_CLAUSES = {
     "write": (
         "Load the contract, and nothing besides it",
-        "This is the only additional genre support file: follow no other genre links"
-        " and load no unselected genre or technique.",
+        (
+            "This is the only additional genre support file: follow no other genre links"
+            " and load no unselected genre or technique."
+        ),
         "Done when this bounded contract is loaded, with no review half.",
     ),
     "redline": (
         "Load what the review is read against, and nothing besides it",
-        "These are the only additional genre support files: follow no other genre"
-        " links and load no unselected genre or technique.",
+        (
+            "These are the only additional genre support files: follow no other genre"
+            " links and load no unselected genre or technique."
+        ),
         "Done when those are loaded and nothing else has been.",
     ),
 }

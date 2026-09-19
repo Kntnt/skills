@@ -1,0 +1,38 @@
+---
+kntnt:
+  genre: article
+  technique: none
+  language: sv
+---
+
+# Fyra veckors mätning visar när värmen behöver undersökas
+
+Ett kort mätförsök kan visa när lufttemperaturen i ett klassrum passerar en vald gräns. Det räcker däremot inte för att förklara orsaken eller avgöra om eleverna fryser. I fiktiva Björkskolan ger fyra veckors mätningar underlag för fortsatt undersökning, men inget färdigt svar på klagomålen om kall luft.
+
+I januari 2026 satte Lerviks fastighetskontor temperaturgivare i sex av Björkskolans klassrum. Kontoret ville undersöka om klagomålen sammanföll med låga temperaturer under lektionstid. Givarna registrerade lufttemperaturen var femte minut under fyra veckor.
+
+## Vad 14 av 120 lektionspass berättar
+
+Enligt rapporten *Mätförsök i Björkskolan*, daterad den 12 mars 2026, innehöll 14 av totalt 120 registrerade lektionspass minst en mätning under 20 grader Celsius. Gränsen var kontorets egen arbetsgräns för försöket, inte ett rättsligt krav.
+
+Resultatet visar alltså vilka lektionspass som innehöll mätvärden under arbetsgränsen. Det säger inte hur länge temperaturen låg där. Ett pass med en enda sådan registrering ingår i antalet, liksom ett pass med flera. Rapporten ger heller inget svar på om eleverna frös.
+
+Att redovisa lektionspass har en poäng: ett medelvärde för hela dagen kan dölja variationer under lektionerna. Men resultatets räckvidd är begränsad till de sex undersökta rummen och de fyra veckorna. Det beskriver inte hela skolans värme över året.
+
+## Givarens plats är en del av mätningen
+
+En temperaturgivare mäter där den sitter. I Björkskolan stod två givare nära ytterväggar och fyra på innerväggar. Placeringarna dokumenterades, men jämfördes inte experimentellt. Försöket visar därför inte vilken betydelse placeringen hade för resultaten.
+
+Lufttemperaturen är dessutom bara ett av de mått som kan beskriva värmeförhållandena i ett rum. Ett annat är operativ temperatur, som tar hänsyn till både luftens temperatur och värmestrålningen från omgivande ytor. I Björkskolan mättes bara lufttemperaturen.
+
+Varken ventilation, luftdrag eller upplevd temperatur mättes. Temperaturserierna – mätvärdena ordnade i tidsföljd – kan därför inte ensamma förklara klagomålen. De ger tidpunkter att undersöka närmare, men fastställer ingen orsak till kylan.
+
+## Koppla mätvärdena till hur rummen används
+
+Efter försöket gick driftteknikern Elin Rask igenom tiderna för ventilation och värme tillsammans med skolans vaktmästare. Effekten av eventuella justeringar har ännu inte mätts.
+
+– Vi vet när vi behöver titta närmare. Vi vet ännu inte varför det blev kallt just då, sade hon.
+
+Rask rekommenderar att temperaturserierna kopplas till användningstiderna innan styrningen ändras. För fastighetsförvaltaren blir nästa steg därmed att sätta mätvärdena i samband med när rummen faktiskt används.
+
+Ett nytt försök planeras till november, med likadant placerade givare och noteringar om rummens användning. Finansieringen är ännu inte beslutad. Det första försöket har ringat in tillfällen att följa upp; orsakerna och effekten av möjliga åtgärder återstår att undersöka.

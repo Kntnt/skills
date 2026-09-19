@@ -1,0 +1,34 @@
+{
+  "base.md": {
+    "paragraphs": 53,
+    "unmatched_paragraphs": []
+  },
+  "base.review.md": {
+    "paragraphs": 47,
+    "unmatched_paragraphs": []
+  },
+  "genres/case-study.md": {
+    "paragraphs": 16,
+    "unmatched_paragraphs": []
+  },
+  "genres/case-study.review.md": {
+    "paragraphs": 33,
+    "unmatched_paragraphs": []
+  },
+  "techniques/abt.md": {
+    "paragraphs": 14,
+    "unmatched_paragraphs": []
+  },
+  "techniques/abt.review.md": {
+    "paragraphs": 51,
+    "unmatched_paragraphs": []
+  },
+  "anti-slop.md": {
+    "paragraphs": 19,
+    "unmatched_paragraphs": []
+  },
+  "mechanics.md": {
+    "paragraphs": 26,
+    "unmatched_paragraphs": []
+  }
+}

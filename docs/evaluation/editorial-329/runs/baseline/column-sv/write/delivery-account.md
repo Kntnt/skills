@@ -1,0 +1,1 @@
+Första utkastet levereras här på svenska som krönika (`column`), med ABT från genrens standardval. Underlaget räckte till den önskade omfattningen; inga mötesscener eller belagda effekter av en ändrad mall fanns att tillgå. Inga filer har sparats och körningens tillfälliga kataloger är borttagna.

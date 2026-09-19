@@ -1,0 +1,1 @@
+Redline delivered a completed no-change status. final.md is therefore byte-identical to draft.md. The source-aware evaluator still finds the English-shaped “innan nästa byggnad börjar” idiom in the translated quotation; Redline did not flag it. This is #341, distinct from mechanical correctness.

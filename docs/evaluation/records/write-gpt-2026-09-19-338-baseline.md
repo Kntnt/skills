@@ -64,3 +64,27 @@ Raw responses, invocation/context, inventories, exact filesystem changes, native
 - **defects filed** — `none` for this Write run.
 - **notes** — The standfirst explicitly calls the case fictional, compatible with the synthetic material. No reference wording was required and no candidate output had been read when judging this run.
 
+## `case-study-sv`
+
+- **fixture** — `case-study-sv`, English source to Swedish; complete source package
+- **invocation** — `/write --genre=case-study --language=sv --output=response source.md`
+- **contextual instruction** — `none`; neutral Harness context is captured separately.
+- **output target** — `response`
+- **observed delivery** — Complete customer case with metadata and separate delivery account, with the observed translation flaw retained; [draft](../editorial-329/runs/baseline/case-study-sv/draft.md), [final](../editorial-329/runs/baseline/case-study-sv/final.md), [response](../editorial-329/runs/baseline/case-study-sv/write/response.txt).
+- **side effects** — No remaining Skill files; full work/input/resource/export/scratch inventories unchanged. Private UV directories were cleaned. Native Codex created 316 private-home entries and added project trust to its config; [classification](../editorial-329/runs/baseline/case-study-sv/write/side-effects.md) lists the evidence boundaries.
+- **criteria** —
+  - `F1` — `pass` — The customer selects/designs the trial, telephone reporting remains, 31 excludes emergencies/prior work, two versus three days measures assignment rather than completion, and “Anteckningen tillskriver uttryckligen inte programvaran skillnaden” preserves non-causality. The qualified appraisal and lack of expansion survive.
+  - `G1` — `pass` — The customer's own maintenance problem, category work and qualified appraisal organise the case; the supplier is a supporting third-person actor rather than a rescuer or first-person advertiser.
+  - `G2` — `pass` — Situation, action, bounded results and actual quoted appraisal are all present; the checklist link describes a document, not a booking. The publisher is identified only in Write's delivery account, a reuse-context limitation, but the text does not claim independent publication.
+  - `P1` — `pass` — The shift-work purpose precedes configuration, and the measured assignment time is explicitly distinguished from repair completion; workload differences explain why causation cannot be assigned.
+  - `W1` — `pass` — The short coherent paragraphs move through decision, preparation, measured results and appraisal; no H2s are used, but this moderately sized case remains navigable through clear paragraph openings. No heading quota is imposed.
+  - `L1` — `fail` — **Qualitative language interference:** “innan nästa byggnad börjar” carries over the source's “before the next building starts”; the Swedish reader has to reconstruct that the trial/implementation begins in that building. This is neither a fabricated fact nor a mechanical spelling error.
+  - `L2` — `pass` — Swedish speech dashes, compounds, date and number forms are consistent; the awkward translated predicate is scored under L1 rather than misclassified as wrong locale mechanics.
+  - `T1` — `pass` — The metadata carries case-study/abt/sv and the actual trace loads the selected case and only ABT, with Swedish scopes resolved explicitly; the default originates with the baseline genre for Write and the input metadata for Redline.
+  - `T2` — `pass` — The need for shared information, category-preparation burden and qualified decision form a restrained arc; no miraculous rescue, satisfaction increase or software-caused improvement is invented.
+  - `R2` — `pass` — Trace items_4–6 load common base, case-study, quotation guidance, Swedish composition and ABT; no review half or peer editorial pass runs.
+  - `O1` — `pass` — Entire-root inventories and executed temporary-directory cleanup establish preserved source/resources and no surviving Skill scratch.
+- **unresolved findings** — The delivery account names absent supplier comparison and absent cost, satisfaction and completion-time measures. The evaluator identifies the translation flaw.
+- **defects filed** — [#341](https://github.com/Kntnt/skills/issues/341).
+- **notes** — Several idiomatic translations could satisfy L1, and the quotation need not be retained in every valid draft. This observation does not itself justify an additional blanket instruction. Candidate wording was not consulted for this judgement.
+
