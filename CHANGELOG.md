@@ -4,6 +4,8 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ## [Unreleased]
 
+## [0.32.0] – 2026-09-19
+
 ### Added
 
 - A living engineering-workflow plan and Frame handoff document the incremental path to independently maintained planning Skills on `main`, using the protected `rework` branch as source material. They record the agreed future placement of project agent instructions in `docs/agents/` and the glossary in `docs/glossary.md`; those migrations and the new Skills remain forthcoming work.
