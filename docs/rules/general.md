@@ -15,7 +15,7 @@ When two rules conflict, the higher-priority rule wins:
 
 ## Design philosophy
 
-These principles often conflict. Find the design that best honours all of them — don't apply each mechanically in sequence. When in doubt, start with YAGNI and work down.
+Balance these principles when they conflict. Apply YAGNI and KISS through the implementation procedure below.
 
 - **YAGNI** — implement only what the current requirement demands. No abstraction until more than one concrete implementation exists.
 - **KISS** — prefer the simpler solution. Complexity must justify itself through a concrete, present requirement.
@@ -23,6 +23,21 @@ These principles often conflict. Find the design that best honours all of them �
 - **TDD** — failing test before production code; Red/Green/Refactor; each test Arrange-Act-Assert with a name stating the expected behaviour. The RED step is not ceremony: a test never observed to fail is of unknown value, so demonstrate the failing run as an artifact (seen failing before the satisfying code exists), never inferred after the fact. Automate every test that can meaningfully constrain behaviour at the lowest layer that does; escalate to integration or end-to-end only where a unit test cannot capture the behaviour; reserve human verification for the irreducibly subjective (visual feel, aesthetics, pacing), stating that residual explicitly.
 - **Deep modules** — a module's external interface is narrow and simple relative to the complexity it hides. This depth is the primary quality metric for a module boundary and creates a clean seam for mocking. Design the external interface as a commitment, as if it cannot be changed.
 - **SOLID inside a module** — governs the internal structure of classes and components, never the module's external interface. Inject dependencies (DIP); keep ISP decomposition internal so the external interface stays deep.
+
+### Choose the implementation
+
+Before choosing a solution, read the requirements and affected code, trace the relevant flow, and identify the behaviour the change must preserve. For a bug, locate its cause before choosing where to edit; follow *Refactoring completeness* when a shared symbol changes.
+
+For each required behaviour, check these options in order and stop at the first that satisfies the requirement and the applicable contracts:
+
+1. **Existing behaviour:** check whether the system already provides it. Where it does, verify that behaviour and leave the implementation as it is.
+2. **Existing code:** search for a helper, type, or established pattern that can supply it; reuse the same concept under the DRY rule above.
+3. **Standard library:** use the existing operation when its semantics cover the requirement.
+4. **Native platform:** use the platform's facility, such as a browser input or a database constraint, when it covers the required behaviour.
+5. **Installed dependency:** use an existing dependency's public interface when it fits.
+6. **New implementation:** write the smallest clear implementation that covers the remaining need. Add a dependency only when its concrete benefit justifies the maintenance it introduces compared with implementing that need directly.
+
+Judge adequacy against the whole requirement, including relevant edge cases, security, accessibility, and error handling that prevents data loss. Keep the tests and module boundaries these principles require. Reduce the implementation we must maintain; line and file counts are not targets, and shorter syntax does not justify reduced readability or omitted behaviour. Verify the chosen solution through the TDD process above.
 
 ## Universal rules
 

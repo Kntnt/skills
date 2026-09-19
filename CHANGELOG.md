@@ -4,9 +4,12 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ## [Unreleased]
 
+## [0.31.1] – 2026-09-19
+
 ### Changed
 
 - The `session-cleanup` block asks the agent to name every path it deletes in full, as literal text, with no shell variable, glob, command substitution or `cd` before it. Claude Code stops for the user's approval of any other removal, even with permissions bypassed, and an agent shortening a long scratch path to `"$S/…"` made its own cleanup wait for the user.
+- The repository's coding standard gives YAGNI and KISS a concrete implementation procedure: verify existing behaviour, reuse existing code, then consider the standard library, native platform facilities and installed dependencies before writing new code. Each choice must satisfy the whole requirement while preserving readability, module boundaries and meaningful tests. The accompanying Ponytail research records the mechanism and the limits of its published code-reduction measurements.
 
 ## [0.31.0] – 2026-09-18
 
