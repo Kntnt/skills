@@ -1417,6 +1417,93 @@ def test_the_same_answer_asked_for_without_it_keeps_its_tools(
     assert "--tools" not in (answer["launch"]["command"] or [])
 
 
+# Every flag either bridge uses to grant or withhold permission. An answer
+# carries the ones the caller's own level named and no others.
+PERMISSION_FLAGS: frozenset[str] = frozenset(
+    {
+        "-s",
+        "--sandbox",
+        "--approve-for-me",
+        "--dangerously-bypass-approvals-and-sandbox",
+        "--permission-mode",
+    }
+)
+
+
+def test_a_caller_s_own_permission_level_reaches_the_command_it_is_handed(
+    tmp_path: Path,
+    capsys: pytest.CaptureFixture[str],
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """A delegated start inherits the level its caller is running at.
+
+    The caller states it, nothing here reads it off anything, and it arrives
+    in the launch spelled the way the CLI being started spells it — which is
+    what lets a builder commit and reach the network without its caller
+    editing the command it was given.
+    """
+
+    _profile(tmp_path)
+    monkeypatch.setenv("PATH", path_holding(tmp_path, "claude"))
+
+    answer = _answer(
+        capsys,
+        f"--data={tmp_path}",
+        "--harness=process",
+        "--kind=implement",
+        "--permissions=bypass",
+    )
+
+    command = answer["launch"]["command"] or []
+    assert command[command.index("--permission-mode") + 1] == "bypassPermissions"
+
+
+def test_an_answer_asked_for_without_a_level_names_no_permission_flag(
+    tmp_path: Path,
+    capsys: pytest.CaptureFixture[str],
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Silence leaves the decision to the started CLI's own configuration."""
+
+    _profile(tmp_path)
+    monkeypatch.setenv("PATH", path_holding(tmp_path, "claude"))
+
+    answer = _answer(
+        capsys, f"--data={tmp_path}", "--harness=process", "--kind=implement"
+    )
+
+    command = answer["launch"]["command"] or []
+    assert not PERMISSION_FLAGS.intersection(command)
+
+
+def test_a_permission_level_nothing_here_knows_is_answered_and_named(
+    tmp_path: Path,
+    capsys: pytest.CaptureFixture[str],
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Never a refusal: there is no answer a caller may read as *start nothing*.
+
+    A caller that could not read its own level, or read one this vocabulary
+    does not hold, still gets a launch. What it also gets is the value back in
+    the note, so the mismatch is visible where the decision is read.
+    """
+
+    _profile(tmp_path)
+    monkeypatch.setenv("PATH", path_holding(tmp_path, "claude"))
+
+    answer = _answer(
+        capsys,
+        f"--data={tmp_path}",
+        "--harness=process",
+        "--kind=implement",
+        "--permissions=paranoid",
+    )
+
+    assert answer["ok"] is True
+    assert not PERMISSION_FLAGS.intersection(answer["launch"]["command"] or [])
+    assert "paranoid" in (answer["note"] or "")
+
+
 def test_the_ask_the_grader_makes_lands_on_a_judge_strong_enough_to_grade(
     tmp_path: Path,
     capsys: pytest.CaptureFixture[str],

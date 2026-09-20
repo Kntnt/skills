@@ -9345,15 +9345,17 @@ def test_delegation_routes_execution_without_changing_the_main_seat() -> None:
 
     assert {"--model", "--deliberation"}.isdisjoint(_flags(_hint(directory)))
     assert {"config.json", "references/", "scripts/"}.isdisjoint(mode.split())
-    assert len(mode.split()) <= 355, (
+    assert len(mode.split()) <= 447, (
         f"{directory / 'references' / 'mode.md'}: the standing instruction has"
-        f" {len(mode.split())} words; keep it at or below 355. That ceiling is the"
+        f" {len(mode.split())} words; keep it at or below 447. That ceiling is the"
         f" budget for the whole doctrine — the routing boundary, the additions"
-        f" issues #207, #208, #209, and #210 make to it, and the Cohort and import"
-        f" issue #222 adds — and it is met by leaving routing and observation"
-        f" implementation behind model-selector's public Interfaces. The ceiling"
-        f" rose once, by what those last two obligations cost to state, rather"
-        f" than by trimming doctrine to fit them (ADR-0179)."
+        f" issues #207, #208, #209, and #210 make to it, the Cohort and import"
+        f" issue #222 adds, and the permission level issue #366 adds, which a"
+        f" spawn inherits and only the session can read off itself — and it is"
+        f" met by leaving routing and observation implementation behind"
+        f" model-selector's public Interfaces. The ceiling has risen twice, each"
+        f" time by what a new obligation cost to state, rather than by trimming"
+        f" doctrine to fit it (ADR-0179, ADR-0202)."
     )
 
     # Keep one pointer and two refreshable companion files.

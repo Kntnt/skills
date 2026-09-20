@@ -604,6 +604,7 @@ def _report(
         cat,
         repo=args.repo,
         read_only=args.read_only,
+        permissions=args.permissions,
     )
     channel = profiles.channel_for(profile, best.point.model, harness)
     total = sum(best.tokens.values())
@@ -1201,6 +1202,9 @@ def _parse(argv: Sequence[str] | None) -> argparse.Namespace:
     parser.add_argument("--objective", choices=OBJECTIVES)
     parser.add_argument("--repo")
     parser.add_argument("--read-only", action="store_true")
+    # No `choices`: a level outside the vocabulary is answered as silence with
+    # a note naming it, and argparse would refuse the call instead (ADR-0182).
+    parser.add_argument("--permissions")
     parser.add_argument("--n", type=int, default=2)
     parser.add_argument("--seed", type=int)
     parser.add_argument("--data")
