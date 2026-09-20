@@ -1117,20 +1117,20 @@ def recover_failed_episode(cwd: Path, number: int) -> Recovery:
 
     anchor = cast(str, start)
     top = Path(git(cwd, "rev-parse", "--show-toplevel").strip())
-    tip = git(cwd, "rev-parse", "HEAD").strip()
+    head = git(cwd, "rev-parse", "HEAD").strip()
     dirty = bool(git(cwd, "status", "--porcelain").strip())
 
     # Preserve before anything is removed, and never a second time: a repeated
     # call finds what the interrupted one wrote and goes on from there.
     try:
         if not ref_stands(cwd, episode.preserved_ref):
-            git(cwd, "update-ref", episode.preserved_ref, tip)
+            git(cwd, "update-ref", episode.preserved_ref, head)
         if dirty and not ref_stands(cwd, episode.snapshot_ref):
             git(
                 cwd,
                 "update-ref",
                 episode.snapshot_ref,
-                preserve_uncommitted(top, tip),
+                preserve_uncommitted(top, head),
             )
     except RunError as exc:
         return refuse_recovery(
@@ -1140,9 +1140,13 @@ def recover_failed_episode(cwd: Path, number: int) -> Recovery:
     # Verify what was written before acting on it, then put the branch, the
     # index, and the working tree back where the episode began. The ticket's
     # own untracked files go with it; what the repository ignores stays, which
-    # is what `clean` without `-x` leaves alone.
+    # is what `clean` without `-x` leaves alone. The tip the failure stands at
+    # is read back off the preservation rather than off the head, a call that
+    # resumes an interrupted one finding the branch already moved back.
     try:
-        git(cwd, "rev-parse", "--verify", f"{episode.preserved_ref}^{{commit}}")
+        tip = git(
+            cwd, "rev-parse", "--verify", f"{episode.preserved_ref}^{{commit}}"
+        ).strip()
         if dirty:
             git(cwd, "rev-parse", "--verify", f"{episode.snapshot_ref}^{{commit}}")
         git(cwd, "reset", "--hard", anchor)
