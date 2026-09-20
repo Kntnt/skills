@@ -1708,19 +1708,19 @@ class Routing:
     else the user's standing choice, else cost — and every later request of
     the run asks for it by name, so a standing choice flipped mid-run never
     changes a run already under way; an answer naming none records none, and
-    nothing is then passed. `seat`,
-    `harness` and `permissions` are what the orchestrating session said it was
-    calling from, kept so a report names the seat every verdict inherited, a
-    measurement names the Harness its attempt ran on, and a dispatched role is
+    nothing is then passed. `seat`, `harness` and `permissions` are what the
+    orchestrating session said it was calling from, kept so a report names the
+    seat every verdict inherited, a measurement names the Harness its attempt
+    ran on, and a role dispatched through a Codex or Claude Code start is
     started with the permission the session dispatching it had. None of the
     three is a lock: a resumed invocation states its own, because they are
-    facts about the session running now rather than about the run. `decisions` is every decision made under
-    those locks, in the order they were made, which is what the outcome account
-    is audited from, and `attempts` is what an external verdict later
-    established about them, kept beside them because an outcome and the
-    decision it judges are one fact. `replaced` says that this account was
-    started over an unreadable one, so a report can say the run re-routed
-    rather than leaving the gap unexplained.
+    facts about the session running now rather than about the run. `decisions`
+    is every decision made under those locks, in the order they were made,
+    which is what the outcome account is audited from, and `attempts` is what
+    an external verdict later established about them, kept beside them because
+    an outcome and the decision it judges are one fact. `replaced` says that
+    this account was started over an unreadable one, so a report can say the
+    run re-routed rather than leaving the gap unexplained.
     """
 
     model: str | None

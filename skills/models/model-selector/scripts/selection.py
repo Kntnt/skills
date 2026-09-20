@@ -90,10 +90,12 @@ FLOOR = 0.8
 
 # The deepest deliberation a call is answered at where the caller names no
 # deliberation ceiling of its own. The top of the ladder is bought on purpose
-# rather than arrived at: a pool that clears nothing is ranked on its chances,
-# and a step up climbs as far as the ladder goes, so without a ceiling
-# hard work reaches `max` unasked (issue #323). Every level above this one — a
-# level later added above `max` included — is out of the pool.
+# rather than arrived at: a pool that clears nothing still ranks something
+# first — the cheapest of the band where the pool holds a measured point, the
+# likeliest where it holds none — and a step up climbs as far as the ladder
+# goes, so without a ceiling hard work reaches `max` unasked (issue #323).
+# Every level above this one — a level later added above `max` included — is
+# out of the pool.
 DEFAULT_MAX_DELIBERATION = "xhigh"
 
 # What share of the calls that may explore actually do. It is a probability per

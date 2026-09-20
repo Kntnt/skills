@@ -604,10 +604,10 @@ def test_the_answer_is_the_cheapest_point_that_clears_the_floor(
     assert beaten["claude-opus-5"]["cost_usd"] > answer["expected"]["cost_usd"]
 
 
-def test_where_nothing_clears_the_floor_the_likeliest_point_is_taken(
+def test_where_nothing_clears_the_floor_the_band_decides(
     tmp_path: Path, capsys: pytest.CaptureFixture[str]
 ) -> None:
-    """A pool that cannot promise the work is done is ranked on doing it."""
+    """A pool that cannot promise the work is done is ordered by the band."""
 
     _under(tmp_path)
 
@@ -743,10 +743,10 @@ def test_the_answer_carries_the_total_it_was_ranked_on(
         assert isinstance(row["per_success_seconds"], int)
 
 
-def test_an_answer_ranked_on_its_chances_still_carries_the_total(
+def test_an_answer_ranked_on_the_band_still_carries_the_total(
     tmp_path: Path, capsys: pytest.CaptureFixture[str]
 ) -> None:
-    """Where nothing clears the floor the answer is ranked on chance, and says both."""
+    """Where nothing clears the floor the band decides, and the answer says both."""
 
     _under(tmp_path)
 
@@ -2850,9 +2850,9 @@ def _deepest(data_dir: Path) -> None:
     """Write a store whose likeliest point, by far, is Opus at `max`.
 
     Only Opus at `max` ever finished, and every other model Anthropic offers
-    has failed, so no point clears the floor and the pool is ranked on its
-    chances — which is the case in which the top of the ladder used to win
-    unasked. Opus at `xhigh` has failed too, so a step up from it has nowhere
+    has failed, so the band is drawn around Opus at `max`, the only point its
+    own bound admits — which is the case in which the top of the ladder used
+    to win unasked. Opus at `xhigh` has failed too, so a step up from it has nowhere
     likelier to go but `max`.
     """
 
@@ -2882,8 +2882,8 @@ def test_with_no_deliberation_ceiling_given_nothing_above_xhigh_is_chosen(
 ) -> None:
     """The top of the ladder is never reached for unasked (issue #323).
 
-    Nothing clears the floor, so the likeliest point is taken, and the
-    likeliest point is Opus at `max`. The deliberation ceiling defaults to
+    Nothing clears the floor, so the band decides, and the band around Opus
+    at `max` admits that point alone. The deliberation ceiling defaults to
     `xhigh`, so `max` is not in the pool at all, and the note says the
     ceiling is why the answer is not the point the evidence would have taken.
     """

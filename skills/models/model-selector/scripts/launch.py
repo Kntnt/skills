@@ -144,14 +144,15 @@ def plan(
     """Return how to start *model* at *deliberation* from *harness*.
 
     `permissions` is the level the caller says it is itself running at, named
-    in this module's own vocabulary, and the launch carries it across to the
-    other tool in that tool's spelling. Naming none is inheritance from the
-    user's own configuration for the CLI being started, which is what a
-    command with no permission flag leaves it at. A level this module does not
-    know is answered as silence with a note naming it, never as a refusal: a
-    caller that cannot read its own level off itself is exactly the caller
-    that most needs an answer, and nothing here is a status meaning *start
-    nothing* (ADR-0182).
+    in this module's own vocabulary, and a Codex or headless-Claude bridge
+    command carries it across to the other tool in that tool's spelling; the
+    opencode bridge carries none. Naming none is inheritance from the user's
+    own configuration for the CLI being started, which is what a command with
+    no permission flag leaves it at. A level this module does not know is
+    answered as silence with a note naming it, never as a refusal: a caller
+    that cannot read its own level off itself is exactly the caller that most
+    needs an answer, and nothing here is a status meaning *start nothing*
+    (ADR-0182).
 
     `read_only` outranks the level entirely. A read-only call is the grader's
     own posture — it reads two excerpts and answers — so it keeps the sandbox

@@ -92,7 +92,7 @@ Answer `reset`'s confirmation yes rather than asking, for an unattended run. Val
 
 **~/.kntnt/model-selector/profile.json**
 
-What the interview settled: Harnesses, the makers whose models you want, and one payment channel per maker and Harness. It holds no list of models, every model a chosen maker offers being eligible, and no credentials. **--data** relocates it, and everything below it except `quota.json`, which says so on its own entry.
+What the interview settled: Harnesses, the makers whose models you want, and one payment channel per maker and Harness. It holds no list of models, every model a chosen maker offers being eligible, and no credentials. **--data** relocates it, and everything below it except the entries that say otherwise on their own.
 
 **~/.kntnt/model-selector/objective.json**
 
@@ -180,7 +180,7 @@ That contract belongs to the collection rather than to this page, and it is stat
 
 ## DEPENDENCIES
 
-`uv` runs the shipped selection engine, the interview's writer, the catalogue's own reader and validator, and the capture hooks. On macOS, `launchctl` loads and unloads the job that runs the catalogue pass daily; on an operating system with no scheduler adapter, the pass runs only when started by hand. The network is reached by the catalogue pass — which starts Claude Code and Codex only to ask for their model lists, and fetches OpenRouter's public model list — whether its daily job runs it, `setup` runs it at its end unless the profile was refused, or you start it by hand, and by nothing else; every other command works from what is already on disk. Grading a finished unit calls one model, chosen, among those your own profile makes reachable that this machine has measured reviewing, as the one whose price per finished job is lowest, and stops rather than inventing a number where none can be reached. The quota guard reads two local sources and nothing else: Codex's own session logs under `~/.codex/sessions/`, bounded to the twenty most recent and the end of each, and `quota.json`, which the `statusline` Feature writes. Neither reaches the network or reads a credential, and a machine with neither simply has no guard.
+`uv` runs the shipped selection engine, the interview's writer, the catalogue's own reader and validator, and the capture hooks. On macOS, `launchctl` loads and unloads the job that runs the catalogue pass daily; on an operating system with no scheduler adapter, the pass runs only when started by hand. The network is reached by the catalogue pass — which starts Claude Code and Codex only to ask for their model lists, and fetches OpenRouter's public model list — whether its daily job runs it, `setup` runs it at its end unless the profile was refused, or you start it by hand, and by nothing else; every other command works from what is already on disk. Grading a finished unit calls one model, chosen among those your own profile makes reachable — from the ones this machine has measured reviewing wherever it can reach any, and from the rest only where it can reach none — as the one whose price per finished job is lowest, and stops rather than inventing a number where none can be reached. The quota guard reads two local sources and nothing else: Codex's own session logs under `~/.codex/sessions/`, bounded to the twenty most recent and the end of each, and `quota.json`, which the `statusline` Feature writes. Neither reaches the network or reads a credential, and a machine with neither simply has no guard.
 
 ## SEE ALSO
 

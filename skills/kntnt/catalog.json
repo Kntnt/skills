@@ -19,7 +19,7 @@
       "name": "delegation",
       "category": "agents",
       "description": "Turn delegation mode on or off — you orchestrate, subagents execute — for this session, this project, or your user account.",
-      "digest": "002a6a0b645ffb056947a35ad93d4de697aed372284f54fbb3d6570cdd124e60",
+      "digest": "5c999dc9e08e367c381b7542a0bad044f434d5f5769b4fa3b487b929b2845ec7",
       "binaries": [
         "uv"
       ],
@@ -60,7 +60,7 @@
       "name": "orchestrate",
       "category": "code",
       "description": "Work the tracker's ready-for-agent tickets unattended — claim, build, and independently verify them a wave at a time, integrating each wave into the current branch.",
-      "digest": "a780a025e88cac51f499b371f7d270c6d6fdd95ada01849ae0329ecb7ffc9068",
+      "digest": "d5652f5e8aa484717c2192e852c4de02f8c3d6864063fd310500b6191ce46f4a",
       "binaries": [
         "git",
         "gh",
@@ -179,7 +179,7 @@
       "name": "model-selector",
       "category": "models",
       "description": "Choose the model and deliberation level that completes delegated work at the lowest total cost, or in the least time where the user has chosen time. Never used implicitly: a Skill that routes work runs its script.",
-      "digest": "8fac406b0ec491dc585841c4ef46bd68bc3b210554a4442a826d753b82b802d8",
+      "digest": "5f8d3ec135ea2c7c03502ac7d1f34747dbc6561916b709f6550e95c75001cca1",
       "binaries": [
         "uv"
       ],

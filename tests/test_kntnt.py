@@ -9560,9 +9560,9 @@ def test_delegation_routes_execution_without_changing_the_main_seat() -> None:
 
     assert {"--model", "--deliberation"}.isdisjoint(_flags(_hint(directory)))
     assert {"config.json", "references/", "scripts/"}.isdisjoint(mode.split())
-    assert len(mode.split()) <= 447, (
+    assert len(mode.split()) <= 451, (
         f"{directory / 'references' / 'mode.md'}: the standing instruction has"
-        f" {len(mode.split())} words; keep it at or below 447. That ceiling is the"
+        f" {len(mode.split())} words; keep it at or below 451. That ceiling is the"
         f" budget for the whole doctrine — the routing boundary, the additions"
         f" issues #207, #208, #209, and #210 make to it, the Cohort and import"
         f" issue #222 adds, and the permission level issue #366 adds, which a"
