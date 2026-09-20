@@ -18,7 +18,7 @@ Genre, technique, language, and output resolve independently before writing. Gen
 
 The draft follows the base editorial contract, resolved genre, optional technique, and resolved language's composition guidance. The five web genres also use their shared craft brief. It uses no review, anti-slop, or mechanics guidance.
 
-Every claim must be supported by the supplied material. Attribution, uncertainty, scope, chronology, and causality are preserved; uncertain quotations are paraphrased.
+Every claim must be supported by the supplied material. Attribution, uncertainty, scope, chronology, and causality are preserved; uncertain quotations are paraphrased. A valuation or a position the brief gives as its author's own is supported as that author's standpoint and needs no outside evidence to be expressed as theirs; a figure, an event or a claim about an actual population stays a factual claim whoever supplied it.
 
 Handoff Metadata is added by default so a later review can reuse the resolved genre, technique, and language.
 

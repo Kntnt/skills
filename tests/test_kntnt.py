@@ -8566,9 +8566,11 @@ def test_a_repair_that_would_take_the_claim_with_it_is_left_and_reported() -> No
     back for a person to settle, exactly as one that cannot be repaired
     without inventing a fact already does. The catalogue's own deletions are
     untouched by that: where the pattern is the whole of the passage, cutting
-    it takes no claim with it. And the judgement is about the passage in front
-    of the subagent rather than about how much text is left, because the two
-    runs this was observed on sit either side of the line at almost the same
+    it takes no claim with it — except, in Redline, for a sentence whose work
+    is to bound what the text asserts, which #377 holds back from that
+    permission. And the judgement is about the passage in front of the
+    subagent rather than about how much text is left, because the two runs
+    this was observed on sit either side of the line at almost the same
     length (ADR-0178).
     """
 
@@ -9566,8 +9568,9 @@ def test_delegation_routes_execution_without_changing_the_main_seat() -> None:
         f" budget for the whole doctrine — the routing boundary, the additions"
         f" issues #207, #208, #209, and #210 make to it, the Cohort and import"
         f" issue #222 adds, and the permission level issue #366 adds, which a"
-        f" spawn inherits and only the session can read off itself — and it is"
-        f" met by leaving routing and observation implementation behind"
+        f" Codex or Claude Code start inherits and only the session can read"
+        f" off itself — and it is met by leaving routing and observation"
+        f" implementation behind"
         f" model-selector's public Interfaces. The ceiling has risen twice, each"
         f" time by what a new obligation cost to state, rather than by trimming"
         f" doctrine to fit it (ADR-0179, ADR-0202)."

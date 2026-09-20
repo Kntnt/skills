@@ -29,7 +29,7 @@ Run `uv run "$HERE/scripts/invoke.py"` — `$HERE` is the directory that holds t
 
 `--json` says a machine is reading the answer rather than a person. A Skill that routes delegated work reads the same answer by running `scripts/selection.py` itself, this body being for people.
 
-`--data=<path>` puts the profile, the catalogue and the measurement store somewhere other than `~/.kntnt/model-selector/`. Every command takes it and every command means the same directory by it.
+`--data=<path>` puts the profile, the catalogue and the measurement store somewhere other than `~/.kntnt/model-selector/`. Every command takes it and every command means the same directory by it, except the commands below that say otherwise on their own.
 
 On `evidence`, `<kind>` narrows the account to that one kind, spelled as above.
 
@@ -39,7 +39,7 @@ On `objective`, the operand is `time` or `cost`, the two words `--objective` alr
 
 ## The answer
 
-This is the bare invocation. The data directory is the `--data=<path>` value where the user gave one and `~/.kntnt/model-selector/` otherwise; every command below means that directory.
+This is the bare invocation. The data directory is the `--data=<path>` value where the user gave one and `~/.kntnt/model-selector/` otherwise; every command below means that directory except where it says otherwise on its own.
 
 Run:
 

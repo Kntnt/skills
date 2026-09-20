@@ -28,9 +28,13 @@ principle one tier shallower: a row's token counts and its elapsed time are
 divided by the factors of the level they ran at before they are pooled, so a
 model's rows for a kind are one sample at the `medium` baseline whatever level
 each of them was taken at, and the pooled figure is scaled back up to the level
-being asked about. An exact-cell tier in front of that would undo it — the level
-holding rows would answer from those rows alone, at whatever baseline they were
-taken, and the level beside it would be forecast the same appetite for nothing.
+being asked about. Each tier is narrowed to its routed rows before it is
+pooled, and is taken whole only where it holds none, because appetite and
+runtime are properties of the size of a job, and a whole routed build and a
+span of somebody's own Main Seat session are two sizes of job (ADR-0203). An
+exact-cell tier in front of that would undo it — the level holding rows would
+answer from those rows alone, at whatever baseline they were taken, and the
+level beside it would be forecast the same appetite for nothing.
 
 A parent is fitted on the rows its child does not hold, and only on those. It
 is a prior for what it can still add, and rows the child is already counting
