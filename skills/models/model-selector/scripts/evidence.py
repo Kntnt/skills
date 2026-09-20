@@ -586,7 +586,17 @@ class Estimator:
         self._capability = {model.id: model.capability for model in cat.models}
 
     def p_success(self, kind: str, model: str, deliberation: str | None) -> Estimate:
-        """Return the chance this point comes back good, and how sure that is."""
+        """Return the chance this point comes back good, and how sure that is.
+
+        Every row of a point is read, routed or not, and `_like_for_like` is
+        deliberately not applied here. What the forecast narrows for is the
+        size of the job: appetite and runtime are properties of that, and a
+        whole routed build and a span of somebody's own Main Seat session are
+        different sizes. How well work went is not — here the level and the
+        model are what is being estimated, the hierarchy below already backs
+        off through three tiers, and narrowing its rows too would interact
+        with what counts as measured (ADR-0203).
+        """
 
         exact, by_kind, by_model = self._levels(kind, model, deliberation)
 
@@ -659,15 +669,22 @@ class Estimator:
         answer scaled to the level asked for, so a model's rows for a kind
         price all five of its levels and the ladder's cost survives having
         been measured at one rung of it.
+
+        Each tier is narrowed to its routed rows before it is pooled, by
+        `_like_for_like`, and the choice is made once per group rather than
+        per category: a category taken from a session span while the routed
+        rows beside it supplied the rest is the averaging that narrowing
+        exists to end.
         """
 
         _, by_kind, by_model = self._levels(kind, model, deliberation)
         prior = self._kinds.tokens(kind, deliberation)
+        groups = (_like_for_like(by_kind), _like_for_like(by_model))
 
         counted: dict[str, float] = {}
         for category in TOKEN_CATEGORIES:
             counted[category] = prior[category]
-            for group in (by_kind, by_model):
+            for group in groups:
                 measured = _geometric_mean(self._normalised(group, category))
                 if measured is not None:
                     counted[category] = measured * self._kinds.factor(
@@ -679,15 +696,15 @@ class Estimator:
     def seconds(self, kind: str, model: str, deliberation: str | None) -> float:
         """Return how long this point is expected to take to finish an attempt.
 
-        The same two tiers the token forecast backs off through, and the same
-        normalisation, over the one measurement a run started for time is
-        ordered on. A store with no elapsed time for this point falls back to
-        the kind's shipped figure rather than to a zero, a zero being the
-        fastest thing on any list.
+        The same two tiers the token forecast backs off through, narrowed the
+        same way and normalised the same way, over the one measurement a run
+        started for time is ordered on. A store with no elapsed time for this
+        point falls back to the kind's shipped figure rather than to a zero, a
+        zero being the fastest thing on any list.
         """
 
         _, by_kind, by_model = self._levels(kind, model, deliberation)
-        for group in (by_kind, by_model):
+        for group in (_like_for_like(by_kind), _like_for_like(by_model)):
             measured = _geometric_mean(self._elapsed(group))
             if measured is not None:
                 return measured * self._kinds.factor(deliberation, "seconds")
@@ -959,6 +976,29 @@ def _measurement(raw: Mapping[str, Any]) -> Measurement | None:
         seconds=_number(raw.get("seconds")),
         routed=bool(raw.get("routed")),
     )
+
+
+def _like_for_like(rows: Sequence[Measurement]) -> Sequence[Measurement]:
+    """Return the routed rows of one tier, or all of them where it holds none.
+
+    A forecast is a claim about the size of the job being asked for, and a
+    routed job and a span of somebody's own Main Seat session are different
+    sizes: pooled together, seventy-five routed builds carrying a grade and no
+    price were priced from a hundred and thirty ten-minute spans of the
+    maintainer's own session, and the figure the ranking compared against a
+    whole Codex build was the price of a span inside a session (ADR-0203).
+
+    The choice is made once per tier, never per category: a tier answering one
+    category from its routed rows and the next from the spans beside them is
+    the same averaging in smaller pieces. Where a tier's routed rows measured
+    nothing, the forecast falls through to the tier above and then to the
+    kind's shipped prior, which is a store saying it has never measured what a
+    routed build of that point spends rather than answering with the price of
+    something else.
+    """
+
+    routed = [row for row in rows if row.routed]
+    return routed or rows
 
 
 def _posterior(

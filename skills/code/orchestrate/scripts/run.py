@@ -6589,6 +6589,14 @@ def cmd_attempt_start(cwd: Path, request_id: str, state_path: Path | None) -> in
         except RunError as exc:
             return fail(str(exc))
 
+    # The first line of the message this dispatch hands its subagent, composed
+    # from the identity the verdict will be filed under. The session opens the
+    # message with it whether what follows is the filled-in brief or a pointer
+    # to the file holding it, and the read of that builder's own transcript
+    # takes the attempt back off it — a brief of several thousand words
+    # travels as a file, and a line a script prints is a line nobody forgets
+    # (issue #370).
+    identity = str(record.decision.get("attempt_id") or record.request_id)
     emit(
         {
             "verb": "attempt-start",
@@ -6597,6 +6605,7 @@ def cmd_attempt_start(cwd: Path, request_id: str, state_path: Path | None) -> in
             "ticket": record.ticket,
             "started_at": standing["started_at"],
             "recorded": recorded,
+            "attempt_line": f"attempt_id: {identity}",
         }
     )
     return 0

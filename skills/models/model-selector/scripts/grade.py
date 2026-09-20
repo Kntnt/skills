@@ -577,6 +577,12 @@ def _measurement(
     profile carries one. A store priced at a list price nobody paid measures
     somebody else's arrangement, and this store exists to say what a point
     costs on this machine.
+
+    The routed fact is the Unit's rather than a constant: a Unit whose brief
+    named an attempt is routed work, and a subagent nobody dispatched under an
+    identity is not. Where the caller filed a row of its own about the same
+    attempt, its reading outranks this one and the merge keeps it — a caller
+    knows whether it chose the seat, and a transcript never does (issue #370).
     """
 
     counted = {
@@ -615,7 +621,7 @@ def _measurement(
         "tokens": counted,
         "cost_usd": cost,
         "seconds": row.get("seconds"),
-        "routed": False,
+        "routed": bool(row.get("routed")),
     }
 
 

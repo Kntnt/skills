@@ -60,9 +60,11 @@ CODE_WRITING_BRIEFS = (
 
 # Every brief the run hands a subagent launched on a point the router chose —
 # the initial build and its rebuild, the two amends, the collision repair, and
-# the wave fix. Each of those is one routed attempt, so each opens with the
-# attempt it is; a wave fix left out of the list would be the double-counted
-# row this rule exists to end (issue #291).
+# the wave fix. Each of those is one routed attempt, so each brief opens with
+# the attempt it is and so does the message handing it over, whether that
+# message carries the brief or a pointer to the file holding it; a wave fix
+# left out of the list would be the double-counted row this rule exists to end
+# (issue #291, issue #370).
 ROUTED_BUILDER_BRIEFS = (
     "brief.md",
     "amend.md",
@@ -80,6 +82,10 @@ ATTEMPT_FILL_SENTENCE = (
     " carries — the same identity `attempt-finish` files this run's verdict"
     " on the attempt under, so what the attempt actually spent is read back"
     " onto that one row rather than counted as a second attempt beside it."
+    " Open the message you hand that subagent with the `attempt_line` that"
+    " `attempt-start` printed, copied as it stands rather than composed here,"
+    " and let the filled-in brief — or a pointer to the file holding it —"
+    " follow on from that line."
 )
 ATTEMPT_FILL_INSTRUCTION = (
     "`<attempt_id>` is the `attempt_id` the route answer for this request"
@@ -88,6 +94,10 @@ ATTEMPT_FILL_INSTRUCTION = (
     " of the brief is what lets the later read of this subagent's own transcript"
     " file what the attempt spent under it too, rather than as a second attempt"
     " nobody graded. Never invent one, and never carry another request's over."
+    " The message this subagent is handed opens with that same line, whether"
+    " what follows it is the filled-in brief itself or a pointer to the file"
+    " holding it — a brief that travels as a file is a sound way to dispatch,"
+    " and the identity has to survive it."
 )
 
 # Every rule that applies to a subagent holding a code-writing brief, named
@@ -3493,7 +3503,8 @@ def test_every_routed_builder_brief_opens_with_the_attempt_it_is() -> None:
     tokens, and capture reads the same builder's transcript and files what it
     spent. They are one attempt, and the only thing that can say so is the
     identity the router already decided — so every routed builder brief opens
-    with it, and capture reads it back off the first line (issue #291).
+    with it, and capture reads it back off whichever line of the dispatch
+    carries it (issue #291, issue #370).
     """
 
     for name in ROUTED_BUILDER_BRIEFS:

@@ -201,18 +201,25 @@ OVERDUE_AFTER = timedelta(hours=24)
 READABLE_HARNESSES: tuple[str, ...] = ("claude-code",)
 
 # The line a routed builder brief opens with, naming the attempt whoever
-# dispatched it already decided. Where an instruction opens with it — a
+# dispatched it already decided. Where an instruction carries it — a
 # subagent's first user message, or an instruction in the session's own
 # record — that attempt is this Unit's identity rather than the hash below,
-# and the Unit is delegated: the caller that dispatched the work files its own
-# verdict under the same name, and one build filed from two sides is one row
-# rather than two (issue #291, #303). Matched on the instruction's first line
-# only. A person at a keyboard does not type it, so an instruction carrying it
-# is a routed brief wherever it arrived. The same form is stated for the tests
-# in `tests/support/model_routing.py`, a shipped script having no business
+# and the Unit is delegated and routed: the caller that dispatched the work
+# files its own verdict under the same name, and one build filed from two
+# sides is one row rather than two (issue #291, #303).
+#
+# Matched against every line of the instruction rather than its first, and
+# anchored to a whole line at both ends. A session holding a brief of several
+# thousand words writes it to a file and hands the builder a pointer to it, so
+# the line the brief opens with is not the line the message opens with, and a
+# Harness may put its own preamble in front of either; a brief quoting the
+# form inside a sentence still names no attempt (issue #370). A person at a
+# keyboard does not type it, so an instruction carrying it is a routed brief
+# wherever it arrived. The same form is stated for the tests in
+# `tests/support/model_routing.py`, a shipped script having no business
 # importing a test file. The backticks are optional because a brief is
 # Markdown and a filler may leave the placeholder's own.
-ATTEMPT_LINE = re.compile(r"^attempt_id:[ \t]*`?([^\s`]+)`?[ \t]*$")
+ATTEMPT_LINE = re.compile(r"^attempt_id:[ \t]*`?([^\s`]+)`?[ \t]*$", re.MULTILINE)
 
 # How the token categories a Claude Code turn reports map onto the five a
 # measurement is priced in. Re-derived per turn from `message.usage`:
@@ -251,7 +258,8 @@ SUBSTANTIAL_OUTPUT_TOKENS = 4000.0
 # beside delegated work, that difference in size is read as a difference in
 # models. What makes a Unit a job is an agent working on its own long enough,
 # so a Unit that was delegated — read from a subagent's own record, or opened
-# by an instruction naming a routed attempt — is held to the substantial test
+# by an instruction that names a routed attempt somewhere in it — is held to
+# the substantial test
 # alone, and any other Unit is written only once it ran this long from its
 # instruction to handing control back (#303).
 OWN_UNIT_SECONDS = 600.0
@@ -379,6 +387,7 @@ class Unit:
     tool_calls: int
     changing_tool_calls: int
     delegated: bool
+    routed: bool
     signals: dict[str, Any]
     instruction_excerpt: str
     result_excerpt: str
@@ -396,6 +405,7 @@ class _Span:
     instruction: str
     started_at: str
     ended_at: str
+    named_attempt: str | None = None
     result: str = ""
     seats: dict[tuple[str | None, str | None], int] = field(default_factory=dict)
     tokens: dict[str, float | None] = field(
@@ -933,26 +943,40 @@ def _spans(lines: list[dict[str, Any]], whole: bool) -> list[_Span]:
     """Split one transcript into spans, one per instruction.
 
     A subagent's transcript is one span *whole*: it was opened by one
-    instruction and everything in it answers that instruction. The main
-    transcript is split, each span running from a user instruction to the turn
-    before the next one. Which spans become Units is decided after the split —
-    the substantial test in `_unit`, and the ten-minute threshold on a Unit of
-    the session's own in `units` — so a session that alternates between quick
-    questions and long jobs contributes the long jobs alone.
+    instruction and everything in it answers that instruction, so the first
+    user line opens the one span there is and no later line opens another.
+    A peer session messaging a builder mid-job is a line `_is_instruction`
+    accepts, and a second span opened at it would file the later half of one
+    delegated attempt as a row beside the row that attempt already has
+    (issue #370). The main transcript is split, each span running from a user
+    instruction to the turn before the next one. Which spans become Units is
+    decided after the split — the substantial test in `_unit`, and the
+    ten-minute threshold on a Unit of the session's own in `units` — so a
+    session that alternates between quick questions and long jobs contributes
+    the long jobs alone.
+
+    The attempt a routed brief named is read here, off the whole instruction
+    the record holds, and only the capped excerpt of that text is kept: the
+    fuller text is read in this process and discarded in it, exactly as a
+    shell command string already is.
     """
 
     spans: list[_Span] = []
     current: _Span | None = None
     for line in lines:
-        if _is_instruction(line) or (
-            whole and current is None and line.get("type") == "user"
-        ):
+        opens = (
+            current is None and line.get("type") == "user"
+            if whole
+            else _is_instruction(line)
+        )
+        if opens:
             instruction = _text_of((line.get("message") or {}).get("content"))
             started = _stamped(line) or ""
             current = _Span(
                 instruction=_excerpt(instruction, INSTRUCTION_CHARS),
                 started_at=started,
                 ended_at=started,
+                named_attempt=_named_attempt(instruction),
             )
             spans.append(current)
             continue
@@ -992,14 +1016,21 @@ def _named_attempt(instruction: str) -> str | None:
     """Return the attempt a routed brief named, or None where none did.
 
     Whoever dispatched a routed builder holds an identity for that attempt
-    before the work starts, and files its own verdict under it. A brief that
-    opens with that identity lets this read of the same builder's transcript
-    file what the attempt spent under the same name, so the store ends with
-    one row rather than one graded attempt without a cost beside one costed
-    attempt with a weaker grade (issue #291).
+    before the work starts, and files its own verdict under it. An instruction
+    carrying that identity on a line of its own lets this read of the same
+    builder's transcript file what the attempt spent under the same name, so
+    the store ends with one row rather than one graded attempt without a cost
+    beside one costed attempt with a weaker grade (issue #291).
+
+    Read from the whole instruction rather than from its first line, because
+    the message a builder is handed is not always the brief: a session holding
+    a brief of several thousand words writes it to a file and hands over a
+    pointer to it, and a Harness may put a preamble of its own in front of
+    whichever it hands over. Whole lines only, so a brief describing the form
+    inside a sentence claims no attempt (issue #370).
     """
 
-    matched = ATTEMPT_LINE.match(instruction.split("\n", 1)[0])
+    matched = ATTEMPT_LINE.search(instruction)
     return matched.group(1) if matched else None
 
 
@@ -1007,8 +1038,12 @@ def _unit(span: _Span, session: str, harness: str, delegated: bool) -> Unit | No
     """Return one span as a Unit, or None where it is not substantial.
 
     The identity is the attempt the brief named, where a routed builder's
-    brief named one, and a span whose instruction names an attempt is
-    delegated wherever it was read. Otherwise the identity is the session, the
+    brief named one, and a span whose instruction names an attempt is both
+    delegated and routed wherever it was read — the attempt was dispatched
+    under a name somebody else already holds, which is what routing is.
+    A subagent a caller spawned on its own Main Seat is delegated and is not
+    routed, and that boundary is the caller's own fact rather than this read's
+    (ADR-0179). Otherwise the identity is the session, the
     Seat and the instant the Unit began, so the same finished session read
     twice yields the same Unit and the measurement store folds the second copy
     into the first rather than counting it twice.
@@ -1032,7 +1067,7 @@ def _unit(span: _Span, session: str, harness: str, delegated: bool) -> Unit | No
         },
         sort_keys=True,
     )
-    named = _named_attempt(span.instruction)
+    named = span.named_attempt
     return Unit(
         unit_id=named or f"unit-{_opaque(identity)}",
         session=session,
@@ -1046,6 +1081,7 @@ def _unit(span: _Span, session: str, harness: str, delegated: bool) -> Unit | No
         tool_calls=span.tool_calls,
         changing_tool_calls=span.changing_tool_calls,
         delegated=delegated or named is not None,
+        routed=named is not None,
         signals={
             "retried": False,
             "tests_ran": span.tests_ran,

@@ -60,7 +60,7 @@
       "name": "orchestrate",
       "category": "code",
       "description": "Work the tracker's ready-for-agent tickets unattended — claim, build, and independently verify them a wave at a time, integrating each wave into the current branch.",
-      "digest": "82ae9fd5504886d2a95f64346fd7ab31e1c22e0bf4239761af0dc6883ddb45bb",
+      "digest": "0ebb11c8918a9108ddf49b8125be6d17ade5fbc61163a0de14f3f6ee7b146501",
       "binaries": [
         "git",
         "gh",
@@ -179,7 +179,7 @@
       "name": "model-selector",
       "category": "models",
       "description": "Choose the model and deliberation level that completes delegated work at the lowest total cost, or in the least time where the user has chosen time. Never used implicitly: a Skill that routes work runs its script.",
-      "digest": "ed8689fd1ea05eb53d5e801230f86e18dba8f879b467005aa3973e908334a37d",
+      "digest": "da6c2a38a8a7cf47bce2b7ff8d6265d619909d65d7ee30014d79ecbbf53ec2a7",
       "binaries": [
         "uv"
       ],
