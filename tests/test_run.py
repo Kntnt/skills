@@ -79,7 +79,11 @@ _GIT_ENV["GIT_COMMITTER_EMAIL"] = "test@example.com"
 # endpoints answer too: an issue asked for over the API has the database id
 # the native blocked-by write is keyed by — its number under a fixed prefix —
 # and the write itself is accepted, except where GH_NO_DEPENDENCIES stands
-# for a tracker without the relation and refuses it.
+# for a tracker without the relation and refuses it. GH_COMMENT_FAIL stands
+# for a tracker that will not take a comment: the call is logged as every
+# other is and then refused, which is both a tracker that never received the
+# write and a write it received whose answer never came back — what the
+# ticket then says is what the test files on it.
 _GH_SCRIPT = """#!/bin/sh
 echo "$@" >> "$GH_LOG"
 if [ "$1" = "api" ]; then
@@ -93,7 +97,8 @@ if [ "$1" = "api" ]; then
 fi
 case "$2" in
   view) cat "$GH_ISSUES/$3.json"; exit $? ;;
-  edit|close|comment) exit 0 ;;
+  comment) [ -z "$GH_COMMENT_FAIL" ]; exit $? ;;
+  edit|close) exit 0 ;;
 esac
 if [ "$1" = "label" ]; then
   case "$2" in
@@ -8161,11 +8166,13 @@ def test_record_refuses_a_done_outcome_while_the_working_tree_holds_work(
     assert "issue close" not in _gh_calls(env)
 
 
-def test_record_writes_a_failure_from_a_working_tree_that_still_holds_work(
+def test_record_outside_every_build_episode_moves_nothing(
     tmp_path: Path,
 ) -> None:
-    """A failed ticket's work is left where it stands on purpose, so the tree
-    holding it is the state that outcome is recorded from."""
+    """A `record` the run never opened an episode for — a hand-run one, and
+    every run from before the serial recovery existed — writes the outcome and
+    leaves the branch, the index, and the tree exactly as it found them, work
+    nothing committed included."""
 
     repo = _init_repo(tmp_path / "proj")
     env = _tracker(tmp_path, {"ready-for-agent": []}, issues={9: _ready(9)})
@@ -10657,3 +10664,1105 @@ def test_a_fast_run_asks_for_time_whatever_its_first_answer_said(
     assert len(calls) == 2
     assert all("--objective=time" in call for call in calls)
     assert not any("--objective=cost" in call for call in calls)
+
+
+# Where the engine anchors a serial build episode, its preserved work, and an
+# incomplete recovery. Stated here as the contract rather than imported: these
+# refs are what a person is told to look at and to remove by hand, so a test
+# that asked the engine for their names would be asking the thing under test
+# to grade itself.
+EPISODE_REF = "refs/kntnt-orchestrate/episode"
+PRESERVED_REF = "refs/kntnt-orchestrate/preserved"
+MARKER_REF = "refs/kntnt-orchestrate/incomplete"
+
+
+def _refs(repo: Path, prefix: str = "refs/kntnt-orchestrate") -> list[str]:
+    """Return every ref the engine owns below *prefix*, sorted."""
+
+    listed = _git(repo, "for-each-ref", "--format=%(refname)", prefix).stdout
+    return sorted(listed.split())
+
+
+def _serial_build(
+    tmp_path: Path,
+    number: int = 9,
+    *,
+    tickets: list[dict[str, Any]] | None = None,
+    issues: dict[int, dict[str, Any]] | None = None,
+) -> tuple[Path, Path, dict[str, str]]:
+    """Play a run to where ticket *number*'s serial build episode is open.
+
+    The engine is driven exactly as the Skill drives it at a ceiling of one:
+    plan, route, claim, and the attempt boundary immediately before dispatch.
+    """
+
+    repo, scratch, env = _routed(
+        tmp_path,
+        tickets=tickets if tickets is not None else [_ticket(number, "the graph")],
+        issues=issues if issues is not None else {number: _ready(number)},
+        requests=[f"build-{number}"],
+    )
+    claimed = _engine(
+        repo, "claim", "--ticket", str(number), "--state-dir", str(scratch), env=env
+    )
+    assert claimed.returncode == 0, claimed.stderr
+    started = _attempt_started(repo, scratch, env, f"build-{number}")
+    assert started.returncode == 0, started.stderr
+    return repo, scratch, env
+
+
+def _git_try(cwd: Path, *args: str) -> subprocess.CompletedProcess[str]:
+    """Run git in *cwd* without raising, for the states a recovery refuses."""
+
+    return subprocess.run(
+        ["git", *args],
+        cwd=cwd,
+        env=_GIT_ENV,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+
+
+def _stranded(repo: Path, episode: str) -> None:
+    """Move *episode*'s start point onto a line of history the branch left.
+
+    Ownership comes out of the record alone, so the state to build is a record
+    naming a commit the branch does not descend from.
+    """
+
+    _git(repo, "checkout", "-b", "aside", "HEAD~1")
+    _built(repo, "aside.py", "another line of history\n")
+    aside = _git(repo, "rev-parse", "HEAD").stdout.strip()
+    _git(repo, "checkout", "work")
+    _git(repo, "update-ref", episode, aside)
+
+
+def _built(repo: Path, name: str, text: str) -> str:
+    """Commit *text* as *name* on the branch, the way a serial builder does."""
+
+    (repo / name).write_text(text, encoding="utf-8")
+    _git(repo, "add", name)
+    _git(repo, "commit", "-m", f"build {name}")
+    return _git(repo, "rev-parse", "HEAD").stdout.strip()
+
+
+def _ignoring(repo: Path, name: str, text: str) -> None:
+    """Write *text* as *name* and have the repository ignore it.
+
+    What a repository ignores was never the run's, so it is what a recovery
+    leaves where it lies and what a refusal is read for leaving untouched.
+    """
+
+    exclude = repo / ".git" / "info" / "exclude"
+    exclude.parent.mkdir(parents=True, exist_ok=True)
+    with exclude.open("a", encoding="utf-8") as handle:
+        handle.write(f"{name}\n")
+    (repo / name).write_text(text, encoding="utf-8")
+
+
+def _failed(
+    repo: Path, scratch: Path, env: dict[str, str], number: int = 9
+) -> dict[str, Any]:
+    """Record ticket *number*'s terminal failure and return the engine's answer."""
+
+    result = _engine(
+        repo,
+        "record",
+        "--ticket",
+        str(number),
+        "--outcome",
+        "failed",
+        "--state-dir",
+        str(scratch),
+        env=env,
+    )
+    assert result.returncode == 0, result.stderr
+    return cast(dict[str, Any], json.loads(result.stdout))
+
+
+def _ref_image(repo: Path) -> dict[str, str]:
+    """Return every ref the engine owns and the object each one points at."""
+
+    listed = _git(
+        repo,
+        "for-each-ref",
+        "--format=%(refname) %(objectname)",
+        "refs/kntnt-orchestrate",
+    ).stdout.splitlines()
+    return dict(line.split(" ", 1) for line in listed if line)
+
+
+def _state_image(repo: Path) -> dict[str, Any]:
+    """Capture everything a refusal promises to leave exactly as it was.
+
+    Every file below the working tree is read byte for byte, ignored files
+    among them, because what a refusal promises is that nothing it found was
+    moved — and the git directory is left out because a refusal does write
+    one thing there, the ref that says the recovery is not finished.
+    """
+
+    return {
+        "head": _git(repo, "rev-parse", "HEAD").stdout.strip(),
+        "branch": _git(repo, "rev-parse", "refs/heads/work").stdout.strip(),
+        "status": _git(repo, "status", "--porcelain", "--untracked-files=all").stdout,
+        "index": _git(repo, "ls-files", "--stage").stdout,
+        "files": {
+            path.relative_to(repo).as_posix(): path.read_bytes()
+            for path in sorted(repo.rglob("*"))
+            if path.is_file() and ".git" not in path.relative_to(repo).parts
+        },
+    }
+
+
+def test_a_terminal_serial_failure_preserves_its_commits_and_moves_the_branch_back(
+    tmp_path: Path,
+) -> None:
+    """Three verdicts failed the work, so it does not stay on the branch the
+    next push would publish — it is preserved whole under a ref of the
+    engine's own, with the commits keeping their own identity."""
+
+    repo, scratch, env = _serial_build(tmp_path)
+    start = _git(repo, "rev-parse", "HEAD").stdout.strip()
+    made = [_built(repo, f"step{index}.py", f"pass {index}\n") for index in range(3)]
+
+    answer = _failed(repo, scratch, env)
+
+    assert answer["recovery_status"] == "recovered"
+    assert _git(repo, "rev-parse", "HEAD").stdout.strip() == start
+    assert answer["start_point"] == start
+    assert answer["failed_tip"] == made[-1]
+    preserved = str(answer["preserved_ref"])
+    assert _git(repo, "rev-parse", preserved).stdout.strip() == made[-1]
+    kept = _git(repo, "rev-list", f"{start}..{preserved}").stdout.split()
+    assert sorted(kept) == sorted(made)
+
+
+def test_a_dirty_terminal_serial_failure_preserves_every_kind_of_uncommitted_work(
+    tmp_path: Path,
+) -> None:
+    """Staged, unstaged and untracked work are all the ticket's, so all three
+    are recoverable afterwards and the staging difference with them."""
+
+    repo, scratch, env = _serial_build(tmp_path)
+    start = _git(repo, "rev-parse", "HEAD").stdout.strip()
+    _built(repo, "graph.py", "committed\n")
+    (repo / "staged.py").write_text("staged\n", encoding="utf-8")
+    _git(repo, "add", "staged.py")
+    (repo / "graph.py").write_text("unstaged\n", encoding="utf-8")
+    (repo / "untracked.py").write_text("untracked\n", encoding="utf-8")
+
+    answer = _failed(repo, scratch, env)
+
+    assert answer["recovery_status"] == "recovered"
+    assert _git(repo, "rev-parse", "HEAD").stdout.strip() == start
+    snapshot = str(answer["snapshot_ref"])
+    assert _git(repo, "show", f"{snapshot}:untracked.py").stdout == "untracked\n"
+    assert _git(repo, "show", f"{snapshot}:graph.py").stdout == "unstaged\n"
+    assert _git(repo, "show", f"{snapshot}:staged.py").stdout == "staged\n"
+    staged = _git(repo, "rev-parse", f"{snapshot}^2").stdout.strip()
+    assert _git(repo, "show", f"{staged}:graph.py").stdout == "committed\n"
+    assert _git(repo, "show", f"{staged}:staged.py").stdout == "staged\n"
+    assert "untracked.py" not in _git(repo, "ls-tree", "-r", staged).stdout
+
+
+def test_an_attempt_with_no_commits_at_all_still_preserves_what_it_changed(
+    tmp_path: Path,
+) -> None:
+    """A builder that committed nothing still made something, and the branch
+    it is taken off is the branch the next plan has to be able to read."""
+
+    repo, scratch, env = _serial_build(tmp_path)
+    start = _git(repo, "rev-parse", "HEAD").stdout.strip()
+    (repo / "half.py").write_text("half a ticket\n", encoding="utf-8")
+
+    answer = _failed(repo, scratch, env)
+
+    assert answer["recovery_status"] == "recovered"
+    assert answer["failed_tip"] == start
+    snapshot = str(answer["snapshot_ref"])
+    assert _git(repo, "show", f"{snapshot}:half.py").stdout == "half a ticket\n"
+    assert not (repo / "half.py").exists()
+
+
+def test_a_recovery_takes_the_untracked_files_and_leaves_the_ignored_ones(
+    tmp_path: Path,
+) -> None:
+    """A tree still holding the failure's untracked files is a tree the next
+    plan refuses, which is the whole point of taking the work off the branch —
+    while what the repository ignores was never the run's to touch."""
+
+    repo, scratch, env = _serial_build(tmp_path)
+    start = _git(repo, "rev-parse", "HEAD").stdout.strip()
+    _ignoring(repo, "secret.env", "nobody's\n")
+    (repo / "left.py").write_text("the failure's\n", encoding="utf-8")
+
+    _failed(repo, scratch, env)
+
+    assert _git(repo, "rev-parse", "HEAD").stdout.strip() == start
+    assert _git(repo, "status", "--porcelain", "--untracked-files=all").stdout == ""
+    assert (repo / "secret.env").read_text(encoding="utf-8") == "nobody's\n"
+    _refile(env, "open", [_ticket(10, "the next one")])
+    planned = _engine(repo, "plan", "--state-dir", str(tmp_path / "later"), env=env)
+    assert json.loads(planned.stdout)["ready"] is True, planned.stdout
+
+
+def test_an_earlier_passed_tickets_work_and_notes_survive_a_later_failure(
+    tmp_path: Path,
+) -> None:
+    """An episode nothing closed stands across an invocation boundary, so the
+    next ticket's own attempt boundary closes it: a recovery that reached back
+    over somebody else's verified work would destroy what three verdicts
+    passed."""
+
+    repo, scratch, env = _serial_build(
+        tmp_path,
+        9,
+        tickets=[_ticket(8, "the earlier one"), _ticket(9, "the later one")],
+        issues={8: _ready(8), 9: _ready(9)},
+    )
+    interrupted = _built(repo, "nine.py", "an interrupted build\n")
+
+    # The interrupted invocation's ticket is picked up again after #8 has been
+    # built, passed, recorded, and had its note applied on the same branch.
+    routed = _route(repo, scratch, env, ["build-8"])
+    assert routed.returncode == 0, routed.stderr
+    assert _attempt_started(repo, scratch, env, "build-8").returncode == 0
+    eight = _built(repo, "eight.py", "a verified ticket\n")
+    assert (
+        _engine(
+            repo,
+            "record",
+            "--ticket",
+            "8",
+            "--outcome",
+            "done",
+            "--commit",
+            eight,
+            "--state-dir",
+            str(scratch),
+            env=env,
+        ).returncode
+        == 0
+    )
+    note = _built(repo, "CHANGELOG.md", "the wave's entry\n")
+    assert _attempt_started(repo, scratch, env, "build-9").returncode == 0
+    (repo / ".kntnt-orchestrate").mkdir()
+    _built(repo, ".kntnt-orchestrate/9.md", "the failed ticket's entry\n")
+
+    answer = _failed(repo, scratch, env)
+
+    assert answer["recovery_status"] == "recovered"
+    assert answer["start_point"] == note
+    assert _git(repo, "rev-parse", "HEAD").stdout.strip() == note
+    assert (repo / "eight.py").exists()
+    assert (repo / "CHANGELOG.md").exists()
+    assert _git(repo, "cat-file", "-t", interrupted).stdout.strip() == "commit"
+    assert (repo / "nine.py").exists()
+    assert not (repo / ".kntnt-orchestrate" / "9.md").exists()
+    preserved = str(answer["preserved_ref"])
+    assert (
+        _git(repo, "show", f"{preserved}:.kntnt-orchestrate/9.md").stdout
+        == "the failed ticket's entry\n"
+    )
+
+
+def test_an_unmerged_index_refuses_the_recovery_and_changes_nothing(
+    tmp_path: Path,
+) -> None:
+    """Work the engine cannot preserve is work it does not move: the refusal
+    names the state, records the outcome all the same, and adds the one ref
+    that says the recovery is not finished."""
+
+    repo, scratch, env = _serial_build(tmp_path)
+    _built(repo, "graph.py", "one side\n")
+    _git(repo, "checkout", "-b", "other", "HEAD~1")
+    _built(repo, "graph.py", "the other side\n")
+    _git(repo, "checkout", "work")
+    assert _git_try(repo, "merge", "other").returncode != 0
+    _ignoring(repo, "secret.env", "nobody's\n")
+    (repo / "loose.py").write_text("not committed\n", encoding="utf-8")
+    episode = _refs(repo, EPISODE_REF)[0]
+    earlier = episode.replace(EPISODE_REF, PRESERVED_REF, 1) + "/commits"
+    _git(repo, "update-ref", earlier, "HEAD")
+    before = _state_image(repo)
+    refs = _ref_image(repo)
+
+    result = _engine(
+        repo,
+        "record",
+        "--ticket",
+        "9",
+        "--outcome",
+        "failed",
+        "--state-dir",
+        str(scratch),
+        env=env,
+    )
+
+    assert result.returncode == 0, result.stderr
+    assert result.stderr == ""
+    answer = json.loads(result.stdout)
+    assert answer["recovery_status"] == "incomplete"
+    assert "unmerged" in answer["recovery_reason"]
+    assert _state_image(repo) == before
+    marker = str(answer["marker_ref"])
+    assert marker.startswith(MARKER_REF)
+    assert answer["marker_removal"] == f"git update-ref -d {marker}"
+    assert _ref_image(repo) == refs | {marker: _ref_image(repo)[marker]}
+    assert _gh_calls(env).count("issue comment 9") == 1
+
+
+def test_a_merge_in_progress_refuses_the_recovery_and_changes_nothing(
+    tmp_path: Path,
+) -> None:
+    """A half-finished merge is a state nothing can preserve whole, so the
+    engine stops before it takes anything off the branch — recording the
+    outcome all the same, and adding nothing to its own refs but the one that
+    says the recovery is not finished."""
+
+    repo, scratch, env = _serial_build(tmp_path)
+    _built(repo, "graph.py", "one side\n")
+    _git(repo, "checkout", "-b", "other", "HEAD~1")
+    _built(repo, "report.py", "the other side\n")
+    _git(repo, "checkout", "work")
+    _git_try(repo, "merge", "--no-commit", "--no-ff", "other")
+    _ignoring(repo, "secret.env", "nobody's\n")
+    (repo / "loose.py").write_text("not committed\n", encoding="utf-8")
+    episode = _refs(repo, EPISODE_REF)[0]
+    earlier = episode.replace(EPISODE_REF, PRESERVED_REF, 1) + "/commits"
+    _git(repo, "update-ref", earlier, "HEAD")
+    before = _state_image(repo)
+    refs = _ref_image(repo)
+
+    result = _engine(
+        repo,
+        "record",
+        "--ticket",
+        "9",
+        "--outcome",
+        "failed",
+        "--state-dir",
+        str(scratch),
+        env=env,
+    )
+
+    assert result.returncode == 0, result.stderr
+    assert result.stderr == ""
+    answer = json.loads(result.stdout)
+    assert answer["recovery_status"] == "incomplete"
+    assert "merge" in answer["recovery_reason"]
+    assert _state_image(repo) == before
+    marker = str(answer["marker_ref"])
+    assert marker.startswith(MARKER_REF)
+    assert answer["marker_removal"] == f"git update-ref -d {marker}"
+    assert _ref_image(repo) == refs | {marker: _ref_image(repo)[marker]}
+    assert _gh_calls(env).count("issue comment 9") == 1
+
+
+def test_a_repeated_record_finishes_a_recovery_the_person_unblocked(
+    tmp_path: Path,
+) -> None:
+    """The refusal kept everything, so the recovery is resumable the moment
+    the person has undone what stopped it: the same call again, no second
+    preservation, and no second comment."""
+
+    repo, scratch, env = _serial_build(tmp_path)
+    start = _git(repo, "rev-parse", "HEAD").stdout.strip()
+    _built(repo, "graph.py", "one side\n")
+    _git(repo, "checkout", "-b", "other", "HEAD~1")
+    _built(repo, "graph.py", "the other side\n")
+    _git(repo, "checkout", "work")
+    assert _git_try(repo, "merge", "other").returncode != 0
+    refused = _failed(repo, scratch, env)
+    assert refused["recovery_status"] == "incomplete"
+    _git(repo, "merge", "--abort")
+    _refile_issue(env, 9, {"comments": [_recorded("failed")]})
+
+    answer = _failed(repo, scratch, env)
+
+    assert answer["recovery_status"] == "recovered"
+    assert _git(repo, "rev-parse", "HEAD").stdout.strip() == start
+    assert _refs(repo, MARKER_REF) == []
+    assert _gh_calls(env).count("issue comment 9") == 1
+
+
+def test_a_detached_head_refuses_the_recovery(tmp_path: Path) -> None:
+    """Ownership comes from the persistent record and nothing else, and a
+    detached head is not the branch that record was written for."""
+
+    repo, scratch, env = _serial_build(tmp_path)
+    tip = _built(repo, "graph.py", "half a ticket\n")
+    _git(repo, "checkout", "--detach", tip)
+    before = _state_image(repo)
+
+    answer = _failed(repo, scratch, env)
+
+    assert answer["recovery_status"] == "incomplete"
+    assert "detached" in answer["recovery_reason"]
+    assert _state_image(repo) == before
+
+
+def test_a_start_point_that_is_no_commit_here_refuses_the_recovery(
+    tmp_path: Path,
+) -> None:
+    """A record whose start point this repository cannot look up is a record
+    the engine may not act on: the work stays where it is and a person is
+    asked for, rather than a boundary being guessed from today's head."""
+
+    repo, scratch, env = _serial_build(tmp_path)
+    _built(repo, "graph.py", "half a ticket\n")
+    blob = _git(repo, "hash-object", "-w", "graph.py").stdout.strip()
+    episode = _refs(repo, EPISODE_REF)[0]
+    _git(repo, "update-ref", episode, blob)
+    before = _state_image(repo)
+
+    answer = _failed(repo, scratch, env)
+
+    assert answer["recovery_status"] == "incomplete"
+    assert "start point" in answer["recovery_reason"]
+    assert _state_image(repo) == before
+
+
+def test_a_start_point_the_branch_no_longer_descends_from_refuses_the_recovery(
+    tmp_path: Path,
+) -> None:
+    """A branch that no longer holds the commit the episode began at is a
+    branch whose history is not the one the record describes."""
+
+    repo, scratch, env = _serial_build(tmp_path)
+    _built(repo, "graph.py", "half a ticket\n")
+    _stranded(repo, _refs(repo, EPISODE_REF)[0])
+    before = _state_image(repo)
+
+    answer = _failed(repo, scratch, env)
+
+    assert answer["recovery_status"] == "incomplete"
+    assert "descend" in answer["recovery_reason"]
+    assert _state_image(repo) == before
+
+
+def test_a_merge_inside_the_episode_refuses_the_recovery(tmp_path: Path) -> None:
+    """A merge inside the stretch brought somebody else's commits onto the
+    branch, and the stretch is no longer only this episode's to move."""
+
+    repo, scratch, env = _serial_build(tmp_path)
+    _built(repo, "graph.py", "half a ticket\n")
+    _git(repo, "checkout", "-b", "other", "HEAD~1")
+    _built(repo, "report.py", "another ticket's\n")
+    _git(repo, "checkout", "work")
+    _git(repo, "merge", "--no-ff", "-m", "merge other", "other")
+    before = _state_image(repo)
+
+    answer = _failed(repo, scratch, env)
+
+    assert answer["recovery_status"] == "incomplete"
+    assert "merge" in answer["recovery_reason"]
+    assert _state_image(repo) == before
+
+
+def test_a_concurrent_tickets_working_tree_keeps_todays_record_behaviour(
+    tmp_path: Path,
+) -> None:
+    """Above a ceiling of one a failed ticket is isolated and never reached
+    the branch, so the isolated path's promises are exactly what they were."""
+
+    repo, scratch, env = _routed(tmp_path, requests=["build-9"])
+    worktree = Path(
+        json.loads(_engine(repo, "isolate", "--ticket", "9").stdout)["worktree"]
+    )
+    assert _attempt_started(repo, scratch, env).returncode == 0
+    before = _state_image(repo)
+
+    answer = _failed(repo, scratch, env)
+
+    assert answer["recovery_status"] == "no-episode"
+    assert _state_image(repo) == before
+    assert _refs(repo, EPISODE_REF) == []
+    assert worktree.is_dir()
+
+
+def test_a_ticket_with_both_a_working_tree_and_an_open_episode_recovers_nothing(
+    tmp_path: Path,
+) -> None:
+    """An episode opened serially and a tree opened later are two accounts of
+    where the work is, and the engine cannot say which bears it."""
+
+    repo, scratch, env = _serial_build(tmp_path)
+    _built(repo, "graph.py", "half a ticket\n")
+    assert _engine(repo, "isolate", "--ticket", "9").returncode == 0
+    before = _state_image(repo)
+
+    answer = _failed(repo, scratch, env)
+
+    assert answer["recovery_status"] == "incomplete"
+    assert "working tree" in answer["recovery_reason"]
+    assert _state_image(repo) == before
+
+
+def test_an_incomplete_recovery_holds_the_next_plan_until_a_hand_releases_it(
+    tmp_path: Path,
+) -> None:
+    """Nothing may be planned over work the run said it had taken off the
+    branch and had not, so the refusal names the ref and the exact command
+    that takes it away."""
+
+    repo, scratch, env = _serial_build(tmp_path)
+    _built(repo, "graph.py", "half a ticket\n")
+    _stranded(repo, _refs(repo, EPISODE_REF)[0])
+    answer = _failed(repo, scratch, env)
+    marker = str(answer["marker_ref"])
+    _refile(env, "open", [_ticket(10, "the next one")])
+
+    planned = _engine(repo, "plan", "--state-dir", str(tmp_path / "later"), env=env)
+
+    assert planned.returncode == 2, planned.stderr
+    plan = json.loads(planned.stdout)
+    assert plan["ready"] is False
+    assert plan["starting"] == []
+    assert marker in plan["reason"]
+    assert f"git update-ref -d {marker}" in plan["reason"]
+    assert "record --ticket=9 --outcome=failed" in plan["reason"]
+
+    _git(repo, "update-ref", "-d", marker)
+
+    again = _engine(repo, "plan", "--state-dir", str(tmp_path / "later"), env=env)
+
+    assert json.loads(again.stdout)["ready"] is True, again.stdout
+
+
+def test_a_repeated_record_after_a_finished_recovery_preserves_nothing_twice(
+    tmp_path: Path,
+) -> None:
+    """A finished recovery closed its episode, so the same call again is an
+    ordinary record outside every episode: it moves nothing, and it never
+    takes a second copy of work already preserved."""
+
+    repo, scratch, env = _serial_build(tmp_path)
+    start = _git(repo, "rev-parse", "HEAD").stdout.strip()
+    _built(repo, "graph.py", "half a ticket\n")
+    first = _failed(repo, scratch, env)
+    assert first["recovery_status"] == "recovered"
+    preserved = _refs(repo, PRESERVED_REF)
+
+    answer = _failed(repo, scratch, env)
+
+    assert answer["recovery_status"] == "no-episode"
+    assert _git(repo, "rev-parse", "HEAD").stdout.strip() == start
+    assert _refs(repo, PRESERVED_REF) == preserved
+    assert _refs(repo, EPISODE_REF) == []
+
+
+def test_an_interruption_after_preserving_is_finished_by_the_same_record(
+    tmp_path: Path,
+) -> None:
+    """Nothing is taken off the branch before everything is preserved, so a
+    run that stopped between the two left its work under the ref and the
+    branch where the builder committed it. Here that is what the interrupted
+    call wrote; the same call again moves the branch onto it rather than
+    preserving a second time."""
+
+    repo, scratch, env = _serial_build(tmp_path)
+    start = _git(repo, "rev-parse", "HEAD").stdout.strip()
+    tip = _built(repo, "graph.py", "half a ticket\n")
+    episode = _refs(repo, EPISODE_REF)[0]
+    preserved = episode.replace(EPISODE_REF, PRESERVED_REF, 1) + "/commits"
+    _git(repo, "update-ref", preserved, tip)
+
+    answer = _failed(repo, scratch, env)
+
+    assert answer["recovery_status"] == "recovered"
+    assert answer["preserved_ref"] == preserved
+    assert answer["failed_tip"] == tip
+    assert answer["start_point"] == start
+    assert _git(repo, "rev-parse", "HEAD").stdout.strip() == start
+    assert _git(repo, "rev-parse", preserved).stdout.strip() == tip
+    assert _refs(repo, PRESERVED_REF) == [preserved]
+    assert _refs(repo, EPISODE_REF) == []
+    assert _gh_calls(env).count("issue comment 9") == 1
+
+
+def test_a_tracker_that_refuses_the_comment_leaves_the_recovery_to_be_resumed(
+    tmp_path: Path,
+) -> None:
+    """The branch is put back before the tracker is told, so a tracker that
+    refuses the write stops the recording and not the recovery. The same call
+    again finishes on what the interrupted one wrote: no second preservation,
+    no moved start point, and the one outcome the first call failed to
+    write."""
+
+    repo, scratch, env = _serial_build(tmp_path)
+    start = _git(repo, "rev-parse", "HEAD").stdout.strip()
+    tip = _built(repo, "graph.py", "half a ticket\n")
+    episode = _refs(repo, EPISODE_REF)
+
+    refused = _engine(
+        repo,
+        "record",
+        "--ticket",
+        "9",
+        "--outcome",
+        "failed",
+        "--state-dir",
+        str(scratch),
+        env=env | {"GH_COMMENT_FAIL": "1"},
+    )
+
+    assert refused.returncode == 1
+    assert "could not be recorded" in refused.stderr
+    assert _git(repo, "rev-parse", "HEAD").stdout.strip() == start
+    assert _refs(repo, EPISODE_REF) == episode
+    standing = _ref_image(repo)
+
+    answer = _failed(repo, scratch, env)
+
+    assert answer["recovery_status"] == "recovered"
+    assert answer["outcome"] == "failed"
+    assert answer["closed"] is False
+    assert answer["start_point"] == start
+    assert answer["failed_tip"] == tip
+    assert _git(repo, "rev-parse", "HEAD").stdout.strip() == start
+    assert _ref_image(repo) == {
+        name: at for name, at in standing.items() if name not in episode
+    }
+    assert _gh_calls(env).count("issue comment 9") == 2
+
+
+def test_a_response_lost_after_the_tracker_took_the_comment_writes_no_second_one(
+    tmp_path: Path,
+) -> None:
+    """A write the tracker accepted and never acknowledged is on the ticket
+    all the same, so the call that resumes the recovery reads it back off the
+    ticket rather than recording the same failure a second time."""
+
+    repo, scratch, env = _serial_build(tmp_path)
+    start = _git(repo, "rev-parse", "HEAD").stdout.strip()
+    tip = _built(repo, "graph.py", "half a ticket\n")
+    episode = _refs(repo, EPISODE_REF)
+
+    lost = _engine(
+        repo,
+        "record",
+        "--ticket",
+        "9",
+        "--outcome",
+        "failed",
+        "--state-dir",
+        str(scratch),
+        env=env | {"GH_COMMENT_FAIL": "1"},
+    )
+    assert lost.returncode == 1
+    _refile_issue(env, 9, {"comments": [_recorded("failed")]})
+    standing = _ref_image(repo)
+
+    answer = _failed(repo, scratch, env)
+
+    assert answer["recovery_status"] == "recovered"
+    assert answer["outcome"] == "failed"
+    assert answer["closed"] is False
+    assert answer["start_point"] == start
+    assert answer["failed_tip"] == tip
+    assert _git(repo, "rev-parse", "HEAD").stdout.strip() == start
+    assert _ref_image(repo) == {
+        name: at for name, at in standing.items() if name not in episode
+    }
+    assert _refs(repo, EPISODE_REF) == []
+    assert _gh_calls(env).count("issue comment 9") == 1
+
+
+def test_claim_opens_no_build_episode(tmp_path: Path) -> None:
+    """A claim is not an attempt start: at claim time no ticket has a working
+    tree yet, so a record written there could not tell the two paths apart."""
+
+    repo, scratch, env = _routed(tmp_path, requests=["build-9"])
+
+    claimed = _engine(
+        repo, "claim", "--ticket", "9", "--state-dir", str(scratch), env=env
+    )
+
+    assert claimed.returncode == 0, claimed.stderr
+    assert _refs(repo) == []
+
+
+def test_an_isolated_tickets_attempt_start_opens_no_episode(tmp_path: Path) -> None:
+    """The episode is the serial path's own record, and a ticket that already
+    has a working tree of this run's is not on it."""
+
+    repo, scratch, env = _routed(tmp_path, requests=["build-9"])
+    assert _engine(repo, "isolate", "--ticket", "9").returncode == 0
+
+    assert _attempt_started(repo, scratch, env).returncode == 0
+
+    assert _refs(repo, EPISODE_REF) == []
+
+
+def test_a_repeated_attempt_start_leaves_the_start_point_where_it_was(
+    tmp_path: Path,
+) -> None:
+    """The start point is the episode's, not the call's: a boundary that moved
+    with every repetition would leave the ticket's own commits on the branch."""
+
+    repo, scratch, env = _serial_build(tmp_path)
+    start = _git(repo, "rev-parse", "HEAD").stdout.strip()
+    _built(repo, "graph.py", "half a ticket\n")
+
+    assert _attempt_started(repo, scratch, env).returncode == 0
+    assert (
+        _engine(
+            repo, "claim", "--ticket", "9", "--state-dir", str(scratch), env=env
+        ).returncode
+        == 0
+    )
+
+    episode = _refs(repo, EPISODE_REF)
+    assert len(episode) == 1
+    assert _git(repo, "rev-parse", episode[0]).stdout.strip() == start
+
+
+def test_a_ticket_taken_up_again_starts_above_what_is_already_on_the_branch(
+    tmp_path: Path,
+) -> None:
+    """A parked ticket resumed through its amend opens a new episode, and the
+    commits its earlier episode left stay exactly where they were committed."""
+
+    repo, scratch, env = _serial_build(tmp_path)
+    parked = _built(repo, "graph.py", "the first try\n")
+    assert (
+        _engine(
+            repo, "park", "--ticket", "9", "--state-dir", str(scratch), env=env
+        ).returncode
+        == 0
+    )
+    assert _refs(repo, EPISODE_REF) == []
+    routed = _route(repo, scratch, env, ["amend-9-1"])
+    assert routed.returncode == 0, routed.stderr
+
+    assert _attempt_started(repo, scratch, env, "amend-9-1").returncode == 0
+
+    episode = _refs(repo, EPISODE_REF)
+    assert len(episode) == 1
+    assert _git(repo, "rev-parse", episode[0]).stdout.strip() == parked
+    _built(repo, "second.py", "the second try\n")
+    _failed(repo, scratch, env)
+    assert _git(repo, "rev-parse", "HEAD").stdout.strip() == parked
+    assert (repo / "graph.py").exists()
+
+
+@pytest.mark.parametrize(
+    ("outcome", "extra"),
+    [
+        ("done", ("--commit", "HEAD")),
+        ("conflicted", ("--collided-with", "8")),
+        ("blocked", ("--blocked-by", "8")),
+    ],
+)
+def test_every_other_outcome_strikes_the_episode_and_leaves_the_branch_alone(
+    tmp_path: Path, outcome: str, extra: tuple[str, ...]
+) -> None:
+    """Only a terminal failure takes work off the branch. Every other outcome
+    closes the episode and leaves the branch, the index, and the tree alone."""
+
+    repo, scratch, env = _serial_build(
+        tmp_path,
+        9,
+        tickets=[_ticket(9, "the graph")],
+        issues={8: _ready(8), 9: _ready(9)},
+    )
+    tip = _built(repo, "graph.py", "a whole ticket\n")
+    before = _state_image(repo)
+
+    result = _engine(
+        repo,
+        "record",
+        "--ticket",
+        "9",
+        "--outcome",
+        outcome,
+        *(tip if value == "HEAD" else value for value in extra),
+        "--state-dir",
+        str(scratch),
+        env=env,
+    )
+
+    assert result.returncode == 0, result.stderr
+    assert json.loads(result.stdout)["recovery_status"] == "no-episode"
+    assert _state_image(repo) == before
+    assert _refs(repo, EPISODE_REF) == []
+
+
+def test_park_strikes_the_episode_whoever_the_tracker_claim_belonged_to(
+    tmp_path: Path,
+) -> None:
+    """The episode is the repository's record of a build in flight, and a park
+    ends that build whether or not the tracker claim was this run's to release."""
+
+    repo, scratch, env = _serial_build(tmp_path)
+    tip = _built(repo, "graph.py", "half a ticket\n")
+    _refile_issue(env, 9, {"assignees": [{"login": "somebody-else"}]})
+
+    parked = _engine(
+        repo, "park", "--ticket", "9", "--state-dir", str(scratch), env=env
+    )
+
+    assert parked.returncode == 0, parked.stderr
+    assert _refs(repo, EPISODE_REF) == []
+    assert _git(repo, "rev-parse", "HEAD").stdout.strip() == tip
+
+
+def test_isolate_strikes_no_episode(tmp_path: Path) -> None:
+    """Striking here would turn the contradictory state into a silent nothing
+    instead of the refusal it has to be."""
+
+    repo, _scratch, _env = _serial_build(tmp_path)
+    _built(repo, "graph.py", "half a ticket\n")
+
+    assert _engine(repo, "isolate", "--ticket", "9").returncode == 0
+
+    assert len(_refs(repo, EPISODE_REF)) == 1
+
+
+def test_another_tickets_attempt_start_leaves_an_incomplete_recovery_standing(
+    tmp_path: Path,
+) -> None:
+    """A recovery the run could not finish is not somebody else's to close."""
+
+    repo, scratch, env = _serial_build(tmp_path)
+    _built(repo, "graph.py", "half a ticket\n")
+    _stranded(repo, _refs(repo, EPISODE_REF)[0])
+    assert _failed(repo, scratch, env)["recovery_status"] == "incomplete"
+    routed = _route(repo, scratch, env, ["build-8"])
+    assert routed.returncode == 0, routed.stderr
+
+    assert _attempt_started(repo, scratch, env, "build-8").returncode == 0
+
+    assert len(_refs(repo, EPISODE_REF)) == 2
+    assert len(_refs(repo, MARKER_REF)) == 1
+
+
+def test_a_same_ticket_attempt_start_never_disturbs_its_own_episode(
+    tmp_path: Path,
+) -> None:
+    """Every name a ticket's own attempt is requested under is its own, so
+    none of the four closes the episode the ticket is building in."""
+
+    repo, scratch, env = _serial_build(tmp_path)
+    start = _git(repo, "rev-parse", "HEAD").stdout.strip()
+    _built(repo, "graph.py", "half a ticket\n")
+    routed = _route(repo, scratch, env, ["amend-9-1", "repair-9", "rebuild-9"])
+    assert routed.returncode == 0, routed.stderr
+
+    for request in ("build-9", "amend-9-1", "repair-9", "rebuild-9"):
+        assert _attempt_started(repo, scratch, env, request).returncode == 0
+
+    episode = _refs(repo, EPISODE_REF)
+    assert len(episode) == 1
+    assert _git(repo, "rev-parse", episode[0]).stdout.strip() == start
+
+
+def test_the_engines_own_refs_live_outside_the_branches(tmp_path: Path) -> None:
+    """They are neither branches nor collectable: `git branch` does not list
+    them, the one gesture that deletes a branch cannot reach them, and what
+    they point at survives a collection."""
+
+    repo, scratch, env = _serial_build(
+        tmp_path,
+        9,
+        issues={9: _ready(9), 10: _ready(10), 12: {}},
+    )
+    _built(repo, "graph.py", "half a ticket\n")
+    answer = _failed(repo, scratch, env)
+    preserved = str(answer["preserved_ref"])
+    tip = str(answer["failed_tip"])
+
+    listed = _git(repo, "branch", "--list", "--all").stdout
+    assert "kntnt-orchestrate/episode" not in listed
+    assert "kntnt-orchestrate/preserved" not in listed
+
+    # The gesture itself, run for real: another ticket's half-built tree and
+    # branch are discarded while these refs stand.
+    assert _engine(repo, "isolate", "--ticket", "10").returncode == 0
+    standing = _ref_image(repo)
+    discarded = _engine(
+        repo,
+        "record",
+        "--ticket",
+        "10",
+        "--outcome",
+        "blocked",
+        "--blocked-by",
+        "12",
+        env=env,
+    )
+    assert discarded.returncode == 0, discarded.stderr
+    assert _ref_image(repo) == standing
+
+    _git(repo, "reflog", "expire", "--expire=now", "--expire-unreachable=now", "--all")
+    _git(repo, "gc", "--prune=now", "--quiet")
+
+    assert _git(repo, "rev-parse", preserved).stdout.strip() == tip
+    assert _git(repo, "cat-file", "-t", tip).stdout.strip() == "commit"
+
+
+def test_a_recovered_failure_says_where_the_work_now_is(tmp_path: Path) -> None:
+    """The ticket's own comment and the run's report are where the next person
+    finds work that is no longer where it was committed."""
+
+    repo, scratch, env = _serial_build(tmp_path)
+    _built(repo, "graph.py", "half a ticket\n")
+    (repo / "loose.py").write_text("not committed\n", encoding="utf-8")
+
+    answer = _failed(repo, scratch, env)
+
+    note = _wrote(env, 9)
+    assert str(repo) in note
+    assert str(answer["preserved_ref"]) in note
+    assert str(answer["snapshot_ref"]) in note
+    assert str(answer["failed_tip"]) in note
+    assert str(answer["start_point"]) in note
+    marker = f"<!-- {MARKER} outcome=failed -->"
+    assert note.startswith(marker)
+
+    _refile(env, "open", [_ticket(9, "the graph", comments=[_recorded("failed")])])
+    reported = _engine(repo, "report", env=env)
+
+    assert reported.returncode == 0, reported.stderr
+    report = json.loads(reported.stdout)
+    assert report["failed"] == [9]
+    assert report["base"] == answer["start_point"]
+    detail = report["tickets"][0]
+    assert str(answer["preserved_ref"]) in detail["preserved"]
+    assert str(answer["snapshot_ref"]) in detail["preserved"]
+    assert detail["incomplete_recovery"] is None
+
+
+def test_an_incomplete_recovery_is_named_in_the_report(tmp_path: Path) -> None:
+    """A run that could not take the work off the branch says so, rather than
+    reporting a branch the failure is no longer on."""
+
+    repo, scratch, env = _serial_build(tmp_path)
+    _built(repo, "graph.py", "half a ticket\n")
+    _stranded(repo, _refs(repo, EPISODE_REF)[0])
+    answer = _failed(repo, scratch, env)
+    note = _wrote(env, 9)
+    assert str(answer["marker_ref"]) in note
+    assert f"git update-ref -d {answer['marker_ref']}" in note
+
+    _refile(env, "open", [_ticket(9, "the graph", comments=[_recorded("failed")])])
+    reported = _engine(repo, "report", env=env)
+
+    assert reported.returncode == 0, reported.stderr
+    detail = json.loads(reported.stdout)["tickets"][0]
+    assert detail["incomplete_recovery"] == answer["marker_ref"]
+    assert detail["preserved"] == []
+
+
+def test_a_record_without_a_session_directory_still_recovers(tmp_path: Path) -> None:
+    """The start point is a ref in the repository rather than a line in the
+    session's scratch, so a recovery does not depend on a directory that may
+    be gone by the time the failure is recorded."""
+
+    repo, scratch, env = _serial_build(tmp_path)
+    start = _git(repo, "rev-parse", "HEAD").stdout.strip()
+    _built(repo, "graph.py", "half a ticket\n")
+    shutil.rmtree(scratch)
+
+    result = _engine(repo, "record", "--ticket", "9", "--outcome", "failed", env=env)
+
+    assert result.returncode == 0, result.stderr
+    answer = json.loads(result.stdout)
+    assert answer["recovery_status"] == "recovered"
+    assert answer["start_point"] == start
+    assert _git(repo, "rev-parse", "HEAD").stdout.strip() == start
+
+
+def test_a_hand_moved_branch_lets_a_repeated_record_release_it(
+    tmp_path: Path,
+) -> None:
+    """The marker goes when the recovery is finished, whoever finished it: a
+    person who put the branch back where the record says the build began has
+    done what the engine refused to guess at, and the next call sees it."""
+
+    repo, scratch, env = _serial_build(tmp_path)
+    _built(repo, "graph.py", "half a ticket\n")
+    _stranded(repo, _refs(repo, EPISODE_REF)[0])
+    assert _failed(repo, scratch, env)["recovery_status"] == "incomplete"
+    _refile_issue(env, 9, {"comments": [_recorded("failed")]})
+    written = _git(repo, "rev-parse", _refs(repo, EPISODE_REF)[0]).stdout.strip()
+    _git(repo, "reset", "--hard", written)
+
+    answer = _failed(repo, scratch, env)
+
+    assert answer["recovery_status"] == "recovered"
+    assert _refs(repo, MARKER_REF) == []
+    assert _git(repo, "rev-parse", "HEAD").stdout.strip() == written
+    assert _gh_calls(env).count("issue comment 9") == 1
+
+
+def test_a_marker_the_engine_cannot_release_holds_the_branch_until_a_hand_does(
+    tmp_path: Path,
+) -> None:
+    """A recovery whose ground is gone is not resumable, so the door out of it
+    is the person's: the engine goes on refusing, the plan goes on starting
+    nothing whatever the tracker already says, and the branch comes back the
+    moment the marker is taken away."""
+
+    repo, scratch, env = _serial_build(tmp_path)
+    _built(repo, "graph.py", "half a ticket\n")
+    blob = _git(repo, "hash-object", "-w", "graph.py").stdout.strip()
+    _git(repo, "update-ref", _refs(repo, EPISODE_REF)[0], blob)
+    marker = str(_failed(repo, scratch, env)["marker_ref"])
+    _refile(
+        env,
+        "open",
+        [_ticket(9, "the graph", comments=[_recorded("failed")]), _ticket(10, "next")],
+    )
+
+    assert _failed(repo, scratch, env)["recovery_status"] == "incomplete"
+    held = _engine(repo, "plan", "--state-dir", str(tmp_path / "later"), env=env)
+    assert held.returncode == 2
+    assert marker in json.loads(held.stdout)["reason"]
+
+    _git(repo, "update-ref", "-d", marker)
+
+    again = _engine(repo, "plan", "--state-dir", str(tmp_path / "later"), env=env)
+
+    assert json.loads(again.stdout)["ready"] is True, again.stdout
+
+
+def test_the_path_where_done_is_refused_reaches_the_same_recovery(
+    tmp_path: Path,
+) -> None:
+    """A verifier passed the ticket and the tree refused it, which is the one
+    failure that arrives without a verdict — and it reaches the same contract
+    as an exhausted amend path."""
+
+    repo, scratch, env = _serial_build(tmp_path)
+    start = _git(repo, "rev-parse", "HEAD").stdout.strip()
+    tip = _built(repo, "graph.py", "a whole ticket\n")
+    (repo / "loose.py").write_text("nothing committed this\n", encoding="utf-8")
+
+    refused = _engine(
+        repo,
+        "record",
+        "--ticket",
+        "9",
+        "--outcome",
+        "done",
+        "--commit",
+        tip,
+        "--state-dir",
+        str(scratch),
+        env=env,
+    )
+    assert refused.returncode == 1
+    assert "committed" in refused.stderr
+
+    answer = _failed(repo, scratch, env)
+
+    assert answer["recovery_status"] == "recovered"
+    assert answer["failed_tip"] == tip
+    assert _git(repo, "rev-parse", "HEAD").stdout.strip() == start
+    snapshot = str(answer["snapshot_ref"])
+    assert (
+        _git(repo, "show", f"{snapshot}:loose.py").stdout == "nothing committed this\n"
+    )

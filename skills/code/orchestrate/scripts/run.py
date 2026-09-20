@@ -18,7 +18,7 @@ import subprocess
 import sys
 import tempfile
 from collections.abc import Callable, Iterator, Sequence
-from contextlib import contextmanager
+from contextlib import contextmanager, suppress
 from dataclasses import asdict, dataclass, field, replace
 from datetime import UTC, datetime
 from pathlib import Path, PurePosixPath
@@ -519,26 +519,40 @@ def emit(payload: dict[str, Any]) -> None:
     print(json.dumps(payload, indent=2))
 
 
-def _capture(cwd: Path, *args: str) -> subprocess.CompletedProcess[str]:
-    """Run a command in *cwd* without raising on a non-zero exit."""
+def _capture(
+    cwd: Path, *args: str, env: dict[str, str] | None = None
+) -> subprocess.CompletedProcess[str]:
+    """Run a command in *cwd* without raising on a non-zero exit.
 
-    return subprocess.run(args, cwd=cwd, text=True, capture_output=True, check=False)
+    *env* adds to this process's own environment rather than replacing it, so
+    a caller that has to set one git variable does not have to reconstruct the
+    rest of the environment the command needs.
+    """
+
+    return subprocess.run(
+        args,
+        cwd=cwd,
+        env=None if env is None else os.environ | env,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
 
 
-def _output(cwd: Path, *args: str) -> str:
+def _output(cwd: Path, *args: str, env: dict[str, str] | None = None) -> str:
     """Run a command in *cwd* and return stdout. Raise RunError on failure."""
 
-    result = _capture(cwd, *args)
+    result = _capture(cwd, *args, env=env)
     if result.returncode != 0:
         detail = (result.stderr or result.stdout).strip()
         raise RunError(detail or f"{' '.join(args)} failed")
     return result.stdout
 
 
-def git(cwd: Path, *args: str) -> str:
+def git(cwd: Path, *args: str, env: dict[str, str] | None = None) -> str:
     """Run git in *cwd* and return stdout."""
 
-    return _output(cwd, "git", *args)
+    return _output(cwd, "git", *args, env=env)
 
 
 def git_result(cwd: Path, *args: str) -> subprocess.CompletedProcess[str]:
@@ -681,6 +695,568 @@ def open_worktrees(cwd: Path, run_branch: str) -> dict[int, str]:
                 found[int(standing.name)] = str(standing)
 
     return found
+
+
+# Where the engine anchors the serial path's own records. They sit outside
+# `refs/heads/`, so `git branch` does not list them, `discard_tree` cannot
+# reach them, a collection cannot take away what they point at, and they never
+# collide with the branch names `worktree_branch` forms (ADR-0201).
+ENGINE_REFS = "refs/kntnt-orchestrate"
+EPISODE_START = f"{ENGINE_REFS}/episode"
+EPISODE_PRESERVED = f"{ENGINE_REFS}/preserved"
+EPISODE_INCOMPLETE = f"{ENGINE_REFS}/incomplete"
+
+# What a `record` answers about the recovery it ran. Three words: the branch
+# was moved back, the recovery could not be finished, or no serial episode was
+# there to recover from — which is every isolated ticket, every hand-run
+# `record`, and every run from before this contract existed.
+RECOVERED: str = "recovered"
+RECOVERY_INCOMPLETE: str = "incomplete"
+NO_RECOVERY: str = "no-episode"
+
+# What the engine cannot preserve whole, read off the repository before
+# anything is moved. An unmerged index has stages no tree can hold, and each
+# of the files below is git's own record that a multi-step operation is
+# half-finished; preserving either would be preserving a state, not work.
+UNPRESERVABLE: dict[str, str] = {
+    "MERGE_HEAD": "a merge",
+    "CHERRY_PICK_HEAD": "a cherry-pick",
+    "REVERT_HEAD": "a revert",
+    "BISECT_LOG": "a bisect",
+    "rebase-merge": "a rebase",
+    "rebase-apply": "a rebase",
+}
+
+
+@dataclass(frozen=True)
+class Episode:
+    """One serial build episode: a ticket, a branch, and a stretch of history.
+
+    It is opened at the attempt boundary immediately before a serial builder
+    is dispatched, and it is the only thing that gives a later `record` the
+    authority to move the branch back: the stretch it may move is exactly
+    `<start point>..HEAD` on the branch this names, and no commit in it is
+    ever examined for its author, message, or time to decide whose it is
+    (ADR-0201).
+
+    `identity` tells one episode of a ticket from the next on the same branch,
+    so a ticket taken up again preserves its work beside what an earlier
+    episode preserved rather than over it.
+    """
+
+    number: int
+    branch: str
+    identity: int
+
+    @property
+    def ref(self) -> str:
+        """Return the start-point ref, whose existence is the open episode."""
+
+        return f"{EPISODE_START}/{self.branch}/{self.number}/{self.identity}"
+
+    @property
+    def preserved_ref(self) -> str:
+        """Return the ref the episode's own commits are preserved under."""
+
+        return (
+            f"{EPISODE_PRESERVED}/{self.branch}/{self.number}/{self.identity}/commits"
+        )
+
+    @property
+    def snapshot_ref(self) -> str:
+        """Return the ref its index and working tree are preserved under."""
+
+        return (
+            f"{EPISODE_PRESERVED}/{self.branch}/{self.number}/{self.identity}/worktree"
+        )
+
+    @property
+    def marker_ref(self) -> str:
+        """Return the ref that stands while its recovery is unfinished."""
+
+        return f"{EPISODE_INCOMPLETE}/{self.branch}/{self.number}/{self.identity}"
+
+
+@dataclass
+class Recovery:
+    """What one `record` did about the branch, and where the work now is.
+
+    Carried into the ticket's own comment and into the verb's answer, because
+    a failure whose work is no longer where it was committed is only findable
+    where the run says so. `reason` is empty unless the recovery is
+    incomplete, in which case it names the state that stopped it.
+    """
+
+    status: str
+    reason: str = ""
+    episode: Episode | None = None
+    start_point: str | None = None
+    failed_tip: str | None = None
+    preserved_ref: str | None = None
+    snapshot_ref: str | None = None
+    marker_ref: str | None = None
+
+
+def engine_refs(cwd: Path, prefix: str) -> list[str]:
+    """Return every ref of the engine's own below *prefix*, names only.
+
+    Names only, because a ref whose object this repository no longer holds is
+    exactly one of the states the recovery has to refuse rather than fail on.
+    """
+
+    listed = git(cwd, "for-each-ref", "--format=%(refname)", prefix)
+    return sorted(listed.split())
+
+
+def ref_stands(cwd: Path, ref: str) -> bool:
+    """Return whether *ref* is written, whatever it points at."""
+
+    return git_ok(cwd, "show-ref", "--verify", "--quiet", ref)
+
+
+def all_episodes(cwd: Path) -> list[Episode]:
+    """Return every serial build episode standing open in this repository.
+
+    The ref name is read from the right, a branch being free to carry slashes
+    of its own while a ticket number and an episode identity are not.
+    """
+
+    stem = f"{EPISODE_START}/"
+    found: list[Episode] = []
+    for refname in engine_refs(cwd, stem):
+        parts = refname.removeprefix(stem).split("/")
+        if len(parts) < 3 or not parts[-1].isdigit() or not parts[-2].isdigit():
+            continue
+        found.append(
+            Episode(
+                number=int(parts[-2]),
+                branch="/".join(parts[:-2]),
+                identity=int(parts[-1]),
+            )
+        )
+    return found
+
+
+def open_episodes(cwd: Path, branch: str) -> list[Episode]:
+    """Return the serial build episodes standing open on *branch*."""
+
+    return [episode for episode in all_episodes(cwd) if episode.branch == branch]
+
+
+def episode_of(cwd: Path, branch: str, number: int) -> Episode | None:
+    """Return ticket *number*'s open episode on *branch*, or None."""
+
+    for episode in open_episodes(cwd, branch):
+        if episode.number == number:
+            return episode
+    return None
+
+
+def episode_start(cwd: Path, episode: Episode) -> str | None:
+    """Return the commit *episode* began at, or None where it is not one here.
+
+    A start point this repository cannot look up as a commit is the one thing
+    the recovery may never replace with a guess from today's head.
+    """
+
+    resolved = git_result(cwd, "rev-parse", "--verify", f"{episode.ref}^{{commit}}")
+    return resolved.stdout.strip() if resolved.returncode == 0 else None
+
+
+def recovery_incomplete(cwd: Path, episode: Episode) -> bool:
+    """Return whether *episode* carries an unfinished recovery."""
+
+    return ref_stands(cwd, episode.marker_ref)
+
+
+def preserved_refs(cwd: Path, branch: str, number: int) -> list[str]:
+    """Return every ref ticket *number*'s preserved work on *branch* is under."""
+
+    return engine_refs(cwd, f"{EPISODE_PRESERVED}/{branch}/{number}/")
+
+
+def standing_markers(cwd: Path, branch: str) -> list[Episode]:
+    """Return the episodes on *branch* whose recovery never finished.
+
+    Read off the marker refs rather than off the open episodes, because the
+    marker is what holds the branch and a person may have taken the start
+    point away by hand while it still stands.
+    """
+
+    stem = f"{EPISODE_INCOMPLETE}/{branch}/"
+    found: list[Episode] = []
+    for refname in engine_refs(cwd, stem):
+        parts = refname.removeprefix(stem).split("/")
+        if len(parts) != 2 or not all(part.isdigit() for part in parts):
+            continue
+        found.append(
+            Episode(number=int(parts[0]), branch=branch, identity=int(parts[1]))
+        )
+    return found
+
+
+def next_episode_identity(cwd: Path, branch: str, number: int) -> int:
+    """Return an episode identity ticket *number* has never used on *branch*.
+
+    Preserved work outlives the episode that made it, so an identity is spent
+    for good once anything has been written under it: a second episode reusing
+    one would preserve its own work over the first's.
+    """
+
+    spent = {0}
+    for prefix in (EPISODE_START, EPISODE_PRESERVED, EPISODE_INCOMPLETE):
+        stem = f"{prefix}/{branch}/{number}/"
+        for refname in engine_refs(cwd, stem):
+            part = refname.removeprefix(stem).split("/")[0]
+            if part.isdigit():
+                spent.add(int(part))
+    return max(spent) + 1
+
+
+def open_build_episode(cwd: Path, number: int | None) -> Episode | None:
+    """Open ticket *number*'s serial build episode where this is the serial path.
+
+    Called at the one moment in a run where the two paths are already told
+    apart and the branch is about to take a builder's commits: a ticket that
+    already has a working tree of this run's is isolated and has no episode,
+    and a ticket whose episode is already open keeps the start point it has.
+
+    Every other ticket's episode on this branch is closed first. An episode
+    nothing closed stands across an invocation boundary, and a recovery that
+    later reached back over it would take a passed ticket's integrated work
+    with it — so the moment the branch is about to receive somebody else's
+    work is the moment that episode ends (ADR-0201).
+    """
+
+    # A detached head is no branch to open an episode on, and the verbs that
+    # would have refused it have their own refusals already.
+    try:
+        branch = current_branch(cwd)
+    except RunError:
+        return None
+
+    # End every episode on this branch that is not this call's own ticket. One
+    # holding an unfinished recovery is nobody else's to end.
+    for other in open_episodes(cwd, branch):
+        if other.number == number or recovery_incomplete(cwd, other):
+            continue
+        git(cwd, "update-ref", "-d", other.ref)
+
+    # A wave fix carries no ticket, and an isolated ticket's work never
+    # reaches this branch, so neither opens one.
+    if number is None or number in open_worktrees(cwd, branch):
+        return None
+
+    # A repeated attempt start continues the episode rather than moving it.
+    standing = episode_of(cwd, branch, number)
+    if standing is not None:
+        return standing
+
+    episode = Episode(
+        number=number,
+        branch=branch,
+        identity=next_episode_identity(cwd, branch, number),
+    )
+    git(cwd, "update-ref", episode.ref, git(cwd, "rev-parse", "HEAD").strip())
+    return episode
+
+
+def strike_build_episode(cwd: Path, number: int) -> None:
+    """Close ticket *number*'s episode on the checked-out branch.
+
+    Called where the build it stood for is over: at every recorded outcome and
+    at every park. An episode whose recovery is unfinished is the exception —
+    it is what holds the branch, and it goes when the recovery does.
+    """
+
+    try:
+        branch = current_branch(cwd)
+    except RunError:
+        return
+
+    episode = episode_of(cwd, branch, number)
+    if episode is None or recovery_incomplete(cwd, episode):
+        return
+
+    git(cwd, "update-ref", "-d", episode.ref)
+
+
+def unpreservable_state(cwd: Path) -> str | None:
+    """Return why this repository's work cannot be preserved whole, or None.
+
+    Asked before anything is written or moved. These are states rather than
+    work: what they hold has no single tree, so preserving them would be
+    preserving an appearance of the work and losing the rest.
+    """
+
+    if git(cwd, "ls-files", "--unmerged").strip():
+        return "the index holds unmerged stages"
+
+    home = (cwd / git(cwd, "rev-parse", "--git-dir").strip()).resolve()
+    for name, operation in UNPRESERVABLE.items():
+        if (home / name).exists():
+            return f"{operation} is in progress in this repository"
+
+    return None
+
+
+def unexpected_history(cwd: Path, episode: Episode, start: str | None) -> str | None:
+    """Return why *episode*'s stretch is not the one its record describes.
+
+    All four conditions hold or the history is unexpected. Ownership comes out
+    of the persistent record and nowhere else, so what is checked is the shape
+    of the history between the start point and the head, never whose a commit
+    looks like it is.
+    """
+
+    # The head is the branch the record was written for, and is not detached.
+    # Which branch it is was settled by how the episode was found, so what is
+    # left to ask is whether a branch is checked out at all.
+    if not git_ok(cwd, "symbolic-ref", "--quiet", "HEAD"):
+        return f"HEAD is detached, and this episode was opened on {episode.branch}"
+
+    # The start point is a commit this repository still holds.
+    if start is None:
+        return f"the start point under {episode.ref} is no commit in this repository"
+
+    # The branch still descends from it, and nothing merged into the stretch.
+    if not git_ok(cwd, "merge-base", "--is-ancestor", start, "HEAD"):
+        return f"this branch does not descend from the start point {start}"
+    if git(cwd, "rev-list", "--min-parents=2", f"{start}..HEAD").strip():
+        return f"a merge commit stands between the start point {start} and HEAD"
+
+    return None
+
+
+def preserve_uncommitted(cwd: Path, tip: str) -> str:
+    """Return a commit holding the index and working tree exactly as they are.
+
+    Built against a copy of the index, so neither the index nor a single file
+    is touched by the preserving itself. The answer's own tree is the working
+    tree, untracked files included, and its second parent's tree is the index,
+    which is what keeps the staging difference recoverable. What the
+    repository ignores is not work and is left where it lies.
+    """
+
+    with tempfile.TemporaryDirectory() as home:
+        # Work an index of our own, copied from the real one where it exists.
+        index = Path(home) / "index"
+        standing = (
+            cwd / git(cwd, "rev-parse", "--git-path", "index").strip()
+        ).resolve()
+        if standing.exists():
+            shutil.copyfile(standing, index)
+        aside = {"GIT_INDEX_FILE": str(index)}
+
+        # Write the index as it stands, then the whole working tree over it.
+        staged = git(cwd, "write-tree", env=aside).strip()
+        anchored = git(
+            cwd, "commit-tree", staged, "-p", tip, "-m", "index", env=aside
+        ).strip()
+        git(cwd, "add", "--all", env=aside)
+        whole = git(cwd, "write-tree", env=aside).strip()
+        return git(
+            cwd,
+            "commit-tree",
+            whole,
+            "-p",
+            tip,
+            "-p",
+            anchored,
+            "-m",
+            "working tree",
+            env=aside,
+        ).strip()
+
+
+def recover_failed_episode(cwd: Path, number: int) -> Recovery:
+    """Take ticket *number*'s terminally failed work off the branch it is on.
+
+    The serial path's whole contract, in the order an interruption may stop
+    it at: nothing is removed before everything is preserved, the branch is
+    moved back only once that preservation is verified, and a repeated call
+    with the same arguments continues from wherever the last one stopped.
+
+    Where it cannot be finished safely it is not begun: the refusal writes the
+    one ref that says so, leaves every other ref and every byte in the working
+    tree exactly as it found them, and never refuses to record the outcome.
+    """
+
+    branch = None
+    with suppress(RunError):
+        branch = current_branch(cwd)
+
+    # A detached head still has to answer for an episode somebody opened, so
+    # the ticket's episode is looked for wherever it stands.
+    episodes = [
+        episode
+        for episode in all_episodes(cwd)
+        if episode.number == number and (branch is None or episode.branch == branch)
+    ]
+    if not episodes:
+        return Recovery(status=NO_RECOVERY)
+    episode = episodes[0]
+    start = episode_start(cwd, episode)
+
+    # A ticket with both a working tree of this run's and an open episode has
+    # two accounts of where its work is, and the engine cannot tell which
+    # bears it.
+    if branch is not None and number in open_worktrees(cwd, branch):
+        return refuse_recovery(
+            cwd,
+            episode,
+            start,
+            "this ticket has both a working tree of this run's and an open "
+            "build episode, so which of them bears its work cannot be told",
+        )
+
+    if reason := unpreservable_state(cwd):
+        return refuse_recovery(cwd, episode, start, reason)
+    if reason := unexpected_history(cwd, episode, start):
+        return refuse_recovery(cwd, episode, start, reason)
+
+    anchor = cast(str, start)
+    top = Path(git(cwd, "rev-parse", "--show-toplevel").strip())
+    head = git(cwd, "rev-parse", "HEAD").strip()
+    dirty = bool(git(cwd, "status", "--porcelain").strip())
+
+    # Preserve before anything is removed, and never a second time: a repeated
+    # call finds what the interrupted one wrote and goes on from there.
+    try:
+        if not ref_stands(cwd, episode.preserved_ref):
+            git(cwd, "update-ref", episode.preserved_ref, head)
+        if dirty and not ref_stands(cwd, episode.snapshot_ref):
+            git(
+                cwd,
+                "update-ref",
+                episode.snapshot_ref,
+                preserve_uncommitted(top, head),
+            )
+    except RunError as exc:
+        return refuse_recovery(
+            cwd, episode, start, f"this ticket's work could not be preserved: {exc}"
+        )
+
+    # Verify what was written before acting on it, then put the branch, the
+    # index, and the working tree back where the episode began. The ticket's
+    # own untracked files go with it; what the repository ignores stays, which
+    # is what `clean` without `-x` leaves alone. The tip the failure stands at
+    # is read back off the preservation rather than off the head, a call that
+    # resumes an interrupted one finding the branch already moved back.
+    try:
+        tip = git(
+            cwd, "rev-parse", "--verify", f"{episode.preserved_ref}^{{commit}}"
+        ).strip()
+        if dirty:
+            git(cwd, "rev-parse", "--verify", f"{episode.snapshot_ref}^{{commit}}")
+        git(cwd, "reset", "--hard", anchor)
+        git(top, "clean", "--force", "-d")
+    except RunError as exc:
+        return refuse_recovery(
+            cwd, episode, start, f"this branch could not be moved back: {exc}"
+        )
+
+    if ref_stands(cwd, episode.marker_ref):
+        git(cwd, "update-ref", "-d", episode.marker_ref)
+
+    return Recovery(
+        status=RECOVERED,
+        episode=episode,
+        start_point=anchor,
+        failed_tip=tip,
+        preserved_ref=episode.preserved_ref,
+        snapshot_ref=(
+            episode.snapshot_ref if ref_stands(cwd, episode.snapshot_ref) else None
+        ),
+    )
+
+
+def refuse_recovery(
+    cwd: Path, episode: Episode, start: str | None, reason: str
+) -> Recovery:
+    """Stop *episode*'s recovery without moving anything, and say so durably.
+
+    The one thing a refusal writes is the marker, because a refusal that left
+    nothing behind would leave the failed work planned over by the next
+    invocation — which is the whole of what this contract exists to stop. It
+    is also the only thing that changes: every ref that existed before the
+    call points where it did, and every file in the working tree is the byte
+    for byte the same, ignored files included (ADR-0201).
+    """
+
+    git(cwd, "update-ref", episode.marker_ref, git(cwd, "rev-parse", "HEAD").strip())
+    return Recovery(
+        status=RECOVERY_INCOMPLETE,
+        reason=reason,
+        episode=episode,
+        start_point=start,
+        failed_tip=git(cwd, "rev-parse", "HEAD").strip(),
+        preserved_ref=(
+            episode.preserved_ref if ref_stands(cwd, episode.preserved_ref) else None
+        ),
+        snapshot_ref=(
+            episode.snapshot_ref if ref_stands(cwd, episode.snapshot_ref) else None
+        ),
+        marker_ref=episode.marker_ref,
+    )
+
+
+def incomplete_recovery_refusal(cwd: Path, branch: str) -> str | None:
+    """Return why nothing may be planned on *branch*, or None where it may.
+
+    A run that said it had taken failed work off the branch and could not is
+    a run whose branch still holds work three verdicts refused. The refusal
+    names both doors out of it: the call that continues the recovery, and the
+    command that takes the marker away by hand where nothing can.
+    """
+
+    standing = standing_markers(cwd, branch)
+    if not standing:
+        return None
+
+    episode = standing[0]
+    return (
+        f"#{episode.number}'s recovery from a terminal failure on {branch} is "
+        "incomplete, so its unverified work may still be on this branch: "
+        f"repeat `record --ticket={episode.number} --outcome=failed` to "
+        f"continue the recovery, or release the branch by hand with "
+        f"`git update-ref -d {episode.marker_ref}`"
+    )
+
+
+def recovery_prose(cwd: Path, number: int, recovery: Recovery) -> str:
+    """Return what a recorded failure says about where its work now is.
+
+    Outside the marker, because nothing reads it back: what the engine needs
+    machine-readably is the outcome, and what a person needs is the path, the
+    refs, and the commits (ADR-0201).
+    """
+
+    if recovery.status == NO_RECOVERY:
+        return ""
+
+    episode = cast(Episode, recovery.episode)
+    home = git(cwd, "rev-parse", "--show-toplevel").strip()
+    if recovery.status == RECOVERY_INCOMPLETE:
+        return (
+            f" Its work was not taken off {episode.branch} in {home}: "
+            f"{recovery.reason}. The recovery is incomplete and "
+            f"{recovery.marker_ref} stands; repeat `record --ticket={number} "
+            f"--outcome=failed` to continue it, or release the branch by hand "
+            f"with `git update-ref -d {recovery.marker_ref}`."
+        )
+
+    snapshot = (
+        f", its index and working tree under {recovery.snapshot_ref}"
+        if recovery.snapshot_ref
+        else ""
+    )
+    return (
+        f" Its work was taken off {episode.branch} in {home} and preserved "
+        f"locally: the commits it failed at are under {recovery.preserved_ref}, "
+        f"tip {recovery.failed_tip}{snapshot}. The branch stands again at "
+        f"{recovery.start_point}."
+    )
 
 
 def numbered_registries(cwd: Path) -> dict[str, int]:
@@ -918,6 +1494,14 @@ class Ticket:
     own holds it. It is None for a ticket built straight on the branch, and for
     one whose tree was taken away when its work was merged — which leaves it
     naming exactly the failures the machine kept for the developer to look at.
+
+    `preserved`, `start_point`, and `incomplete_recovery` are the same question
+    asked of the serial path, and answered by the repository for the same
+    reason: work a terminal failure took off the branch is findable only under
+    the refs that hold it, a build in flight began at a commit only the branch
+    remembers, and a recovery that could not be finished is what a reader has
+    to be told before anything else about that ticket. Preserved work is where
+    a failure now stands; it is never work that landed (ADR-0201).
     """
 
     number: int
@@ -936,6 +1520,9 @@ class Ticket:
     commit_contract: list[dict[str, Any]] | None = None
     contract_base: str | None = None
     worktree: str | None = None
+    preserved: list[str] = field(default_factory=list)
+    start_point: str | None = None
+    incomplete_recovery: str | None = None
 
 
 def ticket_details(
@@ -2776,16 +3363,28 @@ def tickets_recorded(
 
 
 def say_where_work_stands(cwd: Path, tickets: list[Ticket], run_branch: str) -> None:
-    """Tell each of *tickets* which working tree still holds its work, if any.
+    """Tell each of *tickets* where its work stands, if anywhere.
 
     Asked of the repository once and answered for the whole set, rather than
     threaded through the reading of the tracker: where a ticket's work stands
-    is the repository's answer and the tracker has no opinion about it.
+    is the repository's answer and the tracker has no opinion about it. The
+    serial path's refs are read here for exactly that reason — a failure whose
+    work was taken off the branch is findable under them and nowhere else, and
+    the tracker comment that names them is prose rather than the account.
     """
 
     open_now = open_worktrees(cwd, run_branch)
+    standing = {episode.number: episode for episode in open_episodes(cwd, run_branch)}
     for ticket in tickets:
         ticket.worktree = open_now.get(ticket.number)
+        ticket.preserved = preserved_refs(cwd, run_branch, ticket.number)
+        episode = standing.get(ticket.number)
+        ticket.start_point = None if episode is None else episode_start(cwd, episode)
+        ticket.incomplete_recovery = (
+            episode.marker_ref
+            if episode is not None and recovery_incomplete(cwd, episode)
+            else None
+        )
 
 
 def run_base(cwd: Path, tickets: list[Ticket]) -> str:
@@ -3022,6 +3621,17 @@ def build_plan(
     plan.approval_expected = approval
     plan.approval_payload = plan_approval_payload(plan)
     plan.approval_identity = plan_approval_identity(plan.approval_payload)
+
+    # A recovery the run could not finish holds this branch before anything
+    # else is weighed: the failed work it said it had taken off may still be
+    # there, and a frontier let out over it would be built on exactly that.
+    # Nothing writes state here, so neither a fresh session directory nor a
+    # tracker that already carries the failure gets past it (ADR-0201).
+    if (unfinished := incomplete_recovery_refusal(cwd, branch)) is not None:
+        plan.ready = False
+        plan.reason = unfinished
+        plan.starting = []
+        return plan
 
     # Hold later unflagged work below the first caller-authorized frontier.
     ceiling_refusal: str | None = None
@@ -3976,6 +4586,11 @@ def cmd_park(cwd: Path, number: int, state_path: Path | None) -> int:
         return fail(f"#{number} could not be parked: {exc}")
 
     forget_claim(state_path, cwd, number)
+    try:
+        strike_build_episode(cwd, number)
+    except RunError as exc:
+        return fail(f"#{number}'s build episode could not be closed: {exc}")
+
     emit({"verb": "park", "ticket": number, "parked": True, "reason": None})
     return 0
 
@@ -4879,13 +5494,16 @@ def outcome_note(
     commit: str | None,
     against: list[int],
     contract_base: str | None = None,
+    recovery: str = "",
 ) -> str:
     """Render what is written on a ticket when its outcome is recorded.
 
     One line, carrying a marker a later run can read the outcome back out of
     and prose the developer reading the ticket can read instead. Both halves
     name the ticket a collision was with, that being the pair the developer
-    fixes the ticket breakdown from.
+    fixes the ticket breakdown from. *recovery* is the serial path's own
+    sentence about where the work now is, and it stays outside the marker:
+    nothing reads it back, and the marker's grammar is unchanged by it.
     """
 
     named = f" commit={commit}" if commit else ""
@@ -4897,7 +5515,10 @@ def outcome_note(
     anchored = f" contract-base={contract_base}" if contract_base else ""
     said = f" It collided with {as_references(against)}." if against else ""
 
-    return f"<!-- {MARKER} outcome={outcome}{named}{marked}{anchored} --> {NOTES[outcome]}{said}"
+    return (
+        f"<!-- {MARKER} outcome={outcome}{named}{marked}{anchored} --> "
+        f"{NOTES[outcome]}{said}{recovery}"
+    )
 
 
 def blocked_note(waiting_on: list[int]) -> str:
@@ -5211,6 +5832,32 @@ def cmd_record(
         except RunError as exc:
             return fail(f"#{number} could not be recorded blocked: {exc}")
 
+    # A terminal serial failure takes its work off the branch before the
+    # tracker is told, so what the next plan and the branch gate read is the
+    # branch the ticket began on rather than work three verdicts refused. The
+    # other outcomes reach neither: only a failure leaves work nothing will
+    # integrate on a branch the developer's next push would publish.
+    try:
+        recovery = (
+            recover_failed_episode(cwd, number)
+            if outcome == FAILED
+            else Recovery(status=NO_RECOVERY)
+        )
+    except RunError as exc:
+        return fail(f"#{number}'s failed work could not be recovered: {exc}")
+
+    # A recovery that was interrupted after the tracker took the comment is
+    # resumed rather than recorded twice: the marker the engine writes is the
+    # one durable statement that this attempt is already on the ticket.
+    already = False
+    if recovery.status != NO_RECOVERY:
+        try:
+            already = (
+                recorded_against(ticket_view(cwd, number, "comments"))[0] == FAILED
+            )
+        except (RunError, KeyError) as exc:
+            return fail(f"the tracker cannot answer for #{number}: {exc}")
+
     # Done is the only outcome that closes a ticket, and the Skill records it
     # only where a separate subagent has verified the work — so there is no
     # path from a builder's own report to a closed ticket.
@@ -5218,14 +5865,18 @@ def cmd_record(
         blocked_note(waiting)
         if outcome == BLOCKED
         else outcome_note(
-            outcome, commit, collided, contract_base if outcome == DONE else None
+            outcome,
+            commit,
+            collided,
+            contract_base if outcome == DONE else None,
+            recovery_prose(cwd, number, recovery),
         )
     )
     try:
         if outcome == DONE:
             complete_lifecycle(cwd, number, ticket)
             gh(cwd, "issue", "close", str(number), "--comment", note)
-        else:
+        elif not already:
             gh(cwd, "issue", "comment", str(number), "--body", note)
     except RunError as exc:
         return fail(f"#{number} could not be recorded: {exc}")
@@ -5243,6 +5894,10 @@ def cmd_record(
             return fail(f"#{number}'s working tree could not be discarded: {exc}")
 
     forget_claim(state_path, cwd, number)
+    try:
+        strike_build_episode(cwd, number)
+    except RunError as exc:
+        return fail(f"#{number}'s build episode could not be closed: {exc}")
 
     emit(
         {
@@ -5253,6 +5908,18 @@ def cmd_record(
             "collided_with": collided,
             "blocked_by": waiting,
             "closed": outcome == DONE,
+            "recovery_status": recovery.status,
+            "recovery_reason": recovery.reason,
+            "start_point": recovery.start_point,
+            "failed_tip": recovery.failed_tip,
+            "preserved_ref": recovery.preserved_ref,
+            "snapshot_ref": recovery.snapshot_ref,
+            "marker_ref": recovery.marker_ref,
+            "marker_removal": (
+                None
+                if recovery.marker_ref is None
+                else f"git update-ref -d {recovery.marker_ref}"
+            ),
         }
     )
     return 0
@@ -5843,8 +6510,14 @@ def _routed_attempt(
     return held, cast(RouteRecord, held.decided(request_id))
 
 
-def cmd_attempt_start(request_id: str, state_path: Path | None) -> int:
-    """Persist the first launch instant of one routed execution request."""
+def cmd_attempt_start(cwd: Path, request_id: str, state_path: Path | None) -> int:
+    """Persist the first launch instant of one routed execution request.
+
+    This is also where a serial build episode is opened and where every other
+    ticket's is closed: it is the one moment a run tells the isolated path
+    from the serial one before the branch takes a builder's commits, and it
+    runs immediately before every dispatch that can make one (ADR-0201).
+    """
 
     try:
         routing, record = _routed_attempt(
@@ -5864,6 +6537,14 @@ def cmd_attempt_start(request_id: str, state_path: Path | None) -> int:
     )
     if standing is not None and "outcome" in standing:
         return fail(f"{request_id} has already completed and cannot start again")
+
+    # Open this ticket's episode where the branch is what it builds on, and
+    # close whatever earlier episode this branch is about to build over.
+    try:
+        open_build_episode(cwd, record.ticket)
+    except RunError as exc:
+        return fail(str(exc))
+
     recorded = standing is None
     if standing is None:
         standing = {
@@ -6715,7 +7396,7 @@ def main(argv: list[str] | None = None) -> int:
             state_path,
         )
     if args.verb == "attempt-start":
-        return cmd_attempt_start(args.request, state_path)
+        return cmd_attempt_start(cwd, args.request, state_path)
     if args.verb == "attempt-finish":
         return cmd_attempt_finish(
             cwd,
