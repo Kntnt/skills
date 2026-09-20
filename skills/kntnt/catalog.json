@@ -1,6 +1,6 @@
 {
   "origin": "Kntnt/skills",
-  "manager_digest": "63fffe632bf31291f91738191f25d7e631a6f0ebc2faae1c796c8e176ca02426",
+  "manager_digest": "5a5823d2b69eebf6e3f7c6fcdfd1ad617e1ac05a68230cd0b235ee3202e49621",
   "skills": [
     {
       "name": "agents-md",
@@ -60,7 +60,7 @@
       "name": "orchestrate",
       "category": "code",
       "description": "Work the tracker's ready-for-agent tickets unattended — claim, build, and independently verify them a wave at a time, integrating each wave into the current branch.",
-      "digest": "ce6871a2e1a9cb0f0c2a8c4153cce05ac3dcebf545f86ec52841d536b9ba5a27",
+      "digest": "a780a025e88cac51f499b371f7d270c6d6fdd95ada01849ae0329ecb7ffc9068",
       "binaries": [
         "git",
         "gh",
@@ -135,7 +135,7 @@
       "name": "redline",
       "category": "editorial",
       "description": "Review one supplied text against this collection's editorial contract — its genre, its optional technique, its language, and the shared anti-slop catalogue — repair what the review found through a bounded budget of fresh correction subagents, report whatever is left unresolved, and finish with exactly one mechanical pass.",
-      "digest": "cef71be09c9299859cdccdd7631b913799c24de6654681826be841ff80cf0e3f",
+      "digest": "d3523012e817a551f7c1811cbe84e6301d3fcc4771e27f22b0b8bbbafd21b1ec",
       "binaries": [
         "uv"
       ],
@@ -179,7 +179,7 @@
       "name": "model-selector",
       "category": "models",
       "description": "Choose the model and deliberation level that completes delegated work at the lowest total cost, or in the least time where the user has chosen time. Never used implicitly: a Skill that routes work runs its script.",
-      "digest": "07395f5d6498967f56fabbbeba2120f8e6d19401a1777399c27265243ec5a4ec",
+      "digest": "674a94e04cd00fd2c861dd52beceb5664670666cdbcee66b5f19031fc1128c0f",
       "binaries": [
         "uv"
       ],
