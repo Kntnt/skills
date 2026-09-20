@@ -1,0 +1,8 @@
+47d9b20832a50ef7b1e3fa6ff2dac1fc5b09ed63bda25cbafb7a20437d0a8cfb  ./evidence/scratch/dispositions-1.md
+2be6d6aa85e3b72f110e0f6c623b9e2d5cb9ece4d06986e4fb8768bfb992bfe5  ./evidence/scratch/draft-2.md
+2be6d6aa85e3b72f110e0f6c623b9e2d5cb9ece4d06986e4fb8768bfb992bfe5  ./evidence/scratch/draft.md
+f1d11c2958e995b5ad082ccc1c47de666b974a9d09b28cce9d2f17f91bcd7ecf  ./evidence/scratch/report-1.md
+98bc5a21ba687e13bf5588a710be0d38d25611a430c869a7980a29657664bc03  ./evidence/scratch/report-2.md
+e10819b04b18180c5188d2ddde1b90f086bc86f5ac94f3a58b197ce32e56a369  ./response.md
+83265898e21c908c50a5462053175ebcf82d56fe3ea746fa67c16a5f6559dec4  ./work/source.md
+b9787ac1242a82e1e40f226a69aa87a63535a2d5c589badc0bf863492fa288da  -

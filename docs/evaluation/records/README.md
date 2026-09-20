@@ -114,3 +114,11 @@ The [reading packet](../editorial-329/README.md) links full sources, drafts, rev
 - [redline-gpt-2026-09-20-344-account-original.md](redline-gpt-2026-09-20-344-account-original.md).
 - [write-gpt-2026-09-20-344-account-new.md](write-gpt-2026-09-20-344-account-new.md).
 - [write-gpt-2026-09-20-344-account-original.md](write-gpt-2026-09-20-344-account-original.md).
+
+## Source comparison — #362
+
+The Claude-family evaluation of the change to Write's source comparison, read with [`../editorial-362/README.md`](../editorial-362/README.md).
+
+- [`write-claude-2026-09-20-362.md`](write-claude-2026-09-20-362.md) — nine `/write` runs of the `opinion`, `column` and `case-study` sources against the working tree at `65834c3` with `source-check.md` changed, in Claude Code 2.1.278 on `claude-opus-5`: seven delivered, two valid stops, one delivery past the gate.
+- [`redline-claude-2026-09-20-362.md`](redline-claude-2026-09-20-362.md) — the four source-blind `/redline` pairs on drafts that record delivered, same Harness and model: `R1` passes twice and fails twice.
+

@@ -165,7 +165,7 @@
       "name": "write",
       "category": "editorial",
       "description": "Turn a brief and its source material into one truthful first draft in the target language, and stop there. Start it on your own only when the literal token `/write` appears in the request or in an instruction the request points at — inside a longer message, a document, or a checklist that says to run it. Not for a bare request to write, draft, compose, summarise, rewrite, edit, or review something — without `/write` in it, such a request is answered as it otherwise would be. A user may also invoke it by name at any time.",
-      "digest": "e674b41c8321ed94a5c9bf8979a6dd4b06ad5e20328ba938893fe141c7a31473",
+      "digest": "11882fa7dba4ed35fd87b86ea89cad7a87bfc7db4943102bafcb302a79ad8047",
       "binaries": [
         "uv"
       ],

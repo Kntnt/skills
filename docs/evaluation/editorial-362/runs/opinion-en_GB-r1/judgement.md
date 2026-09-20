@@ -1,0 +1,82 @@
+# Judgement — opinion, en_GB, run 1
+
+Judged from `write/work/source.md`, `write/response.md`, `draft.md` and every file under `write/evidence/`. Nothing else was read. The checkers' and the writer's own approvals are weighed as arguments below, not taken as evidence.
+
+## 1. Outcome
+
+**Delivered.** Two comparisons ran: `evidence/scratch/report-1.md` (four findings, all source-support) and `evidence/scratch/report-2.md` (zero findings). The writer's `evidence/scratch/dispositions-1.md` accepts all four and records the repairs; there is no dispositions file for round 2 and none is needed, since round 2 found nothing.
+
+**The delivered prose is identical to the last prose a checker saw.** `draft.md` (stripped of its frontmatter) is byte-identical to `evidence/scratch/draft-2.md`, the draft report-2 compared. No repair was made after the last comparison; the dispositions name only the four round-1 repairs and close with "No other change was made to the draft." The response reproduces the same text verbatim.
+
+One evidence gap, which does not affect judgeability: `evidence/scratch/draft.md` is also identical to `draft-2.md`, i.e. the round-1 repairs were applied in place and the pre-repair draft was not retained. None of the four passages report-1 quotes ("Twenty-four calls", "nobody has yet put a number on", "per booking", "We have not costed that trial") survives in any draft file. Report-1 quotes them in full, so the round-1 findings remain judgeable, but the draft report-1 actually examined cannot be inspected directly.
+
+Length: 403 words of body prose (headings and byline excluded) against the brief's "ungefär 400 ord". Markdown with orienting headings, no commercial CTA. Frontmatter carries `genre: opinion`, `technique: none`, `language: en_GB`.
+
+## 2. F1 — source support: **pass**
+
+I paired the delivered draft against the material myself. No unsupported addition, changed term, changed subject, changed scope, date, modality or certainty, dropped caveat, invented event or invented personal attribute rises to a failure. What I checked, and what I found:
+
+**Carried over correctly.** Date 18 June; "all seven community venues" (*alla sju lokaler*); "from September" (*från september*); the proposal's modality (*föreslår* → "is asked to", not "has decided"); the report title kept in Swedish with its date 8 April 2026; eight weeks, two venues; 96 web and 24 phone bookings attributed to the report, as the boundary requires ("Siffror ska tillskrivas rapporten där de bär argumentet"); "counts bookings rather than unique people"; the three unmeasured things; the inferential limit on the phone figure, with *därför* → "therefore" and the epistemic direction intact (the figure cannot establish the share — not that the share is small); six months, all seven venues, both routes; *frivilligt* → "voluntarily", retained; the three end options in the source's order; the decision left with the board.
+
+**Boundaries.** No legal requirement, protest, discrimination case, party-political motive or established saving appears anywhere in the draft — all five are forbidden by the judging block. The administration's motive is reported as the material states it, *including its negative half*: "it is not a claim that people who ring are lazy or expensive" carries "inte att telefonanvändare är lata eller dyra", which is precisely what keeps the piece's sharpness from turning into a false motive. The ending names the board's possible decision and asserts no cost figure, so *kostnadsosäkerheten* survives.
+
+**Translated terms, tested in both directions.**
+
+- *kommunstyrelsen* → "the council executive board" and *kommunen* → "the council" are kept apart by two distinct English terms, at A1/E1 and in the last body sentence respectively. No claim about one body is transferred to the other.
+- *lokaler* / *föreningslokaler* → "community venues": the referent is pinned by count in both places ("all seven", "two"), and the report's Swedish title is retained, so nothing can fall under one term and not the other here.
+- *digital vana* → "how used to digital services people are": the English is narrower than the Swedish. Because both are **negative** claims about what the report measures, the source's wider negative entails the draft's narrower one. The draft asserts less, not more. Same structure, and same verdict, for "no measurement of how long either route takes staff, and no calculation of what removing one would save" against the unqualified "Någon tidsmätning eller ekonomisk besparingsberäkning finns inte i handlingarna".
+- *Motivet* (definite singular) → "gives one reason": weaker than the source and entailed by it.
+- *talesperson* → "spokesperson": both gender-neutral. The source's only natural-gender marking is *Hon* for Ek; the draft's first person asserts no gender. Nothing is added in either direction.
+- *någon* → "somebody", *telefonanvändare* → "people who ring", *invånarna* → "Lervik's residents" (the brief fixes the municipality): all neutral for gender and number in both languages.
+
+**Unknown kept apart from absent.** This is the discrimination the material is built to test, and the delivered draft holds it in three places: "the documents contain no measurement…", "an inconvenience **the documents** put no number on", and "We make no claim to have funded or costed that trial". The first two state an absence *in the papers* rather than an absence in the world; the third states the absence of a claim rather than the absence of the act. Each is the repaired wording, and each is correct. Had any of the three been left as drafted, F1 would have failed.
+
+**Three points I examined and did not count as failures**, recorded so the judgement is auditable:
+
+1. **"the work each route costs staff"** for *arbetskostnaden*. Two shifts sit here. The per-route breakdown is not in Ek's stated view ("Hon menar att kommunen först måste kunna väga arbetskostnaden mot värdet för användarna"); it comes from the proposed trial's *tidsåtgång per bokningsväg*, so it is supported by the material taken together rather than by that sentence alone. And *arbetskostnad* is a monetary cost, which the draft renders as the work a route costs — a softening from money towards labour. The adjacent "What it would cost is for the board to weigh" keeps the monetary frame in view, and "costs staff" retains a cost reading, so nothing unsupplied is asserted. This is the weakest join in the draft, but not an F1 defect.
+2. **"During it, the administration records the time each booking route takes and asks users…"** The source's *ska* is proposal-internal; the draft uses the present indicative. Read alone, the sentence could be taken as describing current practice. "During it" binds both verbs to a trial the previous sentence has just marked as *proposed*, so the proposal-internal reading is the only available one. Loose, and also an L1 blemish (see below), but not an unsupported assertion.
+3. **"before we know what it costs" (title)** and **"When the trial has produced figures" (closing)**. The first presupposes the cost is not currently known; "Kostnaden behöver kommunstyrelsen ta ställning till" leaves the cost unsettled for the decision-maker, and "we" is the author with her readers, not a claim about the administration's files. The second converts *Därefter* into a condition on the trial's output; the trial is defined as recording time per route and collecting reasons, so figures are what it is designed to produce, and the sentence is the author advocating a sequence rather than predicting a fact. *Kan avgöra* → an imperative addressed to the board is opinion-genre advocacy; the option set and the decision-maker are unchanged.
+
+## 3. G2 — required parts perform distinct useful jobs: **pass**
+
+Opinion requires an early position, support, a relevant real objection, and an identifiable action and actor.
+
+- **Early position**, in the title and the fourth sentence: "It is not yet a reason to make the change permanent." A reader knows what is being argued before the first H2.
+- **Support**, doing three distinct jobs across three sections rather than restating one: what the pilot can and cannot show ("it counts bookings rather than unique people"); what the decision basis lacks ("no measurement of how long either route takes staff, and no calculation of what removing one would save"); and what is proposed instead (six months, both routes, time per route, voluntary reasons). No section is decorative.
+- **Relevant real objection**, and this is the part most opinion drafts fake: the administration's actual reason is stated, conceded, and answered on its merits — "That is a fair thing to want", "I take it at face value: it is not a claim that people who ring are lazy or expensive", answered with "an inconvenience the documents put no number on". The objection is the real one from the material, not a straw version, and the concession is not toothless neutralisation, because the rebuttal that follows is sharp.
+- **Identifiable action and actor**: "Postpone the permanent switch and run the six months with both routes open", addressed to the council executive board at its 18 June meeting, under a heading that names both. The ending is earned rather than exhortatory, and it names the later decision separately ("When the trial has produced figures, decide whether a channel should be removed, changed or kept"), so a reader is not led to place that decision on 18 June.
+
+Reader effect: someone in Lervik finishes knowing what is proposed, when it is decided, what the evidence does and does not support, what the author wants instead, and what it would not settle. The byline is supplied, not invented.
+
+## 4. L1 — professionally written British English: **pass**, with three blemishes
+
+The prose reads as written in English, not translated into it. Sentence rhythm is varied and controlled, and several moves are genuinely native: "on the strength of an inconvenience the documents put no number on", "That is thin ground for making the change permanent", "Those figures are the report's, and so are their limits", "set the work each route costs staff against what it is worth to the people who use it" (*väga … mot* rendered with the correct British idiom, not word for word). Spelling and mechanics are en_GB throughout, and "costed" for a costing exercise is right, not an error. Collective agreement is held consistently ("the board is", "staff should", "residents are").
+
+Three blemishes, none of which sinks the criterion:
+
+1. **"staff should not have to enter the details in two flows"** — *två flöden* rendered as "two flows" is the clearest Swedish import in the draft. "Flows" for workflows is not impossible in English, but a British writer would say "into two systems" or "twice over". A reader pauses here.
+2. **"During it, the administration records the time each booking route takes…"** — English wants "would record" for a trial that does not yet exist. The indicative makes the reader do the work of locating the tense.
+3. **"We make no claim to have funded or costed that trial."** — accurate, and deliberately so after the round-1 repair, but stiff and legalistic against the surrounding voice. The precision is worth the stiffness; it is still the flattest sentence in the piece.
+
+The long closing sentence of the Ek paragraph ("I am against settling its shape before the council can set the work each route costs staff against what it is worth to the people who use it") is dense enough to need a second pass, though it parses correctly and the idiom is right.
+
+## 5. Intermediate — every checker finding
+
+| # | Passage | Allegation | Writer's action | Class |
+|---|---|---|---|---|
+| R1-F1 | "Twenty-four **calls** therefore cannot tell us what share…" | Changes the thing counted: the material counts twenty-four phone *bookings*; nothing in it counts calls, and the previous sentence has just said the report counts bookings, not people. | Accepted; repaired to "Twenty-four phone bookings therefore cannot tell us…" | **Supported repair.** A real defect. One call can carry two bookings, or none; the two counts come apart, and nothing supplied fixes them together. |
+| R1-F2 | "…an inconvenience **nobody has yet put a number on**." | Widens an absence stated of *handlingarna* into an absence in the world. | Accepted; repaired to "…an inconvenience the documents put no number on." | **Supported repair.** A real defect, and the central one this material tests. The judging block says no savings are *belagda* — a statement about what is established, not about what exists. The preceding sentence already had the scope right, so the widening was unforced. |
+| R1-F3 | "the time each route takes **per booking**" | Narrows *tidsåtgång per bokningsväg* from time per booking *route* to time per booking. | Accepted; repaired by deleting the two words: "the time each booking route takes". | **Supported repair.** A real defect, and load-bearing: the closing argument leans on this measurement. Totals per route satisfy the source and not the draft. |
+| R1-F4 | "**We have not costed that trial** and we make no claim to be paying for it." | Converts a withheld claim (*gör inget anspråk på att ha … kostnadsberäknat*) into a positive denial, and shifts *ha finansierat* (perfect) to "to be paying for it" (ongoing). | Accepted; repaired to "We make no claim to have funded or costed that trial." | **Supported repair.** A real defect on both counts. The source states the absence of a claim, never the absence of the act, and the repair restores the aspect as well. |
+| R1, row on "I am against settling its shape…" | Not raised as a finding; flagged in the accounting as "defensible as written, but it leans on the measurement in Finding 3". | — | Writer made no change; dispositions note that "the work each route costs staff" is per route and stands. | **Disputed caution, correctly left.** The note is fair, the passage survives on the material taken together, and the writer's reason is the right one. |
+| R2 | Zero findings; eleven cases tested and set aside (§2.1). | — | No dispositions file; none required. | **Not findings.** I checked all eleven set-asides against the material and agree with each. Cases 5, 6 and 7 (the indicative in D2, the cost "on the table", and "When the trial has produced figures") are the ones where a stricter checker could have written a caution; report-2's reasoning for setting them aside is sound, and I reach the same result at §2 above. |
+
+**Was a real defect I found under F1 seen by no checker?** No. I found no F1 failure in the delivered draft. Of the three soft points I examined, two (the indicative in "During it, the administration records…"; the closing "cost of both routes on the table") were seen and reasoned through by checker 2, and the third (*arbetskostnaden* → "the work each route costs staff") was raised in part by checker 1's accounting row and accounted for at checker 2's D7 — though neither addressed the money-to-labour softening head-on. That is the one gap in the checkers' coverage, and it is a rendering softening rather than an unsupported claim.
+
+The two checkers are not redundant: checker 1 caught four real defects, and every one of them was the same failure mode — asserting slightly more than the material licenses. Checker 2, given the repaired text, found nothing and said so, which is the correct result rather than an empty one.
+
+## 6. Stop or delivery
+
+**A valid delivery.** The delivered draft passes F1, G2 and L1. Two comparisons ran; the first produced four genuine defects, all four were accepted with evidence quoted from the Swedish, all four were repaired at the smallest supported scope, and the repaired text was put back to a fresh checker, which found nothing. The delivered prose is identical to what that second checker saw, so nothing reached the reader unexamined. The response to the user is accurate about all of this: it names the four repairs correctly, states where the material stops, keeps the cost with the board, and flags the one genuine judgement call (Ek's supplied statement written as her own prose rather than quoted around herself) as overrulable — which is the right disposition, since the material permits either and she is the sender.
+
+The only thing I would fault is evidentiary rather than editorial: the pre-repair draft was overwritten in place, so the artefact checker 1 examined no longer exists in the run.

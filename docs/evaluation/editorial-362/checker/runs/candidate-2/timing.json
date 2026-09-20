@@ -1,0 +1,3 @@
+{"unit":"seconds, subagent wall time as the harness reported it","model":"claude-opus-5 at high deliberation (agent type kntnt-opus-high)",
+ "p1-r1":236,"p1-r2":216,"p1-r3":221,"p2-r1":187,"p2-r2":207,"p2-r3":187,"p3-r1":199,"p3-r2":176,"p3-r3":134,"p4-r1":156,"p4-r2":136,"p4-r3":145,
+ "n1-r1":195,"n1-r2":226,"n1-r3":197,"n2-r1":147,"n2-r2":152,"n2-r3":156,"n3-r1":200,"n3-r2":165,"n3-r3":171}

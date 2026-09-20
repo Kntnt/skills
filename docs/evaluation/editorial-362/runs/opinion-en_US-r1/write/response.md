@@ -1,0 +1,17 @@
+The draft is not delivered. One source-support defect stands in the final comparison, and the contract does not let me repair prose after it.
+
+**Resolved configuration.** Genre `opinion` and language `en_US`, both from your invocation; the language selector verified against the installed Language Resources. No technique: you named none, `source.md` carries no Kntnt map, and `opinion` names none as the technique it is ordinarily written with, so the draft has no imposed arc. Output target: this response.
+
+**What happened.** I wrote the debate article — Sanna Ek's byline, the thesis in the lead, four orienting headings, about 440 words with headings, no commercial call to action — and put it through the source comparison twice.
+
+The first comparison returned five source-support defects. I accepted and repaired all five: "24 calls" where the report counts 24 phone bookings; a sentence that presupposed a saving the material says is not established; "we have neither funded nor costed it" where the material records only that the association makes no such claim; "time each route takes per booking" where the proposal says `tidsåtgång per bokningsväg`; and "the staff time a channel costs" where Sanna Ek's position is about `arbetskostnaden`. No translation defect was found in either pass — her released statement carries its meaning, its refusal-then-redirection shape and its certainty into idiomatic American English.
+
+**The passage that remains unresolved.** The lead said the six months would give the board "figures on what each route costs and what it is for." The material specifies only that the administration is to record `tidsåtgång per bokningsväg`, and it lists `tidsmätning` and `ekonomisk besparingsberäkning` as two separate things missing from the decision documents. Six months of logged minutes per route, never converted into money, satisfies the proposal and leaves the board without any figure for what a route costs. Nothing in the material excludes that case, so the lead claims a yield the proposal does not undertake to produce. I accepted the finding rather than rejecting it, because I had already accepted the same distinction one round earlier when I put `arbetskostnaden` back where the draft had written staff time; reading time as cost here would contradict that.
+
+The comparison allows two passes and no unchecked prose changes after the second, so a draft repaired now would reach you never having been compared. That is why nothing is delivered.
+
+**What would close it.** The repair is one clause — naming the measure the proposal actually specifies, rather than a cost — and a fresh run of this Skill would write and check it. If instead the trial is meant to price the recorded time, the material does not say so; a line from Öppna beslut stating that the time logged is to be converted into a labour cost would support the lead as it was written, and is the only thing missing.
+
+**Where else the material stopped.** Nothing else. The brief's ~400 words, the Markdown headings and the ban on a commercial call to action were all met within what the material carries, and the close names the board's three options with the cost uncertainty intact, as the brief required.
+
+**On disk.** Nothing was written for you: the draft lived only in scratch, which is removed. Two files remain in the run directory at the observer's request and not as part of this Skill — `evidence/`, a copy of the source-check scratch including both reports and my dispositions, and `response.md`, this reply.
