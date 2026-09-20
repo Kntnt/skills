@@ -20,6 +20,9 @@ from support.model_routing import inherit_answer, select_answer
 
 REPO_ROOT: Path = Path(__file__).resolve().parent.parent
 RUN: Path = REPO_ROOT / "skills" / "code" / "orchestrate" / "scripts" / "run.py"
+CAPTURE: Path = (
+    REPO_ROOT / "skills" / "models" / "model-selector" / "scripts" / "capture.py"
+)
 
 
 def _run() -> ModuleType:
@@ -44,6 +47,26 @@ def _run() -> ModuleType:
     sys.modules[spec.name] = module
     spec.loader.exec_module(module)
     return module
+
+
+def _attempt_pattern() -> re.Pattern[str]:
+    """Return the pattern capture reads a routed attempt's own line with.
+
+    Taken from the shipped module rather than restated here: the whole point
+    of the line this engine prints is that the other side of the seam matches
+    it, and a second copy of the pattern is a second thing to keep true.
+    """
+
+    spec = importlib.util.spec_from_file_location("kntnt_capture_pattern", CAPTURE)
+    if spec is None or spec.loader is None:
+        raise RuntimeError(f"cannot import the capture module from {CAPTURE}")
+    # Registered first, as the run engine is, because that module's own
+    # dataclasses resolve their annotations through the module they were
+    # declared in.
+    module = importlib.util.module_from_spec(spec)
+    sys.modules[spec.name] = module
+    spec.loader.exec_module(module)
+    return cast("re.Pattern[str]", module.ATTEMPT_LINE)
 
 
 # How long any one invocation is given. Generous enough that a cold `uv` never
@@ -643,6 +666,7 @@ def _route(
     max_deliberation: str | None = None,
     seat: str | None = "the-strongest@high",
     harness: str | None = "claude-code",
+    permissions: str | None = "bypass",
     classify: bool = True,
 ) -> subprocess.CompletedProcess[str]:
     """Route *requests* through the engine, as the preflight does.
@@ -673,6 +697,8 @@ def _route(
         args += ["--seat", seat]
     if harness is not None:
         args += ["--harness", harness]
+    if permissions is not None:
+        args += ["--permissions", permissions]
     if scratch is not None:
         args += ["--state-dir", str(scratch)]
     return _engine(repo, *args, env=env)
@@ -3382,7 +3408,11 @@ def test_the_routing_account_names_the_seat_the_run_calls_from(
 
     Nothing else holds it: no tracker, no branch, and nothing of
     model-selector's own. It travels into every call, is recorded once, and is
-    what a report names as the seat every verdict inherited.
+    what a report names as the seat every verdict inherited. The permission
+    level the session is running at is the third of them, and it is here for
+    the same reason: a builder started under less permission than the session
+    that dispatched it cannot do the work it was given, and only the session
+    knows what it is running under.
     """
 
     repo, scratch, env = _routed(tmp_path)
@@ -3392,8 +3422,79 @@ def test_the_routing_account_names_the_seat_the_run_calls_from(
     routing = json.loads(reported.stdout)["routing"]
     assert routing["seat"] == "the-strongest@high"
     assert routing["harness"] == "claude-code"
+    assert routing["permissions"] == "bypass"
     assert "--seat=the-strongest@high" in _select_calls(env)[0]
     assert "--harness=claude-code" in _select_calls(env)[0]
+    assert "--permissions=bypass" in _select_calls(env)[0]
+
+
+def test_every_routing_call_of_a_run_carries_the_level_it_is_running_at(
+    tmp_path: Path,
+) -> None:
+    """Every call, every invocation — not the first one and then inheritance.
+
+    The level reaches model-selector the same way the seat does, on each
+    request the run makes, because each one plans a launch of its own.
+    """
+
+    repo, scratch, env = _routed(tmp_path)
+
+    _route(repo, scratch, env, ["amend-9-1", "amend-9-2"])
+
+    calls = _select_calls(env)
+    assert len(calls) >= 3
+    assert all("--permissions=bypass" in call for call in calls)
+
+
+def test_a_run_resumed_at_another_permission_level_routes_at_that_level(
+    tmp_path: Path,
+) -> None:
+    """The level is a fact about the session, so a new session states its own.
+
+    It is none of the four fields the first frontier was routed under, and it
+    is no part of what the developer authorized, so a resumed invocation
+    running at a different level is routed at the one it is actually on rather
+    than refused for not being the one before it.
+    """
+
+    repo, scratch, env = _routed(tmp_path)
+
+    resumed = _route(repo, scratch, env, ["amend-9-1"], permissions="edits")
+    reported = _engine(repo, "report", "--state-dir", str(scratch), env=env)
+
+    assert resumed.returncode == 0, resumed.stderr
+    assert "--permissions=edits" in _select_calls(env)[-1]
+    account = json.loads(reported.stdout)["routing"]
+    assert account["permissions"] == "edits"
+    # The four the first frontier was routed under did not move with it, which
+    # is what says the level stands beside the locks rather than among them.
+    assert account["model"] is None
+    assert account["deliberation"] is None
+    assert account["fast"] is False
+    assert account["max_deliberation"] is None
+
+
+def test_a_run_that_names_no_permission_level_asks_for_none(
+    tmp_path: Path,
+) -> None:
+    """A session that cannot read its own level leaves the flag off.
+
+    What it gets then is what the user's own configuration for the started CLI
+    gives, which is the honest answer where nothing can be read off.
+    """
+
+    repo = _init_repo(tmp_path / "proj")
+    scratch = tmp_path / "scratch"
+    env = _tracker(tmp_path, {"ready-for-agent": [_ticket(9, "the skeleton")]})
+    planned = _engine(repo, "plan", "--state-dir", str(scratch), env=env)
+    assert planned.returncode == 0, planned.stderr
+
+    routed = _route(repo, scratch, env, ["build-9"], permissions=None)
+    reported = _engine(repo, "report", "--state-dir", str(scratch), env=env)
+
+    assert routed.returncode == 0, routed.stderr
+    assert "--permissions" not in _select_calls(env)[0]
+    assert json.loads(reported.stdout)["routing"]["permissions"] is None
 
 
 def test_a_launch_lost_after_a_claim_is_routed_again(
@@ -9608,6 +9709,33 @@ def test_only_an_externally_judged_attempt_becomes_a_measurement(
     filed = _filed(env)
     assert [row["grade"] for row in filed] == [1.0]
     assert [row["graded_by"] for row in filed] == ["checker"]
+
+
+def test_attempt_start_prints_the_line_the_dispatch_it_precedes_opens_with(
+    tmp_path: Path,
+    isolated_attempt_environment: dict[str, str],
+) -> None:
+    """A line a script prints is a line nobody forgets.
+
+    The dispatching session hands a builder a pointer to a brief file as often
+    as it hands over the brief, and the attempt identity has to survive that:
+    the message opens with this line whichever of the two follows it. Composed
+    here from the same identity the verdict is filed under, so the two sides
+    of one build cannot name it differently (issue #370).
+    """
+
+    repo, scratch, env = _routed(tmp_path)
+    env |= isolated_attempt_environment
+
+    started = _attempt_started(repo, scratch, env)
+
+    assert started.returncode == 0, started.stderr
+    routing = json.loads((scratch / STATE_HOME / ROUTING_FILE).read_text("utf-8"))
+    decided = routing["decisions"][0]["decision"]["attempt_id"]
+    printed = json.loads(started.stdout)["attempt_line"]
+    matched = _attempt_pattern().match(printed)
+    assert matched is not None, printed
+    assert matched.group(1) == decided
 
 
 def test_a_measurement_names_the_kind_the_ticket_was_classified_as(

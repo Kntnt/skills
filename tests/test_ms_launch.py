@@ -96,7 +96,13 @@ def test_an_openai_model_is_started_through_the_codex_cli() -> None:
     """The bridge is a command, and its shape is what the caller runs verbatim."""
 
     plan = launch.plan(
-        ASTRA, "high", "claude-code", _profile("codex"), CAT, repo="/repo"
+        ASTRA,
+        "high",
+        "claude-code",
+        _profile("codex"),
+        CAT,
+        repo="/repo",
+        permissions="edits",
     )
 
     assert plan.how == "bridge-command"
@@ -399,11 +405,23 @@ def test_a_read_only_codex_bridge_is_given_no_way_to_write() -> None:
     assert "workspace-write" not in plan.command
 
 
-def test_an_ordinary_codex_bridge_still_writes_where_it_was_sent() -> None:
-    """Read-only is the judge's own posture, never every caller's."""
+def test_a_codex_bridge_writes_where_the_level_its_caller_named_lets_it() -> None:
+    """Read-only is the judge's own posture, never every caller's.
+
+    What decides the rest is the level the caller says it is running at, and
+    nothing here decides one on the caller's behalf: a caller that named none
+    is answered by the silence test below, not by a writable workspace chosen
+    for it here.
+    """
 
     plan = launch.plan(
-        ASTRA, "high", "claude-code", _profile("codex"), CAT, repo="/repo"
+        ASTRA,
+        "high",
+        "claude-code",
+        _profile("codex"),
+        CAT,
+        repo="/repo",
+        permissions="edits",
     )
 
     assert plan.command is not None
@@ -455,6 +473,153 @@ def test_a_claude_bridge_for_a_model_with_no_effort_still_ends_non_variadic() ->
     assert plan.command[-2] not in VARIADIC
 
 
+# Every flag on either bridge that grants or withholds permission, whichever
+# level named it. A planned command carries the ones its own level names and
+# no others, so silence can be told from a level by reading the command.
+PERMISSION_FLAGS = frozenset(
+    {
+        "-s",
+        "--sandbox",
+        "--approve-for-me",
+        "--dangerously-bypass-approvals-and-sandbox",
+        "--permission-mode",
+    }
+)
+
+# The two bridges a permission level is carried across, each as the model that
+# reaches it and the harness the profile has to hold for it. The caller is
+# `process` throughout, so the Anthropic row is planned as a command rather
+# than as the native subagent, which inherits its parent's mode and is untouched.
+BRIDGES: tuple[tuple[str, Any, str], ...] = (
+    ("claude", OPUS, "claude-code"),
+    ("codex", ASTRA, "codex"),
+)
+
+# The CLI versions the permission rows were read out of and tried against.
+CODEX_TRIED_ON = "codex-cli 0.155.1"
+CLAUDE_TRIED_ON = "Claude Code 2.1.278"
+
+
+def _planned(model: Any, harness: str, **named: Any) -> tuple[str, ...]:
+    """Return the bridge command planned for *model*, as the caller runs it."""
+
+    plan = launch.plan(
+        model, "high", "process", _profile(harness), CAT, repo="/repo", **named
+    )
+    assert plan.command is not None
+    command: tuple[str, ...] = plan.command
+    return command
+
+
+def _carries(command: tuple[str, ...], flags: tuple[str, ...]) -> bool:
+    """Say whether *command* holds *flags* whole and in order."""
+
+    width = len(flags)
+    return any(command[at : at + width] == flags for at in range(len(command)))
+
+
+def test_every_permission_level_reaches_each_bridge_in_its_own_spelling() -> None:
+    """One row per level, spelled the way the CLI being started spells it.
+
+    The vocabulary is walked out of the module rather than restated here. A
+    level added to the map is a level this covers, where a second copy of the
+    table would go on passing while the table it copied was wrong.
+    """
+
+    walked = 0
+    for level, spelling in launch.PERMISSIONS.items():
+        for binary, model, harness in BRIDGES:
+            wanted: tuple[str, ...] = getattr(spelling, binary)
+            command = _planned(model, harness, permissions=level)
+            walked += 1
+
+            assert _carries(command, wanted), f"{level} on {binary}: {command}"
+            assert PERMISSION_FLAGS & set(command) == PERMISSION_FLAGS & set(wanted)
+            assert not any(token.startswith("approval_policy=") for token in command)
+            assert not ("--approve-for-me" in command and "-s" in command)
+            if binary == "claude":
+                assert command[-2] not in VARIADIC
+
+    assert walked == len(launch.PERMISSIONS) * len(BRIDGES)
+
+
+def test_a_launch_that_names_no_level_names_no_permission_flag() -> None:
+    """Silence is inheritance: the started CLI follows the user's own settings."""
+
+    for _, model, harness in BRIDGES:
+        command = _planned(model, harness)
+
+        assert not PERMISSION_FLAGS & set(command)
+
+
+def test_a_read_only_launch_is_the_same_command_whatever_level_it_carries() -> None:
+    """Read-only outranks the level, so the judge's command is what it was.
+
+    The Codex row is pinned whole rather than by the flag it turns on: the
+    grader starts exactly this argv, and a permission level that moved one
+    token of it would be a judge launched differently for nothing.
+    """
+
+    codex = _planned(ASTRA, "codex", read_only=True)
+    assert codex == (
+        "codex",
+        "exec",
+        "-C",
+        "/repo",
+        "--skip-git-repo-check",
+        "-m",
+        ASTRA.id,
+        "-c",
+        "model_reasoning_effort=high",
+        "-s",
+        "read-only",
+        "--json",
+    )
+
+    for _, model, harness in BRIDGES:
+        alone = _planned(model, harness, read_only=True)
+        for level in launch.PERMISSIONS:
+            assert _planned(model, harness, read_only=True, permissions=level) == alone
+
+
+def test_a_level_this_module_does_not_know_is_answered_as_silence() -> None:
+    """An unknown level is never a refusal: the caller still gets its launch."""
+
+    for _, model, harness in BRIDGES:
+        plan = launch.plan(
+            model,
+            "high",
+            "process",
+            _profile(harness),
+            CAT,
+            repo="/repo",
+            permissions="paranoid",
+        )
+
+        assert plan.command is not None
+        assert not PERMISSION_FLAGS & set(plan.command)
+        assert plan.note is not None and "paranoid" in plan.note
+
+
+def test_each_bridge_names_the_cli_it_read_its_permission_rows_from() -> None:
+    """A row is worth the CLI version it was read off, so each docstring says it.
+
+    Both claims the rows rest on are version-bound: which flags the tool has,
+    and what a command naming none of them leaves the start at. The Codex row
+    carries the correction as well — `codex exec` does have an approval flag —
+    because a docstring asserting otherwise would be a permanent untruth.
+    """
+
+    codex = " ".join((launch._codex.__doc__ or "").split())
+    claude = " ".join((launch._claude.__doc__ or "").split())
+
+    assert CODEX_TRIED_ON in codex
+    assert "--approve-for-me" in codex
+    assert "config.toml" in codex
+    assert CLAUDE_TRIED_ON in claude
+    assert "defaultMode" in claude
+
+
 def test_the_honoured_effort_line_names_the_version_it_was_verified_against() -> None:
     """A level the Harness ignored would make the whole ladder's evidence a fiction.
 
@@ -479,14 +644,23 @@ def test_the_honoured_effort_line_names_the_version_it_was_verified_against() ->
 
 # The flags each installed CLI's own help lists, for exactly the flags the
 # planner emits, each with the short alias its help lists beside the long form.
-# Read on 2026-09-11 from `claude --help` (Claude Code 2.1.268), `codex exec
-# --help` (codex-cli 0.154.0) and `opencode run --help` (opencode 1.18.30). A
+# Read on 2026-09-20 from `claude --help` (Claude Code 2.1.278), `codex exec
+# --help` (codex-cli 0.155.1) and, on 2026-09-11, `opencode run --help`
+# (opencode 1.18.30). A
 # flag the planner emits that is not here is one the CLI would refuse, which
 # is how `--cwd` reached every opencode launch while opencode had only `--dir`
 # (issue #308). Re-read the help and move these sets when a CLI is upgraded.
 INSTALLED_FLAGS: dict[str, frozenset[str]] = {
     "claude": frozenset(
-        {"-p", "--print", "--add-dir", "--tools", "--model", "--effort"}
+        {
+            "-p",
+            "--print",
+            "--add-dir",
+            "--tools",
+            "--model",
+            "--effort",
+            "--permission-mode",
+        }
     ),
     "codex": frozenset(
         {
@@ -499,6 +673,8 @@ INSTALLED_FLAGS: dict[str, frozenset[str]] = {
             "--config",
             "-s",
             "--sandbox",
+            "--approve-for-me",
+            "--dangerously-bypass-approvals-and-sandbox",
             "--json",
         }
     ),
@@ -513,7 +689,13 @@ def _flags(command: tuple[str, ...]) -> set[str]:
 
 
 def test_every_flag_a_bridge_emits_is_one_its_installed_cli_lists() -> None:
-    """Held for every variant the planner emits: read-only, with and without a level."""
+    """Held for every variant the planner emits.
+
+    Read-only, with and without a deliberation level, and once for each
+    permission level in the vocabulary as well as for naming none — a level
+    reaching a CLI as a flag that CLI does not have is refused before the
+    model is touched, which is the whole reason this walk exists.
+    """
 
     bridges = (
         (OPUS, _profile("claude-code")),
@@ -528,20 +710,22 @@ def test_every_flag_a_bridge_emits_is_one_its_installed_cli_lists() -> None:
         levels = model.deliberation or (None,)
         for level in (*levels, None):
             for read_only in (False, True):
-                plan = launch.plan(
-                    model,
-                    level,
-                    "process",
-                    profile,
-                    CAT,
-                    repo="/repo",
-                    read_only=read_only,
-                )
-                if plan.command is None:
-                    continue
-                planned += 1
-                binary = plan.command[0]
-                unlisted = _flags(plan.command) - INSTALLED_FLAGS[binary]
-                assert not unlisted, f"{binary} lists no {sorted(unlisted)}"
+                for permissions in (None, *launch.PERMISSIONS):
+                    plan = launch.plan(
+                        model,
+                        level,
+                        "process",
+                        profile,
+                        CAT,
+                        repo="/repo",
+                        read_only=read_only,
+                        permissions=permissions,
+                    )
+                    if plan.command is None:
+                        continue
+                    planned += 1
+                    binary = plan.command[0]
+                    unlisted = _flags(plan.command) - INSTALLED_FLAGS[binary]
+                    assert not unlisted, f"{binary} lists no {sorted(unlisted)}"
 
     assert planned >= len(bridges) * 2

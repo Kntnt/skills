@@ -89,6 +89,7 @@ def _unit(**overrides: Any) -> dict[str, Any]:
         "tool_calls": 9,
         "changing_tool_calls": 4,
         "delegated": False,
+        "routed": False,
         "signals": {
             "retried": False,
             "tests_ran": False,
@@ -206,6 +207,36 @@ def test_an_instruction_given_again_grades_the_answer_that_preceded_it(
     assert row.graded_by == "signal"
     assert row.model == "claude-opus-5"
     assert row.deliberation == "high"
+
+
+def test_the_row_carries_the_routed_fact_the_unit_holds(tmp_path: Path) -> None:
+    """A constant `false` lost the fact wherever the caller filed no row of its own.
+
+    Capture knows it — a Unit whose brief named an attempt is routed work,
+    and a subagent nobody dispatched under an identity is not — so the Unit
+    carries it and this pass files what the Unit carries. Where the caller
+    files too, its own reading outranks this one and the merge keeps it
+    (issue #370).
+    """
+
+    data = _queue(
+        tmp_path,
+        _unit(
+            unit_id="build-370",
+            routed=True,
+            signals=_signals(tests_ran=True, tests_passed=True),
+        ),
+        _unit(
+            unit_id="unit-own",
+            routed=False,
+            signals=_signals(tests_ran=True, tests_passed=True),
+        ),
+    )
+
+    grade.grade_pending(data, judge=_never, now=NOW)
+
+    filed = {row.attempt_id: row.routed for row in evidence.load(data)}
+    assert filed == {"build-370": True, "unit-own": False}
 
 
 def test_tests_that_ran_and_passed_grade_the_unit_without_asking_anybody(
