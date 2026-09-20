@@ -1708,10 +1708,13 @@ class Routing:
     else the user's standing choice, else cost — and every later request of
     the run asks for it by name, so a standing choice flipped mid-run never
     changes a run already under way; an answer naming none records none, and
-    nothing is then passed. `seat` and
-    `harness` are what the orchestrating session said it was calling from, kept
-    so a report names the seat every verdict inherited and a measurement names
-    the Harness its attempt ran on. `decisions` is every decision made under
+    nothing is then passed. `seat`,
+    `harness` and `permissions` are what the orchestrating session said it was
+    calling from, kept so a report names the seat every verdict inherited, a
+    measurement names the Harness its attempt ran on, and a dispatched role is
+    started with the permission the session dispatching it had. None of the
+    three is a lock: a resumed invocation states its own, because they are
+    facts about the session running now rather than about the run. `decisions` is every decision made under
     those locks, in the order they were made, which is what the outcome account
     is audited from, and `attempts` is what an external verdict later
     established about them, kept beside them because an outcome and the
@@ -1728,6 +1731,7 @@ class Routing:
     objective: str | None = None
     seat: str | None = None
     harness: str | None = None
+    permissions: str | None = None
     attempts: list[dict[str, Any]] = field(default_factory=list)
     run_identity: str = ""
     replaced: str | None = None
@@ -1753,6 +1757,7 @@ def routing_details(routing: Routing | None) -> dict[str, Any] | None:
         "objective": routing.objective,
         "seat": routing.seat,
         "harness": routing.harness,
+        "permissions": routing.permissions,
         "run_identity": routing.run_identity or None,
         "replaced": routing.replaced,
         "decisions": [asdict(record) for record in routing.decisions],
@@ -2115,6 +2120,9 @@ def read_routing(path: Path | None) -> tuple[Routing | None, str | None]:
             ),
             seat=None if held.get("seat") is None else str(held["seat"]),
             harness=None if held.get("harness") is None else str(held["harness"]),
+            permissions=(
+                None if held.get("permissions") is None else str(held["permissions"])
+            ),
             decisions=[
                 RouteRecord(
                     request_id=str(record["request_id"]),
@@ -2167,6 +2175,7 @@ def write_routing(path: Path | None, routing: Routing) -> str:
                     "objective": routing.objective,
                     "seat": routing.seat,
                     "harness": routing.harness,
+                    "permissions": routing.permissions,
                     "decisions": [asdict(record) for record in routing.decisions],
                     "attempts": routing.attempts,
                     "run_identity": routing.run_identity,
@@ -4043,8 +4052,18 @@ def select_point(
     max_deliberation: str | None,
     after: str | None,
     objective: str | None,
+    permissions: str | None,
 ) -> dict[str, Any]:
     """Return the point model-selector chose for one execution role.
+
+    `permissions` is the level the orchestrating session says it is itself
+    running at, and it travels on every request because every request plans a
+    launch of its own. A role started under less permission than the session
+    that dispatched it cannot do the work it was given, and the alternative —
+    a caller editing the command it was handed — is exactly what a planned
+    launch exists to make unnecessary. A session that cannot read its own
+    level passes none, and the started CLI then follows the user's own
+    configuration for it.
 
     `objective` is asked for by name wherever the run holds one — `time` under
     `--fast`, and otherwise the one its first answer ranked on — and left off
@@ -4073,6 +4092,8 @@ def select_point(
         named.append(f"--after={after}")
     if objective is not None:
         named.append(f"--objective={objective}")
+    if permissions is not None:
+        named.append(f"--permissions={permissions}")
 
     # The repository travels as an argument rather than as the directory the
     # call is made from, a bridge command being run in it later by this run.
@@ -4177,6 +4198,7 @@ def emit_route(records: list[RouteRecord], routing: Routing) -> None:
             "run_identity": routing.run_identity or None,
             "seat": routing.seat,
             "harness": routing.harness,
+            "permissions": routing.permissions,
             "replaced": routing.replaced,
             "decisions": [asdict(record) for record in records],
         }
@@ -4291,6 +4313,7 @@ def cmd_route(
     max_deliberation: str | None,
     seat: str | None,
     harness: str | None,
+    permissions: str | None,
 ) -> int:
     """Route this run's named execution roles, and record what came back.
 
@@ -4349,8 +4372,14 @@ def cmd_route(
             or ("" if dry_run else secrets.token_hex(32)),
             replaced=damaged,
         )
+    # The three facts only the calling session knows. None of them is a lock,
+    # so a resumed invocation states its own and is refused nothing for it: the
+    # permission level in particular is what this session is running under now,
+    # and routing a role at the level of a session that has ended would be the
+    # defect rather than the guard.
     routing.seat = seat or routing.seat
     routing.harness = harness or routing.harness
+    routing.permissions = permissions or routing.permissions
 
     # Ask for one point per role, and hold every answer to the locks the
     # developer typed before any of them reaches the account.
@@ -4367,6 +4396,7 @@ def cmd_route(
                 max_deliberation=max_deliberation,
                 after=escalated_from(routing, observed_task(ticket, request_id)),
                 objective="time" if routing.fast else routing.objective,
+                permissions=routing.permissions,
             )
         except RunError as exc:
             return fail(str(exc))
@@ -7200,6 +7230,7 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     route.add_argument("--request", action="append")
     route.add_argument("--seat")
     route.add_argument("--harness")
+    route.add_argument("--permissions")
     route.add_argument("--dry-run", action="store_true")
     route.add_argument("--model")
     route.add_argument("--fast", action="store_true")
@@ -7337,6 +7368,7 @@ def main(argv: list[str] | None = None) -> int:
             max_deliberation=args.max_deliberation,
             seat=args.seat,
             harness=args.harness,
+            permissions=args.permissions,
         )
     if args.verb == "claim":
         result = cmd_claim(cwd, args.ticket, state_path)

@@ -68,6 +68,10 @@ The rules whose reasoning is settled in a decision record are named here in a ph
 
 **A Bridge is a real argv, produced by the module and run by the caller** (ADR-0182). It names the model and the reasoning control in that tool's own spelling. The caller runs it and reads its output; it composes no invocation of its own.
 
+**A Bridge start carries the caller's own permission level, and an explicit choice wins where silence means inheritance** (ADR-0202). This is the inheritance model and Deliberation already have. The vocabulary is Model Selector's own — closed, Harness-neutral, and translated into the spelling of the tool being started — and the caller states which level it is running at, exactly as it states its Harness and its Seat: only the session knows, and no script of this collection reads it off anything. A call naming no level produces a command with no permission flag at all, so the started CLI follows the user's own configuration for it; that is inheritance from configuration and never a promise of write access, and a role that has to write is given a level by its caller. A level outside the vocabulary is answered as silence with a note naming it, never with a refusal, there being no answer a caller may read as *start nothing* (ADR-0182). A read-only request outranks every level and is always a start that cannot write. The Claude Code subagent path and inheritance are untouched, a subagent already running in its parent's mode.
+
+**A caller runs the argv it was handed as it stands** (ADR-0202). None of its flags is added, exchanged or removed, the sandbox and permission flags included, and a start that cannot do the work it was given is wrongly routed rather than wrongly worded: it is reported as a defect, and never repaired by editing the command. A caller that edits what it was planned is a caller reproducing the launch translation, which is the module's alone.
+
 **Inheritance is the floor and is always available** (ADR-0182). It is what an answer degrades to, and a caller can act on it without knowing why.
 
 ## What becomes a measurement

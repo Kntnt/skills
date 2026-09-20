@@ -643,6 +643,7 @@ def _route(
     max_deliberation: str | None = None,
     seat: str | None = "the-strongest@high",
     harness: str | None = "claude-code",
+    permissions: str | None = "bypass",
     classify: bool = True,
 ) -> subprocess.CompletedProcess[str]:
     """Route *requests* through the engine, as the preflight does.
@@ -673,6 +674,8 @@ def _route(
         args += ["--seat", seat]
     if harness is not None:
         args += ["--harness", harness]
+    if permissions is not None:
+        args += ["--permissions", permissions]
     if scratch is not None:
         args += ["--state-dir", str(scratch)]
     return _engine(repo, *args, env=env)
@@ -3382,7 +3385,11 @@ def test_the_routing_account_names_the_seat_the_run_calls_from(
 
     Nothing else holds it: no tracker, no branch, and nothing of
     model-selector's own. It travels into every call, is recorded once, and is
-    what a report names as the seat every verdict inherited.
+    what a report names as the seat every verdict inherited. The permission
+    level the session is running at is the third of them, and it is here for
+    the same reason: a builder started under less permission than the session
+    that dispatched it cannot do the work it was given, and only the session
+    knows what it is running under.
     """
 
     repo, scratch, env = _routed(tmp_path)
@@ -3392,8 +3399,79 @@ def test_the_routing_account_names_the_seat_the_run_calls_from(
     routing = json.loads(reported.stdout)["routing"]
     assert routing["seat"] == "the-strongest@high"
     assert routing["harness"] == "claude-code"
+    assert routing["permissions"] == "bypass"
     assert "--seat=the-strongest@high" in _select_calls(env)[0]
     assert "--harness=claude-code" in _select_calls(env)[0]
+    assert "--permissions=bypass" in _select_calls(env)[0]
+
+
+def test_every_routing_call_of_a_run_carries_the_level_it_is_running_at(
+    tmp_path: Path,
+) -> None:
+    """Every call, every invocation — not the first one and then inheritance.
+
+    The level reaches model-selector the same way the seat does, on each
+    request the run makes, because each one plans a launch of its own.
+    """
+
+    repo, scratch, env = _routed(tmp_path)
+
+    _route(repo, scratch, env, ["amend-9-1", "amend-9-2"])
+
+    calls = _select_calls(env)
+    assert len(calls) >= 3
+    assert all("--permissions=bypass" in call for call in calls)
+
+
+def test_a_run_resumed_at_another_permission_level_routes_at_that_level(
+    tmp_path: Path,
+) -> None:
+    """The level is a fact about the session, so a new session states its own.
+
+    It is none of the four fields the first frontier was routed under, and it
+    is no part of what the developer authorized, so a resumed invocation
+    running at a different level is routed at the one it is actually on rather
+    than refused for not being the one before it.
+    """
+
+    repo, scratch, env = _routed(tmp_path)
+
+    resumed = _route(repo, scratch, env, ["amend-9-1"], permissions="edits")
+    reported = _engine(repo, "report", "--state-dir", str(scratch), env=env)
+
+    assert resumed.returncode == 0, resumed.stderr
+    assert "--permissions=edits" in _select_calls(env)[-1]
+    account = json.loads(reported.stdout)["routing"]
+    assert account["permissions"] == "edits"
+    # The four the first frontier was routed under did not move with it, which
+    # is what says the level stands beside the locks rather than among them.
+    assert account["model"] is None
+    assert account["deliberation"] is None
+    assert account["fast"] is False
+    assert account["max_deliberation"] is None
+
+
+def test_a_run_that_names_no_permission_level_asks_for_none(
+    tmp_path: Path,
+) -> None:
+    """A session that cannot read its own level leaves the flag off.
+
+    What it gets then is what the user's own configuration for the started CLI
+    gives, which is the honest answer where nothing can be read off.
+    """
+
+    repo = _init_repo(tmp_path / "proj")
+    scratch = tmp_path / "scratch"
+    env = _tracker(tmp_path, {"ready-for-agent": [_ticket(9, "the skeleton")]})
+    planned = _engine(repo, "plan", "--state-dir", str(scratch), env=env)
+    assert planned.returncode == 0, planned.stderr
+
+    routed = _route(repo, scratch, env, ["build-9"], permissions=None)
+    reported = _engine(repo, "report", "--state-dir", str(scratch), env=env)
+
+    assert routed.returncode == 0, routed.stderr
+    assert "--permissions" not in _select_calls(env)[0]
+    assert json.loads(reported.stdout)["routing"]["permissions"] is None
 
 
 def test_a_launch_lost_after_a_claim_is_routed_again(
