@@ -20,6 +20,9 @@ from support.model_routing import inherit_answer, select_answer
 
 REPO_ROOT: Path = Path(__file__).resolve().parent.parent
 RUN: Path = REPO_ROOT / "skills" / "code" / "orchestrate" / "scripts" / "run.py"
+CAPTURE: Path = (
+    REPO_ROOT / "skills" / "models" / "model-selector" / "scripts" / "capture.py"
+)
 
 
 def _run() -> ModuleType:
@@ -44,6 +47,26 @@ def _run() -> ModuleType:
     sys.modules[spec.name] = module
     spec.loader.exec_module(module)
     return module
+
+
+def _attempt_pattern() -> re.Pattern[str]:
+    """Return the pattern capture reads a routed attempt's own line with.
+
+    Taken from the shipped module rather than restated here: the whole point
+    of the line this engine prints is that the other side of the seam matches
+    it, and a second copy of the pattern is a second thing to keep true.
+    """
+
+    spec = importlib.util.spec_from_file_location("kntnt_capture_pattern", CAPTURE)
+    if spec is None or spec.loader is None:
+        raise RuntimeError(f"cannot import the capture module from {CAPTURE}")
+    # Registered first, as the run engine is, because that module's own
+    # dataclasses resolve their annotations through the module they were
+    # declared in.
+    module = importlib.util.module_from_spec(spec)
+    sys.modules[spec.name] = module
+    spec.loader.exec_module(module)
+    return cast("re.Pattern[str]", module.ATTEMPT_LINE)
 
 
 # How long any one invocation is given. Generous enough that a cold `uv` never
@@ -9608,6 +9631,33 @@ def test_only_an_externally_judged_attempt_becomes_a_measurement(
     filed = _filed(env)
     assert [row["grade"] for row in filed] == [1.0]
     assert [row["graded_by"] for row in filed] == ["checker"]
+
+
+def test_attempt_start_prints_the_line_the_dispatch_it_precedes_opens_with(
+    tmp_path: Path,
+    isolated_attempt_environment: dict[str, str],
+) -> None:
+    """A line a script prints is a line nobody forgets.
+
+    The dispatching session hands a builder a pointer to a brief file as often
+    as it hands over the brief, and the attempt identity has to survive that:
+    the message opens with this line whichever of the two follows it. Composed
+    here from the same identity the verdict is filed under, so the two sides
+    of one build cannot name it differently (issue #370).
+    """
+
+    repo, scratch, env = _routed(tmp_path)
+    env |= isolated_attempt_environment
+
+    started = _attempt_started(repo, scratch, env)
+
+    assert started.returncode == 0, started.stderr
+    routing = json.loads((scratch / STATE_HOME / ROUTING_FILE).read_text("utf-8"))
+    decided = routing["decisions"][0]["decision"]["attempt_id"]
+    printed = json.loads(started.stdout)["attempt_line"]
+    matched = _attempt_pattern().match(printed)
+    assert matched is not None, printed
+    assert matched.group(1) == decided
 
 
 def test_a_measurement_names_the_kind_the_ticket_was_classified_as(

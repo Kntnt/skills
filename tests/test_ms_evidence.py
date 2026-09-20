@@ -77,6 +77,23 @@ def _many(count: int, grade: float, **overrides: Any) -> list[dict[str, Any]]:
     ]
 
 
+def _spread(count: int, *, routed: bool, **overrides: Any) -> list[dict[str, Any]]:
+    """Provide *count* distinct attempts, all routed or none of them.
+
+    Distinct identities on purpose: two sets filed under one series of names
+    would be folded into each other rather than pooled beside each other.
+    """
+
+    return [
+        _row(
+            attempt_id=f"ms-{'routed' if routed else 'span'}-{index:04d}",
+            routed=routed,
+            **overrides,
+        )
+        for index in range(count)
+    ]
+
+
 def _estimator(rows: list[dict[str, Any]], data_dir: Path) -> Any:
     """File the rows and hand back an estimator reading them."""
 
@@ -157,6 +174,128 @@ def _captured(**overrides: Any) -> dict[str, Any]:
         at="2026-09-06T09:30:00Z",
         **overrides,
     )
+
+
+# What Orchestrate's `observed_measurement` files about a routed attempt: the
+# verdict's grade, an elapsed time from the instant `attempt-start` persisted,
+# every token category null because a Claude subagent exposes nothing to the
+# session that spawned it, and no `cost_usd` key at all (issue #370).
+def _observed(**overrides: Any) -> dict[str, Any]:
+    """Provide the row a routed run files about one attempt of its own."""
+
+    row = _row(
+        **{
+            "graded_by": "checker",
+            "grade": 1.0,
+            "kind": "implement",
+            "label": "build",
+            "routed": True,
+            "tokens": dict.fromkeys(catalogue.TOKEN_CATEGORIES),
+            "seconds": 2_400.0,
+            "channel": "subscription",
+            **overrides,
+        }
+    )
+    row.pop("cost_usd")
+    return row
+
+
+def _attempt(**overrides: Any) -> dict[str, Any]:
+    """Provide the row a read of that same builder's transcript files."""
+
+    return _row(
+        **{
+            "graded_by": "judge",
+            "grade": 0.18,
+            "kind": "analyze",
+            "label": None,
+            "routed": False,
+            "tokens": {
+                "input": 12.0,
+                "cache_read": 2_000_000.0,
+                "cache_write": 3_400.0,
+                "output": 20_000.0,
+                "reasoning": 44_000.0,
+            },
+            "cost_usd": 7.5,
+            "seconds": 1_800.0,
+            "harness": "claude-code",
+            "channel": "subscription",
+            "at": "2026-09-06T09:30:00Z",
+            **overrides,
+        }
+    )
+
+
+def test_one_routed_build_filed_from_both_sides_is_one_priced_row(
+    tmp_path: Path,
+) -> None:
+    """The routed row had a grade and no price; the captured one a price and no verdict.
+
+    Folded under one attempt identity they are one whole build: the checker's
+    grade and kind, the counts the transcript exposed, and the price computed
+    from them. The elapsed time is whichever side filed first, both figures
+    spanning the whole attempt rather than a span inside a session (issue
+    #370).
+    """
+
+    evidence.append(tmp_path, [_observed()])
+    evidence.append(tmp_path, [_attempt()])
+
+    [merged] = evidence.load(tmp_path)
+    assert (merged.grade, merged.graded_by, merged.kind) == (
+        1.0,
+        "checker",
+        "implement",
+    )
+    assert merged.routed is True
+    assert merged.tokens["output"] == 20_000.0
+    assert merged.tokens["cache_write"] == 3_400.0
+    assert merged.cost_usd == 7.5
+    assert merged.seconds == 2_400.0
+
+
+def test_the_opposite_filing_order_leaves_the_same_single_row(
+    tmp_path: Path,
+) -> None:
+    """Which side reaches the store first is a fact about the day.
+
+    It decides nothing but the elapsed time, which is the figure of whichever
+    side filed first — the caller's from the launch instant to the verdict,
+    the captured one from the builder's first instruction to its last turn.
+    """
+
+    evidence.append(tmp_path, [_attempt()])
+    evidence.append(tmp_path, [_observed()])
+
+    [merged] = evidence.load(tmp_path)
+    assert (merged.grade, merged.graded_by, merged.kind) == (
+        1.0,
+        "checker",
+        "implement",
+    )
+    assert merged.routed is True
+    assert merged.tokens["output"] == 20_000.0
+    assert merged.cost_usd == 7.5
+    assert merged.seconds == 1_800.0
+
+
+def test_a_caller_that_measured_no_elapsed_time_takes_the_captured_one(
+    tmp_path: Path,
+) -> None:
+    """A null is an absence, so the one side that measured it fills it."""
+
+    for order in (
+        [_observed(seconds=None), _attempt()],
+        [_attempt(), _observed(seconds=None)],
+    ):
+        store = tmp_path / f"order-{len(list(tmp_path.iterdir()))}"
+        store.mkdir()
+        for row in order:
+            evidence.append(store, [row])
+        [merged] = evidence.load(store)
+        assert merged.seconds == 1_800.0
+        assert merged.routed is True
 
 
 def test_an_attempt_filed_twice_is_merged_into_one_row(tmp_path: Path) -> None:
@@ -530,6 +669,142 @@ def test_a_row_taken_without_a_level_is_neither_divided_nor_multiplied(
     )
 
 
+def test_the_forecast_answers_from_the_routed_rows_where_a_group_has_any(
+    tmp_path: Path,
+) -> None:
+    """A whole build and a span of somebody's own session are different sizes of job.
+
+    Pooled together, seventy-five routed builds carrying a grade and no price
+    were forecast from a hundred and thirty non-routed spans of the
+    maintainer's own session — median ten minutes and seven dollars — and the
+    price the ranking compared against a whole Codex build was the price of a
+    span inside a session (issue #370).
+    """
+
+    rows = _spread(
+        3,
+        routed=True,
+        tokens={"output": 300_000.0, "cache_read": 9_000_000.0},
+        seconds=2_400.0,
+    ) + _spread(
+        4,
+        routed=False,
+        tokens={"output": 20_000.0, "cache_read": 500_000.0, "reasoning": 44_000.0},
+        seconds=600.0,
+    )
+
+    # A second kind's spans, so the model-wide tier the forecast backs off to
+    # holds non-routed rows carrying a category the routed rows never did.
+    rows += [
+        _row(
+            attempt_id=f"ms-other-{index:04d}",
+            kind="analyze",
+            routed=False,
+            tokens={"reasoning": 88_000.0},
+            seconds=300.0,
+        )
+        for index in range(3)
+    ]
+    estimator = _estimator(rows, tmp_path)
+
+    counted = estimator.tokens("implement", STRONG, "high")
+    prior = KINDS.tokens("implement", "high")
+
+    assert counted["output"] == pytest.approx(300_000.0)
+    assert counted["cache_read"] == pytest.approx(9_000_000.0)
+    assert estimator.seconds("implement", STRONG, "high") == pytest.approx(2_400.0)
+
+    # A category the routed rows never measured backs off to the next tier and
+    # then to the kind's prior. Taking it from the non-routed rows beside them
+    # is the averaging this rule exists to end: a store that has never
+    # measured what a routed build spends says so.
+    assert counted["reasoning"] == pytest.approx(prior["reasoning"])
+
+
+def test_a_group_holding_no_routed_row_is_pooled_exactly_as_it_was(
+    tmp_path: Path,
+) -> None:
+    """The filter is a choice made once per group, not a requirement on a row."""
+
+    estimator = _estimator(
+        _spread(3, routed=False, tokens={"output": 20_000.0}, seconds=600.0), tmp_path
+    )
+
+    assert estimator.tokens("implement", STRONG, "high")["output"] == pytest.approx(
+        20_000.0
+    )
+    assert estimator.seconds("implement", STRONG, "high") == pytest.approx(600.0)
+
+
+def test_the_chance_of_success_still_reads_every_row_of_a_point(
+    tmp_path: Path,
+) -> None:
+    """There the level and the model are what is being estimated.
+
+    Narrowing its rows too would interact with what counts as measured, and
+    the hierarchy already backs off through three tiers of its own.
+    """
+
+    rows = _spread(3, routed=True, grade=1.0) + _spread(4, routed=False, grade=0.0)
+    estimator = _estimator(rows, tmp_path)
+
+    assert estimator.p_success("implement", STRONG, "high").n == 7.0
+
+
+def test_the_module_says_why_the_routed_filter_stops_at_the_forecast() -> None:
+    """A reader extending it to the chance of success by symmetry would undo it.
+
+    So the reason is written where the restriction is, rather than left for
+    the next author to infer from an absence (issue #370).
+    """
+
+    stated = " ".join((evidence.Estimator.p_success.__doc__ or "").split())
+
+    assert "routed" in stated
+    assert "size of the job" in stated
+
+
+def test_the_rules_module_says_how_the_routed_fact_reaches_a_row() -> None:
+    """Each side files the fact it holds, and the higher authority's stands.
+
+    `_merged` assigns `routed` inside the branch guarded by the two
+    authorities, so it travels with the grade exactly as the kind and the
+    label do. A module saying it travels with whichever side read the
+    transcript would describe a merge this store does not perform (issue
+    #370).
+    """
+
+    module = ROUTING.read_text(encoding="utf-8")
+    [stated] = [
+        " ".join(block.split())
+        for block in module.split("\n\n")
+        if "A Measurement is keyed by" in block
+    ]
+
+    for phrase in ("files the routed fact it holds", "higher authority"):
+        assert phrase in stated, phrase
+
+
+def test_the_rules_module_no_longer_says_a_delegated_unit_opens_with_the_line() -> None:
+    """The attempt is read from every line of the instruction, not the first.
+
+    A dispatching session hands a builder a pointer to the brief, and a
+    Harness puts its own preamble in front of what it hands over; a module
+    still saying *opens with* describes the rule that left every routed Claude
+    attempt unmeasured (issue #370).
+    """
+
+    module = ROUTING.read_text(encoding="utf-8")
+    [stated] = [
+        " ".join(block.split())
+        for block in module.split("\n\n")
+        if "A Unit of Work is an instruction" in block
+    ]
+
+    assert "opens with" not in stated
+    assert "carries a routed attempt's `attempt_id:` line" in stated
+
+
 def test_the_rules_module_pools_appetite_the_way_the_estimator_does() -> None:
     """The chance of success and what an attempt costs no longer back off alike.
 
@@ -558,7 +833,13 @@ def test_the_rules_module_pools_appetite_the_way_the_estimator_does() -> None:
 
     # What is pooled, in the order the estimator pools it, and the citation the
     # rule has always answered to.
-    for phrase in ("normalised", "prior", "chance of success", "(adr-0182)"):
+    for phrase in (
+        "normalised",
+        "prior",
+        "chance of success",
+        "(adr-0182)",
+        "routed rows of each group",
+    ):
         assert phrase in stated, phrase
 
     # The two fallbacks differ, and a module that flattened them would leave a
