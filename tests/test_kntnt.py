@@ -8313,6 +8313,12 @@ SLOP_HEAVY_CLAIMS: tuple[str, ...] = (
     "synchronous/asynchronous trade-off",
 )
 
+# The account a run owes covers the claims a round changed as well as the ones
+# it removed, and one list says which differences are a change (issue #377).
+REMOVED_CLAIM_DUTY = "every removed claim"
+CHANGED_CLAIM_DUTY = "every changed claim"
+CLAIM_ELEMENTS = "scope, certainty, attribution, chronology, causality"
+
 
 def test_the_loop_stops_where_an_earlier_repair_created_the_finding() -> None:
     """A loop answering for its own work repairs what it did last round.
@@ -8456,7 +8462,11 @@ def test_re_review_rejects_and_reports_a_correction_that_loses_a_claim() -> None
     Comparing the returned artifact with the pre-round artifact catches a claim
     that disappeared even when the shorter text is clean against the editorial
     lens. The bad correction is rejected, and every removal remains visible in
-    both the correction account and the run's delivery (issue #179).
+    both the correction account and the run's delivery (issue #179). So does
+    every claim a round changed without removing — one whose scope, certainty,
+    attribution, chronology, causality or meaning moved — because a reader
+    without the source cannot see a changed claim any more than a lost one
+    (issue #377).
     """
 
     surfaces = (
@@ -8483,10 +8493,22 @@ def test_re_review_rejects_and_reports_a_correction_that_loses_a_claim() -> None
             (brief_path, brief),
             (help_path, help_page),
         ):
-            assert "every removed claim" in text, (
+            assert REMOVED_CLAIM_DUTY in text, (
                 f"{path}: the Skill describes a correction report or delivery"
                 f" without requiring every removed claim to be named, so a reader"
                 f" without the source cannot see what went (issue #179). See"
+                f" {STANDARD}."
+            )
+            assert CHANGED_CLAIM_DUTY in text, (
+                f"{path}: the account covers the claims a round removed and not"
+                f" the ones it changed, so a repair that moves a claim's scope"
+                f" or its attribution is delivered without a word (issue #377)."
+                f" See {STANDARD}."
+            )
+            assert CLAIM_ELEMENTS in text, (
+                f"{path}: the surface requires a changed claim to be reported"
+                f" without saying what makes a difference a change, so each"
+                f" reader of it settles that for themselves (issue #377). See"
                 f" {STANDARD}."
             )
 

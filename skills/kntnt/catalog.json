@@ -1,6 +1,6 @@
 {
   "origin": "Kntnt/skills",
-  "manager_digest": "b761cd35c8fc2e116a11c8a3c81287a3e82ef2bf8c292f7b514cc6c13b3dc135",
+  "manager_digest": "221c644095c269ac497929f8e9475351c51fda8baa251dd8b9f78f3f1ef33f7b",
   "skills": [
     {
       "name": "agents-md",
@@ -135,7 +135,7 @@
       "name": "redline",
       "category": "editorial",
       "description": "Review one supplied text against this collection's editorial contract — its genre, its optional technique, its language, and the shared anti-slop catalogue — repair what the review found through a bounded budget of fresh correction subagents, report whatever is left unresolved, and finish with exactly one mechanical pass.",
-      "digest": "b2cec7dfeb343dee9441832f6a9677af876d0a0fe5d8cfefb042daad88422b52",
+      "digest": "cef71be09c9299859cdccdd7631b913799c24de6654681826be841ff80cf0e3f",
       "binaries": [
         "uv"
       ],
@@ -151,7 +151,7 @@
       "name": "unslop",
       "category": "editorial",
       "description": "Apply this collection's anti-slop pass to one supplied text and nothing else — false contrasts, empty openings, importance inflation, vague attribution, synonym cycling, robotic rhythm, and generic conclusions — repairing what it finds through a bounded budget of fresh correction subagents and reporting whatever is left. It selects no genre, no technique, and no editorial contract, and it runs no mechanical pass.",
-      "digest": "e53d18fcf8dffecdcbb89cc7b3098d1a84af8c199150eb49adb217189c025ba5",
+      "digest": "84fcb75654e0e359098f1a3aa0dc2b9db67ff7dac39bcf0c5ac61bfba37d3f7e",
       "binaries": [
         "uv"
       ],
