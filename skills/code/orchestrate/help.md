@@ -68,7 +68,7 @@ A run at a concurrency of one has no integrated wave to check, so before reporti
 
 Verified work is committed and integrated. After each wave, the complete Project gate runs on the combined branch and an independent coherence review reads what that wave merged onto it, the branch before the wave having been read and passed by the check that ended the wave before. A strict subset of failing tests is rerun unchanged three times in isolation; three passes earn one unchanged full-gate rerun, and only a green full rerun turns the result into a pass recorded as a load-induced flake.
 
-Before integration—or at `record` when the ceiling is one—the engine refuses a declared pass that is incomplete, out of order, or touches paths outside its current role. The diagnostic names the commit and offending paths, nothing is merged or recorded, and the ticket tree remains available for inspection.
+Before integration—or at `record` when the ceiling is one—the engine refuses a declared pass that is incomplete, out of order, or touches paths outside its current role. The diagnostic names the commit and offending paths and nothing is merged or recorded. Above a ceiling of one the ticket tree remains available for inspection; at a ceiling of one there is no such tree, and the failure the run records next takes the work off the branch and preserves it locally.
 
 The verdict turns on whether correction requires a new decision, not on whether every gate command passed. Mechanical findings are fixed by another subagent and checked again until a round is clean.
 
@@ -106,7 +106,7 @@ A verification failure may receive at most two verifier-informed amends. Each us
 
 A merge collision is repaired and verified against both tickets. If repair fails, the ticket is rebuilt once from a clean base. A second collision records it as conflicted.
 
-With `--at-once=1`, an unrepaired failure stops later tickets. With concurrency, unrelated isolated tickets continue and dependants become stranded.
+With `--at-once=1`, an unrepaired failure stops later tickets, and recording it preserves that ticket's commits and its uncommitted work under local refs and returns the branch, the index, and the working tree to the commit its build began on. Untracked files the failure left go with it; ignored files are untouched. Where the work cannot be preserved or the history is not the one the run recorded, the outcome is still recorded, the recovery is reported incomplete, and a marker ref holds the branch until a repeated `record` finishes the recovery or a person removes the marker. With concurrency, unrelated isolated tickets continue and dependants become stranded.
 
 ## CONTINUING A RUN
 
@@ -124,6 +124,8 @@ The routing account is the run's own record of what it decided, and it is report
 
 A current user's claim resumes only when it can be distinguished from another active run. Otherwise the Skill stops.
 
+An unfinished recovery survives an interruption and is the one thing that holds the branch. While its incomplete-recovery marker stands, `plan` starts nothing and its reason names both the `record` call that continues the recovery and the `git update-ref -d` command that releases the branch by hand. Repeating that `record` with the same arguments continues from wherever the last call stopped: it preserves nothing a second time, moves no start point, and writes no second outcome comment.
+
 ## OUTCOMES
 
 Every ticket appears once. Report groups tickets by their current Ticket Resolution while retaining Run Outcome and completion provenance.
@@ -136,7 +138,7 @@ The work is complete. A reconciled ticket was completed outside Orchestrate; its
 
 **failed**
 
-Verification did not pass. `amends_spent` distinguishes an exhausted two-amend path from work that failed before an available continuation completed. Work remains available for inspection.
+Verification did not pass. `amends_spent` distinguishes an exhausted two-amend path from work that failed before an available continuation completed. With worktrees the work remains in the ticket's own tree for inspection. At a concurrency of one it is taken off the run branch and preserved under a local ref of the engine's own, which the outcome comment and the report name, and the branch stands again at the commit that ticket's build began on.
 
 **conflicted**
 
@@ -210,7 +212,11 @@ Assume yes for every yes-or-no question. A ticket containing an open choice is p
 
 **.git/kntnt-orchestrate/**
 
-Concurrent ticket worktrees, branches, reservations, and scratch space. Successful resources are removed; failed and conflicted resources remain for inspection.
+Concurrent ticket worktrees, branches, reservations, and scratch space, made only above a concurrency of one. Successful resources are removed; failed and conflicted resources remain for inspection. At a concurrency of one nothing is made here, and a failure's work is preserved under the refs above instead.
+
+**refs/kntnt-orchestrate/**
+
+Local refs outside `refs/heads/`, so `git branch` does not list them and nothing that deletes a branch can reach them. A start-point ref says where one ticket's serial build began and is what gives a later `record` the authority to move the branch back that far. A preservation ref holds what a terminal failure was recovered from, kept for good and never removed by the run. An incomplete-recovery marker says a recovery is unfinished and holds the branch until the recovery finishes or a person removes the marker.
 
 **Per-session state directory**
 
