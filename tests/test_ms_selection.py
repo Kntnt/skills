@@ -7,7 +7,9 @@ import json
 import random
 import subprocess
 import sys
+import time
 from collections.abc import Sequence
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
@@ -112,13 +114,35 @@ def _module(stem: str, name: str | None = None) -> Any:
     return module
 
 
-for _dependency in ("catalogue", "profiles", "evidence", "launch"):
+for _dependency in ("catalogue", "profiles", "evidence", "launch", "quota"):
     _module(_dependency)
 
 # Registered under a name of its own: this module's file name is the standard
 # library's `select`, and shadowing that inside a test run would reach far
 # beyond this file.
 select = _module("selection", "ms_selection")
+quota = sys.modules["quota"]
+
+
+@pytest.fixture(autouse=True)
+def elsewhere(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> Path:
+    """Point every test in this module at a home of its own, and return it.
+
+    The entry point is run in process here, so anything inside it that asks
+    for a home gets the machine the suite happens to be running on unless
+    something moves it: the data directory's own fallback, the harness probes,
+    and the two trees the quota guard reads. None of this module's subjects is
+    about that machine, so all of them are pointed at a temporary tree, and a
+    test that wants the guard to see a figure writes it under the tree this
+    hands back (issue #373).
+    """
+
+    home = tmp_path / "home"
+    home.mkdir(parents=True, exist_ok=True)
+    monkeypatch.setenv("HOME", str(home))
+    monkeypatch.setenv("USERPROFILE", str(home))
+    monkeypatch.delenv("KNTNT_HOME", raising=False)
+    return home
 
 
 def _answer(capsys: pytest.CaptureFixture[str], *flags: str) -> dict[str, Any]:
@@ -2373,3 +2397,312 @@ def test_a_ceiling_that_empties_the_pool_inherits_and_names_the_ceiling(
     assert answer["launch"]["how"] == "inherit"
     assert (answer["model"], answer["deliberation"]) == ("claude-opus-5", "high")
     assert "deliberation ceiling 'xhigh' admits no candidate" in answer["note"]
+
+
+# --- the quota guard ------------------------------------------------------
+
+# The two Harnesses the fixture profile pays a subscription on, and the model
+# each one's plan pays for. Named rather than derived, so a test asserting that
+# one maker's points went says which channel paid for them.
+CLAUDE_CODE: str = "claude-code"
+CODEX: str = "codex"
+
+# The week, in seconds, which is what a fixture divides to place a window at a
+# share of its own length.
+WEEK: int = 10080 * 60
+
+# A call that reaches both makers: a process caller with both CLIs installed
+# and a profile paying for each, which is the only shape in which holding one
+# channel back leaves something on the other to answer with. High stakes so
+# that no call here is spent exploring, exploration being the one other thing
+# that moves the top of a ranking.
+ASKED: tuple[str, ...] = ("--harness=process", "--stakes=high", "--kind=implement")
+
+
+def _window(
+    home: Path,
+    harness: str,
+    *,
+    used: float,
+    elapsed: float,
+    age: float = 60.0,
+    window: int = 10080,
+) -> None:
+    """Put one Harness's weekly window at a used share and a share elapsed.
+
+    Written where the guard reads that harness: the file this collection's
+    status line writes, for Claude Code, and a session log of Codex's own, for
+    Codex. Both are under the home every test in this module is pointed at, and
+    neither is under the directory `--data` names.
+    """
+
+    moment = time.time()
+    resets = int(moment + (1.0 - elapsed) * WEEK)
+    if harness == CODEX:
+        day = datetime.now(UTC).strftime("%Y/%m/%d")
+        logs = home / ".codex" / "sessions" / day
+        logs.mkdir(parents=True, exist_ok=True)
+        taken = datetime.fromtimestamp(moment - age, UTC).isoformat()
+        (logs / "rollout-fixture.jsonl").write_text(
+            json.dumps(
+                {
+                    "timestamp": taken.replace("+00:00", "Z"),
+                    "type": "event_msg",
+                    "payload": {
+                        "type": "token_count",
+                        "info": {"total_token_usage": {"total_tokens": 47535}},
+                        "rate_limits": {
+                            "limit_id": "codex",
+                            "primary": {
+                                "used_percent": used,
+                                "window_minutes": window,
+                                "resets_at": resets,
+                            },
+                            "secondary": None,
+                            "plan_type": "pro",
+                        },
+                    },
+                }
+            )
+            + "\n",
+            encoding="utf-8",
+        )
+        return
+
+    data = home / ".kntnt" / "model-selector"
+    data.mkdir(parents=True, exist_ok=True)
+    (data / "quota.json").write_text(
+        json.dumps(
+            {
+                "channels": {
+                    harness: {
+                        "used_percent": used,
+                        "resets_at": resets,
+                        "window_minutes": window,
+                        "written_at": int(moment - age),
+                    }
+                }
+            }
+        ),
+        encoding="utf-8",
+    )
+
+
+def _reaching_both(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    *groups: tuple[str, str, Any, float, int],
+) -> tuple[str, ...]:
+    """Set up the call that reaches both makers, and return its flags."""
+
+    _bridged(tmp_path)
+    if groups:
+        _store(tmp_path, *groups)
+    monkeypatch.setenv("PATH", path_holding(tmp_path, "claude", "codex"))
+    return (f"--data={tmp_path}", *ASKED)
+
+
+def test_a_channel_running_ahead_of_its_week_is_left_out_of_the_answer(
+    tmp_path: Path,
+    capsys: pytest.CaptureFixture[str],
+    monkeypatch: pytest.MonkeyPatch,
+    elsewhere: Path,
+) -> None:
+    """Every point the held-back channel pays for goes, and another answers.
+
+    The guard narrows the pool before anything reads it, so the models are
+    absent from the alternatives as well as from the answer — a pool that still
+    held them and merely ranked something above them would read the same off
+    the chosen model alone.
+    """
+
+    asked = _reaching_both(tmp_path, monkeypatch)
+    _window(elsewhere, CODEX, used=95.0, elapsed=0.5)
+
+    answer = _answer(capsys, *asked, EVERY)
+
+    assert _named_in(answer) == ANTHROPIC
+    assert answer["channel"]["harness"] == CLAUDE_CODE
+
+
+def test_ninety_per_cent_holds_a_channel_back_whatever_the_pace(
+    tmp_path: Path,
+    capsys: pytest.CaptureFixture[str],
+    monkeypatch: pytest.MonkeyPatch,
+    elsewhere: Path,
+) -> None:
+    """Behind the week and nearly out of it is still nearly out of it."""
+
+    asked = _reaching_both(tmp_path, monkeypatch)
+    _window(elsewhere, CODEX, used=90.0, elapsed=0.99)
+
+    assert _named_in(_answer(capsys, *asked, EVERY)) == ANTHROPIC
+
+
+def test_a_channel_below_both_thresholds_is_held_back_by_neither(
+    tmp_path: Path,
+    capsys: pytest.CaptureFixture[str],
+    monkeypatch: pytest.MonkeyPatch,
+    elsewhere: Path,
+) -> None:
+    """A window running to time is not a reason to narrow anybody's answer."""
+
+    asked = _reaching_both(tmp_path, monkeypatch)
+    _window(elsewhere, CODEX, used=55.0, elapsed=0.5)
+    _window(elsewhere, CLAUDE_CODE, used=10.0, elapsed=0.5)
+
+    assert _named_in(_answer(capsys, *asked, EVERY)) == ANTHROPIC | OPENAI
+
+
+def test_the_guard_never_empties_the_pool(
+    tmp_path: Path,
+    capsys: pytest.CaptureFixture[str],
+    monkeypatch: pytest.MonkeyPatch,
+    elsewhere: Path,
+) -> None:
+    """Where every candidate's channel would go, nothing goes.
+
+    A guard that answered `inherit` because both subscriptions are busy has
+    stopped the work over an optimisation, and this Skill answers every call it
+    can parse. So the answer is exactly the one the ranking gives with no
+    figure on the machine at all.
+    """
+
+    asked = _reaching_both(tmp_path, monkeypatch)
+    unguarded = _answer(capsys, *asked, EVERY)
+
+    _window(elsewhere, CODEX, used=95.0, elapsed=0.5)
+    _window(elsewhere, CLAUDE_CODE, used=95.0, elapsed=0.5)
+    answer = _answer(capsys, *asked, EVERY)
+
+    assert _named_in(answer) == ANTHROPIC | OPENAI
+    assert (answer["model"], answer["deliberation"]) == (
+        unguarded["model"],
+        unguarded["deliberation"],
+    )
+    assert "quota guard" not in (answer["note"] or "")
+
+
+def test_a_locked_model_is_answered_though_its_channel_is_held_back(
+    tmp_path: Path,
+    capsys: pytest.CaptureFixture[str],
+    monkeypatch: pytest.MonkeyPatch,
+    elsewhere: Path,
+) -> None:
+    """A `--model` is the user naming what they want, and the guard holds nothing."""
+
+    asked = _reaching_both(tmp_path, monkeypatch)
+    _window(elsewhere, CODEX, used=95.0, elapsed=0.5)
+
+    answer = _answer(capsys, *asked, "--model=gpt-5.6-luna")
+
+    assert answer["model"] == "gpt-5.6-luna"
+    assert "quota guard" not in (answer["note"] or "")
+
+
+def test_the_note_names_the_guard_and_the_point_it_ruled_out(
+    tmp_path: Path,
+    capsys: pytest.CaptureFixture[str],
+    monkeypatch: pytest.MonkeyPatch,
+    elsewhere: Path,
+) -> None:
+    """Judged against the same call ranked without the guard, and not otherwise.
+
+    A reader who finds a dearer point chosen has to be able to tell the guard
+    at work from the ranking's own verdict, so the comparison is against the
+    answer this call would have given with every channel admitted.
+    """
+
+    measured = ("implement", "gpt-5.6-luna", "low", 1.0, 20)
+    asked = _reaching_both(tmp_path, monkeypatch, measured)
+
+    # The same call, first with every channel admitted: what the guard has to
+    # be judged against is this answer, not a point named in the test.
+    plain = _answer(capsys, *asked)
+    assert plain["channel"]["harness"] == CODEX
+
+    _window(elsewhere, CODEX, used=95.0, elapsed=0.5)
+    answer = _answer(capsys, *asked)
+
+    ruled_out = f"{plain['model']}@{plain['deliberation']}"
+    assert answer["model"] != plain["model"]
+    assert f"the quota guard ruled out {ruled_out}" in answer["note"]
+
+
+def test_a_guard_that_changed_nothing_says_nothing(
+    tmp_path: Path,
+    capsys: pytest.CaptureFixture[str],
+    monkeypatch: pytest.MonkeyPatch,
+    elsewhere: Path,
+) -> None:
+    """The channel is held back and the answer was never going to be on it.
+
+    The note is about what the guard cost this call, so a guard that took away
+    points the ranking had already beaten is a line nobody needs to read.
+    """
+
+    measured = ("implement", "claude-haiku-4-5-20251001", None, 1.0, 20)
+    asked = _reaching_both(tmp_path, monkeypatch, measured)
+
+    plain = _answer(capsys, *asked, EVERY)
+    assert plain["channel"]["harness"] == CLAUDE_CODE
+
+    _window(elsewhere, CODEX, used=95.0, elapsed=0.5)
+    answer = _answer(capsys, *asked, EVERY)
+
+    assert answer["model"] == plain["model"]
+    assert _named_in(answer) == ANTHROPIC
+    assert "quota guard" not in (answer["note"] or "")
+
+
+def _damage(home: Path, condition: str) -> None:
+    """Leave one of the five ways a figure can fail to be one, for both sources."""
+
+    data = home / ".kntnt" / "model-selector"
+    logs = home / ".codex" / "sessions" / datetime.now(UTC).strftime("%Y/%m/%d")
+    if condition == "absent":
+        return
+    if condition == "unreadable":
+        (data / "quota.json").mkdir(parents=True)
+        logs.mkdir(parents=True, exist_ok=True)
+        (logs / "rollout-fixture.jsonl").mkdir()
+        return
+    if condition == "another shape":
+        data.mkdir(parents=True, exist_ok=True)
+        (data / "quota.json").write_text('{"channels": []}', encoding="utf-8")
+        logs.mkdir(parents=True, exist_ok=True)
+        (logs / "rollout-fixture.jsonl").write_text("not json\n", encoding="utf-8")
+        return
+    if condition == "stale":
+        _window(home, CLAUDE_CODE, used=99.0, elapsed=0.5, age=25 * 3600.0)
+        _window(home, CODEX, used=99.0, elapsed=0.5, age=25 * 3600.0)
+        return
+    _window(home, CLAUDE_CODE, used=99.0, elapsed=1.5)
+    _window(home, CODEX, used=99.0, elapsed=1.5)
+
+
+@pytest.mark.parametrize(
+    "condition", ["absent", "unreadable", "another shape", "stale", "reset"]
+)
+def test_no_figure_is_no_guard_and_is_said_nowhere(
+    tmp_path: Path,
+    capsys: pytest.CaptureFixture[str],
+    monkeypatch: pytest.MonkeyPatch,
+    elsewhere: Path,
+    condition: str,
+) -> None:
+    """Each of the five, on both sources, with exit 0 and nothing said.
+
+    A figure the machine has not got is the ordinary state of a machine, so
+    none of these is a problem to report: the call is answered exactly as it
+    would be with nothing written anywhere.
+    """
+
+    asked = _reaching_both(tmp_path, monkeypatch)
+    _damage(elsewhere, condition)
+
+    answer = _answer(capsys, *asked, EVERY)
+
+    assert answer["ok"] is True
+    assert _named_in(answer) == ANTHROPIC | OPENAI
+    assert "quota" not in (answer["note"] or "")

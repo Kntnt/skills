@@ -1,6 +1,6 @@
 {
   "origin": "Kntnt/skills",
-  "manager_digest": "b761cd35c8fc2e116a11c8a3c81287a3e82ef2bf8c292f7b514cc6c13b3dc135",
+  "manager_digest": "bf3e1645bedcc96256a2c6ee1dc9c921c224b5ccccf16842713981a9b1ad29ae",
   "skills": [
     {
       "name": "agents-md",
@@ -179,7 +179,7 @@
       "name": "model-selector",
       "category": "models",
       "description": "Choose the model and deliberation level that completes delegated work at the lowest total cost, or in the least time where the user has chosen time. Never used implicitly: a Skill that routes work runs its script.",
-      "digest": "1ad814a6bd89b2cce40c493f47d744cb309423fba5cbb813add9a2c908196b7a",
+      "digest": "f57d5371b5ce16c242dec8873c7a1ab0357627ee5ad370a2d62582ddd410a0fd",
       "binaries": [
         "uv"
       ],
@@ -251,7 +251,7 @@
       "name": "statusline",
       "category": "environment",
       "description": "A two-line Claude Code status line — path, worktree, branch and working-tree state above; model, reasoning effort, context usage and subscription windows below.",
-      "digest": "4c2882b5ae8af1db1a90a153531fb21b53fd7ed27bfd7d541e7ea529e220b826",
+      "digest": "c34304889f3946e4518ab169b1c9a04b64de579bc74502f10d87c55fbdd5ea30",
       "binaries": [
         "git",
         "jq"
@@ -261,7 +261,8 @@
         "claude-code"
       ],
       "writes": [
-        "`statusLine` in `~/.claude/settings.json`, pointing at the shipped `statusline.sh` inside this collection's installed Manager. It is a single-valued setting, so it cannot hold two: where it already runs a command that is not this collection's, the row names that command and the confirmation asks whether to replace it, and nothing is written until you answer yes. Nothing is kept of what is replaced, so disabling the Feature afterwards clears the setting rather than restoring the command that was there. Disabling leaves the setting alone where this collection does not hold it."
+        "`statusLine` in `~/.claude/settings.json`, pointing at the shipped `statusline.sh` inside this collection's installed Manager. It is a single-valued setting, so it cannot hold two: where it already runs a command that is not this collection's, the row names that command and the confirmation asks whether to replace it, and nothing is written until you answer yes. Nothing is kept of what is replaced, so disabling the Feature afterwards clears the setting rather than restoring the command that was there. Disabling leaves the setting alone where this collection does not hold it.",
+        "`~/.kntnt/model-selector/quota.json`, this machine's weekly subscription window as Claude Code reported it on this render: the share used, when the window resets, how long the window is, and when the line was written. It is one filter over the payload already read — nothing is fetched and no credential could go in it — written to a temporary file beside its destination and moved into place, and any failure of it is swallowed and leaves the previous file standing. Model Selector's quota guard reads it, so Enabling this Feature is what arms that guard for the Claude channel and disabling it is what disarms it. Nothing is written where the payload carries no weekly window, which is every render before a session's first API response and every machine not on a Pro or Max plan."
       ]
     }
   ]
