@@ -1,0 +1,7 @@
+# working copy digest: 26cc2841a42518d11618a293336361e3088cd94c72377f076f02346b574975e5
+# staged install digest: 5cc50c8eef579ba995ffdd3bf5def3ebdaabc10161bf60b8a395c1dc7620ff5b
+# run directory:
+67fbdecefab05262d11e9655e3ae06ea00d65834b8784de23658ecf6f46046b6  ./inventory-after.txt
+225d72597f181f181fedad9ca5918223e62186eabb6c92051e397c7e855bc9ab  ./inventory-before.txt
+32f1d73e4fe692453a25ae467d989f17a445692a12deb0b30a779c15f2a8a547  ./response.md
+de72deb546c4dba2de1e429788ceaf36ebe861a1ddffe40440909fddf2ec2c4c  ./work/input.md
