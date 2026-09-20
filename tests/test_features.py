@@ -15,6 +15,7 @@ import json
 import os
 import subprocess
 import sys
+import time
 from pathlib import Path
 from typing import Any, cast
 
@@ -625,17 +626,128 @@ def test_the_shipped_status_line_reads_stdin_and_draws_two_lines(
             "context_window": {"total_input_tokens": 42000, "used_percentage": 21},
         }
     )
-    completed = subprocess.run(
+    completed = _draw(payload, home=tmp_path)
+
+    assert completed.returncode == 0
+    assert len(completed.stdout.splitlines()) == 2
+    assert "Opus 5 high" in completed.stdout
+
+
+def _draw(payload: str, *, home: Path) -> subprocess.CompletedProcess[str]:
+    """Draw the status line once against an isolated home.
+
+    The same isolation `_run` gives every other Feature script: the script now
+    writes a file of its own, and the home it writes under is the maintainer's
+    unless a test moves it.
+    """
+
+    return subprocess.run(
         ["bash", str(FEATURES / "statusline" / "statusline.sh")],
+        cwd=REPO_ROOT,
+        env={**os.environ, "KNTNT_HOME": str(home)},
         input=payload,
         text=True,
         capture_output=True,
         check=False,
     )
 
+
+def _drawn_payload(**windows: Any) -> str:
+    """Return the payload Claude Code puts on a status line's standard input."""
+
+    document: dict[str, Any] = {
+        "workspace": {"current_dir": str(REPO_ROOT)},
+        "model": {"display_name": "Opus 5"},
+        "effort": {"level": "high"},
+        "context_window": {"total_input_tokens": 42000, "used_percentage": 21},
+    }
+    if windows:
+        document["rate_limits"] = dict(windows)
+    return json.dumps(document)
+
+
+def _window_file(home: Path) -> Path:
+    """Return where the quota guard reads this machine's own weekly windows."""
+
+    return home / ".kntnt" / "model-selector" / "quota.json"
+
+
+def test_the_shipped_status_line_writes_the_weekly_window_it_was_handed(
+    tmp_path: Path,
+) -> None:
+    """Claude Code publishes no per-turn history a figure could be built from.
+
+    Its transcripts carry no rate-limit fields, but the payload this script is
+    already handed carries the windows — documented at
+    <https://code.claude.com/docs/en/statusline.md> as
+    `rate_limits.seven_day.used_percentage`, from 0 to 100, and
+    `rate_limits.seven_day.resets_at`, Unix epoch seconds. So this Feature is
+    what arms Model Selector's quota guard for the Claude channel, from the
+    payload it has already read, and the two lines it draws are unchanged
+    (issue #373).
+    """
+
+    payload = _drawn_payload(
+        five_hour={"used_percentage": 23.5, "resets_at": 1790000000},
+        seven_day={"used_percentage": 41.2, "resets_at": 1790412740},
+    )
+
+    completed = _draw(payload, home=tmp_path)
+
     assert completed.returncode == 0
     assert len(completed.stdout.splitlines()) == 2
-    assert "Opus 5 high" in completed.stdout
+    written = json.loads(_window_file(tmp_path).read_text(encoding="utf-8"))
+    assert written == {
+        "channels": {
+            "claude-code": {
+                "used_percent": 41.2,
+                "resets_at": 1790412740,
+                "window_minutes": 10080,
+                "written_at": written["channels"]["claude-code"]["written_at"],
+            }
+        }
+    }
+    assert written["channels"]["claude-code"]["written_at"] == pytest.approx(
+        time.time(), abs=120
+    )
+
+
+def test_a_payload_with_no_weekly_window_writes_none_and_keeps_what_is_there(
+    tmp_path: Path,
+) -> None:
+    """`rate_limits` is absent until a session's first API response.
+
+    So a session that has not made one yet must not wipe the figure a session
+    that has just wrote, and a machine on no subscription at all must leave
+    nothing behind to be read as one.
+    """
+
+    assert _draw(_drawn_payload(), home=tmp_path).returncode == 0
+    assert not _window_file(tmp_path).exists()
+
+    standing = _drawn_payload(
+        seven_day={"used_percentage": 41.2, "resets_at": 1790412740}
+    )
+    assert _draw(standing, home=tmp_path).returncode == 0
+    kept = _window_file(tmp_path).read_text(encoding="utf-8")
+
+    assert _draw(_drawn_payload(), home=tmp_path).returncode == 0
+    assert _window_file(tmp_path).read_text(encoding="utf-8") == kept
+
+
+def test_the_status_line_leaves_no_half_written_window_behind(
+    tmp_path: Path,
+) -> None:
+    """The file is moved into place, so a reader never meets half of one."""
+
+    payload = _drawn_payload(
+        seven_day={"used_percentage": 41.2, "resets_at": 1790412740}
+    )
+
+    assert _draw(payload, home=tmp_path).returncode == 0
+
+    directory = _window_file(tmp_path).parent
+    assert [path.name for path in sorted(directory.iterdir())] == ["quota.json"]
 
 
 def test_the_shipped_status_line_reads_no_credential_and_calls_nothing() -> None:

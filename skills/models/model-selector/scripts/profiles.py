@@ -48,7 +48,12 @@ OBJECTIVES = ("cost", "time")
 
 # How a channel is paid for. Anything else in the file is not a channel this
 # Skill can reason about, so the profile carrying it is treated as invalid.
-PAYMENTS = ("subscription", "api")
+# The two are named as well as listed because they are not interchangeable to
+# everything that reads them: a subscription has a window that can run out,
+# where an API channel is metered and billed and has none.
+SUBSCRIPTION = "subscription"
+API = "api"
+PAYMENTS = (SUBSCRIPTION, API)
 
 # The two lists a profile carried before makers replaced them. Found beside
 # `makers`, they are a file written half by an older release or edited by hand,

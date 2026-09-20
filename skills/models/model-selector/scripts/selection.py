@@ -61,6 +61,7 @@ import catalogue
 import evidence
 import launch
 import profiles
+import quota
 from catalogue import LEVELS, Catalogue, Model
 from evidence import KINDS, Estimate, Estimator, KindPriors
 from profiles import OBJECTIVES, Profile
@@ -205,6 +206,13 @@ def _answer(args: argparse.Namespace) -> dict[str, Any]:
     pool = _pool(args.scope, cat, profile, seat_model, harness, args.repo, notes)
     pool = _locked_to_model(pool, cat, args.model, notes)
 
+    # The quota guard next, before anything is ranked, so that the ceiling, the
+    # ranking, the exploration and any later way of trying a point all read the
+    # guarded pool and none of them needs to know the guard exists. The pool as
+    # it stood before it is kept beside it, only to say what the guard cost.
+    admitted = pool
+    pool = _guarded(pool, profile, harness, args.model)
+
     # The deliberation ceiling comes last, so a point either lock re-admitted
     # from the catalogue is held to it too. The pool as it would have stood
     # without the ceiling is kept beside it, only to say what the ceiling cost.
@@ -214,6 +222,11 @@ def _answer(args: argparse.Namespace) -> dict[str, Any]:
     pool = [
         point
         for point in _locked_to_deliberation(pool, args.deliberation, ceiling, notes)
+        if _admitted(point.deliberation, ceiling)
+    ]
+    unguarded = [
+        point
+        for point in _locked_to_deliberation(admitted, args.deliberation, ceiling, [])
         if _admitted(point.deliberation, ceiling)
     ]
     if not pool:
@@ -246,6 +259,14 @@ def _answer(args: argparse.Namespace) -> dict[str, Any]:
             args.after,
             objective.name,
             ceiling,
+        )
+    )
+    notes.append(
+        _guard_ruled_out(
+            ranked,
+            _ranked(scored_as(unguarded), objective.name),
+            args.after,
+            objective.name,
         )
     )
     explored: str | None = None
@@ -364,6 +385,86 @@ def _ceiling_ruled_out(
     return (
         f"the deliberation ceiling {ceiling!r} ruled out "
         f"{_named(free[0].point)}, which the evidence would have chosen"
+    )
+
+
+def _guarded(
+    pool: Sequence[Point], profile: Profile, harness: str, locked: str | None
+) -> list[Point]:
+    """Narrow the pool to the channels whose week is not running ahead of it.
+
+    List-price dollars are not quota. The ranking orders one USD figure, and
+    what actually runs out is a weekly subscription window nobody has priced —
+    so quota is a guard rather than a currency: it decides who is in the pool
+    and changes no figure anything is ordered on (ADR-0205). The rule and the
+    two thresholds are `quota.py`'s, and a point goes where the channel that
+    pays for it is on a held-back harness.
+
+    Three things it never does. It never applies to a model the user locked: a
+    `--model` is the user naming what they want, and an optimisation does not
+    overrule an instruction. It never empties the pool — where holding back
+    would leave the call no candidate, nothing is held back — because a guard
+    answering `inherit` because the subscription is busy has stopped the work
+    over an optimisation, and this Skill answers every call it can parse. And
+    it never refuses: a harness this machine has no figure for simply has no
+    guard, which `quota.py` answers with rather than raising.
+    """
+
+    if locked is not None:
+        return list(pool)
+
+    busy = quota.held_back(quota.data_root(), quota.codex_root())
+    if not busy:
+        return list(pool)
+
+    kept = [point for point in pool if not _paid_by_busy(profile, point, harness, busy)]
+    return kept or list(pool)
+
+
+def _paid_by_busy(
+    profile: Profile, point: Point, harness: str, busy: frozenset[str]
+) -> bool:
+    """Return whether a held-back subscription is what pays for this point.
+
+    `channel_for` already answers which channel pays, and the harness that
+    channel names is whose plan the tokens come out of — frequently not the
+    harness doing the asking, a Claude Code session reaching an OpenAI model by
+    running Codex being the ordinary case. An API channel is metered and billed
+    rather than drawn from a window, so it has none to run out of.
+    """
+
+    channel = profiles.channel_for(profile, point.model, harness)
+    return (
+        channel is not None
+        and channel.pay == profiles.SUBSCRIPTION
+        and channel.harness in busy
+    )
+
+
+def _guard_ruled_out(
+    ranked: Sequence[Scored],
+    unguarded: Sequence[Scored],
+    failed: str | None,
+    objective: str,
+) -> str | None:
+    """Say which point the quota guard kept from being the answer.
+
+    Judged against the answer the same call would have given with every
+    channel admitted — the deliberation ceiling applied to both rankings and
+    neither exploring — so that a reader who finds a dearer point chosen can
+    tell the guard at work from the ranking's own verdict. None where the two
+    agree, which is every call the guard cost nothing.
+    """
+
+    guarded = _after(ranked, failed, objective, [])
+    every = _after(unguarded, failed, objective, [])
+    if not guarded or not every:
+        return None
+    if _named(guarded[0].point) == _named(every[0].point):
+        return None
+    return (
+        f"the quota guard ruled out {_named(every[0].point)}, "
+        f"which the evidence would have chosen"
     )
 
 

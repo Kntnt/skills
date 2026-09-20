@@ -204,6 +204,11 @@ emit_limit() {
 }
 
 # Extract the 5-hour and 7-day windows (percentage used and reset timestamp).
+# Both fields are documented at <https://code.claude.com/docs/en/statusline.md>:
+# `used_percentage` is a percentage from 0 to 100 and `resets_at` is Unix epoch
+# seconds. `rate_limits` is sent only to Pro and Max subscribers, and only after
+# a session's first API response; each window is independently optional, and
+# Claude Code drops one once its `resets_at` has passed.
 five_pct=$(jq -r '.rate_limits.five_hour.used_percentage // empty' <<<"$input")
 five_rst=$(jq -r '.rate_limits.five_hour.resets_at // empty' <<<"$input")
 week_pct=$(jq -r '.rate_limits.seven_day.used_percentage // empty' <<<"$input")
@@ -213,4 +218,39 @@ week_rst=$(jq -r '.rate_limits.seven_day.resets_at // empty' <<<"$input")
 # month-day reset.
 emit_limit "$five_pct" "5h" "$five_rst" "%H:%M"
 emit_limit "$week_pct" "7d" "$week_rst" "%m-%d"
+
+# Publish the weekly window for Model Selector's quota guard, which leaves a
+# subscription channel out of a machine-chosen answer while its week is running
+# ahead of itself. Claude Code exposes no per-turn history a figure could be
+# rebuilt from — its transcripts carry no rate-limit fields — but the payload
+# above carries it, so this Feature is what arms that guard for the Claude
+# channel and disabling the Feature is what disarms it.
+#
+# It is one filter over what has already been read: standard input is consumed
+# once, above, nothing is fetched, no credential is read, and `jq` is declared
+# by this Feature already. The two lines drawn above are not touched by it.
+#
+# Nothing is written where the payload carries no weekly window. Claude Code
+# sends `rate_limits` only to Pro and Max subscribers and only after a
+# session's first API response, so a session that has not made one yet would
+# otherwise wipe the figure a session that has just wrote.
+if [ -n "$week_pct" ] && [ -n "$week_rst" ]; then
+  # Written to a temporary file in the destination and moved into place, so a
+  # reader never meets half of one, and swallowed whole: a status line runs on
+  # every render, and a failure here leaves the previous file standing.
+  quota_dir="${KNTNT_HOME:-$HOME}/.kntnt/model-selector"
+  staged=""
+  {
+    mkdir -p "$quota_dir" &&
+      staged=$(mktemp "$quota_dir/.quota-XXXXXX") &&
+      jq -c '{channels: {"claude-code": {
+                used_percent: .rate_limits.seven_day.used_percentage,
+                resets_at: .rate_limits.seven_day.resets_at,
+                window_minutes: 10080,
+                written_at: (now | floor)}}}' <<<"$input" >"$staged" &&
+      mv "$staged" "$quota_dir/quota.json"
+  } >/dev/null 2>&1 || { [ -n "$staged" ] && rm -f "$staged" >/dev/null 2>&1; }
+fi
+
+exit 0
 

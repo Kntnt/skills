@@ -166,7 +166,7 @@ Serves Claude Code, Codex, and OpenCode.
 
 ### statusline
 
-A two-line Claude Code status line: path, worktree marker, branch, working-tree flags and any git operation in progress on the first; model, reasoning effort, context usage and the subscription windows on the second. It reads what the harness gives it plus one `git status`, calls no network service and reads no credential.
+A two-line Claude Code status line: path, worktree marker, branch, working-tree flags and any git operation in progress on the first; model, reasoning effort, context usage and the subscription windows on the second. It reads what the harness gives it plus one `git status`, calls no network service and reads no credential. Out of that same payload it writes this machine's weekly subscription window to `~/.kntnt/model-selector/quota.json`, which is what arms `model-selector`'s quota guard for the Claude channel; disabling this Feature disarms it.
 
 `statusLine` holds one command rather than a list, so where it already runs something that is not this collection's, the row names that command and asks whether to replace it before anything is written — the same confirmation `--yes` answers. Nothing is kept of what is replaced. Serves Claude Code.
 

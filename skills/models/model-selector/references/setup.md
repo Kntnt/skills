@@ -85,6 +85,14 @@ Then run the catalogue pass once, as `SKILL.md`'s `## Setup` says: where the wri
 
 The profile holds no credential of any kind, and nothing here asks for one.
 
+## What setup says about the quota guard, and does not do about it
+
+The three questions are the whole interview; this is a statement, made once at the end, and not a fourth question.
+
+Say that the quota guard's figure for the Claude channel comes from the `statusline` Feature, which writes this machine's weekly window as it draws the status line, so Enabling that Feature in `/kntnt select` is what arms the guard there and removing it is what disarms it. Say that a user who has replaced the status line with one of their own, or has none, simply gets no guard for the Claude channel — which holds nothing back, stops nothing, and is reported as a problem nowhere. The Codex figure is read from Codex's own session logs and wants nothing from anybody.
+
+**Setup writes no status line, and offers to write none.** It adds nothing to a command anybody else owns, and there is no snippet here for a user to paste. `statusLine` holds one command rather than a list, so a second owner cannot be put beside the first, and anything added in front of the Feature's own command is discarded the next time that Feature is Enabled.
+
 ## When the interview is not held
 
 Until it is held nothing is chosen, and nothing is stopped either. An absent profile, one an older release wrote — a `models` list and no `makers`, which is read as none rather than translated — and a damaged one all stand in as a profile choosing no maker. Damaged means unreadable, carrying an invalid channel or other entry, choosing a maker the catalogue does not know, or carrying `providers` or `models` beside `makers`. With no maker chosen nothing is eligible, the caller's own provider included, so every answer not locked to a model is the caller's own seat with a note naming this command; a `--model` lock is still answered. `status` reports the same. The generated subagent definitions are left untouched until a valid profile says which makers to use.

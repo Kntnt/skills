@@ -17,13 +17,15 @@ The first line is where you are: the working directory with `~` for home, a mark
 
 The second line is the run: the model, its reasoning effort where the model has one, the context window as thousands of tokens and a percentage coloured green, amber and red, and each subscription window Claude Code puts on stdin with the time it resets.
 
-It reads what the Harness hands it, plus git. It calls no network service, reads no credential, and starts no background work — a status line runs on every render, so anything it did it would do again a moment later. A one-second timeout on the `git status` call keeps a huge or busy repository from ever stalling the prompt.
+It reads what the Harness hands it, plus git, and writes one file out of what it has already read. It calls no network service, reads no credential, and starts no background work — a status line runs on every render, so anything it did it would do again a moment later. A one-second timeout on the `git status` call keeps a huge or busy repository from ever stalling the prompt.
 
 Glyphs come from a Nerd Font where the terminal is known to bundle one — Ghostty does; the web UI and the VS Code extension do not — and from plain characters otherwise. `CLAUDE_STATUSLINE_ICONS=nerd` or `=text` settles it by hand.
 
 ## Writes
 
 - `statusLine` in `~/.claude/settings.json`, pointing at the shipped `statusline.sh` inside this collection's installed Manager. It is a single-valued setting, so it cannot hold two: where it already runs a command that is not this collection's, the row names that command and the confirmation asks whether to replace it, and nothing is written until you answer yes. Nothing is kept of what is replaced, so disabling the Feature afterwards clears the setting rather than restoring the command that was there. Disabling leaves the setting alone where this collection does not hold it.
+
+- `~/.kntnt/model-selector/quota.json`, this machine's weekly subscription window as Claude Code reported it on this render: the share used, when the window resets, how long the window is, and when the line was written. It is one filter over the payload already read — nothing is fetched and no credential could go in it — written to a temporary file beside its destination and moved into place, and any failure of it is swallowed and leaves the previous file standing. Model Selector's quota guard reads it, so Enabling this Feature is what arms that guard for the Claude channel and disabling it is what disarms it. Nothing is written where the payload carries no weekly window, which is every render before a session's first API response and every machine not on a Pro or Max plan.
 
 ## Keeping your own
 
