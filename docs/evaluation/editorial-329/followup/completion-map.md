@@ -1,6 +1,6 @@
 # Final requirement disposition
 
-Independent final review supports closure of #344, #349, #352–356 and #359. Keep #329, #341, #357, #358, #360 and #361 open. Actual remote state is recorded after local integration in tracker/final-disposition.json.
+Independent final review supported closure of #344, #349, #352–356 and #359; all eight are now verified closed after local integration. #329, #341, #357, #358, #360 and #361 remain open. Actual remote states and comment links are recorded in tracker/final-disposition.json.
 
 The original #330–338 implementation and evaluation remain in the historical packet. This follow-up starts at 7ff6ec0. No issue is closed merely because repository checks pass. Every semantic outcome uses the frozen criteria; source-blind Redline is not credited with reconstructing unseen sources.
 

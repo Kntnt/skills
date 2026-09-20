@@ -1,0 +1,156 @@
+{
+  "integrated_revision": "12373d807e7f872e88ea4bb795af9b065c075dc5",
+  "product_revision": "5ecadb766ee1f9984a22d1702eb0e21ab2279971",
+  "previous_main": "7ff6ec048f136ad797117a71c7b148843ab2e15e",
+  "protected_rework": "4dbe937bd3d9bb940bbc23b001d4e59d337f03ed",
+  "closed": [
+    344,
+    349,
+    352,
+    353,
+    354,
+    355,
+    356,
+    359
+  ],
+  "kept_open": [
+    341,
+    357,
+    358,
+    360,
+    361,
+    329
+  ],
+  "actions": [
+    {
+      "issue": 344,
+      "comment_url": "https://github.com/Kntnt/skills/issues/344#issuecomment-5746249481",
+      "verified_state": "CLOSED",
+      "issue_url": "https://github.com/Kntnt/skills/issues/344"
+    },
+    {
+      "issue": 349,
+      "comment_url": "https://github.com/Kntnt/skills/issues/349#issuecomment-5746249665",
+      "verified_state": "CLOSED",
+      "issue_url": "https://github.com/Kntnt/skills/issues/349"
+    },
+    {
+      "issue": 352,
+      "comment_url": "https://github.com/Kntnt/skills/issues/352#issuecomment-5746249864",
+      "verified_state": "CLOSED",
+      "issue_url": "https://github.com/Kntnt/skills/issues/352"
+    },
+    {
+      "issue": 353,
+      "comment_url": "https://github.com/Kntnt/skills/issues/353#issuecomment-5746250068",
+      "verified_state": "CLOSED",
+      "issue_url": "https://github.com/Kntnt/skills/issues/353"
+    },
+    {
+      "issue": 354,
+      "comment_url": "https://github.com/Kntnt/skills/issues/354#issuecomment-5746250248",
+      "verified_state": "CLOSED",
+      "issue_url": "https://github.com/Kntnt/skills/issues/354"
+    },
+    {
+      "issue": 355,
+      "comment_url": "https://github.com/Kntnt/skills/issues/355#issuecomment-5746250442",
+      "verified_state": "CLOSED",
+      "issue_url": "https://github.com/Kntnt/skills/issues/355"
+    },
+    {
+      "issue": 356,
+      "comment_url": "https://github.com/Kntnt/skills/issues/356#issuecomment-5746250620",
+      "verified_state": "CLOSED",
+      "issue_url": "https://github.com/Kntnt/skills/issues/356"
+    },
+    {
+      "issue": 359,
+      "comment_url": "https://github.com/Kntnt/skills/issues/359#issuecomment-5746250773",
+      "verified_state": "CLOSED",
+      "issue_url": "https://github.com/Kntnt/skills/issues/359"
+    },
+    {
+      "issue": 341,
+      "comment_url": "https://github.com/Kntnt/skills/issues/341#issuecomment-5746250950",
+      "verified_state": "OPEN",
+      "issue_url": "https://github.com/Kntnt/skills/issues/341"
+    },
+    {
+      "issue": 357,
+      "comment_url": "https://github.com/Kntnt/skills/issues/357#issuecomment-5746251045",
+      "verified_state": "OPEN",
+      "issue_url": "https://github.com/Kntnt/skills/issues/357"
+    },
+    {
+      "issue": 358,
+      "comment_url": "https://github.com/Kntnt/skills/issues/358#issuecomment-5746251160",
+      "verified_state": "OPEN",
+      "issue_url": "https://github.com/Kntnt/skills/issues/358"
+    },
+    {
+      "issue": 360,
+      "comment_url": "https://github.com/Kntnt/skills/issues/360#issuecomment-5746251247",
+      "verified_state": "OPEN",
+      "issue_url": "https://github.com/Kntnt/skills/issues/360"
+    },
+    {
+      "issue": 361,
+      "comment_url": "https://github.com/Kntnt/skills/issues/361#issuecomment-5746251348",
+      "verified_state": "OPEN",
+      "issue_url": "https://github.com/Kntnt/skills/issues/361"
+    },
+    {
+      "issue": 329,
+      "comment_url": "https://github.com/Kntnt/skills/issues/329#issuecomment-5746251432",
+      "verified_state": "OPEN",
+      "issue_url": "https://github.com/Kntnt/skills/issues/329"
+    }
+  ],
+  "push_release_global_install": false,
+  "verified_child_states": {
+    "330": "closed",
+    "331": "closed",
+    "332": "closed",
+    "333": "closed",
+    "334": "closed",
+    "335": "closed",
+    "336": "closed",
+    "337": "closed",
+    "338": "closed",
+    "340": "closed",
+    "339": "closed",
+    "341": "open",
+    "342": "closed",
+    "343": "closed",
+    "344": "closed",
+    "345": "closed",
+    "346": "closed",
+    "347": "closed",
+    "348": "closed",
+    "349": "closed",
+    "350": "closed",
+    "351": "closed",
+    "352": "closed",
+    "353": "closed",
+    "354": "closed",
+    "355": "closed",
+    "356": "closed",
+    "357": "open",
+    "358": "open",
+    "359": "closed",
+    "360": "open",
+    "361": "open"
+  },
+  "verified_open_blockers": [
+    357,
+    358,
+    360,
+    361
+  ],
+  "completed_utc": "2026-09-19T23:59:59.909976+00:00",
+  "working_branch_removed_after_merge": true,
+  "native_run_roots_absent": 245,
+  "hierarchy_child_count": 32,
+  "hierarchy_closed_children": 27
+}

@@ -1,6 +1,6 @@
 # Resultat av fortsättningen på #329
 
-Alla deklarerade körningsplatser är nu redovisade. Produktversionen är fryst vid `5ecadb76`; underlaget nedan skiljer verifierade förbättringar från kvarstående fel. **#329 är inte kvalitetsmässigt färdigt och ska förbli öppet.** Lokal integration och trackerbesked förs in sist, efter slutgranskningen.
+Alla deklarerade körningsplatser är nu redovisade. Produktversionen är fryst vid `5ecadb76`; underlaget nedan skiljer verifierade förbättringar från kvarstående fel. **#329 är inte kvalitetsmässigt färdigt och ska förbli öppet.** De verifierade ändringarna och hela evidenspaketet är integrerade i lokal `main`. Åtta uppfyllda ärenden är avslutade på GitHub; fem underärenden och samlingsärendet är fortsatt öppna.
 
 ## Vad implementationen ändrar
 
@@ -9,6 +9,12 @@ Write låter en färsk, källmedveten agent jämföra hela utkastet med hela und
 Det gemensamma leveranskontraktet skiljer nu korrekt mellan oförändrad text utan fynd, oförändrad text med kvarstående fynd och de olika leveransmålen. Opinion-granskningen skiljer ett uttryckligen osäkert förslag från ett faktiskt löfte om genomförbarhet. Redlines enda avslutande Proofread-pass får hela den accepterade texten i en privat fil och skriver ett separat fullständigt resultat, även när inget ändrats. Föräldern läser det resultatet före leverans.
 
 Försöket med en separat citatgranskare i Redline togs bort. Det förbättrade vissa svenska citat men ändrade också fungerande engelska och ökade läsning och samordning. Återgången minskar den kostnaden, men är inte en verifierad lösning på citatproblemen: slutversionen uppvisar fortfarande både missad svensk idiomatik och onödig engelsk omskrivning.
+
+## Avslutade ärenden
+
+Följande åtta ärenden är verifierat stängda: [#344](https://github.com/Kntnt/skills/issues/344) om dateringar, [#349](https://github.com/Kntnt/skills/issues/349) om okänt kontra belagt frånvarande arbete, [#352](https://github.com/Kntnt/skills/issues/352) om påhittade intervjufrågor, [#353](https://github.com/Kntnt/skills/issues/353) om leveransmål, [#354](https://github.com/Kntnt/skills/issues/354) om kvalificerade förslag, [#355](https://github.com/Kntnt/skills/issues/355) om dokumentets respektive källpaketets räckvidd, [#356](https://github.com/Kntnt/skills/issues/356) om obelagda personattribut och [#359](https://github.com/Kntnt/skills/issues/359) om den mekaniska överföringen.
+
+Varje ärende har en egen slutkommentar med avgränsad slutsats, faktisk evidens, lokal commit och kvarstående begränsningar. [Tracker-kvittot](tracker/final-disposition.json) innehåller kommentarernas länkar och verifierade tillstånd. Slutlig hierarkikontroll visar 32 underärenden, varav 27 stängda och de fem nedan öppna; inga ytterligare undernivåer finns.
 
 ## Konkreta kvarstående fel
 
@@ -53,4 +59,4 @@ Källkontrollen kostar mer läsning och tid. Den obligatoriska resursmängden f�
 
 Native körningar använder observerad, ärvd `gpt-6-astra/high` i Codex CLI 0.155.1, utan modellöverskrivning. Fullständiga artefakter bedöms mot källor och frysta kriterier oberoende av granskarens eget besked. Krypterade dispatchdelar förblir uttryckligen overifierade där senare fullständiga filavläsningar inte ger insyn. Den gamla felstavningens exakta uppkomststeg är fortfarande okänt; den nya privata filöverföringen är däremot direkt observerbar.
 
-Ingen push, release eller global installation ingår. Lokal integration, slutlig körningsräkning, städverifiering och ärendeavslut redovisas här efter att alla deklarerade prov har avslutats.
+Produkt och fullständig evidens integrerades med fast-forward i lokal `main` vid `12373d807e7f872e88ea4bb795af9b065c075dc5`. Den efterföljande dokumentationscommiten registrerar de faktiskt genomförda trackeråtgärderna. Arbetsbranchen `editorial-source-fidelity` är borttagen efter integration; dess commits finns i `main`. Skyddad `rework` och dess worktree är orörda vid `4dbe937bd3d9bb940bbc23b001d4e59d337f03ed`. Alla egna utvärderingsprocesser är avslutade och tillfälliga körningsmiljöer städade; handoff och evidens är bevarade. Ingen push, release eller global installation har gjorts.

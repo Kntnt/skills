@@ -1,0 +1,7 @@
+Kvarstår öppet. Slutproduktens amerikanska debattutkast på 5ecadb76 skriver att rapporten inte mäter ”digital proficiency”, där källan säger ”digital vana”. Vana/erfarenhet och färdighet är olika variabler; frånvaro av mätning av den ena belägger inte frånvaro av mätning av den andra.
+
+Första granskaren anger själv familiarity/experience men godtar proficiency; den andra rekonstruerar med ”digital familiarity/proficiency”. Författaren godtar också sammanblandningen trots den nya fullständiga rapportvalideringen. Detta är en faktisk kontrollmiss, inte avvisande av ett riktigt fynd. Samma text klarar #349:s avgränsade krav men underkänns på hela F1. Källblind Redline lämnar texten oförändrad och kan inte åläggas att återställa osedd källkunskap.
+
+Evidens: `docs/evaluation/editorial-329/followup/runs/account-candidate/opinion-en_US-r1`, `reviews/account-original.md`, `reviews/account-independent-observations.md` och Write/Redline-records för 344-account-original. Alla äldre variabelbyten och deras synligt korrigerade bedömningar står kvar.
+
+Lokalt integrerat i `main` vid `12373d807e7f872e88ea4bb795af9b065c075dc5`; verifierad produktrevision `5ecadb76`. Alla fyra CONTRIBUTING-kontroller passerar, inklusive 1 873 tester. Oberoende teknisk/protokoll- och redaktionell helhetsgranskning är genomförda. Inget är pushat, releasat eller globalt installerat. Samlat slutresultat: `docs/evaluation/editorial-329/followup/completion-report.md`.
