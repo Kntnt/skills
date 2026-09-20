@@ -47,7 +47,7 @@
       "name": "commit",
       "category": "code",
       "description": "Commit the working tree on the current branch, without pushing.",
-      "digest": "a227b31951bb2830edd1682134b3a0d1cd837909f41da4c5810f861b2a04f4be",
+      "digest": "232ea1cb3513f1848160cefbb61f0bfeef7b232b7691c08f4c460bcbc9516860",
       "binaries": [
         "git",
         "uv"
@@ -60,7 +60,7 @@
       "name": "orchestrate",
       "category": "code",
       "description": "Work the tracker's ready-for-agent tickets unattended — claim, build, and independently verify them a wave at a time, integrating each wave into the current branch.",
-      "digest": "d4c0961eb7ad27aa78f7df00ecede4baa1a11e1df18e189086c4aaedfd66ede6",
+      "digest": "259480c9e88a4da599779f68967463ed44b4ea1376ab945825abd543601d2c08",
       "binaries": [
         "git",
         "gh",

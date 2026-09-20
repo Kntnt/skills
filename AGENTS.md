@@ -30,6 +30,7 @@ Precedence over any conflicting skill, README, or other doc unless the user over
 - `docs/rules/collection.md` — read when changing what a Manager verb promises, or how the collection reaches a machine
 - `docs/rules/routing.md` — read when changing how a Skill routes delegated work, or what it may file as evidence
 - `docs/rules/tickets.md` — read when writing a ticket
+- `docs/rules/commits.md` — read when writing a commit message that names a ticket, or telling somebody else how to write one
 - `docs/rules/docs.md` — read when deciding where a rule or a document belongs, writing a decision record, authoring a document an agent loads, adding a pointer to this list, or changing what is already written down here
 - `docs/evaluation/protocol.md` — read when evaluating an editorial Skill against the fixture corpus
 - `docs/evaluation/regressions/README.md` — read when running or verifying a focused behavioural regression

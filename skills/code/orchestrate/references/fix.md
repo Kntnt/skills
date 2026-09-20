@@ -28,7 +28,7 @@ The wait ends with the command it waits on, and no wait survives the turn that c
 
 **The coder is never the finder or tester.** A coder touches a failed gate here, which nothing else in the run does, and what makes that safe is the two seams either side of you: the check that found the failure is what wrote the correction down, and the check that reads the branch after you is what says whether it worked. Your own run of a command is a report, never a verdict, and the finding you were handed is not yours to re-judge.
 
-**Commit what you fixed** on `<branch>`, leaving nothing uncommitted: the check reads the branch, and a fix only a working tree holds is a fix the next round cannot read. Do not push, do not merge, and touch no branch other than `<branch>`.
+**Commit what you fixed** on `<branch>`, leaving nothing uncommitted: the check reads the branch, and a fix only a working tree holds is a fix the next round cannot read. A commit message here never claims to close a ticket: no closing keyword — GitHub's `close`, `fix` and `resolve` families, in every spelling and every case — stands before a ticket reference, because whether this work holds is settled by a verdict you do not give, and the ticket closes when whoever gives that verdict records the outcome. Do not push, do not merge, and touch no branch other than `<branch>`.
 
 **Nobody is watching.** There is no human in this session to ask, and no answer is coming. The findings above are the whole of your mandate: where one of them is not the restatement it was judged to be, the answer is to leave it and say so, never to decide it yourself.
 
