@@ -69,7 +69,7 @@ Two identical questions can come back with different answers, and that is this w
 
 ## Setup
 
-Read `$HERE/references/setup.md` and hold the interview it scripts: which Harnesses are covered, which makers the user wants models from, and then how each maker is paid for on each channel. Every model a chosen maker offers is eligible, so no model is asked about one by one. One question at a time, nothing asked again that the user has already made unambiguous, and nothing asked that the catalogue holds — prices, model lists and the plans each provider sells are all in it. Show the assembled profile in full before it is written.
+Read `$HERE/references/setup.md` and hold the interview it scripts: which Harnesses are covered, which makers the user wants models from, and then how each maker is paid for on each channel. Every model a chosen maker offers is eligible, so no model is asked about one by one; of several releases of one family, only the newest is ever chosen or offered. One question at a time, nothing asked again that the user has already made unambiguous, and nothing asked that the catalogue holds — prices, model lists and the plans each provider sells are all in it. Show the assembled profile in full before it is written.
 
 Hand it to the script rather than editing the file:
 

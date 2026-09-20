@@ -167,7 +167,10 @@ def _answer(capsys: pytest.CaptureFixture[str], *flags: str) -> dict[str, Any]:
 def _profile(data_dir: Path, **overrides: Any) -> None:
     """Write a profile that chooses Anthropic and pays for it in Claude Code.
 
-    Every model Anthropic offers is therefore eligible. A test that needs a
+    Every model Anthropic offers is therefore eligible, and every one of them
+    is a candidate too: each seeded Anthropic family holds one release, so the
+    rule keeping only a family's newest release takes nothing out of this pool
+    until a fixture adds a second release to one of them. A test that needs a
     smaller pool shapes it by the makers it chooses or by a lock, never by a
     list of models, which a profile no longer carries.
     """
@@ -2649,7 +2652,7 @@ def test_the_vocabulary_answer_carries_no_objective(
     assert "objective_source" not in answer
 
 
-# --- Which models are eligible: every model a chosen maker offers ------------
+# --- Which models are eligible: the makers chosen, and nothing narrower ------
 
 
 def _makers(data_dir: Path, *channels: dict[str, Any]) -> None:
@@ -2687,7 +2690,7 @@ OPENAI_CHANNEL: dict[str, Any] = {
 }
 
 
-def test_every_model_a_chosen_maker_offers_that_a_channel_reaches_is_a_candidate(
+def test_a_chosen_makers_models_are_candidates_and_an_unchosen_makers_are_not(
     tmp_path: Path, capsys: pytest.CaptureFixture[str]
 ) -> None:
     """Nothing new has to be enabled by hand; no model of an unchosen maker is in.
@@ -3443,3 +3446,453 @@ def test_no_figure_is_no_guard_and_is_said_nowhere(
     assert answer["ok"] is True
     assert _named_in(answer) == ANTHROPIC | OPENAI
     assert "quota" not in (answer["note"] or "")
+
+
+# --- Only the newest release of a family is a candidate ----------------------
+
+# The maker whose seeded catalogue holds exactly one model, so that a profile
+# choosing it alone puts one family in the pool and the releases a fixture adds
+# to it are the whole of what is ranked. Its seeded release carries no date,
+# which makes it the undated half of the tie the rule has to settle as well.
+XAI: str = "spacexai"
+SEEDED_GROK: str = "grok-4.6"
+
+# The levels the seeded Grok supports, so that a release a fixture adds sits on
+# the same ladder rather than differing from it by accident.
+GROK_LEVELS: tuple[str, ...] = ("low", "medium", "high", "xhigh")
+
+# What every Grok call here asks with: the family's own maker reached through
+# the opencode bridge, high stakes so that no answer is spent exploring, and
+# every alternative listed so that a release left in the pool is seen.
+GROK_ASKED: tuple[str, ...] = (
+    "--harness=claude-code",
+    "--kind=implement",
+    "--stakes=high",
+    EVERY,
+)
+
+
+def _grok(data_dir: Path, *releases: dict[str, Any]) -> None:
+    """Choose xAI alone, paid through OpenRouter, and add releases of Grok.
+
+    A Claude Code caller reaches them over the opencode bridge, so nothing has
+    to be on the `PATH` for the whole family to be in the pool at once.
+    """
+
+    _profile(
+        data_dir,
+        harnesses=["claude-code", "opencode"],
+        makers=[XAI],
+        channels=[
+            {
+                "provider": XAI,
+                "harness": "opencode",
+                "pay": "api",
+                "gateway": "openrouter",
+            }
+        ],
+    )
+    _refresh(data_dir, *releases)
+
+
+def _release(
+    identifier: str,
+    released: str | None = None,
+    levels: Sequence[str] = GROK_LEVELS,
+    gateways: dict[str, str] | None = None,
+) -> dict[str, Any]:
+    """Return one release of the Grok family, routed as the seeded one is."""
+
+    return {
+        "id": identifier,
+        "provider": XAI,
+        "family": "grok",
+        "aliases": ["grok"],
+        "deliberation": list(levels),
+        "price": {"input": 3.0, "cache_read": 0.3, "cache_write": 3.75, "output": 15.0},
+        "reasoning_billed_as": "output",
+        "capability": 0.8,
+        "gateways": (
+            {"openrouter": f"x-ai/{identifier}"} if gateways is None else gateways
+        ),
+        "released": released,
+    }
+
+
+def _three_releases(data_dir: Path) -> None:
+    """Write the family at three releases, every one of them admitted.
+
+    The seeded `grok-4.6` carries no date, and the two added ones do, so the
+    newest is unambiguous and the oldest is the undated case at the same time.
+    """
+
+    _grok(data_dir, _release("grok-5", "2026-02-01"), _release("grok-6", "2026-08-01"))
+
+
+def test_the_answer_is_the_newest_release_of_the_family(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """A maker that goes on listing every release it ever shipped offers one."""
+
+    _three_releases(tmp_path)
+
+    answer = _answer(capsys, f"--data={tmp_path}", *GROK_ASKED)
+
+    assert answer["model"] == "grok-6"
+
+
+def test_no_release_a_newer_one_replaced_is_offered_beside_the_answer(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """An alternative is a point the caller may run, so an older release is none.
+
+    Reading the chosen model alone would pass on a pool that still held the
+    older releases and merely ranked the newest above them.
+    """
+
+    _three_releases(tmp_path)
+
+    answer = _answer(capsys, f"--data={tmp_path}", *GROK_ASKED)
+
+    assert _named_in(answer) == {"grok-6"}
+    assert answer["alternatives"] == []
+
+
+def test_no_exploration_ever_names_a_release_a_newer_one_replaced(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """The rule narrows the pool the exploration draws its candidates from.
+
+    An exploration buys a row about a point somebody might run again, and a
+    row about a replaced release is a row nothing will ever read.
+    """
+
+    _three_releases(tmp_path)
+
+    answers = [
+        _answer(
+            capsys,
+            f"--data={tmp_path}",
+            "--harness=claude-code",
+            "--kind=implement",
+            EVERY,
+            f"--seed={seed}",
+        )
+        for seed in range(DRAWS)
+    ]
+
+    assert {model for answer in answers for model in _named_in(answer)} == {"grok-6"}
+
+
+def test_a_step_up_after_a_failure_never_names_a_release_a_newer_one_replaced(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """The escalation is answered from the same pool, so it holds one release."""
+
+    _three_releases(tmp_path)
+
+    answer = _answer(
+        capsys,
+        f"--data={tmp_path}",
+        "--harness=claude-code",
+        "--kind=implement",
+        "--after=grok-6@low",
+        EVERY,
+    )
+
+    assert _named_in(answer) == {"grok-6"}
+
+
+def test_where_the_newest_release_has_no_way_in_the_next_one_stands_for_the_family(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """The comparison is made among the releases this call could actually use.
+
+    `gateways` is a per-model field, so a release the gateway its channel pays
+    through records no slug for has no route and never entered the pool. Held
+    against it, the family would vanish rather than be represented.
+    """
+
+    _grok(
+        tmp_path,
+        _release("grok-5", "2026-02-01"),
+        _release("grok-6", "2026-08-01", gateways={}),
+    )
+
+    answer = _answer(capsys, f"--data={tmp_path}", *GROK_ASKED)
+
+    assert answer["model"] == "grok-5"
+    assert _named_in(answer) == {"grok-5"}
+
+
+def test_where_the_newest_release_is_above_the_ceiling_the_family_still_stands(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """The ceiling is one of the gates the comparison is made among.
+
+    A release supporting no level at or below the ceiling is not one this call
+    could use, and a pool holding only that family would be emptied by a rule
+    applied before the ceiling rather than after it.
+    """
+
+    _grok(tmp_path, _release("grok-7", "2026-08-01", levels=("max",)))
+
+    answer = _answer(capsys, f"--data={tmp_path}", *GROK_ASKED)
+
+    assert answer["model"] == SEEDED_GROK
+    assert answer["launch"]["how"] != "inherit"
+
+
+def test_a_dated_release_beats_an_undated_one(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """Most seeded entries carry no date, so the undated case is the common one."""
+
+    _grok(tmp_path, _release("grok-5", "2026-02-01"))
+
+    answer = _answer(capsys, f"--data={tmp_path}", *GROK_ASKED)
+
+    assert _named_in(answer) == {"grok-5"}
+
+
+def test_two_releases_dated_the_same_day_resolve_to_the_smaller_id(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """A tie is settled on the id as the catalogue spells it, and lexically.
+
+    Lexically rather than numerically, because a numeric reading would be this
+    module inferring a succession the catalogue never stated.
+    """
+
+    _grok(
+        tmp_path,
+        _release("grok-7.0", "2026-05-01"),
+        _release("grok-7.1", "2026-05-01"),
+    )
+
+    answer = _answer(capsys, f"--data={tmp_path}", *GROK_ASKED)
+
+    assert _named_in(answer) == {"grok-7.0"}
+
+
+def test_the_release_chosen_never_depends_on_the_order_the_catalogue_was_read_in(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """Two fields decide it, so the same catalogue in either order decides alike."""
+
+    first = _release("grok-7.0", "2026-05-01")
+    second = _release("grok-7.1", "2026-05-01")
+    ascending, descending = tmp_path / "ascending", tmp_path / "descending"
+    _grok(ascending, first, second)
+    _grok(descending, second, first)
+
+    answer = _answer(capsys, f"--data={ascending}", *GROK_ASKED)
+    reversed_answer = _answer(capsys, f"--data={descending}", *GROK_ASKED)
+
+    assert _named_in(answer) == _named_in(reversed_answer) == {"grok-7.0"}
+
+
+def test_a_family_alias_and_an_unlocked_call_name_the_same_release_on_a_tie(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """One order decides which release is newest, so the two can never disagree.
+
+    A lock resolving a family alias one way and the pool keeping the other
+    release is a user asking for `grok` and being told the newest Grok is one
+    the same catalogue would not have offered them.
+    """
+
+    _grok(
+        tmp_path,
+        _release("grok-7.0", "2026-05-01"),
+        _release("grok-7.1", "2026-05-01"),
+    )
+
+    unlocked = _answer(capsys, f"--data={tmp_path}", *GROK_ASKED)
+    aliased = _answer(capsys, f"--data={tmp_path}", "--model=grok", *GROK_ASKED)
+
+    assert unlocked["model"] == aliased["model"] == "grok-7.0"
+    assert _named_in(unlocked) == {"grok-7.0"}
+    assert "newest" in aliased["note"]
+
+
+def test_models_of_different_families_are_untouched_by_one_another(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """A family is what the catalogue says it is, whatever two ids have in common.
+
+    `gpt-5.6-sol` and `gpt-6-astra` share a maker and most of a name and are
+    two version lines, so neither replaces the other and both stay.
+    """
+
+    _profile(
+        tmp_path,
+        harnesses=["codex"],
+        makers=["openai"],
+        channels=[
+            {
+                "provider": "openai",
+                "harness": "codex",
+                "pay": "subscription",
+                "plan": "ChatGPT Pro",
+            }
+        ],
+    )
+
+    answer = _answer(
+        capsys,
+        f"--data={tmp_path}",
+        "--harness=codex",
+        "--scope=limited",
+        "--kind=implement",
+        "--stakes=high",
+        EVERY,
+    )
+
+    assert _named_in(answer) == OPENAI
+
+
+def test_an_exact_id_lock_on_a_replaced_release_is_answered_with_that_release(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """A lock is never overridden, and the rule runs after it rather than before.
+
+    Every gate admitted this release, so the answer says nothing about the
+    lock and nothing about a scope that did not offer the model.
+    """
+
+    _three_releases(tmp_path)
+
+    answer = _answer(
+        capsys, f"--data={tmp_path}", f"--model={SEEDED_GROK}", *GROK_ASKED
+    )
+
+    assert answer["model"] == SEEDED_GROK
+    note = answer["note"] or ""
+    assert "lock" not in note
+    assert "did not offer" not in note
+
+
+def test_no_note_composed_from_the_pool_names_a_release_the_rule_removed(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """The unceiled pool the ceiling is measured against is narrowed too.
+
+    `_ceiling_ruled_out` names the point at the top of that pool, so a pool
+    left holding the replaced release tells a caller the ceiling cost it a
+    point it could never have been offered in the first place.
+    """
+
+    _grok(
+        tmp_path,
+        _release("grok-old", "2026-01-01", levels=("low", "xhigh", "max")),
+        _release("grok-new", "2026-08-01", levels=("low", "xhigh")),
+    )
+    _store(tmp_path, ("implement", "grok-old", "max", 1.0, 30))
+
+    answer = _answer(capsys, f"--data={tmp_path}", *GROK_ASKED)
+
+    assert answer["model"] == "grok-new"
+    assert "grok-old" not in (answer["note"] or "")
+
+
+def test_a_failed_point_a_newer_release_replaced_is_answered_as_any_unknown_one(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """No step is invented for a release the pool does not hold.
+
+    The caller's own token is echoed back, which is the caller's word rather
+    than a point this Skill composed from the pool.
+    """
+
+    _three_releases(tmp_path)
+
+    answer = _answer(
+        capsys,
+        f"--data={tmp_path}",
+        "--harness=claude-code",
+        "--kind=implement",
+        f"--after={SEEDED_GROK}@low",
+        EVERY,
+    )
+
+    assert "nothing here matches the failed point" in answer["note"]
+    assert answer["model"] == "grok-6"
+
+
+def test_the_same_failure_locked_to_that_release_still_steps_up_within_it(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """A caller wanting the step up from a release it chose says so with a lock."""
+
+    _three_releases(tmp_path)
+
+    answer = _answer(
+        capsys,
+        f"--data={tmp_path}",
+        "--harness=claude-code",
+        "--kind=implement",
+        f"--model={SEEDED_GROK}",
+        f"--after={SEEDED_GROK}@low",
+        EVERY,
+    )
+
+    assert answer["model"] == SEEDED_GROK
+    assert answer["deliberation"] != "low"
+    assert "one step up from" in answer["note"]
+
+
+def test_one_order_decides_which_release_is_newest_and_every_caller_goes_by_it(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """Two opposite tie-breaks for one notion is what this collapses into one.
+
+    The family alias, the pool and the subagent file name all answer *which
+    release of this family is the newest*, and a tie is where they used to
+    disagree: `resolve` took the smaller id and `definitions` the greater.
+    """
+
+    _grok(
+        tmp_path,
+        _release("grok-7.0", "2026-05-01"),
+        _release("grok-7.1", "2026-05-01"),
+    )
+    catalogue = _module("catalogue")
+    launch = _module("launch")
+    cat = catalogue.load(tmp_path, SKILL)
+    tied = [model for model in cat.models if model.family == "grok"]
+    pool = [select.Point(model, "low") for model in tied]
+
+    assert catalogue.newest_first(tied)[0].id == "grok-7.0"
+    assert {point.model.id for point in select._newest_releases(pool)} == {"grok-7.0"}
+    assert "newest_first" in " ".join((launch.definitions.__doc__ or "").split())
+
+
+def test_the_rule_removes_nothing_this_machine_has_stored(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """A replaced release keeps its entry and its rows; it is simply not chosen.
+
+    Rows are evidence of a version that does not change, and the user may lock
+    the release they were taken at for as long as its maker offers it.
+    """
+
+    _three_releases(tmp_path)
+    _store(tmp_path, ("implement", SEEDED_GROK, "low", 1.0, 30))
+    (tmp_path / "pending.jsonl").write_text(
+        json.dumps({"attempt_id": "ms-fixture-pending", "model": SEEDED_GROK}) + "\n",
+        encoding="utf-8",
+    )
+    before = {
+        path.name: path.read_bytes()
+        for path in sorted(tmp_path.iterdir())
+        if path.is_file()
+    }
+
+    _answer(capsys, f"--data={tmp_path}", *GROK_ASKED)
+
+    assert {
+        path.name: path.read_bytes()
+        for path in sorted(tmp_path.iterdir())
+        if path.is_file()
+    } == before

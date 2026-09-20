@@ -40,7 +40,7 @@ import tempfile
 import time
 import urllib.parse
 import urllib.request
-from collections.abc import Callable, Collection, Iterator, Mapping, Sequence
+from collections.abc import Callable, Collection, Iterable, Iterator, Mapping, Sequence
 from contextlib import contextmanager, suppress
 from dataclasses import dataclass, replace
 from datetime import UTC, datetime, timedelta
@@ -385,6 +385,29 @@ def plans_for(cat: Catalogue, provider: str) -> list[Plan]:
     return [plan for plan in cat.plans if plan.provider == provider]
 
 
+def newest_first(models: Iterable[Model]) -> list[Model]:
+    """Return *models* newest release first, on the one order releases go by.
+
+    `released` orders them and the id settles the rest, so a caller taking
+    `[0]` always takes the same model on the same catalogue however that
+    catalogue was loaded. An entry with no date is older than every dated one,
+    an absence sorting below any date, and two entries dated the same day go
+    to the smaller id. The comparison is lexical throughout: reading a version
+    out of an id would be this module inferring a succession the catalogue
+    never stated.
+
+    One function rather than a key written out wherever the question comes up.
+    A family alias resolving to a release, the pool keeping one release of a
+    family, and the subagent file name a family takes are three askings of
+    *which release of this family is the newest*, and two of them once
+    answered a tie opposite ways.
+    """
+
+    ordered = sorted(models, key=lambda model: model.id)
+    ordered.sort(key=lambda model: model.released or "", reverse=True)
+    return ordered
+
+
 def resolve(cat: Catalogue, token: str) -> list[Model]:
     """Return every model *token* names, newest release first.
 
@@ -407,11 +430,7 @@ def resolve(cat: Catalogue, token: str) -> list[Model]:
         or wanted == model.family.lower()
     ]
 
-    # Newest first, and stable in id order underneath, so that a caller taking
-    # `[0]` always takes the same model on the same catalogue.
-    matched.sort(key=lambda model: model.id)
-    matched.sort(key=lambda model: model.released or "", reverse=True)
-    return matched
+    return newest_first(matched)
 
 
 def cost_usd(
