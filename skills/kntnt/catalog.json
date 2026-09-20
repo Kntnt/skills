@@ -1,6 +1,6 @@
 {
   "origin": "Kntnt/skills",
-  "manager_digest": "d9d206fa9860d2b94ac6cc4a4a7a33888640d94db6027c02deabb8285544343f",
+  "manager_digest": "b761cd35c8fc2e116a11c8a3c81287a3e82ef2bf8c292f7b514cc6c13b3dc135",
   "skills": [
     {
       "name": "agents-md",
@@ -60,7 +60,7 @@
       "name": "orchestrate",
       "category": "code",
       "description": "Work the tracker's ready-for-agent tickets unattended — claim, build, and independently verify them a wave at a time, integrating each wave into the current branch.",
-      "digest": "8f406deb7a033cd1d4b5f297280358995120bf9baab1e53c352a0a2c50cfc526",
+      "digest": "d4c0961eb7ad27aa78f7df00ecede4baa1a11e1df18e189086c4aaedfd66ede6",
       "binaries": [
         "git",
         "gh",
@@ -231,7 +231,7 @@
       "name": "session-cleanup",
       "category": "environment",
       "description": "Leave the machine as the session found it — the agent records what it starts, and a lifecycle hook stops exactly that when the session ends or the next one begins.",
-      "digest": "d521261b8d3edb50821bbbb7d746af6c64a1820d32af6e0390570c6395d42b9e",
+      "digest": "3c34076d8622c22225ad8acdef02463a02451dda7ee46b2ef2606f4560acd7c3",
       "binaries": [
         "uv"
       ],

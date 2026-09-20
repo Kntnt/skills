@@ -414,7 +414,7 @@ def test_a_session_being_resumed_is_not_a_session_that_ended(tmp_path: Path) -> 
         del os.environ["KNTNT_HOME"]
 
 
-def test_a_start_leaves_a_manifest_whose_terminal_is_still_alive(
+def test_legacy_terminals_do_not_authorize_an_immediate_sweep(
     tmp_path: Path,
 ) -> None:
     """Another session's dev server is not this session's to end."""
@@ -428,7 +428,7 @@ def test_a_start_leaves_a_manifest_whose_terminal_is_still_alive(
             {
                 "kind": "session",
                 "id": "S-ELSEWHERE",
-                # A live process this test knows is not this test's own terminal.
+                # Legacy terminal identities carry no owner-lifetime evidence.
                 "sid": os.getpid(),
                 "harness": "claude-code",
             },
@@ -442,7 +442,7 @@ def test_a_start_leaves_a_manifest_whose_terminal_is_still_alive(
         foreign = cleanup.foreign_manifests("S-NEW")
 
         assert elsewhere not in foreign
-        assert here in foreign
+        assert here not in foreign
     finally:
         del os.environ["KNTNT_HOME"]
 
@@ -528,10 +528,10 @@ def test_a_start_keeps_a_recent_unowned_manifest_with_a_live_process(
     assert path not in cleanup.foreign_manifests("new")
 
 
-def test_an_unowned_manifest_with_a_gone_process_can_still_be_swept(
+def test_an_unowned_manifest_with_a_gone_process_waits_for_the_backstop(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
-    """An ended launcher does not keep its recorded scratch forever."""
+    """A finished recorded task does not establish that its owner has ended."""
 
     cleanup = _module(SESSION_CLEANUP, "kntnt_session_cleanup")
     monkeypatch.setenv("KNTNT_HOME", str(tmp_path))
@@ -539,13 +539,13 @@ def test_an_unowned_manifest_with_a_gone_process_can_still_be_swept(
     cleanup.append(path, {"kind": "pid", "id": "123456", "started": "then"})
     monkeypatch.setattr(cleanup, "alive", lambda pid: False)
 
-    assert path in cleanup.foreign_manifests("new")
+    assert path not in cleanup.foreign_manifests("new")
 
 
 @pytest.mark.parametrize(
     ("current_start", "expired"), [("different", False), ("then", True)]
 )
-def test_reused_processes_and_the_age_backstop_release_unowned_manifests(
+def test_only_the_age_backstop_releases_unowned_manifests(
     tmp_path: Path,
     monkeypatch: pytest.MonkeyPatch,
     current_start: str,
@@ -561,7 +561,7 @@ def test_reused_processes_and_the_age_backstop_release_unowned_manifests(
     monkeypatch.setattr(cleanup, "started_at", lambda pid: current_start)
     monkeypatch.setattr(cleanup, "stale", lambda path: expired)
 
-    assert path in cleanup.foreign_manifests("new")
+    assert (path in cleanup.foreign_manifests("new")) is expired
 
 
 def test_a_start_without_readable_ancestry_cannot_authorize_a_sweep(
@@ -854,3 +854,255 @@ def test_the_project_layer_offers_no_feature_and_says_why() -> None:
     assert kntnt.unattempted_features(global_layer=False)["note"] == (
         kntnt.PROJECT_LAYER_FEATURES_NOTE
     )
+
+
+@pytest.mark.parametrize("recorded_kind", ["path", "live-pid", "gone-pid", "container"])
+def test_detached_tools_remain_owned_until_the_harness_exits(
+    tmp_path: Path, recorded_kind: str
+) -> None:
+    """Tool and hook POSIX sessions may die while their Harness keeps working."""
+
+    program = """
+import json, os, subprocess, sys
+from pathlib import Path
+script = sys.argv[1]
+root = Path(os.environ['KNTNT_HOME'])
+os.environ['CLAUDE_PID'] = str(os.getpid())
+os.environ['CLAUDE_CODE_SESSION_ID'] = 'working'
+os.environ['CODEX_SESSION_ID'] = 'outer-codex'
+def call(*args, payload=''):
+    result = subprocess.run([sys.executable, script, *args], cwd=root,
+        input=payload, text=True, capture_output=True, start_new_session=True)
+    assert result.returncode == 0, result.stderr
+    return json.loads(result.stdout) if result.stdout else None
+call('hook', '--harness=claude-code', '--event=SessionStart',
+     payload='{"session_id":"working"}')
+scratch = root / 'scratch'
+scratch.mkdir()
+record = call('add', 'path', str(scratch), 'working scratch')
+if sys.argv[2] == 'live-pid':
+    call('add', 'pid', str(os.getpid()), 'live task')
+if sys.argv[2] == 'gone-pid':
+    child = subprocess.Popen([sys.executable, '-c', 'import sys; sys.stdin.read()'],
+        cwd=root, stdin=subprocess.PIPE, start_new_session=True)
+    call('add', 'pid', str(child.pid), 'short task')
+    child.communicate(timeout=5)
+if sys.argv[2] == 'container':
+    call('add', 'container', 'test-owned/container', 'working container')
+print(json.dumps(record), flush=True)
+sys.stdin.read()
+"""
+    with subprocess.Popen(
+        [sys.executable, "-c", program, str(SESSION_CLEANUP), recorded_kind],
+        cwd=REPO_ROOT,
+        env={**os.environ, "KNTNT_HOME": str(tmp_path)},
+        stdin=subprocess.PIPE,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True,
+        start_new_session=True,
+    ) as owner:
+        try:
+            assert owner.stdout is not None
+            record = json.loads(owner.stdout.readline())
+            manifest = Path(record["manifest"])
+            before = manifest.read_bytes()
+            os.utime(manifest, (1, 1))
+            _run(
+                SESSION_CLEANUP,
+                "hook",
+                "--harness=codex",
+                "--event=SessionStart",
+                home=tmp_path,
+                stdin='{"session_id":"sibling"}',
+            )
+            assert manifest.exists(), "a sibling swept the working session"
+            assert manifest.read_bytes() == before
+            assert (tmp_path / "scratch").exists()
+            assert record["session"] == "working"
+        finally:
+            owner.kill()
+            owner.communicate(timeout=5)
+
+    # A hard-ended owner has no SessionEnd; the next start must reclaim it.
+    if recorded_kind != "container":
+        os.utime(manifest, None)
+        _run(
+            SESSION_CLEANUP,
+            "hook",
+            "--harness=codex",
+            "--event=SessionStart",
+            home=tmp_path,
+            stdin='{"session_id":"after-crash"}',
+        )
+        assert not manifest.exists()
+        assert not (tmp_path / "scratch").exists()
+
+
+def test_lifecycle_retires_legacy_pointers_and_logs_the_sweeper(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """Start/end need no terminal pointer and report subject and initiator."""
+
+    cleanup = _module(SESSION_CLEANUP, "kntnt_session_cleanup")
+    monkeypatch.setenv("KNTNT_HOME", str(tmp_path))
+    pointers = tmp_path / ".kntnt/session-cleanup/current"
+    pointers.mkdir(parents=True)
+    (pointers / "123").write_text("old")
+    orphan = cleanup.manifest_path("orphan")
+    cleanup.append(
+        orphan,
+        {
+            "kind": "session",
+            "id": "orphan",
+            "owner_pid": 999999999,
+            "owner_started": "gone",
+        },
+    )
+    cleanup.append(
+        orphan, {"kind": "path", "id": str(tmp_path / "gone"), "why": "scratch"}
+    )
+    empty = cleanup.manifest_path("empty")
+    cleanup.append(
+        empty,
+        {
+            "kind": "session",
+            "id": "empty",
+            "owner_pid": 999999999,
+            "owner_started": "gone",
+        },
+    )
+
+    cleanup.hook("codex", "SessionStart", {"session_id": "new"})
+    cleanup.hook("codex", "SessionEnd", {"session_id": "new"})
+
+    assert not pointers.exists()
+    assert not cleanup.manifest_path("new").exists()
+    records = [json.loads(line) for line in cleanup.log_path().read_text().splitlines()]
+    swept = [row for row in records if row.get("why") == "start"]
+    assert {row["session"] for row in swept} == {"orphan", "empty"}
+    assert all(
+        row["sweeper_session"] == "new" and row["sweeper_harness"] == "codex"
+        for row in swept
+    )
+
+
+def test_opencode_end_uses_event_identity_not_the_shared_server(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """A conversation ending does not end its shared OpenCode process."""
+
+    cleanup = _module(SESSION_CLEANUP, "kntnt_session_cleanup")
+    monkeypatch.setenv("KNTNT_HOME", str(tmp_path))
+    payload = {"type": "session.created", "properties": {"info": {"id": "oc-session"}}}
+    answer = cleanup.hook("opencode", "", payload)
+    assert answer["session"] == "oc-session"
+    cleanup.append(cleanup.manifest_path("oc-session"), {"kind": "path", "id": "/"})
+    ended = cleanup.hook(
+        "opencode", "session.deleted", {"properties": {"info": {"id": "oc-session"}}}
+    )
+    assert ended["session"] == "oc-session"
+    assert not cleanup.manifest_path("oc-session").exists()
+    assert cleanup.hook("opencode", "session.deleted", {})["swept"] == []
+
+
+def test_hook_with_closed_stderr_still_exits_zero(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """A shutdown may close the reporting pipe before cleanup has finished."""
+
+    import io
+
+    cleanup = _module(SESSION_CLEANUP, "kntnt_session_cleanup")
+    monkeypatch.setenv("KNTNT_HOME", str(tmp_path))
+    monkeypatch.setattr(sys, "stdin", io.StringIO('{"session_id":"closed"}'))
+    closed = io.StringIO()
+    closed.close()
+    monkeypatch.setattr(sys, "stderr", closed)
+
+    assert cleanup.main(["hook", "--harness=codex", "--event=SessionStart"]) == 0
+    assert (
+        not cleanup.log_path().exists()
+        or "hook-failed" not in cleanup.log_path().read_text()
+    )
+
+
+@pytest.mark.parametrize("inner", ["codex", "opencode"])
+def test_inner_harness_does_not_record_under_inherited_claude_identity(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, inner: str
+) -> None:
+    """The nearest Harness owns the call, even with an outer Claude PID."""
+
+    cleanup = _module(SESSION_CLEANUP, "kntnt_session_cleanup")
+    monkeypatch.setenv("KNTNT_HOME", str(tmp_path))
+    monkeypatch.setenv("CLAUDE_PID", "42")
+    monkeypatch.setenv("CLAUDE_CODE_SESSION_ID", "outer-claude")
+    monkeypatch.setenv("CODEX_SESSION_ID", "inner-codex")
+
+    def process_table(
+        args: list[str], **kwargs: Any
+    ) -> subprocess.CompletedProcess[str]:
+        """Model the OS process table at the external ps boundary."""
+        output = (
+            f"{os.getpid()} 43 python\n43 42 {inner}\n42 1 claude\n"
+            if "-axo" in args
+            else "start"
+        )
+        return subprocess.CompletedProcess(args, 0, output, "")
+
+    monkeypatch.setattr(subprocess, "run", process_table)
+    recorded = cleanup.add("container", "unit-test-container", "owned work")
+    assert recorded["session"] == (
+        "inner-codex" if inner == "codex" else "process-43-start"
+    )
+    assert not cleanup.manifest_path("outer-claude").exists()
+
+
+@pytest.mark.parametrize(
+    ("current", "swept"), [("same", False), ("", False), ("reused", True)]
+)
+def test_owner_identity_controls_even_old_manifests(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, current: str, swept: bool
+) -> None:
+    """Only a proven ended owner releases known ownership; age cannot do so."""
+
+    cleanup = _module(SESSION_CLEANUP, "kntnt_session_cleanup")
+    monkeypatch.setenv("KNTNT_HOME", str(tmp_path))
+    manifest = cleanup.manifest_path("old-owner")
+    cleanup.append(
+        manifest, {"kind": "session", "owner_pid": os.getpid(), "owner_started": "same"}
+    )
+    cleanup.append(manifest, {"kind": "container", "id": "unit-test-container"})
+    os.utime(manifest, (1, 1))
+
+    def process_table(
+        args: list[str], **kwargs: Any
+    ) -> subprocess.CompletedProcess[str]:
+        """Keep the process alive while varying the OS identity lookup."""
+        output = f"{os.getpid()} 1 python\n" if "-axo" in args else current
+        return subprocess.CompletedProcess(args, 0, output, "")
+
+    monkeypatch.setattr(subprocess, "run", process_table)
+    assert (manifest in cleanup.foreign_manifests("new")) is swept
+
+
+def test_an_unidentified_hook_cannot_claim_an_inherited_session(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """A hook without payload identity must not borrow its launcher's ID."""
+
+    cleanup = _module(SESSION_CLEANUP, "kntnt_session_cleanup")
+    monkeypatch.setenv("KNTNT_HOME", str(tmp_path))
+    monkeypatch.setenv("CODEX_SESSION_ID", "outer")
+
+    def process_table(
+        args: list[str], **kwargs: Any
+    ) -> subprocess.CompletedProcess[str]:
+        """Expose a nested Codex whose hook inherited the outer environment."""
+        output = f"{os.getpid()} 43 python\n43 1 codex\n" if "-axo" in args else "start"
+        return subprocess.CompletedProcess(args, 0, output, "")
+
+    monkeypatch.setattr(subprocess, "run", process_table)
+    answer = cleanup.hook("codex", "SessionStart", {})
+    assert answer["session"] != "outer"
+    assert not cleanup.manifest_path("outer").exists()

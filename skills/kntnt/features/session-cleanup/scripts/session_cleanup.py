@@ -28,8 +28,8 @@ The sweep runs at a session's start as well as at its end. A hard kill, a crash,
 and a Harness whose end event is weak can leave an ended session's manifest
 behind. A nested session can also find its own launcher's manifest, so a start
 never sweeps a manifest holding the current process or an ancestor. A manifest
-without session ownership and with a live recorded process waits for the age
-backstop rather than being assumed abandoned. Sweeping eligible manifests at
+without reliable Harness ownership waits for the age backstop; a known live
+owner is protected regardless of age (ADR-0199). Sweeping eligible manifests at
 the start makes cleanup converge over disk, as ADR-0179 requires.
 """
 
@@ -72,10 +72,8 @@ END_EVENTS = frozenset({"SessionEnd", "sessionEnd", "session.deleted"})
 # three Harnesses has matchers and the decision is the same in all three.
 RESUMING = frozenset({"resume"})
 
-# How long a manifest nobody has claimed may sit before it is swept whatever
-# its session's terminal is doing. The liveness test below is the primary
-# guard and this is the backstop under it: a machine that never quite ends a
-# session cleanly would otherwise accumulate manifests forever.
+# Unknown ownership, including legacy terminal-only records, waits this long.
+# Known live ownership never expires merely because no new work was recorded.
 STALE_HOURS = 24
 
 # How long a terminated process is given to go before it is killed outright.
@@ -120,10 +118,20 @@ def sessions_dir() -> Path:
     return data_dir() / "sessions"
 
 
-def pointer_dir() -> Path:
-    """Return the directory mapping a terminal to the session now running in it."""
+def retire_pointers() -> None:
+    """Remove obsolete terminal pointers without following directory symlinks."""
 
-    return data_dir() / "current"
+    directory = data_dir() / "current"
+    try:
+        if directory.is_symlink():
+            directory.unlink()
+        elif directory.exists():
+            for path in directory.iterdir():
+                if path.name.isdecimal() and (path.is_file() or path.is_symlink()):
+                    path.unlink(missing_ok=True)
+            directory.rmdir()
+    except OSError as exc:
+        log("pointer-retirement-failed", detail=str(exc))
 
 
 def log_path() -> Path:
@@ -196,14 +204,11 @@ def safe_key(value: str) -> str:
     return cleaned[:128] or "unnamed"
 
 
-def terminal() -> int:
-    """Return this process's POSIX session, which is what a terminal is here.
+def recording_shell_session() -> int:
+    """Return a recording-shell identifier used only for unowned filenames.
 
-    It is the one identity the Harness's hook and the shell the agent records
-    from both have, and the Harness hands neither of them the other's. Its
-    leader being alive is also the cheapest honest answer to *is that session
-    still running*, which is what keeps one session's start from sweeping
-    another session's live manifest.
+    Tool calls and hooks can each have a short-lived POSIX session. Its life
+    says nothing about the Harness lifetime and never authorizes cleanup.
     """
 
     try:
@@ -306,27 +311,46 @@ def manifest_path(key: str) -> Path:
     return sessions_dir() / f"{safe_key(key)}.jsonl"
 
 
-def pointer_path() -> Path:
-    """Return the file naming the session now running in this terminal."""
+def session_owner() -> tuple[str, int, str]:
+    """Find the nearest Harness ancestor, ignoring inherited outer identities.
 
-    return pointer_dir() / safe_key(str(terminal()))
+    Claude publishes its PID, including when its executable is version-named.
+    Other supported local Harnesses are recognized by executable name. Shells,
+    hook runners, and Claude's background PTY helpers are not owners.
+    """
+
+    chain = process_chain()
+    if chain is None:
+        return "", 0, ""
+    for pid, command in chain:
+        executable = Path(command).name
+        if str(pid) == os.environ.get("CLAUDE_PID") or executable == "claude":
+            return "claude-code", pid, started_at(pid)
+        if executable in {"codex", "opencode"}:
+            return executable, pid, started_at(pid)
+    return "", 0, ""
 
 
 def current_key() -> str:
-    """Return the session key a bare `add` belongs to.
+    """Resolve shell identity using its nearest Harness, never an outer one.
 
-    The Harness tells its own hook which session fired it and tells the agent's
-    shell nothing, so the hook leaves the answer where the shell can read it.
-    With no answer there — the Feature enabled mid-session, or a Harness whose
-    start event never ran — the terminal itself is the key, which is the same
-    identity the sweep already reasons about and so needs no second rule.
+    Claude and Codex expose the lifecycle session ID to tools. OpenCode does
+    not consistently do so: its recordings belong to the server process until
+    that process ends. With no identifiable owner the recording shell supplies
+    only a filename, never evidence that the work has ended.
     """
 
-    try:
-        named = pointer_path().read_text(encoding="utf-8").strip()
-    except OSError:
-        named = ""
-    return named or f"terminal-{terminal()}"
+    harness, pid, started = session_owner()
+    variable = {
+        "claude-code": "CLAUDE_CODE_SESSION_ID",
+        "codex": "CODEX_SESSION_ID",
+    }.get(harness)
+    session = os.environ.get(variable, "") if variable else ""
+    if session:
+        return session
+    if pid and started:
+        return f"process-{pid}-{safe_key(started)}"
+    return f"unowned-{recording_shell_session()}"
 
 
 def read_manifest(path: Path) -> tuple[dict[str, Any], list[dict[str, Any]]]:
@@ -370,24 +394,28 @@ def append(path: Path, record: dict[str, Any]) -> None:
 
 
 def open_session(key: str, harness: str, session: str) -> None:
-    """Start this session's manifest and point this terminal at it."""
+    """Record a Harness lifetime independently of the hook's POSIX session."""
 
+    detected, pid, started = session_owner()
+    if harness and detected != harness:
+        pid, started = 0, ""
     path = manifest_path(key)
-    if not path.exists():
+    header, _ = read_manifest(path)
+    if not header or (
+        pid and (header.get("owner_pid"), header.get("owner_started")) != (pid, started)
+    ):
         append(
             path,
             {
                 "kind": "session",
                 "id": key,
-                "sid": terminal(),
-                "harness": harness,
+                "harness": harness or detected,
                 "session": session,
+                "owner_pid": pid,
+                "owner_started": started,
                 "started": _now(),
             },
         )
-    pointer = pointer_path()
-    pointer.parent.mkdir(parents=True, exist_ok=True)
-    pointer.write_text(key, encoding="utf-8")
 
 
 def stop_pid(entry: dict[str, Any]) -> dict[str, Any]:
@@ -498,7 +526,9 @@ def remove_path(entry: dict[str, Any]) -> dict[str, Any]:
 ACTIONS = {"pid": stop_pid, "container": stop_container, "path": remove_path}
 
 
-def sweep(path: Path, *, why: str) -> dict[str, Any]:
+def sweep(
+    path: Path, *, why: str, sweeper_session: str = "", sweeper_harness: str = ""
+) -> dict[str, Any]:
     """Act on every entry one manifest holds, log all of it, and take it away.
 
     A manifest that recorded nothing is logged as exactly that. Recording is
@@ -520,6 +550,8 @@ def sweep(path: Path, *, why: str) -> dict[str, Any]:
         log(
             "acted",
             why=why,
+            sweeper_session=sweeper_session,
+            sweeper_harness=sweeper_harness,
             session=header.get("id") or path.stem,
             kind=entry.get("kind"),
             id=entry.get("id"),
@@ -532,6 +564,8 @@ def sweep(path: Path, *, why: str) -> dict[str, Any]:
         log(
             "recorded-nothing",
             why=why,
+            sweeper_session=sweeper_session,
+            sweeper_harness=sweeper_harness,
             session=header.get("id") or path.stem,
             harness=header.get("harness"),
         )
@@ -549,7 +583,7 @@ def sweep(path: Path, *, why: str) -> dict[str, Any]:
 
 
 def stale(path: Path) -> bool:
-    """True when a manifest is old enough to sweep whatever its terminal says."""
+    """True when an unknown-owner manifest has reached the fallback age."""
 
     try:
         age = time.time() - path.stat().st_mtime
@@ -558,18 +592,12 @@ def stale(path: Path) -> bool:
     return age > STALE_HOURS * 3600
 
 
-def process_ancestors() -> set[int] | None:
-    """Return this process and its ancestors, or None if they cannot be read.
-
-    A hook may run inside a registered builder's process group. Its launcher
-    is live ownership, even where the recording shell has already ended or
-    the nested session shares the parent's terminal. An unreadable process
-    table cannot authorize a session-start sweep.
-    """
+def process_chain() -> list[tuple[int, str]] | None:
+    """Read this process's ancestry in nearest-first order, or fail closed."""
 
     try:
         completed = subprocess.run(
-            ["ps", "-axo", "pid=,ppid="],
+            ["ps", "-axo", "pid=,ppid=,comm="],
             cwd=home(),
             text=True,
             capture_output=True,
@@ -579,21 +607,33 @@ def process_ancestors() -> set[int] | None:
         if completed.returncode:
             return None
         parents = {
-            int(pid): int(parent)
-            for pid, parent in (line.split() for line in completed.stdout.splitlines())
+            int(pid): (int(parent), command)
+            for pid, parent, command in (
+                line.split(maxsplit=2) for line in completed.stdout.splitlines()
+            )
         }
     except (OSError, subprocess.SubprocessError, ValueError):
         return None
 
-    # Include the hook itself and stop when the snapshot reaches its root.
-    ancestors: set[int] = set()
+    # A missing link cannot establish which Harness owns the calling shell.
+    chain: list[tuple[int, str]] = []
+    seen: set[int] = set()
     pid = os.getpid()
-    while pid > 1 and pid not in ancestors:
-        ancestors.add(pid)
+    while pid > 1 and pid not in seen:
+        seen.add(pid)
         if pid not in parents:
             return None
-        pid = parents[pid]
-    return ancestors
+        parent, command = parents[pid]
+        chain.append((pid, command))
+        pid = parent
+    return chain
+
+
+def process_ancestors() -> set[int] | None:
+    """Return identities protecting a nested launch, or None on read failure."""
+
+    chain = process_chain()
+    return {pid for pid, _ in chain} if chain is not None else None
 
 
 def live_recorded_processes(entries: list[dict[str, Any]]) -> set[int]:
@@ -622,21 +662,13 @@ def live_recorded_processes(entries: list[dict[str, Any]]) -> set[int]:
 
 
 def foreign_manifests(mine: str) -> list[Path]:
-    """Return the manifests of sessions that have ended, and only those.
+    """Select ended owners, retaining live or unreadable known identities.
 
-    A manifest whose terminal is still alive somewhere else belongs to a session
-    that may still be running, and is skipped: the cost of skipping it is that
-    its processes live until that session ends or until the backstop above
-    catches the file, and the cost of not skipping it is killing a working
-    session's dev server. One of those is recoverable.
-
-    A nested session may share its parent's terminal or outlive the shell
-    that recorded its launcher. Its own process chain always keeps the whole
-    manifest, including scratch and containers. Without session ownership,
-    a live recorded process keeps a recent manifest until the age backstop.
+    A missing owner (including legacy SID headers) waits for the age fallback.
+    Recorded ancestors protect the entire manifest regardless of age or header.
+    A known owner is released only by death or a changed process start time.
     """
 
-    here = terminal()
     found: list[Path] = []
     ancestors = process_ancestors()
     if ancestors is None:
@@ -654,12 +686,20 @@ def foreign_manifests(mine: str) -> list[Path]:
         if ancestors & processes:
             continue
         try:
-            sid = int(header.get("sid") or 0)
+            pid = int(header.get("owner_pid") or 0)
         except (TypeError, ValueError):
-            sid = 0
-        if sid == 0 and processes and not stale(path):
+            pid = 0
+        recorded = str(header.get("owner_started") or "")
+        if pid > 1 and recorded:
+            if not alive(pid):
+                found.append(path)
+                continue
+            current = started_at(pid)
+            if current and current != recorded:
+                found.append(path)
+            # A live owner or unreadable identity overrides the age fallback.
             continue
-        if sid == here or sid == 0 or not alive(sid) or stale(path):
+        if stale(path):
             found.append(path)
     return found
 
@@ -673,28 +713,37 @@ def hook(harness: str, event: str, payload: dict[str, Any]) -> dict[str, Any]:
     what happened is in the log.
     """
 
+    retire_pointers()
     named = str(payload.get("hook_event_name") or event or payload.get("type") or "")
     session = str(payload.get("session_id") or payload.get("sessionID") or "")
+    if harness == "opencode":
+        properties = payload.get("properties")
+        info = properties.get("info") if isinstance(properties, dict) else None
+        session = str(info.get("id") or "") if isinstance(info, dict) else ""
     reason = str(payload.get("reason") or payload.get("source") or "")
 
     if named in START_EVENTS:
-        key = session or f"terminal-{terminal()}"
+        key = session or f"unowned-{recording_shell_session()}"
         open_session(key, harness, session)
-        swept = [sweep(path, why="start") for path in foreign_manifests(key)]
+        swept = [
+            sweep(path, why="start", sweeper_session=key, sweeper_harness=harness)
+            for path in foreign_manifests(key)
+        ]
         return {"moment": "start", "session": key, "swept": swept}
 
     if named in END_EVENTS:
+        if not session:
+            return {
+                "moment": "end",
+                "session": "",
+                "swept": [],
+                "kept": "unknown-session",
+            }
         if reason in RESUMING:
             log("kept", why="resume", session=session, harness=harness)
             return {"moment": "end", "session": session, "swept": [], "kept": "resume"}
-        key = session or current_key()
+        key = session
         swept = [sweep(manifest_path(key), why="end")]
-        pointer = pointer_path()
-        try:
-            if pointer.exists() and pointer.read_text(encoding="utf-8").strip() == key:
-                pointer.unlink(missing_ok=True)
-        except OSError:
-            pass
         return {"moment": "end", "session": key, "swept": swept}
 
     return {"moment": "ignored", "event": named}
@@ -731,6 +780,7 @@ def add(kind: str, identifier: str, why: str) -> dict[str, Any]:
         )
 
     key = current_key()
+    open_session(key, "", key)
     append(manifest_path(key), record)
     log("recorded", session=key, kind=kind, id=record["id"], reason=record["why"])
     return {"session": key, "recorded": record, "manifest": str(manifest_path(key))}
@@ -899,10 +949,8 @@ def main(argv: list[str] | None = None) -> int:
 
     args = parse_args(sys.argv[1:] if argv is None else argv)
 
-    # The hook is the only action a Harness runs. Its answer goes to standard
-    # error, because the channel it would otherwise print on is the one the
-    # Harness reads back as its own protocol, and it exits zero whatever
-    # happened, because a shutdown this breaks is worse than a leak.
+    # Lifecycle hooks log to disk: shutdown may already have closed both
+    # output pipes, and reporting must not turn cleanup into a hook failure.
     if args.action == "hook":
         try:
             raw = sys.stdin.read()
@@ -916,10 +964,9 @@ def main(argv: list[str] | None = None) -> int:
             payload = {}
         harness = args.harness[0] if args.harness else ""
         try:
-            _emit(hook(harness, args.event, payload), sys.stderr)
+            hook(harness, args.event, payload)
         except Exception as exc:  # noqa: BLE001 - a hook never becomes the session's problem
             log("hook-failed", harness=harness, detail=str(exc))
-            _emit({"moment": "failed", "detail": str(exc)}, sys.stderr)
         return 0
 
     if args.action == "add":
