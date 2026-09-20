@@ -26,9 +26,9 @@ UV_CACHE = Path(os.environ.get("UV_CACHE_DIR") or Path.home() / ".cache" / "uv")
 # read by the model per invocation, cited by every failure below.
 RECORD = "ADR-0181"
 
-# The three answers the engine gives, told apart by exit status so that a
-# body can treat the two non-zero ones alike — print stdout and stop — while a
-# test can tell a page from a refusal.
+# The three answers the engine gives, told apart by exit status. The caller
+# diagnoses who constructed a rejected invocation before it decides whether
+# to correct and resubmit or print stdout and stop (ADR-0198).
 EXIT_VALID = 0
 EXIT_REFUSED = 2
 EXIT_HELP = 3
@@ -593,6 +593,73 @@ def test_an_invalid_form_is_refused_in_the_collections_shape(tmp_path: Path) -> 
     assert "\n" not in first.strip()
     assert rest.startswith(_synopsis(skill / "help.md"))
     assert rest.rstrip("\n").endswith("see '/skill --help'")
+
+
+def test_redline_proofread_handoff_keeps_strict_parsing_and_exact_artifact(
+    tmp_path: Path,
+) -> None:
+    """Invocation repair changes the caller's construction, never the grammar."""
+
+    engine = _engine()
+    redline = SKILLS / "editorial" / "redline"
+    proofread = SKILLS / "editorial" / "proofread"
+    historical_artifact = """---
+kntnt:
+  genre: web-article
+  technique: abt
+  language: en_GB
+---
+
+Example article text.
+"""
+
+    outer = engine.read_invocation(redline, "--in-place --max=3 vawt-article.md")
+    malformed = engine.read_invocation(
+        proofread,
+        f"--language=en_GB --output=response\n{historical_artifact}",
+    )
+    corrected = engine.read_invocation(
+        proofread,
+        f'--language=en_GB --output=response "{historical_artifact}"',
+    )
+
+    assert outer.status == EXIT_VALID, outer.text
+    assert malformed.status == EXIT_REFUSED
+    assert malformed.text.startswith(
+        "'---' is not a flag of this collection's grammar\n\n"
+    )
+    assert corrected.status == EXIT_VALID, corrected.text
+    assert corrected.invocation["operands"] == [historical_artifact]
+
+    # The current Redline handoff transports artifact bytes through a file.
+    # Quotes are content here, not a shell or invocation-grammar exercise.
+    current_artifact = """---
+kntnt:
+  genre: web-article
+  technique: abt
+  language: en_GB
+---
+
+The editor's note says "keep this".
+--dash-prefixed content
+"""
+    mechanical_input = tmp_path / "mechanical-input.md"
+    mechanical_output = tmp_path / "mechanical-output.md"
+    mechanical_input.write_text(current_artifact, encoding="utf-8")
+    handoff = engine.read_invocation(
+        proofread,
+        " ".join(
+            (
+                "--language=en_GB",
+                f"--output={mechanical_output}",
+                str(mechanical_input),
+            )
+        ),
+    )
+
+    assert handoff.status == EXIT_VALID, handoff.text
+    assert handoff.invocation["operands"] == [str(mechanical_input)]
+    assert mechanical_input.read_text(encoding="utf-8") == current_artifact
 
 
 def test_an_unsatisfied_dependency_refuses_with_the_checkers_payload(

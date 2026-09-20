@@ -26,7 +26,7 @@ Source material is outside the contract. The review judges only the supplied tex
 
 A code sample is quoted material. Fenced blocks, indented blocks, and inline code are neither reviewed nor changed; prose about code is ordinary prose.
 
-The final `proofread` pass runs exactly once with the resolved language. Its complete result is required for delivery; an incomplete pass is reported as an obstacle. No substantive edit follows it, and only mechanically relevant guidance is forwarded.
+The final `proofread` pass runs exactly once with the resolved language. A nested invocation refused before Proofread starts is corrected under the shared caller-recovery rule and consumes no pass or Correction Budget; a possible partial pass is established before anything resumes and is never blindly replayed. The complete result is required for delivery; an incomplete pass is reported as an obstacle. No substantive edit follows it, and only mechanically relevant guidance is forwarded.
 
 The Correction Budget is any non-negative integer and defaults to one. `0` reports findings without substantive correction but still runs the final mechanical pass. A larger value is a ceiling, not a quota.
 

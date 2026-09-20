@@ -1,0 +1,7 @@
+# A caller repairs its own invalid invocation and resumes
+
+The invocation engine continues to refuse every malformed form, because accepting or silently repairing invalid syntax supplied by a user would teach a grammar the Skill does not have. A caller that can establish it introduced the construction error itself instead corrects that construction, resubmits it through the same validation path, and continues the authorised task from the failed boundary; this keeps strict parsing while preventing the caller's own quoting, serialisation, forwarding, or argument-order mistake from abandoning valid work (issue #328).
+
+The alternative was to make every non-zero invocation answer terminal. That was simple but conflated two owners of the invalid form: user input that must be refused, and a caller-created transport error the user neither supplied nor can usefully repair. Recovery is therefore diagnosis-based rather than status-based, and it preserves the request, resolved options, complete artifact, authorised destination, and already completed work. Exact help, unmet dependencies, unrelated failures, and errors without a known valid correction retain their own handling.
+
+Where a failed boundary may already have produced effects, the caller establishes what completed before resuming and performs only what remains. A refusal before the called operation starts consumes no substantive correction, budget round, or actual pass; a completed external action is never replayed, and an unresolved partial outcome is reported instead of guessed through.

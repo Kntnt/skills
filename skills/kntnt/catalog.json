@@ -1,12 +1,12 @@
 {
   "origin": "Kntnt/skills",
-  "manager_digest": "282e6680a5299d446400d169d2a089f09baeeade211d78da11922833cec0174b",
+  "manager_digest": "d9d206fa9860d2b94ac6cc4a4a7a33888640d94db6027c02deabb8285544343f",
   "skills": [
     {
       "name": "agents-md",
       "category": "agents",
       "description": "AGENTS.md: create, shrink, or tend the current project's always-loaded file and docs/agents/ after a task when a non-discoverable fact is new, a line is stale or sprawling, or a pointer is missing; also `/agents-md` and `--force`.",
-      "digest": "08ca4c2686758cb11db2ddc1818b44b6512c38fcf730bde0b763deb8acbb6f43",
+      "digest": "03a3db85bdc39b43044c292eaed456af96048d8a525a49ddfbe8b1bd34755ae7",
       "binaries": [
         "git",
         "uv"
@@ -19,7 +19,7 @@
       "name": "delegation",
       "category": "agents",
       "description": "Turn delegation mode on or off — you orchestrate, subagents execute — for this session, this project, or your user account.",
-      "digest": "db9cafa1a0493b985efe3b1b52667d7885260c3ade9470c1e5e8cc642d00c108",
+      "digest": "cb9045574d43bffe46cee83f29fbf2cc4a19b0f199c8062ac359cc72fe181f32",
       "binaries": [
         "uv"
       ],
@@ -35,7 +35,7 @@
       "name": "explain",
       "category": "agents",
       "description": "Explain the reply just given, or whatever the instruction names, better than it was explained the first time.",
-      "digest": "eff2483e6d5756ade90eb23fd220cf1667bf6058e33914b50a1c0a876e7d70dc",
+      "digest": "766edd2d8cdfc198014673a67f30508fa4d1b3ddf7f33d0d100e47d1ec6e7de6",
       "binaries": [
         "uv"
       ],
@@ -47,7 +47,7 @@
       "name": "commit",
       "category": "code",
       "description": "Commit the working tree on the current branch, without pushing.",
-      "digest": "1b33575353f93fe9cda2eea5f4bb80f427f0a1a2963f871120c1fb9b173f7e36",
+      "digest": "a227b31951bb2830edd1682134b3a0d1cd837909f41da4c5810f861b2a04f4be",
       "binaries": [
         "git",
         "uv"
@@ -60,7 +60,7 @@
       "name": "orchestrate",
       "category": "code",
       "description": "Work the tracker's ready-for-agent tickets unattended — claim, build, and independently verify them a wave at a time, integrating each wave into the current branch.",
-      "digest": "a474d8c6f17ca0a649d074840ce83c26296f4d638b8b5ae6f39c7c7a1f3c1e9b",
+      "digest": "8f406deb7a033cd1d4b5f297280358995120bf9baab1e53c352a0a2c50cfc526",
       "binaries": [
         "git",
         "gh",
@@ -78,7 +78,7 @@
       "name": "push",
       "category": "code",
       "description": "Follow commit, then push the current branch.",
-      "digest": "52eef2f1acef6f87bbe51bef68b796e0904129075ed2a67720268ad2fe981271",
+      "digest": "0daaf04e1931c059b8aa008687596a427d784b5eb149741b8e505ebe9cf0a311",
       "binaries": [
         "git",
         "uv"
@@ -93,7 +93,7 @@
       "name": "ready-for-agent-check",
       "category": "code",
       "description": "Read the tracker's ready-for-agent tickets the way an unattended builder will — one subagent per ticket, in a context that did not write it — and report what would stop that builder, before a run spends a wave finding out.",
-      "digest": "6463fec01da78506ffdd25c460f2b227fc8464f1a928bef72bf10cf56eee0c4e",
+      "digest": "d5a1a28cf18eb9d0b83d319e9ce41d6d5ecd5c1816a7d937a3a3a9de1367c34a",
       "binaries": [
         "gh",
         "uv"
@@ -108,7 +108,7 @@
       "name": "release",
       "category": "code",
       "description": "Ship a version — changelog, bump, push, tag, and GitHub release.",
-      "digest": "d2067b405f0173e053dfd721d404f12fc425e68f6d8c7a1f9bdd8ec2ca6272c5",
+      "digest": "9b6b2700471672bf5573114915e5d9d062993de74026334657a0b340f64d3853",
       "binaries": [
         "git",
         "uv"
@@ -123,7 +123,7 @@
       "name": "proofread",
       "category": "editorial",
       "description": "Correct only mechanical language errors — spelling, grammar, punctuation, agreement, inflection, duplicated or missing words, and locale mechanics — in one supplied text, preserving its wording, meaning, tone, structure, formatting, and metadata. Start it on your own only when a specific text is at hand and the request either uses a proofreading term (proofread, spell-check, copyedit, fix the typos, korrekturläs, rätta stavfelen) or is unambiguously limited to mechanical language errors. Not for a request to edit, rewrite, polish, improve, tighten, or review a text — each of those asks for changes this Skill refuses to make. A user may also invoke it by name at any time.",
-      "digest": "b02bd1a4929401da90d1ab2a55f576d6d96cd7ae3f3a0878b1118fc9e487ec0d",
+      "digest": "09023d7a02bc3f9f34e701239381f20b4007823093db55c34dd8d860e0ffbc16",
       "binaries": [
         "uv"
       ],
@@ -135,7 +135,7 @@
       "name": "redline",
       "category": "editorial",
       "description": "Review one supplied text against this collection's editorial contract — its genre, its optional technique, its language, and the shared anti-slop catalogue — repair what the review found through a bounded budget of fresh correction subagents, report whatever is left unresolved, and finish with exactly one mechanical pass.",
-      "digest": "d554740b05db2dc18b3f3913d23d43c2184967cb1311993983cff9cd7245290f",
+      "digest": "b2cec7dfeb343dee9441832f6a9677af876d0a0fe5d8cfefb042daad88422b52",
       "binaries": [
         "uv"
       ],
@@ -151,7 +151,7 @@
       "name": "unslop",
       "category": "editorial",
       "description": "Apply this collection's anti-slop pass to one supplied text and nothing else — false contrasts, empty openings, importance inflation, vague attribution, synonym cycling, robotic rhythm, and generic conclusions — repairing what it finds through a bounded budget of fresh correction subagents and reporting whatever is left. It selects no genre, no technique, and no editorial contract, and it runs no mechanical pass.",
-      "digest": "3051a2e742109e7193e3bd58372ebbd78ca7a5c6f53593c5981f3fb98c1fb2e9",
+      "digest": "e53d18fcf8dffecdcbb89cc7b3098d1a84af8c199150eb49adb217189c025ba5",
       "binaries": [
         "uv"
       ],
@@ -165,7 +165,7 @@
       "name": "write",
       "category": "editorial",
       "description": "Turn a brief and its source material into one truthful first draft in the target language, and stop there. Start it on your own only when the literal token `/write` appears in the request or in an instruction the request points at — inside a longer message, a document, or a checklist that says to run it. Not for a bare request to write, draft, compose, summarise, rewrite, edit, or review something — without `/write` in it, such a request is answered as it otherwise would be. A user may also invoke it by name at any time.",
-      "digest": "313be1d3bc599383b2262df3a1c9f7f46b188f8c73c2f582c94c0ac0a0922730",
+      "digest": "e674b41c8321ed94a5c9bf8979a6dd4b06ad5e20328ba938893fe141c7a31473",
       "binaries": [
         "uv"
       ],
@@ -179,7 +179,7 @@
       "name": "model-selector",
       "category": "models",
       "description": "Choose the model and deliberation level that completes delegated work at the lowest total cost, or in the least time where the user has chosen time. Never used implicitly: a Skill that routes work runs its script.",
-      "digest": "d35685582fa1d0af63e0fbca1b2141caa0aa9a20e80b92b0477a57aca5f95649",
+      "digest": "1ad814a6bd89b2cce40c493f47d744cb309423fba5cbb813add9a2c908196b7a",
       "binaries": [
         "uv"
       ],
@@ -191,7 +191,7 @@
       "name": "rename-invoices",
       "category": "producivity",
       "description": "Safely plan and apply configurable filenames for text-based accounting PDFs.",
-      "digest": "74bcd6f795a35963376073ee9f5189d4dce71f2e40275783fff3231bb356f4e4",
+      "digest": "36271de02926d11795cda4d5f9ced76157041043a3cae7975b5087bce87ec5e9",
       "binaries": [
         "pdftotext",
         "uv"
@@ -204,7 +204,7 @@
       "name": "hetzner",
       "category": "web",
       "description": "Provision and operate Hetzner Cloud servers and deploy or maintain their websites and applications through hcloud, SSH, and cloud-init. Use for Hetzner Cloud infrastructure or workloads hosted there; excludes Robot dedicated servers and Object Storage.",
-      "digest": "667c41fdb453928cc975611b2a62f6b5e2133e019a346e198a895cb16cecbf66",
+      "digest": "cfe9b0370638f202bc0b2d5cc8850fe22f2f16eb9f0324e71675a4e78eb36f58",
       "binaries": [
         "uv"
       ],
@@ -216,7 +216,7 @@
       "name": "mirror",
       "category": "web",
       "description": "Copy a web page, the pages under it that its links, sitemaps and feeds reach, and everything they need to display to disk, so they open in a browser with nothing fetched from the network.",
-      "digest": "30fedf6e9e431dec7c415093fdfd0b2f77028725b1d34fbaacbdd9f64f9f003a",
+      "digest": "905928aa1e1bc5664a91b29d50f5d4e10df9992b9b3239a940e150e53ec57bb0",
       "binaries": [
         "uv",
         "agent-browser"

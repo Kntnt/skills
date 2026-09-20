@@ -10949,21 +10949,21 @@ def test_the_manager_reads_its_verb_off_the_engines_path() -> None:
     assert _synopsis(MANAGER_DIR / "help.md") in reading.text
 
 
-def test_the_manager_body_carries_no_refusal_and_no_verb_grammar_of_its_own() -> None:
-    """What the engine knows is written nowhere in the body.
+def test_the_manager_body_carries_no_verb_grammar_of_its_own() -> None:
+    """What the engine knows about the Manager's grammar is nowhere in the body.
 
-    The verb list with its flags, the sentence that said what the script does
-    with a flag a verb has no use for, and the sentence that said Help takes no
-    flags were three copies of a grammar the engine reads off the
-    `argument-hint` and the shipped pages. `## Arguments` keeps what the engine
-    cannot know — what `--project`, `--yes` and `--dry-run` mean to the verbs
-    (ADR-0181).
+    The entry instruction carries the caller-recovery distinction the engine
+    cannot decide (ADR-0198). The verb list with its flags, the sentence that
+    said what the script does with a flag a verb has no use for, and the sentence
+    that said Help takes no flags remain in the grammar the engine reads off the
+    `argument-hint` and shipped pages. `## Arguments` keeps what the engine cannot
+    know — what `--project`, `--yes` and `--dry-run` mean to the verbs (ADR-0181).
     """
 
     text = (MANAGER_DIR / "SKILL.md").read_text(encoding="utf-8")
     body = text.partition("\n## Invocation\n")[2]
 
-    for phrase in ("refus", "synopsis", "takes no flags", "[--yes]", "[--dry-run]"):
+    for phrase in ("synopsis", "takes no flags", "[--yes]", "[--dry-run]"):
         assert phrase not in body.lower(), (
             f"{MANAGER_DIR / 'SKILL.md'}: the body restates a refusal or a verb's"
             f" grammar ({phrase!r}), which the engine reads off the pages"
@@ -11302,8 +11302,9 @@ def test_every_skill_body_opens_with_the_shim_call() -> None:
     discovery, the same Envelope pointer and the same help routes, and asked
     the model to perform them. The engine performs them now and the shim
     finds the engine, so a body's first instruction is the shim call with the
-    payload on stdin: do what it prints on exit 0, show it verbatim and stop
-    otherwise. None of the previous opening's location, fix, or JSON shape
+    payload on stdin: do what it prints on exit 0, recover a diagnosed caller
+    construction error, and show every other answer verbatim before stopping.
+    None of the previous opening's location, fix, or JSON shape
     stands anywhere in the body, and the Envelope pointer stands only where a
     Step refuses a value the engine cannot, never in the opening (ADR-0181).
     """
@@ -11358,6 +11359,67 @@ def test_every_skill_body_opens_with_the_shim_call() -> None:
                 f" asks the model to do the engine's work a second time"
                 f" (ADR-0181). See {STANDARD}."
             )
+
+
+def test_every_skill_entry_exposes_diagnosed_caller_recovery() -> None:
+    """A caller's known construction error is repairable before the stop path.
+
+    This holds the shipped contract to one answer at every failed boundary. It
+    does not claim that prose assertions prove an agent recovered; issue #328's
+    native Harness record supplies that behavioural evidence.
+    """
+
+    required = (
+        "introduced a known construction error",
+        "preserving the user's request and authority",
+        "submit the corrected invocation",
+        "failed boundary",
+        "effects already produced",
+    )
+    unconditional = (
+        "Any other exit: show what it printed to the user verbatim, and stop."
+    )
+
+    for path in _skill_bodies():
+        text = path.read_text(encoding="utf-8")
+        opening = (
+            text.partition("\n## Arguments\n")[0]
+            if path.parent == MANAGER_DIR
+            else _opening(text)
+        )
+        assert unconditional not in opening, (
+            f"{path}: the entry still stops unconditionally after an invocation"
+            " failure, including one the agent itself constructed (issue #328)."
+        )
+        for phrase in required:
+            assert phrase in opening, (
+                f"{path}: the failed-invocation entry omits {phrase!r}, so the"
+                " collection does not expose one recovery contract at every"
+                " boundary (issue #328)."
+            )
+
+    contract = ENVELOPE_REFERENCE.read_text(encoding="utf-8")
+    standard = (REPO_ROOT / STANDARD).read_text(encoding="utf-8")
+    for phrase in (
+        "## A caller's construction error",
+        "introduced a known error",
+        "invalid user input",
+        "An exit status alone never authorises a retry",
+        "resumes only what remains",
+    ):
+        assert phrase in contract, (
+            f"{ENVELOPE_REFERENCE}: the shared recovery contract omits"
+            f" {phrase!r} (issue #328). See {STANDARD}."
+        )
+    for phrase in (
+        "diagnosed caller-recovery rule",
+        "invalid user input is never repaired or ignored",
+        "failed validation supplies no success reading",
+    ):
+        assert phrase in standard, (
+            f"{STANDARD}: the contributor rule omits {phrase!r}, so a new"
+            " Skill can restore the unconditional stop (issue #328)."
+        )
 
 
 def test_every_shim_is_the_one_file() -> None:

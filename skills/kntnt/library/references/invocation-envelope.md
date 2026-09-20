@@ -1,6 +1,6 @@
 # The Invocation Envelope
 
-The contract every Skill of this collection meets before it reads an argument of its own: how the reserved separator splits an Invocation Envelope, what a Contextual Instruction may and may not settle, and the two refusals a bad Envelope or a bad Formal Invocation takes. It is stated here once and executed by every Skill. A Skill's body follows this file, and its manpages point a reader at it; none of them restates it.
+The contract every Skill of this collection meets before it reads an argument of its own: how the reserved separator splits an Invocation Envelope, what a Contextual Instruction may and may not settle, the two refusals a bad Envelope or a bad Formal Invocation takes, and how a caller recovers from its own construction error. It is stated here once and executed by every Skill. A Skill's body follows this file, and its manpages point a reader at it; none of them restates it.
 
 ## The separator
 
@@ -28,7 +28,15 @@ Before the first side effect, the Skill uses available read-only checks to ident
 
 The addressed page is the most specific recognized command page — the Skill's own `help.md` where no command path was recognized — and the refusal points at that page's own `--help` route rather than at the Skill's root route.
 
-An invalid form is refused, never repaired and never ignored. A flag is refused rather than ignored where it has no work to do, an operand written before a flag is refused rather than reordered, and an incomplete form is refused rather than asked about — because a flag accepted and ignored teaches that flags sometimes do nothing, a form silently repaired teaches an order the Skill does not accept, and a question asked in place of the grammar leaves the user guessing at what the grammar is.
+The engine refuses every invalid form and never repairs or ignores one. When the user supplied the invalid form, the caller reports that refusal without repairing, reordering, discarding, or reinterpreting the user's syntax. A flag is refused rather than ignored where it has no work to do, an operand written before a flag is refused rather than reordered, and an incomplete form is refused rather than asked about — because a flag accepted and ignored teaches that flags sometimes do nothing, a form silently repaired teaches an order the Skill does not accept, and a question asked in place of the grammar leaves the user guessing at what the grammar is.
+
+## A caller's construction error
+
+When the caller introduced a known error while forwarding valid user input or constructing a nested invocation, and knows a valid correction that preserves the user's request and authority, it corrects its construction, submits the corrected invocation through the normal validation path, and continues from the failed boundary. The corrected construction preserves every resolved option, the complete artifact, and the authorised destination. Completed work is retained: a refusal before the called operation starts spends no substantive correction, budget round, or actual pass.
+
+Recovery requires that diagnosis and valid correction. An exit status alone never authorises a retry. Exact help, invalid user input, an unmet dependency, an unrelated failure, and a failure whose origin or valid correction is unknown keep their applicable handling; the caller reports the actual blocker instead of guessing or repeating the same failed call.
+
+Before resuming an operation that may already have produced effects, the caller establishes what completed and resumes only what remains. It never replays a completed external action, widens permissions or the task, changes the authorised destination, or skips validation. Where the partial outcome cannot be established, it reports that uncertainty and stops.
 
 ## A nested Skill
 

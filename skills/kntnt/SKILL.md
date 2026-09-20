@@ -16,7 +16,7 @@ The Manager. One namespaced entry point. Every other collection skill is invoked
 
 ## Invocation
 
-Run `uv run "$HERE/scripts/kntnt.py" invoke --here="$HERE"` with the invocation payload — everything the user typed after `/kntnt`, verbatim, however many lines — on stdin. On exit 0 continue from the JSON it prints. On any other exit print its stdout verbatim and stop: it has already printed what the user is to see, and none of that text is yours to write.
+Run `uv run "$HERE/scripts/kntnt.py" invoke --here="$HERE"` with the invocation payload — everything the user typed after `/kntnt`, verbatim, however many lines — on stdin. On exit 0 continue from the JSON it prints. On any other exit, if you introduced a known construction error and can correct it while preserving the user's request and authority, account for effects already produced, submit the corrected invocation through the same engine, and continue from the failed boundary; a refusal before the operation starts consumes no operation. Otherwise print its stdout verbatim and stop: it has already printed what the user is to see, and none of that text is yours to write. Never repair input the user supplied, or automatically retry exact help, an unmet dependency, an unrelated failure, or a failure whose origin or valid correction is unknown.
 
 In the JSON, `path` is the verb as a one-word list, and empty for bare `/kntnt`; `flags` holds each flag the user wrote — `true` where it stood bare, its value where it carried one, a list of values where it was repeated; `operands` is what followed the flags, in order; `instruction` is the Contextual Instruction, or `null`, and what it may settle is stated in `$LIBRARY/references/invocation-envelope.md`.
 

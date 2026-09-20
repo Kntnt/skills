@@ -17,7 +17,7 @@ metadata:
 
 Which model, at which deliberation level, finishes a piece of work for the least money, or soonest where the user has made time their standing choice — answered from what this machine has measured rather than from reputation. The answer is advice. No form of it means *start nothing*: where no valid profile stands, the catalogue is empty or nothing is reachable, it names the seat the caller already has and says why.
 
-Run `uv run "$HERE/scripts/invoke.py"` — `$HERE` is the directory that holds this SKILL.md — with everything the user typed after `/model-selector`, verbatim and however many lines, on stdin. Exit 0: do what it prints. Any other exit: show what it printed to the user verbatim, and stop.
+Run `uv run "$HERE/scripts/invoke.py"` — `$HERE` is the directory that holds this SKILL.md — with everything the user typed after `/model-selector`, verbatim and however many lines, on stdin. Exit 0: do what it prints. On any other exit, if you introduced a known construction error and can correct it while preserving the user's request and authority, account for effects already produced, submit the corrected invocation through the same shim, and continue from the failed boundary; a refusal before the operation starts consumes no operation. Otherwise show what it printed to the user verbatim and stop. Never repair input the user supplied, or automatically retry exact help, an unmet dependency, an unrelated failure, or a failure whose origin or valid correction is unknown.
 
 ## Arguments
 

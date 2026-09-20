@@ -19,6 +19,7 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ### Fixed
 
+- An agent that introduces a diagnosed quoting, serialisation, forwarding, or argument-construction error now corrects its own invocation and resumes the authorised task from that failed boundary. Invalid syntax supplied by the user remains refused unchanged, and exact help, unmet dependencies, unrelated failures, and errors without a known valid correction are not retried. Recovery preserves completed work, budgets, artifacts and destinations, and checks for prior effects before resuming so a completed external action is not replayed (#328, ADR-0198).
 - The evaluation prose-contract test scans the corpus, protocol and record template, preserving observed output and historical records as evidence rather than treating their wording as requirements (#351).
 - Swedish mechanical proofreading preserves valid upper- or lowercase readings of an unquoted question after a colon (#348).
 - Redline keeps whole-sentence duplication in the editorial correction and diagnoses context-visible idiom problems inside customer quotations (#346, #341).
