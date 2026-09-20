@@ -128,3 +128,9 @@ The Claude-family evaluation of what Write does when the last source comparison 
 
 - [`write-claude-2026-09-20-376.md`](write-claude-2026-09-20-376.md) — three `/write` runs of the corpus `opinion` source in `en_US` against the working tree at `4a932dd` with `skills/editorial/write/` changed, in Claude Code 2.1.278 on `claude-opus-5`: all three delivered the prose their last comparison read, with every remaining finding named beside the draft and no prose changed afterwards.
 
+## Limiting sentences and the claim account — #377
+
+The Claude-family evaluation of the change [#377](https://github.com/Kntnt/skills/issues/377) made to Redline's whole-passage removal permission and to the account both editorial correction Skills owe, read with [`../editorial-377/plan.md`](../editorial-377/plan.md), [`../editorial-377/diagnosis.md`](../editorial-377/diagnosis.md) and [`../editorial-377/results.md`](../editorial-377/results.md).
+
+- [`redline-claude-2026-09-20-377.md`](redline-claude-2026-09-20-377.md) — twenty-two source-blind `/redline` runs in Claude Code 2.1.278 on `claude-opus-5`, two blind judges each: four pre-change replays of the #362 drafts, the same four reviewed twice against the change, and the ten `Redline controls` of the corpus. No limiting sentence is deleted or hardened after the change except under a verified class (a) finding, every changed claim is named in the account, and all ten controls meet their frozen expectation.
+
