@@ -10,13 +10,15 @@ model-selector status - report what is known, how fresh it is, and what is wante
 
 ## DESCRIPTION
 
-Four accounts, none of which asks a question, changes anything, or reaches the network.
+Five accounts, none of which asks a question, changes anything, or reaches the network.
 
 The profile: when it was answered, which Harnesses, makers and payment channels it holds, and every maker the catalogue holds that the profile does not choose, named as not chosen — whether you declined it or were never asked. Where it is absent, from before makers were chosen, or unreadable, that is said plainly, along with the consequence — every answer not locked to a model is your own seat until you run `setup`. A profile older than ninety days is named here too.
 
 The catalogue pass: when it last ran, and what each of its sources said — read completely with no changes, read with that many changes, read only in part and why, or not read at all and why. "No changes" and "could not read" are never the same line. Beneath it, every change the pass journalled in the last seven days, each with its old and new value, a model removed among them. Reading them moves no marker, so the same changes are shown again until they are a week old. Then every model the pass has removed, however long ago: the three days it was missing from its maker's list, and how many measurement rows and how many waiting units have been deleted for it so far, as two numbers. Beside the pass, the daily job that runs it: `healthy`; `degraded` where it is on disk but not loaded, differs from what the Skill installs, or names a `uv` that is gone; `absent`; or `unsatisfied` where this operating system has no scheduler adapter, so the pass runs only when you start it. Then when the next pass is due, the next 05:00 local time; whether the last scheduled pass ended more than a day ago; and which bound it hit, if any — `whole-pass`, where it ran past its three hundred seconds before writing and wrote nothing, or `source:` and a source's name, where that source ran past its thirty seconds and changed nothing it governs.
 
 The measurement: how many units have been recorded, over what span of dates, how many are waiting to be graded, how long the oldest of them has waited, and when the grader last ran. Beside it, whether the judge is at its daily cap of fifty judge-graded units in twenty-four hours, said whether or not anything is waiting. A capped judge is named as capped, with the time the cap frees; judging resumes at the next session end after that, since grading runs only at a session's end.
+
+The weekly subscription windows, per Harness a figure exists for: the share used, the share of the window elapsed, when it resets, where the figure came from, how old it is, and whether the quota guard holds that Harness back. That last is the rule's verdict on the figure rather than what any call did with it — a call whose pool would otherwise be empty ranks a held-back channel anyway. Where there is no figure, that is said plainly with the reason it is: nothing has written one, the file could not be read or is in another shape, the figure was taken more than a day ago, the window it named has already reset, or no session log carries one. None of those is a problem. The Codex figure comes from Codex's own session logs; the Claude figure is written by the `statusline` Feature, so a machine without that Feature Enabled, or with a status line of your own in its place, simply gets no guard for the Claude channel.
 
 The integration, per Harness this collection has an adapter for: `healthy`, `gated` where the Harness is holding it behind a trust decision this collection will not make for you, `degraded`, `absent`, or `unsatisfied` where that Harness's lifecycle cannot carry the contract at all. Beside it, whether that Harness's finished session record can supply measurements, and how much the capture store holds.
 
@@ -40,7 +42,7 @@ That contract belongs to the collection rather than to this page, and it is stat
 
 ## DEPENDENCIES
 
-`uv` runs the three readers this page renders: the catalogue's own print, which names the makers it holds, the catalogue pass's journal, and the capture integration's account of its health and of the daily job's. None of them reaches the network, and none writes anything.
+`uv` runs the four readers this page renders: the catalogue's own print, which names the makers it holds, the catalogue pass's journal, the capture integration's account of its health and of the daily job's, and the quota reader, which is the one place the guard's rule is applied. None of them reaches the network, and none writes anything.
 
 ## SEE ALSO
 

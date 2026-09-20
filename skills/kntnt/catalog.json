@@ -1,6 +1,6 @@
 {
   "origin": "Kntnt/skills",
-  "manager_digest": "221c644095c269ac497929f8e9475351c51fda8baa251dd8b9f78f3f1ef33f7b",
+  "manager_digest": "63fffe632bf31291f91738191f25d7e631a6f0ebc2faae1c796c8e176ca02426",
   "skills": [
     {
       "name": "agents-md",
@@ -19,7 +19,7 @@
       "name": "delegation",
       "category": "agents",
       "description": "Turn delegation mode on or off — you orchestrate, subagents execute — for this session, this project, or your user account.",
-      "digest": "cb9045574d43bffe46cee83f29fbf2cc4a19b0f199c8062ac359cc72fe181f32",
+      "digest": "002a6a0b645ffb056947a35ad93d4de697aed372284f54fbb3d6570cdd124e60",
       "binaries": [
         "uv"
       ],
@@ -60,7 +60,7 @@
       "name": "orchestrate",
       "category": "code",
       "description": "Work the tracker's ready-for-agent tickets unattended — claim, build, and independently verify them a wave at a time, integrating each wave into the current branch.",
-      "digest": "b4cfb6989a885649044040ed459098fc9b23482581fb9aad944873b52b83cf56",
+      "digest": "ce6871a2e1a9cb0f0c2a8c4153cce05ac3dcebf545f86ec52841d536b9ba5a27",
       "binaries": [
         "git",
         "gh",
@@ -165,7 +165,7 @@
       "name": "write",
       "category": "editorial",
       "description": "Turn a brief and its source material into one truthful first draft in the target language, and stop there. Start it on your own only when the literal token `/write` appears in the request or in an instruction the request points at — inside a longer message, a document, or a checklist that says to run it. Not for a bare request to write, draft, compose, summarise, rewrite, edit, or review something — without `/write` in it, such a request is answered as it otherwise would be. A user may also invoke it by name at any time.",
-      "digest": "11882fa7dba4ed35fd87b86ea89cad7a87bfc7db4943102bafcb302a79ad8047",
+      "digest": "2f5b69ea2a0ab0f30e371a38315d91610db30f412e96929f8716ca6d248c2c11",
       "binaries": [
         "uv"
       ],
@@ -179,7 +179,7 @@
       "name": "model-selector",
       "category": "models",
       "description": "Choose the model and deliberation level that completes delegated work at the lowest total cost, or in the least time where the user has chosen time. Never used implicitly: a Skill that routes work runs its script.",
-      "digest": "1ad814a6bd89b2cce40c493f47d744cb309423fba5cbb813add9a2c908196b7a",
+      "digest": "07395f5d6498967f56fabbbeba2120f8e6d19401a1777399c27265243ec5a4ec",
       "binaries": [
         "uv"
       ],
@@ -251,7 +251,7 @@
       "name": "statusline",
       "category": "environment",
       "description": "A two-line Claude Code status line — path, worktree, branch and working-tree state above; model, reasoning effort, context usage and subscription windows below.",
-      "digest": "4c2882b5ae8af1db1a90a153531fb21b53fd7ed27bfd7d541e7ea529e220b826",
+      "digest": "c34304889f3946e4518ab169b1c9a04b64de579bc74502f10d87c55fbdd5ea30",
       "binaries": [
         "git",
         "jq"
@@ -261,7 +261,8 @@
         "claude-code"
       ],
       "writes": [
-        "`statusLine` in `~/.claude/settings.json`, pointing at the shipped `statusline.sh` inside this collection's installed Manager. It is a single-valued setting, so it cannot hold two: where it already runs a command that is not this collection's, the row names that command and the confirmation asks whether to replace it, and nothing is written until you answer yes. Nothing is kept of what is replaced, so disabling the Feature afterwards clears the setting rather than restoring the command that was there. Disabling leaves the setting alone where this collection does not hold it."
+        "`statusLine` in `~/.claude/settings.json`, pointing at the shipped `statusline.sh` inside this collection's installed Manager. It is a single-valued setting, so it cannot hold two: where it already runs a command that is not this collection's, the row names that command and the confirmation asks whether to replace it, and nothing is written until you answer yes. Nothing is kept of what is replaced, so disabling the Feature afterwards clears the setting rather than restoring the command that was there. Disabling leaves the setting alone where this collection does not hold it.",
+        "`~/.kntnt/model-selector/quota.json`, this machine's weekly subscription window as Claude Code reported it on this render: the share used, when the window resets, how long the window is, and when the line was written. It is one filter over the payload already read — nothing is fetched and no credential could go in it — written to a temporary file beside its destination and moved into place, and any failure of it is swallowed and leaves the previous file standing. Model Selector's quota guard reads it, so Enabling this Feature is what arms that guard for the Claude channel and disabling it is what disarms it. Nothing is written where the payload carries no weekly window, which is every render before a session's first API response and every machine not on a Pro or Max plan."
       ]
     }
   ]

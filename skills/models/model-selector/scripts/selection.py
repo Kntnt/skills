@@ -21,17 +21,21 @@ The work itself is never passed in. A caller names its kind and nothing more,
 because that is the whole of what the arithmetic reads, and a brief accepted
 here would be a brief somebody expects to have been recorded.
 
-What is ranked is the chance of finishing first and the price second. Among
-the candidates the evidence says will finish, the one whose price per finished
-job is lowest is taken — its price divided by its chance of success, since a
-point that fails is paid for again — and where any of them has been measured
-doing this kind of work the answer is chosen among those alone. No point below
-`FLOOR` is taken for being cheap, and among those above it the order is on
-price divided by the chance of success; nor is an estimate nobody has tested
-taken over one somebody has. `_ranked` states that rule, and `_explored` states
-the one exception to reading it off the means: a bounded share of reversible
-calls tries the boundary instead, because a store that only ever runs its
-favourite never learns that a cheaper point would have done.
+What is ranked is what this machine has actually watched first, the chance of
+finishing second and the price third. An estimate nobody has tested is never
+taken over one somebody has, so every point measured for this kind of work
+leads the answer whatever the rest of the pool promises. Among those, where any
+clears `FLOOR` the answer is the one of them whose price per finished job is
+lowest — its price divided by its chance of success, since a point that fails
+is paid for again. Where none of them clears it, the price is allowed to order
+only the band: the measured points the evidence cannot tell apart from the best
+one it holds, bounded below by that point's own tenth percentile, so that the
+cheapest junk in the pool cannot win by having a small price divided into a
+small chance. `_ranked` states that rule, `_band` draws the band, and
+`_explored` states the one exception to reading any of it off the means: a
+bounded share of reversible calls tries the boundary instead, because a store
+that only ever runs its favourite never learns that a cheaper point would have
+done.
 
 All of that happens under a deliberation ceiling. No point above it is in the
 pool — `xhigh` where the caller names no `--max-deliberation` — so the top of
@@ -57,6 +61,7 @@ import catalogue
 import evidence
 import launch
 import profiles
+import quota
 from catalogue import LEVELS, Catalogue, Model
 from evidence import KINDS, Estimate, Estimator, KindPriors
 from profiles import OBJECTIVES, Profile
@@ -78,13 +83,15 @@ STAKES = ("reversible", "high")
 DEFAULT_OBJECTIVE = "cost"
 
 # What every call demands before price is allowed to decide anything. Below
-# this, a cheap attempt is a cheap way of not getting the work done.
+# this, a cheap attempt is a cheap way of not getting the work done. Where no
+# point measured for the kind reaches it, what price orders instead is the band
+# `_band` draws, which is narrower than the floor and never wider (ADR-0204).
 FLOOR = 0.8
 
 # The deepest deliberation a call is answered at where the caller names no
 # deliberation ceiling of its own. The top of the ladder is bought on purpose
-# rather than arrived at: where nothing clears the floor the likeliest point is
-# taken, and a step up climbs as far as the ladder goes, so without a ceiling
+# rather than arrived at: a pool that clears nothing is ranked on its chances,
+# and a step up climbs as far as the ladder goes, so without a ceiling
 # hard work reaches `max` unasked (issue #323). Every level above this one — a
 # level later added above `max` included — is out of the pool.
 DEFAULT_MAX_DELIBERATION = "xhigh"
@@ -199,6 +206,13 @@ def _answer(args: argparse.Namespace) -> dict[str, Any]:
     pool = _pool(args.scope, cat, profile, seat_model, harness, args.repo, notes)
     pool = _locked_to_model(pool, cat, args.model, notes)
 
+    # The quota guard next, before anything is ranked, so that the ceiling, the
+    # ranking, the exploration and any later way of trying a point all read the
+    # guarded pool and none of them needs to know the guard exists. The pool as
+    # it stood before it is kept beside it, only to say what the guard cost.
+    admitted = pool
+    pool = _guarded(pool, profile, harness, args.model)
+
     # The deliberation ceiling comes last, so a point either lock re-admitted
     # from the catalogue is held to it too. The pool as it would have stood
     # without the ceiling is kept beside it, only to say what the ceiling cost.
@@ -208,6 +222,11 @@ def _answer(args: argparse.Namespace) -> dict[str, Any]:
     pool = [
         point
         for point in _locked_to_deliberation(pool, args.deliberation, ceiling, notes)
+        if _admitted(point.deliberation, ceiling)
+    ]
+    unguarded = [
+        point
+        for point in _locked_to_deliberation(admitted, args.deliberation, ceiling, [])
         if _admitted(point.deliberation, ceiling)
     ]
     if not pool:
@@ -242,6 +261,14 @@ def _answer(args: argparse.Namespace) -> dict[str, Any]:
             ceiling,
         )
     )
+    notes.append(
+        _guard_ruled_out(
+            ranked,
+            _ranked(scored_as(unguarded), objective.name),
+            args.after,
+            objective.name,
+        )
+    )
     explored: str | None = None
     if _explorable(args):
         ranked, explored = _explored(scored, ranked, args, objective.name, notes)
@@ -258,6 +285,11 @@ def _answer(args: argparse.Namespace) -> dict[str, Any]:
             f"the deliberation lock {args.deliberation!r} lifted the "
             f"deliberation ceiling {base!r}"
         )
+
+    # Said once, here, off the list the answer was read from — after the step
+    # up has narrowed it and never off the unceiled pool the ceiling was
+    # measured against, so the line is written where it is true and once.
+    notes.append(_band_note(ranked, explored))
 
     return _report(
         best, ranked[1:], args, profile, cat, harness, explored, objective, notes
@@ -356,6 +388,86 @@ def _ceiling_ruled_out(
     )
 
 
+def _guarded(
+    pool: Sequence[Point], profile: Profile, harness: str, locked: str | None
+) -> list[Point]:
+    """Narrow the pool to the channels whose week is not running ahead of it.
+
+    List-price dollars are not quota. The ranking orders one USD figure, and
+    what actually runs out is a weekly subscription window nobody has priced —
+    so quota is a guard rather than a currency: it decides who is in the pool
+    and changes no figure anything is ordered on (ADR-0205). The rule and the
+    two thresholds are `quota.py`'s, and a point goes where the channel that
+    pays for it is on a held-back harness.
+
+    Three things it never does. It never applies to a model the user locked: a
+    `--model` is the user naming what they want, and an optimisation does not
+    overrule an instruction. It never empties the pool — where holding back
+    would leave the call no candidate, nothing is held back — because a guard
+    answering `inherit` because the subscription is busy has stopped the work
+    over an optimisation, and this Skill answers every call it can parse. And
+    it never refuses: a harness this machine has no figure for simply has no
+    guard, which `quota.py` answers with rather than raising.
+    """
+
+    if locked is not None:
+        return list(pool)
+
+    busy = quota.held_back(quota.data_root(), quota.codex_root())
+    if not busy:
+        return list(pool)
+
+    kept = [point for point in pool if not _paid_by_busy(profile, point, harness, busy)]
+    return kept or list(pool)
+
+
+def _paid_by_busy(
+    profile: Profile, point: Point, harness: str, busy: frozenset[str]
+) -> bool:
+    """Return whether a held-back subscription is what pays for this point.
+
+    `channel_for` already answers which channel pays, and the harness that
+    channel names is whose plan the tokens come out of — frequently not the
+    harness doing the asking, a Claude Code session reaching an OpenAI model by
+    running Codex being the ordinary case. An API channel is metered and billed
+    rather than drawn from a window, so it has none to run out of.
+    """
+
+    channel = profiles.channel_for(profile, point.model, harness)
+    return (
+        channel is not None
+        and channel.pay == profiles.SUBSCRIPTION
+        and channel.harness in busy
+    )
+
+
+def _guard_ruled_out(
+    ranked: Sequence[Scored],
+    unguarded: Sequence[Scored],
+    failed: str | None,
+    objective: str,
+) -> str | None:
+    """Say which point the quota guard kept from being the answer.
+
+    Judged against the answer the same call would have given with every
+    channel admitted — the deliberation ceiling applied to both rankings and
+    neither exploring — so that a reader who finds a dearer point chosen can
+    tell the guard at work from the ranking's own verdict. None where the two
+    agree, which is every call the guard cost nothing.
+    """
+
+    guarded = _after(ranked, failed, objective, [])
+    every = _after(unguarded, failed, objective, [])
+    if not guarded or not every:
+        return None
+    if _named(guarded[0].point) == _named(every[0].point):
+        return None
+    return (
+        f"the quota guard ruled out {_named(every[0].point)}, "
+        f"which the evidence would have chosen"
+    )
+
+
 def _explorable(args: argparse.Namespace) -> bool:
     """Return whether this request is one the boundary may be tried on.
 
@@ -437,10 +549,11 @@ def _beyond(
     On `deliberation` that is the answer's own model at each of its other
     levels; on `model` it is every other model, taken at the answer's level or
     at the nearest level that model supports. Only the cheaper ones are
-    candidates: the answer is already the point the evidence vouches for with
-    the lowest price per finished job — measured for the kind where anything
-    measured clears the floor — so what a row is worth buying about is whether
-    something below it, often a point nothing has measured yet, would have done.
+    candidates: the answer is already the point the evidence backs with the
+    lowest price per finished job — measured for the kind wherever the pool
+    holds a measured point at all — so what a row is worth buying about is
+    whether something below it, often a point nothing has measured yet, would
+    have done.
     """
 
     if dimension == "deliberation":
@@ -535,17 +648,19 @@ def _after(
     Escalation is a second question rather than a second answer, so it is asked
     the way the first one was and answered from the same pool: keep the
     candidates strictly likelier to finish the work than the one that failed,
-    and where any of those has been measured for the kind and clears the floor,
-    step to the one of them with the lowest price per finished job — a failure
-    is answered with a point the evidence has seen doing the work before it is
-    answered with a cheaper guess. Where none has, the step is the likelier
-    point with the lowest price per finished job, measured or not and with no
-    floor. Either way every candidate is ordered on its price divided by its
-    chance of success, or on its elapsed time divided by it where the call is
-    ranked on time, whether the caller's `--objective` or the user's standing
-    choice set it. Nothing is appended above the top of the ladder:
-    where the failed point was already the likeliest thing available, the
-    caller is told so and offered it again, because there is no step and
+    and let `_preferred` put the measured ones among those at the front — those
+    clearing the floor ordered on price per finished job where any clears it,
+    else the band drawn around the best measured likelier point. A failure is
+    answered with a point the evidence has watched doing the work before it is
+    answered with a cheaper guess, and that holds whether or not the
+    measurements reach the floor. Where none of the likelier points is measured
+    at all, the step is the likelier point with the lowest price per finished
+    job, with no floor, as it was. Every candidate is ordered on its price
+    divided by its chance of success, or on its elapsed time divided by it
+    where the call is ranked on time, whether the caller's `--objective` or the
+    user's standing choice set it. Nothing is appended above the top of the
+    ladder: where the failed point was already the likeliest thing available,
+    the caller is told so and offered it again, because there is no step and
     pretending otherwise would spend a retry on the same seat under a
     different name.
     """
@@ -571,11 +686,8 @@ def _after(
 
     notes.append(f"one step up from {failed!r}, which failed")
     order = _time_key if objective == "time" else _cost_key
-    stepped = sorted(stepped, key=order)
-    vouched = [row for row in stepped if _vouched(row)]
-    if not vouched:
-        return stepped
-    return [vouched[0], *[row for row in stepped if row is not vouched[0]]]
+    rest = [row for row in stepped if not _measured(row)]
+    return _preferred(stepped, objective) + sorted(rest, key=order)
 
 
 def _report(
@@ -604,6 +716,7 @@ def _report(
         cat,
         repo=args.repo,
         read_only=args.read_only,
+        permissions=args.permissions,
     )
     channel = profiles.channel_for(profile, best.point.model, harness)
     total = sum(best.tokens.values())
@@ -911,29 +1024,30 @@ def _score(
 
 
 def _ranked(scored: Sequence[Scored], objective: str) -> list[Scored]:
-    """Order the pool best first: the floor decides who is in, then price decides.
+    """Order the pool best first: what was measured leads, then the floor, then price.
 
     The requirement is that the job gets done, and that among what gets it done
     the cheapest is chosen. A point that fails is paid for again, and a point
     at 0.5 needs two attempts on average, so what a finished job costs is the
-    price of one attempt divided by the chance of success. So the candidates
-    the evidence believes in — those whose posterior mean clears the floor —
-    are ordered on that figure, and the rest fall in behind them ordered on
-    their chances, which is all a pool that can promise nothing has left to
-    offer. No point below `FLOOR` is taken for being cheap, and among those
-    above it the order is on price divided by the chance of success: the
-    division reads the chance as the expected number of attempts, never as an
+    price of one attempt divided by the chance of success, and that division
+    reads the chance as the expected number of attempts rather than as an
     exchange rate between chance and money (ADR-0188).
 
     A mean is not the same claim for every point, though. Where a point has been
     measured doing this kind of work, its mean is what this machine saw; where
     it has not, its mean is a prior or a verdict carried over from other work,
-    and on the means alone that estimate wins whenever it looks cheaper. So the
-    points measured for the kind that clear the floor go first, ordered on
-    price per finished job, and everything else follows exactly as it would
-    have without them.
-    Nothing under the deliberation ceiling is filtered out here: the
-    alternatives and a named failure read the same
+    and on the means alone that estimate wins whenever it looks cheaper. So
+    every point measured for the kind leads the list, in the order `_preferred`
+    puts them, whether or not any of them clears the floor — a floor cleared on
+    a seeded capability is not evidence that the work gets done, and holding
+    the preference to the points that cleared it left an estimate nobody had
+    tested winning every call the measurements fell short on (ADR-0204).
+
+    What is not measured then follows exactly as it did before: those whose
+    posterior mean clears the floor ordered on price per finished job, and the
+    rest behind them ordered on their chances, which is all a pool that can
+    promise nothing has left to offer. Nothing under the deliberation ceiling
+    is filtered out here: the alternatives and a named failure read the same
     list, and whether a cheaper, untried point would have done is what the
     explored calls find out (ADR-0187).
 
@@ -946,22 +1060,114 @@ def _ranked(scored: Sequence[Scored], objective: str) -> list[Scored]:
     """
 
     order = _time_key if objective == "time" else _cost_key
-    clears = [row for row in scored if row.estimate.mean >= FLOOR]
-    under = [row for row in scored if row.estimate.mean < FLOOR]
-    whole = sorted(clears, key=order) + sorted(under, key=_quality_key)
-    vouched = [row for row in whole if _vouched(row)]
-    return vouched + [row for row in whole if not _vouched(row)]
+    rest = [row for row in scored if not _measured(row)]
+    clears = [row for row in rest if row.estimate.mean >= FLOOR]
+    under = [row for row in rest if row.estimate.mean < FLOOR]
+    return (
+        _preferred(scored, objective)
+        + sorted(clears, key=order)
+        + sorted(under, key=_quality_key)
+    )
 
 
-def _vouched(row: Scored) -> bool:
-    """Return whether this point's own rows for the kind clear the floor.
+def _preferred(rows: Sequence[Scored], objective: str) -> list[Scored]:
+    """Order the measured points of a set, which go before everything else in it.
+
+    This is the one statement of that order, asked by the plain answer over the
+    whole pool and by the step up over the points likelier than the one that
+    failed, so that a failure is answered by the same rule the first question
+    was.
+
+    Which measured point leads turns on what the measurements can promise.
+    Where any of them clears `FLOOR` the floor keeps its whole meaning: those
+    are ordered on price per finished job, and the measured points below it
+    follow on their chances alone. Where none of them clears it, the price is
+    allowed to order only the band — the points whose mean is at least the best
+    measured point's own tenth percentile, which is to say the ones the
+    evidence cannot tell apart from it — and the measured points outside that
+    band follow on their chances. Without the band the answer would be the
+    cheapest measured point outright, which on the maintainer's own store was a
+    point finishing about a fifth of the time: dividing the price by the chance
+    is not on its own enough to keep the cheapest junk in a pool from winning.
+    """
+
+    order = _time_key if objective == "time" else _cost_key
+    measured = [row for row in rows if _measured(row)]
+    clears = [row for row in measured if row.estimate.mean >= FLOOR]
+    if clears:
+        under = [row for row in measured if row.estimate.mean < FLOOR]
+        return sorted(clears, key=order) + sorted(under, key=_quality_key)
+
+    drawn = _band(measured)
+    if drawn is None:
+        return []
+    _, bound = drawn
+    inside = [row for row in measured if row.estimate.mean >= bound]
+    outside = [row for row in measured if row.estimate.mean < bound]
+    return sorted(inside, key=order) + sorted(outside, key=_quality_key)
+
+
+def _band(rows: Sequence[Scored]) -> tuple[Scored, float] | None:
+    """Return the best measured point among these rows, and the bound it draws.
+
+    The band is every measured row whose mean is at least that bound. It is
+    read off the rows it is handed and off nothing else — the whole scored pool
+    where the plain answer asks, the points strictly likelier than the failed
+    one where the step up does — so one statement answers both questions and
+    neither reaches the store. None where no row it was given is measured.
+
+    The bound is `Estimate.low`, the tenth percentile the estimator already
+    computes at `LOW_QUANTILE`: no constant is added here and none is tuned,
+    the band being built out of the uncertainty the evidence already carries.
+    It is never empty, the best point's own mean being at least its own bound,
+    and the tie on the highest mean is broken the way every other tie in this
+    module is, so the point it names is total and the same on every run.
+    """
+
+    measured = [row for row in rows if _measured(row)]
+    if not measured:
+        return None
+    best = min(measured, key=_tiebreak)
+    return best, best.estimate.low
+
+
+def _measured(row: Scored) -> bool:
+    """Return whether this point's estimate rests on rows of its own for the kind.
 
     Measured is the estimator's word for it — enough rows in the exact kind,
     model and deliberation — so a model's rows at other levels or of other
     kinds leave a point pooled, however good they were.
     """
 
-    return row.estimate.basis == "measured" and row.estimate.mean >= FLOOR
+    return row.estimate.basis == "measured"
+
+
+def _band_note(ranked: Sequence[Scored], explored: str | None) -> str | None:
+    """Say when the band rather than the floor decided, and what it was drawn around.
+
+    Written once, here, off the list the answer was actually read from: a step
+    up says it of the stepped set, the pool the deliberation ceiling was
+    measured against says nothing at all, and no caller of the ranking carries
+    a note to write into. Without the line a reader cannot tell a band answer
+    from an ordinary one, the band being the only place a point below the floor
+    is taken while something above it was on the table.
+
+    An exploration is never a band answer. The coin decided that call, and its
+    own note already says what the evidence would have chosen.
+    """
+
+    if explored is not None:
+        return None
+    drawn = _band(ranked)
+    if drawn is None:
+        return None
+    best, _ = drawn
+    if best.estimate.mean >= FLOOR:
+        return None
+    return (
+        "no measured point clears the floor, so the answer was taken from the "
+        f"points the evidence cannot tell from {_named(best.point)}"
+    )
 
 
 def _time_key(row: Scored) -> tuple[bool, float, float, float, int, str]:
@@ -1003,7 +1209,7 @@ def _per_success_seconds(row: Scored) -> float:
 
 
 def _quality_key(row: Scored) -> tuple[bool, float, float, float, int, str]:
-    """Rank by chances alone, for a pool nothing in which clears the floor."""
+    """Rank by chances alone, for the points neither the floor nor the band admits."""
 
     return (row.cost_usd is None, -row.estimate.mean, *_tiebreak(row))
 
@@ -1026,9 +1232,12 @@ def _alternatives(
 
     One per model, because a caller reading three levels of the same model has
     been told the same thing three times and still does not know what else it
-    could have run. Ranked order puts the entries that clear the floor first,
-    ordered on price per finished job, so each entry carries that figure beside
-    its per-attempt price, and the elapsed time per finished job beside it.
+    could have run. The list is read off `_ranked` unaltered, so what an entry
+    says is what it always said and only where it falls has moved: the models
+    measured for the kind lead it now, and within each group of that order the
+    entries price ranks come before the entries chance ranks. Each carries the
+    price per finished job beside its per-attempt price, and the elapsed time
+    per finished job beside that.
     """
 
     seen = {best.point.model.id}
@@ -1201,6 +1410,9 @@ def _parse(argv: Sequence[str] | None) -> argparse.Namespace:
     parser.add_argument("--objective", choices=OBJECTIVES)
     parser.add_argument("--repo")
     parser.add_argument("--read-only", action="store_true")
+    # No `choices`: a level outside the vocabulary is answered as silence with
+    # a note naming it, and argparse would refuse the call instead (ADR-0182).
+    parser.add_argument("--permissions")
     parser.add_argument("--n", type=int, default=2)
     parser.add_argument("--seed", type=int)
     parser.add_argument("--data")

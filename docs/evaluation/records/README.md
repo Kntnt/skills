@@ -122,6 +122,12 @@ The Claude-family evaluation of the change to Write's source comparison, read wi
 - [`write-claude-2026-09-20-362.md`](write-claude-2026-09-20-362.md) — nine `/write` runs of the `opinion`, `column` and `case-study` sources against the working tree at `65834c3` with `source-check.md` changed, in Claude Code 2.1.278 on `claude-opus-5`: seven delivered, two valid stops, one delivery past the gate.
 - [`redline-claude-2026-09-20-362.md`](redline-claude-2026-09-20-362.md) — the four source-blind `/redline` pairs on drafts that record delivered, same Harness and model: `R1` passes twice and fails twice.
 
+## The final comparison and the delivery — #376
+
+The Claude-family evaluation of what Write does when the last source comparison leaves a supported finding, read with [`../editorial-376/README.md`](../editorial-376/README.md).
+
+- [`write-claude-2026-09-20-376.md`](write-claude-2026-09-20-376.md) — three `/write` runs of the corpus `opinion` source in `en_US` against the working tree at `4a932dd` with `skills/editorial/write/` changed, in Claude Code 2.1.278 on `claude-opus-5`: all three delivered the prose their last comparison read, with every remaining finding named beside the draft and no prose changed afterwards.
+
 ## Limiting sentences and the claim account — #377
 
 The Claude-family evaluation of the change [#377](https://github.com/Kntnt/skills/issues/377) made to Redline's whole-passage removal permission and to the account both editorial correction Skills owe, read with [`../editorial-377/plan.md`](../editorial-377/plan.md), [`../editorial-377/diagnosis.md`](../editorial-377/diagnosis.md) and [`../editorial-377/results.md`](../editorial-377/results.md).

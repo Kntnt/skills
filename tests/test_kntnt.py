@@ -6571,6 +6571,199 @@ def test_write_accounts_for_what_it_did_with_the_material() -> None:
     )
 
 
+# Every Markdown file Write ships, read as one text: the delivery outcome is
+# asserted across the body, the manpage and the reference, and a sweep by
+# wording alone reaches only the copy it was written from (issue #376).
+WRITE_DIR = REPO_ROOT / "skills" / "editorial" / "write"
+
+
+def _write_prose() -> str:
+    """Join every Markdown file Write ships, in a stable order."""
+
+    return "\n".join(
+        path.read_text(encoding="utf-8") for path in sorted(WRITE_DIR.rglob("*.md"))
+    )
+
+
+def test_write_delivers_the_prose_the_final_comparison_read() -> None:
+    """A true finding at the last comparison costs the findings, not the draft.
+
+    Three of nine runs in the Claude-family evaluation met a real defect at the
+    second comparison: two spent about a thousand seconds each and delivered
+    nothing, and one repaired the draft afterwards and delivered prose no
+    checker had read. The contract now delivers the prose that comparison read
+    and reports what remains beside it, so holding the gate no longer costs the
+    draft (issue #376).
+    """
+
+    text = _write_prose()
+
+    assert "deliver the prose exactly as that comparison read it" in text, (
+        f"{WRITE_DIR}: nothing says what Write delivers when the final"
+        f" comparison leaves a supported finding, which is the situation that"
+        f" produced a stop or an unchecked delivery in three of nine runs"
+        f" (issue #376). See {STANDARD}."
+    )
+
+    assert "the smallest repair the checker proposed" in text, (
+        f"{WRITE_DIR}: a remaining finding is delivered without the repair the"
+        f" checker proposed, so the editor is handed a defect and not a"
+        f" decision (issue #376). See {STANDARD}."
+    )
+
+    assert "delivered with known defects" in text, (
+        f"{WRITE_DIR}: the delivery account does not say that the draft comes"
+        f" with known defects, so a reader meets the draft before the warning"
+        f" (issue #376). See {STANDARD}."
+    )
+
+    for stale in ("delivers no draft", "stop without delivering the draft"):
+        assert stale not in text, (
+            f"{WRITE_DIR}: a surface still asserts that a validated defect"
+            f" costs the delivery, which is the outcome issue #376 replaced."
+            f" See {STANDARD}."
+        )
+
+
+def test_write_makes_no_repair_after_the_final_comparison() -> None:
+    """The gate the GB run talked itself past is the one that stays absolute.
+
+    `opinion-en_GB-r2` applied the checker's own proposed wording after the
+    last comparison and delivered; its dispositions say so. The reasoning was
+    that the checker's wording is safe, so the instruction has to meet that
+    reasoning rather than repeat the prohibition (issue #376).
+    """
+
+    text = _write_prose()
+
+    assert "not even into a repair the checker itself proposed" in text, (
+        f"{WRITE_DIR}: the prohibition on unchecked prose does not reach the"
+        f" checker's own proposed wording, which is the repair a real run"
+        f" talked itself into making (issue #376). See {STANDARD}."
+    )
+
+    assert "however safe it looks" in text, (
+        f"{WRITE_DIR}: nothing answers the reasoning that a repair taken from"
+        f" the checker needs no further comparison (issue #376). See"
+        f" {STANDARD}."
+    )
+
+
+def test_write_names_the_final_comparison_rather_than_the_second() -> None:
+    """A finding no repair can answer never reaches a second comparison.
+
+    The cap runs a second comparison only where the first led to a change or a
+    dispute, so the outcome belongs to the last comparison the run made,
+    whether that is the second or the first. A surface saying "the second
+    comparison" leaves the one-comparison run with no rule (issue #376).
+    """
+
+    text = _write_prose()
+
+    assert "whether that is the second or the first" in text, (
+        f"{WRITE_DIR}: nothing says which comparison the delivery outcome"
+        f" belongs to when the run made only one (issue #376). See"
+        f" {STANDARD}."
+    )
+
+    assert "after the second comparison" not in text, (
+        f"{WRITE_DIR}: a surface names the second comparison where it means"
+        f" the last one the run made (issue #376). See {STANDARD}."
+    )
+
+
+def test_write_never_destroys_the_draft_it_cannot_deliver() -> None:
+    """A check that cannot finish must not take the work with it.
+
+    In a real article run the stop removed the scratch that held the only copy
+    of a finished 2 600-word draft, its source copies and its check reports,
+    and the text had to be written again without the comparison it had already
+    passed. A bounded finding is no reason to destroy the rest of the work
+    (issue #381, incorporated into issue #376).
+    """
+
+    text = _write_prose()
+
+    assert "A stop never destroys the draft." in text, (
+        f"{WRITE_DIR}: a stop may still remove the only copy of the draft,"
+        f" which is how a finished article was lost (issue #381). See"
+        f" {STANDARD}."
+    )
+
+    assert "marked as not source-checked" in text, (
+        f"{WRITE_DIR}: preserved prose is not marked as unchecked, so it can"
+        f" be read as an approved draft (issue #381). See {STANDARD}."
+    )
+
+    assert "so the work can be resumed rather than written again" in text, (
+        f"{WRITE_DIR}: nothing says the preserved draft is there to be"
+        f" resumed from, which is what reconstruction from the conversation"
+        f" cost (issue #381). See {STANDARD}."
+    )
+
+    assert "Only genuine scratch is removed" in text, (
+        f"{WRITE_DIR}: cleanup is still allowed to take the draft with the"
+        f" scratch (issue #381). See {STANDARD}."
+    )
+
+
+def test_write_marks_findings_in_the_document_only_when_asked() -> None:
+    """The default placement stands; an explicit request for markings wins.
+
+    Findings belong beside the text, because what is written at the Output
+    Target is prose a later Skill reads as the text. When the user asks for
+    them marked in the document, that is followed, the prose stays exactly as
+    the last comparison read it, and the markings stay separable from it
+    (issue #381, incorporated into issue #376).
+    """
+
+    text = _write_prose()
+
+    assert "Where the user asks for the findings marked in the document" in text, (
+        f"{WRITE_DIR}: an explicit request for markings in the document has no"
+        f" answer, so the run refuses what the user asked for (issue #381)."
+        f" See {STANDARD}."
+    )
+
+    assert "plainly editorial and separable from it" in text, (
+        f"{WRITE_DIR}: nothing keeps a marking apart from the prose, so an"
+        f" editorial note can travel on as publishable text (issue #381). See"
+        f" {STANDARD}."
+    )
+
+
+def test_write_keeps_a_standpoint_without_sending_it_to_research() -> None:
+    """Whose a statement is, is part of what the material supports.
+
+    A valuation or a rhetorical generalisation the brief gives as the
+    commissioning party's own is supported as that party's position and needs
+    no outside legitimation; a figure, an event or a claim about an actual
+    population stays a factual claim whoever supplied it. Confusing the two
+    costs either the author's voice or the fidelity of a fact (issue #381,
+    incorporated into issue #376).
+    """
+
+    text = _write_prose()
+
+    assert "needs no external evidence to be expressed as theirs" in text, (
+        f"{WRITE_DIR}: a standpoint the brief attributes to its author is"
+        f" treated as a claim about the world that has to be proved (issue"
+        f" #381). See {STANDARD}."
+    )
+
+    assert "calling one an opinion supports nothing" in text, (
+        f"{WRITE_DIR}: an unsupported factual claim can be rescued by calling"
+        f" it an opinion, which is the failure in the other direction (issue"
+        f" #381). See {STANDARD}."
+    )
+
+    assert "a relevant, answerable and bounded question of evidence" in text, (
+        f"{WRITE_DIR}: nothing bounds what a run may go looking for, so an"
+        f" identified standpoint becomes an open research errand (issue"
+        f" #381). See {STANDARD}."
+    )
+
+
 # The Skill this wave's mechanical pass ships as, read at the one seam a test
 # has: the body is the whole of what the agent executes (ADR-0177).
 PROOFREAD = REPO_ROOT / "skills" / "editorial" / "proofread" / "SKILL.md"
@@ -9367,15 +9560,17 @@ def test_delegation_routes_execution_without_changing_the_main_seat() -> None:
 
     assert {"--model", "--deliberation"}.isdisjoint(_flags(_hint(directory)))
     assert {"config.json", "references/", "scripts/"}.isdisjoint(mode.split())
-    assert len(mode.split()) <= 355, (
+    assert len(mode.split()) <= 447, (
         f"{directory / 'references' / 'mode.md'}: the standing instruction has"
-        f" {len(mode.split())} words; keep it at or below 355. That ceiling is the"
+        f" {len(mode.split())} words; keep it at or below 447. That ceiling is the"
         f" budget for the whole doctrine — the routing boundary, the additions"
-        f" issues #207, #208, #209, and #210 make to it, and the Cohort and import"
-        f" issue #222 adds — and it is met by leaving routing and observation"
-        f" implementation behind model-selector's public Interfaces. The ceiling"
-        f" rose once, by what those last two obligations cost to state, rather"
-        f" than by trimming doctrine to fit them (ADR-0179)."
+        f" issues #207, #208, #209, and #210 make to it, the Cohort and import"
+        f" issue #222 adds, and the permission level issue #366 adds, which a"
+        f" spawn inherits and only the session can read off itself — and it is"
+        f" met by leaving routing and observation implementation behind"
+        f" model-selector's public Interfaces. The ceiling has risen twice, each"
+        f" time by what a new obligation cost to state, rather than by trimming"
+        f" doctrine to fit it (ADR-0179, ADR-0202)."
     )
 
     # Keep one pointer and two refreshable companion files.

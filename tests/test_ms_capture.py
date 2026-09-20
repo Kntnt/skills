@@ -6,6 +6,7 @@ import importlib.util
 import io
 import json
 import sys
+from dataclasses import fields
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from types import SimpleNamespace
@@ -196,6 +197,35 @@ def _subagent(transcript: Path, name: str, *lines: dict[str, Any]) -> Path:
         "".join(json.dumps(line) + "\n" for line in lines), encoding="utf-8"
     )
     return path
+
+
+# What a dispatching session hands a builder when the brief is too long to
+# inline: a pointer to the file holding it, and no attempt line. Quoted from
+# the maintainer's own machine, where 222 finished subagent records whose
+# first message concerned a brief read exactly this way and five opened with
+# the attempt line — and those five were the only routed Claude rows in the
+# store that ever merged (issue #370).
+BRIEF_BY_FILE = (
+    "Your whole brief is the file `/somewhere/briefs/370-build.md`. Read all of"
+    " it first and follow it exactly; it is the entirety of your instructions."
+    " End with the report the brief asks for."
+)
+
+
+def _briefed(transcript: Path, name: str, instruction: str) -> Path:
+    """Write one finished subagent record opened by *instruction*."""
+
+    return _subagent(
+        transcript,
+        name,
+        {
+            "type": "user",
+            "timestamp": "2026-09-06T10:01:00.000Z",
+            "isSidechain": True,
+            "message": {"role": "user", "content": instruction},
+        },
+        _assistant("2026-09-06T10:03:30.000Z", text="Built."),
+    )
 
 
 def _long_unit(
@@ -1561,8 +1591,9 @@ def test_a_subagent_briefed_with_an_attempt_is_that_attempt(tmp_path: Path) -> N
 
     Orchestrate files a `checker` row under the identity the router decided,
     carrying the verdict's grade and no tokens. This read of the same
-    builder's transcript carries the tokens and no verdict. The brief's first
-    line is what says the two are one build rather than two (issue #291).
+    builder's transcript carries the tokens and no verdict. The attempt line
+    the dispatch carries — on whichever of its lines it stands — is what says
+    the two are one build rather than two (issue #291, issue #370).
     """
 
     transcript = _transcript(
@@ -1614,6 +1645,206 @@ def test_a_subagent_nobody_routed_keeps_the_identity_capture_computes(
 
     assert len(delegated) == 1
     assert delegated[0].unit_id.startswith("unit-")
+
+
+def test_a_brief_handed_over_as_a_file_is_the_attempt_the_line_in_front_names(
+    tmp_path: Path,
+) -> None:
+    """The bare pointer is the shape that was inert on the maintainer's machine.
+
+    A session holding a brief of several thousand words writes it to a file
+    and hands the builder a path, so the record opens with `BRIEF_BY_FILE` and
+    with no attempt line at all: the Unit takes a computed identity, the
+    verdict's row keeps its own, and the routed attempt ends as one graded row
+    with no price beside one priced row nobody graded. A brief by file is a
+    sound way to dispatch, so what is repaired is the identity — the same
+    pointer with the line in front of it is one attempt again (issue #370).
+    """
+
+    transcript = _transcript(
+        tmp_path,
+        *_long_unit("2026-09-06T10:00:00.000Z", "2026-09-06T10:15:00.000Z"),
+    )
+    inert = _briefed(transcript, "inert", BRIEF_BY_FILE)
+    repaired = _briefed(
+        transcript, "repaired", f"{attempt_line('build-370')}\n\n{BRIEF_BY_FILE}"
+    )
+
+    computed = capture.subagent_units("s", "claude-code", str(inert))
+    named = capture.subagent_units("s", "claude-code", str(repaired))
+
+    assert [unit.unit_id.startswith("unit-") for unit in computed] == [True]
+    assert [unit.unit_id for unit in named] == ["build-370"]
+
+
+def test_the_attempt_is_read_from_every_line_of_the_instruction(
+    tmp_path: Path,
+) -> None:
+    """The line is the dispatch's, and what a Harness puts in front of it is not.
+
+    An injected reminder, a resumption note, or the pointer sentence itself
+    can stand before the line, and a brief is longer than the excerpt a Unit
+    keeps. So the attempt is read from the whole instruction the record holds,
+    before the cap and whatever came first, and only from a line of its own
+    (issue #370).
+    """
+
+    transcript = _transcript(
+        tmp_path,
+        *_long_unit("2026-09-06T10:00:00.000Z", "2026-09-06T10:15:00.000Z"),
+    )
+    preamble = "\n".join(
+        ["This is a reminder, and it is nobody's instruction."]
+        * (capture.INSTRUCTION_CHARS // 40)
+    )
+    assert len(preamble) > capture.INSTRUCTION_CHARS
+    record = _briefed(
+        transcript, "late", f"{preamble}\n{attempt_line('build-370')}\n\nBuild it."
+    )
+
+    [unit] = capture.subagent_units("s", "claude-code", str(record))
+
+    assert unit.unit_id == "build-370"
+    assert len(unit.instruction_excerpt) <= capture.INSTRUCTION_CHARS
+
+
+def test_a_quoted_attempt_line_inside_a_sentence_names_no_attempt(
+    tmp_path: Path,
+) -> None:
+    """Whole lines only, so a brief describing the form is not claiming one."""
+
+    transcript = _transcript(
+        tmp_path,
+        *_long_unit("2026-09-06T10:00:00.000Z", "2026-09-06T10:15:00.000Z"),
+    )
+    record = _briefed(
+        transcript,
+        "quoting",
+        f"The dispatch opens with {attempt_line('<attempt_id>')} and the brief follows.",
+    )
+
+    [unit] = capture.subagent_units("s", "claude-code", str(record))
+
+    assert unit.unit_id.startswith("unit-")
+
+
+def test_one_finished_subagent_record_is_one_unit_however_many_lines_follow(
+    tmp_path: Path,
+) -> None:
+    """Every span of a delegated record answers the instruction that opened it.
+
+    A peer session messaging the builder mid-job is a line the split accepts,
+    and a second span opened at it would file the later half of one routed
+    build as a cheap row beside the row that build already has — which is the
+    double count the attempt identity exists to end (issue #370).
+    """
+
+    transcript = _transcript(
+        tmp_path,
+        *_long_unit("2026-09-06T10:00:00.000Z", "2026-09-06T10:15:00.000Z"),
+    )
+    record = _subagent(
+        transcript,
+        "peered",
+        {
+            "type": "user",
+            "timestamp": "2026-09-06T10:01:00.000Z",
+            "isSidechain": True,
+            "message": {
+                "role": "user",
+                "content": f"{attempt_line('build-370')}\n\n{BRIEF_BY_FILE}",
+            },
+        },
+        _assistant("2026-09-06T10:03:30.000Z", text="Building."),
+        _user("the gate is green, carry on", "2026-09-06T10:04:00.000Z", kind="peer"),
+        _assistant("2026-09-06T10:09:00.000Z", text="Built."),
+    )
+
+    found = capture.subagent_units("s", "claude-code", str(record))
+
+    assert [unit.unit_id for unit in found] == ["build-370"]
+    assert [round(unit.seconds) for unit in found] == [480]
+
+
+def test_a_unit_a_brief_named_an_attempt_in_is_routed_and_no_other_is(
+    tmp_path: Path,
+) -> None:
+    """Capture holds the routed fact, so the row no longer assumes one.
+
+    A spawn a caller ran on its own Main Seat is delegated and is not routed,
+    which is the boundary the routing rules already draw: what capture can
+    tell from a record is whether a brief named an attempt, and that is the
+    fact it files (issue #370).
+    """
+
+    transcript = _transcript(
+        tmp_path,
+        *_long_unit("2026-09-06T10:00:00.000Z", "2026-09-06T10:15:00.000Z"),
+    )
+    dispatched = _briefed(
+        transcript, "dispatched", f"{attempt_line('build-370')}\n\n{BRIEF_BY_FILE}"
+    )
+    spawned = _briefed(transcript, "spawned", "survey the tree")
+
+    [routed] = capture.subagent_units("s", "claude-code", str(dispatched))
+    [own] = capture.subagent_units("s", "claude-code", str(spawned))
+
+    assert (routed.delegated, routed.routed) == (True, True)
+    assert (own.delegated, own.routed) == (True, False)
+
+
+def test_the_pending_row_holds_the_units_own_fields_and_nothing_wider(
+    tmp_path: Path,
+) -> None:
+    """The fuller instruction is read in-process and reaches no file.
+
+    What the store keeps of it is the same capped prefix it always kept, and
+    the row is the Unit's own fields — asserted against the dataclass, so a
+    field added later is covered by this test rather than by a list somebody
+    has to remember (issue #370).
+    """
+
+    _grader()
+    data = tmp_path / "data"
+    transcript = _transcript(
+        tmp_path,
+        *_long_unit("2026-09-06T10:00:00.000Z", "2026-09-06T10:15:00.000Z"),
+    )
+    preamble = "\n".join(
+        ["This is a reminder, and it is nobody's instruction."]
+        * (capture.INSTRUCTION_CHARS // 40)
+    )
+    instruction = f"{preamble}\n{attempt_line('build-370')}\n\nBuild it."
+    record = _subagent(
+        transcript,
+        "bounded",
+        {
+            "type": "user",
+            "timestamp": "2026-09-06T10:01:00.000Z",
+            "isSidechain": True,
+            "message": {"role": "user", "content": instruction},
+        },
+        _assistant("2026-09-06T10:03:30.000Z", text="y" * (capture.RESULT_CHARS * 2)),
+    )
+
+    capture.hook(
+        data,
+        "SubagentStop",
+        {
+            "session_id": "s",
+            "harness": "claude-code",
+            "transcript_path": str(transcript),
+            "agent_transcript_path": str(record),
+        },
+    )
+
+    [written] = capture.pending(data)
+    assert set(written) == {field.name for field in fields(capture.Unit)}
+    assert written["unit_id"] == "build-370"
+    assert len(written["instruction_excerpt"]) <= capture.INSTRUCTION_CHARS
+    assert len(written["result_excerpt"]) <= capture.RESULT_CHARS
+    assert instruction.strip().startswith(written["instruction_excerpt"])
+    assert "build-370" not in written["instruction_excerpt"]
 
 
 def test_a_removal_narrowed_to_one_harness_leaves_the_others(tmp_path: Path) -> None:

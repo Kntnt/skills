@@ -162,6 +162,10 @@ _Avoid_: adapter, shim, proxy, gateway, integration
 The company whose models are chosen as a group, recorded as the catalogue's provider id. Which models a chosen Maker makes eligible is stated in `docs/rules/routing.md`.
 _Avoid_: vendor, lab, company
 
+**Quota Guard**:
+Model Selector's rule leaving a subscription channel out of a machine-chosen answer while the weekly window of the Harness it names is running ahead of the week. It is never a price, an input to the ranking, or a refusal; what it reads, what holds a channel back, and what follows where there is no figure are stated in `docs/rules/routing.md`.
+_Avoid_: rate limit, quota budget, throttle, usage cost
+
 **Enabled**:
 A Catalog entry the user has chosen in a layer: a Skill present on disk in each Detected Harness's skills directory for that layer, and a Feature what its Harnesses actually hold, it placing no files a layer could be read off. What each is read from is stated in `docs/rules/collection.md` and `docs/rules/skills.md`.
 _Avoid_: active, installed, on, turned on (installed is what the transport does; enabled is the user's choice)

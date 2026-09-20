@@ -26,6 +26,8 @@ The profile holds no credentials. Writing it also regenerates the subagent defin
 
 Once the profile is written, or you decline the review, setup runs the catalogue pass once and reports what each of its sources said, so the catalogue is current straight away rather than after the next daily pass. It does not run where the profile was refused.
 
+Setup neither asks about nor writes a status line. The quota guard's figure for the Claude channel is written by the `statusline` Feature as it draws, so Enabling that Feature in `/kntnt select` is what arms the guard there and removing it is what disarms it; if you have replaced the status line with one of your own, or have none, the Claude channel simply gets no guard, which stops nothing. The Codex figure is read from Codex's own session logs and needs nothing of you at all.
+
 Until it is held, nothing is chosen for you. Without a profile — or with one from before makers were chosen, which is read as none rather than translated, or one that cannot be read — every answer not locked to a model is the seat you already have, with a note naming this command, and `status` says the same. The generated subagent definitions are left as they are until a profile says which makers to use.
 
 ## OPTIONS

@@ -18,6 +18,8 @@ The catalogue is kept either way. It is public fact carrying its own sources and
 
 The exact paths are named with their row or byte counts before anything is removed, and you confirm the list. A declined confirmation writes nothing. What went is reported per path, by the same counts the preview showed — nothing here is migrated, backfilled or reinterpreted.
 
+The weekly subscription windows in `quota.json` are kept too, and neither form of this command touches them: they are neither an answer you gave nor anything this machine measured, nothing writes them but the `statusline` Feature as it draws, and they are inert twenty-four hours after the last render in any case.
+
 Two things survive on purpose. The Harness hooks stay installed and go on measuring, because discarding a measurement is not switching measurement off; switching it off is unchecking this Skill in `/kntnt select`. And the generated subagent definitions are left where they are until the next `setup` rewrites the set.
 
 ## OPTIONS
