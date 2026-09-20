@@ -1,5 +1,7 @@
 # Source fidelity follow-up — #329
 
+**Current work:** [#362](https://github.com/Kntnt/skills/issues/362), [#363](https://github.com/Kntnt/skills/issues/363) and [#364](https://github.com/Kntnt/skills/issues/364) replace the six previously open editorial issues at Thomas's request. The old issues are administratively superseded, not accepted as fixed. [Self-contained handoff and mapping](supersession/README.md). Phase outcomes and issue dispositions below describe the historical evaluation before that reorganization.
+
 Thomas approved reopening #329 with #349 and #352 blocking quality completion; #341 follows at lower priority. Starting revision: `7ff6ec0`. Original corpus and failed outputs remain immutable. This directory contains supplementary diagnosis and evaluation, not replacements for the first delivery.
 
 ## Final outcome

@@ -1,0 +1,126 @@
+[
+  {
+    "labels": [
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRUlQ",
+        "name": "bug",
+        "description": "Something isn't working",
+        "color": "d73a4a"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACw0oKnA",
+        "name": "ready-for-agent",
+        "description": "Fully specified, ready for an AFK agent",
+        "color": "0e8a16"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdF9w",
+        "name": "skill:redline",
+        "description": "Concerns the redline skill",
+        "color": "1d76db"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdGhg",
+        "name": "skill:write",
+        "description": "Concerns the write skill",
+        "color": "1d76db"
+      }
+    ],
+    "number": 364,
+    "title": "Write: låt kundcitat bära omdömet utan upprepande citatbryggor",
+    "url": "https://github.com/Kntnt/skills/issues/364"
+  },
+  {
+    "labels": [
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRUlQ",
+        "name": "bug",
+        "description": "Something isn't working",
+        "color": "d73a4a"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACw0oKnA",
+        "name": "ready-for-agent",
+        "description": "Fully specified, ready for an AFK agent",
+        "color": "0e8a16"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdF9w",
+        "name": "skill:redline",
+        "description": "Concerns the redline skill",
+        "color": "1d76db"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdGhg",
+        "name": "skill:write",
+        "description": "Concerns the write skill",
+        "color": "1d76db"
+      }
+    ],
+    "number": 363,
+    "title": "Write och Redline: rätta bristande citatidiom utan att skriva om fungerande citat",
+    "url": "https://github.com/Kntnt/skills/issues/363"
+  },
+  {
+    "labels": [
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRUlQ",
+        "name": "bug",
+        "description": "Something isn't working",
+        "color": "d73a4a"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACw0oKnA",
+        "name": "ready-for-agent",
+        "description": "Fully specified, ready for an AFK agent",
+        "color": "0e8a16"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdGhg",
+        "name": "skill:write",
+        "description": "Concerns the write skill",
+        "color": "1d76db"
+      }
+    ],
+    "number": 362,
+    "title": "Write: bevara faktisk betydelse i källkontrollen utan missade sakfel eller falska fynd",
+    "url": "https://github.com/Kntnt/skills/issues/362"
+  },
+  {
+    "labels": [
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRUlQ",
+        "name": "bug",
+        "description": "Something isn't working",
+        "color": "d73a4a"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACw0oKnA",
+        "name": "ready-for-agent",
+        "description": "Fully specified, ready for an AFK agent",
+        "color": "0e8a16"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWa58g",
+        "name": "library",
+        "description": "Concerns the shared Collection Library (ship.py, references)",
+        "color": "0e8a16"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdFqw",
+        "name": "skill:proofread",
+        "description": "Concerns the proofread skill",
+        "color": "1d76db"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdF9w",
+        "name": "skill:redline",
+        "description": "Concerns the redline skill",
+        "color": "1d76db"
+      }
+    ],
+    "number": 328,
+    "title": "Recover from agent-generated invocation errors without relaxing user syntax validation",
+    "url": "https://github.com/Kntnt/skills/issues/328"
+  }
+]

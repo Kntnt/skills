@@ -1,4 +1,6 @@
-# Final requirement disposition
+# Historical requirement disposition at b004f223
+
+Current remaining work is in [the three successor tickets](supersession/README.md). The six previously open editorial issues are administratively superseded, with all unmet requirements transferred and no changed quality verdict. The table below records the preceding implementation disposition.
 
 Independent final review supported closure of #344, #349, #352–356 and #359; all eight are now verified closed after local integration. #329, #341, #357, #358, #360 and #361 remain open. Actual remote states and comment links are recorded in tracker/final-disposition.json.
 

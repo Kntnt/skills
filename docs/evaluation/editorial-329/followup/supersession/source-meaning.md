@@ -1,0 +1,228 @@
+## What to build
+
+Rätta Writes källjämförelse så att den behåller **den betydelse texten faktiskt uttrycker**: den ska upptäcka byte av mätvariabel och samtidigt bevara källstödd retorik utan att konstruera starkare påståenden. Denna ticket ersätter återstående #357 och #360 samt motsvarande avslutskrav i #329. De två felriktningarna hör ihop: högre upptäcktsgrad får inte köpas genom fler falska fynd eller godtycklig bortredigering.
+
+### Två kvarstående, separat bedömda fel
+
+**A. Ett verkligt sakfel godkänns.** Oförändrad svensk källa säger om hela pilotrapporten: ”Den mäter inte ålder, funktionsförmåga eller digital vana.” Slutligt US-utkast på `5ecadb76` säger ”The report does not measure age, functional ability, or digital proficiency.” Digital erfarenhet/vana är inte samma mätvariabel som färdighet. En rapport kan mäta det ena utan det andra. Felet är påståendet om hela rapportens mätning; en separat slutsats att aggregerade bokningsantal inte visar färdighet kan vara fullt stödd.
+
+Första checkern förklarar själv `digital vana` som familiarity/experience men accepterar proficiency. Andra rapporten rekonstruerar med ”digital familiarity/proficiency” och döljer skillnaden. Författarens fullständiga rapportvalidering missar också den. Ingen riktig invändning har avvisats: alla led godtar felaktig ekvivalens. Källblind Redline lämnar texten oförändrad, vilket inte är ett kravbrott mot osedda källor. Tidigare engelska utkast bytte även funktionsförmåga mot disability/status; den senaste texten har rätt funktionell förmåga men fel digital variabel.
+
+**B. En fungerande kontextuell formulering underkänns.** Sista svenska krönikans första utkast säger efter resonemanget om kalendertid: ”Det är min reflektion, ingen mätning av hur andra använder sina arbetsdagar. Ändå får den mig att undra vad vi ber om när vi ber om varandras tid.” Rapportens F4 tolkar övergången som ett påstående om hur författarens fråga historiskt uppstod och invänder att den ursprungligen kan ha kommit från dokumentiakttagelsen. Utkastet beskriver den aktuella reflektionen; den historiska förstauppkomsten är ett starkare påstående. Författaren accepterar fyndet och stryker övergången. Sluttextens F1 kan passera samtidigt som kontrollens bevarande har fallerat.
+
+Samma krönikas **sista** rapport anmäler två andra falska fynd. Författaren avvisar dem korrekt med exakt kontext/källstöd och levererar den oförändrade kontrollerade texten. Det är en verklig framgång för föräldervalidationen, men upphäver inte accepterat F4. Tidigare krönika och svensk debattartikel har stoppats helt av motsvarande kontextöverdrift. Den ursprungliga diagnostiska krönikmeningen om ”på annat håll” är omtvistad och ska inte användas som säkert facit för ett verkligt sakfel.
+
+### Vad som redan prövats och vad det visar
+
+| Revision/försök | Utfall och begränsning |
+| --- | --- |
+| `8f92e126`: färsk källmedveten checker, högst två jämförelser | Gav upprepade förbättringar för okänt kontra frånvarande arbete (#349) och påhittade intervjufrågor (#352); missade bland annat variabler och dateringar. |
+| `82db4393` och `7b86144d`: fulla propositioner, ärvda modifierare, precisa negationer med samma subjekt/räckvidd | Gav bättre kronologi/dokumentavgränsning men falska retorikfynd och kvarstående begreppsbyten. |
+| Neutral bred kontextkontroll och första finding-adjudication | Missade verkliga daterings-/dokumentfel respektive kunde inte avvisa falska kontextfynd. Inte införda som lösningar. |
+| Tredje jämförelse, tre frysta fortsättningar | Bara en av tre löste kombinationen; nya falska fynd eller kvarstående fel. Kontrollantalet ökades inte. |
+| `cd375d4f`: separat pronomeninformation och evidensbaserad föräldervalidation | Rättade personattributionsproblemet; neutrala finding-burden-prov skilde två riktiga från två falska fynd. Verkliga körningar visade fortfarande missar. |
+| `5ecadb76`: föräldern validerar hela påståenderedovisningen, också utan fynd | Upptäcker verkliga rapportfel utan att förstöra korrekt prosa; avvisar vissa falska fynd. Båda kvarstående exemplen ovan förekommer ändå. |
+
+Den nuvarande operativa instruktionen finns i `skills/editorial/write/references/source-check.md`. Den kräver full källa och exakt utkast i färsk kontext, full påståenderedovisning/negationer, högst två jämförelser, evidens för varje disposition och ingen okontrollerad prosaändring efter sista jämförelsen. Ett fel i rapporten gör inte automatiskt utkastet felaktigt. En ofullständig jämförelse eller accepterat kvarstående fel stoppar leveransen. Hjälptext, deklaration och katalog anger beroendet av underagenter. Läs även Write-body/help, gemensam Claims och berörda genre-/språkresurser.
+
+### Hypoteser att pröva — inga av dem är verifierade lösningar
+
+1. Jämförelsen bevisar ibland sin egen omskrivning i stället för originalutsagan. Pröva en neutral operation som först skiljer de två begreppens möjliga värden/räckvidd i båda riktningarna och först därefter söker stöd. Mätvariablernas namn i originalspråket kan vara ett ankare i intern redovisning, men en fast synonymlista är inte målet.
+2. Den fullständiga negationsliggaren kan belöna tänkbara starkare läsningar och producera långa bevis för dem. Pröva förenklad, kontextförankrad jämförelse eller annan ansvarsfördelning med både verkliga fel och stödd författarröst som kontroll. Det finns ännu inget experiment som visar att förenkling löser detta.
+3. Den lyckade senare avvisningen visar att föräldern kan göra distinktionen, men inte konsekvent. Undersök skillnaden i faktiskt läst kontext och arbetsordning före ett nytt regellager. Mer kontroll eller fler säten får inte antas ge bättre kvalitet utan mätning.
+
+Bevara möjligheten till skarp, källförankrad argumentation och personlig reflektion. Ett krav på ordagrann återgivning eller förbud mot slutsatser, metonymi eller pronomen skulle ändra uppdraget. Bevara samtidigt upptäckt av påhittad biografi, osupplerade händelser och verkliga scope-/datumfel.
+
+### Evidens och reproduktion
+
+- `F/runs/account-candidate/opinion-en_US-r1/`: `draft.md`, `write/supplied-input.md`, `write/checker-report-1.md`, `write/checker-report-2.md`, native spår och separat Redline.
+- `F/probes/account-column-preservation/`: full `source.md`, `draft-first.md`, `report-first.md`, `parent-disposition.md`, `draft-final.md`, `report-final.md`, sista disposition och proveniens. Detta är extraherad befintlig evidens, ingen ny körning.
+- `F/runs/third-candidate/column-sv-r1/write/withheld-draft.md` och motsvarande `opinion-sv-r1`: de tidigare falska stoppen, med rapporter.
+- `F/probes/finding-burden/`, `finding-adjudication/`, `contextual-meaning/`, `third-comparison/` och `account-equivalence/`: de faktiskt lyckade och misslyckade diagnoserna.
+- `F/reviews/account-original.md`, `account-new.md`, `account-independent-observations.md`; separata Write/Redline-records `docs/evaluation/records/*-gpt-2026-09-20-344-account-{original,new}.md`.
+
+Verkliga anrop: `/write --genre=opinion --language=en_US --output=response source.md`, även `en_GB` och `sv` för kontraster; `/write --genre=column --language=sv --output=response source.md`. Parad Redline: `/redline --output=response input.md` med exakt levererad text och metadata, aldrig källpaket. `invocation.txt` är auktoritativ för varje historisk körning. Källor/draft nedan är syntetiska och fullständiga, inte verkliga personuppgifter.
+
+### Utgångsläge och sådant som redan är levererat
+
+Detta är en renodlad fortsättning på #329, på Thomas uttryckliga begäran att ersätta den stora historiska ärendefamiljen med få självbärande restärenden. De gamla ärendena stängs som **ersatta, inte lösta**. Deras fel och evidens står kvar. Ingen fullständig redaktionell kvalitetsacceptans följer av omorganisationen. Uppgiften är att diagnostisera och verifierat rätta beteendet nedan; en dokumenterad teori ensam är inte avslut.
+
+De fem genrebriefarna, deras review-delar, gemensam grund/webbhantverk, ABT/PAC, faktisk laddning, leveransregler och mekanisk filöverföring är redan implementerade och oberoende granskade. Behåll den leveransen; börja inte om med hela genreprojektet. #344, #349, #352–356 och #359 har verifierat avgränsade rättningar. #328 är ett separat, ännu öppet projektövergripande återhämtningskontrakt och ingår inte här.
+
+**Arbetsbas:** lokal `main` i `/Users/thomas/Projects/skills` vid `b004f223634a2de15cf04e73551b1b006e46df62`. Produktfilerna är samma som den faktiskt utvärderade `5ecadb766ee1f9984a22d1702eb0e21ab2279971`; `12373d80` innehåller full slutevidens och `b004f223` tracker-kvittona. Dessa commits är ännu **inte pushade**. Kontrollera gitobjekten före arbete; en färsk GitHub-klon eller global Skill-installation kan ha äldre kod. På annan maskin behövs denna lokala historik/evidens innan samma baslinje kan återskapas. Exemplen nedan gör felet läsbart även utan den. Ingen push, release eller global installation är beställd genom denna ticket. Skyddad `rework` och dess worktree förblir orörda.
+
+`F` nedan betyder `docs/evaluation/editorial-329/followup/`. Börja med `F/completion-report.md`, `F/reviews/final-technical-protocol-disposition.md` och `F/reviews/final-whole-resource-editorial.md`; läs sedan den konkreta evidens som hör till denna ticket. Hela den äldre historien behöver inte rekonstrueras för att förstå kraven här. Originalkorpus är fryst vid `6e531f5`; kompletterande källor vid `bf14dc2`. Fulla prompts, källor, rapporter, utkast, resultat och inventeringar ligger i respektive körningsmapp.
+
+### Gemensamma krav som följer med från #329
+
+Svenskt professionellt journalistiskt hantverk styr vinkel och disposition; målspråket styr idiom, syntax och typografi. Genreanvisningarna ska ge kort riktning och redaktionellt handlingsutrymme. Webbens mått är riktvärden, utan utfyllnad eller skadlig kapning. Ingen teknik väljs automatiskt för de fem genrerna; befintliga explicita val gäller. Behåll parser och publika anropsformer.
+
+Write levererar ett första utkast med källtrohet; den källmedvetna jämförelsen är ingen allmän redaktionell eller mekanisk granskning. Redline ser hela textartefakten men inte Writes källpaket, granskar och korrigerar inom befintlig budget och avslutar med en faktisk installerad Proofread-pass. Mekaniken får inte göra redaktionella ändringar. Citat, metadata, destinationer och källfiler ska bevaras enligt respektive kontrakt.
+
+De långa problembeskrivningarna här är arbetsunderlag för byggaren, **inte text att kopiera in i runtime-instruktionerna**. En ny allmän regel behöver en belagd orsak. Förenkling, borttagning eller annan processutformning får prövas; en viss tidigare implementation är inte facit. En eventuell ändring av det nuvarande kontrollantalet ska vara ett uttalat, diagnostiskt motiverat försök, med ny verifiering av leveransspärren och kostnaden.
+
+### Utvärdering och leverans
+
+Följ `docs/evaluation/protocol.md` och de ursprungliga kriterierna i `docs/evaluation/corpus/editorial-quality/README.md`. F1 betyder källtrogenhet, G2 genrens uppbyggnad, L1 målspråkets idiom och R1 korrekt granskning/bevarande. Bedöm alla tillämpliga kriterier, inte bara ticketens exempel. Bevara historiska underkännanden och varje ny körning. Skilj stödd rättning, omtvistad försiktighetsändring, felaktigt fynd, giltigt stopp, falskt stopp och levererad text. Ett stopp är aldrig ett godkänt utkast, och en Redline-reparation godkänner inte ett tidigare Write-utkast i efterhand.
+
+Frys en proportionerlig matris med positiva och negativa kontroller och upprepningsantal före kandidatprovning. De centrala oförändrade källfallen ska köras mer än en gång; välj inte om bara misslyckade rader tills de passerar. Lägg till nya kontrastfall före produktändringen, med oberoende kriterier och utan en kanonisk formulering. En neutral diagnos som hittar felet motiverar ett försök men ersätter inte verkliga kandidat-Write→färsk-källblind-Redline-anrop. Ge aldrig utvärderarens fynd eller önskade ersättningsord till den provade Skillen.
+
+Tidigare körningar använde native Codex CLI 0.155.1, observerad `gpt-6-astra/high`, utan modellöverskrivning. Följ protokollets providerisolering och ärv aktuell sessions identitet; registrera faktisk miljö och varje skillnad från baslinjen. Den historiska GPT-harnessen `docs/evaluation/editorial-329/harness/run.py` exporterar en oföränderlig revision till isolerad HOME/CODEX_HOME/work/scratch och vägrar skriva över resultat. Den innehåller historiska maskin-/sessionsvägar, bland annat `NATIVE_CODEX`, `PARENT_ROLLOUT`, `AUTHENTICATION` och `CLEANUP`: verifiera/anpassa evaluatorns miljö och identitetsfångst, inte produkt eller testkriterier, innan den används i en ny session. I en annan providerfamilj behövs dess eget stödda native-harness; styr inte Codex från en Claude-utvärdering eller tvärtom. En fristående semantisk bedömare får frysta kriterier och artefakter utan modellidentitet eller tidigare familjers omdömen. Publicera aldrig autentiseringsinnehåll.
+
+Spara fullständiga in-/utdata, faktiska resursläsningar, rapporter, förälderns ställningstaganden, modellidentiteter, före-/efterinventeringar och städkvitton. Krypterade dispatchdelar är overifierade om ingen fullständig filavläsning ger separat insyn. Bedöm texten oberoende av granskarens eget godkännande. Använd fristående teknisk och redaktionell granskning av hela den berörda laddningskedjan, inte bara diffen. Integrera lokalt, verifiera den integrerade produktversionen och dokumentera vad som faktiskt uppfyllts. Om flera restärenden arbetas samtidigt måste en integrator samordna överlappande resursändringar och slutlig regressionsprovning.
+
+Om en gemensam resurs ändras omfattar regressionen även de andra genrer och språk som faktiskt påverkas. Bevara tidigare godkända fall för källgränser, kundens aktörskap, författarståndpunkt, teknikval, webbformat och leverans; välj täckning efter diffen i stället för att göra om hela historiken.
+
+Den tidigare fortsättningen innehåller 212 Skill-invokationer och 33 diagnoser, inte ett krav att göra om alla. Slutversionen hade 26 faktiska invokationer och ett beroendehopp. Fyra tekniska kontroller och 1 873 tester passerade. Dessa är historiska belägg, ingen textkvalitetsgaranti för nästa ändring. Mät samlad obligatorisk läsning och faktisk körningstid; Write hade redan fått 884 extra resursord och tog i sista urvalet median 616 sekunder. Slumpmässiga fallskillnader gör detta olämpligt som ett kausalt prestandamått.
+
+<details>
+<summary>Debattens fullständiga källa — fullständigt bevarat underlag</summary>
+
+Proveniens: `docs/evaluation/corpus/editorial-quality/sources/opinion.md` vid `b004f223`; SHA-256 `83265898e21c908c50a5462053175ebcf82d56fe3ea746fa67c16a5f6559dec4`. Filbytesen i repo är auktoritativa vid återspelning.
+
+````text
+# Opinion brief and source
+
+SYNTHETIC EVALUATION MATERIAL. Fictional policy debate, not legal advice or a real municipal process. Source language: Swedish.
+
+## Brief
+
+Skriv en debattartikel för invånarna i fiktiva Lervik. Avsändare är Sanna Ek, talesperson för föreningen Öppna beslut. Tes: kommunstyrelsen bör skjuta upp ett permanent byte till enbart digital bokning av föreningslokaler och först pröva ett halvår med både telefon och webb. En tydlig, sakligt skarp text på ungefär 400 ord. Markdown med orienterande rubriker. Ingen kommersiell CTA.
+
+## Underlag
+
+Kommunens pilotrapport Bokning av föreningslokaler, 8 april 2026, gäller ett åtta veckor långt försök i två lokaler. Under försöket gjordes 96 bokningar via webb och 24 via telefon. Rapporten räknar bokningar, inte unika personer. Den mäter inte ålder, funktionsförmåga eller digital vana. Telefonbokningarna kan därför inte användas för att säga hur stor andel av invånarna som inte kan boka digitalt.
+
+Tjänsteutlåtandet inför kommunstyrelsens möte den 18 juni föreslår att telefonbokning tas bort för alla sju lokaler från september. Motivet i utlåtandet är att personalen ska slippa föra in uppgifter i två flöden. Någon tidsmätning eller ekonomisk besparingsberäkning finns inte i handlingarna. Förvaltningens verkliga invändning mot att behålla båda kanalerna är dubbel administration, inte att telefonanvändare är lata eller dyra.
+
+Öppna beslut föreslår ett sex månader långt försök i alla sju lokaler, med båda bokningsvägarna kvar. Under försöket ska förvaltningen registrera tidsåtgång per bokningsväg och be användarna frivilligt ange varför de väljer telefon eller webb. Föreningen gör inget anspråk på att ha finansierat eller kostnadsberäknat försöket. Kostnaden behöver kommunstyrelsen ta ställning till. Därefter kan den avgöra om en kanal ska tas bort, ändras eller behållas.
+
+Sanna Eks ståndpunkt: ”Att en bokning går via telefon är inte ett bevis för att någon inte kan använda webben. Det är ett skäl att ta reda på varför telefonen fortfarande används.” Detta får citeras eller refereras. Hon menar att kommunen först måste kunna väga arbetskostnaden mot värdet för användarna. Hon motsätter sig inte digital bokning.
+
+## Boundaries / judging
+
+Inga lagkrav, protester, diskrimineringsfall, partipolitiska motiv eller besparingar är belagda. Siffror ska tillskrivas rapporten där de bär argumentet. Författaren ska kunna kritisera beslutsunderlaget skarpt utan falska motiv eller tandlös neutralisering. Slutet ska namnge kommunstyrelsens möjliga beslut, med kostnadsosäkerheten bevarad.
+````
+
+</details>
+
+<details>
+<summary>Underkänt levererat US-utkast — fullständigt bevarat underlag</summary>
+
+Proveniens: `docs/evaluation/editorial-329/followup/runs/account-candidate/opinion-en_US-r1/draft.md` vid `b004f223`; SHA-256 `3bef8a630e1257b08e50bfd1e3b3b7ca7b4f44f888ac5ecbcf52233c7bc7d8c6`. Filbytesen i repo är auktoritativa vid återspelning.
+
+````text
+---
+kntnt:
+  genre: opinion
+  technique: none
+  language: en_US
+---
+
+# Lervik should test both booking options before cutting one
+
+By Sanna Ek, spokesperson for Öppna beslut
+
+Lervik’s municipal executive board should postpone a permanent switch to online-only booking for community venues. Öppna beslut proposes a six-month trial of phone and web booking at all seven venues before the board decides whether to remove either option. The current evidence leaves essential questions unanswered.
+
+## Booking counts cannot explain users’ needs
+
+The municipality’s April 8, 2026, pilot report, *Bokning av föreningslokaler*, records 96 web bookings and 24 phone bookings during an eight-week trial at two venues. Those are bookings, not individual people. The report does not measure age, functional ability, or digital proficiency.
+
+The phone bookings therefore cannot tell us what share of Lervik’s residents cannot book online. Using them to make that claim would overstate the evidence. But a phone booking is a reason to investigate why someone chose that option. Counting the bookings does not answer that question.
+
+I do not oppose digital booking. My position is that the municipality must first be able to weigh the labor cost against the value to users. That requires evidence about both.
+
+## Duplicate administration deserves a measured answer
+
+The staff recommendation prepared for the board’s June 18 meeting proposes ending phone booking at all seven venues starting in September. Its rationale is that staff would no longer have to enter information through two workflows. Duplicate administration is a real objection that our proposal must address.
+
+Yet the documents contain neither measurements of staff time nor a calculation of financial savings. The board is being asked to remove a booking option across seven venues with a pilot covering two and no measured account of the labor involved. That is an inadequate basis for a permanent change.
+
+## Run a six-month trial, then decide
+
+Our proposed trial would keep both booking options at all seven venues. Staff would record the time spent on each booking method and invite users to explain, voluntarily, why they chose phone or web. This would give the board evidence for weighing administrative work against users’ reasons for choosing each option.
+
+Öppna beslut has not claimed to have funded or costed this trial. Its cost remains a question for the board to consider.
+
+The municipal executive board should postpone the permanent switch, assess the trial’s cost, and approve six months with both options. It can then decide whether a booking option should be removed, changed, or retained.
+````
+
+</details>
+
+<details>
+<summary>Krönikans fullständiga källa — fullständigt bevarat underlag</summary>
+
+Proveniens: `docs/evaluation/editorial-329/followup/probes/account-column-preservation/source.md` vid `b004f223`; SHA-256 `904f89206bcb553c2908491eb065cd9594bf0879e66f0edaded975407fd55192`. Filbytesen i repo är auktoritativa vid återspelning.
+
+````text
+# Column brief and source
+
+SYNTHETIC EVALUATION MATERIAL. A fictional ghostwriting assignment. Source language: Swedish. No author experience exists beyond these notes.
+
+## Brief
+
+Skriv en personlig webbkrönika för yrkesverksamma som planerar möten. Författaren är den fiktiva bibliotekarien Nora Vik. Hennes blick ska märkas, gärna lågmäld humor, men ingen debattkampanj eller köpuppmaning. Cirka 350 ord om underlaget bär det. Rubrik och byline; välj själv om mellanrubriker hjälper.
+
+## Nora Viks egna anteckningar
+
+Jag granskar bibliotekets mötesmall. Där finns rutor för starttid, sluttid, deltagare och dagordning, men ingen ruta för det beslut vi ska kunna fatta när vi går därifrån. Det är en iakttagelse av dokumentet, inte en scen från ett visst möte.
+
+Jag uppskattar möten där kolleger upptäcker att de har förstått en fråga olika. Det kan vara viktigare än att snabbt enas. Samtidigt retar jag mig på att tid i kalendern lätt behandlas som ett resultat i sig. Det här är min reflektion, inte något jag har mätt hos andra.
+
+Min tanke är inte att varje samtal ska pressas till ett beslut. Samtal kan skapa förtroende och upptäcka en fråga vi inte visste att vi behövde ställa. Men den som fyller i en mall borde få formulera varför vi behöver just varandras tid, också när syftet är att undersöka något tillsammans.
+
+Jag vet inte om ytterligare en ruta gör möten bättre. Det finns en komik i att försöka lösa ett problem med formulär genom att utöka formuläret. Ändå vill jag prova en enkel fråga bredvid tiden: vad behöver vi förstå tillsammans? Jag vill behålla både hoppet om den frågan och tvivlet på ännu en ruta.
+
+## Boundaries / judging
+
+Inga verkliga möten, resor, barndomsminnen, repliker eller kroppsliga känslor är lämnade. Uppfinn dem inte. Författarens hållning är nyfiken och självironisk, inte mötesfientlig; hon medger att icke-beslutande samtal har värde. Ingen statistik eller allmän trend är belagd. En konkret dokumentiakttagelse är en fullgod öppning; ett berättat minne är inte nödvändigt. Bedöm personlig reflektion, fungerande rytm, motiverad återkomst och ett slut som får behålla osäkerheten.
+````
+
+</details>
+
+<details>
+<summary>Krönikans första utkast före falskt F4 — fullständigt bevarat underlag</summary>
+
+Proveniens: `docs/evaluation/editorial-329/followup/probes/account-column-preservation/draft-first.md` vid `b004f223`; SHA-256 `cc0d58de7174d1bce83721866622f8dfd907a8d84654dee50dcd91823a2bdb22`. Filbytesen i repo är auktoritativa vid återspelning.
+
+````text
+# En ruta till för det vi inte vet
+
+Av Nora Vik, bibliotekarie
+
+Jag granskar bibliotekets mötesmall. Där finns rutor för starttid, sluttid, deltagare och dagordning. Men ingen ruta för det beslut vi ska kunna fatta när vi går därifrån. Tiden har fått två rutor. Vad vi ska kunna göra med den har inte fått samma tydliga plats.
+
+Det är frestande att börja där: lägg till en ruta för beslutet. Då skulle den som planerar mötet behöva formulera vad det ska leda till. Men redan när jag tänker det behöver jag hejda mig. Ett beslut är inte det enda som kan göra ett samtal värt tiden.
+
+Jag uppskattar möten där kolleger upptäcker att de har förstått en fråga olika. Den upptäckten kan vara viktigare än att snabbt enas. Att få syn på skillnaden är också ett skäl att träffas, även om den inte låter sig sammanfattas i ett beslut. Jag vill inte ha en mall som gör sådana samtal svårare att motivera.
+
+Samtidigt retar jag mig på hur lätt tid i kalendern kan behandlas som ett resultat i sig. Där står mötet, alltså finns det något att peka på. Det är min reflektion, ingen mätning av hur andra använder sina arbetsdagar. Ändå får den mig att undra vad vi ber om när vi ber om varandras tid.
+
+Ett samtal kan skapa förtroende. Det kan också hjälpa oss att upptäcka en fråga vi inte visste att vi behövde ställa. Då kan vi knappast begära att den färdiga frågan ska finnas i kallelsen. Men vi borde kunna försöka formulera varför vi behöver undersöka något tillsammans. Vad behöver just de här människorna varandra till?
+
+Så jag återvänder till mötesmallen med en fråga jag vill prova bredvid tiden: vad behöver vi förstå tillsammans?
+
+Det finns förstås en komik i detta. Jag granskar ett formulär och hoppas på ännu en ruta. Formuläret har åtminstone inte anledning att känna sig hotat.
+
+Om tillägget gör möten bättre vet jag inte. Jag vill prova frågan, men behålla tvivlet på rutan. Starttid och sluttid kan stå kvar. Däremellan hoppas jag att det får plats både ett syfte och något vi ännu inte har förstått.
+````
+
+</details>
+
+## Acceptance criteria
+
+- [ ] Fulla gamla fel, rapporter och oenigheter finns kvar; faktiska semantiska fel skiljs från rapportfel och omtvistade försiktighetsändringar.
+- [ ] En belagd orsak/operation motiverar ändringen. Oförändrade US/GB-debattkällor producerar i förväg planerade upprepade, levererade utkast utan variabelbyte; svensk kontroll, korrekt stark kritik och okänt/frånvarande-gränsen bevaras. Det aktuella begreppet måste faktiskt uttryckas för att dess översättningsgräns ska räknas som utövad.
+- [ ] Upprepade krönike- och svenska debattprov bevarar stödd reflektion utan falsk historisk/uttömmande läsning, onödig strykning eller falskt stopp. Även mellanliggande rapport/disposition bedöms, så att ett levererat F1-pass inte döljer en felaktig ändring.
+- [ ] Samma metod behåller detektion av verkliga dateringsfel, dokument-/källpaketsförskjutning och obelagda personattribut. Använd etablerade riktiga negativa kontroller, inte den omtvistade ”på annat håll”-meningen som säkert facit.
+- [ ] Separata källblinda Redline-par, giltiga stopp/beroendehopp, faktiska kontrollantal och oförändrad sista kontrollerade prosa dokumenteras. Ofullständig kontroll eller att aldrig leverera är inte en lösning.
+- [ ] Oberoende helhetsgranskning och verklig utvärdering av integrerad kandidat stöder avslut; inga nya kanoniska meningar, exempelberoende förbud eller regressionsfel döljs. Läsning, latenser och eventuell processändring redovisas.
+- [ ] Berörda dokument/help/deklarationer hålls samstämmiga, katalogen regenereras där det behövs, lokala commits/integration och evidens färdigställs; de fyra aktuella kontrollerna i `CONTRIBUTING.md` passerar.
+
+## Blocked by
+
+Inga implementationer saknas som blockerar start. Arbetet kan diagnostiseras fristående. Samordna överlappande Write/source-check-ändringar med citatärendet; de är skilda utfall, ingen anledning att återöppna hela #329 eller bygga #328.
+
+---
+Written against b004f223 (product 5ecadb76).

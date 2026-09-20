@@ -1,0 +1,25 @@
+{
+  "body": "## What to build\n\nPart of #329. Preserve functioning quoted wording during source-blind Redline review. At ae24f9b3 and the exact positive-control replay at 3f21d9b1, Redline expands “I would set that time aside before the next building starts.” into “I would set that time aside before the trial starts in the next building.” The complete English context already establishes the repair-log trial and possible expansion. Independent readers identify no concrete English obstruction. F1 meaning survives, but R1 preservation fails. This differs from the Swedish idiom defect in #341.\n\nComplete evidence is in docs/evaluation/editorial-329/followup/runs/quotation-candidate/case-study-en_US-r2/redline/ and runs/final-quotation-original/case-study-en_US-r2/redline/. The exact original artifact is runs/third-candidate/case-study-en_US-r2/draft.md. Latest quotation-transport-audit.json verifies complete artifact and scoped guidance reads by both focused readers. The native reader proposes the needless finding, the correction applies it and the re-reader approves. Both formal quotation-original records preserve the failure.\n\nAssess whether the new fresh-reader mechanism earns its preservation and reading cost; reverting that mechanism is an admissible repair. Do not impose a fixture-specific wording rule or a general ban on metonymy. Preserve source-aware translated quotation checking and the independent Swedish defect.\n\n## Acceptance criteria\n\n- [ ] Preserve both complete failures and unchanged R1 judgments.\n- [ ] Full-artifact source-blind controls at the final revision preserve functioning English wording and distinctive voice outside concrete findings.\n- [ ] Retain genuine Swedish idiom controls and report residual failures without weakening the criterion.\n- [ ] Capture actual loads, complete outputs, single closing Proofread and full-root effects/cleanup.\n- [ ] Run the four CONTRIBUTING checks for the integrated change.\n\n---\nWritten against cd375d4f\n",
+  "comments": [
+    {
+      "id": "IC_kwDOT6J8Bs8AAAABVoDVmA",
+      "author": {
+        "login": "TBarregren"
+      },
+      "authorAssociation": "MEMBER",
+      "body": "Kvarstår öppet efter faktisk återgång till förälderns citatgranskning på 5ecadb76. Båda oförändrade gamla engelska kontrolltexterna bevaras nu, men det nya amerikanska originalprovet r1 ändrar fortfarande det fungerande ”before the next building starts” till ”before the trial starts in the next building”. F1-betydelsen bevaras men R1:s krav på att låta fungerande citat vara kvar underkänns. Amerikanskt r2 bevaras.\n\nBorttagen färsk citatgranskare minskar läs- och samordningskostnaden; den är inte en verifierad rättning av bevarandefelet. De två svenska missarna #341 redovisas samtidigt. Alla slutliga mekaniska överföringar passerar separat och får inte användas som redaktionellt godkännande.\n\nEvidens: `docs/evaluation/editorial-329/followup/runs/account-candidate/case-study-en_US-r1/redline`, `runs/final-delivery-original`, `reviews/account-original.md` och `reviews/final-delivery-original.md`.\n\nLokalt integrerat i `main` vid `12373d807e7f872e88ea4bb795af9b065c075dc5`; verifierad produktrevision `5ecadb76`. Alla fyra CONTRIBUTING-kontroller passerar, inklusive 1 873 tester. Oberoende teknisk/protokoll- och redaktionell helhetsgranskning är genomförda. Inget är pushat, releasat eller globalt installerat. Samlat slutresultat: `docs/evaluation/editorial-329/followup/completion-report.md`.\n",
+      "createdAt": "2026-09-19T23:58:07Z",
+      "includesCreatedEdit": false,
+      "isMinimized": false,
+      "minimizedReason": "",
+      "reactionGroups": [],
+      "url": "https://github.com/Kntnt/skills/issues/358#issuecomment-5746251160",
+      "viewerDidAuthor": true
+    }
+  ],
+  "labels": [],
+  "number": 358,
+  "state": "OPEN",
+  "title": "Redline: preserve functioning quoted wording during source-blind review",
+  "url": "https://github.com/Kntnt/skills/issues/358"
+}

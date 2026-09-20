@@ -1,0 +1,102 @@
+{
+  "base_revision": "b004f223634a2de15cf04e73551b1b006e46df62",
+  "reason": "User requested focused successor tickets and closure of old six as superseded, not solved.",
+  "created_utc": "2026-09-20T06:52:27.502991+00:00",
+  "successors": [
+    {
+      "number": 362,
+      "url": "https://github.com/Kntnt/skills/issues/362",
+      "file": "source-meaning.md",
+      "replaces": [
+        357,
+        360
+      ],
+      "title": "Write: bevara faktisk betydelse i källkontrollen utan missade sakfel eller falska fynd",
+      "verified_body": true,
+      "coordination_comment_url": "https://github.com/Kntnt/skills/issues/362#issuecomment-5748244904"
+    },
+    {
+      "number": 363,
+      "url": "https://github.com/Kntnt/skills/issues/363",
+      "file": "quotation-judgement.md",
+      "replaces": [
+        341,
+        358
+      ],
+      "title": "Write och Redline: rätta bristande citatidiom utan att skriva om fungerande citat",
+      "verified_body": true,
+      "coordination_comment_url": "https://github.com/Kntnt/skills/issues/363#issuecomment-5748245006"
+    },
+    {
+      "number": 364,
+      "url": "https://github.com/Kntnt/skills/issues/364",
+      "file": "quotation-bridge.md",
+      "replaces": [
+        361
+      ],
+      "title": "Write: låt kundcitat bära omdömet utan upprepande citatbryggor",
+      "verified_body": true,
+      "coordination_comment_url": "https://github.com/Kntnt/skills/issues/364#issuecomment-5748245084"
+    }
+  ],
+  "retired": [
+    {
+      "number": 341,
+      "comment_url": "https://github.com/Kntnt/skills/issues/341#issuecomment-5748245173",
+      "state": "closed",
+      "state_reason": "not_planned",
+      "original_body_unchanged": true,
+      "verified_again": true
+    },
+    {
+      "number": 357,
+      "comment_url": "https://github.com/Kntnt/skills/issues/357#issuecomment-5748245330",
+      "state": "closed",
+      "state_reason": "not_planned",
+      "original_body_unchanged": true,
+      "verified_again": true
+    },
+    {
+      "number": 358,
+      "comment_url": "https://github.com/Kntnt/skills/issues/358#issuecomment-5748245452",
+      "state": "closed",
+      "state_reason": "not_planned",
+      "original_body_unchanged": true,
+      "verified_again": true
+    },
+    {
+      "number": 360,
+      "comment_url": "https://github.com/Kntnt/skills/issues/360#issuecomment-5748245596",
+      "state": "closed",
+      "state_reason": "not_planned",
+      "original_body_unchanged": true,
+      "verified_again": true
+    },
+    {
+      "number": 361,
+      "comment_url": "https://github.com/Kntnt/skills/issues/361#issuecomment-5748245734",
+      "state": "closed",
+      "state_reason": "not_planned",
+      "original_body_unchanged": true,
+      "verified_again": true
+    },
+    {
+      "number": 329,
+      "comment_url": "https://github.com/Kntnt/skills/issues/329#issuecomment-5748245876",
+      "state": "closed",
+      "state_reason": "not_planned",
+      "original_body_unchanged": true,
+      "verified_again": true
+    }
+  ],
+  "unrelated_issue_328_unchanged": true,
+  "verified_utc": "2026-09-20T06:56:15.604077+00:00",
+  "open_issue_numbers": [
+    364,
+    363,
+    362,
+    328
+  ],
+  "product_modified": false,
+  "push_release_install": false
+}

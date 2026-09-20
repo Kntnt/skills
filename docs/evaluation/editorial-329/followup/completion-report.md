@@ -1,5 +1,7 @@
 # Resultat av fortsättningen på #329
 
+**Senare trackeromorganisation:** Restarbetet ligger nu i [#362–364](supersession/README.md). #329, #341, #357, #358, #360 och #361 har stängts som ersatta, inte som lösta. Rapporten nedan är kvalitetsredovisningen vid `b004f223`, före denna omorganisation; dess öppna/stängda tillstånd är historiska. Inga underkända texter har godkänts i efterhand.
+
 Alla deklarerade körningsplatser är nu redovisade. Produktversionen är fryst vid `5ecadb76`; underlaget nedan skiljer verifierade förbättringar från kvarstående fel. **#329 är inte kvalitetsmässigt färdigt och ska förbli öppet.** De verifierade ändringarna och hela evidenspaketet är integrerade i lokal `main`. Åtta uppfyllda ärenden är avslutade på GitHub; fem underärenden och samlingsärendet är fortsatt öppna.
 
 ## Vad implementationen ändrar

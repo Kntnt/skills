@@ -1,0 +1,110 @@
+{
+  "body": "## What to build\n\nÅterställ den redaktionella kvaliteten i Write och Redline genom att skriva om `article`, `case-study`, `column`, `opinion` och `web-copy` från grunden. Detta är en samlingsissue; arbetet utförs i underärendena. Beställningen i denna session är att skapa tickets, inte att genomföra ändringarna.\n\n### Beställarens viktigaste krav\n\nAlla fem genrer ska vara skrivna för läsning på webben. `article`, `case-study`, `column` och `opinion` ska upplevas som arbete av en svensk journalist som skriver professionellt för SvD, DN, DI, Fokus, Ny Teknik, Filter eller Forskning & Framsteg. Namnen anger hantverksnivå och tradition, inte imitation av en viss skribent eller en gemensam tidningsmall.\n\n`web-copy` ska upplevas som arbete av en erfaren svensk copywriter och UX-skribent på den nivå som anlitas av Sveriges främsta byråer och varumärken. Texten ska vara tänkt och skriven på målspråket, och varje ord ska göra nytta för läsaren.\n\nDetta gäller oavsett målspråk. Svensk journalistisk respektive kommunikativ tradition styr vinkel, disposition, berättarteknik, tilltal och ton. Målspråket styr ordval, idiom, syntax, skiljetecken och typografi fullt ut. En modersmålsskribent på professionell nivå ska uppfatta texten som en kollegas arbete. Engelska texter ska alltså förena svenskt journalistiskt hantverk med engelska som modersmål, utan svengelska; samma princip gäller alla andra målspråk. Språkval får varken byta bort hantverket mot generisk angloamerikansk marknadsprosa eller föra över svensk språkdräkt till ett annat språk.\n\nInstruktionerna ska gå att arbeta efter och minnas: korta, konkreta regler om vad skribenten gör och vad läsaren får, med få väl valda exempel. Långa motiveringar och abstrakta resonemang ska inte ersätta användbara skrivanvisningar.\n\n### Underlag och källprioritet\n\nDenna beställning och senare förtydliganden har företräde. Därefter används originaldokumenten som vägledning; den äldre samlingen är källmaterial att värdera, inte en version som ska återinstalleras.\n\n1. [Instruktioner för artiklar och blogginlägg](https://docs.google.com/document/d/191vKmkF68VCgepdEKcFhiB5bI0i9nLqAPcr5oInGnWI/edit)\n2. [Berättarteknik och pedagogisk dramaturgi](https://docs.google.com/document/d/1mKORkyC1FQU0rY0n8rWPhEzx95bsXPninr3j2mBnIGY/edit)\n3. [Stil och ton för artiklar](https://docs.google.com/document/d/1xIpbMYNMzsUIpmsp8JC5ivHTz1-cU8TiKsZz14G9rHk/edit)\n4. [Äldre samlingen, fast revision](https://github.com/Kntnt/kntnt-text-skills/tree/b121cfcb274803193c3b0d60e751429bb0aef67a), även lokalt i `/Users/thomas/Projects/kntnt-text-skills`. Läs original med exempelvis `git -C /Users/thomas/Projects/kntnt-text-skills show b121cfcb274803193c3b0d60e751429bb0aef67a:lib/genres/article.md`; motsvarande gäller `lib/genres/<genre>.md`, `lib/techniques/abt.md`, `lib/techniques/pac.md` och `lib/rules/style.md`. Den lokala källsamlingen ska inte ändras.\n\nDe tre Google-dokumenten lästes i sin helhet den 19 september 2026 genom deras text-export (`/export?format=txt`). Deras relevanta innehåll sammanfattas här så att kraven överlever en ändrad länk:\n\n- Artikelmallen skiljer mellan huvudrubrik, fristående ingress, byline, lead och brödtext med mellanrubriker. Ingressen och leaden ska göra olika jobb. Rubriker ska vara informativa, styckena sammanhållna med varierad meningslängd, och avslutningen ska infria inledningens löfte och ge något användbart att gå vidare med.\n- Dramaturgidokumentet prioriterar rak, tydlig, faktabaserad pedagogik. Förklara begrepp innan resonemanget behöver dem, bygg kunskap i begriplig ordning, ge relevant kontext kortfattat och använd frågor, analogier, humor, scener och kulturella referenser sparsamt när de förbättrar förståelsen. Nyheter behöver rak framställning; tekniska förklaringar får vara tekniska. Affärs- och investerarperspektiv hör bara hemma där ämne och målgrupp motiverar dem.\n- Stildokumentet efterfrågar konkret språk, vardagsord där de räcker, förklarade facktermer, verkliga samband mellan avsnitten, varför före hur där förståelsen kräver det, användbara exempel och modeller när underlaget bär dem, professionell och engagerad pedagogik samt kontrollerbara sakpåståenden och källor. Ingen uppdiktad fakta eller källa.\n- **Bekräftat förtydligande från Thomas:** originalens 30–70 tecken för rubriker, högst cirka 60 ord i ingress och cirka 80 ord som övre riktvärde per stycke ska vara riktvärden för webbtexter med motiverade avsteg, inte absoluta gränser. Normalt 2–3 meningar per stycke och 2–3 stycken per avsnitt anger motsvarande lässkala. Varken utfyllnad för att nå ett mått eller skadlig kapning för att underskrida det är tillåten. Språk, genre, innehåll och läsarens behov kan motivera avsteg.\n- Den fasta bylinen i originalmallen är inte ett allmänt författarnamn i samlingen. Byline tas från beställningen; inget namn, citat, kundomdöme, källstöd eller CTA-mål får hittas på för att fylla en mall.\n\n### Beslut om teknikval\n\nEfter kontroll av att `--technique=none` inte stöds i dag valde Thomas uttryckligen: **ingen teknik väljs automatiskt för någon av de fem genrerna**. Alla fem ska därför ange `none` som ordinarie teknik. Ingen ny flagga eller nytt flaggvärde införs. Explicit teknik via flagga, erkänd metadata eller instruktion fortsätter gälla enligt befintlig prioritet; gammal metadata med `abt` ska inte tyst ignoreras. En text utan vald teknik får fortfarande ha naturlig dramaturgi och logisk progression, men ska inte bedömas mot ABT eller PAC.\n\n### Konkreta problem i utgångsläget\n\nVid denna issues revision är samtliga fem genrer långa resonemang med ABT som standard. Thomas förtydligade att originalens uppmaning till sparsam dramaturgi motverkade äldre modellers överdramatisering; det problemet har inte märkts med dagens genrer. Att ABT finns är alltså inte i sig ett kvalitetsfel. Den äldre PAC-resursens utgångspunkt — fakta eller situation att analysera — har i dagens PAC blivit ett krav på en prövbar tes. Artikel och kundcase hänvisar dessutom till `teaser.md` för ingresskraven, samtidigt som Write endast får ladda vald genre; teaser kräver att upplösningen hålls tillbaka, medan en informativ ingress kan behöva ge resultatet. Flera review-filer hänvisar till källmaterial som Redline inte har till uppgift att granska. Web-copy saknar ett lika tydligt uppdrag kring läsarens handlingar och UX som kring skumläsning.\n\nÅtgärda dessa konflikter tillsammans med omskrivningen. Behåll nuvarande ansvarsfördelning: Write skriver ett första utkast med Source Fidelity; Redline granskar själva texten, korrigerar inom sin budget och lämnar en enda avslutande mekanisk pass till Proofread. Genrer ska inte återinföra den äldre samlingens kommandon, parser, triggerlistor eller installationsmodell.\n\n### Leveransordning\n\nUnderärendena omfattar först källförankrad bedömningsmatris och fixtures, sedan gemensam skrivgrund och laddning, därefter tekniker och de fem genrerna, och sist verklig utvärdering av Write följt av Redline. Native sub-issues och blockeringsrelationer visar vilka tickets som hör hit och i vilken ordning de kan byggas. Inget arbete hämtas från `rework`.\n\n## Acceptance criteria\n\n- [ ] Alla fem genrer och deras review-filer är omskrivna med korta, praktiska och genrespecifika anvisningar; den gemensamma kvalitetsribban är explicit och nås av både skrivande, granskande och korrigerande agent.\n- [ ] Svenskt hantverk och målspråkets idiom hålls isär i kontrakt, laddning och faktisk utvärdering; webbläsning gäller alla fem genrer utan att deras olika uppdrag suddas ut.\n- [ ] Originalens pedagogik, webbform och återhållsamhet är återförda med dokumenterade avvägningar; gamla oförenliga regler lever inte kvar i parallella normkällor.\n- [ ] En i förväg fastställd bedömningsmatris har prövats mot verkliga utkast och Redline-resultat på svenska samt brittisk och amerikansk engelska i den utvärderande sessionens egen providerfamilj. Resultat, begränsningar och eventuella uppföljningstickets är redovisade; en grön kodsvit används inte som bevis för textkvalitet.\n- [ ] Underärendenas föreskrivna verifiering är slutförd, inklusive de fyra kontrollerna i `CONTRIBUTING.md` för ändringar som landar i projektet.\n\n---\nWritten against 8ae4c21\n",
+  "comments": [
+    {
+      "id": "IC_kwDOT6J8Bs8AAAABVl5mQQ",
+      "author": {
+        "login": "TBarregren"
+      },
+      "authorAssociation": "MEMBER",
+      "body": "## Förtydligande från beställaren: kort riktning och självständigt redaktionellt omdöme\n\nDetta preciserar beställningen och har företräde framför formuleringar i samlingsissuen och underärendena som kan tolkas som krav på detaljerad skrivstyrning.\n\nGenrebeskrivningarna ska ge en mycket kapabel modell allt väsentligt den behöver för att självständigt göra ett utmärkt arbete. Yrkesrollen och kvalitetsriktningen ska etableras tidigt: svensk journalistisk tradition för article, case-study, column och opinion; erfaren svensk copywriter och UX-skribent för web-copy; i båda fallen webbskrivande och helt idiomatiskt målspråk enligt den ursprungliga beställningen. Bygg vidare på modellens befintliga kunnande.\n\nDen önskade resursen är en kort redaktionell brief: genrens uppdrag och karaktär, nödvändiga textdelar och deras funktion, relevanta formkrav samt ett fåtal praktiska riktvärden. Modellen väljer själv den redaktionella lösningen inom dessa ramar. Allmän skrivlära, utförliga resonemang om varje grepp och systematiska kataloger över möjliga fel ska inte bli obligatorisk läsning. Ticketernas bakgrund och acceptanskriterier är underlag för genomförande och verifiering, inte en disposition som ska kopieras in punkt för punkt i resurserna.\n\nWebbens lässkala behöver beskrivas. De tidigare bekräftade måtten, såsom rubriklängd, ingresslängd och normal omfattning på stycken och avsnitt, är fortsatt riktvärden. Formulera dem med utrymme för genre, innehåll, språk och rytm. Ett välfungerande avsteg kräver varken användarens tillstånd eller en redovisning i textleveransen. Inför inga nya kvoter för meningslängd eller absoluta radantal utan känd layout. En faktiskt angiven begränsning i brief eller publiceringsformat är däremot bindande.\n\nSaklighet, källtrogenhet, korrekt attribution, idiomatiskt målspråk och nödvändiga genrespecifika formkrav är fortsatt verkliga krav. Självständigheten gäller redaktionella val inom dem. Redline skiljer på en faktisk brist och en annan välfungerande lösning; ett missat riktvärde är inte i sig ett fynd.\n\nKortheten ska gälla den samlade obligatoriska läsningen: genre, gemensam grund, vald teknik och tillämpliga review-delar. Bedöm vad varje instruktion tillför utöver yrkesrollen och det redan angivna. Bevara väsentliga krav och stryk överförklaring. Inga nya hårda ordtak, antal regler eller exempelkvoter behövs för själva resurserna heller.\n\nFörslaget i samtalet om obligatorisk tidig kalibrering och godkännande från Thomas införs inte. Den befintliga beroendeordningen och den praktiska utvärderingen kvarstår; arbetet behöver ingen ny mänsklig kontrollstation. Utvärderingen ska pröva om de korta instruktionerna fungerar och ger redaktionellt handlingsutrymme, inte användas för att successivt föreskriva varje skrivbeslut.\n\nTidigare beslut om `none` som ordinarie teknik för alla fem genrer och om oförändrad flagggrammatik står fast.\n\n---\nWritten against 8ae4c21",
+      "createdAt": "2026-09-19T17:38:58Z",
+      "includesCreatedEdit": false,
+      "isMinimized": false,
+      "minimizedReason": "",
+      "reactionGroups": [],
+      "url": "https://github.com/Kntnt/skills/issues/329#issuecomment-5743994433",
+      "viewerDidAuthor": true
+    },
+    {
+      "id": "IC_kwDOT6J8Bs8AAAABVl7Xfg",
+      "author": {
+        "login": "TBarregren"
+      },
+      "authorAssociation": "MEMBER",
+      "body": "## Genomför hela leveransen utan mellanliggande redaktionellt godkännande\n\nThomas har valt att genomföra hela samlingen i ett sammanhängande arbete enligt de befintliga beroendena. När implementationen startas ingår alla underärenden, inklusive utvärderingen i #338. Inget förutbestämt stopp för provläsning, personlig kalibrering eller godkännande från Thomas ska läggas mellan etapperna.\n\nAgenten gör de redaktionella avvägningarna själv inom beställningens ramar. Projektets kontroller, oberoende agentgranskning och föreskriven praktisk utvärdering kvarstår. Leveransen redovisar vad som genomförts, verifierats och eventuellt fortfarande är olöst; det krävs ingen personlig stilbedömning från Thomas för att leverera arbetet.\n\nEfter leveransen använder Thomas de färdiga Skillsen för många texter under några veckor. Den erfarenheten får ligga till grund för nya förbättringstickets. Försök inte föregripa den genom fler detaljregler eller genom att invänta subjektiv återkoppling innan den beställda implementationen genomförs.\n\nDetta preciserar genomförandet. Kraven på korta genrebeskrivningar, självständigt omdöme, saklighet och vägledande webbskala står fast.\n\n---\nWritten against 8ae4c21",
+      "createdAt": "2026-09-19T17:42:50Z",
+      "includesCreatedEdit": false,
+      "isMinimized": false,
+      "minimizedReason": "",
+      "reactionGroups": [],
+      "url": "https://github.com/Kntnt/skills/issues/329#issuecomment-5744023422",
+      "viewerDidAuthor": true
+    },
+    {
+      "id": "IC_kwDOT6J8Bs8AAAABVmv1Gw",
+      "author": {
+        "login": "TBarregren"
+      },
+      "authorAssociation": "MEMBER",
+      "body": "Beställd implementation och verklig utvärdering är slutförda och lokalt integrerade i `main` vid `579ec85ee9d49c0ec65039e96d005c11fb7c98ac`. De fem genrerna, gemensam grund, ABT/PAC, laddning och review är omskrivna som en sammanhängande leverans. Oberoende käll-, teknisk-, redaktionell- och protokollgranskning är genomförda.\n\nAlla 65 föreskrivna invokationer plus 54 bevarade extrakörningar är dokumenterade, med baslinje, fullständiga utkast/sluttexter, spår och inventeringar. Alla 119 privata miljöer är borttagna. Fyra CONTRIBUTING-kontroller passerar, inklusive 1 873 tester. Källor och fryst matris är oförändrade.\n\n20 uppfyllda underärenden är avslutade. **#341, #349 och #352 förblir öppna kvalitetsfel.** Svensk citatidiomatik brister fortfarande i Write (senaste Redline reparerar lokalt); debattutkasten upprepar en obelagd frånvaro av kostnadsarbete/finansiering; sista amerikanska kundcaset lägger till en obelagd intervjufråga. De underkända exemplen förblir underkända. Ursprungligt #329/#338 tillåter avslutad implementation/utvärdering med tydligt redovisade uppföljningar; inget generellt kvalitetsgodkännande eller personligt godkännandestopp införs.\n\nLäspaket och samtliga records: `docs/evaluation/editorial-329/README.md`. Slutgranskningar: `reviews/technical-review.md`, `reviews/editorial-review.md` och `reviews/protocol-final.md` under samma katalog. Commits och evidens är lokala; inget är pushat, releasat eller globalt installerat. Skyddad rework-branch/worktree är orörda.\n",
+      "createdAt": "2026-09-19T19:58:25Z",
+      "includesCreatedEdit": false,
+      "isMinimized": false,
+      "minimizedReason": "",
+      "reactionGroups": [],
+      "url": "https://github.com/Kntnt/skills/issues/329#issuecomment-5744882971",
+      "viewerDidAuthor": true
+    },
+    {
+      "id": "IC_kwDOT6J8Bs8AAAABVm1tTw",
+      "author": {
+        "login": "TBarregren"
+      },
+      "authorAssociation": "MEMBER",
+      "body": "Thomas har godkänt fortsatt arbete och ett skärpt avslutskrav. #329 återöppnas: omskrivningen och den ursprungliga utvärderingen är levererade, men källtrohetsfelen #349 och #352 blockerar kvalitetsmässigt avslut. #341 följs upp med lägre prioritet.\n\nFortsättningen diagnostiserar de två sakfelen tillsammans, prövar en motiverad åtgärd och verifierar den på oförändrade originalprov samt nya, i förväg fastställda fall och upprepade körningar. Alla utfall bevaras. En extra regel eller en enda lyckad omkörning räcker inte som belägg. Redline behåller sin källblinda roll; en eventuell separat källmedveten kontroll hör till Write.\n\nArbetet utgår från lokal `main` vid `7ff6ec0`. Tidigare avslutskommentar är historisk leveransredovisning, inte ett godkännande av de kvarstående textfelen. Push, release och global installation ingår fortsatt inte.\n",
+      "createdAt": "2026-09-19T20:13:43Z",
+      "includesCreatedEdit": false,
+      "isMinimized": false,
+      "minimizedReason": "",
+      "reactionGroups": [],
+      "url": "https://github.com/Kntnt/skills/issues/329#issuecomment-5744979279",
+      "viewerDidAuthor": true
+    },
+    {
+      "id": "IC_kwDOT6J8Bs8AAAABVoDWqA",
+      "author": {
+        "login": "TBarregren"
+      },
+      "authorAssociation": "MEMBER",
+      "body": "Verifierade förbättringar är lokalt integrerade i `main` vid `12373d807e7f872e88ea4bb795af9b065c075dc5`. Write har en färsk, begränsad källjämförelse med författarens validering av full påståenderedovisning; Redline har en verifierbar fullständig filöverföring till sin enda avslutande Proofread-pass. Delat leveranskontrakt och bedömning av osäkra policyförslag är rättade. Den extra citatgranskaren prövades och togs bort när kostnad och bevarandefel inte motiverade den.\n\nÅtta uppfyllda ärenden avslutas med egna evidenskommentarer: #344, #349, #352, #353, #354, #355, #356 och #359. **#329 förblir öppet. #341, #357, #358, #360 och #361 har fortfarande konkreta fel:** svensk citatidiomatik, falska kontextfynd, onödiga engelska citatändringar, byte av mätvariabel och en upprepande citatbrygga. Redline rättar den sistnämnda bryggan; det gör inte Writes utkast godkänt i efterhand. Inget externt hinder är identifierat och felen avfärdas inte som ett krav på omöjlig perfektion.\n\nFortsättningen omfattar 212 verkliga Skill-invokationer (90 Write, 122 Redline) och 33 neutrala diagnoser, med 439 observerade native-sessioner. På slutprodukten 5ecadb76 körs 26 invokationer av 27 planerade platser: svenska Write håller korrekt inne ett utkast för kvarstående idiomfel, och dess beroende Redline hoppas över. Sju utkast levereras, varav sex klarar F1 och ett missar mätvariabeln; ett separat G2-fel finns också. Alla misslyckanden och tidigare omprövningar bevaras. De första 119 invokationerna är separat historik.\n\nFyra CONTRIBUTING-kontroller passerar, inklusive 1 873 tester. Fullständiga källor, utkast, native-spår, delbedömningar, oberoende helhetsgranskningar och samtliga 245 borttagna körningsrötter är redovisade. Inga selektiva omkörningar ersätter underkända prov, och tekniska tester räknas inte som textkvalitet.\n\nLäspaket: `docs/evaluation/editorial-329/followup/completion-report.md`; kravkarta: `completion-map.md`; oberoende slutbesked: `reviews/final-technical-protocol-disposition.md`. Inget är pushat, releasat eller globalt installerat. Skyddad rework-branch och worktree är orörda.\n",
+      "createdAt": "2026-09-19T23:58:12Z",
+      "includesCreatedEdit": false,
+      "isMinimized": false,
+      "minimizedReason": "",
+      "reactionGroups": [],
+      "url": "https://github.com/Kntnt/skills/issues/329#issuecomment-5746251432",
+      "viewerDidAuthor": true
+    }
+  ],
+  "labels": [
+    {
+      "id": "LA_kwDOT6J8Bs8AAAACwmRUuQ",
+      "name": "enhancement",
+      "description": "New feature or request",
+      "color": "a2eeef"
+    },
+    {
+      "id": "LA_kwDOT6J8Bs8AAAACzWa58g",
+      "name": "library",
+      "description": "Concerns the shared Collection Library (ship.py, references)",
+      "color": "0e8a16"
+    },
+    {
+      "id": "LA_kwDOT6J8Bs8AAAACzWdF9w",
+      "name": "skill:redline",
+      "description": "Concerns the redline skill",
+      "color": "1d76db"
+    },
+    {
+      "id": "LA_kwDOT6J8Bs8AAAACzWdGhg",
+      "name": "skill:write",
+      "description": "Concerns the write skill",
+      "color": "1d76db"
+    }
+  ],
+  "number": 329,
+  "state": "OPEN",
+  "title": "Återställ svenskt redaktionellt hantverk i Write och Redlines fem webbgenrer",
+  "url": "https://github.com/Kntnt/skills/issues/329"
+}

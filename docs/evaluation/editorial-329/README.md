@@ -1,6 +1,6 @@
 # Redaktionell leverans #329 — läspaket
 
-**Aktuell fortsättning:** [Slutresultatet för källtrohetsarbetet](followup/completion-report.md) redovisar verifierade förbättringar och konkreta kvarstående fel. #329 förblir öppet. [Uppföljningens hela läspaket](followup/README.md) bevarar samtliga försök och bedömningar. Avsnitten nedan är den första leveransens historiska läspaket vid `7ff6ec0`; dess issue-status och provantal gäller den tidpunkten.
+**Aktuellt återstående arbete:** [#362](https://github.com/Kntnt/skills/issues/362) gäller källkontroll, [#363](https://github.com/Kntnt/skills/issues/363) citatidiom och bevarande, [#364](https://github.com/Kntnt/skills/issues/364) citatbryggor. De ersätter de sex gamla öppna ärendena administrativt; felen är inte därmed lösta. [Överlämning och spårbarhet](followup/supersession/README.md). [Föregående kvalitetsrapport](followup/completion-report.md) och [hela utvärderingspaketet](followup/README.md) bevarar samtliga försök. Avsnitten nedan är den första leveransens historiska läspaket vid `7ff6ec0`; dess issue-status och provantal gäller den tidpunkten.
 
 Implementation och föreskriven utvärdering är genomförda. **Tre kvalitetsfel står kvar öppna: #341, #349 och #352.** Historiska fel och senare försök redovisas sida vid sida; de underkända texterna räknas inte som godkända.
 
