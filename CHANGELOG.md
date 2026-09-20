@@ -4,6 +4,20 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ## [Unreleased]
 
+## [0.34.0] – 2026-09-20
+
+### Added
+
+- Preserved Claude-family editorial evaluation runs and findings for Write and Redline, including remaining source-comparison and delivery-gate defects (#362, #376–378), and a cross-family routing cost analysis documenting selection, pricing and evidence-merging problems (#368).
+
+### Changed
+
+- Write’s source comparison pairs draft passages with their original source passages and tests differences in both directions with concrete cases. It preserves supported author reflection and checks meaning changes across languages outside quotations, while retaining the two-comparison limit and delivery gate (#362).
+
+### Fixed
+
+- Session cleanup protects work for the lifetime of its owning agent process, including across detached hooks and tool calls, and reclaims it after that owner exits. Live owners remain protected regardless of age; unknown ownership uses the one-day fallback. Obsolete terminal pointers are retired, cleanup logs identify the initiating session, and closed output pipes no longer cause hook reporting failures (#365).
+
 ## [0.33.0] – 2026-09-20
 
 ### Added
