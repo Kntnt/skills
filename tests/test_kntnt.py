@@ -6232,6 +6232,94 @@ def test_each_selectable_resource_carries_its_review_guidance_beside_it() -> Non
         )
 
 
+# The shape the four article genres share, and where it is stated. The
+# anatomy sits beside `web-craft.md` outside the selectable directories, so
+# nobody can select it and a genre reaches it by linking it.
+ANATOMY = EDITORIAL / "article-anatomy.md"
+ANATOMY_REVIEW = EDITORIAL / "article-anatomy.review.md"
+ANATOMY_GENRES = ("article", "case-study", "column", "opinion")
+
+# What a dimension looks like in prose: a count, and the thing counted. The
+# anatomy states every one of them for these genres, so a file that links it
+# carrying one is the same limit in a second place.
+DIMENSION = re.compile(
+    r"\d+\s*(?:[–-]\s*\d+\s*)?(?:characters|words|sentences|paragraphs)",
+    re.IGNORECASE,
+)
+
+
+def test_the_four_article_genres_link_the_shape_they_share() -> None:
+    """A shape several genres share is stated once, where all of them link it.
+
+    The anatomy fixes which parts an article, case study, column or opinion
+    has, the order they come in and their dimensions. It lives outside
+    `genres/` and `techniques/` for the reason `web-craft.md` does — nobody
+    selects it and no genre inference reads it — so each genre that is bound
+    by it says so by linking it, and `web-copy`, which is not bound by it,
+    does not.
+    """
+
+    assert ANATOMY.is_file(), (
+        f"{ANATOMY}: the four article genres are bound by a shape stated"
+        f" nowhere, so each of them is free to state its own (ADR-0178). See"
+        f" {STANDARD}."
+    )
+    assert ANATOMY_REVIEW.is_file(), (
+        f"{ANATOMY_REVIEW}: the anatomy states requirements and ships no"
+        f" review guidance for them, leaving a reviewing Skill to invent its"
+        f" own diagnostics for rules somebody else wrote (ADR-0178). See"
+        f" {STANDARD}."
+    )
+
+    for name in ANATOMY_GENRES:
+        path = EDITORIAL / "genres" / f"{name}.md"
+        assert "](../article-anatomy.md)" in path.read_text(encoding="utf-8"), (
+            f"{path}: `{name}` is bound by the article anatomy and links it"
+            f" nowhere, so a reader of this genre never meets the parts the"
+            f" text has to carry (ADR-0178). See {STANDARD}."
+        )
+
+    web_copy = EDITORIAL / "genres" / "web-copy.md"
+    assert "article-anatomy.md" not in web_copy.read_text(encoding="utf-8"), (
+        f"{web_copy}: `web-copy` links the article anatomy, which fixes the"
+        f" parts of a journalistic article and not the form a page's task"
+        f" gives it (ADR-0178). See {STANDARD}."
+    )
+
+    readme = (EDITORIAL / "README.md").read_text(encoding="utf-8")
+    assert "article-anatomy.md" in readme, (
+        f"{EDITORIAL / 'README.md'}: the format page does not say what the"
+        f" anatomy is or who loads it, so the one shared shape is a file"
+        f" nothing accounts for (ADR-0178). See {STANDARD}."
+    )
+
+
+def test_only_the_anatomy_states_a_dimension_for_the_genres_it_binds() -> None:
+    """One limit, one place, or the two of them come to disagree.
+
+    A part's dimension is stated in the anatomy, which an agent loads beside
+    the genre: a count repeated in the genre or in the craft brief is the same
+    requirement in two files, free to drift apart about what the draft owed
+    (ADR-0178). `web-copy` is bound by no anatomy and carries its own scale
+    guides.
+    """
+
+    bound = [
+        EDITORIAL / "web-craft.md",
+        EDITORIAL / "web-craft.review.md",
+        *(EDITORIAL / "genres" / f"{name}.md" for name in ANATOMY_GENRES),
+        *(EDITORIAL / "genres" / f"{name}.review.md" for name in ANATOMY_GENRES),
+    ]
+
+    for path in bound:
+        stated = DIMENSION.findall(path.read_text(encoding="utf-8"))
+        assert stated == [], (
+            f"{stated}: {path} states a dimension the anatomy already fixes"
+            f" for these genres, so one requirement stands in two files"
+            f" (ADR-0178). See {STANDARD}."
+        )
+
+
 def test_a_genre_or_technique_says_what_it_is_before_it_says_what_it_asks() -> None:
     """Listing what is installed reads the top of a file and stops.
 
@@ -7381,8 +7469,8 @@ LOADING_CLAUSES = {
     "write": (
         "Load the contract, and nothing besides it",
         (
-            "This is the only additional genre support file: follow no other genre links"
-            " and load no unselected genre or technique."
+            "These are the only additional genre support files: follow no other genre"
+            " links and load no unselected genre or technique."
         ),
         "Done when this bounded contract is loaded, with no review half.",
     ),
@@ -7481,6 +7569,36 @@ def test_the_licence_sits_where_the_genre_is_resolved_and_widens_no_loading() ->
                 f" the door the licence above must not widen is open"
                 f" (ADR-0178). See {STANDARD}."
             )
+
+
+def test_every_bounded_loading_path_reaches_the_article_anatomy() -> None:
+    """A shape nothing loads is a shape no draft is held to.
+
+    The anatomy is reached the way the craft brief is: named in the loading
+    step of each Skill that may need it, inside the bound that admits the
+    support files and nothing further. Write composes, so it loads the base
+    half alone; Redline and the fresh subagent it corrects through read the
+    diagnostics beside it (ADR-0178).
+    """
+
+    for path, pointer in (
+        (WRITE, "$LIBRARY/references/editorial/article-anatomy"),
+        (REDLINE, "$LIBRARY/references/editorial/article-anatomy"),
+        (REDLINE_CORRECTION, "<library>/references/editorial/article-anatomy"),
+    ):
+        text = path.read_text(encoding="utf-8")
+        reviews = path is not WRITE
+
+        assert f"{pointer}.md" in text, (
+            f"{path}: the loading step never reaches `{pointer}.md`, so an"
+            f" article, case study, column or opinion is written or reviewed"
+            f" without the parts it has to carry (ADR-0178). See {STANDARD}."
+        )
+        assert (f"{pointer}.review.md" in text) is reviews, (
+            f"{path}: the anatomy's review half is loaded where it is not"
+            f" acted on, or left out where it is. Diagnostics belong to the"
+            f" Skills that review (ADR-0178). See {STANDARD}."
+        )
 
 
 def test_the_resource_format_records_what_inference_is_given_to_read() -> None:

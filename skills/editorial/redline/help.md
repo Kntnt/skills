@@ -12,7 +12,7 @@ redline - review one text against the editorial contract, correct what it finds,
 
 ## DESCRIPTION
 
-`redline` reviews one text against the base editorial contract, resolved genre, optional technique, anti-slop catalogue, and resolved language guidance. For the five web genres it also reads their shared craft brief and review guidance. It corrects findings within the Correction Budget, reports anything left, and ends with one mechanical pass.
+`redline` reviews one text against the base editorial contract, resolved genre, optional technique, anti-slop catalogue, and resolved language guidance. For the five web genres it also reads their shared craft brief and its review guidance, and for article, case-study, column and opinion the article anatomy and its review guidance. It corrects findings within the Correction Budget, reports anything left, and ends with one mechanical pass.
 
 No provenance is required. A leading `kntnt` frontmatter map supplies defaults and is updated to match the run; no map is created when none exists. A `technique: none` in that map is its value for no technique rather than a missing one, so a text written without one is reviewed without one.
 

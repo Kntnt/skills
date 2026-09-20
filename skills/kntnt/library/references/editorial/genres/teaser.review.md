@@ -2,7 +2,7 @@
 
 Diagnostics for the requirements the teaser genre's base half states, for a Skill reviewing a draft written against them. Nothing here is a requirement: every target a draft has to meet is in the base half, where the Skill that wrote the draft could see it, and a finding raised here is raised against a rule stated there. The examples are English and are patterns — apply what one does, in the language of the draft, rather than looking for its words.
 
-This guidance is for the selected teaser genre, not the informative ingress within an article or case study. Reuse outside the piece does not make that ingress subject to a withheld-resolution test.
+This guidance is for the selected teaser genre, not the informative standfirst within an article or case study. Reuse outside the piece does not make that standfirst subject to a withheld-resolution test.
 
 ## The parts and their order
 

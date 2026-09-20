@@ -16,7 +16,7 @@ Sources may be inline text, local files, URLs, the Contextual Instruction, or Co
 
 Genre, technique, language, and output resolve independently before writing. Genre defaults to `general`, and language to the request and material. Where nothing names a technique, the resolved genre supplies the one that kind of text is ordinarily written with, and a genre naming none leaves the draft with none. Article, case-study, column, opinion and web-copy ordinarily select no technique. Explicit selections and existing metadata keep their priority. The delivery says which technique was resolved and where it came from. Ambiguous or mixed language produces a question.
 
-The draft follows the base editorial contract, resolved genre, optional technique, and resolved language's composition guidance. The five web genres also use their shared craft brief. It uses no review, anti-slop, or mechanics guidance.
+The draft follows the base editorial contract, resolved genre, optional technique, and resolved language's composition guidance. The five web genres also use their shared craft brief, and article, case-study, column and opinion the article anatomy that fixes their parts, order and dimensions. It uses no review, anti-slop, or mechanics guidance.
 
 Every claim must be supported by the supplied material. Attribution, uncertainty, scope, chronology, and causality are preserved; uncertain quotations are paraphrased. A valuation or a position the brief gives as its author's own is supported as that author's standpoint and needs no outside evidence to be expressed as theirs; a figure, an event or a claim about an actual population stays a factual claim whoever supplied it.
 
