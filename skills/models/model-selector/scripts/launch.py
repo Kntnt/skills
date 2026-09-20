@@ -13,13 +13,14 @@ command. Everything else is not reachable at all, and the honest answer there
 is `inherit`: let the caller do the work in the seat it already occupies,
 rather than hand it a command that will fail in somebody else's terminal.
 
-A bridge command also carries the caller's own permission level across to the
-other tool, because a delegated run inherits what the caller was running at
-unless the caller says otherwise — the same inheritance model and deliberation
-already have, where an explicit choice wins and silence means inheritance. The
-vocabulary is this module's: a closed set of harness-neutral names, each
-translated into the spelling of the CLI being started. Silence names no flag at
-all, which leaves the started CLI at the user's own configuration for that tool.
+A Codex or headless-Claude bridge command also carries the caller's own
+permission level across to the other tool, because a delegated run inherits
+what the caller was running at unless the caller says otherwise — the same
+inheritance model and deliberation already have, where an explicit choice wins
+and silence means inheritance. The vocabulary is this module's: a closed set of
+harness-neutral names, each translated into the spelling of the CLI being
+started. Silence names no flag at all, which leaves the started CLI at the
+user's own configuration for that tool.
 
 `plan` never raises and never returns None, because it is called from inside a
 decision that has already been made. An unreachable point degrades the launch,
@@ -79,7 +80,7 @@ class SyncReport:
 
 @dataclass(frozen=True)
 class Permission:
-    """One permission level, spelled as each bridge's own CLI spells it."""
+    """One permission level, spelled as the Claude and Codex CLIs spell it."""
 
     claude: tuple[str, ...]
     codex: tuple[str, ...]

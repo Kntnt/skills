@@ -32,7 +32,7 @@ The Correction Budget is any non-negative integer and defaults to one. `0` repor
 
 Each correction uses a fresh subagent with the complete current text and current findings. Returned text is compared with the pre-round text and reviewed again before acceptance.
 
-A correction must repair the finding without removing the passage's claim. A claim-losing correction is rejected and restored, and every removed claim is reported, as is every changed claim — one left standing with its scope, certainty, attribution, chronology, causality or meaning moved. A sentence whose work is to bound what the text asserts is removed or weakened only on a finding naming a defect inside it.
+A correction must repair the finding without removing the passage's claim. A claim-losing correction is rejected and restored, and every removed claim is reported, as is every changed claim — one left standing with its scope, certainty, attribution, chronology, causality or meaning moved. A sentence whose work is to bound what the text asserts is removed or weakened only on a finding naming a defect inside it, and only where a retained sentence still states the limit in full or the limit contradicts another passage.
 
 The loop stops when the text is clean, the budget is spent, a correction makes no relevant progress, or re-review raises a finding an earlier round's own repair created. Remaining findings are marked unresolved.
 

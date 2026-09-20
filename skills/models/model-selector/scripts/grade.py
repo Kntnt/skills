@@ -25,8 +25,8 @@ a stated standard. High stakes is what grading actually is: nothing checks the
 judge, and a judge that cannot do the job returns a plausible wrong number
 rather than an obvious failure. Between them the two settle the bar, and the
 engine answers with the point whose price per finished job is lowest — taken
-from the reviewers this machine has measured doing review wherever it has
-measured any, whether or not one of them clears that bar, and from the ones
+from the reviewers this machine has measured doing review wherever the pool
+holds any, whether or not one of them clears that bar, and from the ones
 their own uncertainty cannot tell apart where none does — and never with one of
 the calls it spends on an experiment: a
 store whose grades came from a lottery of graders would be measuring the
