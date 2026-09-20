@@ -39,7 +39,7 @@ The first candidate wording tied the shipped one on detection (11 of 12) with no
 
 ## What is not solved, and candidate tickets
 
-None of these is filed. Each is a defect or a decision this evaluation exposed and did not settle.
+Each is a defect or a decision this evaluation exposed and did not settle. Three are filed for triage: [#376](https://github.com/Kntnt/skills/issues/376) the two-comparison cap and the gate, [#377](https://github.com/Kntnt/skills/issues/377) Redline and the sentences that limit a claim, [#378](https://github.com/Kntnt/skills/issues/378) the checker's report file. The rest stay with #362, which remains open.
 
 - **Defect A in the GPT family is unverified.** The shipped task detects the swap 3 of 3 here and files it as source support, but here the swap never arises in a real draft, and one earlier candidate wording missed it once. A Codex session has to rerun `opinion` in `en_US` and `en_GB` against this revision.
 - **The two-comparison cap turns a late true finding into a stop or a breach.** Three of nine runs met a real defect at the second comparison: two stopped, one repaired and delivered unchecked. The ticket says both that a stop is never an approved draft and that never delivering is no solution; the contract as written cannot give both. This needs a decision, not a wording.

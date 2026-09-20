@@ -25,7 +25,7 @@
   - `R1` — `fail` — ten differences from the input, one the repair of a visible defect and nine of taste on a clean text (re-paragraphing, "channel" to "route", a recast closing line, "We" to "Öppna beslut", "the administration" to "the officers"), none of them reported (a substantive edit).
   - `effects` — `pass` — inventories before and after differ only by the evaluator's addition.
 - **unresolved findings** — `none`
-- **defects filed** — `none` yet; candidates are listed in [`../editorial-362/README.md`](../editorial-362/README.md)
+- **defects filed** — #377
 - **notes** — outside `R1`, since the Skill could not know: Two subject changes moved the objection and the recording duty away from the source's *förvaltningen*, and "channel"/"route" merged the source's *kanal* and *bokningsväg*. Artefacts and judgement: [`../editorial-362/runs/opinion-en_GB-r1/redline/`](../editorial-362/runs/opinion-en_GB-r1/redline/judgement.md).
 
 ## `opinion-en_GB-r2`
@@ -40,7 +40,7 @@
   - `R1` — `pass` — three changes, both removals reported; the account calls "We make no claim to have funded or costed" → "We have not costed" "preserved in full", which misdescribes a changed modality.
   - `effects` — `pass` — inventories before and after differ only by the evaluator's addition.
 - **unresolved findings** — `none`
-- **defects filed** — `none` yet; candidates are listed in [`../editorial-362/README.md`](../editorial-362/README.md)
+- **defects filed** — #377
 - **notes** — outside `R1`, since the Skill could not know: The source says "Föreningen gör inget anspråk på att ha finansierat eller kostnadsberäknat försöket"; the funding disclaimer and the no-claim modality were both required, and both went. Artefacts and judgement: [`../editorial-362/runs/opinion-en_GB-r2/redline/`](../editorial-362/runs/opinion-en_GB-r2/redline/judgement.md).
 
 ## `column-sv-r1`
@@ -55,7 +55,7 @@
   - `R1` — `pass` — one tautological restatement removed and reported, one dash corrected; voice, arguments and claims otherwise untouched.
   - `effects` — `pass` — inventories before and after differ only by the evaluator's addition.
 - **unresolved findings** — `none`
-- **defects filed** — `none` yet; candidates are listed in [`../editorial-362/README.md`](../editorial-362/README.md)
+- **defects filed** — `none`
 - **notes** — outside `R1`, since the Skill could not know: No material loss: "Jag har inte mätt det här hos andra" remains. Artefacts and judgement: [`../editorial-362/runs/column-sv-r1/redline/`](../editorial-362/runs/column-sv-r1/redline/judgement.md).
 
 ## `column-sv-r2`
@@ -70,7 +70,7 @@
   - `R1` — `fail` — two whole sentences deleted from a clean text, accurately reported; neither repaired a visible defect and each removed a hedge, changing a claim's scope and strength (a substantive edit).
   - `effects` — `pass` — inventories before and after differ only by the evaluator's addition.
 - **unresolved findings** — `none`
-- **defects filed** — `none` yet; candidates are listed in [`../editorial-362/README.md`](../editorial-362/README.md)
+- **defects filed** — #377
 - **notes** — outside `R1`, since the Skill could not know: Both deleted sentences are the source's own caveats, near verbatim: "Det är en iakttagelse av dokumentet, inte en scen från ett visst möte" and "Det här är min reflektion, inte något jag har mätt hos andra". Artefacts and judgement: [`../editorial-362/runs/column-sv-r2/redline/`](../editorial-362/runs/column-sv-r2/redline/judgement.md).
 
 ## `opinion-en_US-r1`
