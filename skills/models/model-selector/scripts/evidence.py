@@ -667,7 +667,11 @@ class Estimator:
         recorded cache reads should not be allowed to report a cache read of
         zero — that is the one error that would understate a bill by two
         orders of magnitude. An unmeasured category falls back to the kind's
-        shipped prior instead.
+        shipped prior instead. A category a row did record as nought is the
+        other case and not that one: Codex bills no cache writes and reports
+        none, so the nought is a measurement, it is forecast as one, and a
+        group any of whose rows recorded the category answers for it rather
+        than backing off to the group above or to the prior (issue #371).
 
         Every measurement is read at the `medium` baseline and the pooled
         answer scaled to the level asked for, so a model's rows for a kind
@@ -689,7 +693,7 @@ class Estimator:
         for category in TOKEN_CATEGORIES:
             counted[category] = prior[category]
             for group in groups:
-                measured = _geometric_mean(self._normalised(group, category))
+                measured = self._normalised(group, category)
                 if measured is not None:
                     counted[category] = measured * self._kinds.factor(
                         deliberation, category
@@ -724,25 +728,69 @@ class Estimator:
         exact = [row for row in by_kind if row.deliberation == deliberation]
         return exact, by_kind, by_model
 
-    def _normalised(self, rows: Iterable[Measurement], category: str) -> list[float]:
-        """Return one category's measurements, each read back to `medium`.
+    def _normalised(self, rows: Iterable[Measurement], category: str) -> float | None:
+        """Pool one category over *rows*, at `medium`, or None where none recorded it.
 
         A row's counts are what its own level of deliberation made of them, so
         dividing by that level's factor is what leaves rows taken at different
         levels one sample — and what lets the level being asked about put its
         own factor back on the pooled figure. A row that ran on a model with no
         effort control ran at factor one and is left alone.
+
+        Only a row that recorded the category says anything about it. A row
+        carrying it as null recorded nothing, so it enters neither the pool nor
+        the share taken below: seventy-five of this store's two hundred and
+        thirteen `implement` rows for one model arrived from a routed run that
+        saw a verdict and no usage, and letting them weigh against the rows
+        beside them would cut that point's every category by about a third — a
+        forecast of less work on evidence of no work.
+
+        A recorded nought is a measurement, and the arrangement here exists to
+        keep it one without giving up the geometric mean. That mean is what
+        stops one attempt that read half a repository dragging a sample
+        spanning orders of magnitude, and it cannot hold a nought, the
+        logarithm of nought being no number. So it is taken over the recording
+        rows that measured a positive amount, and the figure is then scaled by
+        their share of the recording rows. Weighting the share in rather than
+        averaging the noughts in is what leaves all four properties standing at
+        once: every recording row positive gives the share one and therefore
+        exactly the mean this forecast has always been; every recording row
+        nought gives an empty pool and therefore nought; a nought added to
+        positive rows lowers the figure in proportion, so a vendor billing no
+        cache writes on one attempt in four is forecast a quarter fewer of them
+        rather than the same or none; and no row recording it at all is an
+        absence, which the caller answers with the kind's prior (issue #371).
         """
 
-        counted: list[float] = []
+        pooled: list[float] = []
+        recorded = 0
         for row in rows:
             value = row.tokens.get(category)
-            if value is not None and value > 0.0:
-                counted.append(value / self._kinds.factor(row.deliberation, category))
-        return counted
+            if value is None:
+                continue
+            recorded += 1
+            if value > 0.0:
+                pooled.append(value / self._kinds.factor(row.deliberation, category))
+
+        if recorded == 0:
+            return None
+        measured = _geometric_mean(pooled)
+        if measured is None:
+            return 0.0
+        return measured * len(pooled) / recorded
 
     def _elapsed(self, rows: Iterable[Measurement]) -> list[float]:
-        """Return every measured runtime, read back to `medium` the same way."""
+        """Return every measured runtime, read back to `medium` the same way.
+
+        A nought is discarded here, and deliberately not treated as the
+        measurement `_normalised` makes of one beside it. The two noughts are
+        different facts: a vendor really does bill no cache writes and really
+        does report the nought, while no harness reports an attempt that took
+        no time — a nought here is a clock that failed to record, a start
+        instant that never persisted. Read as a measurement it would make the
+        point the fastest thing on every list, so leave this test as it stands
+        rather than changing it for symmetry with the one above (issue #371).
+        """
 
         return [
             row.seconds / self._kinds.factor(row.deliberation, "seconds")
