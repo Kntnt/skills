@@ -28,6 +28,6 @@ Run `uv run "$HERE/scripts/invoke.py"` — `$HERE` is the directory that holds t
 2. Exit 2: say there is nothing to commit, and stop.
 3. Follow `$LIBRARY/references/changelog.md`. Done when every real change is recorded in `CHANGELOG.md` — in `[Unreleased]` or already in a dated version section.
 4. If the plan has `gitignore_proposal`, keep it for the gate. Done when the proposal is ready or none is needed.
-5. Message: the one entry of `operands` if there is one, otherwise one concrete subject line from the changelog entries just written, or from `git diff` when there is no user-facing entry. Done when the message is a single subject line.
+5. Message: the one entry of `operands` if there is one, otherwise one concrete subject line from the changelog entries just written, or from `git diff` when there is no user-facing entry. A closing reference belongs in the message only where whoever writes the commit is also whoever decides that the work holds; where somebody else decides it, name the ticket without a closing keyword. A message the user gave you is used as it stands. Done when the message is a single subject line.
 6. Show the changelog diff, the message, and the proposed `.gitignore` if any. Wait unless `--yes`. Done when the user confirms or `--yes` is set.
 7. Write the proposed `.gitignore` if one was confirmed. Run `uv run "$LIBRARY/scripts/ship.py" apply commit --message="<message>"`. Done when stdout is a commit SHA.

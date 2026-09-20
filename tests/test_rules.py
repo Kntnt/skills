@@ -28,6 +28,29 @@ INGRESS = ADR / "README.md"
 # having been folded into it.
 REFORM = "ADR-0180"
 
+# The module saying what a commit message here may claim about a ticket, and
+# the record settling it. The rule binds everybody who commits in this
+# repository rather than one Skill's own body, and no module covered the
+# subject, so it is a module of its own — which is what `docs.md` says a
+# subject none of the others covers becomes (issue #367).
+COMMITS = RULES / "commits.md"
+COMMITS_RECORD = "ADR-0200"
+
+# The Skill that writes a commit message, and the step of its body that
+# settles what the message says. A user running it decides their own work, so
+# the rule reaches that Skill as the case where a closing reference belongs —
+# and a Skill's body is where its own agent meets a rule binding it, the
+# module being for the reader who has to find the law (issue #367).
+COMMIT_SKILL = REPO_ROOT / "skills" / "code" / "commit" / "SKILL.md"
+COMMIT_STEP = re.compile(r"^5\. [^\n]+$", re.MULTILINE)
+
+# The section of `docs.md` that hands a reader the module for their subject.
+# It is the register a reader follows, so a module absent from it is a module
+# nobody arrives at (issue #367).
+RULE_REGISTER = re.compile(
+    r"^\*\*The subject decides the module\.\*\*[^\n]+$", re.MULTILINE
+)
+
 # The three criteria `/domain-modeling` states, which are the bar a decision
 # clears before it earns a record here at all.
 CRITERIA = ("hard to reverse", "surprising", "trade-off")
@@ -433,6 +456,91 @@ def test_every_pointer_a_prose_change_meets_names_the_module_binding_it() -> Non
                 f" to what is already written, so it routes them past the"
                 f" rules binding them."
             )
+
+
+def test_the_commits_module_states_who_may_close_a_ticket() -> None:
+    """A commit trailer is an instruction to the tracker, and it is obeyed blindly.
+
+    `Kntnt/briefsmith` #13 closed on a push carrying a builder's trailer after
+    three failing verdicts had left it open, because nothing between the
+    builder and the tracker asked whether the work held. The rule that answers
+    it binds everybody who commits here, so it is written where a reader
+    looking for the law arrives, stated once and cited to the record holding
+    its evidence and its alternatives (ADR-0200).
+    """
+
+    assert COMMITS.exists(), (
+        f"{COMMITS.relative_to(REPO_ROOT)} is where the rule on what a commit"
+        f" message may claim about a ticket is stated."
+    )
+
+    text = COMMITS.read_text(encoding="utf-8")
+
+    assert COMMITS_RECORD in text, (
+        f"{COMMITS_RECORD}: {COMMITS.relative_to(REPO_ROOT)} cites the record"
+        f" carrying the reasoning, rather than arguing it again."
+    )
+    for keyword in ("`Closes", "`Refs"):
+        assert keyword in text, (
+            f"{keyword!r}: {COMMITS.relative_to(REPO_ROOT)} names the"
+            f" reference each of the two cases takes, a rule a reader has to"
+            f" translate into a trailer being one they translate differently."
+        )
+
+
+def test_the_docs_module_hands_a_reader_the_commits_module() -> None:
+    """One subject per module, and the register is how a reader finds theirs.
+
+    `docs.md` enumerates the modules by subject, and a module missing from
+    that line is one nobody arrives at however carefully it is written
+    (issue #367).
+    """
+
+    register = RULE_REGISTER.search(DOCS.read_text(encoding="utf-8"))
+
+    # A reworded lead-in this pattern stops matching would leave nothing to
+    # judge and pass regardless.
+    assert register is not None, (
+        f"{DOCS.relative_to(REPO_ROOT)} carries the line enumerating the"
+        f" rules modules by subject."
+    )
+
+    assert "`commits.md`" in register.group(0), (
+        f"{DOCS.relative_to(REPO_ROOT)} names"
+        f" {COMMITS.relative_to(REPO_ROOT)} in its register of subjects, so a"
+        f" reader asking what a commit message may claim is sent to it."
+    )
+
+
+def test_the_commit_skill_says_when_a_closing_reference_belongs() -> None:
+    """A Skill's own agent meets a rule binding it in the Skill's own body.
+
+    `/commit` is run by somebody committing their own work, which is the one
+    case where a closing reference is the author's to write — and the same
+    agent hands the Skill a ticket it is not deciding often enough that the
+    step writing the message has to say which case it is in (ADR-0200).
+    """
+
+    step = COMMIT_STEP.search(COMMIT_SKILL.read_text(encoding="utf-8"))
+
+    # A renumbered or rewrapped step would leave nothing to judge.
+    assert step is not None, (
+        f"{COMMIT_SKILL.relative_to(REPO_ROOT)} carries a step 5, which is"
+        f" where the commit message is settled."
+    )
+
+    text = step.group(0)
+
+    assert "closing" in text, (
+        f"{COMMIT_SKILL.relative_to(REPO_ROOT)}: step 5 says when a closing"
+        f" reference belongs in the message it writes and when it does not"
+        f" (ADR-0200)."
+    )
+    assert "decides" in text, (
+        f"{COMMIT_SKILL.relative_to(REPO_ROOT)}: step 5 states the test that"
+        f" settles it — whether whoever writes the commit is also whoever"
+        f" decides the work holds (ADR-0200)."
+    )
 
 
 def test_the_docs_module_places_agent_only_documents_under_docs_agents() -> None:

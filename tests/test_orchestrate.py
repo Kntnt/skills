@@ -114,6 +114,50 @@ EXEMPT_BRIEFS = {
     "fix.md": "runs alone on the integrated branch after the notes are applied — nothing builds beside it, and its findings may send it into the very files the run owns",
 }
 
+# Every brief under this skill's `references/` that tells its subagent to
+# commit. What each of them hands out is a commit message written by somebody
+# whose work a separate verdict decides, so none of them may hand out a
+# closing keyword: the run's own record of the outcome is the one thing that
+# closes a ticket, and a trailer on a builder's commit is a second claim on
+# that authority which the tracker honours the moment the branch is pushed
+# (issue #367). `verify.md` and `repaired.md` are verdicts, and `wave.md`
+# tells its subagent to change nothing, so none of the three grants a commit.
+COMMITTING_BRIEFS = (
+    "brief.md",
+    "amend.md",
+    "fix.md",
+    "repair.md",
+)
+
+# The rule as every committing brief states it. Asserted whole and in one
+# wording, so a subagent meets the same sentence whichever brief it holds,
+# and worded so that it names the forbidden family rather than writing a
+# member of it before a reference — a prohibition spelled out as an example
+# is an instruction the check below cannot tell from the thing it forbids
+# (issue #367).
+CLOSING_AUTHORITY_SENTENCE = (
+    "A commit message here never claims to close a ticket: no closing keyword"
+    " — GitHub's `close`, `fix` and `resolve` families, in every spelling and"
+    " every case — stands before a ticket reference, because whether this work"
+    " holds is settled by a verdict you do not give, and the ticket closes when"
+    " whoever gives that verdict records the outcome."
+)
+
+# What the building brief puts on the final commit instead, the reference
+# that names the ticket and claims nothing about it.
+BUILDER_TRAILER = "`Refs #<number>` trailer on the final commit"
+
+# A closing keyword standing immediately before a ticket reference, which is
+# what the tracker acts on when the commit reaches the default branch. This
+# repository's prose writes such a trailer both wholly inside backticks and
+# with the hash outside them, so backticks around either half are read past
+# rather than relied on, and the placeholder a brief hands out is a reference
+# exactly as a number is (issue #367).
+CLOSING_INSTRUCTION = re.compile(
+    r"\b(?:close[sd]?|fix(?:e[sd])?|resolve[sd]?)\b`?\s*`?#`?\s*(?:\d+|<number>)",
+    re.IGNORECASE,
+)
+
 
 def _brief(name: str) -> str:
     """Read one of the skill's briefs."""
@@ -1978,6 +2022,62 @@ def test_the_fix_brief_commits_for_the_next_round_to_read() -> None:
         f"{where}: the brief says the wave check runs again on the result —"
         f" gate and coherence both — which is what licenses a commit ahead"
         f" of a verdict: no fix escapes unread (ADR-0072)."
+    )
+
+
+def test_no_brief_instructs_a_commit_to_close_its_ticket() -> None:
+    """A builder never decides its own work, so its commit never says it did.
+
+    A run whose tickets are built on the run's own branch leaves a failed
+    ticket's commits where they stand, and a closing trailer among them shuts
+    the ticket the next time the branch is pushed — which is how `Kntnt/briefsmith`
+    #13 closed after three failing verdicts. The reference directory itself is
+    what is read, rather than a list of the briefs there are today, so a brief
+    written later is held to this from the moment it exists (ADR-0200).
+    """
+
+    offenders = {}
+    for path in sorted((SKILL / "references").glob("*.md")):
+        found = CLOSING_INSTRUCTION.findall(path.read_text(encoding="utf-8"))
+        if found:
+            offenders[path.name] = found
+
+    assert offenders == {}, (
+        f"{SKILL / 'references'}: no brief instructs a closing keyword before"
+        f" a ticket reference — the engine's record of the outcome is what"
+        f" closes a ticket here. These do: {offenders} (ADR-0200)."
+    )
+
+
+def test_every_committing_brief_says_who_may_close_a_ticket() -> None:
+    """A rule a brief leaves out is a rule its subagent writes around by habit.
+
+    Only the building brief carried the trailer, so only it could have been
+    corrected — and a builder handed one of the other three writes a closing
+    keyword out of the same habit unless the brief it holds says not to. Each
+    of them therefore carries the prohibition, in the one wording, and the
+    building brief names the reference that replaces the trailer (ADR-0200).
+    """
+
+    for name in COMMITTING_BRIEFS:
+        where = SKILL / "references" / name
+        text = _brief(name)
+
+        assert CLOSING_AUTHORITY_SENTENCE in text, (
+            f"{where}: the brief tells its subagent to commit, so it says who"
+            f" may close a ticket and what its commit may not claim"
+            f" (ADR-0200)."
+        )
+        spliced = _spliced_occurrences(text, CLOSING_AUTHORITY_SENTENCE)
+        assert not spliced, (
+            f"{where}: the brief states that at a sentence boundary, leaving"
+            f" what surrounds it whole: {'; '.join(spliced)} (ADR-0200)."
+        )
+
+    assert BUILDER_TRAILER in _brief("brief.md"), (
+        f"{SKILL / 'references' / 'brief.md'}: the building brief still names"
+        f" the trailer its builder puts on the final commit — one that refers"
+        f" to the ticket without claiming to settle it (ADR-0200)."
     )
 
 
