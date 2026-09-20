@@ -4,6 +4,8 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ## [Unreleased]
 
+## [0.33.0] – 2026-09-20
+
 ### Added
 
 - A native GPT evaluation packet for all five editorial genres in Swedish, British English and American English, with baseline comparisons, independent reviews, preserved failures and explicit open quality findings (#338).
