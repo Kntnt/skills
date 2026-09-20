@@ -470,13 +470,14 @@ def _bridge(data: Path, seconds: float) -> list[str] | None:
     Grading is unchecked work besides: nothing downstream catches a wrong
     grade, and a wrong grade is worse than no grade, which is the engine's own
     definition of high stakes. The two together set a bar only a model that can
-    read a Unit of work clears, and the engine answers, among the points it is
-    confident clear it, with the one whose price divided by its chance of
-    success is lowest — a reviewer measured doing review wherever one clears
-    it, before any it holds only an estimate for — and never explores. It asks
-    on cost by name: the user's standing choice between time and cost is about
-    work somebody is waiting on, and nobody waits on a grade, so the judge is
-    chosen on what it costs to finish whatever that choice says.
+    read a Unit of work clears, and the engine answers with the point whose
+    price divided by its chance of success is lowest — taken from the
+    reviewers this machine has measured doing review wherever the pool holds
+    any, whether or not one of them clears that bar, and from the ones their
+    own uncertainty cannot tell apart where none does — and never explores. It
+    asks on cost by name: the user's standing choice between time and cost is
+    about work somebody is waiting on, and nobody waits on a grade, so the
+    judge is chosen on what it costs to finish whatever that choice says.
 
     It asks as what it is. This is a script rather than a Harness, so it can
     spawn no subagent, and `--harness=process` is what says so: the answer comes
