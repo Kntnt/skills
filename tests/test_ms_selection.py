@@ -580,7 +580,7 @@ def test_a_point_that_cannot_be_priced_is_ranked_last_but_stays_eligible(
 def test_the_answer_is_the_cheapest_point_that_clears_the_floor(
     tmp_path: Path, capsys: pytest.CaptureFixture[str]
 ) -> None:
-    """No point below the floor is taken for being cheap.
+    """Where measured points clear the floor, none below it is taken for being cheap.
 
     The floor is what the job getting done means here, and among the points
     that clear it the order is on price divided by the chance of success — so
@@ -813,16 +813,16 @@ def test_the_step_up_is_the_likelier_point_that_finishes_for_the_least(
     assert (answer["model"], answer["deliberation"]) == ("claude-opus-5", "medium")
 
 
-def test_with_nothing_measured_to_step_to_the_step_is_still_read_per_success(
+def test_with_no_likelier_point_clearing_the_floor_the_step_is_read_per_success(
     tmp_path: Path, capsys: pytest.CaptureFixture[str]
 ) -> None:
-    """The floorless step is ordered on the same total as the rest.
+    """The step drawn over the band is ordered on the same total as the rest.
 
-    Sonnet at `low` failed. Nothing measured above it clears the floor, so
-    every likelier point is a candidate. Sonnet at `medium` is the cheapest
-    attempt among them and finishes about half the time; Sonnet at `high` costs
-    a little more and finishes about two times in three, which makes it the
-    cheaper finished job.
+    Sonnet at `low` failed. Both likelier points are measured and neither
+    clears the floor, so the step is the band drawn around the best of them.
+    Sonnet at `medium` is the cheapest attempt among them and finishes about
+    half the time; Sonnet at `high` costs a little more and finishes about two
+    times in three, which makes it the cheaper finished job.
     """
 
     _profile(tmp_path)
