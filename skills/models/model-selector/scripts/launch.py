@@ -13,6 +13,14 @@ command. Everything else is not reachable at all, and the honest answer there
 is `inherit`: let the caller do the work in the seat it already occupies,
 rather than hand it a command that will fail in somebody else's terminal.
 
+A bridge command also carries the caller's own permission level across to the
+other tool, because a delegated run inherits what the caller was running at
+unless the caller says otherwise — the same inheritance model and deliberation
+already have, where an explicit choice wins and silence means inheritance. The
+vocabulary is this module's: a closed set of harness-neutral names, each
+translated into the spelling of the CLI being started. Silence names no flag at
+all, which leaves the started CLI at the user's own configuration for that tool.
+
 `plan` never raises and never returns None, because it is called from inside a
 decision that has already been made. An unreachable point degrades the launch,
 never the answer.
@@ -21,7 +29,7 @@ never the answer.
 from __future__ import annotations
 
 from collections.abc import Mapping
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from pathlib import Path
 
 from catalogue import Catalogue, Model
@@ -69,6 +77,58 @@ class SyncReport:
     created_directory: bool
 
 
+@dataclass(frozen=True)
+class Permission:
+    """One permission level, spelled as each bridge's own CLI spells it."""
+
+    claude: tuple[str, ...]
+    codex: tuple[str, ...]
+
+
+# The permission levels a caller may say it is running at, and what each one
+# becomes on either bridge. The names are this module's own and belong to no
+# tool: a caller states the level it reads off itself, and the translation into
+# a CLI's spelling happens here and nowhere else. The set is closed and is
+# exhaustive as this is written; a level a CLI grows later is added here with
+# the nearest equivalent on the other side, and the bridge's docstring says why
+# that one is the nearest.
+#
+# Two pairs coincide on the Codex side, where the sandbox is what decides an
+# unattended `exec`: `edits` and `never-ask` both reach it as the writable
+# workspace, and `manual` and `plan` both as the sandbox that cannot write.
+# Neither level sets an approval policy — `_codex` says why.
+#
+# Read from `claude --help` (Claude Code 2.1.278) and `codex exec --help`
+# (codex-cli 0.155.1) on 2026-09-20. Re-read both when either is upgraded: a
+# flag a CLI does not have is refused before the model is reached.
+PERMISSIONS: Mapping[str, Permission] = {
+    "bypass": Permission(
+        claude=("--permission-mode", "bypassPermissions"),
+        codex=("--dangerously-bypass-approvals-and-sandbox",),
+    ),
+    "auto": Permission(
+        claude=("--permission-mode", "auto"),
+        codex=("--approve-for-me",),
+    ),
+    "edits": Permission(
+        claude=("--permission-mode", "acceptEdits"),
+        codex=("-s", "workspace-write"),
+    ),
+    "never-ask": Permission(
+        claude=("--permission-mode", "dontAsk"),
+        codex=("-s", "workspace-write"),
+    ),
+    "manual": Permission(
+        claude=("--permission-mode", "manual"),
+        codex=("-s", "read-only"),
+    ),
+    "plan": Permission(
+        claude=("--permission-mode", "plan"),
+        codex=("-s", "read-only"),
+    ),
+}
+
+
 def plan(
     model: Model,
     deliberation: str | None,
@@ -78,24 +138,79 @@ def plan(
     *,
     repo: str | None,
     read_only: bool = False,
+    permissions: str | None = None,
 ) -> Launch:
     """Return how to start *model* at *deliberation* from *harness*.
+
+    `permissions` is the level the caller says it is itself running at, named
+    in this module's own vocabulary, and the launch carries it across to the
+    other tool in that tool's spelling. Naming none is inheritance from the
+    user's own configuration for the CLI being started, which is what a
+    command with no permission flag leaves it at. A level this module does not
+    know is answered as silence with a note naming it, never as a refusal: a
+    caller that cannot read its own level off itself is exactly the caller
+    that most needs an answer, and nothing here is a status meaning *start
+    nothing* (ADR-0182).
+
+    `read_only` outranks the level entirely. A read-only call is the grader's
+    own posture — it reads two excerpts and answers — so it keeps the sandbox
+    and the tool list that grant no way to write whatever level came with it,
+    and its command is byte for byte what it was before any level existed.
 
     The order is deliberate: the native path first, then the bridges, then the
     admission that there is no path. A point the caller cannot start is worth
     saying out loud, because the alternative is a command that fails later and
     further away from the decision that produced it.
 
-    `read_only` is the caller saying the work it is planning writes nothing —
-    the grader's judge is the one that does — and it reaches the bridge as the
-    sandbox and the tool list that grant no way to write. It is off by default
-    because most delegated work is building, and a builder that cannot write
-    is a builder that cannot finish.
-
     `cat` is part of the signature because every planner in this Skill is
     handed the world it plans against; reaching one already chosen model needs
     nothing else looked up in it.
     """
+
+    if permissions is None or permissions in PERMISSIONS:
+        return _reached(
+            model,
+            deliberation,
+            harness,
+            profile,
+            cat,
+            repo=repo,
+            read_only=read_only,
+            permissions=permissions,
+        )
+
+    unknown = (
+        f"{permissions!r} is no permission level this module knows, so the launch "
+        "names none and the started CLI follows the user's own configuration"
+    )
+    started = _reached(
+        model,
+        deliberation,
+        harness,
+        profile,
+        cat,
+        repo=repo,
+        read_only=read_only,
+        permissions=None,
+    )
+    return replace(
+        started,
+        note=unknown if started.note is None else f"{started.note}; {unknown}",
+    )
+
+
+def _reached(
+    model: Model,
+    deliberation: str | None,
+    harness: str,
+    profile: Profile,
+    cat: Catalogue,
+    *,
+    repo: str | None,
+    read_only: bool,
+    permissions: str | None,
+) -> Launch:
+    """Return the launch itself, for a level already known to be one of ours."""
 
     # The native path. A subagent exists only where `definitions` generated
     # one, which is per family and per supported level, so a level this model
@@ -113,12 +228,18 @@ def plan(
 
     if model.provider in CODEX_PROVIDERS and "codex" in profile.harnesses:
         return Launch(
-            "bridge-command", None, _codex(model, deliberation, repo, read_only), None
+            "bridge-command",
+            None,
+            _codex(model, deliberation, repo, read_only, permissions),
+            None,
         )
 
     if model.provider in CLAUDE_PROVIDERS and "claude-code" in profile.harnesses:
         return Launch(
-            "bridge-command", None, _claude(model, deliberation, repo, read_only), None
+            "bridge-command",
+            None,
+            _claude(model, deliberation, repo, read_only, permissions),
+            None,
         )
 
     if "opencode" in profile.harnesses and model.provider in profile.makers:
@@ -251,7 +372,11 @@ CODEX_TOP = "xhigh"
 
 
 def _codex(
-    model: Model, deliberation: str | None, repo: str | None, read_only: bool = False
+    model: Model,
+    deliberation: str | None,
+    repo: str | None,
+    read_only: bool = False,
+    permissions: str | None = None,
 ) -> tuple[str, ...]:
     """Return the Codex CLI command that starts one point.
 
@@ -269,12 +394,40 @@ def _codex(
     replace under it, and every judge call it made was refused for that reason
     alone.
 
-    The sandbox is the one thing the caller decides: a read-only call is given
-    a sandbox that cannot write, and everything else keeps the writable
-    workspace the work it was planned for needs.
+    A read-only call is given a sandbox that cannot write, whatever level came
+    with it. Otherwise the caller's own level decides, and naming none names no
+    flag: `codex exec` then follows the user's own `~/.codex/config.toml`,
+    which on a machine setting `sandbox_mode` there is what the user chose and
+    on one setting nothing is the CLI's own default. Silence is inheritance
+    from that configuration and never a promise of write access; a role that
+    has to write is given a level by its caller.
+
+    Every claim below was read or tried against codex-cli 0.155.1 on
+    2026-09-20. `codex exec` does have an approval flag, `--approve-for-me`,
+    and `auto` is exactly it: it routes approval requests through an automatic
+    review rather than to a person, so it cannot leave an unattended start
+    waiting on somebody who is not there. The CLI refuses it beside a sandbox —
+    `--approve-for-me -s read-only` exits 2 with *the argument
+    '--approve-for-me' cannot be used with '--sandbox <SANDBOX_MODE>'* before
+    anything runs — so that is the one row carrying no `-s`.
+
+    No level reaches the approval policy through `-c approval_policy=`, and no
+    command built here contains it. `untrusted` is refused by this version
+    outright (*approval_policy = "untrusted" is no longer supported; remove
+    this setting*), and `on-request` or `on-failure` set that way have no
+    automatic reviewer behind them, so either can leave an unattended start
+    waiting on an approval nobody can answer. That is why `manual` is `-s
+    read-only` and not an approval policy: nothing in this CLI means *ask a
+    person first*, and the faithful outcome of a level that would have asked,
+    in a start with nobody to ask, is a start that cannot write — the same
+    command `plan` gets, and the closest equivalent there is. `edits` and
+    `never-ask` coincide for the same reason from the other side: with no
+    policy set, the sandbox is the whole of what decides an unattended `exec`,
+    so both are the writable workspace.
     """
 
     effort = CODEX_TOP if deliberation == "max" else deliberation or "medium"
+    spelled = () if permissions is None else PERMISSIONS[permissions].codex
     return (
         "codex",
         "exec",
@@ -285,32 +438,54 @@ def _codex(
         model.id,
         "-c",
         f"model_reasoning_effort={effort}",
-        "-s",
-        "read-only" if read_only else "workspace-write",
+        *(("-s", "read-only") if read_only else spelled),
         "--json",
     )
 
 
 def _claude(
-    model: Model, deliberation: str | None, repo: str | None, read_only: bool = False
+    model: Model,
+    deliberation: str | None,
+    repo: str | None,
+    read_only: bool = False,
+    permissions: str | None = None,
 ) -> tuple[str, ...]:
     """Return the headless Claude CLI command that starts one point.
 
     A model with no effort control takes no effort flag, which is the same
     absence a generated agent definition expresses by leaving the line out. A
     read-only call is given an empty tool list, which is what this CLI offers
-    for a call that is to answer and touch nothing.
+    for a call that is to answer and touch nothing, and that is the only thing
+    `--tools` is ever used for here.
+
+    The caller's own level travels as `--permission-mode`, whose six values in
+    Claude Code 2.1.278 are exactly this module's six levels, so the mapping is
+    one to one in both directions. `plan` is that mode rather than a
+    description of one: a session in it cannot edit, which is the whole of what
+    the level promises. A read-only call takes no level at all, its own form
+    already granting no way to write.
+
+    Naming no level names no flag, and the start then follows whatever the user
+    set: `permissions.defaultMode` in their own settings where they set one,
+    and otherwise this CLI's own headless default, which the tool's
+    documentation gives as manual on every plan for `-p` (Claude Code 2.1.278,
+    read 2026-09-20). Silence is inheritance from configuration and never a
+    promise of write access.
 
     The order is load-bearing. The caller appends its prompt to this command,
     and `--add-dir` and `--tools` each take a variable number of values, so a
     command ending in one of them would swallow the prompt as another value.
     Every point therefore ends on a flag that takes exactly one: the effort
     level where the model has one, and the model identity where it has not.
+    `--permission-mode` takes exactly one value and is placed before both, so
+    the tail the rule is about is the same tail it always was.
     """
 
     command = ["claude", "-p", "--add-dir", repo or HERE]
     if read_only:
         command += ["--tools", ""]
+    elif permissions is not None:
+        command += list(PERMISSIONS[permissions].claude)
     command += ["--model", model.id]
     if deliberation is not None:
         command += ["--effort", deliberation]

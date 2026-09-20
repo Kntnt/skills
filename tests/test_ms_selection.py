@@ -45,12 +45,19 @@ HAIKU: str = "claude-haiku-4-5-20251001"
 # so that a rule meant to hold at either is asked at each by name.
 STAKES_ASKED: tuple[str, ...] = ("reversible", "high")
 
+# The distinctive words of the note the band writes, so that a test asserting
+# the line is there and one asserting it is absent read the same string.
+BAND: str = "the evidence cannot tell from"
+
 # The retired rule's own sentences, whitespace-collapsed before matching so
 # that a line break falling inside one of them hides nothing. Each states, as
 # the contract in force, an answer read off a draw over the whole pool rather
 # than off the means, or the cost the expected-cost arithmetic used to rank on
-# (issue #288). The identifiers that arithmetic went by are deliberately absent:
-# a list naming them would itself be a surface carrying them.
+# (issue #288), or the floor as the only thing ever standing between a cheap
+# point and the answer, which the band falsifies wherever nothing measured
+# clears it (issue #372). The identifiers the expected-cost arithmetic went by
+# are deliberately absent: a list naming them would itself be a surface
+# carrying them.
 RETIRED: tuple[str, ...] = (
     "ranking on a draw",
     "ranked on a draw",
@@ -62,6 +69,8 @@ RETIRED: tuple[str, ...] = (
     "decided rather than drawn",
     "the cost of finishing",
     "per expected failure",
+    "is taken for being cheap",
+    "is never chosen for being cheap",
 )
 
 
@@ -983,14 +992,16 @@ def test_a_verdict_carried_from_a_harder_kind_does_not_outrank_a_measured_one(
     assert answer["basis"] == "measured"
 
 
-def test_where_no_measured_point_clears_the_floor_the_whole_pool_is_ranked(
+def test_where_no_measured_point_clears_the_floor_the_band_answers(
     tmp_path: Path, capsys: pytest.CaptureFixture[str]
 ) -> None:
-    """Measured points go first only where one of them can promise the work.
+    """Measured points go first whether or not one of them can promise the work.
 
     Opus's own `mechanical` rows all failed, so nothing measured clears the
-    floor and the answer is what it always was: of the points whose estimate
-    clears it, prior or not, the one with the lowest price per finished job.
+    floor. That used to hand the answer back to the whole pool, and an estimate
+    nobody had tested took it on arithmetic. Now the one measured point is the
+    only one its own bound admits, so it is the answer, and a cheaper estimate
+    that clears the floor is offered beside it rather than chosen (ADR-0204).
     """
 
     _profile(tmp_path)
@@ -999,10 +1010,20 @@ def test_where_no_measured_point_clears_the_floor_the_whole_pool_is_ranked(
     answer = _answer(
         capsys, *LIMITED, f"--data={tmp_path}", "--kind=mechanical", "--stakes=high"
     )
+    estimated = _point(
+        capsys,
+        (*LIMITED, f"--data={tmp_path}", "--kind=mechanical", "--stakes=high"),
+        "claude-sonnet-5",
+        "low",
+    )
 
-    assert (answer["model"], answer["deliberation"]) == ("claude-sonnet-5", "low")
-    assert answer["basis"] == "prior"
-    assert answer["expected"]["p_success"] >= select.FLOOR
+    assert estimated["basis"] == "prior"
+    assert estimated["expected"]["p_success"] >= select.FLOOR
+    assert (answer["model"], answer["deliberation"]) == ("claude-opus-5", "high")
+    assert answer["basis"] == "measured"
+    assert answer["expected"]["p_success"] < select.FLOOR
+    assert BAND in (answer["note"] or "")
+    assert "claude-opus-5@high" in (answer["note"] or "")
 
 
 def test_an_explored_answer_can_still_name_a_point_with_no_rows_of_its_own(
@@ -1111,6 +1132,635 @@ def test_where_no_measured_point_steps_up_the_step_is_the_likelier_one_that_fini
 
     assert (answer["model"], answer["deliberation"]) == ("claude-sonnet-5", "low")
     assert answer["basis"] == "prior"
+
+
+# The rule this section covers: every point measured for the kind leads the
+# answer, and where none of them clears the floor a band drawn around the best
+# of them decides which one is taken (ADR-0204).
+
+# Every level the default deliberation ceiling admits, for a fixture that has
+# to measure one model everywhere rather than at one rung of the ladder.
+UNDER_CEILING: tuple[str, ...] = ("low", "medium", "high", "xhigh")
+
+
+def _timed(data_dir: Path, model: str, seconds: float) -> None:
+    """Write an elapsed time onto every stored row of one model.
+
+    `_store` writes a grade and nothing else, so every point of a store it
+    shaped forecasts the kind's shipped elapsed figure scaled by its own level.
+    Two models at one level are then equally fast per attempt, and the likelier
+    of them is always the faster finished job — which no fixture can shape into
+    an untested point that is the slower one. A row carries its own `seconds`,
+    and this is how a fixture says so.
+    """
+
+    path = data_dir / "measurements.jsonl"
+    rows = [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines()]
+    for row in rows:
+        if row["model"] == model:
+            row["seconds"] = seconds
+    path.write_text("".join(f"{json.dumps(row)}\n" for row in rows), encoding="utf-8")
+
+
+def _ranking(
+    data_dir: Path,
+    kind: str,
+    objective: str = "cost",
+    scope: str = "limited",
+    harness: str = "claude-code",
+) -> list[Any]:
+    """Return the whole ranked pool one call reads its answer off.
+
+    `alternatives` carries one entry per model, so it can never show two points
+    of one model in the order the rule put them, and a test reading it would be
+    reading a summary of the list rather than the list. The order itself is
+    read here, through the same module the suite already imports and off the
+    same pool the entry point builds.
+    """
+
+    catalogue = _module("catalogue")
+    profiles = _module("profiles")
+    evidence = _module("evidence")
+
+    cat = catalogue.load(data_dir, SKILL)
+    profile = profiles.load(data_dir, cat)
+    kinds = evidence.load_kinds(SKILL)
+    estimator = evidence.Estimator(evidence.load(data_dir), cat, kinds)
+    pool = [
+        point
+        for point in select._pool(scope, cat, profile, None, harness, None, [])
+        if select._admitted(point.deliberation, select.DEFAULT_MAX_DELIBERATION)
+    ]
+    scored = [
+        select._score(
+            point, kind, estimator, kinds, select._paid(profile, point, harness)
+        )
+        for point in pool
+    ]
+    return list(select._ranked(scored, objective))
+
+
+def _spelt(ranked: Sequence[Any]) -> list[str]:
+    """Spell a ranked pool the way a caller names each of its points."""
+
+    return [select._named(row.point) for row in ranked]
+
+
+def _made(model: Any, level: str | None, mean: float, low: float, cost: float) -> Any:
+    """Return one measured point made rather than stored, for a unit check.
+
+    A tie on the highest mean is what the band's own order has to settle, and
+    two stored cells landing on the same posterior to the last bit is not
+    something a fixture can arrange.
+    """
+
+    evidence = _module("evidence")
+    estimate = evidence.Estimate(
+        mean=mean, low=low, n=9.0, basis="measured", alpha=1.0, beta=1.0
+    )
+    return select.Scored(select.Point(model, level), estimate, {}, cost, 100.0)
+
+
+def _replay(data_dir: Path) -> None:
+    """Write the store that replays the `implement` case of 2026-09-19.
+
+    On the maintainer's machine that day, `gpt-6-astra` at `high` won a day of
+    work at 16.74 USD per finished job with no rows of its own, over
+    `claude-opus-5` at `high` at 7.01 USD with 142 of them, because the first
+    cleared the floor on `sigmoid(SHARPNESS × (capability + bonus −
+    difficulty))` and the second missed it on measurements. Clearing 0.8 that
+    way at `high` takes a seeded capability of about 0.873, and Opus is seeded
+    at 0.87: three thousandths of a seeded number decided the run.
+
+    The shape is what is replayed here rather than the models. Opus at `high`
+    is measured at about 0.76 and does not clear the floor; Fable at `medium`
+    has no row at all, clears it at about 0.83 on its prior, and costs more per
+    finished job. The rows carry an elapsed time of their own so that the same
+    case can be asked on the clock: without one, two points at one level are
+    equally fast per attempt and the likelier is always the faster job.
+    """
+
+    _profile(data_dir)
+    _store(data_dir, ("implement", "claude-opus-5", "high", 0.75, 20))
+    _timed(data_dir, "claude-opus-5", 600.0)
+
+
+def _cheapest_measured(data_dir: Path) -> None:
+    """Write a store whose cheapest measured point is junk the band shuts out.
+
+    Luna is measured at every level the ceiling admits and finishes about a
+    fifth of the time, which its price still makes the cheapest and the fastest
+    finished job in the pool. Opus at `high` is measured at about 0.76, and its
+    tenth percentile is far above anything Luna reads — so the evidence can
+    tell the two apart, and dividing the price by the chance is not on its own
+    what keeps the cheap junk from winning.
+    """
+
+    _bridged(data_dir)
+    _store(
+        data_dir,
+        ("implement", "claude-opus-5", "high", 0.75, 20),
+        *[("implement", "gpt-5.6-luna", level, 0.21, 20) for level in UNDER_CEILING],
+    )
+    _timed(data_dir, "gpt-5.6-luna", 200.0)
+
+
+def _indistinguishable(data_dir: Path) -> None:
+    """Write a store whose best measured point is not the one the band takes.
+
+    Nothing here clears the floor. Opus at `high` reads about 0.76 with a tenth
+    percentile of about 0.65, and Sonnet at `high` about 0.71 — inside that
+    bound, so the evidence cannot tell the two apart, and Sonnet is less than
+    half the price per finished job. Fable at `high` reads about 0.39, well
+    below the bound, so the band leaves it behind however it is priced.
+    """
+
+    _profile(data_dir)
+    _store(
+        data_dir,
+        ("implement", "claude-opus-5", "high", 0.75, 20),
+        ("implement", "claude-sonnet-5", "high", 0.75, 20),
+        ("implement", FABLE, "high", 0.1, 10),
+    )
+
+
+def _unmeasured_kind(data_dir: Path) -> None:
+    """Write a store holding no row at all for the kind the call asks about.
+
+    Sonnet's rows are every one of them `design`, so a `mechanical` call finds
+    nothing measured to prefer and is answered by the rule that stood before
+    the measured points were given the front of the list.
+    """
+
+    _profile(data_dir)
+    _store(data_dir, ("design", "claude-sonnet-5", "high", 1.0, 20))
+
+
+@pytest.mark.parametrize(
+    ("objective", "total"),
+    (("cost", "per_success_cost_usd"), ("time", "per_success_seconds")),
+)
+def test_a_measured_point_is_taken_over_an_estimate_nothing_has_tested(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str], objective: str, total: str
+) -> None:
+    """The replay of the `implement` case of 2026-09-19, on both objectives.
+
+    An estimate nobody has tested cleared the floor and a point with 142 rows
+    behind it did not, so the measured-first preference never engaged and the
+    estimate won on arithmetic. It no longer does: the measured point leads the
+    answer whether or not anything clears the floor, and the untested point
+    here is the dearer and the slower finished job besides.
+    """
+
+    _replay(tmp_path)
+    flags = (
+        *LIMITED,
+        f"--data={tmp_path}",
+        "--kind=implement",
+        f"--objective={objective}",
+        "--seed=0",
+    )
+
+    answer = _answer(capsys, *flags)
+    untested = _point(capsys, flags, FABLE, "medium")
+
+    assert answer["explored"] is None
+    assert untested["basis"] == "prior"
+    assert untested["expected"]["p_success"] >= select.FLOOR
+    assert untested["expected"][total] > answer["expected"][total]
+    assert (answer["model"], answer["deliberation"]) == ("claude-opus-5", "high")
+    assert answer["basis"] == "measured"
+    assert answer["expected"]["p_success"] < select.FLOOR
+
+
+@pytest.mark.parametrize(
+    ("objective", "total"),
+    (("cost", "per_success_cost_usd"), ("time", "per_success_seconds")),
+)
+def test_the_cheapest_measured_point_is_left_outside_the_band(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str], objective: str, total: str
+) -> None:
+    """Measured-first on its own would answer with the cheapest junk in the pool.
+
+    Luna finishes about a fifth of the time and is still the cheapest and the
+    fastest finished job here, because its price is small enough to survive
+    being divided by that. The band is what stops it: its mean is far below the
+    bound the best measured point carries, so the evidence can tell the two
+    apart and the cheap point is never among the candidates price orders.
+    """
+
+    _cheapest_measured(tmp_path)
+    flags = (
+        "--scope=callable",
+        "--harness=claude-code",
+        f"--data={tmp_path}",
+        "--kind=implement",
+        f"--objective={objective}",
+        "--seed=0",
+    )
+
+    answer = _answer(capsys, *flags)
+    cheap = _point(capsys, flags, "gpt-5.6-luna", "low")
+    ranked = _ranking(tmp_path, "implement", objective, "callable")
+
+    priced = [row for row in ranked if row.cost_usd is not None]
+    lowest = min(priced, key=lambda row: select._per_success_cost(row) or 0.0)
+    quickest = min(priced, key=select._per_success_seconds)
+    assert select._named(lowest.point) == "gpt-5.6-luna@low"
+    assert select._named(quickest.point) == "gpt-5.6-luna@low"
+    assert cheap["basis"] == "measured"
+    assert cheap["expected"]["p_success"] < 0.25
+
+    assert answer["explored"] is None
+    assert (answer["model"], answer["deliberation"]) == ("claude-opus-5", "high")
+    assert answer["basis"] == "measured"
+    assert BAND in (answer["note"] or "")
+    assert "claude-opus-5@high" in (answer["note"] or "")
+    # The bound the band was drawn at is the named point's own, read off the
+    # estimator through a locked call rather than off `confidence`, which is
+    # always the answer's own tenth percentile and never the band's.
+    bound = _point(capsys, flags, "claude-opus-5", "high")["confidence"]
+    assert cheap["expected"]["p_success"] < bound
+
+
+@pytest.mark.parametrize(
+    ("objective", "chosen"),
+    (("cost", "claude-sonnet-5@high"), ("time", "claude-opus-5@high")),
+)
+def test_the_band_is_ordered_on_what_the_call_was_ranked_on(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str], objective: str, chosen: str
+) -> None:
+    """Inside the band the objective decides, exactly as it does above the floor.
+
+    Sonnet at `high` is the cheaper finished job of the two the evidence cannot
+    tell apart, and Opus at `high` the faster one, so the same store answers
+    with a different point under each objective.
+    """
+
+    _indistinguishable(tmp_path)
+
+    answer = _answer(
+        capsys,
+        *LIMITED,
+        f"--data={tmp_path}",
+        "--kind=implement",
+        f"--objective={objective}",
+        "--seed=0",
+    )
+
+    assert answer["explored"] is None
+    assert f"{answer['model']}@{answer['deliberation']}" == chosen
+    assert answer["basis"] == "measured"
+    assert answer["expected"]["p_success"] < select.FLOOR
+
+
+def test_every_measured_point_leads_the_pool_the_alternatives_are_read_from(
+    tmp_path: Path,
+) -> None:
+    """A mean resting on rows outranks a mean resting on arithmetic, everywhere.
+
+    The whole list is read rather than its first entry, because `alternatives`
+    carries one entry per model and cannot show two points of one model in the
+    order the rule put them.
+    """
+
+    _indistinguishable(tmp_path)
+    ranked = _ranking(tmp_path, "implement")
+
+    measured = [
+        index for index, row in enumerate(ranked) if row.estimate.basis == "measured"
+    ]
+    other = [
+        index for index, row in enumerate(ranked) if row.estimate.basis != "measured"
+    ]
+    assert measured and other
+    assert max(measured) < min(other)
+
+
+def test_the_ranked_order_is_the_band_then_the_rest_of_what_was_measured(
+    tmp_path: Path,
+) -> None:
+    """The whole order, on a pool no measured point of which clears the floor.
+
+    The band first, ordered on price per finished job; then the measured points
+    the band left behind, on chance alone; then every point that is not
+    measured, in exactly the order the rule before this one gave it — nothing
+    here clears the floor, so that is chance alone as well.
+    """
+
+    _indistinguishable(tmp_path)
+
+    ranked = _ranking(tmp_path, "implement")
+
+    assert _spelt(ranked) == [
+        "claude-sonnet-5@high",
+        "claude-opus-5@high",
+        "claude-fable-5-1@high",
+        "claude-opus-5@xhigh",
+        "claude-sonnet-5@xhigh",
+        "claude-opus-5@medium",
+        "claude-sonnet-5@medium",
+        "claude-opus-5@low",
+        "claude-sonnet-5@low",
+        "claude-fable-5-1@xhigh",
+        "claude-fable-5-1@medium",
+        "claude-fable-5-1@low",
+        HAIKU,
+    ]
+    assert not [row for row in ranked if row.estimate.mean >= select.FLOOR]
+    band = select._band(ranked)
+    assert band is not None
+    inside = ranked[:2]
+    assert all(row.estimate.mean >= band[1] for row in inside)
+    assert select._per_success_cost(inside[0]) < select._per_success_cost(inside[1])
+    assert ranked[2].estimate.mean < band[1]
+
+
+def test_the_band_is_drawn_over_the_rows_it_is_handed_and_nothing_else(
+    tmp_path: Path,
+) -> None:
+    """One statement of the band answers both the plain answer and the step up.
+
+    It reads no store: handed the whole pool it names the best measured point
+    in it, handed the points a step up is choosing between it names the best of
+    those, and handed rows none of which is measured it names nothing.
+    """
+
+    _indistinguishable(tmp_path)
+    ranked = _ranking(tmp_path, "implement")
+
+    whole = select._band(ranked)
+    assert whole is not None
+    assert select._named(whole[0].point) == "claude-opus-5@high"
+    assert whole[1] == whole[0].estimate.low
+
+    stepped = [row for row in ranked if row.point.model.id != "claude-opus-5"]
+    narrower = select._band(stepped)
+    assert narrower is not None
+    assert select._named(narrower[0].point) == "claude-sonnet-5@high"
+    assert narrower[1] == narrower[0].estimate.low
+
+    assert (
+        select._band([row for row in ranked if row.estimate.basis != "measured"])
+        is None
+    )
+    assert select._band([]) is None
+
+
+def test_the_band_breaks_a_tie_on_the_highest_mean_the_same_way_every_run(
+    tmp_path: Path,
+) -> None:
+    """Two measured points on one mean have to resolve to the same one, always."""
+
+    cat = _module("catalogue").load(tmp_path, SKILL)
+    by_id = {model.id: model for model in cat.models}
+    tied = [
+        _made(by_id["claude-sonnet-5"], "high", mean=0.5, low=0.3, cost=2.0),
+        _made(by_id["claude-opus-5"], "high", mean=0.5, low=0.4, cost=1.0),
+    ]
+
+    for handed in (tied, list(reversed(tied))):
+        found = select._band(handed)
+        assert found is not None
+        assert found[0].point.model.id == "claude-opus-5"
+        assert found[1] == 0.4
+
+
+@pytest.mark.parametrize("objective", ("cost", "time"))
+def test_with_nothing_measured_for_the_kind_the_pool_is_ranked_as_it_was(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str], objective: str
+) -> None:
+    """A pool holding no measured point is answered by the rule that stood before.
+
+    The floor decides who is in and the price per finished job orders them, and
+    the band never enters it — there is nothing measured for it to be drawn
+    around, so no line about one is written either.
+    """
+
+    _unmeasured_kind(tmp_path)
+    flags = (
+        *LIMITED,
+        f"--data={tmp_path}",
+        "--kind=mechanical",
+        f"--objective={objective}",
+        "--seed=0",
+    )
+
+    answer = _answer(capsys, *flags)
+    ranked = _ranking(tmp_path, "mechanical", objective)
+
+    assert not [row for row in ranked if row.estimate.basis == "measured"]
+    clears = [row for row in ranked if row.estimate.mean >= select.FLOOR]
+    assert clears
+    total = (
+        select._per_success_seconds if objective == "time" else select._per_success_cost
+    )
+    first = min(clears, key=lambda row: (row.cost_usd is None, total(row) or 0.0))
+    assert (answer["model"], answer["deliberation"]) == (
+        first.point.model.id,
+        first.point.deliberation,
+    )
+    assert answer["basis"] != "measured"
+    assert BAND not in (answer["note"] or "")
+
+
+def test_a_step_up_takes_a_measured_point_over_a_cheaper_estimate(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """A failure is answered with the evidence before it is answered with a guess.
+
+    Nothing measured above the failed point clears the floor, so before this
+    rule the step was the likelier point with the lowest price per finished
+    job, measured or not — which here is Sonnet at `medium`, an estimate with
+    no row of its own. The step is now the measured point the band admits.
+    """
+
+    _indistinguishable(tmp_path)
+    flags = (*LIMITED, f"--data={tmp_path}", "--kind=implement")
+
+    answer = _answer(capsys, *flags, "--after=claude-fable-5-1@low")
+    guess = _point(capsys, flags, "claude-sonnet-5", "medium")
+    failed = _point(capsys, flags, FABLE, "low")
+
+    assert guess["basis"] != "measured"
+    assert guess["expected"]["p_success"] > failed["expected"]["p_success"]
+    assert (
+        guess["expected"]["per_success_cost_usd"]
+        < answer["expected"]["per_success_cost_usd"]
+    )
+    assert "one step up" in (answer["note"] or "")
+    assert (answer["model"], answer["deliberation"]) == ("claude-sonnet-5", "high")
+    assert answer["basis"] == "measured"
+
+
+def test_the_band_decides_the_step_up_where_no_measured_point_clears_the_floor(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """A step up is decided the same way, and says so in the same words.
+
+    Every measured point here is likelier than the failed one and none of them
+    clears the floor, so the band decides the step, and the note names the
+    point it was drawn around rather than the point that was taken.
+    """
+
+    _indistinguishable(tmp_path)
+
+    answer = _answer(
+        capsys,
+        *LIMITED,
+        f"--data={tmp_path}",
+        "--kind=implement",
+        "--after=claude-fable-5-1@high",
+    )
+
+    assert "one step up" in (answer["note"] or "")
+    assert (answer["model"], answer["deliberation"]) == ("claude-sonnet-5", "high")
+    assert BAND in (answer["note"] or "")
+    assert "claude-opus-5@high" in (answer["note"] or "")
+
+
+def test_the_band_note_is_written_once_in_one_answer(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """One line, once, naming the point the band was drawn around.
+
+    Produced in one place off the list the answer was read from, so neither
+    the pool the deliberation ceiling was measured against nor the step up
+    writes a second copy of it.
+    """
+
+    _indistinguishable(tmp_path)
+    note = _answer(
+        capsys, *LIMITED, f"--data={tmp_path}", "--kind=implement", "--seed=0"
+    )["note"]
+
+    assert note is not None
+    assert note.count(BAND) == 1
+    assert "claude-opus-5@high" in note
+
+
+def test_a_band_of_one_still_says_that_the_band_decided(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """The line is about which branch answered, not about how wide it was."""
+
+    _under(tmp_path)
+
+    answer = _answer(
+        capsys, *LIMITED, f"--data={tmp_path}", "--kind=implement", "--seed=0"
+    )
+
+    assert (answer["model"], answer["deliberation"]) == ("claude-opus-5", "high")
+    assert answer["basis"] == "measured"
+    assert BAND in (answer["note"] or "")
+    assert "claude-opus-5@high" in (answer["note"] or "")
+
+
+def test_no_band_line_where_a_measured_point_cleared_the_floor(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """The floor keeps its whole meaning wherever the measurements can promise."""
+
+    _clearing(tmp_path)
+
+    answer = _answer(
+        capsys, *LIMITED, f"--data={tmp_path}", "--kind=implement", "--seed=0"
+    )
+
+    assert answer["expected"]["p_success"] >= select.FLOOR
+    assert BAND not in (answer["note"] or "")
+
+
+def test_no_band_line_on_a_call_that_was_spent_exploring(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """An exploration was not decided by the band, and never claims it was."""
+
+    _indistinguishable(tmp_path)
+
+    answers = _over_seeds(capsys, (*LIMITED, f"--data={tmp_path}", "--kind=implement"))
+    explored = [answer for answer in answers if answer["explored"] is not None]
+
+    assert explored
+    for answer in explored:
+        assert BAND not in (answer["note"] or "")
+
+
+def test_the_judge_is_a_measured_reviewer_even_where_none_clears_the_floor(
+    tmp_path: Path,
+    capsys: pytest.CaptureFixture[str],
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """The grader asks the same ranking, so the band picks its judge too.
+
+    Fable at `high` has twenty `review` rows of its own and finishes about
+    three times in four, which does not clear the high-stakes floor. Opus at
+    `high` has no row, clears the floor on its prior and costs half as much per
+    finished job — and is no longer the judge, a reviewer this machine has
+    watched doing the work being the one it grades with.
+    """
+
+    _bridged(tmp_path)
+    _store(tmp_path, ("review", FABLE, "high", 0.7, 20))
+    monkeypatch.setenv("PATH", path_holding(tmp_path, "claude", "codex"))
+    grader = (
+        f"--data={tmp_path}",
+        "--kind=review",
+        "--scope=callable",
+        "--stakes=high",
+        "--harness=process",
+        "--read-only",
+    )
+
+    answer = _answer(capsys, *grader)
+    prior = _answer(capsys, *grader, "--model=claude-opus-5", "--deliberation=high")
+    watched = _answer(capsys, *grader, f"--model={FABLE}", "--deliberation=high")
+
+    assert prior["basis"] == "prior"
+    assert prior["expected"]["p_success"] >= select.FLOOR
+    assert watched["basis"] == "measured"
+    assert watched["expected"]["p_success"] < select.FLOOR
+    assert (
+        prior["expected"]["per_success_cost_usd"]
+        < watched["expected"]["per_success_cost_usd"]
+    )
+    assert (answer["model"], answer["deliberation"]) == (FABLE, "high")
+    assert answer["basis"] == "measured"
+    assert answer["expected"]["p_success"] < select.FLOOR
+
+
+def test_exploring_still_compares_one_attempt_at_a_time(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """The exploration reads none of this, and a seed still says which calls it is.
+
+    A point the evidence undervalues would never be retried if the exploration
+    judged it on the evidence's own mean, which is the reason ADR-0188 gives
+    for keeping these comparisons per attempt. So which calls explore is the
+    coin alone, and the candidates are still the points cheaper than the answer
+    for one attempt, drawn in that order.
+    """
+
+    _boundary(tmp_path)
+    flags = (*LIMITED, f"--data={tmp_path}", "--kind=implement")
+
+    answers = {seed: _answer(capsys, *flags, f"--seed={seed}") for seed in range(DRAWS)}
+    coin = {
+        seed
+        for seed in range(DRAWS)
+        if random.Random(seed).random() < select.EXPLORATION
+    }
+    assert coin
+    assert {seed for seed, answer in answers.items() if answer["explored"]} == coin
+
+    ranked = _ranking(tmp_path, "implement")
+    plain = ranked[0]
+    for dimension in select.DIMENSIONS:
+        beyond = select._beyond(ranked, plain, dimension, "cost")
+        assert beyond
+        prices = [row.cost_usd for row in beyond]
+        assert prices == sorted(prices)
+        assert all(price < plain.cost_usd for price in prices)
 
 
 def test_a_profile_whose_makers_reach_nothing_inherits_the_callers_own_seat(
@@ -1439,6 +2089,93 @@ def test_the_same_answer_asked_for_without_it_keeps_its_tools(
     answer = _answer(capsys, f"--data={tmp_path}", "--harness=process", "--kind=review")
 
     assert "--tools" not in (answer["launch"]["command"] or [])
+
+
+# Every flag either bridge uses to grant or withhold permission. An answer
+# carries the ones the caller's own level named and no others.
+PERMISSION_FLAGS: frozenset[str] = frozenset(
+    {
+        "-s",
+        "--sandbox",
+        "--approve-for-me",
+        "--dangerously-bypass-approvals-and-sandbox",
+        "--permission-mode",
+    }
+)
+
+
+def test_a_caller_s_own_permission_level_reaches_the_command_it_is_handed(
+    tmp_path: Path,
+    capsys: pytest.CaptureFixture[str],
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """A delegated start inherits the level its caller is running at.
+
+    The caller states it, nothing here reads it off anything, and it arrives
+    in the launch spelled the way the CLI being started spells it — which is
+    what lets a builder commit and reach the network without its caller
+    editing the command it was given.
+    """
+
+    _profile(tmp_path)
+    monkeypatch.setenv("PATH", path_holding(tmp_path, "claude"))
+
+    answer = _answer(
+        capsys,
+        f"--data={tmp_path}",
+        "--harness=process",
+        "--kind=implement",
+        "--permissions=bypass",
+    )
+
+    command = answer["launch"]["command"] or []
+    assert command[command.index("--permission-mode") + 1] == "bypassPermissions"
+
+
+def test_an_answer_asked_for_without_a_level_names_no_permission_flag(
+    tmp_path: Path,
+    capsys: pytest.CaptureFixture[str],
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Silence leaves the decision to the started CLI's own configuration."""
+
+    _profile(tmp_path)
+    monkeypatch.setenv("PATH", path_holding(tmp_path, "claude"))
+
+    answer = _answer(
+        capsys, f"--data={tmp_path}", "--harness=process", "--kind=implement"
+    )
+
+    command = answer["launch"]["command"] or []
+    assert not PERMISSION_FLAGS.intersection(command)
+
+
+def test_a_permission_level_nothing_here_knows_is_answered_and_named(
+    tmp_path: Path,
+    capsys: pytest.CaptureFixture[str],
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Never a refusal: there is no answer a caller may read as *start nothing*.
+
+    A caller that could not read its own level, or read one this vocabulary
+    does not hold, still gets a launch. What it also gets is the value back in
+    the note, so the mismatch is visible where the decision is read.
+    """
+
+    _profile(tmp_path)
+    monkeypatch.setenv("PATH", path_holding(tmp_path, "claude"))
+
+    answer = _answer(
+        capsys,
+        f"--data={tmp_path}",
+        "--harness=process",
+        "--kind=implement",
+        "--permissions=paranoid",
+    )
+
+    assert answer["ok"] is True
+    assert not PERMISSION_FLAGS.intersection(answer["launch"]["command"] or [])
+    assert "paranoid" in (answer["note"] or "")
 
 
 def test_the_ask_the_grader_makes_lands_on_a_judge_strong_enough_to_grade(
