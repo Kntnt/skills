@@ -4,6 +4,8 @@
 
 The reading itself is unchanged, and deliberately so. It was made without the measurement in front of it, its verdict is one of the three independent grounds [`../results.md`](../results.md) gives for not shipping, and rewriting its findings after the fact would destroy the only thing that makes it worth keeping.
 
+**Five word counts in §4 and §5 are understated, and are restated here rather than edited in place.** Recounted with `wc -w` against `19862dc2`: the addition to Redline's step 6 is 161 words net, not the 123 §4 gives, and it is the whole of that file's change; the addition to `source-check.md` is 76 words net, not 56, and it is the whole of the task blockquote's change; and the three pinned constants §5 measures are 161, 148 and 88 words rather than 121, 118 and 66. Every one of those findings argues that the addition or the pin is larger than the behaviour it buys, so the larger figures do not weaken them. They are corrected because a number in an evidence file has to be recomputable from the tree the file names.
+
 ---
 
 ## The reading
