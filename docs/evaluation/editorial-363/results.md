@@ -114,15 +114,19 @@ The same judges do not find the English defect either. No run in any arm expande
 
 ## Wall time
 
-Median seconds from `started.txt` to `finished.txt`, per arm and per Skill.
+Median seconds from `started.txt` to `finished.txt`, per arm and per Skill, recomputed over every run in the tree. The `Write` column covers the fifteen `case-study-<language>-rN` runs; the `Redline` column covers the other fifty, the fifteen paired replays included. Where an arm has an even number of timed runs the median is the mean of the two middle ones.
 
 | Arm | Write | Redline |
 | --- | --- | --- |
-| `b` | 1 187 s (4 runs) | 735 s (8 runs) |
-| `c` | 1 185 s (4 timed of 7) | 828 s (14 runs) |
-| `r` | see below | 703 s (11 timed of 13) |
+| `b` | 1 187 s — 4 runs, all timed | 674 s — 11 runs, all timed |
+| `c` | 1 185 s — 7 runs, 4 timed | 798 s — 21 runs, all timed |
+| `r` | 1 284 s — 4 runs, all timed | 739 s — 18 runs, 16 timed |
 
-**These numbers do not compare across arms and are not evidence about the wordings.** Three separate reasons, each sufficient on its own. The `b` and `c` arms ran a few runs at a time in a subagent seat; the `r` arm ran ten to fourteen fresh sessions at once on one machine, so its figures measure contention more than anything else. Three `c` runs and two `r` runs have no closing timestamp, because the session that made them was stopped by an account limit between the run and the marker; their artefacts are complete and they count for every quality criterion, with their wall time recorded as unavailable rather than invented. And the case mix differs run to run. The figure that does mean something is the one this ticket can control, and it is in the cost table above: **neither wording adds a seat**, so neither adds a run's worth of latency to any pass.
+Five runs have no closing timestamp and are the ones the counts above leave out, named rather than dropped silently: the `c` arm's `case-study-en_GB-r1`, `case-study-sv-r2` and `case-study-sv-r3`, and the `r` arm's `sv-control-r1` and `ellipsis-sv-r1`. The session that made each was stopped by an account limit between the run and the marker. Their artefacts are complete and they count for every quality criterion; only their wall time is unavailable, and it is left unavailable rather than estimated.
+
+An earlier draft of this table reported the three `Redline` medians as 735 s, 828 s and 703 s over eight, fourteen and thirteen runs, and left the `r` arm's `Write` median unstated. Those figures were taken while the paired replays were still landing and were never remeasured; the numbers above are what the committed markers give.
+
+**These numbers do not compare across arms and are not evidence about the wordings.** Four separate reasons, each sufficient on its own. The `b` and `c` arms ran a few runs at a time in a subagent seat, and so did seven of the `r` arm's rows, while the rest of that arm ran ten to fourteen fresh sessions at once on one machine, so those figures measure contention more than anything else. The `r` arm is therefore not even one seat internally. Five runs are untimed, as above. And the case mix differs run to run. The figure that does mean something is the one this ticket can control, and it is in the cost table above: **neither wording adds a seat**, so neither adds a run's worth of latency to any pass.
 
 ## Criteria
 
