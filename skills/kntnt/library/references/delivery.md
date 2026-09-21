@@ -1,6 +1,6 @@
 # Delivery
 
-Every Skill that produces a Text Artifact delivers it the same way. This document is the complete contract: where a result goes, what the response carries when it went somewhere else, when a source file may be replaced instead, what happens when nothing changed, what language a run's own words about the text are written in, and what is refused before anything is written. It is a reference several Skills read rather than a runtime of its own. Each Skill exposes these rules through its own Formal Invocation and owns the names it gives them, so nothing here fixes how an option is spelled; what is fixed is the behaviour behind it.
+Every Skill that produces a Text Artifact delivers it the same way. This document is the complete contract: where a result goes, how a response carries a text it delivers, what the response carries when it went somewhere else, when a source file may be replaced instead, what happens when nothing changed, what language a run's own words about the text are written in, and what is refused before anything is written. It is a reference several Skills read rather than a runtime of its own. Each Skill exposes these rules through its own Formal Invocation and owns the names it gives them, so nothing here fixes how an option is spelled; what is fixed is the behaviour behind it.
 
 ## The response is the default
 
