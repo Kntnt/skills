@@ -1,6 +1,6 @@
 # select
 
-Show what the collection has and change it in the same gesture. The list is the Catalog in two groups — its Skills, and under them its Features — one row per entry with a checkbox that is checked when the entry is Enabled in the targeted layer; the user answers both groups in one sentence of plain text. A Feature is an entry that owns no files a harness loads and only writes into a harness's own configuration, so its row has to say what it writes and where. Targets Global unless `--project` or `--project=on` is given, and reaches every Harness present in that layer. Reading is never a side-effecting act: an answer that changes nothing writes nothing.
+Show what the collection has and change it in the same gesture. The list is the Catalog in two groups — its Skills, and under them its Features — one row per entry with a checkbox that is checked when the entry is Enabled in the targeted layer; the user answers both groups in one sentence of plain text. A Feature is an entry that owns no files a harness loads, so its row has to say what it writes and where. Targets Global unless `--project` or `--project=on` is given, and reaches every Harness present in that layer. Reading is never a side-effecting act: an answer that changes nothing writes nothing.
 
 `$HERE` is the manager directory (the parent of `scripts/`).
 

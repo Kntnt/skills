@@ -259,9 +259,8 @@ SUBSTANTIAL_OUTPUT_TOKENS = 4000.0
 # models. What makes a Unit a job is an agent working on its own long enough,
 # so a Unit that was delegated — read from a subagent's own record, or opened
 # by an instruction that names a routed attempt somewhere in it — is held to
-# the substantial test
-# alone, and any other Unit is written only once it ran this long from its
-# instruction to handing control back (#303).
+# the substantial test alone, and any other Unit is written only once it ran
+# this long from its instruction to handing control back (#303).
 OWN_UNIT_SECONDS = 600.0
 
 # How much of an instruction and of a result the grader is given. They are the

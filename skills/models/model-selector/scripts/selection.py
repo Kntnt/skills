@@ -1357,9 +1357,9 @@ def _newest_releases(pool: Sequence[Point]) -> list[Point]:
     way `catalogue.resolve` matches a family token, and which release of it is
     the newest is `catalogue.newest_first`'s to say. Nothing here infers a
     succession the catalogue does not state, and nothing here is stored: a
-    release keeps its entry, its rows and its generated definition, and a
-    `--model` lock naming it is answered with it, because the lock has already
-    narrowed the pool by the time this runs.
+    release keeps its entry and its rows, and a `--model` lock naming it is
+    answered with it, because the lock has already narrowed the pool by the
+    time this runs.
     """
 
     families: dict[str, list[Model]] = {}

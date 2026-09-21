@@ -87,12 +87,12 @@ class Permission:
 
 
 # The permission levels a caller may say it is running at, and what each one
-# becomes on the Claude and Codex bridges. The names are this module's own and belong to no
-# tool: a caller states the level it reads off itself, and the translation into
-# a CLI's spelling happens here and nowhere else. The set is closed and is
-# exhaustive as this is written; a level a CLI grows later is added here with
-# the nearest equivalent on the other side, and the bridge's docstring says why
-# that one is the nearest.
+# becomes on the Claude and Codex bridges. The names are this module's own and
+# belong to no tool: a caller states the level it reads off itself, and the
+# translation into a CLI's spelling happens here and nowhere else. The set is
+# closed and is exhaustive as this is written; a level a CLI grows later is
+# added here with the nearest equivalent on the other side, and the bridge's
+# docstring says why that one is the nearest.
 #
 # Two pairs coincide on the Codex side, where the sandbox is what decides an
 # unattended `exec`: `edits` and `never-ask` both reach it as the writable
@@ -154,10 +154,11 @@ def plan(
     needs an answer, and nothing here is a status meaning *start nothing*
     (ADR-0182).
 
-    `read_only` outranks the level entirely. A read-only call is the grader's
-    own posture — it reads two excerpts and answers — so it keeps the sandbox
-    and the tool list that grant no way to write whatever level came with it,
-    and its command is byte for byte what it was before any level existed.
+    `read_only` outranks the level on the two bridges that carry one. A
+    read-only call is the grader's own posture — it reads two excerpts and
+    answers — so a Codex or headless-Claude command keeps the sandbox and the
+    tool list that grant no way to write whatever level came with it, and is
+    byte for byte what it was before any level existed.
 
     The order is deliberate: the native path first, then the bridges, then the
     admission that there is no path. A point the caller cannot start is worth

@@ -2937,9 +2937,9 @@ def select_payload(*, global_layer: bool) -> dict[str, Any]:
 
     Two groups rather than one: the Catalog's Skills, and under them the
     Catalog's Features, which are the entries that install nothing a Harness
-    loads and only write into a Harness's own configuration (ADR-0173). A
-    Feature's row carries what it writes and where, because a row that edits a
-    file the user owns and reads has to say so before it is checked.
+    loads (ADR-0173). A Feature's row carries what it writes and where,
+    because a row that edits a file the user owns and reads has to say so
+    before it is checked.
 
     One row per Catalog skill, grouped by Category so related skills are read
     together (ADR-0177), and everything a row is judged on carried on the row:

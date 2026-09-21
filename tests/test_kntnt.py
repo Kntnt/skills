@@ -9684,6 +9684,7 @@ def test_delegation_asks_the_selection_engine_as_a_script() -> None:
         "--seat=<model>@<level>",
         "--repo=<the project root>",
         "`--stakes=high`",
+        "--permissions=<level>",
     }
     missing_command = sorted(
         fragment for fragment in required_command if fragment not in mode

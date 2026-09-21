@@ -1036,7 +1036,7 @@ def _like_for_like(rows: Sequence[Measurement]) -> Sequence[Measurement]:
     A forecast is a claim about the size of the job being asked for, and a
     routed job and a span of somebody's own Main Seat session are different
     sizes: pooled together, seventy-five routed builds carrying a grade and no
-    price were priced from a hundred and thirty ten-minute spans of the
+    price were priced from a hundred and thirty-two ten-minute spans of the
     maintainer's own session, and the figure the ranking compared against a
     whole Codex build was the price of a span inside a session (ADR-0203).
 
