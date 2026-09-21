@@ -1116,7 +1116,7 @@ def _translated(mean: float, margin: float, *, toward: float | None = None) -> f
 
 
 def _geometric_mean(values: Sequence[float]) -> float | None:
-    """Return the geometric mean, or None where nothing was measured.
+    """Return the geometric mean, or None where it was given no values.
 
     Geometric because token counts span orders of magnitude within one kind:
     one exploratory attempt that read half a repository would drag an

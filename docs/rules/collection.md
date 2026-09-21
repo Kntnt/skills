@@ -38,7 +38,7 @@ The rules whose reasoning is settled in a decision record are named here in a ph
 
 ## Disk as truth, and the disk as the report
 
-**Enabled means present on disk in that layer** (ADR-0175). A Harness loads what its skills directory holds, so presence in each Detected Harness's directory for the layer is the whole of the definition for a Skill, and Disabled is its absence. A Feature places no files, so its Enabled state is read from what its Harnesses hold instead, which `skills.md` states (ADR-0173). Select and Update compute the desired set for the targeted layer and apply the delta, so a second run with the same answers writes nothing.
+**Enabled means present on disk in that layer** (ADR-0175). A Harness loads what its skills directory holds, so presence in each Detected Harness's directory for the layer is the whole of the definition for a Skill, and Disabled is its absence. A Feature places no files a layer could be read off, so its Enabled state is read from what its Harnesses hold instead, which `skills.md` states (ADR-0173). Select and Update compute the desired set for the targeted layer and apply the delta, so a second run with the same answers writes nothing.
 
 **Partial is a fact about what is there and not a third state** (ADR-0175). A Skill whose files are in some of the layer's Detected Harnesses and missing from others is still Enabled or Disabled: nothing sets Partial, nothing stores it, and no answer of the user's can select it. Select shows such a Skill checked and marks it incomplete, and confirming the list repairs it; a Feature installed into some of the Harnesses it serves and not the rest is marked and repaired the same way, one harness at a time rather than one directory at a time.
 

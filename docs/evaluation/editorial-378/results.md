@@ -4,7 +4,7 @@ Run on 2026-09-21 against [`plan.md`](plan.md) as it was frozen before the first
 
 ## Which mechanism refused the write
 
-**The filesystem, not a Harness.** `chmod a-w` was applied to the report path's parent directory after the fixture and the task were in place and before the first checker started. The obstacle under test in [#362](https://github.com/Kntnt/skills/issues/378) came from Claude Code's permission system, which cannot be provoked on demand; this one comes from `EACCES`. The obstacle is therefore **modelled, not reproduced**, and nothing here says a Harness refusal was retested.
+**The filesystem, not a Harness.** `chmod a-w` was applied to the report path's parent directory after the fixture and the task were in place and before the first checker started. The obstacle under test in [#362](https://github.com/Kntnt/skills/issues/362) came from Claude Code's permission system, which cannot be provoked on demand; this one comes from `EACCES`. The obstacle is therefore **modelled, not reproduced**, and nothing here says a Harness refusal was retested.
 
 Both mechanisms present the same thing to the checker — a report path it cannot create — and all three checkers named the mechanism precisely and in the same terms: the directory is mode `dr-xr-xr-x`, and the write failed with "Permission denied". The evaluator instruction not to change the staged tree's permissions was obeyed in every run, and the mode was still `dr-xr-xr-x` at the end.
 

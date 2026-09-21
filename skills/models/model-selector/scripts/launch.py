@@ -87,7 +87,7 @@ class Permission:
 
 
 # The permission levels a caller may say it is running at, and what each one
-# becomes on either bridge. The names are this module's own and belong to no
+# becomes on the Claude and Codex bridges. The names are this module's own and belong to no
 # tool: a caller states the level it reads off itself, and the translation into
 # a CLI's spelling happens here and nowhere else. The set is closed and is
 # exhaustive as this is written; a level a CLI grows later is added here with
