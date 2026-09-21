@@ -108,8 +108,54 @@ Median seconds from `started.txt` to `finished.txt`, per arm and per Skill.
 
 ## Criteria
 
-Pending.
+### `K-translate` — the translation control
 
-## Findings that belong to another ticket
+**Baseline arm: pass. Candidate arm: fail.**
 
-Pending.
+The criterion asks that in every delivered `sv` draft two independent judges **both** class the Maya Lind quotation as idiomatic Swedish speech whose meaning, stance, qualification and customer voice are unchanged.
+
+| Run | The rendering | Judge A | Judge B |
+| --- | --- | --- | --- |
+| `b/case-study-sv-r1` | *innan nästa hus börjar* | one pass, intact | one pass, intact |
+| `b/case-study-sv-r2` | *innan nästa fastighet drar i gång* | one pass, intact — *the best rendering of the three drafts' hardest line* | one pass, intact |
+| `c/case-study-sv-r1` | *innan arbetet i nästa hus börjar* | one pass, but *meaning added inside quotation marks to buy fluency* | **not intact** — *it supplies a referent the material leaves open, and points it at the repair work rather than the rollout* |
+| `c/case-study-sv-r2` | *innan nästa hus drar i gång* | one pass, intact | one pass, intact |
+| `c/case-study-sv-r3` | *innan nästa hus kommer igång* | one pass, intact | one pass, *intact bar a softened emphasis* in the first quotation |
+
+Both baseline runs pass on both judges. The candidate arm fails, and it fails on the one run where the change visibly did something: `c/case-study-sv-r1` is the only draft in either arm whose checker raised a translation finding against the quotation and whose writer repaired it, and the repair wrote *arbetet* — the work — into a sentence the source leaves open. Both judges name that as the cost, and the body of this ticket forbids exactly it: *Om faktisk kontext inte räcker ska Redline rapportera hindret och bevara osäkerheten, inte hitta på en händelse*. The candidate wording's only measured effect on this control was to cause one.
+
+### `K-repair-sv` — Swedish source-blind repair
+
+**Not reproduced as a defect in this family, in any arm.**
+
+Both frozen Swedish inputs were replayed in all three arms — five replays of each. In every one, the quotation came back word for word, and no run's reported findings named it. Read against the criterion's own disjunction that is neither branch: the runs neither repaired the quotation nor reported an obstacle in it. What decides whether that is a miss is whether there is an obstacle, and on that both judges, in all ten cases, answer that a Swedish reader takes the passage on one pass. On the evidence this measurement produced, there is nothing here for the review to have found, and the criterion has nothing to separate the arms with.
+
+The clause *a change the run's own reported findings do not name is a fail* does bite, repeatedly — but on headings, bridges and claim accounts rather than on quoted speech, and those are the shapes [#383](https://github.com/Kntnt/skills/issues/383), [#389](https://github.com/Kntnt/skills/issues/389) and [#377](https://github.com/Kntnt/skills/issues/377) own. They are recorded there and counted nowhere here.
+
+### `K-preserve-en` — English and contrast preservation
+
+**Pass, in every arm, including the baseline.**
+
+For `en-positive`, `en-us-r1`, `metonymy-sv` and `rhythm-en_GB`, every run of every arm returned the working quotation unchanged, and both judges confirm it word for word and read on one pass. No run expanded *before the next building starts*, *terminen drog i gång*, *expeditionen*, *before the winter* or *the depot*. `C-metonymy` and `C-rhythm` pass in all three arms.
+
+**The English failure this ticket inherits therefore did not reproduce in this family at all.** The baseline arm — the product with no change — preserves it. There was no English miss for either wording to fix, and neither wording caused one.
+
+`C-ellipsis` is the one fixture criterion that fails, and it fails identically in all three arms: *Sedan gick lagret över* comes back untouched with no reported finding against it, which the fixture states is a miss. Both judges, in all six cases, read that passage as one-pass Swedish too. The fixture and the judges disagree, the fixture was frozen first and is not edited, and what the disagreement rules out is using this row to separate the arms.
+
+### `K-separate` — claims judged separately from idiom
+
+**Pass.** No fixed replacement sentence, no general metonymy ban and no widened source duty for Redline was introduced by either wording; the [load-chain review](reviews/load-chain-review.md) checked the same question independently and agrees on the metonymy point. Claims, attribution, the customer's reservations, chronology and metadata were judged by the two judges separately from idiom, and that is where most of the failures are — every one of them belonging to another ticket.
+
+### `K-chain` — chain and transport
+
+**Pass, on every Redline run in every arm.** Each run directory carries `evidence/mechanical-pass-input.md` and `evidence/mechanical-pass-output.md`: the private input frozen complete, and the separate complete Proofread result. Every run reports the Correction Budget as the existing default of 1. Both branches are exercised — runs that deliver a changed artefact and runs whose mechanical pass reports no change — and both a no-change mechanical pass and a final delivery appear across the tree. The three staged installs verify byte-identical to their pre-run inventories, so no run wrote into the product it was measuring.
+
+**`T1` and `R2` are `skipped`**, with the reason the addendum gives: a subagent's transcript is not readable from the session that started it, and the `r` arm's sessions are headless `claude -p` processes whose transcripts are likewise not artefacts here. Nothing is claimed for them and nothing is failed for lacking them; the loading question is carried by [`reviews/load-chain-review.md`](reviews/load-chain-review.md) instead, which is what [#388](https://github.com/Kntnt/skills/issues/388) exists to make unnecessary.
+
+### `K-cost` — cost against measured benefit
+
+**The rule decides this ticket.** It reads: *a wording that adds reading ships only where the candidate arm removes a miss the baseline arm reproduced in at least two runs; otherwise the shorter wording ships.*
+
+The candidate arm removes no miss. There was none to remove: the baseline arm passes `K-translate` on both its runs, preserves every English and contrast quotation, and its Swedish source-blind replays are judged one-pass by both judges. What the candidate arm did instead was fail `K-translate` — the criterion the wording was written for — by causing a referent to be written into a quotation.
+
+So the shorter wording ships, and the shortest is the one that adds nothing.
