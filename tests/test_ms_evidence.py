@@ -544,8 +544,7 @@ def test_a_category_every_row_recorded_as_nought_is_forecast_as_nought(
     Folded in with a category no row recorded, that reported nought fell
     through to the kind's shipped 208 000 cache-write tokens — about three
     dollars on every `high` attempt of a bill the vendor never sends, on the
-    one figure the whole ranking orders by, making the model look two to four
-    times dearer than it is (issue #371).
+    one figure the whole ranking orders by (issue #371).
     """
 
     measured = {

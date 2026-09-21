@@ -140,7 +140,7 @@ Units that have been seen and not yet graded. Working state, and it goes with **
 
 **Generated subagent definitions**
 
-One file per Anthropic model and supported deliberation level wherever Anthropic is a maker you chose, written into the Harness's own agents directory, prefixed so they are identifiable, and rewritten by every `setup` and by every catalogue pass that changes the catalogue. Without a valid profile they are left as they are. Editing one is pointless; they are the only files this collection writes there.
+One file per Anthropic family and supported deliberation level wherever Anthropic is a maker you chose, the newest release of a family taking the file where a maker still lists an older one, written into the Harness's own agents directory, prefixed so they are identifiable, and rewritten by every `setup` and by every catalogue pass that changes the catalogue. Without a valid profile they are left as they are. Editing one is pointless; they are the only files this collection writes there.
 
 ## DIAGNOSTICS
 

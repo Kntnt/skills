@@ -482,8 +482,8 @@ def _bridge(data: Path, seconds: float) -> list[str] | None:
     It asks as what it is. This is a script rather than a Harness, so it can
     spawn no subagent, and `--harness=process` is what says so: the answer comes
     back as a command whatever the provider, which is the only kind of answer a
-    process can act on. The judge writes nothing, so `--read-only` asks for the
-    command that grants it no way to.
+    process can act on. The judge writes nothing, so `--read-only` asks for a
+    Codex or Claude Code command that grants no way to.
 
     A point that is not a command — the caller's own seat, or a model nothing
     here can reach — is not something a script can start, so there is no judge
