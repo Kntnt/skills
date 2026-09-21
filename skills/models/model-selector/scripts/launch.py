@@ -33,7 +33,7 @@ from collections.abc import Mapping
 from dataclasses import dataclass, replace
 from pathlib import Path
 
-from catalogue import Catalogue, Model
+from catalogue import Catalogue, Model, newest_first
 from profiles import Profile, channel_for
 
 # The prefix every generated agent definition carries, in both its file name
@@ -273,16 +273,17 @@ def definitions(profile: Profile, cat: Catalogue) -> dict[str, str]:
     by naming a subagent and nothing else. Every model the maker offers gets
     its files, since no single model is chosen within a maker (ADR-0190), and
     none needs a channel: Anthropic is the provider a Claude Code seat already
-    pays for. A profile that does not choose Anthropic defines none. Two
-    Anthropic models in one family would want the same file name; the newer
-    one takes it, which is the same rule `resolve` applies to an ambiguous
-    alias.
+    pays for. A profile that does not choose Anthropic defines none.
+
+    Two Anthropic models in one family would want the same file name, and the
+    newer one takes it. Which of them that is, ties included, is
+    `catalogue.newest_first`'s to say and never this function's: the same
+    question decides a family alias and which release the pool offers, and
+    three answers to it would be two of them wrong.
     """
 
-    ordered = sorted(
-        (model for model in cat.models if _generates_an_agent(model, profile)),
-        key=lambda model: (model.released or "", model.id),
-        reverse=True,
+    ordered = newest_first(
+        model for model in cat.models if _generates_an_agent(model, profile)
     )
 
     matrix: dict[str, str] = {}
