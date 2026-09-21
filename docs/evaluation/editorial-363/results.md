@@ -251,7 +251,7 @@ Stated by name, because a run tree that does not say what is missing reads later
 - **`T1` and `R2` are `skipped` on every row**, for the reason above, and are [#388](https://github.com/Kntnt/skills/issues/388)'s business.
 - **The GPT-family failures were not retested**, by the protocol's rule, and stay failed.
 
-None of these changes the decision. `K-cost` turns on whether the candidate arm removed a miss the baseline arm reproduced, and the baseline arm's rows — every one of them complete, judged and passing on quoted speech — settle that it reproduced none.
+None of these changes the decision. `K-cost` turns on whether the candidate arm removed a miss the baseline arm reproduced, and the baseline arm's fifteen rows settle that it reproduced none: every one is complete and judged, every one returned or rendered its quoted sentence without an expansion, and both its `case-study-sv` drafts pass the translation control on both judges. The two paired replays where judge A stops at the English sentence are a split in the reading, not a miss in the product: nothing in either run changed the quotation.
 
 ## Verification
 
