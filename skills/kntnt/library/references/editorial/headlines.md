@@ -18,7 +18,7 @@ A text that reports, explains, argues, decides or narrates gets a statement head
 - Its words are ones this audience knows. A technical term is the right keyword for specialists and noise for a general reader, and the same holds for names and abbreviations.
 - Its tone is the text's tone, and never louder. Illness, accidents, crime and crises get a sober, understated headline; a light text can carry more personality.
 - It is plain before it is clever. It works in full for a reader who misses every allusion, so a pun or a reference never carries the meaning.
-- It gives the answer. A question headline is the rare exception, for a text whose point is that the question stays open.
+- It gives the answer. Journalists hold a question headline to be the wrong form, and so does this: it is a deliberate exception, natural over a text built as questions and answers, and available where the text truly leaves the question open and the headline is meant to assert nothing.
 - The verb does the work. A colon standing in for a verb, a clipped quotation and headline-speak all give way to the full clause.
 - It complements what follows. Headline and standfirst, or subheading and the first sentence under it, say different things in different words.
 

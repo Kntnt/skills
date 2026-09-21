@@ -55,7 +55,7 @@ The lead is the first paragraph of the body: one paragraph, meeting every requir
 Both open the text. Each works without the other, and read together they never repeat:
 
 - The body reads complete without the standfirst, which is often shown apart from the body or skipped. The lead introduces every person, thing and event it mentions, and nothing in the body points back to the standfirst.
-- They begin with different first words.
+- They should begin with different first words, and an everyday word such as *the* or *it* counts like any other.
 - Read in sequence, the lead advances. A reader who has just read the standfirst meets the lead as new material, never as the standfirst said again; what the body needs from the standfirst is named again in passing, and the lead moves on.
 
 ## Paragraphs

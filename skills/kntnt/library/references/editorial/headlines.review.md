@@ -12,7 +12,7 @@ Each of these in a headline or a subheading is a finding:
 - Words, names and abbreviations the audience will not know.
 - Partial quotes, colons in place of a verb, stilted headline-speak.
 - Puns and references that fail for anyone who does not get the allusion.
-- Question headlines, except in the rare text whose point is that the question stays open. Where the text gives the answer, the headline gives it too.
+- Question headlines. Where the text gives the answer, the headline gives it too. The exceptions are a text built as questions and answers, where the form is natural, and a text that truly leaves the question open, where the headline is deliberately kept from asserting anything.
 - A tone more dramatic than the text's.
 - The same words and phrasing in the headline and the standfirst or opening paragraph, or in a subheading and the first sentence under it. They complement each other; they do not repeat.
 
