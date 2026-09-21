@@ -83,7 +83,15 @@ The two Swedish rows that are supposed to expose the miss came back the same way
 
 ## Wall time
 
-Pending.
+Median seconds from `started.txt` to `finished.txt`, per arm and per Skill.
+
+| Arm | Write | Redline |
+| --- | --- | --- |
+| `b` | 1 187 s (4 runs) | 735 s (8 runs) |
+| `c` | 1 185 s (4 timed of 7) | 828 s (14 runs) |
+| `r` | see below | 703 s (11 timed of 13) |
+
+**These numbers do not compare across arms and are not evidence about the wordings.** Three separate reasons, each sufficient on its own. The `b` and `c` arms ran a few runs at a time in a subagent seat; the `r` arm ran ten to fourteen fresh sessions at once on one machine, so its figures measure contention more than anything else. Three `c` runs and two `r` runs have no closing timestamp, because the session that made them was stopped by an account limit between the run and the marker; their artefacts are complete and they count for every quality criterion, with their wall time recorded as unavailable rather than invented. And the case mix differs run to run. The figure that does mean something is the one this ticket can control, and it is in the cost table above: **neither wording adds a seat**, so neither adds a run's worth of latency to any pass.
 
 ## Criteria
 
