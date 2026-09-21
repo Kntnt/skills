@@ -1,0 +1,72 @@
+{
+  "ok": true,
+  "format": "markdown",
+  "conforms": true,
+  "failures": [],
+  "norms": [],
+  "typical": {
+    "paragraphs": 5,
+    "paragraphs_of_two_or_three_sentences": 2,
+    "sections": 2,
+    "sections_of_two_or_three_paragraphs": 1
+  },
+  "parts": {
+    "headline": {
+      "text": "Telefonbokningen bör finnas kvar ett halvår till",
+      "characters": 48,
+      "words": 7
+    },
+    "standfirst": {
+      "text": "Ett pilotförsök i kommunen har gett 120 bokningar, …",
+      "words": 45,
+      "sentences_estimate": 2,
+      "paragraphs": 1
+    },
+    "byline": {
+      "text": "Sanna Ek, Öppna beslut",
+      "words": 4
+    },
+    "lead": {
+      "text": "Kommunstyrelsen borde behålla telefonbokning under ett halvårs försök …",
+      "words": 12,
+      "sentences_estimate": 1,
+      "paragraphs": 1
+    },
+    "sections": [
+      {
+        "subheading": {
+          "text": "Siffrorna säger inte hur många personer som står bakom",
+          "characters": 54,
+          "words": 9
+        },
+        "paragraphs": [
+          {
+            "text": "Det gjordes 96 bokningar på webben och 24 …",
+            "words": 38,
+            "sentences_estimate": 3
+          }
+        ]
+      },
+      {
+        "subheading": {
+          "text": "Kostnaden för två bokningsvägar är inte räknad",
+          "characters": 46,
+          "words": 7
+        },
+        "paragraphs": [
+          {
+            "text": "Förvaltningen invänder att dubbla kanaler innebär dubbel administration. …",
+            "words": 32,
+            "sentences_estimate": 4
+          },
+          {
+            "text": "Det är kommunstyrelsen som kan säga ja till …",
+            "words": 23,
+            "sentences_estimate": 1
+          }
+        ]
+      }
+    ],
+    "other": []
+  }
+}

@@ -1,0 +1,61 @@
+{
+  "ok": true,
+  "format": "markdown",
+  "conforms": false,
+  "failures": [
+    {
+      "part": "byline",
+      "rule": "A text conforms when every part is present in the order shown.",
+      "measured": "absent",
+      "text": null
+    },
+    {
+      "part": "sections",
+      "rule": "A text conforms when every part is present in the order shown.",
+      "measured": "absent",
+      "text": null
+    }
+  ],
+  "norms": [
+    {
+      "part": "lead",
+      "rule": "They should begin with different first words, and an everyday word such as *the* or *it* counts like any other.",
+      "measured": "both open on “givarna”",
+      "text": "Givarna registrerade temperaturer under 20 grader i sex …"
+    },
+    {
+      "part": "lead",
+      "rule": "A paragraph should be at most 80 words, so that a web reader takes it in at a glance.",
+      "measured": "187 words",
+      "text": "Givarna registrerade temperaturer under 20 grader i sex …"
+    }
+  ],
+  "typical": {
+    "paragraphs": 2,
+    "paragraphs_of_two_or_three_sentences": 1,
+    "sections": 0,
+    "sections_of_two_or_three_paragraphs": 0
+  },
+  "parts": {
+    "headline": {
+      "text": "Givarna räddar skolan från en katastrof",
+      "characters": 39,
+      "words": 6
+    },
+    "standfirst": {
+      "text": "Givarna registrerade temperaturer under 20 grader i sex …",
+      "words": 18,
+      "sentences_estimate": 2,
+      "paragraphs": 1
+    },
+    "byline": null,
+    "lead": {
+      "text": "Givarna registrerade temperaturer under 20 grader i sex …",
+      "words": 187,
+      "sentences_estimate": 8,
+      "paragraphs": 1
+    },
+    "sections": [],
+    "other": []
+  }
+}

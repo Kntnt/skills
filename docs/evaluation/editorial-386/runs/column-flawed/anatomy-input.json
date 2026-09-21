@@ -1,0 +1,52 @@
+{
+  "ok": true,
+  "format": "markdown",
+  "conforms": false,
+  "failures": [
+    {
+      "part": "standfirst",
+      "rule": "A text conforms when every part is present in the order shown.",
+      "measured": "absent",
+      "text": null
+    },
+    {
+      "part": "lead",
+      "rule": "The lead is the first paragraph of the body: one paragraph, meeting every requirement under *Paragraphs*.",
+      "measured": "4 paragraphs",
+      "text": "Förra tisdagen satt jag gråtande i bibliotekets mötesrum …"
+    },
+    {
+      "part": "sections",
+      "rule": "A text conforms when every part is present in the order shown.",
+      "measured": "absent",
+      "text": null
+    }
+  ],
+  "norms": [],
+  "typical": {
+    "paragraphs": 4,
+    "paragraphs_of_two_or_three_sentences": 3,
+    "sections": 0,
+    "sections_of_two_or_three_paragraphs": 0
+  },
+  "parts": {
+    "headline": {
+      "text": "Möten förändrar allt",
+      "characters": 20,
+      "words": 3
+    },
+    "standfirst": null,
+    "byline": {
+      "text": "Nora Vik",
+      "words": 2
+    },
+    "lead": {
+      "text": "Förra tisdagen satt jag gråtande i bibliotekets mötesrum …",
+      "words": 109,
+      "sentences_estimate": 9,
+      "paragraphs": 4
+    },
+    "sections": [],
+    "other": []
+  }
+}

@@ -1,0 +1,4 @@
+outcome: changed
+wall_seconds: 561
+anatomy-input.json exit=1
+anatomy-delivered.json exit=0

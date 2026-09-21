@@ -134,3 +134,9 @@ The Claude-family evaluation of the change [#377](https://github.com/Kntnt/skill
 
 - [`redline-claude-2026-09-20-377.md`](redline-claude-2026-09-20-377.md) — twenty-two source-blind `/redline` runs in Claude Code 2.1.278 on `claude-opus-5`, two blind judges each: four pre-change replays of the #362 drafts, the same four reviewed twice against the change, and the ten `Redline controls` of the corpus. No limiting sentence is deleted or hardened after the change except under a verified class (a) finding, every changed claim is named in the account, and all ten controls meet their frozen expectation.
 
+## The article anatomy on the revised controls and two pipeline rows — #386
+
+The Claude-family evaluation of Write and Redline against the part of the editorial-quality corpus that was revised for the article anatomy and the headline reference and had never been run since, read with [`../editorial-386/runs/plan.md`](../editorial-386/runs/plan.md) and [`../editorial-386/runs/results.md`](../editorial-386/runs/results.md).
+
+- [`write-claude-2026-09-21-386.md`](write-claude-2026-09-21-386.md) — the two `Write` pipeline rows `column-sv` and `case-study-sv` against the corpus at `9a29bad3`, in Claude Code 2.1.278 on `claude-opus-5` at high deliberation, two blind judges each: both delivered, both drafts measured conforming by `article_anatomy.py`, and one `G2` failure — a `column-sv` subheading repeating the sentence under it, which neither source checker nor the delivery account caught.
+- [`redline-claude-2026-09-21-386.md`](redline-claude-2026-09-21-386.md) — the eight `Redline controls` of the four article genres and the two `Redline` pipeline rows of the same drafts, same Harness, model and judge arrangement: three of the four clean controls returned byte-identical, `opinion-clean` came back with an unreported clause added to its lead, and both rows that shipped a defect shipped one their own correction round had made and reported.

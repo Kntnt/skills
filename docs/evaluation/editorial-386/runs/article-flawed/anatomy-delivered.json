@@ -1,0 +1,90 @@
+{
+  "ok": true,
+  "format": "markdown",
+  "conforms": false,
+  "failures": [
+    {
+      "part": "byline",
+      "rule": "A text conforms when every part is present in the order shown.",
+      "measured": "absent",
+      "text": null
+    }
+  ],
+  "norms": [],
+  "typical": {
+    "paragraphs": 6,
+    "paragraphs_of_two_or_three_sentences": 4,
+    "sections": 3,
+    "sections_of_two_or_three_paragraphs": 1
+  },
+  "parts": {
+    "headline": {
+      "text": "Mätförsöket i Björkskolan saknar operativ temperatur",
+      "characters": 52,
+      "words": 6
+    },
+    "standfirst": {
+      "text": "Ett mätförsök i Björkskolan visade temperaturer under fastighetskontorets …",
+      "words": 35,
+      "sentences_estimate": 3,
+      "paragraphs": 1
+    },
+    "byline": null,
+    "lead": {
+      "text": "I rapporten Mätförsök i Björkskolan från den 12 …",
+      "words": 53,
+      "sentences_estimate": 3,
+      "paragraphs": 1
+    },
+    "sections": [
+      {
+        "subheading": {
+          "text": "Placeringen redovisas, men inte dess effekt",
+          "characters": 43,
+          "words": 6
+        },
+        "paragraphs": [
+          {
+            "text": "Rapporten anger också att två givare stod vid …",
+            "words": 19,
+            "sentences_estimate": 1
+          }
+        ]
+      },
+      {
+        "subheading": {
+          "text": "Underlaget har flera luckor",
+          "characters": 27,
+          "words": 4
+        },
+        "paragraphs": [
+          {
+            "text": "Operativ temperatur saknas, trots att resonemanget bygger på …",
+            "words": 29,
+            "sentences_estimate": 1
+          },
+          {
+            "text": "Det saknas mätningar av luftdrag och elevernas upplevelse …",
+            "words": 23,
+            "sentences_estimate": 2
+          }
+        ]
+      },
+      {
+        "subheading": {
+          "text": "Elin Rask vill se användningstiderna först",
+          "characters": 42,
+          "words": 6
+        },
+        "paragraphs": [
+          {
+            "text": "Driftteknikern Elin Rask rekommenderar att koppla temperaturserier till …",
+            "words": 28,
+            "sentences_estimate": 2
+          }
+        ]
+      }
+    ],
+    "other": []
+  }
+}

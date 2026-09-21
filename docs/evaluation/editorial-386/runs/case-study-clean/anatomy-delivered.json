@@ -1,0 +1,96 @@
+{
+  "ok": true,
+  "format": "markdown",
+  "conforms": true,
+  "failures": [],
+  "norms": [],
+  "typical": {
+    "paragraphs": 8,
+    "paragraphs_of_two_or_three_sentences": 6,
+    "sections": 3,
+    "sections_of_two_or_three_paragraphs": 3
+  },
+  "parts": {
+    "headline": {
+      "text": "Elm Quay samlade reparationsärendena",
+      "characters": 36,
+      "words": 4
+    },
+    "standfirst": {
+      "text": "Elm Quay Housing provade en gemensam reparationslogg i …",
+      "words": 40,
+      "sentences_estimate": 3,
+      "paragraphs": 1
+    },
+    "byline": {
+      "text": "Text: Iris Falk",
+      "words": 3
+    },
+    "lead": {
+      "text": "Att se samma information över skiftgränserna var vad …",
+      "words": 43,
+      "sentences_estimate": 3,
+      "paragraphs": 1
+    },
+    "sections": [
+      {
+        "subheading": {
+          "text": "Gruppen enades om kategorierna först",
+          "characters": 36,
+          "words": 5
+        },
+        "paragraphs": [
+          {
+            "text": "Kategorierna i loggen var underhållsgruppens egna. Leverantören Svale …",
+            "words": 16,
+            "sentences_estimate": 2
+          },
+          {
+            "text": "– Vi lade mer tid på att enas …",
+            "words": 33,
+            "sentences_estimate": 2
+          }
+        ]
+      },
+      {
+        "subheading": {
+          "text": "Två perioder med olika arbetsbelastning",
+          "characters": 39,
+          "words": 5
+        },
+        "paragraphs": [
+          {
+            "text": "Enligt Elm Quays interna försöksanteckning från den 4 …",
+            "words": 40,
+            "sentences_estimate": 4
+          },
+          {
+            "text": "Perioderna hade olika arbetsbelastning, och anteckningen tillskriver därför …",
+            "words": 11,
+            "sentences_estimate": 1
+          }
+        ]
+      },
+      {
+        "subheading": {
+          "text": "Kunden vill ge förberedelserna mer tid",
+          "characters": 38,
+          "words": 6
+        },
+        "paragraphs": [
+          {
+            "text": "– Jag skulle välja att göra försöket igen. …",
+            "words": 27,
+            "sentences_estimate": 2
+          },
+          {
+            "text": "Kundcaset publiceras av leverantören Svale. Den som står …",
+            "words": 18,
+            "sentences_estimate": 2
+          }
+        ]
+      }
+    ],
+    "other": []
+  }
+}

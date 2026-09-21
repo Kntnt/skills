@@ -1,0 +1,84 @@
+{
+  "ok": true,
+  "format": "markdown",
+  "conforms": true,
+  "failures": [],
+  "norms": [
+    {
+      "part": "section 1",
+      "rule": "A paragraph should be at most 80 words, so that a web reader takes it in at a glance.",
+      "measured": "83 words",
+      "text": "Ett samtal kan vara värt tiden därför att …"
+    }
+  ],
+  "typical": {
+    "paragraphs": 6,
+    "paragraphs_of_two_or_three_sentences": 4,
+    "sections": 2,
+    "sections_of_two_or_three_paragraphs": 2
+  },
+  "parts": {
+    "headline": {
+      "text": "Mötesmallen har en ruta för allt utom varför",
+      "characters": 44,
+      "words": 8
+    },
+    "standfirst": {
+      "text": "Det som ryms i en mötesmall säger en …",
+      "words": 41,
+      "sentences_estimate": 3,
+      "paragraphs": 1
+    },
+    "byline": {
+      "text": "Text: Nora Vik",
+      "words": 3
+    },
+    "lead": {
+      "text": "Vår mötesmall har plats för starttid och sluttid. …",
+      "words": 39,
+      "sentences_estimate": 3,
+      "paragraphs": 1
+    },
+    "sections": [
+      {
+        "subheading": {
+          "text": "Det är inte bara besluten jag vill åt",
+          "characters": 37,
+          "words": 8
+        },
+        "paragraphs": [
+          {
+            "text": "Ett samtal kan vara värt tiden därför att …",
+            "words": 83,
+            "sentences_estimate": 3
+          },
+          {
+            "text": "Jag är alltså inte ute efter färre beslut.",
+            "words": 8,
+            "sentences_estimate": 1
+          }
+        ]
+      },
+      {
+        "subheading": {
+          "text": "Ännu en ruta, och ändå vill jag prova",
+          "characters": 37,
+          "words": 8
+        },
+        "paragraphs": [
+          {
+            "text": "Frågan jag vill lägga till är enkel: vad …",
+            "words": 48,
+            "sentences_estimate": 4
+          },
+          {
+            "text": "Prova ändå frågan nästa gång du bokar ett …",
+            "words": 30,
+            "sentences_estimate": 3
+          }
+        ]
+      }
+    ],
+    "other": []
+  }
+}

@@ -1,0 +1,67 @@
+{
+  "ok": true,
+  "format": "markdown",
+  "conforms": true,
+  "failures": [],
+  "norms": [],
+  "typical": {
+    "paragraphs": 4,
+    "paragraphs_of_two_or_three_sentences": 3,
+    "sections": 2,
+    "sections_of_two_or_three_paragraphs": 0
+  },
+  "parts": {
+    "headline": {
+      "text": "Mötesmallen saknar plats för förståelsen",
+      "characters": 40,
+      "words": 5
+    },
+    "standfirst": {
+      "text": "Ett samtal kan vara värt något även när …",
+      "words": 51,
+      "sentences_estimate": 3,
+      "paragraphs": 1
+    },
+    "byline": {
+      "text": "Nora Vik",
+      "words": 2
+    },
+    "lead": {
+      "text": "Förra tisdagen satt jag gråtande i bibliotekets mötesrum …",
+      "words": 28,
+      "sentences_estimate": 2,
+      "paragraphs": 1
+    },
+    "sections": [
+      {
+        "subheading": {
+          "text": "Mallen frågar efter klockslag",
+          "characters": 29,
+          "words": 4
+        },
+        "paragraphs": [
+          {
+            "text": "Vår mötesmall har plats för starttid och sluttid …",
+            "words": 16,
+            "sentences_estimate": 1
+          }
+        ]
+      },
+      {
+        "subheading": {
+          "text": "Prova frågan innan mallen växer",
+          "characters": 31,
+          "words": 5
+        },
+        "paragraphs": [
+          {
+            "text": "Samtal kan ha värde utan att leda till …",
+            "words": 47,
+            "sentences_estimate": 3
+          }
+        ]
+      }
+    ],
+    "other": []
+  }
+}

@@ -1,0 +1,82 @@
+{
+  "ok": true,
+  "format": "markdown",
+  "conforms": true,
+  "failures": [],
+  "norms": [],
+  "typical": {
+    "paragraphs": 7,
+    "paragraphs_of_two_or_three_sentences": 5,
+    "sections": 2,
+    "sections_of_two_or_three_paragraphs": 2
+  },
+  "parts": {
+    "headline": {
+      "text": "Mätförsöket i Björkskolan visar när, inte varför",
+      "characters": 48,
+      "words": 7
+    },
+    "standfirst": {
+      "text": "Under 14 av 120 lektionspass registrerade givarna i …",
+      "words": 46,
+      "sentences_estimate": 3,
+      "paragraphs": 1
+    },
+    "byline": {
+      "text": "Text: Hedda Lund",
+      "words": 3
+    },
+    "lead": {
+      "text": "En temperaturgivare mäter luften där den sitter. Det …",
+      "words": 33,
+      "sentences_estimate": 3,
+      "paragraphs": 1
+    },
+    "sections": [
+      {
+        "subheading": {
+          "text": "En gräns för det lokala försöket",
+          "characters": 32,
+          "words": 6
+        },
+        "paragraphs": [
+          {
+            "text": "Kontoret valde 20 grader Celsius som arbetsgräns. Rapporten …",
+            "words": 45,
+            "sentences_estimate": 4
+          },
+          {
+            "text": "Givarna mätte varken luftdrag eller elevernas upplevelse. Ett …",
+            "words": 21,
+            "sentences_estimate": 2
+          },
+          {
+            "text": "Driftteknikern Elin Rask sammanfattar: ”Vi vet när vi …",
+            "words": 21,
+            "sentences_estimate": 2
+          }
+        ]
+      },
+      {
+        "subheading": {
+          "text": "Nästa försök behöver mer än givare",
+          "characters": 34,
+          "words": 6
+        },
+        "paragraphs": [
+          {
+            "text": "Rask rekommenderar att temperaturserierna kopplas till rummens användningstider …",
+            "words": 25,
+            "sentences_estimate": 2
+          },
+          {
+            "text": "Lägg därför tiderna för när rummen används bredvid …",
+            "words": 14,
+            "sentences_estimate": 1
+          }
+        ]
+      }
+    ],
+    "other": []
+  }
+}

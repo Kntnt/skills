@@ -1,0 +1,91 @@
+{
+  "ok": true,
+  "format": "markdown",
+  "conforms": true,
+  "failures": [],
+  "norms": [],
+  "typical": {
+    "paragraphs": 7,
+    "paragraphs_of_two_or_three_sentences": 5,
+    "sections": 3,
+    "sections_of_two_or_three_paragraphs": 2
+  },
+  "parts": {
+    "headline": {
+      "text": "Mötesmallen saknar en ruta för förståelse",
+      "characters": 41,
+      "words": 6
+    },
+    "standfirst": {
+      "text": "Vad ska ett möte göra möjligt? Bibliotekarien Nora …",
+      "words": 47,
+      "sentences_estimate": 2,
+      "paragraphs": 1
+    },
+    "byline": {
+      "text": "Av Nora Vik",
+      "words": 3
+    },
+    "lead": {
+      "text": "Jag granskar bibliotekets mötesmall. Där finns rutor för …",
+      "words": 42,
+      "sentences_estimate": 4,
+      "paragraphs": 1
+    },
+    "sections": [
+      {
+        "subheading": {
+          "text": "Jag värderar det mallen inte frågar efter",
+          "characters": 41,
+          "words": 7
+        },
+        "paragraphs": [
+          {
+            "text": "Tiden, däremot, har mallen två rutor för. Jag …",
+            "words": 44,
+            "sentences_estimate": 3
+          },
+          {
+            "text": "Jag uppskattar möten där kolleger upptäcker att de …",
+            "words": 51,
+            "sentences_estimate": 3
+          }
+        ]
+      },
+      {
+        "subheading": {
+          "text": "Ett samtal utan beslut kan också ha ett syfte",
+          "characters": 45,
+          "words": 9
+        },
+        "paragraphs": [
+          {
+            "text": "Min tanke är inte att varje samtal ska …",
+            "words": 33,
+            "sentences_estimate": 3
+          },
+          {
+            "text": "Men den som fyller i mallen borde få …",
+            "words": 36,
+            "sentences_estimate": 3
+          }
+        ]
+      },
+      {
+        "subheading": {
+          "text": "Testa en fråga bredvid tiden, utan att släppa tvivlet",
+          "characters": 53,
+          "words": 9
+        },
+        "paragraphs": [
+          {
+            "text": "Jag vet inte om ytterligare en ruta gör …",
+            "words": 56,
+            "sentences_estimate": 4
+          }
+        ]
+      }
+    ],
+    "other": []
+  }
+}
