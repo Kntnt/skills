@@ -8,6 +8,6 @@ A departure from a *should* is a finding only when following the norm was possib
 
 *Most* is read across the whole text, and no single paragraph or section fails it. A four-sentence paragraph is no finding. A paragraph holding two thoughts is one, and so is a text whose paragraphs are nearly all a single sentence or nearly all long. Name the pattern and what it costs the reader rather than the count.
 
-Read the standfirst separately, then with the lead. Can it introduce the piece on its own, and does the lead start doing the promised work? Repeated orientation may be necessary; an opening that restarts without advancing is the defect.
+Read the standfirst separately, then with the lead. Can it introduce the piece on its own, and does the lead start doing the promised work? Repeated orientation may be necessary; an opening that restarts without advancing is the defect. Then read the body with the standfirst covered. A pronoun, a definite form or a phrase such as *the reason* whose referent only the standfirst supplies is a finding, repaired by naming the referent where the body first needs it.
 
 In a text under review, the author is whoever the text, its metadata or the invocation names. A byline nobody can name is reported as missing and left unfilled: the reviewer's user is not presumed to have written a text they brought for review.
