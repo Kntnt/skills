@@ -30,9 +30,8 @@ The headline is the text's level-1 heading (HTML `h1`, Markdown `#`), and every 
 ## Headline
 
 - 20–70 characters, spaces included.
-- Informative: it names this text's specific subject or angle. Test: it could not head a different article.
-- Enticing: it gives the reader a reason to start reading.
-- Truthful: the text delivers everything the headline promises.
+- It should be three to eight words and at most 60 characters.
+- It is written as [Headlines](headlines.md) says.
 
 ## Standfirst
 
@@ -70,8 +69,8 @@ Both open the text. Each works without the other, and read together they never r
 
 A section is a subheading plus the paragraphs under it.
 
-- A subheading is 30–70 characters, spaces included.
-- It describes clearly what the paragraphs under it are about.
+- A subheading is at most 70 characters, spaces included.
+- It describes clearly what the paragraphs under it are about, and it is written as [Headlines](headlines.md) says.
 - A section holds at least one paragraph and should hold at most three. Most sections hold two or three.
 
 ## Ending

@@ -6,6 +6,8 @@ Apply the shared [web craft brief](../web-craft.md).
 
 Follow the [article anatomy](../article-anatomy.md).
 
+Write the headline and the subheadings as [Headlines](../headlines.md) says.
+
 ## What this genre asks for
 
 Make the angle clear early and let it govern the material. Explain concepts and connections in the order this reader needs them; a technical explanation can be direct and technical. People and quotations contribute where the material gives them a useful role.

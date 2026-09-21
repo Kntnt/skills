@@ -1,6 +1,6 @@
 # Editorial resources
 
-This directory holds the editorial contract the Collection's editorial Skills are written and reviewed against: [`base.md`](base.md), the genres under `genres/`, the techniques under `techniques/`, the shared support files [`web-craft.md`](web-craft.md) and [`article-anatomy.md`](article-anatomy.md) that several genres link, and [`anti-slop.md`](anti-slop.md) and [`mechanics.md`](mechanics.md) beside them. This page is the format they are written to. Read it before adding a genre or a technique, or before changing what the base contract, the anti-slop catalogue, or the mechanics contract holds.
+This directory holds the editorial contract the Collection's editorial Skills are written and reviewed against: [`base.md`](base.md), the genres under `genres/`, the techniques under `techniques/`, the shared support files [`web-craft.md`](web-craft.md), [`article-anatomy.md`](article-anatomy.md) and [`headlines.md`](headlines.md) that several genres link, and [`anti-slop.md`](anti-slop.md) and [`mechanics.md`](mechanics.md) beside them. This page is the format they are written to. Read it before adding a genre or a technique, or before changing what the base contract, the anti-slop catalogue, or the mechanics contract holds.
 
 Everything here is language-independent and written in English. The language-specific half lives beside it in [`../languages/`](../languages/README.md), one resource per language, and the two are loaded together at run time. A rule that is only true of one language belongs there and never here.
 
@@ -43,6 +43,12 @@ The complete loaded path should remain a short usable brief. Genre conventions, 
 [`article-anatomy.md`](article-anatomy.md) fixes which parts a text in article, case-study, column or opinion has, the order they come in and their dimensions; angle, argument, voice and language stay outside it. Each of those four genres links it below its identifying opening. It lives outside the selectable directories and is never a choice or genre-inference input. Write loads its base half only; Redline and its fresh correction agents also load [`article-anatomy.review.md`](article-anatomy.review.md). Their loading steps name this exact bounded exception; no recursive link loading is authorised.
 
 Every statement there carries one of the three strengths that file defines — a requirement, a *should* norm, or what is *most* typical across the whole text — and it is the one place a part of such a text carries a dimension. A genre says what a part means in its kind of text, such as what the ending's call to action is there, and restates no part, order or dimension.
+
+## Headlines
+
+[`headlines.md`](headlines.md) says how a headline is written, a text's subheadings included: when a text gets a statement headline and when a label, what a statement headline does, and that every word in it is supported by the text. Any genre whose texts carry a headline may link it; the four article genres do today, below their identifying opening, and the anatomy sends the headline and the subheading alike to it. It lives outside the selectable directories and is never a choice or genre-inference input. Write loads its base half only; Redline and its fresh correction agents also load [`headlines.review.md`](headlines.review.md). Their loading steps name this exact bounded exception; no recursive link loading is authorised.
+
+It states no dimension. How long a headline may be follows from the format the text is written to, which for these four genres is the anatomy.
 
 ## Review extensions
 

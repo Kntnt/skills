@@ -18,6 +18,6 @@ Förvaltningen vill slippa dubbel administration. Det är en relevant invändnin
 
 ## Besluta om försöket, inte om antagandet
 
-Kommunstyrelsen bör därför besluta om försöket, ta ställning till dess ännu okända kostnad och ge förvaltningen i uppdrag att mäta tidsåtgången samt fråga användarna varför de väljer sin bokningsväg. Först då går det att väga alternativen.
+Kommunstyrelsen bör därför säga ja till halvåret med båda bokningsvägarna, ta ställning till dess ännu okända kostnad och ge förvaltningen i uppdrag att mäta tidsåtgången samt fråga användarna varför de väljer sin bokningsväg. Först då går det att väga alternativen.
 
 Ett antagande blir inte ett beslutsunderlag för att kalendern säger september.

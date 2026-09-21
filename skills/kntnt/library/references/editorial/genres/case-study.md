@@ -6,6 +6,8 @@ Apply the shared [web craft brief](../web-craft.md).
 
 Follow the [article anatomy](../article-anatomy.md).
 
+Write the headline and the subheadings as [Headlines](../headlines.md) says.
+
 ## What this genre asks for
 
 The headline names the customer's benefit or result, and the standfirst introduces the account behind it. Give enough customer background to understand the situation, what prompted the work, the choices and implementation, the supported results with their qualifications, and the customer's own appraisal. Arrange these for understanding; they need neither a heading each nor a quota of quotations. The ending's call to action is the next step the account and the assignment support, and it uses only supplied offers, links and contact routes.

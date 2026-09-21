@@ -6,9 +6,11 @@ Apply the shared [web craft brief](../web-craft.md).
 
 Follow the [article anatomy](../article-anatomy.md).
 
+Write the headline and the subheadings as [Headlines](../headlines.md) says.
+
 ## What this genre asks for
 
-State the thesis early and identify its holder when an author is supplied. Let the headline and useful subheadings carry the issue and argument for a scanning reader; a sharp headline must be one the text can defend.
+State the thesis early and identify its holder when an author is supplied. Let the headline and useful subheadings carry the issue and argument for a scanning reader.
 
 Build a case the reader can follow, distinguishing evidence, judgement and inference. Attribute load-bearing factual claims where they are used, and meet relevant real objections fairly. Neither an argument quota nor an invented opponent makes the case stronger.
 

@@ -14,7 +14,7 @@ Givarna mätte varken luftdrag eller elevernas upplevelse. Ett lågt värde säg
 
 Driftteknikern Elin Rask sammanfattar: ”Vi vet när vi behöver titta närmare. Vi vet ännu inte varför det blev kallt just då.”
 
-## Koppla värdena till användningen
+## Nästa försök behöver mer än givare
 
 Rask rekommenderar att temperaturserierna kopplas till rummens användningstider innan styrningen ändras. Nästa försök planeras för november med likadant placerade givare, men finansieringen är inte beslutad.
 
