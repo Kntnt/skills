@@ -6764,6 +6764,51 @@ def test_write_keeps_a_standpoint_without_sending_it_to_research() -> None:
     )
 
 
+def test_write_completes_a_comparison_by_the_report_not_by_its_route() -> None:
+    """A Harness that refuses the checker's write must not stop the run.
+
+    In two of nine runs of the Claude-family evaluation the environment refused
+    the checker's file write. Both checkers returned the whole report as reply
+    text and both writers read it, but the task caps that reply at 150 words,
+    the file the procedure assumes never existed, and nothing said whether a
+    report received as text is a completed comparison. Completeness turns on
+    the claim accounting and findings the writer received, not on the route
+    they arrived by (issue #378).
+    """
+
+    text = _write_prose()
+
+    assert "the 150-word limit does not apply to that reply" in text, (
+        f"{WRITE_DIR}: the reply cap still truncates a report that has no"
+        f" other way out of the checker (issue #378). See {STANDARD}."
+    )
+
+    assert "save that text to the report path yourself" in text, (
+        f"{WRITE_DIR}: a report received as text never reaches the report"
+        f" path the rest of the procedure reads from (issue #378). See"
+        f" {STANDARD}."
+    )
+
+    assert "complete by either route" in text, (
+        f"{WRITE_DIR}: nothing says a report that arrived complete as reply"
+        f" text is a completed comparison, so a writer may stop on a"
+        f" comparison it has in full (issue #378). See {STANDARD}."
+    )
+
+    assert "only the stated completion status" in text, (
+        f"{WRITE_DIR}: completeness can still be read off how far the"
+        f" accounting reaches, which is how three validators passed a report"
+        f" cut off before its completion status (issue #378). See"
+        f" {STANDARD}."
+    )
+
+    assert "whichever route it arrived by" in text, (
+        f"{WRITE_DIR}: the stop on a partial report does not reach a report"
+        f" that arrived as reply text, so a truncated one can be delivered"
+        f" on (issue #378). See {STANDARD}."
+    )
+
+
 # The Skill this wave's mechanical pass ships as, read at the one seam a test
 # has: the body is the whole of what the agent executes (ADR-0177).
 PROOFREAD = REPO_ROOT / "skills" / "editorial" / "proofread" / "SKILL.md"
