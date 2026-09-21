@@ -1,0 +1,120 @@
+{
+  "ok": true,
+  "format": "markdown",
+  "conforms": true,
+  "failures": [],
+  "norms": [],
+  "typical": {
+    "paragraphs": 11,
+    "paragraphs_of_two_or_three_sentences": 10,
+    "sections": 4,
+    "sections_of_two_or_three_paragraphs": 4
+  },
+  "parts": {
+    "headline": {
+      "text": "Underlaget räcker inte för att stänga telefonbokningen",
+      "characters": 54,
+      "words": 7
+    },
+    "standfirst": {
+      "text": "Från september ska föreningslokaler i Lervik enligt tjänsteutlåtandet …",
+      "words": 42,
+      "sentences_estimate": 4,
+      "paragraphs": 1
+    },
+    "byline": {
+      "text": "Av Sanna Ek, talesperson för föreningen Öppna beslut",
+      "words": 8
+    },
+    "lead": {
+      "text": "Den 18 juni möter kommunstyrelsen i Lervik ett …",
+      "words": 49,
+      "sentences_estimate": 3,
+      "paragraphs": 1
+    },
+    "sections": [
+      {
+        "subheading": {
+          "text": "Siffrorna räknar bokningar, inte människor",
+          "characters": 42,
+          "words": 5
+        },
+        "paragraphs": [
+          {
+            "text": "Under åtta veckor prövades bara två av de …",
+            "words": 29,
+            "sentences_estimate": 2
+          },
+          {
+            "text": "Rapporten räknar bokningar, inte unika personer. Den mäter …",
+            "words": 31,
+            "sentences_estimate": 3
+          },
+          {
+            "text": "Att en bokning går via telefon är inte …",
+            "words": 29,
+            "sentences_estimate": 2
+          }
+        ]
+      },
+      {
+        "subheading": {
+          "text": "Invändningen är verklig, men handlingarna saknar siffror",
+          "characters": 56,
+          "words": 7
+        },
+        "paragraphs": [
+          {
+            "text": "Motivet i tjänsteutlåtandet är att personalen ska slippa …",
+            "words": 20,
+            "sentences_estimate": 2
+          },
+          {
+            "text": "Men handlingarna innehåller varken tidsmätning eller beräkning av …",
+            "words": 28,
+            "sentences_estimate": 2
+          }
+        ]
+      },
+      {
+        "subheading": {
+          "text": "Ett halvår med mätning ger kommunstyrelsen underlag",
+          "characters": 51,
+          "words": 7
+        },
+        "paragraphs": [
+          {
+            "text": "Öppna beslut föreslår i stället sex månaders försök …",
+            "words": 36,
+            "sentences_estimate": 2
+          },
+          {
+            "text": "Då kan arbetskostnaden vägas mot värdet för dem …",
+            "words": 23,
+            "sentences_estimate": 2
+          }
+        ]
+      },
+      {
+        "subheading": {
+          "text": "Mät först, besluta sedan",
+          "characters": 24,
+          "words": 4
+        },
+        "paragraphs": [
+          {
+            "text": "Öppna beslut gör inget anspråk på att ha …",
+            "words": 20,
+            "sentences_estimate": 2
+          },
+          {
+            "text": "Men mät först. Låt telefonbokningen vara kvar under …",
+            "words": 39,
+            "sentences_estimate": 3
+          }
+        ]
+      }
+    ],
+    "other": []
+  }
+}

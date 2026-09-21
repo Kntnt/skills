@@ -1,0 +1,9 @@
+Comparison complete; report written to `/Users/thomas/Projects/skills/.git/kntnt-orchestrate/380.scratch/eval-stage/runs/web-copy-abt/write/work/scratch/source-check/report-2.md`.
+
+Twenty-one claims accounted for, plus a separate accounting of pronoun person, number and gender. Two unresolved source-support findings:
+
+- **F1** — "Uppdraget består av två delar" turns the material's inclusive "Genomgången omfattar … och …" into an exhaustive count; repair: "Uppdraget omfattar:".
+- **F2** — "om uppdraget passar er förening" narrows the material's unstated "om uppdraget passar"; repair: delete "er förening".
+
+One editorial question (Q1): "formuläret"/"Svales formulär" names a submission mechanism the material leaves unnamed — reported as the material's silence, not a defect. No translation findings: both texts are Swedish and the draft contains no quotation.
+EXIT=0

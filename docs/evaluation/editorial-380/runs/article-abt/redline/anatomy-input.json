@@ -1,0 +1,144 @@
+{
+  "ok": true,
+  "format": "markdown",
+  "conforms": true,
+  "failures": [],
+  "norms": [],
+  "typical": {
+    "paragraphs": 14,
+    "paragraphs_of_two_or_three_sentences": 12,
+    "sections": 5,
+    "sections_of_two_or_three_paragraphs": 5
+  },
+  "parts": {
+    "headline": {
+      "text": "Björkskolans mätning visar när, inte varför",
+      "characters": 43,
+      "words": 6
+    },
+    "standfirst": {
+      "text": "Under fyra veckor registrerade Lerviks fastighetskontor temperaturen i …",
+      "words": 54,
+      "sentences_estimate": 3,
+      "paragraphs": 1
+    },
+    "byline": {
+      "text": "Av Thomas Barregren",
+      "words": 3
+    },
+    "lead": {
+      "text": "I januari 2026 satte Lerviks fastighetskontor temperaturgivare i …",
+      "words": 51,
+      "sentences_estimate": 4,
+      "paragraphs": 1
+    },
+    "sections": [
+      {
+        "subheading": {
+          "text": "Placeringen jämfördes aldrig experimentellt",
+          "characters": 43,
+          "words": 4
+        },
+        "paragraphs": [
+          {
+            "text": "Två av givarna stod nära ytterväggar, fyra på …",
+            "words": 17,
+            "sentences_estimate": 2
+          },
+          {
+            "text": "Var givarna satt är dokumenterat. Men eftersom placeringarna …",
+            "words": 29,
+            "sentences_estimate": 2
+          }
+        ]
+      },
+      {
+        "subheading": {
+          "text": "Försöket mätte varken luftdrag eller strålning",
+          "characters": 46,
+          "words": 6
+        },
+        "paragraphs": [
+          {
+            "text": "En temperaturgivare svarar på en fråga i taget: …",
+            "words": 37,
+            "sentences_estimate": 3
+          },
+          {
+            "text": "Ventilation, luftdrag och upplevd temperatur ingick inte i …",
+            "words": 20,
+            "sentences_estimate": 2
+          }
+        ]
+      },
+      {
+        "subheading": {
+          "text": "Rapporten säger hur ofta, inte hur länge",
+          "characters": 40,
+          "words": 7
+        },
+        "paragraphs": [
+          {
+            "text": "Av sammanlagt 120 registrerade lektionspass innehöll 14 minst …",
+            "words": 31,
+            "sentences_estimate": 2
+          },
+          {
+            "text": "Ett medelvärde för hela dagen kan dölja variation …",
+            "words": 20,
+            "sentences_estimate": 2
+          },
+          {
+            "text": "Hur länge temperaturen låg under arbetsgränsen framgår inte. …",
+            "words": 16,
+            "sentences_estimate": 2
+          }
+        ]
+      },
+      {
+        "subheading": {
+          "text": "Effekten av eventuella justeringar är inte mätt",
+          "characters": 47,
+          "words": 7
+        },
+        "paragraphs": [
+          {
+            "text": "Driftteknikern Elin Rask gick efter mätperioden igenom tiderna …",
+            "words": 16,
+            "sentences_estimate": 1
+          },
+          {
+            "text": "Ett nytt försök planeras till november, med likadant …",
+            "words": 20,
+            "sentences_estimate": 2
+          },
+          {
+            "text": "— Vi vet när vi behöver titta närmare. …",
+            "words": 20,
+            "sentences_estimate": 2
+          }
+        ]
+      },
+      {
+        "subheading": {
+          "text": "Lägg användningstiderna bredvid temperaturserien",
+          "characters": 48,
+          "words": 4
+        },
+        "paragraphs": [
+          {
+            "text": "Fyra veckors registrering i sex rum ger ett …",
+            "words": 30,
+            "sentences_estimate": 2
+          },
+          {
+            "text": "Rask rekommenderar att temperaturserierna kopplas till användningstiderna innan …",
+            "words": 32,
+            "sentences_estimate": 2
+          }
+        ]
+      }
+    ],
+    "other": []
+  }
+}
