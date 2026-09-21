@@ -26,7 +26,7 @@ A Contextual Instruction every higher level has already settled is suppressed ra
 
 Only the resolved language's mechanics guidance and the shared mechanics contract are used. Ordinary frontmatter is not configuration, and an unsupported `kntnt` language stops the run unless **--language** overrides it.
 
-The default Output Target is the response. **--output** writes elsewhere; **--in-place** replaces the single writable local source file. An unchanged result is not rewritten unless delivery to another path was requested.
+The default Output Target is the response. A text delivered in the response arrives inside one fenced code block. **--output** writes elsewhere; **--in-place** replaces the single writable local source file. An unchanged result is not rewritten unless delivery to another path was requested.
 
 A model may start this Skill only for a specific text and an explicit proofreading request. Requests to edit, rewrite, polish, improve, tighten, or review do not trigger it; typing `/proofread` always does.
 

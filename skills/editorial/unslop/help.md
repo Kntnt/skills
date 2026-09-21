@@ -42,7 +42,7 @@ Repairs are the smallest changes that remove a pattern while preserving the writ
 
 One invocation handles exactly one text. Multiple files, globs, and directories are refused.
 
-The response is the default Output Target. **--output** writes elsewhere; **--in-place** replaces one writable local source file. The Skill reports the findings separately, in the text's own language, and every removed claim and every changed claim remains visible. Internal review reasoning is not output.
+The response is the default Output Target. A text delivered in the response arrives inside one fenced code block. **--output** writes elsewhere; **--in-place** replaces one writable local source file. The Skill reports the findings separately, in the text's own language, and every removed claim and every changed claim remains visible. Internal review reasoning is not output.
 
 A model never starts this Skill on its own. Typing `/unslop` is the complete trigger.
 
