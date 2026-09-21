@@ -12,7 +12,7 @@ write - turn a brief and its source material into one first draft
 
 `write` turns a brief and its source material into one first draft and independently compares its claims with that material and checks translated quotations before delivery. It performs no editorial review or proofreading.
 
-Sources may be inline text, local files, URLs, the Contextual Instruction, or Conversation Context. Several sources may feed one draft. Supplying a file does not select an output; the response is the default.
+Sources may be inline text, local files, URLs, the Contextual Instruction, or Conversation Context. Several sources may feed one draft. Supplying a file does not select an output; the response is the default. A text delivered in the response arrives inside one fenced code block.
 
 Genre, technique, language, and output resolve independently before writing. Genre defaults to `general`, and language to the request and material. Where nothing names a technique, the resolved genre supplies the one that kind of text is ordinarily written with, and a genre naming none leaves the draft with none. Article, case-study, column, opinion and web-copy ordinarily select no technique. Explicit selections and existing metadata keep their priority. The delivery says which technique was resolved and where it came from. Ambiguous or mixed language produces a question.
 

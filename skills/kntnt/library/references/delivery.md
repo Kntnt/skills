@@ -10,6 +10,18 @@ A Harness convention identifies where an authorized temporary file belongs; it d
 
 An Output Target is independent of where the source material came from. Supplying a local file as source material selects no destination, and a run that reads a file still delivers to the response until the caller names somewhere else. Persisting a result is the caller's explicit choice, and making that choice is the whole of the authorization for it.
 
+## How a response carries the text
+
+A response carries a Text Artifact inside a fenced code block rather than as prose of the reply's own. A text and the words about it are two different things, and a reply that runs them together hands the reader a text nothing marks the edges of. Markdown is where that costs most: an artifact opening on a frontmatter delimiter, set directly beneath a paragraph the run wrote, turns that paragraph into a heading unless a blank line goes in between them — and a blank line there is what ends the frontmatter block the text was settled with. A fence removes the question rather than leaving each run to answer it, and the answers a run improvises are what made one saved reply in sixteen deliver a horizontal rule and a paragraph of configuration in place of a frontmatter block.
+
+The complete Text Artifact sits inside exactly one fenced code block, byte for byte as the run settled it: frontmatter, blank lines and trailing structure included. Nothing is added, dropped or re-wrapped between the fence lines, and one block rather than several, a text split across two fences being a text the reader has to reassemble.
+
+The fence is longer than the longest run of backticks inside the artifact, so a text carrying fenced code of its own cannot close it early. The info string names the text's format: `markdown` for a Markdown text, `html` for HTML, `text` for plain text.
+
+Everything the run says *about* the text sits outside the fence — the resolved configuration, the findings and which of them are unresolved, the claim account, where a technique came from, what the run could not do. Nothing of the run's own is inside it. What the run settled as part of the document does belong inside, the Handoff Metadata and any marking the user asked to have placed in the document itself among it, because that is the text as delivered rather than a remark about it.
+
+The rule reaches every complete text a reply carries, whether this contract calls that text delivered or not. A response-targeted run that changed nothing and has findings left fences the artifact like any other; a run that stopped before it could deliver and carries its preserved prose in the reply fences that prose, and says in its own words outside the fence what the prose has not been through. The short no-change status carries no text at all and so carries no fence. An explicit destination and In-place Editing receive the text itself and never a fence: a fence is how a reply holds a text apart from its own words, and a file has no words of its own to be held apart from.
+
 ## An explicit destination
 
 An explicit destination is one filesystem path, and what exists at that path decides what happens to it.

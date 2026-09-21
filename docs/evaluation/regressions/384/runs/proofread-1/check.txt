@@ -1,0 +1,10 @@
+fenced blocks: 1
+  block 1: info='markdown' lines=24
+    first: '---'
+    last:  'Ändå vill jag prova en enkel fråga bredvid tiden: vad behöver vi förstå tillsammans? Jag vet inte om den överlever mötet med en verklig dagordning, och jag tänker inte låtsas att jag gör det. Hoppet om frågan och tvivlet på ännu en ruta får samsas ett tag till.'
+blocks carrying the artifact: 1
+artifact content outside every fence: False
+fenced frontmatter block: '---\nkntnt:\n  genre: column\n  technique: none\n  language: sv\n---'
+fixture frontmatter block: '---\nkntnt:\n  genre: column\n  technique: none\n  language: sv\n---'
+frontmatter byte-identical: True
+result: pass

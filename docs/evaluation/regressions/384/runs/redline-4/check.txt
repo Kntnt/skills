@@ -1,0 +1,4 @@
+fenced blocks: 0
+blocks carrying the artifact: 0
+artifact content outside every fence: False
+result: not exercised (the reply carries no Text Artifact)

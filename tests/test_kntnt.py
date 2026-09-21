@@ -6015,6 +6015,162 @@ def test_a_named_destination_takes_the_artifact_out_of_the_response() -> None:
             )
 
 
+# The shared delivery contract's answer to how a reply carries the text it
+# delivers: one fenced code block, and the run's own words outside it
+# (issue #384, ADR-0211).
+DELIVERY_ONE_FENCE = (
+    "The complete Text Artifact sits inside exactly one fenced code block, byte"
+    " for byte as the run settled it"
+)
+DELIVERY_FENCE_LENGTH = (
+    "The fence is longer than the longest run of backticks inside the artifact"
+)
+DELIVERY_FENCE_INFO = "The info string names the text's format"
+DELIVERY_FENCE_OUTSIDE = "Nothing of the run's own is inside it"
+DELIVERY_FENCE_DOCUMENT = "Handoff Metadata"
+DELIVERY_FENCE_EVERY_TEXT = "The rule reaches every complete text a reply carries"
+DELIVERY_FENCE_NO_STATUS = "carries no text at all and so carries no fence"
+DELIVERY_FENCE_NOT_A_FILE = "receive the text itself and never a fence"
+
+# The four Skills that deliver through the shared contract, and the one
+# sentence each manpage gives the reader for what a reply looks like. That
+# sentence describes what the user sees and restates none of the properties
+# above, which the contract owns.
+DELIVERY_SKILLS = ("write", "redline", "proofread", "unslop")
+HELP_FENCE_SENTENCE = (
+    "A text delivered in the response arrives inside one fenced code block."
+)
+
+
+def test_the_shared_delivery_contract_settles_how_a_reply_carries_the_text() -> None:
+    """A delivered text is held apart from the words about it, or it is damaged.
+
+    One saved Redline reply in sixteen returned the text with its frontmatter
+    block broken. The artifact opened on `---` directly beneath a paragraph of
+    the reply's own prose, where those three characters are also a thematic
+    break and would turn the paragraph above into a heading, so a blank line
+    went in between them — and a blank line there is exactly what stops a
+    frontmatter block from being one (issue #384). Nothing was disobeyed: the
+    contract settled where a result goes and never how a response carries it,
+    and the sixteen replies accordingly carried it three ways (ADR-0211).
+    """
+
+    contract = DELIVERY.read_text(encoding="utf-8")
+
+    # The rule is stated once, in a section of its own.
+    sections = [
+        section for section in contract.split("\n## ") if DELIVERY_ONE_FENCE in section
+    ]
+    assert len(sections) == 1, (
+        f"{DELIVERY}: the shared contract states in {len(sections)} of its"
+        f" sections that a response carries the Text Artifact in one fenced"
+        f" code block, and the rule that keeps a delivered text apart from the"
+        f" words about it is settled once or not at all (ADR-0211). See"
+        f" {STANDARD}."
+    )
+    rule = sections[0]
+
+    # Every property the rule has to carry to be executable by a run.
+    for clause, gap in (
+        (
+            DELIVERY_FENCE_LENGTH,
+            (
+                "an artifact carrying fenced code of its own closes the fence"
+                " early, and the rest of the text leaves the block"
+            ),
+        ),
+        (
+            DELIVERY_FENCE_INFO,
+            (
+                "the opening fence names no format, so what a reader and a later"
+                " Skill get back is an untyped block"
+            ),
+        ),
+        (
+            DELIVERY_FENCE_OUTSIDE,
+            (
+                "the run's own findings and account may sit between the fence"
+                " lines, which puts words the text never had inside the text"
+            ),
+        ),
+        (
+            DELIVERY_FENCE_DOCUMENT,
+            (
+                "the metadata the run settled as part of the document is not said"
+                " to be inside the fence, so a run may strip it back out"
+            ),
+        ),
+        (
+            DELIVERY_FENCE_EVERY_TEXT,
+            (
+                "the rule reaches only what the contract calls delivered, leaving"
+                " a stopped run's preserved prose to be carried as bare prose"
+            ),
+        ),
+        (
+            DELIVERY_FENCE_NO_STATUS,
+            (
+                "the short no-change status is not excepted, so a reply carrying"
+                " no text at all is read as owing a fence"
+            ),
+        ),
+        (
+            DELIVERY_FENCE_NOT_A_FILE,
+            (
+                "a file destination and In-place Editing are not excepted, so a"
+                " written file may receive the fence lines as part of the text"
+            ),
+        ),
+    ):
+        assert clause in rule, f"{DELIVERY}: {gap} (ADR-0211). See {STANDARD}."
+
+    # The reader who will see the reply meets it once, in each manpage.
+    for name in DELIVERY_SKILLS:
+        page = REPO_ROOT / "skills" / "editorial" / name / "help.md"
+        assert HELP_FENCE_SENTENCE in page.read_text(encoding="utf-8"), (
+            f"{page}: the manpage describes what arrives in the response"
+            f" without saying that a text arrives inside a fenced code block,"
+            f" which is the whole of what the reader will see change"
+            f" (ADR-0211). See {STANDARD}."
+        )
+
+    # And no consumer tells the rule a second time, in any shipped file.
+    for name in DELIVERY_SKILLS:
+        for shipped in sorted(
+            (REPO_ROOT / "skills" / "editorial" / name).rglob("*.md")
+        ):
+            text = shipped.read_text(encoding="utf-8")
+            for clause in (
+                DELIVERY_ONE_FENCE,
+                DELIVERY_FENCE_LENGTH,
+                DELIVERY_FENCE_INFO,
+                DELIVERY_FENCE_OUTSIDE,
+            ):
+                assert clause not in text, (
+                    f"{shipped}: this states how a response carries the Text"
+                    f" Artifact itself, which is a second copy of a rule the"
+                    f" shared delivery contract owns and is free to drift from"
+                    f" it (ADR-0211). See {STANDARD}."
+                )
+
+    # The one text the contract does not call delivered points at the rule
+    # rather than answering for itself.
+    source_check = (
+        REPO_ROOT / "skills" / "editorial" / "write" / "references" / "source-check.md"
+    )
+    preserved = [
+        paragraph
+        for paragraph in source_check.read_text(encoding="utf-8").split("\n\n")
+        if "not source-checked" in paragraph
+    ]
+    assert preserved and all("delivery.md" in paragraph for paragraph in preserved), (
+        f"{source_check}: a stopped run carries its complete prose in the"
+        f" reply without being pointed at how a reply carries a text, so the"
+        f" one text the contract does not call delivered is the one carried"
+        f" as bare prose (ADR-0211). See {STANDARD}."
+    )
+
+
 def test_the_collection_library_carries_the_editorial_base_contract() -> None:
     """One statement of what a first draft has to be, read from both sides.
 
