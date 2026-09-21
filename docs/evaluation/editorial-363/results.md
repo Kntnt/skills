@@ -159,3 +159,43 @@ For `en-positive`, `en-us-r1`, `metonymy-sv` and `rhythm-en_GB`, every run of ev
 The candidate arm removes no miss. There was none to remove: the baseline arm passes `K-translate` on both its runs, preserves every English and contrast quotation, and its Swedish source-blind replays are judged one-pass by both judges. What the candidate arm did instead was fail `K-translate` — the criterion the wording was written for — by causing a referent to be written into a quotation.
 
 So the shorter wording ships, and the shortest is the one that adds nothing.
+
+## The decision
+
+**Nothing ships. The product goes back to the baseline wording, which is `main` as it stood at `8a37e57e`.**
+
+Three independent things point the same way, and any one of them would be enough.
+
+**`K-cost`.** The candidate arm removes no miss the baseline reproduced, so the rule says the shorter wording ships. The baseline wording is the shortest there is.
+
+**`K-translate`.** The candidate wording did not merely fail to help. Its one visible effect on the translation control was a draft that wrote a referent into a quotation the source leaves open, which the body of this ticket names as a failure mode in its own words. A wording whose measured effect on its own criterion is negative does not ship on the argument that it might help elsewhere.
+
+**The independent load-chain review.** [`reviews/load-chain-review.md`](reviews/load-chain-review.md) was written by a reader that saw the diff and the whole chain around it and was deliberately kept from these numbers. It ends *do not ship as it stands*, on three must-fixes: that the chain can now drive a source-blind review into repairing wording inside quotation marks that `languages/sv.md` says the marks vouch for, while neither the reviewer nor the repairer is allowed to load the rule they would be breaking; that `case-study.review.md` dropped the word *merely* from *not protected merely by its quotation marks* and so turned a narrow disclaimer into a general one, in the genre made of customer speech; and that `quotations.md` says *a figure of the source* where it means a figure of the source **language**, so the rule reaches a figure the speaker coined. That last one is the same defect the measurement found from the other side: it is what a writer follows when it writes *arbetet* into Maya Lind's sentence.
+
+Fixing those three would be a second revise-and-remeasure round, and the exit criterion allows one. The `r` arm is that one.
+
+### What this does not decide
+
+**It does not decide that the ticket's premise is wrong.** Thomas's reading — that *innan nästa hus börjar* is a defect in professional Swedish, and that being able to work the meaning out is not the standard — is a judgement about Swedish prose, and this measurement cannot overturn it. What the measurement establishes is narrower and it is about the instrument: with the criteria frozen before the runs and the judging blind, **this provider family does not reproduce either failure**, so no candidate wording could have been shown to remove one. That is a fact about what can be measured here, not a verdict on the defect.
+
+**It does not clear the GPT-family failures.** They stay failed. The protocol forbids a Claude session from driving a Codex harness, so they were not retested, and a retest is Thomas's own step.
+
+**It does not settle what a next attempt should do.** The remaining miss is filed as its own ticket, and the first thing that ticket needs is not another wording: it is a way to tell whether the defect is there at all. Three of this ticket's six criteria turned out to have nothing to measure.
+
+### What is kept
+
+The plan, the fixtures, the judge briefs, the turn templates, the whole run tree with its judgements, this file, the load-chain review, the records, and [ADR-0212](../../adr/0212-a-quotation-is-read-in-the-language-it-is-written-in.md), which records the decision not to ship and why, so that the next author does not spend the same wording again. The three contrast fixtures in particular outlive this ticket: they are frozen, they have independent criteria, and `C-ellipsis` is now a documented disagreement between a fixture and two blind readers, which is worth more to the next attempt than a passing row would have been.
+
+## Findings that belong to another ticket
+
+Recorded here and counted against nothing in this ticket, as the plan and the addendum require. Every one is visible in the judgements beside its run.
+
+| Ticket | What the judges found, and where |
+| --- | --- |
+| [#377](https://github.com/Kntnt/skills/issues/377) | A limiting sentence's object moved without a finding naming it: `c/sv-control-r2` and `r/sv-control-r1` both changed the trial note's refusal to attribute the difference from *programvaran* to *loggen*. Unreported changes of taste to a clean text, in most `sv-control` and `sv-artefact` runs of every arm. |
+| [#383](https://github.com/Kntnt/skills/issues/383) | Clean texts rewritten to taste outside any finding, and mostly not reported: subheadings, bridges and terminology in `sv-control`, `sv-artefact`, `en-positive`, `en-us-r1`, `metonymy-sv`, `rhythm-en_GB` and `ellipsis-sv`, in all three arms. `r/ellipsis-sv-r1` is the clearest: three edits, none reported, under an account asserting that nothing was removed, weakened or moved. |
+| [#389](https://github.com/Kntnt/skills/issues/389) | A repair the run's own re-review condemned, shipped anyway: recurring across the Redline rows, most often a new subheading asserting a median as a standing fact. |
+| [#390](https://github.com/Kntnt/skills/issues/390) | A subheading repeating the sentence under it, after `headlines.md` said how to avoid it: recurring in every arm. |
+| [#392](https://github.com/Kntnt/skills/issues/392) | A source-blind review dropping what the material required: the same shape the #380 wave recorded. |
+
+One observation that belongs to no open ticket and is filed as its own, because it is about the harness rather than the prose: **Redline declares `kntnt.capabilities: "subagents"` in its frontmatter and requires a fresh correction subagent in step 7, but no step confirms the capability.** Write's step 1 does — *confirm that this Harness can start a fresh subagent. Where it cannot, report the Unsatisfied Capability and stop before writing.* Redline has no equivalent, so in a seat that cannot start one it reviews and corrects in its own seat, which is the thing its own step 7 calls *the one reader who cannot check it*. This was met while staging the `r` arm: a Write run stopped correctly on the unsatisfied capability in a seat where Redline runs did not.
