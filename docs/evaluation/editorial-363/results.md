@@ -99,6 +99,8 @@ The same judges do not find the English defect either. No run in any arm expande
 
 **One judge divided against itself, and it is worth recording.** Judging the source-blind replays, judge A reads *innan nästa hus börjar* as one-pass Swedish. Judging a Write draft that had changed it to *innan arbetet i nästa hus börjar*, the same judge writes *a Swedish hus does not börja* and calls the checker's finding against it real. The two readings are made under two briefs, and the Redline brief carries an explicit warning that a figure a language uses itself reads on one pass however odd its literal parse. Neither reading is an oracle; the split is the evidence.
 
+**It happened again, in English, between two batches of the same judge.** Judging the English rows early, judge A recorded every quoted passage as taken on one pass. Judging the English paired replays later, the same judge writes of one run that *the one place a reader stops — "before the next building starts" — is correctly named as a finding left unrepaired*, and of three others that *the reader's stop at "before the next building starts" is not reported*. So the sentence the ticket says works in English is read as working and as a stop by one judge, in two batches, under one brief. Both readings are in the run tree. This is the clearest single reason the measurement cannot separate the arms: the instrument does not give the same answer twice about the sentence the whole ticket turns on.
+
 **Where the judges do find defects, they are other tickets' defects.** Across the Redline cases both judges fail rows for rewriting a clean text's headings to taste, for shipping a subheading the run's own re-review condemned, for an account that says nothing else moved when something did, and for a limiting sentence whose object moved — the shapes owned by [#383](https://github.com/Kntnt/skills/issues/383), [#389](https://github.com/Kntnt/skills/issues/389), [#390](https://github.com/Kntnt/skills/issues/390) and [#377](https://github.com/Kntnt/skills/issues/377). Those are recorded against those numbers and counted against nothing here, as the plan requires. On the Write side both judges fail `F1` on every Swedish draft in both arms, for small source-coverage slips unrelated to quoted speech.
 
 
@@ -130,7 +132,13 @@ The criterion asks that in every delivered `sv` draft two independent judges **b
 | `c/case-study-sv-r2` | *innan nästa hus drar i gång* | one pass, intact | one pass, intact |
 | `c/case-study-sv-r3` | *innan nästa hus kommer igång* | one pass, intact | one pass, *intact bar a softened emphasis* in the first quotation |
 
+| `r/case-study-sv-r1` | *innan nästa hus kommer i gång* | one pass, intact | one pass, intact |
+| `r/case-study-sv-r2` | *innan vi börjar i nästa hus* | one pass, *bar a half-beat at the unintroduced definite* Kategorierna | **stops the reader** — *Q1 stops the reader at* Kategorierna*, which the article never introduces* |
+| `r/case-study-sv-r3` | *innan starten i nästa hus* | one pass, intact | one pass, intact |
+
 Both baseline runs pass on both judges. The candidate arm fails, and it fails on the one run where the change visibly did something: `c/case-study-sv-r1` is the draft the judges record as having had a translation finding raised against the quotation and repaired — both read the checker reports in its `evidence/`, judge A classing the repair a *supported repair, with a cost* and judge B a *disputed caution, accepted* — and the repair wrote *arbetet* — the work — into a sentence the source leaves open. No other Swedish draft in either arm is recorded with one. Both judges name that as the cost, and the body of this ticket forbids exactly it: *Om faktisk kontext inte räcker ska Redline rapportera hindret och bevara osäkerheten, inte hitta på en händelse*. The candidate wording's only measured effect on this control was to cause one.
+
+**The revise round did not repair the criterion either.** Its three Swedish drafts all avoid the bare *X börjar*, which the candidate arm's did not, and two of the three pass on both judges. The third fails: judge B reads the first of Maya Lind's quotations as stopping a Swedish reader at the definite *Kategorierna*, which the article never introduces. That is the same defect class the criterion is about — a word the reader has to supply — moved from one of her quotations to another. Two of three passing is what the candidate arm managed too. The revise round changed which sentence carried the fault; it did not remove it.
 
 ### `K-repair-sv` — Swedish source-blind repair
 
@@ -146,7 +154,13 @@ The clause *a change the run's own reported findings do not name is a fail* does
 
 For `en-positive`, `en-us-r1`, `metonymy-sv` and `rhythm-en_GB`, every run of every arm returned the working quotation unchanged, and both judges confirm it word for word and read on one pass. No run expanded *before the next building starts*, *terminen drog i gång*, *expeditionen*, *before the winter* or *the depot*. `C-metonymy` and `C-rhythm` pass in all three arms.
 
-**The English failure this ticket inherits therefore did not reproduce in this family at all.** The baseline arm — the product with no change — preserves it. There was no English miss for either wording to fix, and neither wording caused one.
+**The English failure this ticket inherits therefore did not reproduce in this family at all.** The baseline arm — the product with no change — preserves it. There was no English miss for either wording to fix, and neither wording changed an English quotation.
+
+**One revised run did fire at the working English sentence, and stopped short of changing it.** `r/en-us-r1-r1` reports, among its unresolved findings:
+
+> **"I would set that time aside before the next building starts."** The reader has to supply what it is that the building starts. It sits inside Lind's quoted speech, and the surrounding text does not settle it in her words, so correcting it would put words in her mouth.
+
+It is the only run in any arm that says this, and it is a revised-arm run. The criterion is met — the quotation came back unchanged, and where a run does report a finding the criterion asks that the finding name a concrete obstacle, which this one does in the text's own words. But the ticket's own position is that *before the next building starts* **works** in the full English account and that there is no concrete English obstacle there. Read against that, this is the over-firing direction the hypothesis predicted would not appear, showing up in the arm written to prevent it, one step short of the change that would have failed the criterion. What kept the text intact was not the new test but the older rule that a repair inside quotation marks puts words in the speaker's mouth — which is the rule the [load-chain review](reviews/load-chain-review.md) says the chain does not reliably reach.
 
 `C-ellipsis` is the one fixture criterion that fails, and it fails identically in all three arms: *Sedan gick lagret över* comes back untouched with no reported finding against it, which the fixture states is a miss. Both judges, in all six cases, read that passage as one-pass Swedish too. The fixture and the judges disagree, the fixture was frozen first and is not edited, and what the disagreement rules out is using this row to separate the arms.
 
