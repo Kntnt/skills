@@ -92,7 +92,7 @@ It prints one JSON object with `conforms`, `failures`, `norms`, `typical` and `p
 
 It is run on every text this evaluation judges: a Write row's delivered draft to `anatomy-delivered.json`, and a Redline row's `work/input.md` and `delivered.md` to `anatomy-input.json` and `anatomy-delivered.json`. A Write row's source package is a brief rather than an article, so no `anatomy-input.json` exists on that side. Where a Write run stopped undelivered, the evaluator copies the last draft from `evidence/` to `last-draft.md` beside `work/` and measures it as `anatomy-last-draft.json`; `delivered.md` and `anatomy-delivered.json` are then absent, which is what a stopped run means.
 
-**The anatomy binds the four article genres only.** On the five `article` and `opinion` rows its counted requirements are requirements, and a count outside one is the failure. On the three `web-copy` rows the corpus says the scale stays advisory, so the script's figures are recorded and quoted as description and no count makes a failure there on its own. The JSON files are kept beside the run either way, and **a judge is handed those figures and counts nothing itself**; where a count it needs is not in the file it says so rather than producing one.
+**The anatomy binds the four article genres only.** On the six `article` and `opinion` rows — `article-sv`, `article-en_GB`, `opinion-sv-r1`, `opinion-sv-r2`, `article-abt` and `article-pac` — its counted requirements are requirements, and a count outside one is the failure. On the two `web-copy` rows, `web-copy-sv` and `web-copy-abt`, the corpus says the scale stays advisory, so the script's figures are recorded and quoted as description and no count makes a failure there on its own. The JSON files are kept beside the run either way, and **a judge is handed those figures and counts nothing itself**; where a count it needs is not in the file it says so rather than producing one.
 
 ## Two judges per artefact
 
@@ -177,8 +177,12 @@ A Redline reply that changes nothing still gets a `delivered.md`: it is a byte c
 
 ## Where the results go
 
-A results file beside this plan; the two records in the protocol's format under `docs/evaluation/records/`, named `write-claude-<run date>-380.md` and `redline-claude-<run date>-380.md`; and one bullet for each in the records index, written to this ticket's note file because that index is the run's to append to rather than a builder's.
+A results file beside this plan; the two records in the protocol's format under `docs/evaluation/records/`, named `write-claude-<run date>-380.md` and `redline-claude-<run date>-380.md`; and one bullet for each in the records index, appended below every line already there.
 
 ## What is fixed before any result exists
 
 No criterion is softened to fit a result, no fixture is edited, and no wording of either Skill or of the Library is changed here. Nothing frozen under `docs/evaluation/` is edited. The rows, the invocations, the criteria, the seat, the briefs, the inventory scope and the script's role above are settled by this file. A real defect becomes its own ticket labelled `needs-triage`, named in the record, and is never absorbed by softening a criterion; where a defect this evaluation meets already has a ticket, that number is cited rather than a second one filed. A run that could not be staged or judged as written is recorded as it fell, and its remaining miss is filed as its own ticket.
+
+## Corrected after the runs
+
+One sentence of this plan was wrong when it was frozen and is corrected here: the paragraph on the anatomy grouped the rows as *five* `article` and `opinion` and *three* `web-copy`, where the eight-row table above has six of the first and two of the second. The evaluator applied the rule by genre throughout — the advisory reading appears on `web-copy-sv` and `web-copy-abt` and on no other entry — so no run, no judgement and no verdict is affected, and nothing else in this file is changed.
