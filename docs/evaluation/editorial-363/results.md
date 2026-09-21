@@ -77,7 +77,7 @@ Every Swedish Write row in every arm delivered a draft; none stopped. All seven 
 
 The revise round did change the Swedish renderings, and in the direction the revised wording aimed at: none of its three runs leaves the bare *X börjar* that the ticket names, where the baseline produced it once and the candidate twice. Two of the three supply something the source leaves open — *vi* in `r2`, *starten* in `r3` — which is the same move the candidate arm's `r1` made with *arbetet*, milder in both cases because *vi* is already the speaker's own word in the sentence before it. The judgements of those three drafts sit beside them in the run tree. What the arm cannot do is change the decision: `K-cost` ships the shorter wording wherever the candidate arm removes no miss the baseline reproduced, and the baseline arm reproduced none — it passed the translation control on both its runs and on both judges.
 
-### Two rows added to the revise arm, and one not
+### One row added to the revise arm, and one deliberately not
 
 The plan lets a row be added and none be removed. The `r` arm as the earlier sessions left it had no English Write row at all, which would have measured the Swedish half of an asymmetric hypothesis without the English half. **`case-study-en_US` was added, once.** It delivered, and its draft carries the source sentence verbatim.
 
