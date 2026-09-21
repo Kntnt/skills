@@ -32,10 +32,14 @@ only the band: the measured points the evidence cannot tell apart from the best
 one it holds, bounded below by that point's own tenth percentile, so that the
 cheapest junk in the pool cannot win by having a small price divided into a
 small chance. `_ranked` states that rule, `_band` draws the band, and
-`_explored` states the one exception to reading any of it off the means: a
-bounded share of reversible calls tries the boundary instead, because a store
-that only ever runs its favourite never learns that a cheaper point would have
-done.
+two exceptions read the answer off something other than the means. `_explored`
+states the first: a bounded share of reversible calls tries the boundary
+instead, because a store that only ever runs its favourite never learns that a
+cheaper point would have done. `_owed` states the second: a model this machine
+holds too few rows of its own for on the kind is given three reversible jobs of
+it at whatever they cost, because the ranking above shuts such a model out of
+every plain answer while the exploration below it only ever goes downhill, and
+between them they leave it no way of ever being measured at all.
 
 All of that happens under a deliberation ceiling. No point above it is in the
 pool — `xhigh` where the caller names no `--max-deliberation` — so the top of
@@ -63,7 +67,7 @@ import launch
 import profiles
 import quota
 from catalogue import LEVELS, Catalogue, Model
-from evidence import KINDS, Estimate, Estimator, KindPriors
+from evidence import ENOUGH, KINDS, Estimate, Estimator, KindPriors
 from profiles import OBJECTIVES, Profile
 
 # How wide a pool the caller wants to consider. `limited` stays with the
@@ -109,6 +113,14 @@ EXPLORATION = 0.1
 # moved both at once would say nothing about either, and the coin gives each
 # dimension half the explorations.
 DIMENSIONS = ("deliberation", "model")
+
+# What `explored` carries where the call was spent on a Trial rather than on an
+# ordinary exploration. It sits in the same member because both are a call
+# spent on the boundary instead of on the answer, and it is deliberately not
+# one of `DIMENSIONS`: a Trial moves the model and takes whatever level that
+# model supports nearest the answer's, so naming a dimension would claim the
+# level was held fixed when it was not (ADR-0207).
+TRIAL = "trial"
 
 # Where the data directory sits when the caller does not say.
 DEFAULT_DATA = Path(".kntnt") / "model-selector"
@@ -271,9 +283,16 @@ def _answer(args: argparse.Namespace) -> dict[str, Any]:
             objective.name,
         )
     )
+    # A Trial first, and the coin only where none is owed. Whether one is owed
+    # is settled without drawing from the generator, so a call owing none
+    # spends exactly the draws it spent before this rule existed.
     explored: str | None = None
     if _explorable(args):
-        ranked, explored = _explored(scored, ranked, args, objective.name, notes)
+        tried = _owed(scored, ranked, args.kind, estimator)
+        if tried is not None:
+            ranked, explored = _trial(tried, ranked, notes), TRIAL
+        else:
+            ranked, explored = _explored(scored, ranked, args, objective.name, notes)
 
     ranked = _after(ranked, args.after, objective.name, notes)
     if not ranked:
@@ -541,6 +560,112 @@ def _explored(
         f"chosen {_named(plain.point)}"
     )
     return [chosen, *[row for row in ranked if row is not chosen]], dimension
+
+
+def _owed(
+    scored: Sequence[Scored],
+    ranked: Sequence[Scored],
+    kind: str,
+    estimator: Estimator,
+) -> Scored | None:
+    """Return the point a model with too few rows of its own is owed a Trial at.
+
+    The ranking puts every point measured for the kind before every point that
+    is not, so a model with no rows for a kind cannot win a plain answer while
+    anything measured is in the pool, and the downhill exploration reaches a
+    cheaper such model about four calls in a thousand and a dearer one never.
+    Measured over 200 000 simulated calls that is some 750 builds for the three
+    rows that would make it judgeable, which is not a door. So a model with
+    fewer than `ENOUGH` rows of its own for the kind is given three reversible
+    jobs of it at whatever they cost, and is judged on its own record after
+    that (ADR-0207).
+
+    Two things make a model owed one. Its rows for the kind, at every level,
+    fall short of `ENOUGH` — the estimator's own count, so that the rows
+    counted are the rows estimated from. And it could plausibly win: the
+    estimate of the point it would be tried at is at least the bound `_band`
+    draws over this call's own pool, the same band the ranking reads where no
+    measured point clears the floor. A Trial tries a model that might be the
+    answer; it is not spent confirming that a weak model is weak, and a model
+    below the band keeps the cheap downhill road it has today. Where the pool
+    holds nothing measured there is no band and no Trial, the ranking already
+    letting an untested point be the plain answer in that case.
+
+    The candidates are the points of the pool this call ranks and nothing
+    wider, which is what makes every filter on the pool a filter on the Trial
+    for free: the scope, the locks, the quota guard and the deliberation
+    ceiling have all already run, and nothing here has to know any of them
+    exists. The answer's own model is never among them — a Trial is a point
+    tried instead of the answer, and a note saying the evidence would have
+    chosen the point just chosen would say nothing.
+
+    One model at a time per kind, decided from the same rows rather than from a
+    key kept somewhere: among the models owed one, a model that already holds a
+    row for the kind is a Trial in progress and is taken first, and where
+    several are, or where none has any row yet, the one whose Trial point the
+    ranked list reaches first is taken. That is a total order, so the choice is
+    the same on every run.
+
+    The count is honest rather than exact. A job whose row has not been filed
+    yet — waiting to be graded, or filed by one side only — does not count, and
+    two calls in one wave read the same rows, so a model can be given a fourth
+    or a fifth job where calls overlap. Overshooting by a job or two is the
+    accepted cost: it buys one extra reversible job, where the alternative is a
+    counter file that can disagree with the store it is counting.
+    """
+
+    plain = ranked[0]
+    drawn = _band(ranked)
+    if drawn is None:
+        return None
+    _, bound = drawn
+
+    place = {id(row): index for index, row in enumerate(ranked)}
+    candidates: list[Scored] = []
+    held: dict[str, int] = {}
+    for rows in _elsewhere(scored, plain.point.model.id):
+        model_id = rows[0].point.model.id
+        held[model_id] = estimator.rows_for_kind(kind, model_id)
+        if held[model_id] >= ENOUGH:
+            continue
+        tried = _alongside(rows, plain.point.deliberation)
+        if tried.estimate.mean < bound:
+            continue
+        candidates.append(tried)
+
+    if not candidates:
+        return None
+    return min(
+        candidates,
+        key=lambda row: (held[row.point.model.id] == 0, place[id(row)]),
+    )
+
+
+def _trial(
+    tried: Scored, ranked: Sequence[Scored], notes: list[str | None]
+) -> list[Scored]:
+    """Return the ranked list with the Trial point lifted to the front of it.
+
+    The rest keeps the order the ranking gave it, so the alternatives are the
+    list they would have been with that one point taken out of its old place.
+
+    The note is the Trial's own rather than the exploration's, because a Trial
+    is a point tried instead of the answer rather than one dimension of the
+    answer moved, and the exploration's line would have called `trial` a
+    dimension. What it owes a reader is what that line owes one (ADR-0184): a
+    reader who finds a model nothing has measured chosen has to be able to tell
+    a deliberate Trial from a routing fault at a glance, so the line says the
+    call was a Trial, names the point being tried, and says what the evidence
+    would have chosen instead.
+    """
+
+    plain = ranked[0]
+    notes.append(
+        f"a trial of {_named(tried.point)}, which this machine holds fewer than "
+        f"{ENOUGH} rows of its own for on this kind of work, where the evidence "
+        f"would have chosen {_named(plain.point)}"
+    )
+    return [tried, *[row for row in ranked if row is not tried]]
 
 
 def _beyond(

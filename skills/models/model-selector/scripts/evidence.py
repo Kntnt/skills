@@ -658,6 +658,24 @@ class Estimator:
             beta=beta,
         )
 
+    def rows_for_kind(self, kind: str, model: str) -> int:
+        """Return how many rows the store holds for one model and kind, at any level.
+
+        What a Trial is counted off (ADR-0207). A model with fewer than
+        `ENOUGH` of these for a kind has not been measured doing that work at
+        all, wherever on the deliberation ladder the rows it does have were
+        taken, and `selection.py` reads this rather than the store a second
+        time so that the count and the estimate are read off one set of rows.
+
+        `Estimate.n` is not this number and cannot stand in for it: that is the
+        size of the deepest non-empty group, so a model holding one row at the
+        level being asked about and two elsewhere reports one, and a Trial
+        counted off it would never end.
+        """
+
+        _, by_kind, _ = self._levels(kind, model, None)
+        return len(by_kind)
+
     def tokens(
         self, kind: str, model: str, deliberation: str | None
     ) -> dict[str, float]:
