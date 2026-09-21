@@ -2,7 +2,7 @@
 
 Measured against [the frozen plan](plan.md) and the frozen criteria in [`fixtures/README.md`](fixtures/README.md). Nothing in either was edited after the first run.
 
-This file is written as the runs complete, so a section marked **pending** is work not yet done rather than work that found nothing.
+It was written as the runs completed and is finished: every row of the frozen matrix ran, every delivered draft got the paired source-blind replay the matrix requires, and every run in the tree carries two blind judgements. What was not done is named in *What is and is not finished* rather than left out.
 
 ## What was run, and in what
 
