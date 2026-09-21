@@ -69,7 +69,19 @@ The sentence the ticket is about is *I would set that time aside before the next
 | `c` | `case-study-sv-r2` | yes | *…innan nästa hus drar i gång* |
 | `c` | `case-study-sv-r3` | yes | *…innan nästa hus kommer igång* |
 
-Every Swedish Write row in both arms delivered a draft; none stopped. Only `c/case-study-sv-r1` writes the activity out, and it does so without being told to. All six English Write rows in the two arms carry the source sentence verbatim inside its quotation marks.
+| `r` | `case-study-sv-r1` | yes | *…innan nästa hus kommer i gång* |
+| `r` | `case-study-sv-r2` | yes | *…innan vi börjar i nästa hus* |
+| `r` | `case-study-sv-r3` | yes | *…innan starten i nästa hus* |
+
+Every Swedish Write row in every arm delivered a draft; none stopped. All seven English Write rows across the three arms carry the source sentence verbatim inside its quotation marks.
+
+The revise round did change the Swedish renderings, and in the direction the revised wording aimed at: none of its three runs leaves the bare *X börjar* that the ticket names, where the baseline produced it once and the candidate twice. Two of the three supply something the source leaves open — *vi* in `r2`, *starten* in `r3` — which is the same move the candidate arm's `r1` made with *arbetet*, milder in both cases because *vi* is already the speaker's own word in the sentence before it. The judgements of those three drafts sit beside them in the run tree. What the arm cannot do is change the decision: `K-cost` ships the shorter wording wherever the candidate arm removes no miss the baseline reproduced, and the baseline arm reproduced none — it passed the translation control on both its runs and on both judges.
+
+### Two rows added to the revise arm, and one not
+
+The plan lets a row be added and none be removed. The `r` arm as the earlier sessions left it had no English Write row at all, which would have measured the Swedish half of an asymmetric hypothesis without the English half. **`case-study-en_US` was added, once.** It delivered, and its draft carries the source sentence verbatim.
+
+**`case-study-en_GB` was not added**, and that is a stated choice rather than an omission. A second English locale would re-measure the same duty — that a writer does not improve a quotation it is copying rather than rendering — on a text the arm already covers at full candidate count in `en-positive`, `en-us-r1` and `rhythm-en_GB`, at the price of a run and its paired replay. One locale is enough to catch a gross regression in the writer's handling of English quoted speech; the preservation question proper is answered on the review side.
 
 ### The Redline rows: what came back
 
@@ -176,11 +188,28 @@ Fixing those three would be a second revise-and-remeasure round, and the exit cr
 
 **It does not clear the GPT-family failures.** They stay failed. The protocol forbids a Claude session from driving a Codex harness, so they were not retested, and a retest is Thomas's own step.
 
-**It does not settle what a next attempt should do.** The remaining miss is filed as its own ticket, and the first thing that ticket needs is not another wording: it is a way to tell whether the defect is there at all. Three of this ticket's six criteria turned out to have nothing to measure.
+**It does not settle what a next attempt should do.** The remaining miss is filed as [#393](https://github.com/Kntnt/skills/issues/393), and the first thing that ticket needs is not another wording: it is a way to tell whether the defect is there at all. Three of this ticket's six criteria turned out to have nothing to measure.
 
 ### What is kept
 
 The plan, the fixtures, the judge briefs, the turn templates, the whole run tree with its judgements, this file, the load-chain review, the records, and [ADR-0212](../../adr/0212-a-quotation-is-read-in-the-language-it-is-written-in.md), which records the decision not to ship and why, so that the next author does not spend the same wording again. The three contrast fixtures in particular outlive this ticket: they are frozen, they have independent criteria, and `C-ellipsis` is now a documented disagreement between a fixture and two blind readers, which is worth more to the next attempt than a passing row would have been.
+
+## What was voided, and why
+
+**Seven `r`-arm attempts made in a subagent seat are preserved and count for nothing.** They are under `logs/voided/` in the run scratch. The reason is [#394](https://github.com/Kntnt/skills/issues/394): a subagent of this harness has no agent-spawning tool, Write's step 1 correctly stopped a run on the unsatisfied `subagents` capability, and Redline runs in the same seat ran to completion without ever checking. Two of those attempts wrote into a run directory a session-harness run was also using, so provenance could not be established for them either; where a run's provenance could not be established it was treated as not completed and re-run, which is what the ticket's own instruction says to do.
+
+Nothing in the `b` or `c` arms is affected: those were made by an earlier session whose subagents could start checkers, as the two separate source-check reports in each of their Write run directories show.
+
+## What is not finished
+
+Stated by name, because a run tree that does not say what is missing reads later as one that is complete.
+
+- **The paired source-blind replays are partly done.** The frozen matrix requires one per delivered Write draft, and no session before this one had run any. All four of the `b` arm are complete. The `c` and `r` arms' replays were started in this session; [`runs/`](runs/) shows which reached a reply. Every completed one behaves as the matrix rows do: the quotation comes back unchanged.
+- **Judging follows the same line.** Every run that has a reply and has been staged for judging carries two blind judgements beside it; the replays that finished late may carry none yet. A run directory without `judgement-a.md` and `judgement-b.md` has not been judged, and nothing about it is claimed here.
+- **`T1` and `R2` are `skipped` on every row**, for the reason above, and are [#388](https://github.com/Kntnt/skills/issues/388)'s business.
+- **The GPT-family failures were not retested**, by the protocol's rule, and stay failed.
+
+None of these changes the decision. `K-cost` turns on whether the candidate arm removed a miss the baseline arm reproduced, and the baseline arm's rows — every one of them complete, judged and passing on quoted speech — settle that it reproduced none.
 
 ## Findings that belong to another ticket
 
@@ -194,4 +223,4 @@ Recorded here and counted against nothing in this ticket, as the plan and the ad
 | [#390](https://github.com/Kntnt/skills/issues/390) | A subheading repeating the sentence under it, after `headlines.md` said how to avoid it: recurring in every arm. |
 | [#392](https://github.com/Kntnt/skills/issues/392) | A source-blind review dropping what the material required: the same shape the #380 wave recorded. |
 
-One observation that belongs to no open ticket and is filed as its own, because it is about the harness rather than the prose: **Redline declares `kntnt.capabilities: "subagents"` in its frontmatter and requires a fresh correction subagent in step 7, but no step confirms the capability.** Write's step 1 does — *confirm that this Harness can start a fresh subagent. Where it cannot, report the Unsatisfied Capability and stop before writing.* Redline has no equivalent, so in a seat that cannot start one it reviews and corrects in its own seat, which is the thing its own step 7 calls *the one reader who cannot check it*. This was met while staging the `r` arm: a Write run stopped correctly on the unsatisfied capability in a seat where Redline runs did not.
+One observation that belonged to no open ticket and is now [#394](https://github.com/Kntnt/skills/issues/394), because it is about the harness rather than the prose: **Redline declares `kntnt.capabilities: "subagents"` in its frontmatter and requires a fresh correction subagent in step 7, but no step confirms the capability.** Write's step 1 does — *confirm that this Harness can start a fresh subagent. Where it cannot, report the Unsatisfied Capability and stop before writing.* Redline has no equivalent, so in a seat that cannot start one it reviews and corrects in its own seat, which is the thing its own step 7 calls *the one reader who cannot check it*. This was met while staging the `r` arm: a Write run stopped correctly on the unsatisfied capability in a seat where Redline runs did not.
