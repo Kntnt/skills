@@ -1,0 +1,14 @@
+{
+ "bd1-report-A": "runs/shipped/bd1-r4.md",
+ "bd1-report-B": "runs/shipped/bd1-r6.md",
+ "bd1-report-C": "runs/shipped/bd1-r5.md",
+ "bd1-report-D": "runs/shipped/bd1-r2.md",
+ "bd1-report-E": "runs/shipped/bd1-r3.md",
+ "bd1-report-F": "runs/shipped/bd1-r1.md",
+ "nd1-report-A": "runs/shipped/nd1-r1.md",
+ "nd1-report-B": "runs/shipped/nd1-r3.md",
+ "nd1-report-C": "runs/shipped/nd1-r5.md",
+ "nd1-report-D": "runs/shipped/nd1-r4.md",
+ "nd1-report-E": "runs/shipped/nd1-r6.md",
+ "nd1-report-F": "runs/shipped/nd1-r2.md"
+}
