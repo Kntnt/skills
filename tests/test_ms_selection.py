@@ -577,6 +577,78 @@ def test_a_point_that_cannot_be_priced_is_ranked_last_but_stays_eligible(
         assert listed["test-unpriced"]["per_success_seconds"] is not None
 
 
+def _measured_nought(data_dir: Path) -> None:
+    """Write a store in which one point recorded nought in every token category.
+
+    Codex reports `cache_write: 0` on every attempt it exposes usage for, and a
+    vendor that bills nothing for a category has reported nothing rather than
+    hidden it. Taken to its limit — every category recorded as nought — the
+    point prices at 0.00 USD.
+    """
+
+    catalogue = _module("catalogue")
+    _profile(data_dir)
+    lines = [
+        json.dumps(
+            {
+                "attempt_id": f"ms-free-{index}",
+                "at": "2026-09-01T00:00:00Z",
+                "kind": "implement",
+                "model": "claude-sonnet-5",
+                "deliberation": "high",
+                "grade": 1.0,
+                "graded_by": "checker",
+                "routed": True,
+                "tokens": dict.fromkeys(catalogue.TOKEN_CATEGORIES, 0.0),
+                "seconds": 900.0,
+            }
+        )
+        for index in range(20)
+    ]
+    (data_dir / "measurements.jsonl").write_text(
+        "".join(f"{line}\n" for line in lines), encoding="utf-8"
+    )
+
+
+def test_a_forecast_of_nought_is_a_real_price_and_not_a_null_one(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """A recorded nought exists, so what it prices at is a price.
+
+    This is the far edge of the rule that a category measured as nought is
+    forecast as nought: a point whose every recorded category measured nought
+    prices at 0.00 USD and sorts ahead of every other priced point. That is the
+    answer rather than a defect, and no floor, epsilon or guard is added
+    against it — the rule that an unmeasured configuration never becomes the
+    cheapest thing on a frontier governs a measurement that does not exist,
+    and this one does (issue #371).
+    """
+
+    _measured_nought(tmp_path)
+    ranked = _ranking(tmp_path, "implement")
+
+    free = {select._named(row.point): row for row in ranked}["claude-sonnet-5@high"]
+    priced = [row for row in ranked if row.cost_usd is not None]
+
+    assert free.cost_usd == 0.0
+    assert select._per_success_cost(free) == 0.0
+
+    # Every point Sonnet's own rows answer for prices at nought, so what has to
+    # hold is that each of them is ahead of every point carrying a real bill.
+    dearer = [row for row in priced if row.cost_usd > 0.0]
+    assert dearer
+    assert select._cost_key(min(priced, key=select._cost_key))[1] == 0.0
+    assert all(select._cost_key(free) < select._cost_key(row) for row in dearer)
+
+    answer = _answer(
+        capsys, *LIMITED, f"--data={tmp_path}", "--kind=implement", "--seed=0"
+    )
+    assert (answer["model"], answer["deliberation"]) == ("claude-sonnet-5", "high")
+    assert answer["expected"]["cost_usd"] == 0.0
+    assert answer["expected"]["per_success_cost_usd"] == 0.0
+    assert all(row["cost_usd"] > 0.0 for row in answer["alternatives"])
+
+
 def test_the_answer_is_the_cheapest_point_that_clears_the_floor(
     tmp_path: Path, capsys: pytest.CaptureFixture[str]
 ) -> None:
