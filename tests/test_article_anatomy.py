@@ -20,6 +20,24 @@ CONFORMS = 0
 FAILS = 1
 UNMEASURED = 2
 
+# The names the answer reports a figure or a stray block under, and the codes a
+# refusal carries. They are the script's published vocabulary, so the
+# expectations below are written in it rather than in string literals of their
+# own.
+HEADLINE_PART = "headline"
+STANDFIRST_PART = "standfirst"
+BYLINE_PART = "byline"
+LEAD_PART = "lead"
+SECTIONS_PART = "sections"
+FRONT_PART = "front"
+BEFORE_HEADLINE_PART = "before the headline"
+FIRST_SECTION = "section 1"
+MARKDOWN = "markdown"
+HTML = "html"
+NO_STRUCTURE = "no-structure"
+EMPTY_TEXT = "empty-text"
+UNREADABLE_INPUT = "unreadable-input"
+
 # The four positive controls of the genres the anatomy binds. The corpus says
 # each of them conforms to the skeleton, so each of them is a text this script
 # has to agree with.
@@ -67,10 +85,10 @@ FRONTMATTER = "---\nkntnt:\n  genre: article\n  technique: none\n  language: sv\
 # `å`, `ä`, `ö` and an en dash inside the first seventy characters, so a script
 # counting UTF-8 bytes or decomposed code points cannot agree with one counting
 # what the reader sees.
-LONG_HEADLINE = (
-    "Mätförsöket i Björkskolan visar när, inte varför och hur länge luften var kall"
+LONG_HEADLINE = "Mätförsöket i Björkskolan visar när, inte varför och inte hur länge luften var kall"
+LONG_SUBHEADING = (
+    "Mätförsöket i Björkskolan – när, inte varför, och vad som ändå återstår att göra"
 )
-LONG_SUBHEADING = "Mätförsöket i Björkskolan – när, inte varför, och vad som ändå återstår att göra"
 
 
 def _article(
@@ -154,6 +172,12 @@ def _rules(payload: Any, key: str = "failures") -> str:
     return " ".join(entry["rule"] for entry in payload[key])
 
 
+def _measured(payload: Any, key: str = "failures") -> str:
+    """Return every figure reported under *key*, folded into one string."""
+
+    return " ".join(entry["measured"] for entry in payload[key])
+
+
 def _figures(payload: Any) -> Any:
     """Return everything a text measures, whichever form it was written in.
 
@@ -189,7 +213,7 @@ def test_a_conforming_article_measures_clean(tmp_path: Path) -> None:
     assert payload["ok"] is True
     assert payload["conforms"] is True
     assert payload["failures"] == []
-    assert payload["format"] == "markdown"
+    assert payload["format"] == MARKDOWN
 
 
 def test_a_conforming_article_reports_what_it_took_as_which_part(
@@ -203,7 +227,7 @@ def test_a_conforming_article_reports_what_it_took_as_which_part(
     assert parts["headline"]["text"] == HEADLINE
     assert parts["headline"]["characters"] == 48
     assert parts["headline"]["words"] == 7
-    assert parts["standfirst"]["words"] == 30
+    assert parts["standfirst"]["words"] == 26
     assert parts["byline"]["text"] == BYLINE
     assert parts["lead"]["text"].startswith("En temperaturgivare mäter luften")
     assert [section["subheading"]["text"] for section in parts["sections"]] == [
@@ -262,10 +286,35 @@ def test_a_paragraph_that_is_not_a_byline_leaves_the_part_missing(
     status, payload = _measure(tmp_path, _article(byline=None))
 
     assert status == FAILS
-    assert "byline" in _parts(payload)
+    assert BYLINE_PART in _parts(payload)
     assert payload["parts"]["byline"] is None
-    assert payload["parts"]["standfirst"]["words"] == 30
+    assert payload["parts"]["standfirst"]["words"] == 26
     assert payload["parts"]["lead"]["text"].startswith("En temperaturgivare")
+
+
+def test_a_byline_wrapped_over_two_source_lines_is_still_a_byline(
+    tmp_path: Path,
+) -> None:
+    """A soft wrap is the source's, not the reader's.
+
+    The same byline in HTML arrives as one run of text, so a rule that counted
+    source lines answered one way for a text and another for its twin.
+    """
+
+    status, payload = _measure(
+        tmp_path, _article(byline="Text: Hedda Lund,\nBjörkskolan")
+    )
+
+    assert status == CONFORMS, payload
+    assert payload["parts"][BYLINE_PART]["text"] == "Text: Hedda Lund, Björkskolan"
+
+
+def test_the_byline_carries_no_character_count(tmp_path: Path) -> None:
+    """The anatomy gives the byline no dimension, so none is reported for it."""
+
+    _, payload = _measure(tmp_path, _article())
+
+    assert "characters" not in payload["parts"][BYLINE_PART]
 
 
 # --- Missing parts --------------------------------------------------------
@@ -288,8 +337,72 @@ def test_a_text_with_no_standfirst_and_no_subheading_reports_both(
 
     assert status == FAILS
     assert payload["parts"]["byline"]["text"] == "Nora Vik"
-    assert {"standfirst", "sections"} <= _parts(payload)
+    assert {STANDFIRST_PART, SECTIONS_PART} <= _parts(payload)
     assert payload["parts"]["sections"] == []
+
+
+def test_a_hash_ending_a_word_belongs_to_the_headline(tmp_path: Path) -> None:
+    """Markdown closes a heading only on a hash run preceded by whitespace.
+
+    A headline naming `C#` is otherwise cut short by its own last character,
+    and a text meeting the floor exactly is failed for a character it has.
+    """
+
+    status, payload = _measure(tmp_path, _article(headline="Vi valde tillslut C#"))
+
+    assert status == CONFORMS, payload
+    assert payload["parts"][HEADLINE_PART]["text"] == "Vi valde tillslut C#"
+    assert payload["parts"][HEADLINE_PART]["characters"] == 20
+
+
+def test_a_closing_hash_run_is_still_dropped(tmp_path: Path) -> None:
+    """The decoration Markdown does have is still not part of the headline."""
+
+    _, payload = _measure(tmp_path, _article(headline="Mätförsöket i Björkskolan ##"))
+
+    assert payload["parts"][HEADLINE_PART]["text"] == "Mätförsöket i Björkskolan"
+
+
+def test_an_underlined_heading_is_read_as_a_heading(tmp_path: Path) -> None:
+    """Markdown has two spellings for a heading, and a text may use either.
+
+    Read as paragraphs, the underlined headline and subheading here produce a
+    missing headline and a missing section — two confident false failures.
+    """
+
+    text = (
+        f"{HEADLINE}\n{'=' * 12}\n\n{STANDFIRST}\n\n{BYLINE}\n\n{LEAD}\n\n"
+        f"En gräns för det lokala försöket\n{'-' * 8}\n\n{LEAD}\n"
+    )
+
+    status, payload = _measure(tmp_path, text)
+
+    assert status == CONFORMS, payload
+    assert payload["parts"][HEADLINE_PART]["text"] == HEADLINE
+    assert payload["parts"][SECTIONS_PART][0]["subheading"]["text"] == (
+        "En gräns för det lokala försöket"
+    )
+
+
+def test_a_headline_standing_after_the_first_subheading_is_reported_out_of_order(
+    tmp_path: Path,
+) -> None:
+    """A level-1 heading below the body is the headline, in the wrong place.
+
+    Reading it as no headline at all loses both the part and the defect: the
+    text has a headline, and what is wrong is where it stands.
+    """
+
+    text = (
+        f"{STANDFIRST}\n\n{BYLINE}\n\n{LEAD}\n\n"
+        f"## En gräns för det lokala försöket\n\n# {HEADLINE}\n\n{LEAD}\n"
+    )
+
+    status, payload = _measure(tmp_path, text)
+
+    assert status == FAILS
+    assert payload["parts"][HEADLINE_PART]["text"] == HEADLINE
+    assert "not the first block" in _measured(payload)
 
 
 def test_a_headline_at_the_floor_passes_and_a_shorter_one_fails(
@@ -297,14 +410,19 @@ def test_a_headline_at_the_floor_passes_and_a_shorter_one_fails(
 ) -> None:
     """Twenty characters is inside the limit; nineteen is outside it."""
 
-    for characters, status in ((19, FAILS), (20, CONFORMS), (70, CONFORMS), (71, FAILS)):
+    for characters, status in (
+        (19, FAILS),
+        (20, CONFORMS),
+        (70, CONFORMS),
+        (71, FAILS),
+    ):
         headline = _cut(LONG_HEADLINE, characters)
         verdict, payload = _measure(tmp_path, _article(headline=headline))
 
         assert verdict == status, (characters, payload)
         assert payload["parts"]["headline"]["characters"] == characters
         if status is FAILS:
-            assert "headline" in _parts(payload)
+            assert HEADLINE_PART in _parts(payload)
             assert "characters" in _rules(payload)
 
 
@@ -315,7 +433,24 @@ def test_a_standfirst_is_measured_at_its_exact_word_limit(tmp_path: Path) -> Non
         verdict, payload = _measure(tmp_path, _article(standfirst=_words(count)))
 
         assert verdict == status, (count, payload)
-        assert payload["parts"]["standfirst"]["words"] == count
+        assert payload["parts"][STANDFIRST_PART]["words"] == count
+
+
+def test_a_standfirst_of_two_paragraphs_is_measured_whole(tmp_path: Path) -> None:
+    """The word limit is the standfirst's, so it counts all of the standfirst.
+
+    Measuring the first paragraph alone reports a 40-word standfirst as 20 and
+    lets a text twice over the limit come back inside it.
+    """
+
+    standfirst = f"{_words(40)}\n\n{_words(40)}"
+
+    status, payload = _measure(tmp_path, _article(standfirst=standfirst))
+
+    assert status == FAILS
+    assert payload["parts"][STANDFIRST_PART]["words"] == 80
+    assert payload["parts"][STANDFIRST_PART]["paragraphs"] == 2
+    assert "80 words" in _measured(payload)
 
 
 def test_a_subheading_is_measured_at_its_exact_character_limit(
@@ -345,7 +480,7 @@ def test_two_paragraphs_before_the_first_subheading_fail_the_lead(
     status, payload = _measure(tmp_path, _article(lead=f"{LEAD}\n\n{LEAD}"))
 
     assert status == FAILS
-    assert "lead" in _parts(payload)
+    assert LEAD_PART in _parts(payload)
     assert payload["parts"]["lead"]["paragraphs"] == 2
 
 
@@ -357,7 +492,7 @@ def test_a_section_holding_no_paragraph_fails(tmp_path: Path) -> None:
     status, payload = _measure(tmp_path, _article(body=body))
 
     assert status == FAILS
-    assert "section 1" in _parts(payload)
+    assert FIRST_SECTION in _parts(payload)
     assert payload["parts"]["sections"][0]["paragraphs"] == []
 
 
@@ -422,8 +557,60 @@ def test_the_script_judges_nothing_but_the_counted_requirements(
     status, payload = _measure(tmp_path, text)
 
     assert status == FAILS
-    assert _parts(payload) == {"standfirst"}
+    assert _parts(payload) == {STANDFIRST_PART}
     assert payload["typical"]["sections"] == 2
+
+
+def test_a_requirement_and_a_norm_never_share_a_rule_string(tmp_path: Path) -> None:
+    """The rule a finding quotes is what says which strength it carries.
+
+    One string standing for both a section's floor and its ceiling, or for two
+    separate norms on the headline, leaves the reader unable to tell a
+    requirement from a *should* without counting the figure themselves.
+    """
+
+    body = (
+        "## En gräns för det lokala försöket\n\n"
+        "## Nästa försök behöver mer än givare\n\n" + "\n\n".join([LEAD] * 4) + "\n"
+    )
+    long_headline = _cut(LONG_HEADLINE, 65)
+
+    _, payload = _measure(tmp_path, _article(headline=long_headline, body=body))
+
+    failed = {entry["rule"] for entry in payload["failures"]}
+    departed = {entry["rule"] for entry in payload["norms"]}
+    assert failed & departed == set()
+    assert len(departed) == len([entry["rule"] for entry in payload["norms"]])
+
+
+def test_a_long_second_standfirst_paragraph_is_reported_under_the_standfirst(
+    tmp_path: Path,
+) -> None:
+    """A part named wrongly is a fact the Skill has no reason to doubt."""
+
+    standfirst = f"{_words(5)}\n\n{_words(81)}"
+
+    status, payload = _measure(tmp_path, _article(standfirst=standfirst))
+
+    assert status == FAILS
+    assert [entry["part"] for entry in payload["norms"]] == [STANDFIRST_PART]
+
+
+def test_a_stray_block_no_byline_can_place_is_reported_in_the_front(
+    tmp_path: Path,
+) -> None:
+    """Where the byline is missing, nothing divides the standfirst from the lead.
+
+    The quotation below stands somewhere in front of the first subheading, and
+    that is the whole of what is known about it — so that is what is said.
+    """
+
+    text = _article(byline=None, lead=f"> Ett citat ur rapporten.\n\n{LEAD}")
+
+    status, payload = _measure(tmp_path, text)
+
+    assert status == FAILS
+    assert [entry["part"] for entry in payload["parts"]["other"]] == [FRONT_PART]
 
 
 # --- Blocks that are neither heading nor paragraph ------------------------
@@ -432,7 +619,7 @@ def test_the_script_judges_nothing_but_the_counted_requirements(
 def test_a_block_that_is_neither_heading_nor_paragraph_is_reported_and_counted_nowhere(
     tmp_path: Path,
 ) -> None:
-    """A list inside a section is reported by kind and enters no limit."""
+    """A list inside a section is reported where it sits and enters no limit."""
 
     body = (
         "## En gräns för det lokala försöket\n"
@@ -449,11 +636,10 @@ def test_a_block_that_is_neither_heading_nor_paragraph_is_reported_and_counted_n
 
     assert status == CONFORMS, payload
     assert len(payload["parts"]["sections"][0]["paragraphs"]) == 1
-    assert {entry["kind"] for entry in payload["parts"]["other"]} == {
-        "list",
-        "blockquote",
-    }
-    assert {entry["part"] for entry in payload["parts"]["other"]} == {"section 1"}
+    assert [entry["part"] for entry in payload["parts"]["other"]] == [
+        FIRST_SECTION,
+        FIRST_SECTION,
+    ]
 
 
 # --- HTML -----------------------------------------------------------------
@@ -520,15 +706,15 @@ def test_html_measures_exactly_as_its_markdown_twin_does(tmp_path: Path) -> None
     status, html = _measure(tmp_path, HTML_TWIN)
 
     assert status == CONFORMS, html
-    assert html["format"] == "html"
+    assert html["format"] == HTML
     assert _figures(html) == _figures(markdown)
 
 
 def test_wordpress_block_comments_change_no_figure(tmp_path: Path) -> None:
     """A comment is a block that is neither heading nor paragraph.
 
-    It is reported by kind, it enters no limit, and it does not displace the
-    headline from the front of the text.
+    It is reported where it stands, it enters no limit, and it does not
+    displace the headline from the front of the text.
     """
 
     _, markdown = _measure(tmp_path, _article())
@@ -536,24 +722,7 @@ def test_wordpress_block_comments_change_no_figure(tmp_path: Path) -> None:
 
     assert status == CONFORMS, wordpress
     assert _figures(wordpress) == _figures(markdown)
-    assert {entry["kind"] for entry in wordpress["parts"]["other"]} == {"comment"}
-
-
-def test_the_format_option_overrides_what_detection_would_choose(
-    tmp_path: Path,
-) -> None:
-    """Detection is a default, and a caller who knows the form says so.
-
-    Read as Markdown, an HTML document is raw HTML throughout: no heading and
-    no paragraph, so there is nothing to measure.
-    """
-
-    auto, _ = _measure(tmp_path, HTML_TWIN)
-    forced, payload = _measure(tmp_path, HTML_TWIN, "--format=markdown")
-
-    assert auto == CONFORMS
-    assert forced == UNMEASURED
-    assert payload["code"] == "no-structure"
+    assert wordpress["parts"]["other"][0]["part"] == BEFORE_HEADLINE_PART
 
 
 # --- Reading the text -----------------------------------------------------
@@ -576,7 +745,7 @@ def test_an_unreadable_path_is_not_measured(tmp_path: Path) -> None:
     assert result.returncode == UNMEASURED
     payload = _json(result)
     assert payload["ok"] is False
-    assert payload["code"] == "unreadable-input"
+    assert payload["code"] == UNREADABLE_INPUT
     assert payload["message"]
 
 
@@ -586,7 +755,7 @@ def test_an_empty_text_is_not_measured(tmp_path: Path) -> None:
     status, payload = _measure(tmp_path, f"{FRONTMATTER}\n\n   \n")
 
     assert status == UNMEASURED
-    assert payload["code"] == "empty-text"
+    assert payload["code"] == EMPTY_TEXT
 
 
 def test_a_text_with_no_heading_and_no_paragraph_is_not_measured(
@@ -597,7 +766,7 @@ def test_a_text_with_no_heading_and_no_paragraph_is_not_measured(
     status, payload = _measure(tmp_path, "- Ett mätvärde\n- Ett till\n")
 
     assert status == UNMEASURED
-    assert payload["code"] == "no-structure"
+    assert payload["code"] == NO_STRUCTURE
     assert payload["ok"] is False
 
 

@@ -28,4 +28,4 @@ A headline claims only what its text claims. Every figure, name, claim and concl
 
 ## Getting there
 
-Settle the reader and the angle before wording anything. Then write three to five variants and keep the clearest, which is rarely the cleverest.
+Settle the reader and the angle before wording anything. Then write three to five variants and keep the clearest, which is rarely the cleverest. Word a subheading from its whole section, once the section is written, in words its first sentence does not use.

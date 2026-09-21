@@ -2,100 +2,83 @@
 # requires-python = ">=3.12"
 # dependencies = []
 # ///
-"""Count what the article anatomy counts, and judge only what a count settles.
+"""Measure the article anatomy's counted limits in one text.
 
 `references/editorial/article-anatomy.md` fixes the parts of a text in the
 genres `article`, `case-study`, `column` and `opinion`, their order and their
-dimensions, and it says that the limits are exact and verified by counting. A
-language model counts characters badly, so the counting happens here: Write
-measures a draft before its source check, Redline takes every count a finding
-reports from this output, and Redline's correction agent measures its own
-repair before returning it.
-
-The anatomy gives each statement one of three strengths, and this script keeps
-them apart. A plain statement is a **requirement**, and a requirement a count
-settles is decided here: each one that fails is reported under `failures` and
-the exit status says so. *Should* marks a **norm**, reported under `norms` and
-decided by nobody here — whether a departure is better for the reader is the
-Skill's judgement. *Most* states what is typical across the whole text, so no
-single paragraph or section can fail it; the figures it rests on are reported
-under `typical` and nothing is concluded from them. Everything else stays the
-Skill's too: whether a part does its job, whether the ending calls the reader
-to action, and how a headline is written.
+dimensions. Counting them is this script's whole job; ADR-0209 says why the
+counting belongs to a script rather than to the agent reading the text, and
+what this script is therefore not allowed to judge.
 
 ## The command line
 
-    uv run --no-cache --no-project article_anatomy.py [--format=auto|markdown|html] <path>
+    uv run --no-cache --no-project article_anatomy.py <path>
 
 `<path>` may be `-`, which reads the text from standard input, so a
-response-targeted run needs no scratch file. `auto` reads the text as HTML
-where it carries block tags (`<h1>`-`<h6>`, `<p>`) and no ATX heading line, and
-as Markdown otherwise.
+response-targeted run needs no scratch file. The form is read off the text
+itself: HTML where it carries block tags (`<h1>`-`<h6>`, `<p>`) and no ATX
+heading line, Markdown otherwise. The command line goes to `argparse` as in the
+Library's other engines — the machine-readable refusals here are about the text
+rather than about the line, so there is no JSON refusal for a malformed
+invocation to travel in.
 
 ## The exit status is the verdict
 
-`0` measured, and every requirement holds. `1` measured, and at least one
-requirement fails. `2` not measured — an unreadable path, an empty text, or a
-text carrying no heading and no paragraph in either form. All three print one
-JSON object on stdout. A refusal carries `ok: false`, a stable `code`
-(`unreadable-input`, `empty-text`, `no-structure`) and a `message`; an invalid
-command line is `argparse`'s own refusal on stderr, as in the Library's other
-engines.
+`0` measured, and every counted requirement holds. `1` measured, and at least
+one fails. `2` not measured. All three print one JSON object on stdout, and a
+refusal carries `ok: false`, a stable `code` — `unreadable-input`, `empty-text`
+or `no-structure` — and a `message`.
 
-## What is measured, and how
+## What is read as what
 
-Leading YAML frontmatter is skipped and never parsed: a `kntnt` map is
-configuration rather than text. What remains is read as blocks in order.
+Leading YAML frontmatter is skipped and never parsed. What remains is read as
+blocks: a heading (ATX or setext in Markdown, `h1`-`h6` in HTML), a paragraph,
+a code block, or `other`, which is a list, a quotation, a table, an image, raw
+HTML or a comment. Only headings and paragraphs enter a limit; every other
+block is reported under the part it sits in and counted in none.
 
-The headline is the level-1 heading. None, more than one, and one that is not
-the first heading-or-paragraph block are each a requirement failure; a block
-that is neither heading nor paragraph enters no limit, so a WordPress block
-comment standing in front of the headline displaces nothing.
+The headline is the first level-1 heading. The standfirst, the byline and the
+lead lie between it and the first level-2 heading, and the byline is the first
+paragraph there of at most twelve words that does not end in `.`, `!`, `?` or
+`…`. Paragraphs before it are the standfirst and those after it the lead; where
+no paragraph has that shape the byline is reported missing, the first paragraph
+is taken as the standfirst and the rest as the lead. The answer names which
+block was taken as which, so a Skill can overrule it — as it has to where a
+text opens on a byline-shaped dramatic line standing before the real byline,
+which is the line this rule finds. Each level-2 heading opens a section running
+to the next one, and the last section is the ending.
 
-Between the headline and the first level-2 heading lie the standfirst, the
-byline and the lead. The byline is found by shape and position rather than by
-prefix, because a prefix rule reaches `By …` and `Text: …` and reports every
-other language's convention missing: it is the first paragraph there that is a
-single line of at most twelve words and does not end in `.`, `!`, `?` or `…`.
-Paragraphs before it are the standfirst, paragraphs after it the lead. Where no
-paragraph has that shape the byline is reported missing, the first paragraph is
-taken as the standfirst and the rest as the lead. Each part reports the text it
-was read from, so a Skill can overrule a wrong guess.
-
-Each level-2 heading opens a section running to the next one, and the last
-section is the ending.
-
-Text is measured as the reader sees it. Markdown emphasis, code and link syntax
-is stripped, HTML is reduced to its text with entities decoded, whitespace is
-collapsed and the result normalised to NFC. A Markdown heading is ATX (`#`).
-Characters are code points, spaces included. A word is a whitespace-separated
-token holding at least one letter or digit, so a lone dash is no word.
-Sentences are split on terminal punctuation and are always reported as
-`sentences_estimate`, because only *most* rests on them and an abbreviation
-ends a sentence as far as any splitter can tell.
+Text is measured as the reader sees it: Markdown emphasis, code and link syntax
+stripped, HTML reduced to its text with entities decoded, whitespace collapsed
+and the result normalised to NFC. Characters are code points, spaces included.
+A word is a whitespace-separated token holding at least one letter or digit, so
+a lone dash is no word. Sentences are split on terminal punctuation and are
+always reported as `sentences_estimate`, an abbreviation ending a sentence as
+far as any splitter can tell.
 
 ## The shape of the answer
 
 `ok`, `format`, `conforms`, `failures`, `norms`, `typical` and `parts`.
 
-A `failures` or `norms` entry carries `part` (`headline`, `standfirst`,
-`byline`, `lead`, `sections`, or `section <n>`), `rule` in the anatomy's own
-words, `measured` as a figure in words, and `text`, which is the text measured
-or `null` where the part is absent.
+Each entry of `failures` and of `norms` carries `part` — `headline`,
+`standfirst`, `byline`, `lead`, `sections` or `section <n>` — `rule` in the
+anatomy's words, `measured` as a figure in words, and `text`, which is the text
+measured or `null` where the part is absent. No rule string is shared by a
+failure and a norm, so the strength of a statement is readable off the entry.
 
 `typical` carries `paragraphs`, `paragraphs_of_two_or_three_sentences`,
 `sections` and `sections_of_two_or_three_paragraphs`.
 
 `parts` carries `headline`, `standfirst`, `byline`, `lead`, `sections` and
-`other`. A measured text carries `text` — the whole of it for a headline, a
-byline and a subheading, and its opening words for a paragraph — with
-`characters` and `words` as the anatomy counts that part, and a paragraph
-carries `words` and `sentences_estimate` beside them. `standfirst` and `lead`
-also carry `paragraphs`, since a part that should be one paragraph can arrive
-as two. A part nothing was found for is `null`. Each entry of `sections`
-carries its `subheading` and its `paragraphs`. `other` holds every block that
-is neither heading nor paragraph, each with its `kind`, the `part` it sits in,
-and its opening `text`.
+`other`, and a part nothing was found for is `null`. `headline` and a section's
+`subheading` carry `text`, `characters` and `words`; `byline` carries `text`
+and `words`, the anatomy giving it no dimension; `standfirst`, `lead` and a
+section's paragraphs carry their opening words as `text` beside `words` and
+`sentences_estimate`, and `standfirst` and `lead` also carry `paragraphs`,
+their figures covering every paragraph they hold. `other` names each remaining
+block's `part` — `before the headline`, `standfirst`, `lead`, `section <n>`, or
+`front` where no byline settles which side of it a block stands — and its
+opening `text`.
 """
 
 from __future__ import annotations
@@ -106,10 +89,11 @@ import re
 import sys
 import unicodedata
 from dataclasses import dataclass, field
+from enum import StrEnum
 from html import unescape
 from html.parser import HTMLParser
 from pathlib import Path
-from typing import Any, ClassVar
+from typing import Any
 
 # The anatomy's counted limits, each named for the part it belongs to. They are
 # the one thing in this file that has to agree with a document, so they are
@@ -127,22 +111,26 @@ SECTION_NORM_PARAGRAPHS = 3
 # three sentences and most sections hold two or three paragraphs.
 TYPICAL = (2, 3)
 
-# The anatomy's own words, quoted so that a finding says what was required
-# rather than this script's paraphrase of it.
+# The anatomy's own words, one string per statement. A requirement and a norm
+# never share one, so a reader of an entry can tell which strength it carries
+# without looking at which list it came out of.
 ORDER = "A text conforms when every part is present in the order shown."
 ONCE = "Each part appears once, except the section, which repeats."
 HEADLINE_IS_A_HEADING = (
     "The headline is the text's level-1 heading (HTML `h1`, Markdown `#`)."
 )
-HEADLINE_LIMIT = "20-70 characters, spaces included."
-HEADLINE_NORM = "It should be three to eight words and at most 60 characters."
-STANDFIRST_LIMIT = "One paragraph, at most 60 words."
+HEADLINE_LIMIT = "20–70 characters, spaces included."
+HEADLINE_NORM_LENGTH = "It should be at most 60 characters."
+HEADLINE_NORM_WORDING = "It should be three to eight words."
+STANDFIRST_ONE_PARAGRAPH = "The standfirst is one paragraph."
+STANDFIRST_WORD_LIMIT = "The standfirst is at most 60 words."
 LEAD_IS_ONE_PARAGRAPH = (
     "The lead is the first paragraph of the body: one paragraph, meeting every"
     " requirement under *Paragraphs*."
 )
 SUBHEADING_LIMIT = "A subheading is at most 70 characters, spaces included."
-SECTION_LIMIT = "A section holds at least one paragraph and should hold at most three."
+SECTION_HOLDS_A_PARAGRAPH = "A section holds at least one paragraph."
+SECTION_NORM = "A section should hold at most three paragraphs."
 TWO_LEVELS = "The text should use these two levels only."
 DIFFERENT_FIRST_WORDS = (
     "They should begin with different first words, and an everyday word such as"
@@ -164,10 +152,51 @@ CONFORMS = 0
 FAILS = 1
 UNMEASURED = 2
 
+
+class Kind(StrEnum):
+    """What a block is, to the extent that anything here turns on it."""
+
+    HEADING = "heading"
+    PARAGRAPH = "paragraph"
+    CODE = "code"
+    OTHER = "other"
+
+
+class Part(StrEnum):
+    """The part a figure or a stray block is reported under."""
+
+    HEADLINE = "headline"
+    STANDFIRST = "standfirst"
+    BYLINE = "byline"
+    LEAD = "lead"
+    SECTIONS = "sections"
+
+    # Two positions rather than parts, for a block that is neither heading nor
+    # paragraph: where it stands is a fact, and `FRONT` is what is said instead
+    # of a guess where no byline divides the standfirst from the lead.
+    BEFORE_HEADLINE = "before the headline"
+    FRONT = "front"
+
+
+class Form(StrEnum):
+    """The form a text is written in, as the answer reports it."""
+
+    MARKDOWN = "markdown"
+    HTML = "html"
+
+
+class Code(StrEnum):
+    """The stable reasons a text is not measured at all."""
+
+    UNREADABLE_INPUT = "unreadable-input"
+    EMPTY_TEXT = "empty-text"
+    NO_STRUCTURE = "no-structure"
+
+
 # What the reader sees as the end of a sentence, and what may stand between
 # that mark and the space after it.
 SENTENCE = re.compile(r"(?<=[.!?…])[\"'”’»)\]]*\s+")
-TERMINAL = ("." , "!", "?", "…")
+TERMINAL = (".", "!", "?", "…")
 
 # Markdown inline syntax, in the order it is removed: a code span first, so
 # that emphasis marks inside one are not read as emphasis, then what links and
@@ -187,40 +216,47 @@ EMPHASIS = (
 TAG = re.compile(r"<[^>]+>")
 ESCAPE = re.compile(r"\\([\\`*_{}\[\]()#+\-.!>|~])")
 
-# Markdown block syntax. Everything a line can open that is not a paragraph,
-# recognised by the one line that opens it.
+# A fence, and the two ways Markdown writes a heading. The closing run of an
+# ATX heading has to be preceded by whitespace, so a hash that ends a word —
+# `C#` — is part of the headline rather than a decoration on it.
 FENCE = re.compile(r"^ {0,3}(`{3,}|~{3,})")
-ATX = re.compile(r"^ {0,3}(#{1,6})(?:[ \t]+(.*?))?[ \t]*(?<!\\)#*[ \t]*$")
-LIST_ITEM = re.compile(r"^ {0,3}(?:[-*+]|\d{1,9}[.)])(?:[ \t]|$)")
-QUOTE = re.compile(r"^ {0,3}>")
-INDENTED = re.compile(r"^(?: {4}|\t)")
-TABLE_DELIMITER = re.compile(r"^ {0,3}\|?[ :|-]*-[ :|-]*\|[ :|-]*$")
-IMAGE_ONLY = re.compile(r"^\s*!\[[^\]]*\]\([^)]*\)\s*$")
-THEMATIC = re.compile(r"^ {0,3}(?:([-*_])[ \t]*){3,}$")
+ATX = re.compile(r"^ {0,3}(#{1,6})(?:[ \t]+(.*?))?(?:[ \t]+#+)?[ \t]*$")
+SETEXT = re.compile(r"^ {0,3}(=+|-+)[ \t]*$")
+
+# A line opening something the reader does not meet as prose: an indented
+# block, a list item, a quotation, a table row, raw HTML or a comment, or a
+# thematic break. Which of them it is drives nothing, so the block is reported
+# as `other` and enters no limit.
+NOT_PROSE = re.compile(
+    r"^(?: {4}|\t)"
+    r"|^ {0,3}(?:[-*+]|\d{1,9}[.)])(?:[ \t]|$)"
+    r"|^ {0,3}[>|<]"
+    r"|^ {0,3}(?:[-*_][ \t]*){3,}$"
+)
 
 # The ATX heading a text written in HTML never carries, and the block tags a
 # text written in Markdown rarely does: between them they decide the form.
 ATX_LINE = re.compile(r"^ {0,3}#{1,6}(?:[ \t]|$)", re.MULTILINE)
 BLOCK_TAG = re.compile(r"<(?:h[1-6]|p)\b[^>]*>", re.IGNORECASE)
 
-# An HTML element that stands as a block of its own, and the kind it is
-# reported as. A block nested inside one of these belongs to it: a paragraph
-# inside a blockquote is the blockquote's text, not a paragraph of the article.
+# An HTML element that stands as a block of its own, and the kind it is read
+# as. A block nested inside one of these belongs to it: a paragraph inside a
+# blockquote is the blockquote's text, not a paragraph of the article.
 HTML_BLOCKS = {
-    "h1": "heading",
-    "h2": "heading",
-    "h3": "heading",
-    "h4": "heading",
-    "h5": "heading",
-    "h6": "heading",
-    "p": "paragraph",
-    "ul": "list",
-    "ol": "list",
-    "dl": "list",
-    "blockquote": "blockquote",
-    "pre": "code",
-    "table": "table",
-    "figure": "image",
+    "h1": Kind.HEADING,
+    "h2": Kind.HEADING,
+    "h3": Kind.HEADING,
+    "h4": Kind.HEADING,
+    "h5": Kind.HEADING,
+    "h6": Kind.HEADING,
+    "p": Kind.PARAGRAPH,
+    "pre": Kind.CODE,
+    "ul": Kind.OTHER,
+    "ol": Kind.OTHER,
+    "dl": Kind.OTHER,
+    "blockquote": Kind.OTHER,
+    "table": Kind.OTHER,
+    "figure": Kind.OTHER,
 }
 
 # The frontmatter delimiters, either of which closes a block YAML header.
@@ -228,42 +264,23 @@ DELIMITERS = ("---", "...")
 
 
 class Unmeasurable(RuntimeError):
-    """A text this script will not report figures for, and the reason."""
+    """A text this script reports no figures for, carrying the reason's code."""
 
-    code: ClassVar[str] = "unmeasurable"
-
-
-class UnreadableInput(Unmeasurable):
-    """The text could not be read from where it was said to be."""
-
-    code: ClassVar[str] = "unreadable-input"
-
-
-class EmptyText(Unmeasurable):
-    """There is nothing under the frontmatter to measure."""
-
-    code: ClassVar[str] = "empty-text"
-
-
-class NoStructure(Unmeasurable):
-    """Neither form could be read: no heading and no paragraph anywhere."""
-
-    code: ClassVar[str] = "no-structure"
+    def __init__(self, code: Code, message: str) -> None:
+        super().__init__(message)
+        self.code = code
 
 
 @dataclass(frozen=True)
 class Block:
-    """One block of the text, as the reader meets it.
+    """One block of the text, its *text* already reduced to what is visible.
 
-    *text* is already reduced to what is visible, so nothing downstream has to
-    know which form the block was written in. *lines* counts the line breaks
-    the reader sees rather than the ones the source happens to carry, which is
-    what lets an HTML byline and its Markdown twin answer the same way.
+    Nothing downstream has to know which form the block was written in, which
+    is what lets an HTML text and its Markdown twin answer the same way.
     """
 
-    kind: str
+    kind: Kind
     text: str
-    lines: int = 1
     level: int | None = None
 
 
@@ -302,12 +319,6 @@ def plain(text: str) -> str:
     return collapse(unescape(text))
 
 
-def characters(text: str) -> int:
-    """Return the length of *text* in code points, spaces included."""
-
-    return len(text)
-
-
 def words(text: str) -> list[str]:
     """Return the words of *text*: tokens holding at least one letter or digit."""
 
@@ -341,13 +352,17 @@ def read(source: str) -> str:
         try:
             text = sys.stdin.read()
         except (OSError, UnicodeDecodeError) as exc:
-            raise UnreadableInput(f"standard input could not be read: {exc}") from exc
+            raise Unmeasurable(
+                Code.UNREADABLE_INPUT, f"standard input could not be read: {exc}"
+            ) from exc
     else:
         path = Path(source)
         try:
             text = path.read_text(encoding="utf-8")
         except (OSError, UnicodeDecodeError) as exc:
-            raise UnreadableInput(f"{path}: could not be read: {exc}") from exc
+            raise Unmeasurable(
+                Code.UNREADABLE_INPUT, f"{path}: could not be read: {exc}"
+            ) from exc
 
     return text.lstrip("﻿").replace("\r\n", "\n").replace("\r", "\n")
 
@@ -371,7 +386,7 @@ def body_of(text: str) -> str:
     return text
 
 
-def detect(body: str) -> str:
+def detect(body: str) -> Form:
     """Return the form *body* is written in.
 
     An ATX heading line decides for Markdown wherever it stands, because a
@@ -380,33 +395,8 @@ def detect(body: str) -> str:
     """
 
     if BLOCK_TAG.search(body) and not ATX_LINE.search(body):
-        return "html"
-    return "markdown"
-
-
-def kind_of(chunk: list[str]) -> str:
-    """Return the kind of a Markdown block from the lines that make it up."""
-
-    first = chunk[0]
-    if THEMATIC.match(first):
-        return "thematic break"
-    if QUOTE.match(first):
-        return "blockquote"
-    if LIST_ITEM.match(first):
-        return "list"
-    if INDENTED.match(first):
-        return "code"
-    if first.lstrip().startswith("<!--"):
-        return "comment"
-    if first.lstrip().startswith("|") or (
-        len(chunk) > 1 and TABLE_DELIMITER.match(chunk[1])
-    ):
-        return "table"
-    if len(chunk) == 1 and IMAGE_ONLY.match(first):
-        return "image"
-    if first.lstrip().startswith("<"):
-        return "raw html"
-    return "paragraph"
+        return Form.HTML
+    return Form.MARKDOWN
 
 
 def markdown_blocks(body: str) -> list[Block]:
@@ -432,7 +422,7 @@ def markdown_blocks(body: str) -> list[Block]:
             while index < len(lines) and not lines[index].strip().startswith(marker):
                 index += 1
             index += 1
-            blocks.append(Block(kind="code", text=""))
+            blocks.append(Block(kind=Kind.CODE, text=""))
             continue
 
         # An ATX heading is one line and needs no run gathered for it.
@@ -440,7 +430,7 @@ def markdown_blocks(body: str) -> list[Block]:
         if heading is not None:
             blocks.append(
                 Block(
-                    kind="heading",
+                    kind=Kind.HEADING,
                     text=plain(heading.group(2) or ""),
                     level=len(heading.group(1)),
                 )
@@ -448,8 +438,8 @@ def markdown_blocks(body: str) -> list[Block]:
             index += 1
             continue
 
-        # Everything else runs until a blank line, a heading, or a fence, each
-        # of which closes the paragraph it follows.
+        # Everything else runs until a blank line, a heading, a fence, or the
+        # underline that turns the run itself into a heading.
         start = index
         while index < len(lines):
             current = lines[index]
@@ -458,8 +448,25 @@ def markdown_blocks(body: str) -> list[Block]:
             if index > start and (ATX.match(current) or FENCE.match(current)):
                 break
             index += 1
+            if index - start > 1 and SETEXT.match(lines[index - 1]):
+                break
         chunk = lines[start:index]
-        blocks.append(Block(kind=kind_of(chunk), text=plain("\n".join(chunk)), lines=len(chunk)))
+
+        # A run of prose underlined with `=` or `-` is a heading in the other
+        # spelling Markdown has for one.
+        underline = SETEXT.match(chunk[-1]) if len(chunk) > 1 else None
+        if underline is not None and not NOT_PROSE.match(chunk[0]):
+            blocks.append(
+                Block(
+                    kind=Kind.HEADING,
+                    text=plain("\n".join(chunk[:-1])),
+                    level=1 if underline.group(1).startswith("=") else 2,
+                )
+            )
+            continue
+
+        kind = Kind.OTHER if NOT_PROSE.match(chunk[0]) else Kind.PARAGRAPH
+        blocks.append(Block(kind=kind, text=plain("\n".join(chunk))))
 
     return blocks
 
@@ -472,33 +479,29 @@ class HtmlBlocks(HTMLParser):
         self.blocks: list[Block] = []
         self.tag: str | None = None
         self.depth = 0
-        self.breaks = 0
         self.buffer: list[str] = []
 
     def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
-        # Inside a block, only the same tag nesting and a line break matter:
-        # everything else is that block's own content.
+        # Inside a block, only the same tag nesting matters: everything else is
+        # that block's own content.
         if self.tag is not None:
             if tag == self.tag:
                 self.depth += 1
-            elif tag == "br":
-                self.breaks += 1
             return
 
         if tag in HTML_BLOCKS:
             self.tag = tag
             self.depth = 1
-            self.breaks = 0
             self.buffer = []
         elif tag == "img":
-            self.blocks.append(Block(kind="image", text=""))
+            self.blocks.append(Block(kind=Kind.OTHER, text=""))
 
     def handle_endtag(self, tag: str) -> None:
         if self.tag is None or tag != self.tag:
             return
         self.depth -= 1
         if self.depth == 0:
-            self.close_block()
+            self.close_block(tag)
 
     def handle_data(self, data: str) -> None:
         if self.tag is not None:
@@ -508,25 +511,21 @@ class HtmlBlocks(HTMLParser):
         # A comment inside a block is the block's markup rather than a block;
         # one standing on its own is what WordPress writes around each of them.
         if self.tag is None:
-            self.blocks.append(Block(kind="comment", text=collapse(data)))
+            self.blocks.append(Block(kind=Kind.OTHER, text=collapse(data)))
 
-    def close_block(self) -> None:
-        """Record the open block and start looking for the next one."""
+    def close_block(self, tag: str) -> None:
+        """Record the block *tag* opened and start looking for the next one."""
 
-        tag = self.tag
-        assert tag is not None
         kind = HTML_BLOCKS[tag]
         self.blocks.append(
             Block(
                 kind=kind,
                 text=collapse("".join(self.buffer)),
-                lines=self.breaks + 1,
-                level=int(tag[1]) if kind == "heading" else None,
+                level=int(tag[1]) if kind is Kind.HEADING else None,
             )
         )
         self.tag = None
         self.depth = 0
-        self.breaks = 0
         self.buffer = []
 
 
@@ -540,7 +539,7 @@ def html_blocks(body: str) -> list[Block]:
     # A document whose last block was never closed is still a document, and the
     # block it ends on is still text the reader sees.
     if parser.tag is not None:
-        parser.close_block()
+        parser.close_block(parser.tag)
 
     return parser.blocks
 
@@ -548,17 +547,26 @@ def html_blocks(body: str) -> list[Block]:
 def is_byline(block: Block) -> bool:
     """Return whether *block* has the shape a byline has.
 
-    Shape and position rather than a prefix: Swedish writes `Text: …`, `Av …`,
-    a bare name or a name and an organisation, English writes `By …`, and a
-    rule matching prefixes reports every convention it was not told about as a
-    missing byline.
+    Shape and position rather than a prefix, for the reason ADR-0209 records:
+    a prefix table reaches `By …` and `Text: …` and reports every convention it
+    was not told about as a missing byline.
     """
 
-    if block.kind != "paragraph" or block.lines != 1:
+    if block.kind is not Kind.PARAGRAPH:
         return False
     if len(words(block.text)) > BYLINE_WORDS:
         return False
     return not block.text.endswith(TERMINAL)
+
+
+@dataclass
+class Front:
+    """Everything between the headline and the first subheading, read apart."""
+
+    standfirst: list[Block] = field(default_factory=list)
+    byline: Block | None = None
+    lead: list[Block] = field(default_factory=list)
+    strays: list[tuple[str, Block]] = field(default_factory=list)
 
 
 @dataclass
@@ -568,90 +576,111 @@ class Reading:
     headline: Block | None = None
     extra_headlines: list[Block] = field(default_factory=list)
     headline_is_first: bool = True
-    standfirst: list[Block] = field(default_factory=list)
-    byline: Block | None = None
-    lead: list[Block] = field(default_factory=list)
-    sections: list[Section] = field(default_factory=list)
-    other: list[tuple[str, Block]] = field(default_factory=list)
     deeper: list[Block] = field(default_factory=list)
+    front: Front = field(default_factory=Front)
+    sections: list[Section] = field(default_factory=list)
+    strays: list[tuple[str, Block]] = field(default_factory=list)
 
 
-def _front(reading: Reading, blocks: list[Block], where: str) -> None:
-    """Read the standfirst, the byline and the lead out of the front blocks."""
+def read_the_front(blocks: list[Block], headline_at: int | None) -> Front:
+    """Return the standfirst, the byline and the lead *blocks* hold.
 
-    paragraphs = [block for block in blocks if block.kind == "paragraph"]
-    found = next((block for block in paragraphs if is_byline(block)), None)
+    *blocks* is everything before the first level-2 heading, in order, and
+    *headline_at* is where the headline stands among them. Every block that is
+    neither heading nor paragraph comes back under the position it actually
+    sits in, or under `front` where no byline says which side of it that is.
+    """
 
-    if found is None:
-        reading.standfirst = paragraphs[:1]
-        reading.lead = paragraphs[1:]
+    paragraphs = [
+        (at, block) for at, block in enumerate(blocks) if block.kind is Kind.PARAGRAPH
+    ]
+    byline_at = next((at for at, block in paragraphs if is_byline(block)), None)
+
+    front = Front()
+    if byline_at is None:
+        found = [block for _, block in paragraphs]
+        front.standfirst = found[:1]
+        front.lead = found[1:]
     else:
-        at = paragraphs.index(found)
-        reading.byline = found
-        reading.standfirst = paragraphs[:at]
-        reading.lead = paragraphs[at + 1 :]
+        front.byline = blocks[byline_at]
+        front.standfirst = [block for at, block in paragraphs if at < byline_at]
+        front.lead = [block for at, block in paragraphs if at > byline_at]
 
-    for block in blocks:
-        if block.kind != "paragraph" and block.level is None:
-            reading.other.append((where, block))
+    # A stray block is placed by where it stands, and by nothing weaker than
+    # that: with no byline to divide the region, `front` is the whole of what
+    # is known about it.
+    for at, block in enumerate(blocks):
+        if block.kind is Kind.PARAGRAPH or block.kind is Kind.HEADING:
+            continue
+        if headline_at is not None and at < headline_at:
+            front.strays.append((Part.BEFORE_HEADLINE, block))
+        elif byline_at is None:
+            front.strays.append((Part.FRONT, block))
+        elif at > byline_at:
+            front.strays.append((Part.LEAD, block))
+        else:
+            front.strays.append((Part.STANDFIRST, block))
+
+    return front
 
 
 def read_structure(blocks: list[Block]) -> Reading:
     """Return what each block is, by its kind and its position.
 
-    Position is judged among the headings and the paragraphs. A block that is
-    neither enters no limit, so a comment or an image in front of the headline
-    is reported where it sits and displaces nothing.
+    Position is judged among the headings and the paragraphs, so a comment or
+    an image in front of the headline is reported where it sits and displaces
+    nothing.
     """
 
-    reading = Reading()
+    headings = [block for block in blocks if block.kind is Kind.HEADING]
+    level_one = [block for block in headings if block.level == 1]
+    prose = [block for block in blocks if block.kind in {Kind.HEADING, Kind.PARAGRAPH}]
 
-    # The headline and where the body starts: everything up to the first
-    # level-2 heading belongs to the front of the text.
-    front: list[Block] = []
-    index = 0
-    while index < len(blocks) and not (
-        blocks[index].kind == "heading" and blocks[index].level == 2
-    ):
-        block = blocks[index]
-        if block.kind == "heading" and block.level == 1:
-            if reading.headline is None:
-                reading.headline = block
-                reading.headline_is_first = not any(
-                    earlier.kind in {"heading", "paragraph"} for earlier in front
-                )
-            else:
-                reading.extra_headlines.append(block)
-        elif block.kind == "heading" and block.level is not None and block.level > 2:
-            reading.deeper.append(block)
-        else:
-            front.append(block)
-        index += 1
+    reading = Reading(
+        headline=level_one[0] if level_one else None,
+        extra_headlines=level_one[1:],
+        headline_is_first=bool(level_one) and prose[0] is level_one[0],
+        deeper=[
+            block for block in headings if block.level is not None and block.level > 2
+        ],
+    )
 
-    _front(reading, front, "lead" if reading.headline is not None else "front")
+    # The front of the text is everything before the first subheading, which is
+    # where the headline stands too unless the text put it out of order.
+    boundary = next(
+        (
+            at
+            for at, block in enumerate(blocks)
+            if block.kind is Kind.HEADING and block.level == 2
+        ),
+        len(blocks),
+    )
+    front = blocks[:boundary]
+    headline_at = next(
+        (at for at, block in enumerate(front) if block is reading.headline), None
+    )
+    reading.front = read_the_front(front, headline_at)
 
     # Each level-2 heading opens a section that runs to the next one, and the
     # last of them is the ending.
-    current: Section | None = None
-    for block in blocks[index:]:
-        if block.kind == "heading" and block.level == 2:
-            current = Section(subheading=block)
-            reading.sections.append(current)
+    for block in blocks[boundary:]:
+        if block.kind is Kind.HEADING and block.level == 2:
+            reading.sections.append(Section(subheading=block))
             continue
-        if current is None:
+        if block.kind is Kind.HEADING:
             continue
-        where = f"section {len(reading.sections)}"
-        if block.kind == "paragraph":
-            current.paragraphs.append(block)
-        elif block.kind == "heading":
-            if block.level == 1:
-                reading.extra_headlines.append(block)
-            elif block.level is not None and block.level > 2:
-                reading.deeper.append(block)
+        if block.kind is Kind.PARAGRAPH:
+            reading.sections[-1].paragraphs.append(block)
         else:
-            reading.other.append((where, block))
+            reading.strays.append((section_part(len(reading.sections)), block))
 
     return reading
+
+
+def section_part(number: int) -> str:
+    """Return the name a section is reported under."""
+
+    return f"section {number}"
 
 
 def entry(part: str, rule: str, measured: str, text: str | None) -> dict[str, Any]:
@@ -669,20 +698,27 @@ def first_word(text: str) -> str:
     return found[0].strip(".,:;!?\"'”“’«»()[]–—-…").casefold()
 
 
+def total_words(blocks: list[Block]) -> int:
+    """Return how many words *blocks* hold between them."""
+
+    return sum(len(words(block.text)) for block in blocks)
+
+
 def requirements(reading: Reading) -> list[dict[str, Any]]:
     """Return every counted requirement the text fails, in the anatomy's order."""
 
     failures: list[dict[str, Any]] = []
+    front = reading.front
 
     # The headline: that there is one, that there is only one, that it stands
     # first, and that it is the length the anatomy fixes.
     if reading.headline is None:
-        failures.append(entry("headline", HEADLINE_IS_A_HEADING, "absent", None))
+        failures.append(entry(Part.HEADLINE, HEADLINE_IS_A_HEADING, "absent", None))
     else:
         if reading.extra_headlines:
             failures.append(
                 entry(
-                    "headline",
+                    Part.HEADLINE,
                     ONCE,
                     f"{len(reading.extra_headlines) + 1} level-1 headings",
                     reading.extra_headlines[0].text,
@@ -690,71 +726,77 @@ def requirements(reading: Reading) -> list[dict[str, Any]]:
             )
         if not reading.headline_is_first:
             failures.append(
-                entry("headline", ORDER, "not the first block", reading.headline.text)
+                entry(
+                    Part.HEADLINE,
+                    ORDER,
+                    "not the first block",
+                    reading.headline.text,
+                )
             )
-        count = characters(reading.headline.text)
+        count = len(reading.headline.text)
         low, high = HEADLINE_CHARACTERS
         if not low <= count <= high:
             failures.append(
                 entry(
-                    "headline",
+                    Part.HEADLINE,
                     HEADLINE_LIMIT,
                     f"{count} characters",
                     reading.headline.text,
                 )
             )
 
-    # The standfirst: present, one paragraph, and inside its word limit.
-    if not reading.standfirst:
-        failures.append(entry("standfirst", ORDER, "absent", None))
+    # The standfirst: present, one paragraph, and inside its word limit, which
+    # is measured over everything the standfirst turned out to hold.
+    if not front.standfirst:
+        failures.append(entry(Part.STANDFIRST, ORDER, "absent", None))
     else:
-        if len(reading.standfirst) > 1:
+        if len(front.standfirst) > 1:
             failures.append(
                 entry(
-                    "standfirst",
-                    STANDFIRST_LIMIT,
-                    f"{len(reading.standfirst)} paragraphs",
-                    opening(reading.standfirst[0].text),
+                    Part.STANDFIRST,
+                    STANDFIRST_ONE_PARAGRAPH,
+                    f"{len(front.standfirst)} paragraphs",
+                    opening(front.standfirst[0].text),
                 )
             )
-        count = len(words(reading.standfirst[0].text))
+        count = total_words(front.standfirst)
         if count > STANDFIRST_WORDS:
             failures.append(
                 entry(
-                    "standfirst",
-                    STANDFIRST_LIMIT,
+                    Part.STANDFIRST,
+                    STANDFIRST_WORD_LIMIT,
                     f"{count} words",
-                    opening(reading.standfirst[0].text),
+                    opening(front.standfirst[0].text),
                 )
             )
 
-    if reading.byline is None:
-        failures.append(entry("byline", ORDER, "absent", None))
+    if front.byline is None:
+        failures.append(entry(Part.BYLINE, ORDER, "absent", None))
 
     # The lead: present, and exactly one paragraph, so that the first
     # subheading follows it directly.
-    if not reading.lead:
-        failures.append(entry("lead", ORDER, "absent", None))
-    elif len(reading.lead) > 1:
+    if not front.lead:
+        failures.append(entry(Part.LEAD, ORDER, "absent", None))
+    elif len(front.lead) > 1:
         failures.append(
             entry(
-                "lead",
+                Part.LEAD,
                 LEAD_IS_ONE_PARAGRAPH,
-                f"{len(reading.lead)} paragraphs",
-                opening(reading.lead[0].text),
+                f"{len(front.lead)} paragraphs",
+                opening(front.lead[0].text),
             )
         )
 
     if not reading.sections:
-        failures.append(entry("sections", ORDER, "absent", None))
+        failures.append(entry(Part.SECTIONS, ORDER, "absent", None))
 
     # Each section: a subheading inside its limit, and something under it.
     for number, section in enumerate(reading.sections, start=1):
-        count = characters(section.subheading.text)
+        count = len(section.subheading.text)
         if count > SUBHEADING_CHARACTERS:
             failures.append(
                 entry(
-                    f"section {number}",
+                    section_part(number),
                     SUBHEADING_LIMIT,
                     f"{count} characters",
                     section.subheading.text,
@@ -763,8 +805,8 @@ def requirements(reading: Reading) -> list[dict[str, Any]]:
         if not section.paragraphs:
             failures.append(
                 entry(
-                    f"section {number}",
-                    SECTION_LIMIT,
+                    section_part(number),
+                    SECTION_HOLDS_A_PARAGRAPH,
                     "0 paragraphs",
                     section.subheading.text,
                 )
@@ -777,69 +819,74 @@ def norms(reading: Reading) -> list[dict[str, Any]]:
     """Return every *should* the text departs from, judging none of them."""
 
     departures: list[dict[str, Any]] = []
+    front = reading.front
 
+    # The headline's two norms, each carrying the statement it rests on rather
+    # than the sentence both of them were written in.
     if reading.headline is not None:
         text = reading.headline.text
         count = len(words(text))
         low, high = HEADLINE_NORM_WORDS
         if not low <= count <= high:
-            departures.append(entry("headline", HEADLINE_NORM, f"{count} words", text))
-        if characters(text) > HEADLINE_NORM_CHARACTERS:
+            departures.append(
+                entry(Part.HEADLINE, HEADLINE_NORM_WORDING, f"{count} words", text)
+            )
+        if len(text) > HEADLINE_NORM_CHARACTERS:
             departures.append(
                 entry(
-                    "headline",
-                    HEADLINE_NORM,
-                    f"{characters(text)} characters",
-                    text,
+                    Part.HEADLINE, HEADLINE_NORM_LENGTH, f"{len(text)} characters", text
                 )
             )
 
+    # A heading the text nests deeper than the two levels the anatomy uses.
     for heading in reading.deeper:
         departures.append(
-            entry("sections", TWO_LEVELS, f"level {heading.level}", heading.text)
+            entry(Part.SECTIONS, TWO_LEVELS, f"level {heading.level}", heading.text)
         )
 
     # The standfirst and the lead each work without the other, and a reader
     # meeting the same first word twice meets the standfirst said again.
-    if reading.standfirst and reading.lead:
-        opener = first_word(reading.standfirst[0].text)
-        if opener and opener == first_word(reading.lead[0].text):
+    if front.standfirst and front.lead:
+        opener = first_word(front.standfirst[0].text)
+        if opener and opener == first_word(front.lead[0].text):
             departures.append(
                 entry(
-                    "lead",
+                    Part.LEAD,
                     DIFFERENT_FIRST_WORDS,
                     f"both open on “{opener}”",
-                    opening(reading.lead[0].text),
+                    opening(front.lead[0].text),
                 )
             )
 
-    for number, section in enumerate(reading.sections, start=1):
-        for paragraph in section.paragraphs:
+    # A paragraph past the outer edge, wherever in the text it stands, reported
+    # under the part it belongs to rather than under the nearest one.
+    for part, paragraphs in (
+        (Part.STANDFIRST, front.standfirst[1:]),
+        (Part.LEAD, front.lead),
+        *(
+            (section_part(number), section.paragraphs)
+            for number, section in enumerate(reading.sections, start=1)
+        ),
+    ):
+        for paragraph in paragraphs:
             count = len(words(paragraph.text))
             if count > PARAGRAPH_NORM_WORDS:
                 departures.append(
                     entry(
-                        f"section {number}",
-                        PARAGRAPH_NORM,
-                        f"{count} words",
-                        opening(paragraph.text),
+                        part, PARAGRAPH_NORM, f"{count} words", opening(paragraph.text)
                     )
                 )
+
+    # A section carrying more than the anatomy says most sections carry.
+    for number, section in enumerate(reading.sections, start=1):
         if len(section.paragraphs) > SECTION_NORM_PARAGRAPHS:
             departures.append(
                 entry(
-                    f"section {number}",
-                    SECTION_LIMIT,
+                    section_part(number),
+                    SECTION_NORM,
                     f"{len(section.paragraphs)} paragraphs",
                     section.subheading.text,
                 )
-            )
-
-    for paragraph in (*reading.standfirst[1:], *reading.lead):
-        count = len(words(paragraph.text))
-        if count > PARAGRAPH_NORM_WORDS:
-            departures.append(
-                entry("lead", PARAGRAPH_NORM, f"{count} words", opening(paragraph.text))
             )
 
     return departures
@@ -849,8 +896,8 @@ def all_paragraphs(reading: Reading) -> list[Block]:
     """Return every paragraph the text holds, in reading order."""
 
     return [
-        *reading.standfirst,
-        *reading.lead,
+        *reading.front.standfirst,
+        *reading.front.lead,
         *(block for section in reading.sections for block in section.paragraphs),
     ]
 
@@ -881,7 +928,7 @@ def heading_figures(block: Block) -> dict[str, Any]:
 
     return {
         "text": block.text,
-        "characters": characters(block.text),
+        "characters": len(block.text),
         "words": len(words(block.text)),
     }
 
@@ -897,34 +944,34 @@ def paragraph_figures(block: Block) -> dict[str, Any]:
 
 
 def opening_part(blocks: list[Block]) -> dict[str, Any] | None:
-    """Return the standfirst or the lead, which should each be one paragraph."""
+    """Return the standfirst or the lead, whose figures cover all it holds."""
 
     if not blocks:
         return None
-    figures = paragraph_figures(blocks[0])
-    figures["paragraphs"] = len(blocks)
-    return figures
+    return {
+        "text": opening(blocks[0].text),
+        "words": total_words(blocks),
+        "sentences_estimate": sum(sentences(block.text) for block in blocks),
+        "paragraphs": len(blocks),
+    }
 
 
 def parts(reading: Reading) -> dict[str, Any]:
     """Return what the script took as which part, and what each one measured."""
 
+    front = reading.front
     return {
-        "headline": (
+        Part.HEADLINE: (
             heading_figures(reading.headline) if reading.headline is not None else None
         ),
-        "standfirst": opening_part(reading.standfirst),
-        "byline": (
-            {
-                "text": reading.byline.text,
-                "characters": characters(reading.byline.text),
-                "words": len(words(reading.byline.text)),
-            }
-            if reading.byline is not None
+        Part.STANDFIRST: opening_part(front.standfirst),
+        Part.BYLINE: (
+            {"text": front.byline.text, "words": len(words(front.byline.text))}
+            if front.byline is not None
             else None
         ),
-        "lead": opening_part(reading.lead),
-        "sections": [
+        Part.LEAD: opening_part(front.lead),
+        Part.SECTIONS: [
             {
                 "subheading": heading_figures(section.subheading),
                 "paragraphs": [
@@ -934,35 +981,34 @@ def parts(reading: Reading) -> dict[str, Any]:
             for section in reading.sections
         ],
         "other": [
-            {"kind": block.kind, "part": where, "text": opening(block.text)}
-            for where, block in reading.other
+            {"part": where, "text": opening(block.text)}
+            for where, block in (*front.strays, *reading.strays)
         ],
     }
 
 
-def measure(text: str, form: str) -> dict[str, Any]:
-    """Return the complete measurement of *text*, read in *form*."""
+def measure(text: str) -> dict[str, Any]:
+    """Return the complete measurement of *text*."""
 
     body = body_of(text)
     if not body.strip():
-        raise EmptyText("there is no text under the frontmatter to measure.")
+        raise Unmeasurable(
+            Code.EMPTY_TEXT, "there is no text under the frontmatter to measure."
+        )
 
-    reading_form = detect(body) if form == "auto" else form
-    blocks = (
-        html_blocks(body) if reading_form == "html" else markdown_blocks(body)
-    )
-    if not any(block.kind in {"heading", "paragraph"} for block in blocks):
-        raise NoStructure(
-            f"read as {reading_form}, the text carries no heading and no"
-            f" paragraph; name the form with `--format` where it was read as"
-            f" the wrong one."
+    form = detect(body)
+    blocks = html_blocks(body) if form is Form.HTML else markdown_blocks(body)
+    if not any(block.kind in {Kind.HEADING, Kind.PARAGRAPH} for block in blocks):
+        raise Unmeasurable(
+            Code.NO_STRUCTURE,
+            f"read as {form}, the text carries no heading and no paragraph.",
         )
 
     reading = read_structure(blocks)
     failures = requirements(reading)
     return {
         "ok": True,
-        "format": reading_form,
+        "format": form,
         "conforms": not failures,
         "failures": failures,
         "norms": norms(reading),
@@ -977,7 +1023,6 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description="Measure the counted limits of the article anatomy in one text."
     )
-    parser.add_argument("--format", default="auto", choices=("auto", "markdown", "html"))
     parser.add_argument("path", help="the text to measure, or `-` for standard input")
     return parser.parse_args(argv)
 
@@ -988,9 +1033,9 @@ def main(argv: list[str] | None = None) -> int:
     args = parse_args(sys.argv[1:] if argv is None else argv)
 
     try:
-        payload = measure(read(args.path), args.format)
+        payload = measure(read(args.path))
     except Unmeasurable as exc:
-        refusal = {"ok": False, "code": type(exc).code, "message": str(exc)}
+        refusal = {"ok": False, "code": exc.code, "message": str(exc)}
         print(json.dumps(refusal, indent=2, ensure_ascii=False))
         return UNMEASURED
 

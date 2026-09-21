@@ -42,6 +42,8 @@ The complete loaded path should remain a short usable brief. Genre conventions, 
 
 [`article-anatomy.md`](article-anatomy.md) fixes which parts a text in article, case-study, column or opinion has, the order they come in and their dimensions; angle, argument, voice and language stay outside it. Each of those four genres links it below its identifying opening. It lives outside the selectable directories and is never a choice or genre-inference input. Write loads its base half only; Redline and its fresh correction agents also load [`article-anatomy.review.md`](article-anatomy.review.md). Their loading steps name this exact bounded exception; no recursive link loading is authorised.
 
+Its counted limits are measured by [`../../scripts/article_anatomy.py`](../../scripts/article_anatomy.py) rather than by the agent reading the text: Write measures a draft before it compares the draft with its material, Redline takes every count a finding reports from that script's output, and each of Redline's fresh correction agents measures its own repair before returning it. The script decides the counted requirements alone and reports the norms and the whole-text figures unjudged, everything a count cannot settle staying the Skill's.
+
 Every statement there carries one of the three strengths that file defines — a requirement, a *should* norm, or what is *most* typical across the whole text — and it is the one place a part of such a text carries a dimension. A genre says what a part means in its kind of text, such as what the ending's call to action is there, and restates no part, order or dimension.
 
 ## Headlines

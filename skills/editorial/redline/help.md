@@ -14,6 +14,8 @@ redline - review one text against the editorial contract, correct what it finds,
 
 `redline` reviews one text against the base editorial contract, resolved genre, optional technique, anti-slop catalogue, and resolved language guidance. For the five web genres it also reads their shared craft brief and its review guidance, and for article, case-study, column and opinion the article anatomy and the headline guidance, each with its review guidance. It corrects findings within the Correction Budget, reports anything left, and ends with one mechanical pass.
 
+For those four genres the anatomy's counted limits are measured by a script at every review, so every count a finding reports is a measured one, and each correction agent measures its own repair before returning it. A text the script cannot read is counted by hand and said to be.
+
 No provenance is required. A leading `kntnt` frontmatter map supplies defaults and is updated to match the run; no map is created when none exists. A `technique: none` in that map is its value for no technique rather than a missing one, so a text written without one is reviewed without one.
 
 Genre, technique, and language resolve independently from the Formal Invocation, `kntnt` metadata, the Contextual Instruction, Conversation Context, inference, the resolved genre's ordinary technique, and defaults. Defaults are `general`, no technique, and the text's language. Article, case-study, column, opinion and web-copy ordinarily select no technique. Explicit selections and existing metadata keep their priority. The delivery says which technique was resolved and where it came from. A technique is never inferred, and mixed language produces a question.
