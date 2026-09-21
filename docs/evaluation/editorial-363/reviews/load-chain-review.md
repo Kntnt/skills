@@ -1,6 +1,14 @@
 # Load-chain review of the #363 wording
 
-An independent reading of `git diff 8a37e57e -- skills/` in this working tree, against the chain those six surfaces sit in. I read both `SKILL.md` bodies whole, both `help.md` pages whole, `redline/references/correction.md`, `write/references/quotations.md` and `source-check.md` whole, `editorial/base.md`, `base.review.md`, `README.md`, `headlines.md`, `article-anatomy.md`, `anti-slop.md`, `mechanics.md` (heading level), all ten genre halves, `languages/sv.md`, `en_GB.md`, `en_US.md`, `languages/README.md`, `docs/adr/0212`, and `docs/rules/docs.md`, `skills.md` and `general.md`. I read nothing under any `docs/evaluation/editorial-*` directory, and I did not run the suite. Nothing below rests on the measurement; it rests on the text.
+**What this review read, and where it now is.** This is an independent reading of the revised wording of #363 against the chain its six surfaces sit in. It was written while that wording was in the working tree, so every *now* and every present tense below is about that tree and not about the branch. The branch does not ship it: the six surfaces were returned to the baseline in `36e2b599`, so the diff this review read is empty here and is recovered as `git diff 8a37e57e 19862dc2 -- skills tests`. `19862dc2` is the commit that holds the wording, and its six surfaces hash to the staged `install-revised` file for file. The four tests §5 discusses were removed with the wording and are in that commit too.
+
+The reading itself is unchanged, and deliberately so. It was made without the measurement in front of it, its verdict is one of the three independent grounds [`../results.md`](../results.md) gives for not shipping, and rewriting its findings after the fact would destroy the only thing that makes it worth keeping.
+
+---
+
+## The reading
+
+An independent reading of `git diff 8a37e57e 19862dc2 -- skills/`, against the chain those six surfaces sit in. I read both `SKILL.md` bodies whole, both `help.md` pages whole, `redline/references/correction.md`, `write/references/quotations.md` and `source-check.md` whole, `editorial/base.md`, `base.review.md`, `README.md`, `headlines.md`, `article-anatomy.md`, `anti-slop.md`, `mechanics.md` (heading level), all ten genre halves, `languages/sv.md`, `en_GB.md`, `en_US.md`, `languages/README.md`, `docs/adr/0212`, and `docs/rules/docs.md`, `skills.md` and `general.md`. I read nothing under any `docs/evaluation/editorial-*` directory, and I did not run the suite. Nothing below rests on the measurement; it rests on the text.
 
 ---
 
