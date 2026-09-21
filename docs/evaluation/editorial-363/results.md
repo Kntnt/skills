@@ -81,6 +81,19 @@ Mechanically, across **all three arms and every row**, the quoted sentence each 
 
 The two Swedish rows that are supposed to expose the miss came back the same way. `sv-control` returns *innan nästa hus börjar* and `sv-artefact` returns *innan nästa byggnad kommer i gång*, in `b`, in `c` and in `r`, and no run's reported findings name either sentence. The frozen negative control `ellipsis-sv` behaves identically: *Sedan gick lagret över* comes back untouched and unreported in every run of every arm, which `C-ellipsis` states is a fail — *silence is a fail* — and it fails equally in all three.
 
+### What the blind judges said
+
+Every artefact was read by two judges that saw it under an opaque id, in a directory carrying neither its arm nor any other run's, without this ticket, without the hypothesis and without each other. Where a criterion turns on a judgement it is theirs; where they split, both readings are recorded below and neither is treated as the answer.
+
+**On the sentence this ticket is about, the judges do not agree with the ticket.** Across every Redline case judged so far — `sv-control`, `sv-artefact`, `en-positive`, `en-us-r1` and the three fixtures, in all three arms — both judges answer that every quoted passage came back word for word and that a reader of that text's language takes it **on one pass**. That answer includes the two sentences the frozen material treats as defects: *Den tiden skulle jag avsätta innan nästa hus börjar* in the mandatory Swedish control, and *Sedan gick lagret över* in `ellipsis-sv`, which `C-ellipsis` was written to catch. One judge put it in as many words: *innan nästa hus börjar is the ordinary Swedish shorthand for innan arbetet i nästa hus börjar — a metonymy the language uses of itself*, and called the smoother alternative *a preference, not an obstruction*.
+
+The same judges do not find the English defect either. No run in any arm expanded *before the next building starts*, and both judges class every English quotation as returned verbatim and read on one pass.
+
+**One judge divided against itself, and it is worth recording.** Judging the source-blind replays, judge A reads *innan nästa hus börjar* as one-pass Swedish. Judging a Write draft that had changed it to *innan arbetet i nästa hus börjar*, the same judge writes *a Swedish hus does not börja* and calls the checker's finding against it real. The two readings are made under two briefs, and the Redline brief carries an explicit warning that a figure a language uses itself reads on one pass however odd its literal parse. Neither reading is an oracle; the split is the evidence.
+
+**Where the judges do find defects, they are other tickets' defects.** Across the Redline cases both judges fail rows for rewriting a clean text's headings to taste, for shipping a subheading the run's own re-review condemned, for an account that says nothing else moved when something did, and for a limiting sentence whose object moved — the shapes owned by [#383](https://github.com/Kntnt/skills/issues/383), [#389](https://github.com/Kntnt/skills/issues/389), [#390](https://github.com/Kntnt/skills/issues/390) and [#377](https://github.com/Kntnt/skills/issues/377). Those are recorded against those numbers and counted against nothing here, as the plan requires. On the Write side both judges fail `F1` on every Swedish draft in both arms, for small source-coverage slips unrelated to quoted speech.
+
+
 ## Wall time
 
 Median seconds from `started.txt` to `finished.txt`, per arm and per Skill.
