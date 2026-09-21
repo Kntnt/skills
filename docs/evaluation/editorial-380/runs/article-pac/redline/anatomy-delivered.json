@@ -1,0 +1,115 @@
+{
+  "ok": true,
+  "format": "markdown",
+  "conforms": true,
+  "failures": [],
+  "norms": [],
+  "typical": {
+    "paragraphs": 10,
+    "paragraphs_of_two_or_three_sentences": 9,
+    "sections": 4,
+    "sections_of_two_or_three_paragraphs": 4
+  },
+  "parts": {
+    "headline": {
+      "text": "Classroom temperature readings point to 14 lesson periods",
+      "characters": 57,
+      "words": 8
+    },
+    "standfirst": {
+      "text": "Temperature sensors in six classrooms can tell a …",
+      "words": 49,
+      "sentences_estimate": 2,
+      "paragraphs": 1
+    },
+    "byline": {
+      "text": "By Thomas Barregren",
+      "words": 3
+    },
+    "lead": {
+      "text": "In January 2026 the property office in Lervik …",
+      "words": 53,
+      "sentences_estimate": 3,
+      "paragraphs": 1
+    },
+    "sections": [
+      {
+        "subheading": {
+          "text": "Fourteen of 120 lesson periods held a reading below 20 degrees",
+          "characters": 62,
+          "words": 11
+        },
+        "paragraphs": [
+          {
+            "text": "Values were logged every five minutes for the …",
+            "words": 34,
+            "sentences_estimate": 2
+          },
+          {
+            "text": "The report Mätförsök i Björkskolan, dated 12 March …",
+            "words": 45,
+            "sentences_estimate": 2
+          }
+        ]
+      },
+      {
+        "subheading": {
+          "text": "Ventilation, draught and radiant heat went unrecorded",
+          "characters": 53,
+          "words": 7
+        },
+        "paragraphs": [
+          {
+            "text": "A sensor reports the temperature of the air …",
+            "words": 51,
+            "sentences_estimate": 2
+          },
+          {
+            "text": "Ventilation, draught and perceived temperature were not measured …",
+            "words": 32,
+            "sentences_estimate": 2
+          }
+        ]
+      },
+      {
+        "subheading": {
+          "text": "A count of periods is not a measure of how cold it got",
+          "characters": 54,
+          "words": 13
+        },
+        "paragraphs": [
+          {
+            "text": "The report does not say how long any …",
+            "words": 42,
+            "sentences_estimate": 2
+          },
+          {
+            "text": "Nor does the trial supply anything to set …",
+            "words": 52,
+            "sentences_estimate": 3
+          }
+        ]
+      },
+      {
+        "subheading": {
+          "text": "Pair the readings with usage times before changing the controls",
+          "characters": 63,
+          "words": 10
+        },
+        "paragraphs": [
+          {
+            "text": "Which lesson periods to examine, then, is the …",
+            "words": 39,
+            "sentences_estimate": 2
+          },
+          {
+            "text": "'We know when we need to look more …",
+            "words": 66,
+            "sentences_estimate": 4
+          }
+        ]
+      }
+    ],
+    "other": []
+  }
+}
