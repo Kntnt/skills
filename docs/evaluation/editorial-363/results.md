@@ -8,25 +8,33 @@ It was written as the runs completed and is finished: every row of the frozen ma
 
 ### Three arms, not two
 
-The plan freezes two arms. A third, `r`, is the one revise-and-remeasure round the exit criterion allows, and the wording it carries is the wording this branch ships.
+The plan freezes two arms. A third, `r`, is the one revise-and-remeasure round the exit criterion allows. **None of the three wordings ships**; *The decision* below says why, and the six surfaces on this branch are byte-identical to `install-baseline`, which is the `b` arm's product.
 
 | Arm | Install | Product |
 | --- | --- | --- |
-| `b` | `install-baseline` | `main` at `8a37e57e`, unchanged |
-| `c` | `install-candidate` | baseline plus the first candidate wording |
-| `r` | `install-revised` | baseline plus the revised wording, byte-identical to the files this branch ships |
+| `b` | `install-baseline` | `main` at `8a37e57e`, unchanged — and the state this branch leaves the product in |
+| `c` | `install-candidate` | baseline plus the first candidate wording, which this branch does not ship |
+| `r` | `install-revised` | baseline plus the revised wording, which this branch does not ship |
+
+The revised wording is recoverable: it is the tree at `19862dc2`, whose six surfaces hash to `install-revised` file for file, and `36e2b599` is the commit that returned them to the baseline.
 
 The candidate wording asks the reader-of-this-language question and stops there. The revised wording names what the reader has to supply — a verb whose subject cannot perform it, a time or place adverbial whose event is missing, a reference the sentence never introduces — and adds the instruction to read a repair back the same way before it stands.
 
 ### The harness, and a declared difference from the plan
 
-The plan says each invocation runs in "one fresh subagent per invocation, of type `kntnt-opus-high`". The `b` and `c` arms were run that way. The `r` arm was not, and this is a declared difference.
+The plan says each invocation runs in "one fresh subagent per invocation, of type `kntnt-opus-high`". The `b` and `c` arms were run that way. **Most of the `r` arm was not, and seven of its rows were**, which makes that arm mixed; both halves are set out below, because an earlier draft of this file described the whole arm as sessions and that was not true of those seven.
 
-Both Skills declare `kntnt.capabilities: "subagents"` and stop before writing where the harness cannot start one. The session that completed the `r` arm is itself a subagent of an orchestrating session, and a subagent of this harness has no agent-spawning tool at all: a Write run started that way stops on the unsatisfied capability before it resolves genre, technique or language. One such stop was produced and is kept in [`voided/`](voided/); it is a harness failure and not a run, and it is counted against nothing.
+Both Skills declare `kntnt.capabilities: "subagents"` and stop before writing where the harness cannot start one. The session that finished the `r` arm is itself a subagent of an orchestrating session, and a subagent of that harness has no agent-spawning tool at all: a Write run started that way stops on the unsatisfied capability before it resolves genre, technique or language. One such stop was produced and is kept in [`voided/`](voided/); it is a harness failure and not a run, and it is counted against nothing.
 
-The `r` arm therefore runs each invocation as a **fresh top-level Claude Code session**, started from the shell as
+**Fifteen of the `r` arm's twenty-two runs therefore ran as a fresh top-level Claude Code session**, started from the shell as
 
 `claude -p`, given the turn as its prompt, with the child-session environment variables unset so the session is not a child, with the working directory set to that run's `work/`, and with three flags in Claude Code's own spelling: `--model` set to `claude-opus-5`, `--effort` to `high` and `--permission-mode` to `bypassPermissions`. (Those are that tool's flags, not this collection's, and they are written out here rather than as a command line so that the record does not have to spell a foreign grammar in this collection's own.) The model and the deliberation level are the ones the plan names; what changes is that the seat is a session rather than a subagent, which is what lets the Skill start the checker and correction subagents its contract requires. The addendum's "the supported native harness for this family is Claude Code itself" is what this is. The turn text is unchanged between arms and is recorded in [`runs/write-turn.md`](runs/write-turn.md) and [`runs/redline-turn.md`](runs/redline-turn.md).
+
+Those fifteen are all four `case-study` `Write` rows, their four paired replays, and the Redline rows `en-positive-r2`, `en-us-r1-r1`, `en-us-r1-r2`, `metonymy-sv-r1`, `metonymy-sv-r2`, `rhythm-en_GB-r1` and `rhythm-en_GB-r2`. The script that started them, its per-run log and its exit-status list are in this ticket's scratch directory rather than on the branch, so what the branch itself carries for them is the `started.txt` markers of the wave that begins at `22:08:49Z`.
+
+**The `r` arm's other seven runs were not made that way**, and saying so is a correction to an earlier draft of this file. They are `sv-control-r1` and `r2`, `sv-artefact-r1` and `r2`, `ellipsis-sv-r1` and `r2`, and `en-positive-r1`. Their `started.txt` markers run from `17:30:54Z` to `17:31:37Z` in seven-second steps — the dispatch signature the `b` and `c` waves carry, where `b` steps from `16:01:58Z` to `16:03:04Z` the same way — four and a half hours before the session wave began, and none of them appears in the session script's status list or has a session log. They were dispatched as subagents, as the `b` and `c` arms were, and they were not among the ten attempts that were set aside and re-run.
+
+What that costs is stated rather than argued away. For those seven rows the question [#394](https://github.com/Kntnt/skills/issues/394) names — whether Redline's correction round got the fresh seat its step 7 requires — is as open as it is for the attempts under [`voided/`](voided/), and the branch carries nothing that settles it either way. It changes no criterion verdict below, because every criterion that decides this ticket turns on the `b` and the `c` arms, and because those seven rows returned their quoted sentence unchanged and unreported exactly as the eleven `r`-arm Redline rows in the other seat did. It does mean the `r` arm is not one seat, and no sentence here should be read as saying it is.
 
 The difference is asymmetric between arms and is a reason to read an `r`-arm wall time beside a `b` or `c` one with care. It is not a reason to read the editorial outcomes with care: the Skill, its resources, its input and its blindness are the same in all three.
 
