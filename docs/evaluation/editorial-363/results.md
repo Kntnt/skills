@@ -214,12 +214,12 @@ The plan, the fixtures, the judge briefs, the turn templates, the whole run tree
 
 Nothing in the `b` or `c` arms is affected: those were made by an earlier session whose subagents could start checkers, as the two separate source-check reports in each of their Write run directories show.
 
-## What is not finished
+## What is and is not finished
 
 Stated by name, because a run tree that does not say what is missing reads later as one that is complete.
 
-- **The paired source-blind replays are partly done.** The frozen matrix requires one per delivered Write draft, and no session before this one had run any. All four of the `b` arm are complete. The `c` and `r` arms' replays were started in this session; [`runs/`](runs/) shows which reached a reply. Every completed one behaves as the matrix rows do: the quotation comes back unchanged.
-- **Judging follows the same line.** Every run that has a reply and has been staged for judging carries two blind judgements beside it; the replays that finished late may carry none yet. A run directory without `judgement-a.md` and `judgement-b.md` has not been judged, and nothing about it is claimed here.
+- **The paired source-blind replays are done.** The frozen matrix requires one per delivered Write draft, and no session before this one had run any; all fifteen were run here — four in the `b` arm, seven in `c`, four in `r` — and every one of them returns the draft's own rendering of the quotation unchanged, with both judges taking it on one pass in its own language. That includes the baseline arm's replay of its own Swedish draft, which returns *innan nästa hus börjar* untouched: the pipeline reproducing this ticket's Swedish case end to end and leaving it alone.
+- **Judging.** Every run in the tree carries two blind judgements beside it, as `judgement-a.md` and `judgement-b.md`; one run carries a third, for the reason its `judgement-c.note.md` gives. A run directory without both files has not been judged, and nothing about it is claimed here.
 - **`T1` and `R2` are `skipped` on every row**, for the reason above, and are [#388](https://github.com/Kntnt/skills/issues/388)'s business.
 - **The GPT-family failures were not retested**, by the protocol's rule, and stay failed.
 
