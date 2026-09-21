@@ -26,11 +26,7 @@ Both Skills declare `kntnt.capabilities: "subagents"` and stop before writing wh
 
 The `r` arm therefore runs each invocation as a **fresh top-level Claude Code session**, started from the shell as
 
-```
-claude -p --model claude-opus-5 --effort high --permission-mode bypassPermissions "<the turn>"
-```
-
-with the child-session environment variables unset so the session is not a child, and with the working directory set to that run's `work/`. The model and the deliberation level are the ones the plan names; what changes is that the seat is a session rather than a subagent, which is what lets the Skill start the checker and correction subagents its contract requires. The addendum's "the supported native harness for this family is Claude Code itself" is what this is. The turn text is unchanged between arms and is recorded in [`runs/write-turn.md`](runs/write-turn.md) and [`runs/redline-turn.md`](runs/redline-turn.md).
+`claude -p`, given the turn as its prompt, with the child-session environment variables unset so the session is not a child, with the working directory set to that run's `work/`, and with three flags in Claude Code's own spelling: `--model` set to `claude-opus-5`, `--effort` to `high` and `--permission-mode` to `bypassPermissions`. (Those are that tool's flags, not this collection's, and they are written out here rather than as a command line so that the record does not have to spell a foreign grammar in this collection's own.) The model and the deliberation level are the ones the plan names; what changes is that the seat is a session rather than a subagent, which is what lets the Skill start the checker and correction subagents its contract requires. The addendum's "the supported native harness for this family is Claude Code itself" is what this is. The turn text is unchanged between arms and is recorded in [`runs/write-turn.md`](runs/write-turn.md) and [`runs/redline-turn.md`](runs/redline-turn.md).
 
 The difference is asymmetric between arms and is a reason to read an `r`-arm wall time beside a `b` or `c` one with care. It is not a reason to read the editorial outcomes with care: the Skill, its resources, its input and its blindness are the same in all three.
 

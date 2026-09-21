@@ -6,8 +6,6 @@ Speech is not written prose, and a transcript quoted raw reads as carelessness t
 
 When translating permitted quotations, preserve meaning, stance, certainty and distinctive voice in idiomatic target-language speech, not source-language syntax. The restrictions below protect that substance; they do not require word-for-word translation. Make an implicit referent explicit only when the supplied context settles it. Where the meaning remains ambiguous, paraphrase what is established rather than inventing a fluent interpretation.
 
-Read the finished rendering as a reader of the target language reads it, with the source out of sight. They take it on one pass, or they stop at a word you can name — a verb whose subject cannot perform it in that language, a time or place adverbial whose event is missing, a reference the sentence never introduces. A rendering they stop in has failed however faithful its words are, and so has a repair of it they stop in again: read every repair back the same way before it stands, because the shortest way out of one such figure is another. A figure of the source — an ellipsis, a metonymy, a conventional shorthand — carries over only where the target language has one of its own to reach for; where it has none, say what the speaker said the way that language says it.
-
 ## What may be repaired
 
 The syntax of speech: a sentence abandoned halfway and restarted, a subject left behind by its verb, a clause that never closes. Fillers — *you know*, *sort of*, *liksom*, *alltså* — where they carry nothing. Repetition that is the speaker searching for a word rather than insisting on one. False starts, and the small disfluencies a person does not hear themselves make.
