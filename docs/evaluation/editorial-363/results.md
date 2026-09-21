@@ -22,7 +22,7 @@ The candidate wording asks the reader-of-this-language question and stops there.
 
 The plan says each invocation runs in "one fresh subagent per invocation, of type `kntnt-opus-high`". The `b` and `c` arms were run that way. The `r` arm was not, and this is a declared difference.
 
-Both Skills declare `kntnt.capabilities: "subagents"` and stop before writing where the harness cannot start one. The session that completed the `r` arm is itself a subagent of an orchestrating session, and a subagent of this harness has no agent-spawning tool at all: a Write run started that way stops on the unsatisfied capability before it resolves genre, technique or language. One such stop was produced and is kept at `logs/voided/` in the run scratch; it is a harness failure and not a run, and it is counted against nothing.
+Both Skills declare `kntnt.capabilities: "subagents"` and stop before writing where the harness cannot start one. The session that completed the `r` arm is itself a subagent of an orchestrating session, and a subagent of this harness has no agent-spawning tool at all: a Write run started that way stops on the unsatisfied capability before it resolves genre, technique or language. One such stop was produced and is kept in [`voided/`](voided/); it is a harness failure and not a run, and it is counted against nothing.
 
 The `r` arm therefore runs each invocation as a **fresh top-level Claude Code session**, started from the shell as
 
@@ -210,7 +210,7 @@ The plan, the fixtures, the judge briefs, the turn templates, the whole run tree
 
 ## What was voided, and why
 
-**Seven `r`-arm attempts made in a subagent seat are preserved and count for nothing.** They are under `logs/voided/` in the run scratch. The reason is [#394](https://github.com/Kntnt/skills/issues/394): a subagent of this harness has no agent-spawning tool, Write's step 1 correctly stopped a run on the unsatisfied `subagents` capability, and Redline runs in the same seat ran to completion without ever checking. Two of those attempts wrote into a run directory a session-harness run was also using, so provenance could not be established for them either; where a run's provenance could not be established it was treated as not completed and re-run, which is what the ticket's own instruction says to do.
+**Ten `r`-arm attempts made in a subagent seat are preserved and count for nothing.** They are under [`voided/`](voided/), with a README saying what each one is. The reason is [#394](https://github.com/Kntnt/skills/issues/394): a subagent of this harness has no agent-spawning tool, Write's step 1 correctly stopped a run on the unsatisfied `subagents` capability, and Redline runs in the same seat ran to completion without ever checking. Two of those attempts wrote into a run directory a session-harness run was also using, so provenance could not be established for them either; where a run's provenance could not be established it was treated as not completed and re-run, which is what the ticket's own instruction says to do.
 
 Nothing in the `b` or `c` arms is affected: those were made by an earlier session whose subagents could start checkers, as the two separate source-check reports in each of their Write run directories show.
 
