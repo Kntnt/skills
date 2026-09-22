@@ -134,7 +134,12 @@ Recorded `skipped`, as the plan fixed before the runs: a subagent's transcript i
 
 ## What is filed
 
-Exit 1 requires the cross-family result to be filed as its own `needs-triage` issue naming #364. That, and the heading finding above, are the two things this run leaves behind; both name #364 and neither is a duplicate of an open number. They are listed in [the records index](../records/README.md) entry for this evaluation.
+Exit 1 requires the cross-family result to be filed as its own `needs-triage` issue naming #364. Two issues are filed; both name #364 and neither duplicates an open number.
+
+- [#395](https://github.com/Kntnt/skills/issues/395) — the fault does not reproduce in this family, and stays failed in the GPT family, which this session may not retest.
+- [#396](https://github.com/Kntnt/skills/issues/396) — the pre-echo sits in the section heading, where the bridge rule does not reach, together with the two classing splits that any wording written for it would have to survive.
+
+The decision not to change the shipped wording is recorded in [ADR-0214](../../adr/0214-a-bridge-prepares-a-quotation-rather-than-pre-says-it.md).
 
 ## The records
 

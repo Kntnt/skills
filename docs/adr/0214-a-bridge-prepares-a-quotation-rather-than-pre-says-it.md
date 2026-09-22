@@ -1,0 +1,37 @@
+# A bridge prepares a quotation rather than pre-says it — measured, and the wording left alone
+
+This record decides **not** to change what the `case-study` genre says about a bridge into a quotation, after freezing a matrix against it, measuring the shipped wording and reading the result independently. It exists because the rule reads abstract enough that the next author will want to sharpen it, and because what the measurement found instead is worth more than the wording it did not write. Issue #364.
+
+## What the change would have been, and why it looked right
+
+**The product already states the rule, in two places and no others.** `skills/kntnt/library/references/editorial/genres/case-study.md` says to let attributed quotations carry the customer's experience and judgement, with narrative doing the connecting work, and that *a bridge should prepare a quotation rather than pre-say it*. `case-study.review.md` says to read bridges beside quotations and remove a redundant pre-echo while keeping the attribution and any distinct fact.
+
+**The objection was that the rule is abstract where the composing step needs a test.** *Pre-say* is a coined verb with no reader-facing question behind it, and it sits two sentences after an instruction telling the narrative to do the connecting work — which a writer can satisfy by summarising what the quotation is about to say. The same collection already states the identical shape of rule concretely one resource away, in `article-anatomy.md`: *A reader who has just read the standfirst meets the lead as new material, never as the standfirst said again.* So the candidate family was to give the bridge rule the reader test the anatomy gives the lead, and to name what a bridge may carry, without prescribing a sentence and without forbidding bridges.
+
+The argument is still a good argument. It is not what the measurement was about.
+
+**The plan deliberately left the candidate wording unfrozen**, to be written from what the baseline arm actually did — and where the baseline took exit 1, to be written at all. It was not written.
+
+## Why nothing is shipped
+
+[`docs/evaluation/editorial-364/results.md`](../evaluation/editorial-364/results.md) holds the measurement, against the matrix frozen in [`plan.md`](../evaluation/editorial-364/plan.md) before the first run: three rows, seven Write runs and seven paired source-blind Redline runs, every run a fresh top-level session on `claude-opus-5` at high deliberation against `218e3be1`, every delivered artefact read by two blind judges under a judge brief that classes each bridge (a), (b) or (c) without telling the judge which class is the defect.
+
+**The fault does not reproduce.** The test was fixed before the runs: it counts as reproduced when at least one baseline `case-question-en_GB` draft carries a class (a) bridge. Three runs, two judges each, six readings, class (a) count zero in every one. The family writes the repaired form unprompted — where the GPT-family draft wrote *Asked about choosing the system again and what to change, Vale's endorsement was specific to new jobs, with more time allowed before extending its use:*, all three Claude-family drafts of that same source gave the occasion and the attribution and left both judgement points to the speaker. The body's own rule is that a new general rule needs a demonstrated cause, and this family demonstrates none.
+
+This is the second such result in two days, by the same method: [ADR-0212](0212-a-quotation-is-read-in-the-language-it-is-written-in.md) recorded #363's two quotation failures not reproducing either. Two tickets filed from GPT-family evidence, both measured, both leaving the shipped wording alone. That pattern is now worth naming on its own, and #395 carries it.
+
+**The cost argument points the same way from the other end.** The criterion says a wording that adds reading ships only where the candidate arm removes a miss the baseline arm reproduced. There is no miss to point at, so the shorter wording — the shipped one — stays, and the mandatory reading for a `case-study` run is unchanged.
+
+## What the measurement found instead, and where it went
+
+**The pre-echo has moved into the section heading.** In two of the three `case-question-en_GB` drafts the reader still meets the closing quotation as something already said — not in the bridge, but one step up, in the heading standing over it: *Vale would use the schedule again for new jobs* and *Vale would allow an extra week for the status names*, both over the quotation *I would use it again for new jobs. I would allow another week to check the status names before adding the backlog.* Both of that row's judges reported it without being asked to, one calling it the draft's clearest editorial defect and one no checker saw, while both still classed the bridge itself (b) — correctly, because the plan defines a bridge as the clause standing immediately before the quotation, and a heading two steps up is not that.
+
+So the frozen definition did exactly what it was written to do, and the fault sits outside its reach. The shipped review rule has the same reach: `case-study.review.md` pairs bridges with quotations and the standfirst with the body's opening, and pairs a subheading with nothing. That is #396, which also carries why it is not the subheading-repeats-its-first-sentence fault #390 already owns.
+
+**The classing is not steady at its own edge.** Two control rows split. In `case-study-en_US-r1` the bridge *Lind would plan the next building differently.* was read (a) by one Write judge, (b) by the other, and (a) again by a Redline judge under the other brief — two of three readings calling it this ticket's own defect. In `case-study-sv-r2` the judges disagreed about where the bridge is at all, one taking the heading and one not. Neither split falls in the row the reproduction test reads, so neither changes the exit; both mean that a wording written for the heading has to say what counts as a bridge, or it will be measured the same way. That is in #396 too.
+
+**Nothing was softened to fit the result.** No criterion was reworded after a run, no arm was rerun to get a better reading, and the four rows a server-side kill took were voided whole and re-dispatched from clean directories rather than salvaged — six voided attempts are kept under `editorial-364/voided/` and none reached a judge.
+
+## What this record does not decide
+
+It does not say the defect is not real. It was observed on a GPT-family product and it stays failed there; [the protocol](../evaluation/protocol.md) forbids a Claude session from driving a Codex harness, so it was not retested, and a retest is a separate step. It does not close the question the objection raised, either: the rule may well read abstract. What it decides is that this repository will not add general wording to a shipped resource on evidence from a family that does not exhibit the fault, when the measurement it ran points at a different sentence in a different place.
