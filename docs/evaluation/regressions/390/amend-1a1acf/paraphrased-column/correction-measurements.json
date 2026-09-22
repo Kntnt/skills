@@ -1,0 +1,141 @@
+[
+  {
+    "trace": "native/2026/09/22/rollout-2026-09-22T09-34-31-01a0c809-aace-7523-9bb4-1962880d1c78.jsonl",
+    "ordinal": 61,
+    "command": [
+      "/opt/homebrew/bin/bash",
+      "-lc",
+      "task_tmp_base=\"$TMPDIR\"\ncmd_tmp=\"$(mktemp -d \"$task_tmp_base/anatomy-column.XXXXXX\")\" || exit 1\ncleanup_tmp() {\n  find \"$cmd_tmp\" -type f -delete\n  find \"$cmd_tmp\" -depth -type d -exec rmdir {} \\;\n}\ntrap cleanup_tmp EXIT\nUV_NO_CACHE=1 UV_NO_PROJECT=1 TMPDIR=\"$cmd_tmp\" uv run \"/Users/thomas/Projects/skills/.git/orchestrate-session-389-391-gpt/scratch/390/amend-1a1acf/paraphrased-column/work/.agents/skills/kntnt/library/scripts/article_anatomy.py\" - <<'EOF'\n---\nkntnt:\n  genre: column\n  technique: none\n  language: sv\n---\n\n# Mötesmallen saknar en ruta för förståelse\n\nVad ska ett möte göra möjligt? Bibliotekarien Nora Vik hittar ingen ruta för den frågan i bibliotekets mötesmall, och resonerar här om varför den som fyller i mallen borde få formulera varför vi behöver varandras tid — utan att hon vet om ännu en ruta gör möten bättre.\n\nAv Nora Vik\n\nJag granskar bibliotekets mötesmall. Där finns rutor för starttid, sluttid, deltagare och dagordning. Det finns ingen ruta för det beslut vi ska kunna fatta när vi går därifrån. Det är en iakttagelse av ett dokument, inte en scen från ett visst möte.\n\n## Jag värderar det mallen inte frågar efter\n\nTiden, däremot, har mallen två rutor för. Jag retar mig på hur lätt tid i kalendern behandlas som ett resultat i sig, som om utrymmet vore detsamma som det som skulle rymmas där. Det är min reflektion, inte något jag har mätt hos andra.\n\nJag uppskattar möten där kolleger upptäcker att de har förstått en fråga olika. Den upptäckten kan vara viktigare än att vi snabbt enas. Att gå därifrån med en skarpare bild av var vi skiljer oss är också något att ha åstadkommit, men det finns ingen ruta att skriva in det i.\n\n## Vi kan formulera vad vi vill undersöka\n\nMin tanke är inte att varje samtal ska pressas fram till ett beslut. Samtal kan skapa förtroende. De kan också få oss att upptäcka en fråga vi inte visste att vi behövde ställa.\n\nMen den som fyller i mallen borde få formulera varför vi behöver just varandras tid. Också när syftet är att undersöka något tillsammans går det att säga vad vi vill undersöka. Det är ingen hög tröskel.\n\n## Pröva frågan om gemensam förståelse\n\nJag vet inte om ytterligare en ruta gör möten bättre. Det finns en komik i att försöka lösa ett problem med formulär genom att utöka formuläret. Ändå vill jag prova en enkel fråga bredvid tiden: vad behöver vi förstå tillsammans? Pröva den gärna i din egen mall, och behåll tvivlet på rutan medan du gör det.\nEOF"
+    ],
+    "exit_code": 0,
+    "measurement": {
+      "ok": true,
+      "format": "markdown",
+      "conforms": true,
+      "failures": [],
+      "norms": [],
+      "typical": {
+        "paragraphs": 7,
+        "paragraphs_of_two_or_three_sentences": 5,
+        "sections": 3,
+        "sections_of_two_or_three_paragraphs": 2
+      },
+      "parts": {
+        "headline": {
+          "text": "Mötesmallen saknar en ruta för förståelse",
+          "characters": 41,
+          "words": 6
+        },
+        "standfirst": {
+          "text": "Vad ska ett möte göra möjligt? Bibliotekarien Nora …",
+          "words": 47,
+          "sentences_estimate": 2,
+          "paragraphs": 1
+        },
+        "byline": {
+          "text": "Av Nora Vik",
+          "words": 3
+        },
+        "lead": {
+          "text": "Jag granskar bibliotekets mötesmall. Där finns rutor för …",
+          "words": 42,
+          "sentences_estimate": 4,
+          "paragraphs": 1
+        },
+        "sections": [
+          {
+            "subheading": {
+              "text": "Jag värderar det mallen inte frågar efter",
+              "characters": 41,
+              "words": 7
+            },
+            "paragraphs": [
+              {
+                "text": "Tiden, däremot, har mallen två rutor för. Jag …",
+                "words": 44,
+                "sentences_estimate": 3
+              },
+              {
+                "text": "Jag uppskattar möten där kolleger upptäcker att de …",
+                "words": 51,
+                "sentences_estimate": 3
+              }
+            ]
+          },
+          {
+            "subheading": {
+              "text": "Vi kan formulera vad vi vill undersöka",
+              "characters": 38,
+              "words": 7
+            },
+            "paragraphs": [
+              {
+                "text": "Min tanke är inte att varje samtal ska …",
+                "words": 33,
+                "sentences_estimate": 3
+              },
+              {
+                "text": "Men den som fyller i mallen borde få …",
+                "words": 36,
+                "sentences_estimate": 3
+              }
+            ]
+          },
+          {
+            "subheading": {
+              "text": "Pröva frågan om gemensam förståelse",
+              "characters": 35,
+              "words": 5
+            },
+            "paragraphs": [
+              {
+                "text": "Jag vet inte om ytterligare en ruta gör …",
+                "words": 56,
+                "sentences_estimate": 4
+              }
+            ]
+          }
+        ],
+        "other": []
+      },
+      "heading_pairs": [
+        {
+          "id": "headline-standfirst",
+          "kind": "headline-standfirst",
+          "heading": "Mötesmallen saknar en ruta för förståelse",
+          "following": "Vad ska ett möte göra möjligt? Bibliotekarien Nora Vik hittar ingen ruta för den frågan i bibliotekets mötesmall, och resonerar här om varför den som fyller i mallen borde få formulera varför vi behöver varandras tid — utan att hon vet om ännu en ruta gör möten bättre.",
+          "shared_words": [
+            "en",
+            "för",
+            "ruta"
+          ]
+        },
+        {
+          "id": "subheading-1",
+          "kind": "subheading-first-sentence-estimate",
+          "heading": "Jag värderar det mallen inte frågar efter",
+          "following": "Tiden, däremot, har mallen två rutor för.",
+          "shared_words": [
+            "mallen"
+          ]
+        },
+        {
+          "id": "subheading-2",
+          "kind": "subheading-first-sentence-estimate",
+          "heading": "Vi kan formulera vad vi vill undersöka",
+          "following": "Min tanke är inte att varje samtal ska pressas fram till ett beslut.",
+          "shared_words": []
+        },
+        {
+          "id": "subheading-3",
+          "kind": "subheading-first-sentence-estimate",
+          "heading": "Pröva frågan om gemensam förståelse",
+          "following": "Jag vet inte om ytterligare en ruta gör möten bättre.",
+          "shared_words": [
+            "om"
+          ]
+        }
+      ]
+    }
+  }
+]

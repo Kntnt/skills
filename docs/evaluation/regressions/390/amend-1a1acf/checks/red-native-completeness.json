@@ -1,0 +1,26 @@
+{
+  "criterion": "Every frozen native case has a completed response, delivered artifact, post-delivery pairs and traced semantic outcome",
+  "status": "FAIL",
+  "missing": [
+    "docs/evaluation/regressions/390/retry-59e6c1/recorded-column/response.txt",
+    "docs/evaluation/regressions/390/retry-59e6c1/recorded-column/delivered.md",
+    "docs/evaluation/regressions/390/retry-59e6c1/recorded-column/pairs-after.json",
+    "docs/evaluation/regressions/390/retry-59e6c1/recorded-column/judgement.md",
+    "docs/evaluation/regressions/390/retry-59e6c1/paraphrased-column/response.txt",
+    "docs/evaluation/regressions/390/retry-59e6c1/paraphrased-column/delivered.md",
+    "docs/evaluation/regressions/390/retry-59e6c1/paraphrased-column/pairs-after.json",
+    "docs/evaluation/regressions/390/retry-59e6c1/paraphrased-column/judgement.md",
+    "docs/evaluation/regressions/390/retry-59e6c1/clean-reuse/response.txt",
+    "docs/evaluation/regressions/390/retry-59e6c1/clean-reuse/delivered.md",
+    "docs/evaluation/regressions/390/retry-59e6c1/clean-reuse/pairs-after.json",
+    "docs/evaluation/regressions/390/retry-59e6c1/clean-reuse/judgement.md",
+    "docs/evaluation/regressions/390/retry-59e6c1/paraphrased-headline/response.txt",
+    "docs/evaluation/regressions/390/retry-59e6c1/paraphrased-headline/delivered.md",
+    "docs/evaluation/regressions/390/retry-59e6c1/paraphrased-headline/pairs-after.json",
+    "docs/evaluation/regressions/390/retry-59e6c1/paraphrased-headline/judgement.md",
+    "docs/evaluation/regressions/390/retry-59e6c1/write-column/response.txt",
+    "docs/evaluation/regressions/390/retry-59e6c1/write-column/delivered.md",
+    "docs/evaluation/regressions/390/retry-59e6c1/write-column/pairs-after.json",
+    "docs/evaluation/regressions/390/retry-59e6c1/write-column/judgement.md"
+  ]
+}

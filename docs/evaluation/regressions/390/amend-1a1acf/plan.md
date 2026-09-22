@@ -1,0 +1,7 @@
+# Amend ms-20260922-1a1acf — execution plan
+
+The cases, tasks, fixture hashes and semantic criteria in ../plan.md remain fixed. Product revision: 09fb8991. No shipped implementation or instruction change is planned. The observed red completeness check is preserved in checks/red-native-completeness.json.
+
+Run all five frozen invocations to completion with the existing Codex CLI, gpt-5.6-sol, xhigh effort and default service tier. Each run has a fresh staged installation and private profile. Use workspace-write with network access enabled, exclude default temporary write roots, and grant only that run's private directory. Explicit harness instructions put each UV command's private directory below the supplied TMPDIR. This changes containment, not editorial guidance or the cases. All native parent and child sessions are retained. A 1,800-second bound terminates and reaps the process group; no interruption is a completed outcome.
+
+Preserve full responses, extracted delivered artifacts, before/after pair measurements, trace-backed judgments of each frozen criterion, source-comparison ordering and filesystem inventories. Retain unsuccessful runs separately. Run the exact four published gates, with caches and temporary storage inside the authorized scratch root. The previous packet describes three scheduler tests sensitive to temporary storage under the account home; report any recurrence without altering that unrelated contract or its tests.

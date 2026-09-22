@@ -1,0 +1,32 @@
+{
+  "exact_prose_match_after_metadata_removal": true,
+  "compared_prose_sha256": "d7406ffafaec10a7ba1752cc634c55e2d5d5b49d744ad37d8f2b61d359ee7011",
+  "delivered_prose_sha256": "d7406ffafaec10a7ba1752cc634c55e2d5d5b49d744ad37d8f2b61d359ee7011",
+  "final_checker_and_report": [
+    {
+      "trace": "native/2026/09/22/rollout-2026-09-22T09-44-22-01a0c812-af1c-7d73-b6ec-d1da3f16df3c.jsonl",
+      "ordinal": 15,
+      "timestamp": "2026-09-22T07:44:35.499Z",
+      "event": "Final checker read exact delivered prose"
+    },
+    {
+      "trace": "native/2026/09/22/rollout-2026-09-22T09-44-22-01a0c812-af1c-7d73-b6ec-d1da3f16df3c.jsonl",
+      "ordinal": 44,
+      "timestamp": "2026-09-22T07:49:55.056Z",
+      "event": "Final source report written",
+      "sha256": "533ec36d31cf355af0aea58e713f0c00eb3a7383d0915f2ff8c2184f8508f14c"
+    }
+  ],
+  "measurement_ordinals": [
+    {
+      "trace": "native/2026/09/22/rollout-2026-09-22T09-31-18-01a0c806-b8fe-71b3-98af-5b2e1ebb439f.jsonl",
+      "ordinal": 105,
+      "timestamp": "2026-09-22T07:34:49.790Z"
+    },
+    {
+      "trace": "native/2026/09/22/rollout-2026-09-22T09-31-18-01a0c806-b8fe-71b3-98af-5b2e1ebb439f.jsonl",
+      "ordinal": 214,
+      "timestamp": "2026-09-22T07:43:33.246Z"
+    }
+  ]
+}

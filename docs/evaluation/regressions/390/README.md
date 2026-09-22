@@ -1,110 +1,108 @@
-# Heading-pair evidence — implementation, incomplete acceptance
+# Heading-pair evidence — native outcomes and verification limits
 
-For [#390](https://github.com/Kntnt/skills/issues/390). The working-tree
-implementation exposes unjudged heading pairs and lexical overlap and makes
-Write, Redline and fresh correction agents judge semantic repetition. **This
-packet does not establish native behavioral acceptance or a passing full gate.**
+For [#390](https://github.com/Kntnt/skills/issues/390). Amend
+`ms-20260922-1a1acf` exercises the implementation at `09fb8991` without changing
+shipped code, instructions or tests. The [frozen plan](plan.md), [fixture
+hashes](fixtures.sha256.json), [tasks](tasks/) and semantic criteria are unchanged.
+No #382 baseline was sought. The recorded echo remains the preserved #386 text.
 
-The initial attempt, `ms-20260922-37af51`, is preserved in
-[its original report](attempt-37af51.md), including four observed red/green
-cycles, 48 passing mechanical tests and a native startup blocked by network
-restrictions. Its [frozen plan](plan.md), [fixture hashes](fixtures.sha256.json),
-[tasks](tasks/) and [input pair evidence](pairs/) remain unchanged. No #382
-baseline was sought. The recorded echo is the preserved #386 column.
+The earlier incomplete attempts are retained in [attempt-37af51.md](attempt-37af51.md)
+and [attempt-59e6c1.md](attempt-59e6c1.md), with their original traces and checks.
+The amend first observed the missing native outcomes in the
+[red completeness check](amend-1a1acf/checks/red-native-completeness.json), then ran
+the frozen cases. The [completed packet check](amend-1a1acf/checks/green-native-completeness.json) now passes for all five cases. No unsuccessful attempt was replaced or relabeled as a pass.
 
-## Retry `ms-20260922-59e6c1`
+## Native evidence
 
-The [retry plan](retry-plan.md) was written before execution. The inherited
-implementation was inspected, without changing its product code or instructions.
-The Catalog was regenerated. Native attempts used Codex CLI 0.155.1,
-`gpt-5.6-sol`, `xhigh`, default service tier and separate staged installations.
-Each directory below preserves exact argv, invocation, instruction inventory,
-native parent trace, event stream, stderr and before/after workspace inventories:
+The [amend plan](amend-1a1acf/plan.md) was written before execution. Each case uses
+Codex CLI 0.155.1, `gpt-5.6-sol`, `xhigh`, default service tier and a fresh staged
+installation. Workspace-write permits network access and confines writes to the
+case's private root; the default temporary write roots are excluded. Product
+files are byte copies, with SHA-256 inventories. This resolves the previous
+execution containment problem without changing editorial guidance.
 
-| Frozen case | Retry evidence | Outcome |
-| --- | --- | --- |
-| Recorded Swedish echo | [recorded-column](retry-59e6c1/recorded-column/) | Interrupted during setup; no delivered artifact or correction agent |
-| Paraphrased Swedish echo | [paraphrased-column](retry-59e6c1/paraphrased-column/) | Interrupted during setup; no delivered artifact or correction agent |
-| Legitimate names/topic reuse | [clean-reuse](retry-59e6c1/clean-reuse/) | Interrupted during setup; no delivered artifact or correction agent |
-| Paraphrased headline | Original frozen task only | Not started |
-| Write column | Original frozen task only | Not started |
+| Frozen case | Outcome and evidence |
+| --- | --- |
+| Recorded Swedish echo | [Target repaired](amend-1a1acf/recorded-column/judgement.md); one fresh correction, complete candidate measurement and parent re-review; original uncertainty retained. |
+| Paraphrased Swedish echo | [Target repaired, extra finding retained](amend-1a1acf/paraphrased-column/judgement.md); the echo is recognized with only “en” shared. The child and parent also report an overbroad headline/standfirst concern, disclosed below. |
+| Legitimate name/topic reuse | [Pass](amend-1a1acf/clean-reuse/judgement.md); every heading pair retained, correction budget unspent. Proofread removes one comma. |
+| Paraphrased headline | [Target repaired](amend-1a1acf/paraphrased-headline/judgement.md); the correction agent also retains both clean control section pairs. |
+| Write column | [Pass](amend-1a1acf/write-column/judgement.md); pairs judged before comparison, two completed source comparisons, delivered prose identical to the final compared draft. |
 
-Service access succeeded. The builder then terminated and reaped all three
-native process groups after the paraphrased-column agent created temporary
-directories outside its assigned area. Its event stream records creation and
-removal of `/tmp/redline-invoke.ctsIPR` and `/tmp/redline-language.BjYBuf`.
-These effects violated the supplied workspace constraint; they are not hidden
-by the inventories, which cover only each run's `work/` and `tmp/` directories.
-The interruption records explain the stop. No completed editorial outcome is
-claimed, and no post-delivery pair evidence exists.
+Every case directory preserves exact argv and invocation, harness context,
+staged instruction digests, full native sessions, event stream, stderr,
+before/after work inventories, response, extracted delivered text, complete
+before/after anatomy JSON and a trace-backed judgment. Correction cases also
+preserve the child's complete response and actual candidate measurements.
+`command-index.json` indexes native command records by trace and ordinal;
+it makes no semantic judgment. Source-comparison snapshots and ordering evidence
+are retained in the Write directory. The JSON's lexical overlap never decides
+a case: the judgments read full paired text and its section.
 
-The planned restart with an enforced writable-path boundary was not launched:
-the full gate exposed the independent constraint below. None of the frozen
-semantic criteria was changed or waived. Recognition of the recorded and
-paraphrased echoes, restraint on legitimate reuse, correction-agent evidence
-consumption, actual bounded resource loading and Write's final source-check
-ordering remain unverified.
+### What these runs do and do not demonstrate
 
-## Mechanical checks and the blocking constraint
+The recorded and low-overlap targets are recognized semantically, and the clean
+control's necessary Riverton/Saturday/library reuse is accepted. The headline
+correction agent also accepts the control section pairs, so restraint is observed
+inside a fresh correction as well as in a parent review. All measurements retain
+their structural meaning: echo-bearing inputs conform too.
 
-The anatomy CLI/JSON [focused suite](retry-59e6c1/checks/mechanical.txt) again
-passes **48 tests**. It covers full pairs, stable positional identity, Unicode
-normalization, punctuation, repeated tokens, missing/unpairable members,
-sentence-boundary ambiguity, equivalent Markdown/HTML evidence and unchanged
-structural/verdict semantics. These are measurements, not semantic judgments.
+The paraphrased-column run exposes a limitation. Its child calls the unchanged
+headline/standfirst another echo, and the parent carries that finding to delivery.
+The standfirst also adds the author, proposal and uncertainty, so the finding is
+overbroad in this amend's assessment; the recorded-column run accepts the same
+pair. The target repair passes its frozen criterion, but these results do not
+establish flawless semantic discrimination or population-wide reliability.
 
-The four published commands were run to completion; their commands, process
-groups, exit statuses and durations are in
-[processes.json](retry-59e6c1/checks/processes.json).
+The native CLI encrypts inter-agent task bodies. The original encrypted records
+are preserved; this packet does not claim to decode them. Fresh child identity,
+commands, resource loading, complete measurement outputs, returned candidates,
+and parent re-review are readable in the retained traces. Brief completeness is
+not inferred from an unreadable message. The supplied outer invocation material
+and staged instruction digests are preserved exactly.
+
+## Required checks
+
+All four exact CONTRIBUTING commands ran to completion. Their argv, environment,
+process groups, exit statuses and durations are in
+[processes.json](amend-1a1acf/checks/processes.json).
 
 | Check | Result |
 | --- | --- |
-| `uvx ruff check .` | [Pass](retry-59e6c1/checks/ruff.txt) |
-| `uvx ruff format --check .` | [Pass after formatting the new evidence runner](retry-59e6c1/checks/format-final.txt) |
-| Published mypy command | [Pass, 71 source files](retry-59e6c1/checks/mypy.txt) |
-| Published full pytest command | [2,139 passed, three failed](retry-59e6c1/checks/pytest.txt) |
+| Ruff lint | [Pass](amend-1a1acf/checks/ruff.txt) |
+| Ruff format | [Pass](amend-1a1acf/checks/format.txt) |
+| Published mypy command | [Pass, 71 files](amend-1a1acf/checks/mypy.txt) |
+| Published full pytest command | [2,139 passed, three failed](amend-1a1acf/checks/pytest.txt) |
 
-The three failures are the scheduler tests
-`test_the_manager_s_two_words_answer_with_the_job`,
-`test_under_a_redirected_home_install_writes_the_plist_and_loads_nothing`, and
-`test_an_install_status_and_disable_under_a_temporary_root_call_no_launchctl`.
-A source export of unchanged `HEAD` (`0cb71523`, no new branch or worktree)
-[reproduces all three](retry-59e6c1/checks/baseline.txt), using
-[the recorded command](retry-59e6c1/checks/baseline-command.json).
+The three failures remain confined to `tests/test_ms_scheduler.py`: the manager's
+two-word integration command, redirected-home install and temporary-root
+install/status/disable cases. Their temporary paths are inside `/Users/thomas`
+because both authorized write roots are inside that real account home.
+`integrations._real_account()` deliberately reads the password database and
+treats those paths as real-account paths; the tests expect temporary paths outside
+it. Their stand-in launchctl reports loaded/healthy instead of the expected
+not-loaded/degraded. No real launchctl invocation is implicated by these failures.
+The [environment record](amend-1a1acf/checks/environment.json) preserves this
+constraint; the earlier unchanged-source reproduction remains in
+[the previous attempt](attempt-59e6c1.md).
 
-The cause is the execution location. The scheduler's `_real_account()` in
-`skills/kntnt/library/scripts/integrations.py` recognizes every descendant of
-the password database's home, `/Users/thomas`, as a real-account path. These
-three tests expect their temporary roots to be outside that home. Both write
-roots authorized for this task are inside it, so the stand-in scheduler is
-loaded where the assertions expect it not to be. `TMPDIR` was deliberately
-inside the assigned scratch directory. Changing `HOME` cannot resolve this
-gate, which reads the password database rather than that environment variable.
+The verifier's passing gate was not reproduced under this amend's authorized
+temporary-storage roots. **The four-check acceptance criterion is not met here.**
+Resolving that requires authorization for temporary storage outside the account
+home or a separately scoped scheduler-test correction. No test was weakened,
+skipped or changed, and no unrelated product fix was guessed. Catalog
+[regeneration](amend-1a1acf/checks/catalog.txt) completed and left its bytes unchanged.
 
-**Decision needed:** permit test temporary storage outside `/Users/thomas`, or
-separately authorize making the scheduler tests independent of their temporary
-directory's location. This ticket changes neither the scheduler nor its tests.
-The builder stopped at this constraint rather than choosing a wider scope or
-writing outside the permitted roots. Three passing gates and a baseline
-reproduction do not satisfy the four-check acceptance criterion.
+## Filesystem and process account
 
-The check wrapper raised a bookkeeping `zip(strict=True)` exception after all
-four commands had finished because its CONTRIBUTING extraction also found the
-optional validator commands. Their actual completed results above are retained;
-no gate was left running or omitted because of that wrapper error. The Catalog
-[regeneration log](retry-59e6c1/checks/catalog.txt) is retained separately.
+The per-case before/after inventories show unchanged supplied inputs and staged
+instructions. The remaining additions are private UV lock files; they are
+accounted for rather than presented as clean Skill cleanup. The amend removes its
+runtime tree after preserving evidence, including staged installations,
+authentication copies, caches, comparison scratch and test temporary files.
+The final [cleanup record](amend-1a1acf/checks/cleanup.json) records the result.
+All native groups, wrappers and gate processes are waited to completion and
+reaped; nothing is intentionally left running.
 
-## Delivery and cleanup
-
-The implementation, tests, instruction/documentation sweep and this packet are
-committed together, with the reserved changelog and index entries in
-`.kntnt-orchestrate/390.md`. The ticket remains incomplete for the reasons above.
-
-All processes started by this retry were terminated and reaped or waited to
-completion, including native processes, wrappers, the full suite and the
-baseline reproduction. Nothing is deliberately left running. The retry's
-staged installs, credential copies, private runtime state, caches, test temporary
-files and source export are removed from its assigned scratch directory after
-evidence capture. Its packet and the inherited orchestration logs are retained.
-The saved workspace inventories show no supplied input or staged instruction
-changed; each records one added uv lock file before the builder's final cleanup.
+The reserved regression-index update remains in `.kntnt-orchestrate/390.md`.
+Neither the shared index nor CHANGELOG.md is edited by this amend.
