@@ -1,0 +1,39 @@
+```markdown
+# Mätförsöket i Björkskolan saknar flera mätvärden
+
+**Fyra veckor med temperaturgivare i Björkskolans klassrum gav värden under 20 grader. Här får du veta vad mätningen kan visa, vilka uppgifter som saknas och vad driftteknikern rekommenderar innan styrningen ändras.**
+
+Fastighetskontorets rapport *Mätförsök i Björkskolan* från den 12 mars 2026 redovisar ett försök där temperaturgivare satt i skolans klassrum i fyra veckor. Två av givarna stod vid ytterväggar och fyra vid innerväggar, utan att placeringens effekt jämfördes experimentellt. Var givarna satt, och vad de inte mätte, avgör vad mätvärdena kan användas till.
+
+## Sex klassrum fick värden under 20 grader
+
+Rapporten anger att 14 av 120 lektionspass hade minst ett värde under kontorets egen arbetsgräns på 20 grader, vilket inte är en lagregel. Givarna registrerade temperaturer under 20 grader i sex klassrum.
+
+## Vad mätvärdena inte kan svara på
+
+Operativ temperatur saknas, trots att resonemanget bygger på operativ temperatur, som är ett mått på lufttemperatur och värmestrålning från omgivande ytor, medan givarna bara mätte luften där de satt.
+
+Det saknas mätningar av luftdrag och elevernas upplevelse och uppgifter om hur länge temperaturerna låg under gränsen, och ingen effekt på hälsan har undersökts.
+
+## Nästa steg för mätningarna i Björkskolan
+
+Driftteknikern Elin Rask rekommenderar att koppla temperaturserier till användningstider innan styrningen ändras. Nästa försök är tänkt att använda likadant placerade givare i november, fast finansieringen inte är beslutad. Läs mätvärdena mot användningstiderna innan du bedömer klassrummens temperatur, och följ upp om novemberförsöket får sin finansiering.
+```
+
+**Upplöst konfiguration:** genre `article`, språk `sv`, ingen teknik — genren `article` anger själv att den inte skrivs med någon teknik, så ingen båge har lagts på texten. Korrigeringsbudgeten var 1 och en runda användes. Anatomins räknade mått är maskinmätta.
+
+**Kvarstående fynd (olöst)**
+
+- **Byline saknas.** Artikelanatomin kräver en byline under ingressen, och `article_anatomy.py` rapporterar den som frånvarande både före och efter korrigeringen. Varken texten, dess metadata eller anropet namnger någon författare, så raden kan inte fyllas i utan att en uppgift uppfinns. Läsaren får inte veta vem som står bakom redovisningen av mätförsöket. Fyll i bylinen när författaren är känd.
+
+Övriga nio fynd — rubrikens obelagda påstående om räddning och katastrof, den ordagrant upprepade ingressen, ingressen och ledet som sa samma sak, det 187 ord långa ledet, den påhittade dramatiken, det tvärsäkra hälsopåståendet, den tomma viktighetsmeningen, den generiska slutuppmaningen och givarna som aldrig introducerades — är åtgärdade.
+
+**Borttagna och ändrade påståenden**
+
+- **Borttaget:** att givarna har gjort eleverna friskare (”men ändå är det helt säkert att givarna har gjort eleverna friskare”). Fyndet pekade ut själva påståendet som defekten: texten säger i samma mening att ingen hälsoeffekt har undersökts. Förbehållet står kvar i full omfattning.
+- **Ändrat:** ”och att försöket varade fyra veckor” står nu som ”ett försök där temperaturgivare satt i skolans klassrum i fyra veckor”. Fyra veckor gäller därmed givarnas placering i stället för försöket som helhet — en liten förskjutning av omfånget, gjord i reparationen av det sammanpressade ledet.
+- **Ändrat:** ”trots att ingen effekt på hälsan har undersökts” står nu som ”och ingen effekt på hälsan har undersökts”. Själva förbehållet är intakt; bara den motsättande konjunktionen har bytts, eftersom det påstående den stod emot togs bort.
+
+Inga andra påståenden har fallit bort eller förskjutits. Rapportens titel och datum, 14 av 120 lektionspass, arbetsgränsen på 20 grader och att den inte är en lagregel, givarnas placering vid ytter- och innerväggar och att placeringens effekt inte jämfördes, den saknade operativa temperaturen med sin definition, de saknade mätningarna av luftdrag, upplevelse och varaktighet, Elin Rasks rekommendation samt novemberförsöket med sin obeslutade finansiering står kvar med oförändrat omfång, säkerhet, attribution och orsakssamband.
+
+**Vad som i övrigt ändrades:** rubriken är omskriven från textens egen vinkel och styrka, ingressen är omskriven till ett självbärande stycke, och den enda kroppsmassan på 187 ord är omdisponerad till ett led och tre avsnitt med underrubriker, där de inskjutna bisatserna är uppdelade i egna meningar. Slippmönster är borttagna — den påhittade dramatiken, den cirkulära viktighetsmeningen och den generiska uppmaningen — och avslutningen är ersatt med ett nästa steg byggt på textens eget material. Den avslutande mekaniska genomgången fann inga fel att rätta och lämnade texten oförändrad.

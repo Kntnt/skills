@@ -1,0 +1,41 @@
+Granskningen är klar. Upplösta värden: genre `opinion`, språk `sv`, ingen teknik — genren `opinion` anger själv att den inte skrivs med någon. Korrigeringsbudgeten var 1 och en runda användes; inga kvarstående brister återstår.
+
+```markdown
+# Ge telefonbokningen ett halvår till
+
+Webben tog 96 bokningar och telefonen 24. Kommunens pilotrapport säger samtidigt att bokningarna inte räknar unika personer och att digital vana inte undersöktes. Här prövas vad siffrorna bär, vad förvaltningens invändning om dubbel administration vilar på och vad som återstår att mäta.
+
+Sanna Ek, Öppna beslut
+
+Kommunstyrelsen borde behålla telefonbokning under ett halvårs försök i alla sju lokaler.
+
+## Siffrorna säger inte hur många personer som behöver telefonen
+
+Det gjordes 96 bokningar på webben och 24 via telefon. Telefonen stod därmed för 20 procent av bokningarna. Kommunens pilotrapport från den 8 april 2026 säger samtidigt att bokningarna inte räknar unika personer och att digital vana inte undersöktes.
+
+## Ingen har räknat på vad telefonbokningen kostar
+
+Förvaltningen invänder att dubbla kanaler innebär dubbel administration. Handlingarna saknar tidsmätning.
+
+Föreningen vill att förvaltningen mäter tidsåtgång och frågar användarna varför de väljer en bokningsväg. Försökets kostnad är inte beräknad.
+
+Kommunstyrelsen kan avgöra saken: låt telefonbokningen stå kvar under ett halvårs försök i alla sju lokaler, och låt förvaltningen göra mätningarna under tiden.
+```
+
+## Borttagna påståenden
+
+Tre reparationer tog med sig påståenden som texten inte längre gör. Var och en av dem svarade på en brist som pekade ut just det påståendet som felet.
+
+**Reparationen av ledets andra mening** tog bort hela meningen *”Alla vet att politikerna vill stänga ute äldre för att spara miljoner.”* Med den försvann tre påståenden: att detta är allmänt känt, att politikerna vill stänga ute äldre, och att syftet är att spara miljoner. Inget av dem hade stöd någonstans i texten, och inget av dem gick att skilja från felet.
+
+**Reparationen av den brutna slutledningen om siffrorna** tog bort påståendet att 20 procent av kommunens invånare inte kan använda internet. Siffran 20 procent står kvar, men nu med den nämnare textens egna tal ger: andelen av bokningarna, inte av invånarna.
+
+**Reparationen av kostnadsslutledningen** tog bort påståendet att det inte kostar någonting att behålla telefonbokningen. De två meningar som avgränsar vad texten vet om kostnaden — *”Handlingarna saknar tidsmätning.”* och *”Försökets kostnad är inte beräknad.”* — står kvar ordagrant, liksom pilotrapportens båda förbehåll.
+
+Inget påstående står kvar med flyttad räckvidd, visshet, källa, kronologi, orsak eller innebörd. Bylinen, datumet, bokningstalen, förvaltningens invändning och föreningens krav kommer tillbaka precis som de kom in.
+
+## Vad rundan i övrigt ändrade
+
+Rubriken är omskriven från textens egen vinkel, så att den säger vad texten begär i stället för att tillskriva motparten ett motiv. En ingress är tillagd mellan rubrik och byline, byggd enbart av uppgifter som redan fanns i texten. De två etikettrubrikerna är ersatta av mellanrubriker som säger vad avsnitten hävdar. Diskussionsstycket är delat i två, så att invändningen och föreningens krav står var för sig. Avslutningen namnger nu den åtgärd texten redan föreslår och vem som kan besluta om den. Det avslutande korrekturpasset läste hela texten mot svenska mekanikregler och den gemensamma mekanikkontrakten och fann inget objektivt fel att rätta.
+
+Inget skrevs till filsystemet: `source.md` är oförändrad, och arbetsfilerna som rundan använde är borttagna.

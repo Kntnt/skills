@@ -1,0 +1,122 @@
+{
+  "article-flawed": {
+    "invocation": "/redline --genre=article --language=sv --output=response source.md",
+    "revision": "8619e45ec85b9408c120de91d97111c9420a5831",
+    "returncode": 0,
+    "duration_seconds": 916,
+    "trace_status": "complete",
+    "correction_rounds": 1,
+    "proofread_shim_invocations": 1,
+    "supplied_sha256": "1c0e3b3ef98e06b220058b9811864ebdae4c89b0618eb2f8405b63b0dd6504a0",
+    "delivered_sha256": "fdbdb69621b291c28be4310e6eedf638b0d862c13d6ea3a1d899ecb7a6af0914",
+    "delivered_is_the_supplied_text": false
+  },
+  "article-flawed-2": {
+    "invocation": "/redline --genre=article --language=sv --output=response source.md",
+    "revision": "8619e45ec85b9408c120de91d97111c9420a5831",
+    "returncode": 0,
+    "duration_seconds": 655,
+    "trace_status": "complete",
+    "correction_rounds": 1,
+    "proofread_shim_invocations": 1,
+    "supplied_sha256": "1c0e3b3ef98e06b220058b9811864ebdae4c89b0618eb2f8405b63b0dd6504a0",
+    "delivered_sha256": "642c0e37ba18e8062d956771aa5baf6ad92694fb3c53d36002458d2f23274068",
+    "delivered_is_the_supplied_text": false
+  },
+  "case-study-flawed": {
+    "invocation": "/redline --genre=case-study --language=sv --output=response source.md",
+    "revision": "8619e45ec85b9408c120de91d97111c9420a5831",
+    "returncode": 0,
+    "duration_seconds": 796,
+    "trace_status": "complete",
+    "correction_rounds": 1,
+    "proofread_shim_invocations": 1,
+    "supplied_sha256": "ce574061bd09328ed80109a3cca07875683c2fd77d55f41d5631dc2cdcb18767",
+    "delivered_sha256": "ddd1d673c0d9e73852e93e0e057526963355536c25a8df63c46a3ec51367bc6b",
+    "delivered_is_the_supplied_text": false
+  },
+  "case-study-sv": {
+    "invocation": "/redline --output=response source.md",
+    "revision": "8619e45ec85b9408c120de91d97111c9420a5831",
+    "returncode": 0,
+    "duration_seconds": 804,
+    "trace_status": "complete",
+    "correction_rounds": 1,
+    "proofread_shim_invocations": 1,
+    "supplied_sha256": "5551178fe07e75f27ea6290f3b3aaa77ce1bee32b11343ce26faa616e75d177a",
+    "delivered_sha256": "8cccc2773078fd688decf0ccb0ca30c2ac8badad4f40cbe0a52405681e3cb4c9",
+    "delivered_is_the_supplied_text": false
+  },
+  "case-study-sv-2": {
+    "invocation": "/redline --output=response source.md",
+    "revision": "8619e45ec85b9408c120de91d97111c9420a5831",
+    "returncode": 0,
+    "duration_seconds": 623,
+    "trace_status": "complete",
+    "correction_rounds": 1,
+    "proofread_shim_invocations": 1,
+    "supplied_sha256": "5551178fe07e75f27ea6290f3b3aaa77ce1bee32b11343ce26faa616e75d177a",
+    "delivered_sha256": "efa29fbccead8ad18c1e894340123ec189f095bf8debb9fb12f74bae9a5b43ad",
+    "delivered_is_the_supplied_text": false
+  },
+  "column-flawed": {
+    "invocation": "/redline --genre=column --language=sv --output=response source.md",
+    "revision": "8619e45ec85b9408c120de91d97111c9420a5831",
+    "returncode": 0,
+    "duration_seconds": 771,
+    "trace_status": "complete",
+    "correction_rounds": 1,
+    "proofread_shim_invocations": 1,
+    "supplied_sha256": "9b12ad3fb2cb74011c974feda1d7aafa8c0394ac6899417be2dbdd40ad0e96ab",
+    "delivered_sha256": "9b12ad3fb2cb74011c974feda1d7aafa8c0394ac6899417be2dbdd40ad0e96ab",
+    "delivered_is_the_supplied_text": true
+  },
+  "column-flawed-2": {
+    "invocation": "/redline --genre=column --language=sv --output=response source.md",
+    "revision": "8619e45ec85b9408c120de91d97111c9420a5831",
+    "returncode": 0,
+    "duration_seconds": 898,
+    "trace_status": "complete",
+    "correction_rounds": 1,
+    "proofread_shim_invocations": 1,
+    "supplied_sha256": "9b12ad3fb2cb74011c974feda1d7aafa8c0394ac6899417be2dbdd40ad0e96ab",
+    "delivered_sha256": "9b12ad3fb2cb74011c974feda1d7aafa8c0394ac6899417be2dbdd40ad0e96ab",
+    "delivered_is_the_supplied_text": true
+  },
+  "column-sv": {
+    "invocation": "/redline --output=response source.md",
+    "revision": "8619e45ec85b9408c120de91d97111c9420a5831",
+    "returncode": 0,
+    "duration_seconds": 374,
+    "trace_status": "complete",
+    "correction_rounds": 1,
+    "proofread_shim_invocations": 1,
+    "supplied_sha256": "da9dc2d7e553a40c0dbf10d47072c43c5bd90c5f112b304527544e21fa9bf1c2",
+    "delivered_sha256": "5c95ef7a22c4d4e95b37a767845afdf5ae61debf6c4fab650558c809f4331e91",
+    "delivered_is_the_supplied_text": false
+  },
+  "opinion-flawed": {
+    "invocation": "/redline --genre=opinion --language=sv --output=response source.md",
+    "revision": "8619e45ec85b9408c120de91d97111c9420a5831",
+    "returncode": 0,
+    "duration_seconds": 495,
+    "trace_status": "complete",
+    "correction_rounds": 1,
+    "proofread_shim_invocations": 1,
+    "supplied_sha256": "ab033d9f4c817c9eaa0efa32db93819a99291a3b22e29fb39f0d640e830ed990",
+    "delivered_sha256": "15a447ee8661fe0c2908135587b33511df54e1af4a5062f41d76fd2248727b25",
+    "delivered_is_the_supplied_text": false
+  },
+  "opinion-flawed-2": {
+    "invocation": "/redline --genre=opinion --language=sv --output=response source.md",
+    "revision": "8619e45ec85b9408c120de91d97111c9420a5831",
+    "returncode": 0,
+    "duration_seconds": 629,
+    "trace_status": "complete",
+    "correction_rounds": 1,
+    "proofread_shim_invocations": 1,
+    "supplied_sha256": "ab033d9f4c817c9eaa0efa32db93819a99291a3b22e29fb39f0d640e830ed990",
+    "delivered_sha256": "b6e9b1ff8cf3891251f1b9206efab23e048fbc6dfeeb5c41f5e8e25b86daee77",
+    "delivered_is_the_supplied_text": false
+  }
+}

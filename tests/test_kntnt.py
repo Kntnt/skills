@@ -8931,6 +8931,83 @@ GUARD_NOTHING_RECORDED = "the pattern is not present and nothing is recorded"
 SYNONYM_ONE_THING = "only where the names denote one thing"
 SYNONYM_TWO_THINGS = "not cycling however often they alternate"
 
+# What a returned correction is until something has read it. Rejecting a round
+# needed nothing the run lacked — it holds every state the text passed
+# through — and #386's `case-study-sv` delivered a headline its own re-review
+# had established as unsupported by the body, because the repair-created stop
+# ended the loop with the defective correction still current (issue #389).
+CANDIDATE_NOT_CURRENT = "a correction candidate rather than the current Text Artifact"
+CANDIDATE_SETTLES_ACCEPTANCE = "settles whether the candidate is accepted at all"
+ESTABLISH_AGAINST_STATES = "against the states you retain"
+ESTABLISH_NOT_A_PREFERENCE = "are not attributed to a repair"
+REJECT_THE_WHOLE_ROUND = "reject the whole round that introduced it"
+REJECT_WHATEVER_ELSE = "whatever else that round repaired"
+RESTORE_VERBATIM = "pre-round Text Artifact verbatim as the current text"
+RESTORE_AN_EARLIER_ROUND = (
+    "restore the state immediately before that round and discard every state built"
+    " on it"
+)
+REJECT_NOTHING_KEPT = "Nothing of a rejected round is kept"
+REJECT_CANDIDATE_ACCEPTED = "becomes the current Text Artifact, and the loop goes on"
+
+# The stop condition the rejection is stated in, and what a rejected round
+# costs. The attempt spends its budget; restoration buys nothing back and
+# licenses no wording of the run's own (issue #389).
+STOP_ESTABLISHES = "establishes a finding an earlier round's own repair created"
+STOP_RESTORED_IS_DELIVERED = (
+    "the restored pre-round state is the text this run delivers"
+)
+STOP_BUDGET_KEPT = "The round keeps the budget it spent"
+STOP_NO_REFUND = "restoration refunds nothing and spends nothing"
+STOP_NO_SECOND_ATTEMPT = "no second attempt at the finding it answered"
+STOP_FINDINGS_OF_THE_RESTORED_TEXT = "the findings that commissioned the rejected round"
+STOP_ATTEMPT_NOT_A_DEFECT = "never as a defect of the text delivered"
+
+# The two kinds the evaluation and the staged runs of `main` were observed
+# creating, both of them in what a round rewrote: a headline claiming an effect
+# the body withholds, and a subheading repeating the sentence under it
+# (issue #389).
+REDLINE_STRENGTHENED_CLAIM = "asserted more strongly than the text supports"
+REDLINE_HEADING_ECHO = "a heading repeating what it stands over"
+
+# What the delivery owes about an attempt nobody kept. The discarded defect is
+# not a finding of the text delivered, and a finding carried forward from the
+# restored state was never repaired (issue #389).
+DELIVERY_ATTEMPTED_AND_REJECTED = "attempted and rejected"
+DELIVERY_DISCARDED_NOT_PRESENT = "never reported as present in what you deliver"
+DELIVERY_CARRIED_NOT_REPAIRED = "never reported as repaired"
+
+# The one sentence the correction brief owes about it: a defect of its own
+# costs the subagent the whole round, so a finding it cannot repair without
+# creating another is one it leaves (issue #389).
+BRIEF_A_DEFECT_COSTS_THE_ROUND = "the text you received is restored entire"
+BRIEF_LEAVE_RATHER_THAN_CREATE = "without creating another one is a finding you leave"
+
+# The caller-facing and shared-contract surfaces of the same rule (issue #389).
+HELP_CANDIDATE = "is a correction candidate"
+HELP_REJECTED_ENTIRE = "rejected entire"
+HELP_NO_REFUND = "no refund and no second attempt"
+BASE_CANDIDATE = "A correction is a candidate until"
+BASE_INPUT_STANDS = "the correction is not accepted and its input stands"
+
+# What the first staged native run of the rule showed was still missing. On
+# `article-flawed` — a text with no subheading anywhere, so the round had to
+# write them — the round wrote two that failed the headline contract, the
+# re-review found both, and the run accepted the round and delivered them as
+# unresolved findings. The part the round wrote is the case the rule has to
+# name, a spent budget is not a reason to deliver a defect the run created, and
+# a finding of the run's own making is not something a person is handed
+# (issue #389).
+ESTABLISH_A_PART_THE_ROUND_WROTE = "is where this is established most often"
+ESTABLISH_COMMISSIONED_IS_NO_IMMUNITY = "does not put what it says beyond this check"
+ESTABLISH_WORSE_WITHOUT_IT = "is no reason to keep a defective one"
+ESTABLISH_NEVER_CARRIED_FORWARD = "never carried forward as an unresolved finding"
+ESTABLISH_BEFORE_THE_BUDGET = "the third condition is tested before the fourth"
+REDLINE_PARTS_A_ROUND_WRITES = (
+    "a headline, a standfirst or a subheading that did not exist before the round"
+)
+HELP_NEVER_AN_UNRESOLVED_FINDING = "never reported as an unresolved finding"
+
 
 def test_the_loop_stops_where_an_earlier_repair_created_the_finding() -> None:
     """A loop answering for its own work repairs what it did last round.
@@ -9300,6 +9377,264 @@ def test_the_catalogue_states_its_guard_as_a_test_before_a_finding() -> None:
         f" catalogue was observed authorising away (issue #383). See"
         f" {STANDARD}."
     )
+
+
+def test_a_repair_created_defect_rejects_the_round_that_introduced_it() -> None:
+    """A stop that leaves the defective correction current delivers the defect.
+
+    #386's `case-study-sv` arrived with a headline saying nothing of the angle,
+    the one round replaced it with one claiming in the publication's voice an
+    effect the body explicitly withholds, and the re-review established exactly
+    that — then the loop stopped and the text was delivered with the worse
+    headline in place. Rejection needed nothing the run lacked: it holds the
+    pre-round state. So a returned text is a candidate until the independent
+    review of it has established whether it introduced a defect, and a defect
+    established against the retained states rejects the whole round that
+    introduced it, restores that round's pre-round artifact verbatim and stops
+    (issue #389).
+    """
+
+    for body_path in (REDLINE, UNSLOP):
+        body = body_path.read_text(encoding="utf-8")
+
+        assert CANDIDATE_NOT_CURRENT in body, (
+            f"{body_path}: a returned correction becomes the current Text"
+            f" Artifact before anything has reviewed it, so the review that"
+            f" establishes a defect the round created reports it about the text"
+            f" the run is already delivering (issue #389). See {STANDARD}."
+        )
+        assert CANDIDATE_SETTLES_ACCEPTANCE in body, (
+            f"{body_path}: the re-review settles what the findings are and not"
+            f" whether the candidate is accepted, so its verdict cannot reach"
+            f" the correction it is a verdict on (issue #389). See {STANDARD}."
+        )
+        assert ESTABLISH_AGAINST_STATES in body, (
+            f"{body_path}: nothing says a repair-created defect is established"
+            f" against the states the run retains, so a finding is attributed"
+            f" to a repair on how it words itself (issue #389). See"
+            f" {STANDARD}."
+        )
+        assert ESTABLISH_NOT_A_PREFERENCE in body, (
+            f"{body_path}: a preference, and an old defect first noticed now,"
+            f" are not held away from the repair, so a round is rejected for a"
+            f" defect it did not introduce (issue #389). See {STANDARD}."
+        )
+        assert REJECT_THE_WHOLE_ROUND in body, (
+            f"{body_path}: the loop stops on a repair-created defect while the"
+            f" correction that created it stays in the delivered text, which is"
+            f" the whole of what this rule exists to end (issue #389). See"
+            f" {STANDARD}."
+        )
+        assert REJECT_WHATEVER_ELSE in body, (
+            f"{body_path}: the rejection is not held to the whole round, so a"
+            f" round carrying a valid repair beside a new defect is accepted in"
+            f" part and the defect comes with it (issue #389). See {STANDARD}."
+        )
+        assert RESTORE_VERBATIM in body, (
+            f"{body_path}: the step does not say the pre-round artifact comes"
+            f" back verbatim as the current text, so restoring it is left to"
+            f" the run's own wording (issue #389). See {STANDARD}."
+        )
+        assert RESTORE_AN_EARLIER_ROUND in body, (
+            f"{body_path}: a defect established one round after the round that"
+            f" introduced it restores the wrong state, or none, and the states"
+            f" built on the rejected one stay current (issue #389). See"
+            f" {STANDARD}."
+        )
+        assert REJECT_NOTHING_KEPT in body, (
+            f"{body_path}: nothing says a rejected round survives in no part,"
+            f" so earlier accepted work may be reassembled out of a state the"
+            f" run discarded (issue #389). See {STANDARD}."
+        )
+        assert REJECT_CANDIDATE_ACCEPTED in body, (
+            f"{body_path}: a candidate with no repair-created defect against it"
+            f" is never said to be accepted, so a clean justified correction"
+            f" has no path through the same gate (issue #389). See {STANDARD}."
+        )
+
+        assert ESTABLISH_A_PART_THE_ROUND_WROTE in body, (
+            f"{body_path}: the rule names no case it is established in, and the"
+            f" first staged run of it accepted a round whose own new subheadings"
+            f" failed the contract — the part a round wrote is exactly where"
+            f" this happens (issue #389). See {STANDARD}."
+        )
+        assert ESTABLISH_COMMISSIONED_IS_NO_IMMUNITY in body, (
+            f"{body_path}: a part a finding commissioned is not held to the"
+            f" check, so a round asked for a heading may write any heading"
+            f" (issue #389). See {STANDARD}."
+        )
+        assert ESTABLISH_WORSE_WITHOUT_IT in body, (
+            f"{body_path}: nothing rules out keeping a defective part because"
+            f" the text was worse without one, which is how a round that"
+            f" repaired a real absence keeps the defect it wrote"
+            f" (issue #389). See {STANDARD}."
+        )
+        assert ESTABLISH_NEVER_CARRIED_FORWARD in body, (
+            f"{body_path}: a defect the run itself created may still be carried"
+            f" forward as an unresolved finding, which is how the observed run"
+            f" delivered two of its own (issue #389). See {STANDARD}."
+        )
+        assert ESTABLISH_BEFORE_THE_BUDGET in body, (
+            f"{body_path}: the loop stops at the first of four conditions with"
+            f" nothing saying the third is tested before the fourth, so a spent"
+            f" budget answers for a defect the run created (issue #389). See"
+            f" {STANDARD}."
+        )
+
+    redline = REDLINE.read_text(encoding="utf-8")
+    assert REDLINE_PARTS_A_ROUND_WRITES in redline, (
+        f"{REDLINE}: the parts a round rewrites — the headline, the standfirst,"
+        f" the subheadings — are not named as where a repair-created defect is"
+        f" looked for, and they are where every case the evaluation and the"
+        f" staged runs recorded was created (issue #389). See {STANDARD}."
+    )
+    assert REDLINE_STRENGTHENED_CLAIM in redline, (
+        f"{REDLINE}: the stop names no strengthened claim, so the `case-study-sv`"
+        f" headline claiming an effect the body withholds is not among the"
+        f" defects a round can be rejected for (issue #389). See {STANDARD}."
+    )
+    assert REDLINE_HEADING_ECHO in redline, (
+        f"{REDLINE}: the stop names no heading repeating its own text, so the"
+        f" echoes the `column-flawed` and `article-flawed` rounds wrote are"
+        f" delivered as the evaluation found them (issue #389). See"
+        f" {STANDARD}."
+    )
+
+
+def test_a_rejected_round_keeps_its_budget_and_earns_no_fresh_attempt() -> None:
+    """Restoration is not a refund, and a rejection is not a retry.
+
+    The attempted correction spent a round of the Correction Budget and spends
+    it whatever it came back with. Putting the pre-round text back costs
+    nothing further and buys nothing back, and it authorizes no wording of the
+    run's own: no second attempt at the finding the rejected round answered and
+    no correction to make up for what was discarded, the loop having stopped
+    (issue #389).
+    """
+
+    for body_path, help_path in ((REDLINE, REDLINE_HELP), (UNSLOP, UNSLOP_HELP)):
+        body = body_path.read_text(encoding="utf-8")
+
+        assert STOP_ESTABLISHES in body, (
+            f"{body_path}: the stop reads on a finding raised rather than on one"
+            f" established, so a preference reported in the shape of a"
+            f" repair-created defect rejects a round (issue #389). See"
+            f" {STANDARD}."
+        )
+        assert STOP_RESTORED_IS_DELIVERED in body, (
+            f"{body_path}: the stop does not say the restored state is what the"
+            f" run delivers, so a rejection can end the loop with the candidate"
+            f" still on its way out (issue #389). See {STANDARD}."
+        )
+        assert STOP_BUDGET_KEPT in body, (
+            f"{body_path}: a rejected round is not said to keep the budget it"
+            f" spent, so a run may read its rejection as a round that never"
+            f" happened (issue #389). See {STANDARD}."
+        )
+        assert STOP_NO_REFUND in body, (
+            f"{body_path}: restoration is not held apart from the budget, so"
+            f" putting a passage back either refunds a round or spends one"
+            f" (issue #389). See {STANDARD}."
+        )
+        assert STOP_NO_SECOND_ATTEMPT in body, (
+            f"{body_path}: nothing rules out another attempt at the finding the"
+            f" rejected round answered, so the loop the rejection stopped"
+            f" restarts under another name (issue #389). See {STANDARD}."
+        )
+
+        page = help_path.read_text(encoding="utf-8")
+        assert HELP_CANDIDATE in page, (
+            f"{help_path}: the manpage describes a returned correction as"
+            f" compared and reviewed before acceptance without saying it is a"
+            f" candidate that a review can reject, so a caller does not learn"
+            f" the round can be thrown away (issue #389). See {STANDARD}."
+        )
+        assert HELP_REJECTED_ENTIRE in page, (
+            f"{help_path}: the manpage's loop still stops on a repair-created"
+            f" finding with nothing said about the correction that created it"
+            f" (issue #389). See {STANDARD}."
+        )
+        assert HELP_NEVER_AN_UNRESOLVED_FINDING in page, (
+            f"{help_path}: the page still lets a caller expect a defect the run"
+            f" created among the findings it is handed to settle"
+            f" (issue #389). See {STANDARD}."
+        )
+        assert HELP_NO_REFUND in page, (
+            f"{help_path}: a caller reading the page cannot tell what a"
+            f" rejection costs, so a run that ends one round short of the"
+            f" budget looks like a run that stopped early for nothing"
+            f" (issue #389). See {STANDARD}."
+        )
+
+    assert BASE_CANDIDATE in BASE_REVIEW.read_text(encoding="utf-8"), (
+        f"{BASE_REVIEW}: the shared review extension says a correction is"
+        f" compared with its input and reread, and stops there, so the surface"
+        f" a reviewing Skill meets the rule on does not say the comparison can"
+        f" refuse the correction (issue #389). See {STANDARD}."
+    )
+    assert BASE_INPUT_STANDS in BASE_REVIEW.read_text(encoding="utf-8"), (
+        f"{BASE_REVIEW}: the extension names no consequence for a correction"
+        f" that introduced a defect, so its input is not said to stand"
+        f" (issue #389). See {STANDARD}."
+    )
+
+
+def test_the_delivery_holds_a_discarded_defect_apart_from_what_it_delivers() -> None:
+    """Findings accompanying a restored text describe that text.
+
+    A rejected round's defect is not a finding of the text the run delivers —
+    the run discarded it — and the findings carried forward from the restored
+    state were never repaired. The account says the round was attempted and
+    rejected and what it had introduced, and keeps that apart from what the
+    delivered text still carries, so the reply is truthful about what was
+    attempted, what was rejected and what was retained (issue #389).
+    """
+
+    for body_path in (REDLINE, UNSLOP):
+        body = body_path.read_text(encoding="utf-8")
+
+        assert STOP_FINDINGS_OF_THE_RESTORED_TEXT in body, (
+            f"{body_path}: the findings carried forward are not tied to the"
+            f" text that is delivered, so a rejection can carry forward"
+            f" findings recorded against a candidate nobody kept"
+            f" (issue #389). See {STANDARD}."
+        )
+        assert STOP_ATTEMPT_NOT_A_DEFECT in body, (
+            f"{body_path}: a rejected attempt is not held apart from the"
+            f" delivered text's own defects, so the run reports as present"
+            f" something it discarded (issue #389). See {STANDARD}."
+        )
+        assert DELIVERY_ATTEMPTED_AND_REJECTED in body, (
+            f"{body_path}: the delivery step never says a rejected round is"
+            f" reported at all, so a run may deliver a restored text as though"
+            f" no round had been spent (issue #389). See {STANDARD}."
+        )
+        assert DELIVERY_DISCARDED_NOT_PRESENT in body, (
+            f"{body_path}: the delivery step does not forbid reporting a"
+            f" discarded defect as present, which is the untruth the rejection"
+            f" exists to avoid creating (issue #389). See {STANDARD}."
+        )
+        assert DELIVERY_CARRIED_NOT_REPAIRED in body, (
+            f"{body_path}: a finding carried forward from a restored state may"
+            f" be reported as repaired, the rejected round having claimed to"
+            f" repair it (issue #389). See {STANDARD}."
+        )
+
+    for brief_path in (REDLINE_CORRECTION, UNSLOP_CORRECTION):
+        brief = brief_path.read_text(encoding="utf-8")
+
+        assert BRIEF_A_DEFECT_COSTS_THE_ROUND in brief, (
+            f"{brief_path}: the brief never says what a defect of the"
+            f" subagent's own making costs, so the one party that could avoid"
+            f" creating one does not learn the whole round is discarded"
+            f" (issue #389). See {STANDARD}."
+        )
+        assert BRIEF_LEAVE_RATHER_THAN_CREATE in brief, (
+            f"{brief_path}: the brief stops for a fact it would have to invent"
+            f" and not for a defect it would have to create, so a repair that"
+            f" trades one finding for another is a compliant repair"
+            f" (issue #389). See {STANDARD}."
+        )
 
 
 def test_unslop_resolves_the_language_and_leaves_the_map_as_it_found_it() -> None:
