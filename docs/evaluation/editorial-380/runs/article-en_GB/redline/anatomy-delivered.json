@@ -1,0 +1,120 @@
+{
+  "ok": true,
+  "format": "markdown",
+  "conforms": true,
+  "failures": [],
+  "norms": [],
+  "typical": {
+    "paragraphs": 11,
+    "paragraphs_of_two_or_three_sentences": 11,
+    "sections": 4,
+    "sections_of_two_or_three_paragraphs": 4
+  },
+  "parts": {
+    "headline": {
+      "text": "Temperature sensors show when to look, not why",
+      "characters": 46,
+      "words": 8
+    },
+    "standfirst": {
+      "text": "Lervik's property office spent four weeks measuring the …",
+      "words": 47,
+      "sentences_estimate": 3,
+      "paragraphs": 1
+    },
+    "byline": {
+      "text": "By Thomas Barregren",
+      "words": 3
+    },
+    "lead": {
+      "text": "Fourteen of 120 recorded lesson periods at Björkskolan …",
+      "words": 53,
+      "sentences_estimate": 3,
+      "paragraphs": 1
+    },
+    "sections": [
+      {
+        "subheading": {
+          "text": "Each reading is the air temperature at a single point",
+          "characters": 53,
+          "words": 10
+        },
+        "paragraphs": [
+          {
+            "text": "The office placed sensors in six classrooms in …",
+            "words": 46,
+            "sentences_estimate": 3
+          },
+          {
+            "text": "Each sensor reports the air temperature at its …",
+            "words": 51,
+            "sentences_estimate": 3
+          }
+        ]
+      },
+      {
+        "subheading": {
+          "text": "The count says how many periods, never how cold or how long",
+          "characters": 59,
+          "words": 12
+        },
+        "paragraphs": [
+          {
+            "text": "Twenty degrees was the office's own working limit …",
+            "words": 36,
+            "sentences_estimate": 2
+          },
+          {
+            "text": "'At least one reading' is not a duration. …",
+            "words": 41,
+            "sentences_estimate": 2
+          },
+          {
+            "text": "The report is equally silent on whether the …",
+            "words": 50,
+            "sentences_estimate": 2
+          }
+        ]
+      },
+      {
+        "subheading": {
+          "text": "The office reports by lesson and plans a second trial",
+          "characters": 53,
+          "words": 10
+        },
+        "paragraphs": [
+          {
+            "text": "A daily average could have buried all of …",
+            "words": 41,
+            "sentences_estimate": 2
+          },
+          {
+            "text": "After the trial, operations technician Elin Rask went …",
+            "words": 51,
+            "sentences_estimate": 3
+          }
+        ]
+      },
+      {
+        "subheading": {
+          "text": "Where to look next is what this trial delivers",
+          "characters": 46,
+          "words": 9
+        },
+        "paragraphs": [
+          {
+            "text": "So the trial does not say why the …",
+            "words": 53,
+            "sentences_estimate": 3
+          },
+          {
+            "text": "Her recommendation is where a property manager holding …",
+            "words": 49,
+            "sentences_estimate": 2
+          }
+        ]
+      }
+    ],
+    "other": []
+  }
+}

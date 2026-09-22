@@ -1,0 +1,120 @@
+{
+  "ok": true,
+  "format": "markdown",
+  "conforms": false,
+  "failures": [
+    {
+      "part": "byline",
+      "rule": "A text conforms when every part is present in the order shown.",
+      "measured": "absent",
+      "text": null
+    },
+    {
+      "part": "lead",
+      "rule": "A text conforms when every part is present in the order shown.",
+      "measured": "absent",
+      "text": null
+    }
+  ],
+  "norms": [],
+  "typical": {
+    "paragraphs": 8,
+    "paragraphs_of_two_or_three_sentences": 4,
+    "sections": 4,
+    "sections_of_two_or_three_paragraphs": 2
+  },
+  "parts": {
+    "headline": {
+      "text": "Genomgång av bokningsrutinen för en gemensam lokal",
+      "characters": 50,
+      "words": 7
+    },
+    "standfirst": {
+      "text": "Svale går igenom hur bokningen av föreningens gemensamma …",
+      "words": 48,
+      "sentences_estimate": 2,
+      "paragraphs": 1
+    },
+    "byline": null,
+    "lead": null,
+    "sections": [
+      {
+        "subheading": {
+          "text": "Det här ingår",
+          "characters": 13,
+          "words": 3
+        },
+        "paragraphs": [
+          {
+            "text": "Uppdraget består av två delar:",
+            "words": 5,
+            "sentences_estimate": 1
+          }
+        ]
+      },
+      {
+        "subheading": {
+          "text": "Det här ingår inte",
+          "characters": 18,
+          "words": 4
+        },
+        "paragraphs": [
+          {
+            "text": "Uppdraget omfattar inte juridisk rådgivning, installation av bokningssystem …",
+            "words": 24,
+            "sentences_estimate": 2
+          }
+        ]
+      },
+      {
+        "subheading": {
+          "text": "Pris och förutsättningar",
+          "characters": 24,
+          "words": 3
+        },
+        "paragraphs": [
+          {
+            "text": "Fast pris är 4 800 SEK inklusive moms. …",
+            "words": 15,
+            "sentences_estimate": 2
+          },
+          {
+            "text": "Ni behöver kunna beskriva föreningens befintliga bokningsregler och …",
+            "words": 16,
+            "sentences_estimate": 1
+          }
+        ]
+      },
+      {
+        "subheading": {
+          "text": "Så anmäler ni intresse",
+          "characters": 22,
+          "words": 4
+        },
+        "paragraphs": [
+          {
+            "text": "En intresseanmälan är inte en beställning, och den …",
+            "words": 19,
+            "sentences_estimate": 2
+          },
+          {
+            "text": "Därefter svarar Svale via e-post inom tre arbetsdagar, …",
+            "words": 23,
+            "sentences_estimate": 1
+          },
+          {
+            "text": "Skicka en intresseanmälan – länken öppnar Svales formulär …",
+            "words": 9,
+            "sentences_estimate": 1
+          }
+        ]
+      }
+    ],
+    "other": [
+      {
+        "part": "section 1",
+        "text": "- Ett videomöte på 45 minuter med två …"
+      }
+    ]
+  }
+}

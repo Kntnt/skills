@@ -1,0 +1,141 @@
+{
+  "ok": true,
+  "format": "markdown",
+  "conforms": false,
+  "failures": [
+    {
+      "part": "byline",
+      "rule": "A text conforms when every part is present in the order shown.",
+      "measured": "absent",
+      "text": null
+    },
+    {
+      "part": "lead",
+      "rule": "A text conforms when every part is present in the order shown.",
+      "measured": "absent",
+      "text": null
+    }
+  ],
+  "norms": [
+    {
+      "part": "headline",
+      "rule": "It should be at most 60 characters.",
+      "measured": "61 characters",
+      "text": "Genomgång av bokningsrutinen för föreningens gemensamma lokal"
+    }
+  ],
+  "typical": {
+    "paragraphs": 9,
+    "paragraphs_of_two_or_three_sentences": 3,
+    "sections": 5,
+    "sections_of_two_or_three_paragraphs": 2
+  },
+  "parts": {
+    "headline": {
+      "text": "Genomgång av bokningsrutinen för föreningens gemensamma lokal",
+      "characters": 61,
+      "words": 7
+    },
+    "standfirst": {
+      "text": "Svale gör en avgränsad genomgång av hur bokningen …",
+      "words": 36,
+      "sentences_estimate": 2,
+      "paragraphs": 1
+    },
+    "byline": null,
+    "lead": null,
+    "sections": [
+      {
+        "subheading": {
+          "text": "Det här ingår i genomgången",
+          "characters": 27,
+          "words": 5
+        },
+        "paragraphs": [
+          {
+            "text": "Efter genomgången har styrelsen en gemensam bild av …",
+            "words": 20,
+            "sentences_estimate": 1
+          }
+        ]
+      },
+      {
+        "subheading": {
+          "text": "Det här ingår inte i genomgången",
+          "characters": 32,
+          "words": 6
+        },
+        "paragraphs": [
+          {
+            "text": "Juridisk rådgivning, installation av bokningssystem och intervjuer med …",
+            "words": 9,
+            "sentences_estimate": 1
+          }
+        ]
+      },
+      {
+        "subheading": {
+          "text": "Pris och omfattning",
+          "characters": 19,
+          "words": 3
+        },
+        "paragraphs": [
+          {
+            "text": "Fast pris är 4 800 SEK inklusive moms. …",
+            "words": 15,
+            "sentences_estimate": 2
+          },
+          {
+            "text": "Svale lämnar ingen garanti för en viss tidsbesparing …",
+            "words": 12,
+            "sentences_estimate": 1
+          }
+        ]
+      },
+      {
+        "subheading": {
+          "text": "Förutsättningar",
+          "characters": 15,
+          "words": 1
+        },
+        "paragraphs": [
+          {
+            "text": "Styrelsen behöver kunna beskriva föreningens befintliga bokningsregler och …",
+            "words": 14,
+            "sentences_estimate": 1
+          }
+        ]
+      },
+      {
+        "subheading": {
+          "text": "Så anmäler ni intresse",
+          "characters": 22,
+          "words": 4
+        },
+        "paragraphs": [
+          {
+            "text": "En intresseanmälan är ingen beställning och kräver inga …",
+            "words": 15,
+            "sentences_estimate": 2
+          },
+          {
+            "text": "Svale svarar via e-post inom tre arbetsdagar för …",
+            "words": 23,
+            "sentences_estimate": 1
+          },
+          {
+            "text": "Skicka en intresseanmälan",
+            "words": 3,
+            "sentences_estimate": 1
+          }
+        ]
+      }
+    ],
+    "other": [
+      {
+        "part": "section 1",
+        "text": "- Ett videomöte på 45 minuter med två …"
+      }
+    ]
+  }
+}

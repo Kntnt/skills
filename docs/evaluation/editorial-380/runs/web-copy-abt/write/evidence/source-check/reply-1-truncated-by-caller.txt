@@ -1,0 +1,33 @@
+
+## 3. Findings
+
+### F1 — A necessary condition is stated as a sufficient one, and a new claim about the review's basis is added
+
+- **Draft (line 27):** "Har ni det, finns underlaget som genomgången utgår från."
+- **Source (line 13):** "Styrelsen behöver kunna beskriva sina befintliga bokningsregler och visa nuvarande instruktion till de boende."
+
+**What differs — modality and direction of the conditional, and the thing named.** The material states a requirement: the board *needs to be able to* do these two things. The draft converts it into a guarantee that meeting them is enough — "Har ni det, finns underlaget" — and, second, it names those two items as "underlaget som genomgången utgår från", a claim about what the genomgång proceeds from that the material nowhere makes. The material's only statement about what feeds the genomgång is the content of its output, "en skriftlig sammanställning av nuvarande steg, oklarheter och två möjliga förenklingar", together with "ett videomöte på 45 minuter".
+
+**Concrete case, compatible with the supplied material, in which the source statement holds and the draft's fails.** A board can describe its existing booking rules and can show the current instruction to residents — the material's requirement is met in full — but the genomgång of "nuvarande steg" also proceeds from how the booking is in fact handled between the written rules and the instruction: the key handover, the calendar or list where bookings are recorded, who releases an unused slot. The board has no record of that and cannot account for it. The source's sentence is still true of this board; the draft's "finns underlaget som genomgången utgår från" is false of it. Nothing supplied excludes this case: the material never states that the two listed items are all the genomgång needs, and it explicitly notes that other terms are simply "inte angivna".
+
+**Direction tested in reverse:** no case arises in which the draft's sentence holds and the source's fails, since the draft's antecedent restates the source's requirement. The divergence is one-directional, which is sufficient for the finding.
+
+**Support that is missing:** any supplied statement that the two prerequisites constitute, or suffice as, the basis of the genomgång.
+
+**Smallest supported repair:** keep the sentence a requirement instead of a guarantee — replace "Har ni det, finns underlaget som genomgången utgår från." with "Det behövs för genomgången." (Deleting the sentence outright is equally supported; the preceding sentence already carries the requirement in the material's own terms.)
+
+## 4. Editorial questions (not defects)
+
+- **Length.** The brief asks for "cirka 300 ord om materialet bär det"; the draft runs to roughly 230 words. That is the correct direction — the material is thin and the draft neither pads nor invents to reach the figure, and no supplied qualification is lost in meeting the limit. It does not, however, name what further material would close the gap. Whether it should say so on the page itself or in the delivery note is an editorial call, not a source-support defect. Material that would close it: payment terms, delivery time for the sammanställning, and what the 45-minute meeting covers step by step — the first two are explicitly unavailable and must not be invented.
+- **"att ta ställning till" (line 10).** Supported as the natural sense of "möjliga förenklingar" (row 6), and reported here only because it is the draft's one addition to the brief's benefit formula. It promises no decision, no implementation and no effect, so it is defensible as written.
+
+## 5. Completion status
+
+Comparison complete. Every factual and attributed claim in the draft, including the heading, the section headings, the link label and the microcopy, has been placed against the supplied material; 21 claim pairs accounted for, 20 supported, 1 finding.
+
+**Unresolved findings: 1 — F1** (draft line 27, "Har ni det, finns underlaget som genomgången utgår från."), a necessary condition stated as sufficient plus an unsupported claim about the genomgång's basis; smallest supported repair: "Det behövs för genomgången."
+
+No translation findings: the draft and the material are both in Swedish and the draft carries no quotation, so no meaning crosses languages.
+EXIT=0
+
+[exited with code 0]

@@ -1,0 +1,130 @@
+{
+  "ok": true,
+  "format": "markdown",
+  "conforms": true,
+  "failures": [],
+  "norms": [],
+  "typical": {
+    "paragraphs": 13,
+    "paragraphs_of_two_or_three_sentences": 12,
+    "sections": 4,
+    "sections_of_two_or_three_paragraphs": 4
+  },
+  "parts": {
+    "headline": {
+      "text": "Björkskolans mätning ringar in tiderna att undersöka",
+      "characters": 52,
+      "words": 7
+    },
+    "standfirst": {
+      "text": "Fastighetskontoret i Lervik lät temperaturgivare mäta i sex …",
+      "words": 45,
+      "sentences_estimate": 3,
+      "paragraphs": 1
+    },
+    "byline": {
+      "text": "Av Thomas Barregren",
+      "words": 3
+    },
+    "lead": {
+      "text": "I januari 2026 satte Lerviks fastighetskontor temperaturgivare i …",
+      "words": 46,
+      "sentences_estimate": 3,
+      "paragraphs": 1
+    },
+    "sections": [
+      {
+        "subheading": {
+          "text": "Givaren mäter luften på sin egen plats",
+          "characters": 38,
+          "words": 7
+        },
+        "paragraphs": [
+          {
+            "text": "Värden registrerades var femte minut under fyra veckor. …",
+            "words": 24,
+            "sentences_estimate": 2
+          },
+          {
+            "text": "En givare mäter temperaturen där den sitter, och …",
+            "words": 32,
+            "sentences_estimate": 3
+          },
+          {
+            "text": "Ventilation, luftdrag och upplevd temperatur ingick inte i …",
+            "words": 18,
+            "sentences_estimate": 2
+          }
+        ]
+      },
+      {
+        "subheading": {
+          "text": "Ett värde under gränsen säger inte hur länge",
+          "characters": 44,
+          "words": 8
+        },
+        "paragraphs": [
+          {
+            "text": "I rapporten Mätförsök i Björkskolan, daterad 12 mars …",
+            "words": 25,
+            "sentences_estimate": 1
+          },
+          {
+            "text": "Rapporten säger inte hur länge temperaturen låg under …",
+            "words": 30,
+            "sentences_estimate": 3
+          },
+          {
+            "text": "Mätningarna omfattar bara dessa sex rum och dessa …",
+            "words": 36,
+            "sentences_estimate": 2
+          }
+        ]
+      },
+      {
+        "subheading": {
+          "text": "Två metodval styr vad siffrorna betyder",
+          "characters": 39,
+          "words": 6
+        },
+        "paragraphs": [
+          {
+            "text": "Gränsen på 20 grader var kontorets egen arbetsgräns …",
+            "words": 30,
+            "sentences_estimate": 3
+          },
+          {
+            "text": "Ett medelvärde för hela dygnet kan dölja variation …",
+            "words": 27,
+            "sentences_estimate": 2
+          }
+        ]
+      },
+      {
+        "subheading": {
+          "text": "Koppla temperaturen till när rummen används",
+          "characters": 43,
+          "words": 6
+        },
+        "paragraphs": [
+          {
+            "text": "Efter försöket gick driftteknikern Elin Rask igenom tiderna …",
+            "words": 26,
+            "sentences_estimate": 2
+          },
+          {
+            "text": "– Vi vet när vi behöver titta närmare. …",
+            "words": 20,
+            "sentences_estimate": 2
+          },
+          {
+            "text": "Hon rekommenderar att koppla temperaturserierna till användningstiderna innan …",
+            "words": 50,
+            "sentences_estimate": 3
+          }
+        ]
+      }
+    ],
+    "other": []
+  }
+}

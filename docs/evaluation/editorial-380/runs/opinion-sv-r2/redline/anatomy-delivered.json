@@ -1,0 +1,115 @@
+{
+  "ok": true,
+  "format": "markdown",
+  "conforms": true,
+  "failures": [],
+  "norms": [],
+  "typical": {
+    "paragraphs": 10,
+    "paragraphs_of_two_or_three_sentences": 9,
+    "sections": 4,
+    "sections_of_two_or_three_paragraphs": 3
+  },
+  "parts": {
+    "headline": {
+      "text": "Kommunstyrelsen bör pröva båda bokningsvägarna ett halvår",
+      "characters": 57,
+      "words": 7
+    },
+    "standfirst": {
+      "text": "Lerviks pilotrapport bygger på åtta veckor i två …",
+      "words": 46,
+      "sentences_estimate": 3,
+      "paragraphs": 1
+    },
+    "byline": {
+      "text": "Av Sanna Ek, talesperson för föreningen Öppna beslut",
+      "words": 8
+    },
+    "lead": {
+      "text": "Tjänsteutlåtandet inför kommunstyrelsens möte den 18 juni vill …",
+      "words": 43,
+      "sentences_estimate": 3,
+      "paragraphs": 1
+    },
+    "sections": [
+      {
+        "subheading": {
+          "text": "Pilotrapporten från Lervik mäter inte vem som inte kan boka digitalt",
+          "characters": 68,
+          "words": 11
+        },
+        "paragraphs": [
+          {
+            "text": "Under åtta veckor i två lokaler gjordes 96 …",
+            "words": 34,
+            "sentences_estimate": 3
+          },
+          {
+            "text": "Rapporten mäter inte heller ålder, funktionsförmåga eller digital …",
+            "words": 47,
+            "sentences_estimate": 3
+          },
+          {
+            "text": "Att en bokning går via telefon är inte …",
+            "words": 29,
+            "sentences_estimate": 2
+          }
+        ]
+      },
+      {
+        "subheading": {
+          "text": "Handlingarna saknar mätning av vad det dubbla arbetet kostar",
+          "characters": 60,
+          "words": 9
+        },
+        "paragraphs": [
+          {
+            "text": "Förvaltningens invändning mot att behålla båda vägarna är …",
+            "words": 19,
+            "sentences_estimate": 2
+          },
+          {
+            "text": "Men varken en tidsmätning eller en ekonomisk besparingsberäkning …",
+            "words": 40,
+            "sentences_estimate": 3
+          }
+        ]
+      },
+      {
+        "subheading": {
+          "text": "Ett halvår med båda vägarna ger underlaget",
+          "characters": 42,
+          "words": 7
+        },
+        "paragraphs": [
+          {
+            "text": "Öppna beslut föreslår ett sex månader långt försök …",
+            "words": 34,
+            "sentences_estimate": 2
+          },
+          {
+            "text": "Vi gör inget anspråk på att ha kostnadsberäknat …",
+            "words": 42,
+            "sentences_estimate": 3
+          }
+        ]
+      },
+      {
+        "subheading": {
+          "text": "Kommunstyrelsen kan pröva först och besluta sedan",
+          "characters": 49,
+          "words": 7
+        },
+        "paragraphs": [
+          {
+            "text": "Kommunstyrelsen kan säga ja till förslaget och stänga …",
+            "words": 57,
+            "sentences_estimate": 4
+          }
+        ]
+      }
+    ],
+    "other": []
+  }
+}
