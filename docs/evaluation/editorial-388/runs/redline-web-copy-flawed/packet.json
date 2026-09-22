@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "ticket": "#388",
-  "produced_by": "docs/evaluation/editorial-388/harness/run.py",
+  "produced_by": "docs/evaluation/editorial-388/harness/staged_run.py",
   "invocation": "/redline --genre=web-copy --language=en_US --output=response input.md",
   "status": "complete",
   "reasons": []

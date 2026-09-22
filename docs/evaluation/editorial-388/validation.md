@@ -6,7 +6,7 @@ Every citation below is to [`trace-index.json`](README.md) in the run's own pack
 
 ## Conditions common to both runs
 
-- **harness** — Claude Code 2.1.278, one `claude --print` session per run, started by [`harness/run.py`](harness/run.py).
+- **harness** — Claude Code 2.1.278, one `claude --print` session per run, started by [`harness/staged_run.py`](harness/staged_run.py).
 - **model** — `claude-opus-5` at `high`, requested and observed: every turn of both sessions and of all three nested agents carries that Seat, from each agent's own `seats`.
 - **instruction revision** — `8a37e57eca854fea39dd25e5d2483e831edfc599`, exported with `git archive` into the run's own installation.
 - **corpus revision** — `9a29bad3d0ab5419c687fe04ee965420574dff5d`, the commit that first holds the current editorial-quality matrix.
@@ -21,15 +21,19 @@ Every citation below is to [`trace-index.json`](README.md) in the run's own pack
 
 **Resolved configuration.** Genre `web-copy` and language `sv` come from the Formal Invocation, which `invocation.txt` holds verbatim; the run's own draft carries the map `genre: web-copy`, `technique: none`, `language: sv` (call 8). The language was verified rather than assumed: call 4 runs `languages.py resolve --scope=composition "sv"` — the composition scope alone, which is the scope Write is contracted to.
 
-**Actual loaded files.** The whole of what the session opened under the staged installation, each an `exact` entry:
+**Actual loaded files.** Everything the session opened under the staged installation, the Skill's own body included:
 
-| Call | File |
-|---|---|
-| 3 | the `genres/`, `techniques/`, `editorial/` and `references/` directories, listed |
-| 5 | `references/editorial/base.md` |
-| 6 | `references/editorial/genres/web-copy.md` |
-| 7 | `references/editorial/web-craft.md` |
-| 9 | `write/references/source-check.md`, `references/delivery.md` |
+| Where | File | How |
+|---|---|---|
+| `skill_bodies` | the `write` body, 14891 characters, from `…/skills/write` | the Harness's own record of which installation answered the invocation |
+| call 1 | `write/scripts/invoke.py` | run through the shim, as the body instructs |
+| call 3 | the `genres/`, `techniques/`, `editorial/` and `references/` directories | listed, so `exact: false`: a listing says what is installed and opens none of it |
+| call 5 | `references/editorial/base.md` | `exact` |
+| call 6 | `references/editorial/genres/web-copy.md` | `exact` |
+| call 7 | `references/editorial/web-craft.md` | `exact` |
+| call 9 | `write/references/source-check.md`, `references/delivery.md` | `exact` |
+
+Every other entry of `file_activity` is the run's own material — `work/source.md`, `scratch/draft.md`, the two check directories — or a `mktemp` template. Nothing else under the installation was opened.
 
 **No technique was inferred from shape.** The techniques directory is listed at call 3 and no resource under it is ever opened. `web-copy` states *The technique this genre is ordinarily written with: None*, so level 6 of the precedence supplies nothing and the default stands — and the map the run wrote says `none`, which is the value rather than a gap.
 
@@ -77,7 +81,9 @@ Both halves of each resource, the anti-slop catalogue, and no `mechanics.md` —
 
 **A fresh correction, once.** Call 11 at `05:54:05.212Z` starts agent `ac4e06f8cdb919a0f`, `general-purpose`, `spawn_depth` 1, description *Correct web-copy findings*. Its instruction is preserved verbatim and opens *You have not seen this text before, and there is nothing you are expected to remember* — the brief `correction.md` prescribes. It is the only delegation in the run, so the Correction Budget of 1 was spent once and no second round was taken. The agent loaded the contract for itself — `base.md`, `base.review.md`, `genres/web-copy.md`, `genres/web-copy.review.md`, `anti-slop.md`, `web-craft.md`, `web-craft.review.md`, and the language scopes — and wrote `scratch/corrected.md`.
 
-**Re-review after it, and what establishes it.** The correction agent ended at `05:55:34.474Z`; the session's next recorded call is 12 at `05:56:31.981Z`, which freezes the post-correction artifact for the closing pass. The order is established and the budget is established, but the re-review itself opened no file and ran no command, so no entry of `file_activity` carries it: re-reading a text already in hand leaves no tool call. What holds it is the session's own turns in `transcripts/parent.jsonl` between those two instants, which the packet preserves verbatim and the index does not summarise. That is where an evaluator reads it, and the line above is written from the ordering the calls fix rather than from the session's word for it.
+**Re-review after it — the one clause the trace does not carry.** The correction agent ended at `05:55:34.474Z`; the session's next recorded call is 12 at `05:56:31.981Z`, which freezes the post-correction artifact for the closing pass. What the trace establishes is the order and the budget: one round, spent once, its result taken forward. It does not establish that a re-review happened, because a re-review opens no file and runs no command — re-reading a text already in hand leaves no tool call at all. The session's own turn between those two instants says it re-reviewed, and that is a claim rather than a record; `transcripts/parent.jsonl` preserves it verbatim for an evaluator who wants to read it, and this line does not rest on it.
+
+So the `pass` above is a `pass` on four of the criterion's five clauses — scoped loading, a fresh correction, the budget, one closing installed Proofread pass with no substantive edit after it — with the fifth neither established nor contradicted. An evaluator who requires each clause to be independently recorded scores this line `skipped` for that clause and says so, exactly as the protocol's *the trace a criterion is answered from* directs. It is a limit of what a Harness records rather than of this packet, and it is the one such limit these two runs found.
 
 **Exactly one closing installed Proofread pass.** Call 13 reads `proofread/SKILL.md` from the staged installation. Call 14 runs `proofread/scripts/invoke.py` once, with `--language=en_US --output=$MECHDIR/proofed.md $MECHDIR/artifact.md` — flags and two paths, no artifact contents. Call 15 resolves the mechanics scope and reads `mechanics.md`, which is the pass's own contract and is loaded nowhere before it. Call 16 produces `proofed.md` and compares the two by `shasum`. There is no second invocation of that shim anywhere in the trace.
 
@@ -94,7 +100,7 @@ The same Write invocation on `claude-sonnet-5` at `low`, stopped by its own 45-s
 - `trace-index.json` — the 12 calls the run had made by then are all there, including `base.md`, `genres/web-copy.md`, `web-craft.md` and `delivery.md`, so the partial evidence is readable rather than discarded.
 - `cleanup.json` — the one private root, removed.
 
-A trace this short answers neither criterion, and the point is that it says so rather than reading as a `pass` with nothing behind it.
+A trace this short answers neither criterion, and the point is that it says so rather than reading as a `pass` with nothing behind it. The other two ways a trace comes up short — a child that is not there, a record that ends mid-write — are in [`checks.md`](checks.md), made over the Redline packet's own material.
 
 ## What the method still cannot see
 

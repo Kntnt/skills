@@ -33,6 +33,7 @@ import argparse
 import json
 import re
 import shlex
+from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Any
 
@@ -102,6 +103,15 @@ EXPANSION_ROUNDS = 3
 # existed, where leaving the variable written says exactly what is unknown.
 SUBSTITUTIONS = ("$(", "`")
 
+# What separates one command from the next inside one submitted string. A
+# trailing `;` attaches to the word before it and is handled beside these.
+SEPARATORS = frozenset({"&&", "||", "|", "&", ";"})
+
+# A `mktemp` template: the run named a shape and the system named the file, so
+# the token stands for a path nobody wrote, exactly as an unresolved variable
+# does.
+TEMPLATE = "XXX"
+
 # Markdown inside a command — a link, a reference — carries a separator and is
 # not a path. It arrives where a run greps a text for one of its own sentences.
 MARKDOWN = "]("
@@ -121,6 +131,40 @@ SKILL_BODY_PREFIX = "Base directory for this skill:"
 # preserved transcript beside the index; this is the excerpt that makes the
 # index readable on its own, and `result_chars` says what was left out.
 RESULT_EXCERPT_CHARS = 400
+
+
+@dataclass(frozen=True)
+class Touch:
+    """One file the trace records a run touching, and how that was established.
+
+    `established_from` says which kind of record it is — a tool's own argument
+    or a command the run submitted — and `exact` whether it stands for that one
+    file or for whatever a glob, a variable, a template or a walk settles.
+    """
+
+    ordinal: int
+    at: str | None
+    tool: str
+    path: str
+    access: str
+    established_from: str
+    exact: bool
+    command: str | None
+
+
+def _loaded(path: Path) -> dict[str, Any]:
+    """Return one JSON object a packet holds, and an empty mapping where it has none.
+
+    A packet is read after the fact, so a file of it can be absent, truncated by
+    the run that was writing it, or something other than an object. Each is a
+    thing this module reports around rather than raises on.
+    """
+
+    try:
+        found = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return {}
+    return found if isinstance(found, dict) else {}
 
 
 def _lines(path: Path) -> tuple[list[dict[str, Any]], int]:
@@ -166,8 +210,8 @@ def _text_of(content: Any) -> str:
     )
 
 
-def _tool_uses(line: dict[str, Any]) -> list[dict[str, Any]]:
-    """Return every tool call one assistant line made, in the order it made them."""
+def _blocks(line: dict[str, Any], kind: str) -> list[dict[str, Any]]:
+    """Return one line's content blocks of *kind*, in the order it carries them."""
 
     content = (line.get("message") or {}).get("content")
     if not isinstance(content, list):
@@ -175,20 +219,7 @@ def _tool_uses(line: dict[str, Any]) -> list[dict[str, Any]]:
     return [
         block
         for block in content
-        if isinstance(block, dict) and block.get("type") == "tool_use"
-    ]
-
-
-def _tool_results(line: dict[str, Any]) -> list[dict[str, Any]]:
-    """Return every tool result one user line carried."""
-
-    content = (line.get("message") or {}).get("content")
-    if not isinstance(content, list):
-        return []
-    return [
-        block
-        for block in content
-        if isinstance(block, dict) and block.get("type") == "tool_result"
+        if isinstance(block, dict) and block.get("type") == kind
     ]
 
 
@@ -228,10 +259,35 @@ def _tokens(command: str) -> list[str]:
         return command.split()
 
 
-def _names_a_set(command: str) -> bool:
-    """Whether a command names a set of files rather than the files it lists."""
+def _segments(command: str) -> list[list[str]]:
+    """Return one command's words, split at each point where a new command starts.
 
-    words = _tokens(command)
+    A command is rarely one command: `cat one.md && find . -name '*.md'` reads a
+    file and walks a tree, and judging the whole of it either way would credit
+    the walk to the file or the file to the walk. Lexing first and splitting on
+    the operator *tokens* keeps a separator inside a quoted argument out of it.
+    """
+
+    found: list[list[str]] = []
+    for line in command.split("\n"):
+        current: list[str] = []
+        for word in _tokens(line):
+            if word in SEPARATORS:
+                found.append(current)
+                current = []
+                continue
+            trailing = word.endswith(";")
+            current.append(word.rstrip(";") if trailing else word)
+            if trailing:
+                found.append(current)
+                current = []
+        found.append(current)
+    return [segment for segment in found if segment]
+
+
+def _names_a_set(words: list[str]) -> bool:
+    """Whether one command names a set of files rather than the files it lists."""
+
     if not words:
         return False
     if Path(words[0]).name in WALKING_COMMANDS:
@@ -263,22 +319,28 @@ def _assignments(words: list[str]) -> dict[str, str]:
     }
 
 
-def _paths_in(command: str) -> list[str]:
-    """Return every token of a shell command that reads as a path."""
+def _paths_in(command: str) -> list[tuple[str, bool]]:
+    """Return each path a shell command names, with whether that segment walks.
 
-    words = _tokens(_without_heredocs(command))
-    values = _assignments(words)
+    The assignments of every segment carry forward — a run settles `$LIB` on one
+    line and reads through it on the next — while whether a set was named is
+    asked of the segment the path stands in and of no other.
+    """
 
-    found: list[str] = []
-    for word in words:
-        stripped = word.strip(PUNCTUATION)
-        candidate = _expanded(ASSIGNMENT.sub("", stripped), values)
-        if candidate.startswith("-") or REDIRECTION.match(candidate):
-            continue
-        if MARKDOWN in candidate:
-            continue
-        if "/" in candidate or FILENAME.match(candidate):
-            found.append(candidate)
+    values: dict[str, str] = {}
+    found: list[tuple[str, bool]] = []
+    for words in _segments(_without_heredocs(command)):
+        values.update(_assignments(words))
+        walks = _names_a_set(words)
+        for word in words:
+            stripped = word.strip(PUNCTUATION)
+            candidate = _expanded(ASSIGNMENT.sub("", stripped), values)
+            if candidate.startswith("-") or REDIRECTION.match(candidate):
+                continue
+            if MARKDOWN in candidate:
+                continue
+            if "/" in candidate or FILENAME.match(candidate):
+                found.append((candidate, walks))
     return found
 
 
@@ -296,37 +358,31 @@ def _activity(
         path = arguments.get(argument)
         if not isinstance(path, str) or not path:
             return []
-        return [_entry(ordinal, at, tool, path, access, "tool-argument", True, None)]
+        return [_touch(ordinal, at, tool, path, access, "tool-argument", True)]
 
     # A search names where it looked, which is a set whatever it found.
     if tool in SEARCH_ARGUMENTS:
         path = arguments.get(SEARCH_ARGUMENTS[tool]) or "."
-        return [_entry(ordinal, at, tool, path, "search", "tool-argument", False, None)]
+        return [_touch(ordinal, at, tool, path, "search", "tool-argument", False)]
 
-    # A shell command establishes what was submitted; `exact` says how far.
+    # A shell command establishes what was submitted; `exact` says how far. One
+    # command naming the same path several times touched it once.
     if tool in SHELL_TOOLS:
         command = arguments.get("command")
         if not isinstance(command, str) or not command:
             return []
-        listed = not _names_a_set(command)
+        seen: dict[str, bool] = {}
+        for path, walks in _paths_in(command):
+            seen.setdefault(path, not walks and _resolved(path))
         return [
-            _entry(
-                ordinal,
-                at,
-                tool,
-                path,
-                "shell",
-                "shell-command",
-                listed and not any(c in path for c in UNRESOLVED_CHARACTERS),
-                command,
-            )
-            for path in _paths_in(command)
+            _touch(ordinal, at, tool, path, "shell", "shell-command", exact, command)
+            for path, exact in seen.items()
         ]
 
     return []
 
 
-def _entry(
+def _touch(
     ordinal: int,
     at: str | None,
     tool: str,
@@ -334,20 +390,21 @@ def _entry(
     access: str,
     established_from: str,
     exact: bool,
-    command: str | None,
+    command: str | None = None,
 ) -> dict[str, Any]:
-    """One file the trace records a run touching, and how that was established."""
+    """One `Touch`, as the mapping the index is written out of."""
 
-    return {
-        "ordinal": ordinal,
-        "at": at,
-        "tool": tool,
-        "path": path,
-        "access": access,
-        "established_from": established_from,
-        "exact": exact,
-        "command": command,
-    }
+    return asdict(
+        Touch(ordinal, at, tool, path, access, established_from, exact, command)
+    )
+
+
+def _resolved(path: str) -> bool:
+    """Whether a path stands for itself rather than for whatever settles it."""
+
+    if any(character in path for character in UNRESOLVED_CHARACTERS):
+        return False
+    return TEMPLATE not in path
 
 
 def _walk(lines: list[dict[str, Any]]) -> dict[str, Any]:
@@ -388,7 +445,7 @@ def _walk(lines: list[dict[str, Any]]) -> dict[str, Any]:
                 walked["skill_bodies"].append(_skill_body(text))
             elif not walked["instruction"] and text.strip():
                 walked["instruction"] = text
-            for result in _tool_results(line):
+            for result in _blocks(line, "tool_result"):
                 _close(pending, result)
             continue
 
@@ -402,7 +459,7 @@ def _walk(lines: list[dict[str, Any]]) -> dict[str, Any]:
         if seat != (None, None):
             seats[seat] = seats.get(seat, 0) + 1
 
-        for call in _tool_uses(line):
+        for call in _blocks(line, "tool_use"):
             ordinal += 1
             recorded = _recorded(ordinal, instant, call)
             walked["calls"].append(recorded)
@@ -481,11 +538,13 @@ def _children(packet: Path) -> list[dict[str, Any]]:
     for transcript in sorted(directory.glob("agent-*.jsonl")):
         identity = transcript.stem.removeprefix("agent-")
         meta_file = transcript.with_suffix("").with_suffix(".meta.json")
-        meta: dict[str, Any] = {}
-        if meta_file.is_file():
-            loaded = json.loads(meta_file.read_text(encoding="utf-8"))
-            meta = loaded if isinstance(loaded, dict) else {}
-        found.append({"agent_id": identity, "meta": meta, "transcript": transcript})
+        found.append(
+            {
+                "agent_id": identity,
+                "meta": _loaded(meta_file),
+                "transcript": transcript,
+            }
+        )
     return found
 
 
@@ -605,11 +664,7 @@ def _status(
     )
 
     # How the runner itself ended, which a trace alone cannot say.
-    outcome: dict[str, Any] = {}
-    result_file = packet / RESULT_FILE
-    if result_file.is_file():
-        loaded = json.loads(result_file.read_text(encoding="utf-8"))
-        outcome = loaded if isinstance(loaded, dict) else {}
+    outcome = _loaded(packet / RESULT_FILE)
     finished = (
         outcome.get("returncode") == 0
         and not outcome.get("timed_out")

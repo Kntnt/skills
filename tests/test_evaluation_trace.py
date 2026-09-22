@@ -580,6 +580,72 @@ def test_a_heredoc_body_is_the_text_written_and_not_paths_read(tmp_path: Path) -
     trace = trace_index.read_packet(packet)
 
     assert [item["path"] for item in trace["agents"][0]["file_activity"]] == [
-        "/run/scratch/report.md",
-        "/run/scratch/report.md",
+        "/run/scratch/report.md"
     ]
+
+
+def test_a_walking_command_downgrades_its_own_segment_and_no_other(
+    tmp_path: Path,
+) -> None:
+    packet = _packet(
+        tmp_path / "packet",
+        [
+            _user("/write source.md"),
+            _assistant(
+                _call(
+                    "Bash",
+                    {"command": "cat /lib/base.md && find /lib -name '*.md'"},
+                    "t1",
+                )
+            ),
+            _assistant(
+                _call("Bash", {"command": "cat /lib/base.md\nls -R /lib"}, "t2")
+            ),
+        ],
+    )
+
+    trace = trace_index.read_packet(packet)
+
+    assert [
+        (item["path"], item["exact"]) for item in trace["agents"][0]["file_activity"]
+    ] == [
+        ("/lib/base.md", True),
+        ("/lib", False),
+        ("/lib/base.md", True),
+        ("/lib", False),
+    ]
+
+
+def test_a_separator_inside_a_quoted_argument_opens_no_segment(tmp_path: Path) -> None:
+    packet = _packet(
+        tmp_path / "packet",
+        [
+            _user("/write source.md"),
+            _assistant(_call("Bash", {"command": "grep 'a;b && c' /lib/x.md"}, "t1")),
+        ],
+    )
+
+    trace = trace_index.read_packet(packet)
+
+    activity = trace["agents"][0]["file_activity"]
+    assert [(item["path"], item["exact"]) for item in activity] == [
+        ("/lib/x.md", False)
+    ]
+
+
+def test_a_mktemp_template_names_a_path_nobody_wrote(tmp_path: Path) -> None:
+    packet = _packet(
+        tmp_path / "packet",
+        [
+            _user("/write source.md"),
+            _assistant(
+                _call("Bash", {"command": "mktemp -d /tmp/kntnt-res-XXXXXX"}, "t1")
+            ),
+        ],
+    )
+
+    trace = trace_index.read_packet(packet)
+
+    entry = trace["agents"][0]["file_activity"][0]
+    assert entry["path"] == "/tmp/kntnt-res-XXXXXX"
+    assert entry["exact"] is False

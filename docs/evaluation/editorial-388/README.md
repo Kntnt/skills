@@ -9,7 +9,7 @@ Every entry of the two #386 records scores both `skipped`, because the session t
 
 ## What it is
 
-[`harness/run.py`](harness/run.py) runs **one** Formal Invocation in a real Claude Code session of its own and keeps everything that session recorded. The invocation is typed as a user types it — the staged Skills are installed in the run's own configuration directory, so `/write …` is a Formal Invocation and not a paraphrase of one — and nothing is added to the prompt beside it but the fixture's own Contextual Instruction, where the fixture has one.
+[`harness/staged_run.py`](harness/staged_run.py) runs **one** Formal Invocation in a real Claude Code session of its own and keeps everything that session recorded. The invocation is typed as a user types it — the staged Skills are installed in the run's own configuration directory, so `/write …` is a Formal Invocation and not a paraphrase of one — and nothing is added to the prompt beside it but the fixture's own Contextual Instruction, where the fixture has one.
 
 Claude Code writes the session's own transcript and one transcript per subagent, each beside a `.meta.json` naming the call that started it and the agent that made that call. A run given its own `CLAUDE_CONFIG_DIR` has all of them under one root, which is what makes the nested trace preservable at all.
 
@@ -18,7 +18,7 @@ Claude Code writes the session's own transcript and one transcript per subagent,
 ## Running one
 
 ```
-uv run docs/evaluation/editorial-388/harness/run.py \
+uv run docs/evaluation/editorial-388/harness/staged_run.py \
   --revision=<commit> --corpus-revision=<commit> \
   --invocation='/write --genre=web-copy --language=sv --output=response source.md' \
   --input=docs/evaluation/corpus/editorial-quality/sources/web-copy.md \
@@ -58,7 +58,9 @@ An entry says how it was established, because the kinds are not equally strong:
 
 - `established_from: "tool-argument"` with `exact: true` — the Harness's own record that the file was opened. This is the strongest evidence a trace carries.
 - `established_from: "shell-command"` — the command the run submitted, kept verbatim in `command`. It establishes what was asked for, and the tool result beside it in the transcript establishes what came back.
-- `exact: false` — the entry names a set rather than a file: a glob the shell expanded at run time, a path spelled with a variable, a recursive search, or a `Glob` or `Grep` call. Such an entry says the run looked somewhere; it never says which file under it was read.
+- `exact: false` — the entry names a set rather than a file: a glob the shell expanded at run time, a path spelled with a variable, a `mktemp` template the system filled in, a recursive search, or a `Glob` or `Grep` call. Such an entry says the run looked somewhere; it never says which file under it was read.
+
+Whether a set was named is asked of the command the path stands in rather than of the whole string a run submitted: `cat base.md && find . -name '*.md'` reads one file and walks a tree, and each half is judged on its own, so neither borrows the other's standing. Lexing before splitting keeps a separator inside a quoted argument from opening a command that was never there. One command naming the same path several times is one entry: it touched it once.
 
 A variable one command assigns in its own text is expanded before the path is recorded: a run writes the staged installation's path into `$LIB` and reads every reference through it, so a whole contract's loading would otherwise read as unresolved. The substitution is the one the shell itself made, and `command` keeps the assignment beside it, so an evaluator can check it. A value only the run had — a command substitution — is never substituted; the variable stays as it was written and the entry stays `exact: false`.
 
@@ -76,7 +78,7 @@ A variable one command assigns in its own text is expanded before the path is re
 - `child-without-delegation` — a subagent transcript no recorded call accounts for.
 - `run-did-not-finish` — a non-zero exit, a timeout, or an interruption.
 
-None of these is a judgement about a Skill. A packet reported `incomplete` is one whose criteria are scored from what it does hold, with the gap named.
+None of these is a judgement about a Skill. A packet reported `incomplete` is one whose criteria are scored from what it does hold, with the gap named. [`checks.md`](checks.md) is the three of them demonstrated over real run material.
 
 ## Isolation and cleanup
 

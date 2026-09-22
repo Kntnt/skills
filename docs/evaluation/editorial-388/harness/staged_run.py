@@ -52,6 +52,8 @@ import tarfile
 import tempfile
 import time
 import uuid
+from collections.abc import Iterator
+from contextlib import contextmanager
 from pathlib import Path
 from typing import Any
 
@@ -80,6 +82,11 @@ CREDENTIALS = ".credentials.json"
 # installation instead of the staged one.
 STRIPPED_PREFIXES = ("KNTNT_", "CLAUDE_", "ANTHROPIC_")
 STRIPPED_NAMES = frozenset({"CLAUDECODE"})
+
+# What the run's own root is called under the system temporary directory. It is
+# made by `mkdtemp`, so the name is this run's and no other's, and it is the one
+# path this runner ever removes.
+ROOT_PREFIX = "kntnt-editorial-388-run-"
 
 
 def write_json(path: Path, value: object) -> None:
@@ -113,7 +120,7 @@ def inventory(root: Path, secret: Path) -> dict[str, dict[str, Any]]:
     return result
 
 
-def credential(destination: Path) -> str:
+def install_credential(destination: Path) -> str:
     """Give the staged configuration directory a credential of its own.
 
     Returns where it came from, so the packet says how the run authenticated
@@ -259,8 +266,8 @@ def response_of(stream: Path) -> tuple[str, dict[str, Any]]:
     return reply, result
 
 
-def index(packet: Path) -> dict[str, Any]:
-    """Run the indexer beside this file over the finished packet."""
+def write_index(packet: Path) -> dict[str, Any]:
+    """Index the finished packet with the module beside this file, and return its status."""
 
     specification = importlib.util.spec_from_file_location(
         "trace_index", HERE / "trace_index.py"
@@ -271,6 +278,32 @@ def index(packet: Path) -> dict[str, Any]:
     specification.loader.exec_module(module)
     module.main([str(packet)])
     return dict(module.read_packet(packet)["status"])
+
+
+@contextmanager
+def private_root(packet: Path) -> Iterator[Path]:
+    """Make the run's own root, and remove that one path however the run ends.
+
+    `mkdtemp` names it, so the path removed here is one this process made and
+    nothing else on the machine answers to. The removal is in the exit of a
+    context manager rather than at the end of the run, so a failure, a timeout
+    and an interruption all reach it; the evidence packet is outside the root
+    and is what survives.
+    """
+
+    root = Path(tempfile.mkdtemp(prefix=ROOT_PREFIX)).resolve()
+    try:
+        yield root
+    finally:
+        shutil.rmtree(root, ignore_errors=True)
+        write_json(
+            packet / "cleanup.json",
+            {
+                "root": str(root),
+                "removed": not root.exists(),
+                "removed_only": str(root),
+            },
+        )
 
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
@@ -313,19 +346,8 @@ def main(argv: list[str] | None = None) -> int:
         ["claude", "--version"], cwd=REPOSITORY, text=True
     ).strip()
 
-    root = Path(tempfile.mkdtemp(prefix="kntnt-editorial-388-run-")).resolve()
-    try:
+    with private_root(packet) as root:
         return _run(arguments, packet, root, revisions, version)
-    finally:
-        shutil.rmtree(root, ignore_errors=True)
-        write_json(
-            packet / "cleanup.json",
-            {
-                "root": str(root),
-                "removed": not root.exists(),
-                "removed_only": str(root),
-            },
-        )
 
 
 def _run(
@@ -354,7 +376,7 @@ def _run(
     shutil.copy2(arguments.input, work / arguments.input_name)
     shutil.copy2(arguments.input, packet / "supplied-input.md")
     secret = root / "home" / ".claude" / CREDENTIALS
-    source = credential(secret)
+    source = install_credential(secret)
 
     # The prompt is the Formal Invocation as an evaluator types it, with the
     # Contextual Instruction after it where the fixture has one and nothing else
@@ -497,7 +519,7 @@ def _run(
         "process_group_gone": _gone(process.pid),
     }
     write_json(packet / "result.json", outcome)
-    status = index(packet)
+    status = write_index(packet)
     write_json(
         packet / "packet.json",
         {

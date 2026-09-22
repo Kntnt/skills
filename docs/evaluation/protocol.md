@@ -28,7 +28,7 @@ A criterion may be judged `skipped`, and a skipped criterion says why in the sam
 
 ## The trace a criterion is answered from
 
-A criterion answerable from the trace is answerable only from a run whose trace was kept, and a Harness does not keep one by being used. Such a run is made through a runner that preserves it — [`editorial-329/harness/run.py`](editorial-329/harness/run.py) in the GPT family, [`editorial-388/harness/run.py`](editorial-388/harness/run.py) in the Claude family — each keeping the session's own record and every nested agent's record beside it, with enough parent and child identity to say who ran what and in what order.
+A criterion answerable from the trace is answerable only from a run whose trace was kept, and a Harness does not keep one by being used. Such a run is made through a runner that preserves it — [`editorial-329/harness/run.py`](editorial-329/harness/run.py) in the GPT family, [`editorial-388/harness/staged_run.py`](editorial-388/harness/staged_run.py) in the Claude family — each keeping the session's own record and every nested agent's record beside it, with enough parent and child identity to say who ran what and in what order.
 
 What such a trace establishes is what it recorded: a file named in a tool argument was opened, a command was submitted and answered, an agent was started by this call and by no other. It never establishes what the run's own reply says the run did. Where a trace names a set rather than a file — a glob the shell expanded, a recursive search — it says the run looked somewhere and not which file it read, and a criterion resting on that says so in its line.
 

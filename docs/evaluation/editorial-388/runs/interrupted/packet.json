@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "ticket": "#388",
-  "produced_by": "docs/evaluation/editorial-388/harness/run.py",
+  "produced_by": "docs/evaluation/editorial-388/harness/staged_run.py",
   "invocation": "/write --genre=web-copy --language=sv --output=response source.md",
   "status": "incomplete",
   "reasons": [

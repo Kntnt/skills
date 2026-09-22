@@ -181,7 +181,7 @@
           "path": "source.md",
           "access": "shell",
           "established_from": "shell-command",
-          "exact": false,
+          "exact": true,
           "command": "ls -la && test -f source.md && echo EXISTS"
         },
         {
@@ -251,7 +251,7 @@
           "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a0j8_n26/home/.claude/skills/kntnt/library/references/editorial/genres/",
           "access": "shell",
           "established_from": "shell-command",
-          "exact": true,
+          "exact": false,
           "command": "LIBRARY=\"/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a0j8_n26/home/.claude/skills/kntnt/library\"; ls \"$LIBRARY/references/editorial/genres/\" && echo --- && uv run --no-cache --no-project \"$LIBRARY/scripts/languages.py\" resolve --scope=composition \"sv\""
         },
         {
@@ -341,7 +341,7 @@
           "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a0j8_n26/home/.claude/skills/write/references",
           "access": "shell",
           "established_from": "shell-command",
-          "exact": true,
+          "exact": false,
           "command": "HERE=\"/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a0j8_n26/home/.claude/skills/write\"; find \"$HERE/references\" -iname \"*source-check*\" -o -iname \"*quotations*\""
         },
         {
