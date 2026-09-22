@@ -1,9 +1,12 @@
 # Evaluation
 
-The editorial Skills — Write, Redline, Proofread, and Unslop — are judged by what they actually do in a real Harness, not by what their instructions say. This directory holds the two things that judging needs, and nothing else.
+The editorial Skills — Write, Redline, Proofread, and Unslop — are judged by what they actually do in a real Harness, not by what their instructions say. This directory holds what judging needs, and beside it the evidence each wave preserved.
 
 - [`corpus/`](corpus/README.md) — one shared body of fixture material: briefs, an interview transcript, a long factual source, clean and mechanically flawed prose, concentrated AI slop in each supported language, material for several genres and techniques, Text Artifacts with present, partial, conflicting, unusable, unrelated, and absent frontmatter, inline and file and URL sources, and the situations the output contract distinguishes. Each fixture is documented well enough to use without reading the Skill that consumes it.
 - [`protocol.md`](protocol.md) — how a run is judged, what it writes down, and the provider-isolation rule that binds whoever runs it. Read it before running anything.
+- [`editorial-388/`](editorial-388/README.md) — the Claude-family runner that keeps a run's whole native trace, the session's own record and every nested agent's, so that a criterion answerable only from the trace can be answered at all.
+
+The `editorial-<issue>/` directories beside them hold one wave's own evidence each, and `records/` holds the records themselves.
 
 The corpus was built from the specification rather than from any Skill's implementation, which is what let it exist before the Skills did and what keeps it a test of the contract rather than a description of whatever was built.
 
