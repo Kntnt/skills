@@ -40,10 +40,15 @@ def facts(packet: Path) -> dict[str, Any]:
     response = (packet / "response.txt").read_text(encoding="utf-8")
     session = index["agents"][0]
 
+    # A run may write the shim's path out in full or build it from the Skill's
+    # own `$HERE`, and both are the same invocation: what identifies it is the
+    # shim's file name beside the Skill's name, and not the spelling of the
+    # directory above it. Counted on the literal path alone, a run that built
+    # the path from a variable read as a run with no closing pass at all.
     shim_calls = 0
     for call in session["calls"]:
         command = (call.get("arguments") or {}).get("command") or ""
-        if "skills/proofread" in command and "invoke.py" in command:
+        if "proofread" in command.lower() and "invoke.py" in command:
             shim_calls += 1
 
     delivered = delivered_text(response)

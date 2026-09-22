@@ -1,0 +1,43 @@
+Granskad som `article` på svenska (`sv`), utan teknik — genren `article` anger själv att den inte skrivs med någon. Korrigeringsbudgeten var 3; en runda användes och två återstår outnyttjade. Den kontextuella instruktionen (rubrik högst fem ord, mellanrubriker högst fyra) tillämpades på rubriksättningen. Källfilen är oförändrad; ingenting skrevs till disk.
+
+```markdown
+# Mätförsöket i Björkskolan missade värmestrålningen
+
+Fastighetskontoret mätte temperaturen i Björkskolan i fyra veckor och redovisade resultatet i en rapport i mars 2026. Här är vad mätningen visar, vad den inte kan visa och vad driftteknikern rekommenderar innan styrningen ändras.
+
+Givarna registrerade temperaturer under 20 grader i sex klassrum. Fastighetskontorets rapport *Mätförsök i Björkskolan* från den 12 mars 2026 anger att 14 av 120 lektionspass hade minst ett värde under kontorets egen arbetsgräns på 20 grader, vilket inte är en lagregel.
+
+## Så gjordes mätningen
+
+Rapporten anger också att försöket varade fyra veckor och att två givare stod vid ytterväggar och fyra vid innerväggar, utan att placeringens effekt jämfördes experimentellt.
+
+## Det som inte mättes
+
+Operativ temperatur saknas, trots att resonemanget bygger på operativ temperatur, som är ett mått på lufttemperatur och värmestrålning från omgivande ytor. Givarna mätte bara luften där de satt.
+
+Det saknas mätningar av luftdrag och elevernas upplevelse och uppgifter om hur länge temperaturerna låg under gränsen. Ingen effekt på hälsan har undersökts.
+
+## Vad siffrorna duger till
+
+Driftteknikern Elin Rask rekommenderar att koppla temperaturserier till användningstider innan styrningen ändras. Nästa försök är tänkt att använda likadant placerade givare i november, fast finansieringen inte är beslutad.
+
+Den som vill använda mätvärdena kan börja där Rask föreslår och följa om novemberförsöket finansieras.
+```
+
+**Kvarstående fynd — olöst**
+
+- **Bylinen saknas.** Artikelanatomin kräver en byline efter ingressen. Ingen författare namnges i texten, i dess metadata eller i uppdraget, så raden kan inte fyllas i utan att hitta på en författare. Den är lämnad ofylld och behöver kompletteras av den som vet vem som skrivit texten. Mätningen av anatomin ger fortfarande utfall på just denna punkt och på ingen annan.
+
+**Borttagna påståenden**
+
+- *"men ändå är det helt säkert att givarna har gjort eleverna friskare"* — borttaget av den reparation som svarade på fyndet att säkerheten motsades av kvalifikationen i samma mening och saknade stöd i texten. Fyndet pekade ut själva säkerhetspåståendet som defekten. Gränsen *"ingen effekt på hälsan har undersökts"* står kvar i full styrka som egen mening.
+- *"Katastrofen lurade bakom varje hörn."* — borttagen av den reparation som svarade på fyndet om påhittad dramatik. Ingen katastrof finns beskriven i materialet, och meningen bar ingen uppgift vid sidan av dramatiken.
+- *"Det är viktigt att notera att detta är mycket viktigt för alla som tycker att temperatur är viktigt."* — borttagen av den reparation som svarade på fyndet om tom viktighetsmarkering. Meningen bar ingen uppgift.
+- *"Kontakta oss för att rädda framtiden."* — borttagen av den reparation som svarade på fyndet att uppmaningen inte följde av innehållet. Den ersattes av det nästa steg texten själv bär upp.
+- Rubrikens påstående *"räddar skolan från en katastrof"* — borttaget av den reparation som svarade på fyndet att rubriken drog en slutsats texten inte drar.
+
+Inget påstående lämnades kvar med förändrad räckvidd, säkerhet, källhänvisning, kronologi, orsakssamband eller innebörd. Samtliga sju gränssättande formuleringar — att arbetsgränsen inte är en lagregel, att placeringens effekt inte jämfördes experimentellt, att operativ temperatur saknas, att givarna bara mätte luften där de satt, vad som saknar mätningar, att ingen hälsoeffekt undersökts och att finansieringen inte är beslutad — står kvar i full styrka.
+
+**Vad körningen i övrigt ändrade**
+
+Rubriken skrevs om från textens egen vinkel och på textens egen styrka. Ingressen, som bestod av samma mening ordagrant två gånger och dessutom upprepade ledets första mening, ersattes av en självbärande sammanfattande paragraf byggd av textens eget stoff. Den 187 ord långa löpande paragrafen delades upp i ett led och sex stycken, och texten fick tre avsnitt med mellanrubriker samt en avslutning som pekar på det nästa steg materialet stöder. Tomma viktighetsmarkeringar och påhittad dramatik togs bort. Den avslutande mekaniska genomgången fann inga objektiva fel i stavning, grammatik, interpunktion eller svenska lokalkonventioner och ändrade därför ingenting.

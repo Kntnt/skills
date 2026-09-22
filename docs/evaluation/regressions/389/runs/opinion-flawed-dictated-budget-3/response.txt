@@ -1,0 +1,34 @@
+Granskningen är klar. Upplösning: genre `opinion` och språk `sv` från anropet, teknik `none` — genren `opinion` anger själv att den inte skrivs med någon teknik. Din instruktion om rubriken tillämpades (utan avslutande punkt, som svenska rubriker sätts). En av tre korrigeringsrundor användes; inga fynd kvarstår.
+
+```markdown
+# Behåll telefonbokningen ett halvår till
+
+I kommunens pilot gjordes 96 bokningar på webben och 24 per telefon, men rapporten räknar inte unika personer och undersökte inte digital vana. Här är skälen att pröva båda bokningsvägarna under ett halvårs försök, och vad förvaltningen behöver mäta och fråga under tiden.
+
+Sanna Ek, Öppna beslut
+
+Kommunstyrelsen borde behålla telefonbokning under ett halvårs försök i alla sju lokaler.
+
+## Kommunens eget underlag har luckor
+
+Det gjordes 96 bokningar på webben och 24 via telefon. Kommunens pilotrapport från den 8 april 2026 säger samtidigt att bokningarna inte räknar unika personer och att digital vana inte undersöktes.
+
+## Argumentet mot två bokningsvägar saknar siffror
+
+Förvaltningen invänder att dubbla kanaler innebär dubbel administration. Handlingarna saknar tidsmätning. Försökets kostnad är inte beräknad.
+
+Föreningen vill att förvaltningen mäter tidsåtgång och frågar användarna varför de väljer en bokningsväg.
+
+Kommunstyrelsen kan besluta om ett halvårs försök med telefonbokning i alla sju lokaler och om att förvaltningen mäter tidsåtgången och frågar användarna varför de väljer en bokningsväg.
+```
+
+**Borttagna påståenden**
+
+- *"Alla vet att politikerna vill stänga ute äldre för att spara miljoner."* togs bort i sin helhet av korrigeringen av det fynd som pekade ut hela meningen som defekten. Med den försvann tre påståenden: att detta är allmänt känt, att politikerna vill stänga ute äldre, och att besparingen rör miljoner. Inget av dem hade stöd i texten.
+- *"Det bevisar att 20 procent av kommunens invånare inte kan använda internet."* togs bort av korrigeringen av fyndet som namngav hela slutsatsen som defekten: den byter nämnare från bokningar till invånare och motsägs av pilotrapportens eget förbehåll i nästa mening.
+- *"Därför kostar det ingenting att behålla telefonbokningen."* togs bort av korrigeringen av fyndet om den brutna slutledningen. De två meningar som avgränsar vad texten hävdar — att handlingarna saknar tidsmätning och att försökets kostnad inte är beräknad — står kvar ordagrant.
+- *"Nu är det dags att agera."* ersattes av korrigeringen av fyndet om avslutningen. Meningen bar inget sakpåstående.
+
+Inget kvarstående påstående har fått ändrad räckvidd, säkerhet, källa, kronologi eller orsaksled.
+
+**Vad rundan i övrigt gjorde**: rubriken byttes mot den du angav, en ingress lades till av textens eget innehåll, de två etikettrubrikerna skrevs om till påståenderubriker, diskussionsavsnittet delades i två stycken med kostnadsmeningen flyttad till det stycke den hör till, och avslutningen gjordes konkret genom att namnge den handling och den beslutsfattare som redan fanns i texten. Den avslutande mekaniska genomgången hittade inga stavfel, grammatikfel eller interpunktionsfel att rätta.

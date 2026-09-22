@@ -1,0 +1,39 @@
+Klart. Granskningen utgick från genren `article`, språket `sv` och ingen teknik — genren `article` anger själv att den inte skrivs med någon, så inget arc tillämpades. Din instruktion om högst fem ord i rubriken tillämpades. Korrigeringsbudgeten var 3; två rundor användes, den tredje förblev outnyttjad eftersom inget återstående fynd går att reparera utan att hitta på uppgifter.
+
+```markdown
+# Mätförsök i Björkskolan saknar uppgifter
+
+**Under fyra veckor mätte givare temperaturen i sex klassrum i Björkskolan. Här får du siffrorna ur fastighetskontorets rapport, vad försöket inte mätte och vilket nästa steg driftteknikern föreslår.**
+
+I sex klassrum registrerade givare temperaturer under 20 grader. Fastighetskontorets rapport *Mätförsök i Björkskolan* från den 12 mars 2026 anger att 14 av 120 lektionspass hade minst ett värde under kontorets egen arbetsgräns på 20 grader, vilket inte är en lagregel, och att försöket varade fyra veckor, medan två givare stod vid ytterväggar och fyra vid innerväggar, utan att placeringens effekt jämfördes experimentellt.
+
+## Mätningen fångade inte hela inomhusklimatet
+
+Operativ temperatur saknas, trots att resonemanget bygger på operativ temperatur, som är ett mått på lufttemperatur och värmestrålning från omgivande ytor, medan givarna bara mätte luften där de satt.
+
+Det saknas mätningar av luftdrag och elevernas upplevelse och uppgifter om hur länge temperaturerna låg under gränsen, och ingen effekt på hälsan har undersökts.
+
+## Så vill driftteknikern gå vidare
+
+Driftteknikern Elin Rask rekommenderar att koppla temperaturserier till användningstider innan styrningen ändras, och nästa försök är tänkt att använda likadant placerade givare i november, fast finansieringen inte är beslutad.
+
+Läs rapporten *Mätförsök i Björkskolan* innan du använder siffrorna, och efterfråga operativ temperatur, luftdrag och varaktighet innan du bedömer klassrummens inomhusklimat.
+```
+
+**Olöst fynd**
+
+- **Byline saknas.** Uppmätt: `absent`. Artikelanatomin kräver en byline efter ingressen, men texten namnger ingen författare. Delen lämnas ofylld i stället för att fyllas med ett namn som inte finns i underlaget — du behöver sätta dit författaren själv.
+
+**Borttagna påståenden**
+
+- *Givarna räddar skolan från en katastrof* — rubrikens påstående om en räddning från en katastrof togs bort av reparationen av fyndet att rubriken drar en slutsats texten inte drar. Fyndet namngav påståendet självt som defekten.
+- *Katastrofen lurade bakom varje hörn.* — påståendet att en katastrof hotade togs bort av reparationen av fyndet om påhittad dramatik utan stöd i texten. Fyndet namngav hela meningen som defekten.
+- *det är helt säkert att givarna har gjort eleverna friskare* — togs bort av reparationen av fyndet att säkerhetsgraden motsägs av textens egen uppgift om att ingen hälsoeffekt undersökts. Begränsningen *ingen effekt på hälsan har undersökts* står kvar i sin helhet.
+- *detta är mycket viktigt för alla som tycker att temperatur är viktigt* — togs bort av reparationen av fyndet om den tomma viktighetsfrasen.
+- *Kontakta oss för att rädda framtiden.* — uppmaningen togs bort av reparationen av fyndet om den generiska avslutningen.
+
+Inget påstående lämnades kvar med förändrad räckvidd, säkerhet, källa, kronologi, orsakskedja eller innebörd. Samtliga begränsande uppgifter står kvar ordagrant: att 20-gradersgränsen är kontorets egen arbetsgräns och inte en lagregel, att placeringens effekt inte jämfördes experimentellt, att operativ temperatur, luftdrag, elevernas upplevelse och varaktighet saknas, att ingen hälsoeffekt undersökts och att novemberförsökets finansiering inte är beslutad.
+
+**Vad körningen i övrigt ändrade**
+
+Utöver de borttagna påståendena ovan fick texten en ny rubrik och en ny ingress som båda skrevs ur textens eget material, kroppen delades upp i led och två sektioner med mellanrubriker så att det tidigare 187-ordersstycket blev fem stycken under 80 ord, ledet öppnar nu med en indefinit introduktion av givarna så att kroppen kan läsas utan ingressen, och avslutningen fick en uppmaning som bygger på rapporten och de mätningar texten själv säger saknas. Den avslutande mekaniska genomgången hittade inga stavfel, skiljeteckensfel eller kongruensfel att rätta.

@@ -1,0 +1,2 @@
+/redline --genre=opinion --language=sv --output=response source.md
+-- Skriv rubriken som: Behåll telefonbokningen ett halvår till.

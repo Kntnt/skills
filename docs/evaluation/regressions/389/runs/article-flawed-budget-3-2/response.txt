@@ -1,0 +1,42 @@
+**Granskad som `article` på `sv`.** Ingen teknik tillämpades — genren artikel anger själv att den inte skrivs med någon ordinarie teknik.
+
+```markdown
+# Björkskolans mätförsök lämnar frågor obesvarade
+
+**Givarna registrerade temperaturer under 20 grader i sex klassrum. Fastighetskontorets rapport visar hur ofta det hände, vad den inte kan svara på och vad driftteknikern rekommenderar.**
+
+Fastighetskontorets rapport *Mätförsök i Björkskolan* från den 12 mars 2026 anger att 14 av 120 lektionspass hade minst ett värde under kontorets egen arbetsgräns på 20 grader. Arbetsgränsen är ingen lagregel.
+
+## Så var försöket upplagt
+
+Försöket varade fyra veckor och omfattade sex klassrum. Två givare stod vid ytterväggar och fyra vid innerväggar.
+
+Placeringens effekt jämfördes inte experimentellt.
+
+## Det som mätningen inte fångade
+
+Operativ temperatur saknas, trots att rapportens resonemang bygger på operativ temperatur, som är ett mått på lufttemperatur och värmestrålning från omgivande ytor, medan givarna bara mätte luften där de satt.
+
+Det saknas mätningar av luftdrag och elevernas upplevelse. Det saknas också uppgifter om hur länge temperaturerna låg under gränsen. Ingen effekt på hälsan har undersökts.
+
+## Så vill driftteknikern gå vidare
+
+Driftteknikern Elin Rask rekommenderar att koppla temperaturserier till användningstider innan styrningen ändras. Nästa försök är tänkt att använda likadant placerade givare i november, fast finansieringen inte är beslutad.
+
+Väg siffran 14 av 120 mot vad mätningen inte fångade innan du drar slutsatser om temperaturen i klassrummen.
+```
+
+**Kvarstående fynd — olöst**
+
+- **Byline saknas.** Anatomimätningen rapporterar `byline: absent` som brusten regel: artikeln ska ha en byline mellan ingressen och det ingående stycket. Varken texten, dess metadata eller anropet namnger någon författare, så delen lämnas ofylld i stället för att fyllas med ett påhittat namn. Läsaren kan inte se vem som svarar för texten. Fyll i byline innan publicering.
+
+Granskningen avbröts här med en korrigering av tre oanvänd: det enda fynd som återstår är ett som granskningsunderlaget själv anvisar ska rapporteras och lämnas ofyllt, så det fanns inget kvar att rätta.
+
+**Påståenderedovisning**
+
+- **Borttaget påstående:** *"det är helt säkert att givarna har gjort eleverna friskare"* togs bort av den första korrigeringen, som svar på det fynd som utpekade själva visshetspåståendet som defekten — texten säger i samma mening att ingen hälsoeffekt undersökts. Förbehållet står kvar i sin helhet som egen mening: *"Ingen effekt på hälsan har undersökts."* Tre meningar till togs bort (den påhittade katastrofdramatiken, viktighetsformeln och den generiska slutuppmaningen); ingen av dem bar något sakpåstående.
+- **Ändrat påstående:** *"resonemanget bygger på operativ temperatur"* blev *"rapportens resonemang bygger på operativ temperatur"* i den andra korrigeringen, som svar på fyndet om oklar referens. Omfattning och styrka är oförändrade; attributionen är nu utskriven. Inga andra påståenden har flyttats i omfattning, säkerhet, attribution, kronologi, orsakssamband eller innebörd.
+
+**Vad körningen i övrigt ändrade**
+
+Rubriken skrevs om från textens egen vinkel sedan den tidigare påstod en räddning och en katastrof som underlaget inte bär; ingressens ordagrant upprepade mening ersattes av en som säger vad artikeln ger läsaren, och det ingående stycket inleds inte längre med samma mening som ingressen. Den 187 ord långa brödtextklumpen delades i tre sektioner med mellanrubriker och i stycken om en tanke vardera, och de staplade bisatserna delades till en huvudtanke per mening. Slop-mönster — den påhittade dramatiken, hedge-formeln "Det är viktigt att notera att" och den innehållslösa slutklämman — togs bort, och avslutningen fick i stället en uppmaning som följer av artikelns eget innehåll. Den avslutande mekaniska genomgången hittade inga stavfel, särskrivningar, böjnings- eller kongruensfel och ändrade ingenting. Varje sakuppgift i originalet — rapportens namn och datum, 14 av 120 lektionspass, arbetsgränsen på 20 grader och att den inte är en lagregel, fyra veckor, givarnas placering, det som saknas i mätningen, Elin Rasks rekommendation och den obeslutade finansieringen — står kvar.

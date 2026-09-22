@@ -1,0 +1,446 @@
+{
+  "article-flawed": {
+    "rounds": 1,
+    "states": [
+      {
+        "round": 1,
+        "pre_round_sha256": "1c0e3b3ef98e06b220058b9811864ebdae4c89b0618eb2f8405b63b0dd6504a0",
+        "pre_round_is_the_supplied_text": true,
+        "delivered_is_this_pre_round_state": false
+      }
+    ],
+    "delivered_sha256": "fdbdb69621b291c28be4310e6eedf638b0d862c13d6ea3a1d899ecb7a6af0914",
+    "delivered_is_the_pre_round_state_of_round": null
+  },
+  "article-flawed-2": {
+    "rounds": 1,
+    "states": [
+      {
+        "round": 1,
+        "pre_round_sha256": "1c0e3b3ef98e06b220058b9811864ebdae4c89b0618eb2f8405b63b0dd6504a0",
+        "pre_round_is_the_supplied_text": true,
+        "delivered_is_this_pre_round_state": false
+      }
+    ],
+    "delivered_sha256": "642c0e37ba18e8062d956771aa5baf6ad92694fb3c53d36002458d2f23274068",
+    "delivered_is_the_pre_round_state_of_round": null
+  },
+  "article-flawed-budget-3": {
+    "rounds": 1,
+    "states": [
+      {
+        "round": 1,
+        "pre_round_sha256": "1c0e3b3ef98e06b220058b9811864ebdae4c89b0618eb2f8405b63b0dd6504a0",
+        "pre_round_is_the_supplied_text": true,
+        "delivered_is_this_pre_round_state": true
+      }
+    ],
+    "delivered_sha256": "1c0e3b3ef98e06b220058b9811864ebdae4c89b0618eb2f8405b63b0dd6504a0",
+    "delivered_is_the_pre_round_state_of_round": 1
+  },
+  "article-flawed-budget-3-2": {
+    "rounds": 2,
+    "states": [
+      {
+        "round": 1,
+        "pre_round_sha256": "1c0e3b3ef98e06b220058b9811864ebdae4c89b0618eb2f8405b63b0dd6504a0",
+        "pre_round_is_the_supplied_text": true,
+        "delivered_is_this_pre_round_state": false
+      },
+      {
+        "round": 2,
+        "pre_round_sha256": "0145c5ad55f5f3b155708d3b939d13566703ed74be738f85f8c201f41978b46f",
+        "pre_round_is_the_supplied_text": false,
+        "delivered_is_this_pre_round_state": false
+      }
+    ],
+    "delivered_sha256": "0f6109dc2851325134e3439af8157045f2c12cc3e3a53f23fd332a2169f05519",
+    "delivered_is_the_pre_round_state_of_round": null
+  },
+  "article-flawed-budget-3-3": {
+    "rounds": 2,
+    "states": [
+      {
+        "round": 1,
+        "pre_round_sha256": "1c0e3b3ef98e06b220058b9811864ebdae4c89b0618eb2f8405b63b0dd6504a0",
+        "pre_round_is_the_supplied_text": true,
+        "delivered_is_this_pre_round_state": false
+      },
+      {
+        "round": 2,
+        "pre_round_sha256": "9c8997f066b0c455816eca61a3d8d4332a8871133ac2ac97991c3449f27d9fa9",
+        "pre_round_is_the_supplied_text": false,
+        "delivered_is_this_pre_round_state": true
+      }
+    ],
+    "delivered_sha256": "9c8997f066b0c455816eca61a3d8d4332a8871133ac2ac97991c3449f27d9fa9",
+    "delivered_is_the_pre_round_state_of_round": 2
+  },
+  "article-flawed-budget-3-4": {
+    "rounds": 2,
+    "states": [
+      {
+        "round": 1,
+        "pre_round_sha256": "1c0e3b3ef98e06b220058b9811864ebdae4c89b0618eb2f8405b63b0dd6504a0",
+        "pre_round_is_the_supplied_text": true,
+        "delivered_is_this_pre_round_state": false
+      },
+      {
+        "round": 2,
+        "pre_round_sha256": "4b12614ad77880ee1b1a1051fac2f61457bba915fba9aa15fb7f70d221a26f25",
+        "pre_round_is_the_supplied_text": false,
+        "delivered_is_this_pre_round_state": false
+      }
+    ],
+    "delivered_sha256": "9684de2254a07818d7ffdd48ba5427e6619f84c948ae9ecbc236fc223c29cddc",
+    "delivered_is_the_pre_round_state_of_round": null
+  },
+  "article-flawed-short-headline-budget-3": {
+    "rounds": 2,
+    "states": [
+      {
+        "round": 1,
+        "pre_round_sha256": "1c0e3b3ef98e06b220058b9811864ebdae4c89b0618eb2f8405b63b0dd6504a0",
+        "pre_round_is_the_supplied_text": true,
+        "delivered_is_this_pre_round_state": false
+      },
+      {
+        "round": 2,
+        "pre_round_sha256": "77334beb8584de30eeb162fc4827a5b40e6f6d7ec084117ed501fcb7f584e871",
+        "pre_round_is_the_supplied_text": false,
+        "delivered_is_this_pre_round_state": false
+      }
+    ],
+    "delivered_sha256": "82559954ca393061dc0bd3a848956323f13038a27ef91b388f389578eafddb86",
+    "delivered_is_the_pre_round_state_of_round": null
+  },
+  "article-flawed-short-headline-budget-3-2": {
+    "rounds": 2,
+    "states": [
+      {
+        "round": 1,
+        "pre_round_sha256": "1c0e3b3ef98e06b220058b9811864ebdae4c89b0618eb2f8405b63b0dd6504a0",
+        "pre_round_is_the_supplied_text": true,
+        "delivered_is_this_pre_round_state": false
+      },
+      {
+        "round": 2,
+        "pre_round_sha256": "a8f1cd5bc3efa0222d957d08073f03eeda02b2ccbc305ded466226d4561d623c",
+        "pre_round_is_the_supplied_text": false,
+        "delivered_is_this_pre_round_state": false
+      }
+    ],
+    "delivered_sha256": "1d429085d4d155f8191da00ec38a70efbbde56a07a218bb88ee86d873e51a02d",
+    "delivered_is_the_pre_round_state_of_round": null
+  },
+  "article-flawed-tight-headings-1": {
+    "rounds": 1,
+    "states": [
+      {
+        "round": 1,
+        "pre_round_sha256": "1c0e3b3ef98e06b220058b9811864ebdae4c89b0618eb2f8405b63b0dd6504a0",
+        "pre_round_is_the_supplied_text": true,
+        "delivered_is_this_pre_round_state": false
+      }
+    ],
+    "delivered_sha256": "28808fe1b3e0f73edb15f5df3b84724d86f83e8df1096e8758ffd0c1d3368e7f",
+    "delivered_is_the_pre_round_state_of_round": null
+  },
+  "article-flawed-tight-headings-2": {
+    "rounds": 2,
+    "states": [
+      {
+        "round": 1,
+        "pre_round_sha256": "1c0e3b3ef98e06b220058b9811864ebdae4c89b0618eb2f8405b63b0dd6504a0",
+        "pre_round_is_the_supplied_text": true,
+        "delivered_is_this_pre_round_state": false
+      },
+      {
+        "round": 2,
+        "pre_round_sha256": "37a89be78e12cb319952cfb1ffd66949e155106ad9415102d860aeb7c55f63ad",
+        "pre_round_is_the_supplied_text": false,
+        "delivered_is_this_pre_round_state": false
+      }
+    ],
+    "delivered_sha256": "f45fd69a87e059fe1fd94fa5e0724964f52b65ce86050433f95ac9a4cb81a6db",
+    "delivered_is_the_pre_round_state_of_round": null
+  },
+  "article-flawed-tight-headings-3": {
+    "rounds": 1,
+    "states": [
+      {
+        "round": 1,
+        "pre_round_sha256": "1c0e3b3ef98e06b220058b9811864ebdae4c89b0618eb2f8405b63b0dd6504a0",
+        "pre_round_is_the_supplied_text": true,
+        "delivered_is_this_pre_round_state": false
+      }
+    ],
+    "delivered_sha256": "8ab72b439533c10b0aeca2231baefc09d13c55758a9a80f76ec6b825b02b375a",
+    "delivered_is_the_pre_round_state_of_round": null
+  },
+  "article-flawed-tight-headings-4": {
+    "rounds": 2,
+    "states": [
+      {
+        "round": 1,
+        "pre_round_sha256": "1c0e3b3ef98e06b220058b9811864ebdae4c89b0618eb2f8405b63b0dd6504a0",
+        "pre_round_is_the_supplied_text": true,
+        "delivered_is_this_pre_round_state": false
+      },
+      {
+        "round": 2,
+        "pre_round_sha256": "c54907e0b6a96033ce7ba00ca6aec29e3236d62648117bc5fb3cd6afff9625c8",
+        "pre_round_is_the_supplied_text": false,
+        "delivered_is_this_pre_round_state": false
+      }
+    ],
+    "delivered_sha256": "748dcf1d8c747f117db63d3a3793e6052201c9a04a368be77c28788f88dd68f1",
+    "delivered_is_the_pre_round_state_of_round": null
+  },
+  "case-study-flawed": {
+    "rounds": 1,
+    "states": [
+      {
+        "round": 1,
+        "pre_round_sha256": "ce574061bd09328ed80109a3cca07875683c2fd77d55f41d5631dc2cdcb18767",
+        "pre_round_is_the_supplied_text": true,
+        "delivered_is_this_pre_round_state": false
+      }
+    ],
+    "delivered_sha256": "ddd1d673c0d9e73852e93e0e057526963355536c25a8df63c46a3ec51367bc6b",
+    "delivered_is_the_pre_round_state_of_round": null
+  },
+  "case-study-sv": {
+    "rounds": 1,
+    "states": [
+      {
+        "round": 1,
+        "pre_round_sha256": "5551178fe07e75f27ea6290f3b3aaa77ce1bee32b11343ce26faa616e75d177a",
+        "pre_round_is_the_supplied_text": true,
+        "delivered_is_this_pre_round_state": false
+      }
+    ],
+    "delivered_sha256": "8cccc2773078fd688decf0ccb0ca30c2ac8badad4f40cbe0a52405681e3cb4c9",
+    "delivered_is_the_pre_round_state_of_round": null
+  },
+  "case-study-sv-2": {
+    "rounds": 1,
+    "states": [
+      {
+        "round": 1,
+        "pre_round_sha256": "5551178fe07e75f27ea6290f3b3aaa77ce1bee32b11343ce26faa616e75d177a",
+        "pre_round_is_the_supplied_text": true,
+        "delivered_is_this_pre_round_state": false
+      }
+    ],
+    "delivered_sha256": "efa29fbccead8ad18c1e894340123ec189f095bf8debb9fb12f74bae9a5b43ad",
+    "delivered_is_the_pre_round_state_of_round": null
+  },
+  "case-study-sv-budget-3": {
+    "rounds": 2,
+    "states": [
+      {
+        "round": 1,
+        "pre_round_sha256": "5551178fe07e75f27ea6290f3b3aaa77ce1bee32b11343ce26faa616e75d177a",
+        "pre_round_is_the_supplied_text": true,
+        "delivered_is_this_pre_round_state": false
+      },
+      {
+        "round": 2,
+        "pre_round_sha256": "c7c993aae711d9282363889f0493d8769e41e916c806f80debd6ca6a146ec5e0",
+        "pre_round_is_the_supplied_text": false,
+        "delivered_is_this_pre_round_state": false
+      }
+    ],
+    "delivered_sha256": "20d01300b86942c810b4644652aa51adba71fb552f93e5b4ce01f9107a35256e",
+    "delivered_is_the_pre_round_state_of_round": null
+  },
+  "case-study-sv-dictated": {
+    "rounds": 0,
+    "states": [],
+    "delivered_sha256": null,
+    "delivered_is_the_pre_round_state_of_round": null
+  },
+  "case-study-sv-short-headline": {
+    "rounds": 1,
+    "states": [
+      {
+        "round": 1,
+        "pre_round_sha256": "5551178fe07e75f27ea6290f3b3aaa77ce1bee32b11343ce26faa616e75d177a",
+        "pre_round_is_the_supplied_text": true,
+        "delivered_is_this_pre_round_state": false
+      }
+    ],
+    "delivered_sha256": "47c8937f0451c6cea095189364db4806c80553f7742d24f1cf24d98812e9827c",
+    "delivered_is_the_pre_round_state_of_round": null
+  },
+  "case-study-sv-short-headline-2": {
+    "rounds": 1,
+    "states": [
+      {
+        "round": 1,
+        "pre_round_sha256": "5551178fe07e75f27ea6290f3b3aaa77ce1bee32b11343ce26faa616e75d177a",
+        "pre_round_is_the_supplied_text": true,
+        "delivered_is_this_pre_round_state": true
+      }
+    ],
+    "delivered_sha256": "5551178fe07e75f27ea6290f3b3aaa77ce1bee32b11343ce26faa616e75d177a",
+    "delivered_is_the_pre_round_state_of_round": 1
+  },
+  "case-study-sv-steered": {
+    "rounds": 1,
+    "states": [
+      {
+        "round": 1,
+        "pre_round_sha256": "5551178fe07e75f27ea6290f3b3aaa77ce1bee32b11343ce26faa616e75d177a",
+        "pre_round_is_the_supplied_text": true,
+        "delivered_is_this_pre_round_state": true
+      }
+    ],
+    "delivered_sha256": "5551178fe07e75f27ea6290f3b3aaa77ce1bee32b11343ce26faa616e75d177a",
+    "delivered_is_the_pre_round_state_of_round": 1
+  },
+  "case-study-sv-steered-2": {
+    "rounds": 1,
+    "states": [
+      {
+        "round": 1,
+        "pre_round_sha256": "5551178fe07e75f27ea6290f3b3aaa77ce1bee32b11343ce26faa616e75d177a",
+        "pre_round_is_the_supplied_text": true,
+        "delivered_is_this_pre_round_state": false
+      }
+    ],
+    "delivered_sha256": "c05f20dd6ec9df6cce2b2d361e7caff1cc6685aa99d8176e1416d7d8db69e66d",
+    "delivered_is_the_pre_round_state_of_round": null
+  },
+  "case-study-sv-steered-3": {
+    "rounds": 1,
+    "states": [
+      {
+        "round": 1,
+        "pre_round_sha256": "5551178fe07e75f27ea6290f3b3aaa77ce1bee32b11343ce26faa616e75d177a",
+        "pre_round_is_the_supplied_text": true,
+        "delivered_is_this_pre_round_state": false
+      }
+    ],
+    "delivered_sha256": "42e9420d18e638eb0a3a16174d999a54b7bc64b26c728fc4821d6c2c67409e8e",
+    "delivered_is_the_pre_round_state_of_round": null
+  },
+  "column-flawed": {
+    "rounds": 1,
+    "states": [
+      {
+        "round": 1,
+        "pre_round_sha256": "9b12ad3fb2cb74011c974feda1d7aafa8c0394ac6899417be2dbdd40ad0e96ab",
+        "pre_round_is_the_supplied_text": true,
+        "delivered_is_this_pre_round_state": true
+      }
+    ],
+    "delivered_sha256": "9b12ad3fb2cb74011c974feda1d7aafa8c0394ac6899417be2dbdd40ad0e96ab",
+    "delivered_is_the_pre_round_state_of_round": 1
+  },
+  "column-flawed-2": {
+    "rounds": 1,
+    "states": [
+      {
+        "round": 1,
+        "pre_round_sha256": "9b12ad3fb2cb74011c974feda1d7aafa8c0394ac6899417be2dbdd40ad0e96ab",
+        "pre_round_is_the_supplied_text": true,
+        "delivered_is_this_pre_round_state": true
+      }
+    ],
+    "delivered_sha256": "9b12ad3fb2cb74011c974feda1d7aafa8c0394ac6899417be2dbdd40ad0e96ab",
+    "delivered_is_the_pre_round_state_of_round": 1
+  },
+  "column-sv": {
+    "rounds": 1,
+    "states": [
+      {
+        "round": 1,
+        "pre_round_sha256": "da9dc2d7e553a40c0dbf10d47072c43c5bd90c5f112b304527544e21fa9bf1c2",
+        "pre_round_is_the_supplied_text": true,
+        "delivered_is_this_pre_round_state": false
+      }
+    ],
+    "delivered_sha256": "5c95ef7a22c4d4e95b37a767845afdf5ae61debf6c4fab650558c809f4331e91",
+    "delivered_is_the_pre_round_state_of_round": null
+  },
+  "opinion-flawed": {
+    "rounds": 1,
+    "states": [
+      {
+        "round": 1,
+        "pre_round_sha256": "ab033d9f4c817c9eaa0efa32db93819a99291a3b22e29fb39f0d640e830ed990",
+        "pre_round_is_the_supplied_text": true,
+        "delivered_is_this_pre_round_state": false
+      }
+    ],
+    "delivered_sha256": "15a447ee8661fe0c2908135587b33511df54e1af4a5062f41d76fd2248727b25",
+    "delivered_is_the_pre_round_state_of_round": null
+  },
+  "opinion-flawed-2": {
+    "rounds": 1,
+    "states": [
+      {
+        "round": 1,
+        "pre_round_sha256": "ab033d9f4c817c9eaa0efa32db93819a99291a3b22e29fb39f0d640e830ed990",
+        "pre_round_is_the_supplied_text": true,
+        "delivered_is_this_pre_round_state": false
+      }
+    ],
+    "delivered_sha256": "b6e9b1ff8cf3891251f1b9206efab23e048fbc6dfeeb5c41f5e8e25b86daee77",
+    "delivered_is_the_pre_round_state_of_round": null
+  },
+  "opinion-flawed-dictated": {
+    "rounds": 1,
+    "states": [
+      {
+        "round": 1,
+        "pre_round_sha256": "ab033d9f4c817c9eaa0efa32db93819a99291a3b22e29fb39f0d640e830ed990",
+        "pre_round_is_the_supplied_text": true,
+        "delivered_is_this_pre_round_state": false
+      }
+    ],
+    "delivered_sha256": "56c44a095e4643120a9cdad4f4242089da11b77c270bbe88d17c853aab8a60f4",
+    "delivered_is_the_pre_round_state_of_round": null
+  },
+  "opinion-flawed-dictated-budget-3": {
+    "rounds": 1,
+    "states": [
+      {
+        "round": 1,
+        "pre_round_sha256": "ab033d9f4c817c9eaa0efa32db93819a99291a3b22e29fb39f0d640e830ed990",
+        "pre_round_is_the_supplied_text": true,
+        "delivered_is_this_pre_round_state": false
+      }
+    ],
+    "delivered_sha256": "cffd039a3db0cd06b4c1c30bd7b1dd9b2c5c5ed00029e52ce83b4d143716e818",
+    "delivered_is_the_pre_round_state_of_round": null
+  },
+  "opinion-flawed-steered": {
+    "rounds": 1,
+    "states": [
+      {
+        "round": 1,
+        "pre_round_sha256": "ab033d9f4c817c9eaa0efa32db93819a99291a3b22e29fb39f0d640e830ed990",
+        "pre_round_is_the_supplied_text": true,
+        "delivered_is_this_pre_round_state": false
+      }
+    ],
+    "delivered_sha256": "86c905de418f9d9b5215ae37aaf2684c924ec32150950fee285e7170451f5e60",
+    "delivered_is_the_pre_round_state_of_round": null
+  },
+  "opinion-flawed-steered-2": {
+    "rounds": 1,
+    "states": [
+      {
+        "round": 1,
+        "pre_round_sha256": "ab033d9f4c817c9eaa0efa32db93819a99291a3b22e29fb39f0d640e830ed990",
+        "pre_round_is_the_supplied_text": true,
+        "delivered_is_this_pre_round_state": false
+      }
+    ],
+    "delivered_sha256": "ebc57b2ab887d887b4e02701fb6c484e3454dc8476b768732c3be2257e233158",
+    "delivered_is_the_pre_round_state_of_round": null
+  }
+}

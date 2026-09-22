@@ -1,0 +1,49 @@
+Granskningen är klar. Upplösning: genre `article` och språk `sv` från anropet; ingen teknik — genren `article` anger själv att den inte skrivs med någon, så ingen båge har lagts på texten. Din anvisning om rubriklängd har tillämpats: rubriken är fem ord, mellanrubrikerna tre, fyra och fyra.
+
+```markdown
+# Mätförsöket i Björkskolan har luckor
+
+**Fastighetskontoret satte temperaturgivare i sex klassrum i Björkskolan och fann värden under sin egen arbetsgräns på 20 grader. Rapporten från försöket lämnar samtidigt flera frågor öppna: om elevernas upplevelse, om hur länge temperaturerna låg under gränsen och om vad givarnas placering betydde. Här får du veta vad mätningen räcker till.**
+
+Temperaturgivarna som fastighetskontoret placerade i Björkskolan registrerade temperaturer under 20 grader i sex klassrum. Fastighetskontorets rapport *Mätförsök i Björkskolan* från den 12 mars 2026 anger att 14 av 120 lektionspass hade minst ett värde under kontorets egen arbetsgräns på 20 grader, vilket inte är en lagregel.
+
+## Givarnas placering varierade
+
+Försöket varade fyra veckor, enligt rapporten. Två givare stod vid ytterväggar och fyra vid innerväggar, utan att placeringens effekt jämfördes experimentellt.
+
+## Det som inte mättes
+
+Operativ temperatur saknas, trots att resonemanget bygger på operativ temperatur. Det är ett mått på lufttemperatur och värmestrålning från omgivande ytor, medan givarna bara mätte luften där de satt.
+
+Det saknas mätningar av luftdrag och elevernas upplevelse och uppgifter om hur länge temperaturerna låg under gränsen. Ingen effekt på hälsan har undersökts.
+
+## Så går arbetet vidare
+
+Driftteknikern Elin Rask rekommenderar att koppla temperaturserier till användningstider innan styrningen ändras. Nästa försök är tänkt att använda likadant placerade givare i november, fast finansieringen inte är beslutad.
+```
+
+## Kvarstående fynd
+
+Båda är **oreparerade**, och båda av samma skäl: delen finns inte i textens eget stoff och kan inte hämtas ur den utan att något hittas på.
+
+1. **Byline saknas.** Varken texten, dess metadata eller anropet namnger någon författare. Anatomin kräver delen; den rapporteras som saknad och lämnas ofylld. Det är det enda krav mätskriptet fortfarande räknar som icke uppfyllt.
+2. **Avslutningen saknar en uppmaning till läsaren.** Den avslutande sektionen redovisar verksamhetens nästa steg — driftteknikerns rekommendation, det tänkta novemberförsöket, den obeslutade finansieringen — men inget steg som är läsarens. Texten innehåller inget läsarriktat nästa steg att bygga det på.
+
+En av de tre tillåtna korrigeringsrundorna är oanvänd. Båda kvarstående fynden är av det slag som kontraktet uttryckligen säger ska rapporteras i stället för repareras, så en tredje runda hade antingen inte gjort något eller hittat på ett namn respektive en uppmaning.
+
+## Påståenderedovisning
+
+Fyra påståenden togs bort, samtliga i första rundan och samtliga av reparationer vars fynd pekade ut just det påståendet som defekten:
+
+- **"Givarna räddar skolan från en katastrof"** (rubriken) — togs bort av reparationen av fyndet att rubriken påstod en räddning och en katastrof som inte finns någonstans i materialet.
+- **"Katastrofen lurade bakom varje hörn."** — togs bort av reparationen av fyndet att meningen var tillverkad dramatik utan stöd.
+- **"det är helt säkert att givarna har gjort eleverna friskare"** — togs bort av reparationen av fyndet att säkerheten motsades av textens egen uppgift i samma mening.
+- **"Det är viktigt att notera att detta är mycket viktigt för alla som tycker att temperatur är viktigt."** och **"Kontakta oss för att rädda framtiden."** — togs bort av reparationerna av fynden att den ena var en tom formel utan faktainnehåll och den andra en uppmaning som inte följde av innehållet.
+
+Inget påstående står kvar med förskjuten omfattning, säkerhet, källa, kronologi, orsak eller innebörd. Textens förbehåll är oförändrade i full styrka: att 20 grader är kontorets egen arbetsgräns och inte en lagregel, att placeringens effekt inte jämfördes experimentellt, att mätningar av luftdrag, elevernas upplevelse och varaktighet saknas, att ingen effekt på hälsan har undersökts, och att finansieringen av nästa försök inte är beslutad.
+
+## Vad rundorna i övrigt gjorde
+
+Rubriken och ingressen är omskrivna ur textens eget stoff, ingressen från en ordagrant upprepad mening till ett fristående stycke som säger vad artikeln ger; brödtexten är uppdelad från ett enda stycke på 187 ord till ett led och tre sektioner med mellanrubriker, långa bisatskedjor är delade vid sina fogar, ledets bestämda form har fått sin referent namngiven så att brödtexten går att läsa utan ingressen, och slop-mönstren — den tillverkade dramatiken, viktighetsformeln och den generiska slutuppmaningen — är borta. Den avslutande mekaniska genomgången mot svenska korrekturregler hittade inget att rätta, så texten levereras som den såg ut efter andra rundan.
+
+`source.md` är oförändrad och ingenting har skrivits till disk.

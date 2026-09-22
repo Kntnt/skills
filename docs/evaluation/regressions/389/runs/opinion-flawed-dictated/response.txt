@@ -1,0 +1,36 @@
+Granskningen är klar. Texten levereras här.
+
+```markdown
+# Behåll telefonbokningen ett halvår till
+
+Av 120 bokningar i kommunens pilotrapport gjordes 24 via telefon. Rapporten räknar inte unika personer, och digital vana undersöktes inte. Öppna beslut granskar vad siffrorna räcker till och vad kommunstyrelsen behöver veta innan den beslutar om telefonbokningen.
+
+Sanna Ek, Öppna beslut
+
+Kommunstyrelsen borde behålla telefonbokning under ett halvårs försök i alla sju lokaler.
+
+## Pilotens siffror säger inget om vem som kan boka digitalt
+
+Det gjordes 96 bokningar på webben och 24 via telefon. Telefonbokningarna är 20 procent av alla bokningar. Kommunens pilotrapport från den 8 april 2026 säger samtidigt att bokningarna inte räknar unika personer och att digital vana inte undersöktes.
+
+## Mät vad de två bokningsvägarna kostar under försöket
+
+Förvaltningen invänder att dubbla kanaler innebär dubbel administration. Handlingarna saknar tidsmätning. Föreningen vill att förvaltningen mäter tidsåtgång och frågar användarna varför de väljer en bokningsväg. Försökets kostnad är inte beräknad.
+
+Kommunstyrelsen kan låta telefonbokningen vara kvar i alla sju lokaler ett halvår till och under tiden låta förvaltningen mäta tidsåtgången och fråga användarna varför de väljer en bokningsväg.
+```
+
+**Upplösning.** Genre `opinion`, språk `sv`, ingen teknik: genren anger själv att den inte skrivs med någon, så ingen arc har lagts på texten. Rubriken är skriven enligt den kontextuella instruktionen. Korrigeringsbudgeten var 1; en runda användes, och omgranskningen efter den lämnar inga kvarstående iakttagelser.
+
+**Borttagna påstående.**
+
+- Att kommunledningen hatar människor. Iakttagelsen pekade ut rubriken själv som felet — den påstod något texten varken säger eller belägger — och rubriken ersattes.
+- Att politikerna vill stänga ute äldre, och att miljoner ska sparas. Båda satt i meningen "Alla vet att politikerna vill stänga ute äldre för att spara miljoner", som iakttagelsen pekade ut i sin helhet: en auktoritet som inte finns, ett uppsåt texten inte visar, och en besparing som textens egen avslutning säger inte är beräknad.
+- Att det inte kostar någonting att behålla telefonbokningen. Iakttagelsen pekade ut slutsatsen själv: att handlingarna saknar tidsmätning visar inte att kostnaden är noll, och meningen motsades av "Försökets kostnad är inte beräknad" två meningar senare.
+
+**Ändrade påstående.**
+
+- "Det bevisar att 20 procent av kommunens invånare inte kan använda internet" står nu som "Telefonbokningarna är 20 procent av alla bokningar". Nämnaren flyttar från invånare till bokningar och slutsatsen om internetförmåga är borta. Det var den slutledningen iakttagelsen pekade ut.
+- Avslutningens uppmaning har bytt räckvidd. "Nu är det dags att agera" namngav varken handling eller beslutsfattare; avslutningen pekar nu ut kommunstyrelsen och det förslag texten redan innehöll, utan att något nytt förslag tillförts.
+
+**Vad körningen i övrigt ändrade.** Rubriken är omskriven enligt instruktionen, en fristående ingress på 37 ord har lagts till mellan rubrik och byline och bygger på textens egna uppgifter — summan 120 är de 96 och 24 som redan stod i texten — och de två etikettrubrikerna "Bakgrund" och "Diskussion" har ersatts av mellanrubriker som säger vad respektive avsnitt hävdar. Två slopmönster är borta: den tomma auktoriteten "alla vet" och den generiska avslutningen. Artikelanatomin är maskinmätt och uppfyller nu alla räknade krav, och den avslutande mekaniska genomgången hittade inga stavfel, skiljeteckenfel eller kongruensfel att rätta. Byline, de två bokningssiffrorna, rapportens datum, förvaltningens invändning och föreningens två önskemål står kvar ordagrant, liksom de två meningar som avgränsar vad texten hävdar: "Handlingarna saknar tidsmätning" och "Försökets kostnad är inte beräknad".
