@@ -34,6 +34,8 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ### Fixed
 
+- Write waits for native checker completion and accepts either complete report route without report-file polling; it stops and verifies run-owned work before removing scratch, preserves unchecked drafts on interrupted comparisons, and reports cleanup failures (#391).
+
 - Expose complete heading/following-text pairs and deterministic lexical overlap in article-anatomy measurements; make Write, Redline and correction agents judge semantic echoes while preserving legitimate word reuse and Write's final source-comparison boundary (#390).
 
 - A ticket whose work fails review is no longer closed by pushing the commits that were made for it. A commit claims to close a ticket only where whoever writes it also decides that the work holds, so every Orchestrate brief that lets a subagent commit now instructs `Refs` and forbids the tracker's closing keywords, while the engine's recorded outcome remains the one thing that closes a run's ticket. Work taken outside Orchestrate closes its own ticket as before, `/commit` says when a closing reference belongs in a message, and the rule is written in `docs/rules/commits.md` (#367).
