@@ -6,9 +6,9 @@
 
 `references/editorial/article-anatomy.md` fixes the parts of a text in the
 genres `article`, `case-study`, `column` and `opinion`, their order and their
-dimensions. Counting them is this script's whole job; ADR-0209 says why the
-counting belongs to a script rather than to the agent reading the text, and
-what this script is therefore not allowed to judge.
+dimensions. This script counts them and exposes heading/following-text pairs
+with lexical overlap for the editorial agent to judge. ADR-0209 records why
+counted dimensions belong to a script rather than to the agent reading them.
 
 ## The command line
 
@@ -58,7 +58,8 @@ far as any splitter can tell.
 
 ## The shape of the answer
 
-`ok`, `format`, `conforms`, `failures`, `norms`, `typical` and `parts`.
+`ok`, `format`, `conforms`, `failures`, `norms`, `typical`, `parts` and
+`heading_pairs`.
 
 Each entry of `failures` and of `norms` carries `part` — `headline`,
 `standfirst`, `byline`, `lead`, `sections` or `section <n>` — `rule` in the
@@ -79,6 +80,39 @@ their figures covering every paragraph they hold. `other` names each remaining
 block's `part` — `before the headline`, `standfirst`, `lead`, `section <n>`, or
 `front` where no byline settles which side of it a block stands — and its
 opening `text`.
+
+`heading_pairs` is unjudged evidence, independent of `failures`, `norms`,
+`conforms` and the exit status. Each entry carries `id`, `kind`, the complete
+visible `heading` and `following` text, and `shared_words`. The first entry's
+id and kind are `headline-standfirst`; it joins every standfirst paragraph
+with two newlines. Subsequent ids are `subheading-1`, `subheading-2`, etc., in
+document order across levels 2–6, with kind
+`subheading-first-sentence-estimate`. Ids survive rewording and equivalent
+Markdown/HTML, but inserting or removing a subheading renumbers later ones.
+They identify positions within a measurement, not persistent document objects.
+
+For each subheading, the first paragraph before the next heading of any level
+supplies the sentence estimate; intervening non-prose blocks are skipped.
+The estimate ends at the first `.`, `!`, `?` or `…` followed by optional closing
+quotes/brackets and whitespace. Closing marks remain in the visible text.
+Without such a boundary, the whole first paragraph is the estimate, even an
+unterminated fragment. Abbreviations such as `Dr. Vik` and ellipses can split
+prematurely; a decimal such as `3.5` does not split. No language-specific
+sentence parser is implied. A missing member is `null`; a first paragraph
+with no letter or digit is unpairable and supplies `null`, never a later
+paragraph or another section's prose. The structural `parts` still show what
+was parsed, and callers check ambiguous or missing pairs against the full text.
+
+Overlap tokenization is separate from dimension word counts: casefold each
+visible text, normalize to NFC, then take maximal Unicode alphanumeric runs
+(`[^\\W_]+`). Punctuation, underscores and whitespace separate tokens, including
+apostrophes and hyphens. Shared words are the unique intersection, sorted by
+Unicode code point; repeated occurrences count once, with no stop-word
+removal, stemming, synonyms or similarity score. `shared_words` is `null`
+when a member is `null`, and `[]` when both are present but share no tokens.
+The visible text keeps its original wording, case and punctuation beside the
+normalized words. A repeated name or subject word can be necessary; an echo
+can paraphrase with no shared word. Neither observation is an automatic finding.
 """
 
 from __future__ import annotations
@@ -956,6 +990,70 @@ def opening_part(blocks: list[Block]) -> dict[str, Any] | None:
     }
 
 
+def heading_pair(
+    identity: str, kind: str, heading: str | None, following: str | None
+) -> dict[str, Any]:
+    """Keep visible text beside shared words, without an editorial verdict."""
+
+    # Lexical evidence has its own tokenizer; dimension counts stay unchanged.
+    shared = None
+    if heading is not None and following is not None:
+        left, right = (
+            set(re.findall(r"[^\W_]+", unicodedata.normalize("NFC", text.casefold())))
+            for text in (heading, following)
+        )
+        shared = sorted(left & right)
+
+    return {
+        "id": identity,
+        "kind": kind,
+        "heading": heading,
+        "following": following,
+        "shared_words": shared,
+    }
+
+
+def first_sentence_after(blocks: list[Block], heading_at: int) -> str | None:
+    """Estimate the first prose sentence before the next heading of any level."""
+
+    for block in blocks[heading_at + 1 :]:
+        if block.kind is Kind.HEADING:
+            return None
+        if block.kind is Kind.PARAGRAPH:
+            if not words(block.text):
+                return None
+            boundary = SENTENCE.search(block.text)
+            return block.text[: boundary.end()].rstrip() if boundary else block.text
+
+    return None
+
+
+def heading_pairs(reading: Reading, blocks: list[Block]) -> list[dict[str, Any]]:
+    """Expose the headline and each section's opening for semantic judgment."""
+
+    pairs = [
+        heading_pair(
+            "headline-standfirst",
+            "headline-standfirst",
+            reading.headline.text if reading.headline is not None else None,
+            "\n\n".join(block.text for block in reading.front.standfirst) or None,
+        )
+    ]
+    for at, block in enumerate(blocks):
+        if block.kind is not Kind.HEADING or block.level == 1:
+            continue
+        pairs.append(
+            heading_pair(
+                f"subheading-{len(pairs)}",
+                "subheading-first-sentence-estimate",
+                block.text,
+                first_sentence_after(blocks, at),
+            )
+        )
+
+    return pairs
+
+
 def parts(reading: Reading) -> dict[str, Any]:
     """Return what the script took as which part, and what each one measured."""
 
@@ -1014,6 +1112,7 @@ def measure(text: str) -> dict[str, Any]:
         "norms": norms(reading),
         "typical": typical(reading),
         "parts": parts(reading),
+        "heading_pairs": heading_pairs(reading, blocks),
     }
 
 

@@ -1,0 +1,555 @@
+Installed 6 packages in 7ms
+FFFFFFFFFE                                                               [100%]
+==================================== ERRORS ====================================
+__ ERROR at setup of test_a_clean_run_exits_zero_and_reports_what_it_fetched ___
+
+    @pytest.fixture
+    def site() -> Iterator[Site]:
+        """Serve a fresh fixture site for one test, and stop it afterwards."""
+    
+        served = Site()
+    
+        class Handler(BaseHTTPRequestHandler):
+            def do_GET(self) -> None:
+                host = self.headers.get("Host", "")
+                request = Request(host, self.path, dict(self.headers))
+                served.requests.append(request)
+                gated = served.gate(request) if served.gate else None
+                if gated is not None:
+                    self.send_response(gated.status)
+                    self.send_header("Content-Type", gated.content_type)
+                    self.send_header("Content-Length", str(len(gated.body)))
+                    for name, value in gated.headers.items():
+                        self.send_header(name, value)
+                    self.end_headers()
+                    self.wfile.write(gated.body)
+                    return
+                responses = served.host_routes.get(
+                    (host.rpartition(":")[0], self.path)
+                ) or served.routes.get(self.path)
+                if not responses:
+                    self.send_response(404)
+                    self.send_header("Content-Length", "0")
+                    self.end_headers()
+                    return
+                response = responses.pop(0) if len(responses) > 1 else responses[0]
+                if not_modified(response, dict(self.headers)):
+                    self.send_response(304)
+                    for name in VALIDATORS:
+                        if name in response.headers:
+                            self.send_header(name, response.headers[name])
+                    self.end_headers()
+                    return
+                self.send_response(response.status)
+                self.send_header("Content-Type", response.content_type)
+                self.send_header("Content-Length", str(len(response.body)))
+                for name, value in response.headers.items():
+                    self.send_header(name, value)
+                self.end_headers()
+                self.wfile.write(response.body)
+    
+            def log_message(self, format: str, *args: object) -> None:
+                return
+    
+>       server = ThreadingHTTPServer(("127.0.0.1", 0), Handler)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_mirror.py:208: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../../.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/socketserver.py:457: in __init__
+    self.server_bind()
+../../../../.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/http/server.py:140: in server_bind
+    socketserver.TCPServer.server_bind(self)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <http.server.ThreadingHTTPServer object at 0x106c1e480>
+
+    def server_bind(self):
+        """Called by constructor to bind the socket.
+    
+        May be overridden.
+    
+        """
+        if self.allow_reuse_address and hasattr(socket, "SO_REUSEADDR"):
+            self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        # Since Linux 6.12.9, SO_REUSEPORT is not allowed
+        # on other address families than AF_INET/AF_INET6.
+        if (
+            self.allow_reuse_port and hasattr(socket, "SO_REUSEPORT")
+            and self.address_family in (socket.AF_INET, socket.AF_INET6)
+        ):
+            self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEPORT, 1)
+>       self.socket.bind(self.server_address)
+E       PermissionError: [Errno 1] Operation not permitted
+
+../../../../.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/socketserver.py:478: PermissionError
+=================================== FAILURES ===================================
+_______ test_only_the_age_backstop_releases_unowned_manifests[then-True] _______
+
+tmp_path = PosixPath('/Users/thomas/Projects/skills-388-391/.scratch-390/tmp/pytest-of-thomas/pytest-10/test_only_the_age_backstop_rel0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x1069e8bc0>
+current_start = 'then', expired = True
+
+    @pytest.mark.parametrize(
+        ("current_start", "expired"), [("different", False), ("then", True)]
+    )
+    def test_only_the_age_backstop_releases_unowned_manifests(
+        tmp_path: Path,
+        monkeypatch: pytest.MonkeyPatch,
+        current_start: str,
+        expired: bool,
+    ) -> None:
+        """Conservative ownership does not disable orphan cleanup's existing bounds."""
+    
+        cleanup = _module(SESSION_CLEANUP, "kntnt_session_cleanup")
+        monkeypatch.setenv("KNTNT_HOME", str(tmp_path))
+        path = cleanup.manifest_path("unowned")
+        cleanup.append(path, {"kind": "pid", "id": "123456", "started": "then"})
+        monkeypatch.setattr(cleanup, "alive", lambda pid: pid == 123456)
+        monkeypatch.setattr(cleanup, "started_at", lambda pid: current_start)
+        monkeypatch.setattr(cleanup, "stale", lambda path: expired)
+    
+>       assert (path in cleanup.foreign_manifests("new")) is expired
+E       AssertionError: assert (PosixPath('/Users/thomas/Projects/skills-388-391/.scratch-390/tmp/pytest-of-thomas/pytest-10/test_only_the_age_backstop_rel0/.kntnt/session-cleanup/sessions/unowned.jsonl') in []) is True
+E        +  where [] = <function foreign_manifests at 0x1084158a0>('new')
+E        +    where <function foreign_manifests at 0x1084158a0> = <module 'kntnt_session_cleanup' from '/Users/thomas/Projects/skills-388-391/.scratch-390/baseline/skills/kntnt/features/session-cleanup/scripts/session_cleanup.py'>.foreign_manifests
+
+tests/test_features.py:566: AssertionError
+________ test_detached_tools_remain_owned_until_the_harness_exits[path] ________
+
+tmp_path = PosixPath('/Users/thomas/Projects/skills-388-391/.scratch-390/tmp/pytest-of-thomas/pytest-10/test_detached_tools_remain_own0')
+recorded_kind = 'path'
+
+    @pytest.mark.parametrize("recorded_kind", ["path", "live-pid", "gone-pid", "container"])
+    def test_detached_tools_remain_owned_until_the_harness_exits(
+        tmp_path: Path, recorded_kind: str
+    ) -> None:
+        """Tool and hook POSIX sessions may die while their Harness keeps working."""
+    
+        program = """
+    import json, os, subprocess, sys
+    from pathlib import Path
+    script = sys.argv[1]
+    root = Path(os.environ['KNTNT_HOME'])
+    os.environ['CLAUDE_PID'] = str(os.getpid())
+    os.environ['CLAUDE_CODE_SESSION_ID'] = 'working'
+    os.environ['CODEX_SESSION_ID'] = 'outer-codex'
+    def call(*args, payload=''):
+        result = subprocess.run([sys.executable, script, *args], cwd=root,
+            input=payload, text=True, capture_output=True, start_new_session=True)
+        assert result.returncode == 0, result.stderr
+        return json.loads(result.stdout) if result.stdout else None
+    call('hook', '--harness=claude-code', '--event=SessionStart',
+         payload='{"session_id":"working"}')
+    scratch = root / 'scratch'
+    scratch.mkdir()
+    record = call('add', 'path', str(scratch), 'working scratch')
+    if sys.argv[2] == 'live-pid':
+        call('add', 'pid', str(os.getpid()), 'live task')
+    if sys.argv[2] == 'gone-pid':
+        child = subprocess.Popen([sys.executable, '-c', 'import sys; sys.stdin.read()'],
+            cwd=root, stdin=subprocess.PIPE, start_new_session=True)
+        call('add', 'pid', str(child.pid), 'short task')
+        child.communicate(timeout=5)
+    if sys.argv[2] == 'container':
+        call('add', 'container', 'test-owned/container', 'working container')
+    print(json.dumps(record), flush=True)
+    sys.stdin.read()
+    """
+        with subprocess.Popen(
+            [sys.executable, "-c", program, str(SESSION_CLEANUP), recorded_kind],
+            cwd=REPO_ROOT,
+            env={**os.environ, "KNTNT_HOME": str(tmp_path)},
+            stdin=subprocess.PIPE,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+            start_new_session=True,
+        ) as owner:
+            try:
+                assert owner.stdout is not None
+                record = json.loads(owner.stdout.readline())
+                manifest = Path(record["manifest"])
+                before = manifest.read_bytes()
+                os.utime(manifest, (1, 1))
+                _run(
+                    SESSION_CLEANUP,
+                    "hook",
+                    "--harness=codex",
+                    "--event=SessionStart",
+                    home=tmp_path,
+                    stdin='{"session_id":"sibling"}',
+                )
+                assert manifest.exists(), "a sibling swept the working session"
+                assert manifest.read_bytes() == before
+                assert (tmp_path / "scratch").exists()
+>               assert record["session"] == "working"
+E               AssertionError: assert 'unowned-80534' == 'working'
+E                 
+E                 - working
+E                 + unowned-80534
+
+tests/test_features.py:1035: AssertionError
+______ test_detached_tools_remain_owned_until_the_harness_exits[live-pid] ______
+
+tmp_path = PosixPath('/Users/thomas/Projects/skills-388-391/.scratch-390/tmp/pytest-of-thomas/pytest-10/test_detached_tools_remain_own1')
+recorded_kind = 'live-pid'
+
+    @pytest.mark.parametrize("recorded_kind", ["path", "live-pid", "gone-pid", "container"])
+    def test_detached_tools_remain_owned_until_the_harness_exits(
+        tmp_path: Path, recorded_kind: str
+    ) -> None:
+        """Tool and hook POSIX sessions may die while their Harness keeps working."""
+    
+        program = """
+    import json, os, subprocess, sys
+    from pathlib import Path
+    script = sys.argv[1]
+    root = Path(os.environ['KNTNT_HOME'])
+    os.environ['CLAUDE_PID'] = str(os.getpid())
+    os.environ['CLAUDE_CODE_SESSION_ID'] = 'working'
+    os.environ['CODEX_SESSION_ID'] = 'outer-codex'
+    def call(*args, payload=''):
+        result = subprocess.run([sys.executable, script, *args], cwd=root,
+            input=payload, text=True, capture_output=True, start_new_session=True)
+        assert result.returncode == 0, result.stderr
+        return json.loads(result.stdout) if result.stdout else None
+    call('hook', '--harness=claude-code', '--event=SessionStart',
+         payload='{"session_id":"working"}')
+    scratch = root / 'scratch'
+    scratch.mkdir()
+    record = call('add', 'path', str(scratch), 'working scratch')
+    if sys.argv[2] == 'live-pid':
+        call('add', 'pid', str(os.getpid()), 'live task')
+    if sys.argv[2] == 'gone-pid':
+        child = subprocess.Popen([sys.executable, '-c', 'import sys; sys.stdin.read()'],
+            cwd=root, stdin=subprocess.PIPE, start_new_session=True)
+        call('add', 'pid', str(child.pid), 'short task')
+        child.communicate(timeout=5)
+    if sys.argv[2] == 'container':
+        call('add', 'container', 'test-owned/container', 'working container')
+    print(json.dumps(record), flush=True)
+    sys.stdin.read()
+    """
+        with subprocess.Popen(
+            [sys.executable, "-c", program, str(SESSION_CLEANUP), recorded_kind],
+            cwd=REPO_ROOT,
+            env={**os.environ, "KNTNT_HOME": str(tmp_path)},
+            stdin=subprocess.PIPE,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+            start_new_session=True,
+        ) as owner:
+            try:
+                assert owner.stdout is not None
+                record = json.loads(owner.stdout.readline())
+                manifest = Path(record["manifest"])
+                before = manifest.read_bytes()
+                os.utime(manifest, (1, 1))
+                _run(
+                    SESSION_CLEANUP,
+                    "hook",
+                    "--harness=codex",
+                    "--event=SessionStart",
+                    home=tmp_path,
+                    stdin='{"session_id":"sibling"}',
+                )
+                assert manifest.exists(), "a sibling swept the working session"
+                assert manifest.read_bytes() == before
+                assert (tmp_path / "scratch").exists()
+>               assert record["session"] == "working"
+E               AssertionError: assert 'unowned-80586' == 'working'
+E                 
+E                 - working
+E                 + unowned-80586
+
+tests/test_features.py:1035: AssertionError
+______ test_detached_tools_remain_owned_until_the_harness_exits[gone-pid] ______
+
+tmp_path = PosixPath('/Users/thomas/Projects/skills-388-391/.scratch-390/tmp/pytest-of-thomas/pytest-10/test_detached_tools_remain_own2')
+recorded_kind = 'gone-pid'
+
+    @pytest.mark.parametrize("recorded_kind", ["path", "live-pid", "gone-pid", "container"])
+    def test_detached_tools_remain_owned_until_the_harness_exits(
+        tmp_path: Path, recorded_kind: str
+    ) -> None:
+        """Tool and hook POSIX sessions may die while their Harness keeps working."""
+    
+        program = """
+    import json, os, subprocess, sys
+    from pathlib import Path
+    script = sys.argv[1]
+    root = Path(os.environ['KNTNT_HOME'])
+    os.environ['CLAUDE_PID'] = str(os.getpid())
+    os.environ['CLAUDE_CODE_SESSION_ID'] = 'working'
+    os.environ['CODEX_SESSION_ID'] = 'outer-codex'
+    def call(*args, payload=''):
+        result = subprocess.run([sys.executable, script, *args], cwd=root,
+            input=payload, text=True, capture_output=True, start_new_session=True)
+        assert result.returncode == 0, result.stderr
+        return json.loads(result.stdout) if result.stdout else None
+    call('hook', '--harness=claude-code', '--event=SessionStart',
+         payload='{"session_id":"working"}')
+    scratch = root / 'scratch'
+    scratch.mkdir()
+    record = call('add', 'path', str(scratch), 'working scratch')
+    if sys.argv[2] == 'live-pid':
+        call('add', 'pid', str(os.getpid()), 'live task')
+    if sys.argv[2] == 'gone-pid':
+        child = subprocess.Popen([sys.executable, '-c', 'import sys; sys.stdin.read()'],
+            cwd=root, stdin=subprocess.PIPE, start_new_session=True)
+        call('add', 'pid', str(child.pid), 'short task')
+        child.communicate(timeout=5)
+    if sys.argv[2] == 'container':
+        call('add', 'container', 'test-owned/container', 'working container')
+    print(json.dumps(record), flush=True)
+    sys.stdin.read()
+    """
+        with subprocess.Popen(
+            [sys.executable, "-c", program, str(SESSION_CLEANUP), recorded_kind],
+            cwd=REPO_ROOT,
+            env={**os.environ, "KNTNT_HOME": str(tmp_path)},
+            stdin=subprocess.PIPE,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+            start_new_session=True,
+        ) as owner:
+            try:
+                assert owner.stdout is not None
+                record = json.loads(owner.stdout.readline())
+                manifest = Path(record["manifest"])
+                before = manifest.read_bytes()
+                os.utime(manifest, (1, 1))
+                _run(
+                    SESSION_CLEANUP,
+                    "hook",
+                    "--harness=codex",
+                    "--event=SessionStart",
+                    home=tmp_path,
+                    stdin='{"session_id":"sibling"}',
+                )
+                assert manifest.exists(), "a sibling swept the working session"
+                assert manifest.read_bytes() == before
+                assert (tmp_path / "scratch").exists()
+>               assert record["session"] == "working"
+E               AssertionError: assert 'unowned-80652' == 'working'
+E                 
+E                 - working
+E                 + unowned-80652
+
+tests/test_features.py:1035: AssertionError
+_____ test_detached_tools_remain_owned_until_the_harness_exits[container] ______
+
+tmp_path = PosixPath('/Users/thomas/Projects/skills-388-391/.scratch-390/tmp/pytest-of-thomas/pytest-10/test_detached_tools_remain_own3')
+recorded_kind = 'container'
+
+    @pytest.mark.parametrize("recorded_kind", ["path", "live-pid", "gone-pid", "container"])
+    def test_detached_tools_remain_owned_until_the_harness_exits(
+        tmp_path: Path, recorded_kind: str
+    ) -> None:
+        """Tool and hook POSIX sessions may die while their Harness keeps working."""
+    
+        program = """
+    import json, os, subprocess, sys
+    from pathlib import Path
+    script = sys.argv[1]
+    root = Path(os.environ['KNTNT_HOME'])
+    os.environ['CLAUDE_PID'] = str(os.getpid())
+    os.environ['CLAUDE_CODE_SESSION_ID'] = 'working'
+    os.environ['CODEX_SESSION_ID'] = 'outer-codex'
+    def call(*args, payload=''):
+        result = subprocess.run([sys.executable, script, *args], cwd=root,
+            input=payload, text=True, capture_output=True, start_new_session=True)
+        assert result.returncode == 0, result.stderr
+        return json.loads(result.stdout) if result.stdout else None
+    call('hook', '--harness=claude-code', '--event=SessionStart',
+         payload='{"session_id":"working"}')
+    scratch = root / 'scratch'
+    scratch.mkdir()
+    record = call('add', 'path', str(scratch), 'working scratch')
+    if sys.argv[2] == 'live-pid':
+        call('add', 'pid', str(os.getpid()), 'live task')
+    if sys.argv[2] == 'gone-pid':
+        child = subprocess.Popen([sys.executable, '-c', 'import sys; sys.stdin.read()'],
+            cwd=root, stdin=subprocess.PIPE, start_new_session=True)
+        call('add', 'pid', str(child.pid), 'short task')
+        child.communicate(timeout=5)
+    if sys.argv[2] == 'container':
+        call('add', 'container', 'test-owned/container', 'working container')
+    print(json.dumps(record), flush=True)
+    sys.stdin.read()
+    """
+        with subprocess.Popen(
+            [sys.executable, "-c", program, str(SESSION_CLEANUP), recorded_kind],
+            cwd=REPO_ROOT,
+            env={**os.environ, "KNTNT_HOME": str(tmp_path)},
+            stdin=subprocess.PIPE,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+            start_new_session=True,
+        ) as owner:
+            try:
+                assert owner.stdout is not None
+                record = json.loads(owner.stdout.readline())
+                manifest = Path(record["manifest"])
+                before = manifest.read_bytes()
+                os.utime(manifest, (1, 1))
+                _run(
+                    SESSION_CLEANUP,
+                    "hook",
+                    "--harness=codex",
+                    "--event=SessionStart",
+                    home=tmp_path,
+                    stdin='{"session_id":"sibling"}',
+                )
+                assert manifest.exists(), "a sibling swept the working session"
+                assert manifest.read_bytes() == before
+                assert (tmp_path / "scratch").exists()
+>               assert record["session"] == "working"
+E               AssertionError: assert 'unowned-80738' == 'working'
+E                 
+E                 - working
+E                 + unowned-80738
+
+tests/test_features.py:1035: AssertionError
+_________ test_lifecycle_retires_legacy_pointers_and_logs_the_sweeper __________
+
+tmp_path = PosixPath('/Users/thomas/Projects/skills-388-391/.scratch-390/tmp/pytest-of-thomas/pytest-10/test_lifecycle_retires_legacy_0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x106c1ea50>
+
+    def test_lifecycle_retires_legacy_pointers_and_logs_the_sweeper(
+        tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        """Start/end need no terminal pointer and report subject and initiator."""
+    
+        cleanup = _module(SESSION_CLEANUP, "kntnt_session_cleanup")
+        monkeypatch.setenv("KNTNT_HOME", str(tmp_path))
+        pointers = tmp_path / ".kntnt/session-cleanup/current"
+        pointers.mkdir(parents=True)
+        (pointers / "123").write_text("old")
+        orphan = cleanup.manifest_path("orphan")
+        cleanup.append(
+            orphan,
+            {
+                "kind": "session",
+                "id": "orphan",
+                "owner_pid": 999999999,
+                "owner_started": "gone",
+            },
+        )
+        cleanup.append(
+            orphan, {"kind": "path", "id": str(tmp_path / "gone"), "why": "scratch"}
+        )
+        empty = cleanup.manifest_path("empty")
+        cleanup.append(
+            empty,
+            {
+                "kind": "session",
+                "id": "empty",
+                "owner_pid": 999999999,
+                "owner_started": "gone",
+            },
+        )
+    
+        cleanup.hook("codex", "SessionStart", {"session_id": "new"})
+        cleanup.hook("codex", "SessionEnd", {"session_id": "new"})
+    
+        assert not pointers.exists()
+        assert not cleanup.manifest_path("new").exists()
+        records = [json.loads(line) for line in cleanup.log_path().read_text().splitlines()]
+        swept = [row for row in records if row.get("why") == "start"]
+>       assert {row["session"] for row in swept} == {"orphan", "empty"}
+E       AssertionError: assert set() == {'empty', 'orphan'}
+E         
+E         Extra items in the right set:
+E         'empty'
+E         'orphan'
+E         Use -v to get more diff
+
+tests/test_features.py:1096: AssertionError
+_______________ test_the_manager_s_two_words_answer_with_the_job _______________
+
+tmp_path = PosixPath('/Users/thomas/Projects/skills-388-391/.scratch-390/tmp/pytest-of-thomas/pytest-10/test_the_manager_s_two_words_a0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x106c1f200>
+
+    def test_the_manager_s_two_words_answer_with_the_job(
+        tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        """Both answers carry the `scheduler` key the Manager is handed."""
+    
+        monkeypatch.setenv("HOME", str(tmp_path))
+        _launchctl(tmp_path, monkeypatch)
+    
+        installed = capture.install_integrations([])
+        removed = capture.remove_integrations([])
+    
+>       assert installed["scheduler"]["state"] in {"not loaded", "unsatisfied"}
+E       AssertionError: assert 'loaded' in {'not loaded', 'unsatisfied'}
+
+tests/test_ms_scheduler.py:250: AssertionError
+___ test_under_a_redirected_home_install_writes_the_plist_and_loads_nothing ____
+
+tmp_path = PosixPath('/Users/thomas/Projects/skills-388-391/.scratch-390/tmp/pytest-of-thomas/pytest-10/test_under_a_redirected_home_i0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x106c1dcd0>
+
+    def test_under_a_redirected_home_install_writes_the_plist_and_loads_nothing(
+        tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        """A Manager Sandbox redirects HOME, and the real `launchd` is never reached."""
+    
+        home = tmp_path / "home"
+        home.mkdir()
+        monkeypatch.setenv("HOME", str(home))
+        log = _launchctl(tmp_path, monkeypatch)
+    
+        report = capture.install(
+            capture.default_data(), Path.home(), [], [], platform="darwin"
+        )
+    
+>       assert report["scheduler"]["state"] == "not loaded"
+E       AssertionError: assert 'loaded' == 'not loaded'
+E         
+E         - not loaded
+E         ? ----
+E         + loaded
+
+tests/test_ms_scheduler.py:271: AssertionError
+_ test_an_install_status_and_disable_under_a_temporary_root_call_no_launchctl __
+
+tmp_path = PosixPath('/Users/thomas/Projects/skills-388-391/.scratch-390/tmp/pytest-of-thomas/pytest-10/test_an_install_status_and_dis0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x106c1f410>
+
+    def test_an_install_status_and_disable_under_a_temporary_root_call_no_launchctl(
+        tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        """The gate is where the plist is written, so a temporary root never loads."""
+    
+        log = _launchctl(tmp_path, monkeypatch)
+        data, root = tmp_path / "data", tmp_path / "home"
+    
+        capture.install(data, root, [], COMMAND, platform="darwin")
+        reported = capture.status(data, root, platform="darwin")["scheduler"]
+        removed = capture.disable(data, root, [], platform="darwin")["scheduler"]
+    
+>       assert reported["health"] == "degraded"
+E       AssertionError: assert 'healthy' == 'degraded'
+E         
+E         - degraded
+E         + healthy
+
+tests/test_ms_scheduler.py:288: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_features.py::test_only_the_age_backstop_releases_unowned_manifests[then-True]
+FAILED tests/test_features.py::test_detached_tools_remain_owned_until_the_harness_exits[path]
+FAILED tests/test_features.py::test_detached_tools_remain_owned_until_the_harness_exits[live-pid]
+FAILED tests/test_features.py::test_detached_tools_remain_owned_until_the_harness_exits[gone-pid]
+FAILED tests/test_features.py::test_detached_tools_remain_owned_until_the_harness_exits[container]
+FAILED tests/test_features.py::test_lifecycle_retires_legacy_pointers_and_logs_the_sweeper
+FAILED tests/test_ms_scheduler.py::test_the_manager_s_two_words_answer_with_the_job
+FAILED tests/test_ms_scheduler.py::test_under_a_redirected_home_install_writes_the_plist_and_loads_nothing
+FAILED tests/test_ms_scheduler.py::test_an_install_status_and_disable_under_a_temporary_root_call_no_launchctl
+ERROR tests/test_mirror.py::test_a_clean_run_exits_zero_and_reports_what_it_fetched
+9 failed, 1 error in 5.77s

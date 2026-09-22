@@ -1,0 +1,82 @@
+Using CPython 3.12.13
+Creating virtual environment at: .venv
+warning: No `requires-python` value found in the workspace. Defaulting to `>=3.12`.
+Installed 6 packages in 13ms
+FFF                                                                      [100%]
+=================================== FAILURES ===================================
+_______________ test_the_manager_s_two_words_answer_with_the_job _______________
+
+tmp_path = PosixPath('/Users/thomas/Projects/skills/.git/orchestrate-session-389-391-gpt/scratch/390/retry-59e6c1/tmp/pytest-of-thomas/pytest-2/test_the_manager_s_two_words_a0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x1068178f0>
+
+    def test_the_manager_s_two_words_answer_with_the_job(
+        tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        """Both answers carry the `scheduler` key the Manager is handed."""
+    
+        monkeypatch.setenv("HOME", str(tmp_path))
+        _launchctl(tmp_path, monkeypatch)
+    
+        installed = capture.install_integrations([])
+        removed = capture.remove_integrations([])
+    
+>       assert installed["scheduler"]["state"] in {"not loaded", "unsatisfied"}
+E       AssertionError: assert 'loaded' in {'not loaded', 'unsatisfied'}
+
+tests/test_ms_scheduler.py:250: AssertionError
+___ test_under_a_redirected_home_install_writes_the_plist_and_loads_nothing ____
+
+tmp_path = PosixPath('/Users/thomas/Projects/skills/.git/orchestrate-session-389-391-gpt/scratch/390/retry-59e6c1/tmp/pytest-of-thomas/pytest-2/test_under_a_redirected_home_i0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x1067fb1a0>
+
+    def test_under_a_redirected_home_install_writes_the_plist_and_loads_nothing(
+        tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        """A Manager Sandbox redirects HOME, and the real `launchd` is never reached."""
+    
+        home = tmp_path / "home"
+        home.mkdir()
+        monkeypatch.setenv("HOME", str(home))
+        log = _launchctl(tmp_path, monkeypatch)
+    
+        report = capture.install(
+            capture.default_data(), Path.home(), [], [], platform="darwin"
+        )
+    
+>       assert report["scheduler"]["state"] == "not loaded"
+E       AssertionError: assert 'loaded' == 'not loaded'
+E         
+E         - not loaded
+E         ? ----
+E         + loaded
+
+tests/test_ms_scheduler.py:271: AssertionError
+_ test_an_install_status_and_disable_under_a_temporary_root_call_no_launchctl __
+
+tmp_path = PosixPath('/Users/thomas/Projects/skills/.git/orchestrate-session-389-391-gpt/scratch/390/retry-59e6c1/tmp/pytest-of-thomas/pytest-2/test_an_install_status_and_dis0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x1067f9b50>
+
+    def test_an_install_status_and_disable_under_a_temporary_root_call_no_launchctl(
+        tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        """The gate is where the plist is written, so a temporary root never loads."""
+    
+        log = _launchctl(tmp_path, monkeypatch)
+        data, root = tmp_path / "data", tmp_path / "home"
+    
+        capture.install(data, root, [], COMMAND, platform="darwin")
+        reported = capture.status(data, root, platform="darwin")["scheduler"]
+        removed = capture.disable(data, root, [], platform="darwin")["scheduler"]
+    
+>       assert reported["health"] == "degraded"
+E       AssertionError: assert 'healthy' == 'degraded'
+E         
+E         - degraded
+E         + healthy
+
+tests/test_ms_scheduler.py:288: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_ms_scheduler.py::test_the_manager_s_two_words_answer_with_the_job
+FAILED tests/test_ms_scheduler.py::test_under_a_redirected_home_install_writes_the_plist_and_loads_nothing
+FAILED tests/test_ms_scheduler.py::test_an_install_status_and_disable_under_a_temporary_root_call_no_launchctl
+3 failed, 22 deselected in 0.86s

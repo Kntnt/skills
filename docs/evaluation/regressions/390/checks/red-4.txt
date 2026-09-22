@@ -1,0 +1,46 @@
+FF                                                                       [100%]
+=================================== FAILURES ===================================
+________ test_unpairable_first_paragraph_does_not_select_a_later_one[] _________
+
+tmp_path = PosixPath('/Users/thomas/Projects/skills-388-391/.scratch-390/tmp/pytest-of-thomas/pytest-6/test_unpairable_first_paragrap0')
+first_paragraph = ''
+
+    @pytest.mark.parametrize("first_paragraph", ["", "…"])
+    def test_unpairable_first_paragraph_does_not_select_a_later_one(
+        tmp_path: Path, first_paragraph: str
+    ) -> None:
+        """A present but empty or punctuation-only paragraph supplies no sentence."""
+    
+        text = f"<h2>En rubrik</h2><p>{first_paragraph}</p><p>Senare prosa.</p>"
+    
+        _, payload = _measure(tmp_path, text)
+    
+        pair = payload["heading_pairs"][1]
+>       assert pair["following"] is None
+E       AssertionError: assert '' is None
+
+tests/test_article_anatomy.py:353: AssertionError
+_____ test_unpairable_first_paragraph_does_not_select_a_later_one[\u2026] ______
+
+tmp_path = PosixPath('/Users/thomas/Projects/skills-388-391/.scratch-390/tmp/pytest-of-thomas/pytest-6/test_unpairable_first_paragrap1')
+first_paragraph = '…'
+
+    @pytest.mark.parametrize("first_paragraph", ["", "…"])
+    def test_unpairable_first_paragraph_does_not_select_a_later_one(
+        tmp_path: Path, first_paragraph: str
+    ) -> None:
+        """A present but empty or punctuation-only paragraph supplies no sentence."""
+    
+        text = f"<h2>En rubrik</h2><p>{first_paragraph}</p><p>Senare prosa.</p>"
+    
+        _, payload = _measure(tmp_path, text)
+    
+        pair = payload["heading_pairs"][1]
+>       assert pair["following"] is None
+E       AssertionError: assert '…' is None
+
+tests/test_article_anatomy.py:353: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_article_anatomy.py::test_unpairable_first_paragraph_does_not_select_a_later_one[]
+FAILED tests/test_article_anatomy.py::test_unpairable_first_paragraph_does_not_select_a_later_one[\u2026]
+2 failed, 41 deselected in 0.35s

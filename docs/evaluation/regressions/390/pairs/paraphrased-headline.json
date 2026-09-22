@@ -1,0 +1,104 @@
+{
+  "ok": true,
+  "format": "markdown",
+  "conforms": true,
+  "failures": [],
+  "norms": [
+    {
+      "part": "lead",
+      "rule": "They should begin with different first words, and an everyday word such as *the* or *it* counts like any other.",
+      "measured": "both open on “the”",
+      "text": "The trial adds Saturday access to the library's …"
+    }
+  ],
+  "typical": {
+    "paragraphs": 4,
+    "paragraphs_of_two_or_three_sentences": 3,
+    "sections": 2,
+    "sections_of_two_or_three_paragraphs": 0
+  },
+  "parts": {
+    "headline": {
+      "text": "Weekend access is a temporary experiment",
+      "characters": 40,
+      "words": 6
+    },
+    "standfirst": {
+      "text": "The Saturday service will run as a limited …",
+      "words": 9,
+      "sentences_estimate": 1,
+      "paragraphs": 1
+    },
+    "byline": {
+      "text": "By Alex Reed",
+      "words": 3
+    },
+    "lead": {
+      "text": "The trial adds Saturday access to the library's …",
+      "words": 19,
+      "sentences_estimate": 2,
+      "paragraphs": 1
+    },
+    "sections": [
+      {
+        "subheading": {
+          "text": "Riverton will review the trial in January",
+          "characters": 41,
+          "words": 7
+        },
+        "paragraphs": [
+          {
+            "text": "Riverton staff will record Saturday visits during October, …",
+            "words": 27,
+            "sentences_estimate": 2
+          }
+        ]
+      },
+      {
+        "subheading": {
+          "text": "Saturday visitors can use the usual entrance",
+          "characters": 44,
+          "words": 7
+        },
+        "paragraphs": [
+          {
+            "text": "Saturday opening runs from ten until two. Visitors …",
+            "words": 26,
+            "sentences_estimate": 2
+          }
+        ]
+      }
+    ],
+    "other": []
+  },
+  "heading_pairs": [
+    {
+      "id": "headline-standfirst",
+      "kind": "headline-standfirst",
+      "heading": "Weekend access is a temporary experiment",
+      "following": "The Saturday service will run as a limited trial.",
+      "shared_words": [
+        "a"
+      ]
+    },
+    {
+      "id": "subheading-1",
+      "kind": "subheading-first-sentence-estimate",
+      "heading": "Riverton will review the trial in January",
+      "following": "Riverton staff will record Saturday visits during October, November and December.",
+      "shared_words": [
+        "riverton",
+        "will"
+      ]
+    },
+    {
+      "id": "subheading-2",
+      "kind": "subheading-first-sentence-estimate",
+      "heading": "Saturday visitors can use the usual entrance",
+      "following": "Saturday opening runs from ten until two.",
+      "shared_words": [
+        "saturday"
+      ]
+    }
+  ]
+}

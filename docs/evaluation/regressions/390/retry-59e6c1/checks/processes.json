@@ -1,0 +1,34 @@
+[
+  {
+    "name": "ruff",
+    "command": "uvx ruff check .",
+    "pid": 78821,
+    "process_group": 78821,
+    "exit_status": 0,
+    "elapsed_seconds": 0.15137491701170802
+  },
+  {
+    "name": "format",
+    "command": "uvx ruff format --check .",
+    "pid": 78837,
+    "process_group": 78837,
+    "exit_status": 1,
+    "elapsed_seconds": 0.10952499997802079
+  },
+  {
+    "name": "mypy",
+    "command": "uvx --with types-PyYAML --with pytest --with httpx==0.28.1 --with selectolax==0.4.11 --with types-tinycss2 --with types-regex mypy skills/kntnt/scripts/kntnt.py skills/kntnt/library/scripts/argument_grammar.py skills/kntnt/library/scripts/article_anatomy.py skills/kntnt/library/scripts/ship.py skills/kntnt/library/scripts/integrations.py skills/kntnt/library/scripts/languages.py skills/models/model-selector/scripts/catalogue.py skills/models/model-selector/scripts/profiles.py skills/models/model-selector/scripts/evidence.py skills/models/model-selector/scripts/launch.py skills/models/model-selector/scripts/selection.py skills/models/model-selector/scripts/quota.py skills/models/model-selector/scripts/record.py skills/models/model-selector/scripts/capture.py skills/models/model-selector/scripts/grade.py skills/models/model-selector/scripts/setup_apply.py skills/code/orchestrate/scripts/run.py skills/producivity/rename-invoices/scripts/rename_invoices.py skills/agents/explain/scripts/invoke.py skills/web/mirror/scripts/mirror.py docs/evaluation/editorial-388/harness/staged_run.py docs/evaluation/editorial-388/harness/trace_index.py tests",
+    "pid": 78846,
+    "process_group": 78846,
+    "exit_status": 0,
+    "elapsed_seconds": 3.2310403749579564
+  },
+  {
+    "name": "pytest",
+    "command": "uv run --with pytest --with pytest-xdist --with pyyaml pytest -n auto",
+    "pid": 78868,
+    "process_group": 78868,
+    "exit_status": 1,
+    "elapsed_seconds": 108.2825597920455
+  }
+]

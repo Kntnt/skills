@@ -7,6 +7,8 @@ import subprocess
 from pathlib import Path
 from typing import Any
 
+import pytest
+
 REPO_ROOT = Path(__file__).resolve().parent.parent
 LIBRARY = REPO_ROOT / "skills" / "kntnt" / "library"
 ANATOMY = LIBRARY / "scripts" / "article_anatomy.py"
@@ -193,6 +195,7 @@ def _figures(payload: Any) -> Any:
         "norms": payload["norms"],
         "typical": payload["typical"],
         "parts": parts,
+        "heading_pairs": payload["heading_pairs"],
     }
 
 
@@ -248,6 +251,179 @@ def test_a_conforming_article_reports_the_text_wide_figures(tmp_path: Path) -> N
         "sections": 2,
         "sections_of_two_or_three_paragraphs": 1,
     }
+
+
+# --- Heading pairs -------------------------------------------------------
+
+
+def test_heading_pairs_preserve_full_text_and_report_unjudged_overlap(
+    tmp_path: Path,
+) -> None:
+    """An echo is evidence for an editor, never a counted failure."""
+
+    headline = "Jag vet inte om rutan skulle hjälpa"
+    standfirst = (
+        "Jag vet inte om ytterligare en ruta gör möten bättre. Ändå vill jag prova."
+    )
+    text = _article(
+        headline=headline,
+        standfirst=standfirst,
+        body=f"## {headline}\n\n{standfirst}",
+    )
+
+    status, payload = _measure(tmp_path, text)
+
+    assert status == CONFORMS
+    assert payload["conforms"] is True
+    assert payload["failures"] == []
+    assert payload["norms"] == []
+    assert payload["heading_pairs"] == [
+        {
+            "id": "headline-standfirst",
+            "kind": "headline-standfirst",
+            "heading": headline,
+            "following": standfirst,
+            "shared_words": ["inte", "jag", "om", "vet"],
+        },
+        {
+            "id": "subheading-1",
+            "kind": "subheading-first-sentence-estimate",
+            "heading": headline,
+            "following": "Jag vet inte om ytterligare en ruta gör möten bättre.",
+            "shared_words": ["inte", "jag", "om", "vet"],
+        },
+    ]
+
+
+@pytest.mark.parametrize(
+    ("paragraph", "first"),
+    [
+        ("”Ska vi prova?” Nästa fråga väntar.", "”Ska vi prova?”"),
+        ("(Svaret är nej.) Nästa fråga väntar.", "(Svaret är nej.)"),
+        ("Really?! Yes.", "Really?!"),
+        ("Dr. Vik spoke. We listened.", "Dr."),
+        (
+            "Mätningen var 3.5 grader. Nästa mätning väntar.",
+            "Mätningen var 3.5 grader.",
+        ),
+        ("En ofullbordad tanke", "En ofullbordad tanke"),
+    ],
+)
+def test_first_sentence_is_an_estimate_that_preserves_terminal_closers(
+    tmp_path: Path, paragraph: str, first: str
+) -> None:
+    """Quotes stay visible; abbreviations and fragments disclose the estimate."""
+
+    _, payload = _measure(tmp_path, _article(body=f"## En fråga\n\n{paragraph}"))
+
+    pair = payload["heading_pairs"][1]
+    assert pair["kind"] == "subheading-first-sentence-estimate"
+    assert pair["following"] == first
+
+
+def test_each_subheading_pairs_only_with_its_own_first_prose(tmp_path: Path) -> None:
+    """Deeper headings and non-prose never lend another section's sentence."""
+
+    body = (
+        "## Ingen egen prosa\n\n### En underrubrik\n\n"
+        "```text\nInte prosa.\n```\n\n> Inte heller prosa.\n\n"
+        "Här börjar prosan. Här fortsätter den.\n\n"
+        "## Tomt avsnitt\n\n- Bara en lista\n\n"
+        "## Sista avsnittet\n\nSista avsnittets första mening."
+    )
+
+    _, payload = _measure(tmp_path, _article(body=body))
+
+    pairs = payload["heading_pairs"][1:]
+    assert [pair["id"] for pair in pairs] == [
+        "subheading-1",
+        "subheading-2",
+        "subheading-3",
+        "subheading-4",
+    ]
+    assert [pair["following"] for pair in pairs] == [
+        None,
+        "Här börjar prosan.",
+        None,
+        "Sista avsnittets första mening.",
+    ]
+    assert pairs[0]["shared_words"] is None
+    assert pairs[2]["shared_words"] is None
+
+
+@pytest.mark.parametrize("first_paragraph", ["", "…"])
+def test_unpairable_first_paragraph_does_not_select_a_later_one(
+    tmp_path: Path, first_paragraph: str
+) -> None:
+    """A present but empty or punctuation-only paragraph supplies no sentence."""
+
+    text = f"<h2>En rubrik</h2><p>{first_paragraph}</p><p>Senare prosa.</p>"
+
+    _, payload = _measure(tmp_path, text)
+
+    pair = payload["heading_pairs"][1]
+    assert pair["following"] is None
+    assert pair["shared_words"] is None
+
+
+def test_shared_words_normalize_case_punctuation_and_repeated_tokens(
+    tmp_path: Path,
+) -> None:
+    """Lexical tokens use NFC and casefold, without stemming or stop words."""
+
+    heading = "Åsa, ÅSA — O’Neil 2026: STRASSE; ruta/rutor"
+    paragraph = "A\u030asa möter O'NEIL 2026; Straße, ruta! Senare syns rutor."
+
+    _, payload = _measure(tmp_path, _article(body=f"## {heading}\n\n{paragraph}"))
+
+    pair = payload["heading_pairs"][1]
+    assert pair["heading"] == heading
+    assert pair["following"] == "Åsa möter O'NEIL 2026; Straße, ruta!"
+    assert pair["shared_words"] == ["2026", "neil", "o", "ruta", "strasse", "åsa"]
+
+
+@pytest.mark.parametrize(
+    ("headline", "standfirst"),
+    [(None, STANDFIRST), (HEADLINE, None), (None, None)],
+)
+def test_missing_front_members_are_null_without_changing_structural_failures(
+    tmp_path: Path, headline: str | None, standfirst: str | None
+) -> None:
+    """Missing material is not a zero-overlap pair and cannot be invented."""
+
+    status, payload = _measure(
+        tmp_path, _article(headline=headline, standfirst=standfirst)
+    )
+
+    pair = payload["heading_pairs"][0]
+    assert status == FAILS
+    assert pair["heading"] == headline
+    assert pair["following"] == (standfirst.strip("*") if standfirst else None)
+    assert pair["shared_words"] is None
+    expected = set()
+    if headline is None:
+        expected.add(HEADLINE_PART)
+    if standfirst is None:
+        expected.add(STANDFIRST_PART)
+    assert _parts(payload) == expected
+
+
+def test_standfirst_pair_contains_every_paragraph_and_ids_survive_rewording(
+    tmp_path: Path,
+) -> None:
+    """Even a structurally invalid standfirst is shown whole, never truncated."""
+
+    standfirst = "En första mening.\n\nEn andra mening."
+    _, before = _measure(tmp_path, _article(standfirst=standfirst))
+    _, after = _measure(
+        tmp_path,
+        _article(headline="En omformulerad huvudrubrik", standfirst=standfirst),
+    )
+
+    assert before["heading_pairs"][0]["following"] == standfirst
+    assert [pair["id"] for pair in before["heading_pairs"]] == [
+        pair["id"] for pair in after["heading_pairs"]
+    ]
 
 
 # --- The byline -----------------------------------------------------------

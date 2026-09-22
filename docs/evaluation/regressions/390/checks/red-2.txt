@@ -1,0 +1,72 @@
+FF....                                                                   [100%]
+=================================== FAILURES ===================================
+_ test_first_sentence_is_an_estimate_that_preserves_terminal_closers[\u201dSka vi prova?\u201d N\xe4sta fr\xe5ga v\xe4ntar.-\u201dSka vi prova?\u201d] _
+
+tmp_path = PosixPath('/Users/thomas/Projects/skills-388-391/.scratch-390/tmp/pytest-of-thomas/pytest-2/test_first_sentence_is_an_esti0')
+paragraph = '”Ska vi prova?” Nästa fråga väntar.', first = '”Ska vi prova?”'
+
+    @pytest.mark.parametrize(
+        ("paragraph", "first"),
+        [
+            ('”Ska vi prova?” Nästa fråga väntar.', '”Ska vi prova?”'),
+            ('(Svaret är nej.) Nästa fråga väntar.', '(Svaret är nej.)'),
+            ('Really?! Yes.', 'Really?!'),
+            ('Dr. Vik spoke. We listened.', 'Dr.'),
+            ('Mätningen var 3.5 grader. Nästa mätning väntar.', 'Mätningen var 3.5 grader.'),
+            ('En ofullbordad tanke', 'En ofullbordad tanke'),
+        ],
+    )
+    def test_first_sentence_is_an_estimate_that_preserves_terminal_closers(
+        tmp_path: Path, paragraph: str, first: str
+    ) -> None:
+        """Quotes stay visible; abbreviations and fragments disclose the estimate."""
+    
+        _, payload = _measure(tmp_path, _article(body=f"## En fråga\n\n{paragraph}"))
+    
+        pair = payload["heading_pairs"][1]
+        assert pair["kind"] == "subheading-first-sentence-estimate"
+>       assert pair["following"] == first
+E       AssertionError: assert '”Ska vi prova?' == '”Ska vi prova?”'
+E         
+E         - ”Ska vi prova?”
+E         ?               -
+E         + ”Ska vi prova?
+
+tests/test_article_anatomy.py:315: AssertionError
+_ test_first_sentence_is_an_estimate_that_preserves_terminal_closers[(Svaret \xe4r nej.) N\xe4sta fr\xe5ga v\xe4ntar.-(Svaret \xe4r nej.)] _
+
+tmp_path = PosixPath('/Users/thomas/Projects/skills-388-391/.scratch-390/tmp/pytest-of-thomas/pytest-2/test_first_sentence_is_an_esti1')
+paragraph = '(Svaret är nej.) Nästa fråga väntar.', first = '(Svaret är nej.)'
+
+    @pytest.mark.parametrize(
+        ("paragraph", "first"),
+        [
+            ('”Ska vi prova?” Nästa fråga väntar.', '”Ska vi prova?”'),
+            ('(Svaret är nej.) Nästa fråga väntar.', '(Svaret är nej.)'),
+            ('Really?! Yes.', 'Really?!'),
+            ('Dr. Vik spoke. We listened.', 'Dr.'),
+            ('Mätningen var 3.5 grader. Nästa mätning väntar.', 'Mätningen var 3.5 grader.'),
+            ('En ofullbordad tanke', 'En ofullbordad tanke'),
+        ],
+    )
+    def test_first_sentence_is_an_estimate_that_preserves_terminal_closers(
+        tmp_path: Path, paragraph: str, first: str
+    ) -> None:
+        """Quotes stay visible; abbreviations and fragments disclose the estimate."""
+    
+        _, payload = _measure(tmp_path, _article(body=f"## En fråga\n\n{paragraph}"))
+    
+        pair = payload["heading_pairs"][1]
+        assert pair["kind"] == "subheading-first-sentence-estimate"
+>       assert pair["following"] == first
+E       AssertionError: assert '(Svaret är nej.' == '(Svaret är nej.)'
+E         
+E         - (Svaret är nej.)
+E         ?                -
+E         + (Svaret är nej.
+
+tests/test_article_anatomy.py:315: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_article_anatomy.py::test_first_sentence_is_an_estimate_that_preserves_terminal_closers[\u201dSka vi prova?\u201d N\xe4sta fr\xe5ga v\xe4ntar.-\u201dSka vi prova?\u201d]
+FAILED tests/test_article_anatomy.py::test_first_sentence_is_an_estimate_that_preserves_terminal_closers[(Svaret \xe4r nej.) N\xe4sta fr\xe5ga v\xe4ntar.-(Svaret \xe4r nej.)]
+2 failed, 4 passed, 34 deselected in 0.49s
