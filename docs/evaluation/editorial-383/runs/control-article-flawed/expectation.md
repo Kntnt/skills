@@ -1,0 +1,3 @@
+# Frozen expectation
+
+Detect unsupported catastrophe/health certainty visible against explicit limits, a standfirst and lead that repeat each other and open on the same word, late concept and an unbroken paragraph mixing unlike jobs. The anatomy adds: no byline, which is reported as missing and left unfilled; a 187-word lead; no subheading anywhere, so the body has neither a section nor an ending; and a closing sales line unrelated to the explanation. The 39-character headline meets its limit and fails on truthfulness instead. Restore navigation without deleting measured facts, exclusions or funding uncertainty. A supplied-source investigation is not a remedy.

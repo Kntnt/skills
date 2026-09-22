@@ -32,7 +32,7 @@ Source material is outside the contract. The pass judges only the supplied text.
 
 The Correction Budget is any non-negative integer and defaults to one. `0` reports findings without correction; a larger value is a ceiling, not a quota.
 
-Each correction uses a fresh subagent with the complete current text and findings. Returned text is compared with the pre-round text and reviewed again before acceptance.
+Each correction uses a fresh subagent with the complete current text and findings. Returned text is compared with the pre-round text and reviewed again before acceptance. Every difference in it traces to a finding of the pass that commissioned the round, or to what repairing one required; a difference that traces to neither is restored from the pre-round text byte for byte, the rest of the round stands, and the restoration costs no budget and raises no finding.
 
 A correction removes the pattern without removing the passage's claim. A claim-losing correction is rejected and restored, and every removed claim is reported, as is every changed claim — one left standing with its scope, certainty, attribution, chronology, causality or meaning moved.
 
@@ -42,7 +42,7 @@ Repairs are the smallest changes that remove a pattern while preserving the writ
 
 One invocation handles exactly one text. Multiple files, globs, and directories are refused.
 
-The response is the default Output Target. A text delivered in the response arrives inside one fenced code block. **--output** writes elsewhere; **--in-place** replaces one writable local source file. The Skill reports the findings separately, in the text's own language, and every removed claim and every changed claim remains visible. Internal review reasoning is not output.
+The response is the default Output Target. A text delivered in the response arrives inside one fenced code block. **--output** writes elsewhere; **--in-place** replaces one writable local source file. The Skill reports the findings separately, in the text's own language, and every removed claim and every changed claim remains visible. Where the delivered text differs from the text as it arrived, the account closes with one paragraph saying by kind what the run changed beyond the claim account, without itemising it. Internal review reasoning is not output.
 
 A model never starts this Skill on its own. Typing `/unslop` is the complete trigger.
 

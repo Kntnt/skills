@@ -1,0 +1,8 @@
+# staged install: /Users/thomas/Projects/skills/.git/orchestrate-session-383-389-claude/383.scratch/install-post
+# staged install digest: 5352a85ca94ac33dc787f1eb501518f5ed22549bb5b56b86034a896bded21c32
+# staged install files: 73
+# run directory:
+581c1fd89f281bc83a6b65db85a364b4e45f0e486870c092596412cc551d61b2  ./inventory-after.txt
+20c9123405cdb34e7afa56e595ea072347ce40313efd02835c15c212ebce45f6  ./inventory-before.txt
+7e802b6b3d9682b3a1591561dfdcacaa05b7adf3ae7692e250add6c3b22925f6  ./response.md
+74b966f1352c4f42e75dc58a7f247bd42571fced8760bcf12064067b8b81de42  ./work/input.md

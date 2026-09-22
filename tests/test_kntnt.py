@@ -7577,6 +7577,7 @@ ANTI_SLOP = (
     / "editorial"
     / "anti-slop.md"
 )
+BASE_REVIEW = ANTI_SLOP.parent / "base.review.md"
 SLOP_PATTERNS = (
     "false contrast",
     "empty opening",
@@ -8889,6 +8890,47 @@ REMOVED_CLAIM_DUTY = "every removed claim"
 CHANGED_CLAIM_DUTY = "every changed claim"
 CLAIM_ELEMENTS = "scope, certainty, attribution, chronology, causality"
 
+# What the run checks a returned text for beside the claims. Comparing claim by
+# claim and nothing else let every difference that moves no claim through: a
+# rewritten heading, a re-split paragraph, `set … against` becoming
+# `weigh … against`, `channel` becoming `route`. Each difference now traces to
+# a finding of the review that commissioned the round, or to what repairing
+# that finding required, and one that traces to neither comes back byte for
+# byte from the pre-round text (issue #383).
+TRACE_TO_A_FINDING = "trace each one to a finding"
+TRACE_NECESSITATES = "or where that repair necessitates it"
+TRACE_UNTRACED_RESTORED = "traces to neither is not accepted"
+TRACE_BYTE_FOR_BYTE = "byte for byte from the pre-round"
+TRACE_IS_NOT_A_REJECTION = "spends no budget and is not a finding"
+
+# The one sentence the correction brief owes about it. The brief already tells
+# the subagent to repair what the findings name and nothing else; what it never
+# said is what happens to a difference that answers no finding (issue #383).
+BRIEF_UNTRACED_RESTORED = "traces to no finding is restored"
+
+# The delivery's closing paragraph. Changes to a claim, to meaning or to sense
+# stay itemised as #377 left them; corrections of spelling, slop and the like
+# are summarised by kind in one closing paragraph instead, and the paragraph is
+# built from the run's own comparison rather than from a subagent's note of
+# what it did — `post-opinion-en_GB-r1-b`'s reply described a change its own
+# returned text contradicted (issue #383).
+SUMMARY_BEYOND_THE_CLAIMS = "beyond the claim account"
+SUMMARY_BY_KIND = "by kind"
+SUMMARY_NOT_ITEMISED = "without itemising"
+SUMMARY_FROM_THE_RUNS_COMPARISON = "never from a correction subagent's note"
+SUMMARY_COVERS_EVERY_KIND = "every kind of difference"
+SUMMARY_IS_TRUE = "false against the delivered text"
+
+# The catalogue's own guard, which authorised the `channel` → `route`
+# substitutions because it was written as an exception inside the paragraph on
+# repair rather than as a test a reader applies before recording anything
+# (issue #383).
+GUARD_HEADING = "## The test before a pattern is recorded"
+GUARD_IMAGINED_REPAIR = "Make the repair in your head before you record"
+GUARD_NOTHING_RECORDED = "the pattern is not present and nothing is recorded"
+SYNONYM_ONE_THING = "only where the names denote one thing"
+SYNONYM_TWO_THINGS = "not cycling however often they alternate"
+
 
 def test_the_loop_stops_where_an_earlier_repair_created_the_finding() -> None:
     """A loop answering for its own work repairs what it did last round.
@@ -9083,6 +9125,181 @@ def test_re_review_rejects_and_reports_a_correction_that_loses_a_claim() -> None
                 f" reader of it settles that for themselves (issue #377). See"
                 f" {STANDARD}."
             )
+
+
+def test_every_difference_a_round_returns_traces_to_a_finding() -> None:
+    """A claim comparison cannot see a difference that moves no claim.
+
+    Step 7 compared the returned text with the pre-round text claim by claim
+    and nothing else, and the correction brief's *repair what the findings name
+    and nothing else* had no party verifying it. So a rewritten heading, a
+    re-split paragraph and a substituted verb passed every check the run made,
+    and six of sixteen judgements of #377's post-change arm failed on exactly
+    that. The trace check is the missing reader: every difference answers a
+    finding of the review that commissioned the round, or answers what
+    repairing that finding required, and a difference answering neither is
+    restored byte for byte from the pre-round text while the rest of the round
+    stands (issue #383).
+    """
+
+    for body_path, brief_path in (
+        (REDLINE, REDLINE_CORRECTION),
+        (UNSLOP, UNSLOP_CORRECTION),
+    ):
+        body = body_path.read_text(encoding="utf-8")
+
+        assert TRACE_TO_A_FINDING in body, (
+            f"{body_path}: step 7 compares the returned text with the pre-round"
+            f" text claim by claim and nothing else, so a difference that moves"
+            f" no claim is accepted without anything having read it"
+            f" (issue #383). See {STANDARD}."
+        )
+        assert TRACE_NECESSITATES in body, (
+            f"{body_path}: the trace check names no consequence of a repair, so"
+            f" an agreement fixed after a changed subject traces to nothing and"
+            f" is restored on top of the repair that required it (issue #383)."
+            f" See {STANDARD}."
+        )
+        assert TRACE_UNTRACED_RESTORED in body, (
+            f"{body_path}: a difference the review never asked for can still"
+            f" become the current artifact, which is the whole of what this"
+            f" check exists to stop (issue #383). See {STANDARD}."
+        )
+        assert TRACE_BYTE_FOR_BYTE in body, (
+            f"{body_path}: the step does not say the passage comes back from"
+            f" the pre-round text unchanged, so restoring it is left to the"
+            f" run's own wording — and wording of the orchestrator's own is"
+            f" what a restoration exists to avoid writing (issue #383). See"
+            f" {STANDARD}."
+        )
+        assert TRACE_IS_NOT_A_REJECTION in body, (
+            f"{body_path}: a restoration is not held apart from the claim"
+            f" comparison's rejection, so a run may spend a round of budget or"
+            f" raise a finding over a passage it simply put back (issue #383)."
+            f" See {STANDARD}."
+        )
+
+        assert BRIEF_UNTRACED_RESTORED in brief_path.read_text(encoding="utf-8"), (
+            f"{brief_path}: the brief tells the subagent to repair what the"
+            f" findings name and nothing else without saying what becomes of a"
+            f" difference that answers no finding, so the one party that could"
+            f" avoid the work never learns it will be undone (issue #383). See"
+            f" {STANDARD}."
+        )
+
+    assert TRACE_TO_A_FINDING in BASE_REVIEW.read_text(encoding="utf-8"), (
+        f"{BASE_REVIEW}: the review extension says what a correction is"
+        f" compared against and asks only for its claims beside the defect, so"
+        f" the surface a reviewing Skill meets the rule on still describes the"
+        f" narrower comparison (issue #383). See {STANDARD}."
+    )
+
+
+def test_the_delivery_summarises_what_it_changed_beyond_the_claims() -> None:
+    """An account of the claims alone leaves every other difference unsaid.
+
+    The delivery step asked for the unresolved findings and the claim account,
+    and beyond those only for what the review resolved — so a reply could say
+    `no claim was removed or changed` and list nothing while three words
+    differed, and another could describe a change its own returned text
+    contradicted. Changes to a claim stay itemised as #377 left them; what else
+    the run did is one closing paragraph by kind, built from the run's own
+    comparison of the text as it arrived with the text it delivers, with every
+    kind of difference covered and nothing in it false against that text
+    (issue #383).
+    """
+
+    for body_path, help_path in ((REDLINE, REDLINE_HELP), (UNSLOP, UNSLOP_HELP)):
+        body = body_path.read_text(encoding="utf-8")
+
+        assert SUMMARY_BEYOND_THE_CLAIMS in body, (
+            f"{body_path}: the delivery step names the claim account and the"
+            f" unresolved findings and stops, so every difference that touched"
+            f" no claim is delivered without a word (issue #383). See"
+            f" {STANDARD}."
+        )
+        assert SUMMARY_BY_KIND in body and SUMMARY_NOT_ITEMISED in body, (
+            f"{body_path}: the closing summary is not held to kinds, so it"
+            f" either itemises what the account was widened in order not to"
+            f" itemise or says nothing in particular (issue #383). See"
+            f" {STANDARD}."
+        )
+        assert SUMMARY_FROM_THE_RUNS_COMPARISON in body, (
+            f"{body_path}: the summary may be built from the correction"
+            f" subagent's account of its own work, which is the one reader that"
+            f" cannot check it — the same reason a correction is verified by"
+            f" review (issue #383). See {STANDARD}."
+        )
+        assert SUMMARY_COVERS_EVERY_KIND in body, (
+            f"{body_path}: the summary owes no completeness, so a run may name"
+            f" one kind of difference and leave another out (issue #383). See"
+            f" {STANDARD}."
+        )
+        assert SUMMARY_IS_TRUE in body, (
+            f"{body_path}: the summary owes nothing to the text it is about, so"
+            f" a sentence false against the delivered text satisfies it"
+            f" (issue #383). See {STANDARD}."
+        )
+
+        page = help_path.read_text(encoding="utf-8")
+        assert SUMMARY_BEYOND_THE_CLAIMS in page, (
+            f"{help_path}: the manpage still describes the account as the"
+            f" findings and the claims alone, so a caller reading it does not"
+            f" learn that the reply says what else the run changed"
+            f" (issue #383). See {STANDARD}."
+        )
+
+
+def test_the_catalogue_states_its_guard_as_a_test_before_a_finding() -> None:
+    """An exception inside the repair paragraph authorised the substitutions.
+
+    The guard was there — *where a phrase is doing real work … the pattern is
+    not present and nothing is changed* — but it sat in the paragraph about how
+    to repair, so it read as a licence to be careful while repairing rather
+    than as a reason not to record anything. It is now a test applied before a
+    pattern becomes a finding: make the repair in your head, and where a claim
+    then asserts more, less or something else, or a distinction the text drew
+    is gone, nothing is recorded. *Synonym cycling* says what that means where
+    it was observed failing — two words a text uses for two things are not
+    cycling, however often they alternate (issue #383).
+    """
+
+    catalogue = ANTI_SLOP.read_text(encoding="utf-8")
+
+    assert GUARD_HEADING in catalogue, (
+        f"{ANTI_SLOP}: the *doing real work* guard is still a clause inside the"
+        f" paragraph on repair, where it qualifies how a pattern is removed"
+        f" instead of whether it was ever present (issue #383). See"
+        f" {STANDARD}."
+    )
+    assert GUARD_IMAGINED_REPAIR in catalogue, (
+        f"{ANTI_SLOP}: the guard states no test a reader can apply, so whether"
+        f" a phrase is doing real work is settled by whoever is reading"
+        f" (issue #383). See {STANDARD}."
+    )
+    assert GUARD_NOTHING_RECORDED in catalogue, (
+        f"{ANTI_SLOP}: the guard's consequence is that nothing is changed"
+        f" rather than that nothing is recorded, so the pattern still reaches a"
+        f" correction agent as a finding (issue #383). See {STANDARD}."
+    )
+    assert catalogue.index(GUARD_HEADING) < catalogue.index("## The seven patterns"), (
+        f"{ANTI_SLOP}: the test sits after the patterns it governs, so a reader"
+        f" recording one meets it only once the finding is written"
+        f" (issue #383). See {STANDARD}."
+    )
+
+    synonym = catalogue.partition("**Synonym cycling.**")[2].partition("\n\n")[0]
+    assert SYNONYM_ONE_THING in synonym, (
+        f"{ANTI_SLOP}: *Synonym cycling* does not say the pattern needs names"
+        f" that denote one thing, so two words naming two things are cycling as"
+        f" soon as they alternate (issue #383). See {STANDARD}."
+    )
+    assert SYNONYM_TWO_THINGS in synonym, (
+        f"{ANTI_SLOP}: nothing under *Synonym cycling* holds the pattern away"
+        f" from a distinction the text meant to draw, which is the case the"
+        f" catalogue was observed authorising away (issue #383). See"
+        f" {STANDARD}."
+    )
 
 
 def test_unslop_resolves_the_language_and_leaves_the_map_as_it_found_it() -> None:
