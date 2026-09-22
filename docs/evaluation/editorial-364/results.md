@@ -6,12 +6,12 @@ Measured against [the frozen plan](plan.md) and the criteria in it. Nothing in t
 
 *Kept true from the first commit onwards, so that a session picking this up after an interruption can see where it stands.*
 
-- **Finished.** The plan, the matrix, the criteria and the two judge briefs, frozen and committed. The baseline (`b`) arm's seven Write runs, all delivered and all judged twice. The seven paired source-blind Redline runs, all delivered and all judged twice. The before-and-after inventory. This file and the two records.
-- **Not reached, and why.** The candidate arm, and with it `K-bridge`, `K-controls` and `K-chain`. The baseline took [exit 1](plan.md#exit) — the fault does not reproduce — and where the baseline takes exit 1 the plan writes no candidate wording at all, so there is no change to measure and no changed load chain to review. This is the exit taken as written, not a criterion dropped.
+- **Finished.** The plan, the matrix, the criteria and the two judge briefs, frozen and committed. The baseline (`b`) arm's seven Write runs, all delivered and all judged twice. The seven paired source-blind Redline runs, all delivered and all judged twice. The before-and-after inventory. The two independent load-chain reviews under [`reviews/`](reviews/). This file, the two records and ADR-0214.
+- **Not reached, and why.** The candidate arm, and with it `K-bridge` and `K-controls`, both of which are stated over the candidate arm's drafts. The baseline took [exit 1](plan.md#exit) — the fault does not reproduce — and where the baseline takes exit 1 the plan writes no candidate wording at all, so there is nothing for either criterion to be read against. This is the exit taken as written, not a criterion dropped. `K-chain` is met: it is stated over the affected load chain rather than over a diff, and the chain exists whether or not anything changed it.
 
 ## The harness and the seat
 
-Provider family `claude`. Claude Code 2.1.278. Every run is a fresh top-level session started from the shell with `claude -p`, the turn as its prompt, the child-session environment variables unset, the working directory set to that run's `work/`, and `--model claude-opus-5 --effort high --permission-mode bypassPermissions`. The declared difference from the addendum's "fresh `claude-opus-5` subagent at high deliberation" is the seat: a subagent of this harness has no agent-spawning tool, so both Skills stop on their `subagents` capability there ([#394](https://github.com/Kntnt/skills/issues/394)). The model and the deliberation level are the ones the addendum names.
+Provider family `claude`. Claude Code 2.1.278. Every run is a fresh top-level session started from the shell with `claude -p`, the turn as its prompt, the child-session environment variables unset, the working directory set to that run's `work/`, and Claude Code's own `--model`, `--effort` and `--permission-mode` flags set to `claude-opus-5`, `high` and `bypassPermissions`. The declared difference from the addendum's "fresh `claude-opus-5` subagent at high deliberation" is the seat: a subagent of this harness has no agent-spawning tool, so both Skills stop on their `subagents` capability there ([#394](https://github.com/Kntnt/skills/issues/394)). The model and the deliberation level are the ones the addendum names.
 
 Judges are fresh `kntnt-opus-high` subagents (`claude-opus-5`, high deliberation) with no history; they start nothing, so the seat question does not reach them. Each delivered artefact was read by two, blind to this plan, to the hypothesis, to the expected answer and to any model identity.
 
@@ -121,6 +121,21 @@ A Redline repair passes no Write draft retroactively, and none is counted as one
 **The closing mechanical pass** is judged from the preserved private input and output in each row's `evidence/` and their byte relation to the delivered artefact. In all seven rows `mechanical-pass-output.md` is byte-identical to `delivered.md`, so the mechanical pass is the last thing that touched the text in every run and nothing was edited after it. In three rows — `en_GB-r1-paired`, `en_GB-r3-paired`, `en_US-r1-paired` — it returned its input unchanged; in the other four it changed the text.
 
 **Bridges across the Redline pairs.** Three class (a) bridges in the inputs were repaired by the review: `sv-r1-paired` quotation 1 (a) → (c) and `sv-r2-paired` quotation 3 (a) → (b), both on both judges and the second reported in the reply, and `en_US-r1-paired` quotation 1 (a) → (c) on judge B, judge A reading that bridge (c) on both sides. Two class (a) bridges were carried through unchanged and unfound, each on one judge: `en_US-r1-paired` quotation 2 and `en_GB-r2-paired` quotation 2. Every other bridge came back in the class it went in with, and no review moved a bridge into class (a).
+
+## `K-chain`
+
+Two fresh subagents read the whole chain a `case-study` run loads — from both `SKILL.md` files through what the shim resolves, the base contract, the genre and its review half, the anatomy and `headlines.md` — and answered one question: does the chain, as it stands, give a writer and a reviewer what they need to keep a quotation from being pre-said? Neither was told what the runs found. Their reports are [`reviews/load-chain-review-1.md`](reviews/load-chain-review-1.md) and [`reviews/load-chain-review-2.md`](reviews/load-chain-review-2.md).
+
+Both answered *partly*, and both arrived independently at the finding the measurement had already made from the other direction.
+
+- **The rule's window is one sentence wide.** Review 1: "The rule's window is one sentence wide; the defect is as wide as everything the reader has already read." Both reviews record that *bridge* is nowhere defined, so a heading, a standfirst, a lead or an earlier paragraph can pre-say a quotation without the words of the rule reaching it.
+- **Nothing pairs a subheading with the quotation under it.** `case-study.review.md` pairs bridges with quotations and the standfirst with the body's opening; both reviews name the missing pairing, and both propose it as a must-fix.
+- **`headlines.md` pulls the other way.** Its instruction to word a subheading from its whole section, in words its first sentence does not use, is satisfied by a subheading that says what the quotation two sentences down says. Review 2 calls that line a must-fix in its own right, and notes that Write loads it.
+- **The composing half gets the least.** Write loads the genre but no `.review.md`, so the only operable wording — "Remove a redundant pre-echo while keeping the attribution and any distinct fact" — reaches the reviewer and not the agent writing the sentence. Both reviews make this their first or second must-fix: whatever is written for the heading has to land where the writer reads it.
+
+Three of those must-fixes are the substance of [#396](https://github.com/Kntnt/skills/issues/396); the fourth, the asymmetry in what Write loads, is recorded here and in that issue. Nothing from either review is acted on in this ticket, whose exit forbids a product change.
+
+One qualification, so the independence is not overstated: review 2's report cites #396 by number, so it had seen this evaluation's own output in the working tree and was not blind to the conclusion. Review 1 does not, and reached the same place on its own reading. The corroboration is worth what one blind reading and one informed one are worth, which is less than two blind ones.
 
 ## `K-preserve`
 
