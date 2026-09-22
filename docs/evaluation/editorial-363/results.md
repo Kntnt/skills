@@ -78,7 +78,6 @@ The sentence the ticket is about is *I would set that time aside before the next
 | `c` | `case-study-sv-r1` | yes | *…innan arbetet i nästa hus börjar* |
 | `c` | `case-study-sv-r2` | yes | *…innan nästa hus drar i gång* |
 | `c` | `case-study-sv-r3` | yes | *…innan nästa hus kommer igång* |
-
 | `r` | `case-study-sv-r1` | yes | *…innan nästa hus kommer i gång* |
 | `r` | `case-study-sv-r2` | yes | *…innan vi börjar i nästa hus* |
 | `r` | `case-study-sv-r3` | yes | *…innan starten i nästa hus* |
@@ -155,7 +154,6 @@ The criterion asks that in every delivered `sv` draft two independent judges **b
 | `c/case-study-sv-r1` | *innan arbetet i nästa hus börjar* | one pass, but *meaning added inside quotation marks to buy fluency* | **not intact** — *it supplies a referent the material leaves open, and points it at the repair work rather than the rollout* |
 | `c/case-study-sv-r2` | *innan nästa hus drar i gång* | one pass, intact | one pass, intact |
 | `c/case-study-sv-r3` | *innan nästa hus kommer igång* | one pass, intact | one pass, intact, on one qualification — Q1's *och* for the source's semicolon *softens her emphasis a shade* |
-
 | `r/case-study-sv-r1` | *innan nästa hus kommer i gång* | one pass, intact | one pass, intact |
 | `r/case-study-sv-r2` | *innan vi börjar i nästa hus* | *Almost one pass* on Q1 — *a recoverable half-beat inside the sentence, not a stop that breaks the reading* | **Not one pass** on Q1 — *the Swedish reader stops at* **Kategorierna**, *a reference the article never introduces* |
 | `r/case-study-sv-r3` | *innan starten i nästa hus* | one pass, intact | one pass, intact |
