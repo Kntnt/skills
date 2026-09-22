@@ -1,0 +1,7 @@
+75160dbc12d41294eccfc615f4a8e1b2df1b5202185f5ba1f24a2f3d5fd69afc  ./case-question-en_GB-r1/work/source.md
+75160dbc12d41294eccfc615f4a8e1b2df1b5202185f5ba1f24a2f3d5fd69afc  ./case-question-en_GB-r2/work/source.md
+75160dbc12d41294eccfc615f4a8e1b2df1b5202185f5ba1f24a2f3d5fd69afc  ./case-question-en_GB-r3/work/source.md
+75188596831d5a0a28364ea4da4d1053f69900ca25237f08859696058c579f11  ./case-study-en_US-r1/work/source.md
+75188596831d5a0a28364ea4da4d1053f69900ca25237f08859696058c579f11  ./case-study-en_US-r2/work/source.md
+75188596831d5a0a28364ea4da4d1053f69900ca25237f08859696058c579f11  ./case-study-sv-r1/work/source.md
+75188596831d5a0a28364ea4da4d1053f69900ca25237f08859696058c579f11  ./case-study-sv-r2/work/source.md
