@@ -7066,6 +7066,47 @@ def test_write_completes_a_comparison_by_the_report_not_by_its_route() -> None:
     )
 
 
+def test_write_waits_for_checker_completion_without_polling_a_report_path() -> None:
+    """The reply can be the only report; file creation cannot release a wait.
+
+    Hold the executable prose at its synchronization seam (issue #391).
+    Native regression runs separately observe task lifetime and delivery.
+    """
+
+    text = (WRITE_DIR / "references" / "source-check.md").read_text()
+
+    assert "Use the Harness's native completion/wait mechanism" in text
+    assert (
+        "Never start a shell or background task that polls for the report path" in text
+    )
+    assert "no usable completion mechanism" in text
+    assert "completes without a complete report" in text
+
+
+def test_write_stops_only_owned_work_before_removing_comparison_scratch() -> None:
+    """Cleanup must account for tasks, not just files (issue #391).
+
+    A process still writing into removed scratch survives a clean inventory.
+    The delivery surface must reach the same lifecycle rule as the procedure.
+    """
+
+    procedure = (WRITE_DIR / "references" / "source-check.md").read_text()
+    body = (WRITE_DIR / "SKILL.md").read_text()
+    help_text = (WRITE_DIR / "help.md").read_text()
+
+    assert "bounded and owned by this run" in procedure
+    assert "completion, failure, timeout, cancellation or interruption" in procedure
+    assert "before removing scratch" in procedure
+    assert "cannot write into scratch after cleanup" in procedure
+    assert "Do not terminate unrelated processes or another run's checker" in procedure
+    assert "Report cleanup failure" in procedure
+    assert "stop and verify run-owned tasks" in body
+    assert "process/task state" in body
+    assert "native completion" in help_text
+    assert "poll" in help_text
+    assert "cleanup failure" in help_text
+
+
 # The Skill this wave's mechanical pass ships as, read at the one seam a test
 # has: the body is the whole of what the agent executes (ADR-0177).
 PROOFREAD = REPO_ROOT / "skills" / "editorial" / "proofread" / "SKILL.md"

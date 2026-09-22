@@ -1,0 +1,76 @@
+{
+  "format": "Contemporaneous transcription of native lifecycle tool results and own shell events. Checker inner tool trace is not directly exportable; requested hold is distinguished from independently observed state. No shell wait helper or report-path polling.",
+  "events": [
+    {
+      "tool": "exec_command",
+      "chunk_id": "a1b8c3",
+      "exit_code": 0,
+      "python_pid": 29931,
+      "action": "Start case, run shim and language resolver; exact subprocess results in result files"
+    },
+    {
+      "tool": "exec_command",
+      "chunk_id": "d48b64",
+      "exit_code": 0,
+      "python_pid": 30390,
+      "action": "Save draft and full task prompt"
+    },
+    {
+      "tool": "spawn_agent",
+      "result": {
+        "task_name": "/root/build_391_retry/native_391/check_interrupted"
+      },
+      "prompt_file": "spawn-prompt.txt"
+    },
+    {
+      "tool": "list_agents",
+      "owned": {
+        "/root/build_391_retry/native_391/check_interrupted": "running"
+      }
+    },
+    {
+      "tool": "exec_command",
+      "chunk_id": "d94290",
+      "exit_code": 0,
+      "python_pid": 33994,
+      "observer_ps_pid": 33995,
+      "observer_ps_exit": 0
+    },
+    {
+      "tool": "native message",
+      "checker": "/root/build_391_retry/native_391/check_interrupted",
+      "message": "READY. I have read the supplied source and complete draft. I am entering the prescribed 60-second native hold before report generation; no report has been written."
+    },
+    {
+      "tool": "interrupt_agent",
+      "target": "check_interrupted",
+      "result": {
+        "previous_status": "running"
+      }
+    },
+    {
+      "tool": "list_agents",
+      "stage": "before cleanup",
+      "owned": {
+        "/root/build_391_retry/native_391/check_interrupted": "interrupted"
+      }
+    },
+    {
+      "tool": "exec_command",
+      "chunk_id": "df66fe",
+      "exit_code": 0,
+      "python_pid": 40876,
+      "observer_ps_pid": 40882,
+      "observer_ps_exit": 0,
+      "report_exists": false,
+      "action": "Preserve incomplete-comparison response and draft; rm -r /Users/thomas/Projects/skills/.git/orchestrate-session-389-391-gpt/scratch/391/interrupted/work"
+    },
+    {
+      "tool": "list_agents",
+      "stage": "actual after cleanup call",
+      "owned": {
+        "/root/build_391_retry/native_391/check_interrupted": "interrupted"
+      }
+    }
+  ]
+}

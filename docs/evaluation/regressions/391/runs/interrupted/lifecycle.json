@@ -1,0 +1,30 @@
+{
+  "writer": "/root/build_391_retry/native_391",
+  "checker": "/root/build_391_retry/native_391/check_interrupted",
+  "spawn_result": {
+    "task_name": "/root/build_391_retry/native_391/check_interrupted"
+  },
+  "list_after_spawn": "running",
+  "wait_helpers": [],
+  "requested_checker_hold": {
+    "tool": "collaboration.wait_agent",
+    "timeout_ms": 60000
+  },
+  "model_deliberation": "inherited, no overrides",
+  "checker_history": "none",
+  "ready_message": "READY. I have read the supplied source and complete draft. I am entering the prescribed 60-second native hold before report generation; no report has been written.",
+  "interrupt_result": {
+    "previous_status": "running"
+  },
+  "before_cleanup": {
+    "tool": "list_agents",
+    "checker_state": "interrupted",
+    "terminal": true
+  },
+  "after_cleanup": {
+    "tool": "list_agents",
+    "checker_state": "interrupted",
+    "terminal": true,
+    "evidence": "Actual list_agents call after exec_command df66fe"
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "writer": "/root/build_391_retry/native_391",
+  "checker": "/root/build_391_retry/native_391/check_file_success",
+  "spawn_result": {
+    "task_name": "/root/build_391_retry/native_391/check_file_success"
+  },
+  "list_after_spawn": "running",
+  "wait_helpers": [],
+  "model_deliberation": "inherited, no overrides",
+  "checker_history": "none",
+  "before_cleanup": {
+    "checker_state": {
+      "completed": "Complete. No source-support or translation findings; no unresolved findings.\n\nReport: /Users/thomas/Projects/skills/.git/orchestrate-session-389-391-gpt/scratch/391/file-success/work/report.md"
+    },
+    "terminal": true
+  },
+  "after_cleanup": {
+    "checker_state": {
+      "completed": "Complete. No source-support or translation findings; no unresolved findings.\n\nReport: /Users/thomas/Projects/skills/.git/orchestrate-session-389-391-gpt/scratch/391/file-success/work/report.md"
+    },
+    "terminal": true,
+    "evidence": "Actual list_agents call immediately after exec_command 1060ba; exact owned state transcribed in events.json. Not inferred from filesystem."
+  }
+}

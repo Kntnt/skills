@@ -1,0 +1,3 @@
+warning: No `requires-python` value found in the workspace. Defaulting to `>=3.12`.
+...                                                                      [100%]
+3 passed, 422 deselected in 0.43s

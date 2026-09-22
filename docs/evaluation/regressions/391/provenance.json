@@ -1,0 +1,24 @@
+{
+  "base_commit": "34ccf44e301adc0542f5218b74747da3cd72e6d1",
+  "date": "2026-09-22",
+  "harness": "Codex native collaboration tools",
+  "model": "gpt-6-astra",
+  "deliberation": "high (inherited from routed builder)",
+  "native_writer_task": "/root/build_391_retry/native_391",
+  "writer_context": "fork_turns=none; three sequential cases with separate work directories and a fresh checker per case",
+  "prior_build": "CLI attempt stopped at subscription usage limit after red synchronization test, implementation, green synchronization test, and red cleanup test. Logs retained in checks/. Retry completed cleanup implementation before green-cleanup.txt.",
+  "files_before_native_runs": {
+    "skills/editorial/write/SKILL.md": "f615815291f85db9e58e781b6275f0a89b8ecc6ed32d2e8c630ab4659b3f9b0f",
+    "skills/editorial/write/help.md": "ded72b971835fd52ba5349dad95f1c5c57cc6c79fb387068af66e06e35c0db14",
+    "skills/editorial/write/references/source-check.md": "c7a8956c5d850854984cd97f802a5c7c1caf13cccf4aff351aa6bee7c1df3ce0",
+    "skills/kntnt/catalog.json": "768f377854b16af31865db15cda0f046760f2d7e403277b815b5209c2f13a190"
+  },
+  "final_files": {
+    "skills/editorial/write/SKILL.md": "a2fb921879b62b5922b8be6f7e674bbf58a7d6fe90ca4f89dcaec379d7818be1",
+    "skills/editorial/write/help.md": "f66e6b92c1a4d51c77542f1e91009c2055e9e2fdc5a705c39088009d65d3a9c2",
+    "skills/editorial/write/references/source-check.md": "c7a8956c5d850854984cd97f802a5c7c1caf13cccf4aff351aa6bee7c1df3ce0",
+    "skills/kntnt/catalog.json": "788f29f721c97452f99e73e1cd4f228dc8607ae30968431386872929ce5426aa"
+  },
+  "staged_final_delta": "The final SKILL.md delivery-account sentence preserves the shared filesystem-accounting test's exact wording while adding verified process/task state. The staged wording expressed the same duties. Final help.md splits the wait and cleanup paragraphs and clarifies 'without a usable completion mechanism' to remove grammatical ambiguity. Neither change alters the staged source-check procedure, checker task, invocation grammar or run behavior; source-check.md is byte-identical. The Catalog was regenerated after these edits, and the final focused checks include Catalog equality.",
+  "staged_files": "staged-files.json is the actual staged shipped-file hash inventory; files_before_native_runs records worktree product files at the stated point and is not an assertion that the staged Catalog matches the subsequently generated worktree Catalog."
+}
