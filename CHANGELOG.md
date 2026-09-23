@@ -4,6 +4,14 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ## [Unreleased]
 
+### Changed
+
+- An editorial evaluation now runs a clean control — any corpus control whose frozen expectation is that the text comes back unchanged — twice against the same install: once to the response, which shows whether the Skill returns the short no-change status a user should get, and once to a new file beside the input, whose delivered text is what the criterion that the text comes back unchanged is judged from. A no-change status carries no text, so that criterion had rested on the run's own word and on the source's unmoved digest, neither of which shows what the run would have delivered. `docs/evaluation/protocol.md` states the rule under `## A clean control`: what each run is evidence for, that the two are recorded as two fixture entries told apart by their output target, and, one rejection at a time, which of the protocol's five rejections a no-change reply to a response target can be held to. The editorial-quality matrix adds the file-target invocation for a clean Redline control and no longer treats the input as a no-change run's final text. What Redline and Proofread deliver to a caller is unchanged (#404).
+
+### Fixed
+
+- `/redline` and `/unslop` now stop in a Harness that cannot start a subagent, rather than reviewing and correcting in their own seat. Each hands every correction to a subagent started fresh for the round, because the seat that made a repair is the one reader who cannot check it, and each declared that Capability, but no step confirmed it: in a seat with no agent-spawning tool, `/redline` ran to completion and delivered corrected text from correction rounds no fresh subagent had made, and said nothing about it, while `/write` in the same seat stopped. The first step of each now confirms that the Harness can start a fresh subagent and, where it cannot, reports the Unsatisfied Capability and stops before the destination is settled and before anything is loaded, reviewed or written, whatever Correction Budget `--max` names, `0` included. Each manpage's DEPENDENCIES section now says so, as `/write`'s does (#394).
+
 ## [0.36.1] – 2026-09-23
 
 ### Fixed
