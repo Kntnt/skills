@@ -18,7 +18,11 @@ The token then goes from the clipboard into hcloud's own configuration as a cont
 
 Once per machine, it makes the agents' own SSH key, `~/.ssh/kntnt-agent`: an ed25519 key without a passphrase, since the point of the key is that nobody is there to type one. A second `setup` leaves the key as it is. It registers the public half in the project under the name `kntnt-agent` where the project holds no key of that name, so a server created there gets it at creation.
 
-Last, it prints the public key and the procedure that admits the agents to a server that already exists: a user `kntnt-agent` of their own with passwordless `sudo`, rather than root's login. Run it as root on each such server. The private key is never printed and never copied anywhere.
+Last, it prints the public key and both ways to admit the agents to a server that already exists, each opened by the condition it applies under. Either way the agents get a user `kntnt-agent` of their own with passwordless `sudo`, rather than root's login. The private key is never printed and never copied anywhere.
+
+A configuration tool such as Ansible manages a server when it converges the server's accounts or SSH configuration. On a server a configuration tool manages, the agents are declared as an administrator of their own through that tool, in the workflow of the project at hand, the repository you run `setup` in, and the tool's converge puts them on the server. On a server nothing converges, a procedure admits them: run it as root on each such server.
+
+`setup` reads the project at hand for such a tool. It prints the tool's way first where it finds one, and the procedure first where it finds none, as when you run it outside any repository.
 
 ## POSITIONAL ARGUMENTS
 
