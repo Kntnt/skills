@@ -11,6 +11,8 @@ The official reference for every call is Postmark's API documentation, starting 
 
 `templates/push` copies templates from one server to another, so it takes the account token although every other `templates` path takes the server's. `GET server` and `PUT server` read and change the server whose token is sent; `servers/<id>` does the same for any server, with the account token. Suppressions live under `message-streams/<stream>/suppressions`, so they take the server's token.
 
+Every answer carrying a server — `servers`, `servers/<id>` and `server`, read, created or edited — lists its tokens in `ApiTokens`, and every answer carrying a webhook holds the password Postmark sends to it in `HttpAuth.Password`. The engine prints each of them as `[redacted]`.
+
 A list takes `count` and `offset` in its query string, both required; the maximum `count` is 500, and message search stops at `count + offset` of 10,000.
 
 ## A send

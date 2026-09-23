@@ -49,6 +49,14 @@ TRANSACTIONAL_TOKEN = "srv-2b8d4e6f-Transactional-Token-9876543210"
 BROADCAST_TOKEN = "srv-5a1c3e7b-Broadcast-Token-1357924680"
 TOKENS = (ACCOUNT_TOKEN, TRANSACTIONAL_TOKEN, BROADCAST_TOKEN)
 
+# Credentials Postmark itself returns in an answer, which the engine masks: the
+# tokens of servers the file need not hold, and a webhook's HTTP password.
+LISTED_TOKEN = "srv-9e4d2c8a-Listed-Token-1122334455"
+STAGING_TOKEN = "srv-3f7b1d5e-Staging-Token-6677889900"
+WEBHOOK_PASSWORD = "hook-6c2a8e4f-Webhook-Password-5566778899"
+RETURNED = (LISTED_TOKEN, STAGING_TOKEN, WEBHOOK_PASSWORD)
+MASK = "[redacted]"
+
 # The two servers the Credential File holds a token for, the second with a
 # space in its name as Postmark allows.
 TRANSACTIONAL = "transactional"
@@ -578,6 +586,71 @@ def test_an_error_the_service_answers_is_relayed_with_exit_zero(
     assert "401" in result.stderr
 
 
+# A credential Postmark returns in an answer is masked before it is printed,
+# and everything else in the answer is left as it came.
+
+
+def test_a_call_masks_the_server_tokens_postmark_returns(
+    tmp_path: Path, service: Service
+) -> None:
+    _write_credentials(tmp_path)
+    servers = {
+        "TotalCount": 2,
+        "Servers": [
+            {"ID": 1, "Name": TRANSACTIONAL, "ApiTokens": [LISTED_TOKEN]},
+            {"ID": 2, "Name": "staging", "ApiTokens": [STAGING_TOKEN, LISTED_TOKEN]},
+        ],
+    }
+    service.answer("GET", "/servers?count=50&offset=0", 200, servers)
+
+    result = _run(
+        tmp_path,
+        "call",
+        f"--endpoint={service.endpoint}",
+        "--account",
+        "GET",
+        "servers?count=50&offset=0",
+    )
+
+    assert result.returncode == ANSWERED, result.stderr
+    assert json.loads(result.stdout) == {
+        "TotalCount": 2,
+        "Servers": [
+            {"ID": 1, "Name": TRANSACTIONAL, "ApiTokens": [MASK]},
+            {"ID": 2, "Name": "staging", "ApiTokens": [MASK, MASK]},
+        ],
+    }
+    for returned in RETURNED:
+        assert returned not in result.stdout
+    _assert_no_token(result, service.received)
+
+
+def test_a_call_masks_a_webhooks_http_password(
+    tmp_path: Path, service: Service
+) -> None:
+    _write_credentials(tmp_path)
+    auth = {"Username": "hooks", "Password": WEBHOOK_PASSWORD}
+    webhooks = {
+        "Webhooks": [{"ID": 7, "Url": "https://example.com/hook", "HttpAuth": auth}]
+    }
+    service.answer("GET", "/webhooks", 200, webhooks)
+
+    result = _run(
+        tmp_path,
+        "call",
+        f"--endpoint={service.endpoint}",
+        f"--server={TRANSACTIONAL}",
+        "GET",
+        "webhooks",
+    )
+
+    assert result.returncode == ANSWERED, result.stderr
+    [webhook] = json.loads(result.stdout)["Webhooks"]
+    assert webhook["HttpAuth"] == {"Username": "hooks", "Password": MASK}
+    assert webhook["Url"] == "https://example.com/hook"
+    assert WEBHOOK_PASSWORD not in result.stdout
+
+
 # The Credential File is read as the rule states, and its absence names setup.
 
 
@@ -686,6 +759,51 @@ def test_status_lists_the_servers_and_verifies_each_server_token(
         for request in service.received
     )
     assert by_header == sorted(TOKENS)
+    _assert_no_token(result, service.received)
+
+
+def test_status_masks_the_server_tokens_postmark_returns(
+    tmp_path: Path, service: Service
+) -> None:
+    _write_credentials(tmp_path)
+    service.answer(
+        "GET",
+        "/servers?count=500&offset=0",
+        200,
+        {
+            "TotalCount": 2,
+            "Servers": [
+                {"ID": 1, "Name": TRANSACTIONAL, "ApiTokens": [LISTED_TOKEN]},
+                {"ID": 3, "Name": "staging", "ApiTokens": [STAGING_TOKEN]},
+            ],
+        },
+    )
+    service.answer(
+        "GET",
+        "/server",
+        200,
+        {"ID": 1, "Name": TRANSACTIONAL, "ApiTokens": [LISTED_TOKEN]},
+    )
+
+    result = _run(tmp_path, "status", f"--endpoint={service.endpoint}")
+
+    assert result.returncode == ANSWERED, result.stderr
+    report = _status(result)
+    account = report["account"]
+    assert isinstance(account, dict)
+    assert account["body"]["Servers"] == [
+        {"ID": 1, "Name": TRANSACTIONAL, "ApiTokens": [MASK]},
+        {"ID": 3, "Name": "staging", "ApiTokens": [MASK]},
+    ]
+    servers = report["servers"]
+    assert isinstance(servers, dict)
+    assert servers[TRANSACTIONAL]["body"] == {
+        "ID": 1,
+        "Name": TRANSACTIONAL,
+        "ApiTokens": [MASK],
+    }
+    for returned in RETURNED:
+        assert returned not in result.stdout
     _assert_no_token(result, service.received)
 
 

@@ -215,7 +215,7 @@
       "name": "postmark",
       "category": "infrastructure",
       "description": "Inspect and change email at Postmark on the user's behalf — servers and message streams, domains and their DKIM and Return-Path records, sender signatures, templates, suppressions, bounces, delivery statistics, message search, webhooks, and a send the user asks for. Use for email at Postmark only; excludes other email providers, mailboxes, and setting DNS records.",
-      "digest": "f2d37c0e21ee2a86fca789b853f4be87ce2f9418b4de0e6467309bbe44feeb73",
+      "digest": "21a2b3f2b5c9f5dc3c603b835392af8cbedc3261bf38fa0b77464fa18d923278",
       "binaries": [
         "uv"
       ],

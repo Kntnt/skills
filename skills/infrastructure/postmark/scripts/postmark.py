@@ -14,14 +14,16 @@ signatures across the account. The Credential File,
 Two subcommands:
 
 - `call` sends one request with the token it is told to use, and prints the
-  response body verbatim.
+  response body verbatim, with any credential in it masked.
 - `status` reads every token the file holds against the service and prints
   what each answered, as one JSON document.
 
 Exit 0 wherever the service answered, whatever it answered; 1 where it could
 not be reached; 2 on a refusal made before anything was sent. A token appears
 in its header and nowhere else: never in the URL, an argument, a line printed
-or an error (docs/rules/skills.md, ADR-0218).
+or an error (docs/rules/skills.md, ADR-0218). Nor does one Postmark returns: a
+server's `ApiTokens` and a webhook's HTTP password are masked in every answer
+before it is printed, since what the engine prints reaches the transcript.
 
 What Postmark cannot undo — a deletion, a send and a data removal — is refused
 without `--yes`.
@@ -81,6 +83,12 @@ TIMEOUT_SECONDS: Final = 60
 # How many servers `status` asks for, which is Postmark's page maximum.
 SERVER_PAGE: Final = 500
 
+# The fields whose value is a credential wherever Postmark returns them: a
+# server's tokens, in `ApiTokens`, and the password a webhook's `HttpAuth`
+# sends. What stands in their place.
+CREDENTIAL_FIELDS: Final = ("ApiTokens", "Password")
+MASK: Final = "[redacted]"
+
 # What `status` says in place of the account where the file holds no
 # account token.
 NO_ACCOUNT_TOKEN: Final = (
@@ -104,6 +112,36 @@ class Answer:
 
     status: int
     body: bytes
+
+
+def masked(value: object) -> object:
+    """*value* with every credential field's value masked, at any depth."""
+
+    if isinstance(value, list):
+        return [masked(item) for item in value]
+    if not isinstance(value, dict):
+        return value
+    shown: dict[str, object] = {}
+    for key, item in value.items():
+        if key not in CREDENTIAL_FIELDS or not item:
+            shown[key] = masked(item)
+        elif isinstance(item, list):
+            # A list keeps its length, so a server with two tokens shows two.
+            shown[key] = [MASK] * len(item)
+        else:
+            shown[key] = MASK
+    return shown
+
+
+def printable(body: bytes) -> bytes:
+    """A body as `call` prints it: verbatim, unless a credential had to be masked."""
+
+    try:
+        parsed = json.loads(body)
+    except (UnicodeDecodeError, json.JSONDecodeError):
+        return body
+    shown = masked(parsed)
+    return body if shown == parsed else json.dumps(shown).encode("utf-8")
 
 
 def credential_file() -> Path:
@@ -297,7 +335,7 @@ def command_call(args: argparse.Namespace) -> int:
     # Send it with the token the path needs, and relay the answer as it came.
     header, token = choose_token(args)
     answer = request(args.endpoint, method, args.path, header, token, body)
-    sys.stdout.buffer.write(answer.body)
+    sys.stdout.buffer.write(printable(answer.body))
     sys.stdout.flush()
     if not 200 <= answer.status < 300:
         print(f"postmark.py: Postmark answered HTTP {answer.status}", file=sys.stderr)
@@ -305,11 +343,11 @@ def command_call(args: argparse.Namespace) -> int:
 
 
 def relayed(answer: Answer) -> dict[str, object]:
-    """An answer as `status` reports it: the status, and the body as it came."""
+    """An answer as `status` reports it: the status, and the body with any credential masked."""
 
     text = answer.body.decode("utf-8", errors="replace")
     try:
-        body: object = json.loads(text)
+        body: object = masked(json.loads(text))
     except json.JSONDecodeError:
         body = text
     return {"status": answer.status, "body": body}
