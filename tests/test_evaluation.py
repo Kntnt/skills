@@ -168,6 +168,34 @@ REJECTIONS = (
     "incorrect side effect",
 )
 
+# The matrix the editorial Skills are judged against. Most of the corpus's
+# clean controls are rows of its Redline controls, and a later wave copies its
+# invocations rather than restating them.
+MATRIX = CORPUS / "editorial-quality" / "README.md"
+
+# The protocol's rule on how a clean control is run, and the rule it follows:
+# one says which run a criterion is answered from, the other which record.
+TRACE_HEADING = "## The trace a criterion is answered from"
+CLEAN_CONTROL_HEADING = "## A clean control"
+
+# How the clean-control rule takes the five rejections one at a time: the
+# rejection in bold, as the protocol's own list names it, then whether a
+# no-change reply to a response target can be held to it.
+NO_CHANGE_VERDICT = re.compile(
+    r"^- \*\*(?:An? )?([^*]+)\*\*[^—\n]* — (can|cannot)\b", re.MULTILINE
+)
+
+# What that reply can be held to. A fact the run added and an edit it made
+# exist only in a text it delivered; the status's language, a finding the
+# staged input visibly carries, and the inventory are all there without one.
+NO_CHANGE_VERDICTS = {
+    "unsupported fact": "cannot",
+    "wrong locale behaviour": "can",
+    "substantive edit": "cannot",
+    "unresolved mandatory finding": "can",
+    "incorrect side effect": "can",
+}
+
 # Wording that would turn fixture material into an exact-prose assertion. The
 # corpus supplies material and states what must not happen to it; it never
 # supplies the sentence a model is supposed to write back.
@@ -188,6 +216,16 @@ def _index() -> str:
 
 def _protocol() -> str:
     return PROTOCOL.read_text(encoding="utf-8")
+
+
+def _section(text: str, heading: str) -> str:
+    """One `## ` section of a Markdown document, without the heading itself.
+
+    Empty where the document carries no such heading, so a caller asserts the
+    heading's presence before reading anything out of what this returns.
+    """
+
+    return text.partition(f"\n{heading}\n")[2].partition("\n## ")[0]
 
 
 def _entries() -> dict[str, str]:
@@ -740,6 +778,181 @@ def test_the_protocol_defines_a_recording_format_the_template_carries() -> None:
 
     unrecorded = [field for field in RECORD_FIELDS if field not in template]
     assert unrecorded == [], f"{unrecorded}: recording fields the template omits"
+
+
+def test_the_protocol_runs_a_clean_control_to_a_file_as_well_as_the_response() -> None:
+    """A no-change status carries no text, so it cannot show that none changed.
+
+    A clean control run only to the response comes back with the short status,
+    and the criterion it exists to test is then answered from the run's own
+    word and from the source's unmoved digest, neither of which shows what the
+    run would have delivered. A second run of the same input to a file has a
+    delivered text to compare, so the protocol runs both and says what each is
+    evidence for (issue #404).
+    """
+
+    # Read the protocol's top-level sections in the order a reader meets them.
+    protocol = _protocol()
+    headings = re.findall(r"^## .+$", protocol, re.MULTILINE)
+
+    # Require the rule directly after the rule on the trace, which it answers.
+    assert CLEAN_CONTROL_HEADING in headings, (
+        f"{PROTOCOL}: no `{CLEAN_CONTROL_HEADING}` section, so a clean control"
+        f" is still run once, to the response, and judged on its own word."
+    )
+    following = headings[headings.index(TRACE_HEADING) + 1]
+    assert following == CLEAN_CONTROL_HEADING, (
+        f"{PROTOCOL}: `{CLEAN_CONTROL_HEADING}` does not directly follow"
+        f" `{TRACE_HEADING}`; `{following}` does."
+    )
+
+    # Require both runs, with the file target the matrix's invocations take.
+    section = _section(protocol, CLEAN_CONTROL_HEADING)
+    lowered = section.lower()
+    for evidence in (
+        "response-target run",
+        "file-target run",
+        "`--output=response`",
+        "`--output=output.md`",
+        "delivery.md",
+    ):
+        assert evidence in section, (
+            f"{PROTOCOL}: the clean-control rule does not name {evidence!r},"
+            f" so the second run and what makes it deliver a text are unstated."
+        )
+
+    # Require the criterion answered from the delivered file, and never from
+    # the run's account of itself or the source's unmoved digest.
+    for evidence in (
+        "`r1`",
+        "compared with",
+        "own statement that it changed nothing",
+        "digest",
+        "never evidence",
+    ):
+        assert evidence in lowered, (
+            f"{PROTOCOL}: the clean-control rule does not carry {evidence!r},"
+            f" so the criterion can still be answered from the run's own word."
+        )
+
+    # Require the two runs to be two entries a record tells apart by target.
+    assert "two fixture entries" in lowered and "output target" in lowered, (
+        f"{PROTOCOL}: the clean-control rule does not say how its two runs are"
+        f" recorded, so a record has one entry for two runs."
+    )
+
+
+def test_the_protocol_defines_a_clean_control_by_its_frozen_expectation() -> None:
+    """Which controls owe the second run is a property, and examples show it.
+
+    A list would go stale the day a control is added, so the rule defines a
+    clean control by its frozen expectation that the text comes back unchanged
+    and names examples as examples. The Redline run of a pipeline is excluded
+    by name, because it can end in the same short status without being one.
+    """
+
+    # Read the rule and the corpus files its examples come from.
+    section = _section(_protocol(), CLEAN_CONTROL_HEADING)
+    lowered = section.lower()
+    matrix = MATRIX.read_text(encoding="utf-8")
+
+    # Require the definition as a property, with its examples marked as such.
+    for evidence in ("frozen expectation", "examples", "not a complete list"):
+        assert evidence in lowered, (
+            f"{PROTOCOL}: the clean-control rule does not carry {evidence!r},"
+            f" so it reads as a closed list rather than a property."
+        )
+
+    # Require the three examples, each naming something the corpus carries.
+    for example in ("`*-clean`", "`clean-en-GB`", "`metadata-none`"):
+        assert example in section, (
+            f"{PROTOCOL}: the clean-control rule does not name {example}"
+            f" among its examples."
+        )
+    assert "clean-en-GB" in _entries()
+    assert "| metadata-none |" in matrix
+    assert re.search(r"^\| [a-z-]+-clean / ", matrix, re.MULTILINE)
+
+    # Require the pipeline's Redline run to be excluded in so many words.
+    assert "pipeline" in lowered and "not a clean control" in lowered, (
+        f"{PROTOCOL}: the clean-control rule does not exclude the Redline run"
+        f" of a Write-to-Redline pipeline."
+    )
+
+
+def test_the_protocol_says_which_rejections_a_no_change_reply_can_be_held_to() -> None:
+    """A reply with no text in it can still fail some rejections and not others.
+
+    The test for each is whether a `fail` could be shown from the reply's own
+    words, the staged input and the inventory without a delivered text. Only a
+    delivered text shows a fact the run added or an edit it made, so those two
+    rejections are answered from the file-target run and never from the reply.
+    """
+
+    # Read the rule's verdicts, one bullet per rejection.
+    section = _section(_protocol(), CLEAN_CONTROL_HEADING)
+    verdicts = {
+        match.group(1).strip().lower(): match.group(2)
+        for match in NO_CHANGE_VERDICT.finditer(section)
+    }
+
+    # Require all five rejections taken, and each one answered as decided.
+    assert set(verdicts) == set(REJECTIONS), (
+        f"{PROTOCOL}: the clean-control rule takes {sorted(verdicts)} rather"
+        f" than the five rejections {sorted(REJECTIONS)}."
+    )
+    assert verdicts == NO_CHANGE_VERDICTS
+
+
+def test_the_matrix_runs_a_clean_redline_control_to_a_file_as_well() -> None:
+    """A later wave copies the matrix's invocation, so the matrix carries both.
+
+    Left alone, the matrix would go on prescribing one run to the response, and
+    a wave that copied it would inherit the gap the protocol closes. Its
+    staging paragraph also treated the input as the final text of a no-change
+    run, which is the gap itself (issue #404).
+    """
+
+    # Read the matrix's staging and control sections.
+    matrix = MATRIX.read_text(encoding="utf-8")
+    staging = _section(matrix, "## Material and staging")
+    controls = _section(matrix, "## Redline controls")
+    rule = "(../../protocol.md#a-clean-control)"
+
+    # Require the control paragraph to add the file-target run beside the
+    # response-target one, and point at the rule that asks for it.
+    for evidence in (
+        "`/redline --genre=<genre> --language=<locale> --output=response input.md`",
+        "`/redline --genre=<genre> --language=<locale> --output=output.md input.md`",
+        rule,
+    ):
+        assert evidence in controls, (
+            f"{MATRIX}: `## Redline controls` does not carry {evidence!r}, so a"
+            f" wave copying it runs a clean control only to the response."
+        )
+
+    # Require the staging paragraph to stop treating the input as the result.
+    assert "the input is final" not in staging, (
+        f"{MATRIX}: a no-change status is still read as delivering the input."
+    )
+    assert "delivers no final text" in staging and rule in staging, (
+        f"{MATRIX}: the staging paragraph does not say that a no-change status"
+        f" delivers no final text, or where the rule on its reply is."
+    )
+
+    # Require a revision note directly after the anatomy revision's.
+    paragraphs = matrix.split("\n\n")
+    anatomy = next(
+        position
+        for position, paragraph in enumerate(paragraphs)
+        if paragraph.startswith("Revised for the [article anatomy]")
+    )
+    note = paragraphs[anatomy + 1].lower()
+    assert "clean control" in note and "judged against" in note, (
+        f"{MATRIX}: no note after the anatomy revision says that a clean"
+        f" control is now run differently and nothing it is judged against"
+        f" changed."
+    )
 
 
 def test_the_protocol_isolates_the_provider_families_in_both_directions() -> None:
