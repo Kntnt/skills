@@ -8753,6 +8753,161 @@ def test_unslop_declares_the_subagents_and_the_runtime_it_needs() -> None:
         )
 
 
+# The Skills that hand work to a fresh subagent and deliver a Text Artifact,
+# and what each one's first step says before it settles anything else. The
+# engine's reading sheet already tells the agent to answer every Capability
+# first, and a Redline run in a seat with no agent-spawning tool went past that
+# directive: it reviewed, corrected in its own seat, reported correction rounds
+# and delivered, the reviewer checking its own repair. A `/write` run in the
+# same seat stopped, its first step confirming the Capability at the point of
+# work (issue #394). Orchestrate, delegation and ready-for-agent-check also
+# declare `subagents`; whether they confirm it is #416's question, so they are
+# not named here.
+FRESH_SUBAGENT_SKILLS = (WRITE, REDLINE, UNSLOP)
+FRESH_SUBAGENT_CONFIRMATION = "confirm that this Harness can start a fresh subagent"
+FRESH_SUBAGENT_REFUSAL = "report the Unsatisfied Capability"
+
+# The closure Redline's settle step draws over the invocation, limited to the
+# Harness the Skill can run in. Unlimited, it told a run in a seat that cannot
+# start a subagent that an admitted invocation is reviewed, beside the step
+# that says such a run stops (issue #394).
+REDLINE_CLOSURE_IN_A_CAPABLE_HARNESS = (
+    "In a Harness that can start a fresh subagent, that is the whole of what is"
+    " refused over the invocation"
+)
+
+# What each of the three manpages says a missing subagent does to an
+# invocation, worded as Write's page words it, and the sentence Redline's and
+# Unslop's pages already carried about the Correction Budget (issue #394).
+UNAVAILABLE_SUBAGENT = "An unavailable subagent capability stops the invocation before"
+UNAVAILABLE_SUBAGENT_BEFORE_REVIEW = (
+    "An unavailable subagent capability stops the invocation before anything is"
+    " reviewed or written."
+)
+WHATEVER_THE_BUDGET = (
+    "stays a requirement whatever Correction Budget an invocation names"
+)
+
+
+def _first_step(path: Path) -> list[str]:
+    """Return the sentences of a body's first step, its number stripped."""
+
+    steps = _section(path.read_text(encoding="utf-8"), "## Steps", path)
+    first = steps.partition("\n2. ")[0].strip()
+    assert first.startswith("1. "), (
+        f"{path}: the `## Steps` section does not open on its first step, so"
+        f" what that step settles first cannot be read (issue #394). See"
+        f" {STANDARD}."
+    )
+    return _sentences(first.removeprefix("1. "))
+
+
+def test_a_skill_starting_fresh_subagents_confirms_the_capability_first() -> None:
+    """A run that cannot keep its correction step's freshness does not start.
+
+    Each of these Skills hands work to a subagent started fresh, because the
+    seat that made a text is the one reader who cannot check it. In a Harness
+    that cannot start one, the run either stops or does that work in its own
+    seat and delivers it as if it had not. So the first step confirms the
+    Capability in its first sentence and refuses in its second, before any
+    value is settled, anything is loaded or reviewed, or anything is written,
+    and it does so whatever Correction Budget the invocation names, `0`
+    included (issue #394).
+    """
+
+    for path in FRESH_SUBAGENT_SKILLS:
+        sentences = _first_step(path)
+
+        assert FRESH_SUBAGENT_CONFIRMATION in sentences[0], (
+            f"{path}: the first sentence of step 1 does not confirm that the"
+            f" Harness can start a fresh subagent, so a run in a seat that"
+            f" cannot start one goes on and does the subagent's work in its"
+            f" own seat (issue #394). See {STANDARD}."
+        )
+        refusal = sentences[1]
+        assert FRESH_SUBAGENT_REFUSAL in refusal and "stop" in refusal, (
+            f"{path}: the second sentence of step 1 does not report the"
+            f" Unsatisfied Capability and stop where the Harness cannot start"
+            f" a fresh subagent, so the refusal comes after something has"
+            f" already been settled, read or written (issue #394). See"
+            f" {STANDARD}."
+        )
+        for condition in ("Correction Budget", "--max"):
+            assert condition not in " ".join(sentences[:2]), (
+                f"{path}: step 1 makes the subagent confirmation depend on"
+                f" {condition!r}. The Capability is a requirement whatever"
+                f" budget an invocation names, `--max=0` included (issue"
+                f" #394). See {STANDARD}."
+            )
+        assert sentences[-1].startswith("Done when") and (
+            "Capability" in sentences[-1]
+        ), (
+            f"{path}: step 1 is not done until the Capability is confirmed,"
+            f" and its closing sentence does not say so (issue #394). See"
+            f" {STANDARD}."
+        )
+
+
+def test_redlines_closed_refusal_holds_in_a_harness_that_can_run_the_review() -> None:
+    """The closure is about the invocation, and a missing subagent is about the seat.
+
+    Step 1 says that the values it refuses are the whole of what is refused
+    over the invocation, and that an invocation the engine read and these
+    values admit is reviewed. Next to a confirmation that stops a run in a
+    Harness with no subagent, the unlimited sentence told that same run to
+    review, so it holds for a Harness that can start one (issue #394).
+    """
+
+    step = " ".join(_first_step(REDLINE))
+
+    assert REDLINE_CLOSURE_IN_A_CAPABLE_HARNESS in step, (
+        f"{REDLINE}: step 1 still says that its value refusals are the whole"
+        f" of what is refused over the invocation in any Harness, which tells a"
+        f" run in a seat that cannot start a subagent to review rather than"
+        f" stop (issue #394). See {STANDARD}."
+    )
+
+
+def test_each_editorial_manpage_says_what_a_missing_subagent_stops() -> None:
+    """A reader choosing the Skill learns what it does where it cannot delegate.
+
+    Write's page said that an unavailable subagent capability stops the
+    invocation before writing; Redline's and Unslop's said only that the
+    Capability is required. Each now says what happens without it, in Write's
+    words, and the two correcting Skills keep saying that the requirement
+    holds whatever Correction Budget an invocation names (issue #394).
+    """
+
+    for path in FRESH_SUBAGENT_SKILLS:
+        page = path.parent / "help.md"
+        dependencies = _section(
+            page.read_text(encoding="utf-8"), "## DEPENDENCIES", page
+        )
+
+        assert UNAVAILABLE_SUBAGENT in dependencies, (
+            f"{page}: `## DEPENDENCIES` does not say what an unavailable"
+            f" subagent capability does to an invocation, which Write's page"
+            f" says (issue #394). See {STANDARD}."
+        )
+
+    for page in (REDLINE_HELP, UNSLOP_HELP):
+        dependencies = _section(
+            page.read_text(encoding="utf-8"), "## DEPENDENCIES", page
+        )
+
+        assert UNAVAILABLE_SUBAGENT_BEFORE_REVIEW in dependencies, (
+            f"{page}: `## DEPENDENCIES` does not say that an unavailable"
+            f" subagent capability stops the invocation before anything is"
+            f" reviewed or written (issue #394). See {STANDARD}."
+        )
+        assert WHATEVER_THE_BUDGET in dependencies, (
+            f"{page}: `## DEPENDENCIES` no longer says that the subagent"
+            f" requirement holds whatever Correction Budget an invocation"
+            f" names, which is what keeps `--max=0` from reading as exempt"
+            f" (ADR-0178, issue #394). See {STANDARD}."
+        )
+
+
 def test_unslop_is_started_by_a_person_rather_than_by_a_model() -> None:
     """*This text reads like AI* is a judgement a person makes.
 
@@ -12173,7 +12328,9 @@ SHIM_CALL = 'uv run "$HERE/scripts/invoke.py"'
 SHIM_REFERENCE = REPO_ROOT / "skills" / "agents" / "explain" / "scripts" / "invoke.py"
 
 # What a body no longer says anywhere: the shim finds the Manager and the
-# engine's answer carries `$LIBRARY` and the Capabilities. The Envelope pointer
+# engine's answer carries `$LIBRARY` and the Capabilities to answer, the one
+# Capability a body names being the fresh subagent its later steps start,
+# which its step 1 confirms in its own words (issue #394). The Envelope pointer
 # is held out of the opening alone, a Step that refuses a value the engine
 # cannot still pointing at the contract, as the refusal rule says.
 SHIM_FORBIDDEN = (
@@ -12483,8 +12640,9 @@ def test_every_skill_body_opens_with_the_shim_call() -> None:
             assert phrase not in text, (
                 f"{path}: the body still says {phrase!r}. The shim finds the"
                 f" Manager, and the engine's answer carries `$LIBRARY` and the"
-                f" Capabilities to answer, so a body says none of it"
-                f" (ADR-0181). See {STANDARD}."
+                f" Capabilities to answer, so a body says none of it beyond"
+                f" confirming, in its step 1, the fresh subagent its later steps"
+                f" start (ADR-0181, issue #394). See {STANDARD}."
             )
         assert ENVELOPE_POINTER not in _opening(text), (
             f"{path}: the opening still applies the Contextual Instruction"

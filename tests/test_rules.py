@@ -67,6 +67,18 @@ PEER = re.compile(
     r"^- \*\*Peer internals are not an interface\.\*\*(.*)$", re.MULTILINE
 )
 
+# The bullet under `### Body` governing a body's first instruction, matched by
+# its bold lead-in, which ADR-0181 and ADR-0198 address it by. It says the
+# engine's answer carries the Capabilities, so a body states none of them;
+# Redline was observed running past the reading sheet's directive in a seat
+# that could not start a subagent, and correcting in its own seat, while Write,
+# which confirms the Capability in its step 1, stopped (issue #394).
+SHIM_BULLET = re.compile(
+    r"^- \*\*Every body's first instruction is one call to the shim the Skill"
+    r" ships\b(.*)$",
+    re.MULTILINE,
+)
+
 # The `### Refactoring completeness` section of the code module, read to the
 # next third-level heading. What survives there is the sweep over a symbol's
 # callers; the sweep over prose moved to the module a prose author is actually
@@ -125,6 +137,21 @@ def _peer_bullet() -> str:
         f"{SKILLS.relative_to(REPO_ROOT)} carries a bullet named **Peer"
         f" internals are not an interface**, which is the name ADR-0176 and"
         f" ADR-0177 both address it by."
+    )
+
+    return bullet.group(1)
+
+
+def _shim_bullet() -> str:
+    """The first-instruction bullet of `skills.md`, past its bold lead-in."""
+
+    bullet = SHIM_BULLET.search(SKILLS.read_text(encoding="utf-8"))
+
+    # A renamed lead-in would leave nothing to judge and pass regardless.
+    assert bullet is not None, (
+        f"{SKILLS.relative_to(REPO_ROOT)} carries a bullet opening **Every"
+        f" body's first instruction is one call to the shim the Skill ships**,"
+        f" which is the name ADR-0181 and ADR-0198 address it by."
     )
 
     return bullet.group(1)
@@ -552,3 +579,39 @@ def test_the_docs_module_places_agent_only_documents_under_docs_agents() -> None
     """
 
     assert "`docs/agents/`" in _docs()
+
+
+def test_the_shim_bullet_names_the_capability_a_body_confirms_itself() -> None:
+    """The engine directs every Capability to be answered, and one was not.
+
+    The bullet says the engine's answer carries the Capabilities, so a body
+    states none of them. A Skill whose later steps start a fresh subagent is
+    the exception: a Redline run went past the directive in a seat that could
+    not start one and did the subagent's work in its own seat, while Write,
+    which confirms the Capability at the point of work, stopped. The bullet
+    names that exception where it says the body states none, and still counts
+    its additions truly (issue #394).
+    """
+
+    text = _shim_bullet()
+
+    assert "so the body states none of those" in text, (
+        f"{SKILLS.relative_to(REPO_ROOT)}'s first-instruction bullet still says"
+        f" the engine's answer carries the Capabilities, which is the sentence"
+        f" the exception is an exception to."
+    )
+    assert "confirms that Capability in its step 1" in text, (
+        f"{SKILLS.relative_to(REPO_ROOT)}'s first-instruction bullet says that"
+        f" a Skill whose later steps start a fresh subagent confirms that"
+        f" Capability in its step 1."
+    )
+    assert "fresh subagent" in text and "(issue #394)" in text, (
+        f"{SKILLS.relative_to(REPO_ROOT)}'s first-instruction bullet names the"
+        f" fresh subagent the exception is for and cites the observation it"
+        f" rests on as issue #394."
+    )
+    assert "The one addition" not in text, (
+        f"{SKILLS.relative_to(REPO_ROOT)}'s first-instruction bullet still"
+        f" counts one addition to the shim call, beside a second the body now"
+        f" carries."
+    )
