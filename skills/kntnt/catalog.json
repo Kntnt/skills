@@ -188,6 +188,18 @@
       "capabilities": []
     },
     {
+      "name": "nodeping",
+      "category": "infrastructure",
+      "description": "Read and change uptime monitoring at NodePing on the user's behalf — checks, results, contacts, schedules and notifications. Not for monitoring at any other provider, not for DNS, and not for server or site administration.",
+      "digest": "f64ed745c196a8062d6069cf1e0ad20a33a4bbbcfbbdc9e867977935caf6e966",
+      "binaries": [
+        "uv"
+      ],
+      "skills": [],
+      "externals": [],
+      "capabilities": []
+    },
+    {
       "name": "model-selector",
       "category": "models",
       "description": "Choose the model and deliberation level that completes delegated work at the lowest total cost, or in the least time where the user has chosen time. Never used implicitly: a Skill that routes work runs its script.",

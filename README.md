@@ -154,6 +154,12 @@ Provision Hetzner Cloud servers, install software, and deploy or maintain their 
 
 Run `/hetzner -- <operation>` with the operation and its constraints, or let the agent use it for a matching Hetzner Cloud task. A project is set up once with `/hetzner setup <project>`, after you copy a Read & Write API token from the project's Security page in the Console: the token goes from the clipboard into hcloud's own configuration without entering the conversation, `setup --yes` rotates it, and `/hetzner status` lists every project and what it reaches. `setup` also gives the agents a key of their own, `~/.ssh/kntnt-agent`: a server the Skill creates gets it at creation, and on one that already exists you admit the agents once, as a user `kntnt-agent` with passwordless `sudo`, by the procedure `setup` prints. Preparation alone creates no remote resources; billed and destructive changes stay within the established authorization. Robot dedicated servers and Object Storage are outside its scope.
 
+### nodeping
+
+Read and change uptime monitoring at NodePing — checks, their results and uptime, contacts, contact groups, schedules and notifications — through NodePing's API. It reads what exists before it writes, matches a check by its label and target, verifies each change by reading it again, and deletes nothing without authorization you have given.
+
+Run `/nodeping setup` once to store your API token, copied to the clipboard from NodePing's panel so it never passes through the conversation, and `/nodeping status` to check it. Then run `/nodeping -- <instruction>` with what you want done, or let the agent use it for a matching NodePing task.
+
 ## Features
 
 Besides skills, the collection ships **features**: catalog entries that install nothing a harness loads. `/kntnt select` lists them as a second group under the skills, and a feature's row says what it writes and where before you check it. They apply to the machine rather than to a project, so `--project` offers none.
@@ -175,6 +181,8 @@ A two-line Claude Code status line: path, worktree marker, branch, working-tree 
 Every skill requires `uv` and the manager: the manager ships the engine that reads a skill's invocation, and `uv` runs it.
 
 `hetzner` can prepare deployment files without remote tools; Cloud operations additionally need hcloud, network access, and a project token, `setup` needs `ssh-keygen` and a clipboard tool, and host operations need OpenSSH and server access.
+
+`nodeping` needs network access and a NodePing API token, which `/nodeping setup` stores from the clipboard in `~/.kntnt/nodeping/credentials.json`; the token is the whole account's, since NodePing issues no narrower one.
 
 Git workflows also require `git`; ticket workflows require `gh`; `rename-invoices` requires Poppler's `pdftotext`; `mirror` requires `agent-browser`, which fetches in a real browser what plain HTTP cannot, installed with `brew install agent-browser` and then `agent-browser install`. `release` can finish without `gh`, but then skips the GitHub release.
 
