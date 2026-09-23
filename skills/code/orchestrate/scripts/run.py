@@ -6779,7 +6779,32 @@ def repository_identity(cwd: Path) -> str:
     return remote.stdout.strip() if remote.returncode == 0 else str(cwd.resolve())
 
 
-def flake_record(cwd: Path, evidence_path: Path) -> dict[str, Any]:
+def flake_tree(cwd: Path, ticket: int | None) -> Path:
+    """Return the working tree whose branch and head a flake was proved on.
+
+    A ticket's verdict ran in the ticket's own working tree, on a branch that
+    has moved ahead of the run branch this engine is run from, so the ticket's
+    head is read from the tree the run has open for it. Without a ticket the
+    flake is the repository's own: a wave's, or a ticket's at a ceiling of one,
+    whose work is on the branch itself. A ticket with no open tree has no head
+    to name, and the run branch's is not it.
+    """
+
+    if ticket is None:
+        return cwd
+    open_now = open_worktrees(cwd, current_branch(cwd))
+    if ticket not in open_now:
+        raise RunError(
+            f"#{ticket} has no working tree open in this run, so the head its "
+            "flake was proved on cannot be read; record the flake before the "
+            "integrate that takes the tree away"
+        )
+    return Path(open_now[ticket])
+
+
+def flake_record(
+    cwd: Path, evidence_path: Path, ticket: int | None = None
+) -> dict[str, Any]:
     """Complete and validate one checker-produced load-flake record."""
 
     try:
@@ -6816,10 +6841,11 @@ def flake_record(cwd: Path, evidence_path: Path) -> dict[str, Any]:
     ):
         raise RunError("flake evidence must name its narrowed command and load context")
 
+    tree = flake_tree(cwd, ticket)
     return {
         "repository": repository_identity(cwd),
-        "branch": current_branch(cwd),
-        "head": git(cwd, "rev-parse", "HEAD").strip(),
+        "branch": current_branch(tree),
+        "head": git(tree, "rev-parse", "HEAD").strip(),
         **evidence,
         "timestamp": datetime.now(UTC)
         .isoformat(timespec="seconds")
@@ -6882,12 +6908,14 @@ def flake_ledger_lock(ledger: Path) -> Iterator[None]:
         os.close(descriptor)
 
 
-def cmd_flake(cwd: Path, evidence_path: Path, state_path: Path | None) -> int:
+def cmd_flake(
+    cwd: Path, evidence_path: Path, state_path: Path | None, ticket: int | None = None
+) -> int:
     """Append one independently established load flake to Skill-owned state."""
 
     ledger = Path.home() / FLAKE_HOME / FLAKE_LEDGER
     try:
-        offered = flake_record(cwd, evidence_path)
+        offered = flake_record(cwd, evidence_path, ticket)
         identity = flake_identity(offered)
         with flake_ledger_lock(ledger):
             records = read_flake_ledger(ledger)
@@ -7320,6 +7348,7 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
 
     flake = sub.add_parser("flake", help="Record one load-induced test flake.")
     flake.add_argument("--evidence", required=True, type=Path)
+    flake.add_argument("--ticket", type=int)
     add_shared_flags(flake)
 
     progress = sub.add_parser("progress", help="Replace the run progress dashboard.")
@@ -7449,7 +7478,7 @@ def main(argv: list[str] | None = None) -> int:
             state_path,
         )
     if args.verb == "flake":
-        return cmd_flake(cwd, args.evidence, state_path)
+        return cmd_flake(cwd, args.evidence, state_path, args.ticket)
     if args.verb == "progress":
         progress = ProgressState(
             wave=args.wave,

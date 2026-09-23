@@ -2040,6 +2040,45 @@ def _files(*directories: Path) -> dict[str, bytes]:
     }
 
 
+class _MovableClock:
+    """`time` as the catalogue module sees it, with `monotonic` moved on at will.
+
+    Everything but `monotonic` is the real module's, and every reading of
+    `monotonic` is counted, so a test can say that the code under test did
+    measure its deadline on this clock.
+    """
+
+    def __init__(self) -> None:
+        self.ahead = 0.0
+        self.reads = 0
+
+    def monotonic(self) -> float:
+        self.reads += 1
+        return time.monotonic() + self.ahead
+
+    def __getattr__(self, name: str) -> Any:
+        return getattr(time, name)
+
+
+def _started_child(written: Path, seconds: float = 60.0) -> int:
+    """Return the pid a stand-in wrote to *written*, once it has written it whole.
+
+    The file exists as soon as the stand-in's redirect opens it and holds the
+    pid only once `echo` has run, so a complete line is what says the child is
+    running. A stand-in that never gets that far fails here, by its own
+    message, rather than as the property the test is about.
+    """
+
+    ends = time.monotonic() + seconds
+    while time.monotonic() < ends:
+        if written.exists():
+            line = written.read_text(encoding="utf-8")
+            if line.endswith("\n") and line.strip().isdigit():
+                return int(line)
+        time.sleep(0.01)
+    pytest.fail(f"the stand-in never started its child within {seconds:g} seconds")
+
+
 def _gone(pid: int) -> bool:
     """Return whether process *pid* no longer runs, waiting up to ten seconds.
 
@@ -2205,8 +2244,25 @@ def test_a_source_past_its_deadline_is_stopped_with_its_process_group_and_keeps_
     # instead of hanging with a child in its group.
     bin_dir = _install(tmp_path, "claude", hanging)
     monkeypatch.setenv("PATH", os.pathsep.join((bin_dir, "/bin", "/usr/bin")))
-    # Long enough for a loaded suite to start the stand-in and its child.
-    monkeypatch.setattr(catalogue, "EXCHANGE_SECONDS", 4.0)
+    monkeypatch.setattr(catalogue, "EXCHANGE_SECONDS", 1.0)
+    # The deadline is set before the stand-in starts, and `receive` is where it
+    # turns into an outcome. A loaded machine can spend the whole second
+    # starting the stand-in, so the first `receive` waits until the child is
+    # running before handing over: a deadline already past then fires at once,
+    # and the group it kills is known to hold the child (issue #422).
+    received: Callable[[Any, Callable[[dict[str, Any]], bool]], dict[str, Any]] = (
+        catalogue._Exchange.receive
+    )
+    waited: list[int] = []
+
+    def once_the_child_runs(
+        talk: Any, wanted: Callable[[dict[str, Any]], bool]
+    ) -> dict[str, Any]:
+        if not waited:
+            waited.append(_started_child(child))
+        return received(talk, wanted)
+
+    monkeypatch.setattr(catalogue._Exchange, "receive", once_the_child_runs)
 
     report = catalogue.run(
         data,
@@ -2226,8 +2282,11 @@ def test_a_source_past_its_deadline_is_stopped_with_its_process_group_and_keeps_
     assert "deadline" in stored["sources"]["claude"]["reason"]
     assert _model(here, data, "claude-sonnet-5") is None
     assert all(row["source"] != "claude" for row in _journal(data))
-    assert child.exists(), "the stand-in never started its child"
-    assert _gone(int(child.read_text(encoding="utf-8")))
+    assert waited, (
+        "`read_claude` never called `receive`: the deadline has moved, and the"
+        " wait for the child no longer comes before it"
+    )
+    assert _gone(waited[0])
 
 
 def test_the_whole_deadline_stops_a_source_in_flight(
@@ -2295,17 +2354,30 @@ def test_a_pass_whose_deadline_passes_while_it_is_applying_finishes(
     """Applying is local and bounded, so nothing interrupts it once it has begun."""
 
     here, data, agents = _machine(tmp_path, drop=("claude-sonnet-5",))
-    monkeypatch.setattr(catalogue, "PASS_SECONDS", 2.0)
+    # The pass's own clock is moved past its deadline once applying has begun.
+    # A short real deadline would race the reading before it instead, and a
+    # loaded machine that spent that deadline on reading would stop the pass
+    # before it applied anything, which is not what this test is about
+    # (issue #422).
+    clock = _MovableClock()
+    monkeypatch.setattr(catalogue, "time", clock)
     synced = launch.sync_definitions
+    applying: list[int] = []
 
-    def slow_sync(*arguments: Any, **options: Any) -> Any:
-        time.sleep(2.3)
+    def late_sync(*arguments: Any, **options: Any) -> Any:
+        applying.append(clock.reads)
+        clock.ahead = catalogue.PASS_SECONDS + 1.0
         return synced(*arguments, **options)
 
-    monkeypatch.setattr(launch, "sync_definitions", slow_sync)
+    monkeypatch.setattr(launch, "sync_definitions", late_sync)
 
     report = catalogue.run(data, here, agents, now=NOW, readers=_readers())
 
+    assert applying, "the pass never reached applying, so its deadline was never passed"
+    assert applying[0] > 0, (
+        "the pass read no deadline off its own clock before applying, so moving"
+        " that clock tested nothing"
+    )
     assert report["outcome"] == "ran"
     assert report["bound_hit"] is None
     assert (agents / "kntnt-sonnet-high.md").is_file()

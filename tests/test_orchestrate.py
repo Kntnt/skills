@@ -1655,6 +1655,122 @@ def test_the_wave_brief_reruns_a_strict_failing_subset_without_changes() -> None
     assert "a check this list does not name is not run in its place" in text
 
 
+# The verdict briefs that run the gate and judge what it found: the ticket's
+# verdict (which every amend verdict is, dispatched unchanged), the repaired
+# verdict, and the wave check. Each proves a load flake the same way before it
+# decides anything on a failing strict subset (ADR-0139, issue #422).
+ISOLATION_BRIEFS = ("verify.md", "repaired.md", "wave.md")
+
+ISOLATION_OPENING = (
+    "**A strict subset of failing tests is rerun in isolation before the verdict.**"
+)
+
+
+def test_the_verdict_briefs_state_the_isolation_protocol_in_one_wording() -> None:
+    """One experiment, worded once, in every verdict brief that runs the gate.
+
+    A ticket's verdict once had no way to tell a test that failed under load
+    from one that fails every time, and its brief forbade the rerun that would
+    have told them apart: a false fail spent a ticket's first amend and was
+    imported as a measurement of the model (issue #422).
+    """
+
+    stated = {
+        name: _rule_statement(_brief(name), ISOLATION_OPENING)
+        for name in ISOLATION_BRIEFS
+    }
+    wordings = set(stated.values())
+
+    assert "" not in wordings, (
+        f"{SKILL / 'references'}: every verdict brief that runs the gate states the"
+        f" isolation protocol, opening `{ISOLATION_OPENING}`. These state none: "
+        f"{sorted(name for name, rule in stated.items() if not rule)}."
+    )
+    assert len(wordings) == 1, (
+        f"{SKILL / 'references'}: every verdict brief states the isolation protocol"
+        f" in the same wording, so the briefs run one experiment rather than one"
+        f" each. These differ: {sorted(stated)}."
+    )
+    (rule,) = wordings
+    for phrase in (
+        "is that command run again and not a check the list does not name",
+        "strict subset of tests failing",
+        "runner-selection syntax",
+        "exactly those failing tests in isolation three times",
+        "exact narrowed command",
+        "every isolated result",
+        "one complete rerun",
+        "same unchanged head",
+        "edits, skips, and retries with modification nothing",
+    ):
+        assert phrase in rule, (
+            f"{SKILL / 'references'}: the shared isolation paragraph carries"
+            f" {phrase!r}; it holds the whole experiment (issue #422)."
+        )
+    for outcome in ("clean pass", "a stop", "a fail", "a pass"):
+        assert outcome not in rule, (
+            f"{SKILL / 'references'}: the shared isolation paragraph holds the"
+            f" experiment only; {outcome!r} is what a result means, and that"
+            f" differs brief by brief, so it belongs to each brief's own"
+            f" verdict (issue #422)."
+        )
+
+
+def test_a_ticket_or_repaired_verdict_passes_on_a_proved_flake_and_on_nothing_less() -> (
+    None
+):
+    """A proved flake is a pass only with every criterion met; anything less is a fail."""
+
+    for name in ("verify.md", "repaired.md"):
+        verdict = _rule_statement(
+            _brief(name), "**Report a verdict, and nothing softer.**"
+        )
+        where = SKILL / "references" / name
+
+        for phrase in (
+            "passed all three isolated reruns",
+            "complete rerun on the unchanged head was green",
+            "name that flake evidence",
+            "a pass only where every acceptance criterion",
+            "a complete rerun that failed a second time",
+            "An isolated rerun that failed",
+            "a fail that quotes that evidence",
+            "a verdict you are not sure of is a fail",
+        ):
+            assert phrase in verdict, (
+                f"{where}: the verdict says {phrase!r}. A ticket's verdict passes"
+                f" on a proved flake only after three isolated passes, a green"
+                f" complete rerun, and every criterion met (issue #422)."
+            )
+
+
+def test_the_skill_records_a_flake_on_the_head_the_verdict_proved_it_on() -> None:
+    """Every verdict that proves a flake has it recorded, against the ticket's own tree."""
+
+    body = (SKILL / "SKILL.md").read_text(encoding="utf-8")
+    paragraph = next(
+        part for part in body.split("\n\n") if "flake --evidence=<path>" in part
+    )
+
+    assert "a clean wave verdict" in paragraph
+    assert "a ticket, amend, or repaired verdict" in paragraph
+    assert "--ticket=<number>" in paragraph
+    assert "before the `integrate`" in paragraph
+    assert "where `worktrees` is false, leave `--ticket` out" in paragraph.lower()
+    assert "the verdict that established it" in body
+    assert "did not see" in body
+
+
+def test_the_help_page_describes_the_isolation_protocol_for_every_verdict() -> None:
+    """The protocol is no longer the wave check's alone, and the manual says so."""
+
+    help_page = (SKILL / "help.md").read_text(encoding="utf-8")
+
+    assert "Every verdict that runs the gate" in help_page
+    assert "a repair's" in help_page
+    assert "which verdict established each" in help_page
+
+
 def test_the_skill_records_and_reports_load_flake_evidence() -> None:
     """Durable evidence and recurrence counts travel through the engine seam."""
 
