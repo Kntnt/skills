@@ -8761,8 +8761,10 @@ def test_unslop_declares_the_subagents_and_the_runtime_it_needs() -> None:
 # and delivered, the reviewer checking its own repair. A `/write` run in the
 # same seat stopped, its first step confirming the Capability at the point of
 # work (issue #394). Orchestrate, delegation and ready-for-agent-check also
-# declare `subagents`; whether they confirm it is #416's question, so they are
-# not named here.
+# declare `subagents` and are not named here: nine probes in a seat with no
+# agent-spawning tool, three per Skill, each stopped on the engine's directive
+# before any work and named the Capability, so none of them carries a step-1
+# check (issue #416, `docs/evaluation/regressions/416/`).
 FRESH_SUBAGENT_SKILLS = (WRITE, REDLINE, UNSLOP)
 FRESH_SUBAGENT_CONFIRMATION = "confirm that this Harness can start a fresh subagent"
 FRESH_SUBAGENT_REFUSAL = "report the Unsatisfied Capability"
