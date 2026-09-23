@@ -1,0 +1,5 @@
+interface:
+  display_name: "Postmark"
+  short_description: "Inspect and change email at Postmark"
+policy:
+  allow_implicit_invocation: true

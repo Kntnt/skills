@@ -154,6 +154,12 @@ Provision Hetzner Cloud servers, install software, and deploy or maintain their 
 
 Run `/hetzner`, followed by the operation and constraints, or let the agent use it for a matching Hetzner Cloud task. Preparation alone creates no remote resources; billed and destructive changes stay within the established authorization. Robot dedicated servers and Object Storage are outside its scope.
 
+### postmark
+
+Inspect and change email at Postmark on your behalf: servers and their message streams, domains and their DKIM and Return-Path records, sender signatures, templates, suppressions, bounces, delivery statistics, message search and webhooks, and a send where you ask for one. Every change is read first and verified after; a deletion or a real send happens only where you authorized that exact operation, and a send is shown in full first. DNS records are reported for `cloudns` to set rather than set here.
+
+Run `/postmark setup account` and `/postmark setup server <name>` once to store the tokens, copied in Postmark and read from the clipboard so they never enter the conversation, and `/postmark status` to check them. Then run `/postmark -- <request>`, or let the agent use it for a matching Postmark task.
+
 ## Features
 
 Besides skills, the collection ships **features**: catalog entries that install nothing a harness loads. `/kntnt select` lists them as a second group under the skills, and a feature's row says what it writes and where before you check it. They apply to the machine rather than to a project, so `--project` offers none.
@@ -175,6 +181,8 @@ A two-line Claude Code status line: path, worktree marker, branch, working-tree 
 Every skill requires `uv` and the manager: the manager ships the engine that reads a skill's invocation, and `uv` runs it.
 
 `hetzner` can prepare deployment files without remote tools; Cloud operations additionally need hcloud, network access, and a project token, and host operations need OpenSSH and server access.
+
+`postmark` needs network access and Postmark tokens for anything it does at Postmark: the account token for servers, domains, sender signatures and data removals, and a server token for each server it sends from or manages. `setup` stores them in `~/.kntnt/postmark/credentials.json` through the clipboard.
 
 Git workflows also require `git`; ticket workflows require `gh`; `rename-invoices` requires Poppler's `pdftotext`; `mirror` requires `agent-browser`, which fetches in a real browser what plain HTTP cannot, installed with `brew install agent-browser` and then `agent-browser install`. `release` can finish without `gh`, but then skips the GitHub release.
 
