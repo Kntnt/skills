@@ -4687,8 +4687,8 @@ def _inherited(data_dir: Path, *, kin: bool = True) -> None:
     Sonnet at `high` is the one measured point here, and the bound it draws is
     about 0.819. Opus 5.5's own prior at `high` is about 0.796, under that
     bound, so on its seeded capability alone it is owed no Trial; thirty good
-    `implement` rows of Opus 5 at `high` lift it to about 0.898 as its family's
-    record. Fable and Haiku carry `ENOUGH` failing rows each, which leaves Opus
+    `implement` rows of Opus 5 at `high` lift it to about 0.966, which is Opus
+    5's own estimate at that point, its family's record being Opus 5's. Fable and Haiku carry `ENOUGH` failing rows each, which leaves Opus
     5.5 the only model a Trial could go to. *kin* false leaves the Opus 5 rows
     out, which is the store as it would read with no inheritance at all.
     """

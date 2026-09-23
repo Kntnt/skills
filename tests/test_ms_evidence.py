@@ -1218,42 +1218,127 @@ def _own(count: int, grade: float, **overrides: Any) -> list[dict[str, Any]]:
     ]
 
 
-def test_a_newer_release_with_no_rows_answers_from_its_older_release(
+# Points across the ladder and across kinds, some of which the stores below
+# hold rows at and some of which they do not.
+POINTS: tuple[tuple[str, str], ...] = (
+    ("implement", "high"),
+    ("implement", "low"),
+    ("implement", "xhigh"),
+    ("design", "high"),
+    ("review", "medium"),
+)
+
+
+def _spread_rows(model: str, prefix: str) -> list[dict[str, Any]]:
+    """Provide a record of one model at several kinds and levels, graded unevenly."""
+
+    shape = (
+        ("implement", "high", 1.0, 9),
+        ("implement", "high", 0.0, 3),
+        ("implement", "medium", 0.5, 4),
+        ("design", "high", 0.0, 2),
+        ("review", "low", 1.0, 5),
+    )
+    return [
+        _row(
+            attempt_id=f"{prefix}-{index}-{count}",
+            model=model,
+            kind=kind,
+            deliberation=level,
+            grade=grade,
+        )
+        for index, (kind, level, grade, rows) in enumerate(shape)
+        for count in range(rows)
+    ]
+
+
+def _before_inheritance(
+    estimator: Any, kind: str, model: str, level: str
+) -> tuple[float, float]:
+    """Return a point's Beta as the hierarchy fitted it before ADR-0215.
+
+    The model's own rows through the three tiers and the sigmoid, and nothing
+    else: the arithmetic `main` ran at the commit before this rule, spelt out
+    here with the module's own parts so that a model with no older release can
+    be held to it exactly.
+    """
+
+    exact, by_kind, by_model = estimator._levels(kind, model, level)
+    other_levels = [row for row in by_kind if row.deliberation != level]
+    other_kinds = [row for row in by_model if row.kind != kind]
+    here = estimator._margin(kind, model, level)
+    at_model = estimator._mean_margin(other_kinds, model, here)
+    at_kind = estimator._mean_margin(other_levels, model, here)
+    pooled_model = evidence._posterior_mean(
+        other_kinds,
+        evidence._sigmoid(evidence.SHARPNESS * at_model),
+        evidence.PSEUDO[3],
+    )
+    pooled_kind = evidence._posterior_mean(
+        other_levels,
+        evidence._translated(
+            pooled_model,
+            at_kind - at_model,
+            toward=evidence._sigmoid(evidence.SHARPNESS * at_kind),
+        ),
+        evidence.PSEUDO[2],
+    )
+    alpha, beta = evidence._posterior(
+        exact, evidence._translated(pooled_kind, here - at_kind), evidence.PSEUDO[1]
+    )
+    return alpha, beta
+
+
+def test_a_model_with_no_older_release_is_estimated_exactly_as_before(
     tmp_path: Path,
 ) -> None:
-    """Its answer is its family's, shrunk as any pooled answer is, and says so.
+    """With no older release the family's record is the model's own stack.
 
-    Twelve rows of the older release enter the newer one's exact cell at the
-    weight of six, `INHERITED`, so the cell reads exactly as six rows of its
-    own would — and the point is nonetheless no row of its own: `family`, a
-    Trial count of nought and an `n` of nought. The older release's own
-    reading of the same rows is the stronger one, twelve rows weighing twelve.
-    At a level the older release never ran at, its rows move the kind rather
-    than the cell, so that cell holds nothing but its parent's prior.
+    Its deepest tier is then empty and passes its prior down unchanged, so the
+    Beta is the one the hierarchy gave before a family was read at all, to the
+    last bit — at points the store holds rows for and at points it does not.
+    The same holds for a model whose older releases hold no row, which is what
+    keeps `EXPLORATION_AT_BASE` in `test_ms_selection.py` the sweep the
+    commit before this rule drew.
     """
 
     cat = _family(tmp_path)
-    kin = _many(12, 0.9, model=OLDER)
-    inherited = _reading(cat, kin, tmp_path / "inherited")
-    own = _reading(cat, _own(int(evidence.INHERITED), 0.9), tmp_path / "own")
-    untried = evidence.Estimator([], cat, KINDS)
+    estimator = _reading(cat, _spread_rows(OLDER, "old"), tmp_path / "data")
 
-    heard = inherited.p_success("implement", NEWER, "high")
-    measured = own.p_success("implement", NEWER, "high")
-    prior = untried.p_success("implement", NEWER, "high")
-    older = inherited.p_success("implement", OLDER, "high")
-    beside = inherited.p_success("implement", NEWER, "low")
+    for kind, level in POINTS:
+        estimate = estimator.p_success(kind, OLDER, level)
+        assert (estimate.alpha, estimate.beta) == _before_inheritance(
+            estimator, kind, OLDER, level
+        )
 
-    assert heard.basis == "family"
-    assert inherited.rows_for_kind("implement", NEWER) == 0
-    assert heard.n == 0.0
-    assert (heard.alpha, heard.beta) == pytest.approx((measured.alpha, measured.beta))
-    assert abs(heard.mean - 0.9) < abs(prior.mean - 0.9)
-    assert abs(older.mean - 0.9) < abs(heard.mean - 0.9)
-    assert beside.alpha + beside.beta == pytest.approx(evidence.PSEUDO[1])
-    assert beside.mean != pytest.approx(
-        untried.p_success("implement", NEWER, "low").mean
-    )
+
+def test_a_newer_release_with_no_rows_is_estimated_as_its_predecessor(
+    tmp_path: Path,
+) -> None:
+    """At every point its mean is its predecessor's, and less sure of itself.
+
+    The predecessor's stack is the family's record, so the newer release's
+    cell is fitted on nothing against a prior that is its predecessor's
+    estimate: the same mean, a Beta of only the exact cell's parent weight, so
+    a lower tenth percentile wherever the predecessor had rows at the point,
+    and no row a caller counts — `family`, a Trial count of nought, an `n` of
+    nought.
+    """
+
+    cat = _family(tmp_path)
+    estimator = _reading(cat, _spread_rows(OLDER, "old"), tmp_path / "data")
+
+    for kind, level in POINTS:
+        heir = estimator.p_success(kind, NEWER, level)
+        predecessor = estimator.p_success(kind, OLDER, level)
+        assert heir.mean == pytest.approx(predecessor.mean, rel=1e-12)
+        assert heir.alpha + heir.beta == pytest.approx(evidence.PSEUDO[1])
+        assert heir.low <= predecessor.low + 1e-12
+        assert heir.basis == "family"
+        assert heir.n == 0.0
+    assert estimator.rows_for_kind("implement", NEWER) == 0
+    measured = estimator.p_success("implement", OLDER, "high")
+    assert estimator.p_success("implement", NEWER, "high").low < measured.low
 
 
 def test_the_older_release_is_untouched_by_the_newer_release_s_rows(
@@ -1276,63 +1361,99 @@ def test_the_older_release_is_untouched_by_the_newer_release_s_rows(
     assert estimator.p_success("implement", OLDER, "high").basis == "prior"
 
 
-def test_three_own_rows_are_a_third_of_what_the_cell_is_fitted_on_and_a_dozen_lead(
+def test_three_own_rows_are_a_third_of_the_cell_and_a_dozen_two_thirds(
     tmp_path: Path,
 ) -> None:
-    """The inheritance is a bounded prior that a Trial moves and a dozen outgrow.
+    """The family's record is the cell's prior, at the weight every parent has.
 
-    However many rows the older release holds in the cell, they weigh
-    `INHERITED`, six. A Trial's three rows of the newer release's own are then
-    a third of the rows the cell is fitted on — three of nine — which is a
-    fifth of the cell's whole weight once the six its parent is worth are
-    counted too. A dozen of its own weigh twice what the inheritance does.
+    However many rows the older release holds at the point, what they say
+    enters the newer release's cell as a prior worth `PSEUDO[1]`, six. Three
+    rows of its own are then three of nine, a third of the cell, and a dozen
+    are twelve of eighteen; the rest of the cell is exactly what the family's
+    record says of the point with nothing of the release's own.
     """
 
     cat = _family(tmp_path)
     kin = _many(30, 0.0, model=OLDER)
+    record = _reading(cat, kin, tmp_path / "record").p_success(
+        "implement", NEWER, "high"
+    )
     trial = _reading(cat, [*kin, *_own(evidence.ENOUGH, 1.0)], tmp_path / "trial")
     dozen = _reading(cat, [*kin, *_own(12, 1.0)], tmp_path / "dozen")
 
-    tried = trial.p_success("implement", NEWER, "high")
-    outgrown = dozen.p_success("implement", NEWER, "high")
-    shares = evidence._weighted(
-        [row for row in evidence.load(tmp_path / "trial") if row.model == NEWER],
-        [row for row in evidence.load(tmp_path / "trial") if row.model == OLDER],
-    )
-    own = sum(share for row, share in shares if row.model == NEWER)
-    inherited = sum(share for row, share in shares if row.model == OLDER)
-
-    assert evidence.INHERITED == 2 * evidence.ENOUGH
-    assert (own, inherited) == pytest.approx((evidence.ENOUGH, evidence.INHERITED))
-    assert own / (own + inherited) == pytest.approx(1 / 3)
-    assert tried.alpha + tried.beta == pytest.approx(
-        evidence.ENOUGH + evidence.INHERITED + evidence.PSEUDO[1]
-    )
-    assert outgrown.alpha + outgrown.beta == pytest.approx(
-        12 + evidence.INHERITED + evidence.PSEUDO[1]
-    )
-    assert outgrown.mean > 0.5 > tried.mean
-    assert tried.basis == outgrown.basis == "measured"
+    for estimator, own in ((trial, evidence.ENOUGH), (dozen, 12)):
+        estimate = estimator.p_success("implement", NEWER, "high")
+        weight = estimate.alpha + estimate.beta
+        assert weight == pytest.approx(own + evidence.PSEUDO[1])
+        assert estimate.mean == pytest.approx(
+            (own + evidence.PSEUDO[1] * record.mean) / weight
+        )
+        assert estimate.basis == "measured"
+    assert evidence.ENOUGH / (evidence.ENOUGH + evidence.PSEUDO[1]) == 1 / 3
+    assert 12 / (12 + evidence.PSEUDO[1]) == 2 / 3
     assert trial.rows_for_kind("implement", NEWER) == evidence.ENOUGH
 
 
-def test_a_few_inherited_rows_count_for_no_more_than_they_are(tmp_path: Path) -> None:
-    """Fewer rows than `INHERITED` enter at what they hold, one attempt a row.
+def test_the_newest_of_three_releases_inherits_the_rows_of_both_older_ones(
+    tmp_path: Path,
+) -> None:
+    """Every older release is kin, not only the one just before.
 
-    Spread over two rows, six attempts' worth would read one old failure as
-    three new ones.
+    The rows of the oldest release and of the middle one enter the newest
+    release's record together, so its estimate is the one it would have if
+    all of them had been filed under a single predecessor.
+    """
+
+    releases = (
+        _release("kin-3", "2025-01-01", 0.7),
+        _release(OLDER, "2026-01-01", 0.7),
+        _release(NEWER, "2026-06-01", 0.7),
+    )
+    good = _many(10, 1.0, model="kin-3")
+    bad = [
+        _row(attempt_id=f"mid-{index}", model=OLDER, grade=0.0) for index in range(10)
+    ]
+    moved = [{**row, "model": OLDER} for row in good]
+    chain = _reading(
+        _family(tmp_path / "chain", *releases), [*good, *bad], tmp_path / "a"
+    )
+    pooled = _reading(
+        _family(tmp_path / "pooled", *releases), [*moved, *bad], tmp_path / "b"
+    )
+    oldest = _reading(_family(tmp_path / "oldest", *releases), good, tmp_path / "c")
+
+    heir = chain.p_success("implement", NEWER, "high")
+
+    assert heir.basis == "family"
+    assert heir.mean == pytest.approx(pooled.p_success("implement", NEWER, "high").mean)
+    assert heir.mean < oldest.p_success("implement", NEWER, "high").mean
+
+
+def test_a_release_s_own_rows_at_other_work_inform_its_record_for_this_work(
+    tmp_path: Path,
+) -> None:
+    """The family's stack holds the release's own rows above its cell.
+
+    A predecessor measured once, and failing, is next to nothing beside thirty
+    rows of the newer release's own on other work: the estimate for this work
+    follows the thirty, as it would with no predecessor at all, rather than
+    the one row.
     """
 
     cat = _family(tmp_path)
-    estimator = _reading(cat, _many(2, 0.0, model=OLDER), tmp_path / "data")
+    once = [_row(attempt_id="old-once", model=OLDER, grade=0.0)]
+    thirty = _own(30, 1.0, kind="design")
+    both = _reading(cat, [*once, *thirty], tmp_path / "both")
+    own = _reading(cat, thirty, tmp_path / "own")
+    kin = _reading(cat, once, tmp_path / "kin")
 
-    heard = estimator.p_success("implement", NEWER, "high")
+    mixed = both.p_success("implement", NEWER, "high").mean
+    followed = own.p_success("implement", NEWER, "high").mean
+    inherited = kin.p_success("implement", NEWER, "high").mean
 
-    assert [share for _, share in evidence._weighted([], estimator._rows)] == [
-        1.0,
-        1.0,
-    ]
-    assert heard.alpha + heard.beta == pytest.approx(2 + evidence.PSEUDO[1])
+    assert abs(mixed - followed) < abs(mixed - inherited)
+    assert mixed > inherited
+    assert both.p_success("implement", NEWER, "high").basis == "pooled"
 
 
 def test_family_replaces_prior_alone(tmp_path: Path) -> None:

@@ -26,14 +26,17 @@ caller can tell a measured answer from a plausible one.
 
 A newer release of a family starts from the record of the releases before it,
 on the maintainer's premise that a maker replaces a release with one it holds
-to be better. At every level the model's own rows enter whole, and the same
-level's rows of its older releases enter beside them as a bounded prior —
-`INHERITED` attempts' worth however many there are, or fewer where there are
-fewer — so a release with nothing of its own answers from its family, a Trial's
-three rows already move it, and a dozen lead it. Nothing flows the other way,
-and none of it is the model's own: `basis` reads `family` where the answer
-rests on those rows and on nothing of the model's, and every count a caller
-reads off a point counts the model's own rows alone (ADR-0215).
+to be better. That record is one more stack of the same shape: every row of
+its older releases, whole, with the release's own rows at its other kinds and
+other levels, the older releases' rows at the exact point being its deepest
+tier. What that stack says of the point is the prior of the release's own
+cell, at the exact cell's usual parent weight, so a release with nothing of its
+own is estimated as its predecessor is, a Trial's three rows are a third of
+its cell, a dozen are two thirds, and a release with no older release is
+estimated exactly as it always was. Nothing flows the other way, and none of
+it is the model's own: `basis` reads `family` where the answer rests on those
+rows and on nothing of the model's, and every count a caller reads off a point
+counts the model's own rows alone (ADR-0215).
 
 That hierarchy is about success. What an attempt costs is borrowed on the same
 principle one tier shallower: a row's token counts and its elapsed time are
@@ -133,15 +136,6 @@ PSEUDO = {3: 2.0, 2: 4.0, 1: 6.0}
 # as pooled. Three is the point where a run of luck stops being the whole
 # sample without demanding a study nobody will ever run.
 ENOUGH = 3
-
-# How much an older release's rows are worth to a newer release of its family,
-# in attempts, at each level of the estimate: twice `ENOUGH`, which is six, the
-# weight the exact cell already gives its parent. Enough that a release with no
-# rows of its own answers from its family's record rather than from a sigmoid,
-# and few enough that a Trial's three rows move it and a dozen lead it. A cap
-# rather than the rows whole, because six hundred of a predecessor's rows would
-# never be outgrown by the successor they are about (ADR-0215).
-INHERITED = 2.0 * ENOUGH
 
 # The quantile `low` reports. A tenth percentile is pessimistic enough that an
 # untried point cannot present itself as a sure thing, and generous enough
@@ -644,11 +638,14 @@ class Estimator:
         off through three tiers, and narrowing its rows too would interact
         with what counts as measured (ADR-0203).
 
-        A newer release reads its older releases' rows too, at every level and
-        beside its own, each level's share of them bounded by `_weighted`. They
-        move the estimate and nothing a caller counts: `basis` is `family`
-        only where the model's own rows would have said `prior`, and `n`
-        counts the model's own rows alone (ADR-0215).
+        A newer release is estimated under its family's record: the stack
+        below is fitted on every row of its older releases together with its
+        own rows at other kinds and levels, the older releases' rows at this
+        point being its deepest tier, and what that stack says of the point is
+        the prior its own cell is fitted against. Those rows move the estimate
+        and nothing a caller counts: `basis` is `family` only where the model's
+        own rows would have said `prior`, and `n` counts the model's own rows
+        alone (ADR-0215).
         """
 
         exact, by_kind, by_model = self._levels(kind, model, deliberation)
@@ -661,26 +658,20 @@ class Estimator:
         # the rows the child does not already hold: without that the same rows
         # are asserted once per level, and four failures at one point compound
         # into a certainty about the model that four observations cannot buy.
-        # The older releases' rows are partitioned the same way and enter each
-        # level beside the model's own.
-        other_levels = [row for row in by_kind if row.deliberation != deliberation]
-        other_kinds = [row for row in by_model if row.kind != kind]
-        fitted_exact = _weighted(exact, kin_exact)
-        fitted_kind = _weighted(
-            other_levels,
-            [row for row in kin_by_kind if row.deliberation != deliberation],
-        )
-        fitted_model = _weighted(
-            other_kinds, [row for row in kin_by_model if row.kind != kind]
-        )
+        # Each level above the cell holds the family's record, the older
+        # releases' rows beside the model's own; the cell holds its own alone.
+        other_levels = [
+            row for row in (*by_kind, *kin_by_kind) if row.deliberation != deliberation
+        ]
+        other_kinds = [row for row in (*by_model, *kin_by_model) if row.kind != kind]
 
         # Where each level's evidence actually stands. A level's rows ran under
         # their own conditions, not under the ones being asked about: the rows
         # left to the model span every other kind it has attempted, and the ones
         # left to the kind span every other level it was attempted at.
         here = self._margin(kind, model, deliberation)
-        at_model = self._mean_margin(fitted_model, model, here)
-        at_kind = self._mean_margin(fitted_kind, model, here)
+        at_model = self._mean_margin(other_kinds, model, here)
+        at_kind = self._mean_margin(other_levels, model, here)
 
         # Top down: the sigmoid seeds the model, the model seeds the kind, and
         # the kind seeds the exact cell. Each level is a Beta posterior fitted
@@ -690,9 +681,9 @@ class Estimator:
         # unchanged onto easy work, and a model measured at one level of
         # deliberation would report the same number for all five of them.
         prior = _sigmoid(SHARPNESS * at_model)
-        pooled_model = _posterior_mean(fitted_model, prior, PSEUDO[3])
+        pooled_model = _posterior_mean(other_kinds, prior, PSEUDO[3])
         pooled_kind = _posterior_mean(
-            fitted_kind,
+            other_levels,
             _translated(
                 pooled_model,
                 at_kind - at_model,
@@ -700,9 +691,15 @@ class Estimator:
             ),
             PSEUDO[2],
         )
-        alpha, beta = _posterior(
-            fitted_exact, _translated(pooled_kind, here - at_kind), PSEUDO[1]
-        )
+        parent = _translated(pooled_kind, here - at_kind)
+
+        # The family's own cell for this point, its older releases' rows there,
+        # is the last tier of its record. Empty, it passes its prior down
+        # unchanged, which is what leaves a model with no older release
+        # estimated exactly as it was before it had any.
+        if kin_exact:
+            parent = _posterior_mean(kin_exact, parent, PSEUDO[1])
+        alpha, beta = _posterior(exact, parent, PSEUDO[1])
 
         basis = "prior"
         if len(exact) >= ENOUGH:
@@ -737,8 +734,9 @@ class Estimator:
         counted off it would never end.
 
         The model's own rows alone: its older releases' rows inform the
-        estimate and satisfy no Trial, so a newcomer with a strong inheritance
-        is still owed one and is judged on its own record after it (ADR-0215).
+        estimate and satisfy no Trial, so a newcomer whose family's record
+        makes its point plausible is still owed one and is judged on its own
+        record after it (ADR-0215).
         """
 
         _, by_kind, _ = self._levels(kind, model, None)
@@ -935,14 +933,13 @@ class Estimator:
         )
 
     def _mean_margin(
-        self, rows: Sequence[tuple[Measurement, float]], model: str, fallback: float
+        self, rows: Sequence[Measurement], model: str, fallback: float
     ) -> float:
         """Return the conditions a level's rows stand at, on average.
 
-        Each row counts at the weight it enters the level's posterior at, so an
-        older release's rows move the conditions exactly as far as they move
-        the estimate. They are read at *model*'s own capability, the conditions
-        being the kind and the level they ran at rather than who ran them.
+        An older release's rows are read at *model*'s own capability like the
+        model's own, the conditions being the kind and the level they ran at
+        rather than who ran them.
 
         A level with no rows of its own stands nowhere, so it stands where the
         question does: the fallback makes every translation an identity when
@@ -953,9 +950,8 @@ class Estimator:
         if not rows:
             return fallback
         return sum(
-            share * self._margin(row.kind, model, row.deliberation)
-            for row, share in rows
-        ) / sum(share for _, share in rows)
+            self._margin(row.kind, model, row.deliberation) for row in rows
+        ) / len(rows)
 
 
 def _rejection(row: Mapping[str, Any]) -> str | None:
@@ -1190,41 +1186,23 @@ def _partition(
     return exact, by_kind, rows
 
 
-def _weighted(
-    own: Sequence[Measurement], kin: Sequence[Measurement]
-) -> list[tuple[Measurement, float]]:
-    """Return one level's rows, each with the weight it enters the level at.
-
-    A row of the model's own counts as the one attempt it was. An older
-    release's rows share `INHERITED` attempts' worth between them, evenly, so
-    six hundred of them weigh what six would — and no row counts for more than
-    the one attempt it was, so a level holding fewer than six of them enters
-    at what it holds. Spread over one row, six attempts' worth would read one
-    old failure as six new ones (ADR-0215).
-    """
-
-    share = min(1.0, INHERITED / len(kin)) if kin else 0.0
-    return [(row, 1.0) for row in own] + [(row, share) for row in kin]
-
-
 def _posterior(
-    rows: Sequence[tuple[Measurement, float]], parent_mean: float, weight: float
+    rows: Sequence[Measurement], parent_mean: float, weight: float
 ) -> tuple[float, float]:
     """Return the Beta parameters for *rows* shrunk towards *parent_mean*.
 
     A grade is a fractional success rather than a coin flip, so an attempt
     graded 0.7 contributes 0.7 to alpha and 0.3 to beta. That is what lets a
-    judge's partial credit inform the same arithmetic as a checker's pass. Each
-    row counts at the share it carries, one for a row of the model's own.
+    judge's partial credit inform the same arithmetic as a checker's pass.
     """
 
-    successes = sum(share * row.grade for row, share in rows)
-    failures = sum(share * (1.0 - row.grade) for row, share in rows)
+    successes = sum(row.grade for row in rows)
+    failures = sum(1.0 - row.grade for row in rows)
     return successes + weight * parent_mean, failures + weight * (1.0 - parent_mean)
 
 
 def _posterior_mean(
-    rows: Sequence[tuple[Measurement, float]], parent_mean: float, weight: float
+    rows: Sequence[Measurement], parent_mean: float, weight: float
 ) -> float:
     """Return just the mean of the posterior `_posterior` describes."""
 
