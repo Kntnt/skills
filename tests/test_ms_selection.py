@@ -1059,19 +1059,24 @@ def _measured_beside_unowed_prior(data_dir: Path) -> None:
     Trial, and the shared helper cannot be given rows without moving the four
     other tests that replay it (issue #374).
 
-    Opus at `high` has two hundred good `mechanical` rows and at `low` ten bad
-    ones, so it is the answer and the bound it draws is about 0.9735 — above
-    Sonnet's prior of about 0.9689 at `high` and far above the Haiku point, so
-    neither is owed a Trial on its mean. Fable's three failing rows are
-    `ENOUGH` to take it off one on its count. Sonnet is still untested at every
-    level, still clears the floor at each, and still finishes a job for less
-    than the answer does, which is the whole of what this test is about.
+    Opus at `high` has four hundred good `mechanical` rows and at `low` ten bad
+    ones, so it is the answer and the bound it draws is about 0.9866 — above
+    Sonnet's prior at every level, the highest being about 0.9744 at `xhigh`,
+    and far above the Haiku point, so neither is owed a Trial on its mean.
+    Two hundred rows were enough while a Trial was read at the answer's level
+    alone, where Sonnet reads about 0.9689; read at whichever of a model's
+    points clears the bound first (ADR-0216), the bound has to stand above
+    Sonnet's highest point, which two hundred rows left it just under. Fable's
+    three failing rows are `ENOUGH` to take it off one on its count. Sonnet is
+    still untested at every level, still clears the floor at each, and still
+    finishes a job for less than the answer does, which is the whole of what
+    this test is about.
     """
 
     _profile(data_dir)
     _store(
         data_dir,
-        ("mechanical", "claude-opus-5-5", "high", 1.0, 200),
+        ("mechanical", "claude-opus-5-5", "high", 1.0, 400),
         ("mechanical", "claude-opus-5-5", "low", 0.0, 10),
         ("mechanical", FABLE, "high", 0.0, 3),
     )
@@ -1476,7 +1481,11 @@ def test_the_estimate_that_won_the_replayed_case_is_tried_rather_than_answered(
     the ranking puts the measured point first, and the Trial then tries the
     untested model on purpose — three reversible jobs of the kind at whatever
     they cost — so the model that won that day is tried and says it was tried,
-    rather than taken for the answer (issue #374).
+    rather than taken for the answer (issue #374). It is tried at the very
+    point that won, `medium`: that is the first of Fable's points the ranked
+    list reaches among those clearing the bound, which is where a Trial is
+    now taken (ADR-0216), where it used to be taken at the answer's own
+    level, `high`.
 
     That is forced rather than chosen. The band's bound is the drawer's own
     `Estimate.low`, which is never above its own mean, so wherever no measured
@@ -1510,7 +1519,7 @@ def test_the_estimate_that_won_the_replayed_case_is_tried_rather_than_answered(
     assert measured["expected"]["p_success"] < select.FLOOR
     assert untested["expected"][total] > measured["expected"][total]
 
-    assert (answer["model"], answer["deliberation"]) == (FABLE, "high")
+    assert (answer["model"], answer["deliberation"]) == (FABLE, "medium")
     assert answer["explored"] == TRIAL
     assert answer["basis"] == "prior"
     assert "claude-opus-5-5@high" in (answer["note"] or "")
@@ -2221,10 +2230,12 @@ def _owing(data_dir: Path) -> None:
     so it is the answer and the band it draws is its own bound of about 0.796.
     Sonnet and Haiku have three failing rows each: enough rows of their own
     that neither is owed a Trial, and low enough means that neither would be
-    owed one anyway. Fable has no row for the kind at all, its prior reads
-    about 0.994 — well above the band — and it finishes an attempt for about
-    1.06 against the answer's 0.46, so the one point owed a Trial here is also
-    the dear one.
+    owed one anyway. Fable has no row for the kind at all, and its prior reads
+    about 0.987 at `low` and higher at every level above — well above the
+    band everywhere. Its Trial is taken at `low`, the first of its points the
+    ranked list reaches (ADR-0216), and an attempt there costs about 0.75
+    against the answer's 0.46, so the one point owed a Trial here is also the
+    dear one.
     """
 
     _profile(data_dir)
@@ -2303,33 +2314,39 @@ def test_a_model_with_no_rows_for_the_kind_is_tried_however_dear_it_is(
     a dearer one never, so a model the ranking shuts out of every plain answer
     has no route to the three rows that would let it be judged on its own
     (issue #374). The Trial is that route: no price cap is consulted, and here
-    the point tried finishes an attempt for more than twice what the answer
-    does.
+    the point tried costs an attempt more than one and a half times what the
+    answer's does. That point is Fable at `low` rather than at the answer's
+    level, `low` being the first of Fable's points the ranked list reaches
+    among those clearing the bound (ADR-0216); it is still the dearer one.
     """
 
     _owing(tmp_path)
     flags = (*LIMITED, f"--data={tmp_path}", "--kind=mechanical")
 
     answers = [_answer(capsys, *flags, f"--seed={seed}") for seed in range(DRAWS)]
-    tried = _point(capsys, flags, FABLE, "high")
+    tried = _point(capsys, flags, FABLE, "low")
     plain = _point(capsys, flags, "claude-opus-5-5", "high")
 
     assert tried["expected"]["cost_usd"] > plain["expected"]["cost_usd"]
     for answer in answers:
-        assert (answer["model"], answer["deliberation"]) == (FABLE, "high")
+        assert (answer["model"], answer["deliberation"]) == (FABLE, "low")
         assert answer["explored"] == TRIAL
         assert answer["basis"] == "prior"
         assert "claude-opus-5-5@high" in (answer["note"] or "")
 
 
-def test_a_trial_takes_the_nearest_level_the_tried_model_supports(
+def test_a_model_offering_one_level_is_tried_at_it_wherever_the_answer_runs(
     tmp_path: Path, capsys: pytest.CaptureFixture[str]
 ) -> None:
-    """A model with a shallower ladder is tried where its own ladder reaches.
+    """A model with a one-rung ladder is tried at its one point, which clears the bound.
 
-    The answer sits at `high` and the model owed the Trial offers `low` alone,
-    so `low` is where it is tried — the nearest-level rule an exploration of
-    the model dimension already follows, asked again rather than restated.
+    The answer sits at `high` and the model owed the Trial offers `low` alone.
+    This test used to say `low` was taken as the level nearest the answer's,
+    the rule an exploration of the model dimension follows. A Trial no longer
+    asks that: it takes the first of the model's points the ranked list
+    reaches among those clearing the bound (ADR-0216), and here the model has
+    one point and it clears, so `low` is tried because that is where the model
+    could win, and the answer's level plays no part.
     """
 
     _profile(tmp_path)
@@ -2351,7 +2368,10 @@ def test_a_trial_ends_once_the_store_holds_enough_rows_for_the_kind(
 
     The boundary is read at both sides of `ENOUGH`, and the row that crosses it
     is taken at another level, because what ends a Trial is the model's rows
-    for the kind wherever on the ladder they were taken.
+    for the kind wherever on the ladder they were taken. The Trial still owed
+    at two rows is at `low`, the first of Fable's points the ranked list
+    reaches among those clearing the bound (ADR-0216), not at the answer's
+    level, `high`, where the two good rows were filed.
     """
 
     _owing(tmp_path)
@@ -2367,7 +2387,7 @@ def test_a_trial_ends_once_the_store_holds_enough_rows_for_the_kind(
     )
     full = _answer(capsys, *flags)
 
-    assert (short["model"], short["deliberation"]) == (FABLE, "high")
+    assert (short["model"], short["deliberation"]) == (FABLE, "low")
     assert short["explored"] == TRIAL
     assert (full["model"], full["deliberation"]) == ("claude-opus-5-5", "high")
     assert full["explored"] is None
@@ -2418,11 +2438,18 @@ def test_a_model_below_the_band_is_left_to_the_downhill_exploration(
     not, and the call is answered as it would have been without the rule — the
     road such a model keeps being the downhill exploration, which is cheap by
     construction.
+
+    Sonnet is read at every point it has, a Trial being owed where any of them
+    clears the bound and taken at the first of those the ranked list reaches
+    (ADR-0216). So the quiet store needs the bound above Sonnet's highest
+    point, at `xhigh`, which four hundred good rows put it past where two
+    hundred left it just under, and the store that owes one tries Sonnet at
+    `low`, not at the answer's level, `high`.
     """
 
     below = tmp_path / "below"
     above = tmp_path / "above"
-    for data_dir, rows in ((below, 200), (above, 20)):
+    for data_dir, rows in ((below, 400), (above, 20)):
         _profile(data_dir)
         _store(
             data_dir,
@@ -2438,15 +2465,14 @@ def test_a_model_below_the_band_is_left_to_the_downhill_exploration(
     owed = _answer(capsys, *LIMITED, f"--data={above}", "--kind=mechanical", "--seed=0")
     ranked = _ranking(below, "mechanical")
     drawn = select._band(ranked)
-    sonnet = next(
-        row for row in ranked if select._named(row.point) == "claude-sonnet-5@high"
-    )
+    sonnet = [row for row in ranked if row.point.model.id == "claude-sonnet-5"]
 
     assert drawn is not None
-    assert sonnet.estimate.mean < drawn[1]
+    assert sonnet
+    assert max(row.estimate.mean for row in sonnet) < drawn[1]
     assert (quiet["model"], quiet["deliberation"]) == ("claude-opus-5-5", "high")
     assert quiet["explored"] is None
-    assert (owed["model"], owed["deliberation"]) == ("claude-sonnet-5", "high")
+    assert (owed["model"], owed["deliberation"]) == ("claude-sonnet-5", "low")
     assert owed["explored"] == TRIAL
 
 
@@ -2487,6 +2513,11 @@ def test_a_trial_in_progress_is_taken_before_one_not_yet_begun(
     Fable's the Trial in progress, and it is taken over the earlier-ranked
     point until its three rows are in — which is what keeps one Trial from
     becoming three models with one row each.
+
+    Each model is tried at the first of its points the ranked list reaches
+    among those clearing the bound (ADR-0216): Sonnet at `low` and Fable at
+    `low`, though the answer runs at `high` and Fable's one row was filed
+    there.
     """
 
     fresh = tmp_path / "fresh"
@@ -2511,11 +2542,11 @@ def test_a_trial_in_progress_is_taken_before_one_not_yet_begun(
         capsys, *LIMITED, f"--data={begun}", "--kind=mechanical", "--seed=7"
     )
 
-    assert (neither["model"], neither["deliberation"]) == ("claude-sonnet-5", "high")
+    assert (neither["model"], neither["deliberation"]) == ("claude-sonnet-5", "low")
     assert neither["explored"] == TRIAL
-    assert (started["model"], started["deliberation"]) == (FABLE, "high")
+    assert (started["model"], started["deliberation"]) == (FABLE, "low")
     assert started["explored"] == TRIAL
-    assert (again["model"], again["deliberation"]) == (FABLE, "high")
+    assert (again["model"], again["deliberation"]) == (FABLE, "low")
 
 
 def test_the_answers_own_model_is_never_the_model_owed_a_trial(
@@ -2598,10 +2629,17 @@ def test_a_point_above_the_deliberation_ceiling_is_never_tried(
 ) -> None:
     """The ceiling narrowed the pool, and the Trial's candidates are that pool.
 
-    Asked with no ceiling of its own the Trial takes Fable at `high`; asked
+    Asked with no ceiling of its own the Trial takes Fable at `low`; asked
     under a `medium` ceiling every answer is a point that ceiling admits,
     because the points above it were never in the pool the call ranked.
     Nothing in the Trial reads the ceiling to arrive at that.
+
+    The open call used to try Fable at `high`, the answer's level, which put
+    the Trial point above the `medium` ceiling. It is now taken at the first
+    of Fable's points the ranked list reaches among those clearing the bound
+    (ADR-0216), which is `low`, under the ceiling either way; the case where
+    the one point that could win is held out by the ceiling is
+    `test_a_point_above_the_ceiling_is_never_the_trial_point_however_plausible`.
     """
 
     _owing(tmp_path)
@@ -2613,7 +2651,7 @@ def test_a_point_above_the_deliberation_ceiling_is_never_tried(
         for seed in range(DRAWS)
     ]
 
-    assert (open_call["model"], open_call["deliberation"]) == (FABLE, "high")
+    assert (open_call["model"], open_call["deliberation"]) == (FABLE, "low")
     assert open_call["explored"] == TRIAL
     assert {answer["deliberation"] for answer in capped} <= {None, "low", "medium"}
     assert TRIAL in {answer["explored"] for answer in capped}
@@ -2687,6 +2725,14 @@ def test_an_unpriceable_point_is_tried_where_it_is_the_model_owed_a_trial(
     as a nought would make it the cheapest thing on the frontier — but a Trial
     consults no price, so the one model owed one here is tried although nothing
     can say what it costs.
+
+    Opus 5.5 carries `ENOUGH` failing rows of its own, which keeps it the one
+    model owed nothing here for a reason other than its mean. Read at every
+    point it has, its seeded prior is about 0.826 at `xhigh`, over the bound
+    Sonnet draws, so without those rows it would be owed the Trial ahead of the
+    unpriced point (ADR-0216); read at the answer's level, `high`, alone, as
+    the rule once did, it sat under the bound and needed no rows to be left
+    out.
     """
 
     _refresh(
@@ -2708,6 +2754,7 @@ def test_an_unpriceable_point_is_tried_where_it_is_the_model_owed_a_trial(
         tmp_path,
         ("implement", "claude-sonnet-5", "high", 1.0, 20),
         ("implement", FABLE, "high", 0.0, 3),
+        ("implement", "claude-opus-5-5", "xhigh", 0.0, ENOUGH),
     )
 
     answer = _answer(
@@ -2751,7 +2798,10 @@ def test_a_trial_says_it_was_one_and_what_the_evidence_would_have_chosen(
     The note names the call as a Trial, names the point being tried and says
     what the evidence would have chosen — the duty ADR-0184 gives the
     exploration note — and it never calls `trial` a dimension, a Trial being a
-    point tried instead of the answer rather than one axis of it moved.
+    point tried instead of the answer rather than one axis of it moved. The
+    point it names is Fable at `low`, the first of Fable's points the ranked
+    list reaches among those clearing the bound (ADR-0216), where it once
+    named Fable at the answer's level, `high`.
     """
 
     _owing(tmp_path)
@@ -2771,7 +2821,7 @@ def test_a_trial_says_it_was_one_and_what_the_evidence_would_have_chosen(
     note = tried["note"] or ""
     assert tried["explored"] == TRIAL
     assert TRIAL in note
-    assert f"{FABLE}@high" in note
+    assert f"a trial of {FABLE}@low" in note
     assert "would have chosen" in note
     assert "claude-opus-5-5@high" in note
     assert f"{TRIAL} dimension" not in note
@@ -4684,19 +4734,24 @@ def test_the_rule_removes_nothing_this_machine_has_stored(
 def _inherited(data_dir: Path, *, kin: bool = True) -> None:
     """Write a store in which Opus 5.5 has nothing of its own and Opus 5 a record.
 
-    Sonnet at `high` is the one measured point here, and the bound it draws is
-    about 0.819. Opus 5.5's own prior at `high` is about 0.796, under that
-    bound, so on its seeded capability alone it is owed no Trial; thirty good
-    `implement` rows of Opus 5 at `high` lift it to about 0.966, which is Opus
-    5's own estimate at that point, its family's record being Opus 5's. Fable and Haiku carry `ENOUGH` failing rows each, which leaves Opus
-    5.5 the only model a Trial could go to. *kin* false leaves the Opus 5 rows
-    out, which is the store as it would read with no inheritance at all.
+    Sonnet at `high` is the one measured point here, on thirty good rows, and
+    the bound it draws is about 0.868. Opus 5.5's own prior is about 0.826 at
+    `xhigh` and lower at every other level, under that bound everywhere, so on
+    its seeded capability alone it is owed no Trial; thirty good `implement`
+    rows of Opus 5 at `high` lift it to about 0.966 there and to 0.944 or more
+    at every level, which is Opus 5's own estimate at each point, its family's
+    record being Opus 5's. Sonnet carried twenty rows while a Trial was read at
+    the answer's level alone; at twenty the bound is about 0.819 and Opus
+    5.5's seeded `xhigh` clears it, which the rule now reads (ADR-0216). Fable
+    and Haiku carry `ENOUGH` failing rows each, which leaves Opus 5.5 the only
+    model a Trial could go to. *kin* false leaves the Opus 5 rows out, which is
+    the store as it would read with no inheritance at all.
     """
 
     _profile(data_dir)
     _store(
         data_dir,
-        ("implement", "claude-sonnet-5", "high", 1.0, 20),
+        ("implement", "claude-sonnet-5", "high", 1.0, 30),
         ("implement", FABLE, "high", 0.0, ENOUGH),
         ("implement", HAIKU, None, 0.0, ENOUGH),
         *([("implement", "claude-opus-5", "high", 1.0, 30)] if kin else []),
@@ -4741,10 +4796,13 @@ def test_a_newcomer_its_family_s_record_makes_plausible_is_owed_a_trial(
 ) -> None:
     """The Trial is counted off the release's own rows, so a strong heir gets one.
 
-    Every reversible call is the Trial, at the answer's own level, and its note
-    says so and names what the evidence would have chosen. Without Opus 5's
-    rows the same store owes no Trial at all: the seeded capability alone does
-    not reach the bound, which is exactly the newcomer ADR-0207 never reached.
+    Every reversible call is the Trial, and its note says so and names what
+    the evidence would have chosen. It is taken at `low`, the first of Opus
+    5.5's points the ranked list reaches among those clearing the bound
+    (ADR-0216), where this test once asserted the answer's own level, `high`.
+    Without Opus 5's rows the same store owes no Trial at all: the seeded
+    capability alone reaches the bound at no point, which is exactly the
+    newcomer ADR-0207 never reached.
     """
 
     _inherited(tmp_path / "heir")
@@ -4756,9 +4814,209 @@ def test_a_newcomer_its_family_s_record_makes_plausible_is_owed_a_trial(
     untried = [_answer(capsys, *stranger, f"--seed={seed}") for seed in range(DRAWS)]
 
     for answer in tried:
-        assert (answer["model"], answer["deliberation"]) == ("claude-opus-5-5", "high")
+        assert (answer["model"], answer["deliberation"]) == ("claude-opus-5-5", "low")
         assert answer["explored"] == TRIAL
         assert answer["basis"] == "family"
-        assert "a trial of claude-opus-5-5@high" in (answer["note"] or "")
+        assert "a trial of claude-opus-5-5@low" in (answer["note"] or "")
         assert "claude-sonnet-5@high" in (answer["note"] or "")
     assert not [answer for answer in untried if answer["explored"] == TRIAL]
+
+
+# --- A Trial is taken at the point a model would win at (ADR-0216) -----------
+
+# Every level on the ladder the seeded Opus releases offer, `max` included, so
+# a fixture can write its predecessor's record at each of them.
+OPUS_LADDER: tuple[str, ...] = ("low", "medium", "high", "xhigh", "max")
+
+
+def _plausible_at(data_dir: Path, level: str | None) -> None:
+    """Write a store in which Opus 5.5 could win at one level of its ladder alone.
+
+    Sonnet at `medium` is the answer on twenty good rows of its own, and the
+    bound it draws is about 0.789. Opus 5.5 has no row of its own, and Opus 5
+    holds thirty good `implement` rows at *level* and `ENOUGH` failing ones at
+    every other level of the ladder, so the family's record puts Opus 5.5 at
+    about 0.87 at *level* and at 0.56 or less everywhere else. *level* None
+    gives Opus 5 failing rows at every level, which leaves Opus 5.5 under the
+    bound at every point it has. Fable and Haiku carry `ENOUGH` failing rows
+    each, which leaves Opus 5.5 the only model a Trial could go to.
+    """
+
+    _profile(data_dir)
+    _store(
+        data_dir,
+        ("implement", "claude-sonnet-5", "medium", 1.0, 20),
+        ("implement", FABLE, "high", 0.0, ENOUGH),
+        ("implement", HAIKU, None, 0.0, ENOUGH),
+        *[
+            ("implement", "claude-opus-5", rung, 1.0, 30)
+            if rung == level
+            else ("implement", "claude-opus-5", rung, 0.0, ENOUGH)
+            for rung in OPUS_LADDER
+        ],
+    )
+
+
+def test_a_trial_is_taken_at_the_point_the_model_would_win_at(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """A newcomer plausible at `high` alone is tried at `high` on a `medium` call.
+
+    This is the maintainer's store of 2026-09-23 in small: Opus 5's record is
+    strong at one level and thin at the level the answer runs at. Read at the
+    answer's level, Opus 5.5 sits under the bound and is owed nothing, so the
+    inheritance never brings it in on the kind. Read at the point the ranked
+    list reaches first among those clearing the bound, it is tried at `high`,
+    and the note names that point and the answer the evidence would have given.
+    """
+
+    _plausible_at(tmp_path, "high")
+    flags = (*LIMITED, f"--data={tmp_path}", "--kind=implement")
+
+    answers = [_answer(capsys, *flags, f"--seed={seed}") for seed in range(DRAWS)]
+    at_answer = _point(capsys, flags, "claude-opus-5-5", "medium")
+    ranked = _ranking(tmp_path, "implement")
+    drawn = select._band(ranked)
+
+    assert drawn is not None
+    assert at_answer["expected"]["p_success"] < drawn[1]
+    for answer in answers:
+        note = answer["note"] or ""
+        assert (answer["model"], answer["deliberation"]) == ("claude-opus-5-5", "high")
+        assert answer["explored"] == TRIAL
+        assert "a trial of claude-opus-5-5@high" in note
+        assert "would have chosen claude-sonnet-5@medium" in note
+
+
+def test_a_model_plausible_at_no_point_the_pool_admits_is_owed_no_trial(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """Looking along the whole ladder finds no Trial where no rung clears the bound.
+
+    Opus 5's record fails at every level, so every point of Opus 5.5 reads
+    under the bound Sonnet draws, and the rule reading the model's best-placed
+    point rather than the answer's level owes it nothing — a Trial still never
+    spent confirming that a weak model is weak.
+    """
+
+    _plausible_at(tmp_path, None)
+    flags = (*LIMITED, f"--data={tmp_path}", "--kind=implement")
+
+    answers = [_answer(capsys, *flags, f"--seed={seed}") for seed in range(DRAWS)]
+    ranked = _ranking(tmp_path, "implement")
+    drawn = select._band(ranked)
+    opus = [row for row in ranked if row.point.model.id == "claude-opus-5-5"]
+
+    assert drawn is not None
+    assert opus
+    assert max(row.estimate.mean for row in opus) < drawn[1]
+    assert TRIAL not in {answer["explored"] for answer in answers}
+
+
+def test_a_point_above_the_ceiling_is_never_the_trial_point_however_plausible(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """The ceiling narrows the Trial's point exactly as it narrows the ranking.
+
+    Opus 5.5 could win at `max` alone. Under the default ceiling that point is
+    not in the pool the call ranks, no other point of Opus 5.5 clears the
+    bound, and no Trial is owed. Lift the ceiling to `max` and the same store
+    owes one there — so it was the ceiling, and nothing in the Trial reading
+    it, that kept the point out.
+    """
+
+    _plausible_at(tmp_path, "max")
+    flags = (*LIMITED, f"--data={tmp_path}", "--kind=implement")
+
+    capped = [_answer(capsys, *flags, f"--seed={seed}") for seed in range(DRAWS)]
+    lifted = _answer(capsys, *flags, "--max-deliberation=max", "--seed=0")
+
+    assert TRIAL not in {answer["explored"] for answer in capped}
+    assert {answer["deliberation"] for answer in capped} <= {None, *UNDER_CEILING}
+    assert (lifted["model"], lifted["deliberation"]) == ("claude-opus-5-5", "max")
+    assert lifted["explored"] == TRIAL
+
+
+def _prior(model: Any, level: str | None, mean: float, cost: float) -> Any:
+    """Return one point estimated rather than measured, made for a unit check.
+
+    Its tenth percentile is set well below its mean, so it is never the point
+    a band is drawn around and never reads as measured.
+    """
+
+    evidence = _module("evidence")
+    estimate = evidence.Estimate(
+        mean=mean, low=mean - 0.3, n=0.0, basis="prior", alpha=1.0, beta=1.0
+    )
+    return select.Scored(select.Point(model, level), estimate, {}, cost, 100.0)
+
+
+def test_where_several_points_clear_the_bound_the_first_ranked_is_tried(
+    tmp_path: Path,
+) -> None:
+    """The point tried is the one the ranked list reaches first, not the likeliest.
+
+    Sonnet at `low` is the answer and draws a bound of 0.8. Opus has three
+    points: `medium` at 0.85 ranked first of them, `high` at 0.95 behind it,
+    and `low` — the answer's own level — at 0.5, under the bound. The Trial
+    goes to `medium`: the point the model would be the answer at if it were
+    measured, which is neither the answer's level nor the model's highest mean.
+    """
+
+    evidence = _module("evidence")
+    cat = _module("catalogue").load(tmp_path, SKILL)
+    estimator = evidence.Estimator([], cat, evidence.load_kinds(SKILL))
+    by_id = {model.id: model for model in cat.models}
+    opus = by_id["claude-opus-5-5"]
+    ranked = [
+        _made(by_id["claude-sonnet-5"], "low", mean=0.9, low=0.8, cost=1.0),
+        _prior(opus, "medium", mean=0.85, cost=1.5),
+        _prior(opus, "high", mean=0.95, cost=3.0),
+        _prior(opus, "low", mean=0.5, cost=1.0),
+    ]
+
+    owed = select._owed(ranked, ranked, "implement", estimator)
+
+    assert owed is not None
+    assert select._named(owed.point) == "claude-opus-5-5@medium"
+
+
+def test_the_order_among_models_owed_a_trial_reads_each_models_own_point(
+    tmp_path: Path,
+) -> None:
+    """One in progress first, then ranked order — each read off the point tried.
+
+    Opus's plausible point is ranked ahead of Fable's. With neither holding a
+    row for the kind Opus is tried, the ranked list reaching its point first.
+    With one Fable row filed, at a level other than the one it is now tried at,
+    Fable's is the Trial in progress and is taken first — at `medium`, its one
+    point clearing the bound, rather than at the answer's own level `low`,
+    where it reads under it.
+    """
+
+    evidence = _module("evidence")
+    cat = _module("catalogue").load(tmp_path, SKILL)
+    kinds = evidence.load_kinds(SKILL)
+    by_id = {model.id: model for model in cat.models}
+    opus, fable = by_id["claude-opus-5-5"], by_id[FABLE]
+    ranked = [
+        _made(by_id["claude-sonnet-5"], "low", mean=0.9, low=0.8, cost=1.0),
+        _prior(opus, "high", mean=0.95, cost=3.0),
+        _prior(fable, "medium", mean=0.85, cost=2.0),
+        _prior(fable, "low", mean=0.5, cost=1.0),
+    ]
+    _store(tmp_path, ("implement", FABLE, "xhigh", 1.0, 1))
+
+    fresh = select._owed(
+        ranked, ranked, "implement", evidence.Estimator([], cat, kinds)
+    )
+    begun = select._owed(
+        ranked,
+        ranked,
+        "implement",
+        evidence.Estimator(evidence.load(tmp_path), cat, kinds),
+    )
+
+    assert fresh is not None and begun is not None
+    assert select._named(fresh.point) == "claude-opus-5-5@high"
+    assert select._named(begun.point) == f"{FABLE}@medium"

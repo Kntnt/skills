@@ -117,9 +117,9 @@ DIMENSIONS = ("deliberation", "model")
 # What `explored` carries where the call was spent on a Trial rather than on an
 # ordinary exploration. It sits in the same member because both are a call
 # spent on the boundary instead of on the answer, and it is deliberately not
-# one of `DIMENSIONS`: a Trial moves the model and takes whatever level that
-# model supports nearest the answer's, so naming a dimension would claim the
-# level was held fixed when it was not (ADR-0207).
+# one of `DIMENSIONS`: a Trial moves the model and takes it at whichever of its
+# levels could win, so naming a dimension would claim the level was held fixed
+# when it was not (ADR-0207, ADR-0216).
 TRIAL = "trial"
 
 # Where the data directory sits when the caller does not say.
@@ -591,14 +591,23 @@ def _owed(
 
     Two things make a model owed one. Its rows for the kind, at every level,
     fall short of `ENOUGH` — the estimator's own count, so that the rows
-    counted are the rows estimated from. And it could plausibly win: the
-    estimate of the point it would be tried at is at least the bound `_band`
-    draws over this call's own pool, the same band the ranking reads where no
-    measured point clears the floor. A Trial tries a model that might be the
-    answer; it is not spent confirming that a weak model is weak, and a model
-    below the band keeps the cheap downhill road it has today. Where the pool
+    counted are the rows estimated from. And it could plausibly win: one of
+    its points has an estimate at least the bound `_band` draws over this
+    call's own pool, the same band the ranking reads where no measured point
+    clears the floor. A Trial tries a model that might be the answer; it is
+    not spent confirming that a weak model is weak, and a model below the band
+    at every point keeps the cheap downhill road it has today. Where the pool
     holds nothing measured there is no band and no Trial, the ranking already
     letting an untested point be the plain answer in that case.
+
+    The point tried is the model's first in the ranked list among those
+    clearing that bound — the point it would be the answer at if it were
+    measured (ADR-0216). It is not the answer's level: a newer release reads
+    its family's record (ADR-0215), which may be measured at another level
+    entirely, and the answer's level can then be the thinnest point the model
+    has, owing it nothing where another of its points could win. No price is
+    consulted beyond the order the ranking already gave the list, so the point
+    tried may cost more than the plain answer, as the Trial always could.
 
     The candidates are the points of the pool this call ranks and nothing
     wider, which is what makes every filter on the pool a filter on the Trial
@@ -637,10 +646,10 @@ def _owed(
         held[model_id] = estimator.rows_for_kind(kind, model_id)
         if held[model_id] >= ENOUGH:
             continue
-        tried = _alongside(rows, plain.point.deliberation)
-        if tried.estimate.mean < bound:
+        plausible = [row for row in rows if row.estimate.mean >= bound]
+        if not plausible:
             continue
-        candidates.append(tried)
+        candidates.append(min(plausible, key=lambda row: place[id(row)]))
 
     if not candidates:
         return None
