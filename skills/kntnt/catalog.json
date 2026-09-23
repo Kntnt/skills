@@ -179,7 +179,7 @@
       "name": "cloudns",
       "category": "infrastructure",
       "description": "Read and change DNS zones and records at ClouDNS on the user's behalf. Not for DNS at any other provider, not for registering, renewing or transferring domain names, and not for web hosting, email or SSL.",
-      "digest": "f2ef59e3c11a0f10b739345112cd54283d063e4266abf4d564e199605605199c",
+      "digest": "b859f665bfc74a70df96c3e81da9dc2f2687faa10e7061eb7162613bcaca1df7",
       "binaries": [
         "uv"
       ],

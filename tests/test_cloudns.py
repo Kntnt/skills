@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 import shutil
 import socket
 import subprocess
@@ -651,6 +652,35 @@ def test_the_bodys_setup_leaves_the_overwrite_gate_to_the_librarys_generate() ->
     steps = setup.index("Tell the user")
     assert generate < steps
     assert "--yes" in setup[generate:steps]
+
+
+def test_the_bodys_zone_creation_is_sent_as_a_master_zone_with_no_ns_and_no_yes(
+    tmp_path: Path, service: Service
+) -> None:
+    """The call Change DNS composes creates a master zone as the sub-user.
+
+    Passing `ns` would stop ClouDNS adding the default NS records the Skill
+    reports as the nameservers, and the path's last segment does not begin
+    with `delete`, so the engine sends it without `--yes`.
+    """
+
+    _write_credentials(tmp_path)
+    body = (ENGINE.parent.parent / "SKILL.md").read_text(encoding="utf-8")
+    change = body.split("## Change DNS", 1)[1].split("\n## ", 1)[0]
+    composed = re.search(r"`call (dns/register\.json[^`]*)`", change)
+    assert composed is not None, "Change DNS composes no dns/register.json call"
+    arguments = composed.group(1).replace("<zone>", "qwerty.se").split()
+
+    result = _run(tmp_path, "call", f"--endpoint={service.endpoint}", *arguments)
+
+    assert result.returncode == ANSWERED, result.stderr
+    assert [request.path for request in service.requests] == ["/dns/register.json"]
+    assert service.fields() == {
+        "sub-auth-user": SUB_USER,
+        "auth-password": PASSWORD,
+        "domain-name": "qwerty.se",
+        "zone-type": "master",
+    }
 
 
 def test_the_engine_has_no_setup_subcommand(tmp_path: Path) -> None:

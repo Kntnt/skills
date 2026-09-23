@@ -10,7 +10,7 @@ cloudns status - check the ClouDNS credential and list the zones it reaches
 
 ## DESCRIPTION
 
-`status` asks ClouDNS whether it accepts the credential the Credential File holds, and reports which sub-user it is and whether it was accepted. Where it was, it lists every zone the sub-user can see; those are exactly the zones delegated to it, and so exactly the zones the Skill may touch.
+`status` asks ClouDNS whether it accepts the credential the Credential File holds, and reports which sub-user it is and whether it was accepted. Where it was, it lists every zone the sub-user can see; those are exactly the zones delegated to it or created by it, and so exactly the zones the Skill may touch.
 
 Where ClouDNS refuses the credential, `status` relays the service's own description of why, and says that the panel step may not be done yet: the sub-user not created, or the password not pasted. Where the Credential File is missing, it says so and names `/cloudns setup`.
 
@@ -50,7 +50,7 @@ The Manager must be Enabled so the invocation can be read and the credential wri
 
 **Services**
 
-Remote operations need network access and a ClouDNS API sub-user with the zones it may touch delegated to it. `setup` also needs a clipboard tool — `pbcopy` on macOS, `wl-copy`, `xclip` or `xsel` on Linux, `clip` on Windows — or a Credential File written by hand. Help and `setup`'s file writing reach no network.
+Remote operations need network access and a ClouDNS API sub-user with the existing zones it may touch delegated to it, and a **DNS zones** quota with room for the zones it is to create. `setup` also needs a clipboard tool — `pbcopy` on macOS, `wl-copy`, `xclip` or `xsel` on Linux, `clip` on Windows — or a Credential File written by hand. Help and `setup`'s file writing reach no network.
 
 ## SEE ALSO
 

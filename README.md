@@ -150,7 +150,7 @@ Run `/mirror [--output=<dir>] [--resources=all|in-scope|none] [--max-pages=<n>] 
 
 ### cloudns
 
-Read and change DNS zones and records at ClouDNS. It reads the zone before it writes, applies each change through the ClouDNS API, reads the zone again to verify it, and reports what changed and what the service answered. It acts as an API sub-user rather than the account's main API user, so it reaches exactly the zones delegated to that sub-user; deletions are made only where you asked for them.
+Read and change DNS zones and records at ClouDNS. It reads the zone before it writes, applies each change through the ClouDNS API, reads the zone again to verify it, and reports what changed and what the service answered. It acts as an API sub-user rather than the account's main API user, so it reaches exactly the zones delegated to that sub-user or created by it, and it can add a zone for a domain bought elsewhere and tell you the nameservers to enter at your registrar. Deletions are made only where you asked for them.
 
 Run `/cloudns setup` once to make the sub-user's credential, which is drawn for you, put on the clipboard for you to paste into the ClouDNS panel, and never shown in the conversation; `/cloudns status` confirms it and lists the zones it reaches. Then run `/cloudns -- <change>`, or let the agent use it for a matching ClouDNS task.
 

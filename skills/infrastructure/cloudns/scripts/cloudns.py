@@ -19,7 +19,7 @@ Two subcommands:
   `delete-existing-records=1` — is refused without `--yes`.
 - `status [--endpoint=<url>]` asks `login/login.json` whether the service
   accepts the credential and, where it does, lists the zones the sub-user can
-  see, which are exactly the zones delegated to it.
+  see, which are exactly the zones delegated to it or created by it.
 
 The Credential File is written by the Collection Library's `credentials.py`,
 whose `generate` is also the gate against overwriting a credential it holds.
@@ -352,7 +352,8 @@ def command_status(args: argparse.Namespace) -> int:
         "zones": None,
     }
 
-    # Where it does, list the zones delegated to the sub-user.
+    # Where it does, list the zones the sub-user can see, delegated to it or
+    # created by it.
     if accepted:
         zones, failure = list_zones(args.endpoint, credentials)
         report["zones"] = zones

@@ -16,7 +16,11 @@ cloudns - read and change DNS zones and records at ClouDNS
 
 Say what you want changed in DNS at ClouDNS after the separator, such as `/cloudns -- point www.example.com at 192.0.2.10`, and the Skill reads the zone, plans the change record by record, applies it through the ClouDNS API, reads the zone again to verify it, and reports what changed and what the service answered. Without an instruction it works on the DNS task already established in the conversation, or asks for one.
 
-It acts as a ClouDNS API sub-user, never as the account's main API user, so it can reach exactly the zones delegated to that sub-user and nothing wider. A zone the sub-user cannot see is reported as not delegated, and the Skill stops there rather than looking for another way in.
+It acts as a ClouDNS API sub-user, never as the account's main API user, so it can reach exactly the zones delegated to that sub-user or created by it, and nothing wider.
+
+Asked to set up a zone the sub-user cannot see, such as one for a domain you bought elsewhere, it adds the zone at ClouDNS, within the sub-user's **DNS zones** quota. It then tells you the nameservers ClouDNS assigned, which you enter at your registrar; the zone does not answer for the domain until you have, and that step is yours. Record changes asked for in the same instruction follow once the zone exists.
+
+Asked only to change records in a zone the sub-user cannot see, it reports the zone as not delegated, says it can add the zone if it does not exist at ClouDNS yet, and stops there rather than looking for another way in.
 
 The sub-user's password is drawn by `setup`, stored in the Credential File and put on the clipboard for you to paste into the ClouDNS panel. It never appears in the conversation or in anything the Skill prints.
 
@@ -56,6 +60,10 @@ An invalid form is refused rather than ignored. The Skill names the error, print
 
 The root form takes no operand, so a change written without the separator, such as `/cloudns point www.example.com at 192.0.2.10`, is refused as an unknown command. Write it after `--`.
 
+Setting up a zone is written after the separator too, as `/cloudns -- set up qwerty.se`. Without it, `/cloudns setup qwerty.se` is the `setup` subcommand: on a machine with no credential, it writes a Credential File for a sub-user named `qwerty.se` and replaces what the clipboard held with a new password.
+
+Where ClouDNS refuses to add a zone, whether because the sub-user's **DNS zones** quota is used up, the account's plan allows no more zones, or the zone already exists at ClouDNS, the Skill shows ClouDNS's own description verbatim and stops. A zone that already exists there is not delegated to the sub-user, and delegating it in the panel is your step.
+
 A call that deletes — its API path's last segment begins with `delete` — or that carries `delete-existing-records=1` is refused before anything is sent unless the Skill asserts that you asked for it or a decision you already made covers it.
 
 `setup` refuses to overwrite a credential the Credential File already holds unless **--yes** is given, and names the keys it would have replaced.
@@ -63,6 +71,10 @@ A call that deletes — its API path's last segment begins with `delete` — or 
 A missing Credential File stops every remote operation with a pointer to `/cloudns setup`. A Credential File that group or world may read is refused, naming its mode and the mode it needs.
 
 ## EXAMPLES
+
+**/cloudns -- set up qwerty.se**
+
+Add a zone for a domain bought at another registrar. The Skill creates it at ClouDNS as a master zone, reads the NS records ClouDNS put in it, and tells you those nameservers to enter at the registrar. Record changes written into the same instruction, as in `/cloudns -- set up qwerty.se and point www at 192.0.2.10`, follow once the zone exists.
 
 **/cloudns -- delete the TXT record _acme-challenge on example.com**
 
@@ -94,7 +106,7 @@ The Manager must be Enabled so the invocation can be read and the credential wri
 
 **Services**
 
-Remote operations need network access and a ClouDNS API sub-user with the zones it may touch delegated to it. `setup` also needs a clipboard tool — `pbcopy` on macOS, `wl-copy`, `xclip` or `xsel` on Linux, `clip` on Windows — or a Credential File written by hand. Help and `setup`'s file writing reach no network.
+Remote operations need network access and a ClouDNS API sub-user with the existing zones it may touch delegated to it, and a **DNS zones** quota with room for the zones it is to create. `setup` also needs a clipboard tool — `pbcopy` on macOS, `wl-copy`, `xclip` or `xsel` on Linux, `clip` on Windows — or a Credential File written by hand. Help and `setup`'s file writing reach no network.
 
 ## SEE ALSO
 
