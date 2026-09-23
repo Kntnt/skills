@@ -20,7 +20,9 @@ Each Hetzner Cloud project is reached through an hcloud context carrying the pro
 
 For a small new setup it uses the official hcloud CLI, cloud-init, and SSH. Existing Terraform, Ansible, service-manager, or deployment-platform workflows remain the source of truth. App-specific configuration and release commands are written in the project; the Skill supplies the procedure for operating them.
 
-The agents reach a server as a user of their own, `kntnt-agent`, with a key of their own and passwordless `sudo`, rather than through root's login. A server the Skill creates gets that key at creation. On a server that already exists, the user admits the agents once, by a procedure `setup` prints, or the Skill carries it out where the server is reachable with the user's own key and the instruction authorizes it.
+The agents reach a server as a user of their own, `kntnt-agent`, with a key of their own and passwordless `sudo`, rather than through root's login. A server the Skill creates gets that key at creation.
+
+On a server a configuration tool such as Ansible manages, the agents are declared as an administrator of their own through that tool, in the workflow of the project at hand, the repository the Skill runs in, and the tool's converge puts them on the server. On an existing server nothing converges, the user admits the agents once, by a procedure `setup` prints, or the Skill carries it out where the server is reachable with the user's own key and the instruction authorizes it.
 
 Remote changes use authorization already established for the target, cost, and action. Missing decisions are resolved against a concrete plan before the affected operation. Inspection or file preparation alone does not deploy anything, and permission to deploy does not include unrelated data deletion or server rebuilding.
 
