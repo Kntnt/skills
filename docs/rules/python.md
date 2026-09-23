@@ -35,6 +35,14 @@ The reason is that such a test passes for exactly as long as the staleness rule 
 
 The same reading applies to the diagnosis: where a suite goes red with nothing in the change to account for it, look for a value frozen at a constant and a reader that is not.
 
+### Tests and a deadline
+
+A test that shortens a wall-clock deadline and then launches a process the deadline races establishes that the process is ready before the deadline is acted on, and asserts that readiness apart from the property under test. The deadline is not lengthened to make room for the start: the test waits, with a bound of its own and generous, for the process to say it is running, and only then lets the code under test turn the deadline into an outcome — a deadline already past fires at once, so nothing the test is about changes. A readiness wait that runs out fails with a message of its own, and the test asserts that the wait ran, so a change that moves where the deadline is acted on cannot quietly reopen the race. Where the work that has to finish first runs in the test's own process instead, the test moves the clock the code under test reads past the deadline once that work is done, rather than racing it at all. A test whose deadline only has to fire, because nothing it launched is meant to answer, is outside this rule: load makes it slower but never wrong.
+
+The reason is that a deadline shortened for speed also has to cover forking and exec-ing whatever the test starts, and a machine running several full suites at once can spend all of it there. `tests/test_ms_catalogue_refresh.py` gave `catalogue.EXCHANGE_SECONDS` four seconds to start a stand-in `claude` and the child it put in its process group; under an unattended run's load the deadline fired and the group was killed before the child's pid was written, so the test failed on its precondition while every assertion about the deadline held. The verdict could not tell that from a defect, and it cost a ticket its first amend (issue #422).
+
+The same reading applies to the diagnosis: where a timing test fails under load and passes alone, look for a deadline that starts before the process it races.
+
 ### Doc comments
 
 Docstrings on every module, class, and public function. Document the contract and the why; type hints show the shape. Pick a docstring convention (Google or NumPy style) per project, stay consistent. Use `Args:` / `Returns:` / `Raises:` where they add real value.

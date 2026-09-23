@@ -1126,6 +1126,118 @@ def test_report_names_this_runs_flake_and_its_earlier_count(tmp_path: Path) -> N
     assert flakes[0]["earlier_records"] == {"tests/test_poll.py::test_deadline": 1}
 
 
+def test_flake_for_a_ticket_records_the_branch_and_head_of_its_working_tree(
+    tmp_path: Path,
+) -> None:
+    """A ticket's flake was proved on the ticket's own head, not the run branch's.
+
+    The orchestrator runs the engine from the repository, where HEAD is the run
+    branch; a verdict that proved a flake ran in the ticket's working tree, on a
+    branch that has moved ahead of it (issue #422).
+    """
+
+    repo = _init_repo(tmp_path / "proj")
+    scratch = tmp_path / "scratch"
+    home = tmp_path / "home"
+    worktree = Path(
+        json.loads(_engine(repo, "isolate", "--ticket", "9").stdout)["worktree"]
+    )
+    (worktree / "graph.py").write_text("edges\n", encoding="utf-8")
+    _git(worktree, "add", "graph.py")
+    _git(worktree, "commit", "-m", "read the blocking edges")
+    evidence = tmp_path / "flake.json"
+    evidence.write_text(
+        json.dumps(
+            {
+                "failing_tests": ["tests/test_poll.py::test_deadline"],
+                "isolation_results": ["passed", "passed", "passed"],
+                "full_rerun_result": "passed",
+                "narrowed_command": "pytest tests/test_poll.py::test_deadline",
+                "load_context": "four full suites at once",
+            }
+        ),
+        encoding="utf-8",
+    )
+    env = {**_tracker(tmp_path, {"ready-for-agent": []}), "HOME": str(home)}
+
+    result = _engine(
+        repo,
+        "flake",
+        "--ticket",
+        "9",
+        "--evidence",
+        str(evidence),
+        "--state-dir",
+        str(scratch),
+        env=env,
+    )
+
+    assert result.returncode == 0, result.stderr
+    records = [
+        json.loads(line)
+        for line in (home / FLAKE_LEDGER).read_text(encoding="utf-8").splitlines()
+    ]
+    assert len(records) == 1
+    ticket_head = _git(worktree, "rev-parse", "HEAD").stdout.strip()
+    assert ticket_head != _git(repo, "rev-parse", "HEAD").stdout.strip()
+    assert records[0]["head"] == ticket_head
+    assert (
+        records[0]["branch"]
+        == _git(worktree, "branch", "--show-current").stdout.strip()
+    )
+    assert records[0]["branch"] != "work"
+    assert records[0]["repository"] == str(repo.resolve())
+    assert set(records[0]) == {
+        "repository",
+        "branch",
+        "head",
+        "failing_tests",
+        "isolation_results",
+        "full_rerun_result",
+        "narrowed_command",
+        "load_context",
+        "timestamp",
+    }
+
+
+def test_flake_refuses_a_ticket_with_no_open_working_tree(tmp_path: Path) -> None:
+    """A ticket whose tree is gone has no head to name, and the run branch's is not it."""
+
+    repo = _init_repo(tmp_path / "proj")
+    scratch = tmp_path / "scratch"
+    home = tmp_path / "home"
+    evidence = tmp_path / "flake.json"
+    evidence.write_text(
+        json.dumps(
+            {
+                "failing_tests": ["tests/test_poll.py::test_deadline"],
+                "isolation_results": ["passed", "passed", "passed"],
+                "full_rerun_result": "passed",
+                "narrowed_command": "pytest tests/test_poll.py::test_deadline",
+                "load_context": "four full suites at once",
+            }
+        ),
+        encoding="utf-8",
+    )
+    env = {**_tracker(tmp_path, {"ready-for-agent": []}), "HOME": str(home)}
+
+    result = _engine(
+        repo,
+        "flake",
+        "--ticket",
+        "9",
+        "--evidence",
+        str(evidence),
+        "--state-dir",
+        str(scratch),
+        env=env,
+    )
+
+    assert result.returncode != 0
+    assert "#9" in result.stderr
+    assert not (home / FLAKE_LEDGER).exists()
+
+
 def test_flake_refuses_conflicting_evidence_for_the_same_failure(
     tmp_path: Path,
 ) -> None:
