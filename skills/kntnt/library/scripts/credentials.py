@@ -2,21 +2,25 @@
 # requires-python = ">=3.12"
 # dependencies = []
 # ///
-"""Hold an outside service's credential for a Skill, filled through the clipboard.
+"""Hold an outside service's credential for a Skill, filled through the clipboard or stdin.
 
 A Skill's credential lives in its Credential File,
 `<home>/.kntnt/<skill>/credentials.json`: a flat JSON object of strings whose
 keys the owning Skill names, readable by its owner alone. This script is the
 one writer of that file and the way a value passes between the user and it —
 through the clipboard, so a credential never stands in a conversation, and so
-never in the transcript every Harness keeps of one (ADR-0218).
+never in the transcript every Harness keeps of one (ADR-0218). A value one of
+the Skill's own processes already holds, as a token it fetched from the
+service, reaches the file over standard input instead, the one channel that
+is neither the clipboard nor an argument every user can read through `ps`.
 
 Four subcommands, each exiting 0 on success and 2 on a refusal it can name,
 with the reason on stderr. None of them prompts, none reaches the network, and
 nothing any of them prints is ever a value the file holds:
 
-- `set` reads the clipboard into one key and merges `--set=<key>=<value>`
-  pairs over what the file already holds.
+- `set` reads the clipboard (`--from-clipboard`) or standard input
+  (`--from-stdin`) into one key and merges `--set=<key>=<value>` pairs over
+  what the file already holds.
 - `generate` draws a fresh value into one key and puts it on the clipboard.
 - `show` names the keys the file holds and its mode.
 - `exec` runs a command with one value in one environment variable of the
@@ -27,11 +31,12 @@ through, so no Skill states one of its own. Without `--yes`, each refuses where
 the file already holds a non-empty value under `--key` or under a key a
 `--set` pair names: a key written beside the one filled is as much a working
 credential as that one, and replacing either is a rotation. The refusal comes
-before the clipboard is read or written and before the file is, and names the
-file, the keys held, and what `--yes` asserts: that the user means to replace a
-working credential, which the service goes on expecting until the new value is
-pasted or regenerated there. A key the file does not hold, or holds empty, is
-nothing to overwrite, and a file that does not exist holds none.
+before the clipboard or stdin is read, before the clipboard is written, and
+before the file is, and names the file, the keys held, and what `--yes`
+asserts: that the user means to replace a working credential, which the
+service goes on expecting until the new value is pasted or regenerated there.
+A key the file does not hold, or holds empty, is nothing to overwrite, and a
+file that does not exist holds none.
 
 An engine that makes a service call reads the file itself rather than through
 this script; `docs/rules/skills.md` states how.
@@ -257,6 +262,20 @@ def clipboard_tool(table: dict[str, tuple[tuple[str, ...], ...]]) -> list[str] |
     return None
 
 
+def read_stdin(recovery: str) -> str:
+    """Standard input's text with one trailing newline stripped.
+
+    Raises:
+        Refusal: where standard input holds nothing but whitespace, naming
+            *recovery*, as an empty clipboard is refused.
+    """
+
+    value = sys.stdin.read().removesuffix("\n")
+    if not value.strip():
+        raise Refusal(f"standard input holds no text. {recovery}")
+    return value
+
+
 def read_clipboard(root: Path, recovery: str) -> str:
     """The clipboard's text with surrounding whitespace removed.
 
@@ -361,15 +380,18 @@ def store(
 
 
 def command_set(root: Path, args: argparse.Namespace, extra: dict[str, str]) -> int:
-    """Read the clipboard into `--key`, merge the pairs, and write the file.
+    """Read the clipboard or stdin into `--key`, merge the pairs, and write the file.
 
-    Without `--yes`, a held key is refused before the clipboard is read.
+    Without `--yes`, a held key is refused before the clipboard or stdin is read.
     """
 
     path = credential_file(root, args.skill)
     if not args.yes:
         refuse_overwrite(path, [args.key, *extra])
-    value = read_clipboard(root, by_hand(path))
+    if args.from_stdin:
+        value = read_stdin(by_hand(path))
+    else:
+        value = read_clipboard(root, by_hand(path))
     report(path, store(root, args.skill, args.key, value, extra), args.key)
     return 0
 
@@ -455,7 +477,10 @@ def command_exec(root: Path, args: argparse.Namespace, command: list[str]) -> in
 # flag with its value separated, and this collection's grammar attaches it
 # (ADR-0176).
 USAGES: Final = {
-    "set": "[--yes] --skill=<name> --key=<key> --from-clipboard [--set=<key>=<value>]...",
+    "set": (
+        "[--yes] --skill=<name> --key=<key> (--from-clipboard | --from-stdin)"
+        " [--set=<key>=<value>]..."
+    ),
     "generate": "[--yes] --skill=<name> --key=<key> --to-clipboard [--set=<key>=<value>]...",
     "show": "--skill=<name>",
     "exec": "--env=<VAR> (--from-clipboard | --skill=<name> --key=<key>) -- <command>...",
@@ -485,7 +510,9 @@ def parser() -> tuple[argparse.ArgumentParser, dict[str, argparse.ArgumentParser
     set_command.add_argument("--yes", action="store_true")
     set_command.add_argument("--skill", required=True)
     set_command.add_argument("--key", required=True)
-    set_command.add_argument("--from-clipboard", action="store_true", required=True)
+    set_source = set_command.add_mutually_exclusive_group(required=True)
+    set_source.add_argument("--from-clipboard", action="store_true")
+    set_source.add_argument("--from-stdin", action="store_true")
     set_command.add_argument("--set", action="append", default=[])
 
     generate = subcommands["generate"]

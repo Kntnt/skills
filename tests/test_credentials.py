@@ -110,9 +110,12 @@ def _clipboard_read(tmp_path: Path) -> Path:
 
 
 def _run(
-    tmp_path: Path, *args: str, environment: dict[str, str] | None = None
+    tmp_path: Path,
+    *args: str,
+    environment: dict[str, str] | None = None,
+    stdin: str = "",
 ) -> subprocess.CompletedProcess[str]:
-    """Run the shipped script against a home under *tmp_path*.
+    """Run the shipped script against a home under *tmp_path*, *stdin* on its input.
 
     The launcher is named by absolute path and handed the suite's own
     interpreter, so a case that empties the `PATH` still starts the script and
@@ -125,6 +128,7 @@ def _run(
         [uv, "run", "--python", sys.executable, str(CREDENTIALS), *args],
         env=os.environ | {"KNTNT_HOME": str(tmp_path)} | (environment or {}),
         cwd=tmp_path,
+        input=stdin,
         text=True,
         capture_output=True,
         check=False,
@@ -174,6 +178,7 @@ def test_an_unknown_subcommand_exits_2_with_a_usage_line(tmp_path: Path) -> None
         ("set", "--key=token", "--from-clipboard"),
         ("set", "--skill=demo", "--from-clipboard"),
         ("set", "--skill=demo", "--key=token"),
+        ("set", "--skill=demo", "--key=token", "--from-clipboard", "--from-stdin"),
         ("generate", "--skill=demo", "--key=token"),
         ("show",),
         ("exec", "--from-clipboard", "--", "true"),
@@ -196,7 +201,7 @@ def test_a_missing_required_option_exits_2_with_a_usage_line(
         (
             "set",
             (
-                "[--yes] --skill=<name> --key=<key> --from-clipboard"
+                "[--yes] --skill=<name> --key=<key> (--from-clipboard | --from-stdin)"
                 " [--set=<key>=<value>]..."
             ),
         ),
@@ -367,6 +372,146 @@ def test_a_write_that_fails_after_its_temporary_file_leaves_the_file_standing(
     assert path.read_bytes() == before
     assert sorted(entry.name for entry in path.parent.iterdir()) == [path.name]
     assert SECRET not in capsys.readouterr().err
+
+
+# --- set --from-stdin -----------------------------------------------------
+
+
+def test_set_from_stdin_stores_the_value_with_one_trailing_newline_stripped(
+    tmp_path: Path,
+) -> None:
+    """A value one of a Skill's own processes holds reaches the file over stdin."""
+
+    result = _run(
+        tmp_path,
+        "set",
+        "--skill=demo",
+        "--key=server:My Broadcasts",
+        "--from-stdin",
+        "--set=account=acme",
+        stdin=f"{SECRET}\n",
+    )
+
+    assert result.returncode == 0, result.stderr
+    path = _credential_file(tmp_path)
+    assert json.loads(path.read_text(encoding="utf-8")) == {
+        "account": "acme",
+        "server:My Broadcasts": SECRET,
+    }
+    assert json.loads(result.stdout) == {
+        "path": str(path),
+        "keys": ["account", "server:My Broadcasts"],
+        "key": "server:My Broadcasts",
+        "length": len(SECRET),
+    }
+    assert SECRET not in result.stdout + result.stderr
+
+
+def test_set_from_stdin_strips_one_trailing_newline_and_nothing_else(
+    tmp_path: Path,
+) -> None:
+    value = f" {SECRET}\n"
+
+    result = _run(
+        tmp_path,
+        "set",
+        "--skill=demo",
+        "--key=token",
+        "--from-stdin",
+        stdin=f"{value}\n",
+    )
+
+    assert result.returncode == 0, result.stderr
+    stored = json.loads(_credential_file(tmp_path).read_text(encoding="utf-8"))
+    assert stored == {"token": value}
+
+
+def test_set_from_stdin_never_reads_the_clipboard(tmp_path: Path) -> None:
+    environment, _ = _fake_clipboard(tmp_path, "from-the-clipboard")
+
+    result = _run(
+        tmp_path,
+        "set",
+        "--skill=demo",
+        "--key=token",
+        "--from-stdin",
+        environment=environment,
+        stdin=SECRET,
+    )
+
+    assert result.returncode == 0, result.stderr
+    stored = json.loads(_credential_file(tmp_path).read_text(encoding="utf-8"))
+    assert stored == {"token": SECRET}
+    assert not _clipboard_read(tmp_path).exists()
+
+
+@POSIX_ONLY
+def test_set_from_stdin_creates_the_directory_0700_and_the_file_0600(
+    tmp_path: Path,
+) -> None:
+    result = _run(
+        tmp_path, "set", "--skill=demo", "--key=token", "--from-stdin", stdin=SECRET
+    )
+
+    assert result.returncode == 0, result.stderr
+    path = _credential_file(tmp_path)
+    assert _mode(path.parent) == DIRECTORY_MODE
+    assert _mode(path) == FILE_MODE
+
+
+@pytest.mark.parametrize("given", ["", "\n", " \n\t "])
+def test_an_empty_stdin_exits_2_naming_the_file_to_write_by_hand(
+    tmp_path: Path, given: str
+) -> None:
+    """A value empty once stripped is refused, as an empty clipboard is."""
+
+    result = _run(
+        tmp_path, "set", "--skill=demo", "--key=token", "--from-stdin", stdin=given
+    )
+
+    assert result.returncode == REFUSED
+    assert "standard input holds no text" in result.stderr
+    assert str(_credential_file(tmp_path)) in result.stderr
+    assert "by hand" in result.stderr
+    assert not _credential_file(tmp_path).exists()
+
+
+def test_set_from_stdin_refuses_a_held_key_without_yes_although_stdin_holds_a_value(
+    tmp_path: Path,
+) -> None:
+    """The overwrite gate stands before stdin is read, so the value is never used."""
+
+    path = _write_credentials(tmp_path, {"account": "acme", "token": "first"})
+    before = path.read_bytes()
+
+    result = _run(
+        tmp_path, "set", "--skill=demo", "--key=token", "--from-stdin", stdin=SECRET
+    )
+
+    assert result.returncode == REFUSED
+    assert str(path) in result.stderr
+    assert "nothing was written" in result.stderr
+    assert "replace a working credential" in result.stderr
+    assert path.read_bytes() == before
+    assert "first" not in result.stdout + result.stderr
+
+
+def test_set_from_stdin_with_yes_replaces_a_held_key(tmp_path: Path) -> None:
+    _write_credentials(tmp_path, {"account": "acme", "token": "first"})
+
+    result = _run(
+        tmp_path,
+        "set",
+        "--yes",
+        "--skill=demo",
+        "--key=token",
+        "--from-stdin",
+        stdin=f"{SECRET}\n",
+    )
+
+    assert result.returncode == 0, result.stderr
+    stored = json.loads(_credential_file(tmp_path).read_text(encoding="utf-8"))
+    assert stored == {"account": "acme", "token": SECRET}
 
 
 # --- generate -------------------------------------------------------------

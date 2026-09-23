@@ -1,6 +1,6 @@
 {
   "origin": "Kntnt/skills",
-  "manager_digest": "4f23e87cf669e796c90c58a77fb8cd3e2afe5f775cdc8e738f87fe197ea376f6",
+  "manager_digest": "0eaa94c319f059b816d6ff92a4f3f6fd23958d9242f5241e0feb5cf5080ba5be",
   "skills": [
     {
       "name": "agents-md",
@@ -215,7 +215,7 @@
       "name": "postmark",
       "category": "infrastructure",
       "description": "Inspect and change email at Postmark on the user's behalf — servers and message streams, domains and their DKIM and Return-Path records, sender signatures, templates, suppressions, bounces, delivery statistics, message search, webhooks, and a send the user asks for. Use for email at Postmark only; excludes other email providers, mailboxes, and setting DNS records.",
-      "digest": "21a2b3f2b5c9f5dc3c603b835392af8cbedc3261bf38fa0b77464fa18d923278",
+      "digest": "982fa1971c32d99ad303fff12b09d3fb799d9e806375157b81812fe9b0286181",
       "binaries": [
         "uv"
       ],

@@ -29,6 +29,7 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 ENGINE = (
     REPO_ROOT / "skills" / "infrastructure" / "postmark" / "scripts" / "postmark.py"
 )
+LIBRARY = REPO_ROOT / "skills" / "kntnt" / "library"
 
 # The exit statuses the engine promises: the service answered, the service
 # could not be reached, and a refusal made before anything was sent.
@@ -169,7 +170,9 @@ def _write_credentials(
     return path
 
 
-def _run(tmp_path: Path, *args: str) -> subprocess.CompletedProcess[str]:
+def _run(
+    tmp_path: Path, *args: str, environment: dict[str, str] | None = None
+) -> subprocess.CompletedProcess[str]:
     """Run the shipped engine against a home under *tmp_path*.
 
     Loopback is kept off any proxy the environment names, so the request the
@@ -185,7 +188,8 @@ def _run(tmp_path: Path, *args: str) -> subprocess.CompletedProcess[str]:
             "KNTNT_HOME": str(tmp_path),
             "NO_PROXY": "127.0.0.1,localhost",
             "no_proxy": "127.0.0.1,localhost",
-        },
+        }
+        | (environment or {}),
         cwd=tmp_path,
         text=True,
         capture_output=True,
@@ -869,22 +873,494 @@ def test_status_exits_one_on_a_transport_failure(tmp_path: Path) -> None:
     _assert_no_token(result, [])
 
 
+# `setup-server` fetches a server's token with the account token and hands it
+# to the Library's `set` over stdin, so no token reaches output, a URL, a body
+# or any process's arguments.
+
+# The tokens Postmark lists for the servers of the account in these cases, the
+# first of which is the one `setup-server` stores for its server.
+FETCHED_TOKEN = "srv-8c4f2a6e-Fetched-Token-2468013579"
+SECOND_TOKEN = "srv-1d9b7f3c-Second-Token-3692581470"
+OTHER_TOKEN = "srv-6e2a4c8b-Other-Token-1470258369"
+FETCHED = (FETCHED_TOKEN, SECOND_TOKEN, OTHER_TOKEN)
+
+
+@dataclass
+class Launcher:
+    """A stand-in `uv` first on the `PATH`, logging every argv it is started with."""
+
+    environment: dict[str, str]
+    log: Path
+
+    def argv(self) -> str:
+        """Every argument list the engine started `uv` with, as one text."""
+
+        return self.log.read_text(encoding="utf-8") if self.log.exists() else ""
+
+
+def _launcher(tmp_path: Path, exit_status: int | None = None) -> Launcher:
+    """Put a `uv` first on the `PATH` that logs its argv, then runs the real one.
+
+    The real `uv` is resolved before the `PATH` changes and named by its
+    absolute path, so the stand-in never calls itself. With *exit_status* the
+    stand-in logs and exits with that status instead, calling nothing.
+    """
+
+    real = shutil.which("uv")
+    assert real is not None
+    log = tmp_path / "uv-argv.log"
+    bin_dir = tmp_path / "bin"
+    bin_dir.mkdir(exist_ok=True)
+    tail = f'exec "{real}" "$@"' if exit_status is None else f"exit {exit_status}"
+    fake = bin_dir / "uv"
+    fake.write_text(
+        "#!/bin/sh\n"
+        f'for argument in "$@"; do printf "%s\\n" "$argument" >> "{log}"; done\n'
+        f'printf "%s\\n" "--- end of argv ---" >> "{log}"\n'
+        f"{tail}\n",
+        encoding="utf-8",
+    )
+    fake.chmod(fake.stat().st_mode | stat.S_IEXEC)
+    return Launcher(
+        {
+            "PATH": f"{bin_dir}{os.pathsep}{os.environ.get('PATH', '')}",
+            "UV_PYTHON": sys.executable,
+        },
+        log,
+    )
+
+
+def _servers(*entries: tuple[int, str, list[str]]) -> list[dict[str, object]]:
+    return [
+        {"ID": number, "Name": name, "ApiTokens": tokens}
+        for number, name, tokens in entries
+    ]
+
+
+def _answer_servers(
+    service: Service, servers: list[dict[str, object]], total: int | None = None
+) -> None:
+    """Answer the first page of `GET servers` with *servers*."""
+
+    service.answer(
+        "GET",
+        "/servers?count=500&offset=0",
+        200,
+        {"TotalCount": len(servers) if total is None else total, "Servers": servers},
+    )
+
+
+def _setup_server(
+    tmp_path: Path, service: Service, launcher: Launcher, *args: str
+) -> subprocess.CompletedProcess[str]:
+    return _run(
+        tmp_path,
+        "setup-server",
+        *args[:-1],
+        f"--endpoint={service.endpoint}",
+        f"--library={LIBRARY}",
+        args[-1],
+        environment=launcher.environment,
+    )
+
+
+def _assert_no_fetched_token(
+    result: subprocess.CompletedProcess[str], service: Service, launcher: Launcher
+) -> None:
+    """No token stands in output, a URL, a body, or the argv of `set`."""
+
+    _assert_no_token(result, service.received)
+    argv = launcher.argv()
+    for token in (*FETCHED, *TOKENS):
+        assert token not in result.stdout, "a token reached stdout"
+        assert token not in result.stderr, "a token reached stderr"
+        assert token not in argv, "a token reached a process's arguments"
+        for request in service.received:
+            assert token not in request.path, "a token reached the URL"
+            assert token.encode() not in request.body, "a token reached the body"
+
+
+def _stored(tmp_path: Path) -> dict[str, str]:
+    content = json.loads(_credential_file(tmp_path).read_text(encoding="utf-8"))
+    assert isinstance(content, dict)
+    return content
+
+
+def test_setup_server_stores_the_first_token_and_verifies_it(
+    tmp_path: Path, service: Service
+) -> None:
+    _write_credentials(tmp_path, {"account-token": ACCOUNT_TOKEN})
+    _answer_servers(
+        service,
+        _servers(
+            (11, "staging", [OTHER_TOKEN]),
+            (12, TRANSACTIONAL, [FETCHED_TOKEN, SECOND_TOKEN]),
+        ),
+    )
+    service.answer(
+        "GET",
+        "/server",
+        200,
+        {"ID": 12, "Name": TRANSACTIONAL, "ApiTokens": [FETCHED_TOKEN, SECOND_TOKEN]},
+    )
+    launcher = _launcher(tmp_path)
+
+    result = _setup_server(tmp_path, service, launcher, TRANSACTIONAL)
+
+    assert result.returncode == ANSWERED, result.stderr
+    assert json.loads(result.stdout) == {
+        "key": f"server:{TRANSACTIONAL}",
+        "server_id": 12,
+        "server_name": TRANSACTIONAL,
+    }
+    assert _stored(tmp_path) == {
+        "account-token": ACCOUNT_TOKEN,
+        f"server:{TRANSACTIONAL}": FETCHED_TOKEN,
+    }
+    assert stat.S_IMODE(_credential_file(tmp_path).stat().st_mode) == FILE_MODE
+    listing, verification = service.received
+    assert listing.path == "/servers?count=500&offset=0"
+    assert listing.headers[ACCOUNT_HEADER] == ACCOUNT_TOKEN
+    assert verification.path == "/server"
+    assert verification.headers[SERVER_HEADER] == FETCHED_TOKEN
+    assert ACCOUNT_HEADER not in verification.headers
+    argv = launcher.argv()
+    assert "--from-stdin" in argv
+    assert f"--key=server:{TRANSACTIONAL}" in argv
+    assert "--yes" not in argv
+    _assert_no_fetched_token(result, service, launcher)
+
+
+def test_setup_server_matches_a_name_with_a_space_and_stores_it_with_the_space(
+    tmp_path: Path, service: Service
+) -> None:
+    _write_credentials(tmp_path, {"account-token": ACCOUNT_TOKEN})
+    _answer_servers(
+        service,
+        _servers((21, "My", [OTHER_TOKEN]), (22, BROADCAST, [FETCHED_TOKEN])),
+    )
+    service.answer("GET", "/server", 200, {"ID": 22, "Name": BROADCAST})
+    launcher = _launcher(tmp_path)
+
+    result = _setup_server(tmp_path, service, launcher, BROADCAST)
+
+    assert result.returncode == ANSWERED, result.stderr
+    assert json.loads(result.stdout)["key"] == f"server:{BROADCAST}"
+    assert _stored(tmp_path)[f"server:{BROADCAST}"] == FETCHED_TOKEN
+    _assert_no_fetched_token(result, service, launcher)
+
+
+def test_setup_server_matches_the_name_exactly(
+    tmp_path: Path, service: Service
+) -> None:
+    """Case and spaces count, so a near name is no match."""
+
+    _write_credentials(tmp_path, {"account-token": ACCOUNT_TOKEN})
+    _answer_servers(service, _servers((31, "Transactional", [FETCHED_TOKEN])))
+    launcher = _launcher(tmp_path)
+
+    result = _setup_server(tmp_path, service, launcher, TRANSACTIONAL)
+
+    assert result.returncode == REFUSED
+    assert '"Transactional"' in result.stderr
+    assert not launcher.log.exists()
+
+
+def test_setup_server_reads_every_page_the_total_count_names(
+    tmp_path: Path, service: Service
+) -> None:
+    _write_credentials(tmp_path, {"account-token": ACCOUNT_TOKEN})
+    first = [
+        {"ID": number, "Name": f"filler-{number}", "ApiTokens": [OTHER_TOKEN]}
+        for number in range(500)
+    ]
+    service.answer(
+        "GET",
+        "/servers?count=500&offset=0",
+        200,
+        {"TotalCount": 502, "Servers": first},
+    )
+    service.answer(
+        "GET",
+        "/servers?count=500&offset=500",
+        200,
+        {
+            "TotalCount": 502,
+            "Servers": _servers(
+                (500, "filler-500", [OTHER_TOKEN]),
+                (501, TRANSACTIONAL, [FETCHED_TOKEN]),
+            ),
+        },
+    )
+    service.answer("GET", "/server", 200, {"ID": 501, "Name": TRANSACTIONAL})
+    launcher = _launcher(tmp_path)
+
+    result = _setup_server(tmp_path, service, launcher, TRANSACTIONAL)
+
+    assert result.returncode == ANSWERED, result.stderr
+    assert [request.path for request in service.received] == [
+        "/servers?count=500&offset=0",
+        "/servers?count=500&offset=500",
+        "/server",
+    ]
+    assert _stored(tmp_path)[f"server:{TRANSACTIONAL}"] == FETCHED_TOKEN
+    _assert_no_fetched_token(result, service, launcher)
+
+
+def test_setup_server_stops_paging_at_the_first_empty_page(
+    tmp_path: Path, service: Service
+) -> None:
+    _write_credentials(tmp_path, {"account-token": ACCOUNT_TOKEN})
+    _answer_servers(service, _servers((41, TRANSACTIONAL, [FETCHED_TOKEN])), total=2000)
+    service.answer(
+        "GET",
+        "/servers?count=500&offset=1",
+        200,
+        {"TotalCount": 2000, "Servers": []},
+    )
+    service.answer("GET", "/server", 200, {"ID": 41, "Name": TRANSACTIONAL})
+    launcher = _launcher(tmp_path)
+
+    result = _setup_server(tmp_path, service, launcher, TRANSACTIONAL)
+
+    assert result.returncode == ANSWERED, result.stderr
+    assert [request.path for request in service.received] == [
+        "/servers?count=500&offset=0",
+        "/servers?count=500&offset=1",
+        "/server",
+    ]
+
+
+@pytest.mark.parametrize("held", [None, {f"server:{TRANSACTIONAL}": "held"}])
+def test_setup_server_without_an_account_token_is_refused_naming_the_clipboard(
+    tmp_path: Path, service: Service, held: dict[str, str] | None
+) -> None:
+    if held is not None:
+        _write_credentials(tmp_path, held)
+    before = (
+        _credential_file(tmp_path).read_bytes()
+        if _credential_file(tmp_path).exists()
+        else None
+    )
+    launcher = _launcher(tmp_path)
+
+    result = _setup_server(tmp_path, service, launcher, TRANSACTIONAL)
+
+    assert result.returncode == REFUSED
+    assert "account" in result.stderr
+    if held is not None:
+        assert "clipboard" in result.stderr
+    assert service.received == []
+    assert not launcher.log.exists()
+    after = (
+        _credential_file(tmp_path).read_bytes()
+        if _credential_file(tmp_path).exists()
+        else None
+    )
+    assert after == before
+
+
+def test_setup_server_for_a_name_no_server_carries_lists_the_names(
+    tmp_path: Path, service: Service
+) -> None:
+    path = _write_credentials(tmp_path, {"account-token": ACCOUNT_TOKEN})
+    before = path.read_bytes()
+    _answer_servers(
+        service,
+        _servers((51, "staging", [OTHER_TOKEN]), (52, BROADCAST, [FETCHED_TOKEN])),
+    )
+    launcher = _launcher(tmp_path)
+
+    result = _setup_server(tmp_path, service, launcher, "outbound")
+
+    assert result.returncode == REFUSED
+    assert "outbound" in result.stderr
+    assert '"staging"' in result.stderr
+    assert f'"{BROADCAST}"' in result.stderr
+    assert result.stdout == ""
+    assert path.read_bytes() == before
+    assert not launcher.log.exists()
+    _assert_no_fetched_token(result, service, launcher)
+
+
+def test_setup_server_for_a_name_two_servers_carry_is_refused(
+    tmp_path: Path, service: Service
+) -> None:
+    path = _write_credentials(tmp_path, {"account-token": ACCOUNT_TOKEN})
+    before = path.read_bytes()
+    _answer_servers(
+        service,
+        _servers(
+            (61, TRANSACTIONAL, [FETCHED_TOKEN]), (62, TRANSACTIONAL, [SECOND_TOKEN])
+        ),
+    )
+    launcher = _launcher(tmp_path)
+
+    result = _setup_server(tmp_path, service, launcher, TRANSACTIONAL)
+
+    assert result.returncode == REFUSED
+    assert "several" in result.stderr
+    assert "clipboard" in result.stderr
+    assert path.read_bytes() == before
+    assert not launcher.log.exists()
+    _assert_no_fetched_token(result, service, launcher)
+
+
+def test_setup_server_for_a_server_with_no_token_is_refused(
+    tmp_path: Path, service: Service
+) -> None:
+    path = _write_credentials(tmp_path, {"account-token": ACCOUNT_TOKEN})
+    before = path.read_bytes()
+    _answer_servers(service, _servers((71, TRANSACTIONAL, [])))
+    launcher = _launcher(tmp_path)
+
+    result = _setup_server(tmp_path, service, launcher, TRANSACTIONAL)
+
+    assert result.returncode == REFUSED
+    assert "ApiTokens" in result.stderr
+    assert path.read_bytes() == before
+    assert not launcher.log.exists()
+
+
+def test_setup_server_relays_only_the_status_and_error_code_of_a_refused_listing(
+    tmp_path: Path, service: Service
+) -> None:
+    path = _write_credentials(tmp_path, {"account-token": ACCOUNT_TOKEN})
+    before = path.read_bytes()
+    service.answer(
+        "GET",
+        "/servers?count=500&offset=0",
+        401,
+        {"ErrorCode": 10, "Message": "Bad or missing API token"},
+    )
+    launcher = _launcher(tmp_path)
+
+    result = _setup_server(tmp_path, service, launcher, TRANSACTIONAL)
+
+    assert result.returncode == REFUSED
+    assert "401" in result.stderr
+    assert "10" in result.stderr
+    assert "Bad or missing" not in result.stderr
+    assert result.stdout == ""
+    assert path.read_bytes() == before
+    assert not launcher.log.exists()
+
+
+def test_setup_server_passes_on_the_librarys_refusal_to_replace_a_held_token(
+    tmp_path: Path, service: Service
+) -> None:
+    path = _write_credentials(
+        tmp_path,
+        {
+            "account-token": ACCOUNT_TOKEN,
+            f"server:{TRANSACTIONAL}": TRANSACTIONAL_TOKEN,
+        },
+    )
+    before = path.read_bytes()
+    _answer_servers(service, _servers((81, TRANSACTIONAL, [FETCHED_TOKEN])))
+    launcher = _launcher(tmp_path)
+
+    result = _setup_server(tmp_path, service, launcher, TRANSACTIONAL)
+
+    assert result.returncode == REFUSED
+    assert "credentials.py: " in result.stderr
+    assert "replace a working credential" in result.stderr
+    assert result.stdout == ""
+    assert path.read_bytes() == before
+    assert [request.path for request in service.received] == [
+        "/servers?count=500&offset=0"
+    ]
+    _assert_no_fetched_token(result, service, launcher)
+
+
+def test_setup_server_with_yes_replaces_a_held_token(
+    tmp_path: Path, service: Service
+) -> None:
+    _write_credentials(
+        tmp_path,
+        {
+            "account-token": ACCOUNT_TOKEN,
+            f"server:{TRANSACTIONAL}": TRANSACTIONAL_TOKEN,
+        },
+    )
+    _answer_servers(service, _servers((91, TRANSACTIONAL, [FETCHED_TOKEN])))
+    service.answer("GET", "/server", 200, {"ID": 91, "Name": TRANSACTIONAL})
+    launcher = _launcher(tmp_path)
+
+    result = _setup_server(tmp_path, service, launcher, "--yes", TRANSACTIONAL)
+
+    assert result.returncode == ANSWERED, result.stderr
+    assert _stored(tmp_path)[f"server:{TRANSACTIONAL}"] == FETCHED_TOKEN
+    assert "--yes" in launcher.argv()
+    _assert_no_fetched_token(result, service, launcher)
+
+
+def test_setup_server_reports_a_stored_token_postmark_refuses(
+    tmp_path: Path, service: Service
+) -> None:
+    _write_credentials(tmp_path, {"account-token": ACCOUNT_TOKEN})
+    _answer_servers(service, _servers((101, TRANSACTIONAL, [FETCHED_TOKEN])))
+    service.answer(
+        "GET", "/server", 401, {"ErrorCode": 10, "Message": "Bad or missing API token"}
+    )
+    launcher = _launcher(tmp_path)
+
+    result = _setup_server(tmp_path, service, launcher, TRANSACTIONAL)
+
+    assert result.returncode == REFUSED
+    assert json.loads(result.stdout) == {
+        "key": f"server:{TRANSACTIONAL}",
+        "status": 401,
+        "error_code": 10,
+    }
+    assert _stored(tmp_path)[f"server:{TRANSACTIONAL}"] == FETCHED_TOKEN
+    _assert_no_fetched_token(result, service, launcher)
+
+
+def test_setup_server_exits_one_where_set_fails_as_a_tool(
+    tmp_path: Path, service: Service
+) -> None:
+    path = _write_credentials(tmp_path, {"account-token": ACCOUNT_TOKEN})
+    before = path.read_bytes()
+    _answer_servers(service, _servers((111, TRANSACTIONAL, [FETCHED_TOKEN])))
+    launcher = _launcher(tmp_path, exit_status=3)
+
+    result = _setup_server(tmp_path, service, launcher, TRANSACTIONAL)
+
+    assert result.returncode == TRANSPORT
+    assert "3" in result.stderr
+    assert result.stdout == ""
+    assert path.read_bytes() == before
+    assert [request.path for request in service.received] == [
+        "/servers?count=500&offset=0"
+    ]
+    _assert_no_fetched_token(result, service, launcher)
+
+
 # --- The body ------------------------------------------------------------
 
 
 def test_the_bodys_setup_leaves_the_overwrite_gate_to_the_librarys_set() -> None:
-    """`set` is the gate, so the body passes `--yes` to it and runs no check of its own."""
+    """`set` is the gate, so the body passes `--yes` on and runs no check of its own.
+
+    `show` reads the held keys only to choose between `setup-server`, where the
+    account token is held, and the clipboard; both paths pass `--yes` exactly
+    where the invocation carries it.
+    """
 
     body = (ENGINE.parent.parent / "SKILL.md").read_text(encoding="utf-8")
     setup = body.split("## setup", 1)[1].split("\n## ", 1)[0]
 
-    assert 'credentials.py" show' not in setup
+    fetch = setup.index('postmark.py" setup-server --library="$LIBRARY" "<name>"')
+    fetch_status = setup.index("`status` step", fetch)
+    assert "--yes" in setup[fetch:fetch_status]
+
     account = setup.index(
         'credentials.py" set --skill=postmark --key=account-token --from-clipboard'
     )
     server = setup.index(
         'credentials.py" set --skill=postmark --key="server:<name>" --from-clipboard'
     )
-    status = setup.index("`status` step")
+    status = setup.index("`status` step", server)
     assert account < server < status
     assert "--yes" in setup[server:status]

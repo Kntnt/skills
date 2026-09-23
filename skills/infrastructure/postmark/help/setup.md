@@ -2,7 +2,7 @@
 
 ## NAME
 
-postmark setup - store a Postmark token read from the clipboard, and check it
+postmark setup - store a Postmark token, read from the clipboard or fetched from Postmark, and check it
 
 ## SYNOPSIS
 
@@ -12,11 +12,15 @@ postmark setup - store a Postmark token read from the clipboard, and check it
 
 ## DESCRIPTION
 
-`setup` stores one Postmark token in the Credential File without the token passing through the conversation. The Skill asks you to copy the token in Postmark and to say when it is on the clipboard; it then reads the clipboard into the file and runs `status` to check the token against Postmark.
+`setup` stores one Postmark token in the Credential File without the token passing through the conversation, and then runs `status` to check it against Postmark.
+
+`setup account` takes the token through the clipboard, and so does `setup server` where no account token is stored. The Skill asks you to copy the token in Postmark and to say when it is on the clipboard, and then reads the clipboard into the file.
+
+Where the account token is stored, `setup server` needs no clipboard. The account token already reaches every server's tokens, so the Skill fetches the named server's first token from Postmark and stores it. The token is never printed, put on the clipboard, or passed to a process as an argument.
 
 `setup account` stores the account token, found on the API Tokens tab of the Postmark account and shown to the account owner and admins. `setup server` stores the token of one server, found on the API Tokens tab of that server.
 
-To rotate a token, regenerate it in Postmark, copy the new one, and run `setup` again with `--yes`. You may clear the clipboard afterwards.
+To rotate a server's token where the account token is stored, regenerate it in Postmark and run `setup --yes server` with its name, which fetches the new one. To rotate any other token, regenerate it in Postmark, copy the new one, and run `setup` again with `--yes`. You may clear the clipboard afterwards.
 
 ## POSITIONAL ARGUMENTS
 
@@ -26,7 +30,7 @@ Store the account token, under the key `account-token`.
 
 **server** *NAME*
 
-Store the token of the server called *NAME*, exactly as Postmark shows it, spaces included, under the key `server:`*NAME*.
+Store the token of the server called *NAME*, exactly as Postmark shows it, spaces included, under the key `server:`*NAME*. Where the token is fetched, *NAME* has to match the server's name in Postmark exactly, case included.
 
 ## OPTIONS
 
@@ -44,7 +48,11 @@ The Credential File. `setup` creates it, readable by its owner alone, and adds o
 
 An invalid form is refused rather than ignored. The Skill names the error, prints this page's SYNOPSIS, changes nothing, and points at `/postmark setup --help`. `setup` alone, `setup server` without a name, and `setup account` followed by anything are refused.
 
-Where the Credential File already holds the key and `--yes` is absent, `setup` refuses, names the file and the key, and says that `--yes` asserts you mean to replace the working token; the clipboard is not read and nothing is written. Where the clipboard is empty or no clipboard tool is found, `setup` refuses and says how to write the file by hand instead.
+Where the Credential File already holds the key and `--yes` is absent, `setup` refuses, names the file and the key, and says that `--yes` asserts you mean to replace the working token; the clipboard is not read, no fetched token is stored, and nothing is written. Where the clipboard is empty or no clipboard tool is found, `setup` refuses and says how to write the file by hand instead.
+
+Where `setup server` fetches the token, it refuses and stores nothing when no server in the account carries *NAME*, and lists the names the account's servers carry. It also refuses when several servers carry *NAME*, and when Postmark lists no token for the server. For each of these, the way through is the clipboard: copy the token from that server's API Tokens tab and say so, and the Skill stores it from the clipboard. Where Postmark refuses to list the servers, `setup` names only the HTTP status and Postmark's `ErrorCode`.
+
+Where Postmark refuses the fetched token after it was stored, `setup` says so and the token stays stored. Check or regenerate the token in Postmark and run `setup --yes server` with the server's name.
 
 ## EXAMPLES
 
@@ -72,7 +80,7 @@ Every form above ends with [**--** *INSTRUCTION*], the optional Contextual Instr
 
 ## DEPENDENCIES
 
-`uv` and the Kntnt Manager. Reading the clipboard needs `pbpaste` on macOS, `wl-paste`, `xclip` or `xsel` on Linux, or PowerShell on Windows. Checking the token afterwards needs network access; storing it does not.
+`uv` and the Kntnt Manager. Reading the clipboard needs `pbpaste` on macOS, `wl-paste`, `xclip` or `xsel` on Linux, or PowerShell on Windows. Checking the token afterwards needs network access, and so does fetching a server's token where the account token is stored; storing a token read from the clipboard does not.
 
 ## SEE ALSO
 

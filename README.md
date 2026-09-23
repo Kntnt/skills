@@ -170,7 +170,7 @@ Run `/nodeping setup` once to store your API token, copied to the clipboard from
 
 Inspect and change email at Postmark on your behalf: servers and their message streams, domains and their DKIM and Return-Path records, sender signatures, templates, suppressions, bounces, delivery statistics, message search and webhooks, and a send where you ask for one. Every change is read first and verified after; a deletion or a real send happens only where you authorized that exact operation, and a send is shown in full first. DNS records are reported for `cloudns` to set rather than set here.
 
-Run `/postmark setup account` and `/postmark setup server <name>` once to store the tokens, copied in Postmark and read from the clipboard so they never enter the conversation, and `/postmark status` to check them. Then run `/postmark -- <request>`, or let the agent use it for a matching Postmark task.
+Run `/postmark setup account` once to store the account token, copied in Postmark and read from the clipboard so it never enters the conversation, then `/postmark setup server <name>` for each server, whose token is fetched from Postmark with the account token, and `/postmark status` to check them. Then run `/postmark -- <request>`, or let the agent use it for a matching Postmark task.
 
 ## Features
 
@@ -198,7 +198,7 @@ Every skill requires `uv` and the manager: the manager ships the engine that rea
 
 `cloudns` needs network access and a ClouDNS API sub-user, which `/cloudns setup` makes the credential for; its `setup` also needs a clipboard tool, such as `pbcopy` on macOS or `wl-copy`, `xclip` or `xsel` on Linux.
 
-`postmark` needs network access and Postmark tokens for anything it does at Postmark: the account token for servers, domains, sender signatures and data removals, and a server token for each server it sends from or manages. `setup` stores them in `~/.kntnt/postmark/credentials.json` through the clipboard.
+`postmark` needs network access and Postmark tokens for anything it does at Postmark: the account token for servers, domains, sender signatures and data removals, and a server token for each server it sends from or manages. `setup` stores them in `~/.kntnt/postmark/credentials.json`: the account token through the clipboard, and a server token fetched from Postmark with the account token where that is stored, or through the clipboard where it is not.
 
 Git workflows also require `git`; ticket workflows require `gh`; `rename-invoices` requires Poppler's `pdftotext`; `mirror` requires `agent-browser`, which fetches in a real browser what plain HTTP cannot, installed with `brew install agent-browser` and then `agent-browser install`. `release` can finish without `gh`, but then skips the GitHub release.
 
