@@ -1,0 +1,32 @@
+{
+  "recorded-column": {
+    "input_and_instructions_unchanged": true,
+    "runtime_additions": [
+      "tmp/article-measure.b99W5a/uv-c693ea7519fdc584.lock",
+      "tmp/language-resolve.bwoRUn/uv-846eabe2885abdba.lock",
+      "tmp/uv-beacf39546b11ae8.lock"
+    ],
+    "pair_counts": 4
+  },
+  "paraphrased-column": {
+    "input_and_instructions_unchanged": true,
+    "runtime_additions": [
+      "tmp/uv-beacf39546b11ae8.lock"
+    ],
+    "pair_counts": 4
+  },
+  "clean-reuse": {
+    "input_and_instructions_unchanged": true,
+    "runtime_additions": [
+      "tmp/uv-beacf39546b11ae8.lock"
+    ],
+    "pair_counts": 3
+  },
+  "paraphrased-headline": {
+    "input_and_instructions_unchanged": true,
+    "runtime_additions": [
+      "tmp/uv-beacf39546b11ae8.lock"
+    ],
+    "pair_counts": 3
+  }
+}

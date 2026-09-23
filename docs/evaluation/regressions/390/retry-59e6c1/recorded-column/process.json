@@ -1,0 +1,25 @@
+{
+  "argv": [
+    "/opt/homebrew/bin/codex",
+    "exec",
+    "--ignore-rules",
+    "-s",
+    "danger-full-access",
+    "--skip-git-repo-check",
+    "--json",
+    "-C",
+    "/Users/thomas/Projects/skills/.git/orchestrate-session-389-391-gpt/scratch/390/retry-59e6c1/recorded-column/work",
+    "-o",
+    "/Users/thomas/Projects/skills-388-391/docs/evaluation/regressions/390/retry-59e6c1/recorded-column/response.txt",
+    "-"
+  ],
+  "pid": 77934,
+  "process_group": 77934,
+  "harness": "codex-cli 0.155.1",
+  "model": "gpt-5.6-sol",
+  "effort": "xhigh",
+  "timeout_seconds": 1200,
+  "timed_out": false,
+  "exit_status": -15,
+  "elapsed": 143.53646858292632
+}

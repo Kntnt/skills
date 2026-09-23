@@ -1,0 +1,14 @@
+{
+  "at": "2026-09-22T08:22:19.411946+00:00",
+  "pids": [
+    78321,
+    78444,
+    78567,
+    78693,
+    4050
+  ],
+  "ps_returncode": 1,
+  "ps_stdout": "",
+  "ps_stderr": "",
+  "result": "All registered gate process IDs absent after command completion."
+}

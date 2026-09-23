@@ -1,0 +1,32 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+___________ test_each_subheading_pairs_only_with_its_own_first_prose ___________
+
+tmp_path = PosixPath('/Users/thomas/Projects/skills-388-391/.scratch-390/tmp/pytest-of-thomas/pytest-4/test_each_subheading_pairs_onl0')
+
+    def test_each_subheading_pairs_only_with_its_own_first_prose(tmp_path: Path) -> None:
+        """Deeper headings and non-prose never lend another section's sentence."""
+    
+        body = (
+            "## Ingen egen prosa\n\n### En underrubrik\n\n"
+            "```text\nInte prosa.\n```\n\n> Inte heller prosa.\n\n"
+            "Här börjar prosan. Här fortsätter den.\n\n"
+            "## Tomt avsnitt\n\n- Bara en lista\n\n"
+            "## Sista avsnittet\n\nSista avsnittets första mening."
+        )
+    
+        _, payload = _measure(tmp_path, _article(body=body))
+    
+        pairs = payload["heading_pairs"][1:]
+>       assert [pair["id"] for pair in pairs] == [
+            "subheading-1", "subheading-2", "subheading-3", "subheading-4"
+        ]
+E       AssertionError: assert ['subheading-...subheading-3'] == ['subheading-...subheading-4']
+E         
+E         Right contains one more item: 'subheading-4'
+E         Use -v to get more diff
+
+tests/test_article_anatomy.py:332: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_article_anatomy.py::test_each_subheading_pairs_only_with_its_own_first_prose
+1 failed, 40 deselected in 0.15s

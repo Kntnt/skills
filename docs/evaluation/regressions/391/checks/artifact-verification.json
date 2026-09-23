@@ -1,0 +1,27 @@
+{
+  "file-success": {
+    "response_prose_byte_equal": true,
+    "draft_sha256": "d27c301052cd86a40d9a3ec53c5a51c454425a7ba0a82fed27c3d60150d7901f",
+    "before_terminal": true,
+    "after_terminal": true,
+    "work_absent": true
+  },
+  "denied-write": {
+    "response_prose_byte_equal": true,
+    "draft_sha256": "d27c301052cd86a40d9a3ec53c5a51c454425a7ba0a82fed27c3d60150d7901f",
+    "before_terminal": true,
+    "after_terminal": true,
+    "work_absent": true,
+    "reply_report_byte_equal": true,
+    "reply_words": 321
+  },
+  "interrupted": {
+    "response_prose_byte_equal": true,
+    "draft_sha256": "d27c301052cd86a40d9a3ec53c5a51c454425a7ba0a82fed27c3d60150d7901f",
+    "before_terminal": true,
+    "after_terminal": true,
+    "work_absent": true,
+    "preserved_draft_byte_equal": true,
+    "not_source_checked_label": true
+  }
+}

@@ -1,0 +1,24 @@
+warning: No `requires-python` value found in the workspace. Defaulting to `>=3.12`.
+Downloading pygments (1.2MiB)
+ Downloaded pygments
+Installed 6 packages in 7ms
+F                                                                        [100%]
+=================================== FAILURES ===================================
+____ test_write_waits_for_checker_completion_without_polling_a_report_path _____
+
+    def test_write_waits_for_checker_completion_without_polling_a_report_path() -> None:
+        """The reply can be the only report; file creation cannot release a wait.
+
+        Hold the executable prose at its synchronization seam (issue #391).
+        Native regression runs separately observe task lifetime and delivery.
+        """
+
+        text = (WRITE_DIR / "references" / "source-check.md").read_text()
+
+>       assert "Use the Harness's native completion/wait mechanism" in text
+E       assert "Use the Harness's native completion/wait mechanism" in '# Source and quotation comparison\n\nCheck the completed draft before delivery. Start a fresh subagent on the inherit... and that accounting are not scratch. The report itself is internal working material, not an extra user deliverable.\n'
+
+tests/test_kntnt.py:7078: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_kntnt.py::test_write_waits_for_checker_completion_without_polling_a_report_path
+1 failed, 423 deselected in 0.58s

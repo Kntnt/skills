@@ -1,0 +1,81 @@
+unformatted: File would be reformatted
+  --> .scratch-390/run_checks.py:2:1
+   |
+1  | """Run the four published checks and retain their actual outcomes."""
+2  +
+3  | import json
+--------------------------------------------------------------------------------
+11 | root = Path.cwd()
+   - output = root / 'docs/evaluation/regressions/390/checks'
+12 + output = root / "docs/evaluation/regressions/390/checks"
+13 | environment = dict(os.environ)
+14 | environment.update(
+   -     TMPDIR=str(root / '.scratch-390/tmp'),
+   -     UV_CACHE_DIR=str(root / '.scratch-390/uv-cache'),
+   -     UV_TOOL_DIR=str(root / '.scratch-390/uv-tools'),
+   -     UV_OFFLINE='1',
+   -     UV_NO_PROJECT='1',
+   -     RUFF_CACHE_DIR=str(root / '.scratch-390/ruff-cache'),
+   -     MYPY_CACHE_DIR=str(root / '.scratch-390/mypy-cache'),
+   -     PYTHONDONTWRITEBYTECODE='1',
+15 +     TMPDIR=str(root / ".scratch-390/tmp"),
+16 +     UV_CACHE_DIR=str(root / ".scratch-390/uv-cache"),
+17 +     UV_TOOL_DIR=str(root / ".scratch-390/uv-tools"),
+18 +     UV_OFFLINE="1",
+19 +     UV_NO_PROJECT="1",
+20 +     RUFF_CACHE_DIR=str(root / ".scratch-390/ruff-cache"),
+21 +     MYPY_CACHE_DIR=str(root / ".scratch-390/mypy-cache"),
+22 +     PYTHONDONTWRITEBYTECODE="1",
+23 | )
+   - commands = json.loads((root / '.scratch-390/check-commands.json').read_text())
+24 + commands = json.loads((root / ".scratch-390/check-commands.json").read_text())
+25 | records = []
+26 | processes = []
+27 | try:
+   -     for name, command in zip(('ruff', 'format', 'mypy', 'pytest'), commands):
+   -         log = (output / (name + '.txt')).open('w')
+   -         process = subprocess.Popen(shlex.split(command), cwd=root, env=environment,
+   -                                    stdout=log, stderr=subprocess.STDOUT,
+   -                                    start_new_session=True)
+28 +     for name, command in zip(("ruff", "format", "mypy", "pytest"), commands):
+29 +         log = (output / (name + ".txt")).open("w")
+30 +         process = subprocess.Popen(
+31 +             shlex.split(command),
+32 +             cwd=root,
+33 +             env=environment,
+34 +             stdout=log,
+35 +             stderr=subprocess.STDOUT,
+36 +             start_new_session=True,
+37 +         )
+38 |         processes.append((process, log))
+   -         records.append({'name': name, 'command': command, 'pid': process.pid,
+   -                         'process_group': process.pid, 'exit_status': None})
+   -         (output / 'verification.json').write_text(json.dumps(records, indent=2)+'\n')
+39 +         records.append(
+40 +             {
+41 +                 "name": name,
+42 +                 "command": command,
+43 +                 "pid": process.pid,
+44 +                 "process_group": process.pid,
+45 +                 "exit_status": None,
+46 +             }
+47 +         )
+48 +         (output / "verification.json").write_text(json.dumps(records, indent=2) + "\n")
+49 |     while any(process.poll() is None for process, _ in processes):
+50 |         for record, (process, _) in zip(records, processes):
+   -             record['exit_status'] = process.poll()
+   -         (output / 'verification.json').write_text(json.dumps(records, indent=2)+'\n')
+51 +             record["exit_status"] = process.poll()
+52 +         (output / "verification.json").write_text(json.dumps(records, indent=2) + "\n")
+53 |         time.sleep(1)
+--------------------------------------------------------------------------------
+62 |             process.wait()
+   -         record['exit_status'] = process.returncode
+63 +         record["exit_status"] = process.returncode
+64 |         log.close()
+   -     (output / 'verification.json').write_text(json.dumps(records, indent=2)+'\n')
+65 +     (output / "verification.json").write_text(json.dumps(records, indent=2) + "\n")
+66 | print(json.dumps(records, indent=2))
+   |
+
+1 file would be reformatted, 3102 files already formatted

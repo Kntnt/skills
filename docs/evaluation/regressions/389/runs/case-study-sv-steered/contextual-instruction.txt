@@ -1,0 +1,1 @@
+-- Rubriken ska säga vad testet gav, inte bara att det gjordes. Låt den lyfta fram nyttan med den gemensamma loggen.

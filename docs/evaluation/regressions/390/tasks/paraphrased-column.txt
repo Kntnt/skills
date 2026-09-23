@@ -1,0 +1,3 @@
+Read and execute the staged .agents/skills/redline/SKILL.md for this invocation. Its directory is $HERE.
+
+/redline --max=1 --output=response input.md

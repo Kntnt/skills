@@ -1,0 +1,18 @@
+error: No solution found when resolving tool dependencies
+  cause: Because mypy<=2.0.0 needs to be downloaded from a registry and only the following versions of mypy are available:
+             mypy<=2.0.0
+             mypy>=2.1.0
+         we can conclude that mypy<2.1.0 cannot be used. (1)
+
+         Because ast-serialize was not found in the cache and mypy==2.1.0 depends on ast-serialize>=0.3.0,<1.0.0, we can conclude that mypy==2.1.0 cannot be used.
+         And because we know from (1) that mypy<2.1.0 cannot be used, we can conclude that mypy<=2.1.0 cannot be used.
+         And because only the following versions of mypy are available:
+             mypy<=2.1.0
+             mypy>=2.2.0
+         we can conclude that mypy<2.2.0 cannot be used. (2)
+
+         Because ast-serialize was not found in the cache and mypy>=2.2.0 depends on ast-serialize>=0.6.0,<1.0.0, we can conclude that mypy>=2.2.0 cannot be used.
+         And because we know from (2) that mypy<2.2.0 cannot be used, we can conclude that all versions of mypy cannot be used.
+         And because you require mypy, we can conclude that your requirements are unsatisfiable.
+
+hint: Packages were unavailable because the network was disabled. When the network is disabled, registry packages may only be read from the cache.

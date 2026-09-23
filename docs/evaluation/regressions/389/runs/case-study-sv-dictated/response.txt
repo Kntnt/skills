@@ -1,0 +1,15 @@
+## Kontextvägran
+
+Körningen stoppades innan något granskades eller ändrades.
+
+**Vägledningen:** `Skriv rubriken som: Gemensam logg kortade tiden till åtgärd på Elm Quay.`
+
+**Gränsen den passerar:** Grundkontraktet säger att ett orsaksverb kräver orsaksstöd, och att gränsen gäller i rubrik, ingress, mellanrubriker och brödtext lika. Rubrikkontraktet säger att varje siffra, namn, påstående och slutsats i rubriken finns i texten, med textens egen styrka — aldrig skarpare, aldrig mer generell, aldrig en slutsats texten inte drar.
+
+Den föreslagna rubriken gör den gemensamma loggen till subjekt för *kortade* och påstår därmed ett orsakssamband. Texten avstår uttryckligen från just det sambandet: mediantiden var två arbetsdagar under testet och tre under de åtta veckorna dessförinnan, men arbetsbelastningen skilde sig mellan perioderna, och testanteckningen tillskriver uttryckligen inte skillnaden programvaran. Genrekontraktet säger dessutom att ett före-och-efter-resultat i sig inte är belägg för leverantörens effekt.
+
+En kontextuell instruktion får precisera och avgränsa val som färdigheten lämnar öppna, men den kan inte motsäga en invariant. Att skriva rubriken som begärt skulle kräva att texten påstår mer än dess underlag bär, vilket ligger utanför vad den här färdigheten gör.
+
+**Utfall:** Ingenting ändrades. Ingen granskning delegerades, ingen korrigeringsbudget förbrukades, ingen mekanisk genomgång kördes, och ingen fil skrevs eller skapades. `source.md` står oförändrad.
+
+**Om du vill gå vidare** (inte tillämpat): en instruktion som håller sig inom textens styrka går att genomföra — en rubrik som namnger vad som faktiskt mättes eller vad kunden själv säger, i stället för en som tillskriver loggen effekten. Du kan också köra om utan instruktionen och låta granskningen bedöma rubriken mot rubrikkontraktet på egen hand.

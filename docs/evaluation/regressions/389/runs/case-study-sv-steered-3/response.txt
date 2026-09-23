@@ -1,0 +1,50 @@
+Granskningen är klar. Texten levereras nedan.
+
+```markdown
+---
+kntnt:
+  genre: case-study
+  technique: none
+  language: sv
+---
+
+# Gemensam logg gav underhållslaget en samlad bild
+
+Hösten 2025 prövade bostadsbolaget Elm Quay Housing en gemensam felanmälningslogg i ett test som varade åtta veckor. 31 anmälningar registrerades, och arbetsledaren skulle göra om testet – men med mer tid för förberedelser. Här är vad testet krävde och vad siffrorna inte säger.
+
+Av Thomas Barregren
+
+Telefonanmälningar på ett ställe, e-post på ett annat. Så förvarades felanmälningarna hos Elm Quay Housing, ett bostadsbolag med eget underhållslag som förvaltar 640 lägenheter. I september 2025 bestämde sig laget för att pröva en gemensam logg i två hus.
+
+## Så kom systemet på plats i de två husen
+
+Laget testade om loggen kunde visa status för varje reparation och valde därefter Svale Systems. Någon jämförelse med en annan leverantör finns inte.
+
+– Vi ville att kvällsskiftet skulle se vad morgonskiftet redan hade gjort. Kategorierna var våra; Svale hjälpte oss att lägga in dem i loggen, skriver Maya Lind, arbetsledare för underhållet, i en mejlintervju.
+
+De boende kunde fortsätta anmäla fel per telefon under testet. Svale konfigurerade loggen och utbildade sex medarbetare vid två tillfällen.
+
+## Siffrorna säger inget om orsaken
+
+Testet pågick i åtta veckor. Enligt Elm Quays interna testanteckning från 4 december 2025 registrerades 31 felanmälningar i loggen, och då är akuta ärenden och arbeten som beställts före testet inte inräknade.
+
+Mediantiden från anmälan till tilldelad åtgärd var två arbetsdagar under testet och tre under de åtta veckorna dessförinnan. Arbetsbelastningen skilde sig mellan perioderna, och anteckningen tillskriver uttryckligen inte skillnaden programvaran. Kostnader, de boendes nöjdhet och tiden fram till avslutad åtgärd mättes inte.
+
+– Vi lade mer tid på att komma överens om kategorierna än på att registrera de första anmälningarna. Den tiden skulle jag avsätta innan nästa hus drar i gång, skriver Maya Lind.
+
+## Laget vill pröva kategorierna på större reparationer
+
+Testet har ännu inte utvidgats. Laget vill först se hur kategorierna fungerar för större reparationer, och Lind rekommenderade inte Svale till varje bostadsbolag.
+
+– Jag skulle välja att göra om testet. Att ha en samlad bild av anmälningarna hjälper oss, men jag skulle lägga in en extra vecka för förberedelser, skriver hon.
+
+För den som överväger ett liknande test finns Svale Systems [checklista för införande](https://example.invalid/svale/checklist) att läsa igenom. Den här kundberättelsen är publicerad av Svale Systems och är alltså inte oberoende journalistik.
+```
+
+**Upplösning.** Genren `case-study`, tekniken `none` och språket `sv` kommer alla från textens egen `kntnt`-karta. Att ingen teknik tillämpas är alltså kartans besked och inte genrens: `none` är ett värde som avgör parametern ovanför genrens nivå, så genrens vanliga båge hämtas aldrig.
+
+**Fynd.** Inga fynd kvarstår. Granskningen fann två, båda reparerade i den enda korrigeringsrundan, och omgranskningen av den korrigerade texten fann inga nya.
+
+**Påståenden.** Inget påstående togs bort, och inget står kvar med förskjuten räckvidd, säkerhet, attribution, kronologi, kausalitet eller innebörd. De begränsande meningarna står orörda: att någon leverantörsjämförelse inte finns, vad som inte räknas in i de 31 anmälningarna, att anteckningen uttryckligen inte tillskriver programvaran skillnaden i mediantid, att kostnader, nöjdhet och tid till avslutad åtgärd inte mättes, att Lind inte rekommenderade Svale till varje bostadsbolag, och upplysningen om att berättelsen är utgiven av Svale Systems.
+
+**Vad som ändrades.** Två rubrikrader skiljer den levererade texten från den inlämnade, och inget annat. Rubriken säger nu vad den gemensamma loggen gav underhållslaget i stället för vad kunden gjorde, med textens egen styrka: den påstår ingenting om snabbare eller bättre underhåll, eftersom texten inte tillskriver programvaran tidsskillnaden. Därmed upphör också ekot mellan rubriken och ingressens första mening. Den sista underrubriken är omskriven ur hela sitt avsnitt så att den inte längre upprepar meningen närmast under sig. Brödtext, citat, ingress, byline, länk och frontmatter är oförändrade, och det avslutande mekaniska korrekturpasset hittade inget att rätta.

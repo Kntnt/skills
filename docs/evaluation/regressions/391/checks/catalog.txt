@@ -1,0 +1,269 @@
+{
+  "origin": "Kntnt/skills",
+  "manager_digest": "197b355f8401347c8df2323f627f81e4f7c1729b8d352d90167b2c98378a6f5a",
+  "skills": [
+    {
+      "name": "agents-md",
+      "category": "agents",
+      "description": "AGENTS.md: create, shrink, or tend the current project's always-loaded file and docs/agents/ after a task when a non-discoverable fact is new, a line is stale or sprawling, or a pointer is missing; also `/agents-md` and `--force`.",
+      "digest": "03a3db85bdc39b43044c292eaed456af96048d8a525a49ddfbe8b1bd34755ae7",
+      "binaries": [
+        "git",
+        "uv"
+      ],
+      "skills": [],
+      "externals": [],
+      "capabilities": []
+    },
+    {
+      "name": "delegation",
+      "category": "agents",
+      "description": "Turn delegation mode on or off — you orchestrate, subagents execute — for this session, this project, or your user account.",
+      "digest": "5c999dc9e08e367c381b7542a0bad044f434d5f5769b4fa3b487b929b2845ec7",
+      "binaries": [
+        "uv"
+      ],
+      "skills": [
+        "model-selector"
+      ],
+      "externals": [],
+      "capabilities": [
+        "subagents"
+      ]
+    },
+    {
+      "name": "explain",
+      "category": "agents",
+      "description": "Explain the reply just given, or whatever the instruction names, better than it was explained the first time.",
+      "digest": "766edd2d8cdfc198014673a67f30508fa4d1b3ddf7f33d0d100e47d1ec6e7de6",
+      "binaries": [
+        "uv"
+      ],
+      "skills": [],
+      "externals": [],
+      "capabilities": []
+    },
+    {
+      "name": "commit",
+      "category": "code",
+      "description": "Commit the working tree on the current branch, without pushing.",
+      "digest": "232ea1cb3513f1848160cefbb61f0bfeef7b232b7691c08f4c460bcbc9516860",
+      "binaries": [
+        "git",
+        "uv"
+      ],
+      "skills": [],
+      "externals": [],
+      "capabilities": []
+    },
+    {
+      "name": "orchestrate",
+      "category": "code",
+      "description": "Work the tracker's ready-for-agent tickets unattended — claim, build, and independently verify them a wave at a time, integrating each wave into the current branch.",
+      "digest": "d5652f5e8aa484717c2192e852c4de02f8c3d6864063fd310500b6191ce46f4a",
+      "binaries": [
+        "git",
+        "gh",
+        "uv"
+      ],
+      "skills": [
+        "model-selector"
+      ],
+      "externals": [],
+      "capabilities": [
+        "subagents"
+      ]
+    },
+    {
+      "name": "push",
+      "category": "code",
+      "description": "Follow commit, then push the current branch.",
+      "digest": "0daaf04e1931c059b8aa008687596a427d784b5eb149741b8e505ebe9cf0a311",
+      "binaries": [
+        "git",
+        "uv"
+      ],
+      "skills": [
+        "commit"
+      ],
+      "externals": [],
+      "capabilities": []
+    },
+    {
+      "name": "ready-for-agent-check",
+      "category": "code",
+      "description": "Read the tracker's ready-for-agent tickets the way an unattended builder will — one subagent per ticket, in a context that did not write it — and report what would stop that builder, before a run spends a wave finding out.",
+      "digest": "d5a1a28cf18eb9d0b83d319e9ce41d6d5ecd5c1816a7d937a3a3a9de1367c34a",
+      "binaries": [
+        "gh",
+        "uv"
+      ],
+      "skills": [],
+      "externals": [],
+      "capabilities": [
+        "subagents"
+      ]
+    },
+    {
+      "name": "release",
+      "category": "code",
+      "description": "Ship a version — changelog, bump, push, tag, and GitHub release.",
+      "digest": "9b6b2700471672bf5573114915e5d9d062993de74026334657a0b340f64d3853",
+      "binaries": [
+        "git",
+        "uv"
+      ],
+      "skills": [
+        "push"
+      ],
+      "externals": [],
+      "capabilities": []
+    },
+    {
+      "name": "proofread",
+      "category": "editorial",
+      "description": "Correct only mechanical language errors — spelling, grammar, punctuation, agreement, inflection, duplicated or missing words, and locale mechanics — in one supplied text, preserving its wording, meaning, tone, structure, formatting, and metadata. Start it on your own only when a specific text is at hand and the request either uses a proofreading term (proofread, spell-check, copyedit, fix the typos, korrekturläs, rätta stavfelen) or is unambiguously limited to mechanical language errors. Not for a request to edit, rewrite, polish, improve, tighten, or review a text — each of those asks for changes this Skill refuses to make. A user may also invoke it by name at any time.",
+      "digest": "da1b20b6da6cb2bd2bb84be606e75f1acf8b3908372f390d61ce265770990809",
+      "binaries": [
+        "uv"
+      ],
+      "skills": [],
+      "externals": [],
+      "capabilities": []
+    },
+    {
+      "name": "redline",
+      "category": "editorial",
+      "description": "Review one supplied text against this collection's editorial contract — its genre, its optional technique, its language, and the shared anti-slop catalogue — repair what the review found through a bounded budget of fresh correction subagents, report whatever is left unresolved, and finish with exactly one mechanical pass.",
+      "digest": "831d26b239031ceae6c372a1eb267eebf15c7b96153f53edc5470368eba74632",
+      "binaries": [
+        "uv"
+      ],
+      "skills": [
+        "proofread"
+      ],
+      "externals": [],
+      "capabilities": [
+        "subagents"
+      ]
+    },
+    {
+      "name": "unslop",
+      "category": "editorial",
+      "description": "Apply this collection's anti-slop pass to one supplied text and nothing else — false contrasts, empty openings, importance inflation, vague attribution, synonym cycling, robotic rhythm, and generic conclusions — repairing what it finds through a bounded budget of fresh correction subagents and reporting whatever is left. It selects no genre, no technique, and no editorial contract, and it runs no mechanical pass.",
+      "digest": "23200c3070cc24fe5e63db07d9d32e7b3adf612e8f4ce57b53251c002d377802",
+      "binaries": [
+        "uv"
+      ],
+      "skills": [],
+      "externals": [],
+      "capabilities": [
+        "subagents"
+      ]
+    },
+    {
+      "name": "write",
+      "category": "editorial",
+      "description": "Turn a brief and its source material into one truthful first draft in the target language, and stop there. Start it on your own only when the literal token `/write` appears in the request or in an instruction the request points at — inside a longer message, a document, or a checklist that says to run it. Not for a bare request to write, draft, compose, summarise, rewrite, edit, or review something — without `/write` in it, such a request is answered as it otherwise would be. A user may also invoke it by name at any time.",
+      "digest": "ae8f204f8f3eb269664e93dbdb2f74fcc8a0f7a0fe1616ff98b2ba0a56c1d84f",
+      "binaries": [
+        "uv"
+      ],
+      "skills": [],
+      "externals": [],
+      "capabilities": [
+        "subagents"
+      ]
+    },
+    {
+      "name": "model-selector",
+      "category": "models",
+      "description": "Choose the model and deliberation level that completes delegated work at the lowest total cost, or in the least time where the user has chosen time. Never used implicitly: a Skill that routes work runs its script.",
+      "digest": "a68af9bdafe17b5f48dc87f8f173f1409176db94e976a92def14fda94962bce5",
+      "binaries": [
+        "uv"
+      ],
+      "skills": [],
+      "externals": [],
+      "capabilities": []
+    },
+    {
+      "name": "rename-invoices",
+      "category": "producivity",
+      "description": "Safely plan and apply configurable filenames for text-based accounting PDFs.",
+      "digest": "36271de02926d11795cda4d5f9ced76157041043a3cae7975b5087bce87ec5e9",
+      "binaries": [
+        "pdftotext",
+        "uv"
+      ],
+      "skills": [],
+      "externals": [],
+      "capabilities": []
+    },
+    {
+      "name": "hetzner",
+      "category": "web",
+      "description": "Provision and operate Hetzner Cloud servers and deploy or maintain their websites and applications through hcloud, SSH, and cloud-init. Use for Hetzner Cloud infrastructure or workloads hosted there; excludes Robot dedicated servers and Object Storage.",
+      "digest": "cfe9b0370638f202bc0b2d5cc8850fe22f2f16eb9f0324e71675a4e78eb36f58",
+      "binaries": [
+        "uv"
+      ],
+      "skills": [],
+      "externals": [],
+      "capabilities": []
+    },
+    {
+      "name": "mirror",
+      "category": "web",
+      "description": "Copy a web page, the pages under it that its links, sitemaps and feeds reach, and everything they need to display to disk, so they open in a browser with nothing fetched from the network.",
+      "digest": "905928aa1e1bc5664a91b29d50f5d4e10df9992b9b3239a940e150e53ec57bb0",
+      "binaries": [
+        "uv",
+        "agent-browser"
+      ],
+      "skills": [],
+      "externals": [],
+      "capabilities": []
+    }
+  ],
+  "features": [
+    {
+      "name": "session-cleanup",
+      "category": "environment",
+      "description": "Leave the machine as the session found it — the agent records what it starts, and a lifecycle hook stops exactly that when the session ends or the next one begins.",
+      "digest": "3c34076d8622c22225ad8acdef02463a02451dda7ee46b2ef2606f4560acd7c3",
+      "binaries": [
+        "uv"
+      ],
+      "capabilities": [],
+      "harnesses": [
+        "claude-code",
+        "codex",
+        "opencode"
+      ],
+      "writes": [
+        "A fenced block, delimited by `<!-- kntnt.session-cleanup begin -->` and `<!-- kntnt.session-cleanup end -->`, at the end of each Harness's own global instruction file — `~/.claude/CLAUDE.md`, `~/.codex/AGENTS.md`, `~/.config/opencode/AGENTS.md`. These are files you own and read; everything above the fence is left exactly as it is, and disabling the Feature takes the fenced block away and nothing else.",
+        "One session-lifecycle entry per Harness, in that Harness's own hook table — `~/.claude/settings.json`, `~/.codex/hooks.json` — or, for OpenCode, as the plugin file `~/.config/opencode/plugins/kntnt.session-cleanup.js`.",
+        "Per-session manifests, and one log of every action taken, under `~/.kntnt/session-cleanup/`. Nothing is written outside these three places."
+      ]
+    },
+    {
+      "name": "statusline",
+      "category": "environment",
+      "description": "A two-line Claude Code status line — path, worktree, branch and working-tree state above; model, reasoning effort, context usage and subscription windows below.",
+      "digest": "c34304889f3946e4518ab169b1c9a04b64de579bc74502f10d87c55fbdd5ea30",
+      "binaries": [
+        "git",
+        "jq"
+      ],
+      "capabilities": [],
+      "harnesses": [
+        "claude-code"
+      ],
+      "writes": [
+        "`statusLine` in `~/.claude/settings.json`, pointing at the shipped `statusline.sh` inside this collection's installed Manager. It is a single-valued setting, so it cannot hold two: where it already runs a command that is not this collection's, the row names that command and the confirmation asks whether to replace it, and nothing is written until you answer yes. Nothing is kept of what is replaced, so disabling the Feature afterwards clears the setting rather than restoring the command that was there. Disabling leaves the setting alone where this collection does not hold it.",
+        "`~/.kntnt/model-selector/quota.json`, this machine's weekly subscription window as Claude Code reported it on this render: the share used, when the window resets, how long the window is, and when the line was written. It is one filter over the payload already read — nothing is fetched and no credential could go in it — written to a temporary file beside its destination and moved into place, and any failure of it is swallowed and leaves the previous file standing. Model Selector's quota guard reads it, so Enabling this Feature is what arms that guard for the Claude channel and disabling it is what disarms it. Nothing is written where the payload carries no weekly window, which is every render before a session's first API response and every machine not on a Pro or Max plan."
+      ]
+    }
+  ]
+}

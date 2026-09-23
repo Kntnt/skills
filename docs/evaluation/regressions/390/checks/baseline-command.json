@@ -1,0 +1,23 @@
+[
+  "uv",
+  "run",
+  "--no-project",
+  "--with",
+  "pytest",
+  "--with",
+  "pyyaml",
+  "pytest",
+  "-q",
+  "-p",
+  "no:cacheprovider",
+  "tests/test_features.py::test_only_the_age_backstop_releases_unowned_manifests[then-True]",
+  "tests/test_features.py::test_detached_tools_remain_owned_until_the_harness_exits[path]",
+  "tests/test_features.py::test_detached_tools_remain_owned_until_the_harness_exits[live-pid]",
+  "tests/test_features.py::test_detached_tools_remain_owned_until_the_harness_exits[gone-pid]",
+  "tests/test_features.py::test_detached_tools_remain_owned_until_the_harness_exits[container]",
+  "tests/test_features.py::test_lifecycle_retires_legacy_pointers_and_logs_the_sweeper",
+  "tests/test_ms_scheduler.py::test_the_manager_s_two_words_answer_with_the_job",
+  "tests/test_ms_scheduler.py::test_under_a_redirected_home_install_writes_the_plist_and_loads_nothing",
+  "tests/test_ms_scheduler.py::test_an_install_status_and_disable_under_a_temporary_root_call_no_launchctl",
+  "tests/test_mirror.py::test_a_clean_run_exits_zero_and_reports_what_it_fetched"
+]

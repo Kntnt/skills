@@ -1,0 +1,68 @@
+## Granskningen
+
+**Upplöst konfiguration:** genre `case-study`, teknik `none`, språk `sv` — alla tre hämtade ur textens `kntnt`-karta. Eftersom kartan anger `none` tillämpas ingen teknik, och genrens berättarbåge används inte. Korrigeringsbudgeten var 1 och är förbrukad.
+
+Texten levereras oförändrad — ordagrant som den kom in. Den avslutande mekaniska genomgången hittade inga stavfel, grammatikfel eller interpunktionsfel att rätta.
+
+```markdown
+---
+kntnt:
+  genre: case-study
+  technique: none
+  language: sv
+---
+
+# Elm Quay testade gemensam logg i två hus
+
+Hösten 2025 prövade bostadsbolaget Elm Quay Housing en gemensam felanmälningslogg i ett test som varade åtta veckor. 31 anmälningar registrerades, och arbetsledaren skulle göra om testet – men med mer tid för förberedelser. Här är vad testet krävde och vad siffrorna inte säger.
+
+Av Thomas Barregren
+
+Telefonanmälningar på ett ställe, e-post på ett annat. Så förvarades felanmälningarna hos Elm Quay Housing, ett bostadsbolag med eget underhållslag som förvaltar 640 lägenheter. I september 2025 bestämde sig laget för att pröva en gemensam logg i två hus.
+
+## Så kom systemet på plats i de två husen
+
+Laget testade om loggen kunde visa status för varje reparation och valde därefter Svale Systems. Någon jämförelse med en annan leverantör finns inte.
+
+– Vi ville att kvällsskiftet skulle se vad morgonskiftet redan hade gjort. Kategorierna var våra; Svale hjälpte oss att lägga in dem i loggen, skriver Maya Lind, arbetsledare för underhållet, i en mejlintervju.
+
+De boende kunde fortsätta anmäla fel per telefon under testet. Svale konfigurerade loggen och utbildade sex medarbetare vid två tillfällen.
+
+## Siffrorna säger inget om orsaken
+
+Testet pågick i åtta veckor. Enligt Elm Quays interna testanteckning från 4 december 2025 registrerades 31 felanmälningar i loggen, och då är akuta ärenden och arbeten som beställts före testet inte inräknade.
+
+Mediantiden från anmälan till tilldelad åtgärd var två arbetsdagar under testet och tre under de åtta veckorna dessförinnan. Arbetsbelastningen skilde sig mellan perioderna, och anteckningen tillskriver uttryckligen inte skillnaden programvaran. Kostnader, de boendes nöjdhet och tiden fram till avslutad åtgärd mättes inte.
+
+– Vi lade mer tid på att komma överens om kategorierna än på att registrera de första anmälningarna. Den tiden skulle jag avsätta innan nästa hus drar i gång, skriver Maya Lind.
+
+## Beslutet om fler hus återstår
+
+Testet har ännu inte utvidgats. Laget vill först se hur kategorierna fungerar för större reparationer, och Lind rekommenderade inte Svale till varje bostadsbolag.
+
+– Jag skulle välja att göra om testet. Att ha en samlad bild av anmälningarna hjälper oss, men jag skulle lägga in en extra vecka för förberedelser, skriver hon.
+
+För den som överväger ett liknande test finns Svale Systems [checklista för införande](https://example.invalid/svale/checklist) att läsa igenom. Den här kundberättelsen är publicerad av Svale Systems och är alltså inte oberoende journalistik.
+```
+
+## Kvarstående iakttagelser
+
+Alla fyra är olösta.
+
+1. **Rubriken säger bara att ett test genomfördes.** "Elm Quay testade gemensam logg i två hus" namnger aktiviteten, inte kundens nytta eller resultat, som kundberättelsens rubrik ska göra. Texten har ett belagt utfall att utgå från: arbetsledaren skulle göra om testet, och hon säger att en samlad bild av anmälningarna hjälper laget. Läsaren kan inte på rubriken avgöra vad testet gav. En omskrivning måste hålla sig till textens egen styrka — mediantidsskillnaden får inte tillskrivas loggen, eftersom testanteckningen uttryckligen inte tillskriver skillnaden programvaran, och nyttan finns i texten bara som arbetsledarens egen, kvalificerade bedömning.
+
+2. **Rubrik och ingress säger samma sak med olika ord.** Båda säger att Elm Quay Housing prövade en gemensam logg — i två hus respektive i ett åtta veckor långt test. De ska komplettera varandra, och nu går ingressens första halva åt till att skriva om rubriken. Åtgärdas med rubriken i punkt 1.
+
+3. **Mellanrubrik 3 upprepar sin första mening.** "Beslutet om fler hus återstår" och "Testet har ännu inte utvidgats." lämnar samma uppgift två gånger. Avsnittets första mening förlorar sin plats.
+
+4. **Mellanrubrik 1 namnger ämnet utan att säga vad avsnittet fastställer.** "Så kom systemet på plats i de två husen" skiljer inte avsnittet från vilket införandeavsnitt som helst; det som faktiskt står där är att laget valde Svale Systems och att kategorierna var lagets egna. Dessutom kallas loggen här "systemet", ett namn texten inte använder någon annanstans, så läsaren möter ett tredje namn på en och samma sak.
+
+## Försökt och förkastad korrigeringsrunda
+
+En korrigeringsrunda genomfördes och förkastades i sin helhet; texten före rundan är den som levereras ovan.
+
+Rundan skrev om alla tre rubrikerna. Mellanrubrik 1 blev "Elm Quay valde Svale utan att jämföra leverantörer", vilket påstår mer än texten påstår: texten säger att "Någon jämförelse med en annan leverantör finns inte" — att ingen jämförelse finns dokumenterad — medan rubriken slår fast att laget valde *utan att jämföra*. Den gör alltså ett obelagt förhållande till ett fastställt, och den sammanfattar dessutom stycket under sig i stället för att komplettera det. Samma runda gav mellanrubrik 3 lydelsen "Laget vill pröva kategorierna mot större reparationer", som skriver om avsnittets första mening.
+
+Eftersom felet uppstod i rundan och inte fanns i texten dessförinnan, förkastades hela rundan inklusive den nya huvudrubriken, och budgeten räcker inte till ett nytt försök. Inget påstående i den levererade texten har tagits bort, flyttats eller försvagats.
+
+Den kontextuella instruktionen om rubriken är tillämpad och ligger bakom punkt 1, men punkten är alltså olöst.

@@ -1,0 +1,49 @@
+## Granskning klar — texten levereras oförändrad
+
+Granskningen löste ut **genre `article`** (från anropet), **språk `sv`** (från anropet) och **ingen teknik**: genren `article` anger själv att den inte skrivs med någon teknik, så ingen arc tillämpades. Den kontextuella instruktionen om mellanrubrikerna var tillämplig och ingår i fynd 5.
+
+En korrigeringsrunda gjordes och avvisades. Av korrigeringsbudgeten på 3 är 1 förbrukad; 2 står outnyttjade och kan inte användas, eftersom en avvisad runda inte följs av ett nytt försök. Texten nedan är därför texten som den kom in, efter en avslutande mekanisk genomgång som inte hittade något att rätta.
+
+```markdown
+# Givarna räddar skolan från en katastrof
+
+**Givarna registrerade temperaturer under 20 grader i sex klassrum. Givarna registrerade temperaturer under 20 grader i sex klassrum.**
+
+Givarna registrerade temperaturer under 20 grader i sex klassrum. Katastrofen lurade bakom varje hörn. Fastighetskontorets rapport *Mätförsök i Björkskolan* från den 12 mars 2026 anger att 14 av 120 lektionspass hade minst ett värde under kontorets egen arbetsgräns på 20 grader, vilket inte är en lagregel, och att försöket varade fyra veckor, medan två givare stod vid ytterväggar och fyra vid innerväggar, utan att placeringens effekt jämfördes experimentellt. Operativ temperatur saknas, trots att resonemanget bygger på operativ temperatur, som är ett mått på lufttemperatur och värmestrålning från omgivande ytor, medan givarna bara mätte luften där de satt. Det saknas mätningar av luftdrag och elevernas upplevelse och uppgifter om hur länge temperaturerna låg under gränsen, men ändå är det helt säkert att givarna har gjort eleverna friskare, trots att ingen effekt på hälsan har undersökts. Driftteknikern Elin Rask rekommenderar att koppla temperaturserier till användningstider innan styrningen ändras, och nästa försök är tänkt att använda likadant placerade givare i november, fast finansieringen inte är beslutad. Det är viktigt att notera att detta är mycket viktigt för alla som tycker att temperatur är viktigt. Kontakta oss för att rädda framtiden.
+```
+
+## Fynd — samtliga tolv är olösta
+
+1. **Rubriken påstår mer än texten.** "Givarna räddar skolan från en katastrof" bärs inte av materialet: texten säger uttryckligen att 20-gradersgränsen är fastighetskontorets egen arbetsgräns och inte en lagregel, och att ingen effekt på hälsan har undersökts. Varken räddningen eller katastrofen finns i underlaget, och tonen är dramatisk där innehållet är ett mätförsök med redovisade brister. Läsaren kan inte av rubriken avgöra vad texten handlar om.
+
+2. **Ingressen består av samma mening två gånger, ordagrant.** Den säger inte vad artikeln handlar om utöver ett enda mätvärde, inte vad läsaren får ut av att läsa vidare, och lockar inte vidare.
+
+3. **Ledet börjar om i stället för att gå framåt.** Brödtextens första mening är ordagrant ingressens mening, och båda inleds med "Givarna". Läsaren möter samma upplysning tre gånger innan texten säger något nytt.
+
+4. **Bylinen saknas.** Varken texten, dess metadata eller anropet namnger någon författare, så raden kan inte fyllas i utan att en uppgift uppfinns. Rapporteras som saknad och lämnas ofylld. (Maskinellt uppmätt: `byline: absent`.)
+
+5. **Inga mellanrubriker och därmed inga avsnitt.** Hela brödtexten är ett enda stycke, och någon avslutning som eget avsnitt finns inte. Läsaren får inga ingångar och kan varken skanna texten eller orientera sig i den. Mellanrubrikerna ska dessutom vara konkreta och säga vad avsnittet under dem visar. (Maskinellt uppmätt: `sections: absent`.)
+
+6. **Brödtextens enda stycke är 187 ord** mot normens högsta 80, och rymmer flera skilda tankar: mätresultatet, försökets uppläggning, metodbristerna, driftteknikerns rekommendation och planen för nästa försök.
+
+7. **Bisats staplas på bisats** — "medan", "trots att", "utan att", "fast" — så att en tanke skjuts bakom tre andra inom samma mening. Läsaren tappar vilken uppgift som hör till vilken invändning.
+
+8. **"Givarna" står i bestämd form innan läsaren vet vilka givare det gäller.** Rapporten *Mätförsök i Björkskolan* nämns först i tredje meningen. Läsaren får resonemanget före det som resonemanget handlar om.
+
+9. **"Katastrofen lurade bakom varje hörn."** är påhittad dramatik utan stöd i materialet och tillför ingen uppgift.
+
+10. **"men ändå är det helt säkert att givarna har gjort eleverna friskare"** påstår en visshet materialet inte bär och som motsägs i samma mening. Defekten ligger i vissheten; förbehållet om att ingen hälsoeffekt undersökts, liksom uppgifterna om att mätningar av luftdrag, av elevernas upplevelse och av varaktigheten saknas, avgränsar vad texten påstår och ska stå kvar i full omfattning.
+
+11. **"Det är viktigt att notera att detta är mycket viktigt för alla som tycker att temperatur är viktigt."** hävdar vikt i stället för att redovisa något och kostar läsaren en mening utan innehåll.
+
+12. **"Kontakta oss för att rädda framtiden."** följer inte av artikelns innehåll. Uppslag till en avslutning som materialet bär finns i driftteknikerns rekommendation och i novemberförsöket vars finansiering inte är beslutad.
+
+## Den avvisade rundan
+
+Rundan angrep fynd 1, 2, 3, 5, 6, 7, 8, 9, 10, 11 och 12 och lämnade fynd 4 olöst. Vid omgranskningen visade sig rundan ha infört en defekt som texten inte hade när den kom in: en ny mellanrubrik, **"Placeringen vid väggarna jämfördes aldrig"**, över ett avsnitt vars text lyder "Placeringens effekt jämfördes inte experimentellt". Rubriken påstår att placeringen aldrig jämfördes, medan texten säger att placeringens *effekt* inte jämfördes *experimentellt* — den byter alltså objekt och släpper förbehållet, och en rubrik får inte påstå mer eller mer generellt än sin text.
+
+Enligt kontraktet avvisas därmed hela rundan, tillståndet före rundan återställs i sin helhet och inget nytt försök följer. Defekten finns inte i texten ovan — den kasserades — och inget av rundans övriga arbete behölls.
+
+## Borttagna och ändrade påståenden
+
+Inga. Eftersom rundan avvisades och texten före rundan återställdes ordagrant, bär den levererade texten varje påstående exakt som det kom in, med oförändrad räckvidd, visshet, källhänvisning, kronologi och orsakssamband. Rundan hade föreslagit att ta bort katastrofmeningen (fynd 9), vissheten om elevernas hälsa (fynd 10) och viktighetsmeningen (fynd 11) samt ersätta uppmaningen (fynd 12) — inget av detta genomfördes.

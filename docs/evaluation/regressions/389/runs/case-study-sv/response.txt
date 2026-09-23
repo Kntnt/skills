@@ -1,0 +1,61 @@
+**Genre:** case-study · **Teknik:** ingen · **Språk:** sv — samtliga hämtade ur artikelns `kntnt`-block. Att ingen teknik tillämpats är alltså textens eget val; genren case-study anger för övrigt heller ingen. Korrigeringsbudget: 1 av 1 använd.
+
+```markdown
+---
+kntnt:
+  genre: case-study
+  technique: none
+  language: sv
+---
+
+# Elm Quays arbetsledare skulle göra om loggtestet
+
+Hösten 2025 prövade bostadsbolaget Elm Quay Housing en gemensam felanmälningslogg i ett test som varade åtta veckor. 31 anmälningar registrerades, bortsett från akuta ärenden och arbeten som beställts före testet. Nästa gång skulle arbetsledaren avsätta mer tid för förberedelser. Här är vad testet krävde och vad siffrorna inte säger.
+
+Av Thomas Barregren
+
+Telefonanmälningar på ett ställe, e-post på ett annat. Så förvarades felanmälningarna hos Elm Quay Housing, ett bostadsbolag med eget underhållslag som förvaltar 640 lägenheter. I september 2025 bestämde sig laget för att pröva en gemensam logg i två hus.
+
+## Så kom systemet på plats i de två husen
+
+Laget undersökte om loggen kunde visa status för varje reparation och valde därefter Svale Systems. Någon jämförelse med en annan leverantör finns inte.
+
+– Vi ville att kvällsskiftet skulle se vad morgonskiftet redan hade gjort. Kategorierna var våra; Svale hjälpte oss att lägga in dem i loggen, skriver Maya Lind, arbetsledare för underhållet, i en mejlintervju.
+
+De boende kunde fortsätta anmäla fel per telefon under testet. Svale konfigurerade loggen och utbildade sex medarbetare vid två tillfällen.
+
+## Siffrorna säger inget om orsaken
+
+Testet pågick i åtta veckor. Enligt Elm Quays interna testanteckning från 4 december 2025 registrerades 31 felanmälningar i loggen, och då är akuta ärenden och arbeten som beställts före testet inte inräknade.
+
+Mediantiden från anmälan till tilldelad åtgärd var två arbetsdagar under testet och tre under de åtta veckorna dessförinnan. Arbetsbelastningen skilde sig mellan perioderna, och anteckningen tillskriver uttryckligen inte programvaran skillnaden. Kostnader, de boendes nöjdhet och tiden fram till avslutad åtgärd mättes inte.
+
+– Vi lade mer tid på att komma överens om kategorierna än på att registrera de första anmälningarna. Den tiden skulle jag avsätta innan nästa hus drar i gång, skriver Maya Lind.
+
+## Beslutet om fler hus återstår
+
+Testet har ännu inte utvidgats. Laget vill först se hur kategorierna fungerar för större reparationer, och Lind rekommenderade inte Svale till varje bostadsbolag.
+
+– Jag skulle välja att göra om testet. Att ha en samlad bild av anmälningarna hjälper oss, men jag skulle lägga in en extra vecka för förberedelser, skriver hon.
+
+För den som överväger ett liknande test finns Svale Systems [checklista för införande](https://example.invalid/svale/checklist) att läsa igenom. Den här kundberättelsen är publicerad av Svale Systems och är alltså inte oberoende journalistik.
+```
+
+## Fynd
+
+Granskningen fann tre fynd. Alla tre är åtgärdade, och omgranskningen av den rättade texten lämnar inga olösta fynd kvar.
+
+1. **Rubriken namngav händelsen, inte vinkeln.** «Elm Quay testade gemensam logg i två hus» kunde ha stått över vilken text som helst om samma försök — en som redovisade ett lyckat utfall lika väl som en som redovisade ett misslyckat. Genren kräver att rubriken namnger kundens nytta eller resultat, och läsaren kunde inte av rubriken avgöra om texten var för hen.
+2. **Ingressen gav siffran 31 utan den avgränsning brödtexten bär.** Ingressen ska kunna läsas ensam, och en läsare som bara såg den tog 31 för samtliga felanmälningar under perioden.
+3. **«testade» syftade oklart i första meningen under första mellanrubriken.** Verbet var detsamma som texten i övrigt använder om det åtta veckor långa testet, och «därefter» lade leverantörsvalet efter testandet — en ordning som blir omöjlig läst mot resten av texten.
+
+## Påståenderedovisning
+
+Inget påstående har tagits bort. Två påståenden står kvar med något förflyttat:
+
+- **Arbetsledarens omdöme.** Ingressen bar det som «arbetsledaren skulle göra om testet – men med mer tid för förberedelser». Det är nu delat: rubriken bär första halvan, ingressen den andra som «Nästa gång skulle arbetsledaren avsätta mer tid för förberedelser». Attribution, modalitet («skulle») och räckvidd är oförändrade, och brödtextens citat bär hela omdömet som förut. Flytten följde av rättningen av fynd 1, eftersom rubrik och ingress annars hade sagt samma sak med samma ord.
+- **Lagets utvärdering av loggen.** «Laget testade om loggen kunde visa status» är nu «Laget undersökte om loggen kunde visa status». Betydelsen är därmed något svagare: texten hävdar inte längre att laget prövade funktionen, bara att det undersökte den. Ändringen följde av rättningen av fynd 3.
+
+## Sammanfattning av övriga ändringar
+
+Utöver det som redovisas ovan är texten ändrad på två sätt. Rubriken är omskriven från textens egen vinkel och på textens egen styrka, utan att tillskriva programvaran någon effekt, och ingressen har fått brödtextens avgränsning av siffran. Den avslutande korrekturläsningen rättade dessutom ett grammatiskt fel i objektsordningen efter «tillskriver» i avsnittet om mediantiderna. Inga slop-mönster behövde tas bort, och artikelns struktur, disposition, citat, länk och metadata är oförändrade.

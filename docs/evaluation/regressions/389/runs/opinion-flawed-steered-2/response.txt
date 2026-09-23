@@ -1,0 +1,42 @@
+**Granskad som `opinion` på `sv`.** Ingen teknik tillämpades: genren `opinion` anger själv att den inte skrivs med någon. Rättelsebudgeten var 1 och en rättelserunda användes. Den kontextuella instruktionen om rubriken tillämpades på rubrikfyndet. Artikelanatomin maskinmättes före och efter rättelsen; den korrigerade texten uppfyller samtliga räknade krav.
+
+```markdown
+# Telefonbokningen bör finnas kvar i alla sju lokaler
+
+Fyra av fem bokningar i kommunen gjordes på webben, resten per telefon. Ändå säger pilotrapporten från april 2026 själv att bokningarna inte räknar unika personer och att digital vana inte undersöktes. Innan kommunstyrelsen avgör saken behöver förvaltningen mäta vad de två kanalerna kostar i tid och fråga användarna varför de väljer som de gör.
+
+Sanna Ek, Öppna beslut
+
+Kommunstyrelsen borde behålla telefonbokning under ett halvårs försök i alla sju lokaler.
+
+## Siffrorna säger inte vilka som ringer
+
+Det gjordes 96 bokningar på webben och 24 via telefon. De 24 telefonbokningarna är 20 procent av alla bokningar. Kommunens pilotrapport från den 8 april 2026 säger samtidigt att bokningarna inte räknar unika personer och att digital vana inte undersöktes.
+
+## Tidsåtgången är inte mätt och kostnaden inte beräknad
+
+Förvaltningen invänder att dubbla kanaler innebär dubbel administration. Handlingarna saknar tidsmätning.
+
+Öppna beslut vill att förvaltningen mäter tidsåtgång och frågar användarna varför de väljer en bokningsväg. Försökets kostnad är inte beräknad.
+
+Beslutet ligger hos kommunstyrelsen. Låt telefonbokningen vara kvar i alla sju lokaler under halvårsförsöket.
+```
+
+**Kvarstående fynd:** inga. Samtliga nio fynd rättades, och omgranskningen av den rättade texten fann inget nytt.
+
+**Borttagna påståenden**
+
+- *"Alla vet att politikerna vill stänga ute äldre för att spara miljoner."* — borttagen i sin helhet av rättelsen av fyndet om tom tillskrivning och påhittat motiv, som pekade ut hela meningen som defekten. Med den försvann påståendet att politikerna vill stänga ute äldre, påståendet att motivet är att spara miljoner, och tillskrivningen till "alla".
+- *"Det bevisar att 20 procent av kommunens invånare inte kan använda internet."* — borttagen av rättelsen av fyndet om den brustna slutledningen. Påståendet att 20 procent av invånarna inte kan använda internet försvann, liksom styrkan i "bevisar". Siffran står kvar med den nämnare textens egna tal ger: *"De 24 telefonbokningarna är 20 procent av alla bokningar."*
+- *"Därför kostar det ingenting att behålla telefonbokningen."* — borttagen av rättelsen av fyndet om slutsatsen från omätt uppgift till noll kostnad. Påståendet att det inte kostar något försvann.
+
+**Ändrade påståenden**
+
+- *"Föreningen vill att förvaltningen mäter …"* → *"Öppna beslut vill att förvaltningen mäter …"*. Kravet är detsamma; tillskrivningen är namngiven, efter fyndet om bestämd form utan referent. Namnet är bylinens eget.
+- Slutklämmen *"Nu är det dags att agera."* ersattes efter fyndet om uppmaningen som varken namnger handling eller aktör. Den nya slutklämmen gör textens befintliga förslag uttryckligt och namnger beslutsfattaren; ingen ny åtgärd och inget nytt förslag tillkom.
+
+De tre meningar som avgränsar vad texten påstår — om att bokningarna inte räknar unika personer och att digital vana inte undersöktes, om att handlingarna saknar tidsmätning, och om att försökets kostnad inte är beräknad — står kvar ordagrant.
+
+**Vad som i övrigt ändrades:** rubriken och båda underrubrikerna är omskrivna från etiketter och tillmäle till påståenden som säger textens och avsnittens vinkel, rubriken enligt instruktionen till vad skribenten vill ska ske; en ingress som saknades är tillagd och byggd av textens eget innehåll; ett stycke som rymde två ärenden är delat vid tankegränsen; i övrigt är formuleringar, siffror och styckeindelning oförändrade. Det avslutande korrekturpasset gick igenom hela texten mot svenska mekanikregler och fann inga stavfel, grammatikfel eller skiljeteckensfel att rätta.
+
+Källfilen `source.md` är oförändrad, och inga filer skrevs.

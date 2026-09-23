@@ -1,0 +1,41 @@
+Granskningen är klar. Texten levereras nedan.
+
+```markdown
+# Björkskolans mätförsök saknar operativ temperatur
+
+**Givarna registrerade temperaturer under 20 grader i sex klassrum. Fastighetskontorets rapport från mars 2026 redovisar hur många lektionspass som hade värden under kontorets egen arbetsgräns. Här får du veta vad mätningarna visar, vad de inte visar och vad driftteknikern rekommenderar innan styrningen ändras.**
+
+Fastighetskontorets rapport *Mätförsök i Björkskolan* från den 12 mars 2026 anger att 14 av 120 lektionspass hade minst ett värde under kontorets egen arbetsgräns på 20 grader, vilket inte är en lagregel. Enligt rapporten varade försöket fyra veckor.
+
+## Placeringen varierade och bara luften mättes
+
+Två givare stod vid ytterväggar och fyra vid innerväggar. Placeringens effekt jämfördes inte experimentellt.
+
+Operativ temperatur saknas, trots att resonemanget bygger på operativ temperatur, som är ett mått på lufttemperatur och värmestrålning från omgivande ytor. Givarna mätte bara luften där de satt.
+
+## Flera uppgifter fattas i underlaget
+
+Det saknas mätningar av luftdrag och elevernas upplevelse och uppgifter om hur länge temperaturerna låg under gränsen. Ingen effekt på hälsan har undersökts.
+
+## Beslut om styrning och finansiering återstår
+
+Driftteknikern Elin Rask rekommenderar att koppla temperaturserier till användningstider innan styrningen ändras.
+
+Nästa försök är tänkt att använda likadant placerade givare i november, fast finansieringen inte är beslutad.
+```
+
+**Granskad som:** artikel, på svenska. Ingen teknik tillämpad — genren `article` anger själv att den inte skrivs med någon, så ingen arv nedåt skedde. Korrigeringsbudgeten var 1 och en runda genomfördes.
+
+**Kvarstående iakttagelser**
+
+1. **Byline saknas.** Anatomin kräver en rad som namnger författaren mellan ingressen och leadet. Varken texten, dess metadata eller anropet namnger någon författare, så raden kan inte fyllas i utan att hitta på ett namn. Olöst — du behöver ange författaren.
+2. **Avslutningen saknar uppmaning till läsaren.** Anatomin kräver att den sista sektionen både visar att leadets löfte infriats och ger läsaren ett nästa steg som följer av innehållet. Den ursprungliga uppmaningen togs bort som obefogad, och materialet innehåller inget steg som riktar sig till läsaren — driftteknikerns rekommendation riktar sig till fastighetskontoret. Olöst — det kräver uppgifter som texten inte har.
+
+**Borttagna och ändrade påståenden**
+
+- Borttaget: *att det är helt säkert att givarna har gjort eleverna friskare.* Iakttagelsen pekade ut just detta säkerhetspåstående som defekten — texten slog fast ett orsakssamband som den i samma mening sade var outrett. Förbehållen står kvar i full kraft: uppräkningen av vad som saknas i underlaget är ordagrann, och *Ingen effekt på hälsan har undersökts* står nu som egen mening.
+- Borttaget: *att en katastrof lurade bakom varje hörn.* Iakttagelsen pekade ut hela meningen som påhittad dramatik utan stöd i materialet.
+- De två övriga borttagna meningarna — viktighetsmarkeringen och slutuppmaningen — bar inga påståenden om sakförhållanden.
+- Inget påstående lämnades kvar med sin räckvidd, säkerhet, attribution, kronologi, orsakslogik eller innebörd förflyttad. Uppgiften om sex klassrum finns nu bara i ingressen, men med oförändrad ordalydelse.
+
+**Vad rundan i övrigt gjorde:** rubriken skrevs om från textens egen vinkel i stället för att utlova en räddning texten inte redovisar, ingressens ordagranna dubblering ersattes av ett självbärande stycke, brödtextens upprepade inledning togs bort, det 187 ord långa stycket delades upp i sju stycken under tre mellanrubriker, och ett par slopmönster i svensk språkdräkt försvann med de borttagna meningarna. Den avslutande mekaniska genomgången hittade inga stavfel, grammatikfel eller interpunktionsfel att rätta.

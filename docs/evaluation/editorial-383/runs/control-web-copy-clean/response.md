@@ -1,0 +1,1 @@
+Ingen ändring behövdes. Texten granskades som web-copy på svenska (sv), utan teknik – genren anger ingen. Varken den redaktionella granskningen eller den avslutande mekaniska genomgången fann något att rätta, så korrigeringsbudgeten (1) är oförbrukad.

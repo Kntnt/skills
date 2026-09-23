@@ -1,0 +1,28 @@
+{
+  "product_revision": "09fb8991",
+  "argv": [
+    "/opt/homebrew/bin/codex",
+    "exec",
+    "--ignore-rules",
+    "-s",
+    "workspace-write",
+    "--add-dir",
+    "/Users/thomas/Projects/skills/.git/orchestrate-session-389-391-gpt/scratch/390/amend-1a1acf/paraphrased-column",
+    "--skip-git-repo-check",
+    "--json",
+    "-C",
+    "/Users/thomas/Projects/skills/.git/orchestrate-session-389-391-gpt/scratch/390/amend-1a1acf/paraphrased-column/work",
+    "-o",
+    "/Users/thomas/Projects/skills-388-391/docs/evaluation/regressions/390/amend-1a1acf/paraphrased-column/response.txt",
+    "-"
+  ],
+  "pid": 55921,
+  "process_group": 55921,
+  "harness": "codex-cli 0.155.1",
+  "model": "gpt-5.6-sol",
+  "effort": "xhigh",
+  "timeout_seconds": 1800,
+  "timed_out": false,
+  "exit_status": 0,
+  "elapsed": 787.7157549998956
+}

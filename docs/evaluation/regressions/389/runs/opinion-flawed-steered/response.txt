@@ -1,0 +1,41 @@
+Klart. Granskningen utgick från genren `opinion`, språket `sv` och ingen teknik — genren `opinion` anger själv att den inte skrivs med någon. Korrigeringsbudgeten var 1 (förvalt värde) och en runda användes.
+
+```markdown
+# Kommunstyrelsen bör ge telefonbokningen ett halvår till
+
+I kommunens pilot gjordes 96 bokningar på webben och 24 via telefon. Pilotrapporten tillägger att siffrorna inte räknar unika personer och att digital vana inte undersöktes. Öppna beslut vill därför att telefonbokningen finns kvar medan förvaltningen mäter vad de dubbla kanalerna tar i tid och frågar användarna varför de bokar som de gör.
+
+Sanna Ek, Öppna beslut
+
+Kommunstyrelsen borde behålla telefonbokning under ett halvårs försök i alla sju lokaler.
+
+## Pilotrapporten säger själv vad siffrorna inte visar
+
+Det gjordes 96 bokningar på webben och 24 via telefon. Var femte bokning gjordes alltså per telefon. Kommunens pilotrapport från den 8 april 2026 säger samtidigt att bokningarna inte räknar unika personer och att digital vana inte undersöktes.
+
+## Handlingarna visar inte vad dubbla kanaler tar i tid
+
+Förvaltningen invänder att dubbla kanaler innebär dubbel administration. Handlingarna saknar tidsmätning.
+
+Öppna beslut vill att förvaltningen mäter tidsåtgång och frågar användarna varför de väljer en bokningsväg. Försökets kostnad är inte beräknad.
+
+Kommunstyrelsen kan fatta det beslutet: låt telefonbokningen vara kvar i alla sju lokaler under ett halvårs försök.
+```
+
+## Fynd
+
+Granskningen fann nio fynd: rubriken som tillskrev kommunledningen hat, den saknade ingressen (maskinmätt), det obelagda motivet i brödtextens andra mening, slutsatsen om 20 procent av invånarna, slutledningen att det inte kostar något, den tomma slutuppmaningen, de innehållslösa mellanrubrikerna, den obundna bestämda formen *Föreningen* och stycket som bar flera tankar. Samtliga nio är åtgärdade. Inga fynd kvarstår olösta.
+
+## Påståenden som togs bort eller ändrades
+
+**Borttagna.** Åtgärden av fynd 3 tog bort meningen *Alla vet att politikerna vill stänga ute äldre för att spara miljoner*, och med den påståendena att det är allmänt känt att politikerna vill stänga ute äldre och att syftet är att spara miljoner; fyndet pekade ut hela meningen som defekten. Åtgärden av fynd 4 tog bort påståendet att 20 procent av kommunens invånare inte kan använda internet och att bokningssiffrorna bevisar det; andelen finns kvar, men nu räknad på bokningarna, som är den nämnare siffrorna gäller. Åtgärden av fynd 5 tog bort påståendet att det inte kostar något att behålla telefonbokningen.
+
+**Ändrade.** Åtgärden av fynd 8 flyttade kravet på mätning från *Föreningen* till *Öppna beslut*; kravet och dess avsändare är desamma, men uppgiften att Öppna beslut är en förening finns inte längre i texten, eftersom texten aldrig bar den. Åtgärden av fynd 6 ersatte den allmänna uppmaningen *Nu är det dags att agera* med förslaget som redan fanns i texten, riktat till kommunstyrelsen — en uppmaning utan adressat blev alltså ett bestämt yrkande på en namngiven mottagare, utan att något nytt förslag tillfördes.
+
+De två meningar som anger vad underlaget inte visar — pilotrapportens förbehåll och *Försökets kostnad är inte beräknad* — står kvar i sin helhet.
+
+## Vad som ändrades i övrigt
+
+Utöver påståendena ovan fick texten en ny rubrik som säger vad skribenten vill att kommunstyrelsen gör, en ingress byggd enbart av textens eget innehåll, och två mellanrubriker formulerade ur sina avsnitt i stället för de tidigare dispositionsetiketterna; slutklämman namnger nu handlingen och den som kan besluta om den, ett stycke delades så att invändningen och kravet står var för sig, och de tomma greppen — den obelagda auktoriteten och den generiska avslutningen — är borta. Anatomin mäter rent: rubriken 55 tecken, ingressen 53 ord, mellanrubrikerna 51 och 52 tecken, alla stycken under 80 ord. Den avslutande mekaniska genomgången fann inga stavfel, skiljeteckensfel eller kongruensfel att rätta, så textens ordalydelse är oförändrad efter den.
+
+Inget skrevs till filsystemet: `source.md` är orörd och arbetsytan är återställd.

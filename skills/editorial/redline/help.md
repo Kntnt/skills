@@ -14,7 +14,7 @@ redline - review one text against the editorial contract, correct what it finds,
 
 `redline` reviews one text against the base editorial contract, resolved genre, optional technique, anti-slop catalogue, and resolved language guidance. For the five web genres it also reads their shared craft brief and its review guidance, and for article, case-study, column and opinion the article anatomy and the headline guidance, each with its review guidance. It corrects findings within the Correction Budget, reports anything left, and ends with one mechanical pass.
 
-For those four genres the anatomy's counted limits are measured by a script at every review, so every count a finding reports is a measured one, and each correction agent measures its own repair before returning it. A text the script cannot read is counted by hand and said to be.
+For those four genres the anatomy's counted limits are measured by a script at every review, so every count a finding reports is a measured one, and each correction agent measures its own repair before returning it. The measurement also exposes complete heading/following-text pairs and unjudged shared words. Both reviewer and correction agent judge semantic repetition from those pairs and the full text: necessary repeated names or topic words alone are no defect, and paraphrases can repeat with little overlap. Correction agents repair echoes named by findings or introduced by their own changes; unrelated pre-existing echoes are preserved and reported. A text the script cannot read is inspected by hand and said to be.
 
 No provenance is required. A leading `kntnt` frontmatter map supplies defaults and is updated to match the run; no map is created when none exists. A `technique: none` in that map is its value for no technique rather than a missing one, so a text written without one is reviewed without one.
 
@@ -32,15 +32,15 @@ The final `proofread` pass runs exactly once with the resolved language. A neste
 
 The Correction Budget is any non-negative integer and defaults to one. `0` reports findings without substantive correction but still runs the final mechanical pass. A larger value is a ceiling, not a quota.
 
-Each correction uses a fresh subagent with the complete current text and current findings. Returned text is compared with the pre-round text and reviewed again before acceptance.
+Each correction uses a fresh subagent with the complete current text and current findings. Returned text is a correction candidate: it is compared with the pre-round text and reviewed again before acceptance. Every difference in it traces to a finding of the review that commissioned the round, or to what repairing one required; a difference that traces to neither is restored from the pre-round text byte for byte, the rest of the round stands, and the restoration costs no budget and raises no finding.
 
 A correction must repair the finding without removing the passage's claim. A claim-losing correction is rejected and restored, and every removed claim is reported, as is every changed claim — one left standing with its scope, certainty, attribution, chronology, causality or meaning moved. A sentence whose work is to bound what the text asserts is removed or weakened only on a finding naming a defect inside it, and only where a retained sentence still states the limit in full or the limit contradicts another passage.
 
-The loop stops when the text is clean, the budget is spent, a correction makes no relevant progress, or re-review raises a finding an earlier round's own repair created. Remaining findings are marked unresolved.
+The loop stops when the text is clean, the budget is spent, a correction makes no relevant progress, or re-review establishes a finding an earlier round's own repair created. A round established to have introduced a defect is rejected entire: the Text Artifact as it stood before that round is restored verbatim and is what the run delivers, the round keeps the budget it spent with no refund and no second attempt, and the attempt is reported apart from the findings the restored text still carries. A defect a round created is never reported as an unresolved finding for the caller to settle: the round is undone instead. Remaining findings are marked unresolved.
 
 One invocation handles exactly one text. Multiple files, globs, and directories are refused.
 
-The response is the default Output Target. A text delivered in the response arrives inside one fenced code block. **--output** writes elsewhere; **--in-place** replaces one writable local source file. The Skill reports the findings separately, in the text's own language, and every removed claim and every changed claim remains visible. Internal review reasoning is not output.
+The response is the default Output Target. A text delivered in the response arrives inside one fenced code block. **--output** writes elsewhere; **--in-place** replaces one writable local source file. The Skill reports the findings separately, in the text's own language, and every removed claim and every changed claim remains visible. Where the delivered text differs from the text as it arrived, the account closes with one paragraph saying by kind what the run changed beyond the claim account, without itemising it. Internal review reasoning is not output.
 
 ## POSITIONAL ARGUMENTS
 

@@ -26,6 +26,14 @@ Five things fail regardless of how well the output reads, and no criterion may b
 
 A criterion may be judged `skipped`, and a skipped criterion says why in the same line. A fixture not run is recorded as skipped with its reason rather than left out of the record, because a record silently missing a fixture reads later as a fixture that passed.
 
+## The trace a criterion is answered from
+
+A criterion answerable from the trace is answerable only from a run whose trace was kept, and a Harness does not keep one by being used. Such a run is made through a runner that preserves it — [`editorial-329/harness/run.py`](editorial-329/harness/run.py) in the GPT family, [`editorial-388/harness/staged_run.py`](editorial-388/harness/staged_run.py) in the Claude family — each keeping the session's own record and every nested agent's record beside it, with enough parent and child identity to say who ran what and in what order.
+
+What such a trace establishes is what it recorded: a file named in a tool argument was opened, a command was submitted and answered, an agent was started by this call and by no other. It never establishes what the run's own reply says the run did. Where a trace names a set rather than a file — a glob the shell expanded, a recursive search — it says the run looked somewhere and not which file it read, and a criterion resting on that says so in its line.
+
+A trace missing a segment is recorded as missing. The criteria it would have answered are scored from what was kept, with the gap named in the same line, or `skipped` where nothing was kept that reaches them. An incomplete trace is never read as an absence of the thing it would have shown.
+
 ## The recording format
 
 One record per evaluation, holding one entry per fixture run. [`record-template.md`](record-template.md) is the skeleton; records live in [`records/`](records/README.md) and are named `<skill>-<provider-family>-<YYYY-MM-DD>.md`. Where a re-run lands on the same date as the record it follows, the name takes the issue it was run for after the date, because the convention above has nowhere else to put two records of one Skill and one family on one day.

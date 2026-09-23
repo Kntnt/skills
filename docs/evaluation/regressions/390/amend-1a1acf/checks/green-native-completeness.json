@@ -1,0 +1,7 @@
+{
+  "status": "PASS",
+  "criterion": "Every frozen case has completed native outcomes, delivered text, paired evidence and traced judgment",
+  "cases": 5,
+  "missing": [],
+  "note": "Completeness is not a claim that every editorial judgment or the full gate passed."
+}

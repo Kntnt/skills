@@ -1,0 +1,13 @@
+{
+  "observer_python_pid": 2947,
+  "observer_ps_pid": 2948,
+  "observer_ps_exit": 0,
+  "filter": [
+    "/391/file-success/",
+    "/native_391/check_file_success"
+  ],
+  "matches": [
+    " 2833  1710 Ss   /opt/homebrew/bin/bash -lc python3 - <<'PY'\\012import pathlib,os,subprocess,json\\012print('python_pid='+str(os.getpid()))\\012p=pathlib.Path('/Users/thomas/Projects/skills-388-391/docs/evaluation/regressions/391/runs/file-success')\\012ps=subprocess.Popen(['ps','-axo','pid=,ppid=,stat=,command='],stdout=subprocess.PIPE,text=True)\\012out,_=ps.communicate()\\012rows=[line for line in out.splitlines() if '/391/file-success/' in line or '/native_391/check_file_success' in line]\\012p.joinpath('process-spawn.json').write_text(json.dumps({'observer_python_pid':os.getpid(),'observer_ps_pid':ps.pid,'observer_ps_exit':ps.returncode,'filter':['/391/file-success/','/native_391/check_file_success'],'matches':rows,'note':'Matching python/bash commands containing this filter are observer commands, not checker lifetime evidence. Native checker lifetime is recorded separately.'},indent=2))\\012p.joinpath('lifecycle.json').write_text(json.dumps({'writer':'/root/build_391_retry/native_391','checker':'/root/build_391_retry/native_391/check_file_success','spawn_result':{'task_name':'/root/build_391_retry/native_391/check_file_success'},'list_after_spawn':'running','wait_helpers':[],'model_deliberation':'inherited, no overrides','checker_history':'none'},indent=2))\\012p.joinpath('spawn-prompt.txt').write_text('Execute the complete checker task in /Users/thomas/Projects/skills-388-391/docs/evaluation/regressions/391/runs/file-success/checker-prompt.txt exactly. That file contains the comparison instructions, source material, draft path, and report path for this single regression. Use the inherited model and deliberation with no override. Do not read conversation history. Do not delegate. Stop all owned work before your final reply.')\\012print('observer_ps_pid='+str(ps.pid)+' exit='+str(ps.returncode))\\012PY"
+  ],
+  "note": "Matching python/bash commands containing this filter are observer commands, not checker lifetime evidence. Native checker lifetime is recorded separately."
+}

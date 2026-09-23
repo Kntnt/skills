@@ -1,0 +1,50 @@
+Granskningen är klar. Texten är levererad i svaret nedan; ingenting har skrivits till filsystemet, och `source.md` står orörd.
+
+```markdown
+---
+kntnt:
+  genre: case-study
+  technique: none
+  language: sv
+---
+
+# Elm Quays arbetsledare ser nytta med gemensam logg
+
+Hösten 2025 prövade bostadsbolaget Elm Quay Housing en gemensam felanmälningslogg i ett test som varade åtta veckor. 31 anmälningar registrerades, och arbetsledaren skulle göra om testet – men med mer tid för förberedelser. Här är vad testet krävde och vad siffrorna inte säger.
+
+Av Thomas Barregren
+
+Telefonanmälningar på ett ställe, e-post på ett annat. Så förvarades felanmälningarna hos Elm Quay Housing, ett bostadsbolag med eget underhållslag som förvaltar 640 lägenheter. I september 2025 bestämde sig laget för att pröva en gemensam logg i två hus.
+
+## Så kom loggen på plats i de två husen
+
+Laget undersökte om en logg kunde visa status för varje reparation och valde därefter Svale Systems. Någon jämförelse med en annan leverantör finns inte.
+
+– Vi ville att kvällsskiftet skulle se vad morgonskiftet redan hade gjort. Kategorierna var våra; Svale hjälpte oss att lägga in dem i loggen, skriver Maya Lind, arbetsledare för underhållet, i en mejlintervju.
+
+De boende kunde fortsätta anmäla fel per telefon under testet. Svale konfigurerade loggen och utbildade sex medarbetare vid två tillfällen.
+
+## Siffrorna säger inget om orsaken
+
+Testet pågick i åtta veckor. Enligt Elm Quays interna testanteckning från 4 december 2025 registrerades 31 felanmälningar i loggen, och då är akuta ärenden och arbeten som beställts före testet inte inräknade.
+
+Mediantiden från anmälan till tilldelad åtgärd var två arbetsdagar under testet och tre under de åtta veckorna dessförinnan. Arbetsbelastningen skilde sig mellan perioderna, och anteckningen tillskriver uttryckligen inte programvaran skillnaden. Kostnader, de boendes nöjdhet och tiden fram till avslutad åtgärd mättes inte.
+
+– Vi lade mer tid på att komma överens om kategorierna än på att registrera de första anmälningarna. Den tiden skulle jag avsätta innan nästa hus drar i gång, skriver Maya Lind.
+
+## Beslutet om fler hus återstår
+
+Testet har ännu inte utvidgats. Laget vill först se hur kategorierna fungerar för större reparationer, och Lind rekommenderade inte Svale till varje bostadsbolag.
+
+– Jag skulle välja att göra om testet. Att ha en samlad bild av anmälningarna hjälper oss, men jag skulle lägga in en extra vecka för förberedelser, skriver hon.
+
+För den som överväger ett liknande test finns Svale Systems [checklista för införande](https://example.invalid/svale/checklist) att läsa igenom. Den här kundberättelsen är publicerad av Svale Systems och är alltså inte oberoende journalistik.
+```
+
+**Upplösning.** Genre `case-study`, språk `sv` och ingen teknik — samtliga hämtade ur textens egen `kntnt`-karta, där `technique: none` säger att ingen berättarteknik ska tillämpas. Anatomins räknade krav är maskinmätta.
+
+**Anmärkningar.** Granskningen gav tre anmärkningar, och alla tre är åtgärdade. Inga kvarstår.
+
+**Ändrat påstående.** Ett påstående står kvar med förskjuten räckvidd. Meningen löd *Laget testade om loggen kunde visa status för varje reparation* och lyder nu *Laget undersökte om en logg kunde visa status för varje reparation*. Reparationen av den tredje anmärkningen — att verbet *testade* krockade med textens genomgående *testet* om åttaveckorsförsöket, och att *loggen* stod i bestämd form innan någon logg valts — bytte verb och bestämdhet. Texten säger därmed inte längre att utvärderingen var ett test, och inte längre att den gällde en bestämd logg. Inget påstående togs bort, och inga förbehåll rördes.
+
+**I övrigt.** Rubriken är omskriven så att den namnger kundens omdöme i stället för själva aktiviteten, vilket också tog bort upprepningen mellan rubrik och ingressens första mening; en mellanrubrik använder nu samma ord för loggen som brödtexten under den; och den avslutande korrekturpassningen rättade ett grammatiskt fel i ordföljden mellan två objekt. Citat, siffror, förbehåll, länk, byline och frontmatter står som de kom.

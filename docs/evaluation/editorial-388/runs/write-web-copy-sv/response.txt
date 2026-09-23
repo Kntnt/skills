@@ -1,0 +1,48 @@
+**Utkastet levereras med kända brister.** Två invändningar från den avslutande källkontrollen står kvar. Prosan levereras exakt som den kontrollen läste den, så ingen av dem är åtgärdad i texten.
+
+1. **”Därefter svarar Svale via e-post inom tre arbetsdagar, stämmer av om uppdraget passar föreningen och föreslår en tid för mötet.”** Underlaget säger *”Svale svarar via e-post inom tre arbetsdagar för att stämma av om uppdraget passar och föreslå mötestid”* — tidsfristen gäller alltså svaret, och avstämningen och tidsförslaget anges som svarets syfte. Utkastets samordnade verb kan läsas som att alla tre sker inom tre arbetsdagar. Minsta föreslagna rättelse: *”Därefter svarar Svale via e-post inom tre arbetsdagar för att stämma av om uppdraget passar och föreslå en tid för mötet.”*
+2. **”visa den instruktion som de boende har i dag”.** Underlaget säger *”visa nuvarande instruktion till de boende”* — en instruktion riktad till de boende, som styrelsen visar. Utkastet gör de boendes innehav av den till en del av förutsättningen. Minsta föreslagna rättelse: *”… och visa nuvarande instruktion till de boende.”*
+
+Två andra invändningar avvisade jag mot underlagets ordalydelse: att *”ingen garanti för kortare tid”* skulle vara vidare än *”en viss tidsbesparing”* (underlaget säger även *”Inga … garantier finns”*, vilket utesluter fallet), och att *”passar föreningen”* skulle tillföra ett objekt (kontrollantens motexempel — tre lokaler med gemensam kalender — skiljer inte läsningarna åt, eftersom *”Uppdraget gäller en lokal i en förening”* gör just det uppdraget opassande även för den föreningen).
+
+```markdown
+---
+kntnt:
+  genre: web-copy
+  technique: none
+  language: sv
+---
+
+# Genomgång av bokningsrutinen för er gemensamma lokal
+
+Svale erbjuder en avgränsad genomgång av hur bokningen av en gemensam lokal går till hos er. Den består av ett videomöte med styrelsen och en skriftlig sammanställning, och den ger styrelsen en gemensam bild av rutinen och två möjliga förenklingar att ta ställning till.
+
+## Det här ingår
+
+- Ett videomöte på 45 minuter med två representanter för styrelsen.
+- En skriftlig sammanställning av rutinens nuvarande steg, de oklarheter som kommer fram och två möjliga förenklingar.
+
+Uppdraget gäller en lokal i en förening.
+
+## Det här ingår inte
+
+Genomgången omfattar inte juridisk rådgivning, installation av bokningssystem eller intervjuer med boende. Svale lämnar ingen garanti för kortare tid eller färre konflikter.
+
+## Pris och förutsättningar
+
+Fast pris är 4 800 SEK inklusive moms.
+
+För att genomgången ska gå att göra behöver styrelsen kunna beskriva sina befintliga bokningsregler och visa den instruktion som de boende har i dag.
+
+## Så anmäler ni intresse
+
+Intresseanmälan efterfrågar namn, förening och e-postadress. Den är inte en beställning och kräver inga betalningsuppgifter.
+
+Därefter svarar Svale via e-post inom tre arbetsdagar, stämmer av om uppdraget passar föreningen och föreslår en tid för mötet.
+
+[Anmäl intresse](https://example.invalid/svale/intresse) – länken öppnar Svales formulär för intresseanmälan.
+```
+
+**Upplösning.** Genre `web-copy`, språk svenska (`sv`) och mål *svaret* kom alla från anropet. Ingen teknik tillämpades: `web-copy` anger själv att genren inte skrivs med någon, så utkastet har ingen påbjuden båge — dispositionen följer sidans uppgift. Materialet bar ingen `kntnt`-karta, så inget kom den vägen. Utkastet levererades i svaret, och inget skrevs till filsystemet: `source.md` är oförändrad och allt arbetsmaterial är borttaget.
+
+**Var materialet tog slut.** Briefen bad om cirka 300 ord *om materialet bär det*; brödtexten är cirka 203 ord. Underlaget anger uttryckligen inga betalningsvillkor och ingen leveranstid för sammanställningen och förbjuder att de hittas på, och det bär heller inga kundcitat, betyg, provperioder, garantier eller jämförelser med konkurrenter. Det som skulle sluta gapet är alltså betalningsvillkor, leveranstid för sammanställningen och vad som händer mellan mötet och den skriftliga sammanställningen. Sidan har ingen byline, eftersom briefen varken anger någon författare eller kräver en.

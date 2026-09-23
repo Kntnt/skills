@@ -1,0 +1,48 @@
+```markdown
+# Givarna mätte bara luftens temperatur
+
+**Fastighetskontorets rapport om Björkskolan anger temperaturer under 20 grader i sex klassrum. Artikeln går igenom vad mätningarna omfattar, vilka uppgifter som saknas i underlaget och vad driftteknikern föreslår innan styrningen ändras.**
+
+Under fyra veckor registrerade givarna temperaturer under 20 grader i sex klassrum. Fastighetskontorets rapport *Mätförsök i Björkskolan* från den 12 mars 2026 anger att 14 av 120 lektionspass hade minst ett värde under kontorets egen arbetsgräns på 20 grader. Gränsen är inte en lagregel. Vad siffran räcker till avgörs av hur försöket var upplagt och av vad givarna faktiskt mätte.
+
+## Placeringens effekt prövades inte
+
+Försöket varade fyra veckor. Två givare stod vid ytterväggar och fyra vid innerväggar, utan att placeringens effekt jämfördes experimentellt.
+
+## Operativ temperatur saknas
+
+Givarna mätte bara luften där de satt. Resonemanget i rapporten bygger däremot på operativ temperatur, som är ett mått på lufttemperatur och värmestrålning från omgivande ytor. Något sådant värde redovisas inte.
+
+Det saknas också mätningar av luftdrag och av elevernas upplevelse, liksom uppgifter om hur länge temperaturerna låg under gränsen. Någon effekt på hälsan har inte undersökts.
+
+## Följ upp två saker
+
+Driftteknikern Elin Rask rekommenderar att koppla temperaturserier till användningstider innan styrningen ändras. Nästa försök är tänkt att använda likadant placerade givare i november, men finansieringen är inte beslutad.
+
+Följ därför upp om temperaturserierna kopplas till användningstiderna och om novemberförsöket får sin finansiering, innan du drar slutsatser av siffrorna från Björkskolan.
+```
+
+**Upplösning.** Genre `article` och språk `sv`, båda ur anropet. Ingen teknik: genren `article` anger att den inte skrivs med någon, så ingen tillämpades. Anvisningen om rubriklängd följdes — rubriken är fem ord, mellanrubrikerna fyra, tre och fyra. Korrigeringsbudgeten var 3; en runda användes, två är outnyttjade.
+
+**Olöst fynd.** Texten saknar byline, vilket anatomin kräver. Ingen upphovsperson går att namna ur texten, dess metadata eller anropet — Elin Rask förekommer som källa, inte som författare. Bylinen är därför rapporterad som saknad och lämnad ofylld i stället för påhittad. Detta är det enda fyndet som står kvar, och det är skälet till att budgeten inte spenderades vidare: en runda till hade inte kunnat åtgärda det utan att uppfinna ett namn.
+
+**Borttagna påståenden.** Varje borttagning skedde för att ett fynd pekade ut själva påståendet som defekten:
+
+- att katastrofen lurade bakom varje hörn (fynd om ogrundat dramatiskt anslag),
+- att det är helt säkert att givarna har gjort eleverna friskare (fynd om visshet och orsakspåstående utan stöd, motsagt av kvalifikationen i samma mening),
+- att detta är mycket viktigt för alla som tycker att temperatur är viktigt (fynd om tom betydelsemarkering),
+- uppmaningen att kontakta oss för att rädda framtiden (fynd om uppmaning som inte följer av innehållet),
+- rubrikens påstående att givarna räddar skolan från en katastrof (fynd om slutsats texten inte drar),
+- den ordagrant dubblerade förekomsten av *Givarna registrerade temperaturer under 20 grader i sex klassrum* (fynd om upprepning i ingress och led). Själva sakuppgiften finns kvar, en gång, i ledet.
+
+Samtliga förbehåll står kvar i full styrka: att gränsen inte är en lagregel, att placeringens effekt inte jämfördes experimentellt, att operativ temperatur saknas, att givarna bara mätte luften där de satt, att mätningar av luftdrag, elevernas upplevelse och varaktighet saknas, att ingen effekt på hälsan har undersökts och att finansieringen inte är beslutad.
+
+**Ändrade påståenden.** Tre påståenden står kvar men har flyttats i räckvidd eller attribution:
+
+- De fyra veckorna, som originalet knöt till försöket, ramar nu också in ledets uppgift om att givarna registrerade temperaturer under 20 grader. Uppgiften att försöket varade fyra veckor finns kvar separat.
+- *Försöket varade fyra veckor* och *Två givare stod vid ytterväggar och fyra vid innerväggar* stod i originalet inuti satsen *Fastighetskontorets rapport … anger att …*. De står nu som egna meningar och hämtar sin attribution till rapporten ur det föregående stycket i stället för ur sin egen mening.
+- *resonemanget bygger på operativ temperatur* är nu *Resonemanget i rapporten bygger …*; attributionen till rapporten är alltså uttalad där originalet lämnade den ospecificerad.
+
+Alla tre följer av omfördelningen av den 187 ord långa meningsmassan över flera meningar.
+
+**Vad rundan i övrigt gjorde.** Utöver påståendekontot ovan har texten fått en ny rubrik och en ny ingress skrivna ur textens egen vinkel, och det enda 187-ordsstycket har delats i ett led och tre sektioner med mellanrubriker, varav den sista är ett avslut med ett nästa steg hämtat ur materialet. Meningar med fyra staplade efterställda satser har delats upp så att en huvudtanke bärs per mening. Slopmönster har tagits bort — dramatiskt anslag, betydelsemarkering och en generisk slutuppmaning. Den avslutande mekaniska genomgången fann inga stavfel, grammatikfel eller interpunktionsfel att rätta, så den lämnade texten oförändrad.

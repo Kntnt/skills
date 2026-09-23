@@ -1,0 +1,50 @@
+Klart. Den färdiga texten:
+
+```markdown
+---
+kntnt:
+  genre: case-study
+  technique: none
+  language: sv
+---
+
+# Gemensam logg ger Elm Quays lag överblick
+
+Hösten 2025 prövade bostadsbolaget Elm Quay Housing en gemensam felanmälningslogg i ett test som varade åtta veckor. 31 anmälningar registrerades, och arbetsledaren skulle göra om testet – men med mer tid för förberedelser. Här är vad testet krävde och vad siffrorna inte säger.
+
+Av Thomas Barregren
+
+Telefonanmälningar på ett ställe, e-post på ett annat. Så förvarades felanmälningarna hos Elm Quay Housing, ett bostadsbolag med eget underhållslag som förvaltar 640 lägenheter. I september 2025 bestämde sig laget för att pröva en gemensam logg i två hus.
+
+## Svale satte upp loggen med lagets egna kategorier
+
+Laget testade om loggen kunde visa status för varje reparation och valde därefter Svale Systems. Någon jämförelse med en annan leverantör finns inte.
+
+– Vi ville att kvällsskiftet skulle se vad morgonskiftet redan hade gjort. Kategorierna var våra; Svale hjälpte oss att lägga in dem i loggen, skriver Maya Lind, arbetsledare för underhållet, i en mejlintervju.
+
+De boende kunde fortsätta anmäla fel per telefon under testet. Svale konfigurerade loggen och utbildade sex medarbetare vid två tillfällen.
+
+## Siffrorna säger inget om orsaken
+
+Testet pågick i åtta veckor. Enligt Elm Quays interna testanteckning från 4 december 2025 registrerades 31 felanmälningar i loggen, och då är akuta ärenden och arbeten som beställts före testet inte inräknade.
+
+Mediantiden från anmälan till tilldelad åtgärd var två arbetsdagar under testet och tre under de åtta veckorna dessförinnan. Arbetsbelastningen skilde sig mellan perioderna, och anteckningen tillskriver uttryckligen inte skillnaden programvaran. Kostnader, de boendes nöjdhet och tiden fram till avslutad åtgärd mättes inte.
+
+– Vi lade mer tid på att komma överens om kategorierna än på att registrera de första anmälningarna. Den tiden skulle jag avsätta innan nästa hus drar i gång, skriver Maya Lind.
+
+## Laget vill se kategorierna fungera i större reparationer
+
+Testet har ännu inte utvidgats. Laget vill först se hur kategorierna fungerar för större reparationer, och Lind rekommenderade inte Svale till varje bostadsbolag.
+
+– Jag skulle välja att göra om testet. Att ha en samlad bild av anmälningarna hjälper oss, men jag skulle lägga in en extra vecka för förberedelser, skriver hon.
+
+För den som överväger ett liknande test finns Svale Systems [checklista för införande](https://example.invalid/svale/checklist) att läsa igenom. Den här kundberättelsen är publicerad av Svale Systems och är alltså inte oberoende journalistik.
+```
+
+**Upplösning.** Genre `case-study`, teknik `none` och språk `sv` lästes alla ur textens egna `kntnt`-uppgifter. Att ingen teknik tillämpades följer av `none` i den kartan, inte av genren.
+
+**Fynd.** Inga fynd kvarstår. Granskningen fann fyra, och alla är åtgärdade: rubriken sa bara att testet gjordes, ingressens första mening upprepade rubriken, mellanrubriken "Så kom systemet på plats i de två husen" namngav ett förlopp utan att säga vad avsnittet ger och kallade dessutom loggen "systemet", och mellanrubriken "Beslutet om fler hus återstår" sa samma sak som meningen under den. Två av tre tillåtna rättningsrundor användes; den tredje behövdes inte.
+
+**Påståenden.** Inget påstående togs bort, och inget står kvar med förskjuten räckvidd, säkerhet, attribution, kronologi, orsak eller innebörd. Textens begränsande meningar står ordagrant kvar: att ingen jämförelse med en annan leverantör finns, att akuta ärenden och tidigare beställda arbeten inte är inräknade, att arbetsbelastningen skilde sig och att anteckningen uttryckligen inte tillskriver skillnaden programvaran, att kostnader, nöjdhet och tid till avslutad åtgärd inte mättes, samt att berättelsen är utgiven av Svale Systems.
+
+**Vad som ändrades.** Rubriken och två av tre mellanrubriker är omskrivna – rubriken så att den gemensamma loggen bär den nytta arbetsledaren själv beskriver, i textens egen styrka och utan att knyta mediantidsskillnaden till loggen eller programvaran, eftersom testanteckningen inte drar det sambandet. Brödtext, citat, siffror, förbehåll, länk och frontmatter är oförändrade, och den avslutande mekaniska genomgången hittade inget att rätta.

@@ -1,0 +1,1 @@
+-- Rubriken ska vara högst fem ord lång och mellanrubrikerna högst fyra ord.

@@ -1,0 +1,55 @@
+**Upplöst konfiguration:** genre `article` och språk `sv`, båda från anropet. Ingen teknik tillämpades — genren `article` anger att den inte ordinarie skrivs med någon, så ingen teknik valdes. Korrigeringsbudgeten (`--max=1`) är förbrukad på en runda.
+
+```markdown
+# Mätförsöket i Björkskolan saknar operativ temperatur
+
+**Fastighetskontorets försök i Björkskolan gav minst ett värde under 20 grader i 14 av 120 lektionspass under fyra veckor. Här är vad de siffrorna bygger på, vad som aldrig mättes och vilket nästa steg driftteknikern rekommenderar.**
+
+Givare i sex klassrum registrerade temperaturer under 20 grader. Fastighetskontorets rapport *Mätförsök i Björkskolan* från den 12 mars 2026 redovisar försöket, och en genomgång av den visar vad mätvärdena bär och var de tar slut.
+
+## Arbetsgränsen på 20 grader är kontorets egen
+
+Försöket pågick i fyra veckor. Två givare stod vid ytterväggar och fyra vid innerväggar, och placeringens effekt jämfördes inte experimentellt.
+
+Rapporten anger att 14 av 120 lektionspass hade minst ett värde under kontorets egen arbetsgräns på 20 grader. Den gränsen är inte en lagregel.
+
+## Det rapporten vilar på finns inte i mätvärdena
+
+Operativ temperatur är ett mått på lufttemperatur och värmestrålning från omgivande ytor. Rapportens resonemang bygger på operativ temperatur, men något sådant värde finns inte i försöket. Givarna mätte bara luften där de satt.
+
+Det saknas mätningar av luftdrag och av elevernas upplevelse. Det saknas också uppgifter om hur länge temperaturerna låg under gränsen. Ingen effekt på hälsan har undersökts.
+
+## Elin Rask rekommenderar en koppling före ändrad styrning
+
+Nästa försök är tänkt att använda likadant placerade givare i november, fast finansieringen inte är beslutad. Driftteknikern Elin Rask rekommenderar att koppla temperaturserier till användningstider innan styrningen ändras.
+```
+
+## Kvarstående iakttagelser — samtliga olösta
+
+1. **Byline saknas.** Anatomin kräver en byline, och mätningen bekräftar att den är frånvarande. Varken texten, dess metadata eller anropet namnger någon författare, så delen kan inte fyllas ur textens eget innehåll. Den lämnas ofylld i stället för att fyllas med en påhittad författare. Detta är den enda räknade anatomibrist som återstår.
+
+2. **Avslutningen kallar inte läsaren till någon handling.** Anatomin kräver att den sista sektionen både visar att ledets förväntan infriats och kallar läsaren till en handling som följer av innehållet. Den tomma uppmaningen "Kontakta oss för att rädda framtiden" togs bort, och materialet bär ingen ersättare: Elin Rasks rekommendation riktar sig till fastighetskontoret, inte till läsaren. Delen kan inte skrivas utan att uppgifter tillförs.
+
+3. **Mellanrubriken "Arbetsgränsen på 20 grader är kontorets egen" täcker bara halva sin sektion.** Sektionens första stycke handlar om försökets längd och givarnas placering, vilket rubriken inte nämner. Den som skummar får en felaktig förväntan om vad som står under rubriken.
+
+4. **Mellanrubriken "Elin Rask rekommenderar en koppling före ändrad styrning" säger samma sak som sektionens sista mening.** Rubriken och meningen "Driftteknikern Elin Rask rekommenderar att koppla temperaturserier till användningstider innan styrningen ändras" bär samma uppgift i nästan samma ord. Läsaren läser samma sak två gånger inom fem rader.
+
+## Redovisning av påståenden
+
+**Borttagna påståenden.** Fyra påståenden togs bort, varje gång för att iakttagelsen pekade ut påståendet självt som defekten:
+
+- "Katastrofen lurade bakom varje hörn" — borttaget som påhittad dramatik utan stöd i materialet.
+- "det är helt säkert att givarna har gjort eleverna friskare" — borttaget som en visshet texten inte bär och som motsades av sitt eget förbehåll. Förbehållet står kvar som egen mening: "Ingen effekt på hälsan har undersökts."
+- "Det är viktigt att notera att detta är mycket viktigt för alla som tycker att temperatur är viktigt" — borttaget som cirkulärt och utan uppgift.
+- "Kontakta oss för att rädda framtiden" — borttaget som en uppmaning utan stöd i innehållet och med ett "oss" utan referent i texten.
+
+**Ändrade påståenden.** Två påståenden står kvar med flyttad attribution:
+
+- Försökets längd på fyra veckor och givarnas placering hängde i originalet på "Fastighetskontorets rapport ... anger att". De står nu i textens egen röst, med rapporten namngiven i ledet strax före och uttryckligt åberopad i nästa stycke. Ändringen följde av reparationen av den femdubbla bisatsmeningen.
+- "resonemanget" hade ingen referent i originalet och är nu "Rapportens resonemang". Reparationen namngav alltså vems resonemang det är, där originalet lämnade det öppet.
+
+Inga övriga påståenden fick sin omfattning, säkerhet, attribution, kronologi, orsakslogik eller innebörd flyttad. Samtliga avgränsningar — arbetsgränsen som kontorets egen och inte en lagregel, att placeringens effekt inte jämfördes experimentellt, att operativ temperatur saknas, att luftdrag och elevernas upplevelse inte mättes, att varaktigheten under gränsen inte är känd, att ingen hälsoeffekt undersökts och att finansieringen inte är beslutad — står kvar i full styrka.
+
+## Vad rundan i övrigt ändrade
+
+Utöver de borttagna och ändrade påståendena ovan har rubriken skrivits om från ett räddnings- och katastrofanslag till textens egen vinkel vid textens egen styrka, ingressen har ersatt sin ordagranna dubblering med ett självbärande stycke, och ledet öppnar nu på annat än ingressens första ord och för texten vidare. Brödtextens enda 187 ord långa stycke har delats i tre sektioner med mellanrubriker och sju stycken på 20–35 ord, de staplade bisatserna har blivit fristående huvudsatser, och begreppet operativ temperatur förklaras nu innan resonemanget vilar på det. Den avslutande mekaniska genomgången fann inga stavfel, grammatikfel, särskrivningar eller lokala skrivregelsavvikelser att rätta och ändrade därför ingenting.

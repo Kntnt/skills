@@ -1,0 +1,29 @@
+**Resolved:** genre `web-copy`, language `en_US`, technique `none` — the `web-copy` genre names no technique as the one it is ordinarily written with, so none was applied. Correction budget `1`, spent on one round. `input.md` is unchanged and nothing was written to disk.
+
+```markdown
+# Review of one shared room in your housing association
+
+Svale's review covers one shared room in one housing association and costs SEK 4,800 including VAT. It includes a 45-minute video call with two board representatives and a written account of the booking steps, unclear points and two possible simplifications.
+
+## What happens when you express interest
+
+The link below opens an expression-of-interest form asking for a name, association and email address. It places no order, requires no payment details and books no meeting. Svale replies by email within three working days to discuss whether the review is suitable and suggest a meeting time.
+
+## Express interest
+
+[Open the expression-of-interest form](https://example.invalid/svale/intresse).
+```
+
+## Findings
+
+The review recorded seven findings, and the single correction round repaired all seven: the link label that promised a booking and a payment the form does not perform; a headline promising an unlocked potential nothing on the page supported; an opening paragraph that announced its subject tautologically and carried a Swedish idiom across word for word; an "it" whose referent was never named; six placeholder headings; information ordered so that the button preceded everything the reader needed to judge it; and four one-sentence sections built to one template.
+
+**Unresolved, carried forward:** the text does not settle what the review examines. "Covers one shared room in one housing association" points at the room, while the written account covers "the booking steps," which is the process of booking it. A reader deciding whether SEK 4,800 is worth paying cannot tell which of the two they would be buying, and the headline inherits the first reading. This was present in the source and is not repairable without knowing which is meant, so it needs a person who has that information. The budget was spent, which is what stopped the loop.
+
+## Claim account
+
+**Removed** — the headline's promise of unlocking the association's full potential, removed because finding 2 named that promise itself as the defect; "Decision-makers in a complex reality face growing complexity" and "Take the thumb out and discover a fantastic journey," both removed because finding 3 named each sentence as the whole of the defect rather than as a defect sitting beside a claim.
+
+**Changed** — the link's claim that pressing it books and pays, answering finding 1, which named that claim as the contradiction; it now claims only what the destination does. And the attribution of the offer: the source attributed the price, the scope and the deliverables to an unnamed "it," and the repair for finding 4 attached them to "Svale's review," drawn from the source's own closing paragraph, where Svale replies to discuss whether the review is suitable.
+
+**Unmoved** — SEK 4,800 including VAT; one shared room in one housing association; the 45-minute video call with two board representatives; the written account of booking steps, unclear points and two possible simplifications; the form's three fields; the three-working-day email reply to discuss suitability and suggest a time; and the destination URL. The sentence bounding what the page asserts — that the form places no order, requires no payment details and books no meeting — comes through verbatim, and the repair for finding 6 moved it above the link rather than weakening it.

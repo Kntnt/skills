@@ -1,0 +1,324 @@
+{
+  "sessions": [
+    {
+      "trace": "native/2026/09/22/rollout-2026-09-22T09-29-47-01a0c805-557f-7700-8014-c3c1d23e0a43.jsonl",
+      "thread_id": "01a0c805-557f-7700-8014-c3c1d23e0a43",
+      "parent_thread_id": null,
+      "source": "exec"
+    }
+  ],
+  "commands": [
+    {
+      "trace": "native/2026/09/22/rollout-2026-09-22T09-29-47-01a0c805-557f-7700-8014-c3c1d23e0a43.jsonl",
+      "ordinal": 14,
+      "timestamp": "2026-09-22T07:29:58.158Z",
+      "command": [
+        "/opt/homebrew/bin/bash",
+        "-lc",
+        "sed -n '1,240p' .agents/skills/redline/SKILL.md"
+      ],
+      "exit_code": 0,
+      "status": "completed"
+    },
+    {
+      "trace": "native/2026/09/22/rollout-2026-09-22T09-29-47-01a0c805-557f-7700-8014-c3c1d23e0a43.jsonl",
+      "ordinal": 33,
+      "timestamp": "2026-09-22T07:30:30.550Z",
+      "command": [
+        "/opt/homebrew/bin/bash",
+        "-lc",
+        "set -eu\ntask_tmp_root=${TMPDIR:?TMPDIR is required}\nrun_tmp=$(mktemp -d \"$task_tmp_root/redline-invoke.XXXXXX\")\ncleanup() { find \"$run_tmp\" -depth -delete; }\ntrap cleanup EXIT\nprintf '%s\\n' '--max=1 --output=response input.md' | TMPDIR=\"$run_tmp\" UV_NO_CACHE=1 UV_NO_PROJECT=1 uv run .agents/skills/redline/scripts/invoke.py"
+      ],
+      "exit_code": 0,
+      "status": "completed"
+    },
+    {
+      "trace": "native/2026/09/22/rollout-2026-09-22T09-29-47-01a0c805-557f-7700-8014-c3c1d23e0a43.jsonl",
+      "ordinal": 44,
+      "timestamp": "2026-09-22T07:30:46.813Z",
+      "command": [
+        "/opt/homebrew/bin/bash",
+        "-lc",
+        "sed -n '1,260p' input.md\nsed -n '1,260p' .agents/skills/kntnt/library/references/delivery.md\nsed -n '1,220p' .agents/skills/kntnt/library/references/invocation-envelope.md\nrg --files .agents/skills/kntnt/library/references/editorial/genres .agents/skills/kntnt/library/references/editorial/techniques | sort"
+      ],
+      "exit_code": 0,
+      "status": "completed"
+    },
+    {
+      "trace": "native/2026/09/22/rollout-2026-09-22T09-29-47-01a0c805-557f-7700-8014-c3c1d23e0a43.jsonl",
+      "ordinal": 51,
+      "timestamp": "2026-09-22T07:30:57.132Z",
+      "command": [
+        "/opt/homebrew/bin/bash",
+        "-lc",
+        "set -eu\ntask_tmp_root=${TMPDIR:?TMPDIR is required}\nrun_tmp=$(mktemp -d \"$task_tmp_root/redline-language.XXXXXX\")\ncleanup() { find \"$run_tmp\" -depth -delete; }\ntrap cleanup EXIT\nTMPDIR=\"$run_tmp\" UV_NO_CACHE=1 UV_NO_PROJECT=1 uv run --no-cache --no-project .agents/skills/kntnt/library/scripts/languages.py resolve --scope=composition --scope=review --scope=anti-slop en_GB"
+      ],
+      "exit_code": 0,
+      "status": "completed"
+    },
+    {
+      "trace": "native/2026/09/22/rollout-2026-09-22T09-29-47-01a0c805-557f-7700-8014-c3c1d23e0a43.jsonl",
+      "ordinal": 59,
+      "timestamp": "2026-09-22T07:31:16.978Z",
+      "command": [
+        "/opt/homebrew/bin/bash",
+        "-lc",
+        "sed -n '1,400p' '.agents/skills/kntnt/library/references/editorial/base.review.md'"
+      ],
+      "exit_code": 0,
+      "status": "completed"
+    },
+    {
+      "trace": "native/2026/09/22/rollout-2026-09-22T09-29-47-01a0c805-557f-7700-8014-c3c1d23e0a43.jsonl",
+      "ordinal": 60,
+      "timestamp": "2026-09-22T07:31:16.981Z",
+      "command": [
+        "/opt/homebrew/bin/bash",
+        "-lc",
+        "sed -n '1,400p' '.agents/skills/kntnt/library/references/editorial/base.md'"
+      ],
+      "exit_code": 0,
+      "status": "completed"
+    },
+    {
+      "trace": "native/2026/09/22/rollout-2026-09-22T09-29-47-01a0c805-557f-7700-8014-c3c1d23e0a43.jsonl",
+      "ordinal": 61,
+      "timestamp": "2026-09-22T07:31:16.982Z",
+      "command": [
+        "/opt/homebrew/bin/bash",
+        "-lc",
+        "sed -n '1,400p' '.agents/skills/kntnt/library/references/editorial/genres/article.md'"
+      ],
+      "exit_code": 0,
+      "status": "completed"
+    },
+    {
+      "trace": "native/2026/09/22/rollout-2026-09-22T09-29-47-01a0c805-557f-7700-8014-c3c1d23e0a43.jsonl",
+      "ordinal": 63,
+      "timestamp": "2026-09-22T07:31:16.988Z",
+      "command": [
+        "/opt/homebrew/bin/bash",
+        "-lc",
+        "sed -n '1,400p' '.agents/skills/kntnt/library/references/editorial/genres/article.review.md'"
+      ],
+      "exit_code": 0,
+      "status": "completed"
+    },
+    {
+      "trace": "native/2026/09/22/rollout-2026-09-22T09-29-47-01a0c805-557f-7700-8014-c3c1d23e0a43.jsonl",
+      "ordinal": 64,
+      "timestamp": "2026-09-22T07:31:16.989Z",
+      "command": [
+        "/opt/homebrew/bin/bash",
+        "-lc",
+        "sed -n '1,400p' '.agents/skills/kntnt/library/references/editorial/anti-slop.md'"
+      ],
+      "exit_code": 0,
+      "status": "completed"
+    },
+    {
+      "trace": "native/2026/09/22/rollout-2026-09-22T09-29-47-01a0c805-557f-7700-8014-c3c1d23e0a43.jsonl",
+      "ordinal": 65,
+      "timestamp": "2026-09-22T07:31:16.993Z",
+      "command": [
+        "/opt/homebrew/bin/bash",
+        "-lc",
+        "sed -n '1,400p' '.agents/skills/kntnt/library/references/editorial/web-craft.md'"
+      ],
+      "exit_code": 0,
+      "status": "completed"
+    },
+    {
+      "trace": "native/2026/09/22/rollout-2026-09-22T09-29-47-01a0c805-557f-7700-8014-c3c1d23e0a43.jsonl",
+      "ordinal": 66,
+      "timestamp": "2026-09-22T07:31:16.996Z",
+      "command": [
+        "/opt/homebrew/bin/bash",
+        "-lc",
+        "sed -n '1,400p' '.agents/skills/kntnt/library/references/editorial/web-craft.review.md'"
+      ],
+      "exit_code": 0,
+      "status": "completed"
+    },
+    {
+      "trace": "native/2026/09/22/rollout-2026-09-22T09-29-47-01a0c805-557f-7700-8014-c3c1d23e0a43.jsonl",
+      "ordinal": 67,
+      "timestamp": "2026-09-22T07:31:17.001Z",
+      "command": [
+        "/opt/homebrew/bin/bash",
+        "-lc",
+        "sed -n '1,400p' '.agents/skills/kntnt/library/references/editorial/headlines.md'"
+      ],
+      "exit_code": 0,
+      "status": "completed"
+    },
+    {
+      "trace": "native/2026/09/22/rollout-2026-09-22T09-29-47-01a0c805-557f-7700-8014-c3c1d23e0a43.jsonl",
+      "ordinal": 68,
+      "timestamp": "2026-09-22T07:31:17.011Z",
+      "command": [
+        "/opt/homebrew/bin/bash",
+        "-lc",
+        "sed -n '1,400p' '.agents/skills/kntnt/library/references/editorial/article-anatomy.md'"
+      ],
+      "exit_code": 0,
+      "status": "completed"
+    },
+    {
+      "trace": "native/2026/09/22/rollout-2026-09-22T09-29-47-01a0c805-557f-7700-8014-c3c1d23e0a43.jsonl",
+      "ordinal": 69,
+      "timestamp": "2026-09-22T07:31:17.017Z",
+      "command": [
+        "/opt/homebrew/bin/bash",
+        "-lc",
+        "sed -n '1,400p' '.agents/skills/kntnt/library/references/editorial/article-anatomy.review.md'"
+      ],
+      "exit_code": 0,
+      "status": "completed"
+    },
+    {
+      "trace": "native/2026/09/22/rollout-2026-09-22T09-29-47-01a0c805-557f-7700-8014-c3c1d23e0a43.jsonl",
+      "ordinal": 70,
+      "timestamp": "2026-09-22T07:31:17.030Z",
+      "command": [
+        "/opt/homebrew/bin/bash",
+        "-lc",
+        "sed -n '1,400p' '.agents/skills/kntnt/library/references/editorial/headlines.review.md'"
+      ],
+      "exit_code": 0,
+      "status": "completed"
+    },
+    {
+      "trace": "native/2026/09/22/rollout-2026-09-22T09-29-47-01a0c805-557f-7700-8014-c3c1d23e0a43.jsonl",
+      "ordinal": 77,
+      "timestamp": "2026-09-22T07:31:27.511Z",
+      "command": [
+        "/opt/homebrew/bin/bash",
+        "-lc",
+        "set -eu\ntask_tmp_root=${TMPDIR:?TMPDIR is required}\nrun_tmp=$(mktemp -d \"$task_tmp_root/redline-anatomy.XXXXXX\")\ncleanup() { find \"$run_tmp\" -depth -delete; }\ntrap cleanup EXIT\nset +e\nTMPDIR=\"$run_tmp\" UV_NO_CACHE=1 UV_NO_PROJECT=1 uv run --no-cache --no-project .agents/skills/kntnt/library/scripts/article_anatomy.py - < input.md\nstatus=$?\nset -e\nexit \"$status\""
+      ],
+      "exit_code": 0,
+      "status": "completed"
+    },
+    {
+      "trace": "native/2026/09/22/rollout-2026-09-22T09-29-47-01a0c805-557f-7700-8014-c3c1d23e0a43.jsonl",
+      "ordinal": 85,
+      "timestamp": "2026-09-22T07:31:54.428Z",
+      "command": [
+        "/opt/homebrew/bin/bash",
+        "-lc",
+        "sed -n '1,320p' .agents/skills/redline/references/correction.md"
+      ],
+      "exit_code": 0,
+      "status": "completed"
+    },
+    {
+      "trace": "native/2026/09/22/rollout-2026-09-22T09-29-47-01a0c805-557f-7700-8014-c3c1d23e0a43.jsonl",
+      "ordinal": 96,
+      "timestamp": "2026-09-22T07:32:20.153Z",
+      "command": [
+        "/opt/homebrew/bin/bash",
+        "-lc",
+        "sed -n '1,320p' .agents/skills/proofread/SKILL.md"
+      ],
+      "exit_code": 0,
+      "status": "completed"
+    },
+    {
+      "trace": "native/2026/09/22/rollout-2026-09-22T09-29-47-01a0c805-557f-7700-8014-c3c1d23e0a43.jsonl",
+      "ordinal": 103,
+      "timestamp": "2026-09-22T07:32:32.743Z",
+      "command": [
+        "/opt/homebrew/bin/bash",
+        "-lc",
+        "printf '%s\\n' \"$TMPDIR\""
+      ],
+      "exit_code": 0,
+      "status": "completed"
+    },
+    {
+      "trace": "native/2026/09/22/rollout-2026-09-22T09-29-47-01a0c805-557f-7700-8014-c3c1d23e0a43.jsonl",
+      "ordinal": 112,
+      "timestamp": "2026-09-22T07:32:59.485Z",
+      "command": [
+        "/opt/homebrew/bin/bash",
+        "-lc",
+        "set -eu\ntask_tmp_root=${TMPDIR:?TMPDIR is required}\nmktemp -d \"$task_tmp_root/redline-mechanical.XXXXXX\""
+      ],
+      "exit_code": 0,
+      "status": "completed"
+    },
+    {
+      "trace": "native/2026/09/22/rollout-2026-09-22T09-29-47-01a0c805-557f-7700-8014-c3c1d23e0a43.jsonl",
+      "ordinal": 128,
+      "timestamp": "2026-09-22T07:33:39.944Z",
+      "command": [
+        "/opt/homebrew/bin/bash",
+        "-lc",
+        "set -eu\ncmp -s input.md ../tmp/redline-mechanical.4CZDeQ/mechanical-input.md\ntask_tmp_root=${TMPDIR:?TMPDIR is required}\nrun_tmp=$(mktemp -d \"$task_tmp_root/proofread-invoke.XXXXXX\")\ncleanup() { find \"$run_tmp\" -depth -delete; }\ntrap cleanup EXIT\nprintf '%s\\n' '--language=en_GB --output=/Users/thomas/Projects/skills/.git/orchestrate-session-389-391-gpt/scratch/390/amend-1a1acf/clean-reuse/tmp/redline-mechanical.4CZDeQ/mechanical-output.md /Users/thomas/Projects/skills/.git/orchestrate-session-389-391-gpt/scratch/390/amend-1a1acf/clean-reuse/tmp/redline-mechanical.4CZDeQ/mechanical-input.md' | TMPDIR=\"$run_tmp\" UV_NO_CACHE=1 UV_NO_PROJECT=1 uv run .agents/skills/proofread/scripts/invoke.py"
+      ],
+      "exit_code": 0,
+      "status": "completed"
+    },
+    {
+      "trace": "native/2026/09/22/rollout-2026-09-22T09-29-47-01a0c805-557f-7700-8014-c3c1d23e0a43.jsonl",
+      "ordinal": 135,
+      "timestamp": "2026-09-22T07:33:49.578Z",
+      "command": [
+        "/opt/homebrew/bin/bash",
+        "-lc",
+        "set -eu\ntask_tmp_root=${TMPDIR:?TMPDIR is required}\nrun_tmp=$(mktemp -d \"$task_tmp_root/proofread-language.XXXXXX\")\ncleanup() { find \"$run_tmp\" -depth -delete; }\ntrap cleanup EXIT\nTMPDIR=\"$run_tmp\" UV_NO_CACHE=1 UV_NO_PROJECT=1 uv run --no-cache --no-project .agents/skills/kntnt/library/scripts/languages.py resolve --scope=mechanics en_GB"
+      ],
+      "exit_code": 0,
+      "status": "completed"
+    },
+    {
+      "trace": "native/2026/09/22/rollout-2026-09-22T09-29-47-01a0c805-557f-7700-8014-c3c1d23e0a43.jsonl",
+      "ordinal": 140,
+      "timestamp": "2026-09-22T07:33:54.113Z",
+      "command": [
+        "/opt/homebrew/bin/bash",
+        "-lc",
+        "sed -n '1,320p' .agents/skills/kntnt/library/references/editorial/mechanics.md"
+      ],
+      "exit_code": 0,
+      "status": "completed"
+    },
+    {
+      "trace": "native/2026/09/22/rollout-2026-09-22T09-29-47-01a0c805-557f-7700-8014-c3c1d23e0a43.jsonl",
+      "ordinal": 154,
+      "timestamp": "2026-09-22T07:34:29.667Z",
+      "command": [
+        "/opt/homebrew/bin/bash",
+        "-lc",
+        "set -eu\ncmp -s input.md ../tmp/redline-mechanical.4CZDeQ/mechanical-input.md\ndiff -u ../tmp/redline-mechanical.4CZDeQ/mechanical-input.md ../tmp/redline-mechanical.4CZDeQ/mechanical-output.md || true\nsed -n '1,260p' ../tmp/redline-mechanical.4CZDeQ/mechanical-output.md\nfind ../tmp -maxdepth 1 -type d \\( -name 'redline-*' -o -name 'proofread-*' \\) -print"
+      ],
+      "exit_code": 0,
+      "status": "completed"
+    },
+    {
+      "trace": "native/2026/09/22/rollout-2026-09-22T09-29-47-01a0c805-557f-7700-8014-c3c1d23e0a43.jsonl",
+      "ordinal": 162,
+      "timestamp": "2026-09-22T07:34:40.784Z",
+      "command": [
+        "/opt/homebrew/bin/bash",
+        "-lc",
+        "set -eu\nfind ../tmp/redline-mechanical.4CZDeQ -depth -delete\ntest ! -e ../tmp/redline-mechanical.4CZDeQ\ncmp -s input.md <(printf '%s' \"$(sed -n '1,$p' input.md)\") || true\nfind ../tmp -maxdepth 1 -type d \\( -name 'redline-*' -o -name 'proofread-*' \\) -print\ngit status --short"
+      ],
+      "exit_code": 128,
+      "status": "failed"
+    },
+    {
+      "trace": "native/2026/09/22/rollout-2026-09-22T09-29-47-01a0c805-557f-7700-8014-c3c1d23e0a43.jsonl",
+      "ordinal": 169,
+      "timestamp": "2026-09-22T07:34:59.418Z",
+      "command": [
+        "/opt/homebrew/bin/bash",
+        "-lc",
+        "set -eu\ntest ! -e ../tmp/redline-mechanical.4CZDeQ\nif find ../tmp -maxdepth 1 -type d \\( -name 'redline-*' -o -name 'proofread-*' \\) -print -quit | grep -q .; then exit 1; fi\nsed -n '1,260p' input.md"
+      ],
+      "exit_code": 0,
+      "status": "completed"
+    }
+  ]
+}

@@ -1,0 +1,53 @@
+Granskningen är klar. Den mekaniska slutpassagen hittade inga fel att rätta, och inget skrevs till filsystemet — `source.md` är oförändrad.
+
+**Upplösning:** genre `case-study` och språk `sv` från anropet. Ingen teknik tillämpades: genren anger att den inte skrivs med någon. Korrigeringsbudget 1, förbrukad på en runda, som accepterades efter omgranskning.
+
+```markdown
+# Elm Quays arbetsledare skulle göra försöket igen
+
+**Enligt kundens försöksanteckning var tiden till tilldelning hos Elm Quay två arbetsdagar under försöket, mot tre tidigare. Arbetsbelastningen var samtidigt olika, och skillnaden kan inte tillskrivas programvaran. Arbetsledaren Maya Lind skulle ändra en sak.**
+
+Elm Quay registrerade 31 ärenden.
+
+## Arbetsledaren ser nytta i en gemensam bild av ärendena
+
+Maya Lind har ett förbehåll.
+
+– Att ha en gemensam bild av ärendena hjälper oss, men jag skulle lägga till en vecka för förberedelser, säger Maya Lind, arbetsledare hos kunden.
+
+## Tilldelningen tog två arbetsdagar, men arbetsbelastningen var olika
+
+Enligt kundens försöksanteckning registrerades 31 ärenden under åtta veckor, med akuta ärenden undantagna. Tiden till tilldelning var två arbetsdagar jämfört med tre tidigare. Anteckningen säger att arbetsbelastningen var olika och att skillnaden inte kan tillskrivas programvaran.
+
+– Jag skulle välja att göra försöket igen, säger Lind.
+
+Kundcaset publiceras av leverantören Svale.
+```
+
+## Kvarstående iakttagelser (olösta)
+
+Budgeten tog slut medan dessa återstod. Ingen av dem kan repareras utan material som texten inte innehåller.
+
+1. **Bylinen saknas.** Mätningen med `article_anatomy.py` ger exit 1 med `part: "byline", measured: "absent"`. Anatomin kräver delen. Varken texten, dess metadata eller anropet namnger någon författare, så den lämnas ofylld i stället för att fyllas med en uppfunnen uppgift. Läsaren vet inte vem som står för redogörelsen.
+2. **Avslutningen saknar uppmaning.** Den sista delen visar inte att inledningens förväntan infriats och kallar inte läsaren till någon handling. Genren tillåter bara uppmaningar som bygger på tillhandahållna erbjudanden, länkar eller kontaktvägar, och materialet innehåller inga. Läsaren får ingen väg vidare.
+3. **Kundbakgrunden saknas helt.** Texten säger inte vad Elm Quay gör, vilket problem som skulle lösas eller vad som infördes — allt sådant som genren begär för att läsaren ska förstå situationen. Luckan kan inte fyllas utan uppfunna fakta.
+4. **Inledningen sätter ingen förväntan.** Den består nu av en enda siffermening och säger inte vad redogörelsen ska visa. Bristen fanns redan i den inkomna texten, där förväntan vilade helt på de två ogrundade påståendena nedan, och den kan inte repareras utan det bakgrundsmaterial som iakttagelse 3 saknar.
+
+## Påståenderedovisning
+
+Borttagna påståenden, med den iakttagelse vars defekt var hela påståendet:
+
+- Att leverantörens lösning räddade Elm Quay (rubriken) — iakttagelsen om att varje ord i en rubrik ska ha stöd; texten själv avvisar orsakssambandet.
+- Att Svale är världsledande på att skapa framgång — iakttagelsen om ogrundat beröm och leverantörens röst i brödtexten.
+- Att kunden stod hjälplös innan leverantören kom — iakttagelsen om räddningsberättelsen som fråntar kunden agens.
+- Att resultatet bevisar allt (underrubriken) — iakttagelsen om en slutsats som avsnittet självt tar tillbaka.
+- Att programvaran orsakade hela förbättringen — iakttagelsen om orsak dragen ur en jämförelse före och efter, i direkt motsägelse till meningen före.
+- Den ena av ingressens två identiska meningar och bryggan före citatet togs bort som ordagrann respektive innehållslig dubblering. Båda påståendena står kvar i full form på annat håll i texten: siffran i inledningen, omdömet om den gemensamma bilden i citatet.
+
+Ändrade påståenden:
+
+- Underrubriken **”Kunden fick en gemensam bild”** påstod som konstaterat faktum det som texten bara bär som en namngiven talares omdöme. Reparationen av ekot mellan underrubrik och avsnitt flyttade den till **”Arbetsledaren ser nytta i en gemensam bild av ärendena”** — svagare och attribuerad. Inget påstående stärktes.
+
+## Vad körningen i övrigt ändrade
+
+Rubrik och båda underrubrikerna skrevs om ur textens egen vinkel och med textens egen styrka, och ingressen ersattes av en självbärande sammanfattning som inte längre upprepar inledningen eller inleds med samma ord som den. Bryggan före citatet gör nu bara det en brygga ska: förbereder det. Säljande och överdrivna formuleringar togs bort tillsammans med leverantörens vi-röst i berättelsen. Citaten, sifferuppgifterna och de avgränsande meningarna — attributionen till försöksanteckningen, undantaget för akuta ärenden, uppgiften om olika arbetsbelastning med att skillnaden inte kan tillskrivas programvaran, och att kundcaset publiceras av leverantören — står ordagrant kvar. Den avslutande korrekturläsningen fann inga mekaniska fel att rätta.

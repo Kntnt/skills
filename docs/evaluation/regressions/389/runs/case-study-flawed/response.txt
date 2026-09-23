@@ -1,0 +1,53 @@
+Granskningen är klar. Filsystemet är återställt: `source.md` är oförändrad och inga arbetsfiler finns kvar.
+
+**Upplösning:** genre `case-study` och språk `sv`, båda från anropet. Ingen teknik — genren anger ingen ordinarie teknik, så parameterns standardvärde gäller. Korrigeringsbudgeten (1) är förbrukad, och de räknade gränserna är maskinmätta.
+
+```markdown
+# Elm Quays arbetsledare skulle pröva Svales programvara igen
+
+**Elm Quays försöksanteckning redovisar 31 registrerade ärenden, de akuta undantagna, och två arbetsdagar till tilldelning mot tre tidigare. Anteckningen säger också att arbetsbelastningen skilde sig åt och att skillnaden inte kan tillskrivas programvaran. Här är vad försöket visade och hur arbetsledaren ser på det.**
+
+I åtta veckor pågick ett försök hos Elm Quay med programvara från leverantören Svale. Under tiden förde kunden en anteckning om ärendena och om hur lång tid det tog innan de tilldelades.
+
+## Arbetsledarens bedömning är positiv men inte utan förbehåll
+
+– Att ha en gemensam bild av ärendena hjälper oss, men jag skulle lägga till en vecka för förberedelser, säger Maya Lind, arbetsledare hos kunden.
+
+## Siffrorna säger inte att programvaran låg bakom
+
+Enligt kundens försöksanteckning registrerades 31 ärenden under åtta veckor, med akuta ärenden undantagna. Tiden till tilldelning var två arbetsdagar jämfört med tre tidigare. Anteckningen säger att arbetsbelastningen var olika och att skillnaden inte kan tillskrivas programvaran.
+
+– Jag skulle välja att göra försöket igen, säger Lind.
+
+Kundcaset publiceras av leverantören Svale.
+```
+
+## Kvarstående fynd
+
+Alla tre är olösta. Ingen av dem kan repareras ur texten själv — de kräver material som inte finns i den.
+
+1. **Bylinen saknas.** Anatomin kräver att varje del finns med i ordningen, och mätningen rapporterar `byline: absent` både före och efter korrigeringen. Varken texten, dess metadata eller anropet namnger någon författare, så raden lämnas ofylld i stället för att gissas fram. Läsaren kan inte se vem som står för framställningen.
+
+2. **Avslutningen kallar inte läsaren till handling.** Genren kräver ett nästa steg som följer av innehållet och som bara får byggas av erbjudanden, länkar och kontaktvägar som finns i materialet. Inget sådant finns i texten. `Kundcaset publiceras av leverantören Svale.` är ett utgivarförbehåll och hör hemma där det står, men det är ingen avslutning. Läsaren lämnas utan nästa steg.
+
+3. **Kundbakgrund, vägval och införande saknas.** Genren efterfrågar tillräckligt om kunden och situationen för att förstå vad försöket gällde: vem Elm Quay är, vad som föranledde arbetet, hur programvaran valdes och hur den infördes. Inget av detta finns i texten, och att fylla luckan vore att hitta på. Läsaren kan inte bedöma vad som prövades eller varför.
+
+## Påståenderedovisning
+
+**Borttagna påståenden.** Fyra påståenden är borta. I varje fall namngav fyndet själva påståendet som defekten.
+
+- Att lösningen var *fantastisk* och att den *räddade* Elm Quay — borttaget med reparationen av rubrikfyndet.
+- Att Svale är *världsledande på att skapa framgång* — borttaget med reparationen av ledets fynd.
+- Att *kunden stod hjälplös innan vi kom* — borttaget med samma reparation.
+- Att *programvaran orsakade hela förbättringen* — borttaget med reparationen av orsaksfyndet. Den begränsande meningen före det, att skillnaden inte kan tillskrivas programvaran, står kvar ordagrant.
+
+Bryggan `Maya Lind säger att det hjälper att ha en gemensam bild av ärendena.` togs också bort, med reparationen av förekofyndet. Dess påstående är inte förlorat: det står kvar i citatet direkt under, med full attribution och med arbetsledarens reservation om en vecka för förberedelser.
+
+**Ändrade påståenden.** Två påståenden står kvar med något flyttat.
+
+- Siffran 31 ärenden stod i den gamla ingressen som ett obundet påstående. I den nya ingressen bärs den av kundens försöksanteckning och åtföljs av undantaget för akuta ärenden — attribution och omfång har alltså flyttats, i riktning mot vad brödtexten redan sa. Reparationen svarade på ingressfyndet.
+- Att försöket pågick i åtta veckor står nu i ledet som textens egen berättelse, där brödtexten uttrycker det som vad försöksanteckningen redovisar. Reparationen svarade på ledets fynd om upprepning.
+
+## Vad körningen ändrade i övrigt
+
+Rubriken, ingressen, ledet och båda mellanrubrikerna är omskrivna: rubriken utgår nu från textens egen vinkel i stället för att lova en räddning texten inte dokumenterar, ingressen står på egna ben med siffrorna och deras förbehåll, ledet inleder på ett nytt ord och för framställningen vidare i stället för att upprepa ingressen ordagrant, och mellanrubrikerna beskriver sina avsnitt utan att låna orden under sig eller dra slutsatser avsnitten motsäger. Leverantörens första person och superlativerna är borta ur berättelsen, medan kunden och arbetsledaren är kvar som handlande parter. Citaten, resultatmeningarna och utgivarförbehållet står ordagrant kvar som de kom in. Den avslutande mekaniska genomgången fann inga fel att rätta — stavning, särskrivning, ordföljd, kongruens, tankstreck och genitiv var redan korrekta.

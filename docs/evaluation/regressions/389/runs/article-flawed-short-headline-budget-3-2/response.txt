@@ -1,0 +1,46 @@
+Klart. Konfigurationen som lösningen kom fram till: genre `article` och språk `sv`, båda ur anropet. Ingen teknik tillämpades — genren `article` anger själv att den inte skrivs med någon, så ingen berättarbåge lades på texten. Den kontextuella instruktionen (rubriken högst fem ord) tillämpades på rubriken, som nu är fem ord och 39 tecken.
+
+Korrigeringsbudgeten var 3. Två rundor användes; den tredje lämnades outnyttjad eftersom det enda kvarvarande fyndet inte går att reparera ur textens eget innehåll.
+
+```markdown
+# Björkskolans mätförsök har flera luckor
+
+**Fastighetskontorets rapport om Björkskolan redovisar värden under 20 grader i sex klassrum. Men fyra veckors mätning svarar inte på allt: operativ temperatur, luftdrag och varaktighet saknas. Här är vad försöket visar, och vad en drifttekniker rekommenderar innan styrningen ändras.**
+
+Givarna registrerade temperaturer under 20 grader i sex klassrum. Vad de värdena säger om klassrummen begränsas av hur försöket var upplagt och av vad som inte mättes alls.
+
+## Fjorton pass av 120 hade värden under gränsen
+
+Försöket varade fyra veckor. Fastighetskontorets rapport *Mätförsök i Björkskolan* från den 12 mars 2026 anger att 14 av 120 lektionspass hade minst ett värde under kontorets egen arbetsgräns på 20 grader. Gränsen är inte en lagregel.
+
+Två givare stod vid ytterväggar och fyra vid innerväggar. Placeringens effekt jämfördes inte experimentellt.
+
+## Det här mätte givarna inte
+
+Operativ temperatur saknas, trots att resonemanget bygger på det. Det är ett mått på lufttemperatur och värmestrålning från omgivande ytor. Givarna mätte bara luften där de satt.
+
+Det saknas mätningar av luftdrag och elevernas upplevelse och uppgifter om hur länge temperaturerna låg under gränsen. Ingen effekt på hälsan har undersökts.
+
+## Nästa mätning väntar på finansiering
+
+Driftteknikern Elin Rask rekommenderar att koppla temperaturserier till användningstider innan styrningen ändras. Nästa försök är tänkt att använda likadant placerade givare i november, fast finansieringen inte är beslutad.
+```
+
+**Kvarstående fynd (olöst)**
+
+- **Bylinen saknas.** Artikelanatomin kräver en byline som namnger författaren. Varken texten, dess metadata eller anropet namnger någon; Elin Rask är källa i texten, inte dess författare. Fyndet rapporteras som saknat och är medvetet inte ifyllt — en byline går inte att skriva utan att hitta på en uppgift. Detta är det enda krav i anatomin som texten fortfarande inte uppfyller.
+
+**Borttagna påståenden**
+
+Fyra passager togs bort i första rundan, var och en av en reparation vars fynd pekade ut själva påståendet som defekten:
+
+- *"Katastrofen lurade bakom varje hörn."* — påståendet att en katastrof hotade. Fyndet pekade ut meningen som påklistrad dramatik utan stöd någonstans i materialet; den bar inget annat påstående.
+- *"…men ändå är det helt säkert att givarna har gjort eleverna friskare…"* — påståendet att givarna gjort eleverna friskare. Fyndet pekade ut vissheten och orsakssambandet som defekten. Meningens förbehåll står kvar i full omfattning: att mätningar av luftdrag, elevernas upplevelse och varaktighet saknas, och att ingen effekt på hälsan har undersökts.
+- *"Det är viktigt att notera att detta är mycket viktigt för alla som tycker att temperatur är viktigt."* — cirkulär viktighetsmarkering utan sakinnehåll; den bar inget påstående vid sidan av mönstret.
+- *"Kontakta oss för att rädda framtiden."* — uppmaningen som inte följde av artikelns innehåll.
+
+Inget påstående lämnades kvar med förändrad omfattning, säkerhet, källhänvisning, kronologi, orsakssamband eller innebörd. Samtliga sakuppgifter i rapporten står kvar: titeln, datumet 12 mars 2026, 14 av 120 lektionspass, kontorets egen arbetsgräns på 20 grader och att den inte är en lagregel, fyra veckors försök, två givare vid ytterväggar och fyra vid innerväggar, att placeringens effekt inte jämfördes, definitionen av operativ temperatur, att givarna bara mätte luften där de satt, Elin Rasks rekommendation samt novemberförsöket med obeslutad finansiering.
+
+**Vad körningen ändrade i övrigt**
+
+Slop-mönster togs bort (den tomma inledningsformeln, viktighetsförstärkningen, den påklistrade dramatiken och den tomma avslutningsuppmaningen). Rubriken skrevs om på textens egen styrka och inom fem ord. Ingressen, som bestod av samma mening två gånger ordagrant, ersattes av en självbärande ingress som säger vad texten ger läsaren. Brödtexten, tidigare ett enda stycke på 187 ord, delades i ett led och tre sektioner med mellanrubriker, och de längsta meningarna delades så att varje mening bär ett påstående. Den avslutande mekaniska genomgången hittade inga stavfel, grammatik-, böjnings-, kongruens- eller interpunktionsfel att rätta, så texten passerade den oförändrad.

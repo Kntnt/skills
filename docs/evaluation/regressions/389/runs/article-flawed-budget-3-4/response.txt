@@ -1,0 +1,53 @@
+Klart. Granskningen är gjord, två av tre korrigeringsrundor är använda, och den avslutande mekaniska passningen är genomförd.
+
+```markdown
+# Skolans mätförsök saknar operativ temperatur
+
+**Fastighetskontorets rapport *Mätförsök i Björkskolan* redovisar fyra veckors mätningar i sex klassrum. Här får du veta vad siffrorna visar, vad de inte visar och vilket nästa steg driftteknikern föreslår.**
+
+Givarna registrerade temperaturer under 20 grader i sex klassrum. Fastighetskontorets rapport *Mätförsök i Björkskolan* från den 12 mars 2026 anger att 14 av 120 lektionspass hade minst ett värde under kontorets egen arbetsgräns på 20 grader, vilket inte är en lagregel, och att försöket varade fyra veckor.
+
+## Försöket mätte luften i sex klassrum
+
+Två givare stod vid ytterväggar och fyra vid innerväggar, utan att placeringens effekt jämfördes experimentellt.
+
+Operativ temperatur saknas, trots att resonemanget bygger på operativ temperatur, som är ett mått på lufttemperatur och värmestrålning från omgivande ytor, medan givarna bara mätte luften där de satt.
+
+## Luftdrag, varaktighet och hälsa är outredda
+
+Det saknas mätningar av luftdrag och elevernas upplevelse och uppgifter om hur länge temperaturerna låg under gränsen. Ingen effekt på hälsan har undersökts.
+
+## Nästa försök saknar beslut om pengarna
+
+Driftteknikern Elin Rask rekommenderar att koppla temperaturserier till användningstider innan styrningen ändras. Nästa försök är tänkt att använda likadant placerade givare i november, fast finansieringen inte är beslutad. Innan du använder siffrorna som underlag, kontrollera om nästa mätning omfattar operativ temperatur och varaktighet.
+```
+
+## Upplösning
+
+Genre `article` och språk `sv`, båda från anropet. Ingen teknik: genren `article` anger att den inte skrivs med någon, så ingen berättarbåge har lagts på texten. Texten hade ingen frontmatter och inget `kntnt`-block, och inget har lagts till. De räknade måtten är maskinmätta med `article_anatomy.py`.
+
+## Kvarstående fynd
+
+**Bylinen saknas** (oåtgärdad). Anatomin kräver en byline mellan ingress och lead; `article_anatomy.py` rapporterar fortsatt `byline` / `absent`, vilket nu är textens enda räknade brist. Ingen författare namnges i texten, i dess metadata eller i anropet, och granskningsanvisningen säger uttryckligen att en byline ingen kan namnge rapporteras som saknad och lämnas ofylld. Läsaren får därför inte veta vem som står bakom texten. Det är du som kan avgöra vem som ska stå där.
+
+Fyndet kan inte åtgärdas utan att hitta på en uppgift, så den tredje korrigeringsrundan är oanvänd. Ingen runda avvisades.
+
+## Borttagna och ändrade påstående
+
+Borttaget — i samtliga fall pekade fyndet ut hela påståendet som defekten:
+
+- **"det är helt säkert att givarna har gjort eleverna friskare"** — struket som den kausala säkerhet som motsades av sitt eget förbehåll i samma mening. Förbehållet finns kvar i full styrka som egen mening: *Ingen effekt på hälsan har undersökts.*
+- **"Katastrofen lurade bakom varje hörn."** — struken som obelagd dramatik. Ingen sakuppgift följde med.
+- **"Det är viktigt att notera att detta är mycket viktigt för alla som tycker att temperatur är viktigt."** — struken som tom viktighetsformel. Ingen sakuppgift följde med.
+- **"Kontakta oss för att rädda framtiden."** — struken som en uppmaning utan täckning i innehållet, och ersatt av ett nästa steg som bygger på textens egna uppgifter.
+- **Rubrikens "räddar skolan från en katastrof"** och **ingressens dubblerade mening** — båda utpekade som defekten själv. Dubblettens sakuppgift (temperaturer under 20 grader i sex klassrum) står kvar i leadet.
+
+Ändrat:
+
+- **"två givare stod vid ytterväggar och fyra vid innerväggar, utan att placeringens effekt jämfördes experimentellt"** — uppgiften är ordagrant oförändrad, men när leadet delades upp (fyndet om 187 ord i ett stycke, och fyndet om saknade sektioner) lyftes den ut ur rapportens attributionsram *"rapporten … anger att"* och står nu som textens egen mening. Kontrollera gärna att det är rapporten uppgiften ska tillskrivas.
+
+Inga andra uppgifter har tagits bort, försvagats eller fått förskjuten omfattning, säkerhet, attribution, kronologi, kausalitet eller innebörd. Alla siffror, datum, gränsvärden, förbehåll och Elin Rasks rekommendation står kvar som de kom in.
+
+## Vad som i övrigt ändrades
+
+Utöver påståendena har texten fått en ny rubrik och en ny ingress formulerade ur textens egen vinkel och styrka, brödtexten har delats upp i ett lead och tre sektioner med underrubriker byggda av innehåll som redan fanns, det 187 ord långa stycket har brutits i stycken som håller sig under styckegränsen, ingress och lead upprepar inte längre varandra, avslutningen har fått ett nästa steg som följer av textens uppgifter, och de tomma formlerna och den obelagda dramatiken är borta. Den avslutande mekaniska passningen hittade inga stavfel, grammatikfel eller interpunktionsfel och ändrade ingenting. Källfilen `source.md` är orörd.
