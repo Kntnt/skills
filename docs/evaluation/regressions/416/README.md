@@ -8,6 +8,8 @@ Six shipped Skills declare the `subagents` Capability. Write, Redline and Unslop
 
 **Result: all nine probes stopped cleanly.** In every probe the only calls were the shim call and, in seven of the nine, a `ToolSearch` lookup. Every reply said the session cannot start a subagent and that the Skill stopped for that reason. Nothing was written, no git state changed, nothing was touched on the tracker, and no process was started apart from the shim. None of the probes is void. **Nothing ships.** No Skill is changed. One follow-up ticket was filed: [#428](https://github.com/Kntnt/skills/issues/428), which asks whether `/delegation` should declare `subagents` at all.
 
+**Afterwards.** The step-1 check was added to `/orchestrate` and `/ready-for-agent-check` after this packet was written, under #394's rule in `docs/rules/skills.md`, once the run's wave check found the two Skills breaking it. That settles the last open point below in favour of the check; the decisions recorded here are the ones this packet made.
+
 ## How each probe was started
 
 Each probe is a separate `claude -p` session with the slash command as its prompt, started exactly as #416's readiness addendum gives it. This is the argument vector, as each record's `command_line` keeps it:

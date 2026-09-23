@@ -276,7 +276,7 @@ The Manager and Model Selector Skills must be Enabled so the dependency check ca
 
 **Capabilities**
 
-The current Harness must be able to spawn subagents. The Skill asks the Harness to confirm this capability and starts nothing when it is Unsatisfied.
+The current Harness must be able to spawn subagents. The Skill confirms this Capability first and, when it is Unsatisfied, starts nothing, on a dry run as on any other.
 
 ## SEE ALSO
 

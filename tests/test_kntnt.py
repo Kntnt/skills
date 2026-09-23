@@ -8760,12 +8760,22 @@ def test_unslop_declares_the_subagents_and_the_runtime_it_needs() -> None:
 # directive: it reviewed, corrected in its own seat, reported correction rounds
 # and delivered, the reviewer checking its own repair. A `/write` run in the
 # same seat stopped, its first step confirming the Capability at the point of
-# work (issue #394). Orchestrate, delegation and ready-for-agent-check also
-# declare `subagents` and are not named here: nine probes in a seat with no
-# agent-spawning tool, three per Skill, each stopped on the engine's directive
-# before any work and named the Capability, so none of them carries a step-1
-# check (issue #416, `docs/evaluation/regressions/416/`).
+# work (issue #394). Orchestrate and ready-for-agent-check deliver no Text
+# Artifact and are held to the same first step by the test after the one for
+# these three; delegation declares `subagents` but starts none in its steps, so
+# it carries no step-1 check (issue #416, #428).
 FRESH_SUBAGENT_SKILLS = (WRITE, REDLINE, UNSLOP)
+
+# The Skills whose later steps start a fresh subagent and deliver no Text
+# Artifact. Nine probes in a seat with no agent-spawning tool stopped on the
+# engine's directive alone, but `docs/rules/skills.md` asks a step-1 check of
+# every Skill whose later steps start one, whatever a probe shows, so the rule
+# stays one the next author can apply without running a probe (issue #416,
+# `docs/evaluation/regressions/416/`).
+DELEGATING_SKILLS = (
+    REPO_ROOT / "skills" / "code" / "orchestrate" / "SKILL.md",
+    REPO_ROOT / "skills" / "code" / "ready-for-agent-check" / "SKILL.md",
+)
 FRESH_SUBAGENT_CONFIRMATION = "confirm that this Harness can start a fresh subagent"
 FRESH_SUBAGENT_REFUSAL = "report the Unsatisfied Capability"
 
@@ -8846,6 +8856,47 @@ def test_a_skill_starting_fresh_subagents_confirms_the_capability_first() -> Non
         ), (
             f"{path}: step 1 is not done until the Capability is confirmed,"
             f" and its closing sentence does not say so (issue #394). See"
+            f" {STANDARD}."
+        )
+
+
+def test_a_delegating_skill_confirms_the_capability_before_its_work() -> None:
+    """Orchestrate and ready-for-agent-check stop on the Capability first.
+
+    Each starts fresh subagents in a later step, so `docs/rules/skills.md` asks
+    its first step to confirm the Capability and, where the Harness cannot
+    start one, to report the Unsatisfied Capability before any probe, tracker
+    call or ticket read, and to be done only once the Capability is settled
+    (issue #416).
+    """
+
+    for path in DELEGATING_SKILLS:
+        # Orchestrate's `reconcile` paragraph stands above step 1 and stops
+        # before it, so step 1 is found by its number rather than by position.
+        steps = _section(path.read_text(encoding="utf-8"), "## Steps", path)
+        first = ("\n" + steps).partition("\n1. ")[2].partition("\n2. ")[0]
+        assert first, f"{path}: `## Steps` has no step 1. See {STANDARD}."
+        sentences = _sentences(first.strip())
+
+        assert (
+            FRESH_SUBAGENT_CONFIRMATION in sentences[0][:1].lower() + sentences[0][1:]
+        ), (
+            f"{path}: the first sentence of step 1 does not confirm that the"
+            f" Harness can start a fresh subagent, which `docs/rules/skills.md`"
+            f" asks of a Skill whose later steps start one (issue #416). See"
+            f" {STANDARD}."
+        )
+        assert FRESH_SUBAGENT_REFUSAL in sentences[1], (
+            f"{path}: the second sentence of step 1 does not report the"
+            f" Unsatisfied Capability, so a run in a seat that cannot start a"
+            f" subagent reaches the step's work first (issue #416). See"
+            f" {STANDARD}."
+        )
+        assert sentences[-1].startswith("Done when") and (
+            "Capability" in sentences[-1]
+        ), (
+            f"{path}: step 1 is not done until the Capability is settled, and"
+            f" its closing sentence does not say so (issue #416). See"
             f" {STANDARD}."
         )
 

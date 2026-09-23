@@ -94,7 +94,7 @@ The Manager must be Enabled so the dependency check can run.
 
 **Capabilities**
 
-The current Harness must be able to spawn subagents. Reviewing in the context that helped write the ticket is not a degraded mode; the Skill stops when this Capability is Unsatisfied.
+The current Harness must be able to spawn subagents. Reviewing in the context that helped write the ticket is not a degraded mode; the Skill stops when this Capability is Unsatisfied, before it reads a ticket.
 
 ## SEE ALSO
 
