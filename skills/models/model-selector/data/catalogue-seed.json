@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-09-06",
+  "generated_at": "2026-09-23",
   "notes": [
-    "Prices are USD per million tokens, standard serving tier, retrieved 2026-09-06.",
+    "Prices are USD per million tokens, standard serving tier, retrieved 2026-09-06, except those of `claude-opus-5-5`, `gpt-6-sol`, `gpt-6-luna` and `grok-4.7`, which are OpenRouter's as the daily pass read them on 2026-09-23.",
     "Reasoning tokens bill as output at all three vendors, and are not returned by default. A cost estimated from visible text alone is systematically low, which is why `reasoning` is a token category of its own here.",
     "OpenAI and xAI re-price the entire request once it passes `long_context_threshold` — not the excess, the whole of it. Anthropic has no such threshold at any size, which inverts the ranking for repo-scale work.",
     "Only the input and output rates above a long-context threshold are published. The cached rates in a `long_context` card are the standard cached rates scaled by that model's own input ratio, which is an inference and not a vendor figure.",
@@ -71,6 +71,22 @@
       "retrieved": "2026-09-06"
     },
     {
+      "id": "claude-opus-5-5",
+      "provider": "anthropic",
+      "family": "opus",
+      "aliases": ["opus", "claude-opus-5-5"],
+      "deliberation": ["low", "medium", "high", "xhigh", "max"],
+      "price": {"input": 4.0, "cache_read": 0.2, "cache_write": 5.0, "output": 20.0, "currency": "USD", "unit": "per_mtok"},
+      "long_context_threshold": null,
+      "long_context": null,
+      "reasoning_billed_as": "output",
+      "capability": 0.87,
+      "gateways": {"openrouter": "anthropic/claude-opus-5.5"},
+      "released": "2026-09-22",
+      "source_url": "https://openrouter.ai/anthropic/claude-opus-5.5",
+      "retrieved": "2026-09-23"
+    },
+    {
       "id": "claude-sonnet-5",
       "provider": "anthropic",
       "family": "sonnet",
@@ -131,6 +147,22 @@
       "retrieved": "2026-09-06"
     },
     {
+      "id": "gpt-6-sol",
+      "provider": "openai",
+      "family": "sol",
+      "aliases": ["sol", "gpt-6-sol"],
+      "deliberation": ["low", "medium", "high", "xhigh", "max"],
+      "price": {"input": 2.0, "cache_read": 0.2, "cache_write": 2.5, "output": 10.0, "currency": "USD", "unit": "per_mtok"},
+      "long_context_threshold": 272000,
+      "long_context": {"input": 4.0, "cache_read": 0.4, "cache_write": 5.0, "output": 15.0, "currency": "USD", "unit": "per_mtok"},
+      "reasoning_billed_as": "output",
+      "capability": 0.78,
+      "gateways": {"openrouter": "openai/gpt-6-sol"},
+      "released": "2026-09-22",
+      "source_url": "https://openrouter.ai/openai/gpt-6-sol",
+      "retrieved": "2026-09-23"
+    },
+    {
       "id": "gpt-5.6-terra",
       "provider": "openai",
       "family": "terra",
@@ -161,6 +193,22 @@
       "retrieved": "2026-09-06"
     },
     {
+      "id": "gpt-6-luna",
+      "provider": "openai",
+      "family": "luna",
+      "aliases": ["luna", "gpt-6-luna"],
+      "deliberation": ["low", "medium", "high", "xhigh", "max"],
+      "price": {"input": 0.1, "cache_read": 0.01, "cache_write": 0.125, "output": 0.5, "currency": "USD", "unit": "per_mtok"},
+      "long_context_threshold": 272000,
+      "long_context": {"input": 0.2, "cache_read": 0.02, "cache_write": 0.25, "output": 0.75, "currency": "USD", "unit": "per_mtok"},
+      "reasoning_billed_as": "output",
+      "capability": 0.42,
+      "gateways": {"openrouter": "openai/gpt-6-luna"},
+      "released": "2026-09-22",
+      "source_url": "https://openrouter.ai/openai/gpt-6-luna",
+      "retrieved": "2026-09-23"
+    },
+    {
       "id": "grok-4.6",
       "provider": "spacexai",
       "family": "grok",
@@ -175,6 +223,22 @@
       "released": null,
       "source_url": "https://docs.x.ai/developers/models/grok-4.6",
       "retrieved": "2026-09-06"
+    },
+    {
+      "id": "grok-4.7",
+      "provider": "spacexai",
+      "family": "grok",
+      "aliases": ["grok", "grok-4.7", "x-ai/grok-4.7"],
+      "deliberation": ["low", "medium", "high", "xhigh"],
+      "price": {"input": 1.6, "cache_read": 0.4, "cache_write": null, "output": 4.8, "currency": "USD", "unit": "per_mtok"},
+      "long_context_threshold": 200000,
+      "long_context": {"input": 3.2, "cache_read": 0.8, "cache_write": null, "output": 9.6, "currency": "USD", "unit": "per_mtok"},
+      "reasoning_billed_as": "output",
+      "capability": 0.7,
+      "gateways": {"openrouter": "x-ai/grok-4.7"},
+      "released": "2026-09-21",
+      "source_url": "https://openrouter.ai/x-ai/grok-4.7",
+      "retrieved": "2026-09-23"
     }
   ]
 }

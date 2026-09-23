@@ -160,7 +160,7 @@ def test_opencode_starts_whatever_the_profile_says_it_fronts() -> None:
     assert plan.how == "bridge-command"
     assert plan.command is not None
     assert plan.command[:2] == ("opencode", "run")
-    assert "spacexai/grok-4.6" in plan.command
+    assert "spacexai/grok-4.7" in plan.command
 
 
 def _gateway_profile(gateway: str | None) -> Any:
@@ -187,8 +187,8 @@ def _after(command: tuple[str, ...], flag: str) -> str:
 def test_opencode_names_the_model_the_way_the_channel_s_gateway_routes_it() -> None:
     """The gateway's own slug is a catalogue fact, never the provider's name.
 
-    `spacexai/grok-4.6` is a route this machine has no provider for: the one it
-    is configured for is `openrouter/x-ai/grok-4.6`, and the slug after the
+    `spacexai/grok-4.7` is a route this machine has no provider for: the one it
+    is configured for is `openrouter/x-ai/grok-4.7`, and the slug after the
     gateway's name is not derivable from the catalogue's provider by string
     surgery (issue #308).
     """
@@ -201,7 +201,7 @@ def test_opencode_names_the_model_the_way_the_channel_s_gateway_routes_it() -> N
     assert plan.command is not None
     assert plan.command[:2] == ("opencode", "run")
     assert _after(plan.command, "--dir") == "/repo"
-    assert _after(plan.command, "--model") == "openrouter/x-ai/grok-4.6"
+    assert _after(plan.command, "--model") == "openrouter/x-ai/grok-4.7"
     assert _after(plan.command, "--variant") == "high"
     assert "--cwd" not in plan.command
 
@@ -232,7 +232,7 @@ def test_a_model_with_no_slug_for_the_gateway_is_inherited_rather_than_guessed()
     assert plan.how == "inherit"
     assert plan.command is None
     assert plan.note is not None
-    assert "grok-4.6" in plan.note
+    assert "grok-4.7" in plan.note
     assert "openrouter" in plan.note
     assert "no slug" in plan.note
 
@@ -243,7 +243,7 @@ def test_an_opencode_channel_without_a_gateway_plans_provider_and_id() -> None:
     plan = launch.plan(GROK, "low", "process", _gateway_profile(None), CAT, repo=None)
 
     assert plan.command is not None
-    assert _after(plan.command, "--model") == "spacexai/grok-4.6"
+    assert _after(plan.command, "--model") == "spacexai/grok-4.7"
     assert _after(plan.command, "--variant") == "low"
 
 
@@ -271,7 +271,7 @@ def test_opencode_with_no_channel_at_all_plans_provider_and_id() -> None:
     plan = launch.plan(GROK, "low", "process", profile, CAT, repo=None)
 
     assert plan.command is not None
-    assert _after(plan.command, "--model") == "spacexai/grok-4.6"
+    assert _after(plan.command, "--model") == "spacexai/grok-4.7"
 
 
 def test_the_definition_matrix_covers_every_anthropic_point_and_nothing_else() -> None:
@@ -302,8 +302,8 @@ def test_the_definition_matrix_covers_every_anthropic_point_and_nothing_else() -
     )
     assert frontmatter == {
         "name": "kntnt-opus-high",
-        "description": "Delegated work on claude-opus-5 at high deliberation.",
-        "model": "claude-opus-5",
+        "description": "Delegated work on claude-opus-5-5 at high deliberation.",
+        "model": "claude-opus-5-5",
         "effort": "high",
     }
     header = body.split("---\n")[2]

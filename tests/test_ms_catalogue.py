@@ -294,7 +294,7 @@ def test_the_shipped_seed_parses_into_the_models_it_names() -> None:
 
     cat = catalogue.load(Path("/nowhere"), SHIPPED)
 
-    assert len(cat.models) == 9
+    assert len(cat.models) == 13
     assert all(
         level in catalogue.LEVELS
         for model in cat.models
@@ -567,14 +567,25 @@ def test_gateways_and_capability_are_the_fields_the_seed_keeps() -> None:
     assert catalogue.SEEDED_FIELDS == ("capability", "gateways")
 
 
-def test_the_shipped_seed_carries_the_openrouter_slug_for_grok_alone() -> None:
-    """The one gateway route this collection ships knowing is Grok's through OpenRouter."""
+def test_the_shipped_seed_carries_the_openrouter_slugs_the_pass_matched() -> None:
+    """The gateway routes this collection ships knowing are all through OpenRouter.
+
+    The four releases the seed learned on 2026-09-23 carry the slug the
+    catalogue pass matched them by that day, beside the one Grok 4.6 shipped
+    with, a slug being on no page the provider publishes (issue #418).
+    """
 
     cat = catalogue.load(Path("/nowhere"), SHIPPED)
 
     slugged = {model.id: model.gateways for model in cat.models if model.gateways}
 
-    assert slugged == {"grok-4.6": (("openrouter", "x-ai/grok-4.6"),)}
+    assert slugged == {
+        "claude-opus-5-5": (("openrouter", "anthropic/claude-opus-5.5"),),
+        "gpt-6-sol": (("openrouter", "openai/gpt-6-sol"),),
+        "gpt-6-luna": (("openrouter", "openai/gpt-6-luna"),),
+        "grok-4.6": (("openrouter", "x-ai/grok-4.6"),),
+        "grok-4.7": (("openrouter", "x-ai/grok-4.7"),),
+    }
 
 
 def _seed_entry(identifier: str) -> dict[str, Any]:

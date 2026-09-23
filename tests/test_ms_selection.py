@@ -55,13 +55,16 @@ BAND: str = "the evidence cannot tell from"
 # asserting a Trial and one asserting there was none read the same string.
 TRIAL: str = "trial"
 
-# The exploration as it stood at the commit this ticket's work starts from,
-# digested over `SEEDS` seeds of the `_boundary` fixture by `_replayed`. A
-# Trial is settled before the generator is touched, so a pool owing none has to
-# draw exactly what it drew before, and this is the sweep that says it did. The
-# base commit is named in this ticket's commit message.
+# The exploration as it stood before the Trial existed, digested over `SEEDS`
+# seeds of the `_boundary` fixture by `_replayed`. A Trial is settled before
+# the generator is touched, so a pool owing none has to draw exactly what it
+# drew before, and this is the sweep that says it did. It was replayed with the
+# scripts of `a163bf65`, the last `main` without the Trial, over the seed and
+# the fixture as issue #418 left them, Opus 5.5 having replaced Opus 5 in both;
+# the same replay over the seed and fixture before it gives the digest #374
+# recorded, `5ac25d3f`.
 EXPLORATION_AT_BASE: str = (
-    "5ac25d3fadd3a2c5d68aee6412b727e969ef50f967be2302c5bf891c52c47b07"
+    "5d506500c0f6f8bc689d36b16f1866457ea0efb34c577d875c42aa3bc41c3960"
 )
 
 # The retired rule's own sentences, whitespace-collapsed before matching so
@@ -188,10 +191,11 @@ def _answer(capsys: pytest.CaptureFixture[str], *flags: str) -> dict[str, Any]:
 def _profile(data_dir: Path, **overrides: Any) -> None:
     """Write a profile that chooses Anthropic and pays for it in Claude Code.
 
-    Every model Anthropic offers is therefore eligible, and every one of them
-    is a candidate too: each seeded Anthropic family holds one release, so the
-    rule keeping only a family's newest release takes nothing out of this pool
-    until a fixture adds a second release to one of them. A test that needs a
+    Every model Anthropic offers is therefore eligible, and the newest release
+    of each of its families is a candidate: the seed holds Opus at two
+    releases, so the rule keeping only a family's newest release leaves
+    `claude-opus-5` out of this pool, and takes nothing else out of it until a
+    fixture adds a second release to another family. A test that needs a
     smaller pool shapes it by the makers it chooses or by a lock, never by a
     list of models, which a profile no longer carries.
     """
@@ -260,16 +264,17 @@ def _clearing(data_dir: Path) -> None:
     """Write a store whose cheapest clearing point is not its likeliest.
 
     Sonnet at `high` clears the floor at about 0.87 for USD 1.50, Opus clears
-    it everywhere and reads near 0.98 at `max` for four times the money, and
-    the fastest point that clears is Opus at `low` — three different answers
-    to three different questions off one store. Fable and Haiku, the other two
-    models Anthropic offers, have failed the work, so neither is a fourth.
+    it everywhere and reads near 0.98 at `max` for about three times the money,
+    and the fastest point that clears is Opus at `low` — three different
+    answers to three different questions off one store. Fable and Haiku, the
+    other two models in the pool, have failed the work, so neither is a
+    fourth.
     """
 
     _profile(data_dir)
     _store(
         data_dir,
-        ("implement", "claude-opus-5", "low", 1.0, 20),
+        ("implement", "claude-opus-5-5", "low", 1.0, 20),
         ("implement", "claude-sonnet-5", "high", 1.0, 30),
         ("implement", "claude-sonnet-5", "low", 0.0, 10),
         ("implement", FABLE, "high", 0.0, 10),
@@ -291,8 +296,8 @@ def _boundary(data_dir: Path) -> None:
     _profile(data_dir)
     _store(
         data_dir,
-        ("implement", "claude-opus-5", "xhigh", 1.0, 20),
-        ("implement", "claude-opus-5", "low", 0.0, 10),
+        ("implement", "claude-opus-5-5", "xhigh", 1.0, 20),
+        ("implement", "claude-opus-5-5", "low", 0.0, 10),
         ("implement", "claude-sonnet-5", "high", 0.0, 10),
         ("implement", FABLE, "xhigh", 0.0, 10),
         ("implement", HAIKU, None, 0.0, 10),
@@ -302,15 +307,15 @@ def _boundary(data_dir: Path) -> None:
 def _under(data_dir: Path) -> None:
     """Write a store no point of which clears the floor.
 
-    Every model Anthropic offers has rows here, and only Opus at `high` ever
+    Every model in the pool has rows here, and only Opus at `high` ever
     finished, so the prior of an untried model is not left to clear it.
     """
 
     _profile(data_dir)
     _store(
         data_dir,
-        ("implement", "claude-opus-5", "low", 0.0, 8),
-        ("implement", "claude-opus-5", "high", 1.0, 8),
+        ("implement", "claude-opus-5-5", "low", 0.0, 8),
+        ("implement", "claude-opus-5-5", "high", 1.0, 8),
         ("implement", "claude-sonnet-5", "high", 0.0, 8),
         ("implement", FABLE, "high", 0.0, 8),
         ("implement", HAIKU, None, 0.0, 8),
@@ -371,14 +376,18 @@ def _over_seeds(
 # answer, so that `_named_in` reads the whole pool rather than its top three.
 EVERY: str = "--n=20"
 
-# Every model each maker in the shipped catalogue offers. Named here rather
-# than read off the catalogue, because a test that took its pool from the data
-# under test would pass just as well on a catalogue that had lost a model.
+# Every model each maker in the shipped catalogue offers as a candidate, which
+# is the newest release of each family it lists: the seed goes on holding
+# `claude-opus-5`, `gpt-5.6-sol` and `gpt-5.6-luna` beside the releases that
+# replaced them, and none of the three is ever in a pool (issue #418). Named
+# here rather than read off the catalogue, because a test that took its pool
+# from the data under test would pass just as well on a catalogue that had
+# lost a model.
 ANTHROPIC: frozenset[str] = frozenset(
-    {"claude-fable-5-1", "claude-opus-5", "claude-sonnet-5", HAIKU}
+    {"claude-fable-5-1", "claude-opus-5-5", "claude-sonnet-5", HAIKU}
 )
 OPENAI: frozenset[str] = frozenset(
-    {"gpt-6-astra", "gpt-5.6-sol", "gpt-5.6-terra", "gpt-5.6-luna"}
+    {"gpt-6-astra", "gpt-6-sol", "gpt-5.6-terra", "gpt-6-luna"}
 )
 
 
@@ -471,7 +480,7 @@ def test_the_shipped_priors_send_easy_work_cheap_and_hard_work_deep(
     _profile(tmp_path)
     seat = [
         "--harness=claude-code",
-        "--seat=claude-opus-5@xhigh",
+        "--seat=claude-opus-5-5@xhigh",
         "--stakes=high",
         f"--data={tmp_path}",
     ]
@@ -481,7 +490,7 @@ def test_the_shipped_priors_send_easy_work_cheap_and_hard_work_deep(
 
     assert mechanical["model"] != design["model"]
     assert mechanical["expected"]["cost_usd"] < design["expected"]["cost_usd"]
-    assert design["model"] in ("claude-opus-5", "claude-fable-5-1")
+    assert design["model"] in ("claude-opus-5-5", "claude-fable-5-1")
     assert design["deliberation"] in ("high", "xhigh", "max")
     assert design["expected"]["cost_usd"] < 10.0
     assert mechanical["basis"] == "prior"
@@ -548,7 +557,7 @@ def test_a_deliberation_lock_no_candidate_supports_falls_to_the_nearest(
         "--scope=all",
     )
 
-    assert answer["model"] == "grok-4.6"
+    assert answer["model"] == "grok-4.7"
     assert answer["deliberation"] == "xhigh"
     assert "max" in answer["note"]
 
@@ -711,8 +720,8 @@ def test_the_answer_is_the_cheapest_point_that_clears_the_floor(
     assert (answer["model"], answer["deliberation"]) == ("claude-sonnet-5", "high")
     assert answer["expected"]["p_success"] >= select.FLOOR
     beaten = {row["model"]: row for row in answer["alternatives"]}
-    assert beaten["claude-opus-5"]["p_success"] > answer["expected"]["p_success"]
-    assert beaten["claude-opus-5"]["cost_usd"] > answer["expected"]["cost_usd"]
+    assert beaten["claude-opus-5-5"]["p_success"] > answer["expected"]["p_success"]
+    assert beaten["claude-opus-5-5"]["cost_usd"] > answer["expected"]["cost_usd"]
 
 
 def test_where_nothing_clears_the_floor_the_band_decides(
@@ -727,7 +736,7 @@ def test_where_nothing_clears_the_floor_the_band_decides(
     )
 
     assert answer["explored"] is None
-    assert (answer["model"], answer["deliberation"]) == ("claude-opus-5", "high")
+    assert (answer["model"], answer["deliberation"]) == ("claude-opus-5-5", "high")
     assert answer["expected"]["p_success"] < select.FLOOR
     for row in answer["alternatives"]:
         assert row["p_success"] <= answer["expected"]["p_success"]
@@ -745,7 +754,7 @@ def test_a_run_ordered_on_time_takes_the_fastest_point_that_clears_the_floor(
     cheapest = _answer(capsys, *flags)
 
     assert fastest["explored"] is None
-    assert (fastest["model"], fastest["deliberation"]) == ("claude-opus-5", "low")
+    assert (fastest["model"], fastest["deliberation"]) == ("claude-opus-5-5", "low")
     assert fastest["expected"]["p_success"] >= select.FLOOR
     assert fastest["expected"]["seconds"] < cheapest["expected"]["seconds"]
     assert fastest["expected"]["cost_usd"] > cheapest["expected"]["cost_usd"]
@@ -756,7 +765,7 @@ def _finishing(data_dir: Path) -> None:
 
     Opus at `low` and at `medium` both clear the floor on rows of their own.
     `low` is the cheaper attempt, by the money and by the clock, and it finishes
-    about 0.82 of the time; `medium` costs about 1.14 times as much and takes
+    about 0.82 of the time; `medium` costs about 1.15 times as much and takes
     about 1.11 times as long, and finishes about 0.98 of the time. That gap in
     chance is wider than the gap in price, so `medium` is the cheaper finished
     job on both counts.
@@ -765,8 +774,8 @@ def _finishing(data_dir: Path) -> None:
     _profile(data_dir)
     _store(
         data_dir,
-        ("implement", "claude-opus-5", "low", 0.8, 40),
-        ("implement", "claude-opus-5", "medium", 1.0, 40),
+        ("implement", "claude-opus-5-5", "low", 0.8, 40),
+        ("implement", "claude-opus-5-5", "medium", 1.0, 40),
     )
 
 
@@ -806,8 +815,8 @@ def test_the_answer_is_the_point_that_finishes_the_job_for_the_least(
     flags = (*LIMITED, f"--data={tmp_path}", "--kind=implement", "--seed=0")
 
     answer = _answer(capsys, *flags, f"--objective={objective}")
-    cheap = _point(capsys, flags, "claude-opus-5", "low")
-    sure = _point(capsys, flags, "claude-opus-5", "medium")
+    cheap = _point(capsys, flags, "claude-opus-5-5", "low")
+    sure = _point(capsys, flags, "claude-opus-5-5", "medium")
 
     assert select.FLOOR <= cheap["expected"]["p_success"] < 0.85
     assert sure["expected"]["p_success"] > 0.95
@@ -815,7 +824,7 @@ def test_the_answer_is_the_point_that_finishes_the_job_for_the_least(
     total = f"per_success_{attempt}"
     assert sure["expected"][total] < cheap["expected"][total]
     assert answer["explored"] is None
-    assert (answer["model"], answer["deliberation"]) == ("claude-opus-5", "medium")
+    assert (answer["model"], answer["deliberation"]) == ("claude-opus-5-5", "medium")
     assert answer["expected"][total] == sure["expected"][total]
 
 
@@ -875,7 +884,7 @@ def test_an_inheriting_answer_carries_no_total(
 ) -> None:
     """Nothing was priced, so nothing is divided, and the members are still there."""
 
-    answer = _answer(capsys, f"--data={tmp_path}", "--seat=claude-opus-5@xhigh")
+    answer = _answer(capsys, f"--data={tmp_path}", "--seat=claude-opus-5-5@xhigh")
 
     assert answer["basis"] == "inherit"
     assert answer["expected"]["per_success_cost_usd"] is None
@@ -921,7 +930,7 @@ def test_the_step_up_is_the_likelier_point_that_finishes_for_the_least(
     )
 
     assert "one step up" in (answer["note"] or "")
-    assert (answer["model"], answer["deliberation"]) == ("claude-opus-5", "medium")
+    assert (answer["model"], answer["deliberation"]) == ("claude-opus-5-5", "medium")
 
 
 def test_with_no_likelier_point_clearing_the_floor_the_step_is_read_per_success(
@@ -1037,8 +1046,8 @@ def _measured_beside_prior(data_dir: Path) -> None:
     _profile(data_dir)
     _store(
         data_dir,
-        ("mechanical", "claude-opus-5", "high", 1.0, 20),
-        ("mechanical", "claude-opus-5", "low", 0.0, 10),
+        ("mechanical", "claude-opus-5-5", "high", 1.0, 20),
+        ("mechanical", "claude-opus-5-5", "low", 0.0, 10),
     )
 
 
@@ -1062,8 +1071,8 @@ def _measured_beside_unowed_prior(data_dir: Path) -> None:
     _profile(data_dir)
     _store(
         data_dir,
-        ("mechanical", "claude-opus-5", "high", 1.0, 200),
-        ("mechanical", "claude-opus-5", "low", 0.0, 10),
+        ("mechanical", "claude-opus-5-5", "high", 1.0, 200),
+        ("mechanical", "claude-opus-5-5", "low", 0.0, 10),
         ("mechanical", FABLE, "high", 0.0, 3),
     )
 
@@ -1088,7 +1097,7 @@ def test_a_measured_point_that_clears_the_floor_outranks_a_cheaper_prior(
 
     assert plain
     for answer in plain:
-        assert (answer["model"], answer["deliberation"]) == ("claude-opus-5", "high")
+        assert (answer["model"], answer["deliberation"]) == ("claude-opus-5-5", "high")
         assert answer["basis"] == "measured"
 
 
@@ -1107,7 +1116,7 @@ def test_a_verdict_carried_from_a_harder_kind_does_not_outrank_a_measured_one(
     _store(
         tmp_path,
         ("design", "claude-sonnet-5", "high", 1.0, 20),
-        ("mechanical", "claude-opus-5", "high", 1.0, 20),
+        ("mechanical", "claude-opus-5-5", "high", 1.0, 20),
     )
 
     answer = _answer(
@@ -1125,7 +1134,7 @@ def test_a_verdict_carried_from_a_harder_kind_does_not_outrank_a_measured_one(
     assert carried["basis"] == "pooled"
     assert carried["expected"]["p_success"] >= select.FLOOR
     assert carried["expected"]["cost_usd"] < answer["expected"]["cost_usd"]
-    assert (answer["model"], answer["deliberation"]) == ("claude-opus-5", "high")
+    assert (answer["model"], answer["deliberation"]) == ("claude-opus-5-5", "high")
     assert answer["basis"] == "measured"
 
 
@@ -1142,7 +1151,7 @@ def test_where_no_measured_point_clears_the_floor_the_band_answers(
     """
 
     _profile(tmp_path)
-    _store(tmp_path, ("mechanical", "claude-opus-5", "high", 0.0, 10))
+    _store(tmp_path, ("mechanical", "claude-opus-5-5", "high", 0.0, 10))
 
     answer = _answer(
         capsys, *LIMITED, f"--data={tmp_path}", "--kind=mechanical", "--stakes=high"
@@ -1156,11 +1165,11 @@ def test_where_no_measured_point_clears_the_floor_the_band_answers(
 
     assert estimated["basis"] == "prior"
     assert estimated["expected"]["p_success"] >= select.FLOOR
-    assert (answer["model"], answer["deliberation"]) == ("claude-opus-5", "high")
+    assert (answer["model"], answer["deliberation"]) == ("claude-opus-5-5", "high")
     assert answer["basis"] == "measured"
     assert answer["expected"]["p_success"] < select.FLOOR
     assert BAND in (answer["note"] or "")
-    assert "claude-opus-5@high" in (answer["note"] or "")
+    assert "claude-opus-5-5@high" in (answer["note"] or "")
 
 
 def test_an_explored_answer_can_still_name_a_point_with_no_rows_of_its_own(
@@ -1187,7 +1196,7 @@ def test_the_alternatives_still_offer_the_point_nothing_has_measured(
         capsys, *LIMITED, f"--data={tmp_path}", "--kind=mechanical", "--stakes=high"
     )
 
-    assert answer["model"] == "claude-opus-5"
+    assert answer["model"] == "claude-opus-5-5"
     assert "claude-sonnet-5" in {row["model"] for row in answer["alternatives"]}
 
 
@@ -1208,10 +1217,10 @@ def test_the_step_up_prefers_a_measured_point_that_clears_the_floor(
         *LIMITED,
         f"--data={tmp_path}",
         "--kind=mechanical",
-        "--after=claude-opus-5@low",
+        "--after=claude-opus-5-5@low",
     )
 
-    assert (answer["model"], answer["deliberation"]) == ("claude-opus-5", "high")
+    assert (answer["model"], answer["deliberation"]) == ("claude-opus-5-5", "high")
     assert answer["basis"] == "measured"
     assert "one step up" in (answer["note"] or "")
 
@@ -1255,7 +1264,7 @@ def test_where_no_measured_point_steps_up_the_step_is_the_likelier_one_that_fini
     _profile(tmp_path)
     _store(
         tmp_path,
-        ("mechanical", "claude-opus-5", "low", 0.0, 10),
+        ("mechanical", "claude-opus-5-5", "low", 0.0, 10),
         ("mechanical", HAIKU, None, 0.0, 10),
     )
 
@@ -1264,7 +1273,7 @@ def test_where_no_measured_point_steps_up_the_step_is_the_likelier_one_that_fini
         *LIMITED,
         f"--data={tmp_path}",
         "--kind=mechanical",
-        "--after=claude-opus-5@low",
+        "--after=claude-opus-5-5@low",
     )
 
     assert (answer["model"], answer["deliberation"]) == ("claude-sonnet-5", "low")
@@ -1312,7 +1321,8 @@ def _ranking(
     of one model in the order the rule put them, and a test reading it would be
     reading a summary of the list rather than the list. The order itself is
     read here, through the same module the suite already imports and off the
-    same pool the entry point builds.
+    same pool the entry point builds — the newest release of each family
+    included, the seed holding two releases of several (issue #418).
     """
 
     catalogue = _module("catalogue")
@@ -1323,11 +1333,13 @@ def _ranking(
     profile = profiles.load(data_dir, cat)
     kinds = evidence.load_kinds(SKILL)
     estimator = evidence.Estimator(evidence.load(data_dir), cat, kinds)
-    pool = [
-        point
-        for point in select._pool(scope, cat, profile, None, harness, None, [])
-        if select._admitted(point.deliberation, select.DEFAULT_MAX_DELIBERATION)
-    ]
+    pool = select._newest_releases(
+        [
+            point
+            for point in select._pool(scope, cat, profile, None, harness, None, [])
+            if select._admitted(point.deliberation, select.DEFAULT_MAX_DELIBERATION)
+        ]
+    )
     scored = [
         select._score(
             point, kind, estimator, kinds, select._paid(profile, point, harness)
@@ -1378,8 +1390,8 @@ def _replay(data_dir: Path) -> None:
     """
 
     _profile(data_dir)
-    _store(data_dir, ("implement", "claude-opus-5", "high", 0.75, 20))
-    _timed(data_dir, "claude-opus-5", 600.0)
+    _store(data_dir, ("implement", "claude-opus-5-5", "high", 0.75, 20))
+    _timed(data_dir, "claude-opus-5-5", 600.0)
 
 
 def _cheapest_measured(data_dir: Path) -> None:
@@ -1408,13 +1420,13 @@ def _cheapest_measured(data_dir: Path) -> None:
     _bridged(data_dir)
     _store(
         data_dir,
-        ("implement", "claude-opus-5", "high", 0.75, 20),
-        *[("implement", "gpt-5.6-luna", level, 0.21, 20) for level in UNDER_CEILING],
+        ("implement", "claude-opus-5-5", "high", 0.75, 20),
+        *[("implement", "gpt-6-luna", level, 0.21, 20) for level in UNDER_CEILING],
         ("implement", FABLE, "high", 0.0, ENOUGH),
         ("implement", "gpt-6-astra", "high", 0.0, ENOUGH),
-        ("implement", "gpt-5.6-sol", "high", 0.0, ENOUGH),
+        ("implement", "gpt-6-sol", "high", 0.0, ENOUGH),
     )
-    _timed(data_dir, "gpt-5.6-luna", 200.0)
+    _timed(data_dir, "gpt-6-luna", 200.0)
 
 
 def _indistinguishable(data_dir: Path) -> None:
@@ -1430,7 +1442,7 @@ def _indistinguishable(data_dir: Path) -> None:
     _profile(data_dir)
     _store(
         data_dir,
-        ("implement", "claude-opus-5", "high", 0.75, 20),
+        ("implement", "claude-opus-5-5", "high", 0.75, 20),
         ("implement", "claude-sonnet-5", "high", 0.75, 20),
         ("implement", FABLE, "high", 0.1, 10),
     )
@@ -1490,7 +1502,7 @@ def test_the_estimate_that_won_the_replayed_case_is_tried_rather_than_answered(
 
     answer = _answer(capsys, *flags)
     untested = _point(capsys, flags, FABLE, "medium")
-    measured = _point(capsys, flags, "claude-opus-5", "high")
+    measured = _point(capsys, flags, "claude-opus-5-5", "high")
 
     assert untested["basis"] == "prior"
     assert untested["expected"]["p_success"] >= select.FLOOR
@@ -1501,7 +1513,7 @@ def test_the_estimate_that_won_the_replayed_case_is_tried_rather_than_answered(
     assert (answer["model"], answer["deliberation"]) == (FABLE, "high")
     assert answer["explored"] == TRIAL
     assert answer["basis"] == "prior"
-    assert "claude-opus-5@high" in (answer["note"] or "")
+    assert "claude-opus-5-5@high" in (answer["note"] or "")
 
 
 @pytest.mark.parametrize(
@@ -1535,32 +1547,32 @@ def test_the_cheapest_measured_point_is_left_outside_the_band(
     )
 
     answer = _answer(capsys, *flags)
-    cheap = _point(capsys, flags, "gpt-5.6-luna", "low")
+    cheap = _point(capsys, flags, "gpt-6-luna", "low")
     ranked = _ranking(tmp_path, "implement", objective, "callable")
 
     priced = [row for row in ranked if row.cost_usd is not None]
     lowest = min(priced, key=lambda row: select._per_success_cost(row) or 0.0)
     quickest = min(priced, key=select._per_success_seconds)
-    assert select._named(lowest.point) == "gpt-5.6-luna@low"
-    assert select._named(quickest.point) == "gpt-5.6-luna@low"
+    assert select._named(lowest.point) == "gpt-6-luna@low"
+    assert select._named(quickest.point) == "gpt-6-luna@low"
     assert cheap["basis"] == "measured"
     assert cheap["expected"]["p_success"] < 0.25
 
     assert answer["explored"] is None
-    assert (answer["model"], answer["deliberation"]) == ("claude-opus-5", "high")
+    assert (answer["model"], answer["deliberation"]) == ("claude-opus-5-5", "high")
     assert answer["basis"] == "measured"
     assert BAND in (answer["note"] or "")
-    assert "claude-opus-5@high" in (answer["note"] or "")
+    assert "claude-opus-5-5@high" in (answer["note"] or "")
     # The bound the band was drawn at is the named point's own, read off the
     # estimator through a locked call rather than off `confidence`, which is
     # always the answer's own tenth percentile and never the band's.
-    bound = _point(capsys, flags, "claude-opus-5", "high")["confidence"]
+    bound = _point(capsys, flags, "claude-opus-5-5", "high")["confidence"]
     assert cheap["expected"]["p_success"] < bound
 
 
 @pytest.mark.parametrize(
     ("objective", "chosen"),
-    (("cost", "claude-sonnet-5@high"), ("time", "claude-opus-5@high")),
+    (("cost", "claude-sonnet-5@high"), ("time", "claude-opus-5-5@high")),
 )
 def test_the_band_is_ordered_on_what_the_call_was_ranked_on(
     tmp_path: Path, capsys: pytest.CaptureFixture[str], objective: str, chosen: str
@@ -1629,13 +1641,13 @@ def test_the_ranked_order_is_the_band_then_the_rest_of_what_was_measured(
 
     assert _spelt(ranked) == [
         "claude-sonnet-5@high",
-        "claude-opus-5@high",
+        "claude-opus-5-5@high",
         "claude-fable-5-1@high",
-        "claude-opus-5@xhigh",
+        "claude-opus-5-5@xhigh",
         "claude-sonnet-5@xhigh",
-        "claude-opus-5@medium",
+        "claude-opus-5-5@medium",
         "claude-sonnet-5@medium",
-        "claude-opus-5@low",
+        "claude-opus-5-5@low",
         "claude-sonnet-5@low",
         "claude-fable-5-1@xhigh",
         "claude-fable-5-1@medium",
@@ -1666,10 +1678,10 @@ def test_the_band_is_drawn_over_the_rows_it_is_handed_and_nothing_else(
 
     whole = select._band(ranked)
     assert whole is not None
-    assert select._named(whole[0].point) == "claude-opus-5@high"
+    assert select._named(whole[0].point) == "claude-opus-5-5@high"
     assert whole[1] == whole[0].estimate.low
 
-    stepped = [row for row in ranked if row.point.model.id != "claude-opus-5"]
+    stepped = [row for row in ranked if row.point.model.id != "claude-opus-5-5"]
     narrower = select._band(stepped)
     assert narrower is not None
     assert select._named(narrower[0].point) == "claude-sonnet-5@high"
@@ -1691,13 +1703,13 @@ def test_the_band_breaks_a_tie_on_the_highest_mean_the_same_way_every_run(
     by_id = {model.id: model for model in cat.models}
     tied = [
         _made(by_id["claude-sonnet-5"], "high", mean=0.5, low=0.3, cost=2.0),
-        _made(by_id["claude-opus-5"], "high", mean=0.5, low=0.4, cost=1.0),
+        _made(by_id["claude-opus-5-5"], "high", mean=0.5, low=0.4, cost=1.0),
     ]
 
     for handed in (tied, list(reversed(tied))):
         found = select._band(handed)
         assert found is not None
-        assert found[0].point.model.id == "claude-opus-5"
+        assert found[0].point.model.id == "claude-opus-5-5"
         assert found[1] == 0.4
 
 
@@ -1791,7 +1803,7 @@ def test_the_band_decides_the_step_up_where_no_measured_point_clears_the_floor(
     assert "one step up" in (answer["note"] or "")
     assert (answer["model"], answer["deliberation"]) == ("claude-sonnet-5", "high")
     assert BAND in (answer["note"] or "")
-    assert "claude-opus-5@high" in (answer["note"] or "")
+    assert "claude-opus-5-5@high" in (answer["note"] or "")
 
 
 def test_the_band_note_is_written_once_in_one_answer(
@@ -1811,7 +1823,7 @@ def test_the_band_note_is_written_once_in_one_answer(
 
     assert note is not None
     assert note.count(BAND) == 1
-    assert "claude-opus-5@high" in note
+    assert "claude-opus-5-5@high" in note
 
 
 def test_a_band_of_one_still_says_that_the_band_decided(
@@ -1825,10 +1837,10 @@ def test_a_band_of_one_still_says_that_the_band_decided(
         capsys, *LIMITED, f"--data={tmp_path}", "--kind=implement", "--seed=0"
     )
 
-    assert (answer["model"], answer["deliberation"]) == ("claude-opus-5", "high")
+    assert (answer["model"], answer["deliberation"]) == ("claude-opus-5-5", "high")
     assert answer["basis"] == "measured"
     assert BAND in (answer["note"] or "")
-    assert "claude-opus-5@high" in (answer["note"] or "")
+    assert "claude-opus-5-5@high" in (answer["note"] or "")
 
 
 def test_no_band_line_where_a_measured_point_cleared_the_floor(
@@ -1888,7 +1900,7 @@ def test_the_judge_is_a_measured_reviewer_even_where_none_clears_the_floor(
     )
 
     answer = _answer(capsys, *grader)
-    prior = _answer(capsys, *grader, "--model=claude-opus-5", "--deliberation=high")
+    prior = _answer(capsys, *grader, "--model=claude-opus-5-5", "--deliberation=high")
     watched = _answer(capsys, *grader, f"--model={FABLE}", "--deliberation=high")
 
     assert prior["basis"] == "prior"
@@ -1949,12 +1961,12 @@ def test_a_profile_whose_makers_reach_nothing_inherits_the_callers_own_seat(
 
     _profile(tmp_path, makers=["openai"], channels=[])
 
-    answer = _answer(capsys, f"--data={tmp_path}", "--seat=claude-opus-5@xhigh")
+    answer = _answer(capsys, f"--data={tmp_path}", "--seat=claude-opus-5-5@xhigh")
 
     assert answer["ok"] is True
     assert answer["basis"] == "inherit"
     assert answer["launch"]["how"] == "inherit"
-    assert answer["model"] == "claude-opus-5"
+    assert answer["model"] == "claude-opus-5-5"
     assert answer["deliberation"] == "xhigh"
     assert answer["note"]
 
@@ -2096,7 +2108,7 @@ def test_a_lock_is_an_instruction_rather_than_a_boundary_to_try(
 
     locked = [
         _answer(capsys, *flags, lock, f"--seed={seed}")
-        for lock in ("--model=claude-opus-5", "--deliberation=xhigh")
+        for lock in ("--model=claude-opus-5-5", "--deliberation=xhigh")
         for seed in range(DRAWS)
     ]
 
@@ -2113,7 +2125,7 @@ def test_an_escalation_after_a_failure_is_a_step_up_rather_than_an_experiment(
     flags = (*LIMITED, f"--data={tmp_path}", "--kind=implement")
 
     stepped = [
-        _answer(capsys, *flags, "--after=claude-opus-5@low", f"--seed={seed}")
+        _answer(capsys, *flags, "--after=claude-opus-5-5@low", f"--seed={seed}")
         for seed in range(DRAWS)
     ]
 
@@ -2134,7 +2146,7 @@ def test_an_exploration_names_what_the_evidence_would_have_chosen(
     assert explored
     for answer in explored:
         assert "would have chosen" in answer["note"]
-        assert "claude-opus-5@xhigh" in answer["note"]
+        assert "claude-opus-5-5@xhigh" in answer["note"]
         assert answer["explored"] in answer["note"]
 
 
@@ -2211,15 +2223,15 @@ def _owing(data_dir: Path) -> None:
     that neither is owed a Trial, and low enough means that neither would be
     owed one anyway. Fable has no row for the kind at all, its prior reads
     about 0.994 — well above the band — and it finishes an attempt for about
-    1.06 against the answer's 0.67, so the one point owed a Trial here is also
+    1.06 against the answer's 0.46, so the one point owed a Trial here is also
     the dear one.
     """
 
     _profile(data_dir)
     _store(
         data_dir,
-        ("mechanical", "claude-opus-5", "high", 1.0, 20),
-        ("mechanical", "claude-opus-5", "low", 0.0, 10),
+        ("mechanical", "claude-opus-5-5", "high", 1.0, 20),
+        ("mechanical", "claude-opus-5-5", "low", 0.0, 10),
         ("mechanical", "claude-sonnet-5", "high", 0.0, 3),
         ("mechanical", HAIKU, None, 0.0, 3),
     )
@@ -2230,8 +2242,8 @@ def _settled(data_dir: Path, *extra: tuple[str, str, str | None, float, int]) ->
 
     _store(
         data_dir,
-        ("mechanical", "claude-opus-5", "high", 1.0, 20),
-        ("mechanical", "claude-opus-5", "low", 0.0, 10),
+        ("mechanical", "claude-opus-5-5", "high", 1.0, 20),
+        ("mechanical", "claude-opus-5-5", "low", 0.0, 10),
         ("mechanical", "claude-sonnet-5", "high", 0.0, 3),
         ("mechanical", HAIKU, None, 0.0, 3),
         *extra,
@@ -2291,8 +2303,8 @@ def test_a_model_with_no_rows_for_the_kind_is_tried_however_dear_it_is(
     a dearer one never, so a model the ranking shuts out of every plain answer
     has no route to the three rows that would let it be judged on its own
     (issue #374). The Trial is that route: no price cap is consulted, and here
-    the point tried finishes an attempt for more than half again what the
-    answer does.
+    the point tried finishes an attempt for more than twice what the answer
+    does.
     """
 
     _owing(tmp_path)
@@ -2300,14 +2312,14 @@ def test_a_model_with_no_rows_for_the_kind_is_tried_however_dear_it_is(
 
     answers = [_answer(capsys, *flags, f"--seed={seed}") for seed in range(DRAWS)]
     tried = _point(capsys, flags, FABLE, "high")
-    plain = _point(capsys, flags, "claude-opus-5", "high")
+    plain = _point(capsys, flags, "claude-opus-5-5", "high")
 
     assert tried["expected"]["cost_usd"] > plain["expected"]["cost_usd"]
     for answer in answers:
         assert (answer["model"], answer["deliberation"]) == (FABLE, "high")
         assert answer["explored"] == TRIAL
         assert answer["basis"] == "prior"
-        assert "claude-opus-5@high" in (answer["note"] or "")
+        assert "claude-opus-5-5@high" in (answer["note"] or "")
 
 
 def test_a_trial_takes_the_nearest_level_the_tried_model_supports(
@@ -2357,7 +2369,7 @@ def test_a_trial_ends_once_the_store_holds_enough_rows_for_the_kind(
 
     assert (short["model"], short["deliberation"]) == (FABLE, "high")
     assert short["explored"] == TRIAL
-    assert (full["model"], full["deliberation"]) == ("claude-opus-5", "high")
+    assert (full["model"], full["deliberation"]) == ("claude-opus-5-5", "high")
     assert full["explored"] is None
 
 
@@ -2390,7 +2402,7 @@ def test_rows_at_any_level_count_towards_the_kind_the_trial_is_owed_for(
     )
 
     assert spread["expected"]["runs"] == 1
-    assert (answer["model"], answer["deliberation"]) == ("claude-opus-5", "high")
+    assert (answer["model"], answer["deliberation"]) == ("claude-opus-5-5", "high")
     assert answer["explored"] is None
 
 
@@ -2414,8 +2426,8 @@ def test_a_model_below_the_band_is_left_to_the_downhill_exploration(
         _profile(data_dir)
         _store(
             data_dir,
-            ("mechanical", "claude-opus-5", "high", 1.0, rows),
-            ("mechanical", "claude-opus-5", "low", 0.0, 10),
+            ("mechanical", "claude-opus-5-5", "high", 1.0, rows),
+            ("mechanical", "claude-opus-5-5", "low", 0.0, 10),
             ("mechanical", FABLE, "high", 0.0, 3),
             ("mechanical", HAIKU, None, 0.0, 3),
         )
@@ -2432,7 +2444,7 @@ def test_a_model_below_the_band_is_left_to_the_downhill_exploration(
 
     assert drawn is not None
     assert sonnet.estimate.mean < drawn[1]
-    assert (quiet["model"], quiet["deliberation"]) == ("claude-opus-5", "high")
+    assert (quiet["model"], quiet["deliberation"]) == ("claude-opus-5-5", "high")
     assert quiet["explored"] is None
     assert (owed["model"], owed["deliberation"]) == ("claude-sonnet-5", "high")
     assert owed["explored"] == TRIAL
@@ -2480,8 +2492,8 @@ def test_a_trial_in_progress_is_taken_before_one_not_yet_begun(
     fresh = tmp_path / "fresh"
     begun = tmp_path / "begun"
     shared = (
-        ("mechanical", "claude-opus-5", "high", 1.0, 20),
-        ("mechanical", "claude-opus-5", "low", 0.0, 10),
+        ("mechanical", "claude-opus-5-5", "high", 1.0, 20),
+        ("mechanical", "claude-opus-5-5", "low", 0.0, 10),
         ("mechanical", HAIKU, None, 0.0, 3),
     )
     for data_dir in (fresh, begun):
@@ -2534,14 +2546,14 @@ def test_the_answers_own_model_is_never_the_model_owed_a_trial(
         100.0,
     )
     beside = _made(by_id["claude-sonnet-5"], "low", mean=0.9, low=0.5, cost=0.5)
-    measured = _made(by_id["claude-opus-5"], "high", mean=0.8, low=0.4, cost=2.0)
+    measured = _made(by_id["claude-opus-5-5"], "high", mean=0.8, low=0.4, cost=2.0)
     ranked = [first, beside, measured]
 
     owed = select._owed(ranked, ranked, "mechanical", estimator)
 
     assert estimator.rows_for_kind("mechanical", "claude-sonnet-5") == 0
     assert owed is not None
-    assert owed.point.model.id == "claude-opus-5"
+    assert owed.point.model.id == "claude-opus-5-5"
 
 
 @pytest.mark.parametrize(
@@ -2550,7 +2562,7 @@ def test_the_answers_own_model_is_never_the_model_owed_a_trial(
         ("--stakes=high",),
         ("--model=claude-sonnet-5",),
         ("--deliberation=low",),
-        ("--after=claude-opus-5@low",),
+        ("--after=claude-opus-5-5@low",),
     ),
 )
 def test_the_three_requests_that_are_never_explored_are_never_trials(
@@ -2660,9 +2672,9 @@ def test_a_point_the_pool_never_held_is_never_given_a_trial(
     ]
 
     assert wide["explored"] == TRIAL
-    assert wide["model"] == "grok-4.6"
+    assert wide["model"] == "grok-4.7"
     for answer in narrow:
-        assert "grok-4.6" not in _named_in(answer)
+        assert "grok-4.7" not in _named_in(answer)
         assert answer["explored"] != TRIAL
 
 
@@ -2761,7 +2773,7 @@ def test_a_trial_says_it_was_one_and_what_the_evidence_would_have_chosen(
     assert TRIAL in note
     assert f"{FABLE}@high" in note
     assert "would have chosen" in note
-    assert "claude-opus-5@high" in note
+    assert "claude-opus-5-5@high" in note
     assert f"{TRIAL} dimension" not in note
 
     assert ordinary
@@ -2975,7 +2987,7 @@ def test_the_ask_the_grader_makes_lands_on_a_judge_strong_enough_to_grade(
     answer = _answer(capsys, *asked)
 
     assert answer["expected"]["p_success"] >= select.FLOOR
-    assert answer["model"] != "gpt-5.6-luna"
+    assert answer["model"] != "gpt-6-luna"
     assert _named_in(_answer(capsys, *asked, EVERY)) == ANTHROPIC | OPENAI
 
 
@@ -3006,7 +3018,7 @@ def test_the_judge_is_a_measured_reviewer_where_one_clears_the_floor(
     )
 
     answer = _answer(capsys, *grader)
-    prior = _answer(capsys, *grader, "--model=claude-opus-5", "--deliberation=high")
+    prior = _answer(capsys, *grader, "--model=claude-opus-5-5", "--deliberation=high")
 
     assert prior["basis"] == "prior"
     assert prior["expected"]["p_success"] >= select.FLOOR
@@ -3135,12 +3147,12 @@ def test_a_machine_that_can_start_nothing_says_that_rather_than_naming_a_judge(
         f"--data={tmp_path}",
         "--harness=process",
         "--kind=review",
-        "--seat=claude-opus-5@high",
+        "--seat=claude-opus-5-5@high",
     )
 
     assert answer["launch"]["how"] == "inherit"
     assert answer["basis"] == "inherit"
-    assert answer["model"] == "claude-opus-5"
+    assert answer["model"] == "claude-opus-5-5"
     assert "nothing on this machine can start a process" in (answer["note"] or "")
 
 
@@ -3378,7 +3390,7 @@ def test_an_inheriting_answer_names_its_objective_and_where_it_came_from(
 ) -> None:
     """The answer that keeps the caller's seat carries both members as well."""
 
-    flags = (f"--data={tmp_path}", "--seat=claude-opus-5@xhigh")
+    flags = (f"--data={tmp_path}", "--seat=claude-opus-5-5@xhigh")
 
     defaulted = _answer(capsys, *flags)
     asked = _answer(capsys, *flags, "--objective=time")
@@ -3468,7 +3480,7 @@ def test_a_chosen_makers_models_are_candidates_and_an_unchosen_makers_are_not(
         capsys, f"--data={tmp_path}", "--harness=claude-code", "--kind=review", EVERY
     )
 
-    assert _named_in(answer) == ANTHROPIC | {"grok-4.6"}
+    assert _named_in(answer) == ANTHROPIC | {"grok-4.7"}
     assert not _named_in(answer) & OPENAI
 
 
@@ -3511,7 +3523,7 @@ def _stored_as(data_dir: Path, state: str) -> None:
     old = {
         "harnesses": ["claude-code"],
         "providers": ["anthropic"],
-        "models": ["claude-opus-5"],
+        "models": ["claude-opus-5-5"],
         "channels": [ANTHROPIC_CHANNEL],
     }
     shapes: dict[str, Any] = {
@@ -3562,13 +3574,13 @@ def test_without_a_valid_profile_an_unlocked_call_inherits_and_names_setup(
         capsys,
         f"--data={tmp_path}",
         "--harness=claude-code",
-        "--seat=claude-opus-5@xhigh",
+        "--seat=claude-opus-5-5@xhigh",
         f"--scope={scope}",
     )
 
     assert answer["basis"] == "inherit"
     assert answer["launch"]["how"] == "inherit"
-    assert (answer["model"], answer["deliberation"]) == ("claude-opus-5", "xhigh")
+    assert (answer["model"], answer["deliberation"]) == ("claude-opus-5-5", "xhigh")
     assert "/model-selector setup" in answer["note"]
 
 
@@ -3584,7 +3596,7 @@ def test_without_a_valid_profile_a_model_lock_is_still_answered(
         capsys,
         f"--data={tmp_path}",
         "--harness=claude-code",
-        "--seat=claude-opus-5@xhigh",
+        "--seat=claude-opus-5-5@xhigh",
         "--model=sonnet",
         "--deliberation=high",
     )
@@ -3603,7 +3615,7 @@ def test_without_a_valid_profile_a_deliberation_lock_alone_inherits(
         capsys,
         f"--data={tmp_path}",
         "--harness=claude-code",
-        "--seat=claude-opus-5@xhigh",
+        "--seat=claude-opus-5-5@xhigh",
         "--deliberation=high",
     )
 
@@ -3624,9 +3636,9 @@ def _deepest(data_dir: Path) -> None:
     _profile(data_dir)
     _store(
         data_dir,
-        ("implement", "claude-opus-5", "low", 0.0, 8),
-        ("implement", "claude-opus-5", "xhigh", 0.0, 8),
-        ("implement", "claude-opus-5", "max", 1.0, 8),
+        ("implement", "claude-opus-5-5", "low", 0.0, 8),
+        ("implement", "claude-opus-5-5", "xhigh", 0.0, 8),
+        ("implement", "claude-opus-5-5", "max", 1.0, 8),
         ("implement", "claude-sonnet-5", "high", 0.0, 8),
         ("implement", FABLE, "high", 0.0, 8),
         ("implement", HAIKU, None, 0.0, 8),
@@ -3684,7 +3696,7 @@ def test_a_step_up_from_xhigh_does_not_climb_past_the_deliberation_ceiling(
 ) -> None:
     """The only likelier point is `max`, so the ceiling is why there is no step.
 
-    Every other level of every model Anthropic offers has failed outright, and
+    Every other level of every model in the pool has failed outright, and
     Opus at `xhigh` finished some of the time, so without the ceiling the step
     up is `max` and nothing else.
     """
@@ -3692,11 +3704,11 @@ def test_a_step_up_from_xhigh_does_not_climb_past_the_deliberation_ceiling(
     _profile(tmp_path)
     _store(
         tmp_path,
-        ("implement", "claude-opus-5", "low", 0.0, 8),
-        ("implement", "claude-opus-5", "medium", 0.0, 8),
-        ("implement", "claude-opus-5", "high", 0.0, 8),
-        ("implement", "claude-opus-5", "xhigh", 0.6, 20),
-        ("implement", "claude-opus-5", "max", 1.0, 20),
+        ("implement", "claude-opus-5-5", "low", 0.0, 8),
+        ("implement", "claude-opus-5-5", "medium", 0.0, 8),
+        ("implement", "claude-opus-5-5", "high", 0.0, 8),
+        ("implement", "claude-opus-5-5", "xhigh", 0.6, 20),
+        ("implement", "claude-opus-5-5", "max", 1.0, 20),
         *(
             ("implement", model, level, 0.0, 8)
             for model in ("claude-sonnet-5", FABLE)
@@ -3708,21 +3720,23 @@ def test_a_step_up_from_xhigh_does_not_climb_past_the_deliberation_ceiling(
         capsys,
         *LIMITED,
         f"--data={tmp_path}",
-        "--after=claude-opus-5@xhigh",
+        "--after=claude-opus-5-5@xhigh",
         "--max-deliberation=max",
     )
-    assert (free["model"], free["deliberation"]) == ("claude-opus-5", "max")
+    assert (free["model"], free["deliberation"]) == ("claude-opus-5-5", "max")
 
     answer = _answer(
         capsys,
         *LIMITED,
         f"--data={tmp_path}",
         EVERY,
-        "--after=claude-opus-5@xhigh",
+        "--after=claude-opus-5-5@xhigh",
     )
 
     assert "max" not in _levels_named(answer)
-    assert "deliberation ceiling 'xhigh' ruled out claude-opus-5@max" in answer["note"]
+    assert (
+        "deliberation ceiling 'xhigh' ruled out claude-opus-5-5@max" in answer["note"]
+    )
 
 
 def test_a_ceiling_at_max_admits_the_whole_ladder_and_a_lower_one_narrows_it(
@@ -3736,7 +3750,7 @@ def test_a_ceiling_at_max_admits_the_whole_ladder_and_a_lower_one_narrows_it(
     opened = _answer(capsys, *flags, "--max-deliberation=max")
     lowered = _answer(capsys, *flags, "--max-deliberation=high")
 
-    assert (opened["model"], opened["deliberation"]) == ("claude-opus-5", "max")
+    assert (opened["model"], opened["deliberation"]) == ("claude-opus-5-5", "max")
     assert "deliberation ceiling" not in (opened["note"] or "")
     assert not {"xhigh", "max"} & _levels_named(lowered)
     assert "deliberation ceiling 'high'" in lowered["note"]
@@ -3772,11 +3786,11 @@ def test_a_deliberation_lock_at_max_lifts_the_ceiling_and_says_so(
         capsys,
         *LIMITED,
         f"--data={tmp_path}",
-        "--model=claude-opus-5",
+        "--model=claude-opus-5-5",
         "--deliberation=max",
     )
 
-    assert (answer["model"], answer["deliberation"]) == ("claude-opus-5", "max")
+    assert (answer["model"], answer["deliberation"]) == ("claude-opus-5-5", "max")
     assert (
         "deliberation lock 'max' lifted the deliberation ceiling 'xhigh'"
         in answer["note"]
@@ -3848,17 +3862,17 @@ def test_a_model_lock_alone_is_still_held_to_the_ceiling(
     admits every level of the model it names — `max` among them.
     """
 
-    _store(tmp_path, ("implement", "claude-opus-5", "max", 1.0, 8))
+    _store(tmp_path, ("implement", "claude-opus-5-5", "max", 1.0, 8))
 
     answer = _answer(
         capsys,
         f"--data={tmp_path}",
         "--harness=claude-code",
-        "--model=claude-opus-5",
+        "--model=claude-opus-5-5",
     )
 
     assert answer["basis"] != "inherit"
-    assert answer["model"] == "claude-opus-5"
+    assert answer["model"] == "claude-opus-5-5"
     assert answer["deliberation"] != "max"
 
 
@@ -3892,12 +3906,12 @@ def test_a_ceiling_that_empties_the_pool_inherits_and_names_the_ceiling(
         capsys,
         f"--data={tmp_path}",
         "--harness=claude-code",
-        "--seat=claude-opus-5@high",
+        "--seat=claude-opus-5-5@high",
         "--model=test-gapped",
     )
 
     assert answer["launch"]["how"] == "inherit"
-    assert (answer["model"], answer["deliberation"]) == ("claude-opus-5", "high")
+    assert (answer["model"], answer["deliberation"]) == ("claude-opus-5-5", "high")
     assert "deliberation ceiling 'xhigh' admits no candidate" in answer["note"]
 
 
@@ -4096,9 +4110,9 @@ def test_a_locked_model_is_answered_though_its_channel_is_held_back(
     asked = _reaching_both(tmp_path, monkeypatch)
     _window(elsewhere, CODEX, used=95.0, elapsed=0.5)
 
-    answer = _answer(capsys, *asked, "--model=gpt-5.6-luna")
+    answer = _answer(capsys, *asked, "--model=gpt-6-luna")
 
-    assert answer["model"] == "gpt-5.6-luna"
+    assert answer["model"] == "gpt-6-luna"
     assert "quota guard" not in (answer["note"] or "")
 
 
@@ -4115,7 +4129,7 @@ def test_the_note_names_the_guard_and_the_point_it_ruled_out(
     answer this call would have given with every channel admitted.
     """
 
-    measured = ("implement", "gpt-5.6-luna", "low", 1.0, 20)
+    measured = ("implement", "gpt-6-luna", "low", 1.0, 20)
     asked = _reaching_both(tmp_path, monkeypatch, measured)
 
     # The same call, first with every channel admitted: what the guard has to
@@ -4212,12 +4226,15 @@ def test_no_figure_is_no_guard_and_is_said_nowhere(
 
 # --- Only the newest release of a family is a candidate ----------------------
 
-# The maker whose seeded catalogue holds exactly one model, so that a profile
+# The maker whose seeded catalogue holds exactly one family, so that a profile
 # choosing it alone puts one family in the pool and the releases a fixture adds
-# to it are the whole of what is ranked. Its seeded release carries no date,
-# which makes it the undated half of the tie the rule has to settle as well.
+# to it, with the two it ships, are the whole of what is ranked. Its older
+# seeded release carries no date, which makes it the undated half of the tie
+# the rule has to settle as well. Its newer one is dated, so every release a
+# fixture adds here is dated after it, in 2027 (issue #418).
 XAI: str = "spacexai"
 SEEDED_GROK: str = "grok-4.6"
+NEWEST_SEEDED_GROK: str = "grok-4.7"
 
 # The levels the seeded Grok supports, so that a release a fixture adds sits on
 # the same ladder rather than differing from it by accident.
@@ -4281,14 +4298,15 @@ def _release(
     }
 
 
-def _three_releases(data_dir: Path) -> None:
-    """Write the family at three releases, every one of them admitted.
+def _four_releases(data_dir: Path) -> None:
+    """Write the family at four releases, every one of them admitted.
 
-    The seeded `grok-4.6` carries no date, and the two added ones do, so the
-    newest is unambiguous and the oldest is the undated case at the same time.
+    The seeded `grok-4.6` carries no date, the seeded `grok-4.7` does, and the
+    two added ones are dated after it, so the newest is unambiguous and the
+    oldest is the undated case at the same time.
     """
 
-    _grok(data_dir, _release("grok-5", "2026-02-01"), _release("grok-6", "2026-08-01"))
+    _grok(data_dir, _release("grok-5", "2027-02-01"), _release("grok-6", "2027-08-01"))
 
 
 def test_the_answer_is_the_newest_release_of_the_family(
@@ -4296,7 +4314,7 @@ def test_the_answer_is_the_newest_release_of_the_family(
 ) -> None:
     """A maker that goes on listing every release it ever shipped offers one."""
 
-    _three_releases(tmp_path)
+    _four_releases(tmp_path)
 
     answer = _answer(capsys, f"--data={tmp_path}", *GROK_ASKED)
 
@@ -4312,7 +4330,7 @@ def test_no_release_a_newer_one_replaced_is_offered_beside_the_answer(
     older releases and merely ranked the newest above them.
     """
 
-    _three_releases(tmp_path)
+    _four_releases(tmp_path)
 
     answer = _answer(capsys, f"--data={tmp_path}", *GROK_ASKED)
 
@@ -4329,7 +4347,7 @@ def test_no_exploration_ever_names_a_release_a_newer_one_replaced(
     row about a replaced release is a row nothing will ever read.
     """
 
-    _three_releases(tmp_path)
+    _four_releases(tmp_path)
 
     answers = [
         _answer(
@@ -4351,7 +4369,7 @@ def test_a_step_up_after_a_failure_never_names_a_release_a_newer_one_replaced(
 ) -> None:
     """The escalation is answered from the same pool, so it holds one release."""
 
-    _three_releases(tmp_path)
+    _four_releases(tmp_path)
 
     answer = _answer(
         capsys,
@@ -4377,8 +4395,8 @@ def test_where_the_newest_release_has_no_way_in_the_next_one_stands_for_the_fami
 
     _grok(
         tmp_path,
-        _release("grok-5", "2026-02-01"),
-        _release("grok-6", "2026-08-01", gateways={}),
+        _release("grok-5", "2027-02-01"),
+        _release("grok-6", "2027-08-01", gateways={}),
     )
 
     answer = _answer(capsys, f"--data={tmp_path}", *GROK_ASKED)
@@ -4397,11 +4415,11 @@ def test_where_the_newest_release_is_above_the_ceiling_the_family_still_stands(
     applied before the ceiling rather than after it.
     """
 
-    _grok(tmp_path, _release("grok-7", "2026-08-01", levels=("max",)))
+    _grok(tmp_path, _release("grok-7", "2027-08-01", levels=("max",)))
 
     answer = _answer(capsys, f"--data={tmp_path}", *GROK_ASKED)
 
-    assert answer["model"] == SEEDED_GROK
+    assert answer["model"] == NEWEST_SEEDED_GROK
     assert answer["launch"]["how"] != "inherit"
 
 
@@ -4410,7 +4428,7 @@ def test_a_dated_release_beats_an_undated_one(
 ) -> None:
     """Most seeded entries carry no date, so the undated case is the common one."""
 
-    _grok(tmp_path, _release("grok-5", "2026-02-01"))
+    _grok(tmp_path, _release("grok-5", "2027-02-01"))
 
     answer = _answer(capsys, f"--data={tmp_path}", *GROK_ASKED)
 
@@ -4428,8 +4446,8 @@ def test_two_releases_dated_the_same_day_resolve_to_the_smaller_id(
 
     _grok(
         tmp_path,
-        _release("grok-7.0", "2026-05-01"),
-        _release("grok-7.1", "2026-05-01"),
+        _release("grok-7.0", "2027-05-01"),
+        _release("grok-7.1", "2027-05-01"),
     )
 
     answer = _answer(capsys, f"--data={tmp_path}", *GROK_ASKED)
@@ -4442,8 +4460,8 @@ def test_the_release_chosen_never_depends_on_the_order_the_catalogue_was_read_in
 ) -> None:
     """Two fields decide it, so the same catalogue in either order decides alike."""
 
-    first = _release("grok-7.0", "2026-05-01")
-    second = _release("grok-7.1", "2026-05-01")
+    first = _release("grok-7.0", "2027-05-01")
+    second = _release("grok-7.1", "2027-05-01")
     ascending, descending = tmp_path / "ascending", tmp_path / "descending"
     _grok(ascending, first, second)
     _grok(descending, second, first)
@@ -4466,8 +4484,8 @@ def test_a_family_alias_and_an_unlocked_call_name_the_same_release_on_a_tie(
 
     _grok(
         tmp_path,
-        _release("grok-7.0", "2026-05-01"),
-        _release("grok-7.1", "2026-05-01"),
+        _release("grok-7.0", "2027-05-01"),
+        _release("grok-7.1", "2027-05-01"),
     )
 
     unlocked = _answer(capsys, f"--data={tmp_path}", *GROK_ASKED)
@@ -4483,7 +4501,7 @@ def test_models_of_different_families_are_untouched_by_one_another(
 ) -> None:
     """A family is what the catalogue says it is, whatever two ids have in common.
 
-    `gpt-5.6-sol` and `gpt-6-astra` share a maker and most of a name and are
+    `gpt-6-sol` and `gpt-6-astra` share a maker and most of a name and are
     two version lines, so neither replaces the other and both stay.
     """
 
@@ -4523,7 +4541,7 @@ def test_an_exact_id_lock_on_a_replaced_release_is_answered_with_that_release(
     lock and nothing about a scope that did not offer the model.
     """
 
-    _three_releases(tmp_path)
+    _four_releases(tmp_path)
 
     answer = _answer(
         capsys, f"--data={tmp_path}", f"--model={SEEDED_GROK}", *GROK_ASKED
@@ -4547,8 +4565,8 @@ def test_no_note_composed_from_the_pool_names_a_release_the_rule_removed(
 
     _grok(
         tmp_path,
-        _release("grok-old", "2026-01-01", levels=("low", "xhigh", "max")),
-        _release("grok-new", "2026-08-01", levels=("low", "xhigh")),
+        _release("grok-old", "2027-01-01", levels=("low", "xhigh", "max")),
+        _release("grok-new", "2027-08-01", levels=("low", "xhigh")),
     )
     _store(tmp_path, ("implement", "grok-old", "max", 1.0, 30))
 
@@ -4567,7 +4585,7 @@ def test_a_failed_point_a_newer_release_replaced_is_answered_as_any_unknown_one(
     than a point this Skill composed from the pool.
     """
 
-    _three_releases(tmp_path)
+    _four_releases(tmp_path)
 
     answer = _answer(
         capsys,
@@ -4587,7 +4605,7 @@ def test_the_same_failure_locked_to_that_release_still_steps_up_within_it(
 ) -> None:
     """A caller wanting the step up from a release it chose says so with a lock."""
 
-    _three_releases(tmp_path)
+    _four_releases(tmp_path)
 
     answer = _answer(
         capsys,
@@ -4616,8 +4634,8 @@ def test_one_order_decides_which_release_is_newest_and_every_caller_goes_by_it(
 
     _grok(
         tmp_path,
-        _release("grok-7.0", "2026-05-01"),
-        _release("grok-7.1", "2026-05-01"),
+        _release("grok-7.0", "2027-05-01"),
+        _release("grok-7.1", "2027-05-01"),
     )
     catalogue = _module("catalogue")
     launch = _module("launch")
@@ -4639,7 +4657,7 @@ def test_the_rule_removes_nothing_this_machine_has_stored(
     the release they were taken at for as long as its maker offers it.
     """
 
-    _three_releases(tmp_path)
+    _four_releases(tmp_path)
     _store(tmp_path, ("implement", SEEDED_GROK, "low", 1.0, 30))
     (tmp_path / "pending.jsonl").write_text(
         json.dumps({"attempt_id": "ms-fixture-pending", "model": SEEDED_GROK}) + "\n",

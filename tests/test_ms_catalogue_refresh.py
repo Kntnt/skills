@@ -197,13 +197,26 @@ CHANNELS = {
 }
 
 
+# The releases the seed learned after the recordings were taken. No list
+# recorded on 2026-09-11 carries them, so a pass replaying those lists would
+# find each absent from its maker's complete list and remove it on the third
+# day, which is a fact about the recordings' age rather than about the rule
+# under test (issue #418).
+LATER: tuple[str, ...] = ("claude-opus-5-5", "gpt-6-sol", "gpt-6-luna", "grok-4.7")
+
+
 def _here(tmp_path: Path, *, drop: tuple[str, ...] = ()) -> Path:
-    """Write a copy of the shipped seed with the named models left out."""
+    """Write a copy of the shipped seed as the recordings knew it, the named models left out.
+
+    The copy is the seed as it stood on the day the recordings were taken, so
+    the releases in `LATER` are left out of it beside whatever *drop* names.
+    """
 
     seed = json.loads(
         (SHIPPED / "data" / "catalogue-seed.json").read_text(encoding="utf-8")
     )
-    seed["models"] = [entry for entry in seed["models"] if entry["id"] not in drop]
+    left_out = frozenset((*LATER, *drop))
+    seed["models"] = [entry for entry in seed["models"] if entry["id"] not in left_out]
     here = tmp_path / "skill"
     (here / "data").mkdir(parents=True)
     (here / "data" / "catalogue-seed.json").write_text(

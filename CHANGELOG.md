@@ -4,6 +4,10 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ## [Unreleased]
 
+### Changed
+
+- Model Selector's shipped catalogue now carries the four releases its daily pass admitted on 2026-09-22 and 2026-09-23 — `claude-opus-5-5`, `gpt-6-sol`, `gpt-6-luna` and `grok-4.7` — each at the capability of the release it replaced: 0.87, 0.78, 0.42 and 0.70. The pass had admitted them with a price, a release date, a deliberation ladder and an OpenRouter slug each and with no capability, that being a seeded prior no pass fetches, and under the newest-release rule each had already retired the release before it from every pool; so the four were the only candidates of their families and each stood at the capability of a coin flip — a 19.8 % chance of finishing `implement` work, level with `gpt-5.5`, and no Trial owed to any of them. A catalogue refreshed before this release takes the capability from the seed's entry for the same id, as it takes any seeded field a refreshed entry leaves empty, so a machine the pass already reached needs no hand edit. Their prices, release dates, ladders and slugs are the ones the pass read that day, and each carries its family's alias beside its own id, a family alias resolving to the newest release that carries it (#418).
+
 ## [0.35.0] – 2026-09-23
 
 ### Added
