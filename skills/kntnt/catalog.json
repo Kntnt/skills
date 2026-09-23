@@ -176,6 +176,18 @@
       ]
     },
     {
+      "name": "hetzner",
+      "category": "infrastructure",
+      "description": "Provision and operate Hetzner Cloud servers and deploy or maintain their websites and applications through hcloud, SSH, and cloud-init. Use for Hetzner Cloud infrastructure or workloads hosted there; excludes Robot dedicated servers and Object Storage.",
+      "digest": "cfe9b0370638f202bc0b2d5cc8850fe22f2f16eb9f0324e71675a4e78eb36f58",
+      "binaries": [
+        "uv"
+      ],
+      "skills": [],
+      "externals": [],
+      "capabilities": []
+    },
+    {
       "name": "model-selector",
       "category": "models",
       "description": "Choose the model and deliberation level that completes delegated work at the lowest total cost, or in the least time where the user has chosen time. Never used implicitly: a Skill that routes work runs its script.",
@@ -194,18 +206,6 @@
       "digest": "36271de02926d11795cda4d5f9ced76157041043a3cae7975b5087bce87ec5e9",
       "binaries": [
         "pdftotext",
-        "uv"
-      ],
-      "skills": [],
-      "externals": [],
-      "capabilities": []
-    },
-    {
-      "name": "hetzner",
-      "category": "web",
-      "description": "Provision and operate Hetzner Cloud servers and deploy or maintain their websites and applications through hcloud, SSH, and cloud-init. Use for Hetzner Cloud infrastructure or workloads hosted there; excludes Robot dedicated servers and Object Storage.",
-      "digest": "cfe9b0370638f202bc0b2d5cc8850fe22f2f16eb9f0324e71675a4e78eb36f58",
-      "binaries": [
         "uv"
       ],
       "skills": [],

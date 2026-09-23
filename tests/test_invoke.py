@@ -1196,7 +1196,7 @@ SHIPPED_CASES: dict[str, list[Case]] = {
         ("--type=x --config=a --no-config", None),
         ("--type", None),
     ],
-    "web/hetzner": [
+    "infrastructure/hetzner": [
         ("", {"path": [], "flags": {}, "operands": []}),
         (
             "prepare staging deployment files",
