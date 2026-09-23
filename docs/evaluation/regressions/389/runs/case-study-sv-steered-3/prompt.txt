@@ -1,0 +1,2 @@
+/redline --output=response source.md
+-- Rubriken ska säga vad den gemensamma loggen gav underhållslaget.

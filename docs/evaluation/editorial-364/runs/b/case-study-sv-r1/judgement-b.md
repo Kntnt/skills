@@ -1,0 +1,101 @@
+# Judgement — case-study-sv-r1
+
+Judged text: `delivered.md` (Swedish, 399 words of body prose).
+
+## 1. Outcome
+
+**Delivered**, with one disclosed and unrepaired finding. **Two comparisons ran** (`evidence/source-check/report-1.md` on draft 1, `report-2.md` on draft 2). The delivered prose is **identical to the last prose a checker saw**: `diff draft-2.md delivered.md` returns only the added seven-line YAML `kntnt` frontmatter block; not one word of running text differs. The reply says so and says truthfully that the heading finding S1 was left standing because both comparisons were spent.
+
+## 2. F1 — **Fail**, narrowly, on one heading; the body is otherwise exemplary
+
+The body of the draft is unusually disciplined about the material's limits: no causal verb anywhere near the median difference, the note's explicit non-attribution carried in full, the workload confound kept, assignment time never turned into completion time in the body, the missing cost/satisfaction/completion measurements stated outright, the supplier in the third person throughout, Elm Quay or its team the grammatical subject of every act, and the checklist described exactly as the brief describes it (a document to read, not a booking or a trial), with the URL character-for-character correct. I searched for a forbidden inference and found none in the body.
+
+The fail rests on these:
+
+**F1-a (substantive) — the heading drops the scope of the median.** `## Mediantiden var lägre under testet – orsaken är öppen`. The material measures one interval only: *Median time **from report to assignment** was two working days during the trial and three in the preceding eight-week period.* The heading's `Mediantiden` is definite, unqualified, and is the draft's first mention of any median, so the definite article has no antecedent in the text to attach to and the reader supplies the obvious one — the time a repair takes. Concrete case compatible with the material: report-to-assignment fell from three days to two while median completion time rose from six days to nine under a heavier workload. The sourced claim holds in that case; `Mediantiden var lägre under testet` is false in it. Nothing supplied excludes the case — *There are no cost, resident-satisfaction or completion-time measurements* establishes that the material cannot exclude it. The base contract puts this boundary in headings expressly ("This boundary holds in the title, summary, headings and body alike"), and the brief's own judging note names this exact drift. The body sentence beneath the heading carries the qualifier, which limits the damage to a scanning reader, but a heading is read by scanning readers.
+
+**F1-b — the byline attributes authorship the material does not supply.** `Av Thomas Barregren`. The brief states "No author name supplied." The draft puts a named real person's authorship on a supplier-published case. Both checkers were told this line came from the invocation rather than the material and excluded it from assessment, so neither examined it; I do not know the Skill's byline rule and do not judge that rule, only the text. As an attribution in the delivered text it does not stand within the supplied material. The reply discloses it and says the line must be changed before publication if the text is to run unsigned or under another name, which is the right disclosure.
+
+**F1-c (minor) — ownership of the checklist.** `Svale Systems implementeringschecklista`. The brief says only "the supplied implementation checklist at https://example.invalid/svale/checklist" and never names whose it is. The inference from the `/svale/` path and from Svale being the publisher is near-certain but is the draft's, not the material's. Checker 2 raised this as editorial question E1 rather than a finding; I record it as a small addition.
+
+**F1-d (marginal) — tense of the reservation.** Source: "Lind **did not recommend** Svale to every housing company" (a fact about the interview). Draft: `Maya Lind rekommenderar inte Svale till alla bostadsföretag` (a standing present position). The material's "Her final quotation is her actual, qualified assessment" largely licenses the present; the negation scope — not-to-all, rather than against-Svale — is correctly preserved in the Swedish. Not a fail-level item.
+
+Checked and found **supported**, against my own reading of the material: `förvaltar 640 lägenheter`; `Hösten 2025` for a decision dated September with an eight-week trial reported on 4 December (the trial cannot fall outside autumn 2025); `i två av husen`; the prior separate storage located at Elm Quay Housing rather than at the team; `Någon jämförelse … finns inte att tillgå` (availability, not existence — correctly distinguished from `mättes inte` two sections later, where the source's own phrasing is flat); `ville veta om loggen kunde visa status` without claiming what the test established; six staff, two sessions, eight weeks, 31 reports with both exclusions attached; `arbetsledare` for *maintenance supervisor* in both directions; `skriver` for answers given by email; `har ännu inte utvidgats` keeping the possibility open; `orsaken är öppen` denying that a cause is settled rather than proposing one; and the publisher disclosure. Unknown is kept apart from absent everywhere except F1-a.
+
+## 3. G2 — **Fail**, on the first three parts doing each other's job
+
+Every required part is present and in order: headline, standfirst, byline, lead, four sections, ending. The customer account is complete and correctly apportioned — situation (telephone reports and emails stored separately; staff on different shifts could not see the same information), action (the team's own test, its own categories, telephone reporting kept open, Svale configuring and training), results (31 reports with exclusions, two working days against three, and the three things not measured), appraisal (Lind's qualified would-do-it-again), a truthful publisher stance placed in the ending (`publicerad av Svale Systems och är inte oberoende journalistik`), the customer left the acting party throughout, and a call to action built only from the supplied checklist and describing its destination accurately.
+
+The failure is that headline, standfirst and lead deliver the same clause three times inside four lines:
+
+- Headline: `Elm Quay testade gemensam logg i två hus`
+- Standfirst, sentence 2: `Hösten 2025 testade underhållsteamet en gemensam logg för felanmälningar i två av husen.`
+- Lead, sentence 2: `I september 2025 bestämde underhållsteamet sig för att testa en gemensam logg för felanmälningar i två av husen.`
+
+`640 lägenheter` likewise appears in the standfirst's first sentence and again in the lead's appositive. Reader effect: a reader who has read the headline learns nothing from the standfirst's middle sentence, and a reader who has read the standfirst learns nothing from two thirds of the lead's opening. In a text of 399 words, roughly 35 of them restate. The standfirst's third sentence (the roadmap) and the lead's first and third sentences (the prior separate storage, the purpose) do carry their own work, so this is redundancy rather than a missing part — but the standfirst is doing the headline's job and the lead is doing the standfirst's, which is the test G2 sets.
+
+## 4. L1 — **Pass**
+
+The Swedish reads as written in Swedish, not rendered into it. V2 is correct at every fronting, including the harder ones: `Hos Elm Quay Housing … lagrades telefonanmälningar och mejl var för sig`, `I september 2025 bestämde underhållsteamet sig`, `Efter den prövningen valde teamet Svale Systems`, and the topicalised object in `Kategorierna i loggen tog underhållsteamet fram själv`, which is a construction an English draft would not land on. Double definiteness is marked throughout (`de åtta veckorna`, `de första anmälningarna`, `den interna testnoteringen`). Compounds are solid (`kvällsskiftet`, `morgonskiftet`, `felanmälningar`, `implementeringschecklista`, `arbetsbelastning`). Genitive is bare-s on `Elm Quays` and zero on `Svale Systems`. The s-passive is used where a passive is wanted (`lagrades`, `räknas inte in`, `mättes inte`). `du` is the address; `man` appears nowhere, and no sentence reads as an English *you* or *we* that has landed there. `drar i gång` in the quotation is idiomatic spoken Swedish.
+
+Three mild calques, none enough to fail: `testnotering` for *trial note* is a transparent coinage rather than an established Swedish word (`intern notering`, `testanteckning` or a named PM would be more ordinary); `tid till avslutat arbete` for *completion time* is serviceable but clunky; and `orsaken är öppen` for an unsettled cause is a shade more English than `orsaken är oklar`. `var i median` is acceptable statistical Swedish, though `Mediantiden … var` would read better.
+
+## 5. Bridges into quotations
+
+**Q1** (line 26). Bridge: `Testet pågick i åtta veckor.` Quotation: `— Vi ville att kvällsskiftet skulle se vad morgonskiftet redan hade gjort. Kategorierna var våra – Svale hjälpte oss att lägga in dem i loggen,` with the tag `skriver Maya Lind, arbetsledare för underhållet på Elm Quay Housing.`
+**Class (c)** — the bridge carries the trial's eight-week duration, a fact the quotation does not carry. The tag carries role and employer, which is attribution and identification only.
+*Two readings, stated.* Taking the bridge strictly as the clause immediately before the quotation, it is (c). Taking the whole preceding paragraph as the run-up, its first clause — `Kategorierna i loggen tog underhållsteamet fram själv` — together with the section heading `Svale konfigurerade, teamet bestämde indelningen` already delivers the quotation's second sentence (`Kategorierna var våra – Svale hjälpte oss att lägga in dem i loggen`), which would make that half of the quotation meet the reader as the narrative said again — class (a) for that half. I choose (c) because the brief defines the bridge as the sentence or clause standing immediately before, and that sentence is about duration; but the overlap two sentences up is real and costs the quotation half its work. Its first sentence — the evening shift seeing what the morning shift had done — is not pre-stated anywhere and is where the quotation earns its place.
+
+**Q2** (line 28). **No bridge at all.** The quotation follows Q1's paragraph directly; nothing but the tag `skriver hon` stands between them. That is its own answer, not a class. The tag carries attribution and nothing else.
+
+**Q3** (line 40). Bridge: `Testet har ännu inte utvidgats. Teamet vill först se hur kategorierna fungerar för större reparationer, och Maya Lind rekommenderar inte Svale till alla bostadsföretag.` Quotation: `— Jag skulle välja att göra testet igen. Att ha en samlad bild av anmälningarna hjälper oss, men jag skulle lägga in en extra vecka för förberedelser,` tag `skriver hon.`
+**Class (c)** — the bridge carries three facts the quotation does not carry: that the trial has not expanded, that the team will first check the categories against larger repairs, and the scope of Lind's recommendation. The words that put it there are `har ännu inte utvidgats`, `hur kategorierna fungerar för större reparationer` and `rekommenderar inte Svale till alla bostadsföretag`; the quotation mentions no other housing company and no category check.
+*Second reading, stated.* One could read the bridge's last clause as pre-announcing the quotation's reservation (`men jag skulle lägga in en extra vecka`), which would tip towards (a). I reject that reading: the bridge's reservation is about whom she would recommend Svale to, the quotation's is about how much preparation time she would allow, and the two are different reservations. The material also insists that her final quotation is her own qualified assessment and not an inference from the figures, which the placement respects.
+
+**Counts:** class (a) 0, class (b) 0, class (c) 2, plus one quotation standing with no bridge at all.
+**Interviewer:** the draft attributes no question or utterance to an interviewer anywhere; there is no interviewer in the text at all, which is right for material gathered by email.
+**Unsupported bridge assertions:** none — every bridge clause traces to a source sentence (the eight-week duration, the unexpanded trial, the pending category check and the scope of the recommendation), with only the present-tense `rekommenderar` shading the source's past `did not recommend`, noted at F1-d.
+
+## 6. Quoted speech
+
+All three usable quotations the material offers are used, in the material's own order; **none is missing**.
+
+**Q1.** Source: "We wanted the evening shift to see what the morning shift had already done. The categories were ours; Svale helped us put them into the log." Meaning, stance and certainty are whole; the pluperfect `redan hade gjort` matches "had already done"; the ownership assertion `Kategorierna var våra` matches "were ours"; Svale still only *helped* (`hjälpte oss att lägga in dem`) and is not given the work. The semicolon becomes a speech dash, which in Swedish sets the juxtaposition without turning the second half into a concession. **Unmoved.**
+
+**Q2.** Source: "We spent more time agreeing on the categories than entering the first reports. I would set that time aside before the next building starts." The comparison, its two terms, their order and the conditional all survive; `avsätta` is exactly "set aside" in the sense of reserving time. `drar i gång` lifts the register about one step above the neutral "starts" while reproducing the source's own ellipsis (a building does not literally start in either language). Inside the permitted latitude. **Unmoved.**
+
+**Q3.** Source: "I would choose to do the trial again. Having one view of the reports helps us, but I would leave an extra week for preparation." The three moves — endorsement, present-tense benefit scoped to her own organisation, and the `men` that qualifies it — are all present and in order, so the qualified assessment the material insists on survives intact and is not sharpened into a success claim. One small drift: `en samlad bild av anmälningarna` for "one view of the reports" is a shade more abstract than she was. Something can give *en samlad bild* without being *one view* — a monthly summary would — where her point, fixed by Q1's evening-shift/morning-shift contrast, is that the reports are seen in one place. A closer rendering would be `att ha alla anmälningar på ett ställe` or `en gemensam vy`. Meaning slightly widened, stance and certainty unchanged. Checker 2 examined this phrase and set it aside; I record it as a minor drift rather than a defect.
+
+No quotation is welded together from separate remarks, no hedge is added or removed, and no self-correction is misquoted.
+
+## 7. Intermediate — every checker finding
+
+**Report 1 (draft 1), six findings, all accepted and repaired:**
+
+| # | Passage | Allegation | What the writer did | My class |
+|---|---|---|---|---|
+| F1 | `underhållsansvariga Maya Lind` (standfirst) and `underhållsansvarig på Elm Quay Housing` (tag) | Role raised from supervising to holding responsibility for the function; source says "maintenance supervisor" | Changed to `arbetsledaren` and `arbetsledare för underhållet` | **Supported repair.** The material places nobody at the head of Elm Quay's maintenance; the two terms are not coextensive in either direction. |
+| F2 | `och någon rekommendation till alla bostadsföretag ger Maya Lind inte` | Reservation widened from Svale to any recommendation at all; the named product is lost from the customer's reservation | Rewritten to `och Maya Lind rekommenderar inte Svale till alla bostadsföretag` | **Supported repair.** The source withholds a recommendation of Svale; the draft withheld every recommendation, which the brief's "the customer's reservation must survive" makes load-bearing. |
+| F3 | `ett dokument att läsa igenom innan arbetet börjar` | The brief settles what the destination is, not when it is read | Clause deleted | **Supported repair.** A plain unsupported addition; an implementation checklist may be worked through during the implementation. |
+| F4 | `Någon jämförelse med en annan leverantör finns inte.` | Source says "is available"; draft asserted non-existence | Changed to `finns inte att tillgå` | **Supported repair.** Exactly the state-of-knowledge distinction the Claims section names. |
+| F5 | `säger Maya Lind` / `säger hon` ×2 | Manner asserted as speech where the material says "All interviews occurred by email" | Changed to `skriver` in all three tags | **Supported repair.** Circumstantial detail including manner is a claim; the material rules the spoken reading out outright. |
+| F6 | `Hos underhållsteamet på Elm Quay Housing … lagrades` | Source states the state of the records, not who held them | Locative raised to `Hos Elm Quay Housing` | **Supported repair.** Fine-grained, but correct: a central service desk could have held both while the team held neither. |
+
+No finding in report 1 was wrong, and none was rejected. Report 1 also recorded seven items examined and not reported (including `ett bostadsföretag med 640 lägenheter`, `orsaken är öppen`, `drar i gång` and the paragraph break between the count and the medians); I agree with each of those calls.
+
+**Report 2 (draft 2), one finding plus one editorial question:**
+
+| # | Passage | Allegation | What the writer did | My class |
+|---|---|---|---|---|
+| S1 | Heading `## Mediantiden var lägre under testet – orsaken är öppen` | The unqualified definite `Mediantiden` drops the source's scope (*from report to assignment*) and invites the completion-time reading the brief forbids | Nothing. Both comparisons were spent; the reply names the finding, quotes the checker's smallest repair (`## Mediantiden till tilldelning var lägre under testet – orsaken är öppen`) and withdraws the source-fidelity claim for that heading | **Right finding left standing.** Not disputed — accepted as valid and not acted on, which leaves the defect in the delivered text; this is my F1-a. |
+| E1 | `Svale Systems implementeringschecklista` | The brief never names whose checklist it is | Nothing; reported as an editorial question, not a defect | **Right finding downgraded and not acted on.** Small, but it is an addition, not a preference; this is my F1-c. |
+
+**Real defects no checker saw.** Two. First, the byline `Av Thomas Barregren` (my F1-b) — both checkers were instructed to treat it as coming from the invocation and excluded it by scope, so neither compared it against the brief's "No author name supplied." Second, no checker was in a position to see the headline/standfirst/lead triplication (my G2 finding), which falls outside a source comparison; report 1 noted under-length as a matter for general editorial review, which is the nearest either came. The `en samlad bild` drift was seen — checker 2 tested it and set it aside — so it does not count here.
+
+## 8. Stop or delivery
+
+**A valid delivery, and an honestly made one, of a text that carries one accepted defect.**
+
+The reasoning: the run did not deliver silently. It opened the reply with `Utkastet levereras med en känd brist`, set out S1 in full, quoted the checker's smallest repair, stated plainly that the finding was not fixed and why (both comparisons spent), and then withdrew the fidelity claim for that heading specifically — `För den rubriken hävdar den här redogörelsen alltså ingen källtrohet`. It also disclosed the byline as coming from the invocation and flagged that the line must change before publication. What was delivered is exactly the prose a fresh checker read end to end, with nothing slipped in afterwards, which is what makes the two comparisons worth anything.
+
+The cost is that a five-word heading repair the checker had already written out was not applied, so a reader of the published text meets `Mediantiden var lägre under testet` with no qualifier — and disclosure in the reply does not travel with the text to that reader. Delivering the prose a checker actually read, rather than unread prose, is a defensible rule and the run followed it; but the outcome it produced here is a heading that the run itself agrees is not supported. Valid, and one repair short of good.

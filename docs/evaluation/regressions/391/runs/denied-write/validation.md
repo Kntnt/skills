@@ -1,0 +1,1 @@
+Read the complete saved fallback report. All four draft sentences are quoted beside identical source passages. Closure scope/date/purpose, lending desk hours, scheduled reopening, and non-announcement are preserved. No accounting mismatch or finding; no repair or second comparison. The final prose remains byte-identical to the complete comparison.

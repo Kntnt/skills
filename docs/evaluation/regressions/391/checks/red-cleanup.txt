@@ -1,0 +1,23 @@
+warning: No `requires-python` value found in the workspace. Defaulting to `>=3.12`.
+F                                                                        [100%]
+=================================== FAILURES ===================================
+_____ test_write_stops_only_owned_work_before_removing_comparison_scratch ______
+
+    def test_write_stops_only_owned_work_before_removing_comparison_scratch() -> None:
+        """Cleanup must account for tasks, not just files (issue #391).
+
+        A process still writing into removed scratch survives a clean inventory.
+        The delivery surface must reach the same lifecycle rule as the procedure.
+        """
+
+        procedure = (WRITE_DIR / "references" / "source-check.md").read_text()
+        body = (WRITE_DIR / "SKILL.md").read_text()
+        help_text = (WRITE_DIR / "help.md").read_text()
+
+>       assert "bounded and owned by this run" in procedure
+E       AssertionError: assert 'bounded and owned by this run' in '# Source and quotation comparison\n\nCheck the completed draft before delivery. Start a fresh subagent on the inherit... and that accounting are not scratch. The report itself is internal working material, not an extra user deliverable.\n'
+
+tests/test_kntnt.py:7095: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_kntnt.py::test_write_stops_only_owned_work_before_removing_comparison_scratch
+1 failed, 424 deselected in 0.57s

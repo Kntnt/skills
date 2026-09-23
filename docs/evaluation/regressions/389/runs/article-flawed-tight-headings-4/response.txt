@@ -1,0 +1,50 @@
+Granskningen är klar. Filsystemet är orört: `source.md` är oförändrad och inga filer har lämnats kvar.
+
+**Upplösning:** genre `article`, språk `sv`, ingen teknik — genren `article` anger själv att den inte skrivs med någon. Den kontextuella instruktionen (rubrik högst fem ord, mellanrubriker högst fyra) tillämpades och ryms inom rubrikkontraktets egna gränser. Artikelanatomins räknade gränser är maskinmätta.
+
+```markdown
+# Temperaturförsöket i Björkskolan har luckor
+
+**Fastighetskontorets rapport *Mätförsök i Björkskolan* redovisar fyra veckors mätningar i sex klassrum. Underlaget saknar operativ temperatur, luftdrag och elevernas upplevelse, och ingen effekt på hälsan har undersökts. Här är vad mätningen kan svara på och vad den inte kan.**
+
+Givare registrerade temperaturer under 20 grader i sex klassrum. Fastighetskontorets rapport *Mätförsök i Björkskolan* från den 12 mars 2026 anger att 14 av 120 lektionspass hade minst ett värde under kontorets egen arbetsgräns på 20 grader. Arbetsgränsen är inte en lagregel.
+
+## Så gjordes mätningen
+
+Försöket varade fyra veckor. Två givare stod vid ytterväggar och fyra vid innerväggar.
+
+Placeringens effekt jämfördes inte experimentellt.
+
+## Flera uppgifter saknas
+
+Resonemanget bygger på operativ temperatur, som rapporten inte redovisar. Operativ temperatur är ett mått på lufttemperatur och värmestrålning från omgivande ytor. Givarna mätte bara luften där de satt.
+
+Det saknas också mätningar av luftdrag och elevernas upplevelse. Uppgifter om hur länge temperaturerna låg under gränsen saknas. Ingen effekt på hälsan har undersökts.
+
+## Så kan mätningen användas
+
+Driftteknikern Elin Rask rekommenderar att koppla temperaturserier till användningstider innan styrningen ändras. Börja där.
+
+Nästa försök är tänkt att använda likadant placerade givare i november, men finansieringen är inte beslutad.
+```
+
+## Olöst iakttagelse
+
+**Byline saknas.** Artikelanatomin kräver en byline efter ingressen. Varken texten, dess metadata eller uppdraget namnger någon författare, så raden kan inte fyllas i utan att en författare uppfinns. Den lämnas ofylld och måste sättas av en människa. En korrigeringsrunda av tre är oanvänd, eftersom detta var det enda som återstod och det inte går att reparera.
+
+## Redovisning av påståenden
+
+Fyra påståenden togs bort, vart och ett därför att iakttagelsen pekade ut just det påståendet som defekten:
+
+- **”Katastrofen lurade bakom varje hörn.”** — borttagen som påhittad dramatik utan stöd i underlaget.
+- **”det är helt säkert att givarna har gjort eleverna friskare”** — borttagen som ett säkerhetspåstående som motsades av förbehållet i samma mening. Förbehållet står kvar: *Ingen effekt på hälsan har undersökts.*
+- **”detta är mycket viktigt för alla som tycker att temperatur är viktigt”** — borttagen som tom utfyllnad.
+- **”Kontakta oss för att rädda framtiden.”** — borttagen som en uppmaning som inte följde av innehållet; avslutningens nästa steg är nu Elin Rasks rekommendation, som redan fanns i texten.
+
+Ett påstående står kvar med ändrad attribution: **”Operativ temperatur saknas”** blev *”Resonemanget bygger på operativ temperatur, som rapporten inte redovisar”* i reparationen av den tungt underordnade meningsbyggnaden. Frånvaron knyts därmed uttryckligen till rapporten i stället för att stå oattribuerad. Gränsen som helhet står kvar i den bevarade meningen *Givarna mätte bara luften där de satt.*
+
+Samtliga övriga förbehåll står kvar ord för ord i sak: att 20-gradersgränsen är kontorets egen arbetsgräns och inte en lagregel, att placeringens effekt inte jämfördes experimentellt, att uppgifter om varaktighet under gränsen saknas, och att finansieringen inte är beslutad.
+
+## Vad körningen i övrigt ändrade
+
+Rubriken skrevs om från ett ostött räddningsanspråk till textens egen vinkel, och ingressen skrevs om från en ordagrant dubblerad mening till ett fristående erbjudande som inte längre upprepas av ledet. Brödtexten, som var ett enda stycke på 187 ord, delades i ett led och tre sektioner med mellanrubriker, och de tungt underordnade meningarna bröts till en huvudsats per uppgift. Ledets första ord gick från bestämd till obestämd form så att givarna introduceras i stället för att förutsättas kända. Den avslutande mekaniska korrekturläsningen fann inga fel att rätta.

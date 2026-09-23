@@ -1,0 +1,149 @@
+{
+  "format": "Contemporaneous transcription; exact returned status, IDs and identities preserved where available. All exec_command entries exited 0 unless marked otherwise; synchronous command completion is terminal evidence. No shell wait helper or report-path polling.",
+  "events": [
+    {
+      "tool": "exec_command",
+      "chunk_id": "22fc97",
+      "exit_code": 0,
+      "action": "Read native-task.md"
+    },
+    {
+      "tool": "exec_command",
+      "chunk_id": "d033dc",
+      "exit_code": 0,
+      "action": "Read staged SKILL.md"
+    },
+    {
+      "tool": "exec_command",
+      "chunk_id": "4f558b",
+      "exit_code": 0,
+      "action": "Read staged source-check.md"
+    },
+    {
+      "tool": "exec_command",
+      "chunk_id": "da79b4",
+      "exit_code": 0,
+      "shell_pid": 78000,
+      "action": "Read general, delivery and base contract"
+    },
+    {
+      "tool": "exec_command",
+      "chunk_id": "ea18d4",
+      "exit_code": 0,
+      "python_pid": 79194,
+      "action": "Create case work and preserve invocation/before inventory"
+    },
+    {
+      "tool": "exec_command",
+      "chunk_id": "c2f8ab",
+      "exit_code": 0,
+      "shell_pid": 79220,
+      "action": "Run invocation shim; subagents capability confirmed true"
+    },
+    {
+      "tool": "exec_command",
+      "status": "rejected before launch",
+      "action": "rm -rf private UV temp then resolve language",
+      "reason": "rm -f style commands are not permitted. Use a safer approach",
+      "recovery": "Changed removal to rm -r with the same literal absolute owned path; no approval needed for this safer supported operation"
+    },
+    {
+      "tool": "exec_command",
+      "chunk_id": "6e2343",
+      "exit_code": 0,
+      "shell_pid": 83358,
+      "action": "Remove invocation UV temp, resolve composition en_GB"
+    },
+    {
+      "tool": "exec_command",
+      "chunk_id": "17f72f",
+      "exit_code": 0,
+      "python_pid": 87630,
+      "action": "Remove language UV temp; save exact draft and full checker task"
+    },
+    {
+      "tool": "spawn_agent",
+      "result": {
+        "task_name": "/root/build_391_retry/native_391/check_file_success"
+      },
+      "prompt_file": "spawn-prompt.txt"
+    },
+    {
+      "tool": "list_agents",
+      "owned": {
+        "/root/build_391_retry/native_391/check_file_success": "running"
+      }
+    },
+    {
+      "tool": "exec_command",
+      "chunk_id": "f6ffa0",
+      "exit_code": 0,
+      "python_pid": 2947,
+      "observer_ps_pid": 2948,
+      "observer_ps_exit": 0
+    },
+    {
+      "tool": "wait_agent",
+      "timeout_ms": 10000,
+      "result": {
+        "message": "Wait timed out.",
+        "timed_out": true
+      }
+    },
+    {
+      "tool": "exec_command",
+      "chunk_id": "f67ab2",
+      "exit_code": 0,
+      "python_pid": 3571,
+      "action": "Save event transcription"
+    },
+    {
+      "tool": "native completion",
+      "checker": "/root/build_391_retry/native_391/check_file_success",
+      "reply": "Complete. No source-support or translation findings; no unresolved findings.\n\nReport: /Users/thomas/Projects/skills/.git/orchestrate-session-389-391-gpt/scratch/391/file-success/work/report.md"
+    },
+    {
+      "tool": "list_agents",
+      "owned": {
+        "/root/build_391_retry/native_391/check_file_success": {
+          "completed": "Complete. No source-support or translation findings; no unresolved findings.\n\nReport: /Users/thomas/Projects/skills/.git/orchestrate-session-389-391-gpt/scratch/391/file-success/work/report.md"
+        }
+      },
+      "stage": "before cleanup"
+    },
+    {
+      "tool": "exec_command",
+      "chunk_id": "63bce5",
+      "exit_code": 0,
+      "shell_pid": 3687,
+      "action": "Read complete report"
+    },
+    {
+      "tool": "exec_command",
+      "chunk_id": "1060ba",
+      "exit_code": 0,
+      "python_pid": 6532,
+      "observer_ps_pid": 6535,
+      "observer_ps_exit": 0,
+      "action": "Preserve report/draft/delivery evidence and remove /Users/thomas/Projects/skills/.git/orchestrate-session-389-391-gpt/scratch/391/file-success/work with rm -r"
+    },
+    {
+      "tool": "list_agents",
+      "stage": "actual post-cleanup call, before denied-write start",
+      "owned": {
+        "/root/build_391_retry/native_391/check_file_success": {
+          "completed": "Complete. No source-support or translation findings; no unresolved findings.\n\nReport: /Users/thomas/Projects/skills/.git/orchestrate-session-389-391-gpt/scratch/391/file-success/work/report.md"
+        }
+      }
+    },
+    {
+      "tool": "exec_command",
+      "chunk_id": "97d2bf",
+      "exit_code": 0,
+      "python_pid": 13331,
+      "observer_ps_pid": 13338,
+      "observer_ps_exit": 0,
+      "action": "Capture after inventory/processes and start next case"
+    }
+  ]
+}

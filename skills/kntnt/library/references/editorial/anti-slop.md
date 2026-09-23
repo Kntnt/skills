@@ -4,7 +4,13 @@ Prose that a language model produced, or that a human wrote after reading a grea
 
 The examples are English because this document is, and they are patterns rather than strings. Apply each by what it does in the target language, and do not look for the English words in it. A word, a phrase, a punctuation convention, or a construction that only exists in one language belongs to that language's own anti-slop guidance instead, where a Skill loads it beside this file.
 
-Repair with the smallest change that removes the pattern. The writer's vocabulary, their bluntness, their humour, their admitted uncertainty, and their rhythm are what makes a text theirs; a pass that tidies all of it into even prose has replaced one machine voice with another. Leave a strong sentence alone even where it is unusual, and where a phrase is doing real work — a hedge that marks genuine doubt, a repetition that lands — the pattern is not present and nothing is changed.
+## The test before a pattern is recorded
+
+Each pattern below says what a phrase looks like, and looking like one is not being one. Make the repair in your head before you record anything: where the text then asserts more, less or something else than it did, or a distinction it drew is gone, the pattern is not present and nothing is recorded. A hedge that marks genuine doubt, a repetition that lands, a contrast the reader really would otherwise draw wrongly — each of them fails that test, and each is left exactly as it stands.
+
+The test comes before the finding rather than after it. A pattern written down reaches whoever repairs it as a defect somebody found, and a guard that only makes the repair careful arrives too late to save the phrase.
+
+Repair with the smallest change that removes a pattern the test admits. The writer's vocabulary, their bluntness, their humour, their admitted uncertainty, and their rhythm are what makes a text theirs; a pass that tidies all of it into even prose has replaced one machine voice with another. Leave a strong sentence alone even where it is unusual.
 
 ## The seven patterns
 
@@ -16,7 +22,7 @@ Repair with the smallest change that removes the pattern. The writer's vocabular
 
 **Vague attribution.** A claim credited to nobody: *Studies show*, *experts agree*, *industry reports suggest*, *it is widely believed*, *many argue*. Nothing here can be checked, and nothing can be contradicted, which is precisely what makes it comfortable to write. Name who found it, who said it, and how they know; where the text has no source, cut the claim rather than dressing it. Do not invent an attribution to satisfy the pattern — an unsourced sentence is removed, never furnished with a plausible source.
 
-**Synonym cycling.** One thing given a new name every time it is mentioned, because repeating a word felt like poor style: *the agent* reviews the draft, then *the assistant* scores it, then *the tool* suggests fixes. A reader who has been introduced to three names reasonably assumes three things. Pick the clear name and repeat it. Repetition of a key term is how a reader knows it is the same term, and the fix is usually one word restored in two places rather than a rewritten paragraph.
+**Synonym cycling.** One thing given a new name every time it is mentioned, because repeating a word felt like poor style: *the agent* reviews the draft, then *the assistant* scores it, then *the tool* suggests fixes. A reader who has been introduced to three names reasonably assumes three things. Pick the clear name and repeat it. Repetition of a key term is how a reader knows it is the same term, and the fix is usually one word restored in two places rather than a rewritten paragraph. The pattern is present only where the names denote one thing: two words a text uses for two things are not cycling however often they alternate, and a text that named two things comes back naming two things.
 
 **Robotic rhythm.** Sentences and paragraphs built to one template: the same length, the same shape, the same three-part list, each paragraph opening with its topic sentence and closing with its summary. Stacked short fragments used for drama — *That's it. That's the whole idea.* — are the same fault at the other extreme. Read a passage aloud in your head; where the breath falls in the same place every time, the shape is doing the writing. Vary length and construction where the meaning gives you a reason to, and merge or split only the sentences whose shape is actually the problem.
 

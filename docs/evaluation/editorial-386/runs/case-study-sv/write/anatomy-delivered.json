@@ -1,0 +1,111 @@
+{
+  "ok": true,
+  "format": "markdown",
+  "conforms": true,
+  "failures": [],
+  "norms": [],
+  "typical": {
+    "paragraphs": 11,
+    "paragraphs_of_two_or_three_sentences": 11,
+    "sections": 3,
+    "sections_of_two_or_three_paragraphs": 3
+  },
+  "parts": {
+    "headline": {
+      "text": "Elm Quay testade gemensam logg i två hus",
+      "characters": 40,
+      "words": 8
+    },
+    "standfirst": {
+      "text": "Hösten 2025 prövade bostadsbolaget Elm Quay Housing en …",
+      "words": 42,
+      "sentences_estimate": 3,
+      "paragraphs": 1
+    },
+    "byline": {
+      "text": "Av Thomas Barregren",
+      "words": 3
+    },
+    "lead": {
+      "text": "Telefonanmälningar på ett ställe, e-post på ett annat. …",
+      "words": 39,
+      "sentences_estimate": 3,
+      "paragraphs": 1
+    },
+    "sections": [
+      {
+        "subheading": {
+          "text": "Så kom systemet på plats i de två husen",
+          "characters": 39,
+          "words": 9
+        },
+        "paragraphs": [
+          {
+            "text": "Laget testade om loggen kunde visa status för …",
+            "words": 23,
+            "sentences_estimate": 2
+          },
+          {
+            "text": "– Vi ville att kvällsskiftet skulle se vad …",
+            "words": 32,
+            "sentences_estimate": 2
+          },
+          {
+            "text": "De boende kunde fortsätta anmäla fel per telefon …",
+            "words": 20,
+            "sentences_estimate": 2
+          }
+        ]
+      },
+      {
+        "subheading": {
+          "text": "Siffrorna säger inget om orsaken",
+          "characters": 32,
+          "words": 5
+        },
+        "paragraphs": [
+          {
+            "text": "Testet pågick i åtta veckor. Enligt Elm Quays …",
+            "words": 32,
+            "sentences_estimate": 2
+          },
+          {
+            "text": "Mediantiden från anmälan till tilldelad åtgärd var två …",
+            "words": 42,
+            "sentences_estimate": 3
+          },
+          {
+            "text": "– Vi lade mer tid på att komma …",
+            "words": 31,
+            "sentences_estimate": 2
+          }
+        ]
+      },
+      {
+        "subheading": {
+          "text": "Beslutet om fler hus återstår",
+          "characters": 29,
+          "words": 5
+        },
+        "paragraphs": [
+          {
+            "text": "Testet har ännu inte utvidgats. Laget vill först …",
+            "words": 23,
+            "sentences_estimate": 2
+          },
+          {
+            "text": "– Jag skulle välja att göra om testet. …",
+            "words": 28,
+            "sentences_estimate": 2
+          },
+          {
+            "text": "För den som överväger ett liknande test finns …",
+            "words": 30,
+            "sentences_estimate": 2
+          }
+        ]
+      }
+    ],
+    "other": []
+  }
+}

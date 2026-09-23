@@ -275,11 +275,12 @@ def test_opencode_with_no_channel_at_all_plans_provider_and_id() -> None:
 
 
 def test_the_definition_matrix_covers_every_anthropic_point_and_nothing_else() -> None:
-    """One file per point of every Anthropic model, where Anthropic is chosen.
+    """One file per point of every Anthropic family, where Anthropic is chosen.
 
     No single model is chosen or left out within a maker, so the matrix is
-    every Anthropic model the catalogue holds at every level it supports, and
-    no point of any other maker however many of those are chosen beside it.
+    every Anthropic family the catalogue holds at every level it supports —
+    the family's newest release taking the file — and no point of any other
+    maker however many of those are chosen beside it.
     """
 
     matrix = launch.definitions(

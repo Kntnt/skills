@@ -1,0 +1,93 @@
+{
+  "ok": true,
+  "format": "markdown",
+  "conforms": false,
+  "failures": [
+    {
+      "part": "byline",
+      "rule": "A text conforms when every part is present in the order shown.",
+      "measured": "absent",
+      "text": null
+    }
+  ],
+  "norms": [
+    {
+      "part": "lead",
+      "rule": "They should begin with different first words, and an everyday word such as *the* or *it* counts like any other.",
+      "measured": "both open on “elm”",
+      "text": "Elm Quay registrerade 31 ärenden. Vi på Svale …"
+    }
+  ],
+  "typical": {
+    "paragraphs": 7,
+    "paragraphs_of_two_or_three_sentences": 2,
+    "sections": 2,
+    "sections_of_two_or_three_paragraphs": 2
+  },
+  "parts": {
+    "headline": {
+      "text": "Vår fantastiska lösning räddade Elm Quay",
+      "characters": 40,
+      "words": 6
+    },
+    "standfirst": {
+      "text": "Elm Quay registrerade 31 ärenden. Elm Quay registrerade …",
+      "words": 10,
+      "sentences_estimate": 2,
+      "paragraphs": 1
+    },
+    "byline": null,
+    "lead": {
+      "text": "Elm Quay registrerade 31 ärenden. Vi på Svale …",
+      "words": 21,
+      "sentences_estimate": 2,
+      "paragraphs": 1
+    },
+    "sections": [
+      {
+        "subheading": {
+          "text": "Kunden fick en gemensam bild",
+          "characters": 28,
+          "words": 5
+        },
+        "paragraphs": [
+          {
+            "text": "Maya Lind säger att det hjälper att ha …",
+            "words": 13,
+            "sentences_estimate": 1
+          },
+          {
+            "text": "– Att ha en gemensam bild av ärendena …",
+            "words": 24,
+            "sentences_estimate": 1
+          }
+        ]
+      },
+      {
+        "subheading": {
+          "text": "Resultatet bevisar allt",
+          "characters": 23,
+          "words": 3
+        },
+        "paragraphs": [
+          {
+            "text": "Enligt kundens försöksanteckning registrerades 31 ärenden under åtta …",
+            "words": 42,
+            "sentences_estimate": 4
+          },
+          {
+            "text": "– Jag skulle välja att göra försöket igen, …",
+            "words": 9,
+            "sentences_estimate": 1
+          },
+          {
+            "text": "Kundcaset publiceras av leverantören Svale.",
+            "words": 5,
+            "sentences_estimate": 1
+          }
+        ]
+      }
+    ],
+    "other": []
+  }
+}

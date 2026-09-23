@@ -1,0 +1,2 @@
+/redline --genre=opinion --language=sv --output=response source.md
+-- Rubriken ska säga vad skribenten vill att kommunstyrelsen gör.

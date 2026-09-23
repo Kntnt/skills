@@ -1,0 +1,3 @@
+Read and execute the staged .agents/skills/write/SKILL.md for this invocation. Its directory is $HERE.
+
+/write --genre=column --language=sv --output=response source.md

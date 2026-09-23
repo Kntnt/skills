@@ -57,12 +57,19 @@ def _written(
     age: float = 60.0,
     harness: str = "claude-code",
     window: int = WEEK_MINUTES,
+    at: float = NOW,
 ) -> Path:
     """Write the file a status line writes, placed at a share of its window.
 
-    *elapsed* is the share of the week gone at `NOW`, which is what the rule
+    *elapsed* is the share of the week gone at *at*, which is what the rule
     compares the used share against, so a fixture states its pace rather than
     an instant somebody has to divide back out.
+
+    *at* is the instant the reader of this fixture will call now. It is `NOW`
+    for every test that injects that same instant, and the real clock for the
+    one test that runs the reader as a subprocess: that reader takes its own
+    now from the clock, and a reading `age` seconds before a frozen constant
+    passes its staleness rule only until the constant is a day old.
     """
 
     data_dir.mkdir(parents=True, exist_ok=True)
@@ -73,9 +80,9 @@ def _written(
                 "channels": {
                     harness: {
                         "used_percent": used,
-                        "resets_at": int(NOW + (1.0 - elapsed) * WEEK_SECONDS),
+                        "resets_at": int(at + (1.0 - elapsed) * WEEK_SECONDS),
                         "window_minutes": window,
-                        "written_at": int(NOW - age),
+                        "written_at": int(at - age),
                     }
                 }
             }
@@ -477,7 +484,7 @@ def test_the_reader_runs_as_a_script_and_prints_one_account_per_harness(
     """`status` renders one reader's answer rather than reimplementing the rule."""
 
     data = tmp_path / "data"
-    _written(data, used=95.0, elapsed=0.5)
+    _written(data, used=95.0, elapsed=0.5, at=time.time())
 
     completed = subprocess.run(
         [

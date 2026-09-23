@@ -1,0 +1,58 @@
+[
+  {
+    "name": "ruff",
+    "command": "uvx ruff check .",
+    "pid": 66846,
+    "process_group": 66846,
+    "environment": {
+      "UV_CACHE_DIR": "/Users/thomas/Projects/skills/.git/orchestrate-session-389-391-gpt/scratch/390/amend-1a1acf/uv-cache",
+      "TMPDIR": "/Users/thomas/Projects/skills/.git/orchestrate-session-389-391-gpt/scratch/390/amend-1a1acf/gate-tmp",
+      "KNTNT_HOME": "/Users/thomas/Projects/skills/.git/orchestrate-session-389-391-gpt/scratch/390/amend-1a1acf",
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "exit_status": 0,
+    "elapsed_seconds": 0.15214124997146428
+  },
+  {
+    "name": "format",
+    "command": "uvx ruff format --check .",
+    "pid": 66870,
+    "process_group": 66870,
+    "environment": {
+      "UV_CACHE_DIR": "/Users/thomas/Projects/skills/.git/orchestrate-session-389-391-gpt/scratch/390/amend-1a1acf/uv-cache",
+      "TMPDIR": "/Users/thomas/Projects/skills/.git/orchestrate-session-389-391-gpt/scratch/390/amend-1a1acf/gate-tmp",
+      "KNTNT_HOME": "/Users/thomas/Projects/skills/.git/orchestrate-session-389-391-gpt/scratch/390/amend-1a1acf",
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "exit_status": 0,
+    "elapsed_seconds": 0.11561445891857147
+  },
+  {
+    "name": "mypy",
+    "command": "uvx --with types-PyYAML --with pytest --with httpx==0.28.1 --with selectolax==0.4.11 --with types-tinycss2 --with types-regex mypy skills/kntnt/scripts/kntnt.py skills/kntnt/library/scripts/argument_grammar.py skills/kntnt/library/scripts/article_anatomy.py skills/kntnt/library/scripts/ship.py skills/kntnt/library/scripts/integrations.py skills/kntnt/library/scripts/languages.py skills/models/model-selector/scripts/catalogue.py skills/models/model-selector/scripts/profiles.py skills/models/model-selector/scripts/evidence.py skills/models/model-selector/scripts/launch.py skills/models/model-selector/scripts/selection.py skills/models/model-selector/scripts/quota.py skills/models/model-selector/scripts/record.py skills/models/model-selector/scripts/capture.py skills/models/model-selector/scripts/grade.py skills/models/model-selector/scripts/setup_apply.py skills/code/orchestrate/scripts/run.py skills/producivity/rename-invoices/scripts/rename_invoices.py skills/agents/explain/scripts/invoke.py skills/web/mirror/scripts/mirror.py docs/evaluation/editorial-388/harness/staged_run.py docs/evaluation/editorial-388/harness/trace_index.py tests",
+    "pid": 66894,
+    "process_group": 66894,
+    "environment": {
+      "UV_CACHE_DIR": "/Users/thomas/Projects/skills/.git/orchestrate-session-389-391-gpt/scratch/390/amend-1a1acf/uv-cache",
+      "TMPDIR": "/Users/thomas/Projects/skills/.git/orchestrate-session-389-391-gpt/scratch/390/amend-1a1acf/gate-tmp",
+      "KNTNT_HOME": "/Users/thomas/Projects/skills/.git/orchestrate-session-389-391-gpt/scratch/390/amend-1a1acf",
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "exit_status": 0,
+    "elapsed_seconds": 2.8988398340297863
+  },
+  {
+    "name": "pytest",
+    "command": "uv run --with pytest --with pytest-xdist --with pyyaml pytest -n auto",
+    "pid": 67426,
+    "process_group": 67426,
+    "environment": {
+      "UV_CACHE_DIR": "/Users/thomas/Projects/skills/.git/orchestrate-session-389-391-gpt/scratch/390/amend-1a1acf/uv-cache",
+      "TMPDIR": "/Users/thomas/Projects/skills/.git/orchestrate-session-389-391-gpt/scratch/390/amend-1a1acf/gate-tmp",
+      "KNTNT_HOME": "/Users/thomas/Projects/skills/.git/orchestrate-session-389-391-gpt/scratch/390/amend-1a1acf",
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "exit_status": 1,
+    "elapsed_seconds": 123.4383033750346
+  }
+]

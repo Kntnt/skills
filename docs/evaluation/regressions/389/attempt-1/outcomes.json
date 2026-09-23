@@ -1,0 +1,38 @@
+{
+  "article-flawed": {
+    "invocation": "/redline --genre=article --language=sv --output=response source.md",
+    "revision": "8dd5f31bd46b283d0522fae43d8ae728a38c9635",
+    "returncode": 0,
+    "duration_seconds": 665,
+    "trace_status": "complete",
+    "correction_rounds": 1,
+    "proofread_shim_invocations": 1,
+    "supplied_sha256": "1c0e3b3ef98e06b220058b9811864ebdae4c89b0618eb2f8405b63b0dd6504a0",
+    "delivered_sha256": "73cb2c29c5145242b01a42bf9cf5c4655dad6d0cb41cbfc702680c5a29db40fa",
+    "delivered_is_the_supplied_text": false
+  },
+  "case-study-flawed": {
+    "invocation": "/redline --genre=case-study --language=sv --output=response source.md",
+    "revision": "8dd5f31bd46b283d0522fae43d8ae728a38c9635",
+    "returncode": 0,
+    "duration_seconds": 864,
+    "trace_status": "complete",
+    "correction_rounds": 1,
+    "proofread_shim_invocations": 1,
+    "supplied_sha256": "ce574061bd09328ed80109a3cca07875683c2fd77d55f41d5631dc2cdcb18767",
+    "delivered_sha256": "1a4c0f6fc4e36553607ad31e730779be170989e329803db436d86d9cbfd8d47f",
+    "delivered_is_the_supplied_text": false
+  },
+  "case-study-sv": {
+    "invocation": "/redline --output=response source.md",
+    "revision": "8dd5f31bd46b283d0522fae43d8ae728a38c9635",
+    "returncode": 0,
+    "duration_seconds": 1031,
+    "trace_status": "complete",
+    "correction_rounds": 1,
+    "proofread_shim_invocations": 1,
+    "supplied_sha256": "5551178fe07e75f27ea6290f3b3aaa77ce1bee32b11343ce26faa616e75d177a",
+    "delivered_sha256": "8cb90360a5808cd487c56c0ae9f49a4e2302503b66fac79ccc55f73ed20bcc59",
+    "delivered_is_the_supplied_text": false
+  }
+}

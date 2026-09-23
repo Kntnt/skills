@@ -1,0 +1,3 @@
+# developer working copy, scope 4, narrowed to git state
+# before, 2026-09-21T16:00:17Z
+8a37e57eca854fea39dd25e5d2483e831edfc599

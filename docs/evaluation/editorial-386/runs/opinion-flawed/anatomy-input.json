@@ -1,0 +1,74 @@
+{
+  "ok": true,
+  "format": "markdown",
+  "conforms": false,
+  "failures": [
+    {
+      "part": "standfirst",
+      "rule": "A text conforms when every part is present in the order shown.",
+      "measured": "absent",
+      "text": null
+    }
+  ],
+  "norms": [],
+  "typical": {
+    "paragraphs": 4,
+    "paragraphs_of_two_or_three_sentences": 2,
+    "sections": 2,
+    "sections_of_two_or_three_paragraphs": 1
+  },
+  "parts": {
+    "headline": {
+      "text": "Kommunledningen hatar människor",
+      "characters": 31,
+      "words": 3
+    },
+    "standfirst": null,
+    "byline": {
+      "text": "Sanna Ek, Öppna beslut",
+      "words": 4
+    },
+    "lead": {
+      "text": "Kommunstyrelsen borde behålla telefonbokning under ett halvårs försök …",
+      "words": 24,
+      "sentences_estimate": 2,
+      "paragraphs": 1
+    },
+    "sections": [
+      {
+        "subheading": {
+          "text": "Bakgrund",
+          "characters": 8,
+          "words": 1
+        },
+        "paragraphs": [
+          {
+            "text": "Det gjordes 96 bokningar på webben och 24 …",
+            "words": 43,
+            "sentences_estimate": 3
+          }
+        ]
+      },
+      {
+        "subheading": {
+          "text": "Diskussion",
+          "characters": 10,
+          "words": 1
+        },
+        "paragraphs": [
+          {
+            "text": "Förvaltningen invänder att dubbla kanaler innebär dubbel administration. …",
+            "words": 37,
+            "sentences_estimate": 5
+          },
+          {
+            "text": "Nu är det dags att agera.",
+            "words": 6,
+            "sentences_estimate": 1
+          }
+        ]
+      }
+    ],
+    "other": []
+  }
+}

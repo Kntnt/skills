@@ -6015,6 +6015,162 @@ def test_a_named_destination_takes_the_artifact_out_of_the_response() -> None:
             )
 
 
+# The shared delivery contract's answer to how a reply carries the text it
+# delivers: one fenced code block, and the run's own words outside it
+# (issue #384, ADR-0211).
+DELIVERY_ONE_FENCE = (
+    "The complete Text Artifact sits inside exactly one fenced code block, byte"
+    " for byte as the run settled it"
+)
+DELIVERY_FENCE_LENGTH = (
+    "The fence is longer than the longest run of backticks inside the artifact"
+)
+DELIVERY_FENCE_INFO = "The info string names the text's format"
+DELIVERY_FENCE_OUTSIDE = "Nothing of the run's own is inside it"
+DELIVERY_FENCE_DOCUMENT = "Handoff Metadata"
+DELIVERY_FENCE_EVERY_TEXT = "The rule reaches every complete text a reply carries"
+DELIVERY_FENCE_NO_STATUS = "carries no text at all and so carries no fence"
+DELIVERY_FENCE_NOT_A_FILE = "receive the text itself and never a fence"
+
+# The four Skills that deliver through the shared contract, and the one
+# sentence each manpage gives the reader for what a reply looks like. That
+# sentence describes what the user sees and restates none of the properties
+# above, which the contract owns.
+DELIVERY_SKILLS = ("write", "redline", "proofread", "unslop")
+HELP_FENCE_SENTENCE = (
+    "A text delivered in the response arrives inside one fenced code block."
+)
+
+
+def test_the_shared_delivery_contract_settles_how_a_reply_carries_the_text() -> None:
+    """A delivered text is held apart from the words about it, or it is damaged.
+
+    One saved Redline reply in sixteen returned the text with its frontmatter
+    block broken. The artifact opened on `---` directly beneath a paragraph of
+    the reply's own prose, where those three characters are also a thematic
+    break and would turn the paragraph above into a heading, so a blank line
+    went in between them — and a blank line there is exactly what stops a
+    frontmatter block from being one (issue #384). Nothing was disobeyed: the
+    contract settled where a result goes and never how a response carries it,
+    and the sixteen replies accordingly carried it three ways (ADR-0211).
+    """
+
+    contract = DELIVERY.read_text(encoding="utf-8")
+
+    # The rule is stated once, in a section of its own.
+    sections = [
+        section for section in contract.split("\n## ") if DELIVERY_ONE_FENCE in section
+    ]
+    assert len(sections) == 1, (
+        f"{DELIVERY}: the shared contract states in {len(sections)} of its"
+        f" sections that a response carries the Text Artifact in one fenced"
+        f" code block, and the rule that keeps a delivered text apart from the"
+        f" words about it is settled once or not at all (ADR-0211). See"
+        f" {STANDARD}."
+    )
+    rule = sections[0]
+
+    # Every property the rule has to carry to be executable by a run.
+    for clause, gap in (
+        (
+            DELIVERY_FENCE_LENGTH,
+            (
+                "an artifact carrying fenced code of its own closes the fence"
+                " early, and the rest of the text leaves the block"
+            ),
+        ),
+        (
+            DELIVERY_FENCE_INFO,
+            (
+                "the opening fence names no format, so what a reader and a later"
+                " Skill get back is an untyped block"
+            ),
+        ),
+        (
+            DELIVERY_FENCE_OUTSIDE,
+            (
+                "the run's own findings and account may sit between the fence"
+                " lines, which puts words the text never had inside the text"
+            ),
+        ),
+        (
+            DELIVERY_FENCE_DOCUMENT,
+            (
+                "the metadata the run settled as part of the document is not said"
+                " to be inside the fence, so a run may strip it back out"
+            ),
+        ),
+        (
+            DELIVERY_FENCE_EVERY_TEXT,
+            (
+                "the rule reaches only what the contract calls delivered, leaving"
+                " a stopped run's preserved prose to be carried as bare prose"
+            ),
+        ),
+        (
+            DELIVERY_FENCE_NO_STATUS,
+            (
+                "the short no-change status is not excepted, so a reply carrying"
+                " no text at all is read as owing a fence"
+            ),
+        ),
+        (
+            DELIVERY_FENCE_NOT_A_FILE,
+            (
+                "a file destination and In-place Editing are not excepted, so a"
+                " written file may receive the fence lines as part of the text"
+            ),
+        ),
+    ):
+        assert clause in rule, f"{DELIVERY}: {gap} (ADR-0211). See {STANDARD}."
+
+    # The reader who will see the reply meets it once, in each manpage.
+    for name in DELIVERY_SKILLS:
+        page = REPO_ROOT / "skills" / "editorial" / name / "help.md"
+        assert HELP_FENCE_SENTENCE in page.read_text(encoding="utf-8"), (
+            f"{page}: the manpage describes what arrives in the response"
+            f" without saying that a text arrives inside a fenced code block,"
+            f" which is the whole of what the reader will see change"
+            f" (ADR-0211). See {STANDARD}."
+        )
+
+    # And no consumer tells the rule a second time, in any shipped file.
+    for name in DELIVERY_SKILLS:
+        for shipped in sorted(
+            (REPO_ROOT / "skills" / "editorial" / name).rglob("*.md")
+        ):
+            text = shipped.read_text(encoding="utf-8")
+            for clause in (
+                DELIVERY_ONE_FENCE,
+                DELIVERY_FENCE_LENGTH,
+                DELIVERY_FENCE_INFO,
+                DELIVERY_FENCE_OUTSIDE,
+            ):
+                assert clause not in text, (
+                    f"{shipped}: this states how a response carries the Text"
+                    f" Artifact itself, which is a second copy of a rule the"
+                    f" shared delivery contract owns and is free to drift from"
+                    f" it (ADR-0211). See {STANDARD}."
+                )
+
+    # The one text the contract does not call delivered points at the rule
+    # rather than answering for itself.
+    source_check = (
+        REPO_ROOT / "skills" / "editorial" / "write" / "references" / "source-check.md"
+    )
+    preserved = [
+        paragraph
+        for paragraph in source_check.read_text(encoding="utf-8").split("\n\n")
+        if "not source-checked" in paragraph
+    ]
+    assert preserved and all("delivery.md" in paragraph for paragraph in preserved), (
+        f"{source_check}: a stopped run carries its complete prose in the"
+        f" reply without being pointed at how a reply carries a text, so the"
+        f" one text the contract does not call delivered is the one carried"
+        f" as bare prose (ADR-0211). See {STANDARD}."
+    )
+
+
 def test_the_collection_library_carries_the_editorial_base_contract() -> None:
     """One statement of what a first draft has to be, read from both sides.
 
@@ -6229,6 +6385,107 @@ def test_each_selectable_resource_carries_its_review_guidance_beside_it() -> Non
             f" guidance for them, leaving a reviewing Skill to invent its own"
             f" diagnostics for rules somebody else wrote (ADR-0178). See"
             f" {STANDARD}."
+        )
+
+
+# What the four article genres share, and where each of it is stated: the
+# shape their text has, and how its headline and subheadings are written. Both
+# sit beside `web-craft.md` outside the selectable directories, so nobody can
+# select one and a genre reaches it by linking it.
+ANATOMY_GENRES = ("article", "case-study", "column", "opinion")
+ARTICLE_SUPPORT = {
+    "article-anatomy": "the parts such a text has, their order and their dimensions",
+    "headlines": "how such a text's headline and subheadings are written",
+}
+
+# What a dimension looks like in prose: a count, and the thing counted. The
+# anatomy states every one of them for these genres, so a file that links it
+# carrying one is the same limit in a second place.
+DIMENSION = re.compile(
+    r"\d+\s*(?:[–-]\s*\d+\s*)?(?:characters|words|sentences|paragraphs)",
+    re.IGNORECASE,
+)
+
+
+def test_the_four_article_genres_link_the_support_they_share() -> None:
+    """Support several genres share is stated once, where all of them link it.
+
+    The anatomy fixes which parts an article, case study, column or opinion
+    has, the order they come in and their dimensions; the headline reference
+    says how the headline and the subheadings among those parts are written.
+    Both live outside `genres/` and `techniques/` for the reason `web-craft.md`
+    does — nobody selects them and no genre inference reads them — so each
+    genre that is bound by one says so by linking it, and `web-copy`, which is
+    bound by neither, links neither.
+    """
+
+    readme = (EDITORIAL / "README.md").read_text(encoding="utf-8")
+    web_copy = EDITORIAL / "genres" / "web-copy.md"
+
+    for name, states in ARTICLE_SUPPORT.items():
+        base = EDITORIAL / f"{name}.md"
+        review = EDITORIAL / f"{name}.review.md"
+
+        assert base.is_file(), (
+            f"{base}: the four article genres are bound by {states}, stated"
+            f" nowhere, so each of them is free to state its own (ADR-0178)."
+            f" See {STANDARD}."
+        )
+        assert review.is_file(), (
+            f"{review}: `{name}` states requirements and ships no review"
+            f" guidance for them, leaving a reviewing Skill to invent its own"
+            f" diagnostics for rules somebody else wrote (ADR-0178). See"
+            f" {STANDARD}."
+        )
+
+        for genre in ANATOMY_GENRES:
+            path = EDITORIAL / "genres" / f"{genre}.md"
+            assert f"](../{name}.md)" in path.read_text(encoding="utf-8"), (
+                f"{path}: `{genre}` is bound by {states} and links"
+                f" `{name}.md` nowhere, so a reader of this genre never meets"
+                f" what the text has to carry (ADR-0178). See {STANDARD}."
+            )
+
+        assert f"{name}.md" not in web_copy.read_text(encoding="utf-8"), (
+            f"{web_copy}: `web-copy` links `{name}.md`, which states {states}"
+            f" and not the form a page's task gives it (ADR-0178). See"
+            f" {STANDARD}."
+        )
+
+        assert f"{name}.md" in readme, (
+            f"{EDITORIAL / 'README.md'}: the format page does not say what"
+            f" `{name}.md` is or who loads it, so support four genres share is"
+            f" a file nothing accounts for (ADR-0178). See {STANDARD}."
+        )
+
+
+def test_only_the_anatomy_states_a_dimension_for_the_genres_it_binds() -> None:
+    """One limit, one place, or the two of them come to disagree.
+
+    A part's dimension is stated in the anatomy, which an agent loads beside
+    the genre: a count repeated in the genre, in the craft brief or in the
+    headline reference is the same requirement in two files, free to drift
+    apart about what the draft owed (ADR-0178). The headline reference states
+    how a headline is written and leaves its length to the format the text
+    follows, which for these genres is the anatomy. `web-copy` is bound by no
+    anatomy and carries its own scale guides.
+    """
+
+    bound = [
+        EDITORIAL / "web-craft.md",
+        EDITORIAL / "web-craft.review.md",
+        EDITORIAL / "headlines.md",
+        EDITORIAL / "headlines.review.md",
+        *(EDITORIAL / "genres" / f"{name}.md" for name in ANATOMY_GENRES),
+        *(EDITORIAL / "genres" / f"{name}.review.md" for name in ANATOMY_GENRES),
+    ]
+
+    for path in bound:
+        stated = DIMENSION.findall(path.read_text(encoding="utf-8"))
+        assert stated == [], (
+            f"{stated}: {path} states a dimension the anatomy already fixes"
+            f" for these genres, so one requirement stands in two files"
+            f" (ADR-0178). See {STANDARD}."
         )
 
 
@@ -6764,6 +7021,92 @@ def test_write_keeps_a_standpoint_without_sending_it_to_research() -> None:
     )
 
 
+def test_write_completes_a_comparison_by_the_report_not_by_its_route() -> None:
+    """A Harness that refuses the checker's write must not stop the run.
+
+    In two of nine runs of the Claude-family evaluation the environment refused
+    the checker's file write. Both checkers returned the whole report as reply
+    text and both writers read it, but the task caps that reply at 150 words,
+    the file the procedure assumes never existed, and nothing said whether a
+    report received as text is a completed comparison. Completeness turns on
+    the claim accounting and findings the writer received, not on the route
+    they arrived by (issue #378).
+    """
+
+    text = _write_prose()
+
+    assert "the 150-word limit does not apply to that reply" in text, (
+        f"{WRITE_DIR}: the reply cap still truncates a report that has no"
+        f" other way out of the checker (issue #378). See {STANDARD}."
+    )
+
+    assert "save that text to the report path yourself" in text, (
+        f"{WRITE_DIR}: a report received as text never reaches the report"
+        f" path the rest of the procedure reads from (issue #378). See"
+        f" {STANDARD}."
+    )
+
+    assert "complete by either route" in text, (
+        f"{WRITE_DIR}: nothing says a report that arrived complete as reply"
+        f" text is a completed comparison, so a writer may stop on a"
+        f" comparison it has in full (issue #378). See {STANDARD}."
+    )
+
+    assert "only the stated completion status" in text, (
+        f"{WRITE_DIR}: completeness can still be read off how far the"
+        f" accounting reaches, which is how three validators passed a report"
+        f" cut off before its completion status (issue #378). See"
+        f" {STANDARD}."
+    )
+
+    assert "whichever route it arrived by" in text, (
+        f"{WRITE_DIR}: the stop on a partial report does not reach a report"
+        f" that arrived as reply text, so a truncated one can be delivered"
+        f" on (issue #378). See {STANDARD}."
+    )
+
+
+def test_write_waits_for_checker_completion_without_polling_a_report_path() -> None:
+    """The reply can be the only report; file creation cannot release a wait.
+
+    Hold the executable prose at its synchronization seam (issue #391).
+    Native regression runs separately observe task lifetime and delivery.
+    """
+
+    text = (WRITE_DIR / "references" / "source-check.md").read_text()
+
+    assert "Use the Harness's native completion/wait mechanism" in text
+    assert (
+        "Never start a shell or background task that polls for the report path" in text
+    )
+    assert "no usable completion mechanism" in text
+    assert "completes without a complete report" in text
+
+
+def test_write_stops_only_owned_work_before_removing_comparison_scratch() -> None:
+    """Cleanup must account for tasks, not just files (issue #391).
+
+    A process still writing into removed scratch survives a clean inventory.
+    The delivery surface must reach the same lifecycle rule as the procedure.
+    """
+
+    procedure = (WRITE_DIR / "references" / "source-check.md").read_text()
+    body = (WRITE_DIR / "SKILL.md").read_text()
+    help_text = (WRITE_DIR / "help.md").read_text()
+
+    assert "bounded and owned by this run" in procedure
+    assert "completion, failure, timeout, cancellation or interruption" in procedure
+    assert "before removing scratch" in procedure
+    assert "cannot write into scratch after cleanup" in procedure
+    assert "Do not terminate unrelated processes or another run's checker" in procedure
+    assert "Report cleanup failure" in procedure
+    assert "stop and verify run-owned tasks" in body
+    assert "process/task state" in body
+    assert "native completion" in help_text
+    assert "poll" in help_text
+    assert "cleanup failure" in help_text
+
+
 # The Skill this wave's mechanical pass ships as, read at the one seam a test
 # has: the body is the whole of what the agent executes (ADR-0177).
 PROOFREAD = REPO_ROOT / "skills" / "editorial" / "proofread" / "SKILL.md"
@@ -7234,6 +7577,7 @@ ANTI_SLOP = (
     / "editorial"
     / "anti-slop.md"
 )
+BASE_REVIEW = ANTI_SLOP.parent / "base.review.md"
 SLOP_PATTERNS = (
     "false contrast",
     "empty opening",
@@ -7336,8 +7680,8 @@ LOADING_CLAUSES = {
     "write": (
         "Load the contract, and nothing besides it",
         (
-            "This is the only additional genre support file: follow no other genre links"
-            " and load no unselected genre or technique."
+            "These are the only additional genre support files: follow no other genre"
+            " links and load no unselected genre or technique."
         ),
         "Done when this bounded contract is loaded, with no review half.",
     ),
@@ -7435,6 +7779,40 @@ def test_the_licence_sits_where_the_genre_is_resolved_and_widens_no_loading() ->
                 f"{path}: the loading step no longer carries {clause!r}, so"
                 f" the door the licence above must not widen is open"
                 f" (ADR-0178). See {STANDARD}."
+            )
+
+
+def test_every_bounded_loading_path_reaches_the_shared_article_support() -> None:
+    """Support nothing loads is support no draft is held to.
+
+    The anatomy and the headline reference are reached the way the craft brief
+    is: named in the loading step of each Skill that may need them, inside the
+    bound that admits the support files and nothing further. Write composes, so
+    it loads the base halves alone; Redline and the fresh subagent it corrects
+    through read the diagnostics beside them (ADR-0178).
+    """
+
+    for path, prefix in (
+        (WRITE, "$LIBRARY/references/editorial/"),
+        (REDLINE, "$LIBRARY/references/editorial/"),
+        (REDLINE_CORRECTION, "<library>/references/editorial/"),
+    ):
+        text = path.read_text(encoding="utf-8")
+        reviews = path is not WRITE
+
+        for name in ARTICLE_SUPPORT:
+            pointer = f"{prefix}{name}"
+
+            assert f"{pointer}.md" in text, (
+                f"{path}: the loading step never reaches `{pointer}.md`, so an"
+                f" article, case study, column or opinion is written or"
+                f" reviewed without what it is held to (ADR-0178). See"
+                f" {STANDARD}."
+            )
+            assert (f"{pointer}.review.md" in text) is reviews, (
+                f"{path}: the review half of `{name}.md` is loaded where it is"
+                f" not acted on, or left out where it is. Diagnostics belong"
+                f" to the Skills that review (ADR-0178). See {STANDARD}."
             )
 
 
@@ -8512,6 +8890,124 @@ REMOVED_CLAIM_DUTY = "every removed claim"
 CHANGED_CLAIM_DUTY = "every changed claim"
 CLAIM_ELEMENTS = "scope, certainty, attribution, chronology, causality"
 
+# What the run checks a returned text for beside the claims. Comparing claim by
+# claim and nothing else let every difference that moves no claim through: a
+# rewritten heading, a re-split paragraph, `set … against` becoming
+# `weigh … against`, `channel` becoming `route`. Each difference now traces to
+# a finding of the review that commissioned the round, or to what repairing
+# that finding required, and one that traces to neither comes back byte for
+# byte from the pre-round text (issue #383).
+TRACE_TO_A_FINDING = "trace each one to a finding"
+TRACE_NECESSITATES = "or where that repair necessitates it"
+TRACE_UNTRACED_RESTORED = "traces to neither is not accepted"
+TRACE_BYTE_FOR_BYTE = "byte for byte from the pre-round"
+TRACE_IS_NOT_A_REJECTION = "spends no budget and is not a finding"
+
+# The one sentence the correction brief owes about it. The brief already tells
+# the subagent to repair what the findings name and nothing else; what it never
+# said is what happens to a difference that answers no finding (issue #383).
+BRIEF_UNTRACED_RESTORED = "traces to no finding is restored"
+
+# The delivery's closing paragraph. Changes to a claim, to meaning or to sense
+# stay itemised as #377 left them; corrections of spelling, slop and the like
+# are summarised by kind in one closing paragraph instead, and the paragraph is
+# built from the run's own comparison rather than from a subagent's note of
+# what it did — `post-opinion-en_GB-r1-b`'s reply described a change its own
+# returned text contradicted (issue #383).
+SUMMARY_BEYOND_THE_CLAIMS = "beyond the claim account"
+SUMMARY_BY_KIND = "by kind"
+SUMMARY_NOT_ITEMISED = "without itemising"
+SUMMARY_FROM_THE_RUNS_COMPARISON = "never from a correction subagent's note"
+SUMMARY_COVERS_EVERY_KIND = "every kind of difference"
+SUMMARY_IS_TRUE = "false against the delivered text"
+
+# The catalogue's own guard, which authorised the `channel` → `route`
+# substitutions because it was written as an exception inside the paragraph on
+# repair rather than as a test a reader applies before recording anything
+# (issue #383).
+GUARD_HEADING = "## The test before a pattern is recorded"
+GUARD_IMAGINED_REPAIR = "Make the repair in your head before you record"
+GUARD_NOTHING_RECORDED = "the pattern is not present and nothing is recorded"
+SYNONYM_ONE_THING = "only where the names denote one thing"
+SYNONYM_TWO_THINGS = "not cycling however often they alternate"
+
+# What a returned correction is until something has read it. Rejecting a round
+# needed nothing the run lacked — it holds every state the text passed
+# through — and #386's `case-study-sv` delivered a headline its own re-review
+# had established as unsupported by the body, because the repair-created stop
+# ended the loop with the defective correction still current (issue #389).
+CANDIDATE_NOT_CURRENT = "a correction candidate rather than the current Text Artifact"
+CANDIDATE_SETTLES_ACCEPTANCE = "settles whether the candidate is accepted at all"
+ESTABLISH_AGAINST_STATES = "against the states you retain"
+ESTABLISH_NOT_A_PREFERENCE = "are not attributed to a repair"
+REJECT_THE_WHOLE_ROUND = "reject the whole round that introduced it"
+REJECT_WHATEVER_ELSE = "whatever else that round repaired"
+RESTORE_VERBATIM = "pre-round Text Artifact verbatim as the current text"
+RESTORE_AN_EARLIER_ROUND = (
+    "restore the state immediately before that round and discard every state built"
+    " on it"
+)
+REJECT_NOTHING_KEPT = "Nothing of a rejected round is kept"
+REJECT_CANDIDATE_ACCEPTED = "becomes the current Text Artifact, and the loop goes on"
+
+# The stop condition the rejection is stated in, and what a rejected round
+# costs. The attempt spends its budget; restoration buys nothing back and
+# licenses no wording of the run's own (issue #389).
+STOP_ESTABLISHES = "establishes a finding an earlier round's own repair created"
+STOP_RESTORED_IS_DELIVERED = (
+    "the restored pre-round state is the text this run delivers"
+)
+STOP_BUDGET_KEPT = "The round keeps the budget it spent"
+STOP_NO_REFUND = "restoration refunds nothing and spends nothing"
+STOP_NO_SECOND_ATTEMPT = "no second attempt at the finding it answered"
+STOP_FINDINGS_OF_THE_RESTORED_TEXT = "the findings that commissioned the rejected round"
+STOP_ATTEMPT_NOT_A_DEFECT = "never as a defect of the text delivered"
+
+# The two kinds the evaluation and the staged runs of `main` were observed
+# creating, both of them in what a round rewrote: a headline claiming an effect
+# the body withholds, and a subheading repeating the sentence under it
+# (issue #389).
+REDLINE_STRENGTHENED_CLAIM = "asserted more strongly than the text supports"
+REDLINE_HEADING_ECHO = "a heading repeating what it stands over"
+
+# What the delivery owes about an attempt nobody kept. The discarded defect is
+# not a finding of the text delivered, and a finding carried forward from the
+# restored state was never repaired (issue #389).
+DELIVERY_ATTEMPTED_AND_REJECTED = "attempted and rejected"
+DELIVERY_DISCARDED_NOT_PRESENT = "never reported as present in what you deliver"
+DELIVERY_CARRIED_NOT_REPAIRED = "never reported as repaired"
+
+# The one sentence the correction brief owes about it: a defect of its own
+# costs the subagent the whole round, so a finding it cannot repair without
+# creating another is one it leaves (issue #389).
+BRIEF_A_DEFECT_COSTS_THE_ROUND = "the text you received is restored entire"
+BRIEF_LEAVE_RATHER_THAN_CREATE = "without creating another one is a finding you leave"
+
+# The caller-facing and shared-contract surfaces of the same rule (issue #389).
+HELP_CANDIDATE = "is a correction candidate"
+HELP_REJECTED_ENTIRE = "rejected entire"
+HELP_NO_REFUND = "no refund and no second attempt"
+BASE_CANDIDATE = "A correction is a candidate until"
+BASE_INPUT_STANDS = "the correction is not accepted and its input stands"
+
+# What the first staged native run of the rule showed was still missing. On
+# `article-flawed` — a text with no subheading anywhere, so the round had to
+# write them — the round wrote two that failed the headline contract, the
+# re-review found both, and the run accepted the round and delivered them as
+# unresolved findings. The part the round wrote is the case the rule has to
+# name, a spent budget is not a reason to deliver a defect the run created, and
+# a finding of the run's own making is not something a person is handed
+# (issue #389).
+ESTABLISH_A_PART_THE_ROUND_WROTE = "is where this is established most often"
+ESTABLISH_COMMISSIONED_IS_NO_IMMUNITY = "does not put what it says beyond this check"
+ESTABLISH_WORSE_WITHOUT_IT = "is no reason to keep a defective one"
+ESTABLISH_NEVER_CARRIED_FORWARD = "never carried forward as an unresolved finding"
+ESTABLISH_BEFORE_THE_BUDGET = "the third condition is tested before the fourth"
+REDLINE_PARTS_A_ROUND_WRITES = (
+    "a headline, a standfirst or a subheading that did not exist before the round"
+)
+HELP_NEVER_AN_UNRESOLVED_FINDING = "never reported as an unresolved finding"
+
 
 def test_the_loop_stops_where_an_earlier_repair_created_the_finding() -> None:
     """A loop answering for its own work repairs what it did last round.
@@ -8706,6 +9202,439 @@ def test_re_review_rejects_and_reports_a_correction_that_loses_a_claim() -> None
                 f" reader of it settles that for themselves (issue #377). See"
                 f" {STANDARD}."
             )
+
+
+def test_every_difference_a_round_returns_traces_to_a_finding() -> None:
+    """A claim comparison cannot see a difference that moves no claim.
+
+    Step 7 compared the returned text with the pre-round text claim by claim
+    and nothing else, and the correction brief's *repair what the findings name
+    and nothing else* had no party verifying it. So a rewritten heading, a
+    re-split paragraph and a substituted verb passed every check the run made,
+    and six of sixteen judgements of #377's post-change arm failed on exactly
+    that. The trace check is the missing reader: every difference answers a
+    finding of the review that commissioned the round, or answers what
+    repairing that finding required, and a difference answering neither is
+    restored byte for byte from the pre-round text while the rest of the round
+    stands (issue #383).
+    """
+
+    for body_path, brief_path in (
+        (REDLINE, REDLINE_CORRECTION),
+        (UNSLOP, UNSLOP_CORRECTION),
+    ):
+        body = body_path.read_text(encoding="utf-8")
+
+        assert TRACE_TO_A_FINDING in body, (
+            f"{body_path}: step 7 compares the returned text with the pre-round"
+            f" text claim by claim and nothing else, so a difference that moves"
+            f" no claim is accepted without anything having read it"
+            f" (issue #383). See {STANDARD}."
+        )
+        assert TRACE_NECESSITATES in body, (
+            f"{body_path}: the trace check names no consequence of a repair, so"
+            f" an agreement fixed after a changed subject traces to nothing and"
+            f" is restored on top of the repair that required it (issue #383)."
+            f" See {STANDARD}."
+        )
+        assert TRACE_UNTRACED_RESTORED in body, (
+            f"{body_path}: a difference the review never asked for can still"
+            f" become the current artifact, which is the whole of what this"
+            f" check exists to stop (issue #383). See {STANDARD}."
+        )
+        assert TRACE_BYTE_FOR_BYTE in body, (
+            f"{body_path}: the step does not say the passage comes back from"
+            f" the pre-round text unchanged, so restoring it is left to the"
+            f" run's own wording — and wording of the orchestrator's own is"
+            f" what a restoration exists to avoid writing (issue #383). See"
+            f" {STANDARD}."
+        )
+        assert TRACE_IS_NOT_A_REJECTION in body, (
+            f"{body_path}: a restoration is not held apart from the claim"
+            f" comparison's rejection, so a run may spend a round of budget or"
+            f" raise a finding over a passage it simply put back (issue #383)."
+            f" See {STANDARD}."
+        )
+
+        assert BRIEF_UNTRACED_RESTORED in brief_path.read_text(encoding="utf-8"), (
+            f"{brief_path}: the brief tells the subagent to repair what the"
+            f" findings name and nothing else without saying what becomes of a"
+            f" difference that answers no finding, so the one party that could"
+            f" avoid the work never learns it will be undone (issue #383). See"
+            f" {STANDARD}."
+        )
+
+    assert TRACE_TO_A_FINDING in BASE_REVIEW.read_text(encoding="utf-8"), (
+        f"{BASE_REVIEW}: the review extension says what a correction is"
+        f" compared against and asks only for its claims beside the defect, so"
+        f" the surface a reviewing Skill meets the rule on still describes the"
+        f" narrower comparison (issue #383). See {STANDARD}."
+    )
+
+
+def test_the_delivery_summarises_what_it_changed_beyond_the_claims() -> None:
+    """An account of the claims alone leaves every other difference unsaid.
+
+    The delivery step asked for the unresolved findings and the claim account,
+    and beyond those only for what the review resolved — so a reply could say
+    `no claim was removed or changed` and list nothing while three words
+    differed, and another could describe a change its own returned text
+    contradicted. Changes to a claim stay itemised as #377 left them; what else
+    the run did is one closing paragraph by kind, built from the run's own
+    comparison of the text as it arrived with the text it delivers, with every
+    kind of difference covered and nothing in it false against that text
+    (issue #383).
+    """
+
+    for body_path, help_path in ((REDLINE, REDLINE_HELP), (UNSLOP, UNSLOP_HELP)):
+        body = body_path.read_text(encoding="utf-8")
+
+        assert SUMMARY_BEYOND_THE_CLAIMS in body, (
+            f"{body_path}: the delivery step names the claim account and the"
+            f" unresolved findings and stops, so every difference that touched"
+            f" no claim is delivered without a word (issue #383). See"
+            f" {STANDARD}."
+        )
+        assert SUMMARY_BY_KIND in body and SUMMARY_NOT_ITEMISED in body, (
+            f"{body_path}: the closing summary is not held to kinds, so it"
+            f" either itemises what the account was widened in order not to"
+            f" itemise or says nothing in particular (issue #383). See"
+            f" {STANDARD}."
+        )
+        assert SUMMARY_FROM_THE_RUNS_COMPARISON in body, (
+            f"{body_path}: the summary may be built from the correction"
+            f" subagent's account of its own work, which is the one reader that"
+            f" cannot check it — the same reason a correction is verified by"
+            f" review (issue #383). See {STANDARD}."
+        )
+        assert SUMMARY_COVERS_EVERY_KIND in body, (
+            f"{body_path}: the summary owes no completeness, so a run may name"
+            f" one kind of difference and leave another out (issue #383). See"
+            f" {STANDARD}."
+        )
+        assert SUMMARY_IS_TRUE in body, (
+            f"{body_path}: the summary owes nothing to the text it is about, so"
+            f" a sentence false against the delivered text satisfies it"
+            f" (issue #383). See {STANDARD}."
+        )
+
+        page = help_path.read_text(encoding="utf-8")
+        assert SUMMARY_BEYOND_THE_CLAIMS in page, (
+            f"{help_path}: the manpage still describes the account as the"
+            f" findings and the claims alone, so a caller reading it does not"
+            f" learn that the reply says what else the run changed"
+            f" (issue #383). See {STANDARD}."
+        )
+
+
+def test_the_catalogue_states_its_guard_as_a_test_before_a_finding() -> None:
+    """An exception inside the repair paragraph authorised the substitutions.
+
+    The guard was there — *where a phrase is doing real work … the pattern is
+    not present and nothing is changed* — but it sat in the paragraph about how
+    to repair, so it read as a licence to be careful while repairing rather
+    than as a reason not to record anything. It is now a test applied before a
+    pattern becomes a finding: make the repair in your head, and where a claim
+    then asserts more, less or something else, or a distinction the text drew
+    is gone, nothing is recorded. *Synonym cycling* says what that means where
+    it was observed failing — two words a text uses for two things are not
+    cycling, however often they alternate (issue #383).
+    """
+
+    catalogue = ANTI_SLOP.read_text(encoding="utf-8")
+
+    assert GUARD_HEADING in catalogue, (
+        f"{ANTI_SLOP}: the *doing real work* guard is still a clause inside the"
+        f" paragraph on repair, where it qualifies how a pattern is removed"
+        f" instead of whether it was ever present (issue #383). See"
+        f" {STANDARD}."
+    )
+    assert GUARD_IMAGINED_REPAIR in catalogue, (
+        f"{ANTI_SLOP}: the guard states no test a reader can apply, so whether"
+        f" a phrase is doing real work is settled by whoever is reading"
+        f" (issue #383). See {STANDARD}."
+    )
+    assert GUARD_NOTHING_RECORDED in catalogue, (
+        f"{ANTI_SLOP}: the guard's consequence is that nothing is changed"
+        f" rather than that nothing is recorded, so the pattern still reaches a"
+        f" correction agent as a finding (issue #383). See {STANDARD}."
+    )
+    assert catalogue.index(GUARD_HEADING) < catalogue.index("## The seven patterns"), (
+        f"{ANTI_SLOP}: the test sits after the patterns it governs, so a reader"
+        f" recording one meets it only once the finding is written"
+        f" (issue #383). See {STANDARD}."
+    )
+
+    synonym = catalogue.partition("**Synonym cycling.**")[2].partition("\n\n")[0]
+    assert SYNONYM_ONE_THING in synonym, (
+        f"{ANTI_SLOP}: *Synonym cycling* does not say the pattern needs names"
+        f" that denote one thing, so two words naming two things are cycling as"
+        f" soon as they alternate (issue #383). See {STANDARD}."
+    )
+    assert SYNONYM_TWO_THINGS in synonym, (
+        f"{ANTI_SLOP}: nothing under *Synonym cycling* holds the pattern away"
+        f" from a distinction the text meant to draw, which is the case the"
+        f" catalogue was observed authorising away (issue #383). See"
+        f" {STANDARD}."
+    )
+
+
+def test_a_repair_created_defect_rejects_the_round_that_introduced_it() -> None:
+    """A stop that leaves the defective correction current delivers the defect.
+
+    #386's `case-study-sv` arrived with a headline saying nothing of the angle,
+    the one round replaced it with one claiming in the publication's voice an
+    effect the body explicitly withholds, and the re-review established exactly
+    that — then the loop stopped and the text was delivered with the worse
+    headline in place. Rejection needed nothing the run lacked: it holds the
+    pre-round state. So a returned text is a candidate until the independent
+    review of it has established whether it introduced a defect, and a defect
+    established against the retained states rejects the whole round that
+    introduced it, restores that round's pre-round artifact verbatim and stops
+    (issue #389).
+    """
+
+    for body_path in (REDLINE, UNSLOP):
+        body = body_path.read_text(encoding="utf-8")
+
+        assert CANDIDATE_NOT_CURRENT in body, (
+            f"{body_path}: a returned correction becomes the current Text"
+            f" Artifact before anything has reviewed it, so the review that"
+            f" establishes a defect the round created reports it about the text"
+            f" the run is already delivering (issue #389). See {STANDARD}."
+        )
+        assert CANDIDATE_SETTLES_ACCEPTANCE in body, (
+            f"{body_path}: the re-review settles what the findings are and not"
+            f" whether the candidate is accepted, so its verdict cannot reach"
+            f" the correction it is a verdict on (issue #389). See {STANDARD}."
+        )
+        assert ESTABLISH_AGAINST_STATES in body, (
+            f"{body_path}: nothing says a repair-created defect is established"
+            f" against the states the run retains, so a finding is attributed"
+            f" to a repair on how it words itself (issue #389). See"
+            f" {STANDARD}."
+        )
+        assert ESTABLISH_NOT_A_PREFERENCE in body, (
+            f"{body_path}: a preference, and an old defect first noticed now,"
+            f" are not held away from the repair, so a round is rejected for a"
+            f" defect it did not introduce (issue #389). See {STANDARD}."
+        )
+        assert REJECT_THE_WHOLE_ROUND in body, (
+            f"{body_path}: the loop stops on a repair-created defect while the"
+            f" correction that created it stays in the delivered text, which is"
+            f" the whole of what this rule exists to end (issue #389). See"
+            f" {STANDARD}."
+        )
+        assert REJECT_WHATEVER_ELSE in body, (
+            f"{body_path}: the rejection is not held to the whole round, so a"
+            f" round carrying a valid repair beside a new defect is accepted in"
+            f" part and the defect comes with it (issue #389). See {STANDARD}."
+        )
+        assert RESTORE_VERBATIM in body, (
+            f"{body_path}: the step does not say the pre-round artifact comes"
+            f" back verbatim as the current text, so restoring it is left to"
+            f" the run's own wording (issue #389). See {STANDARD}."
+        )
+        assert RESTORE_AN_EARLIER_ROUND in body, (
+            f"{body_path}: a defect established one round after the round that"
+            f" introduced it restores the wrong state, or none, and the states"
+            f" built on the rejected one stay current (issue #389). See"
+            f" {STANDARD}."
+        )
+        assert REJECT_NOTHING_KEPT in body, (
+            f"{body_path}: nothing says a rejected round survives in no part,"
+            f" so earlier accepted work may be reassembled out of a state the"
+            f" run discarded (issue #389). See {STANDARD}."
+        )
+        assert REJECT_CANDIDATE_ACCEPTED in body, (
+            f"{body_path}: a candidate with no repair-created defect against it"
+            f" is never said to be accepted, so a clean justified correction"
+            f" has no path through the same gate (issue #389). See {STANDARD}."
+        )
+
+        assert ESTABLISH_A_PART_THE_ROUND_WROTE in body, (
+            f"{body_path}: the rule names no case it is established in, and the"
+            f" first staged run of it accepted a round whose own new subheadings"
+            f" failed the contract — the part a round wrote is exactly where"
+            f" this happens (issue #389). See {STANDARD}."
+        )
+        assert ESTABLISH_COMMISSIONED_IS_NO_IMMUNITY in body, (
+            f"{body_path}: a part a finding commissioned is not held to the"
+            f" check, so a round asked for a heading may write any heading"
+            f" (issue #389). See {STANDARD}."
+        )
+        assert ESTABLISH_WORSE_WITHOUT_IT in body, (
+            f"{body_path}: nothing rules out keeping a defective part because"
+            f" the text was worse without one, which is how a round that"
+            f" repaired a real absence keeps the defect it wrote"
+            f" (issue #389). See {STANDARD}."
+        )
+        assert ESTABLISH_NEVER_CARRIED_FORWARD in body, (
+            f"{body_path}: a defect the run itself created may still be carried"
+            f" forward as an unresolved finding, which is how the observed run"
+            f" delivered two of its own (issue #389). See {STANDARD}."
+        )
+        assert ESTABLISH_BEFORE_THE_BUDGET in body, (
+            f"{body_path}: the loop stops at the first of four conditions with"
+            f" nothing saying the third is tested before the fourth, so a spent"
+            f" budget answers for a defect the run created (issue #389). See"
+            f" {STANDARD}."
+        )
+
+    redline = REDLINE.read_text(encoding="utf-8")
+    assert REDLINE_PARTS_A_ROUND_WRITES in redline, (
+        f"{REDLINE}: the parts a round rewrites — the headline, the standfirst,"
+        f" the subheadings — are not named as where a repair-created defect is"
+        f" looked for, and they are where every case the evaluation and the"
+        f" staged runs recorded was created (issue #389). See {STANDARD}."
+    )
+    assert REDLINE_STRENGTHENED_CLAIM in redline, (
+        f"{REDLINE}: the stop names no strengthened claim, so the `case-study-sv`"
+        f" headline claiming an effect the body withholds is not among the"
+        f" defects a round can be rejected for (issue #389). See {STANDARD}."
+    )
+    assert REDLINE_HEADING_ECHO in redline, (
+        f"{REDLINE}: the stop names no heading repeating its own text, so the"
+        f" echoes the `column-flawed` and `article-flawed` rounds wrote are"
+        f" delivered as the evaluation found them (issue #389). See"
+        f" {STANDARD}."
+    )
+
+
+def test_a_rejected_round_keeps_its_budget_and_earns_no_fresh_attempt() -> None:
+    """Restoration is not a refund, and a rejection is not a retry.
+
+    The attempted correction spent a round of the Correction Budget and spends
+    it whatever it came back with. Putting the pre-round text back costs
+    nothing further and buys nothing back, and it authorizes no wording of the
+    run's own: no second attempt at the finding the rejected round answered and
+    no correction to make up for what was discarded, the loop having stopped
+    (issue #389).
+    """
+
+    for body_path, help_path in ((REDLINE, REDLINE_HELP), (UNSLOP, UNSLOP_HELP)):
+        body = body_path.read_text(encoding="utf-8")
+
+        assert STOP_ESTABLISHES in body, (
+            f"{body_path}: the stop reads on a finding raised rather than on one"
+            f" established, so a preference reported in the shape of a"
+            f" repair-created defect rejects a round (issue #389). See"
+            f" {STANDARD}."
+        )
+        assert STOP_RESTORED_IS_DELIVERED in body, (
+            f"{body_path}: the stop does not say the restored state is what the"
+            f" run delivers, so a rejection can end the loop with the candidate"
+            f" still on its way out (issue #389). See {STANDARD}."
+        )
+        assert STOP_BUDGET_KEPT in body, (
+            f"{body_path}: a rejected round is not said to keep the budget it"
+            f" spent, so a run may read its rejection as a round that never"
+            f" happened (issue #389). See {STANDARD}."
+        )
+        assert STOP_NO_REFUND in body, (
+            f"{body_path}: restoration is not held apart from the budget, so"
+            f" putting a passage back either refunds a round or spends one"
+            f" (issue #389). See {STANDARD}."
+        )
+        assert STOP_NO_SECOND_ATTEMPT in body, (
+            f"{body_path}: nothing rules out another attempt at the finding the"
+            f" rejected round answered, so the loop the rejection stopped"
+            f" restarts under another name (issue #389). See {STANDARD}."
+        )
+
+        page = help_path.read_text(encoding="utf-8")
+        assert HELP_CANDIDATE in page, (
+            f"{help_path}: the manpage describes a returned correction as"
+            f" compared and reviewed before acceptance without saying it is a"
+            f" candidate that a review can reject, so a caller does not learn"
+            f" the round can be thrown away (issue #389). See {STANDARD}."
+        )
+        assert HELP_REJECTED_ENTIRE in page, (
+            f"{help_path}: the manpage's loop still stops on a repair-created"
+            f" finding with nothing said about the correction that created it"
+            f" (issue #389). See {STANDARD}."
+        )
+        assert HELP_NEVER_AN_UNRESOLVED_FINDING in page, (
+            f"{help_path}: the page still lets a caller expect a defect the run"
+            f" created among the findings it is handed to settle"
+            f" (issue #389). See {STANDARD}."
+        )
+        assert HELP_NO_REFUND in page, (
+            f"{help_path}: a caller reading the page cannot tell what a"
+            f" rejection costs, so a run that ends one round short of the"
+            f" budget looks like a run that stopped early for nothing"
+            f" (issue #389). See {STANDARD}."
+        )
+
+    assert BASE_CANDIDATE in BASE_REVIEW.read_text(encoding="utf-8"), (
+        f"{BASE_REVIEW}: the shared review extension says a correction is"
+        f" compared with its input and reread, and stops there, so the surface"
+        f" a reviewing Skill meets the rule on does not say the comparison can"
+        f" refuse the correction (issue #389). See {STANDARD}."
+    )
+    assert BASE_INPUT_STANDS in BASE_REVIEW.read_text(encoding="utf-8"), (
+        f"{BASE_REVIEW}: the extension names no consequence for a correction"
+        f" that introduced a defect, so its input is not said to stand"
+        f" (issue #389). See {STANDARD}."
+    )
+
+
+def test_the_delivery_holds_a_discarded_defect_apart_from_what_it_delivers() -> None:
+    """Findings accompanying a restored text describe that text.
+
+    A rejected round's defect is not a finding of the text the run delivers —
+    the run discarded it — and the findings carried forward from the restored
+    state were never repaired. The account says the round was attempted and
+    rejected and what it had introduced, and keeps that apart from what the
+    delivered text still carries, so the reply is truthful about what was
+    attempted, what was rejected and what was retained (issue #389).
+    """
+
+    for body_path in (REDLINE, UNSLOP):
+        body = body_path.read_text(encoding="utf-8")
+
+        assert STOP_FINDINGS_OF_THE_RESTORED_TEXT in body, (
+            f"{body_path}: the findings carried forward are not tied to the"
+            f" text that is delivered, so a rejection can carry forward"
+            f" findings recorded against a candidate nobody kept"
+            f" (issue #389). See {STANDARD}."
+        )
+        assert STOP_ATTEMPT_NOT_A_DEFECT in body, (
+            f"{body_path}: a rejected attempt is not held apart from the"
+            f" delivered text's own defects, so the run reports as present"
+            f" something it discarded (issue #389). See {STANDARD}."
+        )
+        assert DELIVERY_ATTEMPTED_AND_REJECTED in body, (
+            f"{body_path}: the delivery step never says a rejected round is"
+            f" reported at all, so a run may deliver a restored text as though"
+            f" no round had been spent (issue #389). See {STANDARD}."
+        )
+        assert DELIVERY_DISCARDED_NOT_PRESENT in body, (
+            f"{body_path}: the delivery step does not forbid reporting a"
+            f" discarded defect as present, which is the untruth the rejection"
+            f" exists to avoid creating (issue #389). See {STANDARD}."
+        )
+        assert DELIVERY_CARRIED_NOT_REPAIRED in body, (
+            f"{body_path}: a finding carried forward from a restored state may"
+            f" be reported as repaired, the rejected round having claimed to"
+            f" repair it (issue #389). See {STANDARD}."
+        )
+
+    for brief_path in (REDLINE_CORRECTION, UNSLOP_CORRECTION):
+        brief = brief_path.read_text(encoding="utf-8")
+
+        assert BRIEF_A_DEFECT_COSTS_THE_ROUND in brief, (
+            f"{brief_path}: the brief never says what a defect of the"
+            f" subagent's own making costs, so the one party that could avoid"
+            f" creating one does not learn the whole round is discarded"
+            f" (issue #389). See {STANDARD}."
+        )
+        assert BRIEF_LEAVE_RATHER_THAN_CREATE in brief, (
+            f"{brief_path}: the brief stops for a fact it would have to invent"
+            f" and not for a defect it would have to create, so a repair that"
+            f" trades one finding for another is a compliant repair"
+            f" (issue #389). See {STANDARD}."
+        )
 
 
 def test_unslop_resolves_the_language_and_leaves_the_map_as_it_found_it() -> None:
@@ -9639,6 +10568,7 @@ def test_delegation_asks_the_selection_engine_as_a_script() -> None:
         "--seat=<model>@<level>",
         "--repo=<the project root>",
         "`--stakes=high`",
+        "--permissions=<level>",
     }
     missing_command = sorted(
         fragment for fragment in required_command if fragment not in mode

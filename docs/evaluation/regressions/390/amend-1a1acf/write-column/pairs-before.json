@@ -1,0 +1,116 @@
+{
+  "ok": true,
+  "format": "markdown",
+  "conforms": true,
+  "failures": [],
+  "norms": [],
+  "typical": {
+    "paragraphs": 8,
+    "paragraphs_of_two_or_three_sentences": 7,
+    "sections": 2,
+    "sections_of_two_or_three_paragraphs": 2
+  },
+  "parts": {
+    "headline": {
+      "text": "Mötet behöver en fråga före en ruta",
+      "characters": 35,
+      "words": 7
+    },
+    "standfirst": {
+      "text": "Bibliotekets mötesmall rymmer tider, deltagare och dagordning – …",
+      "words": 38,
+      "sentences_estimate": 2,
+      "paragraphs": 1
+    },
+    "byline": {
+      "text": "Av Nora Vik",
+      "words": 3
+    },
+    "lead": {
+      "text": "När jag granskar bibliotekets mötesmall ser jag rutor …",
+      "words": 47,
+      "sentences_estimate": 3,
+      "paragraphs": 1
+    },
+    "sections": [
+      {
+        "subheading": {
+          "text": "Jag vill veta varför vi tar tiden",
+          "characters": 33,
+          "words": 7
+        },
+        "paragraphs": [
+          {
+            "text": "Det är inte snabb enighet jag uppskattar mest. …",
+            "words": 36,
+            "sentences_estimate": 3
+          },
+          {
+            "text": "Samtidigt retar jag mig på hur lätt tid …",
+            "words": 51,
+            "sentences_estimate": 3
+          },
+          {
+            "text": "Det betyder inte att varje samtal måste pressas …",
+            "words": 51,
+            "sentences_estimate": 4
+          }
+        ]
+      },
+      {
+        "subheading": {
+          "text": "En fråga får stå bredvid tiden",
+          "characters": 30,
+          "words": 6
+        },
+        "paragraphs": [
+          {
+            "text": "Här uppstår förstås ett litet formulärproblem. Jag vet …",
+            "words": 45,
+            "sentences_estimate": 3
+          },
+          {
+            "text": "Ändå vill jag prova en enkel fråga bredvid …",
+            "words": 34,
+            "sentences_estimate": 2
+          },
+          {
+            "text": "Jag behåller gärna både hoppet om frågan och …",
+            "words": 25,
+            "sentences_estimate": 3
+          }
+        ]
+      }
+    ],
+    "other": []
+  },
+  "heading_pairs": [
+    {
+      "id": "headline-standfirst",
+      "kind": "headline-standfirst",
+      "heading": "Mötet behöver en fråga före en ruta",
+      "following": "Bibliotekets mötesmall rymmer tider, deltagare och dagordning – men inte vad vi behöver förstå tillsammans. Det som saknas säger något om hur jag vill planera möten och varför jag ändå tvekar inför att fylla formuläret med ännu en ruta.",
+      "shared_words": [
+        "behöver",
+        "en",
+        "ruta"
+      ]
+    },
+    {
+      "id": "subheading-1",
+      "kind": "subheading-first-sentence-estimate",
+      "heading": "Jag vill veta varför vi tar tiden",
+      "following": "Det är inte snabb enighet jag uppskattar mest.",
+      "shared_words": [
+        "jag"
+      ]
+    },
+    {
+      "id": "subheading-2",
+      "kind": "subheading-first-sentence-estimate",
+      "heading": "En fråga får stå bredvid tiden",
+      "following": "Här uppstår förstås ett litet formulärproblem.",
+      "shared_words": []
+    }
+  ]
+}

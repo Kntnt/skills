@@ -1,0 +1,132 @@
+warning: No `requires-python` value found in the workspace. Defaulting to `>=3.12`.
+{
+  "manifest": "/Users/thomas/Projects/skills/.git/orchestrate-session-389-391-gpt/scratch/390/retry-59e6c1/registry/.kntnt/session-cleanup/sessions/01a0c7f0-2b8b-7d40-8503-2e197c2c1ee1.jsonl",
+  "recorded": {
+    "at": "2026-09-22T07:11:39+00:00",
+    "id": "78868",
+    "kind": "pid",
+    "started": "Tue Sep 22 09:11:39 2026",
+    "why": "Ticket 390 pytest check"
+  },
+  "session": "01a0c7f0-2b8b-7d40-8503-2e197c2c1ee1"
+}
+Installed 8 packages in 7ms
+============================= test session starts ==============================
+platform darwin -- Python 3.12.13, pytest-9.1.1, pluggy-1.6.0
+rootdir: /Users/thomas/Projects/skills-388-391
+configfile: pyproject.toml
+testpaths: tests
+plugins: xdist-3.8.0
+created: 14/14 workers
+14 workers [2142 items]
+
+........................................................................ [  3%]
+........................................................................ [  6%]
+........................................................................ [ 10%]
+........................................................................ [ 13%]
+........................................................................ [ 16%]
+........................................................................ [ 20%]
+........................................................................ [ 23%]
+........................................................................ [ 26%]
+........................................................................ [ 30%]
+........................................................................ [ 33%]
+........................................................................ [ 36%]
+........................................................................ [ 40%]
+........................................................................ [ 43%]
+........................................................................ [ 47%]
+........................................................................ [ 50%]
+........................................................................ [ 53%]
+.............................F.......................................... [ 57%]
+.......................................F................................ [ 60%]
+..............................F......................................... [ 63%]
+........................................................................ [ 67%]
+........................................................................ [ 70%]
+........................................................................ [ 73%]
+........................................................................ [ 77%]
+........................................................................ [ 80%]
+........................................................................ [ 84%]
+........................................................................ [ 87%]
+........................................................................ [ 90%]
+........................................................................ [ 94%]
+........................................................................ [ 97%]
+......................................................                   [100%]
+=================================== FAILURES ===================================
+_______________ test_the_manager_s_two_words_answer_with_the_job _______________
+[gw4] darwin -- Python 3.12.13 /Users/thomas/Projects/skills/.git/orchestrate-session-389-391-gpt/scratch/390/retry-59e6c1/uv-cache/builds-v0/.tmpNzddDI/bin/python
+
+tmp_path = PosixPath('/Users/thomas/Projects/skills/.git/orchestrate-session-389-391-gpt/scratch/390/retry-59e6c1/tmp/pytest-of-thomas/pytest-0/popen-gw4/test_the_manager_s_two_words_a0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x103c25850>
+
+    def test_the_manager_s_two_words_answer_with_the_job(
+        tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        """Both answers carry the `scheduler` key the Manager is handed."""
+    
+        monkeypatch.setenv("HOME", str(tmp_path))
+        _launchctl(tmp_path, monkeypatch)
+    
+        installed = capture.install_integrations([])
+        removed = capture.remove_integrations([])
+    
+>       assert installed["scheduler"]["state"] in {"not loaded", "unsatisfied"}
+E       AssertionError: assert 'loaded' in {'not loaded', 'unsatisfied'}
+
+tests/test_ms_scheduler.py:250: AssertionError
+___ test_under_a_redirected_home_install_writes_the_plist_and_loads_nothing ____
+[gw4] darwin -- Python 3.12.13 /Users/thomas/Projects/skills/.git/orchestrate-session-389-391-gpt/scratch/390/retry-59e6c1/uv-cache/builds-v0/.tmpNzddDI/bin/python
+
+tmp_path = PosixPath('/Users/thomas/Projects/skills/.git/orchestrate-session-389-391-gpt/scratch/390/retry-59e6c1/tmp/pytest-of-thomas/pytest-0/popen-gw4/test_under_a_redirected_home_i0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x103c24b60>
+
+    def test_under_a_redirected_home_install_writes_the_plist_and_loads_nothing(
+        tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        """A Manager Sandbox redirects HOME, and the real `launchd` is never reached."""
+    
+        home = tmp_path / "home"
+        home.mkdir()
+        monkeypatch.setenv("HOME", str(home))
+        log = _launchctl(tmp_path, monkeypatch)
+    
+        report = capture.install(
+            capture.default_data(), Path.home(), [], [], platform="darwin"
+        )
+    
+>       assert report["scheduler"]["state"] == "not loaded"
+E       AssertionError: assert 'loaded' == 'not loaded'
+E         
+E         - not loaded
+E         ? ----
+E         + loaded
+
+tests/test_ms_scheduler.py:271: AssertionError
+_ test_an_install_status_and_disable_under_a_temporary_root_call_no_launchctl __
+[gw4] darwin -- Python 3.12.13 /Users/thomas/Projects/skills/.git/orchestrate-session-389-391-gpt/scratch/390/retry-59e6c1/uv-cache/builds-v0/.tmpNzddDI/bin/python
+
+tmp_path = PosixPath('/Users/thomas/Projects/skills/.git/orchestrate-session-389-391-gpt/scratch/390/retry-59e6c1/tmp/pytest-of-thomas/pytest-0/popen-gw4/test_an_install_status_and_dis0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x103bf4230>
+
+    def test_an_install_status_and_disable_under_a_temporary_root_call_no_launchctl(
+        tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        """The gate is where the plist is written, so a temporary root never loads."""
+    
+        log = _launchctl(tmp_path, monkeypatch)
+        data, root = tmp_path / "data", tmp_path / "home"
+    
+        capture.install(data, root, [], COMMAND, platform="darwin")
+        reported = capture.status(data, root, platform="darwin")["scheduler"]
+        removed = capture.disable(data, root, [], platform="darwin")["scheduler"]
+    
+>       assert reported["health"] == "degraded"
+E       AssertionError: assert 'healthy' == 'degraded'
+E         
+E         - degraded
+E         + healthy
+
+tests/test_ms_scheduler.py:288: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_ms_scheduler.py::test_the_manager_s_two_words_answer_with_the_job
+FAILED tests/test_ms_scheduler.py::test_under_a_redirected_home_install_writes_the_plist_and_loads_nothing
+FAILED tests/test_ms_scheduler.py::test_an_install_status_and_disable_under_a_temporary_root_call_no_launchctl
+================== 3 failed, 2139 passed in 107.49s (0:01:47) ==================

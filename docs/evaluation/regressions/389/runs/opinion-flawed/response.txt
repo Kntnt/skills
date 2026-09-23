@@ -1,0 +1,39 @@
+## Granskningen
+
+Genre `opinion` och språk `sv` kom från anropet. Ingen teknik tillämpades: `opinion` anger själv att genren inte skrivs med någon. Korrigeringsbudgeten (`--max`, standardvärde 1) räckte till en runda, och den lämnade texten utan kvarstående fynd — omgranskningen från början hittade inget nytt, och inget fel som rundan själv skulle ha infört. Artikelanatomin är maskinmätt (`article_anatomy.py`, exit 0).
+
+```markdown
+# Behåll telefonbokningen i alla sju lokaler
+
+I kommunens pilotrapport redovisas 96 bokningar på webben och 24 via telefon. Rapporten tillägger att antalet bokningar inte är detsamma som antalet personer och att digital vana inte undersöktes. Här är skälen till att kommunstyrelsen bör låta båda bokningsvägarna vara kvar, och vad förvaltningen behöver mäta.
+
+Sanna Ek, Öppna beslut
+
+Kommunstyrelsen borde behålla telefonbokning under ett halvårs försök i alla sju lokaler.
+
+## Siffrorna räknar bokningar, inte personer
+
+Det gjordes 96 bokningar på webben och 24 via telefon. Det innebär att 20 procent av bokningarna gjordes via telefon. Kommunens pilotrapport från den 8 april 2026 säger samtidigt att bokningarna inte räknar unika personer och att digital vana inte undersöktes.
+
+## Merarbetet är påstått men inte uppmätt
+
+Förvaltningen invänder att dubbla kanaler innebär dubbel administration. Handlingarna saknar tidsmätning.
+
+Föreningen Öppna beslut vill att förvaltningen mäter tidsåtgång och frågar användarna varför de väljer en bokningsväg. Försökets kostnad är inte beräknad.
+
+Kommunstyrelsen bör därför besluta att telefonbokningen finns kvar i alla sju lokaler under ett halvår, och ge förvaltningen i uppdrag att mäta tidsåtgången.
+```
+
+## Borttagna påståenden
+
+- **Att alla vet att politikerna vill stänga ute äldre, motivet som tillskrevs dem, och besparingen "i miljoner".** Fyndet pekade ut hela meningen som defekten — en åsikt tillskriven alla utan att någon namnges, ett motiv utan belägg och ett belopp som ingen uppgift i texten bär — och repareringen av det fyndet tog bort meningen.
+- **Att det inte kostar något att behålla telefonbokningen.** Fyndet gällde den brutna slutledningen från utebliven tidsmätning till noll kostnad, och repareringen tog bort slutsatsmeningen. Den gränsdragande meningen "Handlingarna saknar tidsmätning" står kvar oförändrad, liksom "Försökets kostnad är inte beräknad" och pilotrapportens förbehåll om unika personer och digital vana.
+
+## Ändrade påståenden
+
+- **Tjugoprocentsiffran.** Repareringen av fyndet om fel nämnare gav siffran tillbaka sin egen nämnare: 20 procent gäller nu bokningarna, inte invånarna. Påståendet om att invånare inte kan använda internet finns inte kvar, och verbet "bevisar" är borta.
+- **Avslutningen.** Repareringen av fyndet om den handlingslösa uppmaningen flyttade "Nu är det dags att agera" till textens eget förslag, riktat till kommunstyrelsen. Det är ledets förslag uttryckt igen, inte ett nytt.
+
+## Vad rundan i övrigt ändrade
+
+Rubriken är omskriven från textens vinkel i stället för ett tillskrivet motiv, en ingress är tillagd, och de två etikettrubrikerna är ersatta med underrubriker som säger vad avsnitten hävdar. Föreningen är namngiven i brödtexten i stället för att bara syfta tillbaka på bylinen, och diskussionsstycket är delat vid en befintlig meningsgräns så att invändningen och kravet inte längre ligger i samma stycke. Korrekturpasset hittade inga mekaniska fel att rätta. Källfilen `source.md` är oförändrad — leveransen gick till svaret.

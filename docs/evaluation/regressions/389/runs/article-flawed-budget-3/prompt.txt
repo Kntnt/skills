@@ -1,0 +1,2 @@
+/redline --genre=article --language=sv --max=3 --output=response source.md
+-- Mellanrubrikerna ska vara konkreta och säga vad avsnittet under dem visar.

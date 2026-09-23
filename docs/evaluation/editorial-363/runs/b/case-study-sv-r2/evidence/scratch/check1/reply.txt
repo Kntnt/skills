@@ -1,0 +1,10 @@
+Complete. Report written to `report.md` in this directory (`.../case-study-sv-r2/scratch/check1/report.md`). Sources and draft unchanged.
+
+Four source-support findings, all unresolved, each with a smallest repair:
+
+1. l.14 "ett bostadsföretag **med** 640 lägenheter" — material says "manages 640 flats".
+2. l.18/l.28 "hyresgästerna"/"hyresgästnöjdhet" — material says "residents"/"resident-satisfaction"; tenure is never stated.
+3. l.16 heading "bestämde vad loggen skulle innehålla" — material grants Elm Quay the categories and puts "Svale configured the log".
+4. l.30 heading "Beslutet hänger på…" — material says only "will decide after checking".
+
+No translation findings: all three quotations preserve meaning, stance, certainty and voice in idiomatic Swedish speech. One editorial question, no repair proposed: quotation 3 sitting under the call-to-action heading. The causal reservation, assignment-vs-completion distinction and Lind's reservation all survive intact.

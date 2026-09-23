@@ -227,7 +227,7 @@ def _answer(args: argparse.Namespace) -> dict[str, Any]:
     admitted = pool
     pool = _guarded(pool, profile, harness, args.model)
 
-    # The deliberation ceiling comes last, so a point either lock re-admitted
+    # The deliberation ceiling comes next, so a point either lock re-admitted
     # from the catalogue is held to it too. The pool as it would have stood
     # without the ceiling is kept beside it, only to say what the ceiling cost.
     base = args.max_deliberation or DEFAULT_MAX_DELIBERATION
@@ -243,6 +243,15 @@ def _answer(args: argparse.Namespace) -> dict[str, Any]:
         for point in _locked_to_deliberation(admitted, args.deliberation, ceiling, [])
         if _admitted(point.deliberation, ceiling)
     ]
+
+    # Each of the three pools then keeps the newest release of each family it
+    # holds, and keeps it on its own terms: a pool is compared among the
+    # releases it was actually left with, so the ceiling and the locks are
+    # gates the comparison is made after rather than around.
+    pool = _newest_releases(pool)
+    free = _newest_releases(free)
+    unguarded = _newest_releases(unguarded)
+
     if not pool:
         if free:
             notes.append(f"the deliberation ceiling {ceiling!r} admits no candidate")
@@ -932,7 +941,13 @@ def _pool(
     repo: str | None,
     notes: list[str | None],
 ) -> list[Point]:
-    """Return every point the scope admits, before any lock narrows it."""
+    """Return every point the scope admits, before any lock narrows it.
+
+    This is the widest the pool ever is. The locks, the quota guard, the
+    deliberation ceiling and `_newest_releases` each narrow it afterwards, in
+    that order, so a release admitted here is a candidate only until a newer
+    release of its own family turns out to have been admitted beside it.
+    """
 
     source = _eligible(cat, profile, scope)
     points = [
@@ -984,6 +999,11 @@ def _eligible(cat: Catalogue, profile: Profile, scope: str) -> list[Model]:
     the scope. The stand-in chooses no maker, and the whole catalogue is a pool
     nobody chose (ADR-0190). A model lock still reaches past an empty pool, so
     the one call answered without a profile is the one naming its model.
+
+    Eligibility is a statement about makers and says nothing about releases:
+    every release a chosen maker still lists is eligible here, and which of
+    them a call may be answered with is `_newest_releases`' question, asked
+    once every other gate has had its say.
     """
 
     if profile.source == "fallback":
@@ -1437,6 +1457,47 @@ def _models(pool: Sequence[Point]) -> list[Model]:
     for point in pool:
         seen.setdefault(point.model.id, point.model)
     return list(seen.values())
+
+
+def _newest_releases(pool: Sequence[Point]) -> list[Point]:
+    """Narrow a pool to the newest release of each family it holds.
+
+    A maker that goes on listing every release it ever shipped — which through
+    OpenRouter is indefinitely — otherwise has each of them ranked, explored
+    and offered as an alternative for ever, and a row bought about a release
+    its own maker has superseded is a row nothing will read again. The
+    lifecycle rule is no help here: it removes a model a maker stopped
+    offering, and these are still offered.
+
+    The comparison is made among the releases the pool it is handed actually
+    holds, which is why this runs after the locks and after the deliberation
+    ceiling rather than inside `_pool`. Held before them, a family whose newest
+    release this call cannot use would vanish instead of being represented by
+    its best usable release, and a pool holding only that family would be
+    emptied — which no gate of this module may do. Held here, it can only ever
+    remove a release another release of the same family survives, so it empties
+    no pool and loses no family from one.
+
+    A family is whatever the catalogue's own `family` field says, matched the
+    way `catalogue.resolve` matches a family token, and which release of it is
+    the newest is `catalogue.newest_first`'s to say. Nothing here infers a
+    succession the catalogue does not state, and nothing here is stored: a
+    release keeps its entry and its rows, and a `--model` lock naming it is
+    answered with it, because the lock has already narrowed the pool by the
+    time this runs.
+    """
+
+    families: dict[str, list[Model]] = {}
+    for model in _models(pool):
+        families.setdefault(model.family.lower(), []).append(model)
+
+    newest = {
+        family: catalogue.newest_first(releases)[0].id
+        for family, releases in families.items()
+    }
+    return [
+        point for point in pool if point.model.id == newest[point.model.family.lower()]
+    ]
 
 
 def _nearest(model: Model, level: str, ceiling: str | None = None) -> str | None:

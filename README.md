@@ -156,7 +156,7 @@ Run `/hetzner`, followed by the operation and constraints, or let the agent use 
 
 ## Features
 
-Besides skills, the collection ships **features**: catalog entries that install nothing a harness loads and only write into a harness's own configuration. `/kntnt select` lists them as a second group under the skills, and a feature's row says what it writes and where before you check it. They apply to the machine rather than to a project, so `--project` offers none.
+Besides skills, the collection ships **features**: catalog entries that install nothing a harness loads. `/kntnt select` lists them as a second group under the skills, and a feature's row says what it writes and where before you check it. They apply to the machine rather than to a project, so `--project` offers none.
 
 ### session-cleanup
 

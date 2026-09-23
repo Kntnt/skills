@@ -1,11 +1,12 @@
 """The Catalog's second entry type, and the two Features shipped on it.
 
 A Feature owns nothing a Harness loads, so nothing about it can be established
-by looking for a file in a skills directory. What it owns is state inside files
-the user maintains by hand — a Harness's own instruction file, a Harness's own
-hook table, a single-valued setting somebody may already have taken — and every
-test here is about the one property those share: this collection writes exactly
-what it owns, reads back what it wrote, and never touches anything else.
+by looking for a file in a skills directory. What it owns is state outside
+every skills directory — a Harness's own instruction file, a Harness's own hook
+table, a single-valued setting somebody may already have taken, a data file it
+writes as it runs — and every test here is about the one property those share:
+this collection writes exactly what it owns, reads back what it wrote, and
+never touches anything else.
 """
 
 from __future__ import annotations

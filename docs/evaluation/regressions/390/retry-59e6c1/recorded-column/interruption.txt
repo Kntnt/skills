@@ -1,0 +1,1 @@
+Builder terminated this process group to tighten filesystem confinement. The paraphrased-column run created and removed /tmp/redline-invoke.ctsIPR despite workspace instructions. Retry with workspace-write, network access enabled and /tmp excluded; preserve this attempt without treating startup progress as a semantic outcome.

@@ -1,0 +1,53 @@
+Klart. Den färdiga texten:
+
+```markdown
+---
+kntnt:
+  genre: case-study
+  technique: none
+  language: sv
+---
+
+# Arbetsledaren skulle göra om loggtestet – men förbereda mer
+
+Hösten 2025 prövade bostadsbolaget Elm Quay Housing en gemensam felanmälningslogg i ett test som varade åtta veckor. 31 anmälningar registrerades, exklusive akuta ärenden och arbeten som beställts före testet. Här är vad testet krävde och vad siffrorna inte säger.
+
+Av Thomas Barregren
+
+Telefonanmälningar på ett ställe, e-post på ett annat. Så förvarades felanmälningarna hos Elm Quay Housing, ett bostadsbolag med eget underhållslag som förvaltar 640 lägenheter. I september 2025 bestämde sig laget för att pröva en gemensam logg i två hus.
+
+## Så kom loggen på plats
+
+Laget bedömde om loggen kunde visa status för varje reparation och valde därefter Svale Systems. Någon jämförelse med en annan leverantör finns inte.
+
+– Vi ville att kvällsskiftet skulle se vad morgonskiftet redan hade gjort. Kategorierna var våra; Svale hjälpte oss att lägga in dem i loggen, skriver Maya Lind, arbetsledare för underhållet, i en mejlintervju.
+
+De boende kunde fortsätta anmäla fel per telefon under testet. Svale konfigurerade loggen och utbildade sex medarbetare vid två tillfällen.
+
+## Siffrorna säger inget om orsaken
+
+Testet pågick i åtta veckor. Enligt Elm Quays interna testanteckning från 4 december 2025 registrerades 31 felanmälningar i loggen, och då är akuta ärenden och arbeten som beställts före testet inte inräknade.
+
+Mediantiden från anmälan till tilldelad åtgärd var två arbetsdagar under testet och tre under de åtta veckorna dessförinnan. Arbetsbelastningen skilde sig mellan perioderna, och anteckningen tillskriver uttryckligen inte programvaran skillnaden. Kostnader, de boendes nöjdhet och tiden fram till avslutad åtgärd mättes inte.
+
+– Vi lade mer tid på att komma överens om kategorierna än på att registrera de första anmälningarna. Den tiden skulle jag avsätta innan nästa hus drar i gång, skriver Maya Lind.
+
+## Beslutet om fler hus väntar på kategorierna
+
+Testet har ännu inte utvidgats. Laget vill först se hur kategorierna fungerar för större reparationer, och Lind rekommenderade inte Svale till varje bostadsbolag.
+
+– Jag skulle välja att göra om testet. Att ha en samlad bild av anmälningarna hjälper oss, men jag skulle lägga in en extra vecka för förberedelser, skriver hon.
+
+För den som överväger ett liknande test finns Svale Systems [checklista för införande](https://example.invalid/svale/checklist) att läsa igenom. Den här kundberättelsen är publicerad av Svale Systems och är alltså inte oberoende journalistik.
+```
+
+**Granskningen.** Genre `case-study`, teknik `none` och språk `sv` — alla tre hämtade ur textens egna `kntnt`-block. Eftersom blocket anger `none` tillämpades ingen teknik, och genren anger för övrigt heller ingen.
+
+**Kvarstående anmärkningar:** inga. Fem anmärkningar fördes till rättning, och omgranskningen visade att samtliga var åtgärdade. De räknade måtten i artikelanatomin mättes maskinellt både före och efter rättningen och håller.
+
+**Påståenden som ändrats.** Inget påstående har fallit bort ur texten, men två har flyttats eller förskjutits:
+
+- Ingressens omdöme *"och arbetsledaren skulle göra om testet – men med mer tid för förberedelser"* står inte längre kvar i ingressen. Omdömet bär nu rubriken, och förbehållet har därmed förskjutits från *mer tid för förberedelser* till *förbereda mer*. Båda läsningarna bärs av Lind-citatet, som står oförändrat med förbehållet i sin helhet (*"en extra vecka för förberedelser"*). Flytten är rättningen av anmärkningen om att rubriken angav händelsen i stället för vinkeln, och att ingressens första mening upprepade rubriken.
+- *"Laget testade om loggen kunde visa status"* har blivit *"Laget bedömde om loggen kunde visa status"*. Påståendets innebörd förskjuts en aning — från att pröva till att bedöma — och det är rättningen av anmärkningen om att *testa* användes både om leverantörsbedömningen och om det åtta veckor långa försöket.
+
+**Sammanfattning av vad som ändrats.** Rubriken och två av tre mellanrubriker är omskrivna, så att rubriken anger textens vinkel i stället för att bara konstatera att testet ägde rum, och så att ingen mellanrubrik längre säger om det som meningen under den säger; en mellanrubrik hade dessutom ett namn på loggen som texten inte använder någon annanstans. Ingressen har fått med den avgränsning av antalet som brödtexten ger. Ett verb är bytt för att hålla isär bedömningen och försöket. Den avslutande korrekturläsningen rättade ett grammatiskt fel i ordföljden i meningen om vad anteckningen inte tillskriver programvaran. Citat, siffror, datum, länk, förbehåll och frontmatter är i övrigt oförändrade. Inga slop-mönster fanns att ta bort.

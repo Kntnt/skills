@@ -1,0 +1,12 @@
+# /Users/thomas/Projects/skills-388-391
+# HEAD 3167fb68f356b44ced01716b03650739605937f0
+?? docs/evaluation/editorial-383/control-judge-brief.md
+?? docs/evaluation/editorial-383/plan.md
+?? docs/evaluation/editorial-383/redline-judge-brief.md
+?? docs/evaluation/editorial-383/redline-turn-post.md
+?? docs/evaluation/editorial-383/redline-turn-pre.md
+?? docs/evaluation/editorial-383/runs/inventory.sh
+# end /Users/thomas/Projects/skills-388-391
+# /Users/thomas/Projects/skills
+# HEAD 61b6c5948ff94bfeb2b8af6aab56ccf536fcaae8
+# end /Users/thomas/Projects/skills

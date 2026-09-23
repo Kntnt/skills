@@ -24,11 +24,13 @@ too: a status line is a thing a harness can be asked to write, and a session log
 is not a thing one can be asked for.
 
 Absence is the ordinary state here rather than a failure. A machine with no
-file, an unreadable one, one in another shape, one written more than a day ago,
-one past the reset instant it names, no session log, a damaged tree — each is a
-harness with no guard, said nowhere in an answer, refused never, and reported
-plainly by `status`. This runs inside somebody else's turn, and a guard that
-stopped the work over an optimisation would be worse than no guard at all.
+file, an unreadable one, one in another shape, one that parses but carries no
+readable weekly window for the Harness being asked about, one written more
+than a day ago, one past the reset instant it names, no session log, a damaged
+tree — each is a harness with no guard, said nowhere in an answer, refused
+never, and reported plainly by `status`. This runs inside somebody else's
+turn, and a guard that stopped the work over an optimisation would be worse
+than no guard at all.
 """
 
 from __future__ import annotations

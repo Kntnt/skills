@@ -1,0 +1,7 @@
+Complete. Report written to `report.md` in the working directory.
+
+**One source-support finding.** The headline, "Elm Quay lät två skift dela samma reparationslogg", states as accomplished — and counts at two — what the material carries only as the team's aim ("The team wanted staff on different shifts to see the same information"; "We wanted the evening shift to see what the morning shift had already done"). Proposed smallest repair: insert *ville låta*.
+
+**No translation findings.** All three quotations keep meaning, stance, certainty and Lind's qualification in idiomatic Swedish speech.
+
+Everything else holds: the reservation survives, assignment time is never turned into completion time, no causal claim appears anywhere, supplier narration stays third-person, and the link accurately describes a checklist to read. Two editorial questions (the final heading's placement above Lind's quotation; *säger* for emailed answers) are recorded without repairs.

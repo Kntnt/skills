@@ -1,0 +1,38 @@
+Klart. Granskningen utgick från artikelns `kntnt`-uppgifter: genren **column**, språket **svenska (sv)** och teknik **none** — kartan anger uttryckligen ingen teknik, och genren column anger heller ingen egen. Inga kvarstående anmärkningar: den enda anmärkningen reparerades och verifierades genom omgranskning.
+
+```markdown
+---
+kntnt:
+  genre: column
+  technique: none
+  language: sv
+---
+
+# Mötesmallen saknar en ruta för förståelse
+
+Vad ska ett möte göra möjligt? Bibliotekarien Nora Vik hittar ingen ruta för den frågan i bibliotekets mötesmall, och resonerar här om varför den som fyller i mallen borde få formulera varför vi behöver varandras tid – utan att hon vet om ännu en ruta gör möten bättre.
+
+Av Nora Vik
+
+Jag granskar bibliotekets mötesmall. Där finns rutor för starttid, sluttid, deltagare och dagordning. Det finns ingen ruta för det beslut vi ska kunna fatta när vi går därifrån. Det är en iakttagelse av ett dokument, inte en scen från ett visst möte.
+
+## Jag värderar det mallen inte frågar efter
+
+Tiden, däremot, har mallen två rutor för. Jag retar mig på hur lätt tid i kalendern behandlas som ett resultat i sig, som om utrymmet vore detsamma som det som skulle rymmas där. Det är min reflektion, inte något jag har mätt hos andra.
+
+Jag uppskattar möten där kolleger upptäcker att de har förstått en fråga olika. Den upptäckten kan vara viktigare än att vi snabbt enas. Att gå därifrån med en skarpare bild av var vi skiljer oss är också något att ha åstadkommit, men det finns ingen ruta att skriva in det i.
+
+## Ett samtal utan beslut kan också ha ett syfte
+
+Min tanke är inte att varje samtal ska pressas fram till ett beslut. Samtal kan skapa förtroende. De kan också få oss att upptäcka en fråga vi inte visste att vi behövde ställa.
+
+Men den som fyller i mallen borde få formulera varför vi behöver just varandras tid. Också när syftet är att undersöka något tillsammans går det att säga vad vi vill undersöka. Det är ingen hög tröskel.
+
+## Jag föreslår en fråga jag själv tvivlar på
+
+Jag vet inte om ytterligare en ruta gör möten bättre. Det finns en komik i att försöka lösa ett problem med formulär genom att utöka formuläret. Ändå vill jag prova en enkel fråga bredvid tiden: vad behöver vi förstå tillsammans? Pröva den gärna i din egen mall, och behåll tvivlet på rutan medan du gör det.
+```
+
+**Påståenden:** Inget påstående togs bort, och inget lämnades kvar med förändrad räckvidd, säkerhet, attribution, kronologi, kausalitet eller innebörd. De avgränsande meningarna – att texten är en iakttagelse av ett dokument och inte en scen från ett visst möte, och att irritationen över tiden är en reflektion och inte något som mätts hos andra – står kvar ordagrant.
+
+**Sammanfattning av ändringarna:** En underrubrik skrevs om, eftersom den upprepade den första meningen i sitt eget avsnitt med nästan samma ord och därför inte gav den skannande läsaren något nytt; den nya rubriken är formulerad ur hela avsnittet och håller kvar tvivlet utan att skärpa något påstående. Den avslutande mekaniska genomgången rättade dessutom streckbruket i ingressen till svensk typografi. Brödtext, ingress, rubrik, byline, övriga underrubriker, formatering och frontmatter är i övrigt oförändrade.

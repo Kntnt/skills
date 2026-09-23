@@ -10,7 +10,7 @@ from unittest import mock
 # Load the executable script directly so the skill needs no packaging
 # dependency.
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-SKILL_ROOT = PROJECT_ROOT / "skills" / "producivity" / "rename-invoices"
+SKILL_ROOT = PROJECT_ROOT / "skills" / "productivity" / "rename-invoices"
 sys.path.insert(0, str(SKILL_ROOT / "scripts"))
 
 import rename_invoices as renamer

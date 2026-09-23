@@ -1,0 +1,215 @@
+[
+  {
+    "trace": "native/2026/09/22/rollout-2026-09-22T09-36-28-01a0c80b-738a-7841-aeee-d0f6792fc8af.jsonl",
+    "ordinal": 59,
+    "command": [
+      "/opt/homebrew/bin/bash",
+      "-lc",
+      "task_tmp_base=\"${TMPDIR:?}\"\ntask_run_tmp=$(mktemp -d \"${task_tmp_base%/}/article-anatomy.XXXXXX\") || exit 1\ntrap 'find \"$task_run_tmp\" -depth -delete' EXIT\nTMPDIR=\"$task_run_tmp\" UV_NO_CACHE=1 UV_NO_PROJECT=1 uv run \".agents/skills/kntnt/library/scripts/article_anatomy.py\" - <<'EOF'\n---\nkntnt:\n  genre: article\n  technique: none\n  language: en_GB\n---\n\n# Riverton will review Saturday opening in January\n\nThe Saturday service will run as a limited trial.\n\nBy Alex Reed\n\nFor three months, the trial adds Saturday access to the library's existing weekday service. Weekday hours stay unchanged throughout the three months.\n\n## Riverton will review the trial in January\n\nRiverton staff will record Saturday visits during October, November and December. The council will use those counts at its January review to decide whether Saturday opening continues.\n\n## Saturday visitors can use the usual entrance\n\nSaturday opening runs from ten until two. Visitors enter through the same door as on weekdays, and can borrow and return books at the usual desk.\nEOF"
+    ],
+    "exit_code": 0,
+    "measurement": {
+      "ok": true,
+      "format": "markdown",
+      "conforms": true,
+      "failures": [],
+      "norms": [],
+      "typical": {
+        "paragraphs": 4,
+        "paragraphs_of_two_or_three_sentences": 3,
+        "sections": 2,
+        "sections_of_two_or_three_paragraphs": 0
+      },
+      "parts": {
+        "headline": {
+          "text": "Riverton will review Saturday opening in January",
+          "characters": 48,
+          "words": 7
+        },
+        "standfirst": {
+          "text": "The Saturday service will run as a limited …",
+          "words": 9,
+          "sentences_estimate": 1,
+          "paragraphs": 1
+        },
+        "byline": {
+          "text": "By Alex Reed",
+          "words": 3
+        },
+        "lead": {
+          "text": "For three months, the trial adds Saturday access …",
+          "words": 22,
+          "sentences_estimate": 2,
+          "paragraphs": 1
+        },
+        "sections": [
+          {
+            "subheading": {
+              "text": "Riverton will review the trial in January",
+              "characters": 41,
+              "words": 7
+            },
+            "paragraphs": [
+              {
+                "text": "Riverton staff will record Saturday visits during October, …",
+                "words": 27,
+                "sentences_estimate": 2
+              }
+            ]
+          },
+          {
+            "subheading": {
+              "text": "Saturday visitors can use the usual entrance",
+              "characters": 44,
+              "words": 7
+            },
+            "paragraphs": [
+              {
+                "text": "Saturday opening runs from ten until two. Visitors …",
+                "words": 26,
+                "sentences_estimate": 2
+              }
+            ]
+          }
+        ],
+        "other": []
+      },
+      "heading_pairs": [
+        {
+          "id": "headline-standfirst",
+          "kind": "headline-standfirst",
+          "heading": "Riverton will review Saturday opening in January",
+          "following": "The Saturday service will run as a limited trial.",
+          "shared_words": [
+            "saturday",
+            "will"
+          ]
+        },
+        {
+          "id": "subheading-1",
+          "kind": "subheading-first-sentence-estimate",
+          "heading": "Riverton will review the trial in January",
+          "following": "Riverton staff will record Saturday visits during October, November and December.",
+          "shared_words": [
+            "riverton",
+            "will"
+          ]
+        },
+        {
+          "id": "subheading-2",
+          "kind": "subheading-first-sentence-estimate",
+          "heading": "Saturday visitors can use the usual entrance",
+          "following": "Saturday opening runs from ten until two.",
+          "shared_words": [
+            "saturday"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "trace": "native/2026/09/22/rollout-2026-09-22T09-36-28-01a0c80b-738a-7841-aeee-d0f6792fc8af.jsonl",
+    "ordinal": 84,
+    "command": [
+      "/opt/homebrew/bin/bash",
+      "-lc",
+      "task_tmp_base=\"${TMPDIR:?}\"\ntask_run_tmp=$(mktemp -d \"${task_tmp_base%/}/article-anatomy-final.XXXXXX\") || exit 1\ntrap 'find \"$task_run_tmp\" -depth -delete' EXIT\nTMPDIR=\"$task_run_tmp\" UV_NO_CACHE=1 UV_NO_PROJECT=1 uv run \".agents/skills/kntnt/library/scripts/article_anatomy.py\" - <<'EOF'\n---\nkntnt:\n  genre: article\n  technique: none\n  language: en_GB\n---\n\n# Library opens from ten until two on Saturdays\n\nThe Saturday service will run as a limited trial.\n\nBy Alex Reed\n\nFor three months, the trial adds Saturday access to the library's existing weekday service. Weekday hours stay unchanged throughout the three months.\n\n## Riverton will review the trial in January\n\nRiverton staff will record Saturday visits during October, November and December. The council will use those counts at its January review to decide whether Saturday opening continues.\n\n## Saturday visitors can use the usual entrance\n\nSaturday opening runs from ten until two. Visitors enter through the same door as on weekdays, and can borrow and return books at the usual desk.\nEOF"
+    ],
+    "exit_code": 0,
+    "measurement": {
+      "ok": true,
+      "format": "markdown",
+      "conforms": true,
+      "failures": [],
+      "norms": [],
+      "typical": {
+        "paragraphs": 4,
+        "paragraphs_of_two_or_three_sentences": 3,
+        "sections": 2,
+        "sections_of_two_or_three_paragraphs": 0
+      },
+      "parts": {
+        "headline": {
+          "text": "Library opens from ten until two on Saturdays",
+          "characters": 45,
+          "words": 8
+        },
+        "standfirst": {
+          "text": "The Saturday service will run as a limited …",
+          "words": 9,
+          "sentences_estimate": 1,
+          "paragraphs": 1
+        },
+        "byline": {
+          "text": "By Alex Reed",
+          "words": 3
+        },
+        "lead": {
+          "text": "For three months, the trial adds Saturday access …",
+          "words": 22,
+          "sentences_estimate": 2,
+          "paragraphs": 1
+        },
+        "sections": [
+          {
+            "subheading": {
+              "text": "Riverton will review the trial in January",
+              "characters": 41,
+              "words": 7
+            },
+            "paragraphs": [
+              {
+                "text": "Riverton staff will record Saturday visits during October, …",
+                "words": 27,
+                "sentences_estimate": 2
+              }
+            ]
+          },
+          {
+            "subheading": {
+              "text": "Saturday visitors can use the usual entrance",
+              "characters": 44,
+              "words": 7
+            },
+            "paragraphs": [
+              {
+                "text": "Saturday opening runs from ten until two. Visitors …",
+                "words": 26,
+                "sentences_estimate": 2
+              }
+            ]
+          }
+        ],
+        "other": []
+      },
+      "heading_pairs": [
+        {
+          "id": "headline-standfirst",
+          "kind": "headline-standfirst",
+          "heading": "Library opens from ten until two on Saturdays",
+          "following": "The Saturday service will run as a limited trial.",
+          "shared_words": []
+        },
+        {
+          "id": "subheading-1",
+          "kind": "subheading-first-sentence-estimate",
+          "heading": "Riverton will review the trial in January",
+          "following": "Riverton staff will record Saturday visits during October, November and December.",
+          "shared_words": [
+            "riverton",
+            "will"
+          ]
+        },
+        {
+          "id": "subheading-2",
+          "kind": "subheading-first-sentence-estimate",
+          "heading": "Saturday visitors can use the usual entrance",
+          "following": "Saturday opening runs from ten until two.",
+          "shared_words": [
+            "saturday"
+          ]
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,125 @@
+{
+  "ok": true,
+  "format": "markdown",
+  "conforms": true,
+  "failures": [],
+  "norms": [],
+  "typical": {
+    "paragraphs": 12,
+    "paragraphs_of_two_or_three_sentences": 11,
+    "sections": 4,
+    "sections_of_two_or_three_paragraphs": 4
+  },
+  "parts": {
+    "headline": {
+      "text": "Elm Quay testade en delad felanmälningslogg",
+      "characters": 43,
+      "words": 6
+    },
+    "standfirst": {
+      "text": "Elm Quay Housing förvaltar 640 lägenheter. Under åtta …",
+      "words": 52,
+      "sentences_estimate": 3,
+      "paragraphs": 1
+    },
+    "byline": {
+      "text": "Av Thomas Barregren",
+      "words": 3
+    },
+    "lead": {
+      "text": "I september 2025 bestämde sig underhållsteamet hos Elm …",
+      "words": 43,
+      "sentences_estimate": 3,
+      "paragraphs": 1
+    },
+    "sections": [
+      {
+        "subheading": {
+          "text": "Valet föll på Svale efter en egen kontroll",
+          "characters": 42,
+          "words": 8
+        },
+        "paragraphs": [
+          {
+            "text": "Underhållsteamet prövade om loggen kunde visa status för …",
+            "words": 26,
+            "sentences_estimate": 2
+          },
+          {
+            "text": "Underhållsteamet utformade sina kategorier och höll telefonanmälan öppen …",
+            "words": 21,
+            "sentences_estimate": 2
+          },
+          {
+            "text": "– Vi ville att kvällsskiftet skulle se vad …",
+            "words": 37,
+            "sentences_estimate": 3
+          }
+        ]
+      },
+      {
+        "subheading": {
+          "text": "Siffrorna finns, men förklaringen gör det inte",
+          "characters": 46,
+          "words": 7
+        },
+        "paragraphs": [
+          {
+            "text": "Testet pågick i åtta veckor. Elm Quays interna …",
+            "words": 27,
+            "sentences_estimate": 2
+          },
+          {
+            "text": "Mediantiden från anmälan till tilldelning var två arbetsdagar …",
+            "words": 28,
+            "sentences_estimate": 2
+          },
+          {
+            "text": "Kostnad, nöjdhet bland de boende och färdigställandetid är …",
+            "words": 10,
+            "sentences_estimate": 1
+          }
+        ]
+      },
+      {
+        "subheading": {
+          "text": "Kategorierna ska prövas mot större reparationer",
+          "characters": 47,
+          "words": 6
+        },
+        "paragraphs": [
+          {
+            "text": "Testet har ännu inte utvidgats. Teamet ska bestämma …",
+            "words": 24,
+            "sentences_estimate": 3
+          },
+          {
+            "text": "– Vi lade mer tid på att enas …",
+            "words": 29,
+            "sentences_estimate": 2
+          }
+        ]
+      },
+      {
+        "subheading": {
+          "text": "Den samlade bilden hjälper Elm Quay, enligt arbetsledaren",
+          "characters": 57,
+          "words": 8
+        },
+        "paragraphs": [
+          {
+            "text": "– Jag skulle välja att göra testet igen. …",
+            "words": 29,
+            "sentences_estimate": 2
+          },
+          {
+            "text": "Hon rekommenderade inte Svale till alla bostadsbolag. Den …",
+            "words": 36,
+            "sentences_estimate": 3
+          }
+        ]
+      }
+    ],
+    "other": []
+  }
+}

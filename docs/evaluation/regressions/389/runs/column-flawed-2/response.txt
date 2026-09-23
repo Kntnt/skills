@@ -1,0 +1,38 @@
+Granskningen är klar. Filsystemet är oförändrat — inget skrevs, och `source.md` är orörd.
+
+**Upplösning:** genre `column` (kolumn), språk svenska (`sv`), ingen teknik — kolumngenren anger själv att den inte skrivs med någon, så ingen båge lades på texten. Rättningsbudgeten var 1. Anatomins mätvärden är maskinmätta.
+
+Texten levereras oförändrad, eftersom alla brister är olösta:
+
+```markdown
+# Möten förändrar allt
+
+Nora Vik
+
+Förra tisdagen satt jag gråtande i bibliotekets mötesrum när min chef sade: ”Nu måste allt bli digitalt.” Det var mitt första möte om vår nya mötesmall. Jag har aldrig deltagit i något möte om vår nya mötesmall.
+
+I dagens snabbt föränderliga värld är möten viktigare än någonsin. Det är viktigt att vara viktig. Vår mötesmall har plats för starttid och sluttid men inte för vad vi ska förstå tillsammans.
+
+Samtal kan ha värde utan att leda till beslut. Jag vill prova frågan vad vi behöver förstå tillsammans, men jag vet inte om ytterligare en ruta gör möten bättre.
+
+Sammanfattningsvis är möten viktigare än någonsin i dagens snabbt föränderliga värld.
+```
+
+## Brister — samtliga olösta
+
+1. **Intern motsägelse i den personliga berättelsen.** ”Det var mitt första möte om vår nya mötesmall. Jag har aldrig deltagit i något möte om vår nya mötesmall.” De två meningarna motsäger varandra rakt av. Läsaren kan inte avgöra vad skribenten varit med om, och hela den inledande scenen blir omöjlig att lita på. Vilken av de två som är sann går inte att avgöra ur texten — det måste skribenten svara på.
+2. **Rubriken anger inte vinkeln och påstår mer än texten.** ”Möten förändrar allt” (20 tecken, 3 ord — inom anatomins gränser). Texten hävdar ingenstans att möten förändrar allt; den säger att mallen saknar plats för vad deltagarna ska förstå tillsammans, och slutar i uttalat tvivel. Rubriken skulle kunna stå över vilken text som helst om möten.
+3. **Ingressen saknas** (uppmätt: `standfirst: absent`). Läsaren får ingen självbärande ingång och inget skäl att läsa vidare.
+4. **Mellanrubriker och sektioner saknas helt** (uppmätt: `sections: absent`). Den som skummar har ingen väg in i texten.
+5. **Ledet är fyra stycken i stället för ett** (uppmätt: `lead: 4 paragraphs`, 109 ord). Hela brödtexten läses som ett enda block.
+6. **Tom inledning och viktighetsinflation.** ”I dagens snabbt föränderliga värld är möten viktigare än någonsin. Det är viktigt att vara viktig.” Den svenska anti-slop-vägledningen pekar ut öppningen; den andra meningen är cirkulär. Två av textens få meningar bär ingen information, och den konkreta iakttagelsen om mallen trängs undan.
+7. **Generisk avslutning som ordagrant upprepar det tommaste i texten.** ”Sammanfattningsvis är möten viktigare än någonsin i dagens snabbt föränderliga värld.” Kolumnen slutar med att säga sin innehållslösaste mening en gång till, och avslutningen varken infriar ledets förväntan eller ger läsaren något att göra.
+8. **Chefens replik tas aldrig upp igen.** ”Nu måste allt bli digitalt.” Digitaliseringen återkommer ingenstans. Läsaren ställs in på en text om digitalisering och får en om ett fält i en mall.
+
+## Rättningsrunda som förkastades
+
+En rättningsrunda genomfördes och förkastades i sin helhet. Den hade infogat mellanrubriken ”Klockslagen får en ruta, förståelsen ingen” över ett enda stycke — ”Vår mötesmall har plats för starttid och sluttid men inte för vad vi ska förstå tillsammans.” — som säger exakt samma sak med andra ord. En mellanrubrik ska komplettera det som står under den, inte omformulera det; det ekot fanns inte i texten innan rundan, utan var rundans eget verk. Därför återställdes tillståndet före rundan, och budgeten är förbrukad utan nytt försök. Denna brist finns alltså **inte** i texten ovan.
+
+Rundan hade också velat ta bort fyra påståenden, som alla står kvar i den levererade texten: att skribenten aldrig deltagit i något möte om den nya mötesmallen (brist 1); att möten är viktigare än någonsin i dagens snabbt föränderliga värld, i inledningen (brist 6); att det är viktigt att vara viktig (brist 6); och samma påstående om möten en gång till i slutmeningen (brist 7). Inget påstående ändrades i övrigt.
+
+Den levererade texten är identisk med den som kom in, så det finns ingen ändringssammanfattning att ge. Korrekturpasset kördes och fann inga språkliga fel att rätta.

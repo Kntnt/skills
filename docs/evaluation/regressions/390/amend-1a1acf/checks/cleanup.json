@@ -1,0 +1,8 @@
+{
+  "removed_path": "/Users/thomas/Projects/skills/.git/orchestrate-session-389-391-gpt/scratch/390/amend-1a1acf",
+  "runtime_tree_absent": true,
+  "native_and_gate_processes_alive": [],
+  "process_evidence": "owned-processes-after.json",
+  "cleanup": "Literal rm -r path; completed and waited. An initial rm -rf command was rejected before execution, then the non-force removal succeeded.",
+  "retained": "All evidence and delivered artifacts under docs/evaluation/regressions/390; no earlier scratch directories were touched."
+}

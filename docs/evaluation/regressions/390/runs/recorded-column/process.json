@@ -1,0 +1,28 @@
+{
+  "argv": [
+    "/opt/homebrew/bin/codex",
+    "exec",
+    "--ignore-rules",
+    "-s",
+    "workspace-write",
+    "--skip-git-repo-check",
+    "--json",
+    "-C",
+    "/Users/thomas/Projects/skills-388-391/.scratch-390/native-recorded/work",
+    "--add-dir",
+    "/Users/thomas/Projects/skills-388-391/.scratch-390/native-recorded/tmp",
+    "-o",
+    "/Users/thomas/Projects/skills-388-391/docs/evaluation/regressions/390/runs/recorded-column/response.txt",
+    "-"
+  ],
+  "pid": 36719,
+  "process_group": 36719,
+  "harness": "codex-cli 0.155.1",
+  "model": "gpt-5.6-sol",
+  "effort": "xhigh",
+  "timeout_seconds": 45,
+  "registration": "local ledger; user confines writes to this worktree",
+  "timed_out": true,
+  "exit_status": -15,
+  "elapsed": 45.01040820800699
+}

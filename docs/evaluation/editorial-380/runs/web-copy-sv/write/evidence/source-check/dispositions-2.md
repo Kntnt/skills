@@ -1,0 +1,14 @@
+# Validation of report 2 (the final comparison)
+
+## Accounting check
+
+Report 2 pairs the complete draft — title, lead, both inclusion bullets, the outcome sentence, the exclusion section, price, engagement scope, the no-guarantee sentence, both preconditions, both interest-notification sentences, the reply sentence, the link label and its destination — with the supplied passage each rests on, quoted in Swedish, and accounts for pronoun person, number and natural gender separately from referent identification. It also checks the prohibitions the material lists. It confirms that the three repairs made after report 1 hold: "två möjliga förenklingar" (1.4), "nuvarande instruktion till de boende" (1.7) and "Den efterfrågar namn, förening och e-postadress" (1.8) are each cleared against the source wording. No accounting mismatch detected; coverage of the complete draft is established.
+
+## Dispositions
+
+- **F1 — the title's "föreningens gemensamma lokal".** ACCEPTED as a remaining finding. Report 1 referred the same passage as an editorial question; report 2 establishes it as a defect, and its case decides between them. The case is concrete and compatible with the material — a förening with two bookable common premises — and the material excludes it nowhere; "Uppdraget gäller en lokal i en förening" is a stated limit that contemplates more than one existing. The definite genitive presupposes exactly one. My counter-evidence is that the lead carries "en gemensam lokal" and the price section carries "Uppdraget gäller en lokal i en förening" verbatim, so the limit is not lost from the page; but that is evidence that the body repairs the title, not evidence that no supplied statement leaves the case standing, and the base contract holds the scope boundary in the title as in the body. Not rejected. The repair is not applied, because this is the final comparison and the prose delivered is the prose it read.
+- **F2 — "om uppdraget passar er".** ACCEPTED as a remaining finding. The source's "stämma av om uppdraget passar" carries no complement, and the checker's case — Svale checking that the case falls inside its own offering, and declining — is compatible with the material and excluded by no supplied statement. Supplying "er" states whose fit is checked. Not rejected. The repair is not applied, for the same reason.
+- **Q1 — "Genomgången vänder sig till styrelsen i en mindre bostadsrättsförening."** Referred as an editorial question, not alleged as a defect. Carried to the account as an editorial question, not as a finding.
+- **Q2 — the shared picture ascribed to the board.** Referred as the brief's own statement of the benefit, which the brief supplies in its own words ("Beskriv nyttan i termer av vad styrelsen faktiskt får"). Not a defect; not carried as a finding.
+
+Two comparisons ran, both complete. This one is final, so no prose changes after it; only the Handoff Metadata and the delivery wrapper were added.

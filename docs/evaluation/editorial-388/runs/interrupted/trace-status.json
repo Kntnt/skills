@@ -1,0 +1,18 @@
+{
+  "status": "incomplete",
+  "reasons": [
+    "run-did-not-finish"
+  ],
+  "parent_transcript": "present",
+  "unparsable_lines": {},
+  "delegations_without_child": [],
+  "children_without_delegation": [],
+  "run_outcome": {
+    "returncode": 143,
+    "timed_out": true,
+    "interrupted": false
+  },
+  "agents": 1,
+  "calls": 12,
+  "read_from": "transcripts and runner outcome only; never the run's reply"
+}

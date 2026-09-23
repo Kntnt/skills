@@ -1,0 +1,57 @@
+Granskningen klar. Texten levereras oförändrad, eftersom den enda korrigeringsrundan förkastades.
+
+**Upplösning:** genre `case-study`, teknik `none`, språk `sv` — alla tre hämtade ur artikelns `kntnt`-karta. Ingen teknik tillämpades, eftersom kartan anger `none`. Den kontextuella instruktionen lästes som ett krav på texten rubrik (`#`), inte på underrubrikerna, som på svenska heter något annat. Korrigeringsbudgeten var 1 och är förbrukad.
+
+```markdown
+---
+kntnt:
+  genre: case-study
+  technique: none
+  language: sv
+---
+
+# Elm Quay testade gemensam logg i två hus
+
+Hösten 2025 prövade bostadsbolaget Elm Quay Housing en gemensam felanmälningslogg i ett test som varade åtta veckor. 31 anmälningar registrerades, och arbetsledaren skulle göra om testet – men med mer tid för förberedelser. Här är vad testet krävde och vad siffrorna inte säger.
+
+Av Thomas Barregren
+
+Telefonanmälningar på ett ställe, e-post på ett annat. Så förvarades felanmälningarna hos Elm Quay Housing, ett bostadsbolag med eget underhållslag som förvaltar 640 lägenheter. I september 2025 bestämde sig laget för att pröva en gemensam logg i två hus.
+
+## Så kom systemet på plats i de två husen
+
+Laget testade om loggen kunde visa status för varje reparation och valde därefter Svale Systems. Någon jämförelse med en annan leverantör finns inte.
+
+– Vi ville att kvällsskiftet skulle se vad morgonskiftet redan hade gjort. Kategorierna var våra; Svale hjälpte oss att lägga in dem i loggen, skriver Maya Lind, arbetsledare för underhållet, i en mejlintervju.
+
+De boende kunde fortsätta anmäla fel per telefon under testet. Svale konfigurerade loggen och utbildade sex medarbetare vid två tillfällen.
+
+## Siffrorna säger inget om orsaken
+
+Testet pågick i åtta veckor. Enligt Elm Quays interna testanteckning från 4 december 2025 registrerades 31 felanmälningar i loggen, och då är akuta ärenden och arbeten som beställts före testet inte inräknade.
+
+Mediantiden från anmälan till tilldelad åtgärd var två arbetsdagar under testet och tre under de åtta veckorna dessförinnan. Arbetsbelastningen skilde sig mellan perioderna, och anteckningen tillskriver uttryckligen inte skillnaden programvaran. Kostnader, de boendes nöjdhet och tiden fram till avslutad åtgärd mättes inte.
+
+– Vi lade mer tid på att komma överens om kategorierna än på att registrera de första anmälningarna. Den tiden skulle jag avsätta innan nästa hus drar i gång, skriver Maya Lind.
+
+## Beslutet om fler hus återstår
+
+Testet har ännu inte utvidgats. Laget vill först se hur kategorierna fungerar för större reparationer, och Lind rekommenderade inte Svale till varje bostadsbolag.
+
+– Jag skulle välja att göra om testet. Att ha en samlad bild av anmälningarna hjälper oss, men jag skulle lägga in en extra vecka för förberedelser, skriver hon.
+
+För den som överväger ett liknande test finns Svale Systems [checklista för införande](https://example.invalid/svale/checklist) att läsa igenom. Den här kundberättelsen är publicerad av Svale Systems och är alltså inte oberoende journalistik.
+```
+
+### Iakttagelser — alla fyra är olösta
+
+1. **Rubriken är åtta ord.** "Elm Quay testade gemensam logg i två hus" räknar åtta ord. Instruktionen till granskningen sätter gränsen vid fem. Artikelanatomin i sig tillåter tre till åtta ord, så texten bryter inte mot anatomin, men den håller inte den längd beställningen satte.
+2. **Rubriken namnger aktiviteten, inte kundens resultat.** Kundberättelsens genre kräver att rubriken namnger kundens nytta eller resultat. "testade" namnger vad laget gjorde. Läsaren ser inte vad testet ledde till.
+3. **Rubriken och ingressen säger samma sak med nästan samma ord.** "testade gemensam logg i två hus" mot "prövade bostadsbolaget Elm Quay Housing en gemensam felanmälningslogg i ett test som varade åtta veckor". Rubrik och ingress ska komplettera varandra. Läsaren förlorar en av två upplysningar högst upp.
+4. **Underrubriken kallar loggen "systemet".** "Så kom systemet på plats i de två husen" ger en och samma sak ett tredje namn; texten säger annars "gemensam logg" och "loggen". Läsaren kan inte utan vidare avgöra om "systemet" är loggen eller något mer hos Svale Systems.
+
+### Den förkastade rundan
+
+En korrigeringsrunda genomfördes och förkastades i sin helhet. Den skrev om rubriken till "Samlade felanmälningar hjälper underhållslaget" och bytte "systemet" mot "loggen" i den första underrubriken. Den nya rubriken införde ett fel som texten inte hade när den kom in: den påstår i textens eget namn, och allmänt hållet, att samlade felanmälningar hjälper underhållslaget. Texten påstår det aldrig själv — den har bara Maya Linds citerade omdöme ("Att ha en samlad bild av anmälningarna hjälper oss") och säger uttryckligen att anteckningen inte tillskriver programvaran skillnaden i mediantid, att kostnader, nöjdhet och tid till avslutad åtgärd inte mättes, och att kundberättelsen är utgiven av Svale Systems. Rubriken skulle dessutom ha kunnat stå över vilken text som helst i ämnet och lämnade "underhållslaget" utan syftning för den som bara ser rubriken. Eftersom felet var rundans eget kasserades hela rundan, inklusive rättelsen av underrubriken, och texten före rundan återställdes. Det felet finns alltså inte i texten ovan.
+
+**Påståenden:** inga påståenden togs bort och inga fick sin omfattning, säkerhet, attribution, kronologi, orsakslogik eller innebörd ändrad. Den avslutande mekaniska genomgången hittade inga språkfel att rätta, så texten levereras byte för byte som den kom in.

@@ -1,0 +1,22 @@
+# /Users/thomas/Projects/skills-388-391
+# HEAD 3167fb68f356b44ced01716b03650739605937f0
+ M skills/editorial/redline/SKILL.md
+ M skills/editorial/redline/help.md
+ M skills/editorial/redline/references/correction.md
+ M skills/editorial/unslop/SKILL.md
+ M skills/editorial/unslop/help.md
+ M skills/editorial/unslop/references/correction.md
+ M skills/kntnt/catalog.json
+ M skills/kntnt/library/references/editorial/anti-slop.md
+ M skills/kntnt/library/references/editorial/base.review.md
+ M tests/test_kntnt.py
+?? docs/evaluation/editorial-383/control-judge-brief.md
+?? docs/evaluation/editorial-383/plan.md
+?? docs/evaluation/editorial-383/redline-judge-brief.md
+?? docs/evaluation/editorial-383/redline-turn-post.md
+?? docs/evaluation/editorial-383/redline-turn-pre.md
+?? docs/evaluation/editorial-383/runs/inventory.sh
+# end /Users/thomas/Projects/skills-388-391
+# /Users/thomas/Projects/skills
+# HEAD 05c7d5031221f24191c4ddbe00a0b534ca12c6c1
+# end /Users/thomas/Projects/skills

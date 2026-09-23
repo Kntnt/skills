@@ -1,0 +1,7 @@
+{
+  "revision": "0cb71523b0578834422773be44c69248f3738c0d",
+  "method": "git archive HEAD, extracted without a branch or worktree",
+  "cwd": "/Users/thomas/Projects/skills/.git/orchestrate-session-389-391-gpt/scratch/390/retry-59e6c1/baseline",
+  "command": "uv run --with pytest --with pyyaml pytest -q -p no:cacheprovider tests/test_ms_scheduler.py -k \"the_manager_s_two_words_answer_with_the_job or under_a_redirected_home_install_writes_the_plist_and_loads_nothing or an_install_status_and_disable_under_a_temporary_root_call_no_launchctl\"",
+  "TMPDIR": "/Users/thomas/Projects/skills/.git/orchestrate-session-389-391-gpt/scratch/390/retry-59e6c1/tmp"
+}

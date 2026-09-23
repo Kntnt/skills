@@ -1,0 +1,23 @@
+# Mötesmallen saknar en ruta för förståelse
+
+Vad ska ett möte göra möjligt? Bibliotekarien Nora Vik hittar ingen ruta för den frågan i bibliotekets mötesmall, och resonerar här om varför den som fyller i mallen borde få formulera varför vi behöver varandras tid — utan att hon vet om ännu en ruta gör möten bättre.
+
+Av Nora Vik
+
+Jag granskar bibliotekets mötesmall. Där finns rutor för starttid, sluttid, deltagare och dagordning. Det finns ingen ruta för det beslut vi ska kunna fatta när vi går därifrån. Det är en iakttagelse av ett dokument, inte en scen från ett visst möte.
+
+## Jag värderar det mallen inte frågar efter
+
+Tiden, däremot, har mallen två rutor för. Jag retar mig på hur lätt tid i kalendern behandlas som ett resultat i sig, som om utrymmet vore detsamma som det som skulle rymmas där. Det är min reflektion, inte något jag har mätt hos andra.
+
+Jag uppskattar möten där kolleger upptäcker att de har förstått en fråga olika. Den upptäckten kan vara viktigare än att vi snabbt enas. Att gå därifrån med en skarpare bild av var vi skiljer oss är också något att ha åstadkommit, men det finns ingen ruta att skriva in det i.
+
+## Ett samtal utan beslut kan också ha ett syfte
+
+Min tanke är inte att varje samtal ska pressas fram till ett beslut. Samtal kan skapa förtroende. De kan också få oss att upptäcka en fråga vi inte visste att vi behövde ställa.
+
+Men den som fyller i mallen borde få formulera varför vi behöver just varandras tid. Också när syftet är att undersöka något tillsammans går det att säga vad vi vill undersöka. Det är ingen hög tröskel.
+
+## Jag vet inte om rutan skulle hjälpa
+
+Jag vet inte om ytterligare en ruta gör möten bättre. Det finns en komik i att försöka lösa ett problem med formulär genom att utöka formuläret. Ändå vill jag prova en enkel fråga bredvid tiden: vad behöver vi förstå tillsammans? Pröva den gärna i din egen mall, och behåll tvivlet på rutan medan du gör det.

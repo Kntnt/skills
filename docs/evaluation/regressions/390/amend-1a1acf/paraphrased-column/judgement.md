@@ -1,0 +1,13 @@
+# Paraphrased Swedish echo — target repaired, additional finding retained
+
+Native invocation completed with exit 0. delivered.md is extracted verbatim from response.txt's Markdown fence. The complete findings account remains in response.txt.
+
+The frozen target “En extra fråga kanske saknar verkan” and “Jag vet inte om ytterligare en ruta gör möten bättre.” share only “en”. The parent nevertheless identifies the repeated proposition, not a lexical threshold (events.jsonl, item_23). One fresh correction agent changes that heading to orient the reader to trying the shared-understanding question, while the first sentence retains the original doubt. It also repairs the second heading named in the parent's review; all body sentences and qualifications remain intact.
+
+The child measures its complete candidate and reads all pairs before returning. correction-measurements.json retains that full result and its native ordinal 61; correction-response.txt retains the candidate and its semantic account. The parent independently measures and re-reviews it (items_31–32), then runs one mechanical pass, whose only change is the Swedish dash. Both original and delivered anatomy measurements conform. The repaired target still shares “om”, so success is not zero overlap.
+
+**Additional outcome, not hidden by the target pass:** the correction agent reports the unchanged headline/standfirst as another semantic echo, and the parent carries it to the delivery as unresolved after the one-round budget. This report is overbroad in my assessment: although the missing-box proposition recurs, the full standfirst also adds the named author, proposal and doubt. The recorded-column run accepts the same pair. The frozen low-overlap target was recognized and repaired, but this run does not establish flawless semantic discrimination across all pairs. No instruction or fixture was retuned to conceal the extra finding. The separate clean-reuse control and the retained control pairs in paraphrased-headline test necessary name/topic reuse directly.
+
+Actual parent and child reads remain within column/none/sv and its named shared resources; the mechanical scopes are confined to the final Proofread phase. The before/after inventories show no changed input or staged instruction. Private UV lock residue is included in the filesystem account and removed during final runtime cleanup.
+
+Limitations: one native sample, the extra false positive above, and encrypted inter-agent task bodies in the CLI's native records. Fresh-child identity, its resource commands, pair evidence and final response are readable and retained; nothing is inferred from the encrypted payload.

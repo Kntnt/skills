@@ -536,6 +536,201 @@ def test_a_category_no_row_measured_falls_back_to_the_prior_not_to_zero(
     assert all(value > 0.0 for value in counted.values())
 
 
+def test_a_category_every_row_recorded_as_nought_is_forecast_as_nought(
+    tmp_path: Path,
+) -> None:
+    """Codex reports no cache writes at all, and the vendor never bills them.
+
+    Folded in with a category no row recorded, that reported nought fell
+    through to the kind's shipped 208 000 cache-write tokens — about three
+    dollars on every `high` attempt of a bill the vendor never sends, on the
+    one figure the whole ranking orders by (issue #371).
+    """
+
+    measured = {
+        "input": 600.0,
+        "cache_read": 1_000_000.0,
+        "cache_write": 0.0,
+        "output": 30_000.0,
+        "reasoning": 12_000.0,
+    }
+    estimator = _estimator(_many(3, 1.0, tokens=measured), tmp_path)
+
+    counted = estimator.tokens("implement", STRONG, "high")
+
+    assert counted["cache_write"] == 0.0
+    assert counted["cache_write"] != KINDS.tokens("implement", "high")["cache_write"]
+    for category, value in measured.items():
+        assert counted[category] == pytest.approx(value), category
+
+
+def test_a_category_no_row_carries_is_not_one_every_row_measured_as_nought(
+    tmp_path: Path,
+) -> None:
+    """The store keeps the two apart the whole way here, and only this folded them.
+
+    A row carrying no member for a category said nothing about it, and the
+    kind's prior scaled to the level asked about is the honest answer. A row
+    carrying nought said nought.
+    """
+
+    absent = _estimator(
+        _many(3, 1.0, tokens={"output": 30_000.0}), tmp_path / "absent"
+    ).tokens("implement", STRONG, "high")
+    recorded = _estimator(
+        _many(3, 1.0, tokens={"output": 30_000.0, "cache_write": 0.0}),
+        tmp_path / "recorded",
+    ).tokens("implement", STRONG, "high")
+
+    prior = KINDS.tokens("implement", "high")
+
+    assert absent["cache_write"] == pytest.approx(prior["cache_write"])
+    assert absent["cache_write"] == pytest.approx(208_000.0 * LADDER["high"]["tokens"])
+    assert recorded["cache_write"] == 0.0
+    assert absent["output"] == pytest.approx(30_000.0)
+    assert recorded["output"] == pytest.approx(30_000.0)
+
+
+def test_a_row_that_measured_nought_lowers_the_forecast_it_joins(
+    tmp_path: Path,
+) -> None:
+    """A vendor that bills nothing on one attempt in four spends less than on none.
+
+    The geometric mean cannot hold a nought — the logarithm of nought is not a
+    number — so the rows that measured a positive amount are pooled exactly as
+    they always were and the pooled figure is scaled by their share of the rows
+    that recorded the category at all.
+    """
+
+    positive = [
+        _row(attempt_id=f"ms-paid-{index}", tokens={"cache_write": 40_000.0})
+        for index in range(3)
+    ]
+    free = [_row(attempt_id="ms-free-0", tokens={"cache_write": 0.0})]
+
+    alone = _estimator(list(positive), tmp_path / "alone").tokens(
+        "implement", STRONG, "high"
+    )["cache_write"]
+    mixed = _estimator(positive + free, tmp_path / "mixed").tokens(
+        "implement", STRONG, "high"
+    )["cache_write"]
+
+    assert alone == pytest.approx(40_000.0)
+    assert mixed == pytest.approx(40_000.0 * 3 / 4)
+    assert 0.0 < mixed < alone
+
+
+def test_a_point_that_measured_nought_everywhere_forecasts_nought_everywhere(
+    tmp_path: Path,
+) -> None:
+    """Nothing takes the logarithm of a nought, and no figure comes back negative."""
+
+    estimator = _estimator(
+        _many(3, 1.0, tokens=dict.fromkeys(catalogue.TOKEN_CATEGORIES, 0.0)),
+        tmp_path,
+    )
+
+    for level in evidence.LEVELS:
+        counted = estimator.tokens("implement", STRONG, level)
+        assert set(counted) == set(catalogue.TOKEN_CATEGORIES)
+        assert all(value == 0.0 for value in counted.values()), level
+
+
+def test_a_row_that_recorded_nothing_is_no_evidence_about_a_category(
+    tmp_path: Path,
+) -> None:
+    """Seventy-five of this store's Opus `implement` rows carry no counts at all.
+
+    They came from a routed run that could see a verdict and no usage. Let them
+    into the share the pooled figure is scaled by — a share taken over every
+    row of the group rather than over the recording ones — and that point's
+    every category is cut by about a third: a forecast of less work on evidence
+    of no work (issue #371).
+    """
+
+    recording = [
+        _row(attempt_id=f"ms-seen-{index}", tokens={"output": 30_000.0})
+        for index in range(3)
+    ]
+    silent = [
+        _row(
+            attempt_id=f"ms-blind-{index}",
+            tokens=dict.fromkeys(catalogue.TOKEN_CATEGORIES),
+        )
+        for index in range(9)
+    ]
+
+    alone = _estimator(list(recording), tmp_path / "alone").tokens(
+        "implement", STRONG, "high"
+    )
+    beside = _estimator(recording + silent, tmp_path / "beside").tokens(
+        "implement", STRONG, "high"
+    )
+
+    assert alone["output"] == pytest.approx(30_000.0)
+    assert beside == pytest.approx(alone)
+
+
+def test_a_group_that_recorded_nought_answers_rather_than_backing_off(
+    tmp_path: Path,
+) -> None:
+    """A nought is a measurement inside the back-off as well as at the end of it.
+
+    Fall through on *no positive rows* and a store every row of which measured
+    nought forecasts the kind's prior, which is the defect being fixed. Only a
+    group no row of which recorded the category reaches the group above it, and
+    only where neither recorded it does the shipped prior answer.
+    """
+
+    for_the_kind = [
+        _row(
+            attempt_id=f"ms-kind-{index}",
+            tokens={"cache_write": 0.0, "output": 30_000.0},
+        )
+        for index in range(3)
+    ]
+    for_another = [
+        _row(
+            attempt_id=f"ms-other-{index}",
+            kind="analyze",
+            tokens={"cache_write": 50_000.0, "reasoning": 80_000.0},
+        )
+        for index in range(3)
+    ]
+    estimator = _estimator(for_the_kind + for_another, tmp_path)
+
+    counted = estimator.tokens("implement", STRONG, "high")
+    prior = KINDS.tokens("implement", "high")
+
+    assert counted["cache_write"] == 0.0
+    assert counted["output"] == pytest.approx(30_000.0)
+    assert counted["reasoning"] == pytest.approx(80_000.0)
+    assert counted["input"] == pytest.approx(prior["input"])
+
+
+def test_an_elapsed_time_of_nought_is_a_clock_that_failed_to_record(
+    tmp_path: Path,
+) -> None:
+    """The same nought is a measurement for tokens and an absence for the clock.
+
+    A vendor really does bill no cache writes; no harness reports an attempt
+    that took no time, so a nought there is a start instant that never
+    persisted. Read as a measurement it would make the point the fastest thing
+    on every list, which is why `_elapsed` keeps the test `_normalised` gives
+    up (issue #371).
+    """
+
+    estimator = _estimator(
+        _many(3, 1.0, tokens={"output": 30_000.0, "cache_write": 0.0}, seconds=0.0),
+        tmp_path,
+    )
+
+    assert estimator.tokens("implement", STRONG, "high")["cache_write"] == 0.0
+    assert estimator.seconds("implement", STRONG, "high") == pytest.approx(
+        KINDS.seconds("implement", "high")
+    )
+
+
 def test_a_measured_row_is_scaled_to_the_level_it_is_forecast_at(
     tmp_path: Path,
 ) -> None:
@@ -847,6 +1042,12 @@ def test_the_rules_module_pools_appetite_the_way_the_estimator_does() -> None:
     # recorded one.
     assert "category by category" in stated
     assert "whole" in stated
+
+    # And the two things "unmeasured" was folding together: a category no row
+    # recorded, which takes the prior, and one every recording row measured as
+    # nought, which is a measurement and is priced as one (issue #371).
+    assert "recorded it as nought" in stated
+    assert "priced as nought" in stated
 
 
 def test_the_shipped_note_says_the_ladder_is_applied_to_measurements_too() -> None:

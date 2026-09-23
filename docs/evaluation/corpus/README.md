@@ -305,7 +305,7 @@ A `Reject` line is a floor, not a rubric. The full judging criteria are the prot
 
 ## Editorial quality
 
-The [frozen five-genre matrix](editorial-quality/README.md) supplies synthetic briefs, source packages and positive/negative controls for #329–338. It covers Swedish, British English and American English Write→Redline pipelines, explicit technique/metadata cases and a fixed baseline comparison. Its criteria distinguish source-aware drafting from text-only review, advisory web dimensions from actual defects, and editorial judgement from mechanically testable contracts.
+The [frozen five-genre matrix](editorial-quality/README.md) supplies synthetic briefs, source packages and positive/negative controls for #329–338. It covers Swedish, British English and American English Write→Redline pipelines, explicit technique/metadata cases and a fixed baseline comparison. Its criteria distinguish source-aware drafting from text-only review, the article anatomy's counted requirements from the norms and whole-text patterns around them, and editorial judgement from mechanically testable contracts.
 
 ### `editorial-quality`
 
@@ -313,4 +313,4 @@ The [frozen five-genre matrix](editorial-quality/README.md) supplies synthetic b
 - **Covers** — genre; technique; clean prose; ai slop; locale mechanics; handoff metadata present; handoff metadata conflicting; no-change status
 - **Material** — synthetic five-genre sources and clean/flawed controls, with explicit factual boundaries and a frozen semantic rubric in [the matrix](editorial-quality/README.md).
 - **Use** — stage only the input each matrix row names; run its exact Write and/or Redline invocation in a fresh isolated session. The matrix predetermines all locales, baseline cases and metadata preparations.
-- **Reject** — unsupported facts, hidden loss of claims or voice, unavailable-source review, invented technique selection, wrong locale, numerical taste corrections, or an Output Target side effect. Detailed per-fixture questions and rejection cases are frozen in the linked matrix.
+- **Reject** — unsupported facts, hidden loss of claims or voice, unavailable-source review, invented technique selection, wrong locale, a clean text rewritten against a limit it meets or a count the anatomy does not bind it to, or an Output Target side effect. Detailed per-fixture questions and rejection cases are frozen in the linked matrix.

@@ -1,0 +1,12 @@
+unformatted: File would be reformatted
+    --> tests/test_kntnt.py:7079:12
+     |
+7078 |     assert "Use the Harness's native completion/wait mechanism" in text
+     -     assert "Never start a shell or background task that polls for the report path" in text
+7079 +     assert (
+7080 +         "Never start a shell or background task that polls for the report path" in text
+7081 +     )
+7082 |     assert "no usable completion mechanism" in text
+     |
+
+1 file would be reformatted, 3057 files already formatted

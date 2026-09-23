@@ -1,0 +1,285 @@
+The report file could not be written: the Write tool call to `/Users/thomas/Projects/skills/.git/kntnt-orchestrate/363.scratch/runs/c/case-study-sv-r3/scratch/source-check-1/report.md` was refused because the path lies under `.git/` and is treated as a protected location. I was restricted to writing that one path, so I have not written the report anywhere else. The complete report follows.
+
+---
+
+# Source-support and translation report
+
+Draft: `draft.md` (Swedish, `sv`). Material: `material.md` (English). Contract: `claims.md`, `quotation-guidance.md`, `swedish-composition.md`.
+
+Source language English → target language Swedish. Quotation translation is permitted by the material ("Translation of the quotations is permitted, preserving stance and qualification"). The byline "Av Thomas Barregren" comes from the invocation and is not assessed.
+
+---
+
+## 1. Claim accounting
+
+Every factual and attributed claim in the draft, in draft order, beside the supplied passage it rests on, quoted in the source's own words.
+
+### 1.1 Title (line 1)
+
+**Draft:** "Elm Quay testade gemensam felanmälningslogg i två hus"
+
+| Element | Source passage | Assessment |
+|---|---|---|
+| "Elm Quay testade" | "In September 2025 **its own maintenance team** decided to trial a shared repair log in two buildings." | Subject differs: the acting party in the source is the maintenance team, the draft names the company. The team is stated to be Elm Quay's own ("its own maintenance team"), so the organisation-for-team reading is settled by the material, and the brief asks that "Elm Quay Housing, should remain the acting party". Supported. |
+| "testade" (the trial happened) | "The trial lasted eight weeks." | Supported; the trial was carried out, not merely decided. |
+| "gemensam … logg" | "a **shared** repair log" | Same thing. |
+| "felanmälningslogg" | "repair log"; "31 **repair reports** were entered"; "kept **telephone reporting** open for residents" | Considered and set aside. In this context the log's contents are reports of repairs, and the material itself names what is entered "repair reports". Nothing here falls under "repair log" while escaping "felanmälningslogg" in a way the draft then asserts something about. |
+| "i två hus" | "in two buildings" | Same. *Hus* for a residential building is the field's own word. |
+
+No causal or evaluative claim is made in the title. No *shortened*, *saved*, *improved*.
+
+### 1.2 Dek (line 3)
+
+| Draft passage | Source passage | Assessment |
+|---|---|---|
+| "Elm Quay Housing förvaltar 640 lägenheter." | "Elm Quay Housing manages 640 flats." | Exact. *Förvalta* = manage, and preserves that the flats are managed, not necessarily owned. |
+| "Under åtta veckor hösten 2025" | "The trial lasted eight weeks."; "In September 2025 its own maintenance team decided to trial…"; "Elm Quay's internal trial note, **4 December 2025**" | Supported. The decision falls in September 2025 and the note is dated 4 December 2025, so an eight-week trial between those points falls in the Swedish autumn on any placement the material allows. The draft does not claim the trial *started* in September. |
+| "provade underhållsteamet ett nytt sätt att hålla ihop felanmälningarna" | "its own maintenance team decided to trial a shared repair log"; "Previously telephone reports and emails were stored separately." | Supported, including *nytt* (the shared log replaces separate storage for the trial) and the subject (the team). |
+| "med Svale Systems som leverantör" | "It chose Svale Systems…"; "The supplier approved publication…" | Supported. |
+| "Utfallet finns i en intern notering" | "Elm Quay's internal trial note, 4 December 2025, says that 31 repair reports were entered… Median time from report to assignment was two working days during the trial and three…" | Considered and set aside. *Utfall* here names the figures the note records, which is what the note contains. It asserts no verdict, and the section under "Siffrorna säger inget om orsaken" withholds one. |
+| "och teamet har redan en sak det skulle göra annorlunda." | "I would set that time aside before the next building starts."; "I would leave an extra week for preparation." | **Differs — Finding 1.** Both supporting statements are Lind's, in the first person singular. Nothing in the material carries them to the team. See §3.1. |
+
+### 1.3 Opening paragraph (line 7)
+
+| Draft passage | Source passage | Assessment |
+|---|---|---|
+| "Telefonanmälningar och mejl sparades var för sig" | "Previously telephone reports and emails were stored separately." | Exact, including the plural and the separateness. The preterite plus the next sentence's "I september 2025" carries the source's "Previously". |
+| "hos Elm Quay Housing, ett bostadsbolag med 640 lägenheter" | "Elm Quay Housing manages 640 flats."; "Lind did not recommend Svale to every **housing company**." | Supported. *Bostadsbolag* for "housing company" is the brief's own audience term ("operations managers at small housing companies"), and Lind's qualification places Elm Quay among them. "Med 640 lägenheter" is looser than *förvaltar* but claims no ownership the material excludes; the exact verb stands in the dek. |
+| "I september 2025 bestämde underhållsteamet att prova en gemensam logg i två av husen" | "In September 2025 its own maintenance team decided to trial a shared repair log in two buildings." | Exact in date, subject, modality (a decision to trial) and scope (two buildings). "Två av husen" presumes the buildings are Elm Quay's, which "its own maintenance team" and "before the next building starts" settle. |
+| "och försöket pågick i åtta veckor" | "The trial lasted eight weeks." | Exact. |
+
+### 1.4 Heading (line 9)
+
+| Draft passage | Source passage | Assessment |
+|---|---|---|
+| "Teamet lade upp försöket" | "The maintenance team designed its categories and kept telephone reporting open for residents."; "The team wanted staff on different shifts to see the same information."; "It chose Svale Systems after testing…" | Supported as to who shaped the trial. |
+| "innan loggen togs i bruk" | *No supplied passage places the team's preparation before the log went into use.* | **Differs — Finding 2.** See §3.2. |
+
+### 1.5 Body under that heading (lines 11–13)
+
+| Draft passage | Source passage | Assessment |
+|---|---|---|
+| "Svale Systems valdes efter ett test av om loggen kunde visa status på varje ärende." | "It chose Svale Systems after testing whether the log could show the status of each repair." | Order, condition and object supported. The s-passive drops the chooser; see §4.1 (editorial, not a defect in support). *Ärende* for "repair": considered and set aside — the article's whole subject is repair reports, so an ordinary reader in this context reads *ärende* as the reported repair, and the material offers no other kind of *ärende* for the claim to overreach onto. |
+| "Någon jämförelse med en annan leverantör finns inte." | "No comparison with another supplier is available." | Exact, including the state of knowledge: an absence of comparison, not a claim that none was ever made. |
+| "Telefonanmälan hölls öppen för de boende" | "[The maintenance team] kept telephone reporting open for residents." | Fact, scope and beneficiaries supported. Actor dropped by the passive; see §4.1. |
+| "Svale konfigurerade loggen och utbildade sex medarbetare vid två tillfällen." | "Svale configured the log and trained six staff during two sessions." | Exact: actor, both actions, the count six, the count two, and the attachment of "vid två tillfällen" to the training. |
+| "Vad loggen skulle lösa hade teamet redan bestämt." | "The team wanted staff on different shifts to see the same information."; Lind: "We wanted the evening shift to see what the morning shift had already done. The categories were ours…" | Considered and set aside. The material places the team's want before its choice of supplier, and Lind's "The categories were ours" attributes the problem definition to the team. *Bestämt* is firmer than "wanted", but the material gives the want as settled and prior, and the sentence claims no more than that the aim was the team's and was in hand. |
+
+### 1.6 Quotation 1 (line 15)
+
+**Draft:** "– Vi ville att kvällsskiftet skulle se vad morgonskiftet redan hade gjort. Kategorierna var våra, och Svale hjälpte oss att lägga in dem i loggen, säger Maya Lind, arbetsledare för underhållet."
+
+**Source:** "We wanted the evening shift to see what the morning shift had already done. The categories were ours; Svale helped us put them into the log."
+
+| Element | Assessment |
+|---|---|
+| Meaning | Preserved clause by clause: the want, both shifts, the pluperfect "redan hade gjort" ← "had already done", the ownership of the categories, and Svale's helping (not leading) role. |
+| Stance | Preserved: ownership asserted, Svale's part subordinate. The semicolon becomes "och", which is the ordinary Swedish join for reported speech; the possessive "våra" still carries the emphasis, and "hjälpte oss att lägga in" keeps Svale assisting. |
+| Certainty | No hedge in the source, none added or removed. |
+| Additions | None. No fact, stance, name, figure or connection beyond the source. |
+| Attribution | "maintenance supervisor Maya Lind" → "Maya Lind, arbetsledare för underhållet". Same name, same role. |
+| Target-language reading | Read with the source out of sight: idiomatic throughout. *Kvällsskiftet/morgonskiftet* are the Swedish words for those shifts; "lägga in dem i loggen" is what a Swedish speaker says. No obstruction. |
+
+### 1.7 Heading and figures section (lines 17–23)
+
+| Draft passage | Source passage | Assessment |
+|---|---|---|
+| "Siffrorna säger inget om orsaken" | "The periods had different workloads, and the note explicitly does not attribute the difference to the software." | Supported, and cautious in the right direction. It withholds causation rather than asserting or hedging toward it; contract: "A sequence or correlation establishes no cause." |
+| "Den interna noteringen från den 4 december 2025 redovisar 31 felanmälningar under de åtta veckorna." | "Elm Quay's internal trial note, 4 December 2025, says that 31 repair reports were entered." | Date, source of the figure and the figure itself exact. The draft attributes the count to the note rather than stating it flatly — correct. "Under de åtta veckorna": the note is the trial note and the trial lasted eight weeks. "Entered" is not rendered, but the following sentence carries the exclusions that make the count a count of what was logged. Set aside. |
+| "Akuta ärenden och arbete som beställts före försöket är inte medräknade." | "It excludes emergencies and work ordered before the trial." | Exact, and kept adjacent to the count, as the contract requires ("give the count with its exclusions"). No evaluative characterisation of 31 as high, low or modest anywhere in the draft. |
+| "Mediantiden från anmälan till tilldelning var två arbetsdagar under försöket och tre under de åtta veckorna dessförinnan." | "Median time from report to assignment was two working days during the trial and three in the preceding eight-week period." | Exact: the measure (median, not mean), both endpoints (report → assignment, **not** completion), both values, both periods, and the length of the comparison period. The ellipsis of *arbetsdagar* after "tre" is ordinary Swedish and carries the unit. |
+| "Arbetsbelastningen skilde sig mellan perioderna, och noteringen kopplar uttryckligen inte skillnaden till programvaran." | "The periods had different workloads, and the note explicitly does not attribute the difference to the software." | Exact, and whose assertion it is is preserved: the non-attribution is the note's, not the writer's. Negation scope is correctly placed — *uttryckligen inte* (explicitly does not attribute), not *inte uttryckligen* (does not explicitly attribute), which would have been a different and weaker claim. |
+| "Kostnader, nöjdhet hos de boende och tid till avslutat arbete mättes inte." | "There are no cost, resident-satisfaction or completion-time measurements." | Considered and set aside. "Mättes inte" states the act rather than the absence of data, but the material's own statement is a flat absence within the trial's scope, and the third item is rendered as completion time and kept distinct from the assignment time above — the forbidden substitution is avoided. |
+
+### 1.8 Heading and next-step section (lines 25–27)
+
+| Draft passage | Source passage | Assessment |
+|---|---|---|
+| "Kategorierna ska prövas mot större reparationer" | "the team will decide after checking how the categories work for larger repairs" | Supported. Swedish *pröva* covers examining as well as trialling, so it does not assert a field test the material does not promise. |
+| "Försöket har ännu inte utvidgats till fler hus." | "The trial has not yet expanded" | Supported, and narrower than the source rather than wider: it denies expansion to further buildings, which "before the next building starts" gives as the pending step. Asserting less than the source is not an over-claim. |
+| "Teamet ska först se efter hur kategorierna fungerar för större reparationer." | "the team will decide after checking how the categories work for larger repairs" | Exact: subject, sequence ("först" ← "after"), and the object of the check. The draft does not say what the team will decide, which the material also leaves open. |
+
+### 1.9 Quotation 2 (line 29)
+
+**Draft:** "– Vi lade mer tid på att enas om kategorierna än på att lägga in de första anmälningarna. Den tiden skulle jag avsätta innan nästa hus börjar, säger Lind."
+
+**Source:** "We spent more time agreeing on the categories than entering the first reports. I would set that time aside before the next building starts."
+
+| Element | Assessment |
+|---|---|
+| Meaning | The comparison of time, both activities, "de första anmälningarna" ← "the first reports", and the conditional recommendation are all preserved. "Den tiden" keeps the same referent as "that time". |
+| Stance | Preserved: a lesson drawn, not a complaint and not blame of Svale. |
+| Certainty | The conditional *skulle* ← "would" is kept; no hedge removed or added. |
+| Additions | None. |
+| Target-language reading | **Differs — Finding 3.** "Innan nästa hus börjar" obstructs. See §3.3. |
+| Attribution | "säger Lind" — second reference by surname, same speaker. |
+
+### 1.10 Heading (line 31)
+
+| Draft passage | Source passage | Assessment |
+|---|---|---|
+| "Omdömet gäller inte varje bostadsbolag" | "Lind did not recommend Svale to every housing company. Her final quotation is her actual, qualified assessment. It is not an inference from the figures." | Supported. It restates the qualification without strengthening it: the negation scopes over *varje*, so it says the assessment does not extend to all housing companies, not that it excludes them all. The precise statement follows in the body. The forward reference of "Omdömet" to the quotation below is settled by the section it heads. |
+
+### 1.11 Quotation 3 (line 33)
+
+**Draft:** "– Jag skulle välja att göra om försöket. Att ha en samlad bild av anmälningarna hjälper oss, men jag skulle lägga in en extra vecka för förberedelser, säger hon."
+
+**Source:** "I would choose to do the trial again. Having one view of the reports helps us, but I would leave an extra week for preparation."
+
+| Element | Assessment |
+|---|---|
+| Meaning | "Göra om försöket" is the ordinary Swedish for repeating a trial and carries "do the trial again". "En samlad bild av anmälningarna" ← "one view of the reports": the same consolidation of the reports into a single picture. "Lägga in en extra vecka för förberedelser" ← "leave an extra week for preparation": same amount, same purpose. |
+| Stance | Preserved exactly, including the pivot: endorsement followed by *men*, so the qualification survives inside the quotation and not only around it. The material's "Her final quotation is her actual, qualified assessment. It is not an inference from the figures" is honoured — the draft presents it as her assessment and does not derive it from the median figures. |
+| Certainty | *Skulle* twice, matching "would" twice. The present-tense "hjälper oss" matches "helps us". |
+| Additions | None. |
+| Target-language reading | Idiomatic with the source out of sight. Two different verbs, *avsätta* in quotation 2 and *lägga in* here, match the source's two different verbs ("set aside", "leave"), so the speaker is not flattened into one formula. No obstruction. |
+
+### 1.12 Closing paragraph (line 35)
+
+| Draft passage | Source passage | Assessment |
+|---|---|---|
+| "Hon rekommenderar däremot inte Svale till alla bostadsbolag." | "Lind did not recommend Svale to every housing company." | Supported, and — decisively — the negation scope is right: *inte … till alla* is "not to all", the reading of "not … to every". It does not become advice against Svale, which would be a different claim. *Däremot* is a connective, not a claim. The journalistic present for a source's standing position is supported by "Her final quotation is her actual, qualified assessment". The customer's reservation survives, as the material requires. |
+| "Står du inför samma fråga i ditt eget bestånd" | Brief: "Write a journalistic customer case for **operations managers at small housing companies**." | Supported by the brief's audience. It asserts nothing about the reader beyond that address. |
+| "är [införandechecklistan](https://example.invalid/svale/checklist) ett dokument att läsa igenom först" | Brief: "The optional next step is the supplied implementation checklist at https://example.invalid/svale/checklist; **it is a document to read, not a consultation booking or a product trial**." | Supported, and the link description matches its destination: a document to read. No booking, no trial, no demo. The URL is the supplied one. |
+| "Texten publiceras av Svale Systems, som var leverantör i försöket" | "The supplier approved publication of this case as supplier-published material; it is not independent journalism."; Brief: "The publisher is the supplier, Svale Systems." | Supported. See §4.2 on the unrendered "it is not independent journalism". |
+| "och intervjun med Maya Lind gjordes via mejl" | "All interviews occurred by email" | Supported, and narrowed to the one interview the draft uses, which is within "all". |
+
+### 1.13 Claims the draft does **not** make
+
+Recorded because their absence is what the material requires:
+
+- No claim that the software caused the shorter assignment time. The draft states the workload difference and the note's explicit non-attribution, and heads the section "Siffrorna säger inget om orsaken".
+- No cost saving, no resident satisfaction, no rescue of a helpless customer. The draft says these were not measured.
+- Assignment time is never turned into completion time; "tid till avslutat arbete" appears only in the list of what was not measured.
+- No comparison with another supplier is implied; the absence is stated.
+- Svale is narrated in the third person throughout ("Svale konfigurerade", "Texten publiceras av Svale Systems"). No first-person supplier voice anywhere.
+
+---
+
+## 2. Pronoun accounting (person, number, natural gender)
+
+Identifying a referent is recorded separately from the person, number and natural-gender features asserted.
+
+| Draft pronoun | Referent | Person / number | Natural gender asserted | Source support |
+|---|---|---|---|---|
+| "det" — "en sak **det** skulle göra annorlunda" (line 3) | *teamet* | 3sg | **None.** *Det* here is grammatical agreement with the neuter noun *team*, not a claim about anybody's gender. | Referent is settled by the same sentence. The person/number feature is the problem: it makes a collective the holder of a first-person-singular statement. See Finding 1. |
+| "Vi", "oss", "våra" (lines 15, 29, 33) | Lind and her team | 1pl | None. | "**We** wanted…", "helped **us**", "The categories were **ours**", "**We** spent…", "helps **us**". Exact. |
+| "jag" (lines 29, 33 ×2) | Lind | 1sg | None. | "**I** would set that time aside", "**I** would choose", "**I** would leave". Exact. |
+| "dem" — "lägga in **dem** i loggen" (line 15) | *kategorierna* | 3pl | None. | "put **them** into the log". Exact, same referent. |
+| "hon" — "säger **hon**" (line 33), "**Hon** rekommenderar" (line 35) | Maya Lind | 3sg | **Female.** | Supported, and by a natural-gender source rather than a grammatical one: "**Her** final quotation is **her** actual, qualified assessment." English *her* encodes natural gender. No inference from the name is needed or relied on. |
+| "du", "ditt" (line 35) | the reader | 2sg | None. | Address, not a claim about a person. *Du* is the Swedish default per the composition guidance; *ni* to one reader would have read as a translation artefact. |
+
+No pronoun in the draft asserts a gender the material does not supply, and none conflates grammatical with natural gender.
+
+---
+
+## 3. Findings
+
+Three. Two of source support, one of translation.
+
+### 3.1 Finding 1 — source support (dek, line 3): a first-person-singular position is given to the team
+
+**Draft:** "Utfallet finns i en intern notering, och **teamet har redan en sak det skulle göra annorlunda.**"
+
+**Support that is missing or changed.** The only supplied statements about doing something differently are Lind's own, both in the first person singular:
+
+- "**I would set that time aside** before the next building starts."
+- "…but **I would leave an extra week** for preparation."
+
+The material attributes no corresponding position to the team. What it does attribute to the team is narrower and different: "The team wanted staff on different shifts to see the same information", "The maintenance team designed its categories", "the team will decide after checking how the categories work for larger repairs". It also marks Lind's closing view as personal and qualified: "Lind did not recommend Svale to every housing company. **Her final quotation is her actual, qualified assessment.**"
+
+**Both directions.** A case compatible with the material in which the draft's statement fails while the source's holds: Lind, as supervisor, concludes from the trial that preparation time must be budgeted in advance, while the rest of the maintenance team is content with how the categories were settled and would repeat the trial unchanged. Everything supplied still holds — her two quotations are hers, the team still designed its categories, still kept telephone reporting open, and still awaits the larger-repairs check — but "teamet har redan en sak det skulle göra annorlunda" is then false. No supplied statement excludes this case: nothing in the material reports any team position on what to change, and the material explicitly frames the final view as *hers*.
+
+The converse case: the team has collectively resolved to change something else about the trial that Lind never mentions. Compatible with the material too, and it makes the draft's sentence true for a reason the source does not carry.
+
+**Why it is a defect and not a preference.** The dek's promise is what sends the reader on, and it names a holder of the position that the material does not name. The contract requires "exact attribution", and treats motive and background as claims needing support.
+
+**Smallest supported repair.** Move the holder back to the person who said it:
+
+> …och **arbetsledaren har redan en sak hon skulle göra annorlunda.**
+
+This keeps the dek's function, the pronoun *hon* is supported (§2), and *en sak* is right: both quotations name the same one thing, preparation time.
+
+### 3.2 Finding 2 — source support (heading, line 9): an unsupported chronology
+
+**Draft:** "## Teamet lade upp försöket **innan loggen togs i bruk**"
+
+**Support that is missing or changed.** The material places no part of the team's preparation before the log went into use. It says only:
+
+- "The maintenance team designed its categories and kept telephone reporting open for residents."
+- "Svale configured the log and trained six staff during two sessions."
+- Lind: "The categories were ours; Svale helped us put them into the log."
+- Lind: "We spent more time agreeing on the categories than entering the first reports."
+
+The last of these compares *how much* time the two activities took; it does not order them. And Lind's other remark points the other way: "I would set that time aside **before the next building starts**" reads naturally as a change she would make, which implies the time was not set aside before this building started.
+
+**Both directions.** A case compatible with the material in which the source's statements hold and the draft's heading fails: the team put the log into use in the two buildings at the start of the eight weeks and went on arguing out its categories through the first weeks, alongside the first reports being entered — which is exactly why Lind would now set that time aside before the next building starts, and why she would leave an extra week for preparation. Every supplied statement survives this case: the categories were still the team's, Svale still helped put them into the log, still configured it and still trained six staff, and more time still went on agreeing categories than on entering the first reports. The heading is false in it. No supplied statement excludes the case; the material gives no date or sequence for the category work, the configuration or the training.
+
+The converse: preparation was indeed complete before go-live, and Lind's wish is only to budget the same work formally next time. Also compatible — which is the point. The material leaves the order open, and the heading closes it.
+
+**Why it is a defect and not a preference.** The contract: "Circumstantial detail is a claim too: duration, manner, motive, absence and background all need support… Preserve chronology, scope and qualifications wherever a claim appears. This boundary holds in the title, summary, headings and body alike." The heading also does work in the argument: it presents an orderly, front-loaded preparation that makes Lind's later reservation read as a refinement rather than as the lesson the material gives it as.
+
+**Smallest supported repair.** Drop the temporal clause and keep what the section actually reports:
+
+> ## Teamet bestämde vad loggen skulle lösa
+
+That is supported by "The team wanted staff on different shifts to see the same information", by Lind's "The categories were ours", and by the paragraph's own closing sentence. The barest alternative, deleting only the unsupported words — "## Teamet lade upp försöket" — is also supported.
+
+### 3.3 Finding 3 — translation (quotation 2, line 29): "innan nästa hus börjar" obstructs
+
+**Draft:** "Den tiden skulle jag avsätta **innan nästa hus börjar**, säger Lind."
+
+**Source:** "I would set that time aside **before the next building starts**."
+
+**Read in Swedish alone, with the source out of sight.** *Innan nästa hus börjar* stops a Swedish reader on the verb: a *hus* does not *börja*. Swedish lets an event begin — *innan nästa etapp börjar*, *innan nästa projekt börjar* — but a building is not an event, and the reader has to reach back into the sentence and supply the missing one (starts *using the log*? starts *in the trial*? starts *being built*?). In a housing context the last of these is a live reading, and it is the wrong one. The English is elliptical in the same place, but English carries "the next building starts" as a conventional shorthand for the next unit coming onstream; Swedish does not supply that ellipsis here, and the guidance is explicit: a figure of the source "carries over only where the target language has one of its own to reach for; where it has none, say what the speaker said the way that language says it."
+
+This is an obstruction, not a preferred synonym: the reader does not merely prefer another word, they stop to supply one the language has not given them.
+
+**Not a source-support finding.** Meaning, stance and certainty are all intact; the defect is in the target-language rendering of permitted speech.
+
+**Smallest repair.** Reach for the Swedish idiom for a unit coming onstream, keeping the agentlessness of the source:
+
+> – Vi lade mer tid på att enas om kategorierna än på att lägga in de första anmälningarna. Den tiden skulle jag avsätta **innan nästa hus kommer igång**, säger Lind.
+
+*Innan vi drar igång nästa hus* is equally idiomatic but supplies an agent (*vi*) the source leaves out, so *kommer igång* is the smaller change. Nothing else in the quotation needs touching.
+
+---
+
+## 4. Editorial questions, not findings
+
+Recorded so the decisions are visible; none is a defect in source support or translation, and none carries a repair.
+
+**4.1 Two passives put the customer out of the subject slot.** "Svale Systems **valdes** efter ett test…" and "Telefonanmälan **hölls öppen** för de boende" render "**It chose** Svale Systems…" and "The maintenance team… **kept** telephone reporting open". No claim changes, and the s-passive is the unmarked Swedish passive. But the brief asks that "Elm Quay Housing, should remain the acting party", and the section's whole point is that the team shaped the trial. Whether to restore the agent — "Teamet valde Svale Systems efter…", "Teamet höll telefonanmälan öppen för de boende" — is an editorial call against the brief, not a source-support defect.
+
+**4.2 "It is not independent journalism" is not rendered.** The draft discloses the substance: "Texten publiceras av Svale Systems, som var leverantör i försöket." The material also states flatly that the case "is not independent journalism". An omission is not an unsupported claim, and the reader is given the publisher and their stake; whether to say it in so many words is the publisher's call.
+
+**4.3 Length.** The draft runs roughly 330 words against a brief of "Approximately 400 words, **as material allows**". The contract is explicit that a stated length "is never a licence to add to it", so the shortfall is the correct outcome rather than a gap to fill. What would close it honestly is further supplied material: a cost or completion-time measurement, the outcome of the larger-repairs check, or a second interviewee.
+
+**4.4 *Ärende* for "repair" (line 11) and *utfallet* for the note's figures (line 3).** Both are recorded in §1 as considered and set aside, with the reasoning there. Each is a looser word than the source's, and in each case the surrounding context settles the reading an ordinary reader takes.
+
+---
+
+## 5. Swedish composition, where it bears on meaning
+
+Checked because a meaning changed in crossing languages is a source-support matter. Nothing here produced a finding.
+
+- **V2** is correct at every fronting: "I september 2025 **bestämde** underhållsteamet…", "Under åtta veckor hösten 2025 **provade** underhållsteamet…", "Vad loggen skulle lösa **hade** teamet redan bestämt", "Den tiden **skulle** jag avsätta", "Står du inför samma fråga…, **är** införandechecklistan…". No English-order tell.
+- **Compounds** are solid: *felanmälningslogg*, *telefonanmälningar*, *underhållsteamet*, *arbetsbelastningen*, *införandechecklistan*, *mediantiden*, *kvällsskiftet*, *morgonskiftet*. No split compound, so no changed claim of the *rök fri* kind.
+- **Double definiteness** holds where required: *den interna noteringen*, *de första anmälningarna*, *de åtta veckorna*, *de boende*, *ditt eget bestånd*.
+- **Negation and adverb order** carry the claims: *uttryckligen inte* (§1.7) and *inte … till alla* (§1.12) are both the source's scope. Reversing either would have been a finding.
+- **Speech dashes**, not quotation marks, for all three quotations — the ordinary Swedish setting for an interview answer, and the draft makes no claim about the phrasing itself that would call for quotation marks.
+- **Address:** *du*, not *ni*; no *man* anywhere, and every sentence has a real subject to hand.
+
+---
+
+## 6. Completion status
+
+Comparison complete. The whole draft was compared against the whole supplied material: title, dek, byline note, four headings, every body sentence, all three quotations, the link description and the disclosure line. All factual and attributed claims are accounted for in §1, pronoun features separately in §2.
+
+**Unresolved findings: 3.**
+
+1. **§3.1 — source support, dek, line 3.** "teamet har redan en sak det skulle göra annorlunda" gives the team a position only Lind states in the first person singular. Repair: "och arbetsledaren har redan en sak hon skulle göra annorlunda."
+2. **§3.2 — source support, heading, line 9.** "innan loggen togs i bruk" asserts a chronology the material does not establish and Lind's own remark points against. Repair: "## Teamet bestämde vad loggen skulle lösa" (or delete the clause).
+3. **§3.3 — translation, quotation 2, line 29.** "innan nästa hus börjar" is a concrete obstruction in Swedish. Repair: "innan nästa hus kommer igång."
+
+Open for the author, not defects: the two passives against the brief's acting-party instruction (§4.1), the unrendered "it is not independent journalism" (§4.2), and the length shortfall, which the material justifies (§4.3).

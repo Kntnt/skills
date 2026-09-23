@@ -1,0 +1,29 @@
+I001 [*] Import block is un-sorted or un-formatted
+  --> .scratch-390/run_checks.py:2:1
+   |
+ 1 |   """Run the four published checks and retain their actual outcomes."""
+ 2 | / import json
+ 3 | | import os
+ 4 | | from pathlib import Path
+ 5 | | import shlex
+ 6 | | import signal
+ 7 | | import subprocess
+ 8 | | import time
+   | |___________^
+ 9 |
+10 |   root = Path.cwd()
+   |
+help: Organize imports
+  |
+3 | import os
+  - from pathlib import Path
+4 | import shlex
+5 | import signal
+6 | import subprocess
+7 | import time
+8 + from pathlib import Path
+9 |
+  |
+
+Found 1 error.
+[*] 1 fixable with the `--fix` option.

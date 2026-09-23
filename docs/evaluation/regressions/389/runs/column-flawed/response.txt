@@ -1,0 +1,45 @@
+Granskningen är klar. Texten levereras oförändrad: korrigeringsrundan avvisades, och korrekturpasset fann inga mekaniska fel.
+
+**Upplösning:** genre `column` och språk `sv` från anropet. Ingen teknik tillämpades — krönikegenren anger själv att den inte skrivs med någon. Korrigeringsbudget: 1 (förbrukad).
+
+```markdown
+# Möten förändrar allt
+
+Nora Vik
+
+Förra tisdagen satt jag gråtande i bibliotekets mötesrum när min chef sade: ”Nu måste allt bli digitalt.” Det var mitt första möte om vår nya mötesmall. Jag har aldrig deltagit i något möte om vår nya mötesmall.
+
+I dagens snabbt föränderliga värld är möten viktigare än någonsin. Det är viktigt att vara viktig. Vår mötesmall har plats för starttid och sluttid men inte för vad vi ska förstå tillsammans.
+
+Samtal kan ha värde utan att leda till beslut. Jag vill prova frågan vad vi behöver förstå tillsammans, men jag vet inte om ytterligare en ruta gör möten bättre.
+
+Sammanfattningsvis är möten viktigare än någonsin i dagens snabbt föränderliga värld.
+```
+
+## Iakttagelser — samtliga olösta
+
+1. **Ingressen saknas.** Anatomin kräver en ingress mellan rubriken och bylinen. Läsaren förlorar den fristående sammanfattning som säger vad krönikan handlar om och vad hen får ut av att läsa den. *(Maskinmätt.)*
+
+2. **Leadet är fyra stycken och 109 ord.** Leadet ska vara kroppens första stycke, ett enda. Eftersom texten saknar mellanrubriker räknas hela kroppen som lead, och läsaren får ingen ingång som säger vad hen lär sig av att läsa vidare. *(Maskinmätt.)*
+
+3. **Mellanrubriker och avsnitt saknas helt.** Texten har inga nivå-2-rubriker och därmed varken avsnitt eller ett avslutande avsnitt. Den som skannar får inga ingångar, och texten saknar den avslutning som ska visa att leadets förväntan infriats och ge läsaren något att pröva eller ompröva. *(Maskinmätt.)*
+
+4. **Inre motsägelse i det personliga vittnesmålet.** ”Det var mitt första möte om vår nya mötesmall.” och ”Jag har aldrig deltagit i något möte om vår nya mötesmall.” kan inte båda vara sanna. Läsaren tappar tilltron till hela scenen. Vilken utsaga som gäller framgår inte av texten, och att stryka den ena vore att påstå den andra. **Kräver författaren.**
+
+5. **Citatet knyts aldrig till det texten handlar om.** Chefens replik ”Nu måste allt bli digitalt.” följs direkt av mötesmallen, men texten etablerar aldrig något samband mellan digitaliseringen och mallen. Sambandet får inte uppfinnas, och att stryka citatet vore att ta chefens ord med sig. **Kräver författaren.**
+
+6. **Tom inledningsfras med viktighetsinflation.** ”I dagens snabbt föränderliga värld är möten viktigare än någonsin.” kan stå framför vilken text som helst, och påståendet stöds inte av något i texten.
+
+7. **Tom cirkelsats.** ”Det är viktigt att vara viktig.” bär inget påstående och för inte reflexionen vidare.
+
+8. **Generisk avslutning.** ”Sammanfattningsvis är möten viktigare än någonsin i dagens snabbt föränderliga värld.” sammanfattar vad läsaren just läst och upprepar stycke två nästan ordagrant.
+
+9. **Rubriken påstår något texten inte påstår.** ”Möten förändrar allt” generaliserar, medan texten driver tvivlet om huruvida ytterligare en ruta i mallen gör möten bättre.
+
+10. **Reflexionen utvecklas inte.** Scenen, mötesmallen och tvivlet står bredvid varandra utan att kopplas samman. Sambanden får bara byggas av textens eget material.
+
+## Avvisad korrigeringsrunda
+
+En korrigeringsrunda genomfördes och avvisades. Den hade infört två fel som texten inte hade när den kom in: en mellanrubrik, *”Jag vill ställa frågan men vet inte om en ruta till hjälper”*, som nästan ordagrant upprepar meningen under sig, och en ingress som utlovade *varför* skribenten ändå inte vet — ett skäl kroppen aldrig ger. Eftersom felen var rundans egna återställdes texten före rundan i sin helhet, och budgeten är förbrukad utan nytt försök.
+
+Rundan hade också strukit påståendena *möten är viktigare än någonsin* (två gånger) och *möten förändrar allt*. **Inget av detta gäller den levererade texten** — den bär alla sina meningar precis som de kom in, och samtliga tio iakttagelser ovan står därför kvar att åtgärda.

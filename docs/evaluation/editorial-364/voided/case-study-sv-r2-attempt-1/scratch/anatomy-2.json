@@ -1,0 +1,130 @@
+{
+  "ok": true,
+  "format": "markdown",
+  "conforms": true,
+  "failures": [],
+  "norms": [],
+  "typical": {
+    "paragraphs": 13,
+    "paragraphs_of_two_or_three_sentences": 10,
+    "sections": 4,
+    "sections_of_two_or_three_paragraphs": 4
+  },
+  "parts": {
+    "headline": {
+      "text": "Elm Quay samlade 31 felanmälningar i en logg",
+      "characters": 44,
+      "words": 8
+    },
+    "standfirst": {
+      "text": "Elm Quay Housing förvaltar 640 lägenheter. Hösten 2025 …",
+      "words": 39,
+      "sentences_estimate": 3,
+      "paragraphs": 1
+    },
+    "byline": {
+      "text": "Av Thomas Barregren",
+      "words": 3
+    },
+    "lead": {
+      "text": "Telefonanmälningar och e-post förvarades var för sig hos …",
+      "words": 40,
+      "sentences_estimate": 3,
+      "paragraphs": 1
+    },
+    "sections": [
+      {
+        "subheading": {
+          "text": "Elm Quay valde leverantör och utformade kategorierna",
+          "characters": 52,
+          "words": 7
+        },
+        "paragraphs": [
+          {
+            "text": "Innan teamet bestämde sig prövade det om loggen …",
+            "words": 29,
+            "sentences_estimate": 3
+          },
+          {
+            "text": "Kategorierna i loggen utformade teamet själv, och telefonanmälan …",
+            "words": 26,
+            "sentences_estimate": 2
+          },
+          {
+            "text": "– Vi ville att kvällsskiftet skulle se vad …",
+            "words": 25,
+            "sentences_estimate": 2
+          }
+        ]
+      },
+      {
+        "subheading": {
+          "text": "Anteckningen mäter tilldelningstiden men tillskriver ingen orsak",
+          "characters": 64,
+          "words": 7
+        },
+        "paragraphs": [
+          {
+            "text": "Svale konfigurerade loggen och utbildade sex medarbetare vid …",
+            "words": 10,
+            "sentences_estimate": 1
+          },
+          {
+            "text": "Enligt Elm Quays interna testanteckning från den 4 …",
+            "words": 43,
+            "sentences_estimate": 3
+          },
+          {
+            "text": "Perioderna hade olika arbetsbelastning, och anteckningen tillskriver uttryckligen …",
+            "words": 18,
+            "sentences_estimate": 2
+          }
+        ]
+      },
+      {
+        "subheading": {
+          "text": "Lind skulle avsätta tid för kategorierna före nästa hus",
+          "characters": 55,
+          "words": 9
+        },
+        "paragraphs": [
+          {
+            "text": "Förberedelserna är det hon återkommer till.",
+            "words": 6,
+            "sentences_estimate": 1
+          },
+          {
+            "text": "– Vi lade mer tid på att enas …",
+            "words": 29,
+            "sentences_estimate": 2
+          }
+        ]
+      },
+      {
+        "subheading": {
+          "text": "Så går Elm Quay vidare",
+          "characters": 22,
+          "words": 5
+        },
+        "paragraphs": [
+          {
+            "text": "Lind rekommenderar inte Svale till alla bostadsföretag. Hennes …",
+            "words": 16,
+            "sentences_estimate": 2
+          },
+          {
+            "text": "– Jag skulle välja att göra testet igen. …",
+            "words": 28,
+            "sentences_estimate": 2
+          },
+          {
+            "text": "Teamet har ännu inte utvidgat testet, utan bestämmer …",
+            "words": 41,
+            "sentences_estimate": 4
+          }
+        ]
+      }
+    ],
+    "other": []
+  }
+}

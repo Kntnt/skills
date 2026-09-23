@@ -1,0 +1,20 @@
+{
+  "returncode": 0,
+  "timed_out": false,
+  "interrupted": false,
+  "duration_seconds": 495.25,
+  "harness_result": {
+    "is_error": false,
+    "subtype": "success",
+    "num_turns": 22,
+    "total_cost_usd": 2.809327,
+    "terminal_reason": "completed"
+  },
+  "transcripts": {
+    "parent_transcript": "home/.claude/projects/-private-var-folders-cs-vgp-x-353zd9frkjpysp7zdw0000gn-T-kntnt-editorial-388-run-s7c93cwn-work/e1f44b28-9e9e-48fe-beb2-a0c43a7e8e57.jsonl",
+    "subagent_transcripts": 1,
+    "subagents_directory": "present",
+    "missing": []
+  },
+  "process_group_gone": true
+}

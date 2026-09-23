@@ -1163,7 +1163,7 @@ SHIPPED_CASES: dict[str, list[Case]] = {
         ("reset --json", None),
         ("my workload --yes", None),
     ],
-    "producivity/rename-invoices": [
+    "productivity/rename-invoices": [
         ("--type=invoice", {"flags": {"--type": "invoice"}, "operands": []}),
         (
             "--folder=/x --type=invoice --locale=sv --locale=en --yes",

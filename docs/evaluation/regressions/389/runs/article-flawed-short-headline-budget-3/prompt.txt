@@ -1,0 +1,2 @@
+/redline --genre=article --language=sv --max=3 --output=response source.md
+-- Rubriken ska vara högst fem ord lång.

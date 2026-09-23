@@ -1,0 +1,45 @@
+**Granskad som:** genre `article`, språk `sv`, ingen teknik — genren `article` anger själv att den inte skrivs med någon.
+
+```markdown
+# Mätförsöket i Björkskolan har luckor i underlaget
+
+**Ett mätförsök i Björkskolan pågick i fyra veckor. Artikeln går igenom vad fastighetskontorets rapport anger om temperaturerna i sex klassrum, vad försöket inte mäter och vilket nästa steg driftteknikern rekommenderar innan styrningen ändras.**
+
+Givarna registrerade temperaturer under 20 grader i sex klassrum. Fastighetskontorets rapport *Mätförsök i Björkskolan* från den 12 mars 2026 anger att 14 av 120 lektionspass hade minst ett värde under kontorets egen arbetsgräns på 20 grader. Arbetsgränsen är inte en lagregel. Försöket varade fyra veckor.
+
+## Givarna mätte luften, inte den operativa temperaturen
+
+Två givare stod vid ytterväggar och fyra vid innerväggar. Placeringens effekt jämfördes inte experimentellt.
+
+Resonemanget bygger på operativ temperatur, som är ett mått på lufttemperatur och värmestrålning från omgivande ytor. Operativ temperatur saknas i försöket. Givarna mätte bara luften där de satt.
+
+## Försöket mäter inte luftdrag eller hälsa
+
+Det saknas mätningar av luftdrag och elevernas upplevelse och uppgifter om hur länge temperaturerna låg under gränsen. Ingen effekt på hälsan har undersökts.
+
+## Driftteknikern vill koppla mätvärdena till användningstiderna
+
+Nästa försök är tänkt att använda likadant placerade givare i november. Finansieringen är inte beslutad.
+
+Driftteknikern Elin Rask rekommenderar att koppla temperaturserier till användningstider innan styrningen ändras.
+```
+
+**Olöst iakttagelse**
+
+- **Byline saknas.** Artikelanatomin kräver en rad som namnger författaren mellan ingressen och ledet (maskinellt mätt: `byline: absent`). Ingen författare går att hämta ur texten, dess metadata eller uppdraget — den enda person som nämns, driftteknikern Elin Rask, är en källa artikeln rapporterar om, inte dess skribent. Raden lämnas därför ofylld och behöver kompletteras av någon som vet vem som står för texten, i formen `Av <författare>`.
+
+**Borttagna påståenden**
+
+Varje borttagning skedde där iakttagelsen pekade ut själva påståendet som felet:
+
+- att en katastrof lurade bakom varje hörn — meningen var tillverkad dramatik utan stöd i textens eget underlag.
+- att det är helt säkert att givarna har gjort eleverna friskare — säkerheten motsades av samma mening. Förbehållet står kvar i full styrka som egen mening: *Ingen effekt på hälsan har undersökts.*
+- att detta är mycket viktigt för alla som tycker att temperatur är viktigt — meningen hävdade vikt utan att säga något.
+- uppmaningen att kontakta avsändaren för att rädda framtiden — den följde inte av artikelns innehåll.
+- rubrikens påstående att givarna räddar skolan från en katastrof — varken *räddar* eller *katastrof* har stöd i texten.
+
+Inget påstående står kvar med förändrad räckvidd, säkerhet, attribution, kronologi, orsakssamband eller innebörd. Rapportens titel och datum, 14 av 120 lektionspass, kontorets egen 20-gradersgräns och att den inte är en lagregel, de fyra veckorna, givarnas placering och den ojämförda placeringseffekten, avsaknaden av operativ temperatur, de saknade mätningarna av luftdrag, elevernas upplevelse och varaktighet, den outredda hälsoeffekten, Rasks rekommendation samt novemberförsöket med obeslutad finansiering finns alla kvar som de stod.
+
+**Detta gjordes i övrigt**
+
+Rubriken skrevs om från textens egen vinkel och i dess egen styrka, och ingressen skrevs om till en självbärande paragraf som säger vad artikeln handlar om — den ordagranna dubbleringen och överlappet mot ledet är därmed borta. Den 187 ord långa textmassan delades upp i ett led och tre avsnitt med mellanrubriker, och de staplade bisatserna med *medan*, *utan att*, *trots att* och *fast* delades till egna huvudsatser med en tanke i taget. Slop-mönstren — dramatiken, viktighetsinflationen och den frikopplade uppmaningen — togs bort, och avslutningen landar nu i det nästa steg materialet faktiskt bär. Den avslutande korrekturläsningen hittade inga mekaniska fel att rätta.
