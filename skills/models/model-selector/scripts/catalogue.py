@@ -17,7 +17,9 @@ seed alone: no structured source lists them, so they change with a release of
 the collection, and plans an older release wrote into `catalogue.json` are not
 read. A model its maker stopped listing is removed by the catalogue pass,
 and `lifecycle.json` beside the refreshed file masks the seed's copy of it, so
-that no later load or release of the seed brings it back.
+that no later load or release of the seed brings it back. The record keeps the
+removed release's family and release date, which is all a newer release of
+that family needs to go on reading its rows as an inheritance (ADR-0215).
 
 Nothing here raises. A catalogue that cannot be read is a catalogue that says
 so in `problem` and hands back what it still has, because every caller of this
@@ -176,14 +178,53 @@ class Model:
     retrieved: str | None
 
 
+class Release(Protocol):
+    """Whatever a family's releases are ordered by: an id and a release date.
+
+    A model in the catalogue is one and a release the lifecycle removed is
+    another, and `newest_first` orders the two together, a removed release
+    being an older release of its family still (ADR-0215).
+    """
+
+    @property
+    def id(self) -> str:
+        """Return the release's exact id."""
+
+    @property
+    def released(self) -> str | None:
+        """Return the release's date, or None where the catalogue has none."""
+
+
+@dataclass(frozen=True)
+class Removed:
+    """A release the catalogue pass removed, as its lifecycle record keeps it.
+
+    Kept for one reason: a newer release of the same family reads its rows as
+    an inheritance, and that needs the family and the date the release had on
+    the day it went, and nothing else. A removal recorded before the record
+    kept a family is no release of any family (ADR-0215).
+    """
+
+    id: str
+    family: str
+    released: str | None
+    provider: str | None
+
+
 @dataclass(frozen=True)
 class Catalogue:
-    """Every known model, and why the answer might be thinner than it looks."""
+    """Every known model, and why the answer might be thinner than it looks.
+
+    `removed` holds the releases the lifecycle removed whose record names a
+    family, which no pool offers and which a newer release of that family
+    reads as kin (ADR-0215).
+    """
 
     models: tuple[Model, ...]
     plans: tuple[Plan, ...]
     generated_at: str
     problem: str | None
+    removed: tuple[Removed, ...] = ()
 
 
 def load(data_dir: Path, here: Path) -> Catalogue:
@@ -198,9 +239,25 @@ def load(data_dir: Path, here: Path) -> Catalogue:
     plans an older release wrote into the refreshed file are left unread
     rather than offered as though they were current.
 
+    Every removal whose record names a family is carried under `removed`,
+    unless the refreshed file holds that id again, a re-added model being an
+    ordinary one.
+
     A missing or unreadable refreshed file leaves the seed standing and is
     reported in `problem`; only a seed that will not parse empties the answer,
     because at that point the Skill knows nothing at all about the world.
+    """
+
+    return _merged(data_dir, here, _lifecycle(data_dir))
+
+
+def _merged(
+    data_dir: Path, here: Path, records: Mapping[str, Mapping[str, Any]]
+) -> Catalogue:
+    """Return the catalogue `load` returns, with *records* as the lifecycle's.
+
+    The pass asks for the catalogue it is about to leave before it has written
+    the removals it just made, and those have to mask the seed already.
     """
 
     # The seed is the floor. Without it there is no catalogue to merge into.
@@ -214,7 +271,7 @@ def load(data_dir: Path, here: Path) -> Catalogue:
     refreshed, _, refreshed_generated, refresh_problem = _read(
         data_dir / REFRESHED_FILE
     )
-    masked = _removed(_lifecycle(data_dir))
+    masked = _removed(records)
     seeded: dict[str, Model] = {model.id: model for model in seed}
     merged = {
         identifier: model
@@ -224,12 +281,28 @@ def load(data_dir: Path, here: Path) -> Catalogue:
     for model in refreshed:
         merged[model.id] = _with_seeded_fields(model, seeded.get(model.id))
 
+    # What the lifecycle removed and a newer release may still read as kin.
+    # A record written before removals kept a family names no family.
+    gone = tuple(
+        Removed(
+            identifier,
+            family,
+            _text(record.get("released")),
+            _text(record.get("provider")),
+        )
+        for identifier, record in sorted(records.items())
+        if identifier in masked
+        and identifier not in merged
+        and (family := _text(record.get("family"))) is not None
+    )
+
     generated_at = refreshed_generated or seed_generated
     return Catalogue(
         tuple(merged.values()),
         tuple(seed_plans),
         generated_at,
         refresh_problem,
+        gone,
     )
 
 
@@ -385,7 +458,7 @@ def plans_for(cat: Catalogue, provider: str) -> list[Plan]:
     return [plan for plan in cat.plans if plan.provider == provider]
 
 
-def newest_first(models: Iterable[Model]) -> list[Model]:
+def newest_first[R: Release](models: Iterable[R]) -> list[R]:
     """Return *models* newest release first, on the one order releases go by.
 
     `released` orders them and the id settles the rest, so a caller taking
@@ -406,6 +479,32 @@ def newest_first(models: Iterable[Model]) -> list[Model]:
     ordered = sorted(models, key=lambda model: model.id)
     ordered.sort(key=lambda model: model.released or "", reverse=True)
     return ordered
+
+
+def older_releases(cat: Catalogue, model_id: str) -> list[Model | Removed]:
+    """Return the older releases of *model_id*'s family, newest first.
+
+    The releases of the same family — the `family` field, compared as
+    `resolve` and the newest-release rule compare it — that `newest_first`
+    places after the model, a release the lifecycle removed among them. That
+    is the whole of what makes one release kin to another: nothing infers a
+    succession the catalogue does not state, so `gpt-6-astra` has no older
+    release in `gpt-5.6-sol` and a family of one has none at all. A model the
+    catalogue does not hold has none either (ADR-0215).
+    """
+
+    model = next((entry for entry in cat.models if entry.id == model_id), None)
+    if model is None:
+        return []
+
+    family = model.family.lower()
+    releases: list[Model | Removed] = [
+        *(entry for entry in cat.models if entry.family.lower() == family),
+        *(entry for entry in cat.removed if entry.family.lower() == family),
+    ]
+    ordered = newest_first(releases)
+    place = next(index for index, entry in enumerate(ordered) if entry is model)
+    return ordered[place + 1 :]
 
 
 def resolve(cat: Catalogue, token: str) -> list[Model]:
@@ -1244,12 +1343,14 @@ def refresh(
     written, saying so.
 
     A model missing from its maker's complete list on three consecutive UTC
-    days is gone: its entry is removed, the seed's copy masked, and every
-    measurement row and pending Unit of it deleted. Only a complete read is an
-    observation, so a failed or partial one breaks the run rather than
-    extending it, and a failure to run a model is never one at all. Every
-    pass, one choosing no maker included, deletes whatever rows have been
-    filed since for the models it removed.
+    days is gone: its entry is removed and the seed's copy masked. Every
+    measurement row and pending Unit of it is deleted where no newer release
+    of its family stands in the catalogue the pass leaves; where one does, they
+    stay as that release's inheritance, and the record names it (ADR-0215).
+    Only a complete read is an observation, so a failed or partial one breaks
+    the run rather than extending it, and a failure to run a model is never one
+    at all. Every pass, one choosing no maker included, deletes whatever rows
+    have been filed since for the removed models nothing inherits.
 
     Each entry is checked by the validator before it is written, and the
     stored file is written whole, so `load` never falls back to the seed by
@@ -1287,7 +1388,9 @@ def refresh(
         if seen:
             report["present"] = {"day": today, "models": sorted(seen)}
         if _removed(records):
-            report["lifecycle"] = _settle_lifecycle(data_dir, records, held, {})
+            report["lifecycle"] = _settle_lifecycle(
+                data_dir, records, held, {}, cat.models
+            )
         _replace_json(data_dir / PASS_FILE, report)
         return report
 
@@ -1386,19 +1489,38 @@ def refresh(
             report["written"] = str(data_dir / REFRESHED_FILE)
 
     # A removal is recorded only once the entry is out of the file; until then
-    # its three absent days stand, and the next pass removes it.
+    # its three absent days stand, and the next pass removes it. The record
+    # keeps the family and the release date the entry had on its last day,
+    # which is what a newer release of the family reads it as kin by.
     removed_now = gone if written else {}
     for identifier, days in removed_now.items():
+        entry = step.entries[identifier]
         records[identifier] = {
             "absent_days": days,
             "removed_at": stamp,
+            "family": _text(entry.get("family")),
+            "released": _text(entry.get("released")),
+            "provider": _text(entry.get("provider")),
             "rows_deleted": 0,
             "units_dropped": 0,
         }
     if written:
         _forget(records, stored_models)
-    report["lifecycle"] = _settle_lifecycle(data_dir, records, held, removed_now)
+    report["lifecycle"] = _settle_lifecycle(
+        data_dir,
+        records,
+        held,
+        removed_now,
+        _merged(data_dir, here, records).models,
+    )
     for identifier, days in removed_now.items():
+        removal: dict[str, Any] = {
+            "absent_days": days,
+            "rows_deleted": records[identifier]["rows_deleted"],
+            "units_dropped": records[identifier]["units_dropped"],
+        }
+        if records[identifier].get("inherited_by") is not None:
+            removal["inherited_by"] = records[identifier]["inherited_by"]
         rows.append(
             {
                 "at": stamp,
@@ -1406,11 +1528,7 @@ def refresh(
                 "model": identifier,
                 "field": "removed",
                 "old": None,
-                "new": {
-                    "absent_days": days,
-                    "rows_deleted": records[identifier]["rows_deleted"],
-                    "units_dropped": records[identifier]["units_dropped"],
-                },
+                "new": removal,
             }
         )
 
@@ -1666,13 +1784,18 @@ def _settle_lifecycle(
     records: dict[str, dict[str, Any]],
     held: str,
     removed_now: Mapping[str, list[str]],
+    standing: Sequence[Model],
 ) -> dict[str, Any]:
-    """Delete the rows of every removed model, then write `lifecycle.json` where it moved.
+    """Delete the rows nothing inherits, then write `lifecycle.json` where it moved.
 
-    The deletion runs under the ledger's lock. Where another pass holds it,
-    the removal stands and its rows wait for the next pass that gets the lock;
-    `lifecycle.json` keeps each removed model's running counts, which is what
-    status reports.
+    *standing* is the catalogue the pass leaves. A removed release whose
+    family still has a newer release in it keeps its rows and its pending
+    Units, and its record names the family's newest release as `inherited_by`;
+    one with none left, or whose record names no family, has them deleted, as
+    a later pass does once the family is gone (ADR-0215). The deletion runs
+    under the ledger's lock. Where another pass holds it, the removal stands
+    and its rows wait for the next pass that gets the lock; `lifecycle.json`
+    keeps each removed model's running counts, which is what status reports.
     """
 
     import evidence  # Imported here: it imports this module.
@@ -1680,24 +1803,37 @@ def _settle_lifecycle(
     removed = sorted(
         identifier for identifier in records if _is_removal(records[identifier])
     )
+    heirs = {
+        identifier: _heir(standing, identifier, records[identifier])
+        for identifier in removed
+    }
+    for identifier, heir in heirs.items():
+        if heir is None:
+            records[identifier].pop("inherited_by", None)
+        else:
+            records[identifier]["inherited_by"] = heir
+    orphaned = [identifier for identifier in removed if heirs[identifier] is None]
     outcome: dict[str, Any] = {
         "removed": sorted(removed_now),
+        "inherited": {
+            identifier: heir for identifier, heir in heirs.items() if heir is not None
+        },
         "lock": None,
         "rows_deleted": 0,
         "units_dropped": 0,
     }
-    if removed:
+    if orphaned:
         try:
             with evidence.lock(data_dir) as taken:
                 outcome["lock"] = "held" if taken else "busy"
-                deleted = evidence.discard_models(data_dir, removed) if taken else None
+                deleted = evidence.discard_models(data_dir, orphaned) if taken else None
         except OSError as problem:
             outcome["problem"] = (
                 f"the rows of removed models could not be deleted: {problem}"
             )
             deleted = None
         if deleted is not None:
-            for identifier in removed:
+            for identifier in orphaned:
                 record = records[identifier]
                 rows = deleted.rows.get(identifier, 0)
                 units = deleted.units.get(identifier, 0)
@@ -1713,6 +1849,38 @@ def _settle_lifecycle(
         except OSError as problem:
             outcome["problem"] = f"{path} could not be written: {problem}"
     return outcome
+
+
+def _heir(
+    standing: Sequence[Model], identifier: str, record: Mapping[str, Any]
+) -> str | None:
+    """Return the release that inherits a removed model's rows, or None.
+
+    That is the newest release of its family in *standing*, where it is newer
+    than the removed one — the one order `newest_first` keeps, against the
+    date the record kept. A family left with only older releases has nobody
+    to inherit anything, inheritance never flowing from a newer release to an
+    older one, and a record that names no family was written before removals
+    kept one (ADR-0215).
+    """
+
+    family = _text(record.get("family"))
+    if family is None:
+        return None
+
+    gone = Removed(
+        identifier,
+        family,
+        _text(record.get("released")),
+        _text(record.get("provider")),
+    )
+    kin: list[Model | Removed] = [
+        model
+        for model in standing
+        if model.family.lower() == family.lower() and model.id != identifier
+    ]
+    newest = newest_first([*kin, gone])[0]
+    return None if newest is gone else newest.id
 
 
 def _forget(records: dict[str, dict[str, Any]], present: Collection[str]) -> None:
@@ -1788,7 +1956,8 @@ def journal(
     report that moved a marker would change what the next report says. A
     removal is shown for as long as `lifecycle.json` records it, however old,
     with the rows and Units deleted for it so far, since later passes go on
-    deleting what capture files for it.
+    deleting what capture files for it, and with `inherited_by` where a newer
+    release of its family keeps them instead.
     """
 
     until = (now or datetime.now(UTC)).astimezone(UTC)
@@ -1829,6 +1998,11 @@ def journal(
                 "removed_at": record.get("removed_at"),
                 "rows_deleted": record.get("rows_deleted", 0),
                 "units_dropped": record.get("units_dropped", 0),
+                **(
+                    {"inherited_by": record["inherited_by"]}
+                    if record.get("inherited_by") is not None
+                    else {}
+                ),
             }
             for identifier, record in sorted(_lifecycle(data_dir).items())
             if _is_removal(record)

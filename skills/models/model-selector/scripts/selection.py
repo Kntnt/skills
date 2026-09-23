@@ -1182,13 +1182,14 @@ def _ranked(scored: Sequence[Scored], objective: str) -> list[Scored]:
 
     A mean is not the same claim for every point, though. Where a point has been
     measured doing this kind of work, its mean is what this machine saw; where
-    it has not, its mean is a prior or a verdict carried over from other work,
-    and on the means alone that estimate wins whenever it looks cheaper. So
-    every point measured for the kind leads the list, in the order `_preferred`
-    puts them, whether or not any of them clears the floor — a floor cleared on
-    a seeded capability is not evidence that the work gets done, and holding
-    the preference to the points that cleared it left an estimate nobody had
-    tested winning every call the measurements fell short on (ADR-0204).
+    it has not, its mean is a prior, a verdict carried over from other work or
+    the record of an older release of its family, and on the means alone that
+    estimate wins whenever it looks cheaper. So every point measured for the
+    kind leads the list, in the order `_preferred` puts them, whether or not
+    any of them clears the floor — a floor cleared on a seeded capability is
+    not evidence that the work gets done, and holding the preference to the
+    points that cleared it left an estimate nobody had tested winning every
+    call the measurements fell short on (ADR-0204).
 
     What is not measured then follows exactly as it did before: those whose
     posterior mean clears the floor ordered on price per finished job, and the
@@ -1283,7 +1284,8 @@ def _measured(row: Scored) -> bool:
 
     Measured is the estimator's word for it — enough rows in the exact kind,
     model and deliberation — so a model's rows at other levels or of other
-    kinds leave a point pooled, however good they were.
+    kinds leave a point pooled, however good they were, and an older release's
+    rows leave it `family` (ADR-0215).
     """
 
     return row.estimate.basis == "measured"
@@ -1465,9 +1467,10 @@ def _newest_releases(pool: Sequence[Point]) -> list[Point]:
     A maker that goes on listing every release it ever shipped — which through
     OpenRouter is indefinitely — otherwise has each of them ranked, explored
     and offered as an alternative for ever, and a row bought about a release
-    its own maker has superseded is a row nothing will read again. The
-    lifecycle rule is no help here: it removes a model a maker stopped
-    offering, and these are still offered.
+    its own maker has superseded is a row the release that replaced it reads
+    only as a bounded inheritance (ADR-0215). The lifecycle rule is no help
+    here: it removes a model a maker stopped offering, and these are still
+    offered.
 
     The comparison is made among the releases the pool it is handed actually
     holds, which is why this runs after the locks and after the deliberation

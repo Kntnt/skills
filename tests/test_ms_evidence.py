@@ -1146,6 +1146,312 @@ def test_a_handful_of_failures_at_one_point_is_worth_one_handful(
     assert heard.mean == pytest.approx(weight * prior.mean / (weight + 4))
 
 
+# --- A newer release inherits its family's record (ADR-0215) ---------------------
+
+# Two releases of one family, and a store that holds rows for either or both.
+# The family is the fixture's own rather than a seeded one, so that nothing the
+# seed ships decides which release is the older.
+OLDER: str = "kin-4"
+NEWER: str = "kin-5"
+
+
+def _release(
+    identifier: str, released: str, capability: float | None
+) -> dict[str, Any]:
+    """Provide one release of the fixture family, in the shape the seed writes it."""
+
+    return {
+        "id": identifier,
+        "provider": "testing",
+        "family": "kin",
+        "aliases": ["kin"],
+        "deliberation": ["low", "medium", "high", "xhigh"],
+        "price": {
+            "input": 1.0,
+            "cache_read": 0.1,
+            "cache_write": 1.25,
+            "output": 5.0,
+            "currency": "USD",
+            "unit": "per_mtok",
+        },
+        "reasoning_billed_as": "output",
+        "capability": capability,
+        "released": released,
+        "source_url": "https://example.invalid/models",
+        "retrieved": "2026-09-23",
+    }
+
+
+def _family(tmp_path: Path, *releases: dict[str, Any]) -> Any:
+    """Return a catalogue holding *releases*, the two-release family by default.
+
+    The older release carries a capability and the newer one none, which is
+    how the catalogue pass admits a release the seed does not name yet.
+    """
+
+    shipped = releases or (
+        _release(OLDER, "2026-01-01", 0.7),
+        _release(NEWER, "2026-06-01", None),
+    )
+    here = tmp_path / "skill"
+    (here / "data").mkdir(parents=True)
+    (here / "data" / "catalogue-seed.json").write_text(
+        json.dumps({"generated_at": "2026-09-23", "models": list(shipped)}),
+        encoding="utf-8",
+    )
+    return catalogue.load(tmp_path / "data", here)
+
+
+def _reading(cat: Any, rows: list[dict[str, Any]], data_dir: Path) -> Any:
+    """File *rows* in a store of their own and return an estimator over *cat*."""
+
+    evidence.append(data_dir, rows)
+    return evidence.Estimator(evidence.load(data_dir), cat, KINDS)
+
+
+def _own(count: int, grade: float, **overrides: Any) -> list[dict[str, Any]]:
+    """Provide *count* rows of the newer release, named apart from the older's."""
+
+    return [
+        _row(attempt_id=f"own-{index:04d}", model=NEWER, grade=grade, **overrides)
+        for index in range(count)
+    ]
+
+
+def test_a_newer_release_with_no_rows_answers_from_its_older_release(
+    tmp_path: Path,
+) -> None:
+    """Its answer is its family's, shrunk as any pooled answer is, and says so.
+
+    Twelve rows of the older release enter the newer one's exact cell at the
+    weight of six, `INHERITED`, so the cell reads exactly as six rows of its
+    own would — and the point is nonetheless no row of its own: `family`, a
+    Trial count of nought and an `n` of nought. The older release's own
+    reading of the same rows is the stronger one, twelve rows weighing twelve.
+    At a level the older release never ran at, its rows move the kind rather
+    than the cell, so that cell holds nothing but its parent's prior.
+    """
+
+    cat = _family(tmp_path)
+    kin = _many(12, 0.9, model=OLDER)
+    inherited = _reading(cat, kin, tmp_path / "inherited")
+    own = _reading(cat, _own(int(evidence.INHERITED), 0.9), tmp_path / "own")
+    untried = evidence.Estimator([], cat, KINDS)
+
+    heard = inherited.p_success("implement", NEWER, "high")
+    measured = own.p_success("implement", NEWER, "high")
+    prior = untried.p_success("implement", NEWER, "high")
+    older = inherited.p_success("implement", OLDER, "high")
+    beside = inherited.p_success("implement", NEWER, "low")
+
+    assert heard.basis == "family"
+    assert inherited.rows_for_kind("implement", NEWER) == 0
+    assert heard.n == 0.0
+    assert (heard.alpha, heard.beta) == pytest.approx((measured.alpha, measured.beta))
+    assert abs(heard.mean - 0.9) < abs(prior.mean - 0.9)
+    assert abs(older.mean - 0.9) < abs(heard.mean - 0.9)
+    assert beside.alpha + beside.beta == pytest.approx(evidence.PSEUDO[1])
+    assert beside.mean != pytest.approx(
+        untried.p_success("implement", NEWER, "low").mean
+    )
+
+
+def test_the_older_release_is_untouched_by_the_newer_release_s_rows(
+    tmp_path: Path,
+) -> None:
+    """Nothing flows from a newer release to an older one.
+
+    A lock to the older release by its exact id is answered from its own rows,
+    and here it has none: its estimate is the one an empty store gives it.
+    """
+
+    cat = _family(tmp_path)
+    estimator = _reading(cat, _own(12, 1.0), tmp_path / "data")
+    untried = evidence.Estimator([], cat, KINDS)
+
+    for level in ("low", "high"):
+        assert estimator.p_success("implement", OLDER, level) == untried.p_success(
+            "implement", OLDER, level
+        )
+    assert estimator.p_success("implement", OLDER, "high").basis == "prior"
+
+
+def test_three_own_rows_are_a_third_of_what_the_cell_is_fitted_on_and_a_dozen_lead(
+    tmp_path: Path,
+) -> None:
+    """The inheritance is a bounded prior that a Trial moves and a dozen outgrow.
+
+    However many rows the older release holds in the cell, they weigh
+    `INHERITED`, six. A Trial's three rows of the newer release's own are then
+    a third of the rows the cell is fitted on — three of nine — which is a
+    fifth of the cell's whole weight once the six its parent is worth are
+    counted too. A dozen of its own weigh twice what the inheritance does.
+    """
+
+    cat = _family(tmp_path)
+    kin = _many(30, 0.0, model=OLDER)
+    trial = _reading(cat, [*kin, *_own(evidence.ENOUGH, 1.0)], tmp_path / "trial")
+    dozen = _reading(cat, [*kin, *_own(12, 1.0)], tmp_path / "dozen")
+
+    tried = trial.p_success("implement", NEWER, "high")
+    outgrown = dozen.p_success("implement", NEWER, "high")
+    shares = evidence._weighted(
+        [row for row in evidence.load(tmp_path / "trial") if row.model == NEWER],
+        [row for row in evidence.load(tmp_path / "trial") if row.model == OLDER],
+    )
+    own = sum(share for row, share in shares if row.model == NEWER)
+    inherited = sum(share for row, share in shares if row.model == OLDER)
+
+    assert evidence.INHERITED == 2 * evidence.ENOUGH
+    assert (own, inherited) == pytest.approx((evidence.ENOUGH, evidence.INHERITED))
+    assert own / (own + inherited) == pytest.approx(1 / 3)
+    assert tried.alpha + tried.beta == pytest.approx(
+        evidence.ENOUGH + evidence.INHERITED + evidence.PSEUDO[1]
+    )
+    assert outgrown.alpha + outgrown.beta == pytest.approx(
+        12 + evidence.INHERITED + evidence.PSEUDO[1]
+    )
+    assert outgrown.mean > 0.5 > tried.mean
+    assert tried.basis == outgrown.basis == "measured"
+    assert trial.rows_for_kind("implement", NEWER) == evidence.ENOUGH
+
+
+def test_a_few_inherited_rows_count_for_no_more_than_they_are(tmp_path: Path) -> None:
+    """Fewer rows than `INHERITED` enter at what they hold, one attempt a row.
+
+    Spread over two rows, six attempts' worth would read one old failure as
+    three new ones.
+    """
+
+    cat = _family(tmp_path)
+    estimator = _reading(cat, _many(2, 0.0, model=OLDER), tmp_path / "data")
+
+    heard = estimator.p_success("implement", NEWER, "high")
+
+    assert [share for _, share in evidence._weighted([], estimator._rows)] == [
+        1.0,
+        1.0,
+    ]
+    assert heard.alpha + heard.beta == pytest.approx(2 + evidence.PSEUDO[1])
+
+
+def test_family_replaces_prior_alone(tmp_path: Path) -> None:
+    """`measured` and `pooled` mean what they meant, off the release's own rows.
+
+    One row of its own at the point asked about is too few for either, so a
+    release whose family holds rows reads `family`; three rows of its own at
+    another kind make it `pooled` as they always did; and a release with
+    neither rows nor an older release holding any stays `prior`.
+    """
+
+    cat = _family(tmp_path)
+    kin = _many(4, 1.0, model=OLDER, kind="review")
+    one = _reading(cat, [*kin, *_own(1, 1.0)], tmp_path / "one")
+    elsewhere = _reading(cat, [*kin, *_own(3, 1.0, kind="design")], tmp_path / "other")
+    alone = _reading(cat, _own(1, 1.0), tmp_path / "alone")
+
+    assert evidence.BASIS == ("measured", "pooled", "family", "prior", "inherit")
+    assert one.p_success("implement", NEWER, "high").basis == "family"
+    assert elsewhere.p_success("implement", NEWER, "high").basis == "pooled"
+    assert alone.p_success("implement", NEWER, "high").basis == "prior"
+    assert one.p_success("implement", OLDER, "high").basis == "pooled"
+
+
+def test_a_release_with_no_seeded_capability_stands_at_its_newest_older_release_s(
+    tmp_path: Path,
+) -> None:
+    """The bottom of the stack is the family's, read here and written nowhere.
+
+    Where the release just before it carries no capability either, the newest
+    older release that does is the one it stands at. The catalogue keeps its
+    own `None`, and no `catalogue.json` is written, a figure written there
+    outranking the seed's own later word.
+    """
+
+    three = _family(
+        tmp_path / "three",
+        _release("kin-3", "2025-01-01", 0.6),
+        _release(OLDER, "2026-01-01", 0.9),
+        _release(NEWER, "2026-06-01", None),
+    )
+    gap = _family(
+        tmp_path / "gap",
+        _release("kin-3", "2025-01-01", 0.6),
+        _release(OLDER, "2026-01-01", None),
+        _release(NEWER, "2026-06-01", None),
+    )
+    newest = evidence.Estimator([], three, KINDS)
+    skipped = evidence.Estimator([], gap, KINDS)
+
+    for level in ("low", "high"):
+        assert newest.p_success("implement", NEWER, level) == newest.p_success(
+            "implement", OLDER, level
+        )
+        assert skipped.p_success("implement", NEWER, level) == skipped.p_success(
+            "implement", "kin-3", level
+        )
+    assert (
+        newest.p_success("implement", NEWER, "high").mean
+        > skipped.p_success("implement", NEWER, "high").mean
+    )
+    assert next(model for model in three.models if model.id == NEWER).capability is None
+    assert not list(tmp_path.rglob("catalogue.json"))
+
+
+def test_a_forecast_for_a_release_with_no_rows_is_its_older_release_s(
+    tmp_path: Path,
+) -> None:
+    """Tokens and elapsed time come from the family at the tier they are asked at.
+
+    Read back to the baseline and scaled to the level asked for, as the older
+    release's own forecast is, rather than from the kind's shipped prior.
+    """
+
+    cat = _family(tmp_path)
+    estimator = _reading(
+        cat,
+        _many(4, 1.0, model=OLDER, seconds=1200.0, tokens={"output": 40_000.0}),
+        tmp_path / "data",
+    )
+
+    for level in ("low", "xhigh"):
+        assert estimator.tokens("implement", NEWER, level) == estimator.tokens(
+            "implement", OLDER, level
+        )
+        assert estimator.seconds("implement", NEWER, level) == pytest.approx(
+            estimator.seconds("implement", OLDER, level)
+        )
+    assert estimator.tokens("implement", NEWER, "high") != KINDS.tokens(
+        "implement", "high"
+    )
+
+
+def test_a_forecast_takes_the_release_s_own_rows_before_its_family_s_at_each_tier(
+    tmp_path: Path,
+) -> None:
+    """Own kind, inherited kind, own model, inherited model, then the prior.
+
+    The newer release's own `design` rows answer `design`, and for
+    `implement` they are the model tier, which comes after the kind's
+    inherited rows: the older release's `implement` rows answer first. One
+    `implement` row of its own then answers ahead of both.
+    """
+
+    cat = _family(tmp_path)
+    kin = _many(4, 1.0, model=OLDER, seconds=1200.0)
+    design = _own(4, 1.0, kind="design", seconds=100.0)
+    before = _reading(cat, [*kin, *design], tmp_path / "before")
+    after = _reading(
+        cat,
+        [*kin, *design, _row(attempt_id="own-late", model=NEWER, seconds=300.0)],
+        tmp_path / "after",
+    )
+
+    assert before.seconds("implement", NEWER, "high") == pytest.approx(1200.0)
+    assert before.seconds("design", NEWER, "high") == pytest.approx(100.0)
+    assert after.seconds("implement", NEWER, "high") == pytest.approx(300.0)
+
+
 # --- Discarding the rows of a model that is gone -------------------------------
 
 

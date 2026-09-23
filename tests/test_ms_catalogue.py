@@ -183,6 +183,98 @@ def test_resolve_matches_id_alias_and_family_and_returns_the_newest_first(
     assert catalogue.resolve(cat, "nothing-like-this") == []
 
 
+def test_the_older_releases_of_a_model_are_its_family_after_it_newest_first(
+    tmp_path: Path,
+) -> None:
+    """Kin is the catalogue's own family, in the one order releases go by.
+
+    The family is compared as the newest-release rule compares it, whatever its
+    case, and nothing infers a succession across families: a model of another
+    family is no older release of this one however old it is (ADR-0215).
+    """
+
+    here = _here(
+        tmp_path,
+        [
+            _model(id="test-undated", released=None),
+            _model(id="test-old", released="2025-06-01"),
+            _model(id="test-mid", family="ONE", released="2026-01-01"),
+            _model(id="test-new", released="2026-06-01"),
+            _model(id="test-other", family="two", released="2024-01-01"),
+        ],
+    )
+    cat = catalogue.load(tmp_path / "data", here)
+
+    def older(model_id: str) -> list[str]:
+        """Spell one model's older releases by id."""
+
+        return [release.id for release in catalogue.older_releases(cat, model_id)]
+
+    assert older("test-new") == ["test-mid", "test-old", "test-undated"]
+    assert older("test-old") == ["test-undated"]
+    assert older("test-undated") == []
+    assert older("test-other") == []
+    assert older("nothing-like-this") == []
+
+
+def _removal(**kept: Any) -> dict[str, Any]:
+    """Provide one removal as `lifecycle.json` records it, with *kept* beside it."""
+
+    return {
+        "absent_days": ["2026-09-01", "2026-09-02", "2026-09-03"],
+        "removed_at": "2026-09-03T05:00:00Z",
+        "rows_deleted": 0,
+        "units_dropped": 0,
+        **kept,
+    }
+
+
+def test_a_release_the_lifecycle_removed_is_kin_by_the_family_its_record_kept(
+    tmp_path: Path,
+) -> None:
+    """A removed release is an older release still, and nothing more.
+
+    It is no model a pool can offer, so it is not among the models; it is
+    carried beside them only where its record kept a family, since a removal
+    recorded before that is no release of any family. A removed id the
+    refreshed file holds again is an ordinary model and no removal at all.
+    """
+
+    here = _here(tmp_path, [_model(id="test-new", released="2026-06-01")])
+    data = tmp_path / "data"
+    data.mkdir()
+    (data / "lifecycle.json").write_text(
+        json.dumps(
+            {
+                "models": {
+                    "test-gone": _removal(
+                        family="one", released="2026-01-01", provider="testing"
+                    ),
+                    "test-bare": _removal(),
+                    "test-back": _removal(family="one", released="2025-01-01"),
+                    "test-absent": {"absent_days": ["2026-09-03"]},
+                }
+            }
+        ),
+        encoding="utf-8",
+    )
+    (data / "catalogue.json").write_text(
+        json.dumps({"models": [_model(id="test-back", released="2025-01-01")]}),
+        encoding="utf-8",
+    )
+
+    cat = catalogue.load(data, here)
+
+    assert cat.removed == (
+        catalogue.Removed("test-gone", "one", "2026-01-01", "testing"),
+    )
+    assert "test-gone" not in {model.id for model in cat.models}
+    assert [release.id for release in catalogue.older_releases(cat, "test-new")] == [
+        "test-gone",
+        "test-back",
+    ]
+
+
 def test_cost_prices_the_measured_session_with_cache_reads_dominating() -> None:
     """The bill is mostly cache reads, and pricing that ignores them is wrong."""
 

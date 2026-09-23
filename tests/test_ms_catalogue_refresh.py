@@ -205,17 +205,20 @@ CHANNELS = {
 LATER: tuple[str, ...] = ("claude-opus-5-5", "gpt-6-sol", "gpt-6-luna", "grok-4.7")
 
 
-def _here(tmp_path: Path, *, drop: tuple[str, ...] = ()) -> Path:
+def _here(
+    tmp_path: Path, *, drop: tuple[str, ...] = (), keep: tuple[str, ...] = ()
+) -> Path:
     """Write a copy of the shipped seed as the recordings knew it, the named models left out.
 
     The copy is the seed as it stood on the day the recordings were taken, so
-    the releases in `LATER` are left out of it beside whatever *drop* names.
+    the releases in `LATER` are left out of it beside whatever *drop* names,
+    except those *keep* names for a test that lists them itself.
     """
 
     seed = json.loads(
         (SHIPPED / "data" / "catalogue-seed.json").read_text(encoding="utf-8")
     )
-    left_out = frozenset((*LATER, *drop))
+    left_out = frozenset(model for model in (*LATER, *drop) if model not in keep)
     seed["models"] = [entry for entry in seed["models"] if entry["id"] not in left_out]
     here = tmp_path / "skill"
     (here / "data").mkdir(parents=True)
@@ -226,11 +229,14 @@ def _here(tmp_path: Path, *, drop: tuple[str, ...] = ()) -> Path:
 
 
 def _machine(
-    tmp_path: Path, *makers: str, drop: tuple[str, ...] = ()
+    tmp_path: Path,
+    *makers: str,
+    drop: tuple[str, ...] = (),
+    keep: tuple[str, ...] = (),
 ) -> tuple[Path, Path, Path]:
     """Return a seed, a data directory holding a profile choosing *makers*, and an agents directory."""
 
-    here = _here(tmp_path, drop=drop)
+    here = _here(tmp_path, drop=drop, keep=keep)
     data = tmp_path / "data"
     data.mkdir()
     chosen = makers or ("anthropic", "openai", "spacexai")
@@ -1829,6 +1835,176 @@ def test_the_journal_subcommand_shows_every_removal_with_its_dates_and_counts(
             }
         ]
     assert later["journal"] == []
+
+
+# --- A removed release's rows as a newer release's inheritance (ADR-0215) ---------
+
+# The release that replaced `GONE` in its family. The seed copy leaves it out
+# unless a test keeps it, and the recorded Codex list carries only `GONE`.
+SUCCESSOR = "gpt-6-luna"
+
+
+def _codex_succeeded(old: str = GONE, new: str = SUCCESSOR) -> list[dict[str, Any]]:
+    """Return the recorded Codex pages with *old* listed under *new* instead."""
+
+    pages = copy.deepcopy(_codex_pages())
+    for page in pages:
+        for entry in page["data"]:
+            if entry["model"] == old:
+                entry["id"] = entry["model"] = new
+    return pages
+
+
+def test_a_removal_that_leaves_a_newer_release_of_its_family_keeps_its_rows_for_it(
+    tmp_path: Path,
+) -> None:
+    """The entry goes, and the rows and Units stay as the successor's inheritance.
+
+    The removal is journalled with counts of nought and the release that
+    inherits, the record keeps the family and the date the entry had on its
+    last day, and the catalogue reads the removed release as the successor's
+    kin from that record — so the successor's estimate rests on it. A pass the
+    day after deletes nothing either.
+    """
+
+    here, data, agents = _machine(tmp_path, keep=(SUCCESSOR,))
+    _measured(data, GONE, 3)
+    _waiting(data, GONE, "u1", "u2")
+
+    _days(here, data, agents, 4, codex=_codex_succeeded())
+
+    cat = catalogue.load(data, here)
+    kinds = evidence.load_kinds(SHIPPED)
+    estimate = evidence.Estimator(evidence.load(data), cat, kinds).p_success(
+        "implement", SUCCESSOR, "high"
+    )
+    days = [(NOW + index * DAY).date().isoformat() for index in range(3)]
+    released = _day(_openrouter_entry(_openrouter(), f"openai/{GONE}")["created"])
+    assert _model(here, data, GONE) is None
+    assert _model(here, data, SUCCESSOR) is not None
+    assert _ledger(data) == [GONE, GONE, GONE]
+    assert _queued(data) == [GONE, GONE]
+    assert _removals(data) == [
+        {
+            "at": _stamp(NOW + 2 * DAY),
+            "source": "codex",
+            "model": GONE,
+            "field": "removed",
+            "old": None,
+            "new": {
+                "absent_days": days,
+                "rows_deleted": 0,
+                "units_dropped": 0,
+                "inherited_by": SUCCESSOR,
+            },
+        }
+    ]
+    record = _lifecycle(data)[GONE]
+    assert (record["family"], record["released"], record["provider"]) == (
+        "luna",
+        released,
+        "openai",
+    )
+    assert record["inherited_by"] == SUCCESSOR
+    assert (record["rows_deleted"], record["units_dropped"]) == (0, 0)
+    assert [release.id for release in catalogue.older_releases(cat, SUCCESSOR)] == [
+        GONE
+    ]
+    assert estimate.basis == "family"
+    shown = catalogue.journal(data, 7, now=NOW + 3 * DAY)["removed"]
+    assert shown[0]["inherited_by"] == SUCCESSOR
+
+
+def test_a_family_left_only_older_releases_keeps_nothing_for_them(
+    tmp_path: Path,
+) -> None:
+    """Inheritance runs from an older release to a newer one and never back.
+
+    Where the removed release is the family's newest, the releases left are
+    older than it, none of them reads its rows, and nothing keeps them.
+    """
+
+    here, data, agents = _machine(tmp_path, keep=(SUCCESSOR,))
+    _measured(data, SUCCESSOR, 2)
+
+    _days(here, data, agents, 3)
+
+    record = _lifecycle(data)[SUCCESSOR]
+    assert _model(here, data, SUCCESSOR) is None
+    assert _model(here, data, GONE) is not None
+    assert _ledger(data) == []
+    assert record["rows_deleted"] == 2
+    assert "inherited_by" not in record
+    assert "inherited_by" not in _removals(data)[0]["new"]
+
+
+def test_a_later_pass_that_finds_the_family_gone_deletes_what_was_kept(
+    tmp_path: Path,
+) -> None:
+    """Once nothing is left to inherit them, the kept rows go as ADR-0192 had them.
+
+    The successor is removed three days after its predecessor, and the pass
+    that removes it deletes both releases' rows and Units, the predecessor's
+    record dropping the heir it no longer has.
+    """
+
+    here, data, agents = _machine(tmp_path, keep=(SUCCESSOR,))
+    _measured(data, GONE, 3)
+    _measured(data, SUCCESSOR, 1, first=10)
+    _waiting(data, GONE, "u1")
+    _days(here, data, agents, 3, codex=_codex_succeeded())
+    assert _ledger(data).count(GONE) == 3
+
+    _days(here, data, agents, 3, first=NOW + 3 * DAY, codex=_codex_without())
+
+    gone = _lifecycle(data)[GONE]
+    later = [row for row in _removals(data) if row["model"] == SUCCESSOR]
+    assert _model(here, data, SUCCESSOR) is None
+    assert _ledger(data) == []
+    assert _queued(data) == []
+    assert "inherited_by" not in gone
+    assert (gone["rows_deleted"], gone["units_dropped"]) == (3, 1)
+    assert later[0]["new"] == {
+        "absent_days": [(NOW + index * DAY).date().isoformat() for index in (3, 4, 5)],
+        "rows_deleted": 1,
+        "units_dropped": 0,
+    }
+
+
+def test_a_removal_recorded_before_it_kept_a_family_is_deleted_as_before(
+    tmp_path: Path,
+) -> None:
+    """A record naming no family is no release of any family, whatever stands.
+
+    Its rows go on every pass, as ADR-0192 has them, though a newer release of
+    what was its family stands in the catalogue.
+    """
+
+    here, data, agents = _machine(tmp_path, keep=(SUCCESSOR,))
+    (data / "lifecycle.json").write_text(
+        json.dumps(
+            {
+                "models": {
+                    GONE: {
+                        "absent_days": ["2026-09-08", "2026-09-09", "2026-09-10"],
+                        "removed_at": _stamp(NOW - DAY),
+                        "rows_deleted": 0,
+                        "units_dropped": 0,
+                    }
+                }
+            }
+        ),
+        encoding="utf-8",
+    )
+    _measured(data, GONE, 2)
+
+    _pass(here, data, agents, codex=_codex_succeeded())
+
+    record = _lifecycle(data)[GONE]
+    assert _ledger(data) == []
+    assert record["rows_deleted"] == 2
+    assert "inherited_by" not in record
+    assert catalogue.load(data, here).removed == ()
 
 
 # --- The bounds a pass runs within (#312) ------------------------------------------

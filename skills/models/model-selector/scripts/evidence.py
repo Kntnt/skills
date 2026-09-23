@@ -9,9 +9,10 @@ appended to and never edited, written field by field onto a closed set of
 names so that a caller cannot smuggle a key into it and nothing has to be
 stripped back out later. A row leaves it only with the model it measured:
 `reset --evidence` discards the whole ledger, and a model its maker no longer
-lists takes its rows with it (`discard_models`). The estimator is what the store is for: given a kind, a model and a
-level of deliberation, how likely is the attempt to come back good, and how
-many tokens of each category will it burn getting there.
+lists takes its rows with it where no newer release of its family is left to
+inherit them (`discard_models`). The estimator is what the store is for: given
+a kind, a model and a level of deliberation, how likely is the attempt to come
+back good, and how many tokens of each category will it burn getting there.
 
 The estimator is a four-level hierarchy and that is the whole design. Almost
 every cell of the (kind x model x deliberation) grid is empty and will stay
@@ -23,18 +24,31 @@ the kind informs the exact level, and the deepest level that has real rows is
 what the answer ends up being made of. `basis` says which level that was, so a
 caller can tell a measured answer from a plausible one.
 
+A newer release of a family starts from the record of the releases before it,
+on the maintainer's premise that a maker replaces a release with one it holds
+to be better. At every level the model's own rows enter whole, and the same
+level's rows of its older releases enter beside them as a bounded prior —
+`INHERITED` attempts' worth however many there are, or fewer where there are
+fewer — so a release with nothing of its own answers from its family, a Trial's
+three rows already move it, and a dozen lead it. Nothing flows the other way,
+and none of it is the model's own: `basis` reads `family` where the answer
+rests on those rows and on nothing of the model's, and every count a caller
+reads off a point counts the model's own rows alone (ADR-0215).
+
 That hierarchy is about success. What an attempt costs is borrowed on the same
 principle one tier shallower: a row's token counts and its elapsed time are
 divided by the factors of the level they ran at before they are pooled, so a
 model's rows for a kind are one sample at the `medium` baseline whatever level
 each of them was taken at, and the pooled figure is scaled back up to the level
-being asked about. Each tier is narrowed to its routed rows before it is
-pooled, and is taken whole only where it holds none, because appetite and
-runtime are properties of the size of a job, and a whole routed build and a
-span of somebody's own Main Seat session are two sizes of job (ADR-0203). An
-exact-cell tier in front of that would undo it — the level holding rows would
-answer from those rows alone, at whatever baseline they were taken, and the
-level beside it would be forecast the same appetite for nothing.
+being asked about. Each tier answers from the model's own rows where it has
+any, else from its older releases', before the tier above. Each is narrowed to
+its routed rows before it is pooled, and is taken whole only where it holds
+none, because appetite and runtime are properties of the size of a job, and a
+whole routed build and a span of somebody's own Main Seat session are two
+sizes of job (ADR-0203). An exact-cell tier in front of that would undo it —
+the level holding rows would answer from those rows alone, at whatever
+baseline they were taken, and the level beside it would be forecast the same
+appetite for nothing.
 
 A parent is fitted on the rows its child does not hold, and only on those. It
 is a prior for what it can still add, and rows the child is already counting
@@ -65,7 +79,7 @@ from dataclasses import asdict, dataclass, fields
 from pathlib import Path
 from typing import Any
 
-from catalogue import LEVELS, TOKEN_CATEGORIES, Catalogue
+from catalogue import LEVELS, TOKEN_CATEGORIES, Catalogue, Model, older_releases
 
 # The work this Skill knows how to route. A kind outside this set is a kind
 # nobody has written a difficulty or a token prior for, so it is rejected at
@@ -87,9 +101,11 @@ KINDS = (
 # caller that files a grade from an unknown judge is still filing evidence.
 GRADED_BY = ("checker", "judge", "signal", "user")
 
-# How an estimate was arrived at, strongest first. "inherit" is not produced
-# here; it is what a caller reports when it declined to choose at all.
-BASIS = ("measured", "pooled", "prior", "inherit")
+# How an estimate was arrived at, strongest first. "family" is an estimate
+# resting on an older release's rows and on nothing of the model's own.
+# "inherit" is not produced here; it is what a caller reports when it declined
+# to choose at all.
+BASIS = ("measured", "pooled", "family", "prior", "inherit")
 
 MEASUREMENTS_FILE = "measurements.jsonl"
 KINDS_FILE = "kinds.json"
@@ -117,6 +133,15 @@ PSEUDO = {3: 2.0, 2: 4.0, 1: 6.0}
 # as pooled. Three is the point where a run of luck stops being the whole
 # sample without demanding a study nobody will ever run.
 ENOUGH = 3
+
+# How much an older release's rows are worth to a newer release of its family,
+# in attempts, at each level of the estimate: twice `ENOUGH`, which is six, the
+# weight the exact cell already gives its parent. Enough that a release with no
+# rows of its own answers from its family's record rather than from a sigmoid,
+# and few enough that a Trial's three rows move it and a dozen lead it. A cap
+# rather than the rows whole, because six hundred of a predecessor's rows would
+# never be outgrown by the successor they are about (ADR-0215).
+INHERITED = 2.0 * ENOUGH
 
 # The quantile `low` reports. A tenth percentile is pessimistic enough that an
 # untried point cannot present itself as a sure thing, and generous enough
@@ -587,7 +612,25 @@ class Estimator:
     ) -> None:
         self._rows = tuple(rows)
         self._kinds = kinds
-        self._capability = {model.id: model.capability for model in cat.models}
+
+        # Each model's older releases, and the capability it stands at: its own
+        # seeded figure, else that of its newest older release still in the
+        # catalogue carrying one. Read here and never written back, since a
+        # figure written into `catalogue.json` would outrank the seed's own
+        # later word (ADR-0215).
+        self._kin: dict[str, frozenset[str]] = {}
+        self._capability: dict[str, float | None] = {}
+        for model in cat.models:
+            older = older_releases(cat, model.id)
+            self._kin[model.id] = frozenset(release.id for release in older)
+            self._capability[model.id] = next(
+                (
+                    release.capability
+                    for release in (model, *older)
+                    if isinstance(release, Model) and release.capability is not None
+                ),
+                None,
+            )
 
     def p_success(self, kind: str, model: str, deliberation: str | None) -> Estimate:
         """Return the chance this point comes back good, and how sure that is.
@@ -600,25 +643,44 @@ class Estimator:
         model are what is being estimated, the hierarchy below already backs
         off through three tiers, and narrowing its rows too would interact
         with what counts as measured (ADR-0203).
+
+        A newer release reads its older releases' rows too, at every level and
+        beside its own, each level's share of them bounded by `_weighted`. They
+        move the estimate and nothing a caller counts: `basis` is `family`
+        only where the model's own rows would have said `prior`, and `n`
+        counts the model's own rows alone (ADR-0215).
         """
 
         exact, by_kind, by_model = self._levels(kind, model, deliberation)
+        kin_exact, kin_by_kind, kin_by_model = self._kin_levels(
+            kind, model, deliberation
+        )
 
         # What each level knows that the level below it does not. A parent is
         # only a prior for what it can still tell its child, so it is fitted on
         # the rows the child does not already hold: without that the same rows
         # are asserted once per level, and four failures at one point compound
         # into a certainty about the model that four observations cannot buy.
+        # The older releases' rows are partitioned the same way and enter each
+        # level beside the model's own.
         other_levels = [row for row in by_kind if row.deliberation != deliberation]
         other_kinds = [row for row in by_model if row.kind != kind]
+        fitted_exact = _weighted(exact, kin_exact)
+        fitted_kind = _weighted(
+            other_levels,
+            [row for row in kin_by_kind if row.deliberation != deliberation],
+        )
+        fitted_model = _weighted(
+            other_kinds, [row for row in kin_by_model if row.kind != kind]
+        )
 
         # Where each level's evidence actually stands. A level's rows ran under
         # their own conditions, not under the ones being asked about: the rows
         # left to the model span every other kind it has attempted, and the ones
         # left to the kind span every other level it was attempted at.
         here = self._margin(kind, model, deliberation)
-        at_model = self._mean_margin(other_kinds, model, here)
-        at_kind = self._mean_margin(other_levels, model, here)
+        at_model = self._mean_margin(fitted_model, model, here)
+        at_kind = self._mean_margin(fitted_kind, model, here)
 
         # Top down: the sigmoid seeds the model, the model seeds the kind, and
         # the kind seeds the exact cell. Each level is a Beta posterior fitted
@@ -628,9 +690,9 @@ class Estimator:
         # unchanged onto easy work, and a model measured at one level of
         # deliberation would report the same number for all five of them.
         prior = _sigmoid(SHARPNESS * at_model)
-        pooled_model = _posterior_mean(other_kinds, prior, PSEUDO[3])
+        pooled_model = _posterior_mean(fitted_model, prior, PSEUDO[3])
         pooled_kind = _posterior_mean(
-            other_levels,
+            fitted_kind,
             _translated(
                 pooled_model,
                 at_kind - at_model,
@@ -639,7 +701,7 @@ class Estimator:
             PSEUDO[2],
         )
         alpha, beta = _posterior(
-            exact, _translated(pooled_kind, here - at_kind), PSEUDO[1]
+            fitted_exact, _translated(pooled_kind, here - at_kind), PSEUDO[1]
         )
 
         basis = "prior"
@@ -647,6 +709,8 @@ class Estimator:
             basis = "measured"
         elif len(by_kind) >= ENOUGH or len(by_model) >= ENOUGH:
             basis = "pooled"
+        elif kin_by_model:
+            basis = "family"
 
         deepest = exact or by_kind or by_model
         return Estimate(
@@ -671,6 +735,10 @@ class Estimator:
         size of the deepest non-empty group, so a model holding one row at the
         level being asked about and two elsewhere reports one, and a Trial
         counted off it would never end.
+
+        The model's own rows alone: its older releases' rows inform the
+        estimate and satisfy no Trial, so a newcomer with a strong inheritance
+        is still owed one and is judged on its own record after it (ADR-0215).
         """
 
         _, by_kind, _ = self._levels(kind, model, None)
@@ -701,11 +769,16 @@ class Estimator:
         per category: a category taken from a session span while the routed
         rows beside it supplied the rest is the averaging that narrowing
         exists to end.
+
+        Each tier answers from the model's own rows before its older
+        releases': the kind's own, the kind's inherited, the model's own, the
+        model's inherited, then the prior. An older release's appetite is the
+        nearest evidence a newer one has before it has any of its own
+        (ADR-0215).
         """
 
-        _, by_kind, by_model = self._levels(kind, model, deliberation)
         prior = self._kinds.tokens(kind, deliberation)
-        groups = (_like_for_like(by_kind), _like_for_like(by_model))
+        groups = self._forecast_groups(kind, model)
 
         counted: dict[str, float] = {}
         for category in TOKEN_CATEGORIES:
@@ -722,15 +795,14 @@ class Estimator:
     def seconds(self, kind: str, model: str, deliberation: str | None) -> float:
         """Return how long this point is expected to take to finish an attempt.
 
-        The same two tiers the token forecast backs off through, narrowed the
-        same way and normalised the same way, over the one measurement a run
-        started for time is ordered on. A store with no elapsed time for this
-        point falls back to the kind's shipped figure rather than to a zero, a
-        zero being the fastest thing on any list.
+        The same tiers the token forecast backs off through, in the same order,
+        narrowed the same way and normalised the same way, over the one
+        measurement a run started for time is ordered on. A store with no
+        elapsed time for this point falls back to the kind's shipped figure
+        rather than to a zero, a zero being the fastest thing on any list.
         """
 
-        _, by_kind, by_model = self._levels(kind, model, deliberation)
-        for group in (_like_for_like(by_kind), _like_for_like(by_model)):
+        for group in self._forecast_groups(kind, model):
             measured = _geometric_mean(self._elapsed(group))
             if measured is not None:
                 return measured * self._kinds.factor(deliberation, "seconds")
@@ -741,10 +813,40 @@ class Estimator:
     ) -> tuple[list[Measurement], list[Measurement], list[Measurement]]:
         """Return the exact, kind-wide and model-wide rows, in that order."""
 
-        by_model = [row for row in self._rows if row.model == model]
-        by_kind = [row for row in by_model if row.kind == kind]
-        exact = [row for row in by_kind if row.deliberation == deliberation]
-        return exact, by_kind, by_model
+        return _partition(
+            [row for row in self._rows if row.model == model], kind, deliberation
+        )
+
+    def _kin_levels(
+        self, kind: str, model: str, deliberation: str | None
+    ) -> tuple[list[Measurement], list[Measurement], list[Measurement]]:
+        """Return the same three groups over the rows of *model*'s older releases.
+
+        Older only, by the catalogue's own family and order: a lock to an older
+        release is answered from its own rows and nothing later (ADR-0215).
+        """
+
+        kin = self._kin.get(model, frozenset())
+        return _partition(
+            [row for row in self._rows if row.model in kin], kind, deliberation
+        )
+
+    def _forecast_groups(self, kind: str, model: str) -> list[Sequence[Measurement]]:
+        """Return the groups a forecast backs off through, nearest first.
+
+        The kind's rows, then the model's, each from the model's own rows
+        before its older releases', and each narrowed by `_like_for_like` on
+        its own. The level asked about is not a tier here: every group is read
+        back to one baseline and the level's factors are put back on whatever
+        answered.
+        """
+
+        _, by_kind, by_model = self._levels(kind, model, None)
+        _, kin_by_kind, kin_by_model = self._kin_levels(kind, model, None)
+        return [
+            _like_for_like(group)
+            for group in (by_kind, kin_by_kind, by_model, kin_by_model)
+        ]
 
     def _normalised(self, rows: Iterable[Measurement], category: str) -> float | None:
         """Pool one category over *rows*, at `medium`, or None where none recorded it.
@@ -833,9 +935,14 @@ class Estimator:
         )
 
     def _mean_margin(
-        self, rows: Sequence[Measurement], model: str, fallback: float
+        self, rows: Sequence[tuple[Measurement, float]], model: str, fallback: float
     ) -> float:
         """Return the conditions a level's rows stand at, on average.
+
+        Each row counts at the weight it enters the level's posterior at, so an
+        older release's rows move the conditions exactly as far as they move
+        the estimate. They are read at *model*'s own capability, the conditions
+        being the kind and the level they ran at rather than who ran them.
 
         A level with no rows of its own stands nowhere, so it stands where the
         question does: the fallback makes every translation an identity when
@@ -846,8 +953,9 @@ class Estimator:
         if not rows:
             return fallback
         return sum(
-            self._margin(row.kind, model, row.deliberation) for row in rows
-        ) / len(rows)
+            share * self._margin(row.kind, model, row.deliberation)
+            for row, share in rows
+        ) / sum(share for _, share in rows)
 
 
 def _rejection(row: Mapping[str, Any]) -> str | None:
@@ -970,8 +1078,9 @@ def lock(data_dir: Path, name: str = LOCK_FILE) -> Iterator[bool]:
 def discard_models(data_dir: Path, models: Collection[str]) -> Discarded:
     """Delete every measurement row and pending Unit of *models*, and count them.
 
-    For a model its maker no longer lists: it does not come back, and its
-    rows are worth nothing to a selection that can no longer choose it. A row
+    For a model its maker no longer lists and no newer release of its family
+    inherits, which the catalogue pass decides: it does not come back, and
+    nothing a selection can choose reads its rows any more (ADR-0215). A row
     or Unit belongs to a model by exact id, which is what the store holds and
     what the estimator matches on. Both files are rewritten as `_refold`
     rewrites the ledger — every line this does not delete carried across as
@@ -1071,23 +1180,51 @@ def _like_for_like(rows: Sequence[Measurement]) -> Sequence[Measurement]:
     return routed or rows
 
 
+def _partition(
+    rows: list[Measurement], kind: str, deliberation: str | None
+) -> tuple[list[Measurement], list[Measurement], list[Measurement]]:
+    """Split one model's rows, or its older releases', into the three levels."""
+
+    by_kind = [row for row in rows if row.kind == kind]
+    exact = [row for row in by_kind if row.deliberation == deliberation]
+    return exact, by_kind, rows
+
+
+def _weighted(
+    own: Sequence[Measurement], kin: Sequence[Measurement]
+) -> list[tuple[Measurement, float]]:
+    """Return one level's rows, each with the weight it enters the level at.
+
+    A row of the model's own counts as the one attempt it was. An older
+    release's rows share `INHERITED` attempts' worth between them, evenly, so
+    six hundred of them weigh what six would — and no row counts for more than
+    the one attempt it was, so a level holding fewer than six of them enters
+    at what it holds. Spread over one row, six attempts' worth would read one
+    old failure as six new ones (ADR-0215).
+    """
+
+    share = min(1.0, INHERITED / len(kin)) if kin else 0.0
+    return [(row, 1.0) for row in own] + [(row, share) for row in kin]
+
+
 def _posterior(
-    rows: Sequence[Measurement], parent_mean: float, weight: float
+    rows: Sequence[tuple[Measurement, float]], parent_mean: float, weight: float
 ) -> tuple[float, float]:
     """Return the Beta parameters for *rows* shrunk towards *parent_mean*.
 
     A grade is a fractional success rather than a coin flip, so an attempt
     graded 0.7 contributes 0.7 to alpha and 0.3 to beta. That is what lets a
-    judge's partial credit inform the same arithmetic as a checker's pass.
+    judge's partial credit inform the same arithmetic as a checker's pass. Each
+    row counts at the share it carries, one for a row of the model's own.
     """
 
-    successes = sum(row.grade for row in rows)
-    failures = sum(1.0 - row.grade for row in rows)
+    successes = sum(share * row.grade for row, share in rows)
+    failures = sum(share * (1.0 - row.grade) for row, share in rows)
     return successes + weight * parent_mean, failures + weight * (1.0 - parent_mean)
 
 
 def _posterior_mean(
-    rows: Sequence[Measurement], parent_mean: float, weight: float
+    rows: Sequence[tuple[Measurement, float]], parent_mean: float, weight: float
 ) -> float:
     """Return just the mean of the posterior `_posterior` describes."""
 

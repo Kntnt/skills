@@ -4676,3 +4676,89 @@ def test_the_rule_removes_nothing_this_machine_has_stored(
         for path in sorted(tmp_path.iterdir())
         if path.is_file()
     } == before
+
+
+# --- A newer release starts from its family's record (ADR-0215) --------------
+
+
+def _inherited(data_dir: Path, *, kin: bool = True) -> None:
+    """Write a store in which Opus 5.5 has nothing of its own and Opus 5 a record.
+
+    Sonnet at `high` is the one measured point here, and the bound it draws is
+    about 0.819. Opus 5.5's own prior at `high` is about 0.796, under that
+    bound, so on its seeded capability alone it is owed no Trial; thirty good
+    `implement` rows of Opus 5 at `high` lift it to about 0.898 as its family's
+    record. Fable and Haiku carry `ENOUGH` failing rows each, which leaves Opus
+    5.5 the only model a Trial could go to. *kin* false leaves the Opus 5 rows
+    out, which is the store as it would read with no inheritance at all.
+    """
+
+    _profile(data_dir)
+    _store(
+        data_dir,
+        ("implement", "claude-sonnet-5", "high", 1.0, 20),
+        ("implement", FABLE, "high", 0.0, ENOUGH),
+        ("implement", HAIKU, None, 0.0, ENOUGH),
+        *([("implement", "claude-opus-5", "high", 1.0, 30)] if kin else []),
+    )
+
+
+def test_a_point_resting_on_its_family_s_record_ranks_behind_every_measured_one(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """An inheritance is an estimate, and every measured point comes before one.
+
+    Opus 5.5 at `xhigh` reads likelier than the measured Sonnet point off its
+    predecessor's rows, and still ranks behind it: its basis is `family`, it
+    counts no run of its own, and a call nothing is explored on is answered
+    with what this machine measured.
+    """
+
+    _inherited(tmp_path)
+    flags = (*LIMITED, f"--data={tmp_path}", "--kind=implement", "--stakes=high")
+
+    ranked = _ranking(tmp_path, "implement")
+    bases = [row.estimate.basis for row in ranked]
+    measured = [row for row in ranked if row.estimate.basis == "measured"]
+    inherited = [row for row in ranked if row.point.model.id == "claude-opus-5-5"]
+    answer = _answer(capsys, *flags, EVERY)
+    locked = _point(capsys, flags, "claude-opus-5-5", "high")
+
+    assert bases[: len(measured)] == ["measured"] * len(measured)
+    assert "measured" not in bases[len(measured) :]
+    assert {row.estimate.basis for row in inherited} == {"family"}
+    assert max(row.estimate.mean for row in inherited) > max(
+        row.estimate.mean for row in measured
+    )
+    assert (answer["model"], answer["deliberation"]) == ("claude-sonnet-5", "high")
+    assert answer["basis"] == "measured"
+    assert locked["basis"] == "family"
+    assert locked["expected"]["runs"] == 0.0
+
+
+def test_a_newcomer_its_family_s_record_makes_plausible_is_owed_a_trial(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """The Trial is counted off the release's own rows, so a strong heir gets one.
+
+    Every reversible call is the Trial, at the answer's own level, and its note
+    says so and names what the evidence would have chosen. Without Opus 5's
+    rows the same store owes no Trial at all: the seeded capability alone does
+    not reach the bound, which is exactly the newcomer ADR-0207 never reached.
+    """
+
+    _inherited(tmp_path / "heir")
+    _inherited(tmp_path / "stranger", kin=False)
+    heir = (*LIMITED, f"--data={tmp_path / 'heir'}", "--kind=implement", EVERY)
+    stranger = (*LIMITED, f"--data={tmp_path / 'stranger'}", "--kind=implement")
+
+    tried = [_answer(capsys, *heir, f"--seed={seed}") for seed in range(DRAWS)]
+    untried = [_answer(capsys, *stranger, f"--seed={seed}") for seed in range(DRAWS)]
+
+    for answer in tried:
+        assert (answer["model"], answer["deliberation"]) == ("claude-opus-5-5", "high")
+        assert answer["explored"] == TRIAL
+        assert answer["basis"] == "family"
+        assert "a trial of claude-opus-5-5@high" in (answer["note"] or "")
+        assert "claude-sonnet-5@high" in (answer["note"] or "")
+    assert not [answer for answer in untried if answer["explored"] == TRIAL]

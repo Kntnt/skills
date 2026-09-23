@@ -12,7 +12,7 @@ model-selector evidence - report what has been measured and what the answers res
 
 Every recommendation is an estimate over rows this machine collected while you worked. This is those rows, grouped the way the estimate groups them: by kind of work, model, and deliberation level, which together are the whole of a measurement's identity.
 
-Each group reports how many rows stand behind it, the mean score and who established it, the mean cost, the mean elapsed time, and the earliest and latest date. The row count is what separates an answer resting on measurement of exactly that point from one pooled up from the same model's other work, or from its published capability alone.
+Each group reports how many rows stand behind it, the mean score and who established it, the mean cost, the mean elapsed time, and the earliest and latest date. The row count is what separates an answer resting on measurement of exactly that point from one pooled up from the same model's other work, from one resting on an older release of the same family where the model has too few rows of its own, or from its published capability alone.
 
 A figure no row carries is reported absent, never as a zero. An absence read as a zero is exactly how an unmeasured configuration becomes the cheapest thing on a list, and this Skill exists to stop that happening.
 
