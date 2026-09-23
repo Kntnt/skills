@@ -11,19 +11,32 @@ signatures across the account. The Credential File,
 `<home>/.kntnt/postmark/credentials.json`, holds the account token under
 `account-token` and each server token under `server:<name>`.
 
-Two subcommands:
+Three subcommands:
 
 - `call` sends one request with the token it is told to use, and prints the
   response body verbatim, with any credential in it masked.
 - `status` reads every token the file holds against the service and prints
   what each answered, as one JSON document.
+- `setup-server` fetches one server's token with the account token, has the
+  Library's `credentials.py set --from-stdin` store it under `server:<name>`,
+  and verifies it with `GET server`.
 
-Exit 0 wherever the service answered, whatever it answered; 1 where it could
-not be reached; 2 on a refusal made before anything was sent. A token appears
-in its header and nowhere else: never in the URL, an argument, a line printed
-or an error (docs/rules/skills.md, ADR-0218). Nor does one Postmark returns: a
-server's `ApiTokens` and a webhook's HTTP password are masked in every answer
-before it is printed, since what the engine prints reaches the transcript.
+`call` and `status` exit 0 wherever the service answered, whatever it
+answered; 1 where it could not be reached; 2 on a refusal made before anything
+was sent. `setup-server` exits 0 where the token was stored and Postmark
+accepted it; 1 where Postmark could not be reached or the Library's `set`
+failed as a tool; and 2 on any refusal: its own, one from Postmark, which it
+names by HTTP status and `ErrorCode` alone, and the Library's, passed on as it
+stands.
+
+A token appears in its header and nowhere else: never in the URL, an
+argument, a line printed or an error (docs/rules/skills.md, ADR-0218). The one
+handoff beside the header is `setup-server`'s: the token it fetched is written
+to the standard input of the Library's `set`, which is the Library's own write
+path into the Credential File. Nor does a token Postmark returns reach a
+print: a server's `ApiTokens` and a webhook's HTTP password are masked in
+every answer before it is printed, since what the engine prints reaches the
+transcript, and `setup-server` prints no answer at all.
 
 What Postmark cannot undo — a deletion, a send and a data removal — is refused
 without `--yes`.
@@ -36,6 +49,7 @@ import http.client
 import json
 import os
 import stat
+import subprocess
 import sys
 import urllib.error
 import urllib.request
@@ -44,8 +58,8 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Final
 
-# The exit statuses: the service answered, it could not be reached, and a
-# refusal made before anything was sent.
+# The exit statuses: the service answered, it could not be reached or a tool
+# failed, and a refusal.
 ANSWERED: Final = 0
 TRANSPORT: Final = 1
 REFUSED: Final = 2
@@ -80,8 +94,12 @@ DATA_REMOVAL: Final = "data-removals"
 # How long one request may take before it counts as a transport failure.
 TIMEOUT_SECONDS: Final = 60
 
-# How many servers `status` asks for, which is Postmark's page maximum.
+# How many servers `status` and `setup-server` ask for in one page, which is
+# Postmark's page maximum.
 SERVER_PAGE: Final = 500
+
+# The Skill whose Credential File the Library's `set` writes.
+SKILL: Final = "postmark"
 
 # The fields whose value is a credential wherever Postmark returns them: a
 # server's tokens, in `ApiTokens`, and the password a webhook's `HttpAuth`
@@ -99,11 +117,23 @@ NO_ACCOUNT_TOKEN: Final = (
 
 
 class Refusal(Exception):
-    """A refusal made before anything was sent, carrying the reason it prints."""
+    """A refusal this engine names, carrying the reason it prints.
+
+    `call` and `status` refuse only before anything is sent; `setup-server`
+    also refuses over what Postmark answered.
+    """
+
+
+class PassedOn(Exception):
+    """A refusal from the Library's `set`, carrying its stderr to pass on unchanged."""
 
 
 class Unreachable(Exception):
     """The service could not be reached, carrying the reason it prints."""
+
+
+class Failure(Exception):
+    """A tool the engine started failed, carrying the reason it prints."""
 
 
 @dataclass(frozen=True)
@@ -396,6 +426,215 @@ def command_status(args: argparse.Namespace) -> int:
     return ANSWERED
 
 
+def error_code(answer: Answer) -> int | None:
+    """The `ErrorCode` of a refusal's body, or `None` where none can be read."""
+
+    try:
+        body = json.loads(answer.body)
+    except (UnicodeDecodeError, json.JSONDecodeError):
+        return None
+    code = body.get("ErrorCode") if isinstance(body, dict) else None
+    return code if isinstance(code, int) and not isinstance(code, bool) else None
+
+
+def refused(call: str, answer: Answer) -> str:
+    """What a refusal from Postmark is reported as: its status and its code alone.
+
+    The body is never quoted, since an answer carrying a server carries its
+    tokens.
+    """
+
+    code = error_code(answer)
+    return f"Postmark answered {call} with HTTP {answer.status}" + (
+        f" and ErrorCode {code}" if code is not None else ""
+    )
+
+
+def list_servers(endpoint: str, token: str) -> list[dict[str, object]]:
+    """Every server of the account, read page by page with the account token.
+
+    Paging stops once `TotalCount` servers have been read, or at the first page
+    that comes back empty, whichever comes first.
+
+    Raises:
+        Refusal: where Postmark refuses a page or answers one in a shape that
+            is not a list of servers, naming neither the body nor a token.
+        Unreachable: where Postmark could not be reached.
+    """
+
+    servers: list[dict[str, object]] = []
+    total: int | None = None
+    while total is None or len(servers) < total:
+        answer = request(
+            endpoint,
+            "GET",
+            f"servers?count={SERVER_PAGE}&offset={len(servers)}",
+            ACCOUNT_HEADER,
+            token,
+            None,
+        )
+        if not 200 <= answer.status < 300:
+            raise Refusal(refused("GET servers", answer))
+        try:
+            page = json.loads(answer.body)
+        except (UnicodeDecodeError, json.JSONDecodeError):
+            page = None
+        listed = page.get("Servers") if isinstance(page, dict) else None
+        count = page.get("TotalCount") if isinstance(page, dict) else None
+        if (
+            not isinstance(listed, list)
+            or not all(isinstance(server, dict) for server in listed)
+            or not isinstance(count, int)
+        ):
+            raise Refusal(
+                "Postmark's answer to GET servers could not be read as a list of"
+                " servers"
+            )
+        if not listed:
+            break
+        total = count
+        servers.extend(listed)
+    return servers
+
+
+def server_token(servers: list[dict[str, object]], name: str) -> str:
+    """The first token Postmark lists for the one server called exactly *name*.
+
+    Raises:
+        Refusal: where no server, or more than one, carries *name*, or the one
+            that does lists no token. None of them names a token.
+    """
+
+    matches = [server for server in servers if server.get("Name") == name]
+    if not matches:
+        names = ", ".join(json.dumps(server.get("Name")) for server in servers)
+        raise Refusal(
+            f"Postmark holds no server named {json.dumps(name)}; the account's"
+            f" servers are {names or 'none'}. The name has to match exactly,"
+            " case and spaces included"
+        )
+    if len(matches) > 1:
+        raise Refusal(
+            f"Postmark holds several servers named {json.dumps(name)}, so which"
+            " one's token to store cannot be told from the name; the token has to"
+            " come through the clipboard, copied from that server's API Tokens tab"
+        )
+    tokens = matches[0].get("ApiTokens")
+    first = tokens[0] if isinstance(tokens, list) and tokens else None
+    if not isinstance(first, str) or not first.strip():
+        raise Refusal(
+            f"Postmark lists no token in ApiTokens for the server {json.dumps(name)};"
+            " create one on that server's API Tokens tab, or store one through the"
+            " clipboard"
+        )
+    return first
+
+
+def store_server_token(
+    library: Path, home: Path, name: str, token: str, replace: bool
+) -> None:
+    """Have the Library's `set` store *token* under `server:<name>`, over stdin.
+
+    The token is written to the standard input of that one process and to
+    nothing else, so it never stands in an argument every user can read. The
+    process runs in *home*, the directory `.kntnt` is under, which no run of
+    this collection replaces.
+
+    Raises:
+        PassedOn: where `set` refuses, carrying its stderr as it stands.
+        Failure: where `uv` cannot be started or `set` fails as a tool.
+    """
+
+    script = library / "scripts" / "credentials.py"
+    command = [
+        "uv",
+        "run",
+        str(script),
+        "set",
+        *(["--yes"] if replace else []),
+        f"--skill={SKILL}",
+        f"--key={SERVER_PREFIX}{name}",
+        "--from-stdin",
+    ]
+    try:
+        result = subprocess.run(
+            command,
+            cwd=home,
+            input=token,
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+    except OSError as error:
+        raise Failure(
+            f"uv could not be started to run {script} ({error.strerror})"
+        ) from error
+    if result.returncode == REFUSED:
+        raise PassedOn(result.stderr)
+    if result.returncode != 0:
+        raise Failure(
+            f"{script} set exited with {result.returncode}, and the token was not"
+            " confirmed stored"
+        )
+
+
+def command_setup_server(args: argparse.Namespace) -> int:
+    """Fetch one server's token with the account token, store it, and verify it."""
+
+    # Only the account token reaches a server's token, and the Library's `set`
+    # is what stores it.
+    path = credential_file()
+    credentials = read_credentials(path)
+    if ACCOUNT_KEY not in credentials:
+        raise Refusal(
+            f"{path} holds no account token, so there is nothing to fetch a"
+            " server's token with; store this server's token through the"
+            " clipboard instead, or store the account token with"
+            " `/postmark setup account` first"
+        )
+    if not (args.library / "scripts" / "credentials.py").is_file():
+        raise Refusal(f"--library={args.library} holds no scripts/credentials.py")
+
+    # Find the one server of that name and take its first token.
+    token = server_token(
+        list_servers(args.endpoint, credentials[ACCOUNT_KEY]), args.name
+    )
+    key = f"{SERVER_PREFIX}{args.name}"
+    store_server_token(args.library, path.parents[2], args.name, token, args.yes)
+
+    # Verify the stored token against the server it belongs to.
+    answer = request(args.endpoint, "GET", "server", SERVER_HEADER, token, None)
+    if not 200 <= answer.status < 300:
+        print(
+            json.dumps(
+                {"key": key, "status": answer.status, "error_code": error_code(answer)}
+            )
+        )
+        print(
+            f"postmark.py: {refused('GET server', answer)} under the token now"
+            f" stored as {key} in {path}; check or regenerate it in Postmark and"
+            f" run `/postmark setup --yes server {args.name}`",
+            file=sys.stderr,
+        )
+        return REFUSED
+    try:
+        server = json.loads(answer.body)
+    except (UnicodeDecodeError, json.JSONDecodeError):
+        server = None
+    if not isinstance(server, dict):
+        server = {}
+    print(
+        json.dumps(
+            {
+                "key": key,
+                "server_id": server.get("ID"),
+                "server_name": server.get("Name"),
+            }
+        )
+    )
+    return ANSWERED
+
+
 # Each subcommand's usage, written out because `argparse` would print a valued
 # flag with its value separated, and this collection's grammar attaches it
 # (ADR-0176).
@@ -405,6 +644,7 @@ USAGES: Final = {
         " <METHOD> <path> [<json>]"
     ),
     "status": "[--endpoint=<url>]",
+    "setup-server": "[--yes] [--endpoint=<url>] --library=<dir> <name>",
 }
 
 
@@ -436,6 +676,16 @@ def parser() -> argparse.ArgumentParser:
     )
     status.add_argument("--endpoint", default=ENDPOINT)
 
+    setup_server = commands.add_parser(
+        "setup-server",
+        prog="postmark.py setup-server",
+        usage=f"%(prog)s {USAGES['setup-server']}",
+    )
+    setup_server.add_argument("--yes", action="store_true")
+    setup_server.add_argument("--endpoint", default=ENDPOINT)
+    setup_server.add_argument("--library", required=True, type=Path)
+    setup_server.add_argument("name")
+
     return root
 
 
@@ -446,11 +696,16 @@ def main(argv: Sequence[str] | None = None) -> int:
     try:
         if args.command == "call":
             return command_call(args)
+        if args.command == "setup-server":
+            return command_setup_server(args)
         return command_status(args)
     except Refusal as refusal:
         print(f"postmark.py: {refusal}", file=sys.stderr)
         return REFUSED
-    except Unreachable as failure:
+    except PassedOn as refusal:
+        sys.stderr.write(str(refusal))
+        return REFUSED
+    except (Unreachable, Failure) as failure:
         print(f"postmark.py: {failure}", file=sys.stderr)
         return TRANSPORT
 

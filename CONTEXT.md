@@ -15,7 +15,7 @@ The shared references and scripts shipped inside the Manager and available to ev
 _Avoid_: shared skill, utility skill, support skill
 
 **Credential File**:
-The file at `~/.kntnt/<skill>/credentials.json` holding an outside service's credential for the Skill its directory names, as a flat JSON object of strings readable by its owner alone. It is filled through the clipboard so that no credential passes through a conversation, and it is not the store a tool the Skill drives keeps for itself. What a Skill holding one owes, and how its engine reads it, is stated in `docs/rules/skills.md`.
+The file at `~/.kntnt/<skill>/credentials.json` holding an outside service's credential for the Skill its directory names, as a flat JSON object of strings readable by its owner alone. It is filled through the clipboard or, for a Postmark server token, fetched by setup, so that no credential passes through a conversation, and it is not the store a tool the Skill drives keeps for itself. What a Skill holding one owes, and how its engine reads it, is stated in `docs/rules/skills.md`.
 _Avoid_: secret store, keychain, token file, `.env`
 
 **Category**:

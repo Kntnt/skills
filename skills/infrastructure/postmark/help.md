@@ -30,7 +30,7 @@ The Skill uses two kinds of Postmark token, which `setup` stores and `status` ch
 
 **setup**
 
-Store the account token or one server's token, read from the clipboard, and check it. See `/postmark setup --help`.
+Store the account token or one server's token, and check it. The account token is read from the clipboard; a server's token is fetched from Postmark where the account token is stored, and read from the clipboard otherwise. See `/postmark setup --help`.
 
 **status**
 
@@ -68,7 +68,7 @@ Where no Credential File exists, `status` and every request but a test send stop
 
 ## EXAMPLES
 
-Store the token of a server called transactional, copied from that server's API Tokens tab.
+Store the token of a server called transactional: fetched from Postmark where the account token is stored, and copied from that server's API Tokens tab otherwise.
 
 ```
 /postmark setup server transactional
@@ -106,7 +106,7 @@ Every form above ends with [**--** *INSTRUCTION*], the optional Contextual Instr
 
 `uv` and the Kntnt Manager run the invocation engine and the Skill's own engine. No peer Skill or Harness Capability is required.
 
-Remote operations need network access and a Postmark token: the account token for servers, domains and sender signatures, a server's token for everything that server does. Help, and `setup`'s writing of the Credential File, need neither. `setup` reads the clipboard through `pbpaste` on macOS, `wl-paste`, `xclip` or `xsel` on Linux, and PowerShell on Windows.
+Remote operations need network access and a Postmark token: the account token for servers, domains and sender signatures, a server's token for everything that server does. `setup server` with the account token stored fetches the server's token from Postmark, so it needs network access too. Help, and `setup`'s storing of a token read from the clipboard, need neither. `setup` reads the clipboard through `pbpaste` on macOS, `wl-paste`, `xclip` or `xsel` on Linux, and PowerShell on Windows.
 
 ## SEE ALSO
 

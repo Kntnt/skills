@@ -13,6 +13,8 @@ The official reference for every call is Postmark's API documentation, starting 
 
 Every answer carrying a server — `servers`, `servers/<id>` and `server`, read, created or edited — lists its tokens in `ApiTokens`, and every answer carrying a webhook holds the password Postmark sends to it in `HttpAuth.Password`. The engine prints each of them as `[redacted]`.
 
+`setup server` fetches a server's token with the account token and never prints it.
+
 A list takes `count` and `offset` in its query string, both required; the maximum `count` is 500, and message search stops at `count + offset` of 10,000.
 
 ## A send
