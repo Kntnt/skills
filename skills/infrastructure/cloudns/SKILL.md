@@ -21,7 +21,7 @@ Then follow the section the reading's `path` names: [Change DNS](#change-dns) fo
 ## Arguments
 
 - `<sub-user>`, the one operand of `setup`, is the name of the ClouDNS API sub-user the credential belongs to, which becomes the Credential File's `sub-auth-user`. Without it the name is `kntnt-agent`.
-- `--yes` on `setup` asserts that the credential the Credential File already holds may be replaced: it is the rotation. Without it, `setup` changes nothing where a credential is already held.
+- `--yes` on `setup` asserts that the credential the Credential File already holds may be replaced: it is the rotation.
 - The root form's change is the `instruction`. With none, use the task established in the conversation; if there is none, ask what the user wants changed in DNS at ClouDNS.
 
 ## The engine
@@ -30,15 +30,13 @@ Every call to ClouDNS goes through `uv run "$HERE/scripts/cloudns.py"`, which re
 
 - `call [--yes] <path> [<key>=<value>]...` POSTs to `https://api.cloudns.net/<path>` with the credential and every pair, and prints the response body verbatim. Compose `<path>` and the pairs from [the API reference](references/api.md).
 - `status` checks the credential with the service and lists the zones it can see.
-- `setup [--yes]` is the overwrite gate `setup` passes before anything is written.
 
 Exit 0 means the service answered; read its answer, because ClouDNS reports a failure in band as `{"status":"Failed","statusDescription":"..."}`. Exit 1 means it could not be reached, and exit 2 means the engine refused before sending anything; show that refusal's message verbatim. Never read the Credential File yourself, never give a credential parameter as a pair, and never print, repeat or ask for the password: the user pastes it into the ClouDNS panel from the clipboard, and it never passes through this conversation.
 
 ## setup
 
-1. Run `uv run "$HERE/scripts/cloudns.py" setup`, adding `--yes` where the reading's `flags` carry it. On exit 2, show its message verbatim and stop: a credential is already held, and nothing was written. Done when it exits 0.
-2. Run `uv run "$LIBRARY/scripts/credentials.py" generate --skill=cloudns --key=auth-password --to-clipboard --set=sub-auth-user=<name>`, `<name>` being the operand or `kntnt-agent`. It draws a new password, writes the Credential File, and puts the password on the clipboard without showing it. On a non-zero exit, show its message verbatim and stop. Done when it exits 0.
-3. Tell the user what only they can do, in this order:
+1. Run `uv run "$LIBRARY/scripts/credentials.py" generate --skill=cloudns --key=auth-password --to-clipboard --set=sub-auth-user=<name>`, `<name>` being the operand or `kntnt-agent`, adding `--yes` exactly where the reading's `flags` carry it. It draws a new password, writes the Credential File, and puts the password on the clipboard without showing it. On a non-zero exit, show its stderr verbatim and stop. Done when it exits 0.
+2. Tell the user what only they can do, in this order:
    1. In the ClouDNS panel, go to **API & Resellers → API Sub-Users → Add new sub-user** and create a sub-user named `<name>`.
    2. Paste the password from the clipboard as its **auth-password**.
    3. Set **DNS zones** to at least the number of zones the agent will manage, and **DNS records** likewise.
@@ -46,8 +44,8 @@ Exit 0 means the service answered; read its answer, because ClouDNS reports a fa
    5. Leave **IP address** blank or restrict it; that is theirs to decide.
    6. Separately, delegate each zone the agent may touch to that sub-user. The panel offers this from the zone's own management, and the documented API method is `sub-users/delegate-zone.json`, which needs the main API user's credential that this Skill does not hold.
 
-   On a rotation — `--yes` where step 1 reported a credential already held — say instead that the sub-user already exists, and that the user pastes the password from the clipboard as that sub-user's new password in the panel; the old one stops working at ClouDNS the moment they do, and the agent cannot call ClouDNS until they have. Where step 1 reported a `sub_user` other than `<name>`, say that the Credential File now names `<name>`.
-4. End by naming `/cloudns status` as what confirms the credential and lists which zones actually came through, since that list is the agent's boundary. Done when the user has the steps.
+   Where `flags` carries `--yes`, add that a sub-user named `<name>` that already exists in the panel is not created again: the user pastes the password from the clipboard as that sub-user's new password instead, and the old one stops working at ClouDNS the moment they do; the agent cannot call ClouDNS until they have. Where no sub-user of that name exists there, the steps above stand as written.
+3. End by naming `/cloudns status` as what confirms the credential and lists which zones actually came through, since that list is the agent's boundary. Done when the user has the steps.
 
 ## status
 

@@ -44,7 +44,7 @@ The Credential File. `setup` creates it, readable by its owner alone, and adds o
 
 An invalid form is refused rather than ignored. The Skill names the error, prints this page's SYNOPSIS, changes nothing, and points at `/postmark setup --help`. `setup` alone, `setup server` without a name, and `setup account` followed by anything are refused.
 
-Where the Credential File already holds the key and `--yes` is absent, `setup` refuses, names the key, and says that `--yes` asserts you mean to replace the working token; nothing is read or written. Where the clipboard is empty or no clipboard tool is found, `setup` refuses and says how to write the file by hand instead.
+Where the Credential File already holds the key and `--yes` is absent, `setup` refuses, names the file and the key, and says that `--yes` asserts you mean to replace the working token; the clipboard is not read and nothing is written. Where the clipboard is empty or no clipboard tool is found, `setup` refuses and says how to write the file by hand instead.
 
 ## EXAMPLES
 

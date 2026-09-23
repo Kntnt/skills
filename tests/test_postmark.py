@@ -749,3 +749,24 @@ def test_status_exits_one_on_a_transport_failure(tmp_path: Path) -> None:
 
     assert result.returncode == TRANSPORT
     _assert_no_token(result, [])
+
+
+# --- The body ------------------------------------------------------------
+
+
+def test_the_bodys_setup_leaves_the_overwrite_gate_to_the_librarys_set() -> None:
+    """`set` is the gate, so the body passes `--yes` to it and runs no check of its own."""
+
+    body = (ENGINE.parent.parent / "SKILL.md").read_text(encoding="utf-8")
+    setup = body.split("## setup", 1)[1].split("\n## ", 1)[0]
+
+    assert 'credentials.py" show' not in setup
+    account = setup.index(
+        'credentials.py" set --skill=postmark --key=account-token --from-clipboard'
+    )
+    server = setup.index(
+        'credentials.py" set --skill=postmark --key="server:<name>" --from-clipboard'
+    )
+    status = setup.index("`status` step")
+    assert account < server < status
+    assert "--yes" in setup[server:status]

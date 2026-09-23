@@ -1,6 +1,6 @@
 {
   "origin": "Kntnt/skills",
-  "manager_digest": "988b021cc0fea175e80ac2284f224d123ac2b6f918eaf09462738732619b6736",
+  "manager_digest": "3ca715bbeec0562347ad3cd1f0b1e37530dc644968891667a7b90876e0820d28",
   "skills": [
     {
       "name": "agents-md",
@@ -179,7 +179,7 @@
       "name": "cloudns",
       "category": "infrastructure",
       "description": "Read and change DNS zones and records at ClouDNS on the user's behalf. Not for DNS at any other provider, not for registering, renewing or transferring domain names, and not for web hosting, email or SSL.",
-      "digest": "a2d25199d1db8eda9aadc83cdc4bfe647b16ffc97631144296efd44fdf816507",
+      "digest": "f2ef59e3c11a0f10b739345112cd54283d063e4266abf4d564e199605605199c",
       "binaries": [
         "uv"
       ],
@@ -203,7 +203,7 @@
       "name": "nodeping",
       "category": "infrastructure",
       "description": "Read and change uptime monitoring at NodePing on the user's behalf — checks, results, contacts, schedules and notifications. Not for monitoring at any other provider, not for DNS, and not for server or site administration.",
-      "digest": "f64ed745c196a8062d6069cf1e0ad20a33a4bbbcfbbdc9e867977935caf6e966",
+      "digest": "5049601ccb9d98ca31ab9b4aeaca4410a3a93cdaa64301e2bd7e0c2f7121f6c2",
       "binaries": [
         "uv"
       ],
@@ -215,7 +215,7 @@
       "name": "postmark",
       "category": "infrastructure",
       "description": "Inspect and change email at Postmark on the user's behalf — servers and message streams, domains and their DKIM and Return-Path records, sender signatures, templates, suppressions, bounces, delivery statistics, message search, webhooks, and a send the user asks for. Use for email at Postmark only; excludes other email providers, mailboxes, and setting DNS records.",
-      "digest": "b9022f02f0fd6be249ed02308011ccd2b542bffe28d94a07aab0f8acd3c6aa79",
+      "digest": "f2d37c0e21ee2a86fca789b853f4be87ce2f9418b4de0e6467309bbe44feeb73",
       "binaries": [
         "uv"
       ],

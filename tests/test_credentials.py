@@ -79,22 +79,34 @@ def _fake_clipboard(tmp_path: Path, content: str) -> tuple[dict[str, str], Path]
     """Stand in for the clipboard, holding *content*, and record what it is given.
 
     Returns the environment that reaches the fakes and the file the writing
-    fake records its input to.
+    fake records its input to. The reading fake leaves `_clipboard_read`
+    behind, so a case can tell that the clipboard was never read.
     """
 
     reader, writer = _clipboard_pair()
     held = tmp_path / "clipboard-held"
     held.write_text(content, encoding="utf-8")
     record = tmp_path / "clipboard-received"
-    fake_binary_on_path(tmp_path, reader, '#!/bin/sh\ncat "$FAKE_CLIPBOARD_HELD"\n')
+    fake_binary_on_path(
+        tmp_path,
+        reader,
+        '#!/bin/sh\ntouch "$FAKE_CLIPBOARD_READ"\ncat "$FAKE_CLIPBOARD_HELD"\n',
+    )
     environment = fake_binary_on_path(
         tmp_path, writer, '#!/bin/sh\ncat > "$FAKE_CLIPBOARD_RECORD"\n'
     )
     environment |= {
         "FAKE_CLIPBOARD_HELD": str(held),
+        "FAKE_CLIPBOARD_READ": str(_clipboard_read(tmp_path)),
         "FAKE_CLIPBOARD_RECORD": str(record),
     }
     return environment, record
+
+
+def _clipboard_read(tmp_path: Path) -> Path:
+    """The file the reading fake creates the moment the clipboard is read."""
+
+    return tmp_path / "clipboard-read"
 
 
 def _run(
@@ -181,10 +193,19 @@ def test_a_missing_required_option_exits_2_with_a_usage_line(
 @pytest.mark.parametrize(
     ("subcommand", "spelled"),
     [
-        ("set", "--skill=<name> --key=<key> --from-clipboard [--set=<key>=<value>]..."),
+        (
+            "set",
+            (
+                "[--yes] --skill=<name> --key=<key> --from-clipboard"
+                " [--set=<key>=<value>]..."
+            ),
+        ),
         (
             "generate",
-            "--skill=<name> --key=<key> --to-clipboard [--set=<key>=<value>]...",
+            (
+                "[--yes] --skill=<name> --key=<key> --to-clipboard"
+                " [--set=<key>=<value>]..."
+            ),
         ),
         ("show", "--skill=<name>"),
         (
@@ -294,6 +315,7 @@ def test_set_refuses_a_file_whose_mode_admits_group_or_world(tmp_path: Path) -> 
     result = _run(
         tmp_path,
         "set",
+        "--yes",
         "--skill=demo",
         "--key=token",
         "--from-clipboard",
@@ -330,7 +352,14 @@ def test_a_write_that_fails_after_its_temporary_file_leaves_the_file_standing(
     monkeypatch.setattr(module.os, "replace", fail_replace)
 
     status = module.main(
-        ["set", "--skill=demo", "--key=token", "--from-clipboard", "--set=region=eu"]
+        [
+            "set",
+            "--yes",
+            "--skill=demo",
+            "--key=token",
+            "--from-clipboard",
+            "--set=region=eu",
+        ]
     )
 
     assert status == REFUSED
@@ -370,6 +399,102 @@ def test_generate_stores_a_value_hands_it_to_the_clipboard_and_prints_none(
     assert report["keys"] == ["account", "webhook"]
     assert report["key"] == "webhook"
     assert report["length"] == len(value)
+
+
+# --- The overwrite gate ---------------------------------------------------
+
+# Each writing subcommand as a caller spells it, without `--yes`.
+WRITES = [
+    ("set", "--skill=demo", "--key=token", "--from-clipboard"),
+    ("generate", "--skill=demo", "--key=token", "--to-clipboard"),
+]
+
+
+@pytest.mark.parametrize("args", WRITES)
+def test_replacing_a_held_key_without_yes_exits_2_and_touches_nothing(
+    tmp_path: Path, args: tuple[str, ...]
+) -> None:
+    """Rotation destroys a working credential, so it is refused unless asserted.
+
+    The refusal comes before the clipboard is read or written and before the
+    file is, and it names the file, the key, and what `--yes` asserts.
+    """
+
+    path = _write_credentials(tmp_path, {"account": "acme", "token": "first"})
+    before = path.read_bytes()
+    environment, record = _fake_clipboard(tmp_path, SECRET)
+
+    result = _run(tmp_path, *args, environment=environment)
+
+    assert result.returncode == REFUSED
+    assert str(path) in result.stderr
+    assert "token" in result.stderr
+    assert "nothing was written" in result.stderr
+    assert "--yes" in result.stderr
+    assert "replace a working credential" in result.stderr
+    assert path.read_bytes() == before
+    assert not _clipboard_read(tmp_path).exists()
+    assert not record.exists()
+    assert "first" not in result.stdout + result.stderr
+
+
+def test_a_pair_naming_a_held_key_is_refused_without_yes(tmp_path: Path) -> None:
+    """A key beside the one filled is as much a working credential as that one."""
+
+    path = _write_credentials(tmp_path, {"account": "acme"})
+    before = path.read_bytes()
+    environment, _ = _fake_clipboard(tmp_path, SECRET)
+
+    result = _run(
+        tmp_path,
+        "set",
+        "--skill=demo",
+        "--key=token",
+        "--from-clipboard",
+        "--set=account=other",
+        environment=environment,
+    )
+
+    assert result.returncode == REFUSED
+    assert "account" in result.stderr
+    assert path.read_bytes() == before
+    assert not _clipboard_read(tmp_path).exists()
+    assert "acme" not in result.stdout + result.stderr
+
+
+@pytest.mark.parametrize("args", WRITES)
+def test_replacing_a_held_key_with_yes_overwrites_it(
+    tmp_path: Path, args: tuple[str, ...]
+) -> None:
+    _write_credentials(tmp_path, {"account": "acme", "token": "first"})
+    environment, _ = _fake_clipboard(tmp_path, SECRET)
+
+    result = _run(tmp_path, args[0], "--yes", *args[1:], environment=environment)
+
+    assert result.returncode == 0, result.stderr
+    stored = json.loads(_credential_file(tmp_path).read_text(encoding="utf-8"))
+    assert stored["account"] == "acme"
+    assert stored["token"] not in ("first", "")
+    if args[0] == "set":
+        assert stored["token"] == SECRET
+
+
+@pytest.mark.parametrize("held", [None, {"token": ""}, {"account": "acme"}])
+@pytest.mark.parametrize("args", WRITES)
+def test_a_key_the_file_does_not_hold_is_written_without_yes(
+    tmp_path: Path, args: tuple[str, ...], held: dict[str, str] | None
+) -> None:
+    """No file, an empty value and another key alike are nothing to overwrite."""
+
+    if held is not None:
+        _write_credentials(tmp_path, held)
+    environment, _ = _fake_clipboard(tmp_path, SECRET)
+
+    result = _run(tmp_path, *args, environment=environment)
+
+    assert result.returncode == 0, result.stderr
+    stored = json.loads(_credential_file(tmp_path).read_text(encoding="utf-8"))
+    assert stored["token"]
 
 
 # --- The clipboard's absence ----------------------------------------------

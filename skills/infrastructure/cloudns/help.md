@@ -58,7 +58,7 @@ The root form takes no operand, so a change written without the separator, such 
 
 A call that deletes — its API path's last segment begins with `delete` — or that carries `delete-existing-records=1` is refused before anything is sent unless the Skill asserts that you asked for it or a decision you already made covers it.
 
-`setup` refuses to overwrite a credential the Credential File already holds unless **--yes** is given, and names the key it would have replaced.
+`setup` refuses to overwrite a credential the Credential File already holds unless **--yes** is given, and names the keys it would have replaced.
 
 A missing Credential File stops every remote operation with a pointer to `/cloudns setup`. A Credential File that group or world may read is refused, naming its mode and the mode it needs.
 

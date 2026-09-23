@@ -10,7 +10,7 @@ reads it by: `sub-auth-user` and `auth-password`. This engine reads that file
 itself, as `docs/rules/skills.md` states every such engine does, and puts the
 two values in the body of the request and nowhere else (ADR-0218).
 
-Three subcommands:
+Two subcommands:
 
 - `call [--yes] [--endpoint=<url>] <path> [<key>=<value>]...` POSTs to
   `<endpoint>/<path>` with the credential and every pair in the form body, and
@@ -20,9 +20,9 @@ Three subcommands:
 - `status [--endpoint=<url>]` asks `login/login.json` whether the service
   accepts the credential and, where it does, lists the zones the sub-user can
   see, which are exactly the zones delegated to it.
-- `setup [--yes]` is the gate the Skill's `setup` passes before the Library
-  draws a new password: it refuses to let a credential the file already holds
-  be overwritten unless `--yes` is given.
+
+The Credential File is written by the Collection Library's `credentials.py`,
+whose `generate` is also the gate against overwriting a credential it holds.
 
 Exit 0 wherever the service answered, whatever it answered, since ClouDNS
 reports a failure in band with `status` and `statusDescription`; 1 where it
@@ -363,44 +363,12 @@ def command_status(args: argparse.Namespace) -> int:
     return ANSWERED
 
 
-def command_setup(args: argparse.Namespace) -> int:
-    """Refuse to let `setup` overwrite a held credential unless `--yes` is given.
-
-    The Library's writer overwrites without asking, and a stray `setup` would
-    destroy a working credential: the service goes on expecting the old
-    password until the user pastes the new one into its panel.
-    """
-
-    # Name what the file already holds; nothing held is nothing to overwrite.
-    path = credential_file()
-    held = load_credentials(path) if path.exists() else {}
-    keys = [key for key in CREDENTIAL_KEYS if held.get(key)]
-    if keys and not args.yes:
-        raise Refusal(
-            f"{path} already holds {' and '.join(keys)}, and nothing was written;"
-            " setup --yes rotates it, drawing a new auth-password that the agent"
-            " cannot reach ClouDNS with until it is pasted as the sub-user's"
-            " password in the ClouDNS panel"
-        )
-    print(
-        json.dumps(
-            {
-                "credential_file": str(path),
-                "held": keys,
-                "sub_user": held.get(SUB_USER_KEY),
-            }
-        )
-    )
-    return ANSWERED
-
-
 # Each subcommand's usage, written out because `argparse` would print a valued
 # flag with its value separated, and this collection's grammar attaches it
 # (ADR-0176).
 USAGES: Final = {
     "call": "[--yes] [--endpoint=<url>] <path> [<key>=<value>]...",
     "status": "[--endpoint=<url>]",
-    "setup": "[--yes]",
 }
 
 
@@ -432,8 +400,6 @@ def parser() -> argparse.ArgumentParser:
 
     subcommands["status"].add_argument("--endpoint", default=DEFAULT_ENDPOINT)
 
-    subcommands["setup"].add_argument("--yes", action="store_true")
-
     return root
 
 
@@ -445,10 +411,8 @@ def main(argv: Sequence[str] | None = None) -> int:
         match args.command:
             case "call":
                 return command_call(args)
-            case "status":
-                return command_status(args)
             case _:
-                return command_setup(args)
+                return command_status(args)
     except Refusal as refusal:
         print(f"cloudns.py: {refusal}", file=sys.stderr)
         return REFUSED

@@ -35,10 +35,9 @@ The token is the whole account's: NodePing issues one per account, with no scope
 
 ## setup
 
-1. Run `uv run "$LIBRARY/scripts/credentials.py" show --skill=nodeping`. Where it exits 0 listing `token` among its keys and `flags` carries no `--yes`, refuse: say that the Credential File already holds `token`, that `/nodeping setup --yes` replaces it, and that `--yes` asserts the working token is meant to be replaced — a rotation. Write nothing and stop.
-2. Ask the user to open Account Settings in NodePing's panel, go to API, copy the API token — pressing Regenerate first where this is a rotation, which revokes the old one — and tell you when it is on the clipboard. Wait for that answer.
-3. Run `uv run "$LIBRARY/scripts/credentials.py" set --skill=nodeping --key=token --from-clipboard`. On exit 2, show its stderr verbatim and stop.
-4. Run `uv run "$HERE/scripts/nodeping.py" status` and render its answer as the `status` section does. Report in one breath that the Credential File is written — its path and the stored token's length, from `set`'s output — and whether the service accepts the token.
+1. Ask the user to open Account Settings in NodePing's panel, go to API, copy the API token — pressing Regenerate first where `flags` carries `--yes`, since that is a rotation and regenerating revokes the old token — and tell you when it is on the clipboard. Wait for that answer.
+2. Run `uv run "$LIBRARY/scripts/credentials.py" set --skill=nodeping --key=token --from-clipboard`, adding `--yes` exactly where the reading's `flags` carry it. On exit 2, show its stderr verbatim and stop.
+3. Run `uv run "$HERE/scripts/nodeping.py" status` and render its answer as the `status` section does. Report in one breath that the Credential File is written — its path and the stored token's length, from `set`'s output — and whether the service accepts the token.
 
 ## status
 

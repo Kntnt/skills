@@ -454,18 +454,20 @@ def test_status_relays_the_services_refusal_and_exits_0(
 # --- The body ------------------------------------------------------------
 
 
-def test_the_bodys_setup_checks_for_a_held_token_before_it_reads_the_clipboard() -> (
-    None
-):
-    """The overwrite gate comes before the clipboard, and the status step after it."""
+def test_the_bodys_setup_leaves_the_overwrite_gate_to_the_librarys_set() -> None:
+    """`set` is the gate, so the body passes `--yes` to it and runs no check of its own.
+
+    The status step comes after the store, so one answer says both that the
+    file is written and whether the service accepts the token.
+    """
 
     body = (SKILL / "SKILL.md").read_text(encoding="utf-8")
     setup = body.split("## setup", 1)[1].split("\n## ", 1)[0]
 
-    show = setup.index('credentials.py" show --skill=nodeping')
+    assert 'credentials.py" show' not in setup
     store = setup.index(
         'credentials.py" set --skill=nodeping --key=token --from-clipboard'
     )
     status = setup.index('nodeping.py" status')
-    assert show < store < status
-    assert "--yes" in setup[show:store]
+    assert store < status
+    assert "--yes" in setup[store:status]

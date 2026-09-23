@@ -16,7 +16,7 @@ It then tells you what only you can do, in this order: in the ClouDNS panel unde
 
 Run `/cloudns status` afterwards: it confirms that ClouDNS accepts the credential and lists the zones that actually came through, which are the zones the Skill may touch.
 
-Running `setup --yes` again is the rotation. A new password is drawn and put on the clipboard, and you paste it as the sub-user's new password in the panel; until you do, ClouDNS still expects the old one.
+Running `setup --yes` again is the rotation. A new password is drawn and put on the clipboard, and you paste it as the sub-user's new password in the panel; until you do, ClouDNS still expects the old one. Where no sub-user of that name exists in the panel yet, as when *SUB-USER* names a new one, you create it as above instead.
 
 ## POSITIONAL ARGUMENTS
 
@@ -40,7 +40,7 @@ The Credential File `setup` writes, holding `sub-auth-user` and `auth-password`,
 
 An invalid form is refused rather than ignored. The Skill names the error, prints this page's SYNOPSIS, changes nothing, and points at `/cloudns setup --help`. A flag is refused rather than ignored where it has no work to do here, and **--yes** written after *SUB-USER* is out of order and refused.
 
-A credential already held is not overwritten without **--yes**: `setup` names the key it would have replaced, says that **--yes** rotates it, and writes nothing. The operand takes the rest of the line, so prose written after `setup` becomes a sub-user's name; on a machine that already holds a credential, that is refused by this same rule.
+A credential already held is not overwritten without **--yes**: `setup` names the file and the keys it would have replaced, says what **--yes** asserts, and writes nothing, leaving the clipboard as it was. The operand takes the rest of the line, so prose written after `setup` becomes a sub-user's name; on a machine that already holds a credential, that is refused by this same rule.
 
 Where no clipboard tool is found, nothing is written, and the message says how to write the Credential File by hand instead.
 

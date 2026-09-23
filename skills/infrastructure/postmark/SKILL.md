@@ -31,10 +31,9 @@ Never read, print or copy the Credential File yourself, and never ask the user t
 ## setup
 
 1. Read the key from the operands: `account-token` for `setup account`, `server:<name>` for `setup server <name>`.
-2. Run `uv run "$LIBRARY/scripts/credentials.py" show --skill=postmark`. Where it says there is no Credential File, nothing is held yet; continue. Where it refuses for another reason, show what it printed and stop. Where it lists the key and `flags` holds no `--yes`, refuse: say that the Credential File already holds that key, that `--yes` asserts the user means to replace the working token with a new one, and that `/postmark setup --yes account` or `/postmark setup --yes server <name>` is the rotation; change nothing and stop.
-3. Ask the user to copy the token and to say when it is on the clipboard. For `setup account`, it is on the API Tokens tab of the Postmark account (Account → API Tokens, visible to the account owner and admins). For `setup server <name>`, it is on the API Tokens tab of that server (Servers → the server → API Tokens). For a rotation, the user regenerates the token there first. Wait for the answer.
-4. Run `uv run "$LIBRARY/scripts/credentials.py" set --skill=postmark --key=account-token --from-clipboard` for `setup account`, or `uv run "$LIBRARY/scripts/credentials.py" set --skill=postmark --key="server:<name>" --from-clipboard` for `setup server <name>`. On exit 2, show what it printed and stop.
-5. Run the `status` step below, and tell the user they may clear the clipboard.
+2. Ask the user to copy the token and to say when it is on the clipboard. For `setup account`, it is on the API Tokens tab of the Postmark account (Account → API Tokens, visible to the account owner and admins). For `setup server <name>`, it is on the API Tokens tab of that server (Servers → the server → API Tokens). Where `flags` carries `--yes`, this is a rotation, and the user regenerates the token there first. Wait for the answer.
+3. Run `uv run "$LIBRARY/scripts/credentials.py" set --skill=postmark --key=account-token --from-clipboard` for `setup account`, or `uv run "$LIBRARY/scripts/credentials.py" set --skill=postmark --key="server:<name>" --from-clipboard` for `setup server <name>`, adding `--yes` exactly where the reading's `flags` carry it. On exit 2, show its stderr verbatim and stop.
+4. Run the `status` step below, and tell the user they may clear the clipboard.
 
 ## status
 

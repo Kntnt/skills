@@ -4,6 +4,10 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ## [Unreleased]
 
+### Fixed
+
+- `/nodeping setup`, `/postmark setup` and `/cloudns setup` refuse to overwrite a credential already held without `--yes` because the Collection Library's `credentials.py` now refuses it, rather than because each Skill's body checked first. `set` and `generate` take `--yes`, and without it exit 2 wherever the Credential File already holds a value under the key they fill or under a key a `--set` pair names, before the clipboard is read or written and before anything is written, naming the file, the keys, and what `--yes` asserts: that a working credential is meant to be replaced, which the service goes on expecting until the new value is pasted or regenerated there. `/nodeping` and `/postmark` checked for a held token in prose the model was asked to follow, which no exit status held it to, and `/cloudns` kept a gate of its own in its engine, whose `setup` subcommand is gone; each Skill now passes its `--yes` through to the Library and shows its refusal as it stands. Without `--yes`, `/nodeping setup` and `/postmark setup` now ask for the token before refusing, and the refusal leaves the clipboard unread. `/hetzner setup`, whose token lives in `hcloud`'s own store, keeps its own refusal as before, and `docs/rules/skills.md` now says where each gate lives.
+
 ## [0.36.0] – 2026-09-23
 
 ### Added

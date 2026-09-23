@@ -22,6 +22,17 @@ nothing any of them prints is ever a value the file holds:
 - `exec` runs a command with one value in one environment variable of the
   child, which is how a value reaches a tool that keeps its own store.
 
+`set` and `generate` are the overwrite gate every Skill's `setup` passes
+through, so no Skill states one of its own. Without `--yes`, each refuses where
+the file already holds a non-empty value under `--key` or under a key a
+`--set` pair names: a key written beside the one filled is as much a working
+credential as that one, and replacing either is a rotation. The refusal comes
+before the clipboard is read or written and before the file is, and names the
+file, the keys held, and what `--yes` asserts: that the user means to replace a
+working credential, which the service goes on expecting until the new value is
+pasted or regenerated there. A key the file does not hold, or holds empty, is
+nothing to overwrite, and a file that does not exist holds none.
+
 An engine that makes a service call reads the file itself rather than through
 this script; `docs/rules/skills.md` states how.
 """
@@ -314,6 +325,28 @@ def report(path: Path, content: dict[str, str], key: str) -> None:
     )
 
 
+def refuse_overwrite(path: Path, keys: Sequence[str]) -> None:
+    """Refuse to replace a value the file at *path* holds under any of *keys*.
+
+    Rotation is the one operation that destroys a working credential, and the
+    one a stray invocation reaches by accident, so only `--yes` passes it.
+
+    Raises:
+        Refusal: where the file holds a non-empty value under one of *keys*,
+            or cannot be read.
+    """
+
+    content = read_credentials(path) if path.exists() else {}
+    held = [key for key in dict.fromkeys(keys) if content.get(key)]
+    if held:
+        raise Refusal(
+            f"{path} already holds {', '.join(held)}, and nothing was written."
+            " Pass --yes to assert that you mean to replace a working credential;"
+            " the service goes on expecting the old value until the new one is"
+            " pasted or regenerated there"
+        )
+
+
 def store(
     root: Path, skill: str, key: str, value: str, extra: dict[str, str]
 ) -> dict[str, str]:
@@ -328,9 +361,14 @@ def store(
 
 
 def command_set(root: Path, args: argparse.Namespace, extra: dict[str, str]) -> int:
-    """Read the clipboard into `--key`, merge the pairs, and write the file."""
+    """Read the clipboard into `--key`, merge the pairs, and write the file.
+
+    Without `--yes`, a held key is refused before the clipboard is read.
+    """
 
     path = credential_file(root, args.skill)
+    if not args.yes:
+        refuse_overwrite(path, [args.key, *extra])
     value = read_clipboard(root, by_hand(path))
     report(path, store(root, args.skill, args.key, value, extra), args.key)
     return 0
@@ -342,11 +380,13 @@ def command_generate(
     """Draw a value into `--key`, write the file, and put the value on the clipboard.
 
     The file is written before the clipboard is, so the user is never handed a
-    value that was not stored; and a machine with no clipboard tool is refused
-    before anything is written at all.
+    value that was not stored; and a held key without `--yes`, and a machine
+    with no clipboard tool, are each refused before anything is written at all.
     """
 
     path = credential_file(root, args.skill)
+    if not args.yes:
+        refuse_overwrite(path, [args.key, *extra])
     command = clipboard_tool(WRITERS)
     if command is None:
         raise Refusal(f"no clipboard tool was found on the PATH. {by_hand(path)}")
@@ -415,8 +455,8 @@ def command_exec(root: Path, args: argparse.Namespace, command: list[str]) -> in
 # flag with its value separated, and this collection's grammar attaches it
 # (ADR-0176).
 USAGES: Final = {
-    "set": "--skill=<name> --key=<key> --from-clipboard [--set=<key>=<value>]...",
-    "generate": "--skill=<name> --key=<key> --to-clipboard [--set=<key>=<value>]...",
+    "set": "[--yes] --skill=<name> --key=<key> --from-clipboard [--set=<key>=<value>]...",
+    "generate": "[--yes] --skill=<name> --key=<key> --to-clipboard [--set=<key>=<value>]...",
     "show": "--skill=<name>",
     "exec": "--env=<VAR> (--from-clipboard | --skill=<name> --key=<key>) -- <command>...",
 }
@@ -442,12 +482,14 @@ def parser() -> tuple[argparse.ArgumentParser, dict[str, argparse.ArgumentParser
     }
 
     set_command = subcommands["set"]
+    set_command.add_argument("--yes", action="store_true")
     set_command.add_argument("--skill", required=True)
     set_command.add_argument("--key", required=True)
     set_command.add_argument("--from-clipboard", action="store_true", required=True)
     set_command.add_argument("--set", action="append", default=[])
 
     generate = subcommands["generate"]
+    generate.add_argument("--yes", action="store_true")
     generate.add_argument("--skill", required=True)
     generate.add_argument("--key", required=True)
     generate.add_argument("--to-clipboard", action="store_true", required=True)

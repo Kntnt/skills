@@ -32,7 +32,7 @@ The Credential File, holding one key, `token`, readable by its owner alone (mode
 
 An invalid form is refused rather than ignored. The Skill names the error, prints this page's SYNOPSIS, changes nothing, and points at `/nodeping setup --help`. `setup` takes no operand, so any word after it is refused.
 
-Without **--yes**, a Credential File that already holds a token is left as it is: the Skill names the key and says that **--yes** asserts the working token is meant to be replaced.
+Without **--yes**, a Credential File that already holds a token is left as it is, and the clipboard is not read: the refusal names the file and the key, and says that **--yes** asserts the working token is meant to be replaced.
 
 An empty clipboard, or no clipboard tool on the `PATH`, is refused with the path of the file to write by hand. A Credential File that group or world may read is refused, naming the mode it needs.
 

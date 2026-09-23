@@ -14,7 +14,6 @@ import json
 import os
 import shutil
 import socket
-import stat
 import subprocess
 import sys
 import threading
@@ -636,38 +635,28 @@ def test_status_exits_1_where_the_service_cannot_be_reached(tmp_path: Path) -> N
     assert PASSWORD not in result.stdout + result.stderr
 
 
-# --- setup -----------------------------------------------------------------
+# --- The body ------------------------------------------------------------
 
 
-def test_setup_passes_where_there_is_no_credential_file_yet(tmp_path: Path) -> None:
-    result = _run(tmp_path, "setup")
+def test_the_bodys_setup_leaves_the_overwrite_gate_to_the_librarys_generate() -> None:
+    """`generate` is the gate, so the body passes `--yes` to it and runs none of its own."""
 
-    assert result.returncode == ANSWERED, result.stderr
-    assert not _credential_file(tmp_path).exists()
+    body = (ENGINE.parent.parent / "SKILL.md").read_text(encoding="utf-8")
+    setup = body.split("## setup", 1)[1].split("\n## ", 1)[0]
+
+    assert 'cloudns.py" setup' not in body
+    generate = setup.index(
+        'credentials.py" generate --skill=cloudns --key=auth-password --to-clipboard'
+    )
+    steps = setup.index("Tell the user")
+    assert generate < steps
+    assert "--yes" in setup[generate:steps]
 
 
-def test_setup_refuses_to_overwrite_a_held_credential_without_yes(
-    tmp_path: Path,
-) -> None:
-    path = _write_credentials(tmp_path)
-    before = path.read_bytes()
+def test_the_engine_has_no_setup_subcommand(tmp_path: Path) -> None:
+    """The overwrite gate is the Library's, so the engine keeps no second one."""
 
     result = _run(tmp_path, "setup")
 
     assert result.returncode == REFUSED
-    assert "auth-password" in result.stderr
-    assert "--yes" in result.stderr
-    assert "rotat" in result.stderr
-    assert PASSWORD not in result.stdout + result.stderr
-    assert path.read_bytes() == before
-
-
-def test_setup_with_yes_lets_the_rotation_go_ahead(tmp_path: Path) -> None:
-    path = _write_credentials(tmp_path)
-
-    result = _run(tmp_path, "setup", "--yes")
-
-    assert result.returncode == ANSWERED, result.stderr
-    assert json.loads(result.stdout)["sub_user"] == SUB_USER
-    assert PASSWORD not in result.stdout + result.stderr
-    assert stat.S_IMODE(path.stat().st_mode) == 0o600
+    assert "usage:" in result.stderr
