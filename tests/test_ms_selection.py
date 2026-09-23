@@ -613,6 +613,13 @@ def _measured_nought(data_dir: Path) -> None:
     vendor that bills nothing for a category has reported nothing rather than
     hidden it. Taken to its limit — every category recorded as nought — the
     point prices at 0.00 USD.
+
+    Sonnet's sixty good rows are what put the bound it draws at about 0.9276,
+    above every prior in this pool — the highest of them Fable's 0.9002, and the
+    point Fable would be tried at, `high` like the answer, 0.8808 — so no model
+    here is owed a Trial and the answer this fixture is read for is the ranked
+    one. The rows are the same recorded nought whatever their number, so the
+    price under test is untouched by how many there are (issue #374).
     """
 
     catalogue = _module("catalogue")
@@ -632,7 +639,7 @@ def _measured_nought(data_dir: Path) -> None:
                 "seconds": 900.0,
             }
         )
-        for index in range(20)
+        for index in range(60)
     ]
     (data_dir / "measurements.jsonl").write_text(
         "".join(f"{line}\n" for line in lines), encoding="utf-8"
@@ -651,6 +658,9 @@ def test_a_forecast_of_nought_is_a_real_price_and_not_a_null_one(
     against it — the rule that an unmeasured configuration never becomes the
     cheapest thing on a frontier governs a measurement that does not exist,
     and this one does (issue #371).
+
+    The store is this test's own and owes no Trial, so the answer read here is
+    the ranked one rather than a point being tried (issue #374).
     """
 
     _measured_nought(tmp_path)
@@ -1381,6 +1391,18 @@ def _cheapest_measured(data_dir: Path) -> None:
     tenth percentile is far above anything Luna reads — so the evidence can
     tell the two apart, and dividing the price by the chance is not on its own
     what keeps the cheap junk from winning.
+
+    Fable, Astra and Sol each carry `ENOUGH` failing rows of their own, which is
+    what leaves nothing in this pool owed a Trial. Opus's own mean has to stay
+    below the floor for the band to be what decides the answer, so the bound it
+    draws stays near 0.65 and can never be lifted over a prior of 0.88: the
+    three models whose tried point reads above that bound are taken off a Trial
+    on their count instead, and every other model here with no rows for the kind
+    is below it already at the level it would be tried at. The rows are failures
+    so that Opus at `high` stays the best measured point and goes on being the
+    one the band is drawn around, and they move neither the cheapest nor the
+    quickest finished job in the pool, both of which are still Luna at `low`
+    (issue #374).
     """
 
     _bridged(data_dir)
@@ -1388,6 +1410,9 @@ def _cheapest_measured(data_dir: Path) -> None:
         data_dir,
         ("implement", "claude-opus-5", "high", 0.75, 20),
         *[("implement", "gpt-5.6-luna", level, 0.21, 20) for level in UNDER_CEILING],
+        ("implement", FABLE, "high", 0.0, ENOUGH),
+        ("implement", "gpt-6-astra", "high", 0.0, ENOUGH),
+        ("implement", "gpt-5.6-sol", "high", 0.0, ENOUGH),
     )
     _timed(data_dir, "gpt-5.6-luna", 200.0)
 
@@ -1427,16 +1452,31 @@ def _unmeasured_kind(data_dir: Path) -> None:
     ("objective", "total"),
     (("cost", "per_success_cost_usd"), ("time", "per_success_seconds")),
 )
-def test_a_measured_point_is_taken_over_an_estimate_nothing_has_tested(
+def test_the_estimate_that_won_the_replayed_case_is_tried_rather_than_answered(
     tmp_path: Path, capsys: pytest.CaptureFixture[str], objective: str, total: str
 ) -> None:
-    """The replay of the `implement` case of 2026-09-19, on both objectives.
+    """The replay of the `implement` case of 2026-09-19, which is now a Trial.
 
-    An estimate nobody has tested cleared the floor and a point with 142 rows
+    An estimate nobody had tested cleared the floor and a point with 142 rows
     behind it did not, so the measured-first preference never engaged and the
-    estimate won on arithmetic. It no longer does: the measured point leads the
-    answer whether or not anything clears the floor, and the untested point
-    here is the dearer and the slower finished job besides.
+    estimate won a day of work on arithmetic, as though something had watched it
+    do the job. The two rules released together answer that shape differently:
+    the ranking puts the measured point first, and the Trial then tries the
+    untested model on purpose — three reversible jobs of the kind at whatever
+    they cost — so the model that won that day is tried and says it was tried,
+    rather than taken for the answer (issue #374).
+
+    That is forced rather than chosen. The band's bound is the drawer's own
+    `Estimate.low`, which is never above its own mean, so wherever no measured
+    point clears the floor while an untested one does — the antecedent this test
+    asserts of its own store — the untested point is necessarily at or above the
+    band and is therefore necessarily owed a Trial. No store keeps this
+    scenario and owes none, so the ranking-only claim this test used to make is
+    covered where the Trial is suppressed instead:
+    `test_where_no_measured_point_clears_the_floor_the_band_answers` asks it at
+    high stakes, which `_explorable` never tries the boundary on, and
+    `test_every_measured_point_leads_the_pool_the_alternatives_are_read_from`
+    reads the ranked order itself, below the Trial.
     """
 
     _replay(tmp_path)
@@ -1450,14 +1490,18 @@ def test_a_measured_point_is_taken_over_an_estimate_nothing_has_tested(
 
     answer = _answer(capsys, *flags)
     untested = _point(capsys, flags, FABLE, "medium")
+    measured = _point(capsys, flags, "claude-opus-5", "high")
 
-    assert answer["explored"] is None
     assert untested["basis"] == "prior"
     assert untested["expected"]["p_success"] >= select.FLOOR
-    assert untested["expected"][total] > answer["expected"][total]
-    assert (answer["model"], answer["deliberation"]) == ("claude-opus-5", "high")
-    assert answer["basis"] == "measured"
-    assert answer["expected"]["p_success"] < select.FLOOR
+    assert measured["basis"] == "measured"
+    assert measured["expected"]["p_success"] < select.FLOOR
+    assert untested["expected"][total] > measured["expected"][total]
+
+    assert (answer["model"], answer["deliberation"]) == (FABLE, "high")
+    assert answer["explored"] == TRIAL
+    assert answer["basis"] == "prior"
+    assert "claude-opus-5@high" in (answer["note"] or "")
 
 
 @pytest.mark.parametrize(
@@ -1474,6 +1518,10 @@ def test_the_cheapest_measured_point_is_left_outside_the_band(
     being divided by that. The band is what stops it: its mean is far below the
     bound the best measured point carries, so the evidence can tell the two
     apart and the cheap point is never among the candidates price orders.
+
+    The store is this test's own, and nothing in its pool is owed a Trial, so
+    the answer read here is the ranked one rather than a point being tried
+    (issue #374).
     """
 
     _cheapest_measured(tmp_path)
