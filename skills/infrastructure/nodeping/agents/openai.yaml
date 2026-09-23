@@ -1,0 +1,5 @@
+interface:
+  display_name: "NodePing"
+  short_description: "Read and change uptime monitoring at NodePing"
+policy:
+  allow_implicit_invocation: true
