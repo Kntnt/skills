@@ -166,6 +166,12 @@ Read and change uptime monitoring at NodePing — checks, their results and upti
 
 Run `/nodeping setup` once to store your API token, copied to the clipboard from NodePing's panel so it never passes through the conversation, and `/nodeping status` to check it. Then run `/nodeping -- <instruction>` with what you want done, or let the agent use it for a matching NodePing task.
 
+### postmark
+
+Inspect and change email at Postmark on your behalf: servers and their message streams, domains and their DKIM and Return-Path records, sender signatures, templates, suppressions, bounces, delivery statistics, message search and webhooks, and a send where you ask for one. Every change is read first and verified after; a deletion or a real send happens only where you authorized that exact operation, and a send is shown in full first. DNS records are reported for `cloudns` to set rather than set here.
+
+Run `/postmark setup account` and `/postmark setup server <name>` once to store the tokens, copied in Postmark and read from the clipboard so they never enter the conversation, and `/postmark status` to check them. Then run `/postmark -- <request>`, or let the agent use it for a matching Postmark task.
+
 ## Features
 
 Besides skills, the collection ships **features**: catalog entries that install nothing a harness loads. `/kntnt select` lists them as a second group under the skills, and a feature's row says what it writes and where before you check it. They apply to the machine rather than to a project, so `--project` offers none.
@@ -191,6 +197,8 @@ Every skill requires `uv` and the manager: the manager ships the engine that rea
 `nodeping` needs network access and a NodePing API token, which `/nodeping setup` stores from the clipboard in `~/.kntnt/nodeping/credentials.json`; the token is the whole account's, since NodePing issues no narrower one.
 
 `cloudns` needs network access and a ClouDNS API sub-user, which `/cloudns setup` makes the credential for; its `setup` also needs a clipboard tool, such as `pbcopy` on macOS or `wl-copy`, `xclip` or `xsel` on Linux.
+
+`postmark` needs network access and Postmark tokens for anything it does at Postmark: the account token for servers, domains, sender signatures and data removals, and a server token for each server it sends from or manages. `setup` stores them in `~/.kntnt/postmark/credentials.json` through the clipboard.
 
 Git workflows also require `git`; ticket workflows require `gh`; `rename-invoices` requires Poppler's `pdftotext`; `mirror` requires `agent-browser`, which fetches in a real browser what plain HTTP cannot, installed with `brew install agent-browser` and then `agent-browser install`. `release` can finish without `gh`, but then skips the GitHub release.
 

@@ -1281,6 +1281,36 @@ SHIPPED_CASES: dict[str, list[Case]] = {
         ("--yes", None),
         ("--bogus", None),
     ],
+    "infrastructure/postmark": [
+        ("", {"path": [], "flags": {}, "operands": [], "instruction": None}),
+        (
+            "-- verify the domain",
+            {"path": [], "operands": [], "instruction": "verify the domain"},
+        ),
+        ("setup account", {"path": ["setup"], "flags": {}, "operands": ["account"]}),
+        (
+            "setup --yes account",
+            {"path": ["setup"], "flags": {"--yes": True}, "operands": ["account"]},
+        ),
+        (
+            "setup server transactional",
+            {"path": ["setup"], "flags": {}, "operands": ["server", "transactional"]},
+        ),
+        (
+            "setup server My Server",
+            {"path": ["setup"], "operands": ["server", "My Server"]},
+        ),
+        ("status", {"path": ["status"], "flags": {}, "operands": []}),
+        # A request without the reserved separator is an unknown command, the
+        # grammar carrying command paths (ADR-0176).
+        ("verify the domain", None),
+        ("setup", None),
+        ("setup server", None),
+        ("setup account extra", None),
+        ("status --yes", None),
+        ("--yes", None),
+        ("setup --force account", None),
+    ],
     "web/mirror": [
         ("https://x.se/", {"flags": {}, "operands": ["https://x.se/"]}),
         (

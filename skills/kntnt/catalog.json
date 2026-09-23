@@ -212,6 +212,18 @@
       "capabilities": []
     },
     {
+      "name": "postmark",
+      "category": "infrastructure",
+      "description": "Inspect and change email at Postmark on the user's behalf — servers and message streams, domains and their DKIM and Return-Path records, sender signatures, templates, suppressions, bounces, delivery statistics, message search, webhooks, and a send the user asks for. Use for email at Postmark only; excludes other email providers, mailboxes, and setting DNS records.",
+      "digest": "b9022f02f0fd6be249ed02308011ccd2b542bffe28d94a07aab0f8acd3c6aa79",
+      "binaries": [
+        "uv"
+      ],
+      "skills": [],
+      "externals": [],
+      "capabilities": []
+    },
+    {
       "name": "model-selector",
       "category": "models",
       "description": "Choose the model and deliberation level that completes delegated work at the lowest total cost, or in the least time where the user has chosen time. Never used implicitly: a Skill that routes work runs its script.",
