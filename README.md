@@ -152,7 +152,7 @@ Run `/mirror [--output=<dir>] [--resources=all|in-scope|none] [--max-pages=<n>] 
 
 Provision Hetzner Cloud servers, install software, and deploy or maintain their websites and applications with the official hcloud CLI, cloud-init, and SSH. It follows the project's existing stack and deployment files, reconciles existing resources and interrupted writes, and verifies bootstrap, services, and the requested public endpoint. Application-specific release and recovery routines stay in the project.
 
-Run `/hetzner`, followed by the operation and constraints, or let the agent use it for a matching Hetzner Cloud task. Preparation alone creates no remote resources; billed and destructive changes stay within the established authorization. Robot dedicated servers and Object Storage are outside its scope.
+Run `/hetzner -- <operation>` with the operation and its constraints, or let the agent use it for a matching Hetzner Cloud task. A project is set up once with `/hetzner setup <project>`, after you copy a Read & Write API token from the project's Security page in the Console: the token goes from the clipboard into hcloud's own configuration without entering the conversation, `setup --yes` rotates it, and `/hetzner status` lists every project and what it reaches. `setup` also gives the agents a key of their own, `~/.ssh/kntnt-agent`: a server the Skill creates gets it at creation, and on one that already exists you admit the agents once, as a user `kntnt-agent` with passwordless `sudo`, by the procedure `setup` prints. Preparation alone creates no remote resources; billed and destructive changes stay within the established authorization. Robot dedicated servers and Object Storage are outside its scope.
 
 ### nodeping
 
@@ -180,7 +180,7 @@ A two-line Claude Code status line: path, worktree marker, branch, working-tree 
 
 Every skill requires `uv` and the manager: the manager ships the engine that reads a skill's invocation, and `uv` runs it.
 
-`hetzner` can prepare deployment files without remote tools; Cloud operations additionally need hcloud, network access, and a project token, and host operations need OpenSSH and server access.
+`hetzner` can prepare deployment files without remote tools; Cloud operations additionally need hcloud, network access, and a project token, `setup` needs `ssh-keygen` and a clipboard tool, and host operations need OpenSSH and server access.
 
 `nodeping` needs network access and a NodePing API token, which `/nodeping setup` stores from the clipboard in `~/.kntnt/nodeping/credentials.json`; the token is the whole account's, since NodePing issues no narrower one.
 

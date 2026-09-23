@@ -179,7 +179,7 @@
       "name": "hetzner",
       "category": "infrastructure",
       "description": "Provision and operate Hetzner Cloud servers and deploy or maintain their websites and applications through hcloud, SSH, and cloud-init. Use for Hetzner Cloud infrastructure or workloads hosted there; excludes Robot dedicated servers and Object Storage.",
-      "digest": "cfe9b0370638f202bc0b2d5cc8850fe22f2f16eb9f0324e71675a4e78eb36f58",
+      "digest": "227bc6fcfac95da0d568a2dbc143c7aeacbd513fe2b2a999139ca41d244e0c96",
       "binaries": [
         "uv"
       ],
