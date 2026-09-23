@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import hashlib
 import importlib.util
 import json
 import random
@@ -48,6 +49,20 @@ STAKES_ASKED: tuple[str, ...] = ("reversible", "high")
 # The distinctive words of the note the band writes, so that a test asserting
 # the line is there and one asserting it is absent read the same string.
 BAND: str = "the evidence cannot tell from"
+
+# What `explored` carries where the call was a Trial rather than an ordinary
+# exploration, stated here rather than read off the module so that a test
+# asserting a Trial and one asserting there was none read the same string.
+TRIAL: str = "trial"
+
+# The exploration as it stood at the commit this ticket's work starts from,
+# digested over `SEEDS` seeds of the `_boundary` fixture by `_replayed`. A
+# Trial is settled before the generator is touched, so a pool owing none has to
+# draw exactly what it drew before, and this is the sweep that says it did. The
+# base commit is named in this ticket's commit message.
+EXPLORATION_AT_BASE: str = (
+    "5ac25d3fadd3a2c5d68aee6412b727e969ef50f967be2302c5bf891c52c47b07"
+)
 
 # The retired rule's own sentences, whitespace-collapsed before matching so
 # that a line break falling inside one of them hides nothing. Each states, as
@@ -131,6 +146,12 @@ for _dependency in ("catalogue", "profiles", "evidence", "launch", "quota"):
 # beyond this file.
 select = _module("selection", "ms_selection")
 quota = sys.modules["quota"]
+
+# How many rows of its own a model needs for a kind before it stops being owed
+# a Trial, read off the module because it is the same threshold that decides
+# when a cell stops being pooled and a test writing a three of its own would
+# stop agreeing with the rule the moment the rule moved.
+ENOUGH: int = sys.modules["evidence"].ENOUGH
 
 
 @pytest.fixture(autouse=True)
@@ -543,6 +564,11 @@ def test_a_point_that_cannot_be_priced_is_ranked_last_but_stays_eligible(
     the answer. A null cost is a null cost: read as a nought it would make the
     model nothing is known about the cheapest thing on the frontier by having
     nothing behind it.
+
+    Sonnet's sixty good rows are what put the bound it draws at about 0.9276,
+    over the unpriced model's prior of about 0.9105 and over every other prior
+    in this pool, so nothing here is owed a Trial and the answer this test
+    reads is the ranked one rather than a point being tried (issue #374).
     """
 
     _refresh(
@@ -560,7 +586,7 @@ def test_a_point_that_cannot_be_priced_is_ranked_last_but_stays_eligible(
         },
     )
     _profile(tmp_path)
-    _store(tmp_path, ("implement", "claude-sonnet-5", "high", 1.0, 20))
+    _store(tmp_path, ("implement", "claude-sonnet-5", "high", 1.0, 60))
 
     answers = [
         _answer(
@@ -587,6 +613,13 @@ def _measured_nought(data_dir: Path) -> None:
     vendor that bills nothing for a category has reported nothing rather than
     hidden it. Taken to its limit — every category recorded as nought — the
     point prices at 0.00 USD.
+
+    Sonnet's sixty good rows are what put the bound it draws at about 0.9276,
+    above every prior in this pool — the highest of them Fable's 0.9002, and the
+    point Fable would be tried at, `high` like the answer, 0.8808 — so no model
+    here is owed a Trial and the answer this fixture is read for is the ranked
+    one. The rows are the same recorded nought whatever their number, so the
+    price under test is untouched by how many there are (issue #374).
     """
 
     catalogue = _module("catalogue")
@@ -606,7 +639,7 @@ def _measured_nought(data_dir: Path) -> None:
                 "seconds": 900.0,
             }
         )
-        for index in range(20)
+        for index in range(60)
     ]
     (data_dir / "measurements.jsonl").write_text(
         "".join(f"{line}\n" for line in lines), encoding="utf-8"
@@ -625,6 +658,9 @@ def test_a_forecast_of_nought_is_a_real_price_and_not_a_null_one(
     against it — the rule that an unmeasured configuration never becomes the
     cheapest thing on a frontier governs a measurement that does not exist,
     and this one does (issue #371).
+
+    The store is this test's own and owes no Trial, so the answer read here is
+    the ranked one rather than a point being tried (issue #374).
     """
 
     _measured_nought(tmp_path)
@@ -1006,6 +1042,32 @@ def _measured_beside_prior(data_dir: Path) -> None:
     )
 
 
+def _measured_beside_unowed_prior(data_dir: Path) -> None:
+    """Write `_measured_beside_prior`'s case with no model in the pool owed a Trial.
+
+    A store of one test's own, because the shape that test is about — a cheaper
+    untested point beside a dearer measured one — is also the shape that owes a
+    Trial, and the shared helper cannot be given rows without moving the four
+    other tests that replay it (issue #374).
+
+    Opus at `high` has two hundred good `mechanical` rows and at `low` ten bad
+    ones, so it is the answer and the bound it draws is about 0.9735 — above
+    Sonnet's prior of about 0.9689 at `high` and far above the Haiku point, so
+    neither is owed a Trial on its mean. Fable's three failing rows are
+    `ENOUGH` to take it off one on its count. Sonnet is still untested at every
+    level, still clears the floor at each, and still finishes a job for less
+    than the answer does, which is the whole of what this test is about.
+    """
+
+    _profile(data_dir)
+    _store(
+        data_dir,
+        ("mechanical", "claude-opus-5", "high", 1.0, 200),
+        ("mechanical", "claude-opus-5", "low", 0.0, 10),
+        ("mechanical", FABLE, "high", 0.0, 3),
+    )
+
+
 @pytest.mark.parametrize("stakes", STAKES_ASKED)
 def test_a_measured_point_that_clears_the_floor_outranks_a_cheaper_prior(
     tmp_path: Path, capsys: pytest.CaptureFixture[str], stakes: str
@@ -1018,7 +1080,7 @@ def test_a_measured_point_that_clears_the_floor_outranks_a_cheaper_prior(
     whether the cheaper, untried point would do is exploration's job.
     """
 
-    _measured_beside_prior(tmp_path)
+    _measured_beside_unowed_prior(tmp_path)
     flags = (*LIMITED, f"--data={tmp_path}", "--kind=mechanical", f"--stakes={stakes}")
 
     answers = [_answer(capsys, *flags, f"--seed={seed}") for seed in range(DRAWS)]
@@ -1329,6 +1391,18 @@ def _cheapest_measured(data_dir: Path) -> None:
     tenth percentile is far above anything Luna reads — so the evidence can
     tell the two apart, and dividing the price by the chance is not on its own
     what keeps the cheap junk from winning.
+
+    Fable, Astra and Sol each carry `ENOUGH` failing rows of their own, which is
+    what leaves nothing in this pool owed a Trial. Opus's own mean has to stay
+    below the floor for the band to be what decides the answer, so the bound it
+    draws stays near 0.65 and can never be lifted over a prior of 0.88: the
+    three models whose tried point reads above that bound are taken off a Trial
+    on their count instead, and every other model here with no rows for the kind
+    is below it already at the level it would be tried at. The rows are failures
+    so that Opus at `high` stays the best measured point and goes on being the
+    one the band is drawn around, and they move neither the cheapest nor the
+    quickest finished job in the pool, both of which are still Luna at `low`
+    (issue #374).
     """
 
     _bridged(data_dir)
@@ -1336,6 +1410,9 @@ def _cheapest_measured(data_dir: Path) -> None:
         data_dir,
         ("implement", "claude-opus-5", "high", 0.75, 20),
         *[("implement", "gpt-5.6-luna", level, 0.21, 20) for level in UNDER_CEILING],
+        ("implement", FABLE, "high", 0.0, ENOUGH),
+        ("implement", "gpt-6-astra", "high", 0.0, ENOUGH),
+        ("implement", "gpt-5.6-sol", "high", 0.0, ENOUGH),
     )
     _timed(data_dir, "gpt-5.6-luna", 200.0)
 
@@ -1375,16 +1452,31 @@ def _unmeasured_kind(data_dir: Path) -> None:
     ("objective", "total"),
     (("cost", "per_success_cost_usd"), ("time", "per_success_seconds")),
 )
-def test_a_measured_point_is_taken_over_an_estimate_nothing_has_tested(
+def test_the_estimate_that_won_the_replayed_case_is_tried_rather_than_answered(
     tmp_path: Path, capsys: pytest.CaptureFixture[str], objective: str, total: str
 ) -> None:
-    """The replay of the `implement` case of 2026-09-19, on both objectives.
+    """The replay of the `implement` case of 2026-09-19, which is now a Trial.
 
-    An estimate nobody has tested cleared the floor and a point with 142 rows
+    An estimate nobody had tested cleared the floor and a point with 142 rows
     behind it did not, so the measured-first preference never engaged and the
-    estimate won on arithmetic. It no longer does: the measured point leads the
-    answer whether or not anything clears the floor, and the untested point
-    here is the dearer and the slower finished job besides.
+    estimate won a day of work on arithmetic, as though something had watched it
+    do the job. The two rules released together answer that shape differently:
+    the ranking puts the measured point first, and the Trial then tries the
+    untested model on purpose — three reversible jobs of the kind at whatever
+    they cost — so the model that won that day is tried and says it was tried,
+    rather than taken for the answer (issue #374).
+
+    That is forced rather than chosen. The band's bound is the drawer's own
+    `Estimate.low`, which is never above its own mean, so wherever no measured
+    point clears the floor while an untested one does — the antecedent this test
+    asserts of its own store — the untested point is necessarily at or above the
+    band and is therefore necessarily owed a Trial. No store keeps this
+    scenario and owes none, so the ranking-only claim this test used to make is
+    covered where the Trial is suppressed instead:
+    `test_where_no_measured_point_clears_the_floor_the_band_answers` asks it at
+    high stakes, which `_explorable` never tries the boundary on, and
+    `test_every_measured_point_leads_the_pool_the_alternatives_are_read_from`
+    reads the ranked order itself, below the Trial.
     """
 
     _replay(tmp_path)
@@ -1398,14 +1490,18 @@ def test_a_measured_point_is_taken_over_an_estimate_nothing_has_tested(
 
     answer = _answer(capsys, *flags)
     untested = _point(capsys, flags, FABLE, "medium")
+    measured = _point(capsys, flags, "claude-opus-5", "high")
 
-    assert answer["explored"] is None
     assert untested["basis"] == "prior"
     assert untested["expected"]["p_success"] >= select.FLOOR
-    assert untested["expected"][total] > answer["expected"][total]
-    assert (answer["model"], answer["deliberation"]) == ("claude-opus-5", "high")
-    assert answer["basis"] == "measured"
-    assert answer["expected"]["p_success"] < select.FLOOR
+    assert measured["basis"] == "measured"
+    assert measured["expected"]["p_success"] < select.FLOOR
+    assert untested["expected"][total] > measured["expected"][total]
+
+    assert (answer["model"], answer["deliberation"]) == (FABLE, "high")
+    assert answer["explored"] == TRIAL
+    assert answer["basis"] == "prior"
+    assert "claude-opus-5@high" in (answer["note"] or "")
 
 
 @pytest.mark.parametrize(
@@ -1422,6 +1518,10 @@ def test_the_cheapest_measured_point_is_left_outside_the_band(
     being divided by that. The band is what stops it: its mean is far below the
     bound the best measured point carries, so the evidence can tell the two
     apart and the cheap point is never among the candidates price orders.
+
+    The store is this test's own, and nothing in its pool is owed a Trial, so
+    the answer read here is the ranked one rather than a point being tried
+    (issue #374).
     """
 
     _cheapest_measured(tmp_path)
@@ -2100,6 +2200,596 @@ def test_an_explored_answer_reports_the_rate_measured_and_not_the_draw(
         for answer in explored:
             if (answer["model"], answer["deliberation"]) == (model, level):
                 assert answer["expected"]["p_success"] == rate
+
+
+def _owing(data_dir: Path) -> None:
+    """Write a store one model of which is owed a Trial, at a dearer point.
+
+    Opus at `high` has twenty good `mechanical` rows and at `low` ten bad ones,
+    so it is the answer and the band it draws is its own bound of about 0.796.
+    Sonnet and Haiku have three failing rows each: enough rows of their own
+    that neither is owed a Trial, and low enough means that neither would be
+    owed one anyway. Fable has no row for the kind at all, its prior reads
+    about 0.994 — well above the band — and it finishes an attempt for about
+    1.06 against the answer's 0.67, so the one point owed a Trial here is also
+    the dear one.
+    """
+
+    _profile(data_dir)
+    _store(
+        data_dir,
+        ("mechanical", "claude-opus-5", "high", 1.0, 20),
+        ("mechanical", "claude-opus-5", "low", 0.0, 10),
+        ("mechanical", "claude-sonnet-5", "high", 0.0, 3),
+        ("mechanical", HAIKU, None, 0.0, 3),
+    )
+
+
+def _settled(data_dir: Path, *extra: tuple[str, str, str | None, float, int]) -> None:
+    """Write `_owing`'s store again with rows added, the fixture being replaced whole."""
+
+    _store(
+        data_dir,
+        ("mechanical", "claude-opus-5", "high", 1.0, 20),
+        ("mechanical", "claude-opus-5", "low", 0.0, 10),
+        ("mechanical", "claude-sonnet-5", "high", 0.0, 3),
+        ("mechanical", HAIKU, None, 0.0, 3),
+        *extra,
+    )
+
+
+def _shaped(model_id: str, levels: Sequence[str]) -> dict[str, Any]:
+    """Return a priced Anthropic model supporting exactly the levels named."""
+
+    return {
+        "id": model_id,
+        "provider": "anthropic",
+        "family": model_id,
+        "aliases": [model_id],
+        "deliberation": list(levels),
+        "price": {
+            "input": 3.0,
+            "cache_read": 0.3,
+            "cache_write": 3.75,
+            "output": 15.0,
+            "currency": "USD",
+            "unit": "per_mtok",
+        },
+        "reasoning_billed_as": "output",
+        "capability": 0.95,
+        "released": "2026-09-01",
+    }
+
+
+def _replayed(answers: Sequence[dict[str, Any]]) -> str:
+    """Digest one seed sweep: which calls explored, on what, and in what order.
+
+    A thousand seeds are too many to write down and the point of writing them
+    down is that none of them moved, so what is kept is a digest over the whole
+    sweep — each seed's `explored`, the point it answered, and the whole order
+    of the pool that answer was read off.
+    """
+
+    spelt = []
+    for seed, answer in enumerate(answers):
+        listed = ",".join(
+            f"{row['model']}@{row['deliberation']}" for row in answer["alternatives"]
+        )
+        spelt.append(
+            f"{seed}|{answer['explored']}|{answer['model']}"
+            f"@{answer['deliberation']}|{listed}"
+        )
+    return hashlib.sha256("\n".join(spelt).encode("utf-8")).hexdigest()
+
+
+def test_a_model_with_no_rows_for_the_kind_is_tried_however_dear_it_is(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """A Trial buys the rows that make a point judgeable, at whatever it costs.
+
+    The downhill exploration reaches a cheaper point about one call in ten and
+    a dearer one never, so a model the ranking shuts out of every plain answer
+    has no route to the three rows that would let it be judged on its own
+    (issue #374). The Trial is that route: no price cap is consulted, and here
+    the point tried finishes an attempt for more than half again what the
+    answer does.
+    """
+
+    _owing(tmp_path)
+    flags = (*LIMITED, f"--data={tmp_path}", "--kind=mechanical")
+
+    answers = [_answer(capsys, *flags, f"--seed={seed}") for seed in range(DRAWS)]
+    tried = _point(capsys, flags, FABLE, "high")
+    plain = _point(capsys, flags, "claude-opus-5", "high")
+
+    assert tried["expected"]["cost_usd"] > plain["expected"]["cost_usd"]
+    for answer in answers:
+        assert (answer["model"], answer["deliberation"]) == (FABLE, "high")
+        assert answer["explored"] == TRIAL
+        assert answer["basis"] == "prior"
+        assert "claude-opus-5@high" in (answer["note"] or "")
+
+
+def test_a_trial_takes_the_nearest_level_the_tried_model_supports(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """A model with a shallower ladder is tried where its own ladder reaches.
+
+    The answer sits at `high` and the model owed the Trial offers `low` alone,
+    so `low` is where it is tried — the nearest-level rule an exploration of
+    the model dimension already follows, asked again rather than restated.
+    """
+
+    _profile(tmp_path)
+    _refresh(tmp_path, _shaped("test-shallow", ["low"]))
+    _settled(tmp_path, ("mechanical", FABLE, "high", 0.0, 3))
+
+    answer = _answer(
+        capsys, *LIMITED, f"--data={tmp_path}", "--kind=mechanical", "--seed=0"
+    )
+
+    assert (answer["model"], answer["deliberation"]) == ("test-shallow", "low")
+    assert answer["explored"] == TRIAL
+
+
+def test_a_trial_ends_once_the_store_holds_enough_rows_for_the_kind(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """Three rows of its own take a model off the Trial and onto its own record.
+
+    The boundary is read at both sides of `ENOUGH`, and the row that crosses it
+    is taken at another level, because what ends a Trial is the model's rows
+    for the kind wherever on the ladder they were taken.
+    """
+
+    _owing(tmp_path)
+    flags = (*LIMITED, f"--data={tmp_path}", "--kind=mechanical", "--seed=0")
+
+    _settled(tmp_path, ("mechanical", FABLE, "high", 1.0, ENOUGH - 1))
+    short = _answer(capsys, *flags)
+
+    _settled(
+        tmp_path,
+        ("mechanical", FABLE, "high", 1.0, ENOUGH - 1),
+        ("mechanical", FABLE, "low", 1.0, 1),
+    )
+    full = _answer(capsys, *flags)
+
+    assert (short["model"], short["deliberation"]) == (FABLE, "high")
+    assert short["explored"] == TRIAL
+    assert (full["model"], full["deliberation"]) == ("claude-opus-5", "high")
+    assert full["explored"] is None
+
+
+def test_rows_at_any_level_count_towards_the_kind_the_trial_is_owed_for(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """A Trial ends on three rows spread across the ladder, one of them at the point tried.
+
+    The count is the model's rows for the kind rather than the cell's, and
+    `Estimate.n` is not it: that reads the deepest group holding anything, so
+    this model, with one row at the level being asked about and two elsewhere,
+    reports one run while the store holds the three that end its Trial. A Trial
+    counted off that figure would never end.
+    """
+
+    _owing(tmp_path)
+    _settled(
+        tmp_path,
+        *[("mechanical", FABLE, level, 1.0, 1) for level in ("high", "low", "medium")],
+    )
+
+    answer = _answer(
+        capsys, *LIMITED, f"--data={tmp_path}", "--kind=mechanical", "--seed=0"
+    )
+    spread = _point(
+        capsys,
+        (*LIMITED, f"--data={tmp_path}", "--kind=mechanical"),
+        FABLE,
+        "high",
+    )
+
+    assert spread["expected"]["runs"] == 1
+    assert (answer["model"], answer["deliberation"]) == ("claude-opus-5", "high")
+    assert answer["explored"] is None
+
+
+def test_a_model_below_the_band_is_left_to_the_downhill_exploration(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """A Trial tries a model that might be the answer, never one that cannot be.
+
+    Two stores holding the same models, differing only in how many good rows
+    the measured point has and therefore in where the bound it draws falls.
+    Sonnet is untested for the kind in both. Where its prior sits above that
+    bound it is owed a Trial; where the bound has risen past its prior it is
+    not, and the call is answered as it would have been without the rule — the
+    road such a model keeps being the downhill exploration, which is cheap by
+    construction.
+    """
+
+    below = tmp_path / "below"
+    above = tmp_path / "above"
+    for data_dir, rows in ((below, 200), (above, 20)):
+        _profile(data_dir)
+        _store(
+            data_dir,
+            ("mechanical", "claude-opus-5", "high", 1.0, rows),
+            ("mechanical", "claude-opus-5", "low", 0.0, 10),
+            ("mechanical", FABLE, "high", 0.0, 3),
+            ("mechanical", HAIKU, None, 0.0, 3),
+        )
+
+    quiet = _answer(
+        capsys, *LIMITED, f"--data={below}", "--kind=mechanical", "--seed=0"
+    )
+    owed = _answer(capsys, *LIMITED, f"--data={above}", "--kind=mechanical", "--seed=0")
+    ranked = _ranking(below, "mechanical")
+    drawn = select._band(ranked)
+    sonnet = next(
+        row for row in ranked if select._named(row.point) == "claude-sonnet-5@high"
+    )
+
+    assert drawn is not None
+    assert sonnet.estimate.mean < drawn[1]
+    assert (quiet["model"], quiet["deliberation"]) == ("claude-opus-5", "high")
+    assert quiet["explored"] is None
+    assert (owed["model"], owed["deliberation"]) == ("claude-sonnet-5", "high")
+    assert owed["explored"] == TRIAL
+
+
+def test_a_kind_with_no_measured_point_owes_no_trial(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """Without a measured point there is no band, and without a band no Trial.
+
+    The ranking already lets an untested point be the plain answer where the
+    pool holds nothing measured for the kind, so there is no door here for a
+    Trial to open.
+    """
+
+    _unmeasured_kind(tmp_path)
+
+    answers = [
+        _answer(
+            capsys,
+            *LIMITED,
+            f"--data={tmp_path}",
+            "--kind=mechanical",
+            f"--seed={seed}",
+        )
+        for seed in range(DRAWS)
+    ]
+
+    assert select._band(_ranking(tmp_path, "mechanical")) is None
+    assert {answer["explored"] for answer in answers} <= {None, *select.DIMENSIONS}
+
+
+def test_a_trial_in_progress_is_taken_before_one_not_yet_begun(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """One model at a time per kind, and the one already part-way is that model.
+
+    Two models are owed here and the ranked list reaches Sonnet's point first,
+    so Sonnet is tried while neither has a row. A single row for Fable makes
+    Fable's the Trial in progress, and it is taken over the earlier-ranked
+    point until its three rows are in — which is what keeps one Trial from
+    becoming three models with one row each.
+    """
+
+    fresh = tmp_path / "fresh"
+    begun = tmp_path / "begun"
+    shared = (
+        ("mechanical", "claude-opus-5", "high", 1.0, 20),
+        ("mechanical", "claude-opus-5", "low", 0.0, 10),
+        ("mechanical", HAIKU, None, 0.0, 3),
+    )
+    for data_dir in (fresh, begun):
+        _profile(data_dir)
+    _store(fresh, *shared)
+    _store(begun, *shared, ("mechanical", FABLE, "high", 1.0, 1))
+
+    neither = _answer(
+        capsys, *LIMITED, f"--data={fresh}", "--kind=mechanical", "--seed=0"
+    )
+    started = _answer(
+        capsys, *LIMITED, f"--data={begun}", "--kind=mechanical", "--seed=0"
+    )
+    again = _answer(
+        capsys, *LIMITED, f"--data={begun}", "--kind=mechanical", "--seed=7"
+    )
+
+    assert (neither["model"], neither["deliberation"]) == ("claude-sonnet-5", "high")
+    assert neither["explored"] == TRIAL
+    assert (started["model"], started["deliberation"]) == (FABLE, "high")
+    assert started["explored"] == TRIAL
+    assert (again["model"], again["deliberation"]) == (FABLE, "high")
+
+
+def test_the_answers_own_model_is_never_the_model_owed_a_trial(
+    tmp_path: Path,
+) -> None:
+    """A Trial is a point tried instead of the answer, so it is never the answer's.
+
+    No pool the ranking produces can put an unmeasured point first while the
+    band is non-empty, so this guard is unreachable through a fixture and is
+    held at the unit level instead: a pool built by hand whose first point is
+    its model's, with no rows behind that model at all, still yields no Trial
+    of it. A note saying the evidence would have chosen the point just chosen
+    would say nothing.
+    """
+
+    evidence = _module("evidence")
+    cat = _module("catalogue").load(tmp_path, SKILL)
+    kinds = evidence.load_kinds(SKILL)
+    estimator = evidence.Estimator([], cat, kinds)
+    by_id = {model.id: model for model in cat.models}
+    first = select.Scored(
+        select.Point(by_id["claude-sonnet-5"], "high"),
+        evidence.Estimate(
+            mean=0.99, low=0.9, n=0.0, basis="prior", alpha=1.0, beta=1.0
+        ),
+        {},
+        1.0,
+        100.0,
+    )
+    beside = _made(by_id["claude-sonnet-5"], "low", mean=0.9, low=0.5, cost=0.5)
+    measured = _made(by_id["claude-opus-5"], "high", mean=0.8, low=0.4, cost=2.0)
+    ranked = [first, beside, measured]
+
+    owed = select._owed(ranked, ranked, "mechanical", estimator)
+
+    assert estimator.rows_for_kind("mechanical", "claude-sonnet-5") == 0
+    assert owed is not None
+    assert owed.point.model.id == "claude-opus-5"
+
+
+@pytest.mark.parametrize(
+    "asked",
+    (
+        ("--stakes=high",),
+        ("--model=claude-sonnet-5",),
+        ("--deliberation=low",),
+        ("--after=claude-opus-5@low",),
+    ),
+)
+def test_the_three_requests_that_are_never_explored_are_never_trials(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str], asked: tuple[str, ...]
+) -> None:
+    """A Trial is an experiment, and the same three requests refuse one.
+
+    High stakes wants the best point the evidence knows of, a lock is an
+    instruction rather than a dimension to vary, and a caller naming the point
+    that just failed is asking for the step up. `_explorable` already says so,
+    and a Trial asks it rather than stating it a second time.
+    """
+
+    _owing(tmp_path)
+
+    answers = [
+        _answer(
+            capsys,
+            *LIMITED,
+            f"--data={tmp_path}",
+            "--kind=mechanical",
+            *asked,
+            f"--seed={seed}",
+        )
+        for seed in range(DRAWS)
+    ]
+
+    assert {answer["explored"] for answer in answers} == {None}
+
+
+def test_a_point_above_the_deliberation_ceiling_is_never_tried(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """The ceiling narrowed the pool, and the Trial's candidates are that pool.
+
+    Asked with no ceiling of its own the Trial takes Fable at `high`; asked
+    under a `medium` ceiling every answer is a point that ceiling admits,
+    because the points above it were never in the pool the call ranked.
+    Nothing in the Trial reads the ceiling to arrive at that.
+    """
+
+    _owing(tmp_path)
+    flags = (*LIMITED, f"--data={tmp_path}", "--kind=mechanical")
+
+    open_call = _answer(capsys, *flags, "--seed=0")
+    capped = [
+        _answer(capsys, *flags, "--max-deliberation=medium", f"--seed={seed}")
+        for seed in range(DRAWS)
+    ]
+
+    assert (open_call["model"], open_call["deliberation"]) == (FABLE, "high")
+    assert open_call["explored"] == TRIAL
+    assert {answer["deliberation"] for answer in capped} <= {None, "low", "medium"}
+    assert TRIAL in {answer["explored"] for answer in capped}
+
+
+def test_a_model_the_ceiling_leaves_no_point_for_is_never_tried(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """A model reaching no level under the ceiling has no point to be tried at.
+
+    It is not excluded from the Trial: it is absent from the pool the Trial's
+    candidates are the points of, which is the same thing arrived at without
+    the rule having to know the ceiling exists.
+    """
+
+    _profile(tmp_path)
+    _refresh(tmp_path, _shaped("test-deep", ["max"]))
+    _settled(tmp_path, ("mechanical", FABLE, "high", 0.0, 3))
+
+    answers = [
+        _answer(
+            capsys,
+            *LIMITED,
+            f"--data={tmp_path}",
+            "--kind=mechanical",
+            EVERY,
+            f"--seed={seed}",
+        )
+        for seed in range(DRAWS)
+    ]
+
+    for answer in answers:
+        assert "test-deep" not in _named_in(answer)
+        assert answer["explored"] != TRIAL
+
+
+def test_a_point_the_pool_never_held_is_never_given_a_trial(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """Every filter on the pool is a filter on the Trial, for free.
+
+    One store asked twice. Where the scope admits the whole catalogue the Trial
+    goes to the earliest-ranked point owed one among it; where the call is held
+    to the maker paying for this turn those points are not in the pool it
+    ranked, nothing left in it is owed a Trial, and none is given.
+    """
+
+    _profile(tmp_path)
+    _settled(tmp_path, ("mechanical", FABLE, "high", 0.0, 3))
+    flags = (f"--data={tmp_path}", "--kind=mechanical", "--harness=claude-code", EVERY)
+
+    wide = _answer(capsys, *flags, "--scope=all", "--seed=0")
+    narrow = [
+        _answer(capsys, *flags, "--scope=limited", f"--seed={seed}")
+        for seed in range(DRAWS)
+    ]
+
+    assert wide["explored"] == TRIAL
+    assert wide["model"] == "grok-4.6"
+    for answer in narrow:
+        assert "grok-4.6" not in _named_in(answer)
+        assert answer["explored"] != TRIAL
+
+
+def test_an_unpriceable_point_is_tried_where_it_is_the_model_owed_a_trial(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """No price cap means a point with no price at all is a candidate like any other.
+
+    The downhill exploration excludes such a point on purpose — an absence read
+    as a nought would make it the cheapest thing on the frontier — but a Trial
+    consults no price, so the one model owed one here is tried although nothing
+    can say what it costs.
+    """
+
+    _refresh(
+        tmp_path,
+        {
+            "id": "test-unpriced",
+            "provider": "anthropic",
+            "family": "unpriced",
+            "aliases": ["unpriced"],
+            "deliberation": ["high"],
+            "price": None,
+            "reasoning_billed_as": "unknown",
+            "capability": 0.99,
+            "released": "2026-09-01",
+        },
+    )
+    _profile(tmp_path)
+    _store(
+        tmp_path,
+        ("implement", "claude-sonnet-5", "high", 1.0, 20),
+        ("implement", FABLE, "high", 0.0, 3),
+    )
+
+    answer = _answer(
+        capsys, *LIMITED, f"--data={tmp_path}", "--kind=implement", EVERY, "--seed=0"
+    )
+
+    assert (answer["model"], answer["deliberation"]) == ("test-unpriced", "high")
+    assert answer["explored"] == TRIAL
+    assert answer["expected"]["cost_usd"] is None
+
+
+def test_while_a_trial_is_owed_every_reversible_call_is_one(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """Three consecutive jobs, rather than three calls in thirty.
+
+    The one-in-ten coin is not tossed at all while a model is owed a Trial, so
+    no seed leaves a plain answer among these; once the store holds that
+    model's three rows the coin comes back and the ordinary mixture of plain
+    and explored answers returns.
+    """
+
+    _owing(tmp_path)
+    flags = (*LIMITED, f"--data={tmp_path}", "--kind=mechanical")
+
+    owed = [_answer(capsys, *flags, f"--seed={seed}") for seed in range(DRAWS)]
+
+    _settled(tmp_path, ("mechanical", FABLE, "high", 1.0, ENOUGH))
+    done = [_answer(capsys, *flags, f"--seed={seed}") for seed in range(DRAWS)]
+
+    assert {answer["explored"] for answer in owed} == {TRIAL}
+    assert [answer for answer in done if answer["explored"] is None]
+    assert {answer["explored"] for answer in done} <= {None, *select.DIMENSIONS}
+
+
+def test_a_trial_says_it_was_one_and_what_the_evidence_would_have_chosen(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """A reader must tell a deliberate Trial from a routing fault at a glance.
+
+    The note names the call as a Trial, names the point being tried and says
+    what the evidence would have chosen — the duty ADR-0184 gives the
+    exploration note — and it never calls `trial` a dimension, a Trial being a
+    point tried instead of the answer rather than one axis of it moved.
+    """
+
+    _owing(tmp_path)
+    tried = _answer(
+        capsys, *LIMITED, f"--data={tmp_path}", "--kind=mechanical", "--seed=0"
+    )
+
+    _boundary(tmp_path)
+    ordinary = [
+        answer
+        for answer in _over_seeds(
+            capsys, (*LIMITED, f"--data={tmp_path}", "--kind=implement")
+        )
+        if answer["explored"] is not None
+    ]
+
+    note = tried["note"] or ""
+    assert tried["explored"] == TRIAL
+    assert TRIAL in note
+    assert f"{FABLE}@high" in note
+    assert "would have chosen" in note
+    assert "claude-opus-5@high" in note
+    assert f"{TRIAL} dimension" not in note
+
+    assert ordinary
+    for answer in ordinary:
+        assert answer["explored"] in select.DIMENSIONS
+        assert f"{answer['explored']} dimension" in (answer["note"] or "")
+
+
+def test_no_trial_owed_leaves_the_exploration_exactly_as_it_was(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """A call owing no Trial draws what it drew before, on every seed.
+
+    `_boundary` holds `ENOUGH` rows for every model in its pool, so nothing
+    there is ever owed a Trial and the generator is untouched. Which seeds
+    explored, which dimension each moved, which point each answered and the
+    whole order of the pool behind it are read against the sweep the module
+    produced before this rule existed.
+    """
+
+    _boundary(tmp_path)
+
+    answers = _over_seeds(
+        capsys, (*LIMITED, f"--data={tmp_path}", "--kind=implement", EVERY)
+    )
+
+    assert {answer["explored"] for answer in answers} <= {None, *select.DIMENSIONS}
+    assert _replayed(answers) == EXPLORATION_AT_BASE
 
 
 def test_a_process_asking_for_an_anthropic_model_is_handed_a_command(

@@ -166,6 +166,10 @@ _Avoid_: vendor, lab, company
 Model Selector's rule leaving a subscription channel out of a machine-chosen answer while the weekly window of the Harness it names is running ahead of the week. It is never a price, an input to the ranking, or a refusal; what it reads, what holds a channel back, and what follows where there is no figure are stated in `docs/rules/routing.md`.
 _Avoid_: rate limit, quota budget, throttle, usage cost
 
+**Trial**:
+The three reversible jobs of one Work Kind that Model Selector gives a model holding too few Measurements of its own for that kind, at whatever they cost, so that it is judged on its own record rather than on a Capability Rank. It is not the bounded exploration beside it, which only ever tries a point cheaper than the answer. When one is owed, which model gets it, which point it is taken at, and what the answer says about it are stated in `docs/rules/routing.md`.
+_Avoid_: experiment, probe, sample, trial run, warm-up, exploration
+
 **Enabled**:
 A Catalog entry the user has chosen in a layer: a Skill present on disk in each Detected Harness's skills directory for that layer, and a Feature what its Harnesses actually hold, it placing no files a layer could be read off. What each is read from is stated in `docs/rules/collection.md` and `docs/rules/skills.md`.
 _Avoid_: active, installed, on, turned on (installed is what the transport does; enabled is the user's choice)
