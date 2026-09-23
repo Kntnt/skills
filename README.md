@@ -148,11 +148,23 @@ Save a web page, and every page and file under it that its links, sitemaps and f
 
 Run `/mirror [--output=<dir>] [--resources=all|in-scope|none] [--max-pages=<n>] [--delay=<seconds>] [--no-links] [--no-sitemap] [--no-feeds] [--ignore-robots] [--include=<regex> ...] [--exclude=<regex> ...] [--header=<name: value> ...] [--user-agent=<string>] [--browser=auto|always|never] [--headed] [--profile=<name>|<path>] [--dry-run] <url>`.
 
+### cloudns
+
+Read and change DNS zones and records at ClouDNS. It reads the zone before it writes, applies each change through the ClouDNS API, reads the zone again to verify it, and reports what changed and what the service answered. It acts as an API sub-user rather than the account's main API user, so it reaches exactly the zones delegated to that sub-user; deletions are made only where you asked for them.
+
+Run `/cloudns setup` once to make the sub-user's credential, which is drawn for you, put on the clipboard for you to paste into the ClouDNS panel, and never shown in the conversation; `/cloudns status` confirms it and lists the zones it reaches. Then run `/cloudns -- <change>`, or let the agent use it for a matching ClouDNS task.
+
 ### hetzner
 
 Provision Hetzner Cloud servers, install software, and deploy or maintain their websites and applications with the official hcloud CLI, cloud-init, and SSH. It follows the project's existing stack and deployment files, reconciles existing resources and interrupted writes, and verifies bootstrap, services, and the requested public endpoint. Application-specific release and recovery routines stay in the project.
 
-Run `/hetzner`, followed by the operation and constraints, or let the agent use it for a matching Hetzner Cloud task. Preparation alone creates no remote resources; billed and destructive changes stay within the established authorization. Robot dedicated servers and Object Storage are outside its scope.
+Run `/hetzner -- <operation>` with the operation and its constraints, or let the agent use it for a matching Hetzner Cloud task. A project is set up once with `/hetzner setup <project>`, after you copy a Read & Write API token from the project's Security page in the Console: the token goes from the clipboard into hcloud's own configuration without entering the conversation, `setup --yes` rotates it, and `/hetzner status` lists every project and what it reaches. `setup` also gives the agents a key of their own, `~/.ssh/kntnt-agent`: a server the Skill creates gets it at creation, and on one that already exists you admit the agents once, as a user `kntnt-agent` with passwordless `sudo`, by the procedure `setup` prints. Preparation alone creates no remote resources; billed and destructive changes stay within the established authorization. Robot dedicated servers and Object Storage are outside its scope.
+
+### nodeping
+
+Read and change uptime monitoring at NodePing — checks, their results and uptime, contacts, contact groups, schedules and notifications — through NodePing's API. It reads what exists before it writes, matches a check by its label and target, verifies each change by reading it again, and deletes nothing without authorization you have given.
+
+Run `/nodeping setup` once to store your API token, copied to the clipboard from NodePing's panel so it never passes through the conversation, and `/nodeping status` to check it. Then run `/nodeping -- <instruction>` with what you want done, or let the agent use it for a matching NodePing task.
 
 ### postmark
 
@@ -180,7 +192,11 @@ A two-line Claude Code status line: path, worktree marker, branch, working-tree 
 
 Every skill requires `uv` and the manager: the manager ships the engine that reads a skill's invocation, and `uv` runs it.
 
-`hetzner` can prepare deployment files without remote tools; Cloud operations additionally need hcloud, network access, and a project token, and host operations need OpenSSH and server access.
+`hetzner` can prepare deployment files without remote tools; Cloud operations additionally need hcloud, network access, and a project token, `setup` needs `ssh-keygen` and a clipboard tool, and host operations need OpenSSH and server access.
+
+`nodeping` needs network access and a NodePing API token, which `/nodeping setup` stores from the clipboard in `~/.kntnt/nodeping/credentials.json`; the token is the whole account's, since NodePing issues no narrower one.
+
+`cloudns` needs network access and a ClouDNS API sub-user, which `/cloudns setup` makes the credential for; its `setup` also needs a clipboard tool, such as `pbcopy` on macOS or `wl-copy`, `xclip` or `xsel` on Linux.
 
 `postmark` needs network access and Postmark tokens for anything it does at Postmark: the account token for servers, domains, sender signatures and data removals, and a server token for each server it sends from or manages. `setup` stores them in `~/.kntnt/postmark/credentials.json` through the clipboard.
 
