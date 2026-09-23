@@ -27,6 +27,14 @@ The reason is that a process outlives its own working directory. A directory is 
 
 Pick the directory the call actually needs, and prefer one nothing in the run can remove: the Manager's two integration seams run a Skill's declared script from `home()`, which is what Global paths resolve against and what no verb of this collection deletes. Where a resolution can fail — `Path.home()` raises `RuntimeError` on a machine with no home — the failure joins whatever the call already reports rather than becoming a new way for it to raise.
 
+### Tests and the clock
+
+A fixture frozen at a constant and a reader on the real clock cannot both be right, and the one that ages is the one that eventually fails. So a fixture whose freshness the code under test judges takes the instant its reader will call now, rather than assuming the constant the rest of the module is frozen at — defaulted to that constant, so every test that injects the same instant is unaffected, and passed the real clock by whichever test does not.
+
+The reason is that such a test passes for exactly as long as the staleness rule allows and then fails on every run afterwards, with nothing in the diff to explain it. `tests/test_ms_quota.py` froze one instant and wrote the status line's quota reading sixty seconds before it; every test that injected that same instant stayed correct, while the one test that ran the reader as a subprocess took its now from the real clock and, a day later, read a fixture the reader's own `STALE_SECONDS` called stale. It had passed for a day and failed for every run after, on a branch and on `main` alike, and each session that met it cold met it as a mystery (issue #412).
+
+The same reading applies to the diagnosis: where a suite goes red with nothing in the change to account for it, look for a value frozen at a constant and a reader that is not.
+
 ### Doc comments
 
 Docstrings on every module, class, and public function. Document the contract and the why; type hints show the shape. Pick a docstring convention (Google or NumPy style) per project, stay consistent. Use `Args:` / `Returns:` / `Raises:` where they add real value.
