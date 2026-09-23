@@ -161,6 +161,10 @@ STATE_HOME: str = "kntnt-orchestrate"
 ROUTING_FILE: str = "kntnt-orchestrate-routing.json"
 ATTEMPTS_FILE: str = "kntnt-orchestrate-attempts.json"
 
+# Where the run keeps the gate readings it has taken of a contributing guide,
+# one per distinct guide text, beside the rest of its session account.
+GATE_FILE: str = "kntnt-orchestrate-gate.json"
+
 # A stand-in for `uv run`, answering model-selector's two machine entry points
 # from files the test wrote and running everything else for real. The engine
 # reaches that Skill the way it reaches `gh` — by starting a process — so this
@@ -1281,6 +1285,339 @@ def test_flake_refuses_conflicting_evidence_for_the_same_failure(
     assert len((home / FLAKE_LEDGER).read_text(encoding="utf-8").splitlines()) == 1
 
 
+# The contributing guide a gate reading is taken from in these fixtures, and
+# the type-check line tickets edit in it. The line is what went wrong on
+# 2026-09-23: each ticket of a wave added its own module to one shared line.
+GUIDE = "CONTRIBUTING.md"
+
+
+def _guide(tree: Path, *modules: str) -> str:
+    """Write a guide whose type-check line names *modules*, and return that line."""
+
+    line = f"uvx mypy {' '.join(modules)}"
+    (tree / GUIDE).write_text(
+        f"# Contributing\n\nRun these:\n\n```\nuvx ruff check .\n```\n```\n{line}\n```\n",
+        encoding="utf-8",
+    )
+    return line
+
+
+def _commit_guide(tree: Path, *modules: str) -> str:
+    """Commit a guide naming *modules* in *tree*, and return its type-check line."""
+
+    line = _guide(tree, *modules)
+    _git(tree, "add", GUIDE)
+    _git(tree, "commit", "-m", f"type-check {' '.join(modules)}")
+    return line
+
+
+def _gate(
+    repo: Path, scratch: Path, *args: str, env: dict[str, str] | None = None
+) -> dict[str, Any]:
+    """Ask the engine for a tree's gate and return its answer."""
+
+    result = _engine(repo, "gate", *args, "--state-dir", str(scratch), env=env)
+    assert result.returncode == 0, result.stderr
+    return cast(dict[str, Any], json.loads(result.stdout))
+
+
+def _record_gate(
+    repo: Path,
+    scratch: Path,
+    commands: list[str],
+    *keys: str,
+    ticket: int | None = None,
+    guide: str | None = GUIDE,
+) -> dict[str, Any]:
+    """Record *commands* as the reading of the guide under each of *keys*."""
+
+    reading = (
+        scratch.parent / f"reading-{len(list(scratch.parent.glob('reading-*')))}.json"
+    )
+    reading.write_text(json.dumps(commands), encoding="utf-8")
+    named = ("--ticket", str(ticket)) if ticket is not None else ()
+    where = ("--guide", guide) if guide is not None else ("--no-guide",)
+    unders = [part for key in keys for part in ("--under", key)]
+    return _gate(repo, scratch, *named, *where, *unders, "--commands", str(reading))
+
+
+def test_gate_trees_whose_guides_are_byte_identical_share_one_reading(
+    tmp_path: Path,
+) -> None:
+    """A guide read once is read once, however many trees carry it unchanged.
+
+    That is the half of issue #80 the per-tree gate keeps: nine readings of one
+    guide in one wave was the defect, so a wave in which no ticket touches the
+    guide reads it once (issue #421).
+    """
+
+    repo = _init_repo(tmp_path / "proj")
+    scratch = tmp_path / "scratch"
+    line = _commit_guide(repo, "a.py")
+    for number in (7, 8):
+        assert _engine(repo, "isolate", "--ticket", str(number)).returncode == 0
+
+    first = _gate(repo, scratch, "--guide", GUIDE)
+    blob = _git(repo, "rev-parse", f"HEAD:{GUIDE}").stdout.strip()
+    assert first["guide"] == GUIDE
+    assert first["tree"]["blob"] == blob and first["tree"]["key"] == blob
+    assert first["tree"]["reading"] is None
+    _record_gate(repo, scratch, ["uvx ruff check .", line], blob)
+
+    for number in (7, 8):
+        answer = _gate(repo, scratch, "--ticket", str(number))
+        assert answer["tree"]["key"] == blob
+        assert answer["tree"]["reading"] == ["uvx ruff check .", line]
+    readings = json.loads((scratch / STATE_HOME / GATE_FILE).read_text())["readings"]
+    assert list(readings) == [blob]
+
+
+def test_gate_for_a_ticket_reads_its_own_working_tree_and_not_the_run_branch(
+    tmp_path: Path,
+) -> None:
+    """The 2026-09-23 case: a sibling's module is not a ticket forked before it.
+
+    #410's tree was forked before #408 merged and added a module to the
+    guide's type-check line; a gate read off the run branch named a file the
+    tree did not have, and mypy refused it. Read off the ticket's own tree,
+    the forked ticket's gate names no sibling's module, and the ticket that
+    added a module of its own is held to the line it wrote (issue #421).
+    """
+
+    repo = _init_repo(tmp_path / "proj")
+    scratch = tmp_path / "scratch"
+    before = _commit_guide(repo, "a.py")
+    forked = Path(
+        json.loads(_engine(repo, "isolate", "--ticket", "7").stdout)["worktree"]
+    )
+    adding = Path(
+        json.loads(_engine(repo, "isolate", "--ticket", "9").stdout)["worktree"]
+    )
+    own = _commit_guide(adding, "a.py", "c.py")
+    sibling = _commit_guide(repo, "a.py", "b.py")
+
+    run = _gate(repo, scratch, "--guide", GUIDE)
+    _record_gate(repo, scratch, [sibling], run["tree"]["key"])
+    early = _gate(repo, scratch, "--ticket", "7")
+    late = _gate(repo, scratch, "--ticket", "9")
+
+    assert early["tree"]["worktree"] == str(forked)
+    assert early["tree"]["commit"] == _git(forked, "rev-parse", "HEAD").stdout.strip()
+    assert early["tree"]["key"] != run["tree"]["key"]
+    assert early["tree"]["reading"] is None
+    assert late["tree"]["worktree"] == str(adding)
+    assert late["tree"]["key"] not in (run["tree"]["key"], early["tree"]["key"])
+
+    _record_gate(repo, scratch, [before], early["tree"]["key"], ticket=7)
+    _record_gate(repo, scratch, [own], late["tree"]["key"], ticket=9)
+
+    early_gate = _gate(repo, scratch, "--ticket", "7")["tree"]["reading"]
+    late_gate = _gate(repo, scratch, "--ticket", "9")["tree"]["reading"]
+    assert early_gate == [before] and not any("b.py" in c for c in early_gate)
+    assert late_gate == [own] and any("c.py" in c for c in late_gate)
+    assert not any("b.py" in c for c in late_gate)
+
+
+def test_gate_for_a_ticket_answers_its_base_beside_its_tree(tmp_path: Path) -> None:
+    """The base is where the ticket's branch and the run branch last agreed.
+
+    A verifier compares the tree's gate with its base's to see a command the
+    ticket dropped or narrowed, so the engine names the base rather than the
+    orchestrator picking one; after the run branch is merged in, as a
+    collision repair does, the base is the run head that merge brought in
+    (issue #421).
+    """
+
+    repo = _init_repo(tmp_path / "proj")
+    scratch = tmp_path / "scratch"
+    before = _commit_guide(repo, "a.py")
+    fork = _git(repo, "rev-parse", "HEAD").stdout.strip()
+    tree = Path(
+        json.loads(_engine(repo, "isolate", "--ticket", "9").stdout)["worktree"]
+    )
+    own = _commit_guide(tree, "a.py", "c.py")
+    sibling = _commit_guide(repo, "a.py", "b.py")
+
+    answer = _gate(repo, scratch, "--ticket", "9", "--guide", GUIDE)
+    base_blob = _git(repo, "rev-parse", f"{fork}:{GUIDE}").stdout.strip()
+    assert answer["base"]["commit"] == fork
+    assert answer["base"]["blob"] == base_blob and answer["base"]["key"] == base_blob
+    assert answer["base"]["reading"] is None
+
+    _record_gate(repo, scratch, [before], base_blob, ticket=9)
+    _record_gate(repo, scratch, [own], answer["tree"]["key"], ticket=9)
+    answer = _gate(repo, scratch, "--ticket", "9")
+    assert answer["base"]["reading"] == [before]
+    assert answer["tree"]["reading"] == [own]
+
+    # A repair merges the run branch into the ticket's tree.
+    _git(tree, "merge", "work", "-X", "ours", "-m", "repair")
+    run_head = _git(repo, "rev-parse", "HEAD").stdout.strip()
+    repaired = _gate(repo, scratch, "--ticket", "9")
+    assert repaired["base"]["commit"] == run_head
+    assert (
+        repaired["base"]["blob"]
+        == _git(repo, "rev-parse", f"HEAD:{GUIDE}").stdout.strip()
+    )
+    assert sibling not in (repaired["tree"]["reading"] or [])
+
+
+def test_gate_readings_survive_a_resumed_invocation_on_the_same_state_directory(
+    tmp_path: Path,
+) -> None:
+    """A reading is remembered with the run, not with the process that took it."""
+
+    repo = _init_repo(tmp_path / "proj")
+    scratch = tmp_path / "scratch"
+    line = _commit_guide(repo, "a.py")
+    blob = _gate(repo, scratch, "--guide", GUIDE)["tree"]["key"]
+    _record_gate(repo, scratch, [line], blob)
+
+    resumed = _gate(repo, scratch)
+    elsewhere = _gate(repo, tmp_path / "another", "--guide", GUIDE)
+
+    assert resumed["guide"] == GUIDE
+    assert resumed["tree"]["reading"] == [line]
+    assert elsewhere["tree"]["reading"] is None
+
+
+def test_gate_for_a_serial_ticket_reads_the_branch_and_its_episode_start(
+    tmp_path: Path,
+) -> None:
+    """At a ceiling of one the ticket's tree is the run branch itself.
+
+    Its base is the start point its build episode was opened at, which the
+    engine already records before a serial builder is dispatched (issue #421).
+    """
+
+    repo = _init_repo(tmp_path / "proj")
+    scratch = tmp_path / "scratch"
+    _commit_guide(repo, "a.py")
+    start = _git(repo, "rev-parse", "HEAD").stdout.strip()
+    _git(repo, "update-ref", "refs/kntnt-orchestrate/episode/work/9/1", start)
+    _commit_guide(repo, "a.py", "c.py")
+
+    answer = _gate(repo, scratch, "--ticket", "9", "--guide", GUIDE)
+
+    assert answer["tree"]["commit"] == _git(repo, "rev-parse", "HEAD").stdout.strip()
+    assert answer["tree"]["branch"] == "work"
+    assert answer["base"]["commit"] == start
+    assert (
+        answer["base"]["key"]
+        == _git(repo, "rev-parse", f"{start}:{GUIDE}").stdout.strip()
+    )
+
+
+def test_gate_refuses_a_ticket_with_no_tree_to_read(tmp_path: Path) -> None:
+    """No open working tree and no serial episode: there is no tree to name."""
+
+    repo = _init_repo(tmp_path / "proj")
+    scratch = tmp_path / "scratch"
+    _commit_guide(repo, "a.py")
+
+    result = _engine(
+        repo, "gate", "--ticket", "9", "--guide", GUIDE, "--state-dir", str(scratch)
+    )
+
+    assert result.returncode != 0
+    assert "#9" in result.stderr
+
+
+def test_gate_with_no_guide_keys_its_reading_on_the_trees_commit(
+    tmp_path: Path,
+) -> None:
+    """With no guide there is no blob, so the commit the tree stands at is the key."""
+
+    repo = _init_repo(tmp_path / "proj")
+    scratch = tmp_path / "scratch"
+    head = _git(repo, "rev-parse", "HEAD").stdout.strip()
+
+    answer = _gate(repo, scratch, "--no-guide")
+    assert answer["guide"] is None
+    assert answer["tree"]["blob"] is None and answer["tree"]["key"] == head
+    _record_gate(repo, scratch, ["uv run pytest"], head, guide=None)
+
+    assert _gate(repo, scratch)["tree"]["reading"] == ["uv run pytest"]
+    (repo / "x.py").write_text("x = 1\n", encoding="utf-8")
+    _git(repo, "add", "x.py")
+    _git(repo, "commit", "-m", "move on")
+    assert _gate(repo, scratch)["tree"]["reading"] is None
+
+
+def test_gate_refuses_to_record_under_a_key_that_is_not_the_trees_or_its_bases(
+    tmp_path: Path,
+) -> None:
+    """The engine picks the tree; a reading recorded under another key is refused."""
+
+    repo = _init_repo(tmp_path / "proj")
+    scratch = tmp_path / "scratch"
+    _commit_guide(repo, "a.py")
+    stranger = _git(repo, "rev-parse", "HEAD~1").stdout.strip()
+    reading = tmp_path / "reading.json"
+    reading.write_text(json.dumps(["uv run pytest"]), encoding="utf-8")
+
+    result = _engine(
+        repo,
+        "gate",
+        "--guide",
+        GUIDE,
+        "--under",
+        stranger,
+        "--commands",
+        str(reading),
+        "--state-dir",
+        str(scratch),
+    )
+
+    assert result.returncode != 0
+    assert "neither this tree's guide nor its base's" in result.stderr
+    assert not (scratch / STATE_HOME / GATE_FILE).exists()
+
+
+def test_gate_refuses_a_second_different_reading_of_the_same_guide(
+    tmp_path: Path,
+) -> None:
+    """A byte-identical guide reuses its reading verbatim, so a rival is refused."""
+
+    repo = _init_repo(tmp_path / "proj")
+    scratch = tmp_path / "scratch"
+    line = _commit_guide(repo, "a.py")
+    blob = _gate(repo, scratch, "--guide", GUIDE)["tree"]["key"]
+    _record_gate(repo, scratch, [line], blob)
+    _record_gate(repo, scratch, [line], blob)
+    rival = tmp_path / "rival.json"
+    rival.write_text(json.dumps([line, "make lint"]), encoding="utf-8")
+
+    result = _engine(
+        repo,
+        "gate",
+        "--guide",
+        GUIDE,
+        "--under",
+        blob,
+        "--commands",
+        str(rival),
+        "--state-dir",
+        str(scratch),
+    )
+
+    assert result.returncode != 0
+    assert "already carries a different reading" in result.stderr
+    assert _gate(repo, scratch)["tree"]["reading"] == [line]
+
+
+def test_gate_asks_for_the_guide_before_any_is_recorded(tmp_path: Path) -> None:
+    """Finding the guide is a reading of prose, so the engine is told it."""
+
+    repo = _init_repo(tmp_path / "proj")
+    scratch = tmp_path / "scratch"
+
+    result = _engine(repo, "gate", "--state-dir", str(scratch))
+
+    assert result.returncode != 0
+    assert "--guide" in result.stderr and "--no-guide" in result.stderr
+
+
 def test_every_verb_accepts_yes(tmp_path: Path) -> None:
     """ADR-0029: the flag reaches every verb, including those that ask nothing."""
 
@@ -1300,6 +1637,7 @@ def test_every_verb_accepts_yes(tmp_path: Path) -> None:
         ("park", "--ticket", "9", "--yes"),
         ("record", "--ticket", "9", "--outcome", "done", "--commit", head, "--yes"),
         ("report", "--yes"),
+        ("gate", "--no-guide", "--yes"),
     ):
         result = _engine(repo, *args, "--state-dir", str(scratch), env=env)
         assert result.returncode == 0, f"{args}: {result.stderr}"
