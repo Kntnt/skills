@@ -12,7 +12,7 @@ cloudns setup - make or rotate the ClouDNS sub-user credential
 
 `setup` draws a new password, writes it with the sub-user's name to the Credential File, and puts the password on the clipboard. It never shows the password.
 
-It then tells you what only you can do, in this order: in the ClouDNS panel under **API & Resellers → API Sub-Users → Add new sub-user**, create a sub-user with that name; paste the password from the clipboard as its **auth-password**; set **DNS zones** to at least the number of zones the agent will manage, and **DNS records** likewise; choose **Access level: Read and write**; and leave **IP address** blank or restrict it, as you decide. Separately, delegate each zone the agent may touch to that sub-user, from the zone's own management in the panel.
+It then tells you what only you can do, in this order: in the ClouDNS panel under **API & Resellers → API Sub-Users → Add new sub-user**, create a sub-user with that name; paste the password from the clipboard as its **auth-password**; set **DNS zones** to at least the number of zones the agent will manage, leaving room for the new zones you will want it to create as well as the ones you delegate, since that number is the quota it creates zones within, and **DNS records** likewise; choose **Access level: Read and write**; and leave **IP address** blank or restrict it, as you decide. Separately, delegate to that sub-user each zone that already exists at ClouDNS and that the agent may touch, from the zone's own management in the panel; a zone the agent creates is the sub-user's own and needs no delegation.
 
 Run `/cloudns status` afterwards: it confirms that ClouDNS accepts the credential and lists the zones that actually came through, which are the zones the Skill may touch.
 
@@ -72,7 +72,7 @@ The Manager must be Enabled so the invocation can be read and the credential wri
 
 **Services**
 
-Remote operations need network access and a ClouDNS API sub-user with the zones it may touch delegated to it. `setup` also needs a clipboard tool — `pbcopy` on macOS, `wl-copy`, `xclip` or `xsel` on Linux, `clip` on Windows — or a Credential File written by hand. Help and `setup`'s file writing reach no network.
+Remote operations need network access and a ClouDNS API sub-user with the existing zones it may touch delegated to it, and a **DNS zones** quota with room for the zones it is to create. `setup` also needs a clipboard tool — `pbcopy` on macOS, `wl-copy`, `xclip` or `xsel` on Linux, `clip` on Windows — or a Credential File written by hand. Help and `setup`'s file writing reach no network.
 
 ## SEE ALSO
 

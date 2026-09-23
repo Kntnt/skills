@@ -27,6 +27,26 @@ The parameter tables on the add, modify and delete pages name the record type `t
 
 The answer is an array of zones, each carrying its `name`. Start at `page=1` with `rows-per-page=100`; a full page may have another after it, and a shorter one is the last. `search=<name>` narrows the list to matching zones.
 
+## Adding a zone: `dns/register.json`
+
+The Skill calls it as `dns/register.json domain-name=<zone> zone-type=master`. Its page is [article 48](https://www.cloudns.net/wiki/article/48/), and besides the credential, which the engine adds, it gives these parameters:
+
+- `domain-name`, required: the zone's name, "Domain name or reverse zone name".
+- `zone-type`, required: one of `master`, `slave`, `parked` and `geodns`. The Skill sends `master` only. A reverse zone is a `master` zone named under `.in-addr.arpa` or `.ip6.arpa`.
+- `ns`, optional and for master zones only: an array of nameservers for the zone's starting NS records. Given, it stops ClouDNS adding its default NS records. The Skill passes none, because those defaults are the nameservers it reports for the user to enter at their registrar, read with `dns/records.json domain-name=<zone>` once the zone exists.
+- `master-ip`, optional and for slave zones only.
+
+The path's last segment does not begin with `delete`, so the engine sends the call without `--yes`.
+
+A failure is reported in band. Two of the page's own examples are:
+
+```
+{"status":"Failed","statusDescription":"domain.tld has been already added."}
+{"status":"Failed","statusDescription":"xxxx is invalid domain name."}
+```
+
+The first is a zone that already exists in the ClouDNS system, and so one this sub-user was never given. The page publishes no text for the sub-user's **DNS zones** quota being used up or for the account plan's own zone limit being reached, and both fail in band too, so relay whatever `statusDescription` comes back rather than expecting a known string.
+
 ## Listing records: `dns/records.json`
 
 `domain-name=<zone>` alone lists every record in the zone. `host=<host>` narrows it to one host, and `type=<type>` to one type.
@@ -51,6 +71,6 @@ It takes `domain-name`, `record-id`, `host`, `record` and `ttl`, plus the type-s
 
 ## Sub-users and delegation
 
-A sub-user is created in the panel under **API & Resellers → API Sub-Users → Add new sub-user** ([article 42](https://www.cloudns.net/wiki/article/42/)), or through the API ([article 115](https://www.cloudns.net/wiki/article/115/)); [article 114](https://www.cloudns.net/wiki/article/114/) is the overview. The **DNS zones** field on that form is a quota — how many zones the sub-user may create — and not a list of the zones it reaches.
+A sub-user is created in the panel under **API & Resellers → API Sub-Users → Add new sub-user** ([article 42](https://www.cloudns.net/wiki/article/42/)), or through the API ([article 115](https://www.cloudns.net/wiki/article/115/)); [article 114](https://www.cloudns.net/wiki/article/114/) is the overview. The **DNS zones** field on that form is a quota — how many zones the sub-user may create — and not a list of the zones it reaches. That quota is what bounds zone creation with `dns/register.json`, and a zone the sub-user creates is one it then lists and changes as it does a delegated one. [Article 248](https://www.cloudns.net/wiki/article/248/) says what counts as a zone toward a zone limit.
 
-A zone is delegated to a sub-user separately, in the panel from the zone's own management, or through `sub-users/delegate-zone.json` ([article 126](https://www.cloudns.net/wiki/article/126/)), which takes the main API user's `auth-id` and `auth-password`, the sub-user's `id` and a `zone`. This Skill holds only the sub-user's credential, so delegation is the user's step, and `status` is how the result is seen.
+A zone that already exists in the account is delegated to a sub-user separately, in the panel from the zone's own management, or through `sub-users/delegate-zone.json` ([article 126](https://www.cloudns.net/wiki/article/126/)), which takes the main API user's `auth-id` and `auth-password`, the sub-user's `id` and a `zone`. This Skill holds only the sub-user's credential, so delegation is the user's step, and `status` is how the result is seen.
