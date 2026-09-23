@@ -278,7 +278,10 @@ the repair.
   and what stands behind it is the contract prose in
   `skills/editorial/redline/SKILL.md` and the assertion in `tests/test_kntnt.py`
   that the prose is there. It is stated as unmet here rather than read out of a
-  run that did something else.
+  run that did something else. It is settled all the same, as carried by the
+  contract rather than by a run: *How the unmet clause was settled* below says
+  who settled it, on what ground, and where the behaviour no preserved run
+  reached is filed — [#413](https://github.com/Kntnt/skills/issues/413).
 - **The fix suppresses the case the evidence wants.** The shipped correction
   brief now tells the subagent what a defect of its own costs it — *the text you
   received is restored entire, nothing you did survives* — and a round that has
@@ -312,3 +315,45 @@ the repair.
   in [its trace index](runs/column-flawed/trace-index.json) and how
   `harness/rounds.py` reads each round's starting state; nothing is inferred
   about a message the trace does not carry.
+
+## How the unmet clause was settled
+
+The clause the first limit above names — where the round that introduced a
+defect is not the last, the state immediately before that round is restored and
+every state built on it discarded — is **settled as carried by the contract
+rather than by a run**. The unattended run working this ticket put the question
+to Thomas after two independent verifications had each established that no
+preserved run reaches the clause, and his answer is recorded in [a comment on
+#389 of 2026-09-23](https://github.com/Kntnt/skills/issues/389#issuecomment-5790182797):
+the clause is met by the contract prose in `skills/editorial/redline/SKILL.md`
+and the test that holds that prose in place, and is not required to be
+demonstrated by a native run, because no run can be made to demonstrate it.
+
+The ground is the one *Why no correction return was controlled* states above of
+the harness, said of the clause instead. Reaching the clause needs a re-review
+that misses what a later re-review catches, and, in that comment's words, "the
+re-review is the Redline run's own parent agent rather than a delegated
+subagent, so criterion 7's sanctioned controlled correction return cannot reach
+it: there is no party to intercept." Thirty-one runs across seven frozen waves,
+eight of them reaching a second round, produced five rejections and every one of
+them at round 1.
+
+Nothing else is relaxed by this. The rule itself is unchanged: a defect
+established after a later round still restores the state immediately before the
+round that introduced it and discards every state built on it. The mixed-round
+half of the same criterion stands as an observed result, and every other
+criterion stands as written and as measured in the sections above. What changed
+is only what counts as evidence for this one clause.
+
+The behaviour no preserved run reached is filed as
+[#413](https://github.com/Kntnt/skills/issues/413) with `needs-triage`, naming
+this ticket, so that a future evaluation with a way to observe a late-established
+repair-created defect can pick it up. That issue states what the behaviour is,
+what the contract says happens, why no run reached it, and what an evaluation
+would need in order to reach it.
+
+Nothing in this packet was edited to fit the settlement. The limit above still
+says the clause is unmet by any preserved run, because it is; every wave's
+frozen plan and every run directory stands as it was; and
+[`attempt-1/`](attempt-1/README.md) is kept, because the record of what was
+attempted is itself the evidence that the clause is unstageable from outside.
