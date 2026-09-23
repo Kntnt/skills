@@ -84,7 +84,7 @@ An invalid form is refused rather than repaired or ignored. The Skill names the 
 
 Refusals include unknown, missing, repeated, or out-of-order input; unsupported resources; invalid budgets; multiple texts; incompatible output options; unsafe in-place sources; and unwritable destinations. This is the whole of what is refused over the form of an invocation.
 
-Other stops are documented with the value they concern and under `## INVOCATION ENVELOPE`.
+Other stops are documented with the value they concern, under `## INVOCATION ENVELOPE`, and under `## DEPENDENCIES`.
 
 A valid text is reviewed even when it is a brief, outline, or notes. Its incompleteness becomes a finding, not a refusal.
 
