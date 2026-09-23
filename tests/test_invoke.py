@@ -1216,6 +1216,25 @@ SHIPPED_CASES: dict[str, list[Case]] = {
         ("--dry-run", {"operands": ["--dry-run"]}),
         ("--  ", None),
     ],
+    "infrastructure/nodeping": [
+        ("", {"path": [], "flags": {}, "operands": [], "instruction": None}),
+        (
+            "-- add a check for kntnt.se",
+            {"path": [], "operands": [], "instruction": "add a check for kntnt.se"},
+        ),
+        ("add a check for kntnt.se", None),
+        ("setup", {"path": ["setup"], "flags": {}, "operands": []}),
+        ("setup --yes", {"path": ["setup"], "flags": {"--yes": True}}),
+        ("status", {"path": ["status"], "flags": {}, "operands": []}),
+        (
+            "status -- only the account name",
+            {"path": ["status"], "instruction": "only the account name"},
+        ),
+        ("setup extra", None),
+        ("status --yes", None),
+        ("--yes", None),
+        ("--bogus", None),
+    ],
     "web/mirror": [
         ("https://x.se/", {"flags": {}, "operands": ["https://x.se/"]}),
         (
