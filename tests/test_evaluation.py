@@ -178,6 +178,26 @@ MATRIX = CORPUS / "editorial-quality" / "README.md"
 TRACE_HEADING = "## The trace a criterion is answered from"
 CLEAN_CONTROL_HEADING = "## A clean control"
 
+# The protocol's opening section, which says what an evaluation can and cannot
+# be held to, and the section that follows it. The record of the rejection
+# clause no run has reached goes inside the first, under no heading of its own
+# (issue #413).
+EVALUATION_HEADING = "## What an evaluation is"
+BLINDED_HEADING = "## Blinded semantic judging"
+
+# The clause of Redline's and Unslop's rejection rule that no native run has
+# reached, worded as both Skills' correction step words it, and the regression
+# packet whose runs establish that it is unreached.
+REVIEWING_SKILLS = (
+    REPO_ROOT / "skills" / "editorial" / "redline" / "SKILL.md",
+    REPO_ROOT / "skills" / "editorial" / "unslop" / "SKILL.md",
+)
+UNREACHED_CLAUSE = (
+    "where the round that introduced it is not the last, restore the state"
+    " immediately before that round and discard every state built on it"
+)
+UNREACHED_EVIDENCE = "regressions/389/README.md"
+
 # How the clean-control rule takes the five rejections one at a time: the
 # rejection in bold, as the protocol's own list names it, then whether a
 # no-change reply to a response target can be held to it.
@@ -743,6 +763,82 @@ def test_an_arc_fixture_names_the_genre_that_settles_its_technique() -> None:
         assert _genre_technique(genre) != "none", (
             f"{name}: the {genre} genre supplies no technique, so the fixture"
             f" stages nothing at the level of the resolution order it claims."
+        )
+
+
+def test_the_protocol_records_the_rejection_clause_no_run_has_reached() -> None:
+    """A limit left in a closed ticket's thread is one the next evaluator meets cold.
+
+    Redline's and Unslop's rejection rule has a clause for a defect a later
+    re-review establishes against an earlier round, and no native run has
+    reached it: thirty-one runs made for #389 rejected five rounds, each at
+    round 1. Both routes to staging it are refused, so the clause is carried by
+    the contract prose and the test that holds it in place. The protocol states
+    the limit where whoever stages the next evaluation reads it, says what
+    would reopen the question, and points at the preserved runs rather than
+    restating them (issue #413).
+    """
+
+    # Read the protocol's top-level sections and the one the record goes in.
+    protocol = _protocol()
+    headings = re.findall(r"^## .+$", protocol, re.MULTILINE)
+    section = _section(protocol, EVALUATION_HEADING)
+    lowered = section.lower()
+
+    # Require the record inside the opening section, after what that section
+    # already says and under no heading of its own.
+    following = headings[headings.index(EVALUATION_HEADING) + 1]
+    assert following == BLINDED_HEADING, (
+        f"{PROTOCOL}: `{following}` follows `{EVALUATION_HEADING}`, so the"
+        f" record of the unreached clause sits under a heading of its own."
+    )
+    assert not re.search(r"^#{3,} ", section, re.MULTILINE), (
+        f"{PROTOCOL}: `{EVALUATION_HEADING}` carries a subheading, so the"
+        f" record of the unreached clause sits under a heading of its own."
+    )
+    assert UNREACHED_CLAUSE in section, (
+        f"{PROTOCOL}: `{EVALUATION_HEADING}` does not name the clause of the"
+        f" rejection rule no run has reached, so the next evaluation stages a"
+        f" wave to reach it or reads a run as having reached it."
+    )
+    assert section.index(UNREACHED_CLAUSE) > section.index("editing the corpus"), (
+        f"{PROTOCOL}: the record of the unreached clause comes before what"
+        f" `{EVALUATION_HEADING}` already says an evaluation is."
+    )
+
+    # Require the clause named to be the one both reviewing Skills carry.
+    for skill in REVIEWING_SKILLS:
+        assert UNREACHED_CLAUSE in skill.read_text(encoding="utf-8"), (
+            f"{skill}: the correction step no longer carries the clause the"
+            f" protocol records as unreached, so the record names a rule that"
+            f" is not there."
+        )
+
+    # Require the runs that establish the clause as unreached, and a pointer
+    # to the packet that holds them in place of a restatement.
+    assert f"({UNREACHED_EVIDENCE})" in section, (
+        f"{PROTOCOL}: the record does not point at `{UNREACHED_EVIDENCE}`,"
+        f" so the runs it rests on have to be restated or found by hand."
+    )
+    assert (EVALUATION / UNREACHED_EVIDENCE).is_file()
+    for evidence in (
+        "thirty-one",
+        "round-1 starting state",
+        "`checks/rounds.json`",
+        "not why",
+    ):
+        assert evidence in lowered, (
+            f"{PROTOCOL}: the record does not carry {evidence!r}, so what"
+            f" establishes the clause as unreached is left unstated."
+        )
+
+    # Require both routes to it refused in the terms the refusal turns on,
+    # and what would reopen the question.
+    for evidence in ("controlled setup", "unprompted reproduction", "reopen"):
+        assert evidence in lowered, (
+            f"{PROTOCOL}: the record does not carry {evidence!r}, so an"
+            f" evaluation that arranges the miss can still be read as"
+            f" evidence that the Skill misses."
         )
 
 
