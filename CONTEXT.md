@@ -14,6 +14,10 @@ _Avoid_: package, plugin, marketplace, bundle
 The shared references and scripts shipped inside the Manager and available to every Collection Skill and Feature. It is not a Skill, a Catalog entry, or something the user Enables separately.
 _Avoid_: shared skill, utility skill, support skill
 
+**Credential File**:
+The file at `~/.kntnt/<skill>/credentials.json` holding an outside service's credential for the Skill its directory names, as a flat JSON object of strings readable by its owner alone. It is filled through the clipboard so that no credential passes through a conversation, and it is not the store a tool the Skill drives keeps for itself. What a Skill holding one owes, and how its engine reads it, is stated in `docs/rules/skills.md`.
+_Avoid_: secret store, keychain, token file, `.env`
+
 **Category**:
 A folder under `skills/` in the collection repository that groups related skills. It is not part of the skill name and cannot be Enabled as a set; what Select does with a Category is stated in `docs/rules/collection.md`.
 _Avoid_: namespace, group, tag, section
