@@ -111,6 +111,7 @@ CODE_WRITING_RULES = {
     "the waiting rule (issue #75, issue #151)": "**A long command is waited on, not yielded to.**",
     "the confinement rule (ADR-0071)": "**Where you write.**",
     "the leftover rule (ADR-0127)": "**What you leave running.**",
+    "the own-gate rule (issue #421)": "**You are held to your own tree's gate.**",
 }
 
 # The reference directory's remaining briefs, each with the reason the
@@ -2589,15 +2590,47 @@ def test_invalid_reconcile_form_routes_to_reconcile_synopsis() -> None:
 # names for a change* alone, from scratch — nine resolutions over one
 # interviewed tree — and the open-ended phrasing invited discovery beyond the
 # list: one wave check found and ran a twenty-five-minute rendering rig no
-# guide had named as a gate. The orchestrator now resolves the list once, at
-# run start, and these briefs carry it.
+# guide had named as a gate. The orchestrator reads the guide and these briefs
+# carry the list. Since issue #421 the list is the one the guide states in the
+# tree the brief's subagent works or verifies in, rather than one frozen for
+# the run, and the builder's own brief carries it too.
 GATE_CARRYING_BRIEFS = (
+    "brief.md",
     "verify.md",
     "repair.md",
     "repaired.md",
     "wave.md",
     "amend.md",
 )
+
+# The two verdict briefs that compare a tree's gate with its base's, so a
+# command a ticket or a repair dropped or narrowed is seen (issue #421).
+BASE_GATE_BRIEFS = (
+    "verify.md",
+    "repaired.md",
+)
+
+# What no shipped file of this Skill may say any longer: that the gate is
+# resolved once at run start, is fixed for the run, or is the one resolved
+# before the first wave. On 2026-09-23 a gate held for the run would have
+# type-checked none of the five engines the run added, and one re-read off the
+# moving run branch failed a ticket over a sibling's module (issue #421).
+RUN_WIDE_GATE_PHRASES = (
+    "resolved once at run start",
+    "resolved at run start",
+    "resolved once at the run's start",
+    "once for the run: read the project's contributing guide",
+    "before the first wave was briefed",
+    "full fixed gate",
+    "fixed for the run",
+    "gate you resolved",
+    "gate commands resolved",
+)
+
+# The phrase step 11's serial clause runs the branch gate with. Named once,
+# because it is also the marker that proves the worktree clause runs no
+# serial gate of its own.
+SERIAL_GATE = "the commands `gate` answers for the branch as it stands"
 
 
 def test_every_gate_brief_carries_the_gate_rather_than_rediscovering_it() -> None:
@@ -2606,7 +2639,9 @@ def test_every_gate_brief_carries_the_gate_rather_than_rediscovering_it() -> Non
     Each of these briefs told its subagent to run every command the project's
     contributing guide names for a change, and each subagent resolved that
     phrase from scratch — nine times over the same tree in one interviewed
-    wave (issue #80).
+    wave (issue #80). The list now comes from the guide in the subagent's own
+    tree, and the subagent is still forbidden to read one for itself
+    (issue #421).
     """
 
     for name in GATE_CARRYING_BRIEFS:
@@ -2614,17 +2649,21 @@ def test_every_gate_brief_carries_the_gate_rather_than_rediscovering_it() -> Non
         where = SKILL / "references" / name
 
         assert "`<gate>`" in text, (
-            f"{where}: the brief carries the gate the orchestrator resolved"
-            f" at run start. A subagent handed no list derives one, and each"
-            f" derivation is a fresh reading of the same guide (issue #80)."
+            f"{where}: the brief carries the gate the orchestrator read. A"
+            f" subagent handed no list derives one, and each derivation is a"
+            f" fresh reading of the same guide (issue #80)."
         )
-        assert (
-            "resolved once at run start from the project's contributing guide" in text
-        ), (
-            f"{where}: the brief says where the list came from — resolved"
-            f" once at run start from the project's contributing guide — so"
-            f" the subagent reads it as settled rather than as a starting"
-            f" point for its own reading (issue #80)."
+        assert "the contributing guide states" in text, (
+            f"{where}: the brief says where the list came from — the commands"
+            f" the contributing guide states in the tree this subagent works"
+            f" or verifies in — so the subagent reads it as settled rather"
+            f" than as a starting point for its own reading (issue #421)."
+        )
+        assert "never derive a gate of your own" in text, (
+            f"{where}: the brief forbids its subagent to derive a gate of its"
+            f" own from the guide. The reading is the orchestrator's, once per"
+            f" distinct guide text, never one per subagent (issue #80,"
+            f" issue #421)."
         )
         assert "every command its contributing guide names" not in text, (
             f"{where}: the brief no longer tells its subagent to resolve the"
@@ -2632,10 +2671,9 @@ def test_every_gate_brief_carries_the_gate_rather_than_rediscovering_it() -> Non
             f" subagent resolved alone, from scratch (issue #80)."
         )
         assert "If there is no such guide" not in text, (
-            f"{where}: the no-guide fallback is the orchestrator's to resolve"
-            f" at run start, not the subagent's — a brief that carries it"
-            f" invites the rediscovery the carried gate exists to end"
-            f" (issue #80)."
+            f"{where}: the no-guide fallback is the orchestrator's to read,"
+            f" not the subagent's — a brief that carries it invites the"
+            f" rediscovery the carried gate exists to end (issue #80)."
         )
 
 
@@ -2666,7 +2704,7 @@ def test_every_gate_brief_keeps_the_all_of_them_force_and_refuses_discovery() ->
 
 
 def test_every_gate_briefs_fill_in_instructions_take_the_list() -> None:
-    """A placeholder nothing explains is handed out unfilled."""
+    """A placeholder nothing explains is handed out unfilled, and a list is never re-read."""
 
     for name in GATE_CARRYING_BRIEFS:
         instructions = _instructions(name)
@@ -2674,53 +2712,247 @@ def test_every_gate_briefs_fill_in_instructions_take_the_list() -> None:
 
         assert "`<gate>`" in instructions, (
             f"{where}: the fill-in instructions say what `<gate>` is replaced"
-            f" with — the gate as the orchestrator resolved it at run start"
-            f" (issue #80)."
+            f" with (issue #80)."
+        )
+        assert "the engine's `gate" in instructions, (
+            f"{where}: the fill-in instructions take the list from the"
+            f" engine's `gate` answer for this brief's tree, so nobody picks"
+            f" the tree by hand — a wrong tree is what failed a ticket on"
+            f" 2026-09-23 (issue #421)."
         )
         assert "never re-derived" in instructions, (
-            f"{where}: the fill-in instructions forbid re-deriving the list"
-            f" at fill time — the resolution happened once, at run start,"
-            f" and filling a brief is not a second reading of the guide"
-            f" (issue #80)."
+            f"{where}: the fill-in instructions forbid re-deriving the list at"
+            f" fill time — a guide text already read is reused verbatim"
+            f" (issue #80, issue #421)."
+        )
+        assert "never widened" in instructions, (
+            f"{where}: the fill-in instructions forbid widening the list (issue #80)."
         )
 
 
-def test_the_build_step_resolves_the_gate_once_at_run_start() -> None:
-    """The orchestrator reads the contributing guide once and every brief carries the answer.
+def test_each_gate_brief_names_the_tree_its_gate_is_read_from() -> None:
+    """Each brief names the tree for its own role, and none reproduces the table."""
 
-    Which commands gate a change is a reading of prose, like which files are
-    the run's own — so it is made once, at run start, and held for the whole
-    run rather than re-made by every subagent (issue #80).
+    trees = {
+        "brief.md": "this ticket's working tree as it stands when you fill this brief",
+        "amend.md": "this ticket's working tree as it stands when you fill this brief",
+        "verify.md": "as it stands when you fill this brief",
+        "repaired.md": "the repaired working tree after the merge",
+        "repair.md": "the run branch as it stands, asked without `--ticket`",
+        "wave.md": "the run branch as it stands when you fill this round's brief",
+    }
+
+    assert set(trees) == set(GATE_CARRYING_BRIEFS)
+    for name, tree in trees.items():
+        assert tree in _instructions(name), (
+            f"{SKILL / 'references' / name}: the fill-in instructions name the"
+            f" tree this brief's gate is read in — {tree!r} — as SKILL.md"
+            f" names it for this role (issue #421)."
+        )
+    assert "merged tree" in _brief("repair.md").split("\n---\n", 1)[1], (
+        f"{SKILL / 'references' / 'repair.md'}: the repairer is told that the"
+        f" verdict on its repair runs the merged tree's gate (issue #421)."
+    )
+
+
+def test_no_shipped_file_holds_the_gate_for_the_whole_run() -> None:
+    """The gate is a property of the tree, not of the run (issue #421)."""
+
+    for path in sorted(SKILL.rglob("*")):
+        if not path.is_file() or path.suffix not in {".md", ".py", ".yaml"}:
+            continue
+        text = path.read_text(encoding="utf-8")
+        for phrase in RUN_WIDE_GATE_PHRASES:
+            assert phrase not in text, (
+                f"{path}: says the gate is held for the run — {phrase!r}. The"
+                f" gate is the one the contributing guide states in the tree a"
+                f" brief's subagent works or verifies in (issue #421)."
+            )
+
+
+def test_the_build_step_reads_the_gate_per_tree() -> None:
+    """The orchestrator reads each distinct guide once, and the engine picks the tree.
+
+    Which commands gate a change is a reading of prose, so it stays the
+    orchestrator's rather than any subagent's (issue #80). But the guide is a
+    file tickets edit, so the reading is per guide text rather than per run,
+    and the tree is the one the brief's subagent works in (issue #421).
     """
 
     step = _step(6)
+    where = SKILL / "SKILL.md"
 
-    assert "esolve the gate" in step, (
-        f"{SKILL / 'SKILL.md'}: step 6 has the orchestrator resolve the gate"
-        f" before the first wave is briefed. Left to the briefs, the same"
-        f" phrase is resolved by every subagent over the same tree"
-        f" (issue #80)."
+    assert (
+        "the gate the contributing guide states in the tree where that brief's subagent works or verifies"
+        in step
+    ), (
+        f"{where}: step 6 says the gate filled into a brief is the one the"
+        f" guide states in that brief's own tree (issue #421)."
+    )
+    assert "its own working tree as it stands when its brief is filled" in step, (
+        f"{where}: step 6 names the builder's tree (issue #421)."
+    )
+    assert 'run.py" gate --ticket=<number>' in step, (
+        f"{where}: step 6 has the engine pick the tree, rather than the"
+        f" orchestrator choosing one by hand (issue #421)."
+    )
+    assert (
+        "byte-identical to a guide already read reuses that reading verbatim" in step
+    ), (
+        f"{where}: step 6 reads each distinct guide text once, so a wave in"
+        f" which no ticket touches the guide reads it once (issue #80,"
+        f" issue #421)."
+    )
+    assert "No subagent ever reads the guide to derive its own gate" in step, (
+        f"{where}: step 6 keeps the reading the orchestrator's (issue #80)."
     )
     assert "verbatim" in step, (
-        f"{SKILL / 'SKILL.md'}: step 6 takes the guide's commands verbatim —"
-        f" the gate is what the guide names, not the orchestrator's reading"
-        f" of what it meant (issue #80)."
+        f"{where}: step 6 takes the guide's commands verbatim (issue #80)."
     )
     assert "lint, format, and type checks the project is configured for" in step, (
-        f"{SKILL / 'SKILL.md'}: step 6 carries the no-guide fallback the"
-        f" briefs used to state — the whole test suite and the checks the"
-        f" project is configured for — because the fallback moved here"
-        f" rather than being dropped (issue #80)."
+        f"{where}: step 6 carries the no-guide fallback (issue #80)."
+    )
+    assert "`git rev-parse HEAD` in that tree" in step and "--no-guide" in step, (
+        f"{where}: step 6 keys a tree with no guide on the commit it stands"
+        f" at (issue #421)."
     )
     assert "every brief that asks for verification" in step, (
-        f"{SKILL / 'SKILL.md'}: step 6 fills the resolved gate into every"
-        f" brief that asks for verification, which is what makes one"
-        f" resolution the run's rather than one subagent's (issue #80)."
+        f"{where}: step 6 fills the gate into every brief that asks for"
+        f" verification (issue #80)."
     )
-    assert "all of it and nothing in its place" in step, (
-        f"{SKILL / 'SKILL.md'}: step 6 keeps the strictness beside the new"
-        f" source — the list is the gate wherever it is carried, all of it"
-        f" and nothing in its place (issue #80)."
+    assert "all of it and nothing in its place" in step and "never widened" in step, (
+        f"{where}: step 6 keeps the strictness beside the new source — the"
+        f" list is the gate wherever it is carried, all of it and nothing in"
+        f" its place, and never widened (issue #80)."
+    )
+
+
+def test_every_step_that_fills_a_gate_names_the_tree_it_reads() -> None:
+    """Each role's gate comes from the tree that role works or verifies in (issue #421)."""
+
+    where = SKILL / "SKILL.md"
+    step_ten = _step(10)
+    step_eleven = _step(11)
+
+    assert "working tree as it stands when the brief is filled" in _step(7), (
+        f"{where}: a ticket's verifier reads the ticket's working tree as it"
+        f" stands when its brief is filled."
+    )
+    assert "`<base-gate>`" in _step(7), (
+        f"{where}: step 7 fills the base's gate beside the tree's."
+    )
+    assert _step(9).count("working tree as it stands when") >= 2, (
+        f"{where}: both the builder and the verifier of an amend read the"
+        f" ticket's working tree as it stands when their brief is filled."
+    )
+    assert "the gate of the run branch as it stands" in step_ten, (
+        f"{where}: the repair builder reads the run branch as it stands, the"
+        f" side its merge brings in."
+    )
+    assert "merged tree's gate" in step_ten, (
+        f"{where}: the repair builder is told the verdict runs the merged tree's gate."
+    )
+    assert "the gate of the repaired working tree after the merge" in step_ten, (
+        f"{where}: the repaired-collision verifier reads the repaired tree"
+        f" after the merge."
+    )
+    assert "fresh working tree" in step_ten, (
+        f"{where}: a rebuild reads its fresh working tree."
+    )
+    assert (
+        "the gate of the run branch as it stands when that round's brief is filled"
+        in step_eleven
+    ), f"{where}: the wave check reads the run branch as it stands."
+    assert "`<gate>` read again from that branch" in step_eleven, (
+        f"{where}: every rerun of the wave check reads the branch again."
+    )
+    assert SERIAL_GATE in _serial_wave_clause(), (
+        f"{where}: the serial branch gate reads the branch as it stands."
+    )
+
+
+def test_the_builder_is_held_to_its_own_trees_gate() -> None:
+    """A builder learns its commands from the brief and is held to the ones it writes."""
+
+    text = _brief("brief.md")
+    where = SKILL / "references" / "brief.md"
+
+    assert (
+        "the contributing guide states in your own working tree when that verdict runs"
+        in text
+    ), (
+        f"{where}: the builder is told its work is verified against its own"
+        f" working tree's guide when the verdict runs (issue #421)."
+    )
+    assert "run them as you changed them" in text, (
+        f"{where}: a builder that changes the guide's commands runs them as it"
+        f" changed them, and says so (issue #421)."
+    )
+    assert (
+        "Dropping or narrowing a command the ticket did not ask you to drop or narrow fails the verdict"
+        in text
+    ), (
+        f"{where}: dropping or narrowing a command the ticket did not ask for"
+        f" fails the verdict (issue #421)."
+    )
+
+
+def test_the_verdict_briefs_show_the_bases_gate_beside_the_trees() -> None:
+    """A dropped or narrowed gate command is seen the way a weakened test is (issue #421)."""
+
+    for name in BASE_GATE_BRIEFS:
+        text = _brief(name)
+        instructions = _instructions(name)
+        where = SKILL / "references" / name
+        body = text.split("\n---\n", 1)[1]
+        step_three = body.split("\n3. ", 1)[1].split("\n", 1)[0]
+
+        assert "`<base-gate>`" in body and "`<base-gate>`" in instructions, (
+            f"{where}: the brief carries the base's gate beside the tree's,"
+            f" and its instructions say what fills it."
+        )
+        assert "never run" in instructions and "for comparison" in instructions, (
+            f"{where}: the base's list is for comparison and is never run."
+        )
+        assert "never to be run" in body, (
+            f"{where}: the verifier is told the base's list is not run."
+        )
+        assert "dropped or narrowed" in step_three, (
+            f"{where}: step 3 names a removed or narrowed gate command as"
+            f" something the verifier checks."
+        )
+
+    verify = _instructions("verify.md")
+    assert "`git merge-base`" in verify and "`isolate`" in verify, (
+        f"{SKILL / 'references' / 'verify.md'}: a worktree ticket's base is"
+        f" the merge-base of its branch and the run branch after `isolate`."
+    )
+    assert "serial build episode" in verify, (
+        f"{SKILL / 'references' / 'verify.md'}: a serial ticket's base is the"
+        f" commit its build episode was opened at."
+    )
+    assert "the run head the repair merged in" in _instructions("repaired.md"), (
+        f"{SKILL / 'references' / 'repaired.md'}: a repaired tree's base is"
+        f" the run-branch side of the merge."
+    )
+
+
+def test_the_state_directory_names_gate_readings_as_a_remembered_class() -> None:
+    """A reading that is gone costs one further reading of the guide (issue #421)."""
+
+    skill = (SKILL / "SKILL.md").read_text(encoding="utf-8")
+    paragraph = next(
+        line
+        for line in skill.splitlines()
+        if line.startswith("Every command below takes")
+    )
+
+    assert "four classes of information" in paragraph
+    assert "gate readings are the fourth class, and are remembered" in paragraph
+    assert "costs one further reading of the guide and nothing else" in paragraph
+    assert "The engine holds no gate of its own" not in _step(12), (
+        f"{SKILL / 'SKILL.md'}: the engine holds gate readings now, so step 12"
+        f" says it means gate results."
     )
 
 
@@ -3089,20 +3321,43 @@ def test_the_manpage_advises_running_from_the_strongest_model() -> None:
     )
 
 
-def test_the_manpage_says_the_gate_is_resolved_once() -> None:
+def test_the_manpage_says_where_each_verdicts_gate_comes_from() -> None:
     """A developer reading the page has to know what a verifier runs and who decided it."""
 
     where = SKILL / "help.md"
-    entry = _manpage_entry("TICKET EXECUTION", "**Build**")
+    build = _manpage_entry("TICKET EXECUTION", "**Build**")
+    verify = _manpage_entry("TICKET EXECUTION", "**Verify**")
+    integrate = _manpage_entry("TICKET EXECUTION", "**Integrate**")
 
-    assert "resolved once at the run's start" in entry, (
-        f"{where}: the manpage says the gate is resolved once, at the run's"
-        f" start, from the project's contributing guide — not rediscovered"
-        f" by each verifying subagent (issue #80)."
+    assert "verification commands" in build, (
+        f"{where}: the Build entry says the builder is handed verification"
+        f" commands, as `references/brief.md` hands them (issue #421)."
     )
-    assert "neither substitutes nor expands it" in entry, (
-        f"{where}: the manpage says every verifier receives the exact gate and"
+    assert "the tree the subagent works or verifies in" in build, (
+        f"{where}: the manpage says the gate comes from the guide in the tree"
+        f" a subagent works or verifies in, not from a list fixed for the run"
+        f" (issue #421)."
+    )
+    assert "neither substitutes nor expands it" in build, (
+        f"{where}: the manpage says every subagent receives the exact gate and"
         f" neither substitutes nor expands it (issue #80)."
+    )
+    assert (
+        "ticket's working tree as it stands when the verifier is briefed" in verify
+    ), (
+        f"{where}: the Verify entry says a verifier's gate is the ticket's"
+        f" working tree's (issue #421)."
+    )
+    assert "gate of the tree's base" in verify and "never to run" in verify, (
+        f"{where}: the Verify entry names the base's gate, shown for"
+        f" comparison and never run (issue #421)."
+    )
+    assert "on its own branch as it stands" in integrate, (
+        f"{where}: the serial branch gate reads the branch as it stands."
+    )
+    assert "read again for every round" in integrate, (
+        f"{where}: the wave check reads the combined branch's gate again for"
+        f" every round (issue #421)."
     )
 
 
@@ -3123,9 +3378,9 @@ def test_the_serial_branch_gate_is_the_step_the_serial_path_leaves_by() -> None:
         f"{SKILL / 'SKILL.md'}: a serial run with another wave to build returns"
         " through step 2 and step 3 as before."
     )
-    assert "same commands you resolved before the first wave was briefed" in clause, (
-        f"{SKILL / 'SKILL.md'}: the serial gate reuses the commands resolved at"
-        " run start rather than resolving a gate of its own."
+    assert SERIAL_GATE in clause, (
+        f"{SKILL / 'SKILL.md'}: the serial gate is the one the engine answers"
+        " for the branch as it stands, read as step 6 reads every gate."
     )
     assert "on the branch as it stands" in clause, (
         f"{SKILL / 'SKILL.md'}: the serial gate reads the branch as the run left it."
@@ -3150,7 +3405,7 @@ def test_the_serial_branch_gate_is_the_step_the_serial_path_leaves_by() -> None:
     )
 
     plan_again = clause.index("run step 1's `plan` command again")
-    gate = clause.index("same commands you resolved before the first wave was briefed")
+    gate = clause.index(SERIAL_GATE)
     assert plan_again < gate, (
         f"{SKILL / 'SKILL.md'}: the gate follows the plan that establishes the"
         " wave was the run's last, so it runs once per invocation."
@@ -3163,9 +3418,7 @@ def test_the_serial_gate_adds_no_second_reading_to_the_worktree_path() -> None:
     step_eleven = _step(11)
     worktree_clause = step_eleven.split("Where `worktrees` is false", 1)[0]
 
-    assert "same commands you resolved before the first wave was briefed" not in (
-        worktree_clause
-    ), (
+    assert SERIAL_GATE not in worktree_clause, (
         f"{SKILL / 'SKILL.md'}: a run using worktrees reads its integrated branch"
         " through the wave check alone."
     )
@@ -3210,8 +3463,8 @@ def test_step_twelve_reports_the_serial_gate_commit_and_result() -> None:
         "two exceptions to the rule against report rendering from session memory"
         in (step_twelve)
     ), (
-        f"{SKILL / 'SKILL.md'}: the engine holds no gate, so step 12 names the"
-        " gate as an exception to rendering without session memory."
+        f"{SKILL / 'SKILL.md'}: the engine holds no gate result, so step 12 names"
+        " the gate as an exception to rendering without session memory."
     )
     assert (
         "the one exception to the rule against report rendering" not in step_twelve

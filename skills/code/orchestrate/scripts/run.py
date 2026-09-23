@@ -342,6 +342,15 @@ FLAKE_HOME = Path(".kntnt/orchestrate")
 FLAKE_LEDGER = "flakes.jsonl"
 RUN_FLAKES_FILE = "kntnt-orchestrate-flakes.json"
 
+# Where a run keeps the gate readings it has taken, beside the rest of its
+# session account. A reading is the orchestrator's list of the verification
+# commands one contributing guide names, filed under that guide's blob, so a
+# guide byte-identical to one already read is never read again. The gate is a
+# property of the tree a verdict runs in rather than of the run, and the guide
+# is a file tickets edit like any other; the readings are remembered rather
+# than relied on, the guide at any recorded blob staying in Git (issue #421).
+GATE_FILE = "kntnt-orchestrate-gate.json"
+
 # The version of the run's own account of the attempts it observed. It is this
 # Skill's audit artifact rather than anybody else's contract: what a
 # measurement looks like when it is filed is model-selector's to say.
@@ -6895,11 +6904,15 @@ def read_flake_ledger(path: Path) -> list[dict[str, Any]]:
 
 
 @contextmanager
-def flake_ledger_lock(ledger: Path) -> Iterator[None]:
-    """Serialize atomic ledger generations without leaving another state file."""
+def directory_lock(held: Path) -> Iterator[None]:
+    """Serialize atomic generations of *held* without leaving another state file.
 
-    ledger.parent.mkdir(parents=True, exist_ok=True)
-    descriptor = os.open(ledger.parent, os.O_RDONLY)
+    The lock is taken on the directory the file stands in, so a caller that
+    finds it taken waits for the other's whole read-modify-write to end.
+    """
+
+    held.parent.mkdir(parents=True, exist_ok=True)
+    descriptor = os.open(held.parent, os.O_RDONLY)
     try:
         fcntl.flock(descriptor, fcntl.LOCK_EX)
         yield
@@ -6917,7 +6930,7 @@ def cmd_flake(
     try:
         offered = flake_record(cwd, evidence_path, ticket)
         identity = flake_identity(offered)
-        with flake_ledger_lock(ledger):
+        with directory_lock(ledger):
             records = read_flake_ledger(ledger)
             standing = next(
                 (
@@ -6996,6 +7009,251 @@ def reported_flakes(cwd: Path, state_path: Path | None) -> list[dict[str, Any]]:
             }
         )
     return reported
+
+
+@dataclass(frozen=True)
+class GateTree:
+    """The tree a gate is read in, and the base it is compared with.
+
+    `worktree` is where the subagent the gate is filled for works or verifies,
+    `commit` the commit that tree stands at, and `base` the commit whose gate
+    its verifier is shown beside the tree's own for comparison, or None where
+    nothing stands behind the tree to compare it with.
+    """
+
+    worktree: Path
+    branch: str
+    commit: str
+    base: str | None
+
+
+def gate_tree(cwd: Path, ticket: int | None) -> GateTree:
+    """Return the tree ticket *ticket*'s gate is read in, and its base.
+
+    Without a ticket the tree is the run branch as it stands, which is the
+    wave check's and the serial branch gate's, and the side a repair merges
+    in. A ticket with a working tree of this run's is read there, its base
+    being where its branch and the run branch last agreed: the fork, or for a
+    resumed or repaired ticket the run head its tree last merged in. A ticket
+    with none is built on the run branch itself, its base the start point its
+    serial build episode was opened at. A ticket with neither has no tree
+    here, and the run branch's gate is not its gate (issue #421).
+    """
+
+    # The run branch as it stands answers for everything no ticket names.
+    run_branch = current_branch(cwd)
+    top = Path(git(cwd, "rev-parse", "--show-toplevel").strip())
+    if ticket is None:
+        return GateTree(top, run_branch, git(cwd, "rev-parse", "HEAD").strip(), None)
+
+    # A ticket's own working tree answers for a ticket that has one.
+    open_now = open_worktrees(cwd, run_branch)
+    if ticket in open_now:
+        tree = Path(open_now[ticket])
+        branch = worktree_branch(run_branch, ticket)
+        return GateTree(
+            tree,
+            branch,
+            git(tree, "rev-parse", "HEAD").strip(),
+            git(cwd, "merge-base", branch, run_branch).strip(),
+        )
+
+    # A serial ticket's tree is the run branch, from its episode's start on.
+    episode = episode_of(cwd, run_branch, ticket)
+    if episode is not None:
+        return GateTree(
+            top,
+            run_branch,
+            git(cwd, "rev-parse", "HEAD").strip(),
+            episode_start(cwd, episode),
+        )
+
+    raise RunError(
+        f"#{ticket} has no working tree open in this run and no serial build "
+        f"episode on {run_branch}, so there is no tree its gate could be read in; "
+        "at a ceiling of one, ask after the attempt-start that opens its episode"
+    )
+
+
+def gate_key(cwd: Path, commit: str, guide: str | None) -> tuple[str | None, str]:
+    """Return the guide's blob at *commit*, and the key its reading is filed under.
+
+    The key is the blob, so two trees whose guides are byte-identical share
+    one reading. A tree with no guide has no blob, and its reading is keyed on
+    the commit the tree stands at instead.
+    """
+
+    if guide is not None:
+        found = git_result(cwd, "rev-parse", "--verify", "--quiet", f"{commit}:{guide}")
+        if found.returncode == 0:
+            blob = found.stdout.strip()
+            return blob, blob
+    return None, commit
+
+
+def read_gate_readings(path: Path | None) -> dict[str, Any]:
+    """Return the run's gate readings, or nothing where none can be read.
+
+    Remembered rather than relied on: a file that is gone or damaged costs one
+    further reading of the guide, which Git still holds at every blob.
+    """
+
+    if path is None:
+        return {}
+    try:
+        stored = json.loads(path.read_text(encoding="utf-8"))
+        readings = stored["readings"]
+        guide = stored["guide"]
+        if not isinstance(readings, dict) or not (
+            guide is None or isinstance(guide, str)
+        ):
+            return {}
+        return {"guide": guide, "readings": readings}
+    except (OSError, UnicodeError, TypeError, ValueError, KeyError):
+        return {}
+
+
+def gate_commands(commands_path: Path) -> list[str]:
+    """Return the list of commands one reading holds, refusing anything else."""
+
+    try:
+        commands = json.loads(commands_path.read_text(encoding="utf-8"))
+    except (OSError, UnicodeError, ValueError) as exc:
+        raise RunError(f"{commands_path} does not hold a gate reading: {exc}") from exc
+    if (
+        not isinstance(commands, list)
+        or not commands
+        or not all(isinstance(command, str) and command.strip() for command in commands)
+    ):
+        raise RunError(
+            f"{commands_path} must hold a JSON list of the gate's commands, verbatim"
+        )
+    return cast(list[str], commands)
+
+
+def guide_path(named: str) -> str:
+    """Return *named* as a path from the repository's root, or refuse it."""
+
+    path = PurePosixPath(named)
+    if path.is_absolute() or ".." in path.parts or not path.parts:
+        raise RunError(
+            f"{named} is not a path inside the repository; name the guide from "
+            "the repository's root"
+        )
+    return path.as_posix()
+
+
+def gate_side(
+    cwd: Path, commit: str, guide: str | None, readings: dict[str, Any]
+) -> dict[str, Any]:
+    """Return what one side of a gate answer says: its blob, key, and reading."""
+
+    blob, key = gate_key(cwd, commit, guide)
+    reading = readings.get(key)
+    return {"commit": commit, "blob": blob, "key": key, "reading": reading}
+
+
+def cmd_gate(
+    cwd: Path,
+    ticket: int | None,
+    state_path: Path | None,
+    *,
+    guide: str | None = None,
+    no_guide: bool = False,
+    under: list[str] | None = None,
+    commands_path: Path | None = None,
+) -> int:
+    """Answer a tree's gate and its base's, or record a reading of either.
+
+    The engine picks the tree and holds the readings; the reading itself is
+    the orchestrator's, because a script cannot read prose. So a query says
+    which guide text the tree carries and whether it has been read, and a
+    record files the orchestrator's reading under the key the query named
+    (issue #421).
+    """
+
+    path = None if state_path is None else state_path.parent / GATE_FILE
+    recording = bool(under) or commands_path is not None
+    try:
+        # A record names what it records and where, and has somewhere to keep it.
+        if recording and not (under and commands_path is not None):
+            raise RunError("a reading is recorded with --under and --commands together")
+        if recording and path is None:
+            raise RunError(
+                "a gate reading is kept in the run's state; pass --state-dir"
+            )
+        if recording and guide is None and not no_guide:
+            raise RunError(
+                "a reading is recorded with the guide it was read from: pass "
+                "--guide=<path>, or --no-guide where the repository has none"
+            )
+
+        # The guide is the one this call names, else the one the run recorded.
+        stored = read_gate_readings(path)
+        if guide is not None:
+            named: str | None = guide_path(guide)
+        elif no_guide:
+            named = None
+        elif "guide" in stored:
+            named = stored["guide"]
+        else:
+            raise RunError(
+                "no contributing guide is recorded for this run yet: pass "
+                "--guide=<path> to name it, or --no-guide where the repository has none"
+            )
+
+        # The tree and its base, and the key each one's reading is filed under.
+        tree = gate_tree(cwd, ticket)
+        keys = {gate_key(cwd, tree.commit, named)[1]}
+        if tree.base is not None:
+            keys.add(gate_key(cwd, tree.base, named)[1])
+
+        # A record files one reading under each key it names, under the lock.
+        if recording:
+            assert under is not None and commands_path is not None
+            commands = gate_commands(commands_path)
+            strangers = [key for key in under if key not in keys]
+            if strangers:
+                raise RunError(
+                    f"{', '.join(strangers)} is neither this tree's guide nor its "
+                    "base's; record a reading under a key this verb answered with"
+                )
+            assert path is not None
+            with directory_lock(path):
+                stored = read_gate_readings(path)
+                readings = dict(stored.get("readings", {}))
+                for key in under:
+                    if key in readings and readings[key] != commands:
+                        raise RunError(
+                            f"{key} already carries a different reading; a guide "
+                            "read once is reused verbatim"
+                        )
+                    readings[key] = commands
+                stored = {"guide": named, "readings": readings}
+                write_atomically(path, json.dumps(stored, indent=2) + "\n")
+    except RunError as exc:
+        return fail(str(exc))
+
+    # Answer both sides from what is now recorded.
+    readings = stored.get("readings", {})
+    emit(
+        {
+            "verb": "gate",
+            "ticket": ticket,
+            "guide": named,
+            "tree": {
+                "worktree": str(tree.worktree),
+                "branch": tree.branch,
+                **gate_side(cwd, tree.commit, named, readings),
+            },
+            "base": (
+                None
+                if tree.base is None
+                else gate_side(cwd, tree.base, named, readings)
+            ),
+        }
+    )
+    return 0
 
 
 def _attempt_passed(attempt: dict[str, Any]) -> bool:
@@ -7351,6 +7609,45 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     flake.add_argument("--ticket", type=int)
     add_shared_flags(flake)
 
+    gate = sub.add_parser(
+        "gate",
+        help="Answer or record the gate one tree's contributing guide states.",
+        description=(
+            "Answer the contributing guide's blob in the tree a gate is filled "
+            "for, the base it is compared with, and the reading recorded under "
+            "each; or record a reading. Without --ticket the tree is the run "
+            "branch as it stands. A tree with no contributing guide keys its "
+            "reading on the commit it stands at, git rev-parse HEAD in that "
+            "tree, instead of a blob."
+        ),
+    )
+    gate.add_argument(
+        "--ticket",
+        type=int,
+        help="Read the tree that ticket is built or verified in.",
+    )
+    where = gate.add_mutually_exclusive_group()
+    where.add_argument(
+        "--guide",
+        help="The contributing guide's path from the repository's root; kept on a record.",
+    )
+    where.add_argument(
+        "--no-guide",
+        action="store_true",
+        help="Declare that there is no guide, keying readings on the tree's HEAD.",
+    )
+    gate.add_argument(
+        "--under",
+        action="append",
+        help="A key this verb answered, tree's or base's, to record the reading under.",
+    )
+    gate.add_argument(
+        "--commands",
+        type=Path,
+        help="A JSON list of the commands the guide names, verbatim.",
+    )
+    add_shared_flags(gate)
+
     progress = sub.add_parser("progress", help="Replace the run progress dashboard.")
     progress.add_argument("--phase", required=True, choices=PROGRESS_PHASES)
     progress.add_argument("--wave", required=True, type=int)
@@ -7479,6 +7776,16 @@ def main(argv: list[str] | None = None) -> int:
         )
     if args.verb == "flake":
         return cmd_flake(cwd, args.evidence, state_path, args.ticket)
+    if args.verb == "gate":
+        return cmd_gate(
+            cwd,
+            args.ticket,
+            state_path,
+            guide=args.guide,
+            no_guide=args.no_guide,
+            under=args.under,
+            commands_path=args.commands,
+        )
     if args.verb == "progress":
         progress = ProgressState(
             wave=args.wave,
