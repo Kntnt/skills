@@ -191,7 +191,19 @@
       "name": "hetzner",
       "category": "infrastructure",
       "description": "Provision and operate Hetzner Cloud servers and deploy or maintain their websites and applications through hcloud, SSH, and cloud-init. Use for Hetzner Cloud infrastructure or workloads hosted there; excludes Robot dedicated servers and Object Storage.",
-      "digest": "cfe9b0370638f202bc0b2d5cc8850fe22f2f16eb9f0324e71675a4e78eb36f58",
+      "digest": "227bc6fcfac95da0d568a2dbc143c7aeacbd513fe2b2a999139ca41d244e0c96",
+      "binaries": [
+        "uv"
+      ],
+      "skills": [],
+      "externals": [],
+      "capabilities": []
+    },
+    {
+      "name": "nodeping",
+      "category": "infrastructure",
+      "description": "Read and change uptime monitoring at NodePing on the user's behalf — checks, results, contacts, schedules and notifications. Not for monitoring at any other provider, not for DNS, and not for server or site administration.",
+      "digest": "f64ed745c196a8062d6069cf1e0ad20a33a4bbbcfbbdc9e867977935caf6e966",
       "binaries": [
         "uv"
       ],

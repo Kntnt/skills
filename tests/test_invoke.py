@@ -1218,24 +1218,68 @@ SHIPPED_CASES: dict[str, list[Case]] = {
         ("setup --force", None),
     ],
     "infrastructure/hetzner": [
-        ("", {"path": [], "flags": {}, "operands": []}),
+        ("", {"path": [], "flags": {}, "operands": [], "instruction": None}),
         (
-            "prepare staging deployment files",
-            {"operands": ["prepare staging deployment files"], "instruction": None},
-        ),
-        (
-            "-- inspect staging only",
-            {"operands": [], "instruction": "inspect staging only"},
-        ),
-        (
-            "prepare files\n-- leave production unchanged",
+            "-- create a server for kntnt.se",
             {
-                "operands": ["prepare files"],
-                "instruction": "leave production unchanged",
+                "path": [],
+                "flags": {},
+                "operands": [],
+                "instruction": "create a server for kntnt.se",
             },
         ),
-        ("--dry-run", {"operands": ["--dry-run"]}),
+        (
+            "setup kntnt-wordpress",
+            {"path": ["setup"], "flags": {}, "operands": ["kntnt-wordpress"]},
+        ),
+        (
+            "setup --yes kntnt-wordpress",
+            {
+                "path": ["setup"],
+                "flags": {"--yes": True},
+                "operands": ["kntnt-wordpress"],
+            },
+        ),
+        (
+            "setup kntnt-wordpress\n-- the token is on the clipboard",
+            {
+                "path": ["setup"],
+                "operands": ["kntnt-wordpress"],
+                "instruction": "the token is on the clipboard",
+            },
+        ),
+        ("status", {"path": ["status"], "flags": {}, "operands": []}),
+        (
+            "status -- only the staging project",
+            {"path": ["status"], "instruction": "only the staging project"},
+        ),
+        ("create a server", None),
+        ("setup", None),
+        ("setup kntnt-wordpress --yes", None),
+        ("status --yes", None),
+        ("status kntnt-wordpress", None),
+        ("--yes", None),
+        ("--dry-run", None),
         ("--  ", None),
+    ],
+    "infrastructure/nodeping": [
+        ("", {"path": [], "flags": {}, "operands": [], "instruction": None}),
+        (
+            "-- add a check for kntnt.se",
+            {"path": [], "operands": [], "instruction": "add a check for kntnt.se"},
+        ),
+        ("add a check for kntnt.se", None),
+        ("setup", {"path": ["setup"], "flags": {}, "operands": []}),
+        ("setup --yes", {"path": ["setup"], "flags": {"--yes": True}}),
+        ("status", {"path": ["status"], "flags": {}, "operands": []}),
+        (
+            "status -- only the account name",
+            {"path": ["status"], "instruction": "only the account name"},
+        ),
+        ("setup extra", None),
+        ("status --yes", None),
+        ("--yes", None),
+        ("--bogus", None),
     ],
     "web/mirror": [
         ("https://x.se/", {"flags": {}, "operands": ["https://x.se/"]}),
