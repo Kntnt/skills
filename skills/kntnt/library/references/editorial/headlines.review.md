@@ -1,6 +1,6 @@
 # Headlines — review guidance
 
-Read under [Headlines](headlines.md). Read the text first and say its angle to yourself in one sentence. Then read the headline against that sentence, and each subheading against its own section, and ask four questions of each. Can every word in it be supported by the text? Is the core message there? Does the tone match the seriousness of the content? Would the reader feel misled afterwards?
+Read under [Headlines](headlines.md). Read the text first and say its angle to yourself in one sentence. Then read the headline against that sentence, and each subheading against its own section and against any quotation standing under it, and ask four questions of each. Can every word in it be supported by the text? Is the core message there? Does the tone match the seriousness of the content? Would the reader feel misled afterwards?
 
 ## Avoid
 
@@ -15,9 +15,10 @@ Each of these in a headline or a subheading is a finding:
 - Question headlines. Where the text gives the answer, the headline gives it too. The exceptions are a text built as questions and answers, where the form is natural, and a text that truly leaves the question open, where the headline is deliberately kept from asserting anything.
 - A tone more dramatic than the text's.
 - The same words and phrasing in the headline and the standfirst or opening paragraph, or in a subheading and the first sentence under it. They complement each other; they do not repeat.
+- A subheading that pre-spends the judgement, figure or concession of a quotation standing under it, so that the reader meets the quotation as the subheading said again. Read it against the quotation however far down the section the quotation stands. Repair it by naming the subject, the occasion or the speaker, or by stating what the rest of the section says, and leave the quotation as it is.
 
 Name what the reader loses, and repair by rewriting the headline alone, from the text's angle and at the text's own strength. The text stays as it is.
 
 ## Leave alone
 
-A working headline is left alone. Plain is no defect, and neither is a headline with no number or place where none carries the message, direct address in an instructional text, or an angle other than the one you would have chosen where the text supports it. A label on a reference or navigation text is correct as a label.
+A working headline is left alone. Plain is no defect, and neither is a headline with no number or place where none carries the message, direct address in an instructional text, or an angle other than the one you would have chosen where the text supports it. A label on a reference or navigation text is correct as a label. A subheading over a quotation that names the subject, the occasion or the speaker and leaves the quotation its point is working too, and not a subject named with nothing said about it.

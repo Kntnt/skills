@@ -6459,6 +6459,113 @@ def test_the_four_article_genres_link_the_support_they_share() -> None:
         )
 
 
+# Where a subheading standing over a quotation is ruled, and the surfaces that
+# tell a writer or a reviewer how to repair a heading. `CONTEXT.md` gives
+# *Bridge* another meaning, so the sentence introducing a quotation is called a
+# quotation bridge; the two sentences written before that rule keep their word.
+HEADLINES = EDITORIAL / "headlines.md"
+HEADLINES_REVIEW = EDITORIAL / "headlines.review.md"
+QUOTATION_BRIDGE_BOUNDARY = "outside the quotation bridge"
+BARE_BRIDGE = re.compile(r"(?<!quotation )\bbridges?\b", re.IGNORECASE)
+BARE_BRIDGE_KEPT = (
+    "A bridge should prepare a quotation rather than pre-say it.",
+    "Read bridges beside quotations and the standfirst beside the body's opening.",
+)
+HEADING_REPAIR = re.compile(r"whole (?:text or )?section", re.IGNORECASE)
+HEADING_REPAIR_SURFACES = (
+    HEADLINES,
+    REPO_ROOT / "skills" / "editorial" / "write" / "SKILL.md",
+    REPO_ROOT / "skills" / "editorial" / "write" / "help.md",
+    REPO_ROOT / "skills" / "editorial" / "redline" / "references" / "correction.md",
+)
+
+
+def _editorial_prose() -> list[Path]:
+    """Every shipped Markdown file the editorial Skills and their library carry."""
+
+    return sorted(
+        [
+            *EDITORIAL.rglob("*.md"),
+            *(REPO_ROOT / "skills" / "editorial").rglob("*.md"),
+        ]
+    )
+
+
+def test_a_subheading_over_a_quotation_is_ruled_where_the_writer_reads() -> None:
+    """The heading over a quotation is outside the quotation bridge, and ruled.
+
+    A subheading worded from its whole section can say what the quotation
+    standing under it says, and the reader then meets the quotation as the
+    subheading said again (issue #396). Write loads `headlines.md` and not its
+    review half, so the rule and the definition of the quotation bridge that
+    places the subheading outside it are both stated there, and the review half
+    lists the defect as a finding.
+    """
+
+    headlines = HEADLINES.read_text(encoding="utf-8")
+    review = HEADLINES_REVIEW.read_text(encoding="utf-8")
+
+    assert QUOTATION_BRIDGE_BOUNDARY in headlines, (
+        f"{HEADLINES}: does not say that a subheading standing over a"
+        f" quotation is {QUOTATION_BRIDGE_BOUNDARY}, so the writer is left to"
+        f" guess which rule governs it (issue #396)."
+    )
+    assert "quotation" in review.split("## Avoid", 1)[1].split("## Leave alone")[0], (
+        f"{HEADLINES_REVIEW}: its Avoid list names no subheading that"
+        f" pre-spends the quotation under it, so a reviewer has no finding for"
+        f" the rule `headlines.md` states (issue #396)."
+    )
+
+
+def test_every_heading_repair_leaves_a_quotation_its_point() -> None:
+    """Each instruction to word a heading from its section bounds it by the quotation.
+
+    Wording a subheading from its whole section is exactly how it comes to
+    pre-spend the judgement, figure or concession of a quotation under it
+    (issue #396), so every sentence giving that instruction says so.
+    """
+
+    for path in HEADING_REPAIR_SURFACES:
+        text = path.read_text(encoding="utf-8")
+        sentences = [
+            sentence
+            for sentence in re.split(r"(?<=[.;])\s+", text)
+            if HEADING_REPAIR.search(sentence)
+        ]
+
+        assert sentences, (
+            f"{path}: states no heading repair any more; update this test."
+        )
+        for sentence in sentences:
+            assert "quotation" in sentence, (
+                f"{path}: `{sentence.strip()[:120]}` tells a heading to be"
+                f" worded from its section without leaving a quotation under"
+                f" it its point, which is how the pre-echo is written"
+                f" (issue #396)."
+            )
+
+
+def test_editorial_prose_says_quotation_bridge_never_a_bare_bridge() -> None:
+    """*Bridge* is a Collection term for something else.
+
+    `CONTEXT.md` defines a Bridge as a command one Harness runs to reach
+    another's model, so editorial prose names the sentence introducing a
+    quotation a quotation bridge (issue #396). The two sentences written before
+    the term was settled keep their wording.
+    """
+
+    for path in _editorial_prose():
+        text = path.read_text(encoding="utf-8")
+        for kept in BARE_BRIDGE_KEPT:
+            text = text.replace(kept, "")
+
+        assert not BARE_BRIDGE.findall(text), (
+            f"{path}: says a bare `bridge`, which `CONTEXT.md` defines as a"
+            f" command reaching another Harness's model; write `quotation"
+            f" bridge` (issue #396)."
+        )
+
+
 def test_only_the_anatomy_states_a_dimension_for_the_genres_it_binds() -> None:
     """One limit, one place, or the two of them come to disagree.
 
