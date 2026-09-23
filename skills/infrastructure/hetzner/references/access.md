@@ -77,7 +77,7 @@ It exits 0 when the agents are admitted. `sudo -n` fails rather than waits where
 Each case is for a server nothing converges, as *Who manages the server* settles.
 
 - **A server this Skill creates** gets the agents' key at creation, which Hetzner installs for root. After its host key is verified and cloud-init has finished, run the procedure over that root login, verify the `kntnt-agent` login as above, then remove the agents' key from `/root/.ssh/authorized_keys`, leaving the user's own key there. From then on the agents reach it as `kntnt-agent` alone.
-- **A server that already exists**, where the instruction authorizes admitting the agents and the server is reachable with the user's own key: enable its protection first, as the Execution boundaries require before a first write, then run the procedure over the user's login and verify it.
+- **A server that already exists**, where the instruction authorizes admitting the agents and the server is reachable with the user's own key: enable its protection where the Execution boundaries call for it, then run the procedure over the user's login and verify it.
 - **Any other server**: print the procedure with `KEY` filled in, for the user to run as root in the server's console or in a session of their own. This is the one step only the user can take on a server the agents cannot yet reach.
 
 ## Reaching a server as the agents
