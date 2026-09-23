@@ -1196,6 +1196,27 @@ SHIPPED_CASES: dict[str, list[Case]] = {
         ("--type=x --config=a --no-config", None),
         ("--type", None),
     ],
+    "infrastructure/cloudns": [
+        ("", {"path": [], "flags": {}, "operands": [], "instruction": None}),
+        (
+            "-- point kntnt.se at 192.0.2.1",
+            {"path": [], "operands": [], "instruction": "point kntnt.se at 192.0.2.1"},
+        ),
+        ("point kntnt.se at 192.0.2.1", None),
+        ("setup", {"path": ["setup"], "flags": {}, "operands": []}),
+        ("setup kntnt-agent", {"path": ["setup"], "operands": ["kntnt-agent"]}),
+        ("setup --yes", {"path": ["setup"], "flags": {"--yes": True}, "operands": []}),
+        (
+            "setup --yes kntnt-agent",
+            {"path": ["setup"], "flags": {"--yes": True}, "operands": ["kntnt-agent"]},
+        ),
+        ("status", {"path": ["status"], "flags": {}, "operands": []}),
+        ("--yes", None),
+        ("status --yes", None),
+        ("status extra", None),
+        ("setup kntnt-agent --yes", None),
+        ("setup --force", None),
+    ],
     "infrastructure/hetzner": [
         ("", {"path": [], "flags": {}, "operands": [], "instruction": None}),
         (

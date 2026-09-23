@@ -148,6 +148,12 @@ Save a web page, and every page and file under it that its links, sitemaps and f
 
 Run `/mirror [--output=<dir>] [--resources=all|in-scope|none] [--max-pages=<n>] [--delay=<seconds>] [--no-links] [--no-sitemap] [--no-feeds] [--ignore-robots] [--include=<regex> ...] [--exclude=<regex> ...] [--header=<name: value> ...] [--user-agent=<string>] [--browser=auto|always|never] [--headed] [--profile=<name>|<path>] [--dry-run] <url>`.
 
+### cloudns
+
+Read and change DNS zones and records at ClouDNS. It reads the zone before it writes, applies each change through the ClouDNS API, reads the zone again to verify it, and reports what changed and what the service answered. It acts as an API sub-user rather than the account's main API user, so it reaches exactly the zones delegated to that sub-user; deletions are made only where you asked for them.
+
+Run `/cloudns setup` once to make the sub-user's credential, which is drawn for you, put on the clipboard for you to paste into the ClouDNS panel, and never shown in the conversation; `/cloudns status` confirms it and lists the zones it reaches. Then run `/cloudns -- <change>`, or let the agent use it for a matching ClouDNS task.
+
 ### hetzner
 
 Provision Hetzner Cloud servers, install software, and deploy or maintain their websites and applications with the official hcloud CLI, cloud-init, and SSH. It follows the project's existing stack and deployment files, reconciles existing resources and interrupted writes, and verifies bootstrap, services, and the requested public endpoint. Application-specific release and recovery routines stay in the project.
@@ -183,6 +189,8 @@ Every skill requires `uv` and the manager: the manager ships the engine that rea
 `hetzner` can prepare deployment files without remote tools; Cloud operations additionally need hcloud, network access, and a project token, `setup` needs `ssh-keygen` and a clipboard tool, and host operations need OpenSSH and server access.
 
 `nodeping` needs network access and a NodePing API token, which `/nodeping setup` stores from the clipboard in `~/.kntnt/nodeping/credentials.json`; the token is the whole account's, since NodePing issues no narrower one.
+
+`cloudns` needs network access and a ClouDNS API sub-user, which `/cloudns setup` makes the credential for; its `setup` also needs a clipboard tool, such as `pbcopy` on macOS or `wl-copy`, `xclip` or `xsel` on Linux.
 
 Git workflows also require `git`; ticket workflows require `gh`; `rename-invoices` requires Poppler's `pdftotext`; `mirror` requires `agent-browser`, which fetches in a real browser what plain HTTP cannot, installed with `brew install agent-browser` and then `agent-browser install`. `release` can finish without `gh`, but then skips the GitHub release.
 

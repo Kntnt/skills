@@ -176,6 +176,18 @@
       ]
     },
     {
+      "name": "cloudns",
+      "category": "infrastructure",
+      "description": "Read and change DNS zones and records at ClouDNS on the user's behalf. Not for DNS at any other provider, not for registering, renewing or transferring domain names, and not for web hosting, email or SSL.",
+      "digest": "a2d25199d1db8eda9aadc83cdc4bfe647b16ffc97631144296efd44fdf816507",
+      "binaries": [
+        "uv"
+      ],
+      "skills": [],
+      "externals": [],
+      "capabilities": []
+    },
+    {
       "name": "hetzner",
       "category": "infrastructure",
       "description": "Provision and operate Hetzner Cloud servers and deploy or maintain their websites and applications through hcloud, SSH, and cloud-init. Use for Hetzner Cloud infrastructure or workloads hosted there; excludes Robot dedicated servers and Object Storage.",

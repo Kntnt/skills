@@ -1,0 +1,5 @@
+interface:
+  display_name: "ClouDNS"
+  short_description: "Read and change DNS zones and records at ClouDNS"
+policy:
+  allow_implicit_invocation: true
