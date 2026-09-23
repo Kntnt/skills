@@ -4967,7 +4967,10 @@ def cmd_invoke(skill_dir: Path) -> int:
 # They are the engine's to print because the engine knows what a body cannot
 # — where the Library is, and whether this Skill declares a Capability or this
 # invocation carries a Contextual Instruction — so a body that calls it says
-# nothing about either and does what the answer says (ADR-0181).
+# nothing about either and does what the answer says (ADR-0181). The one
+# exception is a Skill whose later steps start a fresh subagent: its step 1
+# confirms that Capability too, a run having gone past this directive in a
+# seat that could not start one (issue #394).
 READ_LINE = "Invocation read."
 CAPABILITIES_DIRECTIVE = (
     "Before anything else, answer each Capability under"

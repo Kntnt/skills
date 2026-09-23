@@ -120,7 +120,7 @@ That contract belongs to the collection rather than to this page, and it is stat
 
 ## DEPENDENCIES
 
-`uv`; the Kntnt Manager, whose Collection Library carries the editorial contract, the genres and techniques, the anti-slop catalogue, and the language resources this Skill resolves against; the `proofread` Skill, which performs the closing mechanical pass; and a harness that can run subagents, which stays a requirement whatever Correction Budget an invocation names.
+`uv`; the Kntnt Manager, whose Collection Library carries the editorial contract, the genres and techniques, the anti-slop catalogue, and the language resources this Skill resolves against; the `proofread` Skill, which performs the closing mechanical pass; and a harness that can run subagents, which stays a requirement whatever Correction Budget an invocation names. An unavailable subagent capability stops the invocation before anything is reviewed or written.
 
 ## SEE ALSO
 
