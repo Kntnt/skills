@@ -9552,6 +9552,22 @@ ACCOUNT_COPIED_IS_NOT_MOVED = (
 )
 ASSURANCE_OPEN_IS_ITEMISED = "itemised as changed rather than covered"
 
+# What the account owes a change it names. #383's replies replaced a headline
+# and two subheadings correctly and never said what was wrong with them, and
+# reported a headline that lost its place name as *shorter*: a reader of the
+# account could not tell a repaired part from a rewritten one, nor what the
+# changed headline now asserted. #380's replies removed a `därför`, a
+# subheading and a bounding clause each on a sound finding, and named the
+# passage without saying what the reader had lost with it (issues #400, #392).
+PARATEXT_FINDING_NAMES_THE_DEFECT = "names that part and the defect in it"
+PARATEXT_REPORTED_WITH_ITS_DEFECT = "the defect that licensed the change"
+PARATEXT_REPAIRED_FROM_REWRITTEN = "tell a repaired part from a rewritten one"
+CHANGED_CLAIM_BY_WHAT_IT_ASSERTS = (
+    "what it now asserts rather than how far its wording moved"
+)
+REMOVED_LIMIT_KINDS = "a limit, a connective or a bounding clause"
+REMOVED_LIMIT_NAMES_THE_LOSS = "no longer has"
+
 # What the run checks a returned text for beside the claims. Comparing claim by
 # claim and nothing else let every difference that moves no claim through: a
 # rewritten heading, a re-split paragraph, `set … against` becoming
@@ -9980,6 +9996,91 @@ def test_the_claim_account_covers_the_claims_a_run_wrote() -> None:
         f" claims what its own findings contradict (issue #398). See"
         f" {STANDARD}."
     )
+
+
+def test_the_account_says_what_a_change_did_to_the_text() -> None:
+    """A change named by its extent tells the reader nothing about the text.
+
+    #383's post-change arm replaced `case-study-flawed`'s two subheadings and
+    `column-flawed`'s headline on sound findings and never named the defect
+    either repair answered, and reported `post-opinion-en_GB-r1-a`'s headline,
+    which had lost `Lervik's`, as *the headline shorter*. #380's runs removed a
+    `därför`, a subheading and a bounding clause, each on a finding sound on
+    the text alone, and named the passage without saying what a reader of the
+    returned text no longer had. So Redline records a finding against a
+    headline, a standfirst or a subheading with the defect in it and reports
+    every such part it changed with that defect; both Skills report a changed
+    claim by what it now asserts, and a removal that took a limit, a
+    connective or a bounding clause by what the reader lost with it
+    (issues #400, #392).
+    """
+
+    redline = REDLINE.read_text(encoding="utf-8")
+    steps = redline.split("\n## Steps\n", 1)[1]
+    step_6 = steps.split("\n6. ", 1)[1].split("\n7. ", 1)[0]
+    delivery = steps.split("\n11. ", 1)[1]
+    assert PARATEXT_FINDING_NAMES_THE_DEFECT in step_6, (
+        f"{REDLINE}: step 6 does not say that a finding against a headline, a"
+        f" standfirst or a subheading names the defect in that part, so the"
+        f" delivery has no defect to report a repaired one by (issue #400)."
+        f" See {STANDARD}."
+    )
+    for phrase in (
+        PARATEXT_REPORTED_WITH_ITS_DEFECT,
+        PARATEXT_REPAIRED_FROM_REWRITTEN,
+    ):
+        assert phrase in delivery, (
+            f"{REDLINE}: the delivery may report a changed headline, standfirst"
+            f" or subheading as rewritten without the defect its repair"
+            f" answered, as #383's `column-flawed` reply did (issue #400). See"
+            f" {STANDARD}."
+        )
+    for path in (HEADLINES_REVIEW, REDLINE_HELP):
+        assert PARATEXT_REPORTED_WITH_ITS_DEFECT in path.read_text(encoding="utf-8"), (
+            f"{path}: the surface does not say that a changed headline,"
+            f" standfirst or subheading is reported with the defect that"
+            f" licensed the change, so it disagrees with Redline's step 11"
+            f" (issue #400). See {STANDARD}."
+        )
+
+    surfaces = (
+        (REDLINE, REDLINE_CORRECTION, REDLINE_HELP, "\n11. "),
+        (UNSLOP, UNSLOP_CORRECTION, UNSLOP_HELP, "\n9. "),
+    )
+    for body_path, brief_path, help_path, marker in surfaces:
+        body = body_path.read_text(encoding="utf-8")
+        account = body.split("\n## Steps\n", 1)[1].split(marker, 1)[1]
+        for path, text in (
+            (body_path, account),
+            (brief_path, brief_path.read_text(encoding="utf-8")),
+            (help_path, help_path.read_text(encoding="utf-8")),
+        ):
+            assert CHANGED_CLAIM_BY_WHAT_IT_ASSERTS in text, (
+                f"{path}: a changed claim may be reported by how far its"
+                f" wording moved, as #383's reply reported a headline that"
+                f" lost its place name as shorter (issue #400). See"
+                f" {STANDARD}."
+            )
+            for phrase in (REMOVED_LIMIT_KINDS, REMOVED_LIMIT_NAMES_THE_LOSS):
+                assert phrase in text, (
+                    f"{path}: a removal that took a limit, a connective or a"
+                    f" bounding clause may be reported by the passage alone,"
+                    f" as #380's replies reported a removed `därför` (issues"
+                    f" #400, #392). See {STANDARD}."
+                )
+
+    base = BASE_REVIEW.read_text(encoding="utf-8")
+    for phrase in (
+        CHANGED_CLAIM_BY_WHAT_IT_ASSERTS,
+        REMOVED_LIMIT_KINDS,
+        REMOVED_LIMIT_NAMES_THE_LOSS,
+    ):
+        assert phrase in base, (
+            f"{BASE_REVIEW}: the shared contract does not say that a headline"
+            f" carries a claim accounted for by what it now asserts, or that a"
+            f" removed limit is accounted for by what the reader lost, so it"
+            f" disagrees with Redline's step 11 (issue #400). See {STANDARD}."
+        )
 
 
 def test_every_difference_a_round_returns_traces_to_a_finding() -> None:
