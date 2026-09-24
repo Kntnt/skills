@@ -54,7 +54,7 @@ Provider family `claude`, in Claude Code 2.1.281, from a Claude session. [The pr
 **The seat.** Every run, every correction subagent and every judge runs on `claude-opus-5-5` at high deliberation. Where #377's plan and #385's Agent Brief say `claude-opus-5`, this evaluation launches `claude-opus-5-5`, as the readiness addendum of 2026-09-23 19:35 settles. Judges are fresh `kntnt-opus-high` subagents, which launch that model at that deliberation. A run is not a subagent: this build's session is itself a subagent, and a subagent of it is given no tool for starting a subagent of its own, so it could not start Unslop's correction subagent (#397's [plan amendment](../editorial-397/plan-amendment.md) records the same seam for Redline). Each run is therefore a fresh top-level Claude Code session, started by [`runs/run_turn.sh`](runs/run_turn.sh) as
 
 ```
-claude --print --safe-mode --model claude-opus-5-5 --effort high \
+claude --print --safe-mode --model=claude-opus-5-5 --effort=high \
   --dangerously-skip-permissions --strict-mcp-config \
   --output-format stream-json --verbose
 ```
