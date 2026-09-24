@@ -1,0 +1,36 @@
+# Every tool call a correction subagent of the wave made, read from the wave
+# session's native subagent transcripts. For a command that creates, writes or
+# removes a path, the lines doing so are kept; any other command is marked as reading only.
+
+## post-column-sv-r2-a -> correction subagent agent-a6ca65720b2a1e2a4 (kntnt-opus-high, "Fresh correction round for column")
+- Bash, reading only
+- Bash, reading only
+- Bash, reading only
+- Bash, writing: T=$(mktemp -d) ; rm -rf "$T"
+- Bash, writing: T=$(mktemp -d) ; trap 'rm -rf "$T"' EXIT ; cat > "$T/c.md" <<'EOF'
+
+## post-column-sv-r2-b -> correction subagent agent-aaf4a01a306674a43 (kntnt-opus-high, "Redline correction round 1")
+- Bash, reading only
+- Bash, reading only
+- Bash, writing: T=$(mktemp -d) ; rm -rf "$T"
+- Bash, writing: T=$(mktemp -d) ; cat > "$T/candidate.md" <<'EOF' ; rm -rf "$T"
+
+## post-column-sv-r2-c -> correction subagent agent-ae68935e718c54109 (general-purpose, "Fresh correction round for column")
+- Bash, reading only
+- Bash, reading only
+- Bash, writing: T=$(mktemp -d) ; trap 'rm -rf "$T"' EXIT ; cd /tmp
+- Bash, writing: T=$(mktemp -d) ; trap 'rm -rf "$T"' EXIT ; cd /tmp ; cat > "$T/c.md" <<'EOF'
+
+## post-column-sv-r2-d -> correction subagent agent-a9374c5cabfdcc98d (general-purpose, "Correct column per findings")
+- Bash, reading only
+- Bash, reading only
+- Bash, writing: T=$(mktemp -d) ; rm -rf "$T"
+- Bash, writing: T=$(mktemp -d) ; cat > "$T/c.md" <<'EOF' ; rm -rf "$T"
+
+## post-column-sv-r2-e -> correction subagent agent-afe1aae13cae91147 (kntnt-opus-high, "Fresh correction round for column")
+- Bash, reading only
+- Bash, reading only
+- Bash, reading only
+- Bash, reading only
+- Bash, writing: T=$(mktemp -d) ; trap 'rm -rf "$T"' EXIT
+- Bash, writing: T=$(mktemp -d) ; trap 'rm -rf "$T"' EXIT ; cat > "$T/c.md" <<'EOF'

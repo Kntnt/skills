@@ -30,7 +30,7 @@ The message that starts each run is in [`dispatch/`](dispatch/), one file per ru
 The five runs are not started from the builder's session, which is itself a subagent in `/orchestrate` and shares its scratchpad with its parent and its siblings. The builder starts one separate session, the *wave session*:
 
 ```text
-claude --print --model claude-opus-5-5 --effort high --dangerously-skip-permissions --session-id <uuid> --output-format stream-json --verbose
+claude --print --model=claude-opus-5-5 --effort=high --dangerously-skip-permissions --session-id=<uuid> --output-format=stream-json --verbose
 ```
 
 with [`wave-session.md`](wave-session.md) on stdin, its working directory a fresh empty directory under the builder's scratch directory, and `PYTHONDONTWRITEBYTECODE=1`. Its whole job is: list its own session scratchpad as its system prompt names it into `runs/scratchpad-before.txt`, with `find <scratchpad> -type f -exec shasum -a 256 {} + | sort -k 2`; start the five run subagents in one message, each a fresh `kntnt-opus-high` subagent (`claude-opus-5-5` at high deliberation); wait for all five; list the scratchpad again into `runs/scratchpad-after.txt`; and write each run's final reply to `runs/<run>/reply.md`. It writes its scratchpad's path to `runs/scratchpad-path.txt`. Nothing else writes in that scratchpad, and every subagent it starts, and every subagent those start, shares it: that is the shared directory the collision needs. `docs/evaluation/editorial-388/harness/staged_run.py` is not used, because it gives each run its own `TMPDIR` and `HOME`, so no two runs would share a scratchpad. The wave session is not recorded with `session_cleanup.py`.
