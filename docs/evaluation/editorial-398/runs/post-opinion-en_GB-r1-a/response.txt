@@ -1,0 +1,45 @@
+I reviewed `input.md` as an opinion piece in British English with no technique. All three values come from the `kntnt` block at the top of the file, and they already matched, so that block is unchanged. I made one round of corrections, checked the result by reviewing the whole text again, and then ran the final proofread. The proofread found no errors. No files were written or left behind.
+
+```markdown
+---
+kntnt:
+  genre: opinion
+  technique: none
+  language: en_GB
+---
+
+# Don't switch off Lervik's phone booking before we know what it costs
+
+By Sanna Ek, spokesperson for Öppna beslut
+
+On 18 June the council executive board is asked to remove phone booking from all seven community venues from September. The officers' report gives one reason: staff should not have to enter the details in two flows. That is a fair thing to want. It is not yet a reason to make the change permanent.
+
+## What the pilot actually counted
+
+The pilot report *Bokning av föreningslokaler*, dated 8 April 2026, covers an eight-week trial in two venues. It records 96 bookings made on the web and 24 made by phone. Those figures are the report's, and so are their limits: it counts bookings rather than unique people, and it measures nothing about age, functional ability or how used to digital services people are. Twenty-four phone bookings therefore cannot tell us what share of Lervik's residents are unable to book digitally. Nobody should claim they can.
+
+## A reason on the table, but no figures under it
+
+The officers' objection to keeping both routes is double administration, and I take it at face value: it is not a claim that people who ring are lazy or expensive. But the documents contain no measurement of how long either route takes staff, and no calculation of what removing one would save. The board is being asked to close a channel for good on the strength of an inconvenience the documents put no number on. That is thin ground for making the change permanent.
+
+## Time each channel and ask users why they choose it
+
+Öppna beslut proposes a six-month trial in all seven venues with both booking routes kept open. During it, the officers record the time each booking route takes and ask users to say, voluntarily, why they chose the phone or the web. We make no claim to have funded or costed that trial. What it would cost is for the board to weigh.
+
+A booking made by phone is not proof that somebody cannot use the web. It is a reason to find out why the phone is still being used. I am not against digital booking. I am against settling its shape before the council can set the work each route costs staff against what it is worth to the people who use it.
+
+## What the board can decide on 18 June
+
+Postpone the permanent switch and run the six months with both routes open. When the trial has produced figures, decide whether a channel should be removed, changed or kept. That decision is the board's either way, and it will be a better one for being taken with the cost of both routes on the table.
+```
+
+**Still open: the text has no standfirst.** The paragraph under the headline is the lead, because the body depends on it: it introduces "the change", the seven venues and the 18 June decision. That leaves no standalone summary paragraph between the headline and the byline. You need to write one; I didn't, because it would mean writing new content.
+
+**Article structure:** apart from the missing standfirst, the parts the measuring script counts are in order. I also checked by reading that the lead is one paragraph, each subheading describes its section, and the last section works as an ending that asks the board to act. I couldn't check whether the standfirst and lead repeat each other, since there is no standfirst yet. So I'm not calling the text fully compliant with the article structure. The headline has 12 words and 68 characters, and two paragraphs run to 85 and 84 words. All of these are slightly over the guideline figures but meet the hard limits. None of them was a finding, so they're unchanged.
+
+**How the claims were changed:**
+- **Changed:** the objection to keeping both routes is now "the officers'" objection instead of "the administration's", and in the proposed trial "the officers" do the recording instead of "the administration". In British local government, "the administration" usually means the ruling political group. The lead had already said the objection came from the officers' report, so this now matches it.
+- **Changed:** the second subheading calls the officers' objection a "reason" instead of a "motive". "Motive" suggested a hidden aim, which the section itself says it isn't claiming.
+- **Removed and added:** nothing. The new third subheading only restates what its section already says.
+
+**What changed besides the claims:** the sign-off at the end became the byline under the headline, so readers know whose argument it is from the start. The third subheading was rewritten so it no longer repeats the sentence below it. "The administration" became "the officers" in two places, with one verb changed to agree ("records" to "record", "asks" to "ask"). The proofread made no corrections.

@@ -1,0 +1,60 @@
+I made one round of corrections (`--max` was 1). Five of the six findings are fixed. One problem is left that you need to fix: the opinion piece has no lead paragraph.
+
+**Settings.** All three came from the `kntnt` block at the top of the file: genre `opinion`, technique `none`, language `en_GB`. Because the technique is `none`, the text was not fitted to a set story structure. The block already matched these settings, so it is unchanged.
+
+```markdown
+---
+kntnt:
+  genre: opinion
+  technique: none
+  language: en_GB
+---
+
+# Don't switch off Lervik's phone booking before we know what it costs
+
+On 18 June Lervik's council executive board is asked to remove phone booking from all seven community venues from September. The officers' report gives one reason: staff should not have to enter the details in two separate workflows. That is a fair thing to want. It is not yet a reason to make the change permanent.
+
+By Sanna Ek, spokesperson for Öppna beslut
+
+## What the pilot actually counted
+
+The pilot report *Bokning av föreningslokaler*, dated 8 April 2026, covers an eight-week trial in two venues. It records 96 bookings made on the web and 24 made by phone. Those figures are the report's, and so are their limits: it counts bookings rather than unique people, and it measures nothing about age, functional ability or how used to digital services people are. Twenty-four phone bookings therefore cannot tell us what share of Lervik's residents are unable to book digitally. Nobody should claim they can.
+
+## A motive on the table, but no figures under it
+
+The administration's objection to keeping both routes is double administration, and I take it at face value: it is not a claim that people who ring are lazy or expensive. But the documents contain no measurement of how long either route takes staff, and no calculation of what removing one would save. The council executive board is being asked to close a channel for good on the strength of an inconvenience the documents put no number on. That is thin ground for making the change permanent.
+
+## Measure staff time and find out why people still phone
+
+Öppna beslut proposes a six-month trial in all seven venues with both booking routes kept open. During it, the administration records the time each booking route takes and asks users to say, voluntarily, why they chose the phone or the web. We make no claim to have funded or costed that trial. What it would cost is for the board to weigh.
+
+A booking made by phone is not proof that somebody cannot use the web. It is a reason to find out why the phone is still being used. I am not against digital booking. I am against settling its shape before the council can set the work each route costs staff against what it is worth to the people who use it.
+
+## What the board can decide on 18 June
+
+Postpone the permanent switch and run the six months with both routes open. When the trial has produced figures, decide whether a channel should be removed, changed or kept. That decision is the board's either way, and it will be a better one for being taken with the cost of both routes on the table.
+```
+
+**What you still need to fix**
+
+- **There is no lead paragraph.** An opinion piece needs both an opening summary paragraph (the standfirst) and a lead: the first paragraph of the body. This text has only one paragraph before the first subheading. I treated it as the standfirst, as the counting script did, so the lead is missing. The body therefore goes straight into the pilot report's figures without first setting out the decision, the date or the author's position. I haven't written a lead because it's content for the author to supply.
+
+**Fixed findings**
+
+- **Author credit:** it stood at the end of the text. It is now under the opening summary as a byline: "By Sanna Ek, spokesperson for Öppna beslut".
+- **Unclear "The board":** in the section "A motive on the table…", "The board" only made sense if the reader had read the opening summary. It now reads "The council executive board".
+- **Opening summary didn't name the council:** it now says "Lervik's council executive board".
+- **Subheading repeated its first sentence:** "Six months, both routes, and something to measure" said the same thing as the sentence under it. It now reads "Measure staff time and find out why people still phone", which draws only on what the section already says.
+- **"Two flows":** this read like a translation from Swedish and is unclear in British English. It now says "two separate workflows".
+
+**What happened to the claims**
+
+- **Removed:** none.
+- **Changed:**
+  - The opening summary now says which council is deciding: Lervik's (from the fix to the opening summary). The headline and body already said this.
+  - The officers' one stated reason is reworded from "two flows" to "two separate workflows" (from the "two flows" fix). The meaning should be the same, but check the wording against the officers' report.
+- **Added:** none. The new subheading asserts nothing the section doesn't already say.
+
+**How the text conforms to the required structure.** With the lead missing, it doesn't conform. The counting script's only failure is the missing lead. I also read for the rules the script can't count, and the rest hold. The one exception is that the ending can't show a lead's promise being met, since there is no lead.
+
+Beyond the claims above: the author credit moved to the byline position, one subheading was rewritten, and one reference was spelled out in the body. The final proofreading pass found no spelling, grammar or punctuation errors, so it changed nothing. `input.md` is unchanged, and the temporary files have been removed.

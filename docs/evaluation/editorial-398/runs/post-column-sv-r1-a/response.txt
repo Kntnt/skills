@@ -1,0 +1,45 @@
+Granskningen är klar. Inställningarna kommer från textens `kntnt`-block: genre `column`, teknik `none` och språk `sv`. Tekniken `none` står uttryckligen i blocket, så ingen dramaturgisk båge har tillämpats. Korrigeringsbudgeten var 1, och den användes till en rättning av rubriken. `input.md` är oförändrad, och inga filer finns kvar efter körningen.
+
+`````markdown
+---
+kntnt:
+  genre: column
+  technique: none
+  language: sv
+---
+
+# Bibliotekets mötesmall har rutor för allt utom poängen
+
+Av Nora Vik, bibliotekarie
+
+Jag granskar bibliotekets mötesmall. Där finns rutor för starttid, sluttid, deltagare och dagordning. Någon ruta för det beslut vi ska kunna fatta när vi går därifrån finns inte. Det är dokumentet jag tittar på, inte ett bestämt möte.
+
+Jag uppskattar möten där kolleger upptäcker att de har förstått en fråga olika. Den upptäckten kan vara viktigare än att vi snabbt enas. Min tanke är alltså inte att varje samtal ska pressas fram till ett beslut.
+
+Det som retar mig är något annat: att tid i kalendern så lätt behandlas som ett resultat i sig. Timmen är bokad, alltså har något hänt. Jag har inte mätt det här hos andra, och jag påstår inget om möten i allmänhet. Det är min reflektion, med den räckvidd en reflektion har.
+
+Ändå tycker jag att den som fyller i en mall borde få formulera varför vi behöver just varandras tid. Också när syftet är att undersöka något tillsammans finns det ett skäl att skriva ner. Samtal kan skapa förtroende. Samtal kan hitta en fråga vi inte visste att vi behövde ställa. Inget av det kräver ett beslut, men båda delarna tål att motiveras.
+
+Så jag vill prova en enkel fråga bredvid tiden: vad behöver vi förstå tillsammans?
+
+Där börjar tvivlet. Det finns en komik i att försöka lösa ett problem med formulär genom att utöka formuläret – bibliotekarien som svarar på en mall med mer mall. Jag vet inte om ytterligare en ruta gör våra möten bättre. Kanske blir frågan bara en rad till att fylla i.
+
+Jag vill prova den i alla fall, och behålla båda hållningarna så länge: hoppet om frågan och tvivlet på ännu en ruta.
+`````
+
+**Fynd**
+
+1. **Rubriken gick inte att förstå på egen hand. Åtgärdat.** "Mallen" syftade på en mall som först brödtexten förklarar. Rubriken visade inte heller att krönikan handlar om möten. Nu anger rubriken "Bibliotekets mötesmall". Den nya rubriken är 54 tecken och 8 ord.
+2. **Ingress saknas. Olöst.** Artikelanatomin kräver ett självbärande, sammanfattande stycke på högst 60 ord mellan rubrik och byline. Skriptet mätte ingressen som frånvarande. Den skrivs inte i en granskning, utan du bestämmer vad som ska stå där.
+3. **Mellanrubriker, avsnitt och ett eget avslutande avsnitt saknas. Olöst.** Brödtexten består av sju stycken utan någon mellanrubrik på nivå 2. Skriptet mäter därför inledningen till sju stycken, men det beror bara på att avsnitten saknas. Sista stycket är ett avslutande innehåll, men det har inget eget avsnitt. Inga rubriker eller avsnitt har skrivits, eftersom indelningen är ditt beslut.
+4. **Uppmaningen till läsaren saknas. Olöst.** Krönikan slutar med skribentens egen avsikt ("Jag vill prova den i alla fall …"). Läsaren får ingenting att pröva, lägga märke till eller ompröva. Uppmaningen har inte skrivits.
+
+Texten följer alltså inte artikelanatomin. Rubrik, byline och styckelängder håller måtten.
+
+**Påståenden**
+
+- **Ändrat:** rubrikens subjekt har ändrats från den obestämda "Mallen" till "Bibliotekets mötesmall", och "en ruta" har blivit "rutor". Ändringen gjordes för att åtgärda fynd 1. Brödtexten säger redan att det gäller bibliotekets mötesmall, så rubriken påstår inte mer än texten gör.
+
+Utöver den ändrade rubriken ovan har inget påstående tagits bort, ändrats eller lagts till. De meningar som begränsar textens anspråk står kvar ordagrant. Det gäller till exempel "Det är dokumentet jag tittar på, inte ett bestämt möte" och "Jag har inte mätt det här hos andra …".
+
+Utöver rubriken har körningen bara gjort en mekanisk rättelse: det engelska tankstrecket (—) har bytts mot ett svenskt tankstreck med mellanslag (–). Struktur, formatering och metadata är oförändrade.

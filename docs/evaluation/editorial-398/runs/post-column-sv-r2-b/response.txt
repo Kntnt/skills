@@ -1,0 +1,42 @@
+Konfiguration: genre `column`, teknik `none` och språk `sv`. Alla tre värden kommer från textens `kntnt`-karta, och kartan var redan i linje med dem. Kartan anger `none` för tekniken, och den väljer bort genrens vanliga båge, så ingen berättarteknik har tillämpats. Korrigeringsbudgeten var 1, och den användes till en korrigering.
+
+```markdown
+---
+kntnt:
+  genre: column
+  technique: none
+  language: sv
+---
+
+# Mötesmallen saknar ett varför
+
+Av Nora Vik
+
+Jag granskar bibliotekets mötesmall. Där finns rutor för starttid, sluttid, deltagare och dagordning. Någon ruta för det beslut vi ska kunna fatta när vi går därifrån finns inte. Det här är en iakttagelse av ett dokument, inte en scen från ett visst möte. Mallen vill veta när vi ses och vilka som kommer. Vad tiden ska leda till frågar den inte om.
+
+En dagordning räknar upp vad vi ska tala om. Den säger inte varför vi behöver göra det tillsammans.
+
+Missförstå mig rätt: jag uppskattar möten där kolleger upptäcker att de har förstått en fråga olika. Den upptäckten kan vara viktigare än att vi snabbt enas. Det som retar mig är något annat – att tid i kalendern så lätt behandlas som ett resultat i sig. Timmen är bokad, alltså har något hänt. Det är min reflektion, inte något jag har mätt hos andra.
+
+Min tanke är inte att varje samtal ska pressas till ett beslut. Samtal kan skapa förtroende, och de kan få fram en fråga vi inte visste att vi behövde ställa. Men den som fyller i en mall borde få formulera varför vi behöver just varandras tid, också när syftet är att undersöka något tillsammans.
+
+Sedan kommer invändningen, och den är min egen. Jag vet inte om ytterligare en ruta gör möten bättre. Det finns en komik i att försöka lösa ett problem med formulär genom att utöka formuläret, och komiken blir inte mindre av att förslaget kommer från mig.
+
+Ändå vill jag prova en enkel fråga bredvid tiden: vad behöver vi förstå tillsammans? Jag vet inte om den överlever mötet med en verklig dagordning, och jag tänker inte låtsas att jag gör det. Hoppet om frågan och tvivlet på ännu en ruta får samsas ett tag till.
+```
+
+**Fynd**
+
+1. **Ingress saknas (olöst).** Mellan rubriken och bylinen finns ingen ingress. Artikelanatomin kräver ett självbärande, sammanfattande stycke på högst 60 ord. En läsare som bara ser rubrik och ingress, till exempel i ett flöde, får inte veta vad krönikan handlar om eller varför den är värd att läsa. Delen skrivs inte vid granskning, utan en person avgör vad den ska innehålla.
+2. **Mellanrubriker, avsnitt och avslutande avsnitt saknas (olöst).** Texten har inga nivå 2-rubriker och därmed inga avsnitt. Mätskriptet räknar därför brödtextens inledning som sex stycken, men det följer bara av att avsnitten saknas. Innehållet i avslutningen finns: sista stycket rundar av med en fråga som läsaren kan pröva och med ärligt tvivel, och det står kvar där det står. Utan avsnitt har en läsare som skummar inga ingångar i texten. Hon ser inte heller hur reflektionen rör sig från iakttagelse via invändning till försök. Vid granskning skrivs varken avsnitt eller mellanrubriker.
+3. **Rubriken förstods inte på egen hand (löst).** ”Rutan som inte finns” nämnde varken möten, mallen eller vad som saknas, så läsaren kunde inte avgöra om texten var något för dem. Rubriken är omskriven, och en ny granskning hittade inget nytt fel.
+
+Texten uppfyller inte artikelanatomin på grund av fynd 1 och 2. Tre av anatomins krav gick inte att pröva eftersom delarna saknas: att ingressen står på egen hand, att den inte upprepar inledningen och att det avslutande avsnittet har en egen mellanrubrik.
+
+**Påståenden**
+
+- *Ändrat:* Rubriken sade tidigare bara att en ruta inte finns. Nu säger den att mötesmallen saknar ett varför. Ändringen gjordes för att lösa fynd 3. Påståendet vilar på textens egen iakttagelse att mallen inte frågar vad tiden ska leda till, och på att dagordningen inte säger varför vi behöver ses.
+
+Utöver den ändrade rubriken har inga påståenden tagits bort, ändrats eller lagts till.
+
+Utöver påståendena har körningen ändrat en sak till. Den avslutande mekaniska genomgången ersatte ett engelskt långt tankstreck med ett svenskt tankstreck med mellanslag. Inga filer har skrivits.

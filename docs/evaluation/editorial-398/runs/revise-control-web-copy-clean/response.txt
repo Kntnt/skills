@@ -1,0 +1,26 @@
+Genre: web-copy (från anropet). Språk: svenska (från anropet). Teknik: ingen – genren web-copy anger ingen teknik som den vanligtvis skrivs med.
+
+```markdown
+# Så fungerar intresseanmälan
+
+En intresseanmälan till Svales genomgång av bokningsrutiner är inte en beställning. Den hjälper Svale att avgöra om genomgången passar föreningens behov.
+
+## Uppgifter att lämna
+
+Ange namn, förening och e-postadress i formuläret. Inga betalningsuppgifter behövs.
+
+## Svar inom tre arbetsdagar
+
+Svale svarar via e-post inom tre arbetsdagar för att stämma av uppdraget och föreslå en mötestid. En tid bokas alltså inte när formuläret skickas in.
+```
+
+**Anmärkningar**
+
+1. **Åtgärdad:** Under ”Svar inom tre arbetsdagar” stod tidsramen bara i mellanrubriken. Brödtexten sa att Svale svarar, men inte när. Den som läste avsnittet utan rubriken fick inte veta hur länge det dröjer innan svaret kommer. Nu står tidsramen också i brödtexten.
+2. **Ej åtgärdad:** Under ”Uppgifter att lämna” hänvisar ”i formuläret” och ”när formuläret skickas in” till ett formulär som texten varken innehåller, länkar till eller talar om var det finns. Läsaren får inte veta var anmälan görs. Texten säger inte var formuläret finns, och det går inte att rätta utan att hitta på en destination. Du behöver lägga till en länk eller ange var formuläret finns, eller bekräfta att det ligger inbäddat på sidan.
+
+**Påståenden**
+
+Inget påstående togs bort, ändrades eller lades till. Svarstiden på tre arbetsdagar stod tidigare bara i mellanrubriken. Den står nu också i brödtexten, med samma omfattning och säkerhet.
+
+Utöver det har bara brödtexten under den sista mellanrubriken ändrats: tidsramen från rubriken står nu också i den första meningen där. Korrekturläsningen hittade inga språkliga fel. `input.md` är orörd, och inga filer finns kvar från körningen.

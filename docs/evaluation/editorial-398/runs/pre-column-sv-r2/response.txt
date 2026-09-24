@@ -1,0 +1,42 @@
+```markdown
+---
+kntnt:
+  genre: column
+  technique: none
+  language: sv
+---
+
+# Bibliotekets mötesmall saknar plats för mötets syfte
+
+Av Nora Vik
+
+Jag granskar bibliotekets mötesmall. Där finns rutor för starttid, sluttid, deltagare och dagordning. Någon ruta för det beslut vi ska kunna fatta när vi går därifrån finns inte. Det här är en iakttagelse av ett dokument, inte en scen från ett visst möte. Mallen vill veta när vi ses och vilka som kommer. Vad tiden ska leda till frågar den inte om.
+
+En dagordning räknar upp vad vi ska tala om. Den säger inte varför vi behöver göra det tillsammans.
+
+Missförstå mig rätt: jag uppskattar möten där kolleger upptäcker att de har förstått en fråga olika. Den upptäckten kan vara viktigare än att vi snabbt enas. Det som retar mig är något annat – att tid i kalendern så lätt behandlas som ett resultat i sig. Timmen är bokad, alltså har något hänt. Det är min reflektion, inte något jag har mätt hos andra.
+
+Min tanke är inte att varje samtal ska pressas till ett beslut. Samtal kan skapa förtroende, och de kan få fram en fråga vi inte visste att vi behövde ställa. Men den som fyller i en mall borde få formulera varför vi behöver just varandras tid, också när syftet är att undersöka något tillsammans.
+
+Sedan kommer invändningen, och den är min egen. Jag vet inte om ytterligare en ruta gör möten bättre. Det finns en komik i att försöka lösa ett problem med formulär genom att utöka formuläret, och komiken blir inte mindre av att förslaget kommer från mig.
+
+Ändå vill jag prova en enkel fråga bredvid tiden: vad behöver vi förstå tillsammans? Jag vet inte om den överlever mötet med en verklig dagordning, och jag tänker inte låtsas att jag gör det. Hoppet om frågan och tvivlet på ännu en ruta får samsas ett tag till.
+```
+
+**Inställningar:** genre `column`, teknik `none` och språk `sv`. Alla tre kommer från `kntnt`-kartan i `input.md`. Tekniken sattes uttryckligen till `none` i kartan och kommer alltså inte från genren. Kartan stämmer redan med det som gäller och har inte ändrats.
+
+**Åtgärdat fynd (1 av 4, korrigeringsbudgeten på 1 förbrukad):**
+- **Rubriken** "Rutan som inte finns" gick inte att förstå utan texten, eftersom den inte sa vilken ruta det gällde eller att det handlar om möten. Den upprepade också första styckets "Någon ruta … finns inte". Den nya rubriken anger kolumnens vinkel och gäller bara bibliotekets mall. Den håller textens styrka och ligger inom anatomins gränser (52 tecken, 7 ord).
+
+**Olösta fynd.** Delarna nedan saknas. De ska fyllas av en person och har därför inte skrivits:
+1. **Ingress saknas.** Rubriken följs direkt av bylinen. En läsare som bara ser rubrik och ingress, till exempel i ett flöde, får inget som sammanfattar kolumnen.
+2. **Mellanrubriker och avsnitt saknas, också det avslutande avsnittet.** Brödtexten består av sex stycken och 290 ord utan ingångar för den som skummar. Mätskriptet rapporterar också ett inledningsstycke på sex stycken, men det beror bara på att avsnitten saknas.
+3. **Uppmaning till läsaren saknas.** Sista stycket uttrycker skribentens egen avsikt ("Ändå vill jag prova …") men ger inte läsaren något att göra. Att göra avsikten till en uppmaning skulle lägga en rekommendation i skribentens mun som texten själv tvivlar på.
+
+Texten följer alltså inte artikelanatomin. Styckena håller sig inom anatomins normer.
+
+**Påståenden:** inga påståenden har tagits bort eller ändrats. De avgränsande meningarna ("Det här är en iakttagelse av ett dokument …" och "Det är min reflektion, inte något jag har mätt …") står kvar oförändrade, liksom tvivlet i slutet.
+
+**Vad körningen ändrade:** rubriken skrevs om så att den går att förstå utan texten och inte upprepar första stycket. Korrekturpasset bytte det engelska långa tankstrecket mot ett svenskt kort tankstreck med mellanslag. Inget annat i texten har ändrats.
+
+`input.md` är orört och inga arbetsfiler finns kvar.

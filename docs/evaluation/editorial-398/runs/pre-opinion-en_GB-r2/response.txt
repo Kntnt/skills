@@ -1,0 +1,56 @@
+I reviewed `input.md` as an opinion piece in British English. Genre, technique (none) and language all came from the `kntnt` settings at the top of the file, which already matched and were left as they were. The one correction round the budget allowed fixed six of seven findings, and the final proofreading pass found no errors. Nothing was written to disk: `input.md` is unchanged and all temporary files are gone.
+
+```markdown
+---
+kntnt:
+  genre: opinion
+  technique: none
+  language: en_GB
+---
+
+# Keep telephone booking until Lervik knows why it is used
+
+*By Sanna Ek, spokesperson for Öppna beslut*
+
+On 18 June the municipal executive board has before it a proposal that telephone booking of Lervik's association venues disappear in September. It should not settle that yet: keep both routes, telephone and web, for six months, in all seven venues, and decide afterwards, with figures in hand.
+
+## The pilot counted bookings, not people
+
+The municipality's pilot report on the booking of association venues, dated 8 April 2026, covers an eight-week trial in two venues: 96 bookings were made on the web and 24 by telephone. The report counts bookings rather than unique people, and it measures nothing about age, ability or digital habit.
+
+Those 24 bookings therefore settle nothing about the residents behind them. They cannot show what share of residents are unable to book digitally; nor do they show the opposite, that the telephone survives out of habit. The report does not measure it.
+
+## The proposal rests on an inconvenience the papers do not measure
+
+The officers' report before the June meeting proposes removing telephone booking in all seven venues from September. The reason given is that staff should not have to enter details into two flows. Double administration is the administration's genuine objection to keeping both routes, not any view that telephone users are lazy or expensive, and I do not accuse it of holding one.
+
+What the papers do not contain is any measurement of the time that second flow costs, or any calculation of the saving. A permanent change for seven venues is being proposed on the strength of a nuisance the papers put no number on.
+
+## Six months would produce the figures
+
+Öppna beslut proposes six months in all seven venues with both routes kept open. The administration would record how long each route takes and would ask users to state, voluntarily, why they chose the telephone or the web. We make no claim to have funded or costed that trial; what it would cost is for the board to weigh.
+
+That a booking comes in by telephone is not proof that somebody cannot use the web. It is a reason to find out why the telephone is still being used. I am not against digital booking. I am against deciding before the staff time each route takes can be weighed against what each route is worth to the people who use it.
+
+## What the board can decide on 18 June
+
+The municipal executive board can adopt the September removal on the material in front of it. Or it can postpone that decision, run the trial in all seven venues, and afterwards remove, change or keep a route with time figures and users' own reasons on the table. The trial costs something we have not costed; asking what that sum is, before the route goes, is the smaller risk.
+```
+
+**Still to fix**
+
+- **The standfirst is missing.** The piece needs a short summary paragraph between the headline and the byline: at most 60 words, stating what the piece argues and why it's worth reading. Without it, a reader who sees only the top of the page, or the piece in a list, gets no summary of the case. Missing parts are left for the author to write, so I didn't add one. Because of this, the text doesn't yet meet the required article structure. Everything else in that structure was checked and passes.
+
+**Claims**
+
+- No claim was removed.
+- One claim was narrowed. In the section "Six months would produce the figures", "the cost of the work" became "the staff time each route takes". The old wording could be read as the cost of the trial, which the previous paragraph had just mentioned. The new wording uses the text's own terms ("the time that second flow costs", "how long each route takes"), but it limits the cost to staff time. Check that this is what the author meant.
+
+**What changed**
+
+- **Headline:** "Keep the telephone" became "Keep telephone booking", so the headline makes sense on its own. It is still 10 words, above the usual three-to-eight, but I didn't count that as a problem because it's clear at that length.
+- **Byline:** changed to the English "By …" form.
+- **Opening paragraph:** it now names both routes, telephone and web.
+- **Consistent term:** "channels" became "routes" wherever it meant the two ways to book.
+- **Last section:** it now opens with "The municipal executive board" instead of an "It" that only the subheading explained.
+- **Final proofreading:** found nothing to correct.

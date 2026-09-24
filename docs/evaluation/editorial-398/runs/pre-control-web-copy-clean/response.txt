@@ -1,0 +1,21 @@
+**Inställningar:** genren är webbtext och språket svenska, båda angivna i anropet. Ingen berättarteknik tillämpades, eftersom genren webbtext inte anger någon. Texten saknar frontmatter och ingen har lagts till.
+
+````markdown
+# Så fungerar intresseanmälan
+
+En intresseanmälan till Svales genomgång av bokningsrutiner är inte en beställning. Den hjälper Svale att avgöra om genomgången passar föreningens behov.
+
+## Uppgifter att lämna
+
+Ange namn, förening och e-postadress i formuläret. Inga betalningsuppgifter behövs.
+
+## Svar inom tre arbetsdagar
+
+Svale svarar via e-post för att stämma av uppdraget och föreslå en mötestid. En tid bokas alltså inte när formuläret skickas in.
+````
+
+**Olöst anmärkning**
+
+1. **Formuläret som texten hänvisar till saknas.** Det gäller ”Ange namn, förening och e-postadress i formuläret.” under *Uppgifter att lämna* och ”när formuläret skickas in” i sista stycket. Texten skriver ”formuläret” som om läsaren redan ser det, men sidan har inget formulär, ingen länk eller knapp och ingen uppgift om var formuläret finns. Den som vill anmäla intresse vet vilka uppgifter som behövs men inte var eller hur de ska lämnas. Sidan beskriver alltså ett steg utan att visa vägen dit. Rättningsrundan kunde inte lösa detta, eftersom formulärets plats, länktext och mål inte framgår av texten och måste hittas på. Den som äger sidan behöver lägga in formuläret eller ange var det finns, till exempel med en länk eller knapp under *Uppgifter att lämna*.
+
+Rättningsrundan ändrade ingenting, och korrekturläsningen hittade inga fel. Texten levereras därför exakt som den kom in. Inga påståenden har tagits bort eller ändrats. Ingen fil har skrivits eller ändrats: `input.md` är orörd och de tillfälliga arbetsfilerna är borttagna.

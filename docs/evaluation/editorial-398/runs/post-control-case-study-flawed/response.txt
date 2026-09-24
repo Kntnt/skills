@@ -1,0 +1,57 @@
+**Konfiguration:** genre `case-study` (från anropet), språk `sv` (från anropet). Ingen teknik tillämpades, eftersom genren case-study inte anger någon.
+
+```markdown
+# Elm Quays försök visar kortare väntan på tilldelning
+
+**I ett försök med Svales programvara registrerade Elm Quay 31 ärenden under åtta veckor, med akuta ärenden undantagna. Tiden till tilldelning var två arbetsdagar mot tre tidigare, men kundens försöksanteckning säger att skillnaden inte kan tillskrivas programvaran. Elm Quays arbetsledare Maya Lind berättar vad hon skulle ändra.**
+
+Kunden Elm Quay har prövat programvara från leverantören Svale och fört en egen anteckning om försöket. Nedan redovisas vad anteckningen visar och hur arbetsledaren Maya Lind bedömer försöket.
+
+## Arbetsledaren ser tillbaka på försöket
+
+– Att ha en gemensam bild av ärendena hjälper oss, men jag skulle lägga till en vecka för förberedelser, säger Maya Lind, arbetsledare hos kunden.
+
+## Tilldelningen gick en arbetsdag fortare, men orsaken är oklar
+
+Enligt kundens försöksanteckning registrerades 31 ärenden under åtta veckor, med akuta ärenden undantagna. Tiden till tilldelning var två arbetsdagar jämfört med tre tidigare. Anteckningen säger att arbetsbelastningen var olika och att skillnaden inte kan tillskrivas programvaran.
+
+## Arbetsledarens slutomdöme
+
+– Jag skulle välja att göra försöket igen, säger Lind.
+
+Kundcaset publiceras av leverantören Svale.
+```
+
+## Olösta fynd
+
+Tre fynd kvarstår. Alla tre gäller material som saknas i texten och som en person måste tillföra.
+
+1. **Uppmaning till handling saknas.** Avslutningen uppmanar inte läsaren till något nästa steg. Texten innehåller inga erbjudanden, länkar eller kontaktvägar att bygga en uppmaning på. Därför skrevs ingen.
+2. **Byline saknas.** Texten har ingen rad som namnger författaren, och ingen författare nämns i texten eller i anropet. Mätningen bekräftar att byline saknas.
+3. **Kundens bakgrund, anledningen och genomförandet saknas.** Texten säger inte vad Elm Quay är för verksamhet, vad ärendena gäller eller varför försöket gjordes. Den säger inte heller vad Svales programvara gör eller hur den infördes. Läsaren saknar därför sammanhanget som gör resultatet begripligt.
+
+**Artikelanatomi:** Texten uppfyller inte anatomin. Mätningen visar att byline saknas, och läsningen visar att uppmaningen till handling saknas. Övriga krav är uppfyllda. Det gäller både de uppmätta och de som bedömdes genom läsning: att ingressen står på egen hand, att inledningen för texten framåt, att mellanrubrikerna beskriver sina avsnitt och att sista avsnittet är ett avslut.
+
+## Redovisning av påståenden
+
+**Strukna**
+- ”Vår fantastiska lösning räddade Elm Quay”, alltså att Svales lösning räddade kunden. Påståendet ströks när rubriken skrevs om, eftersom texten själv säger att skillnaden inte kan tillskrivas programvaran.
+- ”Vi på Svale är världsledande på att skapa framgång” ströks vid reparationen av inledningen. Påståendet saknade stöd i texten.
+- ”kunden stod hjälplös innan vi kom” ströks vid samma reparation. Även det saknade stöd och gjorde dessutom kunden passiv.
+- ”Vår programvara orsakade därför hela förbättringen.” ströks vid reparationen av resultatavsnittet, eftersom försöksanteckningen strax före motsäger påståendet.
+
+**Ändrade**
+- Rubrikens påstående handlar nu om försökets resultat, kortare väntan på tilldelning, i stället för om en räddning. Detta hör till rubrikreparationen.
+- I ingressen gäller ”31 ärenden” nu åtta veckor med akuta ärenden undantagna, i enlighet med brödtexten. Detta hör till ingressreparationen.
+- Mellanrubriken ”Resultatet bevisar allt” säger nu bara det som avsnittet redovisar: att tilldelningen gick en arbetsdag fortare.
+- Mellanrubriken ”Kunden fick en gemensam bild” är omskriven så att den namnger talaren och tillfället. Påståendet om den gemensamma bilden står kvar i Maya Linds citat. Detsamma gäller den strukna bryggan före citatet: dess påstående finns kvar i citatet.
+
+**Tillagda** (slutsatser dragna ur det som texten redan sa)
+- Att försöket gjordes med Svales programvara, i ingressen och inledningen. Slutsatsen bygger på ”Vår programvara” och på anteckningens förbehåll om programvaran.
+- Att Elm Quay är kunden och att Maya Lind är Elm Quays arbetsledare, i ingressen och inledningen. Tidigare framgick det bara indirekt.
+- ”Maya Lind berättar vad hon skulle ändra”, i ingressen. Formuleringen tolkar hennes förbehåll om en extra vecka för förberedelser.
+- ”orsaken är oklar”, i den andra mellanrubriken. Formuleringen bygger på anteckningens besked om att arbetsbelastningen var olika och att skillnaden inte kan tillskrivas programvaran.
+
+Förutom de påståenden som redovisas ovan står alla påståenden i texten kvar oförändrade. Det gäller även meningen som avgränsar vad texten hävdar: ”Anteckningen säger att arbetsbelastningen var olika och att skillnaden inte kan tillskrivas programvaran.”
+
+Den dubblerade meningen i ingressen har strukits, och ingressen har byggts om av brödtextens eget innehåll. Inledningen har skrivits om så att den inte upprepar ingressen, och leverantörens vi-perspektiv, självberöm och superlativ har tagits bort. Bryggan som föregrep Maya Linds citat har strukits. Rubriken och två mellanrubriker har skrivits om. Linds slutomdöme och upplysningen om utgivaren har flyttats till ett eget avslutande avsnitt med en ny mellanrubrik. Den avslutande språkliga korrekturen hittade inga fel att rätta.

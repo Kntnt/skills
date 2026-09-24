@@ -1,0 +1,41 @@
+Konfiguration: genre `article` och språk `sv`, båda från anropet. Ingen teknik tillämpades eftersom genren `article` inte anger någon och inget annat valde en. Texten saknar frontmatter, så ingen `kntnt`-karta lästes och ingen lades till. Korrekturbudgeten på 1 användes. Den avslutande språkgranskningen hittade inga mekaniska fel. Ingen fil har skrivits.
+
+```markdown
+# Björkskolans mätförsök visar värden under 20 grader
+
+**Ett fyra veckor långt försök med sex temperaturgivare mätte lufttemperaturen i Björkskolan. Artikeln går igenom vad fastighetskontorets rapport om försöket visar, vad mätningarna inte fångar och vad driftteknikern Elin Rask rekommenderar innan styrningen ändras.**
+
+Temperaturgivare i Björkskolan registrerade temperaturer under 20 grader i sex klassrum. Fastighetskontorets rapport *Mätförsök i Björkskolan* från den 12 mars 2026 anger att 14 av 120 lektionspass hade minst ett värde under kontorets egen arbetsgräns på 20 grader, vilket inte är en lagregel.
+
+Rapporten anger också att försöket varade fyra veckor. Två givare stod enligt rapporten vid ytterväggar och fyra vid innerväggar, utan att placeringens effekt jämfördes experimentellt.
+
+Resonemanget bygger på operativ temperatur, som är ett mått på lufttemperatur och värmestrålning från omgivande ytor. Ändå saknas operativ temperatur i mätningarna. Givarna mätte bara luften där de satt.
+
+Det saknas mätningar av luftdrag och elevernas upplevelse och uppgifter om hur länge temperaturerna låg under gränsen. Ingen effekt på hälsan har undersökts.
+
+Driftteknikern Elin Rask rekommenderar att koppla temperaturserier till användningstider innan styrningen ändras, och nästa försök är tänkt att använda likadant placerade givare i november, fast finansieringen inte är beslutad.
+
+Den som ska ändra styrningen kan börja med Elin Rasks rekommendation.
+```
+
+**Olösta fynd**
+
+1. **"Resonemanget" har ingen tydlig referent.** Stycket om operativ temperatur börjar med "Resonemanget bygger på operativ temperatur …", men texten säger aldrig vems resonemang det är. Läsaren kan inte avgöra om det är rapportens, fastighetskontorets eller någon annans. Begreppet förklaras nu innan det används och det framgår var operativ temperatur saknas, men referenten kan inte fyllas i utan uppgifter som texten saknar.
+2. **Byline saknas.** Ingen författare namnges i texten eller i anropet. Den har lämnats ofylld.
+3. **Mellanrubriker saknas, och därmed ett avslutande avsnitt.** Texten består av rubrik, ingress och sex brödtextstycken utan en enda mellanrubrik. Mätskriptet räknar därför inledningen som sex stycken, men det beror enbart på att mellanrubrikerna saknas. Inga avsnitt och inga mellanrubriker har skrivits. Texten uppfyller alltså inte artikelanatomin.
+
+**Påståenden som tagits bort**
+
+- Att katastrofen lurade bakom varje hörn. Meningen var obelagd dramatik och togs bort helt vid korrigeringen.
+- Att det är helt säkert att givarna har gjort eleverna friskare. Det motsades av förbehållet i samma mening om att ingen hälsoeffekt undersökts. Förbehållen står kvar.
+- Att detta är mycket viktigt för alla som tycker att temperatur är viktigt. Det var en cirkulär utfyllnadsmening.
+- Att läsaren ska kontakta ett icke namngivet "oss" för att rädda framtiden. Uppmaningen ersattes av att den som ska ändra styrningen kan börja med Elin Rasks rekommendation.
+
+**Påståenden som ändrats**
+
+- Placeringen av givarna tillskrivs nu uttryckligen rapporten ("enligt rapporten"). I originalet var det oklart om uppgiften kom från rapporten. Ändringen uppstod när rapportmeningen delades upp vid fogarna.
+- "Operativ temperatur saknas" preciseras till att den saknas "i mätningarna". Stödet är textens uppgift att givarna bara mätte luften där de satt.
+- Inledningens första mening säger nu att givarna fanns i Björkskolan. Originalet angav platsen bara genom rapportens titel.
+- Avslutningens uppmaning bygger nu på Elin Rasks rekommendation i stället för en kontakt med en okänd avsändare.
+
+Jämfört med originalet har rubriken skrivits om så att den håller sig till vad texten belägger. Ingressens dubblerade mening är borta, och ingressen presenterar nu försöket, skolan och vad artikeln tar upp. Inledningen upprepar inte längre ingressen. Obelagd dramatik och tom utfyllnad har tagits bort. Den överlastade rapportmeningen har delats vid fogarna. Begreppet operativ temperatur förklaras där det först används. Det enda brödtextstycket på 187 ord har delats i sex stycken, ett per tanke. Den avslutande språkgranskningen gjorde inga ändringar.

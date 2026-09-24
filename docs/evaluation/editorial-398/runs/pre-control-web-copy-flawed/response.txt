@@ -1,0 +1,28 @@
+I reviewed `input.md` as **web-copy** in **en_US**, both set in your command. No technique was applied: you didn't name one, and the web-copy genre doesn't have a usual one. The one allowed correction round was used and accepted. The closing proofreading pass found no mechanical errors. `input.md` is unchanged and nothing was written to disk.
+
+````markdown
+# A review of how one shared room in your housing association is booked
+
+## What the review covers and costs
+
+The review costs SEK 4,800 including VAT. It covers one shared room in one housing association. It includes a 45-minute video call with two board representatives. It includes a written account of the booking steps, unclear points and two possible simplifications.
+
+## How to express interest and what happens next
+
+[Express interest in the review](https://example.invalid/svale/intresse).
+
+The link opens an expression-of-interest form asking for a name, association and email address. It places no order, requires no payment details and books no meeting. Svale replies by email within three business days to discuss whether the review is suitable and suggest a meeting time.
+````
+
+**Unresolved findings** (the correction budget is used up; these need a person)
+
+1. **Who Svale is.** "Svale" first appears in the last sentence, and the page never says who offers or carries out the review. A reader has to guess who they are dealing with. The text implies Svale is the provider but never says so. Stating it would add a claim, so it was left alone.
+2. **Repeated sentence pattern in "What the review covers and costs."** The paragraph is four short sentences, three starting with "It" and two with "It includes." The pattern was in the original. Merging the two "It includes" sentences would read more smoothly and wouldn't change any claim.
+
+**Removed and changed claims**
+
+- **Removed (opening paragraph).** The opening was cut because the finding named the whole paragraph as the defect: a tautology that could open any text, a literal Swedish idiom, and an unsupported promise. Three claims went with it: that decision-makers in a complex reality face growing complexity, the instruction "Take the thumb out," and the promise to "discover a fantastic journey."
+- **Changed (headline).** "Unlock your association's full potential" promised an outcome the page doesn't support. The new headline states only what the body says is offered.
+- **Changed (link label).** "Book and pay now" claimed the link books and takes payment. The page itself says it does neither, so the label now says "Express interest in the review." The URL is unchanged.
+
+The six empty headings ("Start," "It," "More," "Again," "Things," "Important") were replaced with two headings that say what each section holds. The one-sentence sections were combined, and the unclear "It" now reads "The review." The link moved after the description of the offer, and "working days" became the American "business days." The proofreading pass made no mechanical corrections.

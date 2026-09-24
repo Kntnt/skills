@@ -1,0 +1,41 @@
+I reviewed `input.md` as web copy in American English and made one correction round. The re-review found nothing left, so the corrected text is below. Nothing was written to disk, and `input.md` is unchanged.
+
+**Settings:** genre `web-copy` and language `en_US`, both from your command. No storytelling technique was applied: you didn't name one, and the web-copy guidelines don't prescribe one. The file has no frontmatter, so no Kntnt settings block was read or added.
+
+````markdown
+# A review of how a shared room in your housing association is booked
+
+The review covers one shared room in one housing association and includes:
+
+- a 45-minute video call with two board representatives
+- a written account of the booking steps, unclear points and two possible simplifications
+
+It costs SEK 4,800 including VAT.
+
+## Expressing interest and what happens next
+
+[Express interest in the review](https://example.invalid/svale/intresse).
+
+The link opens an expression-of-interest form asking for a name, association and email address. It places no order, requires no payment details and books no meeting. Svale replies by email within three working days to discuss whether the review is suitable and suggest a meeting time.
+````
+
+**What the review found (all three fixed)**
+1. **Headline and opening:** "Unlock your association's full potential" and the paragraph under it promised things the offer never claims. They also read as filler, and "Take the thumb out" is a word-for-word Swedish idiom that means nothing in English. Readers reached the price before learning what was being sold.
+2. **The link label:** "Book and pay now" contradicted the page's own last section. That section says the link only opens an expression-of-interest form that places no order, takes no payment and books no meeting.
+3. **Headings and structure:** the headings "Start", "It", "More", "Again", "Things" and "Important" told a scanning reader nothing. The four sections that open with "It" never say what "It" is. And four related facts about one offer were split into four one-sentence sections.
+
+**Claims removed** (the headline and opening fix, where the whole claim was the problem)
+- "Unlock your association's full potential"
+- "Decision-makers in a complex reality face growing complexity."
+- "Take the thumb out and discover a fantastic journey."
+
+**Claims changed**
+- **Link label** (link fix): "Book and pay now" is now "Express interest in the review". The link also moved down, directly above the sentences that say what the form does.
+- **What the offer is called** (headings fix): "It covers one shared room in one housing association" now starts "The review covers…". The original called the offer "the review" only in its final sentence.
+
+**Claims added**
+- **New headline** (headline and opening fix): it says the offer is a review of how a shared room in the reader's housing association is booked. This is inferred from the scope sentence and the written account of "the booking steps". The original never says outright that those booking steps are for the shared room, so please confirm it.
+
+Apart from the claims listed above, every other fact is still there with the same wording or meaning: the price, the video call, the written account, the form's fields, the three-working-day reply, and the statements that the form places no order, needs no payment details and books no meeting.
+
+**Other changes:** I removed the empty promotional opening and the corporate filler. The six unhelpful headings are gone. The offer's scope, price, call and written account now form one section, with the two deliverables as a list. The remaining heading now says what its section covers, and the link sits in that section. The final mechanical proofread found no errors and changed nothing.

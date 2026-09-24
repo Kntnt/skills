@@ -1,0 +1,49 @@
+Konfiguration: genren är `article` och språket `sv`, båda angivna i anropet. Ingen teknik används: genren anger ingen, och varken anropet eller texten valde någon. Texten saknar Kntnt-metadata, så ingen lades till. Budgeten på en korrigering förbrukades, och därefter gick texten igenom en mekanisk slutpassage.
+
+````markdown
+# Björkskolans mätförsök visar värden under 20 grader
+
+**Under ett fyra veckor långt försök i Björkskolan registrerade givare temperaturer under Fastighetskontorets arbetsgräns i sex klassrum. Mätningarna säger dock inget om luftdrag, elevernas upplevelse eller effekter på hälsan. Här är vad försöket visar och vad en drifttekniker rekommenderar innan styrningen ändras.**
+
+Fastighetskontorets rapport *Mätförsök i Björkskolan* från den 12 mars 2026 anger att 14 av 120 lektionspass hade minst ett värde under kontorets egen arbetsgräns på 20 grader. Arbetsgränsen är inte en lagregel. Rapporten anger också att försöket varade fyra veckor. Givarna i försöket registrerade temperaturer under 20 grader i sex klassrum. Två givare stod vid ytterväggar och fyra vid innerväggar, utan att placeringens effekt jämfördes experimentellt.
+
+Operativ temperatur saknas, trots att resonemanget bygger på operativ temperatur, som är ett mått på lufttemperatur och värmestrålning från omgivande ytor, medan givarna bara mätte luften där de satt. Det saknas mätningar av luftdrag och elevernas upplevelse och uppgifter om hur länge temperaturerna låg under gränsen, och ingen effekt på hälsan har undersökts.
+
+Driftteknikern Elin Rask rekommenderar att koppla temperaturserier till användningstider innan styrningen ändras, och nästa försök är tänkt att använda likadant placerade givare i november, fast finansieringen inte är beslutad.
+
+Kontakta oss för att rädda framtiden.
+````
+
+## Olösta fynd
+
+1. **Vems är ”resonemanget”?** I ”trots att resonemanget bygger på operativ temperatur” framgår inte om resonemanget är rapportens, Fastighetskontorets eller artikelns. Läsaren kan inte avgöra vems slutsatser som vilar på ett mått som aldrig mättes. Texten själv säger inte vems det är, och därför går fyndet inte att reparera utan ny information.
+2. **Uppmaningen följer inte av innehållet.** ”Kontakta oss för att rädda framtiden” anger inte vilka ”oss” är, och ”rädda framtiden” har inget stöd i texten. Någon uppmaning som texten bär kan inte skrivas utan att hitta på vem läsaren ska vända sig till eller vad hen ska göra.
+3. **Byline saknas.** Varken texten eller anropet namnger någon författare, och ingen byline har skrivits.
+4. **Avsnitt och avslutande avsnitt saknas.** Texten har inga mellanrubriker och därför inga avsnitt och inget avslutande avsnitt med egen mellanrubrik. Mätskriptet räknar därför de fyra brödtextstyckena som en ingress i fyra stycken, men det felet beror enbart på att avsnitten saknas. Inga mellanrubriker har skrivits.
+
+Texten uppfyller alltså inte artikelanatomin. Det som saknas är byline, avsnitt och avslutning, enligt `article_anatomy.py`. Allt annat skriptet räknar håller: rubriken har 51 tecken och 7 ord, ingressen är ett stycke på 42 ord och varje stycke har under 80 ord. Delarna som skriptet inte räknar har granskats genom läsning. Ingressen står på egen hand, brödtexten inleds med andra ord än ingressen och för läsaren vidare, och rubriken och ingressen säger olika saker.
+
+## Påståenden
+
+**Borttagna** (i varje fall var hela påståendet självt defekten):
+- Att givarna räddade skolan från en katastrof. Det togs bort när rubriken skrevs om, eftersom texten saknar stöd för det.
+- ”Katastrofen lurade bakom varje hörn.” Det var tillverkad dramatik utan stöd.
+- Att det är ”helt säkert att givarna har gjort eleverna friskare”. Det var ett orsakssamband som motsades av förbehållet bredvid. Förbehållet att ingen effekt på hälsan har undersökts står kvar ordagrant.
+- ”Det är viktigt att notera att detta är mycket viktigt för alla som tycker att temperatur är viktigt.” Det var tom utfyllnad.
+
+**Ändrade** (vid delningen av den överlastade meningen om rapporten och förtydligandet av givarna):
+- ”Arbetsgränsen är inte en lagregel.” står nu som en egen mening i artikelns egen röst. Tidigare var det en bisats inuti det som rapporten ”anger”, och där gick det inte att avgöra om det var rapportens uppgift eller artikelns.
+- Uppgiften om placeringen, två givare vid ytterväggar och fyra vid innerväggar utan experimentell jämförelse, står nu också i artikelns egen röst. Tidigare kunde den läsas som en del av det som rapporten anger.
+- ”Givarna registrerade …” har blivit ”Givarna i försöket registrerade …”. Givarna knyts nu uttryckligen till mätförsöket.
+
+**Tillagda** (alla finns i ingressen, som skrevs om för att den upprepade sig och inte stod på egen hand):
+- Att försöket i Björkskolan var fyra veckor långt. Uppgiften kommer från rapportens titel och brödtextens uppgift om fyra veckor.
+- Att givarna registrerade temperaturer under Fastighetskontorets arbetsgräns i sex klassrum. Här har uppgiften om sex klassrum förts ihop med arbetsgränsen på 20 grader.
+- Att mätningarna ”säger inget om” luftdrag, elevernas upplevelse eller effekter på hälsan. Det är en slutsats av det som brödtexten anger saknas eller inte har undersökts.
+- Att artikeln redovisar vad en drifttekniker rekommenderar innan styrningen ändras. Det syftar på Elin Rasks rekommendation.
+
+Den nya rubriken säger bara det som brödtexten redan säger om rapportens mätvärden. Utöver det som räknas upp ovan är varje påstående kvar med samma omfattning, säkerhet, tillskrivning, kronologi och innebörd.
+
+## Vad som ändrades
+
+Rubriken skrevs om så att den inte längre påstår mer än texten bär. Ingressen skrevs om: den upprepade sig och stod inte på egen hand. Brödtextens första mening, som upprepade ingressen, flyttades in efter rapportuppgifterna så att givarna presenteras innan de nämns. Tillverkad dramatik, ett ogrundat hälsopåstående och tom utfyllnad togs bort. Den överlastade meningen om rapporten delades upp, och det felaktiga sambandsordet ”medan” försvann. Det enda brödtextstycket på 187 ord delades vid tankegränserna i fyra stycken. Den mekaniska slutpassagen hittade inget att rätta.

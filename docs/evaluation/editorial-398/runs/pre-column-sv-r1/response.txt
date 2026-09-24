@@ -1,0 +1,44 @@
+**Granskning:** krönika (`column`) på svenska (`sv`), utan teknik. Alla tre värdena kommer ur textens `kntnt`-karta. Tekniken `none` står uttryckligen där, så ingen dramaturgisk båge har tillämpats. Kartan stämde redan med det som granskningen landade i och har inte ändrats.
+
+```markdown
+---
+kntnt:
+  genre: column
+  technique: none
+  language: sv
+---
+
+# Mötesmallen har en ruta för allt utom poängen
+
+Av Nora Vik, bibliotekarie
+
+Jag granskar bibliotekets mötesmall. Där finns rutor för starttid, sluttid, deltagare och dagordning. Någon ruta för det beslut vi ska kunna fatta när vi går därifrån finns inte. Det är dokumentet jag tittar på, inte ett bestämt möte.
+
+Jag uppskattar möten där kolleger upptäcker att de har förstått en fråga olika. Den upptäckten kan vara viktigare än att vi snabbt enas. Min tanke är alltså inte att varje samtal ska pressas fram till ett beslut.
+
+Det som retar mig är något annat: att tid i kalendern så lätt behandlas som ett resultat i sig. Timmen är bokad, alltså har något hänt. Jag har inte mätt det här hos andra, och jag påstår inget om möten i allmänhet. Det är min reflektion, med den räckvidd en reflektion har.
+
+Ändå tycker jag att den som fyller i en mall borde få formulera varför vi behöver just varandras tid. Också när syftet är att undersöka något tillsammans finns det ett skäl att skriva ner. Samtal kan skapa förtroende. Samtal kan hitta en fråga vi inte visste att vi behövde ställa. Inget av det kräver ett beslut, men båda delarna tål att motiveras.
+
+Så jag vill prova en enkel fråga bredvid tiden: vad behöver vi förstå tillsammans?
+
+Där börjar tvivlet. Det finns en komik i att försöka lösa ett problem med formulär genom att utöka formuläret – bibliotekarien som svarar på en mall med mer mall. Jag vet inte om ytterligare en ruta gör våra möten bättre. Kanske blir frågan bara en rad till att fylla i.
+
+Jag vill prova den i alla fall, och behålla båda hållningarna så länge: hoppet om frågan och tvivlet på ännu en ruta.
+```
+
+**Olösta fynd.** Delarna nedan saknas i texten. En granskning skriver inte saknade delar, så de ligger kvar för dig:
+
+1. **Ingress saknas.** Det finns inget fristående, sammanfattande stycke på högst 60 ord mellan rubriken och bylinen. En läsare som bara ser rubriken i ett flöde får inte veta vad krönikan handlar om eller vad den ger.
+2. **Mellanrubriker, avsnitt och ett avslutande avsnitt saknas.** Brödtexten är sju stycken och 274 ord utan en enda mellanrubrik. Den som skummar får inga ingångar i texten. Skriptet räknar därför hela brödtexten som ett inledande stycke på sju stycken, men det följer bara av att avsnitten saknas och är inget eget fel.
+3. **Uppmaning till läsaren saknas.** Slutet beskriver skribentens egen plan ("Jag vill prova den i alla fall …") men ger inte läsaren något att själv pröva. Om planen skrevs om till en uppmaning skulle det ändra vad skribenten säger, så det får en person avgöra.
+
+**Löst fynd.** Rubriken förstods inte på egen hand, eftersom "Mallen" inte sa vilken mall det gällde. "Mallen" har ersatts med "Mötesmallen". Nu står det viktigaste nyckelordet först, och rubriken har samma påstående och samma styrka som förut (45 tecken, 8 ord).
+
+**Artikelanatomin.** Texten följer inte artikelanatomin. Fynd 1 och 2 bryter mot de krav som mäts genom räkning. Krav som inte räknas, som att en mellanrubrik beskriver sitt avsnitt och att slutet fungerar som avslutning, går inte att pröva så länge avsnitten saknas.
+
+**Påståenden.** Inget påstående har tagits bort eller ändrats.
+
+**Ändringar i texten.** Rubrikens första ord har bytts ut så att rubriken säger att det gäller mötesmallen. Den avslutande språkliga genomgången ersatte ett engelskt tankstreck (—) med ett svenskt tankstreck med mellanrum (–). I övrigt är texten oförändrad.
+
+Ingenting har skrivits till filsystemet. `input.md` är orörd, och alla tillfälliga filer är borttagna.

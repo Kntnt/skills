@@ -1,0 +1,49 @@
+Jag granskade texten som artikel och gjorde ett korrigeringsförsök, men försöket skapade ett nytt fel och förkastades. Korrekturläsningen hittade inga mekaniska fel. Texten nedan är därför oförändrad och två anmärkningar kvarstår olösta. Inga filer har skrivits eller lämnats kvar.
+
+**Inställningar:** genren är artikel (från anropet) och språket svenska (från anropet). Ingen berättarteknik tillämpas, eftersom artikelgenren inte anger någon.
+
+```markdown
+# Mätförsöket i Björkskolan visar när, inte varför
+
+**Under 14 av 120 lektionspass registrerade givarna i Björkskolan temperaturer under fastighetskontorets egen arbetsgräns. Fyra veckors mätningar pekar ut tillfällen att undersöka närmare, men förklarar inte varför luften var kall. Här är vad ett kort försök kan säga, och vad som behövs för att komma vidare.**
+
+Text: Hedda Lund
+
+En temperaturgivare mäter luften där den sitter. Det gör placeringen viktig när fastighetskontoret ska tolka fyra veckors mätningar i Björkskolans sex klassrum. Genomgången nedan visar vad värdena räcker till och var gränsen går.
+
+## En gräns för det lokala försöket
+
+Kontoret valde 20 grader Celsius som arbetsgräns. Rapporten *Mätförsök i Björkskolan*, daterad 12 mars 2026, räknar 14 lektionspass av 120 med minst en mätning under den gränsen. Hur länge temperaturen låg under den anger rapporten inte. Gränsen är kontorets egen, vald för det här försöket.
+
+Givarna mätte varken luftdrag eller elevernas upplevelse. Ett lågt värde säger alltså när luften var kall, men inte hur rummet kändes.
+
+Driftteknikern Elin Rask sammanfattar: ”Vi vet när vi behöver titta närmare. Vi vet ännu inte varför det blev kallt just då.”
+
+## Nästa försök behöver mer än givare
+
+Rask rekommenderar att temperaturserierna kopplas till rummens användningstider innan styrningen ändras. Nästa försök planeras för november med likadant placerade givare, men finansieringen är inte beslutad.
+
+Lägg därför tiderna för när rummen används bredvid mätvärdena innan nästa givare sätts upp.
+```
+
+**Olösta anmärkningar**
+
+1. **Mellanrubriken ”En gräns för det lokala försöket” (olöst).**
+   - Rubriken säger samma sak som avsnittets första mening (”Kontoret valde 20 grader Celsius som arbetsgräns”), fast med andra ord. Den upprepar också styckets sista mening (”Gränsen är kontorets egen, vald för det här försöket”).
+   - Den täcker bara valet av gräns. Avsnittet handlar om vad mätvärdena visar och inte visar: 14 av 120 pass med minst en mätning under gränsen, att varaktigheten är okänd, att luftdrag och elevernas upplevelse inte mättes, och Rasks sammanfattning.
+   - Den som skummar rubrikerna får inte veta vad avsnittet ger, och den som läser möter första meningen som en upprepning av rubriken.
+   - En ny rubrik får inte föregripa Rasks citat om ”när men inte varför”.
+
+2. **Leadens löfte om placering (olöst).**
+   - ”Det gör placeringen viktig när fastighetskontoret ska tolka …” väcker en förväntan som brödtexten aldrig infriar. Texten säger inte var givarna satt eller hur placeringen begränsar tolkningen, och ”likadant placerade givare” i sista avsnittet kommenteras inte.
+   - För att lösa det behövs uppgifter som inte finns i texten, till exempel var givarna satt. Alternativet är ett medvetet beslut att stryka påståendet och binda ihop leaden på annat sätt.
+
+**Förkastat korrigeringsförsök**
+
+Försöket skrev om mellanrubriken till ”Antalet pass under gränsen säger inget om varaktighet eller drag”. I leaden strök det påståendet ”Det gör placeringen viktig när fastighetskontoret ska tolka fyra veckors mätningar …”, så att meningen löd ”Fastighetskontoret ska tolka fyra veckors mätningar i Björkskolans sex klassrum.”
+
+Strykningen skapade ett nytt fel. Leadens första mening, ”En temperaturgivare mäter luften där den sitter”, blev hängande utan uttalat samband med resten av stycket. Därför förkastades hela försöket och originaltexten återställdes. Inget från försöket finns kvar i texten ovan, inte heller den nya mellanrubriken.
+
+**Påståenden:** Det enda påstående som berördes var det om placeringens betydelse. Försöket ströks, men påståendet står kvar oförändrat. Inga andra påståenden har tagits bort eller ändrats.
+
+**Artikelns anatomi:** Allt som mätskriptet räknar, som längder och antal stycken, uppfyller kraven. Jag har också läst det skriptet inte räknar: ingressen står på egen hand, leaden för texten vidare och slutavsnittet avslutar med en uppmaning. Texten följer anatomin med ett undantag: första mellanrubriken beskriver inte sitt avsnitt (anmärkning 1).

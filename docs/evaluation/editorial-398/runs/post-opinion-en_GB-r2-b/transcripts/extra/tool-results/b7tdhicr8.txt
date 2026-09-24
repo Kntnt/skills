@@ -1,0 +1,319 @@
+=== base.md
+# The base contract
+
+Write with the clarity and factual precision of a well-edited newspaper or quality magazine. Genre, audience, and purpose override that register: a letter, a speech and an advertisement keep their own character. The selected genre governs craft and form; the resolved language governs idiom, syntax and typography. Examples here illustrate meanings, not English phrases to translate.
+
+## Reader and progression
+
+Give the intended reader what they need to understand, judge or do the thing the text is for. Keep a clear focus, introduce unfamiliar concepts before the reasoning needs them, and order material by that reader's needs rather than the writer's discovery process. Relevant technical detail belongs; unexplained jargon and unrelated background do not.
+
+Make the relations between passages real. A transition may explain a connection, but cannot invent one. Keep paragraphs coherent and give supporting material a clear place beside what it supports. The body and its sections remain intelligible without treating a title, standfirst or subheading as their opening sentence.
+
+Open on something specific to the subject. End with what the job calls for: an earned understanding, conclusion, recommendation or next step. Remove introductions and conclusions that add only an announcement or a generic flourish.
+
+## Expression
+
+Use concrete words, useful verbs and a natural, varied cadence. Keep terminology and reference clear; introduce an unfamiliar abbreviation before using it alone. Choose ordinary words where they suffice and established specialist terms where they give this reader precision.
+
+Let tone and rhetorical devices serve the genre and the meaning. A useful analogy, question, image, fragment or humorous turn can clarify or carry a voice; decoration and manufactured drama cannot. An imagined comparison is recognisable as a comparison, never presented as an event or someone's experience. Criticism addresses the supported issue without inventing motives or patronising the reader.
+
+Each passage earns its place. Repetition may establish an independent entry point, explain a hard idea or give a deliberate rhetorical return; merely saying the same thing again does none of these. Keep formatting useful: headings for orientation, lists for coordinate items, tables for comparisons, emphasis for what merits it. Hold voice, terminology and presentation consistent unless a visible purpose calls for a change.
+
+## Claims
+
+Every claim is supported by the text or its material, with exact attribution and proportionate strength. Preserve the state of knowledge: what is unknown or unclaimed is not thereby known not to have happened. Keep uncertainty where it exists and certainty where it is warranted. A fact, quotation, source, scene, personal experience or opinion attributed to somebody is never invented to complete a form. Name the actual source of an attributed claim rather than invoking unnamed studies or experts.
+
+Circumstantial detail is a claim too: duration, manner, motive, absence and background all need support. So does an evaluative characterisation: calling a count high, low or modest needs a comparison, target, capacity or speaker assessment. Otherwise give the count with its exclusions, without that assessment.
+
+A sequence or correlation establishes no cause. A causal verb such as *shortened* needs causal support; a causal hedge such as *suggests that it shortened* still adds that attribution. This boundary holds in the title, summary, headings and body alike. Preserve chronology, scope and qualifications wherever a claim appears.
+
+A stated length constrains the use of material and is never a licence to add to it. When the material is insufficient, deliver the length the material supports and name what further material would close the gap. A supplied publication limit is binding; meeting it cannot justify invention or loss of a qualification that changes a claim.
+=== base.review.md
+# Reviewing the base contract
+
+Diagnose failures of [the base contract](base.md) in the text in front of you. A finding identifies the passage, the requirement and what the reader loses. Another successful choice, a house-style preference and a mechanical error are not editorial findings; mechanics belongs to the separate final pass. Repetition of whole sentences or passages is an editorial matter, even when the duplication is verbatim; Proofread's duplicate-word correction does not own it.
+
+Read for the intended reader's missing step: an unexplained term, a transition asserting a relation the surrounding sentences do not establish, a section whose place obscures the argument. Cover the paratext to find unresolved references in the body. Judge rhythm by its effect, not sentence counts; purposeful repetition, a personal rough edge and a useful digression may be doing essential work.
+
+Compare the strength of a claim with the support visible in this text. A number contradicting its stated denominator, a causal conclusion following only a sequence, or a certainty contradicted by a nearby qualification is diagnosable. A plausible quotation or experience is not disproved by the absence of its original source. Review no unseen material, request none, and add no source-verification caveat.
+
+Use [the anti-slop catalogue](anti-slop.md) to recognise empty performance, not to prohibit a working figure, contrast or ending. Test suspected filler by what its removal costs; preserve any fact, implication or voice it carries beside the defect. Strong supported criticism needs no generic softening.
+
+A sentence can do its work by bounding what the text asserts: that something is not measured, not claimed, not witnessed or not general, or that what follows is an observation of a document rather than a scene from an occasion. Such a sentence is where *Preserve the state of knowledge: what is unknown or unclaimed is not thereby known not to have happened*, *Keep uncertainty where it exists and certainty where it is warranted* and *Preserve chronology, scope and qualifications wherever a claim appears* are carried, and the text alone shows which sentence it is: read it out, and the claims around it assert more than they did. That cost is what the removal test above answers, so recognise one by what it bounds and by which claim loses that bound, never by its form. A finding lies inside such a sentence or nowhere: name a limit another sentence already states in full, or a limit contradicting another passage of this text, or leave the sentence exactly as it stands. Naming the whole of it as the defect names nothing inside it.
+
+Make the smallest correction that removes a finding. Move or clarify existing material where it supplies the missing connection. Introduce no new evidence, experience, attribution or outcome. If repair would change a claim or a quotation's meaning, or requires information absent from the text, leave the passage and report the unresolved finding. A claim removed because the finding named that claim itself remains part of the claim account, and so does every claim a correction left standing with its scope, certainty, attribution, chronology, causality or meaning moved, and every claim a correction added — one the corrected text asserts and the text before it has no counterpart for, an inference drawn from what that text already said among them where it asserts something that text did not say. A claim that has a counterpart in the text before is changed rather than added. The account is of the text delivered rather than of the text received, and nothing a reviewing Skill says about the claims as a whole contradicts a finding the same reply states.
+
+Compare each correction with its input, including claims beside the defect, then reread the surrounding passage for broken references or transitions. Compare it difference by difference and not by its claims alone, and trace each one to a finding or to what repairing that finding required: a difference answering neither is not a correction, whatever it improves, and the passage it touched belongs back as it was. A correction is a candidate until that comparison and the review after it have run: where the review establishes a defect the correction introduced and its input did not have, the correction is not accepted and its input stands. Preserve functioning wording, voice and formatting outside the finding; concision is not permission to summarise the text away.
+=== genres/opinion.md
+# Opinion
+
+A journalistic debate article that argues a clear position and asks for a change or a considered stance. The author takes responsibility for the argument rather than observing it from outside.
+
+Apply the shared [web craft brief](../web-craft.md).
+
+Follow the [article anatomy](../article-anatomy.md).
+
+Write the headline and the subheadings as [Headlines](../headlines.md) says.
+
+## What this genre asks for
+
+State the thesis early and identify its holder when an author is supplied. Let the headline and useful subheadings carry the issue and argument for a scanning reader.
+
+Build a case the reader can follow, distinguishing evidence, judgement and inference. Attribute load-bearing factual claims where they are used, and meet relevant real objections fairly. Neither an argument quota nor an invented opponent makes the case stronger.
+
+Keep a persuasive, accountable voice without strengthening or weakening the author's supplied positions: absence of opposition is not endorsement. Criticise ideas, decisions and actions precisely; do not invent an opponent's motives. Preserve warranted sharpness as well as material qualifications, without compulsory softening or inflated rhetoric.
+
+The call to action is the specific change or stance the argument supports, and the ending makes clear who can act. Reconsidering or declining a proposal can be the action; a generic exhortation alone is not one.
+
+## The technique this genre is ordinarily written with
+
+None.
+=== genres/opinion.review.md
+# Opinion — review guidance
+
+Identify the early position, the grounds supporting it and the action the ending leaves with somebody. If *it is time to act* names no act, look for the existing proposal to make explicit; supply no new policy or decision.
+
+Check factual premises and predictions against the support visible in the text, loaded figures for attribution, and objections for fair treatment. Treat a clearly proposed target with its stated uncertainty as an authorial choice. A support finding identifies a premise or inferential dependency the argument actually asserts; preserve choices that make no such factual promise. An internal contradiction or broken inference is a finding; external reference checking is outside this review.
+
+Preserve a successful polemic, its authorial responsibility and its qualifications. A pointed closing or rhetorical return is not a defect because a neutral report would omit it. Clarify a broken argument without replacing its position.
+=== anti-slop.md
+# The anti-slop catalogue
+
+Prose that a language model produced, or that a human wrote after reading a great deal of it, fails in a small number of recognisable ways. This is the catalogue of those ways: what each one looks like on the page, why it costs the reader something, and the smallest change that removes it. It is a diagnostic document — a Skill reading it beside the base contract meets no target the contract does not already hold, and a Skill reading it alone has the patterns and their repairs and needs nothing else.
+
+The examples are English because this document is, and they are patterns rather than strings. Apply each by what it does in the target language, and do not look for the English words in it. A word, a phrase, a punctuation convention, or a construction that only exists in one language belongs to that language's own anti-slop guidance instead, where a Skill loads it beside this file.
+
+## The test before a pattern is recorded
+
+Each pattern below says what a phrase looks like, and looking like one is not being one. Make the repair in your head before you record anything: where the text then asserts more, less or something else than it did, or a distinction it drew is gone, the pattern is not present and nothing is recorded. A hedge that marks genuine doubt, a repetition that lands, a contrast the reader really would otherwise draw wrongly — each of them fails that test, and each is left exactly as it stands.
+
+The test comes before the finding rather than after it. A pattern written down reaches whoever repairs it as a defect somebody found, and a guard that only makes the repair careful arrives too late to save the phrase.
+
+Repair with the smallest change that removes a pattern the test admits. The writer's vocabulary, their bluntness, their humour, their admitted uncertainty, and their rhythm are what makes a text theirs; a pass that tidies all of it into even prose has replaced one machine voice with another. Leave a strong sentence alone even where it is unusual.
+
+## The seven patterns
+
+**False contrasts.** A negation used as a run-up to the actual claim: *This isn't a tool. It's a way of working.* *The question isn't whether, but when.* *It's not just faster — it's cheaper.* The rejected half was never in play, so the sentence spends the reader's attention establishing a position nobody held. State the second half on its own: *This changes how the team works.* A contrast stays where the text really is correcting something a reader would otherwise believe.
+
+**Empty openings.** A first sentence that announces the subject, asserts that the subject matters, or clears the throat before the text starts: *In today's rapidly changing landscape…*, *Communication has never been more important.*, *Here's the thing.*, *What most people get wrong is…* Each could sit in front of any text at all, which is the test: an opening that would survive being moved to a different article is carrying no information. Cut it and open on the material — a fact, a scene, a tension, the question the text answers. The second paragraph is very often the real opening.
+
+**Importance inflation.** Adjectives and formulas that assert weight the material has not shown: *a pivotal moment*, *stands as a testament to*, *a game-changer*, *underscores the significance of*, *plays a vital role in*. Also the trailing participial clause that pretends to interpret — *…, highlighting the team's commitment to quality* — which adds a judgement no fact in the sentence supports. Replace the assertion with what actually happened: *The launch is the company's first paid product.* A reader who is given the fact will decide it matters without being told to.
+
+**Vague attribution.** A claim credited to nobody: *Studies show*, *experts agree*, *industry reports suggest*, *it is widely believed*, *many argue*. Nothing here can be checked, and nothing can be contradicted, which is precisely what makes it comfortable to write. Name who found it, who said it, and how they know; where the text has no source, cut the claim rather than dressing it. Do not invent an attribution to satisfy the pattern — an unsourced sentence is removed, never furnished with a plausible source.
+
+**Synonym cycling.** One thing given a new name every time it is mentioned, because repeating a word felt like poor style: *the agent* reviews the draft, then *the assistant* scores it, then *the tool* suggests fixes. A reader who has been introduced to three names reasonably assumes three things. Pick the clear name and repeat it. Repetition of a key term is how a reader knows it is the same term, and the fix is usually one word restored in two places rather than a rewritten paragraph. The pattern is present only where the names denote one thing: two words a text uses for two things are not cycling however often they alternate, and a text that named two things comes back naming two things.
+
+**Robotic rhythm.** Sentences and paragraphs built to one template: the same length, the same shape, the same three-part list, each paragraph opening with its topic sentence and closing with its summary. Stacked short fragments used for drama — *That's it. That's the whole idea.* — are the same fault at the other extreme. Read a passage aloud in your head; where the breath falls in the same place every time, the shape is doing the writing. Vary length and construction where the meaning gives you a reason to, and merge or split only the sentences whose shape is actually the problem.
+
+**Generic conclusions.** A final paragraph that restates what the reader has just read, reopens the introduction as a rhetorical question, or reaches for an uplifting abstraction: *In conclusion*, *Ultimately, the future belongs to those who…*, *one thing is clear.* The reader was there for the whole text and does not need it summarised back. Delete the paragraph and end on the last concrete point the draft already contains; where the job genuinely calls for a conclusion, a recommendation, or a next step, write that thing plainly and stop. Do not replace a weak closing metaphor with a better one — remove it.
+
+## Notice
+
+This catalogue is a condensed, language-independent adaptation of patterns catalogued in Peter Yang's `no-ai-slop` Skill. The wording here is this collection's own, and the following notice accompanies it as that project's licence requires.
+
+```
+MIT License
+
+Copyright (c) 2026 Peter Yang
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+```
+=== web-craft.md
+# Craft for five web genres
+
+For article, case-study, column and opinion, work as a skilled Swedish journalist at the professional level of SvD, DN, DI, Fokus, Ny Teknik, Filter or Forskning & Framsteg. For web-copy, work as an experienced Swedish copywriter and UX writer trusted by leading agencies and brands. These are standards of craft, not voices to imitate.
+
+In every target language, keep that Swedish editorial or communicative tradition in the angle, disposition, storytelling, address and tone. Think and write wholly in the target language: its Language Resource governs vocabulary, idiom, syntax, punctuation and typography. A native professional should hear a colleague, not a translation. Language choice changes the language surface, not the chosen craft.
+
+## Web reading
+
+Give the reader a clear angle or task and useful ways into the text. Let facts and reasoning carry explanation; choose any narrative devices for what they contribute. Headings orient according to the genre, paragraphs hold connected thoughts, and varied rhythm supports both scanning and sustained reading.
+
+For article, case-study, column and opinion, the [article anatomy](article-anatomy.md) fixes the parts, their order and their dimensions.
+=== web-craft.review.md
+# Reviewing web craft
+
+Read under [the craft brief](web-craft.md). Test the text as a reader who scans, then as one who follows its reasoning. Identify the actual cost of a dense or fragmented passage before proposing a change.
+
+Distinguish target-language fluency from editorial tradition. A Swedish angle expressed in natural English succeeds; Swedish word order in English does not. Equally, flawless local spelling does not rescue generic promotional prose from a lost journalistic purpose. Preserve successful genre-specific voice and structure instead of standardising them.
+=== article-anatomy.md
+# Article anatomy
+
+The fixed skeleton of a text in the genres `article`, `case-study`, `column` and `opinion`; *article* below means a text in any of them. The anatomy fixes which parts the text has, their order and their dimensions. Angle, argument, voice and language are outside it.
+
+A statement below has one of three strengths:
+
+- A plain statement is a requirement: it holds in every conforming text.
+- *Should* marks a norm: follow it as a requirement, and depart only when following it is impossible or the departure is clearly better for the reader.
+- *Most* states what is typical across the whole text; each single paragraph or section follows its own content.
+
+A text conforms when every part is present in the order shown and all three hold. Limits are exact; verify each one by counting.
+
+A review of a finished text reports a part the text lacks as missing rather than writing it, and repairs only the parts the text has.
+
+## Order
+
+```text
+Headline
+Standfirst
+Byline
+Lead
+Subheading        ┐ a section; one or more
+Paragraphs        ┘
+Last subheading   ┐ the ending
+Paragraphs        ┘
+```
+
+Each part appears once, except the section, which repeats. The first subheading follows the lead directly. The body is everything from the lead through the ending.
+
+The headline is the text's level-1 heading (HTML `h1`, Markdown `#`), and every subheading is a level-2 heading (HTML `h2`, Markdown `##`). The text should use these two levels only. Where an academic text would nest a level-3 heading, a further level-2 subheading usually serves; a level-3 heading is for the rare text whose structure truly demands one.
+
+## Headline
+
+- 20–70 characters, spaces included.
+- It should be three to eight words and at most 60 characters.
+- It is written as [Headlines](headlines.md) says.
+
+## Standfirst
+
+The standfirst is a summarising paragraph that introduces the article and stands on its own. It is a full paragraph; a deck — a subtitle or one-line teaser — is a different device and no substitute for it.
+
+- One paragraph, at most 60 words.
+- Self-contained: a reader who sees only the standfirst understands it fully.
+- It says what the article is about and what the reader gains from reading it.
+- It entices the reader to read on.
+
+## Byline
+
+One line naming the author. In English: `By <author>`. In another language, that language's conventional byline form. The author is the one the brief names; when it names none, the author is the user.
+
+## Lead
+
+The lead is the first paragraph of the body: one paragraph, meeting every requirement under *Paragraphs*. It introduces the subject and gives the reader a clear expectation of what they will learn by reading on.
+
+### Standfirst and lead
+
+Both open the text. Each works without the other, and read together they never repeat:
+
+- The body reads complete without the standfirst, which is often shown apart from the body or skipped. The lead introduces every person, thing and event it mentions, and nothing in the body points back to the standfirst.
+- They should begin with different first words, and an everyday word such as *the* or *it* counts like any other.
+- Read in sequence, the lead advances. A reader who has just read the standfirst meets the lead as new material, never as the standfirst said again; what the body needs from the standfirst is named again in passing, and the lead moves on.
+
+## Paragraphs
+
+- Each paragraph holds one thought, and the thought sets its length. Most paragraphs come to two or three sentences. A thought that takes one sentence, or four or five, gets exactly that.
+- A break may also fall for drama: a single sentence, or a single word, stands alone when isolating it creates an effect the text needs.
+- Sentence length varies within the paragraph, giving the text a natural rhythm.
+- A paragraph should be at most 80 words, so that a web reader takes it in at a glance. Eighty is the outer edge; aim well below it.
+
+## Subheadings and sections
+
+A section is a subheading plus the paragraphs under it.
+
+- A subheading is at most 70 characters, spaces included.
+- It describes clearly what the paragraphs under it are about, and it is written as [Headlines](headlines.md) says.
+- A section holds at least one paragraph and should hold at most three. Most sections hold two or three.
+
+## Ending
+
+The ending is a section of its own, opened by its own subheading, after at least one other section. It is the last section, and it is short: one paragraph can be enough. It does two things:
+
+- It shows that the expectation the lead set has been met.
+- It calls the reader to action, and the action follows from the article's content. The selected genre says what that action is in its kind of text.
+
+The last section is the ending when its subheading and paragraphs close the piece — the call to action, the reflection, the recommendation or the next step — and it opens no new line of argument. A section that carries the argument with a closing line appended is not an ending.
+=== article-anatomy.review.md
+# Article anatomy — review guidance
+
+Read under [the anatomy](article-anatomy.md), and word each finding in the strength the statement it rests on has.
+
+A requirement that fails is a finding. Count characters and words before reporting a limit, and give the count.
+
+A part the text does not have is reported, and a part it has is repaired. Where a required part is absent — the headline, the standfirst, the byline, the lead, a section, or the ending with its call to action — its absence is a finding, and the part is not written: not from the text's own content and not from anywhere else, since the text is finished and a person decides what fills it. A part the text has that fails its own rule is repaired like any other defect, from the text's own content. A part in the wrong place is present, not absent, and is repaired by moving it into place: a byline standing at the end of the text is moved to its place in the order, although the measuring script reports the byline `absent`. Ending content the text has — closing paragraphs that show the lead's expectation met or call the reader to act — is a present ending. Where the last section is an ending by the anatomy's test, a defect in it, a vague call to action among them, is repaired where it stands from what the text already says. Where the closing content stands inside a last section that carries the argument, or inside a text's only section, it is a present ending that fails its rule, since the ending is a section of its own: it is repaired by giving it a section of its own, opened by its own subheading and built from the text's own content, the closing content moving there and a vague call to action among it repaired from what the text already says. At the close of a text with no section at all, closing content is repaired where it stands from what the text already says, and no section and no subheading is written to hold it: the text has no ending section either, and that is reported with its absent sections. A text with no ending content at all has an absent ending, and a text that calls the reader to no action has an absent call to action; both are reported. A failure the script reports only because another part is absent is reported as that absent part and is not repaired by writing it: a lead of several paragraphs in a text with no subheading fails only because its sections are absent, so the finding is the absent sections, and no section and no subheading is written to make the lead one paragraph. Likewise a text of one section with no ending content fails the section count only because its ending is absent, and the finding is the absent ending. Where the script takes the text's one opening paragraph as its standfirst and reports the lead absent, whichever of the two that paragraph is taken for, the other is absent and is reported.
+
+A departure from a *should* is a finding only when following the norm was possible and the text is no better for having left it. A paragraph a little past the edge that holds one thought and reads well at that length has met the bar. A paragraph far past it, or paragraphs that run long throughout, cost the web reader something a finding can name. The anatomy's bands are its four *should* norms on a dimension, each with the figure [the anatomy](article-anatomy.md) gives it: the headline's word norm and its character norm, a paragraph's word norm, and a section's paragraph norm. A band is not by itself a defect. A headline, a subheading or a paragraph the text has that meets its requirements is not rewritten, split or merged only to come inside a band. A change the test above justifies is not made only to come inside one: it repairs what the finding names the reader losing, as a split of a paragraph far past the edge does. The limits the script reports as failures are requirements, not bands — the headline's character limits, a subheading's maximum, and the standfirst's single paragraph and its word limit, each as the anatomy states it — and a part that fails one is repaired. A subheading has no band, only its maximum. A subheading that describes clearly what its section is about meets its requirement, and is not rewritten from a label into a statement on that ground alone; one that does not describe its section fails that requirement and is repaired.
+
+*Most* is read across the whole text, and no single paragraph or section fails it. A four-sentence paragraph is no finding. A paragraph holding two thoughts is one, and so is a text whose paragraphs are nearly all a single sentence or nearly all long. Name the pattern and what it costs the reader rather than the count.
+
+Read the standfirst separately, then with the lead. Can it introduce the piece on its own, and does the lead start doing the promised work? Repeated orientation may be necessary; an opening that restarts without advancing is the defect. Then read the body with the standfirst covered. A pronoun, a definite form or a phrase such as *the reason* whose referent only the standfirst supplies is a finding, repaired by naming the referent where the body first needs it.
+
+In a text under review, the author is whoever the text, its metadata or the invocation names. A byline nobody can name is reported as missing and left unfilled: the reviewer's user is not presumed to have written a text they brought for review.
+=== headlines.md
+# Headlines
+
+How a headline is written, in any genre that links this file. A headline lets the reader judge at once whether the text is for them: it states the core of the text as briefly and precisely as it can, and it is understood on its own, with no image, standfirst or surrounding page to explain it. *Headline* here covers a text's subheadings too; for a subheading, the text is its section.
+
+## Statement or label
+
+A text that reports, explains, argues, decides or narrates gets a statement headline: a clause that says what the text says. A text the reader looks things up in or navigates by — a policy, a manual, opening hours, a contact page — gets a plain label naming what it holds: *Privacy policy*, where a statement would read *How we protect your data*. Everything below is about the statement headline.
+
+## What a statement headline does
+
+- It states the angle: the single most important message, the sentence that would remain if only one could. A subject alone is a label. Test: the headline could not head a different text on the same subject.
+- It is a simple clause — subject, active verb, object where there is one — in straight word order, and in the present tense where that fits: *Council introduces free bus travel*.
+- The most important keyword comes first.
+- A concrete detail stands in it when the detail carries the message: a number, a date, a place. *Three schools to close this autumn* beats *Changes to school organisation*.
+- The reader sees what they gain: a decision, a fact, a change. An instructional text may address the reader directly (*you*, *your*) and open on *How to*, *Why* or *Here's*.
+- It is as short as the angle allows. Modifiers, repetition and filler go; a keyword that carries meaning stays. The format the text follows sets the limits.
+- It sounds like something a person would say aloud.
+- Its words are ones this audience knows. A technical term is the right keyword for specialists and noise for a general reader, and the same holds for names and abbreviations.
+- Its tone is the text's tone, and never louder. Illness, accidents, crime and crises get a sober, understated headline; a light text can carry more personality.
+- It is plain before it is clever. It works in full for a reader who misses every allusion, so a pun or a reference never carries the meaning.
+- It gives the answer. Journalists hold a question headline to be the wrong form, and so does this: it is a deliberate exception, natural over a text built as questions and answers, and available where the text truly leaves the question open and the headline is meant to assert nothing.
+- The verb does the work. A colon standing in for a verb, a clipped quotation and headline-speak all give way to the full clause.
+- It complements what follows. Headline and standfirst, or subheading and the first sentence under it, say different things in different words.
+
+## Every word supported
+
+A headline claims only what its text claims. Every figure, name, claim and conclusion in it is in the text, at the text's own strength: never sharper, never more general, never a conclusion the text does not draw. A reader who finishes the text finds that the headline told the truth about it.
+
+## A subheading over a quotation
+
+A quotation in a section is there to carry what only its speaker can say: a judgement, a figure, a concession. A subheading standing over it, however far down the section the quotation stands, leaves that to the quotation. It states the section's angle from what the rest of the section says, or, where the quotation is the section's point, names the subject, the occasion or the speaker the quotation speaks to, and not the point itself. Test: a reader who has just read the subheading meets the quotation as new material, never as the subheading said again. *The clinic would double its training time*, over a head nurse saying *Next time I would double the training time before we switch*, has spent the quotation before the reader reaches it; *The head nurse looks back on the switch* leaves it to her.
+
+The quotation bridge is the narrative sentence or clause that stands immediately before a quotation and leads the reader into it, including a speech tag that carries anything besides the attribution. The genre that quotes says what a quotation bridge may carry. A subheading standing over a quotation is outside the quotation bridge and is governed by this section.
+
+## Getting there
+
+Settle the reader and the angle before wording anything. Then write three to five variants and keep the clearest, which is rarely the cleverest. Word a subheading from its whole section, once the section is written, in words its first sentence does not use, and leave a quotation standing under it the judgement, figure or concession it is there to carry.
+=== headlines.review.md
+# Headlines — review guidance
+
+Read under [Headlines](headlines.md). Read the text first and say its angle to yourself in one sentence. Then read the headline against that sentence, and each subheading against its own section and against any quotation standing under it, and ask four questions of each. Can every word in it be supported by the text? Is the core message there? Does the tone match the seriousness of the content? Would the reader feel misled afterwards?
+
+## Avoid
+
+Each of these in a headline or a subheading is a finding:
+
+- Claims, figures, names or conclusions not found in the text. A headline that sharpens, generalises or draws a conclusion the text itself does not draw is always a finding, however well it reads.
+- Vague or mysterious wording that requires reading the text to understand the headline.
+- A subject named with nothing said about it, where the text has an angle to state.
+- Words, names and abbreviations the audience will not know.
+- Partial quotes, colons in place of a verb, stilted headline-speak.
+- Puns and references that fail for anyone who does not get the allusion.
+- Question headlines. Where the text gives the answer, the headline gives it too. The exceptions are a text built as questions and answers, where the form is natural, and a text that truly leaves the question open, where the headline is deliberately kept from asserting anything.
+- A tone more dramatic than the text's.
+- The same words and phrasing in the headline and the standfirst or opening paragraph, or in a subheading and the first sentence under it. They complement each other; they do not repeat.
+- A subheading that pre-spends the judgement, figure or concession of a quotation standing under it, so that the reader meets the quotation as the subheading said again. Read it against the quotation however far down the section the quotation stands. Repair it by naming the subject, the occasion or the speaker, or by stating what the rest of the section says, and leave the quotation as it is.
+
+Name what the reader loses, and repair by rewriting the headline alone, from the text's angle and at the text's own strength. The text stays as it is.
+
+## Leave alone
+
+A working headline is left alone. Plain is no defect, and neither is a headline with no number or place where none carries the message, direct address in an instructional text, or an angle other than the one you would have chosen where the text supports it. A label on a reference or navigation text is correct as a label. A subheading over a quotation that names the subject, the occasion or the speaker and leaves the quotation its point is working too, and not a subject named with nothing said about it.

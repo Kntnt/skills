@@ -1,0 +1,47 @@
+Resolved configuration: genre `case-study` (from the invocation), language `sv` (from the invocation). No technique applies: none was named, and the `case-study` genre names none by default. The review report below is in Swedish, the text's own language.
+
+```markdown
+# Elm Quay noterade kortare tid till tilldelning
+
+**Under ett åtta veckor långt försök med Svales programvara registrerade Elm Quay 31 ärenden, akuta ärenden undantagna. Det gick två arbetsdagar innan ärendena tilldelades, mot tre tidigare, men enligt Elm Quays anteckning kan skillnaden inte tillskrivas programvaran. Arbetsledaren Maya Lind berättar vad som hjälper och vad hon skulle göra annorlunda.**
+
+Elm Quay har prövat programvara från leverantören Svale. Kundens egen anteckning visar hur det gick, och arbetsledaren Maya Lind säger vad hon tycker.
+
+## Maya Lind bedömer försöket
+
+– Att ha en gemensam bild av ärendena hjälper oss, men jag skulle lägga till en vecka för förberedelser, säger Maya Lind, arbetsledare hos kunden.
+
+## Anteckningen redovisar resultatet med ett förbehåll
+
+Enligt kundens försöksanteckning registrerades 31 ärenden under åtta veckor, med akuta ärenden undantagna. Tiden till tilldelning var två arbetsdagar jämfört med tre tidigare. Anteckningen säger att arbetsbelastningen var olika och att skillnaden inte kan tillskrivas programvaran.
+
+– Jag skulle välja att göra försöket igen, säger Lind.
+
+Kundcaset publiceras av leverantören Svale.
+```
+
+**Olösta anmärkningar**
+
+Dessa tre kräver uppgifter som inte finns i texten. Därför har de inte åtgärdats.
+
+1. **Byline saknas.** Texten ska ha en byline efter ingressen. Varken texten eller anropet anger vem som skrivit den.
+2. **Avslutning och uppmaning saknas.** Sista avsnittet redovisar resultatet och avslutar inte texten. Det finns inget erbjudande, ingen länk och ingen kontaktväg att bygga en uppmaning på.
+3. **Kundcaset saknar bakgrund.** Texten säger inte vad Elm Quay är, vilka ärenden det gäller, varför försöket gjordes eller hur det gick till. Utan det kan läsaren inte bedöma om erfarenheten gäller dem.
+
+Texten uppfyller alltså inte artikelanatomin. Mätskriptet hittar bara den saknade bylinen. Vid genomläsningen saknas också ett eget avslutande avsnitt. Rubrik, ingress, inledning och mellanrubriker håller sina krav.
+
+**Borttagna påståenden**
+
+- ”Vår fantastiska lösning räddade Elm Quay” (rubriken) togs bort. Rubriken påstod en räddning och ett orsakssamband som texten själv motsäger.
+- ”Vi på Svale är världsledande på att skapa framgång” togs bort. Påståendet saknade stöd och stod i leverantörens vi-form.
+- ”kunden stod hjälplös innan vi kom” togs bort. Påståendet saknade stöd och gjorde kunden hjälplös.
+- ”Maya Lind säger att det hjälper att ha en gemensam bild av ärendena.” togs bort eftersom meningen föregrep citatet. Samma omdöme står kvar i hennes citat.
+- Mellanrubriken ”Kunden fick en gemensam bild” togs bort. Den gjorde Linds omdöme till ett faktum och tog citatet i förväg.
+- Mellanrubriken ”Resultatet bevisar allt” togs bort. Den påstod ett bevis som avsnittet under den förnekar.
+- ”Vår programvara orsakade därför hela förbättringen.” togs bort. Slutsatsen motsades direkt av meningen före. Att programvaran är Svales stod bara i den meningen, och det står nu i ingressen och inledningen. Anteckningens förbehåll står kvar ordagrant.
+
+**Ändrade påståenden**
+
+- ”Elm Quay registrerade 31 ärenden” står nu i ingressen med sin avgränsning: under åtta veckor, med akuta ärenden undantagna. Ändringen följer av anmärkningen om ingressen. Inledningens upprepning av samma mening togs bort. Påståendet står kvar i ingressen och i brödtexten.
+
+Texten har ändrats på följande sätt. Säljspråk och leverantörens vi-form är borta ur berättelsen. Rubriken och båda mellanrubrikerna har skrivits om, så att de håller sig till vad texten belägger och inte tar citaten i förväg. Ingressen och inledningen har skrivits om, så att de inte längre upprepar varandra. Den mening som föregrep Linds första citat är borta. Den avslutande korrekturläsningen hittade inga mekaniska fel att rätta.

@@ -1,0 +1,65 @@
+Konfiguration: genren `opinion` och språket `sv` kommer från anropet. Ingen berättarteknik används, eftersom genren `opinion` inte anger någon. Budgeten tillät en korrigeringsrunda. Den kördes men avvisades, så texten levereras som den kom in. Korrekturläsningen hittade inga mekaniska fel.
+
+````markdown
+# Kommunledningen hatar människor
+
+Sanna Ek, Öppna beslut
+
+Kommunstyrelsen borde behålla telefonbokning under ett halvårs försök i alla sju lokaler. Alla vet att politikerna vill stänga ute äldre för att spara miljoner.
+
+## Bakgrund
+
+Det gjordes 96 bokningar på webben och 24 via telefon. Det bevisar att 20 procent av kommunens invånare inte kan använda internet. Kommunens pilotrapport från den 8 april 2026 säger samtidigt att bokningarna inte räknar unika personer och att digital vana inte undersöktes.
+
+## Diskussion
+
+Förvaltningen invänder att dubbla kanaler innebär dubbel administration. Handlingarna saknar tidsmätning. Därför kostar det ingenting att behålla telefonbokningen. Föreningen vill att förvaltningen mäter tidsåtgång och frågar användarna varför de väljer en bokningsväg. Försökets kostnad är inte beräknad.
+
+Nu är det dags att agera.
+````
+
+## Olösta anmärkningar
+
+Alla åtta anmärkningar är olösta.
+
+1. **Rubriken.** "Kommunledningen hatar människor" har inget stöd i texten. Den tillskriver motståndarsidan ett motiv, och tonen är mycket skarpare än i texten. "Kommunledningen" nämns aldrig i brödtexten, som talar om kommunstyrelsen, politikerna och förvaltningen. Rubriken säger inte heller vad texten tycker, nämligen att telefonbokningen bör finnas kvar under ett halvårs försök. En läsare som bara skummar blir vilseledd.
+
+2. **Ingress saknas.** Mätningen visar att bylinen kommer direkt efter rubriken, utan någon sammanfattande ingress. Enligt artikelmallen är det en del som saknas. Den skrivs inte i en granskning, så skribenten får fylla i den.
+
+3. **Inledningens andra mening.** "Alla vet att politikerna vill stänga ute äldre för att spara miljoner" har tre problem:
+   - Den hittar på ett motiv hos motståndarsidan.
+   - "Alla vet" är en källa som saknar namn.
+   - Beloppet har inget stöd, eftersom texten själv säger att försökets kostnad inte är beräknad.
+
+   Texten säger också själv att digital vana inte undersöktes, så ingenting stöder påståendet om äldre. Meningen försvagar trovärdigheten i de delar av argumentet som har stöd.
+
+4. **"Det bevisar att 20 procent av kommunens invånare inte kan använda internet."**
+   - 24 av 120 är 20 procent av bokningarna, inte av invånarna.
+   - Nästa mening säger att bokningarna inte räknar unika personer och att digital vana inte undersöktes.
+   - Därmed motsäger texten sig själv på "bevisar", och det centrala talet återges fel.
+
+5. **"Därför kostar det ingenting att behålla telefonbokningen."** Att tiden inte har mätts visar inte att kostnaden är noll. Samma stycke säger dessutom att försökets kostnad inte är beräknad. Förvaltningens invändning bemöts alltså med en slutsats som inte följer, och bemöts därför inte rättvist.
+
+6. **"Föreningen".** Brödtexten säger aldrig vilken förening som avses. Bylinen nämner Öppna beslut, men texten säger inte att det är en förening eller att det är den som menas. Läsaren vet inte vem förslaget kommer från. Det går inte att rätta utan uppgifter som saknas i texten.
+
+7. **Mellanrubrikerna "Bakgrund" och "Diskussion".** De skulle kunna stå i vilken text som helst. Den som skummar får ingenting av argumentet, varken bokningssiffrorna och deras begränsningar eller förvaltningens invändning och kravet på mätning.
+
+8. **Avslutningen.** "Nu är det dags att agera" pekar inte ut någon handling och ingen som ska handla. Den står dessutom inne i avsnittet "Diskussion", som för argumentet vidare. Enligt mallen ska avslutningen vara ett eget avsnitt med egen mellanrubrik, där läsaren uppmanas till en handling som följer av texten. Här kan det vara textens befintliga förslag till kommunstyrelsen.
+
+Texten följer inte artikelmallen. Mätningen visar att ingressen saknas (anmärkning 2). Genom läsning har jag också konstaterat att mellanrubrikerna inte beskriver sina avsnitt (anmärkning 7) och att det saknas ett eget avslutande avsnitt (anmärkning 8).
+
+## Avvisad korrigeringsrunda
+
+Korrigeringsrundan åtgärdade anmärkning 1, 3, 4, 5, 7 och 8, men den avvisades i sin helhet. Den nya rubriken, "Telefonbokningen borde finnas kvar ett halvår på prov", upprepade inledningens enda mening med i stort sett samma ord ("borde", "telefonbokning", "halvår"). Rubrik och inledning ska komplettera varandra, och det felet fanns inte i den ursprungliga texten.
+
+Därför har den ursprungliga texten återställts ord för ord. Rundans ändringar finns alltså inte i den levererade texten:
+- Den tog bort andra meningen i inledningen.
+- Den ändrade 20 procent av invånarna till 20 procent av bokningarna.
+- Den tog bort "Därför kostar det ingenting …".
+- Den skrev nya mellanrubriker och ett nytt avslutande avsnitt.
+
+Budgeten är förbrukad. Avgör själv hur rubriken ska formuleras så att den anger textens ståndpunkt utan att upprepa inledningen.
+
+## Påståenden
+
+Den levererade texten är byte för byte identisk med den som kom in. Inget påstående har tagits bort, ändrats eller lagts till.
