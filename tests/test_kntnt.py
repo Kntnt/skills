@@ -6642,7 +6642,8 @@ def test_a_band_licenses_no_rewrite_of_a_part_that_meets_its_requirements() -> N
     A working headline replaced to reach a word or character band moved what it
     claims, and two paragraphs a little past eighty words were each split only
     to come under it (issue #397). The paragraph on *should* norms names the
-    four bands, says a part meeting its requirements is not rewritten, split or
+    four bands without their figures, which the anatomy alone states
+    (ADR-0178), says a part meeting its requirements is not rewritten, split or
     merged only to reach one, and keeps a describing subheading from being
     rewritten into a statement on that ground alone.
     """
@@ -6654,14 +6655,28 @@ def test_a_band_licenses_no_rewrite_of_a_part_that_meets_its_requirements() -> N
     )
 
     for band in (
-        "three to eight words",
-        "60 characters",
-        "80 words",
-        "three paragraphs",
+        "the headline's word norm",
+        "its character norm",
+        "a paragraph's word norm",
+        "a section's paragraph norm",
     ):
         assert band in norms, (
             f"{ANATOMY_REVIEW}: its paragraph on *should* norms does not name"
             f" the band `{band}` (issue #397)."
+        )
+    for figure in (
+        "three to eight",
+        "60 characters",
+        "80 words",
+        "three paragraphs",
+        "20–70",
+        "70 characters",
+        "60 words",
+    ):
+        assert figure not in norms, (
+            f"{ANATOMY_REVIEW}: its paragraph on *should* norms states the"
+            f" anatomy's figure `{figure}`, which only the anatomy carries"
+            f" (ADR-0178, issue #397)."
         )
     assert "not rewritten, split or merged only to come inside a band" in norms, (
         f"{ANATOMY_REVIEW}: does not say that a part meeting its requirements"
