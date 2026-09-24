@@ -26,6 +26,12 @@ A text that reports, explains, argues, decides or narrates gets a statement head
 
 A headline claims only what its text claims. Every figure, name, claim and conclusion in it is in the text, at the text's own strength: never sharper, never more general, never a conclusion the text does not draw. A reader who finishes the text finds that the headline told the truth about it.
 
+## A subheading over a quotation
+
+A quotation in a section is there to carry what only its speaker can say: a judgement, a figure, a concession. A subheading standing over it, however far down the section the quotation stands, leaves that to the quotation. It states the section's angle from what the rest of the section says, or, where the quotation is the section's point, names the subject, the occasion or the speaker the quotation speaks to, and not the point itself. Test: a reader who has just read the subheading meets the quotation as new material, never as the subheading said again. *The clinic would double its training time*, over a head nurse saying *Next time I would double the training time before we switch*, has spent the quotation before the reader reaches it; *The head nurse looks back on the switch* leaves it to her.
+
+The quotation bridge is the narrative sentence or clause that stands immediately before a quotation and leads the reader into it, including a speech tag that carries anything besides the attribution. The genre that quotes says what a quotation bridge may carry. A subheading standing over a quotation is outside the quotation bridge and is governed by this section.
+
 ## Getting there
 
-Settle the reader and the angle before wording anything. Then write three to five variants and keep the clearest, which is rarely the cleverest. Word a subheading from its whole section, once the section is written, in words its first sentence does not use.
+Settle the reader and the angle before wording anything. Then write three to five variants and keep the clearest, which is rarely the cleverest. Word a subheading from its whole section, once the section is written, in words its first sentence does not use, and leave a quotation standing under it the judgement, figure or concession it is there to carry.

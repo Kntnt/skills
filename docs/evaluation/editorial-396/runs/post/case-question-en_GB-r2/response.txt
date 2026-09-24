@@ -1,0 +1,58 @@
+**This draft is delivered with two known defects.** The second and final source comparison found them, and the procedure allows no prose changes after that comparison. So the text below is exactly what it checked.
+
+1. **Headline: "Fenwick staff could see which instruments awaited parts".** The headline states this as fact. The source only reports that the trial summary *says* staff could see which instruments were waiting for parts, and it calls this the team's reported experience. The checker's suggested repair: "Fenwick's trial summary says staff could see which instruments awaited parts".
+2. **Standfirst: "spent six weeks trialling a shared bench schedule".** This says the trial ran its full six weeks. The source only says a six-week trial *began* in January 2026, and the summary is dated 23 February. A trial that started after 12 January can't have run six weeks by then. The checker's suggested repair is to start the standfirst "In January 2026 Fenwick Instrument Repairs began a six-week trial of a shared bench schedule."
+
+```markdown
+---
+kntnt:
+  genre: case-study
+  technique: none
+  language: en_GB
+---
+# Fenwick staff could see which instruments awaited parts
+
+Fenwick Instrument Repairs spent six weeks trialling a shared bench schedule. Manager Priya Vale describes what the team had to settle first and what Vale would change, while the workshop's own summary records what the trial established – and what the summary does not measure.
+
+By Thomas Barregren
+
+Before the trial, jobs awaiting parts and jobs ready for work appeared on separate paper sheets at Fenwick Instrument Repairs, which services brass and woodwind instruments. In January 2026 its team began a six-week trial of one shared bench schedule, choosing Benchline after checking that it could tell those two statuses apart.
+
+## Fenwick defined its own job statuses
+
+Benchline configured the workshop's choices, including who would update each status, and trained four staff in one online session. Collection arrangements were still discussed with customers by telephone.
+
+Asked by email what the team had to settle before the schedule was useful, workshop manager Priya Vale replied: 'We had to agree what ready for work meant. A part being in the building did not always mean that it had reached the right bench.'
+
+## The summary leaves repair speed unmeasured
+
+The workshop's trial summary, dated 23 February 2026, records 38 jobs entered in the schedule and says staff could see which instruments were waiting for parts. It does not measure repair duration, revenue or customer satisfaction.
+
+## Vale looks ahead to the backlog
+
+Vale approved continued use for new jobs but held back the backlog until the team had reviewed its status definitions. Asked about choosing again, and what would change, Vale wrote: 'I would use it again for new jobs. I would allow another week to check the status names before adding the backlog.'
+
+A manager planning a similar trial can start with the question Fenwick had to settle: what does 'ready for work' mean in your workshop?
+```
+
+**Settings used**
+- **Genre and language:** `case-study` and `en_GB`, both from your command. I delivered the draft here in the response, which is the default.
+- **Technique:** none. The case-study genre doesn't name one, and nothing else selected one.
+- **Handoff Metadata:** the `kntnt` block at the top of the draft, included by default.
+- **Byline:** the brief named no author, so the byline carries your name. Change it if the case should run unsigned or under another name.
+
+**Checks**
+- **Anatomy:** the draft meets every counted requirement: headline 55 characters, standfirst 44 words, every paragraph under 80 words.
+- **Length:** about 280 words of prose, plus headings and byline, so it's within the brief's 250–300.
+- **Source comparisons:** two ran. The first found two problems, which I fixed:
+  - the earlier headline stated in the present tense a claim the summary makes about the trial period;
+  - "what it left unmeasured" could be read as referring to the whole trial rather than the summary.
+
+  The second comparison produced the two findings above. Apart from those, it found every claim and both verbatim quotations supported by the source.
+- **Pronouns:** the source gives no pronouns for Priya Vale, so the draft uses the name throughout.
+
+**Where the material ran out**
+- **Call to action:** none was supplied, so the ending doesn't mention any Benchline offer, link or contact route. The last sentence is the author's own suggestion, based on Vale's answer. The checker flagged it as an editorial question: does it work as the genre's call to action?
+- **Results:** the material has no measure of repair speed, revenue or customer satisfaction. So the draft reports only what the summary records, plus Vale's own judgement.
+
+**Files:** I removed everything I created, and nothing else was written. The only file in the working directory is `source.md`, unchanged. The two checker subagents have finished.

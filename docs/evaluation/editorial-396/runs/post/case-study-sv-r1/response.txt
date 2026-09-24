@@ -1,0 +1,63 @@
+**Utkastet levereras med tre kända brister.** Det finns också ett underkänt påpekande. Båda granskningarna mot källan blev klara. Brödtexten nedan är exakt den som den andra och sista granskningen läste, och bristerna är inte rättade efter den.
+
+1. **S1, källstöd, avsnittet om mediantiden.** Utkastet skriver ”31 felanmälningar …, akuta ärenden och arbeten beställda före provet oräknade”. Det knyter undantagen bara till antalet. I källan gäller ”It excludes …” hela anteckningen och därmed kanske även mediantiderna. Granskarens förslag: ”Enligt Elm Quays interna anteckning från den 4 december 2025 fördes 31 felanmälningar in i loggen. Anteckningen räknar inte med akuta ärenden eller arbeten beställda före provet.”
+2. **S2, källstöd, ”Hennes helhetsbedömning”.** Källan kallar bara hennes sista citat ”her actual, qualified assessment”, inte hennes helhetsbedömning. Granskarens förslag: ”Hennes bedömning är ingen slutsats dragen ur siffrorna”.
+3. **T1, översättning, citat 2.** ”innan nästa hus sätter i gång” följer engelsk syntax och kan läsas som ett byggstarts. Granskarens förslag: ”Den tiden skulle jag avsätta innan det är dags för nästa hus.”
+4. **S3 underkändes.** Granskaren ansåg att underrubriken ”… före beslut om fler hus” säger mer än källan om vad beslutet gäller. Jag underkände det: källan skriver ”The trial has not yet expanded; the team will decide after checking …”, och Lind talar om ”the next building”. Det är mitt eget beslut, inte granskarens godkännande.
+
+```markdown
+---
+kntnt:
+  genre: case-study
+  technique: none
+  language: sv
+---
+
+# Elm Quay provade en gemensam logg för felanmälningar
+
+Hur ser kvällsskiftet vad morgonskiftet redan har gjort? Underhållsteamet på Elm Quay Housing sökte svaret med en delad reparationslogg i två hus under åtta veckor. Arbetsledaren Maya Lind berättar vad provet gav och att hon skulle ge förberedelserna en extra vecka. Texten redovisar också vad siffrorna inte visar.
+
+Av Thomas Barregren
+
+Elm Quay Housing förvaltar 640 lägenheter. Tidigare sparades telefonanmälningar och mejl på olika ställen. I september 2025 beslutade bolagets eget underhållsteam att prova en delad reparationslogg i två hus. Hur provet föll ut beskriver arbetsledaren Maya Lind i en mejlintervju, och bolagets interna anteckning visar vad som mättes.
+
+## Telefonen blev kvar och sex anställda utbildades
+
+Kunde loggen visa var varje reparation stod? Det prövade underhållsteamet innan det valde Svale Systems, som också publicerar den här texten.
+
+– Vi ville att kvällsskiftet skulle se vad morgonskiftet redan hade gjort. Kategorierna var våra, Svale hjälpte oss att lägga in dem i loggen, skriver Maya Lind.
+
+Teamet lät telefonen vara kvar som väg in för de boendes felanmälningar. Svale konfigurerade loggen och utbildade sex anställda vid två tillfällen.
+
+## Mediantiden till tilldelning var kortare under provet
+
+Provet pågick i åtta veckor. Enligt Elm Quays interna anteckning från den 4 december 2025 fördes 31 felanmälningar in i loggen, akuta ärenden och arbeten beställda före provet oräknade.
+
+Från anmälan till att ärendet tilldelades tog det i median två arbetsdagar under provet, mot tre under de åtta veckorna innan. Perioderna hade olika arbetsbelastning, och anteckningen tillskriver uttryckligen inte programvaran skillnaden.
+
+Siffran gäller alltså tiden till tilldelning, inte hur snabbt reparationerna blev klara. Någon sådan mätning finns inte, och inte heller några mätningar av kostnader eller av de boendes nöjdhet.
+
+## Arbetsledaren ser tillbaka på provet
+
+– Vi lade mer tid på att enas om kategorierna än på att föra in de första anmälningarna. Den tiden skulle jag avsätta innan nästa hus sätter i gång, skriver Maya Lind om förarbetet.
+
+Hennes helhetsbedömning är ingen slutsats dragen ur siffrorna, och hon rekommenderar inte Svale till varje bostadsbolag.
+
+– Jag skulle välja att göra provet igen. Att ha en samlad bild av anmälningarna hjälper oss, men jag skulle lägga till en extra vecka för förberedelser, skriver hon.
+
+## Kategorierna prövas på större reparationer före beslut om fler hus
+
+Provet har ännu inte utvidgats. Underhållsteamet ska först se hur kategorierna fungerar för större reparationer och fatta beslut efter det.
+
+Den som förbereder ett liknande prov kan läsa [checklistan för införande](https://example.invalid/svale/checklist).
+```
+
+**Inställningar:** genren är `case-study` och språket svenska (`sv`), båda från anropet. Texten levereras i det här svaret, med Kntnt-metadatan påslagen som standard. Ingen teknik används: anropet angav ingen, och genren anger ingen som den vanligtvis skrivs med.
+
+**Bylinen:** briefen namnger ingen författare, så bylinen bär ditt namn, Thomas Barregren. Ändra den om texten ska publiceras osignerad eller under ett annat namn.
+
+**Artikelmallen:** alla räknade krav i artikelmallen uppfylls enligt mätskriptet, som körde utan fel. Den enda avvikelsen från normerna var att ett avsnitt hade fyra stycken. Den rättades före granskningen.
+
+**Längd och underlag:** texten ligger nära de cirka 400 ord briefen bad om, och underlaget räckte. Materialet saknar mätningar av kostnader, de boendes nöjdhet och tid tills reparationen var klar. Det saknar också en jämförelse med andra leverantörer. Texten påstår inget om detta utöver att mätningarna saknas.
+
+**Filer:** tillfälliga filer och granskningsrapporter är borttagna. Filsystemet är som före körningen, och `source.md` är orörd. Båda granskarna har avslutats.

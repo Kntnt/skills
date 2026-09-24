@@ -1,0 +1,54 @@
+I've written the draft, but it has **two known defects**. Only two source comparisons are allowed, and the second one found these after the last edits, so the prose below is exactly what that comparison read:
+
+1. **Lead, "Afterwards, the workshop's manager named one thing to do differently."** The material doesn't say when the trial ended. A six-week trial begun in January could still have been running at the email interview on 2 March, so "Afterwards" may be wrong. Checker's fix: replace "Afterwards," with "In an email interview on 2 March 2026,".
+2. **Last subheading, "Fenwick kept the schedule for new jobs and held back the backlog".** The material says only that the manager "approved continued use for new jobs"; "kept" claims the use actually continued. Checker's fix: "Fenwick approved the schedule for new jobs and held back the backlog".
+
+These are what the checker found; you decide whether to accept them. Four findings from the first comparison (headline attribution, the trial's length, "the record" wording, and how the interview question was put) were fixed before the second comparison read the draft.
+
+```markdown
+---
+kntnt:
+  genre: case-study
+  technique: none
+  language: en_GB
+---
+# Fenwick says staff could see which instruments awaited parts
+
+A six-week trial of a shared bench schedule from Benchline began at Fenwick Instrument Repairs in January 2026. Here is what the team had to agree before it was useful, what the trial did and did not establish, and what the workshop's manager would change.
+
+By Thomas Barregren
+
+Fenwick Instrument Repairs, which services brass and woodwind instruments, used to list jobs awaiting parts and jobs ready for work on separate paper sheets. For a six-week trial of a shared bench schedule, begun in January 2026, the team chose Benchline after checking that it could tell those two statuses apart. Afterwards, the workshop's manager named one thing to do differently.
+
+## 'Ready for work' needed an agreed meaning
+
+Benchline configured the statuses the workshop had defined, together with its choices of who would update them. It also trained four staff in one online session. Collection arrangements were still discussed with customers by telephone.
+
+Asked by email what had to be settled before the schedule was useful, workshop manager Priya Vale named one status. 'We had to agree what ready for work meant. A part being in the building did not always mean that it had reached the right bench.'
+
+## The summary counts jobs but does not time repairs
+
+The workshop documented the trial in its own summary, dated 23 February 2026. It records 38 jobs entered in the schedule and says that staff could see which instruments were waiting for parts.
+
+It does not measure repair duration, revenue or customer satisfaction. Like the manager's answers, it reports the team's experience. Neither shows faster repairs or makes a case for every workshop.
+
+## Fenwick kept the schedule for new jobs and held back the backlog
+
+Asked whether Vale would make the same choice again, and what the manager would change, Vale wrote: 'I would use it again for new jobs. I would allow another week to check the status names before adding the backlog.' Vale approved continued use for new jobs but postponed adding the backlog until the team had reviewed its status definitions.
+
+A workshop weighing a shared schedule can start as Fenwick did, by deciding what each status means and who updates it, and then allow time to check the status names before any backlog goes in.
+```
+
+**Also check before publishing:**
+- **Byline:** the brief named no author, so the byline uses your name, "Thomas Barregren", taken from your account. Change it if the case should run unsigned or under Benchline's name.
+- **Closing advice:** the brief supplied no call to action, but the article format needs one. The last paragraph is therefore general advice in the publisher's voice, built from what Fenwick did and what Vale said. Both checkers raised it as a question for you, not a defect, because the material says the results are "not a recommendation for every workshop". If it's too much, tie the sentence to Fenwick alone or cut it.
+- **Headline:** it is nine words, one over the usual limit of eight (it is still within the 60-character limit). The extra word is "says", which makes clear the claim comes from Fenwick's summary.
+- **Vale's pronouns:** the material doesn't give them, so the draft uses no pronoun for Vale.
+
+**Settings:** case study, British English, delivered here in the reply. Genre and language came from your command. No technique was used: you named none and the case-study genre doesn't come with one.
+
+**Length:** the body, from lead to ending, is 299 words, within the brief's 250–300. With headline, standfirst and byline it comes to about 380. The text passes every counted limit on headline, standfirst, paragraph and section size.
+
+**Gaps in the material:** it has nothing on repair speed, revenue or customer satisfaction, no workshop visit or spoken exchange, and no end date for the trial. The draft states these limits rather than filling them in.
+
+**Files:** nothing was written to disk. The run's scratch files have been deleted, `source.md` is unchanged, and both checkers have finished.

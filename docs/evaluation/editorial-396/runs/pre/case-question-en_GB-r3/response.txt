@@ -1,0 +1,58 @@
+**The draft has one known defect.** The final source check left one finding open. The second subheading, "The trial recorded visibility rather than faster repairs", drops the word "measured" that the source uses. The source says only that the trial summary "does not measure repair duration" and that the account shows "not a measured improvement in repair speed". Nothing in the source rules out staff *reporting* quicker repairs, and if they did, the subheading would be false. The checker's suggested fix is **"The trial recorded visibility, not measured repair speed"**. I haven't made that change, because the rules for this run don't allow editing the text after its final check.
+
+```markdown
+---
+kntnt:
+  genre: case-study
+  technique: none
+  language: en_GB
+---
+
+# Fenwick reports staff could see jobs awaiting parts
+
+Fenwick Instrument Repairs has trialled a shared bench schedule. Its manager, Priya Vale, explains what the team had to settle before the schedule was useful and what Vale would change, while the workshop’s trial summary shows what was and was not measured.
+
+By Thomas Barregren
+
+Jobs waiting for parts and jobs ready for work used to appear on separate paper sheets at Fenwick Instrument Repairs, which services brass and woodwind instruments. In January 2026 the workshop team began a six-week trial of a shared bench schedule, choosing Benchline after checking that it could tell those two statuses apart. Workshop manager Priya Vale has since approved continued use for new jobs, but postponed adding the backlog until the team had reviewed its status definitions.
+
+## ‘Ready for work’ needed an agreed meaning
+
+The workshop defined the statuses and decided who would update them. Benchline configured those choices and trained four staff in one online session, while the team kept discussing collection arrangements with customers by telephone.
+
+Asked in an email interview what the team had to settle before the schedule was useful, Vale wrote: ‘We had to agree what ready for work meant. A part being in the building did not always mean that it had reached the right bench.’
+
+## The trial recorded visibility rather than faster repairs
+
+The workshop’s trial summary, dated 23 February 2026, records 38 jobs entered in the schedule and says staff could see which instruments were waiting for parts. It does not measure repair duration, revenue or customer satisfaction.
+
+The summary and the interview establish the team’s reported experience, not a measured improvement in repair speed or a recommendation for every workshop.
+
+## Status definitions come before the backlog
+
+Asked whether the same choice would be made again, and what would change, Vale replied: ‘I would use it again for new jobs. I would allow another week to check the status names before adding the backlog.’
+
+A manager weighing a similar trial can begin by deciding, as Fenwick’s workshop did, what each status means and who updates it, and, as Vale would, by allowing time to check those names before adding a backlog.
+```
+
+**Settings used**
+- **Genre:** case study, as you specified.
+- **Language:** British English, as you specified.
+- **Output:** here in the reply.
+- **Metadata:** the `kntnt` block at the top is included by default.
+- **Structure:** no narrative technique was applied, so the draft follows no set arc. The case-study genre doesn't call for one, and nothing else selected one.
+
+**Byline:** The brief named no author, so the byline uses your name, Thomas Barregren. Change it before publishing if the piece should run unsigned or under someone else's name.
+
+**Where the material ran out**
+- **Coverage:** The brief's three questions are all answered from the source: what Fenwick changed, what the trial established and what Vale would do differently.
+- **Call to action:** No offer, link or contact route was supplied. The ending therefore gives advice that follows from Fenwick's account and doesn't promote Benchline.
+- **Vale's pronouns:** The source never gives them, so the draft refers to Vale by name throughout.
+- **Length:** From the opening paragraph to the end, the text runs to about 290 words, within the 250–300 you asked for.
+
+**Checks**
+- **Structure:** the draft meets every counted requirement for a case study's structure, such as heading and paragraph lengths.
+- **Source checks:** two independent checks ran against the source.
+  - **First check:** six findings, all accepted and fixed. The headline now attributes the result to Fenwick's own summary. The standfirst no longer claims a completed six-week run, and it now attributes each point to the right source. The lead now includes the condition for adding the backlog, and the dropped "recommendation for every workshop" qualification is back. The last subheading and the closing advice no longer invent a plan or an order of steps.
+  - **Second check:** read the repaired text and raised only the subheading finding above.
+- **Cleanup:** all temporary files have been removed and no checks are still running. The only file left in the working directory is your `source.md`, unchanged.

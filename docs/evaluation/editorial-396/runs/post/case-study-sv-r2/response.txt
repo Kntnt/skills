@@ -1,0 +1,82 @@
+**Utkastet levereras med kända brister.** Den andra och sista källkontrollen hittade fyra ställen som inte är åtgärdade. Kontrollen får inte ändra texten efteråt, så de står kvar precis som den läste dem. Det här är vad kontrollen hävdar, inte fastställda fel. Du avgör.
+
+1. **Rubriken.** "Elm Quays testhus fick samlad vy över anmälningarna" gör Maya Linds bedömning ("Having one view of the reports helps us") till ett fastslaget resultat. Den säger också att alla anmälningar samlades. Men telefonanmälan hölls öppen för de boende, och anteckningen räknar inte med akuta ärenden, så en del anmälningar kan ha hamnat utanför loggen. Föreslagen ändring: "Elm Quay prövade en gemensam logg för anmälningarna i två hus", eller en rubrik som tillskriver Lind påståendet.
+2. **Ingressen.** I "visar erfarenheterna var förberedelserna tar tid" blir ett teams erfarenhet en allmän sanning i presens. Föreslagen ändring: "tog tid".
+3. **"I två av sina hus" och "i de egna husen"** (liten brist). Källan säger att Elm Quay *förvaltar* 640 lägenheter, inte att bolaget äger husen. Föreslagen ändring: "I två hus provade …" och "Om testet i de två husen skriver hon:".
+4. **"Lind har ett råd om tidsplanen:"** Det här är en redaktionell fråga snarare än ett fel. "I would set that time aside" kan vara hennes egen plan och inte ett råd till läsaren. Föreslagen ändring: "Om tidsplanen skriver Lind:".
+
+Inga fel hittades i översättningen av citaten.
+
+```markdown
+---
+kntnt:
+  genre: case-study
+  technique: none
+  language: sv
+---
+
+# Elm Quays testhus fick samlad vy över anmälningarna
+
+I två av sina hus provade Elm Quay Housings underhållsteam en gemensam reparationslogg från Svale Systems i åtta veckor. Teamet utformade själv kategorierna. För den som planerar något liknande visar erfarenheterna var förberedelserna tar tid, vad testets siffror säger och inte säger och hur arbetsledaren Maya Lind bedömer resultatet.
+
+Av Thomas Barregren
+
+Hos Elm Quay Housing, som förvaltar 640 lägenheter, sparades telefonanmälningar och mejl tidigare var för sig. I september 2025 beslutade bolagets eget underhållsteam att pröva en gemensam reparationslogg i två hus. Leverantören blev Svale Systems. Efter åtta veckors test har teamet siffror med tydliga förbehåll och en bild av vad arbetsledaren skulle göra annorlunda.
+
+## Varför teamet ville ha en gemensam logg
+
+Maya Lind är arbetsledare i underhållsteamet. I en mejlintervju beskriver hon vad teamet var ute efter:
+
+– Vi ville att kvällsskiftet skulle se vad morgonskiftet redan hade gjort. Kategorierna var våra egna; Svale hjälpte oss att föra in dem i loggen.
+
+Innan teamet bestämde sig för Svale testade det om loggen kunde visa status för varje reparation. Uppgifter om någon jämförelse med andra leverantörer finns inte.
+
+## Teamet och Svale delade på införandet
+
+Underhållsteamet lät de boende fortsätta att felanmäla per telefon. Svale konfigurerade loggen och utbildade sex ur personalen vid två tillfällen. Testet pågick i åtta veckor.
+
+Lind har ett råd om tidsplanen:
+
+– Vi lade mer tid på att komma överens om kategorierna än på att föra in de första anmälningarna. Den tiden skulle jag avsätta innan det är dags för nästa hus.
+
+## Siffrorna från testet kommer med förbehåll
+
+Elm Quays interna anteckning om testet, daterad den 4 december 2025, anger att 31 reparationsanmälningar fördes in. Anteckningen omfattar inte akuta ärenden eller arbeten som beställdes före testet.
+
+Mediantiden från anmälan till tilldelning var två arbetsdagar under testet och tre under de åtta veckorna dessförinnan. Perioderna hade olika arbetsbelastning, och anteckningen tillskriver uttryckligen inte programvaran skillnaden. Mätningar av kostnader, de boendes nöjdhet och tid till avslutad reparation saknas.
+
+## Maya Lind ser tillbaka på testet
+
+Lind rekommenderade inte Svale till alla bostadsbolag. Om testet i de egna husen skriver hon:
+
+– Jag skulle välja att göra testet igen. Att ha en enda vy över anmälningarna hjälper oss, men jag skulle planera in en extra vecka för förberedelserna.
+
+## Kategorierna ska prövas på större reparationer
+
+Testet har ännu inte utvidgats. Teamet bestämmer sig när det har sett hur kategorierna fungerar för större reparationer. Den som förbereder ett liknande test kan läsa en [checklista för införandet](https://example.invalid/svale/checklist).
+```
+
+**Inställningar:**
+- **Genre och språk:** case-study och svenska (sv), båda från anropet.
+- **Teknik:** ingen. Anropet angav ingen, och case-study-genren anger ingen teknik som den vanligen skrivs med.
+- **Leverans:** utkastet ligger här i svaret.
+- **Metadata:** Kntnt-metadatan är påslagen (standard).
+
+**Byline:** Briefen angav ingen författare, så bylinen bär ditt namn, Thomas Barregren. Ändra den om texten ska publiceras osignerad eller under ett annat namn.
+
+**Så gick kontrollen till:**
+- **Artikelmallen:** Utkastet mättes mot artikelmallen och uppfyller alla krav och normer. Rubriken har 8 ord och 51 tecken, och ingressen har 50 ord.
+- **Två källkontroller:** Den första hittade fem brister, och alla fem är rättade:
+  - Rubriken var för bred.
+  - "byggde själv upp" blev "utformade".
+  - "felanmälningar per telefon och mejl" blev "telefonanmälningar och mejl".
+  - "felanmälningar" blev "reparationsanmälningar" i antalet 31.
+  - "anställda" blev "ur personalen".
+- **Den nya rubriken:** Den andra kontrollen invände mot den nya rubriken igen (punkt 1 ovan).
+
+**Där materialet tog slut:**
+- **Längden:** Texten är cirka 420 ord och räcker till de ungefär 400 ord som briefen bad om.
+- **Checklistan:** Länken hämtades inte. Därför beskrivs checklistan bara som ett dokument att läsa, inte vad den innehåller.
+- **Utgivare:** Utkastet säger inte att det är material som leverantören ger ut, fast briefen anger att det är det. Det påstår inte heller att det är oberoende journalistik. Om texten ska märkas upp är ett redaktionellt beslut.
+
+**Städning:** De tillfälliga filerna är borttagna och inga filer finns kvar. Källfilen `source.md` är orörd. Båda kontrollanterna har avslutats.
