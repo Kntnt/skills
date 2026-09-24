@@ -1,0 +1,39 @@
+Jag granskade `input.md` som debattartikel (opinion) på svenska och rättade båda fynden i en rättningsrunda. Ingen fil har skrivits eller ändrats. `input.md` är orörd och alla tillfälliga filer är borttagna.
+
+**Inställningar:** Genren och språket kom från anropet. Ingen teknik används, eftersom opinionsgenren inte har någon.
+
+**Fynd som rättades:**
+1. **Brödtexten behövde ingressen för att förstå september.** Slutraden ”… för att kalendern säger september” fungerade bara om man hade läst ingressen, eftersom det var bara där bytet kopplades till september. Nu säger inledningsstycket att bytet kan ske i september, med samma osäkerhet som i ingressen.
+2. **Brödtexten sa aldrig vilket antagande det gällde.** Rubriken, den tredje mellanrubriken och slutraden vilar på ordet ”antagande”, men brödtexten förklarade aldrig vad som antas. Nu står det efter meningen om vad siffrorna inte visar: ”Ett beslut att avskaffa telefonbokningen skulle därför vila på ett antagande om hur många som klarar sig utan den.”
+
+Mätningen av rubriker, ingress, stycken och avsnitt visar att allt håller sig inom gränserna, även efter rättningen. Inga fynd återstår.
+
+**Påståenden:** Inga påståenden togs bort, och inget befintligt påstående fick ändrad räckvidd, säkerhet, källa, tidsordning, orsakssamband eller innebörd. Meningen om antagandet är en slutsats som texten tidigare bara antydde och som rubriken redan drog. Nu står den i klartext i brödtexten.
+
+```markdown
+# Avskaffa inte telefonbokningen på ett antagande
+
+**I september kan telefonbokningen av Lerviks föreningslokaler försvinna. Beslutet ska vila på åtta veckors siffror från två lokaler, och de siffrorna räknar bokningar, inte personer. Här är skälen att pröva båda bokningsvägarna ett halvår till innan den ena stängs.**
+
+Text: Sanna Ek, Öppna beslut
+
+Kommunstyrelsen i Lervik bör skjuta upp bytet till enbart digital bokning av föreningslokaler, ett byte som kan ske i september. Pröva först båda bokningsvägarna i alla sju lokaler under ett halvår och mät vad de kräver. Ett permanent beslut behöver bättre underlag än det som nu ligger på bordet.
+
+## Bokningar är inte samma sak som personer
+
+Kommunens pilotrapport från den 8 april 2026 räknar 96 webbbokningar och 24 telefonbokningar under åtta veckor i två lokaler. Den säger inte hur många personer som bokade eller varför de valde telefonen. Siffrorna visar varken hur många som saknar digital vana eller hur många som skulle klara sig utan telefonbokning. Ett beslut att avskaffa telefonbokningen skulle därför vila på ett antagande om hur många som klarar sig utan den.
+
+En bokning är en händelse, inte en invånare. Den skillnaden avgör vad siffrorna kan användas till.
+
+## Mät också arbetet med två kanaler
+
+Förvaltningen vill slippa dubbel administration. Det är en relevant invändning. Men handlingarna innehåller ingen mätning av tidsåtgången. Att behålla två kanaler kostar arbete, och hur mycket behöver vägas mot vad användarna får.
+
+## Besluta om försöket, inte om antagandet
+
+Kommunstyrelsen bör därför säga ja till halvåret med båda bokningsvägarna, ta ställning till dess ännu okända kostnad och ge förvaltningen i uppdrag att mäta tidsåtgången samt fråga användarna varför de väljer sin bokningsväg. Först då går det att väga alternativen.
+
+Ett antagande blir inte ett beslutsunderlag för att kalendern säger september.
+```
+
+Jämfört med originalet har brödtexten ändrats på två ställen. Inledningsstycket säger nu själv att bytet kan ske i september. Det första avsnittet säger nu vilket antagande ett avskaffande skulle vila på. Korrekturläsningen gjorde en ändring: ”webbokningar” skrivs nu ”webbbokningar”, eftersom alla tre b:n skrivs ut när tre likadana konsonanter möts i ett sammansatt ord. Rubriker, ingress, byline, uppbyggnad och övrig text är oförändrade.

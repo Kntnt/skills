@@ -1,0 +1,13 @@
+f183e6da31cf78081cc7c7eee69570940e24802997e92d96bb111966aa4170d5  /Users/thomas/Projects/skills/.git/kntnt-orchestrate/402.scratch/inputs/article-clean.md
+1c0e3b3ef98e06b220058b9811864ebdae4c89b0618eb2f8405b63b0dd6504a0  /Users/thomas/Projects/skills/.git/kntnt-orchestrate/402.scratch/inputs/article-flawed.md
+32037623b16754f359666719c0661483393141c8be47cea2962ca85d38f6aab3  /Users/thomas/Projects/skills/.git/kntnt-orchestrate/402.scratch/inputs/case-study-clean.md
+ce574061bd09328ed80109a3cca07875683c2fd77d55f41d5631dc2cdcb18767  /Users/thomas/Projects/skills/.git/kntnt-orchestrate/402.scratch/inputs/case-study-flawed.md
+98b65197fa9dd8001010f4dc181d0d356769ee19e0ac9bf3dd984ec87ee40407  /Users/thomas/Projects/skills/.git/kntnt-orchestrate/402.scratch/inputs/column-clean.md
+9b12ad3fb2cb74011c974feda1d7aafa8c0394ac6899417be2dbdd40ad0e96ab  /Users/thomas/Projects/skills/.git/kntnt-orchestrate/402.scratch/inputs/column-flawed.md
+179cc9615d2aa633234ef8d54f83d447ad47627a042646ba4fd6bc26cf52b34a  /Users/thomas/Projects/skills/.git/kntnt-orchestrate/402.scratch/inputs/opinion-clean.md
+ab033d9f4c817c9eaa0efa32db93819a99291a3b22e29fb39f0d640e830ed990  /Users/thomas/Projects/skills/.git/kntnt-orchestrate/402.scratch/inputs/opinion-flawed.md
+8de234f1c80fe947361503113e4c84361427e8a52b836aa9e5d03550431fff15  /Users/thomas/Projects/skills/.git/kntnt-orchestrate/402.scratch/inputs/web-copy-clean.md
+a5470e4b3aea20a09e4cbfe8a9598885399460897025781c130f7c76228ca184  /Users/thomas/Projects/skills/.git/kntnt-orchestrate/402.scratch/inputs/web-copy-flawed.md
+7c84ceaf2eb37beba0064cacd497464c8b81905b14a940f8277430e9f7b55bda  /Users/thomas/Projects/skills/.git/kntnt-orchestrate/402.scratch/run_one.sh
+34d9bd127267d45afe19566d2965dbf9b7d440d7ac178a652e0b91e79b0655a2  /Users/thomas/Projects/skills/.git/kntnt-orchestrate/402.scratch/wave.sh
+e5ef67c5231d9bfd45c61fd03e6c8f410d1d6a59a8ec6fefe948ba50d994d846  /Users/thomas/Projects/skills/.git/kntnt-orchestrate/402.scratch/wave/wave-1-before-scratch.txt

@@ -1,0 +1,43 @@
+Konfiguration: genren `article` och språket `sv` kommer från anropet. Ingen teknik används, eftersom artikelgenren inte anger någon.
+
+````markdown
+# Mätförsök i Björkskolan visar värden under 20 grader
+
+**En rapport från Fastighetskontoret redovisar hur lufttemperaturen i klassrum i Björkskolan mättes med givare. Läs vad mätningen visade, vilka uppgifter som saknas och vad en drifttekniker rekommenderar.**
+
+Givare registrerade temperaturer under 20 grader i sex klassrum i Björkskolan. Fastighetskontorets rapport *Mätförsök i Björkskolan* från den 12 mars 2026 anger att 14 av 120 lektionspass hade minst ett värde under kontorets egen arbetsgräns på 20 grader, vilket inte är en lagregel.
+
+Enligt rapporten varade försöket fyra veckor. Två givare stod vid ytterväggar och fyra vid innerväggar, utan att placeringens effekt jämfördes experimentellt.
+
+Operativ temperatur saknas, trots att resonemanget bygger på operativ temperatur, som är ett mått på lufttemperatur och värmestrålning från omgivande ytor, medan givarna bara mätte luften där de satt. Det saknas mätningar av luftdrag och elevernas upplevelse och uppgifter om hur länge temperaturerna låg under gränsen. Ingen effekt på hälsan har undersökts.
+
+Driftteknikern Elin Rask rekommenderar att koppla temperaturserier till användningstider innan styrningen ändras.
+
+Nästa försök är tänkt att använda likadant placerade givare i november, fast finansieringen inte är beslutad.
+
+Kontakta oss.
+````
+
+## Olösta fynd
+
+Korrigeringsbudgeten (1) är förbrukad. Följande fynd kvarstår och behöver avgöras av en person:
+
+1. **Byline saknas.** Varken texten eller anropet namnger någon författare, så ingen byline har skrivits.
+2. **”resonemanget”** i stycket om operativ temperatur syftar på ett resonemang som texten aldrig presenterar. Läsaren kan inte avgöra vems resonemang som bygger på operativ temperatur. Texten själv säger inte vems det är, så meningen står kvar oförändrad.
+3. **”Kontakta oss.”** – delvis åtgärdat. Den uppblåsta delen ”för att rädda framtiden” är borttagen. Texten säger fortfarande inte vem ”oss” är eller vad läsaren ska höra av sig om, och det kan bara någon med kännedom om avsändaren fylla i.
+4. **Mellanrubriker, avsnitt och avslutande avsnitt saknas.** Ingen mellanrubrik har skrivits. Därför består leaden nu av sex stycken, något som bara beror på att avsnitten saknas. Av samma skäl finns inget avslutande avsnitt som visar att leadens förväntan har infriats.
+
+## Påståenden som tagits bort eller ändrats
+
+**Borttagna:**
+- Rubrikens påstående att givarna räddar skolan från en katastrof. Det hade inget stöd i texten.
+- ”Katastrofen lurade bakom varje hörn.” Uppdiktad dramatik utan stöd.
+- Att det är ”helt säkert att givarna har gjort eleverna friskare”. Påståendet motsades av textens egen uppgift att ingen effekt på hälsan har undersökts, och den uppgiften står kvar.
+- ”Det är viktigt att notera att detta är mycket viktigt för alla som tycker att temperatur är viktigt.” Tautologisk utfyllnad.
+- Att en kontakt med ”oss” skulle ”rädda framtiden”.
+
+**Ändrade:**
+- Den första meningen i brödtexten har fått ortsangivelse. ”Givarna registrerade … i sex klassrum” har blivit ”Givare registrerade … i sex klassrum i Björkskolan”, så att givarna presenteras innan de omtalas.
+- Uppgiften om givarnas placering stod tidigare i en bisats inom rapportens ”anger att …”. Nu är den en egen mening efter ”Enligt rapporten varade försöket fyra veckor.” Den tillskrivs alltså rapporten bara underförstått. Försökets längd tillskrivs fortfarande uttryckligen rapporten.
+
+Rubriken och ingressen är omskrivna utifrån textens eget innehåll, och de ordagranna upprepningarna mellan ingress och brödtext är borttagna. Det enda långa stycket är uppdelat i flera. En överlastad mening och en fog som antydde ett samband som texten inte belägger har delats upp. Ett ostött orsakspåstående, uppdiktad dramatik och tom utfyllnad är borttagna. Uppmaningen har förlorat sin uppblåsta del. Det avslutande mekaniska passet hittade inget att rätta.

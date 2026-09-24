@@ -1,0 +1,57 @@
+Texten har inte ändrats, och alla nio anmärkningar kvarstår olösta. Den enda rättningsrundan gav två nya fel som texten inte hade från början, så rundan förkastades och originaltexten återställdes oförändrad. Den mekaniska korrekturen hittade inga fel.
+
+Granskningen gällde genren `opinion` på `sv`, båda angivna i anropet. Ingen berättarteknik användes, eftersom genren inte anger någon. Ingen fil har skrivits.
+
+````markdown
+# Kommunledningen hatar människor
+
+Sanna Ek, Öppna beslut
+
+Kommunstyrelsen borde behålla telefonbokning under ett halvårs försök i alla sju lokaler. Alla vet att politikerna vill stänga ute äldre för att spara miljoner.
+
+## Bakgrund
+
+Det gjordes 96 bokningar på webben och 24 via telefon. Det bevisar att 20 procent av kommunens invånare inte kan använda internet. Kommunens pilotrapport från den 8 april 2026 säger samtidigt att bokningarna inte räknar unika personer och att digital vana inte undersöktes.
+
+## Diskussion
+
+Förvaltningen invänder att dubbla kanaler innebär dubbel administration. Handlingarna saknar tidsmätning. Därför kostar det ingenting att behålla telefonbokningen. Föreningen vill att förvaltningen mäter tidsåtgång och frågar användarna varför de väljer en bokningsväg. Försökets kostnad är inte beräknad.
+
+Nu är det dags att agera.
+````
+
+## Anmärkningar
+
+1. **Rubriken ”Kommunledningen hatar människor”** påstår ett motiv som texten inte stöder, och tonen är högre än textens. Rubriken säger heller inget om ärendet, nämligen att telefonbokningen ska finnas kvar under ett halvårsförsök. Läsaren vilseleds om vad texten hävdar.
+2. **Ingressen saknas.** Mätskriptet rapporterar den som frånvarande. Den ska skrivas av en person och har inte fyllts i.
+3. **”Alla vet att politikerna vill stänga ute äldre för att spara miljoner.”**
+   - ”Alla vet” anger ingen källa.
+   - Motivet tillskrivs motståndaren utan stöd.
+   - Att telefonbokarna är äldre motsägs av att digital vana inte undersöktes.
+   - Besparingen på ”miljoner” motsägs av att kostnaden inte är beräknad.
+4. **”Det bevisar att 20 procent av kommunens invånare inte kan använda internet.”** 24 av 120 är 20 procent av bokningarna, inte av invånarna. Bokningarna räknar inte unika personer, och meningen efter motsäger ”bevisar”. Meningen om pilotrapporten avgränsar vad siffrorna visar och ska stå kvar.
+5. **Siffrorna 96 och 24 har ingen källa och ingen period.** Hela argumentet vilar på dem.
+6. **”Handlingarna saknar tidsmätning. Därför kostar det ingenting …”** är ett felslut. Att tiden inte mätts visar inte att kostnaden är noll, och samma stycke säger att kostnaden inte är beräknad. Förvaltningens invändning bemöts alltså inte rättvist.
+7. **”Föreningen vill …”** syftar på en förening som bara nämns i bylinen (Öppna beslut). Brödtexten säger inte vem som står bakom förslaget.
+8. **Mellanrubrikerna ”Bakgrund” och ”Diskussion”** är funktionsetiketter. De säger inget om vad avsnitten handlar om, så den som skummar får inget av argumentet.
+9. **Avslutningen ”Nu är det dags att agera.”** namnger ingen handling och ingen aktör. Texten har redan ett förslag som kan göras explicit:
+   - kommunstyrelsen behåller telefonbokningen i alla sju lokaler under halvårsförsöket;
+   - förvaltningen mäter tidsåtgången och frågar användarna varför de väljer en bokningsväg.
+
+## Den förkastade rättningsrundan
+
+Rundan ändrade åtgärdade anmärkningarna 1 och 3–9. Omgranskningen hittade två nya fel som originaltexten inte hade:
+
+- **Ny källhänvisning.** Rättningen för anmärkning 5 lade till ”enligt kommunens pilotrapport” vid siffrorna 96 och 24. Texten säger aldrig att siffrorna kommer därifrån.
+- **Rubrik som ekar inledningen.** Rättningen för anmärkning 1 gav rubriken ”Telefonbokning av lokaler bör finnas kvar ett halvår”, som upprepar inledningens tes med nästan samma ord.
+
+Därför togs ingenting från rundan med. Två frågor behöver avgöras av en person: vilken källa siffrorna faktiskt har, och en rubrik som anger vinkeln utan att upprepa inledningen.
+
+## Påståenden som rundan försökte ändra
+
+Inget av detta finns i den levererade texten.
+
+- **Borttagen mening (anmärkning 3):** ”Alla vet att politikerna vill stänga ute äldre för att spara miljoner.” Den tog med sig tre påståenden: att politikerna vill stänga ute äldre, att syftet är att spara miljoner, och att ”alla vet” detta.
+- **Borttagen mening (anmärkning 6):** ”Därför kostar det ingenting att behålla telefonbokningen.”
+- **Ändrat påstående (anmärkning 4):** ”Det bevisar att 20 procent av kommunens invånare inte kan använda internet” skulle ha blivit ”Det betyder att 20 procent av bokningarna gjordes via telefon.”
+- **Ändrad källa (anmärkning 5):** siffrorna 96 och 24 skulle ha tillskrivits kommunens pilotrapport.

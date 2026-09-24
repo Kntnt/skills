@@ -1,0 +1,14 @@
+# /Users/thomas/Projects/skills/.git/kntnt-orchestrate/402
+# HEAD 5fd4cef485171df97565fe0154a8c0a6f0069d47
+ M skills/editorial/redline/SKILL.md
+ M skills/editorial/redline/references/correction.md
+ M skills/kntnt/catalog.json
+ M skills/kntnt/library/references/editorial/article-anatomy.md
+ M skills/kntnt/library/references/editorial/article-anatomy.review.md
+ M skills/kntnt/library/scripts/article_anatomy.py
+ M tests/test_article_anatomy.py
+ M tests/test_kntnt.py
+# end /Users/thomas/Projects/skills/.git/kntnt-orchestrate/402
+# /Users/thomas/Projects/skills
+# HEAD 1ef14cb5235d1076a500532ca7e2f9f65a7a0a11
+# end /Users/thomas/Projects/skills

@@ -1,0 +1,3 @@
+# Frozen expectation
+
+Conforms to the anatomy. Preserve the personal reflection, the early point, the purposeful recurrence, the admitted doubt, the coherent 83-word single-thought paragraph and the ending's non-commercial invitation to try the question. No permission or deviation explanation is owed. Reject the splitting of the 83-word paragraph, any finding against a limit the text meets (44-character headline, 41-word standfirst, 37-character subheadings), any finding resting on the one-sentence paragraph, the four-sentence paragraph or one section's paragraph count, and a finding against the Swedish `Text:` byline form.

@@ -1,0 +1,40 @@
+Granskningen är klar och texten har gått igenom den avslutande korrekturläsningen. `input.md` är orörd och inga tillfälliga filer finns kvar.
+
+**Inställningar:** genre `article` och språk `sv`, båda angivna i anropet. Ingen teknik används, eftersom artikelgenren inte anger någon och ingen annan nivå valde någon. Texten saknar `kntnt`-metadata, och ingen har lagts till.
+
+```markdown
+# Björkskolans temperaturer bör läsas mot när rummen används
+
+**Under 14 av 120 lektionspass registrerade givarna i Björkskolan temperaturer under fastighetskontorets egen arbetsgräns. Fyra veckors mätningar pekar ut tillfällen att undersöka närmare, men förklarar inte varför luften var kall. Här är vad ett kort försök kan säga, och vad som behövs för att komma vidare.**
+
+Text: Hedda Lund
+
+En temperaturgivare mäter luften där den sitter. Det gör placeringen viktig när fastighetskontoret ska tolka fyra veckors mätningar i Björkskolans sex klassrum. Genomgången nedan visar vad värdena räcker till och var gränsen går.
+
+## Värdena mäts mot kontorets gräns och fångar inte elevernas upplevelse
+
+Kontoret valde 20 grader Celsius som arbetsgräns. Rapporten *Mätförsök i Björkskolan*, daterad 12 mars 2026, räknar 14 lektionspass av 120 med minst en mätning under den gränsen. Hur länge temperaturen låg under den anger rapporten inte. Gränsen är kontorets egen, vald för det här försöket.
+
+Givarna mätte varken luftdrag eller elevernas upplevelse. Ett lågt värde säger alltså när luften var kall, men inte hur rummet kändes.
+
+Driftteknikern Elin Rask sammanfattar: ”Vi vet när vi behöver titta närmare. Vi vet ännu inte varför det blev kallt just då.”
+
+## Nästa försök behöver mer än givare
+
+Rask rekommenderar att temperaturserierna kopplas till rummens användningstider innan styrningen ändras. Nästa försök planeras för november med likadant placerade givare, men finansieringen är inte beslutad.
+
+Lägg därför tiderna för när rummen används bredvid mätvärdena innan nästa givare sätts upp.
+```
+
+**Åtgärdade fel:** granskningen hittade tre fel, och en korrigeringsrunda åtgärdade alla. Den nya granskningen hittade inga kvarstående fel och inga nya fel från rundan.
+
+1. **Rubriken var otydlig på egen hand.** ”visar när, inte varför” sa inte när vad. En läsare som bara såg rubriken kunde inte veta att texten handlar om temperaturer i klassrummen.
+2. **Rubriken upprepade ingressen.** Ingressens andra mening sa samma sak med andra ord: mätningarna pekar ut tillfällen men förklarar inte varför.
+3. **Första mellanrubriken beskrev inte hela avsnittet.** ”En gräns för det lokala försöket” täckte bara första stycket. Två av tre stycken handlar om vad mätningarna inte fångar.
+
+**Påståenden:** inget påstående har strukits. Ett påstående har flyttats:
+- Rubriken påstod tidigare att mätförsöket ”visar när, inte varför”. Nu uttrycker den i stället textens rekommendation, att temperaturerna bör läsas mot när rummen används. Rekommendationen bygger på Rasks förslag och på textens avslutande uppmaning. Påståendet om när och varför står kvar oförändrat i ingressen och i Rasks citat. Ändringen gjordes för fel 1 och 2.
+
+Texten följer artikelns anatomi utan avvikelser. Skriptet mätte gränserna, bland annat rubriken (58 tecken, 8 ord) och mellanrubriken (69 av högst 70 tecken). Jag läste själv igenom resten: att ingressen står på egna ben, att inledningen för texten vidare, att mellanrubrikerna beskriver sina avsnitt och att sista avsnittet fungerar som avslutning.
+
+**Ändringar i texten:** rubriken och den första mellanrubriken är omskrivna. Allt annat är ordagrant oförändrat. Korrekturläsningen hittade inga fel att rätta.

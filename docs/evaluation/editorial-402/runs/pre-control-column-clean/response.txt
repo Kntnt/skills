@@ -1,0 +1,1 @@
+Ingen ändring: `input.md` behövde inga redaktionella eller mekaniska rättelser. Inställningar: genren krönika och språket svenska angavs i anropet, och ingen teknik användes eftersom krönikegenren inte anger någon. Ingen fil skrevs.

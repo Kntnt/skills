@@ -1,0 +1,3 @@
+# Frozen expectation
+
+Detect unsupported motives, population inference contradicted by booking denominator, cost contradiction and vague final exhortation. The anatomy adds: no standfirst; `Bakgrund` and `Diskussion`, which label the sections instead of describing them; and no ending section, the closing exhortation sitting inside the last one and naming no act. Existing action/actor in body can repair the ending. Keep qualified facts and the proposal.

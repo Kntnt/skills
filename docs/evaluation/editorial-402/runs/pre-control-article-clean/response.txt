@@ -1,0 +1,38 @@
+Klart. Konfiguration: genre **article** och språk **sv**, båda angivna i anropet. Ingen teknik tillämpades, eftersom genren *article* inte har någon teknik som den normalt skrivs med. Artikelns räknade gränser mättes maskinellt och höll i både originalet och den levererade texten. Rubriken har nu nio ord, ett ord över riktmärket på högst åtta. Det är en norm och inget krav, och rubriken läses bättre så än med ett ord mindre. `input.md` är orörd och inga arbetsfiler ligger kvar.
+
+```markdown
+# Björkskolans mätningar visar när det var kallt, inte orsaken
+
+**Under 14 av 120 lektionspass registrerade givarna i Björkskolan temperaturer under fastighetskontorets egen arbetsgräns. Fyra veckors mätningar pekar ut tillfällen att undersöka närmare, men förklarar inte varför luften var kall. Här är vad försöket kan säga, och vad som behövs för att komma vidare.**
+
+Text: Hedda Lund
+
+En temperaturgivare mäter luften där den sitter. Det gör placeringen viktig när fastighetskontoret ska tolka fyra veckors mätningar i Björkskolans sex klassrum. Genomgången nedan visar vad värdena räcker till och var gränsen går.
+
+## En gräns för det lokala försöket
+
+Kontoret valde 20 grader Celsius som arbetsgräns. Rapporten *Mätförsök i Björkskolan*, daterad 12 mars 2026, räknar 14 lektionspass av 120 med minst en mätning under den gränsen. Hur länge temperaturen låg under den anger rapporten inte. Gränsen är kontorets egen, vald för det här försöket.
+
+Givarna mätte varken luftdrag eller elevernas upplevelse. Ett lågt värde säger alltså när luften var kall, men inte hur rummet kändes.
+
+Driftteknikern Elin Rask sammanfattar: ”Vi vet när vi behöver titta närmare. Vi vet ännu inte varför det blev kallt just då.”
+
+## Nästa försök behöver mer än givare
+
+Rask rekommenderar att temperaturserierna kopplas till rummens användningstider innan styrningen ändras. Nästa försök planeras för november med likadant placerade givare, men finansieringen är inte beslutad.
+
+Lägg därför tiderna för när rummen används bredvid mätvärdena innan nästa givare sätts upp.
+```
+
+**Åtgärdat i granskningen** (en rättningsrunda, inga fynd kvar):
+
+1. **Rubriken gick inte att förstå på egen hand.** *Mätförsöket i Björkskolan visar när, inte varför* sa inte vad som mättes eller vad ”när” syftade på. Den nya rubriken säger att det gäller när det var kallt. Den använder inte ingressens formulering ”förklarar inte varför”.
+2. **Ingressen kallade försöket kort utan stöd.** Ingenstans i texten jämförs de fyra veckorna med något. Texten förklarar begränsningarna med vad som mättes, inte med hur länge. ”Kort” antydde alltså att ett längre försök hade kunnat förklara kylan.
+
+**Påståenden som ändrats:**
+- **Borttaget:** att försöket var kort. Det tog rättningen av fynd 2 bort, eftersom fyndet gällde just den värderingen.
+- **Ändrad räckvidd:** ”vad ett kort försök kan säga” gällde försök i allmänhet. Nu står det ”vad försöket kan säga”, om det här försöket. Ändringen kom med rättningen av fynd 2.
+
+Följande står kvar oförändrat: de meningar som avgränsar vad texten påstår, citatet, 20-gradersgränsen och planerna för november. Med avgränsande meningar avses att rapporten inte anger hur länge det var kallt, att luftdrag och upplevelse inte mättes, att gränsen valdes för just det här försöket och att finansieringen inte är beslutad.
+
+Jämfört med originalet har körningen skrivit om rubriken så att den står på egen hand, och tagit bort en ostödd värdering ur ingressen. Den avslutande korrekturen hittade inga mekaniska fel och ändrade ingenting.

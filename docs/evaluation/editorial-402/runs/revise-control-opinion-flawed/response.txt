@@ -1,0 +1,57 @@
+# Granskning av ”Kommunledningen hatar människor”
+
+Jag granskade texten mot genren opinion på svenska. Varken anropet eller genren angav någon berättarteknik, så ingen har tillämpats. Budgeten räckte till en korrigeringsrunda. Den rundan förkastades, så texten nedan är samma som den som kom in. Den mekaniska korrekturläsningen hittade inga fel.
+
+```markdown
+# Kommunledningen hatar människor
+
+Sanna Ek, Öppna beslut
+
+Kommunstyrelsen borde behålla telefonbokning under ett halvårs försök i alla sju lokaler. Alla vet att politikerna vill stänga ute äldre för att spara miljoner.
+
+## Bakgrund
+
+Det gjordes 96 bokningar på webben och 24 via telefon. Det bevisar att 20 procent av kommunens invånare inte kan använda internet. Kommunens pilotrapport från den 8 april 2026 säger samtidigt att bokningarna inte räknar unika personer och att digital vana inte undersöktes.
+
+## Diskussion
+
+Förvaltningen invänder att dubbla kanaler innebär dubbel administration. Handlingarna saknar tidsmätning. Därför kostar det ingenting att behålla telefonbokningen. Föreningen vill att förvaltningen mäter tidsåtgång och frågar användarna varför de väljer en bokningsväg. Försökets kostnad är inte beräknad.
+
+Nu är det dags att agera.
+```
+
+## Kvarstående fynd
+
+Alla tio fynd är olösta.
+
+1. **Rubriken är ogrundad.** ”Kommunledningen hatar människor” ger motparten ett motiv som texten aldrig belägger. Tonen är hårdare än i resten av texten, och rubriken säger inget om textens ståndpunkt: att telefonbokningen ska behållas under ett halvårs försök. Läsaren får fel bild av vad texten argumenterar för.
+2. **”Alla vet att politikerna vill stänga ute äldre för att spara miljoner.”**
+   - ”Alla vet” anger ingen källa.
+   - Motivet är påhittat.
+   - ”Äldre” nämns ingen annanstans i texten.
+   - ”Spara miljoner” motsägs av textens egen mening ”Försökets kostnad är inte beräknad.”
+3. **”Det bevisar att 20 procent av kommunens invånare inte kan använda internet.”** 24 av 120 är 20 procent av bokningarna, inte av invånarna. Meningen efter säger dessutom att bokningarna inte räknar unika personer och att digital vana inte undersöktes. Texten motsäger alltså sin egen slutsats.
+4. **”Därför kostar det ingenting att behålla telefonbokningen.”** Slutsatsen följer inte av premissen. Att tidsmätning saknas visar inte att kostnaden är noll, och den sista meningen i stycket säger att kostnaden inte är beräknad.
+5. **Avslutningen saknar både handling och aktör.** ”Nu är det dags att agera.” säger inte vad som ska göras eller vem som ska göra det. Meningen står dessutom inne i avsnittet ”Diskussion” i stället för i ett eget avslutande avsnitt. Förslaget finns redan i texten: kommunstyrelsen behåller telefonbokningen under ett halvårs försök i alla sju lokaler.
+6. **Mellanrubrikerna är generiska etiketter.** ”Bakgrund” och ”Diskussion” skulle passa i vilken text som helst och säger inget om vad avsnitten hävdar.
+7. **Ingress saknas.** Det mätta resultatet visar att ingressen saknas. Den ska inte skrivas i granskningen, eftersom det är en person som avgör vad den ska innehålla.
+8. **Siffrorna saknar källa och period.** Texten säger inte var siffrorna 96 och 24 kommer ifrån eller vilken period de gäller.
+9. **Det framgår inte vilken förening som avses.** ”Föreningen” nämns bara i brödtexten. Bylinen nämner Öppna beslut men säger inte att det är en förening.
+10. **Sammanhang saknas.** Texten säger inte vad som bokas eller i vilken kommun.
+
+Fynd 1–6 går att rätta utifrån textens eget innehåll. Fynd 7–10 kräver uppgifter som texten inte har.
+
+## Den förkastade korrigeringsrundan
+
+En korrigeringsrunda försökte rätta fynd 1–6 och förkastades. Den nya första mellanrubriken ”Telefonen stod för var femte bokning” upprepade med andra ord början av sitt avsnitt. Samma rundas omskrivning av fynd 3, ”Det är 20 procent av bokningarna.”, sade samma sak en tredje gång. Det var ett nytt fel som rundan själv hade skapat. Därför återställdes texten i sin helhet, och inget av rundans arbete finns kvar.
+
+Rundan försökte också ändra texten så här:
+- Stryka påståendena i fynd 2, det vill säga att ”alla vet” att politikerna vill stänga ute äldre för att spara miljoner.
+- Stryka påståendet i fynd 4 om att telefonbokningen inte kostar något.
+- Ändra påståendet i fynd 3 från 20 procent av invånarna till 20 procent av bokningarna.
+
+Ingen av dessa ändringar finns i den levererade texten. Inget påstående har tagits bort eller ändrats i den.
+
+## Artikelanatomin
+
+Texten följer inte artikelanatomin, eftersom ingressen saknas. Avslutningen står inte som ett eget avsnitt, och båda mellanrubrikerna misslyckas med att beskriva sina avsnitt. Rubrikens längd, mellanrubrikernas maxlängd och styckenas storlek håller sig inom gränserna.

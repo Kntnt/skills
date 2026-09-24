@@ -1,0 +1,32 @@
+**Konfiguration:** genre `column`, språk `sv`. Ingen teknik används: det angavs ingen, och genren column anger ingen som den vanligen skrivs med. Korrigeringsbudgeten var 1 och gick åt till en korrigeringsrunda. Rundan granskades sedan på nytt och godtogs.
+
+````markdown
+# Vår mötesmall saknar plats för gemensam förståelse
+
+Nora Vik
+
+Förra tisdagen satt jag gråtande i bibliotekets mötesrum när min chef sade: ”Nu måste allt bli digitalt.” Det var mitt första möte om vår nya mötesmall. Jag har aldrig deltagit i något möte om vår nya mötesmall.
+
+Vår mötesmall har plats för starttid och sluttid men inte för vad vi ska förstå tillsammans.
+
+Samtal kan ha värde utan att leda till beslut. Jag vill prova frågan vad vi behöver förstå tillsammans, men jag vet inte om ytterligare en ruta gör möten bättre.
+````
+
+**Olösta anmärkningar**
+
+1. **Motsägelse i den personliga berättelsen.** Första stycket säger både ”Det var mitt första möte om vår nya mötesmall.” och ”Jag har aldrig deltagit i något möte om vår nya mötesmall.” Båda kan inte stämma. Läsaren vet inte om skribenten var med på mötet, och scenen som bär krönikan tappar trovärdighet. Texten visar inte vilket påstående som är sant, så båda meningarna står kvar.
+2. **Öppningsscenen hänger inte ihop med resonemanget.** Gråten och chefens ”Nu måste allt bli digitalt.” nämns aldrig igen. Texten säger inte hur de hänger ihop med att mallen saknar plats för det man ska förstå tillsammans. En koppling går inte att skriva utan att hitta på motiv eller händelser.
+3. **Ingress saknas.** Mellan rubriken och bylinen behövs en fristående ingress på högst 60 ord. Den ska säga vad krönikan handlar om och vad läsaren får ut av den.
+4. **Mellanrubriker och avsnitt saknas.** Brödtexten består av tre stycken utan mellanrubrik. Att det första stycket mäts som tre stycken beror bara på att avsnitten saknas.
+5. **Uppmaning till läsaren saknas.** Slutet ger läsaren inget att pröva, lägga märke till eller ompröva. ”Jag vill prova frågan …” gäller skribentens egen avsikt och är inte riktad till läsaren. Den meningen har inte ändrats.
+
+Punkt 3–5 gäller delar som texten saknar. De har inte skrivits, eftersom en person behöver bestämma vad som ska stå där.
+
+**Strukna påståenden**
+
+- Påståendet att möten är viktigare än någonsin i dagens snabbt föränderliga värld är struket. Det fanns på två ställen: som inledning på andra stycket och i slutstycket ”Sammanfattningsvis är möten viktigare än någonsin i dagens snabbt föränderliga värld.” Båda gångerna var hela meningen felet. Första gången var den en tom inledningsfras med en överdriven betydelse som texten inte belägger. Andra gången var den en sammanfattande slutfras som upprepade den första.
+- ”Det är viktigt att vara viktig.” är struken som tom utfyllnad. Meningen påstod inget om möten eller mallen.
+
+Inget påstående som står kvar har ändrats i räckvidd, säkerhet, tillskrivning, kronologi, orsakssamband eller innebörd.
+
+Utöver det som redovisas ovan har körningen strukit tre floskler av typen tomma inledningar och sammanfattningar. Den har också skrivit om rubriken från ”Möten förändrar allt”, som lovade något texten inte påstår, till en rubrik som anger krönikans vinkel i textens egen styrka. Språkgranskningen i slutet hittade inga fel att rätta.

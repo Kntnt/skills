@@ -1,0 +1,44 @@
+Jag har granskat texten som debattartikel på svenska och gjort en korrigeringsrunda. Genren och språket kommer från anropet. Ingen berättarteknik tillämpades, eftersom varken anropet eller genren anger någon.
+
+````markdown
+# Avskaffa inte telefonbokningen på ett antagande
+
+**I september kan telefonbokningen av Lerviks föreningslokaler försvinna. Beslutet ska vila på åtta veckors siffror från två lokaler, och de siffrorna räknar bokningar, inte personer. Här är skälen att pröva båda bokningsvägarna ett halvår till innan den ena stängs.**
+
+Text: Sanna Ek, Öppna beslut
+
+Kommunstyrelsen i Lervik bör skjuta upp bytet till enbart digital bokning av föreningslokaler, ett byte som kan ske i september. Pröva först båda bokningsvägarna i alla sju lokaler under ett halvår och mät vad de kräver. Ett permanent beslut behöver bättre underlag än det som nu ligger på bordet.
+
+## Bokningar är inte samma sak som personer
+
+Kommunens pilotrapport från den 8 april 2026 räknar 96 webbokningar och 24 telefonbokningar under åtta veckor i två lokaler. Den säger inte hur många personer som bokade eller varför de valde telefonen. Siffrorna visar varken hur många som saknar digital vana eller hur många som skulle klara sig utan telefonbokning.
+
+En bokning är en händelse, inte en invånare. Den skillnaden avgör vad siffrorna kan användas till. Att de räcker som underlag för att avskaffa telefonbokningen är ett antagande.
+
+## Mät också arbetet med två bokningsvägar
+
+Förvaltningen vill slippa dubbel administration. Det är en relevant invändning. Men handlingarna innehåller ingen mätning av tidsåtgången. Att behålla två bokningsvägar kostar arbete, och hur mycket behöver vägas mot vad användarna får.
+
+## Besluta om försöket, inte om antagandet
+
+Kommunstyrelsen bör därför säga ja till halvåret med båda bokningsvägarna, ta ställning till dess ännu okända kostnad och ge förvaltningen i uppdrag att mäta tidsåtgången samt fråga användarna varför de väljer sin bokningsväg. Först då går det att väga alternativen.
+
+Ett antagande blir inte ett beslutsunderlag för att kalendern säger september.
+````
+
+**Granskningen:** Granskningen hittade tre problem, och korrigeringsrundan löste alla tre. När texten granskades om hittades inga nya problem, och inga olösta anmärkningar återstår.
+
+1. **September stod bara i ingressen.** Slutmeningen "för att kalendern säger september" pekade på något som bara ingressen berättade. Nu står i inledningen att bytet kan ske i september, med samma försiktiga "kan" som i ingressen.
+2. **Två ord för samma sak.** Avsnittet om administrationen skrev "kanaler", medan resten av texten skriver "bokningsvägar". Nu används "bokningsvägar" genomgående.
+3. **Antagandet sades aldrig ut.** Rubriken och slutrubriken ("inte om antagandet") vilar på ett antagande som brödtexten aldrig formulerade.
+
+Texten uppfyller artikelanatomin. Skriptet godkände alla räknade gränser, och jag läste igenom de krav som skriptet inte räknar:
+- ingressen står på egna ben
+- ingressen och inledningen upprepar inte varandra
+- brödtexten klarar sig utan ingressen
+- underrubrikerna beskriver sina avsnitt
+- sista avsnittet är ett avslut med en uppmaning som riktar sig till kommunstyrelsen
+
+**Påståendena:** Inget påstående har strukits, och inget befintligt påstående har ändrat omfång, säkerhet, avsändare, tidsordning, orsakssamband eller betydelse. Korrigeringen av anmärkning 3 har däremot gjort en slutsats uttrycklig som texten tidigare bara antydde: "Att de räcker som underlag för att avskaffa telefonbokningen är ett antagande." Meningen är inte starkare än rubriken och pekar inte ut någon som bärare av antagandet. Författaren bör ändå godkänna den, eftersom den står i hennes namn.
+
+**Ändringar:** Tidpunkten september har lagts in i inledningen. Termen "kanaler" har ersatts med "bokningsvägar" i en underrubrik och i en mening. En mening som uttryckligen säger vilket antagande det gäller har lagts till i avsnittet om bokningar och personer. Korrekturläsningen hittade inga fel att rätta. `input.md` är orörd, och inga tillfälliga filer finns kvar.

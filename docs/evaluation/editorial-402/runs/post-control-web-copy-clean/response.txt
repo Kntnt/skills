@@ -1,0 +1,23 @@
+Jag har granskat texten som webbtext (`web-copy`) på svenska (`sv`), båda angivna i anropet. Ingen teknik tillämpades eftersom webbtextgenren inte anger någon.
+
+````markdown
+# Så fungerar intresseanmälan
+
+En intresseanmälan till Svales genomgång av bokningsrutiner är inte en beställning. Den hjälper Svale att avgöra om genomgången passar föreningens behov.
+
+## Uppgifter att lämna
+
+Ange namn, förening och e-postadress i formuläret för intresseanmälan. Inga betalningsuppgifter behövs.
+
+## Svar inom tre arbetsdagar
+
+Svale svarar via e-post inom tre arbetsdagar för att stämma av uppdraget och föreslå en mötestid. En tid bokas alltså inte när formuläret skickas in.
+````
+
+**Olöst anmärkning**
+
+- **Var formuläret finns (”Uppgifter att lämna”).** Texten säger nu att det är formuläret för intresseanmälan som avses. Den säger fortfarande inte om formuläret finns på sidan eller bakom en länk. Läsaren vet alltså inte var formuläret finns. Uppgiften saknas i texten, så den har inte hittats på. Någon som vet hur sidan är byggd behöver lägga till den.
+
+**Påståenden:** Inget påstående har strukits. Inget har heller fått ändrad räckvidd, säkerhet, avsändare, tidsordning, orsak eller betydelse.
+
+**Vad som ändrats:** Svarstiden på tre arbetsdagar stod bara i mellanrubriken. Nu står den också i brödtexten under rubriken. Hänvisningen till formuläret har fått det sammanhang som behövs för den som börjar läsa vid det avsnittet. Korrekturläsningen till sist hittade inga språkfel att rätta.

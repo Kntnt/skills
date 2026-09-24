@@ -1,0 +1,57 @@
+Nu sammanställer jag leveransen. Allt är klart: en korrigeringsrunda är godkänd, det mekaniska passet är gjort och de privata filerna är borttagna.
+
+**Konfiguration:** genre `case-study` och språk `sv` kommer från anropet. Ingen teknik används, eftersom genren `case-study` inte anger någon. `input.md` är orörd och inga filer har skrivits.
+
+```markdown
+# Tilldelningstiden sjönk i Elm Quays försök
+
+**I ett försök registrerade Elm Quay 31 ärenden under åtta veckor, med akuta ärenden undantagna. Tiden till tilldelning var två arbetsdagar mot tidigare tre, men enligt kundens anteckning kan skillnaden inte tillskrivas Svales programvara. Arbetsledaren Maya Lind berättar hur hon ser på försöket.**
+
+Elm Quay prövade programvara från Svale. Elm Quays egen anteckning från försöket visar vad som mättes och med vilka förbehåll, och arbetsledaren Maya Lind säger vad hon skulle göra annorlunda.
+
+## Arbetsledaren ser tillbaka på försöket
+
+– Att ha en gemensam bild av ärendena hjälper oss, men jag skulle lägga till en vecka för förberedelser, säger Maya Lind, arbetsledare hos kunden.
+
+## Kunden tillskriver inte programvaran den kortare tiden
+
+Enligt kundens försöksanteckning registrerades 31 ärenden under åtta veckor, med akuta ärenden undantagna. Tiden till tilldelning var två arbetsdagar jämfört med tre tidigare. Anteckningen säger att arbetsbelastningen var olika och att skillnaden inte kan tillskrivas programvaran.
+
+## Maya Lind blickar framåt
+
+– Jag skulle välja att göra försöket igen, säger Lind.
+
+Kundcaset publiceras av leverantören Svale.
+```
+
+## Olösta fynd
+
+Korrigeringsbudgeten (1) är förbrukad. Tre fynd står kvar. Alla gäller delar som saknas och som bara en person kan fylla i:
+
+1. **Byline saknas.** Texten namnger ingen författare. Mätningen visar att det är det enda räknade kravet i artikelanatomin som inte uppfylls.
+2. **Uppmaning till handling saknas.** Avslutningen ger läsaren inget nästa steg. Texten innehåller heller inga erbjudanden, länkar eller kontaktvägar att bygga ett på.
+3. **Kundbakgrund saknas.** Texten säger inte vad Elm Quay är, vad ärendena gäller, varför försöket gjordes, vilken programvara som prövades eller hur den infördes. Läsaren kan därför inte avgöra om fallet liknar det egna.
+
+Texten följer alltså inte artikelanatomin fullt ut, eftersom byline och uppmaning saknas. De krav som skriptet inte räknar har jag granskat genom läsning. Ingressen står på egen hand och inledningen för läsaren vidare. Mellanrubrikerna beskriver sina avsnitt och förbrukar inte citaten, och avslutningen är ett eget avsnitt.
+
+## Påståenden som strukits eller ändrats
+
+**Strukna**, eftersom fynden pekade ut hela påståendet som felet:
+
+- **Rubriken ”Vår fantastiska lösning räddade Elm Quay”** är ersatt. Påståendet att Svales lösning räddade kunden gick emot anteckningens förbehåll.
+- **”Vi på Svale är världsledande på att skapa framgång”** är struket. Inget i texten stöder det.
+- **”kunden stod hjälplös innan vi kom”** är struket. Inget i texten stöder det, och det gjorde kunden till en passiv part.
+- **”Vår programvara orsakade därför hela förbättringen.”** är struket. Meningen före säger uttryckligen att skillnaden inte kan tillskrivas programvaran, och den avgränsande meningen står kvar oförändrad.
+- **Mellanrubriken ”Kunden fick en gemensam bild”** är ersatt, eftersom den tog Maya Linds omdöme i förväg.
+- **Mellanrubriken ”Resultatet bevisar allt”** är ersatt, eftersom den påstod motsatsen till avsnittets förbehåll.
+- **Bryggan ”Maya Lind säger att det hjälper att ha en gemensam bild av ärendena.”** är struken, eftersom den upprepade citatet. Påståendet finns kvar i citatet, och även attributionen med roll finns kvar.
+
+**Ändrade:**
+
+- **Antalet 31 ärenden i ingressen** står nu med sin period (åtta veckor) och med undantaget för akuta ärenden, i stället för utan avgränsning. Ingressen tar också med tiden till tilldelning och anteckningens förbehåll.
+- **Inledningen** öppnar inte längre med antalet ärenden. Antalet står kvar, med sina avgränsningar, i ingressen och i resultatavsnittet.
+- **Programvaran** nämns i tredje person som ”Svales programvara” och ”programvara från Svale”, i stället för ”vår”.
+
+## Vad körningen ändrade
+
+Körningen tog bort reklamspråk, som leverantörens ”vi” och ”vår”, superlativer och räddningsberättelsen, och en orsaksslutsats som texten själv motsade. Den ordagranna upprepningen i ingressen och bryggan som sa citatet i förväg är också borta. Rubriken och mellanrubrikerna är omskrivna efter textens egna uppgifter. Ingressen och inledningen är omarbetade så att de inte upprepar varandra. Kundens slutomdöme och upplysningen om att Svale publicerar kundcaset står nu i ett eget avslutande avsnitt. Det mekaniska passet hittade inga fel att rätta.
