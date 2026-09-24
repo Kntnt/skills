@@ -43,6 +43,14 @@ UNREADABLE_INPUT = "unreadable-input"
 # The four positive controls of the genres the anatomy binds. The corpus says
 # each of them conforms to the skeleton, so each of them is a text this script
 # has to agree with.
+# The anatomy's requirement that the ending stands apart from the argument,
+# which the script quotes as the rule of a text holding one section (#402).
+ENDING_IS_A_SECTION = (
+    "The ending is a section of its own, opened by its own subheading, after at"
+    " least one other section."
+)
+ANATOMY_REFERENCE = LIBRARY / "references" / "editorial" / "article-anatomy.md"
+
 CLEAN_CONTROLS = (
     "article-clean.md",
     "case-study-clean.md",
@@ -81,6 +89,15 @@ BODY = (
     "Lägg tiderna för när rummen används bredvid mätvärdena innan nästa givare"
     " sätts upp."
 )
+# The second of `BODY`'s sections, for a fixture whose own section is what it is
+# about: the ending is a section of its own after at least one other, so a text
+# of one section fails a requirement the fixture is not testing.
+ENDING_SUBHEADING = "Nästa försök behöver mer än givare"
+ENDING_PARAGRAPH = (
+    "Lägg tiderna för när rummen används bredvid mätvärdena innan nästa givare"
+    " sätts upp."
+)
+ENDING = f"## {ENDING_SUBHEADING}\n\n{ENDING_PARAGRAPH}"
 FRONTMATTER = "---\nkntnt:\n  genre: article\n  technique: none\n  language: sv\n---"
 
 # What a headline and a subheading of an exact length are cut from. Both carry
@@ -268,7 +285,7 @@ def test_heading_pairs_preserve_full_text_and_report_unjudged_overlap(
     text = _article(
         headline=headline,
         standfirst=standfirst,
-        body=f"## {headline}\n\n{standfirst}",
+        body=f"## {headline}\n\n{standfirst}\n\n{ENDING}",
     )
 
     status, payload = _measure(tmp_path, text)
@@ -291,6 +308,13 @@ def test_heading_pairs_preserve_full_text_and_report_unjudged_overlap(
             "heading": headline,
             "following": "Jag vet inte om ytterligare en ruta gör möten bättre.",
             "shared_words": ["inte", "jag", "om", "vet"],
+        },
+        {
+            "id": "subheading-2",
+            "kind": "subheading-first-sentence-estimate",
+            "heading": ENDING_SUBHEADING,
+            "following": ENDING_PARAGRAPH,
+            "shared_words": ["givare", "nästa"],
         },
     ]
 
@@ -548,7 +572,8 @@ def test_an_underlined_heading_is_read_as_a_heading(tmp_path: Path) -> None:
 
     text = (
         f"{HEADLINE}\n{'=' * 12}\n\n{STANDFIRST}\n\n{BYLINE}\n\n{LEAD}\n\n"
-        f"En gräns för det lokala försöket\n{'-' * 8}\n\n{LEAD}\n"
+        f"En gräns för det lokala försöket\n{'-' * 8}\n\n{LEAD}\n\n"
+        f"{ENDING_SUBHEADING}\n{'-' * 8}\n\n{ENDING_PARAGRAPH}\n"
     )
 
     status, payload = _measure(tmp_path, text)
@@ -640,7 +665,7 @@ def test_a_subheading_is_measured_at_its_exact_character_limit(
 
     for characters, status in ((70, CONFORMS), (71, FAILS)):
         subheading = _cut(LONG_SUBHEADING, characters)
-        body = f"## {subheading}\n\n{LEAD}"
+        body = f"## {subheading}\n\n{LEAD}\n\n{ENDING}"
         verdict, payload = _measure(tmp_path, _article(body=body))
 
         assert verdict == status, (characters, payload)
@@ -678,7 +703,10 @@ def test_a_section_holding_no_paragraph_fails(tmp_path: Path) -> None:
 def test_a_level_three_heading_is_reported_as_a_norm(tmp_path: Path) -> None:
     """*Should* is a norm, and a norm the Skill weighs rather than a failure."""
 
-    body = f"## En gräns för det lokala försöket\n\n### En underavdelning\n\n{LEAD}"
+    body = (
+        f"## En gräns för det lokala försöket\n\n### En underavdelning\n\n{LEAD}"
+        f"\n\n{ENDING}"
+    )
 
     status, payload = _measure(tmp_path, _article(body=body))
 
@@ -689,7 +717,7 @@ def test_a_level_three_heading_is_reported_as_a_norm(tmp_path: Path) -> None:
 def test_a_paragraph_over_eighty_words_is_reported_as_a_norm(tmp_path: Path) -> None:
     """Eighty words is the outer edge of a *should*, so passing it fails nothing."""
 
-    body = f"## En gräns för det lokala försöket\n\n{_words(81)}"
+    body = f"## En gräns för det lokala försöket\n\n{_words(81)}\n\n{ENDING}"
 
     status, payload = _measure(tmp_path, _article(body=body))
 
@@ -735,6 +763,35 @@ def test_the_script_judges_nothing_but_the_counted_requirements(
     assert status == FAILS
     assert _parts(payload) == {STANDFIRST_PART}
     assert payload["typical"]["sections"] == 2
+
+
+def test_a_text_of_one_section_fails_the_ending_section(tmp_path: Path) -> None:
+    """The ending is a section of its own, so one section cannot be both.
+
+    `opinion-flawed` was reported as meeting the anatomy while its closing line
+    stood inside a section that carried the argument (#402). Whether a last
+    section closes the piece stays the Skill's to judge; what the script can
+    count is that the ending has a section beside the argument's, so at least
+    two.
+    """
+
+    body = "## En gräns för det lokala försöket\n\nGivarna mätte varken luftdrag.\n\nNu är det dags att agera."
+
+    status, payload = _measure(tmp_path, _article(body=body))
+
+    assert status == FAILS, payload
+    assert payload["failures"] == [
+        {
+            "part": SECTIONS_PART,
+            "rule": ENDING_IS_A_SECTION,
+            "measured": "1 section",
+            "text": "En gräns för det lokala försöket",
+        }
+    ]
+    anatomy = " ".join(ANATOMY_REFERENCE.read_text(encoding="utf-8").split())
+    assert ENDING_IS_A_SECTION in anatomy, (
+        f"{ANATOMY_REFERENCE}: does not state the rule the script quotes."
+    )
 
 
 def test_a_requirement_and_a_norm_never_share_a_rule_string(tmp_path: Path) -> None:
@@ -805,7 +862,9 @@ def test_a_block_that_is_neither_heading_nor_paragraph_is_reported_and_counted_n
         "\n"
         "> Ett citat ur rapporten.\n"
         "\n"
-        f"{LEAD}"
+        f"{LEAD}\n"
+        "\n"
+        f"{ENDING}"
     )
 
     status, payload = _measure(tmp_path, _article(body=body))
