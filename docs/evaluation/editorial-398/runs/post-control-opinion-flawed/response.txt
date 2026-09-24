@@ -1,0 +1,47 @@
+Jag granskade texten mot genren debattartikel på svenska. Inställningen kom från anropet: genre `opinion` och språk `sv`. Ingen teknik användes, eftersom genren inte anger någon. Texten hade ingen `kntnt`-karta i frontmatter, och ingen lades till. Korrigeringsbudgeten var 1. Den användes till en korrigeringsrunda, och den rundan granskades om och godtogs. Den avslutande korrekturläsningen hittade inga mekaniska fel.
+
+```markdown
+# Telefonbokningen bör finnas kvar på försök
+
+Sanna Ek, Öppna beslut
+
+Kommunstyrelsen borde behålla telefonbokning under ett halvårs försök i alla sju lokaler.
+
+## Var femte bokning kom in per telefon
+
+Det gjordes 96 bokningar på webben och 24 via telefon. Det är 20 procent av bokningarna. Kommunens pilotrapport från den 8 april 2026 säger samtidigt att bokningarna inte räknar unika personer och att digital vana inte undersöktes.
+
+## Handlingarna mäter inte tiden för två bokningsvägar
+
+Förvaltningen invänder att dubbla kanaler innebär dubbel administration. Handlingarna saknar tidsmätning. Försökets kostnad är inte beräknad.
+
+## Kommunstyrelsen och förvaltningen får var sitt förslag
+
+Föreningen vill att förvaltningen mäter tidsåtgång och frågar användarna varför de väljer en bokningsväg. Kommunstyrelsen borde behålla telefonbokningen under ett halvårs försök i alla sju lokaler.
+```
+
+## Kvarstående anmärkningar (olösta)
+
+1. **Ingress saknas.** Mätskriptet rapporterar att ingressen saknas. Den skrivs inte i en granskning, så någon behöver skriva den. Därför följer texten inte artikelanatomin.
+2. **"Föreningen" presenteras aldrig.** Brödtexten nämner ingen förening. Läsaren får gissa att det är Öppna beslut från bylinen, men texten säger inte att Öppna beslut är en förening. Läsaren vet därför inte vems förslaget är. Det går inte att rätta utan uppgifter som saknas i texten.
+3. **Oklart vad frågan gäller.** Texten säger aldrig vad som bokas, vems de sju lokalerna är eller att webbokningen är det försök som pilotrapporten gäller. Leaden presenterar alltså inte det den nämner. Det går inte att rätta utan nya uppgifter.
+4. **Bokningssiffrorna saknar källa och period.** Siffrorna 96 och 24 bär argumentet, men läsaren får inte veta varifrån de kommer eller vilken tid de gäller. Att tillskriva dem pilotrapporten vore en slutsats som texten inte drar.
+
+Av anatomins krav som skriptet inte räknar granskades dessa: att sista sektionen är en avslutning, att varje mellanrubrik beskriver sin sektion och att brödtexten klarar sig utan ingress. Ingressens egna krav kunde inte granskas eftersom ingressen saknas.
+
+## Påståenden
+
+**Borttagna**
+- Rubrikens påstående att kommunledningen "hatar människor". Det togs bort vid rättningen av rubriken, eftersom motivet saknade stöd och tonen var starkare än textens.
+- "Alla vet att politikerna vill stänga ute äldre för att spara miljoner." Hela påståendet var felet: det tillskrev motiv utan stöd, byggde på vag attribuering och sa saker om äldre och miljonbesparingar som texten saknar underlag för.
+- "Därför kostar det ingenting att behålla telefonbokningen." Hela påståendet var en bruten slutledning och motsades av att försökets kostnad inte är beräknad.
+
+**Ändrat**
+- "Det bevisar att 20 procent av kommunens invånare inte kan använda internet" lyder nu "Det är 20 procent av bokningarna." Nämnaren är rättad från invånarna till bokningarna. "Bevisar" och påståendet om att inte kunna använda internet är borta, eftersom pilotrapporten i nästa mening underkänner dem. Meningen om pilotrapporten står kvar oförändrad.
+
+**Tillagt**
+- Mellanrubriken "Kommunstyrelsen och förvaltningen får var sitt förslag" beskriver textens två förslag som riktade till var sin mottagare. Det säger texten inte uttryckligen. Den skrevs när avslutningen fick en egen sektion.
+
+Utöver de påståenden som redovisas ovan är inga påståenden borttagna, ändrade eller tillagda.
+
+Rundan ändrade också detta i texten utöver påståendena ovan. Rubriken skrevs om så att den anger textens tes. De allmänna mellanrubrikerna "Bakgrund" och "Diskussion" ersattes med rubriker som säger vad sektionerna handlar om. Avslutningen fick en egen sektion med egen mellanrubrik. Dit flyttades meningen om föreningens förslag oförändrad. Den allmänna uppmaningen "Nu är det dags att agera" ersattes med textens eget förslag till kommunstyrelsen. Korrekturläsningen gjorde inga mekaniska ändringar.

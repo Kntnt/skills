@@ -9523,6 +9523,35 @@ REMOVED_CLAIM_DUTY = "every removed claim"
 CHANGED_CLAIM_DUTY = "every changed claim"
 CLAIM_ELEMENTS = "scope, certainty, attribution, chronology, causality"
 
+# The third class of the account. A run that wrote an assertion into the text
+# and then said nothing had happened to the claims was wrong about the text it
+# delivered, because the account was written about the claims it received. A
+# claim the run added is itemised as its own class beside the removed and the
+# changed, and what tells the two apart is whether the text before has a
+# counterpart for it — an inference from what the text already said is added
+# where it asserts what that text did not (issue #398).
+ADDED_CLAIM_DUTY = "every added claim"
+ADDED_CLAIM_NO_COUNTERPART = "has no counterpart for"
+ADDED_CLAIM_INFERENCE = "an inference drawn from what"
+CHANGED_CLAIM_COUNTERPART = "has a counterpart"
+
+# What the reply may say about the claims as a whole. #383's replies closed the
+# account with an assurance that no claim had moved, true of the claims the run
+# received and false of the text it delivered, and one of them stood a
+# paragraph after the reply's own finding disclosing the move (issue #398).
+ASSURANCE_OF_THE_DELIVERED_TEXT = "an account of the text you deliver"
+ASSURANCE_AFTER_THE_FINDINGS = "written after the findings"
+ASSURANCE_NO_CONTRADICTION = "contradicts a finding the same reply states"
+# What the first candidate's arm showed was still open: an entry saying a
+# claim had only moved down the page when the round had copied it there, and
+# a sentence saying nothing else had moved over a heading reworded with a
+# gloss of its own (issue #398).
+ACCOUNT_ENTRY_AS_THE_COMPARISON_SHOWS = "as the comparison shows it"
+ACCOUNT_COPIED_IS_NOT_MOVED = (
+    "a claim a round copied to a second place is not one it moved"
+)
+ASSURANCE_OPEN_IS_ITEMISED = "itemised as changed rather than covered"
+
 # What the run checks a returned text for beside the claims. Comparing claim by
 # claim and nothing else let every difference that moves no claim through: a
 # rewritten heading, a re-split paragraph, `set … against` becoming
@@ -9837,6 +9866,120 @@ def test_re_review_rejects_and_reports_a_correction_that_loses_a_claim() -> None
                 f" reader of it settles that for themselves (issue #377). See"
                 f" {STANDARD}."
             )
+
+
+def test_the_claim_account_covers_the_claims_a_run_wrote() -> None:
+    """An account of the claims received says nothing of the claims written.
+
+    Every reply of #383's post-change arm on the four #362 drafts closed its
+    claim account by saying no claim had been removed or moved, over a text
+    carrying assertions the run had written, and on `web-copy-flawed` the
+    same sentence stood a paragraph after the reply's own finding disclosing
+    the move. The run is answerable for the whole of the text it delivers: a
+    claim it added is recorded by step 7 in the same comparison as the removed
+    and the changed ones and itemised as a third class, what separates it from
+    a changed claim is whether the text before has a counterpart for it, and
+    whatever the reply says about the claims as a whole is true of the
+    delivered text and never contradicts a finding the same reply states
+    (issue #398).
+    """
+
+    surfaces = (
+        (REDLINE, REDLINE_CORRECTION, REDLINE_HELP),
+        (UNSLOP, UNSLOP_CORRECTION, UNSLOP_HELP),
+    )
+    for body_path, brief_path, help_path in surfaces:
+        body = body_path.read_text(encoding="utf-8")
+        steps = body.split("\n## Steps\n", 1)[1]
+        step_7 = steps.split("\n7. ", 1)[1].split("\n8. ", 1)[0]
+        delivery = steps.split("\n9. ", 1)[1]
+
+        assert ADDED_CLAIM_DUTY in step_7, (
+            f"{body_path}: step 7 records the removed and the changed claims"
+            f" and not the ones a round wrote, so the delivery has no record"
+            f" of them to report from (issue #398). See {STANDARD}."
+        )
+        assert ADDED_CLAIM_DUTY in delivery, (
+            f"{body_path}: the delivery itemises removed and changed claims and"
+            f" not added ones, so a run reports nothing of an assertion it"
+            f" wrote into the text (issue #398). See {STANDARD}."
+        )
+        for path in (body_path, brief_path, help_path):
+            text = path.read_text(encoding="utf-8")
+            assert ADDED_CLAIM_DUTY in text, (
+                f"{path}: the surface names the removed and the changed claims"
+                f" and not the added ones, so it disagrees with the other"
+                f" surfaces of the same account (issue #398). See {STANDARD}."
+            )
+            assert ADDED_CLAIM_NO_COUNTERPART in text, (
+                f"{path}: an added claim is named without saying what makes a"
+                f" claim added rather than changed, so each reader of it"
+                f" settles that for themselves (issue #398). See {STANDARD}."
+            )
+            assert ADDED_CLAIM_INFERENCE in text, (
+                f"{path}: the definition does not reach an inference drawn"
+                f" from what the text already said, which is the form an added"
+                f" claim took in the headline #383 measured (issue #398). See"
+                f" {STANDARD}."
+            )
+
+        assert CHANGED_CLAIM_COUNTERPART in step_7, (
+            f"{body_path}: step 7 names three classes without saying that a"
+            f" changed claim is the one with a counterpart in the text before,"
+            f" so an added claim can be recorded as changed (issue #398). See"
+            f" {STANDARD}."
+        )
+        assert ASSURANCE_OF_THE_DELIVERED_TEXT in delivery, (
+            f"{body_path}: the account is not said to be of the delivered text,"
+            f" so a run writes it about the claims it received and calls the"
+            f" text it delivers clean (issue #398). See {STANDARD}."
+        )
+        assert ASSURANCE_AFTER_THE_FINDINGS in delivery, (
+            f"{body_path}: a sentence about the claims as a whole may stand"
+            f" beside the findings rather than after them, where it reads as a"
+            f" clean bill over what they disclose (issue #398). See"
+            f" {STANDARD}."
+        )
+        for phrase in (
+            ACCOUNT_ENTRY_AS_THE_COMPARISON_SHOWS,
+            ACCOUNT_COPIED_IS_NOT_MOVED,
+            ASSURANCE_OPEN_IS_ITEMISED,
+        ):
+            assert phrase in delivery, (
+                f"{body_path}: an entry of the claim account may describe a"
+                f" claim otherwise than the delivered text shows it, and a"
+                f" sentence saying nothing else moved may stand over a"
+                f" difference nobody settled (issue #398). See {STANDARD}."
+            )
+        for path, text in (
+            (body_path, delivery),
+            (help_path, help_path.read_text(encoding="utf-8")),
+        ):
+            assert ASSURANCE_NO_CONTRADICTION in text, (
+                f"{path}: nothing stops the reply's statement about the claims"
+                f" contradicting a finding it states, as #383's"
+                f" `web-copy-flawed` reply did one paragraph after disclosing"
+                f" the move (issue #398). See {STANDARD}."
+            )
+
+    base = BASE_REVIEW.read_text(encoding="utf-8")
+    for phrase in (ADDED_CLAIM_NO_COUNTERPART, ADDED_CLAIM_INFERENCE):
+        assert phrase in base, (
+            f"{BASE_REVIEW}: the review extension says what remains part of the"
+            f" claim account and leaves out the claims a correction added, so"
+            f" the shared contract disagrees with both Skills (issue #398). See"
+            f" {STANDARD}."
+        )
+    assert CHANGED_CLAIM_COUNTERPART in base, (
+        f"{BASE_REVIEW}: the review extension does not say that a claim with a"
+        f" counterpart in the text before is changed rather than added"
+        f" (issue #398). See {STANDARD}."
+    )
+    assert ASSURANCE_NO_CONTRADICTION in base, (
+        f"{BASE_REVIEW}: the shared contract lets a reviewing Skill say of the"
+        f" claims what its own findings contradict (issue #398). See"
+        f" {STANDARD}."
+    )
 
 
 def test_every_difference_a_round_returns_traces_to_a_finding() -> None:

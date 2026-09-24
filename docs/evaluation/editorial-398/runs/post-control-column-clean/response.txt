@@ -1,0 +1,7 @@
+Ingen ändring behövdes i `input.md`. Granskningen hittade inga fel, och korrekturläsningen på slutet hittade inga språkfel att rätta.
+
+- **Inställningar:** genren är krönika och språket svenska, båda angivna i anropet. Ingen teknik användes, eftersom krönikan inte har någon egen och inget annat angav någon.
+- **Artikelns delar:** texten följer mallen för artikelns delar utan avvikelser. Det gäller både det som skriptet räknar och det jag läste själv, till exempel ingressen, inledningen, slutet med uppmaningen och vad underrubrikerna säger om sina avsnitt.
+- **Första stycket under den första underrubriken** har 83 ord, alltså strax över riktvärdet på 80. Det är inget fel att åtgärda, eftersom stycket håller en enda tanke och läses bra i den längden.
+
+Inga ändringar gjordes, så inga påståenden togs bort, ändrades eller lades till. Inga filer skrevs, och tillfälliga arbetsfiler har tagits bort.

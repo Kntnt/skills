@@ -1,0 +1,41 @@
+Granskad som **kolumn** på **svenska**, utan berättarteknik. Alla tre värdena kommer från textens `kntnt`-karta, och kartan stämde redan med dem. Ingen teknik tillämpades: kartan anger `none`, och kolumngenren anger heller ingen.
+
+````markdown
+---
+kntnt:
+  genre: column
+  technique: none
+  language: sv
+---
+
+# Bibliotekets mötesmall har rutor för allt utom poängen
+
+Av Nora Vik, bibliotekarie
+
+Jag granskar bibliotekets mötesmall. Där finns rutor för starttid, sluttid, deltagare och dagordning. Någon ruta för det beslut vi ska kunna fatta när vi går därifrån finns inte. Det är dokumentet jag tittar på, inte ett bestämt möte.
+
+Jag uppskattar möten där kolleger upptäcker att de har förstått en fråga olika. Den upptäckten kan vara viktigare än att vi snabbt enas. Min tanke är alltså inte att varje samtal ska pressas fram till ett beslut.
+
+Det som retar mig är något annat: att tid i kalendern så lätt behandlas som ett resultat i sig. Timmen är bokad, alltså har något hänt. Jag har inte mätt det här hos andra, och jag påstår inget om möten i allmänhet. Det är min reflektion, med den räckvidd en reflektion har.
+
+Ändå tycker jag att den som fyller i en mall borde få formulera varför vi behöver just varandras tid. Också när syftet är att undersöka något tillsammans finns det ett skäl att skriva ner. Samtal kan skapa förtroende. Samtal kan hitta en fråga vi inte visste att vi behövde ställa. Inget av det kräver ett beslut, men båda delarna tål att motiveras.
+
+Så jag vill prova en enkel fråga bredvid tiden: vad behöver vi förstå tillsammans?
+
+Där börjar tvivlet. Det finns en komik i att försöka lösa ett problem med formulär genom att utöka formuläret – bibliotekarien som svarar på en mall med mer mall. Jag vet inte om ytterligare en ruta gör våra möten bättre. Kanske blir frågan bara en rad till att fylla i.
+
+Jag vill prova den i alla fall, och behålla båda hållningarna så länge: hoppet om frågan och tvivlet på ännu en ruta.
+````
+
+**Olösta anmärkningar**
+
+1. **Ingressen saknas.** Rubriken följs direkt av bylinen. Artikelanatomin kräver en ingress: ett sammanfattande stycke på högst 60 ord som står på egen hand. Mätskriptet rapporterar ingressen som frånvarande. Där ingressen visas ensam, till exempel i ett flöde, får läsaren inget som säger vad kolumnen handlar om eller vad den ger. En saknad del skrivs inte vid en granskning, så en person behöver skriva den.
+2. **Avsnitt med mellanrubriker saknas, och därmed också ett avslutande avsnitt.** Hela brödtexten består av sju stycken utan mellanrubrik. Skriptet räknar därför inledningen som sju stycken och 274 ord, men det beror bara på att avsnitten saknas. Slutet finns som innehåll: de två sista styckena om tvivlet och om att ändå prova frågan. Det står dock inte i ett eget avsnitt med egen mellanrubrik. Den som skummar på webben får inga ingångar i texten. Ingen mellanrubrik skrevs, så en person behöver lägga till avsnitten.
+
+Texten uppfyller alltså inte artikelanatomin. Jag läste de krav som skriptet inte räknar och som gäller delar texten har. Rubriken anger vinkeln och håller sig till textens styrka. Brödtexten klarar sig utan ingress. Uppmaningen till läsaren finns kvar i frågan att prova och i förslaget att motivera varför mötet behövs, och den står bredvid ett ärligt tvivel. Kraven på ingressen och på slutavsnittet gick inte att pröva, eftersom delarna saknas.
+
+**Löst:** Rubriken förstods inte på egen hand. Formen *Mallen* sa inte vilken mall det gällde, och ordet möte saknades. Den nya rubriken är ”Bibliotekets mötesmall har rutor för allt utom poängen” (54 tecken, 8 ord). En ny granskning efter rättelsen hittade inga nya fel. Korrigeringsbudgeten (1) är förbrukad.
+
+**Påståenden:** Inget påstående har tagits bort, ändrats eller lagts till. Rubriken nämner nu bibliotekets mötesmall, som inledningen redan nämnde. De begränsande meningarna står oförändrade: att det är dokumentet och inte ett möte som granskas, och att ingenting har mätts eller sägs om möten i allmänhet.
+
+**Ändringar jämfört med originalet:** Rubriken reparerades så att den säger vilken mall texten handlar om. Den avslutande korrekturläsningen ersatte ett engelskt tankstreck (—) med ett svenskt tankstreck med mellanslag (–). I övrigt är texten oförändrad.

@@ -1,0 +1,65 @@
+Granskning och korrektur är klara; här är resultatet.
+
+**Inställningar:** genre `opinion` och språk `sv` (båda angivna i anropet). Ingen teknik används, eftersom genren opinion inte anger någon. Texten har ingen `kntnt`-metadata och ingen har lagts till.
+
+**Så gick körningen:** En rättningsomgång gjordes (budget 1) men **förkastades**. Den nya rubriken, ”Telefonbokningen bör finnas kvar ett halvår på försök”, upprepade ledets påstående och formulering (”ett halvårs försök”, ”telefonbokning”). Då tillförde ledet bara vem som ska agera och ”alla sju lokaler”. Felet fanns inte i texten från början, så hela omgången förkastades och originaltexten återställdes. Den avslutande korrekturläsningen hittade inga mekaniska fel. Texten nedan är därför oförändrad, och alla fynd kvarstår olösta. Inga filer har skrivits.
+
+````markdown
+# Kommunledningen hatar människor
+
+Sanna Ek, Öppna beslut
+
+Kommunstyrelsen borde behålla telefonbokning under ett halvårs försök i alla sju lokaler. Alla vet att politikerna vill stänga ute äldre för att spara miljoner.
+
+## Bakgrund
+
+Det gjordes 96 bokningar på webben och 24 via telefon. Det bevisar att 20 procent av kommunens invånare inte kan använda internet. Kommunens pilotrapport från den 8 april 2026 säger samtidigt att bokningarna inte räknar unika personer och att digital vana inte undersöktes.
+
+## Diskussion
+
+Förvaltningen invänder att dubbla kanaler innebär dubbel administration. Handlingarna saknar tidsmätning. Därför kostar det ingenting att behålla telefonbokningen. Föreningen vill att förvaltningen mäter tidsåtgång och frågar användarna varför de väljer en bokningsväg. Försökets kostnad är inte beräknad.
+
+Nu är det dags att agera.
+````
+
+**Olösta fynd**
+
+1. **Rubriken ”Kommunledningen hatar människor” har inget stöd i texten.**
+   - Den tillskriver motståndaren ett motiv, hat, som texten inte belägger.
+   - Tonen är mer dramatisk än texten.
+   - Den säger inget om förslaget.
+   - ”Kommunledningen” blir ett tredje namn bredvid ”Kommunstyrelsen” och ”politikerna”.
+
+   En läsare som bara skummar får fel budskap.
+2. **Ingressen saknas.** Mätskriptet bekräftar det. En saknad del ska inte skrivas av granskningen, så en person behöver skriva den.
+3. **”Alla vet att politikerna vill stänga ute äldre för att spara miljoner.”**
+   - ”Alla vet” är en attribuering utan källa.
+   - Motivet är påhittat.
+   - Texten säger inget annat om äldre.
+   - ”Miljoner” motsägs av ”Försökets kostnad är inte beräknad”.
+4. **”Det bevisar att 20 procent av kommunens invånare inte kan använda internet.”**
+   - 24 av 120 är 20 procent av *bokningarna*, inte av invånarna.
+   - Att någon bokar via telefon säger inget om förmågan att använda internet.
+   - ”Bevisar” motsägs av nästa mening: pilotrapporten räknar inte unika personer och har inte undersökt digital vana.
+5. **”Därför kostar det ingenting att behålla telefonbokningen.”** Slutsatsen håller inte. Att tidsmätning saknas visar inte att kostnaden är noll, och samma stycke säger att kostnaden inte är beräknad. Förvaltningens invändning bemöts därför inte rättvist.
+6. **”Föreningen” har ingen referent i brödtexten.** Bara bylinen nämner Öppna beslut, så läsaren vet inte vem förslaget kommer från.
+7. **Mellanrubrikerna ”Bakgrund” och ”Diskussion” är generiska etiketter.** De säger inget om vad avsnitten innehåller, så den som skummar får inget av argumentet.
+8. **”Nu är det dags att agera.” är en allmän uppmaning.** Den säger inte vem som ska göra vad. Den står dessutom inne i det argumenterande avsnittet, så texten saknar ett eget avslutande avsnitt. Konkret innehåll för slutet finns redan i texten:
+   - kommunstyrelsen behåller telefonbokningen under ett halvårs försök i alla sju lokaler
+   - förvaltningen mäter tidsåtgången och frågar användarna.
+9. **Siffrorna 96 och 24 saknar källa.** Att de kommer från pilotrapporten är bara en slutsats. Texten behöver en källa som inte finns i den.
+10. **Ledet förklarar inte sammanhanget.** Det säger inte vad som bokas i de sju lokalerna eller att det finns ett förslag om att ta bort telefonbokningen. Det kräver uppgifter som inte finns i texten.
+
+Anatomin stämmer inte: ingressen saknas (fynd 2) och slutet är inget eget avsnitt (fynd 8).
+
+**Påståenden i den förkastade omgången**
+
+Ingen목 av detta finns med i texten ovan, som är oförändrad.
+
+- **Borttagna påståenden:**
+  - hela meningen i fynd 3
+  - påståendet att 20 procent av invånarna inte kan använda internet (fynd 4)
+  - påståendet att telefonbokningen inte kostar något (fynd 5)
+- **Ändrade påståenden:**
+  - 20 procent gällde bokningarna i stället för invånarna (fynd 4)
+  - Öppna beslut:s krav på mätning blev skribentens egen uppmaning i slutet (fynd 8).

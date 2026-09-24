@@ -1,0 +1,63 @@
+Jag granskade texten mot artikelgenren men lämnar den oförändrad. Tre fynd kvarstår olösta. Jag gjorde ett rättningsförsök men förkastade det, eftersom det gav rubriken ett nytt fel.
+
+**Inställningar:** genre `article` och språk `sv`, båda från anropet. Ingen teknik används, eftersom artikelgenren inte anger någon. Filen saknar frontmatter, så jag lade inte till någon metadata.
+
+**Artikelns disposition:** Skriptet mätte längder och antal och hittade inga fel. Övriga krav läste jag igenom själv. Ingressen står på egna ben, brödingressen presenterar allt den nämner och sista avsnittet fungerar som avslutning med en uppmaning. Den första mellanrubriken uppfyller däremot inte kravet att beskriva sitt avsnitt (fynd 2). Rubriken bryter mot rubrikreglerna, som dispositionen hänvisar till (fynd 1). Texten följer alltså inte dispositionen fullt ut.
+
+```markdown
+# Mätförsöket i Björkskolan visar när, inte varför
+
+**Under 14 av 120 lektionspass registrerade givarna i Björkskolan temperaturer under fastighetskontorets egen arbetsgräns. Fyra veckors mätningar pekar ut tillfällen att undersöka närmare, men förklarar inte varför luften var kall. Här är vad ett kort försök kan säga, och vad som behövs för att komma vidare.**
+
+Text: Hedda Lund
+
+En temperaturgivare mäter luften där den sitter. Det gör placeringen viktig när fastighetskontoret ska tolka fyra veckors mätningar i Björkskolans sex klassrum. Genomgången nedan visar vad värdena räcker till och var gränsen går.
+
+## En gräns för det lokala försöket
+
+Kontoret valde 20 grader Celsius som arbetsgräns. Rapporten *Mätförsök i Björkskolan*, daterad 12 mars 2026, räknar 14 lektionspass av 120 med minst en mätning under den gränsen. Hur länge temperaturen låg under den anger rapporten inte. Gränsen är kontorets egen, vald för det här försöket.
+
+Givarna mätte varken luftdrag eller elevernas upplevelse. Ett lågt värde säger alltså när luften var kall, men inte hur rummet kändes.
+
+Driftteknikern Elin Rask sammanfattar: ”Vi vet när vi behöver titta närmare. Vi vet ännu inte varför det blev kallt just då.”
+
+## Nästa försök behöver mer än givare
+
+Rask rekommenderar att temperaturserierna kopplas till rummens användningstider innan styrningen ändras. Nästa försök planeras för november med likadant placerade givare, men finansieringen är inte beslutad.
+
+Lägg därför tiderna för när rummen används bredvid mätvärdena innan nästa givare sätts upp.
+```
+
+## Olösta fynd
+
+1. **Rubriken ”Mätförsöket i Björkskolan visar när, inte varför”.**
+   - **Problemet:** Rubriken förstås inte utan ingressen. Den säger inte vad mätningarna visar *när* och inte *varför*, och att det gäller kall luft framgår först av ingressen. Ingressens andra mening säger sedan samma sak igen: ”… pekar ut tillfällen att undersöka närmare, men förklarar inte varför luften var kall”. Även ”inte varför” upprepas.
+   - **Vad läsaren förlorar:** Rubriken går inte att förstå på egen hand, och ingressens andra mening läses som rubriken en gång till i stället för som nytt stoff.
+
+2. **Första mellanrubriken ”En gräns för det lokala försöket”.**
+   - **Problemet:** En mellanrubrik ska beskriva vad avsnittet handlar om. Avsnittet redovisar fyra saker:
+     - att 14 av 120 lektionspass hade minst en mätning under 20 grader
+     - att rapporten inte anger hur länge temperaturen låg under gränsen
+     - att givarna varken mätte luftdrag eller elevernas upplevelse
+     - Elin Rasks sammanfattning
+
+     Rubriken fångar bara att gränsen valdes för just det här försöket.
+   - **Vad läsaren förlorar:** Den som skummar rubrikerna får inte veta vad avsnittet säger om vad mätningarna visar och inte visar.
+
+3. **”ett kort försök” i ingressens sista mening.**
+   - **Problemet:** Ingenting i texten stöder att fyra veckors mätningar är kort. De begränsningar texten redovisar gäller vad som mättes och redovisades, inte hur länge försöket pågick.
+   - **Vad läsaren förlorar:** ”Kort” antyder en bedömning, och en förklaring till mätningarnas gränser, som texten inte står för.
+
+## Förkastat rättningsförsök
+
+En rättningsrunda försökte åtgärda alla tre fynden och ändrade tre saker:
+
+- Rubriken blev ”Björkskolans givare visar när luften understeg 20 grader”.
+- Den första mellanrubriken blev ”Givarna fångade värden under gränsen, men inte drag eller upplevelse”.
+- ”ett kort försök” blev ”försöket”.
+
+Den nya rubriken införde ett nytt fel. Den tappade ”inte varför”, alltså den gräns för vad mätningarna säger som hela artikeln handlar om. Kvar blev bara halva vinkeln, och rubriken kunde lika gärna stå över en text som bara redovisar de kalla perioderna. Den ursprungliga rubriken hade vinkeln med. Därför förkastades hela rundan och texten återställdes som den kom in. Inget från rundan finns kvar, och de tre fynden ovan kvarstår olösta. Rättningsbudgeten (1) är förbrukad. Den ändring som ska avgöras är rubriken: den behöver en formulering som bär hela vinkeln, är begriplig utan ingressen och inte upprepar ingressens andra mening.
+
+## Påståenden
+
+Den levererade texten är densamma som kom in, så inga påståenden har tagits bort, ändrats eller lagts till. Den avslutande korrekturläsningen hittade inga mekaniska fel. Inga filer skrevs, och de tillfälliga arbetsfilerna är borttagna.

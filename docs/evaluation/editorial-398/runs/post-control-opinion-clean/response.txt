@@ -1,0 +1,45 @@
+Granskningen hittade ett fynd, och det är rättat. Konfiguration: genre `opinion` och språk `sv`, båda från anropet. Ingen teknik används, eftersom genren `opinion` inte anger någon.
+
+````markdown
+# Avskaffa inte telefonbokningen på ett antagande
+
+**I september kan telefonbokningen av Lerviks föreningslokaler försvinna. Beslutet ska vila på åtta veckors siffror från två lokaler, och de siffrorna räknar bokningar, inte personer. Här är skälen att pröva båda bokningsvägarna ett halvår till innan den ena stängs.**
+
+Text: Sanna Ek, Öppna beslut
+
+Kommunstyrelsen i Lervik bör skjuta upp bytet till enbart digital bokning av föreningslokaler. Bytet kan ske i september. Pröva först båda bokningsvägarna i alla sju lokaler under ett halvår och mät vad de kräver. Ett permanent beslut behöver bättre underlag än det som nu ligger på bordet.
+
+## Bokningar är inte samma sak som personer
+
+Kommunens pilotrapport från den 8 april 2026 räknar 96 webbokningar och 24 telefonbokningar under åtta veckor i två lokaler. Den säger inte hur många personer som bokade eller varför de valde telefonen. Siffrorna visar varken hur många som saknar digital vana eller hur många som skulle klara sig utan telefonbokning.
+
+En bokning är en händelse, inte en invånare. Den skillnaden avgör vad siffrorna kan användas till.
+
+## Mät också arbetet med två kanaler
+
+Förvaltningen vill slippa dubbel administration. Det är en relevant invändning. Men handlingarna innehåller ingen mätning av tidsåtgången. Att behålla två kanaler kostar arbete, och hur mycket behöver vägas mot vad användarna får.
+
+## Besluta om försöket, inte om antagandet
+
+Kommunstyrelsen bör därför säga ja till halvåret med båda bokningsvägarna, ta ställning till dess ännu okända kostnad och ge förvaltningen i uppdrag att mäta tidsåtgången samt fråga användarna varför de väljer sin bokningsväg. Först då går det att väga alternativen.
+
+Ett antagande blir inte ett beslutsunderlag för att kalendern säger september.
+````
+
+**Fynd:** Inga fynd återstår. Det enda fyndet är åtgärdat:
+
+- **Brödtexten byggde på ingressen.** Slutraden ”… för att kalendern säger september” förutsatte att läsaren visste att bytet kan ske i september. Det stod bara i ingressen, och brödtexten ska gå att läsa utan den. Nu står tidpunkten i inledningsstycket och med samma styrka som i ingressen (”kan”).
+
+**Påståenden:**
+
+- Inledningsstycket säger nu att bytet kan ske i september. Det påståendet fanns redan i ingressen och upprepas bara i brödtexten. Det är alltså inte nytt och är inte starkare än i ingressen.
+- Utöver detta har inget påstående tagits bort, ändrats eller lagts till.
+
+**Artikelanatomin:** Texten följer artikelanatomin. Skriptet hittade inga fel i de räknade kraven. Jag har också läst igenom de krav som skriptet inte räknar och hittade inga avvikelser:
+
+- Ingressen står på egen hand.
+- Inledningsstycket för texten framåt och börjar inte med samma ord som ingressen.
+- Varje mellanrubrik beskriver sitt avsnitt.
+- Avslutningen är ett eget avsnitt. Den uppmanar kommunstyrelsen att handla och öppnar inget nytt resonemang.
+
+Körningen gjorde en ändring i strukturen: en mening lades till i inledningsstycket, så att brödtexten klarar sig utan ingressen. Korrekturläsningen på slutet hittade inga mekaniska fel, och resten av texten är oförändrad. `input.md` har inte ändrats, och inga arbetsfiler finns kvar.

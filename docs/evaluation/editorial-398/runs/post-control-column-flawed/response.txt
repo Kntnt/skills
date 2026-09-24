@@ -1,0 +1,38 @@
+Konfiguration: genre `column` och språk `sv` från anropet. Ingen teknik tillämpades, eftersom genren column inte anger någon. Korrigeringsbudgeten (1) gick åt på en runda. Den omgranskades och godtogs.
+
+````markdown
+# Mötesmallen saknar plats för vad vi ska förstå
+
+Nora Vik
+
+Förra tisdagen satt jag gråtande i bibliotekets mötesrum när min chef sade: ”Nu måste allt bli digitalt.” Det var mitt första möte om vår nya mötesmall. Jag har aldrig deltagit i något möte om vår nya mötesmall.
+
+Vår mötesmall har plats för starttid och sluttid men inte för vad vi ska förstå tillsammans.
+
+Samtal kan ha värde utan att leda till beslut. Jag vill prova frågan vad vi behöver förstå tillsammans, men jag vet inte om ytterligare en ruta gör möten bättre.
+````
+
+## Olösta fynd
+
+Fyra fynd kvarstår och behöver en person som har underlaget.
+
+1. **Motsägelse i första stycket.** ”Det var mitt första möte om vår nya mötesmall” och ”Jag har aldrig deltagit i något möte om vår nya mötesmall” kan inte båda vara sanna, och texten visar inte vilken mening som gäller. Läsaren tappar förtroendet för scenen som krönikan öppnar med. Stycket har lämnats orört.
+2. **Öppningsscenen hänger inte ihop med resten.** Gråten och chefens ”Nu måste allt bli digitalt.” följs aldrig upp, och ingenting knyter dem till tankarna om mötesmallen. Läsaren förstår inte varför scenen står där. Ett samband går inte att skapa ur texten utan att hitta på något.
+3. **Ingressen saknas.** Mellan rubriken och bylinen ska det stå ett självständigt stycke som säger vad krönikan handlar om och vad läsaren får ut av den. Delen har inte skrivits.
+4. **Mellanrubriker, avsnitt, avslutande avsnitt och uppmaning till läsaren saknas.** Brödtexten mäts som ett inledande stycke på tre stycken. Det beror bara på att avsnitten saknas. ”Jag vill prova frågan …” är skribentens egen avsikt och ingen uppmaning till läsaren. Ingenting av detta har skrivits.
+
+Texten uppfyller alltså inte artikelanatomin. Rubriken ligger inom sina gränser: 46 tecken och 8 ord.
+
+## Påståenden
+
+**Borttagna**
+- ”I dagens snabbt föränderliga värld är möten viktigare än någonsin.” (andra stycket). Togs bort när den tomma öppningen reparerades. Påståendet var självt defekten eftersom texten inte har något stöd för det.
+- ”Det är viktigt att vara viktig.” (andra stycket). Togs bort i samma reparation.
+- ”Sammanfattningsvis är möten viktigare än någonsin i dagens snabbt föränderliga värld.” (sista stycket). Togs bort när den generiska avslutningen reparerades. Stycket upprepade bara den tomma formeln.
+
+**Ändrade**
+- Rubriken ”Möten förändrar allt” blev ”Mötesmallen saknar plats för vad vi ska förstå”. Den gamla rubriken påstod något som texten inte påstår. Den nya bygger på andra styckets ”Vår mötesmall har plats för starttid och sluttid men inte för vad vi ska förstå tillsammans” och är inte starkare än det.
+
+Inga påståenden har lagts till. Utöver de fyra ovan står textens övriga påståenden kvar oförändrade.
+
+Utöver påståendena ändrade körningen detta: två typiska AI-fraser togs bort, nämligen den tomma öppningsformeln i andra stycket och den sammanfattande slutklyschan. Rubriken skrevs om så att den anger krönikans vinkel. Texten slutar nu på skribentens ärliga osäkerhet. Den avslutande korrekturläsningen hittade inga mekaniska fel och ändrade ingenting.

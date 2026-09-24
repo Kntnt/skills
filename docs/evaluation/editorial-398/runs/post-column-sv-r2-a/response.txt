@@ -1,0 +1,45 @@
+Konfiguration från filens `kntnt`-karta: genre `column`, teknik `none` (kartan anger ingen teknik, så ingen båge har tillämpats) och språk `sv`. Korrigeringsbudgeten var 1 och gick åt till rubriken. Filen `input.md` är orörd och inga arbetsfiler finns kvar.
+
+```markdown
+---
+kntnt:
+  genre: column
+  technique: none
+  language: sv
+---
+
+# Mötesmallen saknar frågan om varför vi träffas
+
+Av Nora Vik
+
+Jag granskar bibliotekets mötesmall. Där finns rutor för starttid, sluttid, deltagare och dagordning. Någon ruta för det beslut vi ska kunna fatta när vi går därifrån finns inte. Det här är en iakttagelse av ett dokument, inte en scen från ett visst möte. Mallen vill veta när vi ses och vilka som kommer. Vad tiden ska leda till frågar den inte om.
+
+En dagordning räknar upp vad vi ska tala om. Den säger inte varför vi behöver göra det tillsammans.
+
+Missförstå mig rätt: jag uppskattar möten där kolleger upptäcker att de har förstått en fråga olika. Den upptäckten kan vara viktigare än att vi snabbt enas. Det som retar mig är något annat – att tid i kalendern så lätt behandlas som ett resultat i sig. Timmen är bokad, alltså har något hänt. Det är min reflektion, inte något jag har mätt hos andra.
+
+Min tanke är inte att varje samtal ska pressas till ett beslut. Samtal kan skapa förtroende, och de kan få fram en fråga vi inte visste att vi behövde ställa. Men den som fyller i en mall borde få formulera varför vi behöver just varandras tid, också när syftet är att undersöka något tillsammans.
+
+Sedan kommer invändningen, och den är min egen. Jag vet inte om ytterligare en ruta gör möten bättre. Det finns en komik i att försöka lösa ett problem med formulär genom att utöka formuläret, och komiken blir inte mindre av att förslaget kommer från mig.
+
+Ändå vill jag prova en enkel fråga bredvid tiden: vad behöver vi förstå tillsammans? Jag vet inte om den överlever mötet med en verklig dagordning, och jag tänker inte låtsas att jag gör det. Hoppet om frågan och tvivlet på ännu en ruta får samsas ett tag till.
+```
+
+**Åtgärdat fynd**
+
+- **Rubriken sa inte krönikans vinkel.** ”Rutan som inte finns” (20 tecken, 4 ord) kunde inte förstås utan texten. Den sa inte vilken ruta det gällde, var den saknades eller vad frånvaron betydde, och den kunde ha stått över en helt annan text. Den nya rubriken har 46 tecken och 7 ord. Den håller sig till textens styrka och upprepar inte första stycket.
+
+**Olösta fynd** (delarna saknas, och en person avgör vad de ska innehålla)
+
+1. **Ingress saknas.** Mellan rubriken och bylinen finns inget sammanfattande stycke på högst 60 ord som står på egen hand. Den som ser texten i ett flöde eller en förhandsvisning har därför inget att avgöra läsningen på.
+2. **Mellanrubriker, avsnitt och avslutande avsnitt saknas.** Brödtexten har sex stycken och 290 ord men ingen nivå 2-rubrik, så allt mäts som en ingress på sex stycken. Det felet beror bara på att avsnitten saknas. Den som skummar får inga ingångar i resonemanget, och slutet står inte fram som ett eget avslut.
+3. **Uppmaning till läsaren saknas.** Sista stycket beskriver skribentens egen avsikt (”Ändå vill jag prova …”) men uppmanar inte läsaren att pröva, lägga märke till eller ompröva något. Reflektionen stannar hos skribenten i stället för att lämnas över.
+
+Texten uppfyller alltså inte artikelanatomin. Delarna ovan saknas, och de räknade gränserna är maskinuppmätta.
+
+**Påståenden**
+
+- **Ändrat påstående:** rubriken. Den antydde tidigare att en ruta saknas men sa inte vilken. Nu säger den att mötesmallen saknar frågan om varför vi träffas. Rubriken ändrades för att åtgärda rubrikfyndet och stöds av första, andra och fjärde stycket.
+- Inga andra påståenden har tagits bort, ändrats eller lagts till.
+
+Utöver rubriken har körningen bara gjort en mekanisk ändring: tankstrecket i tredje stycket är nu ett svenskt tankstreck med mellanrum i stället för ett engelskt. Brödtexten, bylinen och frontmattern är i övrigt oförändrade.

@@ -1,0 +1,24 @@
+# /Users/thomas/Projects/skills/.git/kntnt-orchestrate/398
+# HEAD 3f5f8c307e81f3fd5d3aa1a27bfd72390b7a8bac
+?? docs/evaluation/editorial-398/runs/wave-1-after-repo.txt
+?? docs/evaluation/editorial-398/runs/wave-1-after-scratch.txt
+?? docs/evaluation/editorial-398/runs/wave-1-after-session-scratchpad.txt
+?? docs/evaluation/editorial-398/runs/wave-1-before-repo.txt
+?? docs/evaluation/editorial-398/runs/wave-1-before-scratch.txt
+?? docs/evaluation/editorial-398/runs/wave-1-before-session-scratchpad.txt
+?? docs/evaluation/editorial-398/runs/wave-2-after-repo.txt
+?? docs/evaluation/editorial-398/runs/wave-2-after-scratch.txt
+?? docs/evaluation/editorial-398/runs/wave-2-after-session-scratchpad.txt
+?? docs/evaluation/editorial-398/runs/wave-2-before-repo.txt
+?? docs/evaluation/editorial-398/runs/wave-2-before-scratch.txt
+?? docs/evaluation/editorial-398/runs/wave-2-before-session-scratchpad.txt
+?? docs/evaluation/editorial-398/runs/wave-3-after-repo.txt
+?? docs/evaluation/editorial-398/runs/wave-3-after-scratch.txt
+?? docs/evaluation/editorial-398/runs/wave-3-after-session-scratchpad.txt
+?? docs/evaluation/editorial-398/runs/wave-3-before-repo.txt
+?? docs/evaluation/editorial-398/runs/wave-3-before-scratch.txt
+?? docs/evaluation/editorial-398/runs/wave-3-before-session-scratchpad.txt
+# end /Users/thomas/Projects/skills/.git/kntnt-orchestrate/398
+# /Users/thomas/Projects/skills
+# HEAD 81f50bfdad42f7f209724a5c28fda588d1efbbbc
+# end /Users/thomas/Projects/skills

@@ -1,0 +1,35 @@
+Jag har granskat texten som webbtext på svenska och gjort en ändring: svarstiden står nu i brödtexten. Ett fynd är olöst, eftersom texten hänvisar till ett formulär som den inte visar eller länkar till.
+
+**Inställningar:** genre `web-copy` och språk `sv`, båda enligt anropet. Ingen berättarteknik användes, eftersom `web-copy` inte anger någon som den normalt skrivs med. Jag gjorde en korrigeringsrunda (`--max=1`), och därefter var budgeten slut.
+
+````markdown
+# Så fungerar intresseanmälan
+
+En intresseanmälan till Svales genomgång av bokningsrutiner är inte en beställning. Den hjälper Svale att avgöra om genomgången passar föreningens behov.
+
+## Uppgifter att lämna
+
+Ange namn, förening och e-postadress i formuläret. Inga betalningsuppgifter behövs.
+
+## Svar inom tre arbetsdagar
+
+Svale svarar via e-post inom tre arbetsdagar för att stämma av uppdraget och föreslå en mötestid. En tid bokas alltså inte när formuläret skickas in.
+````
+
+## Fynd
+
+**Löst:**
+- **Svarstiden stod bara i rubriken.** Tidigare fanns ”tre arbetsdagar” bara i underrubriken ”Svar inom tre arbetsdagar”. Stycket under den sa att Svale svarar via e-post, men inte när. Den som läste stycket utan rubriken fick alltså inte veta svarstiden. Nu står den i stycket.
+
+**Olöst:**
+- **Formuläret visas inte och länkas inte.** Texten skriver ”i formuläret” och ”när formuläret skickas in”, men den innehåller inget formulär och säger inte var det finns eller hur man når det. Läsaren vet vilka uppgifter hen ska lämna men inte var anmälan görs. För att rätta det behövs formulärets plats eller länk, och de uppgifterna finns inte i texten. Jag har därför inte hittat på någon.
+
+## Påståenden
+
+- **Borttagna:** inga.
+- **Ändrade:** påståendet ”Svale svarar via e-post” anger nu också när svaret kommer: ”inom tre arbetsdagar”. Uppgiften fanns redan i underrubriken och har bara flyttats ner i stycket. Den ändringen gjordes för att svarstiden bara stod i rubriken.
+- **Tillagda:** inga.
+
+Utöver detta är samma svarstid, som redan stod i rubriken, nu också inskriven i brödtexten. Den sista korrekturläsningen hittade inga stavfel, grammatikfel eller skiljeteckenfel. Rubriker, struktur och övriga meningar är oförändrade.
+
+Ingenting har sparats på disken. `input.md` är orörd och alla temporära filer är borttagna.

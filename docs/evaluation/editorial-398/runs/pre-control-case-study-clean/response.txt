@@ -1,0 +1,43 @@
+Jag har granskat texten som kundcase på svenska och gjort en korrigeringsrunda. Det finns inga öppna fynd kvar. Tekniken är *ingen*, eftersom genren case-study inte anger någon. Genre och språk kom från anropet.
+
+```markdown
+# Delad bild av ärendena hjälper Elm Quays underhållsgrupp
+
+**Elm Quay Housing provade en gemensam reparationslogg i två hus under åtta veckor. Arbetsledaren Maya Lind vill göra om försöket, men skulle avsätta mer tid för förberedelser. Här är vad underhållsgruppen gjorde, vad försöksanteckningen visar och vad hon skulle ändra.**
+
+Text: Iris Falk
+
+Underhållsgruppen på Elm Quay Housing ville att den gemensamma reparationsloggen skulle visa samma information oavsett skift. Försöket pågick i åtta veckor och omfattade två hus. Vad det krävde beskriver gruppens arbetsledare, och vad som registrerades under försöket står i en intern försöksanteckning.
+
+## Gruppen enades om kategorierna först
+
+Kategorierna i loggen var underhållsgruppens egna. Leverantören Svale konfigurerade loggen efter dem och utbildade sex medarbetare.
+
+– Vi lade mer tid på att enas om kategorierna än på att lägga in de första ärendena. Den tiden skulle jag avsätta innan nästa hus börjar, säger Maya Lind, arbetsledare på Elm Quay.
+
+## Två perioder med olika arbetsbelastning
+
+Enligt Elm Quays interna försöksanteckning från den 4 december 2025 registrerades 31 ärenden under åtta veckor. Akuta ärenden och tidigare beställda arbeten ingick inte. Mediantiden från anmälan till tilldelning var två arbetsdagar. Under de föregående åtta veckorna var den tre.
+
+Perioderna hade olika arbetsbelastning, och anteckningen tillskriver därför inte skillnaden programvaran.
+
+## Maya Lind ser tillbaka på de åtta veckorna
+
+– Jag skulle välja att göra försöket igen. Att ha en gemensam bild av ärendena hjälper oss, men jag skulle lägga till en vecka för förberedelser, säger Lind.
+
+Kundcaset publiceras av leverantören Svale. Den som står inför samma förberedelser kan börja i [Svales checklista för införandet](https://example.invalid/svale/checklist).
+```
+
+**Artikelns uppbyggnad:** Texten följer artikelanatomin utan avvikelser. Skriptet mätte alla gränser och godkände dem. Rubriken är 56 tecken och 8 ord, och ingressen är 40 ord. Jag läste också igenom de krav som skriptet inte räknar och fann att de är uppfyllda:
+- sista avsnittet fungerar som avslutning med uppmaning,
+- ingressen står på egna ben,
+- ingress och brödingress börjar olika och upprepar inte varandra,
+- varje mellanrubrik beskriver sitt avsnitt.
+
+**Ändrade påståenden:**
+- **Rubriken** (fynd 1: rubriken nämnde en handling i stället för kundens nytta, och uttrycket var vagt). ”Elm Quay samlade reparationsärendena” är borta. Den nya rubriken ”Delad bild av ärendena hjälper Elm Quays underhållsgrupp” bygger på Maya Linds egen bedömning i slutcitatet och är lika stark som den. I rubriken står bedömningen utan att hon anges som källa.
+- **Ingressen** (fynd 2: ”gruppen” saknade referent, och ”anteckningarna” stod i plural). ”Anteckningarna” har blivit ”försöksanteckningen” i singular. Det stämmer med den enda källan i brödtexten.
+- **Brödingressens sista mening** (fynd 3: fel källa och ett orsakssamband texten inte bär). ”Gruppens egna anteckningar” har delats upp i två källor: arbetsledaren för vad försöket krävde och en intern försöksanteckning för vad som registrerades. Påståendet ”vad det gav”, som lät som en effekt, har blivit ”vad som registrerades”. Meningen om arbetsbelastning och programvara, som begränsar vad texten påstår, står kvar orörd.
+- **Mellanrubriken i sista avsnittet** (fynd 5: rubriken tog ut citatets poäng i förväg). ”Kunden vill ge förberedelserna mer tid” har blivit ”Maya Lind ser tillbaka på de åtta veckorna”. Påståendet om mer tid för förberedelser finns kvar i Linds citat, med hennes egen villkorliga form ”skulle”.
+
+**Övriga ändringar:** Brödingressens första mening var byggd som en engelsk konstruktion och innehöll en översättning ord för ord (”över skiftgränserna”). Den är nu en rak svensk huvudsats med samma innehåll. Utöver det har rubrik och mellanrubrik skrivits om och källhänvisningarna i ingress och brödingress preciserats, som ovan. Den avslutande korrekturläsningen hittade inga fel att rätta. Inga filer har skrivits, och de tillfälliga arbetsfilerna är borttagna.

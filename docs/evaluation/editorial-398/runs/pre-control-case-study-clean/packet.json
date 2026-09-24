@@ -1,0 +1,8 @@
+{
+  "schema_version": 1,
+  "ticket": "#388",
+  "produced_by": "docs/evaluation/editorial-388/harness/run.py",
+  "invocation": "/redline --genre=case-study --language=sv --output=response input.md",
+  "status": "complete",
+  "reasons": []
+}

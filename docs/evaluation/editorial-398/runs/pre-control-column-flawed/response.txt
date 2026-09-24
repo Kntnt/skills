@@ -1,0 +1,32 @@
+**Konfiguration:** genre `column` (från anropet), språk `sv` (från anropet), ingen teknik. Kolumngenren anger ingen teknik den vanligtvis skrivs med, och ingen annan nivå valde någon. Texten saknar frontmatter och `kntnt`-karta, och ingen karta har lagts till. En korrigeringsrunda användes, och därefter gjordes en mekanisk korrektur.
+
+````markdown
+# Mötesmallen saknar det vi ska förstå tillsammans
+
+Nora Vik
+
+Förra tisdagen satt jag gråtande i bibliotekets mötesrum när min chef sade: ”Nu måste allt bli digitalt.” Det var mitt första möte om vår nya mötesmall. Jag har aldrig deltagit i något möte om vår nya mötesmall.
+
+Vår mötesmall har plats för starttid och sluttid men inte för vad vi ska förstå tillsammans.
+
+Samtal kan ha värde utan att leda till beslut. Jag vill prova frågan vad vi behöver förstå tillsammans, men jag vet inte om ytterligare en ruta gör möten bättre.
+````
+
+**Olösta fynd.** Budgeten är förbrukad, så dessa lämnas åt en person:
+
+1. **Ingress saknas.** Texten har ingen fristående sammanfattning av vad kolumnen handlar om och vad läsaren får ut av den. Delen har inte skrivits.
+2. **Mellanrubriker, avsnitt och ett avslutande avsnitt saknas.** Därför mäts inledningen som tre stycken (82 ord). Den som skummar texten på webben får inga ingångar i den. Inga avsnitt eller rubriker har skrivits.
+3. **Ingen uppmaning till läsaren.** ”Jag vill prova frågan …” beskriver skribentens egen avsikt. Läsaren får inget att pröva, lägga märke till eller ompröva.
+4. **Stycke 1 motsäger sig självt.** ”Det var mitt första möte om vår nya mötesmall” går inte ihop med ”Jag har aldrig deltagit i något möte om vår nya mötesmall”. Texten avgör inte vilket som stämmer, och då kan läsaren inte lita på scenen. Att välja det ena påståendet vore att ändra ett påstående utan stöd.
+5. **Scenen knyts aldrig till reflektionen.** Gråten och chefens ”Nu måste allt bli digitalt” återkommer inte, och läsaren förstår inte vad iakttagelsen har med mötesmallen att göra. För att skapa sambandet skulle man behöva hitta på motiv eller händelser.
+
+**Anatomin:** texten följer inte artikelanatomin. Det beror på att ingress, avsnitt, avslutande avsnitt och uppmaning saknas (fynd 1–3). Den nya rubriken klarar gränserna (48 tecken, 7 ord).
+
+**Påståenden som strukits:**
+- ”I dagens snabbt föränderliga värld är möten viktigare än någonsin.” och ”Det är viktigt att vara viktig.” (stycke 2). De ströks som en tom öppningsfras och en tom viktighetsförstärkning, där hela meningen var felet.
+- ”Sammanfattningsvis är möten viktigare än någonsin i dagens snabbt föränderliga värld.” (stycke 4). Det ströks som en generisk avslutning. Texten slutar nu på det ärliga tvivlet i stycke 3.
+
+**Ändrat påstående:**
+- Rubriken ”Möten förändrar allt” påstod något texten aldrig säger. Den ersattes med ”Mötesmallen saknar det vi ska förstå tillsammans”, som återger stycke 2 utan att påstå mer än det.
+
+Utöver påståendena har körningen gjort två slags ändringar: rubriken är omskriven utifrån textens egen vinkel, och de klyschiga fraserna i början och slutet är borttagna. Den mekaniska korrekturen hittade inga fel att rätta. `input.md` är orörd, och körningen lämnade inga filer efter sig.

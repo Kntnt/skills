@@ -1,0 +1,54 @@
+I've finished the review and closing proofread, one correction round (the default budget), and I'm writing up the result. The review found five problems and fixed four. The fifth, a missing standfirst (the summary paragraph between headline and article), needs you to write it. Settings came from the file's own metadata: genre `opinion`, technique `none`, language `en_GB`. The metadata was already correct, so I left it unchanged.
+
+```markdown
+---
+kntnt:
+  genre: opinion
+  technique: none
+  language: en_GB
+---
+
+# Don't switch off Lervik's phone booking before we know what it costs
+
+By Sanna Ek, spokesperson for Öppna beslut
+
+On 18 June Lervik's council executive board is asked to remove phone booking from all seven community venues from September. The officers' report gives one reason: staff should not have to enter the details in two flows. That is a fair thing to want. It is not yet a reason to make the change permanent.
+
+## What the pilot actually counted
+
+The pilot report *Bokning av föreningslokaler*, dated 8 April 2026, covers an eight-week trial in two venues. It records 96 bookings made on the web and 24 made by phone. Those figures are the report's, and so are their limits: it counts bookings rather than unique people, and it measures nothing about age, functional ability or how used to digital services people are. Twenty-four phone bookings therefore cannot tell us what share of Lervik's residents are unable to book digitally. Nobody should claim they can.
+
+## The case against phone booking cites no staff-time or savings figures
+
+The administration's objection to keeping both routes is double administration, and I take it at face value: it is not a claim that people who ring are lazy or expensive. But the documents contain no measurement of how long either route takes staff, and no calculation of what removing one would save. The board is being asked to close a channel for good on the strength of an inconvenience the documents put no number on. That is thin ground for making the change permanent.
+
+## Measure staff time on each channel and ask people why they ring
+
+Öppna beslut proposes a six-month trial in all seven venues with both booking routes kept open. During it, the administration records the time each booking route takes and asks users to say, voluntarily, why they chose the phone or the web. We make no claim to have funded or costed that trial. What it would cost is for the board to weigh.
+
+A booking made by phone is not proof that somebody cannot use the web. It is a reason to find out why the phone is still being used. I am not against digital booking. I am against settling its shape before the council can set the work each route costs staff against what it is worth to the people who use it.
+
+## What the board can decide on 18 June
+
+Postpone the permanent switch and run the six months with both routes open. When the trial has produced figures, decide whether a channel should be removed, changed or kept. That decision is the board's either way, and it will be a better one for being taken with the cost of both routes on the table.
+```
+
+**Still to fix: there's no standfirst.** The opening paragraph ("On 18 June…") is the lead, because the rest of the article depends on it for the board, the date, the venues and the officers' reason. So the text has no standfirst: nothing that, read with only the headline, says what the piece argues and why to read on. I left it for you to write rather than inventing one.
+
+**Article structure:** apart from the missing standfirst, the text follows the article structure. I checked every rule, including the ones the measuring script can't count:
+- The lead sets up what the ending delivers.
+- The ending is its own section, telling the board to postpone and run the trial.
+- Each subheading describes its section.
+- The article reads complete without a standfirst.
+
+The headline (68 characters, 12 words) and the first two sections' paragraphs (85 and 84 words) run a little over the length guides. I left them, because each reads well at that length.
+
+**Claims:** no claim was removed or changed.
+
+**What changed:**
+- **Byline:** moved from the end of the piece to under the headline, in the form "By …". The reader now knows who "I" and "we" are, and that Öppna beslut is the author's organisation, before the argument starts.
+- **Lead:** now names Lervik's council, so the article no longer relies on the headline to say whose council and venues these are.
+- **Second subheading:** was "A motive on the table, but no figures under it", which a reader skimming the headings couldn't decode.
+- **Third subheading:** was "Six months, both routes, and something to measure", which repeated the first sentence under it.
+
+The closing proofread made no corrections. No files were written or left behind, and `input.md` is unchanged.

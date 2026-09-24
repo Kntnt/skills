@@ -1,0 +1,62 @@
+I reviewed `input.md` and made three small repairs in one correction round. One problem is still open: the article has no standfirst, which you'll need to write. The settings came from the article's own frontmatter: genre `opinion`, technique `none` and language `en_GB`. No technique was applied because the frontmatter says `none`.
+
+````markdown
+---
+kntnt:
+  genre: opinion
+  technique: none
+  language: en_GB
+---
+
+# Keep the telephone until Lervik knows why it is used
+
+*By Sanna Ek, spokesperson for Öppna beslut*
+
+On 18 June the municipal executive board has before it a proposal that telephone booking of Lervik's association venues disappear in September. It should not settle that yet: keep both routes, the telephone and the web, for six months, in all seven venues, and decide afterwards, with figures in hand.
+
+## The pilot counted bookings, not people
+
+The municipality's pilot report on the booking of association venues, dated 8 April 2026, covers an eight-week trial in two venues: 96 bookings were made on the web and 24 by telephone. The report counts bookings rather than unique people, and it measures nothing about age, ability or digital habit.
+
+Those 24 bookings therefore settle nothing about the residents behind them. They cannot show what share of residents are unable to book digitally; nor do they show the opposite, that the telephone survives out of habit. The report does not measure it.
+
+## The proposal rests on an inconvenience the papers do not measure
+
+The officers' report before the June meeting proposes removing telephone booking in all seven venues from September. The reason given is that staff should not have to enter details into two flows. Double administration is the administration's genuine objection to keeping both channels, not any view that telephone users are lazy or expensive, and I do not accuse it of holding one.
+
+What the papers do not contain is any measurement of the time that second flow costs, or any calculation of the saving. A permanent change for seven venues is being proposed on the strength of a nuisance the papers put no number on.
+
+## Six months would produce the figures
+
+Öppna beslut proposes six months in all seven venues with both routes kept open. The administration would record how long each route takes and would ask users to state, voluntarily, why they chose the telephone or the web. We make no claim to have funded or costed that trial; what it would cost is for the board to weigh.
+
+That a booking comes in by telephone is not proof that somebody cannot use the web. It is a reason to find out why the telephone is still being used. I am not against digital booking. I am against deciding before the cost of the work can be weighed against what each route is worth to the people who use it.
+
+## What the board can decide on 18 June
+
+The municipal executive board can adopt the September removal on the material in front of it. Or it can postpone that decision, run the trial in all seven venues, and afterwards remove, change or keep a channel with time figures and users' own reasons on the table. The trial costs something we have not costed; asking what that sum is, before the channel goes, is the smaller risk.
+````
+
+**Still open**
+
+- **The standfirst is missing.** An opinion piece should have a short summary paragraph between the headline and the byline. Without one, a reader who sees only the headline and summary isn't told what the piece argues or why to read it. A review doesn't write missing parts, so you'll need to add it.
+
+**Fixed**
+
+- **Byline:** the line now reads "By Sanna Ek, spokesperson for Öppna beslut", which is the standard English byline form. The italics and the affiliation are unchanged.
+- **Opening paragraph:** it said "keep both routes" before the article had said what the second route was. It now reads "both routes, the telephone and the web", as the body already establishes.
+- **Final section:** it opened with "It can adopt…", and only the subheading said what "It" was. The sentence now names "The municipal executive board".
+
+**Article structure**
+
+The structure check passes except for the missing standfirst. The headline is 52 characters, all four subheadings are within the length limit, and every paragraph is under 80 words. No section has more than three paragraphs. The headline has 10 words, just over the recommended 3–8, but I left it because shortening it would drop part of the argument. I also checked what the measuring script can't count:
+- the opening paragraph introduces everything it mentions;
+- each subheading describes its section;
+- no subheading repeats the first sentence under it;
+- the last section works as an ending, telling the board what it can decide.
+
+Everything else conforms, apart from the missing standfirst.
+
+**Claims:** no claim was removed, weakened or added. The opening paragraph now spells out "the telephone and the web", which the body already said, so its meaning is unchanged. Apart from these repairs, the text is exactly as it arrived.
+
+**What changed:** the byline now uses the English byline form. The opening paragraph now names the two booking routes. The final section's first sentence now names the board. The proofreading pass found no spelling, grammar or punctuation errors to fix.
