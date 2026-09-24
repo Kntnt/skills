@@ -1,0 +1,1 @@
+Ingen ändring. Texten granskades som artikel på svenska och gav inga anmärkningar, och korrekturläsningen på slutet hittade inga mekaniska fel. Ingen teknik användes, eftersom genren artikel inte anger någon.
