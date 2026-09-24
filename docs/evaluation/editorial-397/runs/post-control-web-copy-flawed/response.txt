@@ -1,0 +1,36 @@
+```markdown
+# A review of how a shared room in your housing association is booked
+
+## Price and contents of the review
+
+The review costs SEK 4,800 including VAT and covers one shared room in one housing association. It includes:
+
+- a 45-minute video call with two board representatives
+- a written account of the booking steps, unclear points and two possible simplifications
+
+## What happens when you register interest
+
+[Register your interest](https://example.invalid/svale/intresse).
+
+The link opens an expression-of-interest form asking for a name, association and email address. It places no order, requires no payment details and books no meeting. Svale replies by email within three working days to discuss whether the review is suitable and suggest a meeting time.
+```
+
+**Settings:** web-copy genre and en_US language, both from your command. No technique was applied because the web-copy genre doesn't specify one. `input.md` is unchanged, and no files were left behind.
+
+**Fixed (one correction round, the most allowed):**
+1. **Headline and opening:** The page never said what it was selling. The heading and first paragraph had empty promises ("full potential," "fantastic journey") and "Take the thumb out," a word-for-word translation of the Swedish "ta tummen ur" that makes no sense in English.
+2. **Link label:** "Book and pay now" was wrong, because the link only opens an interest form. It places no order, takes no payment and books no meeting. The text explaining this was five sections below the link.
+3. **Headings:** Headings like "It," "More," "Again" and "Things" didn't say what was under them. Each section started with "It," but nothing in the section said what "It" was.
+4. **Structure:** The price, scope and two deliverables were split into four one-sentence sections that all started the same way.
+
+**Still open:**
+- **"three working days":** In American English this is usually "three business days." I found this when checking the corrected text, after the one allowed correction round was used up.
+
+**Claims removed or changed (all in the one correction round):**
+- **Removed:** "Unlock your association's full potential." Finding 1 said this was an unsupported promise.
+- **Removed:** "Decision-makers in a complex reality face growing complexity." Finding 1 said this was a circular opening that could start any page.
+- **Removed:** "Take the thumb out and discover a fantastic journey." Finding 1 said this was a promise the text doesn't support, built on a literal translation.
+- **Changed:** "Book and pay now" is now "Register your interest," fixing finding 2. The link no longer claims to book or take payment, which matches what the form does.
+- **Changed:** The headline now says the review is about how a shared room is booked. The original never said this outright. It is inferred from what the review delivers: a written account of the booking steps, unclear points and possible simplifications for one shared room. This fixes finding 1, but check that this is actually what the review covers.
+
+**Other changes:** Six opaque headings became two descriptive ones. The price, scope and deliverables are now one section, with the two deliverables as a list. The link now sits directly above the paragraph explaining what it does. The final mechanical check found no errors to correct.

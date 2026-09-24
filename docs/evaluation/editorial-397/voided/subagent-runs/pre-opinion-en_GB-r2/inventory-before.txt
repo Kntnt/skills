@@ -1,0 +1,6 @@
+# staged install: /Users/thomas/Projects/skills/.git/kntnt-orchestrate/397.scratch/install-pre
+# staged install digest: fc4963de621cea3b6f67ddecb3302471e364a9f6a6666227e4a7681457589d24
+# staged install files: 85
+# run directory:
+59f1aec8f62a75e000530d76e85ff202cea55ff9a3be273b7740cdf9f0927311  ./inventory-before.txt
+cfefda44d50dcb42ba1100137793391854a32835c2fc4552db52e4d101aa035d  ./work/input.md

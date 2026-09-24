@@ -1,0 +1,38 @@
+```markdown
+---
+kntnt:
+  genre: column
+  technique: none
+  language: sv
+---
+
+# Mallen har en ruta för allt utom poängen
+
+Av Nora Vik, bibliotekarie
+
+Jag granskar bibliotekets mötesmall. Där finns rutor för starttid, sluttid, deltagare och dagordning. Någon ruta för det beslut vi ska kunna fatta när vi går därifrån finns inte. Det är dokumentet jag tittar på, inte ett bestämt möte.
+
+Jag uppskattar möten där kolleger upptäcker att de har förstått en fråga olika. Den upptäckten kan vara viktigare än att vi snabbt enas. Min tanke är alltså inte att varje samtal ska pressas fram till ett beslut.
+
+Det som retar mig är något annat: att tid i kalendern så lätt behandlas som ett resultat i sig. Timmen är bokad, alltså har något hänt. Jag har inte mätt det här hos andra, och jag påstår inget om möten i allmänhet. Det är min reflektion, med den räckvidd en reflektion har.
+
+Ändå tycker jag att den som fyller i en mall borde få formulera varför vi behöver just varandras tid. Också när syftet är att undersöka något tillsammans finns det ett skäl att skriva ner. Samtal kan skapa förtroende. Samtal kan hitta en fråga vi inte visste att vi behövde ställa. Inget av det kräver ett beslut, men båda delarna tål att motiveras.
+
+Så jag vill prova en enkel fråga bredvid tiden: vad behöver vi förstå tillsammans?
+
+Där börjar tvivlet. Det finns en komik i att försöka lösa ett problem med formulär genom att utöka formuläret – bibliotekarien som svarar på en mall med mer mall. Jag vet inte om ytterligare en ruta gör våra möten bättre. Kanske blir frågan bara en rad till att fylla i.
+
+Jag vill prova den i alla fall, och behålla båda hållningarna så länge: hoppet om frågan och tvivlet på ännu en ruta.
+```
+
+**Inställningar:** genre `column`, teknik `none` och språk `sv`. Alla tre kommer från textens `kntnt`-block. Ingen berättarbåge användes, eftersom blocket anger `none`.
+
+**Kvarstående anmärkningar (tre, ingen åtgärdad):** Alla tre gäller delar som texten saknar. Vid en granskning skrivs sådana delar inte, så det är du som avgör vad de ska innehålla. Ett korrigeringsvarv kördes men lämnade texten oförändrad, och därmed var budgeten (1) förbrukad.
+
+1. **Ingress saknas.** Mellan rubriken och bylinen ska det stå ett fristående stycke på högst 60 ord som säger vad krönikan handlar om och vad läsaren vinner på att läsa den. Utan ingress får den som möter texten i ett flöde eller en lista ingenting som lockar till läsning.
+2. **Mellanrubriker och avsnitt saknas.** Hela brödtexten är sju stycken och 274 ord utan en enda mellanrubrik. Den räknas därför som ett lead på sju stycken, men det felet beror bara på att avsnitten saknas. Den som skummar får inga ingångar och ser inte var texten vänder från iakttagelse till förslag och sedan till tvivel.
+3. **Uppmaning till läsaren saknas.** Slutet knyter ihop förslaget och tvivlet, men båda meningarna som börjar med ”Jag vill prova …” gäller skribentens egen mall. Krönikan ger inte läsaren något att själv pröva, lägga märke till eller ompröva. Om och hur läsaren ska tilltalas avgör du.
+
+Inga påståenden togs bort eller ändrades.
+
+Jämfört med originalet har körningen bara gjort en mekanisk rättelse: ett engelskt tankstreck (—) har bytts mot det svenska, som är kortare och har mellanslag på båda sidor (–). Ordalydelse, struktur och metadata är orörda.

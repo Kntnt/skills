@@ -1,0 +1,39 @@
+Jag har granskat texten som debattartikel (`opinion`) på svenska (`sv`). Genren anger ingen teknik, så ingen berättarbåge användes. Texten hade inga metadata från oss, och inga metadata har lagts till. `input.md` är orörd.
+
+````markdown
+# Avskaffa inte telefonbokningen på ett antagande
+
+**I september kan telefonbokningen av Lerviks föreningslokaler försvinna. Beslutet ska vila på åtta veckors siffror från två lokaler, och de siffrorna räknar bokningar, inte personer. Här är skälen att pröva båda bokningsvägarna ett halvår till innan den ena stängs.**
+
+Text: Sanna Ek, Öppna beslut
+
+Kommunstyrelsen i Lervik bör skjuta upp bytet till enbart digital bokning av föreningslokaler, ett byte som kan ske i september. Pröva först båda bokningsvägarna i alla sju lokaler under ett halvår och mät vad de kräver. Ett permanent beslut behöver bättre underlag än det som nu ligger på bordet.
+
+## Bokningar är inte samma sak som personer
+
+Kommunens pilotrapport från den 8 april 2026 räknar 96 webbokningar och 24 telefonbokningar under åtta veckor i två lokaler. Den säger inte hur många personer som bokade eller varför de valde telefonen. Siffrorna visar varken hur många som saknar digital vana eller hur många som skulle klara sig utan telefonbokning.
+
+En bokning är en händelse, inte en invånare. Den skillnaden avgör vad siffrorna kan användas till.
+
+## Mät också arbetet med två kanaler
+
+Förvaltningen vill slippa dubbel administration. Det är en relevant invändning. Men handlingarna innehåller ingen mätning av tidsåtgången. Att behålla två kanaler kostar arbete, och hur mycket behöver vägas mot vad användarna får.
+
+## Besluta om försöket, inte om antagandet
+
+Kommunstyrelsen bör därför säga ja till halvåret med båda bokningsvägarna, ta ställning till dess ännu okända kostnad och ge förvaltningen i uppdrag att mäta tidsåtgången samt fråga användarna varför de väljer sin bokningsväg. Först då går det att väga alternativen.
+
+Ett antagande blir inte ett beslutsunderlag för att kalendern säger september.
+````
+
+**Åtgärdat**
+
+- **Slutmeningen byggde på ingressen.** Den sista meningen syftar på ”september”, men uppgiften om september fanns bara i ingressen. Den som läste brödtexten utan ingressen förstod därför inte tidspressen i slutpoängen. Inledningen säger nu att bytet ”kan ske i september”. Det är lika starkt som ingressen uttrycker det.
+
+**Kvarstår (olöst)**
+
+- **Åtgärden i slutet besvarar bara en del av bristen.** Avsnittet ”Bokningar är inte samma sak som personer” är textens starkaste skäl. Rapporten säger inte hur många personer som bokade, och siffrorna visar inte hur många som behöver telefonen. Uppdraget i slutet gäller bara att mäta tidsåtgången och fråga användarna varför de väljer sin bokningsväg. Ändå lovar ”Först då går det att väga alternativen” ett tillräckligt underlag. Bara författaren kan avgöra om försöket också ska räkna personer eller om slutmeningen ska formuleras försiktigare. Jag har därför inte ändrat något här. Korrigeringsbudgeten (1) är förbrukad.
+
+**Påståenden:** Inga påståenden har tagits bort. Inga har fått ändrad räckvidd, säkerhet, källa, tidsföljd, orsakssamband eller betydelse.
+
+Jämfört med originalet har inledningens första mening fått ett tillägg om att bytet kan ske i september. Uppgiften kommer från ingressen, så slutmeningen har nu något att syfta tillbaka på i brödtexten. Den mekaniska korrekturen hittade inga fel och ändrade ingenting. I övrigt är texten oförändrad.

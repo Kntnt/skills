@@ -1,0 +1,47 @@
+Konfiguration: genre `opinion` och språk `sv` från anropet. Ingen teknik tillämpades: genren `opinion` anger ingen som den vanligen skrivs med. Texten hade ingen `kntnt`-metadata och har inte fått någon.
+
+```markdown
+# Telefonbokningen bör prövas i sex månader
+
+Kommunens bokningssiffror visar inte hur många personer som bokade via telefon, och handlingarna mäter inte den tid som en extra bokningsväg kräver. Sanna Ek, Öppna beslut, argumenterar för att telefonbokningen ska finnas kvar under en försöksperiod.
+
+Sanna Ek, Öppna beslut
+
+Kommunstyrelsen borde behålla telefonbokning under ett halvårs försök i alla sju lokaler.
+
+## Pilotrapporten förklarar inte valet av telefon
+
+Det gjordes 96 bokningar på webben och 24 via telefon. Telefonen stod alltså för 20 procent av bokningarna. Kommunens pilotrapport från den 8 april 2026 säger samtidigt att bokningarna inte räknar unika personer och att digital vana inte undersöktes.
+
+## Kostnaden för två bokningsvägar är inte beräknad
+
+Förvaltningen invänder att dubbla kanaler innebär dubbel administration. Handlingarna saknar tidsmätning. Därför är det inte visat att telefonbokningen ger dubbel administration. Föreningen vill att förvaltningen mäter tidsåtgång och frågar användarna varför de väljer en bokningsväg. Försökets kostnad är inte beräknad.
+
+Kommunstyrelsen bör behålla telefonbokningen i alla sju lokaler under ett halvårs försök, och förvaltningen bör mäta tidsåtgången och fråga användarna varför de väljer en bokningsväg.
+```
+
+**Åtgärdat i granskningen**
+- **Rubriken:** Den tillskrev motståndaren ett motiv som texten inte belägger. Nu anger den textens förslag.
+- **Ingressen:** Den saknades. Nu finns en, byggd bara av textens eget innehåll (36 ord).
+- **Inledningen:** Den anonyma auktoriteten och motivet i ”Alla vet att …” är borta.
+- **20 procent:** Siffran gällde bokningar, inte invånare. Påståendet motsade pilotrapportens egen reservation.
+- **”kostar ingenting”:** Påståendet var ett felslut. Att tidsmätning saknas visar inte att kostnaden är noll.
+- **Avslutningen:** ”Nu är det dags att agera” är ersatt av textens befintliga förslag, med kommunstyrelsen och förvaltningen som de som ska handla.
+- **Mellanrubrikerna:** ”Bakgrund” och ”Diskussion” bara namngav ett ämne. Nu säger de något om det.
+
+Den korrigerade texten har granskats om från början, och granskningen hittade inga nya fel. Artikelns anatomi mättes med skriptet och uppfyller alla räknade krav.
+
+**Olösta fynd** (korrigeringsbudgeten på en runda är förbrukad)
+1. **”Föreningen vill …”:** Brödtexten har inte presenterat någon förening. Texten säger inte heller att Öppna beslut är en förening. Läsaren vet därför inte vems förslaget är. Det går inte att åtgärda utan uppgifter som saknas i texten.
+2. **Vad som bokas:** Texten säger aldrig vad som bokas i de sju lokalerna, att telefonbokningen är hotad eller vilket beslut kommunstyrelsen står inför. Läsaren kan inte avgöra vad förslaget gäller. Det kräver uppgifter som texten inte innehåller.
+
+**Borttagna påståenden**
+- ”Kommunledningen hatar människor”: rubriken, borttagen av rubrikkorrigeringen.
+- ”Alla vet att politikerna vill stänga ute äldre för att spara miljoner”: inledningens andra mening. Den togs bort av korrigeringen av anonym auktoritet och påhittat motiv. Därmed försvann påståendena om äldre, om motivet och om besparingen på miljoner.
+
+**Ändrade påståenden**
+- ”Det bevisar att 20 procent av kommunens invånare inte kan använda internet” blev ”Telefonen stod alltså för 20 procent av bokningarna”. Både påståendets omfattning och dess säkerhet ändrades (korrigeringen av 20-procentsslutsatsen).
+- ”Därför kostar det ingenting att behålla telefonbokningen” blev ”Därför är det inte visat att telefonbokningen ger dubbel administration” (korrigeringen av felslutet om kostnaden).
+- Attributionen flyttades. I brödtexten är det ”Föreningen” som vill att förvaltningen mäter tidsåtgång och frågar användarna. I avslutningen står nu skribenten själv bakom samma krav (”förvaltningen bör …”) (korrigeringen av avslutningen). Om det stämmer beror på om föreningen är Öppna beslut, och det är det olösta fynd 1.
+
+Utöver påståendena ovan har körningen skrivit om rubriken och de två mellanrubrikerna och lagt till en ingress. Inledningen har kortats till förslaget, och den allmänna slutuppmaningen har ersatts av textens eget konkreta förslag. Den avslutande mekaniska korrekturläsningen hittade inga fel att rätta. Ingen fil har skrivits eller ändrats, och `input.md` är orörd.

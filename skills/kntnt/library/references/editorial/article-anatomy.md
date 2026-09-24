@@ -10,6 +10,8 @@ A statement below has one of three strengths:
 
 A text conforms when every part is present in the order shown and all three hold. Limits are exact; verify each one by counting.
 
+A review of a finished text reports a part the text lacks as missing rather than writing it, and repairs only the parts the text has.
+
 ## Order
 
 ```text

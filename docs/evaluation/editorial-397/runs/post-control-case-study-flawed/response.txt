@@ -1,0 +1,39 @@
+Konfiguration: genre `case-study` och språk `sv` från anropet. Ingen teknik tillämpades eftersom genren case-study inte anger någon. Texten saknar frontmatter, så ingen `kntnt`-metadata lades till. `input.md` är orörd och inga filer från körningen finns kvar på disken.
+
+````markdown
+# Elm Quays tilldelningstid sjönk till två arbetsdagar
+
+**Under ett försök på åtta veckor blev tiden till tilldelning av ärenden en arbetsdag kortare hos Elm Quay. Enligt kundens egen anteckning kan skillnaden ändå inte tillskrivas Svales programvara. Här redovisas utfallet, arbetsledaren Maya Linds reservation och hennes besked om hon skulle göra om försöket.**
+
+Elm Quay registrerade 31 ärenden. Kundens försöksanteckning visar hur lång tid det tog att tilldela dem jämfört med tidigare, och arbetsledaren Maya Lind berättar hur hon ser på försöket med Svales programvara.
+
+## Arbetsledaren Maya Lind om försöket
+
+– Att ha en gemensam bild av ärendena hjälper oss, men jag skulle lägga till en vecka för förberedelser, säger Maya Lind, arbetsledare hos kunden.
+
+## Tilldelningen gick fortare, men arbetsbelastningen skilde sig
+
+Enligt kundens försöksanteckning registrerades 31 ärenden under åtta veckor, med akuta ärenden undantagna. Tiden till tilldelning var två arbetsdagar jämfört med tre tidigare. Anteckningen säger att arbetsbelastningen var olika och att skillnaden inte kan tillskrivas programvaran.
+
+– Jag skulle välja att göra försöket igen, säger Lind.
+
+Kundcaset publiceras av leverantören Svale.
+````
+
+**Olösta anmärkningar.** De här kräver uppgifter som texten saknar och lämnas åt en person:
+
+1. **Bakgrund saknas.** Texten säger inte vad Elm Quay är, vad försöket gällde eller vad Svales programvara gör. Läsaren kan därför inte förstå situationen eller vad resultatet gäller.
+2. **Byline saknas.** Ingen författare namnges, så ingen byline skrevs. Mätningen av textens uppbyggnad anger att den saknas.
+3. **Uppmaning till handling saknas.** Avslutningen har ingen uppmaning, och texten innehåller inga erbjudanden, länkar eller kontaktvägar att bygga en på.
+
+**Borttagna påståenden.** Alla togs bort i en godtagen korrigering, där anmärkningen gällde hela påståendet:
+- ”Vi på Svale är världsledande på att skapa framgång”: ett överlägsenhetsanspråk utan stöd i texten.
+- ”och kunden stod hjälplös innan vi kom”: en räddningsberättelse utan stöd.
+- ”Vår programvara orsakade därför hela förbättringen”: meningen före motsade den. Den meningen, att skillnaden inte kan tillskrivas programvaran, står kvar oförändrad.
+- Rubrikens ”fantastiska” och påståendet att lösningen ”räddade” Elm Quay.
+- Mellanrubrikernas ”Kunden fick en gemensam bild” och ”Resultatet bevisar allt”.
+- Bryggan ”Maya Lind säger att det hjälper att ha en gemensam bild av ärendena”, som sade citatet i förväg. Innehållet finns kvar i hennes eget citat.
+
+**Ändrat påstående.** Att försöket gjordes med Svales programvara stod tidigare bara underförstått, i leverantörens egna vi-meningar. Nu sägs det rakt ut i ingressen och inledningen. Det ändrades när inledningen skrevs om så att Svale omnämns i tredje person, och ”programvaran” i brödtexten har nu något att syfta tillbaka på.
+
+**Vad körningen ändrade.** Utöver påståendena ovan skrevs rubriken, ingressen, inledningen och båda mellanrubrikerna om utifrån textens eget innehåll. Syftet var att ta bort leverantörens vi-form, reklamspråk och orsakspåståenden som texten inte stöder. Ingressens upprepade mening och dess upprepning av inledningen ersattes av en sammanfattning. Den avslutande korrekturläsningen hittade inga mekaniska fel att rätta.

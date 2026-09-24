@@ -1,0 +1,35 @@
+````markdown
+# Vår mötesmall har ingen ruta för gemensam förståelse
+
+Nora Vik menar att samtal kan ha värde utan att leda till beslut. Den nya mötesmallen på hennes arbetsplats frågar efter starttid och sluttid. Hon vill prova frågan om vad deltagarna behöver förstå tillsammans, men vet inte om ännu ett fält i mallen gör mötena bättre.
+
+Nora Vik
+
+Förra tisdagen satt jag gråtande i bibliotekets mötesrum när min chef sade: ”Nu måste allt bli digitalt.” Det var mitt första möte om vår nya mötesmall. Jag har aldrig deltagit i något möte om vår nya mötesmall.
+
+Vår mötesmall har plats för starttid och sluttid men inte för vad vi ska förstå tillsammans.
+
+Samtal kan ha värde utan att leda till beslut. Jag vill prova frågan vad vi behöver förstå tillsammans, men jag vet inte om ytterligare en ruta gör möten bättre.
+````
+
+**Inställningar:** Genren är krönika (`column`) och språket svenska (`sv`), båda angivna i anropet. Ingen teknik används, eftersom krönikegenren inte anger någon. `input.md` har inte ändrats och inga filer har skrivits.
+
+**Åtgärdat i granskningen:**
+- **Rubriken saknade vinkel.** Den gamla rubriken, ”Möten förändrar allt”, påstod något som texten inte säger. Den nya har 52 tecken och bygger på krönikans egen vinkel.
+- **Ingressen saknades.** En ingress på 46 ord har lagts till och bygger bara på textens eget innehåll.
+- **Andra stycket öppnade tomt.** Två meningar har strukits: ”I dagens snabbt föränderliga värld …” och ”Det är viktigt att vara viktig”.
+- **Slutet var en generisk sammanfattning.** Meningen ”Sammanfattningsvis …” har strukits.
+
+**Kvarstående fynd (olösta):**
+1. **Mellanrubriker, avsnitt och avslutningsavsnitt saknas.** Artikelanatomin kräver att inledningen är ett enda stycke, följt av minst ett avsnitt med mellanrubrik och ett avslutande avsnitt med egen mellanrubrik. Enligt mätningen är inledningen nu tre stycken (82 ord) och det finns inga avsnitt. Efter strykningarna består det första tänkbara avsnittet av en enda mening. Varje rubrik över den skulle antingen upprepa meningen eller påstå mer än texten gör. En person behöver avgöra om avsnittet ska få mer material eller om en rubrik som upprepar meningen kan godtas. Utan mellanrubriker kan läsaren inte skumma sig fram till iakttagelsen om mallen eller till den avslutande frågan.
+2. **Första stycket motsäger sig självt.** ”Det var mitt första möte om vår nya mötesmall” och ”Jag har aldrig deltagit i något möte om vår nya mötesmall” kan inte båda stämma. Texten avslöjar inte vilken mening som är sann, och att stryka någon av dem skulle ändra vad skribenten säger sig ha varit med om. Därför är stycket orört. Bara skribenten kan avgöra detta.
+
+Korrigeringsbudgeten (1) är förbrukad.
+
+**Påståenden som strukits eller ändrats:**
+- *Struket:* ”I dagens snabbt föränderliga värld är möten viktigare än någonsin.” Påståendet saknade stöd i texten och var självt defekten.
+- *Struket:* ”Det är viktigt att vara viktig.” Meningen sade ingenting och var självt defekten.
+- *Struket:* ”Sammanfattningsvis är möten viktigare än någonsin i dagens snabbt föränderliga värld.” Meningen var en generisk avslutning som upprepade det ogrundade påståendet ovan och var självt defekten.
+- *Ändrat:* rubrikens påstående ”Möten förändrar allt” har ersatts av ”Vår mötesmall har ingen ruta för gemensam förståelse”. Det gamla påståendet saknade stöd i texten.
+
+**Sammanfattning av ändringarna:** Rubriken har skrivits om så att den anger krönikans vinkel. En ingress har lagts till före bylinen, byggd på textens eget innehåll. De tomma fraserna i andra stycket och den generiska slutmeningen har strukits. I övrigt är brödtexten ordagrant densamma. Korrekturläsningen hittade inga språkliga fel att rätta.

@@ -1,0 +1,40 @@
+Granskad som debattartikel på svenska. Ingen berättarteknik användes, eftersom genren debattartikel inte anger någon. En korrigeringsrunda gjordes. Fyra fynd kräver uppgifter som inte finns i texten och står kvar för dig att lösa. `input.md` är orörd och inga filer har skrivits.
+
+````markdown
+# Pröva att ha kvar telefonen som bokningsväg
+
+Sanna Ek, Öppna beslut
+
+Kommunstyrelsen borde behålla telefonbokning under ett halvårs försök i alla sju lokaler.
+
+## Siffrorna visar inte vilka som väljer telefonen
+
+Det gjordes 96 bokningar på webben och 24 via telefon. Det innebär att 20 procent av bokningarna gjordes via telefon. Kommunens pilotrapport från den 8 april 2026 säger samtidigt att bokningarna inte räknar unika personer och att digital vana inte undersöktes.
+
+## Handlingarna visar inte hur mycket tid två bokningsvägar tar
+
+Förvaltningen invänder att dubbla kanaler innebär dubbel administration. Handlingarna saknar tidsmätning. Föreningen vill att förvaltningen mäter tidsåtgång och frågar användarna varför de väljer en bokningsväg. Försökets kostnad är inte beräknad.
+
+Kommunstyrelsen bör nu behålla telefonbokningen under ett halvårs försök i alla sju lokaler, och förvaltningen bör mäta tidsåtgången och fråga användarna varför de väljer en bokningsväg.
+````
+
+**Olösta fynd**
+
+1. **Ingressen saknas.** Texten går direkt från rubrik till byline. En fristående ingress på högst 60 ord ska stå där. Utan den får den som bara läser rubrik och ingress ingen sammanfattning av ärendet. Den har inte skrivits, eftersom en person behöver avgöra vad den ska innehålla.
+2. **Siffrorna saknar källa.** Texten säger inte var siffrorna 96 och 24 bokningar kommer ifrån, så läsaren kan inte bedöma underlaget. Texten anger ingen källa, så ingen har lagts till. Pilotrapporten har inte antagits vara källan.
+3. **Ärendet presenteras aldrig.** Texten säger inte vilket försök pilotrapporten gäller, vad som bokas i de sju lokalerna eller vilket förslag kommunstyrelsen ska ta ställning till. Läsaren får pussla ihop ärendet själv, och uppgifterna saknas i texten.
+4. **Det framgår inte vilken förening som avses.** ”Föreningen vill att …”: ingen förening presenteras i brödtexten. Bylinen nämner Öppna beslut, men texten säger inte att det är den föreningen som avses.
+
+**Påståenden som strukits**
+
+- ”Alla vet att politikerna vill stänga ute äldre för att spara miljoner.” Påståendet tillskrev motståndarsidan ett motiv som texten inte belägger. Det stödde sig på ”alla vet” och angav en besparing i miljoner, trots att texten själv säger att kostnaden inte är beräknad. Hela påståendet var felet och ströks.
+- ”Därför kostar det ingenting att behålla telefonbokningen.” Att tiden inte har mätts visar inte att kostnaden är noll, och samma stycke säger att kostnaden inte är beräknad. Hela slutsatsen var felet och ströks. De avgränsande meningarna ”Handlingarna saknar tidsmätning.” och ”Försökets kostnad är inte beräknad.” står kvar.
+
+**Påståenden som ändrats**
+
+- **20 procent av invånarna blev 20 procent av bokningarna.** ”Det bevisar att 20 procent av kommunens invånare inte kan använda internet” är nu ”Det innebär att 20 procent av bokningarna gjordes via telefon”. Siffran 24 av 120 gäller bokningar, och pilotrapportens förbehåll står kvar oförändrat.
+- **Artikelns slutkrav tar in föreningens krav.** Tidigare var det bara föreningen som ville att förvaltningen skulle mäta tidsåtgången och fråga användarna. Nu ställer skribenten själv det kravet i slutmeningen, bredvid kravet att kommunstyrelsen behåller telefonbokningen under försöket. Meningen om att föreningen vill detta står kvar. Kontrollera att Sanna Ek står bakom kravet.
+
+**Övriga ändringar**
+
+Utöver ändringarna ovan har rubriken skrivits om så att den säger vad artikeln föreslår i stället för att tillskriva någon ett motiv. Mellanrubrikerna ”Bakgrund” och ”Diskussion” har fått beskrivande rubriker hämtade ur respektive avsnitt. Den allmänna slutuppmaningen ”Nu är det dags att agera.” har ersatts av textens eget förslag, där det framgår vem som ska göra vad. Korrekturläsningen hittade inga stavnings- eller grammatikfel.

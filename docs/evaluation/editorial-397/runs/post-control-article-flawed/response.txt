@@ -1,0 +1,24 @@
+Jag granskade texten som en svensk (`sv`) artikel (`article`), utan berättarteknik. Genren anger ingen teknik, och anropet och texten valde inte heller någon. Texten saknar frontmatter, så ingen Kntnt-metadata lades till. Budgeten räckte till en korrigeringsrunda, och den gick åt. Efter rundan granskade jag texten på nytt. Reparationen hade inte skapat några nya brister. Filen `input.md` är oförändrad och inga andra filer ligger kvar.
+
+`````markdown
+# Björkskolans givare visade under 20 grader i 14 lektionspass
+
+**Ett mätförsök på fyra veckor registrerade temperaturer under 20 grader i sex klassrum på Björkskolan. Här får du veta vad fastighetskontorets rapport visar, vad som inte mättes och vad en drifttekniker rekommenderar innan styrningen ändras.**
+
+Fastighetskontorets rapport *Mätförsök i Björkskolan* från den 12 mars 2026 anger att 14 av 120 lektionspass hade minst ett värde under kontorets egen arbetsgräns på 20 grader, vilket inte är en lagregel. Enligt rapporten varade försöket fyra veckor. Två givare stod vid ytterväggar och fyra vid innerväggar, utan att placeringens effekt jämfördes experimentellt. Givarna registrerade temperaturer under 20 grader i sex klassrum. Operativ temperatur saknas, trots att resonemanget bygger på operativ temperatur, som är ett mått på lufttemperatur och värmestrålning från omgivande ytor, medan givarna bara mätte luften där de satt. Det saknas mätningar av luftdrag och elevernas upplevelse och uppgifter om hur länge temperaturerna låg under gränsen, och ingen effekt på hälsan har undersökts. Driftteknikern Elin Rask rekommenderar att koppla temperaturserier till användningstider innan styrningen ändras, och nästa försök är tänkt att använda likadant placerade givare i november, fast finansieringen inte är beslutad. Läs rapportens siffror som lufttemperatur där givarna satt, inte som den temperatur eleverna upplevde.
+`````
+
+## Olösta anmärkningar
+
+1. **Vems resonemang?** I meningen "Operativ temperatur saknas, trots att resonemanget bygger på operativ temperatur" pekar "resonemanget" inte på något. Texten har inte presenterat något resonemang. Läsaren kan därför inte avgöra om det gäller rapporten, försöket eller något annat, och ser inte varför det spelar roll att operativ temperatur saknas. Frågan kan inte lösas utan en uppgift som texten saknar.
+2. **Byline saknas.** Texten, anropet och eventuell metadata namnger ingen författare. En person behöver fylla i den.
+3. **Mellanrubriker och sektioner saknas, också den avslutande sektionen.** Hela brödtexten ligger i ett enda stycke, inledningen, som mäts till 158 ord. Normen är högst 80 ord. Stycket rymmer flera tankar: rapportens resultat, hur mätningen gjordes, vad som inte mättes, rekommendationen och nästa försök. Längden beror på att sektionerna saknas. Därför har inga rubriker skrivits och stycket har inte delats. Det avgör en person.
+
+## Påståenden som ändrats
+
+- **Borttaget:** "Katastrofen lurade bakom varje hörn." Påståendet att en katastrof hotade hade inget stöd i texten. Hela meningen var bristen, och korrigeringsrundan tog bort den.
+- **Borttaget:** "men ändå är det helt säkert att givarna har gjort eleverna friskare". Den samtidiga uppgiften att ingen hälsoeffekt har undersökts motsade påståendet. Rundan tog bort det. Förbehållet står kvar: "ingen effekt på hälsan har undersökts".
+- **Borttaget:** Rubrikens påstående att givarna "räddar skolan från en katastrof". Texten stödde det inte, och rundan ersatte det med rapportens egen siffra.
+- **Ändrat:** Att försöket varade fyra veckor tillskrivs nu uttryckligen rapporten ("Enligt rapporten"). Förut ingick uppgiften i en längre mening om vad rapporten "anger". Ändringen följer av att meningen delades.
+
+Rundan skrev om rubriken, ingressen och slutet. Ingressen upprepade samma mening två gånger och gör nu inte det. Den säger i stället vad artikeln handlar om och vad läsaren får ut av den. Uppmaningen "Kontakta oss för att rädda framtiden." saknade avsändare. Den har ersatts av en läsanvisning som bygger på det texten redan säger. Inledningen börjar inte längre med samma mening som ingressen. Meningen om givarna står nu efter uppgiften om var givarna satt. Den tomma frasen "Det är viktigt att notera att …" är borta. En lång mening har delats vid fogarna så att "medan" inte längre antyder ett samband mellan försökets längd och givarnas placering. Korrekturläsningen på slutet hittade inga mekaniska fel att rätta.

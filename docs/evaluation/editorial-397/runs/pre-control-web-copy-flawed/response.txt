@@ -1,0 +1,40 @@
+I reviewed `input.md` as US English web copy and made one correction round, which fixed all six problems the review found. Proofread then found no spelling, grammar or punctuation errors. `input.md` is unchanged and I wrote no files.
+
+No technique was applied, because the web-copy genre names none.
+
+````markdown
+# Svale's review of how one shared room in your association is booked
+
+## What the review costs and covers
+
+Svale's review costs SEK 4,800 including VAT and covers one shared room in one housing association. It includes:
+
+- a 45-minute video call with two board representatives
+- a written account of the booking steps, unclear points and two possible simplifications
+
+## What happens when you express interest
+
+[Express interest in the review](https://example.invalid/svale/intresse).
+
+The link opens an expression-of-interest form asking for a name, association and email address. It places no order, requires no payment details and books no meeting. Svale replies by email within three business days to discuss whether the review is suitable and suggest a meeting time.
+````
+
+**What the review fixed**
+
+1. **The page didn't say what it offered.** The headline "Unlock your association's full potential" was generic sales language, and the offer wasn't named until the last sentence. The headline now names Svale's review and what it covers.
+2. **The opening paragraph said nothing.** It had no information about the offer, and "Take the thumb out" is a word-for-word translation of a Swedish saying, not English. It's gone.
+3. **The link label promised the wrong thing.** "Book and pay now" led to a form that books nothing and takes no payment. The link now reads "Express interest in the review" and sits right above the paragraph that explains what the form does.
+4. **The headings said nothing about their sections.** "Start", "It", "More", "Again", "Things" and "Important" are replaced by two headings that do. The "It" that opened each section now points to "Svale's review", which the page names first.
+5. **One offer was split into four one-sentence sections.** Price and scope are now one sentence, and the call and the written account are a two-item list.
+6. **British wording.** "Working days" is now "business days".
+
+**Claims removed**
+- "Decision-makers in a complex reality face growing complexity." Removed by fix 2.
+- "Take the thumb out and discover a fantastic journey", including its promise of a "fantastic journey". Removed by fix 2.
+- The promise that the offer unlocks "your association's full potential". Removed by fix 1.
+
+**Claim changed**
+- The link no longer claims to book and pay (fix 3). It now matches the page's own statement that the form places no order, takes no payment and books no meeting.
+
+**What else changed**
+The run removed the sales language and the translated Swedish saying, and rebuilt the headline, headings and structure. The link was relabeled and moved next to its explanation, and "working days" became "business days". The closing pass made no changes. Every fact about price, scope, the call, the written account, the form and Svale's reply is still in the text.

@@ -1,0 +1,40 @@
+Jag har granskat texten som en krönika på svenska, utan berättarteknik. Alla tre värdena kommer från textens `kntnt`-karta, där tekniken är satt till `none`. Genren föreskriver ingen teknik heller. Kartan stämmer redan med det jag kom fram till, så jag har inte ändrat den. `input.md` är orörd och alla temporära filer är borttagna.
+
+````markdown
+---
+kntnt:
+  genre: column
+  technique: none
+  language: sv
+---
+
+# Bibliotekets mötesmall har ingen ruta för mötets syfte
+
+Av Nora Vik
+
+Jag granskar bibliotekets mötesmall. Där finns rutor för starttid, sluttid, deltagare och dagordning. Någon ruta för det beslut vi ska kunna fatta när vi går därifrån finns inte. Det här är en iakttagelse av ett dokument, inte en scen från ett visst möte. Mallen vill veta när vi ses och vilka som kommer. Vad tiden ska leda till frågar den inte om.
+
+En dagordning räknar upp vad vi ska tala om. Den säger inte varför vi behöver göra det tillsammans.
+
+Missförstå mig rätt: jag uppskattar möten där kolleger upptäcker att de har förstått en fråga olika. Den upptäckten kan vara viktigare än att vi snabbt enas. Det som retar mig är något annat – att tid i kalendern så lätt behandlas som ett resultat i sig. Timmen är bokad, alltså har något hänt. Det är min reflektion, inte något jag har mätt hos andra.
+
+Min tanke är inte att varje samtal ska pressas till ett beslut. Samtal kan skapa förtroende, och de kan få fram en fråga vi inte visste att vi behövde ställa. Men den som fyller i en mall borde få formulera varför vi behöver just varandras tid, också när syftet är att undersöka något tillsammans.
+
+Sedan kommer invändningen, och den är min egen. Jag vet inte om ytterligare en ruta gör möten bättre. Det finns en komik i att försöka lösa ett problem med formulär genom att utöka formuläret, och komiken blir inte mindre av att förslaget kommer från mig.
+
+Ändå vill jag prova en enkel fråga bredvid tiden: vad behöver vi förstå tillsammans? Jag vet inte om den överlever mötet med en verklig dagordning, och jag tänker inte låtsas att jag gör det. Hoppet om frågan och tvivlet på ännu en ruta får samsas ett tag till.
+````
+
+**Åtgärdat**
+
+- **Rubriken var otydlig.** ”Rutan som inte finns” gick inte att förstå utan texten och sa inget om krönikans vinkel. Den nya rubriken säger vad texten iakttar och inget mer.
+
+**Olösta fynd som författaren behöver ta ställning till.** Delarna saknas i texten. Enligt reglerna rapporterar granskningen dem och skriver dem inte själv.
+
+1. **Ingress saknas.** Ett fristående stycke på högst 60 ord ska stå mellan rubrik och byline. Utan det får den som skummar ingen sammanfattning av vad texten handlar om och vad läsaren får ut av den.
+2. **Mellanrubriker och avsnitt saknas, också det avslutande avsnittet.** Mätningen ger 0 avsnitt. Därför räknas hela brödtexten, 6 stycken och 290 ord, som ett enda ingångsstycke. Den som läser på webben får inga ingångar i texten.
+3. **Uppmaning till läsaren saknas.** Sista stycket bär författarens egen avsikt (”Ändå vill jag prova …”) och ett ärligt tvivel. Det ger inte läsaren något att själv pröva, lägga märke till eller ompröva. Att göra om avsikten till en uppmaning skulle ändra vad författaren säger, så det avgör författaren.
+
+**Påståenden:** inget påstående har tagits bort eller ändrats. Båda meningarna som avgränsar textens anspråk står kvar ordagrant: ”en iakttagelse av ett dokument” och ”inte något jag har mätt hos andra”.
+
+Jämfört med originalet har körningen gjort två ändringar. Rubriken är omskriven så att den anger krönikans vinkel. Korrekturläsningen har också bytt ett engelskt tankstreck (—) mot svenskt tankstreck med mellanslag (–). I övrigt är texten, inklusive metadata och byline, oförändrad.

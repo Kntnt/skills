@@ -1,0 +1,50 @@
+{
+  "instruction_revision": "d1be173134d23047bf9a91f39df9ffe6eccd2260",
+  "corpus_revision": "a321690f1af9a6cbc594764c22f1e0eefb768f5a",
+  "harness": "2.1.281 (Claude Code)",
+  "requested_identity": {
+    "model": "claude-opus-5-5",
+    "effort": "high"
+  },
+  "session_id": "fbf8e518-5e2e-4eac-9282-6d1885c5fdfb",
+  "credential_source": "keychain:Claude Code-credentials",
+  "staged_skills": [
+    "kntnt",
+    "proofread",
+    "redline",
+    "unslop",
+    "write"
+  ],
+  "input_name": "input.md",
+  "input_source": "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/397/docs/evaluation/corpus/editorial-quality/controls/opinion-clean.md",
+  "working_directory": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-logcrymh/work",
+  "argv": [
+    "claude",
+    "--print",
+    "--session-id",
+    "fbf8e518-5e2e-4eac-9282-6d1885c5fdfb",
+    "--model",
+    "claude-opus-5-5",
+    "--effort",
+    "high",
+    "--dangerously-skip-permissions",
+    "--strict-mcp-config",
+    "--output-format",
+    "stream-json",
+    "--verbose",
+    "--add-dir",
+    "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-logcrymh/scratch"
+  ],
+  "prompt_on": "stdin",
+  "environment": {
+    "HOME": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-logcrymh/home",
+    "CLAUDE_CONFIG_DIR": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-logcrymh/home/.claude",
+    "TMPDIR": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-logcrymh/scratch/tmp",
+    "UV_CACHE_DIR": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-logcrymh/scratch/uv-cache",
+    "UV_PYTHON_INSTALL_DIR": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-logcrymh/scratch/data/uv/python",
+    "XDG_DATA_HOME": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-logcrymh/scratch/data",
+    "XDG_CACHE_HOME": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-logcrymh/scratch/cache",
+    "XDG_CONFIG_HOME": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-logcrymh/home/.config"
+  },
+  "note": "The identity requested here is a request; the seats in trace-index.json are what ran."
+}

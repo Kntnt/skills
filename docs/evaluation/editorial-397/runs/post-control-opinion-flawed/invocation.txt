@@ -1,0 +1,1 @@
+/redline --genre=opinion --language=sv --output=response input.md
