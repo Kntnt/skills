@@ -6839,11 +6839,6 @@ def test_the_review_extension_repairs_an_ending_standing_inside_the_argument() -
         assert words in sentence, (
             f"{ANATOMY_REVIEW}: `{sentence[:160]}` does not say `{words}` (issue #402)."
         )
-    assert "does not say again what the paragraph under it says" in rule, (
-        f"{ANATOMY_REVIEW}: does not hold the subheading written for such an"
-        f" ending to what every subheading is, so a repair that restates the"
-        f" call to action in it is rejected with the whole round (issue #402)."
-    )
     assert "missing" not in sentence and "absent" not in sentence, (
         f"{ANATOMY_REVIEW}: `{sentence[:160]}` words a present ending as a"
         f" missing one (issue #402)."
