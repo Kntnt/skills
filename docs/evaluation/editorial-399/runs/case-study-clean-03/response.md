@@ -1,0 +1,1 @@
+Ingen ändring behövdes. Texten granskades som kundcase (`case-study`) på svenska utan berättarteknik, eftersom genren inte anger någon. Varken granskningen eller den avslutande korrekturläsningen hittade något att rätta, och ingen fil skrevs.

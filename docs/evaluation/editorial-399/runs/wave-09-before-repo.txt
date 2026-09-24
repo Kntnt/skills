@@ -1,0 +1,51 @@
+# /Users/thomas/Projects/skills/.git/kntnt-orchestrate/399
+# HEAD 201330680cc5c4904f1469419ee71b4e3ede4e51
+?? docs/evaluation/editorial-399/control-judge-brief.md
+?? docs/evaluation/editorial-399/plan.md
+?? docs/evaluation/editorial-399/redline-turn-post.md
+?? docs/evaluation/editorial-399/redline-turn-pre.md
+?? docs/evaluation/editorial-399/runs/inventory.sh
+?? docs/evaluation/editorial-399/runs/run_inventory.sh
+?? docs/evaluation/editorial-399/runs/void/wave-01-attempt-1-after-repo.txt
+?? docs/evaluation/editorial-399/runs/void/wave-01-attempt-1-after-scratch.txt
+?? docs/evaluation/editorial-399/runs/void/wave-01-attempt-1-before-repo.txt
+?? docs/evaluation/editorial-399/runs/void/wave-01-attempt-1-before-scratch.txt
+?? docs/evaluation/editorial-399/runs/wave-01-after-repo.txt
+?? docs/evaluation/editorial-399/runs/wave-01-after-scratch.txt
+?? docs/evaluation/editorial-399/runs/wave-01-before-repo.txt
+?? docs/evaluation/editorial-399/runs/wave-01-before-scratch.txt
+?? docs/evaluation/editorial-399/runs/wave-02-after-repo.txt
+?? docs/evaluation/editorial-399/runs/wave-02-after-scratch.txt
+?? docs/evaluation/editorial-399/runs/wave-02-before-repo.txt
+?? docs/evaluation/editorial-399/runs/wave-02-before-scratch.txt
+?? docs/evaluation/editorial-399/runs/wave-03-after-repo.txt
+?? docs/evaluation/editorial-399/runs/wave-03-after-scratch.txt
+?? docs/evaluation/editorial-399/runs/wave-03-before-repo.txt
+?? docs/evaluation/editorial-399/runs/wave-03-before-scratch.txt
+?? docs/evaluation/editorial-399/runs/wave-04-after-repo.txt
+?? docs/evaluation/editorial-399/runs/wave-04-after-scratch.txt
+?? docs/evaluation/editorial-399/runs/wave-04-before-repo.txt
+?? docs/evaluation/editorial-399/runs/wave-04-before-scratch.txt
+?? docs/evaluation/editorial-399/runs/wave-05-after-repo.txt
+?? docs/evaluation/editorial-399/runs/wave-05-after-scratch.txt
+?? docs/evaluation/editorial-399/runs/wave-05-before-repo.txt
+?? docs/evaluation/editorial-399/runs/wave-05-before-scratch.txt
+?? docs/evaluation/editorial-399/runs/wave-06-after-repo.txt
+?? docs/evaluation/editorial-399/runs/wave-06-after-scratch.txt
+?? docs/evaluation/editorial-399/runs/wave-06-before-repo.txt
+?? docs/evaluation/editorial-399/runs/wave-06-before-scratch.txt
+?? docs/evaluation/editorial-399/runs/wave-07-after-repo.txt
+?? docs/evaluation/editorial-399/runs/wave-07-after-scratch.txt
+?? docs/evaluation/editorial-399/runs/wave-07-before-repo.txt
+?? docs/evaluation/editorial-399/runs/wave-07-before-scratch.txt
+?? docs/evaluation/editorial-399/runs/wave-08-after-repo.txt
+?? docs/evaluation/editorial-399/runs/wave-08-after-scratch.txt
+?? docs/evaluation/editorial-399/runs/wave-08-before-repo.txt
+?? docs/evaluation/editorial-399/runs/wave-08-before-scratch.txt
+?? docs/evaluation/editorial-399/runs/wave-09-before-repo.txt
+?? docs/evaluation/editorial-399/runs/wave-09-before-scratch.txt
+?? docs/evaluation/editorial-399/runs/wave_inventory.sh
+# end /Users/thomas/Projects/skills/.git/kntnt-orchestrate/399
+# /Users/thomas/Projects/skills
+# HEAD 201330680cc5c4904f1469419ee71b4e3ede4e51
+# end /Users/thomas/Projects/skills

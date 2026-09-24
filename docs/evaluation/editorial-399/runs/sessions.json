@@ -1,0 +1,297 @@
+{
+  "case-study-clean-01": {
+    "argv": [
+      "claude",
+      "--print",
+      "--agent",
+      "kntnt-opus-high",
+      "--model",
+      "claude-opus-5-5",
+      "--effort",
+      "high",
+      "--dangerously-skip-permissions",
+      "--strict-mcp-config",
+      "--output-format",
+      "stream-json",
+      "--verbose"
+    ],
+    "prompt_sha256": "61e20b3fc606dc0ae7918cb0a0267d45ecaff4cb8d9e5b4c03ce47de65bfedeb",
+    "claude_code_version": "2.1.281",
+    "session_id": "fed31732-631d-4a63-b38e-478fcae13843",
+    "session_model": "claude-opus-5-5",
+    "agent_tool_available": true,
+    "subagents_started": [],
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "duration_ms": 133806,
+    "is_error": false,
+    "exit": "0"
+  },
+  "case-study-clean-02": {
+    "argv": [
+      "claude",
+      "--print",
+      "--agent",
+      "kntnt-opus-high",
+      "--model",
+      "claude-opus-5-5",
+      "--effort",
+      "high",
+      "--dangerously-skip-permissions",
+      "--strict-mcp-config",
+      "--output-format",
+      "stream-json",
+      "--verbose"
+    ],
+    "prompt_sha256": "78fe4f5584bb0970f4f48eb1a8cae05f5754d156694b594fcf097ad273bb007a",
+    "claude_code_version": "2.1.281",
+    "session_id": "b956dd54-e3f6-4ef9-b026-9f2ab422038b",
+    "session_model": "claude-opus-5-5",
+    "agent_tool_available": true,
+    "subagents_started": [],
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "duration_ms": 166951,
+    "is_error": false,
+    "exit": "0"
+  },
+  "case-study-clean-03": {
+    "argv": [
+      "claude",
+      "--print",
+      "--agent",
+      "kntnt-opus-high",
+      "--model",
+      "claude-opus-5-5",
+      "--effort",
+      "high",
+      "--dangerously-skip-permissions",
+      "--strict-mcp-config",
+      "--output-format",
+      "stream-json",
+      "--verbose"
+    ],
+    "prompt_sha256": "83aa17b295b15c99fb6b4cad1ecb975476935a5d3629ad18260299d2d38a3756",
+    "claude_code_version": "2.1.281",
+    "session_id": "67f467d0-0b44-498e-8eca-ee77fd902ef1",
+    "session_model": "claude-opus-5-5",
+    "agent_tool_available": true,
+    "subagents_started": [],
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "duration_ms": 178232,
+    "is_error": false,
+    "exit": "0"
+  },
+  "case-study-clean-04": {
+    "argv": [
+      "claude",
+      "--print",
+      "--agent",
+      "kntnt-opus-high",
+      "--model",
+      "claude-opus-5-5",
+      "--effort",
+      "high",
+      "--dangerously-skip-permissions",
+      "--strict-mcp-config",
+      "--output-format",
+      "stream-json",
+      "--verbose"
+    ],
+    "prompt_sha256": "55c66d18e96f2ac94cc6d21c398f4cd201760925359fe59939a54bc5ee068e72",
+    "claude_code_version": "2.1.281",
+    "session_id": "28d304e7-1a98-4c90-a917-4a40c7156fc7",
+    "session_model": "claude-opus-5-5",
+    "agent_tool_available": true,
+    "subagents_started": [],
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "duration_ms": 145675,
+    "is_error": false,
+    "exit": "0"
+  },
+  "case-study-clean-05": {
+    "argv": [
+      "claude",
+      "--print",
+      "--agent",
+      "kntnt-opus-high",
+      "--model",
+      "claude-opus-5-5",
+      "--effort",
+      "high",
+      "--dangerously-skip-permissions",
+      "--strict-mcp-config",
+      "--output-format",
+      "stream-json",
+      "--verbose"
+    ],
+    "prompt_sha256": "a4d1d0f90f82fb772762d43dfee8546ea0035e289c1122831c59c41d3c260a9f",
+    "claude_code_version": "2.1.281",
+    "session_id": "ecf54bef-4964-4beb-95fe-e9fd6850084d",
+    "session_model": "claude-opus-5-5",
+    "agent_tool_available": true,
+    "subagents_started": [],
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "duration_ms": 106613,
+    "is_error": false,
+    "exit": "0"
+  },
+  "case-study-clean-06": {
+    "argv": [
+      "claude",
+      "--print",
+      "--agent",
+      "kntnt-opus-high",
+      "--model",
+      "claude-opus-5-5",
+      "--effort",
+      "high",
+      "--dangerously-skip-permissions",
+      "--strict-mcp-config",
+      "--output-format",
+      "stream-json",
+      "--verbose"
+    ],
+    "prompt_sha256": "69beaea17fcc4549ee0ba7ef4fff43daaccf9e0078f282ffa02909a47a2f2278",
+    "claude_code_version": "2.1.281",
+    "session_id": "60bde730-f371-4898-b111-3d6d80b684e5",
+    "session_model": "claude-opus-5-5",
+    "agent_tool_available": true,
+    "subagents_started": [],
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "duration_ms": 189387,
+    "is_error": false,
+    "exit": "0"
+  },
+  "case-study-clean-07": {
+    "argv": [
+      "claude",
+      "--print",
+      "--agent",
+      "kntnt-opus-high",
+      "--model",
+      "claude-opus-5-5",
+      "--effort",
+      "high",
+      "--dangerously-skip-permissions",
+      "--strict-mcp-config",
+      "--output-format",
+      "stream-json",
+      "--verbose"
+    ],
+    "prompt_sha256": "1da09ea1b2a725c64750ea59e3c0410d27d49df9b83cb6996ba1a04bc2021d9c",
+    "claude_code_version": "2.1.281",
+    "session_id": "2d14f354-d28f-4c34-bcd2-78afb1d0d481",
+    "session_model": "claude-opus-5-5",
+    "agent_tool_available": true,
+    "subagents_started": [],
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "duration_ms": 175613,
+    "is_error": false,
+    "exit": "0"
+  },
+  "case-study-clean-08": {
+    "argv": [
+      "claude",
+      "--print",
+      "--agent",
+      "kntnt-opus-high",
+      "--model",
+      "claude-opus-5-5",
+      "--effort",
+      "high",
+      "--dangerously-skip-permissions",
+      "--strict-mcp-config",
+      "--output-format",
+      "stream-json",
+      "--verbose"
+    ],
+    "prompt_sha256": "f574dfb29afe854f1d6f64a881ac0afcfd17e9555e82af0540231223ebfb4ca5",
+    "claude_code_version": "2.1.281",
+    "session_id": "b411bff9-c7e6-4041-9c75-d3fe998883e6",
+    "session_model": "claude-opus-5-5",
+    "agent_tool_available": true,
+    "subagents_started": [
+      "kntnt-opus-high"
+    ],
+    "models_used": [
+      "claude-opus-5-5",
+      "claude-opus-5-5[1m]"
+    ],
+    "duration_ms": 299509,
+    "is_error": false,
+    "exit": "0"
+  },
+  "case-study-clean-09": {
+    "argv": [
+      "claude",
+      "--print",
+      "--agent",
+      "kntnt-opus-high",
+      "--model",
+      "claude-opus-5-5",
+      "--effort",
+      "high",
+      "--dangerously-skip-permissions",
+      "--strict-mcp-config",
+      "--output-format",
+      "stream-json",
+      "--verbose"
+    ],
+    "prompt_sha256": "2a2302bc047e6fd3e153489924cc0bafd4f1415f29cfed0b51c4613b08cae242",
+    "claude_code_version": "2.1.281",
+    "session_id": "005d80fa-31e1-4e35-8fcd-6fdff5d14078",
+    "session_model": "claude-opus-5-5",
+    "agent_tool_available": true,
+    "subagents_started": [
+      "general-purpose"
+    ],
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "duration_ms": 226809,
+    "is_error": false,
+    "exit": "0"
+  },
+  "case-study-clean-10": {
+    "argv": [
+      "claude",
+      "--print",
+      "--agent",
+      "kntnt-opus-high",
+      "--model",
+      "claude-opus-5-5",
+      "--effort",
+      "high",
+      "--dangerously-skip-permissions",
+      "--strict-mcp-config",
+      "--output-format",
+      "stream-json",
+      "--verbose"
+    ],
+    "prompt_sha256": "01e826698520160ce2e966105dabd4ee7c6c8ed498094eb8ffa17fdb5dcff2f2",
+    "claude_code_version": "2.1.281",
+    "session_id": "1498cdf4-af3c-438a-bdab-7042a8c8dc1e",
+    "session_model": "claude-opus-5-5",
+    "agent_tool_available": true,
+    "subagents_started": [],
+    "models_used": [
+      "claude-opus-5-5"
+    ],
+    "duration_ms": 185937,
+    "is_error": false,
+    "exit": "0"
+  }
+}

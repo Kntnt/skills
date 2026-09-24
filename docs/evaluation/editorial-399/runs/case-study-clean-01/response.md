@@ -1,0 +1,1 @@
+Ingen ändring behövdes. Texten följer kraven för genren kundcase på svenska och ingen teknik användes, eftersom genren inte föreskriver någon. Granskningen gav inga fynd, så ingen korrigeringsrunda användes. Korrekturläsningen hittade inga språkfel, och inga påståenden togs bort eller ändrades.
