@@ -1,0 +1,59 @@
+I've written the case study, but **it comes with known defects.** The second and final source check left four findings open. I couldn't change the text after that check, so it appears exactly as the checker read it. Each finding is an alleged mismatch with `source.md`, with the checker's proposed fix:
+
+1. **Closing paragraph, "start where Fenwick had to" (the most serious).** The source only says the team *had to* agree what "ready for work" meant. Holding back the backlog was the manager's decision, and checking the status names for longer is Vale's hindsight. "Had to" stretches necessity over both. Proposed fix: "…could begin where Fenwick had to, by agreeing what each status means, and, as Vale would now, allow time to check the names before any backlog goes in."
+2. **Standfirst, "held back the backlog".** This drops the source's condition: postponed "until the team had reviewed its status definitions". Proposed fix: "…but postponed adding the backlog."
+3. **Standfirst, "After trialling".** The approval has no date, so it could have come before the six weeks ended. Proposed fix (together with 2): "Fenwick Instrument Repairs trialled a shared bench schedule; its manager approved continued use for new jobs but postponed adding the backlog."
+4. **Lead, "having chosen Benchline".** This says the choice came before the trial began, but the source gives no order. Proposed fix: split the sentence: "…began a six-week trial of a shared bench schedule. The team chose Benchline after checking that it could tell those statuses apart."
+
+The checker also raised an editorial question rather than a defect. The source says the account is not "a recommendation for every workshop", and the brief supplies no call to action. So the closing advice is my own, hedged with "could", and it recommends a process, not Benchline. Whether to keep it is the publisher's decision.
+
+```markdown
+---
+kntnt:
+  genre: case-study
+  technique: none
+  language: en_GB
+---
+
+# Fenwick says staff could see repairs awaiting parts
+
+After trialling a shared bench schedule, Fenwick Instrument Repairs' manager approved it for new jobs but held back the backlog. The account makes clear that agreeing what each status meant was the workshop's work, not the software's.
+
+By Thomas Barregren
+
+Fenwick Instrument Repairs services brass and woodwind instruments. Before the trial, jobs awaiting parts and jobs ready for work appeared on separate paper sheets. In January 2026 the workshop team began a six-week trial of a shared bench schedule, having chosen Benchline after checking that it could tell those statuses apart. The workshop's manager, Priya Vale, describes what had to be settled and what would be done differently.
+
+## The workshop set the statuses, Benchline configured them
+
+Asked in an email interview what the team had to settle before the schedule was useful, Vale replied: 'We had to agree what ready for work meant. A part being in the building did not always mean that it had reached the right bench.'
+
+The workshop defined the statuses and decided who would update them. Benchline configured those choices and trained four staff in one online session. The team continued to use telephone calls to discuss collection arrangements with customers.
+
+## Trial summary leaves repair speed unmeasured
+
+The workshop's trial summary, dated 23 February 2026, records 38 jobs entered in the schedule. It says staff could see which instruments were waiting for parts. It does not measure repair duration, revenue or customer satisfaction.
+
+What the summary and interview establish, then, is the team's reported experience rather than a measured improvement in repair speed. Vale approved continued use for new jobs but postponed adding the backlog until the team had reviewed its status definitions.
+
+## Vale would spend longer checking the status names
+
+Would Vale make the same choice again? 'I would use it again for new jobs,' Vale wrote. 'I would allow another week to check the status names before adding the backlog.'
+
+A workshop weighing a shared schedule of its own could start where Fenwick had to: by agreeing what each status means, and checking the names, before any backlog goes in.
+```
+
+**Settings used:**
+- **Genre:** case study, from your command.
+- **Language:** British English, from your command.
+- **Technique:** none. You didn't name one, and the case-study genre doesn't have a default technique.
+- **Output:** here in the reply, with the Kntnt frontmatter included (the default).
+
+**How it was checked:** two independent source checks ran. The first found eight problems, all confirmed and fixed; the second is the final one above. Neither checker was allowed to write its report file, so each returned it in its reply. The draft meets every counted requirement for this genre's structure. All my scratch files have been removed, and nothing was written to disk.
+
+**Byline:** it carries your name, because the brief named no author. Change it before publishing if the case should run unsigned or under someone else's name.
+
+**Limits of the material:**
+- **Call to action:** the brief supplied no offer, link or contact route. The ending therefore gives advice only, with no link or offer. A real call to action needs those details from Benchline.
+- **Length:** the body (the lead through the ending) is about 280 words, inside the 250–300 you asked for.
+- **Quotations:** both come word for word from Vale's email answers, which the source says Vale approved for publication.
+- **Scene and speed:** there was no workshop visit and no spoken exchange, so the draft contains no scene description. The trial didn't measure speed, revenue or customer satisfaction, so the draft makes no claims about any of them.

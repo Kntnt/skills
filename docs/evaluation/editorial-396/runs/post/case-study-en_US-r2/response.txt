@@ -1,0 +1,73 @@
+**Delivered with one known defect.** The second, final source check flagged the headline:
+
+- **Headline:** "Elm Quay trial gives shifts one repair view"
+- **Problem:** the source gives shift-sharing only as the team's goal ("The team wanted staff on different shifts to see the same information"), plus Lind's judgement that "Having one view of the reports helps us". The headline states it as a result achieved for the shifts, and leaves out that the trial covered only two buildings. The checker rated this plausible rather than certain, because Lind's "helps us" can fairly be read as covering the team's shifts. I left it for you to decide rather than rejecting it.
+- **Checker's proposed repair:** "Elm Quay tests one repair log for its shifts."
+
+The first check found four other problems, and I fixed all of them before the final check:
+
+- A subheading claimed the note declined to credit the software in general. The note only declines to attribute the difference in assignment times.
+- "With one change" suggested Lind would change only one thing.
+- The lead-in to the second quotation implied how the preparation time was divided, which the source doesn't say.
+- "Elm Quay's maintenance supervisor" implied she is the only one.
+
+```markdown
+---
+kntnt:
+  genre: case-study
+  technique: none
+  language: en_US
+---
+
+# Elm Quay trial gives shifts one repair view
+
+Elm Quay Housing's maintenance team spent eight weeks testing a shared repair log from Svale Systems in two buildings. Operations managers planning something similar can see what the preparation took, what an internal note shows and leaves open, and why maintenance supervisor Maya Lind would run the trial again with more time for preparation.
+
+By Thomas Barregren
+
+At Elm Quay Housing, which manages 640 flats, telephone reports and emails used to be stored separately. In September 2025, the company's own maintenance team decided to trial a shared repair log in two buildings. How that went is recorded in an internal trial note and described by Elm Quay maintenance supervisor Maya Lind.
+
+## Why Elm Quay wanted one log
+
+The team chose Svale Systems to supply the log after testing whether it could show the status of each repair. Answering questions by email, Lind describes the starting point:
+
+> “We wanted the evening shift to see what the morning shift had already done. The categories were ours; Svale helped us put them into the log.”
+
+## What the setup demanded
+
+Svale configured the log and trained six staff during two sessions. The team also kept telephone reporting open for residents.
+
+Lind describes the setup from the team's side:
+
+> “We spent more time agreeing on the categories than entering the first reports. I would set that time aside before the next building starts.”
+
+## The note does not credit the software for quicker assignment
+
+The trial ran for eight weeks. Elm Quay's internal note on it, dated December 4, 2025, says that 31 repair reports were entered; emergencies and work ordered before the trial are excluded.
+
+Median time from report to assignment was two working days during the trial, compared with three in the preceding eight weeks. The two periods had different workloads, and the note explicitly does not attribute the difference to the software.
+
+These figures concern assignment, not completion. There are no measurements of cost, resident satisfaction, or completion time.
+
+## Maya Lind looks back on the trial
+
+Lind did not recommend Svale to every housing company. Of the trial itself, she writes:
+
+> “I would choose to do the trial again. Having one view of the reports helps us, but I would leave an extra week for preparation.”
+
+## Any expansion waits on larger repairs
+
+The trial has not yet been expanded. Before deciding whether to expand it, the team will check how its categories work for larger repairs.
+
+Operations managers weighing a similar trial can start by reading the [implementation checklist](https://example.invalid/svale/checklist).
+```
+
+- **Settings:**
+  - Genre is case-study and language is en_US; both came from your command.
+  - No technique was applied, because the case-study genre doesn't name one. The draft simply follows the order of events.
+  - The draft is in this reply and no file was written. The `kntnt` metadata block at the top is on by default.
+- **Byline:** the brief named no author, so the byline uses your name, "Thomas Barregren". Change it if the case should run unsigned or under someone else's name.
+- **Length:** the draft is a little under the requested ~400 words, and the material doesn't support more. The brief allowed for that ("as material allows"). More would need further material: the results of the check on larger repairs, or more of Lind's answers.
+- **Supplier disclosure:** the draft doesn't claim to be independent reporting, and it doesn't say it is published by the supplier either. Whether to label it as supplier-published is your call.
+- **Anatomy:** the measurement script found every counted requirement met, with no departures from its norms.
+- **Files:** the scratch files are deleted, and `source.md` is unchanged.

@@ -1,0 +1,69 @@
+I've written the draft, but it comes with two known defects. The second source check flagged both, and I found each one real against `source.md`. The draft below is exactly the text that check read; I haven't changed it since.
+
+1. **The lead credits the team with setting up the log.** "This account follows how the team set it up…" — "it" refers to the log, but the source says "Svale configured the log." The team designed the categories and kept telephone reporting open. Proposed fix: "…how the team prepared the trial, what the trial measured and what remains to be decided."
+2. **The last subheading suggests expansion is coming.** "Expansion awaits a test of the categories on larger repairs" reads as if the trial will expand once the test passes. The source leaves the decision open: "the team will decide after checking how the categories work for larger repairs." Proposed fix: "Decision on expansion awaits a check of the categories on larger repairs."
+
+```markdown
+---
+kntnt:
+  genre: case-study
+  technique: none
+  language: en_US
+---
+
+# Elm Quay pilots one view of repair reports
+
+Elm Quay Housing's maintenance team spent eight weeks testing a shared repair log from Svale Systems in two of its buildings. The company's internal trial note sets out what its figures do and do not show, and maintenance supervisor Maya Lind describes how the team prepared and what she would plan differently next time.
+
+By Thomas Barregren
+
+Before the trial, telephone reports and emails about repairs were stored separately at Elm Quay Housing, which manages 640 flats. In September 2025, the company's own maintenance team decided to test a shared repair log in two buildings. This account follows how the team set it up, what the trial measured and what remains to be decided.
+
+## Why the maintenance team wanted a shared log
+
+Maya Lind, Elm Quay's maintenance supervisor, describes both the aim and who did what: “We wanted the evening shift to see what the morning shift had already done. The categories were ours; Svale helped us put them into the log.”
+
+The team chose Svale Systems after testing whether the log could show the status of each repair. It also kept telephone reporting open for residents. Svale configured the log and trained six staff members in two sessions.
+
+## Median assignment time was shorter; the note does not credit software
+
+The trial ran for eight weeks. According to Elm Quay's internal trial note, dated December 4, 2025, 31 repair reports were entered, not counting emergencies or work ordered before the trial began.
+
+Median time from report to assignment was two working days during the trial, compared with three in the preceding eight-week period. The two periods had different workloads, and the note explicitly does not attribute the difference to the software. There are no measurements of costs, resident satisfaction or completion times.
+
+## Maya Lind weighs the trial
+
+Looking back, Lind names where the time went: “We spent more time agreeing on the categories than entering the first reports. I would set that time aside before the next building starts.”
+
+Her overall assessment is qualified: “I would choose to do the trial again. Having one view of the reports helps us, but I would leave an extra week for preparation.” Interviewed by email, Lind did not recommend Svale to every housing company.
+
+## Expansion awaits a test of the categories on larger repairs
+
+The trial has not yet expanded beyond the two buildings. The team will decide after checking how its categories work for larger repairs.
+
+This account is published by Svale Systems. Operations managers considering a similar trial can read the [implementation checklist](https://example.invalid/svale/checklist).
+```
+
+**Settings used**
+- **Genre:** `case-study`, from your command.
+- **Language:** `en_US`, from your command.
+- **Technique:** `none`, because the case-study genre doesn't name a usual technique. The account follows the order of events, not a set story arc.
+- **Output:** here in the reply. A `kntnt` metadata block is included at the top.
+
+**Byline:** the brief named no author, so the byline is your name, "By Thomas Barregren". Change it before publishing if the case should run unsigned or under another name.
+
+**Checks**
+- **Article structure:** all required counts pass. An early version had a 9-word headline and a five-paragraph section; I fixed both before the source checks.
+- **First source check:** it found four problems, and I fixed all four:
+  - The standfirst credited the figures to Lind; they come from the trial note.
+  - A subheading widened a median to assignment times in general.
+  - A lead-in to a quote added an order of events Lind never gave.
+  - A subheading made the expansion decision sound conditional.
+- **Second source check:** this was the final one. It left the two findings above.
+- **Quotations:** all three are Lind's words exactly as supplied, including her reservations.
+- **Cleanup:** neither checker could write its report file, so each returned it in its reply. I kept a summary of each report in the run's temporary folder and then deleted that folder. Only `source.md` remains in the working directory.
+
+**Where the material stopped**
+- The body is about 390 words, close to the requested 400.
+- The source compares Svale with no other supplier and has no figures for cost, resident satisfaction or completion time, so the draft makes no such claims.
+- It also doesn't say what the checklist contains, so the draft only calls it an implementation checklist to read.

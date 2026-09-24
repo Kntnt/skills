@@ -1,0 +1,69 @@
+Utkastet levereras med **tre kända brister**. De kvarstår efter den sista källjämförelsen. Jämförelsen tar upp dem som påståenden som redaktören får avgöra; de är inte fastslagna fakta om texten. Enligt reglerna får prosan inte ändras efter den sista jämförelsen, så de är inte åtgärdade:
+
+1. **"bolagets eget underhållsteam"** (ingressens andra mening). "Bolag" slår fast att Elm Quay är ett företag, men materialet anger inte organisationsformen. Det kan vara en ideell förening eller ett kooperativ. *Föreslagen ändring:* "Elm Quays eget underhållsteam".
+2. **Mellanrubriken "Att enas om kategorierna tog mer tid än första inmatningen"** står som ett fastslaget faktum. Det enda underlaget är Maya Linds egen beskrivning, och tiden har inte mätts. Citatet som bär påståendet följer direkt efter, så bristen är liten. *Föreslagen ändring:* lägg till ", enligt Lind".
+3. **Mellanrubriken "Kortare tid till fördelning, men olika arbetsbelastning"** tappar ordet "median". Källan anger bara mediantiden, och medelvärdet kan ha gått åt andra hållet. *Föreslagen ändring:* "Kortare mediantid till fördelning, men olika arbetsbelastning" (61 tecken, inom gränsen på 70).
+
+````markdown
+---
+kntnt:
+  genre: case-study
+  technique: none
+  language: sv
+---
+
+# Samlad vy över anmälningar hjälper teamet, anser Lind
+
+Under åtta veckor förde Elm Quay Housings underhållsteam in felanmälningar från två hus i en gemensam logg från Svale Systems. Här är vad förberedelserna krävde, vad siffrorna visar och inte visar och hur arbetsledaren Maya Lind bedömer försöket.
+
+Av Thomas Barregren
+
+Elm Quay Housing förvaltar 640 lägenheter. I september 2025 beslutade bolagets eget underhållsteam att pröva en gemensam reparationslogg i två av husen. Försöket pågick i åtta veckor med en logg från Svale Systems, och arbetsledaren Maya Lind vet i dag vad hon skulle göra annorlunda.
+
+## Olika skift skulle ha samma information
+
+Innan försöket förvarades telefonanmälningar och mejl var för sig. Målet beskriver Maya Lind i en e-postintervju:
+
+– Vi ville att kvällsskiftet skulle se vad morgonskiftet redan hade gjort.
+
+Teamet valde Svale Systems efter att ha testat om loggen kunde visa status för varje reparation.
+
+## Att enas om kategorierna tog mer tid än första inmatningen
+
+Underhållsteamet lät telefonen finnas kvar som ett sätt för de boende att anmäla fel. Svale konfigurerade loggen och utbildade sex medarbetare vid två tillfällen.
+
+– Kategorierna var våra. Svale hjälpte oss att lägga in dem i loggen, skriver Maya Lind.
+
+– Vi lade mer tid på att komma överens om kategorierna än på att föra in de första anmälningarna. Den tiden skulle jag avsätta innan nästa hus sätter i gång.
+
+## Kortare tid till fördelning, men olika arbetsbelastning
+
+Elm Quays interna promemoria om försöket, daterad den 4 december 2025, anger att 31 felanmälningar fördes in. Akuta ärenden och arbeten som beställts före försöket räknas inte med.
+
+Mediantiden från anmälan till att ärendet fördelades var två arbetsdagar under försöket och tre under de åtta veckorna före. Arbetsbelastningen skilde sig mellan perioderna, och promemorian tillskriver uttryckligen inte programvaran skillnaden. Mätningar av kostnader, de boendes nöjdhet eller tiden tills en reparation var klar finns inte.
+
+## Frågan om fler hus är ännu öppen
+
+– Jag skulle välja att göra försöket igen. Att ha en samlad vy över anmälningarna hjälper oss, men jag skulle lägga till en extra vecka för förberedelser, skriver Maya Lind.
+
+Försöket har ännu inte utvidgats. Teamet fattar beslut när det har sett hur kategorierna fungerar för större reparationer. Planerar du ett liknande försök finns en [checklista för införande](https://example.invalid/svale/checklist) att läsa.
+````
+
+**Inställningar:** genren är `case-study` och språket `sv`, båda från anropet. Texten levererades här i svaret. Ingen teknik används, eftersom genren case-study inte anger någon. Texten har därför ingen berättarbåge.
+
+**Byline:** briefen nämner ingen författare, så bylinen är ditt namn, "Av Thomas Barregren". Ändra den om texten ska publiceras osignerad eller under ett annat namn.
+
+**Källjämförelser:** två jämförelser gjordes, och båda blev klara.
+- **Första jämförelsen:** tre fynd godtogs och åtgärdades. Rubriken återger nu Linds bedömning som hennes egen. Ingressen skriver "arbetsledaren Maya Lind" i stället för "teamets arbetsledare". Mellanrubriken om kategorierna jämför nu att enas med att föra in, som i hennes citat.
+- **Avvisat fynd:** ett fynd hävdade att materialet inte ger något pronomen för Lind. Det stämmer inte, eftersom källan skriver "Her final quotation is her actual, qualified assessment."
+- **Andra jämförelsen:** den lämnade de tre bristerna ovan. Ingen av jämförelserna hittade något fel i översättningen av citaten.
+
+**Där materialet tar slut:**
+- **Längd:** texten har ungefär 350 ord löptext, mot briefens cirka 400. Det som fattas kräver mer material, till exempel:
+  - fler citat om hur skiften använde loggen i vardagen
+  - en beskrivning av hur kategorierna utformades
+  - uppgifter om hur de tre telefon-, mejl- och loggvägarna fungerade ihop
+- **Mätningar:** det finns inga mått på kostnad, de boendes nöjdhet eller tid tills en reparation var klar.
+- **Redaktionell fråga:** materialet anger att fallet publiceras av leverantören och inte är oberoende journalistik. Utkastet påstår inte att det är oberoende, men det säger inte heller att Svale Systems är utgivare. Om det ska framgå är ett beslut för redaktionen.
+
+**Filer:** de båda granskarna kunde inte skriva sina rapportfiler, så de lämnade rapporterna i sina svar. Alla arbetsfiler från körningen är borttagna. Ingen kopia av texten finns kvar på disk, och `source.md` är orörd.

@@ -1,0 +1,114 @@
+{
+  "63a61938": {
+    "run": "post/case-question-en_GB-r1",
+    "judge": "a"
+  },
+  "b758e4b6": {
+    "run": "post/case-question-en_GB-r1",
+    "judge": "b"
+  },
+  "fb8e2767": {
+    "run": "post/case-question-en_GB-r2",
+    "judge": "a"
+  },
+  "d22cc156": {
+    "run": "post/case-question-en_GB-r2",
+    "judge": "b"
+  },
+  "a1658686": {
+    "run": "post/case-question-en_GB-r3",
+    "judge": "a"
+  },
+  "ece5aa82": {
+    "run": "post/case-question-en_GB-r3",
+    "judge": "b"
+  },
+  "154c66f2": {
+    "run": "post/case-study-en_US-r1",
+    "judge": "a"
+  },
+  "59f6b609": {
+    "run": "post/case-study-en_US-r1",
+    "judge": "b"
+  },
+  "d71ce57c": {
+    "run": "post/case-study-en_US-r2",
+    "judge": "a"
+  },
+  "00b0bedd": {
+    "run": "post/case-study-en_US-r2",
+    "judge": "b"
+  },
+  "93fedc2e": {
+    "run": "post/case-study-sv-r1",
+    "judge": "a"
+  },
+  "75f832da": {
+    "run": "post/case-study-sv-r1",
+    "judge": "b"
+  },
+  "a9b5ca01": {
+    "run": "post/case-study-sv-r2",
+    "judge": "a"
+  },
+  "a5b7ac89": {
+    "run": "post/case-study-sv-r2",
+    "judge": "b"
+  },
+  "9d34536c": {
+    "run": "pre/case-question-en_GB-r1",
+    "judge": "a"
+  },
+  "63bf4689": {
+    "run": "pre/case-question-en_GB-r1",
+    "judge": "b"
+  },
+  "efa318bc": {
+    "run": "pre/case-question-en_GB-r2",
+    "judge": "a"
+  },
+  "93dbdc8a": {
+    "run": "pre/case-question-en_GB-r2",
+    "judge": "b"
+  },
+  "c7e7d6db": {
+    "run": "pre/case-question-en_GB-r3",
+    "judge": "a"
+  },
+  "6fc7373a": {
+    "run": "pre/case-question-en_GB-r3",
+    "judge": "b"
+  },
+  "c52b1b13": {
+    "run": "pre/case-study-en_US-r1",
+    "judge": "a"
+  },
+  "b1586c79": {
+    "run": "pre/case-study-en_US-r1",
+    "judge": "b"
+  },
+  "780f955c": {
+    "run": "pre/case-study-en_US-r2",
+    "judge": "a"
+  },
+  "405c47f8": {
+    "run": "pre/case-study-en_US-r2",
+    "judge": "b"
+  },
+  "b4fb2719": {
+    "run": "pre/case-study-sv-r1",
+    "judge": "a"
+  },
+  "ab6f461b": {
+    "run": "pre/case-study-sv-r1",
+    "judge": "b"
+  },
+  "1566d268": {
+    "run": "pre/case-study-sv-r2",
+    "judge": "a"
+  },
+  "0c8d6647": {
+    "run": "pre/case-study-sv-r2",
+    "judge": "b"
+  }
+}

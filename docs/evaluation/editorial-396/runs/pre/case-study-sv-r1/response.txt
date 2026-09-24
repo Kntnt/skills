@@ -1,0 +1,73 @@
+**Utkastet levereras med kända brister.** Den andra och sista källkontrollen hittade två avvikelser som finns kvar i texten. Efter den kontrollen får prosan inte ändras, så de är inte åtgärdade:
+
+1. **Rubriken ”Samlad vy hjälper teamet …”.** Maya Lind skriver ”helps us”, och materialet säger inte vilka ”us” är. ”Teamet” kan alltså vara en snävare grupp än den hon menade. Kontrollantens förslag: ”Samlad vy hjälper, bedömer Elm Quays arbetsledare”.
+2. **”Akuta ärenden och arbeten som beställdes före provet ingår inte.”** I källan är det anteckningen som utesluter dem (”It excludes …”). Meningen kan läsas som att ärendena aldrig fördes in i loggen. Kontrollantens förslag: ”Anteckningen räknar inte med akuta ärenden och arbeten som beställdes före provet.”
+
+Kontrollen tog också upp en redaktionell fråga. Enligt materialet publicerar Svale Systems själva caset, och det är inte oberoende journalistik. Texten påstår inget oberoende, men den har en journalistisk byline och säger inte att Svale är avsändare. Om det ska redovisas är upp till er.
+
+```markdown
+---
+kntnt:
+  genre: case-study
+  technique: none
+  language: sv
+---
+
+# Samlad vy hjälper teamet, bedömer Elm Quays arbetsledare
+
+Under åtta veckor provade Elm Quay Housing en gemensam logg för felanmälningar i två hus. Arbetsledaren Maya Lind skulle göra om provet, men med en extra vecka för förberedelser. Här är hur underhållsteamet lade upp arbetet, vad mätningarna visar och vad de inte kan visa.
+
+Av Thomas Barregren
+
+Elm Quay Housing förvaltar 640 lägenheter. Tidigare sparades telefonanmälningar och mejl var för sig. I september 2025 beslutade bolagets eget underhållsteam att prova en gemensam felanmälningslogg i två av husen. Maya Lind, arbetsledare för underhållet, beskriver vad provet krävde och hur hon värderar det.
+
+## Teamet utformade kategorierna, Svale hjälpte till att lägga in dem
+
+Innan underhållsteamet valde Svale Systems testade det om loggen kunde visa status för varje reparation. De boende kunde fortsätta att felanmäla per telefon.
+
+– Vi ville att kvällspasset skulle se vad morgonpasset redan hade gjort. Kategorierna var våra egna. Svale hjälpte oss att lägga in dem i loggen, skriver Maya Lind i en mejlintervju.
+
+Svale konfigurerade loggen och utbildade sex anställda vid två tillfällen. Provet pågick i åtta veckor.
+
+## Mediantiden till fördelning blev kortare – orsaken lämnas öppen
+
+Enligt Elm Quays interna anteckning om provet, daterad den 4 december 2025, fördes 31 felanmälningar in i loggen. Akuta ärenden och arbeten som beställdes före provet ingår inte.
+
+Mediantiden från felanmälan till att ärendet fördelades var två arbetsdagar under provet, mot tre under de åtta veckorna innan. Arbetsbelastningen skilde sig mellan perioderna, och anteckningen tillskriver uttryckligen inte programvaran skillnaden.
+
+Det finns inga mätningar av kostnader, de boendes nöjdhet eller tiden tills reparationerna var klara.
+
+## Arbetsledaren skulle göra om provet med mer förberedelse
+
+– Vi lade mer tid på att komma överens om kategorierna än på att föra in de första felanmälningarna. Den tiden skulle jag avsätta innan nästa hus kommer i gång, skriver Lind.
+
+– Jag skulle välja att göra provet igen. Att ha en samlad vy över felanmälningarna hjälper oss, men jag skulle ge förberedelserna en vecka till, skriver hon om provet som helhet.
+
+Någon rekommendation av Svale till alla bostadsbolag ger hon inte.
+
+## Teamet ska pröva kategorierna på större reparationer först
+
+Provet har ännu inte utvidgats. Underhållsteamet fattar beslut om det när det har sett hur kategorierna fungerar för större reparationer. Den som planerar ett eget prov kan läsa [checklistan för implementering](https://example.invalid/svale/checklist) innan planeringen börjar.
+```
+
+**Inställningar:**
+- **Genre:** `case-study`, angiven i anropet.
+- **Språk:** `sv`, angivet i anropet.
+- **Teknik:** ingen. Genren har ingen standardteknik och ingen annan valdes, så texten följer ingen särskild dramaturgisk båge.
+- **Leverans:** här i svaret, med Kntnt-metadata i frontmatter.
+
+**Byline:** Briefen namnger ingen författare, så bylinen är ditt namn, Thomas Barregren. Ändra den om texten ska publiceras osignerad eller i någon annans namn.
+
+**Kontroller:**
+- **Anatomin:** Mätningen godkände till slut alla räknade krav. Det enda som slog i var en norm: ett avsnitt hade fyra stycken. Det åtgärdades.
+- **Första källkontrollen:** Den hittade fyra avvikelser, som alla åtgärdades:
+  - Rubriken återgav Linds omdöme som ett faktum.
+  - En mellanrubrik påstod att Svale själv lade in kategorierna.
+  - ”Mejl” hade snävats in till felanmälningar.
+  - Mellanrubriken om mediantiden sa inte att den gäller tiden till fördelning.
+- **Andra källkontrollen:** Den läste den reviderade texten och lämnade de två bristerna ovan. Ingen av kontrollerna fann fel i översättningen av citaten.
+- **Rapportfiler:** Ingen av kontrollanterna fick skriva sin rapportfil, så rapporterna kom i deras svar.
+
+**Längd och material:** Texten är ungefär 400 ord, som briefen bad om. Materialet innehåller inga uppgifter om kostnader, de boendes nöjdhet, tid till färdig reparation eller någon jämförelse med andra leverantörer, så texten tar inte upp något av det.
+
+**Filer:** Kontrollanterna har avslutats och den tillfälliga katalogen med utkast och rapport är borttagen. `source.md` är orörd och inga andra filer ligger kvar.
