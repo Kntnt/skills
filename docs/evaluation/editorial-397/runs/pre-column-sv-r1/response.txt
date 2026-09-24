@@ -1,0 +1,47 @@
+**Konfiguration:** genre `column`, teknik `none`, språk `sv`. Alla tre värden kommer från textens `kntnt`-karta, och ingen berättelsebåge har tillämpats. Kartan stämde redan med det som fastställdes och är oförändrad.
+
+**Granskningen och vad som åtgärdades:** en korrigeringsrunda, som granskades om från början efteråt. Fyra fynd åtgärdades, och inga fynd återstår.
+
+1. Ingressen saknades. En ingress på 59 ord är nu byggd ur textens eget innehåll. Den behåller textens gränser: att det är en betraktelse av ett dokument och en personlig reflektion utan anspråk på möten i allmänhet.
+2. Mellanrubriker och avsnitt saknades. Efter inledningsstycket finns nu tre avsnitt med två stycken vardera, och det sista är avslutningen.
+3. Avslutningen gav läsaren ingenting att göra. En uppmaning att pröva frågan i den egna mötesmallen är tillagd efter det oförändrade slutstycket.
+4. Rubriken sa inte vilken mall det gällde. ”Mallen” har blivit ”Mötesmallen”.
+
+**Påståenden:** inga påståenden har strukits eller flyttats i omfång, säkerhet, tillskrivning, kronologi, orsakssamband eller betydelse. Alla ursprungliga meningar står kvar ordagrant.
+
+```markdown
+---
+kntnt:
+  genre: column
+  technique: none
+  language: sv
+---
+
+# Mötesmallen har en ruta för allt utom poängen
+
+Bibliotekarien Nora Vik läser mötesmallen på sitt bibliotek – dokumentet, inte något bestämt möte – och saknar en plats för varför deltagarna behöver varandras tid. Hon vill pröva en enkel fråga bredvid klockslagen, fast hon tvivlar på att ännu en rad i formuläret gör mötena bättre. En personlig reflektion utan anspråk på möten i allmänhet – och en fråga att pröva själv.
+
+Av Nora Vik, bibliotekarie
+
+Jag granskar bibliotekets mötesmall. Där finns rutor för starttid, sluttid, deltagare och dagordning. Någon ruta för det beslut vi ska kunna fatta när vi går därifrån finns inte. Det är dokumentet jag tittar på, inte ett bestämt möte.
+
+## Samtalen får vara öppna, men bokad tid är inget resultat
+
+Jag uppskattar möten där kolleger upptäcker att de har förstått en fråga olika. Den upptäckten kan vara viktigare än att vi snabbt enas. Min tanke är alltså inte att varje samtal ska pressas fram till ett beslut.
+
+Det som retar mig är något annat: att tid i kalendern så lätt behandlas som ett resultat i sig. Timmen är bokad, alltså har något hänt. Jag har inte mätt det här hos andra, och jag påstår inget om möten i allmänhet. Det är min reflektion, med den räckvidd en reflektion har.
+
+## En fråga om gemensam förståelse kan stå bredvid klockslagen
+
+Ändå tycker jag att den som fyller i en mall borde få formulera varför vi behöver just varandras tid. Också när syftet är att undersöka något tillsammans finns det ett skäl att skriva ner. Samtal kan skapa förtroende. Samtal kan hitta en fråga vi inte visste att vi behövde ställa. Inget av det kräver ett beslut, men båda delarna tål att motiveras.
+
+Så jag vill prova en enkel fråga bredvid tiden: vad behöver vi förstå tillsammans?
+
+## Ännu en ruta kanske inte hjälper, men den är värd att pröva
+
+Där börjar tvivlet. Det finns en komik i att försöka lösa ett problem med formulär genom att utöka formuläret – bibliotekarien som svarar på en mall med mer mall. Jag vet inte om ytterligare en ruta gör våra möten bättre. Kanske blir frågan bara en rad till att fylla i.
+
+Jag vill prova den i alla fall, och behålla båda hållningarna så länge: hoppet om frågan och tvivlet på ännu en ruta. Pröva gärna själv nästa gång du fyller i en mötesmall: skriv vad ni behöver förstå tillsammans, och lägg märke till om svaret säger mer än klockslaget.
+```
+
+Utöver redovisningen ovan har körningen gjort följande ändringar. Texten har fått den anatomi en krönika kräver: rubriken är förtydligad, och en ingress, tre mellanrubriker och en avslutande läsaruppmaning har lagts till. Allt är skrivet ur textens eget innehåll. Den avslutande språkgranskningen bytte ett engelskt tankstreck (em-streck) mot svenskt tankstreck. `input.md` är oförändrad, och inga filer har skrivits.

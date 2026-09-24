@@ -1,0 +1,34 @@
+Granskningen hittade 14 problem, och alla står kvar olösta. Texten nedan är därför oförändrad. Den enda tillåtna korrigeringsrundan (`--max=1`) avvisades, och korrläsningen hittade inga mekaniska fel.
+
+**Inställningar:** genre `article` och språk `sv` kommer från anropet. Ingen teknik används: genren `article` anger ingen teknik som den normalt skrivs med. Texten har ingen `kntnt`-metadata, och ingen lades till.
+
+**Den avvisade rundan:** en korrigering gjordes, men den kasserades helt och texten återställdes som den kom in. Den nya mellanrubriken "Driftteknikern vill analysera mer före ändrad styrning" sa samma sak som meningen direkt under den ("Driftteknikern Elin Rask rekommenderar att koppla temperaturserier till användningstider innan styrningen ändras"). Läsaren hade mött meningen som en upprepning av rubriken. Det felet fanns inte i originalet, och därför sparades ingenting från rundan. Beslutet att ta bort eller skriva om en mellanrubrik som upprepar sin första mening är ditt.
+
+```markdown
+# Givarna räddar skolan från en katastrof
+
+**Givarna registrerade temperaturer under 20 grader i sex klassrum. Givarna registrerade temperaturer under 20 grader i sex klassrum.**
+
+Givarna registrerade temperaturer under 20 grader i sex klassrum. Katastrofen lurade bakom varje hörn. Fastighetskontorets rapport *Mätförsök i Björkskolan* från den 12 mars 2026 anger att 14 av 120 lektionspass hade minst ett värde under kontorets egen arbetsgräns på 20 grader, vilket inte är en lagregel, och att försöket varade fyra veckor, medan två givare stod vid ytterväggar och fyra vid innerväggar, utan att placeringens effekt jämfördes experimentellt. Operativ temperatur saknas, trots att resonemanget bygger på operativ temperatur, som är ett mått på lufttemperatur och värmestrålning från omgivande ytor, medan givarna bara mätte luften där de satt. Det saknas mätningar av luftdrag och elevernas upplevelse och uppgifter om hur länge temperaturerna låg under gränsen, men ändå är det helt säkert att givarna har gjort eleverna friskare, trots att ingen effekt på hälsan har undersökts. Driftteknikern Elin Rask rekommenderar att koppla temperaturserier till användningstider innan styrningen ändras, och nästa försök är tänkt att använda likadant placerade givare i november, fast finansieringen inte är beslutad. Det är viktigt att notera att detta är mycket viktigt för alla som tycker att temperatur är viktigt. Kontakta oss för att rädda framtiden.
+```
+
+**Olösta problem (alla 14):**
+
+1. **Vinkeln är oklar.** Rubriken lovar en räddning och ingressen ett mätresultat. Brödtexten redovisar ett mätförsök och dess brister, och slutet uppmanar läsaren att rädda framtiden. Texten läser som ett oredigerat utkast snarare än en färdig artikel, och läsaren vet inte vad hen ska förstå.
+2. **Rubriken säger mer än texten.** Texten visar varken en räddning eller en katastrof, och "räddar" påstår ett orsakssamband som texten inte stöder. Tonen är högre än textens. "Givarna" i bestämd form förutsätter att läsaren redan vet vilka givare det gäller.
+3. **Ingressen upprepar sig.** Samma mening står två gånger, ord för ord. Ingressen går inte att förstå ensam: den säger inte vilka givare, vilken skola eller vilket försök det gäller. Den säger inte heller vad läsaren får ut av artikeln.
+4. **Ingress och lead börjar likadant.** Båda inleds med "Givarna" enligt mätskriptet. Leadens första mening är ingressens mening igen, så texten börjar om i stället för att gå vidare.
+5. **Leaden presenterar inte det den nämner.** "Givarna" står först, men skolan och rapporten nämns först mitt i stycket.
+6. **"Katastrofen lurade bakom varje hörn."** Påhittad dramatik som inget i texten stöder. Hela meningen är felet.
+7. **"men ändå är det helt säkert att givarna har gjort eleverna friskare"** motsägs av bisatsen direkt efter, om att ingen effekt på hälsan har undersökts. Det är en orsaksslutsats utan stöd. Bisatsen om vad som inte undersökts begränsar vad texten påstår och ska stå kvar.
+8. **"Det är viktigt att notera att detta är mycket viktigt …"** är en cirkulär utfyllnadsmening som inte säger något.
+9. **"Kontakta oss för att rädda framtiden."** Texten förklarar aldrig vilka "oss" är, och "rädda framtiden" har inget stöd. Uppmaningen följer inte av något i artikeln.
+10. **Leaden är ett enda stycke på 187 ord** (mätt). Normen är högst 80 ord, och stycket rymmer minst sex separata tankar.
+11. **Mellanrubriker och ett avslutande avsnitt saknas** (mätt). Materialet till dem finns redan i texten: resultatet, mätningens brister, rekommendationen och nästa försök.
+12. **Byline saknas** (mätt). Ingen författare nämns någonstans, så den kan inte fyllas i utan att hitta på ett namn.
+13. **"medan" påstår samband som texten inte visar.** Det gäller både mellan försökets längd och givarnas placering och i "medan givarna bara mätte luften där de satt". Den långa meningen gör det också oklart vilka uppgifter som kommer från rapporten.
+14. **Det är oklart vilket "resonemanget" syftar på.** Texten har inte presenterat något sådant resonemang, så läsaren förstår inte varför det spelar roll att operativ temperatur saknas.
+
+**Påståenden:** inga påståenden har tagits bort eller ändrats i den levererade texten.
+
+**Filer:** ingenting skrevs till filsystemet. `input.md` är oförändrad, och alla tillfälliga filer från körningen är borttagna.

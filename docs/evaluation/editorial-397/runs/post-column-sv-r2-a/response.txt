@@ -1,0 +1,55 @@
+Genren är `column`, tekniken `none` och språket `sv`. Alla tre värdena kommer från textens `kntnt`-karta. Tekniken är uttryckligen `none`, så ingen berättarbåge har tillämpats. Kartan stämde redan med de upplösta värdena och är oförändrad.
+
+````markdown
+---
+kntnt:
+  genre: column
+  technique: none
+  language: sv
+---
+
+# Rutan som inte finns
+
+Av Nora Vik
+
+Jag granskar bibliotekets mötesmall. Där finns rutor för starttid, sluttid, deltagare och dagordning. Någon ruta för det beslut vi ska kunna fatta när vi går därifrån finns inte. Det här är en iakttagelse av ett dokument, inte en scen från ett visst möte. Mallen vill veta när vi ses och vilka som kommer. Vad tiden ska leda till frågar den inte om.
+
+En dagordning räknar upp vad vi ska tala om. Den säger inte varför vi behöver göra det tillsammans.
+
+Missförstå mig rätt: jag uppskattar möten där kolleger upptäcker att de har förstått en fråga olika. Den upptäckten kan vara viktigare än att vi snabbt enas. Det som retar mig är något annat – att tid i kalendern så lätt behandlas som ett resultat i sig. Timmen är bokad, alltså har något hänt. Det är min reflektion, inte något jag har mätt hos andra.
+
+Min tanke är inte att varje samtal ska pressas till ett beslut. Samtal kan skapa förtroende, och de kan få fram en fråga vi inte visste att vi behövde ställa. Men den som fyller i en mall borde få formulera varför vi behöver just varandras tid, också när syftet är att undersöka något tillsammans.
+
+Sedan kommer invändningen, och den är min egen. Jag vet inte om ytterligare en ruta gör möten bättre. Det finns en komik i att försöka lösa ett problem med formulär genom att utöka formuläret, och komiken blir inte mindre av att förslaget kommer från mig.
+
+Ändå vill jag prova en enkel fråga bredvid tiden: vad behöver vi förstå tillsammans? Jag vet inte om den överlever mötet med en verklig dagordning, och jag tänker inte låtsas att jag gör det. Hoppet om frågan och tvivlet på ännu en ruta får samsas ett tag till.
+````
+
+**Olösta fynd**
+
+Alla tre fynden står kvar i texten ovan.
+
+1. **Rubriken är gåtfull och upprepar första stycket (olöst).** Rubriken `# Rutan som inte finns` har 20 tecken och 4 ord.
+   - Den säger inte vilken ruta det gäller. Den säger inte heller att krönikan handlar om en mötesmall som frågar när och vilka, men inte vad tiden ska leda till.
+   - En krönikerubrik får vara suggestiv, men den ska gå att förstå på egen hand och ange krönikans vinkel.
+   - Rubriken återger också första styckets "Någon ruta för … finns inte".
+   - Den som bara ser rubriken kan inte avgöra om texten är för dem. När läsaren sedan kommer till första stycket får hen samma sak en gång till i stället för något nytt.
+2. **Ingress saknas (olöst).** Texten har ingen ingress, alltså ett självbärande stycke på högst 60 ord mellan rubriken och brödtexten. En granskning skriver inte delar som saknas, så en person får avgöra vad ingressen ska säga.
+3. **Mellanrubriker och avsnitt saknas (olöst).** Texten har inga avsnitt. Därför räknas hela brödtexten som inledning, med 6 stycken och 290 ord enligt mätskriptet, och avslutningen står inte i ett eget sista avsnitt. Inledningens längd beror bara på att avsnitten saknas, så den har inte kortats. Mellanrubrikerna får en person skriva.
+
+**Ett försök som förkastades**
+
+Rättningsbudgeten var en runda, och den gick till rubriken i fynd 1. Rundan föreslog `# Mötesmallen borde fråga varför vi behöver varandras tid`. Omgranskningen visade att den nya rubriken gjorde påståendet starkare än texten gör:
+
+- Rubriken lägger fram förslaget om en fråga i mallen som ett färdigt krav.
+- Texten lämnar just den frågan öppen: "Jag vet inte om ytterligare en ruta gör möten bättre" och "Hoppet om frågan och tvivlet på ännu en ruta får samsas ett tag till".
+
+Därför förkastades hela rundan och ursprungstexten återställdes. Den levererade texten har kvar den ursprungliga rubriken och fynd 1 som olöst. En person behöver hitta en rubrik som anger vinkeln utan att ta bort krönikans tvivel.
+
+**Påståenden**
+
+Inget påstående har tagits bort eller ändrats i den levererade texten.
+
+**Ändringar**
+
+Den levererade texten skiljer sig från originalet bara genom en mekanisk rättning i korrekturläsningen. Ett engelskt tankstreck (—) i tredje stycket har bytts mot det svenska, med mellanslag på båda sidor (–). Inga andra ändringar har gjorts. Ingen fil har skrivits, input.md är orörd och de tillfälliga filerna har tagits bort.

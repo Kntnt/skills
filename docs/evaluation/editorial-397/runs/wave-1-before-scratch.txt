@@ -1,0 +1,3 @@
+4b992a7aa1b63a730b286d3429ff307e04206b75997cc352367cf597da22aac6  /Users/thomas/Projects/skills/.git/kntnt-orchestrate/397.scratch/evaluator/run.sh
+6dcdb1482af988217b7ad68492698f8ecd4312d0dc08bac49af98e9d2a9ca037  /Users/thomas/Projects/skills/.git/kntnt-orchestrate/397.scratch/evaluator/setup.py
+34cc96a9a90140267d1d466840584f0830e84783ca6d0abe5c42de2d8a78fe39  /Users/thomas/Projects/skills/.git/kntnt-orchestrate/397.scratch/wave-1-before-scratch.txt

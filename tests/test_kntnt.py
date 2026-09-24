@@ -9494,8 +9494,7 @@ ESTABLISH_BEFORE_THE_BUDGET = "the third condition is tested before the fourth"
 # A review no longer writes a part the text lacks, so the parts named are the
 # ones a round changes rather than writes (issue #397).
 REDLINE_PARTS_A_ROUND_WRITES = (
-    "a headline, a standfirst or a subheading that said something else before"
-    " the round"
+    "a headline, a standfirst or a subheading that said something else before the round"
 )
 HELP_NEVER_AN_UNRESOLVED_FINDING = "never reported as an unresolved finding"
 

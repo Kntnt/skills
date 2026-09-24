@@ -1,0 +1,44 @@
+Ingen teknik tillämpades: `kntnt`-kartan anger `technique: none`, och krönikegenren anger heller ingen. Genre (`column`) och språk (`sv`) kommer också från kartan, som redan stämde och därför lämnades orörd. Ingen fil har skrivits.
+
+```markdown
+---
+kntnt:
+  genre: column
+  technique: none
+  language: sv
+---
+
+# Bibliotekets mötesmall har rutor för allt utom poängen
+
+Av Nora Vik, bibliotekarie
+
+Jag granskar bibliotekets mötesmall. Där finns rutor för starttid, sluttid, deltagare och dagordning. Någon ruta för det beslut vi ska kunna fatta när vi går därifrån finns inte. Det är dokumentet jag tittar på, inte ett bestämt möte.
+
+Jag uppskattar möten där kolleger upptäcker att de har förstått en fråga olika. Den upptäckten kan vara viktigare än att vi snabbt enas. Min tanke är alltså inte att varje samtal ska pressas fram till ett beslut.
+
+Det som retar mig är något annat: att tid i kalendern så lätt behandlas som ett resultat i sig. Timmen är bokad, alltså har något hänt. Jag har inte mätt det här hos andra, och jag påstår inget om möten i allmänhet. Det är min reflektion, med den räckvidd en reflektion har.
+
+Ändå tycker jag att den som fyller i en mall borde få formulera varför vi behöver just varandras tid. Också när syftet är att undersöka något tillsammans finns det ett skäl att skriva ner. Samtal kan skapa förtroende. Samtal kan hitta en fråga vi inte visste att vi behövde ställa. Inget av det kräver ett beslut, men båda delarna tål att motiveras.
+
+Så jag vill prova en enkel fråga bredvid tiden: vad behöver vi förstå tillsammans?
+
+Där börjar tvivlet. Det finns en komik i att försöka lösa ett problem med formulär genom att utöka formuläret – bibliotekarien som svarar på en mall med mer mall. Jag vet inte om ytterligare en ruta gör våra möten bättre. Kanske blir frågan bara en rad till att fylla i.
+
+Jag vill prova den i alla fall, och behålla båda hållningarna så länge: hoppet om frågan och tvivlet på ännu en ruta.
+```
+
+**Åtgärdat**
+
+- **Rubriken förstods inte fristående.** "Mallen" förutsatte att läsaren redan visste vilken mall det gällde. Nu står "bibliotekets mötesmall" i rubriken, hämtat ur inledningen. Rubriken är 54 tecken och 8 ord och påstår inget mer än förut.
+
+**Olöst – kräver att en person skriver delarna**
+
+1. **Ingress saknas.** Artikelanatomin kräver ett fristående, sammanfattande stycke på högst 60 ord efter rubriken. Utan det får den som bara ser rubrik och ingress, till exempel i ett flöde, inte veta vad krönikan handlar om eller vad den ger.
+2. **Mellanrubriker och avslutande avsnitt saknas.** Hela brödtexten, 7 stycken och 274 ord, mäts därför som en enda inledning. Den som skummar på webben får ingen orientering i texten.
+3. **Uppmaning till läsaren saknas.** Slutet säger bara vad skribenten själv tänker göra ("Jag vill prova den i alla fall …"). Läsaren uppmanas ingenstans att pröva, lägga märke till eller ompröva något. Närmast kommer fjärde stycket, "den som fyller i en mall borde få formulera …", men det riktar sig inte till läsaren. Att vända det till en uppmaning vore att lägga till något skribenten inte har sagt.
+
+Korrigeringsbudgeten (1) är förbrukad.
+
+**Påståenden:** Inga påståenden har tagits bort eller ändrats i räckvidd, säkerhet, tillskrivning, kronologi, orsakssamband eller betydelse. De avgränsande meningarna ("Det är dokumentet jag tittar på …", "Jag har inte mätt det här hos andra …", "Det är min reflektion …") står kvar ordagrant.
+
+Jämfört med originalet har rubriken skrivits om så att den säger vilken mall det gäller. Korrekturläsningen på slutet bytte också ett engelskt tankstreck (—) mot ett svenskt (–). I övrigt är texten oförändrad.

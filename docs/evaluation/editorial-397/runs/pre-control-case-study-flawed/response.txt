@@ -1,0 +1,45 @@
+Kontrollen gick igenom `input.md` som ett kundcase på svenska (`sv`) utan berättarteknik, eftersom genren inte anger någon. Jag gjorde en korrigeringsrunda, vilket är hela budgeten. Tre fynd står kvar olösta eftersom texten saknar underlaget som skulle behövas. Svaret är målet, så `input.md` är orörd.
+
+```markdown
+# Ärenden tilldelades snabbare i Elm Quays försök
+
+**Under ett åtta veckor långt försök med programvara från leverantören Svale registrerade Elm Quay 31 ärenden, akuta ärenden undantagna. Tiden till tilldelning var två arbetsdagar mot tidigare tre, men enligt kundens försöksanteckning kan skillnaden inte tillskrivas programvaran. Läs vad kundens arbetsledare Maya Lind skulle göra annorlunda.**
+
+Elm Quay använde programvara från Svale i ett åtta veckor långt försök. Kundens försöksanteckning visar både utfallet och vad utfallet inte säger, och arbetsledaren Maya Lind på Elm Quay ger sin bedömning.
+
+## Maya Lind bedömer försöket
+
+– Att ha en gemensam bild av ärendena hjälper oss, men jag skulle lägga till en vecka för förberedelser, säger Maya Lind, arbetsledare hos kunden.
+
+## Kortare tilldelningstid kan inte knytas till programvaran
+
+Enligt kundens försöksanteckning registrerades 31 ärenden under åtta veckor, med akuta ärenden undantagna. Tiden till tilldelning var två arbetsdagar jämfört med tre tidigare. Anteckningen säger att arbetsbelastningen var olika och att skillnaden inte kan tillskrivas programvaran.
+
+– Jag skulle välja att göra försöket igen, säger Lind.
+
+Kundcaset publiceras av leverantören Svale.
+```
+
+**Olösta fynd**
+
+1. **Byline saknas.** Artikelns anatomi kräver en byline mellan ingressen och brödtexten. Varken texten eller anropet namnger någon författare, så platsen står tom. Det är det enda mätbara krav som fortfarande inte uppfylls.
+2. **Uppmaning till handling saknas i avslutningen.** Ett kundcase får bara använda erbjudanden, länkar och kontaktvägar som redan finns, och texten innehåller inga. Läsaren får alltså inget nästa steg.
+3. **Genrens luckor.** Texten säger inte vad Elm Quay är, vilka slags ärenden det gäller, vad som ledde till försöket eller vad Svales programvara gör och hur den infördes. Utan det kan läsaren inte bedöma resultatet. Luckorna kan inte fyllas ur texten.
+
+**Strukna påståenden**
+
+- ”Vi på Svale är världsledande på att skapa framgång” i inledningen. Det saknade stöd, och leverantören berättade med sitt eget ”vi”.
+- ”kunden stod hjälplös innan vi kom” i inledningen. Det var en räddningsberättelse utan stöd, och resten av texten visar kunden som en part som själv agerar.
+- ”Vår programvara orsakade därför hela förbättringen.” Meningen drog en slutsats om orsak som meningen före uttryckligen avvisar. Den meningen, om att arbetsbelastningen var olika och att skillnaden inte kan tillskrivas programvaran, står kvar ordagrant.
+- ”räddade” och ”fantastiska” i rubriken, och ”bevisar allt” i den andra underrubriken. Orden påstod mer än texten stöder.
+- Bryggan ”Maya Lind säger att det hjälper att ha en gemensam bild av ärendena.” Den upprepade bara citatet. Påståendet står kvar i citatet, och vem som säger det framgår av anföringen.
+- ”Elm Quay registrerade 31 ärenden.” ströks ur inledningen eftersom meningen upprepade ingressen. Uppgiften står kvar, med period och undantag, i ingressen och i resultatavsnittet.
+
+**Ändrade påståenden**
+
+- Siffran 31 i ingressen står nu tillsammans med perioden på åtta veckor och undantaget för akuta ärenden.
+- Att Elm Quay prövade programvara från Svale i ett försök står nu uttryckligen i ingressen och inledningen. Tidigare framgick det bara indirekt av ”Vår programvara” och sista raden.
+- Rubriken säger nu att ärenden tilldelades snabbare. Det bygger på att tiden gick från tre arbetsdagar till två, och rubriken påstår inget orsakssamband.
+- Underrubriken ”Kortare tilldelningstid kan inte knytas till programvaran” säger utan källa det som brödtexten tillskriver kundens försöksanteckning. Brödtexten anger fortfarande att det är anteckningen som säger det.
+
+Utöver påståendena ovan skrevs rubriken och båda underrubrikerna om så att de håller sig till textens egen styrka. Den första underrubriken lämnar dessutom poängen åt citatet under den. Den dubblerade ingressen skrevs om till en fristående sammanfattning. Inledningen skrevs om så att den för texten framåt och introducerar försöket och Maya Lind. Reklamspråk och leverantörens eget ”vi” togs bort. Den avslutande mekaniska korrekturläsningen hittade inga fel att rätta.

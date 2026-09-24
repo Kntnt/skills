@@ -1,0 +1,57 @@
+I reviewed `input.md` and made one correction round, then a final spelling-and-grammar pass. The text is clean: no findings remain, and `input.md` itself was not changed.
+
+**Settings, all from the file's `kntnt` block:** genre `opinion`, technique `none`, British English (`en_GB`). The file sets the technique to `none` itself, so no story structure was applied. The opinion genre doesn't name one either.
+
+**What the review found:** seven problems, and the one correction round (1 of 1 allowed) fixed all of them.
+1. **No opening paragraph after the summary.** Read without the summary paragraph, the body never introduced the proposal, the board or the 18 June meeting, but still referred back to them.
+2. **No byline**, even though the sign-off names the author.
+3. **The summary paragraph never named Lervik.**
+4. **Öppna beslut appeared without introduction,** so the reader couldn't tell who "we" was until the sign-off.
+5. **A subheading repeated the sentence under it.** "Six months, both routes, and something to measure" said the same as that section's first sentence.
+6. **The headline was too long:** 12 words and 68 characters, against a guideline of eight words and 60 characters.
+7. **Paragraphs were long throughout.** Sections 1 and 2 were each one block of 84–85 words.
+
+**Claims:** no claim was removed or changed in scope, certainty, attribution, timing, cause or meaning. The summary paragraph now names Lervik's council executive board, which the headline and body already implied.
+
+```markdown
+---
+kntnt:
+  genre: opinion
+  technique: none
+  language: en_GB
+---
+
+# Keep Lervik's phone booking until costs are known
+
+On 18 June Lervik's council executive board is asked to remove phone booking from all seven community venues from September. The officers' report gives one reason: staff should not have to enter the details in two flows. That is a fair thing to want. It is not yet a reason to make the change permanent.
+
+By Sanna Ek
+
+Phone booking at all seven of Lervik's community venues would stop for good from September if the council executive board approves the proposal on 18 June. The board should postpone that permanent step until it has figures on the staff time each booking route takes.
+
+## What the pilot actually counted
+
+The pilot report *Bokning av föreningslokaler*, dated 8 April 2026, covers an eight-week trial in two venues. It records 96 bookings made on the web and 24 made by phone.
+
+Those figures are the report's, and so are their limits: it counts bookings rather than unique people, and it measures nothing about age, functional ability or how used to digital services people are. Twenty-four phone bookings therefore cannot tell us what share of Lervik's residents are unable to book digitally. Nobody should claim they can.
+
+## A motive on the table, but no figures under it
+
+The administration's objection to keeping both routes is double administration, and I take it at face value: it is not a claim that people who ring are lazy or expensive.
+
+But the documents contain no measurement of how long either route takes staff, and no calculation of what removing one would save. The board is being asked to close a channel for good on the strength of an inconvenience the documents put no number on. That is thin ground for making the change permanent.
+
+## Measure staff time per channel and ask users for their reasons
+
+Öppna beslut, whose spokesperson I am, proposes a six-month trial in all seven venues with both booking routes kept open. During it, the administration records the time each booking route takes and asks users to say, voluntarily, why they chose the phone or the web. We make no claim to have funded or costed that trial. What it would cost is for the board to weigh.
+
+A booking made by phone is not proof that somebody cannot use the web. It is a reason to find out why the phone is still being used. I am not against digital booking. I am against settling its shape before the council can set the work each route costs staff against what it is worth to the people who use it.
+
+## What the board can decide on 18 June
+
+Postpone the permanent switch and run the six months with both routes open. When the trial has produced figures, decide whether a channel should be removed, changed or kept. That decision is the board's either way, and it will be a better one for being taken with the cost of both routes on the table.
+
+— Sanna Ek, spokesperson for Öppna beslut
+```
+
+**Summary of changes:** The run added the parts an opinion piece needs: a byline, and an opening paragraph that introduces the proposal, the board and the 18 June decision and states the author's position. The headline was shortened to eight words, the subheading that repeated the text below it was reworded, and Lervik and the author's link to Öppna beslut are now named where the reader first needs them. The two longest paragraphs were split at their natural break without changing any words. The final spelling-and-grammar pass found nothing to correct.

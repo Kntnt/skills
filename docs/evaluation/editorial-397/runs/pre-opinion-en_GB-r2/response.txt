@@ -1,0 +1,46 @@
+I reviewed `input.md` as an opinion piece in British English with no technique, as its `kntnt` frontmatter specifies. The genre also names no technique, so no set structure was applied. The frontmatter already matched these settings, so I left it unchanged. The review found seven problems, and one correction round fixed all of them. A fresh re-review found no new ones, and the article's structure checker now passes. `input.md` is unchanged and no files were written.
+
+```markdown
+---
+kntnt:
+  genre: opinion
+  technique: none
+  language: en_GB
+---
+
+# Keep Lervik's telephone booking through a six-month trial
+
+Lervik's association venues may stop taking bookings by telephone in September. The municipality's pilot counted bookings, not the people behind them, and the papers before the executive board put no number on the staff time a second booking flow costs. Öppna beslut wants the missing figures gathered before anything is decided.
+
+*By Sanna Ek, spokesperson for Öppna beslut*
+
+On 18 June the municipal executive board has before it a proposal that telephone booking of Lervik's association venues disappear in September. It should not settle that yet: keep both routes, telephone and web, for six months, in all seven venues, and decide afterwards, with figures in hand.
+
+## The pilot counted bookings, not people
+
+The municipality's pilot report on the booking of association venues, dated 8 April 2026, covers an eight-week trial in two venues: 96 bookings were made on the web and 24 by telephone. The report counts bookings rather than unique people, and it measures nothing about age, ability or digital habit.
+
+Those 24 bookings therefore settle nothing about the residents behind them. They cannot show what share of residents are unable to book digitally; nor do they show the opposite, that the telephone survives out of habit. The report does not measure it.
+
+## The proposal rests on an inconvenience the papers do not measure
+
+The officers' report before the June meeting proposes removing telephone booking in all seven venues from September. The reason given is that staff should not have to enter details into two flows. Double administration is the administration's genuine objection to keeping both channels, not any view that telephone users are lazy or expensive, and I do not accuse it of holding one.
+
+What the papers do not contain is any measurement of the time that second flow costs, or any calculation of the saving. A permanent change for seven venues is being proposed on the strength of a nuisance the papers put no number on.
+
+## Six months would produce the figures
+
+Öppna beslut proposes six months in all seven venues with both routes kept open. The administration would record how long each route takes and would ask users to state, voluntarily, why they chose the telephone or the web. We make no claim to have funded or costed that trial; what it would cost is for the board to weigh.
+
+That a booking comes in by telephone is not proof that somebody cannot use the web. It is a reason to find out why the telephone is still being used. I am not against digital booking. I am against deciding before the staff time each route takes can be weighed against what each route is worth to the people who use it.
+
+## Postponing on 18 June is the less risky choice
+
+The board can adopt the September removal on the material in front of it. Or it can postpone that decision, run the trial in all seven venues, and afterwards remove, change or keep a channel with time figures and users' own reasons on the table. The trial costs something we have not costed; asking what that sum is, before the channel goes, is the smaller risk.
+```
+
+**Claims that changed.** No claim was removed. Two claims now read differently:
+- **Headline:** it no longer says "until Lervik knows why it is used"; it now says "through a six-month trial". The headline now promises a fixed six months, where before it promised to wait until the reasons were known. This matches the six months the text proposes. The fix was needed to bring the headline within eight words and make it clear it is about booking.
+- **Section "Six months would produce the figures":** "the cost of the work" became "the staff time each route takes". This narrows a vague cost to the staff time the rest of the text talks about. It was changed because "the work" could be read as the cost of the trial.
+
+**What changed overall.** The text gained a standfirst built only from what the article already says. The byline now reads "By …" and sits after the standfirst. The headline is now 8 words instead of 10, and says the issue is telephone booking. The last subheading used to just name the topic; it now states the section's conclusion. Two sentences became clearer: the lead now names both booking routes, and the ending's opening "It" now reads "The board". The final proofreading pass found no spelling, grammar or punctuation errors.

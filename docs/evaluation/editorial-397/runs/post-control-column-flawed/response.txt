@@ -1,0 +1,33 @@
+Granskad som krönika (`column`) på svenska (`sv`), båda angivna i anropet. Ingen teknik tillämpades eftersom krönikegenren inte anger någon.
+
+```markdown
+# Mötesmallen frågar inte vad vi ska förstå tillsammans
+
+Nora Vik
+
+Förra tisdagen satt jag gråtande i bibliotekets mötesrum när min chef sade: ”Nu måste allt bli digitalt.” Det var mitt första möte om vår nya mötesmall. Jag har aldrig deltagit i något möte om vår nya mötesmall.
+
+Vår mötesmall har plats för starttid och sluttid men inte för vad vi ska förstå tillsammans.
+
+Samtal kan ha värde utan att leda till beslut. Jag vill prova frågan vad vi behöver förstå tillsammans, men jag vet inte om ytterligare en ruta gör möten bättre.
+```
+
+**Olösta fynd**
+
+Budgeten var en korrigering och är förbrukad. De här fem fynden lämnas åt dig:
+
+1. **Ingressen saknas.** Mellan rubriken och bylinen ska det stå ett självständigt stycke på högst 60 ord som sammanfattar krönikan. En läsare som bara ser rubriken får ingen sammanfattning. Delen skrivs inte vid en granskning.
+2. **Mellanrubriker och avsnitt saknas.** Texten har inga avsnitt, så inledningen blir tre stycken lång. Webbläsaren får inga ingångar i texten. Delen skrivs inte vid en granskning.
+3. **Den personliga berättelsen motsäger sig själv.** Det står: ”Det var mitt första möte om vår nya mötesmall. Jag har aldrig deltagit i något möte om vår nya mötesmall.” Läsaren kan inte veta om skribenten har varit på ett sådant möte, och öppningsscenen tappar trovärdighet. Texten visar inte vilket påstående som stämmer, och att välja ett av dem skulle ändra vad texten säger.
+4. **Öppningsscenen hänger inte ihop med reflektionen.** Gråten och chefens replik ”Nu måste allt bli digitalt.” tas aldrig upp igen. Läsaren förstår inte vad de har med mötesmallen att göra. Sambandet går inte att skapa utan att hitta på ett motiv eller en händelse.
+5. **Uppmaningen till läsaren saknas.** Texten säger vad skribenten själv vill prova men ger läsaren inget att pröva, lägga märke till eller ompröva. Delen skrivs inte vid en granskning.
+
+**Borttagna påståenden**
+
+- Korrigeringen av den tomma öppningsfrasen tog bort ”I dagens snabbt föränderliga värld är möten viktigare än någonsin.” Påståendet att möten är viktigare än någonsin saknade stöd i texten, och hela meningen var defekten.
+- Korrigeringen av den tomma utfyllnaden tog bort ”Det är viktigt att vara viktig.” Hela meningen var defekten.
+- Korrigeringen av den generiska avslutningen tog bort slutstycket ”Sammanfattningsvis är möten viktigare än någonsin i dagens snabbt föränderliga värld.” Det upprepade samma påstående utan stöd, och hela stycket var defekten.
+
+Inget annat påstående ändrades.
+
+Rubriken skrevs om utifrån textens egen vinkel och på dess egen styrka. Den gamla rubriken, ”Möten förändrar allt”, lovade en tes som texten inte bär. Den tomma öppningsfrasen, en utfyllnadsmening och den generiska avslutningen togs bort, så att texten nu slutar i skribentens uttalade osäkerhet. Korrekturläsningen hittade inga fel att rätta.

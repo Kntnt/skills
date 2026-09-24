@@ -1,0 +1,1 @@
+/redline --genre=web-copy --language=sv --output=response input.md

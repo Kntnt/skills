@@ -1,0 +1,43 @@
+Konfiguration: krönika (`column`), svenska (`sv`) och ingen teknik. Alla tre värden kommer från textens `kntnt`-karta. Tekniken `none` sattes i kartan och kommer alltså inte från genren.
+
+Granskningen hittade fyra brister, och en korrigeringsrunda åtgärdade alla fyra. Inga fynd återstår.
+
+1. **Ingress saknades.** Texten har nu en ingress på 58 ord mellan rubriken och bylinen. Den bygger enbart på krönikans eget innehåll.
+2. **Mellanrubriker och avslutande avsnitt saknades.** Hela brödtexten (sex stycken) låg under rubriken utan mellanrubriker. Nu består ingångsstycket av ett enda stycke, och två mellanrubriker delar resten i ett avsnitt och ett avslutande avsnitt. Styckena skrevs inte om.
+3. **Rubriken gick inte att förstå fristående.** "Rutan som inte finns" sa inte vilken ruta det gällde eller var den saknades. Den nya rubriken säger vad krönikan handlar om utan att påstå att en ny ruta skulle hjälpa.
+4. **Avslutningen uppmanade inte läsaren till något.** En mening bjuder nu läsaren att själv prova frågan. Skribentens tvivel står kvar oförändrat.
+
+Inga påståenden har tagits bort eller ändrats i räckvidd, säkerhet, tillskrivning, kronologi eller orsakssamband. De två meningarna som avgränsar texten står kvar ordagrant: "Det här är en iakttagelse av ett dokument …" och "Det är min reflektion, inte något jag har mätt hos andra."
+
+```markdown
+---
+kntnt:
+  genre: column
+  technique: none
+  language: sv
+---
+
+# Mötesmallen saknar frågan om varför vi ses
+
+Nora Vik vill att den som fyller i en mötesmall ska få skriva vad den gemensamma tiden är till för, också när syftet är att utforska något ihop. Hon föreslår en enkel fråga om vad vi behöver förstå tillsammans, en fråga du kan ta med till nästa möte, men vet inte om ännu en ruta gör möten bättre.
+
+Av Nora Vik
+
+Jag granskar bibliotekets mötesmall. Där finns rutor för starttid, sluttid, deltagare och dagordning. Någon ruta för det beslut vi ska kunna fatta när vi går därifrån finns inte. Det här är en iakttagelse av ett dokument, inte en scen från ett visst möte. Mallen vill veta när vi ses och vilka som kommer. Vad tiden ska leda till frågar den inte om.
+
+## Även ett utforskande möte borde få ett uttalat syfte
+
+En dagordning räknar upp vad vi ska tala om. Den säger inte varför vi behöver göra det tillsammans.
+
+Missförstå mig rätt: jag uppskattar möten där kolleger upptäcker att de har förstått en fråga olika. Den upptäckten kan vara viktigare än att vi snabbt enas. Det som retar mig är något annat – att tid i kalendern så lätt behandlas som ett resultat i sig. Timmen är bokad, alltså har något hänt. Det är min reflektion, inte något jag har mätt hos andra.
+
+Min tanke är inte att varje samtal ska pressas till ett beslut. Samtal kan skapa förtroende, och de kan få fram en fråga vi inte visste att vi behövde ställa. Men den som fyller i en mall borde få formulera varför vi behöver just varandras tid, också när syftet är att undersöka något tillsammans.
+
+## Jag tvivlar på fler rutor men vill prova en fråga
+
+Sedan kommer invändningen, och den är min egen. Jag vet inte om ytterligare en ruta gör möten bättre. Det finns en komik i att försöka lösa ett problem med formulär genom att utöka formuläret, och komiken blir inte mindre av att förslaget kommer från mig.
+
+Ändå vill jag prova en enkel fråga bredvid tiden: vad behöver vi förstå tillsammans? Jag vet inte om den överlever mötet med en verklig dagordning, och jag tänker inte låtsas att jag gör det. Prova gärna att ställa den själv nästa gång du kallar till ett möte, och lägg märke till om svaret säger något som dagordningen inte säger. Hoppet om frågan och tvivlet på ännu en ruta får samsas ett tag till.
+```
+
+Rubriken är omskriven, och texten har fått en ingress, två mellanrubriker och en uppmaning till läsaren i sista stycket. Den mekaniska slutkorrekturen ändrade ett engelskt långt tankstreck till ett svenskt tankstreck med mellanslag. Allt annat, inklusive frontmatter, är oförändrat. `input.md` har inte ändrats, och alla tillfälliga filer från körningen är borttagna.

@@ -1,0 +1,1 @@
+Repair Swedish idiom calque, abstract audience description, opaque fragmented headings and misleading Book and pay action contradicted by the page. Preserve price, scope, timing, deliverables, conditions and destination. Existing content permits useful regrouping without a brief.

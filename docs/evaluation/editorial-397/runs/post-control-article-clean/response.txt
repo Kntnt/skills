@@ -1,0 +1,39 @@
+Granskad som **artikel** på **svenska**, båda enligt anropet. Ingen berättarteknik tillämpades eftersom genren artikel inte anger någon. Den enda korrigeringsrundan åtgärdade alla tre anmärkningarna. Ingen anmärkning återstår och inget skrevs till disk. `input.md` är oförändrad.
+
+````markdown
+# Björkskolans givare visar ibland kall luft, inte orsaken
+
+**Under 14 av 120 lektionspass registrerade givarna i Björkskolan temperaturer under fastighetskontorets egen arbetsgräns. Fyra veckors mätningar pekar ut tillfällen att undersöka närmare, men förklarar inte varför luften var kall. Här är vad försöket kan säga, och vad som behövs för att komma vidare.**
+
+Text: Hedda Lund
+
+En temperaturgivare mäter luften där den sitter. Det gör placeringen viktig när fastighetskontoret ska tolka fyra veckors mätningar i Björkskolans sex klassrum. Genomgången nedan visar vad värdena räcker till och var gränsen går.
+
+## Låga värden räknas, men luftdrag och upplevelse saknas
+
+Kontoret valde 20 grader Celsius som arbetsgräns. Rapporten *Mätförsök i Björkskolan*, daterad 12 mars 2026, räknar 14 lektionspass av 120 med minst en mätning under den gränsen. Hur länge temperaturen låg under den anger rapporten inte. Gränsen är kontorets egen, vald för det här försöket.
+
+Givarna mätte varken luftdrag eller elevernas upplevelse. Ett lågt värde säger alltså när luften var kall, men inte hur rummet kändes.
+
+Driftteknikern Elin Rask sammanfattar: ”Vi vet när vi behöver titta närmare. Vi vet ännu inte varför det blev kallt just då.”
+
+## Nästa försök behöver mer än givare
+
+Rask rekommenderar att temperaturserierna kopplas till rummens användningstider innan styrningen ändras. Nästa försök planeras för november med likadant placerade givare, men finansieringen är inte beslutad.
+
+Lägg därför tiderna för när rummen används bredvid mätvärdena innan nästa givare sätts upp.
+````
+
+**Åtgärdade anmärkningar**
+
+1. **Rubriken** ”Mätförsöket i Björkskolan visar när, inte varför” gick inte att förstå utan texten. ”När” och ”varför” saknade objekt, och ingressen upprepade dessutom samma poäng med samma ord. Den nya rubriken säger vad givarna visar, och med samma styrka som texten.
+2. **Första mellanrubriken** ”En gräns för det lokala försöket” beskrev bara avsnittets första stycke. Den nya rubriken tar med också det som givarna inte mätte, men lämnar Rasks citat dess egen poäng.
+3. **Ingressens sista mening** kallade försöket ”kort” utan att texten gav något att jämföra med. Omdömet är borttaget.
+
+**Påståenden som ändrats eller tagits bort**
+
+- *Borttaget:* påståendet att försöket var kort. Det togs bort i åtgärden av anmärkning 3, som gällde just det omdömet.
+- *Ändrat, rubriken:* ”visar när, inte varför” har blivit ”visar ibland kall luft, inte orsaken”. Rubriken anger nu en frekvens, ”ibland”, som vilar på brödtextens 14 av 120 lektionspass. Ändringen hör till åtgärden av anmärkning 1.
+- *Ändrat, första mellanrubriken:* rubriken säger inte längre att gränsen gäller det lokala försöket. Den säger i stället att låga värden räknas och att luftdrag och upplevelse saknas. Avgränsningen finns kvar i sin helhet i meningen ”Gränsen är kontorets egen, vald för det här försöket.” Ändringen hör till åtgärden av anmärkning 2.
+
+Jämfört med originalet har körningen skrivit om rubriken och den första mellanrubriken och strukit ett värderande ord i ingressen. Övrig text, citatet och formateringen är oförändrade. Den avslutande språkliga korrekturen hittade inga fel att rätta.

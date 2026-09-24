@@ -1,0 +1,27 @@
+```markdown
+# Så fungerar intresseanmälan
+
+En intresseanmälan till Svales genomgång av bokningsrutiner är inte en beställning. Den hjälper Svale att avgöra om genomgången passar föreningens behov.
+
+## Uppgifter att lämna
+
+Ange namn, förening och e-postadress i formuläret. Inga betalningsuppgifter behövs.
+
+## Svar inom tre arbetsdagar
+
+Svale svarar inom tre arbetsdagar via e-post för att stämma av uppdraget och föreslå en mötestid. En tid bokas alltså inte när formuläret skickas in.
+```
+
+**Inställningar:** genre `web-copy` och språk `sv`, båda från anropet. Ingen teknik används, eftersom genren `web-copy` inte anger någon. Korrigeringsbudgeten var 1 och gick åt.
+
+**Olöst anmärkning**
+
+1. **Formuläret saknas på sidan.** Sidan skriver ”Ange namn, förening och e-postadress i formuläret” och ”när formuläret skickas in”, men texten innehåller inget formulär. Den anger inte heller någon länk, knapp eller plats där formuläret finns. Läsaren får veta vad som ska fyllas i men inte var. Det går inte att rätta utan formulärets plats eller länk, och den uppgiften finns inte i texten. Någon med tillgång till sidan behöver lägga in formuläret eller länka till det.
+
+**Löst anmärkning**
+
+2. **Svarstiden stod bara i mellanrubriken.** Uppgiften om tre arbetsdagar fanns bara i rubriken ”Svar inom tre arbetsdagar”. Nu står den också i brödtexten under rubriken.
+
+**Påståenden:** inget påstående har strukits och inget har ändrats i omfattning, säkerhet eller betydelse. Svarstiden säger samma sak som rubriken redan gjorde.
+
+**Ändringar:** den enda ändringen är att svarstiden, tre arbetsdagar, nu också står i brödtexten under mellanrubriken. Korrekturläsningen hittade inga fel att rätta. Källfilen `input.md` är orörd, och alla tillfälliga filer från körningen är borttagna.
