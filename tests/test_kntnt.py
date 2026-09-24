@@ -10408,6 +10408,86 @@ def test_every_correction_brief_preserves_code_beside_quotations() -> None:
         )
 
 
+# Where a correction subagent keeps a file it writes while working. The rule
+# about the brief itself stops at the brief, and a subagent left to choose for
+# its own working files chose a fixed name in a scratchpad its session shared
+# with a concurrent run of the same Skill on the same text: that run wrote the
+# same name, and the subagent took the other run's repair for its own stale
+# copy and deleted it (issue #401). The paragraph is written to the subagent,
+# so it stands below the brief's `---` line, where the text it receives
+# starts, and it names the failure rather than only the rule, because a rule
+# alone did not keep two of #383's judges out of `/tmp`.
+OWN_FILES_HEADING = "**Your own working files.**"
+OWN_FILES_RULE = (
+    "a directory you created for this one round",
+    "including on failure",
+    "A fixed name under a shared temporary directory is not that directory",
+    "at the same time",
+    "on this same text",
+    "your own stale copy",
+    "work that is not yours",
+)
+
+
+def _own_files_paragraph(brief: Path) -> str:
+    """Return the paragraph of *brief* that says where the subagent's files go."""
+
+    subagent = brief.read_text(encoding="utf-8").partition("\n---\n")[2]
+    paragraphs = [block for block in subagent.split("\n\n") if block.strip()]
+    found = [
+        index
+        for index, block in enumerate(paragraphs)
+        if block.startswith(OWN_FILES_HEADING)
+    ]
+    assert len(found) == 1, (
+        f"{brief}: the text written to the subagent carries no paragraph of its"
+        f" own saying where a file it writes while working goes, so it picks a"
+        f" name for itself, and a fixed name in a scratchpad two runs share is"
+        f" one a concurrent run overwrites (issue #401). See {STANDARD}."
+    )
+    following = paragraphs[found[0] + 1] if found[0] + 1 < len(paragraphs) else ""
+    assert following.startswith("**What you return.**"), (
+        f"{brief}: the paragraph on the subagent's own files does not stand"
+        f" immediately before the one saying what it returns, where both briefs"
+        f" carry it (issue #401). See {STANDARD}."
+    )
+    return paragraphs[found[0]]
+
+
+def test_every_correction_brief_keeps_the_subagents_own_files_to_its_round() -> None:
+    """A file a correction subagent writes is a name another run can write too.
+
+    Two runs of one Skill from one session share its scratchpad, and a user
+    running two reviews at once is ordinary. A candidate written to a fixed
+    name there was overwritten by a concurrent run repairing the same column,
+    and the subagent deleted what it took for its own stale copy: the other
+    run's repair (issue #401). Each brief tells the subagent to keep such a
+    file in a directory it created for this one round and removes afterwards,
+    in the same words in both, and says why in the failure's own terms.
+    """
+
+    paragraphs = {brief: _own_files_paragraph(brief) for brief in CORRECTION_BRIEFS}
+
+    for brief, paragraph in paragraphs.items():
+        for phrase in OWN_FILES_RULE:
+            assert phrase in paragraph, (
+                f"{brief}: the paragraph on the subagent's own files does not"
+                f" say {phrase!r}, so it states less than the rule and the"
+                f" failure it answers (issue #401). See {STANDARD}."
+            )
+        assert "TMPDIR" not in paragraph, (
+            f"{brief}: the paragraph on the subagent's own files leans on a"
+            f" `TMPDIR` sentence, which Unslop's brief does not carry, so it"
+            f" does not stand on its own (issue #401). See {STANDARD}."
+        )
+
+    assert len(set(paragraphs.values())) == 1, (
+        f"{CORRECTION_BRIEFS}: the two briefs word the rule on the subagent's"
+        f" own files differently, so one Skill's correction round is held to a"
+        f" rule the other's is not (issue #401). See {STANDARD}."
+    )
+
+
 def test_every_editorial_manpage_says_a_code_sample_is_quoted() -> None:
     """Whether a pass will touch the samples in a document is reference material.
 
