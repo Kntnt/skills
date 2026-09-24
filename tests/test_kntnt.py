@@ -9542,6 +9542,15 @@ CHANGED_CLAIM_COUNTERPART = "has a counterpart"
 ASSURANCE_OF_THE_DELIVERED_TEXT = "an account of the text you deliver"
 ASSURANCE_AFTER_THE_FINDINGS = "written after the findings"
 ASSURANCE_NO_CONTRADICTION = "contradicts a finding the same reply states"
+# What the first candidate's arm showed was still open: an entry saying a
+# claim had only moved down the page when the round had copied it there, and
+# a sentence saying nothing else had moved over a heading reworded with a
+# gloss of its own (issue #398).
+ACCOUNT_ENTRY_AS_THE_COMPARISON_SHOWS = "as the comparison shows it"
+ACCOUNT_COPIED_IS_NOT_MOVED = (
+    "a claim a round copied to a second place is not one it moved"
+)
+ASSURANCE_OPEN_IS_ITEMISED = "itemised as changed rather than covered"
 
 # What the run checks a returned text for beside the claims. Comparing claim by
 # claim and nothing else let every difference that moves no claim through: a
@@ -9931,6 +9940,17 @@ def test_the_claim_account_covers_the_claims_a_run_wrote() -> None:
             f" clean bill over what they disclose (issue #398). See"
             f" {STANDARD}."
         )
+        for phrase in (
+            ACCOUNT_ENTRY_AS_THE_COMPARISON_SHOWS,
+            ACCOUNT_COPIED_IS_NOT_MOVED,
+            ASSURANCE_OPEN_IS_ITEMISED,
+        ):
+            assert phrase in delivery, (
+                f"{body_path}: an entry of the claim account may describe a"
+                f" claim otherwise than the delivered text shows it, and a"
+                f" sentence saying nothing else moved may stand over a"
+                f" difference nobody settled (issue #398). See {STANDARD}."
+            )
         for path, text in (
             (body_path, delivery),
             (help_path, help_path.read_text(encoding="utf-8")),

@@ -135,7 +135,7 @@
       "name": "redline",
       "category": "editorial",
       "description": "Review one supplied text against this collection's editorial contract — its genre, its optional technique, its language, and the shared anti-slop catalogue — repair what the review found through a bounded budget of fresh correction subagents, report whatever is left unresolved, and finish with exactly one mechanical pass.",
-      "digest": "6b9d058b3a17a62b57eac2160cc7f7b296f7399c24568dce6ba028d50555ddfa",
+      "digest": "95be459504313ab8b1248244aa6db1be62ef7b5e416b9ea50ff5eebf28af282e",
       "binaries": [
         "uv"
       ],
@@ -151,7 +151,7 @@
       "name": "unslop",
       "category": "editorial",
       "description": "Apply this collection's anti-slop pass to one supplied text and nothing else — false contrasts, empty openings, importance inflation, vague attribution, synonym cycling, robotic rhythm, and generic conclusions — repairing what it finds through a bounded budget of fresh correction subagents and reporting whatever is left. It selects no genre, no technique, and no editorial contract, and it runs no mechanical pass.",
-      "digest": "698541b7a60de24843ae3ee1b3e7d4ee66504b62b268953899e41d58856649b9",
+      "digest": "0d58d0844269f433110115dd781419e95017b71a81ca51937a3131c0e59b4517",
       "binaries": [
         "uv"
       ],
