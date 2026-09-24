@@ -6566,6 +6566,179 @@ def test_editorial_prose_says_quotation_bridge_never_a_bare_bridge() -> None:
         )
 
 
+# What a review may do about a part of the article anatomy (issue #397). A
+# review reports a required part the text does not have and repairs a part the
+# text has; the rule is stated in full where both reviewers reach it, the review
+# extension, and in one sentence where the requirement is stated.
+ANATOMY = EDITORIAL / "article-anatomy.md"
+ANATOMY_REVIEW = EDITORIAL / "article-anatomy.review.md"
+ARTICLE_REVIEW = EDITORIAL / "genres" / "article.review.md"
+REDLINE_SKILL = REPO_ROOT / "skills" / "editorial" / "redline" / "SKILL.md"
+REDLINE_CORRECTION = (
+    REPO_ROOT / "skills" / "editorial" / "redline" / "references" / "correction.md"
+)
+ANATOMY_LIMITS = "Limits are exact; verify each one by counting."
+SKILL_NAMES = re.compile(r"\b(?:redline|write|unslop|proofread)\b", re.IGNORECASE)
+
+
+def _paragraphs(text: str) -> list[str]:
+    return [block.strip() for block in text.split("\n\n") if block.strip()]
+
+
+def test_the_review_extension_reports_an_absent_part_and_repairs_a_present_one() -> (
+    None
+):
+    """An absent part is a finding left for a person; a present one is repaired.
+
+    Writing a standfirst, subheadings or a call to action into a finished text
+    that arrived without them puts words into it that its author never wrote,
+    and every judgement of #383's runs on the four #362 drafts rejected it
+    (issue #397). The review extension is the one file Redline and each of its
+    correction agents load for the anatomy, so it carries the whole rule: which
+    parts it reaches, that a misplaced part is present, that ending content
+    inside the last section is a present ending, and that a failure caused only
+    by an absent part is reported as that part.
+    """
+
+    review = ANATOMY_REVIEW.read_text(encoding="utf-8")
+
+    assert "restore it from the text's own content" not in review, (
+        f"{ANATOMY_REVIEW}: still has a missing part restored from the text's"
+        f" own content, which writes a part the text does not have (issue #397)."
+    )
+    rule = next((block for block in _paragraphs(review) if "not written" in block), "")
+    assert rule, (
+        f"{ANATOMY_REVIEW}: states nowhere that a part the text does not have"
+        f" is reported and not written (issue #397)."
+    )
+    for part in (
+        "headline",
+        "standfirst",
+        "byline",
+        "lead",
+        "section",
+        "ending",
+        "call to action",
+    ):
+        assert part in rule, (
+            f"{ANATOMY_REVIEW}: its rule on absent parts does not name the"
+            f" {part}, so a reviewer may read it as writable (issue #397)."
+        )
+    for point, words in (
+        ("a part the text has is repaired", "repaired"),
+        ("a part in the wrong place is present", "wrong place"),
+        ("ending content inside the last section is a present ending", "last section"),
+        ("a failure caused only by an absent part is that part", "only because"),
+    ):
+        assert words in rule, (
+            f"{ANATOMY_REVIEW}: its rule on absent parts does not say that"
+            f" {point} (issue #397)."
+        )
+
+
+def test_a_band_licenses_no_rewrite_of_a_part_that_meets_its_requirements() -> None:
+    """A *should* norm on a dimension is not by itself a defect.
+
+    A working headline replaced to reach a word or character band moved what it
+    claims, and two paragraphs a little past eighty words were each split only
+    to come under it (issue #397). The paragraph on *should* norms names the
+    four bands, says a part meeting its requirements is not rewritten, split or
+    merged only to reach one, and keeps a describing subheading from being
+    rewritten into a statement on that ground alone.
+    """
+
+    norms = next(
+        block
+        for block in _paragraphs(ANATOMY_REVIEW.read_text(encoding="utf-8"))
+        if block.startswith("A departure from a *should*")
+    )
+
+    for band in (
+        "three to eight words",
+        "60 characters",
+        "80 words",
+        "three paragraphs",
+    ):
+        assert band in norms, (
+            f"{ANATOMY_REVIEW}: its paragraph on *should* norms does not name"
+            f" the band `{band}` (issue #397)."
+        )
+    assert "not rewritten, split or merged only to come inside a band" in norms, (
+        f"{ANATOMY_REVIEW}: does not say that a part meeting its requirements"
+        f" is left alone however a band reads (issue #397)."
+    )
+    assert "from a label into a statement" in norms, (
+        f"{ANATOMY_REVIEW}: does not keep a subheading that describes its"
+        f" section from being rewritten into a statement (issue #397)."
+    )
+
+
+def test_the_anatomy_says_in_one_sentence_what_a_review_does_with_a_lack() -> None:
+    """The requirement binds a text being written; a review reports what is lacking.
+
+    Write loads the anatomy and writes every part of its draft, so the one
+    sentence added where the requirement is stated names no Skill and leaves
+    *every part is present* binding (issue #397).
+    """
+
+    anatomy = ANATOMY.read_text(encoding="utf-8")
+    paragraphs = _paragraphs(anatomy)
+    at = next(
+        index
+        for index, block in enumerate(paragraphs)
+        if block.endswith(ANATOMY_LIMITS)
+    )
+    added = paragraphs[at + 1]
+
+    assert "A text conforms when every part is present in the order shown" in anatomy
+    assert "review" in added and "report" in added and not added.startswith("#"), (
+        f"{ANATOMY}: the paragraph after `{ANATOMY_LIMITS}` does not say that a"
+        f" review reports a part a finished text lacks (issue #397)."
+    )
+    assert len(re.findall(r"[.!?](?:\s|$)", added)) == 1, (
+        f"{ANATOMY}: `{added[:120]}` is more than the one sentence the rule"
+        f" adds here (issue #397)."
+    )
+    assert not SKILL_NAMES.search(added), (
+        f"{ANATOMY}: `{added[:120]}` names a Skill in a file Write loads too"
+        f" (issue #397)."
+    )
+
+
+def test_no_reviewer_surface_writes_a_part_the_text_lacks() -> None:
+    """Every sentence that once had a part written into a text now reports it.
+
+    Redline's step 7 presented a standfirst or a subheading the text lacked as
+    something a round writes, the article genre's review half restored a
+    missing function and implied that a part the text could supply is written,
+    and the correction brief had the agent repair every counted failure a
+    finding named, an absent part's among them (issue #397).
+    """
+
+    skill = REDLINE_SKILL.read_text(encoding="utf-8")
+    article = ARTICLE_REVIEW.read_text(encoding="utf-8")
+    correction = REDLINE_CORRECTION.read_text(encoding="utf-8")
+
+    assert "did not exist before the round" not in skill, (
+        f"{REDLINE_SKILL}: step 7 still presents a part the text lacked as"
+        f" something a round writes (issue #397)."
+    )
+    for stale in ("Restore a missing function", "cannot be supplied from the text"):
+        assert stale not in article, (
+            f"{ARTICLE_REVIEW}: `{stale}` still has a reviewer write a part the"
+            f" text does not have (issue #397)."
+        )
+    sentence = next(
+        part
+        for part in re.split(r"(?<=[.;])\s+", correction)
+        if "repair the ones a finding named" in part
+    )
+    assert "absent" in sentence and "unwritten" in sentence, (
+        f"{REDLINE_CORRECTION}: `{sentence.strip()[:160]}` has the agent write a"
+        f" part whose absence a finding names (issue #397)."
+    )
+
+
 def test_only_the_anatomy_states_a_dimension_for_the_genres_it_binds() -> None:
     """One limit, one place, or the two of them come to disagree.
 
@@ -9318,8 +9491,11 @@ ESTABLISH_COMMISSIONED_IS_NO_IMMUNITY = "does not put what it says beyond this c
 ESTABLISH_WORSE_WITHOUT_IT = "is no reason to keep a defective one"
 ESTABLISH_NEVER_CARRIED_FORWARD = "never carried forward as an unresolved finding"
 ESTABLISH_BEFORE_THE_BUDGET = "the third condition is tested before the fourth"
+# A review no longer writes a part the text lacks, so the parts named are the
+# ones a round changes rather than writes (issue #397).
 REDLINE_PARTS_A_ROUND_WRITES = (
-    "a headline, a standfirst or a subheading that did not exist before the round"
+    "a headline, a standfirst or a subheading that said something else before"
+    " the round"
 )
 HELP_NEVER_AN_UNRESOLVED_FINDING = "never reported as an unresolved finding"
 
