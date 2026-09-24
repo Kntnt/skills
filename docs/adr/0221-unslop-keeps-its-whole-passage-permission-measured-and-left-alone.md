@@ -1,0 +1,31 @@
+# Unslop keeps its whole-passage permission — measured, and the narrowing left out
+
+This record decides **not** to carry to Unslop the narrowing #377 gave Redline's permission to remove a passage the finding named whole, after committing that narrowing as a candidate, freezing a plan against it and measuring the shipped wording first. The defect did not reproduce, so the candidate was reverted and nothing ships. Redline's rule and Unslop's now diverge on purpose, and this record is where that is written down. Issue #385, filed from #377.
+
+## What the change would have been, and why it looked right
+
+**#377 narrowed the rule in one Skill of two.** Redline's permission to remove a passage because the finding named the whole of it as the defect no longer reaches a sentence whose work is to bound what the text asserts — that something is not measured, not claimed, not witnessed or not general, or that the text is an observation of a document rather than a scene from an occasion. Such a sentence goes or is weakened only on a finding naming a defect inside it, and only where a retained sentence still states that limit in full or the limit contradicts another passage. Unslop's counterparts kept the old wording.
+
+**The argument for leaving Unslop alone rested on reading, not on a run.** Unslop loads `anti-slop.md` and a language's anti-slop scope and nothing else, and the catalogue's guard says a phrase doing real work is not the pattern. #385's triage answered that #377's own [diagnosis](../evaluation/editorial-377/diagnosis.md) found that guard holding in none of four Redline runs, and found *False contrasts* in `anti-slop.md` — which Unslop loads whole — hardening *I am not against digital booking.* into *I support digital booking*. Unslop also does not load `base.review.md`, where #377 put what a limiting sentence is. So triage expected the defect to be there, and ordered the candidate written before the measurement.
+
+**The candidate** (`d84b20ae`) put the narrowing in Unslop's step 7, both paragraphs of its correction brief and its manpage, in the *pattern* vocabulary, naming hardening and recasting beside removal and weakening. Its step 6 said itself what a limiting sentence is and that one is recognised by what it bounds and which claim would lose that bound, never by its form, because `anti-slop.md`'s *The test before a pattern is recorded*, which #383 added, never names a limiting sentence.
+
+## Why nothing is shipped
+
+[`docs/evaluation/editorial-385/results.md`](../evaluation/editorial-385/results.md) holds the measurement, against the plan frozen in [`plan.md`](../evaluation/editorial-385/plan.md) before the first run: the four #362 drafts #377 found the defect on, each run once against Unslop as it stood at `c211a1d5`, every run a fresh top-level Claude Code session on `claude-opus-5-5` at high deliberation, two blind judges each.
+
+**The defect does not reproduce.** The plan's test was fixed before the runs, and the readiness addendum defined it: reproduced where a pre-change run removes, weakens, hardens or recasts a limiting sentence outside the two classes, on the stricter judge's reading. Four runs, eight readings, no such sentence. Three runs raised no finding and returned the no-change status. The fourth replaced *channel* with *route* in two sentences on one synonym-cycling finding; one of those sentences carries the limiting clause *an inconvenience the documents put no number on*, which came back word for word, and the one judge who read the host sentence as recast placed it in class (a) on a pattern inside it. *I am not against digital booking.* came back unchanged from both English runs, and all four of their judges list it as a limiting sentence.
+
+**So there is no cause to write a wording for.** A narrowing adds reading to three surfaces Unslop loads on every run, and the only evidence that could justify it is a miss the shipped wording demonstrably makes. With none, the plan ran neither the post-change arm nor the controls, and the candidate was reverted by a commit of its own (`18757082`). Unslop's three surfaces and its manpage are byte-identical to `c211a1d5`.
+
+**The model changed between #377's measurement and this one, and this record rests on that on purpose.** #377's diagnosis was of Redline on `claude-opus-5`; these runs are of Unslop on `claude-opus-5-5`, which the Skills now run on, as the readiness addendum chose. So this record does not say #377's diagnosis was wrong about Unslop's catalogue. It says the behaviour is absent from Unslop, on the current model, on the texts it was found on.
+
+This is the fourth such result by the same method: [ADR-0212](0212-a-quotation-is-read-in-the-language-it-is-written-in.md) for #363, [ADR-0214](0214-a-bridge-prepares-a-quotation-rather-than-pre-says-it.md) for #364 and [ADR-0220](0220-a-narrowed-denial-is-not-filed-against-under-the-shipped-comparison-task.md) for #387 also measured a filed defect first, found it absent, and left the shipped wording alone.
+
+## What this record does not decide
+
+**The measurement tested recognition far more than repair.** The four drafts gave Unslop little to do: three came back clean and the fourth raised one finding. A limiting sentence is only reached by a repair, so what these runs show is that Unslop did not take a limit for a pattern — in thirty-four to thirty-eight limiting sentences and clauses the judges listed. They did not put a pattern inside a limiting sentence before a correction subagent and watch what it did to the limit, because the drafts carried none Unslop found. A text that does — a vague attribution or an inflated word sitting inside a disclaimer, say — is the cheap next test, and `docs/evaluation/editorial-385/plan.md` is a frozen method to copy, with `d84b20ae` the candidate to stage against it.
+
+**The two Skills now state different rules, and that is deliberate.** Redline's step 7 and correction brief hold a limiting sentence back from the whole-passage permission; Unslop's do not. A later author aligning the two for tidiness would be adding the reading this record declined to add, without the miss that would pay for it.
+
+**Nothing here reaches the GPT family.** The protocol forbids a Claude session from starting a Codex Harness, so Unslop was not measured there.
