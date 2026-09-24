@@ -40,9 +40,6 @@ NO_STRUCTURE = "no-structure"
 EMPTY_TEXT = "empty-text"
 UNREADABLE_INPUT = "unreadable-input"
 
-# The four positive controls of the genres the anatomy binds. The corpus says
-# each of them conforms to the skeleton, so each of them is a text this script
-# has to agree with.
 # The anatomy's requirement that the ending stands apart from the argument,
 # which the script quotes as the rule of a text holding one section (#402).
 ENDING_IS_A_SECTION = (
@@ -51,6 +48,9 @@ ENDING_IS_A_SECTION = (
 )
 ANATOMY_REFERENCE = LIBRARY / "references" / "editorial" / "article-anatomy.md"
 
+# The four positive controls of the genres the anatomy binds. The corpus says
+# each of them conforms to the skeleton, so each of them is a text this script
+# has to agree with.
 CLEAN_CONTROLS = (
     "article-clean.md",
     "case-study-clean.md",
