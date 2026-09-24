@@ -1,0 +1,1 @@
+Ingen ändring behövdes. Texten granskades som kundcase på svenska och utan teknik, eftersom genren inte anger någon. Granskningen gav inga anmärkningar och korrekturläsningen hittade inga fel att rätta.

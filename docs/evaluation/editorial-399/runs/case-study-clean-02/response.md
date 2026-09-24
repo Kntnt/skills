@@ -1,0 +1,1 @@
+Texten behövde inga ändringar. Granskningen mot genren kundcase på svenska gav inga fynd, och korrekturläsningen hittade inga mekaniska fel. Ingen teknik tillämpades, eftersom genren inte anger någon.
