@@ -1,0 +1,39 @@
+Jag har granskat texten som kundcase på svenska och gjort en korrigeringsrunda. Tre brister kräver material som bara du har: byline, uppmaning till handling och kundens bakgrund. Genren anger ingen standardteknik, så ingen berättarbåge har tillämpats.
+
+```markdown
+# Tilldelningen tog två arbetsdagar i Elm Quays försök
+
+**Elm Quay prövade Svales programvara och registrerade 31 ärenden under åtta veckor, med akuta ärenden undantagna. Ärendena tilldelades snabbare än tidigare, men enligt Elm Quays anteckning kan skillnaden inte tillskrivas programvaran. Arbetsledaren Maya Lind berättar vad hon skulle göra annorlunda.**
+
+Kunden Elm Quay gjorde ett försök med programvara från leverantören Svale. Kundens egen försöksanteckning redovisar hur många ärenden som registrerades och hur lång tid det tog att tilldela dem.
+
+## Arbetsledaren ser tillbaka på försöket
+
+– Att ha en gemensam bild av ärendena hjälper oss, men jag skulle lägga till en vecka för förberedelser, säger Maya Lind, arbetsledare hos kunden.
+
+## Vad försöket mätte och vad det inte visar
+
+Enligt kundens försöksanteckning registrerades 31 ärenden under åtta veckor, med akuta ärenden undantagna. Tiden till tilldelning var två arbetsdagar jämfört med tre tidigare. Anteckningen säger att arbetsbelastningen var olika och att skillnaden inte kan tillskrivas programvaran.
+
+– Jag skulle välja att göra försöket igen, säger Lind.
+
+Kundcaset publiceras av leverantören Svale.
+```
+
+**Olösta anmärkningar.** Korrigeringsbudgeten (1 runda) är förbrukad. De här tre går inte att åtgärda utan material som texten saknar:
+
+1. **Byline saknas.** Det bekräftas av mätskriptet. Varken texten eller anropet anger någon författare, så ingen byline har skrivits in.
+2. **Avslutningen saknar en uppmaning till handling.** Texten har inga erbjudanden, länkar eller kontaktvägar som en sådan kan bygga på.
+3. **Bakgrund och genomförande saknas.** Läsaren får inte veta vem Elm Quay är, varför försöket gjordes eller hur det gick till. Utan det är det svårt att förstå situationen och bedöma resultatet.
+
+**Borttagna påståenden.** Alla gällde påståenden som i sin helhet var själva defekten:
+- ”Vi på Svale är världsledande på att skapa framgång” och ”kunden stod hjälplös innan vi kom”. Båda togs bort ur inledningen, eftersom inget i texten stöder dem.
+- ”Vår programvara orsakade därför hela förbättringen.” Meningen motsades av försöksanteckningen och är struken. Meningen före, som säger att skillnaden inte kan tillskrivas programvaran, står kvar oförändrad.
+- Rubrikens ”Vår fantastiska lösning räddade Elm Quay” och mellanrubriken ”Resultatet bevisar allt” drog slutsatser som texten inte drar. Båda har skrivits om.
+- Mellanrubriken ”Kunden fick en gemensam bild” och bryggan ”Maya Lind säger att det hjälper att ha en gemensam bild av ärendena” tog ut citatets poäng i förväg. Båda är borta, men påståendet finns kvar i Maya Linds eget citat.
+
+**Ändrade påståenden:**
+- Det nakna ”Elm Quay registrerade 31 ärenden” stod tre gånger i ingressen och inledningen. Nu står det en gång i ingressen, med den avgränsning som brödtexten ger: under åtta veckor, akuta ärenden undantagna.
+- Ingressen återger anteckningens reservation förkortad: ”skillnaden kan inte tillskrivas programvaran”. Att arbetsbelastningen varierade nämns bara i brödtexten, där hela meningen står kvar.
+
+Sammantaget skrevs rubriken, ingressen och inledningen om utifrån textens eget innehåll. Leverantörens vi-form och reklamspråket försvann, liksom ett orsakspåstående som texten själv motsade. Båda mellanrubrikerna fick ny formulering, och en brygga som upprepade citatet ströks. Korrekturläsningen hittade inga mekaniska fel att rätta.

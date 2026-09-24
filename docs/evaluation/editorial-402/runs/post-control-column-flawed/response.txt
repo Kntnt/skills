@@ -1,0 +1,34 @@
+Granskningen av `input.md` är klar. En rättningsrunda gjordes och godkändes vid omgranskningen, men fem brister kvarstår och behöver avgöras av en person. Inget sparades på disk. `input.md` är orörd och alla temporära filer är borttagna.
+
+**Inställningar:** genren är `column` och språket `sv`, båda enligt anropet. Ingen teknik användes, eftersom krönikegenren inte anger någon. Texten hade ingen frontmatter och har inte fått någon.
+
+````markdown
+# Mötesmallen rymmer tiden men inte förståelsen
+
+Nora Vik
+
+Förra tisdagen satt jag gråtande i bibliotekets mötesrum när min chef sade: ”Nu måste allt bli digitalt.” Det var mitt första möte om vår nya mötesmall. Jag har aldrig deltagit i något möte om vår nya mötesmall.
+
+Vår mötesmall har plats för starttid och sluttid men inte för vad vi ska förstå tillsammans.
+
+Samtal kan ha värde utan att leda till beslut. Jag vill prova frågan vad vi behöver förstå tillsammans, men jag vet inte om ytterligare en ruta gör möten bättre.
+````
+
+**Olösta brister** (rättningsutrymmet på en runda är förbrukat):
+
+1. **Ingress saknas.** Det finns ingen sammanfattande ingress mellan rubriken och bylinen. Den som bara ser rubriken får inte veta vad krönikan handlar om eller vad den ger. Ingressen är inte skriven, eftersom en saknad del ska fyllas av en person.
+2. **Avsnitt med mellanrubriker saknas, och därmed det avslutande avsnittet.** Texten har inga `##`-rubriker. Därför räknar mätningen alla tre styckena som inledning. Felet beror bara på att avsnitten saknas, så inga avsnitt eller rubriker har lagts till. Den som skummar texten får inga ingångar.
+3. **Uppmaning till läsaren saknas.** Texten ber inte läsaren pröva, lägga märke till eller ompröva något. ”Jag vill prova frågan …” är skribentens avsikt, inte en uppmaning.
+4. **Berättelsen motsäger sig själv.** ”Det var mitt första möte om vår nya mötesmall.” följs direkt av ”Jag har aldrig deltagit i något möte om vår nya mötesmall.” Texten visar inte vilken mening som stämmer. En rättning skulle ändra vad Nora Vik har upplevt, så båda meningarna står kvar.
+5. **Inledningsscenen kopplas aldrig till reflektionen.** Gråten och chefens ”Nu måste allt bli digitalt.” återkommer aldrig. Det framgår inte heller vad yttrandet har med mötesmallen att göra. Ett samband går inte att skapa utan att hitta på skäl eller händelser, så scenen och citatet står orörda.
+
+Texten följer alltså inte artikelanatomin. Jag gick igenom alla anatomikrav, även de som mätskriptet inte räknar. Luckorna är ingressen, avsnitten, det avslutande avsnittet och uppmaningen. Rubriken klarar nu sina gränser med 45 tecken och sex ord.
+
+**Borttagna påståenden** (alla i den godkända rättningsrundan, där bristen gällde hela passagen):
+- ”I dagens snabbt föränderliga värld är möten viktigare än någonsin.” Tomt öppningsgrepp och ett påstående om betydelse som texten inte stöder.
+- ”Det är viktigt att vara viktig.” Säger ingenting.
+- ”Sammanfattningsvis är möten viktigare än någonsin i dagens snabbt föränderliga värld.” En generisk avslutning som upprepar öppningsgreppet.
+
+Inget kvarstående påstående har ändrats.
+
+**Övriga ändringar:** Rubriken ”Möten förändrar allt” påstod något texten inte säger. Den är omskriven utifrån textens egen iakttagelse om mötesmallen. De tomma fraserna i början och slutet är borttagna, så andra stycket nu börjar med iakttagelsen och texten slutar på det tvivel som redan fanns där. Den avslutande korrekturen hittade inga språkfel att rätta.

@@ -46,7 +46,9 @@ is taken as the standfirst and the rest as the lead. The answer names which
 block was taken as which, so a Skill can overrule it — as it has to where a
 text opens on a byline-shaped dramatic line standing before the real byline,
 which is the line this rule finds. Each level-2 heading opens a section running
-to the next one, and the last section is the ending.
+to the next one. The ending is a section of its own after at least one other,
+so a text of one section fails; whether its last section is an ending — closing
+the piece rather than carrying the argument — is the Skill's to judge.
 
 Text is measured as the reader sees it: Markdown emphasis, code and link syntax
 stripped, HTML reduced to its text with entities decoded, whitespace collapsed
@@ -164,6 +166,10 @@ LEAD_IS_ONE_PARAGRAPH = (
 )
 SUBHEADING_LIMIT = "A subheading is at most 70 characters, spaces included."
 SECTION_HOLDS_A_PARAGRAPH = "A section holds at least one paragraph."
+ENDING_IS_A_SECTION = (
+    "The ending is a section of its own, opened by its own subheading, after at"
+    " least one other section."
+)
 SECTION_NORM = "A section should hold at most three paragraphs."
 TWO_LEVELS = "The text should use these two levels only."
 DIFFERENT_FIRST_WORDS = (
@@ -695,8 +701,9 @@ def read_structure(blocks: list[Block]) -> Reading:
     )
     reading.front = read_the_front(front, headline_at)
 
-    # Each level-2 heading opens a section that runs to the next one, and the
-    # last of them is the ending.
+    # Each level-2 heading opens a section that runs to the next one. Which of
+    # them is the ending is not read here: only that there are enough of them
+    # for the ending to be one of its own is counted.
     for block in blocks[boundary:]:
         if block.kind is Kind.HEADING and block.level == 2:
             reading.sections.append(Section(subheading=block))
@@ -821,8 +828,20 @@ def requirements(reading: Reading) -> list[dict[str, Any]]:
             )
         )
 
+    # The sections: present, and more than one, since the ending is a section
+    # of its own after at least one other. Whether the last one closes the
+    # piece is a judgement, and not made here.
     if not reading.sections:
         failures.append(entry(Part.SECTIONS, ORDER, "absent", None))
+    elif len(reading.sections) == 1:
+        failures.append(
+            entry(
+                Part.SECTIONS,
+                ENDING_IS_A_SECTION,
+                "1 section",
+                reading.sections[0].subheading.text,
+            )
+        )
 
     # Each section: a subheading inside its limit, and something under it.
     for number, section in enumerate(reading.sections, start=1):

@@ -1,0 +1,45 @@
+I reviewed `input.md` against the web-copy guidance for US English and ran one correction round. The re-review found nothing left to fix. `input.md` itself is unchanged, and no files were left on disk.
+
+**Settings used:** genre `web-copy` and language `en_US`, both from your command. No storytelling structure ("technique") was applied: you named none, and the web-copy guidance doesn't use one by default. The text had no metadata header, so none was added.
+
+```markdown
+# A review of one shared room in your housing association
+
+## Price, scope and contents
+
+The review costs SEK 4,800 including VAT. It covers one shared room in one housing association and includes:
+
+- a 45-minute video call with two board representatives
+- a written account of the booking steps, unclear points and two possible simplifications
+
+## Expressing interest and what happens next
+
+[Fill in the expression-of-interest form](https://example.invalid/svale/intresse).
+
+The link opens an expression-of-interest form asking for a name, association and email address. It places no order, requires no payment details and books no meeting. Svale replies by email within three working days to discuss whether the review is suitable and suggest a meeting time.
+```
+
+**Problems found (all fixed; none open):**
+1. **Headline:** "Unlock your association's full potential" promised a result nothing in the text supports, and didn't say what was on offer.
+2. **Opening paragraph:** it contained no information about the offer.
+   - It opened with a circular statement ("complexity… growing complexity").
+   - "Take the thumb out" is the Swedish idiom *ta tummen ur* translated word for word.
+   - "A fantastic journey" was hype with nothing behind it.
+3. **Link:** "Book and pay now" contradicted the last section, which says the form doesn't order, take payment or book anything. The link also came before the page said what was offered.
+4. **Headings:** "Start", "It", "More", "Again", "Things" and "Important" didn't say what their sections contain.
+5. **The four "It …" sections:**
+   - "It" referred to nothing, because the review wasn't named until the last sentence.
+   - One offer was split into four one-sentence sections.
+
+**Claims removed:**
+- **Fix 1** removed the claim that the offer unlocks the association's "full potential".
+- **Fix 2** deleted the whole opening paragraph, taking with it:
+  - the claim that decision-makers face growing complexity;
+  - the "Take the thumb out" call to act;
+  - the promise of "a fantastic journey".
+
+**Claims changed:**
+- **Fix 3** changed what the link promises: "Book and pay now" is now "Fill in the expression-of-interest form", which matches what the text says the form does.
+- The sentence saying the form places no order, takes no payment details and books no meeting is word for word as it was.
+
+**What else changed:** there's a new headline naming the offer and two descriptive headings instead of six vague ones. The price, scope and what the review includes now sit together in one section, with the two inclusions as a list. The renamed link moved down to sit right above the explanation of what it does. The final proofreading pass found no spelling, grammar or punctuation errors, so it changed nothing.

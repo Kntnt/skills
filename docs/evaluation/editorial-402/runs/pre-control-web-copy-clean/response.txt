@@ -1,0 +1,1 @@
+Ingen ändring behövdes i `input.md`. Granskningen mot webbtext (`web-copy`) på svenska hittade inga redaktionella fel, så ingen rättningsrunda gjordes. Den avslutande korrekturläsningen hittade inga språkfel. Ingen berättarteknik användes, eftersom genren webbtext inte anger någon. Inga filer skrevs.

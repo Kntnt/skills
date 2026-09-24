@@ -1,0 +1,43 @@
+Granskningen är klar. Jag har gjort en korrigeringsrunda och den avslutande korrekturen, så nu kommer resultatet.
+
+**Konfiguration:** genre `article` och språk `sv`, båda angivna i anropet. Ingen teknik används, eftersom artikelgenren inte anger någon och ingen annan källa valde en. Texten saknar frontmatter, så ingen metadata har lagts till.
+
+```markdown
+# Björkskolans temperaturmätning lämnar luckor
+
+**Under ett mätförsök på Björkskolan visade givare i sex klassrum temperaturer under 20 grader. Här är vad fastighetskontorets rapport anger, vad mätningarna saknar och vad en drifttekniker rekommenderar.**
+
+Fastighetskontorets rapport *Mätförsök i Björkskolan* från den 12 mars 2026 anger att 14 av 120 lektionspass hade minst ett värde under kontorets egen arbetsgräns på 20 grader, vilket inte är en lagregel. Rapporten anger också att försöket varade fyra veckor.
+
+Försökets givare registrerade temperaturer under 20 grader i sex klassrum. Två givare stod vid ytterväggar och fyra vid innerväggar, utan att placeringens effekt jämfördes experimentellt. Operativ temperatur saknas, trots att resonemanget bygger på operativ temperatur, som är ett mått på lufttemperatur och värmestrålning från omgivande ytor, medan givarna bara mätte luften där de satt.
+
+Det saknas mätningar av luftdrag och elevernas upplevelse och uppgifter om hur länge temperaturerna låg under gränsen. Ingen effekt på hälsan har undersökts.
+
+Driftteknikern Elin Rask rekommenderar att koppla temperaturserier till användningstider innan styrningen ändras. Nästa försök är tänkt att använda likadant placerade givare i november, fast finansieringen inte är beslutad. Den som ska ändra styrningen kan börja där Elin Rask föreslår.
+```
+
+## Fynd som återstår (olösta)
+
+Korrigeringsbudgeten (1) är förbrukad, och följande fynd återstår för en person att avgöra:
+
+1. **”trots att resonemanget bygger på operativ temperatur”**: det framgår inte vems resonemang som avses, om det är rapportens, kontorets eller textens eget. Det går inte att klargöra utan uppgifter som texten saknar, så meningen står kvar oförändrad.
+2. **Byline saknas.** Ingen författare nämns i texten eller i anropet, så ingen byline har skrivits.
+3. **Mellanrubriker, avsnitt och ett avslutande avsnitt saknas.** Texten har inga underrubriker. Därför är avslutet och uppmaningen inte ett eget avsnitt, och brödtexten räknas som en inledning på fyra stycken. Inga rubriker har skrivits.
+
+**Artikelns anatomi:** texten följer den inte, eftersom byline, avsnitt och avslutande avsnitt saknas. De uppmätta gränserna håller: rubriken är 44 tecken och fyra ord, och ingressen är ett stycke på 28 ord. Jag har också granskat de krav som skriptet inte räknar. Ingressen står på egna ben, inledningen upprepar den inte, brödtexten går att läsa utan ingressen och uppmaningen följer av innehållet.
+
+## Påståenden som tagits bort
+
+- **”räddar skolan från en katastrof”** i den gamla rubriken, liksom **”Katastrofen lurade bakom varje hörn.”** Texten gav inget stöd för dem, och fynden gällde påståendena i sin helhet.
+- **”det är helt säkert att givarna har gjort eleverna friskare”.** Det var ett orsakspåstående utan stöd, som texten själv motsade. Förbehållet att ingen effekt på hälsan har undersökts står kvar som en egen mening.
+- **”Det är viktigt att notera att detta är mycket viktigt för alla som tycker att temperatur är viktigt.”** Meningen var utfyllnad utan annat innehåll än att något är viktigt.
+- **”Kontakta oss för att rädda framtiden.”** Både uppmaningen till ett oidentifierat ”oss” och påståendet om att rädda framtiden har strukits.
+
+## Påståenden som ändrats
+
+- **De sex klassrummen:** Förut hette det bara ”Givarna registrerade …”. Nu kopplas givarna uttryckligen till mätförsöket på Björkskolan, i ingressen (”Under ett mätförsök på Björkskolan …”) och i brödtexten (”Försökets givare …”). Originalet antydde det sambandet men sa det inte rakt ut. Ändringen gjordes för att reparera ingressen och inledningen.
+- **Uppmaningen:** Den ersattes av ”Den som ska ändra styrningen kan börja där Elin Rask föreslår.” Därmed återges Elin Rasks rekommendation nu också som textens egen uppmaning.
+
+## Övriga ändringar
+
+Rubriken har skrivits om så att den följer textens vinkel och har textens egen styrka. Ingressen upprepade samma mening två gånger, och inledningen upprepade ingressen. De upprepningarna är borta, och ingressen säger nu vad läsaren får ut av texten. Tomma formler och uppblåst dramatik har strukits. Det enda stycket på 187 ord är uppdelat i fem stycken med en tanke vardera. Överlastade meningar har delats vid fogarna, så att de inte längre antyder samband som texten inte påstår. Den avslutande korrekturläsningen hittade inga mekaniska fel. Inga filer har skapats, och `input.md` är orörd.

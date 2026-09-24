@@ -6754,6 +6754,136 @@ def test_no_reviewer_surface_writes_a_part_the_text_lacks() -> None:
     )
 
 
+# The ending is a section of its own (issue #402). `opinion-flawed` closed on an
+# exhortation appended to a section carrying the argument; the anatomy took the
+# last section for the ending, so a run reported the text as conforming without
+# deviation while the corpus counted its ending section missing.
+ENDING_IS_A_SECTION = (
+    "The ending is a section of its own, opened by its own subheading, after at"
+    " least one other section."
+)
+
+
+def _level_two_section(text: str, heading: str) -> str:
+    """Return the body of the level-2 section *heading* in *text*."""
+
+    start = text.index(f"\n## {heading}\n")
+    end = text.find("\n## ", start + 1)
+    return text[start : end if end != -1 else len(text)]
+
+
+def test_the_anatomy_makes_the_ending_a_section_of_its_own_and_says_what_one_is() -> (
+    None
+):
+    """A requirement the script can quote, and a test for a last section.
+
+    The script counts the sections and quotes the requirement; whether a last
+    section is an ending stays a judgement, so the anatomy says what makes one:
+    it closes the piece and opens no new line of argument (issue #402).
+    """
+
+    ending = " ".join(
+        _level_two_section(ANATOMY.read_text(encoding="utf-8"), "Ending").split()
+    )
+
+    assert ENDING_IS_A_SECTION in ending, (
+        f"{ANATOMY}: `## Ending` does not state as a requirement that the"
+        f" ending is a section of its own (issue #402)."
+    )
+    for words in (
+        "call to action",
+        "reflection",
+        "recommendation",
+        "next step",
+        "opens no new line of argument",
+        "with a closing line appended is not an ending",
+    ):
+        assert words in ending, (
+            f"{ANATOMY}: `## Ending` does not give the test for when the last"
+            f" section is an ending: `{words}` is missing (issue #402)."
+        )
+
+
+def test_the_review_extension_repairs_an_ending_standing_inside_the_argument() -> None:
+    """Closing content inside a section carrying the argument is a present ending.
+
+    It fails its rule and is repaired by a section of its own built from the
+    text's own content, where #397's wording had it repaired where it stood
+    with no subheading written (issue #402).
+    """
+
+    rule = next(
+        block
+        for block in _paragraphs(ANATOMY_REVIEW.read_text(encoding="utf-8"))
+        if "not written" in block
+    )
+    sentence = next(
+        (
+            part
+            for part in re.split(r"(?<=[.])\s+", rule)
+            if "carries the argument" in part
+        ),
+        "",
+    )
+
+    assert sentence, (
+        f"{ANATOMY_REVIEW}: its rule on the parts says nothing of closing"
+        f" content inside a section that carries the argument (issue #402)."
+    )
+    for words in (
+        "present ending that fails its rule",
+        "section of its own",
+        "own subheading",
+        "text's own content",
+    ):
+        assert words in sentence, (
+            f"{ANATOMY_REVIEW}: `{sentence[:160]}` does not say `{words}` (issue #402)."
+        )
+    assert "missing" not in sentence and "absent" not in sentence, (
+        f"{ANATOMY_REVIEW}: `{sentence[:160]}` words a present ending as a"
+        f" missing one (issue #402)."
+    )
+
+
+def test_redline_reports_anatomy_conformance_only_where_the_uncounted_was_examined() -> (
+    None
+):
+    """Exit 0 settles the counted requirements, and nothing else.
+
+    A reply said the text met the anatomy without deviation on the strength of
+    the counted measures, while a requirement only a reading can settle was
+    unmet (issue #402). Step 6 reads the exit status, step 11 writes the
+    reply, and the correction brief reads the status and writes the return.
+    """
+
+    skill = REDLINE_SKILL.read_text(encoding="utf-8")
+    listed = skill[skill.index("\n## Steps\n") :].splitlines()
+    steps = {
+        number: next(line for line in listed if line.startswith(f"{number}. "))
+        for number in (6, 11)
+    }
+    correction = next(
+        block
+        for block in _paragraphs(REDLINE_CORRECTION.read_text(encoding="utf-8"))
+        if "article_anatomy.py" in block
+    )
+
+    for where, text in (
+        (f"{REDLINE_SKILL} step 6", steps[6]),
+        (f"{REDLINE_SKILL} step 11", steps[11]),
+        (str(REDLINE_CORRECTION), correction),
+    ):
+        assert "Exit 0 settles the counted requirements only" in text, (
+            f"{where}: does not say that exit 0 settles the counted"
+            f" requirements only (issue #402)."
+        )
+        assert "the script does not count" in text and "examined" in text, (
+            f"{where}: does not make a report of conformance to the anatomy"
+            f" wait on every requirement the script does not count being"
+            f" examined (issue #402)."
+        )
+
+
 def test_only_the_anatomy_states_a_dimension_for_the_genres_it_binds() -> None:
     """One limit, one place, or the two of them come to disagree.
 

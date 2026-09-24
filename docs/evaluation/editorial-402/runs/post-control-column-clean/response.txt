@@ -1,0 +1,42 @@
+Jag har granskat kolumnen och rättat tre saker: rubriken, första mellanrubriken och ett verb i ingressen. Inga fynd återstår. Den avslutande korrekturläsningen hittade inga mekaniska fel.
+
+**Inställningar:** genre `column` och språk `sv`, båda från anropet. Ingen teknik används, eftersom genren inte anger någon och inget annat valde en. Rättelsebudgeten var 1 och räckte.
+
+**Artikelns anatomi:** Texten följer anatomin. Skriptet mätte alla räknade gränser utan anmärkning. Jag läste också igenom det som skriptet inte räknar:
+- Ingressen står på egna ben och upprepar inte första stycket.
+- Brödtexten fungerar utan ingressen.
+- Mellanrubrikerna beskriver sina avsnitt.
+- Sista avsnittet är ett avslut, med en uppmaning som följer av resonemanget.
+
+Första stycket under första mellanrubriken har 83 ord, strax över riktvärdet 80. Det håller en enda tanke och läses bra, så det är inget fynd.
+
+```markdown
+# Mötesmallen mäter tiden men frågar inte varför
+
+**Det som ryms i en mötesmall säger en hel del om vad vi tror att möten är till för. Jag vill lägga till en enda fråga i vår mall, och misstror samtidigt min egen lösning. Här är resonemanget, med tvivlet kvar.**
+
+Text: Nora Vik
+
+Vår mötesmall har plats för starttid och sluttid. Vad vi ska förstå när tiden är slut får vi hålla reda på själva. Det är inget fel på rutorna, men de räknar tid, och tid är det enda de räknar.
+
+## Jag vill att förståelse får plats bredvid besluten
+
+Ett samtal kan vara värt tiden därför att vi upptäcker att vi menar olika saker, eller därför att någon får förtroende nog att säga det som ännu inte är färdigtänkt. Jag vill inte att den sortens arbete ska behöva klä ut sig till ett beslut för att få finnas i en kalender. Men när veckan fylls blir det lättare att se att vi ska träffas än varför vi behöver varandra, och då är det beslutet som får stå kvar som enda giltiga skäl.
+
+Jag är alltså inte ute efter färre beslut.
+
+## Ännu en ruta, och ändå vill jag prova
+
+Frågan jag vill lägga till är enkel: vad behöver vi förstå tillsammans? Den lovar inte att varje samtal ska mynna ut i ett svar. Den ger bara det arbetet en rad i mallen. Och ja, jag hör hur det låter: lösningen på ett formulär är ett längre formulär.
+
+Prova ändå frågan nästa gång du bokar ett möte, och skriv den före tiderna. Formuläret blir åtminstone längre. Det är den enda förbättring jag kan lova innan vi har provat.
+```
+
+**Påståenden som ändrats.** Inget påstående har tagits bort. Två påståenden står kvar men säger något annat än förut:
+
+1. **Rubriken.** "Mötesmallen har en ruta för allt utom varför" blev "Mötesmallen mäter tiden men frågar inte varför". Påståendet om vad mallen rymmer är snävare nu: från "allt utom varför" till "tiden". Ändringen rättar fyndet att rubriken sa mer än texten. Texten säger själv att mallen bara har start- och sluttid och att "tid är det enda de räknar".
+2. **Första mellanrubriken.** "Det är inte bara besluten jag vill åt" blev "Jag vill att förståelse får plats bredvid besluten". Rubriken säger nu uttryckligen att skribenten vill ha plats för förståelse bredvid besluten. Den bygger inte längre på en kontrast mot något som ingen i texten har påstått. Ändringen rättar fyndet att rubriken förutsatte beslut som ämne innan texten tagit upp dem. "Vill åt" kunde dessutom läsas som att skribenten ville angripa besluten, vilket går emot avsnittets slutrad.
+
+**Vad körningen ändrade utöver påståendena.** Utöver rubrikerna byttes ett verb i ingressen: "misstänker min egen lösning" blev "misstror min egen lösning", eftersom "misstänker" lät översatt. Brödtexten, bylinen och andra mellanrubriken är oförändrade.
+
+`input.md` är orörd. Alla tillfälliga filer från körningen är borttagna.

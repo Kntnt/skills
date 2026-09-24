@@ -77,7 +77,9 @@ A section is a subheading plus the paragraphs under it.
 
 ## Ending
 
-The ending is the last section, and it is short: one paragraph can be enough. It does two things:
+The ending is a section of its own, opened by its own subheading, after at least one other section. It is the last section, and it is short: one paragraph can be enough. It does two things:
 
 - It shows that the expectation the lead set has been met.
 - It calls the reader to action, and the action follows from the article's content. The selected genre says what that action is in its kind of text.
+
+The last section is the ending when its subheading and paragraphs close the piece — the call to action, the reflection, the recommendation or the next step — and it opens no new line of argument. A section that carries the argument with a closing line appended is not an ending.
