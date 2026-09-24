@@ -9726,9 +9726,9 @@ def test_a_repair_that_would_take_the_claim_with_it_is_left_and_reported() -> No
     back for a person to settle, exactly as one that cannot be repaired
     without inventing a fact already does. The catalogue's own deletions are
     untouched by that: where the pattern is the whole of the passage, cutting
-    it takes no claim with it — except, in Redline, for a sentence whose work
-    is to bound what the text asserts, which #377 holds back from that
-    permission. And the judgement is about the passage in front of the
+    it takes no claim with it — except, in both Redline and Unslop, for a
+    sentence whose work is to bound what the text asserts, which #377 and #385
+    hold back from that permission. And the judgement is about the passage in front of the
     subagent rather than about how much text is left, because the two runs
     this was observed on sit either side of the line at almost the same
     length (ADR-0178).
@@ -9760,6 +9760,109 @@ def test_a_repair_that_would_take_the_claim_with_it_is_left_and_reported() -> No
             f" and a subagent measuring what is left would stop repairing a"
             f" short text and go on emptying a long one (ADR-0178). See"
             f" {STANDARD}."
+        )
+
+
+# The sentence #377 held back from the whole-passage permission, in the words
+# both Skills describe it with, and the two classes that still let a repair
+# reach one (issues #377, #385).
+LIMITING_SENTENCE = (
+    "a sentence whose work is to bound what the text asserts — that something"
+    " is not measured, not claimed, not witnessed or not general, or that the"
+    " text is an observation of a document rather than a scene from an occasion"
+)
+LIMIT_KEPT = "still states that limit in full"
+LIMIT_CONTRADICTS = "contradicts another passage of the same text"
+LIMIT_BEYOND_EXCEPTION = (
+    "that exception does not reach a sentence whose work is to bound what the"
+    " text asserts"
+)
+
+
+def test_a_sentence_that_bounds_what_the_text_asserts_is_held_back() -> None:
+    """The whole-passage permission stops at a limit, in both Skills.
+
+    Naming a whole passage as the defect or the pattern lets a repair cut it,
+    and a sentence whose only work is to limit what the text claims is the one
+    kind that permission must not reach: cutting it, or recasting it as an
+    assertion, raises what the text says with nothing visible to show for it.
+    #377 held it back in Redline, and #385 in Unslop, each in its own
+    vocabulary, so the two Skills say one thing: such a sentence is touched
+    only on a finding inside it, and only where a retained sentence still
+    states the limit or the limit contradicts another passage.
+    """
+
+    surfaces = (
+        (REDLINE, REDLINE_CORRECTION, REDLINE_HELP, "defect"),
+        (UNSLOP, UNSLOP_CORRECTION, UNSLOP_HELP, "pattern"),
+    )
+    for body_path, brief_path, help_path, finding in surfaces:
+        steps = body_path.read_text(encoding="utf-8").split("\n## Steps\n", 1)[1]
+        step_7 = steps.split("\n7. ", 1)[1].split("\n8. ", 1)[0]
+        brief = brief_path.read_text(encoding="utf-8")
+        manpage = help_path.read_text(encoding="utf-8")
+
+        for where, text in ((body_path, step_7), (brief_path, brief)):
+            for clause in (LIMITING_SENTENCE, LIMIT_KEPT, LIMIT_CONTRADICTS):
+                assert clause in text, (
+                    f"{where}: the permission to cut a passage the finding"
+                    f" named whole is not held back from a sentence that bounds"
+                    f" what the text asserts, or not on the two conditions that"
+                    f" still let a repair reach one (issues #377, #385). See"
+                    f" {STANDARD}."
+                )
+        assert f"a {finding} inside it" in step_7, (
+            f"{body_path}: step 7 does not say that only a {finding} inside a"
+            f" limiting sentence reaches it (issues #377, #385). See"
+            f" {STANDARD}."
+        )
+        assert f"a {finding} inside the sentence" in brief, (
+            f"{brief_path}: the correction brief does not say that only a"
+            f" {finding} inside a limiting sentence reaches it (issues #377,"
+            f" #385). See {STANDARD}."
+        )
+        assert LIMIT_BEYOND_EXCEPTION in brief, (
+            f"{brief_path}: the claim-by-claim check still lets the whole-claim"
+            f" exception reach a limiting sentence (issues #377, #385). See"
+            f" {STANDARD}."
+        )
+        assert (
+            "A sentence whose work is to bound what the text asserts is removed"
+            in manpage
+            and f"naming a {finding} inside it" in manpage
+        ), (
+            f"{help_path}: the manpage states the whole-passage permission"
+            f" without the limit it stops at (issues #377, #385). See"
+            f" {STANDARD}."
+        )
+
+    # Unslop loads no review half, so it names every way a repair raises what a
+    # limit bounded — Redline's review half reaches the same through "leave
+    # the sentence exactly as it stands" — and says itself how a limiting
+    # sentence is recognised, where it reads for findings.
+    steps = UNSLOP.read_text(encoding="utf-8").split("\n## Steps\n", 1)[1]
+    step_6 = steps.split("\n6. ", 1)[1].split("\n7. ", 1)[0]
+    step_7 = steps.split("\n7. ", 1)[1].split("\n8. ", 1)[0]
+    brief = UNSLOP_CORRECTION.read_text(encoding="utf-8")
+    assert "removal, weakening, hardening or recasting" in step_7, (
+        f"{UNSLOP}: step 7 holds back only the removal of a limiting sentence,"
+        f" and a repair that recasts one as an assertion goes through (issue"
+        f" #385). See {STANDARD}."
+    )
+    assert "Remove, weaken, harden or recast one only where" in brief, (
+        f"{UNSLOP_CORRECTION}: the brief holds back only the removal of a"
+        f" limiting sentence, and a repair that hardens one goes through"
+        f" (issue #385). See {STANDARD}."
+    )
+    for clause in (
+        "whose work is to bound what the text asserts",
+        "never by its form",
+        "was never in play",
+    ):
+        assert clause in step_6, (
+            f"{UNSLOP}: step 6 never says how a limiting sentence is recognised,"
+            f" and Unslop loads no review half that would, so the pass records"
+            f" a limit as a false contrast (issue #385). See {STANDARD}."
         )
 
 
