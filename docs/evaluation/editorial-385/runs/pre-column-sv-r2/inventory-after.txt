@@ -1,0 +1,8 @@
+# staged install: /Users/thomas/Projects/skills/.git/kntnt-orchestrate/385.scratch/kntnt-eval-385/install-pre
+# staged install digest: 00f687019fb921963d4440fa1d60e95c885d392a2cef67b32d101595c962cb12
+# staged install files: 70
+# run directory:
+b3f9999d1fe6a0a79fe102cc900e4ef143020b6cc017dedb77759189af915880  ./inventory-after.txt
+5db0aba9070f76ef07f65a5878fccb12a7607bc70eec1653662eb66f06c82edf  ./inventory-before.txt
+c1a770fc82c911402e94a2be5ddc82da0d7e303fee0fae9fbf0bae647bd265d6  ./response.md
+74b966f1352c4f42e75dc58a7f247bd42571fced8760bcf12064067b8b81de42  ./work/input.md
