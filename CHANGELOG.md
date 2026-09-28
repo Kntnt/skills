@@ -4,6 +4,10 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ## [Unreleased]
 
+### Added
+
+- `/brief` interviews for, drafts from supplied material, or reviews a Writing Brief against the shared 13-question template. It marks missing, suggested and weak answers, checks coherence, and passes settled genre, technique and text language to `/write`. The new `/brief` is unrelated to the former Skill of that name, which was removed in favour of `/explain` (#444).
+
 ### Changed
 
 - Editorial genre and technique names use lowercase letters only, with no hyphen or other separator: `web-copy`, `press-release` and `case-study` are now `webcopy`, `pressrelease` and `casestudy`. The old names are not accepted. `/write` and `/redline` refuse them as uninstalled genres. If a Kntnt map in an existing artifact still carries an old value, change that value by hand before using the artifact (#443).
