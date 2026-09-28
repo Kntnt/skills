@@ -1,0 +1,5 @@
+# Why this wave is void
+
+These are the four pre-change runs made on 2026-09-24 between 04:52Z and 04:55Z, and their eight judgements, against [`../../../plan.md`](../../../plan.md) as it was first committed at `e3723890`. After they were made, that plan was edited at `0d7fd057`: its run command was respelled so that each flag carries its value after an `=`, because the repository's flag-grammar check refused the frozen spelling. The plan says nothing in it is edited after the first run. So these runs were not made under a plan that stayed frozen, and they do not stand as the evaluation's pre-change arm.
+
+No run here was cut off, and nothing in them is wrong in itself. They are kept byte for byte as they were first committed, moved here from `runs/` with this file added, so that what they showed stays readable. The plan is frozen again, by the commit that adds this file, before the first run of the wave that replaces this one. That replacement wave is the pre-change arm, and [`../../../results.md`](../../../results.md) counts only that wave.
