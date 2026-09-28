@@ -6,13 +6,15 @@ Revised for the [article anatomy](../../../../skills/kntnt/library/references/ed
 
 Revised again for how a clean control is run. A clean control is now run to a file as well as to the response, as the protocol's [rule on a clean control](../../protocol.md#a-clean-control) requires, so that the criterion that its text comes back unchanged is answered from a delivered text rather than from the run's own account of itself. This revision changes how a clean control is run and nothing that a record is judged against: no control, source, frozen expectation, criterion or rejection moved.
 
+Revised for installed genre names. Fixture case IDs and source filenames retain their historical spelling, while Write staging now takes the source linked in the pipeline matrix and the installed genre in that row's Genre column.
+
 ## Material and staging
 
 Every person, organisation, event, quote, measurement and URL in this directory is **synthetic**. Source files are complete brief/source packages with explicit limits, not facts to verify on the web. Control files contain only the Text Artifact; this index supplies their synthetic label and intended use. An evaluator copies the necessary input into an isolated working directory and exposes only that input to the invoked Skill. Do not expose this rubric, expected findings, another output, or the other provider's records to it.
 
 Use a fresh supported native session for each invocation. Install only the revision's Manager, Write, Redline and Proofread into that run's private skill directory. A neutral Harness dispatch instruction may identify the exact local SKILL.md for a formal invocation; it may not paraphrase or replace its steps. Preserve the full trace, including correction agents and the closing Proofread invocation. The evaluator captures output externally; response-targeted Skills create no enduring files. Inventory all staged writable roots before and after, including the complete working copy, temporary directories and Harness state/scratch. Separate Harness-owned logs/database changes and evaluator writes from Skill effects by trace and timing, rather than excluding those roots.
 
-For Write, copy `sources/<genre>.md` to `source.md`. Invoke exactly `/write --genre=<genre> --language=<locale> --output=response source.md`. The requested language overrides the source language. Use no technique or contextual instruction in a normal run. Preserve the full response and the complete draft including its Kntnt metadata as separate evaluator artifacts. Then give a fresh session only that draft as `input.md` and invoke `/redline --output=response input.md`. Redline never sees the source package. Preserve its response, final text, findings and removed-claim account separately. A no-change status delivers no final text, so a run that ends in one has no final text to preserve; the protocol's [rule on a no-change reply](../../protocol.md#a-clean-control) says which of the five rejections that reply can still be held to. The default correction budget remains unchanged.
+For Write, copy the source linked in the pipeline matrix to `source.md`. Invoke exactly `/write --genre=<genre> --language=<locale> --output=response source.md`, substituting the genre in that row's Genre column. The requested language overrides the source language. Use no technique or contextual instruction in a normal run. Preserve the full response and the complete draft including its Kntnt metadata as separate evaluator artifacts. Then give a fresh session only that draft as `input.md` and invoke `/redline --output=response input.md`. Redline never sees the source package. Preserve its response, final text, findings and removed-claim account separately. A no-change status delivers no final text, so a run that ends in one has no final text to preserve; the protocol's [rule on a no-change reply](../../protocol.md#a-clean-control) says which of the five rejections that reply can still be held to. The default correction budget remains unchanged.
 
 ## Predeclared semantic criteria
 
@@ -39,13 +41,13 @@ The protocol's five unconditional rejections remain: unsupported facts, wrong lo
 
 Each row is a separate Write invocation followed by a separate Redline invocation. All normal runs are unprompted about technique. `F1 G1 G2 P1 W1 L1 L2 T1 R2 O1` apply to Write; `G1 G2 P1 W1 L1 L2 T1 R1 R2 O1` to Redline.
 
-| IDs | Source | Candidate locales | Baseline locales selected now |
-|---|---|---|---|
-| article-sv / article-en_GB / article-en_US | [article](sources/article.md), Swedish source | sv, en_GB, en_US | sv, en_GB |
-| case-study-sv / case-study-en_GB / case-study-en_US | [customer case](sources/case-study.md), English source | sv, en_GB, en_US | sv |
-| column-sv / column-en_GB / column-en_US | [column](sources/column.md), Swedish source | sv, en_GB, en_US | sv |
-| opinion-sv / opinion-en_GB / opinion-en_US | [opinion](sources/opinion.md), Swedish source | sv, en_GB, en_US | sv |
-| web-copy-sv / web-copy-en_GB / web-copy-en_US | [webcopy](sources/web-copy.md), Swedish source | sv, en_GB, en_US | sv |
+| IDs | Genre | Source | Candidate locales | Baseline locales selected now |
+|---|---|---|---|---|
+| article-sv / article-en_GB / article-en_US | article | [article](sources/article.md), Swedish source | sv, en_GB, en_US | sv, en_GB |
+| case-study-sv / case-study-en_GB / case-study-en_US | casestudy | [customer case](sources/case-study.md), English source | sv, en_GB, en_US | sv |
+| column-sv / column-en_GB / column-en_US | column | [column](sources/column.md), Swedish source | sv, en_GB, en_US | sv |
+| opinion-sv / opinion-en_GB / opinion-en_US | opinion | [opinion](sources/opinion.md), Swedish source | sv, en_GB, en_US | sv |
+| web-copy-sv / web-copy-en_GB / web-copy-en_US | webcopy | [webcopy](sources/web-copy.md), Swedish source | sv, en_GB, en_US | sv |
 
 Baseline and candidate use identical material, invocation and native model/Harness where technically possible, but their own default techniques. Judge each separately before comparison. A failed or impossible baseline remains recorded; it is never assumed worse. These six baseline pairs are fixed before results exist.
 

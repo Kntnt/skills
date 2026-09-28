@@ -1051,6 +1051,22 @@ def test_the_matrix_runs_a_clean_redline_control_to_a_file_as_well() -> None:
     )
 
 
+def test_the_pipeline_matrix_names_a_genre_independently_of_legacy_fixture_paths() -> (
+    None
+):
+    """Write staging cannot derive an installed genre from an immutable fixture name."""
+
+    matrix = MATRIX.read_text(encoding="utf-8")
+    staging = _section(matrix, "## Material and staging")
+    pipeline = _section(matrix, "## Pipeline matrix")
+
+    assert "sources/<genre>.md" not in staging
+    assert "the source linked in the pipeline matrix" in staging
+    assert "the genre in that row's Genre column" in staging
+    for genre in ("article", "casestudy", "column", "opinion", "webcopy"):
+        assert f"| {genre} |" in pipeline
+
+
 def test_the_protocol_isolates_the_provider_families_in_both_directions() -> None:
     """The isolation rule binds whoever runs an evaluation, both ways round.
 
