@@ -1,0 +1,44 @@
+warning: No `requires-python` value found in the workspace. Defaulting to `>=3.12`.
+........................................................................ [ 13%]
+........................................................................ [ 27%]
+........................................................................ [ 41%]
+........................................................................ [ 55%]
+..............................................................F......... [ 69%]
+........................................................................ [ 83%]
+........................................................................ [ 97%]
+...............                                                          [100%]
+=================================== FAILURES ===================================
+___ test_the_licence_sits_where_the_genre_is_resolved_and_widens_no_loading ____
+
+    def test_the_licence_sits_where_the_genre_is_resolved_and_widens_no_loading() -> None:
+        """Anything inference reads is licensed where inference happens.
+    
+        The resolution step owns the question, so the licence is stated there.
+        Loading remains bounded to the base, resolved genre, returned language
+        scopes, optional technique and the named support for the five web genres,
+        with review halves only in Redline (ADR-0178, issue #331).
+        """
+    
+        for path in (WRITE, REDLINE):
+            text = path.read_text(encoding="utf-8")
+            resolution = text.partition("\n## Resolution\n")[2].partition("\n## Steps\n")[0]
+    
+            assert GENRE_INFERENCE_LICENCE in resolution, (
+                f"{path}: what inference may read is licensed outside"
+                f" `## Resolution`, which is where the genre is settled"
+                f" (ADR-0178). See {STANDARD}."
+            )
+    
+            for clause in LOADING_CLAUSES[path.parent.name]:
+>               assert clause in text, (
+                    f"{path}: the loading step no longer carries {clause!r}, so"
+                    f" the door the licence above must not widen is open"
+                    f" (ADR-0178). See {STANDARD}."
+                )
+E               AssertionError: /Users/thomas/Projects/skills/skills/editorial/redline/SKILL.md: the loading step no longer carries 'Done when those are loaded and nothing else has been.', so the door the licence above must not widen is open (ADR-0178). See docs/rules/skills.md.
+E               assert 'Done when those are loaded and nothing else has been.' in "---\nname: redline\ndescription: Review one supplied text against this collection's editorial contract — its genre, i...l stay out of the output. Done when the Text Artifact has been delivered, or the no-change status has been reported.\n"
+
+tests/test_kntnt.py:8269: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_kntnt.py::test_the_licence_sits_where_the_genre_is_resolved_and_widens_no_loading
+1 failed, 518 passed in 119.96s (0:01:59)

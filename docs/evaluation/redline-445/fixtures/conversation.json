@@ -1,0 +1,4 @@
+[
+  "When I ask you to review draft.md, review it against brief.md. Acknowledge for now.",
+  "/redline --max=0 --output=output.md draft.md"
+]

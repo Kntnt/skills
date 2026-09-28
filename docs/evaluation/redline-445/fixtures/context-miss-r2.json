@@ -1,0 +1,3 @@
+[
+  "/redline --max=0 --output=output.md miss.md -- Review it against the brief in brief.md."
+]

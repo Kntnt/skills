@@ -120,9 +120,9 @@ Run `/proofread [--language=LANGUAGE] [--output=TARGET] [text|path|url]` or use 
 
 ### redline
 
-Review one text against the editorial contract, correct findings within a bounded correction budget, and finish with one proofreading pass. Remaining findings are reported with the delivered text.
+Review one text against the editorial contract, correct findings within a bounded correction budget, and finish with one proofreading pass. Remaining findings are reported with the delivered text. An explicitly selected Writing Brief adds a question-by-question fulfilment report; name it with `--brief=PATH`, in the Contextual Instruction, or in applicable Conversation Context, in that order of precedence.
 
-Run `/redline [--genre=GENRE] [--technique=TECHNIQUE] [--language=LANGUAGE] [--max=N] [--output=TARGET] [text|path|url]` or use `--in-place path`.
+Run `/redline [--genre=GENRE] [--technique=TECHNIQUE] [--language=LANGUAGE] [--brief=PATH|URL] [--max=N] [--output=TARGET] [text|path|url]` or use `--in-place path`.
 
 ### unslop
 

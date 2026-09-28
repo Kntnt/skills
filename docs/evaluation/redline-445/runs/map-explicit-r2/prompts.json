@@ -1,0 +1,3 @@
+[
+  "/redline --brief=brief.md --language=en_US --max=0 --output=output.md conflict.md"
+]

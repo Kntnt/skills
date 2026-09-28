@@ -1,0 +1,105 @@
+warning: No `requires-python` value found in the workspace. Defaulting to `>=3.12`.
+Downloading pygments (1.2MiB)
+ Downloaded pygments
+Installed 6 packages in 5ms
+============================= test session starts ==============================
+platform darwin -- Python 3.12.13, pytest-9.1.1, pluggy-1.6.0
+rootdir: /Users/thomas/Projects/skills
+configfile: pyproject.toml
+collected 70 items / 67 deselected / 3 selected
+
+tests/test_invoke.py FFF                                                 [100%]
+
+=================================== FAILURES ===================================
+_ test_redline_accepts_a_brief_separately_from_its_text[--brief=brief.md draft.md] _
+
+payload = '--brief=brief.md draft.md'
+
+    @pytest.mark.parametrize(
+        "payload",
+        [
+            "--brief=brief.md draft.md",
+            "--brief=https://example.org/brief --in-place draft.md",
+            "--brief=brief.md draft.md -- Review against other.md instead.",
+        ],
+    )
+    def test_redline_accepts_a_brief_separately_from_its_text(payload: str) -> None:
+        """The brief is a valued option in both delivery forms, never an operand."""
+    
+        result = _engine().read_invocation(SKILLS / "editorial/redline", payload)
+    
+>       assert result.status == EXIT_VALID, result.text
+E       AssertionError: '/redline' takes no '--brief'
+E         
+E         **/redline** [**--genre**=*GENRE*] [**--technique**=*TECHNIQUE*] [**--language**=*LANGUAGE*] [**--max**=*N*] [**--output**=*TARGET*] [*TEXT*|*PATH*|*URL*] [**--** *INSTRUCTION*]
+E         
+E         **/redline** [**--genre**=*GENRE*] [**--technique**=*TECHNIQUE*] [**--language**=*LANGUAGE*] [**--max**=*N*] **--in-place**[=**on**|**off**] *PATH* [**--** *INSTRUCTION*]
+E         
+E         see '/redline --help'
+E       assert 2 == 0
+E        +  where 2 = Reading(status=2, text="'/redline' takes no '--brief'\n\n**/redline** [**--genre**=*GENRE*] [**--technique**=*TECHNIQU...[**--max**=*N*] **--in-place**[=**on**|**off**] *PATH* [**--** *INSTRUCTION*]\n\nsee '/redline --help'", invocation={}).status
+
+tests/test_invoke.py:641: AssertionError
+_ test_redline_accepts_a_brief_separately_from_its_text[--brief=https://example.org/brief --in-place draft.md] _
+
+payload = '--brief=https://example.org/brief --in-place draft.md'
+
+    @pytest.mark.parametrize(
+        "payload",
+        [
+            "--brief=brief.md draft.md",
+            "--brief=https://example.org/brief --in-place draft.md",
+            "--brief=brief.md draft.md -- Review against other.md instead.",
+        ],
+    )
+    def test_redline_accepts_a_brief_separately_from_its_text(payload: str) -> None:
+        """The brief is a valued option in both delivery forms, never an operand."""
+    
+        result = _engine().read_invocation(SKILLS / "editorial/redline", payload)
+    
+>       assert result.status == EXIT_VALID, result.text
+E       AssertionError: '/redline' takes no '--brief'
+E         
+E         **/redline** [**--genre**=*GENRE*] [**--technique**=*TECHNIQUE*] [**--language**=*LANGUAGE*] [**--max**=*N*] [**--output**=*TARGET*] [*TEXT*|*PATH*|*URL*] [**--** *INSTRUCTION*]
+E         
+E         **/redline** [**--genre**=*GENRE*] [**--technique**=*TECHNIQUE*] [**--language**=*LANGUAGE*] [**--max**=*N*] **--in-place**[=**on**|**off**] *PATH* [**--** *INSTRUCTION*]
+E         
+E         see '/redline --help'
+E       assert 2 == 0
+E        +  where 2 = Reading(status=2, text="'/redline' takes no '--brief'\n\n**/redline** [**--genre**=*GENRE*] [**--technique**=*TECHNIQU...[**--max**=*N*] **--in-place**[=**on**|**off**] *PATH* [**--** *INSTRUCTION*]\n\nsee '/redline --help'", invocation={}).status
+
+tests/test_invoke.py:641: AssertionError
+_ test_redline_accepts_a_brief_separately_from_its_text[--brief=brief.md draft.md -- Review against other.md instead.] _
+
+payload = '--brief=brief.md draft.md -- Review against other.md instead.'
+
+    @pytest.mark.parametrize(
+        "payload",
+        [
+            "--brief=brief.md draft.md",
+            "--brief=https://example.org/brief --in-place draft.md",
+            "--brief=brief.md draft.md -- Review against other.md instead.",
+        ],
+    )
+    def test_redline_accepts_a_brief_separately_from_its_text(payload: str) -> None:
+        """The brief is a valued option in both delivery forms, never an operand."""
+    
+        result = _engine().read_invocation(SKILLS / "editorial/redline", payload)
+    
+>       assert result.status == EXIT_VALID, result.text
+E       AssertionError: '/redline' takes no '--brief'
+E         
+E         **/redline** [**--genre**=*GENRE*] [**--technique**=*TECHNIQUE*] [**--language**=*LANGUAGE*] [**--max**=*N*] [**--output**=*TARGET*] [*TEXT*|*PATH*|*URL*] [**--** *INSTRUCTION*]
+E         
+E         **/redline** [**--genre**=*GENRE*] [**--technique**=*TECHNIQUE*] [**--language**=*LANGUAGE*] [**--max**=*N*] **--in-place**[=**on**|**off**] *PATH* [**--** *INSTRUCTION*]
+E         
+E         see '/redline --help'
+E       assert 2 == 0
+E        +  where 2 = Reading(status=2, text="'/redline' takes no '--brief'\n\n**/redline** [**--genre**=*GENRE*] [**--technique**=*TECHNIQU...[**--max**=*N*] **--in-place**[=**on**|**off**] *PATH* [**--** *INSTRUCTION*]\n\nsee '/redline --help'", invocation={}).status
+
+tests/test_invoke.py:641: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_invoke.py::test_redline_accepts_a_brief_separately_from_its_text[--brief=brief.md draft.md]
+FAILED tests/test_invoke.py::test_redline_accepts_a_brief_separately_from_its_text[--brief=https://example.org/brief --in-place draft.md]
+FAILED tests/test_invoke.py::test_redline_accepts_a_brief_separately_from_its_text[--brief=brief.md draft.md -- Review against other.md instead.]
+======================= 3 failed, 67 deselected in 0.29s =======================

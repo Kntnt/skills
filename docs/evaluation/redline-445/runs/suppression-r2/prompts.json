@@ -1,0 +1,3 @@
+[
+  "/redline --brief=brief.md --max=0 --output=output.md draft.md -- Review against other.md."
+]

@@ -1,0 +1,23 @@
+[
+  {
+    "type": "userMessage",
+    "id": "01a0e8ec-ae79-7d12-a8a9-1bce7d03a4c1",
+    "clientId": null,
+    "content": [
+      {
+        "type": "text",
+        "text": "When I ask you to review draft.md, review it against brief.md. Acknowledge for now.",
+        "text_elements": []
+      }
+    ]
+  },
+  {
+    "type": "agentMessage",
+    "id": "msg_0b6ef3055d391812016aba9ace510087d2b5b2cfd294fee561",
+    "text": "Understood. When you ask me to review draft.md, I’ll review it against brief.md.",
+    "phase": "final_answer",
+    "memoryCitation": null,
+    "delivery": null,
+    "questions": null
+  }
+]

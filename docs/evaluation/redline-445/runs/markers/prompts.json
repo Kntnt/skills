@@ -1,0 +1,3 @@
+[
+  "/redline --brief=markers.md --max=0 --output=output.md draft.md"
+]

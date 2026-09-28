@@ -2,13 +2,13 @@
 
 ## NAME
 
-redline - review one text against the editorial contract, correct what it finds, and close with one mechanical pass
+redline - review one text against the editorial contract and an optional Writing Brief, correct what it finds, and close with one mechanical pass
 
 ## SYNOPSIS
 
-**/redline** [**--genre**=*GENRE*] [**--technique**=*TECHNIQUE*] [**--language**=*LANGUAGE*] [**--max**=*N*] [**--output**=*TARGET*] [*TEXT*|*PATH*|*URL*] [**--** *INSTRUCTION*]
+**/redline** [**--genre**=*GENRE*] [**--technique**=*TECHNIQUE*] [**--language**=*LANGUAGE*] [**--brief=**_PATH|URL_] [**--max**=*N*] [**--output**=*TARGET*] [*TEXT*|*PATH*|*URL*] [**--** *INSTRUCTION*]
 
-**/redline** [**--genre**=*GENRE*] [**--technique**=*TECHNIQUE*] [**--language**=*LANGUAGE*] [**--max**=*N*] **--in-place**[=**on**|**off**] *PATH* [**--** *INSTRUCTION*]
+**/redline** [**--genre**=*GENRE*] [**--technique**=*TECHNIQUE*] [**--language**=*LANGUAGE*] [**--brief=**_PATH|URL_] [**--max**=*N*] **--in-place**[=**on**|**off**] *PATH* [**--** *INSTRUCTION*]
 
 ## DESCRIPTION
 
@@ -16,15 +16,19 @@ redline - review one text against the editorial contract, correct what it finds,
 
 For those four genres the anatomy's counted limits are measured by a script at every review, so every count a finding reports is a measured one, and each correction agent measures its own repair before returning it. The measurement also exposes complete heading/following-text pairs and unjudged shared words. Both reviewer and correction agent judge semantic repetition from those pairs and the full text: necessary repeated names or topic words alone are no defect, and paraphrases can repeat with little overlap. Correction agents repair echoes named by findings or introduced by their own changes; unrelated pre-existing echoes are preserved and reported. A text the script cannot read is inspected by hand and said to be.
 
-No provenance is required. A leading `kntnt` frontmatter map supplies defaults and is updated to match the run; no map is created when none exists. A `technique: none` in that map is its value for no technique rather than a missing one, so a text written without one is reviewed without one.
+An explicitly selected Writing Brief adds a **Brief fulfilment** section, even when the text is unchanged. The brief resolves from **--brief**, then a Contextual Instruction naming it for this review, then applicable Conversation Context naming it. Each level suppresses those below it; the delivery names a different brief suppressed by the option. A brief merely present from an earlier session turn is not selected. Without a selected brief, the ordinary review is unchanged.
 
-Genre, technique, and language resolve independently from the Formal Invocation, `kntnt` metadata, the Contextual Instruction, Conversation Context, inference, the resolved genre's ordinary technique, and defaults. Defaults are `general`, no technique, and the text's language. Article, casestudy, column, opinion and webcopy ordinarily select no technique. Explicit selections and existing metadata keep their priority. The delivery says which technique was resolved and where it came from. A technique is never inferred, and mixed language produces a question.
+The review maps a brief of any shape or language onto the Library's English 13-question template. Each answered question receives a fulfilled, partly fulfilled or not fulfilled status, evidence from the delivered text or explicit absence, and reader loss for a shortfall. Unanswered questions are named. A **[MISSING: …]**-only answer is unanswered; **[SUGGESTED: …]** and **[WEAK: …]** answers are assessed as written and flagged unconfirmed or weak. The brief itself is never reviewed, edited, proofread or delivered.
+
+No provenance is required. A leading `kntnt` frontmatter map in the text supplies defaults and is updated to match the run; no map is created when none exists. A `technique: none` in that map is its value for no technique rather than a missing one, so a text written without one is reviewed without one.
+
+Genre, technique, and language resolve independently from the Formal Invocation, the brief's `kntnt` metadata, the text's metadata for values the brief omits, the Contextual Instruction, Conversation Context, inference, the resolved genre's ordinary technique, and defaults. Defaults are `general`, no technique, and the text's language. Article, casestudy, column, opinion and webcopy ordinarily select no technique. Explicit selections and existing metadata keep their priority. The delivery says which technique was resolved and where it came from. A technique is never inferred, and mixed language produces a question.
 
 A Contextual Instruction every higher level has already settled is suppressed rather than refused: the run continues, and the delivery names the suppressed instruction beside the resolved configuration where saying so is useful.
 
-Ordinary frontmatter is not configuration. Unsupported `kntnt` values stop the run unless the corresponding flag overrides them.
+Disagreement between the two maps is always reported as a finding, even when an explicit option overrides both. The brief's map wins below the Formal Invocation and is never updated. With only one map, that map supplies defaults. Ordinary frontmatter is not configuration. Unsupported winning `kntnt` values stop the run unless the corresponding flag overrides them. A text-map value suppressed by the brief map is reported in the conflict.
 
-Source material is outside the contract. The review judges only the supplied text; visible contradictions or unsupported claims may still be findings.
+Without a selected brief, source material is outside the contract. The review judges only the supplied text; visible contradictions or unsupported claims may still be findings. With a brief, the review reads the material it points at as needed for its requirements. Repairable shortfalls join the existing findings and Correction Budget. Source Fidelity binds these corrections: no fact, source or quotation may be added without support in the text or that material, with attribution, uncertainty, scope, chronology and causality intact. Shortfalls needing unavailable evidence are reported and left for the writer; a brief requirement is not itself evidence.
 
 A code sample is quoted material. Fenced blocks, indented blocks, and inline code are neither reviewed nor changed; prose about code is ordinary prose.
 
@@ -58,7 +62,7 @@ Select an installed genre. The default is `general`; an unknown genre is refused
 
 **--technique**=*TECHNIQUE*
 
-Select an installed structural technique. Where none is named here, in the text's `kntnt` map, in an instruction, or in applicable conversation context, the resolved genre's ordinary technique applies. To review against no technique, say so in an instruction or carry `technique: none` in the map: this flag takes an installed name and cannot say none. Resemblance never selects one.
+Select an installed structural technique. Where none is named here, in the selected brief's or the text's `kntnt` map, in an instruction, or in applicable conversation context, the resolved genre's ordinary technique applies. To review against no technique, say so in an instruction or carry `technique: none` in the map: this flag takes an installed name and cannot say none. Resemblance never selects one.
 
 <!-- kntnt:editorial-techniques -->
 
@@ -66,17 +70,21 @@ Select an installed structural technique. Where none is named here, in the text'
 
 Select the language or locale by canonical code, case or separator variant, curated alias, or ordinary description. It overrides every other source and is passed to `proofread`.
 
+**--brief=**_PATH|URL_
+
+Review against the Writing Brief at this path or URL as well as the editorial contract. The brief is never edited, proofread or delivered. A Contextual Instruction or applicable Conversation Context can also name it; the option wins over the instruction, which wins over conversation. A brief merely present in the session is not selected.
+
 **--max**=*N*
 
 Set the maximum number of substantive corrections. It accepts any non-negative integer and defaults to `1`. `0` only reviews and reports; the final mechanical pass still runs.
 
 **--output**=*TARGET*
 
-Deliver to `response` (the default) or one filesystem path. A new path creates a file, an existing file is replaced, and an existing directory receives a derived non-colliding filename. It cannot be combined with **--in-place** or name the source path.
+Deliver to `response` (the default) or one filesystem path. A new path creates a file, an existing file is replaced, and an existing directory receives a derived non-colliding filename. It cannot be combined with **--in-place**, name the source path, or replace the selected brief's file (including an alias of that file).
 
 **--in-place**[=**on**|**off**]
 
-Replace the writable local source file. Bare **--in-place** means `on`; accepted values are `yes`, `on`, `true`, `no`, `off`, and `false`. Inline text, URLs, uploaded or read-only sources, and simultaneous **--output** are refused.
+Replace the writable local source file. Bare **--in-place** means `on`; accepted values are `yes`, `on`, `true`, `no`, `off`, and `false`. Inline text, URLs, uploaded or read-only sources, simultaneous **--output**, and replacement of the selected brief's file are refused.
 
 ## DIAGNOSTICS
 
@@ -84,13 +92,23 @@ An invalid form is refused rather than repaired or ignored. The Skill names the 
 
 Refusals include unknown, missing, repeated, or out-of-order input; unsupported resources; invalid budgets; multiple texts; incompatible output options; unsafe in-place sources; and unwritable destinations. This is the whole of what is refused over the form of an invocation.
 
+An unreadable selected brief stops the run before review or writing; it is never silently ignored. Missing material referenced by a readable brief is reported as a limitation and the affected shortfall is left for the writer.
+
 Other stops are documented with the value they concern, under `## INVOCATION ENVELOPE`, and under `## DEPENDENCIES`.
 
 A valid text is reviewed even when it is a brief, outline, or notes. Its incompleteness becomes a finding, not a refusal.
 
-Unsupported `kntnt` metadata stops the run unless a flag overrides it. Mixed or ambiguous language produces one question before anything is written.
+Unsupported winning `kntnt` metadata stops the run unless a flag overrides it. Mixed or ambiguous language produces one question before anything is written.
 
 ## EXAMPLES
+
+**/redline --brief=brief.md --output=reviewed.md draft.md**
+
+Review `draft.md` against the editorial contract and `brief.md`, then deliver the text with a question-by-question brief report.
+
+**/redline draft.md -- Review it against the brief in brief.md.**
+
+Select the brief through the Contextual Instruction. An earlier conversation instruction naming the brief for this review also works when neither the option nor this instruction selects one.
 
 **/redline article.md**
 

@@ -1,0 +1,128 @@
+[
+  {
+    "run": "context-miss",
+    "pid": 33840,
+    "waited_returncode": 0,
+    "still_running_this_evaluation": false
+  },
+  {
+    "run": "context-miss-r2",
+    "pid": 4125,
+    "waited_returncode": 0,
+    "still_running_this_evaluation": false
+  },
+  {
+    "run": "conversation",
+    "pid": 49139,
+    "waited_returncode": 0,
+    "still_running_this_evaluation": false
+  },
+  {
+    "run": "conversation-r2",
+    "pid": 8549,
+    "waited_returncode": 0,
+    "still_running_this_evaluation": false
+  },
+  {
+    "run": "map-conflict",
+    "pid": 49140,
+    "waited_returncode": 0,
+    "still_running_this_evaluation": false
+  },
+  {
+    "run": "map-conflict-r2",
+    "pid": 11971,
+    "waited_returncode": 0,
+    "still_running_this_evaluation": false
+  },
+  {
+    "run": "map-explicit",
+    "pid": 65412,
+    "waited_returncode": 0,
+    "still_running_this_evaluation": false
+  },
+  {
+    "run": "map-explicit-r2",
+    "pid": 14947,
+    "waited_returncode": 0,
+    "still_running_this_evaluation": false
+  },
+  {
+    "run": "markers",
+    "pid": 33855,
+    "waited_returncode": 0,
+    "still_running_this_evaluation": false
+  },
+  {
+    "run": "markers-r2",
+    "pid": 7846,
+    "waited_returncode": 0,
+    "still_running_this_evaluation": false
+  },
+  {
+    "run": "option-fulfil",
+    "pid": 33422,
+    "waited_returncode": 0,
+    "still_running_this_evaluation": false
+  },
+  {
+    "run": "option-fulfil-r2",
+    "pid": 4124,
+    "waited_returncode": 0,
+    "still_running_this_evaluation": false
+  },
+  {
+    "run": "pre-context",
+    "pid": 30572,
+    "waited_returncode": 0,
+    "still_running_this_evaluation": false
+  },
+  {
+    "run": "prior-presence",
+    "pid": 69624,
+    "waited_returncode": 0,
+    "still_running_this_evaluation": false
+  },
+  {
+    "run": "protected-brief",
+    "pid": 66958,
+    "waited_returncode": 0,
+    "still_running_this_evaluation": false
+  },
+  {
+    "run": "repair",
+    "pid": 68484,
+    "waited_returncode": 0,
+    "still_running_this_evaluation": false
+  },
+  {
+    "run": "suppression",
+    "pid": 49141,
+    "waited_returncode": 0,
+    "still_running_this_evaluation": false
+  },
+  {
+    "run": "suppression-r2",
+    "pid": 11485,
+    "waited_returncode": 0,
+    "still_running_this_evaluation": false
+  },
+  {
+    "run": "web-copy-clean-file",
+    "pid": 80100,
+    "waited_returncode": 0,
+    "still_running_this_evaluation": false
+  },
+  {
+    "run": "web-copy-clean-response",
+    "pid": 71862,
+    "waited_returncode": 0,
+    "still_running_this_evaluation": false
+  },
+  {
+    "run": "web-copy-flawed-file",
+    "pid": 82401,
+    "waited_returncode": 0,
+    "still_running_this_evaluation": false
+  }
+]

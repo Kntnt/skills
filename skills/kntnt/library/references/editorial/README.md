@@ -6,7 +6,7 @@ Everything here is language-independent and written in English. The language-spe
 
 ## The writing brief
 
-[`writing-brief.md`](writing-brief.md) holds the 13 numbered questions, their guidance and quality criteria, and the final coherence check for a Writing Brief. It is shared input to preparing and reviewing a brief. Its English version is authoritative; consumers translate the questions into the user's working language without changing their numbers or order. Its examples are not an inventory of installed genres or techniques.
+[`writing-brief.md`](writing-brief.md) holds the 13 numbered questions, their guidance and quality criteria, and the final coherence check for a Writing Brief. It is shared input to preparing and reviewing a brief and to assessing a text against one. Its English version is authoritative; consumers translate the questions into the user's working language without changing their numbers or order. Its examples are not an inventory of installed genres or techniques.
 
 ## The base contract
 

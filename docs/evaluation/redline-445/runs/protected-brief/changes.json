@@ -1,0 +1,21 @@
+{
+  "created": [
+    "scratch/state/goals_1.sqlite",
+    "scratch/state/goals_1.sqlite-shm",
+    "scratch/state/goals_1.sqlite-wal",
+    "scratch/state/logs_2.sqlite",
+    "scratch/state/logs_2.sqlite-shm",
+    "scratch/state/logs_2.sqlite-wal",
+    "scratch/state/memories_1.sqlite",
+    "scratch/state/memories_1.sqlite-shm",
+    "scratch/state/memories_1.sqlite-wal",
+    "scratch/state/queue_1.sqlite",
+    "scratch/state/queue_1.sqlite-shm",
+    "scratch/state/queue_1.sqlite-wal",
+    "scratch/state/state_5.sqlite",
+    "scratch/state/state_5.sqlite-shm",
+    "scratch/state/state_5.sqlite-wal"
+  ],
+  "removed": [],
+  "changed": []
+}

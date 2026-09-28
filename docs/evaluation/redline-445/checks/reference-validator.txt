@@ -1,0 +1,5 @@
+   Building skills-ref @ git+https://github.com/agentskills/agentskills@69ef37e9424c0a7ea9dd2293b559e43ec8176379#subdirectory=skills-ref
+      Built skills-ref @ git+https://github.com/agentskills/agentskills@69ef37e9424c0a7ea9dd2293b559e43ec8176379#subdirectory=skills-ref
+Installed 5 packages in 2ms
+Validation failed for skills/editorial/redline:
+  - Unexpected fields in frontmatter: argument-hint, disable-model-invocation. Only ['allowed-tools', 'compatibility', 'description', 'license', 'metadata', 'name'] are allowed.

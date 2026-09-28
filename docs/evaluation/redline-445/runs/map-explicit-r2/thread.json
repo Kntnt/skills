@@ -1,0 +1,73 @@
+{
+  "thread": {
+    "id": "01a0e8fe-e8f1-73a2-b688-eb6966db5996",
+    "environments": [
+      {
+        "environmentId": "local",
+        "cwd": "/private/tmp/claude-501/-Users-thomas-Projects-skills/e8b2bc18-7919-41a5-8ca9-09238d1d9734/scratchpad/t445/map-explicit-r2/work",
+        "runtimeWorkspaceRoots": [
+          "/private/tmp/claude-501/-Users-thomas-Projects-skills/e8b2bc18-7919-41a5-8ca9-09238d1d9734/scratchpad/t445/map-explicit-r2/work",
+          "/private/tmp/claude-501/-Users-thomas-Projects-skills/e8b2bc18-7919-41a5-8ca9-09238d1d9734/scratchpad/t445/map-explicit-r2/scratch"
+        ]
+      }
+    ],
+    "extra": null,
+    "sessionId": "01a0e8fe-e8f1-73a2-b688-eb6966db5996",
+    "forkedFromId": null,
+    "parentThreadId": null,
+    "preview": "",
+    "ephemeral": true,
+    "section": null,
+    "sectionEnteredAt": null,
+    "projectId": null,
+    "historyMode": "legacy",
+    "modelProvider": "openai",
+    "model": "gpt-6-astra",
+    "reasoningEffort": "high",
+    "createdAt": 1790615415,
+    "updatedAt": 1790615415,
+    "recencyAt": 1790615415,
+    "status": {
+      "type": "idle"
+    },
+    "path": null,
+    "cwd": "/private/tmp/claude-501/-Users-thomas-Projects-skills/e8b2bc18-7919-41a5-8ca9-09238d1d9734/scratchpad/t445/map-explicit-r2/work",
+    "cliVersion": "0.157.1",
+    "originator": "redline445evaluation",
+    "source": "vscode",
+    "canAcceptDirectInput": true,
+    "threadSource": null,
+    "agentNickname": null,
+    "agentRole": null,
+    "gitInfo": null,
+    "name": null,
+    "daybreakEnabled": null,
+    "turns": []
+  },
+  "model": "gpt-6-astra",
+  "modelProvider": "openai",
+  "serviceTier": "default",
+  "disabledPluginIds": [],
+  "cwd": "/private/tmp/claude-501/-Users-thomas-Projects-skills/e8b2bc18-7919-41a5-8ca9-09238d1d9734/scratchpad/t445/map-explicit-r2/work",
+  "runtimeWorkspaceRoots": [
+    "/private/tmp/claude-501/-Users-thomas-Projects-skills/e8b2bc18-7919-41a5-8ca9-09238d1d9734/scratchpad/t445/map-explicit-r2/work",
+    "/private/tmp/claude-501/-Users-thomas-Projects-skills/e8b2bc18-7919-41a5-8ca9-09238d1d9734/scratchpad/t445/map-explicit-r2/scratch"
+  ],
+  "instructionSources": [
+    "/Users/thomas/.codex/AGENTS.md"
+  ],
+  "approvalPolicy": "never",
+  "approvalsReviewer": "user",
+  "sandbox": {
+    "type": "workspaceWrite",
+    "writableRoots": [
+      "/private/tmp/claude-501/-Users-thomas-Projects-skills/e8b2bc18-7919-41a5-8ca9-09238d1d9734/scratchpad/t445/map-explicit-r2/scratch"
+    ],
+    "networkAccess": true,
+    "excludeTmpdirEnvVar": true,
+    "excludeSlashTmp": true
+  },
+  "activePermissionProfile": null,
+  "reasoningEffort": "high",
+  "multiAgentMode": "explicitRequestOnly"
+}

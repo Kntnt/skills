@@ -35,8 +35,8 @@ The single installed source for one language or locale's editorial guidance. It 
 _Avoid_: language pack, translation, alias registry
 
 **Source Fidelity**:
-The Write Skill's truthful representation of the material supplied for a new text: facts, attribution, uncertainty, scope, chronology, causality, and the meaning of edited interview quotations remain supported by that material. It is not external fact-checking, and it is no other editorial Skill's contract.
-_Avoid_: fact-checking, source validation, Redline verification
+Truthful representation of supplied material in a new text or a correction against a Writing Brief: facts, attribution, uncertainty, scope, chronology, causality, and the meaning of edited interview quotations remain supported by that material. It is distinct from external fact-checking.
+_Avoid_: fact-checking, source validation
 
 **Text Artifact**:
 One coherent text that Write creates or that an editorial Skill processes. Write may use several source materials to create one Text Artifact; how many of them one invocation of an editorial Skill carries is stated in that Skill's own shipped documents.

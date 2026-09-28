@@ -1,0 +1,1 @@
+Invented fixture: Fen Repair runs a lamp assessment desk in the Oak Room on Saturday, 10 October, from 10 am to noon. Volunteers assess whether lamps can be repaired; repair is not guaranteed. Visitors should bring the lamp and its cable. Book via desk@example.org. No cost, attendance or success-rate figures are available.

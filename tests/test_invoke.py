@@ -625,6 +625,22 @@ def test_an_invalid_form_is_refused_in_the_collections_shape(tmp_path: Path) -> 
     assert rest.rstrip("\n").endswith("see '/skill --help'")
 
 
+@pytest.mark.parametrize(
+    "payload",
+    [
+        "--brief=brief.md draft.md",
+        "--brief=https://example.org/brief --in-place draft.md",
+        "--brief=brief.md draft.md -- Review against other.md instead.",
+    ],
+)
+def test_redline_accepts_a_brief_separately_from_its_text(payload: str) -> None:
+    """The brief is a valued option in both delivery forms, never an operand."""
+
+    result = _engine().read_invocation(SKILLS / "editorial/redline", payload)
+
+    assert result.status == EXIT_VALID, result.text
+
+
 def test_redline_proofread_handoff_keeps_strict_parsing_and_exact_artifact(
     tmp_path: Path,
 ) -> None:

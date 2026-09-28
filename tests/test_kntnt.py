@@ -8512,10 +8512,10 @@ def test_the_resource_format_places_the_ordinary_technique_below_the_opening() -
     )
 
 
-def test_redline_leaves_source_fidelity_to_the_skill_that_owns_it() -> None:
-    """A reviewing Skill has no source material, and says nothing about it.
+def test_redline_without_a_brief_leaves_source_fidelity_to_the_writer() -> None:
+    """An ordinary review has no source material, and says nothing about it.
 
-    Redline reviews the Text Artifact against its editorial contract. It never
+    Without a selected brief, Redline reviews the editorial contract. It never
     compares the artifact with source material and never reports that source
     verification was unavailable, because a caveat about material nobody
     supplied is noise in every run that was never a Write run (ADR-0178).
@@ -8529,8 +8529,8 @@ def test_redline_leaves_source_fidelity_to_the_skill_that_owns_it() -> None:
         f" (ADR-0178). See {STANDARD}."
     )
     assert "Source Fidelity" in text, (
-        f"{REDLINE}: the body never names Source Fidelity as somebody else's"
-        f" contract, and the boundary is what keeps this Skill usable where no"
+        f"{REDLINE}: the body never names Source Fidelity or its boundary for"
+        f" a review without a brief, which keeps this Skill usable where no"
         f" Write invocation and no material exist (ADR-0178). See {STANDARD}."
     )
 

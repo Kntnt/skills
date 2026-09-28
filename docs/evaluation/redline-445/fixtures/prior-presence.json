@@ -1,0 +1,4 @@
+[
+  "/brief --output=prior.md sources.md -- Draft a Writing Brief from this material for a short printed community notice. Use English and do not interview me; mark gaps.",
+  "/redline --genre=general --language=en_GB --max=0 --output=output.md draft.md"
+]

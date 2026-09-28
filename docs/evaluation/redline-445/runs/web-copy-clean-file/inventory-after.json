@@ -1,0 +1,410 @@
+{
+  "scratch/models.json": {
+    "sha256": "f6ed45658ec44c7970ce9a50326070ec8f345d19e519f2a192c9449d5afdb6ed",
+    "mode": 420
+  },
+  "scratch/state/goals_1.sqlite": {
+    "sha256": "4eeb710c739848e62f0d53d04057e17375b4af741c9b441f2a546f6ed860c79f",
+    "mode": 420
+  },
+  "scratch/state/goals_1.sqlite-shm": {
+    "sha256": "9a7e810043fa313cc9749acba2f78b7ec6d049c8f2066462b9dfa812e6f424f3",
+    "mode": 420
+  },
+  "scratch/state/goals_1.sqlite-wal": {
+    "sha256": "fd17b2438c47e086c0997d8f55691e86fe140272888f2c5707ebfe8adc9c165c",
+    "mode": 420
+  },
+  "scratch/state/logs_2.sqlite": {
+    "sha256": "0a593d7fa20bf6610160962bc19a323cf08919227e965b0ce26b180cd4f0e0df",
+    "mode": 420
+  },
+  "scratch/state/logs_2.sqlite-shm": {
+    "sha256": "9e587f7f3b8ccc3562292ec0e8f31654484fe45ef45291ec4853f23eb766ed35",
+    "mode": 420
+  },
+  "scratch/state/logs_2.sqlite-wal": {
+    "sha256": "08922e75abf0043dec954d35e76c04a0cf10f6f43be56824213c9a3cb4a79dc8",
+    "mode": 420
+  },
+  "scratch/state/memories_1.sqlite": {
+    "sha256": "4eeb710c739848e62f0d53d04057e17375b4af741c9b441f2a546f6ed860c79f",
+    "mode": 420
+  },
+  "scratch/state/memories_1.sqlite-shm": {
+    "sha256": "b48df493361acf95176ded90365d9c8fadd14165940da0a620a84da6d20b9b3f",
+    "mode": 420
+  },
+  "scratch/state/memories_1.sqlite-wal": {
+    "sha256": "2c4e2bf175e245a3dae0c8ab8dbc86ffe8f9717e40c7274b664cdea1c1c4fdd9",
+    "mode": 420
+  },
+  "scratch/state/queue_1.sqlite": {
+    "sha256": "4eeb710c739848e62f0d53d04057e17375b4af741c9b441f2a546f6ed860c79f",
+    "mode": 420
+  },
+  "scratch/state/queue_1.sqlite-shm": {
+    "sha256": "8c6ff3b610b4d6f3c29737681fff9f324f2ca88bf8d2c6097f7521f8b424e289",
+    "mode": 420
+  },
+  "scratch/state/queue_1.sqlite-wal": {
+    "sha256": "a2439c9179012ad6a9386ed587ebf06e53e9b3cfdd8b2d8991858779ec0b6942",
+    "mode": 420
+  },
+  "scratch/state/state_5.sqlite": {
+    "sha256": "401dd5a8e6a774c559a3ceeda43212725138bdc23bf66d76e09e8db095380edf",
+    "mode": 420
+  },
+  "scratch/state/state_5.sqlite-shm": {
+    "sha256": "452a9309b3c2a2d76325aff8b9834c4bf0d96fe223d7ff85ba5b18eb6f36eea3",
+    "mode": 420
+  },
+  "scratch/state/state_5.sqlite-wal": {
+    "sha256": "3d96cfdcf1327fac1f1a9b5c3d1a30c390794939ebc1f7e568e12e120e62e210",
+    "mode": 420
+  },
+  "work/.agents/skills/kntnt/SKILL.md": {
+    "sha256": "750ad3f09e8c896f9992e41ed7e3e8557d8727f643e8ba8894f2ad48fa6517c7",
+    "mode": 420
+  },
+  "work/.agents/skills/kntnt/agents/openai.yaml": {
+    "sha256": "709b566f6698b9a6c2a3ba4d95a6e33b7a590608f66b5af515069234ac0dbd91",
+    "mode": 420
+  },
+  "work/.agents/skills/kntnt/catalog.json": {
+    "sha256": "2998b57633957d94baf463631e81ddf7163b73bdcf82702a04d1e289e14cb5be",
+    "mode": 420
+  },
+  "work/.agents/skills/kntnt/features/session-cleanup/FEATURE.md": {
+    "sha256": "afdd1a67dc15229b9542711ed681777cdcae35fe9c8ab788456f11eaadc7560b",
+    "mode": 420
+  },
+  "work/.agents/skills/kntnt/features/session-cleanup/instructions.md": {
+    "sha256": "64434359eaccc208e0d9c52038dd08b6349c42459c58d8e3af846086c7f25e36",
+    "mode": 420
+  },
+  "work/.agents/skills/kntnt/features/session-cleanup/scripts/__pycache__/session_cleanup.cpython-312.pyc": {
+    "sha256": "0a31d3a9e6696e49d2cf015678a00cbfe5d4104007e83b670620f70fca3bf00b",
+    "mode": 420
+  },
+  "work/.agents/skills/kntnt/features/session-cleanup/scripts/__pycache__/session_cleanup.cpython-314.pyc": {
+    "sha256": "dce6b33484d445d7f61e7784cba200594c089a173255ccb305361cfe0d3d6d96",
+    "mode": 420
+  },
+  "work/.agents/skills/kntnt/features/session-cleanup/scripts/session_cleanup.py": {
+    "sha256": "defdd20644108e1ad4ab78b207d04b912481821c4382130ee3a8e065522ebce5",
+    "mode": 420
+  },
+  "work/.agents/skills/kntnt/features/statusline/FEATURE.md": {
+    "sha256": "68f3dacf20ee5dd582ef0440a0bc4cef839251e3546c3f2876dcc2412ba6a4a5",
+    "mode": 420
+  },
+  "work/.agents/skills/kntnt/features/statusline/scripts/statusline_feature.py": {
+    "sha256": "3596f97853a1d1adfc654a91c8778ebf57fbf90c0a3dfb051f95e8399248d220",
+    "mode": 420
+  },
+  "work/.agents/skills/kntnt/features/statusline/statusline.sh": {
+    "sha256": "4262bf72da77714d6abe95f3e7c84d5f2c9572f29e84469af676d672a9907166",
+    "mode": 493
+  },
+  "work/.agents/skills/kntnt/harness-paths.json": {
+    "sha256": "4d288adb766da2b686bfcdb7dc082f7938de7e68c359d29c9f3b5529dcbb4b81",
+    "mode": 420
+  },
+  "work/.agents/skills/kntnt/help/help.md": {
+    "sha256": "4ea6bb85655233bc6329446dc4b947d5a0499bb7dbc67a46292a3140428a7701",
+    "mode": 420
+  },
+  "work/.agents/skills/kntnt/help/select.md": {
+    "sha256": "8fbbe07776916cd3bf5dd2af29372b914485a59525af926cf440eec8717f0484",
+    "mode": 420
+  },
+  "work/.agents/skills/kntnt/help/uninstall.md": {
+    "sha256": "c1e01918ef371836b0e09247240691534cf4d68d225f26b0cad52f72b967b149",
+    "mode": 420
+  },
+  "work/.agents/skills/kntnt/help/update.md": {
+    "sha256": "571931337a9d2b7cc5bce9027ffd278180b3307a60907a686bac5cc4e8ae3437",
+    "mode": 420
+  },
+  "work/.agents/skills/kntnt/help.md": {
+    "sha256": "680e5731fc90b4e437a0d7b17c9d4dbfec0e984c957cb7f3def291b83e5df1aa",
+    "mode": 420
+  },
+  "work/.agents/skills/kntnt/library/references/changelog.md": {
+    "sha256": "ffbaa70cec4453d3fb366ca2cb0ea07359d5c4f6d86edc1882458aa9e627fb56",
+    "mode": 420
+  },
+  "work/.agents/skills/kntnt/library/references/delivery.md": {
+    "sha256": "612ce978502bf6059c28602969f1b986bc4bf629e7fea22b903d2bf8d2b4d31f",
+    "mode": 420
+  },
+  "work/.agents/skills/kntnt/library/references/editorial/README.md": {
+    "sha256": "b9a6d64d0f29dcf9d162e947f506b874dea6ec2216232fecd3894cad336e9a5e",
+    "mode": 420
+  },
+  "work/.agents/skills/kntnt/library/references/editorial/anti-slop.md": {
+    "sha256": "9ec7fb15b3cfe22f446c6ed2df85666aaa182d8fa0a09fa3668887e4786d83c2",
+    "mode": 420
+  },
+  "work/.agents/skills/kntnt/library/references/editorial/article-anatomy.md": {
+    "sha256": "3bded416ddae0be9307c4dc89200b2602616fcb8e79f377fa5f32ff557b3bd28",
+    "mode": 420
+  },
+  "work/.agents/skills/kntnt/library/references/editorial/article-anatomy.review.md": {
+    "sha256": "3e616f9671126ba7898123dd288a4a9bb4170f189d567a3fcbd2b17ccb82c633",
+    "mode": 420
+  },
+  "work/.agents/skills/kntnt/library/references/editorial/base.md": {
+    "sha256": "d4146ef134de7482e25469201aaceed7b207fba9f8bacb06a428b85f6bfc3581",
+    "mode": 420
+  },
+  "work/.agents/skills/kntnt/library/references/editorial/base.review.md": {
+    "sha256": "80bf996801ffce5574097a7888ca38e662124ca5e8d5f7bf02227a3f10924e36",
+    "mode": 420
+  },
+  "work/.agents/skills/kntnt/library/references/editorial/genres/article.md": {
+    "sha256": "2313180d69b25de48b818629c5d761daa36eb69def33441b01c24a2135f17b4f",
+    "mode": 420
+  },
+  "work/.agents/skills/kntnt/library/references/editorial/genres/article.review.md": {
+    "sha256": "0d992e276cb65943ceab91cb855c1fcafd2b65ed4b378a16a4ea63036de8074c",
+    "mode": 420
+  },
+  "work/.agents/skills/kntnt/library/references/editorial/genres/casestudy.md": {
+    "sha256": "9ab74023260a0b74ee6aff972326738cf31564f9dba2c4deba39a89d625b3af3",
+    "mode": 420
+  },
+  "work/.agents/skills/kntnt/library/references/editorial/genres/casestudy.review.md": {
+    "sha256": "a7db10d0dc1970064a8887c819a8500dfdecf43dcb45fffed32994921ceb68a4",
+    "mode": 420
+  },
+  "work/.agents/skills/kntnt/library/references/editorial/genres/column.md": {
+    "sha256": "0971c8b498535ed57bbc130e61989b477c334e53cf3fa3c37b2e1bf64a158d98",
+    "mode": 420
+  },
+  "work/.agents/skills/kntnt/library/references/editorial/genres/column.review.md": {
+    "sha256": "8abffc59549e71a00d40200e89b656ca77d0dfd8d1f3e58293a0591373fb5c37",
+    "mode": 420
+  },
+  "work/.agents/skills/kntnt/library/references/editorial/genres/general.md": {
+    "sha256": "438d85d3016889dd994d70a989b4ab73b8b70e149aea8e45d144cf3d371c6be5",
+    "mode": 420
+  },
+  "work/.agents/skills/kntnt/library/references/editorial/genres/opinion.md": {
+    "sha256": "f0edbed362fe613f11cfe6232c4c7fc98202786fa909f3cd72f1b1acd0867e41",
+    "mode": 420
+  },
+  "work/.agents/skills/kntnt/library/references/editorial/genres/opinion.review.md": {
+    "sha256": "97c67a0ca701388b268b03f8dbab88e877ed259b6201f3c005ff45ea634b641d",
+    "mode": 420
+  },
+  "work/.agents/skills/kntnt/library/references/editorial/genres/pressrelease.md": {
+    "sha256": "4e554d322f25995dbc7ed2237ac261b49eec1283eb64576dc80b95ed7066db3b",
+    "mode": 420
+  },
+  "work/.agents/skills/kntnt/library/references/editorial/genres/pressrelease.review.md": {
+    "sha256": "b2660413e3bd94843a7092309859a6fd14be880ca8a66d861509d4eb2c9d96f6",
+    "mode": 420
+  },
+  "work/.agents/skills/kntnt/library/references/editorial/genres/report.md": {
+    "sha256": "1edaa623002a25cf60ddf2c1fe74ced72479b168857f7c79d7db6965d5d75138",
+    "mode": 420
+  },
+  "work/.agents/skills/kntnt/library/references/editorial/genres/report.review.md": {
+    "sha256": "8c6e3a5b5dfb224d6324026c2708d930abc009a34206caad5bf6296d7235e026",
+    "mode": 420
+  },
+  "work/.agents/skills/kntnt/library/references/editorial/genres/teaser.md": {
+    "sha256": "540f873055e0454cf84b08c2eccce373fe5037ba51c672f5089127a805fd9589",
+    "mode": 420
+  },
+  "work/.agents/skills/kntnt/library/references/editorial/genres/teaser.review.md": {
+    "sha256": "9dc18d812492b0609c827e53c00014d6c29cab477ede94d440054b49a19bcb6c",
+    "mode": 420
+  },
+  "work/.agents/skills/kntnt/library/references/editorial/genres/webcopy.md": {
+    "sha256": "629656792d7038f4d4572fc3f8751643f0cbfd46050892010552ed81f6d04adf",
+    "mode": 420
+  },
+  "work/.agents/skills/kntnt/library/references/editorial/genres/webcopy.review.md": {
+    "sha256": "3f0062c93ad2b8839fcfda637e4ea08d34aeb08be47add59f37ef5dd31e109ba",
+    "mode": 420
+  },
+  "work/.agents/skills/kntnt/library/references/editorial/headlines.md": {
+    "sha256": "adfb7ca612905afee03a73d58cdb07de9d0877b23af9de89f7e114f6de81df5f",
+    "mode": 420
+  },
+  "work/.agents/skills/kntnt/library/references/editorial/headlines.review.md": {
+    "sha256": "d2194657be8b6527e5b04c16439837fa45d87aeff23432d496ee354da0b12ce5",
+    "mode": 420
+  },
+  "work/.agents/skills/kntnt/library/references/editorial/mechanics.md": {
+    "sha256": "b3103ed6da4ac9d27a0ebfb43bdb40b8e77d58d84b3745a90c0a736142438b45",
+    "mode": 420
+  },
+  "work/.agents/skills/kntnt/library/references/editorial/techniques/abt.md": {
+    "sha256": "f43c6d5fd219777e5421587e6e667f219e54bd484f709497616c406fcf4846f9",
+    "mode": 420
+  },
+  "work/.agents/skills/kntnt/library/references/editorial/techniques/abt.review.md": {
+    "sha256": "ae18b5f6c54732450fe81e311b7ae15b940f6e1882f715e5eff74222e523b7a7",
+    "mode": 420
+  },
+  "work/.agents/skills/kntnt/library/references/editorial/techniques/pac.md": {
+    "sha256": "a1b286711c7d224432faa66b6117010388eedb11bce3ab5c81dd8a524ada4666",
+    "mode": 420
+  },
+  "work/.agents/skills/kntnt/library/references/editorial/techniques/pac.review.md": {
+    "sha256": "735a6b025a6baea7891856f5e853e37be8e7e9214321ccba540b2a5118cc80c8",
+    "mode": 420
+  },
+  "work/.agents/skills/kntnt/library/references/editorial/web-craft.md": {
+    "sha256": "b1ac5867d30952c3ca78da244520ab28c025102f4389f44ec206757a29f05371",
+    "mode": 420
+  },
+  "work/.agents/skills/kntnt/library/references/editorial/web-craft.review.md": {
+    "sha256": "169da1beeb4fb80e74f9423bdd4d7bcd57aa9b59b8e8ff5b71f3a67dfef7e923",
+    "mode": 420
+  },
+  "work/.agents/skills/kntnt/library/references/editorial/writing-brief.md": {
+    "sha256": "e0eec9c0c2cd534eced410e63296eb0416238fa299c28faa552d48f4d571fd5c",
+    "mode": 420
+  },
+  "work/.agents/skills/kntnt/library/references/invocation-envelope.md": {
+    "sha256": "1f76ac87aa395a652232f5f289aef94a8652de76e88dbee3d5f7ceca14496bad",
+    "mode": 420
+  },
+  "work/.agents/skills/kntnt/library/references/languages/README.md": {
+    "sha256": "23929466b467620f2d5b12a2c6ea040ef381a906e0892eaa877dd5210c01a338",
+    "mode": 420
+  },
+  "work/.agents/skills/kntnt/library/references/languages/en_GB.md": {
+    "sha256": "2b36899b232e65300ea15fbbb0db2abece4e1f32e7b193957355a67a34331413",
+    "mode": 420
+  },
+  "work/.agents/skills/kntnt/library/references/languages/en_US.md": {
+    "sha256": "d11fcffa9e7316dd44d8796a954e5db9965c501e7df982affe91bc624cfef73c",
+    "mode": 420
+  },
+  "work/.agents/skills/kntnt/library/references/languages/sv.md": {
+    "sha256": "241f0e5e4ca590c1d2348dc4048d15b5c8cc030c9dc91de989a758cefd4cd211",
+    "mode": 420
+  },
+  "work/.agents/skills/kntnt/library/scripts/__pycache__/argument_grammar.cpython-312.pyc": {
+    "sha256": "a7e040ef8933b5cb6a4700180e25bde531d25892931472daa26b2f51dc014e0c",
+    "mode": 420
+  },
+  "work/.agents/skills/kntnt/library/scripts/__pycache__/credentials.cpython-312.pyc": {
+    "sha256": "b0013dd08b5633077df124916be3d4d9fa34f48754a719f62fd4012dd6e636a1",
+    "mode": 420
+  },
+  "work/.agents/skills/kntnt/library/scripts/__pycache__/integrations.cpython-312.pyc": {
+    "sha256": "de312477a150e328d6146275108bc663227e80c979e29aeab217632768f3742d",
+    "mode": 420
+  },
+  "work/.agents/skills/kntnt/library/scripts/__pycache__/integrations.cpython-314.pyc": {
+    "sha256": "ba05f543a08f362911f67e1424bb67f2f29e544d1c8ed7eb4d9952a006298054",
+    "mode": 420
+  },
+  "work/.agents/skills/kntnt/library/scripts/argument_grammar.py": {
+    "sha256": "dc732205eb9e2942aae2880018342d3789e379bcddca4ce9326295327a36937f",
+    "mode": 420
+  },
+  "work/.agents/skills/kntnt/library/scripts/article_anatomy.py": {
+    "sha256": "69a1712a7edf3608fc87873e3ee098f349e5205ced4ed83c5af1d0e3843af534",
+    "mode": 420
+  },
+  "work/.agents/skills/kntnt/library/scripts/credentials.py": {
+    "sha256": "6ea3731d5390de0d408a19878d47e06a0e68f2b4531ec3a70c9b15367dc0385c",
+    "mode": 420
+  },
+  "work/.agents/skills/kntnt/library/scripts/integrations.py": {
+    "sha256": "60d5dc8dfebac1497bf155ad9016ba4cead3eda7532f8173e2f0ebd061858c61",
+    "mode": 420
+  },
+  "work/.agents/skills/kntnt/library/scripts/languages.py": {
+    "sha256": "6d09120fc7ab52ba69db24bb6db6e85ff9ab304d5d5ebe04ec5f2f2dd0042d70",
+    "mode": 420
+  },
+  "work/.agents/skills/kntnt/library/scripts/ship.py": {
+    "sha256": "e66d1eaec0d1f875559e6d1b89a4ab2065917f38763fc67e36b9ebbc378fdc47",
+    "mode": 420
+  },
+  "work/.agents/skills/kntnt/scripts/__pycache__/kntnt.cpython-312.pyc": {
+    "sha256": "30016fab8db5e8ef754edd554fc09bda10c281a6f29a636fcf4614efa69cc13a",
+    "mode": 420
+  },
+  "work/.agents/skills/kntnt/scripts/__pycache__/kntnt.cpython-314.pyc": {
+    "sha256": "62adb7bab03b51b3b3d9eec1c1cd4c6c6a7360ff27e561669d131b69a7cfa762",
+    "mode": 420
+  },
+  "work/.agents/skills/kntnt/scripts/kntnt.py": {
+    "sha256": "c5b7c791bbe20b0b73633219049bab13547b97806c48bb54475f7aea747e2df6",
+    "mode": 420
+  },
+  "work/.agents/skills/kntnt/steps/help.md": {
+    "sha256": "a80d128ae214de0a759e9d5ae912e68005fd63d23f8361db5ab5c5e39411045b",
+    "mode": 420
+  },
+  "work/.agents/skills/kntnt/steps/select.md": {
+    "sha256": "eda226bbdcdbaaf9b539695d9593cece194204e1c4d9fb8932b2146a9801faa0",
+    "mode": 420
+  },
+  "work/.agents/skills/kntnt/steps/uninstall.md": {
+    "sha256": "5dc6650fd7c885bbd551b5d94fffc966c60b70005a8ca3da67a5944a218515bf",
+    "mode": 420
+  },
+  "work/.agents/skills/kntnt/steps/update.md": {
+    "sha256": "095e9d0d950793f69a8171b80639ec2039ee995055b495f2cd117c253ce96b45",
+    "mode": 420
+  },
+  "work/.agents/skills/proofread/SKILL.md": {
+    "sha256": "6cad45f3d50a96e43c8df9996bc748c7e09e09f456e8a9375c724b84d236404f",
+    "mode": 420
+  },
+  "work/.agents/skills/proofread/agents/openai.yaml": {
+    "sha256": "ef05500ed19dff98c0181872ac5ff04d99ba241f992f70284629119c0451883a",
+    "mode": 420
+  },
+  "work/.agents/skills/proofread/help.md": {
+    "sha256": "5bad100c3b2bca059643a524d8730ac2d5761414295db2e9420207cf3004a43f",
+    "mode": 420
+  },
+  "work/.agents/skills/proofread/scripts/invoke.py": {
+    "sha256": "1986301369b22e298280544bfd889e460af2e4f8acb187a7967f994ae93daa2a",
+    "mode": 420
+  },
+  "work/.agents/skills/redline/SKILL.md": {
+    "sha256": "84eca125b6e65f2eb851aa6c4f7cdb093fe7f4dc1d0f9258b2823dd848df01ad",
+    "mode": 420
+  },
+  "work/.agents/skills/redline/agents/openai.yaml": {
+    "sha256": "a9ff49ac5ec1f2d858911e08212525c5d8404c5d1a6789c3bf2713f25f388973",
+    "mode": 420
+  },
+  "work/.agents/skills/redline/help.md": {
+    "sha256": "da7cac41837a55488d4f58587e6c086fb6af817fe14e14083c6c6a1d311046af",
+    "mode": 420
+  },
+  "work/.agents/skills/redline/references/brief-review.md": {
+    "sha256": "2094e84cd953a1226022153be4683aede97cb03692861fed3ca3b8fd5f6e853d",
+    "mode": 420
+  },
+  "work/.agents/skills/redline/references/correction.md": {
+    "sha256": "1048b017f7091d00b84c4cfc004e85477485df21f62917e564f8adaf89162bfa",
+    "mode": 420
+  },
+  "work/.agents/skills/redline/scripts/invoke.py": {
+    "sha256": "1986301369b22e298280544bfd889e460af2e4f8acb187a7967f994ae93daa2a",
+    "mode": 420
+  },
+  "work/output.md": {
+    "sha256": "8de234f1c80fe947361503113e4c84361427e8a52b836aa9e5d03550431fff15",
+    "mode": 420
+  },
+  "work/web-copy-clean.md": {
+    "sha256": "8de234f1c80fe947361503113e4c84361427e8a52b836aa9e5d03550431fff15",
+    "mode": 420
+  }
+}

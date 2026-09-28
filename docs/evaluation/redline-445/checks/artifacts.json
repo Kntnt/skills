@@ -1,0 +1,413 @@
+{
+  "context-miss": {
+    "staged_files_unchanged": true,
+    "source_inputs_unchanged": true,
+    "global_redline_read": true,
+    "template_named_in_command": true,
+    "subagent_activity": [],
+    "equals_draft.md": false,
+    "equals_miss.md": true,
+    "equals_web-copy-clean.md": false
+  },
+  "context-miss-r2": {
+    "staged_files_unchanged": true,
+    "source_inputs_unchanged": true,
+    "global_redline_read": false,
+    "template_named_in_command": true,
+    "subagent_activity": [
+      {
+        "type": "subAgentActivity",
+        "id": "call_2mDqtxJRnkb0Z7WY4d1ibfIT",
+        "kind": "started",
+        "agentThreadId": "01a0e8f9-2ce6-7623-9f4e-f2da2a896ae8",
+        "agentPath": "/root/mechanical_pass"
+      },
+      {
+        "type": "subAgentActivity",
+        "id": "subagent-completed-01a0e8f9-2d0b-7542-8914-53c1b7f04d4d",
+        "kind": "completed",
+        "agentThreadId": "01a0e8f9-2ce6-7623-9f4e-f2da2a896ae8",
+        "agentPath": "/root/mechanical_pass"
+      }
+    ],
+    "equals_draft.md": false,
+    "equals_miss.md": true,
+    "equals_web-copy-clean.md": false
+  },
+  "conversation": {
+    "staged_files_unchanged": true,
+    "source_inputs_unchanged": true,
+    "global_redline_read": true,
+    "template_named_in_command": false,
+    "subagent_activity": [
+      {
+        "type": "subAgentActivity",
+        "id": "call_P1jFFHpoXz7UpJCF0F43LA7p",
+        "kind": "started",
+        "agentThreadId": "01a0e8ed-dc29-7020-a1b1-fa560f59d7f4",
+        "agentPath": "/root/mechanical_pass"
+      },
+      {
+        "type": "subAgentActivity",
+        "id": "subagent-completed-01a0e8ed-dc4e-7c30-9b90-94ad057a396d",
+        "kind": "completed",
+        "agentThreadId": "01a0e8ed-dc29-7020-a1b1-fa560f59d7f4",
+        "agentPath": "/root/mechanical_pass"
+      }
+    ],
+    "equals_draft.md": true,
+    "equals_miss.md": false,
+    "equals_web-copy-clean.md": false
+  },
+  "conversation-r2": {
+    "staged_files_unchanged": true,
+    "source_inputs_unchanged": true,
+    "global_redline_read": false,
+    "template_named_in_command": true,
+    "subagent_activity": [],
+    "equals_draft.md": true,
+    "equals_miss.md": false,
+    "equals_web-copy-clean.md": false
+  },
+  "map-conflict": {
+    "staged_files_unchanged": true,
+    "source_inputs_unchanged": true,
+    "global_redline_read": true,
+    "template_named_in_command": true,
+    "subagent_activity": [
+      {
+        "type": "subAgentActivity",
+        "id": "call_8u1LHlGuz2nAXlbXYWflzaTm",
+        "kind": "started",
+        "agentThreadId": "01a0e8ee-a4e4-78a3-8fd0-a5d9305e394d",
+        "agentPath": "/root/mechanical_pass"
+      },
+      {
+        "type": "subAgentActivity",
+        "id": "subagent-completed-01a0e8ee-a507-7232-876a-52031d580bc3",
+        "kind": "completed",
+        "agentThreadId": "01a0e8ee-a4e4-78a3-8fd0-a5d9305e394d",
+        "agentPath": "/root/mechanical_pass"
+      }
+    ],
+    "equals_draft.md": false,
+    "equals_miss.md": false,
+    "equals_web-copy-clean.md": false
+  },
+  "map-conflict-r2": {
+    "staged_files_unchanged": true,
+    "source_inputs_unchanged": true,
+    "global_redline_read": false,
+    "template_named_in_command": true,
+    "subagent_activity": [],
+    "equals_draft.md": false,
+    "equals_miss.md": false,
+    "equals_web-copy-clean.md": false
+  },
+  "map-explicit": {
+    "staged_files_unchanged": true,
+    "source_inputs_unchanged": true,
+    "global_redline_read": true,
+    "template_named_in_command": true,
+    "subagent_activity": [
+      {
+        "type": "subAgentActivity",
+        "id": "call_oxBzsFtRfkCvnFwyRR5cn3Qb",
+        "kind": "started",
+        "agentThreadId": "01a0e8f0-ef5d-7b20-bdfd-76e3acefaacc",
+        "agentPath": "/root/mechanical_pass"
+      },
+      {
+        "type": "subAgentActivity",
+        "id": "call_3AdzDOytpgcNS02Q0OZCUtto",
+        "kind": "interacted",
+        "agentThreadId": "01a0e8f0-ef5d-7b20-bdfd-76e3acefaacc",
+        "agentPath": "/root/mechanical_pass"
+      },
+      {
+        "type": "subAgentActivity",
+        "id": "subagent-completed-01a0e8f0-ef86-7fa3-a977-2a316a98315a",
+        "kind": "completed",
+        "agentThreadId": "01a0e8f0-ef5d-7b20-bdfd-76e3acefaacc",
+        "agentPath": "/root/mechanical_pass"
+      }
+    ],
+    "equals_draft.md": false,
+    "equals_miss.md": false,
+    "equals_web-copy-clean.md": false
+  },
+  "map-explicit-r2": {
+    "staged_files_unchanged": true,
+    "source_inputs_unchanged": true,
+    "global_redline_read": false,
+    "template_named_in_command": true,
+    "subagent_activity": [
+      {
+        "type": "subAgentActivity",
+        "id": "call_DvTK5eIJmthMJWGxhBxg4ggk",
+        "kind": "started",
+        "agentThreadId": "01a0e900-4bcf-71a1-81f0-2e47643f8d7b",
+        "agentPath": "/root/mechanical_pass"
+      },
+      {
+        "type": "subAgentActivity",
+        "id": "call_9vShuUWTKCe45JAQIZzbhNKk",
+        "kind": "interacted",
+        "agentThreadId": "01a0e900-4bcf-71a1-81f0-2e47643f8d7b",
+        "agentPath": "/root/mechanical_pass"
+      },
+      {
+        "type": "subAgentActivity",
+        "id": "subagent-completed-01a0e900-4bfd-7971-a6f4-9e8dfff15035",
+        "kind": "completed",
+        "agentThreadId": "01a0e900-4bcf-71a1-81f0-2e47643f8d7b",
+        "agentPath": "/root/mechanical_pass"
+      }
+    ],
+    "equals_draft.md": false,
+    "equals_miss.md": false,
+    "equals_web-copy-clean.md": false
+  },
+  "markers": {
+    "staged_files_unchanged": true,
+    "source_inputs_unchanged": true,
+    "global_redline_read": true,
+    "template_named_in_command": true,
+    "subagent_activity": [
+      {
+        "type": "subAgentActivity",
+        "id": "call_GwPAxke3nFk4qrWX2D3exeyT",
+        "kind": "started",
+        "agentThreadId": "01a0e8ea-a25d-7031-8cd9-23dc4fa18c2e",
+        "agentPath": "/root/mechanical_pass"
+      },
+      {
+        "type": "subAgentActivity",
+        "id": "call_zYLkxxP6aseON5EoRVH5EOPQ",
+        "kind": "interacted",
+        "agentThreadId": "01a0e8ea-a25d-7031-8cd9-23dc4fa18c2e",
+        "agentPath": "/root/mechanical_pass"
+      },
+      {
+        "type": "subAgentActivity",
+        "id": "subagent-completed-01a0e8ea-a29a-7b42-94a7-da67715b4d9c",
+        "kind": "completed",
+        "agentThreadId": "01a0e8ea-a25d-7031-8cd9-23dc4fa18c2e",
+        "agentPath": "/root/mechanical_pass"
+      }
+    ],
+    "equals_draft.md": true,
+    "equals_miss.md": false,
+    "equals_web-copy-clean.md": false
+  },
+  "markers-r2": {
+    "staged_files_unchanged": true,
+    "source_inputs_unchanged": true,
+    "global_redline_read": false,
+    "template_named_in_command": true,
+    "subagent_activity": [
+      {
+        "type": "subAgentActivity",
+        "id": "call_bL5TjjQzqGYFIZ2cAgNUTDVP",
+        "kind": "started",
+        "agentThreadId": "01a0e8fb-883d-7101-90a6-79939aef93b2",
+        "agentPath": "/root/mechanical_pass"
+      },
+      {
+        "type": "subAgentActivity",
+        "id": "call_94jSmCZIR499O1ZXIxpOtIp7",
+        "kind": "interacted",
+        "agentThreadId": "01a0e8fb-883d-7101-90a6-79939aef93b2",
+        "agentPath": "/root/mechanical_pass"
+      },
+      {
+        "type": "subAgentActivity",
+        "id": "subagent-completed-01a0e8fb-8861-7130-a40e-effd50d22cab",
+        "kind": "completed",
+        "agentThreadId": "01a0e8fb-883d-7101-90a6-79939aef93b2",
+        "agentPath": "/root/mechanical_pass"
+      }
+    ],
+    "equals_draft.md": true,
+    "equals_miss.md": false,
+    "equals_web-copy-clean.md": false
+  },
+  "option-fulfil": {
+    "staged_files_unchanged": true,
+    "source_inputs_unchanged": true,
+    "global_redline_read": true,
+    "template_named_in_command": true,
+    "subagent_activity": [],
+    "equals_draft.md": true,
+    "equals_miss.md": false,
+    "equals_web-copy-clean.md": false
+  },
+  "option-fulfil-r2": {
+    "staged_files_unchanged": true,
+    "source_inputs_unchanged": true,
+    "global_redline_read": false,
+    "template_named_in_command": true,
+    "subagent_activity": [],
+    "equals_draft.md": true,
+    "equals_miss.md": false,
+    "equals_web-copy-clean.md": false
+  },
+  "pre-context": {
+    "staged_files_unchanged": true,
+    "source_inputs_unchanged": true,
+    "global_redline_read": false,
+    "template_named_in_command": false,
+    "subagent_activity": [],
+    "equals_draft.md": true,
+    "equals_miss.md": false,
+    "equals_web-copy-clean.md": false
+  },
+  "prior-presence": {
+    "staged_files_unchanged": true,
+    "source_inputs_unchanged": true,
+    "global_redline_read": false,
+    "template_named_in_command": true,
+    "subagent_activity": [],
+    "equals_draft.md": true,
+    "equals_miss.md": false,
+    "equals_web-copy-clean.md": false
+  },
+  "protected-brief": {
+    "staged_files_unchanged": true,
+    "source_inputs_unchanged": true,
+    "global_redline_read": false,
+    "template_named_in_command": false,
+    "subagent_activity": []
+  },
+  "repair": {
+    "staged_files_unchanged": true,
+    "source_inputs_unchanged": true,
+    "global_redline_read": false,
+    "template_named_in_command": true,
+    "subagent_activity": [
+      {
+        "type": "subAgentActivity",
+        "id": "call_bLWSiOpYJyxQ7q8TZZxWLyGu",
+        "kind": "started",
+        "agentThreadId": "01a0e8f4-6dd5-7031-8cec-7477a2b16db5",
+        "agentPath": "/root/correct_notice"
+      },
+      {
+        "type": "subAgentActivity",
+        "id": "subagent-completed-01a0e8f4-6df9-75c2-bc86-9773d17b11b7",
+        "kind": "completed",
+        "agentThreadId": "01a0e8f4-6dd5-7031-8cec-7477a2b16db5",
+        "agentPath": "/root/correct_notice"
+      }
+    ],
+    "equals_draft.md": false,
+    "equals_miss.md": false,
+    "equals_web-copy-clean.md": false
+  },
+  "suppression": {
+    "staged_files_unchanged": true,
+    "source_inputs_unchanged": true,
+    "global_redline_read": true,
+    "template_named_in_command": true,
+    "subagent_activity": [
+      {
+        "type": "subAgentActivity",
+        "id": "call_ogHNCXGfq3T9nB1eDs7oJTIH",
+        "kind": "started",
+        "agentThreadId": "01a0e8ef-5f70-7780-bdf7-c6ca2a5a6bad",
+        "agentPath": "/root/mechanical_pass"
+      },
+      {
+        "type": "subAgentActivity",
+        "id": "subagent-completed-01a0e8ef-5f91-7f01-b579-0e455a3ceab7",
+        "kind": "completed",
+        "agentThreadId": "01a0e8ef-5f70-7780-bdf7-c6ca2a5a6bad",
+        "agentPath": "/root/mechanical_pass"
+      },
+      {
+        "type": "subAgentActivity",
+        "id": "call_BMsfDaZH6CM98FtoEKAvINBk",
+        "kind": "interacted",
+        "agentThreadId": "01a0e8ef-5f70-7780-bdf7-c6ca2a5a6bad",
+        "agentPath": "/root/mechanical_pass"
+      }
+    ],
+    "equals_draft.md": true,
+    "equals_miss.md": false,
+    "equals_web-copy-clean.md": false
+  },
+  "suppression-r2": {
+    "staged_files_unchanged": true,
+    "source_inputs_unchanged": true,
+    "global_redline_read": false,
+    "template_named_in_command": true,
+    "subagent_activity": [],
+    "equals_draft.md": true,
+    "equals_miss.md": false,
+    "equals_web-copy-clean.md": false
+  },
+  "web-copy-clean-file": {
+    "staged_files_unchanged": true,
+    "source_inputs_unchanged": true,
+    "global_redline_read": false,
+    "template_named_in_command": false,
+    "subagent_activity": [],
+    "equals_draft.md": false,
+    "equals_miss.md": false,
+    "equals_web-copy-clean.md": true
+  },
+  "web-copy-clean-response": {
+    "staged_files_unchanged": true,
+    "source_inputs_unchanged": true,
+    "global_redline_read": false,
+    "template_named_in_command": false,
+    "subagent_activity": [
+      {
+        "type": "subAgentActivity",
+        "id": "call_jqfZvKDLGTjojrqgq7jgLOWK",
+        "kind": "started",
+        "agentThreadId": "01a0e8f4-2f33-7610-a6bf-8b9fc0a486d6",
+        "agentPath": "/root/mechanical_pass"
+      },
+      {
+        "type": "subAgentActivity",
+        "id": "subagent-completed-01a0e8f4-2f71-7f41-b9d1-9bd17061f44c",
+        "kind": "completed",
+        "agentThreadId": "01a0e8f4-2f33-7610-a6bf-8b9fc0a486d6",
+        "agentPath": "/root/mechanical_pass"
+      },
+      {
+        "type": "subAgentActivity",
+        "id": "call_8IDy2a1u0Y8onAjXxsr96nVr",
+        "kind": "interacted",
+        "agentThreadId": "01a0e8f4-2f33-7610-a6bf-8b9fc0a486d6",
+        "agentPath": "/root/mechanical_pass"
+      }
+    ]
+  },
+  "web-copy-flawed-file": {
+    "staged_files_unchanged": true,
+    "source_inputs_unchanged": true,
+    "global_redline_read": false,
+    "template_named_in_command": false,
+    "subagent_activity": [
+      {
+        "type": "subAgentActivity",
+        "id": "call_amzojUKSVF2qGTtsjop0bJNY",
+        "kind": "started",
+        "agentThreadId": "01a0e8f7-e649-7712-b526-8db4535a4e21",
+        "agentPath": "/root/correction"
+      },
+      {
+        "type": "subAgentActivity",
+        "id": "subagent-completed-01a0e8f7-e66d-7cc2-9156-61bb2f1e0653",
+        "kind": "completed",
+        "agentThreadId": "01a0e8f7-e649-7712-b526-8db4535a4e21",
+        "agentPath": "/root/correction"
+      }
+    ],
+    "equals_draft.md": false,
+    "equals_miss.md": false,
+    "equals_web-copy-clean.md": false
+  }
+}

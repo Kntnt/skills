@@ -1,0 +1,10 @@
+warning: No `requires-python` value found in the workspace. Defaulting to `>=3.12`.
+============================= test session starts ==============================
+platform darwin -- Python 3.12.13, pytest-9.1.1, pluggy-1.6.0
+rootdir: /Users/thomas/Projects/skills
+configfile: pyproject.toml
+collected 70 items / 67 deselected / 3 selected
+
+tests/test_invoke.py ...                                                 [100%]
+
+======================= 3 passed, 67 deselected in 0.04s =======================
