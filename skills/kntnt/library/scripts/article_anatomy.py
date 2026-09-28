@@ -5,7 +5,7 @@
 """Measure the article anatomy's counted limits in one text.
 
 `references/editorial/article-anatomy.md` fixes the parts of a text in the
-genres `article`, `case-study`, `column` and `opinion`, their order and their
+genres `article`, `casestudy`, `column` and `opinion`, their order and their
 dimensions. This script counts them and exposes heading/following-text pairs
 with lexical overlap for the editorial agent to judge. ADR-0209 records why
 counted dimensions belong to a script rather than to the agent reading them.

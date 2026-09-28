@@ -6293,12 +6293,12 @@ INSTALLED_GENRES = (
     "general",
     "article",
     "report",
-    "press-release",
+    "pressrelease",
     "teaser",
     "column",
     "opinion",
-    "web-copy",
-    "case-study",
+    "webcopy",
+    "casestudy",
 )
 INSTALLED_TECHNIQUES = ("abt", "pac")
 
@@ -6308,12 +6308,12 @@ INSTALLED_TECHNIQUES = ("abt", "pac")
 REVIEWED_RESOURCES = (
     "genres/article",
     "genres/report",
-    "genres/press-release",
+    "genres/pressrelease",
     "genres/teaser",
     "genres/column",
     "genres/opinion",
-    "genres/web-copy",
-    "genres/case-study",
+    "genres/webcopy",
+    "genres/casestudy",
     "techniques/abt",
     "techniques/pac",
 )
@@ -6343,6 +6343,18 @@ def test_the_genres_and_techniques_a_user_selects_ship_in_the_library() -> None:
     installed set, so a name with no file is a refusal rather than a default
     quietly supplied in its place (ADR-0178).
     """
+
+    for directory in ("genres", "techniques"):
+        hyphenated = sorted(
+            path.name
+            for path in (EDITORIAL / directory).glob("*.md")
+            if "-" in path.name
+        )
+        assert not hyphenated, (
+            f"{EDITORIAL / directory}: canonical selectable resources use"
+            f" lowercase letters only, so these filenames are invalid:"
+            f" {hyphenated}. See {STANDARD}."
+        )
 
     for name in INSTALLED_GENRES:
         path = EDITORIAL / "genres" / f"{name}.md"
@@ -6442,7 +6454,7 @@ def test_a_review_half_diagnoses_only_what_the_writer_can_act_on() -> None:
 # shape their text has, and how its headline and subheadings are written. Both
 # sit beside `web-craft.md` outside the selectable directories, so nobody can
 # select one and a genre reaches it by linking it.
-ANATOMY_GENRES = ("article", "case-study", "column", "opinion")
+ANATOMY_GENRES = ("article", "casestudy", "column", "opinion")
 ARTICLE_SUPPORT = {
     "article-anatomy": "the parts such a text has, their order and their dimensions",
     "headlines": "how such a text's headline and subheadings are written",
@@ -6465,12 +6477,12 @@ def test_the_four_article_genres_link_the_support_they_share() -> None:
     says how the headline and the subheadings among those parts are written.
     Both live outside `genres/` and `techniques/` for the reason `web-craft.md`
     does — nobody selects them and no genre inference reads them — so each
-    genre that is bound by one says so by linking it, and `web-copy`, which is
+    genre that is bound by one says so by linking it, and `webcopy`, which is
     bound by neither, links neither.
     """
 
     readme = (EDITORIAL / "README.md").read_text(encoding="utf-8")
-    web_copy = EDITORIAL / "genres" / "web-copy.md"
+    web_copy = EDITORIAL / "genres" / "webcopy.md"
 
     for name, states in ARTICLE_SUPPORT.items():
         base = EDITORIAL / f"{name}.md"
@@ -6497,7 +6509,7 @@ def test_the_four_article_genres_link_the_support_they_share() -> None:
             )
 
         assert f"{name}.md" not in web_copy.read_text(encoding="utf-8"), (
-            f"{web_copy}: `web-copy` links `{name}.md`, which states {states}"
+            f"{web_copy}: `webcopy` links `{name}.md`, which states {states}"
             f" and not the form a page's task gives it (ADR-0178). See"
             f" {STANDARD}."
         )
@@ -6942,7 +6954,7 @@ def test_only_the_anatomy_states_a_dimension_for_the_genres_it_binds() -> None:
     headline reference is the same requirement in two files, free to drift
     apart about what the draft owed (ADR-0178). The headline reference states
     how a headline is written and leaves its length to the format the text
-    follows, which for these genres is the anatomy. `web-copy` is bound by no
+    follows, which for these genres is the anatomy. `webcopy` is bound by no
     anatomy and carries its own scale guides.
     """
 

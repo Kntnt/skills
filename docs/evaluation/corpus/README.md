@@ -62,7 +62,7 @@ A `Reject` line is a floor, not a rubric. The full judging criteria are the prot
 - **Files** — `source/brief-press-release-sv.md`
 - **Covers** — genre
 - **Material** — a Swedish brief for a press release about a library repair workshop, with a date, opening hours, a funding figure, a named source, and two explicit exclusions.
-- **Use** — supply the file path with the press-release genre selected, and let the language fall through to inference on one run and be named explicitly on another.
+- **Use** — supply the file path with the `pressrelease` genre selected, and let the language fall through to inference on one run and be named explicitly on another.
 - **Reject** — a draft in any language but Swedish when nothing overrode inference, and any suggestion that the workshop repairs devices for visitors or sells parts, both of which the brief excludes.
 
 ### `interview-transcript`

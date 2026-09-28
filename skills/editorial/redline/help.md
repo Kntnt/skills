@@ -12,13 +12,13 @@ redline - review one text against the editorial contract, correct what it finds,
 
 ## DESCRIPTION
 
-`redline` reviews one text against the base editorial contract, resolved genre, optional technique, anti-slop catalogue, and resolved language guidance. For the five web genres it also reads their shared craft brief and its review guidance, and for article, case-study, column and opinion the article anatomy and the headline guidance, each with its review guidance. It corrects findings within the Correction Budget, reports anything left, and ends with one mechanical pass.
+`redline` reviews one text against the base editorial contract, resolved genre, optional technique, anti-slop catalogue, and resolved language guidance. For the five web genres it also reads their shared craft brief and its review guidance, and for article, casestudy, column and opinion the article anatomy and the headline guidance, each with its review guidance. It corrects findings within the Correction Budget, reports anything left, and ends with one mechanical pass.
 
 For those four genres the anatomy's counted limits are measured by a script at every review, so every count a finding reports is a measured one, and each correction agent measures its own repair before returning it. The measurement also exposes complete heading/following-text pairs and unjudged shared words. Both reviewer and correction agent judge semantic repetition from those pairs and the full text: necessary repeated names or topic words alone are no defect, and paraphrases can repeat with little overlap. Correction agents repair echoes named by findings or introduced by their own changes; unrelated pre-existing echoes are preserved and reported. A text the script cannot read is inspected by hand and said to be.
 
 No provenance is required. A leading `kntnt` frontmatter map supplies defaults and is updated to match the run; no map is created when none exists. A `technique: none` in that map is its value for no technique rather than a missing one, so a text written without one is reviewed without one.
 
-Genre, technique, and language resolve independently from the Formal Invocation, `kntnt` metadata, the Contextual Instruction, Conversation Context, inference, the resolved genre's ordinary technique, and defaults. Defaults are `general`, no technique, and the text's language. Article, case-study, column, opinion and web-copy ordinarily select no technique. Explicit selections and existing metadata keep their priority. The delivery says which technique was resolved and where it came from. A technique is never inferred, and mixed language produces a question.
+Genre, technique, and language resolve independently from the Formal Invocation, `kntnt` metadata, the Contextual Instruction, Conversation Context, inference, the resolved genre's ordinary technique, and defaults. Defaults are `general`, no technique, and the text's language. Article, casestudy, column, opinion and webcopy ordinarily select no technique. Explicit selections and existing metadata keep their priority. The delivery says which technique was resolved and where it came from. A technique is never inferred, and mixed language produces a question.
 
 A Contextual Instruction every higher level has already settled is suppressed rather than refused: the run continues, and the delivery names the suppressed instruction beside the resolved configuration where saying so is useful.
 
@@ -100,7 +100,7 @@ Review `article.md`, allow one correction, proofread the result, and return it w
 
 Report editorial findings without correcting them; the final mechanical pass still runs.
 
-**/redline --genre=press-release --language=sv --in-place utkast.md**
+**/redline --genre=pressrelease --language=sv --in-place utkast.md**
 
 Review and replace `utkast.md` as a Swedish press release.
 

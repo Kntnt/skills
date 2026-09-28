@@ -1,6 +1,6 @@
 # Article anatomy
 
-The fixed skeleton of a text in the genres `article`, `case-study`, `column` and `opinion`; *article* below means a text in any of them. The anatomy fixes which parts the text has, their order and their dimensions. Angle, argument, voice and language are outside it.
+The fixed skeleton of a text in the genres `article`, `casestudy`, `column` and `opinion`; *article* below means a text in any of them. The anatomy fixes which parts the text has, their order and their dimensions. Angle, argument, voice and language are outside it.
 
 A statement below has one of three strengths:
 
