@@ -1,0 +1,23 @@
+[
+  {
+    "type": "userMessage",
+    "id": "01a0e8cc-0b43-7a50-9229-327023ab9025",
+    "clientId": null,
+    "content": [
+      {
+        "type": "text",
+        "text": "Frågan är hur en medlem kan boka utan att använda en dator.",
+        "text_elements": []
+      }
+    ]
+  },
+  {
+    "type": "agentMessage",
+    "id": "msg_0669f403bc1e645e016aba9273843c87d2af67061688e2d4ed",
+    "text": "**10. Vilka källor och belägg har du?**\n\nDu har angett att hela faktaunderlaget är de påhittade uppgifterna om Lindö Verktygsrum: bokningen införs den 5 oktober 2026, och medlemmen skriver namn och verktyg på papperslistan vid disken.\n\nSka detta vara det enda underlaget, utan externa källor eller ytterligare belägg?",
+    "phase": "final_answer",
+    "memoryCitation": null,
+    "delivery": null,
+    "questions": null
+  }
+]

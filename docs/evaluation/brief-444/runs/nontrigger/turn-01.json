@@ -1,0 +1,23 @@
+[
+  {
+    "type": "userMessage",
+    "id": "01a0e8ca-03a0-7a92-8ad3-6a65f6856d20",
+    "clientId": null,
+    "content": [
+      {
+        "type": "text",
+        "text": "In one sentence, explain the difference between a brief and a first draft.",
+        "text_elements": []
+      }
+    ]
+  },
+  {
+    "type": "agentMessage",
+    "id": "msg_0ef69917c722f5ad016aba91eded6c87d29ed8eef247d1fb4d",
+    "text": "A brief defines what a piece of writing should achieve, who it is for, and what it should cover, while a first draft turns that direction into the actual text.",
+    "phase": "final_answer",
+    "memoryCitation": null,
+    "delivery": null,
+    "questions": null
+  }
+]

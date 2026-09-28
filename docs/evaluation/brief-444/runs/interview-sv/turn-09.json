@@ -1,0 +1,23 @@
+[
+  {
+    "type": "userMessage",
+    "id": "01a0e8cb-d2a7-7d43-aae6-1da4184169fc",
+    "clientId": null,
+    "content": [
+      {
+        "type": "text",
+        "text": "Från 5 oktober bokar medlemmarna verktyg genom att skriva namn och verktyg på listan vid disken.",
+        "text_elements": []
+      }
+    ]
+  },
+  {
+    "type": "agentMessage",
+    "id": "msg_0669f403bc1e645e016aba9265117487d2b84fb01e7dd7c66f",
+    "text": "**7. Vad ska läsaren känna, tänka eller göra efteråt?**\n\nVälj en huvudsaklig effekt av förståelsen i fråga 6. Vad vill ni att volontärerna konkret ska göra, tänka eller känna – och hur kan ni märka att texten fått den effekten?",
+    "phase": "final_answer",
+    "memoryCitation": null,
+    "delivery": null,
+    "questions": null
+  }
+]

@@ -1102,6 +1102,17 @@ SHIPPED_CASES: dict[str, list[Case]] = {
         ("--genre=essay report.md", None),
         ("--in-place", None),
     ],
+    "editorial/brief": [
+        ("", {"path": [], "operands": []}),
+        ("notes.md", {"operands": ["notes.md"]}),
+        (
+            "--output=brief.md notes.md",
+            {"flags": {"--output": "brief.md"}, "operands": ["notes.md"]},
+        ),
+        ("--output", None),
+        ("--in-place notes.md", None),
+        ("notes.md --output=brief.md", None),
+    ],
     "editorial/write": [
         ("", {"operands": []}),
         (

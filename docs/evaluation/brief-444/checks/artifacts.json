@@ -1,0 +1,119 @@
+{
+  "interview-sv": {
+    "headings": [
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9",
+      "10",
+      "11",
+      "12",
+      "13"
+    ],
+    "metadata": {
+      "genre": "general",
+      "technique": "none",
+      "language": "sv"
+    },
+    "markers": [
+      "MISSING",
+      "WEAK"
+    ],
+    "write_metadata": {
+      "genre": "general",
+      "technique": "none",
+      "language": "sv"
+    }
+  },
+  "draft-en": {
+    "headings": [
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9",
+      "10",
+      "11",
+      "12",
+      "13"
+    ],
+    "metadata": {
+      "genre": "general",
+      "technique": "none",
+      "language": "sv"
+    },
+    "markers": [
+      "MISSING",
+      "SUGGESTED"
+    ],
+    "write_metadata": {
+      "genre": "general",
+      "technique": "none",
+      "language": "sv"
+    }
+  },
+  "review-en": {
+    "headings": [
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9",
+      "10",
+      "11",
+      "12",
+      "13"
+    ],
+    "metadata": {
+      "genre": "pressrelease",
+      "technique": "abt",
+      "language": "en_GB"
+    },
+    "markers": [
+      "MISSING",
+      "WEAK"
+    ],
+    "write_metadata": {
+      "genre": "pressrelease",
+      "technique": "abt",
+      "language": "en_GB"
+    }
+  },
+  "draft-partial": {
+    "headings": [
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9",
+      "10",
+      "11",
+      "12",
+      "13"
+    ],
+    "metadata": {
+      "genre": "report"
+    },
+    "markers": [
+      "MISSING",
+      "SUGGESTED"
+    ]
+  }
+}

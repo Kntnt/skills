@@ -1,0 +1,68 @@
+warning: No `requires-python` value found in the workspace. Defaulting to `>=3.12`.
+.....................................................F.................. [ 13%]
+........................................................................ [ 27%]
+........................................................................ [ 41%]
+........................................................................ [ 55%]
+............................F........................................... [ 69%]
+........................................................................ [ 83%]
+........................................................................ [ 97%]
+............                                                             [100%]
+=================================== FAILURES ===================================
+________________ test_the_case_table_covers_every_shipped_skill ________________
+
+    def test_the_case_table_covers_every_shipped_skill() -> None:
+        """A Skill added without a row here is a grammar the engine is never held to."""
+
+        shipped = {str(body.parent.relative_to(SKILLS)) for body in _shipped_skills()}
+
+>       assert shipped == set(SHIPPED_CASES)
+E       AssertionError: assert {'agents/agen...de/push', ...} == {'agents/agen...de/push', ...}
+E
+E         Extra items in the left set:
+E         'editorial/brief'
+E         Use -v to get more diff
+
+tests/test_invoke.py:1421: AssertionError
+_______ test_no_editorial_resource_pins_a_rule_to_one_installed_language _______
+
+    def test_no_editorial_resource_pins_a_rule_to_one_installed_language() -> None:
+        """The editorial half is language-independent, and the split is the point.
+
+        What a genre or a technique asks for holds in every language the
+        Collection installs; what writing well in one language takes lives in that
+        language's own resource, which is the only place a Skill looks for it
+        (ADR-0178). A rule here naming one language would be applied to
+        drafts written in the others.
+        """
+
+        languages = REPO_ROOT / "skills" / "kntnt" / "library" / "references" / "languages"
+        codes = sorted(
+            path.stem for path in languages.glob("*.md") if path.name != "README.md"
+        )
+
+        # A rename in the languages directory must not silently empty this check.
+        assert codes
+
+        for path in sorted(EDITORIAL.rglob("*.md")):
+            if path.name == "README.md":
+                continue
+
+            text = path.read_text(encoding="utf-8")
+            named = [code for code in codes if re.search(rf"\b{re.escape(code)}\b", text)]
+>           assert named == [], (
+                f"{named}: {path} pins a rule to a single Language Resource. The"
+                f" editorial contract is language-independent, and guidance true"
+                f" of one language belongs in that language's resource (ADR-0178,"
+                f" ADR-0178). See {STANDARD}."
+            )
+E           AssertionError: ['en_GB', 'sv']: /Users/thomas/Projects/skills/skills/kntnt/library/references/editorial/writing-brief.md pins a rule to a single Language Resource. The editorial contract is language-independent, and guidance true of one language belongs in that language's resource (ADR-0178, ADR-0178). See docs/rules/skills.md.
+E           assert ['en_GB', 'sv'] == []
+E
+E             Left contains 2 more items, first extra item: 'en_GB'
+E             Use -v to get more diff
+
+tests/test_kntnt.py:7060: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_invoke.py::test_the_case_table_covers_every_shipped_skill
+FAILED tests/test_kntnt.py::test_no_editorial_resource_pins_a_rule_to_one_installed_language
+2 failed, 514 passed in 117.55s (0:01:57)

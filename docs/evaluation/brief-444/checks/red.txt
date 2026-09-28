@@ -1,0 +1,118 @@
+warning: No `requires-python` value found in the workspace. Defaulting to `>=3.12`.
+Downloading pygments (1.2MiB)
+ Downloaded pygments
+Installed 6 packages in 6ms
+FFF                                                                      [100%]
+=================================== FAILURES ===================================
+_______ test_brief_accepts_interview_and_material_through_the_manager[] ________
+
+tmp_path = PosixPath('/private/tmp/claude-501/-Users-thomas-Projects-skills/e8b2bc18-7919-41a5-8ca9-09238d1d9734/scratchpad/t444/tmp/pytest-of-thomas/pytest-0/test_brief_accepts_interview_a0')
+payload = ''
+
+    @pytest.mark.parametrize("payload", ["", "--output=brief.md notes.md"])
+    def test_brief_accepts_interview_and_material_through_the_manager(
+        tmp_path: Path, payload: str
+    ) -> None:
+        """No material starts an interview; material and one destination also parse."""
+
+        result = subprocess.run(
+            [sys.executable, str(MANAGER), "invoke", f"--here={BRIEF}"],
+            input=payload,
+            text=True,
+            capture_output=True,
+            cwd=tmp_path,
+            env={**os.environ, "KNTNT_HOME": str(tmp_path)},
+            check=False,
+        )
+
+>       assert result.returncode == 0, result.stdout + result.stderr
+E       AssertionError: {
+E           "ok": false,
+E           "unsatisfied": [
+E             {
+E               "name": "brief",
+E               "kind": "declaration",
+E               "how": "this Manager cannot read what the skill declares (no SKILL.md at /Users/thomas/Projects/skills/skills/editorial/brief); refresh this machine with '/kntnt update', which brings the Manager and every Enabled Skill to one revision of the collection"
+E             }
+E           ],
+E           "capabilities": []
+E         }
+E
+E       assert 2 == 0
+E        +  where 2 = CompletedProcess(args=['/private/tmp/claude-501/-Users-thomas-Projects-skills/e8b2bc18-7919-41a5-8ca9-09238d1d9734/scr...Manager and every Enabled Skill to one revision of the collection"\n    }\n  ],\n  "capabilities": []\n}\n', stderr='').returncode
+
+tests/test_brief.py:35: AssertionError
+_ test_brief_accepts_interview_and_material_through_the_manager[--output=brief.md notes.md] _
+
+tmp_path = PosixPath('/private/tmp/claude-501/-Users-thomas-Projects-skills/e8b2bc18-7919-41a5-8ca9-09238d1d9734/scratchpad/t444/tmp/pytest-of-thomas/pytest-0/test_brief_accepts_interview_a1')
+payload = '--output=brief.md notes.md'
+
+    @pytest.mark.parametrize("payload", ["", "--output=brief.md notes.md"])
+    def test_brief_accepts_interview_and_material_through_the_manager(
+        tmp_path: Path, payload: str
+    ) -> None:
+        """No material starts an interview; material and one destination also parse."""
+
+        result = subprocess.run(
+            [sys.executable, str(MANAGER), "invoke", f"--here={BRIEF}"],
+            input=payload,
+            text=True,
+            capture_output=True,
+            cwd=tmp_path,
+            env={**os.environ, "KNTNT_HOME": str(tmp_path)},
+            check=False,
+        )
+
+>       assert result.returncode == 0, result.stdout + result.stderr
+E       AssertionError: {
+E           "ok": false,
+E           "unsatisfied": [
+E             {
+E               "name": "brief",
+E               "kind": "declaration",
+E               "how": "this Manager cannot read what the skill declares (no SKILL.md at /Users/thomas/Projects/skills/skills/editorial/brief); refresh this machine with '/kntnt update', which brings the Manager and every Enabled Skill to one revision of the collection"
+E             }
+E           ],
+E           "capabilities": []
+E         }
+E
+E       assert 2 == 0
+E        +  where 2 = CompletedProcess(args=['/private/tmp/claude-501/-Users-thomas-Projects-skills/e8b2bc18-7919-41a5-8ca9-09238d1d9734/scr...Manager and every Enabled Skill to one revision of the collection"\n    }\n  ],\n  "capabilities": []\n}\n', stderr='').returncode
+
+tests/test_brief.py:35: AssertionError
+________ test_writing_brief_preserves_the_authoritative_question_schema ________
+
+    def test_writing_brief_preserves_the_authoritative_question_schema() -> None:
+        """The ticket's headings are an interchange format, not a prose snapshot."""
+
+>       headings = re.findall(r"^## (\d+\. .+)$", TEMPLATE.read_text(), re.MULTILINE)
+                                                  ^^^^^^^^^^^^^^^^^^^^
+
+tests/test_brief.py:42:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+../../.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/pathlib.py:1027: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = PosixPath('/Users/thomas/Projects/skills/skills/kntnt/library/references/editorial/writing-brief.md')
+mode = 'r', buffering = -1, encoding = 'locale', errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/Users/thomas/Projects/skills/skills/kntnt/library/references/editorial/writing-brief.md'
+
+../../.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/pathlib.py:1013: FileNotFoundError
+=========================== short test summary info ============================
+FAILED tests/test_brief.py::test_brief_accepts_interview_and_material_through_the_manager[]
+FAILED tests/test_brief.py::test_brief_accepts_interview_and_material_through_the_manager[--output=brief.md notes.md]
+FAILED tests/test_brief.py::test_writing_brief_preserves_the_authoritative_question_schema
+3 failed in 0.29s

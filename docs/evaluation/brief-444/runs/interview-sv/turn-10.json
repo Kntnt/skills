@@ -1,0 +1,29 @@
+[
+  {
+    "type": "userMessage",
+    "id": "01a0e8cb-e2ff-76f0-95b2-1329ef89a27e",
+    "clientId": null,
+    "content": [
+      {
+        "type": "text",
+        "text": "Volontären visar nästa medlem var listan finns. Vi ser att effekten har uppnåtts när volontären faktiskt visar listan.",
+        "text_elements": []
+      }
+    ]
+  },
+  {
+    "type": "reasoning",
+    "id": "rs_0669f403bc1e645e016aba92693ed887d2a57d4fd12d64ede1",
+    "summary": [],
+    "content": []
+  },
+  {
+    "type": "agentMessage",
+    "id": "msg_0669f403bc1e645e016aba926abbec87d2ad4460e94c9ddab9",
+    "text": "**8. Hur ska texten struktureras?**\n\nJag föreslår **fri struktur**: börja med vad som ändras och när, förklara hur medlemmen bokar och avsluta med vad volontären ska göra. Det passar en kort, praktisk instruktion i genren `general`.\n\nVill du använda den strukturen, eller föredrar du en berättande struktur (ABT) eller en resonerande struktur (PAC)?",
+    "phase": "final_answer",
+    "memoryCitation": null,
+    "delivery": null,
+    "questions": null
+  }
+]

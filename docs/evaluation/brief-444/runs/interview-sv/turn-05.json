@@ -1,0 +1,29 @@
+[
+  {
+    "type": "userMessage",
+    "id": "01a0e8cb-7302-7d73-8f4b-82d069134db2",
+    "clientId": null,
+    "content": [
+      {
+        "type": "text",
+        "text": "Jag kan inte precisera det mer.",
+        "text_elements": []
+      }
+    ]
+  },
+  {
+    "type": "reasoning",
+    "id": "rs_0669f403bc1e645e016aba924e3d9087d2b226ccfa8cc59e75",
+    "summary": [],
+    "content": []
+  },
+  {
+    "type": "agentMessage",
+    "id": "msg_0669f403bc1e645e016aba924f7aac87d284e448f183eeccc7",
+    "text": "Jag noterar: Läsarna är föreningens volontärer, som bryr sig om verktygen. [WEAK: Läsarnas förkunskaper och skäl att läsa texten är inte preciserade.]\n\n**3. Vad gör texten relevant, intressant och värdefull för läsaren?**\n\n- **Relevant:** Varför behöver volontärerna informationen just nu?\n- **Intressant:** Vad fångar deras intresse?\n- **Värdefull:** Vad ska de få ut av att läsa?\n\nIntresse eller värde kan väljas bort medvetet; relevansen behöver finnas.",
+    "phase": "final_answer",
+    "memoryCitation": null,
+    "delivery": null,
+    "questions": null
+  }
+]

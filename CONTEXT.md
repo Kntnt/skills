@@ -42,6 +42,10 @@ _Avoid_: fact-checking, source validation, Redline verification
 One coherent text that Write creates or that an editorial Skill processes. Write may use several source materials to create one Text Artifact; how many of them one invocation of an editorial Skill carries is stated in that Skill's own shipped documents.
 _Avoid_: document batch, input collection, text payload
 
+**Writing Brief**:
+The answers to the editorial Library's 13 questions about a text to be written: its assignment, reader and intended effect, with the evidence and boundaries the writer needs. It is distinct from instructions handed to a subagent; its template lives in `skills/kntnt/library/references/editorial/writing-brief.md`.
+_Avoid_: subagent brief, correction brief, project brief
+
 **Handoff Metadata**:
 Optional metadata carried with a Text Artifact that records the resolved genre, technique, and language. Which editorial Skill writes one, which reads one, and what happens where it is absent are stated in their own shipped documents.
 _Avoid_: required frontmatter, source brief, invocation cache

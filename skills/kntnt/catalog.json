@@ -1,6 +1,6 @@
 {
   "origin": "Kntnt/skills",
-  "manager_digest": "7d170260bec4bcbd568d3bb60b53d23f2e1d0b40ec2a676b7f7c993b238478e3",
+  "manager_digest": "aca75819480c9c8e86e088c7b8b1bf0ccc000537962d07f263f6d92d245430a4",
   "skills": [
     {
       "name": "agents-md",
@@ -116,6 +116,18 @@
       "skills": [
         "push"
       ],
+      "externals": [],
+      "capabilities": []
+    },
+    {
+      "name": "brief",
+      "category": "editorial",
+      "description": "Interview for, draft from supplied material, or review a Writing Brief against the 13-question writing template. Start it on your own only when the literal token `/brief` appears in the request or the user explicitly asks for a brief according to this 13-question template. Not for a bare mention of the word brief, a request for a short answer, or an unrelated project or delegation brief. A user may also invoke it by name at any time.",
+      "digest": "357109d70cb4e515f2ee2b8f69b7db622c2cc5e992266e7a79f52904c869073c",
+      "binaries": [
+        "uv"
+      ],
+      "skills": [],
       "externals": [],
       "capabilities": []
     },

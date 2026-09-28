@@ -1,0 +1,23 @@
+[
+  {
+    "type": "userMessage",
+    "id": "01a0e8cb-96b5-76d2-b666-22798755af81",
+    "clientId": null,
+    "content": [
+      {
+        "type": "text",
+        "text": "R: Volontärerna behöver veta hur de ska hjälpa medlemmar att boka från 5 oktober. I: Hur fungerar en bokning utan dator? V: De får en instruktion de kan använda vid disken.",
+        "text_elements": []
+      }
+    ]
+  },
+  {
+    "type": "agentMessage",
+    "id": "msg_0669f403bc1e645e016aba9255c64487d2ad0d5f961411fe83",
+    "text": "**4. Vilket varumärke är avsändare?**\n\nDu har nämnt Lindö Verktygsrum – är det också avsändaren? Beskriv vad föreningen lovar och vill vara känd för, hur volontärerna uppfattar den i dag, vad den kan uttala sig trovärdigt om och vilken ton den ska ha.",
+    "phase": "final_answer",
+    "memoryCitation": null,
+    "delivery": null,
+    "questions": null
+  }
+]

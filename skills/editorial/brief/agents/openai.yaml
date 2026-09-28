@@ -1,0 +1,5 @@
+interface:
+  display_name: "Brief"
+  short_description: "Interview for, draft or review a writing brief"
+policy:
+  allow_implicit_invocation: true

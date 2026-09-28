@@ -4,6 +4,10 @@ This directory holds the editorial contract the Collection's editorial Skills ar
 
 Everything here is language-independent and written in English. The language-specific half lives beside it in [`../languages/`](../languages/README.md), one resource per language, and the two are loaded together at run time. A rule that is only true of one language belongs there and never here.
 
+## The writing brief
+
+[`writing-brief.md`](writing-brief.md) holds the 13 numbered questions, their guidance and quality criteria, and the final coherence check for a Writing Brief. It is shared input to preparing and reviewing a brief. Its English version is authoritative; consumers translate the questions into the user's working language without changing their numbers or order. Its examples are not an inventory of installed genres or techniques.
+
 ## The base contract
 
 `base.md` holds the outcomes shared by all genres; genre-specific outcomes belong in the selected genre and its explicitly loaded support, and chosen structural relations in the selected technique. Each requirement is stated once: a Skill that writes and a Skill that reviews read the same document, so a requirement stated in two places is a requirement that can come to disagree with itself about what was required.

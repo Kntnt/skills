@@ -1,0 +1,23 @@
+[
+  {
+    "type": "userMessage",
+    "id": "01a0e8cc-394a-7db2-b67a-36f232002c3a",
+    "clientId": null,
+    "content": [
+      {
+        "type": "text",
+        "text": "Ta inte upp priser, öppettider eller påstådda effektivitetsvinster.",
+        "text_elements": []
+      }
+    ]
+  },
+  {
+    "type": "agentMessage",
+    "id": "msg_0669f403bc1e645e016aba9280698c87d287def3e01f8e287e",
+    "text": "**12. Vad är arbetsrubriken?**\n\nVälj en kort och tydlig rubrik som gör att ni direkt känner igen vad texten handlar om. Den behöver inte fungera som färdig publiceringsrubrik.",
+    "phase": "final_answer",
+    "memoryCitation": null,
+    "delivery": null,
+    "questions": null
+  }
+]

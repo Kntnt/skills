@@ -1,0 +1,29 @@
+[
+  {
+    "type": "userMessage",
+    "id": "01a0e8cb-6341-76c0-a2d5-2f5f23ff16e5",
+    "clientId": null,
+    "content": [
+      {
+        "type": "text",
+        "text": "De bryr sig om verktygen.",
+        "text_elements": []
+      }
+    ]
+  },
+  {
+    "type": "reasoning",
+    "id": "rs_0669f403bc1e645e016aba9248ae9887d2ab9cb9ed7809328e",
+    "summary": [],
+    "content": []
+  },
+  {
+    "type": "agentMessage",
+    "id": "msg_0669f403bc1e645e016aba9249850c87d2a768a08f06c4d084",
+    "text": "Vad känner volontärerna redan till om hur utlåningen fungerar, och varför skulle de vilja läsa om den nya bokningen?",
+    "phase": "final_answer",
+    "memoryCitation": null,
+    "delivery": null,
+    "questions": null
+  }
+]

@@ -1,0 +1,12 @@
+{
+  "name": "brief",
+  "description": "Interview for, draft from supplied material, or review a Writing Brief against the 13-question writing template. Start it on your own only when the literal token `/brief` appears in the request or the user explicitly asks for a brief according to this 13-question template. Not for a bare mention of the word brief, a request for a short answer, or an unrelated project or delegation brief. A user may also invoke it by name at any time.",
+  "compatibility": "Requires uv",
+  "metadata": {
+    "kntnt.internal": "true",
+    "kntnt.binaries": "uv",
+    "kntnt.skills": "",
+    "kntnt.externals": "",
+    "kntnt.capabilities": ""
+  }
+}

@@ -1,0 +1,23 @@
+[
+  {
+    "type": "userMessage",
+    "id": "01a0e8cb-a907-7ab1-a628-7484e4859f83",
+    "clientId": null,
+    "content": [
+      {
+        "type": "text",
+        "text": "Lindö Verktygsrum är avsändaren. Löftet är att göra verktyg tillgängliga. Mandatet är våra egna låneregler. Tonen är lugn och konkret. Vi vet inte hur varumärket uppfattas.",
+        "text_elements": []
+      }
+    ]
+  },
+  {
+    "type": "agentMessage",
+    "id": "msg_0669f403bc1e645e016aba925c7fac87d28a587065b727106c",
+    "text": "Jag noterar att bilden av varumärket är okänd: [MISSING: Hur uppfattar volontärerna Lindö Verktygsrum i dag?]\n\n**5. Vilken vinkel ska texten ha?**\n\nVälj ett enda perspektiv på bokningen, nära volontärernas behov. Vad ska texten fokusera på?",
+    "phase": "final_answer",
+    "memoryCitation": null,
+    "delivery": null,
+    "questions": null
+  }
+]

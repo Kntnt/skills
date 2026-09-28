@@ -106,6 +106,12 @@ Run `/orchestrate [--dry-run] [--at-once=N] [--model=NAME] [--deliberation=LEVEL
 
 Use `/orchestrate reconcile [--commit=COMMIT] [--yes] #ticket` when a failed or conflicted attempt was completed outside orchestrate.
 
+### brief
+
+Interview for, draft or review a writing brief using 13 questions about the assignment, reader, message and evidence. It marks gaps and suggestions, checks how the answers fit together, and supplies settled metadata for a later `/write` invocation.
+
+Run `/brief [--output=TARGET] [material]`, or `/brief` to begin an interview.
+
 ### proofread
 
 Correct mechanical language errors in one text while preserving wording, meaning, tone, structure, formatting, code, and metadata. The result goes to the response unless another output or explicit in-place editing is selected.

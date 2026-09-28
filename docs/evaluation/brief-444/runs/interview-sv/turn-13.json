@@ -1,0 +1,29 @@
+[
+  {
+    "type": "userMessage",
+    "id": "01a0e8cc-1efe-7320-812a-0cf2b57c4ada",
+    "clientId": null,
+    "content": [
+      {
+        "type": "text",
+        "text": "Vet inte.",
+        "text_elements": []
+      }
+    ]
+  },
+  {
+    "type": "reasoning",
+    "id": "rs_0669f403bc1e645e016aba9278578087d2804c5dd4faf3ef7a",
+    "summary": [],
+    "content": []
+  },
+  {
+    "type": "agentMessage",
+    "id": "msg_0669f403bc1e645e016aba927a45ac87d2b43b7b0990d5045a",
+    "text": "De uppgifter du redan lämnat finns kvar som underlag. [MISSING: Vilka källor eller belägg kan anges för uppgifterna?]\n\n**11. Vad ska lämnas utanför?**\n\nAnge minst en avgränsning: ett sidospår, något utanför föreningens mandat eller ett påstående som texten inte ska göra eftersom underlag saknas.",
+    "phase": "final_answer",
+    "memoryCitation": null,
+    "delivery": null,
+    "questions": null
+  }
+]

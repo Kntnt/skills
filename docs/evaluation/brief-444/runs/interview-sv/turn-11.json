@@ -1,0 +1,23 @@
+[
+  {
+    "type": "userMessage",
+    "id": "01a0e8cb-fcbc-7042-bc98-663f88673939",
+    "clientId": null,
+    "content": [
+      {
+        "type": "text",
+        "text": "Fri disposition. Det är en kort instruktion som följer handgreppen i ordning, inte en berättelse eller analys.",
+        "text_elements": []
+      }
+    ]
+  },
+  {
+    "type": "agentMessage",
+    "id": "msg_0669f403bc1e645e016aba926fc9c887d2a9d1b9b4403d6337",
+    "text": "**9. Vad är kroken?**\n\nDu nämnde tidigare frågan ”Hur fungerar en bokning utan dator?”. Vill du använda den som krok – frågan som väcker intresse och som instruktionen besvarar – eller vill du välja en annan?",
+    "phase": "final_answer",
+    "memoryCitation": null,
+    "delivery": null,
+    "questions": null
+  }
+]

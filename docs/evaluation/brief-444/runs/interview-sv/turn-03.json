@@ -1,0 +1,23 @@
+[
+  {
+    "type": "userMessage",
+    "id": "01a0e8cb-570c-7ef3-a189-d12dd6a7bbaf",
+    "clientId": null,
+    "content": [
+      {
+        "type": "text",
+        "text": "Föreningens volontärer.",
+        "text_elements": []
+      }
+    ]
+  },
+  {
+    "type": "agentMessage",
+    "id": "msg_0669f403bc1e645e016aba9245498487d2a668ec628a1ba85c",
+    "text": "Vad vet volontärerna redan om verktygslånen och den nya bokningen, och vad i deras uppdrag gör informationen intressant att läsa?",
+    "phase": "final_answer",
+    "memoryCitation": null,
+    "delivery": null,
+    "questions": null
+  }
+]

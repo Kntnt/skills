@@ -1,0 +1,9 @@
+{
+  "method": "After-run directory inventory compared with explicit controller staging directories and ancestors of every before-inventory file.",
+  "extra_directories": [
+    "scratch/home/.kntnt",
+    "scratch/home/.kntnt/session-cleanup",
+    "scratch/home/.kntnt/session-cleanup/sessions"
+  ],
+  "missing_directories": []
+}

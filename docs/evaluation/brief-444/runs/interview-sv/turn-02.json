@@ -1,0 +1,51 @@
+[
+  {
+    "type": "userMessage",
+    "id": "01a0e8cb-2ffe-7d80-9a82-4acd22fcd5e8",
+    "clientId": null,
+    "content": [
+      {
+        "type": "text",
+        "text": "Ämnet är bokning av låneverktyg. Genren är general och kanalen ett internt nyhetsbrev. Den påhittade föreningen Lindö Verktygsrum inför bokning på en papperslista från 5 oktober 2026. Medlemmarna skriver sitt namn och verktyget på listan vid disken. Det här är hela faktaunderlaget.",
+        "text_elements": []
+      }
+    ]
+  },
+  {
+    "type": "commandExecution",
+    "id": "exec-b3ffab25-69f4-4dcc-ba9e-ef192c09e623",
+    "pluginId": null,
+    "scriptPath": null,
+    "command": "/opt/homebrew/bin/bash -lc 'cat .agents/skills/kntnt/library/references/editorial/genres/general.md'",
+    "cwd": "/private/tmp/claude-501/-Users-thomas-Projects-skills/e8b2bc18-7919-41a5-8ca9-09238d1d9734/scratchpad/t444/interview-sv/work",
+    "processId": "72816",
+    "source": "unifiedExecStartup",
+    "status": "completed",
+    "commandActions": [
+      {
+        "type": "read",
+        "command": "cat .agents/skills/kntnt/library/references/editorial/genres/general.md",
+        "name": "general.md",
+        "path": "/private/tmp/claude-501/-Users-thomas-Projects-skills/e8b2bc18-7919-41a5-8ca9-09238d1d9734/scratchpad/t444/interview-sv/work/.agents/skills/kntnt/library/references/editorial/genres/general.md"
+      }
+    ],
+    "aggregatedOutput": "# General\n\nThe default genre: the contract a text gets when nobody named a content type. It is a complete contract rather than the absence of one, and it is what a note, a memo, a letter, an explanation, or a piece of prose whose kind has no name is written against.\n\n## What this genre asks for\n\n**The shape follows the material and the job.** No convention is imposed here — no lede, no summary paragraph, no boilerplate, no mandatory heading, no obligatory recommendation at the end. A named genre brings its reader's expectations with it; this one brings only the reader's need, so the text takes the shape that need implies and no other.\n\n**The kind of text is recognisable from the text.** A reader should be able to tell within a sentence or two whether they are holding an explanation, an argument, an account of what happened, a request, or a description, and the text should then behave like that thing throughout. A draft that is an argument for two paragraphs and a chronology for the next two has changed kind without telling anybody.\n\n**The register is the baseline's, moved by the audience and the purpose.** With no genre convention to override it, what moves the register is who the text is for and what it is for. A note to a colleague, a public explanation, and a letter of complaint are all this genre, and they are not written the same way. Where the request states or implies an audience or a purpose, that is the instruction; where it does not, hold the baseline.\n\n**Length is what the job takes.** There is no expected length here, and nothing is padded to look substantial or cut to look brisk. A text that has done its job in two hundred words is finished at two hundred words.\n\n**A title is written when the artifact has one.** Where the requested artifact is a document with a title, the title says what the text is about in the text's own terms, rather than posing a question the text does not answer or promising more than the text delivers. Where the artifact is a passage, a message, or a fragment, no title is invented for it.\n\n## What this genre does not do\n\nIt does not stand in for a genre that exists. Where the request names a content type the Collection installs, that genre's contract is the one to load; this one is what applies when nothing was named and nothing in the request implies a named kind.\n\nIt adds no requirement the base contract does not already hold. Everything about register, structure, sentences, words, claims, openings, endings, formatting, and consistency is stated there once, and repeating any of it here would make one rule two things to keep true.\n\n## The technique this genre is ordinarily written with\n\nNone. This is the contract a text gets when nobody named a kind of text, and a kind nobody named brings no arc with it. What puts a technique on a text here is a selection, and this genre is not one.\n",
+    "exitCode": 0,
+    "durationMs": 20
+  },
+  {
+    "type": "reasoning",
+    "id": "rs_0669f403bc1e645e016aba923f81f087d2b2729a1aecfc28f2",
+    "summary": [],
+    "content": []
+  },
+  {
+    "type": "agentMessage",
+    "id": "msg_0669f403bc1e645e016aba924042f887d2acc0bcc740494b7c",
+    "text": "Jag noterar ämnet, genren `general` och kanalen internt nyhetsbrev. Uppgifterna om den påhittade föreningen är hela faktaunderlaget.\n\n**2. Vem är läsaren?**\n\nBeskriv vilka medlemmar texten riktar sig till, vad de redan vet om verktygslånen och bokningen, vad de bryr sig om och vad som får dem att läsa nyhetsbrevet.",
+    "phase": "final_answer",
+    "memoryCitation": null,
+    "delivery": null,
+    "questions": null
+  }
+]

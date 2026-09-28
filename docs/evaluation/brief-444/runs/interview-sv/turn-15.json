@@ -1,0 +1,23 @@
+[
+  {
+    "type": "userMessage",
+    "id": "01a0e8cc-4bee-7623-9511-0b6de07a74bc",
+    "clientId": null,
+    "content": [
+      {
+        "type": "text",
+        "text": "Boka verktyg på papper.",
+        "text_elements": []
+      }
+    ]
+  },
+  {
+    "type": "agentMessage",
+    "id": "msg_0669f403bc1e645e016aba928596b087d286c890cc25e1c890",
+    "text": "**13. Vilka ramar gäller för texten?**\n\nAnge den framtida textens språk och ungefärliga längd. Ska tonen vara lugn och konkret, som du beskrev tidigare? Ange också om texten ska ha någon sökfras eller om ni medvetet avstår eftersom den ska gå i ett internt nyhetsbrev.",
+    "phase": "final_answer",
+    "memoryCitation": null,
+    "delivery": null,
+    "questions": null
+  }
+]

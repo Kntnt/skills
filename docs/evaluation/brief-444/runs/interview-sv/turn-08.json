@@ -1,0 +1,23 @@
+[
+  {
+    "type": "userMessage",
+    "id": "01a0e8cb-c2b7-71a1-9000-8bca2048753e",
+    "clientId": null,
+    "content": [
+      {
+        "type": "text",
+        "text": "Vinkeln är hur volontärerna hjälper en medlem att boka på den nya papperslistan.",
+        "text_elements": []
+      }
+    ]
+  },
+  {
+    "type": "agentMessage",
+    "id": "msg_0669f403bc1e645e016aba9260d5a087d2b777045e53b26a97",
+    "text": "**6. Vad ska läsaren ha förstått efteråt?**\n\nFormulera budskapet som ett påstående i en mening: vad ska volontärerna förstå om hur de hjälper en medlem att boka? Det ska rymmas inom föreningens mandat och ge den praktiska nytta du beskrev.",
+    "phase": "final_answer",
+    "memoryCitation": null,
+    "delivery": null,
+    "questions": null
+  }
+]
