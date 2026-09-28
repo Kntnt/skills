@@ -6388,6 +6388,56 @@ def test_each_selectable_resource_carries_its_review_guidance_beside_it() -> Non
         )
 
 
+# The test a base half and its review half are held to as a pair, in the one
+# wording the format page and the standard both carry (issue #414).
+OPERABLE_PAIR = (
+    "stated operably where the writer reads it — in the files Write loads for the genre"
+)
+
+
+def test_a_review_half_diagnoses_only_what_the_writer_can_act_on() -> None:
+    """The requirement a review half diagnoses is operable where the writer reads it.
+
+    Write loads no review half, by design. So where a base half states a
+    requirement abstractly and only the review half says what to do about it,
+    the agent composing a sentence is not given what the agent reviewing it is
+    given, and produces the very defect the reviewer is equipped to find
+    (issue #414). The format page states the test a new pair is held to, and
+    the standard states it in the same words beside the pairing rule.
+    """
+
+    readme = EDITORIAL / "README.md"
+    section = readme.read_text(encoding="utf-8").split("\n## Review extensions\n", 1)[1]
+    section = section.split("\n## ", 1)[0]
+
+    assert OPERABLE_PAIR in section, (
+        f"{readme}: `## Review extensions` does not say that the requirement a"
+        f" review half diagnoses is {OPERABLE_PAIR}, so the next author of a"
+        f" review half has no test for a pair (issue #414). See {STANDARD}."
+    )
+    assert "incomplete pair" in section, (
+        f"{readme}: `## Review extensions` does not name a diagnosis whose"
+        f" requirement the writer cannot act on as an incomplete pair, so such"
+        f" a pair reads as complete (issue #414). See {STANDARD}."
+    )
+
+    standard = (REPO_ROOT / STANDARD).read_text(encoding="utf-8")
+    pairing = [
+        sentence
+        for sentence in re.split(r"(?<=\.\))\s+|(?<=\.)\s+(?=[A-Z`])", standard)
+        if sentence.startswith("A review half is a separate `<name>.review.md`")
+    ]
+
+    assert len(pairing) == 1, (
+        f"{STANDARD}: the sentence stating the editorial pairing is gone or"
+        f" doubled; update this test."
+    )
+    assert OPERABLE_PAIR in pairing[0], (
+        f"{STANDARD}: the pairing sentence does not say that the requirement a"
+        f" review half diagnoses is {OPERABLE_PAIR} (issue #414)."
+    )
+
+
 # What the four article genres share, and where each of it is stated: the
 # shape their text has, and how its headline and subheadings are written. Both
 # sit beside `web-craft.md` outside the selectable directories, so nobody can
