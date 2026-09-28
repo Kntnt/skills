@@ -7,6 +7,7 @@ All notable changes to this project are documented here. The format follows [Kee
 ### Added
 
 - `/brief` interviews for, drafts from supplied material, or reviews a Writing Brief against the shared 13-question template. It marks missing, suggested and weak answers, checks coherence, and passes settled genre, technique and text language to `/write`. The new `/brief` is unrelated to the former Skill of that name, which was removed in favour of `/explain` (#444).
+- `/redline` accepts `--brief=PATH|URL`, or a Writing Brief explicitly named in the Contextual Instruction or Conversation Context, and reports fulfilment against the shared 13-question template. Repairable shortfalls share the existing Correction Budget and remain source-bound; brief metadata wins over text metadata below explicit options, with conflicts reported. The brief is never edited or delivered (#445).
 
 ### Changed
 

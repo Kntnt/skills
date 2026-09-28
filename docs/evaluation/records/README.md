@@ -219,3 +219,7 @@ The Claude-family evaluation of the form four judges of #383 named independently
 ## Writing Brief — #444
 
 - [brief-gpt-2026-09-28.md](brief-gpt-2026-09-28.md) — the three Brief modes in Swedish and English, the bare-mention control, and each mode's file handed to Write; native Codex traces, synthetic fixtures, filesystem inventories and gate evidence are in [the #444 packet](../brief-444/README.md).
+
+## Redline against a Writing Brief — #445
+
+- [redline-gpt-2026-09-28-445.md](redline-gpt-2026-09-28-445.md) — native Codex evaluations of brief selection, template mapping and markers, map precedence, source-bound correction, brief protection and no-brief controls; the [packet](../redline-445/README.md) preserves fixtures, traces, inventories and red/green evidence.
