@@ -38,7 +38,7 @@ fi
 date -u +%Y-%m-%dT%H:%M:%SZ > "$S/logs/$run.started"
 set +e
 ( cd "$work" && timeout 5400 claude --print --safe-mode \
-    --model claude-opus-5-5 --effort high \
+    --model=claude-opus-5-5 --effort=high \
     --dangerously-skip-permissions --strict-mcp-config \
     --output-format stream-json --verbose \
     < "$S/logs/$run.prompt.txt" > "$S/logs/$run.jsonl" 2> "$S/logs/$run.err" )
