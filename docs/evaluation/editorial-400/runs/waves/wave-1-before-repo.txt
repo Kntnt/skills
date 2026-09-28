@@ -1,0 +1,55 @@
+# /Users/thomas/Projects/skills
+# HEAD c211a1d5848fc38a0a00b6caf2c72eb2ea3281b3
+# end /Users/thomas/Projects/skills
+# /Users/thomas/Projects/skills-rework
+# HEAD 4dbe937bd3d9bb940bbc23b001d4e59d337f03ed
+ M AGENTS.md
+ M agents.d/rework-handoff.md
+# end /Users/thomas/Projects/skills-rework
+# /Users/thomas/Projects/skills/.git/kntnt-orchestrate/385
+# HEAD 18757082ed3af495b0e739d6413cb4669a0b0448
+?? docs/adr/0221-unslop-keeps-its-whole-passage-permission-measured-and-left-alone.md
+?? docs/evaluation/editorial-385/results.md
+?? docs/evaluation/editorial-385/runs/judges.tsv
+?? docs/evaluation/editorial-385/runs/pre-column-sv-r1/inventory-after.txt
+?? docs/evaluation/editorial-385/runs/pre-column-sv-r1/inventory-before.txt
+?? docs/evaluation/editorial-385/runs/pre-column-sv-r1/judgement-a.md
+?? docs/evaluation/editorial-385/runs/pre-column-sv-r1/judgement-b.md
+?? docs/evaluation/editorial-385/runs/pre-column-sv-r1/response.md
+?? docs/evaluation/editorial-385/runs/pre-column-sv-r1/work/input.md
+?? docs/evaluation/editorial-385/runs/pre-column-sv-r2/inventory-after.txt
+?? docs/evaluation/editorial-385/runs/pre-column-sv-r2/inventory-before.txt
+?? docs/evaluation/editorial-385/runs/pre-column-sv-r2/judgement-a.md
+?? docs/evaluation/editorial-385/runs/pre-column-sv-r2/judgement-b.md
+?? docs/evaluation/editorial-385/runs/pre-column-sv-r2/response.md
+?? docs/evaluation/editorial-385/runs/pre-column-sv-r2/work/input.md
+?? docs/evaluation/editorial-385/runs/pre-opinion-en_GB-r1/inventory-after.txt
+?? docs/evaluation/editorial-385/runs/pre-opinion-en_GB-r1/inventory-before.txt
+?? docs/evaluation/editorial-385/runs/pre-opinion-en_GB-r1/judgement-a.md
+?? docs/evaluation/editorial-385/runs/pre-opinion-en_GB-r1/judgement-b.md
+?? docs/evaluation/editorial-385/runs/pre-opinion-en_GB-r1/response.md
+?? docs/evaluation/editorial-385/runs/pre-opinion-en_GB-r1/work/input.md
+?? docs/evaluation/editorial-385/runs/pre-opinion-en_GB-r2/inventory-after.txt
+?? docs/evaluation/editorial-385/runs/pre-opinion-en_GB-r2/inventory-before.txt
+?? docs/evaluation/editorial-385/runs/pre-opinion-en_GB-r2/judgement-a.md
+?? docs/evaluation/editorial-385/runs/pre-opinion-en_GB-r2/judgement-b.md
+?? docs/evaluation/editorial-385/runs/pre-opinion-en_GB-r2/response.md
+?? docs/evaluation/editorial-385/runs/pre-opinion-en_GB-r2/work/input.md
+?? docs/evaluation/editorial-385/runs/wave-1-after-repo.txt
+?? docs/evaluation/editorial-385/runs/wave-1-after-scratch.txt
+?? docs/evaluation/editorial-385/runs/wave-1-before-repo.txt
+?? docs/evaluation/editorial-385/runs/wave-1-before-scratch.txt
+# end /Users/thomas/Projects/skills/.git/kntnt-orchestrate/385
+# /Users/thomas/Projects/skills/.git/kntnt-orchestrate/400
+# HEAD 82c119c39e794591298cfc4f118efb4c01d495fe
+ M skills/editorial/redline/SKILL.md
+ M skills/editorial/redline/help.md
+ M skills/editorial/redline/references/correction.md
+ M skills/editorial/unslop/SKILL.md
+ M skills/editorial/unslop/help.md
+ M skills/editorial/unslop/references/correction.md
+ M skills/kntnt/catalog.json
+ M skills/kntnt/library/references/editorial/base.review.md
+ M skills/kntnt/library/references/editorial/headlines.review.md
+ M tests/test_kntnt.py
+# end /Users/thomas/Projects/skills/.git/kntnt-orchestrate/400
