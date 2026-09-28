@@ -1,0 +1,1 @@
+{"session_id": "d34fef7b-7b6e-4250-b245-6f80eda222a5", "invocation": "/redline --genre=opinion --language=sv --output=response input.md", "model": "claude-opus-5-5", "effort": "high", "started": "2026-09-28T07:41:35Z"}

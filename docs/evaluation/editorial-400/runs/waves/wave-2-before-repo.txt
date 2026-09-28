@@ -1,0 +1,14 @@
+# /Users/thomas/Projects/skills
+# HEAD c211a1d5848fc38a0a00b6caf2c72eb2ea3281b3
+# end /Users/thomas/Projects/skills
+# /Users/thomas/Projects/skills-rework
+# HEAD 4dbe937bd3d9bb940bbc23b001d4e59d337f03ed
+ M AGENTS.md
+ M <the retired agent-documents directory>/rework-handoff.md
+# end /Users/thomas/Projects/skills-rework
+# /Users/thomas/Projects/skills/.git/kntnt-orchestrate/385
+# HEAD 4d10e6031d0b9708c579ae9e656621ba067925cc
+# end /Users/thomas/Projects/skills/.git/kntnt-orchestrate/385
+# /Users/thomas/Projects/skills/.git/kntnt-orchestrate/400
+# HEAD c4c7b5e506187311859877cf162b5e5cb87a6bb0
+# end /Users/thomas/Projects/skills/.git/kntnt-orchestrate/400

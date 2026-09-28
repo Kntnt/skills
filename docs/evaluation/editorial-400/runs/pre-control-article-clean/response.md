@@ -1,0 +1,1 @@
+Ingen ändring behövdes. Jag granskade `input.md` som en artikel på svenska. Ingen berättarteknik användes, eftersom artikelgenren inte föreskriver någon. Texten följer artikelns anatomi och behövde varken redaktionella eller mekaniska rättelser.

@@ -17,7 +17,7 @@ Each of these in a headline or a subheading is a finding:
 - The same words and phrasing in the headline and the standfirst or opening paragraph, or in a subheading and the first sentence under it. They complement each other; they do not repeat.
 - A subheading that pre-spends the judgement, figure or concession of a quotation standing under it, so that the reader meets the quotation as the subheading said again. Read it against the quotation however far down the section the quotation stands. Repair it by naming the subject, the occasion or the speaker, or by stating what the rest of the section says, and leave the quotation as it is.
 
-Name what the reader loses, and repair by rewriting the headline alone, from the text's angle and at the text's own strength. The text stays as it is.
+Name what the reader loses, and repair by rewriting the headline alone, from the text's angle and at the text's own strength. The text stays as it is. A headline or a subheading a round changed is reported with this finding — the part, and the defect that licensed the change — and, where the new one asserts something the old did not, with what it now asserts, so that a reader of the account can tell a repaired part from a rewritten one.
 
 ## Leave alone
 
