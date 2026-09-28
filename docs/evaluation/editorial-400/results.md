@@ -74,6 +74,11 @@ Twenty-four judgements of the twelve judged ones are kept. The build session's o
   - the session scratchpad did not change;
   - the scratch root changed only in this build's run directories, packets, logs, judge records and scoring notes.
   - No run of either wave has a side effect outside its own run directory.
+- **One line redacted in the four `*-repo.txt` wave inventories.** Each recorded the read-only rework checkout `/Users/thomas/Projects/skills-rework` with a modified file in the directory this repository retired for agent documents, and the literal directory name, committed, fails `tests/test_agents_md.py::test_no_active_file_names_the_retired_agent_directory`. After the build was verified, line 7 of each file was changed to ` M <the retired agent-documents directory>/rework-handoff.md`, and nothing else in any file changed. The line is identical in all four files, so the before-and-after comparison is the same as it was. That checkout is not one a run could write, and the line does not bear on any criterion. The SHA-256 of each file as it was recorded:
+  - `wave-1-before-repo.txt`: `bff5a8fbf5572ac53890eafa0add59afa09a98b022ab25812b5cfdad33fc0f54`
+  - `wave-1-after-2026-09-28-repo.txt`: `90e7369d0afeaa020593af7ba9fec45c11535dbbc4b04bd13b7517eccc238d55`
+  - `wave-2-before-repo.txt`: `90e7369d0afeaa020593af7ba9fec45c11535dbbc4b04bd13b7517eccc238d55`
+  - `wave-2-after-repo.txt`: `36e602f58f82c32d680e6839aaea9783db16d08414cc8b825bc416bf8253549d`
 - **One judgement copied early.** `control-opinion-clean`'s judgement B was copied into the run a few seconds before its judge returned. Its file matches the judge's final reply, *Fail, narrowly*, and the judge's directory was not recreated after it was removed. Every other judgement was collected only after its judge had returned.
 - **Two replies differ.** In `pair-article-abt-2`, the reply the run saved to `response.md` and the reply the Harness returned differ in wording, but not in what they report. Both are kept, the second as `response.txt`. The run was not judged, because its change did not recur.
 - **The judge directories** were made with `mktemp -d` in the system temporary directory, as the plan requires, so that no path a judge sees names the arm or the ticket. The eight directories the cut-off judges left there were moved whole into the scratch root.
