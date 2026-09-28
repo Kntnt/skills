@@ -1,0 +1,1 @@
+Ingen ändring behövdes. Texten granskades som webbtext (`web-copy`) på svenska utan teknik, eftersom genren inte anger någon. Granskningen gav inga anmärkningar och korrekturläsningen hittade inget att rätta, så texten är oförändrad.
