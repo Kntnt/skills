@@ -466,6 +466,36 @@ def test_editorial_help_lists_installed_choices_under_their_flags(
 
 @pytest.mark.parametrize("name", ["write", "redline"])
 @pytest.mark.parametrize("kind", ["genres", "techniques"])
+@pytest.mark.parametrize("filename", ["web-copy.md", "web_copy.md", "v2.md"])
+def test_editorial_help_lists_only_names_of_lowercase_letters(
+    tmp_path: Path, name: str, kind: str, filename: str
+) -> None:
+    """A name with a hyphen, another separator or a digit is not a choice.
+
+    The editorial README fixes a genre or technique name as lowercase letters
+    only, with no hyphen or other separator (issue #443), so help lists only
+    base files named that way.
+    """
+
+    # Install one canonical choice per category beside a non-canonical one.
+    skill = _editorial_skill(tmp_path, name)
+    manager = tmp_path / "installed" / "kntnt"
+    editorial = manager / "library" / "references" / "editorial"
+    for category in ("genres", "techniques"):
+        _write(editorial / category / "baseline.md", "# Baseline\n\nA choice.\n")
+    _write(editorial / kind / filename, "# Stray\n\nNot a choice.\n")
+
+    result = _invoke(skill, "help", tmp_path, manager=manager)
+
+    # Help still stops, and lists the canonical choice but not the stray file.
+    assert result.returncode == EXIT_HELP, (result.stderr, EDITORIAL_HELP_RULE)
+    assert "- `baseline` — A choice." in result.stdout, EDITORIAL_HELP_RULE
+    assert f"- `{Path(filename).stem}`" not in result.stdout, EDITORIAL_HELP_RULE
+    assert "Not a choice." not in result.stdout, EDITORIAL_HELP_RULE
+
+
+@pytest.mark.parametrize("name", ["write", "redline"])
+@pytest.mark.parametrize("kind", ["genres", "techniques"])
 def test_editorial_help_reads_resource_changes_on_every_call(
     tmp_path: Path, name: str, kind: str
 ) -> None:
@@ -477,7 +507,7 @@ def test_editorial_help_reads_resource_changes_on_every_call(
     editorial = manager / "library" / "references" / "editorial"
     for category in ("genres", "techniques"):
         _write(editorial / category / "baseline.md", "# Baseline\n\nOriginal choice.\n")
-    resource = editorial / kind / "new-choice.md"
+    resource = editorial / kind / "newchoice.md"
 
     # Observe each resource edit through the next invocation, without caching.
     before = _invoke(skill, "help", tmp_path, manager=manager)
@@ -496,9 +526,9 @@ def test_editorial_help_reads_resource_changes_on_every_call(
         result.returncode == EXIT_HELP
         for result in (before, added, moved, edited, removed)
     ), EDITORIAL_HELP_RULE
-    assert "- `new-choice`" not in before.stdout, EDITORIAL_HELP_RULE
-    assert "- `new-choice` — A new choice." in added.stdout, EDITORIAL_HELP_RULE
-    assert "- `new-choice`" not in moved.stdout, EDITORIAL_HELP_RULE
+    assert "- `newchoice`" not in before.stdout, EDITORIAL_HELP_RULE
+    assert "- `newchoice` — A new choice." in added.stdout, EDITORIAL_HELP_RULE
+    assert "- `newchoice`" not in moved.stdout, EDITORIAL_HELP_RULE
     assert "- `renamed` — A new choice." in moved.stdout, EDITORIAL_HELP_RULE
     assert "- `renamed` — An updated description." in edited.stdout, EDITORIAL_HELP_RULE
     assert "A new choice." not in edited.stdout, EDITORIAL_HELP_RULE

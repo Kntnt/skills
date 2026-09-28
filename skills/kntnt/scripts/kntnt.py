@@ -4874,14 +4874,16 @@ def editorial_choices(directory: Path) -> str:
     missing introduction or an empty directory is likewise unavailable.
     """
 
-    # Only canonical base filenames are selectable; review halves and support
-    # documents do not name choices, and `none` is metadata, never a flag value.
+    # Only canonical base filenames, lowercase letters with no separator, are
+    # selectable; review halves and support documents do not name choices, and
+    # `none` is metadata, never a flag value.
     rows: list[str] = []
     for path in sorted(directory.iterdir()):
         # Ignore entries outside the resource format's selectable namespace.
-        if not re.fullmatch(
-            r"[a-z0-9]+(?:-[a-z0-9]+)*\.md", path.name
-        ) or path.stem in {"none", "readme"}:
+        if not re.fullmatch(r"[a-z]+\.md", path.name) or path.stem in {
+            "none",
+            "readme",
+        }:
             continue
 
         # A damaged base resource cannot supply an honest help description.
