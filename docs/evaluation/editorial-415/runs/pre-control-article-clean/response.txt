@@ -1,0 +1,1 @@
+Ingen ändring behövdes. Texten granskades som artikel på svenska, utan teknik eftersom artikelgenren inte anger någon. Granskningen gav inga anmärkningar och texten följer artikelns anatomi. Den avslutande korrekturläsningen hittade inga mekaniska fel.
