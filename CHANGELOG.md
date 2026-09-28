@@ -4,6 +4,10 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ## [Unreleased]
 
+### Changed
+
+- Editorial genre and technique names use lowercase letters only, with no hyphen or other separator: `web-copy`, `press-release` and `case-study` are now `webcopy`, `pressrelease` and `casestudy`. The old names are not accepted. `/write` and `/redline` refuse them as uninstalled genres. If a Kntnt map in an existing artifact still carries an old value, change that value by hand before using the artifact (#443).
+
 ## [0.37.0] – 2026-09-28
 
 ### Added
