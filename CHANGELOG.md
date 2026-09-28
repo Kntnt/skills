@@ -4,6 +4,8 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ## [Unreleased]
 
+## [0.38.0] – 2026-09-28
+
 ### Added
 
 - `/brief` interviews for, drafts from supplied material, or reviews a Writing Brief against the shared 13-question template. It marks missing, suggested and weak answers, checks coherence, and passes settled genre, technique and text language to `/write`. The new `/brief` is unrelated to the former Skill of that name, which was removed in favour of `/explain` (#444).
