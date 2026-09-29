@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import re
+import subprocess
 from pathlib import Path
 
 from support.editorial import ordinary_technique, ordinary_technique_section
@@ -197,6 +198,79 @@ UNREACHED_CLAUSE = (
     " immediately before that round and discard every state built on it"
 )
 UNREACHED_EVIDENCE = "regressions/389/README.md"
+
+# The protocol's rules for staging an evaluation, kept apart by family: those
+# binding every family, then the mechanics only the Claude family's Harness
+# needs. Each rule opens its paragraph under its name in bold, and carries the
+# words a later author would otherwise have to find in a closed ticket's thread
+# (issue #439).
+STAGING_HEADING = "## How an evaluation is staged"
+STAGING_RULES = {
+    "### In every family": {
+        "One seat": ("same seat", "model actually launched"),
+        "A fresh pre-change arm": (
+            "commit the ticket started from",
+            "same inputs",
+            "carried over",
+        ),
+        "Not reproduced": (
+            "maintainer's ruling",
+            "each miss becomes its own ticket",
+            "conditional on the measurement",
+            "no product change",
+            "ADR-0212",
+            "ADR-0214",
+            "ADR-0220",
+            "ADR-0221",
+            "ADR-0223",
+        ),
+        "One revise round": (
+            "at most one",
+            "subset that failed",
+            "beats the pre-change arm",
+            "`needs-triage`",
+            "(#what-an-evaluation-is)",
+        ),
+        "Whose miss": ("that ticket's number", "split rule"),
+        "The frozen plan": (
+            "committed before the first run",
+            "void",
+            "only paths and the seat",
+        ),
+        "Interrupted runs are void": ("usage limit", "5xx", "overload", "apart"),
+        "Blind paths": ("neither the arm nor the ticket",),
+        "The record name": ("issue number", "(#the-recording-format)"),
+    },
+    "### In the Claude family": {
+        "Staging": (
+            "`git archive`",
+            "never copied from a working tree",
+            "committed before the post-change install",
+        ),
+        "Top-level runs": ("`claude --print`", "subagent"),
+        "A scratchpad": ("`CLAUDE_CODE_ARTIFACT=1`", "(regressions/401/README.md)"),
+        "The trace runner": ("(editorial-388/harness/staged_run.py)", "trace"),
+    },
+}
+
+# A model named where a rule would outlive it. The protocol names the seat a
+# plan chooses rather than any model, because a model is retired long before
+# the rule that says a run and its baseline share one is.
+MODEL_NAME = re.compile(r"\b(?:claude-(?:opus|sonnet|haiku|fable)|gpt)-\d")
+
+# The editorial Skills an install holds beside the Manager. A run of one of
+# them can reach the others — Redline closes on Proofread — so every install
+# holds all four.
+EDITORIAL_SKILLS = ("write", "redline", "proofread", "unslop")
+
+# The name every new record takes, and the rule it replaced, which put the
+# issue number in a name only where a record of the same Skill, family and date
+# already existed (issue #439).
+RECORD_NAME = "`<skill>-<provider-family>-<YYYY-MM-DD>-<issue>.md`"
+RETIRED_NAMING = "same date as the record it follows"
+RECORD_TEMPLATE_FIELD = "`<skill>-<provider-family>-<YYYY-MM-DD>-<issue>`"
+RECORDS_README = EVALUATION / "records" / "README.md"
+REGRESSIONS_README = EVALUATION / "regressions" / "README.md"
 
 # How the clean-control rule takes the five rejections one at a time: the
 # rejection in bold, as the protocol's own list names it, then whether a
@@ -998,6 +1072,199 @@ def test_the_protocol_says_which_rejections_a_no_change_reply_can_be_held_to() -
         f" than the five rejections {sorted(REJECTIONS)}."
     )
     assert verdicts == NO_CHANGE_VERDICTS
+
+
+def _staging_rules(family: str) -> dict[str, str]:
+    """Map each staging rule under *family*'s heading to its whole text.
+
+    A rule opens a line with its name in bold and runs to the next rule or the
+    end of the family's subsection, so a rule carrying a code block keeps it.
+    """
+
+    section = _section(_protocol(), STAGING_HEADING)
+    subsection = section.partition(f"\n{family}\n")[2].partition("\n### ")[0]
+    starts = list(re.finditer(r"^\*\*([^*\n]+)\.\*\* ", subsection, re.MULTILINE))
+    return {
+        match.group(1): subsection[
+            match.start() : starts[position + 1].start()
+            if position + 1 < len(starts)
+            else len(subsection)
+        ]
+        for position, match in enumerate(starts)
+    }
+
+
+def test_the_protocol_states_how_an_evaluation_is_staged() -> None:
+    """A staging rule kept in a ticket's thread is restated by every ticket.
+
+    The unattended run of 2026-09-23 wrote the same clause into ten readiness
+    addenda, and its builders then learned three more rules by voiding runs.
+    The protocol states every one of them, each with the reason a later author
+    would otherwise talk themselves out of, and keeps the rules binding every
+    family apart from the mechanics of the Claude family's Harness (issue #439).
+    """
+
+    # Require the section, with the two families in order under it.
+    protocol = _protocol()
+    headings = re.findall(r"^## .+$", protocol, re.MULTILINE)
+    assert STAGING_HEADING in headings, (
+        f"{PROTOCOL}: no `{STAGING_HEADING}` section, so how an evaluation is"
+        f" staged is still stated in ticket threads and nowhere in the tree."
+    )
+    section = _section(protocol, STAGING_HEADING)
+    families = re.findall(r"^### .+$", section, re.MULTILINE)
+    assert families == list(STAGING_RULES), (
+        f"{PROTOCOL}: `{STAGING_HEADING}` carries {families} rather than"
+        f" {list(STAGING_RULES)}, so the rules every family keeps are not kept"
+        f" apart from one family's mechanics."
+    )
+
+    # Require every rule, in its family, carrying what makes it a rule.
+    for family, rules in STAGING_RULES.items():
+        stated = _staging_rules(family)
+        assert list(stated) == list(rules), (
+            f"{PROTOCOL}: `{family}` states {list(stated)} rather than {list(rules)}."
+        )
+        for rule, evidence in rules.items():
+            missing = [phrase for phrase in evidence if phrase not in stated[rule]]
+            assert missing == [], (
+                f"{PROTOCOL}: the staging rule `{rule}` does not carry"
+                f" {missing}, so what it asks of an evaluation is left unstated."
+            )
+
+    # Require the rules to stand on their own words: no model a rule would
+    # outlive, no ticket comment as a source, and the rule that a miss is
+    # never absorbed pointed at rather than said twice.
+    named = MODEL_NAME.findall(protocol)
+    assert named == [], (
+        f"{PROTOCOL}: names the model {named}, which a rule outlives; the"
+        f" plan and the record name the model a run launched."
+    )
+    assert "comment" not in section.lower(), (
+        f"{PROTOCOL}: `{STAGING_HEADING}` cites a ticket comment, which a"
+        f" reader of the tree cannot be expected to open."
+    )
+    assert protocol.count("softening a criterion") == 1, (
+        f"{PROTOCOL}: the rule that a real defect is never absorbed is stated"
+        f" more than once, so there are two copies to keep true."
+    )
+
+
+def test_the_staging_example_lays_out_the_install_the_shim_reads(
+    tmp_path: Path,
+) -> None:
+    """The protocol's staging commands, run as written, stage a usable install.
+
+    Each Skill's shim looks for the Manager in a `kntnt/` directory beside the
+    Skill's own, so an install holds the editorial Skills and `kntnt/` side by
+    side and nothing else at its root. Stripping the Manager's path by as many
+    components as a Skill's spills its contents into the root instead, which
+    is the example one ticket's thread carried and three frozen plans had to
+    correct (issue #439).
+    """
+
+    # Read the one command block the staging rule carries.
+    staging = _staging_rules("### In the Claude family")["Staging"]
+    blocks = re.findall(r"^```\n(.*?)^```$", staging, re.MULTILINE | re.DOTALL)
+    assert len(blocks) == 1, (
+        f"{PROTOCOL}: the staging rule carries {len(blocks)} command blocks"
+        f" rather than one."
+    )
+    assert set(re.findall(r"<[a-z-]+>", blocks[0])) == {"<rev>", "<install>"}, (
+        f"{PROTOCOL}: the staging commands carry placeholders other than"
+        f" `<rev>` and `<install>`, so they cannot be run as written."
+    )
+
+    # Run them against the commit checked out, into an empty install.
+    install = tmp_path / "install"
+    install.mkdir()
+    script = blocks[0].replace("<rev>", "HEAD").replace("<install>", str(install))
+    subprocess.run(
+        ["bash", "-euo", "pipefail", "-c", script], cwd=REPO_ROOT, check=True
+    )
+
+    # Require each Skill and the Manager side by side, and nothing spilled.
+    for skill in EDITORIAL_SKILLS:
+        assert (install / skill / "SKILL.md").is_file(), (
+            f"{PROTOCOL}: the staging commands do not put `{skill}/SKILL.md`"
+            f" at the install's root."
+        )
+    assert (install / "kntnt" / "scripts" / "kntnt.py").is_file(), (
+        f"{PROTOCOL}: the staging commands do not put the Manager at"
+        f" `kntnt/scripts/kntnt.py`, where each Skill's shim looks for it."
+    )
+    root = sorted(path.name for path in install.iterdir())
+    assert root == sorted((*EDITORIAL_SKILLS, "kntnt")), (
+        f"{PROTOCOL}: the staging commands leave {root} at the install's root,"
+        f" so something was extracted beside the Skills and the Manager."
+    )
+
+
+def test_every_new_record_name_carries_the_issue_it_was_run_for() -> None:
+    """Two tickets built side by side can evaluate one Skill on one day.
+
+    The name used to take the issue number only where a record of the same
+    Skill, family and date already existed, which two builders working at once
+    cannot know. Every new record now carries it, stated wherever the name is
+    stated, and records already written keep the names they have (issue #439).
+    """
+
+    recording = _section(_protocol(), "## The recording format")
+    surfaces = {
+        PROTOCOL: recording,
+        RECORDS_README: RECORDS_README.read_text(encoding="utf-8"),
+        TEMPLATE: TEMPLATE.read_text(encoding="utf-8"),
+    }
+    for path, text in surfaces.items():
+        assert RECORD_NAME in text, f"{path}: does not name a record {RECORD_NAME}"
+        assert RETIRED_NAMING not in text, (
+            f"{path}: still adds the issue number only where a record of that"
+            f" Skill, family and date already exists."
+        )
+    for path in (PROTOCOL, RECORDS_README):
+        assert "keep the names" in surfaces[path], (
+            f"{path}: does not say that records already written keep their"
+            f" names, so one is renamed to match the rule."
+        )
+    assert RECORD_TEMPLATE_FIELD in surfaces[TEMPLATE], (
+        f"{TEMPLATE}: the `record` field does not carry the issue number."
+    )
+
+
+def test_whoever_writes_or_builds_an_evaluation_is_pointed_at_the_staging() -> None:
+    """The staging rules are read where an evaluation's author already reads.
+
+    The always-loaded guide sends whoever writes an evaluation ticket to the
+    protocol, not only whoever runs one, and the index of focused regressions
+    points at the staging rules those regressions keep too (issue #439).
+    """
+
+    agents = (REPO_ROOT / "AGENTS.md").read_text(encoding="utf-8")
+    line = re.search(
+        r"^- `docs/evaluation/protocol\.md` — (read when .+)$", agents, re.MULTILINE
+    )
+    assert line is not None, "AGENTS.md: no pointer to the evaluation protocol"
+    assert "evaluation ticket" in line.group(1), (
+        "AGENTS.md: the pointer to the evaluation protocol does not fire for"
+        " writing an evaluation ticket, so its author meets the staging rules"
+        " only after the ticket is written."
+    )
+
+    regressions = REGRESSIONS_README.read_text(encoding="utf-8")
+    assert "(../protocol.md#how-an-evaluation-is-staged)" in regressions, (
+        f"{REGRESSIONS_README}: does not point at the staging rules a focused"
+        f" regression keeps."
+    )
+    for rule in (
+        "The frozen plan",
+        "Interrupted runs are void",
+        "Top-level runs",
+        "A scratchpad",
+    ):
+        assert rule in regressions, (
+            f"{REGRESSIONS_README}: does not name `{rule}` among the staging"
+            f" rules a focused regression keeps."
+        )
 
 
 def test_the_matrix_runs_a_clean_redline_control_to_a_file_as_well() -> None:

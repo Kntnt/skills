@@ -67,9 +67,50 @@ What a no-change reply to a response target can be held to is the same for every
 - **An unresolved mandatory finding** — can: the staged input shows a finding the contract requires to be resolved or reported, and a reply that delivers no text and does not name that finding has delivered it as neither.
 - **An incorrect side effect** — can: side effects are read from the before-and-after inventory rather than from any text, and a response-targeted run has its inventory whether or not it delivered one.
 
+## How an evaluation is staged
+
+These rules hold for every evaluation of an editorial Skill, so that a ticket asking for one states only what is its own — its inputs, its criteria, the plan it copies — and its builder finds the rest here. A ticket that needs something else says so and why; where it says nothing, these rules hold. The first set binds an evaluation in any provider family. The second is how a Claude-family evaluation keeps them in the Claude Code Harness.
+
+### In every family
+
+**One seat.** Every run, correction subagent, checker and judge in one evaluation runs on one seat, and the pre-change arm runs on that same seat. The plan names the seat before the first run, and the plan and the record both name the model actually launched, as the Harness names it. A difference between two arms on two seats is partly a difference between the seats, and nothing in the record can separate the two afterwards. This protocol names no model, because a model is retired long before the rule is.
+
+**A fresh pre-change arm.** No earlier recorded arm serves as the comparison if it ran on another model, or before a change to any file the Skill loads. A criterion that compares against an earlier arm is read against a pre-change arm run in this evaluation, from the commit the ticket started from, on the same seat, over the same inputs. A count carried over from an earlier evaluation, such as *four of six*, is read against that arm too. An old arm looks like a free baseline, but it measured another product or another model, so a difference from it is partly the drift between them and not the change.
+
+**Not reproduced.** Two cases are kept apart, and what the ticket says decides which applies. Where the ticket carries the maintainer's ruling on the behaviour, the ruling ships even when the evaluation cannot reproduce the fault or the change misses its target: the result is recorded as measured, each miss becomes its own ticket, and no decision record is written for the non-reproduction. The ruling is a product decision, and a measurement that does not show the fault has not shown the ruling wrong. Only where the ticket makes the change conditional on the measurement, and the pre-change arm does not show the defect, is the result recorded as not reproduced, no product change shipped, and a decision record written, as ADR-0212, ADR-0214, ADR-0220, ADR-0221 and ADR-0223 did. A change shipped against a defect that does not show has nothing to repair and no measurement that could show it works, and the decision record keeps the next ticket from filing the same fault again.
+
+**One revise round.** An evaluation takes at most one revise round, no larger than the subset that failed. The candidate ships if it then meets the ticket's criteria. Otherwise it ships only if it beats the pre-change arm on the ticket's target criterion and no control that passed in the pre-change arm fails in the candidate arm; if not, the product stays as it was. A ruling the ticket carries ships either way, as *Not reproduced* says. Whichever way it falls, the result is written as measured, and every remaining miss is filed as its own `needs-triage` ticket naming this one, which is how [*What an evaluation is*](#what-an-evaluation-is) says a real defect is handled. A second round always looks one plausible fix away, and every round tuned against the same inputs fits the wording to those inputs rather than to the behaviour.
+
+**Whose miss.** A miss caused by a behaviour another ticket was filed against is recorded under that ticket's number and not counted against this one, with both judges' readings recorded. Where two judges split, the split rule of the plan being copied decides. Counted here, a fault owned elsewhere would fail every evaluation that meets it, and repairing it here would build the other ticket in the wrong place.
+
+**The frozen plan.** An evaluation's `plan.md` is frozen before the first run, and frozen means committed before the first run. The plan is never edited after runs start, not even to satisfy the suite, which does not hold committed evidence to the collection's prose rules (see [*The recording format*](#the-recording-format)). A run started under a plan that was later edited is void and is rerun. A plan copied from an earlier evaluation may have only paths and the seat substituted in its turn files and judge briefs, and that substitution is not a change of method. However small the edit, a plan changed after runs began can no longer show that the method was fixed before the results were known; one spelling change to one line voided six runs.
+
+**Interrupted runs are void.** A run or judge cut off by a usage limit, an HTTP 5xx or an overload is void, not a finding. It is rerun, and the voided output is kept apart from the counted runs rather than deleted. A cut-off run shows what the service did, not what the Skill does, and counted, it reads as a Skill that stopped.
+
+**Blind paths.** Judges are sent run directories under names that reveal neither the arm nor the ticket. Runs execute under the builder's own scratch root, and their directories are copied into the evaluation's own directory only after judging. A path naming the arm tells a judge which answer the evaluation hopes for, and [blinded judging](#blinded-semantic-judging) is then blind in name only.
+
+**The record name.** Every new record's name carries the issue number the evaluation was run for, in the form and for the reason [*The recording format*](#the-recording-format) gives.
+
+### In the Claude family
+
+**Staging.** Each install is exported with `git archive` from the commit it stands for, never copied from a working tree, and extracted flat, so that each editorial Skill's directory and `kntnt/` stand side by side at the install's root, which is where each Skill's shim looks for the Manager:
+
+```
+git archive <rev> skills/editorial/write skills/editorial/redline skills/editorial/proofread skills/editorial/unslop | tar -x -C <install> --strip-components=2
+git archive <rev> skills/kntnt | tar -x -C <install> --strip-components=1
+```
+
+The two paths are stripped by different depths on purpose: stripping `skills/kntnt` by two components, as a Skill's path is stripped, spills the Manager's own files into the install's root instead of into `kntnt/`. The example stages all four editorial Skills, as an install must whenever the Skill under evaluation reaches another — Redline closes on Proofread. The pre-change install is exported from the commit the ticket started from. The candidate is committed before the post-change install is staged, and that install is exported from the candidate's commit. A working tree holds whatever was being edited when it was copied, so an install copied from one stands for no commit, and nobody can stage its arm again.
+
+**Top-level runs.** A Redline, Unslop or Write run that must start a correction subagent is started as a fresh top-level `claude --print` session on the plan's seat, not as a subagent of the builder. A builder that is itself a subagent cannot give its runs a way to start one, so the run that needs one is not the Skill a user runs. #397 voided eight runs and #399 one before finding this out.
+
+**A scratchpad.** A plain `claude --print` session gets no session scratchpad. Where a run needs one, set `CLAUDE_CODE_ARTIFACT=1` in its environment. Without it the run meets another configuration than a user's session does, and a fault that lives in the shared scratchpad cannot happen at all: the first wave of [#401's regression](regressions/401/README.md) was kept apart and not counted for that reason.
+
+**The trace runner.** Where a criterion is answered from the Harness trace, every run is made with [`editorial-388/harness/staged_run.py`](editorial-388/harness/staged_run.py), given the plan's seat; [*The trace a criterion is answered from*](#the-trace-a-criterion-is-answered-from) says why no other run can answer such a criterion. Where no criterion is, a top-level session started as above is enough. The runner starts a top-level session of its own and exports the Skills with `git archive` from the revision it is given, so a run made with it keeps *Top-level runs* and *Staging* without more.
+
 ## The recording format
 
-One record per evaluation, holding one entry per fixture run. [`record-template.md`](record-template.md) is the skeleton; records live in [`records/`](records/README.md) and are named `<skill>-<provider-family>-<YYYY-MM-DD>.md`. Where a re-run lands on the same date as the record it follows, the name takes the issue it was run for after the date, because the convention above has nowhere else to put two records of one Skill and one family on one day.
+One record per evaluation, holding one entry per fixture run. [`record-template.md`](record-template.md) is the skeleton; records live in [`records/`](records/README.md) and are named `<skill>-<provider-family>-<YYYY-MM-DD>-<issue>.md`, the issue being the one the evaluation was run for. Every new record's name carries it, because two tickets built side by side can each evaluate one Skill in one family on one day, and neither builder can see the other's record to know that its own needs telling apart. Records written under the earlier rule, which added the issue only where a record of the same Skill, family and date already existed, keep the names they were written under.
 
 The record's own header carries the identity of the run:
 
