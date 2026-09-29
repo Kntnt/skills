@@ -1,0 +1,73 @@
+lane	run	arm	revision	input	invocation	capture
+A	pre-article-clean-resp-1	pre	e7773344	docs/evaluation/corpus/editorial-quality/controls/article-clean.md	/redline --genre=article --language=sv --output=response input.md	no
+A	pre-article-clean-file-1	pre	e7773344	docs/evaluation/corpus/editorial-quality/controls/article-clean.md	/redline --genre=article --language=sv --output=output.md input.md	yes
+A	post-article-clean-resp-1	post	c7f639c6	docs/evaluation/corpus/editorial-quality/controls/article-clean.md	/redline --genre=article --language=sv --output=response input.md	no
+A	post-article-clean-file-1	post	c7f639c6	docs/evaluation/corpus/editorial-quality/controls/article-clean.md	/redline --genre=article --language=sv --output=output.md input.md	yes
+A	pre-article-clean-resp-2	pre	e7773344	docs/evaluation/corpus/editorial-quality/controls/article-clean.md	/redline --genre=article --language=sv --output=response input.md	no
+A	pre-article-clean-file-2	pre	e7773344	docs/evaluation/corpus/editorial-quality/controls/article-clean.md	/redline --genre=article --language=sv --output=output.md input.md	yes
+A	post-article-clean-resp-2	post	c7f639c6	docs/evaluation/corpus/editorial-quality/controls/article-clean.md	/redline --genre=article --language=sv --output=response input.md	no
+A	post-article-clean-file-2	post	c7f639c6	docs/evaluation/corpus/editorial-quality/controls/article-clean.md	/redline --genre=article --language=sv --output=output.md input.md	yes
+A	pre-article-clean-resp-3	pre	e7773344	docs/evaluation/corpus/editorial-quality/controls/article-clean.md	/redline --genre=article --language=sv --output=response input.md	no
+A	pre-article-clean-file-3	pre	e7773344	docs/evaluation/corpus/editorial-quality/controls/article-clean.md	/redline --genre=article --language=sv --output=output.md input.md	yes
+A	post-article-clean-resp-3	post	c7f639c6	docs/evaluation/corpus/editorial-quality/controls/article-clean.md	/redline --genre=article --language=sv --output=response input.md	no
+A	post-article-clean-file-3	post	c7f639c6	docs/evaluation/corpus/editorial-quality/controls/article-clean.md	/redline --genre=article --language=sv --output=output.md input.md	yes
+B	pre-case-study-clean-resp-1	pre	e7773344	docs/evaluation/corpus/editorial-quality/controls/case-study-clean.md	/redline --genre=casestudy --language=sv --output=response input.md	no
+B	pre-case-study-clean-file-1	pre	e7773344	docs/evaluation/corpus/editorial-quality/controls/case-study-clean.md	/redline --genre=casestudy --language=sv --output=output.md input.md	yes
+B	post-case-study-clean-resp-1	post	c7f639c6	docs/evaluation/corpus/editorial-quality/controls/case-study-clean.md	/redline --genre=casestudy --language=sv --output=response input.md	no
+B	post-case-study-clean-file-1	post	c7f639c6	docs/evaluation/corpus/editorial-quality/controls/case-study-clean.md	/redline --genre=casestudy --language=sv --output=output.md input.md	yes
+B	pre-case-study-clean-resp-2	pre	e7773344	docs/evaluation/corpus/editorial-quality/controls/case-study-clean.md	/redline --genre=casestudy --language=sv --output=response input.md	no
+B	pre-case-study-clean-file-2	pre	e7773344	docs/evaluation/corpus/editorial-quality/controls/case-study-clean.md	/redline --genre=casestudy --language=sv --output=output.md input.md	yes
+B	post-case-study-clean-resp-2	post	c7f639c6	docs/evaluation/corpus/editorial-quality/controls/case-study-clean.md	/redline --genre=casestudy --language=sv --output=response input.md	no
+B	post-case-study-clean-file-2	post	c7f639c6	docs/evaluation/corpus/editorial-quality/controls/case-study-clean.md	/redline --genre=casestudy --language=sv --output=output.md input.md	yes
+B	pre-case-study-clean-resp-3	pre	e7773344	docs/evaluation/corpus/editorial-quality/controls/case-study-clean.md	/redline --genre=casestudy --language=sv --output=response input.md	no
+B	pre-case-study-clean-file-3	pre	e7773344	docs/evaluation/corpus/editorial-quality/controls/case-study-clean.md	/redline --genre=casestudy --language=sv --output=output.md input.md	yes
+B	post-case-study-clean-resp-3	post	c7f639c6	docs/evaluation/corpus/editorial-quality/controls/case-study-clean.md	/redline --genre=casestudy --language=sv --output=response input.md	no
+B	post-case-study-clean-file-3	post	c7f639c6	docs/evaluation/corpus/editorial-quality/controls/case-study-clean.md	/redline --genre=casestudy --language=sv --output=output.md input.md	yes
+C	pre-column-clean-resp-1	pre	e7773344	docs/evaluation/corpus/editorial-quality/controls/column-clean.md	/redline --genre=column --language=sv --output=response input.md	no
+C	pre-column-clean-file-1	pre	e7773344	docs/evaluation/corpus/editorial-quality/controls/column-clean.md	/redline --genre=column --language=sv --output=output.md input.md	yes
+C	post-column-clean-resp-1	post	c7f639c6	docs/evaluation/corpus/editorial-quality/controls/column-clean.md	/redline --genre=column --language=sv --output=response input.md	no
+C	post-column-clean-file-1	post	c7f639c6	docs/evaluation/corpus/editorial-quality/controls/column-clean.md	/redline --genre=column --language=sv --output=output.md input.md	yes
+C	pre-column-clean-resp-2	pre	e7773344	docs/evaluation/corpus/editorial-quality/controls/column-clean.md	/redline --genre=column --language=sv --output=response input.md	no
+C	pre-column-clean-file-2	pre	e7773344	docs/evaluation/corpus/editorial-quality/controls/column-clean.md	/redline --genre=column --language=sv --output=output.md input.md	yes
+C	post-column-clean-resp-2	post	c7f639c6	docs/evaluation/corpus/editorial-quality/controls/column-clean.md	/redline --genre=column --language=sv --output=response input.md	no
+C	post-column-clean-file-2	post	c7f639c6	docs/evaluation/corpus/editorial-quality/controls/column-clean.md	/redline --genre=column --language=sv --output=output.md input.md	yes
+C	pre-column-clean-resp-3	pre	e7773344	docs/evaluation/corpus/editorial-quality/controls/column-clean.md	/redline --genre=column --language=sv --output=response input.md	no
+C	pre-column-clean-file-3	pre	e7773344	docs/evaluation/corpus/editorial-quality/controls/column-clean.md	/redline --genre=column --language=sv --output=output.md input.md	yes
+C	post-column-clean-resp-3	post	c7f639c6	docs/evaluation/corpus/editorial-quality/controls/column-clean.md	/redline --genre=column --language=sv --output=response input.md	no
+C	post-column-clean-file-3	post	c7f639c6	docs/evaluation/corpus/editorial-quality/controls/column-clean.md	/redline --genre=column --language=sv --output=output.md input.md	yes
+D	pre-opinion-clean-resp-1	pre	e7773344	docs/evaluation/corpus/editorial-quality/controls/opinion-clean.md	/redline --genre=opinion --language=sv --output=response input.md	no
+D	pre-opinion-clean-file-1	pre	e7773344	docs/evaluation/corpus/editorial-quality/controls/opinion-clean.md	/redline --genre=opinion --language=sv --output=output.md input.md	yes
+D	post-opinion-clean-resp-1	post	c7f639c6	docs/evaluation/corpus/editorial-quality/controls/opinion-clean.md	/redline --genre=opinion --language=sv --output=response input.md	no
+D	post-opinion-clean-file-1	post	c7f639c6	docs/evaluation/corpus/editorial-quality/controls/opinion-clean.md	/redline --genre=opinion --language=sv --output=output.md input.md	yes
+D	pre-opinion-clean-resp-2	pre	e7773344	docs/evaluation/corpus/editorial-quality/controls/opinion-clean.md	/redline --genre=opinion --language=sv --output=response input.md	no
+D	pre-opinion-clean-file-2	pre	e7773344	docs/evaluation/corpus/editorial-quality/controls/opinion-clean.md	/redline --genre=opinion --language=sv --output=output.md input.md	yes
+D	post-opinion-clean-resp-2	post	c7f639c6	docs/evaluation/corpus/editorial-quality/controls/opinion-clean.md	/redline --genre=opinion --language=sv --output=response input.md	no
+D	post-opinion-clean-file-2	post	c7f639c6	docs/evaluation/corpus/editorial-quality/controls/opinion-clean.md	/redline --genre=opinion --language=sv --output=output.md input.md	yes
+D	pre-opinion-clean-resp-3	pre	e7773344	docs/evaluation/corpus/editorial-quality/controls/opinion-clean.md	/redline --genre=opinion --language=sv --output=response input.md	no
+D	pre-opinion-clean-file-3	pre	e7773344	docs/evaluation/corpus/editorial-quality/controls/opinion-clean.md	/redline --genre=opinion --language=sv --output=output.md input.md	yes
+D	post-opinion-clean-resp-3	post	c7f639c6	docs/evaluation/corpus/editorial-quality/controls/opinion-clean.md	/redline --genre=opinion --language=sv --output=response input.md	no
+D	post-opinion-clean-file-3	post	c7f639c6	docs/evaluation/corpus/editorial-quality/controls/opinion-clean.md	/redline --genre=opinion --language=sv --output=output.md input.md	yes
+E	pre-column-sv-r1-a	pre	e7773344	docs/evaluation/editorial-362/runs/column-sv-r1/redline/work/input.md	/redline --output=response input.md	no
+E	post-column-sv-r1-a	post	c7f639c6	docs/evaluation/editorial-362/runs/column-sv-r1/redline/work/input.md	/redline --output=response input.md	no
+E	pre-column-sv-r1-b	pre	e7773344	docs/evaluation/editorial-362/runs/column-sv-r1/redline/work/input.md	/redline --output=response input.md	no
+E	post-column-sv-r1-b	post	c7f639c6	docs/evaluation/editorial-362/runs/column-sv-r1/redline/work/input.md	/redline --output=response input.md	no
+E	pre-article-flawed	pre	e7773344	docs/evaluation/corpus/editorial-quality/controls/article-flawed.md	/redline --genre=article --language=sv --output=response input.md	no
+E	post-article-flawed	post	c7f639c6	docs/evaluation/corpus/editorial-quality/controls/article-flawed.md	/redline --genre=article --language=sv --output=response input.md	no
+E	pre-case-question-en_GB-r2	pre	e7773344	docs/evaluation/editorial-364/runs/b/case-question-en_GB-r2/delivered.md	/redline --genre=casestudy --language=en_GB --output=response input.md	no
+E	post-case-question-en_GB-r2	post	c7f639c6	docs/evaluation/editorial-364/runs/b/case-question-en_GB-r2/delivered.md	/redline --genre=casestudy --language=en_GB --output=response input.md	no
+F	pre-column-sv-r2-a	pre	e7773344	docs/evaluation/editorial-362/runs/column-sv-r2/redline/work/input.md	/redline --output=response input.md	no
+F	post-column-sv-r2-a	post	c7f639c6	docs/evaluation/editorial-362/runs/column-sv-r2/redline/work/input.md	/redline --output=response input.md	no
+F	pre-column-sv-r2-b	pre	e7773344	docs/evaluation/editorial-362/runs/column-sv-r2/redline/work/input.md	/redline --output=response input.md	no
+F	post-column-sv-r2-b	post	c7f639c6	docs/evaluation/editorial-362/runs/column-sv-r2/redline/work/input.md	/redline --output=response input.md	no
+F	pre-case-study-flawed	pre	e7773344	docs/evaluation/corpus/editorial-quality/controls/case-study-flawed.md	/redline --genre=casestudy --language=sv --output=response input.md	no
+F	post-case-study-flawed	post	c7f639c6	docs/evaluation/corpus/editorial-quality/controls/case-study-flawed.md	/redline --genre=casestudy --language=sv --output=response input.md	no
+F	pre-column-flawed	pre	e7773344	docs/evaluation/corpus/editorial-quality/controls/column-flawed.md	/redline --genre=column --language=sv --output=response input.md	no
+F	post-column-flawed	post	c7f639c6	docs/evaluation/corpus/editorial-quality/controls/column-flawed.md	/redline --genre=column --language=sv --output=response input.md	no
+G	pre-opinion-en_GB-r1-a	pre	e7773344	docs/evaluation/editorial-362/runs/opinion-en_GB-r1/redline/work/input.md	/redline --output=response input.md	no
+G	post-opinion-en_GB-r1-a	post	c7f639c6	docs/evaluation/editorial-362/runs/opinion-en_GB-r1/redline/work/input.md	/redline --output=response input.md	no
+G	pre-opinion-en_GB-r1-b	pre	e7773344	docs/evaluation/editorial-362/runs/opinion-en_GB-r1/redline/work/input.md	/redline --output=response input.md	no
+G	post-opinion-en_GB-r1-b	post	c7f639c6	docs/evaluation/editorial-362/runs/opinion-en_GB-r1/redline/work/input.md	/redline --output=response input.md	no
+G	pre-opinion-flawed	pre	e7773344	docs/evaluation/corpus/editorial-quality/controls/opinion-flawed.md	/redline --genre=opinion --language=sv --output=response input.md	no
+G	post-opinion-flawed	post	c7f639c6	docs/evaluation/corpus/editorial-quality/controls/opinion-flawed.md	/redline --genre=opinion --language=sv --output=response input.md	no
+G	pre-case-question-en_GB-r3	pre	e7773344	docs/evaluation/editorial-364/runs/b/case-question-en_GB-r3/delivered.md	/redline --genre=casestudy --language=en_GB --output=response input.md	no
+G	post-case-question-en_GB-r3	post	c7f639c6	docs/evaluation/editorial-364/runs/b/case-question-en_GB-r3/delivered.md	/redline --genre=casestudy --language=en_GB --output=response input.md	no
