@@ -6628,6 +6628,197 @@ def test_editorial_prose_says_quotation_bridge_never_a_bare_bridge() -> None:
         )
 
 
+# Where a heading on a finished text stops being a finding. Redline rewrote
+# headings that work — an allusion that still names its subject, a figure of
+# speech in a column's own voice, a subheading stating its section — because
+# the review half called every *Avoid* item a finding and gave no test that
+# told one from a working heading (issue #429). Thomas's ruling is the test: a
+# heading is a finding where the review can name what a reader of it loses.
+# The *Avoid* list stays a list, word for word; the line is drawn in the
+# review half alone, since `headlines.md` is what a writer aims at.
+HEADLINES_AVOID_ITEMS = (
+    (
+        "Claims, figures, names or conclusions not found in the text. A "
+        "headline that sharpens, generalises or draws a conclusion the text "
+        "itself does not draw is always a finding, however well it reads."
+    ),
+    (
+        "Vague or mysterious wording that requires reading the text to "
+        "understand the headline."
+    ),
+    (
+        "A subject named with nothing said about it, where the text has an "
+        "angle to state."
+    ),
+    "Words, names and abbreviations the audience will not know.",
+    "Partial quotes, colons in place of a verb, stilted headline-speak.",
+    ("Puns and references that fail for anyone who does not get the allusion."),
+    (
+        "Question headlines. Where the text gives the answer, the headline "
+        "gives it too. The exceptions are a text built as questions and "
+        "answers, where the form is natural, and a text that truly leaves the "
+        "question open, where the headline is deliberately kept from asserting "
+        "anything."
+    ),
+    "A tone more dramatic than the text's.",
+    (
+        "The same words and phrasing in the headline and the standfirst or "
+        "opening paragraph, or in a subheading and the first sentence under it. "
+        "They complement each other; they do not repeat."
+    ),
+    (
+        "A subheading that pre-spends the judgement, figure or concession of a "
+        "quotation standing under it, so that the reader meets the quotation as "
+        "the subheading said again. Read it against the quotation however far "
+        "down the section the quotation stands. Repair it by naming the "
+        "subject, the occasion or the speaker, or by stating what the rest of "
+        "the section says, and leave the quotation as it is."
+    ),
+)
+READER_LOSS_TEST = "what a reader of that heading loses"
+HEADING_SEEN_ALONE = "sees only the heading"
+WORKING_HEADING_CASES = (
+    "allusion",
+    "figure of speech",
+    "states what its section says",
+    "topic words",
+)
+STEP_6_OLD_HEADING_DEFECT = "wording the reader has to read on to understand"
+STEP_6_HEADING_DEFECT = (
+    "a heading from which a reader who sees only it cannot tell what the text is about"
+)
+
+
+def _headlines_review_sections() -> tuple[str, str]:
+    """The review half's *Avoid* and *Leave alone* sections, in that order."""
+
+    review = HEADLINES_REVIEW.read_text(encoding="utf-8")
+    avoid, leave = review.split("## Avoid", 1)[1].split("## Leave alone", 1)
+    return avoid, leave
+
+
+def test_a_heading_is_a_finding_where_the_review_names_what_its_reader_loses() -> None:
+    """The *Avoid* list opens on the ruling's test, and keeps every item.
+
+    Every item on the list used to be a finding as such, so a working allusion
+    was rewritten as *vague* and a subheading stating its section as a repeat
+    (issue #429). The opening sentence now states the test each item is read
+    by, with the finding cases as instances of it rather than a closed list,
+    and the items themselves stay word for word, as #382 ruled.
+    """
+
+    avoid, _ = _headlines_review_sections()
+    opening = _paragraphs(avoid)[0]
+    items = tuple(
+        line[2:].strip() for line in avoid.splitlines() if line.startswith("- ")
+    )
+
+    assert READER_LOSS_TEST in opening, (
+        f"{HEADLINES_REVIEW}: the *Avoid* list does not open on the test that"
+        f" makes an item a finding — {READER_LOSS_TEST} — so every item still"
+        f" reads as a finding wherever its words fit (issue #429)."
+    )
+    assert "instances" in opening, (
+        f"{HEADLINES_REVIEW}: the *Avoid* list's opening does not say that the"
+        f" cases it names are instances of the test, so a reviewer may read"
+        f" them as the whole of it (issue #429)."
+    )
+    assert items == HEADLINES_AVOID_ITEMS, (
+        f"{HEADLINES_REVIEW}: the *Avoid* items are no longer the list #382"
+        f" ruled on, word for word; the line between a finding and a working"
+        f" heading is drawn around them, never by rewording them (issue #429)."
+    )
+
+
+def test_the_working_headings_are_named_once_and_bounded_where_the_reviewer_reads() -> (
+    None
+):
+    """*Leave alone* names the four working headings, and the two items they never override.
+
+    Allusion, a figure of speech in the text's register, a subheading stating
+    its section and shared topic words were each rewritten as a finding on a
+    finished text (issue #429). *Leave alone* names them, reads a heading as a
+    reader who sees only it does, and bounds them by *Avoid* item 1 and by the
+    subheading that pre-spends a quotation, so #396's finding still fires.
+    """
+
+    _, leave = _headlines_review_sections()
+
+    for case in WORKING_HEADING_CASES:
+        assert case in leave, (
+            f"{HEADLINES_REVIEW}: *Leave alone* does not name the working"
+            f" heading `{case}`, so a reviewer has nothing that stops the"
+            f" *Avoid* list at it (issue #429)."
+        )
+    assert HEADING_SEEN_ALONE in leave, (
+        f"{HEADLINES_REVIEW}: *Leave alone* does not read an allusion as a"
+        f" reader who {HEADING_SEEN_ALONE} reads it (issue #429)."
+    )
+    for bound, item in (
+        ("factual claim", "item 1, a claim the text does not support"),
+        ("judgement, figure or concession", "a subheading over a quotation"),
+    ):
+        assert bound in leave, (
+            f"{HEADLINES_REVIEW}: *Leave alone* does not bound the working"
+            f" headings by {item}, so one could license a heading that item"
+            f" makes a finding (issue #429)."
+        )
+
+
+def test_a_heading_repair_keeps_the_texts_recurring_words_and_its_meaning() -> None:
+    """A repaired heading keeps the motif and the meaning the text has.
+
+    A column's `en ruta` became `rutor`, and its `beslut` became `syfte`, in
+    headlines a round rewrote (issue #429). The *Avoid* section's closing
+    paragraph, which says how a heading is repaired, says what the repair keeps.
+    """
+
+    avoid, _ = _headlines_review_sections()
+    closing = next(
+        block
+        for block in _paragraphs(avoid)
+        if block.startswith("Name what the reader loses")
+    )
+
+    assert "recurring words and figures" in closing and "meaning" in closing, (
+        f"{HEADLINES_REVIEW}: the paragraph on repairing a heading does not"
+        f" say that the repair keeps the text's recurring words and figures"
+        f" and its meaning (issue #429)."
+    )
+
+
+def test_redline_names_the_heading_defect_by_what_a_reader_of_it_alone_can_tell() -> (
+    None
+):
+    """Step 6 names the unclear heading by the ruling's test, and restates no working case.
+
+    *Wording the reader has to read on to understand* made every allusion the
+    body resolves a finding (issue #429). Step 6 names the same defect by what
+    a reader who sees only the heading can tell. The working-heading cases live
+    in `headlines.review.md` alone, which both Redline and its correction agent
+    load, so neither restates them.
+    """
+
+    skill = REDLINE_SKILL.read_text(encoding="utf-8")
+
+    assert STEP_6_OLD_HEADING_DEFECT not in skill, (
+        f"{REDLINE_SKILL}: step 6 still names a heading the reader has to read"
+        f" on to understand as a defect, which reaches every allusion the body"
+        f" resolves (issue #429)."
+    )
+    assert STEP_6_HEADING_DEFECT in skill, (
+        f"{REDLINE_SKILL}: step 6 does not name the unclear heading by what a"
+        f" reader who sees only it can tell (issue #429)."
+    )
+    for path in (REDLINE_SKILL, REDLINE_CORRECTION):
+        text = path.read_text(encoding="utf-8")
+        for case in ("allusion", "figure of speech"):
+            assert case not in text, (
+                f"{path}: restates the working heading `{case}`, which"
+                f" `headlines.review.md` states once (issue #429)."
+            )
+
+
 # What a review may do about a part of the article anatomy (issue #397). A
 # review reports a required part the text does not have and repairs a part the
 # text has; the rule is stated in full where both reviewers reach it, the review

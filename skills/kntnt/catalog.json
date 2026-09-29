@@ -1,6 +1,6 @@
 {
   "origin": "Kntnt/skills",
-  "manager_digest": "f5609553b62763effa68a263a0b4050d373bd267aafb0f7c4706b5f1356449df",
+  "manager_digest": "65ef182218f24d27c3a0301d837b1ce3673579f7703bf2127527740447983ca0",
   "skills": [
     {
       "name": "agents-md",
@@ -145,7 +145,7 @@
       "name": "redline",
       "category": "editorial",
       "description": "Review one supplied text against this collection's editorial contract — its genre, its optional technique, its language, and the shared anti-slop catalogue — and, when selected, a Writing Brief; repair what the review found through a bounded budget of fresh correction subagents, report whatever is left unresolved, and finish with exactly one mechanical pass.",
-      "digest": "9c00ceb990241a7f04a581f3f6e4fcd5ffbeb88b72ce9fb684c2014b7267d5bc",
+      "digest": "dca3be16205e1935354a1b90a389623108f7194e4d3cee0668b7a38236c66207",
       "binaries": [
         "uv"
       ],
