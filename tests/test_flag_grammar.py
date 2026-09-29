@@ -8,6 +8,7 @@ from collections.abc import Iterable
 from pathlib import Path
 
 from support.contract import STANDARD
+from support.evidence import is_evaluation_evidence
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 SKILLS = REPO_ROOT / "skills"
@@ -217,6 +218,21 @@ Run `uv run engine.py emit --unshipped value` and read what it says.
 """
 
 
+def reads_for_flag_grammar(path: str) -> bool:
+    """Say whether the scan reads the Markdown file *path*, relative to the root.
+
+    Only a file under `docs/`, and there neither `docs/research/` nor committed
+    evaluation evidence, both explained under `_scanned()`.
+    """
+
+    relative = path.split("/")
+    return (
+        relative[0] == "docs"
+        and "research" not in relative[1:]
+        and not is_evaluation_evidence(path)
+    )
+
+
 def _scanned() -> list[Path]:
     """Every file this rule is read out of, repository order.
 
@@ -227,13 +243,17 @@ def _scanned() -> list[Path]:
     documentation, and this collection's spelling is not that tool's to be
     normalised into. Rewriting `opencode run --model <MODEL>` to attach its
     value would make the quotation false, which is worse than the uniformity
-    it would buy.
+    it would buy. Committed evaluation evidence is outside it as well, for the
+    same reason in another form: a plan or transcript records the command line
+    a run was typed with, and a third-party one (`claude --print --model
+    claude-opus-5-5`) keeps its own tool's spelling. Editing the record to
+    satisfy this scan would falsify what the run did (#442).
     """
 
     roots = sorted(SKILLS.rglob("*.md")) + [
         path
         for path in sorted(DOCS.rglob("*.md"))
-        if "research" not in path.relative_to(DOCS).parts
+        if reads_for_flag_grammar(path.relative_to(REPO_ROOT).as_posix())
     ]
     named = [REPO_ROOT / name for name in ("README.md", "CONTEXT.md", "AGENTS.md")]
     return roots + [path for path in named if path.exists()]

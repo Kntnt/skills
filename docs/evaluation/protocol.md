@@ -97,6 +97,8 @@ Each fixture entry carries what was asked and what happened:
 
 Records are append-only in practice. A re-run is a new record, and the earlier one stays: what a configuration did on a given day is history, and a later repair does not change it.
 
+Committed evidence is never edited to satisfy the suite. The suite does not hold it to the collection's prose rules, such as the spelling of a flag or the retired name of a folder, because a transcript or a plan records what a run saw or was typed with; a decision-record number cited in it must still resolve.
+
 ## Provider isolation
 
 This is a hard constraint on whoever runs an evaluation, and it holds in both directions.

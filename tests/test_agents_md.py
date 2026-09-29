@@ -6,6 +6,8 @@ import re
 import subprocess
 from pathlib import Path
 
+from support.evidence import is_evaluation_evidence
+
 REPO_ROOT = Path(__file__).resolve().parent.parent
 AGENTS = REPO_ROOT / "AGENTS.md"
 
@@ -183,7 +185,12 @@ def test_agents_md_sends_a_reader_to_the_archive_for_why_and_not_for_law() -> No
 # is history, an input the migration reads, or user-scoped persistence, which
 # the project move never covered. Ticket notes under `.kntnt-orchestrate/` are
 # the same historical surface as the changelog they become: a fragment that
-# describes the move is not an instruction to recreate the old directory.
+# describes the move is not an instruction to recreate the old directory. So is
+# committed evaluation evidence (`support.evidence`): a transcript quoting a
+# `git status` of the old checkout records what a run saw, and redacting it to
+# satisfy this scan would falsify the record (#442). The evidence boundary is
+# a predicate rather than an entry below, because a prefix cannot separate
+# `docs/evaluation/records/` from the live README inside it.
 AGENT_DOCUMENTS = "docs/agents/"
 RETIRED = "agents.d/"
 RETIRED_MENTIONS_ALLOWED = (
@@ -203,6 +210,14 @@ RETIRED_MENTIONS_ALLOWED = (
     "skills/agents/delegation/help/on.md",
     "skills/agents/delegation/references/persist.md",
 )
+
+
+def reads_for_retired_name(path: str) -> bool:
+    """Say whether the scan below reads *path*, repository-relative and POSIX."""
+
+    return not (
+        path.startswith(RETIRED_MENTIONS_ALLOWED) or is_evaluation_evidence(path)
+    )
 
 
 def test_project_agent_documents_live_under_docs_agents() -> None:
@@ -225,9 +240,10 @@ def test_no_active_file_names_the_retired_agent_directory() -> None:
     """An instruction naming the old directory recreates it on its next use.
 
     What remains is history left as it stood, the migration's own input,
-    user-scoped persistence, and the ticket notes that become changelog
-    entries; anything else is a producer or a reader the move missed
-    (issue #326).
+    user-scoped persistence, the ticket notes that become changelog entries,
+    and committed evaluation evidence, which records what a run saw and is
+    never edited to satisfy a scan (#442); anything else is a producer or a
+    reader the move missed (issue #326).
     """
 
     tracked = subprocess.run(
@@ -239,7 +255,7 @@ def test_no_active_file_names_the_retired_agent_directory() -> None:
     ).stdout.split("\0")
     stray = []
     for path in filter(None, tracked):
-        if path.startswith(RETIRED_MENTIONS_ALLOWED):
+        if not reads_for_retired_name(path):
             continue
         file = REPO_ROOT / path
         if not file.is_file():
