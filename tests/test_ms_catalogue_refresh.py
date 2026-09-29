@@ -3,11 +3,10 @@
 Every test here is built from payloads recorded on the maintainer's machine on
 2026-09-11 and stored under `tests/support/model_selector_refresh/`: Claude
 Code's `initialize` control response, Codex's `app-server` exchange ending in
-`model/list`, the header of the models cache that exchange left behind, and
-OpenRouter's public `GET /api/v1/models`. Only identifiers of the account and
-the machine were redacted, and nothing else was touched, so a parser that
-reads them reads the shapes the tools actually emit. The redacted fields are
-these:
+`model/list`, and OpenRouter's public `GET /api/v1/models`. Only identifiers
+of the account and the machine were redacted, and nothing else was touched,
+so a parser that reads them reads the shapes the tools actually emit. The
+redacted fields are these:
 
 - `email` and `organization` in Claude's `account`, now `redacted@example.com`
   and `redacted`
