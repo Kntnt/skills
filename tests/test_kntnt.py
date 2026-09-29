@@ -9253,8 +9253,8 @@ def test_unslop_declares_the_subagents_and_the_runtime_it_needs() -> None:
 # same seat stopped, its first step confirming the Capability at the point of
 # work (issue #394). Orchestrate and ready-for-agent-check deliver no Text
 # Artifact and are held to the same first step by the test after the one for
-# these three; delegation declares `subagents` but starts none in its steps, so
-# it carries no step-1 check (issue #416, #428).
+# these three; delegation starts none in its steps, so it declares no
+# Capability and carries no step-1 check (issue #416, #428).
 FRESH_SUBAGENT_SKILLS = (WRITE, REDLINE, UNSLOP)
 
 # The Skills whose later steps start a fresh subagent and deliver no Text
@@ -11203,23 +11203,53 @@ def test_the_generated_catalog_digests_each_skill_directory(tmp_path: Path) -> N
     assert changed_manager["manager_digest"] != before["manager_digest"]
 
 
-def test_delegation_requires_subagents_and_says_so() -> None:
-    """The Claude-only model ladder is gone; the harness requirement is declared."""
+# Where `/delegation` runs in a seat that cannot start a subagent. None of its
+# own steps starts one — they write, remove or read a pointer and two
+# companions, adopt or suspend a standing instruction, write a state file and
+# report — so it declares no Capability and every form works there, `off` and
+# `status` included. The mode it switches on degrades by itself, `mode.md`
+# telling an agent that cannot delegate to execute normally, so the report says
+# so in one line rather than refusing (issue #428).
+DELEGATION = REPO_ROOT / "skills" / "agents" / "delegation"
+DELEGATION_COMPATIBILITY = (
+    "Requires uv and model-selector; delegates only in a harness that can run subagents"
+)
+DELEGATION_NO_SUBAGENT_NOTICE = "the mode changes nothing in this seat until it can"
+DELEGATION_NO_SUBAGENT_PAGE = (
+    "Where the current Harness cannot start a subagent, every form still works"
+)
 
-    path = REPO_ROOT / "skills" / "agents" / "delegation" / "SKILL.md"
+
+def test_delegation_declares_no_capability_and_names_the_harness_softly() -> None:
+    """The Skill's own steps start no subagent, so nothing is refused on one.
+
+    `docs/rules/skills.md` admits only hard requirements to the dependency
+    lists, and a Capability is declared when a Skill's own steps need it, not
+    when the work it switches on does. So `kntnt.capabilities` is empty and
+    `compatibility` names the harness as a soft requirement, the way
+    `/release` names `gh` (issue #428).
+    """
+
+    path = DELEGATION / "SKILL.md"
     text = path.read_text(encoding="utf-8")
-    assert 'kntnt.capabilities: "subagents"' in text, (
-        f"{path}: this skill is meaningless where subagents cannot be spawned,"
-        f" so it declares `subagents` as a Capability. A harness requirement is"
-        f" a fourth kind of dependency the skill refuses on, never a row in a"
-        f" per-harness matrix (ADR-0030). See {STANDARD}."
+    assert 'kntnt.capabilities: ""' in text, (
+        f"{path}: `/delegation` declares a Capability, so the engine's reading"
+        f" sheet tells every run to confirm it and stop where it is"
+        f" Unsatisfied — `off` and `status` included, though none of the"
+        f" Skill's own steps starts a subagent. A Capability is declared when"
+        f" the Skill's own steps need it, not when the work it switches on"
+        f" does (issue #428). See {STANDARD}."
+    )
+    assert f"compatibility: {DELEGATION_COMPATIBILITY}\n" in text, (
+        f"{path}: `compatibility` does not name the harness as a soft"
+        f" requirement: {DELEGATION_COMPATIBILITY!r}. It is the one field a"
+        f" foreign reader reads, so delegating's need for a harness that can"
+        f" run subagents is stated there in prose, as `/release` states `gh`"
+        f" (ADR-0177, issue #428). See {STANDARD}."
     )
     assert f"{SHIM_CALL}`" in text, (
         f"{path}: the body calls the shim, whose answer on exit 0 says which"
-        f" Capabilities to answer before continuing. No script can answer"
-        f" them: the agent is the harness, so a non-empty list means nothing a"
-        f" script could see is missing rather than go-ahead (ADR-0030,"
-        f" ADR-0181). See {STANDARD}."
+        f" Capabilities to answer before continuing (ADR-0181). See {STANDARD}."
     )
 
     mode = (path.parent / "references" / "mode.md").read_text(encoding="utf-8")
@@ -11230,6 +11260,91 @@ def test_delegation_requires_subagents_and_says_so() -> None:
         f" collection is one set across harnesses (ADR-0005) — so it tells the"
         f" reader to pick from its own ladder. See {STANDARD}."
     )
+
+
+def test_delegation_reading_sheet_carries_no_capability_directive() -> None:
+    """Every form reaches its steps in a seat that cannot start a subagent.
+
+    The sheet is built as `invoke` builds it, from the real Skill directory,
+    for each command path the Skill has: a Capability directive on any of
+    them would stop `off` and `status` before their first step (issue #428).
+    """
+
+    engine = _manager_module()
+    library = MANAGER_DIR / "library"
+    for payload in ("", "on", "off --project --yes", "status"):
+        reading = engine.read_invocation(DELEGATION, payload)
+        assert reading.status == 0, reading.text
+        sheet = engine.reading_sheet(
+            {
+                "ok": True,
+                **reading.invocation,
+                "dependencies": {
+                    "ok": True,
+                    "unsatisfied": [],
+                    "capabilities": engine.capabilities_at(DELEGATION),
+                },
+            },
+            library,
+        )
+        assert engine.CAPABILITIES_DIRECTIVE not in sheet, (
+            f"{DELEGATION}: the reading sheet for `/delegation {payload}` tells"
+            f" the agent to answer a Capability and stop where it is"
+            f" Unsatisfied, so the form is refused in a seat that cannot start"
+            f" a subagent although none of its steps starts one (issue #428)."
+            f" See {STANDARD}."
+        )
+
+
+def test_delegation_reports_the_mode_inert_where_no_subagent_can_start() -> None:
+    """Turning the mode on in such a seat is reported, never refused.
+
+    Step 4 names the one line that says the mode changes nothing in this seat
+    until it can start a subagent, and no step stops, refuses or asks on the
+    missing subagent (issue #428).
+    """
+
+    path = DELEGATION / "SKILL.md"
+    steps = _section(path.read_text(encoding="utf-8"), "## Steps", path)
+    fourth = steps.partition("\n4. ")[2]
+    assert DELEGATION_NO_SUBAGENT_NOTICE in fourth, (
+        f"{path}: step 4 does not name the one-line notice"
+        f" {DELEGATION_NO_SUBAGENT_NOTICE!r} for a seat that cannot start a"
+        f" subagent, so turning the mode on there reads as if it delegates"
+        f" (issue #428). See {STANDARD}."
+    )
+    assert "Unsatisfied" not in steps, (
+        f"{path}: a step reports an Unsatisfied Capability, but `/delegation`"
+        f" declares none and refuses on none (issue #428). See {STANDARD}."
+    )
+    for sentence in _sentences(steps):
+        if "cannot start a subagent" in sentence:
+            assert not re.search(r"\b(stop|refus|ask)", sentence), (
+                f"{path}: {sentence!r} stops, refuses or asks where no"
+                f" subagent can start, and the Skill's own steps need none"
+                f" (issue #428). See {STANDARD}."
+            )
+
+
+def test_delegation_pages_say_what_the_mode_does_without_subagents() -> None:
+    """The manpage and each command page state the degrade, not a refusal."""
+
+    pages = [DELEGATION / "help.md", *sorted((DELEGATION / "help").glob("*.md"))]
+    assert len(pages) == 4
+    for page in pages:
+        dependencies = _section(
+            page.read_text(encoding="utf-8"), "## DEPENDENCIES", page
+        )
+        assert DELEGATION_NO_SUBAGENT_PAGE in dependencies, (
+            f"{page}: `## DEPENDENCIES` does not say what the mode does where"
+            f" no subagent can start: {DELEGATION_NO_SUBAGENT_PAGE!r}"
+            f" (issue #428). See {STANDARD}."
+        )
+        assert "does no work" not in dependencies, (
+            f"{page}: `## DEPENDENCIES` says the Skill does no work where the"
+            f" Harness cannot start a subagent, but it declares no Capability"
+            f" and every form runs there (issue #428). See {STANDARD}."
+        )
 
 
 def test_delegation_subagents_do_not_redelegate_without_a_scoped_grant() -> None:

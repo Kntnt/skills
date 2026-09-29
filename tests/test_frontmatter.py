@@ -307,6 +307,12 @@ def test_every_shipped_skill_states_its_dependencies_in_compatibility() -> None:
     # be wrong and leaving it unsaid would be a lie about the requirement.
     soft: dict[str, set[str]] = {"release": {"gh"}}
 
+    # `subagents` is the Capability counterpart: delegation's own steps start
+    # no subagent, so every form runs in a seat that cannot start one, and
+    # only the mode it switches on needs one — which degrades by itself to the
+    # agent executing the work (issue #428).
+    soft_capabilities: dict[str, set[str]] = {"delegation": {"subagents"}}
+
     skill_mds = sorted(SKILLS.glob("*/*/SKILL.md"))
 
     # A glob that matched nothing would pass every assertion below it.
@@ -352,11 +358,16 @@ def test_every_shipped_skill_states_its_dependencies_in_compatibility() -> None:
             f" declaration the checker refuses on, and listed in this test"
             f" (ADR-0177). See {STANDARD}."
         )
-        assert _names(compatibility, kntnt.CAPABILITIES) == set(deps["capabilities"]), (
+        named_capabilities = _names(compatibility, kntnt.CAPABILITIES) - (
+            soft_capabilities.get(skill_md.parent.name, set())
+            - set(deps["capabilities"])
+        )
+        assert named_capabilities == set(deps["capabilities"]), (
             f"{skill_md}: `compatibility` and the dependency declaration name"
             f" different Capabilities —"
-            f" {sorted(_names(compatibility, kntnt.CAPABILITIES))} against"
-            f" {sorted(deps['capabilities'])}. A Capability is stated as the"
+            f" {sorted(named_capabilities)} against"
+            f" {sorted(deps['capabilities'])}, soft requirements listed in this"
+            f" test aside. A Capability is stated as the"
             f" Capability and never as the harness product that has one"
             f" (ADR-0177, ADR-0030). See {STANDARD}."
         )

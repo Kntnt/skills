@@ -122,7 +122,7 @@ The Manager and model-selector must be Enabled so the dependency check can run a
 
 **Capabilities**
 
-The current Harness must be able to spawn subagents. The Skill asks the Harness to confirm this capability and does no work when it is unsatisfied.
+None. Where the current Harness cannot start a subagent, every form still works: none of the Skill's own steps starts one. The mode it turns on changes nothing there until one can, the agent executing the work itself, and turning it on says so in one line.
 
 ## SEE ALSO
 

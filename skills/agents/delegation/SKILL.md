@@ -3,13 +3,13 @@ name: delegation
 description: Turn delegation mode on or off — you orchestrate, subagents execute — for this session, this project, or your user account.
 disable-model-invocation: true
 argument-hint: "[(on|off) [--project|--user] [--yes]] | status [--project|--user] [-- <instruction>]"
-compatibility: Requires uv, model-selector, and a harness that can run subagents
+compatibility: Requires uv and model-selector; delegates only in a harness that can run subagents
 metadata:
   kntnt.internal: "true"
   kntnt.binaries: "uv"
   kntnt.skills: "model-selector"
   kntnt.externals: ""
-  kntnt.capabilities: "subagents"
+  kntnt.capabilities: ""
 ---
 
 # delegation
@@ -47,4 +47,4 @@ The verdict is the effective state here and now:
 1. `--project` or `--user`, with any command path: read [`persist.md`](references/persist.md) and follow it, then go to the report. Done when the pointer and companions are written, removed, or read.
 2. Session scope — `on`, `off`, or the bare invocation's toggle of the current verdict. Going on: read `$HERE/references/mode.md`, substitute every `<model-selector>` in it with Model Selector's own directory — `$HERE/../model-selector/` if that exists, else `$HERE/../../models/model-selector/` — and adopt the result as a standing instruction for the rest of this session, so the routing call names a script this machine can run. Neither directory found: adopt the mode as it stands, say that routing is unavailable until the Manager is installed, and go on. Read `$HERE/references/fence.md` as its canonical fence preamble, fill in the spawn-specific paths, and paste it at the top of every subagent brief, adding only any task-specific tightening. Going off: treat that instruction as inert history — execute tasks yourself again, and spawn subagents only when the user asks. `status` changes nothing. Done when the session state matches the argument.
 3. Write `{"active": true}` or `{"active": false}`, and nothing else, to `kntnt-delegation.json` in whatever per-session scratchpad or temporary directory your harness gives you, so a compaction cannot lose the state. No such directory: the conversation alone carries it. `status` writes nothing. Done when that file matches the session state, or there is nowhere to write it.
-4. Report one line per scope touched — its state, then the verdict — and name any disagreement between the two, and any staleness found. Done when that report is shown.
+4. Report one line per scope touched — its state, then the verdict — and name any disagreement between the two, and any staleness found. Where the session mode was turned on, or a persistent scope written, in a seat that cannot start a subagent, add one line saying that the mode changes nothing in this seat until it can. Done when that report is shown.
