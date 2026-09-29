@@ -22,7 +22,7 @@ Where any of that contradicts the body, the later text stands: a question the bo
 
 ## What you are looking for
 
-Seven things stop a builder or cost it. Go through all seven for this ticket; do not stop at the first.
+Eight things stop a builder or cost it. Go through all eight for this ticket; do not stop at the first.
 
 1. **A decision the ticket leaves open.** It sets out options and chooses none, or it hands the choice to the builder without saying the builder may make it. A criterion of the form *either do X, or state why X is not worth doing* is this shape: it reads as a question, and a builder with nobody to ask stops in front of it. A choice explicitly delegated — *pick whichever fits and say why* — is not this: it is settled, and what is settled is that the builder decides.
 
@@ -38,13 +38,15 @@ Seven things stop a builder or cost it. Go through all seven for this ticket; do
 
 7. **Work that is not an agent's to do.** A judgement about product direction, an access or credential nobody has given it, a design decision the ticket defers to a person, a check that can only be made by a human looking at something. This does not make the ticket bad; it makes it work for a person, and saying so is the finding.
 
+8. **A requirement that contradicts a rule.** The rule is of one of two kinds. It is a rule the repository states now — in its rules modules, in its agent guide and whatever that points at, or in the files a Skill ships — or it is a rule that another ticket this one names will write: a ticket this one is blocked by, or a ticket it cites as the source of a rule it relies on. For the second kind, read that named ticket's whole thread from the tracker, its body and every comment on it, oldest first, because the rule it writes is usually settled in a comment. That is not help from outside this ticket: the builder has the same tracker, and a builder following this ticket's own reference reads the same thread. A ticket whose purpose is to change the rule does not contradict it; the builder holds only the new rule. Otherwise the builder cannot hold both the requirement and the rule, and choosing between them is a choice between two intents, so this finding is a Stop and never a Cost. Quote the ticket's sentence and the rule's sentence, and say which of the two the ticket would have to change for the question not to arise. A ticket this one does not name is not yours to read: two tickets that name nothing in common are compared when their work is merged, not here.
+
 ## What you had to supply
 
-The seven above catch what the ticket fails to say. This catches what you supplied without noticing that you supplied it, which is the one failure a capable reader is most prone to: an ambiguity settled on the way past, an intent read off the context, a fact established because you happened to know where it lived. You are not uncertain while you do any of that, so the rule that an uncertain verdict is a no never reaches it, and the ticket comes back clean for a reason it does not carry.
+The eight above catch what the ticket fails to say. This catches what you supplied without noticing that you supplied it, which is the one failure a capable reader is most prone to: an ambiguity settled on the way past, an intent read off the context, a fact established because you happened to know where it lived. You are not uncertain while you do any of that, so the rule that an uncertain verdict is a no never reaches it, and the ticket comes back clean for a reason it does not carry.
 
 So keep a log. As you read the ticket, and as you check it against the repository, write down every place where you inferred an intent the ticket does not state, chose between two readings the ticket allows, or established a fact the ticket neither carries nor locates. Write each one down at the moment it happens rather than reconstructing the list at the end, because what is reconstructed is what you still notice having done.
 
-Every entry in that log is a finding, whether or not one of the seven names it, and it quotes the sentence it hangs on like every other finding does. An entry is a Cost at minimum. It is a Stop where the builder described above could not have made the same inference and would have had to ask.
+Every entry in that log is a finding, whether or not one of the eight names it, and it quotes the sentence it hangs on like every other finding does. An entry is a Cost at minimum. It is a Stop where the builder described above could not have made the same inference and would have had to ask.
 
 ## What is not a finding
 

@@ -12,7 +12,7 @@ ready-for-agent-check - find ticket defects that would stop an unattended builde
 
 `ready-for-agent-check` reads each ticket in an isolated subagent context that did not help write it and asks whether an unattended builder could complete it without stopping for information or judgement. It reports advice and changes neither the tracker nor the Project.
 
-Each reviewer receives the ticket's complete thread: the original body followed by every comment in chronological order with author and date. Later comments override conflicting earlier text, and acceptance criteria added in comments remain criteria. The reviewer receives no explanation or intent from the invoking session.
+Each reviewer receives the ticket's complete thread: the original body followed by every comment in chronological order with author and date. Later comments override conflicting earlier text, and acceptance criteria added in comments remain criteria. The reviewer receives no explanation or intent from the invoking session. It may read from the tracker a ticket the reviewed ticket names, as a builder would, to find a rule that ticket will write.
 
 The builder it measures against is a Seat no more capable than the reviewer and possibly considerably less: less deliberation, a smaller model, or both. The reviewer's own ease is not the measure, and a fact the reviewer obtained by knowing where to look is reported as a fact the ticket has to locate.
 
@@ -55,6 +55,10 @@ The work has no closing boundary or its scope contradicts its acceptance criteri
 **Human-owned work**
 
 Completion requires product judgement, external authority, a deferred design decision, or a check only a person can perform.
+
+**Contradicted rule**
+
+A requirement contradicts a rule the Project states now — in its rules modules, its agent guide, or a Skill's shipped files — or a rule that another ticket this one names will write, whether a blocker or a ticket cited as the source of a rule the ticket relies on. For the second kind the reviewer reads the named ticket's whole thread from the tracker, as a builder with tracker access would. A ticket that sets out to change the rule does not contradict it. The finding is always a Stop, since choosing between the requirement and the rule is a choice between two intents; it quotes both sentences and says which one the ticket would have to change. Tickets that name nothing in common are not compared, and a contradiction between them is left to the wave check of `/orchestrate`.
 
 ## OUTPUT
 

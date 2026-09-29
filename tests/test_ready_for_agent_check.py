@@ -99,3 +99,121 @@ def test_the_review_brief_names_the_builder_it_measures_against() -> None:
         f" own capability, which is the one thing the ticket cannot carry"
         f" (ADR-0180). See {STANDARD}."
     )
+
+
+NUMBER_WORDS = [
+    "zero",
+    "one",
+    "two",
+    "three",
+    "four",
+    "five",
+    "six",
+    "seven",
+    "eight",
+    "nine",
+    "ten",
+    "eleven",
+    "twelve",
+]
+
+
+def _section(text: str, heading: str) -> str:
+    """The lines under `heading`, up to the next heading of any level."""
+
+    lines = text.splitlines()
+    start = lines.index(heading) + 1
+    end = next(
+        (i for i in range(start, len(lines)) if lines[i].startswith("#")),
+        len(lines),
+    )
+    return "\n".join(lines[start:end])
+
+
+def _criteria_in_the_brief() -> list[str]:
+    """Each numbered thing that stops a builder, as the brief lists it."""
+
+    text = (SKILL / "references" / "review.md").read_text(encoding="utf-8")
+    section = _section(text, "## What you are looking for")
+    return [
+        line for line in section.splitlines() if line[:1].isdigit() and ". **" in line
+    ]
+
+
+def test_the_review_brief_counts_its_own_list() -> None:
+    """The brief tells the reviewer how many things to go through.
+
+    A count that falls behind the list tells the reviewer to stop one short,
+    and the item it drops is always the newest one.
+    """
+
+    path = SKILL / "references" / "review.md"
+    text = path.read_text(encoding="utf-8")
+    word = NUMBER_WORDS[len(_criteria_in_the_brief())]
+
+    for sentence in (
+        f"{word.capitalize()} things stop a builder or cost it.",
+        f"Go through all {word} for this ticket",
+        f"The {word} above catch",
+    ):
+        assert sentence in text, (
+            f"{path}: the brief lists {word} things that stop a builder, so"
+            f" every sentence that counts them says {word}; expected"
+            f" {sentence!r}. A count behind the list tells the reviewer to stop"
+            f" before the newest item. See {STANDARD}."
+        )
+
+
+def test_the_review_brief_reports_a_requirement_that_contradicts_a_rule() -> None:
+    """Both stops of the unattended run of 2026-09-23 were of this shape (#440).
+
+    #397 contradicted a rule the repository stated, and #416 a rule its
+    blocker #394 was set to write. Each ticket was ready alone, and each
+    reached the wave check of /orchestrate instead of this one.
+    """
+
+    path = SKILL / "references" / "review.md"
+    item = next(
+        (
+            line
+            for line in _criteria_in_the_brief()
+            if "contradicts a rule" in line.split("**")[1]
+        ),
+        None,
+    )
+
+    assert item is not None, (
+        f"{path}: the brief lists a requirement that contradicts a rule among"
+        f" the things that stop a builder, in a bold lead containing"
+        f" 'contradicts a rule'. Two tickets each ready alone stopped a run at"
+        f" the wave check over exactly that (#440). See {STANDARD}."
+    )
+    for phrase, why in (
+        ("states now", "a rule the repository states now"),
+        ("will write", "a rule another ticket this one names will write"),
+        ("whole thread", "reading that named ticket's whole thread"),
+        ("Stop", "classing the finding as a Stop"),
+    ):
+        assert phrase in item, (
+            f"{path}: the contradicted-rule item covers {why}, in words"
+            f" containing {phrase!r}. See {STANDARD}."
+        )
+
+
+def test_the_help_page_lists_every_criterion_the_brief_does() -> None:
+    """The manpage says what the check does, so it lists what the reviewer looks for."""
+
+    path = SKILL / "help.md"
+    section = _section(path.read_text(encoding="utf-8"), "## REVIEW CRITERIA")
+    entries = [line for line in section.splitlines() if line.startswith("**")]
+
+    assert "**Contradicted rule**" in entries, (
+        f"{path}: REVIEW CRITERIA carries a **Contradicted rule** entry, the"
+        f" manpage's name for the brief's requirement that contradicts a rule."
+        f" See {STANDARD}."
+    )
+    assert len(entries) == len(_criteria_in_the_brief()), (
+        f"{path}: REVIEW CRITERIA carries one entry per thing the review brief"
+        f" lists ({len(_criteria_in_the_brief())}), and it carries"
+        f" {len(entries)}. See {STANDARD}."
+    )
