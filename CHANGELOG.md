@@ -8,6 +8,10 @@ All notable changes to this project are documented here. The format follows [Kee
 
 - `/orchestrate` resumes a ticket whose own attempt was cut off with uncommitted work in its tree, instead of refusing it. Where the run's own account records an attempt at the ticket that started and never finished, whether a usage limit, a crash or a killed session stopped it, or an amend or repair was parked part-way for a decision, `isolate` keeps that work byte for byte, untracked files included, merging the run branch in around it where that is needed, and answers `kept_interrupted_work` true. The resumed builder's brief opens by saying the tree holds that work, for the builder to examine, finish what is sound and discard what the interruption left partial. No manual stash is needed. If the run branch collides with the kept work, changes a path the work also changed, or a merge was left in progress, `isolate` restores the tree exactly and refuses, and the ticket waits for a hand. Uncommitted work the run did not write is refused as before (#441).
 
+### Fixed
+
+- The test suite no longer fails on committed evaluation evidence: a transcript quoting the retired `agents.d/` folder, or a plan quoting another tool's command line with a space before its value, is a record of what a run saw or was typed with, and editing it to pass a scan had forced changes to records that must stay as recorded. One predicate in `tests/support/evidence.py` names that evidence, meaning each evaluation's own packet, each regression packet and each record, and both scans skip it, while the protocol, the READMEs, the corpus and the two runners stay scanned. `docs/evaluation/protocol.md` now says evidence is never edited to satisfy the suite, and that a decision-record number cited in it must still resolve (#442).
+
 ## [0.38.1] – 2026-09-29
 
 ### Fixed
