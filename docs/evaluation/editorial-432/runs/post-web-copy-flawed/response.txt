@@ -1,0 +1,43 @@
+I fixed all six problems in one correction round and nothing is left unresolved. `input.md` itself is untouched and nothing else was written to disk. Settings: genre `webcopy` and language `en_US`, both from your command. No technique was used, because the webcopy genre doesn't name one.
+
+```markdown
+# A review of how a shared room in your housing association is booked
+
+## Express interest
+
+[Open the expression-of-interest form](https://example.invalid/svale/intresse).
+
+## Price and contents of the review
+
+Svale's review costs SEK 4,800 including VAT. It covers one shared room in one housing association. It includes a 45-minute video call with two board representatives. It includes a written account of the booking steps, unclear points and two possible simplifications.
+
+## What the form asks for and what happens next
+
+The link opens an expression-of-interest form asking for a name, association and email address. It places no order, requires no payment details and books no meeting. Svale replies by email within three working days to discuss whether the review is suitable and suggest a meeting time.
+```
+
+**Problems found and fixed**
+
+1. **Headline:** "Unlock your association's full potential" promised a result nothing on the page backs up, and it never said what was on offer. The new headline names the offer.
+2. **Opening paragraph:** It said nothing specific. It talked about the audience in the abstract ("complexity facing growing complexity"), translated a Swedish idiom word for word ("Take the thumb out" means nothing in English and reads as crude), and promised "a fantastic journey" the page can't back up. It had no facts about the offer, so I removed it.
+3. **Link label:** "Book and pay now" promised a booking and a payment. The page's last section says the link does neither: it only opens a form to express interest. The label now says what the link does.
+4. **Headings:** "Start", "It", "More", "Again", "Things" and "Important" didn't say what their sections held. They became "Express interest", "Price and contents of the review" and "What the form asks for and what happens next".
+5. **"It" with nothing to refer to:** "It costs…", "It covers…" and both "It includes…" sentences never said what "it" was. The review and Svale were only named in the last paragraph. The first sentence of the merged section now names "Svale's review".
+6. **One offer split into four sections:** The price, scope and two inclusions sat in four one-sentence sections. They're now one paragraph under one heading. The sentences are unchanged apart from the fix in point 5.
+
+**Claims removed** (point 2 treated the whole passage as the problem)
+- That decision-makers in a complex reality face growing complexity.
+- The instruction "Take the thumb out" and the promise of "a fantastic journey".
+
+**Claims changed**
+- **Headline (point 1):** It no longer promises to unlock the association's full potential. It now says the page offers a review of how a shared room in the reader's housing association is booked. That's inferred from the scope sentence and the written account of the booking steps. The text never says outright what the video call covers.
+- **Link (point 3):** It no longer says it books, takes payment or acts "now". It now says it opens the expression-of-interest form, which matches the page's last section.
+- **Price, scope and inclusions (points 5 and 6):** The SEK 4,800 price (VAT included), the one-room scope, the 45-minute call and the written account now clearly belong to Svale's review. Before, they belonged to an unnamed "it".
+- **Headings (point 4):** "Express interest" says the section is where the reader registers interest. "Price and contents of the review" says the section gives the price and what the review includes. "What the form asks for and what happens next" says the section covers what the form asks for and what follows. The old headings made no claims.
+
+**Claim added**
+- **"Svale's review" (point 5):** This says Svale provides the review. The original only implied it (Svale replies about whether "the review" suits you), so check that it's true.
+
+The sentence that sets the limit — the link places no order, requires no payment details and books no meeting — is unchanged. Apart from the items listed above, no claim was removed, changed or added.
+
+Apart from the claims listed above, the run made these changes: it removed the empty opening and the promotional, idiom-translated wording; it fixed the structure, going from six sections to three; and it replaced the misleading link label. The final proofreading pass made no mechanical corrections.

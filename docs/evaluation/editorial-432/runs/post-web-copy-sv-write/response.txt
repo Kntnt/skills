@@ -1,0 +1,52 @@
+```````markdown
+---
+kntnt:
+  genre: webcopy
+  technique: none
+  language: sv
+---
+
+# Genomgång av bokningsrutinen för föreningens lokal
+
+Hur går det till när de boende bokar föreningens gemensamma lokal? Svale går igenom rutinen tillsammans med styrelsen. Ni får en gemensam bild av hur den ser ut i dag och två möjliga förenklingar – till fast pris.
+
+## Ingår: videomöte och skriftlig sammanställning
+
+- **Videomöte på 45 minuter** med två representanter för styrelsen.
+- **Skriftlig sammanställning** av de steg som gäller i dag, oklarheter i rutinen och två möjliga förenklingar.
+
+## Ingår inte
+
+Genomgången omfattar inte juridisk rådgivning, installation av bokningssystem eller intervjuer med boende. Svale lämnar heller ingen garanti för en viss tidsbesparing eller för färre konflikter.
+
+## Pris och villkor
+
+- **Pris:** 4 800 kronor inklusive moms. Priset är fast.
+- **Omfattning:** en lokal i en förening.
+- **Underlag från styrelsen:** ni behöver kunna beskriva de bokningsregler ni har i dag och visa den instruktion som de boende får nu.
+
+## Intresseanmälan – inte en beställning
+
+En intresseanmälan är ingen beställning, och ni behöver inte lämna några betalningsuppgifter. Formuläret frågar efter namn, förening och e-postadress.
+
+Inom tre arbetsdagar svarar Svale via e-post. I svaret stämmer Svale av om uppdraget passar och föreslår en mötestid.
+
+[Gå till formuläret för intresseanmälan](https://example.invalid/svale/intresse)
+```````
+
+**Inställningar:** genren är `webcopy` och språket svenska (`sv`), båda angivna i anropet. Texten levereras här i svaret. Ingen teknik används: anropet angav ingen, och genren `webcopy` anger ingen teknik som den normalt skrivs med. Metadata för överlämning (`kntnt`) ligger i frontmatter.
+
+**Källkontroll:** två fristående jämförelser mot `source.md` gjordes.
+- **Första jämförelsen:** den gav ett fynd. Formuleringen "passar er" snävade in källans "om uppdraget passar", så "er" togs bort.
+- **Andra jämförelsen:** den gällde den ändrade texten och hade inga fynd.
+- **Rapportfiler:** kontrollanterna fick inte skriva rapportfiler, så båda rapporterna kom som svar och behandlades därifrån.
+
+Utkastet ovan är exakt den text som den andra jämförelsen läste.
+
+**Var materialet tog slut:**
+- **Längd:** texten är ungefär 200 ord mot beställningens cirka 300. Materialet bär inte mer utan upprepning eller påhitt. Det som skulle fylla ut sidan är material som saknas: betalningsvillkor, leveranstid för sammanställningen, vad som händer efter avstämningen fram till beställning och hur mötet går till.
+- **Villkor som saknas:** betalningsvillkor och leveranstid är inte angivna, som briefen föreskrev.
+- **Tilltal:** "ni" används för styrelsen som grupp, i plural.
+- **Länken:** den heter "Gå till formuläret för intresseanmälan", inte "Boka".
+
+**Städning:** arbetsfilerna från källkontrollen är borttagna och båda kontrollanterna har avslutats. Inget har skrivits i arbetskatalogen, och `source.md` är orörd.

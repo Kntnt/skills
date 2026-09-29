@@ -1,0 +1,3 @@
+Ingen ändring behövdes i `input.md`. Granskningen hittade inga redaktionella fel, och korrekturläsningen hittade inga språkliga fel. Texten är oförändrad och ingen fil har skrivits.
+
+Texten granskades som webbtext (`webcopy`) på svenska (`sv`), utan teknik. Alla tre värdena kommer från textens `kntnt`-karta, där tekniken anges som `none`.

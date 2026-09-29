@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "ticket": "#388",
+  "produced_by": "docs/evaluation/editorial-388/harness/run.py",
+  "invocation": "/redline --genre=webcopy --language=sv --output=output.md input.md",
+  "status": "incomplete",
+  "reasons": [
+    "run-did-not-finish"
+  ]
+}

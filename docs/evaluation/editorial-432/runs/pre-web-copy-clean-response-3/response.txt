@@ -1,0 +1,27 @@
+Konfiguration: genre `webcopy` och språk `sv` kommer från anropet. Ingen teknik tillämpades, eftersom genren webcopy inte anger någon. Korrigeringsbudgeten var 1 och en omgång användes.
+
+```markdown
+# Så fungerar intresseanmälan
+
+En intresseanmälan till Svales genomgång av bokningsrutiner är inte en beställning. Den hjälper Svale att avgöra om genomgången passar föreningens behov.
+
+## Uppgifter att lämna
+
+Ange namn, förening och e-postadress i formuläret. Inga betalningsuppgifter behövs.
+
+## Svar inom tre arbetsdagar
+
+Svale svarar via e-post inom tre arbetsdagar för att stämma av uppdraget och föreslå en mötestid. En tid bokas alltså inte när formuläret skickas in.
+```
+
+**Anmärkningar**
+
+1. **Åtgärdad: svarstiden stod bara i mellanrubriken.** Under ”Svar inom tre arbetsdagar” sade brödtexten att Svale svarar, men inte när. Den som läste stycket utan rubriken fick alltså inte veta svarstiden. Nu står ”inom tre arbetsdagar” även i första meningen. Mellanrubriken är oförändrad.
+2. **Olöst: formuläret anges inte.** ”Ange namn, förening och e-postadress i formuläret” och ”när formuläret skickas in” syftar på ett formulär som texten varken innehåller eller pekar ut. Läsaren får inte veta om formuläret finns på sidan, någon annanstans eller bakom en länk. Det går inte att rätta utan uppgifter som texten saknar. Den som ansvarar för sidan behöver ange var formuläret finns eller länka till det.
+
+**Påståenden**
+
+- Uppgiften att Svale svarar inom tre arbetsdagar står nu också i brödtexten. Den är kopierad från mellanrubriken med samma innebörd. Ingen utgångspunkt för de tre dagarna anges, varken förut eller nu.
+- Utöver detta har inga påståenden tagits bort, ändrats eller lagts till. Den avgränsande meningen ”En tid bokas alltså inte när formuläret skickas in” står kvar oförändrad, liksom ordet ”alltså”.
+
+Den enda skillnaden mot originalet är att svarstiden också står i brödtexten under ”Svar inom tre arbetsdagar”. Korrekturläsningen hittade inga fel och ändrade ingenting. Inget har skrivits till disk och `input.md` är orörd.

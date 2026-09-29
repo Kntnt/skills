@@ -1,0 +1,11 @@
+Jag har skrivit texten till `output.md`. Den behövde ingen redaktionell bearbetning och är byte för byte identisk med `input.md`.
+
+**Inställningar:** genren är `webcopy` och språket svenska (`sv`), båda angivna i anropet. Ingen teknik används, eftersom webcopy-genren inte föreskriver någon och ingen annan angavs. Ingen brief valdes, och texten saknar `kntnt`-metadata, så ingen lades till.
+
+**Granskning:** inga fynd. Texten skiljer tydligt mellan intresseanmälan och beställning. Den säger vilka uppgifter som ska lämnas och vad som händer efter anmälan. Svarstiden på tre arbetsdagar står bara i underrubriken, och det räcker eftersom brödtexten går att förstå utan den. ”Formuläret” är inget fynd, eftersom sidan inte innehåller några gränssnittselement.
+
+**Korrigering:** ingen korrigeringsrunda behövdes. Budgeten på en korrigering förbrukades inte.
+
+**Korrektur:** den avslutande korrekturläsningen hittade inga språkliga fel.
+
+**Påståenden:** inga påståenden har tagits bort, ändrats eller lagts till.

@@ -1,0 +1,15 @@
+Texten är skriven till `output.md`. Den behövde inget arbete: filen är byte för byte identisk med `input.md`.
+
+**Upplösta inställningar:** Genren är `webcopy` och språket `sv` (svenska), båda från anropet. Ingen teknik används. Anropet och texten nämnde ingen, och genren `webcopy` anger att den ordinarie skrivs utan teknik. Texten saknar `kntnt`-karta, och ingen lades till. Ingen brief användes.
+
+**Granskning:** Texten granskades mot baskontraktet, genren och dess webbhantverk, anti-slop-katalogen och de svenska riktlinjerna. Det gav inga fynd:
+- Sidan skiljer tydligt mellan intresseanmälan, beställning och bokning, vilket genren kräver.
+- Varje avsnitt går att förstå om man börjar läsa där.
+- Rubriken *Svar inom tre arbetsdagar* anger en tid som brödtexten inte behöver upprepa.
+- Formuläret nämns utan gränssnittsmarkering, och det räknas inte som ett fynd.
+
+Därför gjordes ingen korrigeringsrunda, och budgeten (1) användes inte.
+
+**Mekanisk slutkorrektur:** Den mekaniska korrekturen kördes en gång på svenska och hittade inga fel.
+
+Inget påstående togs bort, ändrades eller lades till. Inga filer från körningen finns kvar utom `output.md`.

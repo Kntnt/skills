@@ -1,0 +1,22 @@
+Jag har granskat texten och skrivit resultatet till `output.md`. `input.md` är orörd.
+
+**Inställningar:** genre `webcopy` och språk `sv`, båda från anropet. Ingen teknik används, eftersom anropet inte angav någon och genren `webcopy` inte har någon som standard. Rättningsbudgeten var 1 och har gått åt.
+
+## Fynd
+
+1. **Rättat: avsnittet ”Svar inom tre arbetsdagar”.** Svarstiden stod bara i mellanrubriken. Brödtexten sa varken när Svale svarar eller vad svaret gäller, så den som läste brödtexten utan rubriken fick inte veta svarstiden. Nu står svarstiden även i brödtexten, och där framgår att svaret gäller intresseanmälan. Rubriken är oförändrad.
+
+2. **Delvis rättat, en del olöst: hänvisningarna till ”formuläret”.** Den som började läsa vid ”Uppgifter att lämna” fick inte veta vilket formulär som avsågs. Båda hänvisningarna säger nu ”formuläret för intresseanmälan”.
+   - **Olöst:** texten innehåller inte formuläret och säger inte heller var det finns eller hur läsaren kommer dit. Läsaren vet alltså fortfarande inte var anmälan görs. Uppgiften finns inte i texten och har därför inte lagts till. Någon som vet måste lägga till en länk eller en beskrivning av var formuläret finns.
+
+## Påståenden
+
+- **Borttagna:** inga. Meningen ”En tid bokas alltså inte …” finns kvar med sin slutsats.
+- **Ändrade:**
+  - ”Svale svarar på intresseanmälan via e-post inom tre arbetsdagar …” säger nu att svaret gäller intresseanmälan och kommer inom tre arbetsdagar. Tidsgränsen fanns redan i rubriken och har bara förts in i brödtexten. Det står fortfarande inte från när de tre dagarna räknas. Ändringen hör till fynd 1.
+  - ”Ange … i formuläret för intresseanmälan” och ”när formuläret för intresseanmälan skickas in” säger nu uttryckligen vilket formulär det gäller. Det är en slutsats av textens eget ämne. Ändringen hör till fynd 2.
+- **Tillagda:** inga utöver de ändrade ovan.
+
+Utöver det har inget påstående tagits bort, ändrats eller lagts till.
+
+Ändringarna består i att brödtexten i två avsnitt fått de sammanhang som saknades när ett avsnitt läses fristående. Korrekturläsningen hittade inga fel och ändrade ingenting.

@@ -1,0 +1,1 @@
+Ingen ändring behövdes. Texten granskades som webbtext (`webcopy`) på svenska (`sv`), och båda värdena kom från anropet. Ingen teknik användes eftersom webbtextgenren inte anger någon. Granskningen gav inga anmärkningar, så korrigeringsbudgeten användes inte. Korrekturläsningen hittade inga mekaniska fel. Inga filer har skapats eller ändrats.

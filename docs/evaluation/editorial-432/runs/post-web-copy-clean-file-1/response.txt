@@ -1,0 +1,7 @@
+Texten behövde inget arbete och är nu skriven till `output.md`, byte för byte identisk med `input.md`.
+
+**Inställningar:** genren är webbtext och språket svenska, båda angivna i anropet. Ingen berättarteknik används, eftersom genren webbtext inte anger någon.
+
+**Granskning:** inga fynd. Sidan säger tidigt vad den handlar om och håller isär en intresseanmälan från en beställning eller bokning. Den säger också vad som händer sedan: svar via e-post inom tre arbetsdagar. Varje avsnitt går att förstå när man börjar läsa där. Rubriken bär tidsgränsen, och det är tillåtet. Ingen rättning behövdes, så rättningsbudgeten användes inte. Korrekturläsningen på slutet hittade inga språkfel.
+
+**Påståenden:** inga påståenden har strukits, ändrats eller lagts till.
