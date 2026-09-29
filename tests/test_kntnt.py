@@ -5800,6 +5800,13 @@ DELIVERY_TRUTH_RECEIVED = "A statement about the text as it arrived says so"
 DELIVERY_TRUTH_LEFT_OUT = (
     "A statement that cannot be made true of the text it names is left out"
 )
+DELIVERY_TRUTH_CHECKED_AS_DRAFTED = (
+    "The check is made on the reply as drafted, one statement at a time"
+)
+DELIVERY_TRUTH_ONE_EXCEPTION = (
+    "is checked against every part of the text it covers, because a single"
+    " exception makes it false"
+)
 DELIVERY_TRUTH_POINTER = (
     "*The truth of a report about the text* in `$LIBRARY/references/delivery.md`"
 )
@@ -5856,6 +5863,8 @@ def test_the_shared_delivery_contract_holds_a_report_true_of_its_text() -> None:
         DELIVERY_TRUTH_MEASURED,
         DELIVERY_TRUTH_RECEIVED,
         DELIVERY_TRUTH_LEFT_OUT,
+        DELIVERY_TRUTH_CHECKED_AS_DRAFTED,
+        DELIVERY_TRUTH_ONE_EXCEPTION,
     ):
         assert clause in section, (
             f"{DELIVERY}: the section on the truth of a report no longer says"
