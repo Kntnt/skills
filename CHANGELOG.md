@@ -4,6 +4,14 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ## [Unreleased]
 
+### Changed
+
+- `/delegation` no longer declares the `subagents` Capability, so every form works in a harness that cannot start a subagent. Before, the engine told every run to confirm the Capability first and stop where it was missing, which refused `/delegation off`, `/delegation status` and the persistent-scope writes although none of the Skill's own steps starts a subagent. The mode it turns on already degrades by itself, telling an agent that cannot delegate to execute the work normally. Turning the mode on, or writing a persistent scope, in such a harness now adds one line to the report saying the mode changes nothing there until a subagent can start. `compatibility` names the harness as a soft requirement, the manpage and the three command pages say what the mode does without subagents, and `docs/rules/skills.md` states the test: a Capability is declared when the Skill's own steps need it, not when the work it switches on does (#428).
+
+### Fixed
+
+- The editorial-quality controls `opinion-clean` and `case-study-clean` now meet the rules they are frozen as conforming to. The opinion's lead names the September switch the closing sentence already treated as known, so the body reads complete with the standfirst covered. The case study's last subheading names the speaker and the occasion and leaves Maya Lind's reservation to her quotation. A record made against an earlier corpus commit stands as judged (#431).
+
 ## [0.38.2] – 2026-09-29
 
 ### Changed
