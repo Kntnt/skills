@@ -1,0 +1,365 @@
+{
+  "generated_at": "2026-09-29T11:20:43.387961Z",
+  "models": [
+    {
+      "aliases": [
+        "claude-fable-5"
+      ],
+      "capability": null,
+      "deliberation": [
+        "low",
+        "medium",
+        "high",
+        "xhigh",
+        "max"
+      ],
+      "family": "claude-fable-5",
+      "gateways": {
+        "openrouter": "anthropic/claude-fable-5"
+      },
+      "id": "claude-fable-5",
+      "long_context": null,
+      "long_context_threshold": null,
+      "price": {
+        "cache_read": 1.0,
+        "cache_write": 12.5,
+        "currency": "USD",
+        "input": 10.0,
+        "output": 50.0,
+        "unit": "per_mtok"
+      },
+      "provider": "anthropic",
+      "reasoning_billed_as": "output",
+      "released": "2026-06-09",
+      "retrieved": "2026-09-29",
+      "source_url": "https://openrouter.ai/anthropic/claude-fable-5"
+    },
+    {
+      "aliases": [
+        "fable",
+        "claude-fable-5-1",
+        "claude-fable-5.1"
+      ],
+      "capability": 0.95,
+      "deliberation": [
+        "low",
+        "medium",
+        "high",
+        "xhigh",
+        "max"
+      ],
+      "family": "fable",
+      "gateways": {
+        "openrouter": "anthropic/claude-fable-5.1"
+      },
+      "id": "claude-fable-5-1",
+      "long_context": null,
+      "long_context_threshold": null,
+      "price": {
+        "cache_read": 0.25,
+        "cache_write": 12.5,
+        "currency": "USD",
+        "input": 10.0,
+        "output": 50.0,
+        "unit": "per_mtok"
+      },
+      "provider": "anthropic",
+      "reasoning_billed_as": "output",
+      "released": "2026-09-01",
+      "retrieved": "2026-09-29",
+      "source_url": "https://openrouter.ai/anthropic/claude-fable-5.1"
+    },
+    {
+      "aliases": [
+        "claude-haiku-4-5",
+        "haiku"
+      ],
+      "capability": 0.52,
+      "deliberation": [],
+      "family": "haiku",
+      "gateways": {
+        "openrouter": "anthropic/claude-haiku-4.5"
+      },
+      "id": "claude-haiku-4-5-20251001",
+      "long_context": null,
+      "long_context_threshold": null,
+      "price": {
+        "cache_read": 0.1,
+        "cache_write": 1.25,
+        "currency": "USD",
+        "input": 1.0,
+        "output": 5.0,
+        "unit": "per_mtok"
+      },
+      "provider": "anthropic",
+      "reasoning_billed_as": "output",
+      "released": "2025-10-01",
+      "retrieved": "2026-09-29",
+      "source_url": "https://openrouter.ai/anthropic/claude-haiku-4.5"
+    },
+    {
+      "aliases": [
+        "claude-opus-4-6"
+      ],
+      "capability": null,
+      "deliberation": [
+        "low",
+        "medium",
+        "high",
+        "max"
+      ],
+      "family": "claude-opus-4-6",
+      "gateways": {
+        "openrouter": "anthropic/claude-opus-4.6"
+      },
+      "id": "claude-opus-4-6",
+      "long_context": null,
+      "long_context_threshold": null,
+      "price": {
+        "cache_read": 0.5,
+        "cache_write": 6.25,
+        "currency": "USD",
+        "input": 5.0,
+        "output": 25.0,
+        "unit": "per_mtok"
+      },
+      "provider": "anthropic",
+      "reasoning_billed_as": "output",
+      "released": "2026-02-04",
+      "retrieved": "2026-09-29",
+      "source_url": "https://openrouter.ai/anthropic/claude-opus-4.6"
+    },
+    {
+      "aliases": [
+        "claude-opus-4-7"
+      ],
+      "capability": null,
+      "deliberation": [
+        "low",
+        "medium",
+        "high",
+        "xhigh",
+        "max"
+      ],
+      "family": "claude-opus-4-7",
+      "gateways": {
+        "openrouter": "anthropic/claude-opus-4.7"
+      },
+      "id": "claude-opus-4-7",
+      "long_context": null,
+      "long_context_threshold": null,
+      "price": {
+        "cache_read": 0.5,
+        "cache_write": 6.25,
+        "currency": "USD",
+        "input": 5.0,
+        "output": 25.0,
+        "unit": "per_mtok"
+      },
+      "provider": "anthropic",
+      "reasoning_billed_as": "output",
+      "released": "2026-04-16",
+      "retrieved": "2026-09-29",
+      "source_url": "https://openrouter.ai/anthropic/claude-opus-4.7"
+    },
+    {
+      "aliases": [
+        "claude-opus-4-8"
+      ],
+      "capability": null,
+      "deliberation": [
+        "low",
+        "medium",
+        "high",
+        "xhigh",
+        "max"
+      ],
+      "family": "claude-opus-4-8",
+      "gateways": {
+        "openrouter": "anthropic/claude-opus-4.8"
+      },
+      "id": "claude-opus-4-8",
+      "long_context": null,
+      "long_context_threshold": null,
+      "price": {
+        "cache_read": 0.5,
+        "cache_write": 6.25,
+        "currency": "USD",
+        "input": 5.0,
+        "output": 25.0,
+        "unit": "per_mtok"
+      },
+      "provider": "anthropic",
+      "reasoning_billed_as": "output",
+      "released": "2026-05-27",
+      "retrieved": "2026-09-29",
+      "source_url": "https://openrouter.ai/anthropic/claude-opus-4.8"
+    },
+    {
+      "aliases": [
+        "opus",
+        "claude-opus-5"
+      ],
+      "capability": 0.87,
+      "deliberation": [
+        "low",
+        "medium",
+        "high",
+        "xhigh",
+        "max"
+      ],
+      "family": "opus",
+      "gateways": {
+        "openrouter": "anthropic/claude-opus-5"
+      },
+      "id": "claude-opus-5",
+      "long_context": null,
+      "long_context_threshold": null,
+      "price": {
+        "cache_read": 0.5,
+        "cache_write": 6.25,
+        "currency": "USD",
+        "input": 5.0,
+        "output": 25.0,
+        "unit": "per_mtok"
+      },
+      "provider": "anthropic",
+      "reasoning_billed_as": "output",
+      "released": "2026-07-24",
+      "retrieved": "2026-09-29",
+      "source_url": "https://openrouter.ai/anthropic/claude-opus-5"
+    },
+    {
+      "aliases": [
+        "opus"
+      ],
+      "capability": 0.87,
+      "deliberation": [
+        "low",
+        "medium",
+        "high",
+        "xhigh",
+        "max"
+      ],
+      "family": "opus",
+      "gateways": {
+        "openrouter": "anthropic/claude-opus-5.5"
+      },
+      "id": "claude-opus-5-5",
+      "long_context": null,
+      "long_context_threshold": null,
+      "price": {
+        "cache_read": 0.2,
+        "cache_write": 5.0,
+        "currency": "USD",
+        "input": 4.0,
+        "output": 20.0,
+        "unit": "per_mtok"
+      },
+      "provider": "anthropic",
+      "reasoning_billed_as": "output",
+      "released": "2026-09-22",
+      "retrieved": "2026-09-29",
+      "source_url": "https://openrouter.ai/anthropic/claude-opus-5.5"
+    },
+    {
+      "aliases": [
+        "claude-sonnet-4-6"
+      ],
+      "capability": null,
+      "deliberation": [
+        "low",
+        "medium",
+        "high",
+        "max"
+      ],
+      "family": "claude-sonnet-4-6",
+      "gateways": {
+        "openrouter": "anthropic/claude-sonnet-4.6"
+      },
+      "id": "claude-sonnet-4-6",
+      "long_context": null,
+      "long_context_threshold": null,
+      "price": {
+        "cache_read": 0.3,
+        "cache_write": 3.75,
+        "currency": "USD",
+        "input": 3.0,
+        "output": 15.0,
+        "unit": "per_mtok"
+      },
+      "provider": "anthropic",
+      "reasoning_billed_as": "output",
+      "released": "2026-02-17",
+      "retrieved": "2026-09-29",
+      "source_url": "https://openrouter.ai/anthropic/claude-sonnet-4.6"
+    },
+    {
+      "aliases": [
+        "sonnet",
+        "claude-sonnet-5"
+      ],
+      "capability": 0.73,
+      "deliberation": [
+        "low",
+        "medium",
+        "high",
+        "xhigh",
+        "max"
+      ],
+      "family": "sonnet",
+      "gateways": {
+        "openrouter": "anthropic/claude-sonnet-5"
+      },
+      "id": "claude-sonnet-5",
+      "long_context": null,
+      "long_context_threshold": null,
+      "price": {
+        "cache_read": 0.2,
+        "cache_write": 2.5,
+        "currency": "USD",
+        "input": 2.0,
+        "output": 10.0,
+        "unit": "per_mtok"
+      },
+      "provider": "anthropic",
+      "reasoning_billed_as": "output",
+      "released": "2026-06-30",
+      "retrieved": "2026-09-29",
+      "source_url": "https://openrouter.ai/anthropic/claude-sonnet-5"
+    },
+    {
+      "aliases": [
+        "sonnet"
+      ],
+      "capability": null,
+      "deliberation": [
+        "low",
+        "medium",
+        "high",
+        "xhigh",
+        "max"
+      ],
+      "family": "sonnet",
+      "gateways": {
+        "openrouter": "anthropic/claude-sonnet-5.5"
+      },
+      "id": "claude-sonnet-5-5",
+      "long_context": null,
+      "long_context_threshold": null,
+      "price": {
+        "cache_read": 0.2,
+        "cache_write": 2.5,
+        "currency": "USD",
+        "input": 2.0,
+        "output": 10.0,
+        "unit": "per_mtok"
+      },
+      "provider": "anthropic",
+      "reasoning_billed_as": "output",
+      "released": "2026-09-28",
+      "retrieved": "2026-09-29",
+      "source_url": "https://openrouter.ai/anthropic/claude-sonnet-5.5"
+    }
+  ]
+}

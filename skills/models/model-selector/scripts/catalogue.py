@@ -881,6 +881,9 @@ PRESENCE_SOURCES = (
 )
 NO_MAKERS = "no makers chosen"
 NO_PRICE_SOURCE = "no price source"
+# The note on the journal row of a Claude release whose id names no one line,
+# so that it is left the family of its own id rather than given a guessed one.
+FAMILY_UNTOLD = "family untold"
 OUTCOMES = ("complete", "incomplete", "unreadable")
 
 
@@ -972,6 +975,14 @@ def claude_reading(messages: Sequence[Any]) -> Reading:
     Complete where the control response is a `success` carrying `models`. The
     `default` entry names a model another entry names too, and is skipped; a
     bracketed serving selector such as `[1m]` is not a different model.
+
+    An entry's `value` is what the list calls the release, and it is kept as
+    its alias. Where that is a family word — `opus`, `sonnet` — it is the
+    family too. Where it is a full id — the list returns superseded releases
+    such as `claude-opus-4-8` that way on some reads and not on others — the
+    family is the line the release's id names, so a superseded release is an
+    older release of its line and never a family of its own (ADR-0224). An id
+    naming no one line keeps its own id as its family, and the pass says so.
     """
 
     answer = next(
@@ -1011,14 +1022,17 @@ def claude_reading(messages: Sequence[Any]) -> Reading:
         if not value or not resolved or value == "default":
             continue
         identifier = _unbracketed(resolved)
-        family = _unbracketed(value).lower()
+        named = _unbracketed(value).lower()
+        family = named if named.isalpha() else _claude_family(identifier) or identifier
         levels = _levels(entry.get("supportedEffortLevels"))
         held = offers.get(identifier)
-        aliases = (*held.aliases, family) if held is not None else (family,)
+        aliases = (*held.aliases, named) if held is not None else (named,)
+        # A second entry for the same release keeps the family the first gave
+        # it, unless the first could not tell the line, leaving the id itself.
         offers[identifier] = Offer(
             identifier,
             "anthropic",
-            held.family if held is not None else family,
+            family if held is None or held.family == identifier else held.family,
             tuple(dict.fromkeys(aliases)),
             levels if held is None or held.levels is None else held.levels,
         )
@@ -1335,12 +1349,14 @@ def refresh(
 
     What each source governs is the whole of what it can change. The harness
     lists add the Claude and GPT models of a chosen maker, and set their
-    aliases and levels. OpenRouter sets prices, release dates and the slug it
-    routes each model by, and says which Grok models are offered. A source
-    that cannot be read changes nothing it governs, and an incomplete
-    OpenRouter list changes nothing at all. A missing, old-shape or damaged
-    profile chooses no maker, so nothing is read and only `refresh.json` is
-    written, saying so.
+    aliases and levels. Claude's list also puts every Claude release held
+    under its own id as a family into the family of its line, and `untold`
+    names each whose id names no one line (ADR-0224). OpenRouter sets prices,
+    release dates and the slug it routes each model by, and says which Grok
+    models are offered. A source that cannot be read changes nothing it
+    governs, and an incomplete OpenRouter list changes nothing at all. A
+    missing, old-shape or damaged profile chooses no maker, so nothing is read
+    and only `refresh.json` is written, saying so.
 
     A model missing from its maker's complete list on three consecutive UTC
     days is gone: its entry is removed and the seed's copy masked. Every
@@ -1424,6 +1440,9 @@ def refresh(
         frozenset(previous.get("unmatched") or ())
         if isinstance(previous.get("unmatched"), list)
         else frozenset(),
+        frozenset(previous.get("untold") or ())
+        if isinstance(previous.get("untold"), list)
+        else frozenset(),
     )
     for source, reading in readings.items():
         if source in HARNESS_MAKERS and reading.outcome != "unreadable":
@@ -1467,6 +1486,11 @@ def refresh(
             step.unmatched if gateway.outcome == "complete" else step.unmatched_before
         ),
         "present": {"day": today, "models": sorted(seen)},
+        "untold": sorted(
+            step.untold_before
+            if "claude" in readings and readings["claude"].outcome == "unreadable"
+            else step.untold
+        ),
     }
 
     written = False
@@ -2015,8 +2039,9 @@ class _Pass:
 
     Every change goes through `set`, which is where the journal row is made,
     so a field that moved and a row that says so cannot come apart. A model
-    this pass added journals only its `model` row, and its `no price source`
-    row where OpenRouter was read and had no match.
+    this pass added journals only its `model` row, its `no price source` row
+    where OpenRouter was read and had no match, and its `family untold` row
+    where it is a Claude release whose id names no one line.
     """
 
     def __init__(
@@ -2026,6 +2051,7 @@ class _Pass:
         stamp: str,
         today: str,
         unmatched_before: frozenset[str],
+        untold_before: frozenset[str],
     ) -> None:
         self.known = known
         self.entries = {identifier: dict(entry) for identifier, entry in known.items()}
@@ -2034,6 +2060,8 @@ class _Pass:
         self.today = today
         self.unmatched_before = unmatched_before
         self.unmatched: set[str] = set()
+        self.untold_before = untold_before
+        self.untold: set[str] = set()
         self.added: set[str] = set()
         self.rows: list[dict[str, Any]] = []
 
@@ -2096,6 +2124,37 @@ class _Pass:
             self.set(source, offer.id, "aliases", merged)
             if offer.levels is not None:
                 self.set(source, offer.id, "deliberation", list(offer.levels))
+        if maker == "anthropic":
+            self.lined(source)
+
+    def lined(self, source: str) -> None:
+        """Put every Claude release held under its own id into the family of its line.
+
+        A pass before ADR-0224 took a full id in Claude's list as a family of
+        its own, so a superseded release such as `claude-opus-4-8` stood
+        outside its line, where the newest-release rule and the definition
+        files could not reach it. Every such entry is corrected here, on every
+        pass that reads the list, whether or not the list returned it that day:
+        the correction is read off the entry's own id. Only the family moves;
+        the release keeps its entry, its rows and its Units.
+
+        An entry whose id names no one line keeps its family and is reported,
+        in the pass's `untold` and, once, in the journal.
+        """
+
+        for identifier, entry in self.entries.items():
+            if entry.get("provider") != "anthropic":
+                continue
+            family = _text(entry.get("family"))
+            if family is None or family.lower() != identifier.lower():
+                continue
+            line = _claude_family(identifier)
+            if line is not None:
+                self.set(source, identifier, "family", line)
+                continue
+            self.untold.add(identifier)
+            if identifier not in self.untold_before:
+                self.note(source, identifier, "family", family, family, FAMILY_UNTOLD)
 
     def offered_through_gateway(self, reading: Reading) -> None:
         """Add or update every standard Grok model OpenRouter lists with a level control."""
@@ -2397,6 +2456,26 @@ def _levels(raw: Any) -> tuple[str, ...] | None:
         return None
     named = {item for item in raw if isinstance(item, str)}
     return tuple(level for level in LEVELS if level in named)
+
+
+def _claude_family(identifier: str) -> str | None:
+    """Return the line a Claude release's id names, or None where it names no one line.
+
+    The line is the one word of the id that is neither `claude` nor a number
+    or a date: `opus` in `claude-opus-4-8` and in `claude-opus-6`, `sonnet` in
+    `claude-3-5-sonnet-20241022`. Read off the id's own shape rather than off
+    a table of known releases, so a release nobody has seen yet is placed as
+    surely as one that shipped with the seed. An id with no such word, or with
+    two, is given no line, a guessed family being worse than a family of one
+    the pass reports (ADR-0224).
+    """
+
+    words = [
+        part
+        for part in identifier.lower().split("-")
+        if part.isalpha() and part != "claude"
+    ]
+    return words[0] if len(words) == 1 else None
 
 
 def _gpt_family(identifier: str) -> str:
