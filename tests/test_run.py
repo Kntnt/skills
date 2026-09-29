@@ -7719,6 +7719,31 @@ def test_rebuild_discards_the_losing_tickets_working_tree_and_branch(
     assert "rebuild" in _gh_calls(env)
 
 
+def test_rebuild_takes_the_discarded_trees_set_aside_ref_with_it(
+    tmp_path: Path,
+) -> None:
+    """A set-aside an `isolate` left behind holds the work of a tree that is
+    discarded on purpose, and a ref left standing would refuse the next tree the
+    ticket is given as though it still held work."""
+
+    repo = _init_repo(tmp_path / "proj")
+    env = _tracker(
+        tmp_path,
+        {"ready-for-agent": [_ticket(10, "the graph")]},
+        issues={10: _ready(10)},
+    )
+    _collided(repo)
+    assert _engine(repo, "integrate", "--ticket", "10").returncode == 2
+    _git(repo, "update-ref", "refs/kntnt-orchestrate/set-aside/work/10", "HEAD")
+    kept_for_nine = "refs/kntnt-orchestrate/set-aside/work/9"
+    _git(repo, "update-ref", kept_for_nine, "HEAD")
+
+    result = _engine(repo, "rebuild", "--ticket", "10", env=env)
+
+    assert result.returncode == 0, result.stderr
+    assert _set_aside_refs(repo).split() == [kept_for_nine]
+
+
 def test_a_ticket_is_rebuilt_at_most_once(tmp_path: Path) -> None:
     """A rebuild is the one rerun a collision buys, and the tracker is what
     bounds it: the note the first rebuild left on the ticket is what refuses
@@ -8855,7 +8880,7 @@ def test_isolate_marks_the_bring_forward_merge_as_run_owned(tmp_path: Path) -> N
 def test_isolate_refuses_to_resume_a_preserved_tree_with_uncommitted_work(
     tmp_path: Path,
 ) -> None:
-    """A parked builder's uncommitted work is left for a person to inspect."""
+    """Uncommitted work the run cannot account for is left for a person."""
 
     repo = _init_repo(tmp_path / "proj")
     worktree = Path(
@@ -8868,6 +8893,277 @@ def test_isolate_refuses_to_resume_a_preserved_tree_with_uncommitted_work(
     assert result.returncode == 1
     assert "uncommitted" in result.stderr
     assert (worktree / "unfinished.txt").is_file()
+
+
+def _interrupted_ticket(tmp_path: Path) -> tuple[Path, Path, dict[str, str], Path]:
+    """Leave ticket 9 with a tree of its own and an attempt started, never finished.
+
+    The state a usage limit leaves behind: the run's account holds `build-9`
+    with a start and no outcome, and the tree is the one `isolate` made.
+    """
+
+    repo, scratch, env = _routed(tmp_path)
+    isolated = _engine(
+        repo, "isolate", "--ticket", "9", "--state-dir", str(scratch), env=env
+    )
+    assert isolated.returncode == 0, isolated.stderr
+    worktree = Path(json.loads(isolated.stdout)["worktree"])
+    started = _attempt_started(repo, scratch, env)
+    assert started.returncode == 0, started.stderr
+    return repo, scratch, env, worktree
+
+
+def _resume(
+    repo: Path, scratch: Path, env: dict[str, str]
+) -> subprocess.CompletedProcess[str]:
+    """Run `isolate` on ticket 9 as step 5 does, with the run's state directory."""
+
+    return _engine(
+        repo, "isolate", "--ticket", "9", "--state-dir", str(scratch), env=env
+    )
+
+
+def _leave_uncommitted_work(worktree: Path) -> None:
+    """Leave what an interrupted builder leaves: staged and unstaged edits to one
+    tracked file, a tracked file deleted, an untracked file, and an executable one."""
+
+    (worktree / "extra.txt").write_text("tracked\n", encoding="utf-8")
+    _git(worktree, "add", "extra.txt")
+    _git(worktree, "commit", "-m", "preserve extra")
+    (worktree / "README.md").write_text("hello\nstaged\n", encoding="utf-8")
+    _git(worktree, "add", "README.md")
+    (worktree / "README.md").write_text("hello\nstaged\nunstaged\n", encoding="utf-8")
+    (worktree / "extra.txt").unlink()
+    (worktree / "notes.txt").write_bytes(b"half a thought\r\n\x00\xff")
+    script = worktree / "run.sh"
+    script.write_text("#!/bin/sh\n", encoding="utf-8")
+    script.chmod(0o755)
+
+
+def _worktree_bytes(worktree: Path) -> dict[str, tuple[bytes, int] | None]:
+    """Return each file the interrupted work touched as its bytes and mode."""
+
+    held: dict[str, tuple[bytes, int] | None] = {}
+    for name in ("README.md", "extra.txt", "notes.txt", "run.sh"):
+        path = worktree / name
+        held[name] = (
+            (path.read_bytes(), path.stat().st_mode & 0o777) if path.exists() else None
+        )
+    return held
+
+
+def _set_aside_refs(repo: Path) -> str:
+    """Return every ref the engine holds set-aside work under."""
+
+    return _git(
+        repo, "for-each-ref", "--format=%(refname)", "refs/kntnt-orchestrate/set-aside"
+    ).stdout
+
+
+def _commit_on_run_branch(repo: Path, name: str, text: str) -> None:
+    """Integrate something into the run branch behind a ticket's back."""
+
+    (repo / name).write_text(text, encoding="utf-8")
+    _git(repo, "add", name)
+    _git(repo, "commit", "-m", f"run branch changes {name}")
+
+
+def test_isolate_keeps_the_runs_own_interrupted_work_where_nothing_is_brought_forward(
+    tmp_path: Path,
+) -> None:
+    """A usage limit that cut off this run's builder leaves work only that
+    builder can judge, so the resume keeps it byte for byte, untracked files
+    and the staged/unstaged split included."""
+
+    repo, scratch, env, worktree = _interrupted_ticket(tmp_path)
+    _leave_uncommitted_work(worktree)
+    before_status = _git(worktree, "status", "--porcelain").stdout
+    before_bytes = _worktree_bytes(worktree)
+
+    result = _resume(repo, scratch, env)
+
+    assert result.returncode == 0, result.stderr
+    answer = json.loads(result.stdout)
+    assert answer["kept_interrupted_work"] is True
+    assert answer["brought_forward"] is False
+    assert _git(worktree, "status", "--porcelain").stdout == before_status
+    assert _worktree_bytes(worktree) == before_bytes
+
+
+def test_isolate_keeps_the_runs_own_interrupted_work_across_a_bring_forward(
+    tmp_path: Path,
+) -> None:
+    """The run branch is merged in around the work, and every kept path comes
+    back exactly as it was. `git stash` is shared by every worktree of the
+    repository, so a wave resuming together could pop another ticket's work;
+    nothing here may touch it."""
+
+    repo, scratch, env, worktree = _interrupted_ticket(tmp_path)
+    _leave_uncommitted_work(worktree)
+    _commit_on_run_branch(repo, "blocker.txt", "resolved\n")
+    before_bytes = _worktree_bytes(worktree)
+
+    result = _resume(repo, scratch, env)
+
+    assert result.returncode == 0, result.stderr
+    answer = json.loads(result.stdout)
+    assert answer["brought_forward"] is True
+    assert answer["kept_interrupted_work"] is True
+    assert (worktree / "blocker.txt").read_text(encoding="utf-8") == "resolved\n"
+    assert _worktree_bytes(worktree) == before_bytes
+    assert _git(worktree, "status", "--porcelain").stdout == (
+        " M README.md\n D extra.txt\n?? notes.txt\n?? run.sh\n"
+    )
+    assert _git(repo, "stash", "list").stdout == ""
+    assert _set_aside_refs(repo) == ""
+
+
+def test_isolate_refuses_uncommitted_work_no_unfinished_attempt_accounts_for(
+    tmp_path: Path,
+) -> None:
+    """An account whose attempt for this ticket finished says nobody in this
+    run left the work, so it stays for a person as it always did."""
+
+    repo, scratch, env, worktree = _interrupted_ticket(tmp_path)
+    finished = _attempt_finished(repo, scratch, env, "hinder")
+    assert finished.returncode == 0, finished.stderr
+    (worktree / "unfinished.txt").write_text("unfinished\n", encoding="utf-8")
+
+    result = _resume(repo, scratch, env)
+
+    assert result.returncode == 1
+    assert "uncommitted" in result.stderr
+    assert (worktree / "unfinished.txt").read_text(encoding="utf-8") == "unfinished\n"
+
+
+def test_isolate_answers_that_it_kept_nothing_wherever_it_kept_nothing(
+    tmp_path: Path,
+) -> None:
+    """The field is on every answer, false unless the run's own work was kept."""
+
+    repo = _init_repo(tmp_path / "proj")
+    fresh = json.loads(_engine(repo, "isolate", "--ticket", "9").stdout)
+    resumed = json.loads(_engine(repo, "isolate", "--ticket", "9").stdout)
+
+    assert fresh["kept_interrupted_work"] is False
+    assert resumed["kept_interrupted_work"] is False
+
+
+def test_isolate_refuses_and_restores_when_the_bring_forward_collides_with_kept_work(
+    tmp_path: Path,
+) -> None:
+    """A collision with kept work never reaches the repair path: no repairer
+    may meet uncommitted work, so the tree goes back as it was and a person is
+    asked."""
+
+    repo, scratch, env, worktree = _interrupted_ticket(tmp_path)
+    (worktree / "graph.py").write_text("ticket nine\n", encoding="utf-8")
+    _git(worktree, "add", "graph.py")
+    _git(worktree, "commit", "-m", "preserve ticket nine")
+    _leave_uncommitted_work(worktree)
+    _commit_on_run_branch(repo, "graph.py", "the run branch\n")
+    old_head = _git(worktree, "rev-parse", "HEAD").stdout
+    before_status = _git(worktree, "status", "--porcelain").stdout
+    before_bytes = _worktree_bytes(worktree)
+
+    result = _resume(repo, scratch, env)
+
+    assert result.returncode == 1, result.stdout
+    assert "uncommitted work" in result.stderr
+    assert "build-9" in result.stderr
+    assert "graph.py" in result.stderr
+    assert _git(worktree, "rev-parse", "HEAD").stdout == old_head
+    merge_head = _git(worktree, "rev-parse", "--git-path", "MERGE_HEAD").stdout.strip()
+    assert not (worktree / merge_head).exists()
+    assert _git(worktree, "status", "--porcelain").stdout == before_status
+    assert _worktree_bytes(worktree) == before_bytes
+    assert _set_aside_refs(repo) == ""
+
+
+def test_isolate_refuses_and_restores_when_putting_the_kept_work_back_conflicts(
+    tmp_path: Path,
+) -> None:
+    """The merge lands cleanly, but a path the kept work changed is one it
+    changed too. Nothing is merged three ways: the branch goes back to its old
+    head and the work to exactly what it was."""
+
+    repo, scratch, env, worktree = _interrupted_ticket(tmp_path)
+    _leave_uncommitted_work(worktree)
+    _commit_on_run_branch(repo, "README.md", "hello\nthe run branch\n")
+    old_head = _git(worktree, "rev-parse", "HEAD").stdout
+    before_status = _git(worktree, "status", "--porcelain").stdout
+    before_bytes = _worktree_bytes(worktree)
+
+    result = _resume(repo, scratch, env)
+
+    assert result.returncode == 1, result.stdout
+    assert "uncommitted work" in result.stderr
+    assert "build-9" in result.stderr
+    assert _git(worktree, "rev-parse", "HEAD").stdout == old_head
+    assert _git(worktree, "status", "--porcelain").stdout == before_status
+    assert _worktree_bytes(worktree) == before_bytes
+    assert _set_aside_refs(repo) == ""
+
+
+def test_isolate_refuses_a_tree_holding_a_merge_left_in_progress_by_this_run(
+    tmp_path: Path,
+) -> None:
+    """A collision repair cut off part-way leaves a merge no snapshot can hold,
+    so the work is neither kept nor touched."""
+
+    repo, scratch, env, worktree = _interrupted_ticket(tmp_path)
+    (worktree / "graph.py").write_text("ticket nine\n", encoding="utf-8")
+    _git(worktree, "add", "graph.py")
+    _git(worktree, "commit", "-m", "preserve ticket nine")
+    _commit_on_run_branch(repo, "graph.py", "the run branch\n")
+    run_branch = _git(repo, "branch", "--show-current").stdout.strip()
+    merged = subprocess.run(
+        ["git", "merge", run_branch],
+        cwd=worktree,
+        env=_GIT_ENV,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+    assert merged.returncode != 0
+    old_head = _git(worktree, "rev-parse", "HEAD").stdout
+    before_status = _git(worktree, "status", "--porcelain").stdout
+    before_conflict = (worktree / "graph.py").read_bytes()
+
+    result = _resume(repo, scratch, env)
+
+    assert result.returncode == 1, result.stdout
+    assert "uncommitted work" in result.stderr
+    assert "build-9" in result.stderr
+    assert "unmerged" in result.stderr
+    assert _git(worktree, "rev-parse", "HEAD").stdout == old_head
+    assert _git(worktree, "status", "--porcelain").stdout == before_status
+    assert (worktree / "graph.py").read_bytes() == before_conflict
+    assert _set_aside_refs(repo) == ""
+
+
+@pytest.mark.parametrize("dirty", [False, True])
+def test_isolate_refuses_while_a_set_aside_ref_stands_for_the_ticket(
+    tmp_path: Path, dirty: bool
+) -> None:
+    """An `isolate` killed after it cleaned the tree leaves the work held only
+    in the ref, and a clean tree is what a second call would then mistake for
+    nothing to keep."""
+
+    repo, scratch, env, worktree = _interrupted_ticket(tmp_path)
+    run_branch = _git(repo, "branch", "--show-current").stdout.strip()
+    ref = f"refs/kntnt-orchestrate/set-aside/{run_branch}/9"
+    _git(repo, "update-ref", ref, "HEAD")
+    if dirty:
+        (worktree / "unfinished.txt").write_text("unfinished\n", encoding="utf-8")
+
+    result = _resume(repo, scratch, env)
+
+    assert result.returncode == 1, result.stdout
+    assert "uncommitted work" in result.stderr
+    assert ref in result.stderr
+    assert _git(repo, "rev-parse", ref).stdout == _git(repo, "rev-parse", "HEAD").stdout
+    assert (worktree / "unfinished.txt").exists() is dirty
 
 
 def test_isolate_reports_a_resume_collision_and_leaves_no_merge_started(

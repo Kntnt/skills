@@ -4634,16 +4634,147 @@ def cmd_park(cwd: Path, number: int, state_path: Path | None) -> int:
     return 0
 
 
-def cmd_isolate(cwd: Path, number: int) -> int:
+def set_aside_ref(run_branch: str, number: int) -> str:
+    """Name the ref that holds ticket *number*'s work while `isolate` moves it.
+
+    One ref per ticket and never `git stash`: a repository has one stash list
+    and every worktree of it shares that list, so a wave whose tickets resume
+    together could pop each other's work. A ref named by ticket cannot cross
+    tickets, and it keeps what it points at from being collected.
+    """
+
+    return f"{ENGINE_REFS}/set-aside/{run_branch}/{number}"
+
+
+def interrupted_attempt(state_path: Path | None, number: int) -> str | None:
+    """Return the request this run started for ticket *number* and never finished.
+
+    The run's own account is the only thing that can say whose uncommitted work
+    a tree holds: an attempt with a start and no outcome is one a usage limit,
+    a crash or a killed session cut off, or one a genuine decision parked
+    part-way. Where nothing can be read, nobody is accounted for and the answer
+    is None.
+    """
+
+    routing, _ = read_routing(state_path)
+    if routing is None:
+        return None
+
+    for attempt in routing.attempts:
+        if not attempt.get("started_at") or "outcome" in attempt:
+            continue
+
+        # A name this run does not make, and a wave fix, name no ticket.
+        with suppress(RunError):
+            _, ticket = read_request(str(attempt["attempt_id"]))
+            if ticket == number:
+                return str(attempt["attempt_id"])
+
+    return None
+
+
+def restore_tree(cwd: Path, old_head: str, snapshot: str) -> None:
+    """Put the tree at *cwd* back exactly as *snapshot* recorded it at *old_head*.
+
+    The branch returns to its old head, the working tree becomes the
+    snapshot's tree, and the index becomes its second parent's tree, so the
+    staged and unstaged halves of the work come back as they were. Ignored
+    files are not work and are never touched.
+    """
+
+    git(cwd, "reset", "--hard", old_head)
+    git(cwd, "clean", "--force", "-d")
+    git(cwd, "read-tree", "-u", "--reset", snapshot)
+    git(cwd, "read-tree", f"{snapshot}^2")
+
+
+def bring_forward_around_kept_work(
+    cwd: Path,
+    number: int,
+    standing: Path,
+    run_branch: str,
+    attempt: str,
+) -> None:
+    """Bring the run branch into a tree holding this run's own interrupted work.
+
+    The work is snapshotted into a ref of its own before the tree is cleaned,
+    so an interruption at any point leaves it held and named rather than lost.
+    Where the merge collides, or a path the work changed is one the merge
+    changed too, the tree goes back exactly as it was and the call refuses:
+    nothing here is a three-way merge of a file both sides changed, and a
+    collision never reaches a repairer, which must not meet uncommitted work.
+    """
+
+    ref = set_aside_ref(run_branch, number)
+    old_head = git(standing, "rev-parse", "HEAD").strip()
+    snapshot = preserve_uncommitted(standing, old_head)
+    git(cwd, "update-ref", ref, snapshot)
+    git(standing, "reset", "--hard")
+    git(standing, "clean", "--force", "-d")
+
+    # The merge lands, is settled by regenerating, or collides.
+    message = bring_forward_message(number)
+    merged = git_result(standing, "merge", "--no-ff", "-m", message, run_branch)
+    if merged.returncode != 0:
+        collisions = git_result(
+            standing, "diff", "--name-only", "--diff-filter=U"
+        ).stdout.split()
+        settled = settle_by_regenerating(
+            standing, number, collisions, commit_message=message
+        )
+        if settled is None:
+            git_result(standing, "merge", "--abort")
+            restore_tree(standing, old_head, snapshot)
+            git(cwd, "update-ref", "-d", ref)
+            raise RunError(
+                f"#{number} has uncommitted work from its interrupted attempt "
+                f"{attempt}, and bringing the run branch into it collided in "
+                f"{', '.join(collisions)}: the work is as it was, look at "
+                f"{standing} before resuming it"
+            )
+
+    # A path both sides changed cannot be put back without merging the two.
+    kept = set(
+        git(standing, "diff", "--name-only", "--no-renames", old_head, snapshot).split()
+    )
+    brought = set(
+        git(standing, "diff", "--name-only", "--no-renames", old_head, "HEAD").split()
+    )
+    overlap = sorted(kept & brought)
+    if overlap:
+        restore_tree(standing, old_head, snapshot)
+        git(cwd, "update-ref", "-d", ref)
+        raise RunError(
+            f"#{number} has uncommitted work from its interrupted attempt "
+            f"{attempt}, and the run branch changed what it changed "
+            f"({', '.join(overlap)}): the work is as it was, look at "
+            f"{standing} before resuming it"
+        )
+
+    # Every path the work changed is written back as the snapshot holds it,
+    # deletions included, and the index stays at the new head.
+    if kept:
+        git(
+            standing,
+            "restore",
+            f"--source={snapshot}",
+            "--worktree",
+            "--",
+            *sorted(kept),
+        )
+    git(cwd, "update-ref", "-d", ref)
+
+
+def cmd_isolate(cwd: Path, number: int, state_path: Path | None) -> int:
     """Give ticket *number* a working tree of its own, and say where it is."""
 
     try:
-        return isolate(cwd, number)
+        return isolate(cwd, number, state_path)
     except RunError as exc:
         return fail(str(exc))
 
 
-def isolate(cwd: Path, number: int) -> int:
+def isolate(cwd: Path, number: int, state_path: Path | None = None) -> int:
     """Open the working tree ticket *number* is built in, or find the one open.
 
     Tickets built at once cannot share one working tree, and the developer's is
@@ -4655,6 +4786,11 @@ def isolate(cwd: Path, number: int) -> int:
     same call hands out the rest of what the wave would otherwise share: a
     scratch directory of the ticket's own, and one record number in each of the
     repository's numbered registries (ADR-0071).
+
+    A resumed ticket whose tree holds uncommitted work is resumed only where the
+    run's own account (*state_path*) records an attempt for it that started and
+    never finished. That work is kept and answered as `kept_interrupted_work`,
+    for the resumed builder to examine; any other uncommitted work is refused.
     """
 
     home = worktree_home(cwd)
@@ -4710,13 +4846,38 @@ def isolate(cwd: Path, number: int) -> int:
     if number in open_now:
         standing = Path(open_now[number])
 
-        # Preserved work is the mandatory base of a resume, but work not yet
-        # committed belongs to the parked builder and cannot be merged safely.
-        if git_result(standing, "status", "--porcelain").stdout:
+        # Work a set-aside that did not finish still holds is held nowhere
+        # else, whatever state the tree is in, so it is asked first.
+        ref = set_aside_ref(run_branch, number)
+        if git_ok(cwd, "show-ref", "--verify", "--quiet", ref):
             return fail(
-                f"#{number} has uncommitted work in its preserved working tree: "
-                f"look at {standing} before resuming it"
+                f"#{number} has uncommitted work set aside in {ref} by an "
+                f"isolate that did not finish: look at it before resuming it"
             )
+
+        # Preserved work is the mandatory base of a resume. Work not yet
+        # committed is this run's own where its account holds an attempt at
+        # this ticket that started and never finished: a builder cut off, and
+        # the one that resumes it is who can judge that work. Any other
+        # uncommitted work belongs to nobody this run can name.
+        attempt: str | None = None
+        if git_result(standing, "status", "--porcelain").stdout:
+            attempt = interrupted_attempt(state_path, number)
+            if attempt is None:
+                return fail(
+                    f"#{number} has uncommitted work in its preserved working "
+                    f"tree: look at {standing} before resuming it"
+                )
+
+            # A merge or another operation left half-done has no single tree
+            # to set aside.
+            unpreservable = unpreservable_state(standing)
+            if unpreservable is not None:
+                return fail(
+                    f"#{number} has uncommitted work from its interrupted "
+                    f"attempt {attempt}, and {unpreservable}: look at "
+                    f"{standing} before resuming it"
+                )
 
         # Bring resolved blockers and every other integrated predecessor into
         # the preserved ticket branch before another builder sees the tree.
@@ -4725,7 +4886,9 @@ def isolate(cwd: Path, number: int) -> int:
         brought_forward = not git_ok(
             standing, "merge-base", "--is-ancestor", run_head, ticket_head
         )
-        if brought_forward:
+        if brought_forward and attempt is not None:
+            bring_forward_around_kept_work(cwd, number, standing, run_branch, attempt)
+        elif brought_forward:
             message = bring_forward_message(number)
             merged = git_result(standing, "merge", "--no-ff", "-m", message, run_branch)
             if merged.returncode != 0:
@@ -4745,6 +4908,7 @@ def isolate(cwd: Path, number: int) -> int:
                             "worktree": str(standing),
                             "branch": current_branch(standing),
                             "brought_forward": False,
+                            "kept_interrupted_work": False,
                             "collisions": collisions,
                             "collided_with": against,
                             "reason": (
@@ -4763,6 +4927,7 @@ def isolate(cwd: Path, number: int) -> int:
                 "worktree": str(standing),
                 "branch": current_branch(standing),
                 "brought_forward": brought_forward,
+                "kept_interrupted_work": attempt is not None,
                 "collisions": [],
                 "collided_with": [],
                 **allocate(cwd, number),
@@ -4777,6 +4942,7 @@ def isolate(cwd: Path, number: int) -> int:
             "worktree": str(path),
             "branch": branch,
             "brought_forward": False,
+            "kept_interrupted_work": False,
             "collisions": [],
             "collided_with": [],
             **allocate(cwd, number),
@@ -5260,6 +5426,7 @@ def discard_tree(cwd: Path, number: int, path: Path) -> None:
     built_on = current_branch(path)
     git(cwd, "worktree", "remove", "--force", str(path))
     git(cwd, "branch", "--delete", "--force", built_on)
+    git(cwd, "update-ref", "-d", set_aside_ref(current_branch(cwd), number))
     discard_allocation(cwd, number)
 
 
@@ -7714,7 +7881,7 @@ def main(argv: list[str] | None = None) -> int:
         return cmd_park(cwd, args.ticket, state_path)
     if args.verb == "isolate":
         advance_progress(cwd, state_path, "isolate", args.ticket)
-        return cmd_isolate(cwd, args.ticket)
+        return cmd_isolate(cwd, args.ticket, state_path)
     if args.verb == "integrate":
         advance_progress(cwd, state_path, "integrate", args.ticket)
         return cmd_integrate(cwd, args.ticket, state_path)

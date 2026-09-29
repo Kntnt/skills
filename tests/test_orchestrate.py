@@ -847,6 +847,75 @@ def test_the_isolation_step_routes_resume_collisions_to_deferred_verification() 
     assert "step 9" in step
 
 
+KEPT_WORK_SENTENCE = (
+    "This working tree holds uncommitted work from this ticket's own attempt that"
+    " this run started and never finished: examine it, keep and finish what is"
+    " sound, and discard what the interruption left partial."
+)
+
+
+def test_the_resumed_builder_is_told_about_the_kept_interrupted_work() -> None:
+    """The work is kept only for a builder, so the builder is told it is there.
+
+    The sentence is stated here as the contract rather than imported, and it
+    sits in steps 6 and 9 rather than in the two templates: the preserved-commits
+    sentence it follows is a step-6 prefix too.
+    """
+
+    for number in (6, 9):
+        step = _step(number)
+        assert KEPT_WORK_SENTENCE in step, (
+            f"{SKILL / 'SKILL.md'}: step {number} prefixes the sentence telling a"
+            f" resumed builder that its tree holds this run's own interrupted"
+            f" work, verbatim (issue #441)."
+        )
+        assert "kept_interrupted_work" in step
+
+    # The preserved-commits sentence comes first where both apply.
+    commits = "The commits already on the branch are the base and are not rewritten."
+    assert _step(6).index(commits) < _step(6).index(KEPT_WORK_SENTENCE)
+
+
+def test_the_isolation_step_resumes_this_runs_interrupted_work_and_refuses_the_rest() -> (
+    None
+):
+    """Step 5 states both cases, the flag that makes the first one reachable, and
+    the two ways a kept tree still waits for a hand."""
+
+    step = _step(5)
+
+    assert "isolate --ticket=<number> --state-dir=<directory>`" in step
+    assert "`kept_interrupted_work`" in step
+    assert "started and never finished" in step
+    assert "usage limit" in step
+    assert "any other uncommitted work is refused" in step.lower()
+    assert "`uncommitted work`" in step
+    assert "never takes exit 2" in step
+    assert "dispatches no builder" in step
+
+
+def test_the_park_and_resume_rule_states_both_uncommitted_work_cases() -> None:
+    """The rule the steps point at says what becomes of each kind of leftover."""
+
+    text = (SKILL / "SKILL.md").read_text(encoding="utf-8")
+    rule = text.partition("## Park and Resume Rule")[2].partition("## Steps")[0]
+
+    assert "started and never finished" in rule
+    assert "`isolate` keeps it" in rule
+    assert "any other uncommitted work is refused" in rule.lower()
+    assert "waiting for a hand" in rule
+
+
+def test_the_manpage_says_which_uncommitted_preserved_work_waits_for_a_person() -> None:
+    """Only this run's own interrupted work is resumed, and the page says so."""
+
+    text = _manpage_section("CONTINUING A RUN")
+
+    assert "own unfinished attempt is kept and handed to the resumed builder" in text
+    assert "any other uncommitted preserved work waits for a person" in text
+    assert "Uncommitted preserved work waits for a person" not in text
+
+
 def test_the_build_step_preserves_initial_commits_and_reports_a_parked_budget() -> None:
     """Initial resumes retain their base and every mid-run park names its ledger."""
 

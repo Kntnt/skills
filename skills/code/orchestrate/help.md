@@ -114,7 +114,7 @@ Restart an interrupted run with the same invocation and state directory; there i
 
 The amendment limit is a per-ticket-lifetime budget. A parked attempt is resumed rather than forfeited: its tracker-backed `amends_spent` survives every park and resume, and subtracting that value from two gives the exact number of further amendments available.
 
-Preserved commits are the mandatory base of a resume, never discarded in favour of a rebuild from scratch. Before dispatch, Orchestrate brings the current run branch into the preserved ticket branch so resolved blockers and other integrated predecessors are present. Uncommitted preserved work waits for a person; an authored collision is repaired on the ticket branch and then judged by the resumed amend's fresh full-ticket verifier.
+Preserved commits are the mandatory base of a resume, never discarded in favour of a rebuild from scratch. Before dispatch, Orchestrate brings the current run branch into the preserved ticket branch so resolved blockers and other integrated predecessors are present. Uncommitted work from this run's own unfinished attempt is kept and handed to the resumed builder, and any other uncommitted preserved work waits for a person; an authored collision is repaired on the ticket branch and then judged by the resumed amend's fresh full-ticket verifier.
 
 Prior verdicts remain ticket evidence and the resumed amend receives the immediately preceding verdict verbatim. The report keeps `amends_spent` as the lifetime total and names attempts this invocation inherited under `amends_inherited` and attempts it newly spent under `amends_newly_spent`.
 
