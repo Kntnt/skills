@@ -18,7 +18,7 @@ Enligt Elm Quays interna försöksanteckning från den 4 december 2025 registrer
 
 Perioderna hade olika arbetsbelastning, och anteckningen tillskriver därför inte skillnaden programvaran.
 
-## Kunden vill ge förberedelserna mer tid
+## Arbetsledaren ser tillbaka på försöket
 
 – Jag skulle välja att göra försöket igen. Att ha en gemensam bild av ärendena hjälper oss, men jag skulle lägga till en vecka för förberedelser, säger Lind.
 

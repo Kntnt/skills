@@ -4,7 +4,7 @@
 
 Text: Sanna Ek, Öppna beslut
 
-Kommunstyrelsen i Lervik bör skjuta upp bytet till enbart digital bokning av föreningslokaler. Pröva först båda bokningsvägarna i alla sju lokaler under ett halvår och mät vad de kräver. Ett permanent beslut behöver bättre underlag än det som nu ligger på bordet.
+Kommunstyrelsen i Lervik bör skjuta upp bytet till enbart digital bokning av föreningslokaler, ett byte som kan ske i september. Pröva först båda bokningsvägarna i alla sju lokaler under ett halvår och mät vad de kräver. Ett permanent beslut behöver bättre underlag än det som nu ligger på bordet.
 
 ## Bokningar är inte samma sak som personer
 
