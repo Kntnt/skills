@@ -22,6 +22,9 @@ WRITE_RESPONSE_DEFAULT_RECORD = EVALUATION / "records" / "write-gpt-2026-08-26-1
 REDLINE_CLOSING_PROOFREAD_RECORD = (
     EVALUATION / "records" / "redline-gpt-2026-08-26-174.md"
 )
+REDLINE_383_RECORD = EVALUATION / "records" / "redline-claude-2026-09-22-383.md"
+EDITORIAL_383 = EVALUATION / "editorial-383"
+EDITORIAL_383_RESULTS = EDITORIAL_383 / "results.md"
 
 # The material the wave has to survive, one tag per kind. A fixture entry
 # declares what it covers from this vocabulary, and the corpus is complete when
@@ -1451,3 +1454,174 @@ def test_the_corpus_stages_code_a_pass_has_to_read_past() -> None:
             f"{name}: the entry does not reject the code coming back altered,"
             f" which is the other half."
         )
+
+
+# The twelve draft runs `N1` covers, not the controls. Two judgements each is
+# the count the results paragraph may name; a sentence tally is not, because
+# the two judges of one run rarely list the same number of items (issue #427).
+DRAFT_RUNS_383 = (
+    "pre-column-sv-r1",
+    "pre-column-sv-r2",
+    "pre-opinion-en_GB-r1",
+    "pre-opinion-en_GB-r2",
+    "post-column-sv-r1-a",
+    "post-column-sv-r1-b",
+    "post-column-sv-r2-a",
+    "post-column-sv-r2-b",
+    "post-opinion-en_GB-r1-a",
+    "post-opinion-en_GB-r1-b",
+    "post-opinion-en_GB-r2-a",
+    "post-opinion-en_GB-r2-b",
+)
+N1_OPENING = (
+    "  - `N1` — `pass` — no limiting sentence deleted, weakened or hardened"
+    " on either judgement; "
+)
+N1_VERBATIM = f"{N1_OPENING}all of them verbatim."
+N1_VERBATIM_DISCLAIMER = (
+    f"{N1_OPENING}all of them verbatim, both halves of every two-part"
+    " disclaimer included."
+)
+N1_EXCEPTIONS_383 = {
+    "post-column-sv-r2-a": (
+        f"{N1_OPENING}all of them verbatim except `gör det` becoming `vet det`"
+        " in `och jag tänker inte låtsas att jag gör det`, which both judges"
+        " record, both halves of every two-part disclaimer included."
+    ),
+    "post-opinion-en_GB-r2-a": (
+        f"{N1_OPENING}all of them verbatim except `channel` becoming `route`"
+        " in `before the channel goes`, which judge A records, both halves of"
+        " every two-part disclaimer included."
+    ),
+    "post-column-sv-r2-b": (
+        f"{N1_OPENING}all of them verbatim except the dash in `Det som retar"
+        " mig är något annat — att tid i kalendern` set as an en dash, which"
+        " judge A records, both halves of every two-part disclaimer included."
+    ),
+}
+# What #403 left after the count. The count is the only phrase this ticket moves.
+N1_PARAGRAPH_REST_383 = (
+    "not one sentence was deleted, weakened or hardened; every judgement"
+    " records them surviving byte for byte, both halves of every two-part"
+    " disclaimer included, except in four judgements that each record one"
+    " change inside a sentence they list as limiting: both judges of"
+    " `post-column-sv-r2-a` record `gör det` becoming `vet det` in `och jag"
+    " tänker inte låtsas att jag gör det`, judge A of `post-opinion-en_GB-r2-a`"
+    " records `channel` becoming `route` in `before the channel goes`, and"
+    " judge A of `post-column-sv-r2-b` records the dash in `Det som retar mig"
+    " är något annat — att tid i kalendern` set as an en dash. `We make no"
+    " claim to have funded or costed that trial` comes back verbatim in the"
+    " six `opinion-en_GB` runs, and `Det är min reflektion, inte något jag har"
+    " mätt hos andra` and `Det här är en iakttagelse av ett dokument, inte en"
+    " scen från ett visst möte` in the three `column-sv-r2` runs —"
+    " `pre-column-sv-r2`, `post-column-sv-r2-a` and `post-column-sv-r2-b` —"
+    " in each case the only runs of either arm whose input carries the"
+    " sentence. What #377 repaired stays repaired."
+)
+N1_PARAGRAPH_383 = (
+    "**`N1` — met in all eight post-change runs, and in all four pre-change"
+    " runs.** Across the twenty-four judgements of the twelve draft runs "
+    f"{N1_PARAGRAPH_REST_383}"
+)
+RECORD_MISSTATEMENT = (
+    "A record line that misstates what the run's own committed artefacts show"
+    " is corrected in place to what they show, and the commit names the"
+    " artefact the corrected line now agrees with. Such a correction never"
+    " changes a verdict or a criterion outcome; a line whose outcome is itself"
+    " in doubt is raised as a ticket instead."
+)
+
+
+def _fixture_sections(record: str) -> dict[str, str]:
+    """Map each `## ` fixture heading to the entry that follows it."""
+
+    parts = re.split(r"^## `([^`]+)`\n", record, flags=re.MULTILINE)
+    return {parts[index]: parts[index + 1] for index in range(1, len(parts), 2)}
+
+
+def _criterion_line(section: str, identifier: str) -> str:
+    """The one criteria bullet that opens on *identifier*."""
+
+    prefix = f"  - `{identifier}` — "
+    matches = [line for line in section.splitlines() if line.startswith(prefix)]
+    assert len(matches) == 1, matches
+    return matches[0]
+
+
+def test_the_383_n1_paragraph_names_the_judgements_not_a_reading_count() -> None:
+    """A reading count the tree does not support is not evidence.
+
+    `N1` covers the twelve draft runs, two judgements each. Those judgements
+    do not agree on how many limiting sentences a run holds, so the paragraph
+    names the judgements and states no count of readings (issue #427).
+    """
+
+    runs = EDITORIAL_383 / "runs"
+    judgements = [
+        runs / name / judge
+        for name in DRAFT_RUNS_383
+        for judge in ("judgement-a.md", "judgement-b.md")
+    ]
+
+    # The figure the paragraph names is the one the tree holds.
+    missing = [path for path in judgements if not path.is_file()]
+    assert missing == [], missing
+    assert len(DRAFT_RUNS_383) == 12
+    assert len(judgements) == 24
+
+    paragraph = next(
+        line
+        for line in EDITORIAL_383_RESULTS.read_text(encoding="utf-8").splitlines()
+        if line.startswith("**`N1` — met in all eight post-change runs")
+    )
+
+    assert "limiting-sentence readings" not in paragraph
+    assert "forty-eight" not in paragraph
+    assert paragraph == N1_PARAGRAPH_383
+
+
+def test_the_383_record_names_the_three_limiting_sentence_changes() -> None:
+    """Three `N1` lines said verbatim where their own judgements record a change.
+
+    The verdict stays `pass`. The sentence that supports it names the one
+    change and the judge or judges who record it, and the other nine draft
+    runs stay as written (issue #427).
+    """
+
+    sections = _fixture_sections(REDLINE_383_RECORD.read_text(encoding="utf-8"))
+    unchanged = {
+        "pre-column-sv-r1": N1_VERBATIM,
+        "pre-column-sv-r2": N1_VERBATIM,
+        "pre-opinion-en_GB-r1": N1_VERBATIM,
+        "pre-opinion-en_GB-r2": N1_VERBATIM,
+        "post-column-sv-r1-a": N1_VERBATIM_DISCLAIMER,
+        "post-column-sv-r1-b": N1_VERBATIM_DISCLAIMER,
+        "post-opinion-en_GB-r1-a": N1_VERBATIM_DISCLAIMER,
+        "post-opinion-en_GB-r1-b": N1_VERBATIM_DISCLAIMER,
+        "post-opinion-en_GB-r2-b": N1_VERBATIM_DISCLAIMER,
+    }
+
+    assert set(unchanged) | set(N1_EXCEPTIONS_383) == set(DRAFT_RUNS_383)
+
+    for name, expected in {**unchanged, **N1_EXCEPTIONS_383}.items():
+        line = _criterion_line(sections[name], "N1")
+        assert line == expected, name
+        assert "`pass`" in line
+
+
+def test_a_record_line_that_misstates_its_artefacts_is_corrected_in_place() -> None:
+    """Append-only protects a run from a later repair of the Skill.
+
+    It does not protect a line that was false against the run's own committed
+    artefacts on the day it was written. That line is corrected in place, the
+    commit names the artefact it now agrees with, and the correction never
+    moves a verdict or a criterion outcome. A line whose outcome is itself in
+    doubt is a ticket, not an edit (issue #427).
+    """
+
+    section = _section(_protocol(), "## The recording format")
+    append_only = section.index("Records are append-only in practice.")
+    correction = section.index(RECORD_MISSTATEMENT)
+    suite = section.index("Committed evidence is never edited to satisfy the suite.")
+
+    assert append_only < correction < suite
