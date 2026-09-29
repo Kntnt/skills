@@ -210,7 +210,7 @@ Git workflows also require `git`; ticket workflows require `gh`; `rename-invoice
 
 `push` requires `commit`; `release` requires `push`; `delegation` and `orchestrate` require `model-selector`; `redline` requires `proofread`.
 
-Delegation, orchestrate, ready for agent check, write, redline, and unslop require a harness that can spawn subagents. Select shows skill and harness requirements before enablement.
+Orchestrate, ready for agent check, write, redline, and unslop require a harness that can spawn subagents; delegation works in any harness, but the mode it turns on delegates only where one can. Select shows skill and harness requirements before enablement.
 
 ## Contributing and license
 
