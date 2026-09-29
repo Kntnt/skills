@@ -1,0 +1,30 @@
+Konfiguration: genren `webcopy` kommer från anropet och språket `sv` likaså. Ingen teknik används, eftersom genren `webcopy` inte anger någon teknik som den vanligen skrivs med. Ingen skrivbrief valdes, och texten saknar `kntnt`-metadata. Därför har ingen metadata lagts till.
+
+````markdown
+# Så fungerar intresseanmälan
+
+En intresseanmälan till Svales genomgång av bokningsrutiner är inte en beställning. Den hjälper Svale att avgöra om genomgången passar föreningens behov.
+
+## Uppgifter att lämna
+
+Ange namn, förening och e-postadress i formuläret. Inga betalningsuppgifter behövs.
+
+## Svar inom tre arbetsdagar
+
+Svale svarar via e-post inom tre arbetsdagar för att stämma av uppdraget och föreslå en mötestid. En tid bokas alltså inte när formuläret skickas in.
+````
+
+## Anmärkningar
+
+**1. Åtgärdad: svarstiden stod bara i mellanrubriken.** Avsnittet under ”Svar inom tre arbetsdagar” sa aldrig när Svale svarar. Svarstiden fanns bara i mellanrubriken, så brödtexten bar inte det innehåll rubriken utlovade. En läsare som bara läste brödtexten, eller fick sidan återgiven utan rubriker, fick därför ingen tidsram. Nu står ”inom tre arbetsdagar” även i brödtextens första mening. Mellanrubriken är oförändrad.
+
+**2. Kvarstår: formuläret har ingen angiven plats.** Texten hänvisar två gånger till ”formuläret”: ”Ange namn, förening och e-postadress i formuläret” och ”när formuläret skickas in”. Sidan innehåller inte formuläret och säger inte heller var det finns eller hur läsaren når det. Läsaren saknar alltså vägen till det steg sidan beskriver. Formulärets plats eller länkmål finns inte i texten och kan inte läggas till utan att hittas på. Någon med den uppgiften behöver komplettera texten.
+
+## Påståenden
+
+- **Borttagna:** inga.
+- **Ändrade:** inga.
+- **Tillagda:** inga.
+- **Kopierade:** påståendet att Svale svarar inom tre arbetsdagar fanns redan i mellanrubriken och står nu även i brödtexten, med samma omfattning och säkerhet. Det kopierades till en andra plats men flyttades inte, och det är därför inte ett nytt påstående.
+
+Jämfört med den inkomna texten har körningen bara ändrat en sak: uppgiften om svarstiden står nu även i brödtexten under mellanrubriken. Korrekturläsningen hittade inga mekaniska fel att rätta. Inga filer har skrivits, och de tillfälliga filerna som skapades under körningen är borttagna.

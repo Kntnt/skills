@@ -1,0 +1,13 @@
+Den granskade texten finns nu i `output.md`. Texten granskades som `webcopy` på svenska (`sv`), båda enligt anropet. Ingen teknik tillämpades, eftersom genren webbtext inte anger någon och ingen annan nivå valde en. Anropet satte ingen gräns för antalet rättelser, så standardvärdet 1 gällde. Den enda rättelsen användes.
+
+**Anmärkningar**
+
+1. **Löst.** Under mellanrubriken ”Svar inom tre arbetsdagar” stod svarstiden bara i rubriken. Brödtexten sa att Svale svarar men inte när. Den som läste brödtexten utan rubriken, till exempel med skärmläsare, missade därför det enda konkreta beskedet om vad som händer efter anmälan. Nu står svarstiden även i brödtexten. Mellanrubriken är oförändrad.
+2. **Olöst.** I meningarna ”Ange namn, förening och e-postadress i formuläret” och ”när formuläret skickas in” hänvisar texten till ett formulär. Formuläret finns inte i texten, och texten säger inte var det finns eller hur läsaren når det. Läsaren vet alltså inte vart hen ska gå för att göra sin intresseanmälan. Det går inte att rätta utan att hitta på en plats, och ingen sådan finns i texten. Någon behöver ange var formuläret finns, till exempel med en länk eller en upplysning om att det ligger på sidan.
+
+**Påståenden**
+
+- **Ändrat:** ”Svale svarar via e-post inom tre arbetsdagar för att stämma av uppdraget och föreslå en mötestid.” Brödtexten säger nu inte bara att Svale svarar utan också inom vilken tid. Ändringen hör till rättelsen av anmärkning 1. Mellanrubriken sa redan detsamma, så påståendet har en motsvarighet i originalet och har inte fått större räckvidd.
+- Inget påstående har tagits bort eller lagts till utöver det ändrade påståendet ovan. Ingen avgränsning och inget sambandsord har försvunnit.
+
+**Övriga ändringar:** Utöver svarstiden i brödtexten skiljer sig den levererade texten inte från originalet. Korrekturläsningen på slutet hittade inga språkfel att rätta.

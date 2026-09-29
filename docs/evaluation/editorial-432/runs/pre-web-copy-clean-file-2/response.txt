@@ -1,0 +1,15 @@
+Den granskade texten finns i `output.md`. `input.md` är oförändrad.
+
+**Inställningar:** genren är `webcopy` och språket svenska (`sv`), båda enligt anropet. Ingen teknik används: webcopy-genren anger ingen, och ingen annan nivå valde någon. Ingen brief valdes, och texten saknade Kntnt-metadata, så ingen lades till. Korrigeringsbudgeten var 1 och gick åt i en korrigeringsrunda.
+
+**Granskningsfynd**
+
+1. **Åtgärdat.** Avsnittet under ”Svar inom tre arbetsdagar”: svarstiden stod bara i mellanrubriken. Brödtexten sa att Svale svarar via e-post men inte när, så den som läste stycket fick aldrig veta tidsramen. Mellanrubriken är oförändrad; det är brödtexten under den som har ändrats.
+2. **Olöst.** ”Ange namn, förening och e-postadress i formuläret.”: ordet ”formuläret” står i bestämd form, men inget formulär nämns tidigare i texten, och texten säger inte var det finns. Läsaren får alltså inte veta var anmälan faktiskt görs. För att åtgärda det behövs ett faktum som texten saknar, nämligen var formuläret finns: på sidan, bakom en länk eller någon annanstans. Därför lämnades meningen orörd. Någon med den uppgiften behöver komplettera meningen eller bädda in formuläret.
+
+**Påståenden**
+
+- **Ändrat:** ”Svale svarar via e-post inom tre arbetsdagar för att stämma av uppdraget och föreslå en mötestid.” Brödtexten säger nu att svaret kommer inom tre arbetsdagar. Samma sak stod redan i mellanrubriken, så påståendet har inte blivit starkare och inte fått större räckvidd. Ändringen gjordes för att åtgärda fynd 1.
+- Utöver detta har inget påstående strukits, ändrats eller lagts till. Gränsen ”En tid bokas alltså inte när formuläret skickas in” står kvar precis som förut.
+
+Utöver den ändring som redovisas ovan skiljer sig den levererade texten från originalet bara på en punkt: tidsramen ”inom tre arbetsdagar” har lagts in i brödtexten. Korrekturläsningen hittade inga mekaniska fel och ändrade ingenting.

@@ -1,0 +1,1 @@
+Ingen ändring behövdes. Texten granskades som webbtext (`webcopy`) på svenska utan teknik, eftersom genren inte anger någon. Granskningen gav inga anmärkningar och korrekturläsningen hittade inga fel. `input.md` är orörd och inga filer har skapats.

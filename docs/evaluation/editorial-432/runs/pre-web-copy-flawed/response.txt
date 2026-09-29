@@ -1,0 +1,40 @@
+```markdown
+# A review from Svale for one shared room in your housing association
+
+## Price and scope of the review
+
+The review Svale offers costs SEK 4,800 including VAT. It covers one shared room in one housing association. It includes a 45-minute video call with two board representatives. It includes a written account of the booking steps, unclear points and two possible simplifications.
+
+## How to express interest and what happens next
+
+[Open the expression-of-interest form](https://example.invalid/svale/intresse).
+
+The link opens an expression-of-interest form asking for a name, association and email address. It places no order, requires no payment details and books no meeting. Svale replies by email within three business days to discuss whether the review is suitable and suggest a meeting time.
+```
+
+**Settings:** genre `webcopy` and language `en_US`, both from your command. No technique was applied because the webcopy genre doesn't use one. There was no brief. `input.md` has no Kntnt metadata block, so none was added, and the file is unchanged on disk. The one allowed correction round fixed all six findings, and the re-review found nothing left and no new problems.
+
+**Findings, all fixed:**
+1. **Headline** ("Unlock your association's full potential"): it made a promise the page doesn't support, in stock corporate wording, and didn't say what the page offers. It now names the offer.
+2. **Opening paragraph:** the whole paragraph was the problem. It was a vague statement about an unnamed audience, a word-for-word translation of a Swedish idiom ("Take the thumb out"), and an unsupported promise ("a fantastic journey"). It was removed.
+3. **Sections starting with "It" and no subject:** the page named the review only in its last sentence. The price sentence now names what "It" refers to.
+4. **Headings "Start", "It", "More", "Again", "Things" and "Important":** none of them said what its section contained, and four one-sentence facts about the same offer were split across separate sections. The four facts now sit in one section under "Price and scope of the review". "Important" became "How to express interest and what happens next".
+5. **Link text "Book and pay now":** it contradicted what the link does, which is open an expression-of-interest form that books nothing and takes no payment. The link now reads "Open the expression-of-interest form" and sits directly above the paragraph explaining it.
+6. **"working days":** this is the British term. It now reads "business days".
+
+**What happened to the claims:**
+- **Removed** (the fix for finding 2):
+  - that decision-makers "in a complex reality face growing complexity"
+  - that the reader will "discover a fantastic journey"
+  - the instruction "Take the thumb out"
+- **Changed:**
+  - The headline no longer promises to unlock the association's "full potential". It now says the page offers a review for one shared room in the reader's housing association (finding 1).
+  - The link text no longer says it books and takes payment. It now says it opens an expression-of-interest form (finding 5).
+  - The price sentence now names what it prices: "the review Svale offers" (finding 3).
+- **Added:**
+  - The headline and the price sentence now say Svale provides the review (findings 1 and 3). This is inferred from the last sentence ("Svale replies … whether the review is suitable"), which never said so outright.
+  - The new second heading says its section explains how to express interest and what happens next (finding 4). The paragraph under it already says this.
+
+The sentences stating that the form places no order, requires no payment details and books no meeting are unchanged, word for word. Apart from the claims listed above, every claim is still there as written.
+
+**Other changes:** The run removed the vague opening, reduced the six sections to two with descriptive headings, and moved the link next to the explanation of what it does. It also replaced one British word with its American equivalent. The final proofreading pass found nothing to correct.

@@ -1,0 +1,29 @@
+Jag granskade texten och gjorde en korrigering. Ett fynd står kvar olöst: sidan hänvisar till ett formulär utan att visa var det finns. Det kräver en uppgift som bara du har.
+
+**Inställningar:** genren är webbtext och språket svenska, båda angivna i anropet. Ingen berättarteknik används, eftersom webbtextgenren inte har någon. Texten saknade `kntnt`-metadata och jag lade inte till någon.
+
+````markdown
+# Så fungerar intresseanmälan
+
+En intresseanmälan till Svales genomgång av bokningsrutiner är inte en beställning. Den hjälper Svale att avgöra om genomgången passar föreningens behov.
+
+## Uppgifter att lämna
+
+Ange namn, förening och e-postadress i formuläret. Inga betalningsuppgifter behövs.
+
+## Svar inom tre arbetsdagar
+
+Svale svarar via e-post inom tre arbetsdagar för att stämma av uppdraget och föreslå en mötestid. En tid bokas alltså inte när formuläret skickas in.
+````
+
+**Fynd**
+
+1. **Åtgärdat, avsnittet ”Svar inom tre arbetsdagar”:** Bara rubriken sa när svaret kommer, inte brödtexten. Den som läser avsnittet utan rubriken, till exempel med skärmläsare eller i ett utdrag, fick inte veta när Svale hör av sig. Nu står ”inom tre arbetsdagar” även i brödtexten. Rubriken är oförändrad.
+2. **Olöst, ”formuläret” i ”Ange namn, förening och e-postadress i formuläret.” och ”… när formuläret skickas in.”:** Texten hänvisar till formuläret som om läsaren redan vet var det finns. Sidan innehåller dock inte formuläret, länkar inte till det och säger inte var det finns. Läsaren vet vad som ska fyllas i men inte var. Formulärets plats framgår inte av texten och går inte att hitta på. Någon som vet var det finns behöver lägga in formuläret eller en länk med en etikett som säger vad den gör. Båda omnämnandena kan sedan stå kvar som de är.
+
+**Påståenden**
+
+- **Kopierat, inte ändrat eller tillagt:** ”svar inom tre arbetsdagar” står nu både i rubriken och i brödtexten. Påståendet fanns redan i rubriken, och åtgärden för fynd 1 upprepade det bara i brödtexten.
+- Förutom detta har inget påstående tagits bort, ändrats eller lagts till. Begränsningarna finns kvar: intresseanmälan är ingen beställning, inga betalningsuppgifter behövs och ingen tid bokas när formuläret skickas in.
+
+Utöver påståendena har bara en sak ändrats: tidsgränsen från rubriken står nu också i brödtexten i sista avsnittet. Den avslutande korrekturläsningen hittade inget att rätta.

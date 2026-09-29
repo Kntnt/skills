@@ -1,0 +1,8 @@
+Ingen ändring behövdes. `input.md` följer redan det redaktionella kontraktet och har inga mekaniska fel. Den avslutande korrekturläsningen ändrade ingenting, och ingen fil har skrivits eller ändrats.
+
+Inställningarna kom från textens egen `kntnt`-karta:
+- **Genre:** `webcopy`
+- **Teknik:** ingen. Kartan anger `none`, och genren `webcopy` anger heller ingen teknik.
+- **Språk:** `sv`
+
+Ingen skrivbrief användes, och korrigeringsbudgeten (1) användes inte.
