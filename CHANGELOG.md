@@ -4,6 +4,10 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ## [Unreleased]
 
+### Fixed
+
+- Model Selector no longer uses a superseded Claude release, such as Sonnet 4.6, when a newer release of its line exists. On some reads Claude Code's model list names older releases by their full id, and the catalogue pass took each full id it did not know as a family of its own. So `claude-opus-4-8`, `claude-opus-4-7`, `claude-opus-4-6`, `claude-sonnet-4-6` and `claude-fable-5` got 23 subagent definitions of their own, and the newest-release rule could not reach them: a `mechanical` call was answered with `claude-sonnet-4-6` as a Trial. The pass now gives a release named by its full id the family of the line its id names, including a release nobody has seen yet. It also moves every entry an earlier pass wrote under its own id into its line, whether or not that day's list returns it. The next pass after `/kntnt update` corrects the catalogue and removes the 23 files, and touches no measurement row, pending Unit or file without the `kntnt-` prefix. An id that names no line keeps its own id as its family, and `/model-selector status` names it. `docs/rules/routing.md` states the rule and ADR-0224 records it (#446).
+
 ## [0.38.0] – 2026-09-28
 
 ### Added
