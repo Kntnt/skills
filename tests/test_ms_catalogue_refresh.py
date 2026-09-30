@@ -2473,3 +2473,36 @@ def test_openrouter_timing_out_on_its_first_page_is_unreadable_and_names_the_dea
     assert reading.outcome == "unreadable"
     assert "deadline" in (reading.reason or "")
     assert reading.timed_out
+
+
+def test_refresh_retains_series_preferences_and_resyncs_only_selected_agents(
+    tmp_path: Path,
+) -> None:
+    """Catalogue maintenance changes releases and definitions, never user choices."""
+
+    here, data, agents = _machine(tmp_path)
+    path = data / "profile.json"
+    document = json.loads(path.read_text("utf-8"))
+    document["families"] = {"anthropic": ["sonnet"], "openai": ["sol"]}
+    path.write_text(json.dumps(document), encoding="utf-8")
+    original = path.read_bytes()
+    agents.mkdir()
+    (agents / "kntnt-haiku.md").write_text("generated\n", encoding="utf-8")
+    user = agents / "my-agent.md"
+    user.write_text("mine\n", encoding="utf-8")
+
+    report = _pass(here, data, agents)
+
+    assert path.read_bytes() == original
+    assert profiles.load(data, catalogue.load(data, here)).families == {
+        "anthropic": ("sonnet",),
+        "openai": ("sol",),
+    }
+    assert report["definitions"] is not None
+    assert "kntnt-haiku.md" in report["definitions"]["removed"]
+    assert all(
+        path.name.startswith("kntnt-sonnet-")
+        for path in agents.iterdir()
+        if path != user
+    )
+    assert user.read_text("utf-8") == "mine\n"

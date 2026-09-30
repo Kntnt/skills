@@ -191,12 +191,12 @@ def _answer(capsys: pytest.CaptureFixture[str], *flags: str) -> dict[str, Any]:
 def _profile(data_dir: Path, **overrides: Any) -> None:
     """Write a profile that chooses Anthropic and pays for it in Claude Code.
 
-    Every model Anthropic offers is therefore eligible, and the newest release
+    With no series restriction, every model Anthropic offers is eligible, and the newest release
     of each of its families is a candidate: the seed holds Opus at two
     releases, so the rule keeping only a family's newest release leaves
     `claude-opus-5` out of this pool, and takes nothing else out of it until a
     fixture adds a second release to another family. A test that needs a
-    smaller pool shapes it by the makers it chooses or by a lock, never by a
+    smaller pool can choose Makers or series, or apply a lock, never a
     list of models, which a profile no longer carries.
     """
 
@@ -3476,7 +3476,7 @@ def test_the_vocabulary_answer_carries_no_objective(
     assert "objective_source" not in answer
 
 
-# --- Which models are eligible: the makers chosen, and nothing narrower ------
+# --- Maker-only profiles retain eligibility for every series ----------------
 
 
 def _makers(data_dir: Path, *channels: dict[str, Any]) -> None:
@@ -5020,3 +5020,184 @@ def test_the_order_among_models_owed_a_trial_reads_each_models_own_point(
     assert fresh is not None and begun is not None
     assert select._named(fresh.point) == "claude-opus-5-5@high"
     assert select._named(begun.point) == f"{FABLE}@medium"
+
+
+@pytest.mark.parametrize("scope", ("limited", "callable"))
+def test_series_preferences_filter_every_automatic_answer_and_alternative(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str], scope: str
+) -> None:
+    """All automatic paths draw from the same series permission, including Trials."""
+
+    _profile(tmp_path, families={"anthropic": ["sonnet"]})
+    for seed in range(20):
+        answer = _answer(
+            capsys,
+            f"--data={tmp_path}",
+            f"--scope={scope}",
+            "--harness=claude-code",
+            "--kind=implement",
+            EVERY,
+            f"--seed={seed}",
+        )
+        assert answer["model"] == "claude-sonnet-5"
+        assert {row["model"] for row in answer["alternatives"]} <= {"claude-sonnet-5"}
+    stepped = _answer(
+        capsys,
+        f"--data={tmp_path}",
+        f"--scope={scope}",
+        "--harness=claude-code",
+        "--kind=implement",
+        EVERY,
+        "--after=claude-sonnet-5@low",
+    )
+    assert stepped["model"] == "claude-sonnet-5"
+    assert {row["model"] for row in stepped["alternatives"]} <= {"claude-sonnet-5"}
+
+
+def test_explicit_series_follow_new_releases_and_exclude_new_series(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """Arbitrary families work without interpreting a version from an id."""
+
+    _grok(tmp_path, {**_release("old-flower", "2027-01-01"), "family": "flower"})
+    _profile(
+        tmp_path,
+        harnesses=["opencode"],
+        makers=[XAI],
+        families={XAI: ["FLOWER"]},
+        channels=[
+            {
+                "provider": XAI,
+                "harness": "opencode",
+                "pay": "api",
+                "gateway": "openrouter",
+            }
+        ],
+    )
+    before = _answer(capsys, f"--data={tmp_path}", *GROK_ASKED)
+    assert before["model"] == "old-flower"
+    _refresh(
+        tmp_path,
+        {**_release("new-flower", "2028-01-01"), "family": "flower"},
+        {**_release("unselected-tree", "2029-01-01"), "family": "tree"},
+    )
+    after = _answer(capsys, f"--data={tmp_path}", *GROK_ASKED)
+    assert after["model"] == "new-flower"
+    assert _named_in(after) == {"new-flower"}
+
+
+def test_explicit_model_and_all_scope_bypass_series_preferences(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """The standing preference does not forbid a deliberate one-call override."""
+
+    _profile(tmp_path, families={"anthropic": ["sonnet"]})
+    locked = _answer(
+        capsys, f"--data={tmp_path}", *LIMITED, "--kind=implement", "--model=haiku"
+    )
+    assert locked["model"] == HAIKU
+    all_models = _answer(
+        capsys,
+        f"--data={tmp_path}",
+        "--harness=claude-code",
+        "--scope=all",
+        "--kind=implement",
+        EVERY,
+        "--stakes=high",
+    )
+    assert HAIKU in _named_in(all_models)
+    assert "gpt-6-sol" in _named_in(all_models)
+
+
+def test_no_remaining_series_inherits_the_complete_main_seat(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """A temporarily absent series never causes another series to be added."""
+
+    _profile(tmp_path, families={"anthropic": ["temporarily-absent"]})
+    answer = _answer(
+        capsys,
+        f"--data={tmp_path}",
+        *LIMITED,
+        "--kind=implement",
+        "--seat=claude-opus-5@high",
+    )
+    assert answer["model"] == "claude-opus-5"
+    assert answer["deliberation"] == "high"
+    assert answer["basis"] == "inherit"
+    assert answer["launch"]["how"] == "inherit"
+    assert answer["alternatives"] == []
+
+
+def test_a_trial_owed_to_an_excluded_series_never_reenters_the_pool(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """A strong inherited record is no permission to try a declined series."""
+
+    _plausible_at(tmp_path, "high")
+    flags = (f"--data={tmp_path}", *LIMITED, "--kind=implement", EVERY)
+    assert _answer(capsys, *flags)["explored"] == TRIAL
+    _profile(tmp_path, families={"anthropic": ["sonnet"]})
+    for seed in range(30):
+        answer = _answer(capsys, *flags, f"--seed={seed}")
+        assert answer["explored"] != TRIAL
+        assert _named_in(answer) == {"claude-sonnet-5"}
+
+
+def test_openai_can_select_luna_and_sol_without_terra_or_astra(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """More than one chosen series is a union, not a release-specific list."""
+
+    _profile(
+        tmp_path,
+        harnesses=["codex"],
+        makers=["openai"],
+        families={"openai": ["luna", "sol"]},
+    )
+    answer = _answer(
+        capsys,
+        f"--data={tmp_path}",
+        "--harness=codex",
+        "--scope=limited",
+        "--kind=implement",
+        "--stakes=high",
+        EVERY,
+    )
+    assert _named_in(answer) == {"gpt-6-luna", "gpt-6-sol"}
+
+
+def test_identical_series_names_of_different_makers_remain_independent(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """A release from another Maker cannot supersede a selected provider's series."""
+
+    _profile(
+        tmp_path,
+        harnesses=["claude-code", "codex"],
+        makers=["anthropic", "openai"],
+        families={"anthropic": ["flower"], "openai": ["flower"]},
+        channels=[ANTHROPIC_CHANNEL, OPENAI_CHANNEL],
+    )
+    _refresh(
+        tmp_path,
+        {
+            **_release("claude-flower", "2027-01-01"),
+            "provider": "anthropic",
+            "family": "flower",
+        },
+        {
+            **_release("gpt-flower", "2028-01-01"),
+            "provider": "openai",
+            "family": "flower",
+        },
+    )
+    answer = _answer(
+        capsys,
+        f"--data={tmp_path}",
+        "--harness=claude-code",
+        "--kind=implement",
+        "--stakes=high",
+        EVERY,
+    )
+    assert _named_in(answer) == {"claude-flower", "gpt-flower"}

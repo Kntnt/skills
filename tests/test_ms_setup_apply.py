@@ -119,7 +119,7 @@ def test_a_choice_of_makers_the_catalogue_cannot_act_on_is_refused(
 def test_a_profile_carrying_a_list_makers_replaced_is_refused(
     tmp_path: Path, leftover: str
 ) -> None:
-    """No single model is enabled or disabled within a maker, so no list is taken."""
+    """Version-specific model lists remain retired beside Maker/series choices."""
 
     answers = _answers(_subscription())
     answers[leftover] = ["anthropic"] if leftover == "providers" else ["grok-4.6"]
@@ -384,3 +384,72 @@ def test_reset_names_and_removes_the_standing_objective() -> None:
 
     assert section.count("objective.json") >= 2, "previewed and removed"
     assert "objective.json" in page
+
+
+def test_explicit_series_round_trip_with_case_insensitive_normalization(
+    tmp_path: Path,
+) -> None:
+    """Series preferences survive setup and apply to future releases, not ids."""
+
+    answers = _answers(_subscription())
+    answers["families"] = {"anthropic": ["SoNnEt", "SONNET"], "openai": ["LUNA", "sol"]}
+    report = _applied(tmp_path, answers)
+
+    assert report["ok"] is True
+    expected = {"anthropic": ["sonnet"], "openai": ["luna", "sol"]}
+    assert report["profile"]["families"] == expected
+    stored = json.loads((tmp_path / "data" / "profile.json").read_text("utf-8"))
+    assert stored["families"] == expected
+    cat = catalogue.load(tmp_path / "data", SKILL_DIR)
+    profile = profiles.load(tmp_path / "data", cat)
+    assert profile.families == {"anthropic": ("sonnet",), "openai": ("luna", "sol")}
+
+
+@pytest.mark.parametrize(
+    "families",
+    [
+        None,
+        [],
+        {"anthropic": []},
+        {"anthropic": "sonnet"},
+        {"anthropic": [None]},
+        {"anthropic": [""]},
+        {"anthropic": ["luna"]},
+        {"openai": ["sonnet"]},
+        {"unknown": ["sonnet"]},
+    ],
+)
+def test_invalid_series_input_cannot_replace_an_existing_profile(
+    tmp_path: Path, families: Any
+) -> None:
+    """Validation refuses the whole edit before profile or definitions are touched."""
+
+    assert _applied(tmp_path, _answers(_subscription()))["ok"]
+    data = tmp_path / "data"
+    before = (data / "profile.json").read_bytes()
+    agents = sorted(
+        (path.name, path.read_bytes()) for path in (tmp_path / "agents").iterdir()
+    )
+    answers = _answers(_subscription())
+    answers["families"] = families
+
+    refused = _applied(tmp_path, answers)
+
+    assert refused["ok"] is False
+    assert any("families" in problem for problem in refused["problems"])
+    assert (data / "profile.json").read_bytes() == before
+    assert (
+        sorted(
+            (path.name, path.read_bytes()) for path in (tmp_path / "agents").iterdir()
+        )
+        == agents
+    )
+
+
+def test_a_series_of_an_unchosen_provider_is_refused(tmp_path: Path) -> None:
+    """Choosing a series never silently adds its Maker."""
+
+    answers = _answers(_subscription())
+    answers["makers"] = ["anthropic"]
+    answers["families"] = {"openai": ["sol"]}
+    assert _applied(tmp_path, answers)["ok"] is False

@@ -277,7 +277,7 @@ def test_opencode_with_no_channel_at_all_plans_provider_and_id() -> None:
 def test_the_definition_matrix_covers_every_anthropic_point_and_nothing_else() -> None:
     """One file per point of every Anthropic family, where Anthropic is chosen.
 
-    No single model is chosen or left out within a maker, so the matrix is
+    With no explicit series choices the matrix covers
     every Anthropic family the catalogue holds at every level it supports —
     the family's newest release taking the file — and no point of any other
     maker however many of those are chosen beside it.
@@ -730,3 +730,51 @@ def test_every_flag_a_bridge_emits_is_one_its_installed_cli_lists() -> None:
                     assert not unlisted, f"{binary} lists no {sorted(unlisted)}"
 
     assert planned >= len(bridges) * 2
+
+
+def test_series_selection_removes_only_unwanted_generated_definitions(
+    tmp_path: Path,
+) -> None:
+    """Selecting Sonnet removes our Haiku agents and follows Sonnet's newest release."""
+
+    profile = _profile("claude-code")
+    launch.sync_definitions(tmp_path, launch.definitions(profile, CAT))
+    user = tmp_path / "my-reviewer.md"
+    user.write_text("user-owned\n", encoding="utf-8")
+    chosen = dataclasses.replace(profile, families={"anthropic": ("sonnet",)})
+    sonnet = catalogue.resolve(CAT, "sonnet")[0]
+    next_release = dataclasses.replace(
+        sonnet, id="claude-test-release", released="2099-01-01"
+    )
+    cat = dataclasses.replace(CAT, models=(*CAT.models, next_release))
+    wanted = launch.definitions(chosen, cat)
+
+    assert wanted
+    assert all(name.startswith("kntnt-sonnet-") for name in wanted)
+    assert all("claude-test-release" in body for body in wanted.values())
+    report = launch.sync_definitions(tmp_path, wanted)
+    assert "kntnt-haiku.md" in report.removed
+    assert user.read_text("utf-8") == "user-owned\n"
+    assert sorted(path.name for path in tmp_path.iterdir()) == sorted(
+        [*wanted, "my-reviewer.md"]
+    )
+
+
+def test_case_variants_of_a_selected_series_generate_one_definition_per_level() -> None:
+    """Catalogue family identity is case-insensitive for generated files too."""
+
+    chosen = dataclasses.replace(
+        _profile("claude-code"), families={"anthropic": ("sonnet",)}
+    )
+    sonnet = catalogue.resolve(CAT, "sonnet")[0]
+    newer = dataclasses.replace(
+        sonnet, family="SONNET", id="new-sonnet", released="2099-01-01"
+    )
+    cat = dataclasses.replace(CAT, models=(*CAT.models, newer))
+
+    definitions = launch.definitions(chosen, cat)
+
+    assert set(definitions) == {
+        f"kntnt-sonnet-{level}.md" for level in sonnet.deliberation
+    }
+    assert all("model: new-sonnet\n" in body for body in definitions.values())

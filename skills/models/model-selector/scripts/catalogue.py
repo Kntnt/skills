@@ -2627,9 +2627,18 @@ def default_data() -> Path:
 def _document(cat: Catalogue) -> dict[str, Any]:
     """Return the whole merged catalogue, in the shape a reader consumes it."""
 
+    # Use the same order as aliases, selection and generated definitions.
+    families: dict[tuple[str, str], str] = {}
+    for model in newest_first(cat.models):
+        families.setdefault((model.provider, model.family.lower()), model.id)
+
     return {
         "generated_at": cat.generated_at,
         "problem": cat.problem,
+        "families": [
+            {"provider": provider, "family": family, "model": identifier}
+            for (provider, family), identifier in sorted(families.items())
+        ],
         "models": [
             {
                 "id": model.id,

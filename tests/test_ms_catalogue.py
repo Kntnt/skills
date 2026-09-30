@@ -940,3 +940,30 @@ def test_status_reports_the_pass_rather_than_the_age_of_the_facts() -> None:
     assert "journal --data=<directory> --days=7" in status
     assert "retrieved" not in status
     assert "thirty days" not in status
+
+
+def test_the_interview_receives_one_current_representative_per_provider_series(
+    tmp_path: Path, capsys: Any
+) -> None:
+    """Series options use shared release order, arbitrary names and provider identity."""
+
+    entries = [
+        {"id": identifier, "provider": provider, "family": family, "released": date}
+        for identifier, provider, family, date in (
+            ("z-unversioned", "openai", "Orchid", "2099-01-01"),
+            ("a-unversioned", "openai", "ORCHID", "2099-01-01"),
+            ("old-release", "openai", "orchid", "2020-01-01"),
+            ("another-maker", "anthropic", "orchid", "2098-01-01"),
+        )
+    ]
+    (tmp_path / "catalogue.json").write_text(
+        json.dumps({"models": entries}), encoding="utf-8"
+    )
+    assert catalogue.main([f"--data={tmp_path}"]) == 0
+    printed = json.loads(capsys.readouterr().out)
+
+    orchids = [item for item in printed["families"] if item["family"] == "orchid"]
+    assert orchids == [
+        {"provider": "anthropic", "family": "orchid", "model": "another-maker"},
+        {"provider": "openai", "family": "orchid", "model": "a-unversioned"},
+    ]

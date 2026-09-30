@@ -217,7 +217,7 @@ def validate(raw: Any, cat: Catalogue) -> tuple[Profile | None, list[str]]:
     catalogue holds no model of is a typo that would silently empty every
     future answer, and a provider nobody sells is a channel that can never pay
     for anything. A list of providers or models is refused rather than read:
-    makers replaced both, and no single model is chosen within a maker.
+    Makers and series replaced version-specific choices.
     """
 
     problems: list[str] = []
@@ -231,10 +231,22 @@ def validate(raw: Any, cat: Catalogue) -> tuple[Profile | None, list[str]]:
     harnesses = _names(raw.get("harnesses"), "harnesses", problems)
     makers = _names(raw.get("makers"), "makers", problems)
     channels = _channels(raw.get("channels"), harnesses, problems)
+    families, unreadable = profiles.read_families(raw.get("families", {}), makers)
+    if unreadable is not None:
+        problems.append(unreadable)
+    for provider, names in families.items():
+        known = {
+            model.family.lower() for model in cat.models if model.provider == provider
+        }
+        problems += [
+            f"families for {provider!r} names unknown series {name!r}"
+            for name in names
+            if name not in known
+        ]
 
     problems += [
-        f"{field} is no longer part of a profile: makers replaced it, and every "
-        "model a chosen maker offers is eligible"
+        f"{field} is no longer part of a profile: choose makers and families, "
+        "not version-specific model ids"
         for field in profiles.RETIRED
         if field in raw
     ]
@@ -262,6 +274,7 @@ def validate(raw: Any, cat: Catalogue) -> tuple[Profile | None, list[str]]:
             harnesses=harnesses,
             makers=makers,
             channels=channels,
+            families=families,
             answered_at=_text(raw.get("answered_at")) or _now(),
             source="file",
             problem=None,
@@ -300,6 +313,9 @@ def apply(path: Path, data_dir: Path, agents: Path) -> dict[str, Any]:
         "answered_at": profile.answered_at,
         "harnesses": list(profile.harnesses),
         "makers": list(profile.makers),
+        "families": {
+            provider: list(names) for provider, names in profile.families.items()
+        },
         "channels": len(profile.channels),
     }
     synced = launch.sync_definitions(agents, launch.definitions(profile, cat))

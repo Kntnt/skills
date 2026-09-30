@@ -34,7 +34,7 @@ from dataclasses import dataclass, replace
 from pathlib import Path
 
 from catalogue import Catalogue, Model, newest_first
-from profiles import Profile, channel_for
+from profiles import Profile, allows, channel_for
 
 # The prefix every generated agent definition carries, in both its file name
 # and its `name`. It is what tells `sync_definitions` which files in somebody
@@ -43,7 +43,7 @@ PREFIX = "kntnt"
 
 # The providers each bridge can reach. Codex speaks to OpenAI alone; opencode
 # is a front end for whatever the user has configured behind it, so it is
-# limited here only by the makers the profile chooses.
+# limited by Makers; automatic pools also apply series choices.
 CODEX_PROVIDERS = frozenset({"openai"})
 
 # The providers the Claude CLI can reach in its headless form. This is the path
@@ -260,21 +260,20 @@ def agent_name(model: Model, deliberation: str | None) -> str | None:
     """
 
     if not model.deliberation:
-        return f"{PREFIX}-{model.family}" if deliberation is None else None
+        return f"{PREFIX}-{model.family.lower()}" if deliberation is None else None
     if deliberation in model.deliberation:
-        return f"{PREFIX}-{model.family}-{deliberation}"
+        return f"{PREFIX}-{model.family.lower()}-{deliberation}"
     return None
 
 
 def definitions(profile: Profile, cat: Catalogue) -> dict[str, str]:
     """Return the agent-definition matrix, keyed by file name.
 
-    One definition per Anthropic model and supported level wherever the
-    profile chooses Anthropic as a maker, because Claude Code selects a model
-    by naming a subagent and nothing else. Every model the maker offers gets
-    its files, since no single model is chosen within a maker (ADR-0190), and
-    none needs a channel: Anthropic is the provider a Claude Code seat already
-    pays for. A profile that does not choose Anthropic defines none.
+    One definition per selected Anthropic family and supported level, because
+    Claude Code selects a model by naming a subagent and nothing else. The
+    shared Maker/series permission filters these exactly as automatic pools
+    do. None needs a channel: Anthropic is the provider a Claude Code seat
+    already pays for. A profile that does not choose Anthropic defines none.
 
     Two Anthropic models in one family would want the same file name, and the
     newer one takes it. Which of them that is, ties included, is
@@ -329,7 +328,7 @@ def sync_definitions(dest: Path, wanted: Mapping[str, str]) -> SyncReport:
 def _generates_an_agent(model: Model, profile: Profile) -> bool:
     """Return whether this model is one Claude Code can be taught to start."""
 
-    return model.provider == "anthropic" and model.provider in profile.makers
+    return model.provider == "anthropic" and allows(profile, model)
 
 
 def _definition(model: Model, level: str | None) -> str:

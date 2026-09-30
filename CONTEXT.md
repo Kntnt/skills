@@ -167,7 +167,7 @@ A command one Harness runs to put work on a model belonging to another. What one
 _Avoid_: adapter, shim, proxy, gateway, integration
 
 **Maker**:
-The company whose models are chosen as a group, recorded as the catalogue's provider id. Which models a chosen Maker makes eligible is stated in `docs/rules/routing.md`.
+The company behind a group of model series, recorded as the catalogue's provider id. Which models a chosen Maker makes eligible is stated in `docs/rules/routing.md`.
 _Avoid_: vendor, lab, company
 
 **Quota Guard**:

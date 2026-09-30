@@ -370,3 +370,60 @@ def test_a_rate_card_this_skill_cannot_price_from_invalidates_the_profile(
 
         assert profile.source == "fallback"
         assert profile.problem is not None
+
+
+def test_a_temporarily_missing_selected_series_keeps_the_whole_profile(
+    tmp_path: Path,
+) -> None:
+    """Even the last series disappearing must not erase channels or broaden choices."""
+
+    document = _answers(families={"anthropic": ["SONNET"]})
+    _stored(tmp_path, document)
+    empty = replace(
+        CAT,
+        models=tuple(model for model in CAT.models if model.provider != "anthropic"),
+    )
+
+    profile = profiles.load(tmp_path, empty)
+
+    assert profile.source == "file"
+    assert profile.makers == ("anthropic",)
+    assert profile.families == {"anthropic": ("sonnet",)}
+    assert profile.channels[0].plan == "Claude Max 20x"
+    profiles.write(tmp_path, profile)
+    assert profiles.load(tmp_path, CAT).families == {"anthropic": ("sonnet",)}
+
+
+@pytest.mark.parametrize(
+    "families",
+    [
+        None,
+        [],
+        {"anthropic": []},
+        {"anthropic": "sonnet"},
+        {"anthropic": [False]},
+        {"openai": ["sol"]},
+    ],
+)
+def test_structurally_damaged_series_choices_take_the_explicit_fallback(
+    tmp_path: Path, families: Any
+) -> None:
+    """Unreadable choices never silently mean every series."""
+
+    profile = profiles.load(_stored(tmp_path, _answers(families=families)), CAT)
+    assert profile.source == "fallback"
+    assert profile.makers == ()
+    assert "families" in profile.problem
+    assert "/model-selector setup" in profile.problem
+
+
+def test_profiles_without_series_choices_keep_all_present_and_future_series(
+    tmp_path: Path,
+) -> None:
+    """The optional member changes no existing Maker choice or stored shape."""
+
+    profile = profiles.load(_stored(tmp_path, _answers()), CAT)
+    profiles.write(tmp_path, profile)
+    assert "families" not in json.loads((tmp_path / "profile.json").read_text("utf-8"))
+    newcomer = replace(CAT.models[0], provider="anthropic", family="unseen-series")
+    assert profiles.allows(profile, newcomer)

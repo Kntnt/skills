@@ -6,9 +6,10 @@
 
 The catalogue knows every model in the world; this module knows which makers
 the person in front of the machine wants models from, and how they pay for
-each. Every model a chosen maker offers is then eligible, a model the catalogue
-gains later included, and no single model is chosen or left out within a maker
-(ADR-0190). The answers are given once, by `/model-selector setup`, and stored
+each. A Maker can select all its series or an explicit list of catalogue
+families. All includes future series; explicit choices follow future releases
+of those series without adding new ones. Versions are never profile choices.
+The answers are given once, by `/model-selector setup`, and stored
 as `profile.json` under the data directory — which means it is also a file a
 person can hand-edit into something unreadable at three in the morning.
 
@@ -27,7 +28,7 @@ from __future__ import annotations
 import json
 import os
 import tempfile
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 
@@ -110,8 +111,9 @@ class Profile:
     """The user's own answers, or the stand-in that chooses nothing for them.
 
     `makers` are catalogue provider ids — `anthropic`, `openai`, `spacexai` —
-    and every model a chosen maker offers is eligible. The stand-in's `source`
-    is `fallback` and it chooses none.
+    and `families` restricts a Maker to named series where it has an entry.
+    Omitted entries mean all present and future series. The stand-in's
+    `source` is `fallback` and it chooses none.
     """
 
     harnesses: tuple[str, ...]
@@ -120,6 +122,42 @@ class Profile:
     answered_at: str | None
     source: str
     problem: str | None
+    families: dict[str, tuple[str, ...]] = field(default_factory=dict)
+
+
+def allows(p: Profile, model: Model) -> bool:
+    """Return the shared Maker/series permission for automatic choices.
+
+    An omitted Maker selects all its present and future series. Explicit
+    series use the catalogue's case-insensitive family identity.
+    """
+
+    chosen = p.families.get(model.provider)
+    return model.provider in p.makers and (
+        chosen is None or any(model.family.lower() == name.lower() for name in chosen)
+    )
+
+
+def read_families(
+    raw: Any, makers: tuple[str, ...]
+) -> tuple[dict[str, tuple[str, ...]], str | None]:
+    """Read structural series choices, retaining names absent from the catalogue.
+
+    Setup validates catalogue membership separately: absence on a later read
+    must never widen an explicit choice or discard other profile answers.
+    """
+
+    if not isinstance(raw, dict):
+        return {}, "families is not an object"
+    chosen: dict[str, tuple[str, ...]] = {}
+    for provider, entries in raw.items():
+        if provider not in makers:
+            return {}, f"families names unchosen maker {provider!r}"
+        names = _names(entries)
+        if not names:
+            return {}, f"families for {provider!r} is not a non-empty list of names"
+        chosen[provider] = tuple(sorted({name.lower() for name in names}))
+    return chosen, None
 
 
 def detect_harnesses() -> list[str]:
@@ -169,6 +207,10 @@ def load(data_dir: Path, cat: Catalogue) -> Profile:
     if harnesses is None or makers is None:
         return _fallback(f"{path} is missing harnesses or makers; {REPAIR}")
 
+    families, unreadable = read_families(raw.get("families", {}), makers)
+    if unreadable is not None:
+        return _fallback(f"{path} {unreadable}; {REPAIR}")
+
     unreadable = _unchoosable(raw, makers, cat)
     if unreadable is not None:
         return _fallback(f"{path} {unreadable}; {REPAIR}")
@@ -181,6 +223,7 @@ def load(data_dir: Path, cat: Catalogue) -> Profile:
         harnesses=harnesses,
         makers=tuple(dict.fromkeys(makers)),
         channels=channels,
+        families=families,
         answered_at=_text(raw.get("answered_at")),
         source="file",
         problem=None,
@@ -279,7 +322,7 @@ def _replace(data_dir: Path, name: str, document: dict[str, Any]) -> Path:
 def _document(p: Profile) -> dict[str, Any]:
     """Return the profile as the JSON object `load` reads back."""
 
-    return {
+    document: dict[str, Any] = {
         "harnesses": list(p.harnesses),
         "makers": list(p.makers),
         "channels": [
@@ -295,6 +338,11 @@ def _document(p: Profile) -> dict[str, Any]:
         ],
         "answered_at": p.answered_at,
     }
+    if p.families:
+        document["families"] = {
+            provider: list(names) for provider, names in p.families.items()
+        }
+    return document
 
 
 def _fallback(problem: str) -> Profile:
@@ -330,7 +378,8 @@ def _unchoosable(
         return f"carries {' and '.join(leftover)} beside makers, which replaced them"
     if not makers:
         return "chooses no maker"
-    known = {model.provider for model in cat.models}
+    # A selected series may temporarily be the Maker's last catalogue entry.
+    known = {model.provider for model in cat.models} | set(raw.get("families", {}))
     unknown = [name for name in makers if name not in known]
     if unknown:
         return (

@@ -1003,14 +1003,14 @@ def _pool(
 def _eligible(cat: Catalogue, profile: Profile, scope: str) -> list[Model]:
     """Return the catalogue models this call may consider, before reachability.
 
-    Every model a chosen maker offers, or the whole catalogue where the scope
+    Every release of a chosen Maker and series, or the catalogue where scope
     asks for it — and nothing at all where no valid profile stands, whatever
     the scope. The stand-in chooses no maker, and the whole catalogue is a pool
     nobody chose (ADR-0190). A model lock still reaches past an empty pool, so
     the one call answered without a profile is the one naming its model.
 
-    Eligibility is a statement about makers and says nothing about releases:
-    every release a chosen maker still lists is eligible here, and which of
+    Eligibility is a statement about Makers and series, not release versions:
+    every release of a selected series is eligible here, and which of
     them a call may be answered with is `_newest_releases`' question, asked
     once every other gate has had its say.
     """
@@ -1019,7 +1019,7 @@ def _eligible(cat: Catalogue, profile: Profile, scope: str) -> list[Model]:
         return []
     if scope == "all":
         return list(cat.models)
-    return [model for model in cat.models if model.provider in profile.makers]
+    return [model for model in cat.models if profiles.allows(profile, model)]
 
 
 def _provider_floor(cat: Catalogue, seat_model: str | None, harness: str) -> str | None:
@@ -1490,7 +1490,7 @@ def _newest_releases(pool: Sequence[Point]) -> list[Point]:
     remove a release another release of the same family survives, so it empties
     no pool and loses no family from one.
 
-    A family is whatever the catalogue's own `family` field says, matched the
+    A family is its Maker and the catalogue's `family` field, matched the
     way `catalogue.resolve` matches a family token, and which release of it is
     the newest is `catalogue.newest_first`'s to say. Nothing here infers a
     succession the catalogue does not state, and nothing here is stored: a
@@ -1499,16 +1499,18 @@ def _newest_releases(pool: Sequence[Point]) -> list[Point]:
     time this runs.
     """
 
-    families: dict[str, list[Model]] = {}
+    families: dict[tuple[str, str], list[Model]] = {}
     for model in _models(pool):
-        families.setdefault(model.family.lower(), []).append(model)
+        families.setdefault((model.provider, model.family.lower()), []).append(model)
 
     newest = {
         family: catalogue.newest_first(releases)[0].id
         for family, releases in families.items()
     }
     return [
-        point for point in pool if point.model.id == newest[point.model.family.lower()]
+        point
+        for point in pool
+        if point.model.id == newest[(point.model.provider, point.model.family.lower())]
     ]
 
 
