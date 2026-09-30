@@ -1,0 +1,40 @@
+I reviewed `input.md` as web copy in American English (`en_US`), with no technique; the web copy genre doesn't use one by default. I made one correction round and checked it with a second review, which found no new problems. The final proofreading pass changed nothing. I wrote no files and left `input.md` unchanged. The text has one problem left that needs information I don't have.
+
+`````markdown
+# Svale's shared-room review for housing associations
+
+Svale's review costs SEK 4,800 including VAT. It covers one shared room in one housing association. It includes a 45-minute video call with two board representatives. It includes a written account of the booking steps, unclear points and two possible simplifications.
+
+## Expressing interest and what happens next
+
+[Express interest](https://example.invalid/svale/intresse).
+
+The link opens an expression-of-interest form asking for a name, association and email address. It places no order, requires no payment details and books no meeting. Svale replies by email within three working days to discuss whether the review is suitable and suggest a meeting time.
+`````
+
+## What the review found
+
+1. **Headline (fixed).** "Unlock your association's full potential" didn't say what was on offer. It also promised a result the text doesn't support. The new headline, "Svale's shared-room review for housing associations", names the offer and who it's for.
+2. **Opening paragraph (fixed by deleting it).** The paragraph could have opened any page. Its first sentence just repeated itself ("complexity" in "a complex reality"). "Take the thumb out" is a word-for-word Swedish idiom (*ta tummen ur*) that doesn't work in English. "Fantastic journey" promised an experience the offer never describes. The paragraph about the offer now opens the page.
+3. **Link label (fixed).** "Book and pay now" contradicted the page's own description of a form that places no order, takes no payment and books no meeting. The link now reads "Express interest" and sits after the description of the offer.
+4. **"It" with nothing to refer to (fixed).** The first sentence now says "Svale's review", so the "It" in the following sentences refers to the review.
+5. **Subheadings (fixed).** "Start", "It", "More" and "Again" said nothing about their sections, and neither did "Things" or "Important". The four one-sentence sections are now one paragraph. "Start" and "Important" became one heading: "Expressing interest and what happens next".
+6. **Unresolved: what the review looks at, and who Svale is.** The page never says in one sentence what the review examines. A reader can only guess from "booking steps" that it's about how the shared room is booked. The page also never says what Svale is. Fixing this needs facts the text doesn't contain, so I've left it for you.
+
+## What happened to the claims
+
+**Removed**
+- The headline's promise to unlock the association's "full potential" (finding 1).
+- "Decision-makers in a complex reality face growing complexity" (finding 2).
+- The call to "take the thumb out" and "discover a fantastic journey" (finding 2).
+
+**Changed**
+- The link: it now says it lets you express interest, not book and pay (finding 3).
+
+**Added** (all inferred from the original text)
+- Svale carries out the review. It's in the headline and the first sentence (findings 1 and 4). The original only said that Svale replies to discuss whether "the review" is suitable.
+- The review is for housing associations. It's in the headline (finding 1), inferred from "one housing association", "board representatives" and "your association's".
+
+The claims above are the only ones that changed. The last paragraph, about the form, is word for word as before, including its three limits: no order, no payment details and no meeting.
+
+Beyond the claims, I fixed some generic, AI-sounding wording and a Swedish idiom, replaced the six headings with one descriptive heading, merged four one-sentence sections into one paragraph, and moved the link below the description of the offer. The proofreading pass made no corrections.

@@ -1,0 +1,54 @@
+**Inställningar:** genre `column`, teknik `none` och språk `sv`, alla tre hämtade från textens `kntnt`-karta. Tekniken `none` betyder att ingen berättarbåge tillämpades. Ingen brief användes. Ett korrigeringsvarv användes av ett tillgängligt (`--max=1`). Därefter gjordes en avslutande korrekturläsning.
+
+```markdown
+---
+kntnt:
+  genre: column
+  technique: none
+  language: sv
+---
+
+# Bibliotekets mötesmall har en ruta för allt utom poängen
+
+Av Nora Vik, bibliotekarie
+
+Jag granskar bibliotekets mötesmall. Där finns rutor för starttid, sluttid, deltagare och dagordning. Någon ruta för det beslut vi ska kunna fatta när vi går därifrån finns inte. Det är dokumentet jag tittar på, inte ett bestämt möte.
+
+Jag uppskattar möten där kolleger upptäcker att de har förstått en fråga olika. Den upptäckten kan vara viktigare än att vi snabbt enas. Min tanke är alltså inte att varje samtal ska pressas fram till ett beslut.
+
+Det som retar mig är något annat: att tid i kalendern så lätt behandlas som ett resultat i sig. Timmen är bokad, alltså har något hänt. Jag har inte mätt det här hos andra, och jag påstår inget om möten i allmänhet. Det är min reflektion, med den räckvidd en reflektion har.
+
+Ändå tycker jag att den som fyller i en mall borde få formulera varför vi behöver just varandras tid. Också när syftet är att undersöka något tillsammans finns det ett skäl att skriva ner. Samtal kan skapa förtroende. Samtal kan hitta en fråga vi inte visste att vi behövde ställa. Inget av det kräver ett beslut, men båda delarna tål att motiveras.
+
+Så jag vill prova en enkel fråga bredvid tiden: vad behöver vi förstå tillsammans?
+
+Där börjar tvivlet. Det finns en komik i att försöka lösa ett problem med formulär genom att utöka formuläret – bibliotekarien som svarar på en mall med mer mall. Jag vet inte om ytterligare en ruta gör våra möten bättre. Kanske blir frågan bara en rad till att fylla i.
+
+Jag vill prova den i alla fall, och behålla båda hållningarna så länge: hoppet om frågan och tvivlet på ännu en ruta.
+```
+
+## Åtgärdat
+
+**1. Rubriken var obegriplig på egen hand.** Den löd ”Mallen har en ruta för allt utom poängen”. Ordet ”Mallen” pekade inte på något för den som ser rubriken utan text, och rubriken sa inte att det gällde möten. Läsaren kunde alltså inte avgöra om texten var för dem. Rubriken lyder nu ”Bibliotekets mötesmall har en ruta för allt utom poängen”.
+- Den nya rubriken har 56 tecken, vilket är inom gränsen.
+- Den har 9 ord, ett över normen på 3–8. Det bedömdes inte som ett fel: den kortare varianten ”Mötesmallen” kan läsas som ett påstående om mötesmallar i allmänhet. Det motsäger textens egen avgränsning ”jag påstår inget om möten i allmänhet”.
+
+## Kvarstår (olösta, ska inte skrivas av granskningen)
+
+**2. Ingress saknas.** Det finns inget fristående stycke på högst 60 ord mellan rubrik och byline som säger vad krönikan handlar om och vad läsaren får ut av den. En person avgör vad det ska innehålla.
+
+**3. Avsnitt med mellanrubriker saknas,** också det avslutande avsnittet med egen mellanrubrik. Därför mäts ingångsstycket som 7 stycken och 274 ord, men det beror bara på att avsnitten saknas. Den som skumläser förlorar orienteringen i texten.
+
+**4. Uppmaning till läsaren saknas.** Sista stycket säger vad skribenten själv vill göra, men uppmanar inte läsaren att prova, lägga märke till eller ompröva något.
+
+Texten följer alltså inte artikelanatomin. Det beror på att ingress, avsnitt och uppmaning saknas.
+- De krav som går att räkna har mätts med skript.
+- Övriga krav har bedömts genom läsning: att ingångsstycket introducerar ämnet och att styckena håller en tanke var. De uppfylls.
+- Om slutet visar att förväntan från ingångsstycket har infriats går inte att avgöra utan ett avslutande avsnitt. Det hör till fynd 3.
+
+## Påståenden
+
+- **Ändrat påstående (rubriken, fynd 1):** rubriken säger nu att bibliotekets mötesmall har en ruta för allt utom poängen. Förut gällde det en mall utan angiven referent.
+- Inget påstående har tagits bort och inget har lagts till. Ingen avgränsning, inget sambandsord och ingen begränsande bisats har försvunnit.
+
+Utöver påståendena ovan har rubriken fått en tydlig referent. I korrekturläsningen byttes ett engelskt tankstreck (—) mot ett svenskt med mellanslag (–).

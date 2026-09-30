@@ -1,0 +1,52 @@
+**Inställningar:** genren är `opinion` och språket `sv`, båda angivna i anropet. Ingen teknik användes: anropet angav ingen, och genren `opinion` anger ingen som den vanligtvis skrivs med. Ingen brief valdes. Texten saknar `kntnt`-metadata och har inte fått någon.
+
+````markdown
+# Avskaffa inte telefonbokningen på ett antagande
+
+**I september kan telefonbokningen av Lerviks föreningslokaler försvinna. Beslutet ska vila på åtta veckors siffror från två lokaler, och de siffrorna räknar bokningar, inte personer. Här är skälen att pröva båda bokningsvägarna ett halvår till innan den ena stängs.**
+
+Text: Sanna Ek, Öppna beslut
+
+Kommunstyrelsen i Lervik bör skjuta upp bytet till enbart digital bokning av föreningslokaler, ett byte som kan ske i september. Pröva först båda bokningsvägarna i alla sju lokaler under ett halvår och mät vad de kräver. Ett permanent beslut behöver bättre underlag än det som nu ligger på bordet.
+
+## Bokningar är inte samma sak som personer
+
+Kommunens pilotrapport från den 8 april 2026 räknar 96 webbokningar och 24 telefonbokningar under åtta veckor i två lokaler. Den säger inte hur många personer som bokade eller varför de valde telefonen. Siffrorna visar varken hur många som saknar digital vana eller hur många som skulle klara sig utan telefonbokning.
+
+En bokning är en händelse, inte en invånare. Den skillnaden avgör vad siffrorna kan användas till.
+
+## Mät också arbetet med två kanaler
+
+Förvaltningen vill slippa dubbel administration. Det är en relevant invändning. Men handlingarna innehåller ingen mätning av tidsåtgången. Att behålla två kanaler kostar arbete, och hur mycket behöver vägas mot vad användarna får.
+
+## Besluta om försöket, inte om ett antagande
+
+Kommunstyrelsen bör därför säga ja till halvåret med båda bokningsvägarna, ta ställning till dess ännu okända kostnad och ge förvaltningen i uppdrag att mäta tidsåtgången samt fråga användarna varför de väljer sin bokningsväg. Först då går det att väga alternativen.
+
+Ett antagande blir inte ett beslutsunderlag för att kalendern säger september.
+````
+
+**Anmärkningar**
+
+1. **Åtgärdad: den sista mellanrubriken.** Den löd tidigare ”Besluta om försöket, inte om antagandet”. Den bestämda formen ”antagandet” pekade på ett antagande som bara rubriken nämner, eftersom varken inledningen eller något avsnitt talar om något antagande. Den som läste brödtexten kunde inte avgöra vilket antagande som avsågs. Det kunde vara att de som bokar per telefon klarar sig utan den, att dubbel administration kostar för mycket, eller både och.
+   - Rubriken lyder nu ”Besluta om försöket, inte om ett antagande”.
+   - Den pekar inte längre på något som bara rubriken förklarar.
+   - Texten säger fortfarande inte vilket antagande som gäller, och det lades inte till. Att välja ett av dem hade varit ett nytt påstående.
+
+Inga anmärkningar återstår.
+
+**Påståenden**
+
+- **Ändrat:** den sista mellanrubriken säger nu att beslutet bör gälla försöket och inte vila på ett antagande, utan att hänvisa till ett visst antagande. Ändringen gjordes för anmärkning 1.
+- Inget påstående har tagits bort och inget har lagts till. Ingen avgränsning eller något sambandsord har försvunnit.
+
+**Artikelns anatomi**
+
+- Mätskriptet kördes på den slutliga texten och rapporterade inga avvikelser.
+  - Rubriken har 47 tecken och 6 ord.
+  - Ingressen har 39 ord och inledningen 49.
+  - Den ändrade mellanrubriken har 42 tecken.
+- Jag har också läst igenom de krav som skriptet inte räknar. Ingressen står på egen hand och inledningen för texten vidare. Mellanrubrikerna beskriver sina avsnitt. Det sista avsnittet är ett eget slut med en konkret uppmaning till kommunstyrelsen.
+- Texten följer artikelns anatomi utan avvikelser.
+
+Utöver ändringen ovan är texten densamma som den kom in. Den enda skillnaden är mellanrubriken. Den avslutande korrekturläsningen hittade inga mekaniska fel att rätta. Inga filer har skrivits, och `input.md` är orörd.

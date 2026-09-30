@@ -1,0 +1,58 @@
+Jag granskade texten mot artikelkontraktet och korrekturläste den. Den levereras oförändrad: den enda rättningsrundan jag hade budget för blev underkänd och återställd, och korrekturläsningen hittade inga mekaniska fel. Tre anmärkningar kvarstår olösta.
+
+**Inställningar:** genre `article` och språk `sv`, båda angivna i anropet. Ingen teknik, eftersom artikelgenren inte anger någon och inget annat valde en. Texten har ingen `kntnt`-metadata, och ingen har lagts till.
+
+````markdown
+# Mätförsöket i Björkskolan visar när, inte varför
+
+**Under 14 av 120 lektionspass registrerade givarna i Björkskolan temperaturer under fastighetskontorets egen arbetsgräns. Fyra veckors mätningar pekar ut tillfällen att undersöka närmare, men förklarar inte varför luften var kall. Här är vad ett kort försök kan säga, och vad som behövs för att komma vidare.**
+
+Text: Hedda Lund
+
+En temperaturgivare mäter luften där den sitter. Det gör placeringen viktig när fastighetskontoret ska tolka fyra veckors mätningar i Björkskolans sex klassrum. Genomgången nedan visar vad värdena räcker till och var gränsen går.
+
+## En gräns för det lokala försöket
+
+Kontoret valde 20 grader Celsius som arbetsgräns. Rapporten *Mätförsök i Björkskolan*, daterad 12 mars 2026, räknar 14 lektionspass av 120 med minst en mätning under den gränsen. Hur länge temperaturen låg under den anger rapporten inte. Gränsen är kontorets egen, vald för det här försöket.
+
+Givarna mätte varken luftdrag eller elevernas upplevelse. Ett lågt värde säger alltså när luften var kall, men inte hur rummet kändes.
+
+Driftteknikern Elin Rask sammanfattar: ”Vi vet när vi behöver titta närmare. Vi vet ännu inte varför det blev kallt just då.”
+
+## Nästa försök behöver mer än givare
+
+Rask rekommenderar att temperaturserierna kopplas till rummens användningstider innan styrningen ändras. Nästa försök planeras för november med likadant placerade givare, men finansieringen är inte beslutad.
+
+Lägg därför tiderna för när rummen används bredvid mätvärdena innan nästa givare sätts upp.
+````
+
+## Anmärkningar (alla olösta)
+
+1. **Rubriken är svår att förstå på egen hand.** I ”Mätförsöket i Björkskolan visar när, inte varför” saknar ”visar när” ett objekt. Rubriken säger inte att texten handlar om temperatur eller om när luften var kall. Den som bara ser rubriken kan därför inte avgöra vad texten handlar om eller om den är för dem.
+
+2. **Leadens tredje mening upprepar standfirsten.** ”Genomgången nedan visar vad värdena räcker till och var gränsen går” är ett tillkännagivande. Den säger samma sak som standfirstens sista mening, ”Här är vad ett kort försök kan säga …”. Den som har läst standfirsten får erbjudandet en gång till i stället för att texten går vidare.
+
+3. **Placeringen sägs vara viktig men förklaras aldrig.** Leaden säger att placeringen är viktig för tolkningen. Brödtexten säger dock aldrig var givarna satt eller hur placeringen påverkar de 14 lektionspassen. Därför kan läsaren inte bedöma vad ”likadant placerade givare” i nästa försök innebär. En rättning kräver uppgifter som texten inte har, alltså givarnas placering, och de måste komma från skribenten. Leadens första mening avgränsar vad värdena säger och ska stå kvar.
+
+## Den underkända rundan
+
+En rättningsrunda gjordes för anmärkning 1 och 2. Den underkändes, och texten återställdes helt. Den försökte göra två ändringar:
+
+- **Rubriken** skrevs om till ”Björkskolans mätförsök visar när det var under 20 grader, inte varför”. Den nya rubriken hävdade att försöket visar när det var under 20 grader, men inte varför. Den var 69 tecken och elva ord lång och bröt därmed mot normerna för rubriklängd (högst 60 tecken och tre till åtta ord). Den gamla rubriken höll sig inom dem, och det hade gått att hålla normerna. Den nya rubriken upprepade dessutom mer av standfirsten än den gamla: både ”under gränsen” och ”inte varför”.
+- **Leadens tredje mening** ströks. Då hade läsaren förlorat löftet om vad värdena räcker till och var gränsen går.
+
+Ingen av ändringarna finns i den levererade texten, och båda anmärkningarna står kvar olösta. Rättningsbudgeten (1) är förbrukad.
+
+## Påståenden och anatomi
+
+Den levererade texten är byte för byte densamma som den du lämnade in. Inga påståenden har tagits bort, ändrats eller lagts till.
+
+Mätskriptet visar att alla räknade krav i artikelanatomin är uppfyllda. Rubriken har 48 tecken och sju ord, standfirsten 46 ord och leaden 33 ord. Sektionerna har tre respektive två stycken, och inget stycke är längre än 45 ord. Av de krav som skriptet inte räknar är de flesta uppfyllda:
+
+- Sista sektionen är ett avslut med en uppmaning.
+- Standfirsten står på egen hand.
+- Mellanrubrikerna beskriver sina sektioner.
+
+Två krav är inte uppfyllda: att standfirst och lead inte upprepar varandra (anmärkning 2), och att avslutet infriar förväntan som leaden väcker om placeringen (anmärkning 3). Texten följer därför inte artikelanatomin fullt ut.
+
+Inga filer har skapats eller lämnats kvar.

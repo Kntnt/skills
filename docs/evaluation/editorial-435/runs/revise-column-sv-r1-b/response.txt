@@ -1,0 +1,53 @@
+Jag har granskat texten som krönika på svenska, utan teknik. Alla tre värdena kommer från textens `kntnt`-karta, där `technique: none` gör att ingen dramaturgisk mall tillämpades. Jag hade en korrigeringsrunda och använde den till rubriken. Fyra fynd kvarstår och är olösta: delar som saknas i texten, och som jag enligt granskningsreglerna rapporterar i stället för att skriva.
+
+```markdown
+---
+kntnt:
+  genre: column
+  technique: none
+  language: sv
+---
+
+# Mötesmallen har en ruta för allt utom syftet
+
+Av Nora Vik, bibliotekarie
+
+Jag granskar bibliotekets mötesmall. Där finns rutor för starttid, sluttid, deltagare och dagordning. Någon ruta för det beslut vi ska kunna fatta när vi går därifrån finns inte. Det är dokumentet jag tittar på, inte ett bestämt möte.
+
+Jag uppskattar möten där kolleger upptäcker att de har förstått en fråga olika. Den upptäckten kan vara viktigare än att vi snabbt enas. Min tanke är alltså inte att varje samtal ska pressas fram till ett beslut.
+
+Det som retar mig är något annat: att tid i kalendern så lätt behandlas som ett resultat i sig. Timmen är bokad, alltså har något hänt. Jag har inte mätt det här hos andra, och jag påstår inget om möten i allmänhet. Det är min reflektion, med den räckvidd en reflektion har.
+
+Ändå tycker jag att den som fyller i en mall borde få formulera varför vi behöver just varandras tid. Också när syftet är att undersöka något tillsammans finns det ett skäl att skriva ner. Samtal kan skapa förtroende. Samtal kan hitta en fråga vi inte visste att vi behövde ställa. Inget av det kräver ett beslut, men båda delarna tål att motiveras.
+
+Så jag vill prova en enkel fråga bredvid tiden: vad behöver vi förstå tillsammans?
+
+Där börjar tvivlet. Det finns en komik i att försöka lösa ett problem med formulär genom att utöka formuläret – bibliotekarien som svarar på en mall med mer mall. Jag vet inte om ytterligare en ruta gör våra möten bättre. Kanske blir frågan bara en rad till att fylla i.
+
+Jag vill prova den i alla fall, och behålla båda hållningarna så länge: hoppet om frågan och tvivlet på ännu en ruta.
+```
+
+## Fynd
+
+**Åtgärdat**
+
+1. **Rubriken var otydlig på egen hand.** Den gamla rubriken ”Mallen har en ruta för allt utom poängen” sade inte att texten handlar om möten. Först i brödtexten framgick vilken mall och vilken poäng den syftade på. Den som ser rubriken i en lista kunde därför inte avgöra vad texten handlar om. Rubriken har nu 44 tecken och 8 ord och ligger inom gränserna.
+
+**Olöst (en person behöver skriva delarna)**
+
+2. **Ingress saknas.** Det finns inget sammanfattande stycke mellan rubriken och bylinen som på egen hand säger vad texten handlar om och vad läsaren får ut av den.
+3. **Mellanrubriker saknas.** Hela brödtexten, 7 stycken och 274 ord, står utan avsnitt. Mätningen räknar därför alla 7 stycken som inledningsstycke. Det beror enbart på att avsnitten saknas, och därför har jag inte ändrat inledningen.
+4. **Ett avslutande avsnitt med egen mellanrubrik saknas.** Det avslutande innehållet finns redan i sista stycket, där hoppet och tvivlet knyts ihop, och det står kvar där det står.
+5. **En uppmaning till läsaren saknas.** Sista stycket säger vad skribenten själv vill prova, men uppmanar inte läsaren att prova, lägga märke till eller ompröva något.
+
+Texten följer alltså inte artikelanatomin: fynd 2–5 gäller delar som saknas.
+
+## Påståenden
+
+**Ändrat påstående.** Rubriken säger nu att *mötesmallen* har en ruta för allt utom *syftet*. Tidigare stod det ”mallen” och ”poängen”. Den nya rubriken pekar på syftet med mötet, alltså det som fjärde stycket kallar ”varför vi behöver just varandras tid”. Det gamla ”poängen” kunde också läsas som det beslut som första stycket saknar en ruta för. Ändringen svarar mot fynd 1.
+
+Utöver rubriken har inga påståenden tagits bort, ändrats eller lagts till.
+
+## Vad körningen ändrade utöver påståendena
+
+Rubriken skrevs om så att den förstås på egen hand. I korrekturläsningen byttes ett engelskt tankstreck (—) mot ett svenskt tankstreck med mellanslag (–) i sjätte stycket. Resten av texten, inklusive frontmattern, är oförändrad. Inga filer har skrivits, och `input.md` är orörd.

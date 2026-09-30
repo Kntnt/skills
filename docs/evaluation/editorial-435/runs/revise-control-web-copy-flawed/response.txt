@@ -1,0 +1,43 @@
+I made one correction, it held up on re-review, and no findings remain. The review ran with genre `webcopy` and language `en_US` as you gave them, and no technique, because the webcopy genre says it has none. The correction budget was 1 and that one round was used. The closing mechanical pass found nothing to correct. Nothing was written to disk: `input.md` is unchanged and the scratch files are gone.
+
+````markdown
+# A review of one shared room in your housing association
+
+## Price and contents of the review
+
+The review costs SEK 4,800 including VAT. It covers one shared room in one housing association. It includes a 45-minute video call with two board representatives. It includes a written account of the booking steps, unclear points and two possible simplifications.
+
+## How to express interest
+
+[Open the expression-of-interest form](https://example.invalid/svale/intresse).
+
+The link opens an expression-of-interest form asking for a name, association and email address. It places no order, requires no payment details and books no meeting. Svale replies by email within three business days to discuss whether the review is suitable and suggest a meeting time.
+````
+
+## Findings (all six fixed)
+
+1. **Headline "Unlock your association's full potential".** It promised a "full potential" that nothing on the page supports, used "unlock" in the generic corporate style, and didn't say what's being offered. It's now "A review of one shared room in your housing association."
+2. **Opening paragraph.** "Decision-makers in a complex reality face growing complexity" goes in circles and could open any page. "Take the thumb out" is the Swedish idiom *ta tummen ur* translated word for word, and "discover a fantastic journey" is a promise the page doesn't back up. The paragraph said nothing about the offer and has been removed.
+3. **"Start" section and the link "Book and pay now".** The label promised booking and payment. The page's own last section says the link opens a form that places no order, asks for no payment details and books no meeting. The heading "Start" didn't say what the section held, and the link came before the reader knew what was offered. The "Start" heading is gone. The link now reads "Open the expression-of-interest form" and sits directly above the sentence that explains it.
+4. **Headings "It", "More", "Again", "Things" and "Important".** None of them said what its section contained. Each "It" pointed to an offer the page only named ("the review") in its very last sentence, so a reader landing on any one section couldn't tell what cost SEK 4,800. The first four sections are now under "Price and contents of the review." "Important" is now "How to express interest." The first sentence names "the review", so the "It"s that follow have something to point to.
+5. **Four one-sentence sections.** Price, scope, the video call and the written account all describe one offer but were split across four separate sections. They're now one paragraph, in the same order and wording, except that the first "It" became "The review."
+6. **"within three working days".** "Working days" is British; a US reader expects "business days", and it has been changed.
+
+## What happened to the claims
+
+**Removed** (finding 2 identified the whole opening paragraph as the problem):
+- Decision-makers face growing complexity in a complex reality.
+- The call to "take the thumb out" and "discover a fantastic journey", the page's only promise of a journey.
+
+**Changed:**
+- **Headline** (finding 1): it now says the page is about a review of one shared room in the reader's housing association. The promise to unlock the association's "full potential" is gone.
+- **Link label** (finding 3): it now says the link opens the expression-of-interest form, not that it books and takes payment.
+- **The subject of the price and contents** (finding 4): before, the SEK 4,800 price, the scope, the call and the written account belonged to an unnamed "It". Now they explicitly belong to "the review", the name the text itself uses in its last sentence.
+- **Heading "Price and contents of the review"** (findings 4 and 5): it says this section gives the review's price and what it includes. It replaces "It", "More", "Again" and "Things", which said nothing.
+- **Heading "How to express interest"** (finding 4): it says this section explains how to express interest. It replaces "Important", so the section no longer has a heading marking it as important. The limit it contains ("It places no order, requires no payment details and books no meeting") is word for word as it was.
+
+**Added:** none. The headline's scope comes from "It covers one shared room in one housing association". "Your" was already in the old headline ("your association").
+
+## Other changes
+
+Besides the claims above, the run removed a filler opening, a translated Swedish idiom and corporate phrasing, replaced one British term with its American equivalent, and restructured the page. Seven headings became two, and the four one-line sections about the offer became one paragraph. The link moved from the top of the page to just before the paragraph explaining what it does. The final mechanical pass made no corrections.

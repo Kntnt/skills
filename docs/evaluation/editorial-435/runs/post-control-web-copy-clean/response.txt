@@ -1,0 +1,24 @@
+```markdown
+# Så fungerar intresseanmälan
+
+En intresseanmälan till Svales genomgång av bokningsrutiner är inte en beställning. Den hjälper Svale att avgöra om genomgången passar föreningens behov.
+
+## Uppgifter att lämna
+
+Ange namn, förening och e-postadress i formuläret. Inga betalningsuppgifter behövs.
+
+## Svar inom tre arbetsdagar
+
+Svale svarar via e-post inom tre arbetsdagar för att stämma av uppdraget och föreslå en mötestid. En tid bokas alltså inte när formuläret skickas in.
+```
+
+**Konfiguration:** genre `webcopy` och språk `sv`, båda från anropet. Ingen teknik används, eftersom genren webcopy inte anger någon. Texten saknar Kntnt-metadata och har inte fått någon.
+
+**Fynd**
+
+1. **Åtgärdat: mellanrubriken ”Svar inom tre arbetsdagar”.** Rubriken lovade svar inom tre arbetsdagar, men brödtexten under den sa inte när svaret kommer. Den som läste avsnittets text fick alltså inte veta svarstiden. Nu står ”inom tre arbetsdagar” också i avsnittets första mening. Rubriken är oförändrad.
+2. **Olöst: ”Ange namn, förening och e-postadress i formuläret.”** Meningen hänvisar till ”formuläret” utan att texten innehåller formuläret, anger var det finns eller säger hur läsaren kommer åt det. Läsaren får inte veta var och hur intresseanmälan görs. Felet kan inte rättas utan uppgifter som texten saknar, till exempel var formuläret ligger, en länk eller ett inbäddat formulär. Någon som har de uppgifterna behöver fylla i dem.
+
+**Påståenden:** Inget påstående har tagits bort, ändrats eller lagts till. Svarstiden fanns redan i rubriken och står nu även i brödtexten, med samma omfattning och säkerhet. Begränsningarna att en intresseanmälan inte är en beställning, att inga betalningsuppgifter behövs och att ingen tid bokas när formuläret skickas in står kvar oförändrade.
+
+Den enda skillnaden mot texten som den kom in är att svarstiden, som tidigare bara stod i en mellanrubrik, nu också står i brödtexten under rubriken. Korrekturläsningen på slutet hittade inga mekaniska fel och ändrade ingenting.

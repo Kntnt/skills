@@ -1,0 +1,26 @@
+Konfiguration: genren `webcopy` och språket `sv` kom från anropet. Ingen teknik användes, eftersom webcopy-genren inte anger någon. Budgeten var en korrigering och den har använts.
+
+```markdown
+# Så fungerar intresseanmälan
+
+En intresseanmälan till Svales genomgång av bokningsrutiner är inte en beställning. Den hjälper Svale att avgöra om genomgången passar föreningens behov.
+
+## Uppgifter att lämna
+
+Ange namn, förening och e-postadress i formuläret. Inga betalningsuppgifter behövs.
+
+## Svar inom tre arbetsdagar
+
+Svale svarar via e-post inom tre arbetsdagar för att stämma av uppdraget och föreslå en mötestid. En tid bokas alltså inte när formuläret skickas in.
+```
+
+**Fynd**
+
+1. **Åtgärdat: svarstiden stod bara i underrubriken.** Tidsgränsen på tre arbetsdagar fanns bara i underrubriken ”Svar inom tre arbetsdagar”. Brödtexten under den angav ingen tid. Den som läste avsnittet utan rubriken fick därför inte veta när svaret kommer. Nu står ”inom tre arbetsdagar” också i den första meningen under rubriken. Rubriken är oförändrad.
+2. **Olöst: det framgår inte var formuläret finns.** Texten ber läsaren ange sina uppgifter ”i formuläret” men säger inte var formuläret finns. Den säger inte heller om det ligger på sidan eller bakom en länk, eller hur läsaren når det. Läsaren vet alltså vad som ska fyllas i men inte var. Uppgiften finns inte i texten och har inte hittats på. Någon behöver ange formulärets placering, eller länken och länktexten. Därefter räcker en kort fras i avsnittet ”Uppgifter att lämna”.
+
+**Påståenden**
+
+Påståendet om svar inom tre arbetsdagar finns nu både i underrubriken och i brödtexten. Det har kopierats med samma räckvidd: inte heller brödtexten säger när de tre dagarna börjar räknas. Rättningen av fynd 1 har inte strukit, ändrat eller lagt till något annat påstående.
+
+Utöver detta har texten bara ändrats på en punkt: brödtexten under den sista underrubriken anger nu svarstiden. Korrekturläsningen hittade inga mekaniska fel att rätta. Inga filer har skrivits.

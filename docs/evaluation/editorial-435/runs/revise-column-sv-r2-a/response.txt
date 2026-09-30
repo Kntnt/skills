@@ -1,0 +1,44 @@
+Jag har granskat texten som en krönika på svenska utan dramaturgisk teknik, och bara rubriken kunde repareras. Ingress, mellanrubriker och en uppmaning till läsaren saknas fortfarande, och de måste en person skriva.
+
+Genre, teknik och språk kommer från textens egen `kntnt`-karta. Genren anger ingen teknik heller, så ingen berättarbåge har tillämpats. Ingen skrivbrief användes. Kartan stämde redan med inställningarna och är oförändrad.
+
+```markdown
+---
+kntnt:
+  genre: column
+  technique: none
+  language: sv
+---
+
+# Mötesmallen hoppar över varför vi behöver varandras tid
+
+Av Nora Vik
+
+Jag granskar bibliotekets mötesmall. Där finns rutor för starttid, sluttid, deltagare och dagordning. Någon ruta för det beslut vi ska kunna fatta när vi går därifrån finns inte. Det här är en iakttagelse av ett dokument, inte en scen från ett visst möte. Mallen vill veta när vi ses och vilka som kommer. Vad tiden ska leda till frågar den inte om.
+
+En dagordning räknar upp vad vi ska tala om. Den säger inte varför vi behöver göra det tillsammans.
+
+Missförstå mig rätt: jag uppskattar möten där kolleger upptäcker att de har förstått en fråga olika. Den upptäckten kan vara viktigare än att vi snabbt enas. Det som retar mig är något annat – att tid i kalendern så lätt behandlas som ett resultat i sig. Timmen är bokad, alltså har något hänt. Det är min reflektion, inte något jag har mätt hos andra.
+
+Min tanke är inte att varje samtal ska pressas till ett beslut. Samtal kan skapa förtroende, och de kan få fram en fråga vi inte visste att vi behövde ställa. Men den som fyller i en mall borde få formulera varför vi behöver just varandras tid, också när syftet är att undersöka något tillsammans.
+
+Sedan kommer invändningen, och den är min egen. Jag vet inte om ytterligare en ruta gör möten bättre. Det finns en komik i att försöka lösa ett problem med formulär genom att utöka formuläret, och komiken blir inte mindre av att förslaget kommer från mig.
+
+Ändå vill jag prova en enkel fråga bredvid tiden: vad behöver vi förstå tillsammans? Jag vet inte om den överlever mötet med en verklig dagordning, och jag tänker inte låtsas att jag gör det. Hoppet om frågan och tvivlet på ännu en ruta får samsas ett tag till.
+```
+
+## Fynd
+
+1. **Rubriken – reparerad.** "Rutan som inte finns" gick inte att förstå utan att läsa texten. Den sa inte vilken ruta eller vilket dokument det gällde, och inte heller att texten handlar om möten. Den upprepade också öppningsstyckets "Någon ruta … finns inte" i stället för att säga något nytt. Bara rubriken skrevs om. Den nya rubriken är 55 tecken och 8 ord och håller sig inom anatomins gränser.
+2. **Ingress saknas – olöst.** Det finns inget självbärande stycke mellan rubrik och byline. En läsare som bara ser början får inte veta vad krönikan handlar om eller vad den ger. Ingressen har inte skrivits, eftersom det är en del som saknas och som en person ska fylla i.
+3. **Avsnitt och mellanrubriker saknas, också det avslutande avsnittet – olöst.** Texten har inga mellanrubriker. Därför mäts leadet som 6 stycken och 290 ord. Det beror enbart på att avsnitten saknas. Den som skummar på webben får inga ingångar i texten. Inga mellanrubriker har lagts till och inga stycken har slagits ihop eller delats. Det avslutande stycket står kvar där det stod.
+4. **Uppmaning till läsaren saknas – olöst.** Slutet beskriver vad skribenten själv vill prova ("Ändå vill jag prova …"). Läsaren uppmanas inte att pröva, lägga märke till eller ompröva något. Att göra skribentens avsikt till en uppmaning skulle ändra vad hon säger, så en person får avgöra det.
+
+Texten uppfyller alltså inte artikelanatomin. Det enda som hindrar är de delar som saknas enligt fynd 2–4. Rubrik, byline och stycken uppfyller sina krav.
+
+## Påståenden
+
+- **Ändrat påstående (rubriken, fynd 1).** Den gamla rubriken sa bara att en viss ruta inte finns. Den nya säger att mötesmallen inte frågar varför vi behöver varandras tid. Stödet finns i texten: mallen frågar inte vad tiden ska leda till, och skribenten vill att den som fyller i mallen ska få formulera varför vi behöver just varandras tid. Rubriken nämner dock inte biblioteket. "Mötesmallen" kan därför läsas som mötesmallar i allmänhet, medan texten iakttar en enda mall.
+- **Inga påståenden har tagits bort eller lagts till.** Inga begränsningar har heller tagits bort, varken "Det här är en iakttagelse av ett dokument …" eller "Det är min reflektion, inte något jag har mätt hos andra." Det ändrade påståendet i rubriken ovan är undantaget.
+
+Utöver rubriken rättade korrekturpasset ett tankstreck. Det engelska långa tankstrecket i "något annat — att" blev ett svenskt kort tankstreck med mellanrum. I övrigt är texten tecken för tecken densamma som den du lämnade in.

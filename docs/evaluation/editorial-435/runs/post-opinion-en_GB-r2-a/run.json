@@ -1,0 +1,50 @@
+{
+  "instruction_revision": "12a1c7d23070670d2d4c2d82c3006676fb124d15",
+  "corpus_revision": "e777334430ca94fdfd3aedf23d8232cb37430748",
+  "harness": "2.1.285 (Claude Code)",
+  "requested_identity": {
+    "model": "claude-opus-5-5",
+    "effort": "high"
+  },
+  "session_id": "efd84dad-5ba1-46a5-9d03-01f9d582fbcc",
+  "credential_source": "keychain:Claude Code-credentials",
+  "staged_skills": [
+    "kntnt",
+    "proofread",
+    "redline",
+    "unslop",
+    "write"
+  ],
+  "input_name": "input.md",
+  "input_source": "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/435.scratch/inputs/opinion-en_GB-r2.md",
+  "working_directory": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-ojnjbnoq/work",
+  "argv": [
+    "claude",
+    "--print",
+    "--session-id",
+    "efd84dad-5ba1-46a5-9d03-01f9d582fbcc",
+    "--model",
+    "claude-opus-5-5",
+    "--effort",
+    "high",
+    "--dangerously-skip-permissions",
+    "--strict-mcp-config",
+    "--output-format",
+    "stream-json",
+    "--verbose",
+    "--add-dir",
+    "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-ojnjbnoq/scratch"
+  ],
+  "prompt_on": "stdin",
+  "environment": {
+    "HOME": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-ojnjbnoq/home",
+    "CLAUDE_CONFIG_DIR": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-ojnjbnoq/home/.claude",
+    "TMPDIR": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-ojnjbnoq/scratch/tmp",
+    "UV_CACHE_DIR": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-ojnjbnoq/scratch/uv-cache",
+    "UV_PYTHON_INSTALL_DIR": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-ojnjbnoq/scratch/data/uv/python",
+    "XDG_DATA_HOME": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-ojnjbnoq/scratch/data",
+    "XDG_CACHE_HOME": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-ojnjbnoq/scratch/cache",
+    "XDG_CONFIG_HOME": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-ojnjbnoq/home/.config"
+  },
+  "note": "The identity requested here is a request; the seats in trace-index.json are what ran."
+}

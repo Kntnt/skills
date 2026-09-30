@@ -1,0 +1,50 @@
+Konfiguration: genre `column`, teknik `none` och språk `sv`, alla tre hämtade ur textens `kntnt`-karta. Ingen teknik tillämpades, eftersom kartan anger `none`. Ingen brief användes, och inga filer skrevs.
+
+````markdown
+---
+kntnt:
+  genre: column
+  technique: none
+  language: sv
+---
+
+# Bibliotekets mötesmall har rutor för allt utom poängen
+
+Av Nora Vik, bibliotekarie
+
+Jag granskar bibliotekets mötesmall. Där finns rutor för starttid, sluttid, deltagare och dagordning. Någon ruta för det beslut vi ska kunna fatta när vi går därifrån finns inte. Det är dokumentet jag tittar på, inte ett bestämt möte.
+
+Jag uppskattar möten där kolleger upptäcker att de har förstått en fråga olika. Den upptäckten kan vara viktigare än att vi snabbt enas. Min tanke är alltså inte att varje samtal ska pressas fram till ett beslut.
+
+Det som retar mig är något annat: att tid i kalendern så lätt behandlas som ett resultat i sig. Timmen är bokad, alltså har något hänt. Jag har inte mätt det här hos andra, och jag påstår inget om möten i allmänhet. Det är min reflektion, med den räckvidd en reflektion har.
+
+Ändå tycker jag att den som fyller i en mall borde få formulera varför vi behöver just varandras tid. Också när syftet är att undersöka något tillsammans finns det ett skäl att skriva ner. Samtal kan skapa förtroende. Samtal kan hitta en fråga vi inte visste att vi behövde ställa. Inget av det kräver ett beslut, men båda delarna tål att motiveras.
+
+Så jag vill prova en enkel fråga bredvid tiden: vad behöver vi förstå tillsammans?
+
+Där börjar tvivlet. Det finns en komik i att försöka lösa ett problem med formulär genom att utöka formuläret – bibliotekarien som svarar på en mall med mer mall. Jag vet inte om ytterligare en ruta gör våra möten bättre. Kanske blir frågan bara en rad till att fylla i.
+
+Jag vill prova den i alla fall, och behålla båda hållningarna så länge: hoppet om frågan och tvivlet på ännu en ruta.
+````
+
+## Iakttagelser
+
+**Åtgärdad**
+
+1. **Rubriken förstods inte på egen hand.** Den ursprungliga rubriken var ”Mallen har en ruta för allt utom poängen”. Den bestämda formen ”Mallen” syftade på en mall som bara brödtexten talar om, och ordet möten fanns inte med. Den som bara ser rubriken kan därför inte avgöra om texten är något för hen. Rubriken har skrivits om med textens egna ord ”bibliotekets mötesmall” och ”rutor”. Resten av texten är orörd. Den nya rubriken har 54 tecken och 8 ord, enligt mätningen av den slutliga texten.
+
+**Kvarstår** (korrigeringsbudgeten på en omgång är förbrukad, men de här delarna saknas och ska enligt artikelanatomin inte skrivas i en granskning, så en person får avgöra vad de ska innehålla)
+
+2. **Ingressen saknas.** Anatomin kräver ett självständigt stycke på högst 60 ord mellan rubriken och bylinen. Läsaren får då ingen sammanfattning av vad krönikan handlar om och vad den ger, där texten visas utan brödtext.
+3. **Mellanrubriker, avsnitt och ett eget slutavsnitt saknas.** Före första mellanrubriken står nu sju stycken, eftersom det inte finns någon mellanrubrik. Mätningen räknar alla sju som inledning, men det beror bara på att avsnitten saknas, så inledningen har inte gjorts om. Den som skummar på webben saknar vägar in i texten.
+4. **Uppmaningen till läsaren saknas.** Texten slutar med skribentens egen avsikt (”Jag vill prova den i alla fall …”) och vänder sig aldrig till läsaren med något att pröva, lägga märke till eller ompröva. Om och hur läsaren ska tilltalas får en person avgöra.
+
+Texten uppfyller alltså inte artikelanatomin, eftersom delarna i punkt 2–4 saknas.
+
+## Påståenden
+
+- **Ändrat påstående (rubriken, iakttagelse 1):** Rubriken säger nu att bibliotekets mötesmall har rutor för allt utom poängen. Den anger alltså vilken mall det gäller. Styrkan är oförändrad, och ”allt” är samma överdrift som texten redan hade.
+
+Utöver det ändrade rubrikpåståendet ovan har inget påstående tagits bort, ändrats eller lagts till. De avgränsande meningarna (”Det är dokumentet jag tittar på, inte ett bestämt möte” och ”Jag har inte mätt det här …”) står kvar ordagrant.
+
+Utöver rubriken har körningen bara gjort en mekanisk rättelse i slutkorrekturen. Det engelska tankstrecket (—) i stycket om tvivlet ersattes med ett svenskt tankstreck med mellanslag (–).

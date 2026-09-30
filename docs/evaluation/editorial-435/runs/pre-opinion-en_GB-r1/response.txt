@@ -1,0 +1,55 @@
+I reviewed `input.md` against the opinion-genre rules, made one round of corrections and ran the final proofread pass. The main gap left is that the article has no standfirst (the summary paragraph under the headline). That's for you to write, because this review only reports missing parts and doesn't write them. Nothing was written to disk, and `input.md` is unchanged.
+
+**Settings used:** genre `opinion`, technique `none`, language `en_GB`. All three came from the `kntnt` block at the top of the text, and I left that block as it was. No storytelling structure was applied, because the block sets technique to `none`, and the opinion genre doesn't name one either.
+
+**Unresolved**
+- **Standfirst missing.** The opening paragraph ("On 18 June the council executive board is asked…") works as the lead: the rest of the article relies on it for the board, the date, the proposal and the officers' reason. There is no standfirst above it. A reader loses a short summary of what the piece argues and why it's worth reading before the article begins. You need to write it: one paragraph of at most 60 words that makes sense on its own.
+
+**Fixed**
+- **Byline in the wrong place.** The sign-off "— Sanna Ek, spokesperson for Öppna beslut" stood after the last paragraph. Readers didn't learn whose argument it was until the end. They also met "Öppna beslut proposes…" and "We make no claim…" without knowing the author speaks for Öppna beslut. It now sits under the headline as "By Sanna Ek, spokesperson for Öppna beslut".
+- **Subheading "A motive on the table, but no figures under it".** In English, "motive" suggests a hidden reason. That is the opposite of what the section says, since it takes the officers' reason at face value. The word reads like the Swedish *motiv* carried over. The image of something "on the table" with nothing "under it" also forced readers into the section to find out whose reason it was, and for what. It now reads "The documents put no figure on the officers' reason for the switch".
+- **Subheading "Six months, both routes, and something to measure".** The first sentence under it repeated two of its three items in the same words. It now reads "Measure staff time on each channel and ask users why they choose it".
+
+**What happened to the claims**
+- **Changed:** the section 2 subheading now says that the documents put no figure on the officers' reason for the switch. It explicitly treats the section's "double administration" objection as the reason the officers' report gives in the opening paragraph. The text implied that link before but didn't state it. This came from the fix to the "motive" subheading.
+- **Changed:** the section 3 subheading now calls for measuring staff time on each channel and asking users why they choose it. It no longer mentions six months or keeping both routes open, though the first sentence under it still says both. This came from the fix to the repeating subheading.
+- None removed, none added. The byline states the author's role exactly as before.
+
+**Article structure:** every structural requirement was checked, whether measured by the checking script or read by hand. The text doesn't conform only because the standfirst is missing. The headline (12 words, 68 characters) and the single paragraphs in sections 1 and 2 (85 and 84 words) are slightly longer than recommended, and I left them as they are.
+
+The one correction round allowed was used, so the run stopped with the standfirst still missing.
+
+Beyond the claim changes above, the run moved the byline from the end to its place under the headline and reworded two subheadings. The final proofread found no spelling, grammar or punctuation errors and changed nothing.
+
+```markdown
+---
+kntnt:
+  genre: opinion
+  technique: none
+  language: en_GB
+---
+
+# Don't switch off Lervik's phone booking before we know what it costs
+
+By Sanna Ek, spokesperson for Öppna beslut
+
+On 18 June the council executive board is asked to remove phone booking from all seven community venues from September. The officers' report gives one reason: staff should not have to enter the details in two flows. That is a fair thing to want. It is not yet a reason to make the change permanent.
+
+## What the pilot actually counted
+
+The pilot report *Bokning av föreningslokaler*, dated 8 April 2026, covers an eight-week trial in two venues. It records 96 bookings made on the web and 24 made by phone. Those figures are the report's, and so are their limits: it counts bookings rather than unique people, and it measures nothing about age, functional ability or how used to digital services people are. Twenty-four phone bookings therefore cannot tell us what share of Lervik's residents are unable to book digitally. Nobody should claim they can.
+
+## The documents put no figure on the officers' reason for the switch
+
+The administration's objection to keeping both routes is double administration, and I take it at face value: it is not a claim that people who ring are lazy or expensive. But the documents contain no measurement of how long either route takes staff, and no calculation of what removing one would save. The board is being asked to close a channel for good on the strength of an inconvenience the documents put no number on. That is thin ground for making the change permanent.
+
+## Measure staff time on each channel and ask users why they choose it
+
+Öppna beslut proposes a six-month trial in all seven venues with both booking routes kept open. During it, the administration records the time each booking route takes and asks users to say, voluntarily, why they chose the phone or the web. We make no claim to have funded or costed that trial. What it would cost is for the board to weigh.
+
+A booking made by phone is not proof that somebody cannot use the web. It is a reason to find out why the phone is still being used. I am not against digital booking. I am against settling its shape before the council can set the work each route costs staff against what it is worth to the people who use it.
+
+## What the board can decide on 18 June
+
+Postpone the permanent switch and run the six months with both routes open. When the trial has produced figures, decide whether a channel should be removed, changed or kept. That decision is the board's either way, and it will be a better one for being taken with the cost of both routes on the table.
+```

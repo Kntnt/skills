@@ -1,0 +1,63 @@
+I reviewed `input.md` as an **opinion** piece in **British English (en_GB)** with **no technique**. All three settings came from the text's own `kntnt` metadata, which says `technique: none`; the opinion genre doesn't name a default one either. I made one round of corrections, checked it by reviewing the whole text again, and then ran the mechanical proofreading pass. Two findings are still open. `input.md` is unchanged and no other files were left on disk.
+
+````markdown
+---
+kntnt:
+  genre: opinion
+  technique: none
+  language: en_GB
+---
+
+# Keep the telephone until Lervik knows why it is used
+
+*By Sanna Ek, spokesperson for Öppna beslut*
+
+On 18 June the municipal executive board has before it a proposal that telephone booking of Lervik's association venues disappear in September. It should not settle that yet: keep both routes, telephone and web, for six months, in all seven venues, and decide afterwards, with figures in hand.
+
+## The pilot counted bookings, not people
+
+The municipality's pilot report on the booking of association venues, dated 8 April 2026, covers an eight-week trial in two venues: 96 bookings were made on the web and 24 by telephone. The report counts bookings rather than unique people, and it measures nothing about age, ability or digital habit.
+
+Those 24 bookings therefore settle nothing about the residents behind them. They cannot show what share of residents are unable to book digitally; nor do they show the opposite, that the telephone survives out of habit. The report does not measure it.
+
+## The proposal rests on an inconvenience the papers do not measure
+
+The officers' report before the June meeting proposes removing telephone booking in all seven venues from September. The reason given is that staff should not have to enter details into two flows. Double administration is the administration's genuine objection to keeping both channels, not any view that telephone users are lazy or expensive, and I do not accuse it of holding one.
+
+What the papers do not contain is any measurement of the time that second flow costs, or any calculation of the saving. A permanent change for seven venues is being proposed on the strength of a nuisance the papers put no number on.
+
+## Six months would produce the figures
+
+Öppna beslut, for which I am spokesperson, proposes six months in all seven venues with both routes kept open. The administration would record how long each route takes and would ask users to state, voluntarily, why they chose the telephone or the web. We make no claim to have funded or costed that trial; what it would cost is for the board to weigh.
+
+That a booking comes in by telephone is not proof that somebody cannot use the web. It is a reason to find out why the telephone is still being used. I am not against digital booking. I am against deciding before the cost of the work can be weighed against what each route is worth to the people who use it.
+
+## What the board can decide on 18 June
+
+The municipal executive board can adopt the September removal on the material in front of it. Or it can postpone that decision, run the trial in all seven venues, and afterwards remove, change or keep a channel with time figures and users' own reasons on the table. The trial costs something we have not costed; asking what that sum is, before the channel goes, is the smaller risk.
+````
+
+## Findings
+
+**Still open**
+
+1. **There is no standfirst.** An article needs a standalone summary paragraph of at most 60 words between the headline and the byline. This text goes straight from the headline to the byline and the opening paragraph. Without that paragraph, a reader who sees only the top of the piece, for example in a listing, has nothing that states the argument or why it is worth reading. A missing part is reported, not written, so the author needs to add it.
+2. **The text never says what Öppna beslut is.** The piece now links the name to the author, but it never says whether Öppna beslut is an association, a party or a campaign. Adding that would mean inventing information the text doesn't contain, so the author needs to supply it.
+
+**Fixed**
+
+3. **Byline:** it lacked the English byline form. It now starts with "By" and keeps the name, the role and the italics.
+4. **Final section, first sentence:** it opened with "It", and only the subheading said who that was. A reader coming from the previous paragraph couldn't tell who can adopt or postpone the decision. The sentence now names the municipal executive board.
+5. **Öppna beslut in the body:** before, only the byline connected the name to the author. The body didn't say whose proposal it was, or who "we" were. The first mention in the body now links it to the author.
+6. **Opening paragraph:** "both routes" came after only one route had been named. The paragraph now says "telephone and web", so the second route is named before the argument relies on it.
+
+The text meets the article structure rules except for the missing standfirst. The measuring script confirmed that on the final text. I also checked the parts the script doesn't count: the opening paragraph introduces what it mentions, each subheading describes its section, and the final section works as an ending that tells the board what it can do.
+
+## What happened to the claims
+
+- **Removed:** none.
+- **Changed:** the opening paragraph now says the two routes to keep for six months are telephone and web. Before, it said "both routes" without naming the second one. The final section's first sentence now says the municipal executive board can adopt the September removal, where before it said "it". Both changes came from the corrections for findings 6 and 4, and the meaning is the same.
+- **Repeated in a second place:** the body now says that the author is Öppna beslut's spokesperson. Before, only the byline said this. The byline still says it too. This came from the correction for finding 5.
+- **Added:** none.
+
+Apart from the claims above, the run changed only the byline's form, which now opens with "By". The mechanical proofreading pass found nothing to correct.

@@ -1,0 +1,76 @@
+```markdown
+# Tilldelning tog två arbetsdagar i Elm Quays försök
+
+**Elm Quay, kund hos leverantören Svale, registrerade 31 ärenden under åtta veckor i ett försök, med akuta ärenden undantagna. Tilldelningen gick snabbare än tidigare, men enligt kundens anteckning kan skillnaden inte tillskrivas programvaran.**
+
+Hos Svales kund Elm Quay gjordes ett försök. Här redovisas vad kundens försöksanteckning visar om ärenden och tid till tilldelning, och arbetsledaren Maya Lind berättar hur hon ser på försöket.
+
+## Maya Lind om arbetet med ärendena
+
+– Att ha en gemensam bild av ärendena hjälper oss, men jag skulle lägga till en vecka för förberedelser, säger Maya Lind, arbetsledare hos kunden.
+
+## Försökets siffror kommer med ett förbehåll
+
+Enligt kundens försöksanteckning registrerades 31 ärenden under åtta veckor, med akuta ärenden undantagna. Tiden till tilldelning var två arbetsdagar jämfört med tre tidigare. Anteckningen säger att arbetsbelastningen var olika och att skillnaden inte kan tillskrivas programvaran.
+
+## Arbetsledaren ser tillbaka på försöket
+
+– Jag skulle välja att göra försöket igen, säger Lind.
+
+Kundcaset publiceras av leverantören Svale.
+```
+
+**Inställningar:** Genre och språk kom från anropet: `casestudy` och svenska (`sv`). Ingen teknik tillämpades, eftersom genren `casestudy` inte anger någon och ingen annan nivå valde någon. Ingen brief användes. Filen `input.md` är oförändrad. Korrigeringsbudgeten (1) gick åt till en omgång, och den omgången godtogs.
+
+## Kvarstående fynd (olösta)
+
+1. **Byline saknas.** Artikelanatomin kräver en byline mellan ingress och inledning. Varken texten eller anropet namnger en författare, så bylinen har inte skrivits. Läsaren vet inte vem som står bakom texten.
+2. **Uppmaning till handling saknas.** Avslutningen ska ge läsaren ett nästa steg. I ett kundcase får det bara bygga på erbjudanden, länkar och kontaktvägar som faktiskt finns, och texten har inga. Därför skrevs ingen uppmaning, och läsaren får inget nästa steg.
+
+Mätningen av den slutliga texten visar att bylinen är det enda räknade kravet som inte uppfylls. Rubriken har 50 tecken och 8 ord, ingressen 33 ord, inledningen 30 ord och underrubrikerna 33, 42 och 38 tecken. Följande krav räknas inte av skriptet, så jag granskade dem genom läsning:
+
+- ingressen står på egen hand;
+- inledningen presenterar ämnet och för texten framåt;
+- brödtexten går att läsa utan ingressen;
+- varje underrubrik beskriver sitt avsnitt;
+- sista avsnittet fungerar som avslutning.
+
+De kraven håller. Texten följer ändå inte anatomin fullt ut, eftersom bylinen och uppmaningen till handling saknas.
+
+## Åtgärdade delar
+
+- **Rubriken** påstod att Svales lösning räddade Elm Quay. Kundens egen anteckning säger tvärtom att skillnaden inte kan tillskrivas programvaran. Rubriken innehöll dessutom leverantörens ”vår” och en ogrundad superlativ.
+- **Ingressen** hade samma mening två gånger. Den sa inte vad texten handlar om, och talet 31 saknade den period och det undantag som brödtexten anger.
+- **Inledningen** upprepade ingressen ordagrant. Den innehöll också ”Vi på Svale är världsledande …” och en räddningsberättelse utan stöd i texten.
+- **Underrubriken i avsnitt 1** upprepade orden i meningen under den, och bryggan före citatet sa redan i förväg vad citatet säger.
+- **Underrubriken i avsnitt 2** (”Resultatet bevisar allt”) påstod mer än avsnittet, som säger motsatsen.
+- **Meningen ”Vår programvara orsakade därför hela förbättringen.”** var en orsaksslutsats som meningen före den motsäger.
+- **Avslutningen** stod inte som ett eget avsnitt. Linds omdöme och avsändarraden låg efter resultatredovisningen.
+
+## Redovisning av påståendena
+
+**Borttagna**
+
+- Att Svales lösning ”räddade” Elm Quay och att den var ”fantastisk”. Detta försvann ur rubriken med rubrikreparationen.
+- Att Svale är ”världsledande på att skapa framgång”, och att kunden ”stod hjälplös innan vi kom”. Båda försvann med reparationen av inledningen.
+- Att resultatet ”bevisar allt”. Detta försvann ur underrubriken i avsnitt 2.
+- Att programvaran orsakade hela förbättringen. Detta försvann med reparationen av orsaksmeningen, och bindeordet ”därför” gick med den. Samtidigt försvann textens enda uttryckliga uppgift om att programvaran var Svales. Läsaren måste nu själv dra den slutsatsen av ”Svales kund”, ”leverantören Svale” och ”programvaran”. Texten säger inte heller rakt ut vad försöket prövade.
+- Underrubriken ”Kunden fick en gemensam bild” togs bort vid reparationen av avsnitt 1. Påståendet finns nu bara i Linds citat, ”Att ha en gemensam bild av ärendena hjälper oss”.
+- Bryggan ”Maya Lind säger att det hjälper …” togs bort vid samma reparation. Citatet bär samma innehåll, och attributionen står kvar i repliken.
+
+**Ändrade**
+
+- Rubriken påstår nu att tilldelningen tog två arbetsdagar i Elm Quays försök. Ändringen hör till rubrikreparationen.
+- Ingressen påstår inte längre bara att Elm Quay registrerade 31 ärenden. Den säger nu att det var under åtta veckor i ett försök, med akuta ärenden undantagna, vilket är ett snävare påstående. Ingressen återger också två uppgifter ur avsnitt 2. Den första är att tilldelningen gick snabbare än tidigare; brödtexten säger två arbetsdagar mot tre. Den andra är att kundens anteckning inte tillskriver programvaran skillnaden. Båda ändringarna hör till reparationen av ingressen.
+- Underrubriken i avsnitt 2 påstår nu att försökets siffror kommer med ett förbehåll.
+- Underrubriken i avsnitt 1 nämner nu Maya Lind och arbetet med ärendena.
+
+**Tillagda**
+
+- Att Elm Quay är kund hos Svale står nu uttryckligen i ingressen och i inledningen. Tidigare framgick det bara indirekt. Tillägget hör till reparationerna av ingressen och inledningen. Ingressen likställer också Elm Quay med ”kunden” vars anteckning texten citerar.
+- Inledningen säger att ett försök gjordes hos Elm Quay, att texten redovisar vad försöksanteckningen visar om ärenden och tid till tilldelning, och att arbetsledaren Maya Lind berättar hur hon ser på försöket. Detta hör till reparationen av inledningen.
+- Den nya underrubriken ”Arbetsledaren ser tillbaka på försöket” inleder det avslutande avsnittet. Den kom till när avslutningen fick ett eget avsnitt.
+
+Citaten och den begränsande meningen ”Anteckningen säger att arbetsbelastningen var olika och att skillnaden inte kan tillskrivas programvaran.” står kvar oförändrade.
+
+Utöver redovisningen av påståendena togs leverantörsreklam bort: superlativ, leverantörens ”vi” och en räddningsberättelse. Ordagranna upprepningar i ingressen och inledningen ströks. Rubriken och underrubrikerna skrevs om, och bryggan före det första citatet togs bort. Kundens avslutande omdöme och avsändarraden fick ett eget sista avsnitt med en egen underrubrik. Den avslutande mekaniska korrekturläsningen hittade inget att rätta.

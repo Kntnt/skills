@@ -1,0 +1,58 @@
+I reviewed `input.md` as US English web copy (`--genre=webcopy`, `--language=en_US`). No technique was applied, because the webcopy genre doesn't have one it's normally written with. No brief was selected and the file has no `kntnt` metadata, so none was added. The one budgeted correction was accepted after a second review, and the final proofreading pass found nothing to fix. `input.md` itself is unchanged and nothing else was left on disk.
+
+```markdown
+# A review of how your association's community room is booked
+
+Svale's review covers one community room in one housing association. It costs SEK 4,800 including VAT and includes:
+
+- a 45-minute video call with two board representatives
+- a written account of the booking steps, unclear points and two possible simplifications
+
+## How to express interest
+
+[Open the expression-of-interest form](https://example.invalid/svale/intresse).
+
+The link opens an expression-of-interest form asking for a name, association and email address. It places no order, requires no payment details and books no meeting. Svale replies by email within three business days to discuss whether the review is suitable and suggest a meeting time.
+```
+
+## Findings
+
+**Repaired**
+
+1. **Headline:** "Unlock your association's full potential" was a promise nothing on the page supported, in stock corporate wording ("unlock"). It didn't say what the page offers. It's now "A review of how your association's community room is booked."
+2. **Opening paragraph:** It was generic and went in a circle ("a complex reality" with "growing complexity"). "Take the thumb out" is a word-for-word translation of the Swedish idiom *ta tummen ur* ("get your finger out"). "Discover a fantastic journey" was a promise with nothing behind it. The whole paragraph was the problem, so it's gone.
+3. **The offer was never stated:** The page only said it was a review, and who provides it, in its last sentence. It now opens with "Svale's review covers one community room…".
+4. **Link label and position:** "Book and pay now" contradicted the page's own statement that the form places no order, takes no payment and books no meeting. The link now reads "Open the expression-of-interest form". It sits in the last section, right above the paragraph that explains it.
+5. **Vague headings and a dangling "It":** "Start", "It", "More", "Again" and "Things" said nothing about their sections, and each section opened with an "It" that pointed to nothing. Those headings were removed and "It" now refers back to "Svale's review". "Important" became "How to express interest", which says what the section contains.
+6. **Fragmented structure:** Four facts about one offer had six headings between them. They're now one paragraph and a two-item list under the headline.
+7. **"shared room":** In American English this usually means a room two people share. It's now "community room".
+8. **"working days":** This is British usage. It's now "business days".
+
+**Unresolved**
+
+9. **"two board representatives":** The text doesn't say whose board: the housing association's or Svale's. So the reader can't tell who is expected on the call. Fixing this needs a fact the text doesn't contain.
+
+The loop stopped because the budget of one correction was spent while finding 9 was still open.
+
+## Claim account
+
+**Removed**
+- "Unlock your association's full potential": the headline's promise (repair for finding 1).
+- "Decision-makers in a complex reality face growing complexity" (finding 2).
+- The call to "take the thumb out" (finding 2).
+- The promise to "discover a fantastic journey" (finding 2).
+
+**Changed**
+- **The link:** it now says it opens the expression-of-interest form. It no longer says the reader is booking and paying (finding 4).
+- **What the review covers:** "one community room in one housing association", meaning a common space residents book. It used to say "one shared room" (finding 7).
+- **Reply time:** now "three business days" instead of "three working days". The time frame is the same (finding 8).
+- **Price, coverage and what's included:** these now explicitly belong to "Svale's review", not to an "It" with no referent. The price, the 45-minute call and the written account are unchanged (findings 3, 5 and 6).
+
+**Added**
+- **The headline:** it says the page offers a review of how the reader's association's community room is booked. This is inferred from the written account of "the booking steps" and the mention of "the review" (findings 1 and 3). The headline refers to "your association's community room" (singular), and the body still limits the review to "one community room in one housing association".
+- **Svale as the provider:** "Svale's review" names Svale as the review's provider in the first sentence. Before, Svale appeared only as the one who replies by email (finding 3).
+- **The heading "How to express interest":** it says the section explains how to express interest, which the section beneath it supports (finding 5).
+
+The paragraph explaining what the form does and doesn't do (no order, no payment details, no meeting booked) is word for word what it was.
+
+Apart from the claims above, the run removed stock filler (the empty opening and the corporate headline), rebuilt the page's structure and headings, and rewrote the link label. The closing proofreading pass found no mechanical errors and changed nothing.

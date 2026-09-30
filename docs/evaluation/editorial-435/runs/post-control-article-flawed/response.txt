@@ -1,0 +1,48 @@
+Genomgången är klar. En korrigeringsrunda gjordes och budgeten på 1 är förbrukad. Artikeln följer fortfarande inte artikelmallen, eftersom byline och mellanrubriker saknas. Den behöver också en person för fyra punkter som inte går att lösa ur texten.
+
+**Inställningar:** genren `article` och språket `sv` kom från anropet. Ingen teknik användes, eftersom artikelgenren inte anger någon och inget annat valde en. Ingen brief användes.
+
+````markdown
+# Mätningar i Björkskolan visade under 20 grader
+
+**Under ett fyra veckor långt mätförsök i Björkskolan hade 14 av 120 lektionspass minst ett värde under fastighetskontorets arbetsgräns på 20 grader. Läs vad försöket visar, vilka mätningar som saknas och vad driftteknikern Elin Rask rekommenderar.**
+
+Givarna i fastighetskontorets mätförsök i Björkskolan registrerade temperaturer under 20 grader i sex klassrum. Fastighetskontorets rapport *Mätförsök i Björkskolan* från den 12 mars 2026 anger att 14 av 120 lektionspass hade minst ett värde under kontorets egen arbetsgräns på 20 grader, vilket inte är en lagregel, och att försöket varade fyra veckor, och två givare stod vid ytterväggar och fyra vid innerväggar, utan att placeringens effekt jämfördes experimentellt. Operativ temperatur saknas, trots att resonemanget bygger på operativ temperatur, som är ett mått på lufttemperatur och värmestrålning från omgivande ytor, medan givarna bara mätte luften där de satt. Det saknas mätningar av luftdrag och elevernas upplevelse och uppgifter om hur länge temperaturerna låg under gränsen, och ingen effekt på hälsan har undersökts. Driftteknikern Elin Rask rekommenderar att koppla temperaturserier till användningstider innan styrningen ändras, och nästa försök är tänkt att använda likadant placerade givare i november, fast finansieringen inte är beslutad. Kontakta oss.
+````
+
+## Olösta fynd
+
+1. **"… trots att resonemanget bygger på operativ temperatur …"**: det framgår inte vems resonemang det är. Läsaren kan inte avgöra vem som bygger sitt resonemang på operativ temperatur. Stället lämnades orört, eftersom texten inte säger det.
+2. **"Kontakta oss."**: det framgår inte vilka "oss" är, och uppmaningen följer inte av innehållet i artikeln. Läsaren vet inte vem hen ska kontakta eller varför. Frasen "för att rädda framtiden" är struken, men avsändaren går inte att ta fram ur texten.
+3. **Byline saknas.** Varken texten eller anropet anger någon författare, så den lämnas tom för en person att fylla i.
+4. **Mellanrubriker, avsnitt och ett avslutande avsnitt saknas.** Ingången är ett stycke på 152 ord (uppmätt på den levererade texten) med flera tankar i: resultat, metodens begränsningar, mätningar som saknas, en rekommendation och nästa försök. Läsaren som skummar får inga ingångar, och inget avslut visar att ingångens löfte är infriat. Stycket delades inte, eftersom ingången då skulle bli flera stycken i en text utan avsnitt. Inga rubriker skrevs.
+
+## Lösta fynd
+
+- **Rubriken** påstod en räddning från en katastrof som texten inte beskriver, i en ton som var mer dramatisk än texten. "Givarna" gick inte heller att förstå utan texten. Rubriken är nu omskriven (46 tecken, 7 ord).
+- **Ingressen** upprepade samma mening två gånger och upprepade ingångens första mening ordagrant. Den sa inte heller vad artikeln handlar om, och "Givarna" saknade referent. Den är omskriven ur textens eget innehåll (36 ord) och börjar inte längre med samma ord som ingången.
+- **Ingångens första mening** byggde på att rubriken och ingressen redan hade introducerat givarna. Referenten står nu i meningen.
+- **"Katastrofen lurade bakom varje hörn."** var dramatik som texten inte har stöd för. Meningen är struken.
+- **"medan"** antydde ett samband mellan försökets längd och givarnas placering som texten inte har. Ordet är ersatt med "och".
+- **"helt säkert att givarna har gjort eleverna friskare"** var ett orsakspåstående som motsades av samma mening. Påståendet är struket, men begränsningen står kvar.
+- **"Det är viktigt att notera att …"** var en tom tautologi. Meningen är struken.
+
+Rubriken och ingressen delar "Björkskolan", "under 20 grader" och "mätningar", men det bedömdes inte som ett eko. Det är skolans namn och det centrala måttet. Ingressen tillför försökets längd, antalet 14 av 120 lektionspass, arbetsgränsen och vad läsaren får ut av artikeln.
+
+## Hur påståendena ändrades
+
+**Borttagna påståenden**
+- Att en katastrof hotade. Det togs bort av reparationen av dramatiken, där hela meningen var defekten.
+- Att det är helt säkert att givarna har gjort eleverna friskare. Det togs bort av reparationen av orsakspåståendet. Bindeorden "men ändå … trots att" försvann också. De band bara det strukna påståendet till begränsningen, så läsaren förlorar ingen begränsning: "ingen effekt på hälsan har undersökts" står kvar i sin helhet.
+- Att detta är mycket viktigt för alla som tycker att temperatur är viktigt. Det togs bort av reparationen av tautologin.
+- Att en kontakt skulle "rädda framtiden". Det togs bort av reparationen av uppmaningen.
+
+**Ändrade påståenden**
+- **Rubriken** påstod att givarna räddar skolan från en katastrof. Nu påstår den att mätningar i Björkskolan visade under 20 grader. Ändringen kom från reparationen av rubriken.
+- **Ingressen** påstod att givarna registrerade temperaturer under 20 grader i sex klassrum; det påståendet står nu bara i ingången. Nu påstår ingressen att 14 av 120 lektionspass under ett fyra veckor långt mätförsök i Björkskolan hade minst ett värde under fastighetskontorets arbetsgräns på 20 grader. Den säger också att artikeln tar upp vad försöket visar, vilka mätningar som saknas och vad Elin Rask rekommenderar. I ingressen står antalet utan hänvisning till rapporten, och utan "egen" och "vilket inte är en lagregel". Hänvisningen och begränsningen står kvar i brödtexten. Ändringen kom från reparationen av ingressen.
+- **Försökets längd och givarnas placering** står nu som två fakta bredvid varandra, utan samband. Ändringen kom från reparationen av "medan".
+
+**Tillagda påståenden**
+- Ingången kallar nu försöket "fastighetskontorets mätförsök". Originaltexten säger att rapporten och arbetsgränsen var kontorets, men inte uttryckligen att kontoret genomförde försöket. Tillägget är en slutsats som reparationen av ingångens referent drog.
+
+Utöver dessa påståenden har texten ändrats på följande sätt: dramatik och en tom viktighetsfras är borttagna, rubriken och ingressen är omskrivna, en ordagrant dubblerad mening är borttagen och ett bindeord är utbytt. Korrekturläsningen sist hittade inga mekaniska fel och ändrade ingenting. Inga filer skapades eller lämnades kvar, och `input.md` är orörd.

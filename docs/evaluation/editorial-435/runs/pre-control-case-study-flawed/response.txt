@@ -1,0 +1,65 @@
+Jag har granskat texten, men alla nio fynd står kvar olösta. Den enda korrigeringsrundan förkastades eftersom den själv införde två fel, och texten återställdes till originalet. Den enda ändring som levereras är en mekanisk kongruensrättning.
+
+**Upplöst konfiguration:** genre `casestudy` och språk `sv`, båda från anropet. Ingen teknik används, eftersom genren `casestudy` inte anger någon. Ingen brief valdes. Texten saknar `kntnt`-metadata och ingen har lagts till. Målet är svaret, så inga filer har skrivits.
+
+````markdown
+# Vår fantastiska lösning räddade Elm Quay
+
+**Elm Quay registrerade 31 ärenden. Elm Quay registrerade 31 ärenden.**
+
+Elm Quay registrerade 31 ärenden. Vi på Svale är världsledande på att skapa framgång, och kunden stod hjälplös innan vi kom.
+
+## Kunden fick en gemensam bild
+
+Maya Lind säger att det hjälper att ha en gemensam bild av ärendena.
+
+– Att ha en gemensam bild av ärendena hjälper oss, men jag skulle lägga till en vecka för förberedelser, säger Maya Lind, arbetsledare hos kunden.
+
+## Resultatet bevisar allt
+
+Enligt kundens försöksanteckning registrerades 31 ärenden under åtta veckor, med akuta ärenden undantagna. Tiden till tilldelning var två arbetsdagar jämfört med tre tidigare. Anteckningen säger att arbetsbelastningarna var olika och att skillnaden inte kan tillskrivas programvaran. Vår programvara orsakade därför hela förbättringen.
+
+– Jag skulle välja att göra försöket igen, säger Lind.
+
+Kundcaset publiceras av leverantören Svale.
+````
+
+## Fynd (alla olösta)
+
+1. **Rubriken** ”Vår fantastiska lösning räddade Elm Quay” (40 tecken, 6 ord):
+   - ”Räddade” är en orsaksslutsats som texten själv motsäger, eftersom anteckningen säger att skillnaden inte kan tillskrivas programvaran.
+   - ”Fantastiska” är ett superlativ utan stöd.
+   - ”Vår” är leverantörens vi, och räddningsberättelsen gör kunden hjälplös.
+   - Läsaren får en slutsats som texten inte bär.
+2. **Ingressen** upprepar samma mening ordagrant två gånger (10 ord). Den säger inte vem Elm Quay är, vilken period det gäller eller vad läsaren får. Den som bara läser ingressen förstår den inte.
+3. **Brödtextens inledning:**
+   - ”Vi på Svale är världsledande på att skapa framgång” är ett ogrundat överlägsenhetspåstående i leverantörens vi.
+   - ”Kunden stod hjälplös innan vi kom” saknar stöd och tar ifrån kunden rollen som handlande part.
+   - Första meningen upprepar ingressen ordagrant, och båda börjar med ”Elm”.
+   - Inledningen ger ingen förväntan om vad texten ska visa.
+4. **Mellanrubriken** ”Kunden fick en gemensam bild” och överbryggningen ”Maya Lind säger att det hjälper …” säger båda citatets omdöme i förväg. Läsaren möter Maya Linds bedömning för tredje gången när citatet kommer.
+5. **Mellanrubriken** ”Resultatet bevisar allt” motsägs av sektionens egen mening om att skillnaden inte kan tillskrivas programvaran.
+6. **Meningen** ”Vår programvara orsakade därför hela förbättringen.” är en orsaksslutsats som motsägs av meningen direkt före. ”Därför” påstår ett samband som texten saknar.
+7. **Slutet:**
+   - Sista sektionen redovisar resultaten och har Linds omdöme och upplysningen om Svale tillagda sist. Slutet har alltså ingen egen sektion.
+   - Uppmaning till handling saknas. Texten har inga erbjudanden, länkar eller kontaktvägar att bygga en av, så den måste någon annan tillföra.
+8. **Byline saknas.** Ingen författare namnges.
+9. **Kundbakgrund saknas,** liksom vad som föranledde försöket och hur det genomfördes. Det går inte att åtgärda utan material som texten inte har.
+
+Mätningen gav ett enda räknat fel, den saknade bylinen. Övriga fynd kommer från läsningen. Texten uppfyller inte artikelanatomin.
+
+## Förkastad korrigeringsrunda
+
+En korrigeringsrunda, hela budgeten, åtgärdade fynd 1–7. Återgranskningen visade två nya fel som rundan själv hade infört:
+
+- Den nya ingressen kallade Maya Lind för ”hon”. Texten anger aldrig hennes kön, så påståendet saknar stöd.
+- Den nya inledningen syftade på ”ärendena”, som bara ingressen introducerade.
+
+Rundan förkastades därför i sin helhet. Allt den gjorde togs bort, bland annat de strykningar och omskrivningar som fynd 1–7 gällde, och originaltexten återställdes ordagrant. Dessa fel finns inte i den levererade texten.
+
+## Redovisning av påståenden
+
+- **Ändrat, i den mekaniska passagen:** ”att arbetsbelastningen var olika” är nu ”att arbetsbelastningarna var olika”. Meningen säger nu att anteckningen anger att arbetsbelastningarna skilde sig åt. Förbehållet att skillnaden inte kan tillskrivas programvaran står kvar oförändrat.
+- **Borttaget och tillagt:** inget påstående har tagits bort eller lagts till. Utöver ändringen ovan har inget påstående flyttats, och ingen rubrik eller mellanrubrik är ändrad.
+
+Utöver redovisningen ovan har körningen bara ändrat en sak: den avslutande mekaniska passagen rättade kongruensen i en mening.

@@ -1,0 +1,50 @@
+Jag har granskat texten och gjort en korrigering, och det mekaniska passet hittade inga fel. Inga fynd står kvar.
+
+**Inställningar:** genre `opinion` och språk `sv`, båda angivna i anropet. Ingen teknik används, eftersom genren `opinion` inte anger någon. Ingen brief valdes.
+
+```markdown
+# Avskaffa inte telefonbokningen på ett antagande
+
+**I september kan telefonbokningen av Lerviks föreningslokaler försvinna. Beslutet ska vila på åtta veckors siffror från två lokaler, och de siffrorna räknar bokningar, inte personer. Här är skälen att pröva båda bokningsvägarna ett halvår till innan den ena stängs.**
+
+Text: Sanna Ek, Öppna beslut
+
+Kommunstyrelsen i Lervik bör skjuta upp bytet till enbart digital bokning av föreningslokaler, ett byte som kan ske i september. Pröva först båda bokningsvägarna, digital bokning och telefonbokning, i alla sju lokaler under ett halvår och mät vad de kräver. Ett permanent beslut behöver bättre underlag än det som nu ligger på bordet.
+
+## Bokningar är inte samma sak som personer
+
+Kommunens pilotrapport från den 8 april 2026 räknar 96 webbokningar och 24 telefonbokningar under åtta veckor i två lokaler. Den säger inte hur många personer som bokade eller varför de valde telefonen. Siffrorna visar varken hur många som saknar digital vana eller hur många som skulle klara sig utan telefonbokning.
+
+En bokning är en händelse, inte en invånare. Den skillnaden avgör vad siffrorna kan användas till.
+
+## Mät också arbetet med två kanaler
+
+Förvaltningen vill slippa dubbel administration. Det är en relevant invändning. Men handlingarna innehåller ingen mätning av tidsåtgången. Att behålla två kanaler kostar arbete, och hur mycket behöver vägas mot vad användarna får.
+
+## Besluta om försöket, inte om antagandet
+
+Kommunstyrelsen bör därför säga ja till halvåret med båda bokningsvägarna, ta ställning till dess ännu okända kostnad och ge förvaltningen i uppdrag att mäta tidsåtgången samt fråga användarna varför de väljer sin bokningsväg. Först då går det att väga alternativen.
+
+Ett antagande blir inte ett beslutsunderlag för att kalendern säger september.
+```
+
+**Fynd**
+
+1. **Brödtextens första stycke (åtgärdat).** I meningen "Pröva först båda bokningsvägarna …" förutsatte "båda bokningsvägarna" två namngivna vägar. Stycket nämnde bara digital bokning. Att den andra vägen är telefonbokning stod bara i rubriken och ingressen. Brödtexten nämnde telefonbokning först i nästa avsnitt. En läsare som hoppar över ingressen fick alltså inte veta vilken den andra vägen var. Stycket nämner nu båda vägarna.
+
+**Påståenden**
+
+- **Ändrade:** ett. Rekommendationen i brödtextens första stycke säger nu att båda bokningsvägarna, digital bokning och telefonbokning, ska prövas i alla sju lokaler under ett halvår. Ändringen hör till fynd 1. Rekommendationen säger i sak detsamma som förut, men nu står det i stycket självt vilka vägar den gäller. Rubriken, ingressen och avsnittet om pilotrapporten sa redan det.
+- **Borttagna:** inga.
+- **Tillagda:** inga.
+
+Utöver detta har ingen rubrik, mellanrubrik, ingress eller avgränsning ändrats.
+
+**Artikelns anatomi:** Texten följer artikelanatomin. Skriptet mätte den slutliga texten, och alla räknade krav håller. Brödtextens första stycke har nu 53 ord. Jag läste också igenom de krav som skriptet inte räknar:
+- Ingressen står på egen hand.
+- Ingressen och första stycket upprepar inte varandra.
+- Brödtexten pekar inte längre tillbaka på ingressen.
+- Varje mellanrubrik beskriver sitt avsnitt.
+- Sista avsnittet är ett avslut med en uppmaning till kommunstyrelsen.
+
+**Vad som ändrades:** Enda skillnaden mot den inkomna texten är att de två bokningsvägarna nu nämns i brödtextens första stycke. Det mekaniska passet hittade inga fel att rätta. Ingenting annat i texten har ändrats, och inga filer har skrivits.

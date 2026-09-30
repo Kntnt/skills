@@ -1,0 +1,51 @@
+Klart: korrigeringsrundan avvisades, den mekaniska genomgången gjordes och de tillfälliga filerna är borttagna. Texten levereras här oförändrad. Alla fynd står kvar olösta.
+
+**Upplösta inställningar:** genre `opinion` och språk `sv`, båda från anropet. Ingen teknik används: opinionsgenren anger ingen som sin vanliga, och inget annat valde någon. Ingen skrivbrief användes. Texten saknar Kntnt-metadata och har inte fått någon.
+
+```markdown
+# Kommunledningen hatar människor
+
+Sanna Ek, Öppna beslut
+
+Kommunstyrelsen borde behålla telefonbokning under ett halvårs försök i alla sju lokaler. Alla vet att politikerna vill stänga ute äldre för att spara miljoner.
+
+## Bakgrund
+
+Det gjordes 96 bokningar på webben och 24 via telefon. Det bevisar att 20 procent av kommunens invånare inte kan använda internet. Kommunens pilotrapport från den 8 april 2026 säger samtidigt att bokningarna inte räknar unika personer och att digital vana inte undersöktes.
+
+## Diskussion
+
+Förvaltningen invänder att dubbla kanaler innebär dubbel administration. Handlingarna saknar tidsmätning. Därför kostar det ingenting att behålla telefonbokningen. Föreningen vill att förvaltningen mäter tidsåtgång och frågar användarna varför de väljer en bokningsväg. Försökets kostnad är inte beräknad.
+
+Nu är det dags att agera.
+```
+
+## Fynd, alla olösta
+
+1. **Rubriken "Kommunledningen hatar människor"** tillskriver motparten ett motiv, hat, som texten inte ger stöd för. Tonen är mer dramatisk än textens egen. Rubriken säger "kommunledningen", medan texten talar om kommunstyrelsen och politikerna. Den säger heller ingenting om textens ståndpunkt, att telefonbokningen bör behållas. Läsaren vilseleds om vad texten hävdar.
+2. **Ingress saknas.** Mätningen visar ingen fristående sammanfattande ingress mellan rubriken och brödtexten. Den ska skrivas av en person och fylls inte i här.
+3. **"Alla vet att politikerna vill stänga ute äldre för att spara miljoner."** Meningen hänvisar till en anonym auktoritet och tillskriver motparten ett motiv. Den saknar stöd för påståendena om äldre och om miljonbesparingar. Uppgiften om miljonbesparingar motsägs dessutom av att försökets kostnad inte är beräknad. Läsaren får ett obelagt motiv i stället för ett argument.
+4. **"Det bevisar att 20 procent av kommunens invånare inte kan använda internet."** 24 av 120 är 20 procent av bokningarna, inte av invånarna. "Bevisar" motsägs av nästa mening, där det står att bokningarna inte räknar unika personer och att digital vana inte undersöktes. Läsaren får en slutsats som texten själv underkänner.
+5. **Siffrorna 96 och 24 saknar källa där de används.** Texten säger inte om de kommer från pilotrapporten. För att rätta det behövs en uppgift som texten inte har.
+6. **"Handlingarna saknar tidsmätning. Därför kostar det ingenting att behålla telefonbokningen."** Att tidsåtgången inte är mätt visar inte att kostnaden är noll. Slutsatsen motsägs av "Försökets kostnad är inte beräknad." Förvaltningens invändning bemöts därmed inte sakligt.
+7. **"Föreningen"** har ingen föregångare i brödtexten, så läsaren vet inte vilken förening som avses. Bylinen säger inte att Öppna beslut är en förening.
+8. **Inledningen introducerar inte ämnet.** Texten säger aldrig vad som bokas eller vilka de sju lokalerna är. För att rätta det behövs uppgifter som saknas i texten.
+9. **Mellanrubrikerna "Bakgrund" och "Diskussion"** är generiska etiketter. De beskriver inte avsnitten under dem och ger den som skummar texten inget av argumentet.
+10. **Slutet, "Nu är det dags att agera."** Uppmaningen säger inte vad som ska göras eller vem som ska göra det. Den står dessutom sist i avsnittet som bär argumentet, i stället för i ett eget avslutande avsnitt. Texten har redan ett konkret förslag som kan tas upp här: att kommunstyrelsen behåller telefonbokningen under ett halvårs försök i alla sju lokaler.
+
+Texten uppfyller alltså inte artikelanatomin. Mätningen av den levererade texten ger en rubrik på 31 tecken och 3 ord, en saknad ingress och två avsnitt med ett respektive två stycken.
+
+## Avvisad korrigeringsrunda
+
+Budgeten på en korrigering förbrukades på en runda som försökte åtgärda fynd 1, 3, 4, 6, 9 och 10. Rundan avvisades i sin helhet, och texten återställdes ordagrant till sitt tidigare skick. Ingenting av rundan finns kvar i den levererade texten.
+
+Två nya fel från rundan fälldes den:
+
+- **Rubriken upprepade inledningen.** Den nya rubriken "Telefonbokningen borde finnas kvar under ett halvårsförsök" sa samma sak med nästan samma ord som inledningens "Kommunstyrelsen borde behålla telefonbokning under ett halvårs försök". Rubriken hade därmed inget eget att tillföra.
+- **Den nya slutrubriken lade till ett förslag.** "Båda bokningsvägarna borde prövas sida vid sida" framför ett förslag som texten inte gör. Texten föreslår bara att telefonbokningen behålls.
+
+Rundan försökte också ta bort meningen i fynd 3 och skriva om påståendena i fynd 4 och 6. Allt det står kvar i den levererade texten, och därför kvarstår fynden. Den som ska rätta texten får ta ställning till rubrik, mellanrubriker och slut.
+
+## Påståendena
+
+Inga påståenden har tagits bort, ändrats eller lagts till i den levererade texten. Den mekaniska korrekturgenomgången hittade inga fel att rätta, så texten är identisk med den som kom in.
