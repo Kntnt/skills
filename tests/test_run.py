@@ -10,9 +10,11 @@ import re
 import shutil
 import subprocess
 import sys
+from datetime import UTC, datetime
 from pathlib import Path
 from types import ModuleType
 from typing import Any, cast
+from zoneinfo import ZoneInfo
 
 import pytest
 from support.fake_binary import fake_binary_on_path
@@ -106,7 +108,11 @@ _GIT_ENV["GIT_COMMITTER_EMAIL"] = "test@example.com"
 # for a tracker that will not take a comment: the call is logged as every
 # other is and then refused, which is both a tracker that never received the
 # write and a write it received whose answer never came back — what the
-# ticket then says is what the test files on it.
+# ticket then says is what the test files on it. A listing asked with
+# `--search closed:>=<day>` answers only the tickets filed with a `closedAt` on
+# or after that UTC day, which is how the tracker reads a bare date; a ticket
+# filed with no `closedAt` is always answered, so a test says when a ticket
+# closed only where the bound is what it is about.
 _GH_SCRIPT = """#!/bin/sh
 echo "$@" >> "$GH_LOG"
 if [ "$1" = "api" ]; then
@@ -131,15 +137,36 @@ if [ "$1" = "label" ]; then
 fi
 label=""
 state="open"
+search=""
 while [ $# -gt 0 ]; do
   case "$1" in
     --label) label="$2"; shift 2 ;;
     --state) state="$2"; shift 2 ;;
+    --search) search="$2"; shift 2 ;;
     *) shift ;;
   esac
 done
+case "$search" in
+  closed:\\>=*)
+    PYTHON_BIN -c "$GH_CLOSED_SINCE" "${search#closed:>=}" \\
+      < "$GH_TICKETS/$label.$state.json"
+    exit $?
+    ;;
+esac
 cat "$GH_TICKETS/$label.$state.json"
 """
+
+# The bound the stand-in tracker applies to a closed listing: a ticket closed
+# at any instant of the UTC day named, or later, is answered, and so is one
+# filed with no `closedAt`.
+_GH_CLOSED_SINCE = (
+    "import json,sys;"
+    "from datetime import datetime;"
+    "since=datetime.fromisoformat(sys.argv[1]+'T00:00:00+00:00');"
+    "filed=json.load(sys.stdin);"
+    "print(json.dumps([t for t in filed if 'closedAt' not in t or "
+    "datetime.fromisoformat(t['closedAt'].replace('Z','+00:00'))>=since]))"
+)
 
 # The marker `record` writes an outcome in, stated here as the contract rather
 # than imported: what one verb writes on a ticket is what the next run reads
@@ -605,11 +632,14 @@ def _tracker(
             json.dumps(default | issue), encoding="utf-8"
         )
 
-    env = fake_binary_on_path(tmp_path, "gh", _GH_SCRIPT)
+    env = fake_binary_on_path(
+        tmp_path, "gh", _GH_SCRIPT.replace("PYTHON_BIN", sys.executable)
+    )
     return (
         env
         | _selector(tmp_path)
         | {
+            "GH_CLOSED_SINCE": _GH_CLOSED_SINCE,
             "GH_TICKETS": str(directory),
             "GH_ISSUES": str(folder),
             "GH_LOG": str(tmp_path / "gh.log"),
@@ -9266,6 +9296,328 @@ def test_report_refuses_a_closed_list_that_may_have_been_truncated(
 
     assert result.returncode == 1
     assert "200" in result.stderr
+
+
+# What the run's state calls the UTC day its first plan wrote it, stated here
+# as the contract rather than imported, for the reason the file names are.
+START_DAY: str = "start_day"
+
+# A start day earlier than any day a test runs on, so a plan that wrote today's
+# date over a stored one is told from one that kept it.
+EARLIER_DAY: str = "2000-01-01"
+
+# The full-page refusal, word for word, so a bound that is missing refuses
+# exactly as the report always has rather than in some new sentence.
+FULL_PAGE: str = (
+    "the tracker returned a full page of 200 tickets, "
+    "so the scope cannot be read completely"
+)
+
+
+def _utc_today() -> str:
+    """Return today's UTC date in the shape the tracker reads as a whole day."""
+
+    return datetime.now(UTC).date().isoformat()
+
+
+def _stored_state(scratch: Path) -> dict[str, Any]:
+    """Return the state document the run keeps in *scratch*."""
+
+    return cast(
+        dict[str, Any],
+        json.loads((scratch / STATE_HOME / STATE_FILE).read_text(encoding="utf-8")),
+    )
+
+
+def _restate(scratch: Path, **fields: Any) -> None:
+    """Lay *fields* over the stored state; a field given as None is removed.
+
+    Removing the start day leaves the document exactly as an earlier release
+    wrote it, which never knew the field.
+    """
+
+    stored = _stored_state(scratch)
+    for key, value in fields.items():
+        if value is None:
+            stored.pop(key, None)
+        else:
+            stored[key] = value
+    (scratch / STATE_HOME / STATE_FILE).write_text(
+        json.dumps(stored, indent=2) + "\n", encoding="utf-8"
+    )
+
+
+def _default_branch_run(
+    tmp_path: Path,
+    *,
+    closed: list[dict[str, Any]] | None = None,
+    ready_closed: list[dict[str, Any]] | None = None,
+) -> tuple[Path, Path, dict[str, str]]:
+    """Plan a run on the default branch itself, the way this collection runs."""
+
+    repo = _init_repo(tmp_path / "proj", branch="main")
+    scratch = tmp_path / "scratch"
+    env = _tracker(
+        tmp_path,
+        {"ready-for-agent": [_ticket(7, "the next thing")]},
+        issues={7: _ready(7)},
+        closed=closed,
+        ready_closed=ready_closed,
+    )
+    planned = _engine(repo, "plan", "--state-dir", str(scratch), env=env)
+    assert planned.returncode == 0, planned.stderr
+    return repo, scratch, env
+
+
+def test_report_on_the_default_branch_asks_only_for_what_was_closed_since_the_run_started(
+    tmp_path: Path,
+) -> None:
+    """The default branch has no fork point, and on it the closed half of the
+    scope is every ticket the project ever finished. The day the run started
+    bounds it instead: everything this run recorded closed on that day or
+    later, and the page of history before it is never read. A ticket closed
+    at the first instant of the start day is the run's own and is counted."""
+
+    start = "2026-09-29"
+    before = "2026-09-28T23:59:59Z"
+    older = [
+        _ticket(number, "finished before the run", comments=[_recorded("done")])
+        | {"closedAt": before}
+        for number in range(1000, 1201)
+    ]
+    ready_older = [
+        _ticket(number, "given up before the run", comments=[_recorded("failed")])
+        | {"closedAt": before}
+        for number in range(2000, 2201)
+    ]
+    own = _ticket(9, "the run's own", comments=[_recorded("done", "abc123")]) | {
+        "closedAt": f"{start}T00:00:00Z"
+    }
+    repo, scratch, env = _default_branch_run(
+        tmp_path, closed=[*older, own], ready_closed=ready_older
+    )
+    _restate(scratch, **{START_DAY: start})
+
+    result = _engine(repo, "report", "--state-dir", str(scratch), env=env)
+
+    assert result.returncode == 0, result.stderr
+    report = json.loads(result.stdout)
+    assert report["done"] == [9]
+    assert report["failed"] == []
+    asked = [line for line in _gh_calls(env).splitlines() if "--state closed" in line]
+    assert len(asked) == 2
+    assert all(f"closed:>={start}" in question for question in asked)
+    assert any("--label ready-for-agent" in question for question in asked)
+    assert any("--label orchestrated" in question for question in asked)
+
+
+@pytest.mark.parametrize("remembered", ["no state", "a state with no start day"])
+def test_report_on_the_default_branch_asks_the_whole_question_without_a_start_day(
+    tmp_path: Path, remembered: str
+) -> None:
+    """With no day to bound it by — no state directory at all, or a state an
+    earlier release wrote — the question is asked whole, and a full page is
+    refused in the words it always was rather than read as a whole account."""
+
+    older = [
+        _ticket(number, "finished before the run", comments=[_recorded("done")])
+        | {"closedAt": "2026-09-28T12:00:00Z"}
+        for number in range(1000, 1200)
+    ]
+    repo, scratch, env = _default_branch_run(tmp_path, closed=older)
+    if remembered == "no state":
+        result = _engine(repo, "report", env=env)
+    else:
+        _restate(scratch, **{START_DAY: None})
+        result = _engine(repo, "report", "--state-dir", str(scratch), env=env)
+
+    assert result.returncode == 1
+    assert FULL_PAGE in result.stderr
+    asked = [line for line in _gh_calls(env).splitlines() if "--state closed" in line]
+    assert asked
+    assert all("closed:>=" not in question for question in asked)
+
+
+def test_the_first_plan_records_the_day_the_run_started_and_later_plans_keep_it(
+    tmp_path: Path,
+) -> None:
+    """The day is written by the first plan that writes a state, and by no
+    plan after it: a run continued the next day that moved its own start day
+    would bound away the tickets it closed the day before."""
+
+    repo = _init_repo(tmp_path / "proj", branch="main")
+    scratch = tmp_path / "scratch"
+    env = _tracker(
+        tmp_path,
+        {"ready-for-agent": [_ticket(7, "the next thing")]},
+        issues={7: _ready(7)},
+    )
+
+    dry = _engine(repo, "plan", "--dry-run", "--state-dir", str(scratch), env=env)
+    assert dry.returncode == 2, dry.stderr
+    assert not scratch.exists()
+
+    before = _utc_today()
+    first = _engine(repo, "plan", "--state-dir", str(scratch), env=env)
+    after = _utc_today()
+    assert first.returncode == 0, first.stderr
+    assert _stored_state(scratch)[START_DAY] in {before, after}
+
+    _restate(scratch, **{START_DAY: EARLIER_DAY})
+    for _ in range(2):
+        again = _engine(repo, "plan", "--state-dir", str(scratch), env=env)
+        assert again.returncode == 0, again.stderr
+        assert _stored_state(scratch)[START_DAY] == EARLIER_DAY
+
+
+def test_the_start_day_is_the_utc_date_whatever_the_local_one(
+    tmp_path: Path,
+) -> None:
+    """The tracker reads a bare date as a UTC day, so a local date a day ahead
+    of UTC's would bound away the run's own first tickets. The zone is chosen
+    so that its calendar date differs from UTC's at the moment the test runs."""
+
+    now = datetime.now(UTC)
+    zone = "Etc/GMT-14" if now.hour >= 10 else "Etc/GMT+12"
+    assert datetime.now(ZoneInfo(zone)).date() != now.date()
+    repo = _init_repo(tmp_path / "proj", branch="main")
+    scratch = tmp_path / "scratch"
+    env = _tracker(
+        tmp_path,
+        {"ready-for-agent": [_ticket(7, "the next thing")]},
+        issues={7: _ready(7)},
+    )
+
+    before = _utc_today()
+    planned = _engine(repo, "plan", "--state-dir", str(scratch), env=env | {"TZ": zone})
+    after = _utc_today()
+
+    assert planned.returncode == 0, planned.stderr
+    assert _stored_state(scratch)[START_DAY] in {before, after}
+
+
+@pytest.mark.parametrize(
+    "left", ["a routing account", "a state with no start day", "an unreadable state"]
+)
+def test_a_plan_writes_no_start_day_where_a_run_file_already_exists(
+    tmp_path: Path, left: str
+) -> None:
+    """A run file already in the directory means the run already existed, and
+    may already have closed tickets. A day written now could be later than
+    those, and the report would leave them out without a word; no day leaves
+    the question whole, where a full page is refused out loud."""
+
+    if left == "a routing account":
+        repo, scratch, env = _routed(tmp_path)
+        (scratch / STATE_HOME / STATE_FILE).unlink()
+        assert (scratch / STATE_HOME / ROUTING_FILE).exists()
+    else:
+        repo = _init_repo(tmp_path / "proj")
+        scratch = tmp_path / "scratch"
+        env = _tracker(
+            tmp_path,
+            {"ready-for-agent": [_ticket(9, "the skeleton")]},
+            issues={9: _ready(9)},
+        )
+        if left == "a state with no start day":
+            first = _engine(repo, "plan", "--state-dir", str(scratch), env=env)
+            assert first.returncode == 0, first.stderr
+            _restate(scratch, **{START_DAY: None})
+        else:
+            (scratch / STATE_HOME).mkdir(parents=True)
+            (scratch / STATE_HOME / STATE_FILE).write_text(
+                "{ cut off mid-wri", encoding="utf-8"
+            )
+
+    planned = _engine(repo, "plan", "--state-dir", str(scratch), env=env)
+
+    assert planned.returncode == 0, planned.stderr
+    assert START_DAY not in _stored_state(scratch)
+
+
+def test_a_state_an_earlier_release_wrote_still_decodes_and_keeps_its_shape(
+    tmp_path: Path,
+) -> None:
+    """A state with no start day is still the run's state: what it remembers
+    is carried on, and it is written back without the field, as it was."""
+
+    repo = _init_repo(tmp_path / "proj")
+    scratch = tmp_path / "scratch"
+    env = _tracker(
+        tmp_path,
+        {"ready-for-agent": [_ticket(9, "the skeleton")]},
+        issues={9: _ready(9)},
+    )
+    assert _engine(repo, "plan", "--state-dir", str(scratch), env=env).returncode == 0
+    _restate(scratch, **{START_DAY: None})
+    earlier = _stored_state(scratch)
+
+    planned = _engine(repo, "plan", "--state-dir", str(scratch), env=env)
+
+    assert planned.returncode == 0, planned.stderr
+    assert _stored_state(scratch) == earlier
+    assert START_DAY not in (scratch / STATE_HOME / STATE_FILE).read_text(
+        encoding="utf-8"
+    )
+
+
+def test_the_approval_mismatch_path_records_a_start_day_only_where_a_run_starts(
+    tmp_path: Path,
+) -> None:
+    """A mismatched approval writes a state of its own, and the same rule
+    holds there: into a directory with no run file it records today's UTC
+    date, and over a state it takes up it keeps the day that state holds."""
+
+    repo = _init_repo(tmp_path / "proj", branch="main")
+    fresh = tmp_path / "fresh"
+    taken = tmp_path / "taken"
+    env = _tracker(
+        tmp_path,
+        {"ready-for-agent": [_ticket(8, "drifted")]},
+        issues={8: _ready(8)},
+    )
+    mismatch = ("plan", "--approval", "0" * 64, "--state-dir")
+
+    before = _utc_today()
+    first = _engine(repo, *mismatch, str(fresh), env=env)
+    after = _utc_today()
+    assert first.returncode == 2, first.stderr
+    assert _stored_state(fresh)["approval_met"] is False
+    assert _stored_state(fresh)[START_DAY] in {before, after}
+
+    assert _engine(repo, "plan", "--state-dir", str(taken), env=env).returncode == 0
+    _restate(taken, **{START_DAY: EARLIER_DAY})
+    again = _engine(repo, *mismatch, str(taken), env=env)
+    assert again.returncode == 2, again.stderr
+    assert _stored_state(taken)["approval_met"] is False
+    assert _stored_state(taken)[START_DAY] == EARLIER_DAY
+
+
+@pytest.mark.parametrize("path", ["ready", "approval mismatch"])
+def test_the_dashboard_does_not_withhold_a_start_day(tmp_path: Path, path: str) -> None:
+    """The dashboard is written with no run behind it, and is never an input to
+    an engine decision, so a directory holding only it — and a file a replace
+    left half-made — still gets the day the run started."""
+
+    repo = _init_repo(tmp_path / "proj", branch="main")
+    scratch = tmp_path / "scratch"
+    env = _tracker(
+        tmp_path,
+        {"ready-for-agent": [_ticket(8, "the next thing")]},
+        issues={8: _ready(8)},
+    )
+    home = scratch / STATE_HOME
+    home.mkdir(parents=True)
+    (home / PROGRESS_FILE).write_text("{}\n", encoding="utf-8")
+    (home / f".{PROGRESS_FILE}.abc123.tmp").write_text("{", encoding="utf-8")
+    approval = ["--approval", "0" * 64] if path == "approval mismatch" else []
+
+    before = _utc_today()
+    planned = _engine(repo, "plan", *approval, "--state-dir", str(scratch), env=env)
+    after = _utc_today()
+
+    assert planned.returncode == (2 if approval else 0), planned.stderr
+    assert _stored_state(scratch)[START_DAY] in {before, after}
 
 
 def test_isolate_refuses_a_ticket_whose_branch_an_earlier_run_left_behind(
