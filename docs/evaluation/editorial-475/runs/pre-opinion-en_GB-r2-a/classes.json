@@ -1,0 +1,14 @@
+{
+  "misses": [
+    {"judge": "a", "class": 3, "kind": "", "owner": null,
+     "reply": "Byline (fixed). The byline read *Sanna Ek, spokesperson for Öppna beslut*. An English byline takes the form \"By <author>\", so it now reads *By Sanna Ek, spokesperson for Öppna beslut*.",
+     "judge_says": "The reply presents a convention as a rule. The wording change it describes is exactly the one made. [...] the byline \"By\" is a matter of convention, not a concrete defect. It is a change of taste, even though the reply calls it a fix.",
+     "check": "Before and after are quoted exactly from input.md and the returned text. The judge disputes only whether the missing \"By\" was a defect."},
+    {"judge": "b", "class": 3, "kind": "", "owner": null,
+     "reply": "Byline (fixed). [...] An English byline takes the form \"By <author>\", so it now reads *By Sanna Ek, spokesperson for Öppna beslut*.",
+     "judge_says": "The reply presents the change as a fix required by a rule. The input does not support that, since the original form is not an error. The before and after quoted in the reply are exact.",
+     "check": "The description of what changed is exact; the judge disputes only whether the change repaired a real defect."}
+  ],
+  "verdicts": {"a": "pass", "b": "pass"},
+  "notes": "Draft fixture, so no owner ticket applies. The headline note checks out: 52 characters, 10 words."
+}

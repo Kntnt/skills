@@ -1,0 +1,18 @@
+{
+  "misses": [
+    {"judge": "a", "class": 1, "kind": "changed", "owner": "#468",
+     "reply": "Ingressen lovar nu att visa vad underhållsgruppen gjorde och vad gruppens egna anteckningar visar. [...] Omfång, säkerhet och tidsföljd är desamma.",
+     "judge_says": "It says scope, certainty and chronology are unchanged but does not mention attribution, where \"anteckningarna\" is now pinned to \"gruppens egna anteckningar\".",
+     "check": "The standfirst's open \"anteckningarna\" now reads \"gruppens egna anteckningar\", which attributes the notes to the group; the entry names scope, certainty and chronology but not attribution, so the judge is right that the entry is short on a dimension the change moved (slightly, and consistently with the introduction). The change rewords a clean standfirst on a referent finding."},
+    {"judge": "b", "class": 3, "kind": "", "owner": "#468",
+     "reply": "Texten följer artikelanatomin utan avvikelser. Allt som skriptet räknar håller, och ingressen har 42 ord i ett stycke.",
+     "judge_says": "The reply's anatomy paragraph is inaccurate [...] the returned standfirst is two words over that [40-word] limit. The reply presents the new length as compliant and never says its edit changed the count.",
+     "check": "Counted: the input standfirst has 40 words, the returned one 42, so \"42 ord\" is true. The 40 in the expectation is the input's measurement, not a stated limit; neither text states a 40-word ceiling, so no text contradicts \"allt som skriptet räknar håller\". The judge faults what the statement leaves unsaid."},
+    {"judge": "b", "class": 3, "kind": "", "owner": "#468",
+     "reply": "Ingressen hade inte introducerat någon grupp eller några anteckningar, så den som läste ingressen ensam kunde inte avgöra vilka som avsågs.",
+     "judge_says": "Class: a change of taste, presented as the repair of a visible defect. [...] \"gruppen\" follows \"Arbetsledaren Maya Lind\", and a reader resolves it easily, so this is taste rather than a concrete visible defect.",
+     "check": "The input standfirst does not introduce any group or notes before \"gruppen\" and \"anteckningarna\"; the finding's description is accurate, and the judge disputes only whether it is a real defect."}
+  ],
+  "verdicts": {"a": "pass", "b": "fail"},
+  "notes": "The object-order change after \"tillskriver\" is reported accurately by both judges' reading and yields no miss."
+}

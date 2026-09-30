@@ -1,0 +1,59 @@
+I reviewed the piece as an opinion article in British English, with no narrative technique applied. All three settings come from the text's own `kntnt` metadata, which already matched, so the frontmatter is unchanged. I repaired three of four findings in one correction round; the fourth, the missing standfirst, is yours to write. `input.md` is untouched, and no files were left behind.
+
+````markdown
+---
+kntnt:
+  genre: opinion
+  technique: none
+  language: en_GB
+---
+
+# Keep the telephone until Lervik knows why it is used
+
+*By Sanna Ek, spokesperson for Öppna beslut*
+
+On 18 June the municipal executive board has before it a proposal that telephone booking of Lervik's association venues disappear in September. It should not settle that yet: keep both routes for six months, in all seven venues, and decide afterwards, with figures in hand.
+
+## The pilot counted bookings, not people
+
+The municipality's pilot report on the booking of association venues, dated 8 April 2026, covers an eight-week trial in two venues: 96 bookings were made on the web and 24 by telephone. The report counts bookings rather than unique people, and it measures nothing about age, ability or digital habit.
+
+Those 24 bookings therefore settle nothing about the residents behind them. They cannot show what share of residents are unable to book digitally; nor do they show the opposite, that the telephone survives out of habit. The report does not measure it.
+
+## The proposal rests on an inconvenience the papers do not measure
+
+The officers' report before the June meeting proposes removing telephone booking in all seven venues from September. The reason given is that staff should not have to enter details into two flows. Double administration is the administration's genuine objection to keeping both routes, not any view that telephone users are lazy or expensive, and I do not accuse it of holding one.
+
+What the papers do not contain is any measurement of the time that second flow costs, or any calculation of the saving. A permanent change for seven venues is being proposed on the strength of a nuisance the papers put no number on.
+
+## Six months would produce the figures
+
+Öppna beslut proposes six months in all seven venues with both routes kept open. The administration would record how long each route takes and would ask users to state, voluntarily, why they chose the telephone or the web. We make no claim to have funded or costed that trial; what it would cost is for the board to weigh.
+
+That a booking comes in by telephone is not proof that somebody cannot use the web. It is a reason to find out why the telephone is still being used. I am not against digital booking. I am against deciding before the cost of the work can be weighed against what each route is worth to the people who use it.
+
+## What the board can decide on 18 June
+
+The board can adopt the September removal on the material in front of it. Or it can postpone that decision, run the trial in all seven venues, and afterwards remove, change or keep a route with time figures and users' own reasons on the table. The trial costs something we have not costed; asking what that sum is, before the route goes, is the smaller risk.
+````
+
+**Findings**
+
+1. **Not fixed: there is no standfirst.** Between the headline and the byline, the article format needs one self-contained summary paragraph of at most 60 words. The only paragraph before the first subheading ("On 18 June the municipal executive board …") is the lead. A reader who meets the piece in a list or a share preview has nothing that says what it argues or why to read on. A missing part is reported rather than written, so this is left for you. Until a standfirst exists, whether it and the lead avoid repeating each other can't be checked either.
+2. **Fixed: the byline lacked the English "By" form.** "*Sanna Ek, spokesperson for Öppna beslut*" named the author without "By". Directly under the headline, it could be read as a caption or a credit line. It now reads "*By Sanna Ek, spokesperson for Öppna beslut*".
+3. **Fixed: the closing section opened on "It", which only its subheading explained.** "It can adopt the September removal …" followed a sentence ending "the people who use it". Read as body text, it didn't say who can make the decision. The sentence now begins "The board can adopt …".
+4. **Fixed: the booking methods were called both "routes" and "channels".** I changed the three uses of "channel(s)" to "route(s)", the word the proposal itself uses: "keeping both routes", "keep a route" and "before the route goes". "Flows" means the staff's data-entry work, which is a different thing, so it stays.
+
+**Structure**
+
+- **Headline:** 10 words (the guideline is three to eight) and 52 characters. I didn't count this as a finding: it meets the hard limits, and every word carries the argument.
+- **Headings:** the headline and the four subheadings are unchanged.
+- **Counted limits:** apart from the missing standfirst, every hard limit the measuring script checks holds on the final text. Because the standfirst is missing, the text does not yet fit the article format.
+
+**Claims**
+
+No claim was removed, changed or added. The three changes from "channel" to "route" name the same booking methods as before, and "The board" names the same actor as the "It" it replaced.
+
+**Other changes**
+
+Besides the wording above, the run made three kinds of change: it put the byline in the English "By" form, named who acts at the start of the closing section, and used "route" consistently for the booking methods. The final proofreading pass found nothing to correct.

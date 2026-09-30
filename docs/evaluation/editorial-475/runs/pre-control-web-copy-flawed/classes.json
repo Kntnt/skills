@@ -1,0 +1,18 @@
+{
+  "misses": [
+    {
+      "judge": "a",
+      "class": 3,
+      "kind": "",
+      "owner": null,
+      "reply": "four one-sentence sections became one sentence and a two-item list",
+      "judge_says": "One wording slip: the summary says the four sections became \"one sentence and a two-item list\", but the result is two sentences (\"...including VAT. It includes:\") followed by the list. ... The slip is minor.",
+      "check": "Returned text: \"Svale's review covers one shared room in one housing association and costs SEK 4,800 including VAT.\" then the stem \"It includes:\" and two list items. The price and scope sections became that one sentence; the two 'It includes' sections became the two-item list with its stem. The stem is not a sentence apart from the list it introduces, so the count one sentence plus a two-item list is not contradicted; the judge faults only the wording."
+    }
+  ],
+  "verdicts": {
+    "a": "pass",
+    "b": "pass"
+  },
+  "notes": "Judge b remarks that finding 6 calls the deliverable 'the written report' where the text keeps 'written account', but calls it only a paraphrase and the account accurate, so it is not recorded as a miss."
+}

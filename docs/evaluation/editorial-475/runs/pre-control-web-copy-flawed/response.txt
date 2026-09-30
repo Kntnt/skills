@@ -1,0 +1,43 @@
+I reviewed `input.md` as **webcopy** in **en_US** with no technique; the webcopy genre doesn't name one, and nothing else selected one. The review found six problems, and one correction round fixed all of them. The round was checked against the original, and the re-review found nothing it had introduced. No findings remain, and I wrote no files.
+
+````markdown
+# Svale reviews the booking steps for a shared room in your housing association
+
+Svale's review covers one shared room in one housing association and costs SEK 4,800 including VAT. It includes:
+
+- a 45-minute video call with two board representatives
+- a written account of the booking steps, unclear points and two possible simplifications
+
+## How to express interest and what happens next
+
+[Open the expression-of-interest form](https://example.invalid/svale/intresse).
+
+The link opens an expression-of-interest form asking for a name, association and email address. It places no order, requires no payment details and books no meeting. Svale replies by email within three working days to discuss whether the review is suitable and suggest a meeting time.
+````
+
+**What was fixed**
+
+1. **Headline** ("Unlock your association's full potential"): nothing on the page supported the promise, and "unlock" is corporate filler. The headline also didn't say what the page offers. It now names the offer.
+2. **Opening paragraph**: it was empty. "Complex reality" and "growing complexity" say the same thing. "Take the thumb out" is a word-for-word translation of the Swedish idiom *ta tummen ur* and makes no sense in English. "Fantastic journey" promised something the offer doesn't describe. The paragraph said nothing about the offer, so it was removed.
+3. **Link label** ("Book and pay now"): it promised an order, a payment and a booking. The page's own last section says the link does none of these. The label now says what the link does. It also now sits directly above the paragraph explaining what happens next.
+4. **Subheadings** ("Start", "It", "More", "Again", "Things", "Important"): none of them said what its section held. They were replaced by one heading, "How to express interest and what happens next", over the link and its explanation.
+5. **Unclear "It"**: four sections started with "It", but what "It" meant (the review) wasn't named until the last line of the page. The first sentence now names Svale's review.
+6. **Structure**: the link came before the offer was described, and the offer's details were split into four one-sentence sections. Now the scope and price come first, in one sentence. The video call and the written report follow as a list, and the link and its explanation come last.
+
+**What happened to the claims**
+
+- **Removed** (finding 2 identified the whole paragraph as the problem):
+  - that decision-makers in a complex reality face growing complexity
+  - the call to "take the thumb out"
+  - the promise that the reader will "discover a fantastic journey"
+- **Changed:**
+  - **Headline:** it no longer says the page will unlock your association's full potential. It now says Svale reviews the booking steps for a shared room in your housing association (finding 1).
+  - **Link label:** it no longer says the link books and takes payment. It now says the link opens an expression-of-interest form (finding 3).
+  - **Price and inclusions:** these used to belong to an unnamed "It". They are now stated as the price, scope and contents of Svale's review (findings 5 and 6).
+- **Added:**
+  - **Svale does the review:** the headline and first sentence now say so. The original only said that Svale replies by email to discuss whether the review is suitable (findings 1 and 5).
+  - **What the review examines:** the headline now says the review looks at the booking steps. The original only said the review includes a written account of the booking steps (finding 1).
+
+Apart from these, no claim was removed, changed or added. The last paragraph, about what the link opens and what happens next, is word for word what it was.
+
+In summary, the run did three kinds of work. It removed filler, an unsupported promise and a mistranslated Swedish idiom from the headline and opening. It replaced the six headings that said nothing with one heading that describes its section. It rebuilt the page so the offer comes before the action: four one-sentence sections became one sentence and a two-item list, and the link now sits just above its explanation. The final proofreading pass found no mechanical errors and made no corrections.

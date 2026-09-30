@@ -1,0 +1,8 @@
+{
+  "misses": [],
+  "verdicts": {
+    "a": "pass",
+    "b": "pass"
+  },
+  "notes": "Returned text is identical to input.md; neither judge faults any statement of the reply. Judge b's one gap (late concept not detected) is a detection criticism, not an A2 miss. Reply counts checked: headline 39 characters and 6 words, standfirst 18 words, twelve findings listed."
+}

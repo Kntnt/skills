@@ -1,0 +1,18 @@
+{
+  "misses": [
+    {"judge": "a", "class": 3, "kind": "", "owner": null,
+     "reply": "Before, readers didn't learn who was making the argument until the last line. That meant \"Öppna beslut proposes…\" and \"We make no claim to have funded or costed that trial\" in the third section came before they knew Öppna beslut is the author's organisation.",
+     "judge_says": "The reason the Skill gives is weaker than its report of the change. [...] the text marks the author's side before the end: \"Öppna beslut proposes…\" is followed straight away by \"We make no claim…\". (D1: a change of taste; the input shows no visible defect here.)",
+     "check": "In input.md the author's name and her role at Öppna beslut appear only in the closing line; \"We\" after \"Öppna beslut proposes\" lets a reader infer the side but never states the author's organisation. The text does not contradict the finding; the judge disputes whether it was a real defect."},
+    {"judge": "a", "class": 3, "kind": "", "owner": null,
+     "reply": "Without that paragraph, the body never says what the board is being asked to decide: removing phone booking from all seven community venues from September. The reader only meets \"a channel for good\" in section 2.",
+     "judge_says": "That overstates the case, because section 2 and the final section together make the decision clear.",
+     "check": "Without the opening paragraph, the body says \"close a channel for good\" (section 2) and \"decide whether a channel should be removed\" (last section); it never names phone booking as the channel to be removed, all seven venues as its scope, or September. The finding itself concedes \"a channel for good\". Not contradicted; the judge faults only its force."},
+    {"judge": "b", "class": 3, "kind": "", "owner": null,
+     "reply": "Fixed: the byline was in the wrong place and the wrong form. [...] Before, readers didn't learn who was making the argument until the last line.",
+     "judge_says": "That problem is weak when checked against the input [...] So this is not the repair of a visible defect. [...] The Skill calls it \"Fixed\", that is, a defect. As said above, I rate it as taste, but the reply describes the actual edit correctly.",
+     "check": "The byline was the last line in the dash form, as the reply says; the author is named only there. The description is accurate, and the judge disputes only whether the move repaired a real defect."}
+  ],
+  "verdicts": {"a": "pass", "b": "pass"},
+  "notes": "Draft fixture, so no owner ticket applies. Judge b's side note that the opening paragraph now sits where a standfirst goes is about the change, not a misreport; the move itself is reported."
+}

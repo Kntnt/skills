@@ -1,0 +1,5 @@
+Texten är skriven till `output.md`. Den behövde inget arbete. Granskningen gav inga fynd, så ingen korrigering gjordes och korrigeringsbudgeten på 1 användes inte. Korrekturläsningen hittade inga mekaniska fel. `output.md` är byte för byte identisk med `input.md`.
+
+Konfiguration: genre `webcopy` och språk `sv`, båda från anropet. Ingen teknik användes. Anropet angav ingen, och genren webcopy anger ingen teknik som den vanligen skrivs med.
+
+Inga påståenden har tagits bort, ändrats eller lagts till.

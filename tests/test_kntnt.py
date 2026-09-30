@@ -5917,6 +5917,166 @@ def test_the_shared_delivery_contract_holds_a_report_true_of_its_text() -> None:
     )
 
 
+# The reader that checks Redline's reply against both texts before it is
+# delivered: the brief it is started from, the one instruction step 11 gives
+# to start it, and the sentence the manpage tells the reader (issue #475).
+REDLINE_REPLY_CHECK = (
+    REPO_ROOT / "skills" / "editorial" / "redline" / "references" / "reply-check.md"
+)
+REDLINE_REPLY_CHECK_LINK = "[`reply-check.md`](references/reply-check.md)"
+REDLINE_REPLY_CHECK_START = (
+    "Once the reply is drafted, and before anything is delivered, have that check"
+    " made by a fresh subagent started from"
+)
+REDLINE_REPLY_CHECK_CORRECTS = "correct only the reply from what it returns"
+REDLINE_REPLY_CHECK_RETIRED = "make that check on the drafted reply once step 9 has run"
+REDLINE_EVERY_REPORTING_RUN = (
+    "make that measurement on every run whose reply says anything about a text"
+)
+REPLY_CHECK_PLACEHOLDERS = (
+    "`<received>`",
+    "`<delivered>`",
+    "`<reply>`",
+    "`<measurement>`",
+    "`<library>`",
+)
+REPLY_CHECK_TRUTH_CITATION = (
+    "*The truth of a report about the text* in `<library>/references/delivery.md`"
+)
+REPLY_CHECK_ACCOUNT_CITATION = "`<library>/references/editorial/base.review.md`"
+REPLY_CHECK_FALSE_LIST = (
+    "Every statement of the reply that the text it names contradicts"
+)
+REPLY_CHECK_SHORT_LIST = (
+    "Every difference between the two texts that moves a claim and that the"
+    " claim account leaves out, or reports short of what it did"
+)
+REPLY_CHECK_TEXT_UNTOUCHED = "The text is not touched"
+REPLY_CHECK_ONCE = "The check is made once"
+REPLY_CHECK_NO_CHANGE = (
+    "every run except one that returns only the short no-change status"
+)
+REPLY_CHECK_PAGE_CLAUSE = (
+    "Before the reply is delivered, a fresh reader that did not write it checks it"
+    " against both the text as it arrived and the delivered text"
+)
+
+
+def test_redline_has_its_reply_checked_by_a_reader_that_did_not_write_it() -> None:
+    """The run that made the changes is the reader least able to see them.
+
+    #435's evaluation found statements of Redline's reply that the text they
+    name contradicts, and claim-account entries short of what a change did,
+    in 9 of 18 runs under wording that already forbade both. What found them
+    was a reader comparing the two texts fresh. So a fresh subagent that did
+    not write the reply checks it against the text as it arrived and the
+    delivered text, and the run corrects the reply alone (issue #475).
+    """
+
+    skill = REDLINE_SKILL.read_text(encoding="utf-8")
+    steps = skill.split("\n## Steps\n", 1)[1]
+
+    # No step is added or renumbered: the check is started from within step 11.
+    numbered = re.findall(r"^(\d+)\. ", steps, flags=re.MULTILINE)
+    assert numbered == [str(n) for n in range(1, 12)], (
+        f"{REDLINE_SKILL}: the steps are numbered {numbered}, so a test or a"
+        f" cross-reference that finds step 11 by its number now reads another"
+        f" step (issue #475). See {STANDARD}."
+    )
+
+    # Step 11 starts the checker in one instruction, in place of the old one.
+    step_11 = steps.split("\n11. ", 1)[1]
+    for clause in (
+        REDLINE_REPLY_CHECK_START,
+        REDLINE_REPLY_CHECK_LINK,
+        REDLINE_REPLY_CHECK_CORRECTS,
+        REDLINE_EVERY_REPORTING_RUN,
+        REDLINE_FINAL_MEASUREMENT,
+        DELIVERY_TRUTH_POINTER,
+    ):
+        assert clause in step_11, (
+            f"{REDLINE_SKILL}: step 11 no longer says {clause!r}, so the reply"
+            f" is delivered as the run that wrote it checked it (issue #475)."
+            f" See {STANDARD}."
+        )
+    assert REDLINE_REPLY_CHECK_RETIRED not in step_11, (
+        f"{REDLINE_SKILL}: step 11 keeps the run's own check beside the"
+        f" checker, two instructions for one check (issue #475). See {STANDARD}."
+    )
+    assert step_11.count(REDLINE_REPLY_CHECK_LINK) == 1
+    assert "article_anatomy.py" not in step_11
+
+    # The brief is a reference of Redline's own, beside the correction brief.
+    assert REDLINE_REPLY_CHECK.is_file(), (
+        f"{REDLINE_REPLY_CHECK}: step 11 starts a checker from a brief that is"
+        f" not there (issue #475). See {STANDARD}."
+    )
+    brief = REDLINE_REPLY_CHECK.read_text(encoding="utf-8")
+    parent, subagent = brief.split("\n---\n", 1)
+    for clause in REPLY_CHECK_PLACEHOLDERS:
+        assert clause in parent and clause.strip("`") in subagent, (
+            f"{REDLINE_REPLY_CHECK}: {clause} is not both said and filled in,"
+            f" so the checker is not given what issue #475 gives it. See"
+            f" {STANDARD}."
+        )
+    for clause in (
+        REPLY_CHECK_NO_CHANGE,
+        REPLY_CHECK_TEXT_UNTOUCHED,
+        REPLY_CHECK_ONCE,
+    ):
+        assert clause in parent, (
+            f"{REDLINE_REPLY_CHECK}: the parent's half no longer says"
+            f" {clause!r} (issue #475). See {STANDARD}."
+        )
+    for clause in (
+        REPLY_CHECK_TRUTH_CITATION,
+        REPLY_CHECK_ACCOUNT_CITATION,
+        REPLY_CHECK_FALSE_LIST,
+        REPLY_CHECK_SHORT_LIST,
+    ):
+        assert clause in subagent, (
+            f"{REDLINE_REPLY_CHECK}: the checker's brief no longer says"
+            f" {clause!r}, so it returns less than issue #475 asks. See"
+            f" {STANDARD}."
+        )
+    # It knows only what the reply's reader knows, never this Skill's steps.
+    assert "SKILL.md" not in subagent
+
+    # The duties it applies are cited, never restated.
+    delivery = DELIVERY.read_text(encoding="utf-8")
+    truth = delivery.split(DELIVERY_TRUTH_HEADING, 1)[1].split("\n## ", 1)[0]
+    account = next(
+        block
+        for block in _paragraphs(BASE_REVIEW.read_text(encoding="utf-8"))
+        if "remains part of the claim account" in block
+    )
+    for source, block in ((DELIVERY, truth), (BASE_REVIEW, account)):
+        for sentence in re.split(r"(?<=[.;])\s+", block):
+            if len(sentence) > 60:
+                assert sentence not in brief, (
+                    f"{REDLINE_REPLY_CHECK}: restates {sentence[:60]!r} from"
+                    f" {source} rather than citing it, a second copy of the"
+                    f" duty free to drift (issue #475). See {STANDARD}."
+                )
+
+    # No Skill body states the checker's duty in its own words.
+    for body_path in sorted((REPO_ROOT / "skills").rglob("SKILL.md")):
+        body = body_path.read_text(encoding="utf-8")
+        for clause in (REPLY_CHECK_FALSE_LIST, REPLY_CHECK_SHORT_LIST):
+            assert clause not in body, (
+                f"{body_path}: states the checker's duty itself rather than"
+                f" pointing at its brief (issue #475). See {STANDARD}."
+            )
+
+    # The manpage tells its reader the reply is checked before delivery.
+    page = REDLINE_HELP.read_text(encoding="utf-8")
+    assert REPLY_CHECK_PAGE_CLAUSE in page, (
+        f"{REDLINE_HELP}: the manpage does not say that a fresh reader checks"
+        f" the reply against both texts before delivery (issue #475). See"
+        f" {STANDARD}."
+    )
+
+
 # The shared delivery contract's answer to what the response of a run that
 # named a destination carries: where the text went and the findings the file
 # cannot hold, and never the text itself (issue #148).

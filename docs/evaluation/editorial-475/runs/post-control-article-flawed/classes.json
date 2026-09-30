@@ -1,0 +1,8 @@
+{
+  "misses": [],
+  "verdicts": {
+    "a": "pass",
+    "b": "pass"
+  },
+  "notes": "Both judges checked the reply's counts (187, 42/7, 28, 146 words) and found every difference reported accurately; judge a's partial note on the late concept concerns the expectation, not a statement of the reply."
+}

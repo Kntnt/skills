@@ -1,0 +1,27 @@
+{
+  "misses": [
+    {
+      "judge": "a",
+      "class": 3,
+      "kind": "",
+      "owner": null,
+      "reply": "Fixed: the byline lacked the English \"By\" form. … Directly under the headline, it could be read as a caption or a credit line.",
+      "judge_says": "The reply calls this a defect (\"could be read as a caption or a credit line\"). I judge it a matter of taste, but the change itself is described correctly.",
+      "check": "Input byline '*Sanna Ek, spokesperson for Öppna beslut*' has no 'By'; returned '*By Sanna Ek, …*'. The description is true; the judge disputes only that it was a defect."
+    },
+    {
+      "judge": "b",
+      "class": 3,
+      "kind": "",
+      "owner": null,
+      "reply": "Fixed: the byline lacked the English \"By\" form. … Directly under the headline, it could be read as a caption or a credit line.",
+      "judge_says": "The reply calls it a defect (\"it could be read as a caption or a credit line\"). I class it as taste, but the report of the change is accurate.",
+      "check": "Same statement: true of both texts; the judge disputes only whether it was a defect."
+    }
+  ],
+  "verdicts": {
+    "a": "pass",
+    "b": "pass"
+  },
+  "notes": "Headline counted: 10 words, 52 characters, as the reply says. Three uses of 'channel(s)' in the input, as the reply says."
+}

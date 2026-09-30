@@ -1,0 +1,38 @@
+Den granskade texten finns i `output.md`. `input.md` är orörd. Ett fynd åtgärdades och inga fynd återstår.
+
+**Inställningar**
+- **Genre:** krönika (`column`), från anropet.
+- **Teknik:** ingen. Krönikegenren säger att den vanligen skrivs utan teknik, och inget annat ställe angav någon.
+- **Språk:** svenska (`sv`), från anropet.
+- **Skrivbrief:** ingen.
+
+**Fynd**
+
+1. *Åtgärdat.* Slutet saknade ett eget avsnitt.
+   - **Brist:** Det sista avsnittet, ”Ännu en ruta, och ändå vill jag prova”, innehöll både förslaget och textens avslutande uppmaning. Förslaget är frågan och invändningen mot den. Uppmaningen börjar ”Prova ändå frågan nästa gång du bokar ett möte …”.
+   - **Krav:** Artikelanatomin kräver att slutet är ett eget avsnitt med en egen mellanrubrik.
+   - **Följd för läsaren:** Den som skummade rubrikerna kunde inte se var förslaget slutade och uppmaningen började.
+   - **Reparation:** Slutstycket står nu oförändrat under en ny mellanrubrik, ”Om mallen blir bättre vet vi inte förrän vi har provat”. Förslagsstycket står kvar under den gamla mellanrubriken, som har samma lydelse.
+
+**Anatomin**
+
+Texten följer artikelanatomin. Mätskriptet godkänner de räknade kraven i den levererade texten. Kraven som skriptet inte räknar har jag granskat genom läsning: ingressen, inledningen, att mellanrubrikerna beskriver sina avsnitt och slutet. Det finns två avvikelser från normerna, men ingen av dem är ett fynd:
+- Första stycket under ”Det är inte bara besluten jag vill åt” har 83 ord, och normen är högst 80. Stycket håller en tanke och läses väl.
+- Bara ett av tre avsnitt har två eller tre stycken. Förslagsavsnittet och slutet består nu av ett stycke var.
+
+**Påståendena**
+
+- *Tillagt:* Den nya mellanrubriken påstår att vi inte kan veta om mallen blir bättre förrän frågan har prövats. Det står som något ”vi” inte vet.
+  - Närmast i texten kommer slutmeningen ”Det är den enda förbättring jag kan lova innan vi har provat”. Den handlar om vad skribenten kan lova, inte om vad någon vet.
+  - Påståendet kom till när fynd 1 reparerades.
+- *Ändrat:* Uppmaningen ”Prova ändå frågan nästa gång du bokar ett möte …” har samma lydelse, men dess ”ändå” syftar nu på något annat.
+  - **Förut:** Uppmaningen kom direkt efter invändningen ”lösningen på ett formulär är ett längre formulär”, i samma avsnitt. ”Ändå” betydde då ”trots den invändningen”.
+  - **Nu:** Den nya mellanrubriken står emellan, så ”ändå” kan läsas som ”trots att vi inte vet”. Rubriken ger också ett skäl att prova som texten inte hade när den kom in: att ett försök ska avgöra om mallen blir bättre.
+  - **Rubriken ovanför:** Mellanrubriken ”Ännu en ruta, och ändå vill jag prova” har samma lydelse. Den står nu bara över förslagsstycket och inte längre över stycket där läsaren uppmanas att prova.
+  - Ändringen kom till när fynd 1 reparerades.
+
+Inget påstående togs bort. Utöver det tillagda och det ändrade ovan påstår texten samma sak som när den kom in.
+
+**Vad körningen ändrade i övrigt**
+
+Strukturen har reparerats: det sista avsnittet har delats så att slutet har fått ett eget avsnitt under en ny mellanrubrik. Inga anti-slop-mönster togs bort, och den avslutande mekaniska korrekturen gjorde inga ändringar.

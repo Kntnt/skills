@@ -1,0 +1,3 @@
+Ingen ändring behövs i `input.md`. Granskningen hittade inga redaktionella brister, så korrigeringsbudgeten (1) användes inte. Korrekturläsningen hittade inga fel i stavning, grammatik eller interpunktion. Inga filer har skrivits, och filen är orörd.
+
+Granskningen gällde genren krönika (`column`) på svenska (`sv`), utan någon berättarteknik, eftersom krönikan inte anger någon. Texten följer artikelns anatomi. Ett stycke under ”Det är inte bara besluten jag vill åt” har 83 ord, strax över normen på 80. Stycket rymmer en tanke och fungerar i den längden, så det räknas inte som ett fel.

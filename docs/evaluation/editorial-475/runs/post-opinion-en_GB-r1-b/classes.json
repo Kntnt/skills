@@ -1,0 +1,27 @@
+{
+  "misses": [
+    {
+      "judge": "b",
+      "class": 3,
+      "kind": "",
+      "owner": "#468",
+      "reply": "Byline out of place (repaired). ... A reader therefore met \"Öppna beslut proposes…\" and \"We make no claim…\" without knowing that the author speaks for Öppna beslut.",
+      "judge_says": "That reading is defensible but weak. A closing sign-off is a standard form for an opinion piece, and \"Öppna beslut proposes\" already names the proposer in the sentence before \"We make no claim\".",
+      "check": "True of the input: the author's role as spokesperson for Öppna beslut appears only in the closing sign-off, after 'Öppna beslut proposes' and 'We make no claim'. The judge disputes only whether this is a real defect."
+    },
+    {
+      "judge": "b",
+      "class": 3,
+      "kind": "",
+      "owner": "#468",
+      "reply": "Lead relied on the headline (repaired). The lead said \"the council executive board\" and \"all seven community venues\" without saying whose.",
+      "judge_says": "The Skill presents this as the repair of a visible defect (\"Lead relied on the headline\"). I do not find a defect a reader would stumble on, because the lead sits directly under a headline that names Lervik.",
+      "check": "True of the input: the lead's first sentence says 'the council executive board' with no owner, Lervik is named only in the headline before 'Lervik's residents' in 'What the pilot actually counted'. Judge b itself confirms this. The judge disputes only whether it is a defect."
+    }
+  ],
+  "verdicts": {
+    "a": "pass",
+    "b": "pass"
+  },
+  "notes": "Judge a faults no statement of the reply. Judge b states 'I found no difference that the reply leaves out or misreports'; its two entries are disputes of whether the repaired findings were real defects, recorded as class 3. Judge b's 'all five subheadings' is the judge's own miscount (the text has four), not a miss of the reply."
+}

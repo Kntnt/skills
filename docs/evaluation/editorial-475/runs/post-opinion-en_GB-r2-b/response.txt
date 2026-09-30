@@ -1,0 +1,55 @@
+I reviewed `input.md` against the rules for an opinion piece in British English. I read those three settings (genre, technique and language) from the text's own `kntnt` map. The map sets the technique to `none` and opinion pieces have no default one either, so no narrative structure was imposed. The map already matched those settings and is unchanged. I made one correction round, checked it afterwards, and then did a final proofreading pass.
+
+````markdown
+---
+kntnt:
+  genre: opinion
+  technique: none
+  language: en_GB
+---
+
+# Keep the telephone until Lervik knows why it is used
+
+*By Sanna Ek, spokesperson for Öppna beslut*
+
+On 18 June the municipal executive board has before it a proposal that telephone booking of Lervik's association venues disappear in September. It should not settle that yet: keep both routes, telephone and web, for six months, in all seven venues, and decide afterwards, with figures in hand.
+
+## The pilot counted bookings, not people
+
+The municipality's pilot report on the booking of association venues, dated 8 April 2026, covers an eight-week trial in two venues: 96 bookings were made on the web and 24 by telephone. The report counts bookings rather than unique people, and it measures nothing about age, ability or digital habit.
+
+Those 24 bookings therefore settle nothing about the residents behind them. They cannot show what share of residents are unable to book digitally; nor do they show the opposite, that the telephone survives out of habit. The report does not measure it.
+
+## The proposal rests on an inconvenience the papers do not measure
+
+The officers' report before the June meeting proposes removing telephone booking in all seven venues from September. The reason given is that staff should not have to enter details into two flows. Double administration is the administration's genuine objection to keeping both routes, not any view that telephone users are lazy or expensive, and I do not accuse it of holding one.
+
+What the papers do not contain is any measurement of the time that second flow costs, or any calculation of the saving. A permanent change for seven venues is being proposed on the strength of a nuisance the papers put no number on.
+
+## Six months would produce the figures
+
+Öppna beslut proposes six months in all seven venues with both routes kept open. The administration would record how long each route takes and would ask users to state, voluntarily, why they chose the telephone or the web. We make no claim to have funded or costed that trial; what it would cost is for the board to weigh.
+
+That a booking comes in by telephone is not proof that somebody cannot use the web. It is a reason to find out why the telephone is still being used. I am not against digital booking. I am against deciding before the cost of the work can be weighed against what each route is worth to the people who use it.
+
+## What the board can decide on 18 June
+
+The board can adopt the September removal on the material in front of it. Or it can postpone that decision, run the trial in all seven venues, and afterwards remove, change or keep a route with time figures and users' own reasons on the table. The trial costs something we have not costed; asking what that sum is, before the route goes, is the smaller risk.
+````
+
+## Findings
+
+1. **No standfirst (unresolved).** There is no summary paragraph between the headline and the byline. A reader who sees the piece in a list or a feed gets no standalone summary of what it argues or why it is worth reading. I report a missing part rather than write it, so someone needs to add one: a single paragraph of at most 60 words that makes sense alone and does not start with the same words as the lead.
+2. **Byline in the wrong form (fixed).** "Sanna Ek, spokesperson for Öppna beslut" did not follow the English form "By <author>". It now reads "By Sanna Ek, spokesperson for Öppna beslut". The italics, author and role are as they were.
+3. **The lead did not name the second route (fixed).** "keep both routes" referred to a route the lead had not named, and the reader only learnt it was the web in the next section. The lead now says "keep both routes, telephone and web".
+4. **"Route" and "channel" used for the same thing (fixed).** The booking method was a "route" in the lead and the third section, but a "channel" in the second and last sections, so the reader had to work out that both words meant the same thing. "Channel" now reads "route" in all three places: "keeping both routes", "keep a route" and "before the route goes". I left "flows" alone because it means the staff's data entry, not the booking method.
+5. **The last section opened on "It", which only its subheading explained (fixed).** "It can adopt the September removal…" relied on the subheading to supply "the board". Without the subheading, the nearest possible meanings were "each route" and "the people who use it". It now opens "The board can adopt…".
+6. **Öppna beslut is never explained (unresolved).** An English reader is not told what kind of organisation Öppna beslut is, so they can't judge the standing of whoever is proposing the trial. Fixing this needs information the text doesn't contain.
+
+The correction budget of one round is used up. Findings 1 and 6 are still open and need a person to settle them.
+
+**Structure.** The text does not meet the article structure because it has no standfirst. That is the only rule it fails. The headline has 10 words, against a guideline of three to eight. At 52 characters, though, it states the whole argument, and a shorter one would not serve the reader better, so I did not count it as a finding. Every other counted limit is met. I also checked the rules the measuring script can't count, and they hold: the lead introduces the subject and says what the reader will learn, and each subheading describes its section. The last section is a separate ending that tells the board what it can do, and each section now makes sense without its subheading. Whether the standfirst works alone, and whether the lead avoids repeating it, can't be judged until there is one.
+
+**Claims.** One claim changed: the lead now says the two routes are the telephone and the web (finding 3). Before, the lead left the second route unnamed, although the third section already named it. No claim was removed or added, and apart from that change to the lead no claim moved.
+
+**Other changes.** The byline now follows the English form, the booking method has one name throughout, and the last section names the board instead of relying on its subheading. The final proofreading pass found nothing to correct. `input.md` is untouched, and the temporary files from this run have been removed.

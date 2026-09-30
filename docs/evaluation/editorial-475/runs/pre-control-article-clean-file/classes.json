@@ -1,0 +1,36 @@
+{
+  "misses": [
+    {
+      "judge": "a",
+      "class": 3,
+      "kind": "",
+      "owner": "#468",
+      "reply": "Det nya påståendet är textens egen rekommendation, alltså Rasks råd och uppmaningen i slutet.",
+      "judge_says": "The reply does not say that the recommendation has moved from Rask to the article's own voice. That shift in attribution goes unreported.",
+      "check": "input.md already states the recommendation in the article's own voice: 'Lägg därför tiderna för när rummen används bredvid mätvärdena innan nästa givare sätts upp.' The reply names both sources (Rask and the ending). The headline therefore takes over a recommendation the text already makes unattributed; the attribution did not move, and the reply's statement is true. The dropped timing condition and lost limitation are reported. Class 3."
+    },
+    {
+      "judge": "b",
+      "class": 3,
+      "kind": "",
+      "owner": "#468",
+      "reply": "Rubriken upprepade ingressen (åtgärdat). ... Båda använde orden ”inte varför”.",
+      "judge_says": "The account is inaccurate in how it classifies the change. It calls a working headline a defect (\"upprepade ingressen\").",
+      "check": "The old headline 'visar när, inte varför' and the standfirst's second sentence '... men förklarar inte varför luften var kall' both carry 'inte varför' and the same point, so the description is true. The judge disputes only whether this was a real defect."
+    },
+    {
+      "judge": "b",
+      "class": 3,
+      "kind": "",
+      "owner": "#468",
+      "reply": "Det nya påståendet är textens egen rekommendation, alltså Rasks råd och uppmaningen i slutet.",
+      "judge_says": "It never says that the recommendation, which the body attributes to Rask, now appears without attribution.",
+      "check": "As for judge a: the body's closing sentence already makes the recommendation in the article's own voice, and the reply names it as a source. No attribution moved; the statement is true. Class 3."
+    }
+  ],
+  "verdicts": {
+    "a": "fail",
+    "b": "fail"
+  },
+  "notes": "The attribution misses are the closest call: they would be class 1 if the headline's recommendation were Rask's alone in the body, but input.md line 21 states it unattributed in the article's voice. New headline recounted: 58 characters, 6 words, as the reply says."
+}

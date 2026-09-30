@@ -1,0 +1,27 @@
+{
+  "misses": [
+    {
+      "judge": "a",
+      "class": 3,
+      "kind": "",
+      "owner": null,
+      "reply": "Övriga delar finns i rätt ordning. Sista avsnittet är ett eget slutavsnitt, och varje mellanrubrik beskriver sitt avsnitt.",
+      "judge_says": "The anatomy line at the top ... describes the returned text, not the input. Read alone it could mislead, but the heading repairs listed below it make clear what was wrong before.",
+      "check": "True of the returned text: it has a separate closing section under \"Kommunstyrelsen bör ge telefonbokningen en chans\" and each subheading describes its section. The judge faults only what the line might suggest about the input."
+    },
+    {
+      "judge": "a",
+      "class": 3,
+      "kind": "",
+      "owner": null,
+      "reply": "Ändrade: Mellanrubriken ”Kommunstyrelsen bör ge telefonbokningen en chans” återger förslaget i första stycket som en rekommendation. Den nämner varken ”ett halvårs”, ”försök” eller ”i alla sju lokaler”, och den lägger till en inramning",
+      "judge_says": "It is filed under \"Ändrade\" although it is new text, which is a minor filing quirk that does not mislead.",
+      "check": "The entry's content is true of the returned text: the subheading restates the opening proposal without the half-year, trial and seven venues, and adds the framing \"en chans\", all of which the entry says. Only the section it is filed under is faulted, and the judge says it does not mislead."
+    }
+  ],
+  "verdicts": {
+    "a": "pass",
+    "b": "pass"
+  },
+  "notes": "Both judges find every difference reported accurately. Checked the reply's count: \"Telefonbokningen bör få finnas kvar i ett halvår\" is 48 characters and 8 words, as stated (judge b confirms)."
+}

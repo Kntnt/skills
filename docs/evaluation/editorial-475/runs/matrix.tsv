@@ -1,0 +1,47 @@
+lane	run	arm	revision	input	invocation	capture
+A	pre-column-sv-r1-a	pre	41fd4c55fa03bf2be3ffad3b5124e2735f1fbf44	docs/evaluation/editorial-362/runs/column-sv-r1/redline/work/input.md	/redline --output=response input.md	no
+A	post-column-sv-r1-a	post	29d4b6743c47a079a4a78a562f0d9d28826f7dd2	docs/evaluation/editorial-362/runs/column-sv-r1/redline/work/input.md	/redline --output=response input.md	no
+A	pre-column-sv-r1-b	pre	41fd4c55fa03bf2be3ffad3b5124e2735f1fbf44	docs/evaluation/editorial-362/runs/column-sv-r1/redline/work/input.md	/redline --output=response input.md	no
+A	post-column-sv-r1-b	post	29d4b6743c47a079a4a78a562f0d9d28826f7dd2	docs/evaluation/editorial-362/runs/column-sv-r1/redline/work/input.md	/redline --output=response input.md	no
+A	pre-control-article-flawed	pre	41fd4c55fa03bf2be3ffad3b5124e2735f1fbf44	docs/evaluation/corpus/editorial-quality/controls/article-flawed.md	/redline --genre=article --language=sv --output=response input.md	no
+A	post-control-article-flawed	post	29d4b6743c47a079a4a78a562f0d9d28826f7dd2	docs/evaluation/corpus/editorial-quality/controls/article-flawed.md	/redline --genre=article --language=sv --output=response input.md	no
+B	pre-column-sv-r2-a	pre	41fd4c55fa03bf2be3ffad3b5124e2735f1fbf44	docs/evaluation/editorial-362/runs/column-sv-r2/redline/work/input.md	/redline --output=response input.md	no
+B	post-column-sv-r2-a	post	29d4b6743c47a079a4a78a562f0d9d28826f7dd2	docs/evaluation/editorial-362/runs/column-sv-r2/redline/work/input.md	/redline --output=response input.md	no
+B	pre-column-sv-r2-b	pre	41fd4c55fa03bf2be3ffad3b5124e2735f1fbf44	docs/evaluation/editorial-362/runs/column-sv-r2/redline/work/input.md	/redline --output=response input.md	no
+B	post-column-sv-r2-b	post	29d4b6743c47a079a4a78a562f0d9d28826f7dd2	docs/evaluation/editorial-362/runs/column-sv-r2/redline/work/input.md	/redline --output=response input.md	no
+B	pre-control-case-study-flawed	pre	41fd4c55fa03bf2be3ffad3b5124e2735f1fbf44	docs/evaluation/corpus/editorial-quality/controls/case-study-flawed.md	/redline --genre=casestudy --language=sv --output=response input.md	no
+B	post-control-case-study-flawed	post	29d4b6743c47a079a4a78a562f0d9d28826f7dd2	docs/evaluation/corpus/editorial-quality/controls/case-study-flawed.md	/redline --genre=casestudy --language=sv --output=response input.md	no
+C	pre-opinion-en_GB-r1-a	pre	41fd4c55fa03bf2be3ffad3b5124e2735f1fbf44	docs/evaluation/editorial-362/runs/opinion-en_GB-r1/redline/work/input.md	/redline --output=response input.md	no
+C	post-opinion-en_GB-r1-a	post	29d4b6743c47a079a4a78a562f0d9d28826f7dd2	docs/evaluation/editorial-362/runs/opinion-en_GB-r1/redline/work/input.md	/redline --output=response input.md	no
+C	pre-opinion-en_GB-r1-b	pre	41fd4c55fa03bf2be3ffad3b5124e2735f1fbf44	docs/evaluation/editorial-362/runs/opinion-en_GB-r1/redline/work/input.md	/redline --output=response input.md	no
+C	post-opinion-en_GB-r1-b	post	29d4b6743c47a079a4a78a562f0d9d28826f7dd2	docs/evaluation/editorial-362/runs/opinion-en_GB-r1/redline/work/input.md	/redline --output=response input.md	no
+C	pre-control-column-flawed	pre	41fd4c55fa03bf2be3ffad3b5124e2735f1fbf44	docs/evaluation/corpus/editorial-quality/controls/column-flawed.md	/redline --genre=column --language=sv --output=response input.md	no
+C	post-control-column-flawed	post	29d4b6743c47a079a4a78a562f0d9d28826f7dd2	docs/evaluation/corpus/editorial-quality/controls/column-flawed.md	/redline --genre=column --language=sv --output=response input.md	no
+D	pre-opinion-en_GB-r2-a	pre	41fd4c55fa03bf2be3ffad3b5124e2735f1fbf44	docs/evaluation/editorial-362/runs/opinion-en_GB-r2/redline/work/input.md	/redline --output=response input.md	no
+D	post-opinion-en_GB-r2-a	post	29d4b6743c47a079a4a78a562f0d9d28826f7dd2	docs/evaluation/editorial-362/runs/opinion-en_GB-r2/redline/work/input.md	/redline --output=response input.md	no
+D	pre-opinion-en_GB-r2-b	pre	41fd4c55fa03bf2be3ffad3b5124e2735f1fbf44	docs/evaluation/editorial-362/runs/opinion-en_GB-r2/redline/work/input.md	/redline --output=response input.md	no
+D	post-opinion-en_GB-r2-b	post	29d4b6743c47a079a4a78a562f0d9d28826f7dd2	docs/evaluation/editorial-362/runs/opinion-en_GB-r2/redline/work/input.md	/redline --output=response input.md	no
+D	pre-control-opinion-flawed	pre	41fd4c55fa03bf2be3ffad3b5124e2735f1fbf44	docs/evaluation/corpus/editorial-quality/controls/opinion-flawed.md	/redline --genre=opinion --language=sv --output=response input.md	no
+D	post-control-opinion-flawed	post	29d4b6743c47a079a4a78a562f0d9d28826f7dd2	docs/evaluation/corpus/editorial-quality/controls/opinion-flawed.md	/redline --genre=opinion --language=sv --output=response input.md	no
+E	pre-control-article-clean	pre	41fd4c55fa03bf2be3ffad3b5124e2735f1fbf44	docs/evaluation/corpus/editorial-quality/controls/article-clean.md	/redline --genre=article --language=sv --output=response input.md	no
+E	pre-control-article-clean-file	pre	41fd4c55fa03bf2be3ffad3b5124e2735f1fbf44	docs/evaluation/corpus/editorial-quality/controls/article-clean.md	/redline --genre=article --language=sv --output=output.md input.md	yes
+E	post-control-article-clean	post	29d4b6743c47a079a4a78a562f0d9d28826f7dd2	docs/evaluation/corpus/editorial-quality/controls/article-clean.md	/redline --genre=article --language=sv --output=response input.md	no
+E	post-control-article-clean-file	post	29d4b6743c47a079a4a78a562f0d9d28826f7dd2	docs/evaluation/corpus/editorial-quality/controls/article-clean.md	/redline --genre=article --language=sv --output=output.md input.md	yes
+E	pre-control-web-copy-flawed	pre	41fd4c55fa03bf2be3ffad3b5124e2735f1fbf44	docs/evaluation/corpus/editorial-quality/controls/web-copy-flawed.md	/redline --genre=webcopy --language=en_US --output=response input.md	no
+E	post-control-web-copy-flawed	post	29d4b6743c47a079a4a78a562f0d9d28826f7dd2	docs/evaluation/corpus/editorial-quality/controls/web-copy-flawed.md	/redline --genre=webcopy --language=en_US --output=response input.md	no
+F	pre-control-case-study-clean	pre	41fd4c55fa03bf2be3ffad3b5124e2735f1fbf44	docs/evaluation/corpus/editorial-quality/controls/case-study-clean.md	/redline --genre=casestudy --language=sv --output=response input.md	no
+F	pre-control-case-study-clean-file	pre	41fd4c55fa03bf2be3ffad3b5124e2735f1fbf44	docs/evaluation/corpus/editorial-quality/controls/case-study-clean.md	/redline --genre=casestudy --language=sv --output=output.md input.md	yes
+F	post-control-case-study-clean	post	29d4b6743c47a079a4a78a562f0d9d28826f7dd2	docs/evaluation/corpus/editorial-quality/controls/case-study-clean.md	/redline --genre=casestudy --language=sv --output=response input.md	no
+F	post-control-case-study-clean-file	post	29d4b6743c47a079a4a78a562f0d9d28826f7dd2	docs/evaluation/corpus/editorial-quality/controls/case-study-clean.md	/redline --genre=casestudy --language=sv --output=output.md input.md	yes
+F	pre-control-column-clean	pre	41fd4c55fa03bf2be3ffad3b5124e2735f1fbf44	docs/evaluation/corpus/editorial-quality/controls/column-clean.md	/redline --genre=column --language=sv --output=response input.md	no
+F	pre-control-column-clean-file	pre	41fd4c55fa03bf2be3ffad3b5124e2735f1fbf44	docs/evaluation/corpus/editorial-quality/controls/column-clean.md	/redline --genre=column --language=sv --output=output.md input.md	yes
+F	post-control-column-clean	post	29d4b6743c47a079a4a78a562f0d9d28826f7dd2	docs/evaluation/corpus/editorial-quality/controls/column-clean.md	/redline --genre=column --language=sv --output=response input.md	no
+F	post-control-column-clean-file	post	29d4b6743c47a079a4a78a562f0d9d28826f7dd2	docs/evaluation/corpus/editorial-quality/controls/column-clean.md	/redline --genre=column --language=sv --output=output.md input.md	yes
+G	pre-control-opinion-clean	pre	41fd4c55fa03bf2be3ffad3b5124e2735f1fbf44	docs/evaluation/corpus/editorial-quality/controls/opinion-clean.md	/redline --genre=opinion --language=sv --output=response input.md	no
+G	pre-control-opinion-clean-file	pre	41fd4c55fa03bf2be3ffad3b5124e2735f1fbf44	docs/evaluation/corpus/editorial-quality/controls/opinion-clean.md	/redline --genre=opinion --language=sv --output=output.md input.md	yes
+G	post-control-opinion-clean	post	29d4b6743c47a079a4a78a562f0d9d28826f7dd2	docs/evaluation/corpus/editorial-quality/controls/opinion-clean.md	/redline --genre=opinion --language=sv --output=response input.md	no
+G	post-control-opinion-clean-file	post	29d4b6743c47a079a4a78a562f0d9d28826f7dd2	docs/evaluation/corpus/editorial-quality/controls/opinion-clean.md	/redline --genre=opinion --language=sv --output=output.md input.md	yes
+G	pre-control-web-copy-clean	pre	41fd4c55fa03bf2be3ffad3b5124e2735f1fbf44	docs/evaluation/corpus/editorial-quality/controls/web-copy-clean.md	/redline --genre=webcopy --language=sv --output=response input.md	no
+G	pre-control-web-copy-clean-file	pre	41fd4c55fa03bf2be3ffad3b5124e2735f1fbf44	docs/evaluation/corpus/editorial-quality/controls/web-copy-clean.md	/redline --genre=webcopy --language=sv --output=output.md input.md	yes
+G	post-control-web-copy-clean	post	29d4b6743c47a079a4a78a562f0d9d28826f7dd2	docs/evaluation/corpus/editorial-quality/controls/web-copy-clean.md	/redline --genre=webcopy --language=sv --output=response input.md	no
+G	post-control-web-copy-clean-file	post	29d4b6743c47a079a4a78a562f0d9d28826f7dd2	docs/evaluation/corpus/editorial-quality/controls/web-copy-clean.md	/redline --genre=webcopy --language=sv --output=output.md input.md	yes

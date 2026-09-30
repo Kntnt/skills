@@ -1,0 +1,22 @@
+Texten är granskad och sparad i `output.md`. `input.md` har inte ändrats.
+
+**Inställningar:** genre `article` och språk `sv`, båda från anropet. Ingen teknik användes, eftersom genren `article` anger att den normalt skrivs utan någon. Ingen skrivbrief användes.
+
+**Anmärkningar**
+
+1. *Ingressens första mening (åtgärdad).* Meningen började ”Under 14 av 120 lektionspass …”, och vid en snabb läsning uppfattas det som ”färre än 14 av 120”. Dessutom stod ”under” i två betydelser i samma mening. Den som skumläste ingressen kunde tro att 14 var en övre gräns, fast brödtexten anger exakt 14. ”Under” är utbytt mot ”Vid”.
+
+Alla anmärkningar är åtgärdade.
+
+**Artikelns uppbyggnad:** Texten följer uppbyggnaden för en artikel utan avvikelser. Mätskriptet godkänner alla räknade krav i den levererade texten. De krav som skriptet inte räknar har jag granskat genom att läsa texten:
+- ingressen står på egen hand
+- ingångsstycket för texten framåt
+- mellanrubrikerna beskriver sina avsnitt
+- sista avsnittet är ett avslut med en uppmaning.
+
+**Påståenden**
+
+- *Ändrat:* ingressens första mening, genom åtgärden i anmärkning 1. Den säger nu entydigt att givarna registrerade temperaturer under fastighetskontorets arbetsgräns vid 14 av 120 lektionspass. Läsningen ”färre än 14 av 120” är inte längre möjlig.
+- Inga påståenden är borttagna eller tillagda.
+
+**Vad som ändrades:** Ett ord i ingressen är utbytt för att ta bort en tvetydighet. Rubrik, byline, mellanrubriker, citat och övrig brödtext är oförändrade. Den avslutande korrekturläsningen hittade inga fel att rätta.

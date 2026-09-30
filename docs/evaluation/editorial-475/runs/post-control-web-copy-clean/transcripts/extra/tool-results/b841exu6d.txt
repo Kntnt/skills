@@ -1,0 +1,189 @@
+# Delivery
+
+Every Skill that produces a Text Artifact delivers it the same way. This document is the complete contract: where a result goes, how a response carries the text, what the response carries when it went somewhere else, when a source file may be replaced instead, what happens when nothing changed, what language a run's own words about the text are written in and whether what those words say is true of the text they name, and what is refused before anything is written. It is a reference several Skills read rather than a runtime of its own. Each Skill exposes these rules through its own Formal Invocation and owns the names it gives them, so nothing here fixes how an option is spelled; what is fixed is the behaviour behind it.
+
+## The response is the default
+
+The default Output Target is the agent response. A run that keeps the default delivers the complete Text Artifact in the response and changes nothing on the filesystem: it creates no file, touches no file, and makes no directory. That includes scratch files and working copies of the artifact, wherever the Harness says temporary files belong.
+
+A Harness convention identifies where an authorized temporary file belongs; it does not authorize a write. If a run genuinely needs a scratch file while composing, it removes that file before delivery and restores the filesystem to the state in which it found it. Before reporting delivery, the run checks the filesystem locations it used, including the Harness scratch area, and never reports that nothing was written while a copy of the artifact remains on disk.
+
+An Output Target is independent of where the source material came from. Supplying a local file as source material selects no destination, and a run that reads a file still delivers to the response until the caller names somewhere else. Persisting a result is the caller's explicit choice, and making that choice is the whole of the authorization for it.
+
+## How a response carries the text
+
+A response carries a Text Artifact inside a fenced code block rather than as prose of the reply's own. A text and the words about it are two different things, and a reply that runs them together hands the reader a text nothing marks the edges of. Markdown is where that costs most: an artifact opening on a frontmatter delimiter, set directly beneath a paragraph the run wrote, turns that paragraph into a heading unless a blank line goes in between them — and a blank line there is what ends the frontmatter block the text was settled with. A fence removes the question rather than leaving each run to answer it, and the answers a run improvises are what made one saved reply in sixteen deliver a horizontal rule and a paragraph of configuration in place of a frontmatter block.
+
+The complete Text Artifact sits inside exactly one fenced code block, byte for byte as the run settled it: frontmatter, blank lines and trailing structure included. Nothing is added, dropped or re-wrapped between the fence lines, and one block rather than several, a text split across two fences being a text the reader has to reassemble.
+
+The fence is longer than the longest run of backticks inside the artifact, so a text carrying fenced code of its own cannot close it early. The info string names the text's format: `markdown` for a Markdown text, `html` for HTML, `text` for plain text.
+
+Everything the run says *about* the text sits outside the fence — the resolved configuration, the findings and which of them are unresolved, the claim account, where a technique came from, what the run could not do. Nothing of the run's own is inside it. What the run settled as part of the document does belong inside, the Handoff Metadata and any marking the user asked to have placed in the document itself among it, because that is the text as delivered rather than a remark about it.
+
+The rule reaches every complete text a reply carries, whether this contract calls that text delivered or not. A response-targeted run that changed nothing and has findings left fences the artifact like any other; a run that stopped before it could deliver and carries its preserved prose in the reply fences that prose, and says in its own words outside the fence what the prose has not been through. The short no-change status carries no text at all and so carries no fence. An explicit destination and In-place Editing receive the text itself and never a fence: a fence is how a reply holds a text apart from its own words, and a file has no words of its own to be held apart from.
+
+## An explicit destination
+
+An explicit destination is one filesystem path, and what exists at that path decides what happens to it.
+
+**A path that does not exist** creates exactly that one file and writes the complete Text Artifact into it. Exactly one file: nothing else is created beside it, and no directory is made to hold it.
+
+**A path naming an existing file** overwrites that exact file with the complete Text Artifact. No confirmation and no separate force option is required, and none is offered. Naming the path is the authorization, and demanding a second gesture on top of it would teach that naming a destination means something less than it says.
+
+**A path naming an existing directory** delivers into that directory under a filename the run derives, by the rules below. Choosing a directory selects a place, not a file, so it never overwrites a file already in it.
+
+## Deriving a filename for a directory
+
+A directory destination needs a name, and the name comes from what the run already knows. Take the first of these the run has: the basename of the local file that supplied the Text Artifact, the title of a referenced URL, then the Skill's own working title for the text it created. Reduce it to a name the filesystem accepts, and keep a suitable text extension — the source file's own where it had one, and otherwise the one matching the text's format.
+
+That gives a stem and an extension, and the stem stays as it is for every delivery into that directory. Where nothing exists at the derived name, that name is the file written. Where something exists there, the existing file is never overwritten: keep the original stem and take the first free numbered candidate in ascending order, beginning at `-2`. So `my-file.md`, `my-file-2.md`, `my-file-3.md` are one sequence, growing by one name at a time.
+
+A numbered candidate is never adopted as the new stem. A third delivery into a directory already holding the first two is `my-file-3.md` and never `my-file-2-2.md`, whose stem would fork the sequence in two and leave the directory recording how many times the same text arrived rather than which arrival it was. Ascending order with the first free name also means a number freed by a deleted file is used again before a higher one is taken.
+
+## What the response carries when a destination was named
+
+A run that delivers to an explicit destination does not repeat the Text Artifact in the response. The response says where the text went — the derived filename included, where the destination was a directory — and carries what the file cannot: the findings the run reports beside the text, and which of them are unresolved. Naming a destination is saying where the text goes, and printing it again spends output on what the caller is already holding, doubly so when the file just written holds it too.
+
+That holds whether or not the pass changed anything. A run that writes a file byte-identical to the source it read reports the destination and says the text needed no work, and does not become the one run that echoes a text the caller had before it started. The response is the default target precisely because a run that names no destination has nowhere else to put the artifact; naming one moves the text out of the response rather than duplicating it there.
+
+## In-place Editing
+
+In-place Editing replaces the single local file that supplied the Text Artifact with the result, instead of delivering it anywhere else. It is available only to a Skill whose work is to return a changed version of a text the caller already has.
+
+A Skill that creates a new Text Artifact never edits its own source material in place. The brief, the interview, the notes, and the article it draws on are where the text came from and not where it goes; a Skill that could overwrite them would make supplying a file a risk rather than a convenience, and would lose the material the result is answerable to.
+
+In-place Editing requires exactly one writable local source file, and it is mutually exclusive with a separate output option. A run replaces its source or delivers elsewhere, never both, and an invocation asking for both has named two destinations for one text.
+
+It is refused wherever there is no such file to replace. Text supplied inline in the invocation or taken from the conversation is not a file. A URL is not a local file, and fetching one grants no right to write anything back. An uploaded source and a read-only file cannot be replaced. More than one Text Artifact leaves the single file the contract is written around undefined.
+
+An explicit output path equal to the input path is refused in favour of In-place Editing, and the refusal says which gesture to use. Replacing a source then has one recognizable authorization: a reader of an invocation sees that a source is about to be replaced from the request itself, without comparing two paths to discover it.
+
+## When nothing changed
+
+A run may finish with nothing to change, and what it does then follows its destination.
+
+A response-targeted run that changed nothing returns a short no-change status in place of the text when no unresolved findings remain. When findings remain, deliver the complete Text Artifact in the response and report the unresolved findings separately.
+
+An in-place run that changed nothing leaves the source file untouched and returns the short status with any unresolved findings. Rewriting a file with its own contents would make its timestamp claim that something happened.
+
+That status is written in the language of the Text Artifact rather than the language of the invocation, so a Swedish text that needed no work is reported on in Swedish.
+
+An explicitly selected different file or directory still receives the complete Text Artifact when nothing changed. Creating that artifact is what was asked for, and a destination left empty because the text needed no work is a request refused without saying so. A directory destination derives its filename and resolves collisions exactly as it would for a changed text, and the response reports the destination without repeating the artifact beside it, exactly as for a run that changed something.
+
+## The language of a report about the text
+
+A run that reports on the text beside the text itself — the findings it carries forward, and which of them are unresolved — writes that report in the language of the Text Artifact rather than the language of the invocation, exactly as the no-change status above is written. So a Swedish artifact reviewed from an English-language invocation comes back with Swedish findings, whether the run corrected anything or was asked to correct nothing at all, and one text never produces a status in its own language beside a finding list in another.
+
+Who reads it is what decides this. A report about a text is read by the reader of that text, who has to finish whatever the run left undone, and a report in whichever language the invocation happened to be written in reaches that reader in a language nothing about the text promised. The invocation's language is how the run was asked for; the artifact's language is what the run is about.
+
+## The truth of a report about the text
+
+Everything a run says about a text is true of the text it names. That holds for every statement the reply makes about a text, and not only for its findings and its account of the claims: a count, a length, a grammatical label, where a passage stands, and what a round did to a passage — moved it, removed it, replaced it, set a heading over it — each tells the reader something about the text they could check, and each is written so that the check holds.
+
+A statement about the delivered text is checked against the delivered text after the last change to it, the closing mechanical pass included. Most of what a run knows about a text it learned while reviewing the text as it arrived, and the rounds changed that text afterwards, so a length measured before a round or a heading remembered from one describes a text the reader is no longer holding. Where a run measures a text with the Collection Library's measuring script, `scripts/article_anatomy.py`, a count or length the reply states is taken from that script's measurement of the text the statement is about, never from the run's own reading of it and never from a measurement of another state of the text. A statement about the text as it arrived says so, so that nobody reads it against the text delivered. A statement that cannot be made true of the text it names is left out.
+
+The check is made on the reply as drafted, one statement at a time, once the text it describes is final, and each statement is read against the passage it names rather than against what the run remembers of it; a finding written during the review is checked in the same way against the text it was written about. A statement that something holds everywhere or nowhere — that a passage is unchanged, word for word what it was or untouched, that the rest of the text was left alone, that a name appears nowhere else, that a heading says nothing about its section — is checked against every part of the text it covers, because a single exception makes it false, and where there is one the statement names it or is narrowed to what holds. A statement of where wording came from, or of where a passage now stands, is checked by finding that passage in the text.
+
+Who reads it decides this too. The reader of a report finds their way in the text by it, and a statement they check and find false costs them the trust they would have given every other statement in the same reply.
+
+## Refusals
+
+Every contradictory, meaningless, or unusable output request is refused before the first side effect. The cases this contract names are more than one Text Artifact where the Skill processes one, an output option together with In-place Editing, an output path equal to the input path, In-place Editing for inline text or a URL or an uploaded or read-only source, and a destination the run cannot write — a path whose parent directory does not exist among them.
+
+Every such check that can be made by reading is made before anything is written, so a refusal leaves no partial effect behind: no file created, none truncated, none renamed, and no directory made. Where a conflict can only be discovered after a legitimate effect, the run stops there and reports the exact partial outcome rather than continuing.
+
+A refusal follows the Collection's ordinary diagnostic and help conventions. It names what was wrong, prints the synopsis of the most specific recognized command page verbatim, and points at that command's own help form. An output option is refused rather than ignored where it has no work to do, a flag accepted and ignored teaching that flags sometimes do nothing.
+=====
+# The reply check
+
+Give this to a subagent started fresh once step 9 has produced the final Text Artifact and the reply is drafted, before anything is delivered. It runs on every run whose reply says anything about a text, which is every run except one that returns only the short no-change status. Everything in angle brackets is replaced; nothing else is rewritten.
+
+`<received>` is the Text Artifact as it arrived, pasted whole, frontmatter included. `<delivered>` is the final Text Artifact step 9 produced, pasted whole. `<reply>` is the reply as drafted, pasted whole: every finding, the claim account, the closing paragraph and every other sentence it will deliver, leaving out only the delivered text where the reply carries it. `<measurement>` is, for `article`, `casestudy`, `column` and `opinion`, the full output of step 6's command run on the delivered text, as step 11 says, pasted whole; for any other genre, drop the paragraph headed **The measurement of the delivered text** and the placeholder under it. `<library>` is the Collection Library path this run resolved.
+
+Tell the subagent nothing else. Not the review's reasoning, not the rounds or what any of them attempted, not why any change was made, and not this Skill's own instructions: the checker is a reader who knows what the reader of the reply will know, the two texts and what the reply says of them, and that is what lets it see what a change did beyond what it was meant to do. Hand the filled-in brief to the subagent directly, as the whole of its instruction, and never as a file whose path you send in its place: it holds the user's text twice, and a file is a name another process can read, replace or delete while the check runs.
+
+**What you do with what it returns.** The subagent returns two lists. Act on every item of both, and correct only the reply:
+
+- A statement on the first list is rewritten so that it is true of the text it names, or left out, as *The truth of a report about the text* in `$LIBRARY/references/delivery.md` says. A count or length about the delivered text takes its figure from the measurement you handed over.
+- A difference on the second list is added to the claim account, or its entry completed, the way step 11 reports a removed, changed or added claim. Anything the reply says about the claims as a whole that the new or completed entry contradicts is narrowed to what holds, or left out.
+
+The list is a check of the reply, not a note of what a correction did, so the closing paragraph is still built from your own comparison of the two texts, and is corrected from the list like every other statement. The text is not touched: the Text Artifact step 9 produced is delivered as it is, and step 10 holds. The check is made once, and the corrected reply is delivered without being checked again.
+
+---
+
+You are checking one reply against the two texts it describes. You did not write the reply and you did not make the changes it reports; you know only what is below, which is what the reply's own reader will know. Find what the reply gets wrong about the texts, and only that: whether a change was a good one, whether a finding was worth making and how the text reads are questions for somebody else.
+
+**The text as it arrived.** This is the complete text the run received:
+
+`<received>`
+
+**The text as delivered.** This is the complete text the run delivers:
+
+`<delivered>`
+
+**The reply.** This is everything the run is about to say about the two texts:
+
+`<reply>`
+
+**The measurement of the delivered text.** This is the full output of the collection's measuring script, run on the delivered text. A count or length the reply states about the delivered text is read against it:
+
+`<measurement>`
+
+**The duties the reply is held to.** Before you read the reply, read two passages and apply them as written: the section *The truth of a report about the text* in `<library>/references/delivery.md`, and the sentences of `<library>/references/editorial/base.review.md` that say what the claim account holds, from *A claim removed because the finding named that claim itself* to the end of that paragraph. Read nothing else of either file, and no other file.
+
+**First compare the two texts yourself**, passage by passage, frontmatter and headings included, and note every difference, before you read what the reply says about them. The reply's own account is what you are checking, so it is never how you find a difference.
+
+**Then return two lists.**
+
+1. **False statements.** Every statement of the reply that the text it names contradicts, read as *The truth of a report about the text* reads it: a statement about the text as it arrived against that text, and every other statement against the delivered text. A finding's description of a passage, a count, a length, a grammatical label, where a passage stands, what a round did to a passage, a statement that something holds everywhere or nowhere, and every entry and sentence of the claim account are statements the text can contradict. A judgement of quality — that a heading was vague, that a passage read as filler — is not. For each: quote the statement, name the text it is about, quote the passage that contradicts it, and say what is true.
+2. **Claim changes the account misses.** Every difference between the two texts that moves a claim and that the claim account leaves out, or reports short of what it did: scope narrowed or widened; a condition, a qualification, a limit or a connective lost; chronology, causality or attribution moved; or the meaning moved, a sense or a double sense lost and an actor, an ordering or a framing added among it. A headline, a standfirst and a subheading carry claims like any other passage. For each: quote the passage before and after, say what the difference did to the claim, and quote what the account says of it, or say that it says nothing.
+
+Write `none` under a list with nothing on it. Return the two lists and nothing else, and write no file.
+=====
+---
+name: proofread
+description: Correct only mechanical language errors — spelling, grammar, punctuation, agreement, inflection, duplicated or missing words, and locale mechanics — in one supplied text, preserving its wording, meaning, tone, structure, formatting, and metadata. Start it on your own only when a specific text is at hand and the request either uses a proofreading term (proofread, spell-check, copyedit, fix the typos, korrekturläs, rätta stavfelen) or is unambiguously limited to mechanical language errors. Not for a request to edit, rewrite, polish, improve, tighten, or review a text — each of those asks for changes this Skill refuses to make. A user may also invoke it by name at any time.
+disable-model-invocation: false
+argument-hint: '[--language=<language>] ([--output=response|<path>] [<text>|<path>|<url>] | --in-place[=on|off] <path>) [-- <instruction>]'
+compatibility: Requires uv
+metadata:
+  kntnt.internal: "true"
+  kntnt.binaries: "uv"
+  kntnt.skills: ""
+  kntnt.externals: ""
+  kntnt.capabilities: ""
+---
+
+# proofread
+
+Correct the mechanical language errors in one supplied Text Artifact, and change nothing else about it.
+
+Run `UV_NO_CACHE=1 UV_NO_PROJECT=1 uv run "$HERE/scripts/invoke.py"` — `$HERE` is the directory that holds this SKILL.md — with everything the user typed after `/proofread`, verbatim and however many lines, on stdin. Exit 0: do what it prints. On any other exit, if you introduced a known construction error and can correct it while preserving the user's request and authority, account for effects already produced, submit the corrected invocation through the same shim, and continue from the failed boundary; a refusal before the operation starts consumes no operation. Otherwise show what it printed to the user verbatim and stop. Never repair input the user supplied, or automatically retry exact help, an unmet dependency, an unrelated failure, or a failure whose origin or valid correction is unknown.
+
+Run every UV command in this Skill with a fresh private directory as `TMPDIR`, and remove that directory after the command, including when it fails. The private directory belongs to that one command and no other run, so cleanup removes only files this run created.
+
+A model-invoked run changes only how the Skill starts. Once started, it takes the specific Text Artifact the current turn identifies as the omitted operand and enters the same numbered steps as invocation by name. The paths join before loading any language or editorial resource; the trigger wording is not a second source of rules or an alternate execution path.
+
+Where no Formal Invocation carries an Output Target, settle it from the current turn before correcting or writing. An unnamed destination resolves to the response, and a file mentioned only as the location of the errors names no destination: the verbs *fix* and *correct* apply to the named errors, not to the file containing them. Thus `Fix the spelling and grammar mistakes in case.md` delivers to the response. A turn that explicitly names the response or a path other than the source as the destination selects that Output Target; for example, `Write the corrected text to corrected.md` selects corrected.md as a separate Output Target. A turn that asks for the file itself to be changed selects In-place Editing only when it explicitly names that file as the object of the change or as the destination of the corrected text; for example, `Update case.md with the grammar corrections` selects In-place Editing. It remains subject to every refusal that editing mode already carries, including inline text, a URL, an uploaded or read-only source, more than one text, and a simultaneous separate Output Target. A request to save, apply, or persist the corrections without naming where they go is materially ambiguous about the destination: `Fix the grammar errors in case.md and save the corrections` asks which destination the caller intends and writes nothing. For that case and any other material ambiguity about the destination, ask which destination the caller intends and write nothing.
+
+## Arguments
+
+The operand is the Text Artifact: inline text, one local path, or one URL, and exactly one of them — several paths, a glob reaching more than one file, or a directory of texts is more than one. Where the invocation carries no operand, it is the single text the current turn identifies.
+
+`--language=<language>` names the language or locale whose mechanics apply. Any spelling the Collection's resolver reaches is accepted — a canonical code (`sv`, `en_GB`), a case or separator variant of one (`en-GB`, `EN_GB`), a curated alias (`BrE`, `brittisk engelska`), or an ordinary description of a language in any language.
+
+`--output=response|<path>` names the Output Target. `response` is the default and the value `response` states it explicitly; anything else is one filesystem path. It and In-place Editing name two destinations for one text, which is why no form carries both.
+
+`--in-place[=<value>]` selects In-place Editing. It accepts `yes`, `on`, and `true` against `no`, `off`, and `false`; bare `--in-place` means `on`, `--in-place=off` has the same effect as omitting the option, and the default is `off`.
+
+## Steps
+
+1. Settle the single Text Artifact and the options from the JSON. A value outside what `## Arguments` admits — `--in-place` outside its vocabulary, or more than one Text Artifact — is refused as `$LIBRARY/references/invocation-envelope.md` says: correct nothing, write nothing, and stop. Done when one Text Artifact and a valid set of options are in hand, or you have stopped.
+2. Settle the destination before anything is corrected, following `$LIBRARY/references/delivery.md`. Make every refusal that contract names by reading alone — In-place Editing together with a separate Output Target, an output path equal to the input path, In-place Editing against inline text or a URL or a source that is not a writable local file, and a destination whose parent directory does not exist — so that a refusal has nothing written behind it. Done when the destination is settled, or you have stopped.
+3. Read the Text Artifact's leading YAML frontmatter where it has any, and look in it for one top-level `kntnt` map. That map is the only Kntnt configuration a document carries; `language`, `lang`, `genre`, `technique`, and every other key outside it are the document's own fields, whatever they are named and whatever they hold. Read `language` out of the map and nothing else out of it. The map is never required: a Text Artifact carrying none is proofread exactly like one that carries a complete one, its absence refusing nothing and leaving the language to the levels below it in step 4. Done when the artifact's recognized language value is known to be present, absent, or unreachable.
+4. Resolve the language, taking the first of these that answers: the `--language` value; the recognized `kntnt` map's `language` value from step 3; the current Contextual Instruction; applicable Conversation Context; then the language of the Text Artifact itself, which is what inference reads and what the default already is. Suppression is that precedence working rather than an error: a Contextual Instruction every higher level has already settled leaves nothing for it to settle, and the run continues rather than refusing it as unaddressable guidance. Where saying so is useful, the delivery names the suppressed instruction beside the resolved configuration. Where that language is materially ambiguous or mixed — no dominant language, or alternation inside paragraphs — ask which language to proofread in rather than choosing one. Nothing has been written yet, so asking costs nothing to undo. Done when exactly one selector is in hand, or you have asked.
+5. If step 3 found a recognized `kntnt` map whose `language` value no installed resource answers to, and `--language` supplied no value, report it as unusable artifact metadata: name the value, say that it is neither a canonical code nor an installed alias, and stop. Do not read it as the code it resembles. A `--language` value settles the parameter and suppresses this, the unusable map then being none of the run's business. Done when the run has stopped, or the metadata is not in the way.
+6. Run `uv run --no-cache --no-project "$LIBRARY/scripts/languages.py" resolve --scope=mechanics "<selector>"`. Exit 0: take the reported `code` as the resolved language and the `mechanics` scope as this run's language-specific rules. A non-zero exit means the selector reached no single installed resource — interpret the human description semantically, propose one candidate from `uv run --no-cache --no-project "$LIBRARY/scripts/languages.py" list`, and verify it through the same `resolve` command; ask only where no unique installed candidate can be established. Then load `$LIBRARY/references/editorial/mechanics.md`, the shared mechanics contract, which holds the rules of objective correctness that do not depend on the language; it and the resolved scope together are this run's rules, and the scope is the more specific of the two wherever they meet. That one document is the whole of what is admitted from the Collection's editorial resources: load no base contract, no genre, no technique, and no anti-slop catalogue, load no other scope, and read no composition, review, or anti-slop guidance from anywhere. Done when the contract and the mechanics scope are both in hand, or you have stopped.
+7. Correct every objective mechanical error in the resolved language, reading the text yourself: misspellings, grammatical errors, punctuation errors, agreement between subject and verb or noun and modifier, wrong inflection, a duplicated word, a word plainly missing, and the locale's own conventions for dates, numbers, currency, and quotation as the mechanics scope states them, together with everything the shared mechanics contract holds. Correct all of them — a mechanical pass that leaves mechanical errors behind is a pass the user has to make again. Before this step is done, make an agreement-only re-read of every ordinary-prose sentence after the other corrections. Check agreement in both directions between subject and verb and between noun and modifier; in Swedish, `olika bild` must become `olika bilder`. Make that same re-read whether `--language` named the language or another level of the precedence settled it. A resolved locale establishes its date conventions but not what ambiguous source fields meant: `3/4` stays exactly `3/4` under both `en_GB` and `en_US` unless the Text Artifact itself establishes one reading; never expand or reorder it solely from locale. A grammatically valid word-as-word phrase such as `the word probably` remains unmarked: add no quotation marks or other emphasis unless the loaded rules identify an objective error. A code sample — a fenced block, an indented block, or an inline code span — is quoted material rather than the text's own prose: its contents are read past rather than read against the rules, so nothing inside one is a finding and nothing inside one is changed, the docstrings, comments, and string literals among them. Prose about code is ordinary prose and is read like every other sentence. Introduce no spellchecker, grammar service, or scanner of your own; the resolver above is the only script this Skill runs. Done when the mechanical errors you can identify are corrected.
+8. Change nothing else. Wording, meaning, tone, register, argument, structure, factual content, formatting and markup, code and its contents, links, and metadata all come through untouched, and the frontmatter comes through byte for byte — a language value you were entitled to read is read and left exactly where it is, no `kntnt` map is added or removed, and nothing is reordered. A preference is not an error, and the rules step 6 put in hand are what says which is which: what neither of them names as an error comes through untouched, however tempting it is, and what either of them does name is corrected however deliberate it looks. A sentence improved here is the failure this Skill exists to prevent: mechanical correction was requested, and mechanical correction is the whole of what is delivered. Done when the diff you are about to deliver is mechanical throughout.
+9. Deliver by `$LIBRARY/references/delivery.md`: the complete Text Artifact to the settled Output Target, the source file replaced where In-place Editing was requested, and a derived filename with its collisions resolved where the target is a directory. On a response target, remove every artifact or scratch file this run created and base the delivery account on the filesystem state that remains after cleanup. Where nothing was corrected and the destination is the response or the source file itself, write nothing at all and return only the short no-change status, in the language of the Text Artifact. Done when the Text Artifact has been delivered, or the no-change status has been reported.

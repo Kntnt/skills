@@ -1,0 +1,27 @@
+{
+  "misses": [
+    {
+      "judge": "a",
+      "class": 3,
+      "kind": "",
+      "owner": null,
+      "reply": "Den gamla rubriken ”Rutan som inte finns” nämnde inget ämne.",
+      "judge_says": "What the account gets wrong is the headline's status. It calls the old headline a defect (\"nämnde inget ämne\") where this judgement finds working voice.",
+      "check": "The old headline 'Rutan som inte finns' names neither meetings nor the template, so the statement is true of input.md. The judge disputes only whether this was a real defect."
+    },
+    {
+      "judge": "b",
+      "class": 3,
+      "kind": "",
+      "owner": null,
+      "reply": "Den gamla rubriken ”Rutan som inte finns” nämnde inget ämne.",
+      "judge_says": "The account is accurate. It frames the change as a repaired defect, which I do not accept.",
+      "check": "True of input.md: the old headline names no subject. The judge disputes only whether the change repaired a real defect."
+    }
+  ],
+  "verdicts": {
+    "a": "fail",
+    "b": "fail"
+  },
+  "notes": "Both judges confirm the claim account (meaning shift beslut to varför, 'bibliotekets' dropped) and the counts 44 characters / 8 words, which I recounted. Owner left null: the headline rewrite is on a draft fixture (column-sv-r2), not a clean text, so #468 does not strictly apply."
+}

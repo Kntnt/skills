@@ -1,0 +1,55 @@
+**Konfiguration:** genre `column`, teknik `none`, språk `sv`. Alla tre värdena kommer från textens egen `kntnt`-karta. Att ingen teknik tillämpas beror alltså på att kartan anger `none`, inte på genren. Ingen skrivbrief användes. Korrigeringsbudgeten på 1 förbrukades i en runda som inte ändrade något, eftersom alla fynd gäller delar som texten saknar. Sådana delar rapporteras men skrivs inte.
+
+````markdown
+---
+kntnt:
+  genre: column
+  technique: none
+  language: sv
+---
+
+# Mallen har en ruta för allt utom poängen
+
+Av Nora Vik, bibliotekarie
+
+Jag granskar bibliotekets mötesmall. Där finns rutor för starttid, sluttid, deltagare och dagordning. Någon ruta för det beslut vi ska kunna fatta när vi går därifrån finns inte. Det är dokumentet jag tittar på, inte ett bestämt möte.
+
+Jag uppskattar möten där kolleger upptäcker att de har förstått en fråga olika. Den upptäckten kan vara viktigare än att vi snabbt enas. Min tanke är alltså inte att varje samtal ska pressas fram till ett beslut.
+
+Det som retar mig är något annat: att tid i kalendern så lätt behandlas som ett resultat i sig. Timmen är bokad, alltså har något hänt. Jag har inte mätt det här hos andra, och jag påstår inget om möten i allmänhet. Det är min reflektion, med den räckvidd en reflektion har.
+
+Ändå tycker jag att den som fyller i en mall borde få formulera varför vi behöver just varandras tid. Också när syftet är att undersöka något tillsammans finns det ett skäl att skriva ner. Samtal kan skapa förtroende. Samtal kan hitta en fråga vi inte visste att vi behövde ställa. Inget av det kräver ett beslut, men båda delarna tål att motiveras.
+
+Så jag vill prova en enkel fråga bredvid tiden: vad behöver vi förstå tillsammans?
+
+Där börjar tvivlet. Det finns en komik i att försöka lösa ett problem med formulär genom att utöka formuläret – bibliotekarien som svarar på en mall med mer mall. Jag vet inte om ytterligare en ruta gör våra möten bättre. Kanske blir frågan bara en rad till att fylla i.
+
+Jag vill prova den i alla fall, och behålla båda hållningarna så länge: hoppet om frågan och tvivlet på ännu en ruta.
+````
+
+## Olösta fynd
+
+Alla tre fynden är olösta. Varje fynd gäller en del som saknas, och den delen får en person skriva.
+
+1. **Ingress saknas.** Mellan rubriken och bylinen står ingen ingress. Mätskriptet rapporterar den som frånvarande. Den som ser kolumnen i en lista eller ett flöde får bara rubriken, och vet varken vad texten handlar om eller vad den ger att läsa vidare.
+2. **Mellanrubriker och avsnitt saknas, liksom ett eget avslutande avsnitt.** Brödtexten består av sju stycken utan någon mellanrubrik. Mätskriptet rapporterar dessutom att inledningen är sju stycken lång, men det beror enbart på att avsnitten saknas. En läsare som skummar får inga ingångar i texten och ser inte var reflektionen går från iakttagelse till förslag och tvivel. Slutstyckena står kvar där de står.
+3. **Ingen uppmaning till läsaren.** Slutet säger vad skribenten själv tänker göra: ”Så jag vill prova en enkel fråga bredvid tiden” och ”Jag vill prova den i alla fall”. Läsaren får däremot inget att pröva, lägga märke till eller ompröva. Om granskningen skrev in en sådan uppmaning skulle texten ge en rekommendation som skribenten inte har gjort.
+
+## Artikelanatomin
+
+Texten följer inte artikelanatomin, på grund av de tre fynden ovan. Mätningen av den slutliga texten visar följande:
+
+- Rubriken har 40 tecken och 8 ord, vilket ligger inom gränserna.
+- Skriptet rapporterar inga normavvikelser.
+
+Jag har också läst de krav som skriptet inte räknar:
+
+- Rubriken fungerar enligt rubrikkraven. Bilden ”en ruta för allt” är ett stilgrepp, och ingenting i rubriken går utöver vad texten säger.
+- Bylinen har svensk form.
+- Första stycket introducerar ämnet.
+
+## Påståenden
+
+Inget påstående har tagits bort, ändrats eller lagts till. De avgränsande meningarna står kvar oförändrade: ”Det är dokumentet jag tittar på, inte ett bestämt möte” och ”Jag har inte mätt det här hos andra, och jag påstår inget om möten i allmänhet.”
+
+Utöver det har den avslutande mekaniska genomgången gjort en enda ändring: ett engelskt långt tankstreck (—) har bytts mot det svenska, omgivet av mellanslag (–). Inget annat i texten har ändrats. `input.md` är orörd, och inga filer har skrivits.

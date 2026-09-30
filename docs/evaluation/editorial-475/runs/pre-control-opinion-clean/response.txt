@@ -1,0 +1,47 @@
+Granskningen hittade ett fel, som jag har rättat. Inga anmärkningar återstår. `input.md` är orörd och den granskade texten står nedan.
+
+**Inställningar:** debattartikel (opinion) på svenska, båda angivna i anropet. Ingen berättarteknik används: genren opinion anger ingen som standard, och ingen annan nivå valde någon. Korrigeringsbudgeten var 1 och gick åt i den enda rundan. Något skrivet uppdrag (brief) fanns inte.
+
+```markdown
+# Avskaffa inte telefonbokningen på ett antagande
+
+**I september kan telefonbokningen av Lerviks föreningslokaler försvinna. Beslutet ska vila på åtta veckors siffror från två lokaler, och de siffrorna räknar bokningar, inte personer. Här är skälen att pröva båda bokningsvägarna ett halvår till innan den ena stängs.**
+
+Text: Sanna Ek, Öppna beslut
+
+Kommunstyrelsen i Lervik bör skjuta upp bytet till enbart digital bokning av föreningslokaler, ett byte som kan ske i september. Pröva först båda bokningsvägarna, digital bokning och telefonbokning, i alla sju lokaler under ett halvår och mät vad de kräver. Ett permanent beslut behöver bättre underlag än det som nu ligger på bordet.
+
+## Bokningar är inte samma sak som personer
+
+Kommunens pilotrapport från den 8 april 2026 räknar 96 webbokningar och 24 telefonbokningar under åtta veckor i två lokaler. Den säger inte hur många personer som bokade eller varför de valde telefonen. Siffrorna visar varken hur många som saknar digital vana eller hur många som skulle klara sig utan telefonbokning.
+
+En bokning är en händelse, inte en invånare. Den skillnaden avgör vad siffrorna kan användas till.
+
+## Mät också arbetet med två kanaler
+
+Förvaltningen vill slippa dubbel administration. Det är en relevant invändning. Men handlingarna innehåller ingen mätning av tidsåtgången. Att behålla två kanaler kostar arbete, och hur mycket behöver vägas mot vad användarna får.
+
+## Besluta om försöket, inte om antagandet
+
+Kommunstyrelsen bör därför säga ja till halvåret med båda bokningsvägarna, ta ställning till dess ännu okända kostnad och ge förvaltningen i uppdrag att mäta tidsåtgången samt fråga användarna varför de väljer sin bokningsväg. Först då går det att väga alternativen.
+
+Ett antagande blir inte ett beslutsunderlag för att kalendern säger september.
+```
+
+**Anmärkning (åtgärdad)**
+- **Inledningsstycket nämnde inte vilka bokningsvägarna var.** Det skrev ”båda bokningsvägarna” utan att säga vilka de två vägarna var. Enligt artikelanatomin ska inledningsstycket själv presentera allt det nämner. En läsare som hoppar över den fetade ingressen fick inte veta att telefonbokningen var den väg texten vill behålla. Det framgick först i nästa avsnitt. Inledningsstycket säger nu ”båda bokningsvägarna, digital bokning och telefonbokning,”. Rubrik, ingress och mellanrubriker är oförändrade.
+
+**Vad som hände med påståendena**
+- **Ändrat påstående.** I inledningsstycket står nu uttryckligen att de två vägar som ska prövas i alla sju lokaler under ett halvår är digital bokning och telefonbokning. Tidigare angav stycket inte vilka de var. Ändringen gjordes för att åtgärda anmärkningen ovan. Båda vägarna fanns redan i texten, i inledningsstyckets ”enbart digital bokning” och i avsnittet om pilotrapporten.
+- **Borttagna och tillagda påståenden.** Inget påstående har tagits bort eller lagts till. Ingen avgränsning, inget sambandsord och ingen begränsande bisats har försvunnit.
+
+**Artikelanatomin**
+- **Det som går att räkna:** mätningen av den slutliga texten visar att alla räknade krav är uppfyllda. Rubriken har 47 tecken och 6 ord, ingressen 39 ord och inledningsstycket 53 ord.
+- **Det jag bedömde genom läsning:** jag granskade också de krav som skriptet inte räknar, och även de är uppfyllda:
+  - ingressen fungerar fristående,
+  - inledningsstycket för texten vidare från ingressen och inleds med andra ord,
+  - mellanrubrikerna beskriver sina avsnitt,
+  - det sista avsnittet är ett avslut med en uppmaning till kommunstyrelsen.
+- **Slutsats:** texten följer artikelanatomin utan avvikelser.
+
+**Sammanfattning:** Utöver det ändrade påståendet ovan skiljer sig texten från originalet bara genom de fyra orden som lagts in i inledningsstycket, ”digital bokning och telefonbokning”, med kommatecken. Slutkorrekturen hittade inga språkliga fel att rätta.

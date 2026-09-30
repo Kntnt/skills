@@ -1,0 +1,24 @@
+Texten har sparats i `output.md`, och `input.md` är orörd.
+
+**Konfiguration:** genren casestudy och språket svenska (sv) kommer båda från anropet. Ingen teknik användes, eftersom genren casestudy inte anger någon teknik som den vanligen skrivs med. Ingen skrivbrief användes.
+
+**Två fynd, båda åtgärdade**
+
+1. **Ingressen, tredje meningen.** ”Gruppen” och ”anteckningarna” syftade på en grupp och på anteckningar som ingressen aldrig själv presenterade. Den som bara läser ingressen kunde därför inte veta vilken grupp eller vilka anteckningar det gällde. Meningen lyder nu: ”Här är vad underhållsgruppen gjorde, vad gruppens anteckningar från försöket visar och vad hon skulle ändra.”
+2. **Inledningen, andra meningen.** ”Försöket” syftade på ett försök som bara ingressen berättade om. Den som läser brödtexten utan ingressen fick själv räkna ut att loggen prövades i ett försök. Meningen lyder nu: ”Loggen prövades i ett försök som pågick i åtta veckor och omfattade två hus.”
+
+Inga fynd återstår. Budgeten tillät en korrigeringsrunda, och den användes.
+
+**Artikelanatomi:** texten följer anatomin utan avvikelse. Mätskriptet mätte gränserna på den levererade texten: rubriken har 36 tecken, ingressen 43 ord och inledningen 48 ord. De krav som skriptet inte räknar kontrollerades genom läsning:
+- att ingressen går att förstå på egen hand
+- att inledningen presenterar allt den nämner
+- att mellanrubrikerna beskriver sina avsnitt
+- att sista avsnittet avslutar texten med en uppmaning
+
+**Påståenden som ändrades**
+- **Ingressen, tredje meningen** (åtgärden för fynd 1): meningen säger nu att det var underhållsgruppen som gjorde det som texten berättar om. Den säger också att anteckningarna är gruppens och kommer från försöket.
+- **Inledningen, andra meningen** (åtgärden för fynd 2): meningen säger nu uttryckligen att det var loggen som prövades i försöket. Längden på åtta veckor och omfattningen på två hus är oförändrade.
+
+Förutom de två ändrade påståendena togs inget påstående bort och inget nytt lades till. Ingen begränsning, inget förbehåll och ingen konnektor försvann.
+
+Den levererade texten skiljer sig från originalet bara i de två meningarna ovan. Inga rubriker, stycken eller formateringar ändrades, och den avslutande korrekturläsningen hittade inga stav- eller skrivfel att rätta.

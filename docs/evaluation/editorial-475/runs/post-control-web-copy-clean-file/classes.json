@@ -1,0 +1,8 @@
+{
+  "misses": [],
+  "verdicts": {
+    "a": "pass",
+    "b": "pass"
+  },
+  "notes": "output.md is byte-identical to input.md (checked with cmp); both judges find the reply accurate."
+}

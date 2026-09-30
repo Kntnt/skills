@@ -1,0 +1,8 @@
+{
+  "misses": [],
+  "verdicts": {
+    "a": "pass",
+    "b": "pass"
+  },
+  "notes": "Both judges check every difference against the account and call each report accurate. Judge a notes the swapped order of scope and price is not called out separately but says 'The facts and wording are otherwise unchanged' is true; not faulted."
+}

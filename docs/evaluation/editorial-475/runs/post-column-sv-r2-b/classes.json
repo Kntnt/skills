@@ -1,0 +1,14 @@
+{
+  "misses": [
+    {"judge": "a", "class": 3, "kind": "", "owner": null,
+     "reply": "Åtgärdat – rubriken namngav inget ämne. ”Rutan som inte finns” säger att en ruta saknas men inte var. En läsare som bara ser rubriken, i en lista eller ett sökresultat, kan inte avgöra att texten handlar om en mötesmall.",
+     "judge_says": "The Skill presents this as the repair of a visible defect: a headline that names no subject. The input has no such defect. [...] It is the diagnosis that falls short, not the reporting: the reply calls the original headline a defect",
+     "check": "The input headline \"Rutan som inte finns\" names no place or subject; the finding describes it accurately (and the new headline is 34 characters, 6 words, as stated). The judge disputes only whether that is a real defect and calls the account accurate."},
+    {"judge": "b", "class": 3, "kind": "", "owner": null,
+     "reply": "Åtgärdat – rubriken namngav inget ämne.",
+     "judge_says": "The reply still presents the change as the repair of a defect (\"rubriken namngav inget ämne\"). I do not accept that classification (see §1), but the reply does not misstate what changed.",
+     "check": "The input headline does name no subject; the description is true, and the judge disputes only whether it was a defect."}
+  ],
+  "verdicts": {"a": "fail", "b": "fail"},
+  "notes": "Draft fixture, so no owner ticket applies. Both judges find the claim account of the headline (lost reading, widened scope) accurate. Judge a mentions the \"med mellanslag\" wording on the dash but expressly calls it not an inaccuracy, so it is not recorded."
+}

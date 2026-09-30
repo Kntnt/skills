@@ -1,0 +1,10 @@
+Jag skrev texten till `output.md`. Den behövde inget arbete, så filen är byte för byte identisk med `input.md`.
+
+**Inställningar:** Genren är `casestudy` och språket `sv`, båda från anropet. Ingen teknik används, eftersom genren inte anger någon.
+
+**Granskning:** Granskningen gav inga fynd, så ingen korrigering gjordes och korrigeringsbudgeten (1) användes inte. Texten följer artikelanatomin utan avvikelser:
+- Mätskriptet hittade inga fel. Rubriken har 36 tecken, ingressen 40 ord och varje stycke högst 43 ord.
+- Det som skriptet inte räknar granskade jag genom läsning. Ingressen står på egna ben, ingressen och inledningen upprepar inte varandra och varje mellanrubrik beskriver sitt avsnitt. ”Arbetsledaren ser tillbaka på försöket” föregriper inte Linds citat. Sista avsnittet är ett avslut med en uppmaning som bygger på länken i texten.
+- Det avgränsande påståendet att anteckningen inte tillskriver programvaran skillnaden i mediantid står kvar orört.
+
+**Korrekturläsning:** Den avslutande korrekturläsningen på svenska hittade inga mekaniska fel. Inga påståenden har tagits bort, ändrats eller lagts till.

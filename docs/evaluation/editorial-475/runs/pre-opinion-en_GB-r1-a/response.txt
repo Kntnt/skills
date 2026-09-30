@@ -1,0 +1,60 @@
+I reviewed `input.md` against the opinion-genre rules and made one correction round, which I checked by re-reading the whole text. The closing proofread pass found no mechanical errors. One finding is still open: the text has no standfirst, and you'll need to write one.
+
+**Settings used:** genre `opinion`, technique `none`, language `en_GB`, all taken from the text's own `kntnt` frontmatter. That frontmatter says `technique: none`, so no argument structure was imposed on the piece, and the frontmatter itself is unchanged.
+
+```markdown
+---
+kntnt:
+  genre: opinion
+  technique: none
+  language: en_GB
+---
+
+# Don't switch off Lervik's phone booking before we know what it costs
+
+By Sanna Ek, spokesperson for Öppna beslut
+
+On 18 June Lervik's council executive board is asked to remove phone booking from all seven community venues from September. The officers' report gives one reason: staff should not have to enter the details in two flows. That is a fair thing to want. It is not yet a reason to make the change permanent.
+
+## What the pilot actually counted
+
+The pilot report *Bokning av föreningslokaler*, dated 8 April 2026, covers an eight-week trial in two venues. It records 96 bookings made on the web and 24 made by phone. Those figures are the report's, and so are their limits: it counts bookings rather than unique people, and it measures nothing about age, functional ability or how used to digital services people are. Twenty-four phone bookings therefore cannot tell us what share of Lervik's residents are unable to book digitally. Nobody should claim they can.
+
+## A motive on the table, but no figures under it
+
+The administration's objection to keeping both routes is the extra work of two flows, and I take it at face value: it is not a claim that people who ring are lazy or expensive. But the documents contain no measurement of how long either route takes staff, and no calculation of what removing one would save. The board is being asked to close a channel for good on the strength of an inconvenience the documents put no number on. That is thin ground for making the change permanent.
+
+## Six months, both routes, and something to measure
+
+Öppna beslut proposes a six-month trial in all seven venues with both booking routes kept open. During it, the administration records the time each booking route takes and asks users to say, voluntarily, why they chose the phone or the web. We make no claim to have funded or costed that trial. What it would cost is for the board to weigh.
+
+A booking made by phone is not proof that somebody cannot use the web. It is a reason to find out why the phone is still being used. I am not against digital booking. I am against settling its shape before the council can set the work each route costs staff against what it is worth to the people who use it.
+
+## What the board can decide on 18 June
+
+Postpone the permanent switch and run the six months with both routes open. When the trial has produced figures, decide whether a channel should be removed, changed or kept. That decision is the board's either way, and it will be a better one for being taken with the cost of both routes on the table.
+```
+
+**Findings**
+
+1. **The byline was at the end instead of after the headline (fixed).** It was the last line, "— Sanna Ek, spokesperson for Öppna beslut". Readers didn't learn who was arguing until the end, so "Öppna beslut proposes…" and "We make no claim…" in the fourth section came before anyone knew who Öppna beslut or "we" were. It now sits under the headline as "By Sanna Ek, spokesperson for Öppna beslut".
+2. **The standfirst is missing (still open).** The piece has only one opening paragraph. It works as the lead, because the rest of the text depends on it, so the standfirst is the missing part. You or the author need to write it. I didn't write one or split the opening paragraph to make one.
+3. **The lead needed the headline to say where this is happening (fixed).** "the council executive board" didn't say which council; only the headline named Lervik. It now reads "Lervik's council executive board".
+4. **"double administration" (fixed).** In the sentence "The administration's objection … is double administration", the word "administration" meant first the council staff and then the work. The phrase also reads as a direct translation from Swedish. It now reads "the extra work of two flows", reusing the lead's own wording.
+
+**Article structure:** I re-measured the final text. The only structural requirement it fails is the missing standfirst, so it doesn't fit the required article structure. Four recommended limits are exceeded, and I didn't treat them as findings:
+- the headline is 12 words and 68 characters (the guides are 3–8 words and 60 characters);
+- the paragraph under "What the pilot actually counted" is 85 words (the guide is 80);
+- the paragraph under "A motive on the table, but no figures under it" is 88 words. It was 84 before, and the new wording in fix 4 added four words.
+
+**What happened to the claims**
+- *Removed:* none. The byline's statement that Sanna Ek is spokesperson for Öppna beslut was moved, not removed.
+- *Changed:*
+  - The lead now says the board is Lervik's council executive board (fix 3). This matches the headline and "Lervik's residents".
+  - The administration's objection is now described as "the extra work of two flows" instead of "double administration" (fix 4). "Double" is gone, so the objection now describes the workload as extra rather than as double.
+- *Added:* none, apart from the changes listed above.
+- No sentence saying what isn't known, measured or claimed was taken out.
+
+**Other changes:** The byline went from a closing sign-off with a dash to the English "By" form under the headline. Two short passages in the lead and the second section were reworded, as listed above. The proofread pass changed nothing.
+
+`input.md` is unchanged, and no temporary files are left behind.
