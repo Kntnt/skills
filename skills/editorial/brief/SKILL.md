@@ -80,7 +80,7 @@ Say that the brief is enough to write when the direction is settled, which is wh
 - questions 1–11 each have an answer, a confirmed or unconfirmed `[SUGGESTED: …]` counting as one outside those three. Question 1 counts as answered when its genre and its language are given; its other missing parts are reported but do not block;
 - the chain check answers no *no* on the angle line (does the angle lie close to the reader, and does the hook carry it) or on the conclusion line (is the conclusion what the structure lands in, does it carry the message, and does it lie within the brand's mandate). A *no* on another line is reported and does not block.
 
-Open research questions under question 12 never block. Where the brief is not yet enough, name what stands in the way as the questions that would settle it.
+Open research questions under question 12 never block. Where the brief is not yet enough, name what stands in the way as the questions that would settle it. A chain-check inconsistency that *Taking an answer* has already raised is named here by its line and reason as what stands in the way, and is not asked again.
 
 ## Selection
 

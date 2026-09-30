@@ -121,7 +121,7 @@
       "name": "brief",
       "category": "editorial",
       "description": "Interview for, draft from supplied material, or review a Writing Brief against the Library's writing-brief template of questions to answer before you write. Start it on your own only when the literal token `/brief` appears in the request or the user explicitly asks for a brief according to this writing-brief template. Not for a bare mention of the word brief, a request for a short answer, or an unrelated project or delegation brief. A user may also invoke it by name at any time.",
-      "digest": "1ab4455032e46969353de181c33a5bc01bf4892a52aa0fa8081aed5646853849",
+      "digest": "e83cb27411debd998afc1ff304f24f85cdd82eb41c0c99605c7c2f3be356a0a6",
       "binaries": [
         "uv"
       ],
