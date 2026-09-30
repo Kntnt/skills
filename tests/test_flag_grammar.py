@@ -24,9 +24,8 @@ VALUELESS_ACTIONS = frozenset(
     {"store_true", "store_false", "store_const", "count", "help", "version"}
 )
 
-# The helper the one engine that reads its options by hand calls to take a
-# flag's value out of its arguments (ADR-0176): `observations.py`, for
-# `observe --artifact` and `record --data`. A call to it is that engine's
+# The helper an engine that reads its options by hand calls to take a flag's
+# value out of its arguments (ADR-0176). A call to it is that engine's
 # declaration that the flag it names carries a value.
 HAND_PARSED_OPTION = "_option"
 
