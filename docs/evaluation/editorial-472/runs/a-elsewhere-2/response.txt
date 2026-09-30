@@ -1,0 +1,114 @@
+I reviewed `input.md` against `brief.md`. The text as written ended by recommending that readers hand their receipts to an accountant, which works against the brief. One correction round rebuilt it around the weekly Friday habit. Three findings are left for the writer because the source material can't settle them. Nothing was written to disk: `input.md`, `brief.md` and `material.md` are untouched.
+
+**Settings:** genre `general`, technique `abt`, language `en_GB`. All three come from the brief's `kntnt` map, and the technique comes from that map, not from the genre (`general` doesn't name one). `input.md` has no map, so there was nothing to conflict with and none was added. The one allowed correction round (`--max=1`) was used and accepted. The final proofreading pass found nothing to correct.
+
+`````markdown
+# Ten minutes on a Friday
+
+For four years, Priya Nand kept her receipts in a biscuit tin. She tutors maths in Leeds, and every January the tin came down from the shelf. "The last weekend of January was always gone," she says. The Self Assessment return is due on 31 January, and most of us spend the months before it the way Priya did, with receipts collecting in a drawer or an inbox until there is no more room for later.
+
+The tin has two costs. The first is the weekend. The second is quieter. Till receipts are printed on thermal paper, and they often fade within months, faster in a warm kitchen. When Priya finally opened the tin one January, two receipts from the spring had faded to blank, and she could not claim them.
+
+The usual advice is a weekly habit: photograph each receipt, match the week's photographs to your bank lines every Friday, and note anything odd. In March 2026, Priya moved to a session every Friday. "About ten minutes, with a cup of tea," she says.
+
+In a survey this summer, 412 of our users told us how long their last return took. Those who matched receipts every week reported a median of 6 hours of their own time. Those who left everything until January reported 19. But the 57 whose return was prepared by an accountant reported a median of just 3 hours. The figures are what people told us rather than anything we measured, and they do not show what caused the difference.
+
+Priya photographs each receipt when she gets it, and a photograph taken while the receipt is new stays readable.
+
+The next receipt you get can be photographed there and then, and matched this Friday.
+`````
+
+## Findings
+
+**Repaired**
+
+1. **The text ended somewhere other than the brief's conclusion** (brief questions 2, 3, 5, 9 and 10).
+   - The draft brought up the weekly habit only to dismiss it: "It is good advice, and it asks for fifty-two Fridays a year from people who already work most of them".
+   - It then turned to having an accountant prepare the return: "There is another way to get the weekend back"; "It can become somebody else's job"; "This January, the tin could leave the house before the last weekend does".
+   - That pointed a reader who files their own return away from the weekly habit and the app. It also went beyond the brand's remit, which is bookkeeping habits and its own app.
+   - Those sentences are gone. The text now ends on the weekly habit: "The next receipt you get can be photographed there and then, and matched this Friday."
+2. **The ending didn't answer the second problem the text raised** (ABT). Paragraph 2 raises receipts that fade, but a tin handed over in January still holds receipts that faded during the year. Paragraph 5 now answers this, using the support team's note and Priya's interview: "Priya photographs each receipt when she gets it, and a photograph taken while the receipt is new stays readable."
+3. **The text never said how long the weekly session takes** (brief questions 10 and 11). Paragraph 3 now says Priya moved to a Friday session in March 2026, and quotes her: "About ten minutes, with a cup of tea."
+4. **The title promised something the body didn't deliver** (genre `general`). The draft's body said nothing about ten minutes and argued against the Friday session. After repairs 1 and 3 the body covers the ten-minute Friday session, so "Ten minutes on a Friday" keeps its wording. Its claim has changed, though: see the claim account.
+5. **An unsupported description of one survey group** (base contract, claims). The draft said "the people who did the least bookkeeping themselves", but the survey only says these 57 had an accountant prepare their return. The sentence was removed.
+
+**Unresolved, left for the writer**
+
+6. **Two generalisations without a source** (brief question 12).
+   - "most of us spend the months before it the way Priya did" and "The usual advice is a weekly habit" have no support in `material.md`.
+   - The second credits the advice to nobody.
+   - "us" puts the sender, a bookkeeping app, among the sole traders.
+   - Nothing in the material could repair either one.
+7. **The "why now" comes through only partly** (brief question 4). The text mentions January and "this Friday", but not the early-October send-out or the time left before January. The material has nothing on this, and a requirement in the brief doesn't count as evidence.
+8. **The conclusion is shown as a link, not a cause** (brief question 9).
+   - The brief's conclusion says ten minutes every Friday *turns* the return into a short job.
+   - The text gives the ten-minute session and the 6 against 19 hours, and keeps the survey's own caveat: "they do not show what caused the difference".
+   - The material says the survey "does not show that the weekly habit caused the difference", so the causal claim can't be supported. The reader gets a correlation, not a result.
+
+## Claim account
+
+**Removed.** Repair 1 removed all six. The fifth was also removed by repair 5. In each case the finding named that claim itself as the problem.
+- "It is good advice": the sender no longer endorses the weekly habit itself. Priya's example now carries it.
+- "it asks for fifty-two Fridays a year from people who already work most of them".
+- "There is another way to get the weekend back." The survey figures, including the accountant's 3 hours, are still there word for word. How they read now is under Changed.
+- "A tutor's time is worth more at the whiteboard than at the kitchen table sorting paper." and "The tin does not have to become a Friday chore. It can become somebody else's job."
+- "Still, the shortest January in the survey belonged to the people who did the least bookkeeping themselves."
+  - The linking word *Still* went with it. The reader no longer gets the text's own conclusion that, despite the survey's caveat, the shortest January went with doing the least bookkeeping yourself.
+  - The caveat sentence itself ("The figures are what people told us rather than anything we measured, and they do not show what caused the difference.") is unchanged.
+- "This January, the tin could leave the house before the last weekend does."
+
+**Added**, each from `material.md`:
+- Priya moved to a session every Friday in March 2026, and says of it: "About ten minutes, with a cup of tea." (repair 3; interview, §2)
+- Priya photographs each receipt when she gets it (repair 2; §2).
+- A photograph taken while a receipt is new stays readable (repair 2; support note, §3).
+- The closing next step: the next receipt can be photographed there and then, and matched this Friday (repair 1). It adds no new fact and doesn't say the habit shortens January.
+
+**Changed**
+- **The title**, whose wording is unchanged. Read with the new paragraph 3, it now claims that a Friday session takes ten minutes. That comes from Priya's own "About ten minutes": the title drops her "about" and states it generally. Before, nothing in the body backed it up. This follows from repairs 1 and 3.
+- **The survey paragraph**, whose sentences are unchanged. It now follows Priya's move to a Friday session, so the 6 against 19 hours reads as support for the weekly habit. The "But" in "But the 57 whose return was prepared by an accountant reported a median of just 3 hours" now sets the accountant group against the habit the text recommends, and nothing later in the text responds to that. This follows from repair 1.
+
+Apart from the claims listed above, the claims in the delivered text are worded as they arrived.
+
+Beyond the claims, the run fixed the structure: the argument used to end on handing the tin to an accountant and now ends on the weekly habit. The rewritten or removed parts are:
+- the closing sentence of paragraph 3
+- the first and last sentences of paragraph 4
+- paragraph 5
+- the closing line
+
+The title, paragraphs 1 and 2, and the rest of paragraphs 3 and 4 are worded as they arrived. The final proofreading pass made no corrections.
+
+## Brief fulfilment
+
+Brief: `brief.md`. No other brief was named.
+
+1. **What is the assignment?** Fulfilled.
+   - The text is about keeping receipts in order through the tax year: a general newsletter piece in en_GB.
+   - It is 293 words including the title, just under 300 but within the brief's "roughly 300 to 450".
+   - The brief deliberately has no search phrase.
+   - The working title is the title.
+2. **Which brand is the sender?** Fulfilled.
+   - It speaks as the brand ("412 of our users"), plainly and with some dryness ("The second is quieter"; "until there is no more room for later").
+   - With the accountant recommendation gone, it stays within bookkeeping habits and gives no tax advice.
+3. **What does the sender want to convey with this text?** Fulfilled, indirectly. The text leads the reader to photographing each receipt and matching it on Friday, which is where the scanner fits. The scanner isn't named, which the brief allows.
+4. **Who is the reader?** Partly fulfilled (finding 7).
+   - Paragraph 1 speaks to the reader who files their own return, knows the 31 January deadline and keeps receipts in a drawer or an inbox.
+   - "Why now" appears only as January and "this Friday", not as the October send-out with time left.
+   - The reader isn't shown that starting now is what shortens this coming January.
+5. **What is the text's angle?** Fulfilled. The weekly habit carries paragraphs 3 to 6. The accountant median remains as a reported survey result under the survey's own caveat. Its "But" now contrasts it with the weekly habit, and the text doesn't respond (see Changed).
+6. **What is the hook?** Fulfilled. The tin, the lost last weekend of January and the two receipts faded to blank (paragraphs 1–2) set out what's at stake before the turn.
+7. **How should the text be structured?** Fulfilled.
+   - And: the return is due and receipts pile up (paragraph 1).
+   - But: the lost weekend and the fading (paragraph 2).
+   - Therefore: the Friday session, Priya's ten minutes, the survey, the photograph that stays readable, and the next step (paragraphs 3–6).
+   - The ending answers the faded receipt and puts Friday where the January weekend was. It doesn't mention the tin again.
+8. **What should be left out?** Fulfilled. No tax advice, no claim about which expenses are allowable, no other apps, no prices and no paid plan.
+9. **What should the reader have understood afterwards?** Partly fulfilled (finding 8). The reader learns that the session takes about ten minutes and that weekly matchers reported shorter returns, but not that the habit makes the return shorter. This is left for the writer, because the material doesn't support the cause.
+10. **What should the reader feel, think or do afterwards?** Fulfilled. The reader knows the steps and is left with "this Friday". The call to action is indirect, as the brief intends. The measure isn't assessed against the text.
+11. **What makes the text RIV for the reader?**
+    - Relevant: partly, as under question 4.
+    - Interesting: yes, the hook in paragraphs 1–2.
+    - Valuable: yes, the steps in paragraph 3 and Priya's ten-minute session.
+    - The chain check is answered.
+12. **What sources do you know of?** Partly fulfilled. The survey, the interview and the support note are used as the material states them. Two claims have no support in the material (finding 6).
+
+Every question in the brief is answered, and it lists no open research questions ("Nothing is left to find out").

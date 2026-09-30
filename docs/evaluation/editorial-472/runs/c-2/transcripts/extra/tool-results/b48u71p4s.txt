@@ -1,0 +1,215 @@
+genres:
+article.md
+article.review.md
+casestudy.md
+casestudy.review.md
+column.md
+column.review.md
+general.md
+opinion.md
+opinion.review.md
+pressrelease.md
+pressrelease.review.md
+report.md
+report.review.md
+teaser.md
+teaser.review.md
+webcopy.md
+webcopy.review.md
+
+techniques:
+abt.md
+abt.review.md
+pac.md
+pac.review.md
+# The base contract
+
+Write with the clarity and factual precision of a well-edited newspaper or quality magazine. Genre, audience, and purpose override that register: a letter, a speech and an advertisement keep their own character. The selected genre governs craft and form; the resolved language governs idiom, syntax and typography. Examples here illustrate meanings, not English phrases to translate.
+
+## Reader and progression
+
+Give the intended reader what they need to understand, judge or do the thing the text is for. Keep a clear focus, introduce unfamiliar concepts before the reasoning needs them, and order material by that reader's needs rather than the writer's discovery process. Relevant technical detail belongs; unexplained jargon and unrelated background do not.
+
+Make the relations between passages real. A transition may explain a connection, but cannot invent one. Keep paragraphs coherent and give supporting material a clear place beside what it supports. The body and its sections remain intelligible without treating a title, standfirst or subheading as their opening sentence.
+
+Open on something specific to the subject. End with what the job calls for: an earned understanding, conclusion, recommendation or next step. Remove introductions and conclusions that add only an announcement or a generic flourish.
+
+## Expression
+
+Use concrete words, useful verbs and a natural, varied cadence. Keep terminology and reference clear; introduce an unfamiliar abbreviation before using it alone. Choose ordinary words where they suffice and established specialist terms where they give this reader precision.
+
+Let tone and rhetorical devices serve the genre and the meaning. A useful analogy, question, image, fragment or humorous turn can clarify or carry a voice; decoration and manufactured drama cannot. An imagined comparison is recognisable as a comparison, never presented as an event or someone's experience. Criticism addresses the supported issue without inventing motives or patronising the reader.
+
+Each passage earns its place. Repetition may establish an independent entry point, explain a hard idea or give a deliberate rhetorical return; merely saying the same thing again does none of these. Keep formatting useful: headings for orientation, lists for coordinate items, tables for comparisons, emphasis for what merits it. Hold voice, terminology and presentation consistent unless a visible purpose calls for a change.
+
+## Claims
+
+Every claim is supported by the text or its material, with exact attribution and proportionate strength. Preserve the state of knowledge: what is unknown or unclaimed is not thereby known not to have happened. Keep uncertainty where it exists and certainty where it is warranted. A fact, quotation, source, scene, personal experience or opinion attributed to somebody is never invented to complete a form. Name the actual source of an attributed claim rather than invoking unnamed studies or experts.
+
+Circumstantial detail is a claim too: duration, manner, motive, absence and background all need support. So does an evaluative characterisation: calling a count high, low or modest needs a comparison, target, capacity or speaker assessment. Otherwise give the count with its exclusions, without that assessment.
+
+A sequence or correlation establishes no cause. A causal verb such as *shortened* needs causal support; a causal hedge such as *suggests that it shortened* still adds that attribution. This boundary holds in the title, summary, headings and body alike. Preserve chronology, scope and qualifications wherever a claim appears.
+
+A stated length constrains the use of material and is never a licence to add to it. When the material is insufficient, deliver the length the material supports and name what further material would close the gap. A supplied publication limit is binding; meeting it cannot justify invention or loss of a qualification that changes a claim.
+# Reviewing the base contract
+
+Diagnose failures of [the base contract](base.md) in the text in front of you. A finding identifies the passage, the requirement and what the reader loses. Count a loss as the reader who meets the passage in its place would suffer it, not as the strictest reading of a single word could construct it; that holds for every passage, the headline, the standfirst and each subheading as much as the body. A writer's own judgement that the text supports, such as calling a survey small where the text says it reached forty people, is not a claim the text does not carry. Another successful choice, a house-style preference and a mechanical error are not editorial findings; mechanics belongs to the separate final pass. Repetition of whole sentences or passages is an editorial matter, even when the duplication is verbatim; Proofread's duplicate-word correction does not own it.
+
+Read for the intended reader's missing step: an unexplained term, a transition asserting a relation the surrounding sentences do not establish, a section whose place obscures the argument. Cover the paratext to find unresolved references in the body. A heading may carry a fact that the section under it does not repeat: a time, a price or a condition a subheading states has been stated to the reader, and is not missing from the body. What is a finding is a body that needs the heading to be understood — a pronoun, a definite form or an ellipsis that only the heading completes — repaired by naming the referent where the body first needs it rather than by saying the heading's facts again. Judge rhythm by its effect, not sentence counts; purposeful repetition, a personal rough edge and a useful digression may be doing essential work.
+
+Compare the strength of a claim with the support visible in this text. A number contradicting its stated denominator, a causal conclusion following only a sequence, or a certainty contradicted by a nearby qualification is diagnosable. A plausible quotation or experience is not disproved by the absence of its original source. Review no unseen material, request none, and add no source-verification caveat.
+
+Use [the anti-slop catalogue](anti-slop.md) to recognise empty performance, not to prohibit a working figure, contrast or ending. Test suspected filler by what its removal costs; preserve any fact, implication or voice it carries beside the defect. Strong supported criticism needs no generic softening.
+
+A sentence can do its work by bounding what the text asserts: that something is not measured, not claimed, not witnessed or not general, or that what follows is an observation of a document rather than a scene from an occasion. Such a sentence is where *Preserve the state of knowledge: what is unknown or unclaimed is not thereby known not to have happened*, *Keep uncertainty where it exists and certainty where it is warranted* and *Preserve chronology, scope and qualifications wherever a claim appears* are carried, and the text alone shows which sentence it is: read it out, and the claims around it assert more than they did. That cost is what the removal test above answers, so recognise one by what it bounds and by which claim loses that bound, never by its form. A finding lies inside such a sentence or nowhere: name a limit another sentence already states in full, or a limit contradicting another passage of this text, or leave the sentence exactly as it stands. Naming the whole of it as the defect names nothing inside it.
+
+Make the smallest correction that removes a finding. Move or clarify existing material where it supplies the missing connection. Introduce no new evidence, experience, attribution or outcome. If repair would change a claim or a quotation's meaning, or requires information absent from the text, leave the passage and report the unresolved finding. A claim removed because the finding named that claim itself remains part of the claim account, and so does every claim a correction left standing with its scope, certainty, attribution, chronology, causality or meaning moved, and every claim a correction added — one the corrected text asserts and the text before it has no counterpart for, an inference drawn from what that text already said among them where it asserts something that text did not say. A claim that has a counterpart in the text before is changed rather than added. A headline, a standfirst and a subheading carry claims like any other passage, and a changed claim is accounted for by what it now asserts rather than how far its wording moved; a correction that took a limit, a connective or a bounding clause out of the text is accounted for by what the reader no longer has, however little of the text went with it. The account is of the text delivered rather than of the text received, and nothing a reviewing Skill says about the claims as a whole contradicts a finding the same reply states.
+
+Compare each correction with its input, including claims beside the defect, then reread the surrounding passage for broken references or transitions. Compare it difference by difference and not by its claims alone, and trace each one to a finding or to what repairing that finding required: a difference answering neither is not a correction, whatever it improves, and the passage it touched belongs back as it was. A correction is a candidate until that comparison and the review after it have run: where the review establishes a defect the correction introduced and its input did not have, the correction is not accepted and its input stands. Preserve functioning wording, voice and formatting outside the finding; concision is not permission to summarise the text away.
+# General
+
+The default genre: the contract a text gets when nobody named a content type. It is a complete contract rather than the absence of one, and it is what a note, a memo, a letter, an explanation, or a piece of prose whose kind has no name is written against.
+
+## What this genre asks for
+
+**The shape follows the material and the job.** No convention is imposed here — no lede, no summary paragraph, no boilerplate, no mandatory heading, no obligatory recommendation at the end. A named genre brings its reader's expectations with it; this one brings only the reader's need, so the text takes the shape that need implies and no other.
+
+**The kind of text is recognisable from the text.** A reader should be able to tell within a sentence or two whether they are holding an explanation, an argument, an account of what happened, a request, or a description, and the text should then behave like that thing throughout. A draft that is an argument for two paragraphs and a chronology for the next two has changed kind without telling anybody.
+
+**The register is the baseline's, moved by the audience and the purpose.** With no genre convention to override it, what moves the register is who the text is for and what it is for. A note to a colleague, a public explanation, and a letter of complaint are all this genre, and they are not written the same way. Where the request states or implies an audience or a purpose, that is the instruction; where it does not, hold the baseline.
+
+**Length is what the job takes.** There is no expected length here, and nothing is padded to look substantial or cut to look brisk. A text that has done its job in two hundred words is finished at two hundred words.
+
+**A title is written when the artifact has one.** Where the requested artifact is a document with a title, the title says what the text is about in the text's own terms, rather than posing a question the text does not answer or promising more than the text delivers. Where the artifact is a passage, a message, or a fragment, no title is invented for it.
+
+## What this genre does not do
+
+It does not stand in for a genre that exists. Where the request names a content type the Collection installs, that genre's contract is the one to load; this one is what applies when nothing was named and nothing in the request implies a named kind.
+
+It adds no requirement the base contract does not already hold. Everything about register, structure, sentences, words, claims, openings, endings, formatting, and consistency is stated there once, and repeating any of it here would make one rule two things to keep true.
+
+## The technique this genre is ordinarily written with
+
+None. This is the contract a text gets when nobody named a kind of text, and a kind nobody named brings no arc with it. What puts a technique on a text here is a selection, and this genre is not one.
+# ABT
+
+*And, But, Therefore*: Randy Olson's structure connecting a situation and what it puts at stake, a genuine complication or question, and the consequence the material supports. It shapes the reasoning or story without prescribing three paragraphs or visible labels.
+
+## What this technique asks for
+
+Each part moves from the general to the specific. The And gives the situation, then what is at stake in it: what it makes possible or puts at risk, as the material states it. The But names the complication briefly, then its causes. The Therefore says what follows or is done, then how, where something is done. The general orients every reader; the specific gives the part its force.
+
+The reader knows why the situation matters before the complication arrives. A text that opens on its problem leaves the reader asking *so what?* Stakes are facts from the material, never a claim that the subject is important. A calm text often shows them through its situation alone: who has to decide what, and what depends on it. Where the material holds no stakes, state the situation plainly and invent none.
+
+The And holds what the complication needs in order to bite and nothing else, and the complication comes early. How much situation that takes depends on what the reader already knows: somebody inside the subject needs little, somebody outside it more.
+
+An arc has one complication. Other problems are ordered under it as its causes, not beside it, since two problems of equal rank competing for one consequence leave the reader unsure which to follow. Independent arcs are not that: sections of web copy that each answer their own reader question, a teaser's arc, or a nested or revisited arc.
+
+The consequence answers what the complication raised. Each part of it takes up a cause the text has given, so a list of actions is sound when every action answers one; an action against a problem the text never raised is an addition, not a consequence. Where the complication is an open question, or its causes are unknown, the But states it without causes and the consequence takes up the question, for example by naming the next investigation. An open or conditional result is a valid consequence.
+
+The relations must hold even without the words *and*, *but* and *therefore*. A step that only adds, this and then that, where a turn or a consequence belongs, is a sequence rather than the relation. A question need not be a crisis, and a response need not be a triumph. For example: a school records room temperatures before deciding whether to change its heating; the readings locate cold periods but do not explain them; the next investigation links readings to room use.
+
+Apply the structure at the level the genre's task needs. Where a genre's own rules compress, withhold or reorder part of the arc, as when a teaser withholds its resolution, web copy puts the useful words first or an opinion states its position early, the genre governs. A standfirst or lead may give the result early, open question included; the order above governs where the body develops the arc, not that early answer.
+
+Nest or revisit an arc when that helps a complex explanation. In medias res is one possible opening into an event the material actually supplies: the scene itself carries the situation and what is at stake, in the same sentences that move it. It fails when the situation is laid out before the scene, and when it is left out altogether.
+# The anti-slop catalogue
+
+Prose that a language model produced, or that a human wrote after reading a great deal of it, fails in a small number of recognisable ways. This is the catalogue of those ways: what each one looks like on the page, why it costs the reader something, and the smallest change that removes it. It is a diagnostic document — a Skill reading it beside the base contract meets no target the contract does not already hold, and a Skill reading it alone has the patterns and their repairs and needs nothing else.
+
+The examples are English because this document is, and they are patterns rather than strings. Apply each by what it does in the target language, and do not look for the English words in it. A word, a phrase, a punctuation convention, or a construction that only exists in one language belongs to that language's own anti-slop guidance instead, where a Skill loads it beside this file.
+
+## The test before a pattern is recorded
+
+Each pattern below says what a phrase looks like, and looking like one is not being one. Make the repair in your head before you record anything: where the text then asserts more, less or something else than it did, or a distinction it drew is gone, the pattern is not present and nothing is recorded. A hedge that marks genuine doubt, a repetition that lands, a contrast the reader really would otherwise draw wrongly — each of them fails that test, and each is left exactly as it stands.
+
+The test comes before the finding rather than after it. A pattern written down reaches whoever repairs it as a defect somebody found, and a guard that only makes the repair careful arrives too late to save the phrase.
+
+Repair with the smallest change that removes a pattern the test admits. The writer's vocabulary, their bluntness, their humour, their admitted uncertainty, and their rhythm are what makes a text theirs; a pass that tidies all of it into even prose has replaced one machine voice with another. Leave a strong sentence alone even where it is unusual.
+
+## The seven patterns
+
+**False contrasts.** A negation used as a run-up to the actual claim: *This isn't a tool. It's a way of working.* *The question isn't whether, but when.* *It's not just faster — it's cheaper.* The rejected half was never in play, so the sentence spends the reader's attention establishing a position nobody held. State the second half on its own: *This changes how the team works.* A contrast stays where the text really is correcting something a reader would otherwise believe.
+
+**Empty openings.** A first sentence that announces the subject, asserts that the subject matters, or clears the throat before the text starts: *In today's rapidly changing landscape…*, *Communication has never been more important.*, *Here's the thing.*, *What most people get wrong is…* Each could sit in front of any text at all, which is the test: an opening that would survive being moved to a different article is carrying no information. Cut it and open on the material — a fact, a scene, a tension, the question the text answers. The second paragraph is very often the real opening.
+
+**Importance inflation.** Adjectives and formulas that assert weight the material has not shown: *a pivotal moment*, *stands as a testament to*, *a game-changer*, *underscores the significance of*, *plays a vital role in*. Also the trailing participial clause that pretends to interpret — *…, highlighting the team's commitment to quality* — which adds a judgement no fact in the sentence supports. Replace the assertion with what actually happened: *The launch is the company's first paid product.* A reader who is given the fact will decide it matters without being told to.
+
+**Vague attribution.** A claim credited to nobody: *Studies show*, *experts agree*, *industry reports suggest*, *it is widely believed*, *many argue*. Nothing here can be checked, and nothing can be contradicted, which is precisely what makes it comfortable to write. Name who found it, who said it, and how they know; where the text has no source, cut the claim rather than dressing it. Do not invent an attribution to satisfy the pattern — an unsourced sentence is removed, never furnished with a plausible source.
+
+**Synonym cycling.** One thing given a new name every time it is mentioned, because repeating a word felt like poor style: *the agent* reviews the draft, then *the assistant* scores it, then *the tool* suggests fixes. A reader who has been introduced to three names reasonably assumes three things. Pick the clear name and repeat it. Repetition of a key term is how a reader knows it is the same term, and the fix is usually one word restored in two places rather than a rewritten paragraph. The pattern is present only where the names denote one thing: two words a text uses for two things are not cycling however often they alternate, and a text that named two things comes back naming two things.
+
+**Robotic rhythm.** Sentences and paragraphs built to one template: the same length, the same shape, the same three-part list, each paragraph opening with its topic sentence and closing with its summary. Stacked short fragments used for drama — *That's it. That's the whole idea.* — are the same fault at the other extreme. Read a passage aloud in your head; where the breath falls in the same place every time, the shape is doing the writing. Vary length and construction where the meaning gives you a reason to, and merge or split only the sentences whose shape is actually the problem.
+
+**Generic conclusions.** A final paragraph that restates what the reader has just read, reopens the introduction as a rhetorical question, or reaches for an uplifting abstraction: *In conclusion*, *Ultimately, the future belongs to those who…*, *one thing is clear.* The reader was there for the whole text and does not need it summarised back. Delete the paragraph and end on the last concrete point the draft already contains; where the job genuinely calls for a conclusion, a recommendation, or a next step, write that thing plainly and stop. Do not replace a weak closing metaphor with a better one — remove it.
+
+## Notice
+
+This catalogue is a condensed, language-independent adaptation of patterns catalogued in Peter Yang's `no-ai-slop` Skill. The wording here is this collection's own, and the following notice accompanies it as that project's licence requires.
+
+```
+MIT License
+
+Copyright (c) 2026 Peter Yang
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+```
+ls: cannot access 'genres/general.review.md': No such file or directory
+techniques/abt.review.md
+# ABT — review guidance
+
+Identify the situation and its stakes, the complication or question, and what follows. Read the visible text alone, never asking whether the material had stakes or causes the text omits. Test the connections rather than three words, equal parts or one global arc.
+
+**Parker's test.** A transition between parts or sections that only adds, *and then*, where a *but* or *therefore* belongs shows the relation missing there: *we opened an office, but we also hired staff* supplies only an addition. It complements the check that the relations hold without the words.
+
+**General to specific.** Specifics a reader cannot place, because their general point comes later or never, are a finding; an opening scene, or a genre setting its own order, is none.
+
+**Stakes.** A complication arriving before a reader can tell why the situation matters is a finding, unless the situation already shows what depends on it, an early answer in the standfirst or lead precedes the arc, or an opening scene carries the stakes.
+
+**The situation.** Situation the complication does not need, delaying it, is a finding; context the text's reader needs for it to bite is none.
+
+**One complication.** Two problems of equal rank competing for one consequence are a finding; independent arcs, such as sections with their own reader questions, a teaser's arc or a nested or revisited arc, are none.
+
+**The consequence.** An action or conclusion answering a problem the text never raised is a finding; a But whose causes the text does not give, answered by a consequence taking up its question, is none.
+
+**In medias res.** Situation laid out before the scene leaves an anecdote fronting an ordinary opening. Situation left out crowds facts in after the scene, spending its tempo.
+
+**Correction.** Move or clarify existing content: bring stated stakes ahead of the complication and a delayed complication forward, order a cause under its complication, and keep qualifications in the consequence. A missing stake, cause, link or outcome is reported and never written in; a fabricated crisis cannot repair a missing relation. Leave another coherent application alone.
+Installed 1 package in 1ms
+{
+  "selector": "en_GB",
+  "code": "en_GB",
+  "language": "English",
+  "territory": "GB",
+  "territory_name": "United Kingdom",
+  "inherits": null,
+  "scopes": {
+    "composition": {
+      "source": "en_GB",
+      "content": "British general-interest prose is understated. It states a strong claim plainly and lets the claim carry the emphasis, where American register would reach for an intensifier. Irony and litotes are available and are not read as evasion.\n\nCollective nouns take plural agreement when the members are acting and singular when the body is acting as one: *the team are arguing about it*, *the committee has published its report*. Both are correct; what matters is that the choice is consistent within a passage.\n\nThe present perfect covers a recent past that still bears on now: *I've just seen the figures*, *have you eaten?* The simple past in those positions reads as American.\n\n*Have got* is ordinary British usage for possession and obligation — *I've got the file*, *you've got to see this* — and is not an informality to be edited out of general prose.\n\nPrepositions differ in a small, fixed set of places: *at the weekend*, *in hospital*, *different from* or *different to*, *write to somebody*, *meet somebody* rather than *meet with*. None of these is a preference; each is the British form.\n\nSpelling is *-ise* or *-ize* by house style — both are correct British English, *-ise* being the majority convention and *-ize* the Oxford one — but a document uses one throughout. The *-yse* group is invariant: *analyse*, *paralyse*, *catalyse*, in Oxford spelling as in any other.\n\nQuotation marks are single as the outer mark in most British house styles, with double inside; some publications invert this. Follow the document's own choice and make it consistent."
+    },
+    "review": {
+      "source": "en_GB",
+      "content": "Read for American vocabulary that has drifted in: *gotten*, *math*, *fall* for autumn, *elevator*, *sidewalk*, *movie theater*, *diaper*, *vacation*, *check* for a restaurant bill. A single one is a slip; a scatter of them means the text was drafted in another variety.\n\nRead for mixed formats in one document — dates written both *24 August 2026* and *August 24, 2026*, currency in both *£* and *$*, times in both *2.30pm* and *2:30 p.m.* Format drift is the clearest evidence of assembly from several sources.\n\nCheck *-ise* and *-ize* consistency across the whole document, not paragraph by paragraph. Generated British English is frequently American English with some suffixes changed, and the ones that were missed are where it shows.\n\nBritish institutional and business prose slides into passive nominal style: *It is anticipated that a review will be undertaken*. Give it back its subject and its verb: *We expect to review it*.\n\nWatch for hedges in chains — *somewhat rather more likely*, *it may perhaps be the case that* — where British understatement has stopped being restraint and become evasion. One hedge does work; three cancel each other.\n\nCheck that punctuation inside and outside quotation marks follows one convention. British practice places a mark inside the quotation only when it belongs to the quoted matter.\n\nCheck title capitalisation is one system throughout. British house styles differ over whether headings take sentence case or title case, and a document that alternates has chosen neither."
+    },
+    "anti-slop": {
+      "source": "en_GB",
+      "content": "The reskinning tell. Generated British English is very often American English with a spelling pass over it, so the vocabulary and the format are what give it away rather than the spelling: *colour* and *organisation* in a text that still writes *gotten*, *2:30 p.m.*, and *$*.\n\n*Whilst*, *amongst*, *utilise*, *endeavour*, and *commence* sprinkled through ordinary prose. Each exists; none is the neutral British choice, and their density is a model reaching for something that sounds British rather than something a British writer would write. *While*, *among*, *use*, *try*, and *start* are the words.\n\nSuffix inconsistency inside one text — *organise* in one paragraph and *recognize* in the next — is a generation artefact rather than a style, and it is worth naming as such rather than silently normalising, because it usually means the passage came from somewhere else.\n\nA concentration of punctuation forms that conflict with the document's convention is a generation tell. Refer to Mechanics for the conventions; this scope does not restate them.\n\nThe apologetic opening: *It is perhaps worth noting that*, *One might argue that*, *It would be fair to say that*. British hedging turned into an opening formula that says nothing before the sentence starts."
+    }
+  }
+}

@@ -1,0 +1,89 @@
+The piece now argues for the Friday habit instead of handing the tin to an accountant. It is still below the brief's word range, because the material has nothing more on this angle that the text can use. I made one correction round (budget 1). A fresh check found no problems created by that round, so it was accepted. The closing proofread made no corrections. No files were written or changed.
+
+```markdown
+# Ten minutes on a Friday
+
+For four years, Priya Nand kept her receipts in a biscuit tin. She tutors maths in Leeds, and every January the tin came out. "The last weekend of January was always gone," she says. The Self Assessment return is due on 31 January, and most of us spend the months before it the way Priya did, with receipts collecting in a drawer or an inbox until there is no more room for later.
+
+The tin has two costs. The first is the weekend. The second is quieter. Till receipts printed on thermal paper often fade within months, faster when kept somewhere warm. When Priya finally opened the tin one January, two receipts from the spring had faded to blank, and she could not claim them.
+
+In March 2026, Priya moved to a session every Friday. "About ten minutes, with a cup of tea," she says. She photographs each receipt when she gets it, and on Friday she matches the week's photographs to her bank lines and notes anything odd.
+
+In a survey this summer, 412 of our users told us how long their last return took. Those who matched receipts at least once a week reported a median of 6 hours of their own time. Those who left their receipts until January reported 19. The figures are what people told us rather than anything we measured, and they do not show what caused the difference.
+
+A receipt in a tin can still fade. A photograph taken while the receipt is new stays readable.
+```
+
+**Settings used:** genre `general`, structure ABT (And, But, Therefore), language `en_GB`. All three come from the settings block at the top of `brief.md`. ABT applies because the brief names it; the `general` genre sets no structure of its own. `input.md` has no such block, so there was nothing to conflict with and none was added.
+
+## Fixed
+
+1. **The text turned away from the weekly habit (brief questions 3, 5, 7, 9, 10).** The original called the weekly habit good advice, then treated it as a burden ("it asks for fifty-two Fridays a year…"). It never showed the session was short, although the title promises ten minutes. It ended by handing the tin to an accountant ("It can become somebody else's job."). The second half now follows Priya's move to a Friday session and her steps, and quotes her on how long it takes.
+2. **Outside the brand's remit (question 2).** "It can become somebody else's job" and "the tin could leave the house" recommended outsourcing the bookkeeping. The brief limits Larkspur Ledger to bookkeeping habits and its own app. Fixed by the same rework.
+3. **The fading problem had no answer.** Handing the tin over in January does nothing for receipts that have already faded. The ending now answers it: "A photograph taken while the receipt is new stays readable."
+4. **The survey was read as cause and effect.** "There is another way to get the weekend back" and "Still, the shortest January … did the least bookkeeping themselves" relied on a cause that the very next sentence says the figures don't show. The survey also measured hours spent on the return, not how long January felt or how much bookkeeping people did. Both sentences are gone; the caveat sentence is unchanged.
+5. **Unsupported details.** "came down from the shelf" and "a warm kitchen" were reworded. "from people who already work most of them" and "A tutor's time is worth more at the whiteboard…" were removed.
+6. **Advice credited to nobody.** "The usual advice is a weekly habit" had no source. The steps are now Priya's own.
+7. **Claims wider or narrower than the material.** "Till receipts are printed on thermal paper" (all of them), "every week" (the survey says "at least once a week") and "left everything" (the survey says "left receipts") now match the material.
+8. **The title's promise.** The body now delivers the "ten minutes"; the title's wording is unchanged.
+
+## Still open (for the writer)
+
+1. **"most of us spend the months before it the way Priya did".** Nothing in the material gives that proportion, and "us" puts Larkspur Ledger among the sole traders.
+2. **Why now (questions 4 and 11).** Nothing says there is still time to change the habit before January. "This January" was the only reference to the coming January specifically, and it went with the old ending. "due on 31 January" and "the months before it" remain. The October send date is in the brief, not the material.
+3. **Length (question 1).** The piece is now about 258 words including the title, against the brief's 300–450; the original was about 330. Most of the lost words were the outsourcing argument. On this angle, the material offers nothing more the text can use without the brief's unsupported claims. What would close the gap: an account of Priya's first January after switching to Fridays.
+4. **The conclusion and the ending (questions 7 and 9).** The text shows the session takes about ten minutes and gives the 6-against-19-hour figures, which it says do not show cause. It does not show the habit making a January short. The brief's planned ending (the tin empty this January) has no support in the material.
+   - Priya's "January this year was an evening" was recorded in September 2026. She switched in March 2026, so that January came before the habit and can't be credited to it. I didn't use it; worth checking with Priya.
+
+## What happened to the claims
+
+**Removed**
+- That a weekly habit is "the usual advice" (fix 6). The steps stay, now as Priya's.
+- "It is good advice", the brand's own endorsement of the habit, and that it "asks for fifty-two Fridays a year from people who already work most of them" (fixes 1 and 5).
+- "There is another way to get the weekend back." (fixes 1 and 4).
+- That the 57 people whose return an accountant prepared reported a median of just 3 hours of their own time (fix 1). A reader no longer learns that this group reported the least time.
+- "Still, the shortest January in the survey belonged to the people who did the least bookkeeping themselves." (fixes 1 and 4). "But" and "Still" went with these sentences.
+- "A tutor's time is worth more at the whiteboard than at the kitchen table sorting paper." (fixes 1 and 5).
+- "The tin does not have to become a Friday chore. It can become somebody else's job." (fixes 1 and 2).
+- "This January, the tin could leave the house before the last weekend does." (fixes 1 and 2). A reader no longer has the reference to the coming January by name.
+
+**Changed**
+- **Tin:** every January "the tin came out"; it no longer says the tin sat on a shelf (fix 5).
+- **Fading:** "Till receipts printed on thermal paper often fade within months, faster when kept somewhere warm." It no longer says every till receipt is thermal, or puts them in a kitchen (fixes 5 and 7).
+- **Survey groups:** those who matched receipts "at least once a week", and those who "left their receipts until January" (fix 7).
+- **The steps:** they were general advice credited to "the usual advice". They are now Priya's own practice, and add that she photographs each receipt "when she gets it" (fixes 6 and 1).
+- **Survey framing:** the figures now follow Priya's switch, no longer introduced as "another way to get the weekend back" or followed by "Still…". They are the only figures for time spent on the return, still qualified by the caveat that they don't show cause (fixes 1 and 4).
+- **The caveat sentence:** "The figures are what people told us rather than anything we measured, and they do not show what caused the difference." Its wording is unchanged. It covered three groups; the accountant group has gone, so it now limits only the weekly-against-January comparison (fix 1).
+- **The title:** "Ten minutes on a Friday" has the same wording. It used to name a Friday chore the text went on to reject. It now claims, in Priya's words, that the weekly session takes ten minutes (fixes 1 and 8).
+
+**Added**
+- Priya moved to a session every Friday in March 2026 (fix 1).
+- Her words: "About ten minutes, with a cup of tea." (fixes 1 and 8).
+- "A receipt in a tin can still fade." This is an inference from paragraph 2 (fix 3).
+- "A photograph taken while the receipt is new stays readable." (fix 3).
+
+No other claim was removed, changed or added.
+
+**Other changes:** the second half was rebuilt, with Priya's Friday session and an ending on photographs and fading replacing the outsourcing argument. The survey paragraph lost its framing sentences. Unsupported details and three claims that went beyond the material were corrected. The closing proofread made no corrections.
+
+## How the text meets the brief
+
+`brief.md`, named with `--brief`; no other brief was involved.
+
+1. **What is the assignment?** Partly met (before: met). Topic, genre, channel and British English are right, and the missing search phrase was deliberate. At about 258 words it falls short of 300–450, so the newsletter slot isn't filled (open item 3).
+2. **Which brand is the sender?** Met (before: partly; the outsourcing advice was outside the remit). The tone is plain and a little dry ("The tin has two costs. The first is the weekend. The second is quieter."), and it sticks to bookkeeping habits.
+3. **What does the sender want to convey with this text?** Met (before: not met). It leads to the weekly photograph-and-match routine, where the scanner fits, without naming it.
+4. **Who is the reader?** Partly met (before: partly). It speaks to sole traders who file their own return, but nothing says why to start now rather than in January.
+5. **What is the text's angle?** Met (before: not met). One angle: a Friday session against a lost weekend.
+6. **What is the hook?** Met (before: met). The lost weekend and the receipts that "had faded to blank" come before anything is proposed.
+7. **How should the text be structured?** Partly met (before: not met).
+   - The And (deadline and tin), the But (two costs) and the Therefore (the Friday session) are there.
+   - Fading is answered. The lost weekend is answered only by survey figures the text says don't show cause.
+   - The ending returns to the tin but doesn't land on the conclusion.
+8. **What should be left out?** Met (before: met). No tax advice, rival apps, prices or paid plan.
+9. **What should the reader have understood afterwards?** Partly met (before: not met). "About ten minutes" is shown; that this makes January short is not.
+10. **What should the reader feel, think or do afterwards?** Met (before: not met). The session is shown to be short, and all three steps are given.
+11. **What makes the text RIV for the reader, and does the brief hold together?** Partly met (before: partly). It is interesting (the tin, the faded receipts) and valuable (the steps, the ten minutes). It lacks the why-now that would make it relevant. The brief's own consistency check is answered.
+12. **What sources do you know of, and what do you need to find out?** Met (before: partly; the interview's Friday session wasn't used). All three sources are used, and the survey's caveats are kept.
+
+The brief answers every question, none of its answers is marked as provisional, and it lists nothing still to find out.

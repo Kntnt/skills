@@ -1,0 +1,109 @@
+**Settings used:** Brief `brief.md` (from `--brief`; no other brief was named). Genre `general`, technique ABT and language `en_GB` all come from the `kntnt` map in `brief.md`. ABT was set by the brief's map, not by the genre, since `general` names no technique. `input.md` has no `kntnt` map, so the two couldn't conflict, and no map was added to it.
+
+**What happened:** One correction round, which used the whole budget of 1, passed re-review and was kept. The review stopped there because the budget was spent. Every finding still open needs material or a decision from the writer. The final proofread found no mechanical errors and changed nothing. No files were written, and every temporary file has been removed.
+
+````markdown
+# Ten minutes on a Friday
+
+For four years, Priya Nand kept her receipts in a biscuit tin. She tutors maths in Leeds, and every January the tin came out. "The last weekend of January was always gone," she says. The Self Assessment return is due on 31 January, and most of us spend the months before it the way Priya did, with receipts collecting in a drawer or an inbox until there is no more room for later.
+
+The tin has two costs. The first is the weekend. The second is quieter. Till receipts are printed on thermal paper, and they often fade within months, faster in a warm kitchen. When Priya finally opened the tin one January, two receipts from the spring had faded to blank, and she could not claim them.
+
+In March 2026, Priya moved to a session every Friday: "About ten minutes, with a cup of tea." She photographs each receipt when she gets it, and on Friday she matches the week's photographs to her bank lines and notes anything odd.
+
+In a survey this summer, 412 of our users told us how long their last return took. Those who said they matched receipts at least once a week reported a median of 6 hours of their own time. Those who said they left receipts until January reported 19. But the 57 whose return was prepared by an accountant reported a median of just 3 hours. The figures are what people told us rather than anything we measured, and they do not show what caused the difference.
+
+Priya's habit also answers the tin's quieter cost. As our support team notes, a photograph taken while the receipt is new stays readable.
+````
+
+## Findings
+
+**Fixed**
+
+1. **The text steered readers away from the weekly habit** (brief questions 3, 5, 7, 9, 10 and 2; the ABT "therefore"). Old paragraphs 3–6 called the weekly habit a burden of "fifty-two Fridays a year". They ended by handing the tin to "somebody else", meaning an accountant. That is the opposite of the brief's message, angle, conclusion and intended effect. It is also outside the brand's remit, which is bookkeeping habits and its own app. The ending also left the faded-receipt cost unanswered. Fix: those claims are gone. The "therefore" now walks through Priya's Friday session and ends on the faded receipts.
+2. **Unnamed source.** "The usual advice is a weekly habit" credited the steps to nobody. They are now credited to Priya, as `material.md` gives them.
+3. **A correlation offered as a solution.** Two sentences offered the accountant figure as a way out: "There is another way to get the weekend back" and "Still, the shortest January … belonged to the people who did the least bookkeeping themselves". The text's own next sentence says the figures show no cause. "Did the least bookkeeping" is also not in the material. Both sentences are gone.
+4. **Invented detail.** Nothing in the material says the tin was kept "on the shelf". It now just "came out".
+5. **Survey groups didn't match the source.** "Every week" and "everything" now read "said they matched receipts at least once a week" and "said they left receipts until January", as the survey puts it.
+
+**Still open, for the writer**
+
+6. **"most of us spend the months before it the way Priya did"** (paragraph 1). The material gives no share of sole traders who wait until January, so a figure is needed. "Us" also puts Larkspur Ledger among the sole traders, while paragraph 4 says "our users".
+7. **Nothing says why now** (brief question 4). Nothing tells the reader it is early October with time left before January. Removing the old last line ("This January, …") took away the only mention of the coming January, so this is weaker than it was. The send-out date is in the brief, not in the material.
+8. **The accountant figure still points the other way.** "But the 57 whose return was prepared by an accountant reported a median of just 3 hours" was kept. It is a sourced claim and was not itself the problem. It is still the lowest figure, it opens with "But", and nothing after it answers it. A reader can still conclude that an accountant is the answer.
+9. **"Priya's habit also answers the tin's quieter cost."** The word "also" implies that the habit fixes the lost weekend too. Nothing supports that:
+   - The survey says it doesn't show cause.
+   - The material has no return Priya filed after she switched.
+   - The quote "January this year was an evening." can't be used. The interview is dated September 2026 and the switch March 2026, so "January this year" came before the switch.
+
+   Material on her first return after the switch would settle it.
+10. **The ending.** The brief wants to end on the tin, empty this January, but the material doesn't support that. The current ending ties back only to the faded-receipt half of the hook.
+
+## Claim account
+
+**Removed** (all in the one correction round)
+
+- The tin came down "from the shelf" (finding 4 named the detail itself as the problem).
+- The weekly habit is "the usual advice" (finding 2).
+- "It is good advice": the text's praise for that advice went with the sentence finding 1 named. The text no longer calls the habit good advice in words. It shows Priya's habit instead.
+- The habit "asks for fifty-two Fridays a year from people who already work most of them" (finding 1).
+- "There is another way to get the weekend back" (findings 1 and 3). This line introduced the survey as a solution. The reader no longer sees the survey framed that way.
+- "Still, the shortest January in the survey belonged to the people who did the least bookkeeping themselves" (findings 1 and 3). "Still" set this against the survey's caveat. The caveat stays in full.
+- "A tutor's time is worth more at the whiteboard than at the kitchen table sorting paper" (finding 1).
+- "The tin does not have to become a Friday chore. It can become somebody else's job." (finding 1).
+- "This January, the tin could leave the house before the last weekend does" (finding 1). The reader no longer has any mention of the coming January (see finding 7).
+
+**Changed**
+
+- **The steps.** They were general advice to the reader: "photograph each receipt, match the week's photographs to your bank lines every Friday, and note anything odd". They are now what Priya does: she "photographs each receipt when she gets it", and on Friday matches the photographs to her bank lines and notes anything odd. The steps are now attributed to Priya, and photographing now happens when each receipt arrives rather than as part of the Friday session (findings 1 and 2).
+- **The survey groups** now report what respondents said, in the source's wording: "at least once a week" rather than "every week", and "receipts" rather than "everything" (finding 5).
+- **The implied claim that the habit wins back the weekend.** The original implied it through "another way to get the weekend back". The current text implies it through "also": Priya's habit answers the lost weekend too (finding 1; unsupported, see finding 9).
+- **The heading** "Ten minutes on a Friday" is word for word the same, but what it claims has moved. In the original, the body argued against it and gave "ten minutes" no support. Now it stands for Priya's session, "About ten minutes, with a cup of tea." So it now claims, through her, how long a weekly session takes.
+
+**Added** (all for finding 1)
+
+- Priya moved to a session every Friday in March 2026, quoted as "About ten minutes, with a cup of tea." (`material.md`, interview).
+- As the support team notes, a photograph taken while the receipt is new stays readable (`material.md`, support note).
+- Priya's habit answers the tin's quieter cost, the fading receipts. This is an inference joining the two claims above.
+
+Apart from the changes listed above, paragraph 2, the heading's wording and the other sentences of paragraphs 1 and 4 are unchanged.
+
+## How the text meets the brief
+
+Brief: `brief.md`. No other brief was named, so none was overridden. Every question is answered. Question 12 leaves nothing still to research ("Nothing is left to find out"). Where a rating changed, the rating before the edit comes first.
+
+**1. What is the assignment?** Fulfilled. The piece covers keeping receipts through the tax year, as a letter-length general piece for the newsletter, in `en_GB`, under the working title. It is 285 words by a plain word count, heading included. That is just under 300, but within "roughly 300 to 450". No search phrase was wanted.
+
+**2. Which brand is the sender?** Partly fulfilled → partly fulfilled. Before, recommending an accountant went beyond the brand's remit of habits and its own app. Now it speaks as Larkspur Ledger ("our users", "our support team"), plain and friendly, and within that remit. But "most of us" (finding 6) briefly makes the sender one of its readers.
+
+**3. What does the sender want to convey with this text?** Not fulfilled → partly fulfilled. The text now leads to Priya's habit without stating the message outright: she photographs each receipt when she gets it and matches the photographs every Friday. That is where the scanner fits. The accountant figure (finding 8) still points the reader somewhere else.
+
+**4. Who is the reader?** Partly fulfilled → partly fulfilled. The text meets the reader: the tin, the drawer or inbox, 31 January, receipts that can't be claimed. Nothing says why now, so the reader loses the reason to start this autumn (finding 7).
+
+**5. What is the text's angle?** Not fulfilled → partly fulfilled. The text now sticks to the weekly habit. The accountant figure is left as a side track, and "what makes January short" rests on an unsupported "also" (findings 8 and 9).
+
+**6. What is the hook?** Fulfilled. The last weekend of January and the two receipts faded to blank (paragraphs 1–2) set out what is at stake before the habit comes in.
+
+**7. How should the text be structured?** Not fulfilled → partly fulfilled.
+- The one-sentence summary is only partly carried out: the text walks through a Friday session but doesn't show that it makes the return short.
+- The hook is resolved for the faded receipts ("a photograph taken while the receipt is new stays readable"). For the lost weekend it is resolved only through "also".
+- The ending ties back to the faded-receipt half of the hook, not to the brief's empty tin (findings 9 and 10).
+
+**8. What should be left out?** Fulfilled. There is no tax advice, no claim about which expenses are allowable, no other app, no price and no paid plan.
+
+**9. What should the reader have understood afterwards?** Not fulfilled → partly fulfilled. The reader learns two things. The Friday session, matching the week's photographs to bank lines, takes about ten minutes. And photographing each receipt when it arrives leaves a copy that stays readable. The text doesn't carry the idea that this makes the January return a short job, because the material doesn't show it (finding 9).
+
+**10. What should the reader feel, think or do afterwards?** Not fulfilled → partly fulfilled. The reader is left with the steps and "About ten minutes", which supports the belief that a weekly session is short. The accountant figure pulls elsewhere (finding 8). The measure is not assessed.
+
+**11. What makes the text RIV for the reader, and does the brief hold together?** Partly fulfilled → partly fulfilled.
+- Relevant: the January return, but no October timing.
+- Interesting: the hook.
+- Valuable: the Friday steps and Priya's example, both now present.
+
+The brief's own chain check is answered.
+
+**12. What sources do you know of, and what do you need to find out?** Partly fulfilled → partly fulfilled. The text now uses all three sources: the survey with its caveat, the interview and the support note. It still contains "most of us" (finding 6) and the implication in "also" (finding 9), neither of which the material supports.
+
+## What else changed
+
+The review replaced the text's "therefore". Old paragraphs 3–6 made the case for handing the tin to an accountant. They are now Priya's Friday session, the survey and a closing paragraph on faded receipts, so the text went from six paragraphs to five. It also replaced an unnamed source with a named one and removed an invented detail. The heading's wording is unchanged, and the final proofread made no corrections.

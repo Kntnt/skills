@@ -1,0 +1,29 @@
+{
+  "returncode": 0,
+  "timed_out": false,
+  "interrupted": false,
+  "duration_seconds": 255.28,
+  "harness_result": {
+    "is_error": false,
+    "subtype": "success",
+    "num_turns": 15,
+    "total_cost_usd": 1.543698,
+    "terminal_reason": "completed"
+  },
+  "transcripts": {
+    "parent_transcript": "home/.claude/projects/-private-var-folders-cs-vgp-x-353zd9frkjpysp7zdw0000gn-T-kntnt-editorial-388-run-yc6jn4mk-work/294e1527-e445-4e27-863e-b05c5aa591d3.jsonl",
+    "subagent_transcripts": 2,
+    "subagents_directory": "present",
+    "missing": []
+  },
+  "process_group_gone": true,
+  "turns": [
+    {
+      "turn": 1,
+      "returncode": 0,
+      "session_id": "294e1527-e445-4e27-863e-b05c5aa591d3",
+      "is_error": false,
+      "process_group_gone": true
+    }
+  ]
+}

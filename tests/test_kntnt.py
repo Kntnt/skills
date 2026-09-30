@@ -9552,6 +9552,49 @@ def test_redline_without_a_brief_leaves_source_fidelity_to_the_writer() -> None:
     )
 
 
+REDLINE_BRIEF_REVIEW = REDLINE.parent / "references" / "brief-review.md"
+
+# A count of the template's questions, in figures or in words: *13-question*,
+# *12 questions*, *twelve questions*, *all 13*. Naming one question by its
+# number, *question 3*, is not a count and stays allowed.
+TEMPLATE_QUESTION_COUNT = re.compile(
+    r"\b(?:\d+|one|two|three|four|five|six|seven|eight|nine|ten|eleven|"
+    r"twelve|thirteen|fourteen|fifteen)[- ](?:numbered[- ])?questions?\b"
+    r"|\ball (?:\d+|twelve|thirteen)\b",
+    re.IGNORECASE,
+)
+
+
+def test_redline_reviews_the_sender_s_message_and_the_conclusion_apart() -> None:
+    """The brief review follows the template without counting its questions.
+
+    The review maps a brief onto whatever questions `writing-brief.md` holds,
+    so a count written here goes stale the next time the template changes.
+    And the template keeps the sender's message, which may stay unsaid, apart
+    from the conclusion the text lands in, so the review judges them as two
+    requirements rather than one (issue #472).
+    """
+
+    text = REDLINE_BRIEF_REVIEW.read_text(encoding="utf-8")
+
+    stated = TEMPLATE_QUESTION_COUNT.findall(text)
+    assert stated == [], (
+        f"{REDLINE_BRIEF_REVIEW}: states a count of the template's questions"
+        f" {stated}, which the template alone settles (issue #472). See"
+        f" {STANDARD}."
+    )
+    requirements = re.findall(r"^- \*\*([^*]+)\*\*", text, re.MULTILINE)
+    message = [name for name in requirements if "sender's message" in name.lower()]
+    conclusion = [name for name in requirements if "conclusion" in name.lower()]
+    assert message and conclusion and not set(message) & set(conclusion), (
+        f"{REDLINE_BRIEF_REVIEW}: the requirements {requirements} do not list"
+        f" the sender's message and the conclusion as two separate entries, so"
+        f" a text that carries the message without stating it is judged"
+        f" against one requirement standing for both (issue #472). See"
+        f" {STANDARD}."
+    )
+
+
 def test_redline_invokes_proofread_once_and_declares_what_it_needs() -> None:
     """The mechanical pass is last, and both requirements are hard.
 

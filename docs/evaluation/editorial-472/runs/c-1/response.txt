@@ -1,0 +1,78 @@
+I reviewed `input.md` against the Writing Brief `brief.md` and the material it points to, `material.md`. No other brief was named.
+
+**Configuration.** Genre `general`, technique `abt` and language `en_GB`. All three come from the `kntnt` map in the brief's frontmatter. The technique came from the brief's map, not from the genre, because the general genre names no technique. `input.md` has no `kntnt` map, and I didn't add one. The Correction Budget was 1: I ran one correction round and accepted it.
+
+````markdown
+# A quiet table on Saturdays
+
+It is Sunday night, the maths homework is due in the morning, and the kitchen table is covered in books, plates and a younger brother's noise. For many families in Pellbrook, that is where homework gets done.
+
+"At home my little brothers are always shouting," says Amira, in year 9. Since March she has spent her Saturday mornings somewhere else: the homework club at Pellbrook Library. Her mother drops her off on the way to the market. "Here I get my maths done before lunch."
+
+The club meets every Saturday in term time, from 10:00 to 12:00, in the first-floor study room. It is for pupils in years 7 to 11, it is free, and nobody needs to book: pupils sign in at the door and bring their own homework. There are laptops and a printer, and two volunteer tutors are there each week, one for maths and science and one for English and humanities.
+
+Colin Parry, who tutors maths, is a retired teacher. "Most of them just need someone to ask when they're stuck," he says. On the Saturday we visited, 14 pupils signed in.
+
+So if your Sunday nights look like the one above, the Pellbrook homework club gives your child a quiet table and a volunteer tutor every Saturday, free of charge. Mention it at dinner this week. Saturday morning is when the table is waiting.
+````
+
+## Findings
+
+1. **Unresolved, left for the writer.** First paragraph: "For many families in Pellbrook, that is where homework gets done."
+   - **Problem:** neither the leaflet nor the visit notes in `material.md` say where or how Pellbrook families do homework, so nothing supports this claim (brief question 12; base contract, Claims).
+   - **Reader loss:** the reader takes a statement about "many families" as something the council knows.
+   - **Needs:** a source, or the writer deciding how to frame the opening.
+2. **Repaired.** Second paragraph, "For Amira, in year 9, it used to be.", and final paragraph, "if your Sunday nights look like Amira's used to".
+   - **Problem:** together these turned the imagined Sunday-night opening into Amira's past. The visit notes record only her words "At home my little brothers are always shouting. Here I get my maths done before lunch." They mention no kitchen table and no Sunday nights, and the shouting is in the present tense (brief question 12; base contract, Claims).
+   - **Reader loss:** the reader couldn't tell what Amira said from what the text built around her.
+3. **Unresolved, left for the writer.** Missing: a reason to act this term.
+   - **Problem:** the brief's relevance answer names the first mock exams in November and homework piling up in the autumn term. `material.md` mentions neither, so this couldn't be written in without a source (brief questions 4 and 11).
+   - **Reader loss:** a parent has no reason to act now rather than later.
+
+## Claim account
+
+- **Removed:** "For Amira, in year 9, it used to be." This was the claim that the kitchen table in the opening scene used to be where Amira did her homework. The repair for finding 2 removed it, because the finding named that claim as the problem.
+  - A reader no longer has any statement that Amira was once in the opening's situation.
+  - Her year group is still there, now in the attribution "says Amira, in year 9".
+- **Changed:** in the final paragraph, "So if your Sunday nights look like Amira's used to" now reads "So if your Sunday nights look like the one above". It now compares the reader's Sunday nights with the imagined opening scene instead of with Amira's past. The repair for finding 2 made this change.
+- **Added:** none.
+
+No other claim was removed, changed or added.
+
+The run changed one more thing outside the claim account. Amira's first quotation now opens the second paragraph and is attributed "says Amira, in year 9" instead of "she says", because the sentence that introduced her was removed. The final mechanical pass (Proofread, `en_GB`) made no corrections.
+
+## Brief fulfilment
+
+Brief: `brief.md`. It uses an earlier 13-question layout; I mapped it by meaning onto the current template's 12 questions.
+
+1. **What is the assignment?** Fulfilled.
+   - The whole text is about the Saturday homework club. It's a short, friendly newsletter piece for parents in British English ("maths", "year 9", "term time").
+   - The length is within the brief's 200 to 350 words.
+   - The search phrase appears in the final paragraph ("the Pellbrook homework club"), and the headline is the working title.
+2. **Which brand is the sender?** Fulfilled. The text describes the library's own service (times, room, tutors, no booking) to parents in a friendly, clear tone. Missing part: the brief doesn't describe the brand's image.
+3. **What does the sender want to convey with this text?** Unanswered. The brief has one message answer, which the earlier layout maps to question 9. It doesn't give the sender's own message separately.
+4. **Who is the reader?** Partly fulfilled. This is measured against an answer the brief marks weak.
+   - The text speaks to parents directly ("gives your child", "Mention it at dinner this week").
+   - The why-now the brief gives (the November mock exams and the autumn-term homework) doesn't appear; see finding 3. The reader loses a reason to act this term.
+5. **What is the text's angle?** Fulfilled. The club is seen through Amira and her Saturday mornings, with the tutor and the visit alongside her.
+6. **What is the hook?** Fulfilled. The opening sentence sets up the kitchen table on a Sunday night, the homework due in the morning and a younger brother's noise.
+7. **How should the text be structured?** Fulfilled.
+   - **And:** Sunday night at the kitchen table with homework due.
+   - **But:** the noise at home ("At home my little brothers are always shouting").
+   - **Therefore:** the Saturday club and how to come.
+   - The ending ties back to the hook ("if your Sunday nights look like the one above", "the table is waiting").
+   - Missing parts: the brief gives no one-sentence version of the whole text and no step-by-step sketch.
+8. **What should be left out?** Fulfilled. The text doesn't comment on the schools or on teachers; that Colin Parry is a retired teacher is stated only as a fact about him. It gives no exam results.
+9. **What should the reader have understood afterwards?** Fulfilled. The final paragraph lands on it: "the Pellbrook homework club gives your child a quiet table and a volunteer tutor every Saturday, free of charge."
+10. **What should the reader feel, think or do afterwards?** Fulfilled. The call to action is direct ("Mention it at dinner this week."). The text gives the time and place and says no booking is needed. The measure (new pupils signing in during November) isn't assessed against the text.
+11. **What makes the text RIV for the reader, and does the brief hold together?**
+    - **Relevant:** partly fulfilled. The November mock exams and the autumn-term homework don't appear (finding 3), so the reader loses the reason this matters now.
+    - **Interesting:** fulfilled, through the opening scene and Amira.
+    - **Valuable:** fulfilled, through when the club runs, who it is for and how to come.
+    - **Chain check:** unanswered ("Not done yet").
+12. **What sources do you know of, and what do you need to find out?** Partly fulfilled. The club's times, room, age range, tutors and equipment, Amira's quotations and details, Colin Parry's quotation and the 14 pupils all come from `material.md`. "For many families in Pellbrook, that is where homework gets done." doesn't (finding 1).
+
+**Gaps in the brief:**
+- **Unanswered:** question 3, and the chain check under question 11.
+- **Missing parts:** the brand's image (question 2), and the one-sentence version and sketch (question 7).
+- **Open research questions:** the brief records none.

@@ -1,0 +1,1 @@
+/redline --brief=brief.md --output=response input.md

@@ -1,0 +1,85 @@
+```markdown
+# Bring it, fix it, keep it
+
+Somewhere at the back of a Hatherley shed there is a lamp that stopped working, waiting for the autumn clear-out and the tip. Before it goes, bring it to the Repair Café.
+
+You will not be leaving it with us. At the Repair Café, the person who brings a broken thing stays with it. You sit down at a table, a volunteer sits down beside you, and between you, you work out what is wrong. Then, as far as you can, you mend it yourself. There is no charge. The volunteers cover small electrical items, bikes, clothes and small furniture, and the tea is on the table.
+
+In September, Jo Carr brought in a standard lamp that had stopped working. With Dev, one of our volunteers, she opened the plug, found a loose wire and fitted it again herself. "I've never opened a plug in my life," she said. "Now I'd do it on my own." That was one of 31 items that came in that morning, among them a toaster, four bikes and a pair of jeans.
+
+Not everything can come back. We do not repair microwaves or anything with a gas supply. But since the café opened, the volunteers have kept more than a tonne of electrical goods out of landfill, one plug and one hinge at a time.
+
+Two new volunteers joined in September, a retired electrician and a tailor, so there are more hands at the tables.
+
+The lamp in the shed does not need a new owner or a skip. It needs a Saturday morning, and the person who owns it. Sessions run from 10:00 to 13:00, usually in St Anne's church hall. Bring something broken to the next session.
+```
+
+**Configuration:** I reviewed the text against `brief.md`, which `--brief` named. The genre (`general`), the technique (none) and the language (`en_GB`) all come from the brief's `kntnt` map. `input.md` has no frontmatter, so it has no map of its own. The two maps could not conflict, and I added no map. No technique was applied because the brief's map says `none`, and the `general` genre names none either.
+
+**Findings**
+
+Repaired:
+
+1. **Paragraph 5 as it arrived: "There is no charge. Two new volunteers joined in September, …"**
+   - **Problem:** The paragraph joined two unrelated facts. The cost stood apart, after the paragraph on what is not repaired, when it belongs with what a visit involves. That broke the brief's order of a first visit (question 7) and the base contract's rule that paragraphs hold together. A reader who assumes the café is a free repair shop met the cost as an afterthought.
+   - **Repair:** "There is no charge." now follows "Then, as far as you can, you mend it yourself." in the second paragraph. The sentence about the two new volunteers is now a paragraph of its own, word for word as before.
+2. **The ending.**
+   - **Problem:** The text asked the reader to "Bring something broken to the next session" but never said when sessions run or where they are held. A household that has never been could not act on that from the text alone (questions 4 and 10).
+   - **Repair:** I added one sentence before the call to action: "Sessions run from 10:00 to 13:00, usually in St Anne's church hall."
+   - **Source:** the volunteer handbook (`material.md`, section 1): "Sessions run on a Saturday morning, 10:00 to 13:00, usually in St Anne's church hall." The qualifier "usually" is kept.
+
+Unresolved, left for the writer:
+
+3. **Paragraph 4: "But since the café opened, the volunteers have kept more than a tonne of electrical goods out of landfill, one plug and one hinge at a time."**
+   - Neither the volunteer handbook nor the September notes say how long the café has been open. Neither gives a weight of goods kept out of landfill or mentions a hinge.
+   - The reader gets an exact-sounding figure the sender cannot back.
+   - The sentence is unchanged. It needs a source, such as the logbook, or the writer's decision to cut it.
+4. **Length.**
+   - The delivered text is 292 words including the headline, below the brief's range of 300 to 450.
+   - The reader loses little from the shortfall itself. The gap is where the brief's open research would go: the share of items fixed on the day, and the date and room of the December session.
+   - Nothing was added to pad the text.
+
+The review allowed one correction round. That round was re-reviewed and accepted, and no round was rejected.
+
+**Claim account**
+
+- **Added** by the repair of finding 2: sessions run from 10:00 to 13:00, and they are usually held in St Anne's church hall.
+- **Moved, not changed,** by the repair of finding 1: "There is no charge." still asserts that there is no charge. It is now in the second paragraph instead of the fifth.
+- Apart from those two additions, no claim was removed or changed. No limit, connective or bounding clause was taken out.
+
+**Brief fulfilment** (`brief.md`)
+
+1. **What is the assignment?** Partly fulfilled.
+   - The text is about the topic, and the `general` genre fits a short community-newsletter piece.
+   - It is in `en_GB`, and the headline is the working title.
+   - The brief deliberately has no search phrase, so that requirement is met.
+   - At 292 words including the headline, the text falls short of 300 to 450. The reader loses little. This is left for the writer (finding 4).
+2. **Which brand is the sender?** Fulfilled. The text speaks as the café ("You will not be leaving it with us", "one of our volunteers") in a warm, practical, neighbourly tone. It says nothing about product safety standards.
+3. **What does the sender want to convey?** Fulfilled. The text leads the reader to the message: "At the Repair Café, the person who brings a broken thing stays with it."
+4. **Who is the reader?** Fulfilled.
+   - The opening gives the "why now": "waiting for the autumn clear-out and the tip".
+   - "You will not be leaving it with us." answers the assumption that you drop the item off.
+   - "There is no charge." meets the concern about saving money.
+5. **What is the text's angle?** Fulfilled: a first visit, where you sit with a volunteer and fix the thing yourself. The one sentence that looks beyond a first visit, on landfill, is covered under question 12.
+6. **What is the hook?** Fulfilled. The lamp in the shed opens the text. "Then, as far as you can, you mend it yourself." and Jo Carr's "I've never opened a plug in my life" deliver the surprise.
+7. **How should the text be structured?** Fulfilled.
+   - The text follows a visit from arriving, to fixing, to what is not repaired.
+   - It ends back at the lamp: "The lamp in the shed does not need a new owner or a skip."
+   - It carries the brief's one-sentence summary: the lamp you would throw away, the volunteer beside you, and the fixing done yourself.
+8. **What should be left out?** Fulfilled. There is no safety advice, no criticism of manufacturers and no mention of donations.
+9. **What should the reader have understood afterwards?** Fulfilled: "Now I'd do it on my own."
+10. **What should the reader feel, think or do afterwards?** Fulfilled after the repair of finding 2; it was partly fulfilled as the text arrived. The text makes the direct call to action "Bring something broken to the next session." and now gives the session time and usual venue with it. The measure is not assessed.
+11. **RIV and the chain check.** Fulfilled over the whole text.
+    - Relevant: the autumn clear-out.
+    - Interesting: the hook.
+    - Valuable: the account of a visit and of what is not repaired.
+    - The chain check is answered in the brief.
+12. **What sources do you know of?** Partly fulfilled.
+    - Every other fact traces to the volunteer handbook or the September notes.
+    - The landfill sentence has no support, and nothing tells the reader where the figure comes from. This is left for the writer (finding 3).
+    - Two questions are still open: the share of items fixed on the day, and the date and room of the December session.
+    - The sketch says members report saving money on replacements. The material does not support this, and the text is not faulted for leaving it out.
+
+Every question in the brief has an answer.
+
+**What else changed:** Beyond the claim account, the run changed the structure in one place. It moved one sentence into the second paragraph, which leaves the September volunteer news as a paragraph of its own. The closing mechanical pass made no corrections, and no slop patterns were removed. `input.md` and `brief.md` are unchanged on disk, and nothing was written.

@@ -1,0 +1,91 @@
+I reviewed `input.md` against `brief.md` and made one correction (the budget was 1). Four findings need facts that neither the text nor `material.md` supplies, so they're left for the writer. Nothing was written to disk; the working copies I made are deleted, and `input.md` and `brief.md` are unchanged.
+
+**Configuration.** The brief was selected with `--brief`. Genre `general`, technique `abt` and language `en_GB` all come from the `kntnt` map in the brief's frontmatter. `input.md` has no frontmatter, so the two maps couldn't disagree, and I added no map to it. ABT applies because the brief's map selects it; the `general` genre has no technique of its own. The single correction round was accepted.
+
+**Findings**
+
+1. **Unresolved, left for the writer: when Priya's January was.** The passages are "In March she tried something else: a session every Friday.", "But they point the same way as Priya's January." and "January this year was an evening," she says.
+   - The interview in `material.md` (September 2026) says she started the Friday habit in March 2026. "January this year" is therefore January 2026, two months before the habit began.
+   - The text presents that January as the result of the habit.
+   - **Reader loses:** the piece's only first-hand outcome is shown as the habit's result, though the source dates it before the habit.
+   - A fix needs a fact that neither the text nor the material has.
+2. **Unresolved, left for the writer: the closing paragraph isn't in the material.** "The tin is still on the shelf. These days it holds tea bags, and the receipts in her phone are all readable."
+   - Nothing in `material.md` says where the tin is now or what it holds, or that every receipt on her phone is readable.
+   - The support note says only that a photograph taken while a receipt is new stays readable.
+   - **Reader loses:** an ending stated as fact about a named person that nobody reported.
+   - It's also the text's only return to the tin, so cutting it would lose the tie-back to the hook.
+3. **Unresolved, left for the writer: "such as a payment she does not recognise or a receipt with no bank line at all".** The interview says only that she "notes anything odd"; these two examples aren't in it.
+   - **Reader loses:** they can't tell her reported practice from illustration added to it.
+4. **Unresolved, left for the writer: "most of us spend the months before it the way Priya did".**
+   - The material gives no figure for how many people leave receipts until January, so "most" is unsupported.
+   - Here "us" means sole traders. In the fifth paragraph ("told us", "anything we measured") it means Larkspur Ledger.
+   - **Reader loses:** a majority claim they can't check, and a sender who is one of the readers in the first paragraph but the company asking the questions in the fifth.
+5. **Partly repaired: "The app" in Priya's routine.** The text arrived with "The app reads the date, the supplier and the total from each photograph and suggests the bank line it matches."
+   - That sentence said outright that the app reads Priya's photographs, so it said she uses the scanner. The interview doesn't say that.
+   - The repair took the support note's general wording ("from a photograph"), which removes that explicit statement.
+   - **Still unresolved:**
+     - The sentence still ends the paragraph that opens "It works like this." and describes her Friday session, so the text still implies she uses the scanner.
+     - No app is introduced before "The app's".
+6. **Unresolved, left for the writer: why now (brief questions 4 and 11).** The brief schedules the piece for early October, with time left to change the habit before January.
+   - Nothing in the text shows that timing; the nearest passage is "the months before it" in the first paragraph.
+   - **Reader loses:** a reason to start this Friday rather than next January.
+   - The timing comes from the brief, not the material, so I didn't add it to the text.
+
+**Claim account**
+
+- **Changed** by the repair for finding 5. It was "The app reads the date, the supplier and the total from each photograph and suggests the bank line it matches." It now reads "The app's receipt scanner reads the date, the supplier and the total from a photograph and suggests the bank line it matches."
+  - **What it now says:** the app has a receipt scanner that reads those three details from a photograph and suggests the matching bank line.
+  - **What changed about Priya:** before, "each photograph" followed "the week's photographs" and said outright that the app reads every one of her photographs. That explicit statement is gone. Because the sentence still sits at the end of the paragraph about her session, the claim that she uses the scanner is now implied rather than stated.
+  - **What changed in scope:** the claim that every photograph is read is also gone. "From a photograph" says only what the scanner does with a photograph.
+- **Removed:** none.
+- **Added:** none.
+
+Apart from that changed sentence, no claim was removed, changed or added.
+
+That sentence is the only difference between the text as it arrived and the delivered text. No heading, paragraph break or formatting changed, and the closing proofread (`en_GB`) found nothing to correct.
+
+**Brief fulfilment** (`brief.md`)
+
+1. **What is the assignment?** Fulfilled. It stays on topic as a letter-length newsletter piece in en_GB, at 345 words including the headline (the brief asks for 300–450). It has no search phrase, as the brief intends.
+2. **Which brand is the sender?** Fulfilled. It speaks as Larkspur Ledger ("Our users", "told us") and gives no tax advice. The tone is plain and a little dry: "The tin has two costs. The first is the weekend. The second is quieter."
+3. **What does the sender want to convey with this text?** Fulfilled. The Friday routine leads straight to "The app's receipt scanner reads the date, the supplier and the total from a photograph…", so the reader sees where the scanner fits. The message is never stated outright.
+4. **Who is the reader?** Partly fulfilled.
+   - The text meets sole traders who file their own return ("The Self Assessment return is due on 31 January"). It speaks to their time and to expenses they can't claim ("she could not claim them").
+   - Nothing shows why now: the early-October send-out (finding 6). The reader loses a reason to start now.
+5. **What is the text's angle?** Fulfilled. It stays on the weekly habit set against the January weekend.
+6. **What is the hook?** Fulfilled. The lost weekend ("The last weekend of January was always gone") comes before the faded receipts she couldn't claim.
+7. **How should the text be structured?** Fulfilled.
+   - It follows the brief's one-sentence summary:
+     - **And:** the deadline and the receipts piling up.
+     - **But:** the fading and the unclaimed expenses.
+     - **Therefore:** a walk through the Friday session, then the survey.
+   - "While it is still new and readable" and "January this year was an evening" resolve the hook, and the text ends back at the tin.
+   - That resolution rests on the quotation finding 1 questions. The ending is the paragraph finding 2 questions.
+8. **What should be left out?** Fulfilled. No tax advice, no rules on allowable expenses, no other apps, no prices, no paid plan.
+9. **What should the reader have understood afterwards?** Fulfilled. It gets there through three passages:
+   - "About ten minutes, with a cup of tea"
+   - the survey's 6 hours against 19
+   - "January this year was an evening" (subject to finding 1)
+10. **What should the reader feel, think or do afterwards?** Fulfilled. The call to action is indirect: the reader is left with the steps and isn't asked to do anything. The steps are: photograph each receipt, match it to a bank line, note anything odd. The measure isn't assessed.
+11. **What makes the text RIV for the reader, and does the brief hold together?** Partly fulfilled. It's interesting (the tin and the faded receipts) and valuable (the Friday steps and Priya's example). It falls short on relevance because the October timing is missing (finding 6). The chain check is answered.
+12. **What sources do you know of, and what do you need to find out?** Partly fulfilled, both as it arrived and as delivered. All three listed sources are used, but findings 1–4 name claims that go beyond them. The repair for finding 5 turned one such attribution from stated to implied.
+
+No question is unanswered, and the brief lists no open research questions.
+
+```markdown
+# Ten minutes on a Friday
+
+For four years, Priya Nand kept her receipts in a biscuit tin. She tutors maths in Leeds, and every January the tin came down from the shelf. "The last weekend of January was always gone," she says. The Self Assessment return is due on 31 January, and most of us spend the months before it the way Priya did, with receipts collecting in a drawer or an inbox until there is no more room for later.
+
+The tin has two costs. The first is the weekend. The second is quieter. Till receipts are printed on thermal paper, and they often fade within months, faster in a warm kitchen. When Priya finally opened the tin one January, two receipts from the spring had faded to blank, and she could not claim them.
+
+In March she tried something else: a session every Friday. "About ten minutes, with a cup of tea."
+
+It works like this. She photographs each receipt when she gets it, while it is still new and readable. On Friday she sits down with the week's photographs, matches each one to a line in her bank account and makes a note of anything odd, such as a payment she does not recognise or a receipt with no bank line at all. The app's receipt scanner reads the date, the supplier and the total from a photograph and suggests the bank line it matches.
+
+Our users see the same pattern. In a survey this summer, 412 of them told us how long their last return took. Those who matched receipts at least once a week reported a median of 6 hours. Those who left receipts until January reported 19. The figures are what people told us rather than anything we measured, and they do not show that the habit caused the difference. But they point the same way as Priya's January.
+
+"January this year was an evening," she says.
+
+The tin is still on the shelf. These days it holds tea bags, and the receipts in her phone are all readable.
+```

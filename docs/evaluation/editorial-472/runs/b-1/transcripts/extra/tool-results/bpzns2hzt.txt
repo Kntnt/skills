@@ -1,0 +1,200 @@
+# Reviewing against a Writing Brief
+
+Use this branch only when `## Resolution` selects a brief. The brief is a standard for the Text Artifact, never a second Text Artifact. Read it without editing, proofreading or delivering it. If its path or URL cannot be read, report that obstacle and stop before review or writing; never silently substitute a contract-only review. Resolve relative material references from the brief's location.
+
+A brief is a direction for the writer, not a finished dossier. It is often written before the research is done, so its sketch may make claims it does not yet support and its sources may list what is still to be found out. The requirement that every claim is supported binds the text, and Source Fidelity below is where it is checked.
+
+## Read and map
+
+Read `$LIBRARY/references/editorial/writing-brief.md`, the authoritative English template. Its numbered questions, their order and their headings are the ones this review reports by, however many there are. Map the selected brief onto every numbered question by meaning, in any language or layout. Retain the answer and its provenance for each question; preserve gaps instead of supplying answers. The template's guidance under each question explains what the question means; it is not an instruction to review or repair the brief.
+
+An answer consisting only of `[MISSING: …]` is unanswered: name it in the report, and never count it as a shortfall of the text. Review an answer marked `[SUGGESTED: …]` as written and label its assessment **unconfirmed**. Review an answer marked `[WEAK: …]` as written and label its assessment **weak**; the current template no longer produces that marker, but a brief written earlier may carry it. When a question has both supplied content and missing parts, assess only the supplied content and name the missing parts. An unmarked brief has the same mapping: an absent answer remains unanswered.
+
+An open research question carries no marker. Recognise one by meaning: something the answer on sources says still has to be found out, or an answer elsewhere that defers to such a finding, such as a sketch step waiting on a figure. Record it as open. It is not a requirement the text can fall short of.
+
+A brief written to the earlier template had one *message* question where the current template has two: the sender's message, and the text's conclusion. Map such a brief by meaning onto the current questions like any other. Its *message* answer becomes the conclusion, and the sender's message counts as unanswered, unless the brief itself keeps the two apart. Report it by the current template's numbers and headings.
+
+Read the material the brief points at where it bears on an answered requirement, including the sources it lists, source evidence and a referenced brand platform. Record what it actually supports; the brief's demand for a fact or a quotation is not evidence for that fact or quotation. An inaccessible or missing source is a reported limitation, not permission to fill its contents from memory or external research. Review what is available and leave shortfalls needing the unavailable material for the writer.
+
+## Assess and correct
+
+At step 6 and each re-review, assess each answered question against the current text: **fulfilled**, **partly fulfilled** or **not fulfilled**. Give a passage that demonstrates the judgement, or explicitly say which needed passage is absent. For either shortfall status, state what the reader loses. Cover what each answer actually gives, requirement by requirement:
+
+- **The assignment:** the text is about the topic. The genre is resolved as `## Resolution` says, and the text suits the channel. The text is in the brief's source language; other language versions the brief plans are not assessed. The length is judged against the range the brief gives, where it gives one, a provisional range counting as a range. A working title identifies the assignment; it does not require a verbatim final headline. Where a search phrase is given, the text can be found on it; a search phrase deliberately left out is fulfilled.
+- **The sender and the tone in this text:** the text speaks as the named brand, within its mandate, in the tone the brief sets for this text.
+- **The sender's message:** fulfilled when the text carries it, either by saying it or by where it leads the reader. That the message is never stated outright is never a shortfall. The text falls short when it leads the reader somewhere else or contradicts the message.
+- **The reader, and why now:** the text meets the reader the brief describes, with their knowledge and concerns, and what makes the topic pressing now shows in the text.
+- **The angle:** the text keeps to the one angle.
+- **The hook:** the text sets up the tension the hook names, and the reader knows what is at stake before it arrives.
+- **The structure:** judged on whether the text realises the brief's one sentence for the whole text, resolves the hook, and lands in the conclusion. The step-by-step sketch is guidance for the writer, so the text is not judged section by section against it, and a text that departs from its steps while doing those three things has no shortfall there. An ending that does not tie back to the hook is a shortfall.
+- **What is left out:** the text carries nothing the brief excludes, and keeps to the line the brief draws where a boundary has exceptions.
+- **The conclusion:** judged on whether the text lands in it.
+- **The effect and the call to action:** an intended effect is judged by how the text works towards it, not by claiming to know real reader reactions or measured results. A direct call to action is judged by whether the text makes it. An indirect one is judged by what the text leaves the reader with, not by whether the text explicitly asks the reader to do something. A call to action deliberately left out is fulfilled, and a measure is not assessed against the text.
+- **RIV:** relevance, interest and value are judged over the whole text. The chain check belongs to the brief, not the text: it is not assessed against the text, and it is reported only as answered or unanswered.
+- **The use of sources:** judged against the sources the brief lists; a list that is not yet complete is no shortfall. The text is never faulted for leaving out a claim of the sketch that nothing supports, nor for lacking the answer to an open research question.
+
+Record every shortfall as an ordinary finding with its question number, supplied requirement, passage or absence, and reader loss. Mark findings requiring missing facts, sources or quotations as left for the writer. Keep the original metadata conflicts as findings in their own right, naming both values and the resolved value, even after step 8 synchronizes the text's map. Formal options still settle configuration: report the mismatch with the brief without correcting the text against an overridden genre, technique or language.
+
+Repairable brief findings join the same list, fresh correction rounds, Correction Budget, difference comparison and rejection rules as editorial findings. There is no separate budget or parent-authored substantive repair. With each repairable brief finding, include the answer it is measured against and the exact supporting passages from the text or the material read through the brief, identified by path or URL. This support travels inside the complete finding sent to the correction agent; do not send that agent an extra interpretation of the brief. A shortfall on the sender's message is repaired by where the text leads, never by stating the message outright.
+
+Source Fidelity binds these repairs: every fact, source, quotation, attribution, uncertainty, scope, chronology and causal relation must stay supported by the text or the material the brief points at. The available material may supply a missing fact, but an inference, demand, sketch claim or gap in the brief cannot. A claim the brief makes and the material does not support is never repaired into the text. A claim the text makes and the material does not support is a finding, left for the writer. Where neither the text nor the material contains what fulfilment would require, report the shortfall and leave it for the writer. Check source support as part of every candidate's re-review; invented support is a repair-created defect, so the existing rejection rule applies. Keep the normal preservation rules for claims beside a defect, quotation meaning and code samples.
+
+## Report
+
+Deliver a **Brief fulfilment** section in the artifact's language, separate from the Text Artifact and present even when no correction was needed. Name the selected brief and any suppressed selection of a different brief. Report question by question, by the template's number and heading. List each answered question with its status, evidence in the delivered text (or explicit absence), and reader loss where it falls short. Flag every status measured against an unconfirmed or weak answer. Name all unanswered questions by number and heading, including MISSING-only answers, and any missing parts of otherwise answered questions. Name each open research question as open, never as a shortfall.
+
+The section assesses what is delivered: refresh its evidence after accepted corrections and the final mechanical pass without making a further edit. Keep the normal finding and claim account so the writer can distinguish repaired shortfalls, unresolved ones and rejected attempts; report an original map conflict as such, never as a conflict still present after synchronization. Reporting the section does not authorize returning the brief itself or rewriting an unchanged artifact.
+=====
+# Delivery
+
+Every Skill that produces a Text Artifact delivers it the same way. This document is the complete contract: where a result goes, how a response carries the text, what the response carries when it went somewhere else, when a source file may be replaced instead, what happens when nothing changed, what language a run's own words about the text are written in and whether what those words say is true of the text they name, and what is refused before anything is written. It is a reference several Skills read rather than a runtime of its own. Each Skill exposes these rules through its own Formal Invocation and owns the names it gives them, so nothing here fixes how an option is spelled; what is fixed is the behaviour behind it.
+
+## The response is the default
+
+The default Output Target is the agent response. A run that keeps the default delivers the complete Text Artifact in the response and changes nothing on the filesystem: it creates no file, touches no file, and makes no directory. That includes scratch files and working copies of the artifact, wherever the Harness says temporary files belong.
+
+A Harness convention identifies where an authorized temporary file belongs; it does not authorize a write. If a run genuinely needs a scratch file while composing, it removes that file before delivery and restores the filesystem to the state in which it found it. Before reporting delivery, the run checks the filesystem locations it used, including the Harness scratch area, and never reports that nothing was written while a copy of the artifact remains on disk.
+
+An Output Target is independent of where the source material came from. Supplying a local file as source material selects no destination, and a run that reads a file still delivers to the response until the caller names somewhere else. Persisting a result is the caller's explicit choice, and making that choice is the whole of the authorization for it.
+
+## How a response carries the text
+
+A response carries a Text Artifact inside a fenced code block rather than as prose of the reply's own. A text and the words about it are two different things, and a reply that runs them together hands the reader a text nothing marks the edges of. Markdown is where that costs most: an artifact opening on a frontmatter delimiter, set directly beneath a paragraph the run wrote, turns that paragraph into a heading unless a blank line goes in between them — and a blank line there is what ends the frontmatter block the text was settled with. A fence removes the question rather than leaving each run to answer it, and the answers a run improvises are what made one saved reply in sixteen deliver a horizontal rule and a paragraph of configuration in place of a frontmatter block.
+
+The complete Text Artifact sits inside exactly one fenced code block, byte for byte as the run settled it: frontmatter, blank lines and trailing structure included. Nothing is added, dropped or re-wrapped between the fence lines, and one block rather than several, a text split across two fences being a text the reader has to reassemble.
+
+The fence is longer than the longest run of backticks inside the artifact, so a text carrying fenced code of its own cannot close it early. The info string names the text's format: `markdown` for a Markdown text, `html` for HTML, `text` for plain text.
+
+Everything the run says *about* the text sits outside the fence — the resolved configuration, the findings and which of them are unresolved, the claim account, where a technique came from, what the run could not do. Nothing of the run's own is inside it. What the run settled as part of the document does belong inside, the Handoff Metadata and any marking the user asked to have placed in the document itself among it, because that is the text as delivered rather than a remark about it.
+
+The rule reaches every complete text a reply carries, whether this contract calls that text delivered or not. A response-targeted run that changed nothing and has findings left fences the artifact like any other; a run that stopped before it could deliver and carries its preserved prose in the reply fences that prose, and says in its own words outside the fence what the prose has not been through. The short no-change status carries no text at all and so carries no fence. An explicit destination and In-place Editing receive the text itself and never a fence: a fence is how a reply holds a text apart from its own words, and a file has no words of its own to be held apart from.
+
+## An explicit destination
+
+An explicit destination is one filesystem path, and what exists at that path decides what happens to it.
+
+**A path that does not exist** creates exactly that one file and writes the complete Text Artifact into it. Exactly one file: nothing else is created beside it, and no directory is made to hold it.
+
+**A path naming an existing file** overwrites that exact file with the complete Text Artifact. No confirmation and no separate force option is required, and none is offered. Naming the path is the authorization, and demanding a second gesture on top of it would teach that naming a destination means something less than it says.
+
+**A path naming an existing directory** delivers into that directory under a filename the run derives, by the rules below. Choosing a directory selects a place, not a file, so it never overwrites a file already in it.
+
+## Deriving a filename for a directory
+
+A directory destination needs a name, and the name comes from what the run already knows. Take the first of these the run has: the basename of the local file that supplied the Text Artifact, the title of a referenced URL, then the Skill's own working title for the text it created. Reduce it to a name the filesystem accepts, and keep a suitable text extension — the source file's own where it had one, and otherwise the one matching the text's format.
+
+That gives a stem and an extension, and the stem stays as it is for every delivery into that directory. Where nothing exists at the derived name, that name is the file written. Where something exists there, the existing file is never overwritten: keep the original stem and take the first free numbered candidate in ascending order, beginning at `-2`. So `my-file.md`, `my-file-2.md`, `my-file-3.md` are one sequence, growing by one name at a time.
+
+A numbered candidate is never adopted as the new stem. A third delivery into a directory already holding the first two is `my-file-3.md` and never `my-file-2-2.md`, whose stem would fork the sequence in two and leave the directory recording how many times the same text arrived rather than which arrival it was. Ascending order with the first free name also means a number freed by a deleted file is used again before a higher one is taken.
+
+## What the response carries when a destination was named
+
+A run that delivers to an explicit destination does not repeat the Text Artifact in the response. The response says where the text went — the derived filename included, where the destination was a directory — and carries what the file cannot: the findings the run reports beside the text, and which of them are unresolved. Naming a destination is saying where the text goes, and printing it again spends output on what the caller is already holding, doubly so when the file just written holds it too.
+
+That holds whether or not the pass changed anything. A run that writes a file byte-identical to the source it read reports the destination and says the text needed no work, and does not become the one run that echoes a text the caller had before it started. The response is the default target precisely because a run that names no destination has nowhere else to put the artifact; naming one moves the text out of the response rather than duplicating it there.
+
+## In-place Editing
+
+In-place Editing replaces the single local file that supplied the Text Artifact with the result, instead of delivering it anywhere else. It is available only to a Skill whose work is to return a changed version of a text the caller already has.
+
+A Skill that creates a new Text Artifact never edits its own source material in place. The brief, the interview, the notes, and the article it draws on are where the text came from and not where it goes; a Skill that could overwrite them would make supplying a file a risk rather than a convenience, and would lose the material the result is answerable to.
+
+In-place Editing requires exactly one writable local source file, and it is mutually exclusive with a separate output option. A run replaces its source or delivers elsewhere, never both, and an invocation asking for both has named two destinations for one text.
+
+It is refused wherever there is no such file to replace. Text supplied inline in the invocation or taken from the conversation is not a file. A URL is not a local file, and fetching one grants no right to write anything back. An uploaded source and a read-only file cannot be replaced. More than one Text Artifact leaves the single file the contract is written around undefined.
+
+An explicit output path equal to the input path is refused in favour of In-place Editing, and the refusal says which gesture to use. Replacing a source then has one recognizable authorization: a reader of an invocation sees that a source is about to be replaced from the request itself, without comparing two paths to discover it.
+
+## When nothing changed
+
+A run may finish with nothing to change, and what it does then follows its destination.
+
+A response-targeted run that changed nothing returns a short no-change status in place of the text when no unresolved findings remain. When findings remain, deliver the complete Text Artifact in the response and report the unresolved findings separately.
+
+An in-place run that changed nothing leaves the source file untouched and returns the short status with any unresolved findings. Rewriting a file with its own contents would make its timestamp claim that something happened.
+
+That status is written in the language of the Text Artifact rather than the language of the invocation, so a Swedish text that needed no work is reported on in Swedish.
+
+An explicitly selected different file or directory still receives the complete Text Artifact when nothing changed. Creating that artifact is what was asked for, and a destination left empty because the text needed no work is a request refused without saying so. A directory destination derives its filename and resolves collisions exactly as it would for a changed text, and the response reports the destination without repeating the artifact beside it, exactly as for a run that changed something.
+
+## The language of a report about the text
+
+A run that reports on the text beside the text itself — the findings it carries forward, and which of them are unresolved — writes that report in the language of the Text Artifact rather than the language of the invocation, exactly as the no-change status above is written. So a Swedish artifact reviewed from an English-language invocation comes back with Swedish findings, whether the run corrected anything or was asked to correct nothing at all, and one text never produces a status in its own language beside a finding list in another.
+
+Who reads it is what decides this. A report about a text is read by the reader of that text, who has to finish whatever the run left undone, and a report in whichever language the invocation happened to be written in reaches that reader in a language nothing about the text promised. The invocation's language is how the run was asked for; the artifact's language is what the run is about.
+
+## The truth of a report about the text
+
+Everything a run says about a text is true of the text it names. That holds for every statement the reply makes about a text, and not only for its findings and its account of the claims: a count, a length, a grammatical label, where a passage stands, and what a round did to a passage — moved it, removed it, replaced it, set a heading over it — each tells the reader something about the text they could check, and each is written so that the check holds.
+
+A statement about the delivered text is checked against the delivered text after the last change to it, the closing mechanical pass included. Most of what a run knows about a text it learned while reviewing the text as it arrived, and the rounds changed that text afterwards, so a length measured before a round or a heading remembered from one describes a text the reader is no longer holding. Where a run measures a text with the Collection Library's measuring script, `scripts/article_anatomy.py`, a count or length the reply states is taken from that script's measurement of the text the statement is about, never from the run's own reading of it and never from a measurement of another state of the text. A statement about the text as it arrived says so, so that nobody reads it against the text delivered. A statement that cannot be made true of the text it names is left out.
+
+The check is made on the reply as drafted, one statement at a time, once the text it describes is final, and each statement is read against the passage it names rather than against what the run remembers of it; a finding written during the review is checked in the same way against the text it was written about. A statement that something holds everywhere or nowhere — that a passage is unchanged, word for word what it was or untouched, that the rest of the text was left alone, that a name appears nowhere else, that a heading says nothing about its section — is checked against every part of the text it covers, because a single exception makes it false, and where there is one the statement names it or is narrowed to what holds. A statement of where wording came from, or of where a passage now stands, is checked by finding that passage in the text.
+
+Who reads it decides this too. The reader of a report finds their way in the text by it, and a statement they check and find false costs them the trust they would have given every other statement in the same reply.
+
+## Refusals
+
+Every contradictory, meaningless, or unusable output request is refused before the first side effect. The cases this contract names are more than one Text Artifact where the Skill processes one, an output option together with In-place Editing, an output path equal to the input path, In-place Editing for inline text or a URL or an uploaded or read-only source, and a destination the run cannot write — a path whose parent directory does not exist among them.
+
+Every such check that can be made by reading is made before anything is written, so a refusal leaves no partial effect behind: no file created, none truncated, none renamed, and no directory made. Where a conflict can only be discovered after a legitimate effect, the run stops there and reports the exact partial outcome rather than continuing.
+
+A refusal follows the Collection's ordinary diagnostic and help conventions. It names what was wrong, prints the synopsis of the most specific recognized command page verbatim, and points at that command's own help form. An output option is refused rather than ignored where it has no work to do, a flag accepted and ignored teaching that flags sometimes do nothing.
+====
+# The Invocation Envelope
+
+The contract every Skill of this collection meets before it reads an argument of its own: how the reserved separator splits an Invocation Envelope, what a Contextual Instruction may and may not settle, the two refusals a bad Envelope or a bad Formal Invocation takes, and how a caller recovers from its own construction error. It is stated here once and executed by every Skill. A Skill's body follows this file, and its manpages point a reader at it; none of them restates it.
+
+## The separator
+
+`[**--** *INSTRUCTION*]` introduces an optional Contextual Instruction after the formal input. The first standalone, unquoted `--` token is the reserved separator; everything before it remains Formal Invocation and everything after it is instruction, including later `--` tokens. The instruction may start on the same line or after blank lines and must contain non-whitespace text. Attached or quoted forms such as `--force`, `foo--bar`, `` `--` ``, and `"--"` remain formal data. Without the separator, the complete payload remains formal input, including later lines and paragraphs.
+
+The split happens before help routing and before formal validation, and only the Formal Invocation reaches Help, the Skill's own argument grammar, its scripts, and any nested formal parser.
+
+## Quoting a value
+
+An operand and a flag value each arrive without the outer quotes they were written in — `"a b"` and `'a b'` are both the value `a b` — the pair being the caller's way of holding spaces together rather than part of what was written. Only a value whose own quoted run closes at its last character loses that pair, so an inner quote is kept (`'say "hi"'` is `say "hi"`), and a value that is two runs beside each other, a run closed early, a backtick-quoted run, or an unbalanced quote keeps every mark it carries. This happens after the split above, which it never moves: `"--"` is formal data exactly as stated there, and is the value `--`.
+
+## What a Contextual Instruction may settle
+
+A Contextual Instruction is read and used as natural-language guidance after the Formal Invocation is valid. Redundant but applicable guidance is valid. It may clarify or narrow choices the Skill leaves open and overrides older preferences within those choices, but cannot contradict formal input or an invariant, widen the Skill, disable a required gate, or request work outside its contract. Applicable guidance from Conversation Context has the same boundaries and need not be copied into the Invocation Envelope.
+
+## The two refusals
+
+Malformed formal input or an empty instruction takes the syntax refusal. The Skill names the error, prints the addressed SYNOPSIS, changes nothing, and points to help. Context on an exact help route takes the context refusal without rendering the page.
+
+Valid but irrelevant, unaddressable, materially ambiguous, conflicting, or scope-widening guidance takes the distinct context refusal. The Skill names the guidance and its boundary, reports the mutation outcome, prints no synopsis, and stops without applying a valid remainder.
+
+Unaddressable guidance can affect nothing inside the Skill's contract. Guidance settled by a documented precedence is suppressed instead: the run continues and reports the suppression where useful. Suppression for one parameter does not invalidate guidance that applies to another.
+
+Before the first side effect, the Skill uses available read-only checks to identify unusable guidance. If a conflict appears only after a legitimate effect, it stops before the next effect and reports the exact partial outcome. It rolls nothing back unless atomic behaviour was promised.
+
+The addressed page is the most specific recognized command page — the Skill's own `help.md` where no command path was recognized — and the refusal points at that page's own `--help` route rather than at the Skill's root route.
+
+The engine refuses every invalid form and never repairs or ignores one. When the user supplied the invalid form, the caller reports that refusal without repairing, reordering, discarding, or reinterpreting the user's syntax. A flag is refused rather than ignored where it has no work to do, an operand written before a flag is refused rather than reordered, and an incomplete form is refused rather than asked about — because a flag accepted and ignored teaches that flags sometimes do nothing, a form silently repaired teaches an order the Skill does not accept, and a question asked in place of the grammar leaves the user guessing at what the grammar is.
+
+## A caller's construction error
+
+When the caller introduced a known error while forwarding valid user input or constructing a nested invocation, and knows a valid correction that preserves the user's request and authority, it corrects its construction, submits the corrected invocation through the normal validation path, and continues from the failed boundary. The corrected construction preserves every resolved option, the complete artifact, and the authorised destination. Completed work is retained: a refusal before the called operation starts spends no substantive correction, budget round, or actual pass.
+
+Recovery requires that diagnosis and valid correction. An exit status alone never authorises a retry. Exact help, invalid user input, an unmet dependency, an unrelated failure, and a failure whose origin or valid correction is unknown keep their applicable handling; the caller reports the actual blocker instead of guessing or repeating the same failed call.
+
+Before resuming an operation that may already have produced effects, the caller establishes what completed and resumes only what remains. It never replays a completed external action, widens permissions or the task, changes the authorised destination, or skips validation. Where the partial outcome cannot be established, it reports that uncertainty and stops.
+
+## A nested Skill
+
+A nested Skill receives only relevant guidance through an explicit Contextual Instruction in that Skill's own Invocation Envelope; an outer instruction is never forwarded blindly. Successful execution requires no context acknowledgement; an existing report names a materially changed choice where useful.
+
+## Worked cases
+
+The following schematic cases pin the split independently of any one Skill's Formal Invocation grammar; `\n\n` denotes two newline characters in one payload.
+
+| Case | Envelope | Formal Invocation | Contextual Instruction | Outcome |
+| --- | --- | --- | --- | --- |
+| Same line | `/skill --force -- Preserve deployment facts` | `/skill --force` | `Preserve deployment facts` | Envelope valid; formal grammar next |
+| Blank lines | `/skill --force --\n\nPreserve deployment facts` | `/skill --force` | `Preserve deployment facts` | Envelope valid; formal grammar next |
+| Empty suffix | `/skill --force --   ` | `/skill --force` | — | Syntax refusal |
+| Later separator | `/skill -- Preserve -- deployment facts` | `/skill` | `Preserve -- deployment facts` | Envelope valid; formal grammar next |
+| No separator | `/skill Preserve deployment facts` | `/skill Preserve deployment facts` | — | No split; formal grammar decides |
+| Attached and quoted | ``/skill --force foo--bar `--` "--"`` | ``/skill --force foo--bar `--` "--"`` | — | No split; formal grammar decides |
+| Exact help | `/skill --help -- Explain this page` | `/skill --help` | `Explain this page` | Context refusal; render nothing |

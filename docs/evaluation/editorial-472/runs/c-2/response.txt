@@ -1,0 +1,52 @@
+I repaired one finding and left two for you, because both need facts that `material.md` doesn't contain. No files were created or changed; `input.md`, `brief.md` and `material.md` are untouched.
+
+Settings used: genre `general`, technique ABT (`abt`), language `en_GB`. All three come from the `kntnt` map at the top of the brief. The brief named ABT itself; the `general` genre doesn't supply a technique. `input.md` has no `kntnt` map, so the two can't disagree, and I didn't add one.
+
+````markdown
+# A quiet table on Saturdays
+
+It is Sunday night, the maths homework is due in the morning, and the kitchen table is covered in books, plates and a younger brother's noise. For many families in Pellbrook, that is where homework gets done.
+
+Amira is in year 9. "At home my little brothers are always shouting," she says. Since March she has spent her Saturday mornings somewhere else: the homework club at Pellbrook Library. Her mother drops her off on the way to the market. "Here I get my maths done before lunch."
+
+The club meets every Saturday in term time, from 10:00 to 12:00, in the first-floor study room. It is for pupils in years 7 to 11, it is free, and nobody needs to book: pupils sign in at the door and bring their own homework. There are laptops and a printer, and two volunteer tutors are there each week, one for maths and science and one for English and humanities.
+
+Colin Parry, who tutors maths, is a retired teacher. "Most of them just need someone to ask when they're stuck," he says. On the Saturday we visited, 14 pupils signed in.
+
+So if your Sunday nights look like the one at that kitchen table, the Pellbrook homework club gives your child a quiet table and a volunteer tutor every Saturday, free of charge. Mention it at dinner this week. Saturday morning is when the table is waiting.
+````
+
+## Findings
+
+1. **Repaired: an imagined scene was presented as Amira's own experience.** Two passages made the opening Sunday-night kitchen-table scene part of Amira's past: "For Amira, in year 9, it used to be." and the closing "So if your Sunday nights look like Amira's used to,". `material.md` only says that her little brothers are always shouting at home and that she gets her maths done at the club. It says nothing about Sunday nights or a kitchen table. The text now reads "Amira is in year 9." and "So if your Sunday nights look like the one at that kitchen table,".
+2. **Unresolved, left for you: an unsupported claim about Pellbrook families.** Nothing in the text or in `material.md` supports "For many families in Pellbrook, that is where homework gets done." As it stands, readers get a general claim about the town's families with nothing behind it. It needs a source, or you may decide to drop it.
+3. **Unresolved, left for you: no reason to act now.** The brief's reason for acting now, under relevance, isn't in the text: "the first mock exams come in November, and homework piles up in the autumn term". Without it, parents have no reason to mention the club this autumn rather than any other time. `material.md` supports neither claim, and a point in the brief doesn't count as a source, so I added nothing.
+
+## Claim account
+
+- **Removed:** the claim that the Sunday-night kitchen-table scene used to be Amira's own life ("For Amira, in year 9, it used to be."). The fix for finding 1 removed it, because that claim was the problem. The link between the opening scene and Amira went with it. Readers no longer have a sentence saying how Amira relates to that scene; the connection now rests on her quote "At home my little brothers are always shouting". Her year group is kept ("Amira is in year 9.").
+- **Changed:** the closing "if" sentence now asks whether the reader's Sunday nights look like the opening scene ("the one at that kitchen table"), not like Amira's past Sunday nights. The fix for finding 1 made this change.
+- **Added:** none.
+
+Apart from the removed and changed claims above, no claim was removed, changed or added.
+
+## Brief fulfilment
+
+Brief: `brief.md`, selected by `--brief`; no other brief was named. The brief uses a 13-question layout. I matched its answers by meaning to the 12 questions of the current brief template.
+
+1. **What is the assignment?** Fulfilled. The text is about the Saturday homework club, written as a general piece for parents ("your child", "Mention it at dinner this week"), in British English. The text under the headline is 234 words, within the brief's 200–350. The headline is the working title, "A quiet table on Saturdays". The search phrase appears in "the Pellbrook homework club gives your child…".
+2. **Which brand is the sender?** Fulfilled. The text talks about the library's own service ("the homework club at Pellbrook Library"), stays within its mandate, and is friendly and clear. Missing from the brief: how readers currently see the brand.
+3. **What does the sender want to convey with this text?** The brief doesn't answer this. Its only "Message" sits under the question about what the reader should have understood, so I assessed it as the conclusion (question 9).
+4. **Who is the reader?** Reader: fulfilled, but the brief marks this answer as **weak** (`[WEAK]`). The text addresses parents of secondary pupils ("your child", "It is for pupils in years 7 to 11"). Why now: partly fulfilled. The November mock exams and the autumn-term workload are missing (finding 3), and that is left for you.
+5. **What is the text's angle?** Fulfilled. The text shows the club through Amira, who has come since March: "Since March she has spent her Saturday mornings somewhere else: the homework club at Pellbrook Library."
+6. **What is the hook?** Fulfilled. The opening sets up the Sunday-night kitchen table covered in books, plates and a younger brother's noise, with maths homework due in the morning.
+7. **How should the text be structured?** Fulfilled. The text moves from the Sunday-night table to the noise at home ("At home my little brothers are always shouting") to the club. The ending ties back to the hook: "if your Sunday nights look like the one at that kitchen table". Missing from the brief: the one-sentence summary of the whole text and the step-by-step outline.
+8. **What should be left out?** Fulfilled. The text says nothing about the schools or their teachers and gives no exam results.
+9. **What should the reader have understood afterwards?** Fulfilled: "the Pellbrook homework club gives your child a quiet table and a volunteer tutor every Saturday, free of charge."
+10. **What should the reader feel, think or do afterwards?** Fulfilled. The call to action is "Mention it at dinner this week.", and the third paragraph explains how to come ("nobody needs to book: pupils sign in at the door"). The brief's measure, new pupils signing in during November, can't be judged from the text, so I didn't assess it.
+11. **What makes the text relevant, interesting and valuable for the reader?** Relevant: partly fulfilled, since the November mock exams and the autumn term are missing (finding 3). Interesting: fulfilled — a quiet table and a volunteer tutor, free, every Saturday. Valuable: fulfilled — the third paragraph says when, where, who it's for and how to come. The brief's own consistency check is unanswered ("Check before you start writing: Not done yet.").
+12. **What sources do you know of?** Partly fulfilled. The club details, Amira's quotes, Colin Parry's quote and the 14 pupils all match `material.md`. "For many families in Pellbrook, that is where homework gets done." has no support (finding 2). The opening scene was also wrongly credited to Amira; that is fixed (finding 1).
+
+## What else changed
+
+Nothing else changed: the only differences between your text and this one are the two rewordings above. No filler phrases were cut, the headline and structure are the same, and the final proofreading pass found nothing to correct.
