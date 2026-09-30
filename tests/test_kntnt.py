@@ -6976,15 +6976,95 @@ def test_a_heading_that_could_be_better_is_no_finding() -> None:
         f" that could merely be clearer or more specific loses its reader"
         f" nothing, so any imaginable improvement reads as a loss (issue #429)."
     )
-    assert "strictest reading" in leave, (
-        f"{HEADLINES_REVIEW}: *Leave alone* does not count a loss by the reader"
-        f" who meets the heading rather than by the strictest reading of one"
-        f" word (issue #429)."
+    assert "strictest reading" in _finding_rule(), (
+        f"{BASE_REVIEW}: the finding rule does not count a loss by the reader"
+        f" who meets the passage rather than by the strictest reading of one"
+        f" word, so a standfirst loses a word the text supports (issues #429,"
+        f" #468)."
+    )
+    assert "strictest reading" not in leave and "(base.review.md)" in leave, (
+        f"{HEADLINES_REVIEW}: *Leave alone* states the reader-loss rule in its"
+        f" own words rather than pointing at the one statement in"
+        f" {BASE_REVIEW.name}, so the rule is stated twice and reaches"
+        f" headings alone (issue #468)."
     )
     assert "licenses no change" in leave, (
         f"{HEADLINES_REVIEW}: *Leave alone* does not say that a working heading"
         f" one would word differently takes no finding and no change (issue"
         f" #429)."
+    )
+
+
+def _finding_rule() -> str:
+    """The base review's opening paragraph, where a finding is defined."""
+
+    return _paragraphs(BASE_REVIEW.read_text(encoding="utf-8"))[1]
+
+
+def test_a_loss_is_counted_as_the_reader_suffers_it_in_every_passage() -> None:
+    """The reader-loss rule reaches the standfirst and the body, not headings alone.
+
+    #429 wrote the rule for headings, and #468 measured a review dropping a
+    word from a standfirst that the text itself supports, over a loss only the
+    strictest reading of that word could construct. The rule stands once,
+    where the finding rule does, and names every passage.
+    """
+
+    rule = _finding_rule()
+    assert "what the reader loses" in rule, (
+        f"{BASE_REVIEW}: the paragraph read as the finding rule is not the one"
+        f" that defines a finding (issue #468)."
+    )
+    for part in ("standfirst", "headline", "subheading", "judgement"):
+        assert part in rule, (
+            f"{BASE_REVIEW}: the reader-loss rule does not name the {part}, so"
+            f" a review can still read it as a heading rule, or count a"
+            f" writer's supported judgement as a claim the text does not carry"
+            f" (issue #468)."
+        )
+
+
+PREMISE_WRITTEN_IN = "premise, assumption or inference"
+PREMISE_IN_CORRECTION = "or writing a premise the text leaves unstated"
+
+
+def test_a_repair_writes_in_no_premise_the_argument_leaves_implicit() -> None:
+    """An unstated premise is reported where the reader needs it, never written in.
+
+    Redline added a paragraph naming the assumption an opinion's argument
+    rests on to a text that never stated it (issues #434, #468). The rule
+    stands beside the one forbidding new evidence, and the correction brief
+    names it in the sentence its agent acts on, without a second statement.
+    """
+
+    smallest = next(
+        block
+        for block in _paragraphs(BASE_REVIEW.read_text(encoding="utf-8"))
+        if block.startswith("Make the smallest correction")
+    )
+    assert PREMISE_WRITTEN_IN in smallest, (
+        f"{BASE_REVIEW}: the smallest-correction paragraph does not forbid"
+        f" writing in a premise the argument leaves implicit (issue #468)."
+    )
+    rule = smallest.split("Introduce no new evidence", 1)[1].split(". If ", 1)[0]
+    assert PREMISE_WRITTEN_IN in rule and "unresolved" in rule, (
+        f"{BASE_REVIEW}: the premise rule does not stand beside *Introduce no"
+        f" new evidence* or does not say that a gap the reader cannot follow"
+        f" past is reported as unresolved (issue #468)."
+    )
+    assert "no finding" in rule, (
+        f"{BASE_REVIEW}: the premise rule does not say that a premise a reader"
+        f" can follow the argument without is no finding (issue #468)."
+    )
+    correction = REDLINE_CORRECTION.read_text(encoding="utf-8")
+    assert PREMISE_IN_CORRECTION in correction, (
+        f"{REDLINE_CORRECTION}: the correction agent is not told that writing"
+        f" a premise the text leaves unstated is a repair it leaves (issue"
+        f" #468)."
+    )
+    assert PREMISE_WRITTEN_IN not in correction, (
+        f"{REDLINE_CORRECTION}: the brief states the premise rule a second"
+        f" time in its own words (issue #468)."
     )
 
 
