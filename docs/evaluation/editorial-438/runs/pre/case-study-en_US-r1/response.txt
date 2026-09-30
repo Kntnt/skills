@@ -1,0 +1,80 @@
+**The draft comes with three known defects.** A second independent source check flagged three passages. Under the source-check rules, the text must stay exactly as that final check read it, so I haven't fixed them. They are the checker's claims for you to settle:
+
+1. **Lead, "The aim was for staff on different shifts to see the same information."** The source only says "The team wanted staff on different shifts to see the same information." It doesn't say this was the team's only aim. Suggested fix: "The team wanted staff on different shifts to see the same information."
+2. **Trial-figures section, "31 repair reports were entered during the trial."** The trial note only says "31 repair reports were entered"; "during the trial" is my addition. Suggested fix: delete "during the trial".
+3. **Last subheading, "Expansion waits on a check of larger repairs."** The source says a *decision* is pending: "the team will decide after checking how the categories work for larger repairs." The subheading can read as if expansion itself is expected. Suggested fix: "Expansion decision waits on how the categories handle larger repairs".
+
+**The byline is a guess.** The brief named no author, so the byline goes to you, but I don't have your full name. I used "By Thomas", taken from your account email. Correct it before publishing, or remove it if the piece should run unsigned or under another name.
+
+````markdown
+---
+kntnt:
+  genre: casestudy
+  technique: none
+  language: en_US
+---
+
+# Elm Quay trial gives shifts one repair log
+
+Elm Quay Housing's maintenance team spent eight weeks testing a shared repair log from Svale Systems in two buildings. This account covers why the team started, how the work was divided, what supervisor Maya Lind would change before the next building, and what the trial figures can and cannot show.
+
+By Thomas
+
+Before the trial, telephone reports and emails at Elm Quay Housing were stored separately. The company manages 640 flats, and in September 2025 its own maintenance team decided to try a shared repair log in two buildings. The aim was for staff on different shifts to see the same information. After eight weeks, the team has its first figures and its supervisor has lessons about preparation.
+
+## Elm Quay chose Svale after a test of repair status
+
+Maintenance supervisor Maya Lind, who answered questions by email, describes what the team was after:
+
+> “We wanted the evening shift to see what the morning shift had already done. The categories were ours; Svale helped us put them into the log.”
+
+The team picked Svale Systems after testing whether the log could show the status of each repair. It kept telephone reporting open for residents, and Svale trained six staff during two sessions.
+
+## The trial note does not credit the log with the shorter median
+
+Elm Quay's internal trial note, dated December 4, 2025, says that 31 repair reports were entered during the trial. It excludes emergencies and work ordered before the trial began.
+
+The median time from report to assignment was two working days during the trial, against three in the preceding eight weeks. The two periods had different workloads, and the note explicitly does not attribute the difference to the software.
+
+The figure concerns assignment, not completion. There are no measurements of completion time, cost, or resident satisfaction.
+
+## The supervisor looks back on eight weeks
+
+Lind's reflections start with the preparation:
+
+> “We spent more time agreeing on the categories than entering the first reports. I would set that time aside before the next building starts.”
+
+Lind's assessment of the trial as a whole comes with a reservation, and it stops short of recommending Svale to every housing company:
+
+> “I would choose to do the trial again. Having one view of the reports helps us, but I would leave an extra week for preparation.”
+
+## Expansion waits on a check of larger repairs
+
+The trial has not yet expanded. The team will decide on its next step after checking how its categories work for larger repairs. Operations managers weighing a similar trial can start by reading the [implementation checklist](https://example.invalid/svale/checklist).
+````
+
+**Settings used:**
+- **Genre:** `casestudy`, as you specified.
+- **Language:** `en_US`, as you specified.
+- **Output:** this response.
+- **Technique:** none. You didn't name one, `source.md` has no settings block, and the case-study genre has no default technique.
+- **Metadata:** the `kntnt` block at the top is on by default.
+
+**How it was checked:**
+- **Structure:** the draft meets every requirement and guideline in the article-structure script. One repair round shortened the headline to eight words and rewrote the first section so its subheading no longer repeated the sentence under it.
+- **First source check:** it raised four findings, and I accepted and fixed all of them:
+  - one subheading turned a shorter median into "faster assignment";
+  - another made "larger repairs" the deciding factor;
+  - the phrase "the log has not spread" replaced "the trial has not expanded";
+  - the lead assumed there would be a next building.
+- **Second source check:** a fresh checker read the fixed draft and raised the three defects above.
+- **Quotations:** all three of Lind's quotations are verbatim, and they have no translation findings.
+- **Report files:** neither checker was allowed to write its report file, so both reports came back in their replies. I saved them to the scratch folder myself.
+
+**Where the material ran out:**
+- **Length:** the text is about 420 words, in line with the roughly 400 the brief asked for.
+- **Results:** the draft can't report cost, resident satisfaction or completion time, because nothing was measured.
+- **Suppliers:** it doesn't say whether other suppliers were compared, because the material doesn't say.
+- **Sponsorship:** the brief says this is supplier-published material, not independent journalism. The draft makes no claim of independence, but it also has no sponsorship label. Add one if Svale's publishing channel requires it.
+
+**Files:** both checkers finished, and I deleted the scratch folder. The working directory holds only your `source.md`, unchanged.

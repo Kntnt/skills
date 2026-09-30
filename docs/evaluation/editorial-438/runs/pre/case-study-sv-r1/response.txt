@@ -1,0 +1,79 @@
+**Utkastet levereras med kända brister.** Den sista källjämförelsen lämnade dessa fynd. Det är granskarens påståenden, och det är du som avgör dem:
+
+1. **Rubriken** "Elm Quays arbetsledare skulle göra om provet":
+   - Ordet "välja" har fallit bort. "Göra om provet" kan läsas som att man gör om ett misslyckat prov.
+   - Bestämd form ("Elm Quays arbetsledare") antyder att Lind är bolagets enda arbetsledare. Källan säger bara "maintenance supervisor".
+   - Föreslagen lagning: "Arbetsledare på Elm Quay skulle välja att göra provet igen".
+2. **Ingressen** "…ser på förberedelserna inför nästa hus": här förutsätter berättarrösten att ett nästa hus kommer. Enligt källan är utvidgningen ännu inte beslutad. Föreslagen lagning: "inför ett eventuellt nästa hus".
+3. **Undantagen** "Akuta ärenden och arbeten som beställts före provet är inte medräknade": i källan gäller undantaget anteckningen som helhet. Utkastet knyter det bara till antalet 31, så en läsare kan tro att medianen räknar med akuta ärenden. Föreslagen lagning: "Anteckningen räknar inte med akuta ärenden och arbeten som beställts före provet."
+4. **Mellanrubriken** "…programvaran pekas inte ut" (mindre allvarligt): den saknar agent. Det är anteckningen som inte tillskriver skillnaden programvaran. Föreslagen lagning: "…– anteckningen pekar inte ut programvaran".
+5. **Översättningen** av citat 3: "Att se anmälningarna på ett ställe" för "Having one view of the reports" kan läsas snävare än en gemensam vy. Föreslagen lagning: "Att ha en samlad vy över anmälningarna hjälper oss".
+
+Jag avvisade ett fynd. Granskaren menade att "Någon rekommendation av Svale … ger Lind inte" kan läsas som en rekommendation från Svale. Men meningen gör Lind uttryckligen till den som ger den, så "av Svale" kan bara vara objektet.
+
+Granskaren tog också upp en redaktionell fråga, som inte är en brist. Materialet säger att fallet är leverantörspublicerat och inte oberoende journalistik. Utkastet säger inte det, men påstår heller ingen oberoende. Om det behövs en rad om det avgör du utifrån var Svale publicerar texten.
+
+```markdown
+---
+kntnt:
+  genre: casestudy
+  technique: none
+  language: sv
+---
+
+# Elm Quays arbetsledare skulle göra om provet
+
+Underhållsteamet på bostadsbolaget Elm Quay Housing provade under åtta veckor en delad reparationslogg från Svale Systems i två hus. Här är vad provet krävde, vad siffrorna säger och inte säger och hur arbetsledaren Maya Lind ser på förberedelserna inför nästa hus.
+
+Av Thomas
+
+Telefonanmälningar och mejl sparades tidigare var för sig hos Elm Quay Housing, som förvaltar 640 lägenheter. I september 2025 beslutade bolagets eget underhållsteam att pröva en gemensam reparationslogg i två hus. En intern provanteckning och arbetsledaren Maya Lind ger var sin bild av hur det gick.
+
+## Teamet valde Svale efter ett test av loggen
+
+– Vi ville att kvällsskiftet skulle se vad morgonskiftet redan hade gjort. Kategorierna var våra. Svale hjälpte oss att lägga in dem i loggen, skriver Lind i ett mejlsvar.
+
+Testet gällde om loggen kunde visa status för varje reparation. Någon jämförelse med en annan leverantör finns inte att tillgå.
+
+Svale Systems konfigurerade loggen och utbildade sex medarbetare vid två tillfällen. Teamet lät samtidigt de boende fortsätta att anmäla fel per telefon.
+
+## Mediantiden till tilldelning sjönk – programvaran pekas inte ut
+
+Provet pågick i åtta veckor. Enligt Elm Quays interna provanteckning från den 4 december 2025 fördes 31 felanmälningar in i loggen. Akuta ärenden och arbeten som beställts före provet är inte medräknade.
+
+Från anmälan till tilldelning tog det i median två arbetsdagar under provet, mot tre under de åtta veckorna dessförinnan. Arbetsbelastningen skilde sig mellan perioderna, och anteckningen tillskriver uttryckligen inte skillnaden programvaran.
+
+Mätningar av kostnader, de boendes nöjdhet eller tiden tills reparationerna var klara finns inte.
+
+## Arbetsledaren ser tillbaka på provet
+
+– Vi lade mer tid på att komma överens om kategorierna än på att föra in de första anmälningarna. Den tiden skulle jag avsätta innan det är dags för nästa hus, skriver Lind.
+
+– Jag skulle välja att göra provet igen. Att se anmälningarna på ett ställe hjälper oss, men jag skulle ge förberedelserna en vecka till.
+
+Någon rekommendation av Svale till alla bostadsbolag ger Lind inte.
+
+## Frågan om att vidga provet är ännu öppen
+
+Hittills har provet bara gällt de två husen. Teamet tar ställning när det har sett hur kategorierna fungerar för större reparationer.
+
+Planerar du ett liknande prov kan du läsa [checklistan för införandet](https://example.invalid/svale/checklist).
+```
+
+**Inställningar:** genre `casestudy` och språk `sv` kommer från anropet. Teknik blev `none` eftersom genren inte anger någon teknik som den normalt skrivs med, så utkastet följer ingen berättarbåge. Utdata går till svaret, och Kntnt-metadata är påslagen som standard.
+
+**Byline:** briefen namnger ingen författare, så bylinen bär ditt namn. Jag tog "Thomas" från ditt användarnamn på datorn, eftersom inget fullständigt namn fanns att hämta. Rätta bylinen om texten ska publiceras osignerad eller under ett annat namn.
+
+**Kontroller:**
+- Mätskriptet godkänner alla räknade krav i artikelanatomin: rubriken har 7 ord, ingressen 41 ord och brödtexten 290 ord.
+- Två källjämförelser har körts. Efter den första lagade jag tre fynd i rubriken, en mening och en mellanrubrik. Den andra jämförelsen läste exakt den text som levereras här.
+
+**Där materialet tog slut:**
+- Briefen bad om cirka 400 ord. Rubrik, ingress, byline och brödtext blir tillsammans färre, och materialet räcker inte till mer utan upprepning.
+- Det som skulle ge mer text är till exempel:
+  - hur kategorierna konkret var uppbyggda
+  - fler citat från Lind eller andra i teamet
+  - mätningar av tid till färdig reparation, kostnad eller de boendes nöjdhet
+  - utfallet av prövningen på större reparationer
+
+Inga filer finns kvar efter körningen: arbetskatalogen i scratch är borttagen och `source.md` är orörd.

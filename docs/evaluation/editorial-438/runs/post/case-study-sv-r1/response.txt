@@ -1,0 +1,74 @@
+**Utkastet levereras med tre kända brister.** Den andra jämförelsen mot källan fann dem, och texten nedan är exakt den som jämförelsen läste. Bristerna är det kontrollanten hävdar; du avgör själv.
+
+1. **Rubriken gör Lind mer generell än hon är (källstöd).** "Samlad bild av felanmälningar hjälper, säger arbetsledaren" tappar hennes "hjälper oss" ("helps us"). Då kan rubriken läsas som ett allmänt påstående, fast Lind inte rekommenderar Svale till alla bostadsbolag. Föreslagen lagning: "Samlad bild av felanmälningarna hjälper oss, säger arbetsledaren".
+2. **Ingressen kan ge anteckningen mer än källan gör (källstöd, snarast en redaktionell fråga).** Meningen "En intern anteckning om testet redovisar siffrorna och deras begränsningar" är det som ifrågasätts. Källan säger uttryckligen att anteckningen redovisar de 31 anmälningarna och undantagen, och att den inte tillskriver programvaran skillnaden. Om medianerna, arbetsbelastningen och de saknade mätningarna också kommer från anteckningen säger källan inte ordagrant. Jämför gärna med själva anteckningen. Föreslagen lagning: "En intern anteckning om testet redovisar antalet anmälningar och vad som inte ingår, och siffrorna från testet har tydliga begränsningar."
+3. **Citat 2 kan missförstås (översättning).** "innan nästa hus startar" kan läsas som att ett bygge startar. Föreslagen lagning: "… innan vi börjar i nästa hus."
+
+````markdown
+---
+kntnt:
+  genre: casestudy
+  technique: none
+  language: sv
+---
+
+# Samlad bild av felanmälningar hjälper, säger arbetsledaren
+
+Underhållsteamet på Elm Quay Housing prövade i åtta veckor en gemensam reparationslogg från Svale Systems i två hus. Arbetsledaren Maya Lind berättar vad teamet ville uppnå och hur hon skulle lägga upp förberedelserna en annan gång. En intern anteckning om testet redovisar siffrorna och deras begränsningar.
+
+Av Thomas Barregren
+
+Elm Quay Housing förvaltar 640 lägenheter. Tidigare sparades telefonanmälningar och mejl var för sig. I september 2025 beslutade bolagets eget underhållsteam att pröva en gemensam reparationslogg i två av husen. Loggen i testet kom från Svale Systems, och om den ska användas i fler hus är ännu inte bestämt.
+
+## Statusvisningen prövades före valet
+
+Maya Lind är arbetsledare i underhållsteamet och har svarat på frågor via mejl. Hon beskriver vad teamet ville uppnå:
+
+– Vi ville att kvällspasset skulle se vad morgonpasset redan hade gjort. Kategorierna var våra, Svale hjälpte oss att lägga in dem i loggen.
+
+Innan teamet valde Svale testade det om loggen kunde visa status för varje enskild reparation.
+
+## Svale stod för inställningar och utbildning
+
+Testet pågick i åtta veckor, och de boende kunde fortfarande felanmäla per telefon. Leverantören konfigurerade loggen och höll två utbildningstillfällen för sex medarbetare.
+
+Om arbetet med kategorierna skriver Maya Lind:
+
+– Vi lade mer tid på att komma överens om kategorierna än på att föra in de första anmälningarna. Den tiden skulle jag avsätta innan nästa hus startar.
+
+## Anteckningen tillskriver inte loggen den kortare tiden
+
+Enligt Elm Quays interna testanteckning, daterad den 4 december 2025, fördes 31 felanmälningar in i loggen. Akuta ärenden och arbeten som beställts före testet ingår inte i anteckningen.
+
+Under testet var mediantiden från anmälan till tilldelning två arbetsdagar, jämfört med tre under de åtta veckorna innan. Perioderna hade olika arbetsbelastning, och anteckningen tillskriver uttryckligen inte skillnaden till programvaran. Det finns inga mätningar av kostnader, de boendes nöjdhet eller hur lång tid reparationerna tog att slutföra.
+
+## Maya Lind ser tillbaka på testet
+
+Hennes omdöme är inte en slutsats ur siffrorna utan hennes egen bedömning:
+
+– Jag skulle välja att göra testet igen. Att ha en samlad bild av anmälningarna hjälper oss, men jag skulle lägga in en extra vecka för förberedelser.
+
+Någon rekommendation av Svale till alla bostadsbolag ger hon inte.
+
+## Kategorierna prövas på större reparationer före beslut
+
+Testet har ännu inte utvidgats till fler hus. Underhållsteamet fattar sitt beslut när det har kontrollerat hur kategorierna fungerar för större reparationer. Den som förbereder ett liknande införande kan läsa [checklistan för införandet](https://example.invalid/svale/checklist). Kundberättelsen publiceras av Svale Systems.
+````
+
+**Inställningar:**
+- **Genre:** `casestudy`, från anropet.
+- **Språk:** `sv` (svenska), från anropet.
+- **Teknik:** ingen. Genren `casestudy` anger ingen berättarbåge, och ingen annan källa valde någon.
+- **Leverans:** i svaret. Metadatablocket `kntnt` är med, eftersom det är på som standard.
+
+**Kontroller:**
+- **Artikelanatomin:** mättes med skriptet och uppfyller alla räknade krav. Rubriken har 58 tecken och ingressen 46 ord.
+- **Källjämförelser:** två kördes.
+  - Den första gav sju fynd. Jag godtog alla och lagade dem innan den andra jämförelsen, som gav de tre bristerna ovan.
+  - Kontrollanten kunde inte skriva sin rapportfil, så båda rapporterna kom i svaret i stället. De var fullständiga.
+
+**Byline:** den bär ditt namn, Thomas Barregren, eftersom briefen inte angav någon författare. Ändra den innan publicering om texten ska gå osignerad eller under ett annat namn.
+
+**Där materialet tar slut:** briefen bad om cirka 400 ord, och materialet räckte till en text i den storleken. Det saknas mätningar av kostnader, de boendes nöjdhet och tid till slutförd reparation. Det saknas också uppgifter om själva utvärderingen av statusvisningen och om hur kategorierna fungerar för större reparationer. Därför säger texten inget om effekt eller om hur testet gick vidare.
+
+**Städning:** källfilen `source.md` är orörd. Mina tillfälliga filer är borttagna, och båda kontrollanterna är klara.
