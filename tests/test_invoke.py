@@ -1276,6 +1276,16 @@ SHIPPED_CASES: dict[str, list[Case]] = {
         ("setup", {"path": ["setup"]}),
         ("setup --data=/x", {"path": ["setup"], "flags": {"--data": "/x"}}),
         ("status", {"path": ["status"]}),
+        ("list", {"path": ["list"], "flags": {}, "operands": []}),
+        ("list --data=/x", {"path": ["list"], "flags": {"--data": "/x"}}),
+        ("list extra", None),
+        ("list --json", None),
+        ("list --scope=all", None),
+        ("list --yes", None),
+        ("list --unknown", None),
+        ("list --data", None),
+        ("list --data /x", None),
+        ("list --data=/x --data=/y", None),
         ("evidence", {"path": ["evidence"], "operands": []}),
         ("evidence implement", {"path": ["evidence"], "operands": ["implement"]}),
         ("reset", {"path": ["reset"], "flags": {}}),
@@ -1583,6 +1593,19 @@ def test_every_shipped_skill_routes_its_help_forms_to_its_pages() -> None:
             reading = engine.read_invocation(directory, f"{path} --help")
             assert reading.status == EXIT_HELP, (directory.name, path)
             _assert_compact(reading.text, page)
+
+
+@pytest.mark.parametrize("flag", ["--help", "-h"])
+def test_model_selector_list_has_direct_help_routes(flag: str) -> None:
+    """An inventory help request stops at its own page before reading data."""
+
+    directory = SKILLS / "models/model-selector"
+    reading = _engine().read_invocation(directory, f"list {flag}")
+
+    assert reading.status == EXIT_HELP
+    _assert_compact(reading.text, directory / "help/list.md")
+    plain = reading.text.replace("*", "").replace("_", "")
+    assert "/model-selector list [--data=PATH]" in " ".join(plain.split())
 
 
 @pytest.mark.parametrize("name", ["addressed_page", "Grammar"])

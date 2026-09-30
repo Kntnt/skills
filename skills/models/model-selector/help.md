@@ -10,6 +10,8 @@ model-selector - choose the model and deliberation level that finishes work for 
 
 **/model-selector** **setup** [**--data=**_PATH_] [**--** *INSTRUCTION*]
 
+**/model-selector** **list** [**--data=**_PATH_] [**--** *INSTRUCTION*]
+
 **/model-selector** **status** [**--data=**_PATH_] [**--** *INSTRUCTION*]
 
 **/model-selector** **evidence** [**--data=**_PATH_] [*KIND*] [**--** *INSTRUCTION*]
@@ -45,6 +47,10 @@ Nothing waits for you. There is no queue to work through and no reminder placed 
 **setup**
 
 Hold the interview and write the profile: Harnesses, the makers whose models you want, and how each maker is paid for on each channel. It ends by running the catalogue pass once, unless the profile was refused, and reporting what each of its sources said. Run it again to review an existing profile.
+
+**list**
+
+List the profile's selected Harnesses and latest catalogue release per selected series, grouped under Maker display names.
 
 **status**
 
@@ -146,7 +152,7 @@ One file per Anthropic family and supported deliberation level wherever Anthropi
 
 An incomplete form, an unsupported combination, or an option with no work to do on the form it was given with is refused rather than ignored. The Skill names the error, prints the addressed command's SYNOPSIS, changes nothing, and points at that command's own help page. An option written after the work text is out of order and is refused the same way; a dash-prefixed word this Skill declares no option for is part of the work text.
 
-Nothing the selection engine answers is a refusal. A missing or unusable profile, an empty catalogue and an unreachable model are each a degraded answer naming your own seat, with a note saying which it was — a caller that must be stopped is stopped by something that knows what the work is worth.
+Nothing the selection engine answers is a refusal. A missing or unusable profile, an empty catalogue and an unreachable model are each a degraded selection answer naming your own seat, with a note saying which it was — a caller that must be stopped is stopped by something that knows what the work is worth. For `list`, an invalid profile instead reports that no configured models can be listed and names `/model-selector setup`; a missing selected series is named as having no catalogue release.
 
 A catalogue pass that changes nothing is a successful pass. A figure no measurement supports is reported absent rather than as a zero.
 
@@ -184,4 +190,4 @@ That contract belongs to the collection rather than to this page, and it is stat
 
 ## SEE ALSO
 
-**/model-selector setup --help**, **/model-selector status --help**, **/model-selector evidence --help**, **/model-selector objective --help**, **/kntnt select**
+**/model-selector setup --help**, **/model-selector list --help**, **/model-selector status --help**, **/model-selector evidence --help**, **/model-selector objective --help**, **/kntnt select**

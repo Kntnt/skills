@@ -2,7 +2,7 @@
 name: model-selector
 description: "Choose the model and deliberation level that completes delegated work at the lowest total cost, or in the least time where the user has chosen time. Never used implicitly: a Skill that routes work runs its script."
 disable-model-invocation: true
-argument-hint: "[--json] [--scope=limited|callable|all] [--kind=<kind>] [--data=<path>] [<work>] | setup [--data=<path>] | status [--data=<path>] | evidence [--data=<path>] [<kind>] | objective [--data=<path>] [time|cost] | reset [--evidence] [--yes] [--data=<path>] [-- <instruction>]"
+argument-hint: "[--json] [--scope=limited|callable|all] [--kind=<kind>] [--data=<path>] [<work>] | setup [--data=<path>] | list [--data=<path>] | status [--data=<path>] | evidence [--data=<path>] [<kind>] | objective [--data=<path>] [time|cost] | reset [--evidence] [--yes] [--data=<path>] [-- <instruction>]"
 compatibility: Requires uv; on macOS, launchctl runs the daily catalogue pass
 metadata:
   kntnt.internal: "true"
@@ -15,7 +15,7 @@ metadata:
 
 # model-selector
 
-Which model, at which deliberation level, finishes a piece of work for the least money, or soonest where the user has made time their standing choice — answered from what this machine has measured rather than from reputation. The answer is advice. No form of it means *start nothing*: where no valid profile stands, the catalogue is empty or nothing is reachable, it names the seat the caller already has and says why.
+Which model, at which deliberation level, finishes a piece of work for the least money, or soonest where the user has made time their standing choice — answered from what this machine has measured rather than from reputation. The selection answer is advice: where no valid profile stands, the catalogue is empty or nothing is reachable, it names the seat the caller already has and says why.
 
 Run `uv run "$HERE/scripts/invoke.py"` — `$HERE` is the directory that holds this SKILL.md — with everything the user typed after `/model-selector`, verbatim and however many lines, on stdin. Exit 0: do what it prints. On any other exit, if you introduced a known construction error and can correct it while preserving the user's request and authority, account for effects already produced, submit the corrected invocation through the same shim, and continue from the failed boundary; a refusal before the operation starts consumes no operation. Otherwise show what it printed to the user verbatim and stop. Never repair input the user supplied, or automatically retry exact help, an unmet dependency, an unrelated failure, or a failure whose origin or valid correction is unknown.
 
@@ -68,6 +68,14 @@ Without `--json`, render the same answer for a person:
 Two identical questions can come back with different answers, and that is this working rather than failing. About one reversible call in ten is spent trying the boundary instead of taking the answer: it moves one dimension of the answer and only one — either the model or the deliberation level, never both, so that what the attempt teaches is about one variable — and takes the cheapest point one step away that its own spread says could still do the job. That is how a point with little behind it gets tried at all, and therefore the only way this machine ever learns that something cheaper would have done. `explored` names that dimension, or is null on the ordinary answer, and where it is not null `note` says what the measurements would have chosen instead. A high-stakes request, a request carrying a model or a deliberation lock, and a request naming the point that just failed are answered rather than explored.
 
 A model this machine holds too few rows of its own for on a kind of work is given a Trial instead: three reversible jobs of that kind, at whatever they cost, after which it is judged on its own record like everything else. It is owed one only where it could plausibly win — where one of its points is at least as likely to finish as the bound drawn around the best point this call has measured — so a Trial is never spent confirming that a weak model is weak, and a model below that bound at every point is left to the cheaper exploration above. The point tried is the first of that model's points the ranking reaches among those clearing the bound, which is where it would be the answer if it were measured, rather than the level the answer runs at: a newer release inherits its family's record wherever that family was run, and the answer's level can be the thinnest point it has. No price caps it; one model is tried at a time, and everything the Maker/series choices, scope, a lock, the Quota Guard and the deliberation ceiling have already left out stays left out. While a Trial is owed every reversible call of that kind is one, so the three rows arrive together rather than over three hundred calls. `explored` carries `trial` on such a call rather than a dimension's name, and `note` says the call was a Trial, names the point being tried and says what the measurements would have chosen — so a reader finding a model nothing has measured chosen can tell a deliberate Trial from a routing fault at a glance.
+
+## List
+
+For `list`, run only the local inventory reader:
+
+    uv run "$HERE/scripts/inventory.py" [--data=<directory>]
+
+Return its output verbatim: the validated profile's selected Harnesses and the latest catalogue release per selected series, grouped under the Maker's display name, or its short diagnosis naming `setup` when no valid profile stands. Here “enabled” means selected in the profile. The script applies the shared profile permission and catalogue release order; a missing selected series remains visible as having no catalogue release. Use the actual output for this invocation, never session history. This command performs no selection, usage read, Harness or Bridge call, network access, interview, refresh, definition generation or persistent write. Stop after returning the inventory; `status` is the separate diagnostic command.
 
 ## Setup
 

@@ -14548,6 +14548,7 @@ def _command_groups() -> list[tuple[Path, Path]]:
 _MODEL_SELECTOR_MANPAGES = frozenset(
     {
         "evidence.md",
+        "list.md",
         "objective.md",
         "reset.md",
         "setup.md",
