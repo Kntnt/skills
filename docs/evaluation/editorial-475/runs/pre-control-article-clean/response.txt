@@ -1,0 +1,6 @@
+Ingen ändring: `input.md` behövde inget arbete, och varken den redaktionella granskningen eller den avslutande korrekturläsningen hittade något att rätta. Texten upprepas därför inte här.
+
+- **Konfiguration:** genre `article` och språk `sv` kom från anropet. Ingen teknik tillämpades, eftersom genren `article` inte anger någon. Ingen brief och ingen `kntnt`-karta fanns.
+- **Anatomi:** texten följer artikelanatomin utan avvikelse. Mätskriptet godkänner alla räknade krav, och krav det inte räknar granskades genom läsning. Det gäller att ingressen står på egen hand, att brödtexten klarar sig utan den, att mellanrubrikerna beskriver sina avsnitt och att sista avsnittet är ett avslut med en uppmaning.
+- **Korrigeringsbudget:** oanvänd (1 av 1 kvar). Inget fanns att rätta.
+- **Filsystem:** inga filer skrevs, och `input.md` är orörd.

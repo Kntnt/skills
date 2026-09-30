@@ -1,0 +1,27 @@
+{
+  "misses": [
+    {
+      "judge": "a",
+      "class": 3,
+      "kind": "",
+      "owner": "#468",
+      "reply": "”Rutan som inte finns” angav inget ämne.",
+      "judge_says": "The account is candid and correct. It does call the headline a defect (\"angav inget ämne\"), and I do not accept that it is one (see section 4).",
+      "check": "The input headline 'Rutan som inte finns' names neither the meeting template nor its subject, so the description is true of the text as received; the judge disputes only whether this is a real defect (a headline-packaging guideline, not a visible defect)."
+    },
+    {
+      "judge": "b",
+      "class": 3,
+      "kind": "",
+      "owner": "#468",
+      "reply": "Den dubbla betydelsen är borta.",
+      "judge_says": "The account is accurate. It describes the loss of the double meaning as a gain in clarity rather than as a cost.",
+      "check": "The returned headline 'Mötesmallen saknar en ruta för varför vi ses' does drop the second reading, as the reply says; the judge faults only the framing of the loss, not the facts."
+    }
+  ],
+  "verdicts": {
+    "a": "fail",
+    "b": "fail"
+  },
+  "notes": "Headline counts checked: 'Mötesmallen saknar en ruta för varför vi ses' is 44 characters and 8 words, as the reply says. Both judges fail R1 on the headline rewrite of a clean column; that R1 criticism is not itself an A2 miss, and both call the account accurate."
+}

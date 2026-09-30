@@ -1,0 +1,40 @@
+Språk: `sv` (från anropet). Genre: `column` (från anropet). Teknik: ingen – krönikegenren anger ingen teknik som den normalt skrivs med, och varken anropet, texten eller en instruktion angav någon. Ingen brief användes. Jag gjorde en korrigeringsrunda, och den godtogs vid omgranskningen. Den avslutande korrekturläsningen hittade inget att rätta. `input.md` är orörd och inga filer har skrivits.
+
+````markdown
+# Mötesmallen rymmer inte vad vi ska förstå tillsammans
+
+Nora Vik
+
+Förra tisdagen satt jag gråtande i bibliotekets mötesrum när min chef sade: ”Nu måste allt bli digitalt.” Det var mitt första möte om vår nya mötesmall. Jag har aldrig deltagit i något möte om vår nya mötesmall.
+
+Vår mötesmall har plats för starttid och sluttid men inte för vad vi ska förstå tillsammans.
+
+Samtal kan ha värde utan att leda till beslut. Jag vill prova frågan vad vi behöver förstå tillsammans, men jag vet inte om ytterligare en ruta gör möten bättre.
+````
+
+## Åtgärdade fynd
+
+- **Rubriken.** Den löd ”Möten förändrar allt” och påstod något som texten inte påstår. Texten säger ingenstans att möten förändrar något. En läsare som bara ser rubriken kan inte heller avgöra vad krönikan handlar om. Nu anger rubriken textens vinkel med textens egna ord. Den har 53 tecken och 8 ord.
+- **Tom öppning i andra stycket.** ”I dagens snabbt föränderliga värld är möten viktigare än någonsin. Det är viktigt att vara viktig.” Den första meningen är en klyscha med ett påstående som saknar stöd, och den andra säger ingenting. Båda är strukna, så stycket börjar nu med iakttagelsen om mötesmallen.
+- **Generisk avslutning.** Sista stycket, ”Sammanfattningsvis är möten viktigare än någonsin i dagens snabbt föränderliga värld.”, upprepade den tomma öppningen och sammanfattade inte texten. Det är struket, så krönikan slutar nu med tvivlet på om ytterligare en ruta gör möten bättre.
+
+## Olösta fynd
+
+Dessa kräver uppgifter eller delar som bara skribenten kan ge:
+
+1. **Motsägelse i första stycket.** ”Det var mitt första möte om vår nya mötesmall.” står mot ”Jag har aldrig deltagit i något möte om vår nya mötesmall.” Läsaren kan inte veta om skribenten var med på mötet som öppnar krönikan. Bara skribenten vet vilket påstående som stämmer.
+2. **Öppningsscenen hänger inte ihop med reflektionen.** Gråten och chefens ”Nu måste allt bli digitalt.” kommer aldrig tillbaka. Läsaren får inte veta varför hon grät eller vad digitaliseringen har med mallens saknade rad att göra. För att skapa en koppling skulle man behöva hitta på motiv eller samband.
+3. **Ingress saknas.** Mellan rubrik och byline finns ingen sammanfattande ingress som säger vad krönikan handlar om och vad läsaren får ut av den.
+4. **Mellanrubriker och avsnitt saknas, liksom ett avslutande avsnitt med egen mellanrubrik.** Brödtexten består av tre stycken utan mellanrubrik. Att inledningsstycket mäts som tre stycken beror bara på att avsnitten saknas.
+5. **Uppmaning till läsaren saknas.** Slutet uttrycker skribentens egen avsikt och ärliga tvivel men ber inte läsaren pröva, lägga märke till eller ompröva något.
+
+Texten följer alltså inte artikelanatomin. Mätningen av den levererade texten visar att ingress och avsnitt saknas.
+
+## Redovisning av påståenden
+
+- **Ändrat:** Rubriken påstod att möten förändrar allt. Nu påstår den att mötesmallen inte rymmer vad vi ska förstå tillsammans, alltså samma sak som andra stycket säger. Påståendet om att möten förändrar allt finns inte längre någonstans i texten. Ändringen gjordes för att åtgärda fyndet om rubriken.
+- **Borttaget:** Påståendet ”möten är viktigare än någonsin i dagens snabbt föränderliga värld” stod två gånger, i andra styckets första mening och i sista stycket. Båda förekomsterna är strukna, eftersom fynden om den tomma öppningen och den generiska avslutningen pekade ut hela påståendet som defekten.
+- **Borttaget:** ”Det är viktigt att vara viktig.” Det ströks för att åtgärda fyndet om den tomma öppningen, som pekade ut hela meningen som defekten.
+- **Tillagt:** Inga påståenden har lagts till.
+
+Utöver påståendena ovan har körningen strukit tomma öppnings- och avslutningsfraser samt en innehållslös mening, och skrivit om rubriken. Den avslutande korrekturläsningen gjorde inga ändringar. Byline, första stycket, meningen om mötesmallen och tredje stycket står kvar ordagrant som de kom in.

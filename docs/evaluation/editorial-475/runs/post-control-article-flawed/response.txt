@@ -1,0 +1,58 @@
+**Konfiguration:** genre `article` och språk `sv` kommer från anropet. Ingen teknik används: artikelgenren anger ingen teknik som den vanligen skrivs med, och ingen annan nivå valde någon. Korrigeringsbudgeten var 1 och är förbrukad. Texten levereras här i svaret, och `input.md` är orörd.
+
+````markdown
+# Givare i Björkskolan mätte under 20 grader
+
+**Ett mätförsök i Björkskolan mätte bara luften där givarna satt. Här är vad fastighetskontorets rapport anger om temperaturerna, vilka mätningar som saknas och vad driftteknikern Elin Rask rekommenderar.**
+
+Fastighetskontorets rapport *Mätförsök i Björkskolan* från den 12 mars 2026 anger att 14 av 120 lektionspass hade minst ett värde under kontorets egen arbetsgräns på 20 grader, vilket inte är en lagregel, och att försöket varade fyra veckor. Enligt rapporten stod två givare vid ytterväggar och fyra vid innerväggar, utan att placeringens effekt jämfördes experimentellt. Givarna registrerade temperaturer under 20 grader i sex klassrum.
+
+Operativ temperatur saknas, trots att resonemanget bygger på operativ temperatur, som är ett mått på lufttemperatur och värmestrålning från omgivande ytor, medan givarna bara mätte luften där de satt. Det saknas mätningar av luftdrag och elevernas upplevelse och uppgifter om hur länge temperaturerna låg under gränsen. Ingen effekt på hälsan har undersökts.
+
+Driftteknikern Elin Rask rekommenderar att koppla temperaturserier till användningstider innan styrningen ändras.
+
+Nästa försök är tänkt att använda likadant placerade givare i november, fast finansieringen inte är beslutad.
+
+Kontakta oss.
+````
+
+**Åtgärdade fynd**
+
+1. **Rubriken** "Givarna räddar skolan från en katastrof" påstod en räddning och en katastrof som texten inte bär, eftersom texten säger att ingen effekt på hälsan har undersökts. Den hade också högre ton än texten, och "Givarna" sa inte vilka givare det gällde för den som bara ser rubriken. Den nya rubriken är "Givare i Björkskolan mätte under 20 grader".
+2. **Ingressen** upprepade samma mening två gånger ordagrant. Den sa inte heller vilket försök eller vilken skola det gällde, eller vad läsaren får ut av texten. Den är omskriven ur textens eget innehåll.
+3. **Brödtextens första mening** upprepade ingressen ordagrant, och båda började på "Givarna". Dessutom stod "Givarna" i brödtexten innan den sagt vilka givare det var. Brödtexten börjar nu med rapporten, och meningen om sex klassrum står efter meningen om givarnas placering.
+4. **"Katastrofen lurade bakom varje hörn."** hade inget stöd i texten och är struken.
+5. **Brödtexten** var ett enda stycke på 187 ord (i texten som den kom in) med flera tankar. Där kopplade "medan" ihop försökets längd med givarnas placering som om de hängde ihop. Stycket är delat vid tankegränserna, och rapportmeningen är delad där "medan" stod.
+7. **Påståendet** att det är "helt säkert att givarna har gjort eleverna friskare" motsades av förbehållet i samma mening och är struket. Förbehållet står kvar som en egen mening.
+8. **"Det är viktigt att notera att detta är mycket viktigt för alla som tycker att temperatur är viktigt."** var tom utfyllnad och är struken.
+
+**Olösta fynd**
+
+6. **"Operativ temperatur saknas, trots att resonemanget bygger på operativ temperatur"**: "resonemanget" syftar inte på något i texten, och det framgår inte var operativ temperatur saknas. Texten ger ingen syftning att reparera med, så meningen står kvar oförändrad.
+9. **Delvis olöst:** "för att rädda framtiden" är struket, men "Kontakta oss." står kvar. "Oss" syftar fortfarande inte på någon i texten, och uppmaningen följer inte av textens innehåll. Att rätta det kräver en avsändare eller ett nästa steg som texten inte har.
+10. **Delar saknas:** texten har ingen byline, och ingen författare nämns. Den har inte heller några mellanrubriker och därmed inga avsnitt och inget avslutande avsnitt. Delarna är inte skrivna, eftersom en person ska avgöra vad de innehåller. Mätskriptet räknar därför alla fem brödtextstyckena som en inledning på 146 ord, men det felet beror bara på att avsnitten saknas.
+
+Texten följer inte artikelns anatomi, eftersom byline, avsnitt och avslutande avsnitt saknas. Rubriken (42 tecken, 7 ord) och ingressen (ett stycke, 28 ord) håller de räknade gränserna.
+
+**Påståendena**
+
+Strukna:
+- Att givarna räddar skolan från en katastrof (rubriken, fynd 1).
+- Att en katastrof lurade bakom varje hörn (fynd 4).
+- Att det är helt säkert att givarna har gjort eleverna friskare (fynd 7). Med det försvann också "men ändå" och "trots att", som ställde påståendet mot de saknade mätningarna och den ouppsökta hälsoeffekten. Förbehållet att ingen effekt på hälsan har undersökts står kvar i sin helhet.
+- Att "detta" är mycket viktigt för alla som tycker att temperatur är viktigt (fynd 8).
+- Att en kontakt med "oss" räddar framtiden (fynd 9).
+
+Ändrade:
+- **Rubriken** påstår nu att givare i Björkskolan mätte under 20 grader (fynd 1).
+- **Ingressen** påstår nu att ett mätförsök i Björkskolan bara mätte luften där givarna satt. Den säger inte längre att givarna registrerade temperaturer under 20 grader i sex klassrum. Det står nu bara i brödtexten, medan rubriken säger att givare i Björkskolan mätte under 20 grader, utan uppgiften om sex klassrum (fynd 2).
+- **Givarnas placering** tillskrivs nu uttryckligen rapporten ("Enligt rapporten") och är inte längre hopkopplad med försökets längd genom "medan". Läsaren har inte längre den kontrast som "medan" antydde och som texten inte bar (fynd 5).
+- **"Givarna registrerade temperaturer under 20 grader i sex klassrum."** öppnade tidigare brödtexten som textens eget påstående, innan rapporten nämnts. Nu står meningen sist i stycket som redovisar rapporten, direkt efter "Enligt rapporten stod två givare …", så den kan läsas som en del av det rapporten anger. "Givarna" läses då som just de sex givarna. Texten säger fortfarande inte hur givarna fördelades på klassrummen, men närheten kan få en läsare att koppla sex givare till sex klassrum (fynd 3).
+- **Rask och novemberförsöket:** Elin Rasks rekommendation och det planerade novemberförsöket stod tidigare i samma mening, förenade med "och". Planen kunde då läsas som en följd av hennes rekommendation eller som en del av det hon sa. Nu står planen i ett eget stycke, fristående och utan avsändare, och läsaren har inte längre den kopplingen (fynd 5).
+
+Tillagda:
+- Ingressens andra mening lovar att texten redovisar vad fastighetskontorets rapport anger om temperaturerna, vilka mätningar som saknas och vad driftteknikern Elin Rask rekommenderar (fynd 2).
+
+Utöver det som räknas upp ovan har inget påstående strukits, ändrats eller lagts till.
+
+Utöver påståendena har körningen skrivit om rubriken och ingressen och strukit tillverkad dramatik och tom utfyllnad. Den har tagit bort den ordagranna upprepningen, flyttat en mening inom första stycket, delat det enda brödtextstycket i fem stycken och delat några långa meningar vid fogarna. Den avslutande språkgranskningen gjorde inga rättningar.

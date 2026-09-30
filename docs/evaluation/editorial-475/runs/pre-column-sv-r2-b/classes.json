@@ -1,0 +1,27 @@
+{
+  "misses": [
+    {
+      "judge": "a",
+      "class": 1,
+      "kind": "changed",
+      "owner": null,
+      "reply": "Rubriken påstår nu att mötesmallen saknar en ruta för varför vi ses. Tidigare sade den bara att en viss ruta inte finns, utan att säga vilken. ... [finding 1:] påstår inte mer än texten gör.",
+      "judge_says": "The reply's statement that the headline \"påstår inte mer än texten gör\" is defensible, but it does not mention that the body's first-named missing box is a *beslut* box and not a *varför* box.",
+      "check": "input.md paragraph 1 names the missing box as one for 'det beslut vi ska kunna fatta'; the new headline names a box 'för varför vi ses'. The change moved the headline's meaning from the decision box the old 'Rutan' pointed to, and the claim entry does not say so. The judge is right, so the short entry is class 1."
+    },
+    {
+      "judge": "b",
+      "class": 1,
+      "kind": "changed",
+      "owner": null,
+      "reply": "Rubriken påstår nu att mötesmallen saknar en ruta för varför vi ses. Tidigare sade den bara att en viss ruta inte finns, utan att säga vilken.",
+      "judge_says": "The reply does not mention that the body names the missing box as a decision box rather than a why box, but its claim that \"Stödet finns i texten\" holds.",
+      "check": "Same as judge a: the body's missing box is a beslut box, the headline's a varför box; the claim entry leaves the swap out. Class 1."
+    }
+  ],
+  "verdicts": {
+    "a": "fail",
+    "b": "pass"
+  },
+  "notes": "Judge b marks the headline 'reported, accurately' and notes the omission with a hedge; recorded because it names a meaning shift the claim entry leaves out. Counts 44 characters / 8 words recounted and correct. Owner null: draft fixture column-sv-r2, not a clean text."
+}

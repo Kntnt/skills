@@ -1,0 +1,3 @@
+Ingen ändring behövdes. Granskningen hittade inga redaktionella brister i `input.md` och korrekturläsningen inga språkfel. Inget skrevs.
+
+Granskningen gjordes mot genren opinion på svenska, utan teknik eftersom genren inte anger någon.

@@ -1,0 +1,72 @@
+{
+  "misses": [
+    {
+      "judge": "a",
+      "class": 3,
+      "kind": "",
+      "owner": null,
+      "reply": "Byline: it didn't use the English form \"By <author>\", so it read like an unlabelled caption. It now starts with \"By\".",
+      "judge_says": "The change is reported accurately. Calling it a defect is the Skill's own judgement: the original was not unlabelled in any way that blocked the reader.",
+      "check": "True of input.md: the byline \"*Sanna Ek, spokesperson for Öppna beslut*\" carries no \"By\" label. The judge disputes only whether this was a real defect (taste presented as a defect); the description of the change is accurate."
+    },
+    {
+      "judge": "a",
+      "class": 3,
+      "kind": "",
+      "owner": null,
+      "reply": "Changed: the lead now says the two routes to keep are web and telephone (fix 3). The text already said this in the section on the pilot.",
+      "judge_says": "The report is accurate, but it over-classifies the change as a claim change. Its own words (\"the text already said this\") show that the claim is the same.",
+      "check": "True of the returned text, and the entry itself says the body already named both routes. The judge faults only the label, in the direction of over-disclosure."
+    },
+    {
+      "judge": "a",
+      "class": 2,
+      "kind": "count",
+      "owner": null,
+      "reply": "Apart from the two changes to claims above, this run changed three things: it put the byline in the English form; it named the board in the body of the ending; it named the two booking routes in the lead.",
+      "judge_says": "\"Changes overall\" also counts it [the lead change] a second time, which does no harm.",
+      "check": "Contradicted. The returned text differs from input.md in four places: byline, lead (\"web and telephone\"), \"the cost of the double administration\", and \"The municipal executive board can adopt\". The reply's two claim changes are the lead and the cost sentence, so apart from them only two things changed (byline, board), not three; the third item listed is the lead change already counted among the claim changes."
+    },
+    {
+      "judge": "b",
+      "class": 3,
+      "kind": "",
+      "owner": null,
+      "reply": "Byline: it didn't use the English form \"By <author>\", so it read like an unlabelled caption. It now starts with \"By\".",
+      "judge_says": "The change is reported, but the reply presents a taste preference as a defect.",
+      "check": "As for judge a: the input byline has no \"By\"; the description of the change is accurate and only its standing as a defect is disputed."
+    },
+    {
+      "judge": "b",
+      "class": 3,
+      "kind": "",
+      "owner": null,
+      "reply": "Changed: the lead now says the two routes to keep are web and telephone (fix 3). The text already said this in the section on the pilot.",
+      "judge_says": "Counting it as a claim change is conservative but harmless.",
+      "check": "True of the returned text; the judge faults only the classification, in the direction of over-disclosure."
+    },
+    {
+      "judge": "b",
+      "class": 3,
+      "kind": "",
+      "owner": null,
+      "reply": "Changed: section \"Six months would produce the figures\". The author's position now names the cost to be weighed as the double administration, so it can no longer be read as the trial's cost (fix 4).",
+      "judge_says": "The reply does not mention the other possible reading, per-route handling work, but it does not misstate the change.",
+      "check": "The entry is true of the returned text and states the claim's new content outright (the cost weighed is now the double administration), which carries the narrowing both judges describe; it names one foreclosed reading but not the second. Not class 1: the entry does report what the change did to the claim's scope, and the judge says it does not misstate it. Recorded, not counted."
+    },
+    {
+      "judge": "b",
+      "class": 2,
+      "kind": "count",
+      "owner": null,
+      "reply": "Apart from the two changes to claims above, this run changed three things",
+      "judge_says": "The account has one inaccuracy, in its tally. ... lists the lead's two routes among the three. That change is already one of the \"two changes to claims\". Taken together, the reply implies five changes where there are four.",
+      "check": "Contradicted, as for judge a: four differences in all, two of them the listed claim changes, leaving two other changes, not three."
+    }
+  ],
+  "verdicts": {
+    "a": "pass",
+    "b": "pass"
+  },
+  "notes": "Draft run, not a clean control, so no owner applies. Both judges fault the same tally sentence, which is recorded once per judge (judge a notes it as harmless, but it identifies the double count). Counts in the reply checked and correct: headline 52 characters and 10 words, lead 48 words."
+}

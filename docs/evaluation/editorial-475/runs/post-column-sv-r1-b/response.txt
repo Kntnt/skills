@@ -1,0 +1,43 @@
+**Konfiguration:** genre `column` (krönika), ingen teknik, språk `sv` (svenska). Alla tre värdena kommer från textens `kntnt`-karta. Ingen teknik användes eftersom kartan anger `technique: none`, och krönikegenren anger heller ingen. Ingen skrivbrief användes.
+
+**Fynd – alla fyra kvarstår olösta.** Varje fynd gäller en del som texten saknar. En granskning skriver inte en saknad del, så det är du som avgör vad den ska innehålla.
+
+1. **Ingress saknas.** Efter rubriken kommer bylinen och sedan direkt brödtexten. Det finns inget självständigt, sammanfattande stycke på högst 60 ord mellan rubrik och byline som säger vad krönikan handlar om och vad läsaren får ut av den. Den som möter krönikan via rubrik och ingress, till exempel i ett flöde, får ingen sammanfattning och ingen anledning att läsa vidare.
+2. **Mellanrubriker och avsnitt saknas.** Texten har inga mellanrubriker på nivå 2, och alla sju brödtextstyckena står direkt under bylinen. Mätskriptet läser därför alla sju styckena (274 ord) som en enda inledning. Det beror bara på att avsnitten saknas och är inte ett eget fel som ska kortas bort. Den som skummar texten på webben får inga ingångar i resonemanget.
+3. **Avslutande avsnitt saknas.** Sista stycket, ”Jag vill prova den i alla fall …”, är avslutande innehåll och står kvar där det står. Utan avsnitt har texten inget avslutande avsnitt med egen mellanrubrik. Det hör ihop med de saknade avsnitten i fynd 2.
+4. **Uppmaning till läsaren saknas.** Avslutningen säger vad skribenten själv vill prova, men ger inte läsaren något att pröva, lägga märke till eller ompröva, som krönikegenren kräver. Frågan ”vad behöver vi förstå tillsammans?” finns i texten, men bara som skribentens eget försök. Krönikan slutar alltså utan att ge läsaren något att göra med reflektionen.
+
+Texten följer därför inte artikelanatomin. Mätningen av den levererade texten visar att rubriken har 40 tecken och 8 ord, vilket är inom gränserna. Ingress och avsnitt saknas, och brödtexten består av 7 stycken och 274 ord utan mellanrubrik. Rubriken, bylinen och styckena gav i övrigt inga fynd.
+
+Korrigeringsbudgeten (1) gick åt till en korrigeringsrunda. Den ändrade ingenting, eftersom alla fynd gäller delar som saknas.
+
+**Påståenden:** inget påstående har tagits bort, ändrats eller lagts till.
+
+```markdown
+---
+kntnt:
+  genre: column
+  technique: none
+  language: sv
+---
+
+# Mallen har en ruta för allt utom poängen
+
+Av Nora Vik, bibliotekarie
+
+Jag granskar bibliotekets mötesmall. Där finns rutor för starttid, sluttid, deltagare och dagordning. Någon ruta för det beslut vi ska kunna fatta när vi går därifrån finns inte. Det är dokumentet jag tittar på, inte ett bestämt möte.
+
+Jag uppskattar möten där kolleger upptäcker att de har förstått en fråga olika. Den upptäckten kan vara viktigare än att vi snabbt enas. Min tanke är alltså inte att varje samtal ska pressas fram till ett beslut.
+
+Det som retar mig är något annat: att tid i kalendern så lätt behandlas som ett resultat i sig. Timmen är bokad, alltså har något hänt. Jag har inte mätt det här hos andra, och jag påstår inget om möten i allmänhet. Det är min reflektion, med den räckvidd en reflektion har.
+
+Ändå tycker jag att den som fyller i en mall borde få formulera varför vi behöver just varandras tid. Också när syftet är att undersöka något tillsammans finns det ett skäl att skriva ner. Samtal kan skapa förtroende. Samtal kan hitta en fråga vi inte visste att vi behövde ställa. Inget av det kräver ett beslut, men båda delarna tål att motiveras.
+
+Så jag vill prova en enkel fråga bredvid tiden: vad behöver vi förstå tillsammans?
+
+Där börjar tvivlet. Det finns en komik i att försöka lösa ett problem med formulär genom att utöka formuläret – bibliotekarien som svarar på en mall med mer mall. Jag vet inte om ytterligare en ruta gör våra möten bättre. Kanske blir frågan bara en rad till att fylla i.
+
+Jag vill prova den i alla fall, och behålla båda hållningarna så länge: hoppet om frågan och tvivlet på ännu en ruta.
+```
+
+**Vad som ändrats:** Texten skiljer sig från den du skickade på ett enda ställe. Den avslutande korrekturläsningen gjorde en mekanisk rättelse: det engelska långa tankstrecket i ”utöka formuläret — bibliotekarien” är nu ett svenskt tankstreck med mellanslag (”–”). Resten av texten, inklusive frontmatter, är oförändrad. `input.md` har inte rörts och inga filer har skapats.

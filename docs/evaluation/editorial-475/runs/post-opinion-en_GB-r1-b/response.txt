@@ -1,0 +1,59 @@
+I repaired two of the three findings. The third, a missing standfirst, is yours to write: the review only reports a missing part and never writes it. `input.md` is unchanged and I left no files behind.
+
+```markdown
+---
+kntnt:
+  genre: opinion
+  technique: none
+  language: en_GB
+---
+
+# Don't switch off Lervik's phone booking before we know what it costs
+
+By Sanna Ek, spokesperson for Öppna beslut
+
+On 18 June Lervik's council executive board is asked to remove phone booking from all seven community venues from September. The officers' report gives one reason: staff should not have to enter the details in two flows. That is a fair thing to want. It is not yet a reason to make the change permanent.
+
+## What the pilot actually counted
+
+The pilot report *Bokning av föreningslokaler*, dated 8 April 2026, covers an eight-week trial in two venues. It records 96 bookings made on the web and 24 made by phone. Those figures are the report's, and so are their limits: it counts bookings rather than unique people, and it measures nothing about age, functional ability or how used to digital services people are. Twenty-four phone bookings therefore cannot tell us what share of Lervik's residents are unable to book digitally. Nobody should claim they can.
+
+## A motive on the table, but no figures under it
+
+The administration's objection to keeping both routes is double administration, and I take it at face value: it is not a claim that people who ring are lazy or expensive. But the documents contain no measurement of how long either route takes staff, and no calculation of what removing one would save. The board is being asked to close a channel for good on the strength of an inconvenience the documents put no number on. That is thin ground for making the change permanent.
+
+## Six months, both routes, and something to measure
+
+Öppna beslut proposes a six-month trial in all seven venues with both booking routes kept open. During it, the administration records the time each booking route takes and asks users to say, voluntarily, why they chose the phone or the web. We make no claim to have funded or costed that trial. What it would cost is for the board to weigh.
+
+A booking made by phone is not proof that somebody cannot use the web. It is a reason to find out why the phone is still being used. I am not against digital booking. I am against settling its shape before the council can set the work each route costs staff against what it is worth to the people who use it.
+
+## What the board can decide on 18 June
+
+Postpone the permanent switch and run the six months with both routes open. When the trial has produced figures, decide whether a channel should be removed, changed or kept. That decision is the board's either way, and it will be a better one for being taken with the cost of both routes on the table.
+```
+
+**Settings:** genre `opinion`, technique `none`, language `en_GB`. All three come from the text's own `kntnt` map. No technique is applied because the map says `none`, and the opinion genre doesn't name one of its own either. No brief was used. The map already matched these settings, so I left it as it was.
+
+## Findings
+
+1. **Byline out of place (repaired).** The author line "— Sanna Ek, spokesperson for Öppna beslut" stood at the end of the text. A reader therefore met "Öppna beslut proposes…" and "We make no claim…" without knowing that the author speaks for Öppna beslut. The line now stands under the headline as "By Sanna Ek, spokesperson for Öppna beslut".
+2. **Standfirst missing (unresolved).** The only paragraph before the first subheading works as the lead, because the body depends on it for the decision it argues about. So the text has no standfirst: no summary that stands on its own for a web reader to see before the body.
+3. **Lead relied on the headline (repaired).** The lead said "the council executive board" and "all seven community venues" without saying whose. Only the headline named Lervik, and the body didn't name it until the section "What the pilot actually counted". The lead now says "Lervik's council executive board".
+
+Because the standfirst is missing, the text doesn't meet the article structure this genre requires. Some parts also run past the structure's recommended lengths:
+
+- The headline is 12 words and 68 characters, against a recommended three to eight words and 60 characters.
+- The single paragraphs in the first two sections are 85 and 84 words, against a recommended 80.
+
+Each of these still works, so none is a finding and none was changed.
+
+## What happened to the claims
+
+- **Changed:** the lead's first sentence now says the board is Lervik's council executive board. Before, it named no council (the repair for finding 3). The headline already said the phone booking is Lervik's.
+- **Removed:** none.
+- **Added:** none.
+
+No other claim moved.
+
+**What else changed:** the author line moved from the end of the text to below the headline, and now starts with "By" instead of a dash. The final spelling and grammar check made no corrections.

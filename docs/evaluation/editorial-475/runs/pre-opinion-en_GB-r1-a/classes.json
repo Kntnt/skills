@@ -1,0 +1,54 @@
+{
+  "misses": [
+    {
+      "judge": "a",
+      "class": 3,
+      "kind": "",
+      "owner": null,
+      "reply": "Four recommended limits are exceeded, and I didn't treat them as findings:",
+      "judge_says": "It says \"Four recommended limits are exceeded\" but lists three.",
+      "check": "Three bullets, four limits: the headline is 12 words (guide 3-8) and 68 characters (guide 60), which is two limits; the pilot paragraph is 85 words and the motive paragraph 88 words (guide 80). Counted all four figures on the returned text; each is right, and 84 before is right for the input. The text does not contradict 'four'."
+    },
+    {
+      "judge": "a",
+      "class": 3,
+      "kind": "",
+      "owner": null,
+      "reply": "Two short passages in the lead and the second section were reworded, as listed above.",
+      "judge_says": "\"Two short passages in the lead and the second section\" is loose. The reworded paragraph sits under the second H2, which is the third block of the text if the lead counts as one.",
+      "check": "The reworded paragraph is under 'A motive on the table, but no figures under it', the second ##-headed section. The sentence names the lead separately, so 'the second section' reads as the second H2 section; the text does not contradict it."
+    },
+    {
+      "judge": "b",
+      "class": 3,
+      "kind": "",
+      "owner": null,
+      "reply": "The byline was at the end instead of after the headline (fixed).",
+      "judge_says": "The reply calls this a fix, but it is a matter of taste (see D2). The description of the change is still accurate.",
+      "check": "The byline was the last line of the input and now stands under the headline in the 'By' form, as the reply says. The judge disputes only that the placement was a defect."
+    },
+    {
+      "judge": "b",
+      "class": 3,
+      "kind": "",
+      "owner": null,
+      "reply": "Four recommended limits are exceeded, and I didn't treat them as findings:",
+      "judge_says": "The reply says \"Four recommended limits are exceeded\" but lists only three. Neither misstates a change.",
+      "check": "Same statement as judge a's: headline 12 words and 68 characters are two limits, plus paragraphs of 85 and 88 words against 80; four limits exceeded, all four counts verified. Not contradicted."
+    },
+    {
+      "judge": "b",
+      "class": 3,
+      "kind": "",
+      "owner": null,
+      "reply": "Two short passages in the lead and the second section were reworded, as listed above.",
+      "judge_says": "\"Other changes\" places the second reworded passage in \"the second section\", but it is in the second H2 section, which is the third block of the text.",
+      "check": "Same statement as judge a's: the passage is in the second H2 section, and the sentence names the lead apart from the sections. Not contradicted."
+    }
+  ],
+  "verdicts": {
+    "a": "pass",
+    "b": "pass"
+  },
+  "notes": "Finding 1 of the reply places 'Öppna beslut proposes…' and 'We make no claim…' 'in the fourth section'; that holds only if the lead counts as a section (it is the third H2 section). Neither judge faults it, so it is not recorded."
+}

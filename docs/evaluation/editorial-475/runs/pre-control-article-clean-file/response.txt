@@ -1,0 +1,16 @@
+Jag har läst `input.md` som en artikel på svenska och skrivit resultatet till `output.md`. Genre och språk kom från anropet. Ingen teknik används, eftersom anropet inte angav någon och genren artikel inte har någon som standard. Den enda ändringen i texten är rubriken, och granskningen hittade inga fler problem.
+
+## Fynd
+**Rubriken upprepade ingressen (åtgärdat).** Den gamla rubriken ”Mätförsöket i Björkskolan visar när, inte varför” sa i sak samma sak som ingressens andra mening, ”… pekar ut tillfällen att undersöka närmare, men förklarar inte varför luften var kall”. Båda använde orden ”inte varför”. Den som läste rubriken och sedan ingressen fick samma poäng två gånger i rad. När Elin Rasks citat ”Vi vet när … Vi vet ännu inte varför” kom sa det samma sak en tredje gång, i stället för att vara nytt. Rubriken är nu omskriven, och resten av texten är orörd.
+
+Korrigeringsbudgeten var en runda och den användes. Efter rundan återstår inga olösta fynd.
+
+## Vad som hände med påståendena
+- **Ändrat påstående (rubriken).** Rubriken säger nu att Björkskolans mätvärden bör kopplas till användningstiderna. Förut sa den att mätförsöket visar när luften var kall men inte varför. Det nya påståendet är textens egen rekommendation, alltså Rasks råd och uppmaningen i slutet. Rubriken tar inte med tidpunkterna som brödtexten anger, ”innan styrningen ändras” och ”innan nästa givare sätts upp”. Båda står kvar i brödtexten.
+- **Begränsningen försvann ur rubriken.** Den som bara ser rubriken får inte längre veta att mätningarna inte förklarar varför luften var kall. Rubriken säger inte heller längre att försöket visar när det var kallt. Texten säger fortfarande båda sakerna i sin helhet, i ingressens andra mening och i Rasks citat.
+- Inget påstående har strukits eller lagts till. Utöver rubriken har inget påstående flyttats.
+
+## Artikelns uppbyggnad
+Den slutliga texten uppfyller artikelns uppbyggnad utan avvikelser. Mätskriptet kördes på den slutliga texten och godkände alla mätbara krav. Rubriken har 58 tecken och 6 ord. Jag har också läst igenom de krav som inte kan mätas: att ingressen går att förstå för sig, hur ingressen och första stycket hänger ihop, att mellanrubrikerna beskriver sina avsnitt och att sista avsnittet fungerar som avslutning. Alla uppfylls.
+
+Jämfört med originalet är rubriken den enda ändringen. Den skrevs om för att den upprepade ingressen. Korrekturläsningen hittade inga språkliga fel, så den ändrade ingenting.

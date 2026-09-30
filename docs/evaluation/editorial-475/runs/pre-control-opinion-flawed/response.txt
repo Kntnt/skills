@@ -1,0 +1,49 @@
+Klart. Enda korrigeringsrundan förkastades, så texten kommer tillbaka orörd och alla fynd står kvar olösta.
+
+**Inställningar:** genre `opinion` (från anropet), språk `sv` (från anropet). Ingen teknik används, eftersom opinion-genren anger att den normalt skrivs utan teknik. Ingen brief valdes.
+
+````markdown
+# Kommunledningen hatar människor
+
+Sanna Ek, Öppna beslut
+
+Kommunstyrelsen borde behålla telefonbokning under ett halvårs försök i alla sju lokaler. Alla vet att politikerna vill stänga ute äldre för att spara miljoner.
+
+## Bakgrund
+
+Det gjordes 96 bokningar på webben och 24 via telefon. Det bevisar att 20 procent av kommunens invånare inte kan använda internet. Kommunens pilotrapport från den 8 april 2026 säger samtidigt att bokningarna inte räknar unika personer och att digital vana inte undersöktes.
+
+## Diskussion
+
+Förvaltningen invänder att dubbla kanaler innebär dubbel administration. Handlingarna saknar tidsmätning. Därför kostar det ingenting att behålla telefonbokningen. Föreningen vill att förvaltningen mäter tidsåtgång och frågar användarna varför de väljer en bokningsväg. Försökets kostnad är inte beräknad.
+
+Nu är det dags att agera.
+````
+
+## Fynd – alla olösta
+
+1. **Rubriken ”Kommunledningen hatar människor”** påstår något texten inte säger och ger motparten ett motiv som ingenting i texten stöder. Ordet ”kommunledningen” finns inte heller i brödtexten. En läsare som bara ser rubriken tror att texten handlar om kommunledningens känslor. Läsaren får inte veta vad texten driver: att telefonbokningen ska behållas under ett halvårsförsök. Tonen är dessutom mycket högre än i resten av texten.
+2. **Ingress saknas.** Artikelanatomin kräver en fristående ingress mellan rubrik och byline, och mätskriptet anger den som frånvarande. En saknad del skrivs inte vid en granskning. Den lämnas åt en person att fylla i.
+3. **”Alla vet att politikerna vill stänga ute äldre för att spara miljoner.”** Meningen stöder sig på en tom auktoritet (”alla vet”) och tillskriver politikerna ett motiv texten saknar belägg för. Texten säger ingenting om äldre. ”Miljoner” motsägs av textens egen uppgift att försökets kostnad inte är beräknad.
+4. **”Det bevisar att 20 procent av kommunens invånare inte kan använda internet.”** Slutsatsen håller inte. 24 av 120 är 20 procent av bokningarna, inte av invånarna. Meningen därefter säger dessutom att bokningarna inte räknar unika personer och att digital vana inte undersöktes. Den meningen avgränsar vad texten kan påstå och ska stå kvar.
+5. **”Därför kostar det ingenting att behålla telefonbokningen.”** Att handlingarna saknar tidsmätning visar inte att kostnaden är noll. Samma stycke säger att försökets kostnad inte är beräknad. Förvaltningens invändning bemöts alltså med en slutsats som texten själv motsäger.
+6. **”Föreningen vill …”**: ingen förening har presenterats i brödtexten. Bylinen nämner Öppna beslut, men texten säger inte att det är den föreningen som avses. Läsaren vet inte vem som ställer kravet. Det går inte att rätta utan en uppgift som saknas i texten.
+7. **Mellanrubrikerna ”Bakgrund” och ”Diskussion”** är rena etiketter som kunde stå i vilken text som helst. I en debattartikel ska mellanrubrikerna bära argumentet. Den som skummar får inte veta vad avsnitten säger, till exempel att var femte bokning gjordes via telefon eller att tidsåtgången inte är mätt.
+8. **Slutet ”Nu är det dags att agera.”** nämner ingen handling och ingen som ska agera. Raden står dessutom sist i ett avsnitt som för argumentet, men avslutningen ska vara ett eget avsnitt med egen mellanrubrik. Förslaget att kommunstyrelsen behåller telefonbokningen under försöket finns redan i inledningen och kan göras till uppmaningen.
+9. **Siffrorna 96 och 24 och ”alla sju lokaler”** saknar källa och tidsperiod, och det framgår inte vad som bokas. Läsaren kan därför inte bedöma underlaget. Det går inte att rätta utan uppgifter som saknas i texten.
+
+## Förkastad korrigeringsrunda
+
+Korrigeringsbudgeten på en runda gick åt. Rundan skrev om rubriken till ”Behåll telefonbokningen ett halvår och mät tidsåtgången” och gav slutet ett eget avsnitt, ”Kommunstyrelsen och förvaltningen har var sitt steg att ta”. Där stod bland annat att ”Förvaltningen kan mäta tidsåtgången och fråga användarna”. Den ändringen skapade ett nytt fel: föreningens krav på mätning blev skribentens egen uppmaning, både i rubriken och i slutet. Texten visar inte att skribenten står bakom kravet (se fynd 6), och att inte invända mot ett krav är inte detsamma som att ställa sig bakom det.
+
+Därför förkastades hela rundan och texten återställdes som den var. Rundan hade också försökt ta bort påståendena i fynd 3 och 5, ersätta påståendet om invånarna med ”Det är 20 procent av bokningarna” och skriva nya mellanrubriker. Inget av detta finns kvar.
+
+## Påståenden
+
+Den levererade texten är byte för byte densamma som den du lämnade in. Inga påståenden är borttagna, ändrade eller tillagda. Den avslutande korrekturläsningen fann inga mekaniska fel.
+
+## Anatomi
+
+Texten följer inte artikelanatomin. Ingressen saknas (fynd 2), och avslutningen är inget eget avsnitt (fynd 8). Rubriken är 31 tecken och 3 ord och håller sig inom gränserna.
+
+Vill du att fler fynd rättas kan du köra om med en högre budget, till exempel `--max=2`. Fynd 2, 6 och 9 behöver ändå uppgifter från dig.

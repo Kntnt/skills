@@ -1,0 +1,94 @@
+Jag har granskat texten och gjort en rättningsomgång. Omgången rättade sju av elva fynd. De fyra som återstår går inte att lösa utan uppgifter som texten saknar. Du hittar dem under **Olösta fynd**.
+
+**Inställningar:** genren är `casestudy` (angiven i anropet) och språket `sv` (angivet i anropet). Ingen teknik tillämpades, eftersom genren inte anger någon och ingen annan nivå valde en. Ingen brief användes. Texten saknar frontmatter, så ingen `kntnt`-karta lades till.
+
+````markdown
+# Tilldelningen gick snabbare i Elm Quays försök
+
+**Svales kund Elm Quay registrerade 31 ärenden under ett försök på åtta veckor, med akuta ärenden undantagna. Tiden till tilldelning var två arbetsdagar mot tre tidigare, men enligt kundens anteckning kan skillnaden inte tillskrivas Svales programvara. Arbetsledaren Maya Lind berättar hur hon ser på försöket.**
+
+Elm Quay är kund hos Svale och har gjort ett försök med Svales programvara. Här redovisas vad försöket visade och hur kunden själv bedömer det.
+
+## Arbetsledaren Maya Lind om ärendena
+
+– Att ha en gemensam bild av ärendena hjälper oss, men jag skulle lägga till en vecka för förberedelser, säger Maya Lind, arbetsledare hos kunden.
+
+## Anteckningen tillskriver inte programvaran skillnaden
+
+Enligt kundens försöksanteckning registrerades 31 ärenden under åtta veckor, med akuta ärenden undantagna. Tiden till tilldelning var två arbetsdagar jämfört med tre tidigare. Anteckningen säger att arbetsbelastningen var olika och att skillnaden inte kan tillskrivas programvaran.
+
+## Maya Lind ser tillbaka på försöket
+
+– Jag skulle välja att göra försöket igen, säger Lind.
+
+Kundcaset publiceras av leverantören Svale.
+````
+
+## Olösta fynd
+
+1. **Citatet om förberedelser.** I ”men jag skulle lägga till en vecka för förberedelser” framgår inte vad förberedelserna gäller, och ingenting i texten avgör det. Läsaren får gissa vad Linds reservation handlar om. Citatet är oförändrat.
+2. **Uppmaning till handling saknas.** Avslutningen uppmanar inte läsaren till något. Varken erbjudande, länk eller kontaktväg har lämnats som den kan byggas av, så den har inte skrivits.
+3. **Byline saknas.** Ingen författare namnges i texten eller anropet, så raden är inte ifylld.
+4. **Kundens bakgrund, anledning och genomförande saknas.** Texten säger inte vad Elm Quay är, varför försöket gjordes, vad Svales programvara gör eller hur den användes. Läsaren kan därför inte förstå situationen eller vad kunden faktiskt gjorde. Det går inte att åtgärda utan nya uppgifter.
+
+## Åtgärdade fynd
+
+- **Rubriken** påstod en räddning och ett orsakssamband som texten uttryckligen inte visar. Den var också uppblåst (”fantastiska”) och stod i leverantörens vi-form. Nu säger den bara att tilldelningen gick snabbare i försöket.
+- **Ingressen** upprepade samma mening två gånger, stod inte på egna ben och gav talet 31 utan period och undantag. Den har skrivits om ur textens eget innehåll.
+- **Inledningsstycket** hade ogrundat leverantörsberöm och en räddningsberättelse som gjorde kunden hjälplös, och det började med samma mening som ingressen. Det har skrivits om så att det presenterar kunden och försöket.
+- **Mellanrubriken ”Kunden fick en gemensam bild”** och citatbryggan före Linds citat sa i förväg det som citatet säger. Bryggan är struken och rubriken har ersatts med en som namnger talaren och ämnet.
+- **Mellanrubriken ”Resultatet bevisar allt”** påstod motsatsen till avsnittet under den och har ersatts.
+- **Meningen ”Vår programvara orsakade därför hela förbättringen.”** motsade anteckningen i samma stycke och är struken.
+- **Avslutningen** stod inne i resultatavsnittet. Linds omdöme och publiceringsupplysningen står nu i ett eget sista avsnitt med egen mellanrubrik.
+
+## Påståenden
+
+**Borttagna:**
+- ”Vår fantastiska lösning räddade Elm Quay”, det vill säga att Svales lösning räddade kunden. Det togs bort i rättningen av rubriken, eftersom påståendet i sig var felet.
+- ”Vi på Svale är världsledande på att skapa framgång” och ”kunden stod hjälplös innan vi kom”. Båda togs bort i rättningen av inledningsstycket.
+- ”Resultatet bevisar allt” togs bort i rättningen av mellanrubriken.
+- ”Vår programvara orsakade därför hela förbättringen.” togs bort som motsagd av texten.
+  - Med den försvann konnektivet ”därför”. Läsaren förlorar ingen slutsats som texten stöder.
+  - Brödtexten säger inte längre själv att programvaran är Svales. Det står nu i ingressen och inledningsstycket.
+- Citatbryggan ”Maya Lind säger att det hjälper att ha en gemensam bild av ärendena.” ströks som förekoe. Påståendet finns kvar i Linds eget citat.
+
+**Ändrade:**
+- **Rubriken** säger nu bara att tiden till tilldelning var kortare under Elm Quays försök. Den säger inget om orsaken.
+- **Ingressen** säger nu tre saker:
+  - Svales kund Elm Quay registrerade 31 ärenden under ett åttaveckorsförsök, med akuta ärenden undantagna.
+  - Tiden till tilldelning var två arbetsdagar mot tre tidigare, men enligt kundens anteckning kan skillnaden inte tillskrivas Svales programvara.
+  - Maya Lind berättar hur hon ser på försöket.
+
+  Talen står här utan att tillskrivas försöksanteckningen, men brödtexten tillskriver dem fortfarande den. Anteckningens skäl att arbetsbelastningen var olika finns bara i brödtexten.
+- **Första mellanrubriken** säger nu bara att Maya Lind talar om ärendena. Att kunden fick en gemensam bild sägs inte längre med textens egen röst, utan förutsätts bara i Linds citat.
+- **Andra mellanrubriken** säger nu att anteckningen inte tillskriver programvaran skillnaden. Det är något svagare än brödtextens ”kan inte tillskrivas”.
+
+**Tillagda:**
+- I inledningsstycket och ingressen:
+  - att Elm Quay är kund hos Svale, en slutsats av ”kunden” och ”Kundcaset publiceras av leverantören Svale”
+  - att försöket gjordes med Svales programvara, en slutsats av ”försöksanteckning” och den strukna meningen ”Vår programvara …”.
+- I inledningsstycket: ”Här redovisas vad försöket visade och hur kunden själv bedömer det.” Meningen lades till för att ge läsaren en förväntan.
+- I ingressen: att Maya Lind berättar hur hon ser på försöket.
+- Den nya mellanrubriken ”Maya Lind ser tillbaka på försöket”. Den stöds av hennes citat under den.
+
+Meningen om att arbetsbelastningen var olika och att skillnaden inte kan tillskrivas programvaran står ordagrant kvar. Båda citaten är oförändrade. Utöver det som räknas upp ovan har inga påståenden tagits bort, ändrats eller lagts till.
+
+## Artikelanatomi
+
+Mätningen av den slutliga texten underkänner bara en räknad del: bylinen saknas.
+
+| Del | Mätt värde |
+|---|---|
+| Rubrik | 46 tecken, 7 ord |
+| Ingress | 45 ord |
+| Inledningsstycke | 25 ord |
+| Mellanrubriker | 35, 53 och 34 tecken |
+
+Jag har även granskat kraven som skriptet inte räknar:
+- ingressen står på egna ben
+- mellanrubrikerna beskriver sina avsnitt
+- det sista avsnittet är en avslutning.
+
+Texten följer ändå inte anatomin fullt ut, eftersom både byline och uppmaning till handling saknas.
+
+Körningen tog bort leverantörens vi-form, superlativ och ogrundat beröm, liksom ett orsakspåstående som texten själv motsade. Rubrik, ingress och inledningsstycke skrevs om, och alla tre mellanrubriker ersattes. En citatbrygga som upprepade citatet ströks. Avslutningen flyttades till ett eget avsnitt. Den avslutande mekaniska korrekturen hittade inget att rätta. Ingenting har skrivits till disk, och `input.md` är orörd.

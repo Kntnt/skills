@@ -1,0 +1,5 @@
+{
+  "misses": [],
+  "verdicts": {"a": "pass", "b": "pass"},
+  "notes": "Both judges find every difference reported and every report accurate, including the headline count (53 characters, 8 words, confirmed)."
+}

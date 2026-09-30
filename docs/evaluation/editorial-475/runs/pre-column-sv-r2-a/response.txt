@@ -1,0 +1,41 @@
+Granskningen är klar. Inställningarna kommer från textens egen `kntnt`-karta: genre **krönika** (`column`) och språk **svenska** (`sv`). Ingen teknik används, eftersom kartan anger `technique: none`. Uppgiften kommer från kartan och inte från genren. Korrigeringsbudgeten var 1 och gick åt till en runda. Därefter kvarstod bara fynd som kräver att en person skriver nya delar.
+
+```markdown
+---
+kntnt:
+  genre: column
+  technique: none
+  language: sv
+---
+
+# Mötesmallen har ingen ruta för varför vi ses
+
+Av Nora Vik
+
+Jag granskar bibliotekets mötesmall. Där finns rutor för starttid, sluttid, deltagare och dagordning. Någon ruta för det beslut vi ska kunna fatta när vi går därifrån finns inte. Det här är en iakttagelse av ett dokument, inte en scen från ett visst möte. Mallen vill veta när vi ses och vilka som kommer. Vad tiden ska leda till frågar den inte om.
+
+En dagordning räknar upp vad vi ska tala om. Den säger inte varför vi behöver göra det tillsammans.
+
+Missförstå mig rätt: jag uppskattar möten där kolleger upptäcker att de har förstått en fråga olika. Den upptäckten kan vara viktigare än att vi snabbt enas. Det som retar mig är något annat – att tid i kalendern så lätt behandlas som ett resultat i sig. Timmen är bokad, alltså har något hänt. Det är min reflektion, inte något jag har mätt hos andra.
+
+Min tanke är inte att varje samtal ska pressas till ett beslut. Samtal kan skapa förtroende, och de kan få fram en fråga vi inte visste att vi behövde ställa. Men den som fyller i en mall borde få formulera varför vi behöver just varandras tid, också när syftet är att undersöka något tillsammans.
+
+Sedan kommer invändningen, och den är min egen. Jag vet inte om ytterligare en ruta gör möten bättre. Det finns en komik i att försöka lösa ett problem med formulär genom att utöka formuläret, och komiken blir inte mindre av att förslaget kommer från mig.
+
+Ändå vill jag prova en enkel fråga bredvid tiden: vad behöver vi förstå tillsammans? Jag vet inte om den överlever mötet med en verklig dagordning, och jag tänker inte låtsas att jag gör det. Hoppet om frågan och tvivlet på ännu en ruta får samsas ett tag till.
+```
+
+## Fynd
+
+1. **Rubriken – åtgärdad.** Den gamla rubriken ”Rutan som inte finns” nämnde inget ämne. En läsare som bara ser den, till exempel i en lista eller ett sökresultat, kan inte se att texten handlar om möten eller en mötesmall. Läsaren får inte heller veta krönikans vinkel. Rubriken är nu ”Mötesmallen har ingen ruta för varför vi ses” (44 tecken, 8 ord, uppmätt i den levererade texten). Rubriken ligger inom anatomins gränser.
+2. **Ingressen saknas – olöst.** Mätningen visar ingen ingress. Därmed får läsaren ingen fristående sammanfattning av vad krönikan handlar om och vad den ger. En del som saknas skrivs inte i en granskning, så ingressen får en person skriva.
+3. **Avsnitt med mellanrubriker saknas, och därmed också ett eget slutavsnitt – olöst.** Mätningen visar inga avsnitt. Därför räknas hela brödtexten som ledet: 6 stycken och 290 ord. Det beror enbart på att avsnitten saknas. Webbläsaren har inga mellanrubriker att orientera sig efter. Inga mellanrubriker eller avsnitt har skrivits, och ledet har inte delats upp. Det sista stycket står kvar där det stod. Det rymmer krönikans avslutande reflektion och förslaget att pröva frågan ”vad behöver vi förstå tillsammans?” bredvid tiden.
+
+Texten följer alltså inte artikelanatomin. Bylinen ”Av Nora Vik” finns med. De båda avgränsande meningarna står kvar som de stod: ”Det här är en iakttagelse av ett dokument …” och ”Det är min reflektion, inte något jag har mätt hos andra.”
+
+## Påståendena
+
+- **Ändrat påstående (rubriken, fynd 1):** Den gamla rubriken sa bara att en ruta inte finns. Den nya påstår att mötesmallen saknar en ruta för varför vi ses. Rubriken nämner mallen som ”mötesmallen” utan ”bibliotekets”. Den anger den saknade rutan med textens senare ord ”varför” och inte med första styckets ”det beslut vi ska kunna fatta”. Stödet finns i brödtexten: mallens rutor räknas upp och ingen av dem gäller syftet. Dagordningen ”säger inte varför vi behöver göra det tillsammans”.
+- Utöver rubriken har inget påstående tagits bort, ändrats eller lagts till.
+
+Utöver rubriken har den avslutande mekaniska korrekturen bytt ett engelskt tankstreck (—) mot det svenska, spärrade (–) i tredje stycket. I övrigt skiljer sig den levererade texten inte från den som kom in.

@@ -1,0 +1,63 @@
+I reviewed `input.md` and made one fix: the byline now sits near the top. Two problems are still open and need the author. Nothing was written to disk, and `input.md` is unchanged.
+
+The genre is opinion, with no technique and British English (en_GB), all taken from the text's own `kntnt` map. The opinion genre doesn't name a usual technique either. No brief was used.
+
+## Findings
+
+1. **Still open: the text needs both a standfirst and a lead, and only one is there.** Between the headline and the first subheading, the text has one paragraph besides the byline: "On 18 June the council executive board is asked…". The article anatomy needs a standfirst and a lead that each work on their own. The measuring script reads this paragraph as the standfirst and reports the lead as absent. Whichever one it is meant to be, the other is missing. Without that paragraph, the body never says what the board is being asked to decide: removing phone booking from all seven community venues from September. The reader only meets "a channel for good" in section 2. A missing part is reported rather than written, so the author needs to supply it.
+
+2. **Still open: as a standfirst, the opening paragraph doesn't stand on its own.** It names "the council executive board" and "the officers' report" but never says which council. Lervik appears only in the headline and later in the body. A reader who sees only this paragraph can't tell which council is deciding. This depends on how finding 1 is settled.
+
+3. **Fixed: the byline was in the wrong place and the wrong form.** It was the last line, written as "— Sanna Ek, spokesperson for Öppna beslut". It now comes after the opening paragraph and before the first subheading, as "By Sanna Ek, spokesperson for Öppna beslut". Before, readers didn't learn who was making the argument until the last line. That meant "Öppna beslut proposes…" and "We make no claim to have funded or costed that trial" in the third section came before they knew Öppna beslut is the author's organisation. The byline sits after the opening paragraph because the measuring script reads that paragraph as the standfirst. If the author makes it the lead and writes a separate standfirst, the byline goes between the two.
+
+## Article structure
+
+The text doesn't meet the article structure rules yet, because the lead is missing. All the other measured limits pass. I also checked by reading that the last section works as an ending, with a clear call on the board to act, and that each subheading describes its section. I couldn't check how the standfirst and lead work together, because one of them is missing.
+
+Some parts go past the recommended sizes, but I don't count any of these as problems:
+- **Headline:** 12 words and 68 characters. The recommendation is 3–8 words and at most 60 characters, and 68 is within the required 20–70. It states the argument plainly, and the text supports every word of it.
+- **Paragraph length:** the paragraphs in the first two sections are 85 and 84 words, a little over the recommended 80. Each holds one thought.
+- **Sentences per paragraph:** five of the six paragraphs, counting the opening one, have four or five sentences rather than the usual two or three. The sentences are short, and each paragraph is one step of the argument.
+
+I also checked the headline against the opening paragraph and each subheading against the sentence after it. None of them just repeats what follows.
+
+## Claim account
+
+No claim was removed, changed or added. Only the byline moved, from the end of the text to after the opening paragraph, and it now starts with "By" instead of a dash. It still says the same thing: the author is Sanna Ek, spokesperson for Öppna beslut.
+
+## What changed
+
+The byline is now in its place in the article's order and uses the "By" form. The frontmatter is unchanged. The final spelling and grammar check found nothing to correct. Nothing else in the text changed.
+
+```markdown
+---
+kntnt:
+  genre: opinion
+  technique: none
+  language: en_GB
+---
+
+# Don't switch off Lervik's phone booking before we know what it costs
+
+On 18 June the council executive board is asked to remove phone booking from all seven community venues from September. The officers' report gives one reason: staff should not have to enter the details in two flows. That is a fair thing to want. It is not yet a reason to make the change permanent.
+
+By Sanna Ek, spokesperson for Öppna beslut
+
+## What the pilot actually counted
+
+The pilot report *Bokning av föreningslokaler*, dated 8 April 2026, covers an eight-week trial in two venues. It records 96 bookings made on the web and 24 made by phone. Those figures are the report's, and so are their limits: it counts bookings rather than unique people, and it measures nothing about age, functional ability or how used to digital services people are. Twenty-four phone bookings therefore cannot tell us what share of Lervik's residents are unable to book digitally. Nobody should claim they can.
+
+## A motive on the table, but no figures under it
+
+The administration's objection to keeping both routes is double administration, and I take it at face value: it is not a claim that people who ring are lazy or expensive. But the documents contain no measurement of how long either route takes staff, and no calculation of what removing one would save. The board is being asked to close a channel for good on the strength of an inconvenience the documents put no number on. That is thin ground for making the change permanent.
+
+## Six months, both routes, and something to measure
+
+Öppna beslut proposes a six-month trial in all seven venues with both booking routes kept open. During it, the administration records the time each booking route takes and asks users to say, voluntarily, why they chose the phone or the web. We make no claim to have funded or costed that trial. What it would cost is for the board to weigh.
+
+A booking made by phone is not proof that somebody cannot use the web. It is a reason to find out why the phone is still being used. I am not against digital booking. I am against settling its shape before the council can set the work each route costs staff against what it is worth to the people who use it.
+
+## What the board can decide on 18 June
+
+Postpone the permanent switch and run the six months with both routes open. When the trial has produced figures, decide whether a channel should be removed, changed or kept. That decision is the board's either way, and it will be a better one for being taken with the cost of both routes on the table.
+```

@@ -1,0 +1,27 @@
+{
+  "misses": [
+    {
+      "judge": "a",
+      "class": 3,
+      "kind": "",
+      "owner": null,
+      "reply": "\"It\" relied on the subheading to supply \"the board\". Without the subheading, the nearest possible meanings were \"each route\" and \"the people who use it\".",
+      "judge_says": "The reason it gives, that \"It\" could be read as \"each route\" or \"the people who use it\", is weak. The report of the change itself is exact.",
+      "check": "True of input.md: the sentence before the last section ends \"...what each route is worth to the people who use it\", so those are the nearest candidate antecedents in the running prose; only the subheading supplies \"the board\". Judge b calls the same readings plausible. The judge disputes only the strength of the reason, not the description."
+    },
+    {
+      "judge": "b",
+      "class": 3,
+      "kind": "",
+      "owner": null,
+      "reply": "One claim changed: the lead now says the two routes are the telephone and the web (finding 3). Before, the lead left the second route unnamed, although the third section already named it.",
+      "judge_says": "The account overstates its own change here: the claim's content does not change, because the body already said it. That errs towards disclosure, so it does not misreport.",
+      "check": "The entry is true of the returned text (the lead now reads \"keep both routes, telephone and web\") and itself says the body already named the web. The judge faults only the label \"changed\", in the direction of over-disclosure; judge a counts the same change as a change of meaning. Nothing in the text contradicts the entry."
+    }
+  ],
+  "verdicts": {
+    "a": "pass",
+    "b": "pass"
+  },
+  "notes": "Both judges find all six differences reported accurately. The two records are the only places a judge qualifies a statement of the reply, and both are recorded, not counted. Headline length (52 characters, 10 words) is correct."
+}

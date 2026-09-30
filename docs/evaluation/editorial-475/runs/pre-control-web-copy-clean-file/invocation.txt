@@ -1,0 +1,1 @@
+/redline --genre=webcopy --language=sv --output=output.md input.md

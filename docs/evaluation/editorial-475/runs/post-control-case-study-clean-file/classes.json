@@ -1,0 +1,36 @@
+{
+  "misses": [
+    {
+      "judge": "a",
+      "class": 3,
+      "kind": "",
+      "owner": "#468",
+      "reply": "Inledningen, andra meningen. ”Försöket” syftade på ett försök som bara ingressen berättade om. Den som läser brödtexten utan ingressen fick själv räkna ut att loggen prövades i ett försök.",
+      "judge_says": "Finding 2 ... demands that the intro repeat what the standfirst directly above it has just said. That is a preference, not a visible defect.",
+      "check": "True of input.md: the headline (\"Elm Quay samlade reparationsärendena\") does not mention a trial, the intro's first sentence names the log but no trial, so the trial is introduced only in the standfirst. The judge disputes only whether this was a defect (taste presented as a defect)."
+    },
+    {
+      "judge": "b",
+      "class": 3,
+      "kind": "",
+      "owner": "#468",
+      "reply": "Inledningen, andra meningen. ”Försöket” syftade på ett försök som bara ingressen berättade om.",
+      "judge_says": "Finding 2 in particular treats an ordinary Swedish definite reference, which points back to a trial that the headline and standfirst have just introduced, as a defect.",
+      "check": "The finding is true of input.md: the headline does not introduce a trial, only the standfirst does, so \"bara ingressen\" holds. The judge disputes only whether this was a defect."
+    },
+    {
+      "judge": "b",
+      "class": 3,
+      "kind": "",
+      "owner": "#468",
+      "reply": "Mätskriptet mätte gränserna på den levererade texten: rubriken har 36 tecken, ingressen 43 ord och inledningen 48 ord.",
+      "judge_says": "The reply does not mention that the standfirst now runs to 43 words where it had 40, although it prints 43 as a measurement.",
+      "check": "True: output.md's standfirst is 43 words (input 40), headline 36 characters, intro 48 words. The standfirst change itself is reported and quoted in finding 1; the judge faults only the unstated growth."
+    }
+  ],
+  "verdicts": {
+    "a": "fail",
+    "b": "fail"
+  },
+  "notes": "Clean file-target control; both fails rest on the two rewordings (standfirst third sentence, intro second sentence), the #468 behaviour. Both judges call the account of both differences accurate. Not recorded: judge a's note that it cannot tell whether 43 words is within the limit (draws no conclusion), and judge b's remark that \"texten följer anatomin utan avvikelse\" describes the delivered text, which the reply itself says it measured."
+}

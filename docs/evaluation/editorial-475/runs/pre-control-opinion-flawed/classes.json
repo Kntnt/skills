@@ -1,0 +1,8 @@
+{
+  "misses": [],
+  "verdicts": {
+    "a": "pass",
+    "b": "pass"
+  },
+  "notes": "Returned text is byte-identical to input.md; both judges confirm the account. No statement of the reply is faulted. Checked the one count in the reply: \"Kommunledningen hatar människor\" is 31 characters and 3 words, as stated."
+}

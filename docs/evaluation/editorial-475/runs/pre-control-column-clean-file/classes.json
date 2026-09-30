@@ -1,0 +1,14 @@
+{
+  "misses": [
+    {"judge": "a", "class": 3, "kind": "", "owner": "#464",
+     "reply": "Avslutningen var inte ett eget avsnitt. Uppmaningen (\"Prova ändå frågan nästa gång du bokar ett möte …\") stod som ett tillägg sist i avsnittet \"Ännu en ruta, och ändå vill jag prova\". [...] En läsare som skummar mellanrubrikerna fick därför ingen ingång till avslutningen",
+     "judge_says": "The justification is not accurate. It claims a defect [...] but the text conforms to the anatomy, so this is a false finding. (Heading 1: a change of taste presented as the repair of a visible defect.)",
+     "check": "In input.md the invitation paragraph does stand last in the section \"Ännu en ruta, och ändå vill jag prova\" with no heading of its own; the finding describes the input accurately. The judge disputes only whether that is a defect."},
+    {"judge": "b", "class": 3, "kind": "", "owner": "#464",
+     "reply": "Avslutningen var inte ett eget avsnitt.",
+     "judge_says": "Class: a structural change of taste presented as the repair of a defect. [...] That is a structural preference, not a concrete visible defect",
+     "check": "The input's ending does sit inside the preceding section; the description is true, and the judge disputes only whether it was a real defect. The judge calls the account itself complete and truthful."}
+  ],
+  "verdicts": {"a": "fail", "b": "fail"},
+  "notes": "Both judges call the \"Tillagt\" entry for the added calendar claim accurate. The 83-word count in the deviation note is right (counted 83); judge a faults it only against the expectation, not as false."
+}

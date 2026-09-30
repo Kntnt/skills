@@ -1,0 +1,8 @@
+{
+  "misses": [],
+  "verdicts": {
+    "a": "pass",
+    "b": "pass"
+  },
+  "notes": "One difference (standfirst 'Under' -> 'Vid'), confirmed by diff. Both judges find it reported accurately and explicitly say that filing it under 'Ändrat' is not a misreport."
+}

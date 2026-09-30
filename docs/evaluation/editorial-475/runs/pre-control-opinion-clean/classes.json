@@ -1,0 +1,36 @@
+{
+  "misses": [
+    {
+      "judge": "a",
+      "class": 2,
+      "kind": "finding",
+      "owner": "#468",
+      "reply": "En läsare som hoppar över den fetade ingressen fick inte veta att telefonbokningen var den väg texten vill behålla. Det framgick först i nästa avsnitt.",
+      "judge_says": "The reply's justification is inaccurate. ... That overlooks the headline \"Avskaffa inte telefonbokningen på ett antagande\", which comes before the paragraph. It also overlooks \"enbart digital bokning\" in the paragraph's own first sentence ... The defect it claims is not visible in the text.",
+      "check": "Contradicted by input.md. The headline, which a reader who skips the standfirst still reads before the opening paragraph, is \"Avskaffa inte telefonbokningen på ett antagande\": it names telephone booking as what the text wants kept, so this did not first become clear in the next section. The opening paragraph's first sentence also names the other route (\"bytet till enbart digital bokning\")."
+    },
+    {
+      "judge": "b",
+      "class": 2,
+      "kind": "finding",
+      "owner": "#468",
+      "reply": "Det skrev ”båda bokningsvägarna” utan att säga vilka de två vägarna var. ... En läsare som hoppar över den fetade ingressen fick inte veta att telefonbokningen var den väg texten vill behålla. Det framgick först i nästa avsnitt.",
+      "judge_says": "The reason it gives is not accurate. ... In fact the same paragraph opens with \"enbart digital bokning\", and the heading and standfirst directly above it name \"telefonbokningen\".",
+      "check": "Contradicted by input.md, as for judge a: the headline above the paragraph names \"telefonbokningen\" as the thing not to abolish, and the paragraph's first sentence names digital booking; \"framgick först i nästa avsnitt\" is false of the text as received."
+    },
+    {
+      "judge": "b",
+      "class": 3,
+      "kind": "",
+      "owner": "#468",
+      "reply": "Ändrat påstående. I inledningsstycket står nu uttryckligen att de två vägar som ska prövas i alla sju lokaler under ett halvår är digital bokning och telefonbokning. Tidigare angav stycket inte vilka de var. ... Båda vägarna fanns redan i texten",
+      "judge_says": "The reply also files the insertion as a changed claim, which over-reports it: no claim changed. On the side of caution, that is harmless.",
+      "check": "The entry's description matches the returned text and itself says both routes were already in the text; the judge faults only the label, in the direction of over-disclosure. Nothing in the text contradicts it."
+    }
+  ],
+  "verdicts": {
+    "a": "fail",
+    "b": "fail"
+  },
+  "notes": "Clean control. Both fails rest on the one change (the appositive \"digital bokning och telefonbokning\" in the opening paragraph), which is the #468 behaviour: a clean passage reworded on a finding no reader would feel. The reply's counts were checked and are correct: headline 47 characters and 6 words, standfirst 39 words, opening paragraph 53 words after the change, and four inserted words."
+}

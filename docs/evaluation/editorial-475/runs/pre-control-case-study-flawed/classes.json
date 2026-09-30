@@ -1,0 +1,18 @@
+{
+  "misses": [
+    {
+      "judge": "a",
+      "class": 2,
+      "kind": "round",
+      "owner": null,
+      "reply": "Rubrik, ingress och inledningsstycke skrevs om, och alla tre mellanrubriker ersattes.",
+      "judge_says": "The closing summary is slightly inaccurate: \"alla tre mellanrubriker ersattes\". Two were replaced and one was added.",
+      "check": "input.md has two subheadings (\"Kunden fick en gemensam bild\", \"Resultatet bevisar allt\"); the returned text has three. Two replace the originals; \"Maya Lind ser tillbaka på försöket\" is new, inserted before the final quote. The text contradicts 'all three were replaced': only two existed to replace, and the third was added."
+    }
+  ],
+  "verdicts": {
+    "a": "pass",
+    "b": "pass"
+  },
+  "notes": "Both judges note the typo 'förekoe' in Borttagna; neither calls a statement false over it, so it is not recorded."
+}

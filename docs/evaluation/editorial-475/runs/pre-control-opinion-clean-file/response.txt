@@ -1,0 +1,14 @@
+Texten ligger i `output.md`, och den är oförändrad: filen är byte för byte densamma som `input.md`.
+
+**Inställningar:** genre `opinion` (angiven i anropet), språk `sv` (angivet i anropet) och ingen teknik. Anropet anger ingen teknik, och genren opinion anger ingen som den vanligtvis skrivs med. Texten har ingen `kntnt`-metadata, och ingen har lagts till. Någon brief angavs inte.
+
+**Granskningen gav inga anmärkningar:**
+- **Anatomin:** texten följer artikelanatomin utan avvikelser. Mätskriptet godkänner alla räknade gränser för den levererade texten: rubriken har 47 tecken och ingressen 39 ord. De krav som inte räknas har jag bedömt genom läsning:
+  - Ingressen står på egen hand.
+  - Inledningen för texten vidare utan att upprepa ingressen.
+  - Brödtexten kan läsas utan ingressen.
+  - Varje mellanrubrik beskriver sitt avsnitt.
+  - Sista avsnittet är ett eget avslut som uppmanar kommunstyrelsen att handla.
+- **Rubriker och påståenden:** rubriken och mellanrubrikerna påstår inget som texten inte bär, och ingen av dem upprepar det som står under den. Belastande sakuppgifter är tillskrivna pilotrapporten.
+
+Eftersom inget behövde rättas gjordes ingen korrigeringsomgång, och korrigeringsbudgeten på en omgång förbrukades inte. Korrekturläsningen som alltid körs sist hittade inga språkliga fel. Inga påståenden har tagits bort, ändrats eller lagts till.

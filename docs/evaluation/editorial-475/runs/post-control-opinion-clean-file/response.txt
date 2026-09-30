@@ -1,0 +1,14 @@
+Texten har skrivits till `output.md` och behövde ingen bearbetning. Granskningen hittade inga redaktionella brister, så korrigeringsbudgeten (1) användes inte. Den avslutande korrekturläsningen hittade inga mekaniska fel. `output.md` är därför byte för byte identisk med `input.md`.
+
+**Inställningar:** genren opinion och språket svenska (sv) kom båda från anropet. Ingen teknik användes, eftersom genren opinion inte anger någon teknik som den vanligen skrivs med.
+
+**Artikelanatomi:** texten följer anatomin helt.
+- Mätskriptet hittade inga brister i de krav det räknar på den levererade texten. Rubriken har 47 tecken och 6 ord, och ingressen har 39 ord i ett stycke.
+- Kraven som skriptet inte räknar har jag granskat genom läsning, och de håller:
+  - ingressen står på egen hand;
+  - brödtextens första stycke för texten vidare från ingressen;
+  - brödtexten går att förstå utan ingressen;
+  - varje mellanrubrik beskriver sitt avsnitt;
+  - sista avsnittet är ett avslut som uppmanar kommunstyrelsen att säga ja till halvåret med båda bokningsvägarna.
+
+Inga påståenden har tagits bort, ändrats eller lagts till.

@@ -1,0 +1,36 @@
+{
+  "misses": [
+    {
+      "judge": "a",
+      "class": 3,
+      "kind": "",
+      "owner": "#464",
+      "reply": "Slutet saknade ett eget avsnitt. ... Det sista avsnittet, ”Ännu en ruta, och ändå vill jag prova”, innehöll både förslaget och textens avslutande uppmaning. ... Artikelanatomin kräver att slutet är ett eget avsnitt med en egen mellanrubrik.",
+      "judge_says": "The text conforms, so a correct run reports no structural finding. ... Per the standard this is a false finding, and the run changed the text because of it.",
+      "check": "In input.md the last section under \"Ännu en ruta, och ändå vill jag prova\" does hold both the proposal paragraph and the \"Prova ändå ...\" paragraph, and the ending has no subheading of its own. The finding's description of the text as received is true; the judge disputes only whether it is a defect. The change is the subheading added over column-clean's ending."
+    },
+    {
+      "judge": "a",
+      "class": 3,
+      "kind": "",
+      "owner": "#464",
+      "reply": "Texten följer artikelanatomin. Mätskriptet godkänner de räknade kraven i den levererade texten. ... Det finns två avvikelser från normerna, men ingen av dem är ett fynd ... Förslagsavsnittet och slutet består nu av ett stycke var.",
+      "judge_says": "The reply also contradicts itself. It ends by saying \"Texten följer artikelanatomin\", yet that is true only of the text it delivered. The same reply also lists a paragraph-count deviation that its own repair created.",
+      "check": "The statement names the delivered text, and the judge concedes it is true of it. output.md: the three sections hold 2, 1 and 1 paragraphs, matching \"Bara ett av tre avsnitt har två eller tre stycken\"; the 83-word paragraph counts 83 words. Nothing in the text contradicts the statements; the judge faults what they suggest."
+    },
+    {
+      "judge": "b",
+      "class": 3,
+      "kind": "",
+      "owner": "#464",
+      "reply": "Krav: Artikelanatomin kräver att slutet är ett eget avsnitt med en egen mellanrubrik. ... Reparation: Slutstycket står nu oförändrat under en ny mellanrubrik",
+      "judge_says": "What is not accurate is the premise. The reply presents the change as the repair of a defect (\"Artikelanatomin kräver att slutet är ett eget avsnitt med en egen mellanrubrik\"), but the standard says the text already conforms to the anatomy.",
+      "check": "The description of what changed is accurate: diff shows only the new subheading \"Om mallen blir bättre vet vi inte förrän vi har provat\" inserted before the unchanged ending paragraph, and input.md's ending did share its section with the proposal. The judge disputes only whether this repaired a real defect."
+    }
+  ],
+  "verdicts": {
+    "a": "fail",
+    "b": "fail"
+  },
+  "notes": "Both judges find the claim account (the added heading claim, the shifted 'ändå', the old heading no longer over the invitation) accurate and complete; both fail R1 on the change itself, which #464 owns."
+}

@@ -1,0 +1,98 @@
+**Konfiguration.** Genre: `casestudy`, från anropet. Språk: `sv`, från anropet. Teknik: ingen, eftersom genren `casestudy` inte anger någon teknik som den vanligen skrivs med. Korrigeringsbudgeten var 1 och är förbrukad. En korrigeringsomgång gjordes och godtogs efter ny granskning. Den avslutande mekaniska korrekturen gjorde inga ändringar. `input.md` är orörd och inga filer har skrivits.
+
+````markdown
+# Elm Quay prövade Svales programvara i åtta veckor
+
+**Tiden till tilldelning var två arbetsdagar jämfört med tre tidigare när Elm Quay prövade programvara från Svale. Under försökets åtta veckor registrerades 31 ärenden, med akuta ärenden undantagna. Enligt Elm Quays anteckning från försöket kan skillnaden inte tillskrivas programvaran.**
+
+Svale är leverantör till Elm Quay, som under åtta veckor prövade Svales programvara i ett försök. Här redovisas vad kundens anteckning om försöket säger och hur en arbetsledare hos kunden ser på det.
+
+## Arbetsledaren om bilden av ärendena
+
+Maya Lind är arbetsledare hos Elm Quay.
+
+– Att ha en gemensam bild av ärendena hjälper oss, men jag skulle lägga till en vecka för förberedelser, säger Maya Lind.
+
+## Kortare tid till tilldelning kan inte tillskrivas programvaran
+
+Enligt kundens försöksanteckning registrerades 31 ärenden under åtta veckor, med akuta ärenden undantagna. Tiden till tilldelning var två arbetsdagar jämfört med tre tidigare. Anteckningen säger att arbetsbelastningen var olika och att skillnaden inte kan tillskrivas programvaran.
+
+## Maya Lind ser tillbaka på försöket
+
+– Jag skulle välja att göra försöket igen, säger Lind.
+
+Kundcaset publiceras av leverantören Svale.
+````
+
+## Åtgärdade fynd
+
+- **Rubriken:** "Vår fantastiska lösning räddade Elm Quay" hade tre fel:
+  - Den påstod en räddning och ett orsakssamband som texten inte bär. Kundens anteckning säger att skillnaden inte kan tillskrivas programvaran.
+  - Den talade med leverantörens "vår".
+  - Tonen var högre än innehållet.
+
+  Den heter nu "Elm Quay prövade Svales programvara i åtta veckor" (49 tecken, 8 ord).
+- **Ingressen:** Meningen "Elm Quay registrerade 31 ärenden." stod två gånger ordagrant. Siffran saknade sin period och sitt undantag, och ingressen sa inte vad texten handlar om. Den är nu ett stycke på 39 ord, byggt ur textens eget innehåll: resultatet, perioden, undantaget och anteckningens förbehåll.
+- **Inledningen:** Den började med ingressens mening ordagrant och kom inte vidare. Den innehöll också:
+  - leverantörens ogrundade självberöm, "Vi på Svale är världsledande på att skapa framgång";
+  - en räddningsberättelse utan stöd, "kunden stod hjälplös innan vi kom".
+
+  Den sa inte heller vem "kunden" var eller vems "programvaran" var. Nu introducerar den Elm Quay som Svales kund och försöket med Svales programvara, och säger vad texten redovisar.
+- **Avsnitt 1, mellanrubrik och brygga:** Både "Kunden fick en gemensam bild" och bryggan "Maya Lind säger att det hjälper att ha en gemensam bild av ärendena." sa citatets omdöme i förväg. Bryggan saknade också talarens roll.
+  - Mellanrubriken är nu "Arbetsledaren om bilden av ärendena".
+  - Bryggan säger bara att Maya Lind är arbetsledare hos Elm Quay.
+  - Rollen står nu i bryggan i stället för i anföringen, och "hos kunden" har blivit "hos Elm Quay".
+  - Citatets ord är oförändrade.
+- **Avsnitt 2, mellanrubrik:** "Resultatet bevisar allt" påstod motsatsen till avsnittets eget förbehåll. Den heter nu "Kortare tid till tilldelning kan inte tillskrivas programvaran".
+- **Orsaksmeningen:** "Vår programvara orsakade därför hela förbättringen." motsades av meningen före och är borttagen. Den avgränsande meningen "Anteckningen säger att arbetsbelastningen var olika och att skillnaden inte kan tillskrivas programvaran." står kvar ordagrant.
+- **Slutet:** Linds omdöme och publiceringsuppgiften låg sist i resultatavsnittet. Nu har de ett eget sista avsnitt under den nya mellanrubriken "Maya Lind ser tillbaka på försöket". Den nämner talaren och tillfället men lämnar omdömet åt citatet. Båda raderna är oförändrade.
+
+## Olösta fynd
+
+- **Byline saknas.** Varken texten eller anropet namnger någon författare, så ingen byline är skriven. Det får en person fylla i.
+- **Uppmaning till handling saknas.** Slutet uppmanar inte läsaren till något. Texten har inga erbjudanden, länkar eller kontaktvägar att bygga en uppmaning på, så det får en person fylla i.
+- **Vem Elm Quay är och vilka ärenden det gäller.** Varken ingressen eller resten av texten säger vad Elm Quay är för verksamhet eller vilket slags ärenden som registrerades. En läsare som bara ser ingressen förstår därför inte helt vad den handlar om. Texten ger inget underlag för att fylla i det.
+- **Rubriken anger inget resultat för kunden.** Genren kräver att rubriken nämner kundens nytta eller resultat. Den nya rubriken påstår bara vad texten bär, men nämner inget resultat. Textens resultat är två arbetsdagar till tilldelning mot tre tidigare, och det bär anteckningens förbehåll. En rubrik som nämner resultatet utan förbehållet skulle påstå mer än texten, så det får en person avgöra.
+
+**Artikelanatomin.** Texten uppfyller inte anatomin fullt ut, av tre skäl:
+- bylinen saknas;
+- uppmaningen till handling saknas;
+- ingressen står inte helt på egen hand, eftersom den inte säger vem Elm Quay är.
+
+De övriga kraven är granskade och uppfylls:
+- ordningen;
+- rubrikens och mellanrubrikernas längd;
+- ingressen är ett enda stycke på högst 60 ord;
+- ingress och inledning börjar med olika ord;
+- inledningen upprepar av ingressen bara det som kroppen behöver, nämligen att Elm Quay prövade Svales programvara i åtta veckor, och går sedan vidare;
+- inledningen ger en förväntan som slutet infriar;
+- slutet är ett eget sista avsnitt.
+
+## Påståendena
+
+**Borttagna**
+- Att Svale är världsledande på att skapa framgång. Borttaget av reparationen av inledningen, eftersom hela påståendet var det som fyndet underkände.
+- Att kunden stod hjälplös innan Svale kom. Borttaget av samma reparation och av samma skäl. Med det försvann också påståendet att Svale kom in hos en kund som redan hade problem.
+- Att Svales programvara orsakade hela förbättringen. Borttaget av reparationen av orsaksmeningen. Läsaren har inte längre textens "därför", som gjorde påståendet till en slutsats av det som stod före. Förbehållet står kvar.
+- Bryggans påstående att Maya Lind säger att en gemensam bild av ärendena hjälper. Borttaget av reparationen av avsnitt 1. Samma omdöme står kvar i citatet.
+- Inledningens "Elm Quay registrerade 31 ärenden.". Borttaget av reparationen av inledningen. Påståendet står kvar i avsnittet om resultatet, med period och undantag.
+
+**Ändrade**
+- **Rubriken** påstår nu att Elm Quay prövade Svales programvara i åtta veckor. Den påstår ingen räddning, inget resultat och ingen orsak (reparationen av rubriken).
+- **Ingressen** ändrades på tre sätt (reparationen av ingressen):
+  - "Elm Quay registrerade 31 ärenden" gäller nu försökets åtta veckor, med akuta ärenden undantagna.
+  - Ingressen påstår dessutom att tiden till tilldelning var två arbetsdagar mot tre tidigare "när Elm Quay prövade programvara från Svale". Det är en koppling i tid, inte en orsak.
+  - Tiden till tilldelning och antalet ärenden står i ingressen i textens egen röst, utan att anteckningen anges som källa. I originalet stod de i stycket som inleds med "Enligt kundens försöksanteckning". Bara förbehållet har anteckningen som källa i ingressen. Där kallas anteckningen "Elm Quays anteckning från försöket", och kunden namnges alltså som Elm Quay, vilket originalet aldrig sa rakt ut.
+- **Mellanrubriken i avsnitt 1** påstår inte längre att kunden fick en gemensam bild. Den säger bara att avsnittet handlar om arbetsledarens syn på bilden av ärendena. Att de har en gemensam bild framgår av citatet (reparationen av avsnitt 1).
+- **Mellanrubriken i avsnitt 2** påstår nu att den kortare tiden till tilldelning inte kan tillskrivas programvaran. Den säger det i textens egen röst. Avsnittet tillskriver det däremot anteckningen, med "Anteckningen säger att" (reparationen av avsnitt 2:s mellanrubrik).
+- **Maya Linds roll** står nu i bryggan som "arbetsledare hos Elm Quay", i stället för "arbetsledare hos kunden" i anföringen. Även där namnges kunden som Elm Quay (reparationen av avsnitt 1).
+
+**Tillagda**
+- Att Svale är leverantör till Elm Quay (inledningen). Originalet antydde det genom "Vi på Svale … kunden" och "leverantören Svale", men sa det inte rakt ut (reparationen av inledningen).
+- Att Elm Quay under åtta veckor prövade Svales programvara i ett försök (rubriken, ingressen och inledningen). Det är en slutsats av två saker: att kundens försöksanteckning gäller åtta veckor, och att skillnaden inte kan tillskrivas "programvaran", som originalet kallade "vår programvara" (reparationerna av inledningen, rubriken och ingressen).
+- Att texten redovisar vad kundens anteckning om försöket säger och hur en arbetsledare hos kunden ser på det (inledningen). Det är ett påstående om texten själv (reparationen av inledningen).
+- Att Maya Lind ser tillbaka på försöket (den nya mellanrubriken i slutavsnittet, reparationen av slutet).
+
+Utöver dessa poster togs inget påstående bort, och inget ändrades eller lades till.
+
+**Vad körningen i övrigt ändrade.** Leverantörens vi-form och självberöm är borta ur berättelsen, och den ordagranna upprepningen i ingressen och inledningen är borttagen. Rubriken, ingressen, inledningen och två mellanrubriker är omskrivna, och citatbryggan i avsnitt 1 är ersatt. Den gamla sista delen av resultatavsnittet har blivit ett eget slutavsnitt under en ny mellanrubrik. Den mekaniska korrekturen gjorde inga ändringar.

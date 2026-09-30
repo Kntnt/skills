@@ -1,0 +1,45 @@
+```markdown
+---
+kntnt:
+  genre: column
+  technique: none
+  language: sv
+---
+
+# Mötesmallen saknar en ruta för varför vi ses
+
+Av Nora Vik
+
+Jag granskar bibliotekets mötesmall. Där finns rutor för starttid, sluttid, deltagare och dagordning. Någon ruta för det beslut vi ska kunna fatta när vi går därifrån finns inte. Det här är en iakttagelse av ett dokument, inte en scen från ett visst möte. Mallen vill veta när vi ses och vilka som kommer. Vad tiden ska leda till frågar den inte om.
+
+En dagordning räknar upp vad vi ska tala om. Den säger inte varför vi behöver göra det tillsammans.
+
+Missförstå mig rätt: jag uppskattar möten där kolleger upptäcker att de har förstått en fråga olika. Den upptäckten kan vara viktigare än att vi snabbt enas. Det som retar mig är något annat – att tid i kalendern så lätt behandlas som ett resultat i sig. Timmen är bokad, alltså har något hänt. Det är min reflektion, inte något jag har mätt hos andra.
+
+Min tanke är inte att varje samtal ska pressas till ett beslut. Samtal kan skapa förtroende, och de kan få fram en fråga vi inte visste att vi behövde ställa. Men den som fyller i en mall borde få formulera varför vi behöver just varandras tid, också när syftet är att undersöka något tillsammans.
+
+Sedan kommer invändningen, och den är min egen. Jag vet inte om ytterligare en ruta gör möten bättre. Det finns en komik i att försöka lösa ett problem med formulär genom att utöka formuläret, och komiken blir inte mindre av att förslaget kommer från mig.
+
+Ändå vill jag prova en enkel fråga bredvid tiden: vad behöver vi förstå tillsammans? Jag vet inte om den överlever mötet med en verklig dagordning, och jag tänker inte låtsas att jag gör det. Hoppet om frågan och tvivlet på ännu en ruta får samsas ett tag till.
+```
+
+**Konfiguration:** Krönika (`column`), ingen teknik och svenska (`sv`). Alla tre värdena kommer från textens `kntnt`-karta. Ingen teknik användes eftersom kartan anger `none`. Krönikegenren föreslår inte heller någon. Korrigeringsbudgeten var 1, och den enda rundan är använd.
+
+## Fynd
+
+1. **Rubriken – åtgärdad.** ”Rutan som inte finns” angav inget ämne. Den som bara ser rubriken, till exempel i en lista eller ett sökresultat, kunde inte förstå att texten handlar om en mötesmall och om vad mötestid ska leda till. Rubriken lyder nu ”Mötesmallen saknar en ruta för varför vi ses” (44 tecken, 8 ord). Brödtexten ändrades inte i den rundan.
+2. **Ingress saknas – olöst.** Mellan rubriken och bylinen finns inget fristående stycke som säger vad krönikan handlar om och vad läsaren får ut av den. Jag har inte skrivit någon ingress. Vad den ska säga får skribenten avgöra.
+3. **Mellanrubriker, avsnitt och avslutande avsnitt saknas – olöst.** Texten har inga mellanrubriker. Därför räknas alla sex brödtextstycken (290 ord) som ett enda inledningsstycke. Den som skummar texten på webben får inga ingångar. Delarna har inte skrivits.
+4. **Uppmaning till läsaren saknas – olöst.** Sista stycket säger vad skribenten själv vill prova (”Ändå vill jag prova en enkel fråga bredvid tiden”). Det uppmanar inte läsaren att prova, lägga märke till eller ompröva något. Någon uppmaning har inte skrivits.
+
+Ingressen, avsnitten och avslutningen saknas, så texten följer inte artikelmallen. Därför gick det inte heller att pröva hur ingress och inledning förhåller sig till varandra, eller vad avslutningen innehåller.
+
+## Påståenden
+
+- **Ändrat – rubriken (fynd 1).** Den gamla rubriken sa att en ruta inte finns, men inte var eller vilken. Den gick att läsa på två sätt. Den kunde syfta på rutan som mallen saknar. Den kunde också syfta på rutan som skribenten tvivlar på att lägga till (”Jag vet inte om ytterligare en ruta gör möten bättre”, ”tvivlet på ännu en ruta”). Den dubbla betydelsen är borta.
+  - Den nya rubriken slår fast att mötesmallen *saknar* en ruta för varför vi ses. Det kan läsas som att mallen borde ha en sådan ruta. Den slutsatsen har stöd i brödtextens ”borde få formulera varför vi behöver just varandras tid”. Brödtexten lämnar dock frågan öppen: den tvivlar på om ännu en ruta hjälper.
+  - Rubriken säger ”mötesmallen” i bestämd form men inte vems. Att det är bibliotekets mall står i brödtexten.
+  - Brödtexten säger att det saknas en ruta för *beslutet* och att mallen inte frågar *vad tiden ska leda till*. Rubriken kallar det som saknas *varför vi ses*. Ordet *beslut* står inte i rubriken, eftersom texten säger att inte varje samtal ska pressas till ett beslut.
+- Utöver rubriken ovan har inget påstående tagits bort, ändrats eller lagts till.
+
+Utöver rubriken rättade den avslutande korrekturläsningen ett skiljetecken. Det långa tankstrecket i tredje stycket (”något annat — att”) är nu ett svenskt kort tankstreck med mellanslag (”något annat – att”). I övrigt är texten identisk med den som kom in.

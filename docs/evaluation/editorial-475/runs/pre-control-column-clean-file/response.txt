@@ -1,0 +1,17 @@
+Jag har granskat texten och skrivit den till `output.md`. `input.md` är orörd. Jag hittade ett fynd, rättade det och det återstår inga olösta fynd.
+
+**Inställningar:** genren *column* (krönika) och språket svenska kommer från anropet. Ingen teknik användes, eftersom genren inte anger någon.
+
+**Fynd (rättat)**
+- **Avslutningen var inte ett eget avsnitt.** Uppmaningen ("Prova ändå frågan nästa gång du bokar ett möte …") stod som ett tillägg sist i avsnittet "Ännu en ruta, och ändå vill jag prova". Samma avsnitt lägger fram själva förslaget: frågan, vad den lovar och din egen invändning. En läsare som skummar mellanrubrikerna fick därför ingen ingång till avslutningen, och förslaget och uppmaningen lästes som ett och samma steg.
+  - **Rättning:** mellanrubriken "Ett försök i din kalender" står nu före uppmaningen, så att avslutningen blir ett eget avsnitt. Rubriken bygger på textens egna ord ("nästa gång du bokar ett möte", "kalender").
+  - "Ännu en ruta, och ändå vill jag prova" står kvar över förslagsstycket och beskriver det fortfarande.
+
+**Påståenden**
+- **Tillagt:** den nya mellanrubriken säger att försöket görs i läsarens egen kalender. Texten säger bara att frågan skrivs in när man bokar ett möte. Det tillkom i rättningen av fyndet ovan.
+- Utöver det tillagda påståendet har inget påstående tagits bort eller ändrats, och ingen begränsning har försvunnit. Det gäller också "Jag är alltså inte ute efter färre beslut" och "innan vi har provat".
+
+**Anatomi:** den slutliga texten följer artikelanatomin. Skriptet har mätt de räknade kraven och jag har läst resten. Det gäller att avslutningen är ett eget avsnitt med uppmaning, att ingressen står på egen fot, att ingress och inledning inte upprepar varandra, att brödtexten fungerar utan ingressen och att mellanrubrikerna beskriver sina avsnitt.
+- **En avvikelse från normen, inget fynd:** första stycket under "Det är inte bara besluten jag vill åt" är 83 ord, strax över normen på 80. Stycket rymmer en enda tanke och läses bra i den längden, så jag rörde det inte.
+
+**Sammanfattning:** körningen lade till en mellanrubrik så att avslutningen står som ett eget avsnitt. Allt annat är ord för ord som det var, och den avslutande mekaniska korrekturen hittade inget att rätta.

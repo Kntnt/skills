@@ -1,0 +1,18 @@
+{
+  "misses": [
+    {
+      "judge": "b",
+      "class": 3,
+      "kind": "",
+      "owner": null,
+      "reply": "Korrekturläsningen på slutet bytte det engelska långa tankstrecket i ”formuläret — bibliotekarien” mot ett svenskt tankstreck med mellanslag.",
+      "judge_says": "The phrase \"med mellanslag\" could suggest that spaces were added. They were already in the input, and the returned text has a spaced en dash as the reply says, so the description of the result is correct.",
+      "check": "Input has a spaced em dash, returned text a spaced en dash; the statement is true of the returned text. The judge faults only what it might suggest."
+    }
+  ],
+  "verdicts": {
+    "a": "pass",
+    "b": "pass"
+  },
+  "notes": "Judge a makes the same 'med mellanslag' remark but says it does not make the report wrong, so it is not recorded as a miss. Unfaulted counts checked: headline 8 words and 40 characters; body 7 paragraphs and 274 words (275 whitespace tokens including the dash)."
+}

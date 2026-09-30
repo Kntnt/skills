@@ -1,0 +1,10 @@
+{
+  "misses": [
+    {"judge": "b", "class": 3, "kind": "", "owner": null,
+     "reply": "Mätningen räknar därför det inledande stycket som sju stycken, men det felet följer bara av att avsnitten saknas.",
+     "judge_says": "The sentence \"Mätningen räknar därför det inledande stycket som sju stycken\" is muddled.",
+     "check": "Counted: the body has seven paragraphs and no subheading, so everything after the byline measures as an introduction of seven paragraphs (274 words once the spaced dash is not counted as a word). \"det inledande stycket\" is loose wording for the introduction, but the text does not contradict what the sentence says."}
+  ],
+  "verdicts": {"a": "pass", "b": "pass"},
+  "notes": "Draft fixture, so no owner ticket applies. Judge b expressly calls the \"med mellanrum\" dash note correct, so it is not recorded. The headline note checks out: 40 characters, 8 words."
+}

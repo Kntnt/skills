@@ -1,0 +1,3 @@
+Texten i `input.md` behövde inga ändringar. Granskningen gav inga redaktionella anmärkningar och korrekturläsningen hittade inga språkfel. Inga ändringar gjordes och inga filer skrevs.
+
+Inställningar: genren var webbtext och språket svenska. Ingen berättarteknik användes eftersom genren webbtext inte föreskriver någon.

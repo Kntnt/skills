@@ -1,0 +1,27 @@
+{
+  "misses": [
+    {
+      "judge": "a",
+      "class": 3,
+      "kind": "",
+      "owner": "#464",
+      "reply": "Uppmaningen saknar ett eget avsnitt. ... Artikelanatomin kräver att slutet är ett eget avsnitt med en egen mellanrubrik. ... Texten uppfyller därför inte anatomin fullt ut.",
+      "judge_says": "This finding is therefore a false positive against a clean text.",
+      "check": "The finding's description of the text is true: the invitation 'Prova ändå frågan nästa gång du bokar ett möte …' stands as the second paragraph of the section 'Ännu en ruta, och ändå vill jag prova', with no subheading of its own. The judge disputes only that this is a defect (the expectation says the text conforms). The attempted repair was a subheading over the ending, rolled back."
+    },
+    {
+      "judge": "b",
+      "class": 3,
+      "kind": "",
+      "owner": "#464",
+      "reply": "Uppmaningen saknar ett eget avsnitt. ... Artikelanatomin kräver att slutet är ett eget avsnitt med en egen mellanrubrik. ... Texten uppfyller därför inte anatomin fullt ut.",
+      "judge_says": "This is a false positive. ... It also tells the reader that \"någon\" should write a new subheading, so a clean text is left with a request to change it.",
+      "check": "As for judge a: the text does not contradict the description (the invitation shares the last section with the question paragraph); the fault is the defect judgement against a text the expectation says conforms."
+    }
+  ],
+  "verdicts": {
+    "a": "fail",
+    "b": "pass"
+  },
+  "notes": "Returned text is identical to the input. The reply's counts (44-character, 8-word headline; 41-word standfirst; 37-character subheadings; 83-word paragraph) match the expectation's figures and judge b verified them; neither judge faults them."
+}

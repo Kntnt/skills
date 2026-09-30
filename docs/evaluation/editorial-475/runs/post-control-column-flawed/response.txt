@@ -1,0 +1,46 @@
+Jag har granskat `input.md` som krönika på svenska. Genre och språk kommer från anropet. Ingen teknik användes, eftersom krönikegenren inte anger någon teknik som den vanligen skrivs med och ingen annan nivå angav någon. Ingen skrivbrief användes. Korrigeringsbudgeten på en runda gick åt och fem fynd återstår, alla olösta. Den avslutande korrekturläsningen hittade inga mekaniska fel. `input.md` är orörd och inga filer ligger kvar.
+
+```markdown
+# Mötesmallen rymmer inte vad vi ska förstå tillsammans
+
+Nora Vik
+
+Förra tisdagen satt jag gråtande i bibliotekets mötesrum när min chef sade: ”Nu måste allt bli digitalt.” Det var mitt första möte om vår nya mötesmall. Jag har aldrig deltagit i något möte om vår nya mötesmall.
+
+Vår mötesmall har plats för starttid och sluttid men inte för vad vi ska förstå tillsammans.
+
+Samtal kan ha värde utan att leda till beslut. Jag vill prova frågan vad vi behöver förstå tillsammans, men jag vet inte om ytterligare en ruta gör möten bättre.
+```
+
+## Olösta fynd
+
+1. **Motsägelse i stycke 1.** ”Det var mitt första möte om vår nya mötesmall” motsägs direkt av ”Jag har aldrig deltagit i något möte om vår nya mötesmall”. Texten visar inte vilket av påståendena som stämmer, så läsaren vet inte om scenen ägde rum. Det kan bara skribenten avgöra.
+2. **Lösa trådar i öppningen.** Varken gråten eller chefens ”Nu måste allt bli digitalt” kopplas till något senare i texten, som handlar om mallens fält. Läsaren får inte veta varför skribenten grät eller vad digitaliseringen har med mallen att göra. Kopplingen går inte att skapa utan att hitta på.
+3. **Ingress saknas.** Texten har ingen fristående, sammanfattande ingress efter rubriken. En del som saknas rapporteras men skrivs inte.
+4. **Avsnitt med mellanrubriker saknas, också det avslutande avsnittet.** Texten har ingen mellanrubrik. Mätskriptet räknar därför allt efter bylinen som en inledning på 3 stycken, men det följer bara av att avsnitten saknas.
+5. **Uppmaning till handling saknas.** Texten uppmanar inte läsaren till något. ”Jag vill prova frågan vad vi behöver förstå tillsammans” är skribentens egen avsikt.
+
+Texten följer alltså inte artikelanatomin. Rubriken ligger inom gränserna med 53 tecken och 8 ord.
+
+## Åtgärdade fynd
+
+- **Rubriken.** ”Möten förändrar allt” påstod något som texten inte påstår och angav inte krönikans vinkel. Den som bara såg rubriken fick fel bild av vad texten handlar om. Den nya rubriken är ”Mötesmallen rymmer inte vad vi ska förstå tillsammans”.
+- **Tom inledningsformel i stycke 2.** ”I dagens snabbt föränderliga värld är möten viktigare än någonsin.” är borttagen.
+- **Innehållslös mening i stycke 2.** ”Det är viktigt att vara viktig.” är borttagen.
+- **Generisk avslutning.** Sista stycket, ”Sammanfattningsvis är möten viktigare än någonsin i dagens snabbt föränderliga värld.”, är borttaget. Texten slutar nu på skribentens osäkerhet i stycket före.
+
+## Redovisning av påståenden
+
+**Borttagna påståenden:**
+- Att möten i dagens snabbt föränderliga värld är viktigare än någonsin (stycke 2, första meningen). Påståendet försvann med reparationen av den tomma inledningsformeln, eftersom fyndet gällde hela meningen.
+- Att det är viktigt att vara viktig (stycke 2). Påståendet försvann med reparationen av den innehållslösa meningen, eftersom fyndet gällde hela meningen.
+- Samma påstående om att möten är viktigare än någonsin, upprepat i sista stycket. Det försvann med reparationen av den generiska avslutningen, eftersom fyndet gällde hela stycket. Texten påstår nu ingenstans att möten är viktigare än någonsin.
+
+**Ändrade påståenden:**
+- **Rubriken** påstod tidigare att möten förändrar allt. Nu påstår den att mötesmallen inte rymmer vad vi ska förstå tillsammans. Det är samma påstående som stycke 2 gör om ”vår mötesmall”, och ändringen hör till rubrikreparationen. I rubriken står ”Mötesmallen” i bestämd form utan ”vår”, så rubriken ensam säger inte vems mall det gäller.
+
+**Tillagda påståenden:** inga.
+
+Utöver rubriken och de borttagna påståendena ovan har inga påståenden tagits bort, ändrats eller lagts till.
+
+**Sammanfattning av ändringarna:** Två anti-slop-mönster i stycke 2 är borttagna, en tom inledningsformel och en innehållslös mening, och likaså en generisk avslutning. Stycke 2 består nu av en enda mening, och texten har ett stycke mindre. Rubriken är omskriven. Korrekturläsningen på slutet hittade inga mekaniska fel och ändrade ingenting. Bylinen, stycke 1 och stycket som börjar ”Samtal kan ha värde” är oförändrade.

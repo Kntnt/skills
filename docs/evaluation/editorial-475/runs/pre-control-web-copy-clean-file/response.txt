@@ -1,0 +1,15 @@
+Texten behövde ingen ändring och ligger nu oförändrad i `output.md`, byte för byte samma som `input.md`.
+
+**Inställningar:** genren är `webcopy` och språket svenska (`sv`), båda angivna i anropet. Ingen teknik används, eftersom webbtextgenren inte har någon som den vanligtvis skrivs med. Ingen brief valdes, och texten saknar `kntnt`-metadata. Därför lades ingen till.
+
+**Granskning:** texten granskades mot baskontraktet, genren webbtext, webbhantverket, anti-slop-katalogen och den svenska språkvägledningen. Det gav inga fynd.
+- Sidan säger tidigt vad den gäller.
+- Den skiljer tydligt mellan intresseanmälan och beställning.
+- Den säger vilka uppgifter som ska lämnas och att inga betalningsuppgifter behövs.
+- Den säger vad som händer sedan, också att ingen tid bokas när formuläret skickas in.
+- Varje avsnitt går att förstå om läsaren börjar där. Rubriken *Svar inom tre arbetsdagar* anger en tidsgräns som brödtexten inte behöver upprepa.
+- Formuläret som texten nämner är sidans eget, och det är inget fynd.
+
+**Rättelser:** korrigeringsbudgeten (1) användes inte, eftersom det inte fanns något att rätta. Den avslutande korrekturläsningen gjordes en gång och hittade inga mekaniska fel.
+
+**Påståenden:** inget påstående togs bort, ändrades eller lades till. Ändringar i rubriker, struktur eller ordval finns inte heller att redovisa, eftersom texten levereras precis som den kom in. De tillfälliga filerna från korrekturläsningen är borttagna.

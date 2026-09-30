@@ -1,0 +1,44 @@
+Granskningen hittade tre saker som saknas i texten, och ingen av dem är åtgärdad. Enligt artikelanatomin ska en del som saknas rapporteras men inte skrivas, så det enda som ändrats i texten är ett tankstreck.
+
+**Inställningar:** genren är `column`, tekniken är `none` och språket är `sv`. Alla tre värdena kommer från textens egen `kntnt`-karta. Kartan anger ingen teknik, och kolumngenren anger inte heller någon, så ingen berättarbåge har tillämpats. Ingen skrivbrief användes.
+
+```markdown
+---
+kntnt:
+  genre: column
+  technique: none
+  language: sv
+---
+
+# Mallen har en ruta för allt utom poängen
+
+Av Nora Vik, bibliotekarie
+
+Jag granskar bibliotekets mötesmall. Där finns rutor för starttid, sluttid, deltagare och dagordning. Någon ruta för det beslut vi ska kunna fatta när vi går därifrån finns inte. Det är dokumentet jag tittar på, inte ett bestämt möte.
+
+Jag uppskattar möten där kolleger upptäcker att de har förstått en fråga olika. Den upptäckten kan vara viktigare än att vi snabbt enas. Min tanke är alltså inte att varje samtal ska pressas fram till ett beslut.
+
+Det som retar mig är något annat: att tid i kalendern så lätt behandlas som ett resultat i sig. Timmen är bokad, alltså har något hänt. Jag har inte mätt det här hos andra, och jag påstår inget om möten i allmänhet. Det är min reflektion, med den räckvidd en reflektion har.
+
+Ändå tycker jag att den som fyller i en mall borde få formulera varför vi behöver just varandras tid. Också när syftet är att undersöka något tillsammans finns det ett skäl att skriva ner. Samtal kan skapa förtroende. Samtal kan hitta en fråga vi inte visste att vi behövde ställa. Inget av det kräver ett beslut, men båda delarna tål att motiveras.
+
+Så jag vill prova en enkel fråga bredvid tiden: vad behöver vi förstå tillsammans?
+
+Där börjar tvivlet. Det finns en komik i att försöka lösa ett problem med formulär genom att utöka formuläret – bibliotekarien som svarar på en mall med mer mall. Jag vet inte om ytterligare en ruta gör våra möten bättre. Kanske blir frågan bara en rad till att fylla i.
+
+Jag vill prova den i alla fall, och behålla båda hållningarna så länge: hoppet om frågan och tvivlet på ännu en ruta.
+```
+
+**Olösta anmärkningar.** Alla tre gäller delar som saknas och lämnas åt skribenten att skriva.
+
+1. **Ingressen saknas.** Mellan rubriken och bylinen finns ingen sammanfattande ingress. En läsare som bara ser rubriken och ingressen, till exempel i en lista eller ett flöde, får inte veta vad kolumnen handlar om eller vad läsningen ger.
+2. **Mellanrubriker och avsnitt saknas, och därmed ett eget avslutande avsnitt.** Hela brödtexten, 7 stycken och 274 ord, mäts därför som ett enda inledningsstycke. Det felet beror bara på att avsnitten saknas och är inget eget fel. Slutet (”Jag vill prova den i alla fall …”) står inte under en egen mellanrubrik, och den som skummar texten har inga ingångar i den.
+3. **Uppmaningen till läsaren saknas.** Slutet beskriver skribentens eget försök med frågan ”vad behöver vi förstå tillsammans?” och hennes tvivel. Det vänder sig inte till läsaren med något att prova, lägga märke till eller ompröva. Frågan kan bära en sådan uppmaning, men att rikta den till läsaren vore en ny utsaga.
+
+**Rättningsbudgeten.** Budgeten på en rättning är förbrukad. Rättningsrundan lämnade texten oförändrad eftersom alla tre anmärkningarna gäller delar som saknas, och därför stannade granskningen efter den rundan.
+
+**Om anatomin.** Texten följer inte artikelanatomin: ingress och avsnitt saknas. Rubriken har 40 tecken och 8 ord och ligger inom gränserna. Mätningen är gjord på den slutliga texten. Rubriken och bylinen har jag granskat genom att läsa dem, och jag har inga anmärkningar mot dem. Anmärkning 2 och 3 gäller de delar av anatomin som mätskriptet inte räknar.
+
+**Påståendena.** Inget påstående har tagits bort, ändrats eller lagts till. De meningar som avgränsar vad texten hävdar står kvar ordagrant: ”Det är dokumentet jag tittar på, inte ett bestämt möte”, ”Jag har inte mätt det här hos andra …” och ”Det är min reflektion …”.
+
+Den levererade texten skiljer sig från originalet på en enda punkt. Korrekturläsningen på slutet bytte det engelska långa tankstrecket i ”formuläret — bibliotekarien” mot ett svenskt tankstreck med mellanslag. Inget annat i texten har ändrats.

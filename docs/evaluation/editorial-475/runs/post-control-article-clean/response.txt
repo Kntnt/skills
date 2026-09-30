@@ -1,0 +1,6 @@
+Ingen ändring behövdes i `input.md`. Granskningen gav inga redaktionella anmärkningar och korrekturläsningen hittade inga fel. Ingenting har skrivits till disk.
+
+- **Genre:** artikel, enligt `--genre=article`.
+- **Språk:** svenska, enligt `--language=sv`.
+- **Teknik:** ingen. Artikelgenren anger ingen teknik som den vanligen skrivs med, och ingen annan källa valde någon.
+- **Rättningsbudget:** en rättningsomgång, som inte användes eftersom det inte fanns något att rätta.

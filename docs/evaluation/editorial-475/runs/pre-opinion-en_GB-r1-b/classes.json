@@ -1,0 +1,27 @@
+{
+  "misses": [
+    {
+      "judge": "a",
+      "class": 3,
+      "kind": "",
+      "owner": null,
+      "reply": "Author name in the wrong place (fixed). … Readers went through the whole argument, including its \"I\" and \"We\", before learning who was making it.",
+      "judge_says": "The reply calls the change a fix of a defect … That describes a preference, not a visible error, but the change itself is described accurately.",
+      "check": "The byline was the input's last line, after the 'I' and 'We' passages, and now stands under the headline as 'By Sanna Ek, …'. True of both texts; the judge disputes only that it was a defect."
+    },
+    {
+      "judge": "a",
+      "class": 3,
+      "kind": "",
+      "owner": null,
+      "reply": "Changed (finding 3): in the proposed trial, officers now do the time recording and the user survey, not \"the administration\".",
+      "judge_says": "The reply does not mention that the definite article was dropped, which is a trivial omission.",
+      "check": "Input 'the administration records … and asks', returned 'officers record … and ask'. The entry quotes the old term with its article and the new bare 'officers', so the attribution change it reports is the whole of what moved; the dropped article moves nothing further."
+    }
+  ],
+  "verdicts": {
+    "a": "pass",
+    "b": "pass"
+  },
+  "notes": "Judge b checks the reported measurements (55-word opening, headline 68 characters and 12 words, paragraphs of 85 and 84 words) and finds them correct; it records no miss."
+}
