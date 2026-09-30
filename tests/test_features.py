@@ -358,10 +358,12 @@ def test_the_installed_block_names_the_command_it_asks_for(tmp_path: Path) -> No
 def test_a_path_outside_a_temp_root_is_never_recorded(tmp_path: Path) -> None:
     """Recording is where the bound is cheapest to state, so it is stated there too."""
 
-    # `tmp_path` is itself under a temp root, so the path that has to be
-    # refused is one that plainly is not: this repository's own tree.
+    cleanup = _module(SESSION_CLEANUP, "kntnt_session_cleanup")
+    outside_path = Path("/")
+
+    assert cleanup.under_temp(outside_path) is None
     completed = _run(
-        SESSION_CLEANUP, "add", "path", str(REPO_ROOT), "why", home=tmp_path
+        SESSION_CLEANUP, "add", "path", str(outside_path), "why", home=tmp_path
     )
 
     assert completed.returncode == 1
