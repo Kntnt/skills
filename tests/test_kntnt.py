@@ -7425,6 +7425,107 @@ def test_a_genre_or_technique_binds_no_consumers_grammar() -> None:
         )
 
 
+# The PAC arc's two halves, and what each has to say about the parts a reader
+# of an analytical text meets (issue #470).
+PAC = EDITORIAL / "techniques" / "pac.md"
+PAC_REVIEW = EDITORIAL / "techniques" / "pac.review.md"
+PAC_REQUIREMENTS = {
+    "the premise raising a question a reader can have": "a real question",
+    "a topic that is not yet a question": "A topic is not yet a question",
+    "the direction showing early": "The direction shows early",
+    "the sharpest statement waiting for the conclusion": "sharpest statement",
+    "what is normal, stated as no ratio": "no ratio is prescribed",
+    "each step of the analysis advancing": "Each step of the analysis advances",
+    "facts, interpretation and what binds them": "what binds them",
+    "sub-questions that neither overlap nor leave a gap": "do not overlap",
+    "the conclusion answering the premise's question": "answers the premise's question",
+    "the conclusion bringing together rather than repeating": "rather than repeating",
+    "no new support entering at the conclusion": "introduces no support",
+}
+PAC_DIAGNOSES = {
+    "a premise that is only a topic, or a straw man": "only names a topic",
+    "a straw man judged from the text alone": "judge it from the text alone",
+    "a direction the reader cannot see": "which way the analysis goes",
+    "an early answer moved forward, never written": "existing answer or pointer",
+    "a list that does not advance": "lists one point",
+    "a missing link between facts and claim": (
+        "never write a warrant, premise or assumption into the text"
+    ),
+    "parts that overlap or leave the question uncovered": "same ground",
+    "a conclusion that repeats or drops a limit": "drops a limit",
+    "support first met in the conclusion": "support first met there",
+    "the descriptive premise #332 kept valid": (
+        "do not demand a falsifiable thesis or manufacture a counterargument"
+    ),
+}
+
+# Where the arc was taken from. The shipped files state outcomes, and a name
+# there reads as an authority to consult that no Skill can reach.
+PAC_SOURCES = ("Harvey", "Minto", "Toulmin", "Skolverket", "UNC")
+
+
+def test_the_pac_arc_says_what_each_part_owes_the_reader() -> None:
+    """A premise, an analysis and a conclusion are named by what they do.
+
+    The arc once said only that the three parts are there and hang together,
+    which left a writer with no test for a premise that is only a topic, an
+    analysis that lists, or a conclusion that says the analysis again. The
+    base half is where the writer reads it, so every requirement the review
+    half diagnoses is stated there (issue #470).
+    """
+
+    text = PAC.read_text(encoding="utf-8")
+
+    for requirement, wording in PAC_REQUIREMENTS.items():
+        assert wording in text, (
+            f"{PAC}: the arc no longer states {requirement}, so a writer"
+            f" composing a PAC text has no test for it (issue #470). See"
+            f" {STANDARD}."
+        )
+    assert "only at the conclusion" not in text, (
+        f"{PAC}: the sentence on new support at the conclusion can still be"
+        f" read as its own opposite (issue #470). See {STANDARD}."
+    )
+
+
+def test_the_pac_review_diagnoses_each_requirement_and_invents_no_link() -> None:
+    """Each PAC requirement has a diagnosis, and a missing link is reported.
+
+    A reviewer who finds nothing binding a fact to its claim is looking at a
+    gap only the author can fill: a warrant written in by the repair is an
+    assumption the text never made (issue #470).
+    """
+
+    text = PAC_REVIEW.read_text(encoding="utf-8")
+
+    for diagnosis, wording in PAC_DIAGNOSES.items():
+        assert wording in text, (
+            f"{PAC_REVIEW}: the review half has no diagnosis of {diagnosis}"
+            f" (issue #470). See {STANDARD}."
+        )
+
+
+def test_the_pac_arc_stays_short_and_names_none_of_its_sources() -> None:
+    """The arc is loaded into every PAC run, so it stays a short brief.
+
+    The ceilings are the ones issue #470 settled; the sources it was written
+    from are for whoever changes it, not for the Skill that reads it.
+    """
+
+    for path, ceiling in ((PAC, 500), (PAC_REVIEW, 300)):
+        text = path.read_text(encoding="utf-8")
+        words = len(text.split())
+        assert words <= ceiling, (
+            f"{path}: {words} words, over the {ceiling} the arc is held to"
+            f" (issue #470). See {STANDARD}."
+        )
+        named = [source for source in PAC_SOURCES if source in text]
+        assert not named, (
+            f"{path}: names {named}, a source the arc was written from rather"
+            f" than a requirement on the text (issue #470). See {STANDARD}."
+        )
+
+
 def test_no_editorial_resource_pins_a_rule_to_one_installed_language() -> None:
     """The editorial half is language-independent, and the split is the point.
 
