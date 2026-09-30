@@ -1,0 +1,12 @@
+# /Users/thomas/Projects/skills/.git/kntnt-orchestrate/433
+# HEAD fc45e6044e01d9461864f44cc75ce918c3c48439
+?? docs/evaluation/editorial-433/runs/wave-1-after-repo.txt
+?? docs/evaluation/editorial-433/runs/wave-1-after-scratch.txt
+?? docs/evaluation/editorial-433/runs/wave-1-after-session-scratchpad.txt
+?? docs/evaluation/editorial-433/runs/wave-1-before-repo.txt
+?? docs/evaluation/editorial-433/runs/wave-1-before-scratch.txt
+?? docs/evaluation/editorial-433/runs/wave-1-before-session-scratchpad.txt
+# end /Users/thomas/Projects/skills/.git/kntnt-orchestrate/433
+# /Users/thomas/Projects/skills
+# HEAD 2afeb95e54d77f491d0da36c7b58658f2bb939c5
+# end /Users/thomas/Projects/skills

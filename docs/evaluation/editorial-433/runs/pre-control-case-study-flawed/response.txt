@@ -1,0 +1,69 @@
+Klart. Jag har granskat texten som kundcase, gjort en korrigeringsrunda och kört den avslutande mekaniska korrekturen. Filerna har inte ändrats: `input.md` är orörd och alla arbetsfiler är borttagna.
+
+**Inställningar:** genre `casestudy` och språk `sv`, båda från anropet. Ingen berättarteknik användes, eftersom genren inte anger någon.
+
+```markdown
+# I Elm Quays försök tilldelades ärenden på två arbetsdagar
+
+**Tiden till tilldelning av ärenden var kortare än tidigare när Elm Quay prövade leverantören Svales programvara. Enligt kundens anteckning var arbetsbelastningen olika, och skillnaden kan inte tillskrivas programvaran. Arbetsledaren Maya Lind ger sitt omdöme om försöket.**
+
+Elm Quay registrerade 31 ärenden under ett försök med programvara från leverantören Svale. Hur försöket gick framgår av kundens försöksanteckning och av en arbetsledares omdöme.
+
+## Arbetsledaren om en gemensam bild av ärendena
+
+– Att ha en gemensam bild av ärendena hjälper oss, men jag skulle lägga till en vecka för förberedelser, säger Maya Lind, arbetsledare hos kunden.
+
+## Kortare tid till tilldelning, men inte att tillskriva programvaran
+
+Enligt kundens försöksanteckning registrerades 31 ärenden under åtta veckor, med akuta ärenden undantagna. Tiden till tilldelning var två arbetsdagar jämfört med tre tidigare. Anteckningen säger att arbetsbelastningen var olika och att skillnaden inte kan tillskrivas programvaran.
+
+## Maya Lind ser tillbaka på försöket
+
+– Jag skulle välja att göra försöket igen, säger Lind.
+
+Kundcaset publiceras av leverantören Svale.
+```
+
+## Åtgärdade fynd
+
+1. **Rubriken** ”Vår fantastiska lösning räddade Elm Quay” påstod att leverantören räddade kunden. Texten säger tvärtom att skillnaden inte kan tillskrivas programvaran. Rubriken hade också leverantörens ”vår” och en överdrift. Den nya rubriken anger kundens resultat.
+2. **Ingressen** hade samma mening två gånger, sa inte vad kundcaset handlar om och började med samma ord som leadet. Den nya ingressen är skriven ur textens eget innehåll.
+3. **Leadet** hade leverantörens ”vi”, ett ostött påstående om att Svale är världsledande och en räddningsberättelse där kunden stod hjälplös. Dessutom upprepade det ingressen.
+4. **Meningen före Maya Linds första citat** sa samma sak som citatet i förväg. Den är borttagen, och namn och roll står kvar i citatets anföring.
+5. **Mellanrubriken** ”Kunden fick en gemensam bild” tog ut det citatet sedan säger. Den nya rubriken nämner bara talaren och ämnet.
+6. **Mellanrubriken** ”Resultatet bevisar allt” påstod motsatsen till avsnittets reservation och var högre i tonen än texten.
+7. **Meningen** ”Vår programvara orsakade därför hela förbättringen.” drog en orsaksslutsats som meningen före den underkänner.
+8. **Avslutningen** stod inne i resultatavsnittet. Linds slutomdöme och raden om Svale har nu ett eget avsnitt med egen mellanrubrik.
+
+## Kvarstående fynd, olösta
+
+9. **Uppmaning till handling saknas.** Texten har inget erbjudande, ingen länk och ingen kontaktväg att bygga den på.
+10. **Byline saknas.** Ingen författare namnges.
+11. **Kundbakgrund, anledning och genomförande saknas.** Texten säger inte vilken sorts verksamhet Elm Quay är, vilka slags ärenden de 31 är, varför försöket gjordes eller vad det bestod i. Det kräver uppgifter som inte finns i texten.
+12. **I citatet** ”jag skulle lägga till en vecka för förberedelser” framgår det inte vad veckan läggs till. Omgivande text avgör inte det, så citatet är oförändrat.
+
+**Anatomi:** texten följer inte artikelanatomin. Bylinen och uppmaningen till handling saknas. Mätt på den slutliga texten har rubriken 57 tecken och 9 ord, ett ord över normen på högst 8. Jag bedömde det inte som ett fel, eftersom ett kortare alternativ skulle tappa antingen försöket eller ärendena. Ingressen har 36 ord och leadet 25. Jag har också granskat de krav skriptet inte räknar: avslutningen är ett eget avsnitt, ingressen står på egen hand och mellanrubrikerna beskriver sina avsnitt.
+
+## Påståenden
+
+**Borttagna**
+- ”Vi på Svale är världsledande på att skapa framgång” och ”kunden stod hjälplös innan vi kom” (fynd 3).
+- ”Vår programvara orsakade därför hela förbättringen.” (fynd 7). Med den försvann också ”därför”, som presenterade orsaken som en följd av anteckningen.
+- Rubrikens påstående att Svales lösning räddade Elm Quay (fynd 1).
+- Mellanrubrikens påstående att resultatet bevisar allt (fynd 6).
+- Mellanrubrikens påstående att kunden fick en gemensam bild (fynd 5). Läsaren har kvar citatets ”att ha en gemensam bild av ärendena hjälper oss”, men inte längre ett eget konstaterande av att kunden fick en sådan bild.
+- Meningen före Linds första citat, om att en gemensam bild hjälper (fynd 4). Påståendet står kvar i citatet.
+
+Meningen ”Anteckningen säger att arbetsbelastningen var olika och att skillnaden inte kan tillskrivas programvaran.” står kvar ordagrant.
+
+**Ändrade**
+- **Rubriken** säger nu att ärenden tilldelades på två arbetsdagar under Elm Quays försök (fynd 1). Jämförelsen med tre dagar och reservationen finns inte i rubriken.
+- **Andra mellanrubriken** säger nu att tiden till tilldelning blev kortare men inte kan tillskrivas programvaran (fynd 6). Rubriken säger det utan att hänvisa till försöksanteckningen, som avsnittet gör.
+- **Leadet:** de 31 ärendena är nu placerade i ett försök (fynd 3).
+- **Ingressen** upprepar brödtextens resultat och reservation (fynd 2). ”Enligt kundens anteckning” står först i meningen och kan läsas som att den bara gäller det första ledet, alltså att arbetsbelastningen var olika.
+
+**Tillagda**
+- **Att försöket gällde Svales programvara** står nu uttryckligen i leadet och ingressen (fynd 2 och 3). Den ursprungliga texten sa det bara indirekt, genom ”Vår programvara”, ”programvaran” och leverantörsraden.
+- **Att försökets utfall framgår av kundens försöksanteckning och en arbetsledares omdöme** står i leadet (fynd 3).
+
+Utöver påståendena ovan har rundan tagit bort överdrifter, leverantörens ”vi” och räddningsberättelsen. Den har också tagit bort ingressens dubblerade mening och meningen som upprepade citatet. Rubriken, ingressen, leadet och de två befintliga mellanrubrikerna är omskrivna, och avslutningen har fått ett eget avsnitt med en ny mellanrubrik. Den mekaniska korrekturen gjorde inga ändringar.

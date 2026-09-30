@@ -1,0 +1,58 @@
+# Granskning av input.md
+
+**Inställningar:** genre `article` och språk `sv`, båda från anropet. Ingen teknik används, eftersom artikelgenren inte anger någon. Texten saknar `kntnt`-metadata, och ingen sådan har lagts till. Korrigeringsbudgeten var 1 runda och är förbrukad. Den avslutande korrekturläsningen hittade inga mekaniska fel. Inga filer har skrivits.
+
+````markdown
+# Mätförsök i Björkskolan visar temperaturer under 20 grader
+
+**Fastighetskontorets mätförsök i Björkskolan lämnar luckor: operativ temperatur, luftdrag, elevernas upplevelse och uppgifter om hur länge temperaturerna låg under kontorets arbetsgräns saknas. Här är vad mätningarna visar, vad de inte visar och vad en drifttekniker rekommenderar.**
+
+Vid ett mätförsök i Björkskolan registrerade givarna temperaturer under 20 grader i sex klassrum. Fastighetskontorets rapport *Mätförsök i Björkskolan* från den 12 mars 2026 anger att 14 av 120 lektionspass hade minst ett värde under kontorets egen arbetsgräns på 20 grader, vilket inte är en lagregel. Rapporten anger också att försöket varade fyra veckor, medan två givare stod vid ytterväggar och fyra vid innerväggar, utan att placeringens effekt jämfördes experimentellt.
+
+Operativ temperatur saknas, trots att resonemanget bygger på operativ temperatur, som är ett mått på lufttemperatur och värmestrålning från omgivande ytor, medan givarna bara mätte luften där de satt. Det saknas mätningar av luftdrag och elevernas upplevelse och uppgifter om hur länge temperaturerna låg under gränsen, och ingen effekt på hälsan har undersökts.
+
+Driftteknikern Elin Rask rekommenderar att koppla temperaturserier till användningstider innan styrningen ändras, och nästa försök är tänkt att använda likadant placerade givare i november, fast finansieringen inte är beslutad.
+
+Kontakta oss.
+````
+
+## Åtgärdade fynd
+- **Rubriken** ("Givarna räddar skolan från en katastrof") påstod en räddning och en katastrof som texten inte beskriver. Den hade också en dramatiskare ton än texten. En läsare som bara ser rubriken kunde inte veta vilka givare eller vilken skola det gällde. Rubriken är omskriven och har nu 58 tecken och 8 ord.
+- **Ingressen** bestod av samma mening två gånger. Den nämnde varken skolan eller försöket och sade inte vad läsaren får ut av texten. Den är omskriven av textens eget innehåll och har nu 36 ord.
+- **Brödtextens första mening** upprepade ingressen ordagrant. Den använde också "Givarna" innan försöket hade introducerats. Nu knyts givarna till mätförsöket i Björkskolan.
+- **"Katastrofen lurade bakom varje hörn."** var ogrundad, tillverkad dramatik. Meningen är struken.
+- **Påståendet att det är "helt säkert att givarna har gjort eleverna friskare"** var ett orsakspåstående utan stöd. Samma mening sade dessutom att ingen hälsoeffekt har undersökts. Påståendet är struket, men begränsningen står kvar.
+- **"Det är viktigt att notera att detta är mycket viktigt …"** var tom utfyllnad. Meningen är struken.
+- **Brödtextens enda stycke** var 187 ord långt och rymde flera tankar. Det är delat vid tankegränserna, och en lång mening är delad i två.
+
+## Oåtgärdade fynd
+- **"Kontakta oss."** är bara delvis åtgärdad. Den uppblåsta bisatsen "för att rädda framtiden" är borta. Uppmaningen är ändå fortfarande vag: texten säger aldrig vem "oss" är eller vad kontakten gäller, och det går inte att rätta utan att hitta på det.
+- **"trots att resonemanget bygger på operativ temperatur"**: det framgår inte vems resonemang det är. Texten ger inget underlag för att rätta det.
+- **Delar som saknas:**
+  - Byline saknas.
+  - Mellanrubriker saknas, och därmed avsnitt och ett avslutande avsnitt.
+  - Mätningen av den slutliga texten anger därför brödtexten som ett inledningsstycke på 4 stycken och 154 ord. Det beror bara på att avsnitten saknas.
+  - Delarna har inte skrivits, eftersom det är upp till en person att fylla dem.
+
+Texten uppfyller alltså inte artikelanatomin.
+
+## Påståenden
+**Borttagna:**
+- Rubrikens påstående att givarna räddar skolan från en katastrof (rubrikfyndet).
+- Att katastrofen lurade bakom varje hörn.
+- Att det är helt säkert att givarna har gjort eleverna friskare. Med påståendet försvann bindeorden "men ändå" och "trots att". Läsaren förlorar bara kontrasten mot det strukna påståendet, och begränsningen "ingen effekt på hälsan har undersökts" står kvar i sin helhet.
+- Att detta är mycket viktigt för alla som tycker att temperatur är viktigt.
+- Att en kontakt skulle rädda framtiden (uppmaningsfyndet).
+
+**Ändrade:**
+- Rubriken påstår nu att mätförsöket i Björkskolan visar temperaturer under 20 grader.
+- Ingressen påstår nu att mätförsöket lämnar luckor. Den räknar upp att operativ temperatur, luftdrag, elevernas upplevelse och uppgifter om hur länge temperaturerna låg under arbetsgränsen saknas. Resultatet om sex klassrum står inte längre i ingressen, bara i brödtexten (ingressfyndet).
+- Brödtextens första mening placerar nu registreringarna "vid ett mätförsök i Björkskolan". Förut kopplades de till skolan först genom rapportens titel (öppningsfyndet).
+
+**Tillagda** (alla i ingressen, från ingressfyndet):
+- Att mätförsöket är Fastighetskontorets. Texten sade bara att rapporten är kontorets, så detta är en slutsats.
+- Att försöket "lämnar luckor", som en sammanfattning av bristerna som brödtexten räknar upp.
+- Löftet om vad texten ger: vad mätningarna visar, vad de inte visar och vad en drifttekniker rekommenderar.
+
+## Övriga ändringar
+Utöver påståendena ovan har rubriken och ingressen skrivits om och upprepningen i ingressen tagits bort. Uppblåsta formuleringar och tom utfyllnad är strukna. Brödtextens enda stycke är delat i fyra, och en lång mening är delad i två, där den andra delen börjar med "Rapporten anger också att". Bindeordet "trots att" framför hälsobegränsningen är ersatt med "och". Den avslutande korrekturläsningen gjorde inga ändringar.

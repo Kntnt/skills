@@ -1,0 +1,25 @@
+# /Users/thomas/Projects/skills/.git/kntnt-orchestrate/433
+# HEAD fc45e6044e01d9461864f44cc75ce918c3c48439
+?? docs/evaluation/editorial-433/runs/judges.tsv
+?? docs/evaluation/editorial-433/runs/wave-1-after-repo.txt
+?? docs/evaluation/editorial-433/runs/wave-1-after-scratch.txt
+?? docs/evaluation/editorial-433/runs/wave-1-after-session-scratchpad.txt
+?? docs/evaluation/editorial-433/runs/wave-1-before-repo.txt
+?? docs/evaluation/editorial-433/runs/wave-1-before-scratch.txt
+?? docs/evaluation/editorial-433/runs/wave-1-before-session-scratchpad.txt
+?? docs/evaluation/editorial-433/runs/wave-2-after-repo.txt
+?? docs/evaluation/editorial-433/runs/wave-2-after-scratch.txt
+?? docs/evaluation/editorial-433/runs/wave-2-after-session-scratchpad.txt
+?? docs/evaluation/editorial-433/runs/wave-2-before-repo.txt
+?? docs/evaluation/editorial-433/runs/wave-2-before-scratch.txt
+?? docs/evaluation/editorial-433/runs/wave-2-before-session-scratchpad.txt
+?? docs/evaluation/editorial-433/runs/wave-3-after-repo.txt
+?? docs/evaluation/editorial-433/runs/wave-3-after-scratch.txt
+?? docs/evaluation/editorial-433/runs/wave-3-after-session-scratchpad.txt
+?? docs/evaluation/editorial-433/runs/wave-3-before-repo.txt
+?? docs/evaluation/editorial-433/runs/wave-3-before-scratch.txt
+?? docs/evaluation/editorial-433/runs/wave-3-before-session-scratchpad.txt
+# end /Users/thomas/Projects/skills/.git/kntnt-orchestrate/433
+# /Users/thomas/Projects/skills
+# HEAD ae4fd1c9b8a657e2941f5c7c6ebeaff0a9110951
+# end /Users/thomas/Projects/skills
