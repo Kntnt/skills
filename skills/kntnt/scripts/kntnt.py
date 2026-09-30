@@ -18,6 +18,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import textwrap
 import urllib.error
 import urllib.request
 from collections.abc import Iterable, Iterator
@@ -4025,7 +4026,7 @@ def syntax_error(problem: str, argv: list[str]) -> ManagerError:
 
 
 def help_text(name: str | None) -> str:
-    """Return the manager's own manpage, one of its verbs', or an Enabled Skill's.
+    """Return compact help for the Manager, one of its verbs, or an Enabled Skill.
 
     A verb of the manager answers first, so no Skill can shadow one. A Skill is
     answered from a copy a layer holds, rendered as its own `--help` renders it,
@@ -4033,13 +4034,15 @@ def help_text(name: str | None) -> str:
     user does not have is read about in Select instead.
     """
 
-    # Bare help, and the manager's own name, both mean the manager's manpage.
+    # Bare help, and the manager's own name, both mean the Manager's compact help.
     if not name or name == MANAGER:
-        return read_manpage(here() / "help.md")
+        return render_invocation_help(
+            compact_help(here(), here() / "help.md"), here() / "library"
+        )
 
     verb = subcommand_manpage(name)
     if verb is not None:
-        return read_manpage(verb)
+        return render_invocation_help(compact_help(here(), verb), here() / "library")
 
     skill = enabled_skill(name)
     if skill is None:
@@ -4048,7 +4051,9 @@ def help_text(name: str | None) -> str:
             "Enabled here; '/kntnt select' reads the help of one you do not have"
         )
 
-    return render_invocation_help(read_manpage(skill / "help.md"), here() / "library")
+    return render_invocation_help(
+        compact_help(skill, skill / "help.md"), here() / "library"
+    )
 
 
 def cmd_help(name: str | None) -> int:
@@ -4201,7 +4206,7 @@ class Reading:
 
     On a valid form the status is 0 and `invocation` carries the command path,
     the flags with their values, the operands in order, and the Contextual
-    Instruction or None. On a help form the text is the addressed page; on a
+    Instruction or None. On a help form the text is the addressed compact help; on a
     refusal it is the collection's refusal for a person.
     """
 
@@ -4846,7 +4851,7 @@ def read_invocation(skill_dir: Path, payload: str) -> Reading:
             "the reserved separator `--` is followed by no instruction", grammar
         )
 
-    # An exact help form prints the addressed page and stops; a Contextual
+    # An exact help form prints the addressed compact help and stops; a Contextual
     # Instruction beside one is the context refusal, the page not rendered.
     exact_help = root_help or (
         bool(path) and words[len(path) :] in [[flag] for flag in PATH_HELP_FLAGS]
@@ -4859,12 +4864,78 @@ def read_invocation(skill_dir: Path, payload: str) -> Reading:
                 f" an exact help form, whose output is fixed, so it can settle nothing;"
                 f" the page was not rendered and nothing was changed",
             )
-        return Reading(EXIT_HELP, read_manpage(page))
+        return Reading(EXIT_HELP, compact_help(skill_dir, page))
 
     fault, invocation = validate(skill_dir, grammar, path, tokens, formal)
     if fault is not None:
         return _refusal(fault, grammar)
     return Reading(0, invocation={**invocation, "instruction": instruction})
+
+
+def _help_section(text: str, heading: str) -> str:
+    """Read a conventional reference section without its following sections."""
+
+    return text.partition(f"\n## {heading}\n")[2].partition("\n## ")[0].strip()
+
+
+def _help_wrap(text: str) -> str:
+    """Wrap a complete help paragraph at terminal width without cutting tokens."""
+
+    return textwrap.fill(text, width=80, break_long_words=False, break_on_hyphens=False)
+
+
+def compact_help(skill_dir: Path, page: Path) -> str:
+    """Derive quick help from the addressed reference's canonical declarations.
+
+    Accepted forms and option terms are preserved whole, never abbreviated or
+    reconstructed from parsed forms. Child pages supply immediate commands and
+    their purpose lines. Length limits affect only optional explanatory prose.
+    """
+
+    # Validate the same declarations the formal reader uses before rendering.
+    page_grammar(skill_dir, page)
+    text = read_manpage(page)
+    lines = [
+        text.splitlines()[0],
+        "",
+        _help_wrap(_help_section(text, "NAME")),
+        "",
+        "## SYNOPSIS",
+        "",
+    ]
+    for form in synopsis_of(page).splitlines():
+        if form.strip():
+            lines.extend([_help_wrap(form), ""])
+
+    # Each immediate command is discovered from the same tree that addresses it.
+    children = (
+        skill_dir / "help" if page == skill_dir / "help.md" else page.with_suffix("")
+    )
+    commands = sorted(children.glob("*.md"))
+    if commands:
+        lines.extend(["## COMMANDS", ""])
+        for child in commands:
+            purpose = _help_section(read_manpage(child), "NAME").partition(" - ")[2]
+            lines.extend([_help_wrap(f"**{child.stem}** - {purpose}"), ""])
+
+    # Preserve each complete option term and its live resource marker. Only a
+    # short first sentence earns space beside it; the reference holds the rest.
+    options = _help_section(text, "OPTIONS")
+    if options:
+        lines.extend(["## OPTIONS", ""])
+        paragraphs = re.split(r"\n\s*\n", options)
+        for index, paragraph in enumerate(paragraphs):
+            if paragraph.startswith("**-"):
+                lines.extend([_help_wrap(paragraph), ""])
+                if index + 1 < len(paragraphs):
+                    sentence = re.split(r"(?<=[.!?])\s+", paragraphs[index + 1])[0]
+                    if len(sentence.split()) <= 20:
+                        lines.extend([_help_wrap(sentence), ""])
+            elif paragraph.startswith("<!-- kntnt:editorial-"):
+                lines.extend([paragraph, ""])
+
+    lines.append(f"Full reference: `{page.absolute()}`")
+    return "\n".join(lines)
 
 
 def editorial_choices(directory: Path) -> str:
@@ -4886,7 +4957,7 @@ def editorial_choices(directory: Path) -> str:
         }:
             continue
 
-        # A damaged base resource cannot supply an honest help description.
+        # A damaged base resource cannot supply an honest inventory.
         paragraphs = re.split(
             r"\n\s*\n", path.read_text(encoding="utf-8").strip(), maxsplit=2
         )
@@ -4897,18 +4968,17 @@ def editorial_choices(directory: Path) -> str:
         ):
             raise ManagerError(f"'{path}' has no opening paragraph after its title")
 
-        # Keep the opening's words and markup while joining wrapped lines.
-        description = " ".join(paragraphs[1].split())
-        rows.append(f"- `{path.stem}` — {description}")
+        # Show only the name after validating the resource, never its prose.
+        rows.append(f"`{path.stem}`")
 
     # An empty installation has no complete inventory to show.
     if not rows:
         raise ManagerError("no selectable base resources found")
-    return "Installed choices:\n\n" + "\n".join(rows)
+    return "Installed choices: " + ", ".join(rows)
 
 
 def render_invocation_help(page: str, library: Path) -> str:
-    """Expand the two editorial list slots; preserve every other help byte.
+    """Expand the two editorial slots in compact help from this invocation's Library.
 
     This runs only after an exact help form has been accepted. Grammar and
     refusals continue to read the authored page, without touching resources.
@@ -4929,7 +4999,7 @@ def render_invocation_help(page: str, library: Path) -> str:
                     "No list is shown; repair the resources or run `/kntnt update`."
                 )
 
-            page = page.replace(marker, choices)
+            page = page.replace(marker, _help_wrap(choices))
 
     return page
 

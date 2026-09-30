@@ -1857,7 +1857,7 @@ def test_the_manager_has_no_setup_verb(tmp_path: Path) -> None:
 
     assert plan.returncode != 0
     assert apply.returncode != 0
-    assert "setup" not in _run(world, "help").stdout
+    assert "**setup**" not in _run(world, "help").stdout
 
 
 def test_no_command_asks_for_setup_when_nothing_is_detected(tmp_path: Path) -> None:
@@ -2852,7 +2852,9 @@ def test_update_reports_capabilities_per_skill(tmp_path: Path) -> None:
     assert capabilities[0]["name"] == "subagents"
 
 
-def test_help_prints_the_manpage_the_manager_ships(tmp_path: Path) -> None:
+def test_help_derives_compact_help_from_the_manpage_the_manager_ships(
+    tmp_path: Path,
+) -> None:
     """The manager's help is a file beside it, not a string inside its script."""
 
     world = _world(tmp_path)
@@ -2861,10 +2863,13 @@ def test_help_prints_the_manpage_the_manager_ships(tmp_path: Path) -> None:
 
     assert result.returncode == 0, result.stderr
     shipped = (REPO_ROOT / "skills" / "kntnt" / "help.md").read_text(encoding="utf-8")
-    assert result.stdout.strip() == shipped.strip()
+    assert " ".join(
+        _section(shipped, "## SYNOPSIS", MANAGER_DIR / "help.md").split()
+    ) in " ".join(result.stdout.split())
+    assert "## DESCRIPTION" not in result.stdout
 
 
-def test_help_named_subcommand_prints_that_subcommands_manpage(
+def test_help_named_subcommand_derives_that_subcommands_compact_help(
     tmp_path: Path,
 ) -> None:
     """`/kntnt help <command>` is how a verb of the manager is read about."""
@@ -2877,7 +2882,10 @@ def test_help_named_subcommand_prints_that_subcommands_manpage(
     shipped = (REPO_ROOT / "skills" / "kntnt" / "help" / "uninstall.md").read_text(
         encoding="utf-8"
     )
-    assert result.stdout.strip() == shipped.strip()
+    assert " ".join(
+        _section(shipped, "## SYNOPSIS", MANAGER_DIR / "help.md").split()
+    ) in " ".join(result.stdout.split())
+    assert "## DESCRIPTION" not in result.stdout
 
 
 def _engine_help(world: dict[str, Path], skill_dir: Path) -> str:
@@ -2908,7 +2916,7 @@ def test_help_of_an_enabled_skill_prints_what_its_own_help_form_prints(
 ) -> None:
     """`/kntnt help write` is `/write --help`, installed lists and all.
 
-    The page is rendered as the Skill's own help form renders it, so the
+    The compact view is rendered as the Skill's own help form renders it, so the
     editorial list slots are expanded from the Library beside the Manager
     rather than printed as markers.
     """
@@ -2958,7 +2966,10 @@ def test_a_manager_command_outranks_a_skill_of_the_same_name(tmp_path: Path) -> 
 
     assert result.returncode == 0, result.stderr
     shipped = (MANAGER_DIR / "help" / "select.md").read_text(encoding="utf-8")
-    assert result.stdout.strip() == shipped.strip()
+    assert " ".join(
+        _section(shipped, "## SYNOPSIS", MANAGER_DIR / "help.md").split()
+    ) in " ".join(result.stdout.split())
+    assert "## DESCRIPTION" not in result.stdout
 
 
 def test_help_of_a_skill_that_is_not_enabled_is_refused_toward_select(
@@ -4309,12 +4320,13 @@ def test_no_arguments_prints_help(tmp_path: Path) -> None:
     assert result.stdout == _run(world, "help").stdout
 
 
-def test_help_says_select_lists_every_catalog_skill(tmp_path: Path) -> None:
+def test_help_lists_select_and_points_to_the_full_reference(tmp_path: Path) -> None:
     world = _world(tmp_path)
 
     text = _run(world, "help").stdout
 
-    assert "Enabled or not" in text
+    assert "**select**" in text
+    assert "Full reference:" in text
     assert "check --here" not in text
 
 
@@ -5360,7 +5372,9 @@ def test_every_skill_declares_uv_because_the_engine_runs_on_it() -> None:
         )
 
 
-def test_every_collection_skill_ships_a_manpage_and_the_engine_prints_it() -> None:
+def test_every_collection_skill_ships_a_manpage_and_uses_the_common_help_engine() -> (
+    None
+):
     """Help lives with the skill: a file the engine prints, not prose in the body.
 
     The route into the manpage used to be read out of a `## Invocation`
@@ -5389,7 +5403,7 @@ def test_every_collection_skill_ships_a_manpage_and_the_engine_prints_it() -> No
         for route in ("`$HERE/help.md`", "`$HERE/help/"):
             assert route not in text, (
                 f"{path}: the body names a help route ({route}); the engine"
-                f" prints the addressed page, so the route is read off the"
+                f" renders compact help from the addressed page, so the route is read off the"
                 f" pages and nowhere else (ADR-0181). See {STANDARD}."
             )
         assert "Arguments and Steps" not in text, (
@@ -14191,13 +14205,16 @@ def test_the_route_into_help_is_not_a_flag_on_a_verb(tmp_path: Path) -> None:
         result = _run(world, *args)
 
         assert result.returncode == 0, (args, result.stderr)
-        assert result.stdout.strip() == shipped, args
+        assert " ".join(
+            _section(shipped, "## SYNOPSIS", MANAGER_DIR / "help.md").split()
+        ) in " ".join(result.stdout.split()), args
+        assert "## DESCRIPTION" not in result.stdout
 
 
 def test_every_manager_help_form_prints_through_the_engine_what_the_script_printed(
     tmp_path: Path,
 ) -> None:
-    """Each help form prints the same page as before, now read by the engine.
+    """Each help form prints the same compact view through either entry point.
 
     The script routed these forms until the body moved onto the engine; the
     engine reads them off the shipped pages instead. What the user sees is
@@ -14220,29 +14237,27 @@ def test_every_manager_help_form_prints_through_the_engine_what_the_script_print
         ),
     ]
     for payload, before in forms:
-        reading = engine.read_invocation(MANAGER_DIR, payload)
+        reading = engine.read_invocation(world["here"], payload)
         printed = _run(world, *before)
 
         assert printed.returncode == 0, (payload, printed.stderr)
         assert reading.status == 3, (
-            f"/kntnt {payload} did not print a page through the engine:"
+            f"/kntnt {payload} did not print compact help through the engine:"
             f" {reading.text} (ADR-0181). See {STANDARD}."
         )
         assert reading.text.rstrip("\n") == printed.stdout.rstrip("\n"), (
-            f"/kntnt {payload} prints a different page through the engine than"
+            f"/kntnt {payload} prints different compact help through the engine than"
             f" the script printed (ADR-0181). See {STANDARD}."
         )
 
     # Bare `/kntnt` is the one help form that is a valid form rather than an
     # exact help route: the engine hands it to the Steps as an empty path, and
-    # the help step prints the root page through the script as it always did.
+    # the help step prints root compact help through the script as it always did.
     reading = engine.read_invocation(MANAGER_DIR, "")
 
     assert reading.status == 0
     assert reading.invocation["path"] == []
-    assert _run(world, "help").stdout.strip() == (
-        (MANAGER_DIR / "help.md").read_text(encoding="utf-8").strip()
-    )
+    assert _run(world, "help").stdout == _run(world).stdout
 
 
 def test_the_engine_is_named_in_no_body_and_the_shim_in_every_one() -> None:
@@ -14567,9 +14582,11 @@ def test_model_selector_ships_and_routes_one_manpage_per_subcommand() -> None:
         path = " ".join(Path(relative).with_suffix("").parts)
         page = (help_directory / relative).read_text(encoding="utf-8").rstrip("\n")
         reading = engine.read_invocation(MODEL_SELECTOR_DIR, f"{path} --help")
-        assert reading.status == 3 and reading.text.rstrip("\n") == page, (
+        assert reading.status == 3 and " ".join(
+            _section(page, "## SYNOPSIS", help_directory / relative).split()
+        ) in " ".join(reading.text.split()), (
             f"{MODEL_SELECTOR_DIR}: `/model-selector {path} --help` does not"
-            f" print `help/{relative}` verbatim (ADR-0176, ADR-0181). See"
+            f" derive compact help from `help/{relative}` (issue #484). See"
             f" {STANDARD}."
         )
 
@@ -14634,7 +14651,7 @@ def _hint(directory: Path) -> str:
 def _flags(text: str) -> set[str]:
     """Every long flag named in a piece of prose, `--help` excepted.
 
-    `--help` is the route into the manpage rather than a flag on a form, so it
+    `--help` is the route into compact help rather than a flag on a form, so it
     is documented nowhere and belongs to no row of the grammar.
     """
 
@@ -15514,10 +15531,12 @@ def test_delegation_ships_and_routes_one_manpage_per_command_path() -> None:
             reading = engine.read_invocation(
                 DELEGATION_DIR, f"{Path(relative).stem} {flag}"
             )
-            assert reading.status == 3 and reading.text.rstrip("\n") == page, (
+            assert reading.status == 3 and " ".join(
+                _section(page, "## SYNOPSIS", help_directory / relative).split()
+            ) in " ".join(reading.text.split()), (
                 f"{DELEGATION_DIR}: `/delegation {Path(relative).stem} {flag}`"
-                f" does not print `help/{relative}` verbatim (ADR-0176,"
-                f" ADR-0181). See {STANDARD}."
+                f" does not derive compact help from `help/{relative}`"
+                f" (issue #484). See {STANDARD}."
             )
 
 

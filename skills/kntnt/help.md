@@ -20,7 +20,7 @@ kntnt - manage which collection Skills and Features are Enabled
 
 `kntnt` lists, Enables, refreshes, and removes Collection Skills and Features across detected Harnesses. Other Skills are invoked by their own names.
 
-Bare `kntnt` prints this page. Use `/kntnt <command> --help` or `/kntnt help <command>` for command help. Use `/kntnt help <skill>` or `/<skill> --help` for an Enabled Skill. Select can show help for a Skill that is not yet Enabled.
+Bare `kntnt` prints compact help with the path to this full reference. Use `/kntnt <command> --help` or `/kntnt help <command>` for command help. Use `/kntnt help <skill>` or `/<skill> --help` for an Enabled Skill. Select can show help for a Skill that is not yet Enabled.
 
 Select lists every Catalog entry — its Skills and, under them, its Features — Enabled or not.
 
@@ -32,7 +32,7 @@ A real Global Update without formal **--yes** shows its complete plan and applie
 
 **help** [*NAME*]
 
-Print this page, the page for one Manager command, or the page for one Enabled Skill.
+Print compact help for the Manager, one Manager command, or one Enabled Skill, including the full-reference path.
 
 **select**
 
@@ -70,7 +70,7 @@ Run `select`, `update`, or `uninstall` in a discarded temporary home and report 
 
 ## DIAGNOSTICS
 
-An unknown command or a flag with no work to do is refused rather than ignored. The Manager prints the addressed SYNOPSIS, performs no work, and points to the full page. No command accepts **--force**.
+An unknown command or a flag with no work to do is refused rather than ignored. The Manager prints the addressed SYNOPSIS, performs no work, and points to the addressed help route. No command accepts **--force**.
 
 Global Update requires formal **--yes** or approval of the exact displayed plan. A changed plan requires fresh approval.
 

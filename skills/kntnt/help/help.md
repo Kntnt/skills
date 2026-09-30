@@ -2,7 +2,7 @@
 
 ## NAME
 
-kntnt help - display a Manager, command, or Enabled Skill manpage
+kntnt help - display compact help for the Manager, a command, or an Enabled Skill
 
 ## SYNOPSIS
 
@@ -12,11 +12,11 @@ kntnt help - display a Manager, command, or Enabled Skill manpage
 
 ## DESCRIPTION
 
-`kntnt help` prints the Manager's page when *NAME* is omitted. When *NAME* is a Manager command, it prints that command's page. Otherwise, when *NAME* is a Collection Skill that is Enabled in Global or in this Project, it prints that Skill's page as `/<skill> --help` prints it, installed choices included. Bare `/kntnt` is equivalent to `/kntnt help`.
+`kntnt help` prints the Manager's compact help when *NAME* is omitted. When *NAME* is a Manager command, it prints that command's compact help. Otherwise, when *NAME* is a Collection Skill that is Enabled in Global or in this Project, it prints that Skill's compact help as `/<skill> --help` prints it, installed choices included. Bare `/kntnt` is equivalent to `/kntnt help`.
 
-Every Manager command also prints the same page when invoked with `--help` or `-h`, for example `/kntnt select --help`.
+Every Manager command also prints the same compact view when invoked with `--help` or `-h`, for example `/kntnt select --help`.
 
-Help reads pages shipped beside the Manager or with an Enabled Skill. It performs no normal work, runs no Skill, changes no layer, and does not access the network or transport.
+Each view names the actual installed full-reference file. Help reads pages shipped beside the Manager or with an Enabled Skill. It performs no normal work, runs no Skill, changes no layer, and does not access the network or transport.
 
 `/kntnt help <skill>` does not read the page of a Skill that is not Enabled. Open the Select list and request the page there instead.
 
@@ -28,7 +28,7 @@ One of the Manager commands `help`, `select`, `update`, or `uninstall`, or the n
 
 ## DIAGNOSTICS
 
-An option is refused rather than ignored. The Manager names the error, prints the SYNOPSIS, changes nothing, and points to the full page.
+An option is refused rather than ignored. The Manager names the error, prints the SYNOPSIS, changes nothing, and points to the addressed help route.
 
 A *NAME* that is neither a Manager command nor an Enabled Collection Skill is refused. The Manager installs nothing, fetches nothing, and points to Select for a Skill that is not Enabled. An Enabled Skill whose `help.md` is missing is reported by the missing file's path. The page is not fetched from the collection instead.
 

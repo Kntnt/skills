@@ -54,7 +54,7 @@ Use `/kntnt help <command>` for manager details. Use `/<skill> --help` or `/kntn
 
 ## Usage
 
-These summaries help you choose a skill. Each skill's `--help` page contains its complete syntax, options, defaults, and failure behavior.
+These summaries help you choose a skill. Each skill's `--help` shows its complete syntax and options briefly, with the installed reference-file path for defaults and detailed behavior.
 
 ### agents-md
 

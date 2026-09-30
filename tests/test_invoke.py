@@ -211,6 +211,46 @@ def _synopsis(page: Path) -> str:
     return text.partition("\n## SYNOPSIS\n")[2].partition("\n## ")[0].strip("\n")
 
 
+def _assert_compact(output: str, page: Path) -> None:
+    """Compare quick help to the authored grammar, independently of the renderer."""
+
+    # The reference is intact on disk and the displayed path names that file.
+    reference = page.read_text(encoding="utf-8")
+    assert "## DESCRIPTION" in reference
+    assert str(page.absolute()) in output
+    assert output.startswith(reference.splitlines()[0] + "\n")
+    assert "Invocation read." not in output
+    assert all(
+        f"## {heading}" not in output
+        for heading in ("DESCRIPTION", "FILES", "NOTES", "DIAGNOSTICS")
+    )
+
+    # Every complete form and option term survives whitespace-only wrapping.
+    flattened = " ".join(output.split())
+    for form in _synopsis(page).splitlines():
+        if form.strip():
+            assert " ".join(form.split()) in flattened, (page, form, output)
+    options = reference.partition("\n## OPTIONS\n")[2].partition("\n## ")[0]
+    for term in options.splitlines():
+        if term.startswith("**-"):
+            assert " ".join(term.split()) in flattened, (page, term, output)
+
+    # The addressed path exposes its own immediate children at terminal width.
+    children = (
+        page.parent / "help"
+        if (page.parent / "SKILL.md").is_file()
+        else page.with_suffix("")
+    )
+    command_view = output.partition("## COMMANDS\n")[2].partition("\n## ")[0]
+    for child in children.glob("*.md"):
+        assert f"**{child.stem}**" in command_view, (page, child, output)
+    for line in output.splitlines():
+        assert len(line) <= 80 or any(len(word) > 64 for word in line.split()), (
+            page,
+            line,
+        )
+
+
 # --- The worked cases of the Library file -----------------------------------
 
 
@@ -353,7 +393,7 @@ def test_a_multi_line_instruction_with_quotes_survives_stdin(tmp_path: Path) -> 
     assert _reading(result)["instruction"] == instruction
 
 
-def test_an_exact_help_form_prints_the_addressed_page_on_its_own_status(
+def test_an_exact_help_form_prints_compact_help_on_its_own_status(
     tmp_path: Path,
 ) -> None:
     skill = _fixture(
@@ -366,25 +406,76 @@ def test_an_exact_help_form_prints_the_addressed_page_on_its_own_status(
             "off": (["**/tool off** [**--** *INSTRUCTION*]"], []),
         },
     )
-    root = (skill / "help.md").read_text(encoding="utf-8").rstrip("\n")
-    on = (skill / "help" / "on.md").read_text(encoding="utf-8").rstrip("\n")
+    root = skill / "help.md"
+    on = skill / "help" / "on.md"
 
     for payload in ("--help", "-h", "help"):
         result = _invoke(skill, payload, tmp_path)
         assert result.returncode == EXIT_HELP, (payload, result.stderr)
-        assert result.stdout.rstrip("\n") == root, payload
+        _assert_compact(result.stdout, root)
         assert result.stderr == ""
 
     for payload in ("on --help", "on -h"):
         result = _invoke(skill, payload, tmp_path)
         assert result.returncode == EXIT_HELP, (payload, result.stderr)
-        assert result.stdout.rstrip("\n") == on, payload
+        _assert_compact(result.stdout, on)
 
 
-# The help contract's exception to verbatim pages is checked through invoke.
+def test_nested_help_keeps_all_forms_flags_and_immediate_commands(
+    tmp_path: Path,
+) -> None:
+    """Addressed quick help follows an installed tree, including new nested paths."""
+
+    # Give the fixture incompatible leaf forms and a parent with two children.
+    skill = _fixture(
+        tmp_path / "skills",
+        "tool",
+        "config [-- <instruction>]",
+        ["**/tool config** [**--** *INSTRUCTION*]"],
+        pages={
+            "config": (
+                ["**/tool config** (**add**|**remove**) [**--** *INSTRUCTION*]"],
+                [],
+            ),
+            "config add": (
+                [
+                    "**/tool config add** [**--language=**_LANGUAGE_] [**--output=**_PATH_] *TEXT* [**--** *INSTRUCTION*]",
+                    "**/tool config add** [**--language=**_LANGUAGE_] **--in-place** *PATH* [**--** *INSTRUCTION*]",
+                ],
+                ["**--language=**_LANGUAGE_", "**--output=**_PATH_", "**--in-place**"],
+            ),
+            "config remove": (
+                ["**/tool config remove** *PATH* [**--** *INSTRUCTION*]"],
+                [],
+            ),
+        },
+    )
+    _write(skill / "scripts" / "invoke.py", SHIM.read_text(encoding="utf-8"))
+    (skill.parent / "kntnt").symlink_to(MANAGER_DIR, target_is_directory=True)
+    root = _run_shim(skill, "help", tmp_path)
+    parent = _run_shim(skill, "config --help", tmp_path)
+    leaf = _run_shim(skill, "config add -h", tmp_path)
+
+    # Parents list their immediate children; the leaf exposes only its grammar.
+    for result, page in (
+        (root, skill / "help.md"),
+        (parent, skill / "help/config.md"),
+        (leaf, skill / "help/config/add.md"),
+    ):
+        assert result.returncode == EXIT_HELP, (result.stdout, result.stderr)
+        _assert_compact(result.stdout, page)
+    assert "**add** -" not in root.stdout
+    assert "**add** -" in parent.stdout
+    assert "**remove** -" in parent.stdout
+    assert "## COMMANDS" not in leaf.stdout
+    assert "**/tool config remove**" not in leaf.stdout
+    assert root.stdout != parent.stdout != leaf.stdout
+
+
+# Compact help keeps dynamic editorial choices under the declaring options.
 EDITORIAL_HELP_RULE = (
     "Installed editorial choices come from the invocation's Library, preserving "
-    "the page and help status; see docs/rules/skills.md, `help.md` (issue #325)."
+    "complete syntax and help status; see docs/rules/skills.md, `help.md` (issue #484)."
 )
 
 
@@ -412,7 +503,6 @@ def test_editorial_help_lists_installed_choices_under_their_flags(
 
     # Install the shipped grammar beside a distinct fixture Library.
     skill = _editorial_skill(tmp_path, name)
-    source = SKILLS / "editorial" / name / "help.md"
     manager = tmp_path / "installed" / "kntnt"
     library = manager / "library"
     editorial = library / "references" / "editorial"
@@ -436,27 +526,17 @@ def test_editorial_help_lists_installed_choices_under_their_flags(
         .partition("**--technique**")[2]
         .partition("**--language**")[0]
     )
-    assert "- `alpha` — The first genre, with a wrapped opening." in genre, (
-        EDITORIAL_HELP_RULE
-    )
-    assert "- `zebra` — The last genre." in genre, EDITORIAL_HELP_RULE
-    assert genre.index("- `alpha`") < genre.index("- `zebra`"), EDITORIAL_HELP_RULE
-    assert "- `arc` — A chosen arc." in technique, EDITORIAL_HELP_RULE
-    assert result.stdout.count("- `alpha`") == 1, EDITORIAL_HELP_RULE
+    assert "Installed choices: `alpha`, `zebra`" in genre, EDITORIAL_HELP_RULE
+    assert "The last genre." not in genre, EDITORIAL_HELP_RULE
+    assert genre.index("`alpha`") < genre.index("`zebra`"), EDITORIAL_HELP_RULE
+    assert "Installed choices: `arc`" in technique, EDITORIAL_HELP_RULE
+    assert result.stdout.count("`alpha`") == 1, EDITORIAL_HELP_RULE
     assert "Not help." not in result.stdout, EDITORIAL_HELP_RULE
     assert "Not a choice." not in result.stdout, EDITORIAL_HELP_RULE
     assert "<!-- kntnt:" not in result.stdout, EDITORIAL_HELP_RULE
     assert "Invocation read." not in result.stdout, EDITORIAL_HELP_RULE
 
-    # Removing the two known insertions recovers every authored help byte.
-    restored = result.stdout.replace(
-        "Installed choices:\n\n- `alpha` — The first genre, with a wrapped opening.\n- `zebra` — The last genre.",
-        "<!-- kntnt:editorial-genres -->",
-    ).replace(
-        "Installed choices:\n\n- `arc` — A chosen arc.",
-        "<!-- kntnt:editorial-techniques -->",
-    )
-    assert restored == source.read_text(encoding="utf-8"), EDITORIAL_HELP_RULE
+    _assert_compact(result.stdout, skill / "help.md")
 
     # Normal execution receives the exact Library whose resources help used.
     valid = _invoke(skill, "", tmp_path, manager=manager)
@@ -489,8 +569,8 @@ def test_editorial_help_lists_only_names_of_lowercase_letters(
 
     # Help still stops, and lists the canonical choice but not the stray file.
     assert result.returncode == EXIT_HELP, (result.stderr, EDITORIAL_HELP_RULE)
-    assert "- `baseline` — A choice." in result.stdout, EDITORIAL_HELP_RULE
-    assert f"- `{Path(filename).stem}`" not in result.stdout, EDITORIAL_HELP_RULE
+    assert "Installed choices: `baseline`" in result.stdout, EDITORIAL_HELP_RULE
+    assert f"`{Path(filename).stem}`" not in result.stdout, EDITORIAL_HELP_RULE
     assert "Not a choice." not in result.stdout, EDITORIAL_HELP_RULE
 
 
@@ -526,12 +606,13 @@ def test_editorial_help_reads_resource_changes_on_every_call(
         result.returncode == EXIT_HELP
         for result in (before, added, moved, edited, removed)
     ), EDITORIAL_HELP_RULE
-    assert "- `newchoice`" not in before.stdout, EDITORIAL_HELP_RULE
-    assert "- `newchoice` — A new choice." in added.stdout, EDITORIAL_HELP_RULE
-    assert "- `newchoice`" not in moved.stdout, EDITORIAL_HELP_RULE
-    assert "- `renamed` — A new choice." in moved.stdout, EDITORIAL_HELP_RULE
-    assert "- `renamed` — An updated description." in edited.stdout, EDITORIAL_HELP_RULE
-    assert "A new choice." not in edited.stdout, EDITORIAL_HELP_RULE
+    assert "`newchoice`" not in before.stdout, EDITORIAL_HELP_RULE
+    assert "`newchoice`" in added.stdout, EDITORIAL_HELP_RULE
+    assert "`newchoice`" not in moved.stdout, EDITORIAL_HELP_RULE
+    assert "`renamed`" in moved.stdout, EDITORIAL_HELP_RULE
+    assert "`renamed`" in edited.stdout, EDITORIAL_HELP_RULE
+    assert "An updated description." not in edited.stdout, EDITORIAL_HELP_RULE
+    assert edited.stdout == moved.stdout, EDITORIAL_HELP_RULE
     assert removed.stdout == before.stdout, EDITORIAL_HELP_RULE
 
 
@@ -568,8 +649,8 @@ def test_editorial_help_reports_unavailable_lists_without_partial_choices(
     assert result.stderr == "", EDITORIAL_HELP_RULE
     assert "Installed choices unavailable" in result.stdout, EDITORIAL_HELP_RULE
     assert str(genres) in result.stdout, EDITORIAL_HELP_RULE
-    assert "A partial choice." not in result.stdout, EDITORIAL_HELP_RULE
-    assert "- `arc` — The healthy list." in result.stdout, EDITORIAL_HELP_RULE
+    assert "`alpha`" not in result.stdout, EDITORIAL_HELP_RULE
+    assert "Installed choices: `arc`" in result.stdout, EDITORIAL_HELP_RULE
     assert "/kntnt update" in result.stdout, EDITORIAL_HELP_RULE
 
 
@@ -1485,25 +1566,23 @@ def test_every_shipped_skills_documented_forms_are_read_as_its_pages_state_them(
 
 
 def test_every_shipped_skill_routes_its_help_forms_to_its_pages() -> None:
-    """Root help forms print `help.md`; a command path's help form prints its page."""
+    """Every help route derives its compact view from the addressed page."""
 
     engine = _engine()
 
     for body in _shipped_skills():
         directory = body.parent
-        root = (directory / "help.md").read_text(encoding="utf-8").rstrip("\n")
+        root = directory / "help.md"
         for payload in ("--help", "-h", "help"):
             reading = engine.read_invocation(directory, payload)
             assert reading.status == EXIT_HELP, (directory.name, payload)
-            assert reading.text.rstrip("\n") == root, (directory.name, payload)
+            _assert_compact(reading.text, root)
 
         for page in sorted((directory / "help").rglob("*.md")):
             path = " ".join(page.relative_to(directory / "help").with_suffix("").parts)
             reading = engine.read_invocation(directory, f"{path} --help")
             assert reading.status == EXIT_HELP, (directory.name, path)
-            assert reading.text.rstrip("\n") == page.read_text(encoding="utf-8").rstrip(
-                "\n"
-            )
+            _assert_compact(reading.text, page)
 
 
 def test_a_refusal_quotes_the_addressed_pages_own_synopsis_and_route() -> None:
@@ -1554,9 +1633,7 @@ def test_the_managers_own_directory_passes_the_dependency_gate(tmp_path: Path) -
     result = _invoke(MANAGER_DIR, "select --help", tmp_path)
 
     assert result.returncode == EXIT_HELP, (result.stdout, result.stderr)
-    assert result.stdout.rstrip("\n") == (
-        (MANAGER_DIR / "help" / "select.md").read_text(encoding="utf-8").rstrip("\n")
-    )
+    _assert_compact(result.stdout, MANAGER_DIR / "help" / "select.md")
 
 
 def test_manager_refusals_use_the_engine_diagnostics_and_route(tmp_path: Path) -> None:
@@ -1719,6 +1796,35 @@ def _shim_skill(root: Path, *, manager_beside: bool) -> Path:
     return skill
 
 
+def _help_install(root: Path, source: Path) -> Path:
+    """Install real help and the identical shim without unrelated dependencies."""
+
+    skill = root / "skills" / source.name
+    declaration = re.sub(
+        r"(?m)^(  kntnt\.(?:binaries|skills|externals|capabilities):).*$",
+        r'\1 ""',
+        (source / "SKILL.md").read_text(encoding="utf-8"),
+    )
+    _write(skill / "SKILL.md", declaration)
+    _write(skill / "scripts" / "invoke.py", SHIM.read_text(encoding="utf-8"))
+    for page in [source / "help.md", *sorted((source / "help").rglob("*.md"))]:
+        _write(skill / page.relative_to(source), page.read_text(encoding="utf-8"))
+    (skill.parent / "kntnt").symlink_to(MANAGER_DIR, target_is_directory=True)
+    (root / "home").mkdir()
+    (root / "proj").mkdir()
+    return skill
+
+
+def _help_files(root: Path) -> dict[Path, bytes]:
+    """Read installed files and user layers without following the Manager link."""
+
+    return {
+        p.relative_to(root): p.read_bytes()
+        for p in root.rglob("*")
+        if p.is_file() and not p.is_relative_to(root / "skills" / "kntnt")
+    }
+
+
 def _run_shim(
     skill: Path, payload: str, tmp_path: Path
 ) -> subprocess.CompletedProcess[str]:
@@ -1744,6 +1850,59 @@ def _run_shim(
     )
 
 
+def test_model_selector_root_help_is_compact_complete_and_read_only(
+    tmp_path: Path,
+) -> None:
+    """The reported 6,000-word help regression goes through the real shim."""
+
+    # Install the shipped pages and shim with only the help-independent gate removed.
+    skill = _help_install(tmp_path, SKILLS / "models" / "model-selector")
+    before = _help_files(tmp_path)
+
+    results = [
+        _run_shim(skill, payload, tmp_path) for payload in ("--help", "-h", "help")
+    ]
+
+    # The whole accepted syntax survives wrapping; reference prose stays on disk.
+    assert all(result.returncode == EXIT_HELP for result in results)
+    output = results[0].stdout
+    assert all(result.stdout == output for result in results)
+    assert len(output.split()) <= 400
+    _assert_compact(output, skill / "help.md")
+    assert _help_files(tmp_path) == before
+
+
+@pytest.mark.parametrize(
+    "body", sorted(SKILLS.glob("*/*/SKILL.md")), ids=lambda body: body.parent.name
+)
+def test_every_shipped_help_path_uses_compact_help_through_the_shim(
+    tmp_path: Path,
+    body: Path,
+) -> None:
+    """Simple, flag-rich and nested grammars all use the same installed engine."""
+
+    # The real shipped declarations and shim resolve a Manager beside the Skill.
+    skill = _help_install(tmp_path, body.parent)
+    before = _help_files(tmp_path)
+    routes = [(payload, skill / "help.md") for payload in ("--help", "-h", "help")]
+    for page in sorted((skill / "help").rglob("*.md")):
+        path = " ".join(page.relative_to(skill / "help").with_suffix("").parts)
+        routes.extend((f"{path} {flag}", page) for flag in ("--help", "-h"))
+
+    # Each accepted help route stops; contextual help refuses before any work.
+    for payload, page in routes:
+        result = _run_shim(skill, payload, tmp_path)
+        assert result.returncode == EXIT_HELP, (payload, result.stdout, result.stderr)
+        assert result.stderr == ""
+        _assert_compact(result.stdout, page)
+        refused = _run_shim(skill, f"{payload} -- Explain", tmp_path)
+        assert refused.returncode == EXIT_REFUSED
+        assert "context refusal:" in refused.stdout
+        assert "## SYNOPSIS" not in refused.stdout
+        assert "Full reference:" not in refused.stdout
+    assert _help_files(tmp_path) == before
+
+
 def test_the_shim_passes_the_engines_three_answers_through(tmp_path: Path) -> None:
     """Exit status and stdout are the engine's, whichever of the three it gave."""
 
@@ -1756,9 +1915,7 @@ def test_the_shim_passes_the_engines_three_answers_through(tmp_path: Path) -> No
 
     page = _run_shim(skill, "--help", tmp_path)
     assert page.returncode == EXIT_HELP, (page.stdout, page.stderr)
-    assert page.stdout.rstrip("\n") == (skill / "help.md").read_text(
-        encoding="utf-8"
-    ).rstrip("\n")
+    _assert_compact(page.stdout, skill / "help.md")
 
     refused = _run_shim(skill, "--bogus", tmp_path)
     assert refused.returncode == EXIT_REFUSED, (refused.stdout, refused.stderr)
