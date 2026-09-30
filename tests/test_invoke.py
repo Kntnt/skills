@@ -1585,6 +1585,19 @@ def test_every_shipped_skill_routes_its_help_forms_to_its_pages() -> None:
             _assert_compact(reading.text, page)
 
 
+@pytest.mark.parametrize("name", ["addressed_page", "Grammar"])
+def test_help_route_documentation_distinguishes_compact_views_from_reference_files(
+    name: str,
+) -> None:
+    """Route contracts must agree with the help behavior the suite exercises."""
+
+    documentation = " ".join((getattr(_engine(), name).__doc__ or "").split())
+
+    assert "compact help" in documentation, documentation
+    assert "full reference" in documentation, documentation
+    assert "file" in documentation, documentation
+
+
 def test_a_refusal_quotes_the_addressed_pages_own_synopsis_and_route() -> None:
     """The Manager uses the common engine refusal for its addressed page."""
 

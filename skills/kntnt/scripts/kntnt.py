@@ -3994,7 +3994,9 @@ def addressed_verb(argv: list[str]) -> str:
 
 
 def addressed_page(argv: list[str]) -> tuple[Path, str]:
-    """Return the manpage an invocation addressed and where to read it in full.
+    """Return the addressed full reference file and its compact help route.
+
+    The route prints compact help; read the returned file for full details.
 
     A verb the manager documents answers with its own page. Anything else —
     an internal subcommand, or a word that is no subcommand at all — answers
@@ -4193,7 +4195,10 @@ class Form:
 
 @dataclass(frozen=True)
 class Grammar:
-    """What one manpage declares: its forms, and the route to read it in full."""
+    """Canonical forms, their full reference file, and their compact help route.
+
+    `page` names the file to read for full details; `route` prints compact help.
+    """
 
     page: Path
     route: str
