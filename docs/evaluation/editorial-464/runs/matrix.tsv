@@ -1,0 +1,17 @@
+lane	run	arm	revision	input	invocation	capture
+C	pre-column-clean-resp-1	pre	41fd4c55	docs/evaluation/corpus/editorial-quality/controls/column-clean.md	/redline --genre=column --language=sv --output=response input.md	no
+C	pre-column-clean-file-1	pre	41fd4c55	docs/evaluation/corpus/editorial-quality/controls/column-clean.md	/redline --genre=column --language=sv --output=output.md input.md	yes
+C	post-column-clean-resp-1	post	131c5c39	docs/evaluation/corpus/editorial-quality/controls/column-clean.md	/redline --genre=column --language=sv --output=response input.md	no
+C	post-column-clean-file-1	post	131c5c39	docs/evaluation/corpus/editorial-quality/controls/column-clean.md	/redline --genre=column --language=sv --output=output.md input.md	yes
+C	pre-column-clean-resp-2	pre	41fd4c55	docs/evaluation/corpus/editorial-quality/controls/column-clean.md	/redline --genre=column --language=sv --output=response input.md	no
+C	pre-column-clean-file-2	pre	41fd4c55	docs/evaluation/corpus/editorial-quality/controls/column-clean.md	/redline --genre=column --language=sv --output=output.md input.md	yes
+C	post-column-clean-resp-2	post	131c5c39	docs/evaluation/corpus/editorial-quality/controls/column-clean.md	/redline --genre=column --language=sv --output=response input.md	no
+C	post-column-clean-file-2	post	131c5c39	docs/evaluation/corpus/editorial-quality/controls/column-clean.md	/redline --genre=column --language=sv --output=output.md input.md	yes
+C	pre-column-clean-resp-3	pre	41fd4c55	docs/evaluation/corpus/editorial-quality/controls/column-clean.md	/redline --genre=column --language=sv --output=response input.md	no
+C	pre-column-clean-file-3	pre	41fd4c55	docs/evaluation/corpus/editorial-quality/controls/column-clean.md	/redline --genre=column --language=sv --output=output.md input.md	yes
+C	post-column-clean-resp-3	post	131c5c39	docs/evaluation/corpus/editorial-quality/controls/column-clean.md	/redline --genre=column --language=sv --output=response input.md	no
+C	post-column-clean-file-3	post	131c5c39	docs/evaluation/corpus/editorial-quality/controls/column-clean.md	/redline --genre=column --language=sv --output=output.md input.md	yes
+G	pre-opinion-flawed-1	pre	41fd4c55	docs/evaluation/corpus/editorial-quality/controls/opinion-flawed.md	/redline --genre=opinion --language=sv --output=response input.md	no
+G	post-opinion-flawed-1	post	131c5c39	docs/evaluation/corpus/editorial-quality/controls/opinion-flawed.md	/redline --genre=opinion --language=sv --output=response input.md	no
+G	pre-opinion-flawed-2	pre	41fd4c55	docs/evaluation/corpus/editorial-quality/controls/opinion-flawed.md	/redline --genre=opinion --language=sv --output=response input.md	no
+G	post-opinion-flawed-2	post	131c5c39	docs/evaluation/corpus/editorial-quality/controls/opinion-flawed.md	/redline --genre=opinion --language=sv --output=response input.md	no
