@@ -4,6 +4,10 @@
 the standfirst named it. `case-study-clean`'s last subheading stated the
 reservation Maya Lind's quotation is there to carry. Both rows stay frozen as
 conforming, so the texts are what move (issue #431).
+
+`case-study-clean`'s headline named an action, not the customer's benefit, and
+did not say on its own what the text is about. It now names Lind's appraisal
+of the trial at her own strength (issue #463).
 """
 
 from __future__ import annotations
@@ -33,10 +37,18 @@ OPINION_LEAD_LINE = 6
 OPINION_OTHER_SHA256 = (
     "94a1d829238e88b7c031450ec0e0b5def766a061bf655612946500185ee5574f"
 )
+CASE_STUDY_HEADLINE_LINE = 0
 CASE_STUDY_LAST_SUBHEADING_LINE = 20
 CASE_STUDY_OTHER_SHA256 = (
-    "24afcd641482b1ed5c7c2bb9b4048aacf589f53e1d300fa044ddac5c5667fb3e"
+    "aeaa8f6b474f572521b34c450596d371ed1dd511007db01c006fa1a5cef99b55"
 )
+
+# The anatomy's soft limits for a headline, which the revised one stays inside
+# as well as inside the hard 20-70 characters (issue #463).
+HEADLINE_NORM_WORDS = (3, 8)
+HEADLINE_NORM_CHARACTERS = 60
+
+CASE_STUDY_HEADLINE = "# Gemensam ärendebild hjälper, säger Elm Quay om loggförsöket"
 
 OPINION_CLOSE = (
     "Ett antagande blir inte ett beslutsunderlag för att kalendern säger september."
@@ -86,6 +98,7 @@ COUNTED = re.compile(
 )
 
 REVISION_DATE = "2026-09-29"
+HEADLINE_REVISION_DATE = "2026-09-30"
 
 
 def _control(name: str) -> str:
@@ -94,11 +107,11 @@ def _control(name: str) -> str:
     return (CONTROLS / name).read_text(encoding="utf-8")
 
 
-def _other_lines_sha256(text: str, skip: int) -> str:
-    """Digest every line but *skip*, so a second edit cannot hide in the file."""
+def _other_lines_sha256(text: str, *skip: int) -> str:
+    """Digest every line but *skip*, so a further edit cannot hide in the file."""
 
     lines = text.splitlines()
-    kept = [line for index, line in enumerate(lines) if index != skip]
+    kept = [line for index, line in enumerate(lines) if index not in skip]
     return hashlib.sha256("\n".join(kept).encode()).hexdigest()
 
 
@@ -209,11 +222,38 @@ def test_case_study_clean_last_subheading_leaves_the_quotation() -> None:
     assert any(token in folded for token in NAMED), heading
     assert len(heading) <= SUBHEADING_CEILING, (heading, len(heading))
 
-    # One line moved.
+    # One line moved here. The headline is #463's, and its own test pins it.
     assert (
-        _other_lines_sha256(text, CASE_STUDY_LAST_SUBHEADING_LINE)
+        _other_lines_sha256(
+            text, CASE_STUDY_HEADLINE_LINE, CASE_STUDY_LAST_SUBHEADING_LINE
+        )
         == CASE_STUDY_OTHER_SHA256
     ), "a line other than the last subheading moved in case-study-clean"
+
+
+def test_case_study_clean_headline_is_understood_on_its_own() -> None:
+    """The headline names Lind's appraisal of the trial, and nothing else moved.
+
+    It stays inside the anatomy's soft limits, not only its hard ones, and
+    every line but it and #431's last subheading is as it was (issue #463).
+    """
+
+    text = _control("case-study-clean.md")
+    assert text.endswith("\n")
+    assert text.splitlines()[CASE_STUDY_HEADLINE_LINE] == CASE_STUDY_HEADLINE
+
+    headline = _measure("case-study-clean.md")["parts"]["headline"]
+    low, high = HEADLINE_NORM_WORDS
+    assert low <= headline["words"] <= high, headline
+    assert headline["characters"] <= HEADLINE_NORM_CHARACTERS, headline
+
+    # The headline and #431's subheading moved, and nothing else.
+    assert (
+        _other_lines_sha256(
+            text, CASE_STUDY_HEADLINE_LINE, CASE_STUDY_LAST_SUBHEADING_LINE
+        )
+        == CASE_STUDY_OTHER_SHA256
+    ), "a line other than the headline and the last subheading moved"
 
 
 def test_the_matrix_records_the_revision_and_that_earlier_records_stand() -> None:
@@ -244,6 +284,45 @@ def test_the_matrix_records_the_revision_and_that_earlier_records_stand() -> Non
     assert "headlines.md" in note
     assert "without the standfirst" in note
     assert "subheading over a quotation" in note
+    assert "stands as judged" in note
+
+
+def test_the_matrix_records_the_headline_revision() -> None:
+    """A dated paragraph says what was revised, under which two rules.
+
+    It stands after #431's paragraph and before the staging section, and says
+    that records made against an earlier corpus commit stand (issue #463).
+    """
+
+    opening, separator, _rest = MATRIX.read_text(encoding="utf-8").partition(
+        "## Material and staging"
+    )
+    assert separator, "the matrix no longer opens on its revision notes"
+
+    paragraphs = opening.split("\n\n")
+    index = next(
+        (
+            position
+            for position, paragraph in enumerate(paragraphs)
+            if HEADLINE_REVISION_DATE in paragraph and "case-study-clean" in paragraph
+        ),
+        None,
+    )
+    assert index is not None, (
+        "the matrix opening has no dated paragraph revising case-study-clean's headline"
+    )
+    note = paragraphs[index]
+    earlier = next(
+        position
+        for position, paragraph in enumerate(paragraphs)
+        if REVISION_DATE in paragraph and "opinion-clean" in paragraph
+    )
+    assert index > earlier, "the headline revision comes before #431's"
+    assert "headline" in note
+    assert "headlines.md" in note
+    assert "understood on its own" in note
+    assert "casestudy.md" in note
+    assert "benefit or result" in note
     assert "stands as judged" in note
 
 

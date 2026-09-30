@@ -1,4 +1,4 @@
-# Elm Quay samlade reparationsärendena
+# Gemensam ärendebild hjälper, säger Elm Quay om loggförsöket
 
 **Elm Quay Housing provade en gemensam reparationslogg i två hus under åtta veckor. Arbetsledaren Maya Lind vill göra om försöket, men skulle avsätta mer tid för förberedelser. Här är vad gruppen gjorde, vad anteckningarna visar och vad hon skulle ändra.**
 
