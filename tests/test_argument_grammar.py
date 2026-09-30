@@ -29,15 +29,6 @@ def _load(name: str, filename: str) -> Any:
     return module
 
 
-def _declared(module: Any, name: str) -> Any:
-    """Resolve one module-level annotation, deferred to a string or not."""
-
-    annotation = module.__annotations__[name]
-    if isinstance(annotation, str):
-        return eval(annotation, vars(module))
-    return annotation
-
-
 def test_a_flag_declared_valueless_leaves_the_operand_behind_it_alone() -> None:
     """The one thing a hand-rolled parser cannot know by looking at a token.
 
