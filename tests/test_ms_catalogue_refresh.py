@@ -28,6 +28,7 @@ import importlib.util
 import json
 import os
 import re
+import shutil
 import signal
 import subprocess
 import sys
@@ -2506,3 +2507,199 @@ def test_refresh_retains_series_preferences_and_resyncs_only_selected_agents(
         if path != user
     )
     assert user.read_text("utf-8") == "mine\n"
+
+
+def test_manual_refresh_names_only_models_actually_added_or_removed(
+    tmp_path: Path,
+) -> None:
+    """The immediate update report needs identities without a second pass or read."""
+
+    here, data, agents = _machine(tmp_path, "openai")
+    catalogue.run(data, here, agents, now=NOW, readers=_readers())
+    pages = _codex_pages()
+    offer = copy.deepcopy(pages[0]["data"][0])
+    offer.update(id="gpt-6.1-sol", model="gpt-6.1-sol", displayName="GPT-6.1 Sol")
+    pages[0]["data"].append(offer)
+    report = catalogue.run(data, here, agents, now=NOW, readers=_readers(codex=pages))
+
+    assert report["added"] == ["gpt-6.1-sol"]
+    assert report["removed"] == []
+    again = catalogue.run(data, here, agents, now=NOW, readers=_readers(codex=pages))
+    assert again["added"] == []
+    assert again["removed"] == []
+    assert again["sources"]["codex"]["outcome"] == "complete"
+    assert again["sources"]["codex"]["changes"] == 0
+
+
+@pytest.mark.parametrize("selected_series", [None, ["sol"]])
+def test_manual_cli_refresh_preserves_choices_and_matches_the_direct_pass(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+    selected_series: list[str] | None,
+) -> None:
+    """A new release arrives after today's schedule without a profile or objective write."""
+
+    # Seed two identical machines after the same scheduled pass.
+    original = tmp_path / "original"
+    original.mkdir()
+    _, data, agents = _machine(original, "anthropic", "openai")
+    document = json.loads((data / "profile.json").read_text())
+    if selected_series is not None:
+        document["families"] = {"openai": selected_series}
+    (data / "profile.json").write_text(json.dumps(document, indent=3) + "\n")
+    (data / "objective.json").write_text('{ "objective": "time" }\n')
+    today = datetime.now(UTC)
+    catalogue.run(data, SHIPPED, agents, scheduled=True, now=today, readers=_readers())
+    clone = tmp_path / "direct"
+    clone.mkdir()
+    shutil.copytree(data, clone / "data")
+    if agents.exists():
+        shutil.copytree(agents, clone / "agents")
+    protected = {
+        name: (data / name).read_bytes()
+        for name in ("profile.json", "objective.json", "refresh-marker.json")
+    }
+
+    # Replay a later Codex list with a new Sol release and a wholly new series.
+    pages = _codex_pages()
+    for identifier, name in (
+        ("gpt-6.1-sol", "GPT-6.1 Sol"),
+        ("gpt-6.1-newseries", "GPT-6.1 Newseries"),
+    ):
+        offer = copy.deepcopy(pages[0]["data"][0])
+        offer.update(id=identifier, model=identifier, displayName=name)
+        pages[0]["data"].append(offer)
+    readers = _readers(codex=pages)
+    monkeypatch.setattr(catalogue, "READERS", readers)
+    code = catalogue.main(["refresh", f"--data={data}", f"--agents={agents}"])
+    report = json.loads(capsys.readouterr().out)
+    instant = datetime.fromisoformat(report["at"])
+    direct = catalogue.run(
+        clone / "data", SHIPPED, clone / "agents", now=instant, readers=readers
+    )
+
+    # Stored effects match the direct entry, including real Claude definitions.
+    assert code == 0 and report["ran"] is True
+    assert report["added"] == ["gpt-6.1-newseries", "gpt-6.1-sol"]
+    assert _model(SHIPPED, data, "gpt-6.1-sol") is not None
+    for name, before in protected.items():
+        assert (data / name).read_bytes() == before
+        assert (clone / "data" / name).read_bytes() == before
+    for name in ("catalogue.json", "catalogue-journal.jsonl", "lifecycle.json"):
+        assert (data / name).read_bytes() == (clone / "data" / name).read_bytes()
+    for key in (
+        "ran",
+        "outcome",
+        "sources",
+        "changes",
+        "added",
+        "removed",
+        "lifecycle",
+    ):
+        assert report[key] == direct[key]
+    assert report["definitions"]["unchanged"]
+    assert {p.name: p.read_bytes() for p in agents.glob("*.md")} == {
+        p.name: p.read_bytes() for p in (clone / "agents").glob("*.md")
+    }
+    profile = profiles.load(data, catalogue.load(data, SHIPPED))
+    assert profiles.allows(profile, _model(SHIPPED, data, "gpt-6.1-sol"))
+    assert profiles.allows(profile, _model(SHIPPED, data, "gpt-6.1-newseries")) == (
+        selected_series is None
+    )
+
+
+def test_manual_refresh_reports_a_source_failure_beside_real_additions(
+    tmp_path: Path,
+) -> None:
+    """An unreadable source has a reason, while another can legitimately add models."""
+
+    here, data, agents = _machine(tmp_path, "anthropic", "openai")
+    report = catalogue.run(
+        data,
+        here,
+        agents,
+        now=NOW,
+        readers=_readers(
+            overrides={"claude": _failing("fixture authentication failed")}
+        ),
+    )
+
+    assert report["ran"] is True
+    assert report["sources"]["claude"] == {
+        "outcome": "unreadable",
+        "reason": "fixture authentication failed",
+        "changes": 0,
+    }
+    assert report["sources"]["codex"]["outcome"] == "complete"
+    assert report["sources"]["codex"]["changes"] > 0
+    assert "gpt-5.5" in report["added"]
+    assert report["definitions"]["written"]
+
+
+def test_manual_refresh_reports_models_removed_by_the_existing_lifecycle(
+    tmp_path: Path,
+) -> None:
+    """Removal names and evidence cleanup are the effects of the same existing pass."""
+
+    here, data, agents = _machine(tmp_path, "openai")
+    _measured(data, GONE, 1)
+    _waiting(data, GONE, "waiting-unit")
+    _days(here, data, agents, 2, codex=_codex_without())
+    report = catalogue.run(
+        data, here, agents, now=NOW + 2 * DAY, readers=_readers(codex=_codex_without())
+    )
+
+    assert report["removed"] == [GONE]
+    assert _model(here, data, GONE) is None
+    assert _ledger(data) == []
+    assert _queued(data) == []
+
+
+def test_partial_manual_refresh_reports_positive_results_without_claiming_completeness(
+    tmp_path: Path,
+) -> None:
+    """A fallback Codex list can add models but cannot establish missing releases."""
+
+    here, data, agents = _machine(tmp_path, "openai")
+    report = catalogue.run(
+        data,
+        here,
+        agents,
+        now=NOW,
+        readers=_readers(cache_age=timedelta(seconds=3600)),
+    )
+
+    assert report["ran"] is True
+    assert report["sources"]["codex"]["outcome"] == "incomplete"
+    assert report["sources"]["codex"]["reason"]
+    assert report["sources"]["codex"]["changes"] > 0
+    assert "gpt-5.5" in report["added"]
+    assert report["removed"] == []
+
+
+def test_manual_cli_refresh_without_a_valid_profile_preserves_existing_answers(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+) -> None:
+    """No makers is an outcome, never permission to overwrite answers or interview."""
+
+    data = tmp_path / "data"
+    data.mkdir()
+    (data / "profile.json").write_text('{ "harnesses": ["codex"], "makers": [] }\n')
+    (data / "objective.json").write_text('{ "objective": "time" }\n')
+    before = _files(data)
+    monkeypatch.setattr(catalogue, "READERS", dict.fromkeys(SOURCES, _never))
+
+    code = catalogue.main(
+        ["refresh", f"--data={data}", f"--agents={tmp_path / 'agents'}"]
+    )
+    report = json.loads(capsys.readouterr().out)
+
+    assert code == 0
+    assert report["ran"] is True
+    assert report["outcome"] == "no makers chosen"
+    assert not report.get("sources")
+    assert {
+        path: content for path, content in _files(data).items() if path in before
+    } == before
+    assert not (tmp_path / "agents").exists()

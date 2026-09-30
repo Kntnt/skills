@@ -28,7 +28,7 @@ Every figure here is USD per million tokens and nothing converts. A rate card in
 
 Profiles without `families` retain all present and future series of their chosen Makers. Unknown series, empty lists and series for unchosen Makers are refused atomically. A later read keeps a selected series that temporarily disappears without dropping other choices or admitting other series; structural damage is reported as a damaged profile. The profile holds no credentials. Writing it also regenerates the subagent definitions that make a deliberation level launchable — one per selected Anthropic family and supported level, following its newest release — and removes the ones your new answers no longer justify. Where that directory had to be created, the definitions reach sessions started from then on rather than the one you are in.
 
-Once the profile is written, or you decline the review, setup runs the catalogue pass once and reports what each of its sources said, so the catalogue is current straight away rather than after the next daily pass. It does not run where the profile was refused.
+Once the profile is written, or you decline the review, setup runs the catalogue pass once and reports what each of its sources said, so the catalogue is current straight away rather than after the next daily pass. It does not run where the profile was refused. Use `/model-selector update` for a later catalogue refresh that preserves your choices and requires no interview.
 
 Setup neither asks about nor writes a status line. The quota guard's figure for the Claude channel is written by the `statusline` Feature as it draws, so Enabling that Feature in `/kntnt select` is what arms the guard there and removing it is what disarms it; if you have replaced the status line with one of your own, or have none, the Claude channel simply gets no guard, which stops nothing. The Codex figure is read from Codex's own session logs and needs nothing of you at all.
 
@@ -56,4 +56,4 @@ That contract belongs to the collection rather than to this page, and it is stat
 
 ## SEE ALSO
 
-**/model-selector status --help**, **/model-selector reset --help**
+**/model-selector update --help**, **/model-selector status --help**, **/model-selector reset --help**

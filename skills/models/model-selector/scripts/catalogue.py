@@ -1371,7 +1371,9 @@ def refresh(
     Each entry is checked by the validator before it is written, and the
     stored file is written whole, so `load` never falls back to the seed by
     accident. After any write the
-    generated agent definitions in *agents* are brought into line.
+    generated agent definitions in *agents* are brought into line. The report
+    names actually published model additions and removals under `added` and
+    `removed`, so a manual caller reports identities from this pass alone.
 
     Each source is given the lesser of `EXCHANGE_SECONDS` and what remains of
     `PASS_SECONDS`, and a source reached with nothing left is not read. Where
@@ -1565,6 +1567,12 @@ def refresh(
         for source, reading in readings.items()
     }
     report["changes"] = len(rows)
+
+    # Only published changes name models in the immediate manual-pass answer.
+    report["added"] = sorted(
+        row["model"] for row in rows if written and row["field"] == "model"
+    )
+    report["removed"] = sorted(removed_now)
 
     if written:
         try:

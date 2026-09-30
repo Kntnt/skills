@@ -38,4 +38,4 @@ Every form above ends with [**--** *INSTRUCTION*]. The first standalone, unquote
 
 ## SEE ALSO
 
-**/model-selector setup --help**, **/model-selector status --help**, **/model-selector --help**
+**/model-selector update --help**, **/model-selector setup --help**, **/model-selector status --help**, **/model-selector --help**

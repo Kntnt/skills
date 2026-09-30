@@ -14553,6 +14553,7 @@ _MODEL_SELECTOR_MANPAGES = frozenset(
         "reset.md",
         "setup.md",
         "status.md",
+        "update.md",
     }
 )
 

@@ -2,7 +2,7 @@
 name: model-selector
 description: "Choose the model and deliberation level that completes delegated work at the lowest total cost, or in the least time where the user has chosen time. Never used implicitly: a Skill that routes work runs its script."
 disable-model-invocation: true
-argument-hint: "[--json] [--scope=limited|callable|all] [--kind=<kind>] [--data=<path>] [<work>] | setup [--data=<path>] | list [--data=<path>] | status [--data=<path>] | evidence [--data=<path>] [<kind>] | objective [--data=<path>] [time|cost] | reset [--evidence] [--yes] [--data=<path>] [-- <instruction>]"
+argument-hint: "[--json] [--scope=limited|callable|all] [--kind=<kind>] [--data=<path>] [<work>] | setup [--data=<path>] | list [--data=<path>] | update [--data=<path>] | status [--data=<path>] | evidence [--data=<path>] [<kind>] | objective [--data=<path>] [time|cost] | reset [--evidence] [--yes] [--data=<path>] [-- <instruction>]"
 compatibility: Requires uv; on macOS, launchctl runs the daily catalogue pass
 metadata:
   kntnt.internal: "true"
@@ -76,6 +76,20 @@ For `list`, run only the local inventory reader:
     uv run "$HERE/scripts/inventory.py" [--data=<directory>]
 
 Return its output verbatim: the validated profile's selected Harnesses and the latest catalogue release per selected series, grouped under the Maker's display name, or its short diagnosis naming `setup` when no valid profile stands. Here “enabled” means selected in the profile. The script applies the shared profile permission and catalogue release order; a missing selected series remains visible as having no catalogue release. Use the actual output for this invocation, never session history. This command performs no selection, usage read, Harness or Bridge call, network access, interview, refresh, definition generation or persistent write. Stop after returning the inventory; `status` is the separate diagnostic command.
+
+## Update
+
+For `update`, run the existing manual catalogue pass once:
+
+    uv run "$HERE/scripts/catalogue.py" refresh [--data=<directory>]
+
+Use the invocation's data directory. This pass runs even when today's scheduled pass already ran, with the existing lock, source deadlines, validation, journal, missing-release lifecycle and definition sync. It reads structured lists and starts no model job. Leave the daily schedule as it stands.
+
+Answer briefly from this invocation's report: whether `ran` is true; for each source under `sources`, whether its `outcome` is complete, incomplete (read only in part), or unreadable (not read), its `reason` when present, and its `changes` count. Zero changes means “no changes”, never “could not read”. Name the models in `added` and `removed` only when those lists are non-empty. Where `definitions` is present, report the generated subagent definitions written and removed, or its actual error; pass on any report `problem` or deadline outcome. Report a source failure alongside the other sources' actual results, including legitimate changes from them.
+
+Where `ran` is false with `reason` `locked`, say another pass is running and this caller did nothing. Where `outcome` is `no makers chosen`, say no valid profile chooses a Maker, no sources were read, and point briefly to `/model-selector setup`. Stop after the report; run no interview and write no profile.
+
+The pass updates catalogue facts and its existing lifecycle effects. Profile bytes, including `answered_at`, Harnesses, Makers, payment channels and series choices, and standing objective bytes stay as they are. All-series choices admit future series; explicit choices admit only their selected series. Measurements and pending units may be removed under the existing lifecycle rule when a removed model has no newer release of its family. Use `setup` for choices and `status` for diagnostics.
 
 ## Setup
 

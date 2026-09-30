@@ -612,7 +612,7 @@ def test_the_validator_refuses_an_entry_with_nothing_to_attribute_it_to() -> Non
 
 
 def test_the_catalogue_has_no_verb_that_adopts_a_document() -> None:
-    """`update` is retired, and the half of it that was a script goes with it.
+    """The former document-adoption update path remains retired.
 
     The catalogue pass is the one writer of `catalogue.json` (ADR-0194), and
     it goes through the validator on its own path, so nothing is left that
@@ -635,7 +635,7 @@ def test_no_model_carries_a_provider_s_own_prose() -> None:
     """Prose never becomes a number, and nothing ranks on it (ADR-0194).
 
     `provider_says` was the provider's one-line positioning of a model, shown
-    in the interview and fetched by `update`. Nothing reads it any more, so the
+    in the interview and fetched by the former adoption path. Nothing reads it, so the
     seed, the loaded catalogue and its print carry it nowhere.
     """
 
@@ -864,28 +864,21 @@ def test_the_shipped_seed_promises_no_refresh_of_what_it_carries() -> None:
     assert not offending, "the seed still promises a refresh:\n" + "\n".join(offending)
 
 
-# Where a person or an agent is told how to use this Skill: every file it
-# ships, the collection's rule on routing, and the README that lists its
-# verbs. `update` was retired, so none of them may name it as this Skill's
-# verb — neither the slash form nor the backticked word nor a heading — and
-# none may hand a document to `catalogue.py adopt` (ADR-0194).
-UPDATE_SWEEP: tuple[Path, ...] = (
+# The old adoption mechanism stays retired when update returns as a manual
+# structured-source refresh. No shipped instruction may offer adoption.
+ADOPTION_SWEEP: tuple[Path, ...] = (
     REPO_ROOT / "docs" / "rules" / "routing.md",
     REPO_ROOT / "README.md",
 )
-RETIRED_UPDATE_FORMS: tuple[str, ...] = (
-    "/model-selector update",
-    "model-selector update",
-    "`update`",
-    "## Update",
+RETIRED_ADOPTION_FORMS: tuple[str, ...] = (
     "catalogue.py adopt",
     'catalogue.py" adopt',
     "`adopt`",
 )
 
 
-def test_no_shipped_file_tells_anybody_to_run_the_retired_update() -> None:
-    """A verb a page names is a verb somebody runs, and this one no longer exists."""
+def test_no_shipped_file_tells_anybody_to_run_the_retired_adoption() -> None:
+    """Update uses structured-source refresh, never a caller-supplied catalogue."""
 
     files = [
         path
@@ -894,16 +887,15 @@ def test_no_shipped_file_tells_anybody_to_run_the_retired_update() -> None:
     ]
     offending = [
         f"{path.relative_to(REPO_ROOT)}:{number}: {form}"
-        for path in [*files, *UPDATE_SWEEP]
+        for path in [*files, *ADOPTION_SWEEP]
         for number, line in enumerate(
             path.read_text(encoding="utf-8").splitlines(), start=1
         )
-        for form in RETIRED_UPDATE_FORMS
+        for form in RETIRED_ADOPTION_FORMS
         if form in line
     ]
 
-    assert not (SHIPPED / "help" / "update.md").exists()
-    assert not offending, "`update` is still named in:\n" + "\n".join(offending)
+    assert not offending, "adoption is still named in:\n" + "\n".join(offending)
 
 
 def _section(heading: str) -> str:
@@ -967,3 +959,31 @@ def test_the_interview_receives_one_current_representative_per_provider_series(
         {"provider": "anthropic", "family": "orchid", "model": "another-maker"},
         {"provider": "openai", "family": "orchid", "model": "a-unversioned"},
     ]
+
+
+def test_update_runs_the_manual_pass_and_reports_its_actual_outcome() -> None:
+    """The agent's executable steps keep facts separate from profile choices."""
+
+    update = _section("Update")
+
+    assert 'catalogue.py" refresh [--data=<directory>]' in update
+    assert "--scheduled" not in update
+    for term in (
+        "sources",
+        "complete",
+        "incomplete",
+        "unreadable",
+        "changes",
+        "reason",
+        "added",
+        "removed",
+        "definitions",
+        "locked",
+        "no makers chosen",
+        "/model-selector setup",
+        "answered_at",
+        "objective",
+        "pending",
+    ):
+        assert term in update
+    assert "run no interview and write no profile" in update

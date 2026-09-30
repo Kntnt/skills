@@ -46,4 +46,4 @@ That contract belongs to the collection rather than to this page, and it is stat
 
 ## SEE ALSO
 
-**/model-selector setup --help**, **/model-selector evidence --help**
+**/model-selector update --help**, **/model-selector setup --help**, **/model-selector evidence --help**

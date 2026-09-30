@@ -1302,10 +1302,18 @@ SHIPPED_CASES: dict[str, list[Case]] = {
         ("objective fast", None),
         ("objective --yes", None),
         ("recommend", {"path": [], "operands": ["recommend"]}),
-        ("update", {"path": [], "operands": ["update"]}),
+        ("update", {"path": ["update"], "flags": {}, "operands": []}),
+        ("update --data=/x", {"path": ["update"], "flags": {"--data": "/x"}}),
+        ("update extra", None),
+        ("update --json", None),
+        ("update --yes", None),
+        ("update --scheduled", None),
+        ("update --data", None),
+        ("update --data /x", None),
+        ("update --data=/x --data=/y", None),
         ("route path", {"path": [], "operands": ["route path"]}),
         ("setup --force", None),
-        ("update --force", {"path": [], "operands": ["update --force"]}),
+        ("update --force", None),
         ("status extra", None),
         ("update --evidence", None),
         ("reset --json", None),
@@ -1593,6 +1601,19 @@ def test_every_shipped_skill_routes_its_help_forms_to_its_pages() -> None:
             reading = engine.read_invocation(directory, f"{path} --help")
             assert reading.status == EXIT_HELP, (directory.name, path)
             _assert_compact(reading.text, page)
+
+
+@pytest.mark.parametrize("flag", ["--help", "-h"])
+def test_model_selector_update_has_direct_help_routes(flag: str) -> None:
+    """A catalogue update has its own help path before any source is read."""
+
+    directory = SKILLS / "models/model-selector"
+    reading = _engine().read_invocation(directory, f"update {flag}")
+
+    assert reading.status == EXIT_HELP
+    _assert_compact(reading.text, directory / "help/update.md")
+    plain = reading.text.replace("*", "").replace("_", "")
+    assert "/model-selector update [--data=PATH]" in " ".join(plain.split())
 
 
 @pytest.mark.parametrize("flag", ["--help", "-h"])
