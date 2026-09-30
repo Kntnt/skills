@@ -15,7 +15,8 @@ PACKET = re.compile(r".+-\d+")
 # What inside a packet stays live, because it is a tool every later evaluation
 # runs or the document that says how to run it, not what that packet observed.
 # `docs/evaluation/README.md` lists `editorial-388/` beside `corpus/` and
-# `protocol.md` as what judging needs, and `protocol.md` names both runners.
+# `protocol.md` as what staging and judging need, and `protocol.md` names
+# both runners.
 LIVE_IN_A_PACKET = (
     "docs/evaluation/editorial-388/README.md",
     "docs/evaluation/editorial-388/harness/",

@@ -4,7 +4,7 @@ One body of material, shared by every evaluation of the editorial Skills, and re
 
 The corpus is representative rather than exhaustive. It is fixture material, not a test suite: nothing here is an assertion about a sentence a model has to write back, and nothing here claims that any model writes perfectly or finds every error. What it does hold is the material the Skills are expected to survive, and the situations their output contract distinguishes.
 
-The protocol that says how a run against this corpus is judged and recorded is in [`../protocol.md`](../protocol.md). Read it before running anything: it also carries the provider-isolation rule, which binds whoever runs an evaluation.
+The protocol that says how a run against this corpus is judged and recorded is in [`../protocol.md`](../protocol.md). It also states how an evaluation is staged. Read it before running anything: it also carries the provider-isolation rule, which binds whoever runs an evaluation. This file's own section *Staging a run* covers only the working copy of the corpus.
 
 ## Staging a run
 
