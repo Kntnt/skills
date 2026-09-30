@@ -2,28 +2,29 @@
 # requires-python = ">=3.12"
 # dependencies = []
 # ///
-"""Read this collection's argument grammar for an engine that answers in JSON.
+"""Read this collection's argument grammar for an engine that refuses with a code.
 
-The Library's other engines declare their command lines to `argparse`, which
-answers a malformed one with a usage dump on stderr and its own exit status.
-The two that reach this module cannot: their contract is one machine-readable
-refusal carrying a stable code, on exit 2, for every line they will not run. So
-they read their own arguments — and this module is the whole of how, rather
-than a habit each of them keeps privately (ADR-0176).
+The Library's engines that declare their command lines to `argparse` keep it:
+it answers a malformed line with a usage dump on stderr and its own exit
+status. An engine that answers every line it will not run with one
+machine-readable refusal, carrying a stable code, on exit 2, cannot declare
+its command line to `argparse`. This module is how that engine reads its own
+arguments — the whole of how, rather than a habit it would keep privately
+(ADR-0176).
 
 Two things are normalised here. A value written apart from its flag is read as
-that flag's value, because the engines stay permissive about the attached
-spelling the collection writes everywhere else (ADR-0176); and the operands are
-separated from the options whichever order the caller wrote them in, because
-the Skills write the flags first (ADR-0176) while these parsers read their own
-operand first. What a flag is, an engine knows and this module does not: the
-flags that carry no value are named by the engine that has them, so a valueless
-flag never takes the operand written behind it.
+that flag's value, because an engine under that contract is permissive about
+the attached spelling the collection writes everywhere else (ADR-0176); and the
+operands are separated from the options whichever order the caller wrote them
+in, because the Skills write the flags first (ADR-0176) while a parser under
+that contract reads its own operand first. What a flag is, an engine knows and
+this module does not: the flags that carry no value are named by the engine
+that has them, so a valueless flag never takes the operand written behind it.
 
-The module is loaded by path from beside the engine that reads it, the way the
-Library's own cross-module load already is: a peer Skill's `scripts/` is not an
-interface to reach into, and neither is a `sys.path` a module does not own
-(ADR-0149).
+Where an engine reads this module, it loads it by path from beside itself, the
+way the Library's own cross-module load already is: a peer Skill's `scripts/`
+is not an interface to reach into, and neither is a `sys.path` a module does
+not own (ADR-0149).
 """
 
 from __future__ import annotations
