@@ -6662,13 +6662,18 @@ def test_the_four_article_genres_link_the_support_they_share() -> None:
 # Where a subheading standing over a quotation is ruled, and the surfaces that
 # tell a writer or a reviewer how to repair a heading. `CONTEXT.md` gives
 # *Bridge* another meaning, so the sentence introducing a quotation is called a
-# quotation bridge; the two sentences written before that rule keep their word.
+# quotation bridge; the one sentence written before that rule, the review
+# half's, keeps its word.
 HEADLINES = EDITORIAL / "headlines.md"
 HEADLINES_REVIEW = EDITORIAL / "headlines.review.md"
 QUOTATION_BRIDGE_BOUNDARY = "outside the quotation bridge"
+CASE_STUDY = EDITORIAL / "genres" / "casestudy.md"
+CASE_STUDY_REVIEW = EDITORIAL / "genres" / "casestudy.review.md"
+# The phrase of the reader test for a quotation bridge that `headlines.md`,
+# whose test for a subheading it mirrors, does not carry (issue #438).
+QUOTATION_BRIDGE_TEST = "who has just read the quotation bridge"
 BARE_BRIDGE = re.compile(r"(?<!quotation )\bbridges?\b", re.IGNORECASE)
 BARE_BRIDGE_KEPT = (
-    "A bridge should prepare a quotation rather than pre-say it.",
     "Read bridges beside quotations and the standfirst beside the body's opening.",
 )
 HEADING_REPAIR = re.compile(r"whole (?:text or )?section", re.IGNORECASE)
@@ -6717,6 +6722,33 @@ def test_a_subheading_over_a_quotation_is_ruled_where_the_writer_reads() -> None
     )
 
 
+def test_what_a_quotation_bridge_may_carry_is_ruled_where_the_writer_reads() -> None:
+    """The reader test for a quotation bridge is in the genre file Write loads.
+
+    `headlines.md` defines the quotation bridge and leaves what it may carry to
+    the genre that quotes. The case-study review half diagnoses a quotation
+    bridge that says again what its quotation then says, and Write loads no
+    review half, so the requirement is stated in `casestudy.md` with the reader
+    test the writer applies before writing the sentence, and only there
+    (issue #438).
+    """
+
+    genre = CASE_STUDY.read_text(encoding="utf-8")
+    review = CASE_STUDY_REVIEW.read_text(encoding="utf-8")
+
+    assert QUOTATION_BRIDGE_TEST in genre, (
+        f"{CASE_STUDY}: does not give the reader test for a quotation bridge,"
+        f" `{QUOTATION_BRIDGE_TEST}` meeting the quotation as new material, so"
+        f" what a quotation bridge may carry is operable only in the review"
+        f" half, which Write does not load (issue #438)."
+    )
+    assert QUOTATION_BRIDGE_TEST not in review, (
+        f"{CASE_STUDY_REVIEW}: restates the reader test for a quotation bridge,"
+        f" which the review half's diagnosis leaves to the genre file the"
+        f" writer reads (issue #438)."
+    )
+
+
 def test_every_heading_repair_leaves_a_quotation_its_point() -> None:
     """Each instruction to word a heading from its section bounds it by the quotation.
 
@@ -6750,8 +6782,8 @@ def test_editorial_prose_says_quotation_bridge_never_a_bare_bridge() -> None:
 
     `CONTEXT.md` defines a Bridge as a command one Harness runs to reach
     another's model, so editorial prose names the sentence introducing a
-    quotation a quotation bridge (issue #396). The two sentences written before
-    the term was settled keep their wording.
+    quotation a quotation bridge (issue #396). The one sentence written before
+    the term was settled, the review half's, keeps its wording.
     """
 
     for path in _editorial_prose():
