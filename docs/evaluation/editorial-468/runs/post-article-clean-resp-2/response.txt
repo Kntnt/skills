@@ -1,0 +1,3 @@
+Ingen ändring behövdes i `input.md`. Granskningen hittade inga redaktionella brister och korrekturläsningen på slutet hittade inga språkfel. Ingen korrigering gjordes och ingen fil skrevs.
+
+Granskningen gällde genren artikel på svenska, utan någon berättarteknik, eftersom artikelgenren inte föreskriver någon. Texten följer artikelns anatomi utan avvikelser. Rubriklängder, ingressens omfång, styckelängder och antalet stycken per avsnitt är maskinuppmätta. Övriga krav har bedömts vid läsning: att ingressen står på egna ben, att inledningen för texten framåt, att mellanrubrikerna beskriver sina avsnitt och att sista avsnittet är ett avslut med en uppmaning.

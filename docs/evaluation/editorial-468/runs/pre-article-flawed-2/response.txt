@@ -1,0 +1,56 @@
+## Resultat
+
+**Konfiguration:** genre `article` och språk `sv` från anropet. Ingen teknik: genren `article` anger ingen teknik som den vanligen skrivs med. Ingen skrivbrief användes. Korrigeringsbudgeten var 1 och gick åt till en korrigeringsrunda. Därefter gick texten genom ett avslutande korrekturpass, som inte ändrade något. Inget skrevs till disk, och `input.md` är orörd.
+
+```markdown
+# Mätförsök i Björkskolan visar temperaturer under 20 grader
+
+**I en rapport redovisar fastighetskontoret ett mätförsök där givare registrerade temperaturen i klassrum i Björkskolan. Här är vad mätningarna visar, vad som saknas och vad driftteknikern Elin Rask rekommenderar innan styrningen ändras.**
+
+Fastighetskontorets rapport *Mätförsök i Björkskolan* från den 12 mars 2026 anger att 14 av 120 lektionspass hade minst ett värde under kontorets egen arbetsgräns på 20 grader, vilket inte är en lagregel.
+
+Rapporten anger också att försöket varade fyra veckor. Försökets givare registrerade temperaturer under 20 grader i sex klassrum. Två givare stod vid ytterväggar och fyra vid innerväggar, utan att placeringens effekt jämfördes experimentellt.
+
+Operativ temperatur saknas, trots att resonemanget bygger på operativ temperatur, som är ett mått på lufttemperatur och värmestrålning från omgivande ytor, medan givarna bara mätte luften där de satt. Det saknas mätningar av luftdrag och elevernas upplevelse och uppgifter om hur länge temperaturerna låg under gränsen. Ingen effekt på hälsan har undersökts.
+
+Driftteknikern Elin Rask rekommenderar att koppla temperaturserier till användningstider innan styrningen ändras, och nästa försök är tänkt att använda likadant placerade givare i november, fast finansieringen inte är beslutad. Kontakta oss.
+```
+
+### Olösta anmärkningar
+
+1. **Ordet "resonemanget" syftar inte på något** (stycket om operativ temperatur). Texten nämner inget resonemang före det här ordet och säger inte heller vems resonemang det är. Läsaren kan därför inte avgöra vem som utgår från operativ temperatur, och inte heller varför det är en brist att den inte mättes. Att lägga till ett namn vore att hitta på en källa, så stället är lämnat åt dig.
+2. **Uppmaningen "Kontakta oss." är bara delvis åtgärdad.** Den uppblåsta avslutningen "för att rädda framtiden" är borta. Men "oss" syftar fortfarande på ingen som texten har nämnt, och uppmaningen följer inte av artikelns innehåll. Uppgifter om vem läsaren ska kontakta, och varför, finns inte i texten.
+3. **Artikeln saknar tre delar: byline, avsnitt med mellanrubriker och ett eget avslutningsavsnitt.** De har inte skrivits in. Eftersom mellanrubriker saknas räknar mätskriptet allt efter ingressen som ingångsstycket: fyra stycken om sammanlagt 148 ord, mot kravet på ett stycke. Den avvikelsen försvinner när texten får avsnitt. Texten följer alltså inte artikelanatomin.
+
+### Åtgärdade anmärkningar
+
+- **Rubriken** "Givarna räddar skolan från en katastrof" påstod en räddning och en katastrof som texten inte redovisar, och tonen var högre än i texten. En läsare som bara såg rubriken fick inte heller veta vilka givare eller vilken skola det gällde. Den nya rubriken har 58 tecken och 8 ord.
+- **Ingressen** bestod av samma mening två gånger och gick inte att förstå fristående. Nu säger den vad artikeln handlar om och vad läsaren får.
+- **Brödtexten började med ingressens mening en tredje gång.** Den använde också "Givarna" innan det var sagt vilka givare det gällde. Brödtexten börjar nu med rapporten.
+- **Meningen "Katastrofen lurade bakom varje hörn."** var dramatik utan stöd, och "Katastrofen" syftade bara på rubriken. Den är borttagen.
+- **Stycket var 187 ord långt och rymde flera tankar.** Det gäller texten som den kom in. En av meningarna band ihop fyra uppgifter, och ordet "medan" antydde ett samband mellan försökets längd och givarnas placering. Stycket är nu delat i fyra och meningen i tre.
+- **Påståendet "helt säkert att givarna har gjort eleverna friskare"** saknade stöd och motsades av samma menings begränsning. Det är borttaget.
+- **Utfyllnaden "Det är viktigt att notera att …"** var en cirkulär mening. Den är borttagen.
+
+### Påståenden
+
+**Borttagna:**
+- "Katastrofen lurade bakom varje hörn": att en katastrof hotade.
+- "Det är helt säkert att givarna har gjort eleverna friskare": ett säkert orsakssamband mellan givarna och elevernas hälsa. Begränsningen står kvar i sin helhet som en egen mening: "Ingen effekt på hälsan har undersökts." Bara bindeordet "trots att" försvann, och det kopplade begränsningen till det borttagna påståendet.
+- "Detta är mycket viktigt för alla som tycker att temperatur är viktigt": påståendet om sakens vikt.
+- "För att rädda framtiden": att en kontakt skulle rädda framtiden. Läsaren har nu inget uttalat skäl att höra av sig.
+
+**Ändrade:**
+- **Rubriken** påstår nu att mätförsöket i Björkskolan visar temperaturer under 20 grader. Påståendena om räddning och katastrof är borta.
+- **Ingressen** påstår nu att fastighetskontoret i en rapport redovisar ett mätförsök där givare registrerade temperaturen i klassrum. Den lovar också att texten visar vad mätningarna visar, vad som saknas och vad Elin Rask rekommenderar innan styrningen ändras. Uppgiften om temperaturer under 20 grader i sex klassrum står inte längre i ingressen, bara i brödtexten.
+- **"Givarna" har blivit "Försökets givare"** i meningen om de sex klassrummen. Texten säger nu uttryckligen att det är mätförsökets givare. Meningen har också flyttats från brödtextens början till andra stycket.
+- **Meningen om givarnas placering** ("Två givare stod vid ytterväggar och fyra vid innerväggar, utan att placeringens effekt jämfördes experimentellt.") är inte längre grammatiskt knuten till "rapporten anger att". Förut kunde den läsas som en del av rapportens uppgifter, nu står den som textens egen. Sambandet som "medan" antydde med försökets längd är borta, och det var just det som var felet.
+
+**Tillagda:**
+- Ingressen placerar klassrummen i Björkskolan. Det är en slutsats av rapportens titel, *Mätförsök i Björkskolan*. Den tidigare texten sade aldrig uttryckligen var klassrummen fanns.
+
+Utöver det ovanstående har inget påstående tagits bort, ändrats eller lagts till.
+
+### Sammanfattning av ändringarna
+
+Rubriken och ingressen är omskrivna. Den upprepade meningen i ingressen och brödtextens början är borta. Två mönster av tom retorik är borttagna: den dramatiserande katastrofmeningen och utfyllnadsmeningen om vad som är viktigt. Det ostödda hälsopåståendet och den uppblåsta slutet på uppmaningen är också borttagna. Det långa stycket är delat i fyra, en lång mening är delad i tre och en mening är flyttad. Det avslutande korrekturpasset gjorde inga ändringar.

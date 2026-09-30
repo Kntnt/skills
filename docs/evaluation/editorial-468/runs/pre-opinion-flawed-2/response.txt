@@ -1,0 +1,60 @@
+Klart. Min enda korrigeringsomgång underkändes, så texten levereras oförändrad och alla tio fynd kvarstår olösta. Omgången lade till ett eget fel: slutet började kräva i skribentens egen röst något som texten bara tillskriver en ”förening”. Korrekturläsningen hittade inga mekaniska fel.
+
+**Inställningar:** genren är debattartikel (`opinion`) och språket svenska (`sv`), båda från anropet. Ingen teknik används, eftersom genren inte anger någon och ingen annan nivå valde en. Texten har ingen `kntnt`-karta, och ingen lades till.
+
+```markdown
+# Kommunledningen hatar människor
+
+Sanna Ek, Öppna beslut
+
+Kommunstyrelsen borde behålla telefonbokning under ett halvårs försök i alla sju lokaler. Alla vet att politikerna vill stänga ute äldre för att spara miljoner.
+
+## Bakgrund
+
+Det gjordes 96 bokningar på webben och 24 via telefon. Det bevisar att 20 procent av kommunens invånare inte kan använda internet. Kommunens pilotrapport från den 8 april 2026 säger samtidigt att bokningarna inte räknar unika personer och att digital vana inte undersöktes.
+
+## Diskussion
+
+Förvaltningen invänder att dubbla kanaler innebär dubbel administration. Handlingarna saknar tidsmätning. Därför kostar det ingenting att behålla telefonbokningen. Föreningen vill att förvaltningen mäter tidsåtgång och frågar användarna varför de väljer en bokningsväg. Försökets kostnad är inte beräknad.
+
+Nu är det dags att agera.
+```
+
+## Olösta fynd
+
+1. **Rubriken** ”Kommunledningen hatar människor” (31 tecken, 3 ord):
+   - Den tillskriver en aktör som brödtexten aldrig nämner ett motiv, hat, som ingenting i texten stöder.
+   - Den säger heller ingenting om telefonbokningen.
+   - Läsaren får en anklagelse som texten inte bär och kan inte avgöra vad texten handlar om.
+2. **Ingress saknas.** Mellan rubriken och bylinen finns inget fristående, sammanfattande stycke. Det är mätskriptets enda underkända räknade krav. En saknad del skrivs inte vid granskning utan lämnas till skribenten.
+3. **Leadens andra mening** ”Alla vet att politikerna vill stänga ute äldre för att spara miljoner.”:
+   - ”Alla vet” anger ingen källa.
+   - Meningen tillskriver motparten ett motiv som texten inte stöder, och äldre nämns ingen annanstans i texten.
+   - Texten redovisar inga belopp alls, så ”spara miljoner” saknar stöd.
+4. **Bakgrund, andra meningen** ”Det bevisar att 20 procent av kommunens invånare …”:
+   - 24 av 120 bokningar är 20 procent av bokningarna, inte av invånarna.
+   - Slutsatsen motsägs av nästa mening: bokningarna räknar inte unika personer, och digital vana undersöktes inte.
+5. **Bakgrund, första meningen:** siffrorna 96 och 24 bär argumentet men saknar källa och period. Texten säger inte att de kommer från pilotrapporten, så felet kan inte rättas utan en uppgift som bara skribenten har.
+6. **Mellanrubriken ”Bakgrund”** är en etikett som kunde stå över vilket avsnitt som helst. Den som skummar ser inte vad avsnittet säger om bokningssiffrorna.
+7. **Mellanrubriken ”Diskussion”** säger ingenting om att avsnittet bemöter förvaltningens invändning om dubbel administration.
+8. **Diskussion:** ”Handlingarna saknar tidsmätning. Därför kostar det ingenting …” är en bruten slutledning. Att tiden inte är mätt visar inte att kostnaden är noll, och textens egen mening ”Försökets kostnad är inte beräknad.” motsäger nollkostnaden.
+9. **Diskussion:** ”Föreningen” står i bestämd form, men ingen förening har nämnts i brödtexten. Texten säger inte att det är Öppna beslut, så läsaren vet inte vem som ställer kravet.
+10. **Avslutningen** ”Nu är det dags att agera.”:
+    - Uppmaningen säger varken vad som ska göras eller av vem.
+    - Den står inne i avsnittet ”Diskussion”, som bär argumentet, så texten saknar ett eget avslutande avsnitt med egen mellanrubrik.
+
+## En underkänd korrigeringsomgång
+
+Korrigeringsbudgeten var en omgång, och den är förbrukad.
+
+**Vad omgången införde:** omgången försökte rätta fynd 1, 3, 4 och 6–8 och byggde om slutet enligt fynd 10. Den nya avslutningen (”Förvaltningen bör mäta tidsåtgången och fråga användarna …”) och dess mellanrubrik (”Nu bör kommunstyrelsen och förvaltningen agera”) gjorde kravet på mätning till skribentens eget. I texten ställs det kravet bara av en oidentifierad ”förening”. Omgången flyttade alltså attributionen och gav skribenten en ståndpunkt som texten inte ger henne.
+
+**Varför felet uppstod:** reparationen följde fynd 10, som felaktigt beskrev föreningens krav som ett förslag texten redan har. Omgången underkändes därför i sin helhet, och inget av den finns kvar i den levererade texten.
+
+**Att avgöra för en person:** om mätkravet är skribentens eget. Om Öppna beslut är föreningen och skribenten står bakom kravet kan slutet nämna det.
+
+## Påståendena
+
+Inga påståenden i den levererade texten är borttagna, ändrade eller tillagda. Texten är byte för byte densamma som den som kom in.
+
+Texten följer inte artikelanatomin. Ingressen saknas (fynd 2), och slutet är inget eget avsnitt (fynd 10).

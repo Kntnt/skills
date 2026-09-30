@@ -1,0 +1,20 @@
+Granskningen är klar och texten behövde inga ändringar. Den ligger nu i `output.md` och är byte för byte identisk med `input.md`.
+
+**Inställningar**
+- **Genre:** `opinion`, angiven med flagga.
+- **Språk:** svenska (`sv`), angivet med flagga.
+- **Teknik:** ingen. Du angav ingen, och genren opinion anger själv ingen teknik som den normalt skrivs med. Ingen dramaturgisk båge har därför lagts på texten.
+
+**Granskningen**
+Jag granskade texten mot baskontraktet, genren opinion, webbhantverket, artikelanatomin, rubrikkontraktet, anti-slop-katalogen och den svenska språkresursen. Den har inga redaktionella brister:
+
+- **Tes och uppmaning:** Tesen står tidigt. Förvaltningens invändning om dubbel administration bemöts rättvist. Avslutningen ger kommunstyrelsen en konkret handling.
+- **Rubrik och ingress:** Rubrikens påstående bärs av texten och är inte starkare än den. Ingressen står på egna ben, och inledningen för resonemanget vidare i stället för att upprepa ingressen.
+- **Mellanrubriker och avgränsningar:** Mellanrubrikerna beskriver sina avsnitt. Meningarna om vad pilotrapporten inte visar gör sitt jobb.
+- **Upprepade kontraster:** Kontrasten mellan bokningar och personer återkommer flera gånger. Den är ändå bärande i argumentet och klarar prövningen.
+
+Mätskriptet för anatomin rapporterade inga brott mot de räknade gränserna. Jag läste också igenom de krav som skriptet inte räknar. Sista avsnittet är ett eget avslut som inte öppnar någon ny argumentationslinje. Brödtexten går att förstå utan ingressen. Varje mellanrubrik beskriver sitt avsnitt. Texten följer alltså artikelanatomin utan avvikelser.
+
+Eftersom det inte fanns något att åtgärda användes inte korrigeringsbudgeten (1). Korrekturläsningen gjordes en gång och hittade inga mekaniska fel. Texten saknar en `kntnt`-karta, och ingen har lagts till.
+
+Inga påståenden har tagits bort, ändrats eller lagts till.

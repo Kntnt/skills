@@ -1,0 +1,18 @@
+Klart. Den granskade texten ligger i `output.md`. `input.md` är oförändrad.
+
+**Inställningar:** genren är `opinion` och språket `sv`, båda från anropet. Någon teknik används inte, eftersom genren `opinion` inte anger någon. Texten hade ingen `kntnt`-metadata, och ingen har lagts till. Rättningsbudgeten var 1 och gick åt till en rättningsrunda.
+
+**Fynd (ett, åtgärdat)**
+1. **Inledningen**, alltså brödtextens första stycke. Den ska presentera allt den nämner och gå att läsa utan ingressen. Men inledningen nämnde bara den digitala bokningen, och ”båda bokningsvägarna” gick bara att förstå med hjälp av rubriken och ingressen. Den som hoppade över ingressen fick inte veta vilken bokningsväg bytet skulle avskaffa. Telefonbokningen, som hela inlägget försvarar, nämndes först i nästa avsnitt. Nu står det ”båda bokningsvägarna, digital bokning och telefonbokning”. Inga fynd återstår.
+
+**Påståenden**
+- *Ändrat:* uppmaningen i inledningen säger nu uttryckligen att de två bokningsvägarna som ska prövas i alla sju lokaler under ett halvår är digital bokning och telefonbokning. Förut sa den bara ”båda bokningsvägarna”. Det är samma två vägar som resten av texten tar upp, och påståendet gäller lika mycket och är lika säkert som förut. Ändringen kommer från åtgärden av fynd 1.
+- Utöver den ändringen har inget påstående tagits bort, ändrats eller lagts till. Ingen avgränsning och inget sambandsord har försvunnit.
+
+**Artikelns delar:** texten uppfyller kraven på en artikels delar, utan avvikelser. Skriptet har mätt den färdiga texten: rubriken har 47 tecken, ingressen 39 ord och inledningen 53 ord, och inget mätt krav bryts. Jag har också läst igenom de krav som skriptet inte räknar och funnit att de håller:
+- Ingressen fungerar på egen hand.
+- Inledningen upprepar inte ingressen utan för texten vidare, och den börjar med ett annat ord.
+- Mellanrubrikerna beskriver sina avsnitt och upprepar inte meningen under sig.
+- Sista avsnittet är ett avslut med en konkret uppmaning till kommunstyrelsen.
+
+**Vad körningen ändrade:** den enda skillnaden mot originalet är tillägget i inledningen. Inga slentrianmönster fanns att ta bort, och ingen rubrik eller struktur har ändrats. Den avslutande korrekturläsningen hittade inga fel och ändrade ingenting.

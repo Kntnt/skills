@@ -7096,16 +7096,52 @@ def test_a_heading_that_could_be_better_is_no_finding() -> None:
         f" that could merely be clearer or more specific loses its reader"
         f" nothing, so any imaginable improvement reads as a loss (issue #429)."
     )
-    assert "strictest reading" in leave, (
-        f"{HEADLINES_REVIEW}: *Leave alone* does not count a loss by the reader"
-        f" who meets the heading rather than by the strictest reading of one"
-        f" word (issue #429)."
+    assert "strictest reading" in _finding_rule(), (
+        f"{BASE_REVIEW}: the finding rule does not count a loss by the reader"
+        f" who meets the passage rather than by the strictest reading of one"
+        f" word, so a standfirst loses a word the text supports (issues #429,"
+        f" #468)."
+    )
+    assert "strictest reading" not in leave and "(base.review.md)" in leave, (
+        f"{HEADLINES_REVIEW}: *Leave alone* states the reader-loss rule in its"
+        f" own words rather than pointing at the one statement in"
+        f" {BASE_REVIEW.name}, so the rule is stated twice and reaches"
+        f" headings alone (issue #468)."
     )
     assert "licenses no change" in leave, (
         f"{HEADLINES_REVIEW}: *Leave alone* does not say that a working heading"
         f" one would word differently takes no finding and no change (issue"
         f" #429)."
     )
+
+
+def _finding_rule() -> str:
+    """The base review's opening paragraph, where a finding is defined."""
+
+    return _paragraphs(BASE_REVIEW.read_text(encoding="utf-8"))[1]
+
+
+def test_a_loss_is_counted_as_the_reader_suffers_it_in_every_passage() -> None:
+    """The reader-loss rule reaches the standfirst and the body, not headings alone.
+
+    #429 wrote the rule for headings, and #468 measured a review dropping a
+    word from a standfirst that the text itself supports, over a loss only the
+    strictest reading of that word could construct. The rule stands once,
+    where the finding rule does, and names every passage.
+    """
+
+    rule = _finding_rule()
+    assert "what the reader loses" in rule, (
+        f"{BASE_REVIEW}: the paragraph read as the finding rule is not the one"
+        f" that defines a finding (issue #468)."
+    )
+    for part in ("standfirst", "headline", "subheading", "judgement"):
+        assert part in rule, (
+            f"{BASE_REVIEW}: the reader-loss rule does not name the {part}, so"
+            f" a review can still read it as a heading rule, or count a"
+            f" writer's supported judgement as a claim the text does not carry"
+            f" (issue #468)."
+        )
 
 
 def test_redline_names_the_heading_defect_by_what_a_reader_of_it_alone_can_tell() -> (

@@ -1,0 +1,20 @@
+Texten är granskad och ligger i `output.md`. Den behövde inget arbete, så filen är byte för byte identisk med `input.md`.
+
+**Inställningar:** genren är `opinion` och språket `sv` (svenska), båda från anropet. Ingen teknik användes, eftersom opinionsgenren inte har någon. Texten har inga Kntnt-metadata i frontmattern och har inte fått några.
+
+**Fynd:** inga. Rättningsbudgeten (1) användes inte.
+- **Tes och uppmaning:** tesen står tidigt. Grunderna håller isär belägg (pilotrapporten 8 april 2026) och bedömning. Invändningen om dubbel administration bemöts sakligt, och slutet vänder sig till kommunstyrelsen med konkreta uppmaningar.
+- **Avgränsningar:** meningarna om vad siffrorna och handlingarna inte visar stämmer med resten av texten.
+- **Rubriker:** rubrik, ingress och mellanrubriker påstår inget som brödtexten inte bär.
+
+**Artikelanatomi:** texten följer anatomin utan avvikelser. Skriptets mätning av den levererade texten godkänner alla räknade gränser. Rubriken har 47 tecken och 6 ord, och ingressen 39 ord i ett stycke. Jag har läst igenom resten av kraven:
+- ingressen står på egen hand, och ingress och första stycke upprepar inte varandra;
+- byline finns;
+- varje mellanrubrik beskriver sitt avsnitt;
+- sista avsnittet är ett avslutande avsnitt med en uppmaning.
+
+**Påståenden:** inget påstående har strukits, ändrats eller lagts till.
+
+**Korrläsning:** den avslutande korrläsningen hittade inga fel.
+
+Tillfälliga filer från körningen är borttagna.

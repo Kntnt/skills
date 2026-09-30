@@ -1,0 +1,8 @@
+Texten ligger nu i `output.md` och behövde inget arbete. Den är byte för byte identisk med `input.md`.
+
+- **Inställningar:** genren `article` och språket `sv` kom från anropet. Ingen teknik används, eftersom ingen angavs och genren `article` inte anger någon.
+- **Granskning:** jag hittade inga redaktionella fel, så ingen korrigeringsrunda kördes och korrigeringsbudgeten (1) lämnades oanvänd. Rubriken, ingressen, bylinen, inledningen, båda avsnitten och avslutningen med uppmaning uppfyller artikelanatomin.
+  - **Det som mätskriptet räknar:** alla gränser håller, till exempel rubriken på 48 tecken och ingressen på 46 ord.
+  - **Det som jag läste manuellt:** ingressen står på egen hand och inledningen för texten vidare utan att upprepa ingressen. Mellanrubrikerna beskriver sina avsnitt och sista avsnittet fungerar som avslutning.
+- **Korrekturläsning:** den avslutande mekaniska genomgången hittade inga fel att rätta.
+- **Påståenden:** inget påstående har tagits bort, ändrats eller lagts till. Meningarna som avgränsar vad texten hävdar står kvar oförändrade, till exempel att rapporten inte anger hur länge temperaturen låg under gränsen och att givarna inte mätte luftdrag.

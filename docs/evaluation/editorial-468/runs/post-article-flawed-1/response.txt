@@ -1,0 +1,70 @@
+Jag har granskat texten som artikel med en korrigeringsrunda, och tre fynd står kvar som olösta. Korrläsningen i slutet ändrade ingenting. Inget har skrivits till disk och `input.md` är orörd.
+
+**Inställningar:** genren `article` och språket `sv` kommer från anropet. Ingen teknik används, eftersom genren `article` inte har någon teknik som den vanligtvis skrivs med.
+
+````markdown
+# Mätförsök i Björkskolan fann klassrumsluft under 20 grader
+
+**Givare i Björkskolan registrerade temperaturer under 20 grader i sex klassrum. De mätte dock bara luften där de satt, och mätningar av luftdrag och elevernas upplevelse saknas, liksom uppgifter om hur länge temperaturerna låg under den nivån. Läs vad fastighetskontorets rapport om försöket visar och vad den lämnar obesvarat.**
+
+Fastighetskontorets rapport *Mätförsök i Björkskolan* från den 12 mars 2026 anger att 14 av 120 lektionspass hade minst ett värde under kontorets egen arbetsgräns på 20 grader, vilket inte är en lagregel. Försökets givare registrerade sådana temperaturer i sex klassrum.
+
+Enligt rapporten varade försöket fyra veckor. Två givare stod vid ytterväggar och fyra vid innerväggar, utan att placeringens effekt jämfördes experimentellt.
+
+Operativ temperatur saknas, trots att resonemanget bygger på operativ temperatur, som är ett mått på lufttemperatur och värmestrålning från omgivande ytor, medan givarna bara mätte luften där de satt.
+
+Det saknas mätningar av luftdrag och elevernas upplevelse och uppgifter om hur länge temperaturerna låg under gränsen. Ingen effekt på hälsan har undersökts.
+
+Driftteknikern Elin Rask rekommenderar att koppla temperaturserier till användningstider innan styrningen ändras, och nästa försök är tänkt att använda likadant placerade givare i november, fast finansieringen inte är beslutad.
+
+Kontakta oss.
+````
+
+## Fynd som står kvar (olösta)
+
+1. **”resonemanget” saknar referent.** Det gäller meningen ”Operativ temperatur saknas, trots att resonemanget bygger på operativ temperatur …”. Texten säger aldrig vems resonemang det är, så läsaren vet inte vem som gör anspråket. Att namnge någon skulle vara att hitta på en tillskrivning, och därför är meningen orörd.
+2. **Uppmaningen ”Kontakta oss.” följer inte av innehållet.** Texten säger inte vilka ”oss” är eller vad läsaren ska höra av sig om. Uppgifterna finns inte i texten och har därför inte fyllts i. Den uppblåsta delen är borttagen, se fynd 11 nedan.
+3. **Artikelns anatomi uppfylls inte, eftersom delar saknas.** Delarna rapporteras men skrivs inte.
+   - Byline saknas.
+   - Mellanrubriker och avsnitt saknas.
+   - Därmed saknas även avslutningen som eget avsnitt.
+
+   Mätskriptet anger också att inledningen består av 6 stycken. Det beror bara på att avsnitten saknas och ingår alltså i samma fynd.
+
+## Fynd som åtgärdades
+
+- **Rubriken (fynd 1)** hävdade en räddning och en katastrof som texten inte bär, i en ton högre än textens. Den nya rubriken har 58 tecken och 8 ord.
+- **Ingressen (fynd 2 och 3)** upprepade samma mening ordagrant två gånger. Den var inte heller självbärande: ”Givarna” saknade referent, och den sa inte vad artikeln handlar om eller vad läsaren får. Den nya ingressen är ett stycke på 49 ord.
+- **Ingress och inledning (fynd 4).** Brödtextens första mening var ingressens mening ordagrant, och ”Givarna” saknade referent i brödtexten. Nu börjar inledningen med rapporten och knyter givarna till försöket.
+- **Fynd 5:** ”Katastrofen lurade bakom varje hörn.” var fabricerad dramatik och är struken.
+- **Fynd 6:** i rapportmeningen hävdade ”medan” ett samband mellan försökets längd och givarnas placering som texten inte etablerar. Meningen är delad vid fogarna.
+- **Fynd 8:** den säkra och kausala hälsoslutsatsen motsades av meningens egen förbehåll och är struken.
+- **Fynd 9:** brödtexten var ett enda stycke på 187 ord med minst sex tankar (texten som den kom in). Den är nu delad i sex stycken på sammanlagt 144 ord.
+- **Fynd 10:** den tomma, cirkulära viktighetsmeningen är struken.
+- **Fynd 11 (delvis):** ”för att rädda framtiden” är struket.
+
+## Redovisning av påståendena
+
+**Borttagna påståenden**
+- **Att givarna räddar skolan från en katastrof.** Det var rubrikens påstående, borttaget i reparationen av fynd 1.
+- **Att katastrofen lurade bakom varje hörn.** Borttaget i fynd 5.
+- **Att det är helt säkert att givarna har gjort eleverna friskare.** Borttaget i fynd 8.
+  - Med påståendet försvann bindeorden ”men ändå” och ”trots att”.
+  - Förbehållet ”Ingen effekt på hälsan har undersökts” står kvar i sin helhet, så läsaren behåller den gränsen.
+  - Det läsaren inte längre har är bara kontrasten mot det strukna påståendet.
+- **Att ”detta” är mycket viktigt för alla som tycker att temperatur är viktigt.** Borttaget i fynd 10.
+- **Att en kontakt skulle ”rädda framtiden”.** Borttaget i fynd 11.
+- **Bindeordet ”medan” i rapportmeningen.** Borttaget i fynd 6. Läsaren har inte längre den antydda kopplingen mellan försökets längd och givarnas placering. Kopplingen fick aldrig stöd i texten.
+
+**Ändrade påståenden**
+- **Rubriken (fynd 1)** säger nu att mätförsöket i Björkskolan fann klassrumsluft under 20 grader.
+- **Ingressen (fynd 3)** säger nu uttryckligen att givarna stod i Björkskolan. Texten som den kom in lät det framgå bara genom ordningen mellan meningarna.
+- **Ingressens sista mening (fynd 3)** beskriver de saknade uppgifterna som det rapporten ”lämnar obesvarat”. Texten som den kom in skrev bara ”Det saknas” utan att knyta bristerna till rapporten.
+- **”Försökets givare registrerade sådana temperaturer i sex klassrum” (fynd 4)** säger nu uttryckligen att mätvärdena i de sex klassrummen kommer från försökets givare.
+- **Tillskrivningen i stycket om försökets längd (fynd 6).** I texten som den kom in låg både längden och placeringen under rapportens ”anger att”.
+  - Nu tillskriver ”Enligt rapporten” uttryckligen bara längden.
+  - Meningen om placeringen står i samma stycke utan egen tillskrivning.
+
+Utöver ingressens upprepning av uppgifter som redan fanns i brödtexten har inget påstående lagts till.
+
+Utöver det som redovisas ovan är påståendena oförändrade. Rubriken och ingressen är omskrivna enligt fynd 1–3. Ordagranna upprepningar, fabricerad dramatik, tom betoning, en osäker hälsoslutsats och en uppblåst uppmaning är borttagna. Brödtextens början är omordnad, en överlastad mening och det långa stycket är delade i kortare meningar och stycken, och ”Enligt rapporten” är infogat. Den avslutande mekaniska korrläsningen gjorde inga ändringar.

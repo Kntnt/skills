@@ -1,0 +1,4 @@
+c565fc316f48e5f0a03c94a19df95f3d968584afe05b0577f202bdf21a8bd0c5  /Users/thomas/Projects/skills/.git/kntnt-orchestrate/468.scratch/gate-1.log
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  /Users/thomas/Projects/skills/.git/kntnt-orchestrate/468.scratch/logs-wave1.txt
+2ad8b2186a916bdd3c2c1b260a44096e25e8fba676f1406065449f72123b0217  /Users/thomas/Projects/skills/.git/kntnt-orchestrate/468.scratch/wave1.sh
+697cc09935c1d0191b8faf5d5e4197866f363bb7d3e407b8fc5357aea3c622b5  /Users/thomas/Projects/skills/.git/kntnt-orchestrate/468.scratch/waves/wave-1-before-scratch.txt

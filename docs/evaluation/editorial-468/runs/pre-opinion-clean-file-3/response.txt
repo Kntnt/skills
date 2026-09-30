@@ -1,0 +1,18 @@
+Texten är skriven till `output.md`. Den är oförändrad och byte för byte identisk med `input.md`: granskningen hittade inga redaktionella brister att rätta och korrekturläsningen hittade inga mekaniska fel.
+
+**Inställningar:** genren är debattartikel (`--genre=opinion`) och språket svenska (`--language=sv`). Ingen berättarteknik användes. Varken anropet, instruktionerna eller texten angav någon, och genren debattartikel har ingen som standard. Ingen brief valdes och texten saknar metadata från Kntnt, så ingen metadata lades till.
+
+**Granskning:** inga fynd. Rättningsbudgeten (1) användes inte eftersom det inte fanns något att rätta.
+
+- **Artikelns anatomi:** mätskriptet bekräftar att rubriken, ingressen och mellanrubrikerna håller sig inom sina längdgränser och att styckena och avsnitten följer normerna. Jag har också läst igenom det som skriptet inte mäter:
+  - Ingressen står på egna ben.
+  - Inledningen för texten framåt i stället för att upprepa ingressen.
+  - Brödtexten går att förstå utan ingressen.
+  - Varje mellanrubrik beskriver sitt avsnitt.
+  - Sista avsnittet är ett avslut som uppmanar kommunstyrelsen att agera.
+
+  Texten följer därmed artikelns anatomi utan avvikelser.
+- **Rubrikerna:** rubriken säger inget som texten inte själv hävdar, eftersom texten själv kallar beslutsunderlaget ett antagande i sista meningen. Ingen mellanrubrik upprepar meningen under sig.
+- **Argumentationen:** de meningar som avgränsar vad underlaget visar och inte visar står kvar oförändrade. Förvaltningens invändning om dubbel administration bemöts sakligt.
+
+Inga påståenden har tagits bort, ändrats eller lagts till.

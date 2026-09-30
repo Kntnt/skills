@@ -1,0 +1,34 @@
+Resultatet ligger i `output.md`. Texten där är identisk med `input.md`. Granskningen hittade ett fel, i rubriken. Försöket att rätta det underkändes och drogs tillbaka, så felet står kvar och får avgöras av dig. Korrekturläsningen hittade inga fel att rätta.
+
+**Inställningar:** genren är artikel och språket svenska, båda enligt dina flaggor. Ingen teknik användes, eftersom artikelgenren inte anger någon teknik och ingen annan nivå valde någon.
+
+## Kvarstående fynd (olöst)
+
+1. **Rubriken: "Mätförsöket i Björkskolan visar när, inte varför".** En rubrik ska gå att förstå på egen hand. Här saknar "när" och "varför" något att syfta på. Den som ser rubriken ensam, i en lista eller en sökträff, får veta att ett mätförsök i en skola visar "när" något men inte "varför". Läsaren får däremot inte veta vad som mättes eller vad som hände. Att texten handlar om låg lufttemperatur under lektionspass framgår först i ingressen.
+
+## Rättningsförsöket som drogs tillbaka
+
+En rättningsrunda gjordes och budgeten på en rättning är förbrukad. Rundan ändrade bara rubriken, till "Mätförsöket i Björkskolan visar när det blev kallt, inte varför".
+
+- **Varför den inte godtogs:** Den nya rubriken är 63 tecken. Artikelanatomin säger att en rubrik bör vara högst 60 tecken, och originalet höll sig inom den normen med 48 tecken.
+- **Det gick att hålla normen:** "Björkskolans mätförsök visar när det blev kallt, inte varför" är mätt till högst 60 tecken.
+- **Ordantalet avgjorde inte:** Försöket har tio ord mot normen tre till åtta. Jag hittade ingen formulering på högst åtta ord som behåller innebörden, så den avvikelsen räknades inte som ett fel.
+- **Vad som hände sedan:** Rundan underkändes i sin helhet och originaltexten återställdes. Försöket finns inte i den levererade texten. Fyndet ovan är därför fortfarande olöst.
+
+Om du vill rätta rubriken själv är "Björkskolans mätförsök visar när det blev kallt, inte varför" ett alternativ. Uttrycket "det blev kallt" är Elin Rasks eget, och "luften var kall" skulle upprepa ingressen nästan ordagrant.
+
+## Artikelanatomi
+
+Mätningen av den levererade texten visar att alla räknade krav är uppfyllda. Rubriken har 48 tecken och sju ord, ingressen är ett stycke på 46 ord och inledningen har 33 ord. Övriga krav har jag läst igenom:
+
+- ingressen står på egen hand,
+- inledningen för texten framåt,
+- brödtexten går att läsa utan ingressen,
+- mellanrubrikerna beskriver sina avsnitt,
+- sista avsnittet är ett avslutande avsnitt med en uppmaning till läsaren.
+
+Texten följer anatomin med ett undantag: kravet att rubriken skrivs enligt rubrikanvisningarna, alltså fyndet ovan.
+
+## Påståenden
+
+I den levererade texten har inget påstående strukits, ändrats eller lagts till. Det enda ändrade påståendet fanns i den rubrik som drogs tillbaka och som beskrivs ovan.

@@ -1,0 +1,22 @@
+Texten behövde inget arbete. Hela texten ligger nu i `output.md`, byte för byte densamma som `input.md`.
+
+**Inställningar:** genren är `article` och språket `sv`, båda från anropet. Ingen teknik används: den angavs varken i anropet, i metadata eller i instruktioner, och genren `article` anger ingen teknik som den vanligtvis skrivs med. Texten har ingen `kntnt`-metadata, och ingen har lagts till.
+
+**Granskning:** inga redaktionella fynd, så ingen korrigeringsomgång behövdes (budget 1, oanvänd).
+- Rubrik, ingress, byline, inledning och två avsnitt kommer i rätt ordning, och det sista avsnittet fungerar som avslutning.
+- Mätskriptet hittade inga fel och inga avvikelser från normerna i den levererade texten: rubriken har 48 tecken och 7 ord, ingressen 46 ord och inledningen 33 ord.
+- De krav skriptet inte räknar granskades genom läsning, och texten uppfyller dem också:
+  - Ingressen står på egen hand, och inledningen upprepar den inte.
+  - Brödtexten går att förstå utan ingress och mellanrubriker.
+  - Mellanrubrikerna beskriver sina avsnitt och förbrukar inte Elin Rasks citat.
+  - Avslutningen uppfyller det inledningen lovar och har en uppmaning som följer av innehållet.
+- Rubriken och ingressens andra mening delar vinkeln (”inte varför”). Det bedömdes som nödvändig orientering och inte som ett fynd, eftersom ingressen måste kunna stå själv och tillför egna uppgifter.
+- De avgränsande meningarna lämnades orörda:
+  - ”Hur länge temperaturen låg under den anger rapporten inte.”
+  - ”Gränsen är kontorets egen, vald för det här försöket.”
+  - ”Givarna mätte varken luftdrag eller elevernas upplevelse.”
+  - ”men finansieringen är inte beslutad”
+
+**Påståenden:** inga påståenden har tagits bort, ändrats eller lagts till.
+
+**Mekanisk korrekturläsning:** korrekturläsningen på svenska gjordes en gång och hittade inga mekaniska fel. De tillfälliga filerna är borttagna.

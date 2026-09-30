@@ -1,0 +1,60 @@
+Konfiguration: genren är **opinion** och språket **sv**, båda från anropet. Ingen teknik tillämpades, eftersom genren opinion inte anger någon och ingen annan nivå valde en. Ingen brief användes. Jag gjorde en korrigeringsrunda (`--max=1`). Loopen stannade när budgeten var slut och det fanns fynd kvar.
+
+```markdown
+# Telefonbokningen borde finnas kvar under ett försök
+
+Sanna Ek, Öppna beslut
+
+Kommunstyrelsen borde behålla telefonbokning under ett halvårs försök i alla sju lokaler.
+
+## Bokningarna visar inte hur många som bokade
+
+Det gjordes 96 bokningar på webben och 24 via telefon. Det innebär att 20 procent av bokningarna gjordes via telefon. Kommunens pilotrapport från den 8 april 2026 säger samtidigt att bokningarna inte räknar unika personer och att digital vana inte undersöktes.
+
+## Handlingarna visar inte vad dubbla kanaler kostar
+
+Förvaltningen invänder att dubbla kanaler innebär dubbel administration. Handlingarna saknar tidsmätning. Därför är det okänt vad det kostar att behålla telefonbokningen. Föreningen vill att förvaltningen mäter tidsåtgång och frågar användarna varför de väljer en bokningsväg. Försökets kostnad är inte beräknad.
+
+## Nästa steg är kommunstyrelsens
+
+Nu är det dags för kommunstyrelsen att agera och behålla telefonbokningen under ett halvårs försök i alla sju lokaler.
+```
+
+## Olösta fynd
+
+1. **Ingressen saknas.** Mellan rubriken och bylinen finns inget sammanfattande stycke. Läsaren får därför ingen fristående sammanfattning av vad texten handlar om och vad hen får ut av den. En saknad del skrivs inte i en granskning, så den är lämnad till skribenten.
+2. **Siffrorna 96 och 24 bokningar saknar källa och period där de används.** Texten säger inte om de kommer från pilotrapporten eller vilken tid de gäller, så läsaren kan inte bedöma underlaget. Att knyta siffrorna till rapporten vore en slutsats som texten inte drar. Uppgiften måste komma från skribenten.
+3. **"Föreningen vill …" saknar referent i brödtexten.** Ingen förening introduceras. Bylinen nämner Öppna beslut, men texten säger inte att det är en förening eller att det är den som avses. Läsaren vet därför inte vems krav det är. Att likställa de två vore en slutsats som texten inte drar.
+
+Texten uppfyller alltså inte artikelanatomin, eftersom ingressen saknas. I den slutliga texten mätte skriptet ingen annan avvikelse från de räknade kraven. Rubriken är 51 tecken och 7 ord, och mellanrubrikerna är 43, 49 och 30 tecken. Jag har också läst de krav som skriptet inte räknar: slutet är ett eget avsnitt som avslutar texten och säger vem som ska handla, och varje mellanrubrik beskriver sitt avsnitt. Om ingressen står på egen fot gick inte att pröva, eftersom den saknas.
+
+## Reparerade fynd, med de rubriker som ändrades
+
+- **Rubriken** "Kommunledningen hatar människor" tillskrev motparten ett motiv som texten inte belägger. Den var högre i tonen än texten, sa inte textens vinkel och namngav kommunledningen där texten riktar sig till kommunstyrelsen. Nu lyder den "Telefonbokningen borde finnas kvar under ett försök".
+- **Inledningens andra mening** var tom attribuering ("alla vet") och tillskrev politikerna ett motiv. Den påstod också en besparing som motsägs av att försökets kostnad inte är beräknad. Meningen är borttagen.
+- **Mellanrubriken "Bakgrund"** var en etikett som inte sa vad avsnittet handlar om. Nu lyder den "Bokningarna visar inte hur många som bokade".
+- **"Det bevisar att 20 procent av kommunens invånare inte kan använda internet."** Meningen använde fel nämnare, eftersom andelen gäller bokningar och inte invånare. Den motsades dessutom av pilotrapportens förbehåll. Meningen är omskriven.
+- **Mellanrubriken "Diskussion"** var en etikett som inte sa vad avsnittet handlar om. Nu lyder den "Handlingarna visar inte vad dubbla kanaler kostar".
+- **"Därför kostar det ingenting att behålla telefonbokningen."** Slutsatsen höll inte, eftersom en saknad tidsmätning betyder att kostnaden är okänd, inte att den är noll. Meningen är omskriven.
+- **Slutet "Nu är det dags att agera."** Uppmaningen namngav ingen handling och ingen som skulle handla, och den stod inne i ett avsnitt som bar argumentet. Den har fått ett eget avsnitt, "Nästa steg är kommunstyrelsens", och gör nu förslaget från inledningen uttryckligt.
+
+## Redovisning av påståendena
+
+**Borttagna**
+- Rubrikens påstående att kommunledningen hatar människor (fynd 1, rubrikreparationen).
+- Hela inledningens andra mening, med tre påståenden: att "alla vet" något, att politikerna vill stänga ute äldre och att det sparar miljoner. Fyndet pekade ut hela påståendet som defekten, och det togs bort i reparationen av inledningen.
+
+**Ändrade**
+- Rubriken påstår nu att telefonbokningen borde finnas kvar under ett försök. Det är inledningens förslag, utan halvåret och de sju lokalerna (rubrikreparationen).
+- "Det innebär att 20 procent av bokningarna gjordes via telefon." påstår nu bara hur bokningarna fördelas mellan kanalerna. Meningen säger inte längre något om invånarna eller deras förmåga att använda internet, och den påstår inte längre att något bevisas (reparationen av 20-procentsmeningen).
+- "Därför är det okänt vad det kostar att behålla telefonbokningen." påstår nu att kostnaden är okänd, eftersom tidsmätning saknas, i stället för att den är noll (reparationen av kostnadsslutsatsen).
+- Slutmeningen påstår nu att det är dags för kommunstyrelsen att agera och behålla telefonbokningen under ett halvårs försök i alla sju lokaler. Tidigare sa den bara att det är dags att agera (reparationen av slutet).
+- Mellanrubriken "Bokningarna visar inte hur många som bokade" återger pilotrapportens förbehåll att bokningarna inte räknar unika personer. I rubriken står förbehållet utan att rapporten nämns (reparationen av "Bakgrund").
+- Mellanrubriken "Nästa steg är kommunstyrelsens" upprepar inledningens påstående att det är kommunstyrelsen som bör handla (reparationen av slutet).
+
+**Tillagda**
+- Mellanrubriken "Handlingarna visar inte vad dubbla kanaler kostar" påstår att handlingarna inte visar kostnaden för dubbla kanaler. Det är en slutsats av "Handlingarna saknar tidsmätning" och "Försökets kostnad är inte beräknad". Texten som den kom in sa inte detta med egna ord (reparationen av "Diskussion").
+
+Utöver det som redovisas ovan har inget påstående tagits bort, ändrats eller lagts till. Ingen avgränsning, inget förbehåll och inget sambandsord har försvunnit. Pilotrapportens mening, "Handlingarna saknar tidsmätning", "Försökets kostnad är inte beräknad" och "Därför" står kvar.
+
+Utöver påståendena har körningen skrivit om rubriken och de två etikettrubrikerna till påståenden och tagit bort en mening med tom attribuering och motivtillskrivning. Den har också flyttat slutet till ett eget avsnitt med egen mellanrubrik. Den avslutande korrekturen hittade inga mekaniska fel att rätta. Bylinen och övriga meningar är oförändrade.
