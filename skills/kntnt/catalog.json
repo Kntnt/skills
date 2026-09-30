@@ -1,6 +1,6 @@
 {
   "origin": "Kntnt/skills",
-  "manager_digest": "18788ae387c9887111d1651c4392980defc7fa173670130122cb929a60321dc8",
+  "manager_digest": "ad34affe3c13c358a0bdd7589e4c8bf1e994eb007ba13af47c89b8aedd5e10bb",
   "skills": [
     {
       "name": "agents-md",
@@ -145,7 +145,7 @@
       "name": "redline",
       "category": "editorial",
       "description": "Review one supplied text against this collection's editorial contract — its genre, its optional technique, its language, and the shared anti-slop catalogue — and, when selected, a Writing Brief; repair what the review found through a bounded budget of fresh correction subagents, report whatever is left unresolved, and finish with exactly one mechanical pass.",
-      "digest": "edadd9209fbf098c611c3d2af34e075f7a6b6fb5c8f1120093d95c57ff94b1fb",
+      "digest": "9c0ea0411f68fc2da5033a4ef91fa7a6d9e73989dc3d3cf1a178b96c149fb6af",
       "binaries": [
         "uv"
       ],
@@ -175,7 +175,7 @@
       "name": "write",
       "category": "editorial",
       "description": "Turn a brief and its source material into one truthful first draft in the target language, and stop there. Start it on your own only when the literal token `/write` appears in the request or in an instruction the request points at — inside a longer message, a document, or a checklist that says to run it. Not for a bare request to write, draft, compose, summarise, rewrite, edit, or review something — without `/write` in it, such a request is answered as it otherwise would be. A user may also invoke it by name at any time.",
-      "digest": "0219e704b80c563e50dbdb28fe078eab965602d71bfb8fd06b3bc12fe5189943",
+      "digest": "a474a1607f284a817e9e4784475431db1200f5eb269140dd42fc6f46c20b97aa",
       "binaries": [
         "uv"
       ],

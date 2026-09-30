@@ -8699,6 +8699,175 @@ def test_every_bounded_loading_path_reaches_the_shared_article_support() -> None
             )
 
 
+# The press release states its own shape and its own two counted limits, and
+# writes its headline as the headline guidance says (issue #473). It reaches
+# that guidance by the same bounded path the four article genres do, and the
+# Library's measuring script measures its limits for the same three callers.
+PRESS_RELEASE = EDITORIAL / "genres" / "pressrelease.md"
+PRESS_RELEASE_REVIEW = EDITORIAL / "genres" / "pressrelease.review.md"
+PRESS_RELEASE_MEASUREMENT = "--genre=pressrelease"
+PRESS_RELEASE_STATEMENTS = (
+    "The headline is the release's level-1 heading",
+    "The headline is at most 70 characters, spaces included.",
+    "The summary is the first paragraph after the headline.",
+    "The summary is at most 60 words.",
+    "It names the organisation sending the release",
+    "The summary restates the headline's news in full, in its own words",
+    "The first stands directly after the summary",
+    (
+        "The second stands after the body and carries one of the most important"
+        " messages the sender wants a recipient to take away, and no new fact or"
+        " figure."
+    ),
+    (
+        "Where the material carries one quotation, the release carries that one,"
+        " directly after the summary"
+    ),
+    "Where the material carries none, the release has no quotation",
+    "The body is one or two short paragraphs.",
+    (
+        "their name, their title, a telephone number and an email address, as far"
+        " as the material gives them"
+    ),
+)
+PRESS_RELEASE_DIAGNOSES = (
+    "## The shape",
+    "## The headline",
+    "## The summary",
+    "## The headline and the summary",
+    "## Where the quotations stand",
+    "## The second quotation",
+    "## The body's length",
+)
+
+
+def test_the_press_release_states_its_shape_and_limits_where_the_writer_reads() -> None:
+    """Every requirement the review half diagnoses is operable in the base half.
+
+    The maintainer's instruction for a press release fixes a headline of at
+    most 70 characters, a summary of at most 60 words naming the sender, two
+    quotations in fixed places and a body of one or two paragraphs. Write loads
+    the base half alone, so each of those is stated there, the genre being the
+    one file that states its own shape and may give a part of it a dimension;
+    the review half diagnoses them and restates none of the figures.
+    """
+
+    genre = " ".join(PRESS_RELEASE.read_text(encoding="utf-8").split())
+    review = PRESS_RELEASE_REVIEW.read_text(encoding="utf-8")
+
+    assert "](../headlines.md)" in genre, (
+        f"{PRESS_RELEASE}: links the headline guidance nowhere, so a release's"
+        f" headline is written without it (issue #473). See {STANDARD}."
+    )
+    for statement in PRESS_RELEASE_STATEMENTS:
+        assert statement in genre, (
+            f"{PRESS_RELEASE}: does not state {statement!r}, so the writer is"
+            f" not given what the review diagnoses (issue #473). See {STANDARD}."
+        )
+
+    headings = [line for line in review.splitlines() if line.startswith("## ")]
+    for heading in PRESS_RELEASE_DIAGNOSES:
+        assert heading in headings, (
+            f"{PRESS_RELEASE_REVIEW}: carries no `{heading}` diagnosis for a"
+            f" requirement the base half states (issue #473). See {STANDARD}."
+        )
+    assert DIMENSION.findall(review) == [], (
+        f"{PRESS_RELEASE_REVIEW}: restates a limit the base half states, one"
+        f" requirement in two files (ADR-0178). See {STANDARD}."
+    )
+    assert "no finding under the headline guidance" in review, (
+        f"{PRESS_RELEASE_REVIEW}: does not say that a summary restating the"
+        f" headline's news in its own words is no finding under the headline"
+        f" guidance, so the notice the genre asks for reads as a repeat"
+        f" (issue #473). See {STANDARD}."
+    )
+
+
+def test_every_bounded_loading_path_reaches_the_headline_guidance_for_a_release() -> (
+    None
+):
+    """The press release reaches the headline guidance, and the anatomy stays four.
+
+    Each loading step names the genres the headline guidance is loaded for in
+    the clause that loads it, so the press release is named there, and in no
+    clause loading the anatomy, whose parts it does not have (issue #473).
+    """
+
+    for path in (WRITE, REDLINE, REDLINE_CORRECTION):
+        text = path.read_text(encoding="utf-8")
+        clauses = re.split(r"(?<=[.;])\s+", text)
+        headline_clause = next(
+            clause
+            for clause in clauses
+            if "references/editorial/headlines.md" in clause
+        )
+        anatomy_clause = next(
+            clause
+            for clause in clauses
+            if "references/editorial/article-anatomy.md" in clause
+        )
+
+        assert "`pressrelease`" in headline_clause, (
+            f"{path}: the clause loading the headline guidance does not name"
+            f" `pressrelease`, whose genre links it (issue #473). See"
+            f" {STANDARD}."
+        )
+        assert "pressrelease" not in anatomy_clause, (
+            f"{path}: loads the article anatomy for a press release, whose"
+            f" parts the anatomy does not describe (issue #473). See"
+            f" {STANDARD}."
+        )
+
+
+def test_every_measuring_caller_measures_the_press_release() -> None:
+    """Write, Redline and the correction agent measure a release as an article.
+
+    ADR-0209 gives a counted limit to a script rather than to the agent reading
+    the text, and the press release's two limits are counted ones (issue #473).
+    """
+
+    write_steps = WRITE.read_text(encoding="utf-8").split("\n## Steps\n", 1)[1]
+    redline_steps = REDLINE.read_text(encoding="utf-8").split("\n## Steps\n", 1)[1]
+    surfaces = {
+        f"{WRITE} step 7": write_steps.split("\n7. ", 1)[1].split("\n8. ", 1)[0],
+        f"{REDLINE} step 6": redline_steps.split("\n6. ", 1)[1].split("\n7. ", 1)[0],
+        str(REDLINE_CORRECTION): REDLINE_CORRECTION.read_text(encoding="utf-8"),
+    }
+    for where, text in surfaces.items():
+        assert PRESS_RELEASE_MEASUREMENT in text, (
+            f"{where}: does not measure a press release's counted limits with"
+            f" the Library's script (issue #473). See {STANDARD}."
+        )
+
+    step_11 = redline_steps.split("\n11. ", 1)[1]
+    final = next(
+        sentence
+        for sentence in re.split(r"(?<=[.;])\s+", step_11)
+        if REDLINE_FINAL_MEASUREMENT in sentence
+    )
+    assert "`pressrelease`" in final, (
+        f"{REDLINE}: step 11 takes a delivered release's counts from no final"
+        f" measurement (issue #473). See {STANDARD}."
+    )
+
+
+def test_nothing_shipped_links_the_maintainers_press_release_instruction() -> None:
+    """The instruction is the maintainer's document, and the genre stands alone.
+
+    An installed reader receives the Skills and not the maintainer's documents,
+    so the genre states what the instruction asks rather than pointing at it
+    (issue #473).
+    """
+
+    for path in sorted((REPO_ROOT / "skills").rglob("*")):
+        if not path.is_file() or path.suffix not in {".md", ".json", ".py"}:
+            continue
+        assert "docs.google.com" not in path.read_text(encoding="utf-8"), (
+            f"{path}: links a Google document, which no installed reader can"
+            f" rely on (issue #473). See {STANDARD}."
+        )
+
+
 def test_the_resource_format_records_what_inference_is_given_to_read() -> None:
     """The opening is a requirement on every resource, not a courtesy.
 
