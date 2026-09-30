@@ -6787,6 +6787,37 @@ def test_a_heading_repair_keeps_the_texts_recurring_words_and_its_meaning() -> N
     )
 
 
+def test_a_heading_that_could_be_better_is_no_finding() -> None:
+    """A heading that could be worded better loses its reader nothing.
+
+    In #429's first measurement a reviewer could always name some loss: a
+    definite form read at its strictest, a hyperbole read as an inventory, a
+    subheading naming its section's limit rather than its result. The test
+    says what a loss is, reads a heading as its reader meets it, and says that
+    a working heading one would word differently takes no finding and no
+    change.
+    """
+
+    avoid, leave = _headlines_review_sections()
+    opening = _paragraphs(avoid)[0]
+
+    assert "loses its reader nothing" in opening, (
+        f"{HEADLINES_REVIEW}: the *Avoid* opening does not say that a heading"
+        f" that could merely be clearer or more specific loses its reader"
+        f" nothing, so any imaginable improvement reads as a loss (issue #429)."
+    )
+    assert "strictest reading" in leave, (
+        f"{HEADLINES_REVIEW}: *Leave alone* does not count a loss by the reader"
+        f" who meets the heading rather than by the strictest reading of one"
+        f" word (issue #429)."
+    )
+    assert "licenses no change" in leave, (
+        f"{HEADLINES_REVIEW}: *Leave alone* does not say that a working heading"
+        f" one would word differently takes no finding and no change (issue"
+        f" #429)."
+    )
+
+
 def test_redline_names_the_heading_defect_by_what_a_reader_of_it_alone_can_tell() -> (
     None
 ):
