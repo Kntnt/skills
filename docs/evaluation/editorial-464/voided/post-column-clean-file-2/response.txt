@@ -1,0 +1,17 @@
+Jag har sparat texten i `output.md`. Den behövde inget arbete och är byte för byte identisk med `input.md`.
+
+**Inställningar**
+- **Genre:** column, som du angav i anropet.
+- **Teknik:** ingen. Ingen teknik angavs, och genren column anger ingen teknik som den normalt skrivs med.
+- **Språk:** svenska (`sv`), som du angav i anropet.
+- **Metadata:** texten saknar `kntnt`-karta, och ingen har lagts till.
+
+**Granskning**
+Granskningen fann inget som behövde rättas, så ingen korrigeringsrunda kördes och korrigeringsbudgeten (1) användes inte. Den avslutande korrekturläsningen fann inga mekaniska fel.
+
+Texten följer artikelanatomin med en avvikelse från en bör-norm:
+- **Det som räknades:** de mätbara gränserna håller. Rubriken har 44 tecken och 8 ord, ingressen 41 ord och båda mellanrubrikerna 37 tecken.
+- **Det som bedömdes vid läsning:** ingressen står på egen fot, och inledningen för texten framåt i stället för att upprepa ingressen. Brödtexten går att förstå utan ingressen. Mellanrubrikerna beskriver sina avsnitt, och sista avsnittet är ett avslut: det lägger fram förslaget, medger tvivlet och uppmanar läsaren att prova.
+- **Avvikelsen:** första stycket under ”Det är inte bara besluten jag vill åt” har 83 ord, alltså strax över riktvärdet 80. Det räknas inte som ett fynd, eftersom stycket rymmer en tanke och läses väl i den längden.
+
+Inget påstående har tagits bort, ändrats eller lagts till.

@@ -1,0 +1,86 @@
+Nästan klar: granskningen, en korrigeringsrunda och korrläsningen är gjorda. Jag kunde inte ta bort mina arbetsfiler, eftersom borttagningen kräver ditt godkännande (se sist).
+
+## Inställningar
+
+- **Genre:** `opinion`, angiven i anropet.
+- **Språk:** `sv`, angivet i anropet.
+- **Teknik:** ingen. Genren opinion anger ingen teknik, och ingen annan nivå valde en.
+- **Brief:** ingen.
+
+Korrigeringsbudgeten var 1 och gick åt till en runda. Rundan godtogs efter en ny granskning, och tre fynd står kvar olösta.
+
+```markdown
+# Pröva telefonbokningen ett halvår till
+
+Sanna Ek, Öppna beslut
+
+Kommunstyrelsen borde behålla telefonbokning under ett halvårs försök i alla sju lokaler.
+
+## Var femte bokning gjordes via telefon
+
+Det gjordes 96 bokningar på webben och 24 via telefon. Kommunens pilotrapport från den 8 april 2026 säger samtidigt att bokningarna inte räknar unika personer och att digital vana inte undersöktes.
+
+## Kostnaden för dubbla kanaler är inte mätt
+
+Förvaltningen invänder att dubbla kanaler innebär dubbel administration. Handlingarna saknar tidsmätning. Försökets kostnad är inte beräknad.
+
+## Beslutet ligger hos kommunstyrelsen
+
+Föreningen vill att förvaltningen mäter tidsåtgång och frågar användarna varför de väljer en bokningsväg. Nu är det dags för kommunstyrelsen att behålla telefonbokningen under ett halvårs försök i alla sju lokaler.
+```
+
+## Olösta fynd
+
+1. **Ingressen saknas.** Artikelanatomin kräver en ingress mellan rubrik och byline. En granskning skriver inte en del som saknas, så en person behöver skriva den. Läsaren saknar en fristående sammanfattning av vad texten handlar om och vad hen vinner på att läsa.
+2. **Siffrorna har ingen källa.** Meningen "Det gjordes 96 bokningar på webben och 24 via telefon" anger ingen källa. Ordet "samtidigt" i nästa mening antyder att siffrorna kommer från pilotrapporten, men texten säger det inte. Att skriva in rapporten som källa vore att hitta på en attribuering. Läsaren kan inte se var siffrorna kommer från eller vilken period de gäller.
+3. **Det är oklart vilken förening som avses.** "Föreningen vill att förvaltningen mäter …" står i bestämd form, men ingen förening nämns i brödtexten. Bylinens "Öppna beslut" sägs aldrig vara föreningen, så meningen kan inte lagas utan att texten gissar vems kravet är. Meningen står nu i det nya avslutet, så oklarheten följer med dit. Läsaren vet inte vems krav det är.
+
+## Lösta fynd och ändrade rubriker
+
+- **Rubriken.** "Kommunledningen hatar människor" tillskrev kommunledningen ett motiv som inget i texten bär. Tonen var långt högre än textens, och rubriken sa inte vad texten föreslår. Ny rubrik: "Pröva telefonbokningen ett halvår till".
+- **Inledningen.** Meningen "Alla vet att politikerna vill stänga ute äldre för att spara miljoner" är struken. Den byggde på en vag attribuering och ett tillskrivet motiv. Uppgiften om miljoner motsades dessutom av textens egen uppgift att kostnaden inte är beräknad.
+- **Bakgrund.** Slutsatsen "Det bevisar att 20 procent av kommunens invånare inte kan använda internet" är struken. Bokningar är inte invånare, och nästa mening säger att unika personer och digital vana inte undersöktes.
+- **Diskussion.** Meningen "Därför kostar det ingenting att behålla telefonbokningen" är struken. Att tidsmätning saknas visar inte att kostnaden är noll, och samma stycke säger att kostnaden inte är beräknad.
+- **Mellanrubrikerna.** "Bakgrund" och "Diskussion" var etiketter som inte gav den som skummar något av argumentet. De har ersatts av "Var femte bokning gjordes via telefon" och "Kostnaden för dubbla kanaler är inte mätt".
+- **Slutet.** "Nu är det dags att agera" nämnde varken någon handling eller vem som kan handla, och den stod sist i ett avsnitt som bär argumentet. Avslutet är nu ett eget avsnitt med mellanrubriken "Beslutet ligger hos kommunstyrelsen". Uppmaningen säger nu vem som ska göra vad, med textens eget förslag.
+
+## Påståenden
+
+**Borttagna:**
+- Att "alla vet" något om politikernas avsikt, att politikerna vill stänga ute äldre och att de vill spara miljoner. Ändringen av inledningen tog bort dem.
+- Att 20 procent av kommunens invånare inte kan använda internet, och att bokningssiffrorna bevisar det. Ändringen i Bakgrund tog bort dem.
+- Att det inte kostar något att behålla telefonbokningen. Ändringen i Diskussion tog bort det. Med meningen försvann också "Därför", textens (ogrundade) skäl som ledde från den saknade tidsmätningen till en nollkostnad. Läsaren får inte längre ett uttryckligt svar på förvaltningens invändning. Svaret ligger nu bara underförstått i de två meningarna om vad som inte är mätt och beräknat.
+
+**Ändrade:**
+- **Rubriken** påstod att kommunledningen hatar människor. Nu föreslår den att telefonbokningen prövas i ytterligare ett halvår (rubrikändringen).
+- **Andelen 20 procent** gällde invånarna. Nu säger mellanrubriken att var femte bokning gjordes via telefon, alltså 24 av 120 (mellanrubrikerna och ändringen i Bakgrund).
+- **Mellanrubriken "Kostnaden för dubbla kanaler är inte mätt"** påstår att kostnaden för två kanaler inte är mätt. Texten under säger att handlingarna saknar tidsmätning och att försökets kostnad inte är beräknad. Rubriken säger det som ett allmänt påstående om kostnaden, utan att knyta det till handlingarna (mellanrubrikerna).
+- **Slutraden** var en allmän uppmaning. Nu säger den att det är dags för kommunstyrelsen att behålla telefonbokningen under ett halvårs försök i alla sju lokaler, vilket upprepar inledningens förslag (ändringen av slutet).
+
+**Tillagda:**
+- Mellanrubriken "Beslutet ligger hos kommunstyrelsen" påstår att kommunstyrelsen fattar beslutet. Det är en slutsats av inledningens "Kommunstyrelsen borde behålla" (ändringen av slutet).
+
+Utöver dessa har inget påstående tagits bort, ändrats eller lagts till.
+
+## Anatomi
+
+Slutversionen mättes med skriptet och ger kod 1. Det enda felet är att ingressen saknas, så texten följer inte artikelanatomin.
+
+- Rubriken har 38 tecken och 5 ord.
+- Mellanrubrikerna har 37, 41 och 35 tecken.
+- Styckena har 12 ord (inledningen) och sedan 31, 16 och 31 ord.
+
+Jag granskade även de krav skriptet inte räknar:
+- Sista avsnittet klarar provet för ett avslut.
+- Mellanrubrikerna beskriver sina avsnitt.
+- Inledningen är ett stycke som presenterar ämnet.
+
+Kraven på ingressen, att den står på egen hand och inte upprepar inledningen, kunde inte prövas eftersom den saknas. Alla tre avsnitten har ett stycke var. Det är normalt för en så kort text och inget fynd.
+
+## Vad körningen ändrade
+
+Rubriken är ersatt, tre ogrundade påståenden är strukna och två etikettrubriker har blivit påståenden. Avslutet har brutits ut till ett eget avsnitt med egen mellanrubrik. Dit har meningen om föreningens krav flyttats från Diskussion, och uppmaningen säger nu vem som ska göra vad. Övriga meningar står ordagrant kvar. Korrläsningen på slutet hittade inga mekaniska fel och ändrade ingenting.
+
+## Kvarliggande arbetsfiler
+
+Fyra arbetsfiler ligger kvar: `pre.md`, `cand.md`, `cand.sha` och `out.md`, i `scratch/tmp/tmp.nrVJpwLw5X/`. Det är min privata katalog för körningen. Jag försökte ta bort filerna och katalogen, men borttagningen kräver ditt godkännande. Godkänn den, eller ta bort katalogen själv. `input.md` är orörd.

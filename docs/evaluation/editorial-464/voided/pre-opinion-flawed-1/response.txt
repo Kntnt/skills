@@ -1,0 +1,54 @@
+**Konfiguration:** genre `opinion` (flagga), språk `sv` (flagga), teknik: ingen. Genren opinion anger ingen teknik som den vanligen skrivs med. Ingen skrivbrief användes. Korrigeringsbudgeten (1 omgång) är förbrukad.
+
+````markdown
+# Låt lokalbokning per telefon finnas kvar ett halvår
+
+Sanna Ek, Öppna beslut
+
+Kommunstyrelsen borde behålla telefonbokning under ett halvårs försök i alla sju lokaler.
+
+## Var femte bokning kom per telefon, men personerna räknades inte
+
+Det gjordes 96 bokningar på webben och 24 via telefon. Kommunens pilotrapport från den 8 april 2026 säger samtidigt att bokningarna inte räknar unika personer och att digital vana inte undersöktes.
+
+## Handlingarna visar varken tid eller kostnad för två bokningsvägar
+
+Förvaltningen invänder att dubbla kanaler innebär dubbel administration. Handlingarna saknar tidsmätning. Föreningen vill att förvaltningen mäter tidsåtgång och frågar användarna varför de väljer en bokningsväg. Försökets kostnad är inte beräknad.
+
+## Förslaget riktar sig till kommunstyrelsen
+
+Nu är det dags att agera. Kommunstyrelsen borde behålla telefonbokningen i alla sju lokaler under ett halvårs försök.
+````
+
+## Olösta fynd
+
+1. **Ingressen saknas.** Artikelanatomin kräver en fristående, sammanfattande ingress mellan rubrik och byline. Mätningen av den levererade texten visar ingen. Läsaren får ingen fristående sammanfattning av vad texten handlar om och vad den ger. Delen har inte skrivits. Den ska fyllas i av skribenten.
+2. **”Föreningen vill att förvaltningen mäter tidsåtgång …”** Brödtexten presenterar aldrig föreningen. Den enda kandidaten är Öppna beslut i bylinen, och texten säger inte att Öppna beslut är en förening. Läsaren vet inte vem som ställer kravet. Frågan är olöst eftersom en rättning skulle påstå mer än texten gör.
+
+## Reparerade rubriker och avsnitt
+
+- **Rubriken** (”Kommunledningen hatar människor”). Den tillskrev kommunledningen ett motiv som texten inte belägger och var mycket högljuddare än texten. En läsare som bara såg rubriken kunde inte heller se att texten handlar om telefonbokning. Den nya rubriken uppmanar till att telefonbokningen av lokaler ska finnas kvar ett halvår.
+- **Mellanrubriken ”Bakgrund”.** Den var en ren etikett, och en skummande läsare fick inte veta vad avsnittet säger. Den nya rubriken säger att var femte bokning kom per telefon och att personerna inte räknades.
+- **Mellanrubriken ”Diskussion”.** Den var också en ren etikett och sade inte vilken invändning avsnittet bemöter eller vad det säger om den. Den nya rubriken säger att handlingarna varken visar tid eller kostnad för två bokningsvägar.
+- **Slutet** (”Nu är det dags att agera.”). Det stod inne i ett avsnitt som bar argumentet och namngav ingen handling och ingen som kunde handla. Nu är det ett eget avsnitt, ”Förslaget riktar sig till kommunstyrelsen”. Uppmaningen följs av textens befintliga förslag: kommunstyrelsen borde behålla telefonbokningen i alla sju lokaler under ett halvårs försök. Slutet upprepar därmed ingångens förslag som återkoppling. Ingen ny policy har lagts till.
+
+## Påståenden
+
+**Borttagna:**
+- *”Alla vet att politikerna vill stänga ute äldre för att spara miljoner.”* Tre påståenden försvann: att politikerna vill stänga ute äldre, att ”alla vet” detta, och att det skulle spara miljoner. Påståendet var i sin helhet ett obelagt motiv med vag attribution. Det motsades också av textens egen uppgift att kostnaden inte är beräknad. Borttaget i rättningen av ingångsstycket.
+- *”Det bevisar att 20 procent av kommunens invånare inte kan använda internet.”* Slutsatsen om invånarna och ordet ”bevisar” motsades av pilotrapportens förbehåll i meningen efter. Det förbehållet står kvar oförändrat.
+- *”Därför kostar det ingenting att behålla telefonbokningen.”* Påståendet om noll kostnad byggde på att tidsmätning saknas och motsades av att kostnaden inte är beräknad. Med meningen försvann också sambandsordet ”Därför”. Läsaren har inte längre textens eget steg från ”ingen tidsmätning” till ”ingen kostnad”. Förvaltningens invändning bemöts nu bara med att tid och kostnad inte är mätta. De två avgränsande meningarna, ”Handlingarna saknar tidsmätning.” och ”Försökets kostnad är inte beräknad.”, står kvar oförändrade.
+
+**Ändrade:**
+- **Rubriken** påstår nu att telefonbokningen gäller bokning av lokaler, och att den ska finnas kvar ett halvår. Tolkningen ”lokalbokning” stöds av att texten talar om bokningar och lokaler, men texten säger den inte uttryckligen. Ordet ”försök” finns inte i rubriken. Ändrad i rättningen av rubriken.
+- **Första mellanrubriken** påstår att var femte bokning kom per telefon, alltså 24 av 120. Tjugo procent gäller nu andelen bokningar, inte kommunens invånare. Rubriken påstår också att personerna inte räknades. Pilotrapporten säger mer precist att bokningarna inte räknar unika personer. Ändrad i rättningen av ”Bakgrund”.
+- **Andra mellanrubriken** påstår att handlingarna varken visar tid eller kostnad för två bokningsvägar. Den knyter därmed textens två förbehåll (”saknar tidsmätning”, ”kostnad är inte beräknad”) till just upplägget med två kanaler. Ändrad i rättningen av ”Diskussion”.
+- **Slutets mellanrubrik** påstår att förslaget riktar sig till kommunstyrelsen. Det har motsvarighet i ingångens ”Kommunstyrelsen borde”. Skriven i rättningen av slutet.
+
+**Tillagda:** inga utöver de rubrikpåståenden som redovisas ovan som ändrade. Slutets sista mening upprepar ingångens förslag och är inget nytt påstående.
+
+Övriga påståenden står kvar oförändrade, bortsett från dem som redovisas ovan.
+
+**Anatomin:** Texten följer inte artikelanatomin eftersom ingressen saknas. Den levererade texten mäter 51 tecken och 8 ord i rubriken och 12 ord i ingångsstycket. Mellanrubrikerna har 63, 65 och 41 tecken, och varje avsnitt har ett stycke. Jag har också läst de krav som skriptet inte räknar: slutet är ett eget avsnitt, mellanrubrikerna beskriver sina avsnitt och upprepar inte meningen under sig. Det avvikande undantaget är att brödtexten behöver bylinen för att ”Föreningen” ska få en referent (fynd 2).
+
+**Sammanfattning av ändringarna:** Rubriken och de två mellanrubrikerna skrevs om. Slutet fick ett eget avsnitt med ny mellanrubrik och en konkret uppmaning. Tre meningar med obelagda eller självmotsägande påståenden togs bort. Den avslutande korrekturläsningen hittade inga mekaniska fel och ändrade ingenting.

@@ -1,0 +1,5 @@
+Texten behövde ingen ändring. Granskningen hittade inga redaktionella brister, och korrekturläsningen hittade inga mekaniska fel. `input.md` är orörd och inget har skrivits till disk.
+
+Inställningar: genren är column (krönika) och språket svenska (`sv`), båda angivna i anropet. Ingen teknik används, eftersom column-genren inte anger någon och ingen annan källa valde en.
+
+Texten följer artikelanatomin. Skriptet räknade de mätbara kraven. Läsningen visade att sista avsnittet fungerar som avslutning, att ingressen står på egna ben och att mellanrubrikerna beskriver sina avsnitt. Första stycket under ”Det är inte bara besluten jag vill åt” har 83 ord, strax över normen på 80 ord. Det håller en enda tanke och läses bra i den längden, så det räknas inte som en brist.

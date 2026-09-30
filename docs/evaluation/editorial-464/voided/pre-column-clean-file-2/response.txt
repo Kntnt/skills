@@ -1,0 +1,13 @@
+Jag har skrivit texten till `output.md` och den är identisk med `input.md`. Granskningen hittade inget att rätta, så ingen korrigering gjordes. Korrläsningen i slutet hittade inga fel.
+
+**Inställningar:** genren är krönika och språket svenska, båda angivna i anropet. Ingen berättarteknik användes eftersom krönikegenren inte har någon som standard, och ingen annan angav någon.
+
+**Artikelns delar:** texten följer mallen för krönikor utan avvikelser. Skriptet mätte alla delar som räknas och varken rubriker, stycken eller avsnitt överskred någon gräns. Jag läste också de delar som skriptet inte räknar:
+- Ingressen fungerar på egen hand.
+- Första stycket i brödtexten tar resonemanget vidare från ingressen och upprepar den inte.
+- Båda mellanrubrikerna beskriver sina avsnitt.
+- Sista avsnittet är ett avslut. Det lägger fram förslaget, behåller tvivlet och slutar med en uppmaning som följer av texten.
+
+Första stycket under ”Det är inte bara besluten jag vill åt” har 83 ord, strax över riktvärdet 80. Stycket håller sig till en tanke och läses bra i den längden, så det är inget fel.
+
+Inga påståenden har tagits bort, ändrats eller lagts till.

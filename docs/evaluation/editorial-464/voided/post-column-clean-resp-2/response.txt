@@ -1,0 +1,10 @@
+Ingen ändring behövdes: `input.md` redan håller måttet som krönika och har inte ändrats. Inga synpunkter återstår, och ingen fil har skrivits.
+
+- **Konfiguration:** genren är `column` och språket `sv`, båda enligt anropet. Ingen teknik används, eftersom genren `column` inte har någon teknik som den vanligtvis skrivs med. Ingen skrivbrief användes.
+- **Artikelanatomi:** texten följer anatomin. Skriptet hittade inga fel i de räknade gränserna. Jag gick också igenom de krav som skriptet inte räknar:
+  - fristående ingress och brödtext som inte upprepar varandra
+  - rubriker som beskriver sina avsnitt
+  - ett slutavsnitt med en uppmaning till handling som följer av resonemanget
+
+  Ett stycke är något längre än normen på högst 80 ord, men det rymmer en enda tanke och läses väl i den längden, så det räknas inte som en avvikelse att åtgärda.
+- **Korrekturläsning:** den avslutande korrekturläsningen gjordes en gång och hittade inga mekaniska fel.

@@ -1,0 +1,9 @@
+# /Users/thomas/Projects/skills/.git/kntnt-orchestrate/464
+# HEAD ccf1ebad94f6461a2204a9432b71b09dbd768e17
+?? docs/evaluation/editorial-464/runs/waves/wave-1-before-repo.txt
+?? docs/evaluation/editorial-464/runs/waves/wave-1-before-scratch.txt
+?? docs/evaluation/editorial-464/runs/waves/wave-1-before-session-scratchpad.txt
+# end /Users/thomas/Projects/skills/.git/kntnt-orchestrate/464
+# /Users/thomas/Projects/skills
+# HEAD 41fd4c55fa03bf2be3ffad3b5124e2735f1fbf44
+# end /Users/thomas/Projects/skills

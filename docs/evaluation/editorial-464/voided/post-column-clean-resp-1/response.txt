@@ -1,0 +1,3 @@
+Texten behöver inga ändringar. Granskningen hittade inget att rätta och korrekturläsningen hittade inga mekaniska fel, så inget skrevs och `input.md` är orörd.
+
+Granskningen utgick från genren column, språket sv (svenska) och ingen teknik. Ingen teknik angavs, och genren column anger inte heller någon som den brukar skrivas med. Texten följer artikelanatomin. Delarna som mättes håller sina gränser, och delarna som lästes ut uppfyller sina krav: sista avsnittet fungerar som avslutning, ingressen står på egen hand och mellanrubrikerna beskriver sina avsnitt.
