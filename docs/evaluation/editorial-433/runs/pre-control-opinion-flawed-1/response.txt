@@ -1,0 +1,66 @@
+Granskningen är klar, men texten levereras oförändrad. Det enda korrigeringsvarvet (budget 1) skapade själv ett nytt fel och kasserades därför. Den avslutande korrekturläsningen hittade inga mekaniska fel. Alla tio fynd kvarstår och behöver åtgärdas av dig.
+
+**Inställningar:** genren är `opinion` och språket `sv`, båda enligt anropet. Ingen teknik tillämpades, eftersom genren opinion inte anger någon och inget annat valde någon.
+
+```markdown
+# Kommunledningen hatar människor
+
+Sanna Ek, Öppna beslut
+
+Kommunstyrelsen borde behålla telefonbokning under ett halvårs försök i alla sju lokaler. Alla vet att politikerna vill stänga ute äldre för att spara miljoner.
+
+## Bakgrund
+
+Det gjordes 96 bokningar på webben och 24 via telefon. Det bevisar att 20 procent av kommunens invånare inte kan använda internet. Kommunens pilotrapport från den 8 april 2026 säger samtidigt att bokningarna inte räknar unika personer och att digital vana inte undersöktes.
+
+## Diskussion
+
+Förvaltningen invänder att dubbla kanaler innebär dubbel administration. Handlingarna saknar tidsmätning. Därför kostar det ingenting att behålla telefonbokningen. Föreningen vill att förvaltningen mäter tidsåtgång och frågar användarna varför de väljer en bokningsväg. Försökets kostnad är inte beräknad.
+
+Nu är det dags att agera.
+```
+
+## Olösta fynd
+
+1. **Rubriken ”Kommunledningen hatar människor”** tillskriver kommunledningen ett motiv, hat, som ingenting i texten stöder. Den har också en betydligt hårdare ton än texten. Den säger inte heller vad texten föreslår, nämligen att kommunstyrelsen ska behålla telefonbokningen under ett halvårs försök. Den som bara ser rubriken tror att texten belägger ett motiv, och får inte veta vad förslaget är.
+
+2. **Ingress saknas.** Mätskriptet rapporterar ingressen som frånvarande. Läsaren saknar en fristående sammanfattning av vad texten handlar om och vad den ger. Ingressen har inte skrivits, eftersom en saknad del ska rapporteras men inte fyllas i.
+
+3. **Inledningens andra mening, ”Alla vet att politikerna vill stänga ute äldre för att spara miljoner.”**
+   - ”Alla vet” är en tom källhänvisning.
+   - Motivet tillskrivs politikerna utan stöd.
+   - Att det gäller äldre har inget stöd, eftersom pilotrapporten enligt texten inte undersökte digital vana.
+   - Att det gäller miljoner har inte heller stöd, för texten redovisar inga besparingar.
+
+   Läsaren får ett påhittat motiv och en påhittad summa framställda som allmänt kända fakta.
+
+4. **”Det bevisar att 20 procent av kommunens invånare inte kan använda internet.”**
+   - 24 av 120 är 20 procent av bokningarna, inte av invånarna.
+   - Nästa mening säger att bokningarna inte räknar unika personer och att digital vana inte undersöktes.
+
+   Slutsatsen motsägs alltså av textens egen källa, och ordet ”bevisar” är starkare än underlaget.
+
+5. **Siffrorna 96 och 24 saknar källa där de används, och piloten presenteras aldrig.** Läsaren får inte veta vad som bokades eller under vilken period. Texten säger inte uttryckligen att siffrorna kommer från pilotrapporten, så de uppgifterna måste skribenten själv lägga till.
+
+6. **”Därför kostar det ingenting att behålla telefonbokningen.”** Att handlingarna saknar tidsmätning visar att kostnaden är okänd, inte att den är noll. Samma stycke säger dessutom att ”Försökets kostnad är inte beräknad”. Förvaltningens invändning avfärdas alltså med en slutsats som texten själv motsäger, och den bemöts aldrig i sak.
+
+7. **”Föreningen” har ingen referent i brödtexten.** Bylinen nämner Öppna beslut, men texten säger inte att det är en förening eller att det är den som avses. Läsaren vet därför inte vem som lägger fram förslaget.
+
+8. **Mellanrubrikerna ”Bakgrund” och ”Diskussion” är rena etiketter** över avsnitt som för ett argument. Den som skummar texten kan inte följa resonemanget.
+
+9. **Avslutningen ”Nu är det dags att agera.”** har inget eget avsnitt, utan står i det avsnitt som bär argumentet. Den är dessutom en allmän uppmaning som varken säger vad som ska göras eller vem som ska göra det. Texten har redan ett förslag riktat till kommunstyrelsen som avslutningen kan peka på.
+
+10. **Inledningen ger inte sammanhanget.** Den säger inte vad telefonbokningen gäller, vad ”alla sju lokaler” är eller vilket beslut som hotar telefonbokningen. Att rätta det kräver uppgifter som texten inte innehåller.
+
+Texten uppfyller inte artikelanatomin. Mätskriptet anger att ingressen saknas (fynd 2). Vid läsning bryter den också mot anatomins övriga krav, enligt fynd 8, 9 och 10.
+
+## Förkastat korrigeringsförsök
+
+Korrigeringsvarvet försökte åtgärda fynd 1, 3, 4, 6, 8 och 9, men förkastades i sin helhet. Texten ovan är den du lämnade in.
+
+- **Rubriken:** varvets nya rubrik ”Behåll telefonbokningen på försök och mät tidsåtgången” gjorde tidsmätningen till skribentens eget krav. I texten är det bara ”Föreningen” som vill ha tidsmätning, och den säger inte att skribenten ställer sig bakom kravet.
+- **Avslutningen:** varvets nya avslutning gjorde samma sak genom att lägga tidsmätningen i uppmaningen att agera.
+
+Det är de två reparationerna (fynd 1 och fynd 9) som skapade felet, och de behöver du ta ställning till. Försöket tog också bort meningen i fynd 3, men den står kvar i den levererade texten. Inget av felen som försöket skapade finns i texten ovan.
+
+Den levererade texten är identisk med den du lämnade in. Inga påståenden har tagits bort, ändrats eller lagts till, och korrekturläsningen gjorde inga ändringar. Inga filer har skrivits.

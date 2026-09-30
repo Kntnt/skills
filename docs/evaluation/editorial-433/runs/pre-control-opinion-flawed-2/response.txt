@@ -1,0 +1,73 @@
+Jag har granskat texten som debattartikel på svenska. Med budgeten på en rättningsrunda åtgärdades sju av tio fynd. Tre fynd är olösta och kräver uppgifter som bara skribenten har.
+
+**Inställningar:** Genren är `opinion` och språket `sv`, båda enligt anropet. Ingen berättarteknik tillämpades: anropet angav ingen, och genren anger ingen som den vanligen skrivs med.
+
+````markdown
+# Telefonbokningen bör finnas kvar ett halvår
+
+Sanna Ek, Öppna beslut
+
+Kommunstyrelsen borde behålla telefonbokning under ett halvårs försök i alla sju lokaler.
+
+## Så fördelades bokningarna på webb och telefon
+
+Det gjordes 96 bokningar på webben och 24 via telefon. Det är 20 procent av bokningarna. Kommunens pilotrapport från den 8 april 2026 säger samtidigt att bokningarna inte räknar unika personer och att digital vana inte undersöktes.
+
+## Handlingarna visar inte vad dubbla kanaler kostar i tid
+
+Förvaltningen invänder att dubbla kanaler innebär dubbel administration. Handlingarna saknar tidsmätning. Föreningen vill att förvaltningen mäter tidsåtgång och frågar användarna varför de väljer en bokningsväg. Försökets kostnad är inte beräknad.
+
+## Nästa steg är ett halvårs försök
+
+Nu är det dags att agera. Kommunstyrelsen bör besluta att behålla telefonbokningen under ett halvårs försök i alla sju lokaler.
+````
+
+## Olösta fynd
+
+Rättningsbudgeten tog slut med tre fynd kvar:
+
+1. **Ingressen saknas.** Mellan rubrik och byline ska det finnas en fristående sammanfattning av vad artikeln handlar om och vad läsaren får ut av den. Den har inte skrivits, eftersom en granskning inte skriver saknade delar.
+2. **Inledningsstycket säger inte vad som bokas.** Det gäller ”telefonbokning … i alla sju lokaler”. Texten säger aldrig vad som bokas eller vilka de sju lokalerna är, så läsaren vet inte vad förslaget gäller. Att rätta det kräver uppgifter som texten inte har.
+3. **”Föreningen” introduceras aldrig.** I ”Föreningen vill att förvaltningen mäter …” har ingen förening nämnts tidigare, och texten säger inte att Öppna beslut är en förening. Läsaren vet därför inte vem som kräver mätningen. Att koppla ihop dem vore ett påstående som texten inte gör.
+
+## Åtgärdade fynd
+
+**Rubriken.** Den löd ”Kommunledningen hatar människor”. Den tillskrev motståndaren ett motiv som texten inte belägger, var högre i tonen än texten och angav inte textens förslag.
+- Den nya rubriken har 43 tecken och 6 ord.
+- Den hävdar att telefonbokningen bör finnas kvar ett halvår.
+- Den säger inte att det gäller ett försök eller alla sju lokaler, vilket inledningsstycket gör.
+
+**Underrubriken ”Bakgrund”.** Den sa inget om vad avsnittet handlar om. Den nya underrubriken säger att avsnittet visar hur bokningarna fördelades mellan webb och telefon.
+
+**Underrubriken ”Diskussion”.** Den sa inget om att avsnittet bemöter förvaltningens invändning. Den nya underrubriken är en slutsats dragen ur ”Handlingarna saknar tidsmätning”. Se tillagda påståenden nedan.
+
+**Slutet.** ”Nu är det dags att agera.” nämnde ingen handling och ingen som ska handla. Meningen stod dessutom sist i ett avsnitt som bär argumentet. Den står nu i ett eget slutavsnitt med egen underrubrik, följd av textens eget förslag.
+
+**Två påståenden utan stöd strök:**
+- Den obelagda anklagelsen i inledningsstycket.
+- Slutsatsen om att telefonbokningen inte kostar något.
+
+Båda redovisas nedan.
+
+## Så ändrades påståendena
+
+**Strukna påståenden**
+- **”Alla vet att politikerna vill stänga ute äldre för att spara miljoner.”** Meningen strök i sin helhet. Påståendet saknade källa och tillskrev politikerna ett motiv, och texten säger själv att försökets kostnad inte är beräknad.
+- **”Det bevisar att 20 procent av kommunens invånare inte kan använda internet.”** Två påståenden försvann: att siffrorna bevisar något, och att en femtedel av invånarna inte kan använda internet. Nästa mening motsade båda, eftersom bokningarna inte räknar unika personer och digital vana inte undersöktes.
+- **”Därför kostar det ingenting att behålla telefonbokningen.”** Hela påståendet strök. Med ”Därför” försvann textens slutsats att en saknad tidsmätning betyder att kostnaden är noll. Läsaren förlorar alltså bara den felaktiga slutledningen. Meningarna som anger gränserna finns kvar oförändrade: ”Handlingarna saknar tidsmätning.” och ”Försökets kostnad är inte beräknad.”
+- **Rubrikens påstående att kommunledningen hatar människor** finns inte längre kvar någonstans i texten.
+
+**Ändrade påståenden**
+- **20 procent** avser nu andelen bokningar (24 av 120), inte andelen av kommunens invånare. Det kommer från rättningen av påståendet om 20 procent.
+- **Rubriken** hävdar nu att telefonbokningen bör finnas kvar ett halvår. Motsvarigheten finns i inledningsstyckets förslag, men rubriken nämner inte försöket och inte de sju lokalerna.
+
+**Tillagda påståenden**
+- **Underrubriken ”Handlingarna visar inte vad dubbla kanaler kostar i tid”.** Den hävdar att handlingarna inte visar vad två bokningskanaler kostar i tid. Det är en slutsats ur ”Handlingarna saknar tidsmätning” och tillkom när ”Diskussion” byttes ut.
+- **Underrubriken ”Nästa steg är ett halvårs försök”.** Den hävdar att nästa steg är ett halvårs försök. I texten är det skribentens förslag, och texten säger inte att något är beslutat. Den tillkom med slutavsnittet.
+- **”Kommunstyrelsen bör besluta att behålla telefonbokningen under ett halvårs försök i alla sju lokaler.”** Meningen upprepar inledningsstyckets förslag och pekar ut kommunstyrelsen som den som ska besluta. Den tillkom med slutavsnittet.
+
+Utöver de påståenden som redovisas ovan står alla meningar och bylinen ordagrant som de kom. ”Nu är det dags att agera.” har dock flyttats till det nya slutavsnittet.
+
+**Artikelns uppbyggnad:** Texten följer inte den fasta artikelstrukturen. Mätningen av den slutliga texten visar en brist, att ingressen saknas. Vid läsning framkom två brister som mätskriptet inte räknar: inledningsstycket säger inte vad som bokas, och ”Föreningen” introduceras aldrig. I övrigt uppfyller texten de krav som granskades.
+
+Utöver redovisningen ovan har körningen bytt rubriken och båda underrubrikerna. Den har brutit ut slutet till ett eget avsnitt med egen underrubrik och strukit en tom auktoritetshänvisning (”Alla vet”). Den allmänna slutuppmaningen har fått en konkret handling och en som ska handla. Den avslutande mekaniska korrekturläsningen hittade inga fel att rätta. Inga filer skrevs, och de tillfälliga arbetsfilerna är borttagna.

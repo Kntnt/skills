@@ -1,0 +1,19 @@
+wave	run	arm	row	invocation
+1	pre-control-opinion-flawed-1	pre	opinion-flawed	/redline --genre=opinion --language=sv --output=response input.md
+1	pre-control-article-flawed	pre	article-flawed	/redline --genre=article --language=sv --output=response input.md
+1	pre-control-case-study-flawed	pre	case-study-flawed	/redline --genre=casestudy --language=sv --output=response input.md
+1	pre-control-column-flawed	pre	column-flawed	/redline --genre=column --language=sv --output=response input.md
+2	pre-control-opinion-flawed-2	pre	opinion-flawed	/redline --genre=opinion --language=sv --output=response input.md
+3	pre-control-opinion-flawed-3	pre	opinion-flawed	/redline --genre=opinion --language=sv --output=response input.md
+4	post-control-opinion-flawed-1	post	opinion-flawed	/redline --genre=opinion --language=sv --output=response input.md
+4	post-control-article-flawed	post	article-flawed	/redline --genre=article --language=sv --output=response input.md
+4	post-control-case-study-flawed	post	case-study-flawed	/redline --genre=casestudy --language=sv --output=response input.md
+4	post-control-column-flawed	post	column-flawed	/redline --genre=column --language=sv --output=response input.md
+5	post-control-opinion-flawed-2	post	opinion-flawed	/redline --genre=opinion --language=sv --output=response input.md
+6	post-control-opinion-flawed-3	post	opinion-flawed	/redline --genre=opinion --language=sv --output=response input.md
+7	revise-control-opinion-flawed-1	revise	opinion-flawed	/redline --genre=opinion --language=sv --output=response input.md
+7	revise-control-article-flawed	revise	article-flawed	/redline --genre=article --language=sv --output=response input.md
+7	revise-control-case-study-flawed	revise	case-study-flawed	/redline --genre=casestudy --language=sv --output=response input.md
+7	revise-control-column-flawed	revise	column-flawed	/redline --genre=column --language=sv --output=response input.md
+8	revise-control-opinion-flawed-2	revise	opinion-flawed	/redline --genre=opinion --language=sv --output=response input.md
+9	revise-control-opinion-flawed-3	revise	opinion-flawed	/redline --genre=opinion --language=sv --output=response input.md

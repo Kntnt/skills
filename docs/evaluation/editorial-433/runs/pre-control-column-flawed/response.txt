@@ -1,0 +1,43 @@
+Granskningen är klar och texten har gått igenom en rättningsomgång. Den bygger på genren `column` och språket `sv`, som båda angavs i anropet. Ingen dramaturgisk teknik användes, eftersom krönikegenren inte har någon som standard. Ingen brief användes.
+
+````markdown
+# Vår mötesmall saknar vad vi ska förstå tillsammans
+
+Nora Vik
+
+Förra tisdagen satt jag gråtande i bibliotekets mötesrum när min chef sade: ”Nu måste allt bli digitalt.” Det var mitt första möte om vår nya mötesmall. Jag har aldrig deltagit i något möte om vår nya mötesmall.
+
+Vår mötesmall har plats för starttid och sluttid men inte för vad vi ska förstå tillsammans.
+
+Samtal kan ha värde utan att leda till beslut. Jag vill prova frågan vad vi behöver förstå tillsammans, men jag vet inte om ytterligare en ruta gör möten bättre.
+````
+
+## Åtgärdade fynd
+
+- **Rubriken.** ”Möten förändrar allt” påstod något som texten aldrig hävdar. Den sa inte heller att texten handlar om mötesmallen. Den nya rubriken är ”Vår mötesmall saknar vad vi ska förstå tillsammans”. Den säger nu att mötesmallen inte rymmer det vi ska förstå tillsammans, med textens egna ord och i samma styrka som andra stycket.
+- **Tom inledningsfras.** Meningen ”I dagens snabbt föränderliga värld är möten viktigare än någonsin.” saknade stöd i texten och kunde ha stått först i vilken text som helst. Den är struken.
+- **Utfyllnad.** ”Det är viktigt att vara viktig.” bar varken fakta eller poäng. Den är struken.
+- **Generisk avslutning.** ”Sammanfattningsvis är möten viktigare än någonsin i dagens snabbt föränderliga värld.” sammanfattade inte texten utan upprepade tomfrasen. Stycket är struket, och texten slutar nu på skribentens osäkerhet om ytterligare en ruta gör möten bättre.
+
+## Olösta fynd
+
+- **Motsägelse i första stycket.** ”Det var mitt första möte om vår nya mötesmall.” motsäger ”Jag har aldrig deltagit i något möte om vår nya mötesmall.” Texten visar inte vilken av dem som stämmer, så båda står kvar.
+- **Scenen knyts inte till resten.** Gråten och chefens ”Nu måste allt bli digitalt.” kopplas aldrig till reflektionen om mötesmallen. Läsaren får inte veta varför skribenten grät eller vad digitaliseringen har med mallen att göra. Det kräver uppgifter som texten saknar.
+- **Standfirst saknas.** Ingen har skrivits.
+- **Mellanrubriker saknas.** Texten har inga mellanrubriker och därmed inga sektioner och ingen avslutande sektion. Mätskriptet läser därför alla tre brödtextstyckena som ingress: 3 stycken och 82 ord i den slutliga texten. Inget av detta har skrivits in.
+- **Uppmaning till läsaren saknas.** ”Jag vill prova frågan …” uttrycker skribentens egen avsikt och uppmanar inte läsaren till något. Ingen uppmaning har skrivits in.
+
+Texten följer alltså inte artikelanatomin. Mätningen av den slutliga texten visar att rubriken har 50 tecken och 8 ord, och att standfirst och sektioner saknas.
+
+## Redovisning av påståenden
+
+- **Ändrat:** Rubriken säger inte längre att möten förändrar allt. Den säger nu att vår mötesmall saknar det vi ska förstå tillsammans. Ändringen hör till rubrikfyndet.
+- **Borttaget:** Påståendet att möten är viktigare än någonsin i dagens snabbt föränderliga värld. Det stod både i andra stycket och i sista stycket och ströks båda gångerna, eftersom fynden gällde hela meningen respektive hela stycket.
+- **Borttaget:** ”Det är viktigt att vara viktig.” Fyndet gällde hela meningen.
+- **Inga begränsningar eller sambandsord har tagits bort.**
+
+Utöver rubriken och de strukna meningarna ovan har inget påstående tagits bort, ändrats eller lagts till.
+
+Utöver redovisningen ovan har omgången strukit tomfraser och en generisk avslutning och skrivit om rubriken. Den avslutande korrekturläsningen hittade inga mekaniska fel och ändrade ingenting.
+
+`input.md` är orörd. Mina arbetsfiler är borttagna, men en tom temporär katalog finns kvar under scratch-området: `scratch/tmp/tmp.EjAfUo14lq`. Harnessen stoppade borttagningen eftersom katalogen blivit sessionens arbetskatalog.
