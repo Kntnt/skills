@@ -1,6 +1,6 @@
 # The evaluation protocol
 
-How a run of the [fixture corpus](corpus/README.md) against an editorial Skill is judged, what it writes down, and who is allowed to run it. The corpus supplies the material; this document supplies everything else, so that two runs made weeks apart in different provider families can be compared by reading their records rather than by re-running anything.
+How an evaluation is staged, how a run of the [fixture corpus](corpus/README.md) against an editorial Skill is judged, what it writes down, and who is allowed to run it. The corpus supplies the material; this document supplies everything else, so that two runs made weeks apart in different provider families can be compared by reading their records rather than by re-running anything.
 
 The decision this protocol materialises is [ADR-0178](../adr/0178-how-a-text-is-written-reviewed-and-delivered.md).
 
