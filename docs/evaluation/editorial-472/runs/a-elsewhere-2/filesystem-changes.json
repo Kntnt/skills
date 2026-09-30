@@ -1,0 +1,95 @@
+{
+  "created": {
+    "home/.claude/backups": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "home/.claude/backups/.claude.json.backup.1790794294639": {
+      "mode": 384,
+      "type": "file",
+      "size": 84,
+      "sha256": "57a97a2459b8fa53981c3a2c63cf82e1c5bd4a3d397cadb016c0270729b39bb1"
+    },
+    "home/.claude/projects/-private-var-folders-cs-vgp-x-353zd9frkjpysp7zdw0000gn-T-kntnt-editorial-388-run-ak1s41no-work": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "home/.claude/session-env": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "home/.claude/session-env/9d0d187f-b3a5-4121-99d7-9e80a4c79fd7": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "home/.claude/projects/-private-var-folders-cs-vgp-x-353zd9frkjpysp7zdw0000gn-T-kntnt-editorial-388-run-ak1s41no-work/9d0d187f-b3a5-4121-99d7-9e80a4c79fd7/subagents/agent-a8bf492db2d1360ed.meta.json": {
+      "mode": 420,
+      "type": "file",
+      "size": 190,
+      "sha256": "5c0e6ceeb25d289e3b4c8f90960d14dca32ae67b2459c1c854387116219b6d5b"
+    },
+    "home/.claude/projects/-private-var-folders-cs-vgp-x-353zd9frkjpysp7zdw0000gn-T-kntnt-editorial-388-run-ak1s41no-work/9d0d187f-b3a5-4121-99d7-9e80a4c79fd7/subagents/agent-a8bf492db2d1360ed.jsonl": {
+      "mode": 384,
+      "type": "file",
+      "size": 129683,
+      "sha256": "1be3879e281883d4c237f7fa04f755e004afbc54e6fac98e3061b456887a7cf7"
+    },
+    "home/.claude/projects/-private-var-folders-cs-vgp-x-353zd9frkjpysp7zdw0000gn-T-kntnt-editorial-388-run-ak1s41no-work/9d0d187f-b3a5-4121-99d7-9e80a4c79fd7/subagents/agent-afa93211da9d9adb9.meta.json": {
+      "mode": 420,
+      "type": "file",
+      "size": 183,
+      "sha256": "17b60b6745f565cd39a9945e19a8a20e282e00895749fd241afc659199f28ab7"
+    },
+    "home/.claude/.claude.json": {
+      "mode": 384,
+      "type": "file",
+      "size": 45643,
+      "sha256": "9deb54ea3dcdeb9c95e5947b4b05e4bd15d7b9b043968b842d37ccc4fbc8fa59"
+    },
+    "home/.claude/projects/-private-var-folders-cs-vgp-x-353zd9frkjpysp7zdw0000gn-T-kntnt-editorial-388-run-ak1s41no-work/9d0d187f-b3a5-4121-99d7-9e80a4c79fd7.jsonl": {
+      "mode": 384,
+      "type": "file",
+      "size": 761082,
+      "sha256": "420bfe79b7776d03cb01a1e7a372e84fadab0d327b88b95c9294a60b424ff0dc"
+    },
+    "home/.claude/projects/-private-var-folders-cs-vgp-x-353zd9frkjpysp7zdw0000gn-T-kntnt-editorial-388-run-ak1s41no-work/9d0d187f-b3a5-4121-99d7-9e80a4c79fd7/subagents/agent-afa93211da9d9adb9.jsonl": {
+      "mode": 384,
+      "type": "file",
+      "size": 162275,
+      "sha256": "83edb6b93dca9a030e4265d01cee7104586a12e78505623c56b2c772a8e2bc4d"
+    },
+    "home/.claude/projects": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "home/.claude/projects/-private-var-folders-cs-vgp-x-353zd9frkjpysp7zdw0000gn-T-kntnt-editorial-388-run-ak1s41no-work/9d0d187f-b3a5-4121-99d7-9e80a4c79fd7": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "home/.claude/shell-snapshots": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "home/.claude/projects/-private-var-folders-cs-vgp-x-353zd9frkjpysp7zdw0000gn-T-kntnt-editorial-388-run-ak1s41no-work/9d0d187f-b3a5-4121-99d7-9e80a4c79fd7/subagents": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "home/.claude/projects/-private-var-folders-cs-vgp-x-353zd9frkjpysp7zdw0000gn-T-kntnt-editorial-388-run-ak1s41no-work/memory": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "home/.claude/.last-cleanup": {
+      "mode": 420,
+      "type": "file",
+      "size": 24,
+      "sha256": "355cf874ddbb583a922629984b89f590daa5f6bdae1adf77c79b900d5377ebf8"
+    },
+    "home/.claude/sessions": {
+      "mode": 448,
+      "type": "directory"
+    }
+  },
+  "removed": {},
+  "changed": {},
+  "note": "Harness, cache and Skill effects are separated by reading trace-index.json; nothing here is a Skill artifact on its own."
+}

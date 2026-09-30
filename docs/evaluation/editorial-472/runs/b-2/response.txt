@@ -1,0 +1,54 @@
+I reviewed `input.md` against `brief.md` and made one correction round, which I accepted. It gave the call to action a time and place and moved the sentence about the price. Two findings are left for you: a landfill figure that no source supports, and a length just under the brief's range. The final proofreading pass found nothing to fix, and nothing was written to disk.
+
+**Settings used:** the brief is `brief.md`, named by `--brief`. Genre `general`, technique `none` and language `en_GB` all come from the brief's `kntnt` map. The text has no map of its own, so I added none, and there is no conflict between maps. No technique was applied: the brief's map says `none`, and the `general` genre has no default technique. The correction limit was 1, and that one round was used.
+
+```markdown
+# Bring it, fix it, keep it
+
+Somewhere at the back of a Hatherley shed there is a lamp that stopped working, waiting for the autumn clear-out and the tip. Before it goes, bring it to the Repair Café.
+
+You will not be leaving it with us. At the Repair Café, the person who brings a broken thing stays with it. You sit down at a table, a volunteer sits down beside you, and between you, you work out what is wrong. Then, as far as you can, you mend it yourself. The volunteers cover small electrical items, bikes, clothes and small furniture, and the tea is on the table. There is no charge. Sessions run on a Saturday morning, 10:00 to 13:00, usually in St Anne's church hall.
+
+In September, Jo Carr brought in a standard lamp that had stopped working. With Dev, one of our volunteers, she opened the plug, found a loose wire and fitted it again herself. "I've never opened a plug in my life," she said. "Now I'd do it on my own." That was one of 31 items that came in that morning, among them a toaster, four bikes and a pair of jeans.
+
+Not everything can come back. We do not repair microwaves or anything with a gas supply. But since the café opened, the volunteers have kept more than a tonne of electrical goods out of landfill, one plug and one hinge at a time.
+
+Two new volunteers joined in September, a retired electrician and a tailor, so there are more hands at the tables.
+
+The lamp in the shed does not need a new owner or a skip. It needs a Saturday morning, and the person who owns it. Bring something broken to the next session.
+```
+
+## Findings
+
+1. **Fixed: the call to action gave no time or place.** "Bring something broken to the next session" asked a first-time visitor to come without saying when sessions run or where. The second paragraph now carries the session details from the handbook (`material.md`, section 1). The date and room of the December session are still an open research question in the brief, so they are not given.
+2. **Fixed: the price was cut off from the rest of the visit.** "There is no charge." opened a paragraph about new volunteers that had nothing to do with it, after the paragraph on what isn't repaired. It now follows "the tea is on the table" in the paragraph on how a visit works, which is also where the handbook puts it. The sentence about the two new volunteers is unchanged and is now a paragraph of its own.
+3. **Still open, for you to fix: a figure no source supports.** "But since the café opened, the volunteers have kept more than a tonne of electrical goods out of landfill, one plug and one hinge at a time." Neither source the brief lists gives a tonnage, a landfill figure or a total since the café opened. Those sources are the volunteer handbook and the September session notes in `material.md`. Readers get a precise-sounding figure that nothing backs up, and they may repeat it. It needs a source, such as the logbook, or the sentence should go. I left it unchanged.
+4. **Still open, for you to fix: shorter than the brief asks.** By a simple word count the delivered body is about 288 words (294 with the title), against the brief's "roughly 300 to 450". Padding it out would break the rule against adding unsupported material. The facts that would close the gap are open research questions: the share of items fixed on the day, and the date and room of the December session.
+
+## Claim account
+
+- **Added (finding 1):** sessions run on a Saturday morning, 10:00 to 13:00, and are usually held in St Anne's church hall. This comes word for word from `material.md`, section 1, including "usually".
+- **Moved but not changed (finding 2):** "There is no charge." is now in the second paragraph. It still says only that sessions are free.
+
+No claim was removed, and no other claim was changed or added.
+
+## Brief fulfilment
+
+Checked against `brief.md`. Every question has an answer, and none is marked suggested, weak or missing.
+
+1. **What is the assignment?** Partly met. The topic, genre (`general`), channel (a newsletter piece in the sender's voice), language (`en_GB`) and the deliberate lack of a search phrase are all met. The length is short: about 288 words in the body against roughly 300 to 450 (finding 4). Readers lose little from this, and closing the gap depends on open research.
+2. **Which brand is the sender?** Met. The text speaks as the Repair Café ("with us", "our volunteers"). It stays within the café's own sessions and repairs, and its tone is warm, practical and neighbourly.
+3. **What does the sender want to convey with this text?** Met. "You will not be leaving it with us" and "Then, as far as you can, you mend it yourself" steer readers away from thinking it's a free repair shop.
+4. **Who is the reader?** Met. The text speaks to someone who hasn't been before ("You will not be leaving it with us"). The opening shows why now: "waiting for the autumn clear-out and the tip".
+5. **What is the text's angle?** Met. The text follows a first visit, from arriving and sitting down to Jo Carr's repair.
+6. **What is the hook?** Met. The lamp headed for the tip sets up the stakes, and the surprise comes straight after: "You will not be leaving it with us … you mend it yourself."
+7. **How should the text be structured?** Met. The text delivers the brief's one-sentence summary and resolves the hook through Jo Carr's lamp. It ends back on the lamp in the shed ("It needs a Saturday morning, and the person who owns it"). Two points from the sketch are missing: "most items are fixed on the day" and "members say the café has saved them money". Nothing supplied supports either, so their absence is not a shortfall.
+8. **What should be left out?** Met. There is no electrical safety advice, no criticism of manufacturers and no mention of donations.
+9. **What should the reader have understood afterwards?** Met. Jo Carr's "Now I'd do it on my own" delivers the conclusion: you fix the thing yourself and leave able to do it again.
+10. **What should the reader feel, think or do afterwards?** Met. The text makes the direct call to action, "Bring something broken to the next session". Readers now also know when sessions run and where they are usually held (finding 1, fixed). The brief's success measure can't be checked from the text, so I didn't assess it.
+11. **What makes the text relevant, interesting and valuable for the reader, and does the brief hold together?** Met across the whole text. The autumn clear-out makes it relevant, and holding the screwdriver yourself makes it interesting. Knowing what happens at a session and what isn't repaired makes it valuable. The brief's own consistency check is filled in.
+12. **What sources do you know of, and what do you need to find out?** Partly met. The landfill tonnage traces to neither the handbook nor the September notes (finding 3). Readers can't trust that figure.
+
+Open research questions, which don't count as shortfalls: last year's share of items fixed on the day, from the logbook, and the date and room of the December session.
+
+The correction added the session time and place to the second paragraph. It also moved "There is no charge." there from the paragraph about the new volunteers. The final proofreading pass found nothing to correct.

@@ -1,0 +1,65 @@
+I reviewed `input.md` against `brief.md` and made one correction: the last paragraph now says when and where sessions run. Two problems are left for you: an unsupported landfill figure, and a text slightly shorter than the brief asks for. Nothing was written to disk and all scratch files are removed.
+
+````markdown
+# Bring it, fix it, keep it
+
+Somewhere at the back of a Hatherley shed there is a lamp that stopped working, waiting for the autumn clear-out and the tip. Before it goes, bring it to the Repair Café.
+
+You will not be leaving it with us. At the Repair Café, the person who brings a broken thing stays with it. You sit down at a table, a volunteer sits down beside you, and between you, you work out what is wrong. Then, as far as you can, you mend it yourself. The volunteers cover small electrical items, bikes, clothes and small furniture, and the tea is on the table.
+
+In September, Jo Carr brought in a standard lamp that had stopped working. With Dev, one of our volunteers, she opened the plug, found a loose wire and fitted it again herself. "I've never opened a plug in my life," she said. "Now I'd do it on my own." That was one of 31 items that came in that morning, among them a toaster, four bikes and a pair of jeans.
+
+Not everything can come back. We do not repair microwaves or anything with a gas supply. But since the café opened, the volunteers have kept more than a tonne of electrical goods out of landfill, one plug and one hinge at a time.
+
+There is no charge. Two new volunteers joined in September, a retired electrician and a tailor, so there are more hands at the tables.
+
+The lamp in the shed does not need a new owner or a skip. It needs a Saturday morning, and the person who owns it. Sessions run on a Saturday morning, 10:00 to 13:00, usually in St Anne's church hall. Bring something broken to the next session.
+````
+
+**Settings used:** genre `general`, technique `none`, language `en_GB`. All three come from the metadata block at the top of `brief.md`. `input.md` has no such block, so the two can't disagree, and none was added to it. The technique is `none` because the brief says so, and the `general` genre doesn't have a default technique either. The text was checked against `brief.md`, using `material.md` as the source material the brief lists.
+
+## Findings
+
+1. **Fixed: the call to action didn't say when or where.** The last paragraph said "Bring something broken to the next session" with no time or place, and "a Saturday morning" was the only hint. A first-time reader couldn't act on it. I added one sentence taken from the volunteer handbook in `material.md`: "Sessions run on a Saturday morning, 10:00 to 13:00, usually in St Anne's church hall." The word "usually" is kept. No date or room is given for the next session, because the brief lists both as still to be found out.
+2. **Not fixed, for you to settle: a figure with no source.** The text says: "But since the café opened, the volunteers have kept more than a tonne of electrical goods out of landfill, one plug and one hinge at a time." Nothing in the text or in the sources the brief lists supports that figure. Nor do they give a running total or the date the café opened. Readers get an exact-sounding number the café can't back up. Only you can find a source for it or cut it, so I left the sentence as it was.
+3. **Not fixed, for you to settle: shorter than the brief asks for.** The brief asks for roughly 300 to 450 words. The text arrived at 279 words and is now 294, headline included, so it is still just under 300. I added nothing just to reach a word count. Two things the brief still has to find out would close the gap: the share of items fixed on the day, and the date and room of the December session.
+
+## Changes to claims
+
+- **Added (finding 1):** sessions run on a Saturday morning, from 10:00 to 13:00, usually in St Anne's church hall.
+- **Changed (finding 1):** the new sentence comes straight before "Bring something broken to the next session". Because of where it sits, the text now tells readers the next session will be on a Saturday morning from 10:00 to 13:00, probably in St Anne's church hall. Only the place is hedged; the time is stated flatly. "It needs a Saturday morning" also reads more as the actual schedule and less as a figure of speech. The date of the December session is still not given.
+- **Removed:** none.
+
+Apart from the added and changed claims above, no claim was removed, changed or added.
+
+## How well the text meets the brief
+
+Brief: `brief.md`. No other brief was named.
+
+**1. What is the assignment?** Partly met. The text covers the brief's topic: what happens when you bring something broken to the Repair Café. It is in `en_GB`, suits the community newsletter, and uses the working title as its headline. There is no search phrase, which the brief chose deliberately. The gap: at 294 words it is just under the brief's roughly 300 to 450 (finding 3). This costs the reader little, and the material that would fill the gap is still to be found out.
+
+**2. Which brand is the sender?** Met. The café speaks as itself ("You will not be leaving it with us", "one of our volunteers"). The tone is warm and practical, and the text says nothing about product safety standards.
+
+**3. What does the sender want to convey with this text?** Met, through where the text leads rather than by saying it outright: "You will not be leaving it with us … Then, as far as you can, you mend it yourself", with a volunteer beside you.
+
+**4. Who is the reader?** Met. The assumption that you drop things off is answered directly ("You will not be leaving it with us."). Saving money is covered by "There is no charge." and not throwing things away by "the tip". The reason it matters now is in the opening: "waiting for the autumn clear-out".
+
+**5. What is the text's angle?** Met. The text follows a first visit: sitting down with a volunteer, working out what is wrong and mending it yourself, with Jo Carr's lamp as the example.
+
+**6. What is the hook?** Met. The lamp "waiting for the autumn clear-out and the tip" shows what is at stake, and the surprise comes straight after: "You will not be leaving it with us … you mend it yourself."
+
+**7. How should the text be structured?** Met. The text follows the brief's one-sentence summary: the lamp in the shed, then sitting down with a volunteer and mending it yourself, then Jo Carr's "Now I'd do it on my own." Jo's lamp resolves the hook. The text reaches its conclusion, and the ending goes back to the hook ("The lamp in the shed does not need a new owner or a skip.").
+
+**8. What should be left out?** Met. There is no safety advice, no criticism of manufacturers and no mention of donations.
+
+**9. What should the reader have understood afterwards?** Met: "Then, as far as you can, you mend it yourself," and "I've never opened a plug in my life … Now I'd do it on my own."
+
+**10. What should the reader feel, think or do afterwards?** Partly met before the correction; met now. The call to action, "Bring something broken to the next session.", now comes with when and where sessions usually run (finding 1). The second paragraph makes clear that visitors stay and take part. The brief's way of measuring success is not something the text can be checked against.
+
+**11. What makes the text RIV for the reader, and does the brief hold together?** Met. Relevant: the autumn clear-out, in the opening. Interesting: you do the repair yourself. Valuable: what happens at a session, what isn't repaired, and when and where sessions run. The brief's own consistency check is filled in.
+
+**12. What sources do you know of, and what do you need to find out?** Partly met. Everything else the text says is backed by the handbook and the September notes in `material.md`. The exception is the landfill claim (finding 2), so readers get a figure nobody can check. Two things are still to be found out, and neither counts as a gap in the text: the share of items fixed on the day, and the date and room of the December session. The brief's outline mentions that members say the café has saved them money. Nothing in the material supports that, and the text doesn't repeat it.
+
+The brief answers every question and has no gaps marked as missing, suggested or weak.
+
+Beyond the claim changes above, the only change is one added sentence in the last paragraph. The final proofreading pass found no spelling, grammar or punctuation errors and changed nothing. Nothing else in the text was changed.

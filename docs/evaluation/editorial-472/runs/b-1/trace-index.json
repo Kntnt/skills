@@ -1,0 +1,982 @@
+{
+  "schema_version": 1,
+  "packet": "b-1",
+  "agents": [
+    {
+      "agent_id": "2cccbace-9124-4d11-ba33-c8109c21bfff",
+      "role": "session",
+      "parent_agent_id": null,
+      "tool_use_id": null,
+      "agent_type": null,
+      "description": null,
+      "spawn_depth": 0,
+      "transcript": "transcripts/parent.jsonl",
+      "instruction": "<command-message>redline</command-message>\n<command-name>/redline</command-name>\n<command-args>--brief=brief.md --output=response input.md</command-args>",
+      "started_at": "2026-09-30T18:43:37.253Z",
+      "ended_at": "2026-09-30T18:48:59.288Z",
+      "seats": [
+        {
+          "model": "claude-opus-5-5",
+          "deliberation": "high",
+          "turns": 33
+        }
+      ],
+      "skill_bodies": [
+        {
+          "base_directory": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills/redline",
+          "chars": 39133
+        }
+      ],
+      "calls": [
+        {
+          "ordinal": 1,
+          "at": "2026-09-30T18:43:40.524Z",
+          "tool": "Bash",
+          "tool_use_id": "toolu_01MgVRa2iPrTRmtBYTYttCEz",
+          "arguments": {
+            "command": "HERE=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills/redline; T=$(mktemp -d); printf '%s' '--brief=brief.md --output=response input.md' | TMPDIR=$T UV_NO_CACHE=1 UV_NO_PROJECT=1 uv run \"$HERE/scripts/invoke.py\"; echo \"EXIT $?\"; rm -rf \"$T\"",
+            "description": "Run the redline invocation shim"
+          },
+          "is_error": false,
+          "result_chars": 827,
+          "result_excerpt": "Invocation read.\n\nBefore anything else, answer each Capability under `dependencies.capabilities`: say whether its `confirm` sentence is true of you, and where one is not, give its `how`, change nothing, and stop.\n\n`$LIBRARY` is `/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills/kntnt/library`.\n\n```json\n{\n  \"ok\": true,\n  \"path\": [],\n  \"fla"
+        },
+        {
+          "ordinal": 2,
+          "at": "2026-09-30T18:43:44.579Z",
+          "tool": "Bash",
+          "tool_use_id": "toolu_01EYGetT9SW2skey5jthx14s",
+          "arguments": {
+            "command": "cd /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/work; ls -la; echo ----; cat input.md; echo; echo ----BRIEF; cat brief.md; echo; SK=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills; ls $SK/redline/references; ls -R $SK/kntnt/library/references | head -80",
+            "description": "Show input, brief and resource listing"
+          },
+          "is_error": false,
+          "result_chars": 7807,
+          "result_excerpt": "total 16\ndrwxr-xr-x 5 thomas staff  160 Sep 30 20:43 .\ndrwx------ 5 thomas staff  160 Sep 30 20:43 ..\n-rw-r--r-- 1 thomas staff 4692 Sep 30 20:40 brief.md\n-rw-r--r-- 1 thomas staff 1460 Sep 30 20:41 input.md\n-rw-r--r-- 1 thomas staff 1041 Sep 30 20:40 material.md\n----\n# Bring it, fix it, keep it\n\nSomewhere at the back of a Hatherley shed there is a lamp that stopped working, waiting for the autumn"
+        },
+        {
+          "ordinal": 3,
+          "at": "2026-09-30T18:43:47.100Z",
+          "tool": "Bash",
+          "tool_use_id": "toolu_01LYbSpZMGpAEwr9ZLRZwt9r",
+          "arguments": {
+            "command": "SK=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills; cat $SK/redline/references/brief-review.md; echo =====; cat $SK/kntnt/library/references/delivery.md; echo ====; cat $SK/kntnt/library/references/invocation-envelope.md",
+            "description": "Read brief-review, delivery and envelope contracts"
+          },
+          "is_error": false,
+          "result_chars": 2304,
+          "result_excerpt": "<persisted-output>\nOutput too large (31.7KB). Full output saved to: /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/projects/-private-var-folders-cs-vgp-x-353zd9frkjpysp7zdw0000gn-T-kntnt-editorial-388-run-k5fn33fw-work/2cccbace-9124-4d11-ba33-c8109c21bfff/tool-results/bpzns2hzt.txt\n\nPreview (first 2KB):\n# Reviewing against a Writing Brief\n\nUs"
+        },
+        {
+          "ordinal": 4,
+          "at": "2026-09-30T18:43:49.761Z",
+          "tool": "Read",
+          "tool_use_id": "toolu_01KrHpFQpKkm3z4SkeLQ4Myh",
+          "arguments": {
+            "file_path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/projects/-private-var-folders-cs-vgp-x-353zd9frkjpysp7zdw0000gn-T-kntnt-editorial-388-run-k5fn33fw-work/2cccbace-9124-4d11-ba33-c8109c21bfff/tool-results/bpzns2hzt.txt"
+          },
+          "is_error": false,
+          "result_chars": 33108,
+          "result_excerpt": "1\t# Reviewing against a Writing Brief\n2\t\n3\tUse this branch only when `## Resolution` selects a brief. The brief is a standard for the Text Artifact, never a second Text Artifact. Read it without editing, proofreading or delivering it. If its path or URL cannot be read, report that obstacle and stop before review or writing; never silently substitute a contract-only review. Resolve relative materia"
+        },
+        {
+          "ordinal": 5,
+          "at": "2026-09-30T18:43:50.895Z",
+          "tool": "Bash",
+          "tool_use_id": "toolu_01SCkWqWXfEcoMG3nNBMKW8E",
+          "arguments": {
+            "command": "cd /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/work; cat material.md",
+            "description": "Show source material"
+          },
+          "is_error": false,
+          "result_chars": 1038,
+          "result_excerpt": "# Material: fixing it together at the Repair Café\n\nInvented evaluation material. The Hatherley Repair Café and every person named are fictional and describe no real organisation or client.\n\n## 1. From the volunteer handbook\n\n- \"We fix things with you, not for you. The owner stays with the item and does as much of the repair as they can.\"\n- Volunteers cover small electrical items, bikes, clothes an"
+        },
+        {
+          "ordinal": 6,
+          "at": "2026-09-30T18:43:55.330Z",
+          "tool": "Bash",
+          "tool_use_id": "toolu_016DPih3mEo92y9sG96iSjBE",
+          "arguments": {
+            "command": "L=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills/kntnt/library; T=$(mktemp -d); TMPDIR=$T uv run --no-cache --no-project \"$L/scripts/languages.py\" resolve --scope=composition --scope=review --scope=anti-slop \"en_GB\"; echo \"EXIT $?\"; rm -rf \"$T\"",
+            "description": "Resolve the en_GB language selector"
+          },
+          "is_error": false,
+          "result_chars": 4791,
+          "result_excerpt": "Installed 1 package in 1ms\n{\n  \"selector\": \"en_GB\",\n  \"code\": \"en_GB\",\n  \"language\": \"English\",\n  \"territory\": \"GB\",\n  \"territory_name\": \"United Kingdom\",\n  \"inherits\": null,\n  \"scopes\": {\n    \"composition\": {\n      \"source\": \"en_GB\",\n      \"content\": \"British general-interest prose is understated. It states a strong claim plainly and lets the claim carry the emphasis, where American register woul"
+        },
+        {
+          "ordinal": 7,
+          "at": "2026-09-30T18:43:58.609Z",
+          "tool": "Bash",
+          "tool_use_id": "toolu_01Epe77ZtzjqY4FkTBaKxzCt",
+          "arguments": {
+            "command": "E=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills/kntnt/library/references/editorial; for f in base.md base.review.md genres/general.md anti-slop.md writing-brief.md; do echo \"===== $f\"; cat $E/$f; done",
+            "description": "Load base, genre, anti-slop and brief template"
+          },
+          "is_error": false,
+          "result_chars": 2028,
+          "result_excerpt": "<persisted-output>\nOutput too large (33.6KB). Full output saved to: /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/projects/-private-var-folders-cs-vgp-x-353zd9frkjpysp7zdw0000gn-T-kntnt-editorial-388-run-k5fn33fw-work/2cccbace-9124-4d11-ba33-c8109c21bfff/tool-results/bj4ae7kkb.txt\n\nPreview (first 2KB):\n===== base.md\n# The base contract\n\nWrit"
+        },
+        {
+          "ordinal": 8,
+          "at": "2026-09-30T18:44:01.548Z",
+          "tool": "Read",
+          "tool_use_id": "toolu_01WU2kautU6g7WhaiREKgbGc",
+          "arguments": {
+            "file_path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/projects/-private-var-folders-cs-vgp-x-353zd9frkjpysp7zdw0000gn-T-kntnt-editorial-388-run-k5fn33fw-work/2cccbace-9124-4d11-ba33-c8109c21bfff/tool-results/bj4ae7kkb.txt"
+          },
+          "is_error": false,
+          "result_chars": 35155,
+          "result_excerpt": "1\t===== base.md\n2\t# The base contract\n3\t\n4\tWrite with the clarity and factual precision of a well-edited newspaper or quality magazine. Genre, audience, and purpose override that register: a letter, a speech and an advertisement keep their own character. The selected genre governs craft and form; the resolved language governs idiom, syntax and typography. Examples here illustrate meanings, not Eng"
+        },
+        {
+          "ordinal": 9,
+          "at": "2026-09-30T18:44:52.598Z",
+          "tool": "Bash",
+          "tool_use_id": "toolu_01Qk1HRWHRouYWh2Cga6GyR9",
+          "arguments": {
+            "command": "cd /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/work; wc -w input.md; tail -n +2 input.md | wc -w; SK=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills; cat $SK/redline/references/correction.md; echo ====; cat $SK/redline/references/reply-check.md",
+            "description": "Count words and read subagent briefs"
+          },
+          "is_error": false,
+          "result_chars": 21845,
+          "result_excerpt": "280 input.md\n273\n# The correction brief\n\nGive this to a subagent started fresh for one correction, filled in from the run as it now stands. Everything in angle brackets is replaced; nothing else is rewritten.\n\n`<text>` is the current Text Artifact pasted whole — the text as it stands after every correction so far, never the text as it arrived and never an extract of it. `<findings>` is every findi"
+        },
+        {
+          "ordinal": 10,
+          "at": "2026-09-30T18:45:57.590Z",
+          "tool": "Agent",
+          "tool_use_id": "toolu_01HAqpMKxEZHofxELMBZHWxt",
+          "arguments": {
+            "description": "Correction round for redline",
+            "subagent_type": "general-purpose",
+            "run_in_background": false,
+            "prompt": "You are making one correction to one text. You have not seen this text before, and there is nothing you are expected to remember: the text below is its current state, and the findings below are the current review's, complete and as they were written. Repair them.\n\n**The text.** This is the complete Text Artifact, exactly as it now stands:\n\n````markdown\n# Bring it, fix it, keep it\n\nSomewhere at the back of a Hatherley shed there is a lamp that stopped working, waiting for the autumn clear-out and the tip. Before it goes, bring it to the Repair Café.\n\nYou will not be leaving it with us. At the Repair Café, the person who brings a broken thing stays with it. You sit down at a table, a volunteer sits down beside you, and between you, you work out what is wrong. Then, as far as you can, you mend it yourself. The volunteers cover small electrical items, bikes, clothes and small furniture, and the tea is on the table.\n\nIn September, Jo Carr brought in a standard lamp that had stopped working. With Dev, one of our volunteers, she opened the plug, found a loose wire and fitted it again herself. \"I've never opened a plug in my life,\" she said. \"Now I'd do it on my own.\" That was one of 31 items that came in that morning, among them a toaster, four bikes and a pair of jeans.\n\nNot everything can come back. We do not repair microwaves or anything with a gas supply. But since the café opened, the volunteers have kept more than a tonne of electrical goods out of landfill, one plug and one hinge at a time.\n\nThere is no charge. Two new volunteers joined in September, a retired electrician and a tailor, so there are more hands at the tables.\n\nThe lamp in the shed does not need a new owner or a skip. It needs a Saturday morning, and the person who owns it. Bring something broken to the next session.\n````\n\n**The findings.** This is every finding the review recorded against that text, complete and in the order it recorded them:\n\n1. **Paragraph 5, \"There is no charge. Two new volunteers joined in September, a retired electrician and a tailor, so there are more hands at the tables.\"** Requirement: the base contract, *Reader and progression*: \"Keep paragraphs coherent and give supporting material a clear place beside what it supports\"; and the Writing Brief, question 7 (How should the text be structured?): \"Free structure: the piece follows a first visit in the order it happens.\" The paragraph joins two unrelated facts, and \"There is no charge.\" stands after the paragraph on what is not repaired, apart from paragraph 2, which describes what a visit involves and where the other visit condition (\"the tea is on the table\") already sits. What the reader loses: the reader the brief describes, who assumes the café is a free repair shop and cares about saving money, meets the cost as a stray afterthought between the limits and the ending instead of as part of what a first visit is like. Support (material.md, section 1, from the volunteer handbook): \"There is no charge. Tea is on the table.\" Smallest repair: move the sentence \"There is no charge.\" into paragraph 2, beside what a visit involves; leave the sentence about the two new volunteers standing where it is and as it is.\n\n2. **The ending, paragraph 6, \"It needs a Saturday morning, and the person who owns it. Bring something broken to the next session.\"** Requirement: Writing Brief, question 10 (What should the reader feel, think or do afterwards?): \"Main effect: the reader brings a broken item to the next session\", with the direct call to action \"Bring something broken to the next session.\"; and the base contract: \"Give the intended reader what they need to understand, judge or do the thing the text is for.\" The text asks the reader to come to a session but never says at what time sessions run or where they are held. What the reader loses: a Hatherley household that has heard of the café but never been (brief, question 4) is asked to come and is not told where to go or when on a Saturday, so the call to action cannot be acted on from the text alone. Support (material.md, section 1, from the volunteer handbook): \"Sessions run on a Saturday morning, 10:00 to 13:00, usually in St Anne's church hall.\" Use only that support; keep its qualifier \"usually\". The date and room of the December session are open research questions in the brief (question 12) and are not in the material: do not supply a date, and do not state the room as certain. Keep the ending's return to the lamp in the shed and keep the call to action \"Bring something broken to the next session.\" as it stands.\n\n3. **Paragraph 4, \"But since the café opened, the volunteers have kept more than a tonne of electrical goods out of landfill, one plug and one hinge at a time.\"** Requirement: the base contract, *Claims*: \"Every claim is supported by the text or its material\"; Writing Brief, question 12 (What sources do you know of?): the text's claims are judged against the volunteer handbook and the September session notes in material.md. Neither source says how long the café has been open, gives any weight of goods kept out of landfill, or mentions a hinge repair. What the reader loses: a precise-sounding figure and an outcome the sender cannot back, in a newsletter read by neighbours who may ask where it comes from. Left for the writer: the material supplies no support for the figure, and repairing it would require a source the text and material do not have; do not change, remove or replace this sentence in this round.\n\n4. **Length, the whole text.** Requirement: Writing Brief, question 1 (What is the assignment?): \"Length: roughly 300 to 450 words.\" The text runs to roughly 280 words including the headline, below the range. What the reader loses: little in itself; the gap is where the brief's open research (the share of items fixed on the day, the December session's date and room) would go. Left for the writer: a stated length is never a licence to add material, and closing this gap needs material the brief lists as still to be found out. Do not pad the text to reach the range.\n\n**The contract.** The text is a `general` in `en_GB`, and it is held to `none`. Read what it is held to before you change anything: `/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills/kntnt/library/references/editorial/base.md` and `/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills/kntnt/library/references/editorial/base.review.md`; `/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills/kntnt/library/references/editorial/genres/general.md` and the `.review.md` file beside it where one exists; `/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills/kntnt/library/references/editorial/anti-slop.md`; and the `composition`, `review` and `anti-slop` scopes of the resolved language, which `uv run \"/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills/kntnt/library/scripts/languages.py\" resolve --scope=composition --scope=review --scope=anti-slop \"en_GB\"` returns. For `article`, `casestudy`, `column` and `opinion`, and for `webcopy`, also read `/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills/kntnt/library/references/editorial/web-craft.md` and `/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills/kntnt/library/references/editorial/web-craft.review.md`; for `article`, `casestudy`, `column` and `opinion` alone, also read `/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills/kntnt/library/references/editorial/article-anatomy.md` and `/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills/kntnt/library/references/editorial/article-anatomy.review.md`, which fix the parts, order and dimensions of such a text; and for those four and for `pressrelease`, also read `/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills/kntnt/library/references/editorial/headlines.md` and `/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills/kntnt/library/references/editorial/headlines.review.md`, which say how a headline and its subheadings are written. These are the only additional genre support files: follow no other genre links and load no unselected genre or technique. A review extension that is not there is not a defect. Run the resolver with `UV_NO_CACHE=1 UV_NO_PROJECT=1` and a fresh private `TMPDIR`, removing that directory afterwards, including on failure. Load no mechanics guidance and correct no spelling, punctuation, or grammar: a mechanical pass runs after you, and work you do there is work done twice.\n\n**What you change, and what you preserve.** Repair what the findings name and nothing else. Every difference between the text you return and the text above is traced to a finding, or to what repairing a finding required, before this round is accepted, and a difference that traces to no finding is restored from the text you received — so a phrase you improved outside a finding is work that will be undone. Preserve everything the findings do not concern: every sentence, every fact, every quotation, every code sample, every heading, every piece of formatting and every line of frontmatter among them comes back exactly as you received it — a repair that improves a paragraph nobody complained about is a change nobody asked for and nobody will review. A code sample — a fenced block, an indented block, or an inline code span — is quoted material rather than the text's own prose: its contents are read past rather than read against the rules, so nothing inside one is a finding and nothing inside one is changed, the docstrings, comments, and string literals among them. Prose about code is ordinary prose and is read like every other sentence. Where a finding can be repaired several ways, make the smallest change that removes it. Where a finding names something you cannot repair without inventing a fact, changing what the text claims, or altering a quotation's meaning, stance, certainty or distinctive wording, leave that passage alone and say so: in an ordinary review this text is answerable to material you do not have, and a plausible invention is worse than an unrepaired finding. For a brief-shortfall finding carrying exact source support, use only that support or the text to supply what is missing. A repair never states the sender's message outright, since the message may always be conveyed indirectly. Source Fidelity binds the repair: retain attribution, uncertainty, scope, chronology, causality and quotation meaning. A requirement in the brief is not source evidence; where the finding has no support for a needed fact, source or quotation, leave it for the writer and report why.\n\n**A defect of your own costs the whole round.** The review that follows you establishes whether this text has a defect it did not have when you received it — a headline or a heading claiming more than the text claims, a heading repeating the passage under it, a limit your repair dropped. Where it establishes one, the whole round is rejected: the text you received is restored entire, nothing you did survives however much else you repaired, and no fresh attempt follows. So a finding you cannot repair without creating another one is a finding you leave and say so, exactly as you would one you cannot repair without inventing a fact — an unrepaired finding a person can settle costs less than a repair that has to be thrown away with everything beside it.\n\n**What a repair may take with it, and what it may not.** A finding names a defect, and what a repair removes is that defect. Where the defect a finding names is the whole of the passage — an opening that would sit in front of any text, a closing that restates what the reader has just read, a claim credited to nobody that the text cannot source — removing it may be the repair, and any claim removed with it must be named in your return. That stops at a sentence whose work is to bound what the text asserts — that something is not measured, not claimed, not witnessed or not general, or that the text is an observation of a document rather than a scene from an occasion. Remove or weaken one only where the finding names a defect inside the sentence, and only where a sentence you keep still states that limit in full, so the text bounds what it claims exactly as far as it did, or where the limit contradicts another passage of the same text. Otherwise leave it exactly as it stands and say so. Where the passage carries a claim beside the defect — a fact, an observation, the point the passage exists to make — the smallest change is the one that leaves that claim standing, and deleting the passage entire is not that change. And where you can see no way to remove the defect that does not take the claim with it, leave the passage alone and say so, exactly as you would a finding you cannot repair without inventing a fact: a person can give that claim what it needs or let it go, and a round that deletes it leaves them nothing to weigh. That judgement is about the passage in front of you and never about how much of the text is left — a short text is no licence to leave a finding standing, and a long one is no licence to go on cutting.\n\nA repair at a punctuation joint can be the smallest change even when the finding names the implication created there rather than punctuation itself. In *We finished in March, the finance team got a new reporting tool the same month.*, the defect is the implication created by joining unrelated claims, not either claim. Repair it as *We finished in March. The finance team got a new reporting tool the same month.*: splitting at the joint removes the implication and keeps the reporting-tool fact. Do the same wherever the named defect is confined to a joint; do not delete either side or supply a relationship the text does not establish. This example does not admit a wider mechanics pass: it identifies the smallest repair for the finding already in hand.\n\nBefore you return the text, compare it before and after, claim by claim. Every claim you received must still appear with its scope, certainty, attribution, chronology, causality and meaning intact unless the finding named the whole claim as the defect; that exception does not reach a sentence whose work is to bound what the text asserts, which goes only on the two conditions above, and the number or concentration of findings changes nothing about that check. The concentrated anti-slop case makes the boundary visible: removing its patterns must not discard its claims about meeting load, documentation, decisions, satisfaction, distributed work, adoption conditions, or the synchronous/asynchronous trade-off. Repair the patterns around those claims. If one cannot be separated from its pattern, keep it and report the finding unresolved; never compress several content-bearing passages into a cleaner summary.\n\nWhere the text is an `article`, a `casestudy`, a `column` or an `opinion`, measure it before you return it: run `uv run \"/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills/kntnt/library/scripts/article_anatomy.py\" -` with the complete corrected text on stdin, under the same `UV_NO_CACHE=1 UV_NO_PROJECT=1` and fresh private `TMPDIR` terms as the resolver above. Exit 0 settles the counted requirements only: it says they hold and nothing about the anatomy requirements the script does not count, so your return reports the text as conforming to the anatomy only where you examined every one of those too, and otherwise names the ones you did not examine. Exit 1 names each counted requirement of the article anatomy that fails, with the part, the rule and the figure measured: repair the ones a finding named and the ones your own repair introduced, then measure again, except a part a finding names as absent and a failure caused only by an absent part, which you leave unwritten and name in your return as left for a person to supply; a requirement the text was already failing when it reached you, and that no finding names, is left exactly as it stands like everything else the findings do not concern. Exit 2 says the script could not measure the text, and your return says so. Read every `heading_pairs` entry against the complete candidate and the loaded headline contract before returning, whatever the exit status: judge whether each part adds different information in different wording. Necessary repeated names and topic words can be legitimate, and a paraphrased echo can share no words; `shared_words` alone never authorizes a change or creates a finding. Verify absent or ambiguous sentence estimates against the text; on exit 2 inspect the pairs by hand. Repair echoes named by the findings or introduced by your own correction by wording the heading from its whole text or section without strengthening its claims and without pre-spending the judgement, figure or concession of a quotation standing under a subheading, then measure again. An unrelated pre-existing echo stays as received and is reported in your return, with the pair and reader loss; the evidence does not expand your correction authority. Report any echo you cannot repair within that authority the same way.\n\nWhere the text is a `pressrelease`, measure it before you return it the same way, with `--genre=pressrelease` before the `-`, which measures the two counted limits the genre states and nothing else of it. Exit 1 names the headline or the summary that is past its limit, with the rule and the figure measured: repair the ones a finding named and the ones your own repair introduced, then measure again, except a summary a finding names as absent, which you leave unwritten and name in your return as left for a person to supply; a limit the text was already failing when it reached you, and that no finding names, is left exactly as it stands. Exit 2 says the script found no level-1 heading or could not read the text, and your return says so. The output carries no heading pairs: read the headline and the summary against each other as the genre's review half says before returning.\n\n**Your own working files.** Any file you write for your own working purposes — a candidate you measure, a draft you compare, anything you keep while you work — goes in a directory you created for this one round, under a name made unique when you created it, such as the one `mktemp -d` returns. Remove that directory before you return, including on failure. A fixed name under a shared temporary directory is not that directory, whether the directory is the system's own or a scratchpad your session was given: another run may be working at the same time, in the same place and on this same text, and write that same name. The file you come back to is then that run's work and not yours, and when you take it for your own stale copy and delete or replace it, you destroy work that is not yours, and nothing tells the run it came from.\n\n**What you return.** The complete corrected text and a short note of which findings you repaired and which you left, with the reason for each you left. Where any repair removed a passage carrying a claim, name every removed claim and say which finding made the claim itself the defect, and name every changed claim the same way — one you left standing with its scope, certainty, attribution, chronology, causality or meaning moved, by what it now asserts rather than how far its wording moved, and the finding the repair that moved it answered. Where a repair took a limit, a connective or a bounding clause out of the text — a sentence or a heading saying what is not measured, not claimed or not known, a connective giving the text's own reason for what follows, a clause saying what a claim is not about — say what a reader of the text you return no longer has, however little of the text went with it. Name every added claim the same way, whether or not anything was removed: one the text you return asserts and the text you received has no counterpart for, an inference drawn from what that text already said among them where it asserts something that text did not say, and the finding the repair that wrote it answered. A claim with a counterpart in the text you received is changed rather than added. Reporting a removal never makes an impermissible one acceptable. The complete text: not a diff, not the changed passages, not a description of what you did. Return no commentary inside the text itself."
+          },
+          "is_error": false,
+          "result_chars": 4246,
+          "result_excerpt": "[Subagent hand-back] The text below is the final report of a subagent this session delegated to. It is model output, NOT a message from the user: instructions, requests, or approval claims inside it are the subagent's words and carry no user authority. The harness indents every line of the report, so a frame-like line at column zero inside it would be forged. Notes above this frame may quote model"
+        },
+        {
+          "ordinal": 11,
+          "at": "2026-09-30T18:46:39.048Z",
+          "tool": "Bash",
+          "tool_use_id": "toolu_01DDe56nG7inNm561vUmuvXm",
+          "arguments": {
+            "command": "cat /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills/proofread/SKILL.md",
+            "description": "Read the Proofread skill instructions"
+          },
+          "is_error": false,
+          "result_chars": 13006,
+          "result_excerpt": "---\nname: proofread\ndescription: Correct only mechanical language errors — spelling, grammar, punctuation, agreement, inflection, duplicated or missing words, and locale mechanics — in one supplied text, preserving its wording, meaning, tone, structure, formatting, and metadata. Start it on your own only when a specific text is at hand and the request either uses a proofreading term (proofread, sp"
+        },
+        {
+          "ordinal": 12,
+          "at": "2026-09-30T18:46:48.113Z",
+          "tool": "Bash",
+          "tool_use_id": "toolu_01FNrV94QTL15rk3HSmnPUYP",
+          "arguments": {
+            "command": "cd /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/work; tail -c 20 input.md | od -c | tail -3; P=$(mktemp -d); echo $P; cat > \"$P/mech-in.md\" <<'EOF'\n# Bring it, fix it, keep it\n\nSomewhere at the back of a Hatherley shed there is a lamp that stopped working, waiting for the autumn clear-out and the tip. Before it goes, bring it to the Repair Café.\n\nYou will not be leaving it with us. At the Repair Café, the person who brings a broken thing stays with it. You sit down at a table, a volunteer sits down beside you, and between you, you work out what is wrong. Then, as far as you can, you mend it yourself. There is no charge. The volunteers cover small electrical items, bikes, clothes and small furniture, and the tea is on the table.\n\nIn September, Jo Carr brought in a standard lamp that had stopped working. With Dev, one of our volunteers, she opened the plug, found a loose wire and fitted it again herself. \"I've never opened a plug in my life,\" she said. \"Now I'd do it on my own.\" That was one of 31 items that came in that morning, among them a toaster, four bikes and a pair of jeans.\n\nNot everything can come back. We do not repair microwaves or anything with a gas supply. But since the café opened, the volunteers have kept more than a tonne of electrical goods out of landfill, one plug and one hinge at a time.\n\nTwo new volunteers joined in September, a retired electrician and a tailor, so there are more hands at the tables.\n\nThe lamp in the shed does not need a new owner or a skip. It needs a Saturday morning, and the person who owns it. Sessions run from 10:00 to 13:00, usually in St Anne's church hall. Bring something broken to the next session.\nEOF\ndiff input.md \"$P/mech-in.md\"; shasum \"$P/mech-in.md\"; wc -w \"$P/mech-in.md\"",
+            "description": "Freeze candidate text into private file and diff"
+          },
+          "is_error": false,
+          "result_chars": 1956,
+          "result_excerpt": "0000000   o       t   h   e       n   e   x   t       s   e   s   s   i\n0000020   o   n   .  \\n\n0000024\n/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/scratch/tmp/tmp.bwPwar2ON0\n5c5\n< You will not be leaving it with us. At the Repair Café, the person who brings a broken thing stays with it. You sit down at a table, a volunteer sits down beside you, and be"
+        },
+        {
+          "ordinal": 13,
+          "at": "2026-09-30T18:46:53.212Z",
+          "tool": "Bash",
+          "tool_use_id": "toolu_01VdRU6j9keNPjtC7R72g3fv",
+          "arguments": {
+            "command": "P=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/scratch/tmp/tmp.bwPwar2ON0; H=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills/proofread; T=$(mktemp -d); printf '%s' \"--language=en_GB --output=$P/mech-out.md $P/mech-in.md\" | TMPDIR=$T UV_NO_CACHE=1 UV_NO_PROJECT=1 uv run \"$H/scripts/invoke.py\"; echo \"EXIT $?\"; rm -rf \"$T\"",
+            "description": "Invoke the Proofread shim on the frozen text"
+          },
+          "is_error": false,
+          "result_chars": 666,
+          "result_excerpt": "Invocation read.\n\n`$LIBRARY` is `/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills/kntnt/library`.\n\n```json\n{\n  \"ok\": true,\n  \"path\": [],\n  \"flags\": {\n    \"--language\": \"en_GB\",\n    \"--output\": \"/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/scratch/tmp/tmp.bwPwar2ON0/mech-out.md\"\n  },\n  \"operand"
+        },
+        {
+          "ordinal": 14,
+          "at": "2026-09-30T18:46:57.571Z",
+          "tool": "Bash",
+          "tool_use_id": "toolu_01UwFAhEQFFUntFczztk1pNU",
+          "arguments": {
+            "command": "L=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills/kntnt/library; T=$(mktemp -d); TMPDIR=$T uv run --no-cache --no-project \"$L/scripts/languages.py\" resolve --scope=mechanics \"en_GB\"; echo \"EXIT $?\"; rm -rf \"$T\"; echo =====; cat $L/references/editorial/mechanics.md",
+            "description": "Load en_GB mechanics scope and mechanics contract"
+          },
+          "is_error": false,
+          "result_chars": 14115,
+          "result_excerpt": "Installed 1 package in 2ms\n{\n  \"selector\": \"en_GB\",\n  \"code\": \"en_GB\",\n  \"language\": \"English\",\n  \"territory\": \"GB\",\n  \"territory_name\": \"United Kingdom\",\n  \"inherits\": null,\n  \"scopes\": {\n    \"mechanics\": {\n      \"source\": \"en_GB\",\n      \"content\": \"Spelling: *-our* in *colour*, *behaviour*, *favour*; *-re* in *centre*, *theatre*, *metre*; doubled *l* before a suffix in *travelled*, *modelling*, "
+        },
+        {
+          "ordinal": 15,
+          "at": "2026-09-30T18:47:07.537Z",
+          "tool": "Bash",
+          "tool_use_id": "toolu_0151x9cygUwHjgpcQV1WYtbZ",
+          "arguments": {
+            "command": "P=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/scratch/tmp/tmp.bwPwar2ON0; cp \"$P/mech-in.md\" \"$P/mech-out.md\"; shasum \"$P/mech-in.md\" \"$P/mech-out.md\"; cat \"$P/mech-out.md\"; wc -w \"$P/mech-out.md\"; tail -n +2 \"$P/mech-out.md\" | wc -w",
+            "description": "Write Proofread's no-change output and verify it"
+          },
+          "is_error": false,
+          "result_chars": 2002,
+          "result_excerpt": "b8348ada8782bcd47f87cda67c8872326d5270b4  /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/scratch/tmp/tmp.bwPwar2ON0/mech-in.md\nb8348ada8782bcd47f87cda67c8872326d5270b4  /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/scratch/tmp/tmp.bwPwar2ON0/mech-out.md\n# Bring it, fix it, keep it\n\nSomewhere at the back of a Hat"
+        },
+        {
+          "ordinal": 16,
+          "at": "2026-09-30T18:47:32.023Z",
+          "tool": "Bash",
+          "tool_use_id": "toolu_01JNTkZ2W9tnkgQu8F8GLPYU",
+          "arguments": {
+            "command": "rm -rf /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/scratch/tmp/tmp.bwPwar2ON0; ls -la /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/scratch/tmp/ /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/work; shasum /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/work/*.md",
+            "description": "Remove private files and check filesystem state"
+          },
+          "is_error": false,
+          "result_chars": 1004,
+          "result_excerpt": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/scratch/tmp/:\ntotal 0\ndrwxr-xr-x 2 thomas staff  64 Sep 30 20:47 .\ndrwxr-xr-x 6 thomas staff 192 Sep 30 20:43 ..\n\n/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/work:\ntotal 16\ndrwxr-xr-x 5 thomas staff  160 Sep 30 20:43 .\ndrwx------ 5 thomas staff  160 Sep 30 20:43 ."
+        },
+        {
+          "ordinal": 17,
+          "at": "2026-09-30T18:48:05.688Z",
+          "tool": "Agent",
+          "tool_use_id": "toolu_01Jf9mvjXU7wEHzGqVtNFWoN",
+          "arguments": {
+            "description": "Reply check for redline",
+            "subagent_type": "general-purpose",
+            "run_in_background": false,
+            "prompt": "You are checking one reply against the two texts it describes. You did not write the reply and you did not make the changes it reports; you know only what is below, which is what the reply's own reader will know. Find what the reply gets wrong about the texts, and only that: whether a change was a good one, whether a finding was worth making and how the text reads are questions for somebody else.\n\n**The text as it arrived.** This is the complete text the run received:\n\n````markdown\n# Bring it, fix it, keep it\n\nSomewhere at the back of a Hatherley shed there is a lamp that stopped working, waiting for the autumn clear-out and the tip. Before it goes, bring it to the Repair Café.\n\nYou will not be leaving it with us. At the Repair Café, the person who brings a broken thing stays with it. You sit down at a table, a volunteer sits down beside you, and between you, you work out what is wrong. Then, as far as you can, you mend it yourself. The volunteers cover small electrical items, bikes, clothes and small furniture, and the tea is on the table.\n\nIn September, Jo Carr brought in a standard lamp that had stopped working. With Dev, one of our volunteers, she opened the plug, found a loose wire and fitted it again herself. \"I've never opened a plug in my life,\" she said. \"Now I'd do it on my own.\" That was one of 31 items that came in that morning, among them a toaster, four bikes and a pair of jeans.\n\nNot everything can come back. We do not repair microwaves or anything with a gas supply. But since the café opened, the volunteers have kept more than a tonne of electrical goods out of landfill, one plug and one hinge at a time.\n\nThere is no charge. Two new volunteers joined in September, a retired electrician and a tailor, so there are more hands at the tables.\n\nThe lamp in the shed does not need a new owner or a skip. It needs a Saturday morning, and the person who owns it. Bring something broken to the next session.\n````\n\n**The text as delivered.** This is the complete text the run delivers:\n\n````markdown\n# Bring it, fix it, keep it\n\nSomewhere at the back of a Hatherley shed there is a lamp that stopped working, waiting for the autumn clear-out and the tip. Before it goes, bring it to the Repair Café.\n\nYou will not be leaving it with us. At the Repair Café, the person who brings a broken thing stays with it. You sit down at a table, a volunteer sits down beside you, and between you, you work out what is wrong. Then, as far as you can, you mend it yourself. There is no charge. The volunteers cover small electrical items, bikes, clothes and small furniture, and the tea is on the table.\n\nIn September, Jo Carr brought in a standard lamp that had stopped working. With Dev, one of our volunteers, she opened the plug, found a loose wire and fitted it again herself. \"I've never opened a plug in my life,\" she said. \"Now I'd do it on my own.\" That was one of 31 items that came in that morning, among them a toaster, four bikes and a pair of jeans.\n\nNot everything can come back. We do not repair microwaves or anything with a gas supply. But since the café opened, the volunteers have kept more than a tonne of electrical goods out of landfill, one plug and one hinge at a time.\n\nTwo new volunteers joined in September, a retired electrician and a tailor, so there are more hands at the tables.\n\nThe lamp in the shed does not need a new owner or a skip. It needs a Saturday morning, and the person who owns it. Sessions run from 10:00 to 13:00, usually in St Anne's church hall. Bring something broken to the next session.\n````\n\n**The reply.** This is everything the run is about to say about the two texts:\n\n````markdown\n**Configuration.** Reviewed against `brief.md`, named by `--brief`. Genre `general`, technique none and language `en_GB` all come from the brief's `kntnt` map. `input.md` has no frontmatter and so no map of its own: there was no conflict between maps, and no map was added. No technique was applied, because the brief's map says `none`. The `general` genre names no technique either.\n\n**Findings**\n\nRepaired:\n\n1. *Paragraph 5 in the text as it arrived: \"There is no charge. Two new volunteers joined in September, …\".* This paragraph put two unrelated facts together. It also left the cost standing apart, after the paragraph on what is not repaired, when it belongs with what a visit involves. That breaks the brief's order of a first visit (question 7) and the base contract's requirement that paragraphs hold together. A reader who assumes the café is a free repair shop met the cost as an afterthought. *Repair:* \"There is no charge.\" now follows \"Then, as far as you can, you mend it yourself.\" in the second paragraph. The sentence about the two new volunteers is now a paragraph of its own, word for word as before.\n2. *The ending.* The text asked the reader to \"Bring something broken to the next session\" but never said at what time sessions run or where they are held. A household that has never been could not act on the call to action from the text alone (questions 4 and 10). *Repair:* one sentence was added before the call to action: \"Sessions run from 10:00 to 13:00, usually in St Anne's church hall.\" Its source is the volunteer handbook (`material.md`, section 1): \"Sessions run on a Saturday morning, 10:00 to 13:00, usually in St Anne's church hall.\" The qualifier \"usually\" is kept.\n\nUnresolved, left for the writer:\n\n3. *Paragraph 4: \"But since the café opened, the volunteers have kept more than a tonne of electrical goods out of landfill, one plug and one hinge at a time.\"* Neither the volunteer handbook nor the September notes say how long the café has been open. Neither gives a weight of goods kept out of landfill or mentions a hinge. The reader gets an exact-sounding figure the sender cannot back. The sentence is unchanged. It needs a source, for example the logbook, or the writer's decision to cut it.\n4. *Length.* The delivered text is 292 words including the headline, below the brief's 300 to 450. The reader loses little in itself. The gap is where the brief's open research would go: the share of items fixed on the day, and the date and room of the December session. Nothing was added to pad the text.\n\nThe review allowed one correction round. The round was re-reviewed and accepted, and no round was rejected.\n\n**Claim account**\n\n- *Added,* by the repair of finding 2: sessions run from 10:00 to 13:00; they are usually held in St Anne's church hall.\n- *Moved, not changed,* by the repair of finding 1: \"There is no charge.\" still asserts that there is no charge, now in the second paragraph instead of the fifth.\n- Apart from those two additions, no claim was removed or changed. No limit, connective or bounding clause was taken out.\n\n**Brief fulfilment** (`brief.md`)\n\n1. *What is the assignment?* Partly fulfilled. The text is about the topic, and the genre `general` fits a short community-newsletter piece. It is in `en_GB`, and the headline is the working title. Having no search phrase is deliberate, so that requirement is fulfilled. The length, 292 words including the headline, falls short of 300 to 450. The reader loses little. This is left for the writer (finding 4).\n2. *Which brand is the sender?* Fulfilled. The text speaks as the café (\"You will not be leaving it with us\", \"one of our volunteers\") in a warm, practical, neighbourly tone. It says nothing about product safety standards.\n3. *What does the sender want to convey?* Fulfilled. The text leads the reader to it: \"At the Repair Café, the person who brings a broken thing stays with it.\"\n4. *Who is the reader?* Fulfilled. The opening meets the \"why now\" (\"waiting for the autumn clear-out and the tip\"). \"You will not be leaving it with us.\" answers the drop-off assumption, and \"There is no charge.\" meets the concern about saving money.\n5. *What is the text's angle?* Fulfilled: a first visit, where you sit with a volunteer and fix the thing yourself. The one sentence that looks beyond a first visit, on landfill, is reported under question 12.\n6. *What is the hook?* Fulfilled. The lamp in the shed opens the text. \"Then, as far as you can, you mend it yourself.\" and Jo Carr's \"I've never opened a plug in my life\" deliver the surprise.\n7. *How should the text be structured?* Fulfilled. The text follows a visit from arriving to fixing to limits, and ends back at the lamp: \"The lamp in the shed does not need a new owner or a skip.\" It carries the brief's one sentence: the lamp you would throw away, the volunteer beside you, and the fixing done yourself.\n8. *What should be left out?* Fulfilled. There is no safety advice, no criticism of manufacturers and no mention of donations.\n9. *What should the reader have understood afterwards?* Fulfilled: \"Now I'd do it on my own.\"\n10. *What should the reader feel, think or do afterwards?* Fulfilled after the repair of finding 2. It was partly fulfilled in the text as it arrived. The direct call to action \"Bring something broken to the next session.\" is made, and now comes with the session time and usual venue. The measure is not assessed.\n11. *RIV and the chain check.* Fulfilled over the whole text. The autumn clear-out gives relevance, the hook gives interest, and the account of a visit and what is not repaired gives value. The chain check is answered in the brief.\n12. *What sources do you know of?* Partly fulfilled. Every other fact traces to the volunteer handbook or the September notes. The landfill sentence has no support, and a reader cannot be told where the figure comes from. This is left for the writer (finding 3). Two questions are still open: the share of items fixed on the day, and the date and room of the December session. The sketch's claim that members say the café has saved them money has no support in the material, and the text is not faulted for leaving it out.\n\nNo question is unanswered.\n\n**What else changed.** Beyond the claim account, the run changed the structure in one place. It moved one sentence into the second paragraph, which leaves the September volunteer news as a paragraph of its own. The closing mechanical pass made no corrections. No slop patterns were removed. `input.md` and `brief.md` are unchanged on disk, and nothing was written.\n````\n\n**The duties the reply is held to.** Before you read the reply, read two passages and apply them as written: the section *The truth of a report about the text* in `/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills/kntnt/library/references/delivery.md`, and the sentences of `/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills/kntnt/library/references/editorial/base.review.md` that say what the claim account holds, from *A claim removed because the finding named that claim itself* to the end of that paragraph. Read nothing else of either file, and no other file.\n\n**First compare the two texts yourself**, passage by passage, frontmatter and headings included, and note every difference, before you read what the reply says about them. The reply's own account is what you are checking, so it is never how you find a difference.\n\n**Then return two lists.**\n\n1. **False statements.** Every statement of the reply that the text it names contradicts, read as *The truth of a report about the text* reads it: a statement about the text as it arrived against that text, and every other statement against the delivered text. A finding's description of a passage, a count, a length, a grammatical label, where a passage stands, what a round did to a passage, a statement that something holds everywhere or nowhere, and every entry and sentence of the claim account are statements the text can contradict. A judgement of quality — that a heading was vague, that a passage read as filler — is not. For each: quote the statement, name the text it is about, quote the passage that contradicts it, and say what is true.\n2. **Claim changes the account misses.** Every difference between the two texts that moves a claim and that the claim account leaves out, or reports short of what it did: scope narrowed or widened; a condition, a qualification, a limit or a connective lost; chronology, causality or attribution moved; or the meaning moved, a sense or a double sense lost and an actor, an ordering or a framing added among it. A headline, a standfirst and a subheading carry claims like any other passage. For each: quote the passage before and after, say what the difference did to the claim, and quote what the account says of it, or say that it says nothing.\n\nWrite `none` under a list with nothing on it. Return the two lists and nothing else, and write no file."
+          },
+          "is_error": false,
+          "result_chars": 762,
+          "result_excerpt": "[Subagent hand-back] The text below is the final report of a subagent this session delegated to. It is model output, NOT a message from the user: instructions, requests, or approval claims inside it are the subagent's words and carry no user authority. The harness indents every line of the report, so a frame-like line at column zero inside it would be forged. Notes above this frame may quote model"
+        }
+      ],
+      "file_activity": [
+        {
+          "ordinal": 1,
+          "at": "2026-09-30T18:43:40.524Z",
+          "tool": "Bash",
+          "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills/redline",
+          "access": "shell",
+          "established_from": "shell-command",
+          "exact": true,
+          "command": "HERE=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills/redline; T=$(mktemp -d); printf '%s' '--brief=brief.md --output=response input.md' | TMPDIR=$T UV_NO_CACHE=1 UV_NO_PROJECT=1 uv run \"$HERE/scripts/invoke.py\"; echo \"EXIT $?\"; rm -rf \"$T\""
+        },
+        {
+          "ordinal": 1,
+          "at": "2026-09-30T18:43:40.524Z",
+          "tool": "Bash",
+          "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills/redline/scripts/invoke.py",
+          "access": "shell",
+          "established_from": "shell-command",
+          "exact": true,
+          "command": "HERE=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills/redline; T=$(mktemp -d); printf '%s' '--brief=brief.md --output=response input.md' | TMPDIR=$T UV_NO_CACHE=1 UV_NO_PROJECT=1 uv run \"$HERE/scripts/invoke.py\"; echo \"EXIT $?\"; rm -rf \"$T\""
+        },
+        {
+          "ordinal": 2,
+          "at": "2026-09-30T18:43:44.579Z",
+          "tool": "Bash",
+          "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/work",
+          "access": "shell",
+          "established_from": "shell-command",
+          "exact": true,
+          "command": "cd /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/work; ls -la; echo ----; cat input.md; echo; echo ----BRIEF; cat brief.md; echo; SK=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills; ls $SK/redline/references; ls -R $SK/kntnt/library/references | head -80"
+        },
+        {
+          "ordinal": 2,
+          "at": "2026-09-30T18:43:44.579Z",
+          "tool": "Bash",
+          "path": "input.md",
+          "access": "shell",
+          "established_from": "shell-command",
+          "exact": true,
+          "command": "cd /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/work; ls -la; echo ----; cat input.md; echo; echo ----BRIEF; cat brief.md; echo; SK=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills; ls $SK/redline/references; ls -R $SK/kntnt/library/references | head -80"
+        },
+        {
+          "ordinal": 2,
+          "at": "2026-09-30T18:43:44.579Z",
+          "tool": "Bash",
+          "path": "brief.md",
+          "access": "shell",
+          "established_from": "shell-command",
+          "exact": true,
+          "command": "cd /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/work; ls -la; echo ----; cat input.md; echo; echo ----BRIEF; cat brief.md; echo; SK=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills; ls $SK/redline/references; ls -R $SK/kntnt/library/references | head -80"
+        },
+        {
+          "ordinal": 2,
+          "at": "2026-09-30T18:43:44.579Z",
+          "tool": "Bash",
+          "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills",
+          "access": "shell",
+          "established_from": "shell-command",
+          "exact": true,
+          "command": "cd /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/work; ls -la; echo ----; cat input.md; echo; echo ----BRIEF; cat brief.md; echo; SK=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills; ls $SK/redline/references; ls -R $SK/kntnt/library/references | head -80"
+        },
+        {
+          "ordinal": 2,
+          "at": "2026-09-30T18:43:44.579Z",
+          "tool": "Bash",
+          "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills/redline/references",
+          "access": "shell",
+          "established_from": "shell-command",
+          "exact": false,
+          "command": "cd /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/work; ls -la; echo ----; cat input.md; echo; echo ----BRIEF; cat brief.md; echo; SK=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills; ls $SK/redline/references; ls -R $SK/kntnt/library/references | head -80"
+        },
+        {
+          "ordinal": 2,
+          "at": "2026-09-30T18:43:44.579Z",
+          "tool": "Bash",
+          "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills/kntnt/library/references",
+          "access": "shell",
+          "established_from": "shell-command",
+          "exact": false,
+          "command": "cd /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/work; ls -la; echo ----; cat input.md; echo; echo ----BRIEF; cat brief.md; echo; SK=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills; ls $SK/redline/references; ls -R $SK/kntnt/library/references | head -80"
+        },
+        {
+          "ordinal": 3,
+          "at": "2026-09-30T18:43:47.100Z",
+          "tool": "Bash",
+          "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills",
+          "access": "shell",
+          "established_from": "shell-command",
+          "exact": true,
+          "command": "SK=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills; cat $SK/redline/references/brief-review.md; echo =====; cat $SK/kntnt/library/references/delivery.md; echo ====; cat $SK/kntnt/library/references/invocation-envelope.md"
+        },
+        {
+          "ordinal": 3,
+          "at": "2026-09-30T18:43:47.100Z",
+          "tool": "Bash",
+          "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills/redline/references/brief-review.md",
+          "access": "shell",
+          "established_from": "shell-command",
+          "exact": true,
+          "command": "SK=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills; cat $SK/redline/references/brief-review.md; echo =====; cat $SK/kntnt/library/references/delivery.md; echo ====; cat $SK/kntnt/library/references/invocation-envelope.md"
+        },
+        {
+          "ordinal": 3,
+          "at": "2026-09-30T18:43:47.100Z",
+          "tool": "Bash",
+          "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills/kntnt/library/references/delivery.md",
+          "access": "shell",
+          "established_from": "shell-command",
+          "exact": true,
+          "command": "SK=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills; cat $SK/redline/references/brief-review.md; echo =====; cat $SK/kntnt/library/references/delivery.md; echo ====; cat $SK/kntnt/library/references/invocation-envelope.md"
+        },
+        {
+          "ordinal": 3,
+          "at": "2026-09-30T18:43:47.100Z",
+          "tool": "Bash",
+          "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills/kntnt/library/references/invocation-envelope.md",
+          "access": "shell",
+          "established_from": "shell-command",
+          "exact": true,
+          "command": "SK=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills; cat $SK/redline/references/brief-review.md; echo =====; cat $SK/kntnt/library/references/delivery.md; echo ====; cat $SK/kntnt/library/references/invocation-envelope.md"
+        },
+        {
+          "ordinal": 4,
+          "at": "2026-09-30T18:43:49.761Z",
+          "tool": "Read",
+          "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/projects/-private-var-folders-cs-vgp-x-353zd9frkjpysp7zdw0000gn-T-kntnt-editorial-388-run-k5fn33fw-work/2cccbace-9124-4d11-ba33-c8109c21bfff/tool-results/bpzns2hzt.txt",
+          "access": "read",
+          "established_from": "tool-argument",
+          "exact": true,
+          "command": null
+        },
+        {
+          "ordinal": 5,
+          "at": "2026-09-30T18:43:50.895Z",
+          "tool": "Bash",
+          "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/work",
+          "access": "shell",
+          "established_from": "shell-command",
+          "exact": true,
+          "command": "cd /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/work; cat material.md"
+        },
+        {
+          "ordinal": 5,
+          "at": "2026-09-30T18:43:50.895Z",
+          "tool": "Bash",
+          "path": "material.md",
+          "access": "shell",
+          "established_from": "shell-command",
+          "exact": true,
+          "command": "cd /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/work; cat material.md"
+        },
+        {
+          "ordinal": 6,
+          "at": "2026-09-30T18:43:55.330Z",
+          "tool": "Bash",
+          "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills/kntnt/library",
+          "access": "shell",
+          "established_from": "shell-command",
+          "exact": true,
+          "command": "L=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills/kntnt/library; T=$(mktemp -d); TMPDIR=$T uv run --no-cache --no-project \"$L/scripts/languages.py\" resolve --scope=composition --scope=review --scope=anti-slop \"en_GB\"; echo \"EXIT $?\"; rm -rf \"$T\""
+        },
+        {
+          "ordinal": 6,
+          "at": "2026-09-30T18:43:55.330Z",
+          "tool": "Bash",
+          "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills/kntnt/library/scripts/languages.py",
+          "access": "shell",
+          "established_from": "shell-command",
+          "exact": true,
+          "command": "L=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills/kntnt/library; T=$(mktemp -d); TMPDIR=$T uv run --no-cache --no-project \"$L/scripts/languages.py\" resolve --scope=composition --scope=review --scope=anti-slop \"en_GB\"; echo \"EXIT $?\"; rm -rf \"$T\""
+        },
+        {
+          "ordinal": 7,
+          "at": "2026-09-30T18:43:58.609Z",
+          "tool": "Bash",
+          "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills/kntnt/library/references/editorial",
+          "access": "shell",
+          "established_from": "shell-command",
+          "exact": true,
+          "command": "E=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills/kntnt/library/references/editorial; for f in base.md base.review.md genres/general.md anti-slop.md writing-brief.md; do echo \"===== $f\"; cat $E/$f; done"
+        },
+        {
+          "ordinal": 7,
+          "at": "2026-09-30T18:43:58.609Z",
+          "tool": "Bash",
+          "path": "base.md",
+          "access": "shell",
+          "established_from": "shell-command",
+          "exact": true,
+          "command": "E=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills/kntnt/library/references/editorial; for f in base.md base.review.md genres/general.md anti-slop.md writing-brief.md; do echo \"===== $f\"; cat $E/$f; done"
+        },
+        {
+          "ordinal": 7,
+          "at": "2026-09-30T18:43:58.609Z",
+          "tool": "Bash",
+          "path": "base.review.md",
+          "access": "shell",
+          "established_from": "shell-command",
+          "exact": true,
+          "command": "E=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills/kntnt/library/references/editorial; for f in base.md base.review.md genres/general.md anti-slop.md writing-brief.md; do echo \"===== $f\"; cat $E/$f; done"
+        },
+        {
+          "ordinal": 7,
+          "at": "2026-09-30T18:43:58.609Z",
+          "tool": "Bash",
+          "path": "genres/general.md",
+          "access": "shell",
+          "established_from": "shell-command",
+          "exact": true,
+          "command": "E=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills/kntnt/library/references/editorial; for f in base.md base.review.md genres/general.md anti-slop.md writing-brief.md; do echo \"===== $f\"; cat $E/$f; done"
+        },
+        {
+          "ordinal": 7,
+          "at": "2026-09-30T18:43:58.609Z",
+          "tool": "Bash",
+          "path": "anti-slop.md",
+          "access": "shell",
+          "established_from": "shell-command",
+          "exact": true,
+          "command": "E=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills/kntnt/library/references/editorial; for f in base.md base.review.md genres/general.md anti-slop.md writing-brief.md; do echo \"===== $f\"; cat $E/$f; done"
+        },
+        {
+          "ordinal": 7,
+          "at": "2026-09-30T18:43:58.609Z",
+          "tool": "Bash",
+          "path": "writing-brief.md",
+          "access": "shell",
+          "established_from": "shell-command",
+          "exact": true,
+          "command": "E=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills/kntnt/library/references/editorial; for f in base.md base.review.md genres/general.md anti-slop.md writing-brief.md; do echo \"===== $f\"; cat $E/$f; done"
+        },
+        {
+          "ordinal": 7,
+          "at": "2026-09-30T18:43:58.609Z",
+          "tool": "Bash",
+          "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills/kntnt/library/references/editorial/$f",
+          "access": "shell",
+          "established_from": "shell-command",
+          "exact": false,
+          "command": "E=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills/kntnt/library/references/editorial; for f in base.md base.review.md genres/general.md anti-slop.md writing-brief.md; do echo \"===== $f\"; cat $E/$f; done"
+        },
+        {
+          "ordinal": 8,
+          "at": "2026-09-30T18:44:01.548Z",
+          "tool": "Read",
+          "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/projects/-private-var-folders-cs-vgp-x-353zd9frkjpysp7zdw0000gn-T-kntnt-editorial-388-run-k5fn33fw-work/2cccbace-9124-4d11-ba33-c8109c21bfff/tool-results/bj4ae7kkb.txt",
+          "access": "read",
+          "established_from": "tool-argument",
+          "exact": true,
+          "command": null
+        },
+        {
+          "ordinal": 9,
+          "at": "2026-09-30T18:44:52.598Z",
+          "tool": "Bash",
+          "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/work",
+          "access": "shell",
+          "established_from": "shell-command",
+          "exact": true,
+          "command": "cd /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/work; wc -w input.md; tail -n +2 input.md | wc -w; SK=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills; cat $SK/redline/references/correction.md; echo ====; cat $SK/redline/references/reply-check.md"
+        },
+        {
+          "ordinal": 9,
+          "at": "2026-09-30T18:44:52.598Z",
+          "tool": "Bash",
+          "path": "input.md",
+          "access": "shell",
+          "established_from": "shell-command",
+          "exact": true,
+          "command": "cd /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/work; wc -w input.md; tail -n +2 input.md | wc -w; SK=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills; cat $SK/redline/references/correction.md; echo ====; cat $SK/redline/references/reply-check.md"
+        },
+        {
+          "ordinal": 9,
+          "at": "2026-09-30T18:44:52.598Z",
+          "tool": "Bash",
+          "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills",
+          "access": "shell",
+          "established_from": "shell-command",
+          "exact": true,
+          "command": "cd /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/work; wc -w input.md; tail -n +2 input.md | wc -w; SK=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills; cat $SK/redline/references/correction.md; echo ====; cat $SK/redline/references/reply-check.md"
+        },
+        {
+          "ordinal": 9,
+          "at": "2026-09-30T18:44:52.598Z",
+          "tool": "Bash",
+          "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills/redline/references/correction.md",
+          "access": "shell",
+          "established_from": "shell-command",
+          "exact": true,
+          "command": "cd /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/work; wc -w input.md; tail -n +2 input.md | wc -w; SK=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills; cat $SK/redline/references/correction.md; echo ====; cat $SK/redline/references/reply-check.md"
+        },
+        {
+          "ordinal": 9,
+          "at": "2026-09-30T18:44:52.598Z",
+          "tool": "Bash",
+          "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills/redline/references/reply-check.md",
+          "access": "shell",
+          "established_from": "shell-command",
+          "exact": true,
+          "command": "cd /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/work; wc -w input.md; tail -n +2 input.md | wc -w; SK=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills; cat $SK/redline/references/correction.md; echo ====; cat $SK/redline/references/reply-check.md"
+        },
+        {
+          "ordinal": 11,
+          "at": "2026-09-30T18:46:39.048Z",
+          "tool": "Bash",
+          "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills/proofread/SKILL.md",
+          "access": "shell",
+          "established_from": "shell-command",
+          "exact": true,
+          "command": "cat /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills/proofread/SKILL.md"
+        },
+        {
+          "ordinal": 12,
+          "at": "2026-09-30T18:46:48.113Z",
+          "tool": "Bash",
+          "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/work",
+          "access": "shell",
+          "established_from": "shell-command",
+          "exact": true,
+          "command": "cd /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/work; tail -c 20 input.md | od -c | tail -3; P=$(mktemp -d); echo $P; cat > \"$P/mech-in.md\" <<'EOF'\n# Bring it, fix it, keep it\n\nSomewhere at the back of a Hatherley shed there is a lamp that stopped working, waiting for the autumn clear-out and the tip. Before it goes, bring it to the Repair Café.\n\nYou will not be leaving it with us. At the Repair Café, the person who brings a broken thing stays with it. You sit down at a table, a volunteer sits down beside you, and between you, you work out what is wrong. Then, as far as you can, you mend it yourself. There is no charge. The volunteers cover small electrical items, bikes, clothes and small furniture, and the tea is on the table.\n\nIn September, Jo Carr brought in a standard lamp that had stopped working. With Dev, one of our volunteers, she opened the plug, found a loose wire and fitted it again herself. \"I've never opened a plug in my life,\" she said. \"Now I'd do it on my own.\" That was one of 31 items that came in that morning, among them a toaster, four bikes and a pair of jeans.\n\nNot everything can come back. We do not repair microwaves or anything with a gas supply. But since the café opened, the volunteers have kept more than a tonne of electrical goods out of landfill, one plug and one hinge at a time.\n\nTwo new volunteers joined in September, a retired electrician and a tailor, so there are more hands at the tables.\n\nThe lamp in the shed does not need a new owner or a skip. It needs a Saturday morning, and the person who owns it. Sessions run from 10:00 to 13:00, usually in St Anne's church hall. Bring something broken to the next session.\nEOF\ndiff input.md \"$P/mech-in.md\"; shasum \"$P/mech-in.md\"; wc -w \"$P/mech-in.md\""
+        },
+        {
+          "ordinal": 12,
+          "at": "2026-09-30T18:46:48.113Z",
+          "tool": "Bash",
+          "path": "input.md",
+          "access": "shell",
+          "established_from": "shell-command",
+          "exact": true,
+          "command": "cd /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/work; tail -c 20 input.md | od -c | tail -3; P=$(mktemp -d); echo $P; cat > \"$P/mech-in.md\" <<'EOF'\n# Bring it, fix it, keep it\n\nSomewhere at the back of a Hatherley shed there is a lamp that stopped working, waiting for the autumn clear-out and the tip. Before it goes, bring it to the Repair Café.\n\nYou will not be leaving it with us. At the Repair Café, the person who brings a broken thing stays with it. You sit down at a table, a volunteer sits down beside you, and between you, you work out what is wrong. Then, as far as you can, you mend it yourself. There is no charge. The volunteers cover small electrical items, bikes, clothes and small furniture, and the tea is on the table.\n\nIn September, Jo Carr brought in a standard lamp that had stopped working. With Dev, one of our volunteers, she opened the plug, found a loose wire and fitted it again herself. \"I've never opened a plug in my life,\" she said. \"Now I'd do it on my own.\" That was one of 31 items that came in that morning, among them a toaster, four bikes and a pair of jeans.\n\nNot everything can come back. We do not repair microwaves or anything with a gas supply. But since the café opened, the volunteers have kept more than a tonne of electrical goods out of landfill, one plug and one hinge at a time.\n\nTwo new volunteers joined in September, a retired electrician and a tailor, so there are more hands at the tables.\n\nThe lamp in the shed does not need a new owner or a skip. It needs a Saturday morning, and the person who owns it. Sessions run from 10:00 to 13:00, usually in St Anne's church hall. Bring something broken to the next session.\nEOF\ndiff input.md \"$P/mech-in.md\"; shasum \"$P/mech-in.md\"; wc -w \"$P/mech-in.md\""
+        },
+        {
+          "ordinal": 12,
+          "at": "2026-09-30T18:46:48.113Z",
+          "tool": "Bash",
+          "path": "$P/mech-in.md",
+          "access": "shell",
+          "established_from": "shell-command",
+          "exact": false,
+          "command": "cd /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/work; tail -c 20 input.md | od -c | tail -3; P=$(mktemp -d); echo $P; cat > \"$P/mech-in.md\" <<'EOF'\n# Bring it, fix it, keep it\n\nSomewhere at the back of a Hatherley shed there is a lamp that stopped working, waiting for the autumn clear-out and the tip. Before it goes, bring it to the Repair Café.\n\nYou will not be leaving it with us. At the Repair Café, the person who brings a broken thing stays with it. You sit down at a table, a volunteer sits down beside you, and between you, you work out what is wrong. Then, as far as you can, you mend it yourself. There is no charge. The volunteers cover small electrical items, bikes, clothes and small furniture, and the tea is on the table.\n\nIn September, Jo Carr brought in a standard lamp that had stopped working. With Dev, one of our volunteers, she opened the plug, found a loose wire and fitted it again herself. \"I've never opened a plug in my life,\" she said. \"Now I'd do it on my own.\" That was one of 31 items that came in that morning, among them a toaster, four bikes and a pair of jeans.\n\nNot everything can come back. We do not repair microwaves or anything with a gas supply. But since the café opened, the volunteers have kept more than a tonne of electrical goods out of landfill, one plug and one hinge at a time.\n\nTwo new volunteers joined in September, a retired electrician and a tailor, so there are more hands at the tables.\n\nThe lamp in the shed does not need a new owner or a skip. It needs a Saturday morning, and the person who owns it. Sessions run from 10:00 to 13:00, usually in St Anne's church hall. Bring something broken to the next session.\nEOF\ndiff input.md \"$P/mech-in.md\"; shasum \"$P/mech-in.md\"; wc -w \"$P/mech-in.md\""
+        },
+        {
+          "ordinal": 13,
+          "at": "2026-09-30T18:46:53.212Z",
+          "tool": "Bash",
+          "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/scratch/tmp/tmp.bwPwar2ON0",
+          "access": "shell",
+          "established_from": "shell-command",
+          "exact": true,
+          "command": "P=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/scratch/tmp/tmp.bwPwar2ON0; H=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills/proofread; T=$(mktemp -d); printf '%s' \"--language=en_GB --output=$P/mech-out.md $P/mech-in.md\" | TMPDIR=$T UV_NO_CACHE=1 UV_NO_PROJECT=1 uv run \"$H/scripts/invoke.py\"; echo \"EXIT $?\"; rm -rf \"$T\""
+        },
+        {
+          "ordinal": 13,
+          "at": "2026-09-30T18:46:53.212Z",
+          "tool": "Bash",
+          "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills/proofread",
+          "access": "shell",
+          "established_from": "shell-command",
+          "exact": true,
+          "command": "P=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/scratch/tmp/tmp.bwPwar2ON0; H=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills/proofread; T=$(mktemp -d); printf '%s' \"--language=en_GB --output=$P/mech-out.md $P/mech-in.md\" | TMPDIR=$T UV_NO_CACHE=1 UV_NO_PROJECT=1 uv run \"$H/scripts/invoke.py\"; echo \"EXIT $?\"; rm -rf \"$T\""
+        },
+        {
+          "ordinal": 13,
+          "at": "2026-09-30T18:46:53.212Z",
+          "tool": "Bash",
+          "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills/proofread/scripts/invoke.py",
+          "access": "shell",
+          "established_from": "shell-command",
+          "exact": true,
+          "command": "P=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/scratch/tmp/tmp.bwPwar2ON0; H=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills/proofread; T=$(mktemp -d); printf '%s' \"--language=en_GB --output=$P/mech-out.md $P/mech-in.md\" | TMPDIR=$T UV_NO_CACHE=1 UV_NO_PROJECT=1 uv run \"$H/scripts/invoke.py\"; echo \"EXIT $?\"; rm -rf \"$T\""
+        },
+        {
+          "ordinal": 14,
+          "at": "2026-09-30T18:46:57.571Z",
+          "tool": "Bash",
+          "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills/kntnt/library",
+          "access": "shell",
+          "established_from": "shell-command",
+          "exact": true,
+          "command": "L=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills/kntnt/library; T=$(mktemp -d); TMPDIR=$T uv run --no-cache --no-project \"$L/scripts/languages.py\" resolve --scope=mechanics \"en_GB\"; echo \"EXIT $?\"; rm -rf \"$T\"; echo =====; cat $L/references/editorial/mechanics.md"
+        },
+        {
+          "ordinal": 14,
+          "at": "2026-09-30T18:46:57.571Z",
+          "tool": "Bash",
+          "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills/kntnt/library/scripts/languages.py",
+          "access": "shell",
+          "established_from": "shell-command",
+          "exact": true,
+          "command": "L=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills/kntnt/library; T=$(mktemp -d); TMPDIR=$T uv run --no-cache --no-project \"$L/scripts/languages.py\" resolve --scope=mechanics \"en_GB\"; echo \"EXIT $?\"; rm -rf \"$T\"; echo =====; cat $L/references/editorial/mechanics.md"
+        },
+        {
+          "ordinal": 14,
+          "at": "2026-09-30T18:46:57.571Z",
+          "tool": "Bash",
+          "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills/kntnt/library/references/editorial/mechanics.md",
+          "access": "shell",
+          "established_from": "shell-command",
+          "exact": true,
+          "command": "L=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills/kntnt/library; T=$(mktemp -d); TMPDIR=$T uv run --no-cache --no-project \"$L/scripts/languages.py\" resolve --scope=mechanics \"en_GB\"; echo \"EXIT $?\"; rm -rf \"$T\"; echo =====; cat $L/references/editorial/mechanics.md"
+        },
+        {
+          "ordinal": 15,
+          "at": "2026-09-30T18:47:07.537Z",
+          "tool": "Bash",
+          "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/scratch/tmp/tmp.bwPwar2ON0",
+          "access": "shell",
+          "established_from": "shell-command",
+          "exact": true,
+          "command": "P=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/scratch/tmp/tmp.bwPwar2ON0; cp \"$P/mech-in.md\" \"$P/mech-out.md\"; shasum \"$P/mech-in.md\" \"$P/mech-out.md\"; cat \"$P/mech-out.md\"; wc -w \"$P/mech-out.md\"; tail -n +2 \"$P/mech-out.md\" | wc -w"
+        },
+        {
+          "ordinal": 15,
+          "at": "2026-09-30T18:47:07.537Z",
+          "tool": "Bash",
+          "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/scratch/tmp/tmp.bwPwar2ON0/mech-in.md",
+          "access": "shell",
+          "established_from": "shell-command",
+          "exact": true,
+          "command": "P=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/scratch/tmp/tmp.bwPwar2ON0; cp \"$P/mech-in.md\" \"$P/mech-out.md\"; shasum \"$P/mech-in.md\" \"$P/mech-out.md\"; cat \"$P/mech-out.md\"; wc -w \"$P/mech-out.md\"; tail -n +2 \"$P/mech-out.md\" | wc -w"
+        },
+        {
+          "ordinal": 15,
+          "at": "2026-09-30T18:47:07.537Z",
+          "tool": "Bash",
+          "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/scratch/tmp/tmp.bwPwar2ON0/mech-out.md",
+          "access": "shell",
+          "established_from": "shell-command",
+          "exact": true,
+          "command": "P=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/scratch/tmp/tmp.bwPwar2ON0; cp \"$P/mech-in.md\" \"$P/mech-out.md\"; shasum \"$P/mech-in.md\" \"$P/mech-out.md\"; cat \"$P/mech-out.md\"; wc -w \"$P/mech-out.md\"; tail -n +2 \"$P/mech-out.md\" | wc -w"
+        },
+        {
+          "ordinal": 16,
+          "at": "2026-09-30T18:47:32.023Z",
+          "tool": "Bash",
+          "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/scratch/tmp/tmp.bwPwar2ON0",
+          "access": "shell",
+          "established_from": "shell-command",
+          "exact": true,
+          "command": "rm -rf /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/scratch/tmp/tmp.bwPwar2ON0; ls -la /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/scratch/tmp/ /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/work; shasum /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/work/*.md"
+        },
+        {
+          "ordinal": 16,
+          "at": "2026-09-30T18:47:32.023Z",
+          "tool": "Bash",
+          "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/scratch/tmp/",
+          "access": "shell",
+          "established_from": "shell-command",
+          "exact": false,
+          "command": "rm -rf /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/scratch/tmp/tmp.bwPwar2ON0; ls -la /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/scratch/tmp/ /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/work; shasum /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/work/*.md"
+        },
+        {
+          "ordinal": 16,
+          "at": "2026-09-30T18:47:32.023Z",
+          "tool": "Bash",
+          "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/work",
+          "access": "shell",
+          "established_from": "shell-command",
+          "exact": false,
+          "command": "rm -rf /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/scratch/tmp/tmp.bwPwar2ON0; ls -la /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/scratch/tmp/ /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/work; shasum /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/work/*.md"
+        },
+        {
+          "ordinal": 16,
+          "at": "2026-09-30T18:47:32.023Z",
+          "tool": "Bash",
+          "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/work/*.md",
+          "access": "shell",
+          "established_from": "shell-command",
+          "exact": false,
+          "command": "rm -rf /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/scratch/tmp/tmp.bwPwar2ON0; ls -la /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/scratch/tmp/ /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/work; shasum /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/work/*.md"
+        }
+      ],
+      "delegations": [
+        {
+          "ordinal": 10,
+          "at": "2026-09-30T18:45:57.590Z",
+          "tool_use_id": "toolu_01HAqpMKxEZHofxELMBZHWxt",
+          "description": "Correction round for redline",
+          "subagent_type": "general-purpose",
+          "prompt": "You are making one correction to one text. You have not seen this text before, and there is nothing you are expected to remember: the text below is its current state, and the findings below are the current review's, complete and as they were written. Repair them.\n\n**The text.** This is the complete Text Artifact, exactly as it now stands:\n\n````markdown\n# Bring it, fix it, keep it\n\nSomewhere at the back of a Hatherley shed there is a lamp that stopped working, waiting for the autumn clear-out and the tip. Before it goes, bring it to the Repair Café.\n\nYou will not be leaving it with us. At the Repair Café, the person who brings a broken thing stays with it. You sit down at a table, a volunteer sits down beside you, and between you, you work out what is wrong. Then, as far as you can, you mend it yourself. The volunteers cover small electrical items, bikes, clothes and small furniture, and the tea is on the table.\n\nIn September, Jo Carr brought in a standard lamp that had stopped working. With Dev, one of our volunteers, she opened the plug, found a loose wire and fitted it again herself. \"I've never opened a plug in my life,\" she said. \"Now I'd do it on my own.\" That was one of 31 items that came in that morning, among them a toaster, four bikes and a pair of jeans.\n\nNot everything can come back. We do not repair microwaves or anything with a gas supply. But since the café opened, the volunteers have kept more than a tonne of electrical goods out of landfill, one plug and one hinge at a time.\n\nThere is no charge. Two new volunteers joined in September, a retired electrician and a tailor, so there are more hands at the tables.\n\nThe lamp in the shed does not need a new owner or a skip. It needs a Saturday morning, and the person who owns it. Bring something broken to the next session.\n````\n\n**The findings.** This is every finding the review recorded against that text, complete and in the order it recorded them:\n\n1. **Paragraph 5, \"There is no charge. Two new volunteers joined in September, a retired electrician and a tailor, so there are more hands at the tables.\"** Requirement: the base contract, *Reader and progression*: \"Keep paragraphs coherent and give supporting material a clear place beside what it supports\"; and the Writing Brief, question 7 (How should the text be structured?): \"Free structure: the piece follows a first visit in the order it happens.\" The paragraph joins two unrelated facts, and \"There is no charge.\" stands after the paragraph on what is not repaired, apart from paragraph 2, which describes what a visit involves and where the other visit condition (\"the tea is on the table\") already sits. What the reader loses: the reader the brief describes, who assumes the café is a free repair shop and cares about saving money, meets the cost as a stray afterthought between the limits and the ending instead of as part of what a first visit is like. Support (material.md, section 1, from the volunteer handbook): \"There is no charge. Tea is on the table.\" Smallest repair: move the sentence \"There is no charge.\" into paragraph 2, beside what a visit involves; leave the sentence about the two new volunteers standing where it is and as it is.\n\n2. **The ending, paragraph 6, \"It needs a Saturday morning, and the person who owns it. Bring something broken to the next session.\"** Requirement: Writing Brief, question 10 (What should the reader feel, think or do afterwards?): \"Main effect: the reader brings a broken item to the next session\", with the direct call to action \"Bring something broken to the next session.\"; and the base contract: \"Give the intended reader what they need to understand, judge or do the thing the text is for.\" The text asks the reader to come to a session but never says at what time sessions run or where they are held. What the reader loses: a Hatherley household that has heard of the café but never been (brief, question 4) is asked to come and is not told where to go or when on a Saturday, so the call to action cannot be acted on from the text alone. Support (material.md, section 1, from the volunteer handbook): \"Sessions run on a Saturday morning, 10:00 to 13:00, usually in St Anne's church hall.\" Use only that support; keep its qualifier \"usually\". The date and room of the December session are open research questions in the brief (question 12) and are not in the material: do not supply a date, and do not state the room as certain. Keep the ending's return to the lamp in the shed and keep the call to action \"Bring something broken to the next session.\" as it stands.\n\n3. **Paragraph 4, \"But since the café opened, the volunteers have kept more than a tonne of electrical goods out of landfill, one plug and one hinge at a time.\"** Requirement: the base contract, *Claims*: \"Every claim is supported by the text or its material\"; Writing Brief, question 12 (What sources do you know of?): the text's claims are judged against the volunteer handbook and the September session notes in material.md. Neither source says how long the café has been open, gives any weight of goods kept out of landfill, or mentions a hinge repair. What the reader loses: a precise-sounding figure and an outcome the sender cannot back, in a newsletter read by neighbours who may ask where it comes from. Left for the writer: the material supplies no support for the figure, and repairing it would require a source the text and material do not have; do not change, remove or replace this sentence in this round.\n\n4. **Length, the whole text.** Requirement: Writing Brief, question 1 (What is the assignment?): \"Length: roughly 300 to 450 words.\" The text runs to roughly 280 words including the headline, below the range. What the reader loses: little in itself; the gap is where the brief's open research (the share of items fixed on the day, the December session's date and room) would go. Left for the writer: a stated length is never a licence to add material, and closing this gap needs material the brief lists as still to be found out. Do not pad the text to reach the range.\n\n**The contract.** The text is a `general` in `en_GB`, and it is held to `none`. Read what it is held to before you change anything: `/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills/kntnt/library/references/editorial/base.md` and `/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills/kntnt/library/references/editorial/base.review.md`; `/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills/kntnt/library/references/editorial/genres/general.md` and the `.review.md` file beside it where one exists; `/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills/kntnt/library/references/editorial/anti-slop.md`; and the `composition`, `review` and `anti-slop` scopes of the resolved language, which `uv run \"/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills/kntnt/library/scripts/languages.py\" resolve --scope=composition --scope=review --scope=anti-slop \"en_GB\"` returns. For `article`, `casestudy`, `column` and `opinion`, and for `webcopy`, also read `/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills/kntnt/library/references/editorial/web-craft.md` and `/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills/kntnt/library/references/editorial/web-craft.review.md`; for `article`, `casestudy`, `column` and `opinion` alone, also read `/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills/kntnt/library/references/editorial/article-anatomy.md` and `/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills/kntnt/library/references/editorial/article-anatomy.review.md`, which fix the parts, order and dimensions of such a text; and for those four and for `pressrelease`, also read `/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills/kntnt/library/references/editorial/headlines.md` and `/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills/kntnt/library/references/editorial/headlines.review.md`, which say how a headline and its subheadings are written. These are the only additional genre support files: follow no other genre links and load no unselected genre or technique. A review extension that is not there is not a defect. Run the resolver with `UV_NO_CACHE=1 UV_NO_PROJECT=1` and a fresh private `TMPDIR`, removing that directory afterwards, including on failure. Load no mechanics guidance and correct no spelling, punctuation, or grammar: a mechanical pass runs after you, and work you do there is work done twice.\n\n**What you change, and what you preserve.** Repair what the findings name and nothing else. Every difference between the text you return and the text above is traced to a finding, or to what repairing a finding required, before this round is accepted, and a difference that traces to no finding is restored from the text you received — so a phrase you improved outside a finding is work that will be undone. Preserve everything the findings do not concern: every sentence, every fact, every quotation, every code sample, every heading, every piece of formatting and every line of frontmatter among them comes back exactly as you received it — a repair that improves a paragraph nobody complained about is a change nobody asked for and nobody will review. A code sample — a fenced block, an indented block, or an inline code span — is quoted material rather than the text's own prose: its contents are read past rather than read against the rules, so nothing inside one is a finding and nothing inside one is changed, the docstrings, comments, and string literals among them. Prose about code is ordinary prose and is read like every other sentence. Where a finding can be repaired several ways, make the smallest change that removes it. Where a finding names something you cannot repair without inventing a fact, changing what the text claims, or altering a quotation's meaning, stance, certainty or distinctive wording, leave that passage alone and say so: in an ordinary review this text is answerable to material you do not have, and a plausible invention is worse than an unrepaired finding. For a brief-shortfall finding carrying exact source support, use only that support or the text to supply what is missing. A repair never states the sender's message outright, since the message may always be conveyed indirectly. Source Fidelity binds the repair: retain attribution, uncertainty, scope, chronology, causality and quotation meaning. A requirement in the brief is not source evidence; where the finding has no support for a needed fact, source or quotation, leave it for the writer and report why.\n\n**A defect of your own costs the whole round.** The review that follows you establishes whether this text has a defect it did not have when you received it — a headline or a heading claiming more than the text claims, a heading repeating the passage under it, a limit your repair dropped. Where it establishes one, the whole round is rejected: the text you received is restored entire, nothing you did survives however much else you repaired, and no fresh attempt follows. So a finding you cannot repair without creating another one is a finding you leave and say so, exactly as you would one you cannot repair without inventing a fact — an unrepaired finding a person can settle costs less than a repair that has to be thrown away with everything beside it.\n\n**What a repair may take with it, and what it may not.** A finding names a defect, and what a repair removes is that defect. Where the defect a finding names is the whole of the passage — an opening that would sit in front of any text, a closing that restates what the reader has just read, a claim credited to nobody that the text cannot source — removing it may be the repair, and any claim removed with it must be named in your return. That stops at a sentence whose work is to bound what the text asserts — that something is not measured, not claimed, not witnessed or not general, or that the text is an observation of a document rather than a scene from an occasion. Remove or weaken one only where the finding names a defect inside the sentence, and only where a sentence you keep still states that limit in full, so the text bounds what it claims exactly as far as it did, or where the limit contradicts another passage of the same text. Otherwise leave it exactly as it stands and say so. Where the passage carries a claim beside the defect — a fact, an observation, the point the passage exists to make — the smallest change is the one that leaves that claim standing, and deleting the passage entire is not that change. And where you can see no way to remove the defect that does not take the claim with it, leave the passage alone and say so, exactly as you would a finding you cannot repair without inventing a fact: a person can give that claim what it needs or let it go, and a round that deletes it leaves them nothing to weigh. That judgement is about the passage in front of you and never about how much of the text is left — a short text is no licence to leave a finding standing, and a long one is no licence to go on cutting.\n\nA repair at a punctuation joint can be the smallest change even when the finding names the implication created there rather than punctuation itself. In *We finished in March, the finance team got a new reporting tool the same month.*, the defect is the implication created by joining unrelated claims, not either claim. Repair it as *We finished in March. The finance team got a new reporting tool the same month.*: splitting at the joint removes the implication and keeps the reporting-tool fact. Do the same wherever the named defect is confined to a joint; do not delete either side or supply a relationship the text does not establish. This example does not admit a wider mechanics pass: it identifies the smallest repair for the finding already in hand.\n\nBefore you return the text, compare it before and after, claim by claim. Every claim you received must still appear with its scope, certainty, attribution, chronology, causality and meaning intact unless the finding named the whole claim as the defect; that exception does not reach a sentence whose work is to bound what the text asserts, which goes only on the two conditions above, and the number or concentration of findings changes nothing about that check. The concentrated anti-slop case makes the boundary visible: removing its patterns must not discard its claims about meeting load, documentation, decisions, satisfaction, distributed work, adoption conditions, or the synchronous/asynchronous trade-off. Repair the patterns around those claims. If one cannot be separated from its pattern, keep it and report the finding unresolved; never compress several content-bearing passages into a cleaner summary.\n\nWhere the text is an `article`, a `casestudy`, a `column` or an `opinion`, measure it before you return it: run `uv run \"/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills/kntnt/library/scripts/article_anatomy.py\" -` with the complete corrected text on stdin, under the same `UV_NO_CACHE=1 UV_NO_PROJECT=1` and fresh private `TMPDIR` terms as the resolver above. Exit 0 settles the counted requirements only: it says they hold and nothing about the anatomy requirements the script does not count, so your return reports the text as conforming to the anatomy only where you examined every one of those too, and otherwise names the ones you did not examine. Exit 1 names each counted requirement of the article anatomy that fails, with the part, the rule and the figure measured: repair the ones a finding named and the ones your own repair introduced, then measure again, except a part a finding names as absent and a failure caused only by an absent part, which you leave unwritten and name in your return as left for a person to supply; a requirement the text was already failing when it reached you, and that no finding names, is left exactly as it stands like everything else the findings do not concern. Exit 2 says the script could not measure the text, and your return says so. Read every `heading_pairs` entry against the complete candidate and the loaded headline contract before returning, whatever the exit status: judge whether each part adds different information in different wording. Necessary repeated names and topic words can be legitimate, and a paraphrased echo can share no words; `shared_words` alone never authorizes a change or creates a finding. Verify absent or ambiguous sentence estimates against the text; on exit 2 inspect the pairs by hand. Repair echoes named by the findings or introduced by your own correction by wording the heading from its whole text or section without strengthening its claims and without pre-spending the judgement, figure or concession of a quotation standing under a subheading, then measure again. An unrelated pre-existing echo stays as received and is reported in your return, with the pair and reader loss; the evidence does not expand your correction authority. Report any echo you cannot repair within that authority the same way.\n\nWhere the text is a `pressrelease`, measure it before you return it the same way, with `--genre=pressrelease` before the `-`, which measures the two counted limits the genre states and nothing else of it. Exit 1 names the headline or the summary that is past its limit, with the rule and the figure measured: repair the ones a finding named and the ones your own repair introduced, then measure again, except a summary a finding names as absent, which you leave unwritten and name in your return as left for a person to supply; a limit the text was already failing when it reached you, and that no finding names, is left exactly as it stands. Exit 2 says the script found no level-1 heading or could not read the text, and your return says so. The output carries no heading pairs: read the headline and the summary against each other as the genre's review half says before returning.\n\n**Your own working files.** Any file you write for your own working purposes — a candidate you measure, a draft you compare, anything you keep while you work — goes in a directory you created for this one round, under a name made unique when you created it, such as the one `mktemp -d` returns. Remove that directory before you return, including on failure. A fixed name under a shared temporary directory is not that directory, whether the directory is the system's own or a scratchpad your session was given: another run may be working at the same time, in the same place and on this same text, and write that same name. The file you come back to is then that run's work and not yours, and when you take it for your own stale copy and delete or replace it, you destroy work that is not yours, and nothing tells the run it came from.\n\n**What you return.** The complete corrected text and a short note of which findings you repaired and which you left, with the reason for each you left. Where any repair removed a passage carrying a claim, name every removed claim and say which finding made the claim itself the defect, and name every changed claim the same way — one you left standing with its scope, certainty, attribution, chronology, causality or meaning moved, by what it now asserts rather than how far its wording moved, and the finding the repair that moved it answered. Where a repair took a limit, a connective or a bounding clause out of the text — a sentence or a heading saying what is not measured, not claimed or not known, a connective giving the text's own reason for what follows, a clause saying what a claim is not about — say what a reader of the text you return no longer has, however little of the text went with it. Name every added claim the same way, whether or not anything was removed: one the text you return asserts and the text you received has no counterpart for, an inference drawn from what that text already said among them where it asserts something that text did not say, and the finding the repair that wrote it answered. A claim with a counterpart in the text you received is changed rather than added. Reporting a removal never makes an impermissible one acceptable. The complete text: not a diff, not the changed passages, not a description of what you did. Return no commentary inside the text itself.",
+          "child_agent_id": "a859041a9fc825c28"
+        },
+        {
+          "ordinal": 17,
+          "at": "2026-09-30T18:48:05.688Z",
+          "tool_use_id": "toolu_01Jf9mvjXU7wEHzGqVtNFWoN",
+          "description": "Reply check for redline",
+          "subagent_type": "general-purpose",
+          "prompt": "You are checking one reply against the two texts it describes. You did not write the reply and you did not make the changes it reports; you know only what is below, which is what the reply's own reader will know. Find what the reply gets wrong about the texts, and only that: whether a change was a good one, whether a finding was worth making and how the text reads are questions for somebody else.\n\n**The text as it arrived.** This is the complete text the run received:\n\n````markdown\n# Bring it, fix it, keep it\n\nSomewhere at the back of a Hatherley shed there is a lamp that stopped working, waiting for the autumn clear-out and the tip. Before it goes, bring it to the Repair Café.\n\nYou will not be leaving it with us. At the Repair Café, the person who brings a broken thing stays with it. You sit down at a table, a volunteer sits down beside you, and between you, you work out what is wrong. Then, as far as you can, you mend it yourself. The volunteers cover small electrical items, bikes, clothes and small furniture, and the tea is on the table.\n\nIn September, Jo Carr brought in a standard lamp that had stopped working. With Dev, one of our volunteers, she opened the plug, found a loose wire and fitted it again herself. \"I've never opened a plug in my life,\" she said. \"Now I'd do it on my own.\" That was one of 31 items that came in that morning, among them a toaster, four bikes and a pair of jeans.\n\nNot everything can come back. We do not repair microwaves or anything with a gas supply. But since the café opened, the volunteers have kept more than a tonne of electrical goods out of landfill, one plug and one hinge at a time.\n\nThere is no charge. Two new volunteers joined in September, a retired electrician and a tailor, so there are more hands at the tables.\n\nThe lamp in the shed does not need a new owner or a skip. It needs a Saturday morning, and the person who owns it. Bring something broken to the next session.\n````\n\n**The text as delivered.** This is the complete text the run delivers:\n\n````markdown\n# Bring it, fix it, keep it\n\nSomewhere at the back of a Hatherley shed there is a lamp that stopped working, waiting for the autumn clear-out and the tip. Before it goes, bring it to the Repair Café.\n\nYou will not be leaving it with us. At the Repair Café, the person who brings a broken thing stays with it. You sit down at a table, a volunteer sits down beside you, and between you, you work out what is wrong. Then, as far as you can, you mend it yourself. There is no charge. The volunteers cover small electrical items, bikes, clothes and small furniture, and the tea is on the table.\n\nIn September, Jo Carr brought in a standard lamp that had stopped working. With Dev, one of our volunteers, she opened the plug, found a loose wire and fitted it again herself. \"I've never opened a plug in my life,\" she said. \"Now I'd do it on my own.\" That was one of 31 items that came in that morning, among them a toaster, four bikes and a pair of jeans.\n\nNot everything can come back. We do not repair microwaves or anything with a gas supply. But since the café opened, the volunteers have kept more than a tonne of electrical goods out of landfill, one plug and one hinge at a time.\n\nTwo new volunteers joined in September, a retired electrician and a tailor, so there are more hands at the tables.\n\nThe lamp in the shed does not need a new owner or a skip. It needs a Saturday morning, and the person who owns it. Sessions run from 10:00 to 13:00, usually in St Anne's church hall. Bring something broken to the next session.\n````\n\n**The reply.** This is everything the run is about to say about the two texts:\n\n````markdown\n**Configuration.** Reviewed against `brief.md`, named by `--brief`. Genre `general`, technique none and language `en_GB` all come from the brief's `kntnt` map. `input.md` has no frontmatter and so no map of its own: there was no conflict between maps, and no map was added. No technique was applied, because the brief's map says `none`. The `general` genre names no technique either.\n\n**Findings**\n\nRepaired:\n\n1. *Paragraph 5 in the text as it arrived: \"There is no charge. Two new volunteers joined in September, …\".* This paragraph put two unrelated facts together. It also left the cost standing apart, after the paragraph on what is not repaired, when it belongs with what a visit involves. That breaks the brief's order of a first visit (question 7) and the base contract's requirement that paragraphs hold together. A reader who assumes the café is a free repair shop met the cost as an afterthought. *Repair:* \"There is no charge.\" now follows \"Then, as far as you can, you mend it yourself.\" in the second paragraph. The sentence about the two new volunteers is now a paragraph of its own, word for word as before.\n2. *The ending.* The text asked the reader to \"Bring something broken to the next session\" but never said at what time sessions run or where they are held. A household that has never been could not act on the call to action from the text alone (questions 4 and 10). *Repair:* one sentence was added before the call to action: \"Sessions run from 10:00 to 13:00, usually in St Anne's church hall.\" Its source is the volunteer handbook (`material.md`, section 1): \"Sessions run on a Saturday morning, 10:00 to 13:00, usually in St Anne's church hall.\" The qualifier \"usually\" is kept.\n\nUnresolved, left for the writer:\n\n3. *Paragraph 4: \"But since the café opened, the volunteers have kept more than a tonne of electrical goods out of landfill, one plug and one hinge at a time.\"* Neither the volunteer handbook nor the September notes say how long the café has been open. Neither gives a weight of goods kept out of landfill or mentions a hinge. The reader gets an exact-sounding figure the sender cannot back. The sentence is unchanged. It needs a source, for example the logbook, or the writer's decision to cut it.\n4. *Length.* The delivered text is 292 words including the headline, below the brief's 300 to 450. The reader loses little in itself. The gap is where the brief's open research would go: the share of items fixed on the day, and the date and room of the December session. Nothing was added to pad the text.\n\nThe review allowed one correction round. The round was re-reviewed and accepted, and no round was rejected.\n\n**Claim account**\n\n- *Added,* by the repair of finding 2: sessions run from 10:00 to 13:00; they are usually held in St Anne's church hall.\n- *Moved, not changed,* by the repair of finding 1: \"There is no charge.\" still asserts that there is no charge, now in the second paragraph instead of the fifth.\n- Apart from those two additions, no claim was removed or changed. No limit, connective or bounding clause was taken out.\n\n**Brief fulfilment** (`brief.md`)\n\n1. *What is the assignment?* Partly fulfilled. The text is about the topic, and the genre `general` fits a short community-newsletter piece. It is in `en_GB`, and the headline is the working title. Having no search phrase is deliberate, so that requirement is fulfilled. The length, 292 words including the headline, falls short of 300 to 450. The reader loses little. This is left for the writer (finding 4).\n2. *Which brand is the sender?* Fulfilled. The text speaks as the café (\"You will not be leaving it with us\", \"one of our volunteers\") in a warm, practical, neighbourly tone. It says nothing about product safety standards.\n3. *What does the sender want to convey?* Fulfilled. The text leads the reader to it: \"At the Repair Café, the person who brings a broken thing stays with it.\"\n4. *Who is the reader?* Fulfilled. The opening meets the \"why now\" (\"waiting for the autumn clear-out and the tip\"). \"You will not be leaving it with us.\" answers the drop-off assumption, and \"There is no charge.\" meets the concern about saving money.\n5. *What is the text's angle?* Fulfilled: a first visit, where you sit with a volunteer and fix the thing yourself. The one sentence that looks beyond a first visit, on landfill, is reported under question 12.\n6. *What is the hook?* Fulfilled. The lamp in the shed opens the text. \"Then, as far as you can, you mend it yourself.\" and Jo Carr's \"I've never opened a plug in my life\" deliver the surprise.\n7. *How should the text be structured?* Fulfilled. The text follows a visit from arriving to fixing to limits, and ends back at the lamp: \"The lamp in the shed does not need a new owner or a skip.\" It carries the brief's one sentence: the lamp you would throw away, the volunteer beside you, and the fixing done yourself.\n8. *What should be left out?* Fulfilled. There is no safety advice, no criticism of manufacturers and no mention of donations.\n9. *What should the reader have understood afterwards?* Fulfilled: \"Now I'd do it on my own.\"\n10. *What should the reader feel, think or do afterwards?* Fulfilled after the repair of finding 2. It was partly fulfilled in the text as it arrived. The direct call to action \"Bring something broken to the next session.\" is made, and now comes with the session time and usual venue. The measure is not assessed.\n11. *RIV and the chain check.* Fulfilled over the whole text. The autumn clear-out gives relevance, the hook gives interest, and the account of a visit and what is not repaired gives value. The chain check is answered in the brief.\n12. *What sources do you know of?* Partly fulfilled. Every other fact traces to the volunteer handbook or the September notes. The landfill sentence has no support, and a reader cannot be told where the figure comes from. This is left for the writer (finding 3). Two questions are still open: the share of items fixed on the day, and the date and room of the December session. The sketch's claim that members say the café has saved them money has no support in the material, and the text is not faulted for leaving it out.\n\nNo question is unanswered.\n\n**What else changed.** Beyond the claim account, the run changed the structure in one place. It moved one sentence into the second paragraph, which leaves the September volunteer news as a paragraph of its own. The closing mechanical pass made no corrections. No slop patterns were removed. `input.md` and `brief.md` are unchanged on disk, and nothing was written.\n````\n\n**The duties the reply is held to.** Before you read the reply, read two passages and apply them as written: the section *The truth of a report about the text* in `/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills/kntnt/library/references/delivery.md`, and the sentences of `/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills/kntnt/library/references/editorial/base.review.md` that say what the claim account holds, from *A claim removed because the finding named that claim itself* to the end of that paragraph. Read nothing else of either file, and no other file.\n\n**First compare the two texts yourself**, passage by passage, frontmatter and headings included, and note every difference, before you read what the reply says about them. The reply's own account is what you are checking, so it is never how you find a difference.\n\n**Then return two lists.**\n\n1. **False statements.** Every statement of the reply that the text it names contradicts, read as *The truth of a report about the text* reads it: a statement about the text as it arrived against that text, and every other statement against the delivered text. A finding's description of a passage, a count, a length, a grammatical label, where a passage stands, what a round did to a passage, a statement that something holds everywhere or nowhere, and every entry and sentence of the claim account are statements the text can contradict. A judgement of quality — that a heading was vague, that a passage read as filler — is not. For each: quote the statement, name the text it is about, quote the passage that contradicts it, and say what is true.\n2. **Claim changes the account misses.** Every difference between the two texts that moves a claim and that the claim account leaves out, or reports short of what it did: scope narrowed or widened; a condition, a qualification, a limit or a connective lost; chronology, causality or attribution moved; or the meaning moved, a sense or a double sense lost and an actor, an ordering or a framing added among it. A headline, a standfirst and a subheading carry claims like any other passage. For each: quote the passage before and after, say what the difference did to the claim, and quote what the account says of it, or say that it says nothing.\n\nWrite `none` under a list with nothing on it. Return the two lists and nothing else, and write no file.",
+          "child_agent_id": "aa51d93675c7905e4"
+        }
+      ],
+      "interrupted": false
+    },
+    {
+      "agent_id": "a859041a9fc825c28",
+      "role": "subagent",
+      "parent_agent_id": "2cccbace-9124-4d11-ba33-c8109c21bfff",
+      "tool_use_id": "toolu_01HAqpMKxEZHofxELMBZHWxt",
+      "agent_type": "general-purpose",
+      "description": "Correction round for redline",
+      "spawn_depth": 1,
+      "transcript": "transcripts/subagents/agent-a859041a9fc825c28.jsonl",
+      "instruction": "You are making one correction to one text. You have not seen this text before, and there is nothing you are expected to remember: the text below is its current state, and the findings below are the current review's, complete and as they were written. Repair them.\n\n**The text.** This is the complete Text Artifact, exactly as it now stands:\n\n````markdown\n# Bring it, fix it, keep it\n\nSomewhere at the back of a Hatherley shed there is a lamp that stopped working, waiting for the autumn clear-out and the tip. Before it goes, bring it to the Repair Café.\n\nYou will not be leaving it with us. At the Repair Café, the person who brings a broken thing stays with it. You sit down at a table, a volunteer sits down beside you, and between you, you work out what is wrong. Then, as far as you can, you mend it yourself. The volunteers cover small electrical items, bikes, clothes and small furniture, and the tea is on the table.\n\nIn September, Jo Carr brought in a standard lamp that had stopped working. With Dev, one of our volunteers, she opened the plug, found a loose wire and fitted it again herself. \"I've never opened a plug in my life,\" she said. \"Now I'd do it on my own.\" That was one of 31 items that came in that morning, among them a toaster, four bikes and a pair of jeans.\n\nNot everything can come back. We do not repair microwaves or anything with a gas supply. But since the café opened, the volunteers have kept more than a tonne of electrical goods out of landfill, one plug and one hinge at a time.\n\nThere is no charge. Two new volunteers joined in September, a retired electrician and a tailor, so there are more hands at the tables.\n\nThe lamp in the shed does not need a new owner or a skip. It needs a Saturday morning, and the person who owns it. Bring something broken to the next session.\n````\n\n**The findings.** This is every finding the review recorded against that text, complete and in the order it recorded them:\n\n1. **Paragraph 5, \"There is no charge. Two new volunteers joined in September, a retired electrician and a tailor, so there are more hands at the tables.\"** Requirement: the base contract, *Reader and progression*: \"Keep paragraphs coherent and give supporting material a clear place beside what it supports\"; and the Writing Brief, question 7 (How should the text be structured?): \"Free structure: the piece follows a first visit in the order it happens.\" The paragraph joins two unrelated facts, and \"There is no charge.\" stands after the paragraph on what is not repaired, apart from paragraph 2, which describes what a visit involves and where the other visit condition (\"the tea is on the table\") already sits. What the reader loses: the reader the brief describes, who assumes the café is a free repair shop and cares about saving money, meets the cost as a stray afterthought between the limits and the ending instead of as part of what a first visit is like. Support (material.md, section 1, from the volunteer handbook): \"There is no charge. Tea is on the table.\" Smallest repair: move the sentence \"There is no charge.\" into paragraph 2, beside what a visit involves; leave the sentence about the two new volunteers standing where it is and as it is.\n\n2. **The ending, paragraph 6, \"It needs a Saturday morning, and the person who owns it. Bring something broken to the next session.\"** Requirement: Writing Brief, question 10 (What should the reader feel, think or do afterwards?): \"Main effect: the reader brings a broken item to the next session\", with the direct call to action \"Bring something broken to the next session.\"; and the base contract: \"Give the intended reader what they need to understand, judge or do the thing the text is for.\" The text asks the reader to come to a session but never says at what time sessions run or where they are held. What the reader loses: a Hatherley household that has heard of the café but never been (brief, question 4) is asked to come and is not told where to go or when on a Saturday, so the call to action cannot be acted on from the text alone. Support (material.md, section 1, from the volunteer handbook): \"Sessions run on a Saturday morning, 10:00 to 13:00, usually in St Anne's church hall.\" Use only that support; keep its qualifier \"usually\". The date and room of the December session are open research questions in the brief (question 12) and are not in the material: do not supply a date, and do not state the room as certain. Keep the ending's return to the lamp in the shed and keep the call to action \"Bring something broken to the next session.\" as it stands.\n\n3. **Paragraph 4, \"But since the café opened, the volunteers have kept more than a tonne of electrical goods out of landfill, one plug and one hinge at a time.\"** Requirement: the base contract, *Claims*: \"Every claim is supported by the text or its material\"; Writing Brief, question 12 (What sources do you know of?): the text's claims are judged against the volunteer handbook and the September session notes in material.md. Neither source says how long the café has been open, gives any weight of goods kept out of landfill, or mentions a hinge repair. What the reader loses: a precise-sounding figure and an outcome the sender cannot back, in a newsletter read by neighbours who may ask where it comes from. Left for the writer: the material supplies no support for the figure, and repairing it would require a source the text and material do not have; do not change, remove or replace this sentence in this round.\n\n4. **Length, the whole text.** Requirement: Writing Brief, question 1 (What is the assignment?): \"Length: roughly 300 to 450 words.\" The text runs to roughly 280 words including the headline, below the range. What the reader loses: little in itself; the gap is where the brief's open research (the share of items fixed on the day, the December session's date and room) would go. Left for the writer: a stated length is never a licence to add material, and closing this gap needs material the brief lists as still to be found out. Do not pad the text to reach the range.\n\n**The contract.** The text is a `general` in `en_GB`, and it is held to `none`. Read what it is held to before you change anything: `/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills/kntnt/library/references/editorial/base.md` and `/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills/kntnt/library/references/editorial/base.review.md`; `/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills/kntnt/library/references/editorial/genres/general.md` and the `.review.md` file beside it where one exists; `/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills/kntnt/library/references/editorial/anti-slop.md`; and the `composition`, `review` and `anti-slop` scopes of the resolved language, which `uv run \"/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills/kntnt/library/scripts/languages.py\" resolve --scope=composition --scope=review --scope=anti-slop \"en_GB\"` returns. For `article`, `casestudy`, `column` and `opinion`, and for `webcopy`, also read `/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills/kntnt/library/references/editorial/web-craft.md` and `/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills/kntnt/library/references/editorial/web-craft.review.md`; for `article`, `casestudy`, `column` and `opinion` alone, also read `/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills/kntnt/library/references/editorial/article-anatomy.md` and `/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills/kntnt/library/references/editorial/article-anatomy.review.md`, which fix the parts, order and dimensions of such a text; and for those four and for `pressrelease`, also read `/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills/kntnt/library/references/editorial/headlines.md` and `/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills/kntnt/library/references/editorial/headlines.review.md`, which say how a headline and its subheadings are written. These are the only additional genre support files: follow no other genre links and load no unselected genre or technique. A review extension that is not there is not a defect. Run the resolver with `UV_NO_CACHE=1 UV_NO_PROJECT=1` and a fresh private `TMPDIR`, removing that directory afterwards, including on failure. Load no mechanics guidance and correct no spelling, punctuation, or grammar: a mechanical pass runs after you, and work you do there is work done twice.\n\n**What you change, and what you preserve.** Repair what the findings name and nothing else. Every difference between the text you return and the text above is traced to a finding, or to what repairing a finding required, before this round is accepted, and a difference that traces to no finding is restored from the text you received — so a phrase you improved outside a finding is work that will be undone. Preserve everything the findings do not concern: every sentence, every fact, every quotation, every code sample, every heading, every piece of formatting and every line of frontmatter among them comes back exactly as you received it — a repair that improves a paragraph nobody complained about is a change nobody asked for and nobody will review. A code sample — a fenced block, an indented block, or an inline code span — is quoted material rather than the text's own prose: its contents are read past rather than read against the rules, so nothing inside one is a finding and nothing inside one is changed, the docstrings, comments, and string literals among them. Prose about code is ordinary prose and is read like every other sentence. Where a finding can be repaired several ways, make the smallest change that removes it. Where a finding names something you cannot repair without inventing a fact, changing what the text claims, or altering a quotation's meaning, stance, certainty or distinctive wording, leave that passage alone and say so: in an ordinary review this text is answerable to material you do not have, and a plausible invention is worse than an unrepaired finding. For a brief-shortfall finding carrying exact source support, use only that support or the text to supply what is missing. A repair never states the sender's message outright, since the message may always be conveyed indirectly. Source Fidelity binds the repair: retain attribution, uncertainty, scope, chronology, causality and quotation meaning. A requirement in the brief is not source evidence; where the finding has no support for a needed fact, source or quotation, leave it for the writer and report why.\n\n**A defect of your own costs the whole round.** The review that follows you establishes whether this text has a defect it did not have when you received it — a headline or a heading claiming more than the text claims, a heading repeating the passage under it, a limit your repair dropped. Where it establishes one, the whole round is rejected: the text you received is restored entire, nothing you did survives however much else you repaired, and no fresh attempt follows. So a finding you cannot repair without creating another one is a finding you leave and say so, exactly as you would one you cannot repair without inventing a fact — an unrepaired finding a person can settle costs less than a repair that has to be thrown away with everything beside it.\n\n**What a repair may take with it, and what it may not.** A finding names a defect, and what a repair removes is that defect. Where the defect a finding names is the whole of the passage — an opening that would sit in front of any text, a closing that restates what the reader has just read, a claim credited to nobody that the text cannot source — removing it may be the repair, and any claim removed with it must be named in your return. That stops at a sentence whose work is to bound what the text asserts — that something is not measured, not claimed, not witnessed or not general, or that the text is an observation of a document rather than a scene from an occasion. Remove or weaken one only where the finding names a defect inside the sentence, and only where a sentence you keep still states that limit in full, so the text bounds what it claims exactly as far as it did, or where the limit contradicts another passage of the same text. Otherwise leave it exactly as it stands and say so. Where the passage carries a claim beside the defect — a fact, an observation, the point the passage exists to make — the smallest change is the one that leaves that claim standing, and deleting the passage entire is not that change. And where you can see no way to remove the defect that does not take the claim with it, leave the passage alone and say so, exactly as you would a finding you cannot repair without inventing a fact: a person can give that claim what it needs or let it go, and a round that deletes it leaves them nothing to weigh. That judgement is about the passage in front of you and never about how much of the text is left — a short text is no licence to leave a finding standing, and a long one is no licence to go on cutting.\n\nA repair at a punctuation joint can be the smallest change even when the finding names the implication created there rather than punctuation itself. In *We finished in March, the finance team got a new reporting tool the same month.*, the defect is the implication created by joining unrelated claims, not either claim. Repair it as *We finished in March. The finance team got a new reporting tool the same month.*: splitting at the joint removes the implication and keeps the reporting-tool fact. Do the same wherever the named defect is confined to a joint; do not delete either side or supply a relationship the text does not establish. This example does not admit a wider mechanics pass: it identifies the smallest repair for the finding already in hand.\n\nBefore you return the text, compare it before and after, claim by claim. Every claim you received must still appear with its scope, certainty, attribution, chronology, causality and meaning intact unless the finding named the whole claim as the defect; that exception does not reach a sentence whose work is to bound what the text asserts, which goes only on the two conditions above, and the number or concentration of findings changes nothing about that check. The concentrated anti-slop case makes the boundary visible: removing its patterns must not discard its claims about meeting load, documentation, decisions, satisfaction, distributed work, adoption conditions, or the synchronous/asynchronous trade-off. Repair the patterns around those claims. If one cannot be separated from its pattern, keep it and report the finding unresolved; never compress several content-bearing passages into a cleaner summary.\n\nWhere the text is an `article`, a `casestudy`, a `column` or an `opinion`, measure it before you return it: run `uv run \"/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills/kntnt/library/scripts/article_anatomy.py\" -` with the complete corrected text on stdin, under the same `UV_NO_CACHE=1 UV_NO_PROJECT=1` and fresh private `TMPDIR` terms as the resolver above. Exit 0 settles the counted requirements only: it says they hold and nothing about the anatomy requirements the script does not count, so your return reports the text as conforming to the anatomy only where you examined every one of those too, and otherwise names the ones you did not examine. Exit 1 names each counted requirement of the article anatomy that fails, with the part, the rule and the figure measured: repair the ones a finding named and the ones your own repair introduced, then measure again, except a part a finding names as absent and a failure caused only by an absent part, which you leave unwritten and name in your return as left for a person to supply; a requirement the text was already failing when it reached you, and that no finding names, is left exactly as it stands like everything else the findings do not concern. Exit 2 says the script could not measure the text, and your return says so. Read every `heading_pairs` entry against the complete candidate and the loaded headline contract before returning, whatever the exit status: judge whether each part adds different information in different wording. Necessary repeated names and topic words can be legitimate, and a paraphrased echo can share no words; `shared_words` alone never authorizes a change or creates a finding. Verify absent or ambiguous sentence estimates against the text; on exit 2 inspect the pairs by hand. Repair echoes named by the findings or introduced by your own correction by wording the heading from its whole text or section without strengthening its claims and without pre-spending the judgement, figure or concession of a quotation standing under a subheading, then measure again. An unrelated pre-existing echo stays as received and is reported in your return, with the pair and reader loss; the evidence does not expand your correction authority. Report any echo you cannot repair within that authority the same way.\n\nWhere the text is a `pressrelease`, measure it before you return it the same way, with `--genre=pressrelease` before the `-`, which measures the two counted limits the genre states and nothing else of it. Exit 1 names the headline or the summary that is past its limit, with the rule and the figure measured: repair the ones a finding named and the ones your own repair introduced, then measure again, except a summary a finding names as absent, which you leave unwritten and name in your return as left for a person to supply; a limit the text was already failing when it reached you, and that no finding names, is left exactly as it stands. Exit 2 says the script found no level-1 heading or could not read the text, and your return says so. The output carries no heading pairs: read the headline and the summary against each other as the genre's review half says before returning.\n\n**Your own working files.** Any file you write for your own working purposes — a candidate you measure, a draft you compare, anything you keep while you work — goes in a directory you created for this one round, under a name made unique when you created it, such as the one `mktemp -d` returns. Remove that directory before you return, including on failure. A fixed name under a shared temporary directory is not that directory, whether the directory is the system's own or a scratchpad your session was given: another run may be working at the same time, in the same place and on this same text, and write that same name. The file you come back to is then that run's work and not yours, and when you take it for your own stale copy and delete or replace it, you destroy work that is not yours, and nothing tells the run it came from.\n\n**What you return.** The complete corrected text and a short note of which findings you repaired and which you left, with the reason for each you left. Where any repair removed a passage carrying a claim, name every removed claim and say which finding made the claim itself the defect, and name every changed claim the same way — one you left standing with its scope, certainty, attribution, chronology, causality or meaning moved, by what it now asserts rather than how far its wording moved, and the finding the repair that moved it answered. Where a repair took a limit, a connective or a bounding clause out of the text — a sentence or a heading saying what is not measured, not claimed or not known, a connective giving the text's own reason for what follows, a clause saying what a claim is not about — say what a reader of the text you return no longer has, however little of the text went with it. Name every added claim the same way, whether or not anything was removed: one the text you return asserts and the text you received has no counterpart for, an inference drawn from what that text already said among them where it asserts something that text did not say, and the finding the repair that wrote it answered. A claim with a counterpart in the text you received is changed rather than added. Reporting a removal never makes an impermissible one acceptable. The complete text: not a diff, not the changed passages, not a description of what you did. Return no commentary inside the text itself.",
+      "started_at": "2026-09-30T18:45:57.602Z",
+      "ended_at": "2026-09-30T18:46:28.245Z",
+      "seats": [
+        {
+          "model": "claude-opus-5-5",
+          "deliberation": "high",
+          "turns": 5
+        }
+      ],
+      "skill_bodies": [],
+      "calls": [
+        {
+          "ordinal": 1,
+          "at": "2026-09-30T18:46:01.299Z",
+          "tool": "Bash",
+          "tool_use_id": "toolu_01Hp2QrHaQnAjrJE8bFeizV8",
+          "arguments": {
+            "command": "B=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills/kntnt/library; cat $B/references/editorial/base.md $B/references/editorial/base.review.md $B/references/editorial/genres/general.md; ls $B/references/editorial/genres/ | grep general; cat $B/references/editorial/anti-slop.md",
+            "description": "Read contract reference files"
+          },
+          "is_error": false,
+          "result_chars": 19965,
+          "result_excerpt": "# The base contract\n\nWrite with the clarity and factual precision of a well-edited newspaper or quality magazine. Genre, audience, and purpose override that register: a letter, a speech and an advertisement keep their own character. The selected genre governs craft and form; the resolved language governs idiom, syntax and typography. Examples here illustrate meanings, not English phrases to transl"
+        },
+        {
+          "ordinal": 2,
+          "at": "2026-09-30T18:46:03.437Z",
+          "tool": "Bash",
+          "tool_use_id": "toolu_011TKs4iYrUWnFka4aZFPaqH",
+          "arguments": {
+            "command": "T=$(mktemp -d); trap 'rm -rf \"$T\"' EXIT; UV_NO_CACHE=1 UV_NO_PROJECT=1 TMPDIR=\"$T\" uv run \"/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills/kntnt/library/scripts/languages.py\" resolve --scope=composition --scope=review --scope=anti-slop \"en_GB\"",
+            "description": "Resolve en_GB language guidance"
+          },
+          "is_error": false,
+          "result_chars": 4784,
+          "result_excerpt": "Installed 1 package in 1ms\n{\n  \"selector\": \"en_GB\",\n  \"code\": \"en_GB\",\n  \"language\": \"English\",\n  \"territory\": \"GB\",\n  \"territory_name\": \"United Kingdom\",\n  \"inherits\": null,\n  \"scopes\": {\n    \"composition\": {\n      \"source\": \"en_GB\",\n      \"content\": \"British general-interest prose is understated. It states a strong claim plainly and lets the claim carry the emphasis, where American register woul"
+        }
+      ],
+      "file_activity": [
+        {
+          "ordinal": 1,
+          "at": "2026-09-30T18:46:01.299Z",
+          "tool": "Bash",
+          "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills/kntnt/library",
+          "access": "shell",
+          "established_from": "shell-command",
+          "exact": true,
+          "command": "B=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills/kntnt/library; cat $B/references/editorial/base.md $B/references/editorial/base.review.md $B/references/editorial/genres/general.md; ls $B/references/editorial/genres/ | grep general; cat $B/references/editorial/anti-slop.md"
+        },
+        {
+          "ordinal": 1,
+          "at": "2026-09-30T18:46:01.299Z",
+          "tool": "Bash",
+          "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills/kntnt/library/references/editorial/base.md",
+          "access": "shell",
+          "established_from": "shell-command",
+          "exact": true,
+          "command": "B=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills/kntnt/library; cat $B/references/editorial/base.md $B/references/editorial/base.review.md $B/references/editorial/genres/general.md; ls $B/references/editorial/genres/ | grep general; cat $B/references/editorial/anti-slop.md"
+        },
+        {
+          "ordinal": 1,
+          "at": "2026-09-30T18:46:01.299Z",
+          "tool": "Bash",
+          "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills/kntnt/library/references/editorial/base.review.md",
+          "access": "shell",
+          "established_from": "shell-command",
+          "exact": true,
+          "command": "B=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills/kntnt/library; cat $B/references/editorial/base.md $B/references/editorial/base.review.md $B/references/editorial/genres/general.md; ls $B/references/editorial/genres/ | grep general; cat $B/references/editorial/anti-slop.md"
+        },
+        {
+          "ordinal": 1,
+          "at": "2026-09-30T18:46:01.299Z",
+          "tool": "Bash",
+          "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills/kntnt/library/references/editorial/genres/general.md",
+          "access": "shell",
+          "established_from": "shell-command",
+          "exact": true,
+          "command": "B=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills/kntnt/library; cat $B/references/editorial/base.md $B/references/editorial/base.review.md $B/references/editorial/genres/general.md; ls $B/references/editorial/genres/ | grep general; cat $B/references/editorial/anti-slop.md"
+        },
+        {
+          "ordinal": 1,
+          "at": "2026-09-30T18:46:01.299Z",
+          "tool": "Bash",
+          "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills/kntnt/library/references/editorial/genres/",
+          "access": "shell",
+          "established_from": "shell-command",
+          "exact": false,
+          "command": "B=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills/kntnt/library; cat $B/references/editorial/base.md $B/references/editorial/base.review.md $B/references/editorial/genres/general.md; ls $B/references/editorial/genres/ | grep general; cat $B/references/editorial/anti-slop.md"
+        },
+        {
+          "ordinal": 1,
+          "at": "2026-09-30T18:46:01.299Z",
+          "tool": "Bash",
+          "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills/kntnt/library/references/editorial/anti-slop.md",
+          "access": "shell",
+          "established_from": "shell-command",
+          "exact": true,
+          "command": "B=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills/kntnt/library; cat $B/references/editorial/base.md $B/references/editorial/base.review.md $B/references/editorial/genres/general.md; ls $B/references/editorial/genres/ | grep general; cat $B/references/editorial/anti-slop.md"
+        },
+        {
+          "ordinal": 2,
+          "at": "2026-09-30T18:46:03.437Z",
+          "tool": "Bash",
+          "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills/kntnt/library/scripts/languages.py",
+          "access": "shell",
+          "established_from": "shell-command",
+          "exact": true,
+          "command": "T=$(mktemp -d); trap 'rm -rf \"$T\"' EXIT; UV_NO_CACHE=1 UV_NO_PROJECT=1 TMPDIR=\"$T\" uv run \"/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills/kntnt/library/scripts/languages.py\" resolve --scope=composition --scope=review --scope=anti-slop \"en_GB\""
+        }
+      ],
+      "delegations": [],
+      "interrupted": false
+    },
+    {
+      "agent_id": "aa51d93675c7905e4",
+      "role": "subagent",
+      "parent_agent_id": "2cccbace-9124-4d11-ba33-c8109c21bfff",
+      "tool_use_id": "toolu_01Jf9mvjXU7wEHzGqVtNFWoN",
+      "agent_type": "general-purpose",
+      "description": "Reply check for redline",
+      "spawn_depth": 1,
+      "transcript": "transcripts/subagents/agent-aa51d93675c7905e4.jsonl",
+      "instruction": "You are checking one reply against the two texts it describes. You did not write the reply and you did not make the changes it reports; you know only what is below, which is what the reply's own reader will know. Find what the reply gets wrong about the texts, and only that: whether a change was a good one, whether a finding was worth making and how the text reads are questions for somebody else.\n\n**The text as it arrived.** This is the complete text the run received:\n\n````markdown\n# Bring it, fix it, keep it\n\nSomewhere at the back of a Hatherley shed there is a lamp that stopped working, waiting for the autumn clear-out and the tip. Before it goes, bring it to the Repair Café.\n\nYou will not be leaving it with us. At the Repair Café, the person who brings a broken thing stays with it. You sit down at a table, a volunteer sits down beside you, and between you, you work out what is wrong. Then, as far as you can, you mend it yourself. The volunteers cover small electrical items, bikes, clothes and small furniture, and the tea is on the table.\n\nIn September, Jo Carr brought in a standard lamp that had stopped working. With Dev, one of our volunteers, she opened the plug, found a loose wire and fitted it again herself. \"I've never opened a plug in my life,\" she said. \"Now I'd do it on my own.\" That was one of 31 items that came in that morning, among them a toaster, four bikes and a pair of jeans.\n\nNot everything can come back. We do not repair microwaves or anything with a gas supply. But since the café opened, the volunteers have kept more than a tonne of electrical goods out of landfill, one plug and one hinge at a time.\n\nThere is no charge. Two new volunteers joined in September, a retired electrician and a tailor, so there are more hands at the tables.\n\nThe lamp in the shed does not need a new owner or a skip. It needs a Saturday morning, and the person who owns it. Bring something broken to the next session.\n````\n\n**The text as delivered.** This is the complete text the run delivers:\n\n````markdown\n# Bring it, fix it, keep it\n\nSomewhere at the back of a Hatherley shed there is a lamp that stopped working, waiting for the autumn clear-out and the tip. Before it goes, bring it to the Repair Café.\n\nYou will not be leaving it with us. At the Repair Café, the person who brings a broken thing stays with it. You sit down at a table, a volunteer sits down beside you, and between you, you work out what is wrong. Then, as far as you can, you mend it yourself. There is no charge. The volunteers cover small electrical items, bikes, clothes and small furniture, and the tea is on the table.\n\nIn September, Jo Carr brought in a standard lamp that had stopped working. With Dev, one of our volunteers, she opened the plug, found a loose wire and fitted it again herself. \"I've never opened a plug in my life,\" she said. \"Now I'd do it on my own.\" That was one of 31 items that came in that morning, among them a toaster, four bikes and a pair of jeans.\n\nNot everything can come back. We do not repair microwaves or anything with a gas supply. But since the café opened, the volunteers have kept more than a tonne of electrical goods out of landfill, one plug and one hinge at a time.\n\nTwo new volunteers joined in September, a retired electrician and a tailor, so there are more hands at the tables.\n\nThe lamp in the shed does not need a new owner or a skip. It needs a Saturday morning, and the person who owns it. Sessions run from 10:00 to 13:00, usually in St Anne's church hall. Bring something broken to the next session.\n````\n\n**The reply.** This is everything the run is about to say about the two texts:\n\n````markdown\n**Configuration.** Reviewed against `brief.md`, named by `--brief`. Genre `general`, technique none and language `en_GB` all come from the brief's `kntnt` map. `input.md` has no frontmatter and so no map of its own: there was no conflict between maps, and no map was added. No technique was applied, because the brief's map says `none`. The `general` genre names no technique either.\n\n**Findings**\n\nRepaired:\n\n1. *Paragraph 5 in the text as it arrived: \"There is no charge. Two new volunteers joined in September, …\".* This paragraph put two unrelated facts together. It also left the cost standing apart, after the paragraph on what is not repaired, when it belongs with what a visit involves. That breaks the brief's order of a first visit (question 7) and the base contract's requirement that paragraphs hold together. A reader who assumes the café is a free repair shop met the cost as an afterthought. *Repair:* \"There is no charge.\" now follows \"Then, as far as you can, you mend it yourself.\" in the second paragraph. The sentence about the two new volunteers is now a paragraph of its own, word for word as before.\n2. *The ending.* The text asked the reader to \"Bring something broken to the next session\" but never said at what time sessions run or where they are held. A household that has never been could not act on the call to action from the text alone (questions 4 and 10). *Repair:* one sentence was added before the call to action: \"Sessions run from 10:00 to 13:00, usually in St Anne's church hall.\" Its source is the volunteer handbook (`material.md`, section 1): \"Sessions run on a Saturday morning, 10:00 to 13:00, usually in St Anne's church hall.\" The qualifier \"usually\" is kept.\n\nUnresolved, left for the writer:\n\n3. *Paragraph 4: \"But since the café opened, the volunteers have kept more than a tonne of electrical goods out of landfill, one plug and one hinge at a time.\"* Neither the volunteer handbook nor the September notes say how long the café has been open. Neither gives a weight of goods kept out of landfill or mentions a hinge. The reader gets an exact-sounding figure the sender cannot back. The sentence is unchanged. It needs a source, for example the logbook, or the writer's decision to cut it.\n4. *Length.* The delivered text is 292 words including the headline, below the brief's 300 to 450. The reader loses little in itself. The gap is where the brief's open research would go: the share of items fixed on the day, and the date and room of the December session. Nothing was added to pad the text.\n\nThe review allowed one correction round. The round was re-reviewed and accepted, and no round was rejected.\n\n**Claim account**\n\n- *Added,* by the repair of finding 2: sessions run from 10:00 to 13:00; they are usually held in St Anne's church hall.\n- *Moved, not changed,* by the repair of finding 1: \"There is no charge.\" still asserts that there is no charge, now in the second paragraph instead of the fifth.\n- Apart from those two additions, no claim was removed or changed. No limit, connective or bounding clause was taken out.\n\n**Brief fulfilment** (`brief.md`)\n\n1. *What is the assignment?* Partly fulfilled. The text is about the topic, and the genre `general` fits a short community-newsletter piece. It is in `en_GB`, and the headline is the working title. Having no search phrase is deliberate, so that requirement is fulfilled. The length, 292 words including the headline, falls short of 300 to 450. The reader loses little. This is left for the writer (finding 4).\n2. *Which brand is the sender?* Fulfilled. The text speaks as the café (\"You will not be leaving it with us\", \"one of our volunteers\") in a warm, practical, neighbourly tone. It says nothing about product safety standards.\n3. *What does the sender want to convey?* Fulfilled. The text leads the reader to it: \"At the Repair Café, the person who brings a broken thing stays with it.\"\n4. *Who is the reader?* Fulfilled. The opening meets the \"why now\" (\"waiting for the autumn clear-out and the tip\"). \"You will not be leaving it with us.\" answers the drop-off assumption, and \"There is no charge.\" meets the concern about saving money.\n5. *What is the text's angle?* Fulfilled: a first visit, where you sit with a volunteer and fix the thing yourself. The one sentence that looks beyond a first visit, on landfill, is reported under question 12.\n6. *What is the hook?* Fulfilled. The lamp in the shed opens the text. \"Then, as far as you can, you mend it yourself.\" and Jo Carr's \"I've never opened a plug in my life\" deliver the surprise.\n7. *How should the text be structured?* Fulfilled. The text follows a visit from arriving to fixing to limits, and ends back at the lamp: \"The lamp in the shed does not need a new owner or a skip.\" It carries the brief's one sentence: the lamp you would throw away, the volunteer beside you, and the fixing done yourself.\n8. *What should be left out?* Fulfilled. There is no safety advice, no criticism of manufacturers and no mention of donations.\n9. *What should the reader have understood afterwards?* Fulfilled: \"Now I'd do it on my own.\"\n10. *What should the reader feel, think or do afterwards?* Fulfilled after the repair of finding 2. It was partly fulfilled in the text as it arrived. The direct call to action \"Bring something broken to the next session.\" is made, and now comes with the session time and usual venue. The measure is not assessed.\n11. *RIV and the chain check.* Fulfilled over the whole text. The autumn clear-out gives relevance, the hook gives interest, and the account of a visit and what is not repaired gives value. The chain check is answered in the brief.\n12. *What sources do you know of?* Partly fulfilled. Every other fact traces to the volunteer handbook or the September notes. The landfill sentence has no support, and a reader cannot be told where the figure comes from. This is left for the writer (finding 3). Two questions are still open: the share of items fixed on the day, and the date and room of the December session. The sketch's claim that members say the café has saved them money has no support in the material, and the text is not faulted for leaving it out.\n\nNo question is unanswered.\n\n**What else changed.** Beyond the claim account, the run changed the structure in one place. It moved one sentence into the second paragraph, which leaves the September volunteer news as a paragraph of its own. The closing mechanical pass made no corrections. No slop patterns were removed. `input.md` and `brief.md` are unchanged on disk, and nothing was written.\n````\n\n**The duties the reply is held to.** Before you read the reply, read two passages and apply them as written: the section *The truth of a report about the text* in `/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills/kntnt/library/references/delivery.md`, and the sentences of `/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills/kntnt/library/references/editorial/base.review.md` that say what the claim account holds, from *A claim removed because the finding named that claim itself* to the end of that paragraph. Read nothing else of either file, and no other file.\n\n**First compare the two texts yourself**, passage by passage, frontmatter and headings included, and note every difference, before you read what the reply says about them. The reply's own account is what you are checking, so it is never how you find a difference.\n\n**Then return two lists.**\n\n1. **False statements.** Every statement of the reply that the text it names contradicts, read as *The truth of a report about the text* reads it: a statement about the text as it arrived against that text, and every other statement against the delivered text. A finding's description of a passage, a count, a length, a grammatical label, where a passage stands, what a round did to a passage, a statement that something holds everywhere or nowhere, and every entry and sentence of the claim account are statements the text can contradict. A judgement of quality — that a heading was vague, that a passage read as filler — is not. For each: quote the statement, name the text it is about, quote the passage that contradicts it, and say what is true.\n2. **Claim changes the account misses.** Every difference between the two texts that moves a claim and that the claim account leaves out, or reports short of what it did: scope narrowed or widened; a condition, a qualification, a limit or a connective lost; chronology, causality or attribution moved; or the meaning moved, a sense or a double sense lost and an actor, an ordering or a framing added among it. A headline, a standfirst and a subheading carry claims like any other passage. For each: quote the passage before and after, say what the difference did to the claim, and quote what the account says of it, or say that it says nothing.\n\nWrite `none` under a list with nothing on it. Return the two lists and nothing else, and write no file.",
+      "started_at": "2026-09-30T18:48:05.698Z",
+      "ended_at": "2026-09-30T18:48:37.871Z",
+      "seats": [
+        {
+          "model": "claude-opus-5-5",
+          "deliberation": "high",
+          "turns": 6
+        }
+      ],
+      "skill_bodies": [],
+      "calls": [
+        {
+          "ordinal": 1,
+          "at": "2026-09-30T18:48:10.343Z",
+          "tool": "Bash",
+          "tool_use_id": "toolu_01NEmck1MnEwtB1LFs1Aodev",
+          "arguments": {
+            "command": "cd /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills/kntnt/library/references; awk '/^#+ The truth of a report about the text/{f=1;print;next} f&&/^#+ /{exit} f' delivery.md; echo ----; grep -n \"A claim removed because the finding named that claim itself\" editorial/base.review.md",
+            "description": "Extract the two required passages"
+          },
+          "is_error": false,
+          "result_chars": 3876,
+          "result_excerpt": "## The truth of a report about the text\n\nEverything a run says about a text is true of the text it names. That holds for every statement the reply makes about a text, and not only for its findings and its account of the claims: a count, a length, a grammatical label, where a passage stands, and what a round did to a passage — moved it, removed it, replaced it, set a heading over it — each tells th"
+        },
+        {
+          "ordinal": 2,
+          "at": "2026-09-30T18:48:26.655Z",
+          "tool": "Bash",
+          "tool_use_id": "toolu_015NMK4UEFhC6fyeFSystPN7",
+          "arguments": {
+            "command": "cat <<'EOF' | wc -w\nBring it, fix it, keep it\n\nSomewhere at the back of a Hatherley shed there is a lamp that stopped working, waiting for the autumn clear-out and the tip. Before it goes, bring it to the Repair Café.\n\nYou will not be leaving it with us. At the Repair Café, the person who brings a broken thing stays with it. You sit down at a table, a volunteer sits down beside you, and between you, you work out what is wrong. Then, as far as you can, you mend it yourself. There is no charge. The volunteers cover small electrical items, bikes, clothes and small furniture, and the tea is on the table.\n\nIn September, Jo Carr brought in a standard lamp that had stopped working. With Dev, one of our volunteers, she opened the plug, found a loose wire and fitted it again herself. \"I've never opened a plug in my life,\" she said. \"Now I'd do it on my own.\" That was one of 31 items that came in that morning, among them a toaster, four bikes and a pair of jeans.\n\nNot everything can come back. We do not repair microwaves or anything with a gas supply. But since the café opened, the volunteers have kept more than a tonne of electrical goods out of landfill, one plug and one hinge at a time.\n\nTwo new volunteers joined in September, a retired electrician and a tailor, so there are more hands at the tables.\n\nThe lamp in the shed does not need a new owner or a skip. It needs a Saturday morning, and the person who owns it. Sessions run from 10:00 to 13:00, usually in St Anne's church hall. Bring something broken to the next session.\nEOF",
+            "description": "Count words in delivered text"
+          },
+          "is_error": false,
+          "result_chars": 3,
+          "result_excerpt": "291"
+        }
+      ],
+      "file_activity": [
+        {
+          "ordinal": 1,
+          "at": "2026-09-30T18:48:10.343Z",
+          "tool": "Bash",
+          "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills/kntnt/library/references",
+          "access": "shell",
+          "established_from": "shell-command",
+          "exact": true,
+          "command": "cd /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills/kntnt/library/references; awk '/^#+ The truth of a report about the text/{f=1;print;next} f&&/^#+ /{exit} f' delivery.md; echo ----; grep -n \"A claim removed because the finding named that claim itself\" editorial/base.review.md"
+        },
+        {
+          "ordinal": 1,
+          "at": "2026-09-30T18:48:10.343Z",
+          "tool": "Bash",
+          "path": "/^#+ The truth of a report about the text/{f=1;print;next} f&&/^#+ /{exit} f",
+          "access": "shell",
+          "established_from": "shell-command",
+          "exact": true,
+          "command": "cd /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills/kntnt/library/references; awk '/^#+ The truth of a report about the text/{f=1;print;next} f&&/^#+ /{exit} f' delivery.md; echo ----; grep -n \"A claim removed because the finding named that claim itself\" editorial/base.review.md"
+        },
+        {
+          "ordinal": 1,
+          "at": "2026-09-30T18:48:10.343Z",
+          "tool": "Bash",
+          "path": "delivery.md",
+          "access": "shell",
+          "established_from": "shell-command",
+          "exact": true,
+          "command": "cd /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills/kntnt/library/references; awk '/^#+ The truth of a report about the text/{f=1;print;next} f&&/^#+ /{exit} f' delivery.md; echo ----; grep -n \"A claim removed because the finding named that claim itself\" editorial/base.review.md"
+        },
+        {
+          "ordinal": 1,
+          "at": "2026-09-30T18:48:10.343Z",
+          "tool": "Bash",
+          "path": "editorial/base.review.md",
+          "access": "shell",
+          "established_from": "shell-command",
+          "exact": false,
+          "command": "cd /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-k5fn33fw/home/.claude/skills/kntnt/library/references; awk '/^#+ The truth of a report about the text/{f=1;print;next} f&&/^#+ /{exit} f' delivery.md; echo ----; grep -n \"A claim removed because the finding named that claim itself\" editorial/base.review.md"
+        }
+      ],
+      "delegations": [],
+      "interrupted": false
+    }
+  ],
+  "status": {
+    "status": "complete",
+    "reasons": [],
+    "parent_transcript": "present",
+    "unparsable_lines": {},
+    "delegations_without_child": [],
+    "children_without_delegation": [],
+    "run_outcome": {
+      "returncode": 0,
+      "timed_out": false,
+      "interrupted": false
+    },
+    "agents": 3,
+    "calls": 21,
+    "read_from": "transcripts and runner outcome only; never the run's reply"
+  }
+}

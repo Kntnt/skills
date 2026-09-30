@@ -1,0 +1,74 @@
+I've reviewed `input.md` against `brief.md`. The text comes back exactly as it arrived. The one correction round made the text worse, so I rejected it, and all six findings are still open.
+
+The configuration is genre `general`, technique `abt` and language `en_GB`. All three came from the `kntnt` map in `brief.md`, because the invocation named none and the text has no frontmatter. The technique came from the brief's map, not from the genre, since `general` names no technique of its own. The final proofreading pass found nothing to correct, and I left no files behind.
+
+````markdown
+# Ten minutes on a Friday
+
+For four years, Priya Nand kept her receipts in a biscuit tin. She tutors maths in Leeds, and every January the tin came down from the shelf. "The last weekend of January was always gone," she says. The Self Assessment return is due on 31 January, and most of us spend the months before it the way Priya did, with receipts collecting in a drawer or an inbox until there is no more room for later.
+
+The tin has two costs. The first is the weekend. The second is quieter. Till receipts are printed on thermal paper, and they often fade within months, faster in a warm kitchen. When Priya finally opened the tin one January, two receipts from the spring had faded to blank, and she could not claim them.
+
+In March she tried something else: a session every Friday. "About ten minutes, with a cup of tea."
+
+It works like this. She photographs each receipt when she gets it, while it is still new and readable. On Friday she sits down with the week's photographs, matches each one to a line in her bank account and makes a note of anything odd, such as a payment she does not recognise or a receipt with no bank line at all. The app reads the date, the supplier and the total from each photograph and suggests the bank line it matches.
+
+Our users see the same pattern. In a survey this summer, 412 of them told us how long their last return took. Those who matched receipts at least once a week reported a median of 6 hours. Those who left receipts until January reported 19. The figures are what people told us rather than anything we measured, and they do not show that the habit caused the difference. But they point the same way as Priya's January.
+
+"January this year was an evening," she says.
+
+The tin is still on the shelf. These days it holds tea bags, and the receipts in her phone are all readable.
+````
+
+## Findings (all unresolved)
+
+1. **The dates behind Priya's short January don't work (needs the writer).** The interview in `material.md` is dated September 2026. It says she started the Friday sessions in March 2026 and that "January this year was an evening." That January is January 2026, which is before she started. The text gives no year for March and presents the short January as the habit's result, and as agreeing with the survey.
+   - *What the reader loses:* the piece's payoff, a short January caused by the Friday session, which the material does not support.
+   - *To settle it:* the writer needs to check with Priya which January and which March she meant.
+2. **"Priya's January" comes before the reader knows what it was.** The survey paragraph ends "But they point the same way as Priya's January." The quote that says what her January became ("January this year was an evening") only arrives in the next paragraph. At that point the reader knows only her lost January weekends, which point the other way.
+   - *What the reader loses:* they can't tell what the survey is supposed to agree with.
+   - *To settle it:* moving the quote ahead of the survey sentence would fix it.
+3. **The scanner sentence makes Priya sound like a user of the app.** "The app reads the date, the supplier and the total from each photograph…" ends the paragraph about Priya's routine, so "each photograph" reads as her photographs. The interview doesn't say which app she uses, if any, and the support note describes the scanner only in general terms.
+   - *What the reader loses:* Priya reads as a customer testimonial that the material doesn't back.
+   - *To settle it:* the sentence has to leave her routine but still show where the scanner fits in a Friday session (brief question 3). My attempt at this failed; see below.
+4. **Details about Priya that the interview doesn't give (needs the writer).** These are "every January the tin came down from the shelf", "such as a payment she does not recognise or a receipt with no bank line at all" and "The tin is still on the shelf. These days it holds tea bags". The interview gives the tin, the four years and "notes anything odd", and nothing more.
+   - *What the reader loses:* made-up detail reads as reported fact about a named person.
+   - *To settle it:* cutting the ending isn't the fix, because it would break the ending's link back to the opening.
+5. **"most of us" (needs the writer).** The survey gives medians for two groups, not how many users wait until January. The brief's description of its reader doesn't count as evidence.
+   - *What the reader loses:* a claim about a majority with nothing behind it.
+6. **No reason to start now (brief question 4; needs the writer).** The text never says it is October, that the second half of the tax year is starting, or that there is still time before January. The only deadline it gives is 31 January, and "In a survey this summer" dates the piece only as after the summer.
+   - *What the reader loses:* the reason to start this Friday rather than in January.
+   - *To settle it:* the material has no timing facts to write this from.
+
+## Rejected correction round
+
+The one correction round worked on findings 2 and 3:
+- It moved the quote "January this year was an evening," she says. ahead of the survey paragraph.
+- It took the scanner sentence out of Priya's routine and made it a paragraph of its own between the survey and the closing tin paragraph, changing "each photograph" to "a photograph".
+
+When I reviewed the result, the scanner fix had created a new problem. The sentence was now connected to nothing on either side, and it was no longer part of the Friday routine, which is where brief question 3 wants the reader to see the scanner fits. I rejected the whole round and restored the text as it arrived, so none of those changes are in what you're getting.
+
+Findings 2 and 3 are still open. The open question is how to take the scanner sentence out of Priya's routine while keeping it in a Friday session.
+
+## Claims
+
+The delivered text is identical to the text as it arrived, so no claim was removed, changed or added. The one claim the rejected round changed was the scanner sentence, which no longer referred to Priya's photographs. That change is not in the delivered text.
+
+## How well the text meets the brief
+
+The brief used is `brief.md`. No other brief was involved. The text has no `kntnt` map of its own, so there was nothing to conflict with the brief's map. The brief answers every question, and question 12 says nothing is left to find out.
+
+| # | Brief question | Status | Evidence and what the reader loses |
+|---|---|---|---|
+| 1 | What is the assignment? | Fulfilled | About keeping receipts in order through the tax year. A general piece in British English that suits a newsletter to sole traders. 343 words including the headline (338 in the body), within the 300–450 range. The headline matches the working title; no search phrase, as intended. |
+| 2 | Which brand is the sender? | Fulfilled | Speaks as Larkspur Ledger ("Our users", "told us"). Stays within its mandate: habits and its own app, no tax advice. Plain, friendly and a little dry ("These days it holds tea bags"). See finding 5 on "most of us". |
+| 3 | What does the sender want to convey? | Fulfilled | The scanner sentence sits inside the Friday routine, so the reader sees where the scanner fits without the message being spelled out. That same placement is what finding 3 objects to. |
+| 4 | Who is the reader? | Partly | Meets the reader: 31 January, receipts in a drawer or inbox, a receipt too faded to claim. The reason to start now is missing (finding 6), so the reader has no reason to start this Friday. |
+| 5 | What is the text's angle? | Fulfilled | Keeps to ten minutes on a Friday against a weekend in January. |
+| 6 | What is the hook? | Fulfilled | "The last weekend of January was always gone", and the two receipts faded to blank that she couldn't claim. The lost weekend is at stake before the fading comes in. |
+| 7 | How should the text be structured? | Fulfilled | The And-But-Therefore arc runs from the tin and the deadline, through the tin's two costs, to the Friday session and the survey. The ending returns to the tin, which ties back to the hook. The payoff depends on finding 1. |
+| 8 | What should be left out? | Fulfilled | No tax advice and no claim about which expenses are allowable ("she could not claim them" describes her case, not a rule). No comparison with other apps, no prices, no paid plan. |
+| 9 | What should the reader have understood afterwards? | Fulfilled | Lands there through "January this year was an evening" and the survey's 6 against 19 hours. The first depends on finding 1; the survey keeps its own caveats. |
+| 10 | What should the reader feel, think or do? | Fulfilled | The call to action is indirect: the reader leaves with "About ten minutes" and the steps (photograph each receipt when you get it, match it to a bank line on Friday, note anything odd). The success measure can't be judged from the text. |
+| 11 | Is it relevant, interesting and valuable, and does the brief hold together? | Partly | Relevant only in part: the 31 January deadline is there, the October timing isn't (finding 6). Interesting: yes, through the lost weekend and the faded receipts. Valuable: yes, through the Friday steps and Priya's example. The brief answers its own consistency check. |
+| 12 | What sources are there? | Partly | The survey is used with its caveats ("what people told us rather than anything we measured", no proof of cause). The support note covers the fading and the scanner, and the interview covers Priya's story. But findings 1, 3 and 4 are claims about Priya the interview doesn't support, so part of what reads as her reported experience has no source. |
