@@ -1,0 +1,19 @@
+Klart. Den granskade texten ligger i `output.md`. `input.md` är orörd.
+
+**Inställningar:** genre `article` och språk `sv`, båda från anropet. Ingen teknik används, eftersom genren `article` inte anger någon och ingen annan källa heller gjorde det. Texten saknar metadata, och ingen har lagts till.
+
+**Fynd (åtgärdat, inga kvar)**
+- **Ingressen, tredje meningen.** ”Här är vad ett kort försök kan säga …” kallade försöket kort utan att texten ger något att jämföra med. Brödtexten förklarar inte heller begränsningen med försökets längd. Den förklarar den med vad givarna inte mätte, alltså luftdrag och elevernas upplevelse, och med att mätningarna ännu inte är kopplade till när rummen används. Ordet antydde att ett längre försök med samma givare skulle räcka. En korrigeringsrunda har rättat felet, och en ny granskning av hela texten gav inga nya fynd.
+
+**Påståenden som ändrats**
+- **Ingressen.** Den tredje meningen lyder nu ”Här är vad försöket kan säga, och vad som behövs för att komma vidare.” Den säger inte längre att försöket var kort, och den gäller nu just det här försöket i stället för korta försök i allmänhet. Ändringen kommer från rättelsen ovan.
+
+Inga andra påståenden har tagits bort, ändrats eller lagts till. De meningar som anger vad texten inte hävdar finns kvar ordagrant: att rapporten inte anger hur länge temperaturen låg under gränsen, att gränsen är kontorets egen och vald för det här försöket, att givarna varken mätte luftdrag eller upplevelse och att finansieringen inte är beslutad. Bindeorden ”alltså” och ”därför” finns också kvar.
+
+**Artikelns delar:** Texten följer artikelns struktur utan avvikelser. Rubriken har 48 tecken och ingressen 44 ord, räknat med mätskriptet på den slutliga texten. Jag har också läst igenom det som skriptet inte räknar, och allt stämmer:
+- Ingressen fungerar på egen hand.
+- Inledningen upprepar inte ingressen utan för texten vidare.
+- Mellanrubrikerna beskriver sina avsnitt.
+- Sista avsnittet är ett avslut med en uppmaning till läsaren.
+
+**Förändringar i övrigt:** Den enda skillnaden mot originalet är att ett ovägt omdöme i ingressen har tagits bort, nämligen ordet ”kort” och den obestämda formen omkring det. Den avslutande korrekturläsningen hittade inga fel i stavning, grammatik eller skiljetecken och ändrade ingenting.

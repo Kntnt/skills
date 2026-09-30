@@ -1,0 +1,61 @@
+Granskningen är klar. Ett fynd är rättat och ett står kvar olöst, eftersom det inte går att laga utan uppgifter som texten saknar. `input.md` är orörd och inga arbetsfiler finns kvar.
+
+**Inställningar:** genren `article` och språket `sv` kommer från anropet. Ingen teknik tillämpades, eftersom genren `article` inte anger någon. Ingen brief användes.
+
+```markdown
+# Mätförsöket i Björkskolan visar när, inte varför
+
+**Under 14 av 120 lektionspass registrerade givarna i Björkskolan temperaturer under fastighetskontorets egen arbetsgräns. Fyra veckors mätningar pekar ut tillfällen att undersöka närmare, men förklarar inte varför luften var kall. Här är vad ett försök kan säga, och vad som behövs för att komma vidare.**
+
+Text: Hedda Lund
+
+En temperaturgivare mäter luften där den sitter. Det gör placeringen viktig när fastighetskontoret ska tolka fyra veckors mätningar i Björkskolans sex klassrum. Genomgången nedan visar vad värdena räcker till och var gränsen går.
+
+## En gräns för det lokala försöket
+
+Kontoret valde 20 grader Celsius som arbetsgräns. Rapporten *Mätförsök i Björkskolan*, daterad 12 mars 2026, räknar 14 lektionspass av 120 med minst en mätning under den gränsen. Hur länge temperaturen låg under den anger rapporten inte. Gränsen är kontorets egen, vald för det här försöket.
+
+Givarna mätte varken luftdrag eller elevernas upplevelse. Ett lågt värde säger alltså när luften var kall, men inte hur rummet kändes.
+
+Driftteknikern Elin Rask sammanfattar: ”Vi vet när vi behöver titta närmare. Vi vet ännu inte varför det blev kallt just då.”
+
+## Nästa försök behöver mer än givare
+
+Rask rekommenderar att temperaturserierna kopplas till rummens användningstider innan styrningen ändras. Nästa försök planeras för november med likadant placerade givare, men finansieringen är inte beslutad.
+
+Lägg därför tiderna för när rummen används bredvid mätvärdena innan nästa givare sätts upp.
+```
+
+## Fynd
+
+1. **Ingressen, tredje meningen – rättat.** Där stod ”Här är vad ett kort försök kan säga”. Att fyra veckor är *kort* var en värdering som ingenting i texten stöder: ingen jämförelse, inget mål, ingen talares bedömning. Ingressen antydde därmed att det är försökets längd som begränsar vad det kan säga. Brödtexten lägger i stället gränsen i vad som inte mättes: hur länge det var kallt, luftdrag, elevernas upplevelse och när rummen användes. Bara ordet ”kort” är struket.
+2. **Brödtextens första stycke, andra meningen – olöst.** Meningen ”Det gör placeringen viktig när fastighetskontoret ska tolka …” gör givarnas placering viktig. Texten säger aldrig var givarna satt eller hur placeringen påverkar de 14 passen. Läsaren får därför inte veta varför placeringen spelar roll här, och kan inte bedöma slutavsnittets ”likadant placerade givare”. För att laga det behövs uppgifter som texten saknar. Meningen innehåller dessutom ett påstående och fick därför stå kvar. Det här behöver en person avgöra.
+
+## Påståenden
+
+- **Ändrat:** ingressens tredje mening säger nu bara att texten visar vad ett försök kan säga och vad som behövs för att komma vidare. Den kallar inte längre försöket kort. Ändringen kommer från rättelsen av fynd 1.
+- **Borttaget:** inga påståenden.
+- **Tillagt:** inga påståenden.
+
+Rättelsen tog inte bort någon begränsning, något sambandsord eller någon avgränsande bisats.
+
+## Artikelns uppbyggnad
+
+Den färdiga texten är mätt med skriptet, och den följer artikelns uppbyggnad utan avvikelser:
+
+- Rubriken är 48 tecken och 7 ord.
+- Ingressen är 45 ord i ett stycke.
+- Brödtexten har två avsnitt med två och tre stycken.
+
+Jag har också läst igenom det skriptet inte räknar:
+
+- Ingressen står på egen hand, och det första stycket i brödtexten för texten vidare utan att upprepa den.
+- Brödtexten går att förstå utan ingressen.
+- Mellanrubrikerna beskriver sina avsnitt utan att föregripa Rasks citat.
+- Sista avsnittet är ett avslut med en uppmaning som följer av innehållet.
+
+Rubriken och mellanrubrikerna är oförändrade.
+
+## Sammanfattning av ändringarna
+
+Den enda skillnaden mot texten som den kom in är att ordet ”kort” har strukits i ingressen. Den skillnaden redovisas ovan. Den avslutande korrekturläsningen hittade inga mekaniska fel att rätta, och i övrigt är texten ordagrant densamma.

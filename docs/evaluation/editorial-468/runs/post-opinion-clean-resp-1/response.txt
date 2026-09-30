@@ -1,0 +1,7 @@
+Ingen ändring: `input.md` klarade granskningen utan anmärkningar, och korrekturläsningen hittade inga språkliga fel att rätta. Varken texten eller filen har ändrats.
+
+- **Genre:** opinion, som angavs i anropet.
+- **Språk:** svenska (`sv`), som angavs i anropet.
+- **Teknik:** ingen. Anropet angav ingen, och genren opinion anger inte heller någon som den vanligen skrivs med.
+
+Texten följer artikelanatomin utan avvikelser. Skriptet mätte de räknade gränserna, och resten granskades genom läsning. Det gäller att ingressen står på egna ben, att inledningen för argumentet framåt, att varje mellanrubrik beskriver sitt avsnitt och att sista avsnittet är ett avslut som säger vem som kan agera. Rättningsbudgeten gick inte åt.

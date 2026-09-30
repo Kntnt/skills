@@ -1,0 +1,5 @@
+Ingen ändring behövdes i `input.md`. Granskningen hittade inget att rätta, och korrekturläsningen hittade inga språkfel. Ingen fil skrevs och inga tillfälliga filer finns kvar.
+
+- **Genre och språk:** debattartikel (`opinion`) på svenska, båda enligt anropet.
+- **Berättarteknik:** ingen. Anropet angav ingen, och debattartikeln har ingen som standard.
+- **Artikelns uppbyggnad:** texten följer mallen utan avvikelser. Det gäller både de delar som räknas maskinellt, som längder och antal, och de som bedömdes vid läsning.

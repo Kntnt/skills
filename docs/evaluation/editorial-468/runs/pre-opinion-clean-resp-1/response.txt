@@ -1,0 +1,6 @@
+Texten behövde inga ändringar. Granskningen gav inga anmärkningar och korrekturen hittade inga mekaniska fel.
+
+- **Inställningar:** genren är debattartikel (`opinion`) och språket svenska (`sv`), båda angivna i anropet. Ingen berättarteknik användes, eftersom genren inte har någon som standard.
+- **Artikelns uppbyggnad:** texten följer den fasta strukturen utan avvikelser. Rubriken har 47 tecken och sex ord, ingressen 39 ord och alla stycken ligger inom gränserna. Jag läste också igenom det som inte kan räknas fram: att ingressen står på egen fot och att brödtexten klarar sig utan den, att mellanrubrikerna beskriver sina avsnitt och att sista avsnittet är ett avslut som uppmanar kommunstyrelsen till en konkret handling.
+- **Påståenden:** inget påstående har tagits bort, ändrats eller lagts till.
+- **Filer:** ingenting har skrivits. `input.md` är orörd och arbetsfilerna är borttagna.

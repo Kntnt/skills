@@ -1,0 +1,57 @@
+Jag granskade texten som artikel på svenska och ändrade ingenting i den. Artikeln är densamma som i `input.md`, tecken för tecken. Två fynd står kvar olösta; båda kräver uppgifter som bara skribenten har. Ett korrigeringsförsök gjordes men avvisades, och språkkontrollen hittade inga fel.
+
+**Inställningar:** genren `article` och språket `sv` kom från anropet. Ingen teknik användes, eftersom artikelgenren inte anger någon. Texten saknar Kntnt-metadata, och ingen lades till.
+
+```markdown
+# Mätförsöket i Björkskolan visar när, inte varför
+
+**Under 14 av 120 lektionspass registrerade givarna i Björkskolan temperaturer under fastighetskontorets egen arbetsgräns. Fyra veckors mätningar pekar ut tillfällen att undersöka närmare, men förklarar inte varför luften var kall. Här är vad ett kort försök kan säga, och vad som behövs för att komma vidare.**
+
+Text: Hedda Lund
+
+En temperaturgivare mäter luften där den sitter. Det gör placeringen viktig när fastighetskontoret ska tolka fyra veckors mätningar i Björkskolans sex klassrum. Genomgången nedan visar vad värdena räcker till och var gränsen går.
+
+## En gräns för det lokala försöket
+
+Kontoret valde 20 grader Celsius som arbetsgräns. Rapporten *Mätförsök i Björkskolan*, daterad 12 mars 2026, räknar 14 lektionspass av 120 med minst en mätning under den gränsen. Hur länge temperaturen låg under den anger rapporten inte. Gränsen är kontorets egen, vald för det här försöket.
+
+Givarna mätte varken luftdrag eller elevernas upplevelse. Ett lågt värde säger alltså när luften var kall, men inte hur rummet kändes.
+
+Driftteknikern Elin Rask sammanfattar: ”Vi vet när vi behöver titta närmare. Vi vet ännu inte varför det blev kallt just då.”
+
+## Nästa försök behöver mer än givare
+
+Rask rekommenderar att temperaturserierna kopplas till rummens användningstider innan styrningen ändras. Nästa försök planeras för november med likadant placerade givare, men finansieringen är inte beslutad.
+
+Lägg därför tiderna för när rummen används bredvid mätvärdena innan nästa givare sätts upp.
+```
+
+## Olösta fynd
+
+1. **Leaden lovar något om placeringen som brödtexten aldrig följer upp.** Meningen ”Det gör placeringen viktig när fastighetskontoret ska tolka fyra veckors mätningar i Björkskolans sex klassrum” gör givarnas placering till en nyckel för att tolka mätningarna.
+   - **Problemet:** brödtexten säger aldrig var givarna satt eller hur placeringen påverkar tolkningen. Placeringen nämns bara en gång till, i att nästa försök görs med ”likadant placerade givare”.
+   - **Vad läsaren förlorar:** läsaren kan inte avgöra om de 14 kalla passen säger något om rummen eller bara om var givarna satt. Hon vet inte heller om det är ett problem att nästa försök behåller samma placering.
+   - **Varför det är olöst:** att reda ut det kräver uppgifter som texten inte har. Meningen ”En temperaturgivare mäter luften där den sitter” avgränsar vad mätningen säger och ska stå kvar som den är.
+
+2. **”Styrningen” har inte nämnts tidigare.** I ”… innan styrningen ändras” (sista sektionen) står ordet i bestämd form.
+   - **Problemet:** texten har inte sagt vilken styrning det gäller, till exempel värme eller ventilation. Den har inte heller sagt att någon ändring är planerad.
+   - **Vad läsaren förlorar:** läsaren vet inte vad som ska ändras, och en planerad åtgärd tas för given utan stöd i texten.
+   - **Varför det är olöst:** styrningen kan inte namnges utan uppgifter som texten saknar. En mer allmän formulering skulle vidga det som tillskrivs Rask.
+
+## Försök som avvisades
+
+Korrigeringsbudgeten (en omgång) gick åt till ett försök som avvisades. Den text som levereras är texten som den var före omgången.
+
+- **Vad försöket gjorde:** det strök påståendet att givarnas placering är viktig när kontoret tolkar mätningarna. Leaden fick då lyda ”Fastighetskontoret ska tolka fyra veckors mätningar i Björkskolans sex klassrum.”
+- **Varför det avvisades:**
+  - Fynd 1 pekade ut den uteblivna uppföljningen i brödtexten som felet, inte påståendet om placeringen.
+  - Strykningen tog bort kopplingen ”Det gör …”. Leadens första mening, ”En temperaturgivare mäter luften där den sitter”, stod då utan förbindelse till det som följer.
+- **Resultat:** påståendet om placeringen finns kvar oförändrat. Fynd 1 är fortfarande olöst.
+
+## Påståendena
+
+Ingen omgång som godtogs tog bort, ändrade eller lade till något påstående. Den enda strykning som gjordes var det avvisade försöket ovan, och den ingår inte i den levererade texten. Den avslutande språkkontrollen hittade inga mekaniska fel.
+
+## Artikelns uppbyggnad
+
+Texten uppfyller artikelns anatomi utan avvikelser. Mätskriptet godkänner allt det räknar. Rubriken har till exempel 48 tecken och 7 ord, och ingressen 46 ord. De krav som skriptet inte räknar har jag bedömt genom att läsa texten. Det gäller att ingressen står på egen hand, att leaden för texten framåt och att underrubrikerna beskriver sina sektioner. Det gäller också att den sista sektionen fungerar som avslutning med en uppmaning till handling.

@@ -1,0 +1,57 @@
+Jag har granskat texten och gjort en korrigeringsrunda. Tre av nio anmärkningar är olösta och kräver uppgifter från författaren: ingressen saknas, "Föreningen" pekar inte på någon namngiven förening, och siffrorna 96 och 24 saknar källa och period. `input.md` är orörd och inga andra filer har skrivits.
+
+**Inställningar:** genre `opinion` och språk `sv` från anropet. Ingen teknik: opinionsgenren anger ingen teknik som den normalt skrivs med, och inget annat valde någon. Ingen skrivbrief, och texten har ingen `kntnt`-metadata.
+
+````markdown
+# Behåll telefonen som bokningsväg i ett halvårs försök
+
+Sanna Ek, Öppna beslut
+
+Kommunstyrelsen borde behålla telefonbokning under ett halvårs försök i alla sju lokaler.
+
+## Antalet bokningar mäter inte digital vana
+
+Det gjordes 96 bokningar på webben och 24 via telefon. Det betyder att 20 procent av bokningarna gjordes via telefon. Kommunens pilotrapport från den 8 april 2026 säger samtidigt att bokningarna inte räknar unika personer och att digital vana inte undersöktes.
+
+## Tidsåtgången för dubbla kanaler finns inte i handlingarna
+
+Förvaltningen invänder att dubbla kanaler innebär dubbel administration. Handlingarna saknar tidsmätning. Föreningen vill att förvaltningen mäter tidsåtgång och frågar användarna varför de väljer en bokningsväg. Försökets kostnad är inte beräknad.
+
+## Kommunstyrelsen borde besluta om försöket
+
+Nu är det dags för kommunstyrelsen att behålla telefonbokningen under ett halvårs försök i alla sju lokaler.
+````
+
+## Olösta anmärkningar
+
+- **Ingress saknas.** Mellan rubriken och brödtexten finns ingen ingress, alltså inget fristående, sammanfattande stycke. Läsaren får ingen sammanfattning av vad texten handlar om och varför den är värd att läsa. Enligt artikelanatomin rapporteras en saknad del men skrivs inte. Därför följer texten inte anatomin. Övriga räknade gränser håller: rubriken har 53 tecken och 8 ord, och varje mellanrubrik har högst 57 tecken.
+- **"Föreningen vill att förvaltningen mäter …"** Ingen förening nämns i brödtexten. Bara bylinen "Öppna beslut" antyder vilken organisation det kan vara, och texten säger aldrig att Öppna beslut är en förening. Läsaren vet därför inte vems krav det är. Att namnge föreningen hade varit att påstå något som texten inte säger, så den uppgiften ligger hos författaren.
+- **"Det gjordes 96 bokningar på webben och 24 via telefon."** Siffrorna saknar angiven källa och period. Nästa mening antyder pilotrapporten men säger det inte. Läsaren kan inte avgöra var siffrorna kommer ifrån eller vilken period de gäller.
+
+## Åtgärdade anmärkningar och ändrade rubriker
+
+- **Rubriken** "Kommunledningen hatar människor" tillskrev kommunledningen ett motiv som texten inte belägger. Den var också mer uppskruvad än texten och sa inte vad texten handlar om. Den nya rubriken är "Behåll telefonen som bokningsväg i ett halvårs försök".
+- **Mellanrubriken "Bakgrund"** var en ren etikett, fast avsnittet har en poäng. Den som skummade fick inget av argumentet. Den nya är "Antalet bokningar mäter inte digital vana".
+- **Mellanrubriken "Diskussion"** hade samma brist. Den nya är "Tidsåtgången för dubbla kanaler finns inte i handlingarna".
+- **Avslutningen** "Nu är det dags att agera." namngav ingen handling och ingen som ska handla. Den stod dessutom inne i avsnittet som bär argumentet och inte i ett eget avslutande avsnitt. Den har nu ett eget avsnitt med mellanrubriken "Kommunstyrelsen borde besluta om försöket", och uppmaningen upprepar förslaget från inledningen.
+
+## Påståenden
+
+**Borttagna**
+- Att kommunledningen hatar människor. Det stod i den gamla rubriken och försvann med rubrikbytet.
+- "Alla vet att politikerna vill stänga ute äldre för att spara miljoner." Hela meningen var felet: anonym attribuering ("alla vet"), ett påhittat motiv och obelagda påståenden om att telefonbokarna är äldre och att besparingen blir miljoner. Beloppet motsades också av att kostnaden inte är beräknad.
+- "Därför kostar det ingenting att behålla telefonbokningen." Påståendet var felet, eftersom det inte följer av att tiden inte är mätt och motsägs av "Försökets kostnad är inte beräknad". Med meningen försvann också sambandsordet "Därför". Läsaren får inte längre textens slutsats att bristen på tidsmätning gör telefonbokningen gratis. Mot förvaltningens invändning om dubbel administration har texten nu bara två svar: att tiden inte är mätt och att föreningen vill att den mäts.
+
+**Ändrade**
+- "Det bevisar att 20 procent av kommunens invånare inte kan använda internet." är ersatt av "Det betyder att 20 procent av bokningarna gjordes via telefon." Påståendet gäller nu andelen av bokningarna och säger ingenting om invånarna eller deras förmåga att använda internet.
+- Rubriken är ett uppslag att behålla telefonen som bokningsväg under ett halvårs försök, samma förslag som i inledningen. Att det gäller alla sju lokaler framgår inte av rubriken.
+- Mellanrubriken "Tidsåtgången för dubbla kanaler finns inte i handlingarna" upprepar "Handlingarna saknar tidsmätning", men gör det specifikt för tiden som två bokningskanaler kräver.
+- "Nu är det dags att agera." är ersatt av "Nu är det dags för kommunstyrelsen att behålla telefonbokningen under ett halvårs försök i alla sju lokaler." Uppmaningen namnger nu vem som ska göra vad och upprepar förslaget från inledningen.
+- Den nya mellanrubriken "Kommunstyrelsen borde besluta om försöket" säger att kommunstyrelsen bör fatta beslut om försöket. Det är mindre precist än förslaget i inledningen, att telefonbokningen ska behållas.
+
+**Tillagda**
+- Mellanrubriken "Antalet bokningar mäter inte digital vana" påstår att antalet bokningar inte mäter digital vana. Det är en slutsats av pilotrapportens uppgift att digital vana inte undersöktes. Texten säger det inte med de orden.
+
+Utöver dessa påståenden och de bortagna och ändrade påståendena ovan har inga andra påståenden ändrats.
+
+Utöver påståendena gäller ändringarna rubrik och struktur. Rubriken och båda mellanrubrikerna är utbytta, avslutningen har ett eget avsnitt med egen mellanrubrik och inledningen är nu ett stycke på en mening. Den anonyma attribueringen "Alla vet att" och den allmänna slutmeningen "Nu är det dags att agera." är borta. Den avslutande korrekturläsningen hittade inga mekaniska fel och ändrade ingenting.

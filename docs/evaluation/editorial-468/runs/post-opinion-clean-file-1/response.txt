@@ -1,0 +1,24 @@
+Jag har granskat texten som debattartikel på svenska och skrivit resultatet till `output.md`. `input.md` är orörd.
+
+**Inställningar:** genren (`opinion`) och språket (`sv`) kom från anropet. Ingen teknik användes, eftersom genren inte anger någon och ingen annan källa valde en. Texten saknar `kntnt`-metadata, och ingen har lagts till.
+
+**Fynd (åtgärdat)**
+
+- **Ingressens sista mening:** ”innan den ena stängs” framställde det som givet att en av bokningsvägarna ska stängas efter försöket. Brödtexten håller den frågan öppen: först efter halvåret ”går det att väga alternativen”. En läsare av ingressen kunde därför tro att skribenten redan godtar en nedläggning. Jag strök bisatsen. Resten av ingressen, också ”ett halvår till”, står kvar.
+
+Inga fynd återstår. Korrigeringsbudgeten på en omgång förbrukades.
+
+**Påståenden**
+
+- **Ändrat påstående:** ingressens sista mening säger nu bara att artikeln ger skäl att pröva båda bokningsvägarna ett halvår till. Läsaren får inte längre veta att den ena vägarna ska stängas efter försöket. Det var den ändringen fyndet ovan krävde.
+- Utöver den meningen har inget påstående strukits, ändrats eller tillkommit.
+
+**Anatomin:** den slutliga texten uppfyller artikelanatomin utan avvikelser. Rubriken har 47 tecken och sex ord, och ingressen har 35 ord. Jag har också granskat de krav som skriptet inte räknar, och de håller:
+
+- Ingressen står på egen hand.
+- Ingress och inledning upprepar inte varandra.
+- Brödtexten går att förstå utan ingressen.
+- Varje mellanrubrik beskriver sitt avsnitt.
+- Sista avsnittet är ett avslut med en uppmaning till kommunstyrelsen.
+
+Utöver den ändring som redovisas ovan har inget ändrats i texten. Den avslutande korrekturläsningen hittade inga språkfel och ändrade ingenting.

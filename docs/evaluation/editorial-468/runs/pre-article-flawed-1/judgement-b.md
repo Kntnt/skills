@@ -1,0 +1,56 @@
+# Judgement b
+
+Run directory: `/Users/thomas/Projects/skills/.git/kntnt-orchestrate/468.scratch/j/32ad9741d3d7`. Read: `work/input.md` and `response.md`, nothing else.
+
+## 1. Differences
+
+Frontmatter: none before, none after. The reply says no `kntnt` metadata was added. No difference.
+
+Formatting: headline stays `#`, standfirst stays one bold paragraph, the body stays one unbroken paragraph. No subheading added. No formatting difference.
+
+1. Headline. Before: "Givarna räddar skolan från en katastrof" (39 characters). After: "Givare i Björkskolan visade ibland under 20 grader" (50 characters). Class: repair of a visible defect. Claim change in **meaning** (rescue/catastrophe removed; now states readings below 20 degrees) and **certainty** ("räddar" as fact replaced by "ibland", which the body's 14 of 120 supports).
+2. Standfirst. Before: "Givarna registrerade temperaturer under 20 grader i sex klassrum." twice. After: "Fastighetskontorets rapport om ett fyra veckor långt mätförsök i Björkskolan redovisar hur många lektionspass som hade minst ett värde under kontorets arbetsgräns på 20 grader. Men försökets givare mätte bara luften där de satt, och flera saker undersöktes inte – från luftdrag till elevernas hälsa. Här är vad mätningarna säger och vad de inte säger." Class: repair of a visible defect (verbatim doubling). Claim changes: **scope** (the six-classroom claim leaves the standfirst and stays in the body); **meaning** ("mätningar av luftdrag … saknas" becomes "luftdrag … undersöktes inte"; "ingen effekt på hälsan har undersökts" becomes "elevernas hälsa" not examined); **meaning** (added promise "Här är vad mätningarna säger och vad de inte säger"). The standfirst drops "egen" and "inte en lagregel"; both stay in the body.
+3. Lead, first sentence. Before: "Givarna registrerade temperaturer under 20 grader i sex klassrum." After: "I ett mätförsök i Björkskolan registrerade givare temperaturer under 20 grader i sex klassrum." Class: repair of a visible defect (verbatim repeat of the standfirst, same opening word, definite form without antecedent). Claim change in **scope** (locates the readings in the Björkskolan trial, inferred from the report's title).
+4. Before: "Katastrofen lurade bakom varje hörn." After: removed. Class: repair of a visible defect (unsupported catastrophe certainty). Claim removed: **meaning**.
+5. Report sentence. Before: one sentence, "… anger att 14 av 120 lektionspass hade … på 20 grader, vilket inte är en lagregel, och att försöket varade fyra veckor, medan två givare stod vid ytterväggar och fyra vid innerväggar, utan att placeringens effekt jämfördes experimentellt." After: three sentences, "… anger att 14 av 120 lektionspass hade … vilket inte är en lagregel. Försöket varade enligt rapporten fyra veckor. Rapporten anger också att två givare stod vid ytterväggar och fyra vid innerväggar, utan att placeringens effekt jämfördes experimentellt." Class: repair of a visible defect (overloaded sentence; "medan" implying a contrast between duration and placement). Claim change in **causality/meaning** (the implied link via "medan" is removed) and a mild **attribution** firming ("enligt rapporten", "Rapporten anger också"), which states the most natural reading of the original, where every clause sits under "anger att". All figures, the date, the title, "egen", "inte en lagregel" and "utan att placeringens effekt jämfördes experimentellt" survive.
+6. Operative temperature. Before: "Operativ temperatur saknas, trots att resonemanget bygger på operativ temperatur, som är ett mått på lufttemperatur och värmestrålning från omgivande ytor, medan givarna bara mätte luften där de satt." After: "Operativ temperatur är ett mått på lufttemperatur och värmestrålning från omgivande ytor. Givarna mätte bara luften där de satt, och operativ temperatur saknas, trots att resonemanget bygger på den." Class: repair of a visible defect (concept used before it is explained). Claim change: none in substance; the contrastive "medan" becomes "och", with "bara" keeping the limitation.
+7. Health sentence. Before: "Det saknas mätningar av luftdrag och elevernas upplevelse och uppgifter om hur länge temperaturerna låg under gränsen, men ändå är det helt säkert att givarna har gjort eleverna friskare, trots att ingen effekt på hälsan har undersökts." After: "Det saknas mätningar av luftdrag och elevernas upplevelse och uppgifter om hur länge temperaturerna låg under gränsen, och ingen effekt på hälsan har undersökts." Class: repair of a visible defect (unsupported health certainty contradicted by the text's own limit). Claim removed: **certainty** and **causality**. All three limits survive.
+8. Rask and November. Before: "Driftteknikern Elin Rask rekommenderar att koppla temperaturserier till användningstider innan styrningen ändras, och nästa försök är tänkt att använda likadant placerade givare i november, fast finansieringen inte är beslutad." After: two sentences split at ", och". Class: repair of a visible defect (two unlike claims fused, implying the trial follows her advice). Claim change: **causality** (implied link removed). Recommendation, attribution, November and "fast finansieringen inte är beslutad" all survive.
+9. Before: "Det är viktigt att notera att detta är mycket viktigt för alla som tycker att temperatur är viktigt." After: removed. Class: repair of a visible defect (empty emphasis). Claim removed: **meaning** (contentless).
+10. Closing line. Before: "Kontakta oss för att rädda framtiden." After: "Kontakta oss med frågor om mätförsöket i Björkskolan." Class: repair of a visible defect (inflated sales line), with a change in **meaning** (now implies the sender can answer questions about the trial, which the text never said).
+
+No mechanical-only correction was made; the reply says the proofreading pass changed nothing.
+
+## 2. The account
+
+1. Headline: reported under "Reparerade fynd" and "Ändrade", accurately; the 50-character length is reported too.
+2. Standfirst: reported, accurately and in detail, including the two wording shifts ("mätningar", "effekten"), the dropped "lagregel" and the added promise (listed under "Tillagda"). It does not name the dropped "egen" in the standfirst, a trivial omission since the body keeps it.
+3. Lead's first sentence: reported ("Inledningen … knyter meningen givarna till ett mätförsök i Björkskolan och börjar med andra ord än ingressen"), accurately.
+4. Catastrophe sentence: reported under "Borttagna", accurately.
+5. Report sentence: reported ("delad i tre meningar", the first "medan" removed), accurately. The explicit "enligt rapporten"/"Rapporten anger också" is not named separately; it is covered only by the split. Not misleading, since it states the original's natural reading.
+6. Operative temperature: reported ("förklaras nu innan begreppet används"; second "medan" to "och" named under "Borttagna"), accurately.
+7. Health certainty: reported, accurately, with the three surviving limits listed.
+8. Rask/November split: reported, accurately.
+9. Empty emphasis: reported, accurately.
+10. Closing line: reported both as removal ("Att en kontakt räddar framtiden") and as change, stating the new implication honestly ("Det antyder att avsändaren kan svara på sådana frågor, något texten inte sa tidigare"). Accurate.
+
+Unresolved findings reported: missing byline, missing subheadings/sections/ending with the 160-word paragraph, the unanchored "resonemanget", the unidentified "oss".
+
+## 3. The frozen expectation
+
+- **Detect unsupported catastrophe/health certainty visible against explicit limits.** Met. "Det obelagda hälsopåståendet är borttaget"; "ett orsakspåstående utan stöd, som motsades av textens egen reservation"; "'Katastrofen lurade bakom varje hörn.' var uppdiktad dramatik"; headline "påstod en räddning och en katastrof som texten inte stöder".
+- **Detect a standfirst and lead that repeat each other and open on the same word.** Met. "första meningen upprepade ingressen ordagrant … Nu … börjar med andra ord än ingressen"; "samma mening stod två gånger".
+- **Detect late concept.** Met. "Operativ temperatur förklaras nu innan begreppet används."
+- **Detect an unbroken paragraph mixing unlike jobs.** Met. "Hela brödtexten är ett enda stycke på 160 ord med många tankar, långt över normen på högst 80 ord."
+- **No byline, reported as missing and left unfilled.** Met. "Byline saknas. … så raden är inte ifylld."
+- **A 187-word lead.** Met in substance, imprecise in form. The reply reports the lead paragraph as over-long, but measures it on the corrected text (160 words) and calls it "brödtexten" rather than the lead. The input paragraph is 187 words.
+- **No subheading anywhere, so the body has neither a section nor an ending.** Met. "Mellanrubriker, avsnitt och ett eget slutavsnitt saknas."
+- **A closing sales line unrelated to the explanation.** Partly met. The reply finds the line defective ("en uppskruvad uppmaning utan stöd i texten"; "'oss' … är ingen som texten nämner") but does not name its unrelatedness to the explanation; it instead rewrote the line into one tied to the trial ("Kontakta oss med frågor om mätförsöket i Björkskolan"), adding an implication it reports.
+- **The 39-character headline meets its limit and fails on truthfulness instead.** Met. The headline finding is about truth and tone, not length; the run did not flag the original's length.
+- **The missing navigation is reported, not written.** Met. "Ingen mellanrubrik och inget avsnitt har skrivits, och stycket är inte delat." The returned text has no subheading.
+- **No measured fact, exclusion or funding uncertainty is deleted.** Met. Preserved: "14 av 120 lektionspass", "kontorets egen arbetsgräns på 20 grader, vilket inte är en lagregel", "fyra veckor", "två givare stod vid ytterväggar och fyra vid innerväggar, utan att placeringens effekt jämfördes experimentellt", "Det saknas mätningar av luftdrag och elevernas upplevelse och uppgifter om hur länge temperaturerna låg under gränsen, och ingen effekt på hälsan har undersökts", "fast finansieringen inte är beslutad".
+- **Rejection: a supplied-source investigation is not a remedy.** Not committed. The reply asks for no source and proposes no investigation; findings needing facts the text lacks (byline, "resonemanget", "oss") are left open.
+
+## 4. R1
+
+**Pass.** The run addresses every concrete visible defect and every change sits inside a reported finding, while all measured facts, exclusions, the attributed recommendation and the funding uncertainty survive intact: "Det saknas mätningar av luftdrag och elevernas upplevelse och uppgifter om hur länge temperaturerna låg under gränsen, och ingen effekt på hälsan har undersökts. … Nästa försök är tänkt att använda likadant placerade givare i november, fast finansieringen inte är beslutad." The removals are legitimate (catastrophe, health certainty, empty emphasis, "rädda framtiden"). The two additions, the standfirst's promise and the closing line's new implication, are reported honestly as added or changed claims. The weaknesses are that the closing sales line was kept and made to look related rather than reported as unrelated, and that the lead's length is reported on the corrected text.

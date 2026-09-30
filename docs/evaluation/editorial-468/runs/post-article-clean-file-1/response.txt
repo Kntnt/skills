@@ -1,0 +1,15 @@
+Jag skrev texten till `output.md`. Den är byte för byte identisk med `input.md`: granskningen hittade en brist, men den går inte att åtgärda utifrån det som står i texten.
+
+**Inställningar:** genre `article` och språk `sv` (svenska), båda angivna i anropet. Ingen teknik används, eftersom genren `article` inte anger någon. Ingen brief valdes.
+
+**Artikelns anatomi:** Texten följer den utan avvikelser. Mätskriptet godkände alla räknade krav i den levererade texten: rubriken är 48 tecken, ingressen 46 ord och den består av två avsnitt. Jag läste också de krav som skriptet inte räknar och alla håller. Ingressen står på egen hand och brödtextens inledning för texten vidare. Brödtexten går att förstå utan ingressen. Mellanrubrikerna beskriver sina avsnitt, och det sista avsnittet är ett avslut som uppmanar läsaren att göra något.
+
+**Ett fynd kvarstår olöst:**
+
+- **Brödtextens inledning tar upp placeringen men följer aldrig upp den.** De två första meningarna säger att givarnas placering avgör hur mätningarna ska tolkas: ”En temperaturgivare mäter luften där den sitter. Det gör placeringen viktig …”. Resten av texten säger aldrig var givarna satt eller hur placeringen påverkar de 14 lektionspassen. Placeringen nämns bara igen i ”likadant placerade givare” inför försöket i november. Läsaren får alltså aldrig det som inledningen lovar. Läsaren kan inte heller avgöra om likadan placering i nästa försök är en styrka eller en brist.
+  - **Varför det inte åtgärdades:** En rättning skulle kräva uppgifter som texten saknar, nämligen var givarna satt och hur placeringen påverkade värdena. Den första meningen ska dessutom stå kvar, eftersom den avgränsar vad ett mätvärde säger.
+  - **Det här behöver skribenten avgöra:** antingen komplettera med fakta om placeringen, eller stryka placeringen som tema.
+
+**Rättningsrundan och korrekturläsningen:** Jag använde den enda rättningsrunda som budgeten tillät (`--max=1`). Den återkom utan ändringar, och den nya granskningen gav samma fynd. Den avslutande korrekturläsningen hittade inga fel i stavning, grammatik eller skiljetecken.
+
+**Påståenden:** Inga påståenden har tagits bort, ändrats eller lagts till. Den levererade texten är identisk med den mottagna.

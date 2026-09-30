@@ -1,0 +1,40 @@
+Konfiguration: genren `article` och språket `sv` kommer från anropet. Ingen teknik tillämpas, eftersom ingen nivå valde någon och artikelgenren inte anger någon teknik. Ingen brief valdes, och texten saknar `kntnt`-karta, så ingen metadata har lagts till.
+
+```markdown
+# Mätförsöket i Björkskolan visar när, inte varför
+
+**Under 14 av 120 lektionspass registrerade givarna i Björkskolan temperaturer under fastighetskontorets egen arbetsgräns. Fyra veckors mätningar pekar ut tillfällen att undersöka närmare, men förklarar inte varför luften var kall. Här är vad mätförsöket kan säga, och vad som behövs för att komma vidare.**
+
+Text: Hedda Lund
+
+En temperaturgivare mäter luften där den sitter. Det gör placeringen viktig när fastighetskontoret ska tolka fyra veckors mätningar i Björkskolans sex klassrum. Genomgången nedan visar vad värdena räcker till och var gränsen går.
+
+## En gräns för det lokala försöket
+
+Kontoret valde 20 grader Celsius som arbetsgräns. Rapporten *Mätförsök i Björkskolan*, daterad 12 mars 2026, räknar 14 lektionspass av 120 med minst en mätning under den gränsen. Hur länge temperaturen låg under den anger rapporten inte. Gränsen är kontorets egen, vald för det här försöket.
+
+Givarna mätte varken luftdrag eller elevernas upplevelse. Ett lågt värde säger alltså när luften var kall, men inte hur rummet kändes.
+
+Driftteknikern Elin Rask sammanfattar: ”Vi vet när vi behöver titta närmare. Vi vet ännu inte varför det blev kallt just då.”
+
+## Nästa försök behöver mer än givare
+
+Rask rekommenderar att temperaturserierna kopplas till rummens användningstider innan styrningen ändras. Nästa försök planeras för november med likadant placerade givare, men finansieringen är inte beslutad.
+
+Lägg därför tiderna för när rummen används bredvid mätvärdena innan nästa givare sätts upp.
+```
+
+**Fynd (åtgärdat):** Det gällde ingressens tredje mening, ”Här är vad ett kort försök kan säga …”. Att kalla försöket ”kort” är en värdering som behöver stöd i en jämförelse eller i någons bedömning. Texten ger inget sådant stöd, eftersom den bara anger längden, fyra veckor. För läsaren lade ordet dessutom försökets begränsning i dess längd. Textens egen förklaring pekar i stället på vad givarna mätte och inte mätte. Inga fynd återstår.
+
+**Påståenden:**
+- **Ändrat påstående (ingressen):** Meningen säger nu bara att artikeln visar vad mätförsöket kan säga och vad som krävs för att komma vidare. Den påstår inte längre att försöket var kort. Ändringen är lagningen av fyndet ovan.
+- Inget påstående har tagits bort eller lagts till, och inget annat påstående har ändrats.
+
+**Artikelanatomi:** Texten följer artikelanatomin utan avvikelser. Mätskriptet kördes på den slutliga texten: rubriken har 48 tecken och 7 ord, och ingressen har 44 ord i ett stycke. Även de krav som skriptet inte räknar har granskats:
+- Ingressen står på egna ben.
+- Inledningen för texten framåt i stället för att upprepa ingressen.
+- Brödtexten lutar sig inte mot ingressen.
+- Mellanrubrikerna beskriver sina avsnitt.
+- Sista avsnittet är ett avslut med en uppmaning som följer av innehållet.
+
+**Övriga ändringar:** Utöver ändringen ovan är texten densamma som den kom in. Rubriker, struktur och övrig formulering är orörda, och den avslutande mekaniska korrekturen gjorde inga rättelser.

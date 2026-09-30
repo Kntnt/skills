@@ -1,0 +1,7 @@
+Ingen ändring behövdes. `input.md` håller redan måttet för en debattartikel, så granskningen gav inga fynd och den mekaniska korrekturläsningen hittade inga fel att rätta.
+
+Inställningar: genren `opinion` och språket `sv` kom från anropet. Ingen teknik tillämpades, eftersom debattartikelgenren inte föreskriver någon. Varken någon beställning eller några metadata fanns med.
+
+Texten följer artikelanatomin utan avvikelser. Mätskriptet godkände de delar det räknar, och jag gick igenom resten för hand: avslutningen, ingressens och inledningens förhållande och mellanrubrikerna.
+
+Inga filer har skrivits, och `input.md` är orörd.

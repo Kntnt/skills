@@ -1,0 +1,62 @@
+Jag har granskat texten, gjort den korrigeringsrunda budgeten tillät och kört den avslutande korrekturläsningen. Budgeten (1) är förbrukad. Tre fynd står olösta: en referent i brödtexten som inte går att identifiera, vem ”oss” i uppmaningen är, och byline, mellanrubriker och avslutande avsnitt, som saknas.
+
+**Inställningar:** genre `article` och språk `sv`, båda angivna i anropet. Teknik: ingen, eftersom genren `article` inte anger någon.
+
+```markdown
+# Mätförsök i Björkskolan visar värden under 20 grader
+
+**Fastighetskontoret har redovisat fyra veckors temperaturmätningar i Björkskolan. Här är vad mätningarna visar, vad de saknar och vad driftteknikern Elin Rask rekommenderar innan styrningen ändras.**
+
+I Björkskolan registrerade givare temperaturer under 20 grader i sex klassrum. Fastighetskontorets rapport *Mätförsök i Björkskolan* från den 12 mars 2026 anger att 14 av 120 lektionspass hade minst ett värde under kontorets egen arbetsgräns på 20 grader, vilket inte är en lagregel. Rapporten anger också att försöket varade fyra veckor. Två givare stod vid ytterväggar och fyra vid innerväggar, utan att placeringens effekt jämfördes experimentellt.
+
+Operativ temperatur är ett mått på lufttemperatur och värmestrålning från omgivande ytor. Operativ temperatur saknas, trots att resonemanget bygger på den. Givarna mätte bara luften där de satt. Det saknas mätningar av luftdrag och elevernas upplevelse och uppgifter om hur länge temperaturerna låg under gränsen. Ingen effekt på hälsan har undersökts.
+
+Driftteknikern Elin Rask rekommenderar att koppla temperaturserier till användningstider innan styrningen ändras, och nästa försök är tänkt att använda likadant placerade givare i november, fast finansieringen inte är beslutad.
+
+Kontakta oss.
+```
+
+## Åtgärdade fynd
+
+1. **Rubriken** ”Givarna räddar skolan från en katastrof” sa att givarna hade räddat skolan och att en katastrof hotade. Texten stöder inget av det, och tonen var högre än textens. Den nya rubriken är 52 tecken och 8 ord.
+2. **Ingressen** var samma mening två gånger. Den stod inte på egen hand: det framgick inte vilka ”Givarna” var eller var de satt, och den sa inte vad artikeln handlar om eller vad läsaren får ut av den. Den är nu skriven ur textens eget innehåll, 25 ord.
+3. **Ingress och inledning** upprepade samma mening och började båda med ”Givarna”. Brödtexten inleddes dessutom med givarna i bestämd form, fast ingenting hade introducerat dem. Inledningen introducerar nu givarna själv.
+4. **Meningen ”Katastrofen lurade bakom varje hörn.”** var tillverkad dramatik utan stöd i texten. Den är borttagen.
+5. **Inledningsstycket** rymde flera tankar och var 187 ord i texten som den kom in. Det är nu delat i fyra stycken vid tankegränserna.
+6. **Meningen om rapporten** bar fem led, och ”medan” påstod ett samband mellan försökets längd och givarnas placering som texten inte etablerar. Meningen är nu delad. Förbehållen ”vilket inte är en lagregel” och ”utan att placeringens effekt jämfördes experimentellt” står kvar ordagrant.
+7. **Begreppet ”operativ temperatur”** användes två gånger innan det förklarades. Nu förklaras det först.
+8. **Påståendet att det var ”helt säkert att givarna har gjort eleverna friskare”** saknade stöd och motsades i samma mening. Det är borttaget. Förbehållen om vad som inte mättes och att ingen hälsoeffekt har undersökts står kvar.
+9. **Meningen ”Det är viktigt att notera att detta är mycket viktigt …”** var cirkulär utfyllnad. Den är borttagen.
+10. **Uppmaningen** lovade att en kontakt skulle ”rädda framtiden”, vilket saknar stöd. Den frasen är borttagen.
+
+## Olösta fynd
+
+- **”resonemanget”** (andra stycket) har ingen referent. Det framgår inte vems resonemang som bygger på operativ temperatur, och det går inte att lösa utan uppgifter som texten saknar.
+- **”Kontakta oss.”** Texten säger inte vilka ”oss” är eller vad en kontakt gäller, så uppmaningen följer inte av innehållet. Det behöver en person avgöra.
+- **Delar som saknas i artikelns anatomi:** byline, mellanrubriker och avsnitt, och ett avslutande avsnitt med egen mellanrubrik. De är inte skrivna. Mätskriptet rapporterar också inledningen som fyra stycken, men det beror bara på att avsnitten saknas. Texten följer alltså inte artikelanatomin.
+
+## Redovisning av påståenden
+
+**Borttagna**
+- Att givarna räddat skolan från en katastrof, i rubriken (fynd 1).
+- Att en katastrof lurade bakom varje hörn (fynd 4).
+- Att det är helt säkert att givarna gjort eleverna friskare (fynd 8).
+- Att ämnet är mycket viktigt för alla som tycker att temperatur är viktigt (fynd 9).
+- Att en kontakt räddar framtiden (fynd 10).
+
+**Ändrade**
+- **Rubriken** påstår nu att mätförsöket i Björkskolan visar värden under 20 grader (fynd 1).
+- **Ingressen** påstår nu att Fastighetskontoret har redovisat fyra veckors temperaturmätningar i Björkskolan. Uppgiften om sex klassrum finns inte längre i ingressen, bara i inledningen (fynd 2).
+- **Inledningens första mening** placerar nu givarna i Björkskolan. Texten som kom in sa inte det uttryckligen, utan platsen är hämtad från rapporttiteln *Mätförsök i Björkskolan* (fynd 3).
+- **Givarnas placering** (två vid ytterväggar, fyra vid innerväggar) står nu som en egen mening. Den är inte längre knuten till ”rapporten anger”. I texten som kom in var det oklart om rapporten var källan (fynd 6).
+
+**Tillagda**
+- Ingressens löfte att texten redovisar vad mätningarna visar, vad de saknar och vad Elin Rask rekommenderar innan styrningen ändras (fynd 2).
+
+**Förlorade sambandsord**
+- I fynd 7 försvann ”medan”, som knöt den saknade operativa temperaturen till att givarna bara mätte luften. Uppgifterna står nu bredvid varandra. Läsaren får inte längre sambandet uttryckligen, utan bara ordet ”bara” antyder det.
+- I fynd 8 försvann ”men ändå” och ”trots att” tillsammans med hälsopåståendet. Förbehållet att ingen hälsoeffekt har undersökts står kvar i sin helhet som en egen mening.
+
+## Sammanfattning av ändringarna
+
+Utöver det som redovisas ovan har körningen gjort följande. Den har tagit bort uppblåst dramatik och en utfyllnadsmening. Den har tagit bort ingressens dubblerade mening och upprepningen mellan ingress och inledning. Det långa stycket är delat i fyra, och långa meningar med kedjade bisatser är delade i kortare. Förklaringen av operativ temperatur står nu före användningen av begreppet. Den avslutande korrekturläsningen hittade inga mekaniska fel att rätta.

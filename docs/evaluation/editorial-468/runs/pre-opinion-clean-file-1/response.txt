@@ -1,0 +1,25 @@
+Jag har granskat texten och skrivit den till `output.md`. Filen fanns inte sedan tidigare. `input.md` är orörd.
+
+**Inställningar:** Genren är `opinion` och språket `sv`, båda enligt invokationen. Ingen berättarteknik användes. Den kom inte från någon flagga eller metadata, och genren `opinion` anger själv att den vanligen skrivs utan teknik. Ingen brief valdes, och texten har ingen `kntnt`-karta, så jag har inte lagt till någon.
+
+**Fynd (1 fynd, åtgärdat, inga olösta):**
+
+1. **Ingressen lutade sig mot puffen.** Ingressen talade om "båda bokningsvägarna" men nämnde bara den digitala. Att den andra är telefonbokningen stod bara i rubriken och puffen. I brödtexten dök den upp först i nästa stycke, som ett tal i pilotrapporten. En läsare som bara läste brödtexten visste alltså inte vad bytet tar bort när förslaget lades fram. Nu står det i ingressens första mening att bytet tar bort telefonbokningen, så brödtexten går att läsa utan puffen.
+
+**Påståenden:**
+- **Ändrat:** Ingressens beskrivning av bytet säger nu att bytet tar bort telefonbokningen och kan ske i september. Påståendet har en motsvarighet i puffen ("telefonbokningen … kan försvinna"). Osäkerheten i "kan ske" är kvar. Ändringen hör till åtgärden av fynd 1.
+- **Borttaget:** inga påståenden, och inga begränsningar, sambandsord eller avgränsande satser.
+- **Tillagt:** inga påståenden utöver det ändrade.
+
+Utöver den ändringen är texten densamma, och frågan om vad som hänt med påståendena gäller hela texten.
+
+**Artikelanatomin:** Texten följer artikelanatomin utan avvikelser. Mätskriptet hittar inga brister i den slutliga texten, och ingressen är 53 ord. Jag har också läst de krav som skriptet inte räknar:
+- Puffen står på egen hand.
+- Puffen och ingressen börjar med olika ord, och ingressen för resonemanget framåt.
+- Brödtexten behöver inte längre puffen.
+- Mellanrubrikerna beskriver sina avsnitt.
+- Slutet är ett eget avsnitt som ger Kommunstyrelsen en tydlig uppmaning.
+
+Rubriker, mellanrubriker, puff och byline är oförändrade.
+
+Utöver ändringen ovan har körningen inte ändrat texten: den enda skillnaden mot originalet är tillägget i ingressens första mening. Korrekturläsningen hittade inga mekaniska fel och ändrade ingenting.

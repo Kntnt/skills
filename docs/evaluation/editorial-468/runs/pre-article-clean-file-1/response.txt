@@ -1,0 +1,28 @@
+Klart. Den granskade texten ligger i `output.md`. `input.md` är orörd.
+
+**Inställningar:** genre `article` och språk `sv`, båda från anropet. Ingen teknik tillämpades, eftersom genren `article` inte anger någon. Ingen skrivbrief användes. Anropet gav tillåtelse till en korrigering, och den användes.
+
+**Fynd (1, åtgärdat)**
+
+1. **Ingressen, tredje meningen:** ”Här är vad ett kort försök kan säga …” kallade fyra veckors mätningar ”kort”. Texten ger ingen jämförelse, inget mål och ingen bedömning som stöder det ordet. Läsaren fick en antydan om att försökets längd begränsar resultatet, men texten lägger begränsningen i vad som mättes och inte mättes. Meningen lyder nu: ”Här är vad försöket kan säga, och vad som behövs för att komma vidare.”
+
+Inga fynd är olösta.
+
+**Påståenden**
+- **Ändrat:** ingressens tredje mening säger inte längre att försöket var kort. Den pekar bara på försöket. Ändringen svarar mot fynd 1.
+- **Borttaget:** inget påstående togs bort. Varje mening som avgränsar vad texten hävdar står kvar oförändrad, till exempel:
+  - vad givaren mäter
+  - att rapporten inte anger varaktigheten
+  - att gränsen är kontorets egen
+  - att luftdrag och elevernas upplevelse inte mättes
+  - att finansieringen inte är beslutad
+- **Tillagt:** inget.
+
+**Artikelns anatomi:** den slutliga texten uppfyller anatomin utan avvikelse. Mätskriptet godkänner alla räknade krav, och ingressen är 44 ord. De krav som skriptet inte räknar har jag granskat genom läsning och funnit uppfyllda:
+- Ingressen står på egen hand och säger vad läsaren får.
+- Inledningen upprepar inte ingressen.
+- Brödtexten går att förstå utan ingressen.
+- Mellanrubrikerna beskriver sina avsnitt.
+- Sista avsnittet är ett avslut, med en uppmaning som följer av innehållet.
+
+Utöver den ändring som redovisas ovan skiljer sig den levererade texten inte från originalet. Varken rubriker, struktur eller formatering har ändrats. Den avslutande korrekturläsningen hittade inga mekaniska fel att rätta.

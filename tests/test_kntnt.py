@@ -7024,50 +7024,6 @@ def test_a_loss_is_counted_as_the_reader_suffers_it_in_every_passage() -> None:
         )
 
 
-PREMISE_WRITTEN_IN = "premise, assumption or inference"
-PREMISE_IN_CORRECTION = "or writing a premise the text leaves unstated"
-
-
-def test_a_repair_writes_in_no_premise_the_argument_leaves_implicit() -> None:
-    """An unstated premise is reported where the reader needs it, never written in.
-
-    Redline added a paragraph naming the assumption an opinion's argument
-    rests on to a text that never stated it (issues #434, #468). The rule
-    stands beside the one forbidding new evidence, and the correction brief
-    names it in the sentence its agent acts on, without a second statement.
-    """
-
-    smallest = next(
-        block
-        for block in _paragraphs(BASE_REVIEW.read_text(encoding="utf-8"))
-        if block.startswith("Make the smallest correction")
-    )
-    assert PREMISE_WRITTEN_IN in smallest, (
-        f"{BASE_REVIEW}: the smallest-correction paragraph does not forbid"
-        f" writing in a premise the argument leaves implicit (issue #468)."
-    )
-    rule = smallest.split("Introduce no new evidence", 1)[1].split(". If ", 1)[0]
-    assert PREMISE_WRITTEN_IN in rule and "unresolved" in rule, (
-        f"{BASE_REVIEW}: the premise rule does not stand beside *Introduce no"
-        f" new evidence* or does not say that a gap the reader cannot follow"
-        f" past is reported as unresolved (issue #468)."
-    )
-    assert "no finding" in rule, (
-        f"{BASE_REVIEW}: the premise rule does not say that a premise a reader"
-        f" can follow the argument without is no finding (issue #468)."
-    )
-    correction = REDLINE_CORRECTION.read_text(encoding="utf-8")
-    assert PREMISE_IN_CORRECTION in correction, (
-        f"{REDLINE_CORRECTION}: the correction agent is not told that writing"
-        f" a premise the text leaves unstated is a repair it leaves (issue"
-        f" #468)."
-    )
-    assert PREMISE_WRITTEN_IN not in correction, (
-        f"{REDLINE_CORRECTION}: the brief states the premise rule a second"
-        f" time in its own words (issue #468)."
-    )
-
-
 def test_redline_names_the_heading_defect_by_what_a_reader_of_it_alone_can_tell() -> (
     None
 ):

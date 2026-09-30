@@ -1,0 +1,60 @@
+Granskningen gjordes som debattartikel (`opinion`) på svenska (`sv`), båda valda med flaggor. Ingen teknik tillämpades eftersom genren inte anger någon, och ingen writing brief användes. Jag gjorde en korrigeringsrunda, som var hela budgeten. Den godtogs vid omgranskningen, och tre fynd står kvar olösta. Korrekturpassen hittade inga mekaniska fel. `input.md` är orörd, och inga arbetsfiler ligger kvar.
+
+````markdown
+# Telefonen bör vara kvar som bokningsväg ett halvår
+
+Sanna Ek, Öppna beslut
+
+Kommunstyrelsen borde behålla telefonbokning under ett halvårs försök i alla sju lokaler.
+
+## Siffrorna visar andelen telefonbokningar men inte vilka som ringer
+
+Det gjordes 96 bokningar på webben och 24 via telefon. Det betyder att 20 procent av bokningarna gjordes via telefon. Kommunens pilotrapport från den 8 april 2026 säger samtidigt att bokningarna inte räknar unika personer och att digital vana inte undersöktes.
+
+## Tidsåtgång och kostnad för två kanaler saknas i handlingarna
+
+Förvaltningen invänder att dubbla kanaler innebär dubbel administration. Handlingarna saknar tidsmätning. Föreningen Öppna beslut vill att förvaltningen mäter tidsåtgång och frågar användarna varför de väljer en bokningsväg. Försökets kostnad är inte beräknad.
+
+## Kommunstyrelsen kan låta båda bokningsvägarna vara kvar
+
+Nu är det dags för kommunstyrelsen att behålla telefonbokningen under ett halvårs försök i alla sju lokaler.
+````
+
+## Olösta fynd
+
+1. **Ingressen saknas.** Artikelanatomin kräver en fristående ingress mellan rubriken och bylinen. Läsaren får ingen sammanfattning av vad texten handlar om och vad hen vinner på att läsa. En del som saknas skrivs inte vid en granskning, så en person får skriva den.
+2. **Ledet presenterar inte ämnet.** Läsaren får inte veta vad som bokas via telefon och webb, vilka de "sju lokalerna" är eller vad "ett halvårs försök" går ut på. För att rätta det behövs uppgifter som texten inte har.
+3. **Bokningssiffrorna saknar källa.** 96 och 24 bär argumentet, men texten säger inte var de kommer från. Att tillskriva dem pilotrapporten vore en slutsats som texten inte drar.
+
+Texten följer alltså inte artikelanatomin, eftersom ingressen saknas och ledet inte presenterar ämnet. Jag har också granskat de krav som mätskriptet inte räknar. Avslutet är en egen sektion, underrubrikerna beskriver sina sektioner och brödtexten går att förstå utan rubrikerna. Mätt på den slutliga texten har rubriken 50 tecken och 8 ord, och underrubrikerna har 66, 60 och 55 tecken.
+
+## Åtgärdade fynd
+
+- **Rubriken** påstod något texten inte bär (att kommunledningen hatar människor) och var högre i tonen än texten. "Kommunledningen" nämns inte heller någonstans i texten. Rubriken är omskriven utifrån textens förslag.
+- **Underrubrikerna "Bakgrund" och "Diskussion"** var etiketter som inte beskrev sina sektioner. En läsare som skummar kunde inte se vad sektionerna säger. Båda är omskrivna utifrån sektionernas innehåll.
+- **Ledets andra mening** åberopade en anonym auktoritet ("Alla vet") och tillskrev politikerna ett motiv som texten inte belägger. Meningen är struken.
+- **Bakgrund, andra meningen** räknade andelen på fel nämnare. 24 av 120 är 20 procent av bokningarna, inte av invånarna. "Bevisar" motsades dessutom av pilotrapportens förbehåll. Meningen är rättad.
+- **Diskussion, tredje meningen** drog slutsatsen att kostnaden är noll av att tidsmätning saknas. Den slutsatsen motsades av "Försökets kostnad är inte beräknad." Meningen är struken.
+- **"Föreningen"** hade ingen referent i brödtexten. Referenten är nu utskriven.
+- **Avslutet** "Nu är det dags att agera." angav ingen handling och ingen som kan handla, och det stod sist i en sektion som bar argumentet. Nu har avslutet en egen sektion och uppmanar till det förslag texten redan gör.
+
+## Påståenden
+
+**Borttagna**
+- "Alla vet att politikerna vill stänga ute äldre för att spara miljoner." togs bort när ledets andra mening ströks. Med meningen försvann tre påståenden: att alla vet det, att politikerna vill stänga ute äldre och att syftet är att spara miljoner.
+- "Därför kostar det ingenting att behålla telefonbokningen." ströks i Diskussion. Med meningen försvann också "Därför". Läsaren har därför inte längre textens egen slutsats att den saknade tidsmätningen betyder att telefonbokningen inte kostar något.
+
+**Ändrade**
+- **Rubriken** påstod att kommunledningen hatar människor. Nu påstår den att telefonen bör vara kvar som bokningsväg i ett halvår. Den säger inte att det gäller ett försök eller vilka lokaler det handlar om.
+- **Bakgrund, andra meningen** påstår nu att 20 procent av bokningarna gjordes via telefon. Den påstår inte längre att det är bevisat att 20 procent av invånarna inte kan använda internet.
+- **Diskussion, fjärde meningen** säger nu att kravet kommer från föreningen Öppna beslut. Det är en slutsats från bylinen, där Öppna beslut är den enda organisation som namnges. Kontrollera att det stämmer.
+- **Avslutet** uppmanar nu kommunstyrelsen att behålla telefonbokningen under ett halvårs försök i alla sju lokaler. Förut stod där en uppmaning utan handling och utan någon som skulle handla.
+- **Första underrubriken** säger att siffrorna visar andelen telefonbokningar men inte vilka som ringer. Brödtexten säger att bokningarna inte räknar unika personer i någon av kanalerna och att digital vana inte undersöktes. Rubriken sätter alltså förbehållet i termer av vilka som ringer.
+- **Andra underrubriken** säger att handlingarna saknar tidsåtgång och kostnad för två kanaler. Brödtexten säger att handlingarna saknar tidsmätning och att försökets kostnad inte är beräknad.
+
+**Tillagda**
+- Den nya underrubriken "Kommunstyrelsen kan låta båda bokningsvägarna vara kvar" påstår att kommunstyrelsen har möjlighet att behålla båda bokningsvägarna. Den ursprungliga texten riktade sig bara till kommunstyrelsen med "borde".
+
+Utöver det som står ovan står bylinen och alla övriga meningar ordagrant kvar.
+
+Utöver ändringarna av påståendena har rundan tagit bort två typiska AI-mönster: en anonym auktoritet och en generisk slutfras. Rubriken och underrubrikerna är omskrivna, och avslutet har fått en egen sektion med egen underrubrik. Korrekturpassen gjorde inga mekaniska rättelser.
