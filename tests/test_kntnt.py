@@ -6612,6 +6612,20 @@ ABT_SECOND_LEVEL = {
     " withholds or reorders the arc",
 }
 
+# Where the review half diagnoses each of those requirements, as the heading
+# of its paragraph there. The genre's precedence is no requirement on a draft
+# and has no diagnosis of its own (issue #469).
+ABT_DIAGNOSES = {
+    "**General to specific.**": "each part moving from the general to the specific",
+    "**Stakes.**": "the reader knowing what is at stake before the complication",
+    "**The situation.**": "the And holding only what the complication needs,"
+    " with the complication early",
+    "**One complication.**": "one complication per arc, other problems ordered"
+    " under it",
+    "**The consequence.**": "the consequence answering the causes the text gave",
+    "**In medias res.**": "the two ways in medias res fails",
+}
+
 # Olson's template as a form to fill, which the technique states as outcomes
 # instead (issue #469).
 ABT_TEMPLATE_LABELS = ("Ordinary World", "IF/THEN", "BECAUSE", "BUT", "BY")
@@ -6674,6 +6688,24 @@ def test_abt_states_its_second_level_where_the_writer_reads() -> None:
         f" a review may ask for stakes or causes the material never had"
         f" (issue #469)."
     )
+
+
+def test_abt_review_diagnoses_every_requirement_the_writer_is_given() -> None:
+    """Each second-level requirement has its diagnosis in the review half.
+
+    A requirement the writer is given and the reviewer has no diagnosis for
+    goes unchecked in finished prose: an And running past what the
+    complication needs, for one, would pass every review. So each requirement
+    in the base half has a paragraph of its own in the review half, and each
+    such paragraph diagnoses a requirement the base half states (issue #469).
+    """
+
+    review = ABT_REVIEW.read_text(encoding="utf-8")
+    for heading, requirement in ABT_DIAGNOSES.items():
+        assert heading in review, (
+            f"{ABT_REVIEW}: has no diagnosis for {requirement} (`{heading}`),"
+            f" so a review never finds a draft that misses it (issue #469)."
+        )
 
 
 # What the four article genres share, and where each of it is stated: the
