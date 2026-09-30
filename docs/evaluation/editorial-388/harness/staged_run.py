@@ -17,7 +17,9 @@ A run may also be a conversation: an interview is one session continued turn
 by turn, each frozen turn typed with `--resume` once the reply before it has
 ended, all inside one private root with one inventory either side of the whole
 session; and a Skill beyond the four, such as Brief, may be staged beside them
-(issue #471).
+(issue #471). A run reviewing a text against a brief is given the brief, and
+the material the brief points at, as further files beside its input (issue
+#472).
 
 It judges nothing and writes no record. What it produces is an evidence packet:
 the exact invocation material, the revisions it was staged from, the identity
@@ -343,7 +345,30 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     # A JSON array of the user's further turns, each typed into the same
     # session after the reply to the one before it (issue #471).
     parser.add_argument("--turns", type=Path, default=None)
+    # `<path>=<name>`: a further file placed beside the input under that name,
+    # such as the brief a review is read against and the material the brief
+    # points at (issue #472).
+    parser.add_argument("--extra-input", action="append", default=[])
     return parser.parse_args(argv)
+
+
+def place_material(arguments: argparse.Namespace, work: Path, packet: Path) -> None:
+    """Put every supplied file in the working directory, and a copy in the packet.
+
+    The input keeps the packet name `supplied-input.md` it always had; a further
+    file is kept as `supplied-<name>`, so the packet says what the run was given
+    without the evaluator reading it back out of the run's root.
+    """
+
+    if arguments.input is not None:
+        shutil.copy2(arguments.input, work / arguments.input_name)
+        shutil.copy2(arguments.input, packet / "supplied-input.md")
+    for extra in arguments.extra_input:
+        source, separator, name = extra.rpartition("=")
+        if not separator or not source or not name or "/" in name:
+            raise SystemExit(f"--extra-input takes <path>=<name>, not {extra!r}")
+        shutil.copy2(source, work / name)
+        shutil.copy2(source, packet / f"supplied-{name}")
 
 
 def prompts_of(arguments: argparse.Namespace) -> list[str]:
@@ -437,9 +462,7 @@ def _run(
     skills = staged_skills(arguments.extra_skill)
     stage(root, revisions["instruction_revision"], skills)
     work = root / "work"
-    if arguments.input is not None:
-        shutil.copy2(arguments.input, work / arguments.input_name)
-        shutil.copy2(arguments.input, packet / "supplied-input.md")
+    place_material(arguments, work, packet)
     secret = root / "home" / ".claude" / CREDENTIALS
     source = install_credential(secret)
 
@@ -470,6 +493,12 @@ def _run(
             "staged_skills": sorted(skills),
             "input_name": arguments.input_name if arguments.input else None,
             "input_source": str(arguments.input.resolve()) if arguments.input else None,
+            "extra_inputs": {
+                name: str(Path(source).resolve())
+                for source, _, name in (
+                    extra.rpartition("=") for extra in arguments.extra_input
+                )
+            },
             "turns": len(prompts),
             "working_directory": str(work),
             "argv": command,

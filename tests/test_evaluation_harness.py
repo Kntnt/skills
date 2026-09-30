@@ -268,3 +268,35 @@ def test_a_further_skill_is_installed_beside_the_manager(tmp_path: Path) -> None
     assert (installed / "brief" / "SKILL.md").is_file()
     assert (installed / "kntnt" / "scripts" / "kntnt.py").is_file()
     assert not (tmp_path / "export").exists()
+
+
+def test_further_material_is_staged_beside_the_input(tmp_path: Path) -> None:
+    """A brief and its material reach the run beside the text (issue #472)."""
+
+    text = tmp_path / "text.md"
+    brief = tmp_path / "some-brief.md"
+    material = tmp_path / "notes.md"
+    for path in (text, brief, material):
+        path.write_text(path.name)
+    work = tmp_path / "work"
+    packet = tmp_path / "packet"
+    work.mkdir()
+    packet.mkdir()
+    arguments = staged_run.parse_args(
+        [
+            *BASE_ARGUMENTS,
+            f"--input={text}",
+            "--input-name=input.md",
+            f"--extra-input={brief}=brief.md",
+            f"--extra-input={material}=material.md",
+        ]
+    )
+
+    staged_run.place_material(arguments, work, packet)
+
+    assert (work / "input.md").read_text() == "text.md"
+    assert (work / "brief.md").read_text() == "some-brief.md"
+    assert (work / "material.md").read_text() == "notes.md"
+    assert (packet / "supplied-input.md").read_text() == "text.md"
+    assert (packet / "supplied-brief.md").read_text() == "some-brief.md"
+    assert (packet / "supplied-material.md").read_text() == "notes.md"
