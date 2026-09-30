@@ -2,20 +2,26 @@
 # requires-python = ">=3.12"
 # dependencies = []
 # ///
-"""Measure the article anatomy's counted limits in one text.
+"""Measure the counted limits of the article anatomy, or of a press release.
 
 `references/editorial/article-anatomy.md` fixes the parts of a text in the
 genres `article`, `casestudy`, `column` and `opinion`, their order and their
 dimensions. This script counts them and exposes heading/following-text pairs
 with lexical overlap for the editorial agent to judge. ADR-0209 records why
 counted dimensions belong to a script rather than to the agent reading them.
+`references/editorial/genres/pressrelease.md` states two counted limits of its
+own, and the same script measures those, and nothing else of a release, where
+it is given that genre (see *A press release* below).
 
 ## The command line
 
-    uv run --no-cache --no-project article_anatomy.py <path>
+    uv run --no-cache --no-project article_anatomy.py [--genre=<genre>] <path>
 
 `<path>` may be `-`, which reads the text from standard input, so a
-response-targeted run needs no scratch file. The form is read off the text
+response-targeted run needs no scratch file. `--genre` takes `article`,
+`casestudy`, `column`, `opinion` or `pressrelease`; the four article genres
+and an absent `--genre` all measure the anatomy, and any other value is a
+malformed invocation. The form is read off the text
 itself: HTML where it carries block tags (`<h1>`-`<h6>`, `<p>`) and no ATX
 heading line, Markdown otherwise. The command line goes to `argparse` as in the
 Library's other engines — the machine-readable refusals here are about the text
@@ -26,8 +32,8 @@ invocation to travel in.
 
 `0` measured, and every counted requirement holds. `1` measured, and at least
 one fails. `2` not measured. All three print one JSON object on stdout, and a
-refusal carries `ok: false`, a stable `code` — `unreadable-input`, `empty-text`
-or `no-structure` — and a `message`.
+refusal carries `ok: false`, a stable `code` — `unreadable-input`, `empty-text`,
+`no-structure` or, for a press release, `no-headline` — and a `message`.
 
 ## What is read as what
 
@@ -115,6 +121,28 @@ when a member is `null`, and `[]` when both are present but share no tokens.
 The visible text keeps its original wording, case and punctuation beside the
 normalized words. A repeated name or subject word can be necessary; an echo
 can paraphrase with no shared word. Neither observation is an automatic finding.
+
+## A press release
+
+Given `--genre=pressrelease`, the text is read into blocks exactly as above and
+measured against the release's own two limits: a headline of at most 70
+characters, spaces included, and a summary of at most 60 words, counted by the
+rules above. The headline is the first level-1 heading; a second one is read
+past, and a block standing before the headline — the publication time the
+genre puts there — is no part and no failure. The summary is the first
+paragraph after the headline, a dateline opening it counted with it. A text
+with no level-1 heading is not measured, with the code `no-headline`, because
+nothing then says where the summary is; a headline with no paragraph after it
+fails, the summary reported absent.
+
+The answer carries `ok`, `format`, `conforms`, `failures` and `parts`, and
+nothing else: no `norms`, no `typical` and no `heading_pairs`, which are the
+anatomy's. `parts` carries `headline`, with `text`, `characters` and `words`,
+and `summary`, with its opening words as `text` beside `words` and
+`sentences_estimate`, or `null` where it is absent. Each failure carries
+`part`, `rule` in the genre's words, `measured` and `text`, as above. The part
+order, the quotations, the body's length and whether the summary restates the
+headline's news in its own words are the agent's to read.
 """
 
 from __future__ import annotations
@@ -166,6 +194,23 @@ LEAD_IS_ONE_PARAGRAPH = (
 )
 SUBHEADING_LIMIT = "A subheading is at most 70 characters, spaces included."
 SECTION_HOLDS_A_PARAGRAPH = "A section holds at least one paragraph."
+# The press release's two counted limits, stated by its genre file rather than
+# by the anatomy, and the genre's own words for each statement the script
+# quotes.
+RELEASE_HEADLINE_CHARACTERS = 70
+RELEASE_SUMMARY_WORDS = 60
+RELEASE_HEADLINE_IS_A_HEADING = (
+    "The headline is the release's level-1 heading (`h1` in HTML, `#` in Markdown)."
+)
+RELEASE_HEADLINE_LIMIT = "The headline is at most 70 characters, spaces included."
+RELEASE_SUMMARY_IS_FIRST = "The summary is the first paragraph after the headline."
+RELEASE_SUMMARY_LIMIT = "The summary is at most 60 words."
+
+# The genres this script measures: the four the anatomy binds, and the press
+# release, which states its limits itself.
+ANATOMY_GENRES = ("article", "casestudy", "column", "opinion")
+PRESS_RELEASE = "pressrelease"
+
 ENDING_IS_A_SECTION = (
     "The ending is a section of its own, opened by its own subheading, after at"
     " least one other section."
@@ -217,6 +262,10 @@ class Part(StrEnum):
     BEFORE_HEADLINE = "before the headline"
     FRONT = "front"
 
+    # The press release's second counted part, which the anatomy has no word
+    # for.
+    SUMMARY = "summary"
+
 
 class Form(StrEnum):
     """The form a text is written in, as the answer reports it."""
@@ -231,6 +280,7 @@ class Code(StrEnum):
     UNREADABLE_INPUT = "unreadable-input"
     EMPTY_TEXT = "empty-text"
     NO_STRUCTURE = "no-structure"
+    NO_HEADLINE = "no-headline"
 
 
 # What the reader sees as the end of a sentence, and what may stand between
@@ -1104,8 +1154,78 @@ def parts(reading: Reading) -> dict[str, Any]:
     }
 
 
-def measure(text: str) -> dict[str, Any]:
-    """Return the complete measurement of *text*."""
+def release_parts(blocks: list[Block]) -> tuple[Block, Block | None]:
+    """Return a press release's headline and summary, the summary if there is one.
+
+    The headline is the first level-1 heading, and the summary the first
+    paragraph after it; a block that is neither heading nor paragraph standing
+    between the two displaces nothing.
+    """
+
+    headline_at = next(
+        (
+            at
+            for at, block in enumerate(blocks)
+            if block.kind is Kind.HEADING and block.level == 1
+        ),
+        None,
+    )
+    if headline_at is None:
+        raise Unmeasurable(
+            Code.NO_HEADLINE,
+            f"{RELEASE_HEADLINE_IS_A_HEADING} This text carries none, so there is"
+            " no headline to measure and nothing to find the summary after.",
+        )
+
+    summary = next(
+        (block for block in blocks[headline_at + 1 :] if block.kind is Kind.PARAGRAPH),
+        None,
+    )
+    return blocks[headline_at], summary
+
+
+def measure_release(form: Form, blocks: list[Block]) -> dict[str, Any]:
+    """Return the measurement of a press release's two counted limits."""
+
+    headline, summary = release_parts(blocks)
+    failures: list[dict[str, Any]] = []
+
+    if len(headline.text) > RELEASE_HEADLINE_CHARACTERS:
+        failures.append(
+            entry(
+                Part.HEADLINE,
+                RELEASE_HEADLINE_LIMIT,
+                f"{len(headline.text)} characters",
+                headline.text,
+            )
+        )
+
+    if summary is None:
+        failures.append(entry(Part.SUMMARY, RELEASE_SUMMARY_IS_FIRST, "absent", None))
+    elif len(words(summary.text)) > RELEASE_SUMMARY_WORDS:
+        failures.append(
+            entry(
+                Part.SUMMARY,
+                RELEASE_SUMMARY_LIMIT,
+                f"{len(words(summary.text))} words",
+                opening(summary.text),
+            )
+        )
+
+    return {
+        "ok": True,
+        "format": form,
+        "conforms": not failures,
+        "failures": failures,
+        "parts": {
+            Part.HEADLINE: heading_figures(headline),
+            Part.SUMMARY: (paragraph_figures(summary) if summary is not None else None),
+        },
+    }
+
+
+def measure(text: str, genre: str | None = None) -> dict[str, Any]:
+    """Return the complete measurement of *text*, as *genre* counts it."""
 
     body = body_of(text)
     if not body.strip():
@@ -1120,6 +1240,9 @@ def measure(text: str) -> dict[str, Any]:
             Code.NO_STRUCTURE,
             f"read as {form}, the text carries no heading and no paragraph.",
         )
+
+    if genre == PRESS_RELEASE:
+        return measure_release(form, blocks)
 
     reading = read_structure(blocks)
     failures = requirements(reading)
@@ -1139,7 +1262,16 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     """Parse the measuring script's command line."""
 
     parser = argparse.ArgumentParser(
-        description="Measure the counted limits of the article anatomy in one text."
+        description=(
+            "Measure the counted limits of the article anatomy, or of a press"
+            " release, in one text."
+        )
+    )
+    parser.add_argument(
+        "--genre",
+        choices=(*ANATOMY_GENRES, PRESS_RELEASE),
+        default=None,
+        help="the genre whose counted limits to measure; the anatomy by default",
     )
     parser.add_argument("path", help="the text to measure, or `-` for standard input")
     return parser.parse_args(argv)
@@ -1151,7 +1283,7 @@ def main(argv: list[str] | None = None) -> int:
     args = parse_args(sys.argv[1:] if argv is None else argv)
 
     try:
-        payload = measure(read(args.path))
+        payload = measure(read(args.path), args.genre)
     except Unmeasurable as exc:
         refusal = {"ok": False, "code": exc.code, "message": str(exc)}
         print(json.dumps(refusal, indent=2, ensure_ascii=False))

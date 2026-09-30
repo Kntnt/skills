@@ -1,0 +1,49 @@
+Den här granskningen gjorde en korrigeringsrunda och en avslutande korrekturläsning. Kvar är ett olöst fynd: kontaktuppgiften saknar e-postadress. `input.md` är oförändrad och inga andra filer har skapats.
+
+**Inställningar:** genren är `pressrelease` och språket `sv`, båda enligt anropet. Ingen teknik används, eftersom pressreleasegenren inte anger någon. Korrigeringsbudgeten var 1 och hela budgeten användes.
+
+```markdown
+# Tallmora Energi inviger solpark med 12 000 solpaneler den 3 juni
+
+Den 3 juni 2027 inviger Tallmora Energi AB en ny solpark på den mark vid Kvarnbacken i Tallmora där kommunens grustäkt låg fram till 2019. Parken har 12 000 solpaneler på 18 hektar, har kostat 64 miljoner kronor att bygga och beräknas ge 7,5 gigawattimmar el om året.
+
+”Solparken visar att en gammal grustäkt kan göra nytta igen, och vi vill att elen som används i Tallmora också ska produceras här”, säger Maria Ekholm, vd för Tallmora Energi.
+
+Den beräknade årsproduktionen på 7,5 gigawattimmar motsvarar enligt bolagets egen beräkning hushållselen i omkring 1 500 villor i kommunen. Siffran för årsproduktionen är en uppskattning, och den verkliga produktionen beror på hur soligt året blir. Elen levereras till elnätet och säljs inte direkt till hushållen i närheten.
+
+Området är inhägnat och inte öppet för allmänheten, utom vid invigningen den 3 juni klockan 14.00–16.00, då bolaget visar parken för besökare.
+
+Noter till redaktionen: Grustäkten vid Kvarnbacken avvecklades 2019. Tallmora Energi fick tillstånd att bygga solparken 2025, och bygget började i augusti 2026. Parken har 40 växelriktare. Panelerna står i rader i öst–västlig riktning, och markytan mellan raderna betas av får från en gård i närheten. Bilder från solparken finns på https://example.se/press/kvarnbacken-bilder.
+
+Kontakt: Lina Sjögren, kommunikationschef, Tallmora Energi, 070-000 00 00
+
+Tallmora Energi AB ägs av Tallmora kommun och levererar el och fjärrvärme till omkring 14 000 kunder i kommunen.
+```
+
+## Fynd
+
+**Åtgärdade**
+
+1. **Rubriken var för lång.** Den var 97 tecken när texten kom in, och gränsen är 70. Rubriken har skrivits om och är nu 64 tecken, uppmätt på den levererade texten.
+2. **Summeringen var för lång.** Den var 62 ord när texten kom in, och gränsen är 60. Jämförelsen med villorna har flyttats till brödtexten. Summeringen är nu 48 ord, uppmätt på den levererade texten.
+3. **Summeringens första mening upprepade rubrikens formulering.** Meningen var rubrikens mening med samma ord i samma ordning, med bara ”AB” och årtalet tillagda. Den har formulerats om med egna ord och innehåller fortfarande samma uppgifter.
+4. **Brödtexten hade tre stycken.** Det tredje stycket var bakgrund och upprepade summeringens uppgift om grustäkten. Stycket om grustäktens och bygget historik har flyttats oförändrat till början av ”Noter till redaktionen:”. Brödtexten består nu av två stycken.
+
+**Olöst**
+
+5. **Kontaktuppgiften saknar e-postadress.** Det finns bara namn, titel och telefonnummer, så en journalist har ett sätt mindre att nå kontaktpersonen. Texten innehåller ingen e-postadress och en sådan kan inte hittas på. Adressen måste fyllas i av någon som har den.
+
+## Vad som hände med påståendena
+
+- **Ändrat påstående – rubriken (fynd 1):** Rubriken säger nu bara att Tallmora Energi inviger en solpark med 12 000 solpaneler den 3 juni.
+  - Den säger inte längre var parken ligger (vid Kvarnbacken i Tallmora).
+  - Den säger inte heller att parken är ny.
+  - Båda uppgifterna står kvar i summeringen, men den som bara läser rubriken får inte veta platsen.
+- **Flyttat, oförändrat påstående (fynd 2):** Att årsproduktionen enligt bolagets egen beräkning motsvarar hushållselen i omkring 1 500 villor står nu i brödtexten, inte i summeringen.
+  - Påståendet är fortfarande tillskrivet bolaget och fortfarande en beräkning.
+  - Journalisten som kopierar rubrik och summering får alltså inte med villajämförelsen.
+- **Flyttade, oförändrade påståenden (fynd 4):** Att grustäkten avvecklades 2019, att tillståndet kom 2025 och att bygget började i augusti 2026 står nu i bakgrunden.
+
+Utöver det som räknas upp ovan har inga påståenden tagits bort, lagts till eller ändrats.
+
+Jämfört med texten som kom in har rubriken kortats, summeringens första mening formulerats om och summeringen kortats genom att en mening flyttats till brödtexten. Historikstycket har också flyttats från brödtexten till bakgrunden. Korrekturläsningen hittade inga mekaniska fel och gjorde därför inga ändringar.
