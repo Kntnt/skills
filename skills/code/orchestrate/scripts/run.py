@@ -600,9 +600,10 @@ def current_branch(cwd: Path) -> str:
 def default_branch(cwd: Path) -> str | None:
     """Return the repository's default branch, or None where it cannot be told.
 
-    None means there is nothing to bound the closed half of a report by
-    (ADR-0058), which is all the answer is asked for. It gates nothing: a run
-    works the branch the developer left it on either way (ADR-0064).
+    None means only that there is no fork point to bound the closed half of a
+    report by (ADR-0058), which is all the answer is asked for; the run's start
+    day may still bound it (ADR-0227). It gates nothing: a run works the branch
+    the developer left it on either way (ADR-0064).
     """
 
     # What the remote calls its default settles it wherever there is one.
@@ -1591,7 +1592,12 @@ class RunState:
     """What one run remembers of itself between invocations.
 
     Its ordinary account is remembered rather than relied on: the tracker and
-    branch can reproduce it when this state is absent (ADR-0051). Its declared
+    branch can reproduce it when this state is absent (ADR-0051), except the
+    day the run started. Losing that day costs the report its bound on the
+    default branch, where the closed question is then asked whole and a full
+    page refused, and costs nothing else; losing every run file partway
+    through a run and continuing on a later UTC day leaves out of the report
+    the tickets the run closed before that day (ADR-0227). Its declared
     commit contracts and their claim boundaries are relied-on projections: a
     declared ticket requires readable state to begin and enforce its contract,
     while a checking verb with absent or unreadable state deliberately follows
@@ -1614,6 +1620,13 @@ class RunState:
     copied into the routing account when that account is created, so a dry run
     composes none and a resumed invocation reports the one it already has.
 
+    `start_day` is the UTC date, `YYYY-MM-DD`, of the first plan that wrote a
+    state into a run subdirectory holding no run file, and every later write
+    carries it forward unchanged. It bounds the closed tickets a report reads
+    where no fork point can. A state written by an earlier release, or written
+    over a run file that survived without a state the plan took up, has none
+    and never gets one (ADR-0227).
+
     `contracts` projects the tracker declarations, and `contract_bases` holds
     the claim boundaries that the branch can no longer establish after work
     begins. `progress` remembers the session-supplied dashboard values that a
@@ -1631,6 +1644,7 @@ class RunState:
     contracts: dict[int, list[dict[str, Any]]]
     contract_bases: dict[int, str]
     run_identity: str | None = None
+    start_day: str | None = None
     progress: ProgressState | None = None
     approval_expected: str | None = None
     approval_identity: str | None = None
@@ -1644,7 +1658,8 @@ def state_file(directory: str | None) -> Path | None:
     The harness knows where this session's scratch directory is and the engine
     does not, so the directory is passed in. None is not an error: the state is
     an optimisation, and a harness that offers no such directory costs a run
-    nothing but the tracker call the state would have saved.
+    nothing but the tracker call the state would have saved and, on the
+    default branch, the start day that bounds its report's closed question.
 
     It resolves into a subdirectory of that directory rather than its root,
     which the run shares with every subagent it dispatches (ADR-0071).
@@ -1956,6 +1971,9 @@ def decode_state(contents: str) -> RunState:
         run_identity=(
             None if stored.get("run_identity") is None else str(stored["run_identity"])
         ),
+        start_day=(
+            None if stored.get("start_day") is None else str(stored["start_day"])
+        ),
         progress=(
             None
             if progress is None
@@ -2080,6 +2098,8 @@ def write_state(path: Path | None, state: RunState) -> str | None:
         details.pop("progress")
     if state.run_identity is None:
         details.pop("run_identity")
+    if state.start_day is None:
+        details.pop("start_day")
     if state.approval_met is None:
         details = {
             key: value
@@ -3233,14 +3253,16 @@ def closed_since(cwd: Path) -> str | None:
 
     A day rather than an instant, because a whole day of slack in the safe
     direction costs a handful of tickets nobody reads and saves the question
-    of whose clock settles a boundary. None where there is nothing to bound
-    by — no default branch to fork from, the default branch itself in hand,
-    or no common ancestor to find — and the full-page guard is what answers
-    for the question then, as it always did.
+    of whose clock settles a boundary. None where the fork point gives no
+    bound — no default branch to fork from, the default branch itself in hand,
+    or no common ancestor to find. Where the run's state records the day it
+    started, that day now bounds the question instead, and only where it
+    records none is the full-page guard what answers for it (ADR-0227).
     """
 
-    # Nothing to fork from is nothing to bound by: no default to name it, or
-    # the default itself in hand, and the question is left whole.
+    # Nothing to fork from gives no fork-point bound: no default to name it,
+    # or the default itself in hand. `closed_listing` may still bound the
+    # question by the run's start day.
     branch = current_branch(cwd)
     default = default_branch(cwd)
     if default is None or default == branch:
@@ -3254,18 +3276,20 @@ def closed_since(cwd: Path) -> str | None:
         return None
 
 
-def closed_listing(cwd: Path) -> list[dict[str, Any]]:
+def closed_listing(cwd: Path, start_day: str | None) -> list[dict[str, Any]]:
     """Return the finished tickets this machine's runs took on this branch.
 
     The ready label discovers unsuccessful work closed before Reconciliation;
     the neutral historical label discovers tickets whose active workflow state
     was cleaned on completion. The fork date bounds that growing history to
-    what this branch could have recorded.
+    what this branch could have recorded; where there is no fork point, the
+    day the run started, *start_day*, bounds it instead (ADR-0227).
     """
 
-    # A branch with nothing to fork from bounds nothing, and the question is
-    # asked whole — where the guard against a full page is what answers.
-    since = closed_since(cwd)
+    # The fork point bounds the question where there is one, and the run's
+    # start day where there is not. With neither the question is asked whole,
+    # where the guard against a full page is what answers.
+    since = closed_since(cwd) or start_day
     bound = ["--search", f"closed:>={since}"] if since else []
 
     # An unsuccessful ticket closed outside Orchestrate still carries the
@@ -3525,6 +3549,51 @@ def no_ticket_reason(scope: list[Aim] | None) -> str:
     return f"nothing {named} names is an open ticket carrying '{READY_LABEL}'"
 
 
+def run_start_day(path: Path | None, remembered: RunState | None) -> str | None:
+    """Return the start day a plan writing its state now records, or None.
+
+    A state the plan takes up keeps the day it holds, or keeps having none: a
+    state an earlier release wrote records none, and a day given to it now
+    would be later than the tickets that run already closed. A run that has
+    no file of its own yet starts today, as a UTC date, because that is how
+    the tracker reads a bare date in `closed:>=` and a local date a day ahead
+    of it would bound away this run's own first tickets. Anywhere else a run
+    file has survived without a state the plan takes up, and that run may
+    already have closed tickets before today, so it gets no day and its
+    report asks the question whole.
+    """
+
+    if remembered is not None:
+        return remembered.start_day
+    if holds_a_run_file(path):
+        return None
+    return datetime.now(UTC).date().isoformat()
+
+
+def holds_a_run_file(path: Path | None) -> bool:
+    """Say whether the run subdirectory *path* lives in holds any run file.
+
+    Every file there counts except the dashboard, which is written with no run
+    behind it and is never an input to an engine decision, and a dot file,
+    which is what `write_atomically` leaves while it replaces one. Counting
+    the rest rather than naming them is what lets a run file added later count
+    without anyone remembering it. A directory that cannot be read is treated
+    as holding one, the side where no day is written.
+    """
+
+    if path is None:
+        return False
+    try:
+        return any(
+            entry.name != PROGRESS_FILE and not entry.name.startswith(".")
+            for entry in path.parent.iterdir()
+        )
+    except FileNotFoundError:
+        return False
+    except OSError:
+        return True
+
+
 def build_plan(
     cwd: Path,
     *,
@@ -3547,6 +3616,7 @@ def build_plan(
     branch = current_branch(cwd)
     default = default_branch(cwd)
     remembered = read_plan_state(state_path, branch)
+    start_day = run_start_day(state_path, remembered)
     routing, routing_reason = frozen_routing(state_path)
     listed = open_listing(cwd)
     scope = resolve_scope(cwd, reference, listed) if reference is not None else None
@@ -3743,6 +3813,7 @@ def build_plan(
                 },
                 contract_bases=remembered.contract_bases if remembered else {},
                 run_identity=plan.run_identity,
+                start_day=start_day,
                 progress=remembered.progress if remembered else None,
                 approval_expected=(
                     approval
@@ -3789,6 +3860,7 @@ def build_plan(
                 contracts={},
                 contract_bases={},
                 run_identity=carried_identity,
+                start_day=start_day,
                 progress=remembered.progress if remembered else None,
                 approval_expected=approval,
                 approval_identity=plan.approval_identity,
@@ -7534,7 +7606,10 @@ def cmd_report(cwd: Path, reference: str | None, state_path: Path | None) -> int
     try:
         branch = current_branch(cwd)
         listed = open_listing(cwd)
-        finished = closed_listing(cwd)
+        remembered = read_unscoped_state(state_path)
+        finished = closed_listing(
+            cwd, None if remembered is None else remembered.start_day
+        )
         scope = (
             resolve_scope(cwd, reference, listed + finished)
             if reference is not None

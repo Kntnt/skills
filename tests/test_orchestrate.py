@@ -3782,8 +3782,9 @@ def test_the_run_says_which_half_of_its_state_is_rebuilt_and_which_is_not() -> N
     """The two halves of the state directory are read differently, and neither is fatal.
 
     ADR-0051 and ADR-0052 make the run's account a reading of the tracker and
-    the branch, recoverable wherever the session's own memory is gone. The
-    routing account has no second source, but it needs none: a decision is
+    the branch, recoverable wherever the session's own memory is gone, except
+    the day the run started: losing it costs the report its default-branch
+    bound and nothing else (ADR-0227). The routing account has no second source, but it needs none: a decision is
     reproducible because it was recorded, so a lost account costs one further
     call per remaining role rather than the run (ADR-0182).
     """
@@ -3793,7 +3794,8 @@ def test_the_run_says_which_half_of_its_state_is_rebuilt_and_which_is_not() -> N
     assert "remembered rather than relied on" in body, (
         f"{SKILL / 'SKILL.md'}: the state paragraph keeps ADR-0052's rule for"
         f" the run's ordinary account — the tracker and the branch say all of"
-        f" it again (ADR-0052)."
+        f" it again except the day the run started, whose loss costs only the"
+        f" report's default-branch bound (ADR-0052, ADR-0227)."
     )
     assert (
         "it refuses, those being the locks its first frontier was routed under" in body
