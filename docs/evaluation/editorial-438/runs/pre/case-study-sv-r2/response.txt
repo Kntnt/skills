@@ -1,0 +1,67 @@
+```markdown
+---
+kntnt:
+  genre: casestudy
+  technique: none
+  language: sv
+---
+
+# Elm Quay provade gemensam reparationslogg i två hus
+
+Efter åtta veckors försök med en reparationslogg från Svale Systems skulle arbetsledaren för underhållet på bostadsbolaget Elm Quay Housing göra om det – men med en extra vecka för förberedelser. Här är vad teamet gjorde, vad siffrorna visar och vad de inte visar.
+
+Av Thomas Barregren
+
+Elm Quay Housing förvaltar 640 lägenheter. Tidigare förvarades telefonanmälningar och mejl var för sig. I september 2025 beslutade bolagets eget underhållsteam att pröva en gemensam logg i två av husen. Arbetsledaren Maya Lind berättar hur teamet lade upp arbetet och vad hon skulle ändra på inför nästa hus.
+
+## Teamet prövade loggen, Svale satte upp den
+
+Innan valet föll på Svale Systems testade underhållsteamet om loggen kunde visa var varje reparation stod. Någon jämförelse med andra leverantörer finns inte att tillgå.
+
+Svale konfigurerade loggen och utbildade sex medarbetare vid två tillfällen. Teamet höll telefonanmälan öppen för de boende. Vad teamet ville uppnå förklarar Maya Lind i en mejlintervju:
+
+– Vi ville att kvällsskiftet skulle se vad morgonskiftet redan hade gjort. Kategorierna var våra; Svale hjälpte oss att lägga in dem i loggen.
+
+## Anteckningen tillskriver inte programvaran den kortare mediantiden
+
+Enligt Elm Quays interna anteckning om försöket, daterad den 4 december 2025, fördes 31 felanmälningar in. Anteckningen räknar inte med akuta ärenden eller arbete som beställdes före försöket.
+
+Mediantiden från anmälan till att ärendet fördelades var två arbetsdagar under försöket, mot tre under de åtta veckorna dessförinnan. Arbetsbelastningen skilde sig mellan perioderna, och anteckningen tillskriver uttryckligen inte skillnaden programvaran. Siffran gäller tiden till fördelning, inte tiden tills reparationen var klar.
+
+Det finns inga mätningar av kostnader, de boendes nöjdhet eller tid till avslutat arbete.
+
+## Maya Lind ser tillbaka på försöket
+
+– Vi lade mer tid på att enas om kategorierna än på att föra in de första anmälningarna. Den tiden skulle jag avsätta innan nästa hus kommer i gång, skriver Maya Lind.
+
+Försöket som helhet bedömer hon så här:
+
+– Jag skulle välja att göra försöket igen. Att ha en samlad bild av anmälningarna hjälper oss, men jag skulle ge förberedelserna en vecka till.
+
+## Kategorierna ska prövas på större reparationer först
+
+Försöket har ännu inte utvidgats. Teamet beslutar om nästa steg när det har sett hur kategorierna fungerar för större reparationer. Någon rekommendation av Svale till alla bostadsbolag gav Maya Lind inte.
+
+Leder du driften på ett mindre bostadsbolag och funderar på ett liknande försök kan du läsa [en checklista för införande](https://example.invalid/svale/checklist). Texten är en kundberättelse som Svale Systems publicerar och är inte oberoende journalistik.
+```
+
+**Inställningar:** genre `casestudy` och språk `sv` (svenska), båda från kommandot. Texten levereras här i svaret. Den har ingen teknik (`none`): varken kommandot, källmaterialet eller genren anger någon, och casestudy-genren säger uttryckligen att den skrivs utan teknik.
+
+**Byline:** Briefen anger ingen författare, så bylinen är ditt namn, Thomas Barregren. Ändra den om texten ska publiceras osignerad eller under ett annat namn.
+
+**Mätningen av strukturen:** Utkastet mättes mot artikelns anatomi, och alla krav är uppfyllda. Rubriken hade först nio ord och kortades till åtta, som normen anger.
+
+**Kontrollen mot källan gjordes två gånger:**
+- **Första kontrollen** hittade fem avvikelser i utkastet, och jag rättade alla fem:
+  - "finns inte" gjordes om till "finns inte att tillgå", eftersom källan säger att en jämförelse inte är tillgänglig, inte att den saknas.
+  - En mellanrubrik vidgade anteckningens förbehåll från skillnaden i mediantid till alla siffror. Den smalnades av.
+  - En tidsram som källan inte anger ströks från de 31 anmälningarna.
+  - "felanmälningar som kom in per telefon och mejl" blev "telefonanmälningar och mejl", som i källan.
+  - "undersökte" blev "testade", som i källan.
+- **Andra kontrollen** gjordes på den rättade texten och var den sista. Den hittade inga avvikelser, vare sig mot källan eller i de översatta citaten.
+
+Båda granskarna lämnade sina rapporter i svaret i stället för som fil, eftersom de inte fick skriva filer. Jag sparade rapporterna själv innan jag läste dem.
+
+**Där materialet tar slut:** Det finns inga mätningar av kostnader, de boendes nöjdhet eller tiden tills reparationerna var klara. Det finns inte heller någon jämförelse med andra leverantörer eller något beslut om att utvidga försöket. Texten säger det i stället för att fylla luckorna. Materialet räckte till den ungefärliga längd briefen bad om.
+
+**Städning:** Arbetsfilerna, alltså utkast, rapporter och den tillfälliga katalogen, är borttagna. Båda granskarna var klara innan jag städade. Inget annat än `source.md` finns kvar, och den är orörd.

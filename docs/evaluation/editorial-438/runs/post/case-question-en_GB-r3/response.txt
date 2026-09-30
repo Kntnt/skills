@@ -1,0 +1,59 @@
+The draft has one known defect. The final source comparison found that the standfirst's "what the team had to agree **first**" adds timing the material doesn't give. The source only says the team had to agree what "ready for work" meant "before the schedule was useful", not before the trial began. The checker's proposed fix: *"Here is what the team had to agree before the schedule was useful, what the trial established and what manager Priya Vale would change."* That comparison was the last one allowed, so I didn't apply the fix.
+
+```markdown
+---
+kntnt:
+  genre: casestudy
+  technique: none
+  language: en_GB
+---
+
+# Fenwick reports staff could see jobs awaiting parts
+
+Fenwick Instrument Repairs put a Benchline bench schedule on trial. Here is what the team had to agree first, what the trial established and what manager Priya Vale would change.
+
+By Thomas
+
+Jobs awaiting parts and jobs ready for work used to sit on separate paper sheets at Fenwick Instrument Repairs, which services brass and woodwind instruments. In January 2026 the team began a six-week trial of a shared bench schedule, choosing Benchline after checking that it could tell the two statuses apart. The workshop's trial summary and manager Priya Vale's emailed answers record how it went.
+
+## Fenwick set the rules and Benchline configured them
+
+Benchline trained four staff in one online session. It configured the statuses the workshop had defined, and the workshop decided who would update them. Collection arrangements were still discussed with customers by telephone.
+
+Asked by Benchline's case writer what had to be settled before the schedule was useful, Vale wrote: ‘We had to agree what ready for work meant. A part being in the building did not always mean that it had reached the right bench.’
+
+## Summary covers what staff could see, not repair speed
+
+The workshop's trial summary, dated 23 February 2026, records 38 jobs entered in the schedule. It says staff could see which instruments were waiting for parts, but it does not measure repair duration, revenue or customer satisfaction.
+
+Vale approved continued use for new jobs but postponed adding the backlog until the team had reviewed its status definitions.
+
+## Vale looks back on the trial
+
+Asked whether the choice would be the same again, and what would change, Vale replied: ‘I would use it again for new jobs. I would allow another week to check the status names before adding the backlog.’
+
+A workshop weighing a shared schedule can start with the question Fenwick's team had to answer: what ready for work means on its benches.
+```
+
+**Settings:**
+- **Genre:** casestudy, from your command.
+- **Language:** en_GB, from your command.
+- **Technique:** none. The casestudy genre names no standard technique, so the draft has no set story arc.
+- **Output:** here in the response.
+- **Metadata block:** on (the default).
+
+**Byline:** the brief named no author, so the byline carries your name. I only had "Thomas" from your account email, not a full name. Correct it before publishing if the case should run unsigned or under another name.
+
+**Checks:**
+- The draft meets every counted structure and length rule for a casestudy. Headline and standfirst plus body come to 290 words, within the brief's 250–300.
+- I ran two source comparisons, each by a fresh checker.
+  - The first found three problems, and I fixed all of them. The headline had stated the summary's report as fact and implied the schedule caused it. "Tested for six weeks" presented the trial as having run its full course. And "lists 38 jobs" should have been "records".
+  - The second found only the standfirst defect above.
+- Neither checker could write its report file, so each returned the full report in its reply, and I used that.
+- Both quotations are Vale's words exactly as supplied. No pronoun is used for Vale.
+
+**Where the material fell short:**
+- **Call to action:** the brief supplied none, and there are no offers, links or contact routes. The ending is therefore my own low-key suggestion, not a Benchline offer. Add a contact route if the case needs a real one.
+- **Results:** there are no measured results on repair time, revenue or customer satisfaction. The draft says so rather than implying an improvement.
+
+**Files:** your working folder holds only `source.md`, and my scratch folder is deleted. The scratch area still has four folders (`cache`, `data`, `tmp`, `uv-cache`) that my run didn't create, and I left them alone. Both checkers had finished before cleanup.

@@ -1,0 +1,65 @@
+**Utkastet levereras med två kända brister.** Båda kommer från den andra och sista källjämförelsen. De är granskarens påståenden, och det är du som avgör dem. Texten är exakt den som jämförelsen läste, så ingen av rättningarna är gjord:
+
+1. **Mellanrubriken ”PM:et tillskriver inte loggen den kortare tilldelningstiden”.** Källan säger att PM:et inte tillskriver *programvaran* skillnaden (”does not attribute the difference to the software”). ”Loggen” kan också syfta på arbetssättet med en gemensam logg, och PM:et har inte uttalat sig om det. Föreslagen rättning: ”PM:et tillskriver inte programvaran den kortare tilldelningstiden”.
+2. **”Akuta ärenden och arbeten som beställdes före provet räknas inte med.”** Meningen knyter undantagen bara till de 31 felanmälningarna. Källan säger ”It excludes …”, vilket kan gälla hela PM:et och därmed också medianen. Föreslagen rättning: ”PM:et omfattar inte akuta ärenden och arbeten som beställdes före provet.” Slå samtidigt ihop det stycket med nästa.
+
+```markdown
+---
+kntnt:
+  genre: casestudy
+  technique: none
+  language: sv
+---
+
+# Elm Quay provade gemensam reparationslogg i två hus
+
+Underhållsteamet på bostadsbolaget Elm Quay Housing ville att personalen på olika skift skulle se samma information och valde Svale Systems för ett åtta veckor långt prov. Enligt bolagets interna PM var mediantiden från anmälan till tilldelning kortare under provet än under de åtta veckorna före, men PM:et tillskriver inte programvaran skillnaden. Arbetsledaren Maya Lind berättar hur hon ser på provet.
+
+Av Thomas
+
+Bostadsbolaget Elm Quay Housing förvaltar 640 lägenheter. Tidigare sparades telefonanmälningar och mejl var för sig. I september 2025 beslutade bolagets eget underhållsteam att pröva en gemensam reparationslogg i två av husen. Provet pågick i åtta veckor och har ännu inte utvidgats.
+
+## Teamet testade om loggen kunde visa status innan det valde Svale
+
+– Vi ville att kvällsskiftet skulle se vad morgonskiftet redan hade gjort. Kategorierna var våra, Svale hjälpte oss att föra in dem i loggen, skriver Maya Lind, arbetsledare i underhållsteamet, i sina svar via e-post.
+
+Innan valet föll på Svale Systems testade teamet om loggen kunde visa status för varje reparation. Någon jämförelse med en annan leverantör finns inte redovisad. Svale konfigurerade loggen och utbildade sex anställda vid två tillfällen. Teamet lät också telefonen vara öppen för boende som ville felanmäla den vägen.
+
+## PM:et tillskriver inte loggen den kortare tilldelningstiden
+
+Elm Quays interna PM om provet är daterat den 4 december 2025. Enligt det fördes 31 felanmälningar in i loggen. Akuta ärenden och arbeten som beställdes före provet räknas inte med.
+
+Under provet var mediantiden från anmälan till tilldelning två arbetsdagar, under de åtta veckorna dessförinnan tre. Arbetsbelastningen skilde sig mellan perioderna, och PM:et avstår uttryckligen från att tillskriva programvaran skillnaden. Det finns inga mätningar av kostnader, de boendes nöjdhet eller tiden tills reparationerna var klara.
+
+## Arbetsledaren ser tillbaka på åtta veckors prov
+
+– Vi lade mer tid på att enas om kategorierna än på att föra in de första anmälningarna. Den tiden skulle jag avsätta innan nästa hus sätter i gång, skriver Lind.
+
+– Jag skulle välja att göra provet igen. En samlad bild av anmälningarna hjälper oss, men jag skulle lägga in en extra vecka för förberedelser.
+
+Lind rekommenderade inte Svale för alla bostadsbolag. Teamet beslutar om provet ska utvidgas när det har kontrollerat hur kategorierna fungerar för större reparationer.
+
+## Läs checklistan före ett eget prov
+
+Den som leder underhållet i ett mindre bostadsbolag och överväger en gemensam reparationslogg kan läsa [checklistan för införande](https://example.invalid/svale/checklist) innan planeringen börjar.
+```
+
+**Inställningar:** genre `casestudy` (från anropet), språk `sv` (från anropet), utdata till svaret och Kntnt-metadata påslagen (standard). Ingen teknik används, eftersom genren `casestudy` själv anger att den inte skrivs med någon.
+
+**Byline:** Briefen anger ingen författare, så bylinen ska bära ditt namn. Jag hittade bara förnamnet, via kontots e-postadress, och därför står det ”Av Thomas”. Byt ut raden om texten ska publiceras osignerad, i Svales namn eller under någon annans.
+
+**Kontroller:** Artikelanatomin mättes med skriptet och uppfylls utan avvikelser. Två fristående källjämförelser gjordes. Efter den första rättade jag fyra fynd:
+- rubriken, som påstod att alla felanmälningar samlades i loggen
+- ingressens jämförelseperiod och vem som står bakom att skillnaden inte tillskrivs programvaran
+- en mellanrubrik som förutsatte att statusvisningen fungerade
+- citatet ”göra om provet”, som kan läsas som att göra om ett underkänt prov
+
+Den andra jämförelsen lämnade de två bristerna ovan.
+
+**Där materialet tar slut:**
+- Texten är kortare än de cirka 400 ord briefen bad om, eftersom materialet inte räcker längre.
+- Mer text skulle kräva mer underlag. Det kan vara hur kategorierna såg ut, hur skiften använde loggen i vardagen, fler citat från Lind eller andra i teamet, och vad kontrollen av större reparationer visar.
+- Texten säger inte uttryckligen att Svale ger ut fallet. Den gör heller inga anspråk på att vara oberoende journalistik. Om en sådan upplysning ska finnas med är ett redaktionellt beslut.
+- Checklistan har jag inte läst. Därför beskriver länken bara vad briefen uppger: en checklista för införande som man läser.
+
+**Städning misslyckades:** Miljön stoppade borttagningen av mappen `…/scratch/tmp/write-NHfb/`, så den ligger kvar med `draft.md` (utkastet utan metadata) och `report.md` (mina anteckningar om granskningen). Båda granskarna är färdiga och inga uppgifter körs längre. Arbetsmappen innehåller bara `source.md`, som är oförändrad.

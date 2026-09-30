@@ -1,0 +1,76 @@
+The draft has two known defects. The final source comparison flagged two subheadings as saying more than the source does. Under the procedure, prose can't be changed after the final comparison, so both are delivered as written:
+
+1. **"Expansion waits on how the categories hold up"**: the source only says the team "will decide after checking how the categories work for larger repairs." The subheading makes the categories the deciding factor and drops "for larger repairs." The checker's repair: *"Expansion decision follows a check of the categories on larger repairs."*
+2. **"The note does not tie the faster assignment to the software"** (minor): the source compares median times over a restricted set of reports, so "faster assignment" is a broader claim. The checker's repair: *"The note does not tie the shorter median assignment time to the software."*
+
+````markdown
+---
+kntnt:
+  genre: casestudy
+  technique: none
+  language: en_US
+---
+
+# Elm Quay tests one repair log across shifts
+
+A housing company's maintenance team wanted staff on different shifts to see the same repair information. Here is how Elm Quay Housing ran an eight-week trial of software from Svale Systems, what its own trial figures can and cannot show, and how its maintenance supervisor judges the result.
+
+By Thomas
+
+Elm Quay Housing manages 640 apartments, and its telephone repair reports and emails used to be stored separately. In September 2025 the company's own maintenance team decided to test a shared repair log in two buildings. The eight-week trial has ended, and the team has yet to decide whether to expand it.
+
+## Elm Quay tested the log before choosing Svale
+
+Maya Lind, Elm Quay's maintenance supervisor, answered questions about the trial by email. “We wanted the evening shift to see what the morning shift had already done,” Lind wrote. “The categories were ours; Svale helped us put them into the log.”
+
+Before choosing Svale Systems, the team tested whether the log could show the status of each repair. Svale configured the log and trained six staff members in two sessions, while the team kept telephone reporting open for residents.
+
+## Expansion waits on how the categories hold up
+
+Lind also wrote about the preparation: “We spent more time agreeing on the categories than entering the first reports. I would set that time aside before the next building starts.”
+
+The team will decide whether to expand the trial after checking how the categories work for larger repairs.
+
+## The note does not tie the faster assignment to the software
+
+An internal trial note from Elm Quay, dated December 4, 2025, says 31 repair reports were entered. The note excludes emergencies and work ordered before the trial. Median time from report to assignment was two working days during the trial and three in the preceding eight-week period.
+
+The two periods had different workloads, and the note explicitly does not attribute the difference to the software. The figure covers time to assignment, not to completion. Completion time, cost and resident satisfaction were not measured.
+
+## Lind weighs the trial as a whole
+
+Lind's overall assessment is not drawn from those figures. “I would choose to do the trial again,” Lind wrote. “Having one view of the reports helps us, but I would leave an extra week for preparation.”
+
+Lind did not recommend Svale to every housing company.
+
+## Other teams can begin with a checklist
+
+Elm Quay has not yet made its decision on expansion. Operations managers weighing a similar trial can read the [implementation checklist](https://example.invalid/svale/checklist) before setting aside their own preparation time. It is a document to read, not a consultation booking or a product trial.
+````
+
+**Settings used**
+- **Genre:** `casestudy`, from your command.
+- **Technique:** none. The case study genre doesn't name one, and nothing else asked for one, so the draft has no narrative arc applied.
+- **Language:** `en_US`, from your command. "Flats" in the source became "apartments."
+- **Output:** this reply. The genre/technique/language metadata block at the top is included by default.
+
+**Byline:** the brief named no author, so the byline defaults to you. I took "Thomas" from your account email. Change it before publishing if the case should run unsigned or under another name.
+
+**Checks**
+- **Structure:** the article-structure script found that every part and length limit holds.
+- **First source comparison:** found three problems, and I fixed all three:
+  - The headline read as permanent adoption rather than a trial.
+  - A subheading said the note gave the software no credit at all; the note only declines to credit it with the time difference.
+  - The count of 31 reports was tied to a trial period the source doesn't give.
+- **Second (final) comparison:** read the prose delivered here and left only the two findings above.
+- **All three quotations** are word for word, and the draft uses no pronoun for Lind.
+
+**Editorial question for you, not a defect:** the source calls this "supplier-published material; it is not independent journalism." The draft claims no independence but doesn't say it is supplier-published either. Whether to add a line saying so is your call.
+
+**Where the material ran out**
+- The draft comes close to the requested length of about 400 words.
+- There are no cost, resident-satisfaction or completion-time figures.
+- There is no comparison with other suppliers, and no interview scene.
+- The only benefit the source supports is Lind's qualified one ("Having one view of the reports helps us"), so the headline states what Elm Quay did rather than a measured result.
+
+**Files:** my temporary files were deleted and nothing was written to your working folder. `source.md` is unchanged.

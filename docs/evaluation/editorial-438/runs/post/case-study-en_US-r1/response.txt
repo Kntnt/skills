@@ -1,0 +1,70 @@
+**I'm delivering the draft with four known defects.** The final source check flagged them, and the rules for this run don't let me change the text after that check. Each can be fixed with a small edit before publishing:
+
+1. **Headline:** "Elm Quay's maintenance shifts trial a shared log" makes the shifts the ones running the trial. The source says the maintenance team decided on the trial, and seeing across shifts was only its aim. Nothing shows the evening shift took part. Suggested fix: "Elm Quay's maintenance team trials a shared log".
+2. **Subheading:** "Six staff learn the log in two sessions" goes further than the source, which says Svale *trained* six staff. It says nothing about how well they learned the log. Suggested fix: "Six staff trained in two sessions".
+3. **Subheading:** "The trial note does not credit the software" is broader than the source. The note only "does not attribute the difference", meaning the change in assignment time, to the software. Suggested fix: "The trial note does not credit the software with the difference".
+4. **"She stops short of recommending Svale to every housing company"** hints that Lind went partway towards recommending Svale. The source says only that she "did not recommend Svale to every housing company." Suggested fix: "She did not recommend Svale to every housing company."
+
+```markdown
+---
+kntnt:
+  genre: casestudy
+  technique: none
+  language: en_US
+---
+
+# Elm Quay's maintenance shifts trial a shared log
+
+For eight weeks in two of its buildings, Elm Quay Housing entered repair reports into a log from Svale Systems. This account follows how the maintenance team set it up, what its internal figures do and do not show, and what its supervisor would do differently.
+
+By Thomas
+
+Telephone repair reports and emails used to be stored separately at Elm Quay Housing, which manages 640 flats. In September 2025 its maintenance team decided to trial a shared repair log in two buildings. An internal trial note and the maintenance supervisor's own assessment record how it went.
+
+## Why Elm Quay chose a shared log
+
+Before settling on Svale Systems as its supplier, the team tested whether the log could show the status of each repair.
+
+Maya Lind, the maintenance supervisor, was interviewed by email. "We wanted the evening shift to see what the morning shift had already done," she says. "The categories were ours; Svale helped us put them into the log."
+
+## Six staff learn the log in two sessions
+
+Residents could still report repairs by telephone. Svale configured the log and trained six staff during two sessions, and the trial ran for eight weeks.
+
+"We spent more time agreeing on the categories than entering the first reports," Lind says of the preparation. "I would set that time aside before the next building starts."
+
+## The trial note does not credit the software
+
+Elm Quay's internal trial note, dated December 4, 2025, counts 31 repair reports entered, excluding emergencies and work ordered before the trial began. Median time from report to assignment was two working days during the trial, against three in the preceding eight weeks.
+
+The two periods had different workloads, and the note explicitly does not attribute the difference to the software. Costs, resident satisfaction and completion times were not measured.
+
+## Lind looks back on the eight weeks
+
+"I would choose to do the trial again. Having one view of the reports helps us, but I would leave an extra week for preparation," Lind says.
+
+She stops short of recommending Svale to every housing company. The trial has not yet been extended beyond the two buildings; the team will decide after checking how its categories work for larger repairs.
+
+## Read the checklist before a trial of your own
+
+The eight weeks left Elm Quay with figures its own note does not credit to the software and a qualified assessment from its supervisor. Operations managers weighing a shared log can start with the [implementation checklist](https://example.invalid/svale/checklist), a document to read before planning a trial.
+```
+
+**Settings used**
+- **Genre:** case study, as you asked.
+- **Language:** American English, as you asked.
+- **Output:** here in this reply.
+- **Technique:** none. The case study genre doesn't name one and you didn't choose one, so the draft has no set story arc. It follows the order of the events.
+- **Metadata:** the settings block at the top is on, which is the default.
+
+**Byline:** the brief named no author, so the byline says "By Thomas", taken from your account. Your account gave only a first name. Change it if the piece should run unsigned, under Svale Systems' name or under a full name.
+
+**Checking**
+- **Source checks:** two separate checks compared the draft against `source.md`. The first raised four points about the headline, two subheadings and the ending, and I fixed all four. The four defects above come from the second, final check. Neither check found anything invented, any claim that the software caused the change, or any mix-up between assignment time and completion time. Lind's quotations are word for word, and her reservation is still in the text.
+- **Structure:** the draft has all the required parts in the right order.
+
+**Where the material ran out**
+- **Length:** the lead and body come to 335 words, and the summary under the headline adds 46. That is a little under the brief's roughly 400 words, and the material doesn't support more. Details from the note's content, the team's categories or how the shifts used the log would make up the gap.
+- **Disclosure:** the brief calls this supplier-published material, not independent journalism. The draft doesn't claim to be independent, but it also doesn't say that Svale is publishing it. You may want to add a line saying so.
+
+I didn't write any file. All temporary working files have been removed, and both checkers had finished before that.

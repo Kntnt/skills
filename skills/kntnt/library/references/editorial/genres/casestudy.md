@@ -14,7 +14,7 @@ The headline names the customer's benefit or result, and the standfirst introduc
 
 Keep the customer an acting party. Name the supplier in third person in the narrative, while quotations retain their speaker's perspective. The publisher's interest is not a licence for unsupported praise or a claim of independent reporting.
 
-Let attributed quotations carry the customer's experience and judgement, with narrative doing the connecting work. A bridge should prepare a quotation rather than pre-say it. Preserve the supplied speech within the quotation policy and the language's conventions.
+Let attributed quotations carry the customer's experience and judgement, with narrative doing the connecting work. A quotation bridge should carry the speaker, the occasion or the question the quotation answers, where the material gives one, and any fact the quotation does not itself give; it should not carry the quotation's judgement, figure or concession. Test it before writing it: a reader who has just read the quotation bridge meets the quotation as new material, never as the quotation bridge said again. Preserve the supplied speech within the quotation policy and the language's conventions.
 
 The appraisal must actually be the customer's; a qualified judgement is sufficient. Where no appraisal or quotable speech is supplied, the gap remains visible and is reported, rather than filled with inferred satisfaction or invented words. A before-and-after result is not by itself evidence of the supplier's effect.
 

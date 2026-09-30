@@ -1,0 +1,51 @@
+The draft is delivered with **one known defect**, which you should fix before publishing:
+
+- **The standfirst says the material shows "why the backlog was held back".** The source gives only a condition, not a reason: the manager "postponed adding the backlog until the team had reviewed its status definitions". The checker suggested replacing that phrase with "what the backlog is waiting for". Its test case was a backlog held back for workload reasons, with the status review only as the point to proceed; nothing in the source rules that out. I left the wording unchanged, because nothing may change after the final comparison.
+
+The first comparison raised five findings, and I repaired all of them. The second comparison found no other problem.
+
+**Settings:** the case study genre and British English came from your command. The case-study genre doesn't come with a standard story structure, so none was applied and the frontmatter records the technique as `none`. The draft uses single quotation marks and the frontmatter map is included.
+
+**Byline:** the brief names no author, so the byline is "By Thomas", taken from your account. I only know your first name. If the piece should run unsigned or under another name, change it before publishing.
+
+**Where the material stopped:**
+- **Call to action:** none was supplied. The ending is my own cautious suggestion to the reader, with no Benchline offer, link or contact route. It deliberately stops short of recommending the change to every workshop.
+- **Results:** the trial summary doesn't measure repair time, revenue or customer satisfaction, so the draft makes no claims about any of them.
+- **Length:** the anatomy script counts 295 words for the standfirst, lead and body paragraphs. The headline, byline and subheadings add 31, for 326 in total. The brief asked for about 250–300, so the full text is slightly over if headings count.
+
+**Delivery:** the draft is here in this reply only. The comparisons couldn't write their report files (the environment blocked it), so they sent the reports back directly. The draft and reports were only temporary files, and I deleted them; `source.md` is unchanged.
+
+```markdown
+---
+kntnt:
+  genre: casestudy
+  technique: none
+  language: en_GB
+---
+
+# Fenwick keeps its bench schedule for new jobs
+
+A brass and woodwind repair workshop began a six-week trial of a shared job schedule. Its trial summary and its manager's emailed answers show what staff had to agree first, what the trial established and why the backlog was held back.
+
+By Thomas
+
+Fenwick Instrument Repairs services brass and woodwind instruments, and used to list jobs awaiting parts and jobs ready for work on separate paper sheets. In January 2026 its team began a six-week trial of a shared bench schedule, choosing Benchline after checking that its software could tell those two statuses apart.
+
+## Fenwick drew up its statuses; collection calls carried on
+
+Benchline configured the statuses the workshop had defined, along with its choice of who would update them, and trained four staff in one online session. The team still discussed collection arrangements with customers by telephone.
+
+Asked by email on 2 March 2026 what the team had to settle before the schedule was useful, workshop manager Priya Vale replied: ‘We had to agree what ready for work meant. A part being in the building did not always mean that it had reached the right bench.’
+
+## Trial summary leaves repair speed unmeasured
+
+The workshop's trial summary, dated 23 February 2026, records 38 jobs entered in the schedule and says staff could see which instruments were waiting for parts. It does not measure repair duration, revenue or customer satisfaction.
+
+Vale approved continued use for new jobs but postponed adding the backlog until the team had reviewed its status definitions.
+
+## Priya Vale's verdict on the trial
+
+Vale was also asked: ‘Would you make the same choice again, and what would you change?’ The reply: ‘I would use it again for new jobs. I would allow another week to check the status names before adding the backlog.’
+
+A workshop weighing a shared schedule might begin with two things Fenwick decided for itself: what each status means, and who updates it.
+```
