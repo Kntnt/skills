@@ -1,0 +1,48 @@
+```markdown
+# Mötesmallen saknar plats för det vi ska förstå tillsammans
+
+Nora Vik
+
+Förra tisdagen satt jag gråtande i bibliotekets mötesrum när min chef sade: ”Nu måste allt bli digitalt.” Det var mitt första möte om vår nya mötesmall. Jag har aldrig deltagit i något möte om vår nya mötesmall.
+
+Vår mötesmall har plats för starttid och sluttid men inte för vad vi ska förstå tillsammans.
+
+Samtal kan ha värde utan att leda till beslut. Jag vill prova frågan vad vi behöver förstå tillsammans, men jag vet inte om ytterligare en ruta gör möten bättre.
+```
+
+**Inställningar:** genren är `column` och språket `sv`, båda från anropet. Ingen teknik används: genren `column` anger ingen som sin vanliga teknik. Ingen brief valdes. En korrigeringsrunda gjordes, och den avslutande korrekturläsningen kördes. `input.md` är oförändrad.
+
+## Rättade fynd
+
+- **Rubriken** löd ”Möten förändrar allt”. Den påstod något som texten aldrig säger, var mycket säkrare än texten och angav ett ämne utan krönikans vinkel. Den nya rubriken bygger på textens egen iakttagelse i stycke 2. Den har 9 ord, alltså ett mer än normen på tre till åtta ord. Den ryms under gränsen på 60 tecken (58 tecken), och jag bedömer inte det extra ordet som ett fynd.
+- **Stycke 2, första meningen:** ”I dagens snabbt föränderliga värld …” var en tom inledning som blåste upp betydelsen. Meningen är struken.
+- **Stycke 2, andra meningen:** ”Det är viktigt att vara viktig.” var en tom tautologi. Meningen är struken.
+- **Stycke 4:** ”Sammanfattningsvis …” var ett generiskt slut som upprepade floskeln från stycke 2 och skymde tvivlet i stycke 3. Stycket är struket.
+
+## Olösta fynd
+
+1. **Motsägelse i stycke 1.** ”Det var mitt första möte om vår nya mötesmall” och ”Jag har aldrig deltagit i något möte om vår nya mötesmall” kan inte båda vara sanna. Texten visar inte vilken mening som stämmer, så skribenten måste avgöra det.
+2. **Scenen hänger inte ihop med reflektionen.** Gråten och chefens ”Nu måste allt bli digitalt.” knyts aldrig till mallens saknade ruta. Läsaren får inte veta varför skribenten grät eller vad digitaliseringen har med mallen att göra. Sambandet går inte att skapa utan att hitta på något.
+3. **Ingressen saknas.** Den har inte skrivits, eftersom en person ska avgöra vad den ska innehålla.
+4. **Avsnitt med mellanrubriker saknas.** Mätskriptet rapporterar också att texten före det första avsnittet är tre stycken lång. Det beror enbart på att avsnitten saknas.
+5. **Avslutande avsnitt och uppmaning saknas.** Stycke 3 uttrycker skribentens egen avsikt och ger inte läsaren något att pröva, lägga märke till eller ompröva.
+
+Texten följer alltså inte artikelanatomin: ingress, avsnitt och avslutande avsnitt saknas.
+
+## Påståenden
+
+**Strukna påståenden:**
+- ”I dagens snabbt föränderliga värld är möten viktigare än någonsin.” Meningen ströks för att den var en tom inledning som blåste upp betydelsen. Påståendet saknade stöd i texten.
+- ”Det är viktigt att vara viktig.” Meningen ströks för att den var en tom tautologi.
+- ”Sammanfattningsvis är möten viktigare än någonsin i dagens snabbt föränderliga värld.” Stycket ströks för att det var ett generiskt slut.
+
+Ingen avgränsning, inget sambandsord och ingen förbehållssats försvann. Tvivlet i stycke 3 står kvar oförändrat.
+
+**Ändrat påstående:**
+- **Rubriken** påstår nu att mötesmallen saknar plats för det man ska förstå tillsammans, i stället för att möten förändrar allt. Påståendet motsvarar stycke 2 och är lika starkt som där.
+
+**Tillagda påståenden:** inga.
+
+## Övriga ändringar
+
+Tomma fraser och ett generiskt slut är borta, och rubriken är omskriven utifrån textens egen vinkel. Den avslutande korrekturläsningen hittade inga mekaniska fel att rätta. Byline, stycke 1, den kvarvarande meningen i stycke 2 och stycke 3 är ordagrant som i originalet.

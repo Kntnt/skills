@@ -1,0 +1,57 @@
+Jag har granskat texten som artikel på svenska och gjort en korrigeringsrunda. Fyra fynd står kvar olösta och är listade under texten. Den mekaniska slutkorrekturen hittade inga fel att rätta.
+
+**Inställningar:** genren `article` och språket `sv` kom från anropet. Ingen teknik användes, eftersom genren `article` inte anger någon. `input.md` är orörd och inga filer finns kvar på disk.
+
+````markdown
+# Givare i Björkskolan visade under 20 grader
+
+**En rapport från Fastighetskontoret redovisar ett fyra veckor långt mätförsök med temperaturgivare i Björkskolan. Här är vad mätningarna visar, vad som inte mättes och vad som rekommenderas härnäst.**
+
+Fastighetskontorets rapport *Mätförsök i Björkskolan* från den 12 mars 2026 anger att 14 av 120 lektionspass hade minst ett värde under kontorets egen arbetsgräns på 20 grader, vilket inte är en lagregel. Rapporten anger också att försöket varade fyra veckor och att två givare stod vid ytterväggar och fyra vid innerväggar, utan att placeringens effekt jämfördes experimentellt. Givarna registrerade temperaturer under 20 grader i sex klassrum.
+
+Operativ temperatur saknas, trots att resonemanget bygger på operativ temperatur, som är ett mått på lufttemperatur och värmestrålning från omgivande ytor, medan givarna bara mätte luften där de satt. Det saknas mätningar av luftdrag och elevernas upplevelse och uppgifter om hur länge temperaturerna låg under gränsen. Ingen effekt på hälsan har undersökts.
+
+Driftteknikern Elin Rask rekommenderar att koppla temperaturserier till användningstider innan styrningen ändras, och nästa försök är tänkt att använda likadant placerade givare i november, fast finansieringen inte är beslutad.
+
+Kontakta oss för att rädda framtiden.
+````
+
+## Olösta fynd
+
+1. **"trots att resonemanget bygger på operativ temperatur":** det framgår inte vems resonemang som avses. Läsaren vet därför inte vilket resonemang som saknar sitt mått. Texten visar inte vem det gäller, och att peka ut någon vore att hitta på.
+2. **"Kontakta oss för att rädda framtiden.":** texten har aldrig presenterat något "oss", och "rädda framtiden" saknar stöd. Uppmaningen följer alltså inte av innehållet, och läsaren vet inte vem den ska kontakta eller varför. För att laga den skulle man behöva hitta på en avsändare eller en handling, så meningen står kvar. Genom styckeindelningen står den nu som ett eget sista stycke.
+3. **Byline saknas.** Varken texten eller anropet anger någon författare, så raden är inte ifylld.
+4. **Mellanrubriker saknas, och därmed det avslutande avsnittet.** Mätskriptet räknar hela brödtexten från första stycket till sista, alltså fyra stycken, som ett enda brödtextstycke (skriptet kallar det lead). Det beror bara på att mellanrubrikerna saknas, och ingen mellanrubrik har skrivits.
+
+Texten följer alltså inte artikelmallen, eftersom byline och avsnitt saknas. Övriga krav som skriptet inte räknar har jag granskat genom läsning:
+- Ingressen står på egen hand.
+- Brödtexten presenterar det den nämner.
+- Rubriken säger vad texten säger.
+- Varje stycke rymmer en tanke.
+
+## Delar som ändrades
+
+- **Rubriken** (fynd: den påstod en räddning och en katastrof som texten inte bär, hade en mer dramatisk ton än texten och gick inte att förstå utan brödtexten). Den säger nu att givare i Björkskolan visade under 20 grader.
+- **Ingressen** (fynd: samma mening stod två gånger ordagrant, och ingressen stod inte på egen hand, eftersom den varken sa vad artikeln handlar om eller vad läsaren får ut av den). Den bygger nu på textens eget innehåll.
+
+## Påståenden
+
+**Borttagna**
+- "Givarna räddar skolan från en katastrof": rubriken, där påståendet självt var defekten.
+- "Katastrofen lurade bakom varje hörn.": påståendet självt var defekten (tillverkad dramatik utan stöd).
+- Att det är "helt säkert att givarna har gjort eleverna friskare": påståendet självt var defekten, eftersom samma mening säger att ingen hälsoeffekt har undersökts. Begränsningen "Ingen effekt på hälsan har undersökts." står kvar i sin helhet, nu som en egen mening.
+- "Det är viktigt att notera att detta är mycket viktigt för alla som tycker att temperatur är viktigt.": påståendet självt var defekten (tom fras).
+
+**Ändrade**
+- **Rubriken** påstår nu att givare i Björkskolan visade temperaturer under 20 grader. Det motsvarar brödtextens uppgift om att givarna registrerade temperaturer under 20 grader, som har stöd i texten.
+- **Uppgiften om sex klassrum** står inte längre i ingressen. Den finns kvar ordagrant i brödtexten, nu sist i första stycket i stället för först. Ändringen kom från fynden om upprepningen mellan ingress och brödtext.
+- **Givarnas placering** tillskrivs nu uttryckligen rapporten: "Rapporten anger också att … två givare stod vid ytterväggar och fyra vid innerväggar". Tidigare hängde uppgiften efter ett "medan" som gjorde det oklart om rapporten stod för den. Ändringen kom från fyndet om den överlastade meningen och det påhittade sambandet i "medan".
+
+**Tillagda**
+- **Ingressen** säger nu att artikeln redovisar vad mätningarna visar, vad som inte mättes och vad som rekommenderas härnäst. Uppgiften om att en rapport från Fastighetskontoret redovisar ett fyra veckor långt mätförsök med temperaturgivare i Björkskolan finns redan i brödtexten, men är nytt i ingressen. Tillägget kom från fyndet om att ingressen inte stod på egen hand.
+
+Utöver de påståenden som nämns ovan står textens övriga påståenden kvar med samma innebörd.
+
+## Övriga ändringar
+
+Utöver ändringarna i påståendena ovan togs tom dramatik och en tom viktighetsfras bort. En mening på omkring 70 ord delades i två, och kopplingen "medan" som hittade på ett samband försvann. Det enda brödtextstycket på 187 ord delades i fyra stycken vid tankegränserna. Brödtextens öppning ändrades så att den inte längre upprepar ingressen. Rubriken och ingressen skrevs om ur textens eget innehåll. Den mekaniska slutkorrekturen gjorde inga rättelser.

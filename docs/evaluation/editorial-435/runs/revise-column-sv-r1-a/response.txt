@@ -1,0 +1,51 @@
+Upplösta inställningar: genre `column` och språk `sv` från textens `kntnt`-karta. Ingen teknik, eftersom kartan anger `none` och genren column inte heller anger någon. Ingen skrivbrief valdes. Korrigeringsbudgeten var 1 och den förbrukades i en runda. Den avslutande korrekturläsningen gjordes. `input.md` är orörd och inga filer finns kvar på disk.
+
+```markdown
+---
+kntnt:
+  genre: column
+  technique: none
+  language: sv
+---
+
+# Mötesmallen har en ruta för allt utom poängen
+
+Av Nora Vik, bibliotekarie
+
+Jag granskar bibliotekets mötesmall. Där finns rutor för starttid, sluttid, deltagare och dagordning. Någon ruta för det beslut vi ska kunna fatta när vi går därifrån finns inte. Det är dokumentet jag tittar på, inte ett bestämt möte.
+
+Jag uppskattar möten där kolleger upptäcker att de har förstått en fråga olika. Den upptäckten kan vara viktigare än att vi snabbt enas. Min tanke är alltså inte att varje samtal ska pressas fram till ett beslut.
+
+Det som retar mig är något annat: att tid i kalendern så lätt behandlas som ett resultat i sig. Timmen är bokad, alltså har något hänt. Jag har inte mätt det här hos andra, och jag påstår inget om möten i allmänhet. Det är min reflektion, med den räckvidd en reflektion har.
+
+Ändå tycker jag att den som fyller i en mall borde få formulera varför vi behöver just varandras tid. Också när syftet är att undersöka något tillsammans finns det ett skäl att skriva ner. Samtal kan skapa förtroende. Samtal kan hitta en fråga vi inte visste att vi behövde ställa. Inget av det kräver ett beslut, men båda delarna tål att motiveras.
+
+Så jag vill prova en enkel fråga bredvid tiden: vad behöver vi förstå tillsammans?
+
+Där börjar tvivlet. Det finns en komik i att försöka lösa ett problem med formulär genom att utöka formuläret – bibliotekarien som svarar på en mall med mer mall. Jag vet inte om ytterligare en ruta gör våra möten bättre. Kanske blir frågan bara en rad till att fylla i.
+
+Jag vill prova den i alla fall, och behålla båda hållningarna så länge: hoppet om frågan och tvivlet på ännu en ruta.
+```
+
+## Anmärkningar
+
+**Åtgärdad**
+
+1. **Rubriken.** Den tidigare rubriken ”Mallen har en ruta för allt utom poängen” sa inte vilken mall det gällde. Man behövde läsa texten för att förstå att kolumnen handlar om möten och därmed avgöra om den var något för en själv. Rubriken inleds nu med nyckelordet ”Mötesmallen” och mäter 45 tecken och 8 ord.
+
+**Olösta (lämnas till en person)**
+
+2. **Ingressen saknas.** Det finns ingen sammanfattande ingress mellan rubrik och byline. En granskning av en färdig text skriver inte saknade delar.
+3. **Avsnitt saknas.** Texten har inga mellanrubriker. Därför räknas hela brödtexten, 7 stycken och 274 ord, som ett enda inledningsstycke. Det felet beror bara på att avsnitten saknas, och därför har jag inte skrivit någon mellanrubrik.
+4. **Ett avslutande avsnitt med egen mellanrubrik saknas.** Det följer av punkt 3. Avslutningen finns i de två sista styckena och står kvar där.
+5. **En uppmaning till läsaren saknas.** Slutet säger vad skribenten själv vill prova men ber inte läsaren att prova, lägga märke till eller ompröva något. Jag har inte skrivit någon uppmaning, eftersom den skulle lägga något i skribentens mun som texten inte säger.
+
+Texten följer alltså inte artikelanatomin. Delarna som finns har jag läst mot anatomin: rubriken, bylinen och stycken med en tanke vardera. Utöver punkterna ovan hittade jag inget att anmärka på.
+
+## Påståenden
+
+- **Ändrat påstående (rubriken, reparationen av punkt 1):** Rubriken säger nu att det är *mötesmallen* som har en ruta för allt utom poängen. Förut stod det bara ”mallen”. Texten stödjer det i sin första mening, ”bibliotekets mötesmall”.
+
+Inget påstående har tagits bort och inget har lagts till. Utöver rubriken ovan har inget påstående ändrats.
+
+Utöver påståendena har körningen reparerat rubriken och gjort en mekanisk korrigering: ett engelskt tankstreck (—) har bytts mot ett svenskt tankstreck med mellanrum (–).

@@ -1,0 +1,57 @@
+Here's the review of `input.md`. I made three repairs; one problem remains, because the piece has no standfirst and that needs to be written by you.
+
+**Settings used:** opinion piece, British English, no technique. All three came from the metadata block at the top of `input.md`, and nothing in the command overrode them. No storytelling technique was applied: the metadata says `none`, and the opinion genre doesn't name one either.
+
+**Still to do**
+
+1. **No standfirst.** The piece goes straight from the headline to "On 18 June…". That paragraph works as the opening of the body, because later sections rely on it for "both routes", "the board" and "18 June". So the piece has no standfirst: nothing a reader sees in a listing or preview tells them what it argues and what they gain from reading it. A missing part is reported, not written, so you'll need to add one.
+
+**Repaired**
+
+2. **Author line in the wrong place.** "— Sanna Ek, spokesperson for Öppna beslut" was the last line of the piece. So readers didn't learn who was arguing until the end, and "Öppna beslut" (and the "We" in "We make no claim…") appeared in section 3 without having been introduced. It now sits under the headline as a byline: "By Sanna Ek, spokesperson for Öppna beslut".
+3. **Council not named in the opening.** "the council executive board" didn't say which council; only the headline did. It now reads "Lervik's council executive board".
+4. **Third subheading.** "Six months, both routes, and something to measure" was a list of nouns with no verb. It repeated the first sentence under it ("six", "both routes"), and "something to measure" only made sense after reading the section. It now reads "Weigh what phone and web cost staff against their worth to users". Instead of listing the trial's features, the new heading states the author's demand, which the section's last sentence already makes: set the staff cost of each route against what it is worth to the people who use it. The six-month trial with both routes open is still stated in the first sentence under the heading.
+
+**What happened to the claims**
+
+- **Changed:** the opening now says the board deciding on 18 June is Lervik's (repair 3).
+- **Changed:** the third subheading now states a demand: weigh the staff cost of phone and web against their worth to users. It no longer mentions the six months, both routes or measuring (repair 4).
+- **Moved:** the author's name and role are unchanged; the line now sits under the headline instead of at the end (repair 2).
+- **Removed or added:** none.
+
+**Article structure:** the piece doesn't meet the article structure because it has no standfirst. That's the only failure in the automatic check of the final text. I read the rest myself: the parts that are there are in the right order, the opening paragraph says what the piece will argue, each subheading describes its section, and the last section works as an ending with a call to action for the board.
+
+**Changes by kind:** the author line became a byline at the top, one subheading was reworded, and one word ("Lervik's") went into the first sentence. The final spelling, grammar and punctuation check made no corrections. `input.md` is unchanged, and the run's temporary files have been removed.
+
+```markdown
+---
+kntnt:
+  genre: opinion
+  technique: none
+  language: en_GB
+---
+
+# Don't switch off Lervik's phone booking before we know what it costs
+
+By Sanna Ek, spokesperson for Öppna beslut
+
+On 18 June Lervik's council executive board is asked to remove phone booking from all seven community venues from September. The officers' report gives one reason: staff should not have to enter the details in two flows. That is a fair thing to want. It is not yet a reason to make the change permanent.
+
+## What the pilot actually counted
+
+The pilot report *Bokning av föreningslokaler*, dated 8 April 2026, covers an eight-week trial in two venues. It records 96 bookings made on the web and 24 made by phone. Those figures are the report's, and so are their limits: it counts bookings rather than unique people, and it measures nothing about age, functional ability or how used to digital services people are. Twenty-four phone bookings therefore cannot tell us what share of Lervik's residents are unable to book digitally. Nobody should claim they can.
+
+## A motive on the table, but no figures under it
+
+The administration's objection to keeping both routes is double administration, and I take it at face value: it is not a claim that people who ring are lazy or expensive. But the documents contain no measurement of how long either route takes staff, and no calculation of what removing one would save. The board is being asked to close a channel for good on the strength of an inconvenience the documents put no number on. That is thin ground for making the change permanent.
+
+## Weigh what phone and web cost staff against their worth to users
+
+Öppna beslut proposes a six-month trial in all seven venues with both booking routes kept open. During it, the administration records the time each booking route takes and asks users to say, voluntarily, why they chose the phone or the web. We make no claim to have funded or costed that trial. What it would cost is for the board to weigh.
+
+A booking made by phone is not proof that somebody cannot use the web. It is a reason to find out why the phone is still being used. I am not against digital booking. I am against settling its shape before the council can set the work each route costs staff against what it is worth to the people who use it.
+
+## What the board can decide on 18 June
+
+Postpone the permanent switch and run the six months with both routes open. When the trial has produced figures, decide whether a channel should be removed, changed or kept. That decision is the board's either way, and it will be a better one for being taken with the cost of both routes on the table.
+```

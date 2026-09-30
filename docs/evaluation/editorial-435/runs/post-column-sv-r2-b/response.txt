@@ -1,0 +1,44 @@
+**Konfiguration:** genren är krönika (`column`) och språket svenska (`sv`), båda hämtade ur textens egna metadata. Ingen teknik används: metadatat säger `none`, och krönikegenren anger heller ingen. Ingen brief användes. Rättningsbudgeten var en runda. Den gick åt till rubriken, och granskningen efteråt godtog ändringen.
+
+```markdown
+---
+kntnt:
+  genre: column
+  technique: none
+  language: sv
+---
+
+# Bibliotekets mötesmall frågar efter tiden men inte syftet
+
+Av Nora Vik
+
+Jag granskar bibliotekets mötesmall. Där finns rutor för starttid, sluttid, deltagare och dagordning. Någon ruta för det beslut vi ska kunna fatta när vi går därifrån finns inte. Det här är en iakttagelse av ett dokument, inte en scen från ett visst möte. Mallen vill veta när vi ses och vilka som kommer. Vad tiden ska leda till frågar den inte om.
+
+En dagordning räknar upp vad vi ska tala om. Den säger inte varför vi behöver göra det tillsammans.
+
+Missförstå mig rätt: jag uppskattar möten där kolleger upptäcker att de har förstått en fråga olika. Den upptäckten kan vara viktigare än att vi snabbt enas. Det som retar mig är något annat – att tid i kalendern så lätt behandlas som ett resultat i sig. Timmen är bokad, alltså har något hänt. Det är min reflektion, inte något jag har mätt hos andra.
+
+Min tanke är inte att varje samtal ska pressas till ett beslut. Samtal kan skapa förtroende, och de kan få fram en fråga vi inte visste att vi behövde ställa. Men den som fyller i en mall borde få formulera varför vi behöver just varandras tid, också när syftet är att undersöka något tillsammans.
+
+Sedan kommer invändningen, och den är min egen. Jag vet inte om ytterligare en ruta gör möten bättre. Det finns en komik i att försöka lösa ett problem med formulär genom att utöka formuläret, och komiken blir inte mindre av att förslaget kommer från mig.
+
+Ändå vill jag prova en enkel fråga bredvid tiden: vad behöver vi förstå tillsammans? Jag vet inte om den överlever mötet med en verklig dagordning, och jag tänker inte låtsas att jag gör det. Hoppet om frågan och tvivlet på ännu en ruta får samsas ett tag till.
+```
+
+## Fynd
+
+1. **Rubriken (åtgärdat).** Den gamla rubriken "Rutan som inte finns" var så vag att läsaren måste läsa texten för att förstå den. Den sa inte vilken ruta det gällde eller var den saknades, och den visade inte krönikans vinkel. Den nya rubriken hämtar vinkeln ur själva texten. Den har 57 tecken och 8 ord.
+2. **Ingressen saknas (olöst).** Det finns inget sammanfattande stycke mellan rubriken och bylinen som kan stå på egen hand. Därför har läsaren inget stycke som säger vad krönikan handlar om och vad den ger. Delen har inte skrivits; en person behöver fylla den.
+3. **Mellanrubriker och avsnitt saknas (olöst).** Texten har ingen H2. Den som skummar texten får alltså inga hållpunkter genom resonemanget. Mätningen räknar brödtextens första stycke som en inledning på 6 stycken och 290 ord, men det beror enbart på att avsnitten saknas. Inga avsnitt har skrivits.
+4. **Avslutningen saknas som eget avsnitt (olöst).** Avslutande innehåll finns redan i de två sista styckena, med tvivlet och frågan "vad behöver vi förstå tillsammans?". Eftersom texten saknar avsnitt står det kvar där det står, och ingen mellanrubrik har skrivits för det.
+5. **Rubriken upprepar inledningen (olöst).** "frågar efter tiden men inte syftet" säger ungefär samma sak som första styckets sista mening, "Vad tiden ska leda till frågar den inte om", och delvis med samma ord. Läsaren möter alltså poängen två gånger direkt efter varandra. Den gamla rubriken hade samma problem ("Rutan som inte finns" mot "Någon ruta … finns inte"), men den första granskningen tog inte upp det. Budgeten var slut, så fyndet ligger kvar.
+
+Rundan stoppades för att budgeten var förbrukad medan fynd 2–5 återstod. Texten följer alltså inte artikelanatomin: ingressen, avsnitten och ett eget avslutningsavsnitt saknas.
+
+## Påståenden
+
+- **Ändrat påstående (rubriken, reparationen av fynd 1):** Rubriken säger nu att bibliotekets mötesmall frågar efter tiden men inte efter syftet. Tidigare sa den bara att det finns en ruta som saknas. Stöd för påståendet finns i brödtexten: "Vad tiden ska leda till frågar den inte om", "Den säger inte varför vi behöver göra det tillsammans" och "varför vi behöver just varandras tid".
+
+Utöver rubriken har inget påstående tagits bort, ändrats eller lagts till. Båda de avgränsande meningarna står kvar oförändrade: "Det här är en iakttagelse av ett dokument …" och "Det är min reflektion, inte något jag har mätt hos andra."
+
+Utöver påståendena ovan har körningen gjort två sorters ändringar. Rubriken har reparerats, och korrekturpassen på slutet har bytt ett engelskt tankstreck (—) mot ett svenskt med mellanslag (–). Metadatat stämde redan med den lösta konfigurationen och är orört. `input.md` har inte ändrats, och de tillfälliga filerna är borttagna.

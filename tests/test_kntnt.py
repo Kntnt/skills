@@ -5779,6 +5779,144 @@ def test_the_shared_delivery_contract_settles_a_findings_reports_language() -> N
         )
 
 
+# The shared delivery contract's duty on everything a run says about a text,
+# the pointer each reviewing Skill's delivery step gives to it, and the
+# sentence its manpage tells the reader (issue #435).
+DELIVERY_TRUTH_HEADING = "## The truth of a report about the text"
+DELIVERY_TRUTH_SUBJECT = "whether what those words say is true of the text they name"
+DELIVERY_TRUTH_DUTY = "Everything a run says about a text is true of the text it names"
+DELIVERY_TRUTH_SCOPE = (
+    "a count, a length, a grammatical label, where a passage stands, and what a"
+    " round did to a passage"
+)
+DELIVERY_TRUTH_DELIVERED = (
+    "A statement about the delivered text is checked against the delivered text"
+    " after the last change to it, the closing mechanical pass included"
+)
+DELIVERY_TRUTH_MEASURED = (
+    "is taken from that script's measurement of the text the statement is about"
+)
+DELIVERY_TRUTH_RECEIVED = "A statement about the text as it arrived says so"
+DELIVERY_TRUTH_LEFT_OUT = (
+    "A statement that cannot be made true of the text it names is left out"
+)
+DELIVERY_TRUTH_CHECKED_AS_DRAFTED = (
+    "The check is made on the reply as drafted, one statement at a time"
+)
+DELIVERY_TRUTH_ONE_EXCEPTION = (
+    "is checked against every part of the text it covers, because a single"
+    " exception makes it false"
+)
+DELIVERY_TRUTH_POINTER = (
+    "*The truth of a report about the text* in `$LIBRARY/references/delivery.md`"
+)
+REDLINE_FINAL_MEASUREMENT = (
+    "from step 6's measurement run again on the final Text Artifact that step 9"
+    " produced"
+)
+TRUTH_PAGE_CLAUSE = (
+    "Everything the reply says about the text is true of the text it names, and"
+    " a statement about the text as it arrived says so."
+)
+
+
+def test_the_shared_delivery_contract_holds_a_report_true_of_its_text() -> None:
+    """A reply's incidental words about a text owe the check its account owes.
+
+    #398 held the claim account and the closing paragraph to the delivered
+    text, and nothing held the rest of the reply to anything: a headline said
+    to stay at 52 characters came back with 56, a definite form was called
+    indefinite, two passages a heading was set over were said to have moved.
+    Each was written from the review of the text as received or from the run's
+    memory of a round. The duty is stated once, where every editorial Skill's
+    delivery reads it, and the reviewing Skills point at it rather than
+    restating it (issue #435).
+    """
+
+    contract = DELIVERY.read_text(encoding="utf-8")
+
+    # The duty has a section of its own, after the language rule it sits beside.
+    headings = [line for line in contract.splitlines() if line.startswith("## ")]
+    assert DELIVERY_TRUTH_HEADING in headings, (
+        f"{DELIVERY}: the shared contract holds no section saying that what a"
+        f" run says about a text is true of it, so every statement outside the"
+        f" claim account is written unchecked (issue #435). See {STANDARD}."
+    )
+    position = headings.index(DELIVERY_TRUTH_HEADING)
+    assert headings[position - 1] == "## The language of a report about the text"
+    assert headings[position + 1] == "## Refusals"
+
+    # The opening paragraph's list of what the contract covers names it.
+    opening = contract.split("\n\n", 2)[1]
+    assert DELIVERY_TRUTH_SUBJECT in opening, (
+        f"{DELIVERY}: the opening paragraph lists what the contract covers and"
+        f" leaves out the truth of what a run says about the text (issue"
+        f" #435). See {STANDARD}."
+    )
+
+    section = contract.split(DELIVERY_TRUTH_HEADING, 1)[1].split("\n## ", 1)[0]
+    for clause in (
+        DELIVERY_TRUTH_DUTY,
+        DELIVERY_TRUTH_SCOPE,
+        DELIVERY_TRUTH_DELIVERED,
+        "`scripts/article_anatomy.py`",
+        DELIVERY_TRUTH_MEASURED,
+        DELIVERY_TRUTH_RECEIVED,
+        DELIVERY_TRUTH_LEFT_OUT,
+        DELIVERY_TRUTH_CHECKED_AS_DRAFTED,
+        DELIVERY_TRUTH_ONE_EXCEPTION,
+    ):
+        assert clause in section, (
+            f"{DELIVERY}: the section on the truth of a report no longer says"
+            f" {clause!r}, so a reply's statements about the text are held to"
+            f" less than issue #435 settled. See {STANDARD}."
+        )
+
+    # No Skill body states the duty in its own words.
+    for body_path in sorted((REPO_ROOT / "skills").rglob("SKILL.md")):
+        body = body_path.read_text(encoding="utf-8")
+        assert DELIVERY_TRUTH_DUTY not in body, (
+            f"{body_path}: the body states the shared duty itself, a second"
+            f" copy of a rule the shared delivery contract owns and is free to"
+            f" drift from it (issue #435). See {STANDARD}."
+        )
+
+    # Each reviewing Skill's delivery step points at it, and its manpage says it.
+    for body_path, number, help_path in (
+        (REDLINE, 11, REDLINE_HELP),
+        (UNSLOP, 9, UNSLOP_HELP),
+    ):
+        steps = body_path.read_text(encoding="utf-8").split("\n## Steps\n", 1)[1]
+        delivery = steps.split(f"\n{number}. ", 1)[1]
+        assert DELIVERY_TRUTH_POINTER in delivery, (
+            f"{body_path}: step {number} holds the claim account and the closing"
+            f" paragraph to the delivered text and points nowhere for the rest"
+            f" of what the reply says about it (issue #435). See {STANDARD}."
+        )
+        page = help_path.read_text(encoding="utf-8")
+        assert TRUTH_PAGE_CLAUSE in page, (
+            f"{help_path}: the manpage says only that the claim account is"
+            f" true of the delivered text, which a reader takes for the whole"
+            f" duty (issue #435). See {STANDARD}."
+        )
+
+    # Redline measures the text it delivers, with the command step 6 carries.
+    steps = REDLINE.read_text(encoding="utf-8").split("\n## Steps\n", 1)[1]
+    step_6 = steps.split("\n6. ", 1)[1].split("\n7. ", 1)[0]
+    step_11 = steps.split("\n11. ", 1)[1]
+    assert "article_anatomy.py" in step_6
+    assert REDLINE_FINAL_MEASUREMENT in step_11, (
+        f"{REDLINE}: step 6 measures the text under review and nothing measures"
+        f" the text step 9 returns, so a length the reply states about the"
+        f" delivered text is the received text's (issue #435). See {STANDARD}."
+    )
+    assert "article_anatomy.py" not in step_11, (
+        f"{REDLINE}: step 11 repeats step 6's command rather than pointing at"
+        f" it, two copies of one invocation free to drift (issue #435). See"
+        f" {STANDARD}."
+    )
+
+
 # The shared delivery contract's answer to what the response of a run that
 # named a destination carries: where the text went and the findings the file
 # cannot hold, and never the text itself (issue #148).

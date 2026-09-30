@@ -1,0 +1,62 @@
+I reviewed `input.md` and made one correction round. One problem is still unresolved: the piece has no standfirst, and that needs you to write it. Nothing was written to disk: `input.md` is unchanged and the temporary files are gone.
+
+**Settings:** all three came from the text's own frontmatter. It's an opinion piece in British English (`en_GB`), with no technique set (`technique: none`).
+
+```markdown
+---
+kntnt:
+  genre: opinion
+  technique: none
+  language: en_GB
+---
+
+# Keep telephone booking until Lervik knows why it is used
+
+*By Sanna Ek, spokesperson for Öppna beslut*
+
+On 18 June the municipal executive board has before it a proposal that telephone booking of Lervik's association venues disappear in September. It should not settle that yet: keep both routes, telephone and web, for six months, in all seven venues, and decide afterwards, with figures in hand.
+
+## The pilot counted bookings, not people
+
+The municipality's pilot report on the booking of association venues, dated 8 April 2026, covers an eight-week trial in two venues: 96 bookings were made on the web and 24 by telephone. The report counts bookings rather than unique people, and it measures nothing about age, ability or digital habit.
+
+Those 24 bookings therefore settle nothing about the residents behind them. They cannot show what share of residents are unable to book digitally; nor do they show the opposite, that the telephone survives out of habit. The report does not measure it.
+
+## The proposal rests on an inconvenience the papers do not measure
+
+The officers' report before the June meeting proposes removing telephone booking in all seven venues from September. The reason given is that staff should not have to enter details into two flows. Double administration is the administration's genuine objection to keeping both routes, not any view that telephone users are lazy or expensive, and I do not accuse it of holding one.
+
+What the papers do not contain is any measurement of the time that second flow costs, or any calculation of the saving. A permanent change for seven venues is being proposed on the strength of a nuisance the papers put no number on.
+
+## Six months would produce the figures
+
+Öppna beslut proposes six months in all seven venues with both routes kept open. The administration would record how long each route takes and would ask users to state, voluntarily, why they chose the telephone or the web. We make no claim to have funded or costed that trial; what it would cost is for the board to weigh.
+
+That a booking comes in by telephone is not proof that somebody cannot use the web. It is a reason to find out why the telephone is still being used. I am not against digital booking. I am against deciding before the cost of the work can be weighed against what each route is worth to the people who use it.
+
+## What the board can decide on 18 June
+
+The board can adopt the September removal on the material in front of it. Or it can postpone that decision, run the trial in all seven venues, and afterwards remove, change or keep a route with time figures and users' own reasons on the table. The trial costs something we have not costed; asking what that sum is, before the route goes, is the smaller risk.
+```
+
+## Findings
+
+1. **No standfirst (unresolved).** The text goes straight from the headline to the byline and the lead. An opinion piece should have a standfirst there: one paragraph of at most 60 words that makes sense on its own. Without it, a reader who sees only the headline and the teaser gets no summary of the argument or reason to read on. It is reported rather than written, so it needs you to write it.
+2. **Headline (repaired).** "Keep the telephone until Lervik knows why it is used" didn't say what was being kept, so a reader skimming only the headline couldn't tell the piece is about booking. It now says "telephone booking". It is 56 characters and 10 words. The guideline is three to eight words, but the old headline was 10 words too, and it reads clearly at this length.
+3. **Byline (repaired).** "*Sanna Ek, spokesperson for Öppna beslut*" was missing the English byline form, so it read like a caption rather than an author credit. It now starts with "By".
+4. **Lead (repaired).** The lead said "keep both routes" but only ever named telephone booking. Web booking first appeared in the first section. It now reads "both routes, telephone and web".
+5. **Last section (repaired).** "It can adopt…" only made sense by reading the subheading, because the board is named there and not in the sentence. The sentence now begins "The board can adopt…".
+6. **"Route" and "channel" (repaired).** The two booking options were called "routes" in some places and "channels" in others, so a reader could wonder whether they were different things. "Channel(s)" became "route(s)" in "keeping both channels", "keep a channel" and "before the channel goes".
+
+After the correction, a fresh check found no new problems caused by the edits. My one correction round was used up (the default `--max=1`), so the standfirst stays open.
+
+The text now meets the article structure except for the missing standfirst. I checked everything the measuring script can't count myself: the order of the parts, the byline form, the lead, the last section working as an ending with a call to action, and the headings. Whether the standfirst and the lead repeat each other can't be judged until a standfirst exists.
+
+## What changed in the claims
+
+- **Changed (lead, finding 4):** the lead now says the two routes to keep for six months are telephone booking and web booking. Before, it only said "both routes" without naming the second one.
+- **Changed (headline, finding 2):** the headline now says what should be kept until Lervik knows why it is used: telephone booking of venues. It no longer just says "the telephone".
+
+No claim was removed or added. No sentence that limits what the text claims was removed or weakened.
+
+Beyond those two claims, the run made small wording repairs: it added "By" to the byline, named the board at the start of the last section, and used "route" throughout. The final proofreading pass found no spelling, grammar or punctuation errors and changed nothing.

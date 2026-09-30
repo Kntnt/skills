@@ -1,0 +1,65 @@
+The review is done. The text had no standfirst, and a review may not write one, so that is the one finding left for you. I made five other repairs in the single correction round `--max` allowed (the default). The final proofreading pass found nothing to correct. Nothing was written to disk.
+
+**Settings used:** genre `opinion`, technique `none` (so no narrative arc was applied) and language `en_GB`. All three came from the text's own `kntnt` metadata. That metadata already matched these settings, so it is unchanged.
+
+```markdown
+---
+kntnt:
+  genre: opinion
+  technique: none
+  language: en_GB
+---
+
+# Keep telephone booking until Lervik knows why it is used
+
+*By Sanna Ek, spokesperson for Öppna beslut*
+
+On 18 June the municipal executive board has before it a proposal that telephone booking of Lervik's association venues disappear in September. It should not settle that yet: keep both routes, telephone and web, for six months, in all seven venues, and decide afterwards, with figures in hand.
+
+## The pilot counted bookings, not people
+
+The municipality's pilot report on the booking of association venues, dated 8 April 2026, covers an eight-week trial in two venues: 96 bookings were made on the web and 24 by telephone. The report counts bookings rather than unique people, and it measures nothing about age, ability or digital habit.
+
+Those 24 bookings therefore settle nothing about the residents behind them. They cannot show what share of residents are unable to book digitally; nor do they show the opposite, that the telephone survives out of habit. The report does not measure it.
+
+## The proposal rests on an inconvenience the papers do not measure
+
+The officers' report before the June meeting proposes removing telephone booking in all seven venues from September. The reason given is that staff should not have to enter details into two flows. Double administration is the administration's genuine objection to keeping both routes, not any view that telephone users are lazy or expensive, and I do not accuse it of holding one.
+
+What the papers do not contain is any measurement of the time that second flow costs, or any calculation of the saving. A permanent change for seven venues is being proposed on the strength of a nuisance the papers put no number on.
+
+## Six months would produce the figures
+
+Öppna beslut proposes six months in all seven venues with both routes kept open. The administration would record how long each route takes and would ask users to state, voluntarily, why they chose the telephone or the web. We make no claim to have funded or costed that trial; what it would cost is for the board to weigh.
+
+That a booking comes in by telephone is not proof that somebody cannot use the web. It is a reason to find out why the telephone is still being used. I am not against digital booking. I am against deciding before the cost of the work can be weighed against what each route is worth to the people who use it.
+
+## What the board can decide on 18 June
+
+The board can adopt the September removal on the material in front of it. Or it can postpone that decision, run the trial in all seven venues, and afterwards remove, change or keep a route with time figures and users' own reasons on the table. The trial costs something we have not costed; asking what that sum is, before the route goes, is the smaller risk.
+```
+
+## Findings
+
+**Still open**
+
+1. **The standfirst is missing.** Nothing sits between the headline and the byline where the summary paragraph belongs. Readers who only see the top of the piece get no self-contained account of what it argues or why to read on. You need to write it: no more than 60 words, and it should start with a different word from the lead.
+
+**Repaired**
+
+2. **Byline:** it named the author without the English form "By <author>", so it could read as a caption. It now starts with "By".
+3. **Headline:** "Keep the telephone" didn't say what the telephone is for. Read on its own, the headline gave no sign that the subject is booking venues. It now says "telephone booking".
+4. **Lead:** "keep both routes" referred to a second route the lead never named. The web first appeared in the next section. The lead now names both routes: telephone and web.
+5. **Ending:** the first sentence, "It can adopt…", only made sense by reading the subheading, because the board was named nowhere else. The sentence now begins "The board can adopt…".
+6. **Same thing, two names:** the two ways to book were called "routes" in some places and "channels" in others, so a reader could wonder whether they differ. "Route" is now used throughout. "Flows" means the staff's data-entry work, which is a different thing, so it was left alone.
+
+The headline has 10 words, against a guideline of three to eight. It is 56 characters, so it stays within the character limits. Those extra words carry what the headline needs to say, so this is not a finding. The final text does not conform to the article structure because the standfirst is missing. The checks that depend on the standfirst couldn't be done: whether it stands on its own, and whether the lead repeats it.
+
+## What happened to the claims
+
+- **Changed, headline (repair 3):** it now says that telephone booking should be kept until Lervik knows why it is used. Before, it said "the telephone" without saying what for.
+- **Changed, lead (repair 4):** the author's position now names telephone and web as the two routes to keep for six months in all seven venues. The body already said both routes exist.
+
+Apart from these two changes, no claim was removed, added or moved. The sentences that limit what the text claims are untouched, including "The report does not measure it" and "We make no claim to have funded or costed that trial".
+
+Beyond the claims above, the run put the byline in the English form, made the ending's first sentence name the board, and replaced "channel" with "route" in three places. The final proofreading pass made no corrections.

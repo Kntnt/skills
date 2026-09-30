@@ -1,0 +1,68 @@
+I reviewed `input.md` as an opinion piece in British English with no technique. All three values came from the file's own `kntnt` metadata block, and the block already matched, so I left it as it was. One correction round was allowed and it was used. The final proofreading pass found no mechanical errors. Nothing was written to disk and my temporary files are deleted. `input.md` has not changed.
+
+```markdown
+---
+kntnt:
+  genre: opinion
+  technique: none
+  language: en_GB
+---
+
+# Don't switch off Lervik's phone booking before we know what it costs
+
+By Sanna Ek, spokesperson for Öppna beslut
+
+On 18 June the council executive board is asked to remove phone booking from all seven community venues from September. The officers' report gives one reason: staff should not have to enter the details in two flows. That is a fair thing to want. It is not yet a reason to make the change permanent.
+
+## What the pilot actually counted
+
+The pilot report *Bokning av föreningslokaler*, dated 8 April 2026, covers an eight-week trial in two venues. It records 96 bookings made on the web and 24 made by phone.
+
+Those figures are the report's, and so are their limits: it counts bookings rather than unique people, and it measures nothing about age, functional ability or how used to digital services people are. Twenty-four phone bookings therefore cannot tell us what share of Lervik's residents are unable to book digitally. Nobody should claim they can.
+
+## A motive on the table, but no figures under it
+
+The administration's objection to keeping both routes is double administration, and I take it at face value: it is not a claim that people who ring are lazy or expensive.
+
+But the documents contain no measurement of how long either route takes staff, and no calculation of what removing one would save. The board is being asked to close a channel for good on the strength of an inconvenience the documents put no number on. That is thin ground for making the change permanent.
+
+## First find out what each route costs staff and why people ring
+
+Öppna beslut proposes a six-month trial in all seven venues with both booking routes kept open. During it, the administration records the time each booking route takes and asks users to say, voluntarily, why they chose the phone or the web. We make no claim to have funded or costed that trial. What it would cost is for the board to weigh.
+
+A booking made by phone is not proof that somebody cannot use the web. It is a reason to find out why the phone is still being used. I am not against digital booking. I am against settling its shape before the council can set the work each route costs staff against what it is worth to the people who use it.
+
+## What the board can decide on 18 June
+
+Postpone the permanent switch and run the six months with both routes open. When the trial has produced figures, decide whether a channel should be removed, changed or kept. That decision is the board's either way, and it will be a better one for being taken with the cost of both routes on the table.
+```
+
+## What's left for you
+
+- **There is no standfirst.** An opinion piece needs a summary paragraph of at most 60 words between the headline and the byline. The first paragraph ("On 18 June…") works as the lead, because the rest of the piece relies on it for the date, the board and the seven venues. Without a standfirst, readers get no self-contained summary that can be shown apart from the body. I haven't written one, because what it says is for you to decide.
+
+## Fixed
+
+- **The byline was at the end.** "— Sanna Ek, spokesperson for Öppna beslut" came last, so readers met "I" in the second section and "Öppna beslut" in the third without knowing who was speaking. It now sits under the headline as "By Sanna Ek, spokesperson for Öppna beslut", with the same name and role.
+- **Two paragraphs held two points each.** The pilot paragraph was 85 words and the paragraph on the administration's motive was 84. Each is now two paragraphs, split at "Those figures are the report's…" and "But the documents contain no measurement…", with no words changed. They now measure 30 + 55 and 30 + 54 words.
+- **One subheading repeated the sentence under it.** "Six months, both routes, and something to measure" said what the section's first sentence then says again ("a six-month trial … with both booking routes kept open"). It is now "First find out what each route costs staff and why people ring", which is 62 characters.
+
+## Changes to the claims
+
+- **Changed:** the old third subheading said the proposal was six months with both routes open and something to measure. The new one says that before deciding, the board should first find out what each route costs staff and why people ring. That rests on "records the time each booking route takes", "asks users to say … why they chose the phone or the web" and "the work each route costs staff". Someone who only reads the subheading no longer sees the six months or the two routes staying open, but the first sentence of that section still says both.
+
+Apart from the subheading, no claim was changed. None was removed or added, and no limiting sentence or connective was taken out.
+
+## Structure check
+
+The text does not yet have the full article structure, because the standfirst is missing. The measurement of the final text found no other failures. I checked these by reading:
+
+- The last section is a proper ending. It opens no new argument and tells the board what it can decide and do.
+- Each subheading describes its own section.
+- How the standfirst and the lead work together can't be checked until there is a standfirst.
+
+The headline is 12 words and 68 characters. That is inside the 70-character limit but longer than the recommended 8 words and 60 characters. I did not treat that as something to fix. Getting down to 8 words would mean dropping either Lervik or the condition "before we know what it costs", and together they carry the argument.
+
+## What changed overall
+
+Compared with the original, the byline moved from the end to under the headline in the "By …" form. The pilot paragraph and the motive paragraph were each split in two, and the third subheading was reworded. Nothing else changed: the proofreading pass made no corrections and the metadata block is exactly as it was.

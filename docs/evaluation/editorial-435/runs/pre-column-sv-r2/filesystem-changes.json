@@ -1,0 +1,93 @@
+{
+  "created": {
+    "home/.claude/.last-cleanup": {
+      "mode": 420,
+      "type": "file",
+      "size": 24,
+      "sha256": "b4fd9bf55e45af12c67df94369c73d373ca393a896f2dffb014f1ef5f41750ed"
+    },
+    "home/.claude/backups": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "home/.claude/projects/-private-var-folders-cs-vgp-x-353zd9frkjpysp7zdw0000gn-T-kntnt-editorial-388-run-62vohnlw-work/247503b1-7471-46f3-b35f-c92c82f10697.jsonl": {
+      "mode": 384,
+      "type": "file",
+      "size": 557599,
+      "sha256": "4f2f4c0a62588ae9f6ab7b3d0a01c8bbf4c49d5b364c38803bbd642b90dda2a7"
+    },
+    "home/.claude/projects/-private-var-folders-cs-vgp-x-353zd9frkjpysp7zdw0000gn-T-kntnt-editorial-388-run-62vohnlw-work/247503b1-7471-46f3-b35f-c92c82f10697/subagents/agent-ad037ae861a97479f.jsonl": {
+      "mode": 384,
+      "type": "file",
+      "size": 184369,
+      "sha256": "c7754610f660523735e69771252b9b2fa309012b99f2d9af6be5fd46011c4f67"
+    },
+    "home/.claude/projects/-private-var-folders-cs-vgp-x-353zd9frkjpysp7zdw0000gn-T-kntnt-editorial-388-run-62vohnlw-work/247503b1-7471-46f3-b35f-c92c82f10697/tool-results": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "home/.claude/projects/-private-var-folders-cs-vgp-x-353zd9frkjpysp7zdw0000gn-T-kntnt-editorial-388-run-62vohnlw-work/memory": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "home/.claude/shell-snapshots": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "home/.claude/.claude.json": {
+      "mode": 384,
+      "type": "file",
+      "size": 45030,
+      "sha256": "0f8e97a86e19c2c4abcf055a54c2eeaff103ce91d17ba637286754ee7a98674b"
+    },
+    "home/.claude/projects/-private-var-folders-cs-vgp-x-353zd9frkjpysp7zdw0000gn-T-kntnt-editorial-388-run-62vohnlw-work/247503b1-7471-46f3-b35f-c92c82f10697/subagents": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "home/.claude/projects/-private-var-folders-cs-vgp-x-353zd9frkjpysp7zdw0000gn-T-kntnt-editorial-388-run-62vohnlw-work/247503b1-7471-46f3-b35f-c92c82f10697": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "home/.claude/projects": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "home/.claude/session-env": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "home/.claude/projects/-private-var-folders-cs-vgp-x-353zd9frkjpysp7zdw0000gn-T-kntnt-editorial-388-run-62vohnlw-work/247503b1-7471-46f3-b35f-c92c82f10697/tool-results/brxoo9ta1.txt": {
+      "mode": 420,
+      "type": "file",
+      "size": 38952,
+      "sha256": "e54db4fe0bc53f8d19fdc82f0a420a1f2d0e10d58039b9406d63b8c9b47c52b2"
+    },
+    "home/.claude/backups/.claude.json.backup.1790719204734": {
+      "mode": 384,
+      "type": "file",
+      "size": 84,
+      "sha256": "ec5a54d95452e8aeaf0c63419464d218c7ba65f1594590598163fe22d8a4a693"
+    },
+    "home/.claude/projects/-private-var-folders-cs-vgp-x-353zd9frkjpysp7zdw0000gn-T-kntnt-editorial-388-run-62vohnlw-work": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "home/.claude/session-env/247503b1-7471-46f3-b35f-c92c82f10697": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "home/.claude/sessions": {
+      "mode": 448,
+      "type": "directory"
+    },
+    "home/.claude/projects/-private-var-folders-cs-vgp-x-353zd9frkjpysp7zdw0000gn-T-kntnt-editorial-388-run-62vohnlw-work/247503b1-7471-46f3-b35f-c92c82f10697/subagents/agent-ad037ae861a97479f.meta.json": {
+      "mode": 420,
+      "type": "file",
+      "size": 196,
+      "sha256": "60ac2ec06976d1054cc878f43f90c48de05db1703e27ac4c76f95e768782628d"
+    }
+  },
+  "removed": {},
+  "changed": {},
+  "note": "Harness, cache and Skill effects are separated by reading trace-index.json; nothing here is a Skill artifact on its own."
+}

@@ -1,0 +1,54 @@
+Konfiguration: genren `opinion` och språket `sv` kommer från anropet. Ingen teknik tillämpades, eftersom genren opinion inte anger någon. Ingen brief valdes och texten har ingen `kntnt`-metadata, så ingen lades till. En korrigeringsrunda användes av budgeten på en. Därefter gjordes en mekanisk korrekturläsning, som inte hittade något att rätta. Inga filer har skrivits och `input.md` är orörd.
+
+```markdown
+# Telefonbokningen bör få ett halvårs prövotid
+
+Sanna Ek, Öppna beslut
+
+Kommunstyrelsen borde behålla telefonbokning under ett halvårs försök i alla sju lokaler.
+
+## Pilotens siffror räknar bokningar, inte unika personer
+
+Det gjordes 96 bokningar på webben och 24 via telefon. Det motsvarar 20 procent av bokningarna. Kommunens pilotrapport från den 8 april 2026 säger samtidigt att bokningarna inte räknar unika personer och att digital vana inte undersöktes.
+
+## Handlingarna visar inte vad två bokningsvägar kostar
+
+Förvaltningen invänder att dubbla kanaler innebär dubbel administration. Handlingarna saknar tidsmätning. Föreningen vill att förvaltningen mäter tidsåtgång och frågar användarna varför de väljer en bokningsväg. Försökets kostnad är inte beräknad.
+
+## Beslutet ligger hos kommunstyrelsen
+
+Nu är det dags att agera. Kommunstyrelsen bör behålla telefonbokningen under ett halvårs försök i alla sju lokaler.
+```
+
+## Olösta fynd
+
+- **Ingressen saknas.** Artikelanatomin kräver en fristående, sammanfattande ingress på högst 60 ord mellan rubrik och byline. Mätningen rapporterar den som saknad. Den som skummar texten får därför ingen sammanfattning av vad artikeln handlar om eller vill. Delen ska skrivas av en person och har inte skrivits här.
+- **”Föreningen” är inte introducerad** (avsnittet om kostnader). Ordet står i bestämd form utan att någon förening har nämnts. Bylinen nämner Öppna beslut men säger inte att det är en förening, och texten säger inte att det är den som avses. Läsaren vet därför inte vem som föreslår mätningen. Att likställa föreningen med Öppna beslut vore ett tillägg, så stället står kvar oförändrat.
+
+Texten uppfyller inte artikelanatomin, eftersom ingressen saknas. Övriga krav är granskade och uppfyllda, både de som räknas och de som inte räknas. Dit hör att sista avsnittet är en avslutning, att mellanrubrikerna beskriver sina avsnitt och att rubrik och mellanrubriker inte upprepar texten under sig.
+
+## Reparerade delar
+
+- **Rubriken.** Den tillskrev kommunledningen ett motiv (hat) som texten inte har stöd för. Den var mer dramatisk än texten och angav inte textens ståndpunkt. Den nya rubriken säger att telefonbokningen bör få ett halvårs prövotid.
+- **Mellanrubriken ”Bakgrund”.** Den var en generisk etikett som inte sade något om avsnittet. Den nya säger att pilotens siffror räknar bokningar, inte unika personer.
+- **Mellanrubriken ”Diskussion”.** Den var en generisk etikett av samma slag. Den nya säger att handlingarna inte visar vad två bokningsvägar kostar.
+- **Avslutningen.** ”Nu är det dags att agera.” stod sist i ett argumenterande avsnitt och namngav varken handling eller aktör. Den har nu ett eget avsnitt under mellanrubriken ”Beslutet ligger hos kommunstyrelsen”. Avsnittet avslutas med textens eget förslag som konkret uppmaning.
+
+## Påståenden
+
+**Borttagna**
+- ”Alla vet att politikerna vill stänga ute äldre för att spara miljoner.” Här försvann tre påståenden: att politikerna vill stänga ute äldre, att det sker för att spara miljoner, och att ”alla” vet detta. Reparationen svarade på fyndet om ett påhittat motiv och en tom källhänvisning som texten saknar stöd för. Hela påståendet var defekten.
+- ”Därför kostar det ingenting att behålla telefonbokningen.” Reparationen svarade på fyndet om en bruten slutsats som texten själv motsäger (”Försökets kostnad är inte beräknad”). Med meningen försvann också textens ”därför”. Läsaren får inte längre veta att författaren drar slutsatsen att den saknade tidsmätningen innebär kostnadsfrihet. Begränsningarna ”Handlingarna saknar tidsmätning” och ”Försökets kostnad är inte beräknad” står kvar.
+
+**Ändrade**
+- ”Det bevisar att 20 procent av kommunens invånare inte kan använda internet” säger nu bara att 24 av 120 bokningar motsvarar 20 procent av bokningarna. Påståendet om invånarna och om bevis är borta. Reparationen svarade på fyndet om en slutsats som motsäger sin nämnare och textens egen reservation.
+- Rubriken påstår nu att telefonbokningen bör få ett halvårs prövotid, i stället för att kommunledningen hatar människor. Rubrikfyndet ligger bakom ändringen.
+- Den första mellanrubriken påstår nu att pilotens siffror räknar bokningar och inte unika personer. Påståendet bygger på meningen om pilotrapporten.
+- Den andra mellanrubriken påstår nu att handlingarna inte visar vad två bokningsvägar kostar. Påståendet bygger på meningarna om att tidsmätning saknas och att kostnaden inte är beräknad.
+
+**Tillagda**
+- Mellanrubriken ”Beslutet ligger hos kommunstyrelsen” påstår att beslutet ligger hos kommunstyrelsen. Det är en slutsats av att texten vänder sig till kommunstyrelsen som den som bör behålla telefonbokningen. Tillägget kom med reparationen av avslutningen.
+
+Uppmaningen ”Kommunstyrelsen bör behålla telefonbokningen under ett halvårs försök i alla sju lokaler” upprepar inledningens förslag och är inget nytt påstående. Utöver de påståenden som redovisas ovan har inget påstående tagits bort, ändrats eller lagts till.
+
+Utöver påståendena ovan har körningen gjort följande. En tom källhänvisning och ett påhittat motiv har tagits bort. Två generiska etikettrubriker har ersatts av beskrivande mellanrubriker, och rubriken har skrivits om. Avslutningen har fått ett eget avsnitt med en konkret uppmaning i stället för en tom. Den mekaniska korrekturläsningen gjorde inga ändringar.

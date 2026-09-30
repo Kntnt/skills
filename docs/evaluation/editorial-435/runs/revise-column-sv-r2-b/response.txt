@@ -1,0 +1,42 @@
+```markdown
+---
+kntnt:
+  genre: column
+  technique: none
+  language: sv
+---
+
+# Bibliotekets mötesmall frågar inte varför vi möts
+
+Av Nora Vik
+
+Jag granskar bibliotekets mötesmall. Där finns rutor för starttid, sluttid, deltagare och dagordning. Någon ruta för det beslut vi ska kunna fatta när vi går därifrån finns inte. Det här är en iakttagelse av ett dokument, inte en scen från ett visst möte. Mallen vill veta när vi ses och vilka som kommer. Vad tiden ska leda till frågar den inte om.
+
+En dagordning räknar upp vad vi ska tala om. Den säger inte varför vi behöver göra det tillsammans.
+
+Missförstå mig rätt: jag uppskattar möten där kolleger upptäcker att de har förstått en fråga olika. Den upptäckten kan vara viktigare än att vi snabbt enas. Det som retar mig är något annat – att tid i kalendern så lätt behandlas som ett resultat i sig. Timmen är bokad, alltså har något hänt. Det är min reflektion, inte något jag har mätt hos andra.
+
+Min tanke är inte att varje samtal ska pressas till ett beslut. Samtal kan skapa förtroende, och de kan få fram en fråga vi inte visste att vi behövde ställa. Men den som fyller i en mall borde få formulera varför vi behöver just varandras tid, också när syftet är att undersöka något tillsammans.
+
+Sedan kommer invändningen, och den är min egen. Jag vet inte om ytterligare en ruta gör möten bättre. Det finns en komik i att försöka lösa ett problem med formulär genom att utöka formuläret, och komiken blir inte mindre av att förslaget kommer från mig.
+
+Ändå vill jag prova en enkel fråga bredvid tiden: vad behöver vi förstå tillsammans? Jag vet inte om den överlever mötet med en verklig dagordning, och jag tänker inte låtsas att jag gör det. Hoppet om frågan och tvivlet på ännu en ruta får samsas ett tag till.
+```
+
+**Inställningar:** genre `column`, ingen teknik och språk `sv`. Alla tre kommer från textens egen `kntnt`-metadata. Tekniken är uttryckligen satt till `none` där, så ingen berättarbåge har lagts på texten. Ingen brief användes. Korrigeringsbudgeten var 1 och gick åt till en omgång. Metadata är oförändrad eftersom den redan stämde.
+
+**Fynd**
+
+1. **Åtgärdat: rubriken gick inte att förstå utan texten.** Den gamla rubriken "Rutan som inte finns" sa inte vilken ruta det gällde, i vilket sammanhang eller vad krönikan tycker om den. En läsare som bara såg rubriken kunde därför inte avgöra om texten var något för hen. Den nya rubriken är "Bibliotekets mötesmall frågar inte varför vi möts" (49 tecken och 7 ord enligt mätningen av den färdiga texten). Den anger vinkeln på egen hand. Den delar ämnesordet "bibliotekets mötesmall" med första stycket men upprepar inte dess formuleringar.
+2. **Olöst: ingress saknas.** Krönikan har ingen fristående ingress som sammanfattar texten på högst 60 ord. Den som ser texten i ett flöde får därför ingen sammanfattning som lockar vidare. Delen har inte skrivits, eftersom det är skribenten som ska fylla den.
+3. **Olöst: mellanrubriker och avsnitt saknas, liksom ett eget avslutande avsnitt.** Hela brödtexten ligger utan mellanrubriker. Mätningen räknar därför det inledande stycket som 6 stycken och 290 ord. Det felet beror bara på att avsnitten saknas. En läsare som skummar får inga ingångar i texten och ingen markering av var resonemanget går över i avslutningen. Inga mellanrubriker har skrivits.
+4. **Olöst: uppmaning till läsaren saknas.** Avslutningen berättar vad skribenten själv vill prova ("vad behöver vi förstå tillsammans?") men uppmanar inte läsaren att göra något. Att skriva en sådan uppmaning vore att lägga ord i skribentens mun, så den är lämnad åt skribenten.
+
+Texten uppfyller alltså ännu inte artikelanatomin. Budgeten är förbrukad, men fynd 2–4 hade inte kunnat åtgärdas vid en granskning i vilket fall, eftersom de gäller delar som saknas.
+
+**Påståenden**
+
+- **Ändrat påstående (rubriken, fynd 1):** Den gamla rubriken sa bara att en ruta inte finns. Den nya säger att bibliotekets mötesmall inte frågar varför vi möts. Brödtexten bär det påståendet: mallen frågar när och vilka men inte vad tiden ska leda till, och ingen ruta finns för syftet. Rubriken påstår inget om mötesmallar i allmänhet.
+- Inga påståenden har tagits bort eller lagts till. Inga begränsningar, sambandsord eller avgränsande satser har rört. Det gäller till exempel "Det här är en iakttagelse av ett dokument, inte en scen från ett visst möte" och "Det är min reflektion, inte något jag har mätt hos andra", som står kvar ordagrant. Utöver rubriken ovan har inget påstående ändrats.
+
+**Övriga ändringar:** Utöver rubriken bytte slutkorrekturen ett engelskt tankstreck (—) mot ett svenskt (–). Byline, frontmatter och brödtexten är i övrigt oförändrade.

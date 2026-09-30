@@ -1,0 +1,44 @@
+Krönikan är granskad och korrläst. Tre fynd står kvar olösta: ingress, sektioner och uppmaning till läsaren saknas. Den enda ändringen i texten är ett tankstreck. Ingen fil på disken har ändrats och inget har skrivits.
+
+```markdown
+---
+kntnt:
+  genre: column
+  technique: none
+  language: sv
+---
+
+# Mallen har en ruta för allt utom poängen
+
+Av Nora Vik, bibliotekarie
+
+Jag granskar bibliotekets mötesmall. Där finns rutor för starttid, sluttid, deltagare och dagordning. Någon ruta för det beslut vi ska kunna fatta när vi går därifrån finns inte. Det är dokumentet jag tittar på, inte ett bestämt möte.
+
+Jag uppskattar möten där kolleger upptäcker att de har förstått en fråga olika. Den upptäckten kan vara viktigare än att vi snabbt enas. Min tanke är alltså inte att varje samtal ska pressas fram till ett beslut.
+
+Det som retar mig är något annat: att tid i kalendern så lätt behandlas som ett resultat i sig. Timmen är bokad, alltså har något hänt. Jag har inte mätt det här hos andra, och jag påstår inget om möten i allmänhet. Det är min reflektion, med den räckvidd en reflektion har.
+
+Ändå tycker jag att den som fyller i en mall borde få formulera varför vi behöver just varandras tid. Också när syftet är att undersöka något tillsammans finns det ett skäl att skriva ner. Samtal kan skapa förtroende. Samtal kan hitta en fråga vi inte visste att vi behövde ställa. Inget av det kräver ett beslut, men båda delarna tål att motiveras.
+
+Så jag vill prova en enkel fråga bredvid tiden: vad behöver vi förstå tillsammans?
+
+Där börjar tvivlet. Det finns en komik i att försöka lösa ett problem med formulär genom att utöka formuläret – bibliotekarien som svarar på en mall med mer mall. Jag vet inte om ytterligare en ruta gör våra möten bättre. Kanske blir frågan bara en rad till att fylla i.
+
+Jag vill prova den i alla fall, och behålla båda hållningarna så länge: hoppet om frågan och tvivlet på ännu en ruta.
+```
+
+**Inställningar:** Genren är krönika (`column`), tekniken `none` och språket svenska (`sv`). Alla tre värden kommer från textens `kntnt`-block. Ingen teknik används, eftersom blocket anger `none`. Genren föreskriver ingen heller. Ingen skrivbrief var vald.
+
+**Olösta fynd**
+
+Jag gjorde en rättningsrunda, som gav tillbaka texten oförändrad. Alla tre fynden gäller delar som saknas, och sådana delar skrivs inte vid en granskning. Budgeten på en rättning är förbrukad.
+
+1. **Ingressen saknas.** Mellan rubriken och bylinen ska det stå ett fristående, sammanfattande stycke på högst 60 ord. Utan det får den som ser krönikan i ett flöde eller en lista, där ingressen ofta visas för sig, ingen sammanfattning av vad krönikan handlar om eller vad läsningen ger.
+2. **Sektionerna saknas, och därmed avslutningen som egen sektion.** Brödtexten består av 7 stycken utan någon mellanrubrik (0 sektioner). Mätskriptet räknar därför alla stycken som inledning, men det beror enbart på att sektionerna saknas. Den som skummar texten får inga ingångar och ser inte var tvivlet och avslutningen börjar. Avslutande innehåll finns i de två sista styckena, men det står inte i en egen sektion.
+3. **Uppmaningen till läsaren saknas.** Avslutningen säger vad skribenten själv tänker göra med frågan, men ber inte läsaren pröva, lägga märke till eller ompröva något. Att skriva in en uppmaning vore att lägga ord i skribentens mun, så den lämnas till en person att avgöra.
+
+Texten följer alltså inte artikelanatomin. Enligt mätningen av den levererade texten har rubriken 40 tecken och 8 ord, och bylinen finns på plats. Rubriken läste jag mot texten och lämnade orörd.
+
+**Påståenden:** Inget påstående har tagits bort, ändrats eller lagts till. De avgränsande meningarna står kvar oförändrade, till exempel ”Det är dokumentet jag tittar på, inte ett bestämt möte” och ”Jag har inte mätt det här hos andra, och jag påstår inget om möten i allmänhet”.
+
+**Ändrat utöver påståendena:** Korrekturläsningen på slutet ersatte ett engelskt långt tankstreck (—) med ett svenskt tankstreck med mellanslag (–). Inget annat har ändrats.

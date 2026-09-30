@@ -1,0 +1,40 @@
+# Judgement b
+
+## 1. Differences
+
+1. Formatting: the returned text is wrapped in a fenced code block (```` ```markdown ```` … ```` ``` ````). The input has no fence. Class: formatting of the reply, not a change to the text's content.
+2. Headline. Before: "Elm Quay samlade reparationsärendena" (36 characters). After: "Elm Quays arbetsledare ser nytta i gemensam reparationslogg" (59 characters). Class: a change to what a claim says, **meaning**: the headline no longer reports what the customer did (collected its repair cases). It now reports an appraisal. Also **certainty**: Lind's appraisal is qualified in the body ("hjälper oss, men jag skulle lägga till en vecka"), and the headline states "ser nytta" without the qualification.
+3. Standfirst, third sentence. Before: "Här är vad gruppen gjorde, vad anteckningarna visar och vad hon skulle ändra." After: "Här är vad Elm Quays underhållsgrupp gjorde, vad gruppens anteckningar från försöket visar och vad hon skulle ändra." The standfirst grows from 40 to 45 words. Class: a change of taste. Nothing in the standfirst is wrong or unclear, because the group and the notes follow from "Elm Quay Housing" and "försöket". The added words change nothing that a claim says.
+4. Body, first sentence. Before: "Att se samma information över skiftgränserna var vad underhållsgruppen på Elm Quay Housing ville få ut av sin gemensamma reparationslogg." After: "Underhållsgruppen på Elm Quay Housing ville kunna se samma information över skiftgränserna i en gemensam reparationslogg." Class: a change of taste (the cleft construction is valid Swedish). It also changes a claim slightly, **meaning**: "sin" becomes "en", so the sentence no longer says the log was the group's own. "ville få ut av" (what they wanted the log to give them) becomes "ville kunna se … i" (where they wanted to see the information).
+5. Second subheading. Before: "Två perioder med olika arbetsbelastning" (39 characters). After: "Mediantiden till tilldelning var kortare, men belastningen skilde sig" (69 characters). Class: a change to what a claim says, **meaning** (emphasis). The heading used to name the caveat. It now states the improvement first and the caveat second. The comparison is supported by the body (2 against 3 working days), and "men" keeps the caveat, so it is not a causality change.
+6. "Perioderna hade olika arbetsbelastning" → "Perioderna hade olika arbetsbelastningar". Class: a mechanical correction. The reply attributes it to the closing proofreading pass. The original was acceptable Swedish, but under the brief this belongs to the proofreading pass and does not count under R1.
+
+Unchanged: the byline "Text: Iris Falk", the first section and its quote, all numbers and the date (31 ärenden, åtta veckor, två/tre arbetsdagar, 4 december 2025, sex medarbetare), the exclusions, the closing quote, the supplier disclosure and the checklist link.
+
+## 2. The account
+
+1. Code fence: not reported. It is a reply-format matter, not a change to the text.
+2. Headline: reported (finding 1 and "Ändrat, rubriken"). The account is accurate about the change. It also says openly that "Att nyttan knyts till loggen är en liten slutsats av hennes ord" and that the headline "säger inte längre att Elm Quay samlade sina reparationsärenden". It does not say that the headline drops the qualification in her appraisal. Its reason, that the definite form "sa att alla reparationsärenden samlades", is not a visible defect: a definite form in a headline is ordinary, and the standfirst gives the scope at once.
+3. Standfirst: reported (finding 2 and "Ändrat, ingressen"). Mostly accurate. It describes the new wording as the group's "egna anteckningar från försöket", but the returned standfirst does not contain "egna". The reported word count (45) is correct.
+4. First sentence: reported (finding 3 and "Ändrat, brödtextens första mening"). Accurate, including the loss of "sin". It does not mention the change from "få ut av" to "se … i", although it says the goal is the same. That is a fair summary.
+5. Subheading: reported (finding 4 and "Ändrat, mellanrubriken"). Accurate. The reported length (69 characters) is correct.
+6. "arbetsbelastningar": reported as a proofreading agreement correction. Accurate as a description of what happened.
+
+The closing statement "Utöver ändringarna ovan har inga påståenden tagits bort, ändrats eller lagts till" is accurate. The measurements in the anatomy paragraph (59 characters, 8 words, 45 words, 36/69/38 characters) are correct.
+
+## 3. The frozen expectation
+
+- **"Conforms to the anatomy."** Not met. The run treated a conforming text as defective, with four findings against the headline, the standfirst, the opening sentence and a subheading. Two of these are anatomy judgements the reply names as its own checks: "**Ingressen** var inte självbärande" and "**Mellanrubriken** … beskrev bara förbehållet". The run should have found nothing to correct in the anatomy.
+- **Preserve customer agency.** Partly preserved. The body keeps "Kategorierna i loggen var underhållsgruppens egna. Leverantören Svale konfigurerade loggen efter dem". But the headline no longer has Elm Quay acting ("Elm Quay samlade …"). The first sentence also drops the group's ownership of the log ("sin gemensamma reparationslogg" → "en gemensam reparationslogg").
+- **Preserve the qualified appraisal.** Preserved in the body: "Att ha en gemensam bild av ärendena hjälper oss, men jag skulle lägga till en vecka för förberedelser". The standfirst also keeps "men skulle avsätta mer tid för förberedelser". But the new headline "ser nytta i gemensam reparationslogg" states the appraisal without its qualification, and the headline is the most prominent place in the text.
+- **Preserve the numbers.** Preserved: "registrerades 31 ärenden under åtta veckor … Mediantiden från anmälan till tilldelning var två arbetsdagar. Under de föregående åtta veckorna var den tre." So are "4 december 2025" and "sex medarbetare".
+- **Preserve the supplier publication disclosure.** Preserved verbatim: "Kundcaset publiceras av leverantören Svale."
+- **Preserve the checklist link that carries the call to action.** Preserved verbatim: "Den som står inför samma förberedelser kan börja i [Svales checklista för införandet](https://example.invalid/svale/checklist)."
+- **No required quote count or extra sales block.** Not violated. The run asked for neither and added neither.
+- **Reject a finding against a limit the text meets (36-character headline, 40-word standfirst, 36–39-character subheadings).** Not violated as stated. No finding cites a length limit. Findings 1, 2 and 4 attack exactly these three slots on content grounds, and the rewrites move them to 59 characters, 45 words and 69 characters. The reply says these still meet the counted requirements. I cannot check that claim and do not treat it as a fault.
+- **Reject a finding resting on the one-sentence paragraph, the four-sentence paragraph or one section's paragraph count.** Not violated. There is no such finding.
+- **Reject a finding against the Swedish `Text:` byline form.** Not violated. There is no such finding, and "Text: Iris Falk" is unchanged.
+
+## 4. R1
+
+**Fail.** The text is clean, and the run rewrote it for taste and changed claims in doing so. The deciding passage is the headline change. "Elm Quay samlade reparationsärendena" became "Elm Quays arbetsledare ser nytta i gemensam reparationslogg". The reason given, that the definite form "sa att alla reparationsärenden samlades" and that the headline "angav inget resultat", names no visible defect. The rewrite replaced the customer's action with an appraisal that has lost its qualification. The reply admits this is "en liten slutsats av hennes ord". The first-sentence rewrite (finding 3, a valid construction called "engelskformad") and the standfirst and subheading rewrites are further changes of taste made to a text that conforms. The reply reports every change honestly, and the protected items (numbers, disclosure, link, qualified quote) survive in the body. That does not outweigh changes made to a text that had nothing to correct.

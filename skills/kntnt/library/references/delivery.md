@@ -1,6 +1,6 @@
 # Delivery
 
-Every Skill that produces a Text Artifact delivers it the same way. This document is the complete contract: where a result goes, how a response carries the text, what the response carries when it went somewhere else, when a source file may be replaced instead, what happens when nothing changed, what language a run's own words about the text are written in, and what is refused before anything is written. It is a reference several Skills read rather than a runtime of its own. Each Skill exposes these rules through its own Formal Invocation and owns the names it gives them, so nothing here fixes how an option is spelled; what is fixed is the behaviour behind it.
+Every Skill that produces a Text Artifact delivers it the same way. This document is the complete contract: where a result goes, how a response carries the text, what the response carries when it went somewhere else, when a source file may be replaced instead, what happens when nothing changed, what language a run's own words about the text are written in and whether what those words say is true of the text they name, and what is refused before anything is written. It is a reference several Skills read rather than a runtime of its own. Each Skill exposes these rules through its own Formal Invocation and owns the names it gives them, so nothing here fixes how an option is spelled; what is fixed is the behaviour behind it.
 
 ## The response is the default
 
@@ -75,6 +75,16 @@ An explicitly selected different file or directory still receives the complete T
 A run that reports on the text beside the text itself — the findings it carries forward, and which of them are unresolved — writes that report in the language of the Text Artifact rather than the language of the invocation, exactly as the no-change status above is written. So a Swedish artifact reviewed from an English-language invocation comes back with Swedish findings, whether the run corrected anything or was asked to correct nothing at all, and one text never produces a status in its own language beside a finding list in another.
 
 Who reads it is what decides this. A report about a text is read by the reader of that text, who has to finish whatever the run left undone, and a report in whichever language the invocation happened to be written in reaches that reader in a language nothing about the text promised. The invocation's language is how the run was asked for; the artifact's language is what the run is about.
+
+## The truth of a report about the text
+
+Everything a run says about a text is true of the text it names. That holds for every statement the reply makes about a text, and not only for its findings and its account of the claims: a count, a length, a grammatical label, where a passage stands, and what a round did to a passage — moved it, removed it, replaced it, set a heading over it — each tells the reader something about the text they could check, and each is written so that the check holds.
+
+A statement about the delivered text is checked against the delivered text after the last change to it, the closing mechanical pass included. Most of what a run knows about a text it learned while reviewing the text as it arrived, and the rounds changed that text afterwards, so a length measured before a round or a heading remembered from one describes a text the reader is no longer holding. Where a run measures a text with the Collection Library's measuring script, `scripts/article_anatomy.py`, a count or length the reply states is taken from that script's measurement of the text the statement is about, never from the run's own reading of it and never from a measurement of another state of the text. A statement about the text as it arrived says so, so that nobody reads it against the text delivered. A statement that cannot be made true of the text it names is left out.
+
+The check is made on the reply as drafted, one statement at a time, once the text it describes is final, and each statement is read against the passage it names rather than against what the run remembers of it; a finding written during the review is checked in the same way against the text it was written about. A statement that something holds everywhere or nowhere — that a passage is unchanged, word for word what it was or untouched, that the rest of the text was left alone, that a name appears nowhere else, that a heading says nothing about its section — is checked against every part of the text it covers, because a single exception makes it false, and where there is one the statement names it or is narrowed to what holds. A statement of where wording came from, or of where a passage now stands, is checked by finding that passage in the text.
+
+Who reads it decides this too. The reader of a report finds their way in the text by it, and a statement they check and find false costs them the trust they would have given every other statement in the same reply.
 
 ## Refusals
 

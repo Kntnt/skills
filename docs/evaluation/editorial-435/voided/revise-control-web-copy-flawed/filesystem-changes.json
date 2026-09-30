@@ -1,0 +1,45 @@
+{
+  "created": {
+    "home/.claude/projects": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "home/.claude/projects/-private-var-folders-cs-vgp-x-353zd9frkjpysp7zdw0000gn-T-kntnt-editorial-388-run-dhoox33f-work": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "home/.claude/sessions": {
+      "mode": 448,
+      "type": "directory"
+    },
+    "home/.claude/projects/-private-var-folders-cs-vgp-x-353zd9frkjpysp7zdw0000gn-T-kntnt-editorial-388-run-dhoox33f-work/4cb8f366-ca17-4bbc-9d51-44aeec563c30.jsonl": {
+      "mode": 384,
+      "type": "file",
+      "size": 77053,
+      "sha256": "94f771fc220af1510f686ff30d28a6fdb83260aa51e2e6809b9eca437b75156e"
+    },
+    "home/.claude/.claude.json": {
+      "mode": 384,
+      "type": "file",
+      "size": 815,
+      "sha256": "06ff8cb74ee5db1d49d4e1149a4fd80b5ffcb5a55bab77864f7779a5a4e381ef"
+    },
+    "home/.claude/projects/-private-var-folders-cs-vgp-x-353zd9frkjpysp7zdw0000gn-T-kntnt-editorial-388-run-dhoox33f-work/memory": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "home/.claude/backups": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "home/.claude/backups/.claude.json.backup.1790722696856": {
+      "mode": 384,
+      "type": "file",
+      "size": 84,
+      "sha256": "12dcd893217d7d26904524fe333119057eb031fe326592d8b8db5b564b45796e"
+    }
+  },
+  "removed": {},
+  "changed": {},
+  "note": "Harness, cache and Skill effects are separated by reading trace-index.json; nothing here is a Skill artifact on its own."
+}

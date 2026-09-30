@@ -1,0 +1,45 @@
+```markdown
+# Vår mötesmall saknar plats för gemensam förståelse
+
+Nora Vik
+
+Förra tisdagen satt jag gråtande i bibliotekets mötesrum när min chef sade: ”Nu måste allt bli digitalt.” Det var mitt första möte om vår nya mötesmall. Jag har aldrig deltagit i något möte om vår nya mötesmall.
+
+Vår mötesmall har plats för starttid och sluttid men inte för vad vi ska förstå tillsammans.
+
+Samtal kan ha värde utan att leda till beslut. Jag vill prova frågan vad vi behöver förstå tillsammans, men jag vet inte om ytterligare en ruta gör möten bättre.
+```
+
+**Konfiguration:** Genren är krönika (`column`) och språket svenska (`sv`), båda från anropet. Ingen teknik används, eftersom krönikegenren inte anger någon. Ingen brief och ingen `kntnt`-metadata fanns. Texten gick igenom en rättningsrunda (budget 1) och en avslutande korrekturläsning. `input.md` är oförändrad och inga filer har skrivits.
+
+## Åtgärdade fynd
+
+1. **Rubriken ”Möten förändrar allt”** påstod något texten inte påstår och hade ingen vinkel. Den skulle kunna stå över vilken text om möten som helst. Rubriken är omskriven utifrån textens vinkel. Den har nu 50 tecken och 7 ord.
+2. **”I dagens snabbt föränderliga värld är möten viktigare än någonsin.”** var en tom inledningsfras med ett påstående utan stöd. Meningen är struken.
+3. **”Det är viktigt att vara viktig.”** var utfyllnad utan innehåll. Meningen är struken.
+4. **Sista stycket, ”Sammanfattningsvis …”,** var en generisk avslutning som upprepade den tomma frasen. Stycket är struket, så texten slutar nu på reflektionen och den uttalade osäkerheten.
+
+## Kvarstående fynd, olösta
+
+- **Motsägelse i första stycket.** ”Det var mitt första möte om vår nya mötesmall.” och ”Jag har aldrig deltagit i något möte om vår nya mötesmall.” motsäger varandra. Texten visar inte vilken mening som stämmer, så skribenten behöver avgöra det.
+- **Scenen leder inte in i reflektionen.** Varken gråten eller chefens ”Nu måste allt bli digitalt.” kopplas till resonemanget om mallens rutor. Det går inte att koppla ihop dem utan uppgifter som saknas i texten.
+- **Ingress saknas.** Den har inte skrivits.
+- **Mellanrubriker, avsnitt och ett avslutande avsnitt saknas.** Att brödtextens inledning mäts som 3 stycken beror enbart på det. Ingen mellanrubrik har lagts till.
+- **Uppmaning till läsaren saknas.** Texten slutar med vad skribenten själv vill prova men vänder sig inte till läsaren.
+
+Texten följer alltså inte artikelanatomin. Mätningen av den levererade texten visar att ingress och avsnitt saknas och att inledningen är 3 stycken. Rubriken (50 tecken, 7 ord) och bylinen håller.
+
+## Påståenden
+
+**Borttagna:**
+- Att möten i dagens snabbt föränderliga värld är viktigare än någonsin. Det togs bort på två ställen, genom åtgärd 2 och 4.
+- Att det är viktigt att vara viktig, genom åtgärd 3.
+
+**Ändrade:**
+- Rubriken påstår inte längre att möten förändrar allt. Den säger nu att vår mötesmall saknar plats för gemensam förståelse, i samma styrka som stycket om mallens rutor. Det är åtgärd 1.
+
+**Tillagda:** inga.
+
+Utöver dessa har inga påståenden tagits bort, ändrats eller lagts till.
+
+Jämfört med ursprungstexten har körningen tagit bort tomma mönster, nämligen en inledningsfras, en utfyllnadsmening och en sammanfattande slutkläm, och skrivit om rubriken. Korrekturläsningen hittade inga mekaniska fel och ändrade ingenting.

@@ -1,0 +1,3 @@
+Texten behövde ingen ändring. Granskningen hittade inga redaktionella brister, så korrigeringsbudgeten användes inte, och den avslutande korrekturläsningen hittade inga mekaniska fel.
+
+Inställningarna var genre `opinion` och språk svenska (`sv`), båda angivna i anropet. Ingen teknik användes, eftersom genren `opinion` inte anger någon. Räkningen av artikelns delar godkände alla mätbara gränser. Jag läste också igenom de krav som inte går att räkna, till exempel om ingressen står på egen hand, om mellanrubrikerna beskriver sina avsnitt och om sista avsnittet är ett avslutande avsnitt med en uppmaning till kommunstyrelsen. Texten följer artikelns anatomi utan avvikelser.
