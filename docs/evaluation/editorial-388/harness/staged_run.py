@@ -13,6 +13,12 @@ this runner can preserve. That is the whole of what this file adds: one real
 invocation, staged from a frozen revision, with the complete native trace kept
 where an evaluator reads it afterwards (issue #388).
 
+A run may also be a conversation: an interview is one session continued turn
+by turn, each frozen turn typed with `--resume` once the reply before it has
+ended, all inside one private root with one inventory either side of the whole
+session; and a Skill beyond the four, such as Brief, may be staged beside them
+(issue #471).
+
 It judges nothing and writes no record. What it produces is an evidence packet:
 the exact invocation material, the revisions it was staged from, the identity
 the Harness resolved, the before-and-after inventories of every writable root,
@@ -83,6 +89,17 @@ CREDENTIALS = ".credentials.json"
 STRIPPED_PREFIXES = ("KNTNT_", "CLAUDE_", "ANTHROPIC_")
 STRIPPED_NAMES = frozenset({"CLAUDECODE"})
 
+
+def staged_skills(extra: list[str]) -> dict[str, str]:
+    """The Skills one installation holds: the four, and any further editorial one.
+
+    An evaluation of a Skill the four do not include, such as Brief (issue
+    #471), names it; every other run stages exactly what it always staged.
+    """
+
+    return {**STAGED_SKILLS, **{name: f"editorial/{name}" for name in extra}}
+
+
 # What the run's own root is called under the system temporary directory. It is
 # made by `mkdtemp`, so the name is this run's and no other's, and it is the one
 # path this runner ever removes.
@@ -149,7 +166,7 @@ def install_credential(destination: Path) -> str:
     return f"keychain:{KEYCHAIN_SERVICE}"
 
 
-def stage(root: Path, revision: str) -> None:
+def stage(root: Path, revision: str, skills: dict[str, str]) -> None:
     """Export the Skills of one frozen revision into the run's own installation.
 
     `git archive` rather than a copy of the working tree, so that what the run
@@ -161,15 +178,15 @@ def stage(root: Path, revision: str) -> None:
             "git",
             "archive",
             revision,
-            *(f"skills/{path}" for path in STAGED_SKILLS.values()),
+            *(f"skills/{path}" for path in skills.values()),
         ],
         cwd=REPOSITORY,
     )
     with tarfile.open(fileobj=io.BytesIO(archive)) as bundle:
         bundle.extractall(root / "export", filter="data")
-    skills = root / "home" / ".claude" / "skills"
-    for name, source in STAGED_SKILLS.items():
-        shutil.copytree(root / "export" / "skills" / source, skills / name)
+    installed = root / "home" / ".claude" / "skills"
+    for name, source in skills.items():
+        shutil.copytree(root / "export" / "skills" / source, installed / name)
     shutil.rmtree(root / "export")
 
 
@@ -314,14 +331,60 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--corpus-revision", required=True)
     parser.add_argument("--invocation", required=True)
     parser.add_argument("--instruction", default=None)
-    parser.add_argument("--input", type=Path, required=True)
+    # An interview starts from no material at all, so no input is staged.
+    parser.add_argument("--input", type=Path, default=None)
     parser.add_argument("--input-name", default="source.md")
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--model", default="opus")
     parser.add_argument("--effort", default="high")
     parser.add_argument("--timeout", type=int, default=3600)
     parser.add_argument("--capture-output-name", default=None)
+    parser.add_argument("--extra-skill", action="append", default=[])
+    # A JSON array of the user's further turns, each typed into the same
+    # session after the reply to the one before it (issue #471).
+    parser.add_argument("--turns", type=Path, default=None)
     return parser.parse_args(argv)
+
+
+def prompts_of(arguments: argparse.Namespace) -> list[str]:
+    """Every turn the evaluator froze, the Formal Invocation first.
+
+    The first is the invocation with the Contextual Instruction after it where
+    the fixture has one and nothing else at all: framing added here is guidance
+    the run was not supposed to get. The rest are the frozen turns verbatim.
+    """
+
+    first = arguments.invocation
+    if arguments.instruction:
+        first = f"{first}\n{arguments.instruction}"
+    later: list[str] = []
+    if arguments.turns:
+        later = list(json.loads(arguments.turns.read_text(encoding="utf-8")))
+    return [first, *later]
+
+
+def command_for(
+    arguments: argparse.Namespace, session: str, root: Path, *, resume: bool
+) -> list[str]:
+    """The Harness command for one turn; later turns resume the first's session."""
+
+    return [
+        "claude",
+        "--print",
+        "--resume" if resume else "--session-id",
+        session,
+        "--model",
+        arguments.model,
+        "--effort",
+        arguments.effort,
+        "--dangerously-skip-permissions",
+        "--strict-mcp-config",
+        "--output-format",
+        "stream-json",
+        "--verbose",
+        "--add-dir",
+        str(root / "scratch"),
+    ]
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -371,43 +434,27 @@ def _run(
     ]:
         (root / directory).mkdir(parents=True, exist_ok=True)
     (root / "home" / ".claude").chmod(0o700)
-    stage(root, revisions["instruction_revision"])
+    skills = staged_skills(arguments.extra_skill)
+    stage(root, revisions["instruction_revision"], skills)
     work = root / "work"
-    shutil.copy2(arguments.input, work / arguments.input_name)
-    shutil.copy2(arguments.input, packet / "supplied-input.md")
+    if arguments.input is not None:
+        shutil.copy2(arguments.input, work / arguments.input_name)
+        shutil.copy2(arguments.input, packet / "supplied-input.md")
     secret = root / "home" / ".claude" / CREDENTIALS
     source = install_credential(secret)
 
-    # The prompt is the Formal Invocation as an evaluator types it, with the
-    # Contextual Instruction after it where the fixture has one and nothing else
-    # at all: framing added here is guidance the run was not supposed to get.
-    prompt = arguments.invocation
-    if arguments.instruction:
-        prompt = f"{prompt}\n{arguments.instruction}"
+    prompts = prompts_of(arguments)
+    prompt = prompts[0]
     (packet / "invocation.txt").write_text(arguments.invocation + "\n")
     (packet / "contextual-instruction.txt").write_text(
         (arguments.instruction or "none") + "\n"
     )
     (packet / "prompt.txt").write_text(prompt + "\n")
+    if len(prompts) > 1:
+        write_json(packet / "prompts.json", prompts)
 
     session = str(uuid.uuid4())
-    command = [
-        "claude",
-        "--print",
-        "--session-id",
-        session,
-        "--model",
-        arguments.model,
-        "--effort",
-        arguments.effort,
-        "--dangerously-skip-permissions",
-        "--strict-mcp-config",
-        "--output-format",
-        "stream-json",
-        "--verbose",
-        "--add-dir",
-        str(root / "scratch"),
-    ]
+    command = command_for(arguments, session, root, resume=False)
     running = environment(root)
     write_json(
         packet / "run.json",
@@ -420,9 +467,10 @@ def _run(
             },
             "session_id": session,
             "credential_source": source,
-            "staged_skills": sorted(STAGED_SKILLS),
-            "input_name": arguments.input_name,
-            "input_source": str(arguments.input.resolve()),
+            "staged_skills": sorted(skills),
+            "input_name": arguments.input_name if arguments.input else None,
+            "input_source": str(arguments.input.resolve()) if arguments.input else None,
+            "turns": len(prompts),
             "working_directory": str(work),
             "argv": command,
             "prompt_on": "stdin",
@@ -447,38 +495,71 @@ def _run(
 
     # The run itself, in a process group of its own so that a timeout or an
     # interruption stops everything it started rather than the launcher alone.
+    # A turn after the first resumes the same session in the same root, and
+    # goes only once the turn before it has ended of its own accord.
     started = time.monotonic()
     timed_out = False
     interrupted = False
-    with (
-        (packet / "stream.jsonl").open("w") as output,
-        (packet / "stderr.txt").open("w") as errors,
-    ):
-        process = subprocess.Popen(
-            command,
-            cwd=work,
-            env=running,
-            stdin=subprocess.PIPE,
-            stdout=output,
-            stderr=errors,
-            text=True,
-            start_new_session=True,
+    turns: list[dict[str, Any]] = []
+    process: subprocess.Popen[str] | None = None
+    for number, text in enumerate(prompts, start=1):
+        suffix = "" if number == 1 else f"-{number}"
+        turn_command = command_for(arguments, session, root, resume=number > 1)
+        with (
+            (packet / f"stream{suffix}.jsonl").open("w") as output,
+            (packet / f"stderr{suffix}.txt").open("w") as errors,
+        ):
+            process = subprocess.Popen(
+                turn_command,
+                cwd=work,
+                env=running,
+                stdin=subprocess.PIPE,
+                stdout=output,
+                stderr=errors,
+                text=True,
+                start_new_session=True,
+            )
+            write_json(
+                packet / "process.json",
+                {"pid": process.pid, "process_group": process.pid, "turn": number},
+            )
+            try:
+                process.communicate(text, timeout=arguments.timeout)
+            except subprocess.TimeoutExpired:
+                timed_out = True
+                _stop(process)
+            except KeyboardInterrupt:
+                interrupted = True
+                _stop(process)
+        turn_reply, turn_result = response_of(packet / f"stream{suffix}.jsonl")
+        if len(prompts) > 1:
+            (packet / f"response-{number}.txt").write_text(turn_reply)
+        turns.append(
+            {
+                "turn": number,
+                "returncode": process.returncode,
+                "session_id": turn_result.get("session_id"),
+                "is_error": turn_result.get("is_error"),
+                "process_group_gone": _gone(process.pid),
+            }
         )
-        write_json(
-            packet / "process.json", {"pid": process.pid, "process_group": process.pid}
-        )
-        try:
-            process.communicate(prompt, timeout=arguments.timeout)
-        except subprocess.TimeoutExpired:
-            timed_out = True
-            _stop(process)
-        except KeyboardInterrupt:
-            interrupted = True
-            _stop(process)
+        if timed_out or interrupted or process.returncode:
+            break
+    assert process is not None
 
     # Everything the Harness recorded, copied out before the root is removed.
     kept = harvest(root, session, packet)
-    reply, result = response_of(packet / "stream.jsonl")
+    # A Harness that answered a resumed turn under a new session identity kept
+    # that turn's record under it, so each such record is kept too.
+    for other in sorted(
+        {str(turn["session_id"]) for turn in turns if turn["session_id"]} - {session}
+    ):
+        kept.setdefault("resumed_sessions", {})[other] = harvest(
+            root, other, packet / "resumed" / other
+        )
+    reply, result = response_of(
+        packet / f"stream{'' if len(turns) == 1 else f'-{len(turns)}'}.jsonl"
+    )
     (packet / "response.txt").write_text(reply)
     after = inventory(root, secret)
     write_json(packet / "inventory-after.json", after)
@@ -517,6 +598,7 @@ def _run(
         },
         "transcripts": kept,
         "process_group_gone": _gone(process.pid),
+        "turns": turns,
     }
     write_json(packet / "result.json", outcome)
     status = write_index(packet)

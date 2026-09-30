@@ -1,6 +1,6 @@
 {
   "origin": "Kntnt/skills",
-  "manager_digest": "e1b088ca019c33fd8da400ee80d5c95d6cab7c32b5101f8d64b2262c942868f0",
+  "manager_digest": "647f1f706a657d23efe1b6d59e857ad7c16e30e3c28619e50ef4f92de82466de",
   "skills": [
     {
       "name": "agents-md",
@@ -120,8 +120,8 @@
     {
       "name": "brief",
       "category": "editorial",
-      "description": "Interview for, draft from supplied material, or review a Writing Brief against the 13-question writing template. Start it on your own only when the literal token `/brief` appears in the request or the user explicitly asks for a brief according to this 13-question template. Not for a bare mention of the word brief, a request for a short answer, or an unrelated project or delegation brief. A user may also invoke it by name at any time.",
-      "digest": "357109d70cb4e515f2ee2b8f69b7db622c2cc5e992266e7a79f52904c869073c",
+      "description": "Interview for, draft from supplied material, or review a Writing Brief against the Library's writing-brief template of questions to answer before you write. Start it on your own only when the literal token `/brief` appears in the request or the user explicitly asks for a brief according to this writing-brief template. Not for a bare mention of the word brief, a request for a short answer, or an unrelated project or delegation brief. A user may also invoke it by name at any time.",
+      "digest": "6e35d896fd5782880efa44b6939ce84b71ed33a7910e05076b8fa1917dbcff6e",
       "binaries": [
         "uv"
       ],
@@ -145,7 +145,7 @@
       "name": "redline",
       "category": "editorial",
       "description": "Review one supplied text against this collection's editorial contract — its genre, its optional technique, its language, and the shared anti-slop catalogue — and, when selected, a Writing Brief; repair what the review found through a bounded budget of fresh correction subagents, report whatever is left unresolved, and finish with exactly one mechanical pass.",
-      "digest": "a69ad8b03f13b96aef17b117949bfccc4851592c9fe45cc60672aaadbb85d65a",
+      "digest": "0f4cce93f7756bc990d5bf1fe3b5917c45c686b57016c968b4705b19df061eca",
       "binaries": [
         "uv"
       ],

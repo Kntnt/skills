@@ -108,7 +108,7 @@ Use `/orchestrate reconcile [--commit=COMMIT] [--yes] #ticket` when a failed or 
 
 ### brief
 
-Interview for, draft or review a writing brief using 13 questions about the assignment, reader, message and evidence. It marks gaps and suggestions, checks how the answers fit together, and supplies settled metadata for a later `/write` invocation.
+Interview for, draft or review a writing brief using the Library's questions to answer before you write: the assignment, the sender and its message, the reader, the angle, the hook, a sketch of the structure, the conclusion and the intended effect. A brief is a direction rather than a finished dossier, so it marks gaps and suggestions without grading answers or demanding sources, writes down how the answers hang together, says when the direction is settled enough to write, and supplies settled metadata for a later `/write` invocation.
 
 Run `/brief [--output=TARGET] [material]`, or `/brief` to begin an interview.
 
