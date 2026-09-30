@@ -1,0 +1,47 @@
+**Konfiguration:** genre `pressrelease` och språk `sv` kommer från anropet. Ingen teknik används, eftersom pressmeddelandegenren inte anger någon. Ingen brief valdes. Korrigeringsbudgeten var 1 och gick åt till en omgång, och den omgången godtogs efter ny granskning.
+
+```markdown
+# Solpark med 12 000 solpaneler invigs i Tallmora den 3 juni
+
+Tallmora Energi AB inviger den 3 juni 2027 en ny solpark vid Kvarnbacken i Tallmora, på den mark där kommunens grustäkt låg fram till 2019. Parken har 12 000 solpaneler på 18 hektar, har kostat 64 miljoner kronor att bygga och beräknas ge 7,5 gigawattimmar el om året.
+
+”Solparken visar att en gammal grustäkt kan göra nytta igen, och vi vill att elen som används i Tallmora också ska produceras här”, säger Maria Ekholm, vd för Tallmora Energi.
+
+Siffran för årsproduktionen är en uppskattning, och den verkliga produktionen beror på hur soligt året blir. Enligt bolagets egen beräkning motsvarar 7,5 gigawattimmar om året hushållselen i omkring 1 500 villor i kommunen. Elen levereras till elnätet och säljs inte direkt till hushållen i närheten.
+
+Området är inhägnat och inte öppet för allmänheten, utom vid invigningen den 3 juni klockan 14.00–16.00, då bolaget visar parken för besökare.
+
+Grustäkten vid Kvarnbacken avvecklades 2019. Tallmora Energi fick tillstånd att bygga solparken 2025, och bygget började i augusti 2026.
+
+Parken har 40 växelriktare. Panelerna står i rader i öst–västlig riktning, och markytan mellan raderna betas av får från en gård i närheten.
+
+Bilder från solparken finns på https://example.se/press/kvarnbacken-bilder.
+
+Kontakt: Lina Sjögren, kommunikationschef, Tallmora Energi, 070-000 00 00
+
+Tallmora Energi AB ägs av Tallmora kommun och levererar el och fjärrvärme till omkring 14 000 kunder i kommunen.
+```
+
+## Anmärkningar
+
+**Åtgärdade**
+
+1. **Rubriken var för lång.** I texten som den kom in var rubriken 97 tecken, och genrens gräns är 70. Den gick inte att lyfta som en rad. Rubriken är omskriven och är nu 58 tecken enligt mätningen av den levererade texten.
+2. **Ingressens första mening upprepade rubrikens formulering.** Meningen var rubrikens mening med årtalet tillagt, i samma ordföljd. Samma omskrivning av rubriken åtgärdar detta, och ingressens första mening är orörd. Rubrik och ingress delar nu bara namn, datum och ordet för det som invigs.
+3. **Ingressen var för lång.** Den var 62 ord när texten kom in, och gränsen är 60. Bisatsen om motsvarigheten i villors hushållsel är flyttad oförändrad i sak till brödtexten. Där står den som en egen mening efter meningen om att produktionssiffran är en uppskattning. Ingressen är nu 48 ord enligt mätningen av den levererade texten.
+4. **Blocket ”Noter till redaktionen” stod utanför pressmeddelandets delar.** Etiketten är borttagen. Detaljerna om växelriktarna, panelraderna och betet står nu som ett eget bakgrundsstycke efter den befintliga bakgrunden, med oförändrad ordalydelse. Bildlänken står som eget stycke före kontakten.
+
+**Kvarstår (olöst)**
+
+5. **Kontakten saknar e-postadress.** En journalist kan inte mejla Lina Sjögren. Texten innehåller ingen adress, så uppgiften har inte fyllts i. Någon behöver lägga till den.
+
+## Påståenden
+
+- **Ändrat:** rubriken (åtgärd 1) säger nu att en solpark med 12 000 solpaneler invigs i Tallmora den 3 juni. Den säger inte längre att det är Tallmora Energi som inviger, att parken är ny eller att den ligger vid Kvarnbacken. Alla tre uppgifterna står kvar i ingressen.
+- **Flyttat:** påståendet att 7,5 gigawattimmar om året enligt bolagets egen beräkning motsvarar hushållselen i omkring 1 500 villor står nu i brödtexten i stället för i ingressen (åtgärd 3). Källangivelsen, ”omkring” och omfånget är desamma. Den som bara kopierar rubrik och ingress som notis får alltså inte längre med villajämförelsen.
+
+Inget påstående har tagits bort och inget har lagts till. Utöver rubriken ovan har inget påstående ändrats. Meningarna om att produktionssiffran är en uppskattning, att elen inte säljs direkt till hushållen i närheten och att området inte är öppet för allmänheten står kvar ordagrant.
+
+## Sammanfattning av ändringarna
+
+Jämfört med texten som den kom in är rubriken omskriven och en bisats flyttad från ingressen till brödtexten. Redaktionsnoterna är upplösta i ett bakgrundsstycke och ett länkstycke, och deras etikett är borttagen. Rubriken och ingressen håller nu genrens gränser. Den avslutande korrekturläsningen hittade inga mekaniska fel att rätta. Inga filer har skrivits, och `input.md` är orörd.

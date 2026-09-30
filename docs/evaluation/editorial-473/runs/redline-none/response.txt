@@ -1,0 +1,47 @@
+**Så lästes texten:** texten granskades som pressmeddelande på svenska (`sv`), enligt flaggorna. Ingen berättarteknik tillämpades, eftersom pressmeddelandegenren inte anger någon. Omgången gjorde en rättning, och den godtogs vid omgranskningen. Den mekaniska slutkontrollen hittade inget att rätta.
+
+```markdown
+# Tallmora Energi inviger den 3 juni en ny solpark vid Kvarnbacken
+
+Den 3 juni 2027 invigs Tallmora Energi AB:s nya solpark vid Kvarnbacken i Tallmora. Parken har 12 000 solpaneler på 18 hektar, har kostat 64 miljoner kronor att bygga och beräknas ge 7,5 gigawattimmar el om året, vilket enligt bolagets egen beräkning motsvarar hushållselen i omkring 1 500 villor i kommunen.
+
+Siffran för årsproduktionen är en uppskattning, och den verkliga produktionen beror på hur soligt året blir. Elen levereras till elnätet och säljs inte direkt till hushållen i närheten.
+
+Området är inhägnat och inte öppet för allmänheten, utom vid invigningen den 3 juni klockan 14.00–16.00, då bolaget visar parken för besökare.
+
+Solparken ligger på den mark där kommunens grustäkt låg fram till 2019. Grustäkten vid Kvarnbacken avvecklades 2019. Tallmora Energi fick tillstånd att bygga solparken 2025, och bygget började i augusti 2026.
+
+Parken har 40 växelriktare. Panelerna står i rader i öst–västlig riktning, och markytan mellan raderna betas av får från en gård i närheten.
+
+Bilder från solparken finns på https://example.se/press/kvarnbacken-bilder.
+
+Kontakt: Lina Sjögren, kommunikationschef, Tallmora Energi, 070-000 00 00, lina.sjogren@example.se
+
+Tallmora Energi AB ägs av Tallmora kommun och levererar el och fjärrvärme till omkring 14 000 kunder i kommunen.
+```
+
+**Åtgärdade fynd**
+
+1. **Rubriken var för lång.** I texten som den kom in hade rubriken 97 tecken, och genren tillåter högst 70. En redaktör som bara ser rubriken fick inte nyheten på en rad. Den levererade rubriken har 64 tecken.
+2. **Ingressen var för lång.** I texten som den kom in hade ingressen 62 ord, och gränsen är 60. Bisatsen om grustäkten flyttades till bakgrunden i stället för att strykas. Den levererade ingressen har 51 ord.
+3. **Ingressens första mening upprepade rubriken.** Meningen var rubrikens egen mening med "AB" och årtalet tillagda, så den som läst rubriken mötte samma formulering igen. Meningen är nu omformulerad med egna ord.
+4. **Bakgrundsfakta låg i "Noter till redaktionen".** Uppgifterna om växelriktarna, radernas riktning och betet låg i en anteckning under bakgrunden, ihop med bildlänken. De står nu ordagrant i bakgrunden, och länken står som en egen del före kontakten.
+
+Båda längdgränserna håller i den levererade texten. Det är uppmätt med `article_anatomy.py --genre=pressrelease` efter den mekaniska slutkontrollen.
+
+**Olöst fynd**
+
+5. **Citat saknas.** Pressmeddelandet har inget citat, varken efter ingressen eller efter brödtexten. Enligt genren är det en lucka i underlaget: den ska påtalas men aldrig fyllas med ett påhittat citat. Luckan finns kvar och kräver ett verkligt, attribuerat citat från någon med rätt att uttala sig.
+
+**Påståendena**
+
+- **Borttagna påståenden:** inga.
+- **Ändrade påståenden:**
+  - *Rubriken* (fynd 1) säger nu att Tallmora Energi inviger en ny solpark vid Kvarnbacken den 3 juni. Antalet solpaneler (12 000) och ortsangivelsen "i Tallmora" står inte längre i rubriken, men båda finns kvar i ingressen.
+  - *Ingressens första mening* (fynd 3) säger nu att Tallmora Energi AB:s nya solpark vid Kvarnbacken i Tallmora invigs den 3 juni 2027. Meningen står i passiv form och säger att parken är bolagets. Att det är bolaget som inviger står inte längre i den meningen, men rubriken säger det fortfarande.
+- **Tillagda påståenden:** inga.
+- **Avgränsningar:** inga togs bort. Meningen om att produktionssiffran är en uppskattning, uppgiften att elen inte säljs direkt till hushållen i närheten och meningen om att området inte är öppet för allmänheten står kvar ordagrant.
+
+Påståendet att solparken ligger på den mark där kommunens grustäkt låg fram till 2019 flyttades från ingressen till bakgrunden (fynd 2). Det står där som en egen mening och är oförändrat i sak.
+
+Utöver ändringarna i påståendena ovan kortades rubriken och ingressens inledning formulerades om. Bakgrundsuppgifterna flyttades från anteckningen till bakgrunden och ledet "Noter till redaktionen:" ströks. Bildlänken fick en egen rad före kontaktuppgifterna. Övriga stycken är oförändrade. Den mekaniska slutkontrollen gjorde inga ändringar. Inga filer skrevs, och `input.md` är orörd.

@@ -1,0 +1,59 @@
+## Resultat
+
+Jag har granskat pressmeddelandet och rättat alla sju avvikelserna i en enda rättningsrunda. Den avslutande korrekturläsningen hittade inga mekaniska fel. Inga avvikelser återstår. `input.md` är oförändrad och inga filer ligger kvar.
+
+**Inställningar:** genren `pressrelease` och språket `sv` kom från dina flaggor. Ingen teknik användes, eftersom genren pressrelease anger att den inte skrivs med någon. Ingen brief valdes.
+
+```markdown
+# Tallmora Energi inviger den 3 juni en ny solpark vid Kvarnbacken
+
+Den 3 juni 2027 invigs Tallmora Energi AB:s nya solpark vid Kvarnbacken i Tallmora, på den mark där kommunens grustäkt låg fram till 2019. Parken har 12 000 solpaneler på 18 hektar, har kostat 64 miljoner kronor att bygga och beräknas ge 7,5 gigawattimmar el om året.
+
+”Solparken visar att en gammal grustäkt kan göra nytta igen. Vi tror att fler kommuner kommer att pröva samma lösning”, säger Maria Ekholm, vd för Tallmora Energi.
+
+Årsproduktionen på 7,5 gigawattimmar motsvarar enligt bolagets egen beräkning hushållselen i omkring 1 500 villor i kommunen. Siffran för årsproduktionen är en uppskattning, och den verkliga produktionen beror på hur soligt året blir. Elen levereras till elnätet och säljs inte direkt till hushållen i närheten.
+
+Området är inhägnat och inte öppet för allmänheten, utom vid invigningen den 3 juni klockan 14.00–16.00, då bolaget visar parken för besökare.
+
+”Vi vill att elen som används i Tallmora också ska produceras här”, säger Johan Berg, styrelseordförande i Tallmora Energi.
+
+Grustäkten vid Kvarnbacken avvecklades 2019. Tallmora Energi fick tillstånd att bygga solparken 2025, och bygget började i augusti 2026.
+
+Parken har 40 växelriktare. Panelerna står i rader i öst–västlig riktning, och markytan mellan raderna betas av får från en gård i närheten.
+
+Bilder från solparken finns på https://example.se/press/kvarnbacken-bilder.
+
+Kontakt: Lina Sjögren, kommunikationschef, Tallmora Energi, 070-000 00 00, lina.sjogren@example.se
+
+Tallmora Energi AB ägs av Tallmora kommun och levererar el och fjärrvärme till omkring 14 000 kunder i kommunen.
+```
+
+## Rättade avvikelser
+
+Alla sju är åtgärdade. Längderna är uppmätta med mätskriptet, både på texten som den kom och på den levererade texten.
+
+1. **Rubriken var för lång.** I texten som den kom var rubriken 97 tecken, och genren tillåter högst 70. Den levererade rubriken är 64 tecken. Jag strök ”med 12 000 solpaneler” och det andra ”i Tallmora”, eftersom ingressen har båda.
+2. **Ingressen var för lång.** I texten som den kom var ingressen 62 ord, och genren tillåter högst 60. Den levererade ingressen är 47 ord. Jämförelsen med 1 500 villor flyttades till brödtexten.
+3. **Ingressens första mening upprepade rubriken.** Den var rubrikens mening med ”AB” och årtalet tillagda. Nu börjar ingressen med datumet och står i passiv form.
+4. **De två citaten stod bredvid varandra.** Johan Bergs citat stod direkt efter Maria Ekholms. Det står nu, med sin attribution, efter brödtexten.
+5. **Bergs citat innehöll fakta och siffror.** Citatet nämnde kostnaden och årsproduktionen och sa att parken ”ger” 7,5 gigawattimmar. Det motsade texten, som säger att siffran är en uppskattning. Citatet är nu kortat till hans budskap.
+6. **Brödtexten var fyra stycken.** Den är nu två. Styckena om grustäktens avveckling, tillståndet och byggstarten står nu i bakgrunden.
+7. **Ett block med ”Noter till redaktionen” stod utanför pressmeddelandets delar.** Etiketten är borta. Detaljerna står nu sist i bakgrunden, och bildlänken står för sig före kontaktuppgifterna.
+
+## Vad som hände med påståendena
+
+**Borttagna**
+- **Bergs siffror:** Johan Berg citeras inte längre på att parken har kostat 64 miljoner kronor och ”ger” 7,5 gigawattimmar om året. Det togs bort i rättningen av avvikelse 5, där just den meningen var felet. Båda siffrorna står kvar i ingressen utanför citatet, och produktionen står där som ”beräknas ge”. Det läsaren inte längre har är att siffrorna kommer från Berg själv.
+
+**Ändrade**
+- **Rubriken (avvikelse 1):** Den säger nu att Tallmora Energi den 3 juni inviger en ny solpark vid Kvarnbacken. Den som bara läser rubriken får inte längre veta antalet paneler eller att Kvarnbacken ligger i Tallmora. Båda uppgifterna står i ingressen.
+- **Ingressens första mening (avvikelse 3):** Den säger nu att Tallmora Energi AB:s nya solpark invigs den 3 juni 2027. Meningen säger inte längre att det är Tallmora Energi AB som inviger, men rubriken säger det fortfarande.
+- **Villajämförelsen (avvikelse 2):** Den står nu i brödtexten som ”Årsproduktionen på 7,5 gigawattimmar motsvarar enligt bolagets egen beräkning …”. I den meningen står siffran inte längre som beräknad, men nästa mening säger fortfarande att siffran är en uppskattning.
+
+**Tillagda:** inga.
+
+Utöver dessa har inget påstående tagits bort, ändrats eller lagts till.
+
+## Vad mer som ändrades
+
+Utöver det som redovisas ovan har körningen ändrat pressmeddelandets struktur. Bergs citat har flyttats till efter brödtexten. Två korta brödtextstycken har slagits ihop, och villajämförelsen står nu i början av det sammanslagna stycket. Historiken om grustäkten har flyttats till bakgrunden. Etiketten ”Noter till redaktionen” har tagits bort, och blockets detaljer och bildlänk har delats upp i ett bakgrundsstycke och en egen länkrad. Rubriken har kortats. Den avslutande korrekturläsningen gjorde inga mekaniska rättelser.

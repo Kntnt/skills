@@ -1,0 +1,260 @@
+=== genres/pressrelease.md
+# Press release
+
+An announcement written for the editor deciding whether there is a story here and for the journalist who may take facts from it and publish them. It is not written for the public: it is written for the person standing between an organisation and the public, and it works when they can do their job from it without ringing to ask what something meant.
+
+Write the headline as [Headlines](../headlines.md) says, within the limit below.
+
+## What this genre asks for
+
+**A recipient meets the parts in the order they expect them.** An editor works through many releases in a day and reads each one by habit, finding the next thing where the last release had it, so a release that rearranges the parts spends that habit before its facts get a hearing. A headline and a summary come first and work as a news item together, so that a recipient who reads no further has still been told the news. A short quotation follows the summary, saying what somebody makes of the news. The body comes next and can be facts alone, because the comment has already been made, and a second quotation after it carries one of the most important messages the sender wants the recipient to take away. Then comes what serves the recipient rather than the story: background they may use or leave, the links and attachments that go with the release, the contact details, and last of all a standing description of the organisation. A release owes no heading announcing each part: a recipient finds each one by where it stands.
+
+**The headline states the news on one line.** The headline is the release's level-1 heading (`h1` in HTML, `#` in Markdown). The headline is at most 70 characters, spaces included. It interests an editor by the news it states and never by a word louder than that news: a figure that carries the news belongs in it, and a word of praise, excitement or urgency does not. A time from which the release may be published, where the material states one, stands on a line of its own above the headline, never between the headline and the summary.
+
+**The summary tells the news in full.** The summary is the first paragraph after the headline. The summary is at most 60 words. It names the organisation sending the release and says what has happened or will happen, so that a journalist can copy the headline and the summary into a news item and publish it. A dateline, where the release carries one, opens that paragraph rather than standing as a paragraph of its own. The summary restates the headline's news in full, in its own words, and adds the sender and the particulars: a reader who has just read the headline meets the same news told fully, and never the headline's wording said again. The rule in [Headlines](../headlines.md) that a headline and what follows say different things in different words therefore holds here for the words and the detail and not for the news, since the two together are the notice.
+
+**The news is in the first sentence.** The summary opens with what has happened or will happen, who is doing it, and when. That sentence and the headline above it are the only ones an editor is certain to read, and an opening that describes the organisation, sets a scene, or announces that an announcement is being made has spent them on nothing.
+
+**Every fact is in a form that can be printed.** Dates in full, times and opening hours as they will appear, amounts with their currency and the period they cover, counts as counts, names with the roles that make them relevant, and places spelled as the recipient spells them. A recipient should be able to lift any fact straight into their own text and be right.
+
+**What the announcement excludes is said.** Where a reader would reasonably assume something the material rules out — that a service does a thing it does not do, that a figure covers more than it covers, that a trial is a permanent arrangement — the release says so plainly and once. A sentence costs less than the correction it prevents.
+
+**A quotation is a person saying something only they could say.** Where the material carries an attributed quotation, it appears with the speaker's name and the role that entitles them to what they are saying. Where the material carries none, none is written; a manufactured sentence of enthusiasm is the first thing an editor deletes and the first sign that the rest may be padded too. A quotation carries what somebody makes of the news — an interpretation, a conclusion, a view, a message — and never a fact or a figure of its own: a fact the news depends on stands in the summary or the body, where a journalist can lift it without the quotation marks.
+
+**Each quotation has its place.** The first stands directly after the summary: it is short, comments on the news, draws a conclusion from it and takes a view. The second stands after the body and carries one of the most important messages the sender wants a recipient to take away, and no new fact or figure. Where the material carries one quotation, the release carries that one, directly after the summary, and it carries the message where the material gives it one. Where the material carries two and neither carries a message, each stands in its place as the material gives it, and no message is written into either. Where the material carries none, the release has no quotation, and the gap is the material's: said, never filled.
+
+**The body is one or two short paragraphs.** They complement and deepen the summary, and they are neutral enough that a journalist can lift them straight into their own text without rewriting the substance.
+
+**It reads as information rather than as selling.** The recipient's job is to be sceptical of it, and prose that argues for its subject invites exactly the scepticism the facts then have to survive. What survives is what the material supports and the recipient can check.
+
+**What the release ends with is the material's.** The background carries what a journalist may use and may just as well leave out, so nothing the news depends on is left to it. The links and attachments are what accompanies the release — images, pages on the web, documents — named or linked, and nothing written about them. The contact is a named person a journalist can turn to with further questions: their name, their title, a telephone number and an email address, as far as the material gives them; a name by itself is not a contact. The standing description is a short, factual and neutrally worded account of what the organisation does, written for a journalist's use, and it stops there. Where the material gives nothing for one of these parts, or gives only some of a contact's details, the release goes without what is missing rather than with something written to fill the place.
+
+**It is short.** A release is a page and not a document. Detail beyond what the news needs goes into the background or is left for the recipient to ask about.
+
+## What this genre does not do
+
+It does not write the journalist's article for them, and it does not narrate. Background, colour, and interpretation are theirs to add or leave out; what the release owes them is the news, the facts in a usable form, and somebody to ask.
+
+It adds no requirement the base contract already holds. Register, structure, sentences, words, claims, openings, endings, formatting, and consistency are stated there once, and a rule repeated here would be one rule made into two things to keep true.
+
+## The technique this genre is ordinarily written with
+
+None. The order of the parts above is the whole of a release's structure, and it is a recipient's habit rather than an arc: the news, what somebody makes of it, the facts to lift, and the message the sender stands behind. An arc built over it would take the news off the first sentence, which is the one thing a release cannot spend.
+=== genres/pressrelease.review.md
+# Press release — review guidance
+
+Diagnostics for the requirements the press release genre's base half states, for a Skill reviewing a draft written against them. Nothing here is a requirement: every target a draft has to meet is in the base half, where the Skill that wrote the draft could see it, and a finding raised here is raised against a rule stated there. The examples are English and are patterns — apply what one does, in the language of the draft, rather than looking for its words.
+
+## The shape
+
+**Test.** Read the draft for its parts alone, ignoring how well each one is written, and check the sequence against the one the base half states — headline, summary, the first quotation, the body, the second quotation, the background, the links and attachments, the contact and the standing description. A part standing somewhere else in that sequence is a finding, and so is a part the material supplies and the draft leaves out.
+
+**Failure.** A paragraph about what the organisation does before the news; the standing description at the top, or worked into the body as though it were background; contact details between body paragraphs; a comment placed before the recipient has been told what it is a comment on; the only comment standing between body paragraphs; background spliced through the body, so a journalist cannot lift a passage without carrying it along; detail kept below the release as notes where the background is its place; a publication time between the headline and the summary.
+
+**Edge.** A part the material cannot supply is absent rather than invented, and that is a finding against the material rather than against the order: a release with one quotation or none is a whole release, and a release with no links, no attachments or no background is too. The parts are what a recipient expects to find and not sections to be labelled: a release carrying them in order owes no heading announcing each one, and a part is not missing because it runs to a single paragraph. A publication time on its own line above the headline is where the base half puts it, and no part out of order.
+
+**Minimum safe correction.** Move the misplaced part whole and change nothing inside it — a part in the wrong place is rarely also badly written, and rewriting it while moving it turns one finding into two. Where a part is missing and the material carries what it needs, assemble it from the material. Where the material carries nothing for it, leave it out and raise the finding against the material. Never write a quotation the material does not have to fill a place in the sequence.
+
+## The headline
+
+**Test.** Count the headline's characters, spaces included, before reporting its length against the limit the base half states, and give the count. Then read the headline alone and ask whether it states the news on one line — what has happened or will happen — so that an editor who reads nothing else knows what the release announces.
+
+**Failure.** A headline over the limit; a headline naming the organisation or the subject and nothing that happened; two news items joined into one headline; a headline that promises interest with a word — *exciting*, *major*, *big news* — where it should state what makes the news.
+
+**Edge.** Whether it has an active verb, the present tense and a figure is what the headline guidance diagnoses, not this section. A plain headline stating the news is working; plain is no defect, and a headline with no figure where no figure carries the news is working too.
+
+**Minimum safe correction.** Rewrite the headline alone, from the news the summary states and at its strength, and measure it again. Shorten by dropping what the summary already carries in detail, never by dropping the news; never make it louder to make it interesting.
+
+## The summary
+
+**Test.** The summary is the first paragraph after the headline. Count its words before reporting its length against the limit the base half states, and give the count. Then read that paragraph for the sender organisation's name and for the news, told in full enough that the headline and this paragraph would stand together as a news item.
+
+**Failure.** A summary over the limit; a summary that never names the sender; a summary that opens on the organisation's history and reaches the news in its last sentence; a dateline standing as a paragraph of its own, so the paragraph after the headline is not the summary.
+
+**Edge.** A dateline that opens the summary belongs to it and is counted with it. A summary exactly at the limit is inside it.
+
+**Minimum safe correction.** Keep the news, the sender and the particulars a notice needs, and move the rest whole into the body, where a journalist still finds it. Move rather than delete: a fact cut from the summary to meet the limit is a fact the release no longer carries. Measure again after the move.
+
+## The headline and the summary
+
+**Test.** Read the summary against the headline above it. The base half asks the summary to restate the headline's news in full, in its own words, adding the sender and the particulars; read whether it does that, or whether it says the headline again in the headline's own wording.
+
+**Failure.** A summary whose first sentence is the headline's sentence with a date added; a summary built from the headline's own phrases in the headline's own order.
+
+**Edge.** A summary restating the headline's news in its own words, and adding the sender and the particulars, is the notice this genre asks for and no finding under the headline guidance's item on a heading that says again, in substance, what stands under it — the news is meant to stand in both. Shared names, figures and the one word for the thing announced are not the headline's wording said again; a summary that repeats the headline's wording is still a finding.
+
+**Minimum safe correction.** Reword the summary's opening sentence in its own words at the same strength, keeping every fact and figure it carries, and measure the summary again.
+
+## The first sentence
+
+**Test.** Read the summary's first sentence alone and ask whether an editor could tell from it what happened, who did it, and when. Anything they would have to read on to learn is a finding.
+
+**Failure.** *Fagervik City Library is delighted to announce a new initiative* — an announcement about an announcement. *For many households, a broken appliance means an expensive choice* — a scene that could open anything. A first sentence naming the organisation and its values before it names the news.
+
+**Edge.** Where the material genuinely has no date — a thing that has already happened and is being announced now — the *when* is that it has happened, and the sentence says so rather than manufacturing a schedule.
+
+**Minimum safe correction.** Find the sentence in the draft that does carry the news, move it to the front of the summary, and delete the opening it replaces. Where no sentence carries it, assemble one from the material's own facts and nothing else.
+
+## Printable facts
+
+**Test.** Take each fact in the draft and ask whether it could be typed straight into somebody else's article. A fact that would prompt a phone call is a finding.
+
+**Failure.** *This spring* where the material gives a date; *evenings* where it gives opening hours; *substantial municipal funding* where it gives an amount; a name without the role that makes the person relevant; an amount without its currency or its period.
+
+**Edge.** A fact the material itself leaves vague stays vague in the release and is not sharpened. Precision that the material does not carry is invention, whatever it does for the release.
+
+**Minimum safe correction.** Replace the vague form with the material's own value. Where the material has no value, leave the vague form and raise the finding against the material rather than filling it in.
+
+## Exclusions
+
+**Test.** Read the draft as a busy journalist would and note what you now believe. Check each belief against the material, especially the ones the material explicitly rules out.
+
+**Failure.** A release about a repair workshop that never says visitors repair their own devices, leaving a reader to write that the library repairs them; a trial year presented without the word that makes it a trial; a service described in terms that imply parts are sold.
+
+**Edge.** A release does not list everything it is not. The exclusion belongs in the release where a reader would otherwise assume the opposite, and nowhere else.
+
+**Minimum safe correction.** Add one plain sentence carrying the material's own exclusion, placed where the misreading would occur. Do not restructure the release around it.
+
+## Quotations
+
+**Test.** For each quotation, ask whether the named person is the only sort of person who could have said it, and whether the material carries it.
+
+**Failure.** *We are excited to offer this service to our community, said the library director* — attributable to anybody, informative to nobody. A quotation assembled from a paraphrase in the material. A quotation carrying a fact that appears nowhere else and nowhere in the source.
+
+**Edge.** A quotation may be shortened or its spoken syntax repaired within the boundary the writing Skill works under; what a review finds here is a quotation the material does not support at all, or one that says nothing.
+
+**Minimum safe correction.** Replace it with what the material has the person saying, or remove the quotation. Removing it is always safe; writing a better one is not.
+
+## Where the quotations stand
+
+**Test.** Find each quotation and name the part on either side of it. With two, the first stands directly after the summary and the second after the body. With one, it stands directly after the summary. With none, there is nothing to place.
+
+**Failure.** Both quotations after the body, so the news reaches the body with nobody having said what it means; the only quotation after the body or at the end; the first quotation between two body paragraphs; a quotation standing inside the summary, so the notice a journalist copies carries it; the two quotations standing side by side, with no body between them.
+
+**Edge.** A release with one quotation, or none, because the material carries one or none, is placed correctly and owes nothing further; the gap is the material's, and a review writes no quotation into it. Where the material carries two and neither carries a message, each is placed as the base half says and neither is rewritten to carry one.
+
+**Minimum safe correction.** Move the quotation whole, with its attribution, to its place, and change nothing inside it. Never write a quotation the material does not have, and never split one quotation into two to fill both places.
+
+## The second quotation
+
+**Test.** Read the second quotation for what it carries. It is there for one of the sender's most important messages; mark every fact and figure in it and check whether the release states each one outside the quotation.
+
+**Failure.** *"We will have 180,000 kronor for the year and five volunteers on Tuesdays and Thursdays," says the head librarian* — the body's facts put in a speaker's mouth; a second quotation carrying the only mention of an amount, a date or a count; a second quotation repeating the first one's comment on the news with no message of its own.
+
+**Edge.** A figure the quotation uses to make its message, and which the release states outside it, is part of the message rather than a new fact. A second quotation that the material gives without a message stays as the material gives it, and that is a finding against the material rather than a place to write one.
+
+**Minimum safe correction.** Where the material carries the fact outside the quotation, state it in the body and shorten the quotation to what the speaker says beyond it, within the boundary a quotation may be shortened. Where the material carries the fact only in the speaker's words, leave the quotation as it stands and raise the finding against the material. Never add a message the material does not carry.
+
+## The body's length
+
+**Test.** Count the body's paragraphs between the first quotation, or the summary where there is none, and the second quotation, or the background where there is none. More than two is a finding, and so are two paragraphs long enough that a journalist cannot lift either as a passage.
+
+**Failure.** Three or four body paragraphs working through every detail the material holds; a body carrying the organisation's history, which is background; a body that repeats the summary before it deepens it.
+
+**Edge.** A single paragraph is a body. A body that is short because the material is short owes no second paragraph.
+
+**Minimum safe correction.** Keep the paragraphs that complement and deepen the summary, and move the rest whole into the background. Move rather than delete: a fact moved is a fact a journalist can still use.
+
+## Information rather than selling
+
+**Test.** Mark every adjective and adverb of praise, novelty, or scale, then check each against the material.
+
+**Failure.** *Unique*, *revolutionary*, *market-leading*, *long-awaited*, and *proud to* where the material establishes none of them; a benefit asserted for visitors that the material never claims.
+
+**Edge.** A superlative the material states and supports — the first of its kind in the region, where the material says so — stays, with whatever qualification the material gives it.
+
+**Minimum safe correction.** Delete the unsupported modifier and leave the noun. Deletion changes no fact, where rewriting the sentence around the claim often does.
+
+## The close
+
+**Test.** Read the end and ask what a recipient does next. Background they may use, the links and attachments, a contact with a name, a title, a telephone number and an email address as far as the material gives them, and a short standing description where there is one; and above the headline, a publication time where the material states one.
+
+**Failure.** A contact name with no way to reach them; a contact's telephone number or email address in the material and absent from the release; an embargo stated in the material and absent from the release; links to images described in prose instead of given; three paragraphs of organisational history at the end of a page-long release.
+
+**Edge.** A missing contact, or a contact detail the material does not give, is a finding against the material, reported rather than filled, and the same holds for an embargo the material never states.
+
+**Minimum safe correction.** Restore the material's contact details or embargo verbatim, the embargo above the headline, and cut the standing description back at the point it stops being of use to a recipient.
+
+## Length
+
+**Test.** Count. A release running past a page is a finding, whatever else is right about it.
+
+**Failure.** Background the news does not need; the organisation's history; an explanation of why the subject matters in general.
+
+**Edge.** Where a stated length exists, that is the measure. Where none is stated, a page is the shape.
+
+**Minimum safe correction.** Move the surplus into the background, or cut it. Facts are moved rather than deleted where a journalist might want them.
+=== headlines.md
+# Headlines
+
+How a headline is written, in any genre that links this file. A headline lets the reader judge at once whether the text is for them: it states the core of the text as briefly and precisely as it can, and it is understood on its own, with no image, standfirst or surrounding page to explain it. *Headline* here covers a text's subheadings too; for a subheading, the text is its section.
+
+## Statement or label
+
+A text that reports, explains, argues, decides or narrates gets a statement headline: a clause that says what the text says. A text the reader looks things up in or navigates by — a policy, a manual, opening hours, a contact page — gets a plain label naming what it holds: *Privacy policy*, where a statement would read *How we protect your data*. Everything below is about the statement headline.
+
+## What a statement headline does
+
+- It states the angle: the single most important message, the sentence that would remain if only one could. A subject alone is a label. Test: the headline could not head a different text on the same subject.
+- It is a simple clause — subject, active verb, object where there is one — in straight word order, and in the present tense where that fits: *Council introduces free bus travel*.
+- The most important keyword comes first.
+- A concrete detail stands in it when the detail carries the message: a number, a date, a place. *Three schools to close this autumn* beats *Changes to school organisation*.
+- The reader sees what they gain: a decision, a fact, a change. An instructional text may address the reader directly (*you*, *your*) and open on *How to*, *Why* or *Here's*.
+- It is as short as the angle allows. Modifiers, repetition and filler go; a keyword that carries meaning stays. The format the text follows sets the limits.
+- It sounds like something a person would say aloud.
+- Its words are ones this audience knows. A technical term is the right keyword for specialists and noise for a general reader, and the same holds for names and abbreviations.
+- Its tone is the text's tone, and never louder. Illness, accidents, crime and crises get a sober, understated headline; a light text can carry more personality.
+- It is plain before it is clever. It works in full for a reader who misses every allusion, so a pun or a reference never carries the meaning.
+- It gives the answer. Journalists hold a question headline to be the wrong form, and so does this: it is a deliberate exception, natural over a text built as questions and answers, and available where the text truly leaves the question open and the headline is meant to assert nothing.
+- The verb does the work. A colon standing in for a verb, a clipped quotation and headline-speak all give way to the full clause.
+- It complements what follows. Headline and standfirst, or subheading and the first sentence under it, say different things in different words.
+
+## Every word supported
+
+A headline claims only what its text claims. Every figure, name, claim and conclusion in it is in the text, at the text's own strength: never sharper, never more general, never a conclusion the text does not draw. A reader who finishes the text finds that the headline told the truth about it.
+
+## A subheading over a quotation
+
+A quotation in a section is there to carry what only its speaker can say: a judgement, a figure, a concession. A subheading standing over it, however far down the section the quotation stands, leaves that to the quotation. It states the section's angle from what the rest of the section says, or, where the quotation is the section's point, names the subject, the occasion or the speaker the quotation speaks to, and not the point itself. Test: a reader who has just read the subheading meets the quotation as new material, never as the subheading said again. *The clinic would double its training time*, over a head nurse saying *Next time I would double the training time before we switch*, has spent the quotation before the reader reaches it; *The head nurse looks back on the switch* leaves it to her.
+
+The quotation bridge is the narrative sentence or clause that stands immediately before a quotation and leads the reader into it, including a speech tag that carries anything besides the attribution. The genre that quotes says what a quotation bridge may carry. A subheading standing over a quotation is outside the quotation bridge and is governed by this section.
+
+## Getting there
+
+Settle the reader and the angle before wording anything. Then write three to five variants and keep the clearest, which is rarely the cleverest. Word a subheading from its whole section, once the section is written, in words its first sentence does not use, and leave a quotation standing under it the judgement, figure or concession it is there to carry.
+=== headlines.review.md
+# Headlines — review guidance
+
+Read under [Headlines](headlines.md). Read the text first and say its angle to yourself in one sentence. Then read the headline against that sentence, and each subheading against its own section and against any quotation standing under it, and ask four questions of each. Can every word in it be supported by the text? Is the core message there? Does the tone match the seriousness of the content? Would the reader feel misled afterwards?
+
+## Avoid
+
+Each of these in a headline or a subheading is a finding where you can name what a reader of that heading loses, and no finding where you cannot. A reader loses something where the heading claims more than the text, or something other than it; is louder in tone than the text; says again, in substance, what stands under it; gives away the point of a quotation under it; is a bare label or subject where the text has an angle, or a question where the text answers it; uses words the audience does not know; or leaves a reader who sees only the heading unable to tell what the text is about. Those are instances of the test and not the whole of it, so an item they do not name is still a finding wherever the test holds, as where a colon in place of a verb leaves the reader unable to tell who did what. A loss is something the reader gets wrong or does not get: what the text claims, how seriously it speaks, what it is about, a quotation's point met fresh. A heading that could be clearer, more specific, more complete or closer to the angle you would have chosen loses its reader nothing, and on a finished text it is left as it is:
+
+- Claims, figures, names or conclusions not found in the text. A headline that sharpens, generalises or draws a conclusion the text itself does not draw is always a finding, however well it reads.
+- Vague or mysterious wording that requires reading the text to understand the headline.
+- A subject named with nothing said about it, where the text has an angle to state.
+- Words, names and abbreviations the audience will not know.
+- Partial quotes, colons in place of a verb, stilted headline-speak.
+- Puns and references that fail for anyone who does not get the allusion.
+- Question headlines. Where the text gives the answer, the headline gives it too. The exceptions are a text built as questions and answers, where the form is natural, and a text that truly leaves the question open, where the headline is deliberately kept from asserting anything.
+- A tone more dramatic than the text's.
+- The same words and phrasing in the headline and the standfirst or opening paragraph, or in a subheading and the first sentence under it. They complement each other; they do not repeat.
+- A subheading that pre-spends the judgement, figure or concession of a quotation standing under it, so that the reader meets the quotation as the subheading said again. Read it against the quotation however far down the section the quotation stands. Repair it by naming the subject, the occasion or the speaker, or by stating what the rest of the section says, and leave the quotation as it is.
+
+Name what the reader loses, and repair by rewriting the headline alone, from the text's angle and at the text's own strength. The text stays as it is. A headline or a subheading a round changed is reported with this finding — the part, and the defect that licensed the change — and, where the new one asserts something the old did not, with what it now asserts, so that a reader of the account can tell a repaired part from a rewritten one. A repair keeps the text's recurring words and figures and its meaning: a word or an image the text returns to comes back in the form the text gives it, and the heading names the text's point in the text's own word for it, never in a neighbouring word that widens or shifts what the text says.
+
+## Leave alone
+
+A working headline is left alone. Plain is no defect, and neither is a headline with no number or place where none carries the message, direct address in an instructional text, or an angle other than the one you would have chosen where the text supports it. A label on a reference or navigation text is correct as a label.
+
+Read a heading as its reader meets it, and count a loss that reader would suffer, not one that the strictest reading of a single word could construct. A reader who sees only the heading, as a headline in a list or a search result, has nothing else, so a headline alone has to tell that reader what the text is about. A subheading is met after the headline and the standfirst, so a word or a name they have introduced is known to its reader, and a subheading that refers back to one is not unclear. Four kinds of heading are working, and no *Avoid* item makes one a finding by its wording alone. None of the four overrides the first *Avoid* item, a claim the text does not support as a reader would take it, or the item on a subheading that pre-spends a quotation standing under it:
+
+- An allusion or an image that still tells a reader who sees only the heading what the text is about. It names the text's subject, and may name it in general terms where the text's first lines give the particulars. One that names no subject at all leaves its reader unable to tell what the text is about, however soon the body resolves it, and that is a finding.
+- A figure of speech in the text's own register, or the writer's own voice in a signed text, first person included. A figure is an overclaim only where a reader would take it as a factual claim the text does not support, and there the first *Avoid* item decides; an *everything*, a *nothing* or a *never* that overstates in the way the figure means to is read as the figure it is.
+- A subheading that states what its section says, where the section's point is not a quotation's judgement, figure or concession. A subheading that sums up its section says what the section says as a whole; that is its work, not a repeat, and it may name the section's limit or its setting rather than its most favourable result. Where the section's point is a quotation's judgement, figure or concession, a subheading that states that point pre-spends the quotation and stays a finding.
+- A heading that shares names or topic words with the sentence under it while saying something that sentence does not. A repeat is a finding by what it says again, not by the words it shares.
+
+Where you would word a working heading differently but can name no loss, record nothing against it: a note that it could be better is not a finding, and it licenses no change.
+
+A subheading over a quotation that names the subject, the occasion or the speaker and leaves the quotation its point is working too, and not a subject named with nothing said about it.

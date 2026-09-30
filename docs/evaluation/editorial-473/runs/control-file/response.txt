@@ -1,0 +1,14 @@
+Texten är levererad till `output.md`. Granskningen hittade inget att rätta, så filen är byte för byte identisk med `input.md`.
+
+**Inställningar:** genre `pressrelease` och språk `sv` (svenska), båda från anropet. Ingen teknik används: anropet angav ingen, och genren pressmeddelande anger själv ingen, eftersom delarnas ordning är hela strukturen. Texten saknar `kntnt`-karta, och ingen har lagts till.
+
+**Granskning:** inga fynd.
+- **Ordning:** delarna står i den ordning genren kräver. Publiceringstiden står på egen rad ovanför rubriken. Därefter kommer rubriken, sammanfattningen och det första citatet (Maria Ekholm, vd). Brödtexten är två stycken, och sedan följer det andra citatet (Johan Berg, styrelseordförande), bakgrunden, länkarna, kontakten med namn, titel, telefon och e-post, och sist den fasta beskrivningen av bolaget.
+- **Rubrik och sammanfattning:** längden är maskinmätt. Rubriken har 67 tecken med mellanslag, och gränsen är 70. Sammanfattningen har 36 ord, och gränsen är 60. Sammanfattningen namnger avsändaren och berättar nyheten med datum. Den upprepar inte rubrikens formulering.
+- **Fakta, undantag och citat:** alla fakta kan tryckas som de står. Texten säger vad den inte gäller: elen säljs inte direkt till hushållen i närheten, och parken är inte öppen för allmänheten utom vid invigningen. Förbehållet om att siffran på 1 500 villor är en uppskattning står kvar. Citaten ger en tolkning och ett budskap och innehåller inga egna fakta.
+
+**Rättning:** rättningsbudgeten (1 omgång) användes inte, eftersom det inte fanns något att rätta.
+
+**Påståenden:** inget påstående har tagits bort, ändrats eller lagts till.
+
+**Språklig korrektur:** den avslutande korrekturen gick igenom texten en gång och hittade inga fel att rätta.
