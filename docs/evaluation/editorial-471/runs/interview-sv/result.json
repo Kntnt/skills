@@ -1,0 +1,120 @@
+{
+  "returncode": 0,
+  "timed_out": false,
+  "interrupted": false,
+  "duration_seconds": 220.49,
+  "harness_result": {
+    "is_error": false,
+    "subtype": "success",
+    "num_turns": 1,
+    "total_cost_usd": 0.9650295999999999,
+    "terminal_reason": "completed"
+  },
+  "transcripts": {
+    "parent_transcript": "home/.claude/projects/-private-var-folders-cs-vgp-x-353zd9frkjpysp7zdw0000gn-T-kntnt-editorial-388-run-puj36muh-work/9b61ea80-b1ee-45e7-ba50-45f716f824a6.jsonl",
+    "subagent_transcripts": 0,
+    "subagents_directory": "absent",
+    "missing": []
+  },
+  "process_group_gone": true,
+  "turns": [
+    {
+      "turn": 1,
+      "returncode": 0,
+      "session_id": "9b61ea80-b1ee-45e7-ba50-45f716f824a6",
+      "is_error": false,
+      "process_group_gone": true
+    },
+    {
+      "turn": 2,
+      "returncode": 0,
+      "session_id": "9b61ea80-b1ee-45e7-ba50-45f716f824a6",
+      "is_error": false,
+      "process_group_gone": true
+    },
+    {
+      "turn": 3,
+      "returncode": 0,
+      "session_id": "9b61ea80-b1ee-45e7-ba50-45f716f824a6",
+      "is_error": false,
+      "process_group_gone": true
+    },
+    {
+      "turn": 4,
+      "returncode": 0,
+      "session_id": "9b61ea80-b1ee-45e7-ba50-45f716f824a6",
+      "is_error": false,
+      "process_group_gone": true
+    },
+    {
+      "turn": 5,
+      "returncode": 0,
+      "session_id": "9b61ea80-b1ee-45e7-ba50-45f716f824a6",
+      "is_error": false,
+      "process_group_gone": true
+    },
+    {
+      "turn": 6,
+      "returncode": 0,
+      "session_id": "9b61ea80-b1ee-45e7-ba50-45f716f824a6",
+      "is_error": false,
+      "process_group_gone": true
+    },
+    {
+      "turn": 7,
+      "returncode": 0,
+      "session_id": "9b61ea80-b1ee-45e7-ba50-45f716f824a6",
+      "is_error": false,
+      "process_group_gone": true
+    },
+    {
+      "turn": 8,
+      "returncode": 0,
+      "session_id": "9b61ea80-b1ee-45e7-ba50-45f716f824a6",
+      "is_error": false,
+      "process_group_gone": true
+    },
+    {
+      "turn": 9,
+      "returncode": 0,
+      "session_id": "9b61ea80-b1ee-45e7-ba50-45f716f824a6",
+      "is_error": false,
+      "process_group_gone": true
+    },
+    {
+      "turn": 10,
+      "returncode": 0,
+      "session_id": "9b61ea80-b1ee-45e7-ba50-45f716f824a6",
+      "is_error": false,
+      "process_group_gone": true
+    },
+    {
+      "turn": 11,
+      "returncode": 0,
+      "session_id": "9b61ea80-b1ee-45e7-ba50-45f716f824a6",
+      "is_error": false,
+      "process_group_gone": true
+    },
+    {
+      "turn": 12,
+      "returncode": 0,
+      "session_id": "9b61ea80-b1ee-45e7-ba50-45f716f824a6",
+      "is_error": false,
+      "process_group_gone": true
+    },
+    {
+      "turn": 13,
+      "returncode": 0,
+      "session_id": "9b61ea80-b1ee-45e7-ba50-45f716f824a6",
+      "is_error": false,
+      "process_group_gone": true
+    },
+    {
+      "turn": 14,
+      "returncode": 0,
+      "session_id": "9b61ea80-b1ee-45e7-ba50-45f716f824a6",
+      "is_error": false,
+      "process_group_gone": true
+    }
+  ]
+}

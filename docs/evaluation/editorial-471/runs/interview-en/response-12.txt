@@ -1,0 +1,21 @@
+Here is the proposal in full, built only from what you've told me. Every line is marked [SUGGESTED] until you confirm it.
+
+**RIV**
+
+- **Relevant:** [SUGGESTED: The board asked for the report and decides the session schedule at the November meeting. The overruns touch what they care about: volunteers' wellbeing, and premises that must be empty by 21:30. This appears in the opening (why now) and in the figures in step 2.]
+- **Interesting:** [SUGGESTED: The hook: sessions booked for two hours ended late on every evening in September, and nobody has known why. It's stated as the question in the opening.]
+- **Valuable:** [SUGGESTED: The conclusion: the overrun has one main cause, repairs started in the last half hour, and a cut-off for new repairs at 20:30 would end the sessions on time without any spending. This is carried by step 3 and the proposal in step 6.]
+
+**Chain check**
+
+1. *Does the reader follow from the sender and the channel?* [SUGGESTED: **Yes**, because the board members asked for this PDF report.]
+2. *Does the angle lie close to the reader, and does the hook carry it?* [SUGGESTED: **Yes**, because what the sign-in sheets show about where the time goes answers the hook's "nobody has known why".]
+3. *Does the structure resolve the hook's tension, and does it fit the length?* [SUGGESTED: **Yes**, provided step 6 ends on the proposal for a board decision: a trial cut-off at 20:30 from the first session in December, measured by the share of December sessions that end on time. The opening's answer would name that proposal too. About 1,000 words fits 800 to 1,200.]
+4. *Is the conclusion what the structure lands in, does it carry the message, and does it lie within the brand's mandate?* [SUGGESTED: **Partly.** The structure lands in the cut-off, and a cut-off involves no spending, so it stays within the mandate. But the message says the coordinators can fix the overruns *themselves*, while the main effect needs the board to approve a trial. Your answers don't settle which one holds.]
+5. *Does what the reader understands lead to the effect, and does that effect serve the brand's goals?* [SUGGESTED: **Partly.** One main cause leads naturally to approving a trial. Whether that serves the brand's goals can't be fully checked while the brand's promise is missing.]
+6. *Does anything in the structure conflict with what should be left out?* [SUGGESTED: **No conflict.** Nothing is spent or hired, no volunteers are named, and the premises appear only through the 21:30 limit.]
+
+To confirm, please answer:
+
+- **Everything above:** does all of it stand, including the change to step 6?
+- **Line 4:** can the coordinators introduce the cut-off on their own, or does "themselves" mean they need nothing beyond the board's approval of the trial? If it's the latter, I'd reword the message along those lines once you confirm it.

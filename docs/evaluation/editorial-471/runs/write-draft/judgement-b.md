@@ -1,0 +1,5 @@
+# Judgement
+
+**W1, configuration.** pass. The run took `genre: pressrelease` and `language: sv` from the map and reported how it resolved the technique the map leaves out: "Ingen teknik används. Genren pressmeddelande anger ingen, och briefen föreslår själv 'Pressmeddelandets egen form, utan någon teknik'". The draft is in Swedish, the language question 1 names ("Svenska (`sv`)"), and its frontmatter records `technique: none`.
+
+**W2, direction and support.** pass. The draft follows the brief's sketch in order: a 53-character headline, a 15-word lead ("Från och med söndag 1 november 2026 har Norrmyra bibliotek öppet på söndagar klockan 11–15."), Karin Ek's quote word for word from the brief, the contact line, and the one-sentence "Om" line. It leaves out what the brief withholds (the unconfirmed ten-year claim, the library's beliefs about families and a meeting place, a second quote). It invents no body text, background, address or period of validity. The reply reports each of these as a gap ("Besked om söndagsöppet gäller tills vidare eller under en period. Briefen vill ha det i ingressen.") and says that the draft is shorter than the suggested length.

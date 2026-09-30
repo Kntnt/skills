@@ -1,0 +1,17 @@
+Thanks. Question 1 is recorded:
+
+- The genre is **report**, which matches the installed `report` genre. That genre's usual technique is PAC (premise, analysis, conclusion). We'll get to that at question 7.
+- The language is **en_GB**, which I checked against the installed languages. The Swedish translation by your volunteer translator is noted as how the second version will be produced.
+- The search phrase is deliberately none, which counts as an answer.
+
+---
+
+**Question 2 of 12: Which brand is the sender?**
+
+Name the brand the text is published under. Presumably that's Alder Tool Library itself, but please confirm, since in a group of organisations it's sometimes a different entity. Then describe it. If a platform or tone-of-voice guide exists, you can link to it and write out only what matters for this text. Please cover:
+
+- **Promise:** what the brand promises its audience and wants to be known for.
+- **Image:** how the reader sees the brand today. Is there trust to build on, or distrust to handle? Here the reader is the board.
+- **Mandate:** what the brand can credibly speak about.
+- **Tone of voice:** how the brand sounds.
+- **Tone in this text:** how the brand's voice fits with a report's conventions. Reports are plain, accountable and use whole sentences. Say where the two pull apart and what compromise you'd choose, or say that they pull the same way.

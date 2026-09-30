@@ -1,0 +1,21 @@
+Briefen är klar och sparad i `brief.md` i arbetskatalogen. Alla tolv frågor är besvarade och inga punkter saknas. Filen börjar med `genre: article`, `technique: abt` och `language: sv` så att `/write` kan läsa dem.
+
+**Kedjekontrollen:**
+- **Ja:** läsaren följer av avsändaren och kanalen, kroken bär vinkeln, och strukturen löser kroken inom cirka 600 ord.
+- **Delvis, slutsatsen:** den bär att "vem som helst kan lära sig". Men "Cykelköket är stället" bärs bara av avslutningen med de öppna kvällarna.
+- **Delvis, effekten:** en läsare som har förstått att hen klarar det själv kan lika gärna göra det hemma. Bron till en öppen kväll är lånade verktyg och hjälp av volontärer.
+- **Nej, ingen krock:** skissen innehåller inget av det som ska utelämnas.
+
+Du bekräftade kontrollen som den står, så jag har inte ändrat delvis-raderna.
+
+**Briefen räcker för att skriva.** Vinkel, budskap och slutsats är dina egna svar och inga obekräftade förslag. Fråga 1–11 är besvarade, och ingen rad om vinkeln eller slutsatsen fick ett nej. Delvis-raderna stoppar inte skrivandet.
+
+**Öppna frågor**, som tas reda på under arbetet och inte stoppar skrivandet:
+- Hur ofta behöver en kedja faktiskt smörjas på vintern?
+- Stämmer det att saltet sliter mest på kedjan?
+- Hur ofta behöver kedjan tvättas på vintern?
+- Finns det fler handgrepp än att tvätta och smörja?
+- Vad behöver läsaren för varje handgrepp?
+- När är Cykelkökets öppna kvällar i november?
+
+Nästa steg är ditt: kör `/write` med briefen när du vill ha texten.

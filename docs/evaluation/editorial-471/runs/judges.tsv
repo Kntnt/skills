@@ -1,0 +1,25 @@
+token	run	judge	note
+17ba88062a33	interview-sv	a
+924e189d5fc8	interview-sv	b
+7cdfefe55a72	interview-en	a
+4359189d0ed8	interview-en	b
+2821131da9de	draft	a
+7d1c50e09f96	draft	b
+83f1c0aa5371	review-new	a
+3942938930b3	review-new	b
+24c605c88f53	review-old	a
+b0f123c34662	review-old	b
+98683a819064	write-interview	a
+d93f7e9a8bd2	write-interview	b
+b98b880680ec	write-draft	a
+da404e1cb77c	write-draft	b
+725c0e51851d	write-review	a
+32b2150a1f1b	write-review	b
+4e3bf2243d7d	revise-interview-sv	a
+aa76199d5567	revise-interview-sv	b
+39505f08eafa	revise-interview-en	a
+3abf4c9d357a	revise-interview-en	b
+c1657e0e383b	revise-draft	a	voided: judge directory lacked work/notes.md
+084e1a9785e1	revise-draft	b	voided: judge directory lacked work/notes.md
+eaeed39dea37	revise-draft	a
+a7a0b042e11a	revise-draft	b

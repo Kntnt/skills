@@ -1,0 +1,8 @@
+{
+  "schema_version": 1,
+  "ticket": "#388",
+  "produced_by": "docs/evaluation/editorial-388/harness/run.py",
+  "invocation": "/brief --output=brief.md notes.md -- Gör ett utkast till en brief från anteckningarna.",
+  "status": "complete",
+  "reasons": []
+}

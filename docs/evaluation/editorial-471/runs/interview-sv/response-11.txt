@@ -1,0 +1,32 @@
+Tack. Fråga 9 och 10 är besvarade:
+
+- **Slutsats:** den som tvättar och smörjer kedjan regelbundet klarar vintern utan att byta kedja.
+- **Huvudeffekt:** läsaren kommer till en öppen kväll på Cykelköket.
+- **Vägen dit:** läsaren förstår först att det är enkelt och tror sedan att hen klarar det själv.
+- **Uppmaning:** indirekt. Texten slutar med när de öppna kvällarna är.
+- **Mått:** antalet nya besökare på de öppna kvällarna i november.
+
+Svaren avgör hur slutet ska se ut. Därför har jag ändrat led 5 i skissen, så att det nu slutar med när de öppna kvällarna är och inte med en uppmaning att komma. Det stämmer också med gränsen att kvällarna inte ska säljas in.
+
+---
+
+## 11. Vad gör texten RIV för läsaren, och hänger briefen ihop?
+
+Här är mitt förslag, byggt på dina svar:
+
+**Relevant:** `[SUGGESTED: Läsaren cyklar till jobbet året runt, vill att cykeln fungerar och att det inte kostar mycket, och vintern är på väg med salt och slask. Det som gör ämnet aktuellt just nu ligger i And (led 1).]`
+
+**Intressant:** `[SUGGESTED: Kroken, alltså att en kedja som gnisslar inte behöver vara slut. Den finns i But (led 2).]`
+
+**Värdefull:** `[SUGGESTED: Handgreppen, som läsaren kan använda direkt, och slutsatsen att de räcker för att klara vintern utan att byta kedja. De finns i Therefore (led 3–4).]`
+
+**Kedjekontroll:**
+
+1. **Följer läsaren av avsändaren och kanalen?** `[SUGGESTED: Ja. En lokal förening skriver i stadsdelens webbmagasin för vuxna i stadsdelen.]`
+2. **Ligger vinkeln nära läsaren, och bär kroken vinkeln?** `[SUGGESTED: Ja. Läsaren pendlar i salt och slask, och krokens "ofta räcker det att tvätta och smörja" är vinkelns enkla handgrepp.]`
+3. **Löser strukturen krokens spänning, och passar den längden?** `[SUGGESTED: Ja. Therefore visar handgreppen som gör att kedjan inte behöver bytas, och leden blir tillsammans cirka 600 ord om led 4 hålls kort.]`
+4. **Är slutsatsen det strukturen landar i, bär den budskapet, och ligger den inom mandatet?** `[SUGGESTED: Delvis. Slutsatsen ligger inom mandatet för enkel service och leder mot budskapet om att vem som helst kan lära sig. Men kroken säger "ofta", och led 4 handlar om när det inte räcker, medan slutsatsen utan förbehåll säger att man klarar vintern "utan att byta kedja". Det är en glidning.]` **Vilket ska gälla: ska slutsatsen få ett förbehåll, eller ska led 4 strykas?**
+5. **Leder det läsaren förstår till effekten, och tjänar effekten föreningens mål?** `[SUGGESTED: Ja. När läsaren förstår att det är enkelt och tror sig klara det, är en öppen kväll med lånade verktyg och hjälp av volontärer ett naturligt nästa steg. Nya besökare stämmer med löftet att alla ska kunna laga sin egen cykel.]`
+6. **Krockar något i strukturen med det som ska lämnas utanför?** `[SUGGESTED: Nej. Slutet nämner kvällarna utan att sälja in dem. Men handgreppet att smörja kedjan måste beskriva vilken sorts smörjmedel som behövs utan att nämna något varumärke eller pris.]`
+
+**Stämmer det?** Bekräfta eller rätta förslagen, och säg hur du vill lösa glidningen i punkt 4.

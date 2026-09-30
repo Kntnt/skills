@@ -1,0 +1,22 @@
+Utkastet ligger i `draft.md` i arbetskatalogen. Källjämförelsen hittade inga avvikelser mot briefen.
+
+**Inställningar:** genren är `pressrelease` och språket svenska (`sv`), båda från Kntnt-kartan i briefens frontmatter. Ingen teknik används. Genren pressmeddelande anger ingen, och briefen föreslår själv "Pressmeddelandets egen form, utan någon teknik". Kntnt-kartan finns i utkastets frontmatter.
+
+**Mätning:** rubriken har 53 tecken (taket är 70) och ingressen 15 ord (taket är 60), mätt med skriptet. I det första utkastet upprepade ingressen rubrikens ord "öppet på söndagar", så jag skrev om rubriken till "inför söndagsöppet".
+
+**Jämförelse:** en fristående granskare jämförde hela utkastet med briefen, nämligen rubriken, ingressen, citatet och vem som säger det, kontaktraden och beskrivningen av biblioteket. Den hittade inga avvikelser, så utkastet ändrades inte efteråt. Granskaren fick inte skriva sin rapportfil utan lämnade rapporten i sitt svar.
+
+**Här tar materialet slut:**
+- **`notes.md` fanns inte.** Briefen bygger på den filen, men den fanns inte i katalogen. Briefen har därför varit hela materialet, också för Karin Eks citat. Jag kan inte avgöra om citatet är ordagrant eller återgivet ur anteckningar, och ingen har godkänt det.
+- **Utelämnat enligt briefen:**
+  - Uppgiften om första söndagsöppet på tio år, eftersom den inte är bekräftad.
+  - Bibliotekets förväntningar på många barnfamiljer och på att bli ortens naturliga mötesplats, eftersom de inte ska stå som fakta.
+  - Ett andra citat, eftersom materialet inte innehåller något.
+- **Delar som saknas i utkastet, eftersom materialet saknar dem:**
+  - Brödtext, eftersom det saknas uppgifter om vad som finns på söndagarna.
+  - Bakgrund, eftersom det saknas uppgifter om övriga öppettider och varför söndagsöppet införs.
+  - Besked om söndagsöppet gäller tills vidare eller under en period. Briefen vill ha det i ingressen.
+  - Adress, bilagor och en tid då pressmeddelandet tidigast får publiceras.
+- **Längd:** utkastet är betydligt kortare än briefens föreslagna 200–350 ord. Svar på de öppna frågorna i briefens avsnitt 12 skulle ge den längden.
+
+Pressmeddelandet har ingen byline.

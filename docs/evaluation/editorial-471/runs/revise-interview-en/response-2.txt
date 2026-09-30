@@ -1,0 +1,23 @@
+Thanks, that covers question 1:
+
+- **Working title:** Why the evening repair sessions run over
+- **Topic:** the evening repair sessions
+- **Genre:** report
+- **Channel:** PDF for the board of the Alder Tool Library
+- **Language:** en_GB is the source language (checked against the installed language list). A Swedish version will be translated from it afterwards by your volunteer translator.
+- **Length:** provisionally 800–1,200 words
+- **Search phrase:** none, deliberately, since only the board will read it
+
+At this length the report won't need a separate summary. The report genre only adds one from about 5,000 words.
+
+---
+
+**2. Which brand is the sender?**
+
+Name the brand the report is published under. That might be the Alder Tool Library itself, or a committee or working group within it. Then describe it. If a platform or tone-of-voice guide exists, you can just point to it and write out only what matters for this text.
+
+- **Promise:** what the brand promises its audience and wants to be known for.
+- **Image:** how the reader (here, the board) sees the brand today. Is there trust to build on, or distrust to handle?
+- **Mandate:** what the brand can credibly speak about.
+- **Tone of voice:** how the brand sounds.
+- **Tone in this text:** how the brand's voice fits with the conventions of a report: plain, accountable, full sentences, the answer first. If they pull in different directions, what's the compromise? If they pull the same way, just say so.

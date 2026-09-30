@@ -1,0 +1,1 @@
+/brief --output=brief.md notes.md -- Gör ett utkast till en brief från anteckningarna.

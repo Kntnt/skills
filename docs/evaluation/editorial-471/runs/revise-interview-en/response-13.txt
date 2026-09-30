@@ -1,0 +1,23 @@
+The brief is saved to `brief.md` in the working directory. All 12 questions have answers, and the brief is ready for `/write`.
+
+**It's ready because:**
+- The three answers that set the direction are all yours and confirmed: the angle (what the September sign-in sheets show), the message (the coordinators have it under control) and the conclusion (a 20:30 cut-off for new repairs would end sessions on time).
+- The chain check has no "no" on the angle line or the conclusion line.
+- The open research questions don't block writing.
+
+**Chain check:** yes on four lines (reader, angle and hook, structure and length, conclusion). "No" on the left-out line, which here means nothing in the sketch conflicts with what you're leaving out. "Partly" on the effect line: we can't check whether the effect serves the library's goals because its promise is missing.
+
+**Two gaps remain in question 2:** the library's promise, and how the board sees the library and the coordinators today. They're marked `[MISSING: …]` and don't block writing. The platform document could fill them.
+
+**Research still to do** (listed under question 12):
+- How many repairs were started after 20:30 in September?
+- How long did each September session actually run?
+- Do the sheets actually show that most of the overrun comes from repairs started in the last half hour?
+- What are the sessions' booked start and end times?
+- What objection is the board likely to raise to a cut-off for new repairs?
+
+The first three come down to counting the sign-in sheets. If the count doesn't support "most of the overrun", the conclusion will need revisiting before you write.
+
+The brief begins with `genre: report` and `language: en_GB`. There's no technique line, because you chose the report's own form; that choice is recorded under question 7.
+
+Writing the report is your next step: run `/write` with `brief.md` and the counted sign-in sheets.

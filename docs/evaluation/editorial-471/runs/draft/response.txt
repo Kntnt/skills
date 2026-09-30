@@ -1,0 +1,29 @@
+Jag har skrivit utkastet till `brief.md`. Det bygger på `notes.md` och följer mallens tolv frågor. Metadata i frontmatter: `genre: pressrelease` och `language: sv`. Tekniken står inte där, eftersom pressmeddelandets egen form bara är ett förslag än så länge.
+
+**Kontroll av kedjan** (allt är förslag och väntar på att du bekräftar):
+- Läsaren följer av avsändaren och kanalen: **ja**, ett lokalt bibliotek skickar en lokal nyhet till lokala redaktioner.
+- Vinkel och krok: **delvis**, vinkeln är bara ett förslag. Om du bekräftar den bär nyheten den.
+- Struktur och längd: **ja**, nyheten kommer först och allt ryms på en sida.
+- Slutsats, budskap och mandat: **delvis**. Budskapet och slutsatsen är obekräftade och mandatet är inte beskrivet.
+- Från förståelse till effekt: **ja**, redaktionen har det som behövs för att skriva före premiären.
+- Krock med det som ska lämnas utanför: **delvis**. Uppgiften om tio år kommer från bibliotekschefens minne och krockar om den inte bekräftas.
+
+**Är briefen tillräcklig för att skriva?** Inte än. Riktningen är inte bestämd, och det avgörs av tre frågor:
+- Vad vill biblioteket förmedla med pressmeddelandet, i en mening? (3)
+- Vilken vinkel ska texten ha? (5)
+- Vad ska läsaren ha förstått efteråt, i en mening? (9)
+
+Utkastet har förslag på alla tre. Säg om de stämmer eller hur de ska ändras.
+
+**Luckor utöver dem:** längd och sökfras (1), bibliotekets bild, mandat och tonläge samt tonen i just den här texten (2), och om det finns något biblioteket inte kan eller vill säga (8).
+
+**Öppna frågor** (under 12, de hindrar inte skrivandet):
+- Stämmer uppgiften om tio år?
+- Gäller söndagsöppet tills vidare eller under en period?
+- Vad finns på söndagarna?
+- Varför inför biblioteket söndagsöppet nu?
+- Vilka är de övriga öppettiderna, och vilken adress har biblioteket?
+- Finns det bilder eller bilagor, och finns det en kort beskrivning av biblioteket att sätta sist?
+- När ska pressmeddelandet skickas?
+
+Vill du att jag intervjuar dig om luckorna, en fråga i taget? När riktningen är bestämd kan du köra `/write` med briefen.

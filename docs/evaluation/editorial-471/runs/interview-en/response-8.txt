@@ -1,0 +1,18 @@
+You've chosen the report's own form. For the `report` genre, that form is PAC, so the sketch below uses PAC's one-sentence form. In the brief I'll record the choice as "the genre's own form" and leave the technique out of the metadata, so `/write` takes it from the genre.
+
+Your answers so far don't say what the sign-in sheets actually show, and I won't make that up. Wherever a step depends on it, I've left a placeholder and will list it as an open question under question 12. Everything below is a suggestion until you confirm it.
+
+**The whole text in one sentence**
+
+> [SUGGESTED: The evening repair sessions are booked for two hours but ran over on every evening in September without anyone knowing why, and the September sign-in sheets show where the overrun time goes [what the sheets show — to be found out], which means that the volunteer coordinators can bring the sessions back within their booking themselves.]
+
+**Sketch** (about 1,000 words; below 5,000 words a report carries no separate summary)
+
+1. **Opening (about 150 words):** [SUGGESTED: This states what the report covers (the evening repair sessions), why it was written (the board's question ahead of the November meeting, where the schedule is decided) and the period it covers (September). It then asks the question in the board's terms: why do sessions booked for two hours run late every evening? The answer comes straight after, before any evidence: where the time goes, and that the coordinators can fix it themselves.]
+2. **The overrun in figures (about 150 words):** [SUGGESTED: This shows how many evenings there were, how late each one ended and the total overrun, taken from the sign-in sheets and probably shown in a table. Each figure says what it counts and where it comes from.]
+3. **Where the overrun time goes (about 350 words, the core of the analysis):** [SUGGESTED: This breaks the overrun time down by where the sheets place it, in one or more subsections. Each subsection's heading states its finding. It keeps what the sheets record apart from what the report makes of it.]
+4. **The strongest objection (about 100 words):** [SUGGESTED: This puts the objection the board is most likely to raise in its strongest form, and says what the sheets do and don't do to it. Your reader answers suggest it might concern volunteer wellbeing or the rental terms for the premises. Which objection it is remains to be confirmed.]
+5. **What the sheets cannot settle (about 100 words):** [SUGGESTED: The data covers one month and only what the sign-in sheets record. It also covers the conditions under which the answer would be different.]
+6. **What the coordinators will do, and the ending (about 150 words):** [SUGGESTED: This names the coordinators' own measures: what, who and by when, with no spending recommended, because the budget is the treasurer's mandate. It ties back to the hook by showing that the reason for the overruns is now known, and it leaves the board with what they need for the November decision.]
+
+Does this hold? Confirm it, correct any step, or tell me what the sheets show if you already know. Next comes question 8, on what should be left out.

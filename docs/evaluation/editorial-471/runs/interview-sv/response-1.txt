@@ -1,0 +1,19 @@
+Då kör vi en intervju på svenska. Briefen sparas i `brief.md` i arbetskatalogen. Filen finns inte ännu och skrivs först när intervjun är klar.
+
+Jag ställer mallens tolv frågor en i taget och i ordning. Svara så konkret du kan, gärna i hela meningar. Säger du "vet inte" markerar jag punkten som saknad och vi går vidare. Du kan när som helst gå tillbaka till en tidigare fråga. Du behöver inte ange några källor nu, eftersom det kravet gäller först den färdiga texten.
+
+---
+
+## 1. Vad är uppdraget?
+
+Här samlar du det uppdraget ger dig. Det mesta behöver du inte hitta på, men det styr allt som följer.
+
+- **Arbetsrubrik:** ett kort och tydligt namn på texten, så att alla direkt minns vad den handlar om. Den behöver inte vara slagkraftig eller ens exakt.
+- **Ämne:** vad texten handlar om, med några få ord, till exempel "distansarbete" eller "julbak".
+- **Genre:** till exempel artikel, kundcase, krönika, debattartikel, pressmeddelande, rapport, teaser eller webbtext.
+- **Kanal:** till exempel webbplats, blogg, webbmagasin, nyhetsbrev, LinkedIn eller dagstidning.
+- **Språk:** det språk den färdiga texten ska skrivas på, till exempel svenska eller brittisk engelska. Det kan vara ett annat än briefens språk. Om texten ska finnas på flera språk anger du källspråket och hur de andra versionerna tas fram.
+- **Längd:** ungefär hur många ord eller tecken texten ska ha. Ofta styr genren och kanalen längden. Om du inte vet ännu räcker ett preliminärt spann.
+- **Sökfras:** nyckelordet eller frasen som texten ska synas på i sökningar. Om texten medvetet skrivs utan sökfras säger du det.
+
+Vad gäller för uppdraget?

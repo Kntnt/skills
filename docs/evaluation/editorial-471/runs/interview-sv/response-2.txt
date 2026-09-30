@@ -1,0 +1,23 @@
+Tack, då är fråga 1 besvarad:
+
+- **Arbetsrubrik:** Laga cykeln själv i vinter
+- **Ämne:** vinterservice av cyklar
+- **Genre:** artikel. En artikel förklarar eller redogör, så att en webbläsare förstår ett avgränsat ämne.
+- **Kanal:** föreningens webbmagasin
+- **Språk:** svenska (`sv`), bara en version
+- **Längd:** cirka 600 ord
+- **Sökfras:** "vinterservice cykel"
+
+---
+
+## 2. Vilket varumärke är avsändare?
+
+Ange varumärket som texten publiceras under, alltså vilken förening det gäller. Beskriv sedan varumärket. Finns det en plattform, en tonalitetsguide eller en annan beskrivning räcker det att hänvisa till den. Skriv då bara ut det som styr just den här texten, till exempel misstro som behöver hanteras eller en gräns för mandatet. Tonen i den här texten beskriver du alltid.
+
+- **Löfte:** vad varumärket lovar sin publik och vill vara känt för.
+- **Bild:** hur läsaren uppfattar varumärket i dag. Finns det förtroende att bygga på eller misstro att hantera?
+- **Mandat:** vad varumärket trovärdigt kan uttala sig om.
+- **Tonalitet:** hur varumärket låter.
+- **Tonen i den här texten:** både varumärkets tonalitet och genrens konventioner ska respekteras. Om de drar åt olika håll väljer du en kompromiss som låter naturlig för båda. Om de drar åt samma håll säger du det.
+
+Vem är avsändaren?

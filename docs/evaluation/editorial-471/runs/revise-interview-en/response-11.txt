@@ -1,0 +1,28 @@
+**10. Effect:**
+- **Main effect:** the board approves a trial cut-off for new repairs from the first session in December.
+- **The way there:** the board first needs to see that the overrun has one main cause.
+- **Call to action:** direct, as a proposal for a board decision.
+- **Measure:** the share of December sessions that end on time.
+
+---
+
+**11. What makes the text RIV for the reader, and does the brief hold together?**
+
+Here's my proposal from your answers. Please confirm or correct it.
+
+**RIV** (with where each part sits in the sketch):
+- **Relevant:** [SUGGESTED: The board asked for the report and decides the session schedule at the November meeting. It also touches both of the board's concerns: volunteers kept late, and premises that must be empty by 21:30. This sits in the opening (step 1) and the ending (step 5).]
+- **Interesting:** [SUGGESTED: The hook: sessions booked for two hours ended late every evening in September, and nobody has known why. This sits in the opening (step 1).]
+- **Valuable:** [SUGGESTED: The conclusion: the overrun has one main cause, and the fix costs nothing and is ready to decide on. This sits in the analysis (step 3) and the ending (step 5).]
+
+**Chain check:**
+1. *Does the reader follow from the sender and the channel?* [SUGGESTED: **Yes.** It's a PDF for the board only, from the library, answering a question the board asked.]
+2. *Does the angle lie close to the reader, and does the hook carry the angle?* [SUGGESTED: **Yes.** The sign-in sheets answer the very question the board has, and the hook is the unexplained overrun that the sheets explain.]
+3. *Does the structure resolve the hook's tension, and does it fit the length?* [SUGGESTED: **Yes.** The analysis shows where the time goes and the ending says why the sessions run over. The step allocations add up to 800–1,200 words. Whether the sheets bear this out is an open research question, not a gap in the structure.]
+4. *Is the conclusion what the structure lands in, does it carry the message, and is it within the brand's mandate?* [SUGGESTED: **Yes.** The cut-off is where the analysis lands. It shows the coordinators can fix the overrun themselves, and it costs nothing, so it stays within their mandate.]
+5. *Does what the reader understands lead to the effect, and does that effect serve the brand's goals?* [SUGGESTED: **Partly.** Seeing one main cause leads naturally to approving a trial. The message and the call to action fit, as long as the coordinators propose and run the trial and the board only approves it. Whether the effect serves the brand's goals can't be checked, because the library's promise is missing. Question 2's promise would settle that.]
+6. *Does anything in the structure conflict with what should be left out?* [SUGGESTED: **Yes, it holds.** No spending is recommended. The rental terms appear only as the 21:30 limit. In the ending, "who does it" refers to the coordinators as a role, not to named volunteers.]
+
+A note on line 6: the template's question asks whether anything conflicts, so "yes, it holds" here means **no conflict**. I'll write it that way in the brief to avoid a double reading.
+
+Please **confirm or correct** RIV and the chain check.
