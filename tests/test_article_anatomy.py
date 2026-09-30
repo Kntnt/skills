@@ -1020,3 +1020,261 @@ def test_every_clean_control_of_the_four_article_genres_conforms() -> None:
         result = _run(str(CONTROLS / name))
 
         assert result.returncode == CONFORMS, (name, result.stdout, result.stderr)
+
+
+# --- The press release ----------------------------------------------------
+
+# The press release states its own two counted limits in its genre file, and
+# the script measures those and nothing else of it (#473): the headline, which
+# is the release's level-1 heading, and the summary, which is the first
+# paragraph after it. Everything else a release owes its reader is read.
+PRESS_RELEASE = LIBRARY / "references" / "editorial" / "genres" / "pressrelease.md"
+PRESS_GENRE = "--genre=pressrelease"
+SUMMARY_PART = "summary"
+NO_HEADLINE = "no-headline"
+PRESS_HEADLINE_IS_A_HEADING = (
+    "The headline is the release's level-1 heading (`h1` in HTML, `#` in Markdown)."
+)
+PRESS_HEADLINE_LIMIT = "The headline is at most 70 characters, spaces included."
+PRESS_SUMMARY_IS_FIRST = "The summary is the first paragraph after the headline."
+PRESS_SUMMARY_LIMIT = "The summary is at most 60 words."
+
+RELEASE_EMBARGO = "Får publiceras från den 6 maj 2027 klockan 08.00."
+RELEASE_HEADLINE = "Fagerviks stadsbibliotek öppnar reparationsverkstad den 6 maj"
+RELEASE_SUMMARY = (
+    "Fagervik, 22 april 2027 – Fagerviks stadsbibliotek öppnar en"
+    " reparationsverkstad på plan två den 6 maj. Besökare lagar sin egen"
+    " elektronik med hjälp av volontärer, tisdagar och torsdagar klockan 15–19,"
+    " under ett försöksår som kommunen finansierar med 180 000 kronor."
+)
+# Counted by hand: the dateline's four words are among them, and its dash is
+# no word.
+RELEASE_SUMMARY_WORDS = 39
+RELEASE_REST = (
+    "”Vi vill se om lagandet får ett eget rum hos oss”, säger bibliotekschefen"
+    " Anna Lindqvist.\n"
+    "\n"
+    "Fem volontärer från föreningen Fagerviks Reparatörer bemannar verkstaden."
+    " Verkstaden tar inte emot apparater för reparation och säljer inga"
+    " reservdelar.\n"
+    "\n"
+    "Kontakt: Anna Lindqvist, bibliotekschef, 070-000 00 00."
+)
+
+
+def _release(
+    *,
+    embargo: str | None = None,
+    headline: str | None = RELEASE_HEADLINE,
+    summary: str | None = RELEASE_SUMMARY,
+    rest: str | None = RELEASE_REST,
+) -> str:
+    """Assemble one Markdown press release out of the parts named."""
+
+    blocks = [
+        embargo,
+        f"# {headline}" if headline is not None else None,
+        summary,
+        rest,
+    ]
+    return "\n\n".join(block for block in blocks if block is not None) + "\n"
+
+
+def test_a_conforming_press_release_measures_clean(tmp_path: Path) -> None:
+    """A release inside both limits conforms, whatever else it carries.
+
+    The release carries a publication time above its headline, a dateline
+    opening its summary, a quotation, a body and a contact, and none of them
+    is a part the anatomy knows: none of them may turn into a failure.
+    """
+
+    status, payload = _measure(tmp_path, _release(embargo=RELEASE_EMBARGO), PRESS_GENRE)
+
+    assert status == CONFORMS, payload
+    assert payload["ok"] is True
+    assert payload["conforms"] is True
+    assert payload["failures"] == []
+    assert payload["format"] == MARKDOWN
+
+
+def test_a_press_release_reports_its_two_parts_and_nothing_of_the_anatomy(
+    tmp_path: Path,
+) -> None:
+    """The answer carries the headline and the summary, and no norm or pair.
+
+    The anatomy's norms, its whole-text figures and its heading pairs belong
+    to the four article genres; for a release the headline and the summary
+    are read against each other by the agent, as the genre says.
+    """
+
+    _, payload = _measure(tmp_path, _release(embargo=RELEASE_EMBARGO), PRESS_GENRE)
+
+    assert set(payload) == {"ok", "format", "conforms", "failures", "parts"}
+    assert set(payload["parts"]) == {HEADLINE_PART, SUMMARY_PART}
+    assert payload["parts"][HEADLINE_PART] == {
+        "text": RELEASE_HEADLINE,
+        "characters": len(RELEASE_HEADLINE),
+        "words": len(RELEASE_HEADLINE.split()),
+    }
+    summary = payload["parts"][SUMMARY_PART]
+    assert summary["text"].startswith("Fagervik, 22 april 2027 – Fagerviks")
+    assert summary["words"] == RELEASE_SUMMARY_WORDS, summary
+
+
+def test_a_press_release_headline_is_measured_at_its_exact_limit(
+    tmp_path: Path,
+) -> None:
+    """Seventy characters pass and seventy-one fail, counted as code points."""
+
+    at_limit = _cut(LONG_HEADLINE, 70)
+    over = _cut(LONG_HEADLINE, 71)
+
+    status, payload = _measure(tmp_path, _release(headline=at_limit), PRESS_GENRE)
+    assert status == CONFORMS, payload
+
+    status, payload = _measure(tmp_path, _release(headline=over), PRESS_GENRE)
+    assert status == FAILS, payload
+    assert _parts(payload) == {HEADLINE_PART}
+    assert _rules(payload) == PRESS_HEADLINE_LIMIT
+    assert _measured(payload) == "71 characters"
+
+
+def test_a_short_press_release_headline_is_no_failure(tmp_path: Path) -> None:
+    """The release states no floor, so the anatomy's twenty characters do not bind."""
+
+    status, payload = _measure(
+        tmp_path, _release(headline="Biblioteket lagar"), PRESS_GENRE
+    )
+
+    assert status == CONFORMS, payload
+
+
+def test_a_press_release_summary_is_measured_at_its_exact_word_limit(
+    tmp_path: Path,
+) -> None:
+    """Sixty words pass and sixty-one fail, the dateline counted with them."""
+
+    dateline = "Fagervik, 22 april 2027 –"
+    at_limit = f"{dateline} {_words(60 - 4)}"
+    over = f"{dateline} {_words(61 - 4)}"
+
+    status, payload = _measure(tmp_path, _release(summary=at_limit), PRESS_GENRE)
+    assert status == CONFORMS, payload
+    assert payload["parts"][SUMMARY_PART]["words"] == 60
+
+    status, payload = _measure(tmp_path, _release(summary=over), PRESS_GENRE)
+    assert status == FAILS, payload
+    assert _parts(payload) == {SUMMARY_PART}
+    assert _rules(payload) == PRESS_SUMMARY_LIMIT
+    assert _measured(payload) == "61 words"
+
+
+def test_a_publication_time_above_the_headline_does_not_become_the_summary(
+    tmp_path: Path,
+) -> None:
+    """The summary is the first paragraph after the headline, never before it."""
+
+    long_embargo = _words(70)
+    status, payload = _measure(tmp_path, _release(embargo=long_embargo), PRESS_GENRE)
+
+    assert status == CONFORMS, payload
+    assert payload["parts"][SUMMARY_PART]["words"] == RELEASE_SUMMARY_WORDS
+
+
+def test_a_press_release_with_no_level_one_heading_is_not_measured(
+    tmp_path: Path,
+) -> None:
+    """Without the headline there is nothing to find the summary after."""
+
+    text = f"## {RELEASE_HEADLINE}\n\n{RELEASE_SUMMARY}\n\n{RELEASE_REST}\n"
+    status, payload = _measure(tmp_path, text, PRESS_GENRE)
+
+    assert status == UNMEASURED, payload
+    assert payload["ok"] is False
+    assert payload["code"] == NO_HEADLINE
+
+
+def test_the_first_of_two_level_one_headings_is_the_headline(
+    tmp_path: Path,
+) -> None:
+    """A second level-1 heading is read past, and counted in no limit."""
+
+    text = _release(rest=f"# {LONG_HEADLINE}\n\n{RELEASE_REST}")
+    status, payload = _measure(tmp_path, text, PRESS_GENRE)
+
+    assert status == CONFORMS, payload
+    assert payload["parts"][HEADLINE_PART]["text"] == RELEASE_HEADLINE
+
+
+def test_a_press_release_with_nothing_after_its_headline_lacks_a_summary(
+    tmp_path: Path,
+) -> None:
+    """A headline standing alone leaves the summary's limit with nothing to hold."""
+
+    status, payload = _measure(tmp_path, _release(summary=None, rest=None), PRESS_GENRE)
+
+    assert status == FAILS, payload
+    assert _parts(payload) == {SUMMARY_PART}
+    assert _rules(payload) == PRESS_SUMMARY_IS_FIRST
+    assert _measured(payload) == "absent"
+    assert payload["parts"][SUMMARY_PART] is None
+
+
+def test_a_press_release_in_html_measures_as_its_markdown_twin(
+    tmp_path: Path,
+) -> None:
+    """The form is read off the text, for a release as for an article."""
+
+    over = _cut(LONG_HEADLINE, 71)
+    markdown = _release(embargo=RELEASE_EMBARGO, headline=over)
+    html = (
+        f"<p>{RELEASE_EMBARGO}</p>\n<h1>{over}</h1>\n<p>{RELEASE_SUMMARY}</p>\n"
+        "<p>Kontakt: Anna Lindqvist, bibliotekschef, 070-000 00 00.</p>\n"
+    )
+
+    markdown_status, markdown_payload = _measure(tmp_path, markdown, PRESS_GENRE)
+    html_status, html_payload = _measure(tmp_path, html, PRESS_GENRE)
+
+    assert html_payload["format"] == HTML
+    assert (html_status, html_payload["failures"]) == (
+        markdown_status,
+        markdown_payload["failures"],
+    )
+    assert html_payload["parts"] == markdown_payload["parts"]
+
+
+def test_the_press_release_states_every_rule_the_script_quotes() -> None:
+    """The script quotes the genre, so the genre has to say what it quotes."""
+
+    genre = " ".join(PRESS_RELEASE.read_text(encoding="utf-8").split())
+
+    for rule in (
+        PRESS_HEADLINE_IS_A_HEADING,
+        PRESS_HEADLINE_LIMIT,
+        PRESS_SUMMARY_IS_FIRST,
+        PRESS_SUMMARY_LIMIT,
+    ):
+        assert rule in genre, f"{PRESS_RELEASE}: does not state {rule!r}."
+
+
+def test_an_article_genre_named_explicitly_measures_the_anatomy(
+    tmp_path: Path,
+) -> None:
+    """Naming one of the four article genres changes nothing of the answer."""
+
+    text = _article()
+    default_status, default_payload = _measure(tmp_path, text)
+    named_status, named_payload = _measure(tmp_path, text, "--genre=column")
+
+    assert (named_status, named_payload) == (default_status, default_payload)
+
+
+def test_a_genre_the_script_does_not_measure_is_refused(tmp_path: Path) -> None:
+    """A genre with no counted limit here is a malformed invocation."""
+
+    path = tmp_path / "text.md"
+    path.write_text(_release(), encoding="utf-8")
+    result = _run("--genre=report", str(path))
+
+    assert result.returncode == UNMEASURED
+    assert result.stdout == ""

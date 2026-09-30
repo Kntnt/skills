@@ -1,0 +1,1 @@
+/write --genre=pressrelease --language=sv --output=response source.md

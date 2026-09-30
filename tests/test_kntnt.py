@@ -6748,6 +6748,126 @@ def test_a_review_half_diagnoses_only_what_the_writer_can_act_on() -> None:
     )
 
 
+# The ABT pair and the most words each may run to, counted as `wc -w` counts
+# them. The technique is loaded on every run that selects it, so it stays a
+# short brief however much of Olson's second level it carries (issue #469).
+ABT = EDITORIAL / "techniques" / "abt.md"
+ABT_REVIEW = EDITORIAL / "techniques" / "abt.review.md"
+ABT_CEILINGS = {ABT: 600, ABT_REVIEW: 350}
+
+# What the technique asks of a draft beyond the three relations, each as the
+# phrase that states it where Write reads it (issue #469).
+ABT_SECOND_LEVEL = {
+    "from the general to the specific": "each part moving from the general"
+    " to the specific",
+    "before the complication arrives": "the reader knowing what is at stake"
+    " before the complication",
+    "needs in order to bite": "the And holding only what the complication needs",
+    "An arc has one complication": "one complication per arc, other problems"
+    " ordered under it",
+    "a cause the text has given": "the consequence answering the causes the text gave",
+    "the scene itself carries the situation": "the condition on which in"
+    " medias res works",
+    "the genre governs": "a genre's own rules governing where it compresses,"
+    " withholds or reorders the arc",
+}
+
+# Where the review half diagnoses each of those requirements, as the heading
+# of its paragraph there. The genre's precedence is no requirement on a draft
+# and has no diagnosis of its own (issue #469).
+ABT_DIAGNOSES = {
+    "**General to specific.**": "each part moving from the general to the specific",
+    "**Stakes.**": "the reader knowing what is at stake before the complication",
+    "**The situation.**": "the And holding only what the complication needs,"
+    " with the complication early",
+    "**One complication.**": "one complication per arc, other problems ordered"
+    " under it",
+    "**The consequence.**": "the consequence answering the causes the text gave",
+    "**In medias res.**": "the two ways in medias res fails",
+}
+
+# Olson's template as a form to fill, which the technique states as outcomes
+# instead (issue #469).
+ABT_TEMPLATE_LABELS = ("Ordinary World", "IF/THEN", "BECAUSE", "BUT", "BY")
+
+
+def test_abt_stays_a_short_brief_without_a_form_or_a_threshold() -> None:
+    """The second level is stated as outcomes, and the pair stays short.
+
+    Olson subdivides each part and writes the result as a template with a
+    five-word ceiling on the complication. The technique carries what the
+    subdivision asks of a text and neither the form nor the count, and the
+    pair is held to the ceilings the ticket set (issue #469).
+    """
+
+    for path, ceiling in ABT_CEILINGS.items():
+        text = path.read_text(encoding="utf-8")
+        words = len(text.split())
+        assert words <= ceiling, (
+            f"{path}: runs to {words} words, over its ceiling of {ceiling};"
+            f" the technique is a short brief loaded on every run that"
+            f" selects it (issue #469)."
+        )
+        stated = DIMENSION.findall(text)
+        assert stated == [], (
+            f"{stated}: {path} states a count, and the technique sets no word"
+            f" threshold or proportion on any part (issue #469)."
+        )
+        labels = [label for label in ABT_TEMPLATE_LABELS if label in text]
+        assert labels == [], (
+            f"{labels}: {path} carries Olson's template labels, and the"
+            f" technique states outcomes rather than a form (issue #469)."
+        )
+
+
+def test_abt_states_its_second_level_where_the_writer_reads() -> None:
+    """What makes the complication bite is stated in the file Write loads.
+
+    The relations alone left a writer without what makes a complication land:
+    stakes before it, a situation holding only what it needs, one complication
+    with its causes under it, and a consequence answering those causes. Each
+    is stated in the base half, and the review half diagnoses them against
+    the visible text, beginning with Parker's test (issue #469).
+    """
+
+    technique = ABT.read_text(encoding="utf-8")
+    for phrase, requirement in ABT_SECOND_LEVEL.items():
+        assert phrase in technique, (
+            f"{ABT}: does not state {requirement} (`{phrase}`), so the review"
+            f" half diagnoses a requirement the writer was never given"
+            f" (issue #469)."
+        )
+
+    review = ABT_REVIEW.read_text(encoding="utf-8")
+    assert "*and then*" in review, (
+        f"{ABT_REVIEW}: does not carry Parker's test, a transition that only"
+        f" adds where a turn or a consequence belongs (issue #469)."
+    )
+    assert "visible text" in review, (
+        f"{ABT_REVIEW}: does not confine the diagnosis to the visible text, so"
+        f" a review may ask for stakes or causes the material never had"
+        f" (issue #469)."
+    )
+
+
+def test_abt_review_diagnoses_every_requirement_the_writer_is_given() -> None:
+    """Each second-level requirement has its diagnosis in the review half.
+
+    A requirement the writer is given and the reviewer has no diagnosis for
+    goes unchecked in finished prose: an And running past what the
+    complication needs, for one, would pass every review. So each requirement
+    in the base half has a paragraph of its own in the review half, and each
+    such paragraph diagnoses a requirement the base half states (issue #469).
+    """
+
+    review = ABT_REVIEW.read_text(encoding="utf-8")
+    for heading, requirement in ABT_DIAGNOSES.items():
+        assert heading in review, (
+            f"{ABT_REVIEW}: has no diagnosis for {requirement} (`{heading}`),"
+            f" so a review never finds a draft that misses it (issue #469)."
+        )
+
+
 # What the four article genres share, and where each of it is stated: the
 # shape their text has, and how its headline and subheadings are written. Both
 # sit beside `web-craft.md` outside the selectable directories, so nobody can
@@ -7582,6 +7702,107 @@ def test_a_genre_or_technique_binds_no_consumers_grammar() -> None:
         assert flags == [], (
             f"{flags}: {path} names a consumer's flag spelling, which binds a"
             f" grammar the consuming Skill owns (ADR-0178). See {STANDARD}."
+        )
+
+
+# The PAC arc's two halves, and what each has to say about the parts a reader
+# of an analytical text meets (issue #470).
+PAC = EDITORIAL / "techniques" / "pac.md"
+PAC_REVIEW = EDITORIAL / "techniques" / "pac.review.md"
+PAC_REQUIREMENTS = {
+    "the premise raising a question a reader can have": "a real question",
+    "a topic that is not yet a question": "A topic is not yet a question",
+    "the direction showing early": "The direction shows early",
+    "the sharpest statement waiting for the conclusion": "sharpest statement",
+    "what is normal, stated as no ratio": "no ratio is prescribed",
+    "each step of the analysis advancing": "Each step of the analysis advances",
+    "facts, interpretation and what binds them": "what binds them",
+    "sub-questions that neither overlap nor leave a gap": "do not overlap",
+    "the conclusion answering the premise's question": "answers the premise's question",
+    "the conclusion bringing together rather than repeating": "rather than repeating",
+    "no new support entering at the conclusion": "introduces no support",
+}
+PAC_DIAGNOSES = {
+    "a premise that is only a topic, or a straw man": "only names a topic",
+    "a straw man judged from the text alone": "judge it from the text alone",
+    "a direction the reader cannot see": "which way the analysis goes",
+    "an early answer moved forward, never written": "existing answer or pointer",
+    "a list that does not advance": "lists one point",
+    "a missing link between facts and claim": (
+        "never write a warrant, premise or assumption into the text"
+    ),
+    "parts that overlap or leave the question uncovered": "same ground",
+    "a conclusion that repeats or drops a limit": "drops a limit",
+    "support first met in the conclusion": "support first met there",
+    "the descriptive premise #332 kept valid": (
+        "do not demand a falsifiable thesis or manufacture a counterargument"
+    ),
+}
+
+# Where the arc was taken from. The shipped files state outcomes, and a name
+# there reads as an authority to consult that no Skill can reach.
+PAC_SOURCES = ("Harvey", "Minto", "Toulmin", "Skolverket", "UNC")
+
+
+def test_the_pac_arc_says_what_each_part_owes_the_reader() -> None:
+    """A premise, an analysis and a conclusion are named by what they do.
+
+    The arc once said only that the three parts are there and hang together,
+    which left a writer with no test for a premise that is only a topic, an
+    analysis that lists, or a conclusion that says the analysis again. The
+    base half is where the writer reads it, so every requirement the review
+    half diagnoses is stated there (issue #470).
+    """
+
+    text = PAC.read_text(encoding="utf-8")
+
+    for requirement, wording in PAC_REQUIREMENTS.items():
+        assert wording in text, (
+            f"{PAC}: the arc no longer states {requirement}, so a writer"
+            f" composing a PAC text has no test for it (issue #470). See"
+            f" {STANDARD}."
+        )
+    assert "only at the conclusion" not in text, (
+        f"{PAC}: the sentence on new support at the conclusion can still be"
+        f" read as its own opposite (issue #470). See {STANDARD}."
+    )
+
+
+def test_the_pac_review_diagnoses_each_requirement_and_invents_no_link() -> None:
+    """Each PAC requirement has a diagnosis, and a missing link is reported.
+
+    A reviewer who finds nothing binding a fact to its claim is looking at a
+    gap only the author can fill: a warrant written in by the repair is an
+    assumption the text never made (issue #470).
+    """
+
+    text = PAC_REVIEW.read_text(encoding="utf-8")
+
+    for diagnosis, wording in PAC_DIAGNOSES.items():
+        assert wording in text, (
+            f"{PAC_REVIEW}: the review half has no diagnosis of {diagnosis}"
+            f" (issue #470). See {STANDARD}."
+        )
+
+
+def test_the_pac_arc_stays_short_and_names_none_of_its_sources() -> None:
+    """The arc is loaded into every PAC run, so it stays a short brief.
+
+    The ceilings are the ones issue #470 settled; the sources it was written
+    from are for whoever changes it, not for the Skill that reads it.
+    """
+
+    for path, ceiling in ((PAC, 500), (PAC_REVIEW, 300)):
+        text = path.read_text(encoding="utf-8")
+        words = len(text.split())
+        assert words <= ceiling, (
+            f"{path}: {words} words, over the {ceiling} the arc is held to"
+            f" (issue #470). See {STANDARD}."
+        )
+        named = [source for source in PAC_SOURCES if source in text]
+        assert not named, (
+            f"{path}: names {named}, a source the arc was written from rather"
+            f" than a requirement on the text (issue #470). See {STANDARD}."
         )
 
 
@@ -8857,6 +9078,184 @@ def test_every_bounded_loading_path_reaches_the_shared_article_support() -> None
                 f" not acted on, or left out where it is. Diagnostics belong"
                 f" to the Skills that review (ADR-0178). See {STANDARD}."
             )
+
+
+# The press release states its own shape and its own two counted limits, and
+# writes its headline as the headline guidance says (issue #473). It reaches
+# that guidance by the same bounded path the four article genres do, and the
+# Library's measuring script measures its limits for the same three callers.
+PRESS_RELEASE = EDITORIAL / "genres" / "pressrelease.md"
+PRESS_RELEASE_REVIEW = EDITORIAL / "genres" / "pressrelease.review.md"
+PRESS_RELEASE_MEASUREMENT = "--genre=pressrelease"
+PRESS_RELEASE_STATEMENTS = (
+    "The headline is the release's level-1 heading",
+    "The headline is at most 70 characters, spaces included.",
+    "The summary is the first paragraph after the headline.",
+    "The summary is at most 60 words.",
+    "It names the organisation sending the release",
+    "The summary restates the headline's news in full, in its own words",
+    "The first stands directly after the summary",
+    (
+        "The second stands after the body and carries one of the most important"
+        " messages the sender wants a recipient to take away, and no new fact or"
+        " figure."
+    ),
+    (
+        "Where the material carries one quotation, the release carries that one,"
+        " directly after the summary"
+    ),
+    "Where the material carries none, the release has no quotation",
+    "The body is one or two short paragraphs.",
+    "Nothing stands below the release as notes to the editor",
+    (
+        "their name, their title, a telephone number and an email address, as far"
+        " as the material gives them"
+    ),
+)
+PRESS_RELEASE_DIAGNOSES = (
+    "## The shape",
+    "## The headline",
+    "## The summary",
+    "## The headline and the summary",
+    "## Where the quotations stand",
+    "## The second quotation",
+    "## The body's length",
+)
+
+
+def test_the_press_release_states_its_shape_and_limits_where_the_writer_reads() -> None:
+    """Every requirement the review half diagnoses is operable in the base half.
+
+    The maintainer's instruction for a press release fixes a headline of at
+    most 70 characters, a summary of at most 60 words naming the sender, two
+    quotations in fixed places and a body of one or two paragraphs. Write loads
+    the base half alone, so each of those is stated there, the genre being the
+    one file that states its own shape and may give a part of it a dimension;
+    the review half diagnoses them and restates none of the figures.
+    """
+
+    genre = " ".join(PRESS_RELEASE.read_text(encoding="utf-8").split())
+    review = PRESS_RELEASE_REVIEW.read_text(encoding="utf-8")
+
+    assert "](../headlines.md)" in genre, (
+        f"{PRESS_RELEASE}: links the headline guidance nowhere, so a release's"
+        f" headline is written without it (issue #473). See {STANDARD}."
+    )
+    for statement in PRESS_RELEASE_STATEMENTS:
+        assert statement in genre, (
+            f"{PRESS_RELEASE}: does not state {statement!r}, so the writer is"
+            f" not given what the review diagnoses (issue #473). See {STANDARD}."
+        )
+
+    headings = [line for line in review.splitlines() if line.startswith("## ")]
+    for heading in PRESS_RELEASE_DIAGNOSES:
+        assert heading in headings, (
+            f"{PRESS_RELEASE_REVIEW}: carries no `{heading}` diagnosis for a"
+            f" requirement the base half states (issue #473). See {STANDARD}."
+        )
+    assert DIMENSION.findall(review) == [], (
+        f"{PRESS_RELEASE_REVIEW}: restates a limit the base half states, one"
+        f" requirement in two files (ADR-0178). See {STANDARD}."
+    )
+    assert (
+        "notes to the editor"
+        in review.split("## The shape", 1)[1].split("**Failure.**", 1)[0]
+    ), (
+        f"{PRESS_RELEASE_REVIEW}: the shape's test does not name a block of"
+        f" notes to the editor as a part out of the sequence, so a review reads"
+        f" it as the background (issue #473). See {STANDARD}."
+    )
+    assert "no finding under the headline guidance" in review, (
+        f"{PRESS_RELEASE_REVIEW}: does not say that a summary restating the"
+        f" headline's news in its own words is no finding under the headline"
+        f" guidance, so the notice the genre asks for reads as a repeat"
+        f" (issue #473). See {STANDARD}."
+    )
+
+
+def test_every_bounded_loading_path_reaches_the_headline_guidance_for_a_release() -> (
+    None
+):
+    """The press release reaches the headline guidance, and the anatomy stays four.
+
+    Each loading step names the genres the headline guidance is loaded for in
+    the clause that loads it, so the press release is named there, and in no
+    clause loading the anatomy, whose parts it does not have (issue #473).
+    """
+
+    for path in (WRITE, REDLINE, REDLINE_CORRECTION):
+        text = path.read_text(encoding="utf-8")
+        clauses = re.split(r"(?<=[.;])\s+", text)
+        headline_clause = next(
+            clause
+            for clause in clauses
+            if "references/editorial/headlines.md" in clause
+        )
+        anatomy_clause = next(
+            clause
+            for clause in clauses
+            if "references/editorial/article-anatomy.md" in clause
+        )
+
+        assert "`pressrelease`" in headline_clause, (
+            f"{path}: the clause loading the headline guidance does not name"
+            f" `pressrelease`, whose genre links it (issue #473). See"
+            f" {STANDARD}."
+        )
+        assert "pressrelease" not in anatomy_clause, (
+            f"{path}: loads the article anatomy for a press release, whose"
+            f" parts the anatomy does not describe (issue #473). See"
+            f" {STANDARD}."
+        )
+
+
+def test_every_measuring_caller_measures_the_press_release() -> None:
+    """Write, Redline and the correction agent measure a release as an article.
+
+    ADR-0209 gives a counted limit to a script rather than to the agent reading
+    the text, and the press release's two limits are counted ones (issue #473).
+    """
+
+    write_steps = WRITE.read_text(encoding="utf-8").split("\n## Steps\n", 1)[1]
+    redline_steps = REDLINE.read_text(encoding="utf-8").split("\n## Steps\n", 1)[1]
+    surfaces = {
+        f"{WRITE} step 7": write_steps.split("\n7. ", 1)[1].split("\n8. ", 1)[0],
+        f"{REDLINE} step 6": redline_steps.split("\n6. ", 1)[1].split("\n7. ", 1)[0],
+        str(REDLINE_CORRECTION): REDLINE_CORRECTION.read_text(encoding="utf-8"),
+    }
+    for where, text in surfaces.items():
+        assert PRESS_RELEASE_MEASUREMENT in text, (
+            f"{where}: does not measure a press release's counted limits with"
+            f" the Library's script (issue #473). See {STANDARD}."
+        )
+
+    step_11 = redline_steps.split("\n11. ", 1)[1]
+    final = next(
+        sentence
+        for sentence in re.split(r"(?<=[.;])\s+", step_11)
+        if REDLINE_FINAL_MEASUREMENT in sentence
+    )
+    assert "`pressrelease`" in final, (
+        f"{REDLINE}: step 11 takes a delivered release's counts from no final"
+        f" measurement (issue #473). See {STANDARD}."
+    )
+
+
+def test_nothing_shipped_links_the_maintainers_press_release_instruction() -> None:
+    """The instruction is the maintainer's document, and the genre stands alone.
+
+    An installed reader receives the Skills and not the maintainer's documents,
+    so the genre states what the instruction asks rather than pointing at it
+    (issue #473).
+    """
+
+    for path in sorted((REPO_ROOT / "skills").rglob("*")):
+        if not path.is_file() or path.suffix not in {".md", ".json", ".py"}:
+            continue
+        assert "docs.google.com" not in path.read_text(encoding="utf-8"), (
+            f"{path}: links a Google document, which no installed reader can"
+            f" rely on (issue #473). See {STANDARD}."
+        )
 
 
 def test_the_resource_format_records_what_inference_is_given_to_read() -> None:

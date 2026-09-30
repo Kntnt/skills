@@ -1,0 +1,48 @@
+Pressmeddelandet är klart. Rubriken och ingressen håller genrens gränser: rubriken har 66 tecken (högst 70) och ingressen 49 ord (högst 60). Två oberoende jämförelser mot `source.md` gjordes. Den första hittade ett fel: jag hade gjort panelernas 18 hektar till hela parkens yta. Jag rättade det, och den andra jämförelsen hittade inga avvikelser.
+
+```markdown
+---
+kntnt:
+  genre: pressrelease
+  technique: none
+  language: sv
+---
+
+Får publiceras från den 27 maj 2027 klockan 08.00.
+
+# Tallmora Energi inviger solpark med 12 000 paneler vid Kvarnbacken
+
+Tallmora Energi AB håller den 3 juni 2027 invigning av solparken i Tallmora, som ligger på marken där kommunens grustäkt låg fram till 2019. Parken har 12 000 solpaneler på 18 hektar och har kostat 64 miljoner kronor att bygga. Under invigningen, klockan 14.00–16.00, visar bolaget parken för besökare.
+
+Bolaget beräknar att parken ger 7,5 gigawattimmar el om året. Enligt bolagets egen beräkning motsvarar det hushållselen i omkring 1 500 villor. Siffran är en uppskattning, och den verkliga produktionen beror på hur soligt året blir.
+
+Elen levereras till elnätet. Parken säljer ingen el direkt till hushållen i närheten. Området är inhägnat och inte öppet för allmänheten utom under invigningen.
+
+Grustäkten vid Kvarnbacken avvecklades 2019. Tallmora Energi fick tillstånd att bygga solparken 2025, och bygget började i augusti 2026. Parken har 40 växelriktare. Panelerna står i rader i öst–västlig riktning, och marken mellan raderna betas av får från en gård i närheten.
+
+Bilder från solparken: https://example.se/press/kvarnbacken-bilder  
+Karta över parken: https://example.se/kvarnbacken
+
+Lina Sjögren, kommunikationschef, Tallmora Energi  
+Telefon: 070-000 00 00  
+E-post: lina.sjogren@example.se
+
+Tallmora Energi AB ägs av Tallmora kommun och levererar el och fjärrvärme till omkring 14 000 kunder i kommunen.
+```
+
+**Inställningar**
+- **Genre:** `pressrelease`, som du angav i anropet.
+- **Språk:** `sv`, som du angav i anropet.
+- **Leverans:** här i svaret. Metadata i frontmatter är påslagen.
+- **Teknik:** ingen. Genren anger ingen teknik som den normalt skrivs med, så texten saknar dramaturgisk båge. Delarna står i den ordning genren föreskriver.
+
+**Det som saknas i materialet**
+- **Citat:** underlaget innehåller inga. Därför saknas både citatet efter ingressen och citatet efter brödtexten. Luckan har inte fyllts med påhittade citat. Vill du ha citat behövs faktiska uttalanden från en namngiven person med roll, till exempel från Tallmora Energi.
+- **Ortsangivelse:** underlaget anger inget utgivningsdatum, så ingressen inleds inte med ort och datum.
+- **Byline:** texten har ingen, vilket är normalt för ett pressmeddelande.
+
+**Faktakontroll**
+- **Första jämförelsen:** den fann att meningen ”Parken omfattar 18 hektar” gjorde panelernas yta till hela parkens yta. Jag ersatte den med underlagets formulering: ”Parken har 12 000 solpaneler på 18 hektar”.
+- **Andra jämförelsen:** den läste den rättade texten och fann inga avvikelser mot underlaget. Texten här ovan är exakt den som lästes.
+
+Inga filer har skrivits. Mina tillfälliga filer är borttagna och `source.md` är orörd.
