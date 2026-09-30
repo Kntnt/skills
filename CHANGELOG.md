@@ -4,6 +4,10 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ## [Unreleased]
 
+### Added
+
+- Model Selector setup now offers all or selected model series per Maker, with one current catalogue representative per series and no version choice. Explicit series follow new releases automatically without adding new series; existing profiles retain all series. The same choices govern automatic answers, alternatives, exploration, Trials, escalation and generated Claude definitions, while explicit model locks and `--scope=all` retain their one-call exceptions (#481).
+
 ### Changed
 
 - Standard help for every Collection Skill and the Manager now shows a compact view with complete accepted syntax, immediate commands, applicable option terms, and the installed full-reference path. Model Selector's root help stays within 400 words; full references remain on disk, and editorial choice names are read from the invocation's Library on every call (#484).
