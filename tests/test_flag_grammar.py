@@ -24,11 +24,6 @@ VALUELESS_ACTIONS = frozenset(
     {"store_true", "store_false", "store_const", "count", "help", "version"}
 )
 
-# The helper an engine that reads its options by hand calls to take a flag's
-# value out of its arguments (ADR-0176). A call to it is that engine's
-# declaration that the flag it names carries a value.
-HAND_PARSED_OPTION = "_option"
-
 # A manpage option term declaring a value attached to its flag, in each
 # spelling a term is written in: the bold run closing after the `=`, as
 # `**--data=**_PATH_`; the `=` outside the bold, as `**--language**=*LANGUAGE*`;
@@ -102,11 +97,27 @@ def engine_flags_taking_a_value(source: str) -> set[str]:
     the declaration, and a parser is built inside the function that immediately
     parses with it, so there is nothing to introspect without running the
     engine's command line. Both seams the collection has are read — the
-    `argparse` declarations, and the hand-rolled one ADR-0176 names.
+    `argparse` declarations, and the calls to `argument_grammar.option`, the
+    reader an engine that refuses with a code takes a flag's value with.
     """
 
+    tree = ast.parse(source)
+
+    # An engine loads the grammar by path, so no import names its reader: the
+    # engine calls it on the loaded module, or assigns it to a name of its own
+    # choosing and calls that. The assignment is what is recognised, anywhere
+    # in the engine, because the name it binds is fixed by nothing.
+    readers: set[str] = set()
+    for node in ast.walk(tree):
+        if not isinstance(node, (ast.Assign, ast.AnnAssign)):
+            continue
+        if not (isinstance(node.value, ast.Attribute) and node.value.attr == "option"):
+            continue
+        targets = node.targets if isinstance(node, ast.Assign) else [node.target]
+        readers |= {target.id for target in targets if isinstance(target, ast.Name)}
+
     declared: set[str] = set()
-    for node in ast.walk(ast.parse(source)):
+    for node in ast.walk(tree):
         if not isinstance(node, ast.Call):
             continue
         named = {
@@ -119,9 +130,11 @@ def engine_flags_taking_a_value(source: str) -> set[str]:
         if not named:
             continue
 
-        # The hand-rolled seam reads exactly one flag's value per call, so the
+        # The grammar's reader takes exactly one flag's value per call, so the
         # call itself is the declaration and carries no options to read.
-        if isinstance(node.func, ast.Name) and node.func.id == HAND_PARSED_OPTION:
+        if (isinstance(node.func, ast.Attribute) and node.func.attr == "option") or (
+            isinstance(node.func, ast.Name) and node.func.id in readers
+        ):
             declared |= named
             continue
         if not (
@@ -434,6 +447,48 @@ parser.add_argument("--ticket", required=True, type=int)
 parser.add_argument("--message", required=True)
 parser.add_argument("--dry-run", action="store_true")
 '''
+
+# An engine that refuses with a code and so reads its command line through the
+# collection's argument grammar rather than `argparse`. It reaches the grammar's
+# reader both ways an engine can: as an attribute of the loaded module, and
+# through a local name assigned from that attribute. The sample is parsed and
+# never run, so its loading only has to be plausible.
+GRAMMAR_READING_ENGINE = '''"""An engine reading its flags through the argument grammar."""
+
+import importlib.util
+from pathlib import Path
+
+spec = importlib.util.spec_from_file_location(
+    "argument_grammar", Path(__file__).with_name("argument_grammar.py")
+)
+grammar = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(grammar)
+
+read: OptionReader = grammar.option
+
+
+def main(arguments: list[str]) -> int:
+    operands, rest = grammar.split(arguments, ("--quiet",))
+    level = grammar.option(rest, "--level")
+    target = read(rest, "--target")
+    return 0
+'''
+
+
+def test_the_grammars_reader_declares_a_flag_however_the_engine_reaches_it() -> None:
+    """A flag read through `argument_grammar.option` is valued, whatever it is called.
+
+    An engine loads the grammar by path, so no import names the reader: it is
+    called on the loaded module, or on a local name the engine assigned from
+    it. The local name is the engine's own choice, so the assignment is what
+    is recognised, not the name. A flag the engine names only as valueless in
+    its `split` call is not declared valued by it.
+    """
+
+    declared = engine_flags_taking_a_value(GRAMMAR_READING_ENGINE)
+
+    assert declared == {"--level", "--target"}
+    assert "--quiet" not in declared
 
 
 def test_the_valued_set_is_derived_from_the_collections_own_declarations() -> None:
