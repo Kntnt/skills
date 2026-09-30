@@ -1,0 +1,17 @@
+I'll interview you in English and save the finished brief to `brief.md` in the working directory. That file doesn't exist yet, so it will be created.
+
+We'll go through the template's 12 questions one at a time. At any point you can answer "don't know" and I'll mark it as a gap and move on. You can also go back to any earlier question whenever you like.
+
+---
+
+**Question 1 of 12: What is the assignment?**
+
+This part gathers the basic facts of the assignment. Please give:
+
+- **Working title:** a short, clear name for the text. It doesn't need to be punchy.
+- **Topic:** what the text is about, in a few words (e.g. "remote work").
+- **Genre:** e.g. article, case study, column, opinion piece, press release, report, teaser or web copy.
+- **Channel:** e.g. website, blog, newsletter, LinkedIn or newspaper.
+- **Language:** the language of the finished text (e.g. `en_GB`, `sv`). This can differ from the English we're using for the brief. If there will be several language versions, give the source language and how the others will be produced.
+- **Length:** roughly how many words or characters. A provisional range is fine.
+- **Search phrase:** the keyword the text should be found for, or a note that it deliberately has none.

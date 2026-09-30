@@ -1,0 +1,1 @@
+/brief --output=brief.md -- We work in English. Interview me for a writing brief following the template.

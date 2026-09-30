@@ -1,0 +1,1 @@
+/brief --output=brief.md -- Vi arbetar på svenska. Intervjua mig om en skrivbrief enligt mallen.

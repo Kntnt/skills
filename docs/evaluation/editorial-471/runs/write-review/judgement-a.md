@@ -1,0 +1,5 @@
+# Judgement
+
+**W1, configuration.** pass. The brief's `kntnt` map settles `webcopy`, `none` and `en_GB`, and the reply reports exactly those: "Settings used: web copy, no technique, British English. All three come from the settings block at the top of `brief.md`". The draft is in British English, which is what question 1 asks for ("Language: en_GB, one version only").
+
+**W2, direction and support.** pass. The draft opens on the brief's hook ("Come with a single packet of leftover seed, or with none at all"), follows the sketch's steps 2, 3 and 5, and ends on the conclusion and the brief's call to action ("Come to the spring swap on 14 March."). Every fact it states comes from the brief: the labelled envelope, the tables by kind of plant, the newcomers' sheet, "the swap runs on what our members share", and 14 March 2027. The unsettled take-home figure and hall address are left out of the draft and named in the reply ("I didn't make one up"; "the call to action has no venue yet"). The reply also reports the missing search phrase and why the draft falls short of the requested length.

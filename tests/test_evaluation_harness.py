@@ -211,3 +211,60 @@ def test_the_private_root_is_removed_however_the_run_ends(tmp_path: Path) -> Non
     assert cleanup["removed"] is True
     assert cleanup["removed_only"] == str(made)
     shutil.rmtree(beside)
+
+
+# What the Brief evaluation of issue #471 needs of the runner beyond one turn:
+# the Skill staged beside the four editorial Skills, an interview with no
+# material, and one session continued turn by turn inside one private root.
+BASE_ARGUMENTS = [
+    "--revision=HEAD",
+    "--corpus-revision=HEAD",
+    "--invocation=/brief",
+    "--output=packet",
+]
+
+
+def test_a_run_may_stage_a_further_editorial_skill_beside_the_four() -> None:
+    skills = staged_run.staged_skills(["brief"])
+
+    assert skills["brief"] == "editorial/brief"
+    for name, source in staged_run.STAGED_SKILLS.items():
+        assert skills[name] == source
+    assert staged_run.staged_skills([]) == staged_run.STAGED_SKILLS
+
+
+def test_an_interview_is_staged_without_any_material() -> None:
+    arguments = staged_run.parse_args(BASE_ARGUMENTS)
+
+    assert arguments.input is None
+    assert arguments.turns is None
+    assert arguments.extra_skill == []
+
+
+def test_every_turn_after_the_first_resumes_the_same_session(tmp_path: Path) -> None:
+    turns = tmp_path / "turns.json"
+    turns.write_text(json.dumps(["second", "third"]))
+    arguments = staged_run.parse_args(
+        [*BASE_ARGUMENTS, f"--turns={turns}", "--instruction=Vi talar svenska."]
+    )
+
+    prompts = staged_run.prompts_of(arguments)
+    first = staged_run.command_for(arguments, "sid", tmp_path, resume=False)
+    later = staged_run.command_for(arguments, "sid", tmp_path, resume=True)
+
+    assert prompts == ["/brief\nVi talar svenska.", "second", "third"]
+    assert first[first.index("--session-id") + 1] == "sid"
+    assert "--resume" not in first
+    assert later[later.index("--resume") + 1] == "sid"
+    assert "--session-id" not in later
+    # Everything but how the session is named is the same on every turn.
+    assert first[4:] == later[4:]
+
+
+def test_a_further_skill_is_installed_beside_the_manager(tmp_path: Path) -> None:
+    staged_run.stage(tmp_path, "HEAD", staged_run.staged_skills(["brief"]))
+
+    installed = tmp_path / "home" / ".claude" / "skills"
+    assert (installed / "brief" / "SKILL.md").is_file()
+    assert (installed / "kntnt" / "scripts" / "kntnt.py").is_file()
+    assert not (tmp_path / "export").exists()

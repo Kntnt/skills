@@ -1,0 +1,1 @@
+The brief was already saved to `brief.md` in the working directory. I've just confirmed the file is there, and I haven't changed it since, so we're done.

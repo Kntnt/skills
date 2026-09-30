@@ -1,0 +1,15 @@
+The draft of the seed swap page is in `draft.md`. It is about 190 words against the roughly 300 the brief asks for, because the brief doesn't contain the rest of what the page needs.
+
+**Settings used:** web copy, no technique, British English. All three come from the settings block at the top of `brief.md`. The "no technique" setting means the page follows the order a visitor's questions come up, which matches the brief's free structure. The same settings block sits at the top of `draft.md`. The page has no byline.
+
+**Source check:** a separate checker compared every sentence, heading and the call to action with the brief and found nothing unsupported. No changes were needed, so the delivered text is exactly what it checked.
+
+**Where the brief ran out:**
+- **Take-home figure:** the section on how much seed a first-timer usually takes home is left out. That figure is on the autumn newcomers' sheet, which wasn't supplied, and I didn't make one up.
+- **Venue:** the ending gives the date (14 March 2027) but no place. The address of the hall hasn't been settled, so the call to action has no venue yet.
+- **Search phrase:** the brief marks this as missing, so the page isn't written for one.
+- **Swap rules:** the leaflet wasn't supplied. The steps for what to bring and what happens at the swap use only what the brief itself says, such as the labelled envelope, the tables sorted by kind of plant, and noting what you take on the newcomers' sheet.
+
+To reach about 300 words, I'd need the figure from the autumn newcomers' sheet, the hall's address, and ideally the rules leaflet, for details like the swap's opening hours.
+
+The temporary files used for the check have been removed. Only `brief.md` (unchanged) and `draft.md` are in the working folder.

@@ -1,0 +1,5 @@
+# Judgement
+
+**W1, configuration.** pass. The reply reports "web copy, no technique, British English. All three come from the settings block at the top of `brief.md`", which matches the map's `webcopy` / `none` / `en_GB`. The draft is written in British English as question 1 asks ("bring it in a labelled envelope").
+
+**W2, direction and support.** pass. The draft opens on the hook ("Come with a single packet of leftover seed, or with none at all") and follows sketch steps 1–3 and 5. It ends by tying back to the packet and giving the brief's call to action, "Come to the spring swap on 14 March." Every claim traces to the brief, for example "That is all we ask of newcomers" from "asks only that newcomers note what they take". The unsettled points are reported and not filled in: the reply says the take-home figure "is left out", that the page has "no place" because "the address of the hall hasn't been settled", and that it falls short of the length at "about 190 words against the roughly 300".

@@ -1,0 +1,18 @@
+Noted for question 2:
+
+- **Sender:** Alder Tool Library
+- **Promise:** `[MISSING: What does the Alder Tool Library promise its members and want to be known for?]`
+- **Image:** `[MISSING: How does the board see the library, and the volunteer coordinators, today? Is there trust to build on or distrust to handle?]`
+- **Mandate:** the volunteer coordinators may not recommend spending, because the budget is the treasurer's mandate.
+- **Tone of voice:** plain and factual.
+- **Tone in this text:** sober and neutral. The brand's voice and the report's conventions pull the same way.
+
+The platform document isn't to hand, so I'll list it as a known source under question 12. You can come back and fill in the promise and image at any time.
+
+---
+
+**3. What does the sender want to convey with this text?**
+
+This is the message of this particular report, which isn't the same as the library's general message. Write it as a claim in one sentence. The message doesn't have to appear in the text. It can come across indirectly through what the report covers and where it leads the board. You still need to know what it is, because it decides which conclusion the report should land in.
+
+For example, a video-meeting company writes about remote work. The article concludes that short daily check-ins beat long weekly meetings. The company's message is that its tool makes those check-ins easy, and that message may never be stated in the article.

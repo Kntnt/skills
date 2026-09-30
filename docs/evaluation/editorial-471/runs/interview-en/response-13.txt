@@ -1,0 +1,25 @@
+The brief is saved to `brief.md`, and it's **enough to write**. The angle, the message and the conclusion are all settled, and questions 1 to 11 all have answers. The chain check has no "no" on the angle line or the conclusion line.
+
+**Chain check**
+- **Reader follows from sender and channel:** yes. The board asked for this PDF report.
+- **Angle and hook:** yes. What the sign-in sheets show about where the time goes answers "nobody has known why".
+- **Structure and length:** yes. The ending is now the trial proposal, and about 1,000 words fits your 800 to 1,200.
+- **Conclusion, message and mandate:** partly. The cut-off costs nothing, so it's within the mandate. But the message says the coordinators can fix the overruns themselves, while the main effect needs the board to approve a trial. To settle this: **can the coordinators bring in the cut-off on their own, or does "themselves" mean they need only the board's approval of the trial?**
+- **Understanding, effect and brand goals:** partly. Whether the effect serves the brand's goals can't be fully checked while the brand's promise is missing.
+- **Conflict with what's left out:** none.
+
+**Still open in the brief**
+- **Gaps under question 2:** the brand's promise and image are marked `[MISSING: …]`. Neither blocks writing.
+- **One-sentence version:** it's marked `[SUGGESTED: …]`. I updated it with your conclusion, but you haven't confirmed the new wording.
+- **Metadata:** the frontmatter has `genre: report` and `language: en_GB`. Technique is left out on purpose, because you chose the report's own form (PAC), and `/write` takes that from the genre.
+
+**Open questions (question 12)**
+- How many repairs were started after 20:30 each evening?
+- How long did each session actually run?
+- What share of the total overrun comes from the last half hour?
+- What times are the sessions booked for, and how many were held in September?
+- Which objection is the board most likely to raise?
+- What don't the sign-in sheets record?
+- Where is the platform document, and what does it say about the promise and image?
+
+Counting the sign-in sheets and running `/write` with the brief are your next steps.

@@ -1,0 +1,20 @@
+I'll interview you for the brief one question at a time, in the template's order. When we're done I'll write it to `brief.md` in the working directory. That file doesn't exist yet, so nothing will be overwritten.
+
+A few ground rules:
+- If you don't know an answer, just say "don't know". I'll mark it as missing and we'll move on.
+- You can go back to any earlier question at any time.
+- You don't need sources or evidence at this stage. We'll list anything that needs research as an open question at the end.
+
+---
+
+**1. What is the assignment?**
+
+This is the basic information the assignment gives you. Please give:
+
+- **Working title:** a short, clear name so everyone remembers what the text is about. It doesn't need to be catchy.
+- **Topic:** what the text is about, in a few words (e.g. "remote work").
+- **Genre:** e.g. article, case study, column, opinion piece, press release, report, teaser or web copy.
+- **Channel:** e.g. website, blog, newsletter, LinkedIn or newspaper.
+- **Language:** the language of the finished text (e.g. `en_GB`, `sv`). It can differ from the language we're using for the brief. If the text will exist in several languages, name the source language and how the other versions will be produced.
+- **Length:** roughly how many words or characters. A provisional range is fine.
+- **Search phrase:** the keyword or phrase the text should rank for, or say that it deliberately has none.

@@ -1,0 +1,69 @@
+{
+  "created": {
+    "home/.claude/.last-cleanup": {
+      "mode": 420,
+      "type": "file",
+      "size": 24,
+      "sha256": "70463c2dc73a0df3b5f405c4c9dbf21648496f12f71384d77925d74779b0577e"
+    },
+    "home/.claude/.claude.json": {
+      "mode": 384,
+      "type": "file",
+      "size": 45613,
+      "sha256": "fa87957cec93695139ab09ca19e1bcf46a68d815b849b946ed283a010ba35d99"
+    },
+    "home/.claude/backups": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "home/.claude/session-env": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "home/.claude/projects/-private-var-folders-cs-vgp-x-353zd9frkjpysp7zdw0000gn-T-kntnt-editorial-388-run-jjc5enjk-work": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "home/.claude/projects": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "home/.claude/sessions": {
+      "mode": 448,
+      "type": "directory"
+    },
+    "home/.claude/shell-snapshots": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "work/brief.md": {
+      "mode": 420,
+      "type": "file",
+      "size": 11447,
+      "sha256": "3616cf3847ee38f9f029e6335e311dc333abfcfb5503c15848ec1061f9228eab"
+    },
+    "home/.claude/projects/-private-var-folders-cs-vgp-x-353zd9frkjpysp7zdw0000gn-T-kntnt-editorial-388-run-jjc5enjk-work/memory": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "home/.claude/projects/-private-var-folders-cs-vgp-x-353zd9frkjpysp7zdw0000gn-T-kntnt-editorial-388-run-jjc5enjk-work/9c100096-5b95-49f9-9cd2-0f87ca06b7ac.jsonl": {
+      "mode": 384,
+      "type": "file",
+      "size": 316601,
+      "sha256": "6a47b8274b0676cf9e3b03a673cd23bee1dc12a6a7654df10fd29f30c8d72291"
+    },
+    "home/.claude/session-env/9c100096-5b95-49f9-9cd2-0f87ca06b7ac": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "home/.claude/backups/.claude.json.backup.1790791243828": {
+      "mode": 384,
+      "type": "file",
+      "size": 84,
+      "sha256": "c81ce7098631fe5cffb68ed32db10e971d3ec967ba074bbd7cbfaba8cce2b4db"
+    }
+  },
+  "removed": {},
+  "changed": {},
+  "note": "Harness, cache and Skill effects are separated by reading trace-index.json; nothing here is a Skill artifact on its own."
+}

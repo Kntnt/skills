@@ -4,7 +4,7 @@ Use this branch only when `## Resolution` selects a brief. The brief is a standa
 
 ## Read and map
 
-Read `$LIBRARY/references/editorial/writing-brief.md`, the authoritative English 13-question template. Map the selected brief onto all 13 numbered questions by meaning, in any language or layout. Retain the answer and its provenance for each question; preserve gaps instead of supplying answers. The template's quality criteria explain what each question means; they are not an instruction to review or repair the brief.
+Read `$LIBRARY/references/editorial/writing-brief.md`, the authoritative English template. Map the selected brief onto every numbered question by meaning, in any language or layout. Retain the answer and its provenance for each question; preserve gaps instead of supplying answers. The template's guidance explains what each question means; it is not an instruction to review or repair the brief.
 
 An answer consisting only of `[MISSING: …]` is unanswered. Review an answer marked `[SUGGESTED: …]` as written and label its assessment **unconfirmed**; review an answer marked `[WEAK: …]` as written and label its assessment **weak**. When a question has both supplied content and missing parts, assess only the supplied content and name the missing parts. An unmarked brief has the same mapping: an absent answer remains unanswered.
 

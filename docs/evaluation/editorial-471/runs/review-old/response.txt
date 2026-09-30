@@ -1,0 +1,46 @@
+I've reviewed the brief and saved a reworked copy to `brief.md`. `existing.md` is unchanged. The brief isn't ready to write from yet: the sender's message, the "Valuable" answer and the consistency check (the six questions under 11 that test whether the brief holds together) are all missing.
+
+Your brief follows an older 13-question layout, so I matched each answer to the current template's 12 questions by meaning:
+
+- **Old 12 and 13** (working title, language, length, search phrase) are now in question 1.
+- **Old 13's tone** is now under "Tone in this text" in question 2.
+- **Old 6's "message"** is the claim the text ends on, so it became the conclusion (question 9). Question 3, the sender's message, is left empty because your brief never gave it separately from that conclusion.
+- **The `[WEAK: …]` note** on the reader was treated as the answer it marks and dropped.
+- **The `[MISSING: …]` note** under sources is a research question, so it is now a plain open question under question 12.
+
+I put three settings at the top of the file for `/write`: genre `casestudy`, technique `abt` and language `sv`. All three are installed in the Library, and the case-study genre doesn't advise against ABT.
+
+## Status of each question
+
+| # | Question | Status |
+|---|---|---|
+| 1 | Assignment | Answered: title, topic, genre, channel, language, length and search phrase are all there. |
+| 2 | Sender | Answered. Promise and image are marked missing; the template lets a brief give only what governs this text. |
+| 3 | Sender's message | **Not answered.** |
+| 4 | Reader | Answered. |
+| 5 | Angle | Answered. |
+| 6 | Hook | Answered. |
+| 7 | Structure | Answered (ABT). The one-sentence version, the step-by-step outline and the ending are marked missing. |
+| 8 | Left out | Answered. |
+| 9 | Conclusion | Answered. |
+| 10 | Effect | Answered: booking a visit, measured by bookings through the form. |
+| 11 | RIV and consistency check | **Not answered.** Relevant and Interesting are there; Valuable and the check are missing. |
+| 12 | Sources | Answered, with one open research question. |
+
+None of the answers to questions 1–11 depends on the open research question.
+
+**Consistency check:** it's missing. The brief says "Not done yet", so I recorded all six lines as missing and filled none in.
+
+**Why it isn't ready:** the sender's message is one of the three answers that set the text's direction, along with the angle and the conclusion. The other two are answered. Question 11 also needs an answer before the brief is complete.
+
+**Open research question (question 12):** What figures on baking times or energy use can be referred to?
+
+## Questions still to answer
+
+1. What does Tallow Ovens want to say with this particular text, as a one-sentence claim separate from the conclusion?
+2. What value should the text give the reader?
+3. For each of the six consistency-check questions, is the answer yes, no or partly, and why?
+4. What is the whole text in one sentence in ABT form? What does each step say, and which facts carry it, within about 700 words? How does the ending tie back to the hook and lead to booking a visit?
+5. What does Tallow Ovens promise its audience? How do owners of small bakeries see it today?
+
+I can take you through these gaps one question at a time, or rewrite the brief with improved wording. Tell me which you'd like.

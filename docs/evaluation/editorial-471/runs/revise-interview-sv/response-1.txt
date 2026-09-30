@@ -1,0 +1,15 @@
+Då kör vi. Jag ställer frågorna i mallens ordning, en i taget. Du kan när som helst svara "vet inte", så markerar jag punkten som saknad och går vidare. Du kan också gå tillbaka till en tidigare fråga när du vill. När vi är klara sparar jag briefen i `brief.md` i arbetskatalogen. Filen finns inte än och skapas då.
+
+---
+
+## 1. Vad är uppdraget?
+
+Här samlar du det uppdraget ger dig. Det mesta behöver du inte hitta på, men det styr allt som följer. Korta svar räcker:
+
+- **Arbetsnamn:** ett kort och tydligt namn på texten. Det behöver inte vara slagkraftigt.
+- **Ämne:** vad texten handlar om, med några få ord, till exempel "distansarbete".
+- **Genre:** till exempel artikel, kundcase, krönika, debattartikel, pressmeddelande, rapport, teaser eller webbtext.
+- **Kanal:** till exempel webbplats, blogg, nyhetsbrev, LinkedIn eller dagstidning.
+- **Språk:** vilket språk den färdiga texten ska ha, till exempel `sv` eller `en_GB`. Det kan skilja sig från språket vi skriver briefen på. Ska texten finnas på flera språk anger du källspråket och hur de andra versionerna tas fram.
+- **Längd:** ungefär hur många ord eller tecken texten ska ha. Vet du inte än räcker ett preliminärt spann.
+- **Sökfras:** vilket sökord eller vilken fras texten ska synas på, om den ska hittas via sökning. Om texten medvetet skrivs utan sökfras, säg det.

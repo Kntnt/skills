@@ -1,0 +1,17 @@
+The conclusion is recorded: *most of the overrun comes from repairs started in the last half hour, so a cut-off for new repairs at 20:30 would end the sessions on time.*
+
+This also fills the placeholder in the one-sentence version you confirmed. With your permission I'll update it to:
+
+> The evening repair sessions are booked for two hours but ran over on every evening in September without anyone knowing why, and the September sign-in sheets show that most of the overrun comes from repairs started in the last half hour, which means that a cut-off for new repairs at 20:30 would end the sessions on time and the coordinators can fix the overruns themselves.
+
+The actual figures behind "most of the overrun" still need to be taken from the sheets. I'll list that under question 12, and it doesn't block anything.
+
+---
+
+**Question 10 of 12: What should the reader feel, think or do afterwards?**
+
+The conclusion is what the board understands. This question is about what that leads to.
+
+- **Main effect:** one effect, stated concretely enough that you could tell whether it happened. For example, "the board approves X at the November meeting" or "the board sees the coordinators as able to handle this".
+- **The way there:** if the effect comes in steps, what the board first needs to see, understand or believe.
+- **Call to action and measure:** what the board is to do, stated directly or left implicit, and what would show the effect was reached. If the text deliberately has no call to action or no measure, say so.

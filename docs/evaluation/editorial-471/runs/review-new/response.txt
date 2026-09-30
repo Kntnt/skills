@@ -1,0 +1,54 @@
+I've reviewed `existing.md` and written the mapped brief to `brief.md`. `existing.md` is unchanged, and the run left no temporary files behind.
+
+The brief is enough to write. Only one thing is unanswered: the search phrase.
+
+## Status of each question
+
+| # | Question | Status |
+|---|---|---|
+| 1 | Assignment | **Answered.** The genre ("web copy") and the language (en_GB) are both given. The search phrase is missing. The reader finds the page "through a search", so this matters, but it doesn't block writing. |
+| 2 | Sender | **Answered.** Promise, image, mandate, tone of voice and tone in this text are all there. The brief notes that the brand's tone and the page's tone pull the same way. |
+| 3 | Sender's message | **Answered.** It's a one-sentence claim, and it's kept separate from the conclusion. |
+| 4 | Reader | **Answered.** This includes why now: the spring swap on 14 March 2027. |
+| 5 | Angle | **Answered.** There's a single angle: what a first-time visitor brings and takes home. |
+| 6 | Hook | **Answered.** |
+| 7 | Structure | **Answered, with open research questions.** Free structure is chosen explicitly, and there's a one-sentence summary and a five-step sketch. The ending ties back to the hook and carries the call to action. Step 4 needs the packet figure, and step 5 needs the hall's address. |
+| 8 | What to leave out | **Answered.** |
+| 9 | Conclusion | **Answered.** It's a one-sentence claim. |
+| 10 | Effect | **Answered.** It has a main effect, a way there, a direct call to action and a measure. |
+| 11 | RIV and chain check | **Answered.** All three RIV parts and all six check lines are written. |
+| 12 | Sources | **Answered.** There are two numbered sources and two things to find out. |
+
+## Chain check, as the brief wrote it
+
+- **Reader follows from sender and channel:** yes.
+- **Angle close to the reader, hook carries it:** yes.
+- **Structure resolves the hook and fits the length:** partly. Step 4 is waiting on a figure, which is a research gap and doesn't block writing.
+- **Conclusion is where the structure lands, carries the message, within the mandate:** yes.
+- **Understanding leads to the effect, effect serves the brand:** yes.
+- **Structure conflicts with what's left out:** no.
+
+## Readiness
+
+The angle, message and conclusion are all settled. Questions 1–11 are all answered, and the chain check has no "no" on the angle line or the conclusion line.
+
+## What I changed in the mapped brief
+
+- **Metadata:** I added settings at the top so that `/write` knows the genre, structure and language: `genre: webcopy`, `technique: none` (free structure) and `language: en_GB`. I checked that all three are recognised.
+- **Search phrase:** I added a line under question 1 marked as missing.
+- **Question 2:** I split the brand description into a list, one item per part. The wording is unchanged.
+- **Question 12:** I rewrote the things to find out as two open questions.
+- **Question 7:** Step 4's pointer now says "see question 12" instead of "see sources".
+
+Everything else is the brief's own wording.
+
+## Still to settle
+
+**Unanswered:**
+- Which search phrase should the page be visible for, or is it deliberately written without one?
+
+**Open research questions (these don't block writing):**
+- How many packets did a first-time visitor take home at the autumn swap? This comes from the newcomers' sheet.
+- What is the address of the hall booked for the spring swap?
+
+I can interview you about the search phrase, or rewrite the brief's wording as a clean version. Once you're happy with it, you can hand `brief.md` to `/write`.

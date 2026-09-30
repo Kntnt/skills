@@ -1,0 +1,20 @@
+Kroken har jag noterat med dina egna ord, som du skrev den: *många vintercyklister tror att en kedja som gnisslar måste bytas, men ofta räcker det att tvätta och smörja den.* Säg till om du vill ändra den.
+
+---
+
+## 7. Hur ska texten byggas upp?
+
+**Teknik:** ABT. Artikeln som genre har ingen egen standardteknik, så det går bra att lägga en ABT-båge över den. I en ABT-text kommer And och But snabbt fram till problemet. Therefore utgör resten av texten och delas in i avsnitt med mellanrubriker. Texten ska landa i ett slut som knyter an till kroken och bär uppmaningen.
+
+**Hela texten i en mening (din):**
+> Salt och slask sliter på kedjan och om den inte sköts gnisslar den och rostar, men många tror att den då måste bytas eftersom ingen har visat dem hur man sköter den, därför visar vi handgreppen genom att gå igenom dem ett i taget.
+
+Här är mitt förslag till skiss för cirka 600 ord. Allt är markerat som förslag tills du har bekräftat det:
+
+1. **And – situationen (cirka 100 ord):** `[SUGGESTED: Vintern kommer, och den som cyklar till jobbet året runt kör i salt och slask som sliter på kedjan. Det som står på spel är en cykel som fungerar hela vintern utan onödiga kostnader, vilket är det läsaren bryr sig om.]`
+2. **But – kroken (cirka 100 ord):** `[SUGGESTED: Kedjan börjar gnissla och rosta, och många drar slutsatsen att den måste bytas. Orsaken är att ingen har visat dem hur man sköter den. Ofta räcker det att tvätta och smörja den.]`
+3. **Therefore – handgreppen, ett i taget med en mellanrubrik vardera (cirka 350 ord):** `[SUGGESTED: till exempel att tvätta bort salt och smuts, att torka kedjan, att smörja den och att torka bort överflödig olja, och hur ofta det behövs under vintern.]` Vilka handgrepp som faktiskt ska vara med, i vilken ordning och hur ofta har inte material ännu. Jag lägger det som en öppen fråga under fråga 12, så att inget hittas på.
+4. **Therefore – när det inte räcker (kort, valfritt):** `[SUGGESTED: Kroken säger att det *ofta* räcker. Ett par meningar om när kedjan faktiskt är sliten gör texten ärlig och håller den inom enkel service.]` Även det här kräver fakta som ska tas fram.
+5. **Slut (cirka 50 ord):** `[SUGGESTED: Knyt an till kroken, alltså att gnisslet inte betydde att kedjan var slut. Avsluta med uppmaningen att komma till Cykelkökets öppna kvällar och lära sig handgreppen med lånade verktyg och hjälp av volontärer.]` Uppmaningen tar vi ställning till under fråga 10.
+
+**Stämmer skissen?** Bekräfta den, ändra enskilda led eller stryk led 4.

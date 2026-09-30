@@ -1,0 +1,16 @@
+The proposal is in my previous message. Here it is again, cleaned up, with line 6 answered as **No** (no conflict) so it reads unambiguously.
+
+**RIV**
+- **Relevant:** [SUGGESTED: The board asked for the report and decides the session schedule at the November meeting. It also touches both of the board's concerns: volunteers kept late, and premises that must be empty by 21:30. This sits in the opening (step 1) and the ending (step 5).]
+- **Interesting:** [SUGGESTED: The hook: sessions booked for two hours ended late every evening in September, and nobody has known why. This sits in the opening (step 1).]
+- **Valuable:** [SUGGESTED: The conclusion: one main cause, and a fix that costs nothing and is ready for a decision. This sits in the analysis (step 3) and the ending (step 5).]
+
+**Chain check**
+1. *Does the reader follow from the sender and the channel?* [SUGGESTED: **Yes.** It's a board-only PDF from the library, answering the board's own question.]
+2. *Does the angle lie close to the reader, and does the hook carry the angle?* [SUGGESTED: **Yes.** The sign-in sheets answer the board's question, and the hook is the unexplained overrun the sheets explain.]
+3. *Does the structure resolve the hook's tension, and does it fit the length?* [SUGGESTED: **Yes.** The analysis shows where the time goes and the ending says why the sessions run over. The allocations add up to 800–1,200 words.]
+4. *Is the conclusion what the structure lands in, does it carry the message, and is it within the brand's mandate?* [SUGGESTED: **Yes.** The cut-off is where the analysis lands, it shows the coordinators can fix the overrun themselves, and it involves no spending.]
+5. *Does what the reader understands lead to the effect, and does that effect serve the brand's goals?* [SUGGESTED: **Partly.** One main cause leads naturally to approving a trial, and the message fits the call to action if the coordinators propose and run the trial while the board approves it. Whether the effect serves the brand's goals can't be checked, because the library's promise is missing. Question 2's promise would settle that.]
+6. *Does anything in the structure conflict with what should be left out?* [SUGGESTED: **No.** No spending is recommended, the rental terms appear only as the 21:30 limit, and "who does it" refers to the coordinators by role.]
+
+Do you **confirm** this, or would you like to change anything?

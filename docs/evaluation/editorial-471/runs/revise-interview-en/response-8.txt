@@ -1,0 +1,31 @@
+Here's a suggestion for question 7. A report's own form is PAC (Premise, Analysis, Conclusion), so the sketch follows that. Because you chose the genre's own form rather than picking a technique, I'll record it that way under question 7 and leave the technique out of the metadata. `/write` will work the form out from the genre.
+
+I don't know what the sign-in sheets actually show, and we haven't settled the conclusion yet (that's question 9). Where the sketch depends on either, I've left a gap instead of inventing figures. Those gaps will go on the open-questions list under question 12.
+
+**The whole text in one sentence** (PAC form):
+
+> [SUGGESTED: The evening repair sessions are booked for two hours but ended late on every evening in September without anyone knowing why, and the September sign-in sheets show where the overrun time goes — [what the sheets show] — which means that [the conclusion] and that the volunteer coordinators can fix the overruns themselves, within their mandate and without new spending.]
+
+**Sketch** (about 800–1,200 words in total):
+
+1. **Opening: premise and answer** (about 100–150 words). [SUGGESTED]
+   - What the report covers (the evening repair sessions), why it exists (the board asked, ahead of the November meeting that decides the schedule) and the period (September).
+   - The hook: the sessions are booked for two hours, ran late every evening, and nobody has known why.
+   - The answer, stated at the top as the report genre requires: [the conclusion].
+2. **What the sign-in sheets record** (about 100–150 words). [SUGGESTED]
+   - What the sheets count, how many sessions September had, and each evening's booked end time against its actual end time.
+   - Each figure's basis is given, as the report genre requires.
+3. **Where the overrun time goes**, the analysis (about 400–600 words, in one or two sections). [SUGGESTED]
+   - The overrun broken down by whatever the sheets separate out.
+   - A table of evenings and overrun minutes if the data allows.
+   - Headings that name the finding.
+   - Other explanations weighed where the material gives reason to.
+4. **The strongest objection, and what the sheets can't settle** (about 100–150 words). [SUGGESTED]
+   - Any question the board is likely to raise, put at its strongest and then answered.
+   - The limits of the evidence. For example, one month of sign-in sheets is a single month.
+5. **Ending: conclusion and what the coordinators will do** (about 100–150 words). [SUGGESTED]
+   - Ties back to the hook by saying why the sessions run over.
+   - Names what the coordinators will change themselves, who does it and by when. Nothing that costs money, because spending is the treasurer's mandate.
+   - Leaves the board with what it needs for the November schedule decision. That's the call to action, which we'll pin down under question 10.
+
+Please **confirm or correct** the one-sentence version and the sketch. Change any step, the word allocations, or the ending as you see fit.

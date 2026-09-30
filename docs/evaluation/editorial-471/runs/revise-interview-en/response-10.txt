@@ -1,0 +1,15 @@
+**9. Conclusion:** Most of the overrun comes from repairs started in the last half hour, so a cut-off for new repairs at 20:30 would end the sessions on time.
+
+That's a one-sentence claim, and it carries the message: the coordinators can fix this themselves with a rule that costs nothing. I'll fill it into the gaps in the one-sentence version and in the sketch's opening and ending.
+
+Whether the September sheets bear out "most of the overrun" is something to check, so I'll list it as an open research question under question 12. The session times will go on that list too. A cut-off at 20:30 suggests the sessions end at 21:00, with the premises empty by 21:30, but you haven't told me the start and end times, so I won't assume them.
+
+---
+
+**10. What should the reader feel, think or do afterwards?**
+
+The conclusion is what the board understands. This question is about what that understanding should lead to.
+
+- **Main effect:** one effect, stated concretely enough that you can tell whether it happened. It might be something the board thinks, such as "trusts the coordinators to handle it", or something it does, such as "adopts X at the November meeting".
+- **The way there:** if the effect comes in steps, what does the board first need to see, understand or believe?
+- **Call to action and measure:** what the board should do. It can be direct or implied. If the effect can be measured, what would show it worked? If the report deliberately has no call to action or no measure, say so, so it reads as a choice rather than a gap.

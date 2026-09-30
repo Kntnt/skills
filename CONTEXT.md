@@ -43,7 +43,7 @@ One coherent text that Write creates or that an editorial Skill processes. Write
 _Avoid_: document batch, input collection, text payload
 
 **Writing Brief**:
-The answers to the editorial Library's 13 questions about a text to be written: its assignment, reader and intended effect, with the evidence and boundaries the writer needs. It is distinct from instructions handed to a subagent; its template lives in `skills/kntnt/library/references/editorial/writing-brief.md`.
+The answers to the editorial Library's questions to answer before a text is written: its assignment, sender and the sender's message, reader, angle, hook, structure, boundaries, conclusion and intended effect, with the sources already known and what remains to be found out. It sets the text's direction and need not be substantiated; Source Fidelity binds the finished text. It is distinct from instructions handed to a subagent; its template lives in `skills/kntnt/library/references/editorial/writing-brief.md`.
 _Avoid_: subagent brief, correction brief, project brief
 
 **Handoff Metadata**:

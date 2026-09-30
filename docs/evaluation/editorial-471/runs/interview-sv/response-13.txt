@@ -1,0 +1,20 @@
+Briefen är klar och sparad i `brief.md`. Den har ett YAML-block överst, `kntnt`, med `genre: article`, `technique: abt` och `language: sv`. Alla tre valen är gjorda av dig och kontrollerade mot det som finns installerat. Jag lämnade inga temporära filer kvar.
+
+**Kedjekontroll** (du bekräftade den):
+- **Läsare, kanal, vinkel och krok, struktur och längd, effekt:** ja på alla.
+- **Det som ska lämnas utanför:** nej, ingen krock.
+- **Slutsatsen:** delvis. Kroken säger "ofta", och ett led handlar om när det inte räcker. Slutsatsen säger däremot utan förbehåll att man klarar vintern "utan att byta kedja". Du valde inget av alternativen, så jag skrev in det som en olöst fråga: ska slutsatsen få ett förbehåll, till exempel "oftast", eller ska ledet om när det inte räcker strykas?
+
+**Beredskap:** Briefen räcker för att börja skriva. Vinkeln, budskapet och slutsatsen är besvarade, frågorna 1–11 har svar och kedjekontrollen har inget "nej" i leden för vinkeln eller slutsatsen. Glidningen i slutsatsen står som "delvis", och det stoppar inte skrivandet.
+
+Kroken har jag skrivit in med dina egna ord från svaret om vinkeln. Du bekräftade den inte uttryckligen, så säg till om den ska ändras.
+
+**Öppna frågor** (står under fråga 12 och stoppar inte skrivandet):
+- Hur ofta behöver en kedja smörjas på vintern?
+- Stämmer det att saltet sliter mest på kedjan?
+- Vilka handgrepp ska vara med, i vilken ordning, och hur ofta behöver de göras?
+- När är en kedja så sliten att den behöver bytas?
+- Vilken sorts smörjmedel passar på vintern, beskrivet utan varumärke?
+- När är Cykelkökets öppna kvällar i november?
+
+Nästa steg är ditt. Om du vill kan du köra `/write` med briefen.

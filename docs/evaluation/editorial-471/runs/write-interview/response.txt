@@ -1,0 +1,35 @@
+Utkastet är skrivet till `draft.md`, men det **har kända brister**: den slutliga källjämförelsen lämnade två anmärkningar som jag inte fick åtgärda efteråt, och två mellanrubriker upprepar meningen under sig.
+
+**Det här behöver du åtgärda**
+1. **Torka kedjan och torka bort överskottet framställs som fasta steg.** Det gäller "Efter tvätten behöver den bli torr." och "Efter smörjningen torkar du bort överflödigt smörjmedel." Briefen ger stegen bara som exempel. Vilka steg som ska med och i vilken ordning är öppna frågor i briefen. Kontrollanten föreslog att de två avsnitten och orden "Efter tvätten" och "Efter smörjningen" stryks tills en källa besvarar frågan.
+2. **Ingressen vidgar kedjeskötsel till hela cykeln.** Meningen är "Vill du att cykeln ska fungera hela vintern … kommer du långt med några enkla handgrepp". Briefen säger bara att handgreppen håller kedjan igång. Kontrollanten föreslog: "Vill du att cykeln ska fungera hela vintern utan onödiga kostnader, kan du hålla kedjan igång med några enkla handgrepp som du kan göra själv."
+3. **Rubriken "Torka kedjan" säger samma sak som meningen under den**, "Efter tvätten behöver den bli torr.". Läsaren får inget nytt av den första meningen.
+4. **Rubriken "Ta bort överskottet" gör likadant** med "Efter smörjningen torkar du bort överflödigt smörjmedel." Båda avsnitten är en enda mening, så rubriken och texten hamnar på samma påstående.
+
+**Vad utkastet bygger på**
+- Genre `article`, teknik `abt` och språk `sv` kommer alla från `kntnt`-blocket i briefens frontmatter. Tekniken valdes alltså i briefen och inte av genren, som inte har någon egen standardteknik.
+- Filen har ett `kntnt`-block med samma tre värden.
+- Bylinen lyder "Av Thomas" eftersom briefen inte anger någon författare. Jag kände bara till förnamnet, från din e-postadress, så rätta bylinen om texten ska ha fullt namn, en annan skribent eller ingen byline alls.
+- Enligt mätskriptet följer utkastet artikelanatomin. Bara två av sju avsnitt har två eller tre stycken, eftersom briefen vill ha en mellanrubrik per handgrepp och underlaget inte räcker till mer.
+
+**Frågor som är briefens egna**
+- **"Ofta räcker det att tvätta och smörja"** är artikelns bärande påstående. Det står i rubriken och återkommer i texten. Det kommer från briefen, men ingen av frågorna i dess källavsnitt prövar det.
+- **"Förklaringen är att ingen har visat dem hur en kedja sköts"** är ett orsakspåstående om verkliga människor. Utkastet återger det lika säkert som briefen, men briefen har inget belägg för det. Ska det tillskrivas föreningens egen erfarenhet?
+- **Stigvikens Cykelkök beskrivs som verklig i texten.** Briefen kallar föreningen påhittad.
+- **Villkoret i slutsatsen.** Briefen lämnade öppet om slutsatsen ska få ett villkor. Utkastet behåller krokens "ofta", både i slutsatsen och i rubriken "Kedjan kan ofta hålla hela vintern".
+- **Kanalen.** Briefen säger både "föreningens webbmagasin" och "stadsdelens webbmagasin". Texten omtalar därför föreningen i tredje person.
+
+**Här tog underlaget slut**
+Briefen säger "Inga kända källor ännu", så utkastet är betydligt kortare än de cirka 600 ord som beställdes. Svar på briefens öppna frågor skulle fylla ut det:
+- vilka handgrepp som ska vara med, i vilken ordning och hur ofta
+- hur ofta kedjan behöver smörjas på vintern
+- vilken sorts smörjmedel som passar på vintern, beskrivet utan varumärke
+- när en kedja är så sliten att den måste bytas
+- om saltet sliter mest på kedjan
+
+Framför allt saknas datum och tider för de öppna kvällarna i november. Slutet säger därför bara att föreningen har öppna kvällar i november och behöver kompletteras innan uppmaningen fungerar.
+
+**Hur kontrollen gick till**
+Två fristående källjämförelser kördes mot briefen. Den första ledde till fyra rättelser: "olja" blev "smörjning" och "smörjmedel", stegen framställs inte längre i en fast ordning, salt är inte längre den enda orsaken till slitaget och "låta" blev "gnissla". Den andra är den slutliga, och `draft.md` innehåller exakt den text den läste, med frontmattern tillagd.
+
+Ingen av kontrollanterna kunde skriva sin rapportfil, så rapporterna kom i deras svar. Mina arbetsfiler i scratch är borttagna och båda kontrollanterna har avslutats.

@@ -1,0 +1,1 @@
+Briefen är redan sparad i `brief.md`, och filen ligger kvar i arbetskatalogen. Jag har inte skrivit över den. Då är vi klara.

@@ -1,0 +1,34 @@
+Jag har skrivit ett utkast till brief i `brief.md`. `notes.md` är oförändrad, och inga tillfälliga filer finns kvar. Jag kontrollerade att söndag 1 november 2026 verkligen är en söndag.
+
+Frontmattern anger `genre: pressrelease` och `language: sv`, som båda står i anteckningarna. Ingen teknik anges, eftersom ett pressmeddelande följer genrens egen ordning. Genren avråder från att lägga en båge över den ordningen, eftersom nyheten då flyttas bort från första meningen.
+
+**Kontroll av kedjan** (bara förslag som du behöver bekräfta)
+- **Avsändare och kanal:** ja, ett utskick till lokala redaktioner når redaktörer och journalister i orten.
+- **Vinkel och krok:** delvis. Vinkeln är inte bekräftad, och den vilar på att det är första gången på tio år, vilket inte är kontrollerat.
+- **Struktur och längd:** delvis, eftersom längden inte är bestämd.
+- **Slutsats och budskap:** delvis. Budskapet om en mötesplats för hela orten bärs bara indirekt, och det enda citatet handlar om familjerna.
+- **Effekt:** delvis, eftersom det inte är bestämt när utskicket ska gå ut.
+- **Det som ska lämnas utanför:** nej, inget i skissen strider mot det.
+
+**Är briefen tillräcklig att skriva från?** Inte ännu. Vinkeln, budskapet och slutsatsen saknas i anteckningarna, så de finns bara som mina obekräftade förslag. Det här behöver du bestämma:
+- Ska vinkeln vara att söndagsöppet kommer tillbaka efter tio år, eller bara att biblioteket får söndagsöppet?
+- Ska budskapet vara att biblioteket är en mötesplats för hela orten, eller att det finns till för familjerna?
+- Vilken slutsats ska läsaren ha förstått efteråt, i en mening?
+
+I anteckningarna saknas också arbetsrubrik, längd, sökfras, bibliotekets image och tonalitet samt eventuella andra saker som ska lämnas utanför. Jag har lagt in förslag för de flesta, och alla är markerade.
+
+**Öppna frågor att ta reda på**
+- Stämmer det att biblioteket inte har haft söndagsöppet på tio år?
+- Är söndagsöppet permanent eller ett försök?
+- Vad kan besökarna göra på söndagarna?
+- Varför införs söndagsöppet nu, och vem har beslutat det?
+- Vilken är bibliotekets adress?
+- Finns ett andra citat?
+- Finns bilder eller länkar att bifoga?
+- När ska utskicket gå ut, och från vilken tidpunkt får det publiceras?
+- Vilka redaktioner får utskicket?
+- Finns en tonalitetsguide?
+
+De här frågorna hindrar inte skrivandet.
+
+Vill du att vi går igenom luckorna i en intervju, en fråga i taget? När briefen är klar är nästa steg ditt: att köra `/write`.

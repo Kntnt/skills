@@ -1,0 +1,32 @@
+Question 10 is recorded:
+
+- **Main effect:** the board approves a trial cut-off for new repairs from the first session in December.
+- **The way there:** the board first sees that the overrun has one main cause.
+- **Call to action:** direct, as a proposal for a board decision.
+- **Measure:** the share of December sessions that end on time.
+
+---
+
+**Question 11 of 12: What makes the text RIV for the reader, and does the brief hold together?**
+
+RIV stands for relevant, interesting and valuable. Here is my proposal, built from your answers, for you to confirm or correct.
+
+**RIV**
+
+- **Relevant:** [SUGGESTED: The board asked for the report and decides the session schedule at the November meeting. The overruns also touch what they care about: volunteers' wellbeing, and premises that must be empty by 21:30. This appears in the opening (why now) and in the figures in step 2.]
+- **Interesting:** [SUGGESTED: The hook: sessions booked for two hours ended late on every evening in September, and nobody knew why. It's stated as the question in the opening.]
+- **Valuable:** [SUGGESTED: The conclusion: one main cause, and a cut-off at 20:30 that ends the sessions on time without any spending. This is carried by the analysis in step 3 and the proposal in step 6, and it gives the board a basis for the November decision.]
+
+**Chain check**
+
+1. *Does the reader follow from the sender and the channel?* [SUGGESTED: **Yes.** A PDF to the seven board members, who asked for it.]
+2. *Does the angle lie close to the reader, and does the hook carry it?* [SUGGESTED: **Yes.** The board wants to know why the sessions run over. The hook's "nobody has known why" is exactly what the sheets' account of where the time goes answers.]
+3. *Does the structure resolve the hook's tension, and does it fit the length?* [SUGGESTED: **Partly.** Step 3 resolves the "why", and about 1,000 words fits 800 to 1,200. However, your call to action is a direct proposal for a board decision, and the sketch you confirmed ends on the coordinators' own measures. Since your answers settle this, I propose that step 6 end on the proposal itself: a board decision on a trial cut-off for new repairs at 20:30 from the first session in December, measured by the share of December sessions that end on time. The answer at the top of the opening would then name the proposal too.]
+4. *Is the conclusion what the structure lands in, does it carry the message, and does it lie within the brand's mandate?* [SUGGESTED: **Partly.** The structure lands in the cut-off, and a cut-off costs nothing, so it stays within the coordinators' mandate. But the message says the coordinators can fix the overruns *themselves*, while the main effect requires the board to approve a trial. Which do you mean: can the coordinators introduce the cut-off on their own, or do they need no more than the board's approval of the trial?]
+5. *Does what the reader understands lead to the effect, and does that effect serve the brand's goals?* [SUGGESTED: **Partly.** Seeing one main cause leads naturally to approving a trial. Whether the effect serves the brand's goals can't be fully checked while the brand's promise is missing.]
+6. *Does anything in the structure conflict with what should be left out?* [SUGGESTED: **No conflict.** The cut-off involves no spending or hiring, and no volunteers are named. The objection in step 4 may touch the premises only through the 21:30 limit.]
+
+Please confirm or correct this. In particular:
+
+- Do you accept the change to step 6?
+- How should line 4 be settled? You could keep the message as it stands or reword it, for example: "the coordinators have found the cause and can fix it without new resources, given the board's approval of a trial."

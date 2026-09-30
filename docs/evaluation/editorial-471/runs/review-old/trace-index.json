@@ -1,0 +1,302 @@
+{
+  "schema_version": 1,
+  "packet": "review-old",
+  "agents": [
+    {
+      "agent_id": "5e3789fd-1c29-4617-aa8c-8a7f10c4991b",
+      "role": "session",
+      "parent_agent_id": null,
+      "tool_use_id": null,
+      "agent_type": null,
+      "description": null,
+      "spawn_depth": 0,
+      "transcript": "transcripts/parent.jsonl",
+      "instruction": "<command-message>brief</command-message>\n<command-name>/brief</command-name>\n<command-args>--output=brief.md existing.md -- Review this brief.</command-args>",
+      "started_at": "2026-09-30T17:44:47.490Z",
+      "ended_at": "2026-09-30T17:46:22.259Z",
+      "seats": [
+        {
+          "model": "claude-opus-5-5",
+          "deliberation": "high",
+          "turns": 13
+        }
+      ],
+      "skill_bodies": [
+        {
+          "base_directory": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-035uknk4/home/.claude/skills/brief",
+          "chars": 15569
+        }
+      ],
+      "calls": [
+        {
+          "ordinal": 1,
+          "at": "2026-09-30T17:44:50.826Z",
+          "tool": "Bash",
+          "tool_use_id": "toolu_01W7CZRSKv6gVifp2z5SSUN6",
+          "arguments": {
+            "command": "HERE=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-035uknk4/home/.claude/skills/brief; T=$(mktemp -d); printf '%s' '--output=brief.md existing.md -- Review this brief.' | TMPDIR=\"$T\" UV_NO_CACHE=1 UV_NO_PROJECT=1 uv run \"$HERE/scripts/invoke.py\"; rc=$?; rm -rf \"$T\"; echo \"EXIT=$rc\"",
+            "description": "Run the brief skill invocation shim"
+          },
+          "is_error": false,
+          "result_chars": 664,
+          "result_excerpt": "Invocation read.\n\nThe `instruction` is a Contextual Instruction: read `/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-035uknk4/home/.claude/skills/kntnt/library/references/invocation-envelope.md` and apply it as that file says.\n\n`$LIBRARY` is `/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-035uknk4/home/.claude/skills/kntnt/librar"
+        },
+        {
+          "ordinal": 2,
+          "at": "2026-09-30T17:44:54.042Z",
+          "tool": "Bash",
+          "tool_use_id": "toolu_01Xm25RAiYdzzwQdxzDnWSCF",
+          "arguments": {
+            "command": "L=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-035uknk4/home/.claude/skills/kntnt/library; cat $L/references/invocation-envelope.md; echo ======; cat $L/references/delivery.md; echo =====; cd /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-035uknk4/work; ls -la; echo ====; cat existing.md",
+            "description": "Read envelope, delivery rules, and the existing brief"
+          },
+          "is_error": false,
+          "result_chars": 24908,
+          "result_excerpt": "# The Invocation Envelope\n\nThe contract every Skill of this collection meets before it reads an argument of its own: how the reserved separator splits an Invocation Envelope, what a Contextual Instruction may and may not settle, the two refusals a bad Envelope or a bad Formal Invocation takes, and how a caller recovers from its own construction error. It is stated here once and executed by every S"
+        },
+        {
+          "ordinal": 3,
+          "at": "2026-09-30T17:44:56.870Z",
+          "tool": "Bash",
+          "tool_use_id": "toolu_01AK2b5wLJbHTomoqck4rvU6",
+          "arguments": {
+            "command": "L=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-035uknk4/home/.claude/skills/kntnt/library; cat $L/references/editorial/writing-brief.md; echo =====; ls -la $L/references/editorial/genres/ $L/references/editorial/techniques/",
+            "description": "Read brief template and list genres and techniques"
+          },
+          "is_error": false,
+          "result_chars": 16083,
+          "result_excerpt": "# Questions to answer before you write\n\nThe Writing Brief template: each numbered question carries the guidance for answering it. This English reference is authoritative; render its questions and guidance in the user's working language while retaining every question, its number and its order. Its genre and technique examples explain the form, not what is installed: the Library directories supply t"
+        },
+        {
+          "ordinal": 4,
+          "at": "2026-09-30T17:45:01.006Z",
+          "tool": "Bash",
+          "tool_use_id": "toolu_01SjkwipaXZhSmXYUA7dYj9N",
+          "arguments": {
+            "command": "L=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-035uknk4/home/.claude/skills/kntnt/library; cat $L/references/editorial/genres/casestudy.md; echo ====; cat $L/references/editorial/techniques/abt.md; echo ====; T=$(mktemp -d); TMPDIR=\"$T\" uv run --no-cache --no-project \"$L/scripts/languages.py\" resolve --scope=composition \"sv\"; echo \"EXIT=$?\"; rm -rf \"$T\"",
+            "description": "Read case study genre, ABT technique, resolve language sv"
+          },
+          "is_error": false,
+          "result_chars": 9394,
+          "result_excerpt": "# Case study\n\nA journalistic customer account published by a supplier: what the customer set out to do, how they acted, what happened and how they judge the experience. The customer's voice carries the experience; the writer gives it context and progression.\n\nApply the shared [web craft brief](../web-craft.md).\n\nFollow the [article anatomy](../article-anatomy.md).\n\nWrite the headline and the subhe"
+        },
+        {
+          "ordinal": 5,
+          "at": "2026-09-30T17:46:08.228Z",
+          "tool": "Write",
+          "tool_use_id": "toolu_01YTxvP5aK1Z5xbGmQCwTNFc",
+          "arguments": {
+            "file_path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-035uknk4/work/brief.md",
+            "content": "---\nkntnt:\n  genre: casestudy\n  technique: abt\n  language: sv\n---\n\n# Writing Brief — Brackwater Bakery case\n\nInvented evaluation material. Brackwater Bakery and Tallow Ovens are fictional companies and describe no real client.\n\n## 1. What is the assignment?\n\n- **Working title:** Two more hours of sleep at Brackwater.\n- **Topic:** a new oven at a bakery.\n- **Genre:** case study.\n- **Channel:** Tallow Ovens' website, customer stories section.\n- **Language:** sv.\n- **Length:** about 700 words.\n- **Search phrase:** deck oven small bakery.\n\n## 2. Which brand is the sender?\n\nTallow Ovens, a maker of deck ovens for small bakeries.\n\n- **Promise:** [MISSING: What does Tallow Ovens promise its audience and want to be known for, as far as it governs this text?]\n- **Image:** [MISSING: How do small-bakery owners perceive Tallow Ovens today, and is there trust to build on or distrust to handle?]\n- **Mandate:** its own ovens and how customers use them.\n- **Tone of voice:** straightforward and warm.\n- **Tone in this text:** warm, in the customer's voice.\n\n## 3. What does the sender want to convey with this text?\n\n[MISSING: What does Tallow Ovens want to convey with this particular text, as a one-sentence claim kept apart from the conclusion the text lands in?]\n\n## 4. Who is the reader?\n\nOwners of small bakeries.\n\n## 5. What is the text's angle?\n\nHow Brackwater Bakery moved its first bake from 03:00 to 05:00 after installing a Tallow deck oven.\n\n## 6. What is the hook?\n\nThe bakery's owner, Mira Holt, had started work at 03:00 for eleven years.\n\n## 7. How should the text be structured?\n\nTechnique: ABT.\n\n- **The whole text in one sentence:** [MISSING: What is the whole text in one sentence, in ABT's form \"[the situation] and if […] then […], but [the problem] because […], therefore […] by […]\"?]\n- **Sketch:** [MISSING: What does each step say — the And, the But and the Therefore with its sections — and which facts, figures and examples carry it, within about 700 words?]\n- **Ending:** [MISSING: How does the ending tie back to the hook and carry the call to action to book a visit?]\n\n## 8. What should be left out?\n\nPrices and competitors' ovens.\n\n## 9. What should the reader have understood afterwards?\n\nA Tallow deck oven lets a small bakery start its day two hours later.\n\n## 10. What should the reader feel, think or do afterwards?\n\n- **Main effect:** the reader books a visit to see the oven at Brackwater.\n- **Call to action and measure:** booking a visit to see the oven at Brackwater; measured by visit bookings through the form on the page.\n\n## 11. What makes the text RIV for the reader, and does the brief hold together?\n\n- **Relevant:** small bakeries are replacing ovens as energy prices rise.\n- **Interesting:** a bakery like theirs that changed its night shift.\n- **Valuable:** [MISSING: What value should the text give the reader?]\n\nChain check:\n\n- Does the reader follow from the sender and the channel? [MISSING: yes, no or partly, and why?]\n- Does the angle lie close to the reader, and does the hook carry the angle? [MISSING: yes, no or partly, and why?]\n- Does the structure resolve the hook's tension, and does it fit the length? [MISSING: yes, no or partly, and why?]\n- Is the conclusion what the structure actually lands in, does it carry the message, and does it lie within the brand's mandate? [MISSING: yes, no or partly, and why?]\n- Does what the reader understands lead to the effect described, and does that effect serve the brand's goals? [MISSING: yes, no or partly, and why?]\n- Does anything in the structure conflict with what should be left out? [MISSING: yes, no or partly, and why?]\n\n## 12. What sources do you know of, and what do you need to find out?\n\nSources:\n\n1. An interview with Mira Holt, owner of Brackwater Bakery — planned but not yet held.\n\nOpen questions:\n\n- What figures on baking times or energy use can be referred to?\n"
+          },
+          "is_error": false,
+          "result_chars": 199,
+          "result_excerpt": "File created successfully at: /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-035uknk4/work/brief.md (file state is current in your context — no need to Read it back)"
+        },
+        {
+          "ordinal": 6,
+          "at": "2026-09-30T17:46:10.923Z",
+          "tool": "Bash",
+          "tool_use_id": "toolu_018vv536tGP4xtDeTxcFEVZB",
+          "arguments": {
+            "command": "cd /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-035uknk4; ls -la work scratch",
+            "description": "Confirm only brief.md was added and scratch is empty"
+          },
+          "is_error": false,
+          "result_chars": 638,
+          "result_excerpt": "scratch:\ntotal 0\ndrwxr-xr-x 6 thomas staff 192 Sep 30 19:44 .\ndrwx------ 5 thomas staff 160 Sep 30 19:44 ..\ndrwxr-xr-x 2 thomas staff  64 Sep 30 19:44 cache\ndrwxr-xr-x 2 thomas staff  64 Sep 30 19:44 data\ndrwxr-xr-x 2 thomas staff  64 Sep 30 19:45 tmp\ndrwxr-xr-x 2 thomas staff  64 Sep 30 19:44 uv-cache\n\nwork:\ntotal 8\ndrwxr-xr-x 4 thomas staff  128 Sep 30 19:46 .\ndrwx------ 5 thomas staff  160 Sep "
+        }
+      ],
+      "file_activity": [
+        {
+          "ordinal": 1,
+          "at": "2026-09-30T17:44:50.826Z",
+          "tool": "Bash",
+          "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-035uknk4/home/.claude/skills/brief",
+          "access": "shell",
+          "established_from": "shell-command",
+          "exact": true,
+          "command": "HERE=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-035uknk4/home/.claude/skills/brief; T=$(mktemp -d); printf '%s' '--output=brief.md existing.md -- Review this brief.' | TMPDIR=\"$T\" UV_NO_CACHE=1 UV_NO_PROJECT=1 uv run \"$HERE/scripts/invoke.py\"; rc=$?; rm -rf \"$T\"; echo \"EXIT=$rc\""
+        },
+        {
+          "ordinal": 1,
+          "at": "2026-09-30T17:44:50.826Z",
+          "tool": "Bash",
+          "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-035uknk4/home/.claude/skills/brief/scripts/invoke.py",
+          "access": "shell",
+          "established_from": "shell-command",
+          "exact": true,
+          "command": "HERE=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-035uknk4/home/.claude/skills/brief; T=$(mktemp -d); printf '%s' '--output=brief.md existing.md -- Review this brief.' | TMPDIR=\"$T\" UV_NO_CACHE=1 UV_NO_PROJECT=1 uv run \"$HERE/scripts/invoke.py\"; rc=$?; rm -rf \"$T\"; echo \"EXIT=$rc\""
+        },
+        {
+          "ordinal": 2,
+          "at": "2026-09-30T17:44:54.042Z",
+          "tool": "Bash",
+          "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-035uknk4/home/.claude/skills/kntnt/library",
+          "access": "shell",
+          "established_from": "shell-command",
+          "exact": true,
+          "command": "L=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-035uknk4/home/.claude/skills/kntnt/library; cat $L/references/invocation-envelope.md; echo ======; cat $L/references/delivery.md; echo =====; cd /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-035uknk4/work; ls -la; echo ====; cat existing.md"
+        },
+        {
+          "ordinal": 2,
+          "at": "2026-09-30T17:44:54.042Z",
+          "tool": "Bash",
+          "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-035uknk4/home/.claude/skills/kntnt/library/references/invocation-envelope.md",
+          "access": "shell",
+          "established_from": "shell-command",
+          "exact": true,
+          "command": "L=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-035uknk4/home/.claude/skills/kntnt/library; cat $L/references/invocation-envelope.md; echo ======; cat $L/references/delivery.md; echo =====; cd /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-035uknk4/work; ls -la; echo ====; cat existing.md"
+        },
+        {
+          "ordinal": 2,
+          "at": "2026-09-30T17:44:54.042Z",
+          "tool": "Bash",
+          "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-035uknk4/home/.claude/skills/kntnt/library/references/delivery.md",
+          "access": "shell",
+          "established_from": "shell-command",
+          "exact": true,
+          "command": "L=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-035uknk4/home/.claude/skills/kntnt/library; cat $L/references/invocation-envelope.md; echo ======; cat $L/references/delivery.md; echo =====; cd /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-035uknk4/work; ls -la; echo ====; cat existing.md"
+        },
+        {
+          "ordinal": 2,
+          "at": "2026-09-30T17:44:54.042Z",
+          "tool": "Bash",
+          "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-035uknk4/work",
+          "access": "shell",
+          "established_from": "shell-command",
+          "exact": true,
+          "command": "L=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-035uknk4/home/.claude/skills/kntnt/library; cat $L/references/invocation-envelope.md; echo ======; cat $L/references/delivery.md; echo =====; cd /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-035uknk4/work; ls -la; echo ====; cat existing.md"
+        },
+        {
+          "ordinal": 2,
+          "at": "2026-09-30T17:44:54.042Z",
+          "tool": "Bash",
+          "path": "existing.md",
+          "access": "shell",
+          "established_from": "shell-command",
+          "exact": true,
+          "command": "L=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-035uknk4/home/.claude/skills/kntnt/library; cat $L/references/invocation-envelope.md; echo ======; cat $L/references/delivery.md; echo =====; cd /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-035uknk4/work; ls -la; echo ====; cat existing.md"
+        },
+        {
+          "ordinal": 3,
+          "at": "2026-09-30T17:44:56.870Z",
+          "tool": "Bash",
+          "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-035uknk4/home/.claude/skills/kntnt/library",
+          "access": "shell",
+          "established_from": "shell-command",
+          "exact": true,
+          "command": "L=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-035uknk4/home/.claude/skills/kntnt/library; cat $L/references/editorial/writing-brief.md; echo =====; ls -la $L/references/editorial/genres/ $L/references/editorial/techniques/"
+        },
+        {
+          "ordinal": 3,
+          "at": "2026-09-30T17:44:56.870Z",
+          "tool": "Bash",
+          "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-035uknk4/home/.claude/skills/kntnt/library/references/editorial/writing-brief.md",
+          "access": "shell",
+          "established_from": "shell-command",
+          "exact": true,
+          "command": "L=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-035uknk4/home/.claude/skills/kntnt/library; cat $L/references/editorial/writing-brief.md; echo =====; ls -la $L/references/editorial/genres/ $L/references/editorial/techniques/"
+        },
+        {
+          "ordinal": 3,
+          "at": "2026-09-30T17:44:56.870Z",
+          "tool": "Bash",
+          "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-035uknk4/home/.claude/skills/kntnt/library/references/editorial/genres/",
+          "access": "shell",
+          "established_from": "shell-command",
+          "exact": false,
+          "command": "L=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-035uknk4/home/.claude/skills/kntnt/library; cat $L/references/editorial/writing-brief.md; echo =====; ls -la $L/references/editorial/genres/ $L/references/editorial/techniques/"
+        },
+        {
+          "ordinal": 3,
+          "at": "2026-09-30T17:44:56.870Z",
+          "tool": "Bash",
+          "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-035uknk4/home/.claude/skills/kntnt/library/references/editorial/techniques/",
+          "access": "shell",
+          "established_from": "shell-command",
+          "exact": false,
+          "command": "L=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-035uknk4/home/.claude/skills/kntnt/library; cat $L/references/editorial/writing-brief.md; echo =====; ls -la $L/references/editorial/genres/ $L/references/editorial/techniques/"
+        },
+        {
+          "ordinal": 4,
+          "at": "2026-09-30T17:45:01.006Z",
+          "tool": "Bash",
+          "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-035uknk4/home/.claude/skills/kntnt/library",
+          "access": "shell",
+          "established_from": "shell-command",
+          "exact": true,
+          "command": "L=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-035uknk4/home/.claude/skills/kntnt/library; cat $L/references/editorial/genres/casestudy.md; echo ====; cat $L/references/editorial/techniques/abt.md; echo ====; T=$(mktemp -d); TMPDIR=\"$T\" uv run --no-cache --no-project \"$L/scripts/languages.py\" resolve --scope=composition \"sv\"; echo \"EXIT=$?\"; rm -rf \"$T\""
+        },
+        {
+          "ordinal": 4,
+          "at": "2026-09-30T17:45:01.006Z",
+          "tool": "Bash",
+          "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-035uknk4/home/.claude/skills/kntnt/library/references/editorial/genres/casestudy.md",
+          "access": "shell",
+          "established_from": "shell-command",
+          "exact": true,
+          "command": "L=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-035uknk4/home/.claude/skills/kntnt/library; cat $L/references/editorial/genres/casestudy.md; echo ====; cat $L/references/editorial/techniques/abt.md; echo ====; T=$(mktemp -d); TMPDIR=\"$T\" uv run --no-cache --no-project \"$L/scripts/languages.py\" resolve --scope=composition \"sv\"; echo \"EXIT=$?\"; rm -rf \"$T\""
+        },
+        {
+          "ordinal": 4,
+          "at": "2026-09-30T17:45:01.006Z",
+          "tool": "Bash",
+          "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-035uknk4/home/.claude/skills/kntnt/library/references/editorial/techniques/abt.md",
+          "access": "shell",
+          "established_from": "shell-command",
+          "exact": true,
+          "command": "L=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-035uknk4/home/.claude/skills/kntnt/library; cat $L/references/editorial/genres/casestudy.md; echo ====; cat $L/references/editorial/techniques/abt.md; echo ====; T=$(mktemp -d); TMPDIR=\"$T\" uv run --no-cache --no-project \"$L/scripts/languages.py\" resolve --scope=composition \"sv\"; echo \"EXIT=$?\"; rm -rf \"$T\""
+        },
+        {
+          "ordinal": 4,
+          "at": "2026-09-30T17:45:01.006Z",
+          "tool": "Bash",
+          "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-035uknk4/home/.claude/skills/kntnt/library/scripts/languages.py",
+          "access": "shell",
+          "established_from": "shell-command",
+          "exact": true,
+          "command": "L=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-035uknk4/home/.claude/skills/kntnt/library; cat $L/references/editorial/genres/casestudy.md; echo ====; cat $L/references/editorial/techniques/abt.md; echo ====; T=$(mktemp -d); TMPDIR=\"$T\" uv run --no-cache --no-project \"$L/scripts/languages.py\" resolve --scope=composition \"sv\"; echo \"EXIT=$?\"; rm -rf \"$T\""
+        },
+        {
+          "ordinal": 5,
+          "at": "2026-09-30T17:46:08.228Z",
+          "tool": "Write",
+          "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-035uknk4/work/brief.md",
+          "access": "write",
+          "established_from": "tool-argument",
+          "exact": true,
+          "command": null
+        },
+        {
+          "ordinal": 6,
+          "at": "2026-09-30T17:46:10.923Z",
+          "tool": "Bash",
+          "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-035uknk4",
+          "access": "shell",
+          "established_from": "shell-command",
+          "exact": true,
+          "command": "cd /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-035uknk4; ls -la work scratch"
+        }
+      ],
+      "delegations": [],
+      "interrupted": false
+    }
+  ],
+  "status": {
+    "status": "complete",
+    "reasons": [],
+    "parent_transcript": "present",
+    "unparsable_lines": {},
+    "delegations_without_child": [],
+    "children_without_delegation": [],
+    "run_outcome": {
+      "returncode": 0,
+      "timed_out": false,
+      "interrupted": false
+    },
+    "agents": 1,
+    "calls": 6,
+    "read_from": "transcripts and runner outcome only; never the run's reply"
+  }
+}

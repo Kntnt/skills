@@ -1,0 +1,5 @@
+"Something about the sessions" is a topic rather than a message. The template asks for a claim in one sentence, something the library wants the board to take away, whether it's stated or not. A claim would have this shape: "The sessions run over because [cause], and [what follows for the board]". I don't want to guess the content, though.
+
+So I'll ask once, and I won't ask again: **in one sentence, what does the library want the board to come away believing about the evening repair sessions?**
+
+If you'd rather leave it for now, say "don't know" and I'll mark it as missing. Just be aware that the message is one of the three answers that settle the report's direction. Without it, the brief can't count as ready to write.
