@@ -1,0 +1,14 @@
+Texten behövde inget arbete. Den är skriven oförändrad till `output.md`, byte för byte samma som `input.md`.
+
+**Inställningar:** genren är krönika (`column`) och språket svenska (`sv`), båda från anropet. Ingen teknik används, eftersom krönikegenren inte anger någon och ingenting annat valde en.
+
+**Granskning:** jag hittade inga redaktionella brister. Texten följer artikelns anatomi, och jag har granskat alla krav: både de som skriptet räknar och de som bara kan läsas.
+- Rubriken är ett påstående som texten täcker.
+- Ingressen står på egen hand.
+- Brödtexten börjar på annat sätt än ingressen och för resonemanget vidare.
+- Båda mellanrubrikerna beskriver sina avsnitt.
+- Sista avsnittet är ett riktigt slut: förslaget, tvivlet och uppmaningen att prova frågan nästa gång.
+
+Stycket under "Det är inte bara besluten jag vill åt" är 83 ord, strax över riktvärdet 80. Det håller en tanke och läses bra, så det är ingen brist.
+
+Korrigeringsbudgeten (1) användes inte eftersom det inte fanns något att rätta. Korrekturläsningen på slutet hittade inga fel. Inga påståenden har tagits bort, ändrats eller lagts till.

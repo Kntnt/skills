@@ -1,0 +1,13 @@
+Jag har skrivit texten till `output.md`. Den är byte för byte identisk med `input.md`: granskningen hittade en brist, men rättelsen underkändes och korrekturläsningen hittade inga fel.
+
+**Konfiguration:** genren är krönika (`column`) och språket svenska (`sv`), båda enligt anropet. Ingen teknik används, eftersom krönikegenren inte har någon som den vanligtvis skrivs med.
+
+**Artikelanatomin:** De mätbara kraven håller. Rubriken har 44 tecken, ingressen är ett stycke på 41 ord och båda underrubrikerna har 37 tecken. Första stycket under ”Det är inte bara besluten jag vill åt” har 83 ord, strax över normen på 80. Det håller en enda tanke och räknas inte som en brist. Jag granskade också de krav som inte kan räknas: att ingressen står på egen hand och att inledningen för resonemanget vidare, att underrubrikerna beskriver sina sektioner och hur avslutningen är byggd. Texten följer ändå inte anatomin fullt ut, av skälet nedan.
+
+**Kvarstående brist (olöst)**
+
+1. **Avslutningen har ingen egen sektion.** Sista sektionen, ”Ännu en ruta, och ändå vill jag prova”, lägger fram själva förslaget: frågan ”vad behöver vi förstå tillsammans?”, vad den lovar och invändningen om det längre formuläret. Avslutningen och uppmaningen (”Prova ändå frågan nästa gång du bokar ett möte …”) ligger som ett tillagt stycke i samma sektion. Anatomin kräver att avslutningen är en egen sektion under en egen underrubrik. Läsaren som skummar hittar därför ingen avslutning, och det hen ska göra ligger gömt under en rubrik om invändningen mot förslaget.
+
+**Underkänt försök:** Rättelsen gav slutstycket en egen sektion under den nya underrubriken ”Testa frågan själv, utan större löften”. Den underrubriken skapade en ny brist. ”Testa frågan själv” säger samma sak som meningen direkt under den, ”Prova ändå frågan …”, bara med andra ord. ”utan större löften” föregriper dessutom den självironiska slutpoängen. Försöket underkändes och den ursprungliga texten återställdes. Den nya bristen finns alltså inte i den levererade texten, men brist 1 är fortfarande olöst. Budgeten på en rättelse är förbrukad. Någon behöver skriva en underrubrik för avslutningen som inte upprepar ”Prova ändå frågan” eller avslöjar slutpoängen.
+
+**Påståenden:** Den levererade texten är identisk med originalet, så inget påstående har tagits bort, ändrats eller lagts till. Det underkända försöket tog inte heller bort något påstående.

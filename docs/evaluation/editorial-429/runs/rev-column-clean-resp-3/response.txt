@@ -1,0 +1,8 @@
+Ingen ändring behövs i `input.md`. Granskningen hittade inga redaktionella brister, så korrigeringsbudgeten (1) användes inte. Korrekturläsningen på slutet hittade inga mekaniska fel. Inget har skrivits och `input.md` är orörd.
+
+- **Konfiguration:** genren är krönika och språket svenska, båda angivna i anropet. Ingen teknik används: krönikegenren anger ingen teknik, så standardvalet gäller.
+- **Artikelns uppbyggnad:** texten uppfyller kraven, med en avvikelse. Första stycket under ”Det är inte bara besluten jag vill åt” har 83 ord, strax över normen på 80. Stycket rymmer en enda tanke och läses väl, så avvikelsen räknas inte som en brist. Längder och antal är maskinellt uppmätta. Följande granskades genom läsning:
+  - Ingressen står på egna ben och upprepar sig inte i inledningsstycket.
+  - Brödtexten fungerar utan ingressen.
+  - Mellanrubrikerna beskriver sina avsnitt.
+  - Sista avsnittet är ett avslut: det ger förslaget, tvivlet och uppmaningen till läsaren och öppnar ingen ny tråd.

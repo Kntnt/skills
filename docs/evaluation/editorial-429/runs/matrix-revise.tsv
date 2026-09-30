@@ -1,0 +1,30 @@
+lane	run	arm	revision	input	invocation	capture
+RA	rev-article-clean-resp-1	rev	2c5b191f	docs/evaluation/corpus/editorial-quality/controls/article-clean.md	/redline --genre=article --language=sv --output=response input.md	no
+RA	rev-article-clean-file-1	rev	2c5b191f	docs/evaluation/corpus/editorial-quality/controls/article-clean.md	/redline --genre=article --language=sv --output=output.md input.md	yes
+RA	rev-article-clean-resp-2	rev	2c5b191f	docs/evaluation/corpus/editorial-quality/controls/article-clean.md	/redline --genre=article --language=sv --output=response input.md	no
+RA	rev-article-clean-file-2	rev	2c5b191f	docs/evaluation/corpus/editorial-quality/controls/article-clean.md	/redline --genre=article --language=sv --output=output.md input.md	yes
+RA	rev-article-clean-resp-3	rev	2c5b191f	docs/evaluation/corpus/editorial-quality/controls/article-clean.md	/redline --genre=article --language=sv --output=response input.md	no
+RA	rev-article-clean-file-3	rev	2c5b191f	docs/evaluation/corpus/editorial-quality/controls/article-clean.md	/redline --genre=article --language=sv --output=output.md input.md	yes
+RB	rev-case-study-clean-resp-1	rev	2c5b191f	docs/evaluation/corpus/editorial-quality/controls/case-study-clean.md	/redline --genre=casestudy --language=sv --output=response input.md	no
+RB	rev-case-study-clean-file-1	rev	2c5b191f	docs/evaluation/corpus/editorial-quality/controls/case-study-clean.md	/redline --genre=casestudy --language=sv --output=output.md input.md	yes
+RB	rev-case-study-clean-resp-2	rev	2c5b191f	docs/evaluation/corpus/editorial-quality/controls/case-study-clean.md	/redline --genre=casestudy --language=sv --output=response input.md	no
+RB	rev-case-study-clean-file-2	rev	2c5b191f	docs/evaluation/corpus/editorial-quality/controls/case-study-clean.md	/redline --genre=casestudy --language=sv --output=output.md input.md	yes
+RB	rev-case-study-clean-resp-3	rev	2c5b191f	docs/evaluation/corpus/editorial-quality/controls/case-study-clean.md	/redline --genre=casestudy --language=sv --output=response input.md	no
+RB	rev-case-study-clean-file-3	rev	2c5b191f	docs/evaluation/corpus/editorial-quality/controls/case-study-clean.md	/redline --genre=casestudy --language=sv --output=output.md input.md	yes
+RC	rev-column-clean-resp-1	rev	2c5b191f	docs/evaluation/corpus/editorial-quality/controls/column-clean.md	/redline --genre=column --language=sv --output=response input.md	no
+RC	rev-column-clean-file-1	rev	2c5b191f	docs/evaluation/corpus/editorial-quality/controls/column-clean.md	/redline --genre=column --language=sv --output=output.md input.md	yes
+RC	rev-column-clean-resp-2	rev	2c5b191f	docs/evaluation/corpus/editorial-quality/controls/column-clean.md	/redline --genre=column --language=sv --output=response input.md	no
+RC	rev-column-clean-file-2	rev	2c5b191f	docs/evaluation/corpus/editorial-quality/controls/column-clean.md	/redline --genre=column --language=sv --output=output.md input.md	yes
+RC	rev-column-clean-resp-3	rev	2c5b191f	docs/evaluation/corpus/editorial-quality/controls/column-clean.md	/redline --genre=column --language=sv --output=response input.md	no
+RC	rev-column-clean-file-3	rev	2c5b191f	docs/evaluation/corpus/editorial-quality/controls/column-clean.md	/redline --genre=column --language=sv --output=output.md input.md	yes
+RD	rev-opinion-clean-resp-1	rev	2c5b191f	docs/evaluation/corpus/editorial-quality/controls/opinion-clean.md	/redline --genre=opinion --language=sv --output=response input.md	no
+RD	rev-opinion-clean-file-1	rev	2c5b191f	docs/evaluation/corpus/editorial-quality/controls/opinion-clean.md	/redline --genre=opinion --language=sv --output=output.md input.md	yes
+RD	rev-opinion-clean-resp-2	rev	2c5b191f	docs/evaluation/corpus/editorial-quality/controls/opinion-clean.md	/redline --genre=opinion --language=sv --output=response input.md	no
+RD	rev-opinion-clean-file-2	rev	2c5b191f	docs/evaluation/corpus/editorial-quality/controls/opinion-clean.md	/redline --genre=opinion --language=sv --output=output.md input.md	yes
+RD	rev-opinion-clean-resp-3	rev	2c5b191f	docs/evaluation/corpus/editorial-quality/controls/opinion-clean.md	/redline --genre=opinion --language=sv --output=response input.md	no
+RD	rev-opinion-clean-file-3	rev	2c5b191f	docs/evaluation/corpus/editorial-quality/controls/opinion-clean.md	/redline --genre=opinion --language=sv --output=output.md input.md	yes
+RE	rev-column-sv-r2-a	rev	2c5b191f	docs/evaluation/editorial-362/runs/column-sv-r2/redline/work/input.md	/redline --output=response input.md	no
+RE	rev-column-sv-r2-b	rev	2c5b191f	docs/evaluation/editorial-362/runs/column-sv-r2/redline/work/input.md	/redline --output=response input.md	no
+RF	rev-opinion-en_GB-r1-a	rev	2c5b191f	docs/evaluation/editorial-362/runs/opinion-en_GB-r1/redline/work/input.md	/redline --output=response input.md	no
+RF	rev-opinion-en_GB-r1-b	rev	2c5b191f	docs/evaluation/editorial-362/runs/opinion-en_GB-r1/redline/work/input.md	/redline --output=response input.md	no
+RG	rev-column-flawed	rev	2c5b191f	docs/evaluation/corpus/editorial-quality/controls/column-flawed.md	/redline --genre=column --language=sv --output=response input.md	no

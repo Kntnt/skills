@@ -1,0 +1,16 @@
+Texten är levererad till `output.md`. Den behövde ingen redigering, så filen är byte för byte identisk med `input.md`.
+
+**Inställningar:** genren är `opinion` och språket `sv`, båda angivna i anropet. Ingen teknik används, eftersom genren `opinion` inte anger någon som den vanligtvis skrivs med och inget annat pekade ut en. Texten saknar metadata, och ingen har lagts till.
+
+**Granskning:** inga fynd, och därför gjordes ingen korrigering. Texten följer artikelns anatomi utan avvikelser. Skriptet mätte längdgränserna för rubrik, ingress, mellanrubriker och stycken, och alla höll. Jag läste också igenom de krav som inte kan räknas:
+- Ingressen står på egen hand.
+- Inledningen för resonemanget vidare i stället för att upprepa ingressen.
+- Brödtexten fungerar utan ingressen.
+- Varje mellanrubrik beskriver sitt avsnitt.
+- Sista avsnittet är ett eget avslut med en konkret uppmaning till kommunstyrelsen.
+
+Rubrik och ingress säger olika saker, och ingen mellanrubrik upprepar meningen under sig. De återkommande kontrasterna mellan bokningar och personer är textens huvudpoäng och inte tom retorik, så de står kvar.
+
+**Korrekturläsning:** gjordes en gång och gav inga ändringar.
+
+Inga påståenden har tagits bort, ändrats eller lagts till.

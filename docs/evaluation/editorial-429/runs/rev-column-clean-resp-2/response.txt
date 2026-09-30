@@ -1,0 +1,5 @@
+Ingen ändring behövdes i `input.md`. Granskningen hittade inga brister i genren, i artikelanatomin, i rubrikerna eller i slop-mönster. Korrekturläsningen hittade inga mekaniska fel. Ingen fil skrevs.
+
+- **Inställningar:** genren är krönika och språket svenska, båda angivna i anropet. Ingen teknik används, eftersom krönikegenren inte har någon som standard.
+- **Anatomi:** texten följer artikelanatomin utan avvikelser. Alla räknade gränser är maskinmätta. Övriga krav har jag läst av manuellt: att ingressen står på egen hand, att mellanrubrikerna beskriver sina avsnitt och att sista avsnittet är ett avslut med en uppmaning.
+- **Stycke över 80 ord:** första stycket under ”Det är inte bara besluten jag vill åt” har 83 ord, alltså något över normen. Det rymmer en enda tanke och läses bra i den längden, så jag räknar det inte som en brist.

@@ -1,0 +1,53 @@
+I reviewed `input.md` and made one correction round, which is your default budget of 1. The text doesn't yet conform to the article anatomy because it still has no standfirst. That can't be fixed without new content, so it's left for you. Nothing was written to disk.
+
+**Settings used:** genre `opinion`, technique `none`, language `en_GB`, all taken from the text's own `kntnt` map. The opinion genre doesn't name a technique either, so none was applied. No brief was used.
+
+**Findings**
+
+1. **No standfirst (unresolved).** The opening paragraph ("On 18 June … permanent") is the lead, because the body depends on it: the seven venues, the permanent change, the board and the 18 June date are all introduced there. The piece has no standfirst, the stand-alone summary paragraph of at most 60 words that goes before the byline. So wherever the piece is shown without its body, nothing says what it argues or why a reader should read on. A missing part is reported rather than written, so you need to supply this one.
+2. **Byline in the wrong place (repaired).** The line "— Sanna Ek, spokesperson for Öppna beslut" stood at the very end. Readers didn't learn who was arguing until the last line. They also reached "Öppna beslut proposes…" and "We make no claim…" in the third section without knowing Öppna beslut is the author's organisation. It now sits after the headline as "By Sanna Ek, spokesperson for Öppna beslut", with the affiliation kept.
+3. **The lead didn't say whose council it was (repaired).** "The council executive board" and "all seven community venues" only got their referent, Lervik, from the headline; in the body, Lervik first appeared in the first section. The lead now reads "Lervik's council executive board".
+
+No headline, standfirst or subheading was changed.
+
+**Claim account**
+- **Removed:** none.
+- **Changed:** the lead now says the executive board belongs to Lervik's council; before, it said only "the council". This came from the repair for finding 3. The headline and "Lervik's residents" already implied it.
+- **Added:** none.
+
+Moving the byline changed where the authorship claim sits and how it is written, not what it says. Apart from the changed claim above, the claims are the same as in the text you supplied.
+
+Beyond the claim account, the run moved the author line from the end of the text to its place under the headline, in the English byline form. The final proofreading pass found nothing to correct.
+
+`````markdown
+---
+kntnt:
+  genre: opinion
+  technique: none
+  language: en_GB
+---
+
+# Don't switch off Lervik's phone booking before we know what it costs
+
+By Sanna Ek, spokesperson for Öppna beslut
+
+On 18 June Lervik's council executive board is asked to remove phone booking from all seven community venues from September. The officers' report gives one reason: staff should not have to enter the details in two flows. That is a fair thing to want. It is not yet a reason to make the change permanent.
+
+## What the pilot actually counted
+
+The pilot report *Bokning av föreningslokaler*, dated 8 April 2026, covers an eight-week trial in two venues. It records 96 bookings made on the web and 24 made by phone. Those figures are the report's, and so are their limits: it counts bookings rather than unique people, and it measures nothing about age, functional ability or how used to digital services people are. Twenty-four phone bookings therefore cannot tell us what share of Lervik's residents are unable to book digitally. Nobody should claim they can.
+
+## A motive on the table, but no figures under it
+
+The administration's objection to keeping both routes is double administration, and I take it at face value: it is not a claim that people who ring are lazy or expensive. But the documents contain no measurement of how long either route takes staff, and no calculation of what removing one would save. The board is being asked to close a channel for good on the strength of an inconvenience the documents put no number on. That is thin ground for making the change permanent.
+
+## Six months, both routes, and something to measure
+
+Öppna beslut proposes a six-month trial in all seven venues with both booking routes kept open. During it, the administration records the time each booking route takes and asks users to say, voluntarily, why they chose the phone or the web. We make no claim to have funded or costed that trial. What it would cost is for the board to weigh.
+
+A booking made by phone is not proof that somebody cannot use the web. It is a reason to find out why the phone is still being used. I am not against digital booking. I am against settling its shape before the council can set the work each route costs staff against what it is worth to the people who use it.
+
+## What the board can decide on 18 June
+
+Postpone the permanent switch and run the six months with both routes open. When the trial has produced figures, decide whether a channel should be removed, changed or kept. That decision is the board's either way, and it will be a better one for being taken with the cost of both routes on the table.
+`````

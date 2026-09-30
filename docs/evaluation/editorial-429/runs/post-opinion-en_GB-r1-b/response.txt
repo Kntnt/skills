@@ -1,0 +1,59 @@
+I reviewed `input.md` as an opinion piece in British English, with no storytelling technique applied. All three settings came from the file's own metadata (the opinion genre doesn't name a technique either), and I didn't change the metadata. One correction round was allowed and it was used. The final proofreading pass found no spelling, grammar or punctuation errors.
+
+```markdown
+---
+kntnt:
+  genre: opinion
+  technique: none
+  language: en_GB
+---
+
+# Don't switch off Lervik's phone booking before we know what it costs
+
+By Sanna Ek, spokesperson for Öppna beslut
+
+On 18 June Lervik's council executive board is asked to remove phone booking from all seven community venues from September. The officers' report gives one reason: staff should not have to enter the details in two flows. That is a fair thing to want. It is not yet a reason to make the change permanent.
+
+## What the pilot actually counted
+
+The pilot report *Bokning av föreningslokaler*, dated 8 April 2026, covers an eight-week trial in two venues. It records 96 bookings made on the web and 24 made by phone.
+
+Those figures are the report's, and so are their limits: it counts bookings rather than unique people, and it measures nothing about age, functional ability or how used to digital services people are. Twenty-four phone bookings therefore cannot tell us what share of Lervik's residents are unable to book digitally. Nobody should claim they can.
+
+## A motive on the table, but no figures under it
+
+The administration's objection to keeping both routes is double administration, and I take it at face value: it is not a claim that people who ring are lazy or expensive.
+
+But the documents contain no measurement of how long either route takes staff, and no calculation of what removing one would save. The board is being asked to close a channel for good on the strength of an inconvenience the documents put no number on. That is thin ground for making the change permanent.
+
+## Find out why people still ring before digital booking is settled
+
+Öppna beslut proposes a six-month trial in all seven venues with both booking routes kept open. During it, the administration records the time each booking route takes and asks users to say, voluntarily, why they chose the phone or the web. We make no claim to have funded or costed that trial. What it would cost is for the board to weigh.
+
+A booking made by phone is not proof that somebody cannot use the web. It is a reason to find out why the phone is still being used. I am not against digital booking. I am against settling its shape before the council can set the work each route costs staff against what it is worth to the people who use it.
+
+## What the board can decide on 18 June
+
+Postpone the permanent switch and run the six months with both routes open. When the trial has produced figures, decide whether a channel should be removed, changed or kept. That decision is the board's either way, and it will be a better one for being taken with the cost of both routes on the table.
+```
+
+## Findings
+
+**Unresolved**
+
+- **The summary paragraph under the headline is missing.** An opinion piece of this kind should have a short summary paragraph under the headline (a "standfirst") that makes sense on its own, followed by a separate opening paragraph. This text has one opening paragraph, and it works as the opening paragraph rather than the summary: the rest of the piece relies on it for "the board", "18 June" and "the permanent switch", so it can't be skipped the way a summary can. The loss: a reader who sees only the headline and the summary, for example in a listing or a share, gets no summary. I left this for you to write, because the review doesn't write parts that are missing. Because of this gap, the text doesn't yet fully follow the required article structure. Everything else in that structure was checked, including the items that were checked by reading rather than counted.
+
+**Repaired**
+
+- **Byline.** The author appeared only as a sign-off at the end ("— Sanna Ek, spokesperson for Öppna beslut"). Until the last line, a reader didn't know who was arguing, whose "I" and "we" these were, or that Öppna beslut, which "proposes" the trial in section 3, is the author's organisation. The line now sits under the headline as "By Sanna Ek, spokesperson for Öppna beslut".
+- **Opening paragraph.** It never said whose council or venues these were; Lervik appeared only in the headline and later in section 1. It now names Lervik's council executive board.
+- **Third subheading.** "Six months, both routes, and something to measure" repeated the sentence under it and gave the trial's settings, not the section's point. It is now "Find out why people still ring before digital booking is settled".
+- **Paragraph length in sections 1 and 2.** Each of these was one paragraph of about 85 words carrying two thoughts, so a reader skimming wouldn't see the turn the argument rests on. Both are now split at that turn, before "Those figures are the report's" and before "But the documents contain". No wording changed.
+
+## What changed in the claims
+
+- **Changed: the opening paragraph.** It now says the deciding executive board is Lervik's council's board. This came from the opening-paragraph repair and is supported by the headline and by "Lervik's residents".
+- **Changed: the third subheading.** It used to state the trial's settings: six months, both routes open, something to measure. It now says that people still phone, and that the reason should be found out before digital booking is settled. This came from the subheading repair. The trial's settings are still in the first sentence under it. The heading says less than the section does: it leaves out weighing what each route costs staff against what it is worth to users.
+- Apart from those two changed claims, no claim was removed, changed or added. The sentences that limit what the piece claims all stand as they were: "Nobody should claim they can", "Those figures are the report's, and so are their limits…" and "We make no claim to have funded or costed that trial".
+
+Beyond those claims, this run moved the author's line from a closing sign-off to a byline under the headline, named the council in the opening paragraph, reworded one subheading, and split two paragraphs without changing their wording. No stock AI-writing patterns needed removing, and the proofreading pass made no corrections. Nothing was written to disk: `input.md` is unchanged and all temporary files were removed.

@@ -1,0 +1,3 @@
+Inga ändringar behövdes. Texten följer kontraktet för krönikan och artikelns anatomi utan avvikelser. Skriptet mätte längdgränserna, och de delar av anatomin som inte går att räkna granskades genom läsning. Korrekturläsningen hittade inga mekaniska fel.
+
+Konfigurationen var genre `column` och språk `sv`, båda från anropet. Ingen teknik användes, eftersom krönikan inte anger någon som den vanligen skrivs med. Rättningsbudgeten på en omgång förbrukades inte. Ingen fil har skrivits eller ändrats.

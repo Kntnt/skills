@@ -1,0 +1,23 @@
+Den granskade krönikan ligger nu i `output.md`, och `input.md` är orörd. Granskningen gav ett enda fynd, som är åtgärdat, så inga olösta fynd återstår.
+
+**Inställningar:** genre `column` och språk `sv`, båda angivna i anropet. Ingen teknik används, eftersom genren `column` inte föreskriver någon. Texten saknar `kntnt`-metadata och har inte fått någon tillagd.
+
+## Fynd
+
+1. **Sista avsnittet, "Ännu en ruta, och ändå vill jag prova" (åtgärdat).** Artikelanatomin kräver att avslutningen är ett eget avsnitt med egen underrubrik. Avsnittets första stycke lägger fram själva förslaget, alltså frågan, vad den lovar och den föregripna invändningen. Det är resonemang, och uppmaningen att prova frågan hängde på i samma avsnitt. En läsare som skummar underrubrikerna såg inte var resonemanget slutade och avslutningen började.
+   **Åtgärd:** Stycket som börjar "Prova ändå frågan …" står nu i ett eget sista avsnitt under den nya underrubriken **"Frågan får visa vad den är värd"**. Underrubriken "Ännu en ruta, och ändå vill jag prova" är oförändrad och står nu bara över förslagsstycket.
+
+## Påståenden
+
+- **Tillagt påstående:** den nya underrubriken "Frågan får visa vad den är värd", från åtgärden av fynd 1. Den säger att frågan ska prövas och bedömas efter vad den ger. Den lovar inte att frågan fungerar. Den bygger på avslutningens "Prova ändå frågan …" och "… innan vi har provat".
+- Utöver den underrubriken har inga påståenden strukits, ändrats eller lagts till, och inga begränsningar eller sambandsord har försvunnit.
+
+## Artikelanatomin
+
+Texten följer artikelanatomin med en avvikelse. Mätskriptet gav inga fel på de räknade kraven, och jag har läst igenom de krav som skriptet inte räknar. Avvikelsen är första stycket under "Det är inte bara besluten jag vill åt", som har 83 ord mot riktvärdet 80. Stycket rymmer en tanke och läses bra i den längden, så det räknas inte som fynd.
+
+Efter uppdelningen har två av tre avsnitt bara ett stycke. Det är inte heller ett fynd, eftersom anatomin tillåter att avslutningen är ett enda stycke och mittavsnittet är så långt som dess innehåll kräver.
+
+## Övriga ändringar
+
+Den enda ändringen mot originalet är strukturell: sista avsnittet delades av en ny underrubrik så att avslutningen fick ett eget avsnitt. Korrekturläsningen hittade inga mekaniska fel och ändrade ingenting.

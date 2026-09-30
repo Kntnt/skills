@@ -1,0 +1,24 @@
+Jag har granskat texten och skrivit den till `output.md`. Ett fynd är rättat och ett står kvar olöst.
+
+**Inställningar:** genre `article` och språk `sv`, båda från anropet. Ingen teknik används, eftersom genren `article` inte anger någon. Texten saknar `kntnt`-karta, så ingen metadata har lagts till, och ingen brief var angiven. Budgeten var en rättning och den gick åt.
+
+**Anatomin:** Mätskriptet godkände alla räknade krav: rubriken har 48 tecken, ingressen 44 ord och ingen del går över sina gränser. Jag har också läst igenom kraven som skriptet inte räknar, och de håller:
+- Ingressen står på egen hand.
+- Brödtexten går att läsa utan ingressen.
+- Mellanrubrikerna beskriver sina avsnitt.
+- Sista avsnittet är ett avslut med en uppmaning.
+- Avslutet infriar det brödtextens första stycke uttryckligen lovar, nämligen vad värdena räcker till och var gränsen går.
+
+Rubrikparen upprepar inte varandra.
+
+**Fynd**
+
+1. **Rättat: ingressen, ”ett kort försök”.** Texten kallade fyra veckors mätningar ”kort” utan att jämföra med något, och utan att någon i texten bedömer försöket som kort. Ordet antydde att det är längden som begränsar försöket. Texten själv lägger begränsningen i vad som mättes: varken luftdrag, elevernas upplevelse eller användningstider.
+
+2. **Olöst: brödtextens första stycke, ”Det gör placeringen viktig när fastighetskontoret ska tolka …”.** Stycket gör givarnas placering till det som tolkningen hänger på. Brödtexten säger dock aldrig var givarna satt eller hur placeringen påverkade värdena, och ”likadant placerade givare” i sista avsnittet förblir oförklarat. Läsaren kan därför inte avgöra om placeringen är ett problem för nästa försök. För att rätta det behövs uppgifter som texten saknar. Meningen ”En temperaturgivare mäter luften där den sitter.” avgränsar vad ett mätvärde säger och har lämnats orörd. Du behöver antingen lägga till uppgifter om placeringen eller själv avgöra om löftet ska strykas.
+
+**Påståenden**
+- **Ändrat, av rättningen av fynd 1:** ingressens sista mening lovade tidigare vad ”ett kort försök” kan säga. Nu lovar den vad ”försöket”, alltså just det här försöket, kan säga. Värderingen av försöket som kort finns inte längre kvar, men tidsramen står oförändrad: ”Fyra veckors mätningar” i ingressen och ”fyra veckors mätningar” i brödtextens första stycke.
+- **Borttaget eller tillagt:** inga påståenden, bortsett från den ändrade meningen ovan.
+
+Utöver den ändrade ingressmeningen har inget ändrats: rubriker, struktur, citat och avgränsande meningar är ordagrant desamma. Den mekaniska slutgenomgången hittade inga fel att rätta.

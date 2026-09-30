@@ -1,0 +1,31 @@
+# Granskning av input.md: texten sparad oförändrad som `output.md`
+
+Ingenting i texten har ändrats. `output.md` är byte för byte identisk med `input.md`. Min enda rättningsrunda underkändes, och sedan hittade korrekturläsningen inga mekaniska fel. Alla fyra fynd står därför kvar olösta.
+
+**Konfiguration:** genre `casestudy` och språk `sv`, båda från anropet. Texten granskades utan teknik, eftersom anropet inte angav någon och genren `casestudy` inte heller anger någon. Ingen brief användes och texten saknar `kntnt`-metadata.
+
+## Olösta fynd
+
+1. **Rubriken säger vad Elm Quay gjorde, inte vad det gav.** Rubriken lyder "Elm Quay samlade reparationsärendena". Genren kräver att rubriken säger vad kunden fick ut av försöket eller vad det ledde till. Den bestämda formen "reparationsärendena" betyder dessutom alla reparationsärenden, men texten säger att akuta ärenden och tidigare beställda arbeten inte ingick. Läsaren får inte veta vad försöket gav eller vad kunden tycker om det, och rubriken påstår mer än texten.
+2. **Ingressen går inte att förstå fristående.** Ingressen slutar med meningen "Här är vad gruppen gjorde, vad anteckningarna visar …". Där står "gruppen" och "anteckningarna" i bestämd form, men ingressen har inte presenterat dem. Vilken grupp och vilka anteckningar det gäller framgår först i brödtexten, så en läsare som bara ser ingressen kan inte veta det.
+3. **Brödtextens första mening är engelsk syntax i svensk form.** Meningen lyder "Att se samma information över skiftgränserna var vad underhållsgruppen … ville få ut av …". Konstruktionen och uttrycket "över skiftgränserna" följer engelskt mönster. Läsaren måste bära en lång infinitivfras innan det framgår vem som ville vad, och det sker i textens allra första mening.
+4. **Mellanrubriken "Två perioder med olika arbetsbelastning" beskriver inte avsnittet.** Avsnittet redovisar försökets siffror: 31 ärenden, och en mediantid till tilldelning på två arbetsdagar mot tidigare tre. Rubriken nämner bara förbehållet, och vilka perioder det gäller förstår man först när man läser vidare. Den som skummar texten får inte veta att avsnittet innehåller resultatet.
+
+Fynd 2 och 4 är krav i artikelanatomin som texten inte uppfyller, så texten följer inte anatomin fullt ut. Anatomiskriptet hittade inga fel i det som går att räkna. Allt skriptet inte mäter granskade jag för hand, och bortsett från fynd 2 och 4 höll det.
+
+## Underkänd rättningsrunda
+
+En rättningsrunda för alla fyra fynd gjordes men underkändes, och den ursprungliga texten återställdes i sin helhet. Ingenting från rundan finns kvar i `output.md`.
+
+Rundan underkändes för att den nya rubriken, "Gemensam bild av ärendena hjälper, säger Elm Quays arbetsledare", införde fel som den gamla rubriken inte hade:
+
+- Den kortar ned Maya Linds citat till en rubrik av typen "…, säger X".
+- Den stryker "oss" i "hjälper oss", så att hennes omdöme blir generellt.
+- "ärendena" går inte att förstå utan att läsa texten.
+- Den har 9 ord och 63 tecken, över normen på högst 8 ord och 60 tecken.
+
+Rubriken är alltså det som en person behöver ta ställning till. Rättningsbudgeten (en runda) är förbrukad.
+
+## Påståenden
+
+Inga påståenden har strukits, ändrats eller lagts till i den levererade texten, eftersom den är identisk med originalet.

@@ -1,0 +1,58 @@
+I reviewed `input.md` as an opinion piece in British English and made one fix: the author line now sits under the headline instead of at the end. One problem is left for you: the piece has no standfirst, and I didn't write one. The closing proofread found no mechanical errors.
+
+**Settings used:** all three came from the text's own `kntnt` metadata: genre `opinion`, technique `none` and language `en_GB`. The metadata said `none` for the technique, so no narrative arc was applied. The opinion genre doesn't specify one either. No writing brief was used.
+
+**Findings**
+
+1. **The author line was in the wrong place. Fixed.** "— Sanna Ek, spokesperson for Öppna beslut" stood at the very end. The article structure puts the author line near the top, in the form "By …". At the end, readers reached "Öppna beslut proposes…" and "We make no claim…" in the third section without knowing who Öppna beslut is, or that the "I" and "we" are its spokesperson. It is now "By Sanna Ek, spokesperson for Öppna beslut", directly under the headline.
+2. **The standfirst is missing. Not fixed.** The piece has only one paragraph before the first subheading. That paragraph is the lead (the first paragraph of the body), not a standfirst (a short summary above it), because the rest of the text depends on it: 18 June, the board and the officers' report are only introduced there. So readers who scan, or who see the summary on its own, get no self-contained account of the argument. A missing part is reported rather than written, so you need to add a standfirst of up to 60 words between the headline and the author line.
+
+**Structure:** the text does not yet match the article structure, only because the standfirst is missing. The structure-checking script measured the lengths and limits. A few measurements go past the recommended ranges, but I don't count any of them as problems:
+- **Headline:** 12 words and 68 characters, against a recommended 3–8 words and 60 characters. Its extra length carries the "before we know what it costs" condition, which is the argument.
+- **Two paragraphs:** 85 and 84 words, against a recommended 80. Each holds one thought and reads well.
+- **Short sections and paragraphs:** most paragraphs have four or five sentences, and three of the four sections have a single paragraph. The sentences are short, so neither slows a web reader down.
+
+I also read the parts the script can't measure, and all of them hold up:
+- The lead introduces the subject and sets up what follows.
+- Each subheading describes its section and doesn't repeat the sentence under it.
+- The headline and the lead say different things.
+- The last section is a true ending, with a specific call to action for the board.
+
+**What happened to the claims:** none was removed, changed or added. The author's name and role are word for word the same, just moved to the top.
+
+I had one correction round available and used it on the author line. The missing standfirst is the only thing left, and it needs someone to write it.
+
+**What changed apart from the claims:** the author line moved from the end to under the headline and was reworded from "— …" to "By …". The proofread made no corrections. No headline or subheading was changed, and nothing was written to disk.
+
+```markdown
+---
+kntnt:
+  genre: opinion
+  technique: none
+  language: en_GB
+---
+
+# Don't switch off Lervik's phone booking before we know what it costs
+
+By Sanna Ek, spokesperson for Öppna beslut
+
+On 18 June the council executive board is asked to remove phone booking from all seven community venues from September. The officers' report gives one reason: staff should not have to enter the details in two flows. That is a fair thing to want. It is not yet a reason to make the change permanent.
+
+## What the pilot actually counted
+
+The pilot report *Bokning av föreningslokaler*, dated 8 April 2026, covers an eight-week trial in two venues. It records 96 bookings made on the web and 24 made by phone. Those figures are the report's, and so are their limits: it counts bookings rather than unique people, and it measures nothing about age, functional ability or how used to digital services people are. Twenty-four phone bookings therefore cannot tell us what share of Lervik's residents are unable to book digitally. Nobody should claim they can.
+
+## A motive on the table, but no figures under it
+
+The administration's objection to keeping both routes is double administration, and I take it at face value: it is not a claim that people who ring are lazy or expensive. But the documents contain no measurement of how long either route takes staff, and no calculation of what removing one would save. The board is being asked to close a channel for good on the strength of an inconvenience the documents put no number on. That is thin ground for making the change permanent.
+
+## Six months, both routes, and something to measure
+
+Öppna beslut proposes a six-month trial in all seven venues with both booking routes kept open. During it, the administration records the time each booking route takes and asks users to say, voluntarily, why they chose the phone or the web. We make no claim to have funded or costed that trial. What it would cost is for the board to weigh.
+
+A booking made by phone is not proof that somebody cannot use the web. It is a reason to find out why the phone is still being used. I am not against digital booking. I am against settling its shape before the council can set the work each route costs staff against what it is worth to the people who use it.
+
+## What the board can decide on 18 June
+
+Postpone the permanent switch and run the six months with both routes open. When the trial has produced figures, decide whether a channel should be removed, changed or kept. That decision is the board's either way, and it will be a better one for being taken with the cost of both routes on the table.
+```

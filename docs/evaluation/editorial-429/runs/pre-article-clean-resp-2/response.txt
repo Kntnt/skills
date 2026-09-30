@@ -1,0 +1,61 @@
+Den enda korrigeringsomgången förkastades och korrekturläsningen hittade inga fel, så texten lämnas tillbaka oförändrad. Fyra fynd återstår olösta.
+
+**Inställningar:** genren är `article` och språket `sv`, båda från anropet. Ingen teknik används, eftersom genren `article` inte anger någon. Ingen brief valdes. Texten saknar `kntnt`-karta, och ingen har lagts till.
+
+```markdown
+# Mätförsöket i Björkskolan visar när, inte varför
+
+**Under 14 av 120 lektionspass registrerade givarna i Björkskolan temperaturer under fastighetskontorets egen arbetsgräns. Fyra veckors mätningar pekar ut tillfällen att undersöka närmare, men förklarar inte varför luften var kall. Här är vad ett kort försök kan säga, och vad som behövs för att komma vidare.**
+
+Text: Hedda Lund
+
+En temperaturgivare mäter luften där den sitter. Det gör placeringen viktig när fastighetskontoret ska tolka fyra veckors mätningar i Björkskolans sex klassrum. Genomgången nedan visar vad värdena räcker till och var gränsen går.
+
+## En gräns för det lokala försöket
+
+Kontoret valde 20 grader Celsius som arbetsgräns. Rapporten *Mätförsök i Björkskolan*, daterad 12 mars 2026, räknar 14 lektionspass av 120 med minst en mätning under den gränsen. Hur länge temperaturen låg under den anger rapporten inte. Gränsen är kontorets egen, vald för det här försöket.
+
+Givarna mätte varken luftdrag eller elevernas upplevelse. Ett lågt värde säger alltså när luften var kall, men inte hur rummet kändes.
+
+Driftteknikern Elin Rask sammanfattar: ”Vi vet när vi behöver titta närmare. Vi vet ännu inte varför det blev kallt just då.”
+
+## Nästa försök behöver mer än givare
+
+Rask rekommenderar att temperaturserierna kopplas till rummens användningstider innan styrningen ändras. Nästa försök planeras för november med likadant placerade givare, men finansieringen är inte beslutad.
+
+Lägg därför tiderna för när rummen används bredvid mätvärdena innan nästa givare sätts upp.
+```
+
+## Artikelns anatomi
+
+Skriptet mätte alla räknade gränser, och alla håller:
+- rubriken är 48 tecken och 7 ord
+- ingressen är ett stycke på 46 ord
+- inget stycke är längre än 45 ord
+- mellanrubrikerna är 32 och 34 tecken
+
+Jag läste också igenom de krav som skriptet inte räknar. Två av dem uppfylls inte (fynd 2 och 4), så texten följer inte anatomin fullt ut.
+
+## Fynd (alla olösta)
+
+1. **Rubriken säger inte vad den handlar om och upprepar ingressen.** ”Mätförsöket i Björkskolan visar när, inte varför” säger inte när eller varför *vad*. Varken temperatur, kyla eller luft nämns, så rubriken går inte att förstå utan ingressen. Dessutom säger den samma sak som ingressens andra mening, med samma kontrast och orden ”inte varför”. Läsaren får alltså ingen rubrik som ensam säger vad försöket visar, och ingressen kompletterar inte rubriken. En ny rubrik måste hålla textens styrka: luften vid givaren var kall, inte klassrummen. Den behöver också behålla vinkeln att mätningarna visar när men inte varför.
+
+2. **Ledet lovar något om placeringen som texten inte håller.** Meningen ”Det gör placeringen viktig när fastighetskontoret ska tolka …” gör givarnas placering till nyckeln för tolkningen. Brödtexten säger ändå aldrig var givarna satt eller hur placeringen påverkar de 14 passen. Därför kan läsaren inte avgöra om ”likadant placerade givare” i sista avsnittet är ett problem. Fyndet kräver uppgifter som texten saknar och behöver lösas av skribenten. Den avgränsande meningen ”En temperaturgivare mäter luften där den sitter.” ska stå kvar.
+
+3. **Ordet ”gräns” används för två olika saker.** I ledet betyder ”var gränsen går” var värdenas räckvidd tar slut. Direkt efteråt betyder ”gräns” 20-gradersgränsen, i både mellanrubriken och brödtexten. Läsaren kan då tro att ledet lovar en genomgång av temperaturgränsen.
+
+4. **Mellanrubriken ”En gräns för det lokala försöket” täcker bara avsnittets första stycke.** Avsnittet handlar också om det som givarna inte mätte, alltså drag och elevernas upplevelse, och innehåller Rasks sammanfattning. Den som bara skummar texten missar att avsnittet förklarar vad mätvärdena inte kan visa.
+
+## Förkastad korrigeringsomgång
+
+Korrigeringsbudgeten (1) har gått åt till en omgång. Den omgången förkastades, och texten före omgången återställdes i sin helhet. Därför är ingen del av den med i texten ovan, och fynden 1–4 står kvar olösta.
+
+Det här hade omgången infört:
+- **Ny rubrik:** ”Björkskolans givare visar när luften understeg 20 grader”. Den tappade artikelns vinkel. Att mätningarna inte förklarar orsaken försvann, och rubriken hade kunnat stå över en annan text om samma ämne. Den blev också en omskrivning av ingressens första mening.
+- **Ändrat led:** ”Det gör placeringen viktig …” ersattes med ”Det gäller när …”. Påståendet att placeringen är viktig för tolkningen försvann, trots att det låg bredvid defekten i fynd 2 och inte var själva defekten.
+
+## Redovisning av påståenden
+
+Omgången för fynd 1 försökte ta bort begränsningen ”inte varför” ur rubriken. Omgången för fynd 2 försökte ta bort påståendet att givarnas placering är viktig när kontoret tolkar mätningarna. Båda försöken förkastades, och båda påståendena står kvar.
+
+I den levererade texten har inget påstående tagits bort, ändrats eller lagts till. Korrekturläsningen fann inga mekaniska fel. Inga filer har skrivits, och alla tillfälliga filer är borttagna.

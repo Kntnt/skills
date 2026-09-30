@@ -1,0 +1,19 @@
+Texten är granskad och skriven till `output.md`. Den behövde inget arbete, så filen är identisk med `input.md`.
+
+**Inställningar:** genre `opinion` och språk `sv`, båda enligt anropet. Ingen teknik används, eftersom genren opinion inte anger någon.
+
+**Granskning:** Jag hittade inga redaktionella brister. Därför gjordes ingen korrigering, och korrigeringsbudgeten (1) användes inte. Den avslutande korrekturläsningen hittade inga språkfel.
+
+**Artikelanatomi:** Texten följer anatomin utan avvikelser.
+- **Räknade gränser:** skriptet mätte dem och alla håller.
+  - Rubriken har 47 tecken och 6 ord.
+  - Ingressen är ett stycke på 39 ord.
+  - Varje mellanrubrik har högst 40 tecken.
+  - Styckena har högst 50 ord.
+- **Krav som inte räknas:** jag läste igenom dem, och även de håller.
+  - Ingressen står på egen hand.
+  - Inledningen för resonemanget framåt i stället för att upprepa ingressen.
+  - Varje mellanrubrik beskriver sitt avsnitt.
+  - Sista avsnittet är ett avslut som uppmanar kommunstyrelsen att handla.
+
+**Påståenden:** Inga påståenden har tagits bort, ändrats eller lagts till.

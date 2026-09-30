@@ -1,0 +1,55 @@
+**Konfiguration:** genre `article` och språk `sv` kommer från flaggorna. Teknik: ingen, eftersom genren `article` inte anger någon teknik som den vanligen skrivs med. Ingen brief användes, och texten har ingen `kntnt`-metadata.
+
+Texten levereras oförändrad. Rättningsrundan avvisades (se nedan) och den mekaniska korrekturen hittade inga fel. Alla tre anmärkningarna står kvar olösta.
+
+```markdown
+# Mätförsöket i Björkskolan visar när, inte varför
+
+**Under 14 av 120 lektionspass registrerade givarna i Björkskolan temperaturer under fastighetskontorets egen arbetsgräns. Fyra veckors mätningar pekar ut tillfällen att undersöka närmare, men förklarar inte varför luften var kall. Här är vad ett kort försök kan säga, och vad som behövs för att komma vidare.**
+
+Text: Hedda Lund
+
+En temperaturgivare mäter luften där den sitter. Det gör placeringen viktig när fastighetskontoret ska tolka fyra veckors mätningar i Björkskolans sex klassrum. Genomgången nedan visar vad värdena räcker till och var gränsen går.
+
+## En gräns för det lokala försöket
+
+Kontoret valde 20 grader Celsius som arbetsgräns. Rapporten *Mätförsök i Björkskolan*, daterad 12 mars 2026, räknar 14 lektionspass av 120 med minst en mätning under den gränsen. Hur länge temperaturen låg under den anger rapporten inte. Gränsen är kontorets egen, vald för det här försöket.
+
+Givarna mätte varken luftdrag eller elevernas upplevelse. Ett lågt värde säger alltså när luften var kall, men inte hur rummet kändes.
+
+Driftteknikern Elin Rask sammanfattar: ”Vi vet när vi behöver titta närmare. Vi vet ännu inte varför det blev kallt just då.”
+
+## Nästa försök behöver mer än givare
+
+Rask rekommenderar att temperaturserierna kopplas till rummens användningstider innan styrningen ändras. Nästa försök planeras för november med likadant placerade givare, men finansieringen är inte beslutad.
+
+Lägg därför tiderna för när rummen används bredvid mätvärdena innan nästa givare sätts upp.
+```
+
+## Olösta anmärkningar
+
+1. **Rubriken** "Mätförsöket i Björkskolan visar när, inte varför" är för vag. "Visar när" säger inte vad det gäller, så den som bara ser rubriken kan inte avgöra att försöket mätte temperaturen och vad det visade. Kontrasten "inte varför" upprepas dessutom med samma ord i ingressens andra mening ("men förklarar inte varför luften var kall"). Läsaren får alltså vinkeln två gånger i samma ordalag.
+2. **Mellanrubriken** "En gräns för det lokala försöket" beskriver bara avsnittets första stycke, alltså 20-gradersgränsen. De följande styckena handlar om vad mätningarna inte fångar: hur länge temperaturen låg under gränsen, luftdrag, elevernas upplevelse och Rasks "vi vet ännu inte varför". Den som skummar rubrikerna ser inte att det är här texten redovisar vad mätvärdena inte säger. En ny mellanrubrik får inte föregripa Rasks citat.
+3. **Ingressens påstående om placering** följs aldrig upp. Ingressen säger att givarnas placering är viktig för tolkningen, men texten säger aldrig var givarna satt eller hur placeringen påverkade värdena. När nästa försök sedan planeras "med likadant placerade givare" kan läsaren inte bedöma om det är ett problem. Det här kan bara lösas med uppgifter som texten saknar, så skribenten behöver komplettera.
+
+## Den avvisade rättningsrundan
+
+En rättningsrunda gjordes, vilket förbrukade hela rättningsbudgeten på 1, och den avvisades.
+
+- **Rubriken** skrevs om till "Temperaturmätningar i Björkskolan visar när luften var kall". Den nya rubriken tappade textens vinkel, att mätningarna inte förklarar orsaken, och skulle kunna stå över en annan text om samma ämne. Det var ett nytt fel som den ursprungliga rubriken inte hade.
+- Därför återställdes hela texten till sitt skick före rundan, inklusive **mellanrubriken**. Den hade skrivits om till "Arbetsgränsen och det försöket lämnar obesvarat".
+
+Ingenting från rundan finns kvar i den levererade texten. Därför står anmärkning 1 och 2 fortfarande olösta.
+
+## Påståenden
+
+- **Försök att ta bort ett påstående:** den avvisade rubrikrättelsen (anmärkning 1) försökte stryka rubrikens avgränsning "inte varför". Försöket genomfördes inte, och den levererade rubriken har kvar sin avgränsning.
+- **Försök att ändra ett påstående:** den avvisade mellanrubriksrättelsen (anmärkning 2) skulle ha bytt påståendet att gränsen gäller det lokala försöket mot att försöket lämnar frågor obesvarade. Inte heller den ändringen genomfördes.
+
+Utöver dessa två avvisade försök togs inget påstående bort, ändrades eller lades till. Den levererade texten är byte för byte densamma som den som kom in.
+
+**Artikelanatomin:** alla räknade gränser håller enligt det maskinella mätskriptet. Rubriken har 48 tecken och 7 ord, ingressen 46 ord, och alla stycken och avsnitt ligger inom gränserna. De krav som inte räknas har granskats genom läsning. Mellanrubrikens krav att tydligt beskriva sitt avsnitt uppfylls inte (anmärkning 2), så texten uppfyller inte anatomin helt.
+
+**Mekanisk korrektur (sv):** den gjordes en gång på hela texten och gav inga rättelser.
+
+Inga filer skrevs. `input.md` är orörd, och alla tillfälliga filer är borttagna.

@@ -1,0 +1,24 @@
+Texten är granskad och skriven till `output.md`. `input.md` är orörd.
+
+**Konfiguration:** genren är `column` och språket `sv` (svenska), båda enligt anropet. Ingen teknik används, eftersom genren `column` inte anger någon och inget annat gör det heller. Ingen brief valdes, och texten har ingen `kntnt`-karta, så ingen har lagts till.
+
+**Artikelanatomin:** den färdiga texten följer anatomin. Skriptet mätte de räknade kraven utan fel. Resten kontrollerades genom läsning:
+- ingressen står på egen hand och upprepas inte av inledningen,
+- brödtexten går att läsa utan ingressen,
+- varje mellanrubrik beskriver sin sektion,
+- sista sektionen är en avslutning med en uppmaning.
+
+En avvikelse finns kvar: första stycket under ”Det är inte bara besluten jag vill åt” har 83 ord, strax över normen på högst 80. Det rymmer en enda tanke och läses bra i den längden, så det räknas inte som ett fel.
+
+**Fynd**
+
+1. **Avslutningen var ingen egen sektion (åtgärdat).** Sista stycket, ”Prova ändå frågan nästa gång du bokar ett möte …”, stod i sektionen ”Ännu en ruta, och ändå vill jag prova”. Den sektionen bär själva resonemanget: frågan som föreslås, vad den lovar och inte lovar, och skribentens invändning mot sin egen lösning. En läsare som skummar mellanrubrikerna hittade därför inte uppmaningen och den avslutande reflektionen som en egen del. Stycket står nu oförändrat i en egen avslutande sektion under den nya mellanrubriken **”Ett försök med ett enda löfte”**. Den skrevs för att åtgärda just detta fynd.
+
+Inga fynd återstår. Ingen ändring behövde underkännas.
+
+**Påståenden**
+
+- **Tillagt eller flyttat:** den nya mellanrubriken ”Ett försök med ett enda löfte” säger att försöket med frågan kommer med ett enda löfte. Samma sak står redan i stycket under den: ”Det är den enda förbättring jag kan lova innan vi har provat.” Rubriken tar inte med förbehållet ”innan vi har provat”, men stycket säger det fortfarande i sin helhet. Läsaren förlorar alltså ingen begränsning.
+- **Borttaget eller ändrat:** inga. Utöver mellanrubriken ovan har inget påstående tagits bort, ändrats eller lagts till.
+
+**Sammanfattning av ändringarna:** strukturen är lagad genom att avslutningen fått en egen sektion med egen mellanrubrik. Stycket i avslutningen är oförändrat. Korrekturläsningen hittade inga mekaniska fel och gjorde inga ändringar. Utöver mellanrubriken är texten identisk med `input.md`.

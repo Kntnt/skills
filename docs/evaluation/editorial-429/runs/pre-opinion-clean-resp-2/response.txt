@@ -1,0 +1,59 @@
+Konfiguration: genre `opinion` och språk `sv` (båda från anropet). Ingen teknik tillämpades, eftersom genren `opinion` inte anger någon. Ingen brief användes, och texten saknar `kntnt`-metadata, så ingen lades till.
+
+```markdown
+# Avskaffa inte telefonbokningen på ett antagande
+
+**I september kan telefonbokningen av Lerviks föreningslokaler försvinna. Beslutet ska vila på åtta veckors siffror från två lokaler, och de siffrorna räknar bokningar, inte personer. Här är skälen att pröva båda bokningsvägarna ett halvår till innan den ena stängs.**
+
+Text: Sanna Ek, Öppna beslut
+
+Kommunstyrelsen i Lervik bör skjuta upp bytet till enbart digital bokning av föreningslokaler, ett byte som kan ske i september. Pröva först båda bokningsvägarna i alla sju lokaler under ett halvår och mät vad de kräver. Ett permanent beslut behöver bättre underlag än det som nu ligger på bordet.
+
+## Bokningar är inte samma sak som personer
+
+Kommunens pilotrapport från den 8 april 2026 räknar 96 webbokningar och 24 telefonbokningar under åtta veckor i två lokaler. Den säger inte hur många personer som bokade eller varför de valde telefonen. Siffrorna visar varken hur många som saknar digital vana eller hur många som skulle klara sig utan telefonbokning. Att de som bokar per telefon skulle klara sig med enbart digital bokning är alltså ett antagande, inte ett mätresultat.
+
+En bokning är en händelse, inte en invånare. Den skillnaden avgör vad siffrorna kan användas till.
+
+## Mät också arbetet med två kanaler
+
+Förvaltningen vill slippa dubbel administration. Det är en relevant invändning. Men handlingarna innehåller ingen mätning av tidsåtgången. Att behålla två kanaler kostar arbete, och hur mycket behöver vägas mot vad användarna får.
+
+## Besluta om försöket, inte om antagandet
+
+Kommunstyrelsen bör därför säga ja till halvåret med båda bokningsvägarna, ta ställning till dess ännu okända kostnad och ge förvaltningen i uppdrag att mäta tidsåtgången samt fråga användarna varför de väljer sin bokningsväg. Först då går det att väga alternativen.
+
+Ett antagande blir inte ett beslutsunderlag för att kalendern säger september.
+```
+
+## Fynd
+
+Granskningen gav ett fynd. Det är åtgärdat, och inga fynd är olösta.
+
+1. **Texten sa aldrig vilket antagande den menade (åtgärdat).**
+   - **Problemet:** rubriken, den sista mellanrubriken (”inte om antagandet”, i bestämd form) och slutraden vilar alla på påståendet att beslutet bygger på ett antagande. Men ingen mening i brödtexten sa vilket antagande det gällde.
+   - **Vad läsaren förlorade:** läsaren fick själv gissa sig till vad anklagelsen gällde. ”Antagandet” pekade på något som brödtexten aldrig hade nämnt.
+   - **Åtgärden:** en ny mening i slutet av första stycket under ”Bokningar är inte samma sak som personer” säger vad antagandet är. Rubriken, mellanrubrikerna och slutraden är oförändrade.
+
+## Påståenden
+
+- **Tillagt påstående (fynd 1):** ”Att de som bokar per telefon skulle klara sig med enbart digital bokning är alltså ett antagande, inte ett mätresultat.”
+  - Meningen är en slutsats av den föregående meningen, som säger att siffrorna inte visar hur många som skulle klara sig utan telefonbokning.
+  - Den säger inte vem som gör antagandet.
+
+Utöver det tillagda påståendet har inget påstående tagits bort, ändrats eller lagts till. Ingen avgränsning, inget sambandsord och ingen avgränsande bisats har försvunnit.
+
+## Artikelns uppbyggnad
+
+Texten följer artikelns uppbyggnad utan avvikelser:
+
+- **Mätbara krav:** skriptet godkände dem både före och efter ändringen. Det utökade stycket har nu 70 ord.
+- **Krav som prövades genom läsning:**
+  - Ingressen står på egna ben.
+  - Ingressen och inledningen börjar med olika ord.
+  - Inledningen för resonemanget framåt.
+  - Brödtexten går att förstå utan ingressen.
+  - Varje mellanrubrik beskriver sitt avsnitt.
+  - Sista avsnittet är ett avslut, och uppmaningen i det säger vem som kan handla.
+
+Utöver det tillagda påståendet ändrades inget i texten. Den avslutande korrekturläsningen hittade inga mekaniska fel och gjorde inga ändringar. Inga filer skrevs eller lämnades kvar.

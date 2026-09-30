@@ -1,0 +1,28 @@
+Den granskade texten finns i `output.md`. Den är byte för byte identisk med `input.md`. Den enda korrigeringsrundan fick jag förkasta, och de fyra fynden kvarstår olösta. Språkgranskningen hittade inga fel att rätta.
+
+**Inställningar:** genren är `casestudy` och språket `sv`, båda från anropet. Ingen teknik tillämpades, eftersom genren `casestudy` anger att den normalt skrivs utan teknik.
+
+**Artikelanatomin:** mätskriptet godkände alla räknade gränser. Rubriken har 36 tecken och 4 ord, ingressen 40 ord, och varje avsnitt har två stycken. Jag granskade också de krav som skriptet inte räknar. Två av dem uppfylls inte, se fynd 2 och 3, så texten följer inte anatomin fullt ut. Avslutningen är ett eget avsnitt med arbetsledarens bedömning och en uppmaning till läsaren, och varje mellanrubrik beskriver sitt avsnitt.
+
+## Olösta fynd
+
+1. **Rubriken** – ”Elm Quay samlade reparationsärendena”. ”Reparationsärendena” i bestämd form och det avslutade ”samlade” säger att Elm Quay samlade alla sina reparationsärenden för gott. Texten beskriver ett försök på åtta veckor i två hus, där akuta ärenden och tidigare beställda arbeten inte ingick. Rubriken nämner inte heller något resultat eller någon bedömning som texten redovisar, vilket genren kräver. Läsaren förlorar detta: den som bara ser rubriken tror att all ärendehantering har flyttats till ett ställe.
+2. **Ingressen, tredje meningen** – ”Här är vad gruppen gjorde, vad anteckningarna visar …”. Ingressen har inte presenterat ”gruppen” eller ”anteckningarna”, så den står inte på egna ben. Den som bara läser ingressen vet inte vilken grupp eller vilka anteckningar som avses.
+3. **Inledningen, andra meningen** – ”Försöket pågick i åtta veckor …”. Brödtexten har inte sagt att loggen prövades i ett försök. Bara ingressen säger det, så den som hoppar över ingressen vet inte vilket försök som avses.
+4. **Inledningen, första meningen** – ”Att se samma information över skiftgränserna var vad underhållsgruppen … ville få ut av …”. Konstruktionen och uttrycket ”över skiftgränserna” är översatta från engelskan, och subjektet kommer först efter en lång infinitivfras. Brödtextens första mening måste läsas två gånger för att man ska se vem som ville vad.
+
+## Förkastad korrigeringsrunda
+
+Korrigeringsbudgeten var en runda, och den är förbrukad. Rundan åtgärdade fynd 2–4 utan anmärkning. Den ersatte också rubriken med ”Gemensam ärendebild hjälper, säger Elm Quays arbetsledare”, och därmed infördes ett fel som den ursprungliga rubriken inte hade:
+- ”Ärendebild” är ett hopdraget rubrikord.
+- ”Hjälper” saknar objekt.
+- Rubriken nämner inte längre reparationer, så den som bara ser den kan inte avgöra vad texten handlar om.
+- ”Oss” i Maya Linds ”hjälper oss” föll bort, vilket gör hennes bedömning allmängiltig.
+
+Därför förkastades hela rundan och texten återställdes som den kom in. Felet finns inte i den levererade texten.
+
+Rundan tog bort ett påstående: den ville ersätta rubrikens påstående att Elm Quay samlade reparationsärendena (som fynd 1 pekade ut som felet) med en tillskriven parafras av Linds bedömning. Den ändrade också inledningens två första meningar, som svar på fynd 3 och 4. Inget av detta finns kvar.
+
+## Påståendena i den levererade texten
+
+Den levererade texten är identisk med originalet. Inget påstående har alltså tagits bort, ändrats eller lagts till.

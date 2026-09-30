@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "packet": "post-case-study-clean-file-3",
+  "agents": [
+    {
+      "agent_id": "aa255bed-70bf-4498-bb82-35d78d1b23b3",
+      "role": "session",
+      "parent_agent_id": null,
+      "tool_use_id": null,
+      "agent_type": null,
+      "description": null,
+      "spawn_depth": 0,
+      "transcript": "transcripts/parent.jsonl",
+      "instruction": "<command-message>redline</command-message>\n<command-name>/redline</command-name>\n<command-args>--genre=casestudy --language=sv --output=output.md input.md</command-args>",
+      "started_at": "2026-09-29T22:58:50.652Z",
+      "ended_at": "2026-09-29T22:58:50.693Z",
+      "seats": [
+        {
+          "model": "<synthetic>",
+          "deliberation": null,
+          "turns": 1
+        }
+      ],
+      "skill_bodies": [
+        {
+          "base_directory": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-tgwy_hog/home/.claude/skills/redline",
+          "chars": 37442
+        }
+      ],
+      "calls": [],
+      "file_activity": [],
+      "delegations": [],
+      "interrupted": false
+    }
+  ],
+  "status": {
+    "status": "incomplete",
+    "reasons": [
+      "run-did-not-finish"
+    ],
+    "parent_transcript": "present",
+    "unparsable_lines": {},
+    "delegations_without_child": [],
+    "children_without_delegation": [],
+    "run_outcome": {
+      "returncode": 1,
+      "timed_out": false,
+      "interrupted": false
+    },
+    "agents": 1,
+    "calls": 0,
+    "read_from": "transcripts and runner outcome only; never the run's reply"
+  }
+}

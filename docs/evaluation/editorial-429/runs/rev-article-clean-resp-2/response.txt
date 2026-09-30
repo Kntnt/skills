@@ -1,0 +1,41 @@
+Utgångsläge: genre `article` och språk `sv` angavs i anropet. Ingen teknik tillämpades, eftersom genren `article` anger att den normalt skrivs utan teknik. Ingen skrivbrief användes och texten saknar `kntnt`-metadata, så ingen lades till. Du tillät en korrigering och den användes. Inga anmärkningar återstår.
+
+````markdown
+# Mätförsöket i Björkskolan visar när, inte varför
+
+**Under 14 av 120 lektionspass registrerade givarna i Björkskolan temperaturer under fastighetskontorets egen arbetsgräns. Fyra veckors mätningar pekar ut tillfällen att undersöka närmare, men förklarar inte varför luften var kall. Här är vad försöket kan säga, och vad som behövs för att komma vidare.**
+
+Text: Hedda Lund
+
+En temperaturgivare mäter luften där den sitter. Det gör placeringen viktig när fastighetskontoret ska tolka fyra veckors mätningar i Björkskolans sex klassrum. Genomgången nedan visar vad värdena räcker till och var gränsen går.
+
+## En gräns för det lokala försöket
+
+Kontoret valde 20 grader Celsius som arbetsgräns. Rapporten *Mätförsök i Björkskolan*, daterad 12 mars 2026, räknar 14 lektionspass av 120 med minst en mätning under den gränsen. Hur länge temperaturen låg under den anger rapporten inte. Gränsen är kontorets egen, vald för det här försöket.
+
+Givarna mätte varken luftdrag eller elevernas upplevelse. Ett lågt värde säger alltså när luften var kall, men inte hur rummet kändes.
+
+Driftteknikern Elin Rask sammanfattar: ”Vi vet när vi behöver titta närmare. Vi vet ännu inte varför det blev kallt just då.”
+
+## Nästa försök behöver mer än givare
+
+Rask rekommenderar att temperaturserierna kopplas till rummens användningstider innan styrningen ändras. Nästa försök planeras för november med likadant placerade givare, men finansieringen är inte beslutad.
+
+Lägg därför tiderna för när rummen används bredvid mätvärdena innan nästa givare sätts upp.
+````
+
+**Anmärkning (åtgärdad)**
+- **Ingressens tredje mening:** ”Här är vad ett kort försök kan säga …”. Att kalla försöket kort är en värdering som texten inte har stöd för. Texten jämför aldrig de fyra veckorna med något, och varken rapporten eller Rask kallar försöket kort. Ordet fick läsaren att tro att begränsningarna berodde på försökets längd. Brödtexten lägger dem någon annanstans: i det givarna inte mätte, i det rapporten inte anger och i de användningstider som saknas.
+
+**Påståenden**
+- **Borttaget påstående:** att försöket var kort, och med det antydan att dess begränsningar kom av längden. Det togs bort i den enda korrigeringsrundan, som svarade på anmärkningen ovan. Läsaren förlorar ingen avgränsning, eftersom texten fortfarande säger vad som inte mättes och inte är känt.
+- **Ändrat påstående:** meningen utlovar nu vad just det här försöket kan säga, i stället för vad ett kort försök kan säga. Samma korrigering gjorde ändringen.
+- **Tillagda påståenden:** inga.
+- Utöver det som anges ovan har inget påstående tagits bort, ändrats eller lagts till.
+
+**Artikelns uppbyggnad:** texten följer anatomin utan avvikelser. Skriptet mätte längdgränserna och godkände dem. Jag läste också igenom kraven som skriptet inte räknar och fann dem uppfyllda:
+- ingressen står på egen hand och upprepas inte av inledningen,
+- mellanrubrikerna beskriver sina avsnitt,
+- sista avsnittet är ett slut med en uppmaning till läsaren.
+
+Utöver påståendena ovan skiljer sig den levererade texten från originalet bara genom att ordet ”ett kort” strukits och ”försök” blivit ”försöket”. Den avslutande korrekturläsningen hittade inga fel att rätta. Inga filer ligger kvar från körningen.

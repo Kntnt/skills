@@ -1,0 +1,22 @@
+Jag har skrivit texten oförändrad till `output.md`. Jag hittade fyra brister, men ingen av dem är åtgärdad i den levererade texten. Korrigeringsrundan skapade ett nytt fel och fick därför kasseras i sin helhet, med alla fyra reparationerna.
+
+**Inställningar:** genren `casestudy` och språket `sv` kom från anropet. Ingen teknik användes, eftersom genren inte anger någon. Varken texten eller någon brief innehöll en `kntnt`-karta, och ingen lades till. Du tillät en korrigering (`--max=1`) och den användes.
+
+**Brister som finns kvar**
+
+1. **Rubriken** "Elm Quay samlade reparationsärendena" säger vad Elm Quay gjorde, men inte vad det gav kunden. Den nämner inte heller att det gällde ett försök med en gemensam logg. Den bestämda formen "reparationsärendena" låter som att alla ärenden samlades. Texten säger dock att akuta ärenden och tidigare beställda arbeten inte ingick. Läsaren missar textens vinkel och får ett bredare påstående än texten håller för.
+2. **Ingressen** talar om "vad anteckningarna visar", men säger aldrig vilka anteckningar som menas. Den som bara läser ingressen kan inte veta det.
+3. **Första stycket i brödtexten** börjar prata om "Försöket" utan att ha sagt att loggen provades i ett försök. Det framgår bara av ingressens "provade". Den som hoppar över ingressen möter alltså ett försök som aldrig har presenterats.
+4. **Mellanrubriken** "Två perioder med olika arbetsbelastning" är svår att förstå utan att läsa avsnittet. Den säger inte att avsnittet redovisar försökets siffror: 31 ärenden och mediantiden till tilldelning, två arbetsdagar mot tre. Den upprepar också ordagrant avsnittets andra stycke.
+
+**Artikelanatomin:** mätskriptet hittade inga fel i det som går att räkna, som längder och antal. Jag läste också igenom det som inte går att räkna. Sista avsnittet fungerar som avslutning och uppmaningen bygger på den länk som finns. Men ingressen är inte självbärande (brist 2), brödtexten pekar tillbaka på ingressen (brist 3) och en mellanrubrik beskriver inte sitt avsnitt (brist 4). Texten uppfyller därför inte anatomin fullt ut.
+
+**Den kasserade rundan:** rundan åtgärdade alla fyra bristerna.
+- Den nya rubriken blev "Elm Quays arbetsledare ser nytta i gemensam reparationslogg".
+- Mellanrubriken ersattes med "Tilldelningen tog i median två arbetsdagar mot tre före försöket".
+
+Den nya mellanrubriken var felet. Den lyfte fram en före/efter-jämförelse utan förbehållet att perioderna hade olika arbetsbelastning. Den gjorde också "de föregående åtta veckorna" till det bredare "före försöket". Resultatet blev starkare i rubriken än i texten, som uttryckligen avstår från att koppla skillnaden till programvaran. Därför återställde jag texten som den såg ut före rundan. Den som ska lösa brist 4 behöver hitta en rubrik som beskriver jämförelsen utan att tappa förbehållet.
+
+**Påståendena:** ett påstående försvann i den kasserade rundan: mellanrubrikens "två perioder med olika arbetsbelastning". Den ändrade också vad rubriken, ingressen och första stycket påstod. Inget av det finns kvar i den levererade texten.
+
+Den avslutande korrekturläsningen hittade inga mekaniska fel. Därför är `output.md` byte för byte identisk med `input.md`.

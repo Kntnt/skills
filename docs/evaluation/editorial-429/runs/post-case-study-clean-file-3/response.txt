@@ -1,0 +1,38 @@
+Jag har granskat texten, men den levererade `output.md` är identisk med `input.md`. Det enda korrigeringsförsöket skapade ett nytt fel i rubriken och kastades därför helt, också de delar som hade lagat fynd 2 och 3. Alla tre fynden nedan är olösta.
+
+**Inställningar**
+- **Genre:** `casestudy`, angiven i anropet.
+- **Språk:** `sv`, angivet i anropet.
+- **Teknik:** ingen. Anropet, texten och samtalet anger ingen, och genren casestudy anger uttryckligen ingen teknik.
+- **Frontmatter:** texten har ingen och fick ingen tillagd.
+- **Korrigeringsbudget:** 1, som är förbrukad.
+
+**Förkastat korrigeringsförsök**
+Försöket skrev om rubriken till ”Arbetsledaren på Elm Quay Housing vill upprepa loggförsöket”. Det gav två nya fel som den ursprungliga rubriken inte hade:
+- Den säger i sak samma sak som ingressens andra mening (”Arbetsledaren Maya Lind vill göra om försöket …”). Rubrik och ingress ska komplettera varandra, inte upprepa varandra.
+- Den tar bort förbehållet om mer förberedelsetid, som texten annars alltid sätter bredvid Linds omdöme.
+
+Därför återställdes texten ordagrant till hur den såg ut före försöket. Felen finns inte i den levererade texten. Om rubriken ska skrivas om behöver en person avgöra hur den kan ange vinkeln utan att upprepa ingressen.
+
+**Kvarstående fynd (alla olösta)**
+1. **Rubriken ”Elm Quay samlade reparationsärendena”.**
+   - Den bestämda formen ”reparationsärendena” läses som alla Elm Quays reparationsärenden. Texten gäller ett försök i två hus under åtta veckor, där akuta ärenden och tidigare beställda arbeten inte ingick.
+   - Rubriken anger heller ingen vinkel eller något resultat, vilket genren kräver.
+   - ”Elm Quay” utan ”Housing” säger inte vad det är för organisation.
+   - Den som bara ser rubriken får en bredare bild än texten bär och kan inte avgöra vem Elm Quay är.
+2. **Ingressens tredje mening.** I ”Här är vad gruppen gjorde, vad anteckningarna visar …” står ”gruppen” och ”anteckningarna” i bestämd form, men ingressen har inte presenterat någon grupp eller några anteckningar. Den som bara läser ingressen vet inte vilka som avses, och ingressen ska kunna stå på egen hand.
+3. **Inledningens första mening.** ”Att se samma information över skiftgränserna var vad underhållsgruppen … ville få ut av …” är en omskriven kluven mening efter engelskt mönster. Läsaren måste bära en abstrakt infinitivfras innan det framgår vem som ville något. Meningen låter översatt och bryter mot principen känd information före ny.
+
+**Artikelns anatomi**
+Alla räknade krav håller: skriptet `article_anatomy.py` avslutades med kod 0. Jag har också läst igenom de krav skriptet inte räknar:
+- Inledningen presenterar allt den nämner och tillför något nytt efter ingressen.
+- Mellanrubrikerna beskriver sina avsnitt.
+- Sista avsnittet är ett avslut med en uppmaning till handling som följer av texten.
+
+Texten uppfyller anatomin med ett undantag: ingressen står inte helt på egen hand (fynd 2).
+
+**Påståenden**
+Den levererade texten är identisk med originalet. Inga påståenden har tagits bort, ändrats eller lagts till.
+
+**Språkgranskning**
+Korrekturläsningen på slutet hittade inga mekaniska fel.

@@ -1,0 +1,50 @@
+Granskningen är klar och du hittar den granskade krönikan i blocket längst ner, efter fynden. Bara rubriken har skrivits om. Tre delar saknas fortfarande: ingress, mellanrubriker och ett avslutningsavsnitt med en uppmaning till läsaren. Dem lämnade jag åt dig att skriva.
+
+**Inställningar:** krönika (`column`), svenska (`sv`) och ingen teknik. Alla tre värdena kommer från textens egen `kntnt`-karta. Att tekniken är `none` betyder att ingen berättarbåge tillämpas. Jag hade en rättelse att använda, och den gick åt.
+
+## Fynd
+
+1. **Rubriken – åtgärdad.** Rubriken var ”Mallen har en ruta för allt utom poängen”. Den bestämda formen ”Mallen” pekade på en mall som bara brödtexten förklarar. Den som bara såg rubriken kunde därför inte veta att krönikan handlar om möten. Nu lyder rubriken ”Mötesmallen har en ruta för allt utom poängen” (45 tecken, 8 ord). Ordet ”mötesmall” är textens eget, och bilden med rutan som saknar poängen är kvar.
+
+2. **Ingress saknas – öppet.** En krönika ska ha en ingress mellan rubriken och bylinen: ett eget stycke på högst 60 ord. Den saknas, så en läsare som bara ser ingressen får ingen fristående sammanfattning av vad texten handlar om och varför den är värd att läsa. En saknad del skrivs inte i en granskning, så ingressen måste du skriva själv.
+
+3. **Mellanrubriker och avsnitt saknas – öppet.** Brödtexten ska bestå av ett inledande stycke följt av avsnitt som var och ett har en mellanrubrik (`##`). Texten har inga avsnitt. Därför räknar mätskriptet alla sju stycken (274 ord) som inledningsstycke, men det felet har samma orsak och är inget eget fynd. Den som skummar texten på webben får inga ingångar. Avsnitt och mellanrubriker har inte skrivits, eftersom det är du som bestämmer var texten ska delas.
+
+4. **Avslutningsavsnitt och uppmaning till läsaren saknas – öppet.** Avslutande innehåll finns: de två sista styckena, där skribenten själv tänker pröva frågan och ändå behåller tvivlet. Men det står inte i ett eget avsnitt med egen mellanrubrik, och texten ber aldrig läsaren att pröva, lägga märke till eller ompröva något. Den säger bara vad skribenten själv vill göra. Att göra den avsikten till en uppmaning till läsaren vore att lägga en uppmaning i Nora Viks mun som hon aldrig har gjort. Därför har ingen sådan skrivits.
+
+**Artikelns anatomi:** Texten följer inte anatomin. Mätningen bekräftar fynd 2 och 3. Bylinen finns och står på rätt plats. Rubriken håller sig inom gränserna. Tre krav gick inte att bedöma eftersom delarna de gäller saknas: hur ingressen och inledningsstycket förhåller sig till varandra, om mellanrubrikerna beskriver sina avsnitt och om det sista avsnittet fungerar som avslutning.
+
+## Påståenden
+
+- **Ändrat påstående:** Rubriken säger nu att det är *mötesmallen* som har en ruta för allt utom poängen. Förut stod bara ”mallen”. Brödtexten har redan sagt att det gäller bibliotekets mötesmall, så påståendet går inte längre än texten. Ändringen gjordes för att åtgärda fynd 1.
+
+Utöver rubriken har inget påstående tagits bort, ändrats eller lagts till.
+
+Utöver rubriken har den avslutande korrekturläsningen ändrat ett långt engelskt tankstreck (—) till ett svenskt tankstreck (–) med mellanslag på båda sidor.
+
+```markdown
+---
+kntnt:
+  genre: column
+  technique: none
+  language: sv
+---
+
+# Mötesmallen har en ruta för allt utom poängen
+
+Av Nora Vik, bibliotekarie
+
+Jag granskar bibliotekets mötesmall. Där finns rutor för starttid, sluttid, deltagare och dagordning. Någon ruta för det beslut vi ska kunna fatta när vi går därifrån finns inte. Det är dokumentet jag tittar på, inte ett bestämt möte.
+
+Jag uppskattar möten där kolleger upptäcker att de har förstått en fråga olika. Den upptäckten kan vara viktigare än att vi snabbt enas. Min tanke är alltså inte att varje samtal ska pressas fram till ett beslut.
+
+Det som retar mig är något annat: att tid i kalendern så lätt behandlas som ett resultat i sig. Timmen är bokad, alltså har något hänt. Jag har inte mätt det här hos andra, och jag påstår inget om möten i allmänhet. Det är min reflektion, med den räckvidd en reflektion har.
+
+Ändå tycker jag att den som fyller i en mall borde få formulera varför vi behöver just varandras tid. Också när syftet är att undersöka något tillsammans finns det ett skäl att skriva ner. Samtal kan skapa förtroende. Samtal kan hitta en fråga vi inte visste att vi behövde ställa. Inget av det kräver ett beslut, men båda delarna tål att motiveras.
+
+Så jag vill prova en enkel fråga bredvid tiden: vad behöver vi förstå tillsammans?
+
+Där börjar tvivlet. Det finns en komik i att försöka lösa ett problem med formulär genom att utöka formuläret – bibliotekarien som svarar på en mall med mer mall. Jag vet inte om ytterligare en ruta gör våra möten bättre. Kanske blir frågan bara en rad till att fylla i.
+
+Jag vill prova den i alla fall, och behålla båda hållningarna så länge: hoppet om frågan och tvivlet på ännu en ruta.
+```

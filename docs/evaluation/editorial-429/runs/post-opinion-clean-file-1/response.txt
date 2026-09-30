@@ -1,0 +1,23 @@
+Texten är granskad och sparad i `output.md`. Bara en underrubrik har ändrats, med ett ord. `input.md` är orörd, och inga arbetsfiler finns kvar.
+
+**Inställningar:** genre `opinion` och språk `sv`, båda angivna i anropet. Ingen teknik används, eftersom genren `opinion` inte anger någon och ingen annan nivå gjorde det heller. Ingen brief valdes, och texten saknar `kntnt`-metadata. Ingen metadata har lagts till.
+
+**Fynd (åtgärdat)**
+
+- **Underrubriken "Besluta om försöket, inte om antagandet"** (sista sektionen). Den bestämda formen "antagandet" pekar på ett bestämt antagande, men ingen del av texten säger vilket det är. Rubriken och slutraden skriver "ett antagande". En läsare som skummar underrubrikerna kunde inte avgöra vilket antagande som avsågs. Nu lyder den "Besluta om försöket, inte om ett antagande", i samma form som rubriken och slutraden. Den tillskriver ingen ett antagande.
+
+Inga olösta fynd återstår. Korrigeringsbudgeten (1) är förbrukad.
+
+**Artikelanatomin:** texten följer anatomin utan avvikelser. Skriptet mätte de räknade gränserna före och efter ändringen (exit 0). Rubriken har 47 tecken och 6 ord, ingressen 39 ord och styckena högst 50 ord. Övriga krav granskades genom läsning:
+- Ingressen står på egen hand.
+- Inledningen för resonemanget vidare och upprepar inte ingressen.
+- Brödtexten går att läsa utan ingressen.
+- Varje underrubrik beskriver sin sektion.
+- Sista sektionen är ett avslut med en konkret uppmaning till kommunstyrelsen.
+
+**Påståenden**
+- **Ändrat:** den sista underrubriken säger nu att beslutet ska gälla försöket och inte vila på ett antagande. Den ger inte längre sken av att texten har pekat ut ett bestämt antagande. Ändringen besvarar fyndet ovan.
+- **Borttaget och tillagt:** inget påstående togs bort och inget lades till.
+- **Övriga påståenden:** alla andra står kvar oförändrade.
+
+Utöver ändringen i underrubriken ändrades ingenting. Korrekturläsningen hittade inga fel att rätta.

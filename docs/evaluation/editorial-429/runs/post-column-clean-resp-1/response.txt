@@ -1,0 +1,36 @@
+Granskningen hittade ett fynd, och det är åtgärdat. Det var fel i strukturen. Inga påståenden i texten togs bort eller ändrades.
+
+**Inställningar:** genre `column` och språk `sv` kommer från anropet. Ingen teknik används, eftersom genren inte anger någon. Ingen brief valdes. Texten saknar en `kntnt`-karta, och ingen har lagts till.
+
+**Fynd (åtgärdat): avslutningen hade ingen egen sektion.** Artikelanatomin kräver att avslutningen är en egen sektion med egen mellanrubrik. Sektionen ”Ännu en ruta, och ändå vill jag prova” innehöll både förslaget (frågan, som brödtexten nämner där för första gången) och uppmaningen till läsaren. Den som skummade mellanrubrikerna hittade därför ingen avslutning. Nu står uppmaningsstycket oförändrat under en egen mellanrubrik:
+- **Ny mellanrubrik: ”Om frågan hjälper återstår att pröva”.** Rubriken säger att det ännu inte är känt om frågan hjälper, och att det måste prövas. Det står redan i sista meningen: ”Det är den enda förbättring jag kan lova innan vi har provat.” Rubriken lägger alltså inte till något nytt påstående och säger inte mer än texten. Poängen att formuläret åtminstone blir längre får stå kvar i brödtexten.
+
+**Anatomin:** texten följer artikelanatomin, med en avvikelse. Stycket som börjar ”Ett samtal kan vara värt tiden …” har 83 ord och går alltså över normen på 80. Det rymmer en tanke och läses bra, så det räknas inte som ett fynd. Både kraven som skriptet räknar och kraven som måste läsas har granskats. Skriptet mätte gränserna.
+
+**Påståendena:** inga borttagna, inga ändrade och inga tillagda. Den nya mellanrubriken säger om igen det som sista meningen redan begränsar till, som beskrivs ovan. Begränsningarna i texten står kvar ordagrant: ”Jag är alltså inte ute efter färre beslut.”, ”Den lovar inte att varje samtal ska mynna ut i ett svar.” och ”Det är den enda förbättring jag kan lova innan vi har provat.”
+
+Den enda ändringen är i strukturen: avslutningen har fått en egen sektion med en ny mellanrubrik. Den mekaniska korrekturläsningen hittade inget att rätta. `input.md` är orörd, och inga arbetsfiler finns kvar.
+
+```markdown
+# Mötesmallen har en ruta för allt utom varför
+
+**Det som ryms i en mötesmall säger en hel del om vad vi tror att möten är till för. Jag vill lägga till en enda fråga i vår mall, och misstänker samtidigt min egen lösning. Här är resonemanget, med tvivlet kvar.**
+
+Text: Nora Vik
+
+Vår mötesmall har plats för starttid och sluttid. Vad vi ska förstå när tiden är slut får vi hålla reda på själva. Det är inget fel på rutorna, men de räknar tid, och tid är det enda de räknar.
+
+## Det är inte bara besluten jag vill åt
+
+Ett samtal kan vara värt tiden därför att vi upptäcker att vi menar olika saker, eller därför att någon får förtroende nog att säga det som ännu inte är färdigtänkt. Jag vill inte att den sortens arbete ska behöva klä ut sig till ett beslut för att få finnas i en kalender. Men när veckan fylls blir det lättare att se att vi ska träffas än varför vi behöver varandra, och då är det beslutet som får stå kvar som enda giltiga skäl.
+
+Jag är alltså inte ute efter färre beslut.
+
+## Ännu en ruta, och ändå vill jag prova
+
+Frågan jag vill lägga till är enkel: vad behöver vi förstå tillsammans? Den lovar inte att varje samtal ska mynna ut i ett svar. Den ger bara det arbetet en rad i mallen. Och ja, jag hör hur det låter: lösningen på ett formulär är ett längre formulär.
+
+## Om frågan hjälper återstår att pröva
+
+Prova ändå frågan nästa gång du bokar ett möte, och skriv den före tiderna. Formuläret blir åtminstone längre. Det är den enda förbättring jag kan lova innan vi har provat.
+```

@@ -1,0 +1,32 @@
+Den granskade texten är sparad i `output.md`. `input.md` är orörd.
+
+**Inställningar:** genre `casestudy` och språk `sv`, båda angivna i anropet. Ingen teknik används, eftersom genren casestudy inte anger någon. Ingen brief valdes.
+
+**Artikelanatomi:** texten följer anatomin utan avvikelser. Skriptet räknade gränserna före och efter korrigeringen, och båda gångerna låg allt inom dem. Kraven som skriptet inte räknar gick jag igenom genom att läsa texten:
+- ingressen fungerar på egen hand
+- leaden är fristående och för texten framåt
+- varje stycke bär en tanke
+- underrubrikerna beskriver sina avsnitt
+- sista avsnittet är ett avslut med uppmaning till läsaren
+
+## Fynd som åtgärdades (en korrigeringsomgång, hela budgeten)
+
+1. **Rubriken** påstod mer än texten. "Elm Quay samlade reparationsärendena" sa att Elm Quay hade samlat alla sina ärenden, och det lät som ett avslutat faktum. Texten beskriver ett försök på åtta veckor i två hus. Den nya rubriken är "Elm Quay samlade reparationsärenden under ett försök".
+2. **Leadens första mening** var byggd som en engelsk konstruktion ("X var vad Y ville få ut av"), där subjektet kom efter en infinitivfras. Den lyder nu "Underhållsgruppen på Elm Quay Housing ville kunna se samma information över skiftgränserna med sin gemensamma reparationslogg." Innebörden är densamma.
+3. **Leadens tredje mening** lovade att "gruppens egna anteckningar" visar vad försöket "gav". Avsnittet om de två perioderna säger tvärtom att anteckningen inte tillskriver skillnaden programvaran. Brödtexten nämner dessutom bara en anteckning, och det försöket krävde kommer från Maya Linds citat. Meningen lyder nu "Vad det krävde berättar arbetsledaren Maya Lind, och vad som registrerades står i Elm Quays interna försöksanteckning."
+
+## Fynd som återstår (olöst)
+
+- **Ingressen** säger "vad anteckningarna visar" i plural. Brödtexten hänvisar till en enda källa, Elm Quays interna försöksanteckning. Läsaren kan tro att det finns flera anteckningar. Budgeten var slut, så fyndet ligger kvar.
+
+## Påståenden
+
+- **Borttaget:** leadens löfte att anteckningarna visar vad försöket "gav" (fynd 3). Läsaren får inte längre något löfte om en dokumenterad effekt. Det var just det löftet som stred mot den begränsning brödtexten anger.
+- **Borttaget:** att gruppen förde egna anteckningar i plural (fynd 3).
+- **Ändrat:** leaden säger nu att det försöket krävde kommer från Maya Lind. Förut angavs anteckningarna som källa (fynd 3).
+- **Ändrat:** leaden anger nu en enda källa för det som registrerades, Elm Quays interna försöksanteckning. Förut stod "gruppens egna anteckningar" (fynd 3).
+- **Ändrat:** rubriken säger nu att Elm Quay samlade reparationsärenden under ett försök. Den säger inte längre att organisationen samlade alla ärenden, och inte heller att det var ett avslutat, allmänt faktum (fynd 1).
+
+Utöver dessa ändringar har inget påstående tagits bort, ändrats eller lagts till. Meningen om att perioderna hade olika arbetsbelastning står kvar oförändrad.
+
+Utöver påståendena ovan skrevs leadens första mening om till svensk ordföljd utan att innebörden ändrades. Den mekaniska korrekturläsningen hittade inga fel och ändrade ingenting.

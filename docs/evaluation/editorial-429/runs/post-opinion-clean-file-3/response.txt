@@ -1,0 +1,17 @@
+Texten är granskad och den korrigerade versionen är sparad i `output.md`. `input.md` är orörd.
+
+**Inställningar:** genren `opinion` och språket `sv` kom från anropet. Ingen teknik används, eftersom genren `opinion` inte anger någon.
+
+**Artikelns anatomi:** texten uppfyller den utan avvikelse. Mätskriptet godkände alla räknade gränser. Resten granskades genom läsning: ingressen står på egen hand, inledningen för texten vidare, avslutningen är ett eget avsnitt med en uppmaning till kommunstyrelsen och varje mellanrubrik beskriver sitt avsnitt.
+
+**Anmärkning, åtgärdad:**
+- **Mellanrubriken "Besluta om försöket, inte om antagandet"** pekade med bestämd form på ett antagande som brödtexten aldrig nämnde. Ordet fanns bara i rubriken, i mellanrubriken och i slutraden. Den som läste brödtexten fick själv gissa vilket antagande som avsågs, och slutradens poäng saknade något att peka på.
+  - Rättningen lägger till en mening sist i första stycket under "Bokningar är inte samma sak som personer". Mellanrubriken och slutraden syftar nu tillbaka på något som brödtexten säger.
+  - Rubriker, ingress och mellanrubriker är oförändrade.
+
+**Påståenden:**
+- **Tillagt:** "Att de som valde telefonen skulle klara sig utan den är därför ett antagande." Det är en slutsats av styckets egen avgränsning, att siffrorna inte visar hur många som skulle klara sig utan telefonbokning. Den gör ett outtalat led i resonemanget uttryckligt. Meningen säger inte att kommunen, kommunstyrelsen eller förvaltningen har antagit detta.
+- **Borttaget:** inget.
+- **Ändrat:** inget.
+
+Utöver det tillagda påståendet ändrades ingenting. Korrekturläsningen hittade inga mekaniska fel, så den ändrade ingenting.

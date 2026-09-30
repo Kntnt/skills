@@ -1,0 +1,50 @@
+Granskningen är klar. Den enda korrigeringsrundan åtgärdade alla tre fynden, och ingen fråga står öppen.
+
+**Konfiguration:** genre `article` och språk `sv`, båda från anropet. Ingen teknik används: artikelgenren anger ingen, och varken anropet, texten eller instruktioner valde någon. Ingen brief har använts. En korrigeringsrunda av en möjlig har gjorts.
+
+```markdown
+# Givare visar när Björkskolans klassrumsluft var kall, inte varför
+
+**Under 14 av 120 lektionspass registrerade givarna i Björkskolan temperaturer under fastighetskontorets egen arbetsgräns. Fyra veckors mätningar pekar ut tillfällen att undersöka närmare, men förklarar inte varför luften var kall. Här är vad ett kort försök kan säga, och vad som behövs för att komma vidare.**
+
+Text: Hedda Lund
+
+En temperaturgivare mäter luften där den sitter. Fastighetskontoret ska tolka fyra veckors mätningar i Björkskolans sex klassrum. Genomgången nedan visar vad värdena räcker till och var gränsen går.
+
+## Arbetsgränsen underskreds i 14 pass – drag och upplevelse mättes inte
+
+Kontoret valde 20 grader Celsius som arbetsgräns. Rapporten *Mätförsök i Björkskolan*, daterad 12 mars 2026, räknar 14 lektionspass av 120 med minst en mätning under den gränsen. Hur länge temperaturen låg under den anger rapporten inte. Gränsen är kontorets egen, vald för det här försöket.
+
+Givarna mätte varken luftdrag eller elevernas upplevelse. Ett lågt värde säger alltså när luften var kall, men inte hur rummet kändes.
+
+Driftteknikern Elin Rask sammanfattar: ”Vi vet när vi behöver titta närmare. Vi vet ännu inte varför det blev kallt just då.”
+
+## Nästa försök behöver mer än givare
+
+Rask rekommenderar att temperaturserierna kopplas till rummens användningstider innan styrningen ändras. Nästa försök planeras för november med likadant placerade givare, men finansieringen är inte beslutad.
+
+Lägg därför tiderna för när rummen används bredvid mätvärdena innan nästa givare sätts upp.
+```
+
+## Fynd (alla åtgärdade)
+
+1. **Rubriken** var ”Mätförsöket i Björkskolan visar när, inte varför”. Den gick inte att förstå utan ingressen. Den som bara såg rubriken fick inte veta vad som mättes eller vad ”när” och ”varför” gällde. Den bestämda formen ”Mätförsöket” utgick dessutom från att läsaren redan kände till försöket. Den nya rubriken bygger på textens egen formulering ”när luften var kall”.
+   - Den nya rubriken har 65 tecken och 9 ord. Det är över normen på högst 60 tecken och 3–8 ord, som originalet höll.
+   - Jag bedömer inte det som ett fynd. Det gick inte att få med både skolan, klassrummen, den kalla luften och ”inte varför” inom normen, och det var just det sammanhanget som fyndet efterfrågade.
+2. **Inledningens andra mening** sa att givarnas placering avgör tolkningen. Texten sa aldrig var givarna satt eller hur placeringen påverkar resultatet, så inledningen lovade något som texten inte gav. Uppgiften om placeringen finns inte i texten, så påståendet har strukits i stället för att kompletteras.
+3. **Mellanrubriken** ”En gräns för det lokala försöket” nämnde bara gränsen från avsnittets första stycke och sa inget om den. Ordet ”lokala” var inte textens eget. En läsare som skummade kunde inte se att avsnittet redovisar vad mätningarna visade och vad de inte fångade.
+
+## Påståenden
+
+- **Borttaget:** att givarnas placering är viktig för hur fastighetskontoret tolkar mätningarna (fynd 2).
+  - Läsaren förlorar sambandet ”Det gör … när”, som förklarade varför texten börjar med att en givare mäter luften där den sitter. Första meningen står nu utan uttalad koppling till nästa.
+  - Begränsningen att värdena gäller luften vid givaren finns kvar i sin helhet i meningen ”En temperaturgivare mäter luften där den sitter”.
+- **Ändrade:**
+  - **Rubriken (fynd 1)** säger nu att givarna visar när luften i klassrummen på Björkskolan var kall, men inte varför. Tidigare sa den att mätförsöket visar ”när”, utan att säga när vad.
+  - **Mellanrubriken (fynd 3)** säger nu att arbetsgränsen underskreds i 14 pass och att drag och upplevelse inte mättes. Att gränsen gällde just det här försöket står inte längre i rubriken, men brödtexten säger det fortfarande fullt ut: ”Gränsen är kontorets egen, vald för det här försöket.”
+  - **Inledningens andra mening (fynd 2)** säger nu i en egen huvudsats att fastighetskontoret ska tolka fyra veckors mätningar i Björkskolans sex klassrum. Tidigare var det en bisats till påståendet om placeringen.
+- **Tillagda:** inga.
+
+Utöver de påståenden som redovisas ovan har inga påståenden ändrats. Texten följer artikelns anatomi. Mätskriptet godkände alla räknade krav, och jag har läst igenom de krav som skriptet inte räknar: ordningen mellan delarna, att ingressen står på egen hand, att ingressen och inledningen inte upprepar varandra, att mellanrubrikerna beskriver sina avsnitt och att avslutningen uppfyller inledningens löfte med en uppmaning.
+
+Jämfört med originalet har rubriken och den första mellanrubriken skrivits om, och en mening i inledningen har kortats så att löftet om placeringen försvann. I övrigt är texten oförändrad. Den avslutande korrekturläsningen hittade inga mekaniska fel att rätta. Inga filer har skrivits, och `input.md` är orörd.

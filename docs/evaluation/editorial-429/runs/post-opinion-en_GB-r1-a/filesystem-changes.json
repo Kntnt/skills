@@ -1,0 +1,341 @@
+{
+  "created": {
+    "home/.claude/.last-cleanup": {
+      "mode": 420,
+      "type": "file",
+      "size": 24,
+      "sha256": "b57896f49d9b6ca98835666515407a156952c3128f09f32946d97c49a069fd65"
+    },
+    "home/Library/Caches/com.apple.python/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/_collections_abc.cpython-39.pyc": {
+      "mode": 420,
+      "type": "file",
+      "size": 31816,
+      "sha256": "025aa2366cfa4ee5c784895870e6fa69a5cc893de4a06b6600c4bb66b080dfa6"
+    },
+    "home/Library/Caches/com.apple.python/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/_sitebuiltins.cpython-39.pyc": {
+      "mode": 420,
+      "type": "file",
+      "size": 3580,
+      "sha256": "875887203fa6ca2b711c3a8782499fd297e8df75ec5cdac3cf69a4257d619db0"
+    },
+    "home/Library/Caches/com.apple.python/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/json/__init__.cpython-39.pyc": {
+      "mode": 420,
+      "type": "file",
+      "size": 12372,
+      "sha256": "186f59ee1301a4615c43596f3b65e0633ce668826a06745f6fd6034bdf9c31ec"
+    },
+    "home/Library/Caches/com.apple.python/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/site.cpython-39.pyc": {
+      "mode": 420,
+      "type": "file",
+      "size": 17473,
+      "sha256": "0e7de55ccedec23d507b2da822e37ce38913f8dfce85346ad88ce4ca59ec8f0f"
+    },
+    "home/.claude/session-env": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "home/Library/Caches/com.apple.python/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/json/decoder.cpython-39.pyc": {
+      "mode": 420,
+      "type": "file",
+      "size": 9887,
+      "sha256": "bc30ca409ca4278d7d8a10fd30b334756c1213c006dc94d06617c6b1c0f470e1"
+    },
+    "home/.claude/.claude.json": {
+      "mode": 384,
+      "type": "file",
+      "size": 45033,
+      "sha256": "effd1ec80301e22957fa50e135c2e7febab8ed2df497b0c7928c59626501dcbd"
+    },
+    "home/Library/Caches/com.apple.python/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/json/scanner.cpython-39.pyc": {
+      "mode": 420,
+      "type": "file",
+      "size": 2032,
+      "sha256": "3a0cda12dbc371d47094fc207cb96aa03c45365a61c558b73e3982919b9f1961"
+    },
+    "home/Library/Caches/com.apple.python/Library/Developer/CommandLineTools/Library": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "home/Library/Caches/com.apple.python/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "home/Library/Caches/com.apple.python/Library/Developer": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "home/Library/Caches/com.apple.python/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/sre_constants.cpython-39.pyc": {
+      "mode": 420,
+      "type": "file",
+      "size": 6396,
+      "sha256": "dd83deb0e24e948fd432ce7336f927a8d32b407f6f4c5aedb70ff056b4a56623"
+    },
+    "home/Library/Caches/com.apple.python/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/re.cpython-39.pyc": {
+      "mode": 420,
+      "type": "file",
+      "size": 14441,
+      "sha256": "194c2ed74d3fb1b29fc5e2d20d38457c6e2ca31e60f86cabd2aa0055bcf03f5f"
+    },
+    "home/Library/Caches/com.apple.python/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/heapq.cpython-39.pyc": {
+      "mode": 420,
+      "type": "file",
+      "size": 14119,
+      "sha256": "f0de64ed9c3517417faecb1d42fa2f3330200413f84cb59a5c51d5c81897dd6d"
+    },
+    "home/.claude/projects/-private-var-folders-cs-vgp-x-353zd9frkjpysp7zdw0000gn-T-kntnt-editorial-388-run-adzw66ju-work/b4a295c0-6d9a-498a-b31a-a793e035bbf3": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "home/Library/Caches/com.apple.python/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "home/Library/Caches/com.apple.python/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/encodings/utf_8.cpython-39.pyc": {
+      "mode": 420,
+      "type": "file",
+      "size": 1711,
+      "sha256": "dada6b69eb28b5ef21ba73925957c5890b8744c8a2e65705858494d8bf1a2867"
+    },
+    "home/Library/Caches/com.apple.python/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/types.cpython-39.pyc": {
+      "mode": 420,
+      "type": "file",
+      "size": 9300,
+      "sha256": "a914fda5524355c7b42b30f659e8313748a57f85b526f30cbcae391b59ecfcec"
+    },
+    "home/Library/Caches/com.apple.python/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/encodings/latin_1.cpython-39.pyc": {
+      "mode": 420,
+      "type": "file",
+      "size": 1974,
+      "sha256": "d3bc32a4af5f6bad032c9ee2f69a7b62910ab593c7ea809ea3f87bd6fd3de9b2"
+    },
+    "home/Library/Caches/com.apple.python/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/keyword.cpython-39.pyc": {
+      "mode": 420,
+      "type": "file",
+      "size": 995,
+      "sha256": "6818fb8054ba5f3923460697b25c267e71a50fec9ce3cd66b3ef9bc355dc2374"
+    },
+    "home/Library/Caches/com.apple.python/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/codecs.cpython-39.pyc": {
+      "mode": 420,
+      "type": "file",
+      "size": 33967,
+      "sha256": "13f18b89f0af59e3e83868d76980eb55acc63e1a576899fd3dc8ab09e551096f"
+    },
+    "home/.claude/projects/-private-var-folders-cs-vgp-x-353zd9frkjpysp7zdw0000gn-T-kntnt-editorial-388-run-adzw66ju-work/b4a295c0-6d9a-498a-b31a-a793e035bbf3/subagents/agent-a73784637c5eae7fc.meta.json": {
+      "mode": 420,
+      "type": "file",
+      "size": 189,
+      "sha256": "3abe258b964a05ae6827dcbd8b7f9e41496d07907c8f0a7bcbae9edb7f625fef"
+    },
+    "home/.claude/projects/-private-var-folders-cs-vgp-x-353zd9frkjpysp7zdw0000gn-T-kntnt-editorial-388-run-adzw66ju-work/b4a295c0-6d9a-498a-b31a-a793e035bbf3/subagents/agent-a73784637c5eae7fc.jsonl": {
+      "mode": 384,
+      "type": "file",
+      "size": 167946,
+      "sha256": "18d570d240c17d0d814fa3107d8fcff97108ffb6c36f3e6dbba15d30bfa432cd"
+    },
+    "home/Library/Caches/com.apple.python/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/functools.cpython-39.pyc": {
+      "mode": 420,
+      "type": "file",
+      "size": 28261,
+      "sha256": "4b49899052f927c7866c3dc17975154e31063d6d3517e88ae104b8b6ff4b09f2"
+    },
+    "home/.claude/backups": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "home/.claude/projects/-private-var-folders-cs-vgp-x-353zd9frkjpysp7zdw0000gn-T-kntnt-editorial-388-run-adzw66ju-work": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "home/Library/Caches/com.apple.python/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/encodings": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "home/Library/Caches/com.apple.python/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/collections": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "home/Library/Caches/com.apple.python/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/sre_compile.cpython-39.pyc": {
+      "mode": 420,
+      "type": "file",
+      "size": 15132,
+      "sha256": "7d1deb251a7ad3fe2e56471b590491a21f13b3c3635c8afb5b4388e968b68674"
+    },
+    "home/Library/Caches/com.apple.python/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/json": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "home/Library/Caches/com.apple.python/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/enum.cpython-39.pyc": {
+      "mode": 420,
+      "type": "file",
+      "size": 26099,
+      "sha256": "92ec435c8a9e79fc0413125dbb291cd4586adfca82a7e6df93bf2f095850e8fa"
+    },
+    "home/Library/Caches/com.apple.python/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/encodings/cp437.cpython-39.pyc": {
+      "mode": 420,
+      "type": "file",
+      "size": 7927,
+      "sha256": "39b9fadae0704d0b46e24009d325efddf6ea0f779d6ecec44b7fc207b3148a26"
+    },
+    "home/.claude/projects/-private-var-folders-cs-vgp-x-353zd9frkjpysp7zdw0000gn-T-kntnt-editorial-388-run-adzw66ju-work/b4a295c0-6d9a-498a-b31a-a793e035bbf3.jsonl": {
+      "mode": 384,
+      "type": "file",
+      "size": 582065,
+      "sha256": "3c530b0b1b0978ec1ccb79f82fda6621663169f34f240d415d5d8296425d1e3b"
+    },
+    "home/Library/Caches": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "home/Library/Caches/com.apple.python/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/operator.cpython-39.pyc": {
+      "mode": 420,
+      "type": "file",
+      "size": 13827,
+      "sha256": "7d3e8814d3d3a9afeb0803333f93755b9262ffaff47d171569c899657d30af42"
+    },
+    "home/Library/Caches/com.apple.python/Library/Developer/CommandLineTools/Library/Frameworks": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "home/Library/Caches/com.apple.python/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "home/Library/Caches/com.apple.python/Library/Developer/CommandLineTools": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "home/Library/Caches/com.apple.python/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/genericpath.cpython-39.pyc": {
+      "mode": 420,
+      "type": "file",
+      "size": 4103,
+      "sha256": "6e14dc3d4a58678abbf15465f87e3126b80712a2faea87a24f8cb2758864fe83"
+    },
+    "home/Library/Caches/com.apple.python/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/io.cpython-39.pyc": {
+      "mode": 420,
+      "type": "file",
+      "size": 3487,
+      "sha256": "bb126ce95c68ceaf9c09810027ee9456b79b1332bea24bec277ef08a858c4818"
+    },
+    "home/.claude/sessions": {
+      "mode": 448,
+      "type": "directory"
+    },
+    "home/.claude/session-env/b4a295c0-6d9a-498a-b31a-a793e035bbf3": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "home/Library/Caches/com.apple.python/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "home/Library/Caches/com.apple.python/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/abc.cpython-39.pyc": {
+      "mode": 420,
+      "type": "file",
+      "size": 5854,
+      "sha256": "24800010f8463d60da6aac473fe4c6fc2e589219029f89c67d895dcc9ba8186a"
+    },
+    "home/Library/Caches/com.apple.python/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/collections/__init__.cpython-39.pyc": {
+      "mode": 420,
+      "type": "file",
+      "size": 48180,
+      "sha256": "62d09e5140342cd1ed8cf695bbcca3802c175dae0393e545a6ddc594fbffe086"
+    },
+    "home/.claude/projects/-private-var-folders-cs-vgp-x-353zd9frkjpysp7zdw0000gn-T-kntnt-editorial-388-run-adzw66ju-work/b4a295c0-6d9a-498a-b31a-a793e035bbf3/subagents": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "home/Library": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "home/.claude/backups/.claude.json.backup.1790719744852": {
+      "mode": 384,
+      "type": "file",
+      "size": 84,
+      "sha256": "e1c6e3baa44d865cd6ae9697ee56c3630897c766c307961a9832ab82a0216574"
+    },
+    "home/Library/Caches/com.apple.python/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/os.cpython-39.pyc": {
+      "mode": 420,
+      "type": "file",
+      "size": 32076,
+      "sha256": "71244e2fa9bd81f978d18cc49b83c690d51ed074715c64088c3b91a35e00e41a"
+    },
+    "home/Library/Caches/com.apple.python/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/copyreg.cpython-39.pyc": {
+      "mode": 420,
+      "type": "file",
+      "size": 4509,
+      "sha256": "38460391f66aee00b24fb68e5660ba3beb2b65ec73208760f172dd791b255a2e"
+    },
+    "home/.claude/projects": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "home/Library/Caches/com.apple.python/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "home/Library/Caches/com.apple.python/Library": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "home/Library/Caches/com.apple.python/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/encodings/aliases.cpython-39.pyc": {
+      "mode": 420,
+      "type": "file",
+      "size": 6409,
+      "sha256": "6f7cf93d22539994c14fb00b53030786c881d7b156b5848e4fa623a875539273"
+    },
+    "home/Library/Caches/com.apple.python/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/encodings/__init__.cpython-39.pyc": {
+      "mode": 420,
+      "type": "file",
+      "size": 4004,
+      "sha256": "223ec7f89962a503ce772f26e266ea7cecbcc94f57b6c888732dfd9740320a4f"
+    },
+    "home/Library/Caches/com.apple.python/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/reprlib.cpython-39.pyc": {
+      "mode": 420,
+      "type": "file",
+      "size": 5386,
+      "sha256": "e3182c2bac51e767df1b01557b8807a95c27bbff3e42257f985051e9af3a3599"
+    },
+    "home/.claude/projects/-private-var-folders-cs-vgp-x-353zd9frkjpysp7zdw0000gn-T-kntnt-editorial-388-run-adzw66ju-work/memory": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "home/Library/Caches/com.apple.python/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/sre_parse.cpython-39.pyc": {
+      "mode": 420,
+      "type": "file",
+      "size": 21682,
+      "sha256": "5dc0c414a7bf05cea406e17c3123353242abb9569ed4f95a2da4f2b7cb9e0dae"
+    },
+    "home/Library/Caches/com.apple.python/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/json/encoder.cpython-39.pyc": {
+      "mode": 420,
+      "type": "file",
+      "size": 11210,
+      "sha256": "704d937ba5349ecc4f6c7eb5a4870c3bb123cc66ffce1997008d15542a0d3b1f"
+    },
+    "home/Library/Caches/com.apple.python/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/posixpath.cpython-39.pyc": {
+      "mode": 420,
+      "type": "file",
+      "size": 10408,
+      "sha256": "285edce983f9020588bbd2d157ee15bf4f2c0f99c03853bbb3df1cff770d189e"
+    },
+    "home/Library/Caches/com.apple.python/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/_bootlocale.cpython-39.pyc": {
+      "mode": 420,
+      "type": "file",
+      "size": 1306,
+      "sha256": "3fee0dffeacf8bc4e7edc5b987b07742d78c34b035b65ad17290543e5239145b"
+    },
+    "home/Library/Caches/com.apple.python": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "home/Library/Caches/com.apple.python/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/stat.cpython-39.pyc": {
+      "mode": 420,
+      "type": "file",
+      "size": 4451,
+      "sha256": "84ac2f711bce1e14a192167a32090f0daa69576aa4102cd6bae963ae8ae0117a"
+    }
+  },
+  "removed": {},
+  "changed": {},
+  "note": "Harness, cache and Skill effects are separated by reading trace-index.json; nothing here is a Skill artifact on its own."
+}

@@ -1,0 +1,47 @@
+**Inställningar:** genre `column`, teknik `none`, språk `sv`. Alla tre kommer från textens `kntnt`-karta. Tekniken sattes till `none` av kartan, inte av genren. Metadata behövde inte ändras. Korrigeringsbudgeten på 1 användes till en omgång.
+
+````markdown
+---
+kntnt:
+  genre: column
+  technique: none
+  language: sv
+---
+
+# Bibliotekets mötesmall frågar när och vem, inte varför
+
+Av Nora Vik
+
+Jag granskar bibliotekets mötesmall. Där finns rutor för starttid, sluttid, deltagare och dagordning. Någon ruta för det beslut vi ska kunna fatta när vi går därifrån finns inte. Det här är en iakttagelse av ett dokument, inte en scen från ett visst möte. Mallen vill veta när vi ses och vilka som kommer. Vad tiden ska leda till frågar den inte om.
+
+En dagordning räknar upp vad vi ska tala om. Den säger inte varför vi behöver göra det tillsammans.
+
+Missförstå mig rätt: jag uppskattar möten där kolleger upptäcker att de har förstått en fråga olika. Den upptäckten kan vara viktigare än att vi snabbt enas. Det som retar mig är något annat – att tid i kalendern så lätt behandlas som ett resultat i sig. Timmen är bokad, alltså har något hänt. Det är min reflektion, inte något jag har mätt hos andra.
+
+Min tanke är inte att varje samtal ska pressas till ett beslut. Samtal kan skapa förtroende, och de kan få fram en fråga vi inte visste att vi behövde ställa. Men den som fyller i en mall borde få formulera varför vi behöver just varandras tid, också när syftet är att undersöka något tillsammans.
+
+Sedan kommer invändningen, och den är min egen. Jag vet inte om ytterligare en ruta gör möten bättre. Det finns en komik i att försöka lösa ett problem med formulär genom att utöka formuläret, och komiken blir inte mindre av att förslaget kommer från mig.
+
+Ändå vill jag prova en enkel fråga bredvid tiden: vad behöver vi förstå tillsammans? Jag vet inte om den överlever mötet med en verklig dagordning, och jag tänker inte låtsas att jag gör det. Hoppet om frågan och tvivlet på ännu en ruta får samsas ett tag till.
+````
+
+## Fynd
+
+**Åtgärdat**
+
+1. **Rubriken.** ”Rutan som inte finns” (20 tecken, 4 ord) gick inte att förstå utan att läsa texten. Den angav inte heller krönikans vinkel. Läsaren kunde därför inte avgöra om texten var något för dem. Den nya rubriken är ”Bibliotekets mötesmall frågar när och vem, inte varför” (54 tecken, 8 ord) och ligger inom rubrikens gränser. Endast rubriken skrevs om.
+
+**Kvar att lösa**
+
+2. **Ingress saknas.** Ett självbärande sammanfattande stycke på högst 60 ord ska stå mellan rubrik och byline. En saknad del skrivs inte i en granskning, så skribenten behöver lägga till den.
+3. **Mellanrubriker, avsnitt och ett avslutande avsnitt saknas.** Därför räknas inledningen som 6 stycken (290 ord). Ingen mellanrubrik och inget avsnitt har skrivits. Avslutningen står kvar i sista stycket.
+4. **Uppmaningen till läsaren är inte uttalad.** Sista stycket presenterar frågan ”vad behöver vi förstå tillsammans?” som skribentens eget försök (”Ändå vill jag prova”). Ingen uppmaning riktas till läsaren. Om avsikten gjordes om till en rekommendation skulle det ändra vad skribenten säger, så det får skribenten avgöra.
+
+Texten följer alltså inte artikelanatomin: ingressen, avsnitten och det avslutande avsnittet saknas fortfarande.
+
+## Påståenden
+
+- **Ändrat påstående (rubriken, fynd 1):** Tidigare pekade rubriken bara på att det saknas en ruta, utan att säga vilken. Nu påstår den att bibliotekets mötesmall frågar när man ses och vilka som kommer, men inte varför. Påståendet har stöd i första stycket (”Mallen vill veta när vi ses och vilka som kommer. Vad tiden ska leda till frågar den inte om.”) och i ”varför vi behöver just varandras tid”.
+- Utöver rubriken har inget påstående tagits bort, ändrats eller lagts till.
+
+**Ändringar:** Rubriken skrevs om så att den går att förstå fristående och anger krönikans vinkel. Korrekturläsningen på slutet gjorde en mekanisk rättelse: tankstrecket i tredje stycket blev ett svenskt, spärrat kort tankstreck. Brödtexten är i övrigt oförändrad, och inga filer har skrivits.

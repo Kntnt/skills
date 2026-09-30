@@ -1,0 +1,21 @@
+Texten är levererad till `output.md`. Den behövde inget arbete, så filen är byte för byte identisk med `input.md`.
+
+**Inställningar:** genren är debattartikel (`opinion`) och språket svenska (`sv`), båda angivna i anropet. Ingen teknik används. Ingen angavs, och genren debattartikel anger inte heller någon teknik som den vanligen skrivs med. Texten saknar Kntnt-metadata, och ingen har lagts till.
+
+**Granskning:** inga fynd. Texten följer artikelns anatomi utan avvikelser. Alla mätbara gränser är maskinellt uppmätta:
+- rubriken har 47 tecken och 6 ord
+- ingressen har 39 ord i ett stycke
+- varje mellanrubrik har högst 40 tecken
+- varje stycke har högst 50 ord
+
+De krav som inte går att räkna har granskats genom läsning och håller:
+- **Ingressen:** den står på egen hand.
+- **Ingress och inledning:** inledningen för resonemanget vidare i stället för att upprepa ingressen.
+- **Mellanrubrikerna:** var och en beskriver sitt avsnitt.
+- **Avslutningen:** den är ett eget avsnitt och uppmanar kommunstyrelsen till en bestämd handling.
+
+Varje rubrik har också lästs mot den text som följer närmast efter den. Ingen av dem upprepar innehållet i den texten.
+
+**Rättningar:** eftersom inget fynd fanns gjordes ingen rättningsrunda. Den avslutande korrekturläsningen hittade inga fel att rätta.
+
+**Påståenden:** inget påstående har tagits bort, ändrats eller lagts till.

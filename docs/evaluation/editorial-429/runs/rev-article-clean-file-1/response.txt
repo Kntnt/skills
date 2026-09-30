@@ -1,0 +1,21 @@
+Texten var redan i sin slutliga form: granskningen hittade inget att rätta och korrekturläsningen gjorde inga ändringar. Den ligger i **`output.md`**, byte för byte identisk med `input.md`.
+
+**Inställningar:** genre `article` och språk `sv`, båda angivna i anropet. Ingen teknik användes, eftersom artikelgenren inte har någon och ingen annan valdes. Texten har ingen `kntnt`-metadata, och ingen lades till.
+
+**Granskning:** Inga fynd. Rättningsbudgeten (1) användes inte, eftersom det inte fanns något att rätta.
+
+- **Artikelns anatomi:** Skriptet fann inga avvikelser i det som går att räkna.
+  - Rubriken har 48 tecken och 7 ord.
+  - Ingressen är ett stycke på 46 ord.
+  - Brödtexten har ett ingångsstycke på 33 ord och två avsnitt med tre och två stycken.
+
+  Det som inte går att räkna granskades genom läsning, och texten uppfyller anatomin utan avvikelser:
+  - Ingressen står på egna ben.
+  - Ingressen och ingångsstycket börjar olika och upprepar inte varandra.
+  - Brödtexten är begriplig utan ingressen.
+  - Mellanrubrikerna beskriver sina avsnitt.
+  - Sista avsnittet fungerar som avslutning med en uppmaning som följer av innehållet.
+- **Rubrik och ingress:** De delar orden ”inte varför”. Ingressen tillför ändå något nytt: siffran 14 av 120 och att det gällde kall luft. Upprepningen av vinkeln behövs för att ingressen ska stå på egna ben. Mellanrubrikerna upprepar inte meningarna under sig, och den första föregriper inte Elin Rasks citat.
+- **Påståenden:** Meningarna som avgränsar vad texten hävdar är korrekt formulerade och lämnades orörda. Det gäller att givaren mäter luften där den sitter, att rapporten inte anger hur länge temperaturen låg under gränsen, att gränsen är kontorets egen, att luftdrag och upplevelse inte mättes och att finansieringen inte är beslutad.
+
+Inga påståenden togs bort, ändrades eller lades till, och texten ändrades inte på någon punkt.

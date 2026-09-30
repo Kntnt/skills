@@ -1,0 +1,15 @@
+Den granskade texten ligger i `output.md`. `input.md` är orörd. Granskningen hittade ett fel, som nu är rättat. Inga fel finns kvar.
+
+**Inställningar:** genren är krönika (angiven i anropet) och språket svenska (angivet i anropet, `sv`). Ingen dramaturgisk teknik används: anropet angav ingen, och krönikegenren anger ingen som den brukar skrivas med.
+
+**Artikelanatomin:** texten följer anatomin, med en avvikelse. Mätskriptet räknade längder och antal utan att hitta något fel. Jag läste också igenom de krav skriptet inte räknar: att ingressen står på egna ben, att ingress och inledning inte upprepar varandra, att varje mellanrubrik beskriver sitt avsnitt och att sista avsnittet är en avslutning. Avvikelsen är första stycket under ”Det är inte bara besluten jag vill åt”, som har 83 ord mot riktvärdet 80. Stycket rymmer en enda tanke och läses bra i den längden, så det räknas inte som ett fel och är inte ändrat.
+
+**Fel (rättat): avslutningen var inte ett eget avsnitt**
+- **Stället:** sista avsnittet, ”Ännu en ruta, och ändå vill jag prova”.
+- **Felet:** avsnittets första stycke bär argumentets viktigaste steg. Där presenterar texten frågan, säger vad den lovar och bemöter invändningen om det längre formuläret. Uppmaningen ”Prova ändå frågan …” och förbehållet ”Det är den enda förbättring jag kan lova innan vi har provat” låg sedan i samma avsnitt. Enligt anatomin ska avslutningen vara ett eget avsnitt med egen mellanrubrik.
+- **Vad läsaren förlorade:** den som skummar hittade inte uppmaningen som en egen del, och förslaget flöt ihop med inbjudan att pröva det.
+- **Rättningen:** stycket står nu oförändrat i ett eget slutavsnitt under den nya mellanrubriken ”Vad jag ber dig om, och vad jag kan lova”. Rubriken har inget eget påstående. Den pekar bara på uppmaningen och löftet i stycket under den. Omgranskningen hittade inga nya fel.
+
+**Påståendena:** inget påstående har strukits, ändrats eller lagts till. Den nya mellanrubriken återger bara det som stycket under den redan säger.
+
+**Övriga ändringar:** texten har fått en ny mellanrubrik som gör avslutningen till ett eget avsnitt. Allt annat är ord för ord detsamma. Korrekturläsningen på slutet hittade inga språkliga fel att rätta.

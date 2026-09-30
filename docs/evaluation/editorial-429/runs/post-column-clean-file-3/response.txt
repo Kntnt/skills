@@ -1,0 +1,15 @@
+Jag har granskat texten och sparat den korrigerade versionen i `output.md`.
+
+**Inställningar:** genre `column` och språk `sv` angav du i anropet. Ingen teknik används, eftersom genren `column` inte föreskriver någon.
+
+**Åtgärdat fynd (rubriken):** Rubriken ”Mötesmallen har en ruta för allt utom varför” sa att mallen har rutor för allt annat än varför. Texten säger tvärtom att mallen bara har plats för starttid och sluttid: ”tid är det enda de räknar”. En läsare som bara såg rubriken fick alltså motsatt bild av textens poäng. Rubriken lyder nu ”Mötesmallen frågar när men inte varför”, som har 38 tecken och sex ord.
+
+Inga fynd återstår. Eftersom budgeten var en korrigering har den nu använts.
+
+**Artikelns delar:** Texten uppfyller kraven på rubrik, ingress, byline, inledning, avsnitt och avslutning. Både de räknade gränserna och de krav som läses fram är granskade. Det finns en avvikelse från en rekommendation: första stycket under ”Det är inte bara besluten jag vill åt” har 83 ord mot rekommenderade högst 80. Det rör en enda tanke och läses bra i den längden, så det räknas inte som fynd och har inte ändrats.
+
+**Påståenden:**
+- *Ändrat:* Rubriken säger nu att mötesmallen frågar efter tid men inte efter varför. Tidigare sa den att mallen har en ruta för allt utom varför. Det nya påståendet är snävare och stämmer med inledningen. Ändringen kommer från rättelsen av rubriken.
+- Utöver den här ändringen har inget påstående tagits bort, ändrats eller lagts till.
+
+Rubriken är den enda ändringen. Brödtexten, underrubrikerna, ingressen och bylinen är orörda. Språkgranskningen på slutet hittade inga fel i stavning, grammatik eller skiljetecken, så den ändrade ingenting.

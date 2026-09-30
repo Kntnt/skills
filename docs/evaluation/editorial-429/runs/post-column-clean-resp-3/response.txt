@@ -1,0 +1,6 @@
+Texten behövde inga ändringar.
+
+- **Inställningar:** krönika (`column`, angiven i anropet), svenska (`sv`, angiven i anropet) och ingen teknik. Ingen teknik angavs, och genren `column` anger ingen teknik som den normalt skrivs med.
+- **Granskning:** Granskningen gav inga anmärkningar, så korrigeringsbudgeten på en korrigering förbrukades inte. Korrekturläsningen hittade inga mekaniska fel.
+- **Artikelanatomi:** Texten följer artikelanatomin, med en avvikelse. Första stycket under "Det är inte bara besluten jag vill åt" har 83 ord, alltså något över normen på högst 80. Stycket rymmer en enda tanke och fungerar i den längden, så avvikelsen räknas inte som en brist. Jag har också läst de delar som skriptet inte mäter: rubrikerna, ingressen i förhållande till inledningen och att avslutningen fungerar som slut.
+- **Filer:** Inga filer har skrivits eller ändrats, och `input.md` är orörd.

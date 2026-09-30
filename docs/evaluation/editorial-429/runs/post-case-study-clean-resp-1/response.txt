@@ -1,0 +1,56 @@
+Granskningen hittade tre problem. Det enda rättningsförsöket som budgeten gav plats för underkändes, så texten nedan är identisk med `input.md`. Korrekturläsningen hittade inga mekaniska fel. Inget skrevs till disk.
+
+**Inställningar:** genren är `casestudy` och språket `sv`, båda enligt anropet. Ingen teknik används, eftersom genren kundcase inte har någon.
+
+```markdown
+# Elm Quay samlade reparationsärendena
+
+**Elm Quay Housing provade en gemensam reparationslogg i två hus under åtta veckor. Arbetsledaren Maya Lind vill göra om försöket, men skulle avsätta mer tid för förberedelser. Här är vad gruppen gjorde, vad anteckningarna visar och vad hon skulle ändra.**
+
+Text: Iris Falk
+
+Att se samma information över skiftgränserna var vad underhållsgruppen på Elm Quay Housing ville få ut av sin gemensamma reparationslogg. Försöket pågick i åtta veckor och omfattade två hus. Vad det krävde, och vad det gav, går att följa i gruppens egna anteckningar.
+
+## Gruppen enades om kategorierna först
+
+Kategorierna i loggen var underhållsgruppens egna. Leverantören Svale konfigurerade loggen efter dem och utbildade sex medarbetare.
+
+– Vi lade mer tid på att enas om kategorierna än på att lägga in de första ärendena. Den tiden skulle jag avsätta innan nästa hus börjar, säger Maya Lind, arbetsledare på Elm Quay.
+
+## Två perioder med olika arbetsbelastning
+
+Enligt Elm Quays interna försöksanteckning från den 4 december 2025 registrerades 31 ärenden under åtta veckor. Akuta ärenden och tidigare beställda arbeten ingick inte. Mediantiden från anmälan till tilldelning var två arbetsdagar. Under de föregående åtta veckorna var den tre.
+
+Perioderna hade olika arbetsbelastning, och anteckningen tillskriver därför inte skillnaden programvaran.
+
+## Arbetsledaren ser tillbaka på försöket
+
+– Jag skulle välja att göra försöket igen. Att ha en gemensam bild av ärendena hjälper oss, men jag skulle lägga till en vecka för förberedelser, säger Lind.
+
+Kundcaset publiceras av leverantören Svale. Den som står inför samma förberedelser kan börja i [Svales checklista för införandet](https://example.invalid/svale/checklist).
+```
+
+## Olösta anmärkningar
+
+Alla tre är olösta.
+
+1. **Rubriken säger inte vad försöket gav, och den gör omfattningen för stor.** "Elm Quay samlade reparationsärendena" beskriver bara en handling. Enligt genren ska rubriken nämna kundens nytta eller resultat. Den bestämda formen "reparationsärendena" säger dessutom att alla ärenden samlades, men texten säger att akuta ärenden och tidigare beställda arbeten inte ingick. Den som bara läser rubriken får inte veta vad försöket ledde till, och får en bredare bild än texten stöder.
+
+2. **Mellanrubriken "Två perioder med olika arbetsbelastning" är en etikett.** Avsnittet säger något bestämt: mediantiden till tilldelning var två arbetsdagar mot tre under de föregående åtta veckorna. Det säger också att anteckningen inte tillskriver skillnaden programvaran, eftersom arbetsbelastningen var olika. Rubriken nämner bara omständigheten, så den som skummar mellanrubrikerna missar resultatet.
+
+3. **Ingressens första mening är en engelsk konstruktion.** "Att se samma information över skiftgränserna var vad underhållsgruppen … ville få ut av …" följer engelskans mönster "X was what Y wanted". Läsaren får bära en lång infinitivfras innan det framgår vems mål det är, och meningen låter översatt.
+
+**Artikelns uppbyggnad:** de räknade gränserna håller, och det är maskinellt uppmätt. Jag har också läst igenom de krav som inte räknas: avslutningen med uppmaning, att ingressen står på egen hand och att ingressen skiljer sig från brödtextens början. Texten uppfyller ändå inte uppbyggnaden fullt ut, eftersom rubriken och den andra mellanrubriken inte är skrivna som rubrikreglerna kräver (anmärkning 1 och 2).
+
+## Underkänt rättningsförsök
+
+Rättningsbudgeten var ett försök, och det gick åt. Försöket rättade alla tre anmärkningarna men underkändes i sin helhet, eftersom den nya rubriken hade egna fel som originalet saknade. Den nya rubriken löd "Gemensam ärendebild hjälper, säger Elm Quays arbetsledare":
+
+- **Den generaliserade Maya Linds omdöme.** Hon säger att det "hjälper oss", men rubriken säger bara att det hjälper, utan att ange vem.
+- **Den tappade ämnet.** Rubriken nämnde inte längre reparationer, loggen eller försöket, och ordet "ärendebild" finns inte i texten. Den som bara såg rubriken kunde inte avgöra vad texten handlade om.
+
+Ändringarna i ingressens första mening och i mellanrubriken försvann tillsammans med rubriken. Det du behöver ta ställning till är rubriken. Nästa försök bör hålla sig till Linds egen avgränsning ("oss") och nämna loggen eller försöket.
+
+## Påståenden
+
+Texten som levereras är identisk med originalet. Inget påstående har tagits bort, ändrats eller lagts till, och ingen avgränsning har fallit bort.

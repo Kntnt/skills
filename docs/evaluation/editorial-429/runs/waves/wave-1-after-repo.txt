@@ -1,0 +1,7 @@
+# /Users/thomas/Projects/skills/.git/kntnt-orchestrate/429
+# HEAD 244505844d1bfb1842dde352b5f7c9ace3e3dedc
+ M skills/kntnt/library/references/editorial/headlines.review.md
+# end /Users/thomas/Projects/skills/.git/kntnt-orchestrate/429
+# /Users/thomas/Projects/skills
+# HEAD 96e6b3b15429ac668213226609f43c0bc753cc4f
+# end /Users/thomas/Projects/skills

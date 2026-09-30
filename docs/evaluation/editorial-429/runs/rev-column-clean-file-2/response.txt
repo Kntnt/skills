@@ -1,0 +1,17 @@
+Jag har skrivit texten till `output.md`. Den behövde inget arbete och är byte för byte identisk med `input.md`.
+
+**Inställningar:** genren är krönika och språket svenska, båda angivna i anropet. Ingen teknik används: krönikegenren anger ingen teknik som den normalt skrivs med, och ingen annan nivå angav någon heller. Någon skrivbrief angavs inte. Texten saknar `kntnt`-metadata, och jag har inte lagt till någon.
+
+**Granskningen gav inga fynd,** så korrigeringsbudgeten på 1 användes inte.
+
+- **Artikelanatomin:** texten följer den, med en avvikelse. Stycket under "Det är inte bara besluten jag vill åt" har 83 ord, alltså lite över riktvärdet 80. Det rymmer en enda tanke och läser väl i den längden, så det räknas inte som fynd. Alla delar finns och står i rätt ordning: rubrik (44 tecken), ingress (41 ord), byline, inledning, ett avsnitt och ett avslutande avsnitt. Skriptet mätte gränserna. Det som inte går att räkna granskade jag genom läsning:
+  - Ingressen står på egna ben.
+  - Inledningen upprepar inte ingressen, och brödtexten hänvisar inte tillbaka till den.
+  - Mellanrubrikerna beskriver sina avsnitt.
+  - Det sista avsnittet är ett avslut med en uppmaning som växer ur resonemanget.
+- **Rubrikerna:** rubriken och mellanrubrikerna säger inte samma sak som texten direkt under dem, och de påstår inget som texten inte bär.
+- **Rösten:** tvivlet, självironin och återkomsten till "ett längre formulär" gör sitt jobb, liksom de meningar som avgränsar vad texten påstår ("Jag är alltså inte ute efter färre beslut.", "Det är den enda förbättring jag kan lova innan vi har provat."). De står kvar orörda.
+
+**Den mekaniska korrekturen** kördes en gång och hittade inga fel.
+
+Inga påståenden har tagits bort, ändrats eller lagts till. Den privata arbetskatalogen är borttagen.

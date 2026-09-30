@@ -1,0 +1,45 @@
+Du får texten här i svaret. Rubriken är omskriven och ett tankstreck är rättat. Ingress, mellanrubriker, avslutande avsnitt och uppmaning till läsaren saknas fortfarande och får fyllas i av en människa. Ingen fil har skrivits eller ändrats, och `input.md` är orörd.
+
+**Genre, teknik och språk:** genren är `column` och språket `sv`, båda enligt textens `kntnt`-karta. Ingen teknik används. Kartan anger `none`, och kolumngenren har ingen egen teknik. Kartan stämde redan med detta och är oförändrad.
+
+```markdown
+---
+kntnt:
+  genre: column
+  technique: none
+  language: sv
+---
+
+# Formuläret för bibliotekets möten saknar ett varför
+
+Av Nora Vik
+
+Jag granskar bibliotekets mötesmall. Där finns rutor för starttid, sluttid, deltagare och dagordning. Någon ruta för det beslut vi ska kunna fatta när vi går därifrån finns inte. Det här är en iakttagelse av ett dokument, inte en scen från ett visst möte. Mallen vill veta när vi ses och vilka som kommer. Vad tiden ska leda till frågar den inte om.
+
+En dagordning räknar upp vad vi ska tala om. Den säger inte varför vi behöver göra det tillsammans.
+
+Missförstå mig rätt: jag uppskattar möten där kolleger upptäcker att de har förstått en fråga olika. Den upptäckten kan vara viktigare än att vi snabbt enas. Det som retar mig är något annat – att tid i kalendern så lätt behandlas som ett resultat i sig. Timmen är bokad, alltså har något hänt. Det är min reflektion, inte något jag har mätt hos andra.
+
+Min tanke är inte att varje samtal ska pressas till ett beslut. Samtal kan skapa förtroende, och de kan få fram en fråga vi inte visste att vi behövde ställa. Men den som fyller i en mall borde få formulera varför vi behöver just varandras tid, också när syftet är att undersöka något tillsammans.
+
+Sedan kommer invändningen, och den är min egen. Jag vet inte om ytterligare en ruta gör möten bättre. Det finns en komik i att försöka lösa ett problem med formulär genom att utöka formuläret, och komiken blir inte mindre av att förslaget kommer från mig.
+
+Ändå vill jag prova en enkel fråga bredvid tiden: vad behöver vi förstå tillsammans? Jag vet inte om den överlever mötet med en verklig dagordning, och jag tänker inte låtsas att jag gör det. Hoppet om frågan och tvivlet på ännu en ruta får samsas ett tag till.
+```
+
+## Anmärkningar
+
+1. **Rubriken – åtgärdad.** Den gamla rubriken ”Rutan som inte finns” gick inte att förstå utan brödtexten. Den sa inte vilken ruta det gällde eller var den saknades, så läsaren kunde inte avgöra vad kolumnen handlade om. Den upprepade också första styckets formulering ”Någon ruta … finns inte” i stället för att komplettera den. Den nya rubriken har 51 tecken och 7 ord.
+2. **Ingress saknas – kvarstår.** Det finns inget sammanfattande stycke mellan rubrik och byline. Läsaren saknar en fristående sammanfattning av vad kolumnen handlar om och vad den ger. En saknad del skrivs inte av granskningen.
+3. **Mellanrubriker och avsnitt saknas – kvarstår.** Det gäller även ett avslutande avsnitt med egen mellanrubrik. Den som skummar texten på webben har inga ingångar i den. Mätningen räknar hela brödtexten som ett inledande stycke (6 stycken, 290 ord), men det beror bara på att avsnitten saknas.
+4. **Uppmaning till läsaren saknas – kvarstår.** Sista stycket avslutar texten med reflektion och ärligt tvivel. Det säger vad skribenten själv vill prova, men uppmanar inte läsaren att prova, lägga märke till eller ompröva något.
+
+Texten följer alltså inte artikelanatomin, eftersom delarna i punkt 2–4 saknas.
+
+## Påståenden
+
+- **Ändrat påstående (rubriken, åtgärd av anmärkning 1):** rubriken säger nu att formuläret för bibliotekets möten inte frågar varför man ses. Den gamla sa bara att en ruta inte finns. Stödet finns i texten: mallen frågar inte vad tiden ska leda till (stycke 1), dagordningen säger inte varför vi behöver ses (stycke 2) och texten själv kallar mallen formulär (stycke 5).
+
+Utöver rubriken har inget påstående tagits bort, ändrats eller lagts till. De två avgränsande meningarna står kvar oförändrade: ”Det här är en iakttagelse av ett dokument, inte en scen från ett visst möte.” och ”Det är min reflektion, inte något jag har mätt hos andra.”
+
+Jämfört med originalet är det två saker som skiljer. Rubriken är omskriven. Korrekturen har dessutom bytt ett engelskt långt tankstreck (—) mot ett svenskt tankstreck (–) med mellanslag på båda sidor. Frontmatter och all övrig text är oförändrade.

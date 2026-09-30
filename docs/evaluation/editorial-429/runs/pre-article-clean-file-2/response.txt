@@ -1,0 +1,24 @@
+Jag har granskat texten och skrivit resultatet till `output.md`; `input.md` är oförändrad. Rubriken är det enda som ändrats. Ett rubrikfynd är delvis åtgärdat och ett fynd i ingångsstycket är olöst, så båda behöver en människa.
+
+**Inställningar:** genren är `article` och språket `sv`, båda från anropet. Ingen berättarteknik används, eftersom genren `article` inte anger någon och inget annat valde en. Texten saknar Kntnt-metadata, och jag har inte lagt till någon.
+
+## Fynd
+
+1. **Rubriken – delvis åtgärdad.** Den gamla rubriken, ”Mätförsöket i Björkskolan visar när, inte varför”, hade två fel:
+   - **Åtgärdat:** ”när” saknade objekt. Läsaren förstod inte vad försöket visade tidpunkten för förrän i ingressen.
+   - **Olöst:** rubriken sade samma sak som ingressens andra mening, bara med andra ord (”pekar ut tillfällen … men förklarar inte varför luften var kall”). Den nya rubriken har fortfarande samma vinkel och delar nu orden ”luften var kall” med den meningen. Den som läser vidare möter därför ingressens andra mening som rubriken sagd en gång till. För att få bort överlappet måste någon välja en annan vinkel för rubriken eller skriva om ingressen, och det beslutet lämnar jag till er.
+   - Den nya rubriken har 9 ord och 59 tecken. Det håller teckengränserna men är ett ord över normen på högst åtta ord. Jag bedömer inte det som ett fynd: kortare hade bara gått om antingen ”luften var kall” eller begränsningen ”inte orsaken” strukits.
+
+2. **Ingångsstycket – olöst.** ”En temperaturgivare mäter luften där den sitter. Det gör placeringen viktig …” gör givarnas placering till nyckeln för att tolka mätningarna. Brödtexten säger dock aldrig var givarna satt eller hur placeringen påverkar de 14 lektionspassen. Placeringen återkommer bara i ”likadant placerade givare”. Läsaren får alltså en tolkningsnyckel som texten aldrig använder och kan inte avgöra om det är en svaghet att nyttja samma placering i november. Texten saknar uppgifter att laga det med. Skribenten behöver därför antingen lägga till var givarna satt, eller själv avgöra om placeringsspåret ska bort.
+
+**Artikelns uppbyggnad:** alla räknade gränser håller enligt mätskriptet. Jag har också gått igenom de krav som skriptet inte räknar, och de håller med två undantag:
+- rubriken upprepar fortfarande ingressen (fynd 1)
+- avslutningen visar inte att förväntan om placeringen har infriats (fynd 2).
+
+## Påståenden
+
+- **Ändrat:** rubriken. Den sade tidigare att *mätförsöket* visar när, men inte varför. Nu säger den att *Björkskolans givare* visar när luften var kall, men inte orsaken. Grunden för ”när luften var kall” finns i brödtextens ”Ett lågt värde säger alltså när luften var kall”. Begränsningen om orsaken finns kvar. Ändringen gjordes för att åtgärda fynd 1.
+
+Utöver rubriken ovan har inga påståenden tagits bort, ändrats eller lagts till.
+
+Utöver rubriken är texten oförändrad. Den avslutande korrekturläsningen hittade inga stavnings-, grammatik- eller skiljeteckenfel att rätta.

@@ -1,0 +1,49 @@
+Jag granskade texten mot kontraktet för genren opinion. Ingressen påstod att en bokningsväg skulle stängas efter försöket, fast artikeln lämnar det öppet. En bisats i ingressen är ändrad, och inga anmärkningar återstår. `input.md` är orörd, och körningen lämnar inga filer efter sig.
+
+**Inställningar:** genre `opinion` och språk `sv` kom från anropet. Ingen teknik används, eftersom genren opinion själv anger att den inte skrivs med någon särskild teknik. Texten har ingen `kntnt`-metadata och ingen läsordning angavs.
+
+```markdown
+# Avskaffa inte telefonbokningen på ett antagande
+
+**I september kan telefonbokningen av Lerviks föreningslokaler försvinna. Beslutet ska vila på åtta veckors siffror från två lokaler, och de siffrorna räknar bokningar, inte personer. Här är skälen att pröva båda bokningsvägarna ett halvår till innan det avgörs om någon av dem ska stängas.**
+
+Text: Sanna Ek, Öppna beslut
+
+Kommunstyrelsen i Lervik bör skjuta upp bytet till enbart digital bokning av föreningslokaler, ett byte som kan ske i september. Pröva först båda bokningsvägarna i alla sju lokaler under ett halvår och mät vad de kräver. Ett permanent beslut behöver bättre underlag än det som nu ligger på bordet.
+
+## Bokningar är inte samma sak som personer
+
+Kommunens pilotrapport från den 8 april 2026 räknar 96 webbokningar och 24 telefonbokningar under åtta veckor i två lokaler. Den säger inte hur många personer som bokade eller varför de valde telefonen. Siffrorna visar varken hur många som saknar digital vana eller hur många som skulle klara sig utan telefonbokning.
+
+En bokning är en händelse, inte en invånare. Den skillnaden avgör vad siffrorna kan användas till.
+
+## Mät också arbetet med två kanaler
+
+Förvaltningen vill slippa dubbel administration. Det är en relevant invändning. Men handlingarna innehåller ingen mätning av tidsåtgången. Att behålla två kanaler kostar arbete, och hur mycket behöver vägas mot vad användarna får.
+
+## Besluta om försöket, inte om antagandet
+
+Kommunstyrelsen bör därför säga ja till halvåret med båda bokningsvägarna, ta ställning till dess ännu okända kostnad och ge förvaltningen i uppdrag att mäta tidsåtgången samt fråga användarna varför de väljer sin bokningsväg. Först då går det att väga alternativen.
+
+Ett antagande blir inte ett beslutsunderlag för att kalendern säger september.
+```
+
+**Anmärkning (åtgärdad):**
+- **Var:** ingressen, sista meningen. Den löd tidigare ”… innan den ena stängs.”
+- **Felet:** bisatsen tog för givet att en av bokningsvägarna ska stängas efter försöket. Därmed sa ingressen mer än brödtexten, som lämnar utfallet öppet: ”Ett permanent beslut behöver bättre underlag …” och ”Först då går det att väga alternativen.”
+- **Vad läsaren förlorade:** den som bara läste ingressen kunde tro att skribenten redan godtar en stängning och bara vill skjuta upp den.
+
+**Påståenden:**
+- **Ändrat påstående:** ingressen påstår nu att beslutet om att stänga en bokningsväg ska fattas efter försöket. Om någon av dem stängs är en öppen fråga. Ändringen gjordes av den enda åtgärdsomgången och svarar på anmärkningen ovan.
+- **Borttagna påståenden:** inga.
+- **Tillagda påståenden:** inga.
+- Utöver det ändrade påståendet i ingressen står alla påståenden i texten kvar oförändrade.
+
+**Artikelns uppbyggnad:** texten följer artikelmallen utan avvikelser. Skriptet mätte alla räknade gränser: rubriken är 47 tecken och ingressen 44 ord. Resten granskade jag genom läsning:
+- Ingressen fungerar på egen hand.
+- Inledningsstycket upprepar inte ingressen.
+- Brödtexten går att förstå utan ingressen.
+- Mellanrubrikerna beskriver sina avsnitt.
+- Sista avsnittet är ett avslut som uppmanar kommunstyrelsen att handla.
+
+**Vad körningen ändrade:** texten skiljer sig från originalet bara i ingressens sista bisats, som redovisas ovan. Språkgranskningen hittade inga stavnings-, grammatik- eller skiljeteckenfel och ändrade ingenting.
