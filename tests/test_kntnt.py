@@ -8725,6 +8725,7 @@ PRESS_RELEASE_STATEMENTS = (
     ),
     "Where the material carries none, the release has no quotation",
     "The body is one or two short paragraphs.",
+    "Nothing stands below the release as notes to the editor",
     (
         "their name, their title, a telephone number and an email address, as far"
         " as the material gives them"
@@ -8774,6 +8775,14 @@ def test_the_press_release_states_its_shape_and_limits_where_the_writer_reads() 
     assert DIMENSION.findall(review) == [], (
         f"{PRESS_RELEASE_REVIEW}: restates a limit the base half states, one"
         f" requirement in two files (ADR-0178). See {STANDARD}."
+    )
+    assert (
+        "notes to the editor"
+        in review.split("## The shape", 1)[1].split("**Failure.**", 1)[0]
+    ), (
+        f"{PRESS_RELEASE_REVIEW}: the shape's test does not name a block of"
+        f" notes to the editor as a part out of the sequence, so a review reads"
+        f" it as the background (issue #473). See {STANDARD}."
     )
     assert "no finding under the headline guidance" in review, (
         f"{PRESS_RELEASE_REVIEW}: does not say that a summary restating the"
