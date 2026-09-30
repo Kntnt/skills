@@ -1,0 +1,40 @@
+Granskningen hittade två brister, båda i rubriken, och ingen av dem är åtgärdad. Rättningsrundan jag lät göra infördes ett nytt fel, så jag förkastade den. Texten nedan är densamma som `input.md`: korrekturläsningen hittade inga fel att rätta, och inga filer har skrivits.
+
+```markdown
+# Mätförsöket i Björkskolan visar när, inte varför
+
+**Under 14 av 120 lektionspass registrerade givarna i Björkskolan temperaturer under fastighetskontorets egen arbetsgräns. Fyra veckors mätningar pekar ut tillfällen att undersöka närmare, men förklarar inte varför luften var kall. Här är vad ett kort försök kan säga, och vad som behövs för att komma vidare.**
+
+Text: Hedda Lund
+
+En temperaturgivare mäter luften där den sitter. Det gör placeringen viktig när fastighetskontoret ska tolka fyra veckors mätningar i Björkskolans sex klassrum. Genomgången nedan visar vad värdena räcker till och var gränsen går.
+
+## En gräns för det lokala försöket
+
+Kontoret valde 20 grader Celsius som arbetsgräns. Rapporten *Mätförsök i Björkskolan*, daterad 12 mars 2026, räknar 14 lektionspass av 120 med minst en mätning under den gränsen. Hur länge temperaturen låg under den anger rapporten inte. Gränsen är kontorets egen, vald för det här försöket.
+
+Givarna mätte varken luftdrag eller elevernas upplevelse. Ett lågt värde säger alltså när luften var kall, men inte hur rummet kändes.
+
+Driftteknikern Elin Rask sammanfattar: ”Vi vet när vi behöver titta närmare. Vi vet ännu inte varför det blev kallt just då.”
+
+## Nästa försök behöver mer än givare
+
+Rask rekommenderar att temperaturserierna kopplas till rummens användningstider innan styrningen ändras. Nästa försök planeras för november med likadant placerade givare, men finansieringen är inte beslutad.
+
+Lägg därför tiderna för när rummen används bredvid mätvärdena innan nästa givare sätts upp.
+```
+
+**Inställningar:** genre `article` (angiven i anropet) och språk `sv` (svenska, angivet i anropet). Ingen teknik används: genren article anger ingen, och ingen annan valde någon.
+
+**Artikelns anatomi:** alla räknade gränser håller (skriptet avslutades med kod 0). Rubriken har 48 tecken och 7 ord, ingressen 46 ord och ett stycke. Inget stycke har fler än 45 ord, och båda avsnitten har två eller tre stycken. Jag har också läst de krav som inte räknas: ingressen står på egen hand, ingress och inledning upprepar inte varandra, brödtexten fungerar utan ingressen, mellanrubrikerna beskriver sina avsnitt, och sista avsnittet avslutar texten med en uppmaning som följer av innehållet. De kraven håller. Undantaget är kravet att rubriken skrivs enligt rubrikreglerna, och där finns två brister.
+
+**Anmärkningar som står kvar:**
+
+1. **Rubriken förstås inte på egen hand.** ”Mätförsöket i Björkskolan visar när, inte varför” säger inte när *vad*. Den nämner varken temperatur, kyla, luft eller klassrum. Den som bara ser rubriken kan inte avgöra vad försöket mätte eller vad texten handlar om förrän ingressen har förklarat det.
+2. **Rubriken och ingressen säger samma sak.** Ingressens andra mening, ”… men förklarar inte varför luften var kall”, upprepar rubrikens kontrast mellan när och varför, delvis med samma ord (”inte varför”). Läsaren får samma budskap två gånger i stället för att ingressen bygger vidare på rubriken.
+
+**Förkastad rättningsrunda:** en runda försökte åtgärda båda bristerna. Den skrev om rubriken till ”Björkskolans temperaturer bör ställas mot användningstiderna”. Den nya rubriken säger inte längre textens vinkel, alltså att mätningarna visar när men inte varför. I stället gör den textens avslutande rekommendation till huvudbudskapet, och den som klickar på rubriken väntar sig en artikel som argumenterar för just den rekommendationen. Rundan förkastades och originaltexten återställdes oförändrad, så den nya rubriken finns inte i texten ovan. Rättningsbudgeten var en runda och är förbrukad.
+
+Någon behöver avgöra vad som ska gälla för rubriken: den bör säga vad som mättes och behålla vinkeln när/inte varför, men med andra ord än ingressen. Det går också att bedöma överlappningen som godtagbar.
+
+**Påståenden:** jämfört med texten du skickade in har inget påstående tagits bort, ändrats eller lagts till. Den förkastade rundan försökte ändra rubrikens påstående, men den ändringen finns inte i texten ovan.

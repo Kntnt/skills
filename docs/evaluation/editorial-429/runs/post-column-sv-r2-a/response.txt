@@ -1,0 +1,48 @@
+Konfiguration: genren är `column`, tekniken är `none` och språket är `sv`. Alla tre värdena kommer från textens `kntnt`-karta. Någon teknik tillämpades alltså inte, och genren `column` anger heller ingen. Ingen skrivbrief användes. Granskningen fick göra en korrigering, och den är förbrukad.
+
+```markdown
+---
+kntnt:
+  genre: column
+  technique: none
+  language: sv
+---
+
+# Mötesmallen saknar en ruta för syftet
+
+Av Nora Vik
+
+Jag granskar bibliotekets mötesmall. Där finns rutor för starttid, sluttid, deltagare och dagordning. Någon ruta för det beslut vi ska kunna fatta när vi går därifrån finns inte. Det här är en iakttagelse av ett dokument, inte en scen från ett visst möte. Mallen vill veta när vi ses och vilka som kommer. Vad tiden ska leda till frågar den inte om.
+
+En dagordning räknar upp vad vi ska tala om. Den säger inte varför vi behöver göra det tillsammans.
+
+Missförstå mig rätt: jag uppskattar möten där kolleger upptäcker att de har förstått en fråga olika. Den upptäckten kan vara viktigare än att vi snabbt enas. Det som retar mig är något annat – att tid i kalendern så lätt behandlas som ett resultat i sig. Timmen är bokad, alltså har något hänt. Det är min reflektion, inte något jag har mätt hos andra.
+
+Min tanke är inte att varje samtal ska pressas till ett beslut. Samtal kan skapa förtroende, och de kan få fram en fråga vi inte visste att vi behövde ställa. Men den som fyller i en mall borde få formulera varför vi behöver just varandras tid, också när syftet är att undersöka något tillsammans.
+
+Sedan kommer invändningen, och den är min egen. Jag vet inte om ytterligare en ruta gör möten bättre. Det finns en komik i att försöka lösa ett problem med formulär genom att utöka formuläret, och komiken blir inte mindre av att förslaget kommer från mig.
+
+Ändå vill jag prova en enkel fråga bredvid tiden: vad behöver vi förstå tillsammans? Jag vet inte om den överlever mötet med en verklig dagordning, och jag tänker inte låtsas att jag gör det. Hoppet om frågan och tvivlet på ännu en ruta får samsas ett tag till.
+```
+
+## Fynd
+
+**1. Rubriken – åtgärdad.** Den tidigare rubriken var ”Rutan som inte finns”. Den som bara ser rubriken kan inte avgöra att texten handlar om en mötesmall, eller ens om möten, och vet därför inte om texten är något för dem. ”Rutan” får sin mening först i första stycket. Rubriken har skrivits om och lyder nu ”Mötesmallen saknar en ruta för syftet” (37 tecken, 6 ord). Ingen annan del av texten ändrades för detta fynd.
+
+**2. Ingress saknas – olöst.** Texten går direkt från rubrik till byline och brödtext. Artikelanatomin kräver ett fristående, sammanfattande stycke på högst 60 ord mellan rubrik och byline. Utan ingress får en läsare i en lista eller ett flöde inget som säger vad krönikan handlar om och vad läsaren får ut av den. Ingressen har inte skrivits, eftersom det är en person som ska avgöra vad den ska säga.
+
+**3. Mellanrubriker, avsnitt och ett avslutande avsnitt saknas – olöst.** Texten har inga avsnitt. Därför räknas alla sex styckena, 290 ord, som inledning, och det beror enbart på att avsnitten saknas. Den som skummar texten har inga rubriker att orientera sig efter. Avslutningen ska dessutom vara ett eget avsnitt med egen mellanrubrik. Inga avsnitt eller mellanrubriker har skrivits.
+
+Sista stycket fungerar som avslutning, och det har granskats. Det knyter an till den förväntan inledningen väcker och ger läsaren en konkret fråga att pröva: ”vad behöver vi förstå tillsammans?” Samtidigt behåller det författarens öppet uttalade tvivel. Det lämnades därför orört.
+
+Texten uppfyller alltså inte artikelanatomin. Rubriken klarar gränserna, och bylinen finns och står på rätt plats. Om rubriken upprepar ingressen kan inte bedömas förrän ingressen är skriven.
+
+## Påståendena
+
+**Ändrat påstående (rubriken, fynd 1):** Den gamla rubriken sa bara att en viss ruta inte finns. Den nya säger att mötesmallen saknar en ruta för mötets syfte. I brödtexten gäller det bibliotekets mall. Där beskrivs den saknade rutan som en ruta för ”det beslut vi ska kunna fatta när vi går därifrån”, och mallen sägs inte fråga ”vad tiden ska leda till”. Rubriken sammanfattar detta med ordet ”syftet”, som texten själv använder i fjärde stycket. Rubriken säger nu också vad rutan skulle vara till för, vilket den gamla inte gjorde.
+
+Utöver ändringen ovan har inget påstående strukits, ändrats eller lagts till. De avgränsande meningarna står kvar som de var: ”Det här är en iakttagelse av ett dokument, inte en scen från ett visst möte” och ”Det är min reflektion, inte något jag har mätt hos andra”.
+
+Jämfört med originalet har körningen gjort två ändringar. Rubriken har skrivits om enligt fynd 1. Dessutom har korrekturläsningen på slutet gjort en mekanisk rättelse: det engelska tankstrecket (—) i tredje stycket har ersatts med ett svenskt tankstreck (–) med mellanslag. I övrigt är texten tecken för tecken densamma.
+
+Inga filer har skrivits. `input.md` är orörd, och de tillfälliga arbetsfilerna är borttagna.

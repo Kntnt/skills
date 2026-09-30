@@ -1,0 +1,53 @@
+Granskningen är klar. Texten fick en korrigeringsrunda och har gått igenom korrekturläsningen, och här levereras den.
+
+**Inställningar:** genre `article` och språk `sv`, båda från anropet. Ingen teknik används, eftersom genren `article` inte anger någon. Ingen brief valdes, och texten saknar `kntnt`-karta. Korrigeringsbudgeten (1) är förbrukad. Korrekturläsningen gjorde inga ändringar.
+
+```markdown
+# Mätförsök i Björkskolan gav värden under 20 grader
+
+**En rapport från fastighetskontoret redovisar fyra veckors mätningar av lufttemperaturen i Björkskolan. Läs vad mätningarna visade, vad som inte mättes och vad driftteknikern Elin Rask rekommenderar innan styrningen ändras.**
+
+Givarna i ett mätförsök i Björkskolan registrerade temperaturer under 20 grader i sex klassrum. Fastighetskontorets rapport *Mätförsök i Björkskolan* från den 12 mars 2026 anger att 14 av 120 lektionspass hade minst ett värde under kontorets egen arbetsgräns på 20 grader, vilket inte är en lagregel. Rapporten anger också att försöket varade fyra veckor. Två givare stod vid ytterväggar och fyra vid innerväggar, utan att placeringens effekt jämfördes experimentellt.
+
+Operativ temperatur är ett mått på lufttemperatur och värmestrålning från omgivande ytor. Resonemanget bygger på operativ temperatur, men den saknas. Givarna mätte bara luften där de satt. Det saknas mätningar av luftdrag och elevernas upplevelse och uppgifter om hur länge temperaturerna låg under gränsen. Ingen effekt på hälsan har undersökts.
+
+Driftteknikern Elin Rask rekommenderar att koppla temperaturserier till användningstider innan styrningen ändras, och nästa försök är tänkt att använda likadant placerade givare i november, fast finansieringen inte är beslutad.
+
+Kontakta oss.
+```
+
+## Olösta fynd
+
+1. **Byline och avsnitt saknas.** Texten har ingen byline, och ingen författare namnges någonstans. Den har inga mellanrubriker och därmed inga avsnitt och inget eget avslutande avsnitt. Delarna är inte skrivna, eftersom det är en person som avgör vad de ska innehålla. Mätskriptet räknar nu inledningen som fyra stycken (150 ord). Det beror bara på att avsnitten saknas och är alltså samma fynd.
+2. **"Resonemanget" har ingen referent.** Texten säger inte vems resonemang som bygger på operativ temperatur. Läsaren vet inte vem som gör antagandet, och det går inte att avgöra ur texten.
+3. **Uppmaningen "Kontakta oss." är obestämd.** Texten säger inte vilka "oss" är eller vad kontakten gäller, så läsaren vet inte vem den ska vända sig till eller varför. Den uppskruvade delen är borttagen, men resten kan inte repareras utan uppgifter som texten saknar.
+
+Texten uppfyller inte artikelns anatomi, eftersom byline, avsnitt och avslutande avsnitt saknas. Två av anatomins olästa krav har inte prövats som egna frågor: att inledningen skapar en tydlig förväntan och att avslutningen visar att den har infriats.
+
+## Reparerade rubrikdelar
+
+- **Rubriken.** Den påstod en räddning från en katastrof, något texten inte belägger, och tonen var högre än textens. Nu påstår den bara att mätförsöket i Björkskolan gav värden under 20 grader (50 tecken, 8 ord).
+- **Ingressen.** Samma mening stod två gånger ordagrant. Ingressen var inte självbärande, sa inte vad läsaren får ut av texten och upprepade inledningens första mening. Nu säger den att en rapport från fastighetskontoret redovisar fyra veckors mätningar av lufttemperaturen i Björkskolan, och vad läsaren får veta. Den säger inte längre att temperaturen understeg 20 grader i sex klassrum. Den uppgiften finns kvar i brödtexten.
+
+## Påståenden
+
+**Borttagna:**
+- Att katastrofen lurade bakom varje hörn. Påståendet saknade stöd och var tillverkad dramatik.
+- Att det är helt säkert att givarna har gjort eleverna friskare. Texten själv säger att ingen hälsoeffekt har undersökts. Gränsen "Ingen effekt på hälsan har undersökts" och uppräkningen av det som inte mättes står kvar i sin helhet.
+- Att detta är mycket viktigt för alla som tycker att temperatur är viktigt. Meningen var tom utfyllnad.
+- Att en kontakt räddar framtiden ("för att rädda framtiden"). Påståendet saknade stöd och gjorde tonen uppskruvad.
+
+**Ändrade:**
+- Rubriken påstår nu att mätförsöket i Björkskolan gav värden under 20 grader, i stället för att givarna räddar skolan från en katastrof. Ändringen åtgärdar rubriken som påstod mer än texten.
+- Inledningens första mening knyter nu givarna till "ett mätförsök i Björkskolan". Ändringen ger ett syftningsfel i brödtexten en referent.
+- Uppgiften om givarnas placering står nu som textens egen utsaga. I originalet kunde den läsas som en del av det rapporten anger. Ändringen kom när den överlastade meningen delades.
+
+**Tillagt:**
+- Ingressen påstår att rapporten redovisar fyra veckors mätningar av *lufttemperaturen*. Uppgiften är härledd ur rapportens uppgifter, försökets längd och att givarna bara mätte luften. Den kom till när ingressen reparerades.
+
+**Borttagna bindeord:**
+- "medan" band ihop försökets längd med givarnas placering. Det sambandet fanns inte i texten.
+- "trots att" försvann med det säkra hälsopåståendet.
+- "medan" före "givarna bara mätte luften där de satt" är ersatt av en egen mening. Läsaren får inte längre kontrasten uttryckt med ett ord, men meningen står direkt efter uppgiften att den operativa temperaturen saknas.
+
+Utöver påståendena ovan gjordes följande: den dubblerade meningen i ingressen och upprepningen mellan ingress och inledning är borttagna, och likaså mönstren för tillverkad dramatik och tom betoning ("Det är viktigt att notera att"). Överlastade meningar är delade, och begreppet operativ temperatur förklaras nu innan det används. Det långa inledningsstycket är uppdelat i fyra stycken. Rubrik och ingress är omskrivna. Korrekturläsningen gjorde inga ändringar. Inga filer skrevs, och de tillfälliga filerna är borttagna.

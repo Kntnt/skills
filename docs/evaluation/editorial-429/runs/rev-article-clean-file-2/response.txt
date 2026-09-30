@@ -1,0 +1,17 @@
+Jag har skrivit den granskade texten till `output.md`. Originalfilen `input.md` är orörd.
+
+**Inställningar:** genren är `article` och språket `sv`, båda från anropet. Ingen teknik används, eftersom genren `article` inte anger någon. Texten saknar egen Kntnt-metadata, så ingen har lagts till.
+
+**Fynd**
+
+1. **Ingressen, tredje meningen (åtgärdat).** Där stod ”Här är vad ett kort försök kan säga”. Texten ger inget stöd för att fyra veckors mätningar är ett *kort* försök: ingen jämförelse, inget mål och ingen talares bedömning. Ordet antydde också att försökets längd är det som begränsar slutsatserna. Brödtexten lägger begränsningen någon annanstans, i vad givarna mätte och inte mätte. Meningen lyder nu ”Här är vad mätningarna kan säga, och vad som behövs för att komma vidare.”
+
+Inga fynd återstår. Den nya granskningen efter rättningen hittade inga nya fel. Rubriken, mellanrubrikerna, bylinen, inledningen och slutet har inte ändrats. Texten följer artikelanatomin utan avvikelse. Skriptet mätte alla räknade gränser. Resten granskade jag genom läsning: att ingressen står på egen hand, att inledningen går vidare efter ingressen, att brödtexten går att läsa utan ingressen, att mellanrubrikerna beskriver sina avsnitt och att sista avsnittet är ett slut med en uppmaning.
+
+**Påståenden**
+
+- **Ändrat:** ingressens tredje mening påstår inte längre att försöket är kort. Nu säger den bara att texten visar vad fyra veckors mätningar kan säga. Ändringen hör till fynd 1.
+- **Borttaget:** inget. De avgränsande meningarna står kvar ordagrant, till exempel ”Hur länge temperaturen låg under den anger rapporten inte” och ”Gränsen är kontorets egen, vald för det här försöket”. Detsamma gäller sambandsordet ”därför” i slutet.
+- **Tillagt:** inget.
+
+Utöver ändringen i ingressen har inget ändrats. Korrekturläsningen hittade inga mekaniska fel att rätta.

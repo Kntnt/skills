@@ -1,0 +1,37 @@
+Jag skrev texten till `output.md`. Den är identisk med `input.md`, eftersom den enda korrigeringsrundan underkändes och korrekturläsningen inte fann några mekaniska fel. Alla tre anmärkningarna nedan är därför olösta.
+
+**Inställningar:** genre `article` och språk `sv`, båda från anropet. Ingen teknik används, eftersom genren `article` anger att den normalt skrivs utan teknik. Texten saknar `kntnt`-metadata och har inte fått någon.
+
+**Artikelanatomin:** alla räknade krav uppfylls. Rubriken har 48 tecken och 7 ord, ingressen 46 ord i ett stycke, och alla styckelängder och avsnitt håller sig inom gränserna. Jag har också läst de krav som inte räknas: att ingressen står på egen hand, att ingressen och inledningen inte upprepar varandra, att bylinen står rätt och att sista avsnittet är en avslutning. De uppfylls. Texten följer ändå inte anatomin fullt ut, eftersom den första mellanrubriken inte beskriver sitt avsnitt (anmärkning 2).
+
+## Olösta anmärkningar
+
+1. **Rubriken ”Mätförsöket i Björkskolan visar när, inte varför”.**
+   - **Otydlig:** ”visar när, inte varför” säger inte *när vad*. Läsaren måste läsa ingressen för att förstå rubriken.
+   - **Upprepar ingressen:** rubriken säger samma sak som ingressens andra mening (”pekar ut tillfällen att undersöka närmare, men förklarar inte varför luften var kall”), delvis med samma ord (”inte varför”).
+   - **Vad läsaren förlorar:** en rubrik som ensam säger vad försöket visade, och en ingress som tillför något nytt.
+
+2. **Mellanrubriken ”En gräns för det lokala försöket”.**
+   - **Täcker bara första stycket:** den beskriver kontorets arbetsgräns. Avsnittet redovisar också att givarna inte mätte luftdrag eller elevernas upplevelse, vad ett lågt värde därför inte säger, och Elin Rasks sammanfattning.
+   - **Vad läsaren förlorar:** den som skummar får inte veta att avsnittet handlar om vad mätningarna visar och inte visar.
+   - **Att tänka på:** en ny mellanrubrik får inte föregripa Rasks citat.
+
+3. **Ingressens ”Här är vad ett kort försök kan säga”.**
+   - **Ogrundad värdering:** ”kort” saknar stöd i texten. Texten anger bara fyra veckor och jämför inte med något.
+   - **Fel förklaring:** brödtexten förklarar försökets begränsningar med vad som mättes och inte mättes, inte med hur länge det pågick.
+   - **Vad läsaren förlorar:** ingressen antyder att försöket var för kort, något texten inte bär.
+
+## Underkänd korrigeringsrunda
+
+En korrigeringsrunda gjordes och underkändes. Den ändrade tre saker:
+- Rubriken blev ”Björkskolans mätningar visar när luften understeg 20 grader”.
+- Mellanrubriken blev ”Temperaturgränsen och det givarna inte fångade”.
+- ”ett kort försök” blev ”försöket”.
+
+Den nya rubriken tog bort förbehållet att mätningarna inte förklarar varför luften var kall. Därmed saknade rubriken textens kärnbudskap, som den gamla rubriken bar. Förbehållet stod kvar i ingressen och i citatet, men rubriken påstod nu bara vad mätningarna klarar av. Det var ett fel som rundan själv skapade. Därför kastades hela rundan, även de två andra ändringarna, och den ursprungliga texten återställdes. Ingen ny runda gjordes, eftersom korrigeringsbudgeten var förbrukad.
+
+Rundans försök att ta bort påståendet ”inte varför” ur rubriken redovisas här som ett försök. Det finns inte i den levererade texten.
+
+## Påståendena
+
+Den levererade texten är identisk med den mottagna. Inget påstående har tagits bort, ändrats eller lagts till.

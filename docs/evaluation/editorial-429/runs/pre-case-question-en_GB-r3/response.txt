@@ -1,0 +1,63 @@
+I reviewed `input.md` as a case study in British English. It found six problems, and all six are still in the text below. The one correction round I was allowed fixed five of them, but I rejected it because its new first subheading was itself a defect. So apart from one metadata value, the text comes back as you sent it.
+
+**Settings used.** Case study and `en_GB` came from your command. No technique was applied: the text's own metadata says `technique: none`, so its genre wasn't asked for one (and case study doesn't name one anyway). The metadata's `genre: case-study` isn't an installed genre name. Your command overrode it, and I changed that value to `casestudy`.
+
+**Article structure.** The measuring script found every counted limit met: word and character counts, paragraphs per section, subheading lengths. Reading the rest myself, the text doesn't meet the article structure yet: the standfirst doesn't stand on its own (finding 1), and the ending has no call to action (finding 6).
+
+## Findings (all unresolved)
+
+1. **Standfirst isn't self-contained.** "What had to be settled first was what the statuses meant — and the backlog was still waiting on that." Only the body explains "the statuses" and "the backlog". Someone reading just the standfirst could take "the backlog was still waiting" to mean repairs were held up. The text actually says that adding the existing backlog to the schedule was put off until the status definitions had been reviewed.
+2. **The body never says what the schedule replaced.** "Jobs split across separate paper sheets" appears only in the standfirst. A reader who skips the standfirst never learns how the workshop worked before. That also means the reason for choosing the product in the lead (telling jobs awaiting parts from jobs ready for work) has no problem behind it.
+3. **Subheading 1 is vague and repeats what's under it.** In "The team agreed the terms before Benchline configured them", "the terms" reads most naturally as contract terms. The heading also restates the section's first two sentences, and "agreed" gives away Vale's quotation ("We had to agree…") before the reader reaches it.
+4. **Subheading 2 refers to something not yet introduced.** "Neither document measures repair speed" comes before the reader has met any documents, so it only makes sense after reading the section. Any fix must keep the whole limit it states.
+5. **Subheading 3 gives away the quotation under it.** "Vale would allow an extra week for the status names" states Vale's concession before her own words do.
+6. **The ending has no call to action.** The last section works as an ending but asks the reader to do nothing. The text contains no offer, link or contact route to build one from, so you'll need to supply it.
+
+## The rejected correction round
+
+A correction round was tried and rejected, which used up the budget of one. Its rewrite of subheading 1, "The workshop manager on setting up the schedule", created a defect of its own:
+- It has no verb, and the headline rules ask for a full clause.
+- It presents the whole section as the manager's account, when its first paragraph is the writer's narrative.
+
+The rest of that round was thrown out with it: its fixes to the standfirst, the lead and subheadings 2 and 3. Nothing it wrote is in the text below. Getting subheading 1 right is the thing for you to settle; after that, the other five fixes can be made again.
+
+## What happened to the claims
+
+In the rejected round, the subheading 1 rewrite dropped the heading's claim that the team agreed its setup before Benchline configured it. The rewrite of subheading 3 dropped Vale's extra-week concession from the heading. Both claims stay in the text: the first in the section's opening sentences, the second in Vale's quotation. The round's standfirst rewrite would have changed that claim to say the backlog was postponed until the definitions were reviewed. None of this is in the delivered text, which has no removed, changed or added claims.
+
+The only difference from the text you sent is the metadata value `genre`, changed from `case-study` to `casestudy`. The proofread pass found nothing to correct.
+
+I deleted every temporary file. One empty temporary folder is left, `scratch/tmp/tmp.YT1tws7YHd`, because the harness blocked its removal as the session's working directory. It holds no copy of the text.
+
+```markdown
+---
+kntnt:
+  genre: casestudy
+  technique: none
+  language: en_GB
+---
+
+# Fenwick keeps its shared schedule for new jobs
+
+Jobs split across separate paper sheets went onto one shared bench schedule at Fenwick Instrument Repairs, in a six-week trial with the supplier Benchline. What had to be settled first was what the statuses meant — and the backlog was still waiting on that.
+
+By Thomas Barregren
+
+Fenwick Instrument Repairs services brass and woodwind instruments. In January 2026 its team began a six-week trial of a shared bench schedule from Benchline, a scheduling software supplier, chosen after checking that it could distinguish jobs awaiting parts from jobs ready for work.
+
+## The team agreed the terms before Benchline configured them
+
+The workshop defined the statuses itself and decided who would update them. Benchline configured those choices and trained four staff in one online session. Collection arrangements stayed on the telephone.
+
+Benchline's case writer asked workshop manager Priya Vale by email what the team had to settle before the schedule was useful. Vale answered: ‘We had to agree what ready for work meant. A part being in the building did not always mean that it had reached the right bench.’
+
+## Neither document measures repair speed
+
+A workshop summary dated 23 February 2026 records 38 jobs entered in the schedule, and says staff could see which instruments were waiting for parts.
+
+It does not measure repair duration, revenue or customer satisfaction. The summary and the interview carry the team's reported experience, not a measured improvement in repair speed.
+
+## Vale would allow an extra week for the status names
+
+The manager approved continued use for new jobs, and postponed adding the backlog until the team had reviewed its status definitions. Asked whether the choice would be made again, and what would change, Vale answered: ‘I would use it again for new jobs. I would allow another week to check the status names before adding the backlog.’
+```

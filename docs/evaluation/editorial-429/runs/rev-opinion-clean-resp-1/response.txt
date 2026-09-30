@@ -1,0 +1,49 @@
+Jag granskade och rättade `input.md`. Ett problem hittades och är åtgärdat. Den färdiga texten står i sin helhet nedan, och `input.md` är oförändrad.
+
+**Inställningar:** genren är `opinion` och språket `sv`, båda från anropet. Ingen teknik används, eftersom debattgenren inte anger någon.
+
+**Artikelns uppbyggnad:** texten följer genrens mall utan avvikelser. Skriptet mätte längder och antal och hittade inga fel. För hand kontrollerade jag resten av mallen:
+- Ingressen står på egen hand.
+- Ingressen för texten framåt från ingressen i fetstil (standfirst) i stället för att upprepa den.
+- Brödtexten går att läsa utan standfirsten.
+- Varje mellanrubrik beskriver sitt avsnitt.
+- Sista avsnittet är ett avslut som uppmanar kommunstyrelsen att göra något konkret.
+
+### Åtgärdat
+
+**Ingressen nämnde aldrig telefonbokningen.** Brödtextens första stycke talade om ”båda bokningsvägarna”, men telefonbokningen nämndes bara i rubriken och standfirsten. Den som läste brödtexten utan standfirsten fick inte veta vad tesen gällde förrän i första avsnittet. Ingressens första mening slutar nu med ”och som tar bort telefonbokningen”.
+
+Inga problem återstår.
+
+### Påståenden
+- **Tillagt i brödtexten:** ingressen säger nu att bytet tar bort telefonbokningen. Standfirsten sa redan samma sak (”kan telefonbokningen … försvinna”). Påståendet står nu också i brödtexten, utan att bli starkare.
+- **Borttaget:** inget.
+- **Ändrat:** inget.
+
+Rubriken och mellanrubrikerna är oförändrade. Utöver tillägget i ingressen är texten ordagrant densamma. Korrekturläsningen hittade inga stav-, grammatik- eller skiljeteckenfel att rätta.
+
+````markdown
+# Avskaffa inte telefonbokningen på ett antagande
+
+**I september kan telefonbokningen av Lerviks föreningslokaler försvinna. Beslutet ska vila på åtta veckors siffror från två lokaler, och de siffrorna räknar bokningar, inte personer. Här är skälen att pröva båda bokningsvägarna ett halvår till innan den ena stängs.**
+
+Text: Sanna Ek, Öppna beslut
+
+Kommunstyrelsen i Lervik bör skjuta upp bytet till enbart digital bokning av föreningslokaler, ett byte som kan ske i september och som tar bort telefonbokningen. Pröva först båda bokningsvägarna i alla sju lokaler under ett halvår och mät vad de kräver. Ett permanent beslut behöver bättre underlag än det som nu ligger på bordet.
+
+## Bokningar är inte samma sak som personer
+
+Kommunens pilotrapport från den 8 april 2026 räknar 96 webbokningar och 24 telefonbokningar under åtta veckor i två lokaler. Den säger inte hur många personer som bokade eller varför de valde telefonen. Siffrorna visar varken hur många som saknar digital vana eller hur många som skulle klara sig utan telefonbokning.
+
+En bokning är en händelse, inte en invånare. Den skillnaden avgör vad siffrorna kan användas till.
+
+## Mät också arbetet med två kanaler
+
+Förvaltningen vill slippa dubbel administration. Det är en relevant invändning. Men handlingarna innehåller ingen mätning av tidsåtgången. Att behålla två kanaler kostar arbete, och hur mycket behöver vägas mot vad användarna får.
+
+## Besluta om försöket, inte om antagandet
+
+Kommunstyrelsen bör därför säga ja till halvåret med båda bokningsvägarna, ta ställning till dess ännu okända kostnad och ge förvaltningen i uppdrag att mäta tidsåtgången samt fråga användarna varför de väljer sin bokningsväg. Först då går det att väga alternativen.
+
+Ett antagande blir inte ett beslutsunderlag för att kalendern säger september.
+````

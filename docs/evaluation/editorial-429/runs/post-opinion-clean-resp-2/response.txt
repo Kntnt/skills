@@ -1,0 +1,45 @@
+Jag granskade `input.md` som debattartikel (`opinion`) på svenska, och granskningen gav ett fynd. Det åtgärdades i en korrigeringsrunda, och ingen anmärkning står kvar. Någon teknik tillämpades inte, eftersom genren opinion inte anger någon. Källfilen är orörd och ingen fil skrevs. Den slutliga texten:
+
+```markdown
+# Avskaffa inte telefonbokningen på ett antagande
+
+**I september kan telefonbokningen av Lerviks föreningslokaler försvinna. Beslutet ska vila på åtta veckors siffror från två lokaler, och de siffrorna räknar bokningar, inte personer. Här är skälen att pröva båda bokningsvägarna ett halvår till innan den ena stängs.**
+
+Text: Sanna Ek, Öppna beslut
+
+Kommunstyrelsen i Lervik bör skjuta upp bytet till enbart digital bokning av föreningslokaler, ett byte som kan ske i september. Pröva först båda bokningsvägarna i alla sju lokaler under ett halvår och mät vad de kräver. Ett permanent beslut behöver bättre underlag än det som nu ligger på bordet.
+
+## Bokningar är inte samma sak som personer
+
+Kommunens pilotrapport från den 8 april 2026 räknar 96 webbokningar och 24 telefonbokningar under åtta veckor i två lokaler. Den säger inte hur många personer som bokade eller varför de valde telefonen. Siffrorna visar varken hur många som saknar digital vana eller hur många som skulle klara sig utan telefonbokning. Att avskaffa telefonbokningen på det underlaget vore att anta att den inte behövs.
+
+En bokning är en händelse, inte en invånare. Den skillnaden avgör vad siffrorna kan användas till.
+
+## Mät också arbetet med två kanaler
+
+Förvaltningen vill slippa dubbel administration. Det är en relevant invändning. Men handlingarna innehåller ingen mätning av tidsåtgången. Att behålla två kanaler kostar arbete, och hur mycket behöver vägas mot vad användarna får.
+
+## Besluta om försöket, inte om antagandet att telefonen inte behövs
+
+Kommunstyrelsen bör därför säga ja till halvåret med båda bokningsvägarna, ta ställning till dess ännu okända kostnad och ge förvaltningen i uppdrag att mäta tidsåtgången samt fråga användarna varför de väljer sin bokningsväg. Först då går det att väga alternativen.
+
+Ett antagande blir inte ett beslutsunderlag för att kalendern säger september.
+```
+
+**Fynd (åtgärdat): det oklara antagandet**
+Rubriken, sista mellanrubriken och slutraden anklagar beslutet för att vila på ”ett antagande”. Brödtexten sade aldrig vad som antogs. Mellanrubrikens bestämda form ”antagandet” syftade på något som varken brödtexten eller ingressen hade nämnt. Läsaren fick själv lista ut textens centrala anklagelse, och den som bara såg mellanrubriken kunde inte avgöra vilket antagande som avsågs. Både den nya meningen och den ändrade mellanrubriken nedan åtgärdar det här fyndet.
+
+**Påståenden som ändrats eller lagts till**
+- **Tillagt påstående:** första stycket under ”Bokningar är inte samma sak som personer” har fått en ny mening: ”Att avskaffa telefonbokningen på det underlaget vore att anta att den inte behövs.” Meningen är en slutsats av textens egen iakttagelse att siffrorna inte visar hur många som skulle klara sig utan telefonbokning. Texten sade den inte uttryckligen tidigare.
+- **Ändrat påstående (mellanrubrik):** ”Besluta om försöket, inte om antagandet” är nu ”Besluta om försöket, inte om antagandet att telefonen inte behövs”. Rubriken säger nu att kommunstyrelsen inte bör fatta beslut utifrån antagandet att telefonbokningen inte behövs. Förut angav den inte vilket antagande som avsågs.
+- Utöver dessa två har inget påstående tagits bort, ändrats eller lagts till. Alla avgränsningar står kvar, till exempel ”Den säger inte hur många personer …” och ”Siffrorna visar varken …”.
+
+**Artikelns struktur**
+Texten följer artikelanatomin utan avvikelser. Alla mätbara gränser håller enligt mätskriptet: rubriken har 47 tecken, ingressen 39 ord, det längsta stycket 63 ord och den längsta mellanrubriken 65 tecken. Jag har också läst igenom de krav som inte kan mätas:
+- Ingressen fungerar på egen hand.
+- Inledningen för resonemanget framåt.
+- Varje mellanrubrik beskriver sitt avsnitt.
+- Sista avsnittet är ett avslut som säger att kommunstyrelsen ska agera.
+
+**Vad som ändrades i övrigt**
+Utöver det som redovisas ovan har ingenting i texten ändrats. En mellanrubrik förtydligades och en mening lades till i brödtexten för att ge antagandet ett innehåll. Inga AI-typiska formuleringar behövde strykas. Korrekturläsningen hittade inga fel att rätta.

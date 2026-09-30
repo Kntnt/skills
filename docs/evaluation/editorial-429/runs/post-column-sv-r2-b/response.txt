@@ -1,0 +1,47 @@
+Granskning klar. Konfigurationen kommer från textens egen `kntnt`-karta: genre `column`, teknik `none` och språk `sv` (svenska). Kartan anger alltså uttryckligen att ingen teknik används, så genren valde ingen åt texten. Ingen brief användes, och kartan behövde inte ändras. En korrigeringsrunda användes, vilket var hela budgeten. Den reparerade rubriken och granskades om, och ingen ny defekt hittades.
+
+````markdown
+---
+kntnt:
+  genre: column
+  technique: none
+  language: sv
+---
+
+# Bibliotekets mötesmall saknar en ruta för mötets syfte
+
+Av Nora Vik
+
+Jag granskar bibliotekets mötesmall. Där finns rutor för starttid, sluttid, deltagare och dagordning. Någon ruta för det beslut vi ska kunna fatta när vi går därifrån finns inte. Det här är en iakttagelse av ett dokument, inte en scen från ett visst möte. Mallen vill veta när vi ses och vilka som kommer. Vad tiden ska leda till frågar den inte om.
+
+En dagordning räknar upp vad vi ska tala om. Den säger inte varför vi behöver göra det tillsammans.
+
+Missförstå mig rätt: jag uppskattar möten där kolleger upptäcker att de har förstått en fråga olika. Den upptäckten kan vara viktigare än att vi snabbt enas. Det som retar mig är något annat – att tid i kalendern så lätt behandlas som ett resultat i sig. Timmen är bokad, alltså har något hänt. Det är min reflektion, inte något jag har mätt hos andra.
+
+Min tanke är inte att varje samtal ska pressas till ett beslut. Samtal kan skapa förtroende, och de kan få fram en fråga vi inte visste att vi behövde ställa. Men den som fyller i en mall borde få formulera varför vi behöver just varandras tid, också när syftet är att undersöka något tillsammans.
+
+Sedan kommer invändningen, och den är min egen. Jag vet inte om ytterligare en ruta gör möten bättre. Det finns en komik i att försöka lösa ett problem med formulär genom att utöka formuläret, och komiken blir inte mindre av att förslaget kommer från mig.
+
+Ändå vill jag prova en enkel fråga bredvid tiden: vad behöver vi förstå tillsammans? Jag vet inte om den överlever mötet med en verklig dagordning, och jag tänker inte låtsas att jag gör det. Hoppet om frågan och tvivlet på ännu en ruta får samsas ett tag till.
+````
+
+## Fynd
+
+**Åtgärdat**
+
+1. **Rubriken.** ”Rutan som inte finns” sa inte vad texten handlar om för den som bara ser rubriken. Den nämnde varken möten, mötesmallen eller att mallen frågar när och vilka men inte vad tiden ska leda till. Kolumnens rubrik ska förstås på egen hand och ange vinkeln. Den nya rubriken ”Bibliotekets mötesmall saknar en ruta för mötets syfte” har 54 tecken och 8 ord, och bildordet ”ruta” finns kvar.
+
+**Olösta.** De här delarna saknas, och granskningen skriver inte saknade delar. En person behöver fylla i dem:
+
+2. **Ingress saknas.** Texten har ingen sammanfattande ingress på högst 60 ord mellan rubrik och brödtext. Läsaren saknar en fristående väg in i texten.
+3. **Mellanrubriker och avsnitt saknas, och därmed ett avslutande avsnitt med egen mellanrubrik.** Mätskriptet räknar därför hela brödtexten som inledning, sex stycken och 290 ord. Det felet beror enbart på att avsnitten saknas. Webbläsaren saknar orienteringspunkter.
+4. **Uppmaning till handling saknas.** Slutet säger vad skribenten själv vill prova men ger inte läsaren något att prova, lägga märke till eller ompröva.
+
+Texten uppfyller alltså inte artikelanatomin.
+
+## Påståenden
+
+- **Ändrat påstående:** Rubriken, efter reparationen av fynd 1. Den hävdar nu att bibliotekets mötesmall saknar en ruta för mötets syfte. ”Syfte” är bredare än inledningens ”beslut”. Stödet finns i texten: mallen frågar inte vad tiden ska leda till, dagordningen säger inte varför vi ses, och texten vill att man ska kunna formulera ”varför vi behöver just varandras tid”.
+- Inga påståenden har tagits bort eller lagts till utöver den ändrade rubriken. Båda avgränsande meningarna står orörda: ”Det här är en iakttagelse av ett dokument …” och ”Det är min reflektion, inte något jag har mätt hos andra.”
+
+Utöver rubriken har körningen gjort en mekanisk korrigering: ett tankstreck i engelsk stil (—) har ersatts med svenskt tankstreck med mellanslag (–). I övrigt är texten oförändrad. Inget har skrivits till disk, och arbetsfilerna är borttagna.

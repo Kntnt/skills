@@ -1,0 +1,25 @@
+Jag har skrivit den granskade texten till `output.md`. `input.md` är orörd.
+
+**Inställningar:** Genre `opinion` och språk `sv` kom från anropet. Ingen teknik tillämpades, eftersom genren `opinion` anger att den inte skrivs med någon särskild teknik och ingen annan nivå valde en.
+
+**Artikelns anatomi:** Texten följer anatomin utan avvikelse. Skriptet mätte gränserna och fann inga fel. För hand granskade jag det skriptet inte räknar:
+- Ingressen står på egen hand, och inledningen för texten framåt i stället för att upprepa ingressen.
+- Mellanrubrikerna beskriver sina avsnitt.
+- Sista avsnittet är ett avslut som riktar uppmaningen till kommunstyrelsen.
+
+Varken rubriken, ingressen eller någon mellanrubrik ändrades.
+
+**Fynd (ett, åtgärdat):**
+1. Rubriken, mellanrubriken ”Besluta om försöket, inte om antagandet” och slutraden bygger på ordet ”antagande”, men texten sa aldrig vilket antagande som avses. Läsaren fick gissa om det gällde vad bokningssiffrorna visar eller vad två bokningsvägar kostar i arbete. Det åtgärdades med ett nytt stycke först i sista avsnittet som säger vad antagandet är. Den bestämda formen ”antagandet” har nu något att syfta på. Inga fynd återstår.
+
+**Påståenden:**
+- **Borttagna:** inga.
+- **Ändrade:** inga.
+- **Tillagt**, genom åtgärden av fynd 1: ”Att avskaffa telefonbokningen i september skulle vila på ett antagande som underlaget inte belägger: att de som bokar per telefon klarar sig utan den och att två bokningsvägar kostar mer i arbete än de ger användarna.”
+  - Stycket är en slutsats dragen ur två saker texten redan sa: att siffrorna inte visar hur många som skulle klara sig utan telefonbokning, och att tidsåtgången inte är mätt.
+  - Texten påstår nu dessutom att beslutet skulle vila på båda premisserna samtidigt. Det sa den inte tidigare.
+  - Ingen person eller instans sägs hålla antagandet.
+
+Utöver detta påstående är inget påstående borttaget, ändrat eller tillagt. De meningar som anger vad siffrorna inte visar och att tidsåtgången inte är mätt står ordagrant kvar.
+
+Utöver redovisningen av påståendena består ändringen av ett tillagt stycke i det avslutande avsnittet. Det gör att det avsnittet nu har tre stycken. Den avslutande korrekturläsningen hittade inga fel att rätta, och resten av texten är oförändrad tecken för tecken.

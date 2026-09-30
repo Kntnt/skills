@@ -1,0 +1,47 @@
+**Upplösning:** genre `column` och språk `sv` kom från anropet. Ingen teknik används, eftersom kolumngenren inte anger någon. Ingen brief valdes. Texten hade ingen `kntnt`-karta och fick ingen. Rättelsebudgeten var 1 och gick åt till en omgång.
+
+````markdown
+# Mötesmallen rymmer klockslag men inte förståelse
+
+Nora Vik
+
+Förra tisdagen satt jag gråtande i bibliotekets mötesrum när min chef sade: ”Nu måste allt bli digitalt.” Det var mitt första möte om vår nya mötesmall. Jag har aldrig deltagit i något möte om vår nya mötesmall.
+
+Vår mötesmall har plats för starttid och sluttid men inte för vad vi ska förstå tillsammans.
+
+Samtal kan ha värde utan att leda till beslut. Jag vill prova frågan vad vi behöver förstå tillsammans, men jag vet inte om ytterligare en ruta gör möten bättre.
+````
+
+## Olösta fynd
+
+Budgeten tog slut medan dessa fynd fortfarande stod kvar. De behöver avgöras av en person.
+
+1. **Inledningsstycket säger emot sig självt.** Meningarna ”Det var mitt första möte om vår nya mötesmall.” och ”Jag har aldrig deltagit i något möte om vår nya mötesmall.” kan inte båda vara sanna. Läsaren vet därför inte om skribenten har varit på ett möte om mallen, och alltså inte heller om öppningsscenen har ägt rum. Texten visar inte vilken mening som stämmer, så jag strök ingen av dem. Det skulle ha avgjort ett faktum om skribentens egen upplevelse.
+2. **Öppningsscenen hänger inte ihop med reflektionen.** Att skribenten satt gråtande och att chefen sade ”Nu måste allt bli digitalt.” tas aldrig upp igen. Texten säger inte heller hur någotdera hänger ihop med mötesmallen. Läsaren förstår inte varför scenen och citatet står där. En koppling kan inte skrivas in utan att den hittas på.
+3. **Ingress saknas.** Mätningen visar att texten saknar ingress. Läsaren får ingen fristående sammanfattning av vad kolumnen handlar om. Delen är inte skriven.
+4. **Avsnitt, mellanrubriker och ett eget avslutande avsnitt saknas.** Mätningen räknar också brödtextens inledning som tre stycken i stället för ett, men det beror bara på att avsnitten saknas. Läsaren får ingen orientering vid skumläsning. Delarna är inte skrivna.
+5. **Uppmaning till läsaren saknas.** Texten ber inte läsaren att prova, lägga märke till eller ompröva något. Skribenten säger bara vad hon själv vill prova. Uppmaningen är inte skriven.
+
+Texten följer alltså inte artikelanatomin.
+
+## Rättade fynd
+
+- **Rubriken.** Den gamla rubriken ”Möten förändrar allt” påstod något som texten inte säger, och den angav inte kolumnens vinkel. Den nya rubriken bygger på andra styckets iakttagelse. Den är 48 tecken och 6 ord lång.
+- **Tom inledning i andra stycket.** Frasen ”I dagens snabbt föränderliga värld …” är struken.
+- **Utfyllnad i andra stycket.** Meningen ”Det är viktigt att vara viktig.” är struken.
+- **Generisk avslutning.** Stycket som började med ”Sammanfattningsvis …” och upprepade andra styckets inledning är struket. Texten slutar nu på skribentens egen osäkerhet.
+
+## Påståenden
+
+**Strukna** (varje fynd pekade ut hela påståendet som felet):
+- Att möten är viktigare än någonsin i dagens snabbt föränderliga värld. Det stod i andra stycket och upprepades i det sista. Två rättelser tog bort det: den som gällde den tomma inledningen och den som gällde den generiska avslutningen.
+- ”Det är viktigt att vara viktig.” Rättelsen av utfyllnaden tog bort det.
+
+**Ändrade:**
+- Rubriken påstår nu att mötesmallen har plats för klockslag men inte för förståelse. Tidigare påstod den att möten förändrar allt. Rättelsen av rubriken ändrade den.
+
+Utöver det som räknas upp ovan har inget påstående strukits, ändrats eller lagts till. Ingen begränsning, konnektiv eller avgränsande sats har försvunnit.
+
+## Sammanfattning av ändringarna
+
+Körningen strök tre mönster av generisk AI-prosa: en tom inledande fras, en innehållslös mening och en sammanfattande slutkläm. Den skrev också om rubriken så att den anger kolumnens vinkel. Den mekaniska slutkontrollen hittade inget att rätta. Allt annat står kvar ordagrant, även byline, citat och styckeindelning.

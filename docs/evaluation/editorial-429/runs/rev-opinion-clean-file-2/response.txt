@@ -1,0 +1,23 @@
+Texten ligger i `output.md`. Den behövde inget arbete och är byte för byte identisk med `input.md`.
+
+**Inställningar:** genren är `opinion` och språket `sv`, båda från anropet. Ingen teknik tillämpades. Anropet, texten och sammanhanget nämnde ingen, och genren `opinion` anger ingen teknik som den normalt skrivs med. Texten har ingen `kntnt`-karta, så ingen har lagts till.
+
+**Granskning:** inga fynd, så korrigeringsbudgeten (1) användes inte.
+- **Artikelns anatomi:** texten uppfyller den utan avvikelser. Skriptet mätte alla räknade gränser och godkände dem:
+  - rubriken har 47 tecken och 6 ord
+  - ingressen är 39 ord i ett stycke
+  - varje stycke håller sig under 80 ord
+  - varje mellanrubrik håller sig under 70 tecken
+  - varje avsnitt har 1–2 stycken
+
+  Kraven som skriptet inte räknar har granskats genom läsning:
+  - ingressen står på egen fot
+  - ingressen och inledningen börjar olika, och inledningen för texten framåt
+  - brödtexten går att läsa utan ingressen
+  - varje mellanrubrik beskriver sitt avsnitt
+  - det sista avsnittet är ett eget avslut som uppmanar kommunstyrelsen att handla
+- **Rubrik och mellanrubriker:** de säger något annat än texten direkt under dem och påstår inget som texten inte bär.
+- **Påståenden:** meningarna som avgränsar vad texten hävdar står kvar orörda. Det gäller "Den säger inte hur många personer som bokade …" och "Men handlingarna innehåller ingen mätning av tidsåtgången".
+- **Korrekturläsning:** den avslutande korrekturläsningen hittade inga fel att rätta.
+
+Inga påståenden har tagits bort, ändrats eller lagts till.

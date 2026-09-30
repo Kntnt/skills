@@ -1,0 +1,45 @@
+Granskningen är klar. Fyra fynd är åtgärdade och fem kvarstår för skribenten.
+
+**Inställningar:** genre `column` och språk `sv` kom från anropet. Ingen teknik används, eftersom krönikegenren inte anger någon. Ingen brief valdes. Texten saknade `kntnt`-metadata och har inte fått någon.
+
+````markdown
+# Vår mötesmall saknar vad vi ska förstå tillsammans
+
+Nora Vik
+
+Förra tisdagen satt jag gråtande i bibliotekets mötesrum när min chef sade: ”Nu måste allt bli digitalt.” Det var mitt första möte om vår nya mötesmall. Jag har aldrig deltagit i något möte om vår nya mötesmall.
+
+Vår mötesmall har plats för starttid och sluttid men inte för vad vi ska förstå tillsammans.
+
+Samtal kan ha värde utan att leda till beslut. Jag vill prova frågan vad vi behöver förstå tillsammans, men jag vet inte om ytterligare en ruta gör möten bättre.
+````
+
+## Åtgärdade fynd
+
+1. **Rubriken ”Möten förändrar allt”** påstod något som texten inte säger. Krönikan hävdar ingenstans att möten förändrar allt. Den säger att mallen saknar plats för det gemensamma förståndet och att skribenten är osäker på om ytterligare en ruta hjälper. Rubriken är omskriven utifrån textens vinkel och i samma styrka som texten.
+2. **”I dagens snabbt föränderliga värld är möten viktigare än någonsin.”** var en tom öppningsfras som dessutom blåste upp ämnets betydelse utan stöd i texten. Meningen är struken.
+3. **”Det är viktigt att vara viktig.”** var utfyllnad som inte sa något om ämnet. Meningen är struken.
+4. **Slutstycket ”Sammanfattningsvis är möten viktigare än någonsin i dagens snabbt föränderliga värld.”** var en generisk avslutning. Det upprepade fynd 2 nästan ordagrant och gick emot den ärliga osäkerheten i stycket före. Stycket är struket, och texten slutar nu på skribentens reflektion.
+
+## Olösta fynd
+
+5. **Motsägelse i inledningsstycket.** ”Det var mitt första möte om vår nya mötesmall.” och ”Jag har aldrig deltagit i något möte om vår nya mötesmall.” utesluter varandra. Texten visar inte vilken mening som stämmer, och det är bara skribenten som vet. Läsaren förlorar tilltron till scenen som krönikan vilar på.
+6. **Öppningsscenen hänger inte ihop med resten.** Gråten och chefens replik ”Nu måste allt bli digitalt.” tas aldrig upp igen. Läsaren får inte veta varför scenen spelar roll för frågan om mallen, och en koppling kan inte skrivas utan att hittas på.
+7. **Ingress saknas.** Texten har inget fristående stycke som säger vad krönikan handlar om och vad läsaren får ut av den. Jag har inte skrivit någon.
+8. **Avsnitt med mellanrubriker saknas, och därmed ett avslutande avsnitt.** Mätningen räknar inledningsstycket till tre stycken och 82 ord, men bara för att avsnitt saknas. Jag har inte skrivit några avsnitt eller mellanrubriker.
+9. **Uppmaning till läsaren saknas.** Sista stycket säger vad skribenten själv vill prova men ger läsaren inget att pröva, lägga märke till eller ompröva. Jag har inte skrivit någon uppmaning.
+
+Texten följer alltså inte artikelanatomin, eftersom ingress, avsnitt, avslutande avsnitt och uppmaning saknas. Rubriken håller alla mått: 50 tecken och 8 ord.
+
+## Påståenden
+
+- **Ändrat (fynd 1, rubriken):** rubriken påstod att möten förändrar allt. Nu påstår den att vår mötesmall saknar det vi ska förstå tillsammans.
+- **Struket (fynd 2):** att möten är viktigare än någonsin i dagens snabbt föränderliga värld.
+- **Struket (fynd 3):** att det är viktigt att vara viktig.
+- **Struket (fynd 4):** samma påstående som i fynd 2, en gång till i slutstycket.
+
+Ingen av strykningarna tog bort en begränsning, ett sambandsord eller en avgränsande bisats. Inga påståenden har lagts till. Utöver rubriken och de strukna påståendena står alla påståenden kvar som de kom in, även de motsägelsefulla meningarna i fynd 5.
+
+## Sammanfattning av ändringarna
+
+Rubriken är omskriven så att den håller sig till det texten säger. Den tomma öppningsfrasen, utfyllnadsmeningen och den generiska avslutningen är borttagna. Den mekaniska slutkorrekturen hittade inget att rätta.

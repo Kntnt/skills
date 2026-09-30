@@ -1,0 +1,55 @@
+Texten har granskats, korrigerats i en runda och gått igenom den avslutande korrekturen. Svaret nedan är på svenska, eftersom texten är det.
+
+**Konfiguration:** genre `article` och språk `sv` kommer från anropet. Ingen teknik används, eftersom genren `article` inte anger någon. Ingen brief valdes, och texten saknar `kntnt`-karta. Korrigeringsbudgeten var 1 och är förbrukad. Loopen stannade för att budgeten tog slut medan fynd fanns kvar, inte för att texten blev fri från fynd.
+
+```markdown
+# Mätförsök i Björkskolan fann klassrum under 20 grader
+
+**Fastighetskontorets rapport om ett mätförsök i Björkskolan visar hur många lektionspass som hade temperaturer under kontorets arbetsgräns. Men mätningarna säger inget om hur länge temperaturen låg under gränsen eller hur eleverna upplevde det. Driftteknikern Elin Rask rekommenderar att temperaturserierna kopplas till användningstider innan styrningen ändras.**
+
+I sex klassrum registrerade givare temperaturer under 20 grader. Fastighetskontorets rapport *Mätförsök i Björkskolan* från den 12 mars 2026 anger att 14 av 120 lektionspass hade minst ett värde under kontorets egen arbetsgräns på 20 grader, vilket inte är en lagregel.
+
+Enligt rapporten varade försöket fyra veckor. Två givare stod vid ytterväggar och fyra vid innerväggar, utan att placeringens effekt jämfördes experimentellt.
+
+Operativ temperatur saknas, trots att resonemanget bygger på operativ temperatur, som är ett mått på lufttemperatur och värmestrålning från omgivande ytor, medan givarna bara mätte luften där de satt. Det saknas mätningar av luftdrag och elevernas upplevelse och uppgifter om hur länge temperaturerna låg under gränsen. Ingen effekt på hälsan har undersökts.
+
+Driftteknikern Elin Rask rekommenderar att koppla temperaturserier till användningstider innan styrningen ändras, och nästa försök är tänkt att använda likadant placerade givare i november, fast finansieringen inte är beslutad.
+
+Kontakta oss för att rädda framtiden.
+```
+
+## Olösta fynd
+
+1. **"resonemanget"** i "trots att resonemanget bygger på operativ temperatur" pekar inte på något i texten. Läsaren vet inte vems resonemang det är, och därför inte varför det spelar roll att operativ temperatur saknas. Det går inte att rätta utan att hitta på en källa, så det behöver en person.
+2. **Uppmaningen "Kontakta oss för att rädda framtiden."** följer inte av innehållet. "Oss" presenteras aldrig, och "rädda framtiden" blåser upp en mätrapport. Den står kvar oförändrad, nu som ett eget stycke. Den går inte att rätta utan att hitta på en avsändare, och om den stryks har texten ingen uppmaning alls.
+3. **Mellanrubriker, sektioner och en avslutande sektion saknas.** Delarna har inte skrivits, utan en person får avgöra vad som ska fylla dem. Mätskriptet klagar också på att brödtextens inledning nu är fem stycken, men det beror enbart på att sektionerna saknas.
+4. **Byline saknas.** Ingen författare nämns i texten eller i anropet, så ingen byline har skrivits.
+
+Texten följer alltså inte artikelns anatomi. Rubrikens längd, ingressens ordgräns och styckenas längd ligger inom gränserna. Jag har också läst det som skriptet inte räknar: ingressen står på egen hand, och det första stycket i brödtexten presenterar ämnet och säger vad läsaren får veta. Avslutningen är däremot ingen egen sektion, och uppmaningen fungerar inte.
+
+## Lösta fynd och ändrade delar
+
+- **Rubriken** påstod en räddning och en katastrof som texten inte bär, i en ton som var högre än textens. Den har skrivits om utifrån textens innehåll.
+- **Ingressen** innehöll samma mening två gånger. Den sa inte vad artikeln handlar om, och "Givarna" syftade inte på något. Den har byggts om av textens eget innehåll.
+- **Brödtextens första mening** upprepade ingressen ordagrant och började med "Givarna" innan givarna hade presenterats. Den börjar nu med "I sex klassrum" och nämner givare i obestämd form.
+- **Det långa stycket** var 187 ord och rymde flera tankar. Det är delat vid tankegränserna, och rapportmeningen är delad där "medan" antydde en motsättning som texten inte belägger.
+- **Stryckta meningar och fraser:** den tillverkade dramatiken, hälsopåståendet och den tomma frasen "Det är viktigt att notera att …" (se nedan).
+
+## Påståenden
+
+**Borttagna**
+- "Katastrofen lurade bakom varje hörn." Hela meningen var defekten, eftersom påståendet saknade stöd.
+- Påståendet att det är helt säkert att givarna har gjort eleverna friskare. Det saknade stöd och motsades av textens egen reservation. Reservationen står kvar i sin helhet som "Ingen effekt på hälsan har undersökts.", så läsaren förlorar ingen avgränsning. Bindeorden "men ändå" och "trots att" försvann med påståendet.
+- "Det är viktigt att notera att detta är mycket viktigt för alla som tycker att temperatur är viktigt." Meningen var tom och bar ingen uppgift.
+
+**Ändrade**
+- **Rubriken** påstår nu att mätförsöket i Björkskolan fann klassrum under 20 grader. Tidigare påstod den att givarna räddar skolan från en katastrof.
+- **Ingressen** påstår nu tre saker: att rapporten visar hur många lektionspass som hade temperaturer under arbetsgränsen, att mätningarna inte säger något om hur länge eller om elevernas upplevelse, och vad Elin Rask rekommenderar.
+  - Ingressen skriver "hade temperaturer under", medan brödtexten har den exakta formuleringen "minst ett värde under".
+  - Uppgiften om sex klassrum står inte längre i ingressen men finns kvar i brödtexten.
+- **Givarnas placering** (två vid ytterväggar, fyra vid innerväggar) står nu som en egen mening och läses som textens eget påstående. Förut stod den i samma mening som "rapporten anger", och det var oklart om uppgiften kom från rapporten. Ändringen gjordes när stycket och meningen delades.
+
+**Tillagda**
+- Rubriken placerar klassrummen i Björkskolan. Det är en slutsats av rapportens titel, eftersom texten aldrig säger det rakt ut.
+
+Utöver påståendena ovan tog körningen bort den dubblerade meningen i ingressen och upprepningen av den i brödtexten. Den tog också bort dramatiska och tomma fraser och delade det långa stycket och rapportmeningen i kortare enheter. Den avslutande korrekturen hittade inga mekaniska fel att rätta. Inga filer har skrivits eller ändrats, och `input.md` är orörd.

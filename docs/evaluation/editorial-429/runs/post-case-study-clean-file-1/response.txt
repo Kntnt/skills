@@ -1,0 +1,21 @@
+Jag har granskat `input.md` och skrivit den färdiga texten till `output.md`. `input.md` är orörd. Granskningen gav tre anmärkningar och alla tre är åtgärdade. Inga anmärkningar återstår.
+
+**Inställningar:** genre `casestudy` och språk `sv`, båda från anropet. Ingen teknik används, eftersom genren `casestudy` inte anger någon. Ingen brief användes. Korrigeringsbudgeten (`--max=1`) räckte till en korrigeringsrunda, och efter den fanns inga anmärkningar kvar. Texten följer artikelanatomin utan avvikelser. Skriptet mätte gränserna, och jag läste de krav som skriptet inte räknar.
+
+**Åtgärdade anmärkningar**
+
+1. **Rubriken** ”Elm Quay samlade reparationsärendena” påstod mer än texten bär. Den bestämda formen ”reparationsärendena” gav intryck av att Elm Quay samlade alla sina reparationsärenden. Enligt texten gällde försöket 31 ärenden i två hus under åtta veckor, och akuta ärenden och tidigare beställda arbeten ingick inte. Rubriken nämnde också bara en handling, inte kundens nytta eller resultat som genren kräver. Rubriken är omskriven.
+2. **Mellanrubriken** ”Två perioder med olika arbetsbelastning” nämnde bara förbehållet. Den som skummar kunde inte se att avsnittet redovisar försökets mätresultat. Mellanrubriken är omskriven.
+3. **Ingressens första mening** var byggd som en engelsk konstruktion, ”Att se … var vad underhållsgruppen … ville få ut av …”. Konstruktionen sköt upp subjektet bakom en lång infinitivsats. Meningen är omskriven till en huvudsats med subjektet först.
+
+**Påståenden**
+
+- **Ändrat (rubriken, anmärkning 1):** Rubriken lyder nu ”Gemensam ärendebild hjälper, säger Elm Quays arbetsledare”. Den påstår att en gemensam bild av ärendena hjälper, enligt Elm Quays arbetsledare. Tre saker skiljer den från citatet:
+  - Lind säger ”hjälper oss”, men rubriken har inget ”oss”.
+  - I texten är hon ”arbetsledare på Elm Quay”, medan rubrikens ”Elm Quays arbetsledare” kan läsas som att hon är den enda.
+  - Hennes förbehåll om en extra förberedelsevecka finns inte i rubriken, men det står kvar i ingressen och i citatet.
+- **Ändrat (mellanrubriken, anmärkning 2):** Mellanrubriken lyder nu ”Tilldelningen tog i median två arbetsdagar under försöket”. Den som bara läser mellanrubriken får inte längre veta att perioderna hade olika arbetsbelastning, och inte heller jämförelsen med tre dagar. Meningen i brödtexten om arbetsbelastningen står kvar oförändrad och anger fortfarande förbehållet i sin helhet.
+- **Ändrat (ingressen, anmärkning 3):** Meningen säger nu att underhållsgruppen ville använda sin gemensamma reparationslogg för att se samma information över skiftgränserna. Innehållet är detsamma som tidigare, men formuleringen är ny.
+- **Borttagna eller tillagda påståenden:** inga.
+
+Utöver det som står ovan har körningen reparerat rubriken och en mellanrubrik och skrivit om ingressens första mening till svensk ordföljd. Den avslutande språkgranskningen hittade inga fel att rätta. I övrigt är texten identisk med `input.md`.

@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "packet": "post-article-clean-file-3",
+  "agents": [
+    {
+      "agent_id": "dcd5e4b7-57a1-4468-936d-663c28bd980b",
+      "role": "session",
+      "parent_agent_id": null,
+      "tool_use_id": null,
+      "agent_type": null,
+      "description": null,
+      "spawn_depth": 0,
+      "transcript": "transcripts/parent.jsonl",
+      "instruction": "<command-message>redline</command-message>\n<command-name>/redline</command-name>\n<command-args>--genre=article --language=sv --output=output.md input.md</command-args>",
+      "started_at": "2026-09-29T22:58:52.469Z",
+      "ended_at": "2026-09-29T22:58:52.507Z",
+      "seats": [
+        {
+          "model": "<synthetic>",
+          "deliberation": null,
+          "turns": 1
+        }
+      ],
+      "skill_bodies": [
+        {
+          "base_directory": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a2qiutv7/home/.claude/skills/redline",
+          "chars": 37440
+        }
+      ],
+      "calls": [],
+      "file_activity": [],
+      "delegations": [],
+      "interrupted": false
+    }
+  ],
+  "status": {
+    "status": "incomplete",
+    "reasons": [
+      "run-did-not-finish"
+    ],
+    "parent_transcript": "present",
+    "unparsable_lines": {},
+    "delegations_without_child": [],
+    "children_without_delegation": [],
+    "run_outcome": {
+      "returncode": 1,
+      "timed_out": false,
+      "interrupted": false
+    },
+    "agents": 1,
+    "calls": 0,
+    "read_from": "transcripts and runner outcome only; never the run's reply"
+  }
+}

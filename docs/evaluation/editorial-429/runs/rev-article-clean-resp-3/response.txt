@@ -1,0 +1,10 @@
+Texten behövde ingen ändring. Granskningen hittade inga fel att rätta, och korrekturläsningen gav ett resultat som är byte för byte identiskt med `input.md`.
+
+- **Inställningar:** genre `article` och språk `sv` (svenska) kom från anropet. Ingen teknik används, eftersom genren `article` inte anger någon och ingen annan källa valde en. Texten har ingen metadata för genre, teknik eller språk, och ingen lades till.
+- **Artikelns uppbyggnad:** texten uppfyller mallen för en artikel utan avvikelser. Mätskriptet hittade inga fel eller avvikelser i längder och antal. Jag läste också igenom det som skriptet inte räknar:
+  - Ingressen fungerar fristående.
+  - Inledningen för texten vidare i stället för att upprepa ingressen.
+  - Båda mellanrubrikerna beskriver sina avsnitt.
+  - Sista avsnittet är ett riktigt slut med en uppmaning som följer av innehållet.
+- **Påståenden:** inget påstående togs bort, ändrades eller lades till. Det gäller även meningarna som begränsar vad texten hävdar, till exempel att rapporten inte anger hur länge temperaturen låg under gränsen.
+- **Filer:** ingenting skrevs till disk. De tillfälliga filerna från korrekturläsningen är borttagna.

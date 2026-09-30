@@ -1,0 +1,42 @@
+Klart. Granskningen hittade ett fynd och det är åtgärdat. Den mekaniska korrekturläsningen hittade inga fel. Inga filer skrevs, och `input.md` är orörd.
+
+**Inställningar:** genre `opinion` och språk `sv`, båda angivna i anropet. Ingen teknik används, eftersom genren `opinion` inte anger någon. Resten av anatomikraven, som skriptet inte räknar, har jag granskat genom att läsa texten: att slutavsnittet är ett avslut, att ingressen står på egen hand, att mellanrubrikerna beskriver sina avsnitt och att brödtexten går att läsa utan ingressen. Texten följer artikelanatomin efter åtgärden. Före åtgärden avvek den på en punkt, fyndet nedan.
+
+**Fynd (åtgärdat)**
+
+1. *Inledningsstycket och första meningen under ”Bokningar är inte samma sak som personer”.* Brödtexten ska gå att läsa utan ingressen. Men bara ingressen sa att beslutet ska vila på åtta veckors siffror från två lokaler. I brödtexten syftade ”det som nu ligger på bordet” på ett underlag som aldrig namngavs. Pilotrapporten presenterades sedan utan att det sades att det är den beslutet ska vila på. Den som hoppar över ingressen fick alltså veta vad rapporten inte visar, men inte varför det spelar roll för beslutet. Brödtexten namnger nu underlaget, med det som ingressen redan säger.
+
+**Påståenden**
+
+- *Ändrat påstående, inledningsstycket:* ”det som nu ligger på bordet” betyder nu uttryckligen ”åtta veckors siffror från två lokaler”. Meningen säger därmed att underlaget som finns i dag är de siffrorna. Ändringen svarar på fynd 1.
+- *Tillagt påstående, första avsnittet:* ”som beslutet ska vila på” säger att det är kommunens pilotrapport från den 8 april 2026 som beslutet ska vila på. Tidigare kopplade texten inte ihop ingressens ”åtta veckors siffror från två lokaler” med rapporten uttryckligen. Kopplingen är en slutsats av att siffrorna gäller samma period och samma lokaler. Tillägget svarar på fynd 1.
+
+Utöver dessa två har inget påstående tagits bort, ändrats eller lagts till. Ingen rubrik, ingress eller mellanrubrik har ändrats.
+
+```markdown
+# Avskaffa inte telefonbokningen på ett antagande
+
+**I september kan telefonbokningen av Lerviks föreningslokaler försvinna. Beslutet ska vila på åtta veckors siffror från två lokaler, och de siffrorna räknar bokningar, inte personer. Här är skälen att pröva båda bokningsvägarna ett halvår till innan den ena stängs.**
+
+Text: Sanna Ek, Öppna beslut
+
+Kommunstyrelsen i Lervik bör skjuta upp bytet till enbart digital bokning av föreningslokaler, ett byte som kan ske i september. Pröva först båda bokningsvägarna i alla sju lokaler under ett halvår och mät vad de kräver. Ett permanent beslut behöver bättre underlag än det som nu ligger på bordet: åtta veckors siffror från två lokaler.
+
+## Bokningar är inte samma sak som personer
+
+Kommunens pilotrapport från den 8 april 2026, som beslutet ska vila på, räknar 96 webbokningar och 24 telefonbokningar under åtta veckor i två lokaler. Den säger inte hur många personer som bokade eller varför de valde telefonen. Siffrorna visar varken hur många som saknar digital vana eller hur många som skulle klara sig utan telefonbokning.
+
+En bokning är en händelse, inte en invånare. Den skillnaden avgör vad siffrorna kan användas till.
+
+## Mät också arbetet med två kanaler
+
+Förvaltningen vill slippa dubbel administration. Det är en relevant invändning. Men handlingarna innehåller ingen mätning av tidsåtgången. Att behålla två kanaler kostar arbete, och hur mycket behöver vägas mot vad användarna får.
+
+## Besluta om försöket, inte om antagandet
+
+Kommunstyrelsen bör därför säga ja till halvåret med båda bokningsvägarna, ta ställning till dess ännu okända kostnad och ge förvaltningen i uppdrag att mäta tidsåtgången samt fråga användarna varför de väljer sin bokningsväg. Först då går det att väga alternativen.
+
+Ett antagande blir inte ett beslutsunderlag för att kalendern säger september.
+```
+
+Utöver ändringarna ovan är texten oförändrad. Två tillägg knyter brödtexten till det underlag som beslutet ska vila på, och den mekaniska korrekturläsningen hittade inget att rätta.

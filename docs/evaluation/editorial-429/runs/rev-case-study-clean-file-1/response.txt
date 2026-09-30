@@ -1,0 +1,43 @@
+Jag har granskat texten och sparat den korrigerade versionen i **`output.md`**. `input.md` är orörd. Granskningen hittade tre brister. Alla tre är åtgärdade och inga anmärkningar står kvar.
+
+**Inställningar:**
+- **Genre:** `casestudy`, från anropet.
+- **Språk:** `sv`, från anropet.
+- **Teknik:** ingen. Du angav ingen, och genren `casestudy` anger att den normalt skrivs utan teknik.
+- **Korrigeringsbudget:** 1, som gick åt till en korrigeringsrunda. Efter den gick jag igenom texten på nytt. Då fanns inga kvarstående anmärkningar och inga nya fel som rundan hade skapat.
+
+**Artikelanatomin:** Texten följer artikelanatomin utan avvikelser. Skriptet mätte de räknade gränserna före och efter rundan, och samtliga höll. Rubriken har 50 tecken och 8 ord, ingressen 40 ord och leadet 26 ord. Övriga krav läste jag igenom manuellt:
+- ingressen fungerar fristående
+- leadet och ingressen börjar med olika ord
+- leadet för texten framåt i stället för att upprepa ingressen
+- mellanrubrikerna beskriver sina avsnitt
+- sista avsnittet är ett avslut med en uppmaning som följer av innehållet
+- bylinen står på rätt plats
+
+### Åtgärdade anmärkningar
+
+1. **Rubriken** – ”Elm Quay samlade reparationsärendena”.
+   - **Bristen:** Rubriken beskrev ett begränsat försök som något genomfört och allmänt, som om hela Elm Quay hade samlat alla sina reparationsärenden. Texten handlar om ett åttaveckorsförsök i två hus. Rubriken nämnde inte heller det resultat kunden själv beskriver.
+   - **Ny rubrik:** ”Elm Quays loggförsök gav gemensam bild av ärendena”.
+2. **Leadets tredje mening** – ”Vad det krävde, och vad det gav, går att följa i gruppens egna anteckningar.”
+   - **Bristen:** Meningen lovade att anteckningarna visar vad loggen gav, men texten säger senare att anteckningen inte tillskriver skillnaden programvaran. Den angav också fel källa. Brödtexten talar om Elm Quays interna försöksanteckning, och vad försöket krävde kommer från Maya Linds citat. Dessutom upprepade meningen ingressens ”Här är vad gruppen gjorde …”.
+   - **Åtgärd:** Meningen är struken.
+3. **Leadets första mening** – ”Att se samma information … var vad underhållsgruppen … ville få ut av …”.
+   - **Bristen:** En engelsk konstruktion (”X was what Y wanted”) med ett tungt infinitivsubjekt först. Läsaren får målet innan det framgår vems det är.
+   - **Åtgärd:** Meningen är omskriven med rak ordföljd.
+
+### Påståendena i texten
+
+- **Ändrat påstående (rubriken, anmärkning 1):**
+  - **Tidigare:** Elm Quay samlade reparationsärendena.
+  - **Nu:** Elm Quays försök med loggen gav en gemensam bild av ärendena. Orden ”gemensam bild av ärendena” är Maya Linds egna ur citatet i sista avsnittet.
+  - **Slutsatsen:** Att det var försöket som gav bilden drar rubriken själv. Texten säger det inte rakt ut, men det följer av gruppens mål och av Linds omdöme.
+  - **Försvann:** Rubriken nämner inte längre att det handlar om reparationsärenden. Det framgår först av ingressen.
+- **Struket påstående (leadet, anmärkning 2):**
+  - **Påståendet:** Att det som försöket krävde och det som det gav går att följa i gruppens egna anteckningar. Anmärkningen gällde hela påståendet.
+  - **Detta saknar läsaren nu:** Leadet presenterar inte längre vad texten kommer att visa. Riktningen ges i stället av gruppens uttalade mål.
+  - **Förbehållet finns kvar:** Ingen begränsning eller reservation försvann. Anteckningens förbehåll om olika arbetsbelastning står kvar oförändrat i brödtexten.
+
+I övrigt har inga påståenden strukits, ändrats eller lagts till.
+
+Texten har ändrats på tre ställen. Rubriken är omskriven så att den stämmer med försökets omfattning och kundens eget resultat. En upprepande och missvisande presentationsmening i leadet är struken. Leadets första mening har fått svensk ordföljd med samma innehåll. Korrekturläsningen hittade inga mekaniska fel, så resten av texten är oförändrad tecken för tecken.

@@ -1,0 +1,16 @@
+{
+  "status": "complete",
+  "reasons": [],
+  "parent_transcript": "present",
+  "unparsable_lines": {},
+  "delegations_without_child": [],
+  "children_without_delegation": [],
+  "run_outcome": {
+    "returncode": 0,
+    "timed_out": false,
+    "interrupted": false
+  },
+  "agents": 2,
+  "calls": 19,
+  "read_from": "transcripts and runner outcome only; never the run's reply"
+}

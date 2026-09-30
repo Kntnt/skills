@@ -1,0 +1,33 @@
+Jag har granskat och rättat texten och skrivit den till **`output.md`**. `input.md` är orörd. En brist finns kvar: andra mellanrubriken är 71 tecken, ett över gränsen på 70.
+
+**Inställningar:** genre `casestudy` och språk `sv` kommer från anropet. Ingen teknik används, eftersom kundcasegenren inte anger någon. Ingen brief valdes, och texten saknar `kntnt`-metadata, så ingen lades till. Rättningsbudgeten var 1 och gick åt till en rättningsrunda. Rundan granskades om och godtogs.
+
+## Fynd som rättades
+
+1. **Rubriken** ”Elm Quay samlade reparationsärendena” beskrev en handling, inte kundens resultat eller omdöme. Den bestämda formen påstod dessutom att alla reparationsärenden samlades, men akuta ärenden och tidigare beställda arbeten ingick inte. Ny rubrik: ”Gemensam ärendebild hjälper, säger Elm Quays arbetsledare”.
+2. **Ingressens sista mening** var inte självbärande: ”gruppen” och ”anteckningarna” saknade referent. ”Här är vad …” var dessutom en engelsk konstruktion. Nu står det: ”Läs vad Elm Quays underhållsgrupp gjorde, vad gruppens anteckningar visar …”.
+3. **Inledningens öppning** var en pseudoklyvning tänkt på engelska, där det nya kom före det kända. Brödtexten sa dessutom ”Försöket” innan den nämnt något försök; det gjorde bara ingressen. Nu börjar stycket med subjektet, och andra meningen säger att loggen prövades i ett försök.
+4. **Andra mellanrubriken** ”Två perioder med olika arbetsbelastning” var en verblös fras som bara nämnde avsnittets förbehåll, inte att avsnittet redovisar resultatet. Ny mellanrubrik: ”Mediantiden till tilldelning var kortare än under de åtta veckorna före”.
+
+## Olöst fynd
+
+- **Andra mellanrubriken är 71 tecken, max är 70.** Rättningen gav en rubrik på 65 tecken där ett ord saknades. Korrekturpassen lade till ”under” och då blev den 71. Budgeten är slut och inget ändras i sak efter korrekturpassen, så en människa behöver korta rubriken. Den får inte ange någon orsak till skillnaden och inte påstå mer än jämförelsen två mot tre arbetsdagar.
+
+Utöver längden på den rubriken uppfyller texten artikelanatomin. Jag har också läst igenom de krav skriptet inte räknar: att ingressen står på egen hand, att den skiljer sig från inledningen, att brödtexten inte lutar sig mot ingressen, att varje mellanrubrik beskriver sitt avsnitt, och att sista avsnittet är ett avslut med uppmaning.
+
+## Vad som hände med påståendena
+
+**Borttaget**
+- Rubrikens påstående att Elm Quay samlade (alla) reparationsärendena. Rättning 1 tog bort det, eftersom fyndet pekade ut just det påståendet.
+
+**Ändrat**
+- **Rubriken** återger nu Linds eget omdöme ur hennes citat: en gemensam bild av ärendena hjälper. Omdömet tillskrivs henne. Hennes förbehåll om förberedelsetid står inte i rubriken men finns kvar i ingressen och citaten. (Rättning 1.)
+- **Ingressens sista mening** knyter nu gruppen och anteckningarna till Elm Quays underhållsgrupp, som inledningen redan gör med ”gruppens egna anteckningar”. (Rättning 2.)
+- **Inledningens första mening** säger nu att underhållsgruppen ville se samma information över skiftgränserna i sin logg. Tidigare betonade meningen att detta var just det gruppen ville få ut av loggen. Den betoningen är nu svagare. (Rättning 3.)
+- **Andra mellanrubriken** säger nu att mediantiden till tilldelning var kortare än under de åtta veckorna före, utan någon orsak. Den säger inte längre att perioderna hade olika arbetsbelastning. Den som bara skummar rubrikerna ser alltså resultatet utan förbehållet, men förbehållet står oförändrat i stycket under. (Rättning 4, plus ”under” från korrekturpassen.)
+
+**Tillagt:** inget. ”Loggen prövades i ett försök” upprepar ingressens ”provade” i brödtexten; det är inget nytt påstående.
+
+Utöver de påståenden som räknas upp ovan har inget påstående tagits bort, ändrats eller lagts till.
+
+**Övriga ändringar:** två konstruktioner tänkta på engelska är borta (”Här är vad …” och pseudoklyvningen). Rubriken och en mellanrubrik är omskrivna. En bestämd form som bara ingressen förklarade har fått sin referent i brödtexten. Korrekturpassen lade till ett saknat ord i andra mellanrubriken. Resten av texten är oförändrad.

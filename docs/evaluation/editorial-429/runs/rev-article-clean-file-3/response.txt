@@ -1,0 +1,10 @@
+Texten är granskad och skriven till `output.md`. Den behövde inga ändringar, så filen är byte för byte identisk med `input.md`.
+
+- **Inställningar:** Genren är `article` och språket `sv`, båda enligt anropet. Ingen teknik används, eftersom genren `article` inte anger någon. Texten saknar Kntnt-metadata och ingen har lagts till.
+- **Granskning:** Inga redaktionella brister hittades, så korrigeringsbudgeten (1) användes inte.
+- **Artikelns anatomi:** Texten följer den helt, utan avvikelser. Rubrikens längd, ingressens och styckenas längd samt antalet stycken per avsnitt är maskinuppmätta och inom gränserna. De krav som inte räknas har också prövats vid läsning:
+  - Ingressen står på egen hand och upprepas inte av inledningen.
+  - Mellanrubrikerna beskriver sina avsnitt.
+  - Sista avsnittet är ett avslut med en uppmaning som följer av innehållet.
+- **Mekanisk korrektur:** Den gjordes en gång och fann inga fel.
+- **Påståenden:** Inget påstående har tagits bort, ändrats eller lagts till.

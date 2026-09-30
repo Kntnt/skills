@@ -1,0 +1,41 @@
+Jag har granskat texten som debattartikel: genren `opinion` och språket `sv` kommer från anropet. Ingen teknik tillämpades, eftersom opinionsgenren inte anger någon och ingen annan nivå valde en. Texten saknar `kntnt`-karta och ingen brief användes. Jag gjorde en korrigeringsrunda av en möjlig, och efter omgranskningen återstår inga fynd.
+
+```markdown
+# Avskaffa inte telefonbokningen på ett antagande
+
+**I september kan telefonbokningen av Lerviks föreningslokaler försvinna. Beslutet ska vila på åtta veckors siffror från två lokaler, och de siffrorna räknar bokningar, inte personer. Här är skälen att pröva båda bokningsvägarna ett halvår till innan den ena stängs.**
+
+Text: Sanna Ek, Öppna beslut
+
+Kommunstyrelsen i Lervik bör skjuta upp bytet till enbart digital bokning av föreningslokaler, ett byte som kan ske i september. Pröva först båda bokningsvägarna, webb- och telefonbokning, i alla sju lokaler under ett halvår och mät vad de kräver. Ett permanent beslut behöver bättre underlag än det som nu ligger på bordet.
+
+## Bokningar är inte samma sak som personer
+
+Kommunens pilotrapport från den 8 april 2026 räknar 96 webbokningar och 24 telefonbokningar under åtta veckor i två lokaler. Den säger inte hur många personer som bokade eller varför de valde telefonen. Siffrorna visar varken hur många som saknar digital vana eller hur många som skulle klara sig utan telefonbokning.
+
+En bokning är en händelse, inte en invånare. Den skillnaden avgör vad siffrorna kan användas till.
+
+## Mät också arbetet med två bokningsvägar
+
+Förvaltningen vill slippa dubbel administration. Det är en relevant invändning. Men handlingarna innehåller ingen mätning av tidsåtgången. Att behålla två bokningsvägar kostar arbete, och hur mycket behöver vägas mot vad användarna får.
+
+## Besluta om försöket, inte om antagandet
+
+Kommunstyrelsen bör därför säga ja till halvåret med båda bokningsvägarna, ta ställning till dess ännu okända kostnad och ge förvaltningen i uppdrag att mäta tidsåtgången samt fråga användarna varför de väljer sin bokningsväg. Först då går det att väga alternativen.
+
+Ett antagande blir inte ett beslutsunderlag för att kalendern säger september.
+```
+
+**Åtgärdade fynd**
+
+1. **Ingressen nämnde inte telefonbokningen.** Uttrycket ”båda bokningsvägarna” förutsatte ett par där telefonbokningen bara nämndes i rubriken och ingressen i fetstil. Den som läser brödtexten utan fetstilsingressen fick veta att bokningen ska bli enbart digital, men inte vilken bokningsväg som försvinner. Nu namnger ingressen båda vägarna: webb- och telefonbokning.
+2. **Mellanrubriken ”Mät också arbetet med två kanaler” och meningen ”Att behålla två kanaler kostar arbete …”** kallade samma två vägar för ”kanaler” som resten av texten kallar ”bokningsvägar”. Läsaren fick då själv räkna ut att det gällde samma par, och i ett avsnitt om administration kunde ”kanaler” läsas som något annat. Nu används ”bokningsvägar” på båda ställena. Mellanrubriken säger fortfarande att arbetet med att behålla båda vägarna ska mätas.
+
+**Påståenden**
+
+- **Ändrat:** Ingressen säger nu uttryckligen att de två bokningsvägarna är webbokning och telefonbokning. Därmed likställs den digitala bokningen med webbokning. Det följer av pilotsiffrorna i första avsnittet och av fetstilsingressen, men i ingressen stod det tidigare inte utskrivet. Ändringen kommer från åtgärden för fynd 1.
+- Inga påståenden har strukits, inga begränsningar har tagits bort och inga nya påståenden har tillkommit.
+
+Artikelanatomin är uppfylld utan avvikelser. Skriptet mätte de räknebara kraven, och jag läste övriga krav för hand: att puffen står på egna ben, att ingressen för resonemanget vidare, att mellanrubrikerna beskriver sina avsnitt och att sista avsnittet är ett avslut med en uppmaning till kommunstyrelsen.
+
+Utöver det som redovisas ovan har körningen gjort ett begrepp enhetligt och förtydligat ingressen, så att den namnger det som byts ut. Den avslutande mekaniska korrekturläsningen hittade inget att rätta. Ingen fil har skrivits eller ändrats, och `input.md` är orörd.

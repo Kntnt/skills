@@ -1,0 +1,15 @@
+Texten har skrivits till `output.md` och är oförändrad. Granskningen gav inga anmärkningar, så ingen rättelse gjordes. Filen är byte för byte identisk med `input.md`.
+
+**Inställningar:** Genre `opinion` och språk `sv` kommer från anropet. Ingen teknik används, eftersom anropet inte anger någon och genren opinion inte har någon som den vanligtvis skrivs med. Texten saknar Kntnt-metadata och ingen har lagts till.
+
+**Resultat:**
+- Det finns inga anmärkningar, varken lösta eller olösta. Korrigeringsbudgeten (1) används inte, eftersom det inte fanns något att rätta.
+- Texten följer artikelanatomin utan avvikelser. Skriptet mätte alla räknade gränser och rapporterade inga fel: rubriken har 47 tecken och 6 ord, ingressen 39 ord i ett stycke och det längsta stycket 50 ord. Jag läste också de krav som skriptet inte räknar och fann att alla uppfylls:
+  - Ingressen står på egen fot, och inledningen för resonemanget vidare utan att upprepa den.
+  - Brödtexten fungerar utan ingressen.
+  - Varje mellanrubrik beskriver sitt avsnitt och upprepar inte meningen under sig.
+  - Sista avsnittet är ett eget slut. Där vänder sig uppmaningen till kommunstyrelsen och säger konkret vad den bör göra.
+- Tesen står tidigt och avsändaren anges. Motargumentet om dubbel administration bemöts sakligt. Meningarna som anger vad pilotrapporten inte visar, och förbehållet om försökets ”ännu okända kostnad”, står kvar orörda.
+- Korrekturläsningen hittade inga fel att rätta.
+
+Inga påståenden har strukits, ändrats eller lagts till.

@@ -1,0 +1,4 @@
+Texten behövde inget arbete. Granskningen hittade inga redaktionella brister och korrekturläsningen hittade inga fel, så `input.md` är oförändrad och inget har skrivits.
+
+- **Inställningar:** Genren är opinion och språket svenska, båda angivna i anropet. Ingen teknik används, eftersom genren opinion inte anger någon.
+- **Artikelns uppbyggnad:** Texten följer uppbyggnaden utan avvikelser. Skriptet mätte längdgränserna och fann inga fel. Resten läste jag igenom: ingressen står på egen hand, brödtexten går att läsa utan ingressen, och mellanrubrikerna beskriver sina avsnitt. Det sista avsnittet fungerar som avslutning och uppmanar kommunstyrelsen att göra något konkret.

@@ -1,0 +1,62 @@
+I reviewed `input.md` as a case study in British English and made one correction round. Four findings are fixed; the missing call to action is left for you, because the text gives nothing to build one from.
+
+**Settings used**
+- **Genre:** `casestudy`, from `--genre`. The text's metadata said `case-study`, which isn't an installed genre. Because the flag decided the genre, the run went ahead, and the metadata now says `casestudy`.
+- **Technique:** none. The text's metadata says `none`, and the case study genre doesn't name one either.
+- **Language:** `en_GB`, from `--language`.
+
+**Findings**
+1. **Last subheading (fixed).** "Vale would allow an extra week for the status names" gave away the admission in Vale's quote below it, so readers met the quote as something they'd already been told. The new subheading, "The workshop manager looks back on the trial", names who is speaking and leaves the point to the quote.
+2. **Second subheading and one body sentence (fixed).** "Neither document" didn't say which documents it meant. The section named only the workshop summary, and "the interview" was a source the text never introduced; the only exchange with Vale it describes was by email. The subheading is now "Neither the workshop summary nor Vale's answers measure repair speed", and "the interview" is now "Vale's answers". Both limits are unchanged: repair speed is not measured, and the sources give reported experience, not measured improvement.
+3. **First subheading (fixed).** "The team agreed the terms before Benchline configured them" reads as a contract negotiation, which the section never describes. The subheading is now "The team chose its job statuses before Benchline configured them".
+4. **Standfirst (fixed).** "The backlog was still waiting on that" could be read as backlogged repairs being held up. The body says only that adding the backlog to the schedule was postponed. The sentence now says "adding the backlog to the schedule was still waiting on that".
+5. **Ending: no call to action (not fixed).** A case study's ending should give the reader a next step. That step has to come from an offer, link or contact route, and the text has none of these. You'll need to add one.
+
+**Article structure:** the text meets every limit the measuring script checks. I also checked the parts it doesn't count: the order of the parts, the byline, whether the standfirst and lead each work on their own, whether each subheading describes its section, and whether the last section works as an ending. All of these pass. The one exception is the call to action, so the text doesn't yet fully conform.
+
+**Claims**
+- **Removed:** none.
+- **Added:** none.
+- **Changed:**
+  - **Standfirst (finding 4):** it now says that adding the backlog to the schedule waited on the status definitions. The old wording didn't specify what was waiting.
+  - **First subheading (finding 3):** it now says the team chose its job statuses before Benchline configured them. Before, it said the team agreed "the terms".
+  - **Second subheading and "The summary and Vale's answers carry…" (finding 2):** the second source is now named as Vale's answers, not "document" or "the interview". What they say is unmeasured is the same.
+  - **Last subheading (finding 1):** it now says only that the workshop manager looks back on the trial. The extra week is still in Vale's own words in the quote.
+- **Nothing else:** every other claim is as it arrived. No sentence that limits a claim, no connecting phrase and no qualification was lost.
+
+The run changed the standfirst's second sentence, three subheadings and one sentence in the "repair speed" section. It also changed the `genre` value in the metadata from `case-study` to `casestudy`. There was no structural change and nothing to take out as filler, and the final proofread found no errors to fix.
+
+`````markdown
+---
+kntnt:
+  genre: casestudy
+  technique: none
+  language: en_GB
+---
+
+# Fenwick keeps its shared schedule for new jobs
+
+Jobs split across separate paper sheets went onto one shared bench schedule at Fenwick Instrument Repairs, in a six-week trial with the supplier Benchline. What had to be settled first was what the statuses meant — and adding the backlog to the schedule was still waiting on that.
+
+By Thomas Barregren
+
+Fenwick Instrument Repairs services brass and woodwind instruments. In January 2026 its team began a six-week trial of a shared bench schedule from Benchline, a scheduling software supplier, chosen after checking that it could distinguish jobs awaiting parts from jobs ready for work.
+
+## The team chose its job statuses before Benchline configured them
+
+The workshop defined the statuses itself and decided who would update them. Benchline configured those choices and trained four staff in one online session. Collection arrangements stayed on the telephone.
+
+Benchline's case writer asked workshop manager Priya Vale by email what the team had to settle before the schedule was useful. Vale answered: ‘We had to agree what ready for work meant. A part being in the building did not always mean that it had reached the right bench.’
+
+## Neither the workshop summary nor Vale's answers measure repair speed
+
+A workshop summary dated 23 February 2026 records 38 jobs entered in the schedule, and says staff could see which instruments were waiting for parts.
+
+It does not measure repair duration, revenue or customer satisfaction. The summary and Vale's answers carry the team's reported experience, not a measured improvement in repair speed.
+
+## The workshop manager looks back on the trial
+
+The manager approved continued use for new jobs, and postponed adding the backlog until the team had reviewed its status definitions. Asked whether the choice would be made again, and what would change, Vale answered: ‘I would use it again for new jobs. I would allow another week to check the status names before adding the backlog.’
+`````
+
+`input.md` is unchanged, and the run left no working files behind.

@@ -1,0 +1,26 @@
+Jag har granskat texten och skrivit resultatet till `output.md`. Den enda ändringen är rubriken. Ett fynd är olöst, och en person behöver ta ställning till det.
+
+**Inställningar:** genren är `article` och språket `sv`, båda enligt anropet. Ingen teknik används, eftersom genren article inte anger någon. Ingen brief var vald. Korrigeringsbudgeten var 1 och har gått åt.
+
+**Artikelns uppbyggnad:** alla räknade gränser håller, och de är maskinmätta. Med nya rubriken har den 57 tecken och 7 ord, ingressen 46 ord och leaden 33 ord. Jag har också läst igenom de krav som inte räknas: ingressen fungerar fristående, leaden för texten vidare, mellanrubrikerna beskriver sina avsnitt och sista avsnittet är ett avslut med en uppmaning. Texten följer uppbyggnaden med ett undantag, nämligen fynd 2.
+
+## Fynd
+
+1. **Rubriken – åtgärdat.** Den gamla rubriken var ”Mätförsöket i Björkskolan visar när, inte varför”.
+   - Ellipsen sa inte vad försöket visar tidpunkten för, så rubriken gick inte att förstå utan texten.
+   - Den upprepade också ingressens ”förklarar inte varför luften var kall” med samma ord.
+   - Den nya rubriken är ”Björkskolans mätvärden bör ställas mot rummens användning”.
+2. **Leadens andra mening – olöst.** Meningen är ”Det gör placeringen viktig när fastighetskontoret ska tolka …”.
+   - Leaden gör givarnas placering till det tolkningen hänger på. Brödtexten säger aldrig var givarna satt eller vad placeringen betydde för de 14 lektionspassen, och placeringen återkommer bara som ”likadant placerade givare”.
+   - Läsaren kan därför inte bedöma om samma placering i november är en begränsning.
+   - Uppgifterna som behövs finns inte i texten. Därför lämnades passagen orörd.
+
+## Påståenden
+
+- **Ändrat påstående (rubriken, reparationen av fynd 1):** Rubriken sa tidigare att försöket visar när men inte varför. Nu säger den att Björkskolans mätvärden bör ställas mot hur rummen används.
+  - Rekommendationen finns redan i texten: Rasks råd och slutmeningen ”Lägg därför tiderna …”.
+  - Texten talar om rummens *användningstider*, medan rubriken säger *användning*.
+- **Borttagen avgränsning:** begränsningen ”inte varför” finns inte längre i rubriken. Den som bara läser rubriken får alltså inte veta att mätningarna inte förklarar varför det blev kallt. Begränsningen står fortfarande i sin helhet i ingressen och i Elin Rasks citat.
+- Utöver detta har inga påståenden strukits, ändrats eller lagts till.
+
+Utöver rubriken har körningen inte ändrat något, varken struktur, formuleringar eller formatering. Den avslutande korrekturläsningen hittade inga mekaniska fel att rätta.

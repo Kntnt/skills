@@ -1,0 +1,44 @@
+Klart. Sista steget var korrekturpasset, och alla tillfälliga filer är borttagna.
+
+**Inställningar:** krönika (`column`), svenska (`sv`) och ingen berättarteknik. Alla tre värden kommer från textens egen `kntnt`-karta, där tekniken anges som `none`. Kartan stämde redan med det här och har inte ändrats.
+
+```markdown
+---
+kntnt:
+  genre: column
+  technique: none
+  language: sv
+---
+
+# Bibliotekets mötesmall frågar inte varför vi ses
+
+Av Nora Vik
+
+Jag granskar bibliotekets mötesmall. Där finns rutor för starttid, sluttid, deltagare och dagordning. Någon ruta för det beslut vi ska kunna fatta när vi går därifrån finns inte. Det här är en iakttagelse av ett dokument, inte en scen från ett visst möte. Mallen vill veta när vi ses och vilka som kommer. Vad tiden ska leda till frågar den inte om.
+
+En dagordning räknar upp vad vi ska tala om. Den säger inte varför vi behöver göra det tillsammans.
+
+Missförstå mig rätt: jag uppskattar möten där kolleger upptäcker att de har förstått en fråga olika. Den upptäckten kan vara viktigare än att vi snabbt enas. Det som retar mig är något annat – att tid i kalendern så lätt behandlas som ett resultat i sig. Timmen är bokad, alltså har något hänt. Det är min reflektion, inte något jag har mätt hos andra.
+
+Min tanke är inte att varje samtal ska pressas till ett beslut. Samtal kan skapa förtroende, och de kan få fram en fråga vi inte visste att vi behövde ställa. Men den som fyller i en mall borde få formulera varför vi behöver just varandras tid, också när syftet är att undersöka något tillsammans.
+
+Sedan kommer invändningen, och den är min egen. Jag vet inte om ytterligare en ruta gör möten bättre. Det finns en komik i att försöka lösa ett problem med formulär genom att utöka formuläret, och komiken blir inte mindre av att förslaget kommer från mig.
+
+Ändå vill jag prova en enkel fråga bredvid tiden: vad behöver vi förstå tillsammans? Jag vet inte om den överlever mötet med en verklig dagordning, och jag tänker inte låtsas att jag gör det. Hoppet om frågan och tvivlet på ännu en ruta får samsas ett tag till.
+```
+
+## Fynd
+
+1. **Rubriken: åtgärdad.** Den gamla rubriken, *Rutan som inte finns* (20 tecken), nämnde inget ämne. Den sa varken att texten handlar om mötesmallen och mötena eller vad den saknade rutan skulle gälla, och den visade inte krönikans vinkel. En läsare som bara ser rubriken i en lista eller en sökträff kunde därför inte avgöra vad texten handlar om. Den nya rubriken är *Bibliotekets mötesmall frågar inte varför vi ses* (48 tecken, 7 ord). Den anger ämnet och vinkeln med ordet *varför*, som texten själv använder.
+2. **Ingress saknas: kvarstår.** Mellan rubriken och bylinen finns ingen fristående sammanfattning av vad krönikan handlar om och vad läsaren får ut av den. En granskning skriver inte delar som saknas, så det här får en person fylla i.
+3. **Mellanrubriker, avsnitt och ett avslutande avsnitt saknas: kvarstår.** Brödtexten består av sex stycken utan mellanrubriker, så den som skummar texten på webben har inga ingångar. Att mätningen underkänner första stycket (”6 stycken”) beror bara på att avsnitten saknas. Avslutningen finns i sista stycket, med frågan att prova bredvid tiden, men den står inte i ett eget avsnitt. Inte heller detta skrivs vid en granskning.
+
+Texten följer därför inte artikelanatomin. Anledningen är de delar som saknas enligt fynd 2 och 3.
+
+## Påståenden
+
+- **Ändrat påstående (rubriken, svar på fynd 1):** Rubriken säger nu att bibliotekets mötesmall inte frågar varför vi ses. Tidigare gav den bara en bild av en ruta som inte finns, utan att nämna något ämne. Bilden av *rutan* finns inte längre i rubriken men står kvar i brödtexten.
+
+Utöver rubriken har inga påståenden tagits bort, ändrats eller lagts till. De avgränsande meningarna står kvar oförändrade, det vill säga att texten är en iakttagelse av ett dokument och att reflektionen inte bygger på mätningar.
+
+Utöver rubriken har körningen bara gjort en typografisk rättelse i korrekturpasset: det engelska långa tankstrecket (—) i tredje stycket har bytts mot det svenska tankstrecket (–) med mellanslag.

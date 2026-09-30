@@ -1,0 +1,19 @@
+Jag granskade texten och skrev den till `output.md`. Den är byte för byte identisk med `input.md`: ingen rättning godtogs och den mekaniska korrläsningen hittade inga fel. Tre anmärkningar står kvar olösta.
+
+**Inställningar:** genre `article` och språk `sv`, båda från anropet. Teknik: ingen. Genren `article` anger ingen teknik som den vanligtvis skrivs med, och ingen annan nivå valde någon. Ingen skrivbrief användes och texten har ingen `kntnt`-metadata.
+
+**Artikelns anatomi:** Skriptet mätte alla räknade krav och de håller: rubriken har 48 tecken och 7 ord, ingressen 46 ord, ingressstycket 33 ord, och det finns två avsnitt med tre respektive två stycken. Jag läste också de krav som inte räknas. Ingressen står på egen hand, ingressstycket för texten framåt och brödtexten pekar inte tillbaka på ingressen. Sista avsnittet fungerar som avslutning med en uppmaning. Ett krav uppfylls inte: den första mellanrubriken beskriver inte sitt avsnitt (anmärkning 2).
+
+**Olösta anmärkningar**
+
+1. **Rubriken ”Mätförsöket i Björkskolan visar när, inte varför”.** Orden ”när” och ”varför” syftar inte på något. Den som bara ser rubriken kan inte avgöra när vad, och ser inte att texten handlar om kall luft i klassrummen. Ingressens andra mening upprepar dessutom rubriken med delvis samma ord (”förklarar inte varför luften var kall”). Läsaren kan därför inte avgöra av rubriken om texten är för hen, och ingressen tillför inget utöver rubriken på den punkten.
+2. **Mellanrubriken ”En gräns för det lokala försöket”.** Den täcker bara första stycket, om arbetsgränsen på 20 grader. Den säger inget om att givarna varken mätte luftdrag eller elevernas upplevelse, och inget om Elin Rasks citat om när och varför. Ordet ”gräns” kan dessutom läsas både som temperaturgränsen och som gränsen för vad mätningen kan säga. Den som skummar rubrikerna ser inte vad avsnittet säger.
+3. **”styrningen”** i ”innan styrningen ändras”. Texten säger aldrig vilken styrning som avses, till exempel värme eller ventilation. Läsaren vet inte vad som ska ändras. Uppgiften saknas i texten, så anmärkningen lämnas åt skribenten.
+
+**Rättningen som avvisades:** En rättningsrunda försökte åtgärda anmärkning 1 och 2 men avvisades i sin helhet, och texten återställdes till hur den såg ut före rundan.
+
+- Rundan skrev om rubriken till ”Björkskolans givare visar kall luft, inte hur rummen kändes”. Då angav rubriken en sidopoäng som textens vinkel, nämligen hur rummen kändes. Den tappade också textens egen poäng, att mätningarna inte visar *varför*. Den poängen bär ingressen, Rasks citat och avslutningen. Det felet skapade rättningen själv; det fanns inte i originalet. Den nya rubriken finns inte i den levererade texten.
+- Rundan skrev också om den första mellanrubriken till ”Värden under kontorets gräns visar varken luftdrag eller upplevelse”. Den föll med resten av rundan. Den upprepade dessutom nästan ordagrant andra styckets inledning och sa nästan samma sak som den nya rubriken.
+- Budgeten för rättningar var en runda och den är förbrukad. En person behöver skriva om rubriken så att den förstås på egen hand och ändå behåller textens vinkel: mätningarna visar när men inte varför.
+
+**Påståendena:** Den levererade texten är densamma som den som kom in. Inga påståenden har tagits bort, ändrats eller lagts till.

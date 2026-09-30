@@ -1,0 +1,22 @@
+Texten ligger i `output.md`. Den är byte för byte identisk med `input.md`, eftersom den enda korrigeringsrundan avvisades och den mekaniska passen inte hittade några fel. Båda fynden står kvar olösta.
+
+**Inställningar:** genre `column` och språk `sv`, båda från anropet. Ingen teknik, eftersom genren `column` inte anger någon.
+
+## Fynd som står kvar olösta
+
+1. **Rubriken säger mer än texten.** ”Mötesmallen har en ruta för allt utom varför” säger att mallen har rutor för allt annat. Ingressen säger motsatsen: mallen har plats för starttid och sluttid, och ”tid är det enda de räknar”. Den som läst klart märker att rubriken överdrev vad mallen innehåller och att den motsäger textens egen iakttagelse.
+2. **Avslutningen är inget eget avsnitt.** Sista avsnittet, ”Ännu en ruta, och ändå vill jag prova”, bär textens huvudförslag: frågan ”vad behöver vi förstå tillsammans?” och tvivlet på den. Uppmaningen ”Prova ändå frågan nästa gång du bokar ett möte …” hänger på som sista stycke. Artikelmallen kräver att avslutningen är ett eget avsnitt med egen mellanrubrik. Den som skummar texten hittar därför inget eget avslut, och argumentet och uppmaningen flyter ihop under en mellanrubrik som beskriver förslaget.
+
+Texten uppfyller alltså inte artikelmallen. Skriptet mätte alla räknade krav utan fel, och vid läsningen granskade jag även de krav det inte räknar. Avslutningen är det enda som brister.
+
+## Den avvisade rundan
+
+En korrigeringsrunda gjordes, och den avvisades i sin helhet. Rundan skrev om rubriken till ”Mötesmallen har rutor för tid, inte för varför”. Det var en ändring av rubrikens påstående som texten bär. Den lade också till mellanrubriken ”Din tur, med ett förbehåll” före uppmaningen.
+
+Den nya mellanrubriken var ett fel som rundan själv införde. Den är en etikett utan verb som inte säger något om sitt avsnitt och skulle kunna avsluta vilken krönika som helst. Läsaren får inte veta vilket förbehållet är förrän hen läst vidare. Därför återställdes texten som den var före rundan, och inget från rundan finns kvar, inte heller den bättre rubriken. Rundan förbrukade korrigeringsbudgeten på 1. De två fynden ovan är samma fynd som rundan skulle lösa.
+
+Det som behöver avgöras är en mellanrubrik för avslutningen som säger vad avsnittet handlar om, samt en rubrik som håller sig till vad texten säger.
+
+## Påståenden
+
+Den levererade texten är identisk med den mottagna. Inget påstående har tagits bort, ändrats eller lagts till. Den avvisade rundans ändrade rubrik och tillagda mellanrubrik finns inte i det som levererats.

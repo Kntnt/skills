@@ -1,0 +1,71 @@
+I reviewed `input.md` against the case-study contract, made one correction round (the budget was 1), and ran the mechanical pass. The three findings are all resolved and none is left open. Nothing was written to disk: `input.md` is unchanged and the scratch files are deleted.
+
+```markdown
+---
+kntnt:
+  genre: casestudy
+  technique: none
+  language: en_GB
+---
+
+# Fenwick keeps the shared schedule for new jobs
+
+A six-week trial at Fenwick Instrument Repairs replaced two paper sheets with one shared bench schedule. The workshop's summary counts 38 jobs and no repair times. Manager Priya Vale says what had to be agreed first, and what to allow more time for.
+
+By Thomas Barregren
+
+Fenwick Instrument Repairs services brass and woodwind instruments. Until January 2026 its jobs sat on two paper sheets, one for those awaiting parts and one for those ready for work; that month the team began a six-week trial of a shared bench schedule from scheduling software supplier Benchline, chosen after checking that it could tell the two apart.
+
+## The workshop wrote the definitions; Benchline set up the software
+
+Which statuses the schedule would carry, and who would update them, the workshop settled itself. Benchline configured those choices and trained four staff in one online session. Collection arrangements stayed on the telephone.
+
+Asked by email by Benchline's case writer what had to be settled first, Priya Vale, the workshop's manager, answered:
+
+> We had to agree what ready for work meant. A part being in the building did not always mean that it had reached the right bench.
+
+## The summary counts jobs; the backlog waits until statuses are reviewed
+
+The workshop's summary, dated 23 February 2026, records 38 jobs entered in the schedule and says staff could see which instruments were waiting for parts. It does not measure repair duration, revenue or customer satisfaction.
+
+The manager approved continued use for new jobs but postponed adding the backlog until the team had reviewed its status definitions.
+
+## Priya Vale looks back on the trial
+
+Vale's verdict comes with a condition and a delay:
+
+> I would use it again for new jobs. I would allow another week to check the status names before adding the backlog.
+
+The trial cannot say whether the same schedule would suit another workshop. What travels is Vale's order of work: agree the status names, then enter the jobs.
+```
+
+**Settings used:**
+- **Genre:** `casestudy`, from your command.
+- **Technique:** `none`, from the text's own frontmatter; the case-study genre doesn't name a technique either.
+- **Language:** `en_GB`, from your command; the frontmatter agrees.
+
+**Metadata problem:** the text's frontmatter said `genre: case-study`, which isn't a genre that exists. Your `--genre` flag had already settled the genre, so the review went ahead, and the frontmatter now reads `genre: casestudy`.
+
+**Article structure:** the text now meets every structural requirement. The anatomy script found no failures, and I checked by reading the rules the script doesn't count.
+
+**Findings, all resolved in the one round:**
+1. **Vale was only identified in the standfirst.** The first mention of her in the body said just "Vale", and the later "The manager" relied on the same missing introduction. Someone skipping the standfirst had no idea who was speaking. Her first mention in the body now gives her full name and role.
+2. **The section 2 subheading needed rewriting.** It was "Staff could see the waiting jobs; the summary measures no repair time", and it had three problems:
+   - It repeated the wording of the sentences under it.
+   - It stated as fact what the body attributes to the summary, and widened "waiting for parts" to "the waiting jobs".
+   - It said nothing about the section's second paragraph, the decision about the backlog.
+
+   It now reads "The summary counts jobs; the backlog waits until statuses are reviewed".
+3. **The section 3 subheading gave away the quotation.** "Vale would use the schedule again for new jobs" said Vale's verdict before her quotation did, and echoed the headline. It now reads "Priya Vale looks back on the trial" and leaves the verdict to her.
+
+**What happened to the claims:**
+- **Changed, not new:**
+  - **Vale's role in the body:** the sentence before her first quotation now says she is the workshop's manager. The standfirst said this already.
+  - **Section 2 heading:** it now claims that the summary counts jobs and that adding the backlog waits for a review of the statuses. The body says both.
+  - **Section 3 heading:** it now claims only that Vale looks back on the trial. Her verdict now appears only in her quotation.
+- **Dropped from a heading:** section 2's heading no longer says that staff could see the waiting jobs. The body still says it, attributed to the summary.
+- **Limit that moved:** section 2's heading also no longer says that the summary measures no repair time. Someone who only skims the headings loses that warning; the standfirst and the body still say what the summary does not measure.
+
+No claim was removed from the body text and none was added, apart from the heading changes listed above.
+
+Beyond the claims: the frontmatter genre was corrected, one speaker introduction and two subheadings were reworded, and the final proofreading pass removed the quotation marks around the two block quotations.

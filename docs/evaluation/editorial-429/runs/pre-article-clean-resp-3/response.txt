@@ -1,0 +1,36 @@
+Granskad som `article` på svenska (`sv`), båda angivna i anropet. Ingen teknik tillämpas: genren `article` anger ingen teknik som den vanligtvis skrivs med, och ingen annan nivå angav någon. Texten levereras oförändrad, eftersom den enda rättelsen förkastades och korrekturläsningen inte hittade några mekaniska fel. Två anmärkningar kvarstår olösta.
+
+````markdown
+# Mätförsöket i Björkskolan visar när, inte varför
+
+**Under 14 av 120 lektionspass registrerade givarna i Björkskolan temperaturer under fastighetskontorets egen arbetsgräns. Fyra veckors mätningar pekar ut tillfällen att undersöka närmare, men förklarar inte varför luften var kall. Här är vad ett kort försök kan säga, och vad som behövs för att komma vidare.**
+
+Text: Hedda Lund
+
+En temperaturgivare mäter luften där den sitter. Det gör placeringen viktig när fastighetskontoret ska tolka fyra veckors mätningar i Björkskolans sex klassrum. Genomgången nedan visar vad värdena räcker till och var gränsen går.
+
+## En gräns för det lokala försöket
+
+Kontoret valde 20 grader Celsius som arbetsgräns. Rapporten *Mätförsök i Björkskolan*, daterad 12 mars 2026, räknar 14 lektionspass av 120 med minst en mätning under den gränsen. Hur länge temperaturen låg under den anger rapporten inte. Gränsen är kontorets egen, vald för det här försöket.
+
+Givarna mätte varken luftdrag eller elevernas upplevelse. Ett lågt värde säger alltså när luften var kall, men inte hur rummet kändes.
+
+Driftteknikern Elin Rask sammanfattar: ”Vi vet när vi behöver titta närmare. Vi vet ännu inte varför det blev kallt just då.”
+
+## Nästa försök behöver mer än givare
+
+Rask rekommenderar att temperaturserierna kopplas till rummens användningstider innan styrningen ändras. Nästa försök planeras för november med likadant placerade givare, men finansieringen är inte beslutad.
+
+Lägg därför tiderna för när rummen används bredvid mätvärdena innan nästa givare sätts upp.
+````
+
+**Olösta anmärkningar**
+
+1. **Rubriken säger inte vad försöket mätte (olöst).** I ”Mätförsöket i Björkskolan visar när, inte varför” står ”när” och ”varför” utan något de syftar på. Rubriken säger alltså inte vad försöket mätte eller vad det visar tidpunkten för. Den som bara ser rubriken kan inte avgöra om texten handlar om temperatur, luftkvalitet eller något annat, och därmed inte om den är skriven för dem. Enligt rubrikkontraktet ska en rubrik förstås på egen hand.
+2. **”styrningen” har ingen förklaring (olöst).** ”… innan styrningen ändras” står i bestämd form, men texten nämner ingen styrning någon annanstans. Läsaren kan inte veta vad som ska ändras, till exempel värme eller ventilation. Därför är det också oklart vad Rasks rekommendation ska föregå. Det går inte att rätta utan uppgifter som saknas i texten.
+
+**Förkastad rättelse:** En rättelse av anmärkning 1 gjordes och förkastades. Rubriken skrevs om till ”Mätförsöket i Björkskolan visar när temperaturen var låg, inte varför”. Den nya rubriken hade 10 ord och 69 tecken, alltså över artikelanatomins normer på högst åtta ord och högst 60 tecken. Det gick att hålla sig inom normerna, så överskridandet var ett fel som rättelsen själv skapade. Därför förkastades hela rättelsen och originaltexten återställdes. Rättelsebudgeten (1) är förbrukad. Det som återstår att avgöra är rubriken: den behöver säga vad den handlar om och ändå vara kort.
+
+**Artikelanatomin:** De uppmätta kraven håller: rubriken har 48 tecken och 7 ord, ingressen 46 ord i ett stycke, och avsnitten har tre respektive två stycken. Jag har också granskat de krav som inte mäts: att ingressen står på egen hand, att ingress och inledning inte upprepar varandra, att mellanrubrikerna beskriver sina avsnitt och att sista avsnittet är ett avslut med en uppmaning. Texten uppfyller anatomin med ett undantag, rubriken, som strider mot rubrikkontraktet enligt anmärkning 1.
+
+Inga påståenden har tagits bort, ändrats eller lagts till i den levererade texten.

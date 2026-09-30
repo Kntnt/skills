@@ -1,0 +1,55 @@
+Granskningen hittade nio fynd, men ingen korrigering står kvar. Den enda korrigeringsrundan (`--max=1`) skapade ett nytt fel och förkastades helt. Texten nedan är därför exakt den du skickade in, och alla nio fynd är olösta.
+
+**Inställningar:**
+- **Genre:** `opinion`, från anropet.
+- **Språk:** `sv`, från anropet.
+- **Teknik:** ingen. Genren `opinion` skrivs vanligen utan teknik, och inget annat valde någon.
+- **Skrivuppdrag (brief):** inget.
+- **Metadata:** texten har ingen `kntnt`-karta, och ingen lades till.
+
+```markdown
+# Kommunledningen hatar människor
+
+Sanna Ek, Öppna beslut
+
+Kommunstyrelsen borde behålla telefonbokning under ett halvårs försök i alla sju lokaler. Alla vet att politikerna vill stänga ute äldre för att spara miljoner.
+
+## Bakgrund
+
+Det gjordes 96 bokningar på webben och 24 via telefon. Det bevisar att 20 procent av kommunens invånare inte kan använda internet. Kommunens pilotrapport från den 8 april 2026 säger samtidigt att bokningarna inte räknar unika personer och att digital vana inte undersöktes.
+
+## Diskussion
+
+Förvaltningen invänder att dubbla kanaler innebär dubbel administration. Handlingarna saknar tidsmätning. Därför kostar det ingenting att behålla telefonbokningen. Föreningen vill att förvaltningen mäter tidsåtgång och frågar användarna varför de väljer en bokningsväg. Försökets kostnad är inte beräknad.
+
+Nu är det dags att agera.
+```
+
+## Olösta fynd
+
+1. **Rubriken "Kommunledningen hatar människor"** påstår något texten inte belägger: den tillskriver motparten ett motiv. Den säger inte heller vad texten driver, nämligen att telefonbokningen ska finnas kvar under ett halvårs försök. Tonen är högre än textens, och "kommunledningen" förekommer inte i brödtexten, som talar om kommunstyrelsen. Den som bara ser rubriken kan inte avgöra vad texten handlar om och vilseleds om vad den vill.
+2. **Ingress saknas.** Artikelanatomin kräver ett självbärande ingressstycke mellan rubrik och byline, och mätskriptet rapporterar att den saknas. Delen skrivs inte vid en granskning, utan någon behöver skriva den.
+3. **"Alla vet att politikerna vill stänga ute äldre för att spara miljoner."**
+   - "Alla vet" är en tom källhänvisning.
+   - Motivet är påhittat, och äldre nämns ingen annanstans i texten.
+   - "Spara miljoner" motsägs av textens eget "Försökets kostnad är inte beräknad".
+
+   Läsaren får ett obelagt motiv serverat som allmänt känt.
+4. **"Det bevisar att 20 procent av kommunens invånare inte kan använda internet."** 24 av 120 bokningar är 20 procent av bokningarna, inte av invånarna. Nästa mening säger dessutom att bokningarna inte räknar unika personer och att digital vana inte undersöktes. Texten underkänner alltså själv sin slutsats. Meningen om pilotrapporten avgränsar vad texten vet och ska stå kvar.
+5. **"Därför kostar det ingenting att behålla telefonbokningen."** Att tidsmätning saknas visar inte att kostnaden är noll, och "Försökets kostnad är inte beräknad" säger emot. Förvaltningens invändning avfärdas med en felslutning i stället för att bemötas rättvist.
+6. **Mellanrubrikerna "Bakgrund" och "Diskussion"** är rena etiketter. Den som skummar texten får inte veta att första avsnittet handlar om fördelningen mellan webb och telefon och om pilotrapportens förbehåll. Den får inte heller veta att andra avsnittet handlar om invändningen om dubbel administration och om vad som saknas i underlaget.
+7. **Slutet "Nu är det dags att agera."** nämner varken handling eller vem som ska handla. Dessutom står raden sist i avsnittet som bär argumentet, så texten saknar ett eget avslutande avsnitt med egen mellanrubrik. Förslaget finns redan i texten: kommunstyrelsen behåller telefonbokningen under ett halvårs försök, och förvaltningen mäter tidsåtgången och frågar användarna.
+8. **"Föreningen vill …"** Brödtexten har aldrig presenterat någon förening, och vem som menas går bara att gissa ur bylinen ("Öppna beslut").
+9. **Ledet och Bakgrund** säger inte vad som bokas i "alla sju lokaler", vilket beslut som ligger på bordet eller vad pilotrapporten gäller. Det kräver sannolikt uppgifter som texten inte har.
+
+Texten följer inte artikelanatomin: ingressen saknas (fynd 2), ledet ger ingen klar förväntan (fynd 9) och slutet är inget eget avsnitt (fynd 7). Övriga räknade gränser håller, bland annat rubrikens 31 tecken och styckenas längd.
+
+## Den förkastade rundan
+
+En korrigeringsrunda försökte åtgärda fynd 1 och 3–8. Rundan skapade ett nytt fel när den åtgärdade fynd 6. Den gav första avsnittet mellanrubriken "Bokningarna via webb och telefon räknar inte unika personer". Den upprepade nästan ordagrant det förbehåll som avsnittet låter pilotrapporten stå för, och påstod det som skribentens eget faktum utan rapporten som källa.
+
+Därför förkastades hela rundan, och texten sådan den kom in återställdes. Inget från rundan finns kvar, så fynd 1 och 3–8 är lika olösta som 2 och 9. Den nya felet finns inte i den levererade texten. Korrigeringsbudgeten (1) är förbrukad.
+
+## Påståendena
+
+Den levererade texten är identisk med den som kom in. Den avslutande korrekturläsningen hittade inga mekaniska fel. Inget påstående har tagits bort, ändrats eller lagts till. Inga filer skrevs, och `input.md` är orörd.

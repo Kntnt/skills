@@ -1,0 +1,528 @@
+{
+  "schema_version": 1,
+  "packet": "pre-article-clean-resp-3",
+  "agents": [
+    {
+      "agent_id": "3a058d79-ca03-421c-bdf4-1f9ee40f1cda",
+      "role": "session",
+      "parent_agent_id": null,
+      "tool_use_id": null,
+      "agent_type": null,
+      "description": null,
+      "spawn_depth": 0,
+      "transcript": "transcripts/parent.jsonl",
+      "instruction": "<command-message>redline</command-message>\n<command-name>/redline</command-name>\n<command-args>--genre=article --language=sv --output=response input.md</command-args>",
+      "started_at": "2026-09-29T22:55:31.047Z",
+      "ended_at": "2026-09-29T22:58:50.233Z",
+      "seats": [
+        {
+          "model": "claude-opus-5-5",
+          "deliberation": "high",
+          "turns": 20
+        },
+        {
+          "model": "<synthetic>",
+          "deliberation": null,
+          "turns": 1
+        }
+      ],
+      "skill_bodies": [
+        {
+          "base_directory": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/home/.claude/skills/redline",
+          "chars": 37405
+        }
+      ],
+      "calls": [
+        {
+          "ordinal": 1,
+          "at": "2026-09-29T22:55:34.189Z",
+          "tool": "Bash",
+          "tool_use_id": "toolu_015C14yN7tP1x63k2BNErCZH",
+          "arguments": {
+            "command": "HERE=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/home/.claude/skills/redline; T=$(mktemp -d); printf '%s' '--genre=article --language=sv --output=response input.md' | TMPDIR=$T UV_NO_CACHE=1 UV_NO_PROJECT=1 uv run \"$HERE/scripts/invoke.py\"; echo \"exit=$?\"; rm -rf \"$T\"",
+            "description": "Run the redline invocation shim"
+          },
+          "is_error": false,
+          "result_chars": 850,
+          "result_excerpt": "Invocation read.\n\nBefore anything else, answer each Capability under `dependencies.capabilities`: say whether its `confirm` sentence is true of you, and where one is not, give its `how`, change nothing, and stop.\n\n`$LIBRARY` is `/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/home/.claude/skills/kntnt/library`.\n\n```json\n{\n  \"ok\": true,\n  \"path\": [],\n  \"fla"
+        },
+        {
+          "ordinal": 2,
+          "at": "2026-09-29T22:55:38.284Z",
+          "tool": "Bash",
+          "tool_use_id": "toolu_015qE45BJ8FYhMcMjMFgrhi5",
+          "arguments": {
+            "command": "cd /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/work; ls -la; cat -n input.md; L=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/home/.claude/skills/kntnt/library; ls -R $L/references $L/scripts",
+            "description": "Show input text and library layout"
+          },
+          "is_error": false,
+          "result_chars": 3414,
+          "result_excerpt": "total 4\ndrwxr-xr-x 3 thomas staff   96 Sep 30 00:55 .\ndrwx------ 5 thomas staff  160 Sep 30 00:55 ..\n-rw-r--r-- 1 thomas staff 1638 Sep 30 00:03 input.md\n     1\t# Mätförsöket i Björkskolan visar när, inte varför\n     2\t\n     3\t**Under 14 av 120 lektionspass registrerade givarna i Björkskolan temperaturer under fastighetskontorets egen arbetsgräns. Fyra veckors mätningar pekar ut tillfällen att und"
+        },
+        {
+          "ordinal": 3,
+          "at": "2026-09-29T22:55:41.122Z",
+          "tool": "Bash",
+          "tool_use_id": "toolu_013ngdGGi86pvHKRbqWx79o6",
+          "arguments": {
+            "command": "L=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/home/.claude/skills/kntnt/library; T=$(mktemp -d); TMPDIR=$T uv run --no-cache --no-project \"$L/scripts/languages.py\" resolve --scope=composition --scope=review --scope=anti-slop \"sv\"; echo \"exit=$?\"; rm -rf \"$T\"; cat $L/references/delivery.md",
+            "description": "Resolve Swedish language resource and read delivery contract"
+          },
+          "is_error": false,
+          "result_chars": 21503,
+          "result_excerpt": "Installed 1 package in 1ms\n{\n  \"selector\": \"sv\",\n  \"code\": \"sv\",\n  \"language\": \"Swedish\",\n  \"territory\": null,\n  \"territory_name\": null,\n  \"inherits\": null,\n  \"scopes\": {\n    \"composition\": {\n      \"source\": \"sv\",\n      \"content\": \"Swedish is a V2 language: the finite verb is the second constituent of a main clause, so fronting anything at all pushes the subject behind the verb. Write *I morgon åk"
+        },
+        {
+          "ordinal": 4,
+          "at": "2026-09-29T22:55:44.442Z",
+          "tool": "Bash",
+          "tool_use_id": "toolu_01AtDCDjCgpdYoFzNHJRPWir",
+          "arguments": {
+            "command": "L=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/home/.claude/skills/kntnt/library/references/editorial; cat $L/genres/article.md $L/genres/article.review.md",
+            "description": "Read article genre resources"
+          },
+          "is_error": false,
+          "result_chars": 2157,
+          "result_excerpt": "# Article\n\nA journalistic explanation or account that helps a web reader understand a focused subject. Its interest comes from what is reported and how it is explained, rather than the author's personal reflection or a campaign for a position. A blog post is an article published on a blog.\n\nApply the shared [web craft brief](../web-craft.md).\n\nFollow the [article anatomy](../article-anatomy.md).\n\n"
+        },
+        {
+          "ordinal": 5,
+          "at": "2026-09-29T22:55:45.686Z",
+          "tool": "Bash",
+          "tool_use_id": "toolu_01KA97f1Pn5fiXX4TmTT9DG3",
+          "arguments": {
+            "command": "L=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/home/.claude/skills/kntnt/library/references/editorial; cat $L/base.md $L/base.review.md",
+            "description": "Read base editorial contract"
+          },
+          "is_error": false,
+          "result_chars": 8783,
+          "result_excerpt": "# The base contract\n\nWrite with the clarity and factual precision of a well-edited newspaper or quality magazine. Genre, audience, and purpose override that register: a letter, a speech and an advertisement keep their own character. The selected genre governs craft and form; the resolved language governs idiom, syntax and typography. Examples here illustrate meanings, not English phrases to transl"
+        },
+        {
+          "ordinal": 6,
+          "at": "2026-09-29T22:55:48.614Z",
+          "tool": "Bash",
+          "tool_use_id": "toolu_01HkiXwEVRALHvKWJGEeRexo",
+          "arguments": {
+            "command": "L=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/home/.claude/skills/kntnt/library/references/editorial; cat $L/article-anatomy.md $L/article-anatomy.review.md $L/headlines.md $L/headlines.review.md",
+            "description": "Read article anatomy and headline resources"
+          },
+          "is_error": false,
+          "result_chars": 18099,
+          "result_excerpt": "# Article anatomy\n\nThe fixed skeleton of a text in the genres `article`, `casestudy`, `column` and `opinion`; *article* below means a text in any of them. The anatomy fixes which parts the text has, their order and their dimensions. Angle, argument, voice and language are outside it.\n\nA statement below has one of three strengths:\n\n- A plain statement is a requirement: it holds in every conforming "
+        },
+        {
+          "ordinal": 7,
+          "at": "2026-09-29T22:55:50.003Z",
+          "tool": "Bash",
+          "tool_use_id": "toolu_017BKGRzUAK1FCgupfTsca12",
+          "arguments": {
+            "command": "L=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/home/.claude/skills/kntnt/library/references/editorial; cat $L/anti-slop.md $L/web-craft.md $L/web-craft.review.md",
+            "description": "Read anti-slop and web craft resources"
+          },
+          "is_error": false,
+          "result_chars": 9260,
+          "result_excerpt": "# The anti-slop catalogue\n\nProse that a language model produced, or that a human wrote after reading a great deal of it, fails in a small number of recognisable ways. This is the catalogue of those ways: what each one looks like on the page, why it costs the reader something, and the smallest change that removes it. It is a diagnostic document — a Skill reading it beside the base contract meets no"
+        },
+        {
+          "ordinal": 8,
+          "at": "2026-09-29T22:55:53.998Z",
+          "tool": "Bash",
+          "tool_use_id": "toolu_01APzgmNqbcYbe55p3KS4N9B",
+          "arguments": {
+            "command": "cd /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/work; L=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/home/.claude/skills/kntnt/library; T=$(mktemp -d); TMPDIR=$T uv run --no-cache --no-project \"$L/scripts/article_anatomy.py\" - < input.md; echo \"exit=$?\"; rm -rf \"$T\"",
+            "description": "Measure article anatomy of input text"
+          },
+          "is_error": false,
+          "result_chars": 3244,
+          "result_excerpt": "{\n  \"ok\": true,\n  \"format\": \"markdown\",\n  \"conforms\": true,\n  \"failures\": [],\n  \"norms\": [],\n  \"typical\": {\n    \"paragraphs\": 7,\n    \"paragraphs_of_two_or_three_sentences\": 5,\n    \"sections\": 2,\n    \"sections_of_two_or_three_paragraphs\": 2\n  },\n  \"parts\": {\n    \"headline\": {\n      \"text\": \"Mätförsöket i Björkskolan visar när, inte varför\",\n      \"characters\": 48,\n      \"words\": 7\n    },\n    \"stand"
+        },
+        {
+          "ordinal": 9,
+          "at": "2026-09-29T22:57:32.673Z",
+          "tool": "Bash",
+          "tool_use_id": "toolu_01E6DcdYif9Zxce9gzrtzY6p",
+          "arguments": {
+            "command": "cat /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/home/.claude/skills/redline/references/correction.md",
+            "description": "Read the correction subagent brief"
+          },
+          "is_error": false,
+          "result_chars": 14802,
+          "result_excerpt": "# The correction brief\n\nGive this to a subagent started fresh for one correction, filled in from the run as it now stands. Everything in angle brackets is replaced; nothing else is rewritten.\n\n`<text>` is the current Text Artifact pasted whole — the text as it stands after every correction so far, never the text as it arrived and never an extract of it. `<findings>` is every finding of the most re"
+        },
+        {
+          "ordinal": 10,
+          "at": "2026-09-29T22:58:43.574Z",
+          "tool": "Agent",
+          "tool_use_id": "toolu_013SMg7MFqxAtv5PBq54szos",
+          "arguments": {
+            "description": "Correct Swedish article findings",
+            "subagent_type": "general-purpose",
+            "run_in_background": false,
+            "prompt": "You are making one correction to one text. You have not seen this text before, and there is nothing you are expected to remember: the text below is its current state, and the findings below are the current review's, complete and as they were written. Repair them.\n\n**The text.** This is the complete Text Artifact, exactly as it now stands:\n\n````markdown\n# Mätförsöket i Björkskolan visar när, inte varför\n\n**Under 14 av 120 lektionspass registrerade givarna i Björkskolan temperaturer under fastighetskontorets egen arbetsgräns. Fyra veckors mätningar pekar ut tillfällen att undersöka närmare, men förklarar inte varför luften var kall. Här är vad ett kort försök kan säga, och vad som behövs för att komma vidare.**\n\nText: Hedda Lund\n\nEn temperaturgivare mäter luften där den sitter. Det gör placeringen viktig när fastighetskontoret ska tolka fyra veckors mätningar i Björkskolans sex klassrum. Genomgången nedan visar vad värdena räcker till och var gränsen går.\n\n## En gräns för det lokala försöket\n\nKontoret valde 20 grader Celsius som arbetsgräns. Rapporten *Mätförsök i Björkskolan*, daterad 12 mars 2026, räknar 14 lektionspass av 120 med minst en mätning under den gränsen. Hur länge temperaturen låg under den anger rapporten inte. Gränsen är kontorets egen, vald för det här försöket.\n\nGivarna mätte varken luftdrag eller elevernas upplevelse. Ett lågt värde säger alltså när luften var kall, men inte hur rummet kändes.\n\nDriftteknikern Elin Rask sammanfattar: ”Vi vet när vi behöver titta närmare. Vi vet ännu inte varför det blev kallt just då.”\n\n## Nästa försök behöver mer än givare\n\nRask rekommenderar att temperaturserierna kopplas till rummens användningstider innan styrningen ändras. Nästa försök planeras för november med likadant placerade givare, men finansieringen är inte beslutad.\n\nLägg därför tiderna för när rummen används bredvid mätvärdena innan nästa givare sätts upp.\n````\n\n(The fence above is not part of the text; the text begins at `# Mätförsöket` and ends with a single trailing newline after the last paragraph.)\n\n**The findings.** This is every finding the review recorded against that text, complete and in the order it recorded them:\n\n1. Rubriken ”Mätförsöket i Björkskolan visar när, inte varför” (48 tecken, 7 ord). Krav (Headlines): rubriken förstås på egen hand, utan ingress, och rubrik och ingress säger olika saker med olika ord. ”När” står utan innehåll: den som bara ser rubriken får inte veta vad försöket visar när – att luften i klassrummen låg under arbetsgränsen – och ämnets viktigaste nyckelord (temperatur, kyla) saknas. Samtidigt säger ingressens andra mening (”pekar ut tillfällen att undersöka närmare, men förklarar inte varför luften var kall”) samma sak som rubriken igen, med samma ”inte varför”. Läsaren förlorar: rubriken går inte att förstå utan att läsa vidare, och ingressen upprepar rubriken i stället för att komplettera den. Reparation: skriv om rubriken ensam, ur textens vinkel och med textens egen styrka, i ord som ingressen inte redan använder; ingressen står kvar som den är.\n\n2. Underrubriken ”En gräns för det lokala försöket” (32 tecken). Krav (Article anatomy, Headlines): en underrubrik beskriver tydligt vad styckena under den handlar om. Den beskriver bara första styckets sista mening (att gränsen är kontorets egen), medan avsnittet handlar om vad mätvärdena räcker till: antalet pass under gränsen, att rapporten inte anger hur länge temperaturen låg under den, att givarna varken mätte luftdrag eller elevernas upplevelse, och Rasks sammanfattning. Dessutom kommer ”gräns” direkt efter ingångens ”var gränsen går”, där ordet betyder gränsen för vad värdena räcker till, men betyder här en temperaturgräns. Läsaren förlorar: en ingång som säger vad avsnittet ger, och två betydelser av ”gräns” flyter ihop. Reparation: skriv om underrubriken ur hela avsnittet, utan att förbruka Rasks citat (att man vet när men ännu inte varför), och utan att påstå mer än avsnittet gör – rapporten anger inte hur länge temperaturen låg under gränsen, vilket inte är detsamma som att givarna inte mätte det.\n\n3. Ingången: ”En temperaturgivare mäter luften där den sitter. Det gör placeringen viktig när fastighetskontoret ska tolka fyra veckors mätningar i Björkskolans sex klassrum.” Krav (grundkontraktet, artikelgranskningen): den vinkel och det löfte ingången sätter följs genom avsnitten och slutet. Ingången gör givarnas placering till något tolkningen hänger på, men texten säger aldrig var givarna satt eller hur placeringen påverkar de 14 passen, och slutets ”likadant placerade givare” lämnar läsaren utan möjlighet att avgöra om samma placering är ett problem. Läsaren förlorar: en tråd som ingången öppnar och brödtexten aldrig tar upp. Olöst: reparation kräver uppgifter som texten saknar (var givarna satt), och ingångens första mening bär en avgränsning – givaren mäter bara luften där den sitter – som ska stå kvar.\n\n4. ”Rask rekommenderar att temperaturserierna kopplas till rummens användningstider innan styrningen ändras.” Krav (grundkontraktet: referenser tydliga, okända begrepp introduceras innan resonemanget behöver dem). ”Styrningen” står i bestämd form men texten har inte nämnt någon styrning eller att en ändring av den är aktuell. Läsaren förlorar: vet inte vilken styrning (värme, ventilation eller något annat) som avses eller att en ändring planeras. Olöst: reparation kräver en uppgift som texten saknar.\n\n**The contract.** The text is an `article` in `sv`, and it is held to `none`. Read what it is held to before you change anything: `/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/home/.claude/skills/kntnt/library/references/editorial/base.md` and `/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/home/.claude/skills/kntnt/library/references/editorial/base.review.md`; `/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/home/.claude/skills/kntnt/library/references/editorial/genres/article.md` and the `.review.md` file beside it where one exists; `/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/home/.claude/skills/kntnt/library/references/editorial/anti-slop.md`; and the `composition`, `review` and `anti-slop` scopes of the resolved language, which `uv run \"/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/home/.claude/skills/kntnt/library/scripts/languages.py\" resolve --scope=composition --scope=review --scope=anti-slop \"sv\"` returns. For `article`, `casestudy`, `column` and `opinion`, and for `webcopy`, also read `/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/home/.claude/skills/kntnt/library/references/editorial/web-craft.md` and `/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/home/.claude/skills/kntnt/library/references/editorial/web-craft.review.md`; for `article`, `casestudy`, `column` and `opinion` alone, also read `/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/home/.claude/skills/kntnt/library/references/editorial/article-anatomy.md` and `/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/home/.claude/skills/kntnt/library/references/editorial/article-anatomy.review.md`, which fix the parts, order and dimensions of such a text, and `/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/home/.claude/skills/kntnt/library/references/editorial/headlines.md` and `/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/home/.claude/skills/kntnt/library/references/editorial/headlines.review.md`, which say how its headline and its subheadings are written. These are the only additional genre support files: follow no other genre links and load no unselected genre or technique. A review extension that is not there is not a defect. Run the resolver with `UV_NO_CACHE=1 UV_NO_PROJECT=1` and a fresh private `TMPDIR`, removing that directory afterwards, including on failure. Load no mechanics guidance and correct no spelling, punctuation, or grammar: a mechanical pass runs after you, and work you do there is work done twice.\n\n**What you change, and what you preserve.** Repair what the findings name and nothing else. Every difference between the text you return and the text above is traced to a finding, or to what repairing a finding required, before this round is accepted, and a difference that traces to no finding is restored from the text you received — so a phrase you improved outside a finding is work that will be undone. Preserve everything the findings do not concern: every sentence, every fact, every quotation, every code sample, every heading, every piece of formatting and every line of frontmatter among them comes back exactly as you received it — a repair that improves a paragraph nobody complained about is a change nobody asked for and nobody will review. A code sample — a fenced block, an indented block, or an inline code span — is quoted material rather than the text's own prose: its contents are read past rather than read against the rules, so nothing inside one is a finding and nothing inside one is changed, the docstrings, comments, and string literals among them. Prose about code is ordinary prose and is read like every other sentence. Where a finding can be repaired several ways, make the smallest change that removes it. Where a finding names something you cannot repair without inventing a fact, changing what the text claims, or altering a quotation's meaning, stance, certainty or distinctive wording, leave that passage alone and say so: in an ordinary review this text is answerable to material you do not have, and a plausible invention is worse than an unrepaired finding. For a brief-shortfall finding carrying exact source support, use only that support or the text to supply what is missing. Source Fidelity binds the repair: retain attribution, uncertainty, scope, chronology, causality and quotation meaning. A requirement in the brief is not source evidence; where the finding has no support for a needed fact, source or quotation, leave it for the writer and report why.\n\n**A defect of your own costs the whole round.** The review that follows you establishes whether this text has a defect it did not have when you received it — a headline or a heading claiming more than the text claims, a heading repeating the passage under it, a limit your repair dropped. Where it establishes one, the whole round is rejected: the text you received is restored entire, nothing you did survives however much else you repaired, and no fresh attempt follows. So a finding you cannot repair without creating another one is a finding you leave and say so, exactly as you would one you cannot repair without inventing a fact — an unrepaired finding a person can settle costs less than a repair that has to be thrown away with everything beside it.\n\n**What a repair may take with it, and what it may not.** A finding names a defect, and what a repair removes is that defect. Where the defect a finding names is the whole of the passage — an opening that would sit in front of any text, a closing that restates what the reader has just read, a claim credited to nobody that the text cannot source — removing it may be the repair, and any claim removed with it must be named in your return. That stops at a sentence whose work is to bound what the text asserts — that something is not measured, not claimed, not witnessed or not general, or that the text is an observation of a document rather than a scene from an occasion. Remove or weaken one only where the finding names a defect inside the sentence, and only where a sentence you keep still states that limit in full, so the text bounds what it claims exactly as far as it did, or where the limit contradicts another passage of the same text. Otherwise leave it exactly as it stands and say so. Where the passage carries a claim beside the defect — a fact, an observation, the point the passage exists to make — the smallest change is the one that leaves that claim standing, and deleting the passage entire is not that change. And where you can see no way to remove the defect that does not take the claim with it, leave the passage alone and say so, exactly as you would a finding you cannot repair without inventing a fact: a person can give that claim what it needs or let it go, and a round that deletes it leaves them nothing to weigh. That judgement is about the passage in front of you and never about how much of the text is left — a short text is no licence to leave a finding standing, and a long one is no licence to go on cutting.\n\nA repair at a punctuation joint can be the smallest change even when the finding names the implication created there rather than punctuation itself. In *We finished in March, the finance team got a new reporting tool the same month.*, the defect is the implication created by joining unrelated claims, not either claim. Repair it as *We finished in March. The finance team got a new reporting tool the same month.*: splitting at the joint removes the implication and keeps the reporting-tool fact. Do the same wherever the named defect is confined to a joint; do not delete either side or supply a relationship the text does not establish. This example does not admit a wider mechanics pass: it identifies the smallest repair for the finding already in hand.\n\nBefore you return the text, compare it before and after, claim by claim. Every claim you received must still appear with its scope, certainty, attribution, chronology, causality and meaning intact unless the finding named the whole claim as the defect; that exception does not reach a sentence whose work is to bound what the text asserts, which goes only on the two conditions above, and the number or concentration of findings changes nothing about that check. The concentrated anti-slop case makes the boundary visible: removing its patterns must not discard its claims about meeting load, documentation, decisions, satisfaction, distributed work, adoption conditions, or the synchronous/asynchronous trade-off. Repair the patterns around those claims. If one cannot be separated from its pattern, keep it and report the finding unresolved; never compress several content-bearing passages into a cleaner summary.\n\nWhere the text is an `article`, a `casestudy`, a `column` or an `opinion`, measure it before you return it: run `uv run \"/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/home/.claude/skills/kntnt/library/scripts/article_anatomy.py\" -` with the complete corrected text on stdin, under the same `UV_NO_CACHE=1 UV_NO_PROJECT=1` and fresh private `TMPDIR` terms as the resolver above. Exit 0 settles the counted requirements only: it says they hold and nothing about the anatomy requirements the script does not count, so your return reports the text as conforming to the anatomy only where you examined every one of those too, and otherwise names the ones you did not examine. Exit 1 names each counted requirement of the article anatomy that fails, with the part, the rule and the figure measured: repair the ones a finding named and the ones your own repair introduced, then measure again, except a part a finding names as absent and a failure caused only by an absent part, which you leave unwritten and name in your return as left for a person to supply; a requirement the text was already failing when it reached you, and that no finding names, is left exactly as it stands like everything else the findings do not concern. Exit 2 says the script could not measure the text, and your return says so. Read every `heading_pairs` entry against the complete candidate and the loaded headline contract before returning, whatever the exit status: judge whether each part adds different information in different wording. Necessary repeated names and topic words can be legitimate, and a paraphrased echo can share no words; `shared_words` alone never authorizes a change or creates a finding. Verify absent or ambiguous sentence estimates against the text; on exit 2 inspect the pairs by hand. Repair echoes named by the findings or introduced by your own correction by wording the heading from its whole text or section without strengthening its claims and without pre-spending the judgement, figure or concession of a quotation standing under a subheading, then measure again. An unrelated pre-existing echo stays as received and is reported in your return, with the pair and reader loss; the evidence does not expand your correction authority. Report any echo you cannot repair within that authority the same way.\n\n**Your own working files.** Any file you write for your own working purposes — a candidate you measure, a draft you compare, anything you keep while you work — goes in a directory you created for this one round, under a name made unique when you created it, such as the one `mktemp -d` returns. Remove that directory before you return, including on failure. A fixed name under a shared temporary directory is not that directory, whether the directory is the system's own or a scratchpad your session was given: another run may be working at the same time, in the same place and on this same text, and write that same name. The file you come back to is then that run's work and not yours, and when you take it for your own stale copy and delete or replace it, you destroy work that is not yours, and nothing tells the run it came from.\n\n**What you return.** The complete corrected text and a short note of which findings you repaired and which you left, with the reason for each you left. Where any repair removed a passage carrying a claim, name every removed claim and say which finding made the claim itself the defect, and name every changed claim the same way — one you left standing with its scope, certainty, attribution, chronology, causality or meaning moved, by what it now asserts rather than how far its wording moved, and the finding the repair that moved it answered. Where a repair took a limit, a connective or a bounding clause out of the text — a sentence or a heading saying what is not measured, not claimed or not known, a connective giving the text's own reason for what follows, a clause saying what a claim is not about — say what a reader of the text you return no longer has, however little of the text went with it. Name every added claim the same way, whether or not anything was removed: one the text you return asserts and the text you received has no counterpart for, an inference drawn from what that text already said among them where it asserts something that text did not say, and the finding the repair that wrote it answered. A claim with a counterpart in the text you received is changed rather than added. Reporting a removal never makes an impermissible one acceptable. The complete text: not a diff, not the changed passages, not a description of what you did. Return no commentary inside the text itself."
+          },
+          "is_error": true,
+          "result_chars": 204,
+          "result_excerpt": "Agent terminated early due to an API error: Failed to authenticate. API Error: 401 OAuth access token has been revoked. (error type authentication_failed, HTTP 401, model sent to the API: claude-opus-5-5)"
+        }
+      ],
+      "file_activity": [
+        {
+          "ordinal": 1,
+          "at": "2026-09-29T22:55:34.189Z",
+          "tool": "Bash",
+          "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/home/.claude/skills/redline",
+          "access": "shell",
+          "established_from": "shell-command",
+          "exact": true,
+          "command": "HERE=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/home/.claude/skills/redline; T=$(mktemp -d); printf '%s' '--genre=article --language=sv --output=response input.md' | TMPDIR=$T UV_NO_CACHE=1 UV_NO_PROJECT=1 uv run \"$HERE/scripts/invoke.py\"; echo \"exit=$?\"; rm -rf \"$T\""
+        },
+        {
+          "ordinal": 1,
+          "at": "2026-09-29T22:55:34.189Z",
+          "tool": "Bash",
+          "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/home/.claude/skills/redline/scripts/invoke.py",
+          "access": "shell",
+          "established_from": "shell-command",
+          "exact": true,
+          "command": "HERE=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/home/.claude/skills/redline; T=$(mktemp -d); printf '%s' '--genre=article --language=sv --output=response input.md' | TMPDIR=$T UV_NO_CACHE=1 UV_NO_PROJECT=1 uv run \"$HERE/scripts/invoke.py\"; echo \"exit=$?\"; rm -rf \"$T\""
+        },
+        {
+          "ordinal": 2,
+          "at": "2026-09-29T22:55:38.284Z",
+          "tool": "Bash",
+          "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/work",
+          "access": "shell",
+          "established_from": "shell-command",
+          "exact": true,
+          "command": "cd /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/work; ls -la; cat -n input.md; L=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/home/.claude/skills/kntnt/library; ls -R $L/references $L/scripts"
+        },
+        {
+          "ordinal": 2,
+          "at": "2026-09-29T22:55:38.284Z",
+          "tool": "Bash",
+          "path": "input.md",
+          "access": "shell",
+          "established_from": "shell-command",
+          "exact": true,
+          "command": "cd /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/work; ls -la; cat -n input.md; L=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/home/.claude/skills/kntnt/library; ls -R $L/references $L/scripts"
+        },
+        {
+          "ordinal": 2,
+          "at": "2026-09-29T22:55:38.284Z",
+          "tool": "Bash",
+          "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/home/.claude/skills/kntnt/library",
+          "access": "shell",
+          "established_from": "shell-command",
+          "exact": true,
+          "command": "cd /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/work; ls -la; cat -n input.md; L=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/home/.claude/skills/kntnt/library; ls -R $L/references $L/scripts"
+        },
+        {
+          "ordinal": 2,
+          "at": "2026-09-29T22:55:38.284Z",
+          "tool": "Bash",
+          "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/home/.claude/skills/kntnt/library/references",
+          "access": "shell",
+          "established_from": "shell-command",
+          "exact": false,
+          "command": "cd /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/work; ls -la; cat -n input.md; L=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/home/.claude/skills/kntnt/library; ls -R $L/references $L/scripts"
+        },
+        {
+          "ordinal": 2,
+          "at": "2026-09-29T22:55:38.284Z",
+          "tool": "Bash",
+          "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/home/.claude/skills/kntnt/library/scripts",
+          "access": "shell",
+          "established_from": "shell-command",
+          "exact": false,
+          "command": "cd /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/work; ls -la; cat -n input.md; L=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/home/.claude/skills/kntnt/library; ls -R $L/references $L/scripts"
+        },
+        {
+          "ordinal": 3,
+          "at": "2026-09-29T22:55:41.122Z",
+          "tool": "Bash",
+          "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/home/.claude/skills/kntnt/library",
+          "access": "shell",
+          "established_from": "shell-command",
+          "exact": true,
+          "command": "L=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/home/.claude/skills/kntnt/library; T=$(mktemp -d); TMPDIR=$T uv run --no-cache --no-project \"$L/scripts/languages.py\" resolve --scope=composition --scope=review --scope=anti-slop \"sv\"; echo \"exit=$?\"; rm -rf \"$T\"; cat $L/references/delivery.md"
+        },
+        {
+          "ordinal": 3,
+          "at": "2026-09-29T22:55:41.122Z",
+          "tool": "Bash",
+          "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/home/.claude/skills/kntnt/library/scripts/languages.py",
+          "access": "shell",
+          "established_from": "shell-command",
+          "exact": true,
+          "command": "L=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/home/.claude/skills/kntnt/library; T=$(mktemp -d); TMPDIR=$T uv run --no-cache --no-project \"$L/scripts/languages.py\" resolve --scope=composition --scope=review --scope=anti-slop \"sv\"; echo \"exit=$?\"; rm -rf \"$T\"; cat $L/references/delivery.md"
+        },
+        {
+          "ordinal": 3,
+          "at": "2026-09-29T22:55:41.122Z",
+          "tool": "Bash",
+          "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/home/.claude/skills/kntnt/library/references/delivery.md",
+          "access": "shell",
+          "established_from": "shell-command",
+          "exact": true,
+          "command": "L=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/home/.claude/skills/kntnt/library; T=$(mktemp -d); TMPDIR=$T uv run --no-cache --no-project \"$L/scripts/languages.py\" resolve --scope=composition --scope=review --scope=anti-slop \"sv\"; echo \"exit=$?\"; rm -rf \"$T\"; cat $L/references/delivery.md"
+        },
+        {
+          "ordinal": 4,
+          "at": "2026-09-29T22:55:44.442Z",
+          "tool": "Bash",
+          "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/home/.claude/skills/kntnt/library/references/editorial",
+          "access": "shell",
+          "established_from": "shell-command",
+          "exact": true,
+          "command": "L=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/home/.claude/skills/kntnt/library/references/editorial; cat $L/genres/article.md $L/genres/article.review.md"
+        },
+        {
+          "ordinal": 4,
+          "at": "2026-09-29T22:55:44.442Z",
+          "tool": "Bash",
+          "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/home/.claude/skills/kntnt/library/references/editorial/genres/article.md",
+          "access": "shell",
+          "established_from": "shell-command",
+          "exact": true,
+          "command": "L=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/home/.claude/skills/kntnt/library/references/editorial; cat $L/genres/article.md $L/genres/article.review.md"
+        },
+        {
+          "ordinal": 4,
+          "at": "2026-09-29T22:55:44.442Z",
+          "tool": "Bash",
+          "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/home/.claude/skills/kntnt/library/references/editorial/genres/article.review.md",
+          "access": "shell",
+          "established_from": "shell-command",
+          "exact": true,
+          "command": "L=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/home/.claude/skills/kntnt/library/references/editorial; cat $L/genres/article.md $L/genres/article.review.md"
+        },
+        {
+          "ordinal": 5,
+          "at": "2026-09-29T22:55:45.686Z",
+          "tool": "Bash",
+          "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/home/.claude/skills/kntnt/library/references/editorial",
+          "access": "shell",
+          "established_from": "shell-command",
+          "exact": true,
+          "command": "L=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/home/.claude/skills/kntnt/library/references/editorial; cat $L/base.md $L/base.review.md"
+        },
+        {
+          "ordinal": 5,
+          "at": "2026-09-29T22:55:45.686Z",
+          "tool": "Bash",
+          "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/home/.claude/skills/kntnt/library/references/editorial/base.md",
+          "access": "shell",
+          "established_from": "shell-command",
+          "exact": true,
+          "command": "L=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/home/.claude/skills/kntnt/library/references/editorial; cat $L/base.md $L/base.review.md"
+        },
+        {
+          "ordinal": 5,
+          "at": "2026-09-29T22:55:45.686Z",
+          "tool": "Bash",
+          "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/home/.claude/skills/kntnt/library/references/editorial/base.review.md",
+          "access": "shell",
+          "established_from": "shell-command",
+          "exact": true,
+          "command": "L=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/home/.claude/skills/kntnt/library/references/editorial; cat $L/base.md $L/base.review.md"
+        },
+        {
+          "ordinal": 6,
+          "at": "2026-09-29T22:55:48.614Z",
+          "tool": "Bash",
+          "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/home/.claude/skills/kntnt/library/references/editorial",
+          "access": "shell",
+          "established_from": "shell-command",
+          "exact": true,
+          "command": "L=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/home/.claude/skills/kntnt/library/references/editorial; cat $L/article-anatomy.md $L/article-anatomy.review.md $L/headlines.md $L/headlines.review.md"
+        },
+        {
+          "ordinal": 6,
+          "at": "2026-09-29T22:55:48.614Z",
+          "tool": "Bash",
+          "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/home/.claude/skills/kntnt/library/references/editorial/article-anatomy.md",
+          "access": "shell",
+          "established_from": "shell-command",
+          "exact": true,
+          "command": "L=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/home/.claude/skills/kntnt/library/references/editorial; cat $L/article-anatomy.md $L/article-anatomy.review.md $L/headlines.md $L/headlines.review.md"
+        },
+        {
+          "ordinal": 6,
+          "at": "2026-09-29T22:55:48.614Z",
+          "tool": "Bash",
+          "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/home/.claude/skills/kntnt/library/references/editorial/article-anatomy.review.md",
+          "access": "shell",
+          "established_from": "shell-command",
+          "exact": true,
+          "command": "L=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/home/.claude/skills/kntnt/library/references/editorial; cat $L/article-anatomy.md $L/article-anatomy.review.md $L/headlines.md $L/headlines.review.md"
+        },
+        {
+          "ordinal": 6,
+          "at": "2026-09-29T22:55:48.614Z",
+          "tool": "Bash",
+          "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/home/.claude/skills/kntnt/library/references/editorial/headlines.md",
+          "access": "shell",
+          "established_from": "shell-command",
+          "exact": true,
+          "command": "L=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/home/.claude/skills/kntnt/library/references/editorial; cat $L/article-anatomy.md $L/article-anatomy.review.md $L/headlines.md $L/headlines.review.md"
+        },
+        {
+          "ordinal": 6,
+          "at": "2026-09-29T22:55:48.614Z",
+          "tool": "Bash",
+          "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/home/.claude/skills/kntnt/library/references/editorial/headlines.review.md",
+          "access": "shell",
+          "established_from": "shell-command",
+          "exact": true,
+          "command": "L=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/home/.claude/skills/kntnt/library/references/editorial; cat $L/article-anatomy.md $L/article-anatomy.review.md $L/headlines.md $L/headlines.review.md"
+        },
+        {
+          "ordinal": 7,
+          "at": "2026-09-29T22:55:50.003Z",
+          "tool": "Bash",
+          "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/home/.claude/skills/kntnt/library/references/editorial",
+          "access": "shell",
+          "established_from": "shell-command",
+          "exact": true,
+          "command": "L=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/home/.claude/skills/kntnt/library/references/editorial; cat $L/anti-slop.md $L/web-craft.md $L/web-craft.review.md"
+        },
+        {
+          "ordinal": 7,
+          "at": "2026-09-29T22:55:50.003Z",
+          "tool": "Bash",
+          "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/home/.claude/skills/kntnt/library/references/editorial/anti-slop.md",
+          "access": "shell",
+          "established_from": "shell-command",
+          "exact": true,
+          "command": "L=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/home/.claude/skills/kntnt/library/references/editorial; cat $L/anti-slop.md $L/web-craft.md $L/web-craft.review.md"
+        },
+        {
+          "ordinal": 7,
+          "at": "2026-09-29T22:55:50.003Z",
+          "tool": "Bash",
+          "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/home/.claude/skills/kntnt/library/references/editorial/web-craft.md",
+          "access": "shell",
+          "established_from": "shell-command",
+          "exact": true,
+          "command": "L=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/home/.claude/skills/kntnt/library/references/editorial; cat $L/anti-slop.md $L/web-craft.md $L/web-craft.review.md"
+        },
+        {
+          "ordinal": 7,
+          "at": "2026-09-29T22:55:50.003Z",
+          "tool": "Bash",
+          "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/home/.claude/skills/kntnt/library/references/editorial/web-craft.review.md",
+          "access": "shell",
+          "established_from": "shell-command",
+          "exact": true,
+          "command": "L=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/home/.claude/skills/kntnt/library/references/editorial; cat $L/anti-slop.md $L/web-craft.md $L/web-craft.review.md"
+        },
+        {
+          "ordinal": 8,
+          "at": "2026-09-29T22:55:53.998Z",
+          "tool": "Bash",
+          "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/work",
+          "access": "shell",
+          "established_from": "shell-command",
+          "exact": true,
+          "command": "cd /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/work; L=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/home/.claude/skills/kntnt/library; T=$(mktemp -d); TMPDIR=$T uv run --no-cache --no-project \"$L/scripts/article_anatomy.py\" - < input.md; echo \"exit=$?\"; rm -rf \"$T\""
+        },
+        {
+          "ordinal": 8,
+          "at": "2026-09-29T22:55:53.998Z",
+          "tool": "Bash",
+          "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/home/.claude/skills/kntnt/library",
+          "access": "shell",
+          "established_from": "shell-command",
+          "exact": true,
+          "command": "cd /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/work; L=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/home/.claude/skills/kntnt/library; T=$(mktemp -d); TMPDIR=$T uv run --no-cache --no-project \"$L/scripts/article_anatomy.py\" - < input.md; echo \"exit=$?\"; rm -rf \"$T\""
+        },
+        {
+          "ordinal": 8,
+          "at": "2026-09-29T22:55:53.998Z",
+          "tool": "Bash",
+          "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/home/.claude/skills/kntnt/library/scripts/article_anatomy.py",
+          "access": "shell",
+          "established_from": "shell-command",
+          "exact": true,
+          "command": "cd /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/work; L=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/home/.claude/skills/kntnt/library; T=$(mktemp -d); TMPDIR=$T uv run --no-cache --no-project \"$L/scripts/article_anatomy.py\" - < input.md; echo \"exit=$?\"; rm -rf \"$T\""
+        },
+        {
+          "ordinal": 8,
+          "at": "2026-09-29T22:55:53.998Z",
+          "tool": "Bash",
+          "path": "input.md",
+          "access": "shell",
+          "established_from": "shell-command",
+          "exact": true,
+          "command": "cd /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/work; L=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/home/.claude/skills/kntnt/library; T=$(mktemp -d); TMPDIR=$T uv run --no-cache --no-project \"$L/scripts/article_anatomy.py\" - < input.md; echo \"exit=$?\"; rm -rf \"$T\""
+        },
+        {
+          "ordinal": 9,
+          "at": "2026-09-29T22:57:32.673Z",
+          "tool": "Bash",
+          "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/home/.claude/skills/redline/references/correction.md",
+          "access": "shell",
+          "established_from": "shell-command",
+          "exact": true,
+          "command": "cat /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/home/.claude/skills/redline/references/correction.md"
+        }
+      ],
+      "delegations": [
+        {
+          "ordinal": 10,
+          "at": "2026-09-29T22:58:43.574Z",
+          "tool_use_id": "toolu_013SMg7MFqxAtv5PBq54szos",
+          "description": "Correct Swedish article findings",
+          "subagent_type": "general-purpose",
+          "prompt": "You are making one correction to one text. You have not seen this text before, and there is nothing you are expected to remember: the text below is its current state, and the findings below are the current review's, complete and as they were written. Repair them.\n\n**The text.** This is the complete Text Artifact, exactly as it now stands:\n\n````markdown\n# Mätförsöket i Björkskolan visar när, inte varför\n\n**Under 14 av 120 lektionspass registrerade givarna i Björkskolan temperaturer under fastighetskontorets egen arbetsgräns. Fyra veckors mätningar pekar ut tillfällen att undersöka närmare, men förklarar inte varför luften var kall. Här är vad ett kort försök kan säga, och vad som behövs för att komma vidare.**\n\nText: Hedda Lund\n\nEn temperaturgivare mäter luften där den sitter. Det gör placeringen viktig när fastighetskontoret ska tolka fyra veckors mätningar i Björkskolans sex klassrum. Genomgången nedan visar vad värdena räcker till och var gränsen går.\n\n## En gräns för det lokala försöket\n\nKontoret valde 20 grader Celsius som arbetsgräns. Rapporten *Mätförsök i Björkskolan*, daterad 12 mars 2026, räknar 14 lektionspass av 120 med minst en mätning under den gränsen. Hur länge temperaturen låg under den anger rapporten inte. Gränsen är kontorets egen, vald för det här försöket.\n\nGivarna mätte varken luftdrag eller elevernas upplevelse. Ett lågt värde säger alltså när luften var kall, men inte hur rummet kändes.\n\nDriftteknikern Elin Rask sammanfattar: ”Vi vet när vi behöver titta närmare. Vi vet ännu inte varför det blev kallt just då.”\n\n## Nästa försök behöver mer än givare\n\nRask rekommenderar att temperaturserierna kopplas till rummens användningstider innan styrningen ändras. Nästa försök planeras för november med likadant placerade givare, men finansieringen är inte beslutad.\n\nLägg därför tiderna för när rummen används bredvid mätvärdena innan nästa givare sätts upp.\n````\n\n(The fence above is not part of the text; the text begins at `# Mätförsöket` and ends with a single trailing newline after the last paragraph.)\n\n**The findings.** This is every finding the review recorded against that text, complete and in the order it recorded them:\n\n1. Rubriken ”Mätförsöket i Björkskolan visar när, inte varför” (48 tecken, 7 ord). Krav (Headlines): rubriken förstås på egen hand, utan ingress, och rubrik och ingress säger olika saker med olika ord. ”När” står utan innehåll: den som bara ser rubriken får inte veta vad försöket visar när – att luften i klassrummen låg under arbetsgränsen – och ämnets viktigaste nyckelord (temperatur, kyla) saknas. Samtidigt säger ingressens andra mening (”pekar ut tillfällen att undersöka närmare, men förklarar inte varför luften var kall”) samma sak som rubriken igen, med samma ”inte varför”. Läsaren förlorar: rubriken går inte att förstå utan att läsa vidare, och ingressen upprepar rubriken i stället för att komplettera den. Reparation: skriv om rubriken ensam, ur textens vinkel och med textens egen styrka, i ord som ingressen inte redan använder; ingressen står kvar som den är.\n\n2. Underrubriken ”En gräns för det lokala försöket” (32 tecken). Krav (Article anatomy, Headlines): en underrubrik beskriver tydligt vad styckena under den handlar om. Den beskriver bara första styckets sista mening (att gränsen är kontorets egen), medan avsnittet handlar om vad mätvärdena räcker till: antalet pass under gränsen, att rapporten inte anger hur länge temperaturen låg under den, att givarna varken mätte luftdrag eller elevernas upplevelse, och Rasks sammanfattning. Dessutom kommer ”gräns” direkt efter ingångens ”var gränsen går”, där ordet betyder gränsen för vad värdena räcker till, men betyder här en temperaturgräns. Läsaren förlorar: en ingång som säger vad avsnittet ger, och två betydelser av ”gräns” flyter ihop. Reparation: skriv om underrubriken ur hela avsnittet, utan att förbruka Rasks citat (att man vet när men ännu inte varför), och utan att påstå mer än avsnittet gör – rapporten anger inte hur länge temperaturen låg under gränsen, vilket inte är detsamma som att givarna inte mätte det.\n\n3. Ingången: ”En temperaturgivare mäter luften där den sitter. Det gör placeringen viktig när fastighetskontoret ska tolka fyra veckors mätningar i Björkskolans sex klassrum.” Krav (grundkontraktet, artikelgranskningen): den vinkel och det löfte ingången sätter följs genom avsnitten och slutet. Ingången gör givarnas placering till något tolkningen hänger på, men texten säger aldrig var givarna satt eller hur placeringen påverkar de 14 passen, och slutets ”likadant placerade givare” lämnar läsaren utan möjlighet att avgöra om samma placering är ett problem. Läsaren förlorar: en tråd som ingången öppnar och brödtexten aldrig tar upp. Olöst: reparation kräver uppgifter som texten saknar (var givarna satt), och ingångens första mening bär en avgränsning – givaren mäter bara luften där den sitter – som ska stå kvar.\n\n4. ”Rask rekommenderar att temperaturserierna kopplas till rummens användningstider innan styrningen ändras.” Krav (grundkontraktet: referenser tydliga, okända begrepp introduceras innan resonemanget behöver dem). ”Styrningen” står i bestämd form men texten har inte nämnt någon styrning eller att en ändring av den är aktuell. Läsaren förlorar: vet inte vilken styrning (värme, ventilation eller något annat) som avses eller att en ändring planeras. Olöst: reparation kräver en uppgift som texten saknar.\n\n**The contract.** The text is an `article` in `sv`, and it is held to `none`. Read what it is held to before you change anything: `/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/home/.claude/skills/kntnt/library/references/editorial/base.md` and `/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/home/.claude/skills/kntnt/library/references/editorial/base.review.md`; `/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/home/.claude/skills/kntnt/library/references/editorial/genres/article.md` and the `.review.md` file beside it where one exists; `/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/home/.claude/skills/kntnt/library/references/editorial/anti-slop.md`; and the `composition`, `review` and `anti-slop` scopes of the resolved language, which `uv run \"/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/home/.claude/skills/kntnt/library/scripts/languages.py\" resolve --scope=composition --scope=review --scope=anti-slop \"sv\"` returns. For `article`, `casestudy`, `column` and `opinion`, and for `webcopy`, also read `/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/home/.claude/skills/kntnt/library/references/editorial/web-craft.md` and `/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/home/.claude/skills/kntnt/library/references/editorial/web-craft.review.md`; for `article`, `casestudy`, `column` and `opinion` alone, also read `/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/home/.claude/skills/kntnt/library/references/editorial/article-anatomy.md` and `/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/home/.claude/skills/kntnt/library/references/editorial/article-anatomy.review.md`, which fix the parts, order and dimensions of such a text, and `/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/home/.claude/skills/kntnt/library/references/editorial/headlines.md` and `/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/home/.claude/skills/kntnt/library/references/editorial/headlines.review.md`, which say how its headline and its subheadings are written. These are the only additional genre support files: follow no other genre links and load no unselected genre or technique. A review extension that is not there is not a defect. Run the resolver with `UV_NO_CACHE=1 UV_NO_PROJECT=1` and a fresh private `TMPDIR`, removing that directory afterwards, including on failure. Load no mechanics guidance and correct no spelling, punctuation, or grammar: a mechanical pass runs after you, and work you do there is work done twice.\n\n**What you change, and what you preserve.** Repair what the findings name and nothing else. Every difference between the text you return and the text above is traced to a finding, or to what repairing a finding required, before this round is accepted, and a difference that traces to no finding is restored from the text you received — so a phrase you improved outside a finding is work that will be undone. Preserve everything the findings do not concern: every sentence, every fact, every quotation, every code sample, every heading, every piece of formatting and every line of frontmatter among them comes back exactly as you received it — a repair that improves a paragraph nobody complained about is a change nobody asked for and nobody will review. A code sample — a fenced block, an indented block, or an inline code span — is quoted material rather than the text's own prose: its contents are read past rather than read against the rules, so nothing inside one is a finding and nothing inside one is changed, the docstrings, comments, and string literals among them. Prose about code is ordinary prose and is read like every other sentence. Where a finding can be repaired several ways, make the smallest change that removes it. Where a finding names something you cannot repair without inventing a fact, changing what the text claims, or altering a quotation's meaning, stance, certainty or distinctive wording, leave that passage alone and say so: in an ordinary review this text is answerable to material you do not have, and a plausible invention is worse than an unrepaired finding. For a brief-shortfall finding carrying exact source support, use only that support or the text to supply what is missing. Source Fidelity binds the repair: retain attribution, uncertainty, scope, chronology, causality and quotation meaning. A requirement in the brief is not source evidence; where the finding has no support for a needed fact, source or quotation, leave it for the writer and report why.\n\n**A defect of your own costs the whole round.** The review that follows you establishes whether this text has a defect it did not have when you received it — a headline or a heading claiming more than the text claims, a heading repeating the passage under it, a limit your repair dropped. Where it establishes one, the whole round is rejected: the text you received is restored entire, nothing you did survives however much else you repaired, and no fresh attempt follows. So a finding you cannot repair without creating another one is a finding you leave and say so, exactly as you would one you cannot repair without inventing a fact — an unrepaired finding a person can settle costs less than a repair that has to be thrown away with everything beside it.\n\n**What a repair may take with it, and what it may not.** A finding names a defect, and what a repair removes is that defect. Where the defect a finding names is the whole of the passage — an opening that would sit in front of any text, a closing that restates what the reader has just read, a claim credited to nobody that the text cannot source — removing it may be the repair, and any claim removed with it must be named in your return. That stops at a sentence whose work is to bound what the text asserts — that something is not measured, not claimed, not witnessed or not general, or that the text is an observation of a document rather than a scene from an occasion. Remove or weaken one only where the finding names a defect inside the sentence, and only where a sentence you keep still states that limit in full, so the text bounds what it claims exactly as far as it did, or where the limit contradicts another passage of the same text. Otherwise leave it exactly as it stands and say so. Where the passage carries a claim beside the defect — a fact, an observation, the point the passage exists to make — the smallest change is the one that leaves that claim standing, and deleting the passage entire is not that change. And where you can see no way to remove the defect that does not take the claim with it, leave the passage alone and say so, exactly as you would a finding you cannot repair without inventing a fact: a person can give that claim what it needs or let it go, and a round that deletes it leaves them nothing to weigh. That judgement is about the passage in front of you and never about how much of the text is left — a short text is no licence to leave a finding standing, and a long one is no licence to go on cutting.\n\nA repair at a punctuation joint can be the smallest change even when the finding names the implication created there rather than punctuation itself. In *We finished in March, the finance team got a new reporting tool the same month.*, the defect is the implication created by joining unrelated claims, not either claim. Repair it as *We finished in March. The finance team got a new reporting tool the same month.*: splitting at the joint removes the implication and keeps the reporting-tool fact. Do the same wherever the named defect is confined to a joint; do not delete either side or supply a relationship the text does not establish. This example does not admit a wider mechanics pass: it identifies the smallest repair for the finding already in hand.\n\nBefore you return the text, compare it before and after, claim by claim. Every claim you received must still appear with its scope, certainty, attribution, chronology, causality and meaning intact unless the finding named the whole claim as the defect; that exception does not reach a sentence whose work is to bound what the text asserts, which goes only on the two conditions above, and the number or concentration of findings changes nothing about that check. The concentrated anti-slop case makes the boundary visible: removing its patterns must not discard its claims about meeting load, documentation, decisions, satisfaction, distributed work, adoption conditions, or the synchronous/asynchronous trade-off. Repair the patterns around those claims. If one cannot be separated from its pattern, keep it and report the finding unresolved; never compress several content-bearing passages into a cleaner summary.\n\nWhere the text is an `article`, a `casestudy`, a `column` or an `opinion`, measure it before you return it: run `uv run \"/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/home/.claude/skills/kntnt/library/scripts/article_anatomy.py\" -` with the complete corrected text on stdin, under the same `UV_NO_CACHE=1 UV_NO_PROJECT=1` and fresh private `TMPDIR` terms as the resolver above. Exit 0 settles the counted requirements only: it says they hold and nothing about the anatomy requirements the script does not count, so your return reports the text as conforming to the anatomy only where you examined every one of those too, and otherwise names the ones you did not examine. Exit 1 names each counted requirement of the article anatomy that fails, with the part, the rule and the figure measured: repair the ones a finding named and the ones your own repair introduced, then measure again, except a part a finding names as absent and a failure caused only by an absent part, which you leave unwritten and name in your return as left for a person to supply; a requirement the text was already failing when it reached you, and that no finding names, is left exactly as it stands like everything else the findings do not concern. Exit 2 says the script could not measure the text, and your return says so. Read every `heading_pairs` entry against the complete candidate and the loaded headline contract before returning, whatever the exit status: judge whether each part adds different information in different wording. Necessary repeated names and topic words can be legitimate, and a paraphrased echo can share no words; `shared_words` alone never authorizes a change or creates a finding. Verify absent or ambiguous sentence estimates against the text; on exit 2 inspect the pairs by hand. Repair echoes named by the findings or introduced by your own correction by wording the heading from its whole text or section without strengthening its claims and without pre-spending the judgement, figure or concession of a quotation standing under a subheading, then measure again. An unrelated pre-existing echo stays as received and is reported in your return, with the pair and reader loss; the evidence does not expand your correction authority. Report any echo you cannot repair within that authority the same way.\n\n**Your own working files.** Any file you write for your own working purposes — a candidate you measure, a draft you compare, anything you keep while you work — goes in a directory you created for this one round, under a name made unique when you created it, such as the one `mktemp -d` returns. Remove that directory before you return, including on failure. A fixed name under a shared temporary directory is not that directory, whether the directory is the system's own or a scratchpad your session was given: another run may be working at the same time, in the same place and on this same text, and write that same name. The file you come back to is then that run's work and not yours, and when you take it for your own stale copy and delete or replace it, you destroy work that is not yours, and nothing tells the run it came from.\n\n**What you return.** The complete corrected text and a short note of which findings you repaired and which you left, with the reason for each you left. Where any repair removed a passage carrying a claim, name every removed claim and say which finding made the claim itself the defect, and name every changed claim the same way — one you left standing with its scope, certainty, attribution, chronology, causality or meaning moved, by what it now asserts rather than how far its wording moved, and the finding the repair that moved it answered. Where a repair took a limit, a connective or a bounding clause out of the text — a sentence or a heading saying what is not measured, not claimed or not known, a connective giving the text's own reason for what follows, a clause saying what a claim is not about — say what a reader of the text you return no longer has, however little of the text went with it. Name every added claim the same way, whether or not anything was removed: one the text you return asserts and the text you received has no counterpart for, an inference drawn from what that text already said among them where it asserts something that text did not say, and the finding the repair that wrote it answered. A claim with a counterpart in the text you received is changed rather than added. Reporting a removal never makes an impermissible one acceptable. The complete text: not a diff, not the changed passages, not a description of what you did. Return no commentary inside the text itself.",
+          "child_agent_id": "a7f43a2d7035bae38"
+        }
+      ],
+      "interrupted": false
+    },
+    {
+      "agent_id": "a7f43a2d7035bae38",
+      "role": "subagent",
+      "parent_agent_id": "3a058d79-ca03-421c-bdf4-1f9ee40f1cda",
+      "tool_use_id": "toolu_013SMg7MFqxAtv5PBq54szos",
+      "agent_type": "general-purpose",
+      "description": "Correct Swedish article findings",
+      "spawn_depth": 1,
+      "transcript": "transcripts/subagents/agent-a7f43a2d7035bae38.jsonl",
+      "instruction": "You are making one correction to one text. You have not seen this text before, and there is nothing you are expected to remember: the text below is its current state, and the findings below are the current review's, complete and as they were written. Repair them.\n\n**The text.** This is the complete Text Artifact, exactly as it now stands:\n\n````markdown\n# Mätförsöket i Björkskolan visar när, inte varför\n\n**Under 14 av 120 lektionspass registrerade givarna i Björkskolan temperaturer under fastighetskontorets egen arbetsgräns. Fyra veckors mätningar pekar ut tillfällen att undersöka närmare, men förklarar inte varför luften var kall. Här är vad ett kort försök kan säga, och vad som behövs för att komma vidare.**\n\nText: Hedda Lund\n\nEn temperaturgivare mäter luften där den sitter. Det gör placeringen viktig när fastighetskontoret ska tolka fyra veckors mätningar i Björkskolans sex klassrum. Genomgången nedan visar vad värdena räcker till och var gränsen går.\n\n## En gräns för det lokala försöket\n\nKontoret valde 20 grader Celsius som arbetsgräns. Rapporten *Mätförsök i Björkskolan*, daterad 12 mars 2026, räknar 14 lektionspass av 120 med minst en mätning under den gränsen. Hur länge temperaturen låg under den anger rapporten inte. Gränsen är kontorets egen, vald för det här försöket.\n\nGivarna mätte varken luftdrag eller elevernas upplevelse. Ett lågt värde säger alltså när luften var kall, men inte hur rummet kändes.\n\nDriftteknikern Elin Rask sammanfattar: ”Vi vet när vi behöver titta närmare. Vi vet ännu inte varför det blev kallt just då.”\n\n## Nästa försök behöver mer än givare\n\nRask rekommenderar att temperaturserierna kopplas till rummens användningstider innan styrningen ändras. Nästa försök planeras för november med likadant placerade givare, men finansieringen är inte beslutad.\n\nLägg därför tiderna för när rummen används bredvid mätvärdena innan nästa givare sätts upp.\n````\n\n(The fence above is not part of the text; the text begins at `# Mätförsöket` and ends with a single trailing newline after the last paragraph.)\n\n**The findings.** This is every finding the review recorded against that text, complete and in the order it recorded them:\n\n1. Rubriken ”Mätförsöket i Björkskolan visar när, inte varför” (48 tecken, 7 ord). Krav (Headlines): rubriken förstås på egen hand, utan ingress, och rubrik och ingress säger olika saker med olika ord. ”När” står utan innehåll: den som bara ser rubriken får inte veta vad försöket visar när – att luften i klassrummen låg under arbetsgränsen – och ämnets viktigaste nyckelord (temperatur, kyla) saknas. Samtidigt säger ingressens andra mening (”pekar ut tillfällen att undersöka närmare, men förklarar inte varför luften var kall”) samma sak som rubriken igen, med samma ”inte varför”. Läsaren förlorar: rubriken går inte att förstå utan att läsa vidare, och ingressen upprepar rubriken i stället för att komplettera den. Reparation: skriv om rubriken ensam, ur textens vinkel och med textens egen styrka, i ord som ingressen inte redan använder; ingressen står kvar som den är.\n\n2. Underrubriken ”En gräns för det lokala försöket” (32 tecken). Krav (Article anatomy, Headlines): en underrubrik beskriver tydligt vad styckena under den handlar om. Den beskriver bara första styckets sista mening (att gränsen är kontorets egen), medan avsnittet handlar om vad mätvärdena räcker till: antalet pass under gränsen, att rapporten inte anger hur länge temperaturen låg under den, att givarna varken mätte luftdrag eller elevernas upplevelse, och Rasks sammanfattning. Dessutom kommer ”gräns” direkt efter ingångens ”var gränsen går”, där ordet betyder gränsen för vad värdena räcker till, men betyder här en temperaturgräns. Läsaren förlorar: en ingång som säger vad avsnittet ger, och två betydelser av ”gräns” flyter ihop. Reparation: skriv om underrubriken ur hela avsnittet, utan att förbruka Rasks citat (att man vet när men ännu inte varför), och utan att påstå mer än avsnittet gör – rapporten anger inte hur länge temperaturen låg under gränsen, vilket inte är detsamma som att givarna inte mätte det.\n\n3. Ingången: ”En temperaturgivare mäter luften där den sitter. Det gör placeringen viktig när fastighetskontoret ska tolka fyra veckors mätningar i Björkskolans sex klassrum.” Krav (grundkontraktet, artikelgranskningen): den vinkel och det löfte ingången sätter följs genom avsnitten och slutet. Ingången gör givarnas placering till något tolkningen hänger på, men texten säger aldrig var givarna satt eller hur placeringen påverkar de 14 passen, och slutets ”likadant placerade givare” lämnar läsaren utan möjlighet att avgöra om samma placering är ett problem. Läsaren förlorar: en tråd som ingången öppnar och brödtexten aldrig tar upp. Olöst: reparation kräver uppgifter som texten saknar (var givarna satt), och ingångens första mening bär en avgränsning – givaren mäter bara luften där den sitter – som ska stå kvar.\n\n4. ”Rask rekommenderar att temperaturserierna kopplas till rummens användningstider innan styrningen ändras.” Krav (grundkontraktet: referenser tydliga, okända begrepp introduceras innan resonemanget behöver dem). ”Styrningen” står i bestämd form men texten har inte nämnt någon styrning eller att en ändring av den är aktuell. Läsaren förlorar: vet inte vilken styrning (värme, ventilation eller något annat) som avses eller att en ändring planeras. Olöst: reparation kräver en uppgift som texten saknar.\n\n**The contract.** The text is an `article` in `sv`, and it is held to `none`. Read what it is held to before you change anything: `/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/home/.claude/skills/kntnt/library/references/editorial/base.md` and `/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/home/.claude/skills/kntnt/library/references/editorial/base.review.md`; `/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/home/.claude/skills/kntnt/library/references/editorial/genres/article.md` and the `.review.md` file beside it where one exists; `/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/home/.claude/skills/kntnt/library/references/editorial/anti-slop.md`; and the `composition`, `review` and `anti-slop` scopes of the resolved language, which `uv run \"/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/home/.claude/skills/kntnt/library/scripts/languages.py\" resolve --scope=composition --scope=review --scope=anti-slop \"sv\"` returns. For `article`, `casestudy`, `column` and `opinion`, and for `webcopy`, also read `/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/home/.claude/skills/kntnt/library/references/editorial/web-craft.md` and `/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/home/.claude/skills/kntnt/library/references/editorial/web-craft.review.md`; for `article`, `casestudy`, `column` and `opinion` alone, also read `/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/home/.claude/skills/kntnt/library/references/editorial/article-anatomy.md` and `/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/home/.claude/skills/kntnt/library/references/editorial/article-anatomy.review.md`, which fix the parts, order and dimensions of such a text, and `/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/home/.claude/skills/kntnt/library/references/editorial/headlines.md` and `/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/home/.claude/skills/kntnt/library/references/editorial/headlines.review.md`, which say how its headline and its subheadings are written. These are the only additional genre support files: follow no other genre links and load no unselected genre or technique. A review extension that is not there is not a defect. Run the resolver with `UV_NO_CACHE=1 UV_NO_PROJECT=1` and a fresh private `TMPDIR`, removing that directory afterwards, including on failure. Load no mechanics guidance and correct no spelling, punctuation, or grammar: a mechanical pass runs after you, and work you do there is work done twice.\n\n**What you change, and what you preserve.** Repair what the findings name and nothing else. Every difference between the text you return and the text above is traced to a finding, or to what repairing a finding required, before this round is accepted, and a difference that traces to no finding is restored from the text you received — so a phrase you improved outside a finding is work that will be undone. Preserve everything the findings do not concern: every sentence, every fact, every quotation, every code sample, every heading, every piece of formatting and every line of frontmatter among them comes back exactly as you received it — a repair that improves a paragraph nobody complained about is a change nobody asked for and nobody will review. A code sample — a fenced block, an indented block, or an inline code span — is quoted material rather than the text's own prose: its contents are read past rather than read against the rules, so nothing inside one is a finding and nothing inside one is changed, the docstrings, comments, and string literals among them. Prose about code is ordinary prose and is read like every other sentence. Where a finding can be repaired several ways, make the smallest change that removes it. Where a finding names something you cannot repair without inventing a fact, changing what the text claims, or altering a quotation's meaning, stance, certainty or distinctive wording, leave that passage alone and say so: in an ordinary review this text is answerable to material you do not have, and a plausible invention is worse than an unrepaired finding. For a brief-shortfall finding carrying exact source support, use only that support or the text to supply what is missing. Source Fidelity binds the repair: retain attribution, uncertainty, scope, chronology, causality and quotation meaning. A requirement in the brief is not source evidence; where the finding has no support for a needed fact, source or quotation, leave it for the writer and report why.\n\n**A defect of your own costs the whole round.** The review that follows you establishes whether this text has a defect it did not have when you received it — a headline or a heading claiming more than the text claims, a heading repeating the passage under it, a limit your repair dropped. Where it establishes one, the whole round is rejected: the text you received is restored entire, nothing you did survives however much else you repaired, and no fresh attempt follows. So a finding you cannot repair without creating another one is a finding you leave and say so, exactly as you would one you cannot repair without inventing a fact — an unrepaired finding a person can settle costs less than a repair that has to be thrown away with everything beside it.\n\n**What a repair may take with it, and what it may not.** A finding names a defect, and what a repair removes is that defect. Where the defect a finding names is the whole of the passage — an opening that would sit in front of any text, a closing that restates what the reader has just read, a claim credited to nobody that the text cannot source — removing it may be the repair, and any claim removed with it must be named in your return. That stops at a sentence whose work is to bound what the text asserts — that something is not measured, not claimed, not witnessed or not general, or that the text is an observation of a document rather than a scene from an occasion. Remove or weaken one only where the finding names a defect inside the sentence, and only where a sentence you keep still states that limit in full, so the text bounds what it claims exactly as far as it did, or where the limit contradicts another passage of the same text. Otherwise leave it exactly as it stands and say so. Where the passage carries a claim beside the defect — a fact, an observation, the point the passage exists to make — the smallest change is the one that leaves that claim standing, and deleting the passage entire is not that change. And where you can see no way to remove the defect that does not take the claim with it, leave the passage alone and say so, exactly as you would a finding you cannot repair without inventing a fact: a person can give that claim what it needs or let it go, and a round that deletes it leaves them nothing to weigh. That judgement is about the passage in front of you and never about how much of the text is left — a short text is no licence to leave a finding standing, and a long one is no licence to go on cutting.\n\nA repair at a punctuation joint can be the smallest change even when the finding names the implication created there rather than punctuation itself. In *We finished in March, the finance team got a new reporting tool the same month.*, the defect is the implication created by joining unrelated claims, not either claim. Repair it as *We finished in March. The finance team got a new reporting tool the same month.*: splitting at the joint removes the implication and keeps the reporting-tool fact. Do the same wherever the named defect is confined to a joint; do not delete either side or supply a relationship the text does not establish. This example does not admit a wider mechanics pass: it identifies the smallest repair for the finding already in hand.\n\nBefore you return the text, compare it before and after, claim by claim. Every claim you received must still appear with its scope, certainty, attribution, chronology, causality and meaning intact unless the finding named the whole claim as the defect; that exception does not reach a sentence whose work is to bound what the text asserts, which goes only on the two conditions above, and the number or concentration of findings changes nothing about that check. The concentrated anti-slop case makes the boundary visible: removing its patterns must not discard its claims about meeting load, documentation, decisions, satisfaction, distributed work, adoption conditions, or the synchronous/asynchronous trade-off. Repair the patterns around those claims. If one cannot be separated from its pattern, keep it and report the finding unresolved; never compress several content-bearing passages into a cleaner summary.\n\nWhere the text is an `article`, a `casestudy`, a `column` or an `opinion`, measure it before you return it: run `uv run \"/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-a5pd75tf/home/.claude/skills/kntnt/library/scripts/article_anatomy.py\" -` with the complete corrected text on stdin, under the same `UV_NO_CACHE=1 UV_NO_PROJECT=1` and fresh private `TMPDIR` terms as the resolver above. Exit 0 settles the counted requirements only: it says they hold and nothing about the anatomy requirements the script does not count, so your return reports the text as conforming to the anatomy only where you examined every one of those too, and otherwise names the ones you did not examine. Exit 1 names each counted requirement of the article anatomy that fails, with the part, the rule and the figure measured: repair the ones a finding named and the ones your own repair introduced, then measure again, except a part a finding names as absent and a failure caused only by an absent part, which you leave unwritten and name in your return as left for a person to supply; a requirement the text was already failing when it reached you, and that no finding names, is left exactly as it stands like everything else the findings do not concern. Exit 2 says the script could not measure the text, and your return says so. Read every `heading_pairs` entry against the complete candidate and the loaded headline contract before returning, whatever the exit status: judge whether each part adds different information in different wording. Necessary repeated names and topic words can be legitimate, and a paraphrased echo can share no words; `shared_words` alone never authorizes a change or creates a finding. Verify absent or ambiguous sentence estimates against the text; on exit 2 inspect the pairs by hand. Repair echoes named by the findings or introduced by your own correction by wording the heading from its whole text or section without strengthening its claims and without pre-spending the judgement, figure or concession of a quotation standing under a subheading, then measure again. An unrelated pre-existing echo stays as received and is reported in your return, with the pair and reader loss; the evidence does not expand your correction authority. Report any echo you cannot repair within that authority the same way.\n\n**Your own working files.** Any file you write for your own working purposes — a candidate you measure, a draft you compare, anything you keep while you work — goes in a directory you created for this one round, under a name made unique when you created it, such as the one `mktemp -d` returns. Remove that directory before you return, including on failure. A fixed name under a shared temporary directory is not that directory, whether the directory is the system's own or a scratchpad your session was given: another run may be working at the same time, in the same place and on this same text, and write that same name. The file you come back to is then that run's work and not yours, and when you take it for your own stale copy and delete or replace it, you destroy work that is not yours, and nothing tells the run it came from.\n\n**What you return.** The complete corrected text and a short note of which findings you repaired and which you left, with the reason for each you left. Where any repair removed a passage carrying a claim, name every removed claim and say which finding made the claim itself the defect, and name every changed claim the same way — one you left standing with its scope, certainty, attribution, chronology, causality or meaning moved, by what it now asserts rather than how far its wording moved, and the finding the repair that moved it answered. Where a repair took a limit, a connective or a bounding clause out of the text — a sentence or a heading saying what is not measured, not claimed or not known, a connective giving the text's own reason for what follows, a clause saying what a claim is not about — say what a reader of the text you return no longer has, however little of the text went with it. Name every added claim the same way, whether or not anything was removed: one the text you return asserts and the text you received has no counterpart for, an inference drawn from what that text already said among them where it asserts something that text did not say, and the finding the repair that wrote it answered. A claim with a counterpart in the text you received is changed rather than added. Reporting a removal never makes an impermissible one acceptable. The complete text: not a diff, not the changed passages, not a description of what you did. Return no commentary inside the text itself.",
+      "started_at": "2026-09-29T22:58:43.578Z",
+      "ended_at": "2026-09-29T22:58:48.010Z",
+      "seats": [
+        {
+          "model": "<synthetic>",
+          "deliberation": null,
+          "turns": 1
+        }
+      ],
+      "skill_bodies": [],
+      "calls": [],
+      "file_activity": [],
+      "delegations": [],
+      "interrupted": false
+    }
+  ],
+  "status": {
+    "status": "incomplete",
+    "reasons": [
+      "run-did-not-finish"
+    ],
+    "parent_transcript": "present",
+    "unparsable_lines": {},
+    "delegations_without_child": [],
+    "children_without_delegation": [],
+    "run_outcome": {
+      "returncode": 1,
+      "timed_out": false,
+      "interrupted": false
+    },
+    "agents": 2,
+    "calls": 10,
+    "read_from": "transcripts and runner outcome only; never the run's reply"
+  }
+}

@@ -1,0 +1,25 @@
+Jag har granskat kolumnen och skrivit den granskade texten till `output.md`. `input.md` är orörd.
+
+**Inställningar:** genre `column` och språk `sv` från anropet. Ingen teknik används, eftersom genren `column` inte anger någon som den vanligen skrivs med. Ingen brief valdes, och texten har ingen `kntnt`-metadata, så ingen lades till. Korrigeringsbudgeten var 1 och gick åt till en runda.
+
+**Anmärkningar**
+
+1. **Avslutningen hade inget eget avsnitt (åtgärdad).** Det sista avsnittet, ”Ännu en ruta, och ändå vill jag prova”, presenterade kolumnens förslag för första gången. Uppmaningen och slutreflektionen (”Prova ändå frågan …”) låg sist i samma avsnitt. Enligt artikelanatomin ska avslutningen vara ett eget avsnitt med en egen mellanrubrik. En läsare som skummar rubrikerna hittade därför ingen ingång till uppmaningen, och en och samma mellanrubrik fick täcka både förslaget och slutet.
+   - **Åtgärd:** sista stycket har fått en egen mellanrubrik, ”Jag kan inte lova mer innan frågan är provad”. Själva stycket är oförändrat.
+   - **Kontroll:** den nya rubriken säger inget som texten inte redan säger. Den upprepar inte heller den första meningen under sig.
+
+Inga olösta anmärkningar återstår.
+
+**Anatomin:** Texten följer artikelanatomin, med två avvikelser från normerna som inte räknas som fel:
+- Första stycket under ”Det är inte bara besluten jag vill åt” har 83 ord mot normen högst 80. Det rymmer en tanke och fungerar i den längden, så det är ingen anmärkning.
+- Efter delningen har två av tre avsnitt bara ett stycke, medan de flesta avsnitt enligt normen ska ha två eller tre. Det följer av att avslutningen fick ett eget avsnitt.
+
+Skriptet mätte längdkraven, och jag läste igenom resten själv: ingressen, inledningens förhållande till ingressen, att mellanrubrikerna beskriver sina avsnitt och att avslutningen är en avslutning.
+
+**Påståenden**
+- **Borttagna:** inga.
+- **Ändrade:** den nya mellanrubriken ”Jag kan inte lova mer innan frågan är provad” (från rundan som åtgärdade anmärkning 1). Den säger att skribenten inte kan lova mer innan frågan har prövats, vilket motsvarar sista meningen ”Det är den enda förbättring jag kan lova innan vi har provat”. Den enda förskjutningen är att ”vi” i rubriken blir opersonligt, så att det inte längre sägs vem som provar. Meningen själv står kvar oförändrad i stycket.
+- **Tillagda:** inga.
+- Med undantag för mellanrubriken ovan har inga påståenden tagits bort, ändrats eller lagts till.
+
+Utöver den nya mellanrubriken är texten oförändrad: strukturen har rättats genom att avslutningen fått ett eget avsnitt. Den avslutande korrekturläsningen hittade inga fel och ändrade ingenting.

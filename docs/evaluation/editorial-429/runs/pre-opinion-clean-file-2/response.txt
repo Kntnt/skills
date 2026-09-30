@@ -1,0 +1,21 @@
+Jag har granskat och rättat debattartikeln och skrivit resultatet till `output.md`. Granskningen hittade ett fel och det är åtgärdat, så inga olösta fynd återstår. `input.md` är orörd.
+
+**Inställningar:** genre `opinion` och språk `sv` (båda angivna i anropet). Ingen teknik används, eftersom genren `opinion` inte anger någon och ingen teknik valdes på annat sätt. Ingen brief valdes. Texten saknar `kntnt`-metadata, och ingen har lagts till.
+
+**Artikelanatomi:** Texten följer artikelanatomin utan avvikelser. Skriptet räknade gränserna och hittade inga fel. Jag gick också igenom de krav som skriptet inte räknar:
+- sista avsnittet fungerar som avslutning och uppmaningen riktar sig till kommunstyrelsen,
+- ingressen står på egen hand,
+- inledningsstycket för resonemanget vidare efter ingressen,
+- mellanrubrikerna beskriver sina avsnitt,
+- styckena håller en tanke var,
+- bylinen har rätt form.
+
+**Fynd (åtgärdat):**
+1. **Inledningsstycket** skrev ”Pröva först båda bokningsvägarna …”, men brödtexten hade vid den punkten bara nämnt digital bokning. Att den andra vägen är telefonbokning stod bara i rubriken och ingressen, och i brödtexten först i nästa avsnitt. Den som läste brödtexten utan rubrik och ingress visste därför inte i inledningen vilken bokningsväg texten vill behålla. Nu står det ”båda bokningsvägarna, digital bokning och telefonbokning,”.
+
+**Påståenden:**
+- **Ändrat:** ”båda bokningsvägarna” i inledningsstycket säger nu uttryckligen att det gäller digital bokning och telefonbokning. Det följer av rättelsen i fynd 1 och stämmer med rubriken, ingressen och siffrorna i första avsnittet. Förslaget har samma omfattning och säkerhet som förut: båda vägarna, alla sju lokaler, ett halvår, och sedan mätning.
+
+Utöver den ändringen har inget påstående tagits bort, ändrats eller lagts till. Ingen avgränsning, inget sambandsord och ingen begränsande bisats har försvunnit.
+
+Jämfört med originalet har texten fått en förtydligande inskjuten fras i inledningsstycket. Rubriker, ingress, byline, struktur och övriga stycken är oförändrade. Den avslutande korrekturläsningen hittade inga fel att rätta.

@@ -1,0 +1,35 @@
+# Granskning av input.md
+
+`output.md` är skriven och är byte för byte identisk med `input.md`, eftersom den enda korrigeringsomgången förkastades. Båda anmärkningarna står därför kvar olösta.
+
+**Inställningar:** genren `article` och språket `sv` kom från anropet. Tekniken är ingen, eftersom genren `article` inte föreskriver någon. Ingen skrivbrief valdes och texten saknar `kntnt`-metadata, så ingen lades till.
+
+**Artikelns anatomi:** alla räknade krav är uppfyllda enligt mätskriptet (exit 0). Jag läste också igenom de krav skriptet inte räknar: att ingressen står på egen hand, att ingressen och inledningen inte upprepar varandra, att brödtexten går att läsa utan ingressen, att mellanrubrikerna beskriver sina avsnitt och att sista avsnittet är ett avslut med en uppmaning. Alla håller. Undantaget är rubriken, som inte uppfyller rubrikkraven (anmärkning 1).
+
+## Anmärkningar (båda olösta)
+
+1. **Rubriken** – ”Mätförsöket i Björkskolan visar när, inte varför”.
+   - Kravet: en rubrik ska gå att förstå på egen hand.
+   - Problemet: ”när” och ”varför” saknar objekt. Den som bara ser rubriken kan inte avgöra vad försöket mätte, eller att det handlar om att luften i klassrummen låg under fastighetskontorets arbetsgräns.
+   - Vad läsaren förlorar: möjligheten att utifrån rubriken avgöra om texten är något för dem.
+
+2. **Inledningen, andra meningen** – ”Det gör placeringen viktig när fastighetskontoret ska tolka …”.
+   - Problemet: inledningen gör givarnas placering till en förutsättning för tolkningen. Brödtexten säger aldrig var givarna satt eller hur placeringen påverkar de 14 lektionspassen. Placeringen återkommer bara i ”likadant placerade givare” inför nästa försök.
+   - Vad läsaren förlorar: läsaren kan inte bedöma vad placeringen betyder för värdena.
+   - Varför den inte rättades: texten innehåller inga uppgifter om var givarna satt, så en person behöver antingen tillföra dem eller avgöra hur premissen ska hanteras.
+
+## Förkastad korrigeringsomgång
+
+Budgeten var en korrigering. Den användes och förkastades i sin helhet, och den ursprungliga texten återställdes.
+
+- **Inledningen:** omgången strök påståendet att placeringen är viktig när fastighetskontoret ska tolka mätningarna. Meningen blev ”Fastighetskontoret ska tolka fyra veckors mätningar i Björkskolans sex klassrum.”
+  - Det strukna påståendet avgränsar vad värdena säger. ”En temperaturgivare mäter luften där den sitter” fanns kvar, men den meningen säger inte att tolkningen beror på placeringen.
+  - Kopplingen mellan inledningen och ”likadant placerade givare” i sista avsnittet försvann också.
+  - Det räknas som en förlust som omgången själv orsakade, och därför förkastades den.
+- **Rubriken:** omgången skrev om rubriken till ”Björkskolans mätförsök visar när det var kallt, inte varför”. Ändringen föll med resten av omgången och finns inte i den levererade texten.
+
+## Påståenden och språkgranskning
+
+Inga påståenden är strukna, ändrade eller tillagda i den levererade texten, frånsett strykningen i den förkastade omgången ovan, som inte finns med i `output.md`.
+
+Språkgranskningen hittade inga fel att rätta.

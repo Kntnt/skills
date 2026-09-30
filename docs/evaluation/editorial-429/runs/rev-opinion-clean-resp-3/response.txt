@@ -1,0 +1,50 @@
+**Konfiguration:** genren är `opinion` och språket `sv`, båda enligt anropet. Ingen teknik används, eftersom genren `opinion` inte anger någon. Ingen skrivbrief valdes, och texten saknar `kntnt`-metadata, så ingen har lagts till.
+
+```markdown
+# Avskaffa inte telefonbokningen på ett antagande
+
+**I september kan telefonbokningen av Lerviks föreningslokaler försvinna. Beslutet ska vila på åtta veckors siffror från två lokaler, och de siffrorna räknar bokningar, inte personer. Här är skälen att pröva båda bokningsvägarna ett halvår till innan den ena stängs.**
+
+Text: Sanna Ek, Öppna beslut
+
+Kommunstyrelsen i Lervik bör skjuta upp bytet till enbart digital bokning av föreningslokaler, ett byte som kan ske i september. Pröva först båda bokningsvägarna, digital bokning och telefonbokning, i alla sju lokaler under ett halvår och mät vad de kräver. Ett permanent beslut behöver bättre underlag än det som nu ligger på bordet.
+
+## Bokningar är inte samma sak som personer
+
+Kommunens pilotrapport från den 8 april 2026 räknar 96 webbokningar och 24 telefonbokningar under åtta veckor i två lokaler. Den säger inte hur många personer som bokade eller varför de valde telefonen. Siffrorna visar varken hur många som saknar digital vana eller hur många som skulle klara sig utan telefonbokning.
+
+En bokning är en händelse, inte en invånare. Den skillnaden avgör vad siffrorna kan användas till.
+
+## Mät också arbetet med två kanaler
+
+Förvaltningen vill slippa dubbel administration. Det är en relevant invändning. Men handlingarna innehåller ingen mätning av tidsåtgången. Att behålla två kanaler kostar arbete, och hur mycket behöver vägas mot vad användarna får.
+
+## Besluta om försöket, inte om antagandet
+
+Kommunstyrelsen bör därför säga ja till halvåret med båda bokningsvägarna, ta ställning till dess ännu okända kostnad och ge förvaltningen i uppdrag att mäta tidsåtgången samt fråga användarna varför de väljer sin bokningsväg. Först då går det att väga alternativen.
+
+Ett antagande blir inte ett beslutsunderlag för att kalendern säger september.
+```
+
+**Fynd (åtgärdat)**
+
+1. **Inledningsstycket nämnde inte telefonbokningen.** Där stod "båda bokningsvägarna", men bara den digitala vägen nämndes. Att den andra är telefonbokning stod bara i rubriken och ingressen. Den som läser brödtexten utan dem fick veta vilken väg som hotas först i andra stycket.
+   - Åtgärd: "digital bokning och telefonbokning" har lagts till efter "båda bokningsvägarna".
+   - Kontroll: en ny granskning fann inga nya brister.
+
+Inga fynd kvarstår.
+
+**Anatomin:** texten följer artikelanatomin. Skriptet mätte alla räknade gränser utan avvikelse. Jag har också läst igenom kraven som skriptet inte räknar:
+- ingressen fungerar på egen hand;
+- inledningsstycket för texten framåt;
+- varje mellanrubrik beskriver sitt avsnitt;
+- sista avsnittet är ett avslut som säger vem som ska handla, nämligen kommunstyrelsen.
+
+**Påståenden:**
+- **Ändrat:** i inledningsstycket säger texten nu uttryckligen att de två bokningsvägar som ska prövas är digital bokning och telefonbokning. Detta stod redan i rubriken, ingressen och pilotrapportens siffror, men inte i inledningsstycket. Ändringen hör till fynd 1.
+- **Borttaget och tillagt:** inget påstående har tagits bort eller lagts till.
+- **Övrigt:** utöver den ändrade meningen har inget påstående fått ändrad räckvidd, säkerhet, källa, tidsordning eller orsak.
+
+Utöver detta har texten bara ändrats genom att inledningsstycket fått de två bokningsvägarnas namn. Den avslutande korrekturläsningen hittade inga fel att rätta.
+
+Korrigeringsbudgeten på 1 användes, och slingan avslutades eftersom inga fynd återstod. Ingen fil har skrivits eller ändrats. Arbetsfilerna till korrekturläsningen är borttagna, och `input.md` är orörd.

@@ -1,0 +1,53 @@
+Jag granskade texten som krönika (`column`) på svenska. Tre fynd kvarstår olösta. Den enda ändringen i texten är ett tankstreck.
+
+**Inställningar:** krönika och svenska kommer från textens egen `kntnt`-karta. Ingen berättarteknik används: kartan anger `none`, och krönikegenren anger inte heller någon.
+
+```markdown
+---
+kntnt:
+  genre: column
+  technique: none
+  language: sv
+---
+
+# Mallen har en ruta för allt utom poängen
+
+Av Nora Vik, bibliotekarie
+
+Jag granskar bibliotekets mötesmall. Där finns rutor för starttid, sluttid, deltagare och dagordning. Någon ruta för det beslut vi ska kunna fatta när vi går därifrån finns inte. Det är dokumentet jag tittar på, inte ett bestämt möte.
+
+Jag uppskattar möten där kolleger upptäcker att de har förstått en fråga olika. Den upptäckten kan vara viktigare än att vi snabbt enas. Min tanke är alltså inte att varje samtal ska pressas fram till ett beslut.
+
+Det som retar mig är något annat: att tid i kalendern så lätt behandlas som ett resultat i sig. Timmen är bokad, alltså har något hänt. Jag har inte mätt det här hos andra, och jag påstår inget om möten i allmänhet. Det är min reflektion, med den räckvidd en reflektion har.
+
+Ändå tycker jag att den som fyller i en mall borde få formulera varför vi behöver just varandras tid. Också när syftet är att undersöka något tillsammans finns det ett skäl att skriva ner. Samtal kan skapa förtroende. Samtal kan hitta en fråga vi inte visste att vi behövde ställa. Inget av det kräver ett beslut, men båda delarna tål att motiveras.
+
+Så jag vill prova en enkel fråga bredvid tiden: vad behöver vi förstå tillsammans?
+
+Där börjar tvivlet. Det finns en komik i att försöka lösa ett problem med formulär genom att utöka formuläret – bibliotekarien som svarar på en mall med mer mall. Jag vet inte om ytterligare en ruta gör våra möten bättre. Kanske blir frågan bara en rad till att fylla i.
+
+Jag vill prova den i alla fall, och behålla båda hållningarna så länge: hoppet om frågan och tvivlet på ännu en ruta.
+```
+
+## Olösta fynd
+
+Alla tre gäller delar som texten saknar. Sådana delar skrivs inte vid en granskning, eftersom det är författaren som bestämmer vad de ska innehålla. Ett korrigeringsvarv kördes, men det ändrade ingenting. Därför är alla tre olösta.
+
+1. **Ingress saknas.** Mellan rubriken och bylinen står ingen ingress, alltså inget fristående stycke på högst 60 ord som säger vad krönikan handlar om och vad läsaren får ut av den. En läsare som bara ser rubriken och sidans början får ingen sammanfattning och inget skäl att läsa vidare.
+
+2. **Mellanrubriker och avsnitt saknas.** Hela brödtexten består av sju stycken (274 ord) utan en enda mellanrubrik. Därför räknas allt som en ingångstext på sju stycken, när ingångstexten ska vara ett enda stycke följt av avsnitt. Den avvikelsen beror bara på att avsnitten saknas. En webbläsare som skummar får inga ingångar till krönikans rörelse: iakttagelsen av mallen, irritationen, den föreslagna frågan och tvivlet.
+
+3. **Avslutande avsnitt och uppmaning saknas.** Sista stycket ("Jag vill prova den i alla fall …") avslutar en text utan avsnitt, så det finns inget eget avslutande avsnitt. Varken det stycket eller något annat ger läsaren något att pröva, lägga märke till eller tänka om. Texten beskriver bara författarens egen avsikt. Krönikan slutar alltså med författarens plan och ger inte läsaren det steg som reflektionen leder fram till. En uppmaning skulle vara ett nytt påstående riktat till läsaren, så den har inte skrivits.
+
+Texten uppfyller därför inte artikelanatomin. Rubriken (40 tecken, 8 ord) och bylinen uppfyller sina krav, och rubriken upprepar inte öppningsstycket. Några av anatomins krav som inte räknas maskinellt kunde inte prövas, eftersom delarna de gäller saknas:
+- att ingressen står på egen fot och inte upprepas av ingångstexten
+- att mellanrubrikerna beskriver sina avsnitt
+- att avslutningen visar att ingångstextens löfte har infriats
+
+## Påståenden
+
+Inget påstående har tagits bort, ändrats eller lagts till. De avgränsande meningarna står kvar oförändrade: "Det är dokumentet jag tittar på, inte ett bestämt möte" och "Jag har inte mätt det här hos andra, och jag påstår inget om möten i allmänhet".
+
+## Övriga ändringar
+
+Den avslutande korrekturläsningen gjorde en ändring. Det engelska tankstrecket (—) i sjätte stycket blev ett svenskt tankstreck med mellanslag (–). I övrigt är texten identisk med `input.md`, och ingen fil har skrivits eller ändrats.

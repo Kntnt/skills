@@ -1,0 +1,24 @@
+Jag har granskat `input.md` och skrivit resultatet till `output.md`. Bara rubriken är ändrad, resten av texten är tecken för tecken densamma.
+
+**Inställningar:** genren är `casestudy` och språket `sv`, båda enligt anropet. Ingen teknik används, eftersom genren `casestudy` inte anger någon och ingen annan källa heller gör det. Ingen skrivbrief fanns.
+
+**Artikelns uppbyggnad:** texten följer mallen för artikelns delar utan avvikelser. Skriptet mätte gränserna som kan räknas, och alla höll. Jag läste också igenom resten:
+- Ingressen kan läsas på egen hand.
+- Inledningen upprepar inte ingressen.
+- Varje mellanrubrik beskriver sitt avsnitt.
+- Sista avsnittet fungerar som avslutning och har en uppmaning till läsaren.
+
+## Anmärkningar
+
+1. **Rubriken (åtgärdad).** Den gamla rubriken, ”Elm Quay samlade reparationsärendena”, lät försöket verka större än det var. Utan avgränsning sa den att Elm Quay samlade sina reparationsärenden. Texten beskriver ett försök i två hus under åtta veckor, där akuta ärenden och tidigare beställda arbeten inte ingick. Rubriken nämnde dessutom bara vad gruppen gjorde, inte vad försöket gav eller vad kunden tyckte om det. Ny rubrik: ”Elm Quays arbetsledare skulle pröva reparationsloggen igen”. Den bygger på Maya Linds eget villkorade omdöme, ”Jag skulle välja att göra försöket igen”, och använder inte skillnaden i mediantid, som texten uttryckligen inte tillskriver programvaran.
+
+Inga olösta anmärkningar återstår.
+
+## Vad som hände med påståendena
+
+- **Borttaget:** rubrikens påstående att Elm Quay samlade reparationsärendena, utan avgränsning. Det var just det påståendet anmärkningen gällde. Att ärendena samlades i en gemensam logg står kvar i ingressen, inledningen och avsnittet om försöksanteckningen, med rätt avgränsning.
+- **Ändrat:** rubriken säger nu att Elm Quays arbetsledare skulle pröva reparationsloggen igen. Det har motsvarighet i Linds citat och i ingressen och ändrades för att åtgärda anmärkning 1.
+- **Tillagt:** inget.
+- Ingen avgränsning, inget sambandsord och ingen begränsande bisats har tagits bort. Ingressen och brödtexten anger fortfarande försökets omfattning i sin helhet.
+
+Utöver rubriken är texten oförändrad. Korrekturläsningen hittade inga språkliga fel att rätta.

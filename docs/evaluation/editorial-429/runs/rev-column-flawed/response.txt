@@ -1,0 +1,47 @@
+Jag granskade texten som krönika på svenska och gjorde en korrigeringsrunda. Därefter gick texten igenom korrekturläsningen, som inte hittade några språkliga fel att rätta. Fem problem finns kvar som texten själv inte räcker till för att lösa. De måste fyllas i av någon som känner till bakgrunden.
+
+**Inställningar:** genre `column` och språk `sv`, båda angivna i anropet. Ingen berättarteknik används, eftersom krönikegenren inte har någon som standard.
+
+````markdown
+# Mötesmallen saknar plats för vad vi ska förstå tillsammans
+
+Nora Vik
+
+Förra tisdagen satt jag gråtande i bibliotekets mötesrum när min chef sade: ”Nu måste allt bli digitalt.” Det var mitt första möte om vår nya mötesmall. Jag har aldrig deltagit i något möte om vår nya mötesmall.
+
+Vår mötesmall har plats för starttid och sluttid men inte för vad vi ska förstå tillsammans.
+
+Samtal kan ha värde utan att leda till beslut. Jag vill prova frågan vad vi behöver förstå tillsammans, men jag vet inte om ytterligare en ruta gör möten bättre.
+````
+
+## Åtgärdade anmärkningar
+
+- **Rubriken.** ”Möten förändrar allt” påstod något som texten aldrig säger. En läsare som bara såg rubriken fick fel bild av vad krönikan handlar om. Den nya rubriken hämtar sitt påstående och sina ord direkt från andra stycket.
+  - Rubriken har 9 ord, ett över riktmärket på högst 8. Den är ändå kvar. Går man ner till 8 ord försvinner ”tillsammans”, som är textens eget ord för sin poäng.
+- **Tom inledning i andra stycket.** ”I dagens snabbt föränderliga värld …” och ”Det är viktigt att vara viktig” är strukna.
+- **Floskel i slutet.** Sista stycket, ”Sammanfattningsvis …”, är struket.
+
+## Olösta anmärkningar
+
+1. **Ingress saknas.** Läsaren får ingen fristående sammanfattning av krönikan. Den ska inte skrivas vid en granskning, så en person får avgöra vad den ska innehålla.
+2. **Mellanrubriker, avsnitt och ett avslutande avsnitt saknas.** Mätningen räknar därför hela brödtexten som en inledning på tre stycken och 82 ord. Det beror bara på att avsnitten saknas. Delarna ska inte skrivas vid en granskning.
+3. **Uppmaning till läsaren saknas.** ”Jag vill prova frågan …” handlar om skribentens egen avsikt och ger inte läsaren något att pröva eller ompröva.
+4. **Motsägelse i första stycket.** ”Det var mitt första möte om vår nya mötesmall” säger emot ”Jag har aldrig deltagit i något möte om vår nya mötesmall”. Texten säger inte vilket av dem som stämmer.
+5. **Scenen hänger inte ihop med resten.** Gråten och chefens ”Nu måste allt bli digitalt.” knyts aldrig till tankarna om mallen och om vad man behöver förstå tillsammans. Läsaren får inte veta varför scenen berättas. Sambandet kräver uppgifter som texten inte har.
+
+Texten uppfyller alltså inte artikelmallen: ingress, avsnitt, avslutande avsnitt och uppmaning till läsaren saknas.
+
+## Påståenden
+
+**Strukna påståenden:**
+- Att möten i dagens snabbt föränderliga värld är viktigare än någonsin. Det stod både i andra stycket och i sista stycket.
+- Att det är viktigt att vara viktig.
+
+Båda sorterades bort som tom inledning och floskel. Med ”Sammanfattningsvis” försvann också signalen om att en sammanfattning följer. Men meningen sammanfattade inget som texten hade visat, så läsaren förlorar inget innehåll.
+
+**Ändrat påstående:**
+- Rubriken säger nu att mötesmallen saknar plats för vad vi ska förstå tillsammans, i stället för att möten förändrar allt. Påståendet finns redan i andra stycket och är lika starkt här.
+
+Inga andra påståenden är strukna, ändrade eller tillagda.
+
+Utöver det som räknas upp ovan har två kliché-mönster tagits bort, en tom inledning och en floskel som avslutning, och rubriken har skrivits om. Korrekturläsningen rättade inget.
