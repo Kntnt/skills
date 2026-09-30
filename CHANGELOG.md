@@ -4,6 +4,8 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ## [Unreleased]
 
+## [0.38.3] – 2026-09-30
+
 ### Changed
 
 - `/delegation` no longer declares the `subagents` Capability, so every form works in a harness that cannot start a subagent. Before, the engine told every run to confirm the Capability first and stop where it was missing, which refused `/delegation off`, `/delegation status` and the persistent-scope writes although none of the Skill's own steps starts a subagent. The mode it turns on already degrades by itself, telling an agent that cannot delegate to execute the work normally. Turning the mode on, or writing a persistent scope, in such a harness now adds one line to the report saying the mode changes nothing there until a subagent can start. `compatibility` names the harness as a soft requirement, the manpage and the three command pages say what the mode does without subagents, and `docs/rules/skills.md` states the test: a Capability is declared when the Skill's own steps need it, not when the work it switches on does (#428).
