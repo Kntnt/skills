@@ -145,7 +145,7 @@
       "name": "redline",
       "category": "editorial",
       "description": "Review one supplied text against this collection's editorial contract — its genre, its optional technique, its language, and the shared anti-slop catalogue — and, when selected, a Writing Brief; repair what the review found through a bounded budget of fresh correction subagents, report whatever is left unresolved, and finish with exactly one mechanical pass.",
-      "digest": "edadd9209fbf098c611c3d2af34e075f7a6b6fb5c8f1120093d95c57ff94b1fb",
+      "digest": "7533ae1a84a9833f377dd3d9c8e5f61cd7647516049dc9d04927cc7703ef3d65",
       "binaries": [
         "uv"
       ],
