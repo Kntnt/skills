@@ -936,7 +936,7 @@ def test_the_engine_reads_no_grammar_through_the_library_module() -> None:
     assert "argument_grammar" not in source, (
         f"{KNTNT_PY.relative_to(REPO_ROOT)}: the engine reads a Skill's grammar"
         f" from its shipped surfaces itself; `library/scripts/argument_grammar.py`"
-        f" belongs to the two engines that refuse in JSON ({RECORD}). See"
+        f" belongs to an engine that refuses in JSON ({RECORD}). See"
         f" {STANDARD}."
     )
 

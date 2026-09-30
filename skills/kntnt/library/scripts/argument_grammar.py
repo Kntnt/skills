@@ -31,10 +31,11 @@ from __future__ import annotations
 
 from collections.abc import Callable, Collection
 
-# The one declaration of how an engine binds this grammar. Neither engine can
-# import it — each loads this module by path (ADR-0149) and restates the shape
-# in its own annotations — so the suite beside them is what holds all three to
-# one signature rather than mypy, which never sees behind a dynamic load.
+# The one declaration of how an engine binds this grammar. An engine that reads
+# this module cannot import it — it loads the module by path (ADR-0149) and
+# restates the shape in its own annotations — so the suite beside that engine
+# is what holds the two to one signature rather than mypy, which never sees
+# behind a dynamic load.
 type OptionReader = Callable[[list[str], str], str | None]
 type SplitReader = Callable[[list[str], Collection[str]], tuple[list[str], list[str]]]
 

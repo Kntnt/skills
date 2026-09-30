@@ -9,8 +9,8 @@ from typing import Any
 REPO_ROOT = Path(__file__).resolve().parent.parent
 LIBRARY = REPO_ROOT / "skills" / "kntnt" / "library" / "scripts"
 
-# The one implementation of this collection's argument grammar, which the two
-# engines that read their own command lines reach from beside themselves.
+# The one implementation of this collection's argument grammar, which an engine
+# that reads its own command line reaches from beside itself.
 GRAMMAR = "argument_grammar.py"
 
 
