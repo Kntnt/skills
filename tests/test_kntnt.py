@@ -6588,6 +6588,94 @@ def test_a_review_half_diagnoses_only_what_the_writer_can_act_on() -> None:
     )
 
 
+# The ABT pair and the most words each may run to, counted as `wc -w` counts
+# them. The technique is loaded on every run that selects it, so it stays a
+# short brief however much of Olson's second level it carries (issue #469).
+ABT = EDITORIAL / "techniques" / "abt.md"
+ABT_REVIEW = EDITORIAL / "techniques" / "abt.review.md"
+ABT_CEILINGS = {ABT: 600, ABT_REVIEW: 350}
+
+# What the technique asks of a draft beyond the three relations, each as the
+# phrase that states it where Write reads it (issue #469).
+ABT_SECOND_LEVEL = {
+    "from the general to the specific": "each part moving from the general"
+    " to the specific",
+    "before the complication arrives": "the reader knowing what is at stake"
+    " before the complication",
+    "needs in order to bite": "the And holding only what the complication needs",
+    "An arc has one complication": "one complication per arc, other problems"
+    " ordered under it",
+    "a cause the text has given": "the consequence answering the causes the text gave",
+    "the scene itself carries the situation": "the condition on which in"
+    " medias res works",
+    "the genre governs": "a genre's own rules governing where it compresses,"
+    " withholds or reorders the arc",
+}
+
+# Olson's template as a form to fill, which the technique states as outcomes
+# instead (issue #469).
+ABT_TEMPLATE_LABELS = ("Ordinary World", "IF/THEN", "BECAUSE", "BUT", "BY")
+
+
+def test_abt_stays_a_short_brief_without_a_form_or_a_threshold() -> None:
+    """The second level is stated as outcomes, and the pair stays short.
+
+    Olson subdivides each part and writes the result as a template with a
+    five-word ceiling on the complication. The technique carries what the
+    subdivision asks of a text and neither the form nor the count, and the
+    pair is held to the ceilings the ticket set (issue #469).
+    """
+
+    for path, ceiling in ABT_CEILINGS.items():
+        text = path.read_text(encoding="utf-8")
+        words = len(text.split())
+        assert words <= ceiling, (
+            f"{path}: runs to {words} words, over its ceiling of {ceiling};"
+            f" the technique is a short brief loaded on every run that"
+            f" selects it (issue #469)."
+        )
+        stated = DIMENSION.findall(text)
+        assert stated == [], (
+            f"{stated}: {path} states a count, and the technique sets no word"
+            f" threshold or proportion on any part (issue #469)."
+        )
+        labels = [label for label in ABT_TEMPLATE_LABELS if label in text]
+        assert labels == [], (
+            f"{labels}: {path} carries Olson's template labels, and the"
+            f" technique states outcomes rather than a form (issue #469)."
+        )
+
+
+def test_abt_states_its_second_level_where_the_writer_reads() -> None:
+    """What makes the complication bite is stated in the file Write loads.
+
+    The relations alone left a writer without what makes a complication land:
+    stakes before it, a situation holding only what it needs, one complication
+    with its causes under it, and a consequence answering those causes. Each
+    is stated in the base half, and the review half diagnoses them against
+    the visible text, beginning with Parker's test (issue #469).
+    """
+
+    technique = ABT.read_text(encoding="utf-8")
+    for phrase, requirement in ABT_SECOND_LEVEL.items():
+        assert phrase in technique, (
+            f"{ABT}: does not state {requirement} (`{phrase}`), so the review"
+            f" half diagnoses a requirement the writer was never given"
+            f" (issue #469)."
+        )
+
+    review = ABT_REVIEW.read_text(encoding="utf-8")
+    assert "*and then*" in review, (
+        f"{ABT_REVIEW}: does not carry Parker's test, a transition that only"
+        f" adds where a turn or a consequence belongs (issue #469)."
+    )
+    assert "visible text" in review, (
+        f"{ABT_REVIEW}: does not confine the diagnosis to the visible text, so"
+        f" a review may ask for stakes or causes the material never had"
+        f" (issue #469)."
+    )
+
+
 # What the four article genres share, and where each of it is stated: the
 # shape their text has, and how its headline and subheadings are written. Both
 # sit beside `web-craft.md` outside the selectable directories, so nobody can
