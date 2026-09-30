@@ -1,0 +1,5 @@
+Ingen ändring: kolumnen behövde varken redaktionell eller mekanisk rättning. Inget skrevs till disk.
+
+- **Inställningar:** genre `column` och språk `sv`, båda angivna i anropet. Ingen teknik används, eftersom genren `column` inte har någon.
+- **Artikelns delar:** texten följer anatomin och alla räknade gränser håller. Ett stycke under ”Det är inte bara besluten jag vill åt” är 83 ord, strax över normen på 80. Det håller en enda tanke och läses väl, så det räknas inte som ett fel.
+- **Det som inte räknas:** jag har också läst igenom de krav som bara kan bedömas genom läsning. Ingressen står på egen hand. Mellanrubrikerna beskriver sina avsnitt. Sista avsnittet avslutar texten och uppmaningen följer av resonemanget.

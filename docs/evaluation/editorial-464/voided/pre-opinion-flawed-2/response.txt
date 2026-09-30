@@ -1,0 +1,61 @@
+Jag har granskat `input.md` som debattartikel och gjort en korrigeringsrunda. Sju av tio fynd är åtgärdade och tre står kvar för dig. Filen är orörd, och körningen lämnade inga filer efter sig.
+
+**Inställningar:** genre `opinion` och språk `sv`, båda från flaggorna. Ingen teknik används, eftersom genren inte anger någon. Ingen brief valdes och texten saknade `kntnt`-karta, så ingen har lagts till. Korrigeringsbudgeten var 1 och gick åt i den enda rundan. Den mekaniska korrekturen hittade inga fel.
+
+````markdown
+# Bokning per telefon bör prövas i ett halvår
+
+Sanna Ek, Öppna beslut
+
+Kommunstyrelsen borde behålla telefonbokning under ett halvårs försök i alla sju lokaler.
+
+## Siffrorna gäller bokningar, inte personer
+
+Det gjordes 96 bokningar på webben och 24 via telefon. Det innebär att 20 procent av bokningarna gjordes via telefon. Kommunens pilotrapport från den 8 april 2026 säger samtidigt att bokningarna inte räknar unika personer och att digital vana inte undersöktes.
+
+## Handlingarna visar inte tidsåtgången för två bokningsvägar
+
+Förvaltningen invänder att dubbla kanaler innebär dubbel administration. Handlingarna saknar tidsmätning. Därför visar de inte vad det kostar att behålla telefonbokningen. Föreningen vill att förvaltningen mäter tidsåtgång och frågar användarna varför de väljer en bokningsväg. Försökets kostnad är inte beräknad.
+
+## Webb och telefon bör finnas sida vid sida i försöket
+
+Nu är det dags för kommunstyrelsen att agera och behålla telefonbokningen under ett halvårs försök i alla sju lokaler.
+````
+
+## Olösta fynd
+
+- **Ingressen saknas.** Mellan rubriken och bylinen finns ingen sammanfattande ingress. Läsaren får därför ingen fristående text som säger vad artikeln handlar om och vad den ger. Ingressen är en del som texten helt saknar, så jag har inte skrivit den. Därför uppfyller texten inte artikelanatomin. Mätskriptet ger inga andra fel.
+- **Siffrorna 96 och 24 saknar källa.** De bär argumentet, men texten säger inte var de kommer ifrån eller vilken period de gäller. Texten visar inte heller att de kommer från pilotrapporten. Därför kunde ingen källa läggas till utan att hitta på den.
+- **Det framgår inte vilken förening som menas.** "Föreningen vill …" har ingen förening att syfta på i brödtexten. Bylinen nämner Öppna beslut, men texten säger aldrig att Öppna beslut är en förening. Därför kunde jag inte fylla i det.
+
+## Åtgärdade fynd
+
+- **Rubriken.** "Kommunledningen hatar människor" påstod något som texten inte bär och tillskrev motparten ett motiv. Ordet "kommunledningen" fanns inte heller i texten som den kom in, och av rubriken gick det inte att se att texten handlar om telefonbokning. Den nya rubriken är "Bokning per telefon bör prövas i ett halvår" (43 tecken, 8 ord).
+- **Öppningsstyckets andra mening var ostödd.** Den byggde på ett vagt "alla vet", tillskrev politikerna ett motiv och nämnde äldre och miljonbesparingar som texten inte tar upp någon annanstans. Hela meningen var felet och är struken.
+- **"Det bevisar att 20 procent av kommunens invånare …"** Andelen var räknad på bokningar men presenterades som en andel av invånarna. Nästa mening sa dessutom emot den. Meningen säger nu bara vad siffrorna bär.
+- **Mellanrubrikerna "Bakgrund" och "Diskussion".** De var allmänna etiketter som inte sa något om avsnitten till den som skummar. Nu beskriver de sina avsnitt.
+- **"Därför kostar det ingenting att behålla telefonbokningen."** Slutsatsen följde inte av premissen, och "Försökets kostnad är inte beräknad" sa emot den. Meningen säger nu bara vad premissen bär.
+- **"Nu är det dags att agera."** Uppmaningen nämnde ingen handling och ingen aktör, och den satt fast i det argumenterande avsnittet. Den har nu ett eget avslutningsavsnitt med egen mellanrubrik och nämner förslaget från öppningsstycket och vem som ska agera.
+
+## Påståenden
+
+**Borttagna**
+- Att kommunledningen hatar människor. Det försvann när rubriken reparerades.
+- Att politikerna vill stänga ute äldre, att syftet är att spara miljoner och att alla vet det. Det försvann när öppningsstyckets andra mening ströks.
+
+**Ändrade**
+- **Rubriken** säger nu att bokning per telefon bör prövas i ett halvår. Den säger inte, som öppningsstycket, att telefonbokningen ska *behållas*, så den som bara läser rubriken får inte veta att telefonbokning redan finns.
+- **Bakgrundsavsnittets andra mening** säger nu att 20 procent av bokningarna gjordes via telefon. Tidigare stod det att siffrorna bevisar att 20 procent av invånarna inte kan använda internet.
+- **Det första avsnittets mellanrubrik** säger nu med textens egen röst att siffrorna gäller bokningar och inte personer. I brödtexten tillskrivs det sista pilotrapporten, men i rubriken nämns inte rapporten.
+- **Det andra avsnittets mellanrubrik** säger nu att handlingarna inte visar tidsåtgången för två bokningsvägar. Den knyter därmed "Handlingarna saknar tidsmätning" till de dubbla kanalerna.
+- **Diskussionsavsnittets tredje mening** säger nu att handlingarna inte visar vad det kostar att behålla telefonbokningen. Tidigare stod det att det inte kostar något. "Därför" står kvar.
+- **Slutmeningen** säger nu att kommunstyrelsen ska agera och behålla telefonbokningen under ett halvårs försök i alla sju lokaler. Förslaget från öppningsstycket återkommer alltså, nu med en aktör.
+
+**Tillagt**
+- Mellanrubriken "Webb och telefon bör finnas sida vid sida i försöket" säger att webbokningen ska finnas kvar bredvid telefonbokningen under försöket. Det sa inte texten som den kom in. Påståendet är en slutsats av förslaget att behålla telefonbokningen och av invändningen om dubbla kanaler.
+
+De meningar som anger vad som inte är mätt eller undersökt står ordagrant kvar: pilotrapportens meningen, "Handlingarna saknar tidsmätning." och "Försökets kostnad är inte beräknad.". Utöver det som räknas upp ovan har inga påståenden tagits bort, ändrats eller lagts till.
+
+## Övriga ändringar
+
+Rubriken och tre mellanrubriker är nya. En mening som byggde på en vag källa och ett tillskrivet motiv är struken. Två slutsatser är justerade så att de följer av sina premisser. Den allmänna slutuppmaningen har blivit ett eget avslutningsavsnitt.

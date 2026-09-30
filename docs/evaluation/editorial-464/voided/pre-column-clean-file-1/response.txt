@@ -1,0 +1,16 @@
+Nora Viks krönika behövde inget arbete. Jag har skrivit texten till `output.md` och den är byte för byte identisk med `input.md`.
+
+**Inställningar:** genren `column` och språket `sv` kom från anropet. Ingen teknik används, eftersom krönikegenren inte anger någon.
+
+**Granskning:** texten har inga fel. Korrekturläsningen på slutet hittade inga mekaniska fel, och eftersom inget behövde rättas blev ingen av korrekturrundorna använd.
+
+**Artikelns delar:** texten har alla delar som krönikegenren kräver.
+- **Räknade gränser:** mätskriptet hittade inga överskridna gränser. Rubriken har 44 tecken, ingressen 41 ord och båda mellanrubrikerna 37 tecken vardera.
+- **Delar som jag läste mig till:**
+  - Ingressen står på egen hand.
+  - Inledningen säger något nytt efter ingressen och börjar inte med samma ord.
+  - Båda mellanrubrikerna beskriver sina avsnitt.
+  - Avsnittet ”Ännu en ruta, och ändå vill jag prova” fungerar som avslutning. Det ger frågan som ingressen lovar och slutar med en uppmaning som följer av resonemanget, och tvivlet står kvar.
+- **Styckelängd:** första stycket under ”Det är inte bara besluten jag vill åt” har 83 ord, strax över riktvärdet på 80. Det är inget fel, eftersom stycket håller en enda tanke och läses väl i den längden.
+
+Ingen påstående i texten har strukits, ändrats eller lagts till.

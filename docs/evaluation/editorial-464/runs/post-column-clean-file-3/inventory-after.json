@@ -1,0 +1,3017 @@
+{
+  "home": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude": {
+    "mode": 448,
+    "type": "directory"
+  },
+  "home/.claude/.claude.json": {
+    "mode": 384,
+    "type": "file",
+    "size": 46158,
+    "sha256": "3478592f3698c4487676a6aa900544d2ef82c9aac79b3505e4b2d8fc1463c73b"
+  },
+  "home/.claude/.credentials.json": {
+    "mode": 384,
+    "type": "file",
+    "size": 543
+  },
+  "home/.claude/.last-cleanup": {
+    "mode": 420,
+    "type": "file",
+    "size": 24,
+    "sha256": "47280df3c16c391e907572e4e69fe2f263de6a5b8d05e6786e71f993237526f9"
+  },
+  "home/.claude/backups": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/backups/.claude.json.backup.1790786603603": {
+    "mode": 384,
+    "type": "file",
+    "size": 84,
+    "sha256": "d71cfbba6152030a217f286acaa0df4dc46498c1a1b87a024b4faebca8ae07f3"
+  },
+  "home/.claude/plugins": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/plugins/synced": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/plugins/synced/.bucket-60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d": {
+    "mode": 420,
+    "type": "file",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/.last-complete-round": {
+    "mode": 420,
+    "type": "file",
+    "size": 37,
+    "sha256": "56402f361755b4996865a829da0c208cb0a92902faf9180035234886f264c233"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/.marketplaces.json": {
+    "mode": 420,
+    "type": "file",
+    "size": 886,
+    "sha256": "478202ee1b38f5dc98121ee819f5e30ce8d4597aa6883e859311159accb84ef1"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/.claude": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/.claude/settings.json": {
+    "mode": 420,
+    "type": "file",
+    "size": 67,
+    "sha256": "33273989491b2d5f149526289429279ddd1d91b433480caf34e0c906f28ab7d9"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/.claude-plugin": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/.claude-plugin/marketplace.json": {
+    "mode": 420,
+    "type": "file",
+    "size": 436,
+    "sha256": "f085a9de65f88e8c822ba134bb04b3c720a92ca75b28c4ff1fe20dc27d3ed409"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/.claude-plugin/plugin.json": {
+    "mode": 420,
+    "type": "file",
+    "size": 839,
+    "sha256": "7bd595a5a20f4c4aaf2bb9c277a3ac4e26084aad19d477fed3aa5ca6b915cddd"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/.github": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/.github/ISSUE_TEMPLATE": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/.github/ISSUE_TEMPLATE/bug.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 1494,
+    "sha256": "0b5d460ae393e730c2aa8d147b2259b033f1a6c2e53808b34970e0ccd0cd04a2"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/.github/workflows": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/.github/workflows/audit.yml": {
+    "mode": 420,
+    "type": "file",
+    "size": 321,
+    "sha256": "333d60346a79a84a2c8689fcc0629b3b5a1d62fb93a64a8d50749454533d18fa"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/.gitignore": {
+    "mode": 420,
+    "type": "file",
+    "size": 248,
+    "sha256": "1abda78e93d3a77f30d12a15247a560db28bedf06f837c79c403a2968cbae847"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/.pre-commit-config.yaml": {
+    "mode": 420,
+    "type": "file",
+    "size": 238,
+    "sha256": "cb1b572d7a6b22600dd8374129f2e4c367625bdd2f341e17a197c00fb2d61286"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/CHANGELOG.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 38708,
+    "sha256": "9ec63e243a1595cec5335d660ba53b2b56b7d24f751a8852f05e01ebd4afb3a6"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/CONTRIBUTING.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 3900,
+    "sha256": "cc75903f9f6bc35a27e9b22d4d2134268eb29d22a69293da61e76e1e309bcb59"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/LICENSE": {
+    "mode": 420,
+    "type": "file",
+    "size": 11358,
+    "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/NOTICE": {
+    "mode": 420,
+    "type": "file",
+    "size": 382,
+    "sha256": "058bb8d35f8e31cb0874915773991940021027587d04a410275b044301fc4e3f"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/README.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 15433,
+    "sha256": "be3b1b7a6280330f643b3b4bad7bc65498aea51d47f0e01fb8f9dbacc7f1068a"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/commands": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/commands/help.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 1073,
+    "sha256": "0532978ddf89558fe25b5eb7949ffae04e1698e9b63ddc1b55703992c2897873"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/docs": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/docs/architecture.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 9846,
+    "sha256": "48ee049510b19ee52c61984e577464401c4336fcaf90acf7b1662d900916f523"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/docs/authoring.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 11998,
+    "sha256": "6c519d5b51110e16204b57f2bcb3b709e6f7d5b99fb7ccda56071f9d0d4e6ec4"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/docs/content-types.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 4239,
+    "sha256": "ac5a62547a279cb6ec67eb01a2c64f09c6b92caf8e7bad83d80fa1cb809aaa3f"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/docs/extending.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 5119,
+    "sha256": "c39e993e61bd9ceb8e05b16b6ac543805661515cc92d25a3315eae980c2abaeb"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/docs/languages.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 4838,
+    "sha256": "bd12c1cc6924b98e73bf3efdacb9259ed6d6da0bdf60a373fb3e6e415d658ba1"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/docs/versioning.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 3120,
+    "sha256": "44d0880dd09964547f76e24f8dec2705e186f452487a337384caf98afae2021a"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/evals": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/evals/README.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 8169,
+    "sha256": "3322e0f7848aef519614f2d66389409d033ea6686351cf53d71bce01b14eec95"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/evals/baseline.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 13881,
+    "sha256": "2337953df66843ce5089960c6c2055091196eabc45eeec4b5d55bbc56902a6c2"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/evals/capture.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 27851,
+    "sha256": "723a74fb1b4a0f5f1669fb0384ddf731c9013f6c3c733e09bbf0a395329450ef"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/evals/classify_dimensions.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 14498,
+    "sha256": "547b3432a01194e30420b98c1c08074844f0e91f416e7919654400e566281de6"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/evals/edit": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/evals/edit/evals.json": {
+    "mode": 420,
+    "type": "file",
+    "size": 21290,
+    "sha256": "685f888cb04cdcf9ee611378cd0328e7089ff76ae7689b10846cbf53fc891dcf"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/evals/eval": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/evals/eval/SKILL.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 6167,
+    "sha256": "e0fbd641932e4784770e05a380ff0206b72f54de5cb1a4eebdf802f7f26ef634"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/evals/evals.json": {
+    "mode": 420,
+    "type": "file",
+    "size": 109923,
+    "sha256": "b78fe26e6864901ae438034a985b80df5bf109fbc31d07db4df2ff985f17fbb4"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/evals/fixtures": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/evals/fixtures/capture-transcript-edit.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 1691,
+    "sha256": "ce13c12d046313a469cb18d0dd0add1678345f05bbb919a8308a1bfbde4640cc"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/evals/fixtures/capture-transcript-write.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 1692,
+    "sha256": "710260dd1ac989149186466259f9b5e4b0618209c8d4c713f923b1312bf01469"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/evals/fixtures/de-fallback.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 427,
+    "sha256": "f1738f155d2da2a94f74875f08c5c8d93067347896c16d72e8c02df54f9ca4e8"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/evals/fixtures/en_GB-article.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 762,
+    "sha256": "84175fadc837a9dde0eb828bfcfccb495e2df6f1662a5c9dc2e08beb3fb3e441"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/evals/fixtures/en_GB-clean-essay.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 1094,
+    "sha256": "d25e89b4c361b28ee37c907bb31554ed96dfd85dc8367666373b1e9e3e20535f"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/evals/fixtures/en_GB-clean-text.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 709,
+    "sha256": "ba8af14bb1dd039426282f6786d47cc508e71ad06184ae00c4b63cb9b09b59c4"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/evals/fixtures/en_GB-quotation-errors.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 218,
+    "sha256": "591d6eaa882ccd4ed0cbb5e27cea522d73fc4df786f06cdc1ec6d0025f25a6c8"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/evals/fixtures/en_GB-readme-drift.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 2713,
+    "sha256": "72225681c635d3389803501fb9127ff99aeed2b2adea1a167d8ce18d8769486f"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/evals/fixtures/en_GB-short.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 156,
+    "sha256": "5f5043a99f59d8e25a3ee2c6b39b59e147003ad7324c8fe0d04d5e5691c7792e"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/evals/fixtures/en_GB-spelling-drift.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 335,
+    "sha256": "2f8eb1a4a741007646a5e51fa5dc42967517464b22349b2c5da844176eb047b8"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/evals/fixtures/en_GB-style-errors.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 467,
+    "sha256": "f264a6761df667af736e0a4816d676237daf69f3176dda5f0b2d6bfe9f998550"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/evals/fixtures/en_GB-typography-errors.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 563,
+    "sha256": "10792d8e41019a4d956cf133ed8ad357c68b89f92093a9642c2849008f3edad6"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/evals/fixtures/en_US-article.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 770,
+    "sha256": "1d656cbfb31d501fdd77c46974656ed631160884e2b5e2bde8f20e3421e67ab4"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/evals/fixtures/en_US-clean-text.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 718,
+    "sha256": "4122f73714e47179d9a8b4ef6203e60de1d142a43d90d49eabef45e7fb64a244"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/evals/fixtures/en_US-quotation-errors.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 218,
+    "sha256": "77b5ce88c35c02f22e0d4bc04745bd58f9bbdc4816836823fd3b3d93b2eb08c4"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/evals/fixtures/en_US-short.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 155,
+    "sha256": "f0626f355ef8ae18a6ed2eba10ef7d318d692da94f0c3a43e231cd85290d84fd"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/evals/fixtures/en_US-style-errors.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 713,
+    "sha256": "0d27d6d9793a00d8ddbfc7b19813b73c076770ed9d2027069bf15272aa1c94d0"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/evals/fixtures/en_US-typography-errors.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 540,
+    "sha256": "c8bde9a6a2776af114c7cb56f5eb952353099c1b5e5dacf3ea1d9dbce5f891a3"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/evals/fixtures/fabricated-source.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 757,
+    "sha256": "c08db0db14a4e3b89bc99e934671737d7a102562366587830aa6e4e48c245363"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/evals/fixtures/last-resort-developmental.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 250,
+    "sha256": "29ee8770b7180384a6a652537d063e23e848d9752d654cc8068bc0314e478985"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/evals/fixtures/lib": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/evals/fixtures/lib/languages": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/evals/fixtures/lib/languages/sv_FI.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 1876,
+    "sha256": "aab583eecae3ecf465f8c47ce03aae13ecaa1af926bbe0e9589ae14808f95d9d"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/evals/fixtures/overlong-heading.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 908,
+    "sha256": "b65f1a25230f20b41f49784e078ebf893b3fc9f9685f6e1952c84842614f2c6c"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/evals/fixtures/sv-article.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 909,
+    "sha256": "f5ec4ed8609c82ebced4a6f7b750c2a96be36e49e03d9195b00eee86e11cf0dc"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/evals/fixtures/sv-clean-press-release.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 977,
+    "sha256": "a49c247c0c7a5731e136cef8d96194d0541f602aeb0b50c398b65689e3436b12"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/evals/fixtures/sv-clean-text.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 564,
+    "sha256": "3a151f6ca4dfceff226bedb8c2701e37ad31e5d566dbeaa8ab569b2bc0ad3b32"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/evals/fixtures/sv-grammar-errors.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 578,
+    "sha256": "07923f8e18a657aa403b146a22c5c2b92cce25c176a2e7fa86f0434781f9a73b"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/evals/fixtures/sv-particskrivning.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 298,
+    "sha256": "3f0905cd414799cb8bf06835e4a389234aafc23bbb2d4af2795da0594e8208b3"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/evals/fixtures/sv-press-release.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 409,
+    "sha256": "00f4dbc192e96f0dbda5253f591dd62704244b29d849563c29311fe0fa3de53d"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/evals/fixtures/sv-quotation-errors.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 423,
+    "sha256": "91c3ff766d0287a4e3ef30bbda339a7d35f2b8572b2edc68a4f16eb1a925697b"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/evals/fixtures/sv-short.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 159,
+    "sha256": "80f839228797071ffeed46535f7d66f7dfa6476aa66a8860ee6d2621a40ce955"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/evals/fixtures/sv-typography-errors.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 566,
+    "sha256": "0ad7a61c1ac96cfb40dd42fcac2d1f6a034f591d8f3a406c38bcdc038915270a"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/evals/fixtures/sv_FI-text.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 241,
+    "sha256": "1a6d3bbf833dddc534d71ba103c8701cc1db30b425152b39fafb5c10d389fcfc"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/evals/proofread": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/evals/proofread/evals.json": {
+    "mode": 420,
+    "type": "file",
+    "size": 20653,
+    "sha256": "c4aa438bd1f6d2218b938099871f339a56427e355e5fa6559c2659443a0a7ba6"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/evals/redline": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/evals/redline/evals.json": {
+    "mode": 420,
+    "type": "file",
+    "size": 27252,
+    "sha256": "8144ec7ee578b292b4bde4b820d9ce2cd2064fd3d6653a866ff62e4ec56df8de"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/evals/tests": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/evals/tests/test_capture.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 22932,
+    "sha256": "3b58bebbc881e9956c665ffa4f19e4f00a4f0001ee90373fd30484c30f75033e"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/evals/tests/test_register_dimension.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 18745,
+    "sha256": "8450603c67da621edf638eaa4d4dea631102ae649b9af84754f0c4380ce1fa82"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/evals/workspace": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/evals/workspace/EXECUTOR_WITHOUT_SKILL.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 2197,
+    "sha256": "4446c47e282496b7b5b90f333a428d67d7efb84b720b74d8b95f2c60dc13dea7"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/evals/workspace/EXECUTOR_WITH_SKILL.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 4112,
+    "sha256": "9b505843da599901fda49682fd1933a49c42920d63374872bb42662cfa5b2c10"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/evals/workspace/GRADER.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 2591,
+    "sha256": "c5121a619caa35c21619e5666672bba0711e656ab2ee96af2c2ec90b24157aa5"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/evals/workspace/GRADER_BATCH.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 2818,
+    "sha256": "a46a6d061d0c569b750a4d3e023342b84b65d13a0d28ff7b2cb719fcaa973c0f"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/evals/workspace/_aggregate.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 18301,
+    "sha256": "2c738e499707f1dd0274f106ee049d79199ddc21f94c7d30ef95991e14a5ae17"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/evals/workspace/_prompts.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 11771,
+    "sha256": "3f21fd06c493e4db3e75157bff1c24dcf6270e99cec582ada03c4e3dfaa9f532"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/evals/workspace/_runner.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 16446,
+    "sha256": "f0e379218ba8502d5844ba20e0b9a778f6bf9c7fde921c4e78c738afdb5fb9e4"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/evals/workspace/_setup.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 3299,
+    "sha256": "dc7e31166510049c7cf15637c8c7358eee683b9c68510daa254c40ebeec6b716"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/evals/write": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/evals/write/evals.json": {
+    "mode": 420,
+    "type": "file",
+    "size": 16134,
+    "sha256": "b517fe5fbd98eecd8c030e1b4030ecdc5f5453163a63e1ed9e0bd7876bf7e066"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/lib": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/lib/genres": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/lib/genres/_index.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 3576,
+    "sha256": "1169cc23e24a199eda2732b97f339e8a6cdb22dcad3289bc08088f2ff3b1e4d1"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/lib/genres/article.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 7211,
+    "sha256": "b6a4659ebaa8879c728e99a60ad09c10fda189ff273c5873463f79afe13f442f"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/lib/genres/case-study.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 7010,
+    "sha256": "df6ff2d1e0bae46d86297686149fcb8a181d4df59a6bca3cfb4de6f79aa7f84a"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/lib/genres/column.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 6769,
+    "sha256": "5b56be27c6a4357357c422dabd8ca83319c9536069eb753622d05822b2f832ea"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/lib/genres/general.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 5959,
+    "sha256": "0372ab10906fdf3e29d1e9b876f89aad02126027186416fff5c86ab764eb1ca7"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/lib/genres/opinion.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 6727,
+    "sha256": "899e5dce2ad789f34fdea89e7d36581692add8042c1ba60a048a62de65f0d511"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/lib/genres/press-release.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 3733,
+    "sha256": "cb82027f3ef1abe9f63b0e697b62cbc5928f13503b54a4e0bc38976601f1cd31"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/lib/genres/readme-github.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 15045,
+    "sha256": "ad254c53067b91a12aa9af48433d4ee182b450d043405d76f517bf0edbd2a30f"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/lib/genres/report.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 9596,
+    "sha256": "01183579f3ee3e6949e6fa08fcdaa5e49c25e35779a592552fd285b8329bd650"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/lib/genres/teaser.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 6040,
+    "sha256": "045c26bdf67b0acd4a6c804a993bf4077d131e4541cd4d1218482e8346f38eef"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/lib/genres/web-copy.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 6038,
+    "sha256": "a3c5f37b05528aafdc9c203207e1fea4d519e1313dac3822c649aeb9c1dee731"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/lib/languages": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/lib/languages/default-mechanics.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 3171,
+    "sha256": "53a48fe40ce468a94a1d312f7a6c9573d999036a8895aa695bd3d59e85ffb25c"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/lib/languages/en_GB.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 6198,
+    "sha256": "4a64aec43c1d80c3dba7d233949b8c091a735920fb88020350bdc9148d1c3fe2"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/lib/languages/en_US.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 6143,
+    "sha256": "8eabbc119862f3191f8b76ed6e80a21f7292cf611dc041076779c92eb31a30d9"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/lib/languages/sv.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 13169,
+    "sha256": "aff981055fa4f2720920277a124aa442aa0f5545b2653f114935aebc824e4150"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/lib/protocols": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/lib/protocols/dialogue.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 4305,
+    "sha256": "13517e33d7e741055a4e06d851bbb7c2ff14492b735359fc84033e482b69feaf"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/lib/protocols/genre-resolution.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 3570,
+    "sha256": "9a0fb4c7850e671be93485a51288dc84767f6ebdf475ba36f8709e91cd5dde1b"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/lib/protocols/io.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 5208,
+    "sha256": "253694730a1dcca5c9d46e6427bb293ea82182694947fc1a7045d505d5362b2f"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/lib/protocols/language-resolution.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 7419,
+    "sha256": "c4e564c29d89c1467a0cde2a421b17a2e626e6e5076151629fe312c57b511f58"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/lib/protocols/proofread.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 2920,
+    "sha256": "ecf9dfc77ed0b7596d4093c590e47a59296a33032cc9f9f8846d309f8f220bbe"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/lib/protocols/redline.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 8809,
+    "sha256": "759756522bc73a29d4465fce7dd220cb32cc6700c329d92157b933b0e7f3ce40"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/lib/protocols/subagent.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 7543,
+    "sha256": "2d7fa2a3cfa6c40f879f55c206fc42611ba52602f5c9c94aab20a2cb84e239cc"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/lib/rules": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/lib/rules/constructions.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 9541,
+    "sha256": "26a8cf9c0928b2d457cf294ce77367ffd1daad3aa3b601f553beba87c871f887"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/lib/rules/style.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 15509,
+    "sha256": "8dc79e01b5535cba77684f415e566c763cd34db9cc4192713342debbd9e5e93a"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/lib/rules/writing.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 2684,
+    "sha256": "3023e50f7bcaa2294ef7ee90a3189e65e417a2ee82ee6a58d080ea4557c91eca"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/lib/techniques": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/lib/techniques/abt.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 4480,
+    "sha256": "dac623242295fc3fdb58ba2b48cb8d7ad43f5c741f549929ce5b107cdcc150b9"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/lib/techniques/pac.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 4805,
+    "sha256": "d490cba6c85aa9c6edc384b9568b25835b6423e1e87fbb37a900d711dc7b2376"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/scripts": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/scripts/audit.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 34320,
+    "sha256": "ef7a0ba339e4e7276e541ea7c647c82637d1e7369f012b502953ecf8850bd02c"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/scripts/help.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 5655,
+    "sha256": "7e59f2e215f3604dc92410de8f1694bf8fe84b646d9f39ed28370cbcb67daf9c"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/skills": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/skills/abt": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/skills/abt/SKILL.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 1411,
+    "sha256": "de33904efa0f418e2516e1f188192e34ed46d2cd7a36bd2587a242a8578656d4"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/skills/edit": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/skills/edit/SKILL.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 7540,
+    "sha256": "7c99648f1d6de1758b617426d7c9bd27ac17fc1e3c53b54d1537ce9cc7b84646"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/skills/pac": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/skills/pac/SKILL.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 1389,
+    "sha256": "87c25f85a2a54c3fac66564e11affbf9215894d193cd0ad153007d3bc069a85a"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/skills/proofread": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/skills/proofread/SKILL.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 3720,
+    "sha256": "d3ad058c4ed2830cad9b70f9d2db4d594b7e242c4a7c55462fec4f0452de04d6"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/skills/redline": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/skills/redline/SKILL.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 6914,
+    "sha256": "346ee7ec8a7720b3471723c53ac3f993a33caa157b31486f2f9d626c271316d2"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/skills/write": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/skills/write/SKILL.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 10925,
+    "sha256": "85e06a7f7b872ab3756bb3a7dfaade9ae190bfbe103bf4c1b2eaab217a101600"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/skills/writing-rules": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills/skills/writing-rules/SKILL.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 3620,
+    "sha256": "857233c4f7d9b9abd9d14e152b2dfcc2afb7f9bf1b304878cb745c79c3ba3014"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/kntnt-text-skills.meta.json": {
+    "mode": 420,
+    "type": "file",
+    "size": 131,
+    "sha256": "1328421fd8646adaff920259c1753f9860535982c24afa8ae04475d90c37d4ce"
+  },
+  "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/manifest.json": {
+    "mode": 420,
+    "type": "file",
+    "size": 499,
+    "sha256": "8fb3c870df9b68a2639fa2cf5d05d91845cc7ea8ee8e44f522b1cfb6a23fb13e"
+  },
+  "home/.claude/projects": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/projects/-private-var-folders-cs-vgp-x-353zd9frkjpysp7zdw0000gn-T-kntnt-editorial-388-run-4a9zakow-work": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/projects/-private-var-folders-cs-vgp-x-353zd9frkjpysp7zdw0000gn-T-kntnt-editorial-388-run-4a9zakow-work/2fbe5a57-4bcb-430e-bc87-77e06509c715": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/projects/-private-var-folders-cs-vgp-x-353zd9frkjpysp7zdw0000gn-T-kntnt-editorial-388-run-4a9zakow-work/2fbe5a57-4bcb-430e-bc87-77e06509c715/tool-results": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/projects/-private-var-folders-cs-vgp-x-353zd9frkjpysp7zdw0000gn-T-kntnt-editorial-388-run-4a9zakow-work/2fbe5a57-4bcb-430e-bc87-77e06509c715/tool-results/bmj09bmut.txt": {
+    "mode": 420,
+    "type": "file",
+    "size": 31582,
+    "sha256": "9e139f32fb62bdad163ab066d8ac12bab8365598cc0a99b1c59a80f69d2fb1c5"
+  },
+  "home/.claude/projects/-private-var-folders-cs-vgp-x-353zd9frkjpysp7zdw0000gn-T-kntnt-editorial-388-run-4a9zakow-work/2fbe5a57-4bcb-430e-bc87-77e06509c715.jsonl": {
+    "mode": 384,
+    "type": "file",
+    "size": 554900,
+    "sha256": "f2e92c85488dfd558b8b59e31e8de890f44205d20fd6c775225cf291186551ea"
+  },
+  "home/.claude/projects/-private-var-folders-cs-vgp-x-353zd9frkjpysp7zdw0000gn-T-kntnt-editorial-388-run-4a9zakow-work/memory": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/session-env": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/session-env/2fbe5a57-4bcb-430e-bc87-77e06509c715": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/sessions": {
+    "mode": 448,
+    "type": "directory"
+  },
+  "home/.claude/shell-snapshots": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/skills": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/skills/kntnt": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/skills/kntnt/SKILL.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 4021,
+    "sha256": "750ad3f09e8c896f9992e41ed7e3e8557d8727f643e8ba8894f2ad48fa6517c7"
+  },
+  "home/.claude/skills/kntnt/agents": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/skills/kntnt/agents/openai.yaml": {
+    "mode": 420,
+    "type": "file",
+    "size": 148,
+    "sha256": "709b566f6698b9a6c2a3ba4d95a6e33b7a590608f66b5af515069234ac0dbd91"
+  },
+  "home/.claude/skills/kntnt/catalog.json": {
+    "mode": 420,
+    "type": "file",
+    "size": 14577,
+    "sha256": "45f2bde877bee6b1a492160d940004871dc069c752c4c2eec06a498f5c4897e8"
+  },
+  "home/.claude/skills/kntnt/features": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/skills/kntnt/features/session-cleanup": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/skills/kntnt/features/session-cleanup/FEATURE.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 6256,
+    "sha256": "afdd1a67dc15229b9542711ed681777cdcae35fe9c8ab788456f11eaadc7560b"
+  },
+  "home/.claude/skills/kntnt/features/session-cleanup/instructions.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 1194,
+    "sha256": "64434359eaccc208e0d9c52038dd08b6349c42459c58d8e3af846086c7f25e36"
+  },
+  "home/.claude/skills/kntnt/features/session-cleanup/scripts": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/skills/kntnt/features/session-cleanup/scripts/session_cleanup.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 35274,
+    "sha256": "defdd20644108e1ad4ab78b207d04b912481821c4382130ee3a8e065522ebce5"
+  },
+  "home/.claude/skills/kntnt/features/statusline": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/skills/kntnt/features/statusline/FEATURE.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 3909,
+    "sha256": "68f3dacf20ee5dd582ef0440a0bc4cef839251e3546c3f2876dcc2412ba6a4a5"
+  },
+  "home/.claude/skills/kntnt/features/statusline/scripts": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/skills/kntnt/features/statusline/scripts/statusline_feature.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 7126,
+    "sha256": "3596f97853a1d1adfc654a91c8778ebf57fbf90c0a3dfb051f95e8399248d220"
+  },
+  "home/.claude/skills/kntnt/features/statusline/statusline.sh": {
+    "mode": 493,
+    "type": "file",
+    "size": 11700,
+    "sha256": "4262bf72da77714d6abe95f3e7c84d5f2c9572f29e84469af676d672a9907166"
+  },
+  "home/.claude/skills/kntnt/harness-paths.json": {
+    "mode": 420,
+    "type": "file",
+    "size": 5922,
+    "sha256": "4d288adb766da2b686bfcdb7dc082f7938de7e68c359d29c9f3b5529dcbb4b81"
+  },
+  "home/.claude/skills/kntnt/help": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/skills/kntnt/help/help.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 2805,
+    "sha256": "4ea6bb85655233bc6329446dc4b947d5a0499bb7dbc67a46292a3140428a7701"
+  },
+  "home/.claude/skills/kntnt/help/select.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 6752,
+    "sha256": "8fbbe07776916cd3bf5dd2af29372b914485a59525af926cf440eec8717f0484"
+  },
+  "home/.claude/skills/kntnt/help/uninstall.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 3393,
+    "sha256": "c1e01918ef371836b0e09247240691534cf4d68d225f26b0cad52f72b967b149"
+  },
+  "home/.claude/skills/kntnt/help/update.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 3888,
+    "sha256": "571931337a9d2b7cc5bce9027ffd278180b3307a60907a686bac5cc4e8ae3437"
+  },
+  "home/.claude/skills/kntnt/help.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 4536,
+    "sha256": "680e5731fc90b4e437a0d7b17c9d4dbfec0e984c957cb7f3def291b83e5df1aa"
+  },
+  "home/.claude/skills/kntnt/library": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/skills/kntnt/library/references": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/skills/kntnt/library/references/changelog.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 1393,
+    "sha256": "ffbaa70cec4453d3fb366ca2cb0ea07359d5c4f6d86edc1882458aa9e627fb56"
+  },
+  "home/.claude/skills/kntnt/library/references/delivery.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 15329,
+    "sha256": "71babd36f68d93cd9f7d035358c3cbaeae3179147d8dc7a4667047081c898472"
+  },
+  "home/.claude/skills/kntnt/library/references/editorial": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/skills/kntnt/library/references/editorial/README.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 18455,
+    "sha256": "b9a6d64d0f29dcf9d162e947f506b874dea6ec2216232fecd3894cad336e9a5e"
+  },
+  "home/.claude/skills/kntnt/library/references/editorial/anti-slop.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 7475,
+    "sha256": "9ec7fb15b3cfe22f446c6ed2df85666aaa182d8fa0a09fa3668887e4786d83c2"
+  },
+  "home/.claude/skills/kntnt/library/references/editorial/article-anatomy.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 5481,
+    "sha256": "c075c6fe7494dbcdc43d6af599c55ab8fc52fc48d7ed1b6cc26eca7a592cecd7"
+  },
+  "home/.claude/skills/kntnt/library/references/editorial/article-anatomy.review.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 5360,
+    "sha256": "3e616f9671126ba7898123dd288a4a9bb4170f189d567a3fcbd2b17ccb82c633"
+  },
+  "home/.claude/skills/kntnt/library/references/editorial/base.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 3948,
+    "sha256": "d4146ef134de7482e25469201aaceed7b207fba9f8bacb06a428b85f6bfc3581"
+  },
+  "home/.claude/skills/kntnt/library/references/editorial/base.review.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 5285,
+    "sha256": "ea334b50059fc0e2ce49768a678fed5662525eb21b72ef0e781a7d52a653ea6a"
+  },
+  "home/.claude/skills/kntnt/library/references/editorial/genres": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/skills/kntnt/library/references/editorial/genres/article.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 1255,
+    "sha256": "2313180d69b25de48b818629c5d761daa36eb69def33441b01c24a2135f17b4f"
+  },
+  "home/.claude/skills/kntnt/library/references/editorial/genres/article.review.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 905,
+    "sha256": "0d992e276cb65943ceab91cb855c1fcafd2b65ed4b378a16a4ea63036de8074c"
+  },
+  "home/.claude/skills/kntnt/library/references/editorial/genres/casestudy.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 2249,
+    "sha256": "a39054321cbd35819cfd8ac7d2823dd3d56550a6ee2d1c6ee3b30f9daaa16cc5"
+  },
+  "home/.claude/skills/kntnt/library/references/editorial/genres/casestudy.review.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 1110,
+    "sha256": "a7db10d0dc1970064a8887c819a8500dfdecf43dcb45fffed32994921ceb68a4"
+  },
+  "home/.claude/skills/kntnt/library/references/editorial/genres/column.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 1716,
+    "sha256": "0971c8b498535ed57bbc130e61989b477c334e53cf3fa3c37b2e1bf64a158d98"
+  },
+  "home/.claude/skills/kntnt/library/references/editorial/genres/column.review.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 783,
+    "sha256": "8abffc59549e71a00d40200e89b656ca77d0dfd8d1f3e58293a0591373fb5c37"
+  },
+  "home/.claude/skills/kntnt/library/references/editorial/genres/general.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 2873,
+    "sha256": "438d85d3016889dd994d70a989b4ab73b8b70e149aea8e45d144cf3d371c6be5"
+  },
+  "home/.claude/skills/kntnt/library/references/editorial/genres/opinion.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 1478,
+    "sha256": "f0edbed362fe613f11cfe6232c4c7fc98202786fa909f3cd72f1b1acd0867e41"
+  },
+  "home/.claude/skills/kntnt/library/references/editorial/genres/opinion.review.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 984,
+    "sha256": "97c67a0ca701388b268b03f8dbab88e877ed259b6201f3c005ff45ea634b641d"
+  },
+  "home/.claude/skills/kntnt/library/references/editorial/genres/pressrelease.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 4570,
+    "sha256": "4e554d322f25995dbc7ed2237ac261b49eec1283eb64576dc80b95ed7066db3b"
+  },
+  "home/.claude/skills/kntnt/library/references/editorial/genres/pressrelease.review.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 7601,
+    "sha256": "b2660413e3bd94843a7092309859a6fd14be880ca8a66d861509d4eb2c9d96f6"
+  },
+  "home/.claude/skills/kntnt/library/references/editorial/genres/report.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 8648,
+    "sha256": "1edaa623002a25cf60ddf2c1fe74ced72479b168857f7c79d7db6965d5d75138"
+  },
+  "home/.claude/skills/kntnt/library/references/editorial/genres/report.review.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 13445,
+    "sha256": "8c6e3a5b5dfb224d6324026c2708d930abc009a34206caad5bf6296d7235e026"
+  },
+  "home/.claude/skills/kntnt/library/references/editorial/genres/teaser.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 7307,
+    "sha256": "540f873055e0454cf84b08c2eccce373fe5037ba51c672f5089127a805fd9589"
+  },
+  "home/.claude/skills/kntnt/library/references/editorial/genres/teaser.review.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 9090,
+    "sha256": "9dc18d812492b0609c827e53c00014d6c29cab477ede94d440054b49a19bcb6c"
+  },
+  "home/.claude/skills/kntnt/library/references/editorial/genres/webcopy.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 1964,
+    "sha256": "629656792d7038f4d4572fc3f8751643f0cbfd46050892010552ed81f6d04adf"
+  },
+  "home/.claude/skills/kntnt/library/references/editorial/genres/webcopy.review.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 1640,
+    "sha256": "b06d9a72fc61dcd52370d1350520a3a0e9c2d2f19a610e5ac9f029f9e56a056e"
+  },
+  "home/.claude/skills/kntnt/library/references/editorial/headlines.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 4801,
+    "sha256": "adfb7ca612905afee03a73d58cdb07de9d0877b23af9de89f7e114f6de81df5f"
+  },
+  "home/.claude/skills/kntnt/library/references/editorial/headlines.review.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 6746,
+    "sha256": "bb6d9b1236bc03a0aef499d85c781dd54d0e476efef7438ec4f8b8e9b816f7e4"
+  },
+  "home/.claude/skills/kntnt/library/references/editorial/mechanics.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 11577,
+    "sha256": "b3103ed6da4ac9d27a0ebfb43bdb40b8e77d58d84b3745a90c0a736142438b45"
+  },
+  "home/.claude/skills/kntnt/library/references/editorial/techniques": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/skills/kntnt/library/references/editorial/techniques/abt.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 1540,
+    "sha256": "f43c6d5fd219777e5421587e6e667f219e54bd484f709497616c406fcf4846f9"
+  },
+  "home/.claude/skills/kntnt/library/references/editorial/techniques/abt.review.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 788,
+    "sha256": "ae18b5f6c54732450fe81e311b7ae15b940f6e1882f715e5eff74222e523b7a7"
+  },
+  "home/.claude/skills/kntnt/library/references/editorial/techniques/pac.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 1312,
+    "sha256": "a1b286711c7d224432faa66b6117010388eedb11bce3ab5c81dd8a524ada4666"
+  },
+  "home/.claude/skills/kntnt/library/references/editorial/techniques/pac.review.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 933,
+    "sha256": "735a6b025a6baea7891856f5e853e37be8e7e9214321ccba540b2a5118cc80c8"
+  },
+  "home/.claude/skills/kntnt/library/references/editorial/web-craft.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 1233,
+    "sha256": "b1ac5867d30952c3ca78da244520ab28c025102f4389f44ec206757a29f05371"
+  },
+  "home/.claude/skills/kntnt/library/references/editorial/web-craft.review.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 581,
+    "sha256": "169da1beeb4fb80e74f9423bdd4d7bcd57aa9b59b8e8ff5b71f3a67dfef7e923"
+  },
+  "home/.claude/skills/kntnt/library/references/editorial/writing-brief.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 8851,
+    "sha256": "e0eec9c0c2cd534eced410e63296eb0416238fa299c28faa552d48f4d571fd5c"
+  },
+  "home/.claude/skills/kntnt/library/references/invocation-envelope.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 7431,
+    "sha256": "1f76ac87aa395a652232f5f289aef94a8652de76e88dbee3d5f7ceca14496bad"
+  },
+  "home/.claude/skills/kntnt/library/references/languages": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/skills/kntnt/library/references/languages/README.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 8470,
+    "sha256": "23929466b467620f2d5b12a2c6ea040ef381a906e0892eaa877dd5210c01a338"
+  },
+  "home/.claude/skills/kntnt/library/references/languages/en_GB.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 6993,
+    "sha256": "2b36899b232e65300ea15fbbb0db2abece4e1f32e7b193957355a67a34331413"
+  },
+  "home/.claude/skills/kntnt/library/references/languages/en_US.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 6238,
+    "sha256": "d11fcffa9e7316dd44d8796a954e5db9965c501e7df982affe91bc624cfef73c"
+  },
+  "home/.claude/skills/kntnt/library/references/languages/sv.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 14473,
+    "sha256": "241f0e5e4ca590c1d2348dc4048d15b5c8cc030c9dc91de989a758cefd4cd211"
+  },
+  "home/.claude/skills/kntnt/library/scripts": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/skills/kntnt/library/scripts/argument_grammar.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 3961,
+    "sha256": "b796b7d716a45a693c62ab3760e634cb422c83a336669a99ecc385d2fe36af29"
+  },
+  "home/.claude/skills/kntnt/library/scripts/article_anatomy.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 42391,
+    "sha256": "f29df8c55560687ece32d592124a57eec94865901bb3f0261c6443cbbcd840d6"
+  },
+  "home/.claude/skills/kntnt/library/scripts/credentials.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 21772,
+    "sha256": "6ea3731d5390de0d408a19878d47e06a0e68f2b4531ec3a70c9b15367dc0385c"
+  },
+  "home/.claude/skills/kntnt/library/scripts/integrations.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 61037,
+    "sha256": "60d5dc8dfebac1497bf155ad9016ba4cead3eda7532f8173e2f0ebd061858c61"
+  },
+  "home/.claude/skills/kntnt/library/scripts/languages.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 24089,
+    "sha256": "6d09120fc7ab52ba69db24bb6db6e85ff9ab304d5d5ebe04ec5f2f2dd0042d70"
+  },
+  "home/.claude/skills/kntnt/library/scripts/ship.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 24521,
+    "sha256": "e66d1eaec0d1f875559e6d1b89a4ab2065917f38763fc67e36b9ebbc378fdc47"
+  },
+  "home/.claude/skills/kntnt/scripts": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/skills/kntnt/scripts/kntnt.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 213054,
+    "sha256": "c5b7c791bbe20b0b73633219049bab13547b97806c48bb54475f7aea747e2df6"
+  },
+  "home/.claude/skills/kntnt/steps": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/skills/kntnt/steps/help.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 1020,
+    "sha256": "a80d128ae214de0a759e9d5ae912e68005fd63d23f8361db5ab5c5e39411045b"
+  },
+  "home/.claude/skills/kntnt/steps/select.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 17390,
+    "sha256": "eda226bbdcdbaaf9b539695d9593cece194204e1c4d9fb8932b2146a9801faa0"
+  },
+  "home/.claude/skills/kntnt/steps/uninstall.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 5826,
+    "sha256": "5dc6650fd7c885bbd551b5d94fffc966c60b70005a8ca3da67a5944a218515bf"
+  },
+  "home/.claude/skills/kntnt/steps/update.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 11279,
+    "sha256": "095e9d0d950793f69a8171b80639ec2039ee995055b495f2cd117c253ce96b45"
+  },
+  "home/.claude/skills/proofread": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/skills/proofread/SKILL.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 13045,
+    "sha256": "6cad45f3d50a96e43c8df9996bc748c7e09e09f456e8a9375c724b84d236404f"
+  },
+  "home/.claude/skills/proofread/agents": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/skills/proofread/agents/openai.yaml": {
+    "mode": 420,
+    "type": "file",
+    "size": 144,
+    "sha256": "ef05500ed19dff98c0181872ac5ff04d99ba241f992f70284629119c0451883a"
+  },
+  "home/.claude/skills/proofread/help.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 6350,
+    "sha256": "5bad100c3b2bca059643a524d8730ac2d5761414295db2e9420207cf3004a43f"
+  },
+  "home/.claude/skills/proofread/scripts": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/skills/proofread/scripts/invoke.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 4938,
+    "sha256": "1986301369b22e298280544bfd889e460af2e4f8acb187a7967f994ae93daa2a"
+  },
+  "home/.claude/skills/redline": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/skills/redline/SKILL.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 38895,
+    "sha256": "b1c03090c5cf31563b6a3ad020e33e440cd14c968caf42b55fec8b79feb431a5"
+  },
+  "home/.claude/skills/redline/agents": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/skills/redline/agents/openai.yaml": {
+    "mode": 420,
+    "type": "file",
+    "size": 176,
+    "sha256": "a9ff49ac5ec1f2d858911e08212525c5d8404c5d1a6789c3bf2713f25f388973"
+  },
+  "home/.claude/skills/redline/help.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 15232,
+    "sha256": "d54a3f394d5c712de0ae1970d841287d02e715fbeed6a1c7a139f4d8fb9c66d3"
+  },
+  "home/.claude/skills/redline/references": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/skills/redline/references/brief-review.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 5386,
+    "sha256": "2094e84cd953a1226022153be4683aede97cb03692861fed3ca3b8fd5f6e853d"
+  },
+  "home/.claude/skills/redline/references/correction.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 14843,
+    "sha256": "1048b017f7091d00b84c4cfc004e85477485df21f62917e564f8adaf89162bfa"
+  },
+  "home/.claude/skills/redline/scripts": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/skills/redline/scripts/invoke.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 4938,
+    "sha256": "1986301369b22e298280544bfd889e460af2e4f8acb187a7967f994ae93daa2a"
+  },
+  "home/.claude/skills/synced": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/skills/synced/.bucket-60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d": {
+    "mode": 420,
+    "type": "file",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/.last-complete-round": {
+    "mode": 420,
+    "type": "file",
+    "size": 44,
+    "sha256": "c05256892115178c2bf631e636abb0491eb263c2ea29e10e3e5795a11b1f5810"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/docs": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/docs/SKILL.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 1249,
+    "sha256": "98e4fb5934042152d57bc9cb8c0736d5d8e31c6c0122b13ff5836f4c2411fa3e"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/docx": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/docx/LICENSE.txt": {
+    "mode": 420,
+    "type": "file",
+    "size": 1467,
+    "sha256": "79f6d8f5b427252fa3b1c11ecdbdb6bf610b944f7530b4de78f770f38741cfaa"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/docx/SKILL.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 7639,
+    "sha256": "912cb15683a476a285033f9a40c5099248f9c6a06d581b106b95796f9d33d118"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/docx/scripts": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/docx/scripts/__init__.py": {
+    "mode": 493,
+    "type": "file",
+    "size": 1,
+    "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/docx/scripts/accept_changes.py": {
+    "mode": 493,
+    "type": "file",
+    "size": 4051,
+    "sha256": "0c991d2bc7304a1248e9f3bf9b1498f0b6e76641fc457e7cbd73c99b4eef3a74"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/docx/scripts/comment.py": {
+    "mode": 493,
+    "type": "file",
+    "size": 14054,
+    "sha256": "37d116e5f56bb142b208c6c6a4bbcf960495abf470ddb7c6675ccfac864ba3d7"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/docx/scripts/merge_runs.py": {
+    "mode": 493,
+    "type": "file",
+    "size": 9398,
+    "sha256": "3ab367fd7fba4647943d0aa5e65203b15458551410f5ffc821d902616a4b9f40"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/docx/scripts/office": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/docx/scripts/office/helpers": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/docx/scripts/office/helpers/__init__.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 3380,
+    "sha256": "e62e525673baa71fa2c9f01d637c37b44383146a46c28957ba3d9d41e1a4ba21"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/docx/scripts/office/helpers/pptx_chart.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 5862,
+    "sha256": "47ac266f7d39d11ede6bb0d1f3a19d801394fd2964636f1b48beb701f1832964"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/docx/scripts/office/helpers/pptx_slide.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 1675,
+    "sha256": "7b9f69b4a5bd6a2d9eabf9e0e3e796d7a421373145f6a8cd11f60b7ba2d6a5d0"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/docx/scripts/office/helpers/pptx_theme.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 3510,
+    "sha256": "ebb54c56e9c13807f5f98f0cae22d47cdd0162da8525eaa664e3f2c8c8d6bb03"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/docx/scripts/office/schemas": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/docx/scripts/office/schemas/ISO-IEC29500-4_2016": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/docx/scripts/office/schemas/ISO-IEC29500-4_2016/dml-chart.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 74984,
+    "sha256": "41b93bd8857cc68b1e43be2806a872d736a9bdd6566900062d8fdb57d7bbb354"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/docx/scripts/office/schemas/ISO-IEC29500-4_2016/dml-chartDrawing.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 6956,
+    "sha256": "3fd0586f2637b98bb9886f0e0b67d89e1cc987c2d158cc7deb5f5b9890ced412"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/docx/scripts/office/schemas/ISO-IEC29500-4_2016/dml-diagram.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 51302,
+    "sha256": "29b254ee0d10414a8504b5a08149c7baec35a60d5ff607d6b3f492aa36815f40"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/docx/scripts/office/schemas/ISO-IEC29500-4_2016/dml-lockedCanvas.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 624,
+    "sha256": "5cb76dabd8b97d1e9308a1700b90c20139be4d50792d21a7f09789f5cccd6026"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/docx/scripts/office/schemas/ISO-IEC29500-4_2016/dml-main.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 152039,
+    "sha256": "5375417f0f5394b8dd1a7035b9679151f19a6b65df309dec10cfb4a420cb00e9"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/docx/scripts/office/schemas/ISO-IEC29500-4_2016/dml-picture.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 1231,
+    "sha256": "5d389d42befbebd91945d620242347caecd3367f9a3a7cf8d97949507ae1f53c"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/docx/scripts/office/schemas/ISO-IEC29500-4_2016/dml-spreadsheetDrawing.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 8862,
+    "sha256": "b4532b6d258832953fbb3ee4c711f4fe25d3faf46a10644b2505f17010d01e88"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/docx/scripts/office/schemas/ISO-IEC29500-4_2016/dml-wordprocessingDrawing.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 14795,
+    "sha256": "bdad416b096b61d37b71603b2c949484f9070c830bdaeba93bf35e15c8900614"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/docx/scripts/office/schemas/ISO-IEC29500-4_2016/pml.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 83612,
+    "sha256": "d173c3e5d61e42e2e3a97226c632fd2ab7cc481fc4e492365b87024ab546daff"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/docx/scripts/office/schemas/ISO-IEC29500-4_2016/shared-additionalCharacteristics.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 1269,
+    "sha256": "3c6709101c6aaa82888df5d8795c33f9e857196790eb320d9194e64be2b6bdd8"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/docx/scripts/office/schemas/ISO-IEC29500-4_2016/shared-bibliography.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 7328,
+    "sha256": "0b364451dc36a48dd6dae0f3b6ada05fd9b71e5208211f8ee5537d7e51a587e2"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/docx/scripts/office/schemas/ISO-IEC29500-4_2016/shared-commonSimpleTypes.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 6382,
+    "sha256": "e2abacbb9a55ce1365f8961bc1b1395bbc811e512b111000d8c333f98458dece"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/docx/scripts/office/schemas/ISO-IEC29500-4_2016/shared-customXmlDataProperties.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 1248,
+    "sha256": "0ef4bb354ff44b923564c4ddbdda5987919d220225129ec94614a618ceafc281"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/docx/scripts/office/schemas/ISO-IEC29500-4_2016/shared-customXmlSchemaProperties.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 880,
+    "sha256": "0d103b99a4a8652f8871552a69d42d2a3760ac6a5e3ef02d979c4273257ff6a4"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/docx/scripts/office/schemas/ISO-IEC29500-4_2016/shared-documentPropertiesCustom.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 2608,
+    "sha256": "9c085407751b9061c1f996f6c39ce58451be22a8d334f09175f0e89e42736285"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/docx/scripts/office/schemas/ISO-IEC29500-4_2016/shared-documentPropertiesExtended.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 3507,
+    "sha256": "bc92e36ccd233722d4c5869bec71ddc7b12e2df56059942cce5a39065cc9c368"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/docx/scripts/office/schemas/ISO-IEC29500-4_2016/shared-documentPropertiesVariantTypes.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 7507,
+    "sha256": "7b5b7413e2c895b1e148e82e292a117d53c7ec65b0696c992edca57b61b4a74b"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/docx/scripts/office/schemas/ISO-IEC29500-4_2016/shared-math.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 23313,
+    "sha256": "3213ef1631606250f5010b42cad7ef716f7c59426367798e33c374c0ec391d3a"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/docx/scripts/office/schemas/ISO-IEC29500-4_2016/shared-relationshipReference.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 1367,
+    "sha256": "12264f3c03d738311cd9237d212f1c07479e70f0cbe1ae725d29b36539aef637"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/docx/scripts/office/schemas/ISO-IEC29500-4_2016/sml.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 242277,
+    "sha256": "beffeed56945c22a77440122c8bdc426f3fcbe7f3b12ea0976c770d1f8d54578"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/docx/scripts/office/schemas/ISO-IEC29500-4_2016/vml-main.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 26148,
+    "sha256": "f5ee623b08b6a66935e5aced2f5d8ad0fc71bf9e8e833cd490150c0fa94b8763"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/docx/scripts/office/schemas/ISO-IEC29500-4_2016/vml-officeDrawing.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 25279,
+    "sha256": "585bedc1313b40888dcc544cb74cd939a105ee674f3b1d3aa1cc6d34f70ff155"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/docx/scripts/office/schemas/ISO-IEC29500-4_2016/vml-presentationDrawing.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 535,
+    "sha256": "133c9f64a5c5d573b78d0a474122b22506d8eadb5e063f67cdbbb8fa2f161d0e"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/docx/scripts/office/schemas/ISO-IEC29500-4_2016/vml-spreadsheetDrawing.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 5712,
+    "sha256": "6bdeb169c3717eb01108853bd9fc5a3750fb1fa5b82abbdd854d49855a40f519"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/docx/scripts/office/schemas/ISO-IEC29500-4_2016/vml-wordprocessingDrawing.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 4010,
+    "sha256": "475dcae1e7d1ea46232db6f8481040c15e53a52a3c256831d3df204212b0e831"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/docx/scripts/office/schemas/ISO-IEC29500-4_2016/wml.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 171367,
+    "sha256": "c2dd9f61f892deae6acd8d20771ea79b12018af25f3bf8d06639c8542d218cfd"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/docx/scripts/office/schemas/ISO-IEC29500-4_2016/xml.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 4646,
+    "sha256": "a539aa2fb154fa50e0f5cc97e6ad7cbc66f8ec3e3746f61ec6a8b0d5d15ecdf2"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/docx/scripts/office/schemas/ecma": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/docx/scripts/office/schemas/ecma/fouth-edition": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/docx/scripts/office/schemas/ecma/fouth-edition/opc-contentTypes.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 1963,
+    "sha256": "9e0b7209fc69ab11987900404540969976000c5ebe4d4f58c43dc3842886bf3a"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/docx/scripts/office/schemas/ecma/fouth-edition/opc-coreProperties.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 2515,
+    "sha256": "451958454e8588dfc7cd945981ada142ca06ff3307937f5700df059c2b307fa8"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/docx/scripts/office/schemas/ecma/fouth-edition/opc-digSig.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 2856,
+    "sha256": "6de111e11403f7cd49027400755bae0ea1cabef2815f09bd40a24f0017613b24"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/docx/scripts/office/schemas/ecma/fouth-edition/opc-relationships.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 1344,
+    "sha256": "f565adfef5a502044abc3a9153e157edc25af78304d335994afb958874b15e26"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/docx/scripts/office/schemas/mce": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/docx/scripts/office/schemas/mce/mc.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 3127,
+    "sha256": "3a37e461ecf5a8670fdec34029703401f8728ab9c96ec1739a6ae58d55212413"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/docx/scripts/office/schemas/microsoft": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/docx/scripts/office/schemas/microsoft/wml-2010.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 26549,
+    "sha256": "568b26ee156cb9549aa439ca2158965f77b7c1602b7e0316f40ac6cf586e35f2"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/docx/scripts/office/schemas/microsoft/wml-2012.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 3745,
+    "sha256": "0fa75578a000439a7988ba0c59fdc69f774bbd416cbacc14d07125b3f686cb74"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/docx/scripts/office/schemas/microsoft/wml-2018.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 901,
+    "sha256": "be0ff793a22dd31384650c3a4da14c2fa8062751c2e97b0e5ee852bda13c60ad"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/docx/scripts/office/schemas/microsoft/wml-cex-2018.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 1778,
+    "sha256": "fddc2b880cabb9005aebbc7e783e53c19fec1c03df7d0e2f2076a33a0fdfd081"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/docx/scripts/office/schemas/microsoft/wml-cid-2016.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 1002,
+    "sha256": "127ca209fa73d7cb708449cb355c871867948a96e4a74f7bf5811ef62d17991d"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/docx/scripts/office/schemas/microsoft/wml-sdtdatahash-2020.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 600,
+    "sha256": "842e7163409c8d74f4d7088a8bc99500d80bc75332681a0980055b08f374a604"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/docx/scripts/office/schemas/microsoft/wml-symex-2015.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 745,
+    "sha256": "16f6f8072249f431370723c2cd8974672e0d9c897e00e97dd918079df934871b"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/docx/scripts/office/soffice.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 5945,
+    "sha256": "c1b83a67bf7e784ce6255d7b3a58999445f3dad19809845821f1293ab4cbf43e"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/docx/scripts/office/validate.py": {
+    "mode": 493,
+    "type": "file",
+    "size": 6142,
+    "sha256": "346a4c89d92fff55e610f11efda48c30228815b29bdb10b987e48f7af70acf1e"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/docx/scripts/office/validators": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/docx/scripts/office/validators/__init__.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 336,
+    "sha256": "83e0f035c5abea238d3f2c3968afbd511ed022b527b7c9cb60a9434cc34ff987"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/docx/scripts/office/validators/base.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 33721,
+    "sha256": "a5ed6c647ceaf7f48f60386b347ea5c91071073866bdd148532e9eab04c8c347"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/docx/scripts/office/validators/docx.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 17482,
+    "sha256": "93d3444c0ef3f043d21a2285c46d2cda478426b930dc33dcf3b11265935517b5"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/docx/scripts/office/validators/pptx.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 15966,
+    "sha256": "17eadad2b7a8374ccbe4cda45693bcd6a36f9d61a7d60f9c9ceef9464dec8299"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/docx/scripts/office/validators/redlining.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 18017,
+    "sha256": "25ff68611a7cfcfe88644fe3cf011438c9e9a544ae39bad3ae740d96d99a9d43"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/docx/scripts/templates": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/docx/scripts/templates/comments.xml": {
+    "mode": 420,
+    "type": "file",
+    "size": 2603,
+    "sha256": "a08ba83ee8790ac9e3dc61921f4988f19edd7e06ac09d6f1897a877c1581818d"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/docx/scripts/templates/commentsExtended.xml": {
+    "mode": 420,
+    "type": "file",
+    "size": 2611,
+    "sha256": "544eeecfeceed4b468fff163cd9c366d33641c8b8ab691ce002576197846afe8"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/docx/scripts/templates/commentsExtensible.xml": {
+    "mode": 420,
+    "type": "file",
+    "size": 2707,
+    "sha256": "bad10b3283e6ad6e7ef6d1ca5169683721ed690ee331282c65df04017e080631"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/docx/scripts/templates/commentsIds.xml": {
+    "mode": 420,
+    "type": "file",
+    "size": 2619,
+    "sha256": "db20f9616e004ec42ef736e80c2384e45db0f8d1194d31dc8b37c7d6ecdd6420"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/docx/scripts/templates/people.xml": {
+    "mode": 420,
+    "type": "file",
+    "size": 115,
+    "sha256": "056f63aa1197fd8c9dda980c9f1b9ff016fd5fa4a462df8aec5f384f39d23e37"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/google-workspace": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/google-workspace/SKILL.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 13869,
+    "sha256": "f53b2d8c9bcb43365c8cb4118d24a47b0a018b7ca173aa47e680e8bc02ed869d"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/google-workspace/references": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/google-workspace/references/charts.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 15586,
+    "sha256": "60af1c2fb7d673aec45664ce9bbced7c7e1bf7121ec91dc3b640f34d77167c34"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/google-workspace/references/docs.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 40023,
+    "sha256": "2124d21be189d5392b73987d87106fa9d70ef596b4ea668c14d8045a32690231"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/google-workspace/references/sheets.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 38536,
+    "sha256": "3906d940cdd552a757e6b27eeab0bd159718cd9f3fb789d23ec0f9677b3ce58f"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/google-workspace/references/slides.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 47090,
+    "sha256": "985e3d936d9b0b095552eba69eace25d7763c1d298252be25965769d387ee9a6"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/google-workspace/scripts": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/google-workspace/scripts/docs_index.py": {
+    "mode": 493,
+    "type": "file",
+    "size": 17951,
+    "sha256": "735b8ed4e9c292d0e0cc0af46e7b5f054fbf0bd51148a6b3318de774a4299b96"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/google-workspace/scripts/render_export.py": {
+    "mode": 493,
+    "type": "file",
+    "size": 6308,
+    "sha256": "a27468ad1d016cd58bcb33a2b619fd31cdeea59f214948ee937232fe4b6435ba"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/google-workspace/scripts/sheets_helper.py": {
+    "mode": 493,
+    "type": "file",
+    "size": 16045,
+    "sha256": "91b2b5baa2220fc102870e21ba955fbac265e19a8cc328abc820876955c3bde5"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/google-workspace/scripts/slides_helper.py": {
+    "mode": 493,
+    "type": "file",
+    "size": 22731,
+    "sha256": "40ed9169a005513347aacea800b2fda4860d7b9477e0db50dc9c46705eec1fc8"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/import-memory": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/import-memory/SKILL.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 10689,
+    "sha256": "5179b0780b7025c93271c181636a23acc8d05cad3b20584639cbaf1cf9c3b07a"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/manifest.json": {
+    "mode": 420,
+    "type": "file",
+    "size": 7980,
+    "sha256": "31ab5e1bf78846912b19ab92c00522411bbdd0a59d7d0d323bf60873db9046e3"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/morning": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/morning/SKILL.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 18163,
+    "sha256": "a7c4dbcb745799736991b027cceae39aae4880cc00ff43871ae5e87b38023bdd"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/morning/assets": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/morning/assets/fonts": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/morning/assets/fonts/Fraunces-OFL.txt": {
+    "mode": 420,
+    "type": "file",
+    "size": 4483,
+    "sha256": "0bc0daaa78b715774d4ad27d7f4ee8b436f48cef8e2f773531a8f22e27c06248"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/morning/assets/fonts/fraunces-latin-600-normal.woff2": {
+    "mode": 420,
+    "type": "file",
+    "size": 18096,
+    "sha256": "3a1de7711d147bad4422825045f87597fd77cca72e7c96d3b0a81735d00dda82"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/no-ai-slop": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/no-ai-slop/SKILL.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 10890,
+    "sha256": "16719efd6dc6fe5978be7f6db41a474ca246970e5014acc057e29d7bfbd63b0e"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/pdf": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/pdf/FORMS.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 11854,
+    "sha256": "9530b3f57034792e0242a3abfe8b3c296466329551916f2ff6c5a70db78f7e44"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/pdf/LICENSE.txt": {
+    "mode": 420,
+    "type": "file",
+    "size": 1467,
+    "sha256": "79f6d8f5b427252fa3b1c11ecdbdb6bf610b944f7530b4de78f770f38741cfaa"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/pdf/REFERENCE.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 16692,
+    "sha256": "03a5f964f8abecbbe156f363356e927e864d7ee964f1012c84ee1bfc8acbeb95"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/pdf/SKILL.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 8072,
+    "sha256": "9f78b8359fbd4943ad260a7a1e436e5a96503406d6c34e99f69223d647d85b9c"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/pdf/scripts": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/pdf/scripts/check_bounding_boxes.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 2774,
+    "sha256": "0ced522402dd7b3c82a0be9518cf4e485fa9cc0467d7beab6ddb04cb36fcc3e1"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/pdf/scripts/check_fillable_fields.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 268,
+    "sha256": "1fe10b9980a5493c9bbec8c20630c603eaa475b45403751c08f26738736647b8"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/pdf/scripts/convert_pdf_to_images.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 1008,
+    "sha256": "7f58e292a67e18a8ff000d30bad2469389546731f7e8a698cc1d0aed001ea15d"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/pdf/scripts/create_validation_image.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 1258,
+    "sha256": "8fa9fd7962c9f940045b81cf6b991e7c1057c1838e3f9cc6d305007a222ffebf"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/pdf/scripts/extract_form_field_info.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 4300,
+    "sha256": "bb235b36f497bbb1c7c6821cecf527bbba7213520de11219da99f7b13a38c109"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/pdf/scripts/extract_form_structure.py": {
+    "mode": 493,
+    "type": "file",
+    "size": 3945,
+    "sha256": "6814e3fe8f78c2b16d766c132b5a727ff7a31b71d76a7d46bd6e40fe50bc97c5"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/pdf/scripts/fill_fillable_fields.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 3819,
+    "sha256": "d140872c2e92e41b1e05370ae8d270c5b7f5ebdf55d9905f03bc974a9c708ff5"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/pdf/scripts/fill_pdf_form_with_annotations.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 3235,
+    "sha256": "8a56e063a49ed53c0b0e1d312ecf8023af76816ed139486ec3b539873de202fd"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/pptx": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/pptx/LICENSE.txt": {
+    "mode": 420,
+    "type": "file",
+    "size": 1467,
+    "sha256": "79f6d8f5b427252fa3b1c11ecdbdb6bf610b944f7530b4de78f770f38741cfaa"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/pptx/SKILL.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 21822,
+    "sha256": "6c20f2928ca83f21bfed741aa2bbaf2069818f924199e9f7cd600ee2ed943ed3"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/pptx/scripts": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/pptx/scripts/__init__.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/pptx/scripts/add_slide.py": {
+    "mode": 493,
+    "type": "file",
+    "size": 14537,
+    "sha256": "3922f819ee1f6b8bdc6aa146d1a86de70640f5f919321fe3f01a764482ff69c9"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/pptx/scripts/clean.py": {
+    "mode": 493,
+    "type": "file",
+    "size": 10415,
+    "sha256": "5c808cd4dff7e02661ef3c68b5917f4e25097cc6610c92a3a7df4a6366a5c3c1"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/pptx/scripts/office": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/pptx/scripts/office/helpers": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/pptx/scripts/office/helpers/__init__.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 3380,
+    "sha256": "e62e525673baa71fa2c9f01d637c37b44383146a46c28957ba3d9d41e1a4ba21"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/pptx/scripts/office/helpers/pptx_chart.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 5862,
+    "sha256": "47ac266f7d39d11ede6bb0d1f3a19d801394fd2964636f1b48beb701f1832964"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/pptx/scripts/office/helpers/pptx_slide.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 1675,
+    "sha256": "7b9f69b4a5bd6a2d9eabf9e0e3e796d7a421373145f6a8cd11f60b7ba2d6a5d0"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/pptx/scripts/office/helpers/pptx_theme.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 3510,
+    "sha256": "ebb54c56e9c13807f5f98f0cae22d47cdd0162da8525eaa664e3f2c8c8d6bb03"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/pptx/scripts/office/schemas": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/pptx/scripts/office/schemas/ISO-IEC29500-4_2016": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/pptx/scripts/office/schemas/ISO-IEC29500-4_2016/dml-chart.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 74984,
+    "sha256": "41b93bd8857cc68b1e43be2806a872d736a9bdd6566900062d8fdb57d7bbb354"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/pptx/scripts/office/schemas/ISO-IEC29500-4_2016/dml-chartDrawing.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 6956,
+    "sha256": "3fd0586f2637b98bb9886f0e0b67d89e1cc987c2d158cc7deb5f5b9890ced412"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/pptx/scripts/office/schemas/ISO-IEC29500-4_2016/dml-diagram.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 51302,
+    "sha256": "29b254ee0d10414a8504b5a08149c7baec35a60d5ff607d6b3f492aa36815f40"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/pptx/scripts/office/schemas/ISO-IEC29500-4_2016/dml-lockedCanvas.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 624,
+    "sha256": "5cb76dabd8b97d1e9308a1700b90c20139be4d50792d21a7f09789f5cccd6026"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/pptx/scripts/office/schemas/ISO-IEC29500-4_2016/dml-main.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 152039,
+    "sha256": "5375417f0f5394b8dd1a7035b9679151f19a6b65df309dec10cfb4a420cb00e9"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/pptx/scripts/office/schemas/ISO-IEC29500-4_2016/dml-picture.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 1231,
+    "sha256": "5d389d42befbebd91945d620242347caecd3367f9a3a7cf8d97949507ae1f53c"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/pptx/scripts/office/schemas/ISO-IEC29500-4_2016/dml-spreadsheetDrawing.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 8862,
+    "sha256": "b4532b6d258832953fbb3ee4c711f4fe25d3faf46a10644b2505f17010d01e88"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/pptx/scripts/office/schemas/ISO-IEC29500-4_2016/dml-wordprocessingDrawing.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 14795,
+    "sha256": "bdad416b096b61d37b71603b2c949484f9070c830bdaeba93bf35e15c8900614"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/pptx/scripts/office/schemas/ISO-IEC29500-4_2016/pml.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 83612,
+    "sha256": "d173c3e5d61e42e2e3a97226c632fd2ab7cc481fc4e492365b87024ab546daff"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/pptx/scripts/office/schemas/ISO-IEC29500-4_2016/shared-additionalCharacteristics.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 1269,
+    "sha256": "3c6709101c6aaa82888df5d8795c33f9e857196790eb320d9194e64be2b6bdd8"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/pptx/scripts/office/schemas/ISO-IEC29500-4_2016/shared-bibliography.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 7328,
+    "sha256": "0b364451dc36a48dd6dae0f3b6ada05fd9b71e5208211f8ee5537d7e51a587e2"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/pptx/scripts/office/schemas/ISO-IEC29500-4_2016/shared-commonSimpleTypes.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 6382,
+    "sha256": "e2abacbb9a55ce1365f8961bc1b1395bbc811e512b111000d8c333f98458dece"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/pptx/scripts/office/schemas/ISO-IEC29500-4_2016/shared-customXmlDataProperties.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 1248,
+    "sha256": "0ef4bb354ff44b923564c4ddbdda5987919d220225129ec94614a618ceafc281"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/pptx/scripts/office/schemas/ISO-IEC29500-4_2016/shared-customXmlSchemaProperties.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 880,
+    "sha256": "0d103b99a4a8652f8871552a69d42d2a3760ac6a5e3ef02d979c4273257ff6a4"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/pptx/scripts/office/schemas/ISO-IEC29500-4_2016/shared-documentPropertiesCustom.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 2608,
+    "sha256": "9c085407751b9061c1f996f6c39ce58451be22a8d334f09175f0e89e42736285"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/pptx/scripts/office/schemas/ISO-IEC29500-4_2016/shared-documentPropertiesExtended.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 3507,
+    "sha256": "bc92e36ccd233722d4c5869bec71ddc7b12e2df56059942cce5a39065cc9c368"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/pptx/scripts/office/schemas/ISO-IEC29500-4_2016/shared-documentPropertiesVariantTypes.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 7507,
+    "sha256": "7b5b7413e2c895b1e148e82e292a117d53c7ec65b0696c992edca57b61b4a74b"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/pptx/scripts/office/schemas/ISO-IEC29500-4_2016/shared-math.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 23313,
+    "sha256": "3213ef1631606250f5010b42cad7ef716f7c59426367798e33c374c0ec391d3a"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/pptx/scripts/office/schemas/ISO-IEC29500-4_2016/shared-relationshipReference.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 1367,
+    "sha256": "12264f3c03d738311cd9237d212f1c07479e70f0cbe1ae725d29b36539aef637"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/pptx/scripts/office/schemas/ISO-IEC29500-4_2016/sml.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 242277,
+    "sha256": "beffeed56945c22a77440122c8bdc426f3fcbe7f3b12ea0976c770d1f8d54578"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/pptx/scripts/office/schemas/ISO-IEC29500-4_2016/vml-main.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 26148,
+    "sha256": "f5ee623b08b6a66935e5aced2f5d8ad0fc71bf9e8e833cd490150c0fa94b8763"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/pptx/scripts/office/schemas/ISO-IEC29500-4_2016/vml-officeDrawing.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 25279,
+    "sha256": "585bedc1313b40888dcc544cb74cd939a105ee674f3b1d3aa1cc6d34f70ff155"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/pptx/scripts/office/schemas/ISO-IEC29500-4_2016/vml-presentationDrawing.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 535,
+    "sha256": "133c9f64a5c5d573b78d0a474122b22506d8eadb5e063f67cdbbb8fa2f161d0e"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/pptx/scripts/office/schemas/ISO-IEC29500-4_2016/vml-spreadsheetDrawing.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 5712,
+    "sha256": "6bdeb169c3717eb01108853bd9fc5a3750fb1fa5b82abbdd854d49855a40f519"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/pptx/scripts/office/schemas/ISO-IEC29500-4_2016/vml-wordprocessingDrawing.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 4010,
+    "sha256": "475dcae1e7d1ea46232db6f8481040c15e53a52a3c256831d3df204212b0e831"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/pptx/scripts/office/schemas/ISO-IEC29500-4_2016/wml.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 171367,
+    "sha256": "c2dd9f61f892deae6acd8d20771ea79b12018af25f3bf8d06639c8542d218cfd"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/pptx/scripts/office/schemas/ISO-IEC29500-4_2016/xml.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 4646,
+    "sha256": "a539aa2fb154fa50e0f5cc97e6ad7cbc66f8ec3e3746f61ec6a8b0d5d15ecdf2"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/pptx/scripts/office/schemas/ecma": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/pptx/scripts/office/schemas/ecma/fouth-edition": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/pptx/scripts/office/schemas/ecma/fouth-edition/opc-contentTypes.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 1963,
+    "sha256": "9e0b7209fc69ab11987900404540969976000c5ebe4d4f58c43dc3842886bf3a"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/pptx/scripts/office/schemas/ecma/fouth-edition/opc-coreProperties.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 2515,
+    "sha256": "451958454e8588dfc7cd945981ada142ca06ff3307937f5700df059c2b307fa8"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/pptx/scripts/office/schemas/ecma/fouth-edition/opc-digSig.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 2856,
+    "sha256": "6de111e11403f7cd49027400755bae0ea1cabef2815f09bd40a24f0017613b24"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/pptx/scripts/office/schemas/ecma/fouth-edition/opc-relationships.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 1344,
+    "sha256": "f565adfef5a502044abc3a9153e157edc25af78304d335994afb958874b15e26"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/pptx/scripts/office/schemas/mce": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/pptx/scripts/office/schemas/mce/mc.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 3127,
+    "sha256": "3a37e461ecf5a8670fdec34029703401f8728ab9c96ec1739a6ae58d55212413"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/pptx/scripts/office/schemas/microsoft": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/pptx/scripts/office/schemas/microsoft/wml-2010.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 26549,
+    "sha256": "568b26ee156cb9549aa439ca2158965f77b7c1602b7e0316f40ac6cf586e35f2"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/pptx/scripts/office/schemas/microsoft/wml-2012.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 3745,
+    "sha256": "0fa75578a000439a7988ba0c59fdc69f774bbd416cbacc14d07125b3f686cb74"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/pptx/scripts/office/schemas/microsoft/wml-2018.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 901,
+    "sha256": "be0ff793a22dd31384650c3a4da14c2fa8062751c2e97b0e5ee852bda13c60ad"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/pptx/scripts/office/schemas/microsoft/wml-cex-2018.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 1778,
+    "sha256": "fddc2b880cabb9005aebbc7e783e53c19fec1c03df7d0e2f2076a33a0fdfd081"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/pptx/scripts/office/schemas/microsoft/wml-cid-2016.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 1002,
+    "sha256": "127ca209fa73d7cb708449cb355c871867948a96e4a74f7bf5811ef62d17991d"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/pptx/scripts/office/schemas/microsoft/wml-sdtdatahash-2020.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 600,
+    "sha256": "842e7163409c8d74f4d7088a8bc99500d80bc75332681a0980055b08f374a604"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/pptx/scripts/office/schemas/microsoft/wml-symex-2015.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 745,
+    "sha256": "16f6f8072249f431370723c2cd8974672e0d9c897e00e97dd918079df934871b"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/pptx/scripts/office/soffice.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 5945,
+    "sha256": "c1b83a67bf7e784ce6255d7b3a58999445f3dad19809845821f1293ab4cbf43e"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/pptx/scripts/office/validate.py": {
+    "mode": 493,
+    "type": "file",
+    "size": 6142,
+    "sha256": "346a4c89d92fff55e610f11efda48c30228815b29bdb10b987e48f7af70acf1e"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/pptx/scripts/office/validators": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/pptx/scripts/office/validators/__init__.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 336,
+    "sha256": "83e0f035c5abea238d3f2c3968afbd511ed022b527b7c9cb60a9434cc34ff987"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/pptx/scripts/office/validators/base.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 33721,
+    "sha256": "a5ed6c647ceaf7f48f60386b347ea5c91071073866bdd148532e9eab04c8c347"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/pptx/scripts/office/validators/docx.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 17482,
+    "sha256": "93d3444c0ef3f043d21a2285c46d2cda478426b930dc33dcf3b11265935517b5"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/pptx/scripts/office/validators/pptx.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 15966,
+    "sha256": "17eadad2b7a8374ccbe4cda45693bcd6a36f9d61a7d60f9c9ceef9464dec8299"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/pptx/scripts/office/validators/redlining.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 18017,
+    "sha256": "25ff68611a7cfcfe88644fe3cf011438c9e9a544ae39bad3ae740d96d99a9d43"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/pptx/scripts/thumbnail.py": {
+    "mode": 493,
+    "type": "file",
+    "size": 9802,
+    "sha256": "94ef83a84346aa2d63913de0d42bb2fe902ccdc17bfac6130096ca758381793c"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/teach": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/teach/GLOSSARY-FORMAT.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 2131,
+    "sha256": "d177def491519d97873291f2e860d8f1d60ead78feecb82eee022177958069c6"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/teach/LEARNING-RECORD-FORMAT.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 2777,
+    "sha256": "855f81017625256584bbf62bd5edb9b0c86605c4cc1139c56acc36b802595d17"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/teach/MISSION-FORMAT.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 1553,
+    "sha256": "8da6d3ac84eb2eb19f17c260b6acf01c560d3ac7a4501c415eea0e985602f4d7"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/teach/RESOURCES-FORMAT.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 1926,
+    "sha256": "2bc634a64b0d0daa10904f9222e7aa0d361420dfacabbf092fbe3a72222edc08"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/teach/SKILL.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 8727,
+    "sha256": "d36496c90da9871babf8aef3c4e2fb5de1dddc7fafc79659d2ac0ba567069b3b"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/xlsx": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/xlsx/LICENSE.txt": {
+    "mode": 420,
+    "type": "file",
+    "size": 1467,
+    "sha256": "79f6d8f5b427252fa3b1c11ecdbdb6bf610b944f7530b4de78f770f38741cfaa"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/xlsx/SKILL.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 8598,
+    "sha256": "6712b39718fe815054abca9c3ee72f989613e6f771c8a5c58f30a65a6c905622"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/xlsx/scripts": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/xlsx/scripts/office": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/xlsx/scripts/office/helpers": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/xlsx/scripts/office/helpers/__init__.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 3380,
+    "sha256": "e62e525673baa71fa2c9f01d637c37b44383146a46c28957ba3d9d41e1a4ba21"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/xlsx/scripts/office/helpers/pptx_chart.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 5862,
+    "sha256": "47ac266f7d39d11ede6bb0d1f3a19d801394fd2964636f1b48beb701f1832964"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/xlsx/scripts/office/helpers/pptx_slide.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 1675,
+    "sha256": "7b9f69b4a5bd6a2d9eabf9e0e3e796d7a421373145f6a8cd11f60b7ba2d6a5d0"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/xlsx/scripts/office/helpers/pptx_theme.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 3510,
+    "sha256": "ebb54c56e9c13807f5f98f0cae22d47cdd0162da8525eaa664e3f2c8c8d6bb03"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/xlsx/scripts/office/schemas": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/xlsx/scripts/office/schemas/ISO-IEC29500-4_2016": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/xlsx/scripts/office/schemas/ISO-IEC29500-4_2016/dml-chart.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 74984,
+    "sha256": "41b93bd8857cc68b1e43be2806a872d736a9bdd6566900062d8fdb57d7bbb354"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/xlsx/scripts/office/schemas/ISO-IEC29500-4_2016/dml-chartDrawing.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 6956,
+    "sha256": "3fd0586f2637b98bb9886f0e0b67d89e1cc987c2d158cc7deb5f5b9890ced412"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/xlsx/scripts/office/schemas/ISO-IEC29500-4_2016/dml-diagram.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 51302,
+    "sha256": "29b254ee0d10414a8504b5a08149c7baec35a60d5ff607d6b3f492aa36815f40"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/xlsx/scripts/office/schemas/ISO-IEC29500-4_2016/dml-lockedCanvas.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 624,
+    "sha256": "5cb76dabd8b97d1e9308a1700b90c20139be4d50792d21a7f09789f5cccd6026"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/xlsx/scripts/office/schemas/ISO-IEC29500-4_2016/dml-main.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 152039,
+    "sha256": "5375417f0f5394b8dd1a7035b9679151f19a6b65df309dec10cfb4a420cb00e9"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/xlsx/scripts/office/schemas/ISO-IEC29500-4_2016/dml-picture.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 1231,
+    "sha256": "5d389d42befbebd91945d620242347caecd3367f9a3a7cf8d97949507ae1f53c"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/xlsx/scripts/office/schemas/ISO-IEC29500-4_2016/dml-spreadsheetDrawing.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 8862,
+    "sha256": "b4532b6d258832953fbb3ee4c711f4fe25d3faf46a10644b2505f17010d01e88"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/xlsx/scripts/office/schemas/ISO-IEC29500-4_2016/dml-wordprocessingDrawing.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 14795,
+    "sha256": "bdad416b096b61d37b71603b2c949484f9070c830bdaeba93bf35e15c8900614"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/xlsx/scripts/office/schemas/ISO-IEC29500-4_2016/pml.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 83612,
+    "sha256": "d173c3e5d61e42e2e3a97226c632fd2ab7cc481fc4e492365b87024ab546daff"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/xlsx/scripts/office/schemas/ISO-IEC29500-4_2016/shared-additionalCharacteristics.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 1269,
+    "sha256": "3c6709101c6aaa82888df5d8795c33f9e857196790eb320d9194e64be2b6bdd8"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/xlsx/scripts/office/schemas/ISO-IEC29500-4_2016/shared-bibliography.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 7328,
+    "sha256": "0b364451dc36a48dd6dae0f3b6ada05fd9b71e5208211f8ee5537d7e51a587e2"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/xlsx/scripts/office/schemas/ISO-IEC29500-4_2016/shared-commonSimpleTypes.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 6382,
+    "sha256": "e2abacbb9a55ce1365f8961bc1b1395bbc811e512b111000d8c333f98458dece"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/xlsx/scripts/office/schemas/ISO-IEC29500-4_2016/shared-customXmlDataProperties.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 1248,
+    "sha256": "0ef4bb354ff44b923564c4ddbdda5987919d220225129ec94614a618ceafc281"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/xlsx/scripts/office/schemas/ISO-IEC29500-4_2016/shared-customXmlSchemaProperties.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 880,
+    "sha256": "0d103b99a4a8652f8871552a69d42d2a3760ac6a5e3ef02d979c4273257ff6a4"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/xlsx/scripts/office/schemas/ISO-IEC29500-4_2016/shared-documentPropertiesCustom.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 2608,
+    "sha256": "9c085407751b9061c1f996f6c39ce58451be22a8d334f09175f0e89e42736285"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/xlsx/scripts/office/schemas/ISO-IEC29500-4_2016/shared-documentPropertiesExtended.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 3507,
+    "sha256": "bc92e36ccd233722d4c5869bec71ddc7b12e2df56059942cce5a39065cc9c368"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/xlsx/scripts/office/schemas/ISO-IEC29500-4_2016/shared-documentPropertiesVariantTypes.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 7507,
+    "sha256": "7b5b7413e2c895b1e148e82e292a117d53c7ec65b0696c992edca57b61b4a74b"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/xlsx/scripts/office/schemas/ISO-IEC29500-4_2016/shared-math.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 23313,
+    "sha256": "3213ef1631606250f5010b42cad7ef716f7c59426367798e33c374c0ec391d3a"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/xlsx/scripts/office/schemas/ISO-IEC29500-4_2016/shared-relationshipReference.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 1367,
+    "sha256": "12264f3c03d738311cd9237d212f1c07479e70f0cbe1ae725d29b36539aef637"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/xlsx/scripts/office/schemas/ISO-IEC29500-4_2016/sml.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 242277,
+    "sha256": "beffeed56945c22a77440122c8bdc426f3fcbe7f3b12ea0976c770d1f8d54578"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/xlsx/scripts/office/schemas/ISO-IEC29500-4_2016/vml-main.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 26148,
+    "sha256": "f5ee623b08b6a66935e5aced2f5d8ad0fc71bf9e8e833cd490150c0fa94b8763"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/xlsx/scripts/office/schemas/ISO-IEC29500-4_2016/vml-officeDrawing.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 25279,
+    "sha256": "585bedc1313b40888dcc544cb74cd939a105ee674f3b1d3aa1cc6d34f70ff155"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/xlsx/scripts/office/schemas/ISO-IEC29500-4_2016/vml-presentationDrawing.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 535,
+    "sha256": "133c9f64a5c5d573b78d0a474122b22506d8eadb5e063f67cdbbb8fa2f161d0e"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/xlsx/scripts/office/schemas/ISO-IEC29500-4_2016/vml-spreadsheetDrawing.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 5712,
+    "sha256": "6bdeb169c3717eb01108853bd9fc5a3750fb1fa5b82abbdd854d49855a40f519"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/xlsx/scripts/office/schemas/ISO-IEC29500-4_2016/vml-wordprocessingDrawing.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 4010,
+    "sha256": "475dcae1e7d1ea46232db6f8481040c15e53a52a3c256831d3df204212b0e831"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/xlsx/scripts/office/schemas/ISO-IEC29500-4_2016/wml.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 171367,
+    "sha256": "c2dd9f61f892deae6acd8d20771ea79b12018af25f3bf8d06639c8542d218cfd"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/xlsx/scripts/office/schemas/ISO-IEC29500-4_2016/xml.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 4646,
+    "sha256": "a539aa2fb154fa50e0f5cc97e6ad7cbc66f8ec3e3746f61ec6a8b0d5d15ecdf2"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/xlsx/scripts/office/schemas/ecma": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/xlsx/scripts/office/schemas/ecma/fouth-edition": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/xlsx/scripts/office/schemas/ecma/fouth-edition/opc-contentTypes.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 1963,
+    "sha256": "9e0b7209fc69ab11987900404540969976000c5ebe4d4f58c43dc3842886bf3a"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/xlsx/scripts/office/schemas/ecma/fouth-edition/opc-coreProperties.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 2515,
+    "sha256": "451958454e8588dfc7cd945981ada142ca06ff3307937f5700df059c2b307fa8"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/xlsx/scripts/office/schemas/ecma/fouth-edition/opc-digSig.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 2856,
+    "sha256": "6de111e11403f7cd49027400755bae0ea1cabef2815f09bd40a24f0017613b24"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/xlsx/scripts/office/schemas/ecma/fouth-edition/opc-relationships.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 1344,
+    "sha256": "f565adfef5a502044abc3a9153e157edc25af78304d335994afb958874b15e26"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/xlsx/scripts/office/schemas/mce": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/xlsx/scripts/office/schemas/mce/mc.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 3127,
+    "sha256": "3a37e461ecf5a8670fdec34029703401f8728ab9c96ec1739a6ae58d55212413"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/xlsx/scripts/office/schemas/microsoft": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/xlsx/scripts/office/schemas/microsoft/wml-2010.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 26549,
+    "sha256": "568b26ee156cb9549aa439ca2158965f77b7c1602b7e0316f40ac6cf586e35f2"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/xlsx/scripts/office/schemas/microsoft/wml-2012.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 3745,
+    "sha256": "0fa75578a000439a7988ba0c59fdc69f774bbd416cbacc14d07125b3f686cb74"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/xlsx/scripts/office/schemas/microsoft/wml-2018.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 901,
+    "sha256": "be0ff793a22dd31384650c3a4da14c2fa8062751c2e97b0e5ee852bda13c60ad"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/xlsx/scripts/office/schemas/microsoft/wml-cex-2018.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 1778,
+    "sha256": "fddc2b880cabb9005aebbc7e783e53c19fec1c03df7d0e2f2076a33a0fdfd081"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/xlsx/scripts/office/schemas/microsoft/wml-cid-2016.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 1002,
+    "sha256": "127ca209fa73d7cb708449cb355c871867948a96e4a74f7bf5811ef62d17991d"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/xlsx/scripts/office/schemas/microsoft/wml-sdtdatahash-2020.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 600,
+    "sha256": "842e7163409c8d74f4d7088a8bc99500d80bc75332681a0980055b08f374a604"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/xlsx/scripts/office/schemas/microsoft/wml-symex-2015.xsd": {
+    "mode": 420,
+    "type": "file",
+    "size": 745,
+    "sha256": "16f6f8072249f431370723c2cd8974672e0d9c897e00e97dd918079df934871b"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/xlsx/scripts/office/soffice.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 5945,
+    "sha256": "c1b83a67bf7e784ce6255d7b3a58999445f3dad19809845821f1293ab4cbf43e"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/xlsx/scripts/office/validate.py": {
+    "mode": 493,
+    "type": "file",
+    "size": 6142,
+    "sha256": "346a4c89d92fff55e610f11efda48c30228815b29bdb10b987e48f7af70acf1e"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/xlsx/scripts/office/validators": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/xlsx/scripts/office/validators/__init__.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 336,
+    "sha256": "83e0f035c5abea238d3f2c3968afbd511ed022b527b7c9cb60a9434cc34ff987"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/xlsx/scripts/office/validators/base.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 33721,
+    "sha256": "a5ed6c647ceaf7f48f60386b347ea5c91071073866bdd148532e9eab04c8c347"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/xlsx/scripts/office/validators/docx.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 17482,
+    "sha256": "93d3444c0ef3f043d21a2285c46d2cda478426b930dc33dcf3b11265935517b5"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/xlsx/scripts/office/validators/pptx.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 15966,
+    "sha256": "17eadad2b7a8374ccbe4cda45693bcd6a36f9d61a7d60f9c9ceef9464dec8299"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/xlsx/scripts/office/validators/redlining.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 18017,
+    "sha256": "25ff68611a7cfcfe88644fe3cf011438c9e9a544ae39bad3ae740d96d99a9d43"
+  },
+  "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/xlsx/scripts/recalc.py": {
+    "mode": 493,
+    "type": "file",
+    "size": 11366,
+    "sha256": "8dfa9882a5363cf82376a714967c8f421fcbe9c4ad2cedcb1b7d1ad13046b34d"
+  },
+  "home/.claude/skills/unslop": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/skills/unslop/SKILL.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 25429,
+    "sha256": "83f43303b5712cf1c14ea39d6028a8a491c57bc48e514605b7fc92c29e761fbd"
+  },
+  "home/.claude/skills/unslop/agents": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/skills/unslop/agents/openai.yaml": {
+    "mode": 420,
+    "type": "file",
+    "size": 170,
+    "sha256": "70b4629e876b234c708224fdb2864d2ffa16a8225211c2286d98575d15271798"
+  },
+  "home/.claude/skills/unslop/help.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 8820,
+    "sha256": "2022db72a2b78e452ad6f92c0250898dd8831a4b31f23780022b4c97a1c92509"
+  },
+  "home/.claude/skills/unslop/references": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/skills/unslop/references/correction.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 10372,
+    "sha256": "4bf88dbcbef44c32baa62937a9d6d750631a199f1f6689ad7990d032f3c8ee4d"
+  },
+  "home/.claude/skills/unslop/scripts": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/skills/unslop/scripts/invoke.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 4938,
+    "sha256": "1986301369b22e298280544bfd889e460af2e4f8acb187a7967f994ae93daa2a"
+  },
+  "home/.claude/skills/write": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/skills/write/SKILL.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 16997,
+    "sha256": "a4a3e140cb60abdd807d1bf827265fc393402d2fbf0152d3ef07a3a7a801c418"
+  },
+  "home/.claude/skills/write/agents": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/skills/write/agents/openai.yaml": {
+    "mode": 420,
+    "type": "file",
+    "size": 144,
+    "sha256": "6c2c5457f3b5d6e237a9cc7c147763d13115065ac7c8dc96da16b17017fd1953"
+  },
+  "home/.claude/skills/write/help.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 11767,
+    "sha256": "4edfff6cc4bf149512fc95fbf3431262f7a3e7e18c9e7b1917f1dc2e55bb5444"
+  },
+  "home/.claude/skills/write/references": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/skills/write/references/quotations.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 4063,
+    "sha256": "89ba23a834153bf3c38372206548d2e269ff1a516c93cf393eaaf2fe5c62e881"
+  },
+  "home/.claude/skills/write/references/source-check.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 13404,
+    "sha256": "c7a8956c5d850854984cd97f802a5c7c1caf13cccf4aff351aa6bee7c1df3ce0"
+  },
+  "home/.claude/skills/write/scripts": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.claude/skills/write/scripts/invoke.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 4938,
+    "sha256": "1986301369b22e298280544bfd889e460af2e4f8acb187a7967f994ae93daa2a"
+  },
+  "scratch": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "scratch/cache": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "scratch/data": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "scratch/tmp": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "scratch/uv-cache": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "work": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "work/input.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 1557,
+    "sha256": "98b65197fa9dd8001010f4dc181d0d356769ee19e0ac9bf3dd984ec87ee40407"
+  },
+  "work/output.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 1557,
+    "sha256": "98b65197fa9dd8001010f4dc181d0d356769ee19e0ac9bf3dd984ec87ee40407"
+  }
+}

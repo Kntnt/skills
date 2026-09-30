@@ -1,0 +1,57 @@
+Jag granskade `input.md` och gjorde en korrigeringsrunda. Sex av nio anmärkningar är åtgärdade. Tre står kvar, eftersom de kräver uppgifter som texten inte har. Inledningens nya mening om pilotförsöket är min slutsats, och den bör du kontrollera (se Tillagda påståenden). Texten följer inte artikelanatomin, eftersom ingress saknas. `input.md` är orörd.
+
+````markdown
+# Behåll telefonbokningen ett halvår till
+
+Sanna Ek, Öppna beslut
+
+Kommunstyrelsen borde behålla telefonbokning under ett halvårs försök i alla sju lokaler. Kommunen har prövat bokning på webben och via telefon i ett pilotförsök.
+
+## Var femte bokning kom via telefon
+
+Det gjordes 96 bokningar på webben och 24 via telefon. Det betyder att 20 procent av bokningarna gjordes via telefon. Kommunens pilotrapport från den 8 april 2026 säger samtidigt att bokningarna inte räknar unika personer och att digital vana inte undersöktes.
+
+## Handlingarna visar inte vad dubbla kanaler kostar i tid
+
+Förvaltningen invänder att dubbla kanaler innebär dubbel administration. Handlingarna saknar tidsmätning. Föreningen vill att förvaltningen mäter tidsåtgång och frågar användarna varför de väljer en bokningsväg. Försökets kostnad är inte beräknad.
+
+## Nästa steg är kommunstyrelsens
+
+Nu är det dags för kommunstyrelsen att besluta att telefonbokningen behålls under ett halvårs försök i alla sju lokaler.
+````
+
+**Inställningar:** Genren är debattartikel (`opinion`) och språket svenska (`sv`), båda enligt anropet. Ingen teknik används, eftersom debattgenren inte har någon. Budgeten var en korrigering, och den är förbrukad.
+
+## Kvarstående anmärkningar (olösta)
+
+1. **Ingress saknas.** Artikelanatomin kräver en ingress mellan rubrik och byline, och mätningen av den levererade texten visar att den fattas. En saknad del skrivs inte vid granskning, så du får avgöra vad ingressen ska säga.
+2. **"Föreningen vill …"** Ordet står i bestämd form, men ingen förening nämns i brödtexten. Bylinen nämner Öppna beslut men kallar den inte förening, så texten visar inte vilken förening det gäller. Läsaren får inte veta vem som står bakom kravet. Att skriva ut namnet skulle kräva ett påstående som texten saknar stöd för.
+3. **Inledningen förklarar inte hela sammanhanget (delvis löst).** Inledningen nämner nu pilotförsöket. Den säger fortfarande inte vad som bokas eller vilka de sju lokalerna är, och texten har inga uppgifter om det.
+
+## Ändrade rubriker och den anmärkning varje ändring svarar på
+
+- **Rubriken.** "Kommunledningen hatar människor" tillskrev kommunledningen ett motiv som texten inte stöder, och den sa inget om ämnet. Den nya rubriken, "Behåll telefonbokningen ett halvår till", påstår att telefonbokningen bör behållas ett halvår till. Den nämner varken försöket eller de sju lokalerna.
+- **"Bakgrund" blev "Var femte bokning kom via telefon".** Etiketten sa ingenting om argumentet. Den nya mellanrubriken påstår att en av fem bokningar kom via telefon, alltså avsnittets egen siffra, 24 av 120.
+- **"Diskussion" blev "Handlingarna visar inte vad dubbla kanaler kostar i tid".** Även detta var en ren etikett. Den nya mellanrubriken påstår att handlingarna inte visar tidskostnaden för två bokningskanaler. Den kopplar "Handlingarna saknar tidsmätning" till förvaltningens invändning om dubbel administration.
+- **Ny mellanrubrik: "Nästa steg är kommunstyrelsens".** Avslutningen stod tidigare inne i ett avsnitt som bar argumentet. Den nya mellanrubriken påstår att nästa steg ligger hos kommunstyrelsen.
+
+## Påståenden
+
+**Borttagna påståenden**
+- Rubrikens påstående att kommunledningen hatar människor försvann med den nya rubriken.
+- "Alla vet att politikerna vill stänga ute äldre för att spara miljoner." Hela meningen var felet: en auktoritet utan namn, ett tillskrivet motiv och en besparing utan stöd. Med den försvann tre påståenden: att alla vet det, att politikerna vill stänga ute äldre och att syftet är att spara miljoner.
+- "Därför kostar det ingenting att behålla telefonbokningen." Slutsatsen var felet. Med den försvann påståendet att det inte kostar något att behålla telefonbokningen, och även ordet "Därför". Läsaren förlorar alltså textens slutsats från den saknade tidsmätningen till en kostnad på noll, en slutsats som texten själv motsade.
+
+**Ändrade påståenden**
+- "Det bevisar att 20 procent av kommunens invånare inte kan använda internet." Meningen säger nu bara att 20 procent av bokningarna gjordes via telefon. Andelen gäller bokningar, inte invånare, och påståendena om bevis och om att inte kunna använda internet är borta.
+- Rubriken och mellanrubrikerna påstår nu det som står ovan.
+- "Nu är det dags att agera." säger nu att kommunstyrelsen bör besluta att telefonbokningen behålls under ett halvårs försök i alla sju lokaler. Kommunstyrelsen pekas alltså ut som den som ska agera.
+
+**Tillagda påståenden**
+- "Kommunen har prövat bokning på webben och via telefon i ett pilotförsök." Meningen svarar på anmärkningen om inledningens sammanhang. Den är min slutsats av att pilotrapporten tar upp bokningarna och av bokningssiffrorna. Originaltexten säger det inte rakt ut, så kontrollera att pilotförsöket gällde båda kanalerna.
+
+Inga andra påståenden har ändrats än de som räknas upp ovan. Pilotrapportens avgränsning, meningarna "Handlingarna saknar tidsmätning." och "Försökets kostnad är inte beräknad.", föreningens krav och bylinen står ordagrant kvar.
+
+## Vad som ändrats utöver påståendena
+
+Utöver ändringarna ovan har jag strukturerat om texten. Avslutningen har fått ett eget avsnitt med egen mellanrubrik, och etikettrubrikerna har bytts mot rubriker som säger vad avsnitten handlar om. En anonym auktoritet ("Alla vet") och en allmän uppmaning ("Nu är det dags att agera") är borttagna. Korrekturläsningen hittade inga språkliga fel att rätta.

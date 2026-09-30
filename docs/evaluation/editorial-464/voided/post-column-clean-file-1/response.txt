@@ -1,0 +1,20 @@
+Texten behövde inga ändringar. Den är nu skriven till `output.md`, och den filen är identisk med `input.md`.
+
+**Inställningar:** genren är kolumn och språket svenska (`sv`), båda angivna i anropet. Ingen teknik användes, eftersom kolumngenren inte anger någon och ingen annan valdes. Ingen brief användes. Texten saknar Kntnt-metadata och fick inte heller någon.
+
+**Granskning:** jag hittade inga brister, så de 1 korrigeringarna i korrigeringsbudgeten användes inte. Den avslutande korrekturläsningen hittade inga fel att rätta.
+
+**Artikelns uppbyggnad:** texten följer artikelmallen. Alla mätbara gränser håller, vilket mätskriptet bekräftar både före och efter korrekturläsningen:
+- Rubriken har 44 tecken och 8 ord.
+- Ingressen är ett stycke på 41 ord.
+- Båda mellanrubrikerna har 37 tecken.
+
+Det som skriptet inte kan mäta läste jag igenom:
+- **Ingressen** fungerar på egen hand.
+- **Inledningen** börjar med andra ord än ingressen och för resonemanget vidare.
+- **Mellanrubrikerna** beskriver sina avsnitt.
+- **Sista avsnittet** är ett avslut. Det lägger fram förslaget, medger tvivlet och uppmanar läsaren att prova.
+
+**En avvikelse:** första stycket under "Det är inte bara besluten jag vill åt" har 83 ord, alltså strax över riktvärdet på 80. Jag räknar det inte som en brist, eftersom stycket håller en enda tanke och läses bra i den längden. Jag delade det därför inte.
+
+**Påståendena:** inget påstående togs bort, ändrades eller lades till. Texten ändrades inte alls.

@@ -1,0 +1,36 @@
+Jag har granskat texten och skrivit den till `output.md`. Den har inte upprepats här. Du hittar den i arbetskatalogen, och `input.md` är orörd.
+
+**Inställningar:** krönika (`column`) och svenska (`sv`), båda från anropet. Ingen teknik används, eftersom genren krönika inte anger någon. Ingen skrivbrief valdes.
+
+## Fynd
+
+**1. Avslutningen stod inte i ett eget avsnitt. Åtgärdat.**
+- **Brist:** Sista avsnittet, under ”Ännu en ruta, och ändå vill jag prova”, bar resonemangets kärna. Där står frågan som ska läggas till, vad den lovar och självironin om det längre formuläret. Efter det kom uppmaningen ”Prova ändå frågan …”. Artikelanatomin kräver att avslutningen är ett eget avsnitt med egen mellanrubrik. Ett avsnitt som bär argumentet och får en avslutning tillagd räknas inte som avslutning.
+- **Vad läsaren förlorade:** Den som skummar mellanrubrikerna hittade ingen rubrik som ledde till uppmaningen. Uppmaningen lästes då som en fortsättning på argumentet i stället för som det som stänger texten.
+- **Åtgärd:** En ny mellanrubrik, ”Vad frågan ger kan jag inte lova före ett försök”, står nu före det avslutande stycket. Stycket är ordagrant detsamma. Rubriken bygger på den sista meningen och upprepar inte meningen direkt under sig.
+
+Inga fynd kvarstår.
+
+## Vad som hände med påståendena
+
+- **Borttagna:** inga.
+- **Tillagda:** inga.
+- **Ändrat (nya mellanrubriken):** Rubriken säger nu att det frågan ger inte går att lova före ett försök. Motsvarigheten i texten är sista meningen, ”Det är den enda förbättring jag kan lova innan vi har provat”, som står kvar oförändrad. Rubriken säger ”vad frågan ger” i stället för textens ”förbättring”, och det kan läsas bredare. Texten säger ju själv vad frågan ger: en rad i mallen och ett längre formulär.
+
+Utöver den rubriken är alla påståenden ordagrant desamma som i originalet.
+
+## Anatomi
+
+Den slutliga texten har mätts med skriptet, som inte fann några brister i de räknade kraven. Den nya mellanrubriken har 48 tecken. Jag har också läst igenom de krav som skriptet inte räknar:
+- Ingressen står på egen hand, och brödtexten börjar med andra ord och för resonemanget vidare.
+- Brödtexten går att förstå utan ingressen.
+- Mellanrubrikerna beskriver sina avsnitt.
+- Avslutningen är sista avsnittet och öppnar inget nytt resonemang. Den visar att det brödtextens första stycke lovar har infriats och uppmanar läsaren att göra något.
+
+Texten följer alltså anatomin, med två avvikelser från riktvärden:
+- **Långt stycke:** Första stycket under ”Det är inte bara besluten jag vill åt” har 83 ord, mot riktvärdet högst 80. Det rymmer en tanke och läses väl, så jag räknar det inte som ett fynd.
+- **Korta avsnitt:** Riktvärdet är att de flesta avsnitt ska ha två eller tre stycken. Efter åtgärden gäller det bara ett av tre. Avsnittet ”Ännu en ruta …” har nu ett stycke, som rymmer en tanke, och avslutningen får bestå av ett enda stycke. Därför räknar jag inte heller detta som ett fynd.
+
+## Övriga ändringar
+
+Utöver påståendena ovan har strukturen ändrats på en punkt: den nya mellanrubriken delar det tidigare sista avsnittet i två. Den avslutande korrekturläsningen hittade inga mekaniska fel och ändrade ingenting. I övrigt är texten tecken för tecken densamma som originalet.

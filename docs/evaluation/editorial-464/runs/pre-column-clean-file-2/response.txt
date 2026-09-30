@@ -1,0 +1,23 @@
+Jag har granskat och korrigerat texten och skrivit resultatet till `output.md`. `input.md` är orörd.
+
+**Inställningar:** genren `column` och språket `sv` kommer från anropet. Ingen teknik används, eftersom kolumngenren inte anger någon.
+
+## Fynd
+
+1. **Avslutningen saknade egen sektion – åtgärdat.** Sista stycket (”Prova ändå frågan nästa gång du bokar ett möte …”) stod sist i sektionen ”Ännu en ruta, och ändå vill jag prova”. Den sektionen bär resonemangets kärna: frågan som ska läggas till, vad den lovar och medgivandet att formuläret blir längre. Artikelanatomin kräver att avslutningen är en egen sektion med egen underrubrik. Den som skummar texten via underrubrikerna hittade inte uppmaningen som en egen del, och slutet lästes som en fortsättning på argumentet. Stycket står nu oförändrat under den nya underrubriken ”Låt nästa mötesbokning bli ett försök”. Den står efter två andra sektioner.
+
+Inga fynd återstår.
+
+## Påståenden
+
+- **Tillagt:** den nya underrubriken ”Låt nästa mötesbokning bli ett försök” uppmanar läsaren att se nästa mötesbokning som ett försök med okänt utfall. Den skrevs som åtgärd för fynd 1. Den bygger på textens egna ”Prova ändå frågan nästa gång du bokar ett möte” och ”innan vi har provat”. Rubriken och första meningen under den handlar båda om nästa bokning. Jag bedömde att rubriken sammanfattar hela avslutningen och inte bara upprepar meningen.
+
+Utöver den tillagda underrubriken har inget påstående tagits bort, ändrats eller lagts till. Förbehållet ”Det är den enda förbättring jag kan lova innan vi har provat” står kvar.
+
+## Artikelanatomi
+
+Texten uppfyller artikelanatomin med en avvikelse från en norm. Jag har granskat både de räknade kraven och dem som bara kan bedömas genom läsning: att avslutningen är en avslutning, att ingressen står på egen hand och att underrubrikerna beskriver sina sektioner.
+
+Avvikelsen är att första stycket under ”Det är inte bara besluten jag vill åt” har 83 ord, något över normen på högst 80. Stycket rymmer en tanke och läses väl i den längden, så jag har inte räknat det som ett fynd.
+
+Utöver påståendena ovan har körningen ändrat strukturen på ett ställe: en underrubrik har lagts till så att det avslutande stycket blir en egen sektion. Ingen formulering i övrigt har ändrats. Korrekturläsningen hittade inga mekaniska fel och ändrade ingenting.

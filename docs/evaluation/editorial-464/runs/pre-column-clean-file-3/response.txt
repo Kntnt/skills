@@ -1,0 +1,18 @@
+Texten krävde inga ändringar. Jag har skrivit den till `output.md`, byte för byte identisk med `input.md`.
+
+**Inställningar:** genre `column` och språk `sv` kommer från anropet. Ingen teknik används, eftersom krönikegenren inte har någon som den vanligen skrivs med. Texten har inga metadata från Kntnt och har inte fått några tillagda.
+
+**Granskning:** texten följer krönikegenren, artikelanatomin och rubrikreglerna. Mätskriptet hittade inga fel i det som räknas. Jag har också läst igenom det som skriptet inte räknar: standardtexten kan läsas fristående, ingressen och standardtexten upprepar inte varandra, båda mellanrubrikerna beskriver sina avsnitt och det sista avsnittet fungerar som avslutning med en uppmaning. Allt detta håller.
+
+En norm avviker utan att räknas som fel. Första stycket under ”Det är inte bara besluten jag vill åt” har 83 ord, strax över normen på högst 80. Stycket rymmer en enda tanke och läses bra i den längden.
+
+Tre meningar begränsar vad texten påstår, och jag har lämnat dem helt orörda:
+- ”Jag är alltså inte ute efter färre beslut.”
+- ”Den lovar inte att varje samtal ska mynna ut i ett svar.”
+- ”Det är den enda förbättring jag kan lova innan vi har provat.”
+
+Ironin om det längre formuläret är en avsiktlig upprepning och hör till författarens röst.
+
+**Korrigeringar:** jag gjorde ingen korrigeringsrunda, eftersom det inte fanns något att rätta. Budgeten på en korrigering förblev oanvänd. Den avslutande korrekturläsningen hittade inga mekaniska fel. Inga påståenden har tagits bort, ändrats eller lagts till.
+
+Temporära filer har tagits bort, och `output.md` är den enda fil körningen har skapat.

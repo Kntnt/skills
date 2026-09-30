@@ -54,7 +54,8 @@ text opens on a byline-shaped dramatic line standing before the real byline,
 which is the line this rule finds. Each level-2 heading opens a section running
 to the next one. The ending is a section of its own after at least one other,
 so a text of one section fails; whether its last section is an ending — closing
-the piece rather than carrying the argument — is the Skill's to judge.
+the piece rather than bringing reasons or evidence no earlier section gave — is
+the Skill's to judge, by the anatomy's test.
 
 Text is measured as the reader sees it: Markdown emphasis, code and link syntax
 stripped, HTML reduced to its text with entities decoded, whitespace collapsed

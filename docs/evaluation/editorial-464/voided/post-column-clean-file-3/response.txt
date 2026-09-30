@@ -1,0 +1,21 @@
+Texten är granskad och sparad i `output.md`. Filen är byte för byte identisk med `input.md`, eftersom texten inte behövde några ändringar.
+
+**Inställningar:** Genren är krönika (`column`) och språket svenska (`sv`), båda angivna i anropet. Ingen berättarteknik används: krönikegenren anger ingen, och inget annat valde någon.
+
+**Fynd:** Inga. Därför gjordes ingen korrigeringsrunda, och korrigeringsbudgeten (1) användes inte. Den avslutande korrekturläsningen hittade inga stavnings-, grammatik- eller skiljeteckenfel.
+
+**Artikelns uppbyggnad:** Texten följer uppbyggnaden för en krönika utan avvikelse från något krav. Mätskriptet har kontrollerat de räknade gränserna, och siffrorna gäller den levererade texten eftersom den är oförändrad:
+- **Rubrik:** 44 tecken och 8 ord.
+- **Ingress:** ett stycke på 41 ord.
+- **Mellanrubriker:** 37 tecken var.
+
+De krav som skriptet inte räknar har jag läst manuellt, och alla uppfylls:
+- **Ingressen:** den står på egna ben och lockar till läsning.
+- **Ingress och inledning:** de börjar med olika ord, och inledningen för resonemanget vidare i stället för att upprepa ingressen.
+- **Brödtexten:** den går att förstå utan ingressen.
+- **Mellanrubrikerna:** båda beskriver sina avsnitt.
+- **Sista avsnittet:** det är ett riktigt avslut. Det lägger fram förslaget, medger tvivlet och uppmanar läsaren att prova frågan.
+
+En norm överskrids något: första stycket under ”Det är inte bara besluten jag vill åt” är 83 ord, mot riktvärdet högst 80. Det räknas inte som fynd, eftersom stycket rymmer en enda tanke och läses bra i den längden.
+
+**Påståenden:** Inget påstående har tagits bort, ändrats eller lagts till. Texten har inte ändrats alls.

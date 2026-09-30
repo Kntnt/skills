@@ -1,0 +1,74 @@
+**Konfiguration:** genre `opinion` (anges i anropet). Ingen teknik används, eftersom genren opinion inte anger någon teknik som den vanligtvis skrivs med. Språk `sv` (anges i anropet). Ingen skrivbrief användes. Korrigeringsbudgeten var 1, och den enda korrigeringsomgången godtogs efter omgranskning. Budgeten är nu förbrukad och tre fynd återstår olösta. Den avslutande korrekturläsningen hittade inga mekaniska fel.
+
+```markdown
+# Telefonbokningen bör finnas kvar ett halvår på försök
+
+Sanna Ek, Öppna beslut
+
+Kommunstyrelsen borde behålla telefonbokning under ett halvårs försök i alla sju lokaler.
+
+## Bokningssiffrorna mäter varken unika personer eller digital vana
+
+Det gjordes 96 bokningar på webben och 24 via telefon. Det innebär att 20 procent av bokningarna gjordes via telefon. Kommunens pilotrapport från den 8 april 2026 säger samtidigt att bokningarna inte räknar unika personer och att digital vana inte undersöktes.
+
+## Handlingarna visar inte vad två bokningsvägar kostar i tid
+
+Förvaltningen invänder att dubbla kanaler innebär dubbel administration. Handlingarna saknar tidsmätning. Föreningen vill att förvaltningen mäter tidsåtgång och frågar användarna varför de väljer en bokningsväg. Försökets kostnad är inte beräknad.
+
+## Kommunstyrelsen kan pröva båda bokningsvägarna
+
+Nu bör kommunstyrelsen besluta att behålla telefonbokningen i alla sju lokaler under ett halvårs försök.
+```
+
+## Åtgärdade fynd
+
+1. **Rubriken** löd ”Kommunledningen hatar människor”. Den tillskrev någon ett motiv som texten inte belägger, och den hade högre ton än texten. Ordet ”kommunledningen” fanns inte heller i brödtexten. Nu anger rubriken textens tes.
+2. **Leadens andra mening** löd ”Alla vet att politikerna vill stänga ute äldre för att spara miljoner.” ”Alla vet” hänvisade till en auktoritet som ingen kan kontrollera. Meningen hittade på ett motiv, och ”spara miljoner” motsades av att kostnaden inte är beräknad. Meningen är struken.
+3. **Andelen i stycket under första mellanrubriken:** 24 av 120 är 20 procent av bokningarna, inte av invånarna. Slutsatsen om invånarnas internetförmåga motsades dessutom av pilotrapportens förbehåll i meningen efter. Meningen anger nu andelen bokningar.
+4. **Kostnadsslutsatsen** löd ”Därför kostar det ingenting att behålla telefonbokningen.” Att tidsmätning saknas visar inte att kostnaden är noll, och slutsatsen motsades av att försökets kostnad inte är beräknad. Meningen är struken. De avgränsande meningarna ”Handlingarna saknar tidsmätning.” och ”Försökets kostnad är inte beräknad.” står kvar ordagrant.
+5. **Mellanrubrikerna ”Bakgrund” och ”Diskussion”** var etiketter som inte sade vad avsnitten handlar om. Den som skummar fick inte veta något om argumentet. Båda är omskrivna utifrån sina avsnitt.
+6. **Avslutningen ”Nu är det dags att agera.”** stod sist i ett avsnitt som bar argumentet, och den namngav varken en handling eller någon som kan handla. Den är ersatt av ett eget avsnitt med egen mellanrubrik. Där står textens eget förslag som en uppmaning till kommunstyrelsen.
+
+## Olösta fynd
+
+1. **Ingressen saknas.** Mätskriptet rapporterar den som frånvarande. En saknad del skrivs inte vid granskning, så en person behöver skriva ingressen.
+2. **”Föreningen”** har ingen referent i brödtexten. Bylinen nämner Öppna beslut, men texten säger inte att Öppna beslut är en förening eller att det är den som avses. Att sätta ut namnet skulle vara att påstå något texten inte säger.
+3. **Sammanhanget saknas.** Texten säger aldrig vilket beslut eller förslag som gör att telefonbokningen behöver ”behållas”, eller vad som bokas i de sju lokalerna. För att rätta det behövs uppgifter som texten inte har.
+
+## Artikelanatomin
+
+Texten följer inte artikelanatomin, eftersom ingressen saknas. Siffrorna nedan kommer från skriptets mätning av den slutliga texten:
+
+- Rubriken har 53 tecken och 8 ord.
+- Mellanrubrikerna har 64, 58 och 46 tecken.
+- Övriga räknade krav är uppfyllda.
+
+Av de krav som skriptet inte räknar har följande granskats och håller:
+
+- Sista avsnittet fungerar som avslutning.
+- Mellanrubrikerna beskriver sina avsnitt.
+- Rubriken påstår inget som texten inte bär.
+
+Kraven på ingressen, att den står på egna ben och inte upprepas i leaden, har inte kunnat granskas eftersom ingressen saknas.
+
+## Påståenden
+
+**Borttagna påståenden**
+- Att kommunledningen hatar människor, som stod i rubriken (åtgärdat fynd 1).
+- Att alla vet att politikerna vill stänga ute äldre för att spara miljoner (åtgärdat fynd 2). Texten nämner inte längre äldre.
+- Att bokningssiffrorna bevisar att 20 procent av kommunens invånare inte kan använda internet (åtgärdat fynd 3).
+- Att det inte kostar någonting att behålla telefonbokningen (åtgärdat fynd 4). Med ”Därför” försvann också textens skäl för den slutsatsen. Läsaren får alltså inte längre veta att författaren såg den saknade tidsmätningen som bevis för att telefonbokningen är gratis.
+
+**Ändrade påståenden**
+- Rubriken säger nu att telefonbokningen bör finnas kvar ett halvår på försök (åtgärdat fynd 1). Det är leadens tes, utan kommunstyrelsen och utan ”i alla sju lokaler”.
+- Andelsmeningen säger nu att 20 procent av bokningarna gjordes via telefon (åtgärdat fynd 3). Den gällde tidigare invånare och deras internetförmåga och var formulerad som bevis.
+- Första mellanrubriken säger i författarens egen röst att bokningssiffrorna varken mäter unika personer eller digital vana (åtgärdat fynd 5). I avsnittet tillskrivs uppgiften pilotrapporten, och där står att digital vana inte undersöktes.
+- Avslutningen säger nu att kommunstyrelsen nu bör besluta att behålla telefonbokningen i alla sju lokaler under ett halvårs försök (åtgärdat fynd 6). Tidigare var den en allmän uppmaning utan handling och utan aktör.
+
+**Tillagda påståenden**
+- Andra mellanrubriken säger att handlingarna inte visar vad två bokningsvägar kostar i tid (åtgärdat fynd 5). Det är en slutsats av ”Handlingarna saknar tidsmätning”. Brödtexten kopplar inte uttryckligen tidsmätningen till de två bokningsvägarna.
+- Sista mellanrubriken säger att kommunstyrelsen kan pröva båda bokningsvägarna (åtgärdat fynd 6). Den tillför dels att kommunstyrelsen kan fatta beslutet, dels att försöket gäller båda vägarna sida vid sida.
+
+Utöver dessa påståenden står brödtextens övriga meningar och bylinen ordagrant kvar.
+
+Utöver det som redovisas ovan har körningen ändrat texten på tre sätt. Rubriken och alla tre mellanrubrikerna är nyskrivna: två etiketter är ersatta och en ny rubrik öppnar avslutningen. Mönstren anonym auktoritet och generiskt slut är borttagna. Avslutningen har fått ett eget avsnitt. Den avslutande korrekturläsningen gjorde inga mekaniska ändringar.

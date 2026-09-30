@@ -1,0 +1,3 @@
+Texten behövde ingen ändring: granskningen hittade inget att rätta, och korrekturläsningen hittade inga språkfel. Filen `input.md` är orörd, och körningen lämnade inga filer efter sig.
+
+Granskningen gällde krönika (`column`) på svenska, som anropet angav. Ingen dramaturgisk teknik användes, eftersom krönikegenren inte anger någon. Texten följer artikelns anatomi. Varken en brief eller Kntnt-metadata fanns.

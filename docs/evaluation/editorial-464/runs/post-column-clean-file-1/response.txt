@@ -1,0 +1,15 @@
+Granskningen är klar. Inga ändringar behövdes, och texten är skriven till `output.md`.
+
+**Inställningar:** genre `column` och språk `sv` kom från anropet. Ingen teknik används, eftersom genren `column` inte anger någon.
+
+**Resultat:** Texten behövde inget arbete. Det fanns inget att rätta, så ingen korrigeringsrunda kördes och rättningsutrymmet förbrukades inte. Den avslutande korrekturläsningen hittade inga fel. `output.md` är byte för byte identisk med `input.md`.
+
+**Artikelns uppbyggnad:** Texten följer strukturen fullt ut, både det som mätskriptet räknar och det som bara kan bedömas genom läsning:
+- Rubriken har 44 tecken och 8 ord.
+- Ingressen är ett stycke på 41 ord, går att läsa fristående och upprepas inte av inledningsstycket.
+- Mellanrubrikerna beskriver sina avsnitt.
+- Sista avsnittet är ett avslut: det lägger fram förslaget, medger tvivlet och uppmanar läsaren att prova.
+
+En avvikelse från riktvärdet räknas inte som ett fynd. Första stycket under ”Det är inte bara besluten jag vill åt” har 83 ord, alltså strax över riktvärdet 80. Stycket rymmer en enda tanke och läses väl i den längden.
+
+Inga påståenden har tagits bort, ändrats eller lagts till.

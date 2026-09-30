@@ -1,0 +1,3 @@
+Ingen ändring behövdes i `input.md`. Granskningen hittade inget att rätta och språkgranskningen i slutet rättade ingenting, så texten är oförändrad och upprepas inte här.
+
+Upplägg: genre `column` och språk `sv`, båda angivna i anropet. Ingen teknik används, eftersom genren `column` inte anger någon och ingen annan valdes. Texten uppfyller artikelanatomin. Det enda avvikandet är en norm: första stycket under ”Det är inte bara besluten jag vill åt” har 83 ord mot riktvärdet 80. Stycket rymmer en tanke och fungerar i den längden, så det räknas inte som ett fel.

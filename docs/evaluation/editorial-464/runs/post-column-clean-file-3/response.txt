@@ -1,0 +1,7 @@
+Texten är granskad och ligger nu i `output.md`. Den behövde ingen redigering, så filen är byte för byte identisk med `input.md`.
+
+- **Konfiguration:** genren är `column` och språket `sv`, båda från anropet. Ingen teknik tillämpades, eftersom kolumngenren inte har någon teknik som den vanligen skrivs med och inget annat valde någon.
+- **Granskning:** jag hittade inga redaktionella brister att rätta. Ingen korrigering behövdes, så korrigeringsbudgeten på 1 användes inte. Den avslutande korrekturläsningen hittade heller inga mekaniska fel.
+- **Artikelns anatomi:** texten uppfyller anatomin med en avvikelse från en norm. Jag har läst igenom även de krav som skriptet inte räknar. Avslutningen är ett eget slutavsnitt med en uppmaning till läsaren. Ingressen står på egna ben, och brödtexten börjar med nytt stoff i stället för att upprepa den. Båda mellanrubrikerna beskriver sina avsnitt. Avvikelsen är första stycket under ”Det är inte bara besluten jag vill åt”, som har 83 ord mot normen på högst 80 ord. Det är ingen brist: stycket håller en tanke och läses väl i den längden.
+
+Inga påståenden har tagits bort, ändrats eller lagts till.

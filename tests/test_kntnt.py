@@ -7574,6 +7574,36 @@ def test_the_anatomy_makes_the_ending_a_section_of_its_own_and_says_what_one_is(
         )
 
 
+def test_the_anatomy_counts_the_proposal_its_reservation_and_its_call_as_closing() -> (
+    None
+):
+    """A proposal stated in full is closing content, not a new line of argument.
+
+    Runs read a last section that states the text's proposal in full, admits a
+    doubt about it and asks the reader to try it as argument with a closing
+    line appended, and gave its call a subheading of its own (issue #464). The
+    base half carries the test, so that writer and reviewer both read it: what
+    is closing content, and what alone makes a section carry the argument.
+    """
+
+    ending = " ".join(
+        _level_two_section(ANATOMY.read_text(encoding="utf-8"), "Ending").split()
+    )
+
+    for words in (
+        "recommendation or proposal the text has built towards is closing content",
+        "even where the last section is the first place the text states it in full",
+        "the writer's own reservation about it",
+        "the call to try or adopt it",
+        "reasons or evidence the conclusion rests on that no earlier section gave",
+    ):
+        assert words in ending, (
+            f"{ANATOMY}: `## Ending` does not say what counts as closing content"
+            f" and what alone carries the argument: `{words}` is missing"
+            f" (issue #464)."
+        )
+
+
 def test_the_review_extension_repairs_an_ending_standing_inside_the_argument() -> None:
     """Closing content inside a section carrying the argument is a present ending.
 
