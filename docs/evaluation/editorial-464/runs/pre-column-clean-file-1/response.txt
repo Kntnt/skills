@@ -1,0 +1,16 @@
+Texten är granskad och ligger i `output.md`. Den behövde inga ändringar och är byte för byte densamma som `input.md`.
+
+**Inställningar:** genren är krönika och språket svenska, båda från anropet. Ingen teknik användes. Den kom inte från anropet och inte från något metadatablock, och genren krönika anger ingen teknik som den normalt skrivs med. Ingen skrivbrief angavs, och texten har ingen `kntnt`-metadata att synkronisera.
+
+**Fynd:** inga. Därför gjordes ingen korrigeringsrunda, och korrigeringsbudgeten på 1 användes inte. Den avslutande mekaniska korrekturläsningen gjordes en gång och hittade inga fel.
+
+**Artikelns uppbyggnad:** texten följer den utan avvikelse. Mätskriptet kördes på den levererade texten och hittade inga fel mot de räknade kraven. De krav som skriptet inte räknar granskades genom läsning:
+- Ingressen står på egna ben och säger vad texten handlar om och vad läsaren får ut av den.
+- Ingressen och första stycket börjar med olika ord.
+- Brödtexten går att förstå utan ingressen.
+- Mellanrubrikerna beskriver sina avsnitt och upprepar inte meningen under sig.
+- Sista avsnittet är ett eget avslut som svarar på förväntan från första stycket, och uppmaningen följer av resonemanget.
+
+Första stycket under ”Det är inte bara besluten jag vill åt” är 83 ord, strax över riktvärdet 80. Det rymmer en enda tanke och läses bra i den längden, så det räknas inte som ett fynd.
+
+**Påståenden:** inga påståenden har tagits bort, ändrats eller lagts till.

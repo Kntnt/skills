@@ -1,0 +1,9 @@
+Texten behövde inga ändringar.
+
+- **Inställningar:** krönika (`column`), svenska, ingen teknik. Ingen teknik angavs, och krönikegenren anger ingen egen som krönikor vanligen skrivs med.
+- **Granskning:** inga fynd, så korrigeringsbudgeten (1) användes inte.
+- **Artikelns anatomi:** texten följer den. Jag gick igenom både det som skriptet räknar och det som bara kan läsas fram: att sista avsnittet fungerar som avslutning, att ingressen står på egen fot och att mellanrubrikerna beskriver sina avsnitt.
+- **Avvikelse från normen:** första stycket under ”Det är inte bara besluten jag vill åt” har 83 ord, alltså lite över riktvärdet på 80. Stycket rymmer en enda tanke och läses bra i den längden, så det räknas inte som ett fynd.
+- **Mekanisk korrekturläsning:** den gjordes en gång och ändrade ingenting.
+
+Inga påståenden har strukits, ändrats eller lagts till. Ingen fil har skrivits, och de tillfälliga filer som användes under körningen är borttagna.

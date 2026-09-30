@@ -1,0 +1,14 @@
+Texten behövde ingen redigering. `output.md` är skriven och är byte för byte identisk med `input.md`. Texten upprepas därför inte här.
+
+**Inställningar:** genre `column` och språk `sv`, båda angivna i anropet. Ingen teknik används, eftersom genren `column` inte anger någon. Budgeten för rättningar var 1 och förbrukades inte.
+
+**Resultat:** Granskningen hittade inga fel att rätta och inga olösta brister. Korrekturläsningen på slutet hittade inga mekaniska fel. Inga påståenden har tagits bort, ändrats eller lagts till.
+
+**Artikelns uppbyggnad:** Texten uppfyller kraven för hur en artikel ska vara uppbyggd, med en avvikelse. Ett stycke i det första avsnittet, det som börjar med ”Ett samtal kan vara värt tiden …”, har 83 ord. Riktvärdet är högst 80 ord, men det är ingen brist. Stycket rymmer en enda tanke och läses väl i den längden. Antalen kommer från ett skript som mäter den levererade texten.
+
+Delarna som skriptet inte räknar granskades genom läsning:
+- Ingressen fungerar fristående.
+- Ingressen och första stycket i brödtexten upprepar inte varandra.
+- Brödtexten förutsätter inget som bara står i ingressen.
+- Mellanrubrikerna beskriver sina avsnitt.
+- Sista avsnittet är ett avslut, med en uppmaning till läsaren som följer av resonemanget.

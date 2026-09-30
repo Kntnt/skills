@@ -1,0 +1,107 @@
+{
+  "created": {
+    "home/.claude/skills/synced": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "home/.claude/projects": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "home/.claude/sessions": {
+      "mode": 448,
+      "type": "directory"
+    },
+    "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/.staging/54746": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/.staging": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "home/.claude/projects/-private-var-folders-cs-vgp-x-353zd9frkjpysp7zdw0000gn-T-kntnt-editorial-388-run-7bxr-abi-work": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "home/.claude/projects/-private-var-folders-cs-vgp-x-353zd9frkjpysp7zdw0000gn-T-kntnt-editorial-388-run-7bxr-abi-work/memory": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "home/.claude/.claude.json": {
+      "mode": 384,
+      "type": "file",
+      "size": 45798,
+      "sha256": "747fe7437f8e976132dd81f34b44ceeb1f6da1a97a1ffc9a32f7ff60ba30edc7"
+    },
+    "home/.claude/plugins/synced/.bucket-60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d": {
+      "mode": 420,
+      "type": "file",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "home/.claude/backups/.claude.json.backup.1790782424902": {
+      "mode": 384,
+      "type": "file",
+      "size": 84,
+      "sha256": "6c5938e1317bb5499ad2603419874e8ff0712755aba5dc32222f47f8f37dd256"
+    },
+    "home/.claude/backups": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/docs/SKILL.md": {
+      "mode": 420,
+      "type": "file",
+      "size": 1249,
+      "sha256": "98e4fb5934042152d57bc9cb8c0736d5d8e31c6c0122b13ff5836f4c2411fa3e"
+    },
+    "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/manifest.json": {
+      "mode": 420,
+      "type": "file",
+      "size": 523,
+      "sha256": "20e2fdf2fe8c321602b1fbbad9bec2116ef54ddf23939bc8b466f91e38e11ad5"
+    },
+    "home/.claude/plugins": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "home/.claude/plugins/synced": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "home/.claude/projects/-private-var-folders-cs-vgp-x-353zd9frkjpysp7zdw0000gn-T-kntnt-editorial-388-run-7bxr-abi-work/3b01245b-0292-4fbc-a007-7dcacc4f2ab9.jsonl": {
+      "mode": 384,
+      "type": "file",
+      "size": 78591,
+      "sha256": "4d4367fa59bc7bb8e4b24e86950e04bd758f5d013a57d1e432423b398dac2cd5"
+    },
+    "home/.claude/skills/synced/.bucket-60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d": {
+      "mode": 420,
+      "type": "file",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/.marketplaces.json": {
+      "mode": 420,
+      "type": "file",
+      "size": 887,
+      "sha256": "5e3d7f8caba15daa6b6da83fa037fc16f1474346f4cba0231f0c80bf5fdf421c"
+    },
+    "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/docs": {
+      "mode": 493,
+      "type": "directory"
+    }
+  },
+  "removed": {},
+  "changed": {},
+  "note": "Harness, cache and Skill effects are separated by reading trace-index.json; nothing here is a Skill artifact on its own."
+}

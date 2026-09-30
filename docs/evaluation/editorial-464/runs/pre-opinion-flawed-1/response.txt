@@ -1,0 +1,88 @@
+# Granskning: opinion, svenska
+
+- **Genre:** opinion (från `--genre`).
+- **Språk:** sv (från `--language`).
+- **Teknik:** ingen. Genren opinion anger att den normalt skrivs utan teknik, så ingen dramaturgisk båge har tillämpats.
+- **Budget:** en korrigeringsrunda, som har använts. Rundan godtogs efter en ny granskning. Därefter gick en avslutande korrekturläsning över texten.
+
+```markdown
+# Telefonbokningen borde finnas kvar ett halvår
+
+Sanna Ek, Öppna beslut
+
+Kommunstyrelsen borde behålla telefonbokning under ett halvårs försök i alla sju lokaler.
+
+## Siffrorna räknar bokningar, inte personer
+
+Det gjordes 96 bokningar på webben och 24 via telefon. Det betyder att 20 procent av bokningarna gjordes via telefon. Kommunens pilotrapport från den 8 april 2026 säger samtidigt att bokningarna inte räknar unika personer och att digital vana inte undersöktes.
+
+## Kostnaden för två bokningsvägar är inte beräknad
+
+Förvaltningen invänder att dubbla kanaler innebär dubbel administration. Handlingarna saknar tidsmätning. Därför visar de inte hur mycket administration två kanaler kräver. Föreningen vill att förvaltningen mäter tidsåtgång och frågar användarna varför de väljer en bokningsväg. Försökets kostnad är inte beräknad.
+
+## Kravet riktas till kommunstyrelsen
+
+Nu är det dags för kommunstyrelsen att behålla telefonbokningen under ett halvårs försök i alla sju lokaler.
+```
+
+## Olösta fynd
+
+1. **Ingressen saknas.** Artikelanatomin kräver en ingress mellan rubrik och byline. Läsaren får ingen fristående sammanfattning av vad texten handlar om. Delen har inte skrivits; det avgör en person.
+2. **Siffrorna saknar källa.** I "Det gjordes 96 bokningar på webben och 24 via telefon." står varken källa eller tidsperiod där siffrorna används. Pilotrapporten nämns först i meningen efter, och texten säger inte att siffrorna kommer därifrån.
+3. **"Föreningen" har ingen referent i brödtexten.** Bylinen nämner Öppna beslut, men texten säger inte att det är en förening eller att det är samma aktör. Läsaren vet inte vems förslaget om tidsmätning är.
+4. **Det framgår inte vad som bokas.** Inte heller vilka de sju lokalerna är. Kravet i inledningen blir därför oklart. Att reparera det skulle kräva uppgifter som texten saknar.
+
+## Lösta fynd
+
+**Rubrik och mellanrubriker**
+- **Rubriken** tillskrev kommunledningen ett motiv som texten inte stöder ("hatar människor"). Den pekade också ut en annan aktör än den kravet riktas till, och sa inget om vad texten handlar om. Den nya rubriken bygger på textens krav och har textens styrka.
+- **Mellanrubriken "Bakgrund"** var en etikett som inte beskrev avsnittet, och en skummande läsare fick inget av argumentet. Nu anger den vad avsnittets siffror mäter.
+- **Mellanrubriken "Diskussion"** hade samma brist. Nu anger den vad avsnittet konstaterar om kostnaden.
+- **Avslutningen** "Nu är det dags att agera." stod sist i ett argumenterande avsnitt och namngav varken handling eller aktör. Nu är den ett eget avsnitt med egen mellanrubrik, och inledningens förslag har gjorts explicit.
+
+**Brödtexten**
+- **Inledningens andra mening** tillskrev politikerna ett motiv med vag attribution ("Alla vet"). Påståendena om äldre och miljoner saknade stöd. Meningen är struken.
+- **"Det bevisar att 20 procent av kommunens invånare …"** var en felaktig slutsats. 24 av 120 är en andel av bokningarna, inte av invånarna, och meningen efter motsade den.
+- **"Därför kostar det ingenting …"** drog en slutsats ur att tidsmätning saknas som samma stycke själv underkänner ("Försökets kostnad är inte beräknad.").
+
+## Redovisning av påståenden
+
+**Strukna påståenden**
+- Att politikerna vill stänga ute äldre, att de vill spara miljoner på det och att detta är allmänt känt. Struket av reparationen av inledningen; fyndet gällde hela påståendet.
+- Att siffrorna bevisar att 20 procent av kommunens invånare inte kan använda internet. Struket av reparationen i avsnittet om siffrorna.
+- Att det inte kostar något att behålla telefonbokningen. Struket av reparationen i avsnittet om kostnaden.
+- Att kommunledningen hatar människor. Struket när rubriken skrevs om.
+
+**Ändrade påståenden**
+- **Rubriken** påstår nu att telefonbokningen borde finnas kvar i ett halvår. Det är författarens krav från inledningen, men utan inledningens precisering att det gäller ett försök i alla sju lokaler.
+- **Första mellanrubriken** påstår att siffrorna räknar bokningar, inte personer. Brödtexten tillskriver detta pilotrapporten, men rubriken nämner inte rapporten.
+- **Andra mellanrubriken** påstår att kostnaden för två bokningsvägar inte är beräknad. Brödtexten säger att försökets kostnad inte är beräknad och att tidsmätning saknas. Försöket är just de två bokningsvägarna under ett halvår, men rubriken nämner inte försöket.
+- **Tredje mellanrubriken** påstår att kravet riktas till kommunstyrelsen.
+- **Andelen:** 20 procent avser nu bokningarna, räknat ur textens egna siffror (24 av 120).
+- **Bemötandet av förvaltningen** påstår nu att handlingarna inte visar hur mycket administration två kanaler kräver. "Därför" står kvar.
+- **Slutmeningen** uppmanar nu kommunstyrelsen att behålla telefonbokningen under ett halvårs försök i alla sju lokaler, i stället för att uppmana till handling i allmänhet.
+
+**Avgränsningar som står kvar**
+Tre meningar avgränsar vad texten påstår, och alla står kvar ordagrant:
+- "Kommunens pilotrapport från den 8 april 2026 säger samtidigt att bokningarna inte räknar unika personer och att digital vana inte undersöktes."
+- "Handlingarna saknar tidsmätning."
+- "Försökets kostnad är inte beräknad."
+
+Utöver de ändrade påståendena ovan har inget påstående lagts till.
+
+## Artikelanatomin
+
+Texten följer inte artikelanatomin, eftersom ingressen saknas. Mätningen av den slutliga texten visar inga andra fel bland de räknade kraven:
+- Rubriken har 45 tecken och 6 ord.
+- Mellanrubrikerna har 41, 48 och 34 tecken.
+- Varje avsnitt har ett stycke, på 41, 40 och 17 ord.
+
+Av de krav som inte räknas har jag prövat följande:
+- Slutavsnittet är en egen avslutning.
+- Mellanrubrikerna beskriver sina avsnitt.
+- Inledningen introducerar inte "sju lokaler" (fynd 4), och brödtexten introducerar inte "Föreningen" (fynd 3).
+- Kraven på hur ingress och inledning ska förhålla sig till varandra kunde inte prövas, eftersom ingressen saknas.
+
+## Övriga ändringar
+
+Rubriken och de tre mellanrubrikerna är omskrivna, och avslutningen har brutits ut till ett eget avsnitt. Ett obelagt motiv och två felaktiga slutsatser har ersatts eller strukits enligt redovisningen ovan. Korrekturläsningen hittade inga mekaniska fel och ändrade ingenting. Inga filer har skrivits, och `input.md` är orörd.

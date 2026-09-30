@@ -1,0 +1,54 @@
+Granskad som debattartikel (`opinion`) på svenska (`sv`), båda enligt anropet. Ingen berättarteknik användes: genren anger ingen, och inget annat valde någon. Ett rättningsvarv användes av ett tillåtet, och det godtogs efter omgranskning. Korrläsningen fann inga mekaniska fel. Två brister kvarstår. Ingen av dem gick att rätta utan uppgifter som texten saknar. `input.md` har inte ändrats.
+
+````markdown
+# Behåll telefonbokningen ett halvår och mät tidsåtgången
+
+Sanna Ek, Öppna beslut
+
+Kommunstyrelsen borde behålla telefonbokning under ett halvårs försök i alla sju lokaler.
+
+## Statistiken visar bokningar, inte hur många som bokar
+
+Det gjordes 96 bokningar på webben och 24 via telefon. Det är 20 procent av bokningarna. Kommunens pilotrapport från den 8 april 2026 säger samtidigt att bokningarna inte räknar unika personer och att digital vana inte undersöktes.
+
+## Handlingarna mäter inte tiden som dubbla kanaler tar
+
+Förvaltningen invänder att dubbla kanaler innebär dubbel administration. Handlingarna saknar tidsmätning. Försökets kostnad är inte beräknad.
+
+## Kommunstyrelsen bör besluta och förvaltningen mäta
+
+Föreningen Öppna beslut vill att förvaltningen mäter tidsåtgång och frågar användarna varför de väljer en bokningsväg. Nu är det dags för kommunstyrelsen att behålla telefonbokning under ett halvårs försök i alla sju lokaler.
+````
+
+## Olösta brister
+
+1. **Ingressen saknas.** Mellan rubrik och byline ska det stå ett fristående stycke på högst 60 ord. Det ska säga vad texten handlar om och vad läsaren får ut av den. Delen är inte skriven, eftersom det är skribentens sak att fylla den. Texten följer därför inte artikelanatomin. Ingressen är det enda krav som mätskriptet underkänner. Följande krav granskades också genom läsning och håller: delarnas ordning, att mellanrubrikerna beskriver sina avsnitt, och att avslutningen är ett eget avsnitt med en konkret uppmaning. Kraven på hur ingressen förhåller sig till inledningen kunde inte prövas, eftersom ingressen saknas.
+2. **Siffrorna 96 och 24 saknar källa** (Statistiken visar bokningar…, första meningen). Pilotrapporten nämns i meningen efter, men texten säger inte att siffrorna kommer därifrån. Läsaren kan inte se vem som har räknat bokningarna. Att ange en källa skulle kräva en uppgift som texten inte har.
+
+## Åtgärdade brister i rubrik och mellanrubriker
+
+- **Rubriken** ”Kommunledningen hatar människor” tillskrev motståndaren ett motiv, hat, som ingenting i texten bär. Den kallade också aktören ”Kommunledningen”, medan texten talar om kommunstyrelsen. Den nya rubriken uppmanar till att behålla telefonbokningen ett halvår och att mäta tidsåtgången.
+- **Mellanrubrikerna** ”Bakgrund” och ”Diskussion” var nakna etiketter. En läsare som skummar kunde inte se vad avsnitten säger. De har skrivits om utifrån sina egna avsnitt.
+- **Den nya mellanrubriken** ”Kommunstyrelsen bör besluta och förvaltningen mäta” kom till för att rätta slutet. ”Nu är det dags att agera.” nämnde ingen handling och ingen som kan handla. Den stod dessutom inne i avsnittet som för argumentet, så avslutningen hade inget eget avsnitt.
+
+## Påståenden
+
+**Strukna**
+- ”Alla vet att politikerna vill stänga ute äldre för att spara miljoner.” Hela meningen var bristen: en attribution utan källa (”alla vet”), ett påhittat motiv, och påståenden om äldre och om miljonbesparingar som texten inte stöder. Texten säger själv att kostnaden inte är beräknad.
+- Rubrikens påstående att kommunledningen hatar människor, av samma skäl som ovan.
+- Påståendet att andelen 20 procent *bevisar* något om kommunens invånare och deras förmåga att använda internet. Nämnaren var fel, och pilotrapportens förbehåll i nästa mening motsade påståendet.
+- ”Därför kostar det ingenting att behålla telefonbokningen.” Att tidsmätning saknas visar inte att kostnaden är noll, och samma stycke säger att kostnaden inte är beräknad. Med ”Därför” försvann textens eget skäl för slutsatsen. Läsaren får nu ingen slutsats om kostnaden. Texten bemöter förvaltningens invändning bara med de två förbehållen: att tidsmätning saknas och att försökets kostnad inte är beräknad. Båda står kvar ordagrant.
+
+**Ändrade**
+- Rubriken säger nu att telefonbokningen bör behållas ett halvår och att tidsåtgången bör mätas. Att det gäller ett försök i alla sju lokaler står inte i rubriken. Kravet på mätning säger rubriken med textens egen röst, medan brödtexten tillskriver det Föreningen Öppna beslut.
+- ”Det är 20 procent av bokningarna.” Andelen gäller nu bokningarna, inte invånarna.
+- ”Föreningen Öppna beslut vill …” Kravet på mätning och på att fråga användarna tillskrivs nu uttryckligen Öppna beslut. Tidigare stod bara ”Föreningen”.
+- Slutmeningen säger nu vem som ska handla och hur: kommunstyrelsen ska behålla telefonbokning under ett halvårs försök i alla sju lokaler. Det är inledningens förslag, som upprepas i slutet.
+- ”Statistiken visar bokningar, inte hur många som bokar” säger att siffrorna gäller bokningar och inte antalet personer. Det motsvarar pilotrapportens förbehåll i avsnittet.
+- ”Handlingarna mäter inte tiden som dubbla kanaler tar” knyter den saknade tidsmätningen till de dubbla kanalerna. Texten antydde det bara genom att meningen följde invändningen.
+- ”Kommunstyrelsen bör besluta och förvaltningen mäta” säger med textens egen röst att förvaltningen bör mäta. Brödtexten tillskriver det kravet föreningen.
+
+**Tillagda**
+- Att Öppna beslut är en förening. Texten sa det inte tidigare. Slutsatsen dras från bylinen, där Öppna beslut är den enda organisationen som nämns. Tillägget kom till när ”Föreningen” fick en namngiven referent i brödtexten.
+
+Utöver påståendena ovan har körningen gjort följande. Den har tagit bort en tom slutfras och ett påstående om vad ”alla vet”. Rubriken och de två etikettrubrikerna har skrivits om. Avslutningen har fått ett eget avsnitt med egen mellanrubrik, och föreningens krav flyttades dit från avsnittet om förvaltningens invändning. Den avslutande korrläsningen ändrade ingenting.

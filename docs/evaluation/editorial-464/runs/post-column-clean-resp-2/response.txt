@@ -1,0 +1,3 @@
+Ingen ändring behövdes i `input.md`. Granskningen hittade inga fel, så inga rättningar gjordes, och korrekturläsningen på slutet hittade inga mekaniska fel. Ingen fil har skrivits.
+
+Inställningar: genren är krönika och språket svenska, båda angivna i anropet. Ingen berättarteknik användes. Krönikegenren anger ingen teknik som den normalt skrivs med, och ingen annan källa angav någon.

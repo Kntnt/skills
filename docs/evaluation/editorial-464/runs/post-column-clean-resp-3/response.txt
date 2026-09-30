@@ -1,0 +1,7 @@
+Texten behövde inga ändringar. Den levereras inte på nytt, eftersom ingenting ändrades och det inte finns några kvarstående fynd.
+
+- **Inställningar:** genren är `column` och språket `sv`, båda från anropet. Ingen teknik används: anropet, texten och sammanhanget anger ingen, och kolumngenren har ingen egen.
+- **Granskningen:** den gav inga fynd, så ingen rättningsrunda kördes och inget av rättningsutrymmet på en rättning användes.
+- **Artikelns uppbyggnad:** texten följer den. Alla räknade gränser är uppfyllda. Delarna som inte kan räknas har jag läst och bedömt: sista avsnittet fungerar som avslutning, ingressen står på egen fot och varje mellanrubrik beskriver sitt avsnitt. Första stycket under ”Det är inte bara besluten jag vill åt” är 83 ord, strax över riktvärdet på 80. Stycket håller en tanke och läses bra i den längden, så det räknas inte som ett fynd.
+- **Korrekturläsningen:** den hittade inga språkliga fel.
+- **Filer:** `input.md` är orörd och inga filer skapades.

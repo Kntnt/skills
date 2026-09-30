@@ -1,0 +1,293 @@
+{
+  "created": {
+    "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/google-workspace/scripts/slides_helper.py": {
+      "mode": 493,
+      "type": "file",
+      "size": 22731,
+      "sha256": "40ed9169a005513347aacea800b2fda4860d7b9477e0db50dc9c46705eec1fc8"
+    },
+    "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/google-workspace/SKILL.md": {
+      "mode": 420,
+      "type": "file",
+      "size": 13869,
+      "sha256": "f53b2d8c9bcb43365c8cb4118d24a47b0a018b7ca173aa47e680e8bc02ed869d"
+    },
+    "home/.claude/backups/.claude.json.backup.1790782432749": {
+      "mode": 384,
+      "type": "file",
+      "size": 84,
+      "sha256": "d0b8a4fd76dff38912a71a2153df2fa98987dd9d7484405c3697ce8d2630fd6e"
+    },
+    "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/google-workspace": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/pdf/LICENSE.txt": {
+      "mode": 420,
+      "type": "file",
+      "size": 1467,
+      "sha256": "79f6d8f5b427252fa3b1c11ecdbdb6bf610b944f7530b4de78f770f38741cfaa"
+    },
+    "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/import-memory/SKILL.md": {
+      "mode": 420,
+      "type": "file",
+      "size": 10689,
+      "sha256": "5179b0780b7025c93271c181636a23acc8d05cad3b20584639cbaf1cf9c3b07a"
+    },
+    "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/pdf/scripts/fill_fillable_fields.py": {
+      "mode": 420,
+      "type": "file",
+      "size": 3819,
+      "sha256": "d140872c2e92e41b1e05370ae8d270c5b7f5ebdf55d9905f03bc974a9c708ff5"
+    },
+    "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/pdf/scripts/extract_form_field_info.py": {
+      "mode": 420,
+      "type": "file",
+      "size": 4300,
+      "sha256": "bb235b36f497bbb1c7c6821cecf527bbba7213520de11219da99f7b13a38c109"
+    },
+    "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/import-memory": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/google-workspace/scripts/docs_index.py": {
+      "mode": 493,
+      "type": "file",
+      "size": 17951,
+      "sha256": "735b8ed4e9c292d0e0cc0af46e7b5f054fbf0bd51148a6b3318de774a4299b96"
+    },
+    "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/.staging/54969": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/docs/SKILL.md": {
+      "mode": 420,
+      "type": "file",
+      "size": 1249,
+      "sha256": "98e4fb5934042152d57bc9cb8c0736d5d8e31c6c0122b13ff5836f4c2411fa3e"
+    },
+    "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/google-workspace/references/charts.md": {
+      "mode": 420,
+      "type": "file",
+      "size": 15586,
+      "sha256": "60af1c2fb7d673aec45664ce9bbced7c7e1bf7121ec91dc3b640f34d77167c34"
+    },
+    "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/.staging": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/pdf/FORMS.md": {
+      "mode": 420,
+      "type": "file",
+      "size": 11854,
+      "sha256": "9530b3f57034792e0242a3abfe8b3c296466329551916f2ff6c5a70db78f7e44"
+    },
+    "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/pdf/scripts/check_fillable_fields.py": {
+      "mode": 420,
+      "type": "file",
+      "size": 268,
+      "sha256": "1fe10b9980a5493c9bbec8c20630c603eaa475b45403751c08f26738736647b8"
+    },
+    "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/google-workspace/scripts/sheets_helper.py": {
+      "mode": 493,
+      "type": "file",
+      "size": 16045,
+      "sha256": "91b2b5baa2220fc102870e21ba955fbac265e19a8cc328abc820876955c3bde5"
+    },
+    "home/.claude/plugins": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "home/.claude/projects/-private-var-folders-cs-vgp-x-353zd9frkjpysp7zdw0000gn-T-kntnt-editorial-388-run-twcjkj4h-work": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "home/.claude/plugins/synced": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/google-workspace/scripts": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/morning/assets/fonts/fraunces-latin-600-normal.woff2": {
+      "mode": 420,
+      "type": "file",
+      "size": 18096,
+      "sha256": "3a1de7711d147bad4422825045f87597fd77cca72e7c96d3b0a81735d00dda82"
+    },
+    "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/morning": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/google-workspace/references/sheets.md": {
+      "mode": 420,
+      "type": "file",
+      "size": 38536,
+      "sha256": "3906d940cdd552a757e6b27eeab0bd159718cd9f3fb789d23ec0f9677b3ce58f"
+    },
+    "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/morning/assets/fonts/Fraunces-OFL.txt": {
+      "mode": 420,
+      "type": "file",
+      "size": 4483,
+      "sha256": "0bc0daaa78b715774d4ad27d7f4ee8b436f48cef8e2f773531a8f22e27c06248"
+    },
+    "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/pdf/scripts/create_validation_image.py": {
+      "mode": 420,
+      "type": "file",
+      "size": 1258,
+      "sha256": "8fa9fd7962c9f940045b81cf6b991e7c1057c1838e3f9cc6d305007a222ffebf"
+    },
+    "home/.claude/projects": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "home/.claude/projects/-private-var-folders-cs-vgp-x-353zd9frkjpysp7zdw0000gn-T-kntnt-editorial-388-run-twcjkj4h-work/memory": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "home/.claude/backups": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/google-workspace/scripts/render_export.py": {
+      "mode": 493,
+      "type": "file",
+      "size": 6308,
+      "sha256": "a27468ad1d016cd58bcb33a2b619fd31cdeea59f214948ee937232fe4b6435ba"
+    },
+    "home/.claude/projects/-private-var-folders-cs-vgp-x-353zd9frkjpysp7zdw0000gn-T-kntnt-editorial-388-run-twcjkj4h-work/f1eb59d1-2ace-480c-9557-65c29a4d63e0.jsonl": {
+      "mode": 384,
+      "type": "file",
+      "size": 78590,
+      "sha256": "f0c059d2e619a71a9c89fa1d2a0b56684287bbdf7090f2db0ec564e3422013a6"
+    },
+    "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/pdf/REFERENCE.md": {
+      "mode": 420,
+      "type": "file",
+      "size": 16692,
+      "sha256": "03a5f964f8abecbbe156f363356e927e864d7ee964f1012c84ee1bfc8acbeb95"
+    },
+    "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/google-workspace/references/slides.md": {
+      "mode": 420,
+      "type": "file",
+      "size": 47090,
+      "sha256": "985e3d936d9b0b095552eba69eace25d7763c1d298252be25965769d387ee9a6"
+    },
+    "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/manifest.json": {
+      "mode": 420,
+      "type": "file",
+      "size": 523,
+      "sha256": "c260d5bd31ae3428e10d4d41039d3f7d560f2f158939b4033ee9f2bfa5b00048"
+    },
+    "home/.claude/.claude.json": {
+      "mode": 384,
+      "type": "file",
+      "size": 45795,
+      "sha256": "51ae06e38782db279d858992308072aa54dca768dfc059ae83dbebcbd553fe98"
+    },
+    "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/google-workspace/references/docs.md": {
+      "mode": 420,
+      "type": "file",
+      "size": 40023,
+      "sha256": "2124d21be189d5392b73987d87106fa9d70ef596b4ea668c14d8045a32690231"
+    },
+    "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/morning/SKILL.md": {
+      "mode": 420,
+      "type": "file",
+      "size": 18163,
+      "sha256": "a7c4dbcb745799736991b027cceae39aae4880cc00ff43871ae5e87b38023bdd"
+    },
+    "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/morning/assets": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/pdf/scripts/fill_pdf_form_with_annotations.py": {
+      "mode": 420,
+      "type": "file",
+      "size": 3235,
+      "sha256": "8a56e063a49ed53c0b0e1d312ecf8023af76816ed139486ec3b539873de202fd"
+    },
+    "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/pdf/scripts": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/docs": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/pdf/scripts/extract_form_structure.py": {
+      "mode": 493,
+      "type": "file",
+      "size": 3945,
+      "sha256": "6814e3fe8f78c2b16d766c132b5a727ff7a31b71d76a7d46bd6e40fe50bc97c5"
+    },
+    "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/google-workspace/references": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/pdf": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/pdf/scripts/check_bounding_boxes.py": {
+      "mode": 420,
+      "type": "file",
+      "size": 2774,
+      "sha256": "0ced522402dd7b3c82a0be9518cf4e485fa9cc0467d7beab6ddb04cb36fcc3e1"
+    },
+    "home/.claude/sessions": {
+      "mode": 448,
+      "type": "directory"
+    },
+    "home/.claude/skills/synced/.bucket-60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d": {
+      "mode": 420,
+      "type": "file",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "home/.claude/plugins/synced/.bucket-60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d": {
+      "mode": 420,
+      "type": "file",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "home/.claude/skills/synced": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/.marketplaces.json": {
+      "mode": 420,
+      "type": "file",
+      "size": 887,
+      "sha256": "5e3d7f8caba15daa6b6da83fa037fc16f1474346f4cba0231f0c80bf5fdf421c"
+    },
+    "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/pdf/SKILL.md": {
+      "mode": 420,
+      "type": "file",
+      "size": 8072,
+      "sha256": "9f78b8359fbd4943ad260a7a1e436e5a96503406d6c34e99f69223d647d85b9c"
+    },
+    "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/pdf/scripts/convert_pdf_to_images.py": {
+      "mode": 420,
+      "type": "file",
+      "size": 1008,
+      "sha256": "7f58e292a67e18a8ff000d30bad2469389546731f7e8a698cc1d0aed001ea15d"
+    },
+    "home/.claude/skills/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d/morning/assets/fonts": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "home/.claude/plugins/synced/60806b07-781f-48c0-b1a7-b366fb437fb4_2b1808f2-948f-4a3a-907a-0519d28a3a8d": {
+      "mode": 493,
+      "type": "directory"
+    }
+  },
+  "removed": {},
+  "changed": {},
+  "note": "Harness, cache and Skill effects are separated by reading trace-index.json; nothing here is a Skill artifact on its own."
+}
