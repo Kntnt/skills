@@ -1,0 +1,58 @@
+Jag har granskat kolumnen och gjort en korrigeringsrunda, men fem fynd står kvar. Tre av dem gäller delar som saknas: ingress, mellanrubriker och avslutande avsnitt samt en uppmaning till läsaren. Texten följer därför inte artikelanatomin.
+
+Inställningar: genre `column` och språk `sv`, båda angivna i anropet. Ingen berättarteknik användes, eftersom genren column anger att den vanligtvis skrivs utan teknik. Ingen skrivbrief användes. Budgeten var en korrigering, och den rundan godtogs.
+
+````markdown
+# Mötesmallen rymmer inte vad vi ska förstå tillsammans
+
+Nora Vik
+
+Förra tisdagen satt jag gråtande i bibliotekets mötesrum när min chef sade: ”Nu måste allt bli digitalt.” Det var mitt första möte om vår nya mötesmall. Jag har aldrig deltagit i något möte om vår nya mötesmall.
+
+Vår mötesmall har plats för starttid och sluttid men inte för vad vi ska förstå tillsammans.
+
+Samtal kan ha värde utan att leda till beslut. Jag vill prova frågan vad vi behöver förstå tillsammans, men jag vet inte om ytterligare en ruta gör möten bättre.
+````
+
+## Fynd som står kvar
+
+1. **Ingress saknas.** Artikelanatomin kräver en ingress mellan rubrik och byline. Läsaren får ingen fristående sammanfattning av vad kolumnen handlar om och vad den ger. En del som saknas skrivs inte vid en granskning, så den är kvar åt dig.
+2. **Mellanrubriker saknas, och därmed det avslutande avsnittet.** Texten har inga mellanrubriker, så den som skummar får inga ingångar. Mätningen räknar brödtextens inledning som 3 stycken. Det beror bara på att avsnitten saknas och är inget eget fel. Jag har inte skrivit några mellanrubriker och inte slagit ihop några stycken.
+3. **Första stycket motsäger sig självt.** Meningarna ”Det var mitt första möte om vår nya mötesmall.” och ”Jag har aldrig deltagit i något möte om vår nya mötesmall.” kan inte båda vara sanna. Läsaren vet därför inte om skribenten var med på mötet, och alltså inte om scenen i bibliotekets mötesrum är självupplevd. Texten visar inte vilken mening som stämmer, så båda står kvar orörda.
+4. **Scenen i första stycket hänger inte ihop med resten.** Gråten och chefens replik ”Nu måste allt bli digitalt.” tas aldrig upp igen. Texten säger inte vad de har med mötesmallen att göra. Sambandet går inte att skriva utan att hitta på motiv eller upplevelser, så stycket står orört.
+5. **Läsaren uppmanas inte till något.** Kolumnen säger vad skribenten själv vill prova. Den ger aldrig läsaren något att prova, lägga märke till eller ompröva. Uppmaningen skrivs inte vid en granskning.
+
+## Åtgärdade fynd
+
+- **Rubriken.** ”Möten förändrar allt” påstod något texten inte bär. Texten säger ingenstans att möten förändrar något, och den som bara ser rubriken kan inte veta att kolumnen handlar om mötesmallen. Den nya rubriken är ”Mötesmallen rymmer inte vad vi ska förstå tillsammans” (53 tecken, 8 ord).
+- **”I dagens snabbt föränderliga värld är möten viktigare än någonsin.”** Meningen var en tom inledning med ett påstående som texten inte ger stöd för. Den är struken.
+- **”Det är viktigt att vara viktig.”** Meningen var en tom cirkel som inte sade något om möten eller mallen. Den är struken.
+- **Sista stycket, ”Sammanfattningsvis är möten viktigare än någonsin i dagens snabbt föränderliga värld.”** Stycket var en generisk avslutning som upprepade floskeln i andra stycket. Det är struket, och kolumnen slutar nu på stycket om att prova frågan och tvivlet på ytterligare en ruta.
+
+## Påståendena
+
+**Borttagna**
+- Att möten är viktigare än någonsin i dagens snabbt föränderliga värld (andra stycket). Det försvann när den tomma inledningen ströks, eftersom hela meningen var felet.
+- Att det är viktigt att vara viktig (andra stycket). Det försvann när den tomma meningen ströks, eftersom hela meningen var felet.
+- Upprepningen i avslutningen av att möten är viktigare än någonsin i dagens snabbt föränderliga värld. Den försvann när den generiska avslutningen ströks, eftersom hela stycket var felet.
+
+Den levererade texten påstår alltså inte längre att möten är viktigare än någonsin, och den beskriver inte världen som snabbt föränderlig.
+
+**Ändrade**
+- **Rubriken.** Den påstod att möten förändrar allt, och ändringen gjordes för att rätta det. Nu påstår den att mötesmallen inte rymmer vad vi ska förstå tillsammans. Det är iakttagelsen från andra stycket, men rubriken skiljer sig från den på tre sätt:
+  - Raden om rutorna för starttid och sluttid är borta.
+  - Rubriken säger ”Mötesmallen” i stället för ”Vår mötesmall”. Läst för sig, som en rubrik läses, kan den därför uppfattas som ett påstående om mötesmallar i allmänhet och inte om skribentens egen arbetsplats. Påståendets räckvidd har alltså vidgats.
+  - Det är inte längre tydligt att ”vi” betyder skribentens kollegor.
+
+**Tillagda**
+- Inga.
+
+Utöver det som redovisas här har inga påståenden tagits bort, ändrats eller lagts till.
+
+## Sammanfattning
+
+Körningen har gjort två slags ändringar utöver det som redovisas ovan:
+- **Floskler strukna:** den tomma inledningen och den tomma meningen i andra stycket, som nu består av en enda mening, samt den generiska avslutningen. Texten slutar därför på sitt tredje stycke.
+- **Rubriken omskriven.**
+
+Den avslutande korrekturläsningen hittade inga mekaniska fel och ändrade ingenting. Byline samt första och tredje stycket är ordagrant som de kom in. `input.md` är orörd, och mina tillfälliga filer är borttagna.

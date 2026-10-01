@@ -1,0 +1,41 @@
+**Konfiguration:** genre `opinion` (från anropet), språk `sv` (från anropet), ingen teknik – genren opinion anger ingen som den vanligen skrivs med. Ingen skrivbrief. Korrigeringsbudget: 1.
+
+**Utfall:** En korrigeringsrunda gjordes och förkastades i sin helhet, och texten levereras som den kom in. Den avslutande mekaniska genomgången (Proofread) hittade inga fel att rätta. Alla elva fynd nedan är därför olösta.
+
+**Förkastad runda.** Rundan skrev om rubriken och mellanrubrikerna, strök tre meningar och gav avslutningen en egen sektion. Den nya mellanrubriken över avsnittet om förvaltningens invändning, ”Tidsåtgången för två bokningsvägar är inte mätt”, påstod som fakta att tiden inte är mätt. Texten säger bara att handlingarna saknar tidsmätning, så rubriken gjorde en iakttagelse om dokumenten till ett påstående om verkligheten. Det felet införde rundan själv, så hela rundan förkastades och inget av den finns kvar i texten nedan. Budgeten är förbrukad.
+
+````markdown
+# Kommunledningen hatar människor
+
+Sanna Ek, Öppna beslut
+
+Kommunstyrelsen borde behålla telefonbokning under ett halvårs försök i alla sju lokaler. Alla vet att politikerna vill stänga ute äldre för att spara miljoner.
+
+## Bakgrund
+
+Det gjordes 96 bokningar på webben och 24 via telefon. Det bevisar att 20 procent av kommunens invånare inte kan använda internet. Kommunens pilotrapport från den 8 april 2026 säger samtidigt att bokningarna inte räknar unika personer och att digital vana inte undersöktes.
+
+## Diskussion
+
+Förvaltningen invänder att dubbla kanaler innebär dubbel administration. Handlingarna saknar tidsmätning. Därför kostar det ingenting att behålla telefonbokningen. Föreningen vill att förvaltningen mäter tidsåtgång och frågar användarna varför de väljer en bokningsväg. Försökets kostnad är inte beräknad.
+
+Nu är det dags att agera.
+````
+
+**Fynd (alla olösta)**
+
+1. **Rubriken** ”Kommunledningen hatar människor” tillskriver ett motiv, hat, som texten inte belägger, och tonen är långt högre än textens. Den säger inget om vad texten kräver: att kommunstyrelsen behåller telefonbokningen under ett halvårs försök i alla sju lokaler. Den som bara ser rubriken får ett påhittat motiv i stället för textens tes.
+2. **Ingress saknas.** Mellan rubriken och bylinen står inget sammanfattande stycke, och mätskriptet rapporterar ingressen som saknad. En person behöver skriva den, så den skrevs inte här.
+3. **Inledningens andra mening**, ”Alla vet att politikerna vill stänga ute äldre för att spara miljoner.”, hittar på ett motiv och lutar sig mot en anonym auktoritet (”Alla vet”). Äldre nämns inte någon annanstans i texten. Sparbeloppet motsägs av texten själv, som säger att försökets kostnad inte är beräknad och att handlingarna saknar tidsmätning.
+4. **”Det bevisar att 20 procent av kommunens invånare inte kan använda internet.”** (Bakgrund) är ett brutet slutled. 24 av 120 bokningar är 20 procent av bokningarna, inte av invånarna. Meningen efter säger att bokningarna inte räknar unika personer och att digital vana inte undersöktes, och den avgränsningen ska stå kvar. Slutsatsen motsägs alltså av texten själv.
+5. **Siffrorna 96 och 24** (Bakgrund) har ingen angiven källa eller period. Pilotrapporten nämns först i meningen efter, och texten säger inte att siffrorna kommer därifrån. Att rätta det kan kräva en uppgift som bara skribenten har.
+6. **”Handlingarna saknar tidsmätning. Därför kostar det ingenting att behålla telefonbokningen.”** (Diskussion): att tiden inte är mätt visar inte att kostnaden är noll. Samma stycke säger dessutom att försökets kostnad inte är beräknad. Felet sitter i slutledet som ”Därför” inleder. ”Handlingarna saknar tidsmätning.” och ”Försökets kostnad är inte beräknad.” är avgränsningar och ska stå kvar. Följden är att förvaltningens invändning inte bemöts rättvist.
+7. **”Föreningen vill …”** (Diskussion): ingen förening införs i texten. Bylinen nämner Öppna beslut men säger inte att det är en förening eller att förslaget kommer därifrån. Läsaren vet inte vems förslaget är.
+8. **Mellanrubriken ”Bakgrund”** är en ren etikett. Den säger inget om bokningssiffrorna eller om vad pilotrapporten säger om dem, så den som skummar får inget av argumentet.
+9. **Mellanrubriken ”Diskussion”** är också en ren etikett. Den säger inte vilken invändning texten bemöter eller hur.
+10. **Avslutningen** ”Nu är det dags att agera.” säger varken vad som ska göras eller vem som ska göra det, fast texten har ett förslag som kunde göras uttryckligt. Meningen står dessutom i sista sektionen, ”Diskussion”, som för argumentet. Texten har alltså avslutande innehåll men ingen avslutning som egen sektion med egen mellanrubrik.
+11. **Inledningen** anger tesen men inte situationen. Texten säger aldrig vad som bokas i de sju lokalerna eller vilket beslut som väntar, och att telefonbokningen kan försvinna framgår bara indirekt. Att rätta det kräver uppgifter som texten inte ger.
+
+**Artikelns anatomi:** texten följer inte anatomin. Ingressen saknas (fynd 2) och avslutningen har ingen egen sektion (fynd 10). Rubriken, bylinen, inledningen och de två sektionerna står i rätt ordning.
+
+**Påståendena:** Den levererade texten är byte för byte densamma som den som kom in. Inget påstående har tagits bort, ändrats eller lagts till.

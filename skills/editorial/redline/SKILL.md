@@ -20,6 +20,8 @@ Run `UV_NO_CACHE=1 UV_NO_PROJECT=1 uv run "$HERE/scripts/invoke.py"` — `$HERE`
 
 Run every UV command in this Skill with a fresh private directory as `TMPDIR`, and remove that directory after the command, including when it fails. The private directory belongs to that one command and no other run, so cleanup removes only files this run created.
 
+Name every private directory this run makes, for a UV command or for its own working files, by its full path, and never make one the shell's working directory. A Harness may keep a `cd` from one command to the next and then hold the removal of the directory the shell stands in for an approval nobody may be there to give, so a run that entered its own directory cannot remove it and leaves its working files behind. Where the shell stands in one anyway, leave it in a command of its own before removing the directory. A removal the Harness refuses or holds for approval is not tried again in another form or with another tool: the files stay where they are, and the reply names each of them by its path.
+
 ## Arguments
 
 The operand is the Text Artifact: inline text, one local path, or one URL, and exactly one of them — several paths, a glob reaching more than one file, or a directory of texts is more than one. Where the invocation carries no operand, it is the single text the current turn identifies.

@@ -6158,6 +6158,52 @@ def test_response_delivery_cleans_scratch_files_and_reports_the_remaining_state(
         )
 
 
+# Where Redline's shell stands while it works. Claude Code keeps a `cd` from
+# one Bash call to the next, and holds the removal of the directory the shell
+# stands in for an approval no unattended session can give, even with
+# permissions bypassed. Thirteen committed Redline and Write runs entered their
+# own private directory and then had its removal held; four of them left the
+# directory or its files behind, and most of the rest got past the hold by
+# trying the same removal again in another form (issue #476).
+REDLINE_STANDS_OUTSIDE_ITS_OWN_FILES = (
+    "never make one the shell's working directory",
+    "leave it in a command of its own before removing the directory",
+    "is not tried again in another form or with another tool",
+    "the reply names each of them by its path",
+)
+
+
+def test_redline_never_stands_in_a_directory_it_has_to_remove() -> None:
+    """A run that entered its own directory cannot remove it unattended.
+
+    The rule stands beside the one that makes the private directories, where
+    the run reads it before it makes the first one, and it covers a removal
+    the Harness holds anyway: the files stay and are named, and the removal
+    is not tried again in a form the Harness's check does not read (issue
+    #476).
+    """
+
+    body = REDLINE.read_text(encoding="utf-8")
+    paragraphs = [block for block in body.split("\n\n") if block.strip()]
+    made = [
+        index
+        for index, block in enumerate(paragraphs)
+        if block.startswith(UV_RUNTIME_CLEANUP)
+    ]
+    assert len(made) == 1, (
+        f"{REDLINE}: no single paragraph opens with the rule that makes the"
+        f" run's private directories (issue #180)."
+    )
+    following = paragraphs[made[0] + 1] if made[0] + 1 < len(paragraphs) else ""
+    for phrase in REDLINE_STANDS_OUTSIDE_ITS_OWN_FILES:
+        assert phrase in following, (
+            f"{REDLINE}: the paragraph after the one that makes the private"
+            f" directories does not say {phrase!r}, so a run may stand in its"
+            f" own directory and have its removal held for an approval nobody"
+            f" gives, leaving its working files behind (issue #476)."
+        )
+
+
 def test_text_artifact_runtime_leaves_harness_scratch_unchanged(tmp_path: Path) -> None:
     """UV commands do not turn response delivery into a filesystem write.
 
