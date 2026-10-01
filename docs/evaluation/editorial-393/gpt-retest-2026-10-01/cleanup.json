@@ -131,5 +131,12 @@
     "deleted": true,
     "time": "2026-10-01T14:33:51.449515+00:00",
     "void_final_scratch_preserved": true
+  },
+  {
+    "run": "c12",
+    "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-ui0bdkvx",
+    "verified_process_group_absent": 9170,
+    "deleted": true,
+    "time": "2026-10-01T14:38:34.076535+00:00"
   }
 ]
