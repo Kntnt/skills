@@ -102,5 +102,15 @@
     "delivered": false,
     "disposition": "not-invoked",
     "reason": "known genre construction; corrected counterpart executes unchanged material"
+  },
+  "c06": {
+    "counted": true,
+    "delivered": true,
+    "disposition": "completed-artifact"
+  },
+  "c05": {
+    "counted": true,
+    "delivered": true,
+    "disposition": "completed-artifact"
   }
 }
