@@ -8,6 +8,7 @@ All notable changes to this project are documented here. The format follows [Kee
 
 - Model Selector setup now offers all or selected model series per Maker, with one current catalogue representative per series and no version choice. Explicit series follow new releases automatically without adding new series; existing profiles retain all series. The same choices govern automatic answers, alternatives, exploration, Trials, escalation and generated Claude definitions, while explicit model locks and `--scope=all` retain their one-call exceptions (#481).
 - `/model-selector list [--data=PATH]` lists only the profile's selected Harnesses and latest catalogue release per selected model series, grouped under Maker display names. It is read-only, follows new releases without setup, and reports invalid profiles or missing selected series without presenting fallback choices as enabled (#482).
+- `/model-selector update [--data=PATH]` refreshes catalogue facts immediately without repeating setup or changing profile choices or the standing objective, and reports source outcomes, model additions and removals, and generated subagent definitions.
 
 ### Changed
 
