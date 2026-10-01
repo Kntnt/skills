@@ -21,6 +21,27 @@ Actual parent calls name the selected case-study resource, its review extension,
 
 The full correction and reply-check dispatch messages are encrypted in native `spawn_agent` arguments. Fresh-child identity and subsequent actual resource/file reads are visible, but the complete filled-in dispatch brief cannot be recovered from those arguments. Any R2 line requiring that whole brief is `skipped` with this gap; it is not an inferred pass. The trace index retains both the encrypted call pointer and every later plaintext file-read call.
 
+## Two ellipsis invocations and resource-volume evidence
+
+`c05` completed in 1699.20 seconds and delivered artifact `377fc879799b305c36eb98d4550a462ccfcd8d47f7997acbc0de09aec1dde6f0`. `c06` completed in 1463.20 seconds and delivered `68817c49ce27cd806a3b13b9b801fa27390ad8fb49b3d4b48ca593fad6aead98`. Each has the parent, one fresh correction child, one mechanical child and one reply checker, all with completed native lifecycles and the inherited seat. Neither has a structured service interruption. Both have separate captured mechanical input/output matching their delivered artifact, unchanged sources/install and no final work/scratch changes. Their semantic outcomes are left to the frozen criteria and blind judgements.
+
+`resource-evidence.json` uses complete returned tool material, not command names, to identify exact committed resource content and successful resolver scope content. It unwraps complete JSON lines inside batched native outputs; a truncated later entry does not erase an earlier complete returned entry, while an incomplete entry is never credited. All six parents have complete returned content for the eleven mandatory selected editorial resources and all three Swedish review language scopes. Correction/mechanical coverage is listed separately by session; any uncredited child resource or dispatch portion requires its own trace inspection rather than a presumed absence. The returned-volume totals are lower bounds, exclude repeated copies in the same session, and are not token counts or a comprehension test.
+
+| Run | Complete returned resource/scope words across native sessions |
+| --- | ---: |
+| r01 | 32,379 |
+| r02 | 33,878 |
+| c03 | 33,731 |
+| c04 | 35,054 |
+| c05 | 28,836 |
+| c06 | 32,627 |
+
+[The resource-size catalogue](resource-sizes.json) gives exact frozen hashes and complete-file word counts independently of any claim that a run loaded one. Mandatory-set cost is obtained by intersecting actual native read evidence with each role's load contract; it is kept distinct from these observed-volume totals.
+
+## Later shared checkout
+
+At 13:38 UTC the clean shared `main` checkout had advanced to `fe2587b7`, adding #476's Redline shell/cleanup guidance and corresponding catalogue/tests. [The environment observation](environment-drift.json) preserves that exact product diff. Every invocation in this packet still exports the committed `fb169087` product and corpus. Outcomes here therefore do not evaluate the later main revision, and no new arm is inferred or commissioned by that drift.
+
 ## Interrupted and refused evidence
 
 The first corrected Write (`w01`) reached two source comparisons but the runner terminated it after 1800.24 seconds, returning `-15` with `timed_out: true`. It is an instrumentally interrupted attempt, not a completed Write or a fidelity-gate refusal. Its parent and two comparison children, partial draft, full retained comparison reports, first dispositions and transient versions are preserved. Its private root was removed only after that preservation and after checking its native process group was absent. The same intended repetition is commissioned again as `w01-rerun` under the frozen longer timeout.
