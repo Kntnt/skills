@@ -102,5 +102,19 @@
     "verified_process_group_absent": 84604,
     "deleted": true,
     "time": "2026-10-01T13:54:59.513042+00:00"
+  },
+  {
+    "run": "c09",
+    "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-a9a6vvtz",
+    "verified_process_group_absent": 96117,
+    "deleted": true,
+    "time": "2026-10-01T14:09:38.671768+00:00"
+  },
+  {
+    "run": "c10",
+    "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-dujnnokn",
+    "verified_process_group_absent": 97461,
+    "deleted": true,
+    "time": "2026-10-01T14:13:54.486976+00:00"
   }
 ]
