@@ -187,5 +187,12 @@
     "verified_process_group_absent": 85250,
     "deleted": true,
     "time": "2026-10-01T15:49:12.763646+00:00"
+  },
+  {
+    "run": "p01",
+    "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-kipogeeb",
+    "verified_process_group_absent": 90876,
+    "deleted": true,
+    "time": "2026-10-01T16:10:52.499962+00:00"
   }
 ]
