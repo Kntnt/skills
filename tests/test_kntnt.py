@@ -7356,9 +7356,7 @@ def test_an_opinions_step_before_a_pending_decision_is_not_a_forecast() -> None:
         )
 
 
-def test_an_opinions_reference_to_a_pending_change_is_kept_out_of_the_finding() -> (
-    None
-):
+def test_an_opinions_reference_to_a_pending_change_is_kept_out_of_the_finding() -> None:
     """The finding the rule keeps cannot be read as covering the passage it protects.
 
     #479's first candidate said such a passage *neither forecasts that outcome
@@ -7385,23 +7383,31 @@ def test_an_opinions_reference_to_a_pending_change_is_kept_out_of_the_finding() 
     for part, consequence in (
         (
             "on the table",
-            "it does not say that the reference takes for granted only that the"
-            " change is proposed, which the text says",
+            (
+                "it does not say that the reference takes for granted only that the"
+                " change is proposed, which the text says"
+            ),
         ),
         (
             "is not the text stating the outcome as settled",
-            "the protected reference can still be read as the settled outcome"
-            " the finding is kept for",
+            (
+                "the protected reference can still be read as the settled outcome"
+                " the finding is kept for"
+            ),
         ),
         (
             "whether",
-            "it does not refuse the repair that hedges the reference into saying"
-            " whether the change will come",
+            (
+                "it does not refuse the repair that hedges the reference into saying"
+                " whether the change will come"
+            ),
         ),
         (
             "whatever the step shows",
-            "the finding it keeps is not told apart from a reference to the"
-            " proposed change",
+            (
+                "the finding it keeps is not told apart from a reference to the"
+                " proposed change"
+            ),
         ),
     ):
         assert part in rule, (
