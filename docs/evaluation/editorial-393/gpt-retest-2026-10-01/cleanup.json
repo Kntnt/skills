@@ -60,5 +60,19 @@
     "deleted": true,
     "time": "2026-10-01T12:44:09.294217+00:00",
     "void_final_scratch_preserved": true
+  },
+  {
+    "run": "c03",
+    "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-dg_rk1zn",
+    "verified_process_group_absent": 12076,
+    "deleted": true,
+    "time": "2026-10-01T13:10:03.284088+00:00"
+  },
+  {
+    "run": "c04",
+    "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-n5cht9dv",
+    "verified_process_group_absent": 12075,
+    "deleted": true,
+    "time": "2026-10-01T13:10:03.284450+00:00"
   }
 ]
