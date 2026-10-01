@@ -1,0 +1,3 @@
+# Environment drift
+
+The measured product/corpus remain frozen at fb16908712c4d47a36fc6ee9dfb3eb2714a19e65. During the retest, main advanced to fe2587b70f57c3cfc63903b0be6d9fa4819a4827 when #476's Redline shell/cleanup change merged. `git diff --name-only fb169087..main -- skills/editorial/write skills/editorial/redline skills/kntnt/library skills/kntnt/scripts` at this checkpoint names only skills/editorial/redline/SKILL.md. Write and its library/script load chain remain byte-identical, but the paired Redline measurement is of the frozen revision. No additional arm or changed install is introduced.
