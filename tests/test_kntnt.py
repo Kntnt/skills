@@ -7289,6 +7289,41 @@ def test_a_heading_that_could_be_better_is_no_finding() -> None:
     )
 
 
+def test_an_allusion_owes_its_reader_the_subject_and_not_the_particulars() -> None:
+    """A working allusion is not read for references the text fills in.
+
+    #480 measured a review reporting a working allusive headline because its
+    words had nothing to refer to for a reader who sees only it: the review
+    asked the headline for what the text measured and found, and read the
+    words the text fills in as an ellipsis only the standfirst completes. That
+    referent test is the body's, read with the paratext covered. The allusion
+    item says what a heading owes its reader alone — the subject — and keeps
+    the finding for one that names no subject at all.
+    """
+
+    _, leave = _headlines_review_sections()
+    allusion = next(
+        line for line in leave.splitlines() if line.startswith("- An allusion")
+    )
+
+    assert "not its particulars" in allusion, (
+        f"{HEADLINES_REVIEW}: the allusion item does not say that a reader who"
+        f" sees only the heading is owed its subject and not the particulars"
+        f" the text gives, so a review asks a working allusion for the text's"
+        f" findings (issue #480)."
+    )
+    assert "not applied to a heading" in allusion, (
+        f"{HEADLINES_REVIEW}: the allusion item does not keep the body's test"
+        f" of a pronoun, a definite form or an ellipsis only another part"
+        f" completes off the heading, so a word the text fills in reads as an"
+        f" unresolved reference (issue #480)."
+    )
+    assert "names no subject at all" in allusion, (
+        f"{HEADLINES_REVIEW}: the allusion item no longer makes a heading that"
+        f" names no subject a finding (issues #429, #480)."
+    )
+
+
 def _finding_rule() -> str:
     """The base review's opening paragraph, where a finding is defined."""
 
