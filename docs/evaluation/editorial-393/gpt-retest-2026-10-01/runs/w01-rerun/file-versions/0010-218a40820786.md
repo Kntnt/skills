@@ -1,0 +1,242 @@
+# Source-and-quotation comparison, round 1
+
+## Scope and result
+
+I read the complete fictional source package and the complete Swedish draft, including its title, summary, byline, section headings, quotations and final link. No external material was used. There is one source-support finding within a translated quotation: the second quotation supplies a first-person-plural actor for the next building's start that the original does not specify. No independent defect in idiomatic Swedish or distinctive quoted voice was found.
+
+## Complete claim accounting
+
+Source passages below are quoted in their original English. Qualifications that apply across their clauses are included. “Supported” means that no concrete counterexample survives the supplied wording and the ordinary contextual reading of the draft; it does not authenticate this explicitly fictional material externally.
+
+### 1. Title: “Elm Quay Housing samlar reparationsanmälningarna i en vy”
+
+Support: “In September 2025 its own maintenance team decided to trial a shared repair log in two buildings.” Also: “Elm Quay's internal trial note, 4 December 2025, says that 31 repair reports were entered. It excludes emergencies and work ordered before the trial.” Lind: “I would choose to do the trial again. Having one view of the reports helps us, but I would leave an extra week for preparation.”
+
+Accounting: The title gives Elm Quay Housing agency and describes the shared view of entered repair reports. “Reparationsanmälningar” names the repair reports in this reporting-and-assignment context. The article immediately places the action in an eight-week trial; the title's narrative present does not independently claim continued use today, use across all 640 flats, or that every possible repair report was included. Supported.
+
+### 2. Summary: “Under åtta veckor prövade Elm Quay Housing en reparationslogg från Svale Systems i två hus.”
+
+Support: “Elm Quay Housing manages 640 flats. In September 2025 its own maintenance team decided to trial a shared repair log in two buildings. Previously telephone reports and emails were stored separately. The team wanted staff on different shifts to see the same information. It chose Svale Systems after testing whether the log could show the status of each repair. No comparison with another supplier is available.” Also: “Svale configured the log and trained six staff during two sessions. The trial lasted eight weeks.”
+
+Accounting: Customer, product, supplier, duration and two-building scope agree. “Hus” is the buildings taking part in this housing-company trial. The September date in the source belongs to the decision; the summary does not shift that date onto an asserted start or end of the trial. Supported.
+
+### 3. Summary: “Bolagets uppföljning visar en tidsskillnad mellan två perioder, utan att tillskriva den programvaran.”
+
+Support: “Elm Quay's internal trial note, 4 December 2025, says that 31 repair reports were entered. It excludes emergencies and work ordered before the trial. Median time from report to assignment was two working days during the trial and three in the preceding eight-week period. The periods had different workloads, and the note explicitly does not attribute the difference to the software. There are no cost, resident-satisfaction or completion-time measurements.”
+
+Accounting: “Uppföljning” refers to the company's internal trial note, subsequently named and dated. The summary claims a measured difference, without a causal explanation, and attributes the non-attribution to the follow-up. Its wording makes no completion-time claim. Supported.
+
+### 4. Summary: “Svale Systems publicerar kundfallet som leverantör.”
+
+Support from the brief: “The publisher is the supplier, Svale Systems.” Support from the material: “The supplier approved publication of this case as supplier-published material; it is not independent journalism.”
+
+Accounting: Supplier identity and publishing role are explicit. Within a draft for that publisher, “publicerar” identifies the publisher of this text; it need not mean that a completed external publication event has already occurred. The disclosure does not claim independence. Supported.
+
+### 5. Byline: “Av [ditt namn]”
+
+Support: “No author name supplied.” The loaded article contract says: “The author is the one the brief names; when it names none, the author is the user.”
+
+Accounting: The bracketed expression is a placeholder addressed to the user; it supplies no invented personal name or other asserted identity. The user's authorship agrees with the contract. Whether an unfilled placeholder satisfies the separate requirement to name the author is a byline-contract question, not a defect established by this source-support comparison. No source-support repair is proposed.
+
+### 6. Opening: “Telefonanmälningar och mejl hade tidigare sparats var för sig hos Elm Quay Housing”
+
+Support: “Previously telephone reports and emails were stored separately.”
+
+Accounting: Medium, storage, separation, company and past chronology agree. “Telefonanmälningar” is the telephone reports here; it does not imply that the phone calls themselves were recorded. Supported.
+
+### 7. Opening: “som förvaltar 640 lägenheter”
+
+Support: “Elm Quay Housing manages 640 flats.”
+
+Accounting: Company, management role and count agree. “Lägenheter” names these flats; no additional ownership assertion is made. Supported.
+
+### 8. Opening: “I september 2025 beslutade bolagets eget underhållsteam att testa en gemensam logg så att personal på olika skift skulle se samma information.”
+
+Support: “In September 2025 its own maintenance team decided to trial a shared repair log in two buildings. Previously telephone reports and emails were stored separately. The team wanted staff on different shifts to see the same information.”
+
+Accounting: Decision date, customer team, trial intention, shared log and desired cross-shift visibility agree. “Så att ... skulle” expresses the team's purpose in this sentence, not a new claim that the intended outcome was measured or attained. The two-building scope remains in the summary. Supported.
+
+### 9. Heading: “Teamet behöll telefonanmälningarna”; body: “De boende kunde fortsätta att göra anmälningar per telefon.”
+
+Support: “The maintenance team designed its categories and kept telephone reporting open for residents.”
+
+Accounting: In the section's context, the heading names retaining telephone reporting, and the body makes this explicit. It is not an assertion about preserving individual archived reports. Actor, resident eligibility and continued availability of the telephone channel agree. “De boende” is the residents, with no narrower demographic or gender implication. Supported.
+
+### 10. Supplier choice: “Valet föll på Svale Systems efter att teamet hade testat om loggen kunde visa status för varje reparation.”
+
+Support: “It chose Svale Systems after testing whether the log could show the status of each repair. No comparison with another supplier is available.”
+
+Accounting: The team remains the choosing and testing actor. The sequence, supplier and capability tested agree. The draft does not add a comparison, procurement contest or superior-performance claim. Supported.
+
+### 11. “Någon jämförelse med en annan leverantör finns inte i underlaget.”
+
+Support: “No comparison with another supplier is available.”
+
+Accounting: The draft correctly localizes the absence to the source material rather than saying that no comparison ever occurred. Supported.
+
+### 12. Attribution: “Arbetsledaren för underhåll, Maya Lind, beskriver utgångspunkten i en mejlintervju”
+
+Support: “Customer interview with maintenance supervisor Maya Lind, complete usable quotations:” Also: “All interviews occurred by email, and no physical scene, emotion or remembered dialogue is provided.”
+
+Accounting: Name, supervisory maintenance role, email medium and the quotation's provenance agree. “Arbetsledaren för underhåll” does not add a new organizational seniority or head count. No physical interview scene is supplied by the draft. Supported.
+
+### 13. First quotation: “Vi ville att kvällsskiftet skulle se vad morgonskiftet redan hade gjort. Kategorierna var våra; Svale hjälpte oss att lägga in dem i loggen.”
+
+Support: “We wanted the evening shift to see what the morning shift had already done. The categories were ours; Svale helped us put them into the log.” Also: “The maintenance team designed its categories and kept telephone reporting open for residents.”
+
+Accounting: Intended visibility, evening/morning sequence, already-completed activity, ownership of categories and Svale's assistance in entering them agree. “Vi”, “våra” and “oss” preserve source first-person plural; “dem” refers to categories and carries plural number without natural gender. The English shared/owned categories remain the customer's categories. The translation is idiomatic spoken Swedish and retains the direct assertion and collaborative voice. Supported.
+
+### 14. Heading: “Teamet prövade arbetssättet i åtta veckor”
+
+Support: “In September 2025 its own maintenance team decided to trial a shared repair log in two buildings.” And: “The maintenance team designed its categories and kept telephone reporting open for residents. Svale configured the log and trained six staff during two sessions. The trial lasted eight weeks.”
+
+Accounting: “Arbetssättet” summarizes the trial of the shared log and customer categories in the immediate context, without claiming a separate intervention. Team and duration agree. Supported.
+
+### 15. “Svale konfigurerade loggen och utbildade sex medarbetare vid två tillfällen.”
+
+Support: “Svale configured the log and trained six staff during two sessions.”
+
+Accounting: Supplier actor, configuration, six staff and two training sessions agree. “Vid två tillfällen” does not specify distinct days, locations, staff cohorts or duration; each session is a training occasion in this context. Supported.
+
+### 16. Attribution: “I intervjun beskriver Maya Lind också förberedelserna”
+
+Support: “Customer interview with maintenance supervisor Maya Lind, complete usable quotations:” followed by “We spent more time agreeing on the categories than entering the first reports. I would set that time aside before the next building starts.” Also: “All interviews occurred by email, and no physical scene, emotion or remembered dialogue is provided.”
+
+Accounting: The speaker, interview and subject of preparation agree. “Också” joins another usable quotation from the same supplied interview rather than inventing a second conversation. Supported.
+
+### 17. Second quotation, first sentence: “Vi lade mer tid på att komma överens om kategorierna än på att registrera de första anmälningarna.”
+
+Support: “We spent more time agreeing on the categories than entering the first reports. I would set that time aside before the next building starts.”
+
+Accounting: First-person-plural actor, relative time spent, agreement on categories and entering the first reports agree. “Registrera” has the meaning of entering reports into this log, not an additional investigation or validation action. No numerical duration is invented. The spoken translation preserves the comparison and voice. Supported.
+
+### 18. Second quotation, second sentence: “Jag skulle avsätta den tiden innan vi börjar i nästa hus.”
+
+Support: “We spent more time agreeing on the categories than entering the first reports. I would set that time aside before the next building starts.” Context: “The trial has not yet expanded; the team will decide after checking how the categories work for larger repairs.”
+
+Accounting: “Jag skulle avsätta den tiden” preserves I, conditional recommendation and the time referent. “Nästa hus” preserves next building. However, “vi börjar” supplies a first-person-plural subject for starting there, while the original gives the building as the grammatical subject and leaves its starting actor implicit. The preceding “We spent” establishes a first-person-plural actor for the earlier preparation, not necessarily for the future building's start. See finding F1.
+
+### 19. Heading: “Uppföljningen lämnar programvarans effekt öppen”
+
+Support: “The periods had different workloads, and the note explicitly does not attribute the difference to the software. There are no cost, resident-satisfaction or completion-time measurements.”
+
+Accounting: The heading expresses the limit on attribution in the source. It does not turn the absence of attribution into proof of zero effect, nor claim a measured causal effect. Supported.
+
+### 20. Note and reported count: “Elm Quay Housings interna anteckning om försöket, daterad den 4 december 2025, anger att 31 reparationsanmälningar registrerades.”
+
+Support: “Elm Quay's internal trial note, 4 December 2025, says that 31 repair reports were entered. It excludes emergencies and work ordered before the trial.”
+
+Accounting: Owner, internal status, trial-note type, exact date, count and entering of repair reports agree. The draft assigns the assertion to the note rather than inventing independent observation. Supported.
+
+### 21. Exclusions: “Akuta ärenden och arbeten som beställts före försöket ingår inte.”
+
+Support: “Elm Quay's internal trial note, 4 December 2025, says that 31 repair reports were entered. It excludes emergencies and work ordered before the trial.”
+
+Accounting: In the preceding count-and-note context, this carries the exclusions onto the note's reporting. “Akuta ärenden” names the emergencies in this repair context; neither source nor draft defines a narrower emergency threshold. “Arbeten som beställts” retains ordered work and the before-trial boundary. Supported.
+
+### 22. Timing measurement: “Mediantiden från anmälan till tilldelning av ärendet var två arbetsdagar under försöket, jämfört med tre under de föregående åtta veckorna.”
+
+Support: “Median time from report to assignment was two working days during the trial and three in the preceding eight-week period. The periods had different workloads, and the note explicitly does not attribute the difference to the software.”
+
+Accounting: Median rather than mean, report-to-assignment interval rather than completion, working days rather than calendar days, trial period and preceding eight-week comparison period all agree. “Ärendet” identifies what is assigned without naming an assignee, changing the milestone, or asserting completed work. Supported.
+
+### 23. Workload qualification and non-attribution: “Perioderna hade olika arbetsbelastning. Anteckningen tillskriver uttryckligen inte programvaran skillnaden.”
+
+Support: “The periods had different workloads, and the note explicitly does not attribute the difference to the software.”
+
+Accounting: Different workloads and the note's expressly limited attribution both survive. “Arbetsbelastning” names the workload of the periods and does not specify staff stress, staffing levels, direction or size of the workload difference. A lack of software attribution remains a statement about the note, not a factual denial of any software effect. Supported.
+
+### 24. Missing measurements: “Det saknas mätningar av kostnader, de boendes nöjdhet och tiden till färdig reparation.”
+
+Support: “There are no cost, resident-satisfaction or completion-time measurements.”
+
+Accounting: All three measurement gaps remain distinct and unquantified. “Tiden till färdig reparation” is completion time in this repair context, and is expressly absent rather than substituted for the earlier assignment interval. The statement does not say costs were unchanged or residents were unsatisfied. Supported.
+
+### 25. Heading: “Elm Quay Housing avvaktar en utökning”
+
+Support: “The trial has not yet expanded; the team will decide after checking how the categories work for larger repairs.”
+
+Accounting: The customer has not yet expanded and waits for its checking before a decision. The heading does not promise that expansion will occur. Supported.
+
+### 26. “Nästa fråga för teamet är hur kategorierna fungerar för större reparationer. Först efter den kontrollen beslutar teamet om en utökning.”
+
+Support: “The trial has not yet expanded; the team will decide after checking how the categories work for larger repairs.”
+
+Accounting: Category suitability for larger repairs, team agency and checking-before-decision chronology agree. “Nästa fråga” introduces the article's next decision issue; it does not assert a meeting schedule or exclude other matters the team might address meanwhile. In the pending-decision context, “beslutar ... om en utökning” means decides on the expansion question, not necessarily approves expansion. Supported.
+
+### 27. Attribution: “Maya Lind ger sin egen bedömning av försöket”
+
+Support: “Lind did not recommend Svale to every housing company. Her final quotation is her actual, qualified assessment. It is not an inference from the figures.”
+
+Accounting: Speaker and personal assessment agree. The draft neither turns Lind's view into a universal recommendation nor makes it a conclusion inferred from the timing figures. “Sin” is reflexive possession with Lind as the antecedent; it asserts no natural gender. Supported.
+
+### 28. Final quotation: “Jag skulle välja att göra försöket igen. Att ha en samlad vy över anmälningarna hjälper oss, men jag skulle avsätta en extra vecka för förberedelser.”
+
+Support: “I would choose to do the trial again. Having one view of the reports helps us, but I would leave an extra week for preparation.” Qualification: “Lind did not recommend Svale to every housing company. Her final quotation is her actual, qualified assessment. It is not an inference from the figures.”
+
+Accounting: First-person singular conditional choice, first-person plural assistance from one view, adversative qualification and one additional preparation week agree. “En samlad vy” names one consolidated view, not necessarily all reports of all kinds; the reported exclusions remain stated in the article. “Avsätta” expresses reserving the extra week. This is idiomatic speech and preserves the customer's firm benefit assessment and reservation together. Supported.
+
+### 29. Heading: “Du kan läsa vidare inför ett införande”
+
+Support from the brief: “The optional next step is the supplied implementation checklist at https://example.invalid/svale/checklist; it is a document to read, not a consultation booking or a product trial.”
+
+Accounting: This is an optional invitation to the reader to read preparation material. It does not assert that the reader has committed to implementation or offer a booking or trial. Supported.
+
+### 30. Closing reflection: “För ett eget upplägg är både förberedelserna och uppföljningens begränsningar värda att ta med i planeringen.”
+
+Basis: Lind: “We spent more time agreeing on the categories than entering the first reports. I would set that time aside before the next building starts.” And: “I would choose to do the trial again. Having one view of the reports helps us, but I would leave an extra week for preparation.” The note: “The periods had different workloads, and the note explicitly does not attribute the difference to the software. There are no cost, resident-satisfaction or completion-time measurements.”
+
+Accounting: This is the article author's planning recommendation resting on supported preparation experience and measurement limits. It attributes no new experience, event, technical benefit, general-population result or opinion to the customer. The judgment “värda” is the author's advice rather than a factual characterization of the 31-report count. Supported as authored reflection.
+
+### 31. Link: “Du kan läsa Svale Systems checklista för införande” with destination https://example.invalid/svale/checklist
+
+Support from the brief: “The publisher is the supplier, Svale Systems.” And: “The optional next step is the supplied implementation checklist at https://example.invalid/svale/checklist; it is a document to read, not a consultation booking or a product trial.”
+
+Accounting: Supplier identity, checklist/document description, implementation purpose, optional reading action and exact supplied destination agree. The draft adds no consultation, trial or promise about contents beyond a checklist for implementation. Supported.
+
+## Pronoun accounting
+
+- “Den” in the summary refers to “en tidsskillnad”: singular grammatical common gender. It asserts no natural gender. The source difference is the same referent.
+- “Som” in “som förvaltar” has Elm Quay Housing as its referent. Neither language assigns a natural gender to the company; Swedish relative “som” carries no such assertion.
+- “Vi”, “våra” and “oss” in the first quotation are first-person plural, exactly as source “We”, “ours” and “us”. The contextual collective is Lind and the maintenance team/customer staff; neither version specifies an exact group count or member gender.
+- “Dem” in that quotation refers to plural categories; source “them” has that same referent. No natural-gender information is present.
+- “Vi” in the second quotation's first sentence is first-person plural, directly supplied by source “We”.
+- “Jag” in the second quotation is first-person singular, supplied by “I”. The fact that Maya Lind is the speaker does not establish natural gender, and the Swedish draft adds none.
+- “Den” in “den tiden” denotes the time set aside: singular grammatical common gender, no natural gender. Source “that time” supplies the referent.
+- “Vi” in “innan vi börjar i nästa hus” adds first-person plural for that starting action; source “the next building starts” does not. This is finding F1. Naming a plausible team referent does not by itself establish that actor's person and number in the source claim.
+- “Det” in “Det saknas” is an impersonal construction, not a person or an object assigned natural gender.
+- “Sin” in “sin egen bedömning” is reflexive possession attributed to Maya Lind. It contains no natural-gender assertion; source “Her” is feminine singular, but no extra claim is introduced by omitting natural gender in idiomatic Swedish.
+- “Jag”, “oss” and the second “jag” in the final quotation preserve “I”, “us” and “I”: first-person singular, plural and singular respectively, with no natural-gender assertion.
+- “Du” in the closing heading and link sentence, and “ditt” in the placeholder byline, address the individual reader/user in conventional Swedish. These are authored address, not claims about a source person's sex, actual name or participation in the trial.
+- The plural noun expressions “de boende”, “medarbetare” and “personalen på olika skift” name residents/staff in the corresponding source passages. None supplies natural gender or a population count beyond the separately sourced six trained staff.
+
+## Findings
+
+### F1 — Source-support change inside a translated quotation
+
+Draft: “Jag skulle avsätta den tiden innan vi börjar i nästa hus.”
+
+Source, with the applicable preceding clause: “We spent more time agreeing on the categories than entering the first reports. I would set that time aside before the next building starts.”
+
+Changed support: The English makes a recommendation before the next building starts, with the starting actor unstated. The Swedish makes the speaker's “we” the actor starting in that building. The source's first-person-plural preparation statement does not establish a first-person-plural future starting actor. Context says: “The trial has not yet expanded; the team will decide after checking how the categories work for larger repairs.” That establishes a pending team decision but does not settle who would start work in the next building.
+
+Counterexample, source true and draft false: Lind and the team could reserve the category-planning time, after which a contractor or the next building's separately constituted staff would launch its participation; Lind and the original “we” would not themselves begin there. The next building would start, satisfying the source recommendation, while the added “we start” action would fail. No supplied statement excludes that staffing arrangement.
+
+Reverse test: On the draft's contextual reading, if Lind's group begins the next building's participation after reserving the time, the building also starts. No surviving draft-true/source-false example is needed to establish the narrowing; the first direction already supplies the unsupported actor limitation. I found no source passage excluding the first direction.
+
+Smallest supported repair: “Jag skulle avsätta den tiden innan det är dags för nästa hus.” This retains the recommendation, time referent, next-building sequence and colloquial voice while leaving the starting actor implicit. If the writer instead explicitly identifies a start of the trial or log use, that identification needs a contextually settled referent; an added “vi” should not be used as a fluent repair.
+
+Classification: Source-support finding in translated speech, specifically a new actor/person/number assertion. The current Swedish is idiomatic; no separate translation-language defect is reported. All other substance and qualifications of this quotation should remain.
+
+## Completion status
+
+Comparison complete. Report written to the requested path. Unresolved findings: F1, pending revision and a fresh comparison of the changed quotation. The byline placeholder is an identified contract question outside the source-support findings, with no unsupported author identity asserted.
+
+
+## Writer validation after round 1
+
+The complete report was read and validated against every paragraph, heading, attribution and quotation of the complete draft and the supplied original English material. Its accounting covers the whole draft. No accounting mismatch was detected. Supported contextual readings recorded in the report are retained.
+
+F1 is accepted. The draft said “Jag skulle avsätta den tiden innan vi börjar i nästa hus.” The source says “We spent more time agreeing on the categories than entering the first reports. I would set that time aside before the next building starts.” The source establishes a first-person-plural subject for category preparation but not the actor starting in the next building; the pending expansion decision does not establish that actor either. The checker’s contractor/other-staff counterexample is not excluded. The proposed minimal repair is adopted exactly: “Jag skulle avsätta den tiden innan det är dags för nästa hus.” All other prose remains byte-identical to the first compared draft. The complete revised draft will receive a fresh comparison without the prior findings or this validation.
+
+The byline is visibly an unfilled placeholder for the user’s name. Neither invocation nor source gives an author name. This is a material/contract gap to identify in the delivery account, without inventing a name; it is not a source-support finding.

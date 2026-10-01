@@ -1,0 +1,98 @@
+[
+  {
+    "path": "work/input.md",
+    "sha256": "3d2f9ed7390e247b388dfd62ae735272c4c35adab5f471f922046dc9ef93e7a2",
+    "capture": "0000-3d2f9ed7390e.md",
+    "time": 1790865086.0356421
+  },
+  {
+    "path": "work/AGENTS.md",
+    "sha256": "e8d352fcebb50d25cb7f7d7ecccc374073ab4f0cc90c19b4490560f0e4c047a4",
+    "capture": "0001-e8d352fcebb5.md",
+    "time": 1790865086.035767
+  },
+  {
+    "path": "scratch/redline-invoke.TlFKLD/.tmpWxIb1r/environments-v2/kntnt-4b747a8f833acb6e/lib/python3.12/site-packages/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0002-ae98f4215313.txt",
+    "time": 1790865130.0807521
+  },
+  {
+    "path": "scratch/redline-invoke.TlFKLD/.tmpWxIb1r/archive-v0/1tQ-sAon5x3gF7YD/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0003-ae98f4215313.txt",
+    "time": 1790865130.081297
+  },
+  {
+    "path": "scratch/redline-language.FuY4WW/.tmpaRoc4p/.tmpBmz8tP/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0004-ae98f4215313.txt",
+    "time": 1790865152.1195562
+  },
+  {
+    "path": "scratch/redline-language.FuY4WW/.tmpaRoc4p/environments-v2/languages-68212c449f1caf7b/lib/python3.12/site-packages/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0005-ae98f4215313.txt",
+    "time": 1790865152.22846
+  },
+  {
+    "path": "scratch/redline-language.FuY4WW/.tmpaRoc4p/archive-v0/kjQzI3vmdZ_QbDkF/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0006-ae98f4215313.txt",
+    "time": 1790865152.229151
+  },
+  {
+    "path": "scratch/redline-language-b6fvl3ui/.tmpoaVNIF/environments-v2/languages-68212c449f1caf7b/lib/python3.12/site-packages/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0007-ae98f4215313.txt",
+    "time": 1790865410.655593
+  },
+  {
+    "path": "scratch/redline-language-b6fvl3ui/.tmpoaVNIF/archive-v0/lxsWA2dHyv2AfqLa/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0008-ae98f4215313.txt",
+    "time": 1790865410.656209
+  },
+  {
+    "path": "scratch/redline-mechanical-f8_uikah/mechanical-input.md",
+    "sha256": "9f54c67cd838ea8a5f5746c6405772be2fbc5619a66b16426d715e805c3c17b7",
+    "capture": "0009-9f54c67cd838.md",
+    "time": 1790865645.476278
+  },
+  {
+    "path": "scratch/proofread-invoke.0NlLK8/.tmpRfL9Y4/environments-v2/kntnt-4b747a8f833acb6e/lib/python3.12/site-packages/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0010-ae98f4215313.txt",
+    "time": 1790865730.318686
+  },
+  {
+    "path": "scratch/proofread-invoke.0NlLK8/.tmpRfL9Y4/archive-v0/1Nc98AZTLUN57JyS/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0011-ae98f4215313.txt",
+    "time": 1790865730.319211
+  },
+  {
+    "path": "scratch/proofread-resolve.aD5P7h/.tmpwJHFEF/environments-v2/languages-68212c449f1caf7b/lib/python3.12/site-packages/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0012-ae98f4215313.txt",
+    "time": 1790865749.545651
+  },
+  {
+    "path": "scratch/proofread-resolve.aD5P7h/.tmpwJHFEF/archive-v0/xtsz-AV5-TWZ9tew/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0013-ae98f4215313.txt",
+    "time": 1790865749.5463529
+  },
+  {
+    "path": "scratch/redline-mechanical-f8_uikah/mechanical-output.md",
+    "sha256": "7a48b66be7dea353cda89ea0e1632f28f94eb3e04a3f04f89433c345c02570f6",
+    "capture": "0014-7a48b66be7de.md",
+    "time": 1790865784.9629319
+  },
+  {
+    "path": "work/output.md",
+    "sha256": "7a48b66be7dea353cda89ea0e1632f28f94eb3e04a3f04f89433c345c02570f6",
+    "capture": "0015-7a48b66be7de.md",
+    "time": 1790866013.462423
+  }
+]

@@ -194,5 +194,127 @@
     "verified_process_group_absent": 90876,
     "deleted": true,
     "time": "2026-10-01T16:10:52.499962+00:00"
+  },
+  {
+    "run": "jA",
+    "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-zk09mi8c",
+    "verified_process_group_absent": 19809,
+    "deleted": true,
+    "time": "2026-10-01T16:24:32.508181+00:00"
+  },
+  {
+    "run": "jB",
+    "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-zytzrg6p",
+    "verified_process_group_absent": 19811,
+    "deleted": true,
+    "time": "2026-10-01T16:29:45.834429+00:00"
+  },
+  {
+    "path": "/Users/thomas/Projects/skills-393-gpt-retest/.mypy_cache",
+    "deleted": true,
+    "time": "2026-10-01T16:49:48.338705+00:00",
+    "reason": "owned isolated-worktree validation scratch or neutral staging after byte-verified evidence retention; no deliverable removed"
+  },
+  {
+    "path": "/Users/thomas/Projects/skills-393-gpt-retest/.pytest_cache",
+    "deleted": true,
+    "time": "2026-10-01T16:49:48.338830+00:00",
+    "reason": "owned isolated-worktree validation scratch or neutral staging after byte-verified evidence retention; no deliverable removed"
+  },
+  {
+    "path": "/Users/thomas/Projects/skills-393-gpt-retest/.ruff_cache",
+    "deleted": true,
+    "time": "2026-10-01T16:49:48.338838+00:00",
+    "reason": "owned isolated-worktree validation scratch or neutral staging after byte-verified evidence retention; no deliverable removed"
+  },
+  {
+    "path": "/Users/thomas/Projects/skills-393-gpt-retest/.venv",
+    "deleted": true,
+    "time": "2026-10-01T16:49:48.338843+00:00",
+    "reason": "owned isolated-worktree validation scratch or neutral staging after byte-verified evidence retention; no deliverable removed"
+  },
+  {
+    "path": "/Users/thomas/Projects/skills-393-gpt-retest/docs/evaluation/editorial-388/harness/__pycache__",
+    "deleted": true,
+    "time": "2026-10-01T16:49:48.338850+00:00",
+    "reason": "owned isolated-worktree validation scratch or neutral staging after byte-verified evidence retention; no deliverable removed"
+  },
+  {
+    "path": "/Users/thomas/Projects/skills-393-gpt-retest/docs/evaluation/editorial-393/gpt-retest-2026-10-01/harness/__pycache__",
+    "deleted": true,
+    "time": "2026-10-01T16:49:48.338856+00:00",
+    "reason": "owned isolated-worktree validation scratch or neutral staging after byte-verified evidence retention; no deliverable removed"
+  },
+  {
+    "path": "/Users/thomas/Projects/skills-393-gpt-retest/skills/code/orchestrate/scripts/__pycache__",
+    "deleted": true,
+    "time": "2026-10-01T16:49:48.338862+00:00",
+    "reason": "owned isolated-worktree validation scratch or neutral staging after byte-verified evidence retention; no deliverable removed"
+  },
+  {
+    "path": "/Users/thomas/Projects/skills-393-gpt-retest/skills/kntnt/features/session-cleanup/scripts/__pycache__",
+    "deleted": true,
+    "time": "2026-10-01T16:49:48.338869+00:00",
+    "reason": "owned isolated-worktree validation scratch or neutral staging after byte-verified evidence retention; no deliverable removed"
+  },
+  {
+    "path": "/Users/thomas/Projects/skills-393-gpt-retest/skills/kntnt/library/scripts/__pycache__",
+    "deleted": true,
+    "time": "2026-10-01T16:49:48.338874+00:00",
+    "reason": "owned isolated-worktree validation scratch or neutral staging after byte-verified evidence retention; no deliverable removed"
+  },
+  {
+    "path": "/Users/thomas/Projects/skills-393-gpt-retest/skills/kntnt/scripts/__pycache__",
+    "deleted": true,
+    "time": "2026-10-01T16:49:48.338879+00:00",
+    "reason": "owned isolated-worktree validation scratch or neutral staging after byte-verified evidence retention; no deliverable removed"
+  },
+  {
+    "path": "/Users/thomas/Projects/skills-393-gpt-retest/skills/models/model-selector/scripts/__pycache__",
+    "deleted": true,
+    "time": "2026-10-01T16:49:48.338885+00:00",
+    "reason": "owned isolated-worktree validation scratch or neutral staging after byte-verified evidence retention; no deliverable removed"
+  },
+  {
+    "path": "/Users/thomas/Projects/skills-393-gpt-retest/skills/productivity/rename-invoices/scripts/__pycache__",
+    "deleted": true,
+    "time": "2026-10-01T16:49:48.338891+00:00",
+    "reason": "owned isolated-worktree validation scratch or neutral staging after byte-verified evidence retention; no deliverable removed"
+  },
+  {
+    "path": "/Users/thomas/Projects/skills-393-gpt-retest/skills/web/mirror/scripts/__pycache__",
+    "deleted": true,
+    "time": "2026-10-01T16:49:48.338897+00:00",
+    "reason": "owned isolated-worktree validation scratch or neutral staging after byte-verified evidence retention; no deliverable removed"
+  },
+  {
+    "path": "/Users/thomas/Projects/skills-393-gpt-retest/tests/__pycache__",
+    "deleted": true,
+    "time": "2026-10-01T16:49:48.338902+00:00",
+    "reason": "owned isolated-worktree validation scratch or neutral staging after byte-verified evidence retention; no deliverable removed"
+  },
+  {
+    "path": "/Users/thomas/Projects/skills-393-gpt-retest/tests/support/__pycache__",
+    "deleted": true,
+    "time": "2026-10-01T16:49:48.338907+00:00",
+    "reason": "owned isolated-worktree validation scratch or neutral staging after byte-verified evidence retention; no deliverable removed"
+  },
+  {
+    "path": "/Users/thomas/Projects/skills-393-gpt-retest/uv.lock",
+    "deleted": true,
+    "time": "2026-10-01T16:49:48.338911+00:00",
+    "reason": "owned isolated-worktree validation scratch or neutral staging after byte-verified evidence retention; no deliverable removed"
+  },
+  {
+    "path": "/Users/thomas/Projects/skills/.git/evaluation-staging/6aea5e5c345f4ad3af4192edfeceff10",
+    "deleted": true,
+    "time": "2026-10-01T16:49:48.338916+00:00",
+    "reason": "owned isolated-worktree validation scratch or neutral staging after byte-verified evidence retention; no deliverable removed"
+  },
+  {
+    "path": "/Users/thomas/Projects/skills/.git/evaluation-staging",
+    "deleted": true,
+    "time": "2026-10-01T16:49:48.338920+00:00",
+    "reason": "owned isolated-worktree validation scratch or neutral staging after byte-verified evidence retention; no deliverable removed"
   }
 ]

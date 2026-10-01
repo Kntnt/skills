@@ -1,5 +1,5 @@
 {
-  "method": "Filtered existing session-cleanup manifest registrations by explicit #393 ownership reason. Registration timestamps and recorded process start times retain ownership; unrelated entries are omitted.",
+  "method": "Only explicit #393 ownership registrations retained; unrelated records omitted. Each pid ownership is bound to its stored process start timestamp.",
   "registrations": [
     {
       "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
@@ -679,6 +679,114 @@
       "kind": "pid",
       "started": "Thu Oct  1 17:29:36 2026",
       "why": "Editorial #393 isolated native evaluation"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T15:38:20+00:00",
+      "id": "85229",
+      "kind": "pid",
+      "started": "Thu Oct  1 17:38:20 2026",
+      "why": "Editorial #393 isolated native evaluation"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T15:38:20+00:00",
+      "id": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-8bg0x9_u",
+      "kind": "path",
+      "why": "Editorial #393 isolated native evaluation"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T15:38:20+00:00",
+      "id": "85250",
+      "kind": "pid",
+      "started": "Thu Oct  1 17:38:20 2026",
+      "why": "Editorial #393 isolated native evaluation"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T15:41:04+00:00",
+      "id": "89758",
+      "kind": "pid",
+      "started": "Thu Oct  1 17:41:04 2026",
+      "why": "Editorial #393 fixed source-blind p01 launcher"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T15:42:15+00:00",
+      "id": "90857",
+      "kind": "pid",
+      "started": "Thu Oct  1 17:42:15 2026",
+      "why": "Editorial #393 isolated native evaluation"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T15:42:15+00:00",
+      "id": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-kipogeeb",
+      "kind": "path",
+      "why": "Editorial #393 isolated native evaluation"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T15:42:15+00:00",
+      "id": "90876",
+      "kind": "pid",
+      "started": "Thu Oct  1 17:42:15 2026",
+      "why": "Editorial #393 isolated native evaluation"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T16:01:12+00:00",
+      "id": "19705",
+      "kind": "pid",
+      "started": "Thu Oct  1 18:01:12 2026",
+      "why": "Editorial #393 isolated native evaluation"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T16:01:12+00:00",
+      "id": "19706",
+      "kind": "pid",
+      "started": "Thu Oct  1 18:01:12 2026",
+      "why": "Editorial #393 isolated native evaluation"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T16:01:12+00:00",
+      "id": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-zk09mi8c",
+      "kind": "path",
+      "why": "Editorial #393 isolated native evaluation"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T16:01:12+00:00",
+      "id": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-zytzrg6p",
+      "kind": "path",
+      "why": "Editorial #393 isolated native evaluation"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T16:01:13+00:00",
+      "id": "19811",
+      "kind": "pid",
+      "started": "Thu Oct  1 18:01:13 2026",
+      "why": "Editorial #393 isolated native evaluation"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T16:01:13+00:00",
+      "id": "19809",
+      "kind": "pid",
+      "started": "Thu Oct  1 18:01:13 2026",
+      "why": "Editorial #393 isolated native evaluation"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T16:46:02+00:00",
+      "id": "85728",
+      "kind": "pid",
+      "started": "Thu Oct  1 18:46:02 2026",
+      "why": "#393 final documentation/evidence tests own process group"
     }
   ]
 }

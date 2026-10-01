@@ -1,0 +1,9 @@
+`input.md` anger `kntnt.genre: case-study`, som inte är installerad. Den installerade genren heter `casestudy`. Ingen granskning eller ändring har gjorts.
+
+[Redline-instruktionen](/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-1whlh9rj/work/.agents/skills/redline/SKILL.md:67) kräver stopp vid oanvändbar metadata: “is reported as unusable supplied metadata and stops the run”. Du kan åsidosätta värdet med `/redline --genre=casestudy --output=response input.md`.
+
+**/redline** [**--genre**=*GENRE*] [**--technique**=*TECHNIQUE*] [**--language**=*LANGUAGE*] [**--brief=**_PATH|URL_] [**--max**=*N*] [**--output**=*TARGET*] [*TEXT*|*PATH*|*URL*] [**--** *INSTRUCTION*]
+
+**/redline** [**--genre**=*GENRE*] [**--technique**=*TECHNIQUE*] [**--language**=*LANGUAGE*] [**--brief=**_PATH|URL_] [**--max**=*N*] **--in-place**[=**on**|**off**] *PATH* [**--** *INSTRUCTION*]
+
+Hjälp: `/redline --help`.

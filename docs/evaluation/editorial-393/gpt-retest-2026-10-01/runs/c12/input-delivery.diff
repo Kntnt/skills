@@ -1,0 +1,34 @@
+--- input.md
++++ delivered.md
+@@ -1,11 +1,11 @@
+ ---
+ kntnt:
+-  genre: case-study
++  genre: casestudy
+   technique: none
+   language: sv
+ ---
+ 
+-# Björkängsskolan bokar vikarier på en kvart
++# Björkängsskolan redovisar 52 tillsatta pass i vikarieförsök
+ 
+ **Två arbetslag på Björkängsskolan provade en gemensam vikarielista under åtta veckor. Mediantiden till tillsatt pass var 15 minuter under försöket. Rektor Nina Falk skulle göra om det, men avsätta mer tid åt rutinerna.**
+ 
+@@ -13,7 +13,7 @@
+ 
+ Björkängsskolan har 410 elever och 38 lärare. Tidigare ringde expeditionen runt bland kända vikarier varje morgon, och de två arbetslagen förde egna listor. Skolan ville att båda arbetslagen skulle se samma uppgifter och valde Vikarieportalen efter att ha provat om listan kunde visa vem som redan tackat ja.
+ 
+-## Arbetslagen utformade själva kategorierna
++## Vikarieportalen gick igenom listan vid två tillfällen
+ 
+ Skolan tog fram kategorierna för ämne och årskurs och behöll möjligheten att ringa. Vikarieportalen lade upp listan och gick igenom den med sex medarbetare vid två tillfällen.
+ 
+@@ -27,7 +27,7 @@
+ 
+ Måttet gäller tiden tills ett pass var tillsatt, inte hur undervisningen fungerade. Det saknas mätningar av kostnader och av hur eleverna eller lärarna upplevde försöket.
+ 
+-## Skolan vill ge rutinerna mer tid
++## Nina Falk ser tillbaka på försöket
+ 
+ – Jag skulle välja att göra om försöket. Att alla ser samma lista hjälper oss, men jag skulle lägga en vecka till på rutinerna, säger Falk.
+ 

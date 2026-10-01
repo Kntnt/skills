@@ -1,0 +1,235 @@
+I judged each sample against its own supplied evidence. For source-blind reviews, factual scores concern fidelity to the supplied input, not an unavailable original source.
+
+**Q** denotes quotation behaviour, including the commissioned preparation quotation for composition tasks. **D** denotes artifact delivery. **R1** is skipped for composition tasks. A quotation pass does not imply a whole-artifact pass.
+
+All 19 delivered artifacts meet the numerical limits: headlines contain 36–59 characters, standfirsts contain 24–56 words, and the longest subheading contains 59 characters. Their standfirsts are single paragraphs; headed artifacts have single-paragraph leads and nonempty sections. Paragraph sentence counts establish no additional failure.
+
+**sample-01**
+
+Pass: F1, G1, P1, G2, L1, D.  
+Fail: W1, L2, R1, Q.
+
+- **W1:** The artifact has no section headings. The reply correctly reports “body sections, and separate ending section” as missing. Readers lack scanning landmarks for preparation, measurements and the next decision.
+- **L2/Q:** The input’s marked quotation, “I would choose to do the trial again…”, becomes an ordinary unmarked paragraph after “Lind said:”, without blockquote formatting. Its direct-quotation boundaries are lost.
+- **R1:** The reply describes that loss only as “adjusted quotation punctuation in the final mechanical pass.” It also removes “Lind’s assessment includes a reservation about preparation” solely as a pre-echo. That is a claim-limiting frame, not an established reading obstruction.
+- The qualification itself survives: “but I would leave an extra week for preparation.” The preparation quotation’s “before the next building starts” also remains correctly unchanged.
+
+Established rejection class: **impermissible substantive mechanical edit**, through alteration of quotation boundaries.
+
+**sample-02**
+
+Pass: F1, G1, P1, G2, L1, L2, Q, D.  
+Fail: W1, R1.
+
+- **W1:** No section headings are delivered. The reply accurately identifies “Section subheadings, including an ending subheading” as missing.
+- **R1:** “Lind gave a qualified endorsement of repeating the trial” becomes “On repeating the trial, Lind said” because it “pre-echoed her judgement and reservation.” Removing a claim-limiting frame merely because its limit recurs violates the preservation expectation.
+- The quotations remain intact, including “before the next building starts.” The factual limits also survive: “These figures concern assignment, not completion.”
+
+The byline is correctly reported as missing and left unfilled. No listed rejection class is established; the failure is an unjustified substantive review change.
+
+**sample-03**
+
+Pass: G1, P1, W1, G2, L1, L2, Q, D.  
+Disputed: F1.  
+Skipped: R1.
+
+- **Q passes:** “Vi lade mer tid på att komma överens om kategorierna…” preserves the source’s comparison and experience. “Jag skulle avsätta den tiden innan nästa byggnad börjar använda loggen” preserves the conditional recommendation and describes log introduction supported by the full source.
+- **F1 is disputed:** “Siffrorna beskriver tiden till tilldelning av arbetet” specifies the object of assignment. The source says “from report to assignment” without expressly naming that object. Repair-work assignment is a reasonable contextual interpretation, but “av arbetet” could narrow the measured event.
+- The reply identifies this uncertainty and supplies a proposed repair outside the artifact. That proposal is not an applied repair or a missing draft.
+- The customer’s reservation remains: “men jag skulle avsätta en extra vecka för förberedelser.” The unfilled author placeholder is disclosed.
+
+No unsupported introduction activity is established. The uncertainty concerns the assignment measure, not the translated preparation quotation.
+
+**sample-04**
+
+Pass: F1, G1, P1, G2, L1, L2, D.  
+Fail: W1, R1, Q.
+
+- **W1:** The artifact remains unheaded; the reply reports “headed sections, and separate ending section” as missing.
+- **R1/Q:** The valid English “before the next building starts” becomes “before the trial in the next building starts.” The finding that the original “left the referent unclear” establishes no concrete obstacle in its complete context and conflicts with the packet’s preservation expectation.
+- **R1 also fails** because “Lind gave a qualified endorsement of repeating the trial” is removed as a pre-echo.
+- The added wording is contextually plausible and grammatical, so this is not an established invented trial fact. “These figures concern assignment, not completion” and the customer’s reservation survive.
+
+No listed rejection class is established. The quotation change is unnecessary substantive review editing, not a reported mechanical-pass change.
+
+**sample-05**
+
+Pass: F1, G1, P1, G2, L1, L2, Q, D.  
+Fail: W1, R1.
+
+- **W1:** The artifact lacks headings for its body and ending, as the reply acknowledges.
+- **R1:** “Lind’s assessment includes a reservation about preparation” becomes “Lind’s assessment:” solely to remove an advance statement. The protected limiting frame disappears because the limit is repeated.
+- The quotation still says “but I would leave an extra week for preparation,” and the English preparation phrase remains unchanged. Thus overall factual qualification and quotation content are preserved.
+
+Uncertainty: the alleged measurement error that “misidentifies the quotation bridge as a byline” has no supplied measurement evidence. No listed rejection class is established.
+
+**sample-06**
+
+Pass: F1, G1, P1, W1, G2, L2, Q, D.  
+Fail: L1, R1.
+
+- **L1:** “Den tiden skulle jag avsätta innan nästa hus börjar” remains defective Swedish under the fixed expectation.
+- **R1:** The reply leaves only the byline unresolved; it never reports this mandatory language obstruction.
+- The added heading “Maya Lind om förberedelserna” gives the quotation a section and leaves the lead as one paragraph. The causal limit remains: “Anteckningen tillskriver därför inte skillnaden programvaran.”
+
+Established rejection class: **unresolved mandatory finding**. Q passes preservation of quotation content; it does not certify the retained phrase’s idiom.
+
+**sample-07**
+
+Pass: F1, G1, P1, W1, G2, L1, L2, R1, Q, D.
+
+The repair “Sedan gick lagret över **till det nya systemet**” supplies the missing transition destination. It is idiomatic institutional shorthand and is supported by the account of leaving parallel spreadsheets.
+
+“Under de veckorna” retains the six-week boundary after the quotation is moved. The final heading, “Det tredje lagret är ännu inte överfört,” replaces a company-intention claim with a supported status statement. Ranneby’s conditional experience remains: “jag skulle ta en artikelgrupp i taget.”
+
+No listed rejection class or material uncertainty is established.
+
+**sample-08**
+
+Pass: F1, G1, P1, W1, G2, L1, L2, R1, Q, D.
+
+The delivered artifact is mechanically identical to the supplied input, proving preservation. The reply correctly reports “Av [ditt namn]” as an unfilled author name.
+
+“Jag skulle avsätta den tiden innan det är dags för nästa hus” is idiomatic in this supplied log-introduction context. The causal limitation—“Anteckningen tillskriver uttryckligen inte programvaran skillnaden”—and the extra-week reservation remain intact.
+
+No listed rejection class is established. No original English quotation is available for this run, so translation fidelity beyond preservation is not independently answerable.
+
+**sample-09**
+
+Fail: D.  
+Skipped: F1, G1, P1, W1, G2, L1, L2, R1, Q.
+
+The packet explicitly states: **“No Text Artifact was delivered.”** The reply, “Inga ändringar behövdes efter granskning och korrekturläsning,” is a claim about review, not the requested artifact.
+
+Consequently, delivered-text facts, genre, reasoning, web structure, idiom, mechanics, preservation and quotation behaviour cannot be assessed. The input cannot substitute for an output.
+
+This is a **missing artifact**, not proven preservation or an established incorrect side effect.
+
+**sample-10**
+
+Pass: F1, G1, P1, W1, G2, L1, L2, R1, Q, D.
+
+The artifact is mechanically identical to the input. “innan nästa byggnad börjar använda loggen” and “Siffrorna beskriver tiden till tilldelning av arbetet” are therefore preserved supplied wording; this source-blind run provides no English source against which to test translation choices.
+
+The reply correctly leaves the author unidentified. Its observation about the supplied `example.invalid` address is a disclosed link limitation, without replacement or destination invention.
+
+No listed rejection class is established. Actual checklist content is unavailable.
+
+**sample-11**
+
+Pass: F1, G1, P1, W1, G2, L1, Q, D.  
+Fail: L2, R1.
+
+- **L2:** Both occurrences of the established grouping “2 140” become “2,140.” Commas are acceptable British English, but the packet provides no house-style rule making the existing space grouping erroneous. Valid variation was normalized.
+- **R1:** Calling this “corrected British thousands separators” presents an optional normalization as an error repair.
+- The new headings make supported claims. The figures “before the winter” and “the depot stopped ringing round” correctly remain unchanged.
+- “She would not say whether that would hold across a full year” preserves the experience’s limit.
+
+No wrong locale is established: the output commas are valid. The failure concerns preservation of valid variation.
+
+**sample-12**
+
+Pass: F1, G1, P1, W1, G2, L1, Q, D.  
+Fail: L2, R1.
+
+- **L2/R1:** “2 140” again becomes “2,140,” described as “corrected thousands separators.” No supplied rule establishes the original grouping as an error.
+- “The counts exclude concessionary travel” and “The report is open for comment until 30 April” are supported by the retained body.
+- The British quotation remains intact, including “before the winter” and “the depot stopped ringing round.” The full-year staffing reservation also survives.
+
+No listed rejection class is established. The separator change preserves numerical meaning but fails the stated valid-variation expectation.
+
+**sample-13**
+
+Pass: G1, P1, W1, G2, L1, L2, Q, D.  
+Fail: F1.  
+Skipped: R1.
+
+- **F1:** “Av användaren” asserts authorship that the complete source does not supply. The reply confirms the unsupported substitution: “Bylinen anger användaren eftersom författarnamn saknas.” Absence of an author does not establish that the user wrote the article.
+- **Q passes independently:** “Jag skulle avsätta den tiden innan försöket startar i nästa byggnad” preserves the conditional preparation recommendation and identifies an activity supported by the full trial context.
+- The qualified assessment remains: “men jag skulle avsätta en extra vecka för förberedelser.”
+
+Established rejection class: **unsupported fact**, specifically authorship. Preparation-quotation success does not rescue the artifact.
+
+**sample-14**
+
+Pass: F1, G1, P1, W1, G2, L2, Q, D.  
+Fail: L1, R1.
+
+- **L1:** “Jag skulle avsätta den tiden innan nästa byggnad kommer i gång” remains the specified defective Swedish reference.
+- **R1:** The reply reports only the missing byline as unresolved. It neither repairs nor explicitly leaves the mandatory language obstruction unresolved.
+- The new section boundaries provide a single-paragraph lead and a separate ending. “Mätningen gäller alltså tiden tills ett ärende tilldelades, inte tills reparationen var klar” preserves the measurement limit.
+
+Established rejection class: **unresolved mandatory finding**.
+
+**sample-15**
+
+Pass: G1, W1, G2, L1, L2, Q, D.  
+Disputed: F1, P1.  
+Skipped: R1.
+
+- **Q passes:** “Jag skulle avsätta den tiden innan det är dags för nästa hus” is idiomatic, preserves the conditional stance and contributes the source’s preparation experience. It invents no introduction activity.
+- **F1/P1 are disputed:** “Elm Quay Housing avvaktar en utökning” and “beslutar teamet om en utökning” can suggest deferred expansion rather than an undecided outcome. They can also reasonably mean holding off while deciding whether to expand.
+- The source expressly leaves the decision open. The reply identifies the ambiguity and proposes clearer wording, but that wording is not applied.
+- The software-causation disclaimer and customer reservation remain intact.
+
+No listed rejection class is conclusively established. The uncertainty concerns the future decision, not quotation fidelity.
+
+**sample-16**
+
+Pass: F1, G1, P1, W1, G2, L1, L2, R1, Q, D.
+
+“innan nästa hus börjar” becomes “innan nästa hus börjar använda loggen.” The added activity is supported by this supplied shared-log account and resolves the specified Swedish obstruction without changing the conditional recommendation.
+
+The reply reports that clarification. “Maya Lind om kategorierna” separates the quotation from the lead; “Maya Lind om ett nytt försök” gives the final section an attributed frame. The reservation—“jag skulle lägga till en vecka för förberedelser”—survives.
+
+No listed rejection class or material uncertainty is established.
+
+**sample-17**
+
+Pass: G1, W1, G2, L2, Q, D.  
+Fail: F1, P1, L1, R1.
+
+- **F1/P1:** “Hamnfrakts anteckning redovisar 340 artiklar utan plats” omits the supplied restriction “i det nya systemet.” The headline can consequently assert a physical-location problem that the evidence does not establish. The reply itself acknowledges that broader reading.
+- **L1:** “Sedan gick lagret över” remains defective.
+- **R1:** “Under sex veckor” is removed from the registration statement solely as repetition. That deletes its explicit temporal restriction. Changing the original headline merely because it repeated the standfirst also creates the unsupported scope above.
+- The reply explicitly leaves “lagret” as an unclear referent and says “Citatet har därför lämnats oförändrat.” I count this as unresolved reporting of the problematic quotation, rather than an entirely unreported finding.
+
+Established rejection class: **unsupported fact/scope** in the headline. Uncertainty: the unresolved report addresses the referent rather than expressly diagnosing the missing transition destination.
+
+**sample-18**
+
+Pass: G1, P1, W1, G2, L1, L2, Q, D.  
+Fail: F1, R1.
+
+- **F1/R1:** The input specifically states “Arbetslagen utformade själva kategorierna.” Replacing that heading leaves only “Skolan tog fram kategorierna.” These are not equivalent in specificity: the workgroups’ own design agency disappears.
+- The reported finding that the heading merely “upprepade sektionsöppningen” therefore misses information unique to the heading. The removal is reported, but inadequately justified.
+- The main-headline repair is supported: “52 tillsatta pass i vikarieförsök” avoids turning a trial median into a general booking promise. Replacing the school’s asserted intention with “Nina Falk ser tillbaka på försöket” also preserves the personal, conditional assessment.
+- “terminen drog i gång” and “expeditionen märkte skillnaden” correctly remain unchanged.
+
+No listed rejection class is established. The defect is an unjustified substantive review deletion, not a mechanical-pass edit.
+
+**sample-19**
+
+Pass: G1, P1, W1, G2, L1, L2, Q, D.  
+Fail: F1, R1.
+
+- **F1/R1:** “Arbetslagen utformade själva kategorierna” is again removed as repetition, although the retained body only attributes design to “Skolan.” The reply expressly admits that “arbetslagens roll i just utformningen är inte längre uttrycklig.”
+- That is loss of a supplied agency fact without a real reported finding justifying its removal.
+- “Vikarielistan hjälper Björkängsskolan, säger rektorn” is supported by Falk’s attributed “Att alla ser samma lista hjälper oss.” Her preparation reservation remains in both standfirst and quotation.
+- The ordinary Swedish figures “terminen drog i gång” and “expeditionen märkte skillnaden” are preserved.
+
+No listed rejection class is established. The factual-preservation failure arose in the reported substantive correction round.
+
+**sample-20**
+
+Pass: F1, G1, P1, W1, G2, L2, Q, D.  
+Fail: L1, R1.
+
+- **L1:** “innan nästa byggnad kommer i gång” remains the specified defective Swedish phrase.
+- **R1:** The only unresolved finding reported is the byline. The mandatory language obstruction is neither repaired nor explicitly reported as unresolved.
+- The reply also inaccurately says the new heading makes “ingressen nu … ett stycke.” The standfirst was already one paragraph; the added heading changes the **lead** boundary.
+- The sectioning and repeated role attribution are otherwise supported. The assignment/completion distinction and customer reservation remain unchanged.
+
+Established rejection class: **unresolved mandatory finding**.
+
+Across the packet, no supplied evidence establishes actual resource loading or an **incorrect side effect**. Statements about saving files, leaving inputs unchanged or deleting temporary files are reply claims, not independently verified operations. No commissioned preparation quotation is omitted from a delivered composition; sample-09 instead lacks the entire requested artifact.

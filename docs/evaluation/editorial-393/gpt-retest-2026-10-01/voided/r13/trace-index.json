@@ -1,0 +1,159 @@
+{
+  "sessions": [
+    {
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T16-28-04-01a0f7dd-8141-71b3-9915-3f68a145eef1.jsonl",
+      "id": "01a0f7dd-8141-71b3-9915-3f68a145eef1",
+      "source": "exec",
+      "first_event": "2026-10-01T14:28:04.393Z",
+      "last_event": "2026-10-01T14:31:25.405Z",
+      "lifecycle": [
+        {
+          "ordinal": 1,
+          "timestamp": "2026-10-01T14:28:04.393Z",
+          "type": "task_started"
+        },
+        {
+          "ordinal": 83,
+          "timestamp": "2026-10-01T14:31:25.405Z",
+          "type": "task_complete"
+        }
+      ],
+      "calls": [
+        {
+          "ordinal": 12,
+          "timestamp": "2026-10-01T14:28:12.805Z",
+          "name": "exec",
+          "input": "const r = await tools.exec_command({cmd:\"pwd; rg --files -g 'AGENTS.md' -g 'SKILL.md' -g 'input.md' -g '!node_modules' -g '!vendor' . .agents\",max_output_tokens:5000});text(r.output);\nconst s = await tools.exec_command({cmd:\"cat .agents/skills/redline/SKILL.md\",max_output_tokens:12000});text(s.output);\n",
+          "output_ordinal": 16,
+          "output_contains_truncation_notice": true
+        },
+        {
+          "ordinal": 20,
+          "timestamp": "2026-10-01T14:28:31.966Z",
+          "name": "exec",
+          "input": "const results = await Promise.allSettled([\n  tools.exec_command({cmd:\"cat AGENTS.md; sed -n '60,120p' .agents/skills/redline/SKILL.md\",max_output_tokens:16000}),\n  tools.exec_command({cmd:\"redline_uv_tmp=$(mktemp -d /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-qjib77lh/scratch/redline-uv.XXXXXX)\\ntrap 'rm -rf \\\"$redline_uv_tmp\\\"' EXIT\\nTMPDIR=\\\"$redline_uv_tmp\\\" UV_NO_CACHE=1 UV_NO_PROJECT=1 uv run .agents/skills/redline/scripts/invoke.py <<'REDLINE_INVOCATION'\\n--output=response input.md\\nREDLINE_INVOCATION\",max_output_tokens:6000})\n]);for(let i=0;i<results.length;i++){text({part:i,...results[i]});}\n",
+          "output_ordinal": 23,
+          "output_contains_truncation_notice": false
+        },
+        {
+          "ordinal": 27,
+          "timestamp": "2026-10-01T14:28:44.803Z",
+          "name": "exec",
+          "input": "text(await tools.exec_command({cmd:\"python3 - <<'PY'\\nimport os\\nimport shutil\\nimport subprocess\\nimport tempfile\\n\\nprivate_dir = tempfile.mkdtemp(prefix='redline-uv-', dir='/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-qjib77lh/scratch')\\ntry:\\n    env = dict(os.environ, TMPDIR=private_dir, UV_NO_CACHE='1', UV_NO_PROJECT='1')\\n    result = subprocess.run(['uv', 'run', '.agents/skills/redline/scripts/invoke.py'], input='--output=response input.md\\\\n', text=True, env=env)\\nfinally:\\n    shutil.rmtree(private_dir)\\nraise SystemExit(result.returncode)\\nPY\",max_output_tokens:6000}));\n",
+          "output_ordinal": 30,
+          "output_contains_truncation_notice": false
+        },
+        {
+          "ordinal": 36,
+          "timestamp": "2026-10-01T14:28:55.619Z",
+          "name": "exec",
+          "input": "const results = await Promise.allSettled([\n tools.exec_command({cmd:\"cat input.md\",max_output_tokens:12000}),\n tools.exec_command({cmd:\"cat .agents/skills/kntnt/library/references/delivery.md; cat .agents/skills/redline/references/correction.md; cat .agents/skills/redline/references/reply-check.md\",max_output_tokens:15000}),\n tools.exec_command({cmd:\"rg --files .agents/skills/kntnt/library/references/editorial/genres .agents/skills/kntnt/library/references/editorial/techniques\",max_output_tokens:5000})\n]); for(let i=0;i<results.length;i++)text({part:i,...results[i]});\n",
+          "output_ordinal": 41,
+          "output_contains_truncation_notice": true
+        },
+        {
+          "ordinal": 45,
+          "timestamp": "2026-10-01T14:29:16.537Z",
+          "name": "exec",
+          "input": "// @exec: {\"max_output_tokens\": 25000}\nconst results = await Promise.allSettled([\n tools.exec_command({cmd:\"python3 - <<'PY'\\nimport os, shutil, subprocess, tempfile\\nprivate_dir = tempfile.mkdtemp(prefix='redline-language-', dir='/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-qjib77lh/scratch')\\ntry:\\n    env = dict(os.environ, TMPDIR=private_dir, UV_NO_CACHE='1', UV_NO_PROJECT='1')\\n    result = subprocess.run(['uv', 'run', '--no-cache', '--no-project', '.agents/skills/kntnt/library/scripts/languages.py', 'resolve', '--scope=composition', '--scope=review', '--scope=anti-slop', 'en_GB'], env=env)\\nfinally:\\n    shutil.rmtree(private_dir)\\nraise SystemExit(result.returncode)\\nPY\",max_output_tokens:6000}),\n tools.exec_command({cmd:\"cat .agents/skills/kntnt/library/references/editorial/base.md .agents/skills/kntnt/library/references/editorial/base.review.md .agents/skills/kntnt/library/references/editorial/genres/article.md .agents/skills/kntnt/library/references/editorial/genres/article.review.md .agents/skills/kntnt/library/references/editorial/anti-slop.md\",max_output_tokens:15000}),\n tools.exec_command({cmd:\"cat .agents/skills/kntnt/library/references/editorial/web-craft.md .agents/skills/kntnt/library/references/editorial/web-craft.review.md .agents/skills/kntnt/library/references/editorial/article-anatomy.md .agents/skills/kntnt/library/references/editorial/article-anatomy.review.md .agents/skills/kntnt/library/references/editorial/headlines.md .agents/skills/kntnt/library/references/editorial/headlines.review.md\",max_output_tokens:17000})\n]);for(let i=0;i<results.length;i++)text({part:i,...results[i]});\n",
+          "output_ordinal": 50,
+          "output_contains_truncation_notice": false
+        },
+        {
+          "ordinal": 54,
+          "timestamp": "2026-10-01T14:30:03.425Z",
+          "name": "exec",
+          "input": "// @exec: {\"max_output_tokens\": 14000}\nconst results = await Promise.allSettled([\n tools.exec_command({cmd:\"cat .agents/skills/kntnt/library/references/editorial/article-anatomy.review.md .agents/skills/redline/references/correction.md\",max_output_tokens:11000}),\n tools.exec_command({cmd:\"python3 - <<'PY'\\nimport hashlib, json, os, pathlib, shutil, subprocess, tempfile\\nsource = pathlib.Path('input.md').read_text()\\nscratch = pathlib.Path('/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-qjib77lh/scratch')\\nbaseline = sorted(str(p.relative_to(scratch)) for p in scratch.rglob('*'))\\nprivate_dir = tempfile.mkdtemp(prefix='redline-measure-', dir=scratch)\\ntry:\\n    env = dict(os.environ, TMPDIR=private_dir, UV_NO_CACHE='1', UV_NO_PROJECT='1')\\n    result = subprocess.run(['uv', 'run', '--no-cache', '--no-project', '.agents/skills/kntnt/library/scripts/article_anatomy.py', '-'], input=source, text=True, capture_output=True, env=env)\\nfinally:\\n    shutil.rmtree(private_dir)\\nprint(json.dumps({'received': source, 'sha256': hashlib.sha256(source.encode()).hexdigest(), 'scratch_baseline': baseline, 'measurement_exit': result.returncode, 'measurement': result.stdout, 'stderr': result.stderr}))\\nPY\",max_output_tokens:7000})\n]);for(let i=0;i<results.length;i++){if(i===1 && results[i].status===\"fulfilled\"){const d = JSON.parse(results[i].value.output); store(\"redline_original\",d.received);store(\"redline_sha256\",d.sha256);store(\"redline_baseline\",d.scratch_baseline);store(\"redline_original_measurement\",d.measurement);text({measurement_exit:d.measurement_exit,measurement:d.measurement,stderr:d.stderr,scratch_baseline:d.scratch_baseline});}else text({part:i,...results[i]});}\n",
+          "output_ordinal": 58,
+          "output_contains_truncation_notice": false
+        },
+        {
+          "ordinal": 64,
+          "timestamp": "2026-10-01T14:30:35.035Z",
+          "name": "exec",
+          "input": "// @exec: {\"max_output_tokens\": 12000}\ntext(await tools.exec_command({cmd:\"cat .agents/skills/proofread/SKILL.md\",max_output_tokens:12000}));\n",
+          "output_ordinal": 67,
+          "output_contains_truncation_notice": false
+        },
+        {
+          "ordinal": 71,
+          "timestamp": "2026-10-01T14:31:01.331Z",
+          "name": "exec",
+          "input": "const r = await tools.exec_command({cmd:\"python3 - <<'PY'\\nimport hashlib, json, pathlib, tempfile\\nprivate_dir = pathlib.Path(tempfile.mkdtemp(prefix='redline-mechanical-', dir='/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-qjib77lh/scratch'))\\nsource = pathlib.Path('input.md').read_bytes()\\nmechanical_input = private_dir / 'input.md'\\nmechanical_output = private_dir / 'output.md'\\nmechanical_input.write_bytes(source)\\nprint(json.dumps({'directory': str(private_dir), 'input': str(mechanical_input), 'output': str(mechanical_output), 'sha256': hashlib.sha256(source).hexdigest()}))\\nPY\",max_output_tokens:2000});const d=JSON.parse(r.output);store(\"redline_mechanical\",d);text(d);\n",
+          "output_ordinal": 74,
+          "output_contains_truncation_notice": false
+        },
+        {
+          "ordinal": 76,
+          "timestamp": "2026-10-01T14:31:23.152Z",
+          "name": "spawn_agent",
+          "input": "{\"task_name\":\"mechanical_pass\",\"fork_turns\":\"none\",\"message\":\"gAAAAABqvm67W5GnFfFNCuYqd9bUO0aqnD1Z7Ef_QqV3XFKT35Awgdfpyr8RLxHPJglYHlh5ZJKUDxSbjE3BRjLWmXVDhvpuVnzl7lDVlTM5v3hKc6UL_h7xqdOgbuDqVZmw9JODK2BwnWGg2FAnRE2JZDzWJXLDUdV1foCjKDcHaJzkiPqno-yq2cYelf1knw2yZoTlMKOkZhB_YD_F3m3zJkBVjesXPIos6j1xDng9952jFldOUIjImt3DQ-gdH20Ac-xFvslyxEhcw0a457fFSN9ZEunV4Gh_He48R9k4ALcf6mmg68qb69gCqTzCLDoQUQnJUdDgDEKgx7GX49_7_WA0sW2enUgVebdoYEJIKTWj-V5CbxaQ37MZOyCgSMj32fSnv-KP-N7cyKFHEOyESCe7vZgJN4T8A9iMqMxuPCdhgPVotR-L2L5Qz_q3_S9zcT5g-LvZ-nLZ2cm9ENQvIICirj-7InclimEm-Oy1jRcvXa0afBQ88g8pqM6C695-HFotV3TjkyCD51UDk1XjtMlHNCUeLl9t0CAbyUDfyOJuLr_0MLZIO4ooZLbeavi1LwpTeOyHf0wBi_a5JSprlgHdy8YrfduZ9ArpC7UssfFKEot8-ljHSiYpzPWYv8QnRTTZ5VI18W6e6VGcSFqyTePeNaQ-hhK3xgM4AZEPYdEUJugHK6lfhDhve0pKC41Ba4HfNqgrIGFptGJySX8zwquHfyHhMRKvZ-RyFzWvESEcQoRMIQJbgHM-u_DPPalW5AUnedhZRrk4gLLmqs0TLQ1kjCDjqQ8qjMmcTJOfC6PGOd9nc4oZLyHGapoFtNN5klFtUAMb2nefGS9yEUPtMhmRVwDh5Ek8KHdj2vjH5zvuPo1_PhbWlBJHlmbFa57PNluKMKcWzYAaZ_e6oDvARP8RrPX6mMqVdZXAFfVTJTMf9LqMxjOEQQqnWqGU-Tu1441zM1GDxvdI34L8Ne6j_P9FncLak7sdEj-JtEM8V9rNQFt80Xa3wrf-LTwWui3DexbvpnfJ2n3RwHwgGrjHs5Os-8c-lHZvWn6c19RAF1PuXggtB2tp71maMOrnpYrA_7uQW6t-CZl8lREWpTls8ax4B5gjQ1BPVWX-80_d-0fqd9x2si6VDo7qour7Ezw5ct-mpjq_Z_LpMqVy9mm25t5p8b2Tpr1X5jqkE8aiCwp8B3hI_qvydaXcGLIe30q_jBsiElO2PtWLShhDPTE9TySEGpE_FuRu3871g9PWkAnNoFnBizvDoL7cs1CCI0smWkos8oCNwUq3ImNWalyh-vAU7tFQ0mU6dHSGOd2QxmDsMUg-P_1OnvPz_u7zAqXdyn5DaFjEvG8aD1-4qmICXDupkQ95eGjxPN7LudO7YG2zjF4d9vS_YBAXliIpTgl7bpt7s9dka3TaSbRu6yU-0G2cug--IeWNkrovRmH_o-sOcxtCJ2wQ7wyNHDbJWqVhq50AK38hQoc4eToBRQI0zCY6R9IGuw58Ku6DOGJhLq1yOiFfkxeY5K09ulA3IBoV7vVyf3CqbLxvieZIb4Lhq1HoHPkPjWistG4a3rFQmCsu1RnHbZ9Ei8k52VgBEcccjOuRNHdEwTi64FK5Wunx3EZAmiaJzJFt0j1_7g_CaD8v0k82CZUp9L0jiPHLKE3UGnPc-RfAOxtGrosiC8frftiqA03Y65ViytYwCKIFzBVCdPkbQRgiDwOq85rVigt2Cul4zpDM\"}",
+          "output_ordinal": 79,
+          "output_contains_truncation_notice": false
+        }
+      ]
+    },
+    {
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T16-31-23-01a0f7e0-8b14-71c0-94fd-dc47c43a6084.jsonl",
+      "id": "01a0f7e0-8b14-71c0-94fd-dc47c43a6084",
+      "source": {
+        "subagent": {
+          "thread_spawn": {
+            "parent_thread_id": "01a0f7dd-8141-71b3-9915-3f68a145eef1",
+            "depth": 1,
+            "agent_path": "/root/mechanical_pass",
+            "agent_nickname": "Socrates",
+            "agent_role": null
+          }
+        }
+      },
+      "first_event": "2026-10-01T14:31:23.233Z",
+      "last_event": "2026-10-01T14:31:25.418Z",
+      "lifecycle": [
+        {
+          "ordinal": 1,
+          "timestamp": "2026-10-01T14:31:23.233Z",
+          "type": "task_started"
+        },
+        {
+          "ordinal": 12,
+          "timestamp": "2026-10-01T14:31:25.418Z",
+          "type": "turn_aborted"
+        }
+      ],
+      "calls": []
+    }
+  ],
+  "native_service_events": [
+    {
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T16-31-23-01a0f7e0-8b14-71c0-94fd-dc47c43a6084.jsonl",
+      "ordinal": 12,
+      "event": {
+        "timestamp": "2026-10-01T14:31:25.418Z",
+        "ordinal": 12,
+        "type": "event_msg",
+        "payload": {
+          "type": "turn_aborted",
+          "turn_id": "01a0f7e0-8b51-7b62-a45d-14779dba172e",
+          "reason": "interrupted",
+          "started_at": 1790865083,
+          "completed_at": 1790865085,
+          "duration_ms": 2198
+        }
+      }
+    }
+  ],
+  "stream_errors": [
+    {
+      "type": "error",
+      "message": "Selected model is at capacity. Please try a different model."
+    },
+    {
+      "type": "turn.failed",
+      "error": {
+        "message": "Selected model is at capacity. Please try a different model."
+      }
+    }
+  ],
+  "limit": "An input naming a glob or a path is indexed, not credited as a complete individual resource read. Encrypted dispatch briefs remain unverified."
+}

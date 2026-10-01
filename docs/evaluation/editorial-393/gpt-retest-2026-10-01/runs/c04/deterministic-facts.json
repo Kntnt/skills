@@ -1,0 +1,139 @@
+{
+  "result": {
+    "returncode": 0,
+    "timed_out": false,
+    "duration_seconds": 1454.41,
+    "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-n5cht9dv",
+    "cleanup_required": true
+  },
+  "input_sha256": "6648de46956c4796cff8c1fb1f3cc3a195b1a57f7cc5a4511e298f49fa1b6a36",
+  "artifact": {
+    "fenced_artifact_count": 1,
+    "present": true,
+    "source": "response-fence",
+    "sha256": "3472f9e7a77e1fc479bcb6c970247bc452ac6c05814b57c8c9fddb33f9047cc7",
+    "input_identical": false
+  },
+  "identities": [
+    {
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T14-40-36-01a0f77b-1d27-7603-b0d5-75ca5a303c42.jsonl",
+      "id": "01a0f77b-1d27-7603-b0d5-75ca5a303c42",
+      "source": "exec",
+      "seats": [
+        [
+          "gpt-6.1-sol",
+          "xhigh"
+        ]
+      ]
+    },
+    {
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T14-47-01-01a0f780-ff22-7161-aec7-3af51fdf9ffb.jsonl",
+      "id": "01a0f780-ff22-7161-aec7-3af51fdf9ffb",
+      "source": {
+        "subagent": {
+          "thread_spawn": {
+            "parent_thread_id": "01a0f77b-1d27-7603-b0d5-75ca5a303c42",
+            "depth": 1,
+            "agent_path": "/root/redline_correction",
+            "agent_nickname": "Pasteur",
+            "agent_role": null
+          }
+        }
+      },
+      "seats": [
+        [
+          "gpt-6.1-sol",
+          "xhigh"
+        ]
+      ]
+    },
+    {
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T14-54-43-01a0f788-0c46-79b0-8656-060f962b827b.jsonl",
+      "id": "01a0f788-0c46-79b0-8656-060f962b827b",
+      "source": {
+        "subagent": {
+          "thread_spawn": {
+            "parent_thread_id": "01a0f77b-1d27-7603-b0d5-75ca5a303c42",
+            "depth": 1,
+            "agent_path": "/root/redline_proofread",
+            "agent_nickname": "Feynman",
+            "agent_role": null
+          }
+        }
+      },
+      "seats": [
+        [
+          "gpt-6.1-sol",
+          "xhigh"
+        ]
+      ]
+    },
+    {
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T15-01-26-01a0f78e-330e-7b32-a390-a051ac0ecddb.jsonl",
+      "id": "01a0f78e-330e-7b32-a390-a051ac0ecddb",
+      "source": {
+        "subagent": {
+          "thread_spawn": {
+            "parent_thread_id": "01a0f77b-1d27-7603-b0d5-75ca5a303c42",
+            "depth": 1,
+            "agent_path": "/root/redline_reply_check",
+            "agent_nickname": "Gibbs",
+            "agent_role": null
+          }
+        }
+      },
+      "seats": [
+        [
+          "gpt-6.1-sol",
+          "xhigh"
+        ]
+      ]
+    }
+  ],
+  "encrypted_dispatches": [
+    {
+      "session": "01a0f77b-1d27-7603-b0d5-75ca5a303c42",
+      "name": "spawn_agent",
+      "call_id": "call_ABxxyd7FtYgnSCtlA8A4QUlY",
+      "note": "dispatch message encrypted; use actual child reads rather than infer its complete brief"
+    },
+    {
+      "session": "01a0f77b-1d27-7603-b0d5-75ca5a303c42",
+      "name": "spawn_agent",
+      "call_id": "call_1sPHEctTSrL6haWJJDXbHEO3",
+      "note": "dispatch message encrypted; use actual child reads rather than infer its complete brief"
+    },
+    {
+      "session": "01a0f77b-1d27-7603-b0d5-75ca5a303c42",
+      "name": "spawn_agent",
+      "call_id": "call_o5DnS6sXQl032jC2L6Y1t4hF",
+      "note": "dispatch message encrypted; use actual child reads rather than infer its complete brief"
+    },
+    {
+      "session": "01a0f780-ff22-7161-aec7-3af51fdf9ffb",
+      "name": "send_message",
+      "call_id": "call_PpRgEAZoZiRh1Sd35qO6uCeg",
+      "note": "dispatch message encrypted; use actual child reads rather than infer its complete brief"
+    }
+  ],
+  "all_recorded_seats_match": true,
+  "artifact_matches_captures": [
+    {
+      "path": "scratch/redline-mechanical-e47xqi9e/mechanical-input.md",
+      "sha256": "3472f9e7a77e1fc479bcb6c970247bc452ac6c05814b57c8c9fddb33f9047cc7",
+      "capture": "0010-3472f9e7a77e.md",
+      "time": 1790859269.689875
+    },
+    {
+      "path": "scratch/redline-mechanical-e47xqi9e/mechanical-output.md",
+      "sha256": "3472f9e7a77e1fc479bcb6c970247bc452ac6c05814b57c8c9fddb33f9047cc7",
+      "capture": "0015-3472f9e7a77e.md",
+      "time": 1790859378.606011
+    }
+  ],
+  "source_inventory_unchanged": true,
+  "staged_install_unchanged": true,
+  "work_created": {},
+  "work_removed": {},
+  "work_changed": {}
+}

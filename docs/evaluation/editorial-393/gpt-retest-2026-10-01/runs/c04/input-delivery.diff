@@ -1,0 +1,41 @@
+--- input.md
++++ delivered.md
+@@ -1,6 +1,6 @@
+ ---
+ kntnt:
+-  genre: case-study
++  genre: casestudy
+   technique: none
+   language: sv
+ ---
+@@ -11,11 +11,13 @@
+ 
+ Elm Quay Housing förvaltar 640 lägenheter. Tidigare förvarades felanmälningar via telefon och mejl separat. I september 2025 beslutade bolagets eget underhållsteam att prova en gemensam logg. Försöket pågick i åtta veckor.
+ 
+-– Vi ville att kvällsskiftet skulle se vad morgonskiftet redan hade gjort. Kategorierna var våra; Svale hjälpte oss att lägga in dem i loggen, berättar Maya Lind i en mejlintervju.
++## Teamet testade loggen före leverantörsvalet
++
++– Vi ville att kvällsskiftet skulle se vad morgonskiftet redan hade gjort. Kategorierna var våra; Svale hjälpte oss att lägga in dem i loggen, berättar underhållsansvariga Maya Lind i en mejlintervju.
+ 
+ Teamet valde Svale Systems efter att ha testat om loggen kunde visa statusen för varje reparation. Underlaget innehåller ingen jämförelse med någon annan leverantör.
+ 
+-## Teamet utformade kategorierna
++## Svale utbildade sex medarbetare
+ 
+ Underhållsteamet tog fram kategorierna och behöll möjligheten för de boende att felanmäla via telefon. Svale konfigurerade loggen och utbildade sex medarbetare vid två tillfällen.
+ 
+@@ -31,11 +33,13 @@
+ 
+ Mätningen gäller alltså tiden tills ett ärende tilldelades, inte tills reparationen var klar. Det saknas mätningar av kostnader, hur nöjda de boende var och tiden till slutförd reparation.
+ 
+-## Lind skulle avsätta mer tid för förberedelser
++## Lind ser tillbaka på försöket
+ 
+ Linds egen bedömning av försöket rymmer ett förbehåll:
+ 
+ – Jag skulle välja att göra om försöket. Det hjälper oss att ha en samlad bild av felanmälningarna, men jag skulle avsätta en extra vecka för förberedelser.
++
++## Teamet ska kontrollera kategorierna för större reparationer
+ 
+ Försöket har ännu inte utökats. Teamet ska först kontrollera hur kategorierna fungerar för större reparationer och därefter fatta beslut.
+ 

@@ -1,0 +1,146 @@
+{
+  "result": {
+    "returncode": 0,
+    "timed_out": false,
+    "duration_seconds": 941.36,
+    "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-ujmtutv1",
+    "cleanup_required": true
+  },
+  "input_sha256": "3d2f9ed7390e247b388dfd62ae735272c4c35adab5f471f922046dc9ef93e7a2",
+  "artifact": {
+    "fenced_artifact_count": 0,
+    "present": true,
+    "source": "explicit-file",
+    "sha256": "7a48b66be7dea353cda89ea0e1632f28f94eb3e04a3f04f89433c345c02570f6",
+    "input_identical": false
+  },
+  "identities": [
+    {
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T16-31-26-01a0f7e0-96ce-79d3-ae7f-2b22eb12eb6f.jsonl",
+      "id": "01a0f7e0-96ce-79d3-ae7f-2b22eb12eb6f",
+      "source": "exec",
+      "seats": [
+        [
+          "gpt-6.1-sol",
+          "xhigh"
+        ]
+      ]
+    },
+    {
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T16-35-51-01a0f7e4-a43e-7e42-a78e-ca8a9fb3dcaa.jsonl",
+      "id": "01a0f7e4-a43e-7e42-a78e-ca8a9fb3dcaa",
+      "source": {
+        "subagent": {
+          "thread_spawn": {
+            "parent_thread_id": "01a0f7e0-96ce-79d3-ae7f-2b22eb12eb6f",
+            "depth": 1,
+            "agent_path": "/root/redline_correction",
+            "agent_nickname": "Boyle",
+            "agent_role": null
+          }
+        }
+      },
+      "seats": [
+        [
+          "gpt-6.1-sol",
+          "xhigh"
+        ]
+      ]
+    },
+    {
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T16-41-26-01a0f7e9-c014-7590-89cc-4d243b7f9bdc.jsonl",
+      "id": "01a0f7e9-c014-7590-89cc-4d243b7f9bdc",
+      "source": {
+        "subagent": {
+          "thread_spawn": {
+            "parent_thread_id": "01a0f7e0-96ce-79d3-ae7f-2b22eb12eb6f",
+            "depth": 1,
+            "agent_path": "/root/redline_proofread",
+            "agent_nickname": "Anscombe",
+            "agent_role": null
+          }
+        }
+      },
+      "seats": [
+        [
+          "gpt-6.1-sol",
+          "xhigh"
+        ]
+      ]
+    },
+    {
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T16-45-47-01a0f7ed-ba94-7bc2-a7a0-32b42eba979d.jsonl",
+      "id": "01a0f7ed-ba94-7bc2-a7a0-32b42eba979d",
+      "source": {
+        "subagent": {
+          "thread_spawn": {
+            "parent_thread_id": "01a0f7e0-96ce-79d3-ae7f-2b22eb12eb6f",
+            "depth": 1,
+            "agent_path": "/root/redline_reply_check",
+            "agent_nickname": "Faraday",
+            "agent_role": null
+          }
+        }
+      },
+      "seats": [
+        [
+          "gpt-6.1-sol",
+          "xhigh"
+        ]
+      ]
+    }
+  ],
+  "encrypted_dispatches": [
+    {
+      "session": "01a0f7e0-96ce-79d3-ae7f-2b22eb12eb6f",
+      "name": "spawn_agent",
+      "call_id": "call_kBTL28efwj3JAHdWeY27Evdj",
+      "note": "dispatch message encrypted; use actual child reads rather than infer its complete brief"
+    },
+    {
+      "session": "01a0f7e0-96ce-79d3-ae7f-2b22eb12eb6f",
+      "name": "spawn_agent",
+      "call_id": "call_V0vUm6uxH3kkdtxjXaON89ow",
+      "note": "dispatch message encrypted; use actual child reads rather than infer its complete brief"
+    },
+    {
+      "session": "01a0f7e0-96ce-79d3-ae7f-2b22eb12eb6f",
+      "name": "spawn_agent",
+      "call_id": "call_ayCZNVjQVnJrKUtvouuvbM6k",
+      "note": "dispatch message encrypted; use actual child reads rather than infer its complete brief"
+    },
+    {
+      "session": "01a0f7e9-c014-7590-89cc-4d243b7f9bdc",
+      "name": "send_message",
+      "call_id": "call_Hm4YzRGAZQ4Gs8Ax554jFucY",
+      "note": "dispatch message encrypted; use actual child reads rather than infer its complete brief"
+    }
+  ],
+  "all_recorded_seats_match": true,
+  "artifact_matches_captures": [
+    {
+      "path": "scratch/redline-mechanical-f8_uikah/mechanical-output.md",
+      "sha256": "7a48b66be7dea353cda89ea0e1632f28f94eb3e04a3f04f89433c345c02570f6",
+      "capture": "0014-7a48b66be7de.md",
+      "time": 1790865784.9629319
+    },
+    {
+      "path": "work/output.md",
+      "sha256": "7a48b66be7dea353cda89ea0e1632f28f94eb3e04a3f04f89433c345c02570f6",
+      "capture": "0015-7a48b66be7de.md",
+      "time": 1790866013.462423
+    }
+  ],
+  "source_inventory_unchanged": true,
+  "staged_install_unchanged": true,
+  "work_created": {
+    "work/output.md": {
+      "mode": 420,
+      "type": "file",
+      "size": 1752,
+      "sha256": "7a48b66be7dea353cda89ea0e1632f28f94eb3e04a3f04f89433c345c02570f6"
+    }
+  },
+  "work_removed": {},
+  "work_changed": {}
+}
