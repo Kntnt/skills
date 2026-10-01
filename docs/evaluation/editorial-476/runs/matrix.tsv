@@ -1,0 +1,7 @@
+lane	run	arm	revision	input	invocation	capture
+G	pre-opinion-flawed-resp	pre	fb169087	docs/evaluation/corpus/editorial-quality/controls/opinion-flawed.md	/redline --genre=opinion --language=sv --output=response input.md	no
+G	post-opinion-flawed-resp	post	2aa9ccb2	docs/evaluation/corpus/editorial-quality/controls/opinion-flawed.md	/redline --genre=opinion --language=sv --output=response input.md	no
+G	pre-opinion-flawed-file	pre	fb169087	docs/evaluation/corpus/editorial-quality/controls/opinion-flawed.md	/redline --genre=opinion --language=sv --output=output.md input.md	yes
+G	post-opinion-flawed-file	post	2aa9ccb2	docs/evaluation/corpus/editorial-quality/controls/opinion-flawed.md	/redline --genre=opinion --language=sv --output=output.md input.md	yes
+K	pre-column-flawed-resp	pre	fb169087	docs/evaluation/corpus/editorial-quality/controls/column-flawed.md	/redline --genre=column --language=sv --output=response input.md	no
+K	post-column-flawed-resp	post	2aa9ccb2	docs/evaluation/corpus/editorial-quality/controls/column-flawed.md	/redline --genre=column --language=sv --output=response input.md	no
