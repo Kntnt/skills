@@ -6097,8 +6097,7 @@ def test_redline_has_its_reply_checked_by_a_reader_that_did_not_write_it() -> No
 # reading on the first list sends the change built on it to the second
 # (issue #478).
 REPLY_CHECK_SUMMARY_ATTRIBUTION = (
-    "carries an attribution for all of that content, wherever the content itself"
-    " stands"
+    "carries an attribution for all of that content, wherever the content itself stands"
 )
 REPLY_CHECK_FACTS_IN_PLACE = (
     "the attribution has moved even though every fact still stands where it stood"
@@ -6116,9 +6115,7 @@ REPLY_CHECK_FIRST_LIST_FEEDS_SECOND = (
 )
 
 
-def test_the_reply_check_counts_a_summing_sentence_that_moves_an_attribution() -> (
-    None
-):
+def test_the_reply_check_counts_a_summing_sentence_that_moves_an_attribution() -> None:
     """A sentence saying who tells what moves the attribution of all of it.
 
     #475's candidate delivered *Vad det krävde berättar arbetsledaren Maya Lind

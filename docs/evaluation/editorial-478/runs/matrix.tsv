@@ -1,0 +1,35 @@
+lane	run	kind	arm	revision	input	invocation	capture
+A	pre-case-study-clean-resp-1	redline	pre	fb16908712c4d47a36fc6ee9dfb3eb2714a19e65	docs/evaluation/corpus/editorial-quality/controls/case-study-clean.md	/redline --genre=casestudy --language=sv --output=response input.md	no
+A	post-case-study-clean-resp-1	redline	post	cbda03527af6c8780f873ba9b73d5c436e120131	docs/evaluation/corpus/editorial-quality/controls/case-study-clean.md	/redline --genre=casestudy --language=sv --output=response input.md	no
+A	pre-case-study-clean-file-1	redline	pre	fb16908712c4d47a36fc6ee9dfb3eb2714a19e65	docs/evaluation/corpus/editorial-quality/controls/case-study-clean.md	/redline --genre=casestudy --language=sv --output=output.md input.md	yes
+A	post-case-study-clean-file-1	redline	post	cbda03527af6c8780f873ba9b73d5c436e120131	docs/evaluation/corpus/editorial-quality/controls/case-study-clean.md	/redline --genre=casestudy --language=sv --output=output.md input.md	yes
+A	pre-case-study-clean-resp-2	redline	pre	fb16908712c4d47a36fc6ee9dfb3eb2714a19e65	docs/evaluation/corpus/editorial-quality/controls/case-study-clean.md	/redline --genre=casestudy --language=sv --output=response input.md	no
+A	post-case-study-clean-resp-2	redline	post	cbda03527af6c8780f873ba9b73d5c436e120131	docs/evaluation/corpus/editorial-quality/controls/case-study-clean.md	/redline --genre=casestudy --language=sv --output=response input.md	no
+A	pre-case-study-clean-file-2	redline	pre	fb16908712c4d47a36fc6ee9dfb3eb2714a19e65	docs/evaluation/corpus/editorial-quality/controls/case-study-clean.md	/redline --genre=casestudy --language=sv --output=output.md input.md	yes
+A	post-case-study-clean-file-2	redline	post	cbda03527af6c8780f873ba9b73d5c436e120131	docs/evaluation/corpus/editorial-quality/controls/case-study-clean.md	/redline --genre=casestudy --language=sv --output=output.md input.md	yes
+A	pre-case-study-clean-resp-3	redline	pre	fb16908712c4d47a36fc6ee9dfb3eb2714a19e65	docs/evaluation/corpus/editorial-quality/controls/case-study-clean.md	/redline --genre=casestudy --language=sv --output=response input.md	no
+A	post-case-study-clean-resp-3	redline	post	cbda03527af6c8780f873ba9b73d5c436e120131	docs/evaluation/corpus/editorial-quality/controls/case-study-clean.md	/redline --genre=casestudy --language=sv --output=response input.md	no
+A	pre-case-study-clean-file-3	redline	pre	fb16908712c4d47a36fc6ee9dfb3eb2714a19e65	docs/evaluation/corpus/editorial-quality/controls/case-study-clean.md	/redline --genre=casestudy --language=sv --output=output.md input.md	yes
+A	post-case-study-clean-file-3	redline	post	cbda03527af6c8780f873ba9b73d5c436e120131	docs/evaluation/corpus/editorial-quality/controls/case-study-clean.md	/redline --genre=casestudy --language=sv --output=output.md input.md	yes
+B	pre-case-study-flawed-1	redline	pre	fb16908712c4d47a36fc6ee9dfb3eb2714a19e65	docs/evaluation/corpus/editorial-quality/controls/case-study-flawed.md	/redline --genre=casestudy --language=sv --output=response input.md	no
+B	post-case-study-flawed-1	redline	post	cbda03527af6c8780f873ba9b73d5c436e120131	docs/evaluation/corpus/editorial-quality/controls/case-study-flawed.md	/redline --genre=casestudy --language=sv --output=response input.md	no
+B	pre-case-study-flawed-2	redline	pre	fb16908712c4d47a36fc6ee9dfb3eb2714a19e65	docs/evaluation/corpus/editorial-quality/controls/case-study-flawed.md	/redline --genre=casestudy --language=sv --output=response input.md	no
+B	post-case-study-flawed-2	redline	post	cbda03527af6c8780f873ba9b73d5c436e120131	docs/evaluation/corpus/editorial-quality/controls/case-study-flawed.md	/redline --genre=casestudy --language=sv --output=response input.md	no
+C	pre-replay-k1-1	replay	pre	fb16908712c4d47a36fc6ee9dfb3eb2714a19e65	docs/evaluation/editorial-478/contrasts/k1-narrator-to-person/prompt-pre.txt	-	no
+C	post-replay-k1-1	replay	post	cbda03527af6c8780f873ba9b73d5c436e120131	docs/evaluation/editorial-478/contrasts/k1-narrator-to-person/prompt-post.txt	-	no
+C	pre-replay-k1-2	replay	pre	fb16908712c4d47a36fc6ee9dfb3eb2714a19e65	docs/evaluation/editorial-478/contrasts/k1-narrator-to-person/prompt-pre.txt	-	no
+C	post-replay-k1-2	replay	post	cbda03527af6c8780f873ba9b73d5c436e120131	docs/evaluation/editorial-478/contrasts/k1-narrator-to-person/prompt-post.txt	-	no
+C	pre-replay-k1-3	replay	pre	fb16908712c4d47a36fc6ee9dfb3eb2714a19e65	docs/evaluation/editorial-478/contrasts/k1-narrator-to-person/prompt-pre.txt	-	no
+C	post-replay-k1-3	replay	post	cbda03527af6c8780f873ba9b73d5c436e120131	docs/evaluation/editorial-478/contrasts/k1-narrator-to-person/prompt-post.txt	-	no
+D	pre-replay-k2-1	replay	pre	fb16908712c4d47a36fc6ee9dfb3eb2714a19e65	docs/evaluation/editorial-478/contrasts/k2-attribution-kept/prompt-pre.txt	-	no
+D	post-replay-k2-1	replay	post	cbda03527af6c8780f873ba9b73d5c436e120131	docs/evaluation/editorial-478/contrasts/k2-attribution-kept/prompt-post.txt	-	no
+D	pre-replay-k2-2	replay	pre	fb16908712c4d47a36fc6ee9dfb3eb2714a19e65	docs/evaluation/editorial-478/contrasts/k2-attribution-kept/prompt-pre.txt	-	no
+D	post-replay-k2-2	replay	post	cbda03527af6c8780f873ba9b73d5c436e120131	docs/evaluation/editorial-478/contrasts/k2-attribution-kept/prompt-post.txt	-	no
+D	pre-replay-k2-3	replay	pre	fb16908712c4d47a36fc6ee9dfb3eb2714a19e65	docs/evaluation/editorial-478/contrasts/k2-attribution-kept/prompt-pre.txt	-	no
+D	post-replay-k2-3	replay	post	cbda03527af6c8780f873ba9b73d5c436e120131	docs/evaluation/editorial-478/contrasts/k2-attribution-kept/prompt-post.txt	-	no
+E	pre-replay-k3-1	replay	pre	fb16908712c4d47a36fc6ee9dfb3eb2714a19e65	docs/evaluation/editorial-478/contrasts/k3-cause-and-scope-reported/prompt-pre.txt	-	no
+E	post-replay-k3-1	replay	post	cbda03527af6c8780f873ba9b73d5c436e120131	docs/evaluation/editorial-478/contrasts/k3-cause-and-scope-reported/prompt-post.txt	-	no
+E	pre-replay-k3-2	replay	pre	fb16908712c4d47a36fc6ee9dfb3eb2714a19e65	docs/evaluation/editorial-478/contrasts/k3-cause-and-scope-reported/prompt-pre.txt	-	no
+E	post-replay-k3-2	replay	post	cbda03527af6c8780f873ba9b73d5c436e120131	docs/evaluation/editorial-478/contrasts/k3-cause-and-scope-reported/prompt-post.txt	-	no
+E	pre-replay-k3-3	replay	pre	fb16908712c4d47a36fc6ee9dfb3eb2714a19e65	docs/evaluation/editorial-478/contrasts/k3-cause-and-scope-reported/prompt-pre.txt	-	no
+E	post-replay-k3-3	replay	post	cbda03527af6c8780f873ba9b73d5c436e120131	docs/evaluation/editorial-478/contrasts/k3-cause-and-scope-reported/prompt-post.txt	-	no
