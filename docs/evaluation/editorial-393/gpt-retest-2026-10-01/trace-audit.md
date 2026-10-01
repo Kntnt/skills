@@ -59,3 +59,9 @@ The c07 parent removed the harness-created empty `scratch/cache`, `scratch/data`
 ## Resolver wrappers
 
 Some successful resolver outputs end with a separate `EXIT:` or `RESOLVER_EXIT=` line. The retained complete JSON object precedes that status line. The resource extractor now uses JSON prefix decoding, which accepts that complete object and still rejects a cut-off object. This adds previously uncredited complete language scopes in correction/checker sessions without changing any criterion or supplied input. Updated totals supersede the earlier lower bounds where larger: c03 35,054 and c05 30,159 complete returned words. The actual updated evidence is in each run's resource file. r14's parent resolver response remains without a complete credited scope object; its trace limitation is not filled by its correction child's complete scope reads.
+
+## Write source-check transport
+
+w02 and w03 completed two fresh source comparisons each, with no structured service interruption, matching inherited contexts, unchanged supplied source/install, and no final work/scratch effects. Their `write-verification.json` links the last captured checked draft to a complete actual read by the second checker and proves exact equality with delivered prose after removing only the leading handoff metadata. Readable report and disposition copies sit beside the full native traces. Known findings in w02 were delivered beside the checked draft, as the frozen Write contract permits; delivery with a reported remaining finding is not an incomplete-comparison stop.
+
+Resolved composition guidance supplied as plain text can be credited when its complete bytes, established by a complete resolver object from the same run, appear in actual returned checker material. This exposes both w02 checker composition reads. w03's corresponding inline encrypted guidance remains unverified; neither a role description nor the required briefing language is credited as the briefing itself.

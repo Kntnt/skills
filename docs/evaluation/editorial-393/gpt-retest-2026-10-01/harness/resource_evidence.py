@@ -71,9 +71,36 @@ def main() -> None:
             ["git", "show", f"{revision}:{name}"], cwd=REPOSITORY
         )
         resources[name] = content
+    session_events = {
+        path: [json.loads(line) for line in path.read_text().splitlines()]
+        for path in sorted((args.run / "native-sessions").rglob("*.jsonl"))
+    }
+    # A source checker can receive the resolved guidance as complete plain text,
+    # rather than call the resolver again. Establish its bytes only from actual
+    # complete resolver objects in this run, then match actual returned material.
+    known_scopes = {}
+    for events in session_events.values():
+        for event in events:
+            payload = event.get("payload", {})
+            if event["type"] != "response_item" or payload.get("type") not in {
+                "custom_tool_call_output",
+                "function_call_output",
+            }:
+                continue
+            for text in returned_strings(payload.get("output")):
+                try:
+                    decoded, _ = json.JSONDecoder().raw_decode(text[text.index("{") :])
+                except (ValueError, json.JSONDecodeError):
+                    continue
+                if not isinstance(decoded, dict) or not isinstance(
+                    decoded.get("scopes"), dict
+                ):
+                    continue
+                for scope, data in decoded["scopes"].items():
+                    if isinstance(data, dict) and isinstance(data.get("content"), str):
+                        known_scopes[(decoded.get("code"), scope)] = data
     observed = []
-    for path in sorted((args.run / "native-sessions").rglob("*.jsonl")):
-        events = [json.loads(line) for line in path.read_text().splitlines()]
+    for path, events in session_events.items():
         meta = next(e["payload"] for e in events if e["type"] == "session_meta")
         seen = set()
         scope_seen = set()
@@ -104,6 +131,27 @@ def main() -> None:
                             "sha256": hashlib.sha256(content).hexdigest(),
                         }
                     )
+            for key, data in known_scopes.items():
+                content = data["content"]
+                if (
+                    key in scope_seen
+                    or not content
+                    or not any(content in text for text in strings)
+                ):
+                    continue
+                scope_seen.add(key)
+                observed.append(
+                    {
+                        **pointer,
+                        "language": key[0],
+                        "scope": key[1],
+                        "source": data.get("source"),
+                        "complete_returned_content": True,
+                        "words": len(content.split()),
+                        "sha256": hashlib.sha256(content.encode()).hexdigest(),
+                        "presentation": "exact resolved guidance returned as plain text",
+                    }
+                )
             for text in strings:
                 try:
                     decoded, _ = json.JSONDecoder().raw_decode(text[text.index("{") :])
