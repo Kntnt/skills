@@ -119,5 +119,13 @@
     "path_removed": "/Users/thomas/Projects/skills-eval-395-gpt-20261001/.venv",
     "verified_absent": true,
     "note": "No native invocation or product state changed. Subsequent checks use documented uvx commands and neutral cache path."
+  },
+  {
+    "at": "2026-10-01T15:33:32.106524+00:00",
+    "scope": "cell 07 first timeout void",
+    "path_removed": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-od2o_11x",
+    "verified_absent": true,
+    "evidence_copy_verified": true,
+    "command_form": "rm -r with full literal path"
   }
 ]
