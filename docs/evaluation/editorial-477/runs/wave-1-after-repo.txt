@@ -1,0 +1,10 @@
+# /Users/thomas/Projects/skills/.git/kntnt-orchestrate/477
+# HEAD 516afe2e8d0c16412687f56f7402284d03b09619
+?? docs/evaluation/editorial-477/runs/collect.py
+?? docs/evaluation/editorial-477/runs/delivered.py
+?? docs/evaluation/editorial-477/runs/judge_dirs.py
+?? docs/evaluation/editorial-477/runs/judges.tsv
+# end /Users/thomas/Projects/skills/.git/kntnt-orchestrate/477
+# /Users/thomas/Projects/skills
+# HEAD fb16908712c4d47a36fc6ee9dfb3eb2714a19e65
+# end /Users/thomas/Projects/skills
