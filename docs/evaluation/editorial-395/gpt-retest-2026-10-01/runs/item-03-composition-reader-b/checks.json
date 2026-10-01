@@ -26,11 +26,12 @@
     }
   ],
   "native_errors": [],
-  "native_tool_calls": 0,
+  "native_tool_calls": 9,
   "observer_response_matches_native": null,
   "delivered_substring_native": null,
   "mechanical_input_equals_output": null,
   "mechanical_output_equals_delivered": null,
+  "mechanical_output_equals_supplied_input": null,
   "scratch_files": {
     "scratch/cache": {
       "mode": 493,
