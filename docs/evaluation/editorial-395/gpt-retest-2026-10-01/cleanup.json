@@ -45,5 +45,16 @@
     ],
     "verified_absent": true,
     "evidence_copy_verified": true
+  },
+  {
+    "at": "2026-10-01T14:17:05.104737+00:00",
+    "scope": "cell 04 Write and both valid independent judges",
+    "paths_removed": [
+      "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-uto9o939",
+      "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-8ezzqqf3",
+      "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-suoty8kt"
+    ],
+    "verified_absent": true,
+    "evidence_copy_verified": true
   }
 ]

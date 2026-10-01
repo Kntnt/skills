@@ -1,0 +1,75 @@
+{
+  "01a0f78f-88f1-7450-9ec4-293b36820785": {
+    "source": "exec",
+    "resources": [
+      {
+        "path": ".agents/skills/kntnt/library/references/delivery.md",
+        "full_resource_text_in_returned_output": true
+      },
+      {
+        "path": ".agents/skills/kntnt/library/references/editorial/article-anatomy.md",
+        "full_resource_text_in_returned_output": true
+      },
+      {
+        "path": ".agents/skills/kntnt/library/references/editorial/base.md",
+        "full_resource_text_in_returned_output": true
+      },
+      {
+        "path": ".agents/skills/kntnt/library/references/editorial/genres/casestudy.md",
+        "full_resource_text_in_returned_output": true
+      },
+      {
+        "path": ".agents/skills/kntnt/library/references/editorial/headlines.md",
+        "full_resource_text_in_returned_output": true
+      },
+      {
+        "path": ".agents/skills/kntnt/library/references/editorial/web-craft.md",
+        "full_resource_text_in_returned_output": true
+      },
+      {
+        "path": ".agents/skills/kntnt/library/references/invocation-envelope.md",
+        "full_resource_text_in_returned_output": true
+      },
+      {
+        "path": ".agents/skills/write/SKILL.md",
+        "full_resource_text_in_returned_output": true
+      },
+      {
+        "path": ".agents/skills/write/references/quotations.md",
+        "full_resource_text_in_returned_output": true
+      },
+      {
+        "path": ".agents/skills/write/references/source-check.md",
+        "full_resource_text_in_returned_output": true
+      }
+    ]
+  },
+  "01a0f795-2da2-74d1-85d3-3a07d248578b": {
+    "source": {
+      "subagent": {
+        "thread_spawn": {
+          "parent_thread_id": "01a0f78f-88f1-7450-9ec4-293b36820785",
+          "depth": 1,
+          "agent_path": "/root/source_check_1",
+          "agent_nickname": "Carver",
+          "agent_role": null
+        }
+      }
+    },
+    "resources": []
+  },
+  "01a0f79b-6298-7192-a1cd-0d06f91888e1": {
+    "source": {
+      "subagent": {
+        "thread_spawn": {
+          "parent_thread_id": "01a0f78f-88f1-7450-9ec4-293b36820785",
+          "depth": 1,
+          "agent_path": "/root/source_check_2",
+          "agent_nickname": "Bohr",
+          "agent_role": null
+        }
+      }
+    },
+    "resources": []
+  }
+}
