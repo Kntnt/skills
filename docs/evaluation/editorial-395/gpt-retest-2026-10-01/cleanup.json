@@ -56,5 +56,16 @@
     ],
     "verified_absent": true,
     "evidence_copy_verified": true
+  },
+  {
+    "at": "2026-10-01T14:27:22.071199+00:00",
+    "scope": "cell 04 Redline and both independent judges",
+    "paths_removed": [
+      "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-hr_evylq",
+      "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-gynk5wh7",
+      "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-pel2_3oj"
+    ],
+    "verified_absent": true,
+    "evidence_copy_verified": true
   }
 ]

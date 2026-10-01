@@ -1,0 +1,94 @@
+{
+  "01a0f7a1-bed1-7650-97e0-43b4e29d425b": {
+    "source": "exec",
+    "resources": [
+      {
+        "path": ".agents/skills/kntnt/library/references/delivery.md",
+        "full_resource_text_in_returned_output": true
+      },
+      {
+        "path": ".agents/skills/kntnt/library/references/editorial/anti-slop.md",
+        "full_resource_text_in_returned_output": true
+      },
+      {
+        "path": ".agents/skills/kntnt/library/references/editorial/article-anatomy.md",
+        "full_resource_text_in_returned_output": true
+      },
+      {
+        "path": ".agents/skills/kntnt/library/references/editorial/article-anatomy.review.md",
+        "full_resource_text_in_returned_output": true
+      },
+      {
+        "path": ".agents/skills/kntnt/library/references/editorial/base.md",
+        "full_resource_text_in_returned_output": true
+      },
+      {
+        "path": ".agents/skills/kntnt/library/references/editorial/base.review.md",
+        "full_resource_text_in_returned_output": true
+      },
+      {
+        "path": ".agents/skills/kntnt/library/references/editorial/genres/casestudy.md",
+        "full_resource_text_in_returned_output": true
+      },
+      {
+        "path": ".agents/skills/kntnt/library/references/editorial/genres/casestudy.review.md",
+        "full_resource_text_in_returned_output": true
+      },
+      {
+        "path": ".agents/skills/kntnt/library/references/editorial/headlines.md",
+        "full_resource_text_in_returned_output": true
+      },
+      {
+        "path": ".agents/skills/kntnt/library/references/editorial/headlines.review.md",
+        "full_resource_text_in_returned_output": true
+      },
+      {
+        "path": ".agents/skills/kntnt/library/references/editorial/web-craft.md",
+        "full_resource_text_in_returned_output": true
+      },
+      {
+        "path": ".agents/skills/kntnt/library/references/editorial/web-craft.review.md",
+        "full_resource_text_in_returned_output": true
+      },
+      {
+        "path": ".agents/skills/proofread/SKILL.md",
+        "full_resource_text_in_returned_output": true
+      },
+      {
+        "path": ".agents/skills/redline/SKILL.md",
+        "full_resource_text_in_returned_output": true
+      },
+      {
+        "path": ".agents/skills/redline/references/reply-check.md",
+        "full_resource_text_in_returned_output": true
+      }
+    ]
+  },
+  "01a0f7a4-316a-7a10-9097-0f6fdccf43cb": {
+    "source": {
+      "subagent": {
+        "thread_spawn": {
+          "parent_thread_id": "01a0f7a1-bed1-7650-97e0-43b4e29d425b",
+          "depth": 1,
+          "agent_path": "/root/mechanical_pass",
+          "agent_nickname": "Poincare",
+          "agent_role": null
+        }
+      }
+    },
+    "resources": [
+      {
+        "path": ".agents/skills/kntnt/library/references/delivery.md",
+        "full_resource_text_in_returned_output": true
+      },
+      {
+        "path": ".agents/skills/kntnt/library/references/editorial/mechanics.md",
+        "full_resource_text_in_returned_output": true
+      },
+      {
+        "path": ".agents/skills/proofread/SKILL.md",
+        "full_resource_text_in_returned_output": true
+      }
+    ]
+  }
+}

@@ -1,0 +1,105 @@
+{
+  "input_sha256": "e5f5b32ccb7dc3c99562a86471b145dd5dc24f264d2b0537239e3f95ad2488f8",
+  "input_preserved": true,
+  "input_stat_preserved": true,
+  "installed_files_unchanged": true,
+  "result": {
+    "returncode": 0,
+    "timed_out": false,
+    "duration_seconds": 365.29,
+    "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-hr_evylq",
+    "cleanup_required": true
+  },
+  "seats": [
+    {
+      "id": "01a0f7a1-bed1-7650-97e0-43b4e29d425b",
+      "source": "exec",
+      "cli_version": "0.159.3",
+      "seats": [
+        [
+          "gpt-6.1-sol",
+          "xhigh"
+        ]
+      ],
+      "task_complete": true,
+      "trace": "native-sessions/2026/10/01/rollout-2026-10-01T15-22-47-01a0f7a1-bed1-7650-97e0-43b4e29d425b.jsonl"
+    },
+    {
+      "id": "01a0f7a4-316a-7a10-9097-0f6fdccf43cb",
+      "source": {
+        "subagent": {
+          "thread_spawn": {
+            "parent_thread_id": "01a0f7a1-bed1-7650-97e0-43b4e29d425b",
+            "depth": 1,
+            "agent_path": "/root/mechanical_pass",
+            "agent_nickname": "Poincare",
+            "agent_role": null
+          }
+        }
+      },
+      "cli_version": "0.159.3",
+      "seats": [
+        [
+          "gpt-6.1-sol",
+          "xhigh"
+        ]
+      ],
+      "task_complete": true,
+      "trace": "native-sessions/2026/10/01/rollout-2026-10-01T15-25-28-01a0f7a4-316a-7a10-9097-0f6fdccf43cb.jsonl"
+    }
+  ],
+  "native_errors": [],
+  "native_tool_calls": 22,
+  "observer_response_matches_native": true,
+  "delivered_substring_native": null,
+  "mechanical_input_equals_output": true,
+  "mechanical_output_equals_delivered": null,
+  "mechanical_output_equals_supplied_input": true,
+  "scratch_files": {
+    "scratch/cache": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "scratch/data": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "scratch/observer-evidence": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "scratch/observer-evidence/mechanical-pass-input.md": {
+      "mode": 420,
+      "type": "file",
+      "size": 2401,
+      "sha256": "e5f5b32ccb7dc3c99562a86471b145dd5dc24f264d2b0537239e3f95ad2488f8"
+    },
+    "scratch/observer-evidence/mechanical-pass-output.md": {
+      "mode": 420,
+      "type": "file",
+      "size": 2401,
+      "sha256": "e5f5b32ccb7dc3c99562a86471b145dd5dc24f264d2b0537239e3f95ad2488f8"
+    },
+    "scratch/observer-response.md": {
+      "mode": 420,
+      "type": "file",
+      "size": 153,
+      "sha256": "c3ae0f0d15eeea2e1bf8c456918373e73707285b876a9c383d83b173338a8c8a"
+    },
+    "scratch/tmp": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "scratch/uv-cache": {
+      "mode": 493,
+      "type": "directory"
+    }
+  },
+  "work_changes": {},
+  "limits": [
+    "Encrypted dispatch text is not decoded; actual child reads establish only visible scope.",
+    "A file-read command must be checked against its returned output for truncation or failure.",
+    "External captures poll at 100 ms; an uncaptured temporary version is not asserted present.",
+    "No semantic or resource-loading pass follows merely from a tool count or task completion."
+  ]
+}
