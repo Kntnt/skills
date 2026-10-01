@@ -188,5 +188,10 @@
     "counted": true,
     "delivered": false,
     "disposition": "completed-no-change-status"
+  },
+  "p01": {
+    "counted": true,
+    "delivered": true,
+    "disposition": "completed-unchanged-artifact-with-unresolved-findings"
   }
 }
