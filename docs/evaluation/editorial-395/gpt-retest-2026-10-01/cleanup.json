@@ -112,5 +112,12 @@
     "verified_absent": true,
     "evidence_copy_verified": true,
     "command_form": "rm -r with each full literal path"
+  },
+  {
+    "at": "2026-10-01T15:18:07.953848+00:00",
+    "scope": "incorrect uv dependency-group probe created implicit evaluator venv again",
+    "path_removed": "/Users/thomas/Projects/skills-eval-395-gpt-20261001/.venv",
+    "verified_absent": true,
+    "note": "No native invocation or product state changed. Subsequent checks use documented uvx commands and neutral cache path."
   }
 ]

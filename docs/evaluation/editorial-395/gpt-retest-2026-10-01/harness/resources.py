@@ -1,4 +1,5 @@
 """Retain resource-content observations from actual native tool returns."""
+
 from __future__ import annotations
 
 import argparse

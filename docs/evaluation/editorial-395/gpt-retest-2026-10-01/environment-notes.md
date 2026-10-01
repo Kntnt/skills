@@ -1,3 +1,7 @@
 # Environment drift
 
 The measured product/corpus remain frozen at fb16908712c4d47a36fc6ee9dfb3eb2714a19e65. During the retest, main advanced to fe2587b70f57c3cfc63903b0be6d9fa4819a4827 when #476's Redline shell/cleanup change merged. `git diff --name-only fb169087..main -- skills/editorial/write skills/editorial/redline skills/kntnt/library skills/kntnt/scripts` at this checkpoint names only skills/editorial/redline/SKILL.md. Write and its library/script load chain remain byte-identical, but the paired Redline measurement is of the frozen revision. No additional arm or changed install is introduced.
+
+Evaluator resource-content indexing helper resources.py added after the frozen runs; it is never installed or supplied to tested Skills/judges. Exact returned resources and line coverage across rereads are observed separately. Ruff lint/format and mypy strict pass for the helper; native encrypted dispatch is still not decoded.
+
+Cell 05 instrument scope limit: the frozen G2 criterion describes both headline and subheadings as not repeating standfirst or first sentence. Actual frozen headlines.md states the pairs headline–standfirst and subheading–first sentence. Both judges therefore identify first-H2/standfirst repetition under the broader criterion. Their raw G2 failures and consequent Redline R1 failures remain unchanged, but that subpoint is not a demonstrated breach of the installed pairing. No retrospective criterion edit, taste arbitration or rerun.
