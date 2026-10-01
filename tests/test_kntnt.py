@@ -7318,6 +7318,44 @@ def test_a_loss_is_counted_as_the_reader_suffers_it_in_every_passage() -> None:
         )
 
 
+OPINION_REVIEW = EDITORIAL / "genres" / "opinion.review.md"
+
+
+def test_an_opinions_step_before_a_pending_decision_is_not_a_forecast() -> None:
+    """A step the argument sets before a decision still to be taken forecasts nothing.
+
+    #479's pre-change arm read *pröva båda bokningsvägarna ett halvår till
+    innan den ena stängs* as the author conceding that one route closes,
+    although the headline and the lead make that closure the pending decision
+    the author asks to postpone, and three runs of six delivered the clause
+    deleted or hedged. The opinion review reads such a passage as naming the
+    decision the text has put on the table, and keeps a finding for a text
+    that states the outcome as settled while another passage leaves it open.
+    """
+
+    rule = next(
+        (
+            block
+            for block in _paragraphs(OPINION_REVIEW.read_text(encoding="utf-8"))
+            if "still to be taken" in block
+        ),
+        "",
+    )
+    assert rule, (
+        f"{OPINION_REVIEW}: no paragraph says how a passage that sets out what"
+        f" should happen before a decision still to be taken is read, so a"
+        f" review reads the pending decision as the author's forecast of its"
+        f" outcome (issue #479)."
+    )
+    for part in ("forecast", "pending", "settled", "contradict"):
+        assert part in rule, (
+            f"{OPINION_REVIEW}: the rule on a step before a pending decision"
+            f" does not say {part!r}, so it either still reads the step as a"
+            f" forecast or no longer keeps a finding for a text that states"
+            f" the outcome as settled against another passage (issue #479)."
+        )
+
+
 def test_redline_names_the_heading_defect_by_what_a_reader_of_it_alone_can_tell() -> (
     None
 ):
