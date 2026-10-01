@@ -1,0 +1,15 @@
+lane	run	arm	revision	input	invocation	capture
+A	pre-article-clean-resp-1	pre	fb169087	docs/evaluation/corpus/editorial-quality/controls/article-clean.md	/redline --genre=article --language=sv --output=response input.md	no
+A	pre-article-clean-file-1	pre	fb169087	docs/evaluation/corpus/editorial-quality/controls/article-clean.md	/redline --genre=article --language=sv --output=output.md input.md	yes
+A	pre-article-clean-resp-2	pre	fb169087	docs/evaluation/corpus/editorial-quality/controls/article-clean.md	/redline --genre=article --language=sv --output=response input.md	no
+A	pre-article-clean-file-2	pre	fb169087	docs/evaluation/corpus/editorial-quality/controls/article-clean.md	/redline --genre=article --language=sv --output=output.md input.md	yes
+A	pre-article-clean-resp-3	pre	fb169087	docs/evaluation/corpus/editorial-quality/controls/article-clean.md	/redline --genre=article --language=sv --output=response input.md	no
+A	pre-article-clean-file-3	pre	fb169087	docs/evaluation/corpus/editorial-quality/controls/article-clean.md	/redline --genre=article --language=sv --output=output.md input.md	yes
+B	pre-article-allusion-resp-1	pre	fb169087	docs/evaluation/editorial-480/inputs/article-allusion.md	/redline --genre=article --language=sv --output=response input.md	no
+B	pre-article-allusion-file-1	pre	fb169087	docs/evaluation/editorial-480/inputs/article-allusion.md	/redline --genre=article --language=sv --output=output.md input.md	yes
+B	pre-article-allusion-resp-2	pre	fb169087	docs/evaluation/editorial-480/inputs/article-allusion.md	/redline --genre=article --language=sv --output=response input.md	no
+B	pre-article-allusion-file-2	pre	fb169087	docs/evaluation/editorial-480/inputs/article-allusion.md	/redline --genre=article --language=sv --output=output.md input.md	yes
+C	pre-article-unnamed-1	pre	fb169087	docs/evaluation/editorial-480/inputs/article-unnamed.md	/redline --genre=article --language=sv --output=response input.md	no
+C	pre-article-unnamed-2	pre	fb169087	docs/evaluation/editorial-480/inputs/article-unnamed.md	/redline --genre=article --language=sv --output=response input.md	no
+D	pre-article-overclaim-1	pre	fb169087	docs/evaluation/editorial-480/inputs/article-overclaim.md	/redline --genre=article --language=sv --output=response input.md	no
+D	pre-article-overclaim-2	pre	fb169087	docs/evaluation/editorial-480/inputs/article-overclaim.md	/redline --genre=article --language=sv --output=response input.md	no
