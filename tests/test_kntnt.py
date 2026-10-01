@@ -6091,6 +6091,60 @@ def test_redline_has_its_reply_checked_by_a_reader_that_did_not_write_it() -> No
     )
 
 
+# What the run does with the checker's return: it corrects what an item names
+# and delivers every other sentence of the reply as the check read it (#477).
+REPLY_CHECK_ONLY_WHAT_AN_ITEM_CALLS_FOR = (
+    "correct only the reply, and in it only what an item calls for"
+)
+REPLY_CHECK_KEEPS_THE_REST = (
+    "changes what the item says is false and keeps the rest of the statement as drafted"
+)
+REPLY_CHECK_AS_DRAFTED = (
+    "Every sentence no item names goes to the reader as you drafted it, word for word"
+)
+REPLY_CHECK_NOTHING_ADDED = (
+    "nothing about either text is added beyond what an item calls for"
+)
+REPLY_CHECK_PAGE_AS_READ = "the rest of the reply goes out as that reader read it"
+
+
+def test_redline_corrects_only_what_the_reply_check_names() -> None:
+    """A sentence the check passed is not rewritten after it.
+
+    In #475's evaluation the draft the checker read said that the note does
+    not credit the software with the difference, which is true. The checker
+    faulted two other sentences of the same finding, and the run then wrote
+    the whole reply again: 24 of the draft's 32 sentences that no item named
+    were reworded, and the finding now said the note states outright that the
+    software did not cause the difference. Nothing reads the reply after the
+    check, so a sentence reworded then reaches the reader unchecked
+    (issue #477).
+    """
+
+    brief = REDLINE_REPLY_CHECK.read_text(encoding="utf-8")
+    parent = brief.split("\n---\n", 1)[0]
+    for clause in (
+        REPLY_CHECK_ONLY_WHAT_AN_ITEM_CALLS_FOR,
+        REPLY_CHECK_KEEPS_THE_REST,
+        REPLY_CHECK_AS_DRAFTED,
+        REPLY_CHECK_NOTHING_ADDED,
+    ):
+        assert clause in parent, (
+            f"{REDLINE_REPLY_CHECK}: the parent's half no longer says"
+            f" {clause!r}, so a sentence the check passed may be rewritten after"
+            f" it and reach the reader unchecked (issue #477). See {STANDARD}."
+        )
+    # The checker is told nothing of how its return is used.
+    subagent = brief.split("\n---\n", 1)[1]
+    assert REPLY_CHECK_AS_DRAFTED not in subagent
+
+    page = REDLINE_HELP.read_text(encoding="utf-8")
+    assert REPLY_CHECK_PAGE_AS_READ in page, (
+        f"{REDLINE_HELP}: the manpage does not say that the rest of the reply"
+        f" is delivered as the checker read it (issue #477). See {STANDARD}."
+    )
+
+
 # The shared delivery contract's answer to what the response of a run that
 # named a destination carries: where the text went and the findings the file
 # cannot hold, and never the text itself (issue #148).

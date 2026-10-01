@@ -1,0 +1,32 @@
+Jag har granskat och rättat texten och skrivit resultatet till `output.md`. `input.md` är orörd.
+
+**Inställningar:** genre `casestudy` och språk `sv`, båda angivna i anropet. Ingen teknik används: ingenting angav någon, och genren kundcase anger ingen teknik som den vanligen skrivs med.
+
+**Fynd: båda är åtgärdade och inga kvarstår**
+
+1. **Rubriken.** ”Gemensam ärendebild hjälper, säger Elm Quay om loggförsöket” tillskrev bedömningen organisationen Elm Quay. I texten är det arbetsledaren Maya Lind som säger att en gemensam bild av ärendena ”hjälper oss”, och hon säger det med en reservation. Den som bara såg rubriken kunde tro att det var bostadsbolagets officiella hållning. Rubriken lyder nu ”Gemensam ärendebild hjälper, säger Elm Quays arbetsledare”.
+2. **Brödtextens första stycke, sista meningen:** ”Vad det krävde, och vad det gav, går att följa i gruppens egna anteckningar.” Meningen upprepade i sak ingressens sista mening. Den pekade också ut anteckningarna som källa till både vad försöket krävde och vad det gav. Men textens enda anteckning, Elm Quays interna försöksanteckning, redovisar bara ärenden och mediantider, och den tillskriver uttryckligen inte skillnaden programvaran. Det texten berättar om vad försöket krävde står i den löpande texten och i Linds citat, inte i anteckningen. Meningen är struken.
+
+Korrigeringsbudgeten (1) är förbrukad. Den nya granskningen efter korrigeringen hittade varken nya eller kvarstående fynd.
+
+**Påståenden**
+
+- **Ändrat (rubriken, fynd 1):** rubriken säger nu att det är Elm Quays arbetsledare som bedömer att en gemensam ärendebild hjälper, inte Elm Quay. Ledet ”om loggförsöket” är borta, så rubriken säger inte längre att bedömningen gäller loggförsöket. Ingressen säger fortfarande att försöket gällde en gemensam reparationslogg.
+- **Struket (inledningsstycket, fynd 2):** påståendet att man kan följa vad försöket krävde och vad det gav i gruppens egna anteckningar. Inledningsstycket hänvisar inte längre till anteckningarna som källa. Källan till siffrorna, Elm Quays interna försöksanteckning från den 4 december 2025, anges fortfarande i avsnittet ”Två perioder med olika arbetsbelastning”.
+- Inga påståenden har lagts till. Utöver de två ovan är inget påstående ändrat eller struket.
+
+**Artikelns anatomi:** Mätningen av den slutliga texten visar att den uppfyller de räknade kraven:
+- rubriken har 57 tecken och 7 ord
+- ingressen har 40 ord i ett stycke
+- inledningsstycket har 29 ord
+- de tre avsnitten har två stycken vardera
+
+Jag granskade också de krav som mätningen inte räknar:
+- ingressen står på egen hand
+- inledningsstycket börjar med ett annat ord än ingressen och för läsaren vidare
+- mellanrubrikerna beskriver sina avsnitt
+- sista avsnittet är ett avslut som uppmanar läsaren att göra något
+
+Texten följer artikelns anatomi utan avvikelse.
+
+Utöver de två ändringarna ovan har jag inte ändrat något i texten. Slutkorrekturen hittade inga språkfel att rätta, och ingen mellanrubrik, inget annat stycke och ingen formatering har ändrats.

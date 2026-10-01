@@ -6,10 +6,12 @@ Give this to a subagent started fresh once step 9 has produced the final Text Ar
 
 Tell the subagent nothing else. Not the review's reasoning, not the rounds or what any of them attempted, not why any change was made, and not this Skill's own instructions: the checker is a reader who knows what the reader of the reply will know, the two texts and what the reply says of them, and that is what lets it see what a change did beyond what it was meant to do. Hand the filled-in brief to the subagent directly, as the whole of its instruction, and never as a file whose path you send in its place: it holds the user's text twice, and a file is a name another process can read, replace or delete while the check runs.
 
-**What you do with what it returns.** The subagent returns two lists. Act on every item of both, and correct only the reply:
+**What you do with what it returns.** The subagent returns two lists. Act on every item of both, and correct only the reply, and in it only what an item calls for:
 
-- A statement on the first list is rewritten so that it is true of the text it names, or left out, as *The truth of a report about the text* in `$LIBRARY/references/delivery.md` says. A count or length about the delivered text takes its figure from the measurement you handed over.
+- A statement on the first list is rewritten so that it is true of the text it names, or left out, as *The truth of a report about the text* in `$LIBRARY/references/delivery.md` says. The rewrite changes what the item says is false and keeps the rest of the statement as drafted — what it says a text does, who says it there, and how certainly — since the check read that part too and faulted none of it. A count or length about the delivered text takes its figure from the measurement you handed over.
 - A difference on the second list is added to the claim account, or its entry completed, the way step 11 reports a removed, changed or added claim. Anything the reply says about the claims as a whole that the new or completed entry contradicts is narrowed to what holds, or left out.
+
+Every sentence no item names goes to the reader as you drafted it, word for word, and nothing about either text is added beyond what an item calls for. Nothing reads the reply after the check, so a sentence reworded or added now reaches the reader unchecked, and a true one is easily made false in the retelling: a passage that declines to credit a cause, described again in other words, becomes one that rules the cause out.
 
 The list is a check of the reply, not a note of what a correction did, so the closing paragraph is still built from your own comparison of the two texts, and is corrected from the list like every other statement. The text is not touched: the Text Artifact step 9 produced is delivered as it is, and step 10 holds. The check is made once, and the corrected reply is delivered without being checked again.
 
