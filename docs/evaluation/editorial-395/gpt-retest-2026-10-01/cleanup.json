@@ -78,5 +78,39 @@
     ],
     "verified_absent": true,
     "evidence_copy_verified": true
+  },
+  {
+    "at": "2026-10-01T14:59:13.611753+00:00",
+    "scope": "evaluator implicit lint/import caches",
+    "paths_removed": [
+      "/Users/thomas/Projects/skills-eval-395-gpt-20261001/.mypy_cache",
+      "/Users/thomas/Projects/skills-eval-395-gpt-20261001/.ruff_cache",
+      "/Users/thomas/Projects/skills-eval-395-gpt-20261001/docs/evaluation/editorial-395/gpt-retest-2026-10-01/harness/__pycache__"
+    ],
+    "verified_absent": true,
+    "note": "System cleanup registration refuses non-temp paths; tracked here and removed explicitly. Future checks use registered neutral scratch caches and disable import bytecode."
+  },
+  {
+    "time": 1790867473.725742,
+    "scope": "failed evaluator script invocation implicit worktree venv",
+    "path": "/Users/thomas/Projects/skills-eval-395-gpt-20261001/.venv",
+    "note": "uv run was passed a nonexistent scratch script after a quoting error; no native invocation ran. Worktree venv is evaluator scratch and will be removed explicitly."
+  },
+  {
+    "at": "2026-10-01T15:15:55.615277+00:00",
+    "scope": "cell 05 all counted invocations, cell 06 timeout void and implicit evaluator venv",
+    "paths_removed": [
+      "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-aoxu6qeh",
+      "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-45qvcv88",
+      "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-gf2qohpw",
+      "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-lgqitjos",
+      "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-k1wiadic",
+      "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-tc_qggqx",
+      "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-gpk3yzkp",
+      "/Users/thomas/Projects/skills-eval-395-gpt-20261001/.venv"
+    ],
+    "verified_absent": true,
+    "evidence_copy_verified": true,
+    "command_form": "rm -r with each full literal path"
   }
 ]

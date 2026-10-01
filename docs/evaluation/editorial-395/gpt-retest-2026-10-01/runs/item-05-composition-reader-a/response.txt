@@ -1,0 +1,92 @@
+Saved to [judgement.md](/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-lgqitjos/work/judgement.md).
+
+# Judgement
+
+## 1. Outcome
+
+**Delivered. Two source comparisons ran. The delivered prose is identical to the last prose a checker saw.**
+
+The evidence contains an initial draft and first report, a corrected version of that report, the writer’s first disposition, a repaired draft and second report, and the final disposition. The corrected first report is an amendment to comparison 1, not a third comparison; identical observer copies are also not additional comparisons.
+
+Removing the handoff frontmatter from delivered.md leaves prose byte-identical to evidence/0013-8d300ccf1be4.md, the draft covered by comparison 2. The Markdown code block in response.md also matches delivered.md. The only prose change between the two compared drafts removes “Svale Systems’” before the checklist link.
+
+## 2. F1 — Pass
+
+I find no unsupported assertion, quotation, attribution, implication, invented event or personal attribute in the delivered draft. This conclusion comes from comparison with work/source.md, rather than either checker’s approval.
+
+The following wording changes preserve the supplied meaning:
+
+- **“640 flats” → “640 apartments.”** In this housing-management context, both identify the same individual residential units. Neither term includes a materially different dwelling category here in either direction; the count and management relationship remain unchanged.
+- **The maintenance team → Elm Quay in the standfirst, headline and first section heading.** The source explicitly identifies Elm Quay’s own team as the actor. Organizational attribution does not transfer the customer’s actions to the supplier or imply adoption throughout all 640 apartments.
+- **“New log.”** In “testing a new log in two buildings,” “new” describes its introduction into the customer’s reporting arrangement. It does not assert a newly invented product.
+- **“Wanted” → “so staff on different shifts could see the same information.”** The clause gives the purpose of the team’s decision; it does not certify every staff member’s actual use.
+- **Choosing after testing → testing before choosing.** The chronology and the conditional feature test, “whether the log could show the status of each repair,” remain unchanged.
+- **“During two sessions” → “in two sessions.”** The same six staff, trainer and session count are retained; neither wording establishes attendance at each session.
+- **“4 December 2025” → “December 4, 2025.”** Only the date order changes.
+- **“Completion-time measurements” → “repair completion time measurements.”** Repair completion is the source paragraph’s contextual referent. Neither direction changes the measured assignment interval into completion time.
+- **“It excludes” → “That count excludes.”** The draft explicitly attaches emergencies and previously ordered work to the trial note’s reported count, without asserting that those activities did not occur.
+- **“The categories” → “its categories.”** The possessive identifies the same categories the maintenance team designed.
+
+“Elm Quay gains one view of repair reports” is supported by Lind’s “Having one view of the reports helps us.” It does not claim a measured efficiency gain or a view covering every repair. The present-tense heading “Elm Quay keeps telephone reporting open” narrates the historical trial action described beneath it; it does not independently establish an ongoing policy after the trial.
+
+The eight-week trial, 31 entered reports, exclusions, report-to-assignment medians of two and three working days, preceding eight-week comparison period, different workloads and explicit nonattribution to software all survive. No count is characterized as large or small. “No comparison with another supplier is available” preserves unavailable evidence rather than asserting that no comparison ever happened. Missing measurements do not become claims that savings, satisfaction or completed repairs were absent; nonattribution does not become proof that software had no effect.
+
+Lind’s preparation reservation, the lack of expansion and the condition of checking categories for larger repairs remain. Supplier narration stays in third person, and the standfirst identifies Svale as publisher. The checklist’s destination, document type and optional reading action are accurate; its ownership is left unspecified. The Thomas Barregren byline is expressly allowed by this judging brief, and response.md discloses its invocation-derived origin.
+
+## 3. G1, G2, P1, W1, L1 and L2
+
+**G1 — Pass.** This is a recognizable customer case for housing operations managers. The angle is a customer-controlled repair-log trial with a shared view, preparation work and limited evidence about results. Readers learn what the team selected and designed, what Svale supplied, what the trial note measures, what it cannot establish, and what Lind would change. The optional checklist gives a supported practical next step. The customer remains the deciding and acting party.
+
+**G2 — Fail.** The headline, standfirst, disclosed byline, lead, sections and actionable ending appear in the required order. Situation, action, results and appraisal have distinct functions, and the final quotation answers the lead’s expectation about sharing information. Publisher stance and the reading destination are truthful.
+
+However, the subheading “Elm Quay keeps telephone reporting open” repeats the standfirst’s “Elm Quay Housing kept telephone reporting open while testing a new log in two buildings.” Both deliver the same retained-reporting-channel fact. It does not repeat its first following sentence, but criteria.md also expressly requires headings not to repeat the standfirst. This heading therefore fails that requirement and gives the reader an already supplied point instead of a new orientation to the section’s selection, category design and preparation account.
+
+**P1 — Pass.** The sequence moves intelligibly from separate reporting channels to the team’s selection and implementation, then to attributed figures and their limitations, and finally to experience and the pending expansion decision. “Elm Quay’s internal trial note” introduces the numerical source before its findings. “The periods had different workloads” and the nonattribution clause immediately constrain the comparison. The text retains useful operational substance without drawing conclusions beyond it.
+
+**W1 — Fail.** The essential two-building scope appears only in the standfirst: “testing a new log in two buildings.” Covering the standfirst leaves a lead mentioning 640 apartments and a body reporting 31 reports over eight weeks, without telling the reader how many buildings the trial covered. Readers entering through the body cannot establish the scale of those results. This fails the explicit requirement that the body be complete when the standfirst is covered. It is a body-completeness defect, not an unsupported assertion in the complete artifact.
+
+The remaining layout works. There are 10 prose paragraphs, with 17–49 words each; nine contain two or three sentences. The four sections contain 3, 2, 2 and 1 paragraphs, so most meet the two-or-three-paragraph preference. The one-paragraph ending makes one useful reading invitation and does not justify a fragmentation finding. The headline has 8 words and 41 characters; all section headings are H2. Standfirst and lead begin with different words, “Elm” and “Telephone.” The article has approximately 338 words including headings and byline, excluding frontmatter and Markdown syntax, which is reasonable for “approximately 400 words, as material allows.”
+
+**L1 — Pass.** The prose uses clear, professional English syntax and idiom. “Before choosing Svale Systems, the team tested whether…” and “I would leave an extra week for preparation” express sequence and reservation naturally. Some framing is procedural, particularly “Lind’s assessment in the email interview was,” but it remains idiomatic and intelligible. No imported Swedish phrasing or translation-driven meaning problem appears.
+
+**L2 — Pass.** The disclosed American English locale governs “apartments” and “December 4, 2025.” Quotation punctuation, number forms and the serial comma are consistent with that locale. No date or numerical value changes, and no concrete mechanical error is apparent. This judgement is separate from the idiom assessment under L1.
+
+## 4. Bridges into quotations
+
+1. **Bridge:** “Maintenance supervisor Maya Lind described the preparation in an email interview:” **Quotation:** “We spent more time agreeing on the categories than entering the first reports. I would set that time aside before the next building starts.” **Class (b).** “Maintenance supervisor Maya Lind” attributes the speech, “the preparation” names its subject, and “in an email interview” names its occasion. The bridge supplies neither the relative time spent nor the advice to reserve that time. Naming preparation is not a substantive pre-echo.
+
+2. **Bridge:** “Lind’s assessment in the email interview was:” **Quotation:** “I would choose to do the trial again. Having one view of the reports helps us, but I would leave an extra week for preparation.” **Class (b).** “Lind’s assessment” names the speaker and subject, and “in the email interview” names the occasion. It does not deliver the willingness to repeat the trial, the experienced benefit or the extra-week reservation.
+
+For both bridges, the email medium could superficially suggest class (c), because the quotations themselves do not mention it; I choose (b) because the definition expressly includes naming the occasion, and neither bridge adds an independent substantive fact. Both quotations have bridges; neither stands without one. Neither bridge contains a substantive pre-echo clause hidden within another classification.
+
+**Earlier repetition, assessed separately:** The headline “Elm Quay gains one view of repair reports” anticipates the shared-view fact in the second quotation. The quotation still adds “helps us,” Lind’s conditional choice to repeat the trial and the preparation reservation. The standfirst’s “qualified assessment” and the heading “Maya Lind assesses the experience” identify the nature and subject of that quotation without announcing its actual conclusion. These earlier passages do not change either immediate bridge’s class.
+
+**Counts:** The draft has 0 bridges of class (a), 2 of class (b), 0 of class (c), and 0 quotations without bridges.
+
+**Interviewer invention:** The draft attributes no question or utterance to an interviewer and puts no unsupported words in an interviewer’s mouth.
+
+**Bridge support:** Neither bridge asserts anything unsupported; the source supplies Lind’s name and role, both quoted subjects, the actual assessment and the email interview medium.
+
+## 5. Quoted speech
+
+The preparation quotation reproduces the source’s second usable quotation exactly. It preserves the customer’s relative-time comparison, collective “We,” personal conditional “I would,” and advice to set aside category-agreement time. It adds experience beyond the preceding account of category design and training.
+
+The appraisal quotation reproduces the source’s third usable quotation exactly. Meaning, personal stance, certainty, voice and reservation all survive: Lind would choose the trial again, finds the shared view helpful to the customer group, and would allow an extra preparation week. It remains an actual customer assessment rather than a conclusion inferred from the medians or a universal recommendation of Svale.
+
+One permitted quotation is missing altogether: “We wanted the evening shift to see what the morning shift had already done. The categories were ours; Svale helped us put them into the log.” Its shift-sharing purpose and customer ownership of categories are represented in narration. Using every available quotation was not required, so this omission is not itself a defect.
+
+## 6. Intermediate
+
+- **Comparison 1, finding F1**, recorded in evidence/0008-3c8695fac466.md, its amended version evidence/0009-28806073d0e1.md, and the identical capture evidence/0022-28806073d0e1.md — **Passage:** “Svale Systems’ [implementation checklist](https://example.invalid/svale/checklist).” **Allegation:** The possessive adds checklist ownership or affiliation not established by the supplied publisher identity and URL. **Writer action:** Accepted the finding and replaced the possessive with “the,” preserving the link and optional reading action; the draft comparison confirms this was the only prose edit. **Class: supported repair.**
+
+The first report initially supplied an invalid reverse-direction illustration that contradicted explicit source statements. Its amended version withdraws that illustration, and the writer’s disposition acknowledges the correction. The remaining source-compatible possibility of a checklist supplied for the case without belonging to Svale is sufficient to support removal of the possessive. This report-accounting correction was not an additional finding against the draft.
+
+Comparison 2, in evidence/0014-3c15f95c53fc.md and its identical capture evidence/0019-3c15f95c53fc.md, reports no findings; the writer made no subsequent prose repair. Both comparisons report no quotation or translation defects. Response.md mentions no additional defect finding for which a report is missing.
+
+The writer’s final validation says “No anatomy requirement or heading echo remains to carry to delivery,” and response.md says the measured structure requirements passed. Those approvals do not answer the independently visible G2 repetition or W1 missing body scope. Neither issue was reported at delivery.
+
+**Missed F1 or bridge defect:** I found no real defect under F1 or point 4 that a checker missed; the outstanding defects are under G2 and W1.
+
+## 7. Stop or delivery
+
+**A delivery that should not have happened.** The supported source repair was completed, the quotations are faithful, and the final prose matches comparison 2. However, the delivered artifact still violates the required heading nonrepetition and independent body completeness under G2 and W1, while the delivery account reports no remaining problem. The first section heading needed a distinct angle, and the body needed the two-building trial scope restored before delivery.
