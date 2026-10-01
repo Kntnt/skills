@@ -1,0 +1,7 @@
+lane	run	arm	revision	source	input	invocation	capture
+B	rev-opinion-clean-resp-1	rev	3b1f791d	fb169087	docs/evaluation/corpus/editorial-quality/controls/opinion-clean.md	/redline --genre=opinion --language=sv --output=response input.md	no
+B	rev-opinion-clean-file-1	rev	3b1f791d	fb169087	docs/evaluation/corpus/editorial-quality/controls/opinion-clean.md	/redline --genre=opinion --language=sv --output=output.md input.md	yes
+B	rev-opinion-clean-resp-2	rev	3b1f791d	fb169087	docs/evaluation/corpus/editorial-quality/controls/opinion-clean.md	/redline --genre=opinion --language=sv --output=response input.md	no
+B	rev-opinion-clean-file-2	rev	3b1f791d	fb169087	docs/evaluation/corpus/editorial-quality/controls/opinion-clean.md	/redline --genre=opinion --language=sv --output=output.md input.md	yes
+B	rev-opinion-clean-resp-3	rev	3b1f791d	fb169087	docs/evaluation/corpus/editorial-quality/controls/opinion-clean.md	/redline --genre=opinion --language=sv --output=response input.md	no
+B	rev-opinion-clean-file-3	rev	3b1f791d	fb169087	docs/evaluation/corpus/editorial-quality/controls/opinion-clean.md	/redline --genre=opinion --language=sv --output=output.md input.md	yes
