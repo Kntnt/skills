@@ -1,0 +1,27 @@
+{
+  "misses": [
+    {
+      "judge": "a",
+      "class": 3,
+      "kind": "",
+      "owner": null,
+      "reply": "Den lovade ett utfall som försöket skulle ha gett, med anteckningarna som belägg.",
+      "judge_says": "Finding 2 reads \"vad det gav\" as an unsupported promise of an effect caused by the software. The body does show what the trial gave (31 cases, a median of two working days against three) together with the reservation.",
+      "check": "input.md promises that \"vad det gav\" can be followed in \"gruppens egna anteckningar\", and the body cites one internal note that does not credit the software with the difference. The finding's description is not contradicted by the text; the judge disputes the reading, that is, whether the sentence was a real defect."
+    },
+    {
+      "judge": "b",
+      "class": 3,
+      "kind": "",
+      "owner": null,
+      "reply": "Den lovade ett utfall som försöket skulle ha gett, med anteckningarna som belägg. Men Elm Quays interna försöksanteckning, som brödtexten hänvisar till för siffrorna, tillskriver uttryckligen inte programvaran skillnaden i mediantid.",
+      "judge_says": "The justification is inaccurate. The finding says the sentence \"lovade ett utfall som försöket skulle ha gett\" in a causal sense. The input does not say this.",
+      "check": "input.md reads \"Vad det krävde, och vad det gav, går att följa i gruppens egna anteckningar.\" It does promise that what the trial gave can be followed in the notes, and the note \"tillskriver därför inte skillnaden programvaran\". The text does not contradict the finding's description; the judge disputes the causal reading, that is, whether the sentence was a real defect. The finding says the note declines to credit the software, not that it rules the software out, so it is not the #477 behaviour."
+    }
+  ],
+  "verdicts": {
+    "a": "fail",
+    "b": "fail"
+  },
+  "notes": "Both judges call the account of both differences accurate and complete; the reply's headline count (68 characters, 9 words, from 59 and 8) checks out. Judge a's remark that finding 1's headline was ordinary practice rather than an error disputes only the change and is not recorded."
+}

@@ -1,0 +1,9 @@
+{
+  "packet": "post-case-study-clean-resp-3",
+  "checkers": 1,
+  "delivered_text_source": "response.txt: last fenced block",
+  "delivered_text_equals_received": true,
+  "checker_transcript": "transcripts/subagents/agent-a2d534d16947774e5.jsonl",
+  "delivered_text_equals_final": true,
+  "split_by": "stages_delim.py, which also reads <<<NAME blocks"
+}

@@ -1,0 +1,19 @@
+**1. False statements**
+
+- **Finding 4 says:** "Vad försöket krävde kommer i texten från Maya Linds citat, inte från någon anteckning."
+  - **Text:** the text as it arrived.
+  - **What contradicts it:** some of what the trial required comes from the narrator, not from Lind's quote. Under "Gruppen enades om kategorierna först" the narrator says: "Kategorierna i loggen var underhållsgruppens egna. Leverantören Svale konfigurerade loggen efter dem och utbildade sex medarbetare." The lead also gave all of it to the notes: "Vad det krävde … går att följa i gruppens egna anteckningar."
+  - **What is true:** Lind's quotes cover only the time spent agreeing on the categories and the extra week of preparation. The narrator states that the group agreed on the categories first, that Svale configured the log and that Svale trained six staff.
+
+- **The closing paragraph says:** "tre ord i bestämd form – två i ingressen och ett i inledningen – har ersatts med formuleringar som går att förstå utan omgivande text"
+  - **Text:** the delivered text, compared with the text as it arrived.
+  - **What contradicts it:** the lead lost two definite-form words, not one. "Försöket pågick" became "Ett försök med loggen pågick". "gruppens egna anteckningar" became "Elm Quays interna försöksanteckning".
+  - **What is true:** four definite-form words were replaced: two in the standfirst ("gruppen", "anteckningarna") and two in the lead ("Försöket", "gruppens").
+
+**2. Claim changes the account misses**
+
+- **Lead, last sentence: attribution of what the trial required**
+  - **Before:** "Vad det krävde, och vad det gav, går att följa i gruppens egna anteckningar."
+  - **After:** "Vad det krävde berättar arbetsledaren Maya Lind om. Hur många ärenden som registrerades, och hur snabbt de tilldelates, går att följa i Elm Quays interna försöksanteckning."
+  - **What the change did:** the text as it arrived gave everything the trial required to the group's own notes. In the body, much of that content was the narrator's: the group agreeing on the categories first, Svale configuring the log to them, and Svale training six staff. The delivered text gives all of it to Maya Lind as something she tells, including the narrator's statements about Svale's configuration and training, which Lind never says in the text.
+  - **What the account says:** "vad försöket krävde tillskrivs nu arbetsledaren Maya Lind och inte anteckningar". It names the notes as the voice the content was taken from and leaves out the narrator. That reports the change short. The account's footing for it is finding 4's false statement that what the trial required came from Lind's quote.

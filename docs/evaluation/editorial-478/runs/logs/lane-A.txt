@@ -1,0 +1,30 @@
+2026-10-01T11:56:12Z start pre-case-study-clean-resp-1
+2026-10-01T12:02:26Z end pre-case-study-clean-resp-1 exit 0
+2026-10-01T12:02:26Z start post-case-study-clean-resp-1
+2026-10-01T12:09:56Z end post-case-study-clean-resp-1 exit 0
+2026-10-01T12:09:56Z start pre-case-study-clean-file-1
+2026-10-01T12:16:18Z end pre-case-study-clean-file-1 exit 0
+2026-10-01T12:16:18Z start post-case-study-clean-file-1
+2026-10-01T12:23:05Z end post-case-study-clean-file-1 exit 0
+2026-10-01T12:23:05Z start pre-case-study-clean-resp-2
+2026-10-01T12:30:21Z end pre-case-study-clean-resp-2 exit 0
+2026-10-01T12:30:21Z start post-case-study-clean-resp-2
+2026-10-01T12:37:17Z end post-case-study-clean-resp-2 exit 0
+2026-10-01T12:37:17Z start pre-case-study-clean-file-2
+2026-10-01T12:45:19Z end pre-case-study-clean-file-2 exit 0
+2026-10-01T12:45:19Z start post-case-study-clean-file-2
+2026-10-01T12:52:54Z end post-case-study-clean-file-2 exit 0
+2026-10-01T12:52:54Z start pre-case-study-clean-resp-3
+2026-10-01T13:01:25Z end pre-case-study-clean-resp-3 exit 0
+2026-10-01T13:01:25Z start post-case-study-clean-resp-3
+2026-10-01T13:05:36Z end post-case-study-clean-resp-3 exit 1
+2026-10-01T13:05:36Z start pre-case-study-clean-file-3
+2026-10-01T13:05:38Z end pre-case-study-clean-file-3 exit 1
+2026-10-01T13:05:38Z start post-case-study-clean-file-3
+2026-10-01T13:05:40Z end post-case-study-clean-file-3 exit 1
+2026-10-01T15:32:22Z start post-case-study-clean-resp-3
+2026-10-01T15:37:52Z end post-case-study-clean-resp-3 exit 0
+2026-10-01T15:37:52Z start pre-case-study-clean-file-3
+2026-10-01T15:45:03Z end pre-case-study-clean-file-3 exit 0
+2026-10-01T15:45:03Z start post-case-study-clean-file-3
+2026-10-01T15:53:06Z end post-case-study-clean-file-3 exit 0

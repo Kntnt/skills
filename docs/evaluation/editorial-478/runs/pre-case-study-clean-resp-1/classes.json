@@ -1,0 +1,5 @@
+{
+  "misses": [],
+  "verdicts": {"a": "pass", "b": "pass"},
+  "notes": "One difference (the opening's third sentence removed), reported as a removed claim; both judges call the account accurate and confirm the 29-word count (20 + 9), which I counted too. Not recorded: judge a's remarks that the third ground (restating the standfirst) is 'a matter of taste only' and that 'a reader could fairly take \"vad det gav\" to mean only the recorded figures'. Both criticise the repair, not a statement; judge a concludes the removal 'rests on a reading the text supports'. The finding reports the note as not crediting the software, not as ruling it out, so no #477 behaviour."
+}

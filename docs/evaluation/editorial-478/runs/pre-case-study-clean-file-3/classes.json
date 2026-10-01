@@ -1,0 +1,10 @@
+{
+  "misses": [
+    {"judge": "b", "class": 3, "owner": null, "kind": "",
+     "reply": "Inledningsstyckets första mening var byggd som en engelsk konstruktion. ... Därför lästes brödtextens första mening som översatt.",
+     "judge_says": "The report is accurate about what changed. Its label, a defect, is the Skill's own judgement, and it overstates the case. ... finding 1 is a matter of taste presented as a defect. The pseudo-cleft is correct Swedish.",
+     "check": "The finding's description of the input is true: the input sentence puts the goal ('Att se samma information över skiftgränserna') first and the actor afterwards, and the reply's account of the rewrite matches output.md. The judge disputes only whether this was a real defect, so the miss is recorded, not counted."}
+  ],
+  "verdicts": {"a": "fail", "b": "pass"},
+  "notes": "Judge a also calls findings 1 and 2 taste rather than defects, but it frames this only as an R1 criticism of the change and says the reply 'reports every change accurately', so it records no A2 miss. Both judges confirm the claim account (see -> show, 'sin' -> 'en', the trial now in the body with the group as actor). Checked counts: headline 59 characters and 8 words, standfirst 40 words, opening paragraph 43 -> 45 words, matching the reply's 59 / 40 / 45."
+}

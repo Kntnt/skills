@@ -1,0 +1,10 @@
+**1. False statements**
+
+- **Statement:** "Utöver detta har två omnämnanden av gruppen fått gruppens fullständiga benämning."
+  - **Text it is about:** the delivered text.
+  - **What contradicts it:** "Utöver detta" says that two more mentions were changed on top of the two corrections listed under the findings. The delivered text has no such changes. Only two passages differ from the text as it arrived, and both are the listed corrections: "Här är vad underhållsgruppen gjorde" (standfirst) and "går att följa i underhållsgruppens egna anteckningar" (lead).
+  - **What is true:** The two corrections are the only two mentions that were given the full name. Outside them, no wording about the group changed. The subheading "Gruppen enades om kategorierna först" is word for word what it was.
+
+**2. Claim changes the account misses**
+
+none

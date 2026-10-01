@@ -1,0 +1,8 @@
+{
+  "packet": "post-control-case-study-clean",
+  "checkers": 1,
+  "delivered_text_source": "response.txt: last fenced block",
+  "delivered_text_equals_received": false,
+  "checker_transcript": "../../../editorial-475/runs/post-control-case-study-clean/transcripts/subagents/agent-ab7927d526c73a38a.jsonl",
+  "delivered_text_equals_final": true
+}

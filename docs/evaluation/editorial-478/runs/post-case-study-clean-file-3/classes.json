@@ -1,0 +1,14 @@
+{
+  "misses": [
+    {"judge": "a", "class": 4, "owner": null, "kind": "",
+     "reply": "Mätskriptet godkände alla räknade krav i den levererade texten. ... Texten följer artikelanatomin, med undantag för de två riktvärdena för rubriken.",
+     "judge_says": "The reply does not report the growth from 40 to 43 words. ... If 40 words is the standfirst's ceiling ... then that account is incomplete. I cannot check the anatomy itself, so I record this as probable, not established.",
+     "check": "The standfirst is 40 words in input.md and 43 in output.md (whitespace count), so it did grow. No statement in the reply gives the standfirst's length. Neither text establishes that 40 is a limit, so nothing in them contradicts the reply's statement that the script passed every counted requirement. The growth moves no claim; it is an unreported difference."},
+    {"judge": "b", "class": 4, "owner": null, "kind": "",
+     "reply": "Ingressens sista mening (fynd 2): anteckningarna som resultaten bygger på tillskrivs nu uttryckligen underhållsgruppen",
+     "judge_says": "The reply does not say that the standfirst grew from 40 to 43 words, so the account of this change is incomplete.",
+     "check": "Confirmed 40 -> 43 words. The reply's description of the standfirst change is accurate as to wording and attribution; only the length growth goes unreported, and it moves no claim."}
+  ],
+  "verdicts": {"a": "fail", "b": "fail"},
+  "notes": "Both judges call findings 1-3 taste, or marginal defects, only as R1 criticism; under heading 2 both call those accounts accurate, so no A2 miss is recorded for them. Checked: the headline goes from 59 characters and 8 words to 67 characters and 9 words, matching the reply; the opening paragraph goes from 43 to 39 words."
+}

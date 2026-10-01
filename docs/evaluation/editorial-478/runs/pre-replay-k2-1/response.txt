@@ -1,0 +1,14 @@
+**1. False statements**
+
+- **Statement:** "Utöver detta har två omnämnanden av gruppen fått gruppens fullständiga benämning."
+  **Text it names:** the delivered text, as what the round did to it.
+  **What contradicts it:** "Utöver detta" says these two changes came on top of the two corrections already described. The delivered text differs from the text as it arrived in two places only, and they are the same two corrections:
+  - "Här är vad underhållsgruppen gjorde" (was "vad gruppen gjorde")
+  - "går att följa i underhållsgruppens egna anteckningar" (was "gruppens egna anteckningar")
+
+  Nothing else changed. The remaining short form in the delivered text, the subheading "Gruppen enades om kategorierna först", is unchanged.
+  **What is true:** no other mention of the group got its full name. The two expansions are the corrections reported under items 1 and 2, not something extra.
+
+**2. Claim changes the account misses**
+
+none

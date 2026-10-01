@@ -1,0 +1,8 @@
+{
+  "misses": [],
+  "verdicts": {
+    "a": "pass",
+    "b": "pass"
+  },
+  "notes": "The returned text is byte-identical to input.md and both judges call the account accurate. The reply's headline count (40 characters, 6 words) checks out. Judge a calls the reason for rejecting the round questionable, and judge b says a selective revert would have kept repairs; both criticise the run's decision, not the truth of a statement (the original headline does state a result and the proposed one does not), so neither is an A2 miss."
+}

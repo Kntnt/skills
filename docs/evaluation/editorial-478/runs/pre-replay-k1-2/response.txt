@@ -1,0 +1,11 @@
+**1. False statements**
+
+- **"lovade att det loggen gav gick att följa i anteckningar"** (finding 4, about the text as it arrived). The arrived text says: "Försöket pågick i åtta veckor och omfattade två hus. Vad det krävde, och vad det gav, går att följa i gruppens egna anteckningar." The pronoun *det* is neuter, so it refers back to *Försöket*. It can't refer to *loggen*, which would take *den*. The sentence was about what the trial gave, not what the log gave. The reply's own claim account says this correctly ("Att det som försöket *gav* …").
+
+- **"Vad försöket krävde kommer i texten från Maya Linds citat, inte från någon anteckning."** (finding 4, about the text; this section is the same in both versions). The text also gives what the trial took in narration that isn't attributed to Lind: "Kategorierna i loggen var underhållsgruppens egna. Leverantören Svale konfigurerade loggen efter dem och utbildade sex medarbetare." The subheading "Gruppen enades om kategorierna först" does the same. In fact, what the trial took comes partly from Lind's quote and partly from unattributed narration. Only the "inte från någon anteckning" part is true.
+
+- **"tre ord i bestämd form – två i ingressen och ett i inledningen – har ersatts"** (about the delivered text compared with the arrived text). In the arrived lead, two definite-form words were replaced, not one: "Försöket" (now "Ett försök med loggen") and "gruppens" in "gruppens egna anteckningar" (now "Elm Quays interna försöksanteckning"). The definite headline word "reparationsärendena" was replaced too. In fact, at least four definite-form words were replaced, two of them in the lead.
+
+**2. Claim changes the account misses**
+
+none

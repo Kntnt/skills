@@ -1,0 +1,18 @@
+{
+  "misses": [
+    {"judge": "a", "class": 3, "kind": "", "owner": null,
+     "reply": "”om loggförsöket” togs bort i samma rättelse så att rubriken håller sig inom 70 tecken.",
+     "judge_says": "One justification is inaccurate: the reply says \"om loggförsöket\" was dropped \"så att rubriken håller sig inom 70 tecken\". The original headline was 59 characters and already well inside that limit. The length problem was created by the rewrite itself.",
+     "check": "The statement is about the rewritten headline, not the original. The new headline is 65 characters; with \"om loggförsöket\" kept it would be 81 characters, over 70. The text does not contradict the stated reason, so the judge disputes only the wisdom of the rewrite."},
+    {"judge": "b", "class": 3, "kind": "", "owner": null,
+     "reply": "Inledningsstyckets första mening lät översatt. ... Konstruktionen är engelskans ”What they wanted was …” på svenska",
+     "judge_says": "Its reason, that the sentence \"lät översatt\", is a judgement of taste. The reply presents it as a defect.",
+     "check": "The judge reports the change itself (before and after quoted, the purpose-to-wish shift stated) as accurate and disputes only whether it repaired a real defect: a judgement of taste presented as a defect."},
+    {"judge": "b", "class": 3, "kind": "", "owner": null,
+     "reply": "Rubriken är 65 tecken, alltså över normen på högst 60, men inom kravet på 20–70 tecken.",
+     "judge_says": "It does not say that the original met that norm, which its own change undid.",
+     "check": "The output headline is 65 characters, as stated. The statement is true; the judge faults only what the reply leaves unsaid about the original's 59 characters."}
+  ],
+  "verdicts": {"a": "fail", "b": "fail"},
+  "notes": "Both judges call the account of both changes accurate. Judge a's remark that the headline finding rests on a defensible metonymy is R1 criticism of the change and is not recorded as a miss."
+}

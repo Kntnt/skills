@@ -1,0 +1,8 @@
+{
+  "packet": "pre-case-study-flawed-1",
+  "checkers": 1,
+  "delivered_text_source": "response.txt: last fenced block",
+  "delivered_text_equals_received": false,
+  "checker_transcript": "transcripts/subagents/agent-a101b09bfc23e78d2.jsonl",
+  "delivered_text_equals_final": true
+}

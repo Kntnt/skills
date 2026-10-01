@@ -1,0 +1,5 @@
+{
+  "misses": [],
+  "verdicts": {"a": "pass", "b": "pass"},
+  "notes": "Returned text is identical to input. Both judges call the unresolved headline-attribution finding borderline or over-detection, but neither calls any statement of the reply false, inaccurate, loose or misleading; both confirm the reply's account and counts (59 characters, 8 words, 40-word standfirst)."
+}

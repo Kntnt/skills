@@ -1,0 +1,23 @@
+**1. False statements**
+
+- **Statement:** Finding 4 says the sentence ”lovade att det loggen gav gick att följa i anteckningar”.
+  **Text:** the text as it arrived.
+  **Contradicting passage:** ”Försöket pågick i åtta veckor och omfattade två hus. Vad det krävde, och vad det gav, går att följa i gruppens egna anteckningar.”
+  **What is true:** ”det” refers back to ”Försöket”, the trial, and not to the log. The sentence promised that what the trial gave could be followed in the notes. The reply's own claim account gets this right: ”det som försöket *gav*”.
+
+- **Statement:** Finding 4 says ”Vad försöket krävde kommer i texten från Maya Linds citat, inte från någon anteckning.”
+  **Text:** the text as it arrived. The passage is the same in the delivered text.
+  **Contradicting passage:** ”Kategorierna i loggen var underhållsgruppens egna. Leverantören Svale konfigurerade loggen efter dem och utbildade sex medarbetare.” It sits under the subheading ”Gruppen enades om kategorierna först”.
+  **What is true:** Part of what the trial required comes from Lind's quotes: agreeing on the categories and adding a week for preparation. The rest is the text's own unattributed narration and is not in any quote: the group's own categories, Svale's configuration, and the training of six staff.
+
+- **Statement:** The closing paragraph says ”tre ord i bestämd form – två i ingressen och ett i inledningen – har ersatts med formuleringar som går att förstå utan omgivande text”.
+  **Text:** the delivered text, compared with the text as it arrived.
+  **Contradicting passage:** Arrived lead: ”Försöket pågick …” and ”… går att följa i gruppens egna anteckningar.” Delivered lead: ”Ett försök med loggen pågick …” and ”… går att följa i Elm Quays interna försöksanteckning.”
+  **What is true:** Two definite-form words in the lead were replaced, not one. ”Försöket” became ”Ett försök med loggen”, and the definite genitive ”gruppens” became ”Elm Quays”. Counting the standfirst's two, four definite-form words were replaced, not three.
+
+**2. Claim changes the account misses**
+
+- **Before:** ”Vad det krävde, och vad det gav, går att följa i gruppens egna anteckningar.”
+  **After:** ”Vad det krävde berättar arbetsledaren Maya Lind om.”
+  **What the change did:** It moved the source of everything the trial required to Lind. Part of that content is still unattributed narration in the delivered text and is not hers: ”Leverantören Svale konfigurerade loggen efter dem och utbildade sex medarbetare.” So the new attribution claims more than the body supports.
+  **What the account says:** It reports the move only as matching the text: ”vad försöket krävde tillskrivs nu arbetsledaren Maya Lind och inte anteckningar”. It says nothing about the attribution now covering material the text does not give to Lind.

@@ -1,0 +1,22 @@
+{
+  "misses": [
+    {"judge": "a", "class": 3, "kind": "", "owner": null,
+     "reply": "Meningen var byggd efter engelskt mönster: ett tungt infinitivled stod före verbet.",
+     "judge_says": "Its label for the defect (\"byggd efter engelskt mönster\") is a judgement of taste presented as a defect, but the description of what changed is correct.",
+     "check": "The input's first sentence does open with the infinitive phrase 'Att se samma information över skiftgränserna' before the verb 'var'; the description is true of the text. The judge disputes only whether this is a defect."},
+    {"judge": "a", "class": 3, "kind": "", "owner": null,
+     "reply": "Meningen lovade att anteckningarna visar vad försöket gav. Avsnittet \"Två perioder med olika arbetsbelastning\" säger däremot att anteckningen inte tillskriver skillnaden programvaran.",
+     "judge_says": "The Skill's other grounds overread the text. \"Vad det gav\" (what the trial yielded) does not contradict a note that declines to attribute the difference to the software.",
+     "check": "Both halves are true of input.md: the sentence says what the trial gave can be followed in the notes, and the section says 'anteckningen tillskriver därför inte skillnaden programvaran'. The finding reports the note as declining to credit the software, not as ruling it out, so not #477. The judge faults only the contradiction 'däremot' suggests."},
+    {"judge": "a", "class": 3, "kind": "", "owner": null,
+     "reply": "Den sa också att underlaget var gruppens egna anteckningar, i plural. Texten har en enda försöksanteckning, och den är Elm Quays.",
+     "judge_says": "The objection to the plural \"anteckningar\" is inconsistent, because the run left the standfirst's identical plural \"anteckningarna\" untouched.",
+     "check": "input.md's body names one source, 'Elm Quays interna försöksanteckning'; the opening says 'gruppens egna anteckningar'. The statement is true of the text. The standfirst's plural is the same mismatch left unrepaired, which faults the run's consistency, not the statement."},
+    {"judge": "b", "class": 3, "kind": "", "owner": null,
+     "reply": "Den sa också att underlaget var gruppens egna anteckningar, i plural. Texten har en enda försöksanteckning, och den är Elm Quays.",
+     "judge_says": "Part of finding 1's rationale (the plural \"anteckningar\") is contradicted by the unchanged standfirst (\"anteckningarna\"); the plural argument is reported faithfully, but it is weak.",
+     "check": "The standfirst's 'vad anteckningarna visar' does not contradict that the body cites a single note; it repeats the same plural. The statement is true of input.md; the judge faults the repair's consistency."}
+  ],
+  "verdicts": {"a": "fail", "b": "pass"},
+  "notes": "Both judges find every difference reported and every claim-ledger entry accurate (including the admitted loss of emphasis in sentence 1 and the removed sourcing claim), so no class 1. Not recorded as A2 misses: both judges' R1 criticism that finding 2 ('Försöket' not introduced in the body) is a false positive, and judge b's remarks that finding 3 and the repetition ground are near taste; these criticise the changes, and the finding's statement ('fick sin förklaring från rubriken och ingressen, men inte från brödtexten') is true of the text. The reply reports a leftover empty working directory, scratch/tmp/tmp.1reKUB81FT (the #476 behaviour); neither judge faults it."
+}

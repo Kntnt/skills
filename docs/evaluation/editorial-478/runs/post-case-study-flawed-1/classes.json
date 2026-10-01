@@ -1,0 +1,5 @@
+{
+  "misses": [],
+  "verdicts": {"a": "pass", "b": "pass"},
+  "notes": "Both judges list every difference as reported and accurately described (b: 'Every difference is reported, and none is misdescribed'). Both note that finding 5's diagnosis of the first subheading (it repeats the quote) is narrower than the expectation's (it fails to describe its section), but both call it accurate for what it describes; no statement is faulted. Anatomy figures checked: headline 49 characters and 8 words, standfirst 41 words. The reply says no files remain ('inga filer ligger kvar'), and no judge disputes it."
+}
