@@ -1,0 +1,33 @@
+Granskningen hittade ett fel, ett motsägande påstående i ingressen. Felet är rättat och texten är skriven till `output.md`. `input.md` är orörd.
+
+**Inställningar:** genren `opinion` och språket `sv` kommer båda från anropet. Ingen teknik används, eftersom genren `opinion` inte anger någon teknik som den vanligen skrivs med och inget annat valde någon.
+
+**Fynd (1, rättat)**
+
+1. **Ingressens sista mening.** Den beskrev beslutet som redan avgjort: telefonbokningen skulle ”ändå stängs för gott” efter halvårsförsöket. Inledningen och avslutningen lämnar däremot utfallet öppet:
+   - Inledningen: ”Ett permanent beslut behöver bättre underlag än det som nu ligger på bordet”.
+   - Avslutningen: ”Först då går det att väga alternativen”.
+
+   Den som bara läste ingressen fick intrycket att skribenten redan godtar att telefonbokningen ska bort och bara begär uppskov. Den som läste vidare mötte en motsägelse.
+
+   **Rättelse:** ”innan telefonbokningen ändå stängs för gott” har blivit ”innan det avgörs om telefonbokningen ska stängas för gott”.
+
+Inga fynd kvarstår.
+
+**Påståenden**
+
+- **Ändrat:** ingressens sista mening sa förut att telefonbokningen kommer att stängas för gott efter halvåret och att skribenten godtar det. Nu säger den att det efter halvåret ska avgöras om telefonbokningen ska stängas för gott. Ändringen kommer från rättelsen av fynd 1. Den som läser ingressen möter inte längre skribentens medgivande att stängningen sker oavsett vad försöket visar.
+- Inget annat påstående har tagits bort, ändrats eller lagts till.
+
+**Artikelanatomi:** texten följer artikelanatomin utan avvikelse. Mätningen av den levererade texten gav följande:
+- rubriken har 47 tecken
+- ingressen har 44 ord i ett stycke
+- texten har tre avsnitt, och det sista är avslutet.
+
+Jag har också granskat de krav som skriptet inte räknar, och alla uppfylls:
+- Ingressen står på egen hand och säger vad texten handlar om och vad läsaren får.
+- Inledningen för texten vidare, och brödtexten går att läsa utan ingressen.
+- Varje mellanrubrik beskriver sitt avsnitt.
+- Det sista avsnittet är ett avslut, och uppmaningen där riktar sig till kommunstyrelsen.
+
+**Vad körningen ändrade:** den enda skillnaden mot texten som den kom in är ingressens sista mening, som redovisas ovan. Ingen rubrik, mellanrubrik, styckeindelning eller annan mening har ändrats. Den avslutande korrekturläsningen hittade inga stavnings-, grammatik- eller skiljeteckenfel.

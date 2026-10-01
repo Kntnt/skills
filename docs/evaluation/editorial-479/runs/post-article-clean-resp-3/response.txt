@@ -1,0 +1,43 @@
+Granskningen gällde genren article och språket sv, som båda angavs i anropet. Ingen teknik användes, eftersom artikelgenren anger att den inte skrivs med någon särskild teknik. Ingen brief valdes.
+
+**Fynd**
+
+1. **Brödtextens första stycke – åtgärdat.** Meningen ”Det gör placeringen viktig när fastighetskontoret ska tolka fyra veckors mätningar i Björkskolans sex klassrum.” lovade att givarnas placering har betydelse för tolkningen. Texten säger aldrig var givarna satt eller hur placeringen påverkade värdena. När slutet nämner ”likadant placerade givare” kunde läsaren därför inte avgöra om det var ett problem. Det bröt mot artikelgenrens krav att vinkeln ska följas genom avsnitten och slutet. Var givarna satt framgår inte av texten, så korrigeringen tar bort löftet i stället för att infria det. Meningen lyder nu ”Det är utgångspunkten när fastighetskontoret ska tolka fyra veckors mätningar i Björkskolans sex klassrum.” Inga fynd återstår.
+
+**Vad som hände med påståendena**
+
+- **Borttaget:** påståendet att placeringen är viktig när fastighetskontoret tolkar mätningarna. Det stod i andra meningen i brödtextens första stycke. Korrigeringen av fynd 1 tog bort det, och fyndet pekade ut just det påståendet som bristen. Läsaren får inte längre veta att texten anser att givarnas placering spelar roll för tolkningen. Första meningen i samma stycke, ”En temperaturgivare mäter luften där den sitter.”, står kvar oförändrad.
+- **Ändrat:** andra meningen i brödtextens första stycke säger nu att det faktum att en givare mäter luften där den sitter är utgångspunkten när fastighetskontoret tolkar fyra veckors mätningar i Björkskolans sex klassrum. Ändringen gjordes av korrigeringen av fynd 1.
+- **Tillagt:** inga påståenden.
+
+Rubrik, ingress, byline och mellanrubriker är oförändrade. Texten följer artikelanatomin. De gränser som räknas mättes maskinellt på den levererade texten. Jag granskade också de krav som skriptet inte räknar:
+- att ingressen står på egen hand
+- att ingressen och brödtextens första stycke inte upprepar varandra
+- att mellanrubrikerna beskriver sina avsnitt
+- att sista avsnittet är ett avslut med en uppmaning
+
+Körningen har inte ändrat något utöver meningen som redovisas ovan. Den avslutande korrekturen hittade inga mekaniska fel, och övriga meningar, stycken, rubriker och strukturen är oförändrade.
+
+````markdown
+# Mätförsöket i Björkskolan visar när, inte varför
+
+**Under 14 av 120 lektionspass registrerade givarna i Björkskolan temperaturer under fastighetskontorets egen arbetsgräns. Fyra veckors mätningar pekar ut tillfällen att undersöka närmare, men förklarar inte varför luften var kall. Här är vad ett kort försök kan säga, och vad som behövs för att komma vidare.**
+
+Text: Hedda Lund
+
+En temperaturgivare mäter luften där den sitter. Det är utgångspunkten när fastighetskontoret ska tolka fyra veckors mätningar i Björkskolans sex klassrum. Genomgången nedan visar vad värdena räcker till och var gränsen går.
+
+## En gräns för det lokala försöket
+
+Kontoret valde 20 grader Celsius som arbetsgräns. Rapporten *Mätförsök i Björkskolan*, daterad 12 mars 2026, räknar 14 lektionspass av 120 med minst en mätning under den gränsen. Hur länge temperaturen låg under den anger rapporten inte. Gränsen är kontorets egen, vald för det här försöket.
+
+Givarna mätte varken luftdrag eller elevernas upplevelse. Ett lågt värde säger alltså när luften var kall, men inte hur rummet kändes.
+
+Driftteknikern Elin Rask sammanfattar: ”Vi vet när vi behöver titta närmare. Vi vet ännu inte varför det blev kallt just då.”
+
+## Nästa försök behöver mer än givare
+
+Rask rekommenderar att temperaturserierna kopplas till rummens användningstider innan styrningen ändras. Nästa försök planeras för november med likadant placerade givare, men finansieringen är inte beslutad.
+
+Lägg därför tiderna för när rummen används bredvid mätvärdena innan nästa givare sätts upp.
+````

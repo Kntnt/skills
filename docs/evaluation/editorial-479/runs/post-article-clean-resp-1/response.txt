@@ -1,0 +1,3 @@
+**Ingen ändring behövs.** Jag har granskat texten i `input.md` och hittade inget att rätta. Den avslutande korrekturläsningen hittade inte heller några stavfel, grammatikfel eller skiljeteckenfel. Ingen fil har skrivits eller ändrats.
+
+Inställningar: genre `article` och språk `sv`, båda angivna i anropet. Ingen berättarteknik användes, eftersom genren `article` inte anger någon och inget annat i anropet valde en.

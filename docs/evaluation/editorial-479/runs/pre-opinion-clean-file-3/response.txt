@@ -1,0 +1,7 @@
+Texten är skriven till `output.md`. Den behövde inget arbete: granskningen gav inga anmärkningar och korrekturläsningen hittade inga mekaniska fel, så `output.md` är byte för byte identisk med `input.md`.
+
+Granskningen gjordes som genren opinion (angiven i anropet) på svenska, `sv` (angivet i anropet), utan teknik: genren opinion anger ingen teknik som den vanligen skrivs med. Korrigeringsbudgeten på en korrigering användes inte.
+
+Texten följer artikelanatomin utan avvikelse. Mätskriptet fann inget brott mot de räknade gränserna: rubriken har 47 tecken och 6 ord, ingressen är ett stycke på 39 ord, inget stycke har fler än 80 ord och texten har tre avsnitt med mellanrubriker. De krav som skriptet inte räknar har granskats genom läsning: ingressen står på egen hand, det första stycket i brödtexten för resonemanget vidare i stället för att upprepa ingressen, varje mellanrubrik beskriver sitt avsnitt, och det sista avsnittet är ett avslut som uppmanar kommunstyrelsen att handla.
+
+Inga påståenden har tagits bort, ändrats eller lagts till.

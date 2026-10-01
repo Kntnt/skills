@@ -1,0 +1,25 @@
+Jag har skrivit texten till `output.md`. Den är byte för byte identisk med `input.md`, eftersom det enda rättningsvarvet underkändes och korrekturläsningen på slutet inte hittade några mekaniska fel. Två fynd står kvar olösta.
+
+**Inställningar:** Genren `article` och språket `sv` kom båda från anropet. Ingen teknik användes, eftersom genren `article` säger att den vanligen skrivs utan teknik och inget annat valde någon. Ingen skrivbrief användes.
+
+**Fynd (båda olösta)**
+
+1. **Rubriken**: ”Mätförsöket i Björkskolan visar när, inte varför”. En rubrik ska gå att förstå på egen hand. Här saknar ”när” och ”varför” det de syftar på. Den som bara ser rubriken, till exempel i en lista eller ett sökresultat, får inte veta att det gäller när luften var kall och kan inte avgöra vad texten handlar om.
+   - **Underkänt försök:** rättningsvarvet skrev om rubriken till ”Mätförsöket i Björkskolan visar när luften var kall, inte varför”. Den nya rubriken fick två brister som den gamla inte hade:
+     - Den lånade ingressens egna ord: ingressen säger redan ”förklarar inte varför luften var kall”.
+     - Den blev 10 ord och 64 tecken lång. Normen är 3–8 ord och högst 60 tecken, och en kortare lydelse hade varit möjlig.
+   - Därför underkändes hela varvet och texten återställdes till hur den kom in. Bristerna fanns bara i den förkastade rubriken och finns inte i den levererade texten.
+   - Det som återstår att avgöra är hur rubriken kan säga vad ”när” syftar på utan att upprepa ingressen.
+
+2. **Brödtextens första stycke**: ”En temperaturgivare mäter luften där den sitter. Det gör placeringen viktig när fastighetskontoret ska tolka fyra veckors mätningar i Björkskolans sex klassrum.” Inledningen gör placeringen till villkoret för hur mätningarna ska tolkas. Men inget avsnitt säger var givarna satt eller om placeringen påverkade de 14 lektionspassen.
+   - Läsaren väntar på ett besked som aldrig kommer. Hen kan inte heller bedöma vad ”likadant placerade givare” i sista avsnittet betyder för nästa försök.
+   - Fyndet kräver uppgifter som texten inte har, så det lämnades orört. Skribenten behöver avgöra hur det ska lösas.
+
+**Artikelanatomin:** Enligt mätningen av den levererade texten håller alla krav som går att räkna:
+- Rubriken har 48 tecken och 7 ord.
+- Ingressen har 46 ord i ett stycke.
+- De två avsnitten har tre respektive två stycken.
+
+Jag granskade också de krav som inte går att räkna: att ingressen fungerar fristående, hur inledningen förhåller sig till ingressen, mellanrubrikerna och slutavsnittet. Texten följer anatomin med en avvikelse: rubriken är inte skriven som Headlines kräver (fynd 1).
+
+**Påståendena:** Det underkända varvet hade ändrat rubrikens påstående till att försöket visar när luften var kall men inte varför. Den ändringen återställdes och finns inte i den levererade texten. Jämfört med texten som kom in har inget påstående tagits bort, ändrats eller lagts till.

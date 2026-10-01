@@ -1,0 +1,70 @@
+Ingen ändring i texten. Den enda korrigeringsrundan förkastades, så texten levereras exakt som den kom in. Den avslutande korrekturläsningen hittade inga mekaniska fel. Alla nio fynd nedan är därför olösta och lämnas till skribenten.
+
+Konfiguration: genre `opinion` och språk `sv` (svenska), båda enligt anropet. Ingen teknik används, eftersom genren `opinion` inte anger någon och ingen annan nivå valde någon. Ingen skrivbrief användes.
+
+**Fynd (samtliga olösta)**
+
+1. **Rubriken.** "Kommunledningen hatar människor" (31 tecken, 3 ord) tillskriver kommunledningen ett motiv som ingenting i texten bär, och den är högre i tonen än texten.
+   - Rubriken säger inte heller vad texten handlar om: telefonbokningen till kommunens sju lokaler och kravet på ett halvårs försök.
+   - Läsaren får en felaktig bild av vad texten hävdar.
+2. **Ingressen saknas.** Artikelanatomin kräver en ingress mellan rubrik och byline. En person behöver skriva den, så den har inte skrivits här.
+3. **Inledningens andra mening.** "Alla vet att politikerna vill stänga ute äldre för att spara miljoner." lutar sig mot en auktoritet som inte är någon ("alla vet") och tillskriver politikerna en avsikt som texten inte stöder.
+   - Varken "äldre" eller "miljoner" bärs av något i texten. Texten säger själv att försökets kostnad inte är beräknad.
+   - Läsaren kan inte skilja textens belägg från insinuation.
+4. **"Det bevisar att 20 procent av kommunens invånare inte kan använda internet."** 24 av 120 bokningar är 20 procent av bokningarna, inte av invånarna.
+   - Nästa mening säger att bokningarna inte räknar unika personer och att digital vana inte undersöktes. Textens egen reservation motsäger alltså slutsatsen.
+   - Siffrorna bär påståendet att var femte bokning gjordes via telefon, men inte mer.
+5. **Siffrorna 96 och 24 saknar källa och period.** Pilotrapporten nämns först två meningar senare, och texten säger inte att siffrorna kommer därifrån. Det går inte att rätta utan uppgifter som texten saknar.
+6. **"Handlingarna saknar tidsmätning. Därför kostar det ingenting att behålla telefonbokningen."** Att tidsåtgången inte är mätt visar inte att kostnaden är noll.
+   - Textens egen mening "Försökets kostnad är inte beräknad." motsäger slutsatsen. Bemötandet av förvaltningens invändning vilar alltså på en kostnad som är okänd, inte noll.
+   - Meningen "Handlingarna saknar tidsmätning." avgränsar vad som är känt och bör stå kvar.
+7. **Underrubrikerna "Bakgrund" och "Diskussion".** De är generiska etiketter som inte säger något om vad avsnitten visar. En debattartikels underrubriker ska bära argumentet för den som skummar.
+8. **"Föreningen" i avsnittet "Diskussion".** Ordet står i bestämd form, men ingen förening har introducerats i brödtexten. Bylinen nämner Öppna beslut, men texten säger inte att det är den föreningen som avses. Det går inte att rätta utan uppgifter som texten saknar.
+9. **Slutet saknas som eget avsnitt.** "Nu är det dags att agera." namnger varken en handling eller vem som kan handla.
+   - Meningen står sist i avsnittet "Diskussion", som bär argument. Texten har därför inget eget avslutningsavsnitt med egen underrubrik.
+   - Handlingen finns redan i texten: kravet att kommunstyrelsen bör behålla telefonbokningen under ett halvårs försök i alla sju lokaler.
+
+**Artikelanatomin**
+
+Texten följer inte anatomin.
+- Mätskriptet visar att ingressen saknas (fynd 2).
+- Två krav som skriptet inte räknar har granskats genom läsning: slutet är inget eget avsnitt (fynd 9), och ingen av underrubrikerna beskriver sitt avsnitt (fynd 7).
+- Övriga uppmätta gränser håller: rubriken har 31 tecken och det längsta stycket 43 ord.
+
+**Förkastad korrigeringsrunda**
+
+Rundan försökte rätta fynd 1, 3, 4, 6, 7 och 9. Rubrikrättningen införde ett nytt fel.
+- Den nya rubriken var "Behåll telefonen som bokningsväg under ett halvårsförsök".
+- Den sade i sak samma sak som inledningens mening "Kommunstyrelsen borde behålla telefonbokning under ett halvårs försök i alla sju lokaler.", och med nästan samma ord.
+- Rubrik och inledning ska komplettera varandra, och den ursprungliga rubriken hade inte det felet.
+
+Hela rundan förkastades därför och texten återställdes ordagrant. Inget av det rundan gjorde finns i den levererade texten. Det en person behöver avgöra är rubriken (fynd 1): en rubrik som bär textens krav utan att upprepa inledningen.
+
+Det här försökte rundan göra med påståendena. Inget av det finns i texten:
+- Den strök meningen "Alla vet att politikerna vill stänga ute äldre för att spara miljoner." (fynd 3).
+- Den ändrade 20-procentsmeningen så att den bara sade att 20 procent av bokningarna gjordes via telefon (fynd 4).
+- Den ändrade kostnadsslutsatsen så att den sade att handlingarna inte visar vad det kostar att behålla telefonbokningen (fynd 6).
+- Den bytte underrubrikerna mot "Siffrorna räknar bokningar, inte personer" och "Tidsåtgången för två bokningsvägar är inte mätt" (fynd 7).
+- Den lade till ett slutavsnitt med underrubriken "Kommunstyrelsen kan behålla båda bokningsvägarna", som påstod att kommunstyrelsen kan behålla båda bokningsvägarna (fynd 9).
+
+**Påståendena i den levererade texten**
+
+Texten är byte för byte densamma som den som kom in. Inget påstående har strukits, ändrats eller lagts till.
+
+````markdown
+# Kommunledningen hatar människor
+
+Sanna Ek, Öppna beslut
+
+Kommunstyrelsen borde behålla telefonbokning under ett halvårs försök i alla sju lokaler. Alla vet att politikerna vill stänga ute äldre för att spara miljoner.
+
+## Bakgrund
+
+Det gjordes 96 bokningar på webben och 24 via telefon. Det bevisar att 20 procent av kommunens invånare inte kan använda internet. Kommunens pilotrapport från den 8 april 2026 säger samtidigt att bokningarna inte räknar unika personer och att digital vana inte undersöktes.
+
+## Diskussion
+
+Förvaltningen invänder att dubbla kanaler innebär dubbel administration. Handlingarna saknar tidsmätning. Därför kostar det ingenting att behålla telefonbokningen. Föreningen vill att förvaltningen mäter tidsåtgång och frågar användarna varför de väljer en bokningsväg. Försökets kostnad är inte beräknad.
+
+Nu är det dags att agera.
+````

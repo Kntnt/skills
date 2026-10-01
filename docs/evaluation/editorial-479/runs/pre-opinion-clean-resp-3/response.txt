@@ -1,0 +1,57 @@
+Granskningen av `input.md` är klar. En korrigering gjordes och inga fynd kvarstår. Ingen fil har skrivits, och `input.md` är oförändrad.
+
+**Konfiguration:** genren är `opinion` och språket svenska (`sv`), båda angivna i anropet. Ingen teknik tillämpades, eftersom genren opinion inte anger någon och ingen annan nivå valde någon. Inget skrivunderlag användes.
+
+**Artikelanatomin:** de räknade kraven håller. Det mättes med samlingens skript på den levererade texten:
+- rubriken har 47 tecken och 6 ord
+- ingressen har 39 ord i ett stycke
+- inledningen (brödtextens första stycke) har 53 ord
+- inget stycke eller avsnitt går över sina gränser.
+
+De krav som inte räknas granskades genom läsning:
+- ingressen står på egen hand
+- ingress och inledning börjar med olika ord, och inledningen för texten vidare
+- varje mellanrubrik beskriver sitt avsnitt
+- det sista avsnittet är ett avslut som riktar uppmaningen till kommunstyrelsen.
+
+Texten följer artikelanatomin utan avvikelse.
+
+```markdown
+# Avskaffa inte telefonbokningen på ett antagande
+
+**I september kan telefonbokningen av Lerviks föreningslokaler försvinna. Beslutet ska vila på åtta veckors siffror från två lokaler, och de siffrorna räknar bokningar, inte personer. Här är skälen att pröva båda bokningsvägarna ett halvår till innan den ena stängs.**
+
+Text: Sanna Ek, Öppna beslut
+
+Kommunstyrelsen i Lervik bör skjuta upp bytet till enbart digital bokning av föreningslokaler, ett byte som kan ske i september. Pröva först båda bokningsvägarna, digital bokning och telefonbokning, i alla sju lokaler under ett halvår och mät vad de kräver. Ett permanent beslut behöver bättre underlag än det som nu ligger på bordet.
+
+## Bokningar är inte samma sak som personer
+
+Kommunens pilotrapport från den 8 april 2026 räknar 96 webbokningar och 24 telefonbokningar under åtta veckor i två lokaler. Den säger inte hur många personer som bokade eller varför de valde telefonen. Siffrorna visar varken hur många som saknar digital vana eller hur många som skulle klara sig utan telefonbokning.
+
+En bokning är en händelse, inte en invånare. Den skillnaden avgör vad siffrorna kan användas till.
+
+## Mät också arbetet med två kanaler
+
+Förvaltningen vill slippa dubbel administration. Det är en relevant invändning. Men handlingarna innehåller ingen mätning av tidsåtgången. Att behålla två kanaler kostar arbete, och hur mycket behöver vägas mot vad användarna får.
+
+## Besluta om försöket, inte om antagandet
+
+Kommunstyrelsen bör därför säga ja till halvåret med båda bokningsvägarna, ta ställning till dess ännu okända kostnad och ge förvaltningen i uppdrag att mäta tidsåtgången samt fråga användarna varför de väljer sin bokningsväg. Först då går det att väga alternativen.
+
+Ett antagande blir inte ett beslutsunderlag för att kalendern säger september.
+```
+
+**Fynd**
+
+1. **Åtgärdat.** Inledningen talade om ”båda bokningsvägarna” utan att brödtexten hade sagt vilka de två vägarna är. Telefonbokningen nämndes i rubriken och ingressen, men i brödtexten först i avsnittet ”Bokningar är inte samma sak som personer”. Den som läste brödtexten utan ingress fick veta att den ena vägen är digital men inte att den andra är telefonen. Inledningen namnger nu de två vägarna där brödtexten först behöver dem.
+
+Inga fynd kvarstår.
+
+**Påståendena**
+
+- **Ändrat:** inledningens uppmaning att pröva båda bokningsvägarna i alla sju lokaler under ett halvår säger nu uttryckligen att vägarna är digital bokning och telefonbokning. Före ändringen nämnde rubriken och ingressen telefonbokningen, och inledningens första mening nämnde den digitala bokningen, men ingen mening sa att just de två var bokningsvägarna. Uppmaningens omfattning, tid och mottagare är desamma. Ändringen kommer från åtgärden av fynd 1.
+
+Utöver den ändrade uppmaningen ovan har inget påstående tagits bort, ändrats eller lagts till.
+
+Utöver tillägget i inledningen är texten oförändrad. Den avslutande korrekturläsningen gjorde inga rättelser, och inga rubriker, stycken eller formateringar ändrades.

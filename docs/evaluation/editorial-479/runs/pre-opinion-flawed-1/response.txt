@@ -1,0 +1,63 @@
+Jag har granskat texten som debattartikel på svenska och rättat den i en omgång, vilket är hela budgeten. Sex fynd är åtgärdade och tre kvarstår olösta. Den slutliga korrekturläsningen hittade inget att rätta, och inga filer har skrivits.
+
+**Inställningar:** genre `opinion` och språk `sv`, båda från anropet. Ingen teknik används, eftersom genren `opinion` inte är knuten till någon teknik och inget annat valde en. Ingen brief användes.
+
+```markdown
+# Behåll telefonen som bokningsväg i sex månader
+
+Sanna Ek, Öppna beslut
+
+Kommunstyrelsen borde behålla telefonbokning under ett halvårs försök i alla sju lokaler.
+
+## Siffrorna gäller bokningar, inte invånare
+
+Det gjordes 96 bokningar på webben och 24 via telefon. Det betyder att 20 procent av bokningarna gjordes via telefon. Kommunens pilotrapport från den 8 april 2026 säger samtidigt att bokningarna inte räknar unika personer och att digital vana inte undersöktes.
+
+## Handlingarna visar inte vad två bokningsvägar kostar
+
+Förvaltningen invänder att dubbla kanaler innebär dubbel administration. Handlingarna saknar tidsmätning. Föreningen vill att förvaltningen mäter tidsåtgång och frågar användarna varför de väljer en bokningsväg. Försökets kostnad är inte beräknad.
+
+## Nästa steg är kommunstyrelsens
+
+Kommunstyrelsen borde låta telefonbokningen finnas kvar i alla sju lokaler under ett halvårs försök.
+```
+
+## Åtgärdade fynd
+
+1. **Rubriken** ”Kommunledningen hatar människor” tillskrev motparten ett motiv som texten inte belägger. Tonen var dessutom skarpare än i resten av texten. Rubriken är omskriven.
+3. **Inledningens andra mening**, ”Alla vet att politikerna vill stänga ute äldre för att spara miljoner.”, hänvisade bara till ”alla vet” och tillskrev politikerna ett motiv. Varken äldre eller några miljoner har stöd i texten. Meningen är struken.
+5. **”Det bevisar att 20 procent av kommunens invånare inte kan använda internet.”** Slutsatsen följde inte av siffrorna: 24 av 120 bokningar är 20 procent av bokningarna, inte av invånarna. Meningen om pilotrapporten direkt efter motsade den också. Meningen är omformulerad, och meningen om pilotrapporten står kvar.
+6. **”Därför kostar det ingenting att behålla telefonbokningen.”** Slutsatsen följde inte av att tidsmätning saknas, och den motsades av ”Försökets kostnad är inte beräknad.” i samma stycke. Meningen är struken. ”Handlingarna saknar tidsmätning.” och ”Försökets kostnad är inte beräknad.” står kvar.
+8. **Mellanrubrikerna ”Bakgrund” och ”Diskussion”** sa inte vad avsnitten handlade om, så den som skummar kunde inte följa argumentet. De är ersatta med ”Siffrorna gäller bokningar, inte invånare” och ”Handlingarna visar inte vad två bokningsvägar kostar”.
+9. **”Nu är det dags att agera.”** sa varken vad som skulle göras eller vem som kan göra det. Meningen stod dessutom i det argumenterande avsnittet i stället för i ett eget avslutande avsnitt. Nu har texten ett eget slutavsnitt med mellanrubriken ”Nästa steg är kommunstyrelsens”. Dess enda mening upprepar förslaget i inledningen.
+
+## Olösta fynd
+
+2. **Ingress saknas.** Mätskriptet rapporterar ingressen som frånvarande. Den ska skrivas av en person och har inte skrivits här.
+4. **Inledningen säger inte vad beslutet gäller:** vilket förslag telefonbokningen ställs mot, vem som har lagt det och vad som bokas. Texten innehåller inte de uppgifterna, så fyndet går inte att åtgärda utan att hitta på något.
+7. **”Föreningen vill att förvaltningen mäter tidsåtgång …”** Brödtexten säger aldrig vilken förening det gäller. Texten säger inte heller att Öppna beslut i bylinen är en förening eller att det är den som avses. Läsaren vet alltså inte vem som föreslår mätningen. Att skriva in ett namn hade lagt till ett påstående som texten inte bär.
+
+Texten uppfyller därför inte artikelanatomin: ingressen saknas, och inledningen introducerar inte ämnet (fynd 4).
+
+## Påståenden
+
+**Borttagna**
+- Rubrikens anklagelse att kommunledningen hatar människor (fynd 1).
+- Att ”alla vet” att politikerna vill stänga ute äldre och att de vill det för att spara miljoner (fynd 3).
+- Att det inte kostar något att behålla telefonbokningen (fynd 6). Med meningen försvann också ”Därför”. Läsaren får alltså inte längre textens eget skäl till att kostnaden skulle vara noll, nämligen att handlingarna saknar tidsmätning.
+- Uppmaningen ”Nu är det dags att agera.” (fynd 9).
+
+**Ändrade**
+- Andra meningen i avsnittet ”Siffrorna gäller bokningar, inte invånare” påstår nu att 20 procent av bokningarna gjordes via telefon. Den påstår inte längre att siffrorna bevisar att 20 procent av kommunens invånare inte kan använda internet (fynd 5).
+- Rubriken uttrycker nu förslaget i inledningen som en uppmaning: behåll telefonen som bokningsväg i sex månader. Den nämner inte kommunstyrelsen, inte att det gäller ett försök och inte alla sju lokaler (fynd 1).
+
+**Tillagda**
+- Mellanrubriken ”Siffrorna gäller bokningar, inte invånare”. Den är en slutsats av pilotrapportens uppgift att bokningarna inte räknar unika personer (fynd 8).
+- Mellanrubriken ”Handlingarna visar inte vad två bokningsvägar kostar”. Den är en slutsats av att handlingarna saknar tidsmätning och att försökets kostnad inte är beräknad (fynd 8).
+- Mellanrubriken ”Nästa steg är kommunstyrelsens”, alltså att nästa steg ligger hos kommunstyrelsen. Den är en slutsats av förslaget i inledningen (fynd 9).
+
+Meningen i slutavsnittet upprepar förslaget i inledningen, att behålla telefonbokningen i alla sju lokaler under ett halvårs försök, och tillför inget nytt påstående.
+
+## Övriga ändringar
+
+Utöver påståendena ovan har rubriken och båda mellanrubrikerna bytts ut. En hänvisning till vad ”alla vet” i inledningen och en allmän slutuppmaning har strukits. Texten har också fått ett eget slutavsnitt med egen mellanrubrik och har nu tre avsnitt i stället för två. Den slutliga korrekturläsningen hittade inget att rätta.

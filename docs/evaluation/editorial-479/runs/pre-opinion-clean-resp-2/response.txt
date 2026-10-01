@@ -1,0 +1,3 @@
+Ingen ändring: `input.md` behövde varken redaktionella eller mekaniska rättelser och lämnas som den är. Inget har skrivits.
+
+Inställningar: genre `opinion` och språk `sv` (båda från anropet). Ingen teknik används, eftersom genren `opinion` inte anger någon och ingen annan nivå valde en. Korrigeringsbudgeten (1) användes inte.

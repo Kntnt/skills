@@ -1,0 +1,23 @@
+Granskningen är klar och texten är skriven till `output.md`. `input.md` är oförändrad.
+
+**Inställningar:** genren opinion och språket sv kommer från anropet. Ingen teknik användes, eftersom opinion inte har någon teknik som den vanligen skrivs med och inget annat valde någon.
+
+**Fynd**
+
+1. **Ingressen (rättad).** Den sista meningen löd ”Här är skälen att pröva båda bokningsvägarna ett halvår till innan telefonbokningen ändå stängs för gott”. Den gjorde det till ett givet utfall att telefonbokningen stängs. Resten av texten lämnar utfallet öppet. Ingången säger att ett permanent beslut behöver bättre underlag än det som nu ligger på bordet, och avslutningen säger att alternativen går att väga först efter försöket. En läsare som bara ser ingressen kunde därför tro att skribenten redan medger att telefonbokningen ska avskaffas och bara vill skjuta upp det. Meningen slutar nu ”… innan telefonbokningens framtid avgörs.”
+
+Inga fynd är kvar.
+
+**Påståendena**
+
+- **Ändrat påstående** (ingressen, rättelsen av fynd 1): ingressen säger inte längre att telefonbokningen stängs för gott efter försöket. Nu säger den bara att telefonbokningens framtid avgörs efter halvåret.
+
+Inget påstående togs bort eller lades till. Utöver ingressens sista mening ändrades inget påstående.
+
+**Artikelanatomin:** texten följer den utan avvikelse. Gränserna för antal tecken och ord mättes med skript på den levererade texten. De övriga kraven kontrollerades genom läsning:
+- ingressen står på egen hand
+- ingången för texten framåt
+- mellanrubrikerna beskriver sina avsnitt
+- avslutningen är ett eget avsnitt som uppmanar kommunstyrelsen att handla
+
+Den levererade texten skiljer sig från texten som kom in bara i ingressens sista mening, som redovisas ovan. Inga mönster av generisk text togs bort, ingen rubrik och ingen struktur ändrades, och korrekturläsningen på slutet hittade inga mekaniska fel att rätta.

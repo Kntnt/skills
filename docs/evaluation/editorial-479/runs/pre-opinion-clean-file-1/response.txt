@@ -1,0 +1,23 @@
+Texten är levererad till `output.md`. `input.md` är orörd.
+
+**Konfiguration:** genre `opinion` och språk `sv`, båda från anropet. Ingen teknik: varken anropet, metadata eller instruktioner anger någon, och genren opinion anger ingen teknik som den vanligen skrivs med. Ingen skrivbrief användes. Texten saknar `kntnt`-metadata, och ingen lades till.
+
+**Fynd (åtgärdat)**
+
+- Ingressen, sista meningen. Bisatsen ”innan den ena stängs” förutsatte att en av bokningsvägarna ska stängas efter försöket. Brödtexten lämnar utfallet öppet (”Först då går det att väga alternativen”). Den som bara läste ingressen fick intrycket att skribenten redan godtagit en stängning. Meningen lyder nu ”… ett halvår till innan det avgörs om den ena ska stängas.”
+
+Inga fynd återstår.
+
+**Påståenden**
+
+- Ändrat påstående (ingressen, genom åtgärden ovan): ingressen säger inte längre att en bokningsväg ska stängas när halvåret är slut. Den säger i stället att det återstår att avgöra om den ena ska stängas. Att försöket med båda bokningsvägarna ska komma före beslutet står kvar.
+- Inga påståenden har tagits bort eller lagts till, och utöver det ändrade påståendet ovan har inget påstående ändrats.
+
+**Anatomi:** Texten följer artikelanatomin utan avvikelse. Mätskriptet godkände alla räknade krav i den levererade texten: rubriken har 47 tecken, ingressen 43 ord i ett stycke, och inget stycke i brödtexten är över 50 ord. De krav skriptet inte räknar har granskats genom läsning:
+- ordningen och bylinen
+- att ingressen står på egen hand
+- att inledningen för texten vidare
+- att mellanrubrikerna beskriver sina avsnitt
+- att avslutningen är ett eget avsnitt med en uppmaning till kommunstyrelsen
+
+Utöver ändringen i ingressen är texten oförändrad. Korrekturläsningen hittade inga mekaniska fel att rätta.

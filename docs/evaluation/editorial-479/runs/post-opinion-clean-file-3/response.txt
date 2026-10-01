@@ -1,0 +1,7 @@
+Texten är levererad till `output.md`.
+
+Konfiguration: genren `opinion` och språket `sv` kommer från anropet. Ingen teknik tillämpades: genren opinion anger ingen teknik som den vanligen skrivs med, och ingen annan nivå valde någon.
+
+Granskningen hittade inga brister att rätta, så korrigeringsbudgeten (1) användes inte. Texten följer artikelanatomin utan avvikelse. De räknade gränserna mättes med mätskriptet på den levererade texten och håller alla: rubriken har 47 tecken och sex ord, ingressen är ett stycke på 39 ord och inget stycke i brödtexten är längre än 50 ord. De krav som skriptet inte räknar granskades också: att ingressen står på egen hand, att brödtexten går att läsa utan ingressen, att mellanrubrikerna beskriver sina avsnitt och att det sista avsnittet är ett avslut med en konkret uppmaning till Kommunstyrelsen.
+
+Den avslutande korrekturläsningen hittade inga mekaniska fel. `output.md` är byte för byte identisk med `input.md`, och inget påstående har tagits bort, ändrats eller lagts till.

@@ -1,0 +1,34 @@
+Texten är skriven till `output.md`. `input.md` är orörd.
+
+**Konfiguration:** genre `opinion` och språk `sv`, båda angivna i anropet. Ingen teknik: ingen nivå valde någon, och genren opinion anger ingen som den vanligen skrivs med.
+
+**Anatomi:** Texten följer artikelanatomin. Mätskriptet kördes på den levererade texten och rapporterar inga överskridna gränser:
+- rubriken har 47 tecken och 6 ord
+- ingressen är ett stycke på 35 ord
+- inget stycke är längre än 50 ord
+
+Kraven som skriptet inte räknar har också granskats:
+- ingressen står på egen hand
+- ingress och inledning börjar med olika ord, och inledningen för texten vidare
+- brödtexten går att förstå utan ingressen
+- mellanrubrikerna beskriver sina avsnitt
+- sista avsnittet är ett slut som säger vem som ska göra vad
+
+**Fynd (åtgärdat):**
+
+1. **Ingressen, tredje meningen.** Bisatsen ”innan den ena stängs” presenterade stängningen av en bokningsväg som ett givet utfall när halvåret är slut. Brödtexten gör den beroende av försöket:
+   - inledningen vill att bytet skjuts upp, inte att det stoppas
+   - ett permanent beslut kräver enligt texten bättre underlag
+   - först efter mätningen ”går det att väga alternativen”
+
+   Ingressen fick alltså skribenten att medge ett utfall som brödtexten låter bero på vad försöket visar. Bisatsen är struken, och meningen lyder nu: ”Här är skälen att pröva båda bokningsvägarna ett halvår till.”
+
+Inga fynd kvarstår.
+
+**Påståenden:**
+- **Borttaget (ingressen):** att en av de två bokningsvägarna stängs efter halvåret. Påståendet togs bort när fynd 1 åtgärdades, eftersom fyndet pekade ut just det som felet.
+  - Med bisatsen försvann också ingressens tidsordning, först försök och sedan stängning. Ingressen säger inte längre vad som följer efter halvåret.
+  - Brödtexten säger fortfarande att bytet ska skjutas upp och att försöket kommer först (”Pröva först …”, ”Först då går det att väga alternativen”).
+- Utöver detta har inga påståenden ändrats eller tillkommit.
+
+Strykningen i ingressen är den enda skillnaden mellan texten som kom in och den som levereras. Den avslutande korrekturläsningen hittade inga mekaniska fel. Inga andra ändringar gjordes av slopmönster, struktur eller rubriker.

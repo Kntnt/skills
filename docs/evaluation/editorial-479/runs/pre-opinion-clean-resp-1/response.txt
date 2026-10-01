@@ -1,0 +1,59 @@
+Granskningen gällde genren opinion och språket svenska (sv), båda angivna i anropet. Ingen teknik tillämpades: genren opinion anger ingen teknik som den vanligen skrivs med, och inget annat valde någon. Ingen brief användes. Korrigeringsbudgeten var 1 och förbrukades i en korrigeringsrunda. Ingen fil skrevs; `input.md` är orörd.
+
+```markdown
+# Avskaffa inte telefonbokningen på ett antagande
+
+**I september kan telefonbokningen av Lerviks föreningslokaler försvinna. Beslutet ska vila på åtta veckors siffror från två lokaler, och de siffrorna räknar bokningar, inte personer. Här är skälen att pröva båda bokningsvägarna ett halvår till innan det avgörs om den ena ska stängas.**
+
+Text: Sanna Ek, Öppna beslut
+
+Kommunstyrelsen i Lervik bör skjuta upp bytet till enbart digital bokning av föreningslokaler, ett byte som kan ske i september. Pröva först båda bokningsvägarna, telefonbokning och digital bokning, i alla sju lokaler under ett halvår och mät vad de kräver. Ett permanent beslut behöver bättre underlag än det som nu ligger på bordet.
+
+## Bokningar är inte samma sak som personer
+
+Kommunens pilotrapport från den 8 april 2026 räknar 96 webbokningar och 24 telefonbokningar under åtta veckor i två lokaler. Den säger inte hur många personer som bokade eller varför de valde telefonen. Siffrorna visar varken hur många som saknar digital vana eller hur många som skulle klara sig utan telefonbokning.
+
+En bokning är en händelse, inte en invånare. Den skillnaden avgör vad siffrorna kan användas till.
+
+## Mät också arbetet med två kanaler
+
+Förvaltningen vill slippa dubbel administration. Det är en relevant invändning. Men handlingarna innehåller ingen mätning av tidsåtgången. Att behålla två kanaler kostar arbete, och hur mycket behöver vägas mot vad användarna får.
+
+## Besluta om försöket, inte om antagandet
+
+Kommunstyrelsen bör därför säga ja till halvåret med båda bokningsvägarna, ta ställning till dess ännu okända kostnad och ge förvaltningen i uppdrag att mäta tidsåtgången samt fråga användarna varför de väljer sin bokningsväg. Först då går det att väga alternativen.
+
+Ett antagande blir inte ett beslutsunderlag för att kalendern säger september.
+```
+
+**Fynd (båda åtgärdade, inga kvarstår)**
+
+1. **Ingressen, sista meningen.**
+   - **Problem:** Bisatsen ”innan den ena stängs” förutsatte att en av bokningsvägarna stängs efter halvåret. Brödtexten drar inte den slutsatsen. Inledningen begär bättre underlag för ”ett permanent beslut”, och slutet säger ”Först då går det att väga alternativen”.
+   - **Vad läsaren förlorade:** Den som bara läste ingressen kunde tro att skribenten redan godtar att en bokningsväg stängs.
+   - **Åtgärd:** Bisatsen lyder nu ”innan det avgörs om den ena ska stängas”.
+
+2. **Inledningen, andra meningen.**
+   - **Problem:** ”båda bokningsvägarna” pekade tillbaka på rubriken och ingressen. Inledningen namngav bara digital bokning, och brödtexten nämnde telefonbokning först i avsnittet ”Bokningar är inte samma sak som personer”.
+   - **Vad läsaren förlorade:** Den som läste brödtexten utan rubrik och ingress visste efter inledningen inte vilken bokningsväg texten försvarar.
+   - **Åtgärd:** Inskottet ”telefonbokning och digital bokning” efter ”båda bokningsvägarna”.
+
+**Påståendena**
+
+- **Ändrat (fynd 1, ingressen):** Ingressen säger nu att det efter försöket ska avgöras om den ena bokningsvägen ska stängas, inte att den ena stängs.
+- **Ändrat (fynd 2, inledningen):** Inledningen säger nu uttryckligen att de två bokningsvägarna som ska prövas är telefonbokning och digital bokning.
+
+Inget påstående togs bort. Utöver de två ändringarna ovan har inget påstående ändrats eller lagts till.
+
+**Artikelanatomin**
+
+Texten följer artikelanatomin utan avvikelse. De räknade kraven har mätts maskinellt på den levererade texten:
+- rubriken: 47 tecken
+- ingressen: 43 ord
+- inledningen: 53 ord
+
+De krav som inte räknas har granskats genom läsning.
+
+**Övrigt**
+
+Utöver de två ändringarna ovan ändrade körningen ingenting. Inga slop-mönster togs bort, ingen rubrik och ingen struktur ändrades, och den mekaniska slutkorrekturen gjorde inga ändringar.

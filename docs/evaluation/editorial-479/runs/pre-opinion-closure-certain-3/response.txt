@@ -1,0 +1,23 @@
+Granskningen är klar och texten är skriven till `output.md`. `input.md` är orörd.
+
+**Konfiguration:** genren `opinion` och språket `sv` kommer båda från anropet. Ingen teknik används, eftersom opinionsgenren inte anger någon teknik som den vanligen skrivs med och ingen annan nivå valde någon.
+
+**Fynd (åtgärdat)**
+
+1. **Ingressens sista mening.** Bisatsen ”innan telefonbokningen ändå stängs för gott” utgick från att telefonbokningen ska stängas för gott efter försöket. Texten drar inte den slutsatsen. Ingången säger att ett permanent beslut behöver bättre underlag, och slutet säger att det går att väga alternativen först efter försöket. Den som bara läste ingressen fick därför en svagare ståndpunkt än den texten driver, och ingressen motsade textens slut. Bisatsen är struken, så meningen slutar nu ”… ett halvår till.”
+
+Inga fynd återstår.
+
+**Påståenden**
+
+- **Borttaget:** ingressens påstående att telefonbokningen ändå ska stängas för gott efter försöket. Fynd 1 pekade ut just det påståendet som felet, och rättningen av fynd 1 strök det.
+- **Vad den som läser ingressen inte längre får:** ingressen säger inte längre att försöket ska genomföras innan telefonbokningen avgörs slutligt. Brödtexten säger det fortfarande, i ”Pröva först …”, ”Ett permanent beslut behöver bättre underlag …” och ”Först då går det att väga alternativen.”
+- Utöver det borttagna påståendet har inga påståenden ändrats eller tillkommit.
+
+**Artikelanatomi:** texten följer anatomin utan avvikelse. Mätningen av den levererade texten visar att alla räknade krav är uppfyllda. Rubriken har 47 tecken, och ingressen har 35 ord i ett stycke. Jag har också granskat kraven som skriptet inte räknar, och de är uppfyllda:
+- Ingressen fungerar på egen hand.
+- Ingången för texten framåt och går att förstå utan ingressen.
+- Mellanrubrikerna beskriver sina avsnitt.
+- Sista avsnittet är ett avslut som uppmanar kommunstyrelsen att handla.
+
+Utöver det som redovisas under påståenden ändrade körningen bara en sak: korrekturläsningen på slutet rättade ett stavfel i ett sammansatt ord.

@@ -1,0 +1,11 @@
+Texten finns nu i `output.md`. Granskningen hittade inget att rätta, så filen är byte för byte densamma som `input.md`.
+
+- **Granskningen:** Inga redaktionella brister hittades. Korrigeringsbudgeten (1) gick därför inte åt. Den sista korrekturläsningen hittade inga stavfel, grammatikfel eller skiljeteckenfel.
+- **Inställningar:** Genren är `opinion` och språket `sv` (svenska), båda från anropet. Ingen teknik användes, eftersom genren opinion inte anger någon. Ingen skrivbrief valdes.
+- **Artikelns delar:** Texten har alla delar som en debattartikel ska ha, utan avvikelser. Mätskriptet godkände alla räknade gränser. Resten läste jag:
+  - Ingressen går att förstå på egen hand.
+  - Brödtexten går att läsa utan ingressen.
+  - Det första stycket i brödtexten tillför något nytt efter ingressen.
+  - Varje mellanrubrik beskriver sitt avsnitt.
+  - Det sista avsnittet avslutar texten med en uppmaning till kommunstyrelsen.
+- **Påståenden:** Inga påståenden har tagits bort, ändrats eller lagts till.

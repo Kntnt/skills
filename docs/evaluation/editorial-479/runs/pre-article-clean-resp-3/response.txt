@@ -1,0 +1,45 @@
+````markdown
+# Mätningar visar när Björkskolans luft var kall, inte varför
+
+**Under 14 av 120 lektionspass registrerade givarna i Björkskolan temperaturer under fastighetskontorets egen arbetsgräns. Fyra veckors mätningar pekar ut tillfällen att undersöka närmare, men förklarar inte varför luften var kall. Här är vad ett kort försök kan säga, och vad som behövs för att komma vidare.**
+
+Text: Hedda Lund
+
+En temperaturgivare mäter luften där den sitter. Det gör placeringen viktig när fastighetskontoret ska tolka fyra veckors mätningar i Björkskolans sex klassrum. Genomgången nedan visar vad värdena räcker till och var gränsen går.
+
+## En gräns för det lokala försöket
+
+Kontoret valde 20 grader Celsius som arbetsgräns. Rapporten *Mätförsök i Björkskolan*, daterad 12 mars 2026, räknar 14 lektionspass av 120 med minst en mätning under den gränsen. Hur länge temperaturen låg under den anger rapporten inte. Gränsen är kontorets egen, vald för det här försöket.
+
+Givarna mätte varken luftdrag eller elevernas upplevelse. Ett lågt värde säger alltså när luften var kall, men inte hur rummet kändes.
+
+Driftteknikern Elin Rask sammanfattar: ”Vi vet när vi behöver titta närmare. Vi vet ännu inte varför det blev kallt just då.”
+
+## Nästa försök behöver mer än givare
+
+Rask rekommenderar att temperaturserierna kopplas till rummens användningstider innan styrningen ändras. Nästa försök planeras för november med likadant placerade givare, men finansieringen är inte beslutad.
+
+Lägg därför tiderna för när rummen används bredvid mätvärdena innan nästa givare sätts upp.
+````
+
+**Inställningar:** genre article, angiven i anropet. Ingen teknik, eftersom genren article inte anger någon teknik som den vanligen skrivs med. Språk sv, angivet i anropet. Ingen skrivbrief användes.
+
+**Fynd**
+
+1. **Rubriken (åtgärdat).** Den ursprungliga rubriken, ”Mätförsöket i Björkskolan visar när, inte varför”, sa inte vad försöket visar ”när” om. Den som bara ser rubriken, till exempel i en lista eller ett sökresultat, kunde inte avgöra att texten handlar om kall luft i skolan.
+   - Den nya rubriken fyller i det med textens egen formulering ”när luften var kall”: ”Mätningar visar när Björkskolans luft var kall, inte varför”. Den har 59 tecken och 9 ord.
+   - Det är ett ord mer än normen på tre till åtta ord. För att komma ner till åtta ord hade rubriken behövt stryka skolans namn, ”luft var kall” eller förbehållet ”inte varför”.
+
+Inga fynd står olösta.
+
+**Påståendena**
+
+- **Ändrat (rubriken, genom reparationen av fynd 1):**
+  - Rubriken påstår nu att mätningarna visar när luften i Björkskolan var kall, men inte varför. Tidigare sa den att mätförsöket visar ”när” något, utan att säga vad.
+  - ”Björkskolans luft” gäller skolan i stort, medan mätningarna gjordes med givare i sex klassrum. Förbehållet att en givare mäter luften där den sitter står kvar oförändrat i brödtextens första stycke.
+  - Rubrikens subjekt är nu ”Mätningar” i stället för ”Mätförsöket i Björkskolan”. Den som läser bara rubriken får därför inte längre veta att resultatet kommer från ett enda, begränsat försök. Den inramningen finns kvar i ingressen (”ett kort försök”) och i brödtexten.
+- Inga påståenden togs bort och inga lades till.
+
+**Anatomi:** Texten följer artikelns anatomi med en avvikelse: rubriken har 9 ord, mot normen tre till åtta.
+
+Körningen ändrade ingenting utöver rubriken. Korrekturläsningen hittade inga mekaniska fel och gjorde inga ändringar.
