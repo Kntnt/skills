@@ -1,0 +1,20 @@
+{
+  "wording": "reply-check-candidate.md",
+  "command": [
+    "claude",
+    "--print",
+    "--session-id",
+    "31318056-3a3d-4b68-999e-135ee3b599ac",
+    "--model",
+    "claude-opus-5-5",
+    "--effort",
+    "high",
+    "--tools",
+    "",
+    "--strict-mcp-config",
+    "--output-format",
+    "json"
+  ],
+  "credential_source": "keychain:Claude Code-credentials",
+  "exit": 0
+}

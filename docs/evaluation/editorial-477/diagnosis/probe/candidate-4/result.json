@@ -1,0 +1,98 @@
+{
+  "duration_api_ms": 23855,
+  "stop_reason": "end_turn",
+  "session_id": "d13c367f-653f-4aea-9e90-d3f9e8cdb52c",
+  "total_cost_usd": 0.12167420000000001,
+  "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 7670,
+    "cache_read_input_tokens": 531,
+    "output_tokens": 3010,
+    "output_tokens_details": {
+      "thinking_tokens": 1266
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 7670,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 3010,
+        "cache_read_input_tokens": 531,
+        "cache_creation_input_tokens": 7670,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 7670
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+  },
+  "modelUsage": {
+    "claude-opus-5-5": {
+      "inputTokens": 2,
+      "outputTokens": 3010,
+      "cacheReadInputTokens": 531,
+      "cacheCreationInputTokens": 7670,
+      "webSearchRequests": 0,
+      "costUSD": 0.12167420000000001,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 128000,
+      "thinkingTokens": 1266,
+      "canonicalModel": "claude-opus-5-5",
+      "provider": "firstParty",
+      "costBasis": "list"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subagent_stats": {
+    "spawned": 0,
+    "requested": {
+      "background": 0,
+      "foreground": 0,
+      "unset": 0
+    },
+    "started_in_background": 0,
+    "max_depth": 0,
+    "spawned_by_subagents": 0,
+    "completed": 0,
+    "failed": 0,
+    "killed": {
+      "parent": 0,
+      "user": 0,
+      "system": 0
+    },
+    "refused": {
+      "depth_limit": 0,
+      "concurrency_limit": 0,
+      "budget": 0
+    },
+    "by_type": {}
+  },
+  "is_error": false,
+  "num_turns": 1,
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "**Konfiguration:** genren \u00e4r `casestudy` och spr\u00e5ket `sv`, b\u00e5da angivna i anropet. Ingen teknik till\u00e4mpades: genren `casestudy` anger att den inte vanligen skrivs med n\u00e5gon s\u00e4rskild teknik, och ingen annan niv\u00e5 valde n\u00e5gon. Korrigeringsbudgeten var 1 och gick \u00e5t till en korrigeringsrunda.\n\nGranskningen gav fyra anm\u00e4rkningar. Alla fyra \u00e5tg\u00e4rdades i rundan, och ingen kvarst\u00e5r. Texten f\u00f6ljer artikelanatomin utan avvikelse: de r\u00e4knade kraven \u00e4r m\u00e4tta p\u00e5 den levererade texten och de \u00f6vriga har granskats genom l\u00e4sning.\n\n### Anm\u00e4rkningar och vad som \u00e5tg\u00e4rdades\n\n1. **Rubriken** \u2013 \u201dElm Quay samlade reparations\u00e4rendena\u201d generaliserade. Den obegr\u00e4nsade best\u00e4mda formen l\u00e4stes som att Elm Quay hade samlat alla sina reparations\u00e4renden, medan texten g\u00e4ller ett f\u00f6rs\u00f6k i tv\u00e5 hus under \u00e5tta veckor d\u00e4r akuta \u00e4renden och tidigare best\u00e4llda arbeten inte ingick. Den som bara s\u00e5g rubriken fick inte veta att det r\u00f6rde sig om ett avgr\u00e4nsat f\u00f6rs\u00f6k. \u00c5tg\u00e4rd: rubriken lyder nu \u201dElm Quay samlade reparations\u00e4renden p\u00e5 f\u00f6rs\u00f6k\u201d (45 tecken, 6 ord).\n2. **Ingressen** \u2013 var inte sj\u00e4lvb\u00e4rande. \u201dgruppen\u201d och \u201danteckningarna\u201d stod i best\u00e4md form, men ingressen hade inte introducerat n\u00e5gon grupp eller n\u00e5gra anteckningar. \u00c5tg\u00e4rd: \u201dvad gruppen gjorde, vad anteckningarna visar\u201d lyder nu \u201dvad Elm Quays underh\u00e5llsgrupp gjorde, vad en intern f\u00f6rs\u00f6ksanteckning visar\u201d.\n3. **Inledningen, andra meningen** \u2013 \u201dF\u00f6rs\u00f6ket\u201d i best\u00e4md form hade sin referent bara i ingressen, s\u00e5 den som l\u00e4ste br\u00f6dtexten utan ingress m\u00f6tte ett f\u00f6rs\u00f6k som aldrig presenterats. \u00c5tg\u00e4rd: meningen b\u00f6rjar nu \u201dEtt f\u00f6rs\u00f6k med loggen p\u00e5gick \u2026\u201d.\n4. **Inledningen, sista meningen** \u2013 \u201dVad det kr\u00e4vde, och vad det gav, g\u00e5r att f\u00f6lja i gruppens egna anteckningar\u201d lovade att det f\u00f6rs\u00f6ket gav gick att f\u00f6lja i anteckningar. Texten redovisar dock en enda intern f\u00f6rs\u00f6ksanteckning fr\u00e5n Elm Quay, och den tillskriver uttryckligen inte programvaran skillnaden i mediantid. Vad f\u00f6rs\u00f6ket kr\u00e4vde kommer i texten fr\u00e5n Maya Linds citat och fr\u00e5n den oattribuerade ber\u00e4ttande texten om att Svale konfigurerade loggen och utbildade sex medarbetare, inte fr\u00e5n n\u00e5gon anteckning. \u00c5tg\u00e4rd: meningen \u00e4r nu tv\u00e5 meningar \u2013 \u201dVad det kr\u00e4vde ber\u00e4ttar arbetsledaren Maya Lind om. Hur m\u00e5nga \u00e4renden som registrerades, och hur snabbt de tilldelades, g\u00e5r att f\u00f6lja i Elm Quays interna f\u00f6rs\u00f6ksanteckning.\u201d\n\n### P\u00e5st\u00e5enden\n\n**Borttaget**\n- Att det som f\u00f6rs\u00f6ket *gav* g\u00e5r att f\u00f6lja i anteckningarna (inledningen). Det togs bort av \u00e5tg\u00e4rden f\u00f6r anm\u00e4rkning 4, som pekade ut just det p\u00e5st\u00e5endet som felet. L\u00e4saren v\u00e4ntar sig inte l\u00e4ngre belagda effekter av loggen. Den avgr\u00e4nsande meningen \u201dPerioderna hade olika arbetsbelastning, och anteckningen tillskriver d\u00e4rf\u00f6r inte skillnaden programvaran.\u201d st\u00e5r kvar of\u00f6r\u00e4ndrad.\n\n**\u00c4ndrade**\n- Rubriken (anm\u00e4rkning 1): s\u00e4ger nu att Elm Quay samlade reparations\u00e4renden \u2013 obest\u00e4mt, inte alla \u00e4renden \u2013 p\u00e5 f\u00f6rs\u00f6k. Tidigare stod det att Elm Quay samlade reparations\u00e4rendena.\n- Ingressen (anm\u00e4rkning 2): s\u00e4ger nu att det som visas kommer fr\u00e5n *en intern f\u00f6rs\u00f6ksanteckning*, inte fr\u00e5n flera anteckningar, och att gruppen \u00e4r *Elm Quays underh\u00e5llsgrupp*.\n- Inledningen (anm\u00e4rkning 4): vad f\u00f6rs\u00f6ket kr\u00e4vde tillskrivs nu arbetsledaren Maya Lind och inte anteckningar. Det som g\u00e5r att f\u00f6lja i dokumentet \u00e4r nu hur m\u00e5nga \u00e4renden som registrerades och hur snabbt de tilldelades, och dokumentet heter nu Elm Quays interna f\u00f6rs\u00f6ksanteckning i st\u00e4llet f\u00f6r gruppens egna anteckningar i plural.\n\n**Tillagda:** inga. Ut\u00f6ver det som r\u00e4knas upp ovan har inget p\u00e5st\u00e5ende tagits bort, \u00e4ndrats eller lagts till.\n\nUt\u00f6ver p\u00e5st\u00e5endena ovan har k\u00f6rningen gjort f\u00f6ljande: rubriken har skrivits om, fem ord i best\u00e4md form \u2013 ett i rubriken, tv\u00e5 i ingressen och tv\u00e5 i inledningen \u2013 har ersatts, i rubriken och ingressen med formuleringar som g\u00e5r att f\u00f6rst\u00e5 utan omgivande text, och inledningens sista mening har delats i tv\u00e5. I inledningens ers\u00e4ttning \u201dEtt f\u00f6rs\u00f6k med loggen p\u00e5gick \u2026\u201d h\u00e4mtar \u201dloggen\u201d fortfarande sin referent fr\u00e5n meningen f\u00f6re. Den avslutande mekaniska korrekturen hittade inga fel och \u00e4ndrade ingenting.",
+  "ttft_ms": 12671,
+  "type": "result",
+  "duration_ms": 23901,
+  "uuid": "ab4f1409-d516-45ec-a482-7d894880fef7",
+  "ttft_stream_ms": 1332,
+  "time_to_request_ms": 44,
+  "first_content_frame_ms": 1332,
+  "queued_turn_count": 0,
+  "result_index": 0
+}
