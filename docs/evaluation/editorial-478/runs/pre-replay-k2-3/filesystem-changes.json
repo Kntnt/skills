@@ -1,0 +1,63 @@
+{
+  "created": {
+    "home/.claude/backups/.claude.json.backup.1790855895575": {
+      "mode": 384,
+      "type": "file",
+      "size": 84,
+      "sha256": "720aea37b64c2f3b1b8f2107f2f5f3567584282e82b80874140cc4db92505983"
+    },
+    "home/.claude/.claude.json": {
+      "mode": 384,
+      "type": "file",
+      "size": 46791,
+      "sha256": "875fae0972e64fdec91cc10dde9539f5719aec0e38da1a02e977e75a4267f640"
+    },
+    "home/.claude/projects/-private-var-folders-cs-vgp-x-353zd9frkjpysp7zdw0000gn-T-kntnt-editorial-388-run-pcqavr3h-work/memory": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "home/.claude/backups": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "home/.claude/shell-snapshots": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "home/.claude/.last-cleanup": {
+      "mode": 420,
+      "type": "file",
+      "size": 24,
+      "sha256": "2f5df111a4763eccbed49b9dacaaef7a3e24578410a99834c3ca26f8b6eb0628"
+    },
+    "home/.claude/projects/-private-var-folders-cs-vgp-x-353zd9frkjpysp7zdw0000gn-T-kntnt-editorial-388-run-pcqavr3h-work/894e4956-81e1-4548-bfb9-795a7efcdab0.jsonl": {
+      "mode": 384,
+      "type": "file",
+      "size": 139730,
+      "sha256": "2f5d8b6a744200168c7382a42b28d64b365dd5dd7f9eb82c14893863aeaae45a"
+    },
+    "home/.claude/session-env": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "home/.claude/projects/-private-var-folders-cs-vgp-x-353zd9frkjpysp7zdw0000gn-T-kntnt-editorial-388-run-pcqavr3h-work": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "home/.claude/session-env/894e4956-81e1-4548-bfb9-795a7efcdab0": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "home/.claude/projects": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "home/.claude/sessions": {
+      "mode": 448,
+      "type": "directory"
+    }
+  },
+  "removed": {},
+  "changed": {},
+  "note": "Harness, cache and Skill effects are separated by reading trace-index.json; nothing here is a Skill artifact on its own."
+}

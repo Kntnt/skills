@@ -1,0 +1,5 @@
+{
+  "misses": [],
+  "verdicts": {"a": "pass", "b": "pass"},
+  "notes": "Text returned byte-identical; correction round rejected and reported as such. Neither judge calls any statement of the reply false, loose or misleading. Judge a calls finding 1 'marginal as a concrete visible defect', which disputes only whether the defect is real and faults no statement. Reply's counts checked: headline 59 characters, standfirst 40 words, three sections of two paragraphs each."
+}

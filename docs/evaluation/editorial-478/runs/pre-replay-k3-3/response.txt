@@ -1,0 +1,10 @@
+**1. False statements**
+
+- **Statement:** "Utöver påståendena ovan har en mening delats i två."
+  - **Text it names:** the delivered text.
+  - **Contradicting passage:** "Perioderna hade olika arbetsbelastning. Anteckningen tillskriver inte skillnaden programvaran." This is the only sentence split in the delivered text.
+  - **What is true:** The split is the same edit already reported as finding 2 and as the second changed claim. It is not a further change outside the claim changes listed above. Apart from the headline and this one split, the delivered text matches the text as it arrived word for word. "Utöver" ("besides") presents the split as an additional change, and the text contains no such change.
+
+**2. Claim changes the account misses**
+
+none

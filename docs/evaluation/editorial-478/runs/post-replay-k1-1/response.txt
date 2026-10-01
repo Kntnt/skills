@@ -1,0 +1,24 @@
+**1. False statements**
+
+- **"Vad försöket krävde kommer i texten från Maya Linds citat, inte från någon anteckning."** (finding 4)
+  - **Text it is about:** the text as it arrived. The same passages stand unchanged in the delivered text.
+  - **What contradicts it:** "Kategorierna i loggen var underhållsgruppens egna. Leverantören Svale konfigurerade loggen efter dem och utbildade sex medarbetare."
+  - **What is true:** Part of what the trial required comes from Lind's quote: agreeing on the categories, and the time she would set aside. The rest is told in the narrator's own voice, not by Lind: the categories were the group's own, Svale configured the log after them, and six staff were trained.
+
+- **"'Vad det krävde, och vad det gav, går att följa i gruppens egna anteckningar' lovade att det loggen gav gick att följa i anteckningar."** (finding 4)
+  - **Text it is about:** the text as it arrived.
+  - **What contradicts it:** "Försöket pågick i åtta veckor och omfattade två hus. Vad det krävde, och vad det gav, går att följa i gruppens egna anteckningar."
+  - **What is true:** The neuter "det" refers back to "Försöket", not to "loggen", which would take "den". The sentence promised that what the *trial* gave could be followed in the notes, not what the log gave. The reply's own claim account gets this right ("det som försöket *gav*").
+
+- **"Utöver det som räknas upp ovan har inget påstående tagits bort, ändrats eller lagts till."** (claim account)
+  - **Text it is about:** the delivered text.
+  - **What contradicts it:** "Vad det krävde berättar arbetsledaren Maya Lind om."
+  - **What is true:** This sentence now attributes to Lind the content the narrator states: the categories were the group's own, and Svale configured the log and trained six staff. The account's entry on this change names only the notes as the source the content moved from (see list 2).
+
+**2. Claim changes the account misses**
+
+- **Lead, last sentence**
+  - **Before:** "Vad det krävde, och vad det gav, går att följa i gruppens egna anteckningar."
+  - **After:** "Vad det krävde berättar arbetsledaren Maya Lind om. Hur många ärenden som registrerades, och hur snabbt de tilldelades, går att följa i Elm Quays interna försöksanteckning."
+  - **What changed:** The arrived text gave "what it required" to the group's own notes. The content itself was told partly by the narrator (the categories were the group's own, Svale configured the log and trained six staff) and partly by Lind's quote. The delivered text gives all of it to Lind. Content that still stands in the narrator's voice is now presented as something Lind tells.
+  - **What the account says:** "vad försöket krävde tillskrivs nu arbetsledaren Maya Lind och inte anteckningar." It names the notes as the voice the content was taken from and leaves out the narrator. It never says that the configuration and training are now attributed to Lind. Finding 4's false premise ("kommer i texten från Maya Linds citat") is what this entry is built on, so it reports the change short.

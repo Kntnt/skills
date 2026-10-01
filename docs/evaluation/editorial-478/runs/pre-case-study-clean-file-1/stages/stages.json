@@ -1,0 +1,8 @@
+{
+  "packet": "pre-case-study-clean-file-1",
+  "checkers": 1,
+  "delivered_text_source": "captured-output.md",
+  "delivered_text_equals_received": false,
+  "checker_transcript": "transcripts/subagents/agent-a227c7d37a78a2fb7.jsonl",
+  "delivered_text_equals_final": true
+}

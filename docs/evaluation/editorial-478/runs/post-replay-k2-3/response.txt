@@ -1,0 +1,14 @@
+**1. False statements**
+
+- **Statement:** "Utöver detta har två omnämnanden av gruppen fått gruppens fullständiga benämning." ("Beyond this, two mentions of the group have been given the group's full name.")
+  **Text it is about:** the delivered text, compared with the text as it arrived.
+  **What contradicts it:** the texts differ in only two places, and both are the corrections the reply already lists:
+  - the standfirst: "vad gruppen gjorde" → "vad underhållsgruppen gjorde"
+  - the lead: "i gruppens egna anteckningar" → "i underhållsgruppens egna anteckningar"
+
+  The other short mentions of the group are the same in both texts. The subheading "Gruppen enades om kategorierna först" ("The group agreed on the categories first") is one of them.
+  **What is true:** "Utöver detta" ("beyond this") says two more mentions were lengthened besides the two corrections. No mention was changed apart from the two corrections. Those two are the only places where "the group" became "underhållsgruppen" (the maintenance group).
+
+**2. Claim changes the account misses**
+
+none

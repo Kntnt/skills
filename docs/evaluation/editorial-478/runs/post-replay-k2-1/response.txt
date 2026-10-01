@@ -1,0 +1,11 @@
+**1. False statements**
+
+- **"Utöver detta har två omnämnanden av gruppen fått gruppens fullständiga benämning."** This is about the delivered text. "Utöver detta" ("in addition to this") presents these as two more changes on top of the two fixes already described, so a reader would expect four changed mentions. The delivered text has only two differences from the text as it arrived:
+  - in the standfirst, "vad gruppen gjorde" became "vad underhållsgruppen gjorde";
+  - in the lead, "i gruppens egna anteckningar" became "i underhållsgruppens egna anteckningar".
+
+  No other mention of the group was changed. The first subheading still reads "Gruppen enades om kategorierna först". What is true is that the two fixes are the only two mentions that received the full name, and there are no others.
+
+**2. Claim changes the account misses**
+
+none

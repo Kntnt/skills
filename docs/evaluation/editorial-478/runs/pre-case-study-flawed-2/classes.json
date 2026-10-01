@@ -1,0 +1,18 @@
+{
+  "misses": [
+    {
+      "judge": "a",
+      "class": 3,
+      "kind": "",
+      "owner": null,
+      "reply": "Ordet \"programvaran\" i meningen \"Anteckningen säger att arbetsbelastningen var olika och att skillnaden inte kan tillskrivas programvaran.\" fick då inget att syfta på i brödtexten. Bara ingressen sa vilken programvara det gällde. ... det felet hade texten inte när den kom in.",
+      "judge_says": "Whether that rejection was necessary is debatable: in the input, \"programvaran\" already comes before the sentence that names it. ... the reply makes no false claim about the output.",
+      "check": "In input.md the body names the software as \"Vår programvara\" in the sentence after \"programvaran\", so the body as received did carry a referent; with that sentence struck it would not. The statement is true of the text; the judge disputes only whether the round needed rejecting."
+    }
+  ],
+  "verdicts": {
+    "a": "pass",
+    "b": "pass"
+  },
+  "notes": "The returned text is byte-identical to input.md and both judges call the account accurate. The detection gap both judges note (the first subheading not flagged as failing to describe its section) is not an A2 miss."
+}

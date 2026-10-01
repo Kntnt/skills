@@ -1,0 +1,16 @@
+**1. False statements**
+
+- **Finding 4 says the arrived sentence "lovade att det loggen gav gick att följa i anteckningar".** This is about the text as it arrived. That text reads: "Försöket pågick i åtta veckor och omfattade två hus. Vad det krävde, och vad det gav, går att följa i gruppens egna anteckningar." The neuter pronoun "det" refers back to "Försöket" (ett försök). "Loggen" is common gender (en logg) and would take "den". What is true is that the sentence promised that what the *trial* required and gave could be followed in the notes. It said nothing about what the *log* gave. The account's own "Borttaget" entry gets this right ("det som försöket *gav*").
+
+- **Finding 4 says "Vad försöket krävde kommer i texten från Maya Linds citat, inte från någon anteckning."** This is about the text as it arrived; the body is the same in the delivered text. Part of what the trial required is stated by the narrator, not by Lind: "Kategorierna i loggen var underhållsgruppens egna. Leverantören Svale konfigurerade loggen efter dem och utbildade sex medarbetare." Lind's quote covers only the time spent agreeing on categories and the preparation she would add ("Vi lade mer tid på att enas om kategorierna …", "jag skulle lägga till en vecka för förberedelser"). What is true is that the text gets what the trial required partly from Lind's quotes and partly from the narrator: the categories were the group's own, Svale configured the log after them, and Svale trained six staff.
+
+**2. Claim changes the account misses**
+
+- **Lead: the attribution of what the trial required.**
+  - Before: "Vad det krävde, och vad det gav, går att följa i gruppens egna anteckningar."
+  - After: "Vad det krävde berättar arbetsledaren Maya Lind om."
+  - The delivered sentence gives everything the trial required to Lind. In the text as it arrived, that content came from two voices:
+    - the group's notes (through the lead sentence);
+    - in the body, the narrator, who states that the categories were the group's own, that Svale configured the log after them and that Svale trained six staff.
+  - Lind's quotes held only the time spent on categories and the extra preparation week. The delivered text now puts the narrator's facts about Svale's configuration and the training of six staff under Lind's account as well.
+  - The account says: "vad försöket krävde tillskrivs nu arbetsledaren Maya Lind och inte anteckningar." It names only the notes as the voice the content was taken from and leaves out the narrator. So it reports the change short. It builds on the false statement in finding 4 that this content came only from Lind's quote.

@@ -1,0 +1,14 @@
+**1. False statements**
+
+- **Statement:** "”Vad det krävde, och vad det gav, går att följa i gruppens egna anteckningar” lovade att det loggen gav gick att följa i anteckningar" (finding 4).
+  **Text it is about:** the text as it arrived.
+  **What contradicts it:** "Försöket pågick i åtta veckor och omfattade två hus. Vad det krävde, och vad det gav, går att följa i gruppens egna anteckningar."
+  **What is true:** The neuter "det" refers back to "Försöket" (ett försök). It cannot refer to "loggen", which is common gender (en logg → den). The sentence said that what the trial gave could be followed in the notes, not what the log gave. The reply's own claim account gets this right ("Att det som försöket *gav* går att följa i anteckningarna"), so finding 4 misstates the passage it quotes.
+
+**2. Claim changes the account misses**
+
+- **Before:** "Vad det krävde, och vad det gav, går att följa i gruppens egna anteckningar."
+  **After:** "… Hur många ärenden som registrerades, och hur snabbt de tilldelades, går att följa i Elm Quays interna försöksanteckning."
+  The standfirst changed the same way. "vad anteckningarna visar" became "vad en intern försöksanteckning visar".
+  **What the difference did:** It moved the attribution of the source. Before, the record was the maintenance group's own notes, plural, and "egna" stressed that the group wrote them. Neither text says these notes are the same document as Elm Quay's internal trial note. The delivered text names that internal trial note as the source instead. So the authorship moved from the group to Elm Quay, a different document became the source, and the information that the group kept its own notes is gone.
+  **What the account says:** It treats this as a renaming of the same document: "dokumentet heter nu Elm Quays interna försöksanteckning i stället för gruppens egna anteckningar i plural". For the standfirst it says "inte från flera anteckningar". It never says that the attribution moved, or that the claim that the group kept its own notes is gone.

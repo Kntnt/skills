@@ -1,0 +1,5 @@
+{
+  "misses": [],
+  "verdicts": {"a": "pass", "b": "pass"},
+  "notes": "Text returned byte-identical; the rejected round is reported. Neither judge calls a statement of the reply false or misleading. Judge a calls finding 1 debatable and finding 2 a style judgement, and judge b calls finding 2 closer to taste; these concern whether a defect is real, and they fault no statement. Finding 3 says the note 'uttryckligen avstår från att tillskriva programvaran skillnaden' (explicitly declines to credit), which matches input.md; it does not say the note rules the software out, so this is not #477."
+}

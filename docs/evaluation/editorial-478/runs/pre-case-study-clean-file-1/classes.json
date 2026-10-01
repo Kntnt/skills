@@ -1,0 +1,10 @@
+{
+  "misses": [
+    {"judge": "b", "class": 3, "kind": "", "owner": null,
+     "reply": "Ändrat (fynd 1): Rubriken tillskriver nu bedömningen att en gemensam ärendebild hjälper till en arbetsledare, inte till Elm Quay som organisation. Kunden Elm Quay nämns inte längre i rubriken.",
+     "judge_says": "The account is accurate about what changed. ... It does not recognise that the change removes the customer's agency from the headline, and it presents the original attribution as a defect.",
+     "check": "diff input.md output.md: 'säger Elm Quay' became 'säger arbetsledare'. The entry states both the move of attribution from the organisation to a supervisor and that Elm Quay is no longer named in the headline, which is everything the change did to the claim. The judge faults the framing (agency not named as a loss, original treated as a defect), not the content of the entry."}
+  ],
+  "verdicts": {"a": "pass", "b": "fail"},
+  "notes": "Two differences (headline attribution, standfirst 'gruppen' to 'underhållsgruppen'), both reported; both judges call the account accurate. Judge a's reservations (finding 1 debatable, the headline lost the customer name, the headline now over the 60-character norm) are R1 costs, and the reply discloses each one. Counted: new headline 63 characters (was 59), standfirst 40 words before and after, as the reply and both judges say."
+}

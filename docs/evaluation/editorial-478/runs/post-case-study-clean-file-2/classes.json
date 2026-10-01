@@ -1,0 +1,18 @@
+{
+  "misses": [
+    {
+      "judge": "a",
+      "class": 3,
+      "kind": "",
+      "owner": null,
+      "reply": "Meningen \"Vad det krävde, och vad det gav, går att följa i gruppens egna anteckningar.\" pekade ut en källa och ett innehåll som texten inte bär ... Anteckningen tillskriver uttryckligen inte programvaran skillnaden i mediantid, så den visar inte \"vad det gav\".",
+      "judge_says": "The original sentence is a working signpost. The text does give what the trial required (in Lind's quote and in the narrator's account of Svale's work) and what it gave (the note's counts and median times, with their caveat). That makes finding 2 an over-reading, not a concrete visible defect.",
+      "check": "input.md cites one \"intern försöksanteckning\", never shows it is the group's own, gives what the trial required through Lind's quote and the narrator, and says the note \"tillskriver därför inte skillnaden programvaran\". Each part of the finding's description is true of the text; the judge disputes only whether the sentence was a real defect. \"Tillskriver uttryckligen inte\" says the note declines to credit the software, not that it rules it out, so this is not the #477 behaviour."
+    }
+  ],
+  "verdicts": {
+    "a": "fail",
+    "b": "pass"
+  },
+  "notes": "Both judges call the account of both differences accurate and complete. Judge a's other criticisms (finding 1 at most arguable; repair 2 credits narrator-voiced facts to Lind, which the reply itself discloses) are R1 criticism of the changes and are not recorded."
+}

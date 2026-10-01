@@ -1,0 +1,12 @@
+**1. False statements**
+
+- **Statement:** "Utöver detta har två omnämnanden av gruppen fått gruppens fullständiga benämning."
+  - **Text it is about:** the delivered text, compared with the text as it arrived.
+  - **What contradicts it:** the two texts differ in only two places:
+    - In the standfirst, "Här är vad gruppen gjorde" became "Här är vad underhållsgruppen gjorde".
+    - In the lead, "går att följa i gruppens egna anteckningar" became "går att följa i underhållsgruppens egna anteckningar".
+  - **What is true:** these are the same two corrections the reply has already reported under "Anmärkningar och vad som åtgärdades". No further mention of the group was changed. "Utöver detta" tells the reader there were two more changes, and there were none. The sentence also calls "underhållsgruppen" the group's "fullständiga benämning". In the delivered lead, the group's full designation is "underhållsgruppen på Elm Quay Housing". Both changes inserted only "underhållsgruppen" / "underhållsgruppens".
+
+**2. Claim changes the account misses**
+
+none
