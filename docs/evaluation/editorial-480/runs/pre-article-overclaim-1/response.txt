@@ -1,0 +1,52 @@
+````markdown
+# Kalla mätvärden i Björkskolan saknar ännu förklaring
+
+**Under 14 av 120 lektionspass registrerade givarna i Björkskolan temperaturer under fastighetskontorets egen arbetsgräns. Fyra veckors mätningar pekar ut tillfällen att undersöka närmare, men förklarar inte varför luften var kall. Här är vad ett kort försök kan säga, och vad som behövs för att komma vidare.**
+
+Text: Hedda Lund
+
+En temperaturgivare mäter luften där den sitter. Det gör placeringen viktig när fastighetskontoret ska tolka fyra veckors mätningar i Björkskolans sex klassrum. Genomgången nedan visar vad värdena räcker till och var gränsen går.
+
+## En gräns för det lokala försöket
+
+Kontoret valde 20 grader Celsius som arbetsgräns. Rapporten *Mätförsök i Björkskolan*, daterad 12 mars 2026, räknar 14 lektionspass av 120 med minst en mätning under den gränsen. Hur länge temperaturen låg under den anger rapporten inte. Gränsen är kontorets egen, vald för det här försöket.
+
+Givarna mätte varken luftdrag eller elevernas upplevelse. Ett lågt värde säger alltså när luften var kall, men inte hur rummet kändes.
+
+Driftteknikern Elin Rask sammanfattar: ”Vi vet när vi behöver titta närmare. Vi vet ännu inte varför det blev kallt just då.”
+
+## Nästa försök behöver mer än givare
+
+Rask rekommenderar att temperaturserierna kopplas till rummens användningstider innan styrningen ändras. Nästa försök planeras för november med likadant placerade givare, men finansieringen är inte beslutad.
+
+Lägg därför tiderna för när rummen används bredvid mätvärdena innan nästa givare sätts upp.
+````
+
+**Konfiguration:** genre `article` och språk `sv`, båda från anropet. Ingen teknik: genren article anger ingen teknik som den vanligen skrivs med, och ingen annan nivå valde någon. Ingen brief användes.
+
+**Fynd**
+
+1. **Rubriken påstod mer än texten bär (åtgärdat).** Rubriken var ”Mätförsöket visar att Björkskolans klassrum är för kalla”. Den drog en fastställd slutsats om klassrummen som helhet och gjorde en värdering (”för kalla”) som texten uttryckligen avstår från. Texten säger att:
+   - 14 av 120 lektionspass hade minst en mätning under kontorets egen arbetsgräns,
+   - rapporten inte anger hur länge temperaturen låg under gränsen,
+   - givarna varken mätte luftdrag eller elevernas upplevelse,
+   - ingen ännu vet varför det blev kallt.
+
+   Den som bara såg rubriken trodde att försöket hade fastslagit att klassrummen är för kalla. Rubriken är nu omskriven utifrån textens vinkel och på textens styrka.
+
+Inga fynd kvarstår.
+
+**Påståendena**
+
+- **Ändrat: rubriken** (reparationen av fynd 1). Den påstår nu att mätvärden i Björkskolan visade kall luft och att de ännu saknar förklaring. Det sade ingressen och Elin Rasks citat redan. Påståendet att mätförsöket visar att skolans klassrum är för kalla finns inte längre någonstans i texten.
+- Utöver rubriken har inget påstående strukits, ändrats eller lagts till.
+
+**Anatomin:** Texten följer artikelns anatomi.
+- De räknade gränserna håller i den levererade texten. Rubriken har till exempel 52 tecken och 7 ord.
+- Även de krav som skriptet inte räknar är granskade:
+  - att ingressen står på egen hand,
+  - att inledningen inte upprepar ingressen,
+  - att mellanrubrikerna beskriver sina avsnitt,
+  - att sista avsnittet är en avslutning med en uppmaning.
+
+Utöver rubriken är texten ordagrant densamma som när den kom in. Den avslutande mekaniska korrekturen hittade inget att rätta.

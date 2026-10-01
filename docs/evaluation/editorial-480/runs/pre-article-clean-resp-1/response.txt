@@ -1,0 +1,3 @@
+Inga ändringar behövdes. Granskningen hittade inga brister och korrekturpassagen hittade inga mekaniska fel, så texten lämnas som den är. Ingen fil har skrivits och `input.md` är orörd.
+
+Inställningar: genre `article`, språk `sv`, ingen teknik. Ingen teknik angavs, och genren artikel anger ingen som den vanligen skrivs med. Ingen korrigeringsomgång användes, så korrigeringsbudgeten på 1 är oanvänd.

@@ -1,0 +1,15 @@
+Granskningen hittade inget att rätta. Texten finns nu i `output.md` och är byte för byte identisk med `input.md`. Inte heller korrekturläsningen på slutet behövde ändra något.
+
+**Inställningar:** genren `article` och språket `sv` kom från anropet. Ingen teknik användes. Du angav ingen, och genren article har ingen som den vanligen skrivs med.
+
+**Granskning:**
+- Inga anmärkningar.
+- Texten följer artikelanatomin utan avvikelser.
+- Mätskriptet godkände de räknade gränserna i den levererade texten. Rubriken har 46 tecken och fem ord, och ingressen 46 ord i ett stycke. Inget stycke eller avsnitt går över sina gränser.
+- De krav som skriptet inte räknar granskade jag genom att läsa texten:
+  - Ingressen står på egen hand.
+  - Ingressen och inledningen upprepar inte varandra.
+  - Mellanrubrikerna beskriver sina avsnitt.
+  - Det sista avsnittet är ett avslut som uppmanar läsaren att lägga användningstiderna bredvid mätvärdena innan nästa givare sätts upp.
+
+Korrigeringsbudgeten på en runda användes inte. Inga påståenden har tagits bort, ändrats eller lagts till.

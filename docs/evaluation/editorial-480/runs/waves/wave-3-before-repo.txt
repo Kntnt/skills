@@ -1,0 +1,51 @@
+# /Users/thomas/Projects/skills/.git/kntnt-orchestrate/480
+# HEAD e4fe58907c76bdf57c378f42df9bf26f46f5e6aa
+?? docs/evaluation/editorial-480/runs/matrix-post.tsv
+?? docs/evaluation/editorial-480/runs/matrix-revise.tsv
+?? docs/evaluation/editorial-480/runs/pre-article-allusion-file-1/judgement-a.md
+?? docs/evaluation/editorial-480/runs/pre-article-allusion-file-1/judgement-b.md
+?? docs/evaluation/editorial-480/runs/pre-article-allusion-file-2/judgement-a.md
+?? docs/evaluation/editorial-480/runs/pre-article-allusion-file-2/judgement-b.md
+?? docs/evaluation/editorial-480/runs/pre-article-allusion-resp-1/judgement-a.md
+?? docs/evaluation/editorial-480/runs/pre-article-allusion-resp-1/judgement-b.md
+?? docs/evaluation/editorial-480/runs/pre-article-allusion-resp-2/judgement-a.md
+?? docs/evaluation/editorial-480/runs/pre-article-allusion-resp-2/judgement-b.md
+?? docs/evaluation/editorial-480/runs/pre-article-clean-file-1/judgement-a.md
+?? docs/evaluation/editorial-480/runs/pre-article-clean-file-1/judgement-b.md
+?? docs/evaluation/editorial-480/runs/pre-article-clean-file-2/judgement-a.md
+?? docs/evaluation/editorial-480/runs/pre-article-clean-file-2/judgement-b.md
+?? docs/evaluation/editorial-480/runs/pre-article-clean-file-3/judgement-a.md
+?? docs/evaluation/editorial-480/runs/pre-article-clean-file-3/judgement-b.md
+?? docs/evaluation/editorial-480/runs/pre-article-clean-resp-1/judgement-a.md
+?? docs/evaluation/editorial-480/runs/pre-article-clean-resp-1/judgement-b.md
+?? docs/evaluation/editorial-480/runs/pre-article-clean-resp-2/judgement-a.md
+?? docs/evaluation/editorial-480/runs/pre-article-clean-resp-2/judgement-b.md
+?? docs/evaluation/editorial-480/runs/pre-article-clean-resp-3/judgement-a.md
+?? docs/evaluation/editorial-480/runs/pre-article-clean-resp-3/judgement-b.md
+?? docs/evaluation/editorial-480/runs/pre-article-overclaim-1/judgement-a.md
+?? docs/evaluation/editorial-480/runs/pre-article-overclaim-1/judgement-b.md
+?? docs/evaluation/editorial-480/runs/pre-article-overclaim-2/judgement-a.md
+?? docs/evaluation/editorial-480/runs/pre-article-overclaim-2/judgement-b.md
+?? docs/evaluation/editorial-480/runs/pre-article-unnamed-1/judgement-a.md
+?? docs/evaluation/editorial-480/runs/pre-article-unnamed-1/judgement-b.md
+?? docs/evaluation/editorial-480/runs/pre-article-unnamed-2/judgement-a.md
+?? docs/evaluation/editorial-480/runs/pre-article-unnamed-2/judgement-b.md
+?? docs/evaluation/editorial-480/runs/waves/wave-1-after-repo.txt
+?? docs/evaluation/editorial-480/runs/waves/wave-1-after-scratch.txt
+?? docs/evaluation/editorial-480/runs/waves/wave-1-after-session-scratchpad.txt
+?? docs/evaluation/editorial-480/runs/waves/wave-1-before-repo.txt
+?? docs/evaluation/editorial-480/runs/waves/wave-1-before-scratch.txt
+?? docs/evaluation/editorial-480/runs/waves/wave-1-before-session-scratchpad.txt
+?? docs/evaluation/editorial-480/runs/waves/wave-2-after-repo.txt
+?? docs/evaluation/editorial-480/runs/waves/wave-2-after-scratch.txt
+?? docs/evaluation/editorial-480/runs/waves/wave-2-after-session-scratchpad.txt
+?? docs/evaluation/editorial-480/runs/waves/wave-2-before-repo.txt
+?? docs/evaluation/editorial-480/runs/waves/wave-2-before-scratch.txt
+?? docs/evaluation/editorial-480/runs/waves/wave-2-before-session-scratchpad.txt
+?? docs/evaluation/editorial-480/runs/waves/wave-3-before-repo.txt
+?? docs/evaluation/editorial-480/runs/waves/wave-3-before-scratch.txt
+?? docs/evaluation/editorial-480/runs/waves/wave-3-before-session-scratchpad.txt
+# end /Users/thomas/Projects/skills/.git/kntnt-orchestrate/480
+# /Users/thomas/Projects/skills
+# HEAD fe2587b70f57c3cfc63903b0be6d9fa4819a4827
+# end /Users/thomas/Projects/skills

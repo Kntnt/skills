@@ -1,0 +1,22 @@
+Texten är skriven till `output.md` och är oförändrad, identisk med `input.md`. En korrekturrunda gjordes men ändrade ingenting. Den avslutande mekaniska genomgången hittade inga fel att rätta. Två fynd är kvar olösta.
+
+**Konfiguration:** genre `article` och språk `sv`, båda från anropet. Ingen teknik användes, eftersom artikelgenren inte anger någon teknik som den vanligen skrivs med och ingen annan nivå valde någon.
+
+**Olösta fynd.** Båda fynden kräver uppgifter som texten saknar, så de lämnades orörda. Någon som har underlaget behöver avgöra dem.
+
+1. **Inledningsstycket (brödtextens första stycke), andra meningen:** ”Det gör placeringen viktig när fastighetskontoret ska tolka fyra veckors mätningar i Björkskolans sex klassrum.”
+   - **Problem:** Inledningen gör givarnas placering till det som avgör tolkningen. Resten av brödtexten säger ändå aldrig var givarna satt eller hur placeringen påverkade värdena. Placeringen återkommer bara i ”likadant placerade givare” i sista avsnittet.
+   - **Vad läsaren förlorar:** Läsaren kan inte bedöma om de låga värdena speglar klassrummen.
+   - **Det som saknas:** var givarna satt i de sex klassrummen.
+2. **Avsnittet ”Nästa försök behöver mer än givare”, första meningen:** ”… innan styrningen ändras.”
+   - **Problem:** ”Styrningen” introduceras ingenstans. Det framgår inte vilken styrning som avses (värme, ventilation eller något annat), eller att en ändring alls övervägs.
+   - **Vad läsaren förlorar:** Läsaren vet inte vilken åtgärd Rasks rekommendation ska komma före.
+   - **Det som saknas:** vilken styrning det gäller och om en ändring är planerad.
+
+**Artikelns anatomi:** Texten följer anatomin utan avvikelse. Mätskriptet godkänner alla krav som det räknar. Jag har också granskat de krav som skriptet inte räknar:
+- att ingressen står på egen fot,
+- att inledningsstycket för läsaren vidare och börjar med ett annat ord än ingressen,
+- att mellanrubrikerna beskriver sina avsnitt,
+- att sista avsnittet är ett avslut med en uppmaning till läsaren.
+
+**Påståendena:** Inga påståenden togs bort, ändrades eller lades till, eftersom den levererade texten är densamma som den mottagna.

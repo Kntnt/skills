@@ -1,0 +1,19 @@
+Texten är skriven till `output.md`. Varken granskningen eller den avslutande mekaniska korrekturen ändrade något, så filen är byte för byte identisk med `input.md`.
+
+**Konfiguration:** Genre (`article`) och språk (`sv`) kommer från anropet. Ingen teknik användes. Anropet och texten angav ingen, och genren article har ingen teknik som den vanligtvis skrivs med.
+
+**Granskning:** Granskningen hittade inget att rätta, så korrigeringsbudgeten (1) användes inte. Texten följer artikelanatomin utan avvikelser.
+
+- **Räknade gränser:** Mätskriptet hittade inga brister:
+  - rubriken har 48 tecken och 7 ord
+  - ingressen har 46 ord i ett enda stycke
+  - inget stycke har över 80 ord
+  - mellanrubrikerna har 32 och 34 tecken
+- **Krav som skriptet inte räknar:** Även dessa granskades:
+  - ingressen står på egen hand och säger vad texten handlar om och vad läsaren får ut av den
+  - ingressen och första stycket börjar med olika ord och upprepar inte varandra
+  - brödtexten går att förstå utan ingressen
+  - båda mellanrubrikerna beskriver sina avsnitt
+  - sista avsnittet är ett avslut, och dess uppmaning följer av textens innehåll
+
+Inga påståenden togs bort, ändrades eller lades till.

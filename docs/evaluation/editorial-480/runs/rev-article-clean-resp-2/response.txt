@@ -1,0 +1,3 @@
+Ingen ändring behövdes i `input.md`. Granskningen mot artikelgenren hittade inga brister att rätta, och korrekturläsningen på slutet hittade inga språkfel. Ingen fil skrevs.
+
+Granskningen gällde genren `article` och språket `sv`, som båda angavs i anropet. Ingen berättarteknik användes, eftersom genren `article` inte föreskriver någon.

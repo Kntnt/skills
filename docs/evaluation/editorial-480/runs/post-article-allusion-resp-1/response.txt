@@ -1,0 +1,3 @@
+Ingen ändring behövdes i `input.md`. Granskningen gav inga redaktionella anmärkningar, så ingen korrigeringsrunda kördes, och korrekturläsningen hittade inga språkfel. Ingenting skrevs till disk.
+
+Granskad som genre `article` och språk `sv` (båda från anropet). Ingen teknik användes, eftersom genren `article` inte anger någon.

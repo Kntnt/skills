@@ -1,0 +1,17 @@
+Texten är skriven till `output.md` och behövde inget arbete. Granskningen hittade inga brister och den avslutande korrekturläsningen inga mekaniska fel, så `output.md` är byte för byte identisk med `input.md`.
+
+**Konfiguration:** genre `article` och språk `sv` kommer från anropet. Ingen teknik valdes, eftersom artikelgenren inte anger någon som den vanligen skrivs med och ingen annan nivå valde någon. Ingen brief valdes. Korrigeringsbudgeten (1) användes inte.
+
+**Artikelanatomin:** texten uppfyller den. De räknade gränserna mättes med skriptet på den levererade texten:
+- rubriken har 48 tecken och 7 ord
+- ingressen har 46 ord i ett enda stycke
+- inget brödtextstycke är längre än 45 ord
+- mellanrubrikerna har 32 och 34 tecken
+
+De krav som skriptet inte räknar granskades genom läsning:
+- att ingressen står på egna ben
+- att det första stycket för texten framåt i stället för att upprepa ingressen
+- att mellanrubrikerna beskriver sina avsnitt
+- att det sista avsnittet är ett avslut med en uppmaning till läsaren
+
+Inga påståenden har tagits bort, ändrats eller lagts till.

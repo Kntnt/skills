@@ -7389,6 +7389,46 @@ def test_a_heading_that_could_be_better_is_no_finding() -> None:
     )
 
 
+def test_an_allusion_owes_its_reader_the_subject_and_not_the_particulars() -> None:
+    """A working allusion is not read for references the text fills in.
+
+    #480 measured a review reporting a working allusive headline because its
+    words had nothing to refer to for a reader who sees only it: the review
+    asked the headline for what the text measured and found, and read the
+    words the text fills in as references left unresolved. The allusion item
+    says what a heading owes its reader alone — the subject — and that what
+    the text fills in is the allusion at work, and keeps the finding for one
+    that names no subject at all. It says this of the heading alone and sends
+    the reviewer to no test of the body: #480's revise round took out the
+    sentence that did, after a candidate run rewrote the body of a clean text.
+    """
+
+    _, leave = _headlines_review_sections()
+    allusion = next(
+        line for line in leave.splitlines() if line.startswith("- An allusion")
+    )
+
+    assert "not its particulars" in allusion, (
+        f"{HEADLINES_REVIEW}: the allusion item does not say that a reader who"
+        f" sees only the heading is owed its subject and not the particulars"
+        f" the text gives, so a review asks a working allusion for the text's"
+        f" findings (issue #480)."
+    )
+    assert "not a reference left unresolved" in allusion, (
+        f"{HEADLINES_REVIEW}: the allusion item does not say that a word the"
+        f" text fills in is the allusion at work, so it reads as an unresolved"
+        f" reference (issue #480)."
+    )
+    assert "the body's" not in allusion, (
+        f"{HEADLINES_REVIEW}: the allusion item points the reviewer at a test"
+        f" of the body, which a heading rule has no need to name (issue #480)."
+    )
+    assert "names no subject at all" in allusion, (
+        f"{HEADLINES_REVIEW}: the allusion item no longer makes a heading that"
+        f" names no subject a finding (issues #429, #480)."
+    )
+
+
 def _finding_rule() -> str:
     """The base review's opening paragraph, where a finding is defined."""
 

@@ -1,0 +1,46 @@
+Jag granskade texten mot genren `article` och språket `sv`, som båda angavs i anropet. Ingen teknik användes: genren article anger ingen teknik som den vanligtvis skrivs med, och ingen annan nivå valde någon. Ingen skrivbrief användes.
+
+**Fynd**
+
+1. **Olöst.** Brödtextens första stycke har den här andra meningen: ”Det gör placeringen viktig när fastighetskontoret ska tolka fyra veckors mätningar i Björkskolans sex klassrum.”
+   - Meningen säger att givarnas placering är viktig för tolkningen, men brödtexten säger aldrig var givarna satt eller hur placeringen begränsar vad värdena visar.
+   - Placeringen nämns bara en gång till: ”Nästa försök planeras för november med likadant placerade givare”. Där säger texten inte om samma placering är ett problem.
+   - Läsaren får alltså inte den förklaring som öppningen lovar, och kan inte avgöra om det är en svaghet att behålla placeringen.
+   - Fyndet kan inte lösas utan två uppgifter som texten saknar: var givarna satt och vad placeringen betyder för värdena. Det andra sättet vore att ändra själva påståendet.
+   - Styckets första mening, ”En temperaturgivare mäter luften där den sitter.”, avgränsar vad mätningarna påstår och ska stå kvar.
+
+**Avvisat korrigeringsförsök**
+
+Ett korrigeringsförsök gjordes för fynd 1, men det avvisades. Försöket strök ”Det gör placeringen viktig när”, så att meningen löd ”Fastighetskontoret ska tolka fyra veckors mätningar i Björkskolans sex klassrum.”
+
+Då försvann påståendet att placeringen spelar roll för tolkningen. Påståendet stod bredvid felet och var inte självt felet. Samtidigt försvann kopplingen till styckets första mening, som då stod kvar utan sammanhang. Texten återställdes därför till hur den såg ut före försöket, och inget av ändringen finns i den levererade texten. Budgeten på en korrigering är förbrukad.
+
+**Påståenden**
+
+- Försök att stryka, utan att strykningen genomfördes: påståendet att givarnas placering är viktig när fastighetskontoret tolkar mätningarna. Det avvisade korrigeringsförsöket för fynd 1 försökte ta bort det. Påståendet står kvar oförändrat i den levererade texten.
+
+Skriptets mätning av den levererade texten visar att alla räknade gränser i artikelanatomin håller. De övriga kraven i anatomin granskade jag genom att läsa texten, och även de uppfylls, utom det som fynd 1 säger om löftet i brödtextens första stycke. Korrekturläsningen hittade inget att rätta. Den levererade texten är identisk med den mottagna, och inga påståenden har strukits, ändrats eller lagts till.
+
+````markdown
+# Mätförsöket i Björkskolan visar när, inte varför
+
+**Under 14 av 120 lektionspass registrerade givarna i Björkskolan temperaturer under fastighetskontorets egen arbetsgräns. Fyra veckors mätningar pekar ut tillfällen att undersöka närmare, men förklarar inte varför luften var kall. Här är vad ett kort försök kan säga, och vad som behövs för att komma vidare.**
+
+Text: Hedda Lund
+
+En temperaturgivare mäter luften där den sitter. Det gör placeringen viktig när fastighetskontoret ska tolka fyra veckors mätningar i Björkskolans sex klassrum. Genomgången nedan visar vad värdena räcker till och var gränsen går.
+
+## En gräns för det lokala försöket
+
+Kontoret valde 20 grader Celsius som arbetsgräns. Rapporten *Mätförsök i Björkskolan*, daterad 12 mars 2026, räknar 14 lektionspass av 120 med minst en mätning under den gränsen. Hur länge temperaturen låg under den anger rapporten inte. Gränsen är kontorets egen, vald för det här försöket.
+
+Givarna mätte varken luftdrag eller elevernas upplevelse. Ett lågt värde säger alltså när luften var kall, men inte hur rummet kändes.
+
+Driftteknikern Elin Rask sammanfattar: ”Vi vet när vi behöver titta närmare. Vi vet ännu inte varför det blev kallt just då.”
+
+## Nästa försök behöver mer än givare
+
+Rask rekommenderar att temperaturserierna kopplas till rummens användningstider innan styrningen ändras. Nästa försök planeras för november med likadant placerade givare, men finansieringen är inte beslutad.
+
+Lägg därför tiderna för när rummen används bredvid mätvärdena innan nästa givare sätts upp.
+````

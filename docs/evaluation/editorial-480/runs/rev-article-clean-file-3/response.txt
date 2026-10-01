@@ -1,0 +1,16 @@
+Texten är skriven till `output.md` och behövde inget arbete. Granskningen hittade inga brister att rätta, så korrigeringsbudgeten (1) användes inte. Den avslutande korrekturläsningen hittade inga mekaniska fel. `output.md` är byte för byte identisk med `input.md`.
+
+**Inställningar:** genre `article` och språk `sv`, båda från anropet. Ingen teknik användes, eftersom genren `article` anger att den vanligtvis skrivs utan teknik.
+
+**Artikelanatomin:** Texten följer artikelanatomin utan avvikelse.
+- Rubriken har 48 tecken och 7 ord.
+- Ingressen är ett stycke på 46 ord.
+- Texten har två avsnitt med tre respektive två stycken.
+
+Jag granskade också genom läsning det som mätskriptet inte räknar:
+- att ingressen står på egen hand
+- att brödtextens första stycke för texten vidare utan att upprepa ingressen
+- att mellanrubrikerna beskriver sina avsnitt
+- att det sista avsnittet är en avslutning som uppmanar läsaren att handla utifrån texten
+
+Inga påståenden har tagits bort, ändrats eller lagts till.

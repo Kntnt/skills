@@ -1,0 +1,40 @@
+`````markdown
+# Temperaturmätningar i Björkskolan visar när, inte varför
+
+**Under 14 av 120 lektionspass registrerade givarna i Björkskolan temperaturer under fastighetskontorets egen arbetsgräns. Fyra veckors mätningar pekar ut tillfällen att undersöka närmare, men förklarar inte varför luften var kall. Här är vad ett kort försök kan säga, och vad som behövs för att komma vidare.**
+
+Text: Hedda Lund
+
+En temperaturgivare mäter luften där den sitter. Det gör placeringen viktig när fastighetskontoret ska tolka fyra veckors mätningar i Björkskolans sex klassrum. Genomgången nedan visar vad värdena räcker till och var gränsen går.
+
+## En gräns för det lokala försöket
+
+Kontoret valde 20 grader Celsius som arbetsgräns. Rapporten *Mätförsök i Björkskolan*, daterad 12 mars 2026, räknar 14 lektionspass av 120 med minst en mätning under den gränsen. Hur länge temperaturen låg under den anger rapporten inte. Gränsen är kontorets egen, vald för det här försöket.
+
+Givarna mätte varken luftdrag eller elevernas upplevelse. Ett lågt värde säger alltså när luften var kall, men inte hur rummet kändes.
+
+Driftteknikern Elin Rask sammanfattar: ”Vi vet när vi behöver titta närmare. Vi vet ännu inte varför det blev kallt just då.”
+
+## Nästa försök behöver mer än givare
+
+Rask rekommenderar att temperaturserierna kopplas till rummens användningstider innan styrningen ändras. Nästa försök planeras för november med likadant placerade givare, men finansieringen är inte beslutad.
+
+Lägg därför tiderna för när rummen används bredvid mätvärdena innan nästa givare sätts upp.
+`````
+
+**Konfiguration:** genre `article` (från anropet) och språk `sv` (från anropet). Ingen teknik används, eftersom genren artikel inte anger någon teknik som den normalt skrivs med. Ingen brief användes.
+
+**Fynd**
+
+1. Rubriken *Siffrorna visar när, inte varför* namngav inget ämne. ”Siffrorna” saknade referent för den som ser rubriken ensam, i en lista eller ett sökresultat. Ingenting i rubriken sa att texten handlar om temperaturmätningar i Björkskolan. Åtgärdat: rubriken lyder nu *Temperaturmätningar i Björkskolan visar när, inte varför* (56 tecken, 7 ord).
+
+Inga fynd kvarstår.
+
+**Påståenden**
+
+- **Ändrat: rubriken.** Den påstår nu att *temperaturmätningar i Björkskolan* visar när, inte varför. Både ämnet och platsen står i ingressen och i brödtexten. Den gamla rubrikens bestämda ”Siffrorna” pekade på artikelns egna siffror från ett enda försök. Den nya rubrikens obestämda form kan läsas som ett påstående om temperaturmätningar på skolan i allmänhet. Den läsningen kan omfatta mer än det fyra veckor långa försöket som rapporten *Mätförsök i Björkskolan* gäller, till exempel det planerade novemberförsöket. Avgränsningen till ett enda försök finns kvar i ingressen och brödtexten men inte längre i rubriken. Ändringen gjordes i korrigeringen som åtgärdade fynd 1.
+- Utöver rubriken har inget påstående tagits bort, ändrats eller lagts till.
+
+**Artikelns anatomi:** Texten följer artikelanatomin utan avvikelse. Mätskriptet godkände de räknade kraven på den slutliga texten. Granskningen läste även de krav som skriptet inte räknar: att ingressen står på egen hand, att inledningen för texten vidare efter ingressen, att mellanrubrikerna beskriver sina avsnitt och att sista avsnittet är en avslutning med en uppmaning.
+
+**Vad som ändrades:** Utöver rubriken, som redovisas ovan, är texten oförändrad. Den avslutande korrekturläsningen hittade inga mekaniska fel att rätta.

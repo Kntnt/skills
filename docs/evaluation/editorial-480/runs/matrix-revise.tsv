@@ -1,0 +1,7 @@
+lane	run	arm	revision	input	invocation	capture
+A	rev-article-clean-resp-1	rev	e4fe5890	docs/evaluation/corpus/editorial-quality/controls/article-clean.md	/redline --genre=article --language=sv --output=response input.md	no
+A	rev-article-clean-file-1	rev	e4fe5890	docs/evaluation/corpus/editorial-quality/controls/article-clean.md	/redline --genre=article --language=sv --output=output.md input.md	yes
+A	rev-article-clean-resp-2	rev	e4fe5890	docs/evaluation/corpus/editorial-quality/controls/article-clean.md	/redline --genre=article --language=sv --output=response input.md	no
+A	rev-article-clean-file-2	rev	e4fe5890	docs/evaluation/corpus/editorial-quality/controls/article-clean.md	/redline --genre=article --language=sv --output=output.md input.md	yes
+A	rev-article-clean-resp-3	rev	e4fe5890	docs/evaluation/corpus/editorial-quality/controls/article-clean.md	/redline --genre=article --language=sv --output=response input.md	no
+A	rev-article-clean-file-3	rev	e4fe5890	docs/evaluation/corpus/editorial-quality/controls/article-clean.md	/redline --genre=article --language=sv --output=output.md input.md	yes

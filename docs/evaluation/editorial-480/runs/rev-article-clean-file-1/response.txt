@@ -1,0 +1,14 @@
+Texten är skriven till `output.md`.
+
+Konfiguration: genre `article` och språk `sv`, båda från anropet. Ingen teknik tillämpades: anropet anger ingen, och genren `article` anger ingen teknik som den vanligtvis skrivs med.
+
+Granskningen gav inga anmärkningar, så korrigeringsbudgeten (1) användes inte. Texten följer artikelanatomin utan avvikelse. Mätskriptet fann inga brott mot de räknade gränserna. De krav som skriptet inte räknar granskades genom läsning och är uppfyllda:
+- Ingressen står på egen hand och säger vad läsaren får ut av texten.
+- Bylinen står på sin plats.
+- Brödtextens första stycke introducerar ämnet och för texten vidare i stället för att upprepa ingressen.
+- Mellanrubrikerna beskriver sina avsnitt.
+- Det sista avsnittet är ett avslut med en uppmaning som följer av innehållet.
+
+Den avslutande korrekturläsningen fann inga mekaniska fel.
+
+Inga påståenden har tagits bort, ändrats eller lagts till. Den levererade texten är identisk med den som kom in.
