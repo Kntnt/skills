@@ -4,6 +4,8 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ## [Unreleased]
 
+## [0.39.0] – 2026-10-01
+
 ### Added
 
 - Model Selector setup now offers all or selected model series per Maker, with one current catalogue representative per series and no version choice. Explicit series follow new releases automatically without adding new series; existing profiles retain all series. The same choices govern automatic answers, alternatives, exploration, Trials, escalation and generated Claude definitions, while explicit model locks and `--scope=all` retain their one-call exceptions (#481).
