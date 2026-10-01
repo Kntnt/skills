@@ -169,5 +169,26 @@
     "construction_repair": true,
     "interrupted_attempt": "w01",
     "is_counted_replacement": true
+  },
+  "p01": {
+    "fixture": "delivered-case-study-sv-r1",
+    "repeat": 1,
+    "output_target": "response",
+    "paired_write": "w01-rerun",
+    "input_rule": "exact delivered artifact only; source package and Write reply excluded"
+  },
+  "p02": {
+    "fixture": "delivered-case-study-sv-r2",
+    "repeat": 1,
+    "output_target": "response",
+    "paired_write": "w02",
+    "input_rule": "exact delivered artifact only; source package and Write reply excluded"
+  },
+  "p03": {
+    "fixture": "delivered-case-study-sv-r3",
+    "repeat": 1,
+    "output_target": "response",
+    "paired_write": "w03",
+    "input_rule": "exact delivered artifact only; source package and Write reply excluded"
   }
 }

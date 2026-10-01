@@ -1,0 +1,106 @@
+{
+  "r01": {
+    "counted": true,
+    "delivered": true,
+    "disposition": "completed-artifact"
+  },
+  "r02": {
+    "counted": true,
+    "delivered": true,
+    "disposition": "completed-artifact"
+  },
+  "c03": {
+    "counted": true,
+    "delivered": true,
+    "disposition": "completed-artifact"
+  },
+  "c04": {
+    "counted": true,
+    "delivered": true,
+    "disposition": "completed-artifact"
+  },
+  "r03": {
+    "counted": false,
+    "delivered": false,
+    "disposition": "refused-before-operation",
+    "reason": "uninstalled historical genre identifier"
+  },
+  "r04": {
+    "counted": false,
+    "delivered": false,
+    "disposition": "refused-before-operation",
+    "reason": "uninstalled historical genre identifier"
+  },
+  "r05": {
+    "counted": false,
+    "delivered": false,
+    "disposition": "refused-before-operation",
+    "reason": "uninstalled historical genre identifier"
+  },
+  "r06": {
+    "counted": false,
+    "delivered": false,
+    "disposition": "refused-before-operation",
+    "reason": "uninstalled historical genre identifier"
+  },
+  "r15": {
+    "counted": false,
+    "delivered": false,
+    "disposition": "refused-before-operation",
+    "reason": "uninstalled historical genre identifier"
+  },
+  "w01": {
+    "counted": false,
+    "delivered": false,
+    "disposition": "void-outer-timeout",
+    "reason": "1800-second runner boundary; replaced by same intended repetition"
+  },
+  "r07": {
+    "counted": false,
+    "delivered": false,
+    "disposition": "not-invoked",
+    "reason": "known genre construction; corrected counterpart executes unchanged material"
+  },
+  "r08": {
+    "counted": false,
+    "delivered": false,
+    "disposition": "not-invoked",
+    "reason": "known genre construction; corrected counterpart executes unchanged material"
+  },
+  "r09": {
+    "counted": false,
+    "delivered": false,
+    "disposition": "not-invoked",
+    "reason": "known genre construction; corrected counterpart executes unchanged material"
+  },
+  "r10": {
+    "counted": false,
+    "delivered": false,
+    "disposition": "not-invoked",
+    "reason": "known genre construction; corrected counterpart executes unchanged material"
+  },
+  "r11": {
+    "counted": false,
+    "delivered": false,
+    "disposition": "not-invoked",
+    "reason": "known genre construction; corrected counterpart executes unchanged material"
+  },
+  "r12": {
+    "counted": false,
+    "delivered": false,
+    "disposition": "not-invoked",
+    "reason": "known genre construction; corrected counterpart executes unchanged material"
+  },
+  "r16": {
+    "counted": false,
+    "delivered": false,
+    "disposition": "not-invoked",
+    "reason": "known genre construction; corrected counterpart executes unchanged material"
+  },
+  "r17": {
+    "counted": false,
+    "delivered": false,
+    "disposition": "not-invoked",
+    "reason": "known genre construction; corrected counterpart executes unchanged material"
+  }
+}
