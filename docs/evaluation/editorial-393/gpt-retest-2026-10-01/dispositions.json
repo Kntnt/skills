@@ -178,5 +178,15 @@
     "disposition": "completed-artifact",
     "known_findings_reported": true,
     "replaces_void": "w01"
+  },
+  "p02": {
+    "counted": true,
+    "delivered": true,
+    "disposition": "completed-unchanged-artifact-with-unresolved-findings"
+  },
+  "p03": {
+    "counted": true,
+    "delivered": false,
+    "disposition": "completed-no-change-status"
   }
 }
