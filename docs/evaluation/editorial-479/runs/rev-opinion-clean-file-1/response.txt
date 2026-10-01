@@ -1,0 +1,24 @@
+Texten är skriven till `output.md`. Den behövde inget arbete: filen är byte för byte identisk med `input.md`.
+
+**Konfiguration:** genre `opinion` och språk `sv` från anropet. Ingen teknik används. Genren opinion anger ingen teknik som den vanligen skrivs med, och ingen annan nivå valde någon.
+
+**Granskning:** inga anmärkningar.
+- Korrigeringsbudgeten (1) användes inte.
+- Den avslutande korrekturläsningen gjorde inga ändringar.
+
+**Artikelanatomi:** texten följer anatomin utan avvikelse.
+
+Mätskriptet godkänner de räknade gränserna:
+- Rubriken har 47 tecken och 6 ord.
+- Ingressen är ett stycke på 39 ord.
+- Ingen mellanrubrik är längre än 40 tecken.
+- Inget stycke har fler än 50 ord.
+- Inget avsnitt har fler än två stycken.
+
+De krav som skriptet inte räknar granskades genom läsning:
+- Ingressen står på egna ben, börjar med andra ord än brödtextens första stycke och upprepas inte av det.
+- Brödtexten klarar sig utan ingressen.
+- Varje mellanrubrik beskriver sitt avsnitt.
+- Sista avsnittet är ett avslut som uppmanar kommunstyrelsen att besluta om försöket.
+
+**Påståenden:** inga påståenden har tagits bort, ändrats eller lagts till.

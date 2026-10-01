@@ -1,0 +1,21 @@
+Texten är sparad i `output.md`. Den behövde inget arbete. Granskningen hittade inga fel, så korrigeringsbudgeten (1) användes inte. Den avslutande korrekturläsningen ändrade ingenting. Filen är identisk med `input.md`, byte för byte.
+
+Inställningar: genren är opinion och språket svenska (sv), båda angivna i kommandot. Ingen teknik användes. Genren opinion anger ingen teknik som den vanligen skrivs med, och inget annat ställe valde någon.
+
+Texten följer artikelns mall helt. Den har:
+- rubrik (47 tecken, sex ord)
+- ingress (ett stycke, 39 ord)
+- byline
+- inledande stycke
+- tre avsnitt med beskrivande underrubriker
+
+Det sista avsnittet avslutar texten och lämnar uppmaningen till kommunstyrelsen.
+
+Mätskriptet räknar inte alla krav, så de övriga lästes för hand:
+- ingressen går att förstå på egen hand
+- det inledande stycket för texten vidare utan att upprepa ingressen
+- brödtexten går att förstå utan ingressen
+- varje underrubrik beskriver sitt avsnitt
+- det sista avsnittet fungerar som avslutning
+
+Inga påståenden har tagits bort, ändrats eller lagts till.

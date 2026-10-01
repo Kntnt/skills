@@ -1,0 +1,25 @@
+Den granskade texten finns nu i `output.md`, och `input.md` är orörd.
+
+**Konfiguration:** genren är `opinion` och språket svenska (`sv`), båda från anropet. Ingen teknik används, eftersom genren `opinion` inte anger någon teknik som den normalt skrivs med. Ingen brief användes. Texten har ingen `kntnt`-metadata, och ingen lades till.
+
+**Fynd**
+
+1. *Ingressens sista mening (åtgärdat).* Meningen ”Här är skälen att pröva båda bokningsvägarna ett halvår till innan den ena stängs.” förutsatte att en av bokningsvägarna kommer att stängas. Rubriken, inledningen och slutet lämnar däremot utfallet öppet: inledningen säger ”Ett permanent beslut behöver bättre underlag än det som nu ligger på bordet” och slutet ”Först då går det att väga alternativen”. Den som läste ingressen fick därför intrycket att skribenten redan medger att en kanal ska stängas och bara vill skjuta upp det. Det motsäger textens eget krav att alternativen ska vägas först. Meningen slutar nu ”… innan det avgörs om den ena ska stängas.”
+
+Inga fynd kvarstår.
+
+**Artikelanatomi:** Mätskriptet visar att den slutliga texten uppfyller alla räknade krav: rubriken har 47 tecken, ingressen 43 ord och inledningen 49 ord. Jag har också granskat kraven som skriptet inte räknar:
+- Ingressen står på egen hand.
+- Inledningen för texten vidare utan att upprepa ingressen.
+- Mellanrubrikerna beskriver sina avsnitt.
+- Sista avsnittet är ett avslut med en uppmaning till kommunstyrelsen.
+
+Texten följer artikelanatomin utan avvikelse.
+
+**Påståenden**
+
+- *Ändrat:* ingressens sista mening sade tidigare att en av bokningsvägarna ska stängas och bad bara om att det skjuts upp. Nu säger den att det ännu ska avgöras om den ena ska stängas. Ändringen åtgärdar fynd 1.
+
+Inget påstående togs bort eller lades till. Utöver ingressens sista mening ändrades inga påståenden.
+
+Ingressens sista mening är den enda skillnaden mot texten som den kom in. Den avslutande korrekturen av stavning, grammatik och skiljetecken hittade inget att rätta.

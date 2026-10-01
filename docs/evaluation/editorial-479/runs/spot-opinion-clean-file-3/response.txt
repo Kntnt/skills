@@ -1,0 +1,18 @@
+Texten är granskad och sparad i `output.md`.
+
+**Konfiguration:** genre `opinion` (från anropet), språk `sv` (från anropet), ingen teknik – genren debattartikel anger ingen teknik som den normalt skrivs med, och ingen annan nivå valde någon.
+
+**Fynd (1, åtgärdat)**
+
+1. Inledningsstycket (brödtextens första stycke): ”Pröva först båda bokningsvägarna” var en bestämd form vars ena led, telefonbokningen, bara rubriken och ingressen namngav; brödtexten nämnde telefonen först i avsnittet ”Bokningar är inte samma sak som personer”. En läsare som möter brödtexten utan ingressen fick inte veta i inledningen vilken bokningsväg bytet tar bort. Åtgärd: inledningsstycket namnger nu de två vägarna – ”båda bokningsvägarna – telefonbokning och digital bokning –”.
+
+Inga fynd kvarstår.
+
+**Påståenden**
+
+- Ändrat: inledningsstyckets uppmaning att pröva båda bokningsvägarna i alla sju lokaler under ett halvår anger nu uttryckligen att de två vägarna är telefonbokning och digital bokning. Ändringen kommer från åtgärden av fynd 1. Omfattning, tid och osäkerhet är oförändrade.
+- Inga påståenden har tagits bort eller lagts till, och utöver detta har inget påstående ändrats.
+
+**Artikelanatomi:** Texten följer artikelanatomin utan avvikelse. Mätskriptet godkänner de räknade kraven på den levererade texten, och jag har läst de krav det inte räknar: ingressen står på egen hand, inledningen introducerar det den nämner och börjar med ett annat ord än ingressen, mellanrubrikerna beskriver sina avsnitt och sista avsnittet är ett avslut som uppmanar kommunstyrelsen att agera.
+
+Utöver ändringen ovan är texten oförändrad: den avslutande korrekturläsningen hittade inga mekaniska fel att rätta.
