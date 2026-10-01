@@ -59,10 +59,10 @@ Five criteria are this evaluation's own: **`R1`**, **`C1`** (the run against its
 - **invocation** — `/redline --genre=article --language=sv --output=response input.md`
 - **contextual instruction** — `none`
 - **output target** — `response`
-- **observed delivery** — the no-change status in the reply; no text delivered and nothing written.
+- **observed delivery** — the reviewed text in the reply, unchanged, in a fenced block, with the placement finding reported unresolved and the run's account; nothing written.
 - **side effects** — `none` outside the Harness's configuration directory, by the runner's inventories of the private root, which was removed.
 - **criteria** —
-  - `R1` — `skipped` — no text was delivered, and the file-target run of the pair answers the criterion; judges pass / pass on the reply.
+  - `R1` — `pass` — the text in the reply is identical to the input; judges pass / pass.
   - `C1` — `pass` — read against the row's frozen expectation in `expectation.md`, by the same rule as `R1`.
   - `O1` — `pass` — nothing created, changed or removed that the output target does not allow.
   - `S1` — `pass` — `input.md` was the only file in the working directory when the session started.

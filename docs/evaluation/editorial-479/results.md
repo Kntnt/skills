@@ -76,7 +76,7 @@ The standfirst changed in no run of either arm. The candidate changes only `genr
 | --- | --- | --- | --- | --- |
 | `pre-article-clean-resp-1` | no-change status | none | pass / pass | – |
 | `pre-article-clean-file-1` | `output.md`, identical | none | pass / pass | – |
-| `pre-article-clean-resp-2` | no-change status, the placement finding unresolved | none | pass / pass | – |
+| `pre-article-clean-resp-2` | text in the reply, unchanged, the placement finding unresolved | none | pass / pass | – |
 | `pre-article-clean-file-2` | `output.md`, identical | none | pass / pass | – |
 | `pre-article-clean-resp-3` | text in the reply | headline rewritten to *Mätningar visar när Björkskolans luft var kall, inte varför* | fail / fail | #480 |
 | `pre-article-clean-file-3` | `output.md` | headline rewritten to *… visar när luften var kall, inte varför* | fail / fail | #480 |
