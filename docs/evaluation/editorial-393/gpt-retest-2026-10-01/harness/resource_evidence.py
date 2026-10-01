@@ -39,7 +39,12 @@ def returned_strings(value: Any, depth: int = 0) -> list[str]:
         try:
             decoded = json.loads(candidate)
         except json.JSONDecodeError:
-            continue
+            try:
+                # A complete resolver object can precede an EXIT/status line.
+                # raw_decode still refuses any incomplete or truncated object.
+                decoded, _ = json.JSONDecoder().raw_decode(candidate.lstrip())
+            except json.JSONDecodeError:
+                continue
         if decoded != value:
             strings.extend(returned_strings(decoded, depth + 1))
     return strings
@@ -101,7 +106,7 @@ def main() -> None:
                     )
             for text in strings:
                 try:
-                    decoded = json.loads(text[text.index("{") :])
+                    decoded, _ = json.JSONDecoder().raw_decode(text[text.index("{") :])
                 except (ValueError, json.JSONDecodeError):
                     continue
                 if not isinstance(decoded, dict) or not isinstance(
