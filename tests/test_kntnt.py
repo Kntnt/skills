@@ -7501,9 +7501,9 @@ def test_an_opinions_reference_to_a_pending_change_is_kept_out_of_the_finding() 
 
     #479's first candidate said such a passage *neither forecasts that outcome
     nor concedes it* and kept a finding for a text that *states the outcome as
-    settled*. Four further runs of that candidate read *innan den ena stängs* as
-    stating the closure as settled, cited the rule itself as the requirement
-    the clause failed, and two of them delivered it hedged into *innan det
+    settled*. Two of four further runs of that candidate read *innan den ena
+    stängs* as stating the closure as settled, cited the rule itself as the
+    requirement the clause failed, and delivered it hedged into *innan det
     avgörs om den ena ska stängas*. A restraint worded as a property the
     passage must have becomes a test the passage can fail. The rule says
     instead what a reference to the proposed change takes for granted, says
