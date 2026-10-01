@@ -27,6 +27,11 @@ def returned_strings(value: Any, depth: int = 0) -> list[str]:
         return []
     strings = [value]
     candidates = [value]
+    # A batched exec may return several complete JSON lines in one text block,
+    # even when a later line in that same block was truncated.
+    candidates.extend(
+        line for line in value.splitlines() if line.startswith(("{", "["))
+    )
     # UV may put its harmless installation line before a resolver JSON object.
     if "{" in value:
         candidates.append(value[value.index("{") :])
