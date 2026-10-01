@@ -190,5 +190,12 @@
     "output_target": "response",
     "paired_write": "w03",
     "input_rule": "exact delivered artifact only; source package and Write reply excluded"
+  },
+  "r13-rerun": {
+    "fixture": "rhythm-en_GB",
+    "repeat": 1,
+    "output_target": "response",
+    "interrupted_attempt": "r13",
+    "is_counted_replacement": true
   }
 }

@@ -123,5 +123,13 @@
     "verified_process_group_absent": 6630,
     "deleted": true,
     "time": "2026-10-01T14:31:30.686985+00:00"
+  },
+  {
+    "run": "r13",
+    "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-qjib77lh",
+    "verified_process_group_absent": 15590,
+    "deleted": true,
+    "time": "2026-10-01T14:33:51.449515+00:00",
+    "void_final_scratch_preserved": true
   }
 ]

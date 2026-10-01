@@ -137,5 +137,11 @@
     "counted": true,
     "delivered": true,
     "disposition": "completed-artifact"
+  },
+  "r13": {
+    "counted": false,
+    "delivered": false,
+    "disposition": "void-service-capacity",
+    "reason": "native error and turn.failed: Selected model is at capacity; repeat same input and inherited seat"
   }
 }
