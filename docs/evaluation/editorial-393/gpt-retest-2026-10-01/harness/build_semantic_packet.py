@@ -20,7 +20,8 @@ def section(label: str, value: str) -> str:
         if line.startswith("`"):
             longest = max(longest, len(line) - len(line.lstrip("`")))
     fence = "`" * (longest + 1)
-    return f"\n### {label}\n\n{fence}text\n{value}{fence}\n"
+    boundary = "" if value.endswith("\n") else "\n"
+    return f"\n### {label}\n\n{fence}text\n{value}{boundary}{fence}\n"
 
 
 def main() -> None:
