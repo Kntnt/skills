@@ -1,0 +1,34 @@
+Den granskade texten finns nu i `output.md`. `input.md` är orörd.
+
+**Inställningar:** genren är `opinion` och språket `sv`, båda angivna i kommandot. Ingen teknik användes, eftersom opinionsgenren inte anger någon och inget annat valde någon. Ingen skrivbrief användes. Texten saknar Kntnt-metadata, och ingen har lagts till.
+
+**Fynd (åtgärdat)**
+
+1. *Ingressen, sista meningen:* ”Här är skälen att pröva båda bokningsvägarna ett halvår till innan telefonbokningen ändå stängs för gott.”
+   - **Problem:** Bisatsen ”innan telefonbokningen ändå stängs för gott” sa att telefonbokningen stängs för gott efter halvåret, som om utfallet redan var avgjort. Ledet (”Ett permanent beslut behöver bättre underlag än det som nu ligger på bordet.”) och slutavsnittet (”Först då går det att väga alternativen.”) håller däremot frågan öppen.
+   - **Vad läsaren förlorade:** Den som bara läste ingressen kunde tro att skribenten redan gått med på att telefonbokningen ska avskaffas och bara ville skjuta upp det. Det motsade textens slut.
+   - **Åtgärd:** Bisatsen är struken. Meningen lyder nu ”Här är skälen att pröva båda bokningsvägarna ett halvår till.”
+
+Inga olösta fynd återstår.
+
+**Påståenden**
+
+- **Borttaget:** att telefonbokningen ändå stängs för gott efter halvåret (ingressen). Det försvann när fynd 1 åtgärdades, eftersom just det påståendet var felet.
+  - Ingressen säger inte längre något om vad som händer efter halvåret: varken att telefonbokningen stängs eller att ett beslut fattas efter försöket.
+  - Att beslutet ska vänta på försöket står kvar i ledet (”Pröva först …”, ”Ett permanent beslut behöver bättre underlag …”) och i slutavsnittet (”Först då går det att väga alternativen.”).
+- Utöver det borttagna påståendet har inget påstående ändrats eller lagts till.
+
+**Artikelanatomi:** Mätskriptet kördes på den levererade texten och hittade inga avvikelser.
+- Rubriken har 47 tecken och 6 ord.
+- Ingressen är ett stycke på 35 ord.
+- Mellanrubrikerna har 33–40 tecken, och inget stycke är längre än 50 ord.
+
+Jag har också granskat de krav som skriptet inte mäter:
+- Ingressen kan läsas på egen hand.
+- Ledet för texten vidare utan att upprepa ingressen.
+- Varje mellanrubrik beskriver sitt avsnitt.
+- Sista avsnittet är ett avslut med en uppmaning till kommunstyrelsen.
+
+Texten följer alltså artikelanatomin helt.
+
+**Övriga ändringar:** Utöver strykningen ovan är inget ändrat. Rubriker, byline, struktur och alla andra stycken är som förut. Korrekturläsningen hittade inga mekaniska fel att rätta.

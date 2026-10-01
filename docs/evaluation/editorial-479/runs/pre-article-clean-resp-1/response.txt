@@ -1,0 +1,3 @@
+**Ingen ändring: `input.md` behövde varken redaktionella eller mekaniska rättelser.**
+
+Granskad som artikel (`article`) på svenska (`sv`). Ingen berättarteknik tillämpades, eftersom artikelgenren inte anger någon och ingen annan nivå valde en. Korrigeringsbudgeten på en rättelse användes inte, och inga filer skrevs.

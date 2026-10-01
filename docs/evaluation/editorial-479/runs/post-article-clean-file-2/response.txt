@@ -1,0 +1,36 @@
+Jag har granskat texten och skrivit den till `output.md`. `input.md` är orörd. Rubriken är rättad, men två fynd i brödtexten är kvar eftersom de kräver uppgifter som texten inte har.
+
+**Inställningar.** Genre: `article`, angiven i anropet. Språk: `sv`, angivet i anropet. Teknik: ingen. Artikelgenren anger ingen teknik som den normalt skrivs med, och ingen valdes på annat sätt.
+
+**Anatomi.** Texten följer artikelanatomin med en avvikelse från en norm. Rubriken har 9 ord, ett mer än normens tre till åtta, och 57 tecken. Jag räknar inte avvikelsen som ett fynd, eftersom rubriken inte kan kortas utan att tappa platsen, vad som hände eller begränsningen ”inte varför”. Mätskriptet visar att alla andra räknade krav håller. Kraven som skriptet inte räknar har jag kontrollerat för hand:
+- Ingressen står på egen hand.
+- Ingressen och inledningsstycket börjar med olika ord.
+- Underrubrikerna beskriver sina avsnitt.
+- Sista avsnittet avslutar texten med en uppmaning som följer av innehållet.
+
+**Åtgärdat fynd**
+
+1. *Rubriken.* I ”Mätförsöket i Björkskolan visar när, inte varför” hade ”när” och ”varför” inget att syfta på. Den som bara ser rubriken, till exempel i en lista eller ett sökresultat, kunde inte se att texten handlar om temperaturen i klassrummen och om när luften var kall. Rubriken är nu ”Björkskolans givare visar när det blev kallt, inte varför”.
+
+**Olösta fynd**
+
+Jag tog en korrigeringsrunda, vilket var hela budgeten (`--max=1`). Båda fynden nedan står kvar för skribenten att lösa.
+
+2. *Inledningsstyckets andra mening.* ”Det gör placeringen viktig när fastighetskontoret ska tolka fyra veckors mätningar i Björkskolans sex klassrum.” gör givarnas placering till nyckeln för tolkningen.
+   - Texten säger att givarna satt i Björkskolans sex klassrum och att en givare mäter luften där den sitter.
+   - Den säger inte var i rummen givarna satt eller hur placeringen påverkar just de här värdena.
+   - Placeringen nämns sedan bara i ”likadant placerade givare”.
+
+   Läsaren får alltså veta att placeringen spelar roll men inte hur, och kan inte väga värdena eller nästa försök mot det. Första meningen, ”En temperaturgivare mäter luften där den sitter.”, avgränsar vad mätningarna säger och står kvar som den var.
+3. *Andra avsnittets första mening.* I ”innan styrningen ändras” har ”styrningen” inget att syfta tillbaka på. Texten säger inte vilken styrning som avses, om det är värme, ventilation eller något annat. Ändringen som meningen förutsätter nämns inte heller någon annanstans i texten.
+
+**Påståenden**
+
+- *Ändrat påstående (rubriken, rättningen av fynd 1):*
+  - Rubriken säger nu att givarna i Björkskolan visar när det blev kallt men inte varför. Förut var subjektet mätförsöket, och ”när” saknade objekt.
+  - ”Det blev kallt” har stöd i texten: i Rasks citat (”varför det blev kallt just då”) och i ”när luften var kall”.
+  - Ordet ”mätförsöket” finns inte längre i rubriken. Den som bara läser rubriken får därför inte veta att mätningarna kommer från ett försök. Det framgår fortfarande av ingressen och brödtexten.
+
+Utöver rubriken har inga påståenden strukits, ändrats eller lagts till.
+
+Det enda som skiljer `output.md` från `input.md` är rubriken. Korrekturläsningen på slutet hittade inga mekaniska fel och ändrade ingenting.

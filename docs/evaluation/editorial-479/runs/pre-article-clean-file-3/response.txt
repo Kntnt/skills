@@ -1,0 +1,27 @@
+Jag har granskat texten och skrivit den till `output.md`. `input.md` är orörd. Den enda ändringen är rubriken, och ett fynd står kvar olöst.
+
+**Inställningar:** genre `article` och språk `sv`, båda från anropet. Ingen teknik används, eftersom genren article inte anger någon som den vanligen skrivs med. Texten saknar `kntnt`-karta och har inte fått någon.
+
+**Fynd**
+
+1. **Rubriken – åtgärdat.** Den ursprungliga rubriken, ”Mätförsöket i Björkskolan visar när, inte varför”, lät ”när” stå utan led. Den som bara ser rubriken, till exempel i en lista eller ett sökresultat, kunde inte avgöra vad försöket mätte eller vad ”när” gällde. Rubriken lyder nu ”Mätförsöket i Björkskolan visar när luften var kall, inte varför”. Formuleringen är textens egen, från första avsnittet: ”Ett lågt värde säger alltså när luften var kall”.
+2. **”innan styrningen ändras” (andra avsnittet, första stycket) – olöst.** ”Styrningen” står i bestämd form men har inte nämnts tidigare. Texten säger inte vilken styrning som avses (av värme, ventilation eller något annat) eller att någon ändring av den övervägs. Läsaren vet därför inte vad Rasks rekommendation gäller. Det går inte att rätta utan en uppgift som texten inte har, så den som har underlaget behöver fylla i den.
+
+**Artikelns anatomi:** Texten följer anatomin, med en avvikelse.
+- Mätskriptet godkänner alla krav det räknar.
+- Kraven skriptet inte räknar har jag läst igenom för hand:
+  - ingressen står på egen hand,
+  - inledningen presenterar det den nämner och för texten framåt,
+  - mellanrubrikerna beskriver sina avsnitt,
+  - sista avsnittet är ett avslut med en uppmaning till läsaren.
+- Avvikelsen är att den nya rubriken går utöver två normer. Den har 10 ord, där normen är tre till åtta, och 64 tecken, där normen är högst 60. Kravet på högst 70 tecken håller.
+- Kortare varianter tappade antingen platsen, ordet mätförsök eller vinkeln ”när, inte varför”. Därför ger avvikelsen läsaren mer än den kostar.
+
+**Påståenden**
+
+- **Ändrat – rubriken.** Rubriken säger nu att mätförsöket visar när luften var kall, men inte varför. Ändringen kommer från åtgärden av fynd 1.
+  - Det gamla nakna ”när” gick också att läsa som *när det behövs en närmare undersökning*. Den läsningen har stöd i texten: ingressen skriver ”pekar ut tillfällen att undersöka närmare” och Rask säger ”Vi vet när vi behöver titta närmare”. Den läsningen bär rubriken inte längre. Rubriken talar nu bara om lufttemperatur.
+  - Rubriken säger också rakt ut att försöket visar när luften var kall. Två begränsningar står kvar i texten men inte i rubriken: att givaren bara mäter ”luften där den sitter”, och att 20-gradersgränsen är kontorets egen och vald för just det här försöket. Den gamla rubriken saknade också de begränsningarna, men den påstod inte heller något om kyla som de behövde begränsa.
+- Utöver ändringen i rubriken har inget påstående tagits bort, ändrats eller lagts till.
+
+Utöver rubriken är texten oförändrad. Den avslutande korrekturläsningen hittade inga mekaniska fel att rätta.

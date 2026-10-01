@@ -1,0 +1,70 @@
+Granskningen är klar. Genre: opinion. Språk: svenska. Båda angavs i anropet. Ingen teknik användes, eftersom genren opinion inte skrivs med någon särskild teknik och ingen annan nivå valde någon. Ingen skrivbrief användes. Korrigeringsbudgeten var 1. Den enda rättningsrundan godtogs efter en ny granskning. Tre fynd återstår olösta, eftersom de kräver uppgifter som texten saknar. Korrekturläsningen på slutet gjorde inga ändringar. Inga filer skrevs.
+
+```markdown
+# Telefonbokningen bör finnas kvar i ett halvår
+
+Sanna Ek, Öppna beslut
+
+Kommunstyrelsen borde behålla telefonbokning under ett halvårs försök i alla sju lokaler.
+
+## Var femte bokning kom per telefon – digital vana undersöktes inte
+
+Det gjordes 96 bokningar på webben och 24 via telefon. Telefonbokningarna motsvarar 20 procent av alla bokningar. Kommunens pilotrapport från den 8 april 2026 säger samtidigt att bokningarna inte räknar unika personer och att digital vana inte undersöktes.
+
+## Förvaltningens invändning saknar mätning av tid och kostnad
+
+Förvaltningen invänder att dubbla kanaler innebär dubbel administration. Handlingarna saknar tidsmätning. Därför är det inte belagt vad det kostar att behålla telefonbokningen. Föreningen vill att förvaltningen mäter tidsåtgång och frågar användarna varför de väljer en bokningsväg. Försökets kostnad är inte beräknad.
+
+## Nästa steg är kommunstyrelsens
+
+Nu är det dags för kommunstyrelsen att behålla telefonbokningen under ett halvårs försök i alla sju lokaler.
+```
+
+## Olösta fynd
+
+1. **Ingressen saknas.** Enligt artikelanatomin ska en självständig ingress på högst 60 ord stå mellan rubriken och bylinen, och texten har ingen. Enligt mätskriptet är detta det enda räknade krav som den levererade texten inte uppfyller.
+   - En granskning skriver inte en saknad del, så ingressen får en person skriva.
+   - Texten uppfyller därför inte artikelanatomin.
+   - Det gick inte att pröva om ingressen står på egna ben eller om den upprepar inledningen, eftersom det inte finns någon ingress.
+   - Två krav som skriptet inte räknar har prövats och är uppfyllda: att sista avsnittet är en avslutning och att varje underrubrik beskriver sitt avsnitt.
+2. **"Föreningen" har ingen referent.** Ordet står i bestämd form i avsnittet om förvaltningens invändning, men brödtexten har inte nämnt någon förening. Bylinen nämner Öppna beslut, men texten säger inte att det är en förening eller att det är den som avses. Läsaren vet alltså inte vems krav det är. Texten innehåller inget som avgör saken, så stället lämnades orört.
+3. **Inledningen förklarar inte förslaget.** Meningen "Kommunstyrelsen borde behålla telefonbokning under ett halvårs försök i alla sju lokaler." säger inte vad som bokas eller vilka de sju lokalerna är. Läsaren förstår därför inte helt vad förslaget gäller. Texten innehåller inget som besvarar det, så stället lämnades orört.
+
+## Reparerade rubriker och underrubriker
+
+- **Rubriken** "Kommunledningen hatar människor" blev "Telefonbokningen bör finnas kvar i ett halvår" (45 tecken, 7 ord). Defekten var att rubriken tillskrev kommunledningen ett motiv som texten inte bär, var högre i tonen än texten och inte sa vad texten föreslår.
+- **Underrubriken** "Bakgrund" blev "Var femte bokning kom per telefon – digital vana undersöktes inte" (65 tecken). Defekten var att den var en etikett som inte beskrev vad avsnittet handlar om.
+- **Underrubriken** "Diskussion" blev "Förvaltningens invändning saknar mätning av tid och kostnad" (59 tecken). Defekten var densamma.
+- **Underrubriken** "Nästa steg är kommunstyrelsens" (30 tecken) är ny. Den svarar mot två defekter: avslutningen saknade eget avsnitt och stod inne i avsnittet som bar argumentet, och uppmaningen "Nu är det dags att agera." nämnde varken någon handling eller någon som kan handla.
+
+## Påståenden
+
+**Borttagna**
+
+- Meningen "Alla vet att politikerna vill stänga ute äldre för att spara miljoner." togs bort helt. Det gjordes när fyndet om vag attribuering, påhittat motiv och påståenden utan stöd rättades; texten säger själv att försökets kostnad inte är beräknad. Tre påståenden försvann med meningen:
+  - att detta är allmänt känt
+  - att politikerna vill stänga ute äldre
+  - att syftet är att spara miljoner
+
+  Ordet "äldre" finns inte längre i texten.
+
+**Ändrade**
+
+- **Rubriken** påstår inte längre att kommunledningen hatar människor. Den påstår nu att telefonbokningen bör finnas kvar i ett halvår. Till skillnad från inledningen nämner den inte att det gäller ett försök, att det gäller sju lokaler eller att kommunstyrelsen ska besluta. Ändringen gjordes när rubrikfyndet rättades.
+- **Första avsnittet** påstår inte längre att siffrorna bevisar att 20 procent av kommunens invånare inte kan använda internet. Meningen säger nu att telefonbokningarna motsvarar 20 procent av alla bokningar. Ingenting sägs längre om invånarna eller om förmågan att använda internet, och ingenting sägs vara bevisat. Ändringen gjordes när fyndet om en slutsats som texten själv motsäger rättades.
+- **Avsnittet om förvaltningens invändning** påstår inte längre att det inte kostar någonting att behålla telefonbokningen. Meningen säger nu att det inte är belagt vad det kostar. "Därför" står kvar och knyter meningen till att handlingarna saknar tidsmätning. Ändringen gjordes när fyndet om den brutna slutledningen rättades.
+- **Avslutningen** "Nu är det dags att agera." blev "Nu är det dags för kommunstyrelsen att behålla telefonbokningen under ett halvårs försök i alla sju lokaler." Med inledningens förslag nämner den nu vad som ska göras och vem som ska göra det, och den står i ett eget sista avsnitt. Ändringen gjordes när avslutningsfyndet rättades.
+
+**Tillagda (i underrubrikerna)**
+
+- **"Var femte bokning kom per telefon"** anger en andel som texten tidigare bara gav som 96 webbokningar och 24 telefonbokningar. **"digital vana undersöktes inte"** står i underrubriken utan att pilotrapporten nämns, medan brödtexten fortfarande säger att det är pilotrapporten som säger det. Tillagt när fyndet om underrubrikerna rättades.
+- **"Förvaltningens invändning saknar mätning av tid och kostnad"** lägger avsaknaden av mätning på förvaltningens invändning, och det gäller både tid och kostnad. Brödtexten säger att handlingarna saknar tidsmätning, att det inte är belagt vad telefonbokningen kostar och att försökets kostnad inte är beräknad. Den säger däremot inte att det är invändningen som saknar mätning av tid eller av kostnad. Tillagt när fyndet om underrubrikerna rättades.
+- **"Nästa steg är kommunstyrelsens"** påstår att nästa steg ligger hos kommunstyrelsen. Tillagt när avslutningsfyndet rättades.
+
+Utöver det som redovisas ovan ändrade körningen följande:
+- En vag attribuering och ett tillskrivet motiv togs bort.
+- Rubriken och de två befintliga underrubrikerna skrevs om.
+- En ny underrubrik lades till.
+- Den sista meningen flyttades till ett eget avslutande avsnitt.
+
+Korrekturläsningen på slutet gjorde inga mekaniska ändringar.

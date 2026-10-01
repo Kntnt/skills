@@ -1,0 +1,25 @@
+Jag har granskat texten och rättat det enda fyndet. Den är sparad i `output.md`, som är en ny fil; `input.md` är orörd.
+
+**Inställningar:** genren är `opinion` och språket `sv`, båda angivna i anropet. Ingen teknik användes: du angav ingen, och genren opinion anger ingen teknik som den vanligen skrivs med.
+
+**Fynd (1, åtgärdat)**
+
+- *Ingressen, sista meningen.* ”Här är skälen att pröva båda bokningsvägarna ett halvår till innan den ena stängs” medgav att en av bokningsvägarna ska stängas när halvåret är slut. Resten av texten håller den frågan öppen:
+  - rubriken argumenterar mot att avskaffa telefonbokningen på ett antagande
+  - inledningen säger att ett permanent beslut behöver bättre underlag
+  - avslutningen säger att det går att väga alternativen först efter försöket
+
+  Den som läste ingressen fick alltså en annan bild av skribentens ståndpunkt än den texten argumenterar för. Meningen lyder nu: ”… innan det avgörs om den ena ska stängas.” Inga fynd återstår.
+
+**Påståenden**
+
+- **Ändrat:** ingressen påstod tidigare att en av bokningsvägarna stängs efter halvåret. Nu påstår den bara att det avgörs efter halvåret om den ena ska stängas. Ändringen är rättelsen av fyndet ovan.
+- Inga påståenden har strukits eller lagts till, och inget annat påstående har ändrats.
+
+**Artikelanatomi:** texten följer artikelanatomin utan avvikelser. Skriptet mätte den slutliga texten: rubriken har 47 tecken och 6 ord, och ingressen har 43 ord i ett stycke. Jag har också läst igenom de krav som skriptet inte räknar:
+- ingressen står på egen hand
+- ingress och inledning upprepar inte varandra
+- mellanrubrikerna beskriver sina avsnitt
+- sista avsnittet är ett avslut, med en uppmaning som säger vem som kan agera (kommunstyrelsen)
+
+Utöver ändringen i ingressen skiljer sig den levererade texten inte från den inkomna. Den avslutande korrekturläsningen hittade inga mekaniska fel att rätta.

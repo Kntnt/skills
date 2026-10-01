@@ -1,0 +1,17 @@
+Texten är granskad och levererad till `output.md`.
+
+**Konfiguration:** genre `opinion` och språk `sv`, båda från anropet. Ingen teknik tillämpades. Genren `opinion` anger själv att den inte skrivs med någon särskild teknik.
+
+**Fynd (åtgärdat):**
+
+1. *Ingressen drog en slutsats som texten inte drar.* Ingressens sista mening slutade ”innan telefonbokningen ändå stängs för gott”. Det sa att telefonbokningen stängs permanent efter halvåret oavsett vad försöket visar. Brödtexten lämnar däremot utfallet öppet (”Först då går det att väga alternativen”), och rubriken argumenterar mot att avskaffa telefonbokningen på ett antagande. Den som läste ingressen fick därför en annan ståndpunkt än artikelns: ett uppskov med en stängning som redan var avgjord. Meningen slutar nu ”innan det avgörs om telefonbokningen ska stängas för gott”.
+
+Inga fynd kvarstår.
+
+**Påståenden:**
+- *Ändrat påstående (ingressen, rättelsen av fynd 1):* ingressen påstår inte längre att telefonbokningen stängs för gott efter halvåret. Den säger nu att det avgörs efter halvåret om den ska stängas för gott. Med ordet ”ändå” försvann också påståendet att stängningen redan var bestämd. Det påståendet var själva felet.
+- Inga andra påståenden har tagits bort, ändrats eller lagts till, utöver det ändrade påståendet i ingressen ovan.
+
+**Artikelns anatomi:** Texten följer artikelns anatomi utan avvikelse. Skriptet mätte alla räknade gränser på den levererade texten, och samtliga håller; ingressen har till exempel 44 ord av högst 60. Jag läste också igenom de krav som skriptet inte räknar: ingressen står på egen hand, inledningen för texten vidare i stället för att upprepa ingressen, mellanrubrikerna beskriver sina avsnitt, och sista avsnittet är ett avslut som säger vem som ska göra vad (kommunstyrelsen).
+
+Utöver ingressens sista mening är texten oförändrad. Den avslutande mekaniska korrekturen hittade inget att rätta.

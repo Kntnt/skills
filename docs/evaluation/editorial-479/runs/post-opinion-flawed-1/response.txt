@@ -1,0 +1,59 @@
+Jag ändrade sex av åtta problem i en korrigeringsrunda. Två finns kvar och måste lösas av dig: ingressen saknas, och det framgår inte vem "Föreningen" är. Den avslutande språkgranskningen hittade inget att rätta. `input.md` är orörd och inga filer har skrivits.
+
+**Inställningar:** debattartikel (`opinion`) på svenska (`sv`), som du angav. Ingen berättarteknik tillämpades, eftersom debattartikelgenren inte anger någon och inget annat valde en. Ingen skrivbrief användes.
+
+```markdown
+# Låt telefonbokningen finnas kvar i ett halvårsförsök
+
+Sanna Ek, Öppna beslut
+
+Kommunstyrelsen borde behålla telefonbokning under ett halvårs försök i alla sju lokaler.
+
+## Bokningssiffrorna räknar inte unika personer
+
+Det gjordes 96 bokningar på webben och 24 via telefon. Telefon stod alltså för 20 procent av bokningarna. Kommunens pilotrapport från den 8 april 2026 säger samtidigt att bokningarna inte räknar unika personer och att digital vana inte undersöktes.
+
+## Handlingarna visar inte vad två bokningsvägar kostar i tid
+
+Förvaltningen invänder att dubbla kanaler innebär dubbel administration. Handlingarna saknar tidsmätning. Föreningen vill att förvaltningen mäter tidsåtgång och frågar användarna varför de väljer en bokningsväg. Försökets kostnad är inte beräknad.
+
+## Nästa steg är kommunstyrelsens
+
+Nu är det dags för kommunstyrelsen att agera och behålla telefonbokning under ett halvårs försök i alla sju lokaler.
+```
+
+**Olösta fynd**
+
+1. **Ingress saknas.** Mellan rubrik och byline ska det enligt artikelmallen stå en ingress: ett fristående, sammanfattande stycke på högst 60 ord. Den som bara ser rubrik och ingress får därför ingen sammanfattning av texten. Vid granskning skrivs en saknad del inte, så den får du skriva.
+2. **"Föreningen vill att förvaltningen mäter tidsåtgång …"** Ingen förening nämns i brödtexten. Bylinen "Sanna Ek, Öppna beslut" kan antyda vilken, men texten säger inte att Öppna beslut är en förening eller att det är den som avses. Läsaren vet alltså inte vem som står bakom förslaget. Jag lämnade meningen, eftersom en lagning skulle kräva en uppgift som texten inte ger.
+
+**Åtgärdade fynd**
+
+3. **Rubriken** "Kommunledningen hatar människor" tillskrev kommunledningen ett motiv som texten inte belägger. Den hade högre ton än texten och sa inte vad texten handlar om. Ny rubrik: "Låt telefonbokningen finnas kvar i ett halvårsförsök".
+4. **Inledningens andra mening**, "Alla vet att politikerna vill stänga ute äldre för att spara miljoner.", byggde på att "alla vet" utan att någon källa anges, och tillskrev politikerna ett påhittat motiv. Uppgifterna om äldre och miljoner belägger texten inte, och de strider mot textens egen uppgift att försökets kostnad inte är beräknad. Meningen är struken.
+5. **"Det bevisar att 20 procent av kommunens invånare inte kan använda internet."** En andel bokningar framställdes som en andel invånare och som ett bevis. Det motsägs av meningen efter: bokningarna räknar inte unika personer och digital vana undersöktes inte. Ny mening: "Telefon stod alltså för 20 procent av bokningarna."
+6. **"Därför kostar det ingenting att behålla telefonbokningen."** Slutsatsen följde inte av att tidsmätning saknas, och "Försökets kostnad är inte beräknad." i samma stycke motsade den. Förvaltningens invändning bemöttes därmed inte sakligt. Meningen är struken. "Handlingarna saknar tidsmätning." och "Försökets kostnad är inte beräknad." står kvar oförändrade.
+7. **Mellanrubrikerna** "Bakgrund" och "Diskussion" var etiketter som inte sa vad avsnitten handlar om, så den som skummar kunde inte se argumentet. Nya mellanrubriker: "Bokningssiffrorna räknar inte unika personer" och "Handlingarna visar inte vad två bokningsvägar kostar i tid".
+8. **Slutet**, "Nu är det dags att agera.", angav varken vad som ska göras eller vem som ska göra det. Det stod sist i det argumenterande avsnittet "Diskussion" i stället för i ett eget avslutande avsnitt. Slutet har nu ett eget avsnitt med mellanrubriken "Nästa steg är kommunstyrelsens", och meningen lyder "Nu är det dags för kommunstyrelsen att agera och behålla telefonbokning under ett halvårs försök i alla sju lokaler." Uppmaningen bygger på textens eget förslag i inledningen.
+
+**Vad som hände med påståendena**
+
+Strukna påståenden:
+- Att kommunledningen hatar människor (gamla rubriken, fynd 3).
+- Att alla vet att politikerna vill stänga ute äldre, och att syftet är att spara miljoner (inledningen, fynd 4). Texten nämner inte längre äldre, politikerna eller miljoner.
+- Att bokningssiffrorna bevisar att 20 procent av kommunens invånare inte kan använda internet (fynd 5).
+- Att det inte kostar något att behålla telefonbokningen (fynd 6). Med meningen försvann också "Därför", som var skribentens egen slutsats av att tidsmätning saknas. Läsaren har därför inte längre något påstående från skribenten om vad telefonbokningen kostar.
+
+Ändrade påståenden:
+- Rubriken säger nu att telefonbokningen ska få finnas kvar i ett halvårsförsök. Det är samma krav som i inledningen, men rubriken nämner varken kommunstyrelsen eller de sju lokalerna (fynd 3).
+- De 20 procenten avser nu andelen bokningar som gjordes via telefon (24 av 120), inte andelen invånare. De framställs som en uträkning ur siffrorna i stället för som ett bevis (fynd 5).
+- Första mellanrubriken, "Bokningssiffrorna räknar inte unika personer", återger en uppgift ur pilotrapporten. I rubriken står uppgiften som textens eget konstaterande, medan avsnittet anger pilotrapporten som källa (fynd 7).
+- Slutmeningen riktar nu uppmaningen till kommunstyrelsen och anger vad den ska göra: behålla telefonbokning under ett halvårs försök i alla sju lokaler (fynd 8).
+
+Tillagda påståenden:
+- Mellanrubriken "Handlingarna visar inte vad två bokningsvägar kostar i tid". Det är en slutsats av "Handlingarna saknar tidsmätning" och förvaltningens invändning om dubbla kanaler, och texten drog den inte uttryckligen (fynd 7).
+- Mellanrubriken "Nästa steg är kommunstyrelsens", alltså att nästa steg ligger hos kommunstyrelsen. Den bygger på att inledningen riktar kravet till kommunstyrelsen (fynd 8).
+
+**Artikelmallen.** Texten följer inte artikelmallen, eftersom ingressen saknas. Övriga mätbara gränser håller i den levererade texten: rubriken har 52 tecken och 7 ord, mellanrubrikerna 30–58 tecken, och varje avsnitt består av ett stycke. Om ingress och inledning kompletterar varandra går inte att pröva så länge ingressen saknas.
+
+**Ändringar utöver påståendena.** Rubriken och båda mellanrubrikerna är omskrivna. Avslutningen har fått ett eget avsnitt med en ny mellanrubrik och en omskriven slutmening. Inledningen är kortad till en mening. I avsnittet om kostnaden är en mening struken, och i avsnittet om bokningssiffrorna är en mening omskriven, enligt ovan.

@@ -1,0 +1,101 @@
+{
+  "created": {
+    "home/.claude/projects/-private-var-folders-cs-vgp-x-353zd9frkjpysp7zdw0000gn-T-kntnt-editorial-388-run-pw-vpsxj-work/memory": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "home/.claude/projects/-private-var-folders-cs-vgp-x-353zd9frkjpysp7zdw0000gn-T-kntnt-editorial-388-run-pw-vpsxj-work/b03761ae-dd0f-4496-9a36-9ae381c36981": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "home/.claude/projects/-private-var-folders-cs-vgp-x-353zd9frkjpysp7zdw0000gn-T-kntnt-editorial-388-run-pw-vpsxj-work": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "home/.claude/projects/-private-var-folders-cs-vgp-x-353zd9frkjpysp7zdw0000gn-T-kntnt-editorial-388-run-pw-vpsxj-work/b03761ae-dd0f-4496-9a36-9ae381c36981/subagents": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "home/.claude/session-env": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "home/.claude/projects/-private-var-folders-cs-vgp-x-353zd9frkjpysp7zdw0000gn-T-kntnt-editorial-388-run-pw-vpsxj-work/b03761ae-dd0f-4496-9a36-9ae381c36981/subagents/agent-a112962cfbbe3f91e.jsonl": {
+      "mode": 384,
+      "type": "file",
+      "size": 94864,
+      "sha256": "84eabf1ff3bebff29e56472436145e1828ccb56320bf1b18df59d11546a0dbfc"
+    },
+    "home/.claude/sessions": {
+      "mode": 448,
+      "type": "directory"
+    },
+    "home/.claude/backups/.claude.json.backup.1790857441108": {
+      "mode": 384,
+      "type": "file",
+      "size": 84,
+      "sha256": "b0e346784af164eddde856c9f1e91c28299ff3571475d96a3252c26babe355ab"
+    },
+    "home/.claude/projects/-private-var-folders-cs-vgp-x-353zd9frkjpysp7zdw0000gn-T-kntnt-editorial-388-run-pw-vpsxj-work/b03761ae-dd0f-4496-9a36-9ae381c36981.jsonl": {
+      "mode": 384,
+      "type": "file",
+      "size": 675632,
+      "sha256": "2742fac613087ab10698b880fe6cefc171763443c3210e698554691ec1444d10"
+    },
+    "home/.claude/.last-cleanup": {
+      "mode": 420,
+      "type": "file",
+      "size": 24,
+      "sha256": "7ecef22ee9c6f2bef538c131a2fa1709cf7af6ac2f9cb02feebe3769cab8b80a"
+    },
+    "work/output.md": {
+      "mode": 420,
+      "type": "file",
+      "size": 1841,
+      "sha256": "08f43e77d2aa4c94fbfdfef9b9415dc22960aea26cb01c86613dc6635072c47d"
+    },
+    "home/.claude/projects/-private-var-folders-cs-vgp-x-353zd9frkjpysp7zdw0000gn-T-kntnt-editorial-388-run-pw-vpsxj-work/b03761ae-dd0f-4496-9a36-9ae381c36981/subagents/agent-aa7947535ebcf6a75.meta.json": {
+      "mode": 420,
+      "type": "file",
+      "size": 197,
+      "sha256": "399f09c69f90208aa7da36999335740258fbd58b58469b08a4960e894b9c2203"
+    },
+    "home/.claude/projects/-private-var-folders-cs-vgp-x-353zd9frkjpysp7zdw0000gn-T-kntnt-editorial-388-run-pw-vpsxj-work/b03761ae-dd0f-4496-9a36-9ae381c36981/subagents/agent-aa7947535ebcf6a75.jsonl": {
+      "mode": 384,
+      "type": "file",
+      "size": 121941,
+      "sha256": "3c960e2abccb2325fc3434892da0da2e87db8b43c0dbafae9af97c133521e904"
+    },
+    "home/.claude/backups": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "home/.claude/session-env/b03761ae-dd0f-4496-9a36-9ae381c36981": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "home/.claude/projects/-private-var-folders-cs-vgp-x-353zd9frkjpysp7zdw0000gn-T-kntnt-editorial-388-run-pw-vpsxj-work/b03761ae-dd0f-4496-9a36-9ae381c36981/subagents/agent-a112962cfbbe3f91e.meta.json": {
+      "mode": 420,
+      "type": "file",
+      "size": 195,
+      "sha256": "bcfac16f13c4449e9d4d49c1b0ef7196f4a3116a2fc572d4c29299ac340a7808"
+    },
+    "home/.claude/shell-snapshots": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "home/.claude/.claude.json": {
+      "mode": 384,
+      "type": "file",
+      "size": 46935,
+      "sha256": "f3ee302254eb7aa521e50fdc5df144f0ac8c2dde603986101e478714fef7da1e"
+    },
+    "home/.claude/projects": {
+      "mode": 493,
+      "type": "directory"
+    }
+  },
+  "removed": {},
+  "changed": {},
+  "note": "Harness, cache and Skill effects are separated by reading trace-index.json; nothing here is a Skill artifact on its own."
+}

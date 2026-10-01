@@ -1,0 +1,34 @@
+Texten är levererad till `output.md`. `input.md` har inte ändrats.
+
+**Konfiguration:** genren är opinion och språket svenska (sv), båda från anropet. Ingen teknik användes. Genren opinion anger ingen teknik som den vanligen skrivs med, och inget annat valde någon.
+
+## Fynd
+
+1. **Ingressen, tredje meningen (åtgärdat).**
+   - **Före:** Meningen slutade ”… innan telefonbokningen ändå stängs för gott”. Den sa alltså att telefonbokningen stängs för gott efter halvåret, som om utfallet redan vore avgjort.
+   - **Motsägelsen:** Resten av texten håller utfallet öppet. Det gör rubriken (”Avskaffa inte telefonbokningen på ett antagande”), den sista mellanrubriken (”Besluta om försöket, inte om antagandet”) och brödtexten (”Först då går det att väga alternativen”).
+   - **Vad läsaren förlorade:** Den som bara läste ingressen fick intrycket att skribenten redan godtar att telefonbokningen avskaffas och bara vill skjuta upp det.
+   - **Efter:** Meningen slutar nu ”… innan det avgörs om telefonbokningen ska stängas för gott”.
+
+Inga olösta fynd kvarstår.
+
+## Påståendena
+
+- **Ändrat påstående (ingressens tredje mening, fynd 1):** Ingressen säger nu att det ska avgöras efter halvåret om telefonbokningen ska stängas för gott. Den säger inte längre att den kommer att stängas. Det står kvar att halvåret med båda bokningsvägarna kommer före avgörandet.
+- Inget påstående har strukits och inget har lagts till. Utöver ingressens påstående ovan har inget påstående ändrats.
+
+## Artikelanatomi
+
+Texten följer artikelanatomin utan avvikelse.
+
+- **Mätt med skriptet på den levererade texten:** De räknade kraven håller. Rubriken har 47 tecken, ingressen 44 ord i ett stycke, och ingen mellanrubrik är längre än 40 tecken.
+- **Lästa krav som skriptet inte räknar:**
+  - Ingressen står på egen hand.
+  - Ingressen och inledningen upprepar inte varandra.
+  - Brödtexten går att förstå utan ingressen.
+  - Mellanrubrikerna beskriver sina avsnitt.
+  - Det sista avsnittet är ett avslut som uppmanar kommunstyrelsen att handla.
+
+## Vad körningen i övrigt ändrade
+
+Utöver ändringen i ingressen rättade den avslutande korrekturläsningen stavningen av en sammansättning där tre lika konsonanter möts. I övrigt är texten oförändrad.

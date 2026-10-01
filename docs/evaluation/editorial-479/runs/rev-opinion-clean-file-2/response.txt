@@ -1,0 +1,26 @@
+Texten är levererad till `output.md`. `input.md` är orörd.
+
+**Konfiguration:** genren `opinion` och språket `sv` kommer från anropet. Ingen teknik tillämpades: genren opinion anger ingen teknik som den vanligen skrivs med, och inget annat led valde någon. Ingen skrivbrief användes. Texten saknar Kntnt-metadata, och ingen har lagts till.
+
+**Fynd**
+
+1. Det gällde andra meningen i inledningsstycket (brödtextens första stycke). ”Pröva först båda bokningsvägarna …” förutsatte att läsaren redan visste från rubriken och ingressen att den andra bokningsvägen är telefonbokning. Brödtexten nämnde telefonen först i första avsnittet. En läsare som möter brödtexten utan ingressen visste därför inte vad bytet tar bort när förslaget läggs fram.
+   **Åtgärdat:** meningen lyder nu ”Pröva först båda bokningsvägarna, digital bokning och telefonbokning, i alla sju lokaler under ett halvår och mät vad de kräver.”
+
+Inga olösta fynd återstår.
+
+**Påståenden**
+
+- **Ändrat påstående (reparationen av fynd 1):** förslaget i inledningsstycket namnger nu de två bokningsvägarna som digital bokning och telefonbokning. Förslaget i övrigt är detsamma: alla sju lokaler, ett halvår och att mäta vad de kräver. Att det är telefonbokningen som kan försvinna stod redan i rubriken och ingressen.
+- Utöver det ändrade påståendet ovan har inga påståenden tagits bort, ändrats eller lagts till.
+
+**Artikelanatomi:** texten följer artikelanatomin utan avvikelse.
+- Mätningen av den levererade texten gav rubriken 47 tecken och 6 ord, ingressen 39 ord i ett stycke och inledningsstycket 53 ord.
+- Brödtexten har tre avsnitt, och inget stycke är längre än 53 ord.
+- Kraven som skriptet inte räknar har också granskats:
+  - ingressen står på egna ben;
+  - inledningsstycket börjar med andra ord än ingressen och för texten vidare;
+  - varje mellanrubrik beskriver sitt avsnitt;
+  - det sista avsnittet är ett slut som uppmanar kommunstyrelsen att handla.
+
+**Sammanfattning av ändringarna:** den enda skillnaden mot texten som den kom in är inskottet i inledningsstyckets andra mening som redovisas ovan. Inga slop-mönster togs bort. Rubriken, ingressen, bylinen, mellanrubrikerna och strukturen är oförändrade. Den avslutande korrekturläsningen gjorde inga ändringar.

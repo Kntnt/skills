@@ -1,0 +1,15 @@
+Texten är skriven till `output.md`.
+
+**Inställningar:** genre `opinion` (från anropet), språk `sv` (från anropet) och ingen teknik. Genren opinion anger att den inte skrivs med någon särskild teknik, och inget annat valde någon.
+
+**Granskning:** Granskningen hittade inga redaktionella brister. Därför gjordes ingen korrigering, och korrigeringsbudgeten (1) användes inte. Texten följer artikelanatomin utan avvikelse.
+- **Räknade gränser:** De är maskinellt mätta och uppfyllda. Rubriken har 47 tecken och 6 ord. Ingressen har 39 ord i ett stycke. Mellanrubrikerna har 40, 33 och 39 tecken.
+- **Krav som inte räknas:** Även dessa är granskade.
+  - Ingressen står på egen hand.
+  - Inledningen tillför något nytt i stället för att upprepa ingressen.
+  - Varje mellanrubrik beskriver sitt avsnitt.
+  - Sista avsnittet är ett avslut med en uppmaning till kommunstyrelsen.
+
+**Korrekturläsning:** Den avslutande korrekturläsningen hittade inga mekaniska fel.
+
+**Påståenden:** Inga påståenden togs bort, ändrades eller lades till. Den levererade texten är byte för byte densamma som den som kom in.

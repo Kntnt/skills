@@ -1,0 +1,7 @@
+# /Users/thomas/Projects/skills/.git/kntnt-orchestrate/479
+# HEAD f3851e9f9d37a99059403772ed1f7f659f9573b6
+?? docs/evaluation/editorial-479/runs/rounds.py
+# end /Users/thomas/Projects/skills/.git/kntnt-orchestrate/479
+# /Users/thomas/Projects/skills
+# HEAD fe2587b70f57c3cfc63903b0be6d9fa4819a4827
+# end /Users/thomas/Projects/skills

@@ -1,0 +1,18 @@
+Jag har skrivit texten till `output.md`. Den är byte för byte densamma som `input.md`.
+
+**Inställningar:** genre `article` och språk svenska (`sv`) kommer båda från anropet. Ingen teknik används, eftersom genren `article` vanligen skrivs utan teknik. Därför har ingen berättarbåge lagts på texten. Ingen brief valdes.
+
+**Resultat:** granskningen hittade inga fel. Därför gjordes ingen korrigering, och korrigeringsbudgeten (1) användes inte. Den avslutande korrekturläsningen hittade heller inget att rätta.
+
+**Artikelns uppbyggnad:** texten följer mallen för artikelns delar utan avvikelser.
+- **Mätt med skriptet på den levererade texten:**
+  - Rubriken har 48 tecken och 7 ord.
+  - Ingressen är ett stycke på 46 ord.
+  - Brödtexten har två avsnitt, med tre respektive två stycken.
+- **Granskat genom läsning:**
+  - Ingressen fungerar på egen hand.
+  - Brödtextens första stycke för texten vidare i stället för att upprepa ingressen.
+  - Mellanrubrikerna beskriver sina avsnitt.
+  - Det sista avsnittet avslutar texten med en uppmaning som följer av innehållet.
+
+Inga påståenden har tagits bort, ändrats eller lagts till.

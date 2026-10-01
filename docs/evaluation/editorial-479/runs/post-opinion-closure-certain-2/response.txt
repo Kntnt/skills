@@ -1,0 +1,22 @@
+Jag granskade texten som genren opinion (från `--genre`) på språket sv (från `--language`). Ingen teknik tillämpades: ingen angavs, och genren opinion anger ingen teknik som den vanligen skrivs med.
+
+Den granskade texten finns nu i `output.md`. `input.md` är oförändrad.
+
+**Fynd (åtgärdat)**
+
+1. **Ingressen, tredje meningen:** ”… innan telefonbokningen ändå stängs för gott” angav beslutets utfall som avgjort. Rubriken, ingångens ”Ett permanent beslut behöver bättre underlag än det som nu ligger på bordet” och slutavsnittets ”Först då går det att väga alternativen” lämnar i stället utfallet öppet. En läsare som bara läste ingressen kunde tro att skribenten medger att telefonbokningen ska bort och bara begär uppskov. Meningen slutar nu ”… innan telefonbokningens framtid avgörs.” Inga fynd kvarstår.
+
+**Påståenden**
+
+- **Ändrat påstående:** Ingressens tredje mening påstod tidigare att telefonbokningen stängs för gott efter försöket. Nu säger den att försöket ska komma före beslutet om telefonbokningens framtid, utan att ange vad beslutet blir. Ändringen gjordes av rättelsen av fynd 1.
+- Inga påståenden har tagits bort eller lagts till, och inget annat påstående har ändrats.
+
+**Artikelanatomi**
+
+Texten följer artikelanatomin utan avvikelse. Enligt mätningen av den levererade texten har rubriken 47 tecken och ingressen 39 ord i ett stycke, och alla räknade krav är uppfyllda. De krav som skriptet inte räknar är också granskade:
+- Det sista avsnittet är ett avslut som uppmanar kommunstyrelsen att handla.
+- Ingressen står på egen hand.
+- Ingången för texten vidare utan att upprepa ingressen.
+- Varje mellanrubrik beskriver sitt avsnitt.
+
+Utöver ändringen i ingressen har ingenting ändrats i texten. Korrekturläsningen fann inga mekaniska fel att rätta.

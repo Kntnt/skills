@@ -1,0 +1,1 @@
+Ingen ändring: texten behövde inget arbete. Konfiguration: genre `opinion` (angiven i anropet), språk `sv` (angivet i anropet), ingen teknik. Genren `opinion` anger ingen teknik som den vanligen skrivs med, och ingen annan källa valde någon.

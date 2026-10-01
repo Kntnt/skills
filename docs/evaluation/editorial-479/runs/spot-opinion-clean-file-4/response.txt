@@ -1,0 +1,15 @@
+Jag har granskat texten och skrivit den till `output.md`. Den levererade texten är byte för byte identisk med `input.md`.
+
+**Inställningar:** genre opinion (från anropet), språk svenska (från anropet) och ingen teknik, eftersom genren opinion inte anger någon teknik som den vanligen skrivs med. Ingen skrivbrief användes.
+
+**Granskning:** Jag hittade inga redaktionella brister, så korrigeringsbudgeten (1) användes inte.
+
+**Artikelanatomi:** Texten följer artikelanatomin utan avvikelse. Mätskriptet hittade inga fel i de gränser det räknar. Jag har också prövat de krav som skriptet inte räknar, och alla är uppfyllda:
+- ingressen står på egen hand,
+- inledningen fungerar utan ingressen,
+- varje mellanrubrik beskriver sitt avsnitt,
+- sista avsnittet är ett avslut med en uppmaning till kommunstyrelsen.
+
+**Korrekturläsning:** Den avslutande korrekturläsningen hittade inga mekaniska fel.
+
+Inga påståenden har tagits bort, ändrats eller lagts till.

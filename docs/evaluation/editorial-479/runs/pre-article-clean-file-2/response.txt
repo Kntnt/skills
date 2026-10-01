@@ -1,0 +1,11 @@
+Redline wrote the text to `output.md`. It needed no work: the review found nothing to fix and the closing proofreading pass found no mechanical errors, so `output.md` is byte-for-byte identical to `input.md`. My private working files have been removed.
+
+Konfiguration: genre `article` (angiven i anropet), språk `sv` (angivet i anropet) och ingen teknik – artikelgenren anger ingen teknik som den vanligen skrivs med. Ingen skrivinstruktion användes. Korrigeringsbudgeten (1) användes inte.
+
+Texten följer artikelanatomin utan avvikelse. Mätt på den levererade texten har rubriken 48 tecken och 7 ord, ingressen är ett stycke på 46 ord och brödtexten har två avsnitt med tre respektive två stycken, där det längsta stycket har 45 ord. Även de krav som mätningen inte räknar har granskats:
+- ingressen står på egen fot;
+- det första stycket för texten vidare i stället för att upprepa ingressen;
+- båda mellanrubrikerna beskriver sina avsnitt;
+- det sista avsnittet är ett avslut med en uppmaning som följer av innehållet.
+
+Inga påståenden har tagits bort, ändrats eller lagts till.

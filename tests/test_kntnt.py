@@ -7458,6 +7458,110 @@ def test_a_loss_is_counted_as_the_reader_suffers_it_in_every_passage() -> None:
         )
 
 
+OPINION_REVIEW = EDITORIAL / "genres" / "opinion.review.md"
+
+
+def test_an_opinions_step_before_a_pending_decision_is_not_a_forecast() -> None:
+    """A step the argument sets before a decision still to be taken forecasts nothing.
+
+    #479's pre-change arm read *pröva båda bokningsvägarna ett halvår till
+    innan den ena stängs* as the author conceding that one route closes,
+    although the headline and the lead make that closure the pending decision
+    the author asks to postpone, and three runs of six delivered the clause
+    deleted or hedged. The opinion review reads such a passage as naming the
+    decision the text has put on the table, and keeps a finding for a text
+    that states the outcome as settled while another passage leaves it open.
+    """
+
+    rule = next(
+        (
+            block
+            for block in _paragraphs(OPINION_REVIEW.read_text(encoding="utf-8"))
+            if "still to be taken" in block
+        ),
+        "",
+    )
+    assert rule, (
+        f"{OPINION_REVIEW}: no paragraph says how a passage that sets out what"
+        f" should happen before a decision still to be taken is read, so a"
+        f" review reads the pending decision as the author's forecast of its"
+        f" outcome (issue #479)."
+    )
+    for part in ("forecast", "pending", "settled", "contradict"):
+        assert part in rule, (
+            f"{OPINION_REVIEW}: the rule on a step before a pending decision"
+            f" does not say {part!r}, so it either still reads the step as a"
+            f" forecast or no longer keeps a finding for a text that states"
+            f" the outcome as settled against another passage (issue #479)."
+        )
+
+
+def test_an_opinions_reference_to_a_pending_change_is_kept_out_of_the_finding() -> None:
+    """The finding the rule keeps cannot be read as covering the passage it protects.
+
+    #479's first candidate said such a passage *neither forecasts that outcome
+    nor concedes it* and kept a finding for a text that *states the outcome as
+    settled*. Four further runs of that candidate read *innan den ena stängs* as
+    stating the closure as settled, cited the rule itself as the requirement
+    the clause failed, and two of them delivered it hedged into *innan det
+    avgörs om den ena ska stängas*. A restraint worded as a property the
+    passage must have becomes a test the passage can fail. The rule says
+    instead what a reference to the proposed change takes for granted, says
+    outright that it is not the text stating the outcome as settled, asks for
+    no rewording that says whether the change will come, and keeps the finding
+    for a passage that sets the outcome beyond what the step shows.
+    """
+
+    rule = next(
+        (
+            block
+            for block in _paragraphs(OPINION_REVIEW.read_text(encoding="utf-8"))
+            if "still to be taken" in block
+        ),
+        "",
+    )
+    for part, consequence in (
+        (
+            "on the table",
+            (
+                "it does not say that the reference takes for granted only that the"
+                " change is proposed, which the text says"
+            ),
+        ),
+        (
+            "is not the text stating the outcome as settled",
+            (
+                "the protected reference can still be read as the settled outcome"
+                " the finding is kept for"
+            ),
+        ),
+        (
+            "whether",
+            (
+                "it does not refuse the repair that hedges the reference into saying"
+                " whether the change will come"
+            ),
+        ),
+        (
+            "whatever the step shows",
+            (
+                "the finding it keeps is not told apart from a reference to the"
+                " proposed change"
+            ),
+        ),
+    ):
+        assert part in rule, (
+            f"{OPINION_REVIEW}: the rule on a reference to a pending change does"
+            f" not say {part!r}, so {consequence} (issue #479)."
+        )
+    assert "neither" not in rule, (
+        f"{OPINION_REVIEW}: the rule on a reference to a pending change states"
+        f" what the passage neither does nor concedes, which a review reads as"
+        f" a requirement the passage must meet and then finds it failing"
+        f" (issue #479)."
+    )
+
+
 def test_redline_names_the_heading_defect_by_what_a_reader_of_it_alone_can_tell() -> (
     None
 ):
