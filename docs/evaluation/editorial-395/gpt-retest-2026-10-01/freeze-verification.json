@@ -1,0 +1,25 @@
+{
+  "plan_commit": "343856e1",
+  "product_and_corpus": "fb16908712c4d47a36fc6ee9dfb3eb2714a19e65",
+  "all_frozen_inputs_byte_unchanged": true,
+  "paths": [
+    "docs/evaluation/editorial-395/gpt-retest-2026-10-01/plan.md",
+    "docs/evaluation/editorial-395/gpt-retest-2026-10-01/matrix.json",
+    "docs/evaluation/editorial-395/gpt-retest-2026-10-01/criteria.md",
+    "docs/evaluation/editorial-395/gpt-retest-2026-10-01/write-judge-brief.md",
+    "docs/evaluation/editorial-395/gpt-retest-2026-10-01/redline-judge-brief.md",
+    "docs/evaluation/editorial-395/gpt-retest-2026-10-01/redline-turn.md",
+    "docs/evaluation/editorial-395/gpt-retest-2026-10-01/harness/run.py",
+    "docs/evaluation/editorial-395/gpt-retest-2026-10-01/fixtures/source-01.md",
+    "docs/evaluation/editorial-395/gpt-retest-2026-10-01/fixtures/source-02.md",
+    "docs/evaluation/editorial-395/gpt-retest-2026-10-01/turn-01.md",
+    "docs/evaluation/editorial-395/gpt-retest-2026-10-01/turn-02.md",
+    "docs/evaluation/editorial-395/gpt-retest-2026-10-01/turn-03.md",
+    "docs/evaluation/editorial-395/gpt-retest-2026-10-01/turn-04.md",
+    "docs/evaluation/editorial-395/gpt-retest-2026-10-01/turn-05.md",
+    "docs/evaluation/editorial-395/gpt-retest-2026-10-01/turn-06.md",
+    "docs/evaluation/editorial-395/gpt-retest-2026-10-01/turn-07.md"
+  ],
+  "meaning": "Derived audit helpers, results, preservation and operational replacements do not modify these frozen inputs.",
+  "frozen_input_count": 16
+}

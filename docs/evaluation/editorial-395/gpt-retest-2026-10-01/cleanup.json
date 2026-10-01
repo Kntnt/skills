@@ -134,5 +134,12 @@
     "path_removed": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-4uvtdl1m",
     "verified_absent": true,
     "evidence_copy_verified": true
+  },
+  {
+    "at": "2026-10-01T16:06:18.905945+00:00",
+    "scope": "cell 07 second timeout void",
+    "path_removed": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-w1_y1a4a",
+    "verified_absent": true,
+    "evidence_copy_verified": true
   }
 ]
