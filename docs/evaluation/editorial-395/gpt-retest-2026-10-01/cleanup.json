@@ -1,0 +1,15 @@
+[
+  {
+    "at": "2026-10-01T12:54:18.943277+00:00",
+    "paths_removed": [
+      "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-jepbipmd",
+      "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-8ldz95b_",
+      "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-7ea15fmq",
+      "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-ghfz7mb9",
+      "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-y3ja6pbl",
+      "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-l8fk7ad4"
+    ],
+    "verified_absent": true,
+    "command_form": "rm -r with each full literal path; the initial rm -rf command was rejected without effects"
+  }
+]

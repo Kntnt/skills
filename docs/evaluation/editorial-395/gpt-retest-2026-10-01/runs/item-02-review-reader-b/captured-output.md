@@ -1,0 +1,69 @@
+# Judgement
+
+**R1: pass.** The review preserves the entire text and identifies two visible defects. **G2: fail:** the standfirst is not self-contained, and the ending lacks the required call to action. Both defects are reported. The other requested quality criteria pass.
+
+Only brief.md, work/input.md, response.md, delivered.md and criteria.md were read. A delivered artifact is present. Direct comparison establishes that delivered.md is byte-for-byte identical to work/input.md; the Markdown text embedded in response.md also matches the delivered text. Fidelity is established by comparison, not inferred from the reply's no-change statement. No source verification or assessment of traces, configuration or model identity is attempted.
+
+## 1. Every difference and claim preservation
+
+- **None:** before = the complete input; after = the identical delivered text. There are zero mechanical corrections, visible-defect repairs, changes of taste, or changes to a claim's strength, subject, scope, attribution, chronology or modality.
+
+Every before-and-after claim was compared. The following inventory covers the substantive claims and their attribution; all are unchanged.
+
+| Input claim or claim group | Delivered claim |
+|---|---|
+| The headline attributes to Fenwick the statement that staff could identify instruments awaiting parts. | Identical, including attribution and the limited ability claimed. |
+| The standfirst says Fenwick approved continued use for new jobs and postponed adding its backlog. | Identical, including the distinction between new jobs and the backlog. |
+| The case is fictional and is intended to show workshop managers setup choices and limits of evidence. | Identical, including the fiction disclosure and intended reader. |
+| The byline names Thomas Barregren. | Identical; matches the invoking user named in criteria.md. |
+| Fenwick services brass and woodwind instruments; the two job statuses previously appeared on separate paper sheets. | Identical, including the customer activity, statuses and prior arrangement. |
+| The team began a six-week trial of a shared bench schedule in January 2026. | Identical, including duration, timing and trial status. |
+| The team chose Benchline after checking that it could distinguish the two statuses. | Identical, including the team as decision-maker and the stated selection check. |
+| The workshop defined the statuses and update responsibilities; Benchline configured those choices and trained four staff in one online session. | Identical, including allocation of responsibility and both numerical details. |
+| Customer collection arrangements continued to be discussed by telephone. | Identical. |
+| Manager Priya Vale explained what the team had to settle in an email interview on 2 March 2026. | Identical, including name, role, occasion and date. |
+| Vale says the team had to agree what ready for work meant, and a part's presence in the building did not always mean it had reached the right bench. | Identical, including the reservation “did not always”. |
+| The trial summary is dated 23 February 2026, records 38 entered jobs, and says staff could see which instruments were waiting for parts. | Identical, including source attribution, date, count and limited finding. |
+| The summary does not measure repair duration, revenue or customer satisfaction. | Identical; all three evidence limits remain. |
+| The manager approved continued use for new jobs but postponed adding the backlog until the team had reviewed its status definitions. | Identical, including the actor, decision and condition. |
+| In the same interview, Vale says “I would use it again for new jobs” and “I would allow another week” to check status names before adding the backlog. | Identical, including conditional appraisal, extra time and sequence. |
+
+There are no legitimate removals to assess, no rejected losses, and no altered claims. The working voice, argument, headings, metadata and formatting are also unchanged.
+
+## 2. Bridges into quotations
+
+The input contains two direct quotations. They are considered in input order.
+
+- **Quotation 1:** input bridge: “In an email interview on 2 March 2026, manager Priya Vale explained what the team had to settle:” → delivered bridge: “In an email interview on 2 March 2026, manager Priya Vale explained what the team had to settle:”. **Before: (b); after: (b).** “In an email interview on 2 March 2026” names the occasion; “manager Priya Vale” names the attribution; “what the team had to settle” introduces the subject. The bridge does not already explain the meaning of ready for work or the distinction between a part reaching the building and reaching the bench. There is no substantive pre-echo clause or independent fact beyond occasion and attribution. **Change reporting:** not applicable; unchanged. **New event, fact, name or figure:** none. **Lost bridge information absent from the quotation:** none.
+- **Quotation 2:** input bridge: “In the same email interview, Vale said:” → delivered bridge: “In the same email interview, Vale said:”. **Before: (b); after: (b).** “In the same email interview” supplies the occasion and “Vale said” the attribution. Neither the recommendation for new jobs nor the additional week appears in this bridge. **Change reporting:** not applicable; unchanged. **New event, fact, name or figure:** none. **Lost bridge information absent from the quotation:** none.
+
+### Repetition outside the immediate bridges
+
+- Before quotation 1, “The team shapes the setup” and the paragraph saying the workshop defined the statuses establish the subject and overlap with Vale's account of agreeing the definition. They do not already deliver her explanation that a part in the building might not have reached the correct bench. This earlier overlap is unchanged and does not change the immediate bridge's class.
+- Before quotation 2, the standfirst and the paragraph beginning “The summary does not measure” already report continued use for new jobs and deferred backlog entry pending review of status definitions. This overlaps with Vale's appraisal, while preserving a distinction between the reported decision and her conditional “I would” statements. The quotation adds “another week”. The heading “Vale reflects on the choice” introduces the appraisal without stating its conclusion. These earlier passages are unchanged and do not change the immediate bridge's class.
+
+## 3. Quotations themselves
+
+- **Quotation 1:** “We had to agree what ready for work meant. A part being in the building did not always mean that it had reached the right bench.” **Unchanged.** Meaning, stance, certainty, the “did not always” reservation and the speaker's plain, practical voice all survive. No quotation edit requires reporting.
+- **Quotation 2:** “I would use it again for new jobs. I would allow another week to check the status names before adding the backlog.” **Unchanged.** Both conditional “would” statements, the scope “for new jobs”, the additional week, the sequence before backlog entry and the speaker's measured appraisal all survive. No quotation edit requires reporting.
+
+## 4. Criterion decisions
+
+| Criterion | Decision | Evidence |
+|---|---|---|
+| **G1** | **Pass** | The case gives the named workshop-manager reader a recognisable situation, setup decisions, a limited observed result and the manager's appraisal. Readers learn who defined the statuses, who configured them, and what the trial evidence supports. The fiction disclosure makes the publisher stance explicit. The anatomy defects are recorded under G2. |
+| **G2** | **Fail** | The headline, standfirst, named byline, lead before the first H2, explanatory sections and closing appraisal are present. Two mandatory functions fail: “approved continued use” has no identified object within the standfirst, and the ending gives an appraisal without calling the reader to action. Both are accurately reported in response.md. The case supplies no offer, link or contact route from which the required case-study call to action could be built. |
+| **P1** | **Pass** | The body introduces the two statuses and shared schedule before explaining selection, configuration and results. The quotation clarifies the operational difference behind a status. Chronology is coherent: January trial, February summary, March interview. The limited conclusion retains the explicit absence of duration, revenue and satisfaction measurements. |
+| **W1** | **Pass** | The headline has exactly eight words and 60 characters. The seven prose paragraphs each have two or three sentences and contain 25–44 words. The three H2 sections have two, two and one paragraphs: most therefore have two or three, and none exceeds three. No heading is below H2. The standfirst opens “For”; the lead opens “Fenwick”. The lead supplies customer and trial context, while the standfirst states the decision and purpose. The body remains complete with the standfirst covered. There is no demonstrated density or fragmentation loss. |
+| **L1** | **Pass** | The prose uses professional, idiomatic English. The status explanation and quotations retain a natural practical voice. The standfirst's unidentified object is a completeness defect, not evidence of translated syntax. |
+| **L2** | **Pass** | British English mechanics are consistent: single curly quotation marks, day–month–year dates, and appropriate spelling and punctuation. No locale conversion or new date has been introduced. |
+| **R1** | **Pass** | The review identifies concrete visible defects and preserves every claim, quotation, argument and working expression. It makes no taste-driven rewrite and reports both remaining mandatory defects. The unchanged artifact supports the reply's assertion that no claims were removed, changed or added. |
+
+### Removal, changed-claim and unresolved-finding account
+
+- **Removals:** zero. The reply reports “No claims were removed”; this is accurate, and comparison also establishes that no other text was removed.
+- **Changed claims:** zero. The reply reports no changed or added claims; this is accurate. There are no unreported changes to scope, attribution, chronology, certainty or reservations.
+- **Missing call to action:** a legitimate anatomy finding, accurately reported. Supplying the required offer, link or contact route would need information the input does not contain. The review appropriately leaves this finding for the writer; it remains a quality problem in the delivered text.
+- **Standfirst referent:** a legitimate visible defect, accurately reported. It is repairable from the text itself, which identifies the shared bench schedule. It is not inherently irreparable, and it remains a quality problem. The reply attributes leaving it unresolved to an exhausted correction budget. The permitted artifacts do not verify that process claim; no trace or configuration judgement is drawn from it.
+
+Both unresolved mandatory findings are disclosed. Their disclosure satisfies reporting but does not turn the delivered text's G2 failure into a pass. No unavailable-source verification is required for this judgement.
