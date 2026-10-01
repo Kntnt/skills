@@ -13,5 +13,15 @@
     "w02",
     "w03"
   ],
-  "criterion_changes": false
+  "criterion_changes": false,
+  "second_launcher_stop": {
+    "process_group": 42752,
+    "reason": "Use otherwise idle slot for first corrected Write, then gate remaining matrix on both active sessions",
+    "product_runs_interrupted": false
+  },
+  "third_launcher_stop": {
+    "process_group": 10851,
+    "reason": "Count already-running w01 as one occupied executor slot instead of blocking both slots; r01 already completed",
+    "product_runs_interrupted": false
+  }
 }

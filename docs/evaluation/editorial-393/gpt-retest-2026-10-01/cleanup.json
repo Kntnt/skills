@@ -1,0 +1,17 @@
+[
+  {
+    "run": "r15",
+    "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-tmjn2uqe",
+    "verified_process_group_absent": 10574,
+    "deleted": true,
+    "time": "2026-10-01T12:00:19.200310+00:00",
+    "initial_cleanup_attempt": "rm -rf rejected by exec policy; rm -r accepted"
+  },
+  {
+    "run": "r01",
+    "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-wfif5jnm",
+    "verified_process_group_absent": 10575,
+    "deleted": true,
+    "time": "2026-10-01T12:11:05.396010+00:00"
+  }
+]

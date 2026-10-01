@@ -83,5 +83,23 @@
     "fixture": "case-study-sv",
     "repeat": 3,
     "output_target": "response"
+  },
+  "w01": {
+    "fixture": "case-study-sv",
+    "repeat": 1,
+    "output_target": "response",
+    "construction_repair": true
+  },
+  "w02": {
+    "fixture": "case-study-sv",
+    "repeat": 2,
+    "output_target": "response",
+    "construction_repair": true
+  },
+  "w03": {
+    "fixture": "case-study-sv",
+    "repeat": 3,
+    "output_target": "response",
+    "construction_repair": true
   }
 }

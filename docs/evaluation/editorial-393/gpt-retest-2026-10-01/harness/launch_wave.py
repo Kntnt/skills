@@ -3,8 +3,8 @@
 # ///
 """Execute the predeclared remaining matrix with two isolated native runs.
 
-The first two invocations are already running. Their result files gate this
-wave, so a launcher cannot silently exceed its declared concurrency.
+The first Redline is finished and the corrected Write is already running.
+That Write occupies one worker slot until its result exists.
 """
 
 from __future__ import annotations
@@ -48,16 +48,21 @@ def main() -> int:
     manifest = json.loads((PACKET / "input-manifest.json").read_text())
     rows = json.loads((PACKET / "run-index.json").read_text())
 
-    # Wait for the two already-started native sessions before launching more.
-    while not all((staging / run / "result.json").exists() for run in ("r01", "r15")):
-        time.sleep(10)
-
     def invoke(run: str) -> dict[str, object]:
         """Run one exact frozen turn; record a failure without rerunning it."""
+        if run == "w01":
+            while not (staging / run / "result.json").exists():
+                time.sleep(10)
+            result = json.loads((staging / run / "result.json").read_text())
+            return {
+                "run": run,
+                "returncode": result["returncode"],
+                "already_running": True,
+            }
         row = rows[run]
         is_write = row["fixture"] == "case-study-sv"
         turn = (
-            "write-response"
+            "write-current-identifier"
             if is_write
             else "redline-response"
             if row["output_target"] == "response"
@@ -67,6 +72,7 @@ def main() -> int:
             "uv",
             "run",
             str(PACKET / "harness/run.py"),
+            "--timeout=5400",
             f"--revision={REVISION}",
             f"--corpus-revision={REVISION}",
             f"--prompt={PACKET / 'turns' / (turn + '.txt')}",
@@ -90,7 +96,10 @@ def main() -> int:
         return status
 
     # Map waits for every task; no unawaited session outlives this launcher.
-    remaining = [run for run in rows if run not in {"r01", "r15", "r16", "r17"}]
+    remaining = [
+        "w01",
+        *[run for run in rows if run not in {"r01", "r15", "r16", "r17", "w01"}],
+    ]
     with ThreadPoolExecutor(max_workers=2) as executor:
         statuses = list(executor.map(invoke, remaining))
     (PACKET / "wave-status.json").write_text(json.dumps(statuses, indent=2) + "\n")
