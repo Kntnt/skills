@@ -22,6 +22,15 @@ Across all six completed drafts and paired reviews, both readers find no class (
 
 Earlier heading/narrative repetition remains separately recorded under #396's scope. It is not a #395 immediate-bridge miss. Used quotations retain customer agency, qualifications, chronology and measured scope on all six F1 pairs. These raw passes do not settle the separate [cross-locale checklist ownership observation](localization-observation.md); its unresolved interpretation remains explicit rather than becoming a retrospective oracle or a new duplicate issue.
 
+## Frozen target-criterion disposition
+
+| Criterion | Observed disposition | Limit |
+|---|---|---|
+| K-bridge | Met on all six delivered drafts, with both readers; historical target not reproduced in all three British cases | Seventh nondelivery cannot pass; full matrix remains incomplete |
+| K-controls | Both locales observed; (b) and (c) occur in each locale, with no invented question | Unmet as a complete matrix: second Swedish control unavailable |
+| K-preserve | Both F1 readers pass customer words/agency/reservations/factual scope in six deliveries | No whole-artifact preservation pass: Write 01 W1 splits, 04–05 lose independent body orientation, and cross-locale checklist ownership interpretation remains unresolved |
+| K-redline | Every counted delivered draft has its separate fresh source-blind review and exact received bytes | No 07 input; 04–06 have no independently delivered review artifact. Private mechanical equality and the brief's semantic fallback are distinct evidence |
+
 ## Full criteria and gate reporting
 
 Absence of class (a) and source fidelity are not whole-artifact quality passes. All applicable criteria, passage evidence and independent readings are in the [Write record](../../records/write-gpt-2026-10-01-395.md) and [Redline record](../../records/redline-gpt-2026-10-01-395.md). Splits stay unmet on the disputed point.
