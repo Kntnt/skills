@@ -112,5 +112,15 @@
     "counted": true,
     "delivered": true,
     "disposition": "completed-artifact"
+  },
+  "c07": {
+    "counted": true,
+    "delivered": true,
+    "disposition": "completed-artifact"
+  },
+  "c08": {
+    "counted": true,
+    "delivered": true,
+    "disposition": "completed-file-artifact"
   }
 }
