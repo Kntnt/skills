@@ -166,5 +166,12 @@
     "verified_process_group_absent": 35802,
     "deleted": true,
     "time": "2026-10-01T15:31:25.455129+00:00"
+  },
+  {
+    "run": "w01-rerun",
+    "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-gfyoybhg",
+    "verified_process_group_absent": 33111,
+    "deleted": true,
+    "time": "2026-10-01T15:41:04.524303+00:00"
   }
 ]
