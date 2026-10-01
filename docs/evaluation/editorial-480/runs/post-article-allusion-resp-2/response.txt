@@ -1,0 +1,4 @@
+Ingen ändring behövdes i `input.md`. Granskningen hittade inga redaktionella fel, och korrekturläsningen hittade inga stavfel, grammatikfel eller skiljeteckenfel. Därför användes ingen av de rättningar som invokationen tillät, och ingen fil skrevs.
+
+- **Inställningar:** genren är `article` och språket `sv`, båda angivna i invokationen. Ingen berättarteknik används, eftersom artikelgenren inte anger någon och ingen annan källa heller gör det.
+- **Artikelns delar:** texten har alla delar som en artikel ska ha, i rätt ordning: rubrik, ingress, byline, inledning, två avsnitt och ett avslut. Mätskriptet hittade inga överskridna gränser, och de krav skriptet inte kan räkna granskades genom läsning. Där finns inga avvikelser heller.

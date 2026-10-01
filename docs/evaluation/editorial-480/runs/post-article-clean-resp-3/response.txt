@@ -1,0 +1,55 @@
+Granskningen gällde genren artikel och svenska, båda angivna i anropet. Ingen teknik användes, eftersom artikelgenren inte anger någon som den vanligen skrivs med. Ingen brief användes.
+
+**Fynd**
+
+1. *Fortfarande öppet, delvis åtgärdat.* Det gäller brödtextens första stycke, andra meningen: ”Det gör placeringen viktig när fastighetskontoret ska tolka fyra veckors mätningar i Björkskolans sex klassrum.”
+   - **Krav:** det som inledningen lovar ska följas upp i avsnitten och i avslutningen.
+   - **Problemet:** texten säger aldrig var givarna satt eller hur placeringen påverkar tolkningen av de 14 lektionspassen. Placeringen nämns igen bara i ”likadant placerade givare” i sista avsnittet, utan förklaring.
+   - **Vad läsaren förlorar:** läsaren får veta att placeringen är viktig men inte vad den betyder för just de här värdena. Därför går det inte att bedöma om ett nytt försök med likadant placerade givare löser problemet eller upprepar det.
+   - **Vad som gjordes:** korrigeringen kopplade placeringen till hur ett lågt värde ska läsas (se nedan).
+   - **Vad som återstår:** resten kräver uppgifter som texten saknar, nämligen var givarna satt och vad det betyder. Det lämnas till skribenten.
+
+**Ändrat påstående**
+
+- I första avsnittets andra stycke stod det: ”Ett lågt värde säger alltså när luften var kall, men inte hur rummet kändes.” Nu står det: ”Ett lågt värde säger alltså när luften där givaren satt var kall, men inte hur rummet kändes.” Påståendet är snävare: ett lågt värde visar när luften vid givaren var kall, inte när luften i rummet var det. Ändringen gjordes för att åtgärda fynd 1.
+
+Inget påstående togs bort och inget lades till.
+
+**Artikelanatomin**
+
+Texten följer artikelanatomins delar, ordning och mått. Mätskriptet kördes på den levererade texten och de räknade gränserna håller:
+- rubriken har 48 tecken och 7 ord
+- ingressen har 46 ord i ett stycke
+- mellanrubrikerna har 32 och 34 tecken
+
+Jag har också läst igenom de krav som skriptet inte räknar, och de håller:
+- ingressen fungerar på egen hand
+- brödtextens första stycke för texten vidare i stället för att upprepa ingressen
+- mellanrubrikerna beskriver sina avsnitt
+- sista avsnittet är ett avslut med en uppmaning
+
+````markdown
+# Mätförsöket i Björkskolan visar när, inte varför
+
+**Under 14 av 120 lektionspass registrerade givarna i Björkskolan temperaturer under fastighetskontorets egen arbetsgräns. Fyra veckors mätningar pekar ut tillfällen att undersöka närmare, men förklarar inte varför luften var kall. Här är vad ett kort försök kan säga, och vad som behövs för att komma vidare.**
+
+Text: Hedda Lund
+
+En temperaturgivare mäter luften där den sitter. Det gör placeringen viktig när fastighetskontoret ska tolka fyra veckors mätningar i Björkskolans sex klassrum. Genomgången nedan visar vad värdena räcker till och var gränsen går.
+
+## En gräns för det lokala försöket
+
+Kontoret valde 20 grader Celsius som arbetsgräns. Rapporten *Mätförsök i Björkskolan*, daterad 12 mars 2026, räknar 14 lektionspass av 120 med minst en mätning under den gränsen. Hur länge temperaturen låg under den anger rapporten inte. Gränsen är kontorets egen, vald för det här försöket.
+
+Givarna mätte varken luftdrag eller elevernas upplevelse. Ett lågt värde säger alltså när luften där givaren satt var kall, men inte hur rummet kändes.
+
+Driftteknikern Elin Rask sammanfattar: ”Vi vet när vi behöver titta närmare. Vi vet ännu inte varför det blev kallt just då.”
+
+## Nästa försök behöver mer än givare
+
+Rask rekommenderar att temperaturserierna kopplas till rummens användningstider innan styrningen ändras. Nästa försök planeras för november med likadant placerade givare, men finansieringen är inte beslutad.
+
+Lägg därför tiderna för när rummen används bredvid mätvärdena innan nästa givare sätts upp.
+````
+
+Utöver ändringen ovan har inget i texten ändrats. Rubriker, struktur och övriga stycken är som förut, och korrekturläsningen hittade inga fel att rätta. Filen `input.md` är oförändrad och inga arbetsfiler finns kvar.

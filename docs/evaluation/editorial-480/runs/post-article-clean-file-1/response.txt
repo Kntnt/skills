@@ -1,0 +1,25 @@
+Texten finns nu i `output.md`. Den är identisk med `input.md`: varken korrigeringsrundan eller korrekturläsningen på slutet ändrade något.
+
+**Konfiguration:** genre `article` (från anropet), språk `sv` (från anropet) och ingen teknik, eftersom genren `article` inte anger någon.
+
+**Artikelns anatomi:** texten följer anatomin utan avvikelse. Mätskriptet hittade inga brister i de krav det räknar. Rubriken har 48 tecken och 7 ord, ingressen har 46 ord i ett stycke och inget stycke är längre än 80 ord. De krav som skriptet inte räknar har jag granskat och de är uppfyllda:
+- ingressen fungerar på egen hand
+- inledningsstycket upprepar inte ingressen
+- mellanrubrikerna beskriver sina avsnitt
+- sista avsnittet är en avslutning med en uppmaning
+
+**Olösta fynd**
+
+1. *Inledningsstycket (brödtextens första stycke):* ”En temperaturgivare mäter luften där den sitter. Det gör placeringen viktig när fastighetskontoret ska tolka fyra veckors mätningar i Björkskolans sex klassrum.”
+   - Brödtexten säger aldrig var givarna satt eller om placeringen påverkade värdena. Placeringen nämns igen bara i slutavsnittets ”med likadant placerade givare”.
+   - Läsaren får veta att placeringen är viktig för tolkningen men aldrig hur. Därför går det inte att avgöra vad det betyder att nästa försök görs med likadant placerade givare.
+   - Fyndet är olöst, eftersom en lagning kräver uppgifter som texten saknar: var givarna satt och om placeringen ifrågasätts.
+   - Meningarna har lämnats orörda, eftersom de anger vad ett mätvärde säger något om: luften vid givaren, inte hela rummet.
+
+2. *Slutavsnittet, första meningen:* ”innan styrningen ändras”.
+   - Ingen annanstans i texten nämns någon styrning eller någon planerad ändring av den. Läsaren vet därför inte vilken styrning som menas eller att en ändring övervägs.
+   - Fyndet är olöst, eftersom det krävs uppgifter som texten saknar för att säga vilken styrning det gäller.
+
+En korrigeringsrunda gjordes och förbrukade korrigeringsbudgeten på 1. Rundan lämnade båda fynden olösta och texten oförändrad.
+
+**Påståenden:** inget påstående har tagits bort, ändrats eller lagts till.

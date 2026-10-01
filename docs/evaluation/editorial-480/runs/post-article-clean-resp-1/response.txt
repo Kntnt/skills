@@ -1,0 +1,3 @@
+Ingen ändring behövdes: texten är oförändrad och inga anmärkningar återstår.
+
+Granskningen utgick från genre `article` och språk `sv`. Ingen teknik användes, eftersom genren `article` inte anger någon som den vanligen skrivs med. Mätskriptet hittade ingen avvikelse från artikelns anatomi i någon av de mätbara gränserna, och de krav det inte mäter läste jag igenom utan att hitta något att anmärka på. Korrekturläsningen hittade inga mekaniska fel.

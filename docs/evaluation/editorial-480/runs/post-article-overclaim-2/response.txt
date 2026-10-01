@@ -1,0 +1,52 @@
+Jag har rättat ett fel i texten: rubriken drog en slutsats som texten inte bär. Inga andra fynd kvarstår. Allt utom rubriken lämnades orört, och korrekturläsningen på slutet hittade inget att rätta.
+
+Inställningar: genren article och språket svenska kommer från anropet. Ingen teknik tillämpades, eftersom genren article inte anger någon teknik som den vanligen skrivs med. Ingen brief användes, och `input.md` är oförändrad.
+
+````markdown
+# Björkskolans givare visar när luften understeg 20 grader
+
+**Under 14 av 120 lektionspass registrerade givarna i Björkskolan temperaturer under fastighetskontorets egen arbetsgräns. Fyra veckors mätningar pekar ut tillfällen att undersöka närmare, men förklarar inte varför luften var kall. Här är vad ett kort försök kan säga, och vad som behövs för att komma vidare.**
+
+Text: Hedda Lund
+
+En temperaturgivare mäter luften där den sitter. Det gör placeringen viktig när fastighetskontoret ska tolka fyra veckors mätningar i Björkskolans sex klassrum. Genomgången nedan visar vad värdena räcker till och var gränsen går.
+
+## En gräns för det lokala försöket
+
+Kontoret valde 20 grader Celsius som arbetsgräns. Rapporten *Mätförsök i Björkskolan*, daterad 12 mars 2026, räknar 14 lektionspass av 120 med minst en mätning under den gränsen. Hur länge temperaturen låg under den anger rapporten inte. Gränsen är kontorets egen, vald för det här försöket.
+
+Givarna mätte varken luftdrag eller elevernas upplevelse. Ett lågt värde säger alltså när luften var kall, men inte hur rummet kändes.
+
+Driftteknikern Elin Rask sammanfattar: ”Vi vet när vi behöver titta närmare. Vi vet ännu inte varför det blev kallt just då.”
+
+## Nästa försök behöver mer än givare
+
+Rask rekommenderar att temperaturserierna kopplas till rummens användningstider innan styrningen ändras. Nästa försök planeras för november med likadant placerade givare, men finansieringen är inte beslutad.
+
+Lägg därför tiderna för när rummen används bredvid mätvärdena innan nästa givare sätts upp.
+````
+
+## Fynd
+
+1. **Rubriken drog en slutsats som texten inte drar (åtgärdat).** Den ursprungliga rubriken var ”Mätförsöket visar att Björkskolans klassrum är för kalla”.
+   - **Vad texten faktiskt säger:** 14 av 120 lektionspass hade minst en mätning under fastighetskontorets egen arbetsgräns på 20 grader. Gränsen valdes för just det här försöket. Rapporten anger inte hur länge temperaturen låg under gränsen. Givarna mätte varken luftdrag eller elevernas upplevelse, och mätningarna förklarar inte varför luften var kall.
+   - **Problemet:** Rubriken gjorde enstaka lektionspass till ett bestående tillstånd i klassrummen. Den gjorde också kontorets lokala gräns till omdömet ”för kalla”. Den som bara såg rubriken fick tro att försöket hade fastställt något som texten uttryckligen säger att mätningarna inte räcker till.
+   - **Åtgärd:** Rubriken är omskriven till ”Björkskolans givare visar när luften understeg 20 grader”.
+
+## Påståendena
+
+- **Borttaget:** påståendet att mätförsöket visar att Björkskolans klassrum är för kalla. Rubrikändringen i fynd 1 tog bort det, eftersom fyndet pekade ut just det påståendet som felet.
+- **Ändrat:** rubriken påstår nu att givarna i Björkskolan visar när luften var under 20 grader. Den hänvisar till givarna i stället för till mätförsöket och anger gränsens siffra. Den säger inte att gränsen är fastighetskontorets egen eller att den valdes för försöket. Att gränsen är kontorets egen står i ingressen och i första avsnittet. Att den valdes för försöket står bara i första avsnittet.
+- **Tillagt:** inget.
+
+## Artikelns uppbyggnad
+
+Texten följer artikelanatomin.
+- **Mätt:** mätskriptet, kört på den levererade texten, godkänner de krav som räknas. Rubriken har 56 tecken och 8 ord, och ingressen är ett stycke på 46 ord.
+- **Läst:** jag har också granskat de krav som skriptet inte räknar, utan avvikelser:
+  - ingressen står på egen hand
+  - brödtextens första stycke för texten framåt i stället för att upprepa ingressen
+  - mellanrubrikerna beskriver sina avsnitt
+  - det sista avsnittet är ett avslut med en uppmaning
+
+Utöver rubriken är ingenting ändrat. Korrekturläsningen hittade inga mekaniska fel att rätta, och ingen mellanrubrik, inget stycke och ingen formatering har ändrats. Utöver de två punkterna ovan har inget påstående tagits bort, ändrats eller lagts till.

@@ -1,0 +1,24 @@
+Granskningen hittade ett fynd, och det är åtgärdat. Den rättade texten finns i `output.md`, och `input.md` är orörd. Endast andra meningen i inledningsstycket har ändrats.
+
+**Konfiguration:** genre `article` och språk `sv` kommer båda från anropet. Ingen teknik tillämpades, eftersom genren artikel normalt inte skrivs med någon teknik.
+
+**Fynd (åtgärdat)**
+
+1. **Inledningsstycket** (brödtextens första stycke) gjorde givarnas placering till nyckeln för hur mätningarna ska tolkas (”Det gör placeringen viktig när fastighetskontoret ska tolka …”).
+   - Brödtexten säger aldrig var givarna satt eller hur placeringen påverkar de 14 lektionspassen. Placeringen nämns bara en gång till, där nästa försök ska ha ”likadant placerade givare”. Läsaren väntade sig alltså ett besked som texten aldrig ger.
+   - Texten säger inte var givarna satt. Därför ändrades löftet i inledningsstycket i stället för att en uppgift lades till.
+   - Första meningen, ”En temperaturgivare mäter luften där den sitter.”, är orörd. Den avgränsar vad mätningarna gäller.
+
+Inga olösta fynd återstår.
+
+**Påståenden**
+
+- **Ändrat**, av åtgärden för fynd 1:
+  - **Före:** Inledningsstyckets andra mening sade att placeringen är viktig när fastighetskontoret ska tolka fyra veckors mätningar i Björkskolans sex klassrum.
+  - **Nu:** Den säger att givaren bara mäter luften där den sitter, och att det avgränsar vad fastighetskontoret kan läsa ut av mätningarna.
+  - **Det läsaren förlorar:** det uttryckliga påståendet att placeringen är viktig för tolkningen. Texten säger inte heller längre att kontoret står i begrepp att tolka mätningarna (”ska tolka”), bara vad kontoret kan läsa ut av dem.
+- Inga påståenden togs bort eller lades till.
+
+**Artikelanatomin:** Texten följer anatomin. De räknade gränserna mättes på den slutliga texten och håller alla: rubriken har 48 tecken och 7 ord, ingressen 46 ord och inledningsstycket 33 ord. Jag har också läst igenom de krav som skriptet inte räknar. Ingressen står på egen hand och inledningsstycket för texten framåt. Brödtexten går att förstå utan ingressen. Mellanrubrikerna beskriver sina avsnitt, och sista avsnittet är ett avslut med en uppmaning.
+
+Utöver ändringen ovan skiljer sig den levererade texten inte från originalet. Rubriker, struktur och övrig text är oförändrade, och den avslutande korrekturläsningen gjorde inga mekaniska rättningar.

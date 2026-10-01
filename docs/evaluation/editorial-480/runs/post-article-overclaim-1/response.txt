@@ -1,0 +1,54 @@
+Granskningen gällde genren `article` och språket `sv`, som båda angavs i anropet. Ingen teknik användes: genren article anger ingen teknik som den vanligen skrivs med, och inget annat val pekade ut någon. Ingen skrivbrief valdes. Texten har ingen `kntnt`-metadata, och ingen lades till.
+
+**Fynd**
+
+1. **Rubriken (åtgärdat).** Den ursprungliga rubriken, ”Mätförsöket visar att Björkskolans klassrum är för kalla”, påstod mer än texten har stöd för:
+   - Den gällde alla skolans klassrum.
+   - Den gjorde fastighetskontorets egen arbetsgräns till ett omdöme (”för kalla”).
+   - Den drog en slutsats som texten själv avstår från. Texten säger att ett lågt värde visar när luften var kall men inte hur rummet kändes, och att mätningarna inte förklarar varför luften var kall.
+
+   Den som bara såg rubriken kunde tro att försöket har fastställt att klassrummen är för kalla. Rubriken lyder nu ”Mätförsöket visar när klassrumsluften i Björkskolan var kall”.
+
+Inga fynd står kvar olösta.
+
+**Påståenden**
+
+- **Ändrat: rubriken.** Före stod det att försöket visar att Björkskolans klassrum är för kalla. Det var ett omdöme om klassrummen i presens. Nu står det att försöket visar vid vilka tillfällen luften i Björkskolans klassrum var kall. Det står i preteritum och säger inte att det är för kallt. Ändringen kom från rättningen av rubrikfyndet ovan.
+
+Utöver rubriken har inget påstående tagits bort, ändrats eller lagts till.
+
+**Artikelanatomi**
+
+Texten följer artikelanatomin utan avvikelse. De gränser som går att räkna mättes med skriptet på den levererade texten. Rubriken har 60 tecken och 8 ord, ingressen är ett stycke på 46 ord, och inget stycke eller mellanrubrik går över sin gräns. De krav som skriptet inte räknar granskades genom läsning:
+- att ingressen står på egen hand och säger vad läsaren får
+- att ingressen och det inledande stycket inte upprepar varandra
+- att varje mellanrubrik beskriver sitt avsnitt
+- att sista avsnittet är ett avslut med en uppmaning
+
+**Vad körningen ändrade**
+
+Körningen skrev om rubriken och ändrade inget annat. Den avslutande korrekturen hittade inga mekaniska fel att rätta. `input.md` är orörd, och inga filer finns kvar efter körningen.
+
+````markdown
+# Mätförsöket visar när klassrumsluften i Björkskolan var kall
+
+**Under 14 av 120 lektionspass registrerade givarna i Björkskolan temperaturer under fastighetskontorets egen arbetsgräns. Fyra veckors mätningar pekar ut tillfällen att undersöka närmare, men förklarar inte varför luften var kall. Här är vad ett kort försök kan säga, och vad som behövs för att komma vidare.**
+
+Text: Hedda Lund
+
+En temperaturgivare mäter luften där den sitter. Det gör placeringen viktig när fastighetskontoret ska tolka fyra veckors mätningar i Björkskolans sex klassrum. Genomgången nedan visar vad värdena räcker till och var gränsen går.
+
+## En gräns för det lokala försöket
+
+Kontoret valde 20 grader Celsius som arbetsgräns. Rapporten *Mätförsök i Björkskolan*, daterad 12 mars 2026, räknar 14 lektionspass av 120 med minst en mätning under den gränsen. Hur länge temperaturen låg under den anger rapporten inte. Gränsen är kontorets egen, vald för det här försöket.
+
+Givarna mätte varken luftdrag eller elevernas upplevelse. Ett lågt värde säger alltså när luften var kall, men inte hur rummet kändes.
+
+Driftteknikern Elin Rask sammanfattar: ”Vi vet när vi behöver titta närmare. Vi vet ännu inte varför det blev kallt just då.”
+
+## Nästa försök behöver mer än givare
+
+Rask rekommenderar att temperaturserierna kopplas till rummens användningstider innan styrningen ändras. Nästa försök planeras för november med likadant placerade givare, men finansieringen är inte beslutad.
+
+Lägg därför tiderna för när rummen används bredvid mätvärdena innan nästa givare sätts upp.
+````

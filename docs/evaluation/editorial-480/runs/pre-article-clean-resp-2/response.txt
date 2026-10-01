@@ -1,0 +1,49 @@
+```markdown
+# Mätförsöket i Björkskolan visar när det var kallt, inte varför
+
+**Under 14 av 120 lektionspass registrerade givarna i Björkskolan temperaturer under fastighetskontorets egen arbetsgräns. Fyra veckors mätningar pekar ut tillfällen att undersöka närmare, men förklarar inte varför luften var kall. Här är vad ett kort försök kan säga, och vad som behövs för att komma vidare.**
+
+Text: Hedda Lund
+
+En temperaturgivare mäter luften där den sitter. Det gör placeringen viktig när fastighetskontoret ska tolka fyra veckors mätningar i Björkskolans sex klassrum. Genomgången nedan visar vad värdena räcker till och var gränsen går.
+
+## En gräns för det lokala försöket
+
+Kontoret valde 20 grader Celsius som arbetsgräns. Rapporten *Mätförsök i Björkskolan*, daterad 12 mars 2026, räknar 14 lektionspass av 120 med minst en mätning under den gränsen. Hur länge temperaturen låg under den anger rapporten inte. Gränsen är kontorets egen, vald för det här försöket.
+
+Givarna mätte varken luftdrag eller elevernas upplevelse. Ett lågt värde säger alltså när luften var kall, men inte hur rummet kändes.
+
+Driftteknikern Elin Rask sammanfattar: ”Vi vet när vi behöver titta närmare. Vi vet ännu inte varför det blev kallt just då.”
+
+## Nästa försök behöver mer än givare
+
+Rask rekommenderar att temperaturserierna kopplas till rummens användningstider innan styrningen ändras. Nästa försök planeras för november med likadant placerade givare, men finansieringen är inte beslutad.
+
+Lägg därför tiderna för när rummen används bredvid mätvärdena innan nästa givare sätts upp.
+```
+
+Texten granskades som genren article på svenska (sv), båda angivna i anropet. Ingen teknik tillämpades, eftersom genren article inte anger någon teknik som den vanligen skrivs med. Ingen brief användes.
+
+**Fynd**
+
+1. **Rubriken (åtgärdad).** Den inkomna rubriken, ”Mätförsöket i Björkskolan visar när, inte varför”, sade inte vad ”när” och ”varför” syftade på. Den som bara ser rubriken, till exempel i en lista eller ett sökresultat, kunde inte avgöra att texten handlar om temperaturen i skolan; det fick standfirsten fylla i. Rubriken lyder nu ”Mätförsöket i Björkskolan visar när det var kallt, inte varför”.
+
+Inga fynd kvarstår.
+
+**Påståendena**
+
+- **Ändrat påstående: rubriken.** Rubriken påstår nu att mätförsöket i Björkskolan visar när det var kallt, men inte varför. Ändringen kommer från åtgärden av fynd 1.
+  - ”Kallt” är textens eget ord: ”när luften var kall” i brödtexten och ”varför det blev kallt” i Rasks citat.
+  - Det opersonliga ”det var kallt” kan läsas som att det var kallt i rummen eller i skolan. Texten säger något snävare: givaren mäter luften där den sitter, och ett lågt värde visar när luften var kall men inte hur rummet kändes. Rubriken kan därför läsas som ett bredare påstående än texten bär, nämligen kyla i allmänhet i stället för luft under en gräns vid givaren.
+  - Rubriken nämner inte arbetsgränsen på 20 grader eller att gränsen är kontorets egen; det står i standfirsten och brödtexten.
+  - Den inkomna rubrikens ”när” kunde också läsas som ”när man behöver titta närmare”, i linje med standfirstens ”tillfällen att undersöka närmare” och Rasks ”Vi vet när vi behöver titta närmare”. Den läsningen finns inte kvar i rubriken, där ”när” nu bara gäller kylan.
+
+Utöver rubriken togs inget påstående bort, ändrades eller lades till.
+
+**Artikelanatomin**
+
+Den levererade rubriken är 62 tecken och 10 ord. Den uppfyller kravet på 20–70 tecken men går över två bör-normer: högst 60 tecken och tre till åtta ord. Den inkomna rubriken (48 tecken, 7 ord) låg inom båda normerna. Avvikelsen bedömdes som motiverad, eftersom ingen kortare rubrik hittades som behöll både skolan, ”när” och ”varför”.
+
+Även de anatomikrav som mätningen inte räknar granskades: att standfirsten står på egen hand, att ingressen för texten framåt, att mellanrubrikerna beskriver sina avsnitt och att sista avsnittet är en avslutning med en uppmaning. Texten följer artikelanatomin, med avvikelse från de två bör-normerna för rubriken.
+
+Utöver rubriken ändrades ingenting. Standfirst, byline, ingress, mellanrubriker och brödtext är ordagrant som de kom in, och den avslutande korrekturläsningen hittade inga mekaniska fel att rätta.

@@ -1,0 +1,13 @@
+Texten finns nu i `output.md`.
+
+Konfiguration: genre `article` och språk `sv`, båda från anropet. Ingen teknik tillämpades – artikelgenren anger att den normalt skrivs utan teknik. Ingen brief valdes.
+
+Granskningen gav inga redaktionella fynd. Därför kördes ingen korrigeringsomgång, och korrigeringsbudgeten (1) användes inte. Den avslutande korrekturläsningen gjorde inga mekaniska ändringar. Texten i `output.md` är byte för byte identisk med `input.md`.
+
+Texten följer artikelns anatomi utan avvikelser. Mätskriptet rapporterar inga brister och inga normavvikelser i den levererade texten: rubriken har 46 tecken och 5 ord, ingressen har 46 ord i ett stycke och brödtextens första stycke har 33 ord. De krav som skriptet inte räknar kontrollerades genom läsning:
+- ingressen står på egen hand
+- första stycket upprepar inte ingressen
+- mellanrubrikerna beskriver sina avsnitt
+- sista avsnittet är ett avslut med en uppmaning som följer av innehållet.
+
+Inga påståenden har tagits bort, ändrats eller lagts till.

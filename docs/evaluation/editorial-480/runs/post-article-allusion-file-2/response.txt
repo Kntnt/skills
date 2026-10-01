@@ -1,0 +1,17 @@
+Jag har gått igenom `input.md` och skrivit resultatet till `output.md`. Texten är oförändrad, eftersom granskningen inte gav några anmärkningar och den mekaniska slutpassagen inte hittade några fel. Korrigeringsbudgeten (1) användes alltså inte.
+
+**Inställningar:** genren artikel och språket svenska, båda från anropet. Ingen berättarteknik användes, eftersom genren artikel inte anger någon.
+
+**Artikelns uppbyggnad:** texten följer artikelmallen utan avvikelser.
+- **Mätta gränser:** mätskriptet godkänner alla räknade gränser.
+  - Rubriken har 46 tecken och fem ord.
+  - Ingressen är ett stycke på 46 ord.
+  - Mellanrubrikerna har 32 och 34 tecken.
+  - Inget stycke i brödtexten är längre än 45 ord.
+- **Lästa krav:** de krav som skriptet inte räknar har jag bedömt genom att läsa texten.
+  - Ingressen går att förstå på egen hand.
+  - Ingressen och första stycket säger inte samma sak.
+  - Båda mellanrubrikerna beskriver sina avsnitt.
+  - Sista avsnittet avslutar texten med en uppmaning som följer av innehållet.
+
+Inga anmärkningar återstår. Inga påståenden har tagits bort, ändrats eller lagts till.

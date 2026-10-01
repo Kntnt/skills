@@ -1,0 +1,15 @@
+lane	run	arm	revision	input	invocation	capture
+A	post-article-clean-resp-1	post	f39a3721	docs/evaluation/corpus/editorial-quality/controls/article-clean.md	/redline --genre=article --language=sv --output=response input.md	no
+A	post-article-clean-file-1	post	f39a3721	docs/evaluation/corpus/editorial-quality/controls/article-clean.md	/redline --genre=article --language=sv --output=output.md input.md	yes
+A	post-article-clean-resp-2	post	f39a3721	docs/evaluation/corpus/editorial-quality/controls/article-clean.md	/redline --genre=article --language=sv --output=response input.md	no
+A	post-article-clean-file-2	post	f39a3721	docs/evaluation/corpus/editorial-quality/controls/article-clean.md	/redline --genre=article --language=sv --output=output.md input.md	yes
+A	post-article-clean-resp-3	post	f39a3721	docs/evaluation/corpus/editorial-quality/controls/article-clean.md	/redline --genre=article --language=sv --output=response input.md	no
+A	post-article-clean-file-3	post	f39a3721	docs/evaluation/corpus/editorial-quality/controls/article-clean.md	/redline --genre=article --language=sv --output=output.md input.md	yes
+B	post-article-allusion-resp-1	post	f39a3721	docs/evaluation/editorial-480/inputs/article-allusion.md	/redline --genre=article --language=sv --output=response input.md	no
+B	post-article-allusion-file-1	post	f39a3721	docs/evaluation/editorial-480/inputs/article-allusion.md	/redline --genre=article --language=sv --output=output.md input.md	yes
+B	post-article-allusion-resp-2	post	f39a3721	docs/evaluation/editorial-480/inputs/article-allusion.md	/redline --genre=article --language=sv --output=response input.md	no
+B	post-article-allusion-file-2	post	f39a3721	docs/evaluation/editorial-480/inputs/article-allusion.md	/redline --genre=article --language=sv --output=output.md input.md	yes
+C	post-article-unnamed-1	post	f39a3721	docs/evaluation/editorial-480/inputs/article-unnamed.md	/redline --genre=article --language=sv --output=response input.md	no
+C	post-article-unnamed-2	post	f39a3721	docs/evaluation/editorial-480/inputs/article-unnamed.md	/redline --genre=article --language=sv --output=response input.md	no
+D	post-article-overclaim-1	post	f39a3721	docs/evaluation/editorial-480/inputs/article-overclaim.md	/redline --genre=article --language=sv --output=response input.md	no
+D	post-article-overclaim-2	post	f39a3721	docs/evaluation/editorial-480/inputs/article-overclaim.md	/redline --genre=article --language=sv --output=response input.md	no

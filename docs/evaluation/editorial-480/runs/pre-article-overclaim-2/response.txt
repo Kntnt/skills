@@ -1,0 +1,69 @@
+Jag har granskat texten som genren `article` på `sv`, enligt anropet. Ingen teknik användes, eftersom artikelgenren inte anger någon som den normalt skrivs med, och ingen skrivbrief användes. Korrigeringsbudgeten var 1 och har gått åt: rubriken är rättad, men ett fynd är kvar. Inga filer har skrivits, och `input.md` är orörd.
+
+````markdown
+# Mätförsöket visar när luften i Björkskolan var kall
+
+**Under 14 av 120 lektionspass registrerade givarna i Björkskolan temperaturer under fastighetskontorets egen arbetsgräns. Fyra veckors mätningar pekar ut tillfällen att undersöka närmare, men förklarar inte varför luften var kall. Här är vad ett kort försök kan säga, och vad som behövs för att komma vidare.**
+
+Text: Hedda Lund
+
+En temperaturgivare mäter luften där den sitter. Det gör placeringen viktig när fastighetskontoret ska tolka fyra veckors mätningar i Björkskolans sex klassrum. Genomgången nedan visar vad värdena räcker till och var gränsen går.
+
+## En gräns för det lokala försöket
+
+Kontoret valde 20 grader Celsius som arbetsgräns. Rapporten *Mätförsök i Björkskolan*, daterad 12 mars 2026, räknar 14 lektionspass av 120 med minst en mätning under den gränsen. Hur länge temperaturen låg under den anger rapporten inte. Gränsen är kontorets egen, vald för det här försöket.
+
+Givarna mätte varken luftdrag eller elevernas upplevelse. Ett lågt värde säger alltså när luften var kall, men inte hur rummet kändes.
+
+Driftteknikern Elin Rask sammanfattar: ”Vi vet när vi behöver titta närmare. Vi vet ännu inte varför det blev kallt just då.”
+
+## Nästa försök behöver mer än givare
+
+Rask rekommenderar att temperaturserierna kopplas till rummens användningstider innan styrningen ändras. Nästa försök planeras för november med likadant placerade givare, men finansieringen är inte beslutad.
+
+Lägg därför tiderna för när rummen används bredvid mätvärdena innan nästa givare sätts upp.
+````
+
+### Fynd
+
+1. **Rubriken: åtgärdat.** Den tidigare rubriken ”Mätförsöket visar att Björkskolans klassrum är för kalla” påstod mer än texten gör.
+   - Texten redovisar 14 av 120 lektionspass med minst en mätning under en arbetsgräns som kontoret själv valt för just det här försöket.
+   - Den säger också att rapporten inte anger hur länge temperaturen låg under gränsen och att givarna varken mätte luftdrag eller elevernas upplevelse.
+   - Den säger dessutom att mätningarna inte förklarar varför luften var kall.
+
+   Rubriken gjorde detta till ett allmänt omdöme om skolans klassrum, och det omdömet drar texten aldrig. Den som bara såg rubriken fick alltså veta något som texten inte påstår. Den nya rubriken bygger på textens egen formulering: ”Ett lågt värde säger alltså när luften var kall”.
+
+2. **Ingressen: olöst.** Meningen ”Det gör placeringen viktig när fastighetskontoret ska tolka fyra veckors mätningar i Björkskolans sex klassrum” säger att givarnas placering är viktig för hur mätningarna ska tolkas.
+   - Ingen mening i brödtexten säger var givarna satt.
+   - Avsnittet om nästa försök talar om ”likadant placerade givare” utan att placeringen har beskrivits.
+
+   Läsaren kan därför inte bedöma vad mätvärdena står för. Uppgiften finns inte i texten och har inte lagts till. Den behöver komma från någon som har underlaget.
+
+### Påståenden
+
+- **Borttaget:** att Björkskolans klassrum är för kalla, och att det gäller klassrummen i allmänhet. Påståendet stod i rubriken och togs bort när fynd 1 åtgärdades, eftersom det var just det fyndet gällde.
+- **Ändrat:** rubriken påstår nu att mätförsöket visar när luften i Björkskolan var kall. Ändringen gjordes när fynd 1 åtgärdades.
+- **Tillagt:** inget.
+
+Utöver rubriken har inga påståenden tagits bort, ändrats eller lagts till.
+
+### Artikelanatomi
+
+Texten följer artikelanatomin. Mätskriptet hittar inga fel i de krav det räknar i den levererade texten:
+- Rubriken har 51 tecken och 8 ord.
+- Standfirsten är ett enda stycke på 46 ord.
+- Ingressen har 33 ord.
+- Inget stycke i brödtexten är längre än 45 ord.
+
+De krav som skriptet inte räknar har jag kontrollerat genom att läsa texten, och de är uppfyllda:
+- Standfirsten går att förstå på egen hand.
+- Ingressen börjar med andra ord än standfirsten och för texten framåt.
+- Brödtexten fungerar utan standfirsten.
+- Båda mellanrubrikerna beskriver sina avsnitt.
+- Det sista avsnittet är ett avslut med en uppmaning som följer av innehållet.
+
+Fynd 2 gäller vad ingressen lovar om placeringen. Ingen del av anatomin saknas.
+
+### Vad som ändrades
+
+Körningen har bara ändrat rubriken, och resten av texten är oförändrad. Slutkorrekturen hittade inga mekaniska fel att rätta.

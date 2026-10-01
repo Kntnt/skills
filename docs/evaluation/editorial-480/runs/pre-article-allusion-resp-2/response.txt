@@ -1,0 +1,7 @@
+Ingen ändring behövdes i `input.md`.
+
+- **Granskningen:** Texten granskades som genren artikel på svenska, båda angivna i anropet. Ingen berättarteknik tillämpades, eftersom genren artikel inte anger någon och ingen annan nivå valde en. Granskningen hittade inga fel att rätta, så rättningsbudgeten (1) användes inte.
+- **Artikelns uppbyggnad:** Texten följer artikelns uppbyggnad utan avvikelser. Rubrikerna, längderna och antalet stycken mättes med skript. Det som inte går att räkna lästes igenom: att ingressen fungerar på egen hand, att ingress och inledning inte upprepar varandra, att mellanrubrikerna beskriver sina avsnitt och att sista avsnittet är ett slut med en uppmaning.
+- **Korrekturläsningen:** Den avslutande korrekturläsningen hittade inga stavnings-, grammatik- eller skiljeteckenfel.
+
+Inget skrevs till disk, och de tillfälliga filerna är borttagna.

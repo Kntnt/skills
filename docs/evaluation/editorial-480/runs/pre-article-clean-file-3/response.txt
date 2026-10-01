@@ -1,0 +1,8 @@
+Granskningen gav inga fynd, så texten skrevs oförändrad till `output.md`. Den är byte för byte identisk med `input.md`.
+
+- **Granskning:** Texten granskades mot artikelgenren, svensk språkvägledning, rubrikregler, artikelanatomin och anti-slop-katalogen. Det gav inga fynd, så korrigeringsbudgeten (en korrigering) användes inte.
+- **Korrekturläsning:** Den avslutande mekaniska passagen kördes en gång och hittade inga fel.
+- **Konfiguration:** Genren `article` och språket `sv` (svenska) kommer båda från anropet. Ingen teknik tillämpades, eftersom artikelgenren inte anger någon teknik som den vanligen skrivs med. Texten har ingen `kntnt`-karta, och ingen lades till.
+- **Artikelanatomin:** Texten följer anatomin utan avvikelse. Rubrik, ingress, byline, brödtextens inledande stycke, ett avsnitt och ett avslutande avsnitt med uppmaning till läsaren står i rätt ordning. Mätskriptet rapporterar inga överskridna gränser och inga normavvikelser i den levererade texten.
+
+Inga påståenden har tagits bort, ändrats eller lagts till. Alla tillfälliga filer från körningen är borttagna.

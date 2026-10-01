@@ -1,0 +1,6 @@
+Texten behövde ingen ändring. Den uppfyller artikelns krav och lämnas som den kom. Ingenting har skrivits till disk och `input.md` är orörd.
+
+- **Granskningen:** Den hittade inga redaktionella brister, så ingen korrigeringsrunda kördes.
+- **Korrekturläsningen:** Den hittade inga mekaniska fel.
+- **Inställningar:** Genren är `article` och språket svenska (`sv`), båda angivna i anropet. Ingen teknik används, eftersom genren `article` inte anger någon och ingen valdes på annat sätt.
+- **Artikelns uppbyggnad:** Texten följer den utan avvikelse. Mätskriptet godkänner alla gränser som går att räkna. Jag har också läst de krav som inte kan räknas: ingressen fungerar på egen hand, mellanrubrikerna beskriver sina avsnitt och sista avsnittet är ett riktigt slut med en uppmaning till läsaren.

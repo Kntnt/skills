@@ -1,0 +1,5 @@
+Ingen ändring behövdes i `input.md`. Granskningen fann inga redaktionella brister och den mekaniska korrekturen inga fel, så korrigeringsbudgeten (1) användes inte och ingenting har skrivits.
+
+Inställningar: genren `article` och språket `sv` kom från anropet. Ingen teknik tillämpades, eftersom genren `article` inte anger någon.
+
+Texten följer artikelanatomin utan avvikelser. Det gäller både de mätbara gränserna och de krav som granskats genom läsning: att ingressen står på egen hand, att mellanrubrikerna beskriver sina avsnitt och att sista avsnittet är ett avslut.

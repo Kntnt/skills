@@ -1,0 +1,32 @@
+I've written the file and checked my report against it. The checker caught three false statements in my draft, and the version below fixes them.
+
+Granskad som **article** på **svenska**, båda angivna i anropet. Ingen teknik används: artikelgenren säger att den normalt skrivs utan teknik, och inget annat valde någon.
+
+Texten är skriven till `output.md` och är byte för byte identisk med `input.md`. Granskningen gav ett fynd, och det är olöst. Korrigeringsbudgeten (1) gick åt till fyndet, men det gick inte att åtgärda utan uppgifter som texten saknar. Korrekturläsningen hittade inga mekaniska fel.
+
+**Olöst fynd**
+
+1. *Brödtextens första stycke och slutavsnittet.* ”Det gör placeringen viktig när fastighetskontoret ska tolka fyra veckors mätningar i Björkskolans sex klassrum.” Texten säger att placeringen är viktig för tolkningen, och att en givare mäter luften där den sitter. Men den säger aldrig var givarna satt. Slutavsnittets ”med likadant placerade givare” förutsätter ändå att läsaren vet vilken placering det gäller.
+   - **Vad läsaren förlorar:** läsaren väntar sig en redovisning av placeringen som aldrig kommer. Hon kan inte heller avgöra om samma placering i nästa försök är en svaghet eller en förutsättning för jämförbara mätningar.
+   - **Vad som behövs:** var givarna satt, och om placeringen var ett problem. Meningen ”En temperaturgivare mäter luften där den sitter.” avgränsar vad värdena säger och ska stå kvar.
+
+**Artikelanatomin**
+
+Mätskriptet hittar inga brott mot de räknade kraven:
+- Rubriken har 48 tecken och 7 ord.
+- Ingressen har 46 ord i ett stycke.
+- Inget stycke i brödtexten har fler än 45 ord.
+- Båda avsnitten har två eller tre stycken.
+
+Jag har också läst de krav som skriptet inte räknar:
+- ordningen
+- att ingressen står på egen hand
+- att brödtextens första stycke för texten vidare
+- att mellanrubrikerna beskriver sina avsnitt
+- att sista avsnittet är ett slut med en uppmaning
+
+De håller med ett undantag. Slutet visar inte att förväntningen från brödtextens första stycke är infriad, eftersom placeringen aldrig redovisas (fynd 1).
+
+**Påståenden**
+
+Inget påstående har tagits bort, ändrats eller lagts till, eftersom texten är oförändrad.
