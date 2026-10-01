@@ -1,0 +1,15 @@
+{
+  "p02": {
+    "paired_write": "w02",
+    "supplied_input_path": "/Users/thomas/Projects/skills/.git/evaluation-staging/6aea5e5c345f4ad3af4192edfeceff10/w02/delivered.md",
+    "sha256": "d218cf74e9682bb7f4dd6228e62b35172d99f0aa12f2005dfda9f02a2805ef14",
+    "includes": "exact delivered artifact including frontmatter",
+    "excludes": [
+      "source package",
+      "Write reply",
+      "evaluator findings"
+    ],
+    "planned_invocation": "/redline --output=response input.md",
+    "product_revision": "fb16908712c4d47a36fc6ee9dfb3eb2714a19e65"
+  }
+}

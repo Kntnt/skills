@@ -153,5 +153,11 @@
     "counted": true,
     "delivered": true,
     "disposition": "completed-file-artifact"
+  },
+  "w02": {
+    "counted": true,
+    "delivered": true,
+    "disposition": "completed-artifact",
+    "known_findings_reported": true
   }
 }
