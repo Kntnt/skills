@@ -1,0 +1,82 @@
+I reviewed and corrected the text using the one correction round allowed. Two findings are still open: the text has no standfirst, and the figures have no source. `input.md` is unchanged, and the run left no files behind. The report below is in Swedish, the language of the text.
+
+```markdown
+# Ge telefonbokningen av kommunens lokaler ett halvår till
+
+Sanna Ek, Öppna beslut
+
+Kommunstyrelsen borde behålla telefonbokning under ett halvårs försök i alla sju lokaler.
+
+## Var femte bokning kom via telefon, från okänt antal personer
+
+Det gjordes 96 bokningar på webben och 24 via telefon. Det betyder att 20 procent av bokningarna gjordes via telefon. Kommunens pilotrapport från den 8 april 2026 säger samtidigt att bokningarna inte räknar unika personer och att digital vana inte undersöktes.
+
+## Förvaltningens invändning om merarbete saknar tidsmätning
+
+Förvaltningen invänder att dubbla kanaler innebär dubbel administration. Handlingarna saknar tidsmätning. Föreningen Öppna beslut vill att förvaltningen mäter tidsåtgång och frågar användarna varför de väljer en bokningsväg. Försökets kostnad är inte beräknad.
+
+## Kommunstyrelsen kan fatta beslutet
+
+Nu är det dags för kommunstyrelsen att behålla telefonbokningen under ett halvårs försök i alla sju lokaler.
+```
+
+Genren (opinion) och språket (sv) angavs i anropet. Ingen teknik användes: anropet angav ingen, och opinionsgenren skrivs inte vanligen med någon. Ingen skrivbrief användes. Korrigeringsbudgeten var en runda och är förbrukad.
+
+**Olösta fynd**
+
+1. **Ingress saknas.** Mellan rubriken och bylinen saknas ett sammanfattande stycke som står på egna ben. En granskning skriver inte en del som saknas, så den lämnas åt skribenten.
+2. **Siffrorna saknar källa och period.** Siffrorna 96 och 24 bär argumentet men har varken källa eller tidsperiod. De står i första meningen under ”Var femte bokning kom via telefon, från okänt antal personer”.
+   - Pilotrapporten nämns i samma stycke, men bara för sina begränsningar, och texten säger inte uttryckligen att siffrorna kommer därifrån.
+   - Att tillskriva dem rapporten vore att lägga till en attribuering, och perioden finns inte i texten. Skribenten behöver ange båda.
+
+**Åtgärdade fynd**
+
+- **Rubriken** ”Kommunledningen hatar människor” tillskrev kommunledningen ett motiv som texten inte belägger. Den var också högre i tonen än texten och sa inget om vad texten handlar om. Den lyder nu ”Ge telefonbokningen av kommunens lokaler ett halvår till”.
+- **Inledningens andra mening** är borttagen: ”Alla vet att politikerna vill stänga ute äldre för att spara miljoner.” Den var en anonym auktoritet med ett påhittat motiv. Påståendena om äldre och om en miljonbesparing saknade stöd, och texten säger själv att kostnaden inte är beräknad.
+- **Andra meningen under ”Bakgrund”** är omskriven. Den gjorde 20 procent av bokningarna till 20 procent av invånarna och lade till en orsak, vilket nästa mening om pilotrapporten motsade. Meningen om rapporten står kvar oförändrad.
+- **Tredje meningen under ”Diskussion”** är borttagen: ”Därför kostar det ingenting att behålla telefonbokningen.” Den drog en slutsats som den saknade tidsmätningen inte bär. Den motsades också av ”Försökets kostnad är inte beräknad.”
+- **Underrubrikerna** ”Bakgrund” och ”Diskussion” angav avsnittens funktion men inte vad avsnitten säger. De lyder nu ”Var femte bokning kom via telefon, från okänt antal personer” och ”Förvaltningens invändning om merarbete saknar tidsmätning”.
+- **Avslutningen** ”Nu är det dags att agera.” angav varken handling eller aktör, och den stod i ett avsnitt som förde fram argument. Den har nu ett eget avsnitt under den nya underrubriken ”Kommunstyrelsen kan fatta beslutet”. Där anger den handlingen och aktören ur inledningens förslag.
+- **”Föreningen”** i avsnittet om förvaltningens invändning var inte presenterad i brödtexten, och bara bylinen antydde vem som avsågs. Där står nu ”Föreningen Öppna beslut”.
+
+**Påståenden som tagits bort**
+
+- **Ur rubriken:** att kommunledningen hatar människor. Rubrikens reparation tog bort det.
+- **Ur inledningen:** tre påståenden, nämligen att detta är allmänt känt, att politikerna vill stänga ute äldre och att de vill spara miljoner. Reparationen av inledningens andra mening tog bort dem. Fyndet gällde hela påståendet.
+- **Ur ”Bakgrund”:** att siffrorna bevisar att 20 procent av kommunens invånare inte kan använda internet. Reparationen tog bort både invånarandelen och orsaken. Vad meningen nu säger står under ändrade påståenden.
+- **Ur ”Diskussion”:** att det inte kostar någonting att behålla telefonbokningen. Med meningen försvann konnektivet ”Därför”, alltså textens egen koppling mellan den saknade tidsmätningen och slutsatsen.
+  - Brödtexten har därmed inget direkt motargument mot förvaltningens invändning. Den ställer bara invändningen, den saknade tidsmätningen, föreningens krav och den oberäknade kostnaden efter varandra.
+  - Motargumentet finns nu i annan form i underrubriken (se tillagda påståenden).
+
+**Påståenden som ändrats**
+
+- **Rubriken** påstår nu att telefonbokningen av kommunens lokaler bör få ett halvår till. Förslaget kommer från inledningen, men rubriken säger mer och mindre än inledningen. Ändringen kommer från rubrikens reparation.
+  - Den kallar inte längre halvåret ett försök utan begär en förlängning, och ”till” förutsätter att telefonbokning redan funnits.
+  - Den begränsar inte förslaget till sju lokaler. ”Kommunens lokaler” utan antal kan läsas som alla kommunens lokaler. Den som bara läser rubriken vet alltså inte att förslaget är ett försök eller att det bara gäller sju lokaler.
+- **Andra meningen under första underrubriken** påstår nu att 20 procent av bokningarna gjordes via telefon. Det är en andel av bokningarna och inte av invånarna, och meningen anger ingen orsak. ”Bevisar” har blivit ”betyder”. Ändringen kommer från reparationen av den brutna slutledningen.
+- **Kravet** att förvaltningen ska mäta tidsåtgång och fråga användarna tillskrivs nu uttryckligen Öppna beslut. Tidigare stod det ”Föreningen”, och namnet fanns bara i bylinen. Ändringen kommer från reparationen av den ej presenterade föreningen.
+- **Avslutningen** påstår nu att det är dags för kommunstyrelsen att behålla telefonbokningen under ett halvårs försök i alla sju lokaler. Tidigare sa den bara att det var dags att agera. Handlingen och aktören kommer från inledningen, och ändringen från reparationen av avslutningen.
+
+**Påståenden som lagts till**
+
+- **Underrubriken ”Var femte bokning kom via telefon, från okänt antal personer”** påstår att var femte bokning kom via telefon och att antalet personer bakom bokningarna är okänt. Andelen motsvarar 24 av 120 bokningar. Att antalet personer är okänt bygger på rapportens uppgift att bokningarna inte räknar unika personer. Påståendet kommer från reparationen av underrubrikerna.
+- **Underrubriken ”Förvaltningens invändning om merarbete saknar tidsmätning”** påstår att förvaltningens invändning saknar stöd i tidsmätning. Påståendet kommer från reparationen av underrubrikerna.
+  - Brödtexten säger bara att handlingarna saknar tidsmätning, direkt efter invändningen.
+  - Underrubriken kallar också invändningen en invändning om merarbete, medan brödtexten säger ”dubbel administration”.
+- **Underrubriken ”Kommunstyrelsen kan fatta beslutet”** påstår att kommunstyrelsen kan fatta beslutet att behålla telefonbokningen. Inledningen förutsätter det med ”borde behålla” men säger det inte. Påståendet kommer från reparationen av avslutningen.
+
+Utöver de påståenden som redovisas ovan har ingen annan mening i texten ändrats.
+
+**Artikelanatomin**
+
+Mätningen av den levererade texten visar en enda brist bland de räknade kraven: ingressen saknas.
+
+- Rubriken har 56 tecken och 8 ord.
+- Underrubrikerna har 60, 57 och 34 tecken.
+- Varje avsnitt har ett stycke.
+
+Eftersom ingressen saknas har dess övriga krav inte kunnat prövas, till exempel att den står på egna ben och samspelar med inledningen. Därför rapporteras texten inte som förenlig med artikelanatomin.
+
+**Sammanfattning av ändringarna**
+
+Utöver redovisningen av påståendena har körningen ersatt rubriken och båda underrubrikerna. Den har flyttat avslutningen till ett eget avsnitt under en ny underrubrik och tagit bort en anonym auktoritet och två påståenden som texten inte bär. Den har också skrivit om en mening med en bruten slutledning, gjort en allmän slutuppmaning konkret och namngett föreningen i brödtexten. Den avslutande korrekturläsningen gjorde inga ändringar.

@@ -1,0 +1,20 @@
+Two of the 18 calls were refused, both times while the directory being deleted was the shell's current working directory. All the other calls ran.
+
+1. Ran. `<T>` = `/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-6xz3j4ru/scratch/tmp` and `<W>` = `/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-editorial-388-run-6xz3j4ru/work`.
+2. Ran. Printed `<T>/a`, and the working directory changed to `<T>/a`.
+3. Ran. Printed `<T>/a`.
+4. Refused: "Dangerous rm operation detected: '<T>/a'. This command would remove a workspace directory (the working directory, an additional working directory, or one of their parent directories). This requires explicit approval and cannot be auto-allowed by permission rules."
+5. Ran with no output. The working directory went back to `<W>` and `<T>/a` was deleted.
+6. Ran with no output.
+7. Ran. Printed `<W>`.
+8. Ran with no output. `<T>/a` was already gone after item 5.
+9. Ran with no output.
+10. Ran with no output.
+11. Ran with no output.
+12. Ran. Printed `<T>/c`, and the working directory changed to `<T>/c`.
+13. Ran with no output.
+14. Refused: "Dangerous rmdir operation detected: '<T>/c'. This command would remove a workspace directory (the working directory, an additional working directory, or one of their parent directories). This requires explicit approval and cannot be auto-allowed by permission rules."
+15. Ran with no output. The working directory went back to `<W>`.
+16. Ran with no output, so `<T>/c` was deleted.
+17. Ran. Printed `exit 0`.
+18. Ran. `<T>` is empty: only `.` and `..` are listed.

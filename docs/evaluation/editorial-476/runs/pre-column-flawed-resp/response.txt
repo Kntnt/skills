@@ -1,0 +1,46 @@
+**Konfiguration:** genre `column` och språk `sv`, båda från anropet. Ingen teknik: krönikegenren anger ingen teknik som den vanligen skrivs med, och inget annat led valde någon. Korrigeringsbudgeten (1) är förbrukad. Texten följer inte artikelanatomin, eftersom ingress, avsnitt, avslutande avsnitt och uppmaning saknas.
+
+````markdown
+# Mötesmallen rymmer inte vad vi ska förstå tillsammans
+
+Nora Vik
+
+Förra tisdagen satt jag gråtande i bibliotekets mötesrum när min chef sade: ”Nu måste allt bli digitalt.” Det var mitt första möte om vår nya mötesmall. Jag har aldrig deltagit i något möte om vår nya mötesmall.
+
+Vår mötesmall har plats för starttid och sluttid men inte för vad vi ska förstå tillsammans.
+
+Samtal kan ha värde utan att leda till beslut. Jag vill prova frågan vad vi behöver förstå tillsammans, men jag vet inte om ytterligare en ruta gör möten bättre.
+````
+
+## Olösta fynd
+
+Dessa finns kvar i den levererade texten.
+
+5. **Motsägelse i inledningsstycket.** ”Det var mitt första möte om vår nya mötesmall.” och ”Jag har aldrig deltagit i något möte om vår nya mötesmall.” säger emot varandra. Texten avgör inte vilken mening som gäller, så bara skribenten kan rätta det.
+6. **Scenen knyts inte till tanken.** Gråten och chefens ”Nu måste allt bli digitalt.” återkommer aldrig. Läsaren får inte veta varför scenen spelar roll för reflektionen om mötesmallen. En koppling går inte att skriva utan att hitta på motiv eller händelser.
+7. **Ingress saknas.** Krönikan har ingen sammanfattande ingress. Delar som saknas skrivs inte vid en granskning.
+8. **Mellanrubriker och avsnitt saknas**, även det avslutande avsnittet med egen mellanrubrik. Därför läser mätningen hela brödtexten (tre stycken, 82 ord) som en enda inledning. Det beror enbart på att avsnitten saknas.
+9. **Uppmaning till läsaren saknas.** Texten säger vad skribenten själv vill prova, men ger läsaren inget att prova, lägga märke till eller ompröva.
+
+## Reparerade fynd
+
+1. **Rubriken.** ”Möten förändrar allt” drog en slutsats som texten aldrig drar. Ingenstans påstår den att möten förändrar något, och rubriken hade kunnat stå över vilken text om möten som helst. Den nya rubriken bygger på textens vinkel: ”Mötesmallen rymmer inte vad vi ska förstå tillsammans” (53 tecken, 8 ord). Orden ”vad vi ska förstå tillsammans” är textens egna. ”Rymmer inte” återger andra styckets ”har plats för … men inte för”.
+2. **Tom inledning i andra stycket.** ”I dagens snabbt föränderliga värld är möten viktigare än någonsin.” kunde stå före vilken text som helst, och inget i texten stöder påståendet. Meningen är struken.
+3. **Tom utfyllnad i andra stycket.** ”Det är viktigt att vara viktig.” sade ingenting om ämnet. Meningen är struken.
+4. **Generisk avslutning.** Sista stycket, ”Sammanfattningsvis är möten viktigare än någonsin i dagens snabbt föränderliga värld.”, upprepade i sak meningen i fynd 2. Det ersatte också krönikans ärliga osäkerhet med en floskel. Stycket är struket. Texten slutar nu med skribentens tvekan om huruvida ytterligare en ruta gör möten bättre.
+
+## Påståenden
+
+**Borttagna påståenden**
+- Att möten är viktigare än någonsin i dagens snabbt föränderliga värld (”I dagens snabbt föränderliga värld är möten viktigare än någonsin.”). Borttaget när fynd 2 reparerades. Fyndet pekade ut hela påståendet som felet.
+- Att det är viktigt att vara viktig (”Det är viktigt att vara viktig.”). Borttaget när fynd 3 reparerades.
+- Samma påstående om mötens ökade vikt en gång till, i slutstycket som började med ”Sammanfattningsvis”. Borttaget när fynd 4 reparerades.
+
+**Ändrade påståenden**
+- Rubriken påstod att möten förändrar allt. Nu påstår den att mötesmallen inte rymmer vad vi ska förstå tillsammans, alltså det som andra stycket säger. Ändrad när fynd 1 reparerades.
+
+**Tillagda påståenden:** inga.
+
+Utöver dessa har inga påståenden tagits bort, ändrats eller lagts till.
+
+Körningen har också strukit floskler (en tom inledning, en tom utfyllnadsmening och en generisk avslutning) och skrivit om rubriken. Den avslutande korrekturen hittade inga mekaniska fel och ändrade ingenting. Byline, inledningsstycket, den kvarvarande meningen i andra stycket och tredje stycket står ordagrant som de kom. `input.md` är orörd, och inga arbetsfiler finns kvar.

@@ -1,0 +1,51 @@
+Den granskade texten finns i `output.md`. `input.md` är orörd.
+
+**Konfiguration.** Genre `opinion` och språk `sv` kommer båda från anropet. Ingen teknik används, eftersom opinion-genren inte anger någon teknik som den vanligen skrivs med och inget annat angav någon. Den enda korrigeringsrundan (budget 1) användes och godtogs efter ny granskning. Den avslutande korrekturläsningen ändrade ingenting.
+
+## Olösta fynd
+
+1. **Ingressen saknas.** Mellan rubriken och bylinen finns inget sammanfattande stycke, så en läsare som skummar får ingen fristående sammanfattning av vad texten handlar om och vad den vill. Ingressen har inte skrivits, eftersom en person behöver skriva den.
+2. **Siffrornas källa är okänd.** ”Det gjordes 96 bokningar på webben och 24 via telefon.” säger inte var siffrorna kommer ifrån eller vilken period de gäller. Pilotrapporten nämns först två meningar senare, så läsaren kan inte bedöma underlaget. Texten säger inte uttryckligen att siffrorna kommer från pilotrapporten, och därför har den kopplingen inte lagts till.
+3. **Det är oklart vilken förening som avses.** I ”Föreningen vill att förvaltningen mäter …” har ingen förening nämnts tidigare i brödtexten. Bylinen nämner Öppna beslut men säger inte att det är en förening, så läsaren vet inte vems förslaget är.
+
+## Åtgärdade fynd i rubrik, mellanrubriker och slut
+
+- **Rubriken** ”Kommunledningen hatar människor” tillskrev kommunledningen ett hat som texten varken påstår eller belägger. Den var också mer högljudd än texten och sa inte vad texten handlar om. Den lyder nu ”Telefonbokningen av lokalerna bör finnas kvar ett halvår” (56 tecken, 8 ord).
+- **Mellanrubriken ”Bakgrund”** beskrev inte vad avsnittet handlar om, så den som skummar fick inget av argumentet. Den lyder nu ”Var femte bokning kom via telefon, men personer räknades inte”.
+- **Mellanrubriken ”Diskussion”** hade samma brist. Den lyder nu ”Tidsåtgången för två bokningsvägar är inte mätt i handlingarna”.
+- **Slutet.** ”Nu är det dags att agera.” angav varken någon handling eller vem som kan handla. Raden stod dessutom i sista avsnittet, som bar argumentet, så texten saknade ett avslutande avsnitt. Slutet har nu ett eget avsnitt under mellanrubriken ”Nästa steg är kommunstyrelsens”. Det lyder ”Nu borde kommunstyrelsen behålla telefonbokningen i alla sju lokaler under halvårsförsöket.”
+
+## Påståenden
+
+**Borttagna**
+
+- I inledningen togs meningen ”Alla vet att politikerna vill stänga ute äldre för att spara miljoner.” bort, eftersom hela påståendet var defekten:
+  - ingen bär det (”alla vet”)
+  - motivet är uppdiktat
+  - besparingen saknar stöd, och texten säger själv att försökets kostnad inte är beräknad.
+
+  Med meningen försvann tre påståenden: att detta är allmänt känt, att politikerna vill stänga ute äldre och att syftet är att spara miljoner.
+- Rubrikens påstående att kommunledningen hatar människor försvann när rubriken skrevs om.
+
+**Ändrade**
+
+- ”Det bevisar att 20 procent av kommunens invånare inte kan använda internet.” lyder nu ”Det betyder att 20 procent av bokningarna gjordes via telefon.” Meningen påstår nu en andel av bokningarna i stället för ett bevisat förhållande om invånarna. Ändringen åtgärdade en slutsats som underlaget inte bar.
+- ”Därför kostar det ingenting att behålla telefonbokningen.” lyder nu ”Därför visar de inte vad det kostar att behålla telefonbokningen.” Meningen påstår nu att handlingarna inte visar kostnaden, inte att kostnaden är noll. ”Därför” står kvar och knyter nu slutsatsen till att tidsmätning saknas.
+- Slutraden är inte längre en allmän uppmaning. Den säger nu att kommunstyrelsen borde behålla telefonbokningen i alla sju lokaler under halvårsförsöket, alltså samma förslag som inledningen gör.
+- Rubriken säger nu att telefonbokningen bör finnas kvar ett halvår. Den nämner inte att det gäller ett försök, vilket inledningen gör.
+
+**Tillagda** (i omskrivna rubriker och mellanrubriker)
+
+- Rubrikens ”av lokalerna” påstår att det är lokalerna som bokas. Brödtexten säger ”telefonbokning … i alla sju lokaler” men inte uttryckligen vad som bokas, så detta är en tolkning.
+- Första mellanrubriken gör tre saker:
+  - Den säger att var femte bokning kom via telefon. Det är 24 av 120, samma uppgift som andra meningen under rubriken.
+  - Den säger att ”personer räknades inte”. Det är vidare än brödtextens uppgift att bokningarna inte räknar *unika* personer, och mellanrubriken anger inte heller att begränsningen kommer från pilotrapporten.
+  - Med ”men” ställer den begränsningen som en motsats till telefonandelen. Den inramningen finns inte i brödtexten.
+- Andra mellanrubriken säger att tidsåtgången för två bokningsvägar inte är mätt i handlingarna. Det motsvarar brödtextens ”Handlingarna saknar tidsmätning”.
+- Slutets mellanrubrik säger att nästa steg är kommunstyrelsens.
+
+Tre begränsningar står kvar ordagrant: ”Handlingarna saknar tidsmätning”, ”Försökets kostnad är inte beräknad” och meningen om vad pilotrapporten säger.
+
+**Anatomi.** Bortsett från den saknade ingressen håller texten anatomins räknade gränser. Rubriken har 56 tecken och mellanrubrikerna 61, 62 och 30 tecken. Även de krav som inte räknas har granskats, bland annat att sista avsnittet är ett slut och att mellanrubrikerna beskriver sina avsnitt. Med undantag för ingressen följer texten anatomin, med en avvikelse: alla tre avsnitten har ett stycke vardera. Anatomin säger att de flesta avsnitt har två eller tre stycken, men i en så kort text är det inget fynd.
+
+**Övrigt som ändrats.** Utöver påståendena ovan skrevs rubriken och båda mellanrubrikerna om. Slutet fick ett eget avsnitt med egen mellanrubrik. Den tomma attribueringen ”Alla vet” och den generiska slutraden togs bort. Den mekaniska korrekturläsningen gjorde inga ändringar.

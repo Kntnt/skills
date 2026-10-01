@@ -1,0 +1,63 @@
+{
+  "created": {
+    "home/.claude/projects/-private-var-folders-cs-vgp-x-353zd9frkjpysp7zdw0000gn-T-kntnt-editorial-388-run-qsv0bb19-work/memory": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "home/.claude/projects/-private-var-folders-cs-vgp-x-353zd9frkjpysp7zdw0000gn-T-kntnt-editorial-388-run-qsv0bb19-work": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "home/.claude/projects/-private-var-folders-cs-vgp-x-353zd9frkjpysp7zdw0000gn-T-kntnt-editorial-388-run-qsv0bb19-work/664457be-1ab1-4c72-a61e-62b54719fbb4.jsonl": {
+      "mode": 384,
+      "type": "file",
+      "size": 162025,
+      "sha256": "68b816f5f6cff622c4c46b403eaeb25744cadf33befe21fe3956870042c63cb2"
+    },
+    "home/.claude/session-env": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "home/.claude/session-env/664457be-1ab1-4c72-a61e-62b54719fbb4": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "home/.claude/.last-cleanup": {
+      "mode": 420,
+      "type": "file",
+      "size": 24,
+      "sha256": "1c7aeefcb7592e676ad326fb0c60beacf38099c20d3051f1b84dfdbd74b9464d"
+    },
+    "home/.claude/backups": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "home/.claude/sessions": {
+      "mode": 448,
+      "type": "directory"
+    },
+    "home/.claude/.claude.json": {
+      "mode": 384,
+      "type": "file",
+      "size": 2629,
+      "sha256": "d7314bcc7bedeafb222039df8bebdc3d4b6f3b04f9e7a01dd83cc736067a4d05"
+    },
+    "home/.claude/shell-snapshots": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "home/.claude/backups/.claude.json.backup.1790855811496": {
+      "mode": 384,
+      "type": "file",
+      "size": 84,
+      "sha256": "7acf8797df8b003be26ec399a73c95d29d31e730f7f8cd9a5cf6063726d30a37"
+    },
+    "home/.claude/projects": {
+      "mode": 493,
+      "type": "directory"
+    }
+  },
+  "removed": {},
+  "changed": {},
+  "note": "Harness, cache and Skill effects are separated by reading trace-index.json; nothing here is a Skill artifact on its own."
+}
