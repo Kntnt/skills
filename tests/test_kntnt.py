@@ -6091,6 +6091,73 @@ def test_redline_has_its_reply_checked_by_a_reader_that_did_not_write_it() -> No
     )
 
 
+# What the checker's second list counts as a moved attribution: a sentence
+# saying whose a body of content is moves the attribution of all of it, the
+# entry says who held which content before and who holds it now, and a false
+# reading on the first list sends the change built on it to the second
+# (issue #478).
+REPLY_CHECK_SUMMARY_ATTRIBUTION = (
+    "carries an attribution for all of that content, wherever the content itself"
+    " stands"
+)
+REPLY_CHECK_FACTS_IN_PLACE = (
+    "the attribution has moved even though every fact still stands where it stood"
+)
+REPLY_CHECK_WHO_BEFORE_AND_NOW = (
+    "who the text gave which content to before and whom it gives it to now"
+)
+REPLY_CHECK_VOICE_LEFT_OUT = (
+    "An entry that names one of the voices a moved attribution took content from,"
+    " and leaves out another, reports it short."
+)
+REPLY_CHECK_FIRST_LIST_FEEDS_SECOND = (
+    "A statement on your first list that gets wrong whose a passage's content is"
+    " may have a change built on it"
+)
+
+
+def test_the_reply_check_counts_a_summing_sentence_that_moves_an_attribution() -> (
+    None
+):
+    """A sentence saying who tells what moves the attribution of all of it.
+
+    #475's candidate delivered *Vad det krävde berättar arbetsledaren Maya Lind
+    om* over requirements partly stated by the narrator, and the claim account
+    said only that Lind, not notes, now told them. The checker saw on its first
+    list that the content came from the narrator and Lind both, and returned
+    `none` on its second, because every fact still stood where it stood. So the
+    second list counts a summing or pointing sentence's attribution for all the
+    content it covers, asks for who held which content before and who holds it
+    now, and takes the change a first-list misreading was built on (issue #478).
+    """
+
+    brief = REDLINE_REPLY_CHECK.read_text(encoding="utf-8")
+    subagent = brief.split("\n---\n", 1)[1]
+    second = subagent.split("2. **Claim changes the account misses.**", 1)[1]
+    second = second.split("\n\n", 1)[0]
+    for clause in (
+        REPLY_CHECK_SUMMARY_ATTRIBUTION,
+        REPLY_CHECK_FACTS_IN_PLACE,
+        REPLY_CHECK_WHO_BEFORE_AND_NOW,
+        REPLY_CHECK_VOICE_LEFT_OUT,
+        REPLY_CHECK_FIRST_LIST_FEEDS_SECOND,
+    ):
+        assert clause in second, (
+            f"{REDLINE_REPLY_CHECK}: the checker's second list no longer says"
+            f" {clause!r}, so a sentence that gives a person content the text"
+            f" states in another voice passes as reported (issue #478). See"
+            f" {STANDARD}."
+        )
+
+    # The manpage tells its reader what an attribution entry says.
+    page = REDLINE_HELP.read_text(encoding="utf-8")
+    assert f"a moved attribution by {REPLY_CHECK_WHO_BEFORE_AND_NOW}" in page, (
+        f"{REDLINE_HELP}: the manpage does not say that a moved attribution is"
+        f" reported by who held which content before and who holds it now"
+        f" (issue #478). See {STANDARD}."
+    )
+
+
 # The shared delivery contract's answer to what the response of a run that
 # named a destination carries: where the text went and the findings the file
 # cannot hold, and never the text itself (issue #148).
