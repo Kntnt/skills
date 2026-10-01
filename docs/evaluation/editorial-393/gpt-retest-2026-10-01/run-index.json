@@ -161,5 +161,13 @@
     "repeat": 1,
     "output_target": "output.md",
     "metadata_construction_repair": true
+  },
+  "w01-rerun": {
+    "fixture": "case-study-sv",
+    "repeat": 1,
+    "output_target": "response",
+    "construction_repair": true,
+    "interrupted_attempt": "w01",
+    "is_counted_replacement": true
   }
 }

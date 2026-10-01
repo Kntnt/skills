@@ -13,5 +13,52 @@
     "verified_process_group_absent": 10575,
     "deleted": true,
     "time": "2026-10-01T12:11:05.396010+00:00"
+  },
+  {
+    "run": "r02",
+    "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-aofib893",
+    "verified_process_group_absent": 20318,
+    "deleted": true,
+    "time": "2026-10-01T12:36:54.223445+00:00"
+  },
+  {
+    "run": "r03",
+    "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-hlyi1ytl",
+    "verified_process_group_absent": 308,
+    "deleted": true,
+    "time": "2026-10-01T12:44:09.292346+00:00",
+    "void_final_scratch_preserved": false
+  },
+  {
+    "run": "r04",
+    "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-478l45pd",
+    "verified_process_group_absent": 3401,
+    "deleted": true,
+    "time": "2026-10-01T12:44:09.293050+00:00",
+    "void_final_scratch_preserved": false
+  },
+  {
+    "run": "r05",
+    "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-1bwyryom",
+    "verified_process_group_absent": 7211,
+    "deleted": true,
+    "time": "2026-10-01T12:44:09.293500+00:00",
+    "void_final_scratch_preserved": false
+  },
+  {
+    "run": "r06",
+    "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-1whlh9rj",
+    "verified_process_group_absent": 7513,
+    "deleted": true,
+    "time": "2026-10-01T12:44:09.293843+00:00",
+    "void_final_scratch_preserved": false
+  },
+  {
+    "run": "w01",
+    "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-b_nt8eqi",
+    "verified_process_group_absent": 10885,
+    "deleted": true,
+    "time": "2026-10-01T12:44:09.294217+00:00",
+    "void_final_scratch_preserved": true
   }
 ]
