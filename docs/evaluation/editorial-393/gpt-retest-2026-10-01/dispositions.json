@@ -132,5 +132,10 @@
     "counted": true,
     "delivered": true,
     "disposition": "completed-file-artifact"
+  },
+  "c11": {
+    "counted": true,
+    "delivered": true,
+    "disposition": "completed-artifact"
   }
 }
