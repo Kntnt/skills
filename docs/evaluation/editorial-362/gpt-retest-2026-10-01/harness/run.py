@@ -104,6 +104,11 @@ def identity() -> dict[str, str]:
 def main() -> int:
     """Run one supplied prompt and preserve success, failure and disk evidence."""
 
+    # Own the runner group as well as the native session it will start.
+    if os.getpgrp() != os.getpid():
+        os.setsid()
+    register("pid", str(os.getpid()))
+
     # The caller chooses frozen revisions and material, never a model override.
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--revision", required=True)
