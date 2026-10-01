@@ -71,6 +71,20 @@ def main() -> None:
             ["git", "show", f"{revision}:{name}"], cwd=REPOSITORY
         )
         resources[name] = content
+    delivery_name = "skills/kntnt/library/references/delivery.md"
+    delivery_text = resources[delivery_name].decode()
+    truth_start = delivery_text.index("## The truth of a report about the text")
+    truth_end = delivery_text.index("\n## ", truth_start + 1)
+    review_name = "skills/kntnt/library/references/editorial/base.review.md"
+    review_text = resources[review_name].decode()
+    claim_start = review_text.index(
+        "A claim removed because the finding named that claim itself"
+    )
+    claim_end = review_text.index("\n\n", claim_start)
+    fragments = {
+        "delivery-truth": (delivery_name, delivery_text[truth_start:truth_end].strip()),
+        "base-claim-account": (review_name, review_text[claim_start:claim_end].strip()),
+    }
     session_events = {
         path: [json.loads(line) for line in path.read_text().splitlines()]
         for path in sorted((args.run / "native-sessions").rglob("*.jsonl"))
@@ -100,10 +114,12 @@ def main() -> None:
                     if isinstance(data, dict) and isinstance(data.get("content"), str):
                         known_scopes[(decoded.get("code"), scope)] = data
     observed = []
+    fragment_observed = []
     for path, events in session_events.items():
         meta = next(e["payload"] for e in events if e["type"] == "session_meta")
         seen = set()
         scope_seen = set()
+        fragment_seen = set()
         for event in events:
             payload = event.get("payload", {})
             if event["type"] != "response_item" or payload.get("type") not in {
@@ -129,6 +145,19 @@ def main() -> None:
                             "complete_returned_content": True,
                             "words": len(content.decode().split()),
                             "sha256": hashlib.sha256(content).hexdigest(),
+                        }
+                    )
+            for name, (resource, content) in fragments.items():
+                if name not in fragment_seen and any(content in s for s in strings):
+                    fragment_seen.add(name)
+                    fragment_observed.append(
+                        {
+                            **pointer,
+                            "fragment": name,
+                            "resource": resource,
+                            "complete_returned_fragment": True,
+                            "words": len(content.split()),
+                            "sha256": hashlib.sha256(content.encode()).hexdigest(),
                         }
                     )
             for key, data in known_scopes.items():
@@ -184,6 +213,8 @@ def main() -> None:
         "revision": revision,
         "method": "Unique complete returned resource text per native session; whitespace word count. This is observed resource volume, not a comprehension verdict. Absent matches may reflect wrappers, truncation or partial reads and are gaps, not automatic failures. Mandatory-set costing is a separate contract comparison.",
         "observations": observed,
+        "fragment_observations": fragment_observed,
+        "fragment_note": "Selected reply-check passages are recorded separately. Their words must not be added again where the same session already has the complete containing resource credited. A complete fragment match does not prove that nothing else was read.",
     }
     (args.run / "resource-evidence.json").write_text(
         json.dumps(report, ensure_ascii=False, indent=2) + "\n"
