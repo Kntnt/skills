@@ -1,0 +1,17 @@
+{
+  "original_run": "r15",
+  "outcome": "refusal before operation; genre case-study uninstalled",
+  "suppressed": [
+    "r16",
+    "r17"
+  ],
+  "launcher_stopped_process_group": 20468,
+  "method": "SIGTERM to evaluator launcher only while waiting for r01; native sessions run in their own groups",
+  "original_product_runs_interrupted": false,
+  "replacement_ids": [
+    "w01",
+    "w02",
+    "w03"
+  ],
+  "criterion_changes": false
+}

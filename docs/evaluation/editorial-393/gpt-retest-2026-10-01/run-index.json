@@ -1,0 +1,87 @@
+{
+  "r01": {
+    "fixture": "sv-control",
+    "repeat": 1,
+    "output_target": "response"
+  },
+  "r02": {
+    "fixture": "sv-control",
+    "repeat": 2,
+    "output_target": "response"
+  },
+  "r03": {
+    "fixture": "sv-artefact",
+    "repeat": 1,
+    "output_target": "response"
+  },
+  "r04": {
+    "fixture": "sv-artefact",
+    "repeat": 2,
+    "output_target": "response"
+  },
+  "r05": {
+    "fixture": "ellipsis-sv",
+    "repeat": 1,
+    "output_target": "response"
+  },
+  "r06": {
+    "fixture": "ellipsis-sv",
+    "repeat": 2,
+    "output_target": "response"
+  },
+  "r07": {
+    "fixture": "en-positive",
+    "repeat": 1,
+    "output_target": "response"
+  },
+  "r08": {
+    "fixture": "en-positive",
+    "repeat": 1,
+    "output_target": "output.md"
+  },
+  "r09": {
+    "fixture": "en-us-r1",
+    "repeat": 1,
+    "output_target": "response"
+  },
+  "r10": {
+    "fixture": "en-us-r1",
+    "repeat": 1,
+    "output_target": "output.md"
+  },
+  "r11": {
+    "fixture": "metonymy-sv",
+    "repeat": 1,
+    "output_target": "response"
+  },
+  "r12": {
+    "fixture": "metonymy-sv",
+    "repeat": 1,
+    "output_target": "output.md"
+  },
+  "r13": {
+    "fixture": "rhythm-en_GB",
+    "repeat": 1,
+    "output_target": "response"
+  },
+  "r14": {
+    "fixture": "rhythm-en_GB",
+    "repeat": 1,
+    "output_target": "output.md"
+  },
+  "r15": {
+    "fixture": "case-study-sv",
+    "repeat": 1,
+    "output_target": "response"
+  },
+  "r16": {
+    "fixture": "case-study-sv",
+    "repeat": 2,
+    "output_target": "response"
+  },
+  "r17": {
+    "fixture": "case-study-sv",
+    "repeat": 3,
+    "output_target": "response"
+  }
+}
