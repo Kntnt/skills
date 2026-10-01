@@ -7295,10 +7295,12 @@ def test_an_allusion_owes_its_reader_the_subject_and_not_the_particulars() -> No
     #480 measured a review reporting a working allusive headline because its
     words had nothing to refer to for a reader who sees only it: the review
     asked the headline for what the text measured and found, and read the
-    words the text fills in as an ellipsis only the standfirst completes. That
-    referent test is the body's, read with the paratext covered. The allusion
-    item says what a heading owes its reader alone — the subject — and keeps
-    the finding for one that names no subject at all.
+    words the text fills in as references left unresolved. The allusion item
+    says what a heading owes its reader alone — the subject — and that what
+    the text fills in is the allusion at work, and keeps the finding for one
+    that names no subject at all. It says this of the heading alone and sends
+    the reviewer to no test of the body: #480's revise round took out the
+    sentence that did, after a candidate run rewrote the body of a clean text.
     """
 
     _, leave = _headlines_review_sections()
@@ -7312,11 +7314,14 @@ def test_an_allusion_owes_its_reader_the_subject_and_not_the_particulars() -> No
         f" the text gives, so a review asks a working allusion for the text's"
         f" findings (issue #480)."
     )
-    assert "not applied to a heading" in allusion, (
-        f"{HEADLINES_REVIEW}: the allusion item does not keep the body's test"
-        f" of a pronoun, a definite form or an ellipsis only another part"
-        f" completes off the heading, so a word the text fills in reads as an"
-        f" unresolved reference (issue #480)."
+    assert "not a reference left unresolved" in allusion, (
+        f"{HEADLINES_REVIEW}: the allusion item does not say that a word the"
+        f" text fills in is the allusion at work, so it reads as an unresolved"
+        f" reference (issue #480)."
+    )
+    assert "the body's" not in allusion, (
+        f"{HEADLINES_REVIEW}: the allusion item points the reviewer at a test"
+        f" of the body, which a heading rule has no need to name (issue #480)."
     )
     assert "names no subject at all" in allusion, (
         f"{HEADLINES_REVIEW}: the allusion item no longer makes a heading that"
