@@ -101,5 +101,65 @@
     "repeat": 3,
     "output_target": "response",
     "construction_repair": true
+  },
+  "c03": {
+    "fixture": "sv-artefact",
+    "repeat": 1,
+    "output_target": "response",
+    "metadata_construction_repair": true
+  },
+  "c04": {
+    "fixture": "sv-artefact",
+    "repeat": 2,
+    "output_target": "response",
+    "metadata_construction_repair": true
+  },
+  "c05": {
+    "fixture": "ellipsis-sv",
+    "repeat": 1,
+    "output_target": "response",
+    "metadata_construction_repair": true
+  },
+  "c06": {
+    "fixture": "ellipsis-sv",
+    "repeat": 2,
+    "output_target": "response",
+    "metadata_construction_repair": true
+  },
+  "c07": {
+    "fixture": "en-positive",
+    "repeat": 1,
+    "output_target": "response",
+    "metadata_construction_repair": true
+  },
+  "c08": {
+    "fixture": "en-positive",
+    "repeat": 1,
+    "output_target": "output.md",
+    "metadata_construction_repair": true
+  },
+  "c09": {
+    "fixture": "en-us-r1",
+    "repeat": 1,
+    "output_target": "response",
+    "metadata_construction_repair": true
+  },
+  "c10": {
+    "fixture": "en-us-r1",
+    "repeat": 1,
+    "output_target": "output.md",
+    "metadata_construction_repair": true
+  },
+  "c11": {
+    "fixture": "metonymy-sv",
+    "repeat": 1,
+    "output_target": "response",
+    "metadata_construction_repair": true
+  },
+  "c12": {
+    "fixture": "metonymy-sv",
+    "repeat": 1,
+    "output_target": "output.md",
+    "metadata_construction_repair": true
   }
 }

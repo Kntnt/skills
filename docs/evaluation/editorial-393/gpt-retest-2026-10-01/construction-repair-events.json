@@ -23,5 +23,15 @@
     "process_group": 10851,
     "reason": "Count already-running w01 as one occupied executor slot instead of blocking both slots; r01 already completed",
     "product_runs_interrupted": false
+  },
+  "timeout_launcher_restart": {
+    "process_group": 20230,
+    "reason": "Select longer outer timeout for future invocations; restarted launcher monitors already-running r02 and w01 instead of relaunching",
+    "product_runs_interrupted": false
+  },
+  "metadata_launcher_stop": {
+    "process_group": 79705,
+    "reason": "Historical artifact genre metadata case-study is also uninstalled; freeze explicit-genre invocation override before further replays",
+    "product_runs_interrupted": false
   }
 }

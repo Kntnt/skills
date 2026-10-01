@@ -50,7 +50,7 @@ def main() -> int:
 
     def invoke(run: str) -> dict[str, object]:
         """Run one exact frozen turn; record a failure without rerunning it."""
-        if run == "w01":
+        if (staging / run).exists():
             while not (staging / run / "result.json").exists():
                 time.sleep(10)
             result = json.loads((staging / run / "result.json").read_text())
@@ -64,6 +64,11 @@ def main() -> int:
         turn = (
             "write-current-identifier"
             if is_write
+            else "redline-current-genre-response"
+            if row.get("metadata_construction_repair")
+            and row["output_target"] == "response"
+            else "redline-current-genre-file"
+            if row.get("metadata_construction_repair")
             else "redline-response"
             if row["output_target"] == "response"
             else "redline-file"
@@ -98,7 +103,12 @@ def main() -> int:
     # Map waits for every task; no unawaited session outlives this launcher.
     remaining = [
         "w01",
-        *[run for run in rows if run not in {"r01", "r15", "r16", "r17", "w01"}],
+        "r04",
+        *[f"c{i:02d}" for i in range(3, 13)],
+        "r13",
+        "r14",
+        "w02",
+        "w03",
     ]
     with ThreadPoolExecutor(max_workers=2) as executor:
         statuses = list(executor.map(invoke, remaining))
