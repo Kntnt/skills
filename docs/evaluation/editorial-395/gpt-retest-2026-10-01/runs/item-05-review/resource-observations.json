@@ -37,6 +37,13 @@
         "missing_nonblank_lines": []
       }
     ],
+    "language_scopes": [
+      {
+        "path": ".agents/skills/kntnt/library/references/languages/en_US.md",
+        "scope": "mechanics",
+        "complete_scope_content_in_returned_output": true
+      }
+    ],
     "limit": "Line coverage across separate returns does not prove order or exact encrypted dispatch scope."
   },
   "01a0f7db-20bb-7c31-901c-8c5282e7df96": {
@@ -131,6 +138,23 @@
         "full_resource_text_in_returned_output": true,
         "all_nonblank_lines_visible_across_returns": true,
         "missing_nonblank_lines": []
+      }
+    ],
+    "language_scopes": [
+      {
+        "path": ".agents/skills/kntnt/library/references/languages/en_US.md",
+        "scope": "composition",
+        "complete_scope_content_in_returned_output": true
+      },
+      {
+        "path": ".agents/skills/kntnt/library/references/languages/en_US.md",
+        "scope": "review",
+        "complete_scope_content_in_returned_output": true
+      },
+      {
+        "path": ".agents/skills/kntnt/library/references/languages/en_US.md",
+        "scope": "anti-slop",
+        "complete_scope_content_in_returned_output": true
       }
     ],
     "limit": "Line coverage across separate returns does not prove order or exact encrypted dispatch scope."

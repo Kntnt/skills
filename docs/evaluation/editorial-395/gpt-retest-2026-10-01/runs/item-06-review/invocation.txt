@@ -1,0 +1,5 @@
+A user has typed a Skill invocation. Run the installed project Skill exactly as shipped, including its shim, bounded resources, fresh subagents, peer Proofread and cleanup. The only supplied text is input.md, including its metadata. Every command runs in the working directory, and temporary work belongs to the separate harness scratch area named in AGENTS.md. Read only the installed project Skills, input.md and your own scratch.
+
+/redline --output=response input.md
+
+Evaluator captures, separate from the Skill: before removing the private mechanical input and output, copy both complete files into scratch observer-evidence as mechanical-pass-input.md and mechanical-pass-output.md. Save the exact complete delivered Text Artifact, including its frontmatter and without the delivery account, to scratch observer-delivered.md; where nothing is delivered, create no such file. Save the complete user-facing reply to scratch observer-response.md. These captures are observer additions and may remain for external capture. Do not change Skill decisions for them. Give the complete user-facing reply as your final message.

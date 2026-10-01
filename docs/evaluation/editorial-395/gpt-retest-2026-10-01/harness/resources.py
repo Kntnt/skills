@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import subprocess
 from pathlib import Path
 from typing import Any
@@ -18,6 +19,21 @@ def strings(value: Any) -> list[str]:
     if not isinstance(value, str):
         return []
     result = [value]
+    pending = [value]
+    seen = {value}
+    for _ in range(4):
+        next_layer = []
+        for item in pending:
+            for literal in re.findall(r'"(?:\\.|[^"\\])*"', item):
+                try:
+                    decoded = json.loads(literal)
+                except json.JSONDecodeError:
+                    continue
+                if isinstance(decoded, str) and decoded not in seen:
+                    seen.add(decoded)
+                    result.append(decoded)
+                    next_layer.append(decoded)
+        pending = next_layer
     for line in value.splitlines():
         if line.startswith(("{", "[")):
             try:
@@ -56,6 +72,7 @@ def inspect(output: Path, repository: Path, revision: str) -> None:
             for part in strings(event["payload"].get("output"))
         )
         observed = []
+        language_scopes = []
         for path, content in resources.items():
             full = content in returned
             nonblank = [line for line in content.splitlines() if line.strip()]
@@ -69,9 +86,24 @@ def inspect(output: Path, repository: Path, revision: str) -> None:
                         "missing_nonblank_lines": missing if not full else [],
                     }
                 )
+            if "/references/languages/" in path and not path.endswith("README.md"):
+                sections = re.split(
+                    r"(?m)^## (Composition|Review|Anti-slop|Mechanics)\n", content
+                )
+                for index in range(1, len(sections), 2):
+                    scope_content = sections[index + 1].strip()
+                    if scope_content and scope_content in returned:
+                        language_scopes.append(
+                            {
+                                "path": ".agents/" + path,
+                                "scope": sections[index].lower(),
+                                "complete_scope_content_in_returned_output": True,
+                            }
+                        )
         observations[metadata["id"]] = {
             "source": metadata.get("source"),
             "resources": observed,
+            "language_scopes": language_scopes,
             "limit": "Line coverage across separate returns does not prove order or exact encrypted dispatch scope.",
         }
     (output / "resource-observations.json").write_text(

@@ -141,5 +141,43 @@
     "path_removed": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-w1_y1a4a",
     "verified_absent": true,
     "evidence_copy_verified": true
+  },
+  {
+    "at": "2026-10-01T16:35:46.883737+00:00",
+    "scope": "cell 06 Write and its two valid judges; final cell 07 timeout void",
+    "paths_removed": [
+      "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-dm4_i3l7",
+      "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-v1qnlhf6",
+      "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-3hudcv_6",
+      "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-8t7xxu2f"
+    ],
+    "verified_absent": true,
+    "evidence_copy_verified": true,
+    "command_form": "rm -r with every full literal path"
+  },
+  {
+    "at": "2026-10-01T16:50:39.725211+00:00",
+    "paths_removed": [
+      "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-zdjg8iux",
+      "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-2p1c3zto",
+      "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-yjxdkzl3"
+    ],
+    "verified_absent": true,
+    "evidence": "Completed item-06-review and both fresh readers byte-verified before literal removal",
+    "command_form": "rm -r with each full literal path"
+  },
+  {
+    "at": "2026-10-01T16:59:49.860018+00:00",
+    "paths_removed": [
+      "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-observation-3q9k_53_"
+    ],
+    "verified_absent": true,
+    "evidence": "All counted/void outputs, controller markers/logs, recovery scripts and 12 exact neutral judge packets retained before literal removal",
+    "command_form": "rm -r with the full literal path"
+  },
+  {
+    "at": "2026-10-01T17:03:57.508512+00:00",
+    "correction": "The preceding staging-cleanup entry overstated controller-marker retention. Completion .json markers and launcher .log files are directly byte-copied; original .txt error markers were omitted. Earlier actual native read outputs retain cell04/cell06 contents as explicitly observed reconstructions; cell07 original controller marker is unavailable. All three cell07 invocation/native/capture/inventory records remain complete. No deleted marker is described as a direct preserved byte copy.",
+    "evidence": "operations/controller-error-marker-observations.json; environment-notes.md"
   }
 ]
