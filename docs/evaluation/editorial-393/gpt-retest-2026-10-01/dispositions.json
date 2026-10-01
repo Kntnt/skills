@@ -159,5 +159,11 @@
     "delivered": true,
     "disposition": "completed-artifact",
     "known_findings_reported": true
+  },
+  "w03": {
+    "counted": true,
+    "delivered": true,
+    "disposition": "completed-artifact",
+    "known_findings_reported": false
   }
 }
