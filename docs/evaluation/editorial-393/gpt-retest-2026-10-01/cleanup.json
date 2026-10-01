@@ -138,5 +138,12 @@
     "verified_process_group_absent": 9170,
     "deleted": true,
     "time": "2026-10-01T14:38:34.076535+00:00"
+  },
+  {
+    "run": "r14",
+    "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-ujmtutv1",
+    "verified_process_group_absent": 17828,
+    "deleted": true,
+    "time": "2026-10-01T14:51:13.804756+00:00"
   }
 ]
