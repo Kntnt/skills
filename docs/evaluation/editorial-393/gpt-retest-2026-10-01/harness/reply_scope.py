@@ -64,8 +64,7 @@ def main() -> None:
                             "ordinal": event.get("ordinal"),
                             "call_id": payload.get("call_id"),
                             "extra": name,
-                            "words": len(text.split())
-                            - (1 if text.startswith("## ") else 0),
+                            "words": len(text.split()),
                             "exact_returned_passage": text,
                         }
                     )

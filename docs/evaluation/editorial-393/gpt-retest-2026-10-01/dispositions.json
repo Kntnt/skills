@@ -165,5 +165,11 @@
     "delivered": true,
     "disposition": "completed-artifact",
     "known_findings_reported": false
+  },
+  "r13-rerun": {
+    "counted": true,
+    "delivered": true,
+    "disposition": "completed-artifact",
+    "replaces_void": "r13"
   }
 }
