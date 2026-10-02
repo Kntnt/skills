@@ -1,0 +1,7 @@
+{
+  "command": "rm -r /private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-4e63a209/amend-1-runtime",
+  "returncode": 0,
+  "runtime_absent": true,
+  "process_audit": "process-audit.json",
+  "deliberately_retained_processes": []
+}

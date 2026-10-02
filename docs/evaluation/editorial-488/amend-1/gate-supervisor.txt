@@ -1,0 +1,73 @@
+"""Await the four prescribed commands with all disposable writes confined."""
+
+import json
+import os
+import shlex
+import signal
+import subprocess
+import time
+from pathlib import Path
+
+worktree = Path("/Users/thomas/Projects/skills/.git/kntnt-orchestrate/488")
+runtime = Path("/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-4e63a209/amend-1-runtime")
+evidence = worktree / "docs/evaluation/editorial-488/amend-1"
+env = {**os.environ, **json.loads((runtime / "environment.json").read_text())}
+cleanup = "/Users/thomas/.agents/skills/kntnt/features/session-cleanup/scripts/session_cleanup.py"
+
+
+def register(pid: int) -> None:
+    """Register every process group before waiting on its work."""
+    result = subprocess.run(
+        ["uv", "run", cleanup, "add", "pid", str(pid), "Ticket 488 amend 1 project gate"],
+        cwd=worktree, env=env, capture_output=True, text=True, check=True,
+    )
+    with (evidence / "process-registrations.jsonl").open("a") as output:
+        output.write(result.stdout)
+
+
+if os.getpgrp() != os.getpid():
+    os.setsid()
+register(os.getpid())
+commands = [
+    entry["command"]
+    for entry in json.loads((worktree / "docs/evaluation/editorial-488/verification-final/gate-results.json").read_text())
+]
+guide = (worktree / "CONTRIBUTING.md").read_text()
+assert len(commands) == 4 and all("   " + command + "\n" in guide for command in commands)
+receipt = {
+    "starting_head": subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=worktree, text=True).strip(),
+    "supervisor_pid": os.getpid(),
+    "supervisor_process_group": os.getpgrp(),
+    "started": time.time(),
+    "environment": json.loads((runtime / "environment.json").read_text()),
+    "commands": [],
+}
+
+for index, command in enumerate(commands, 1):
+    log = evidence / f"gate-{index}.log"
+    with log.open("w") as output:
+        process = subprocess.Popen(
+            shlex.split(command), cwd=worktree, env=env,
+            stdout=output, stderr=subprocess.STDOUT, start_new_session=True,
+        )
+        item = {"command": command, "pid": process.pid, "started": time.time(), "log": log.name}
+        receipt["commands"].append(item)
+        try:
+            register(process.pid)
+            item["returncode"] = process.wait()
+        finally:
+            if process.poll() is None:
+                os.killpg(process.pid, signal.SIGTERM)
+                try:
+                    process.wait(timeout=10)
+                except subprocess.TimeoutExpired:
+                    os.killpg(process.pid, signal.SIGKILL)
+                    process.wait()
+        item["finished"] = time.time()
+    (evidence / "gate-receipt.json").write_text(json.dumps(receipt, indent=2) + "\n")
+    print(json.dumps(item), flush=True)
+
+receipt["finished"] = time.time()
+receipt["all_passed"] = all(item["returncode"] == 0 for item in receipt["commands"])
+(evidence / "gate-receipt.json").write_text(json.dumps(receipt, indent=2) + "\n")
+raise SystemExit(0 if receipt["all_passed"] else 1)

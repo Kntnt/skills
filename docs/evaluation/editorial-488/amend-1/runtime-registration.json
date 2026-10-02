@@ -1,0 +1,10 @@
+{
+  "manifest": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-4e63a209/amend-1-runtime/kntnt-home/.kntnt/session-cleanup/sessions/unowned-14931.jsonl",
+  "recorded": {
+    "at": "2026-10-02T16:31:54+00:00",
+    "id": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-4e63a209/amend-1-runtime",
+    "kind": "path",
+    "why": "Ticket 488 amend 1 confined verification runtime"
+  },
+  "session": "unowned-14931"
+}

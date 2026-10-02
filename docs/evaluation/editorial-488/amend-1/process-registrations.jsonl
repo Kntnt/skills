@@ -1,0 +1,55 @@
+{
+  "manifest": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-4e63a209/amend-1-runtime/kntnt-home/.kntnt/session-cleanup/sessions/01a0fd6a-14aa-72f2-888b-b1b05df7e59b.jsonl",
+  "recorded": {
+    "at": "2026-10-02T16:32:38+00:00",
+    "id": "15718",
+    "kind": "pid",
+    "started": "Fri Oct  2 18:32:37 2026",
+    "why": "Ticket 488 amend 1 project gate"
+  },
+  "session": "01a0fd6a-14aa-72f2-888b-b1b05df7e59b"
+}
+{
+  "manifest": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-4e63a209/amend-1-runtime/kntnt-home/.kntnt/session-cleanup/sessions/01a0fd6a-14aa-72f2-888b-b1b05df7e59b.jsonl",
+  "recorded": {
+    "at": "2026-10-02T16:32:38+00:00",
+    "id": "15841",
+    "kind": "pid",
+    "started": "Fri Oct  2 18:32:38 2026",
+    "why": "Ticket 488 amend 1 project gate"
+  },
+  "session": "01a0fd6a-14aa-72f2-888b-b1b05df7e59b"
+}
+{
+  "manifest": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-4e63a209/amend-1-runtime/kntnt-home/.kntnt/session-cleanup/sessions/01a0fd6a-14aa-72f2-888b-b1b05df7e59b.jsonl",
+  "recorded": {
+    "at": "2026-10-02T16:32:39+00:00",
+    "id": "15853",
+    "kind": "pid",
+    "started": "Fri Oct  2 18:32:39 2026",
+    "why": "Ticket 488 amend 1 project gate"
+  },
+  "session": "01a0fd6a-14aa-72f2-888b-b1b05df7e59b"
+}
+{
+  "manifest": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-4e63a209/amend-1-runtime/kntnt-home/.kntnt/session-cleanup/sessions/01a0fd6a-14aa-72f2-888b-b1b05df7e59b.jsonl",
+  "recorded": {
+    "at": "2026-10-02T16:32:40+00:00",
+    "id": "15862",
+    "kind": "pid",
+    "started": "Fri Oct  2 18:32:40 2026",
+    "why": "Ticket 488 amend 1 project gate"
+  },
+  "session": "01a0fd6a-14aa-72f2-888b-b1b05df7e59b"
+}
+{
+  "manifest": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-4e63a209/amend-1-runtime/kntnt-home/.kntnt/session-cleanup/sessions/01a0fd6a-14aa-72f2-888b-b1b05df7e59b.jsonl",
+  "recorded": {
+    "at": "2026-10-02T16:32:45+00:00",
+    "id": "16012",
+    "kind": "pid",
+    "started": "Fri Oct  2 18:32:45 2026",
+    "why": "Ticket 488 amend 1 project gate"
+  },
+  "session": "01a0fd6a-14aa-72f2-888b-b1b05df7e59b"
+}

@@ -1,0 +1,245 @@
+"""Audit retained checker inputs; fail if the complete drafts are unavailable.
+
+This is a read-only diagnostic source snapshot, not a new native campaign or a
+replacement judge. Run with Python from the assigned ticket worktree. Its only
+write is the separately named audit receipt beside this snapshot.
+"""
+
+import hashlib
+import json
+import difflib
+import re
+from pathlib import Path
+from typing import Any, Iterator
+
+
+def digest(data: bytes) -> str:
+    """Identify evidence bytes without copying encrypted payloads into reports."""
+    return hashlib.sha256(data).hexdigest()
+
+
+def strings(value: Any) -> Iterator[str]:
+    """Inspect plaintext in every nested trace field, including agent messages."""
+    if isinstance(value, str):
+        yield value
+    elif isinstance(value, dict):
+        for child in value.values():
+            yield from strings(child)
+    elif isinstance(value, list):
+        for child in value:
+            yield from strings(child)
+
+
+def has_filled_brief(text: str) -> bool:
+    """Separate the shipped template from a recoverable complete checker brief."""
+    return all(
+        marker in text
+        for marker in (
+            "**The text as it arrived.**",
+            "**The text as delivered.**",
+            "**The reply.**",
+        )
+    ) and not any(
+        placeholder in text
+        for placeholder in ("<received>", "<delivered>", "<reply>")
+    )
+
+
+root = Path("docs/evaluation/editorial-488")
+# These addresses came from the whole-surface audit, not the final replies.
+draft_locations = {
+    "post-article-clean-response": 171,
+    "post-article-unnamed-1": 236,
+    "post-article-unnamed-2": 199,
+    "post-article-unnamed-3": 196,
+    "post-column-flawed-file": 179,
+    "post-opinion-flawed-3": 244,
+    "pre-article-unnamed-1": 183,
+    "pre-column-flawed-file": 192,
+    "pre-opinion-flawed-1": 215,
+    "pre-opinion-flawed-2": 218,
+}
+rows = []
+for packet in sorted((root / "runs").iterdir()):
+    sessions = []
+    for path in sorted((packet / "native-sessions").rglob("*.jsonl")):
+        events = [json.loads(line) for line in path.read_text().splitlines()]
+        meta = next(e["payload"] for e in events if e["type"] == "session_meta")
+        sessions.append((path, meta, events))
+    parent_path, parent_meta, parent_events = next(
+        session for session in sessions if session[1].get("source") == "exec"
+    )
+    checker_spawns = []
+    for event in parent_events:
+        payload = event.get("payload", {})
+        if event["type"] != "response_item" or payload.get("name") != "spawn_agent":
+            continue
+        args = json.loads(payload["arguments"])
+        if "check" in args.get("task_name", "").lower():
+            checker_spawns.append((event, payload, args))
+    assert len(checker_spawns) == 1, packet.name
+    event, call, args = checker_spawns[0]
+    child_id = next(
+        e["payload"]["item"]["agent_thread_id"]
+        for e in parent_events
+        if e["type"] == "event_msg"
+        and e["payload"].get("item", {}).get("id") == call["call_id"]
+        and e["payload"]["item"].get("kind") == "started"
+    )
+    child_path, child_meta, child_events = next(
+        session for session in sessions if session[1]["id"] == child_id
+    )
+    inherited = [
+        e for e in child_events
+        if e["type"] == "response_item"
+        and e["payload"].get("type") == "agent_message"
+        and e["payload"].get("author") == "/root"
+    ]
+    blocks = [b for e in inherited for b in e["payload"].get("content", [])]
+    final_events = [
+        e for e in child_events
+        if e["type"] == "response_item"
+        and e["payload"].get("type") == "message"
+        and e["payload"].get("role") == "assistant"
+        and e["payload"].get("phase") == "final_answer"
+    ]
+    assert len(final_events) == 1, packet.name
+    final = final_events[0]
+    checker_return = "".join(b.get("text", "") for b in final["payload"]["content"])
+    draft = None
+    draft_source = None
+    if packet.name in draft_locations:
+        draft_event = next(
+            e for e in parent_events
+            if e.get("ordinal") == draft_locations[packet.name]
+        )
+        assert draft_event["timestamp"] < event["timestamp"]
+        if draft_event["payload"]["type"] == "custom_tool_call_output":
+            brief = next(
+                b["text"] for b in draft_event["payload"]["output"]
+                if has_filled_brief(b.get("text", ""))
+            )
+            draft = brief.split("**The reply.**", 1)[1].split("\n\n`", 1)[1].split(
+                "`\n\n**The measurement", 1
+            )[0]
+        else:
+            source = draft_event["payload"]["input"]
+            literals = [json.loads(s) for s in re.findall(r'"(?:\\.|[^"\\])*"', source)]
+            drafts = [v for v in literals if v.startswith(("Gransk", "Spara")) and len(v) > 150]
+            if drafts:
+                assert len(drafts) == 1
+                draft = drafts[0]
+            else:
+                match = re.search(r"const reply\s*=\s*`((?:\\.|[^`\\])*)`;", source, re.S)
+                assert match is not None
+                assert "${" not in match[1], "Interpolated draft requires a separate reading"
+                draft = match[1].replace("\\`", "`")
+        draft_source = {
+            "ordinal": draft_event.get("ordinal"),
+            "timestamp": draft_event["timestamp"],
+            "type": draft_event["payload"]["type"],
+            "sha256": digest(draft.encode()),
+        }
+    terminal = (packet / "response.txt").read_text()
+    terminal_report = re.sub(r"(?ms)^```markdown\n.*?^```\s*", "", terminal).strip()
+    comparison = None
+    if draft is not None:
+        comparison = {
+            "draft": draft,
+            "checker_return": checker_return,
+            "terminal_report": terminal_report,
+            "report_identical": draft == terminal_report,
+            "diff": "".join(difflib.unified_diff(
+                draft.splitlines(keepends=True), terminal_report.splitlines(keepends=True),
+                fromfile="captured-draft", tofile="terminal-report",
+            )),
+            "limitation": "The plaintext draft is retained before checking; the encrypted spawn payload cannot independently be compared byte for byte with it.",
+        }
+    captures = []
+    for capture in json.loads((packet / "file-versions.json").read_text()):
+        path = packet / "file-versions" / capture["capture"]
+        data = path.read_bytes()
+        captures.append({
+            "path": str(path.relative_to(root)),
+            "native_path": capture["path"],
+            "sha256": digest(data),
+            "matches_manifest": digest(data) == capture["sha256"],
+            "filled_checker_brief": has_filled_brief(data.decode()),
+        })
+    message = args.get("message", "")
+    rows.append({
+        "run": packet.name,
+        "parent": str(parent_path.relative_to(root)),
+        "parent_sha256": digest(parent_path.read_bytes()),
+        "parent_id": parent_meta["id"],
+        "spawn_ordinal": event.get("ordinal"),
+        "spawn_timestamp": event["timestamp"],
+        "spawn_call_id": call["call_id"],
+        "spawn_task": args["task_name"],
+        "spawn_message_characters": len(message),
+        "spawn_message_sha256": digest(message.encode()),
+        "spawn_message_encrypted": message.startswith("gAAAA"),
+        "checker": str(child_path.relative_to(root)),
+        "checker_sha256": digest(child_path.read_bytes()),
+        "checker_id": child_meta["id"],
+        "inherited_message_ordinals": [e.get("ordinal") for e in inherited],
+        "inherited_blocks": [{
+            "type": b["type"],
+            "characters": len(b.get("text", b.get("encrypted_content", ""))),
+            "sha256": digest(b.get("text", b.get("encrypted_content", "")).encode()),
+            "identical_to_parent_payload": b.get("encrypted_content") == message,
+        } for b in blocks],
+        "plaintext_inherited_message": "".join(b.get("text", "") for b in blocks),
+        "checker_return_ordinal": final.get("ordinal"),
+        "checker_return_timestamp": final["timestamp"],
+        "checker_return_sha256": digest(checker_return.encode()),
+        "terminal_reply_sha256": digest((packet / "response.txt").read_bytes()),
+        "captures": captures,
+        "plaintext_draft_source": draft_source,
+        "draft_return_delivery_comparison": comparison,
+        "recoverable_complete_checker_instruction": (
+            not message.startswith("gAAAA") and has_filled_brief(message)
+        ) or any(has_filled_brief(b.get("text", "")) for b in blocks),
+    })
+
+# Search the whole owned evaluation, not just user messages or capture names.
+surface = []
+filled_candidates = []
+for path in sorted(root.rglob("*")):
+    if not path.is_file() or "amend-1" in path.relative_to(root).parts:
+        continue
+    data = path.read_bytes()
+    entry = {"path": str(path.relative_to(root)), "sha256": digest(data)}
+    surface.append(entry)
+    if path.suffix == ".jsonl":
+        values = [json.loads(line) for line in data.decode().splitlines() if line]
+    elif path.suffix == ".json":
+        values = [json.loads(data)]
+    else:
+        values = [data.decode(errors="replace")]
+    for value in values:
+        for text in strings(value):
+            if has_filled_brief(text):
+                filled_candidates.append(entry)
+                break
+
+receipt = {
+    "requirement": "Acceptance criterion 5: every unfaulted checked statement reaches the caller word for word",
+    "runs": rows,
+    "owned_surface": surface,
+    "filled_checker_brief_candidates": filled_candidates,
+    "limitation": "The marker scan cannot decode encrypted payloads or reconstruct arbitrary undocumented encodings. No checker draft is inferred from the terminal reply or checker quotations.",
+}
+(root / "amend-1" / "recovery-audit.json").write_text(
+    json.dumps(receipt, ensure_ascii=False, indent=2) + "\n"
+)
+missing = [r["run"] for r in rows if r["draft_return_delivery_comparison"] is None]
+print(json.dumps({
+    "runs": len(rows),
+    "missing_complete_plaintext_draft": missing,
+    "files_inspected": len(surface),
+    "native_rollouts_inspected": sum("native-sessions/" in x["path"] for x in surface),
+    "captures_inspected": sum(len(r["captures"]) for r in rows),
+    "filled_checker_brief_candidates": filled_candidates,
+}, ensure_ascii=False, indent=2), flush=True)
+assert not missing, "Complete plaintext drafts unavailable in " + ", ".join(missing)

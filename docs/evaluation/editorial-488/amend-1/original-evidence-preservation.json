@@ -1,0 +1,12 @@
+{
+  "original_files_identified": 1681,
+  "unchanged_original_files": 1680,
+  "unexpected_sha256_mismatches": [],
+  "supplemented_summary": {
+    "path": "results.md",
+    "original_sha256": "2e9eae6fe9db397d4d72d26895e22d3b2bc7027cb57c19e91b15f20e2fb2ec6f",
+    "original_body_preserved_as_prefix": true,
+    "addition": "Pointer to separate amend-1 evidence audit"
+  },
+  "shipped_file_diff": ""
+}

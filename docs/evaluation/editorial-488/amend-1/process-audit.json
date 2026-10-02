@@ -1,0 +1,16 @@
+{
+  "supervisor_pid": 15718,
+  "command_pids": [
+    15841,
+    15853,
+    15862,
+    16012
+  ],
+  "surviving_owned_processes_or_group_members": [],
+  "all_command_exit_codes": [
+    0,
+    0,
+    0,
+    0
+  ]
+}

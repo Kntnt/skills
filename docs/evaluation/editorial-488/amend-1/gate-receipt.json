@@ -1,0 +1,58 @@
+{
+  "starting_head": "f0dd508f9bee56c8fee3a75fd2ff4643cffaf5f2",
+  "supervisor_pid": 15718,
+  "supervisor_process_group": 15718,
+  "started": 1790958758.240581,
+  "environment": {
+    "TMPDIR": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-4e63a209/amend-1-runtime/tmp",
+    "UV_CACHE_DIR": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-4e63a209/amend-1-runtime/uv-cache",
+    "UV_TOOL_DIR": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-4e63a209/amend-1-runtime/uv-tools",
+    "UV_TOOL_BIN_DIR": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-4e63a209/amend-1-runtime/uv-bin",
+    "UV_PROJECT_ENVIRONMENT": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-4e63a209/amend-1-runtime/project-env",
+    "UV_PYTHON_INSTALL_DIR": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-4e63a209/amend-1-runtime/uv-python",
+    "PYTHONPYCACHEPREFIX": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-4e63a209/amend-1-runtime/pycache",
+    "MYPY_CACHE_DIR": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-4e63a209/amend-1-runtime/mypy-cache",
+    "RUFF_CACHE_DIR": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-4e63a209/amend-1-runtime/ruff-cache",
+    "XDG_CACHE_HOME": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-4e63a209/amend-1-runtime/xdg-cache",
+    "XDG_DATA_HOME": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-4e63a209/amend-1-runtime/xdg-data",
+    "KNTNT_HOME": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-4e63a209/amend-1-runtime/kntnt-home",
+    "UV_NO_PROJECT": "1",
+    "PYTEST_ADDOPTS": "-o cache_dir=/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-4e63a209/amend-1-runtime/pytest-cache --basetemp=/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-4e63a209/amend-1-runtime/pytest-temp"
+  },
+  "commands": [
+    {
+      "command": "uvx ruff check .",
+      "pid": 15841,
+      "started": 1790958758.243139,
+      "log": "gate-1.log",
+      "returncode": 0,
+      "finished": 1790958759.501407
+    },
+    {
+      "command": "uvx ruff format --check .",
+      "pid": 15853,
+      "started": 1790958759.503221,
+      "log": "gate-2.log",
+      "returncode": 0,
+      "finished": 1790958760.361251
+    },
+    {
+      "command": "uvx --with types-PyYAML --with pytest --with httpx==0.28.1 --with selectolax==0.4.11 --with types-tinycss2 --with types-regex mypy skills/kntnt/scripts/kntnt.py skills/kntnt/library/scripts/argument_grammar.py skills/kntnt/library/scripts/article_anatomy.py skills/kntnt/library/scripts/ship.py skills/kntnt/library/scripts/integrations.py skills/kntnt/library/scripts/languages.py skills/kntnt/library/scripts/credentials.py skills/models/model-selector/scripts/catalogue.py skills/models/model-selector/scripts/profiles.py skills/models/model-selector/scripts/evidence.py skills/models/model-selector/scripts/launch.py skills/models/model-selector/scripts/selection.py skills/models/model-selector/scripts/quota.py skills/models/model-selector/scripts/record.py skills/models/model-selector/scripts/capture.py skills/models/model-selector/scripts/grade.py skills/models/model-selector/scripts/setup_apply.py skills/models/model-selector/scripts/inventory.py skills/code/orchestrate/scripts/run.py skills/productivity/rename-invoices/scripts/rename_invoices.py skills/agents/explain/scripts/invoke.py skills/web/mirror/scripts/mirror.py skills/infrastructure/cloudns/scripts/cloudns.py skills/infrastructure/hetzner/scripts/hetzner.py skills/infrastructure/nodeping/scripts/nodeping.py skills/infrastructure/postmark/scripts/postmark.py tests",
+      "pid": 15862,
+      "started": 1790958760.363211,
+      "log": "gate-3.log",
+      "returncode": 0,
+      "finished": 1790958765.785943
+    },
+    {
+      "command": "uv run --with pytest --with pytest-xdist --with pyyaml pytest -n auto",
+      "pid": 16012,
+      "started": 1790958765.7879949,
+      "log": "gate-4.log",
+      "returncode": 0,
+      "finished": 1790958897.6892118
+    }
+  ],
+  "finished": 1790958897.6903071,
+  "all_passed": true
+}
