@@ -1,0 +1,67 @@
+"""Run the unchanged four-command gate and retain owned-process receipts."""
+import json
+import os
+import shlex
+import signal
+import subprocess
+import time
+from pathlib import Path
+
+REPO = Path('/Users/thomas/Projects/skills/.git/kntnt-orchestrate/491')
+CHECKS = REPO / 'docs/evaluation/editorial-491/checks/amend-2'
+RUNTIME = Path(__file__).resolve().parent
+ENV = os.environ.copy() | json.loads((CHECKS / 'environment.json').read_text())
+ENV['PYTEST_ADDOPTS'] = '-o cache_dir=' + str(RUNTIME / 'pytest-cache')
+REGISTER_ENV = ENV | {'KNTNT_HOME': str(RUNTIME / 'ledger')}
+REGISTRAR = '/Users/thomas/.agents/skills/kntnt/features/session-cleanup/scripts/session_cleanup.py'
+COMMANDS = json.loads((REPO / 'docs/evaluation/editorial-491/checks/gate-commands.json').read_text())
+if isinstance(COMMANDS, dict):
+    COMMANDS = COMMANDS['commands']
+assert len(COMMANDS) == 4
+assert all(command in (REPO / 'CONTRIBUTING.md').read_text() for command in COMMANDS)
+if os.getpgrp() != os.getpid():
+    os.setsid()
+assert os.getpgrp() == os.getpid()
+
+
+def register(pid: int, reason: str) -> dict:
+    """Record ownership in this ticket's private ledger immediately."""
+    result = subprocess.run(['uv', 'run', REGISTRAR, 'add', 'pid', str(pid), reason], cwd=REPO, env=REGISTER_ENV, capture_output=True, text=True, check=True)
+    return json.loads(result.stdout)
+
+
+def members(group: int) -> list[str]:
+    """Keep only this process group's members from the system inventory."""
+    result = subprocess.run(['ps', '-axo', 'pid=,ppid=,pgid=,lstart='], cwd=REPO, capture_output=True, text=True, check=True)
+    return [line.strip() for line in result.stdout.splitlines() if len(line.split()) >= 3 and int(line.split()[2]) == group]
+
+
+receipt = {'attempt_id': 'ms-20261002-4871cd', 'starting_head': subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=REPO, text=True).strip(), 'commands': [], 'complete': False, 'supervisor': {'pid': os.getpid(), 'pgid': os.getpgrp()}, 'environment': json.loads((CHECKS / 'environment.json').read_text()), 'home_preserved': True, 'codex_home_preserved': True}
+receipt['supervisor']['registration'] = register(os.getpid(), '#491 amend 2 gate supervisor and waiter')
+(CHECKS / 'supervisor.json').write_text(json.dumps(receipt['supervisor'], indent=2) + '\n')
+
+for index, command in enumerate(COMMANDS, 1):
+    with (CHECKS / f'gate-{index:02d}.log').open('w') as log:
+        proc = subprocess.Popen(shlex.split(command), cwd=REPO, env=ENV, stdout=log, stderr=subprocess.STDOUT, start_new_session=True)
+        row = {'command': command, 'pid': proc.pid, 'pgid': proc.pid, 'started': time.time()}
+        try:
+            row['registration'] = register(proc.pid, f'#491 amend 2 gate {index}')
+            row['initial_members'] = members(proc.pid)
+            row['returncode'] = proc.wait()
+        finally:
+            if proc.poll() is None:
+                os.killpg(proc.pid, signal.SIGTERM)
+                try:
+                    proc.wait(timeout=10)
+                except subprocess.TimeoutExpired:
+                    os.killpg(proc.pid, signal.SIGKILL)
+                    proc.wait()
+        row['ended'] = time.time()
+        row['live_group_after_exit'] = members(proc.pid)
+        assert not row['live_group_after_exit'], row['live_group_after_exit']
+        receipt['commands'].append(row)
+        (CHECKS / 'gate-results.json').write_text(json.dumps(receipt, indent=2) + '\n')
+        print(f'gate {index}: exit {row["returncode"]}', flush=True)
+receipt['complete'] = True
+(CHECKS / 'gate-results.json').write_text(json.dumps(receipt, indent=2) + '\n')
+print('All four gate commands completed.', flush=True)

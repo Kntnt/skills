@@ -1,0 +1,10 @@
+{
+  "manifest": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-42b5836c/amend-2-runtime/ledger/.kntnt/session-cleanup/sessions/unowned-9252.jsonl",
+  "recorded": {
+    "at": "2026-10-02T19:24:49+00:00",
+    "id": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-42b5836c/amend-2-runtime",
+    "kind": "path",
+    "why": "#491 amend 2 isolated gate runtime"
+  },
+  "session": "unowned-9252"
+}

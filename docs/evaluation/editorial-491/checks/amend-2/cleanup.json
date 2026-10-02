@@ -1,0 +1,20 @@
+{
+  "at": "2026-10-02T19:29:29.159642+00:00",
+  "owned_process_groups": [
+    10058,
+    10181,
+    10195,
+    10208,
+    10223
+  ],
+  "live_owned_group_members_before": [],
+  "live_owned_group_members_after": [],
+  "removal_command": "rm -r /private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-42b5836c/amend-2-runtime",
+  "removal_exit_code": 0,
+  "removal_command_session": 33929,
+  "removal_command_completed": true,
+  "runtime_path_absent": true,
+  "scratch_entries_after": [],
+  "deliberately_running": [],
+  "deliverables_preserved": true
+}

@@ -1,0 +1,14 @@
+{
+  "owned_process_groups": [
+    10058,
+    10181,
+    10195,
+    10208,
+    10223
+  ],
+  "live_owned_group_members": [],
+  "scratch_entries": [
+    "amend-2-runtime"
+  ],
+  "path_to_remove": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-42b5836c/amend-2-runtime"
+}

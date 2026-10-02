@@ -1,0 +1,12 @@
+{
+  "TMPDIR": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-42b5836c/amend-2-runtime/tmp",
+  "UV_CACHE_DIR": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-42b5836c/amend-2-runtime/uv-cache",
+  "UV_TOOL_DIR": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-42b5836c/amend-2-runtime/uv-tools",
+  "UV_TOOL_BIN_DIR": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-42b5836c/amend-2-runtime/uv-bin",
+  "UV_PYTHON_INSTALL_DIR": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-42b5836c/amend-2-runtime/python",
+  "XDG_CACHE_HOME": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-42b5836c/amend-2-runtime/cache",
+  "MYPY_CACHE_DIR": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-42b5836c/amend-2-runtime/mypy-cache",
+  "RUFF_CACHE_DIR": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-42b5836c/amend-2-runtime/ruff-cache",
+  "PYTHONDONTWRITEBYTECODE": "1",
+  "UV_NO_PROGRESS": "1"
+}
