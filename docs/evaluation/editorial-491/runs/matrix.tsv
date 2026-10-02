@@ -1,0 +1,15 @@
+run	lane	revision	input	invocation	capture
+pre-case-study-clean-resp-1	0	4cf05813f94c2fa7147898878027835e14d29859	docs/evaluation/editorial-491/inputs/case-study-clean.md	/redline --genre=casestudy --language=sv --output=response input.md	no
+pre-case-study-clean-file-1	0	4cf05813f94c2fa7147898878027835e14d29859	docs/evaluation/editorial-491/inputs/case-study-clean.md	/redline --genre=casestudy --language=sv --output=output.md input.md	yes
+pre-case-study-clean-resp-2	0	4cf05813f94c2fa7147898878027835e14d29859	docs/evaluation/editorial-491/inputs/case-study-clean.md	/redline --genre=casestudy --language=sv --output=response input.md	no
+pre-case-study-clean-file-2	0	4cf05813f94c2fa7147898878027835e14d29859	docs/evaluation/editorial-491/inputs/case-study-clean.md	/redline --genre=casestudy --language=sv --output=output.md input.md	yes
+pre-case-study-clean-resp-3	0	4cf05813f94c2fa7147898878027835e14d29859	docs/evaluation/editorial-491/inputs/case-study-clean.md	/redline --genre=casestudy --language=sv --output=response input.md	no
+pre-case-study-clean-file-3	0	4cf05813f94c2fa7147898878027835e14d29859	docs/evaluation/editorial-491/inputs/case-study-clean.md	/redline --genre=casestudy --language=sv --output=output.md input.md	yes
+pre-case-study-flawed-resp-1	1	4cf05813f94c2fa7147898878027835e14d29859	docs/evaluation/editorial-491/inputs/case-study-flawed.md	/redline --genre=casestudy --language=sv --output=response input.md	no
+pre-case-study-flawed-resp-2	1	4cf05813f94c2fa7147898878027835e14d29859	docs/evaluation/editorial-491/inputs/case-study-flawed.md	/redline --genre=casestudy --language=sv --output=response input.md	no
+pre-supported-appraisal-resp-1	2	4cf05813f94c2fa7147898878027835e14d29859	docs/evaluation/editorial-491/inputs/supported-appraisal.md	/redline --genre=casestudy --language=sv --output=response input.md	no
+pre-supported-appraisal-file-1	2	4cf05813f94c2fa7147898878027835e14d29859	docs/evaluation/editorial-491/inputs/supported-appraisal.md	/redline --genre=casestudy --language=sv --output=output.md input.md	yes
+pre-unsupported-attribution-resp-1	3	4cf05813f94c2fa7147898878027835e14d29859	docs/evaluation/editorial-491/inputs/unsupported-attribution.md	/redline --genre=casestudy --language=sv --output=response input.md	no
+pre-unsupported-attribution-file-1	3	4cf05813f94c2fa7147898878027835e14d29859	docs/evaluation/editorial-491/inputs/unsupported-attribution.md	/redline --genre=casestudy --language=sv --output=output.md input.md	yes
+pre-unresolved-referent-resp-1	4	4cf05813f94c2fa7147898878027835e14d29859	docs/evaluation/editorial-491/inputs/unresolved-referent.md	/redline --genre=casestudy --language=sv --output=response input.md	no
+pre-unresolved-referent-file-1	4	4cf05813f94c2fa7147898878027835e14d29859	docs/evaluation/editorial-491/inputs/unresolved-referent.md	/redline --genre=casestudy --language=sv --output=output.md input.md	yes
