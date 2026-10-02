@@ -1,0 +1,17 @@
+{
+  "continuation_base": "4d46d138a2fd303f8b6bcd23f916017e9723e90d",
+  "attributable_files_verified": 630,
+  "integrated_bytes_match_independent_pretransfer_inventory": true,
+  "native_audit_matches_base_byte_for_byte": true,
+  "tracked_base_files_changed_before_status_documents": [],
+  "retained_source_worktree_and_branch": "No command targeted the source worktree or source branch in this continuation.",
+  "original_failure_receipts": "Untouched; restored-environment receipts are additive.",
+  "product_trials": 0,
+  "semantic_judges": 0,
+  "product_changes": 0,
+  "new_defect_issues": 0,
+  "issue_closures": 0,
+  "pushes": 0,
+  "releases": 0,
+  "global_installs": 0
+}

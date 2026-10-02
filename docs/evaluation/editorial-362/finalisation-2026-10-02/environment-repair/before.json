@@ -1,0 +1,11 @@
+{
+  "base": "4d46d138a2fd303f8b6bcd23f916017e9723e90d",
+  "branch": "kntnt-orchestrate/main/362",
+  "scratch": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-362-scratch",
+  "status": [
+    "?? docs/evaluation/editorial-362/finalisation-2026-10-02/environment-repair/environment-repair.json"
+  ],
+  "ignored_files": [
+    "uv.lock"
+  ]
+}
