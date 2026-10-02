@@ -1,0 +1,131 @@
+{
+  "registered_processes": [
+    {
+      "at": "2026-10-02T12:32:34+00:00",
+      "id": "99970",
+      "kind": "pid",
+      "started": "Fri Oct  2 14:32:34 2026",
+      "why": "Editorial #485 isolated native evaluation",
+      "current_ps": "",
+      "matching_original_alive": false
+    },
+    {
+      "at": "2026-10-02T12:32:34+00:00",
+      "id": "99990",
+      "kind": "pid",
+      "started": "Fri Oct  2 14:32:34 2026",
+      "why": "Editorial #485 isolated native evaluation",
+      "current_ps": "",
+      "matching_original_alive": false
+    },
+    {
+      "at": "2026-10-02T12:33:35+00:00",
+      "id": "2733",
+      "kind": "pid",
+      "started": "Fri Oct  2 14:33:35 2026",
+      "why": "Ticket 485 verification gate process group",
+      "current_ps": "",
+      "matching_original_alive": false
+    },
+    {
+      "at": "2026-10-02T12:42:07+00:00",
+      "id": "66077",
+      "kind": "pid",
+      "started": "Fri Oct  2 14:42:06 2026",
+      "why": "Ticket 485 remaining native evaluation sessions",
+      "current_ps": "",
+      "matching_original_alive": false
+    },
+    {
+      "at": "2026-10-02T12:42:07+00:00",
+      "id": "66201",
+      "kind": "pid",
+      "started": "Fri Oct  2 14:42:07 2026",
+      "why": "Editorial #485 isolated native evaluation",
+      "current_ps": "",
+      "matching_original_alive": false
+    },
+    {
+      "at": "2026-10-02T12:42:07+00:00",
+      "id": "66221",
+      "kind": "pid",
+      "started": "Fri Oct  2 14:42:07 2026",
+      "why": "Editorial #485 isolated native evaluation",
+      "current_ps": "",
+      "matching_original_alive": false
+    },
+    {
+      "at": "2026-10-02T12:49:44+00:00",
+      "id": "75611",
+      "kind": "pid",
+      "started": "Fri Oct  2 14:49:44 2026",
+      "why": "Editorial #485 isolated native evaluation",
+      "current_ps": "",
+      "matching_original_alive": false
+    },
+    {
+      "at": "2026-10-02T12:49:45+00:00",
+      "id": "75631",
+      "kind": "pid",
+      "started": "Fri Oct  2 14:49:45 2026",
+      "why": "Editorial #485 isolated native evaluation",
+      "current_ps": "",
+      "matching_original_alive": false
+    },
+    {
+      "at": "2026-10-02T13:02:43+00:00",
+      "id": "94254",
+      "kind": "pid",
+      "started": "Fri Oct  2 15:02:43 2026",
+      "why": "Editorial #485 isolated native evaluation",
+      "current_ps": "",
+      "matching_original_alive": false
+    },
+    {
+      "at": "2026-10-02T13:02:44+00:00",
+      "id": "94486",
+      "kind": "pid",
+      "started": "Fri Oct  2 15:02:44 2026",
+      "why": "Editorial #485 isolated native evaluation",
+      "current_ps": "",
+      "matching_original_alive": false
+    },
+    {
+      "at": "2026-10-02T13:12:06+00:00",
+      "id": "11197",
+      "kind": "pid",
+      "started": "Fri Oct  2 15:12:06 2026",
+      "why": "Editorial #485 isolated native evaluation",
+      "current_ps": "",
+      "matching_original_alive": false
+    },
+    {
+      "at": "2026-10-02T13:12:06+00:00",
+      "id": "11223",
+      "kind": "pid",
+      "started": "Fri Oct  2 15:12:06 2026",
+      "why": "Editorial #485 isolated native evaluation",
+      "current_ps": "",
+      "matching_original_alive": false
+    },
+    {
+      "at": "2026-10-02T13:25:22+00:00",
+      "id": "26910",
+      "kind": "pid",
+      "started": "Fri Oct  2 15:25:22 2026",
+      "why": "Editorial #485 isolated native evaluation",
+      "current_ps": "",
+      "matching_original_alive": false
+    },
+    {
+      "at": "2026-10-02T13:25:22+00:00",
+      "id": "26930",
+      "kind": "pid",
+      "started": "Fri Oct  2 15:25:22 2026",
+      "why": "Editorial #485 isolated native evaluation",
+      "current_ps": "",
+      "matching_original_alive": false
+    }
+  ],
+  "recorded_group_members": []
+}

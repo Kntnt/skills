@@ -1,0 +1,36 @@
+Delivered with one known format defect: the required byline is absent because no author name was supplied. The final source check found no unresolved findings.
+
+British English case study, with no technique—the genre’s default. The fictional material supplies no call to action. Delivered below; temporary files removed.
+
+```markdown
+---
+kntnt:
+  genre: casestudy
+  technique: none
+  language: en_GB
+---
+
+# Fenwick approves shared scheduling for new jobs
+
+In Fenwick Instrument Repairs’ six-week Benchline trial, staff could see which instruments were waiting for parts. The workshop manager’s account shows what had to be settled before the schedule was useful and what would change before adding the backlog.
+
+Fenwick Instrument Repairs services brass and woodwind instruments. Before its January 2026 trial of a shared bench schedule, jobs awaiting parts and jobs ready for work appeared on separate paper sheets. The team chose scheduling software supplier Benchline after checking that it could distinguish these statuses.
+
+## The workshop sets the rules
+
+Benchline configured the statuses the workshop defined and trained four staff in one online session. The workshop also decided who would update them. Telephone calls continued for customer collection arrangements.
+
+In an email interview with Benchline’s case writer on 2 March 2026, manager Priya Vale was asked what the team had to settle:
+
+‘We had to agree what ready for work meant. A part being in the building did not always mean that it had reached the right bench.’
+
+## The trial summary records 38 jobs entered in the schedule
+
+The workshop’s trial summary, dated 23 February 2026, says staff could see which instruments were waiting for parts. It does not measure repair duration, revenue or customer satisfaction.
+
+The manager approved continued use for new jobs but postponed adding the backlog until the team had reviewed its status definitions.
+
+## Vale looks back on the choice
+
+Asked in the same email interview whether the choice would be the same again and what would change, Vale replied: ‘I would use it again for new jobs. I would allow another week to check the status names before adding the backlog.’
+```
