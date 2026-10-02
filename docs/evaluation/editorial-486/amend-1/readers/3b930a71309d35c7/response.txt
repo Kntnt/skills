@@ -1,0 +1,5 @@
+**R1: Fail.** The Skill unnecessarily expands an already clear lead, violating R1’s prohibition on taste-driven rewrites of clean text.
+
+All frozen-expectation clauses were met: the required passages and denominator inference were preserved, no technique was selected, and no prohibited finding was made.
+
+Written to [judgement-b.md](/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-70ef836a/amend-1/direct/tmp/session-bnwiqq6a/work/judgement-b.md).

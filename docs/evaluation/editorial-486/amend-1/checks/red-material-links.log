@@ -1,0 +1,64 @@
+warning: No `requires-python` value found in the workspace. Defaulting to `>=3.12`.
+F                                                                        [100%]
+=================================== FAILURES ===================================
+___ test_all_counted_readers_receive_neutral_paths_in_every_visible_surface ____
+
+    def test_all_counted_readers_receive_neutral_paths_in_every_visible_surface() -> None:
+        """A random leaf cannot conceal a ticket-bearing ancestor or native cwd."""
+    
+        # Include validators as well as both judges of every completed baseline row.
+        rows = json.loads((EVALUATION / "amend-1/counted-readers.json").read_text())
+        assert sum(row["role"] == "validator" for row in rows) == 4
+        assert sum(row["role"] == "judge" for row in rows) == 20
+        leaks = []
+    
+        # Inspect supplied prompts, actual native contexts and returned tool surfaces.
+        for row in rows:
+            packet = EVALUATION / row["packet"]
+            surfaces = {"invocation": (packet / "invocation.txt").read_text()}
+            audit = json.loads((packet / "identity-audit.json").read_text())
+            for number, lineage in enumerate(audit["lineage"]):
+                surfaces[f"native-context-{number}"] = json.dumps(lineage)
+            with gzip.open(packet / "trace.jsonl.gz", "rt") as stream:
+                surfaces["tool-and-reply-trace"] = stream.read()
+            for native in (packet / "native-sessions").rglob("*.jsonl.gz"):
+                with gzip.open(native, "rt") as stream:
+                    surfaces[str(native.relative_to(packet))] = stream.read()
+            for name, text in surfaces.items():
+                for forbidden in (
+                    "ticket-486",
+                    "editorial-486",
+                    "/486/",
+                    "pre-article-",
+                    "post-article-",
+                ):
+                    if forbidden in text:
+                        leaks.append(f"{row['packet']} {name}: {forbidden}")
+>       assert not leaks, "Reader-visible identity leaks:\n" + "\n".join(leaks)
+E       AssertionError: Reader-visible identity leaks:
+E         amend-1/readers/8456a9f74b484e86 tool-and-reply-trace: ticket-486
+E         amend-1/readers/8456a9f74b484e86 native-sessions/2026/10/02/rollout-2026-10-02T17-21-18-01a0fd34-9891-7ac3-93e2-5f863223e8a3.jsonl.gz: ticket-486
+E         amend-1/readers/eb55c36709f8c3bc tool-and-reply-trace: ticket-486
+E         amend-1/readers/eb55c36709f8c3bc native-sessions/2026/10/02/rollout-2026-10-02T17-21-18-01a0fd34-9890-79d2-b89f-cdef2d310afe.jsonl.gz: ticket-486
+E         amend-1/readers/b1a5b385aff4e81d tool-and-reply-trace: ticket-486
+E         amend-1/readers/b1a5b385aff4e81d native-sessions/2026/10/02/rollout-2026-10-02T17-21-18-01a0fd34-9891-7011-ab16-2beb5bbc95ff.jsonl.gz: ticket-486
+E         amend-1/readers/71c1b24550411ff7 tool-and-reply-trace: ticket-486
+E         amend-1/readers/71c1b24550411ff7 native-sessions/2026/10/02/rollout-2026-10-02T17-21-18-01a0fd34-9891-7122-be80-9166d7ef9a1a.jsonl.gz: ticket-486
+E         amend-1/readers/4e34c640ab62e3d0 tool-and-reply-trace: ticket-486
+E         amend-1/readers/4e34c640ab62e3d0 native-sessions/2026/10/02/rollout-2026-10-02T17-22-57-01a0fd36-1d65-7cb2-ab36-f7badfe496c9.jsonl.gz: ticket-486
+E         amend-1/readers/55617734827b7287 tool-and-reply-trace: ticket-486
+E         amend-1/readers/55617734827b7287 native-sessions/2026/10/02/rollout-2026-10-02T17-23-08-01a0fd36-4793-7841-9f28-727b37da81f2.jsonl.gz: ticket-486
+E         amend-1/readers/ec5e5cea3833bd43 tool-and-reply-trace: ticket-486
+E         amend-1/readers/ec5e5cea3833bd43 native-sessions/2026/10/02/rollout-2026-10-02T17-28-14-01a0fd3a-f1a5-7822-a407-666a8377c5d5.jsonl.gz: ticket-486
+E         amend-1/readers/3b930a71309d35c7 tool-and-reply-trace: ticket-486
+E         amend-1/readers/3b930a71309d35c7 native-sessions/2026/10/02/rollout-2026-10-02T17-28-41-01a0fd3b-5dbb-7f10-8819-7e7f187ee18d.jsonl.gz: ticket-486
+E         amend-1/readers/8d6ca993326bedc1 tool-and-reply-trace: ticket-486
+E         amend-1/readers/8d6ca993326bedc1 native-sessions/2026/10/02/rollout-2026-10-02T17-30-32-01a0fd3d-0c52-72a1-b9b5-21d136f0d9a5.jsonl.gz: ticket-486
+E         amend-1/readers/bf8d009cf33e22a2 tool-and-reply-trace: ticket-486
+E         amend-1/readers/bf8d009cf33e22a2 native-sessions/2026/10/02/rollout-2026-10-02T17-30-46-01a0fd3d-44fe-7832-8f0c-20ae65b1e0c5.jsonl.gz: ticket-486
+E       assert not ['amend-1/readers/8456a9f74b484e86 tool-and-reply-trace: ticket-486', 'amend-1/readers/8456a9f74b484e86 native-session...native-sessions/2026/10/02/rollout-2026-10-02T17-21-18-01a0fd34-9891-7011-ab16-2beb5bbc95ff.jsonl.gz: ticket-486', ...]
+
+tests/test_editorial_486_blinding.py:44: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_editorial_486_blinding.py::test_all_counted_readers_receive_neutral_paths_in_every_visible_surface
+1 failed in 0.06s

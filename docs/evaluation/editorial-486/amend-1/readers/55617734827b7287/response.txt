@@ -1,0 +1,5 @@
+**R1: Fail.** The headline was replaced on an unsupported stylistic finding, despite the control’s conforming anatomy.
+
+All named preservation requirements were met. No ABT technique was selected, and none of the specifically prohibited findings appeared.
+
+Written to [judgement-b.md](/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-70ef836a/amend-1/direct/tmp/session-o5w7l5io/work/judgement-b.md).

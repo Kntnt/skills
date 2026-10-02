@@ -28,6 +28,9 @@ def test_all_counted_readers_receive_neutral_paths_in_every_visible_surface() ->
             surfaces[f"native-context-{number}"] = json.dumps(lineage)
         with gzip.open(packet / "trace.jsonl.gz", "rt") as stream:
             surfaces["tool-and-reply-trace"] = stream.read()
+        for native in (packet / "native-sessions").rglob("*.jsonl.gz"):
+            with gzip.open(native, "rt") as stream:
+                surfaces[str(native.relative_to(packet))] = stream.read()
         for name, text in surfaces.items():
             for forbidden in (
                 "ticket-486",

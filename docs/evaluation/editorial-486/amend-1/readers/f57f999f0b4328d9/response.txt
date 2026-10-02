@@ -1,0 +1,5 @@
+R1: **Fail.** The run unnecessarily expands a conforming headline, treating a preference for explicitness as a visible defect.
+
+All specified preservation clauses were met, and all explicitly prohibited findings were avoided. The anatomy-conformity clause was not respected.
+
+Written: [judgement-a.md](/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-70ef836a/amend-1/direct/tmp/session-lbjzsffv/work/judgement-a.md).

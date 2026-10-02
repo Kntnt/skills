@@ -1,0 +1,5 @@
+**R1: Fail.** The Skill replaced a conforming headline’s statement about the experiment’s limits with a recommendation, without identifying a concrete visible defect.
+
+All specified passages were preserved. No technique was selected, and none of the prohibited length, paragraph, byline or name findings appeared. The expectation to recognize the text’s conforming anatomy was not met.
+
+Written to [judgement-a.md](/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-70ef836a/amend-1/direct/tmp/session-yt9_871w/work/judgement-a.md).
