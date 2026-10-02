@@ -1,0 +1,44 @@
+[
+  {
+    "label": "A",
+    "raw_directory": "sample-07-rerun-1",
+    "report_words": 5980,
+    "duration_seconds": 579.6,
+    "report_sha256": "2b79ce7f33f94b3b260d0524d3d815b0c6d2b0b85b4a7a7b6490461ed3902a06"
+  },
+  {
+    "label": "B",
+    "raw_directory": "sample-08",
+    "report_words": 3994,
+    "duration_seconds": 683.05,
+    "report_sha256": "a82971f5a889fb552cd3984d85a0e1fe4d21efd8e0820a08cf82c63e3e61d882"
+  },
+  {
+    "label": "C",
+    "raw_directory": "sample-09",
+    "report_words": 5812,
+    "duration_seconds": 636.0,
+    "report_sha256": "b0d675b98bb43fadfea5be3597a0756f6ad01c41b5a7dc0a520c92c5c5d5db28"
+  },
+  {
+    "label": "D",
+    "raw_directory": "sample-10",
+    "report_words": 5872,
+    "duration_seconds": 817.28,
+    "report_sha256": "7e5f72726541f8f0eb1754b2290b7e14c566cf9a1891e2e2aedefce1afb94e7e"
+  },
+  {
+    "label": "E",
+    "raw_directory": "sample-11",
+    "report_words": 5460,
+    "duration_seconds": 760.91,
+    "report_sha256": "7337c3bfdbed99093c603419bab071d4661a96b262c7b850554d1070480ccd7e"
+  },
+  {
+    "label": "F",
+    "raw_directory": "sample-12-rerun-1",
+    "report_words": 5981,
+    "duration_seconds": 762.88,
+    "report_sha256": "0128a26cd6647a3d1d25bc489043f11a519419f5baea6c970027d4087f3daddb"
+  }
+]

@@ -1,0 +1,239 @@
+{
+  "same_seat_verified": true,
+  "counted_service_interruptions": 0,
+  "counted_runs_and_judge": [
+    {
+      "sample": "runs/p3-document-scope-r1",
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 579.6,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-fgyvpdmm",
+        "cleanup_required": true
+      },
+      "native_sessions": [
+        {
+          "file": "runs/p3-document-scope-r1/native-sessions/2026/10/01/rollout-2026-10-01T15-05-08-01a0f791-939f-77b0-8e7d-ac7502023b55.jsonl",
+          "metadata": {
+            "id": "01a0f791-939f-77b0-8e7d-ac7502023b55",
+            "source": "exec",
+            "originator": "codex_exec",
+            "cli_version": "0.159.3"
+          },
+          "seats": [
+            {
+              "model": "gpt-6.1-sol",
+              "effort": "xhigh"
+            }
+          ],
+          "completed_turns": [
+            {
+              "turn_id": "01a0f791-951a-7032-bb21-8025cb3e8ba5",
+              "completed_at": 1790860486
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sample": "runs/p3-document-scope-r2",
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 683.05,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-3tfqbziy",
+        "cleanup_required": true
+      },
+      "native_sessions": [
+        {
+          "file": "runs/p3-document-scope-r2/native-sessions/2026/10/01/rollout-2026-10-01T14-55-28-01a0f788-ba61-7572-8ad7-37195d93720e.jsonl",
+          "metadata": {
+            "id": "01a0f788-ba61-7572-8ad7-37195d93720e",
+            "source": "exec",
+            "originator": "codex_exec",
+            "cli_version": "0.159.3"
+          },
+          "seats": [
+            {
+              "model": "gpt-6.1-sol",
+              "effort": "xhigh"
+            }
+          ],
+          "completed_turns": [
+            {
+              "turn_id": "01a0f788-bbd1-7292-b7dc-ea1fc9c8410f",
+              "completed_at": 1790860010
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sample": "runs/p3-document-scope-r3",
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 636.0,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-mxowu2hq",
+        "cleanup_required": true
+      },
+      "native_sessions": [
+        {
+          "file": "runs/p3-document-scope-r3/native-sessions/2026/10/01/rollout-2026-10-01T15-06-51-01a0f793-27ee-7673-94eb-513a48a84426.jsonl",
+          "metadata": {
+            "id": "01a0f793-27ee-7673-94eb-513a48a84426",
+            "source": "exec",
+            "originator": "codex_exec",
+            "cli_version": "0.159.3"
+          },
+          "seats": [
+            {
+              "model": "gpt-6.1-sol",
+              "effort": "xhigh"
+            }
+          ],
+          "completed_turns": [
+            {
+              "turn_id": "01a0f793-298e-7ff2-a1a4-64933805823e",
+              "completed_at": 1790860646
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sample": "runs/p3-document-scope-r4",
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 817.28,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-5ozogrj1",
+        "cleanup_required": true
+      },
+      "native_sessions": [
+        {
+          "file": "runs/p3-document-scope-r4/native-sessions/2026/10/01/rollout-2026-10-01T15-10-39-01a0f796-a168-7d03-8437-6ee769d096d6.jsonl",
+          "metadata": {
+            "id": "01a0f796-a168-7d03-8437-6ee769d096d6",
+            "source": "exec",
+            "originator": "codex_exec",
+            "cli_version": "0.159.3"
+          },
+          "seats": [
+            {
+              "model": "gpt-6.1-sol",
+              "effort": "xhigh"
+            }
+          ],
+          "completed_turns": [
+            {
+              "turn_id": "01a0f796-a2c0-7982-ab9e-6d7ba4849ae8",
+              "completed_at": 1790861055
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sample": "runs/p3-document-scope-r5",
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 760.91,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-0ntdfmsd",
+        "cleanup_required": true
+      },
+      "native_sessions": [
+        {
+          "file": "runs/p3-document-scope-r5/native-sessions/2026/10/01/rollout-2026-10-01T15-17-28-01a0f79c-ddcf-74e0-a57e-5ca20d0ff93f.jsonl",
+          "metadata": {
+            "id": "01a0f79c-ddcf-74e0-a57e-5ca20d0ff93f",
+            "source": "exec",
+            "originator": "codex_exec",
+            "cli_version": "0.159.3"
+          },
+          "seats": [
+            {
+              "model": "gpt-6.1-sol",
+              "effort": "xhigh"
+            }
+          ],
+          "completed_turns": [
+            {
+              "turn_id": "01a0f79c-df3e-7ba2-a6e4-a4eb4dd2c84f",
+              "completed_at": 1790861407
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sample": "runs/p3-document-scope-r6",
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 762.88,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-pzakxudv",
+        "cleanup_required": true
+      },
+      "native_sessions": [
+        {
+          "file": "runs/p3-document-scope-r6/native-sessions/2026/10/01/rollout-2026-10-01T15-35-47-01a0f7ad-a339-76c1-81ff-28243f279ad8.jsonl",
+          "metadata": {
+            "id": "01a0f7ad-a339-76c1-81ff-28243f279ad8",
+            "source": "exec",
+            "originator": "codex_exec",
+            "cli_version": "0.159.3"
+          },
+          "seats": [
+            {
+              "model": "gpt-6.1-sol",
+              "effort": "xhigh"
+            }
+          ],
+          "completed_turns": [
+            {
+              "turn_id": "01a0f7ad-a4cf-7161-b228-498770431c1d",
+              "completed_at": 1790862508
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sample": "judges/p3-document-scope",
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 207.9,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-he9jhsfo",
+        "cleanup_required": true
+      },
+      "native_sessions": [
+        {
+          "file": "judges/p3-document-scope/native-sessions/2026/10/01/rollout-2026-10-01T15-50-14-01a0f7ba-de27-7d42-b3cc-8dc9cd8d61c8.jsonl",
+          "metadata": {
+            "id": "01a0f7ba-de27-7d42-b3cc-8dc9cd8d61c8",
+            "source": "exec",
+            "originator": "codex_exec",
+            "cli_version": "0.159.3"
+          },
+          "seats": [
+            {
+              "model": "gpt-6.1-sol",
+              "effort": "xhigh"
+            }
+          ],
+          "completed_turns": [
+            {
+              "turn_id": "01a0f7ba-df9e-7d22-87e4-c5a3d0ab4038",
+              "completed_at": 1790862820
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "voided_service_runs": 2,
+  "unlaunched_judge_staging_errors": 1
+}

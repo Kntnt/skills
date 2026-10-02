@@ -1,0 +1,8 @@
+{
+  "product_revision_frozen_at_start": "fb16908712c4d47a36fc6ee9dfb3eb2714a19e65",
+  "later_shared_main_observed": "fe2587b70f57c3cfc63903b0be6d9fa4819a4827",
+  "later_change": "#476 Redline shell/cleanup and catalog merge reported by sibling and independently inspected",
+  "evaluation_retargeted": false,
+  "note": "Every trial and judge continues to export the frozen revision, confirmed in its run.json. This record does not certify the later HEAD.",
+  "recorded_utc": "2026-10-01T13:41:08Z"
+}

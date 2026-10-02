@@ -1,0 +1,15 @@
+{
+  "artifact_extracted": true,
+  "delivered_prose_sha256": "7c771be33360ea9d32de4d4953bf6c810dd09e4600d5570ddfddd87e79578e28",
+  "draft_versions": [
+    {
+      "path": "scratch/write-source-check-k_jvhkee/draft.md",
+      "capture": "0007-7c771be33360.md",
+      "time": 1790857079.249822,
+      "sha256": "7c771be33360ea9d32de4d4953bf6c810dd09e4600d5570ddfddd87e79578e28",
+      "prose_sha256": "7c771be33360ea9d32de4d4953bf6c810dd09e4600d5570ddfddd87e79578e28",
+      "exact_delivered_prose_match": true
+    }
+  ],
+  "note": "Identify the final comparison's actual read path/version from child trace; a matching earlier draft alone does not establish V3."
+}

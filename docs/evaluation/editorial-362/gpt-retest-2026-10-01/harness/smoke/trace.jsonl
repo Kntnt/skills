@@ -1,0 +1,7 @@
+{"type":"thread.started","thread_id":"01a0f745-7ba4-7c61-a7aa-0868b0b81ee1"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"agent_message","text":"I’ll start one fresh subagent and wait for it to finish.\n"}}
+{"type":"item.started","item":{"id":"item_1","type":"collab_tool_call","tool":"wait","sender_thread_id":"01a0f745-7ba4-7c61-a7aa-0868b0b81ee1","receiver_thread_ids":[],"prompt":null,"agents_states":{},"status":"in_progress"}}
+{"type":"item.completed","item":{"id":"item_1","type":"collab_tool_call","tool":"wait","sender_thread_id":"01a0f745-7ba4-7c61-a7aa-0868b0b81ee1","receiver_thread_ids":[],"prompt":null,"agents_states":{},"status":"completed"}}
+{"type":"item.completed","item":{"id":"item_2","type":"agent_message","text":"CAPABILITY_OK"}}
+{"type":"turn.completed","usage":{"input_tokens":46578,"cached_input_tokens":39808,"cache_write_input_tokens":0,"output_tokens":101,"reasoning_output_tokens":0}}

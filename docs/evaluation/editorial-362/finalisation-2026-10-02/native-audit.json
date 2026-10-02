@@ -1,0 +1,462 @@
+{
+  "method": "Read-only byte/native audit; no Skill, model or semantic judge launched.",
+  "original_transfer_hashes_verified": 577,
+  "counted_write_runs": 6,
+  "counted_scope_runs": 6,
+  "counted_judges": 7,
+  "counted_native_sessions": 30,
+  "nested_comparisons": 11,
+  "write_median_seconds": 1474.81,
+  "scope_median_seconds": 721.98,
+  "raw_scores_verbatim": {
+    "opinion-en_GB-r1": {
+      "F1": "**fail**",
+      "G2": "**pass**",
+      "L1": "**pass**",
+      "R2": "**skipped**",
+      "O1": "**skipped**",
+      "V1": "**fail**",
+      "V2": "**pass**",
+      "V3": "**pass**",
+      "V4": "**pass**",
+      "X": "**pass**"
+    },
+    "opinion-en_GB-r2": {
+      "F1": "Pass",
+      "G2": "Pass",
+      "L1": "Pass",
+      "R2": "Fail",
+      "O1": "Pass",
+      "V1": "Pass",
+      "V2": "Pass",
+      "V3": "Pass",
+      "V4": "Pass",
+      "X": "Pass"
+    },
+    "opinion-en_GB-r3": {
+      "F1": "**Fail, delivery account only; final article passes**",
+      "G2": "**Pass**",
+      "L1": "**Pass**",
+      "R2": "**Fail in report validation; observable Write workflow otherwise conforms**",
+      "O1": "**Pass for Skill effects**",
+      "V1": "**Pass, exercised**",
+      "V2": "**Pass**",
+      "V3": "**Pass**",
+      "V4": "**Pass**",
+      "X": "**Pass as an audit requirement**"
+    },
+    "opinion-en_US-r1": {
+      "F1": "**fail**",
+      "G2": "**pass**",
+      "L1": "**pass**",
+      "R2": "**fail**",
+      "O1": "**pass**",
+      "V1": "**pass**",
+      "V2": "**pass**",
+      "V3": "**pass**",
+      "V4": "**pass**",
+      "X": "**pass — audit completed**"
+    },
+    "opinion-en_US-r2": {
+      "F1": "**Fail for the complete delivered response; article itself passes**",
+      "G2": "**Pass**",
+      "L1": "**Pass**",
+      "R2": "**Fail under the frozen criterion**",
+      "O1": "**Pass for the evidenced Skill effects**",
+      "V1": "**Pass; exercised**",
+      "V2": "**Pass**",
+      "V3": "**Pass**",
+      "V4": "**Pass**",
+      "X": "**Fail in the run's adjudication; all supplied findings classified below**"
+    },
+    "opinion-en_US-r3": {
+      "F1": "**pass** for the delivered draft",
+      "G2": "**fail**",
+      "L1": "**pass**",
+      "R2": "**skipped in part; overall not fully verifiable**",
+      "O1": "**pass** for the Skill's output and lifecycle",
+      "V1": "**pass; exercised**",
+      "V2": "**pass**",
+      "V3": "**pass**",
+      "V4": "**pass** for the delivered draft",
+      "X": "**pass for the finding/disposition accounting below**"
+    }
+  },
+  "samples": [
+    {
+      "sample": "runs/opinion-en_GB-r1",
+      "seconds": 1530.67,
+      "native_sessions": [
+        {
+          "file": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r1/native-sessions/2026/10/01/rollout-2026-10-01T13-43-24-01a0f746-bf0e-7cb3-80cd-9c63c2d7bef2.jsonl",
+          "started": "2026-10-01T11:43:24.394Z",
+          "child": false
+        },
+        {
+          "file": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r1/native-sessions/2026/10/01/rollout-2026-10-01T13-48-17-01a0f74b-3ba7-7861-bb82-278fdabdc049.jsonl",
+          "started": "2026-10-01T11:48:18.023Z",
+          "child": true
+        },
+        {
+          "file": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r1/native-sessions/2026/10/01/rollout-2026-10-01T13-57-24-01a0f753-90df-7851-b0eb-9f84a749ea4b.jsonl",
+          "started": "2026-10-01T11:57:24.119Z",
+          "child": true
+        }
+      ],
+      "capture_hashes_verified": 12,
+      "cleanup_receipt_verified": true,
+      "comparisons": 2,
+      "final_checker": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r1/native-sessions/2026/10/01/rollout-2026-10-01T13-57-24-01a0f753-90df-7851-b0eb-9f84a749ea4b.jsonl",
+      "delivered_prose_sha256": "ad34c07dce834283be9de0e922f3f014198e9918fab226d111896b8d167fa472",
+      "exact_prose_in_final_checker_tool_output": true,
+      "matching_captures": [
+        {
+          "path": "scratch/write-source-check-6lwyn1b1/draft.md",
+          "sha256": "ad34c07dce834283be9de0e922f3f014198e9918fab226d111896b8d167fa472",
+          "capture": "0010-ad34c07dce83.md",
+          "time": 1790855803.812927
+        }
+      ]
+    },
+    {
+      "sample": "runs/opinion-en_GB-r2",
+      "seconds": 895.52,
+      "native_sessions": [
+        {
+          "file": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r2/native-sessions/2026/10/01/rollout-2026-10-01T14-13-46-01a0f762-8e99-71e3-b9ab-f624a605db34.jsonl",
+          "started": "2026-10-01T12:13:47.000Z",
+          "child": false
+        },
+        {
+          "file": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r2/native-sessions/2026/10/01/rollout-2026-10-01T14-18-43-01a0f767-17fe-7320-95f9-fd16f2fb882e.jsonl",
+          "started": "2026-10-01T12:18:43.903Z",
+          "child": true
+        }
+      ],
+      "capture_hashes_verified": 9,
+      "cleanup_receipt_verified": true,
+      "comparisons": 1,
+      "final_checker": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r2/native-sessions/2026/10/01/rollout-2026-10-01T14-18-43-01a0f767-17fe-7320-95f9-fd16f2fb882e.jsonl",
+      "delivered_prose_sha256": "7c771be33360ea9d32de4d4953bf6c810dd09e4600d5570ddfddd87e79578e28",
+      "exact_prose_in_final_checker_tool_output": true,
+      "matching_captures": [
+        {
+          "path": "scratch/write-source-check-k_jvhkee/draft.md",
+          "sha256": "7c771be33360ea9d32de4d4953bf6c810dd09e4600d5570ddfddd87e79578e28",
+          "capture": "0007-7c771be33360.md",
+          "time": 1790857079.249822
+        }
+      ]
+    },
+    {
+      "sample": "runs/opinion-en_GB-r3",
+      "seconds": 1992.92,
+      "native_sessions": [
+        {
+          "file": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r3/native-sessions/2026/10/01/rollout-2026-10-01T14-37-26-01a0f778-36c8-7653-b4e1-24cd2500f495.jsonl",
+          "started": "2026-10-01T12:37:26.248Z",
+          "child": false
+        },
+        {
+          "file": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r3/native-sessions/2026/10/01/rollout-2026-10-01T14-43-02-01a0f77d-5868-7a43-be28-5909f5150668.jsonl",
+          "started": "2026-10-01T12:43:02.180Z",
+          "child": true
+        },
+        {
+          "file": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r3/native-sessions/2026/10/01/rollout-2026-10-01T14-58-36-01a0f78b-98a3-7e41-9c67-c1340c68f96e.jsonl",
+          "started": "2026-10-01T12:58:36.127Z",
+          "child": true
+        }
+      ],
+      "capture_hashes_verified": 13,
+      "cleanup_receipt_verified": true,
+      "comparisons": 2,
+      "final_checker": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r3/native-sessions/2026/10/01/rollout-2026-10-01T14-58-36-01a0f78b-98a3-7e41-9c67-c1340c68f96e.jsonl",
+      "delivered_prose_sha256": "d3eade6d05c12b0db5354a39b947f568bf7c27f4ebf3e245dae01de841522cb7",
+      "exact_prose_in_final_checker_tool_output": true,
+      "matching_captures": [
+        {
+          "path": "scratch/write-source-check-phwbhm4c/draft.md",
+          "sha256": "d3eade6d05c12b0db5354a39b947f568bf7c27f4ebf3e245dae01de841522cb7",
+          "capture": "0010-d3eade6d05c1.md",
+          "time": 1790859471.509242
+        }
+      ]
+    },
+    {
+      "sample": "runs/opinion-en_US-r1",
+      "seconds": 1821.36,
+      "native_sessions": [
+        {
+          "file": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r1/native-sessions/2026/10/01/rollout-2026-10-01T13-43-24-01a0f746-bf0e-7a40-9b5a-5b653342a9f5.jsonl",
+          "started": "2026-10-01T11:43:24.394Z",
+          "child": false
+        },
+        {
+          "file": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r1/native-sessions/2026/10/01/rollout-2026-10-01T13-49-47-01a0f74c-996b-70f1-94fc-4383e6784134.jsonl",
+          "started": "2026-10-01T11:49:47.561Z",
+          "child": true
+        },
+        {
+          "file": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r1/native-sessions/2026/10/01/rollout-2026-10-01T13-58-11-01a0f754-4894-78a3-ba16-bd4ab085e34c.jsonl",
+          "started": "2026-10-01T11:58:11.152Z",
+          "child": true
+        }
+      ],
+      "capture_hashes_verified": 11,
+      "cleanup_receipt_verified": true,
+      "comparisons": 2,
+      "final_checker": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r1/native-sessions/2026/10/01/rollout-2026-10-01T13-58-11-01a0f754-4894-78a3-ba16-bd4ab085e34c.jsonl",
+      "delivered_prose_sha256": "a2268d82e2b0aa4e5f9648b306511ec9e2225baf2552d403213fee7dc0de1079",
+      "exact_prose_in_final_checker_tool_output": true,
+      "matching_captures": [
+        {
+          "path": "scratch/write-source-check-eep48lma/draft-2.md",
+          "sha256": "a2268d82e2b0aa4e5f9648b306511ec9e2225baf2552d403213fee7dc0de1079",
+          "capture": "0009-a2268d82e2b0.md",
+          "time": 1790855843.662827
+        }
+      ]
+    },
+    {
+      "sample": "runs/opinion-en_US-r2",
+      "seconds": 1418.95,
+      "native_sessions": [
+        {
+          "file": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r2/native-sessions/2026/10/01/rollout-2026-10-01T14-13-46-01a0f762-8e98-7203-8735-e330899decb3.jsonl",
+          "started": "2026-10-01T12:13:46.929Z",
+          "child": false
+        },
+        {
+          "file": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r2/native-sessions/2026/10/01/rollout-2026-10-01T14-18-12-01a0f766-9f61-7c02-a8d2-fd3e4e415645.jsonl",
+          "started": "2026-10-01T12:18:13.026Z",
+          "child": true
+        },
+        {
+          "file": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r2/native-sessions/2026/10/01/rollout-2026-10-01T14-28-23-01a0f76f-f03a-7920-9066-349386432f84.jsonl",
+          "started": "2026-10-01T12:28:23.549Z",
+          "child": true
+        }
+      ],
+      "capture_hashes_verified": 12,
+      "cleanup_receipt_verified": true,
+      "comparisons": 2,
+      "final_checker": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r2/native-sessions/2026/10/01/rollout-2026-10-01T14-28-23-01a0f76f-f03a-7920-9066-349386432f84.jsonl",
+      "delivered_prose_sha256": "bd5699cf5bad6a816ceb6b243247fcc8778ff51cdd02b56105d2c5a5727d0368",
+      "exact_prose_in_final_checker_tool_output": true,
+      "matching_captures": [
+        {
+          "path": "scratch/write-source-check-lm0do59d/draft.md",
+          "sha256": "bd5699cf5bad6a816ceb6b243247fcc8778ff51cdd02b56105d2c5a5727d0368",
+          "capture": "0010-bd5699cf5bad.md",
+          "time": 1790857659.323476
+        }
+      ]
+    },
+    {
+      "sample": "runs/opinion-en_US-r3",
+      "seconds": 1178.63,
+      "native_sessions": [
+        {
+          "file": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r3/native-sessions/2026/10/01/rollout-2026-10-01T14-28-42-01a0f770-3a1d-7950-9e6c-44189fcc9fb2.jsonl",
+          "started": "2026-10-01T12:28:42.783Z",
+          "child": false
+        },
+        {
+          "file": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r3/native-sessions/2026/10/01/rollout-2026-10-01T14-33-53-01a0f774-f840-7e22-9760-940233874a3c.jsonl",
+          "started": "2026-10-01T12:33:53.277Z",
+          "child": true
+        },
+        {
+          "file": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r3/native-sessions/2026/10/01/rollout-2026-10-01T14-40-55-01a0f77b-6b29-77b2-9fc4-c39ee4b7fa97.jsonl",
+          "started": "2026-10-01T12:40:55.938Z",
+          "child": true
+        }
+      ],
+      "capture_hashes_verified": 12,
+      "cleanup_receipt_verified": true,
+      "comparisons": 2,
+      "final_checker": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r3/native-sessions/2026/10/01/rollout-2026-10-01T14-40-55-01a0f77b-6b29-77b2-9fc4-c39ee4b7fa97.jsonl",
+      "delivered_prose_sha256": "11f148a9d0719aed44bf4d5478caec914de8001ee743d479c7979edd5cc2b0e8",
+      "exact_prose_in_final_checker_tool_output": true,
+      "matching_captures": [
+        {
+          "path": "scratch/write-source-check-ubbg1_c7/draft-2.md",
+          "sha256": "11f148a9d0719aed44bf4d5478caec914de8001ee743d479c7979edd5cc2b0e8",
+          "capture": "0010-11f148a9d071.md",
+          "time": 1790858413.359046
+        }
+      ]
+    },
+    {
+      "sample": "runs/p3-document-scope-r1",
+      "seconds": 579.6,
+      "native_sessions": [
+        {
+          "file": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r1/native-sessions/2026/10/01/rollout-2026-10-01T15-05-08-01a0f791-939f-77b0-8e7d-ac7502023b55.jsonl",
+          "started": "2026-10-01T13:05:08.396Z",
+          "child": false
+        }
+      ],
+      "capture_hashes_verified": 3,
+      "cleanup_receipt_verified": true
+    },
+    {
+      "sample": "runs/p3-document-scope-r2",
+      "seconds": 683.05,
+      "native_sessions": [
+        {
+          "file": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r2/native-sessions/2026/10/01/rollout-2026-10-01T14-55-28-01a0f788-ba61-7572-8ad7-37195d93720e.jsonl",
+          "started": "2026-10-01T12:55:28.479Z",
+          "child": false
+        }
+      ],
+      "capture_hashes_verified": 4,
+      "cleanup_receipt_verified": true
+    },
+    {
+      "sample": "runs/p3-document-scope-r3",
+      "seconds": 636.0,
+      "native_sessions": [
+        {
+          "file": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r3/native-sessions/2026/10/01/rollout-2026-10-01T15-06-51-01a0f793-27ee-7673-94eb-513a48a84426.jsonl",
+          "started": "2026-10-01T13:06:51.931Z",
+          "child": false
+        }
+      ],
+      "capture_hashes_verified": 3,
+      "cleanup_receipt_verified": true
+    },
+    {
+      "sample": "runs/p3-document-scope-r4",
+      "seconds": 817.28,
+      "native_sessions": [
+        {
+          "file": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r4/native-sessions/2026/10/01/rollout-2026-10-01T15-10-39-01a0f796-a168-7d03-8437-6ee769d096d6.jsonl",
+          "started": "2026-10-01T13:10:39.566Z",
+          "child": false
+        }
+      ],
+      "capture_hashes_verified": 3,
+      "cleanup_receipt_verified": true
+    },
+    {
+      "sample": "runs/p3-document-scope-r5",
+      "seconds": 760.91,
+      "native_sessions": [
+        {
+          "file": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r5/native-sessions/2026/10/01/rollout-2026-10-01T15-17-28-01a0f79c-ddcf-74e0-a57e-5ca20d0ff93f.jsonl",
+          "started": "2026-10-01T13:17:28.265Z",
+          "child": false
+        }
+      ],
+      "capture_hashes_verified": 3,
+      "cleanup_receipt_verified": true
+    },
+    {
+      "sample": "runs/p3-document-scope-r6",
+      "seconds": 762.88,
+      "native_sessions": [
+        {
+          "file": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r6/native-sessions/2026/10/01/rollout-2026-10-01T15-35-47-01a0f7ad-a339-76c1-81ff-28243f279ad8.jsonl",
+          "started": "2026-10-01T13:35:47.422Z",
+          "child": false
+        }
+      ],
+      "capture_hashes_verified": 3,
+      "cleanup_receipt_verified": true
+    },
+    {
+      "sample": "judges/opinion-en_GB-r1",
+      "seconds": 976.19,
+      "native_sessions": [
+        {
+          "file": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_GB-r1/native-sessions/2026/10/01/rollout-2026-10-01T14-08-55-01a0f75e-1b94-7cc2-a049-4b71e719cc25.jsonl",
+          "started": "2026-10-01T12:08:55.318Z",
+          "child": false
+        }
+      ],
+      "capture_hashes_verified": 4,
+      "cleanup_receipt_verified": true
+    },
+    {
+      "sample": "judges/opinion-en_GB-r2",
+      "seconds": 599.55,
+      "native_sessions": [
+        {
+          "file": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_GB-r2/native-sessions/2026/10/01/rollout-2026-10-01T14-29-34-01a0f771-025b-7a50-8e34-cbd6dfc781b5.jsonl",
+          "started": "2026-10-01T12:29:34.125Z",
+          "child": false
+        }
+      ],
+      "capture_hashes_verified": 3,
+      "cleanup_receipt_verified": true
+    },
+    {
+      "sample": "judges/opinion-en_GB-r3",
+      "seconds": 967.35,
+      "native_sessions": [
+        {
+          "file": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_GB-r3/native-sessions/2026/10/01/rollout-2026-10-01T15-10-40-01a0f796-a40b-7cc3-bb0a-a85067dc5554.jsonl",
+          "started": "2026-10-01T13:10:40.259Z",
+          "child": false
+        }
+      ],
+      "capture_hashes_verified": 3,
+      "cleanup_receipt_verified": true
+    },
+    {
+      "sample": "judges/opinion-en_US-r1",
+      "seconds": 947.06,
+      "native_sessions": [
+        {
+          "file": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_US-r1/native-sessions/2026/10/01/rollout-2026-10-01T14-13-46-01a0f762-8c40-7c22-9b8f-7223b0297d0d.jsonl",
+          "started": "2026-10-01T12:13:46.331Z",
+          "child": false
+        }
+      ],
+      "capture_hashes_verified": 3,
+      "cleanup_receipt_verified": true
+    },
+    {
+      "sample": "judges/opinion-en_US-r2",
+      "seconds": 828.32,
+      "native_sessions": [
+        {
+          "file": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_US-r2/native-sessions/2026/10/01/rollout-2026-10-01T14-37-26-01a0f778-37d0-7343-b0a0-1984d54f3962.jsonl",
+          "started": "2026-10-01T12:37:26.487Z",
+          "child": false
+        }
+      ],
+      "capture_hashes_verified": 3,
+      "cleanup_receipt_verified": true
+    },
+    {
+      "sample": "judges/opinion-en_US-r3",
+      "seconds": 896.68,
+      "native_sessions": [
+        {
+          "file": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_US-r3/native-sessions/2026/10/01/rollout-2026-10-01T14-48-22-01a0f782-3ae9-7641-abba-0e631af95b4b.jsonl",
+          "started": "2026-10-01T12:48:22.658Z",
+          "child": false
+        }
+      ],
+      "capture_hashes_verified": 3,
+      "cleanup_receipt_verified": true
+    },
+    {
+      "sample": "judges/p3-document-scope",
+      "seconds": 207.9,
+      "native_sessions": [
+        {
+          "file": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/p3-document-scope/native-sessions/2026/10/01/rollout-2026-10-01T15-50-14-01a0f7ba-de27-7d42-b3cc-8dc9cd8d61c8.jsonl",
+          "started": "2026-10-01T13:50:14.445Z",
+          "child": false
+        }
+      ],
+      "capture_hashes_verified": 4,
+      "cleanup_receipt_verified": true
+    }
+  ],
+  "limits": "Opaque dispatch contents remain unverified. Semantic judgments, method-error dispositions and historical cleanup claims are preserved, not rejudged or replayed."
+}

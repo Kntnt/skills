@@ -1,0 +1,187 @@
+{
+  "builder_base": "5b0260283b1d1597ca1ed2dddc602888dac7119d",
+  "measured_product": "fb16908712c4d47a36fc6ee9dfb3eb2714a19e65",
+  "frozen_plan_and_briefs": [
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/plan.md",
+      "sha256": "a54bc9066cf489875fdb56bd8978ed1d9a570d443828b61756c3123ddb3a0caa",
+      "matches_ebd1121a": true
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/prompts/write-judge.txt",
+      "sha256": "52f2335ae95ee3d8a2c758d8d0dc6a572b6e8ebffa05b5971bebdaedb4f13ede",
+      "matches_ebd1121a": true
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/prompts/checker-judge.txt",
+      "sha256": "22a63564d5687570e0ce36c87b5015214a36cf8b8549483591a9c0f06c9564fe",
+      "matches_ebd1121a": true
+    }
+  ],
+  "contracts": [
+    {
+      "path": "skills/editorial/write/SKILL.md",
+      "frozen_sha256": "73186c908f6fa2c9608682947799fdac1a5e902fd6d1a265b1a088dd23c85489",
+      "current_sha256": "73186c908f6fa2c9608682947799fdac1a5e902fd6d1a265b1a088dd23c85489",
+      "unchanged_at_builder_base": true,
+      "words": 2839
+    },
+    {
+      "path": "skills/editorial/write/references/source-check.md",
+      "frozen_sha256": "c7a8956c5d850854984cd97f802a5c7c1caf13cccf4aff351aa6bee7c1df3ce0",
+      "current_sha256": "c7a8956c5d850854984cd97f802a5c7c1caf13cccf4aff351aa6bee7c1df3ce0",
+      "unchanged_at_builder_base": true,
+      "words": 2150
+    },
+    {
+      "path": "skills/editorial/write/references/quotations.md",
+      "frozen_sha256": "89ba23a834153bf3c38372206548d2e269ff1a516c93cf393eaaf2fe5c62e881",
+      "current_sha256": "89ba23a834153bf3c38372206548d2e269ff1a516c93cf393eaaf2fe5c62e881",
+      "unchanged_at_builder_base": true,
+      "words": 671
+    },
+    {
+      "path": "skills/kntnt/library/references/invocation-envelope.md",
+      "frozen_sha256": "1f76ac87aa395a652232f5f289aef94a8652de76e88dbee3d5f7ceca14496bad",
+      "current_sha256": "1f76ac87aa395a652232f5f289aef94a8652de76e88dbee3d5f7ceca14496bad",
+      "unchanged_at_builder_base": true,
+      "words": 1176
+    },
+    {
+      "path": "skills/kntnt/library/references/delivery.md",
+      "frozen_sha256": "71babd36f68d93cd9f7d035358c3cbaeae3179147d8dc7a4667047081c898472",
+      "current_sha256": "71babd36f68d93cd9f7d035358c3cbaeae3179147d8dc7a4667047081c898472",
+      "unchanged_at_builder_base": true,
+      "words": 2675
+    },
+    {
+      "path": "skills/kntnt/library/references/editorial/base.md",
+      "frozen_sha256": "d4146ef134de7482e25469201aaceed7b207fba9f8bacb06a428b85f6bfc3581",
+      "current_sha256": "d4146ef134de7482e25469201aaceed7b207fba9f8bacb06a428b85f6bfc3581",
+      "unchanged_at_builder_base": true,
+      "words": 597
+    },
+    {
+      "path": "skills/kntnt/library/references/editorial/genres/opinion.md",
+      "frozen_sha256": "f0edbed362fe613f11cfe6232c4c7fc98202786fa909f3cd72f1b1acd0867e41",
+      "current_sha256": "f0edbed362fe613f11cfe6232c4c7fc98202786fa909f3cd72f1b1acd0867e41",
+      "unchanged_at_builder_base": true,
+      "words": 216
+    },
+    {
+      "path": "skills/kntnt/library/references/editorial/web-craft.md",
+      "frozen_sha256": "b1ac5867d30952c3ca78da244520ab28c025102f4389f44ec206757a29f05371",
+      "current_sha256": "b1ac5867d30952c3ca78da244520ab28c025102f4389f44ec206757a29f05371",
+      "unchanged_at_builder_base": true,
+      "words": 184
+    },
+    {
+      "path": "skills/kntnt/library/references/editorial/article-anatomy.md",
+      "frozen_sha256": "c075c6fe7494dbcdc43d6af599c55ab8fc52fc48d7ed1b6cc26eca7a592cecd7",
+      "current_sha256": "c075c6fe7494dbcdc43d6af599c55ab8fc52fc48d7ed1b6cc26eca7a592cecd7",
+      "unchanged_at_builder_base": true,
+      "words": 962
+    },
+    {
+      "path": "skills/kntnt/library/references/editorial/headlines.md",
+      "frozen_sha256": "adfb7ca612905afee03a73d58cdb07de9d0877b23af9de89f7e114f6de81df5f",
+      "current_sha256": "adfb7ca612905afee03a73d58cdb07de9d0877b23af9de89f7e114f6de81df5f",
+      "unchanged_at_builder_base": true,
+      "words": 844
+    }
+  ],
+  "core_words": 12314,
+  "actual_parent_read_output_checks": [
+    {
+      "run": "opinion-en_GB-r1",
+      "whole_resource_output_matches": {
+        "skills/editorial/write/SKILL.md": true,
+        "skills/editorial/write/references/source-check.md": true,
+        "skills/editorial/write/references/quotations.md": false,
+        "skills/kntnt/library/references/invocation-envelope.md": false,
+        "skills/kntnt/library/references/delivery.md": true,
+        "skills/kntnt/library/references/editorial/base.md": true,
+        "skills/kntnt/library/references/editorial/genres/opinion.md": true,
+        "skills/kntnt/library/references/editorial/web-craft.md": true,
+        "skills/kntnt/library/references/editorial/article-anatomy.md": true,
+        "skills/kntnt/library/references/editorial/headlines.md": true
+      }
+    },
+    {
+      "run": "opinion-en_GB-r2",
+      "whole_resource_output_matches": {
+        "skills/editorial/write/SKILL.md": true,
+        "skills/editorial/write/references/source-check.md": true,
+        "skills/editorial/write/references/quotations.md": true,
+        "skills/kntnt/library/references/invocation-envelope.md": false,
+        "skills/kntnt/library/references/delivery.md": true,
+        "skills/kntnt/library/references/editorial/base.md": true,
+        "skills/kntnt/library/references/editorial/genres/opinion.md": true,
+        "skills/kntnt/library/references/editorial/web-craft.md": true,
+        "skills/kntnt/library/references/editorial/article-anatomy.md": true,
+        "skills/kntnt/library/references/editorial/headlines.md": true
+      }
+    },
+    {
+      "run": "opinion-en_GB-r3",
+      "whole_resource_output_matches": {
+        "skills/editorial/write/SKILL.md": true,
+        "skills/editorial/write/references/source-check.md": false,
+        "skills/editorial/write/references/quotations.md": false,
+        "skills/kntnt/library/references/invocation-envelope.md": false,
+        "skills/kntnt/library/references/delivery.md": false,
+        "skills/kntnt/library/references/editorial/base.md": true,
+        "skills/kntnt/library/references/editorial/genres/opinion.md": true,
+        "skills/kntnt/library/references/editorial/web-craft.md": true,
+        "skills/kntnt/library/references/editorial/article-anatomy.md": true,
+        "skills/kntnt/library/references/editorial/headlines.md": true
+      }
+    },
+    {
+      "run": "opinion-en_US-r1",
+      "whole_resource_output_matches": {
+        "skills/editorial/write/SKILL.md": true,
+        "skills/editorial/write/references/source-check.md": true,
+        "skills/editorial/write/references/quotations.md": false,
+        "skills/kntnt/library/references/invocation-envelope.md": false,
+        "skills/kntnt/library/references/delivery.md": false,
+        "skills/kntnt/library/references/editorial/base.md": false,
+        "skills/kntnt/library/references/editorial/genres/opinion.md": false,
+        "skills/kntnt/library/references/editorial/web-craft.md": false,
+        "skills/kntnt/library/references/editorial/article-anatomy.md": false,
+        "skills/kntnt/library/references/editorial/headlines.md": false
+      }
+    },
+    {
+      "run": "opinion-en_US-r2",
+      "whole_resource_output_matches": {
+        "skills/editorial/write/SKILL.md": true,
+        "skills/editorial/write/references/source-check.md": false,
+        "skills/editorial/write/references/quotations.md": false,
+        "skills/kntnt/library/references/invocation-envelope.md": false,
+        "skills/kntnt/library/references/delivery.md": true,
+        "skills/kntnt/library/references/editorial/base.md": true,
+        "skills/kntnt/library/references/editorial/genres/opinion.md": true,
+        "skills/kntnt/library/references/editorial/web-craft.md": true,
+        "skills/kntnt/library/references/editorial/article-anatomy.md": true,
+        "skills/kntnt/library/references/editorial/headlines.md": true
+      }
+    },
+    {
+      "run": "opinion-en_US-r3",
+      "whole_resource_output_matches": {
+        "skills/editorial/write/SKILL.md": true,
+        "skills/editorial/write/references/source-check.md": false,
+        "skills/editorial/write/references/quotations.md": false,
+        "skills/kntnt/library/references/invocation-envelope.md": false,
+        "skills/kntnt/library/references/delivery.md": false,
+        "skills/kntnt/library/references/editorial/base.md": false,
+        "skills/kntnt/library/references/editorial/genres/opinion.md": false,
+        "skills/kntnt/library/references/editorial/web-craft.md": false,
+        "skills/kntnt/library/references/editorial/article-anatomy.md": true,
+        "skills/kntnt/library/references/editorial/headlines.md": true
+      }
+    }
+  ],
+  "limits": "A false whole-output match means this exact contiguous file was not found in the output, not proof of an unread resource; scoped/recovered reads must be inspected in the preserved trace."
+}

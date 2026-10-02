@@ -1,0 +1,36 @@
+{
+  "removed_paths": [
+    "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/362.scratch",
+    "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/362/.venv",
+    "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/362/.mypy_cache",
+    "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/362/.pytest_cache",
+    "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/362/.ruff_cache",
+    "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/362/tests/__pycache__",
+    "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/362/skills/models/model-selector/scripts/__pycache__",
+    "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/362/docs/evaluation/editorial-362/finalisation-2026-10-02/__pycache__"
+  ],
+  "all_removed_paths_absent": true,
+  "recorded_gate_process_groups_absent": [
+    1567,
+    1575,
+    1577,
+    1583,
+    56806,
+    56808,
+    56810,
+    56815
+  ],
+  "tool_sessions_completed": [
+    56287,
+    37506,
+    40726,
+    92846
+  ],
+  "services_started": [],
+  "remaining_owned_processes": [],
+  "deliverables_deleted": false,
+  "retained_source_worktree": "/Users/thomas/Projects/skills-eval-362-gpt-20261001",
+  "retained_source_branch": "eval/362-gpt-20261001",
+  "process_registration": "Gate PIDs/groups recorded immediately in this worktree; no shared registry outside the two authorised write roots was modified.",
+  "cleanup_method": "Force-removal shell command rejected before execution; explicitly named Python rmtree operations completed, then absence was checked."
+}

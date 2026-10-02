@@ -1,0 +1,45 @@
+{
+  "seats": [
+    {
+      "session": "01a0f746-bf0e-7cb3-80cd-9c63c2d7bef2",
+      "model": "gpt-6.1-sol",
+      "effort": "xhigh"
+    },
+    {
+      "session": "01a0f74b-3ba7-7861-bb82-278fdabdc049",
+      "model": "gpt-6.1-sol",
+      "effort": "xhigh"
+    },
+    {
+      "session": "01a0f753-90df-7851-b0eb-9f84a749ea4b",
+      "model": "gpt-6.1-sol",
+      "effort": "xhigh"
+    }
+  ],
+  "lineage": {
+    "01a0f746-bf0e-7cb3-80cd-9c63c2d7bef2": "exec",
+    "01a0f74b-3ba7-7861-bb82-278fdabdc049": {
+      "subagent": {
+        "thread_spawn": {
+          "parent_thread_id": "01a0f746-bf0e-7cb3-80cd-9c63c2d7bef2",
+          "depth": 1,
+          "agent_path": "/root/source_comparison_1",
+          "agent_nickname": "Ptolemy",
+          "agent_role": null
+        }
+      }
+    },
+    "01a0f753-90df-7851-b0eb-9f84a749ea4b": {
+      "subagent": {
+        "thread_spawn": {
+          "parent_thread_id": "01a0f746-bf0e-7cb3-80cd-9c63c2d7bef2",
+          "depth": 1,
+          "agent_path": "/root/source_comparison_2",
+          "agent_nickname": "Einstein",
+          "agent_role": null
+        }
+      }
+    }
+  },
+  "all_same_inherited_seat": true
+}

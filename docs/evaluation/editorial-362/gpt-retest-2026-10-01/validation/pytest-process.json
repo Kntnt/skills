@@ -1,0 +1,18 @@
+{
+  "pid": 81559,
+  "process_group": 81559,
+  "command": [
+    "uv",
+    "run",
+    "--with",
+    "pytest",
+    "--with",
+    "pytest-xdist",
+    "--with",
+    "pyyaml",
+    "pytest",
+    "-n",
+    "auto"
+  ],
+  "working_directory": "/Users/thomas/Projects/skills-eval-362-gpt-20261001"
+}

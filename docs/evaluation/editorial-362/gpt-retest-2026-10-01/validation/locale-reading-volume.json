@@ -1,0 +1,50 @@
+{
+  "sample-01": [
+    {
+      "code": "en_US",
+      "composition_guidance_words": 188,
+      "output_words": 211,
+      "scope_is_composition": true
+    }
+  ],
+  "sample-02": [
+    {
+      "code": "en_GB",
+      "composition_guidance_words": 258,
+      "output_words": 281,
+      "scope_is_composition": true
+    }
+  ],
+  "sample-03": [
+    {
+      "code": "en_US",
+      "composition_guidance_words": 188,
+      "output_words": 211,
+      "scope_is_composition": true
+    }
+  ],
+  "sample-04": [
+    {
+      "code": "en_GB",
+      "composition_guidance_words": 258,
+      "output_words": 281,
+      "scope_is_composition": true
+    }
+  ],
+  "sample-05": [
+    {
+      "code": "en_US",
+      "composition_guidance_words": 188,
+      "output_words": 211,
+      "scope_is_composition": true
+    }
+  ],
+  "sample-06": [
+    {
+      "code": "en_GB",
+      "composition_guidance_words": 258,
+      "output_words": 281,
+      "scope_is_composition": true
+    }
+  ]
+}

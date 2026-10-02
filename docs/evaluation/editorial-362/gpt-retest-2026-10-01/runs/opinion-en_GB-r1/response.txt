@@ -1,0 +1,44 @@
+Delivered with one known source-support defect: “familiarity with digital technology” is broader than the source’s “digital vana”. The checker proposed “experience of using digital tools”.
+
+The [write skill](/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-zhagrwr9/work/.agents/skills/write/SKILL.md) says “never reopen the prose after its final source comparison”, so the compared wording remains.
+
+British English opinion draft, delivered here with no technique selected. No trial cost estimate was supplied. Temporary files were removed.
+
+```markdown
+---
+kntnt:
+  genre: opinion
+  technique: none
+  language: en_GB
+---
+
+# Lervik needs evidence before ending telephone bookings
+
+The case for removing telephone bookings from Lervik’s association premises rests on avoiding duplicate administration. But the papers provide no measurement of staff time or calculated savings. The municipal executive board should establish what each route costs and why people use it.
+
+By Sanna Ek, spokesperson for Öppna beslut
+
+A staff report for the 18 June meeting of Lervik’s municipal executive board proposes ending telephone booking at all seven association premises from September. Öppna beslut wants that permanent switch postponed while both telephone and web booking are tested for six months. I do not oppose digital booking; I question whether the evidence justifies removing the alternative.
+
+## The pilot figures leave users’ reasons unanswered
+
+The municipality’s pilot report, Booking Association Premises, dated 8 April 2026, records 96 web bookings and 24 telephone bookings during an eight-week trial at two venues. Those figures describe bookings, not unique individuals.
+
+It did not measure age, functional ability or familiarity with digital technology. We cannot use the telephone bookings to calculate how many residents cannot book online. A booking made by telephone proves no inability to use the web; it gives us a reason to ask why that route is still used.
+
+## Duplicate administration deserves a fair assessment
+
+The administration wants staff to avoid entering information through two workflows. That objection deserves to be taken seriously. Its case concerns duplicate administration, not a claim that telephone users are lazy or costly.
+
+Yet the papers contain neither a measurement of staff time nor a calculation of financial savings. Before making a permanent change, the board should be able to weigh the labour cost against the value for users. The pilot’s booking totals cannot settle that judgement.
+
+## A wider trial can inform the decision
+
+Our proposal covers all seven venues for six months, keeping both booking routes.
+
+Staff would record the time spent on each route and ask users to explain their choice voluntarily. This would help the board assess both the workload and users’ reasons.
+
+## The board should postpone the permanent switch
+
+Öppna beslut makes no claim to have funded or costed the trial. The executive board must consider its cost, postpone the permanent switch and first test both routes. It can then decide whether a booking channel should be removed, changed or retained.
+```

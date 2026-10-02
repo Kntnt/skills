@@ -1,0 +1,62 @@
+[
+  {
+    "index": 3,
+    "returncode": 0,
+    "stdout": "{\"returncode\": 0, \"timed_out\": false, \"duration_seconds\": 1418.95, \"root\": \"/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-bgcn6qjf\", \"cleanup_required\": true}\n",
+    "stderr": ""
+  },
+  {
+    "index": 4,
+    "returncode": 0,
+    "stdout": "{\"returncode\": 0, \"timed_out\": false, \"duration_seconds\": 895.52, \"root\": \"/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-1jvn8o6u\", \"cleanup_required\": true}\n",
+    "stderr": ""
+  },
+  {
+    "index": 5,
+    "returncode": 0,
+    "stdout": "{\"returncode\": 0, \"timed_out\": false, \"duration_seconds\": 1178.63, \"root\": \"/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-_5ga17y5\", \"cleanup_required\": true}\n",
+    "stderr": ""
+  },
+  {
+    "index": 6,
+    "returncode": 0,
+    "stdout": "{\"returncode\": 0, \"timed_out\": false, \"duration_seconds\": 1992.92, \"root\": \"/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-r95dqkak\", \"cleanup_required\": true}\n",
+    "stderr": ""
+  },
+  {
+    "index": 7,
+    "returncode": 1,
+    "stdout": "{\"returncode\": 1, \"timed_out\": false, \"duration_seconds\": 425.96, \"root\": \"/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-e6c4fr4n\", \"cleanup_required\": true}\n",
+    "stderr": ""
+  },
+  {
+    "index": 8,
+    "returncode": 0,
+    "stdout": "{\"returncode\": 0, \"timed_out\": false, \"duration_seconds\": 683.05, \"root\": \"/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-3tfqbziy\", \"cleanup_required\": true}\n",
+    "stderr": ""
+  },
+  {
+    "index": 9,
+    "returncode": 0,
+    "stdout": "{\"returncode\": 0, \"timed_out\": false, \"duration_seconds\": 636.0, \"root\": \"/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-mxowu2hq\", \"cleanup_required\": true}\n",
+    "stderr": ""
+  },
+  {
+    "index": 10,
+    "returncode": 0,
+    "stdout": "{\"returncode\": 0, \"timed_out\": false, \"duration_seconds\": 817.28, \"root\": \"/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-5ozogrj1\", \"cleanup_required\": true}\n",
+    "stderr": ""
+  },
+  {
+    "index": 11,
+    "returncode": 0,
+    "stdout": "{\"returncode\": 0, \"timed_out\": false, \"duration_seconds\": 760.91, \"root\": \"/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-0ntdfmsd\", \"cleanup_required\": true}\n",
+    "stderr": ""
+  },
+  {
+    "index": 12,
+    "returncode": 1,
+    "stdout": "{\"returncode\": 1, \"timed_out\": false, \"duration_seconds\": 580.24, \"root\": \"/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-bq5ca4kb\", \"cleanup_required\": true}\n",
+    "stderr": ""
+  }
+]

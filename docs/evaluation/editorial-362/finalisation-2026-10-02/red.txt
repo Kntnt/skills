@@ -1,0 +1,28 @@
+warning: No `requires-python` value found in the workspace. Defaulting to `>=3.12`.
+F                                                                        [100%]
+=================================== FAILURES ===================================
+_______ test_integrated_retest_preserves_every_attributable_source_file ________
+
+    def test_integrated_retest_preserves_every_attributable_source_file() -> None:
+        """The pre-transfer inventory constrains evidence, including uncommitted files."""
+    
+        # Read the independent inventory captured before the evidence transfer.
+        inventory = json.loads((FINALISATION / "source-inventory.json").read_text())
+        assert inventory["source_head"] == "27061b27037f3ea215ed2619a189c8aa4f1565a2"
+        assert len(inventory["files"]) == 630
+    
+        # Compare all transferred bytes without consulting the retained worktree.
+        for entry in inventory["files"]:
+            relative = Path(entry["path"])
+            assert not relative.is_absolute() and ".." not in relative.parts
+            path = ROOT / relative
+>           assert path.is_file(), f"Missing preserved evidence: {relative}"
+E           AssertionError: Missing preserved evidence: docs/evaluation/editorial-362/gpt-retest-2026-10-01/README.md
+E           assert False
+E            +  where False = is_file()
+E            +    where is_file = PosixPath('/Users/thomas/Projects/skills/.git/kntnt-orchestrate/362/docs/evaluation/editorial-362/gpt-retest-2026-10-01/README.md').is_file
+
+tests/test_editorial_362_evidence.py:27: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_editorial_362_evidence.py::test_integrated_retest_preserves_every_attributable_source_file
+1 failed in 0.02s

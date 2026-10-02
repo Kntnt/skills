@@ -1,0 +1,23 @@
+{
+  "artifact_extracted": true,
+  "delivered_prose_sha256": "11f148a9d0719aed44bf4d5478caec914de8001ee743d479c7979edd5cc2b0e8",
+  "draft_versions": [
+    {
+      "path": "scratch/write-source-check-ubbg1_c7/draft.md",
+      "capture": "0007-dc03e8747a9f.md",
+      "time": 1790857992.361086,
+      "sha256": "dc03e8747a9f19ae982cfab5f91972464bb2f563dfe83f41fee93f1d209d4ee4",
+      "prose_sha256": "dc03e8747a9f19ae982cfab5f91972464bb2f563dfe83f41fee93f1d209d4ee4",
+      "exact_delivered_prose_match": false
+    },
+    {
+      "path": "scratch/write-source-check-ubbg1_c7/draft-2.md",
+      "capture": "0010-11f148a9d071.md",
+      "time": 1790858413.359046,
+      "sha256": "11f148a9d0719aed44bf4d5478caec914de8001ee743d479c7979edd5cc2b0e8",
+      "prose_sha256": "11f148a9d0719aed44bf4d5478caec914de8001ee743d479c7979edd5cc2b0e8",
+      "exact_delivered_prose_match": true
+    }
+  ],
+  "note": "Identify the final comparison's actual read path/version from child trace; a matching earlier draft alone does not establish V3."
+}

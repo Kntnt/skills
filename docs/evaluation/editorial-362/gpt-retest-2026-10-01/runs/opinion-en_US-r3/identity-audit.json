@@ -1,0 +1,45 @@
+{
+  "seats": [
+    {
+      "session": "01a0f770-3a1d-7950-9e6c-44189fcc9fb2",
+      "model": "gpt-6.1-sol",
+      "effort": "xhigh"
+    },
+    {
+      "session": "01a0f774-f840-7e22-9760-940233874a3c",
+      "model": "gpt-6.1-sol",
+      "effort": "xhigh"
+    },
+    {
+      "session": "01a0f77b-6b29-77b2-9fc4-c39ee4b7fa97",
+      "model": "gpt-6.1-sol",
+      "effort": "xhigh"
+    }
+  ],
+  "lineage": {
+    "01a0f770-3a1d-7950-9e6c-44189fcc9fb2": "exec",
+    "01a0f774-f840-7e22-9760-940233874a3c": {
+      "subagent": {
+        "thread_spawn": {
+          "parent_thread_id": "01a0f770-3a1d-7950-9e6c-44189fcc9fb2",
+          "depth": 1,
+          "agent_path": "/root/write_source_check",
+          "agent_nickname": "Mill",
+          "agent_role": null
+        }
+      }
+    },
+    "01a0f77b-6b29-77b2-9fc4-c39ee4b7fa97": {
+      "subagent": {
+        "thread_spawn": {
+          "parent_thread_id": "01a0f770-3a1d-7950-9e6c-44189fcc9fb2",
+          "depth": 1,
+          "agent_path": "/root/write_source_check_final",
+          "agent_nickname": "Socrates",
+          "agent_role": null
+        }
+      }
+    }
+  },
+  "all_same_inherited_seat": true
+}

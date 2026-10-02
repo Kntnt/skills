@@ -1,0 +1,18 @@
+{
+  "source_head_unchanged": "27061b27037f3ea215ed2619a189c8aa4f1565a2",
+  "source_status_unchanged": true,
+  "selected_source_and_integrated_files_equal": 630,
+  "protected_rework": "No command targeted the protected branch or worktree.",
+  "source_mutations": "None; source reads and Git inspection only.",
+  "tracked_product_historical_and_shared_files_changed": [],
+  "current_branch": "kntnt-orchestrate/main/362",
+  "prohibition_boundaries": {
+    "product_trials": 0,
+    "semantic_judges": 0,
+    "new_issues": 0,
+    "issue_closures": 0,
+    "pushes": 0,
+    "releases": 0,
+    "global_installs": 0
+  }
+}

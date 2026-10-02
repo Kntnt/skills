@@ -1,0 +1,9 @@
+{
+  "product_revision": "fb16908712c4d47a36fc6ee9dfb3eb2714a19e65",
+  "parent_rollout": "/Users/thomas/.codex/sessions/2026/10/01/rollout-2026-10-01T13-35-56-01a0f73f-ebbb-7813-b0ea-9fe03dbdd8a1.jsonl",
+  "seat": {
+    "model": "gpt-6.1-sol",
+    "effort": "xhigh"
+  },
+  "harness": "Codex CLI 0.159.3"
+}
