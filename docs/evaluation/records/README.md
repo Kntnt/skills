@@ -328,3 +328,7 @@ The Claude-family evaluation of [#478](https://github.com/Kntnt/skills/issues/47
 ## Private-directory cleanup — #485
 
 - [`write-gpt-2026-10-02-485.md`](write-gpt-2026-10-02-485.md) — Write's private-directory cleanup contract, evaluated from a fresh pre-change arm and candidate on `gpt-6.1-sol` at high deliberation in Codex CLI 0.160.0 for #485; earlier Claude refusal traces and #476 probes are inspected separately.
+
+## A supported placement inference — #486
+
+- [`redline-gpt-2026-10-02-486.md`](redline-gpt-2026-10-02-486.md) — Redline's supported placement inference, measured without reproduction in six clean runs, with validated inference/promise contrasts, at corpus commit `5457c894`, in Codex CLI `0.160.0` on `gpt-6.1-sol` at `xhigh`, for issue #486; [amend 1](../editorial-486/amend-1/results.md) supplies corrected path-neutral independent judging while preserving the original evidence.
