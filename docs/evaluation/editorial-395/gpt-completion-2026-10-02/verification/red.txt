@@ -1,0 +1,31 @@
+Using CPython 3.12.13
+Creating virtual environment at: .venv
+warning: No `requires-python` value found in the workspace. Defaulting to `>=3.12`.
+Downloading pygments (1.2MiB)
+ Downloaded pygments
+Installed 5 packages in 6ms
+F                                                                        [100%]
+=================================== FAILURES ===================================
+______ test_completion_runner_requires_owned_paths_and_explicit_deadline _______
+
+    def test_completion_runner_requires_owned_paths_and_explicit_deadline() -> None:
+        """Invocation cannot inherit the old temporary root or short deadline."""
+        # Ask only for CLI documentation; this must never launch a native session.
+        result = subprocess.run(
+            [sys.executable, str(RUNNER), '--help'],
+            cwd=REPOSITORY,
+            env={**os.environ, 'PYTHONDONTWRITEBYTECODE': '1'},
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+>       assert result.returncode == 0, result.stderr
+E       AssertionError: /Users/thomas/Projects/skills/.git/kntnt-orchestrate/395.scratch/uv-cache/builds-v0/.tmpLoG1Ow/bin/python: can't open file '/Users/thomas/Projects/skills/.git/kntnt-orchestrate/395/docs/evaluation/editorial-395/gpt-completion-2026-10-02/harness/run.py': [Errno 2] No such file or directory
+E         
+E       assert 2 == 0
+E        +  where 2 = CompletedProcess(args=['/Users/thomas/Projects/skills/.git/kntnt-orchestrate/395.scratch/uv-cache/builds-v0/.tmpLoG1Ow...te/395/docs/evaluation/editorial-395/gpt-completion-2026-10-02/harness/run.py': [Errno 2] No such file or directory\n").returncode
+
+tests/test_editorial_395_completion.py:23: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_editorial_395_completion.py::test_completion_runner_requires_owned_paths_and_explicit_deadline
+1 failed in 0.03s

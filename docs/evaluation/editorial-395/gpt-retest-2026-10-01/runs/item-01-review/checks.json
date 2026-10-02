@@ -1,0 +1,157 @@
+{
+  "input_sha256": "eadd3eabaa135c1588928a1b6be4d1b92c7119cd5bc7e91c0b9e5d9ef10eaf48",
+  "input_preserved": true,
+  "input_stat_preserved": true,
+  "installed_files_unchanged": true,
+  "result": {
+    "returncode": 0,
+    "timed_out": false,
+    "duration_seconds": 800.41,
+    "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-ghfz7mb9",
+    "cleanup_required": true
+  },
+  "seats": [
+    {
+      "id": "01a0f75e-ae53-7322-ba63-9e0e5b318c3c",
+      "source": "exec",
+      "cli_version": "0.159.3",
+      "seats": [
+        [
+          "gpt-6.1-sol",
+          "xhigh"
+        ]
+      ],
+      "task_complete": true,
+      "trace": "native-sessions/2026/10/01/rollout-2026-10-01T14-09-32-01a0f75e-ae53-7322-ba63-9e0e5b318c3c.jsonl"
+    },
+    {
+      "id": "01a0f762-6c11-79f2-bb8f-8b39f455adac",
+      "source": {
+        "subagent": {
+          "thread_spawn": {
+            "parent_thread_id": "01a0f75e-ae53-7322-ba63-9e0e5b318c3c",
+            "depth": 1,
+            "agent_path": "/root/correction_1",
+            "agent_nickname": "Harvey",
+            "agent_role": null
+          }
+        }
+      },
+      "cli_version": "0.159.3",
+      "seats": [
+        [
+          "gpt-6.1-sol",
+          "xhigh"
+        ]
+      ],
+      "task_complete": true,
+      "trace": "native-sessions/2026/10/01/rollout-2026-10-01T14-13-37-01a0f762-6c11-79f2-bb8f-8b39f455adac.jsonl"
+    },
+    {
+      "id": "01a0f764-8fae-7a12-b898-771188c40fd5",
+      "source": {
+        "subagent": {
+          "thread_spawn": {
+            "parent_thread_id": "01a0f75e-ae53-7322-ba63-9e0e5b318c3c",
+            "depth": 1,
+            "agent_path": "/root/mechanical_pass",
+            "agent_nickname": "Dalton",
+            "agent_role": null
+          }
+        }
+      },
+      "cli_version": "0.159.3",
+      "seats": [
+        [
+          "gpt-6.1-sol",
+          "xhigh"
+        ]
+      ],
+      "task_complete": true,
+      "trace": "native-sessions/2026/10/01/rollout-2026-10-01T14-15-57-01a0f764-8fae-7a12-b898-771188c40fd5.jsonl"
+    },
+    {
+      "id": "01a0f768-bb93-74b3-a13b-0c277c73cd7e",
+      "source": {
+        "subagent": {
+          "thread_spawn": {
+            "parent_thread_id": "01a0f75e-ae53-7322-ba63-9e0e5b318c3c",
+            "depth": 1,
+            "agent_path": "/root/reply_check",
+            "agent_nickname": "Feynman",
+            "agent_role": null
+          }
+        }
+      },
+      "cli_version": "0.159.3",
+      "seats": [
+        [
+          "gpt-6.1-sol",
+          "xhigh"
+        ]
+      ],
+      "task_complete": true,
+      "trace": "native-sessions/2026/10/01/rollout-2026-10-01T14-20-31-01a0f768-bb93-74b3-a13b-0c277c73cd7e.jsonl"
+    }
+  ],
+  "native_errors": [],
+  "native_tool_calls": 26,
+  "observer_response_matches_native": true,
+  "delivered_substring_native": true,
+  "mechanical_input_equals_output": true,
+  "mechanical_output_equals_delivered": true,
+  "mechanical_output_equals_supplied_input": true,
+  "scratch_files": {
+    "scratch/cache": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "scratch/data": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "scratch/observer-delivered.md": {
+      "mode": 420,
+      "type": "file",
+      "size": 1789,
+      "sha256": "eadd3eabaa135c1588928a1b6be4d1b92c7119cd5bc7e91c0b9e5d9ef10eaf48"
+    },
+    "scratch/observer-evidence": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "scratch/observer-evidence/mechanical-pass-input.md": {
+      "mode": 420,
+      "type": "file",
+      "size": 1789,
+      "sha256": "eadd3eabaa135c1588928a1b6be4d1b92c7119cd5bc7e91c0b9e5d9ef10eaf48"
+    },
+    "scratch/observer-evidence/mechanical-pass-output.md": {
+      "mode": 420,
+      "type": "file",
+      "size": 1789,
+      "sha256": "eadd3eabaa135c1588928a1b6be4d1b92c7119cd5bc7e91c0b9e5d9ef10eaf48"
+    },
+    "scratch/observer-response.md": {
+      "mode": 420,
+      "type": "file",
+      "size": 2434,
+      "sha256": "0b1b16b5304f41a0ab1ee14517a6a883d252dc0ea29af0c4097e4c9a368b9ddc"
+    },
+    "scratch/tmp": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "scratch/uv-cache": {
+      "mode": 493,
+      "type": "directory"
+    }
+  },
+  "work_changes": {},
+  "limits": [
+    "Encrypted dispatch text is not decoded; actual child reads establish only visible scope.",
+    "A file-read command must be checked against its returned output for truncation or failure.",
+    "External captures poll at 100 ms; an uncaptured temporary version is not asserted present.",
+    "No semantic or resource-loading pass follows merely from a tool count or task completion."
+  ]
+}

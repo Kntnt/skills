@@ -1,0 +1,16 @@
+{
+  "body_equal_ignoring_only_terminal_whitespace": true,
+  "handoff_metadata_separate": true,
+  "matches": [
+    {
+      "path": "scratch/write-source-check.5o9ea0ty/draft.md",
+      "capture": "0007-293f00381dc5.md",
+      "sha256": "293f00381dc58135c6eeb442c38b5cd3f0991be1bbaab9a59b4f0c698132742f"
+    },
+    {
+      "path": "scratch/observer-evidence/draft.md",
+      "capture": "0010-293f00381dc5.md",
+      "sha256": "293f00381dc58135c6eeb442c38b5cd3f0991be1bbaab9a59b4f0c698132742f"
+    }
+  ]
+}

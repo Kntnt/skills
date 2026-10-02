@@ -1,0 +1,18 @@
+{
+  "delivered_artifact_sha256": "a22d3a8d1d9e026319cf8449908b5e11b8418528de64bde2f8a28c83e7f2d873",
+  "comparison": "Remove only the handoff YAML frontmatter and terminal whitespace; the complete remaining body equals captured final source-comparison draft. Native read/write chronology remains separate evidence.",
+  "matches": [
+    {
+      "private_path": "scratch/write-source-check-obworvi4/draft-2.md",
+      "capture": "0010-402b11221f84.md",
+      "draft_sha256": "402b11221f84ae61016c7e06ec0836b7b80722c81531e6793f75aa7b41951a35",
+      "body_equal_ignoring_terminal_whitespace": true
+    },
+    {
+      "private_path": "scratch/observer-evidence/draft-2.md",
+      "capture": "0017-402b11221f84.md",
+      "draft_sha256": "402b11221f84ae61016c7e06ec0836b7b80722c81531e6793f75aa7b41951a35",
+      "body_equal_ignoring_terminal_whitespace": true
+    }
+  ]
+}

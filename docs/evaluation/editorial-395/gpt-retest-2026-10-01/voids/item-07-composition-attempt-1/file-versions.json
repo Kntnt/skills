@@ -1,0 +1,92 @@
+[
+  {
+    "path": "work/source.md",
+    "sha256": "75188596831d5a0a28364ea4da4d1053f69900ca25237f08859696058c579f11",
+    "capture": "0000-75188596831d.md",
+    "time": 1790866877.904649
+  },
+  {
+    "path": "work/AGENTS.md",
+    "sha256": "ae4f322d8c4d007d714bae5988b3314d33c8f7a63f23c1b2658dc79d4d1652b6",
+    "capture": "0001-ae4f322d8c4d.md",
+    "time": 1790866877.904796
+  },
+  {
+    "path": "scratch/write-uv-invoke-puhkyz1h/.tmpsPabGR/.tmpNgUSes/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0002-ae98f4215313.txt",
+    "time": 1790866934.476746
+  },
+  {
+    "path": "scratch/write-uv-invoke-puhkyz1h/.tmpsPabGR/environments-v2/kntnt-3bdda451cf53a1e2/lib/python3.12/site-packages/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0003-ae98f4215313.txt",
+    "time": 1790866934.591894
+  },
+  {
+    "path": "scratch/write-uv-invoke-puhkyz1h/.tmpsPabGR/archive-v0/S9o5-tivsAUkAed8/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0004-ae98f4215313.txt",
+    "time": 1790866934.592682
+  },
+  {
+    "path": "scratch/write-uv-language-aj818kg0/.tmpM0DGXu/environments-v2/languages-6839f17e7435934d/lib/python3.12/site-packages/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0005-ae98f4215313.txt",
+    "time": 1790866961.173101
+  },
+  {
+    "path": "scratch/write-uv-language-aj818kg0/.tmpM0DGXu/archive-v0/dGuAlkxBDhHULIfk/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0006-ae98f4215313.txt",
+    "time": 1790866961.173763
+  },
+  {
+    "path": "scratch/write-source-check-ra20q8ld/draft.md",
+    "sha256": "0f9b39c4a9f95bd44c1876d676fec5851b59b04dc591b7c519bf143766eefa31",
+    "capture": "0007-0f9b39c4a9f9.md",
+    "time": 1790867189.130835
+  },
+  {
+    "path": "scratch/write-source-check-ra20q8ld/draft.md",
+    "sha256": "877ce1d9ac5f472ceccf2d93176e4a57535891e7eed138cbca758e0a9807a253",
+    "capture": "0008-877ce1d9ac5f.md",
+    "time": 1790867226.3259368
+  },
+  {
+    "path": "scratch/write-source-check-ra20q8ld/anatomy-disposition.md",
+    "sha256": "727f4366fc4cecdeeaff9851f5cf6534e35b4477b8de1c586d0655556d0fb72d",
+    "capture": "0009-727f4366fc4c.md",
+    "time": 1790867429.771564
+  },
+  {
+    "path": "scratch/write-source-check-ra20q8ld/report-1.md",
+    "sha256": "7970e403c3fb37896d3ca966722174b56f0fd375b4e0faad8c21af0dab34017c",
+    "capture": "0010-7970e403c3fb.md",
+    "time": 1790867957.990182
+  },
+  {
+    "path": "scratch/write-source-check-ra20q8ld/draft-2.md",
+    "sha256": "44ecfca8a45b7a6cf21e020ea0a014b60c267b81ddc347e3869b83ebb2083fba",
+    "capture": "0011-44ecfca8a45b.md",
+    "time": 1790868072.5424051
+  },
+  {
+    "path": "scratch/write-source-check-ra20q8ld/disposition-1.md",
+    "sha256": "0a5faa0662f5197dc8cf9fe89612935a773db9225305786777ecda56754527c9",
+    "capture": "0012-0a5faa0662f5.md",
+    "time": 1790868072.5425978
+  },
+  {
+    "path": "scratch/write-source-check-ra20q8ld/anatomy-disposition-2.md",
+    "sha256": "4ef93cae3e4c8eb34758f94e1a6ea830a347b5e5eca65c429f65bd104b78ea90",
+    "capture": "0013-4ef93cae3e4c.md",
+    "time": 1790868261.3160682
+  },
+  {
+    "path": "scratch/write-source-check-ra20q8ld/report-2.md",
+    "sha256": "7ff6db536717e246241e0caf5b504deca82a9da105cbc558838d5efb8209a6c1",
+    "capture": "0014-7ff6db536717.md",
+    "time": 1790868625.64972
+  }
+]

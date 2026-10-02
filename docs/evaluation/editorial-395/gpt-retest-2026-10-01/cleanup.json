@@ -1,0 +1,183 @@
+[
+  {
+    "at": "2026-10-01T12:54:18.943277+00:00",
+    "paths_removed": [
+      "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-jepbipmd",
+      "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-8ldz95b_",
+      "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-7ea15fmq",
+      "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-ghfz7mb9",
+      "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-y3ja6pbl",
+      "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-l8fk7ad4"
+    ],
+    "verified_absent": true,
+    "command_form": "rm -r with each full literal path; the initial rm -rf command was rejected without effects"
+  },
+  {
+    "at": "2026-10-01T13:11:51.105895+00:00",
+    "paths_removed": [
+      "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-mg66d7ee",
+      "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-_kwrbn11",
+      "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-46npmlt6",
+      "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-k1x0oubz",
+      "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-7n9uk2ap",
+      "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-tbyllz6u"
+    ],
+    "verified_absent": true,
+    "command_form": "rm -r with each full literal path"
+  },
+  {
+    "time": 1790863658.456842,
+    "scope": "void cell 04 Write judge A attempt 1",
+    "paths": [
+      "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-chrp3gpe"
+    ],
+    "command": "rm -r /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-chrp3gpe",
+    "verified_absent": true,
+    "evidence_copy_verified": true
+  },
+  {
+    "at": "2026-10-01T14:10:34.944974+00:00",
+    "scope": "cell 03 Write and both independent judges",
+    "paths_removed": [
+      "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-7mb8qw2d",
+      "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-6ivx_nee",
+      "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-ebi0hft9"
+    ],
+    "verified_absent": true,
+    "evidence_copy_verified": true
+  },
+  {
+    "at": "2026-10-01T14:17:05.104737+00:00",
+    "scope": "cell 04 Write and both valid independent judges",
+    "paths_removed": [
+      "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-uto9o939",
+      "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-8ezzqqf3",
+      "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-suoty8kt"
+    ],
+    "verified_absent": true,
+    "evidence_copy_verified": true
+  },
+  {
+    "at": "2026-10-01T14:27:22.071199+00:00",
+    "scope": "cell 04 Redline and both independent judges",
+    "paths_removed": [
+      "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-hr_evylq",
+      "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-gynk5wh7",
+      "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-pel2_3oj"
+    ],
+    "verified_absent": true,
+    "evidence_copy_verified": true
+  },
+  {
+    "at": "2026-10-01T14:33:32.661347+00:00",
+    "scope": "cell 03 Redline and both independent judges",
+    "paths_removed": [
+      "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-4qgxrzcm",
+      "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-auntux2h",
+      "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-w44mvpj8"
+    ],
+    "verified_absent": true,
+    "evidence_copy_verified": true
+  },
+  {
+    "at": "2026-10-01T14:59:13.611753+00:00",
+    "scope": "evaluator implicit lint/import caches",
+    "paths_removed": [
+      "/Users/thomas/Projects/skills-eval-395-gpt-20261001/.mypy_cache",
+      "/Users/thomas/Projects/skills-eval-395-gpt-20261001/.ruff_cache",
+      "/Users/thomas/Projects/skills-eval-395-gpt-20261001/docs/evaluation/editorial-395/gpt-retest-2026-10-01/harness/__pycache__"
+    ],
+    "verified_absent": true,
+    "note": "System cleanup registration refuses non-temp paths; tracked here and removed explicitly. Future checks use registered neutral scratch caches and disable import bytecode."
+  },
+  {
+    "time": 1790867473.725742,
+    "scope": "failed evaluator script invocation implicit worktree venv",
+    "path": "/Users/thomas/Projects/skills-eval-395-gpt-20261001/.venv",
+    "note": "uv run was passed a nonexistent scratch script after a quoting error; no native invocation ran. Worktree venv is evaluator scratch and will be removed explicitly."
+  },
+  {
+    "at": "2026-10-01T15:15:55.615277+00:00",
+    "scope": "cell 05 all counted invocations, cell 06 timeout void and implicit evaluator venv",
+    "paths_removed": [
+      "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-aoxu6qeh",
+      "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-45qvcv88",
+      "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-gf2qohpw",
+      "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-lgqitjos",
+      "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-k1wiadic",
+      "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-tc_qggqx",
+      "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-gpk3yzkp",
+      "/Users/thomas/Projects/skills-eval-395-gpt-20261001/.venv"
+    ],
+    "verified_absent": true,
+    "evidence_copy_verified": true,
+    "command_form": "rm -r with each full literal path"
+  },
+  {
+    "at": "2026-10-01T15:18:07.953848+00:00",
+    "scope": "incorrect uv dependency-group probe created implicit evaluator venv again",
+    "path_removed": "/Users/thomas/Projects/skills-eval-395-gpt-20261001/.venv",
+    "verified_absent": true,
+    "note": "No native invocation or product state changed. Subsequent checks use documented uvx commands and neutral cache path."
+  },
+  {
+    "at": "2026-10-01T15:33:32.106524+00:00",
+    "scope": "cell 07 first timeout void",
+    "path_removed": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-od2o_11x",
+    "verified_absent": true,
+    "evidence_copy_verified": true,
+    "command_form": "rm -r with full literal path"
+  },
+  {
+    "at": "2026-10-01T15:42:50.906321+00:00",
+    "scope": "cell 06 second invocation timeout void",
+    "path_removed": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-4uvtdl1m",
+    "verified_absent": true,
+    "evidence_copy_verified": true
+  },
+  {
+    "at": "2026-10-01T16:06:18.905945+00:00",
+    "scope": "cell 07 second timeout void",
+    "path_removed": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-w1_y1a4a",
+    "verified_absent": true,
+    "evidence_copy_verified": true
+  },
+  {
+    "at": "2026-10-01T16:35:46.883737+00:00",
+    "scope": "cell 06 Write and its two valid judges; final cell 07 timeout void",
+    "paths_removed": [
+      "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-dm4_i3l7",
+      "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-v1qnlhf6",
+      "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-3hudcv_6",
+      "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-8t7xxu2f"
+    ],
+    "verified_absent": true,
+    "evidence_copy_verified": true,
+    "command_form": "rm -r with every full literal path"
+  },
+  {
+    "at": "2026-10-01T16:50:39.725211+00:00",
+    "paths_removed": [
+      "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-zdjg8iux",
+      "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-2p1c3zto",
+      "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-yjxdkzl3"
+    ],
+    "verified_absent": true,
+    "evidence": "Completed item-06-review and both fresh readers byte-verified before literal removal",
+    "command_form": "rm -r with each full literal path"
+  },
+  {
+    "at": "2026-10-01T16:59:49.860018+00:00",
+    "paths_removed": [
+      "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-observation-3q9k_53_"
+    ],
+    "verified_absent": true,
+    "evidence": "All counted/void outputs, controller markers/logs, recovery scripts and 12 exact neutral judge packets retained before literal removal",
+    "command_form": "rm -r with the full literal path"
+  },
+  {
+    "at": "2026-10-01T17:03:57.508512+00:00",
+    "correction": "The preceding staging-cleanup entry overstated controller-marker retention. Completion .json markers and launcher .log files are directly byte-copied; original .txt error markers were omitted. Earlier actual native read outputs retain cell04/cell06 contents as explicitly observed reconstructions; cell07 original controller marker is unavailable. All three cell07 invocation/native/capture/inventory records remain complete. No deleted marker is described as a direct preserved byte copy.",
+    "evidence": "operations/controller-error-marker-observations.json; environment-notes.md"
+  }
+]

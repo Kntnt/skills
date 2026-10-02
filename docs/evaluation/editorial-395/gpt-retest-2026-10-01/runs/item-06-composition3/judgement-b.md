@@ -1,0 +1,86 @@
+# Judgement
+
+## 1. Outcome
+
+**Delivered. One source comparison is evidenced. The delivered prose is identical to the last prose the checker saw.**
+
+The judged artifact is `delivered.md`, also reproduced in `response.md`. Removing only the YAML frontmatter leaves text exactly equal to `evidence/0007-293f00381dc5.md`. The response reproduces the delivered artifact without a prose change.
+
+The sole comparison report is `evidence/0008-8ea3f81491a4.md`; `evidence/0012-8ea3f81491a4.md` is its byte-identical observer copy, not another comparison. The checked draft and writer validation also have byte-identical observer copies. The report addresses the revised, three-quotation draft, and the validation records that no second comparison occurred. `evidence/0006-9b335230a3f5.md` is an earlier draft, revised before that comparison.
+
+This judgement uses only the permitted packet. The checker's approval and writer's validation are assessed against the source, not treated as proof of fidelity. Configuration and cleanup claims are not independently established by these artifacts.
+
+## 2. F1 — pass
+
+I find no unsupported assertion, quotation, attribution, personal attribute, event, causal implication, or dropped material caveat in the delivered draft.
+
+The lead preserves the customer's 640 flats, the September 2025 decision, its own maintenance team, and the two-building scope. The body preserves the status-function test before supplier selection, customer-designed categories, continued telephone reporting, supplier configuration, six trainees and two sessions. Attributing the team's activity to Elm Quay Housing in the headline and standfirst is supported organisational attribution; the body identifies the team as the decision-maker.
+
+The figures retain their source and limits: “Enligt Elm Quay Housings interna försöksanteckning, daterad den 4 december 2025, registrerades 31 reparationsanmälningar.” The exclusions immediately follow: “Anteckningen omfattar inte akuta ärenden eller arbeten som hade beställts före försöket.” The measured interval remains report-to-assignment, with a median of two working days against three in the preceding eight-week period. The draft retains both differing workloads and the note's refusal to attribute the difference to software. It neither asserts causation nor asserts that software could not have contributed.
+
+Unknown is kept separate from absent. “Någon jämförelse med andra leverantörer finns inte i underlaget” concerns the available material, not whether the customer ever made a comparison. Similarly, missing cost, satisfaction and completion-time measurements do not become claims of no savings, no satisfaction or no change in completion time. There is no unsupported judgement that 31 reports are many or few.
+
+The forward-looking passage preserves an undecided expansion: “Gruppen ska först kontrollera hur kategorierna fungerar för större reparationer och därefter besluta om en utökning.” “Besluta om” permits either decision; it does not promise expansion. Lind's positive assessment remains personal and qualified, with the extra preparation week intact. No universal supplier recommendation is added. The final paragraph discloses supplier publication, keeps Svale in third person, and accurately offers the supplied checklist as a document to read.
+
+The translated terms were checked in both directions:
+
+| Source → draft | Contextual scope judgement |
+|---|---|
+| “buildings” → “hus” / “byggnader” | “Hus” is used generically for the two buildings, without an added residential-use claim; there is no concrete contextual scope change. |
+| “telephone reports” / “repair reports” → “telefonanmälningar” / “reparationsanmälningar” | These are reports of repair needs in this context, not recordings, completed repairs or a different category of information. |
+| “maintenance supervisor” → “arbetsledare för underhåll” | The supervisory role survives; no additional management rank or employment condition is asserted. |
+| “staff” → “medarbetare” | The personnel trained are preserved; neither term here requires a particular employment contract. |
+| “emergencies” → “akuta ärenden” | In this repair context these denote emergency cases; the draft does not broaden the exclusion to every request someone wants handled quickly. |
+| “assignment” → “tilldelning” | Both identify allocation of a repair, not its execution or completion. |
+| “completion-time measurements” → “mätningar … av … tid till slutförd reparation” | The missing completion measure is preserved without inventing its starting point. |
+| “one view of the reports” → “en samlad vy över anmälningarna” | The shared overview survives; the draft claims neither complete coverage of all repairs nor an exclusive software screen. |
+| “would set that time aside” / “would leave an extra week” → “skulle avsätta den tiden” / “skulle avsätta en extra vecka” | Conditional preparation advice remains conditional, with the same referents and duration. |
+
+The headline's present tense is conventional narrative headline tense for the expressly dated trial, not an invented current rollout. “Det avgränsade resultatet” describes the stated measurement limits, not the size or success of the result. The byline is permitted: `response.md` explicitly discloses using the invoking user's name, Thomas Barregren, because the brief supplies none.
+
+## 3. Other criteria
+
+| Criterion | Verdict | Passage and reader effect |
+|---|---|---|
+| G1 | **Pass** | The customer case gives operations managers a usable account of maintaining telephone access, designing categories, allocating preparation time and interpreting a limited trial. “Jag skulle avsätta den tiden före starten i nästa byggnad” contributes practical customer experience. Supplier publication is disclosed rather than presented as independent journalism. |
+| G2 | **Pass** | The artifact has headline, standfirst, byline, lead, five H2 sections and an actionable ending in order. The headline states aggregation and two-building scope; the standfirst supplies trial duration and the reader promise; “Tidigare förvarade …” begins the situation and decision. Sections cover customer action, supplier implementation, bounded results and qualified appraisal. Their headings identify their respective angles without repeating their first sentences. “Du kan läsa Svales checklista” provides the supplied next step. The customer remains the party choosing, designing, assessing and deciding whether to expand. |
+| P1 | **Pass** | The account moves from separate reporting channels through selection and implementation to measurement limits, appraisal and a next step. The explanation identifies the median's interval before giving the values. “Arbetsbelastningen var olika …” and the express non-attribution prevent the numerical difference from becoming an unsupported causal conclusion. No available technical substance is discarded. |
+| W1 | **Pass** | The headline has eight words and 45 characters. There are five H2 sections containing 3, 2, 2, 2 and 1 paragraphs; the lead precedes them. Prose paragraphs are short, with a maximum of 43 words on a whitespace-token count, and predominantly contain two or three sentence units. The standfirst opens “Under” and the lead “Tidigare”; covering the standfirst leaves a complete body. The brief checklist ending needs only one paragraph and causes no fragmentation or reader loss. The artifact has 349 words including headings and byline, excluding metadata and bare Markdown markers, a reasonable length under “approximately 400 words, as material allows.” |
+| L1 | **Pass** | The Swedish is professional and idiomatic. “Komma överens om kategorierna”, “avsätta den tiden” and “före starten i nästa byggnad” convey the source naturally. The more formal “anteckningen tillskriver uttryckligen inte skillnaden programvaran” is appropriate to a careful account of measurement limits. No identifiable English syntactic or idiomatic import remains. |
+| L2 | **Pass** | The staged artifact consistently uses Swedish locale mechanics: “den 4 december 2025”, Swedish compounds such as “åttaveckorsperioden”, speech dashes and normal Swedish possessives. Numbers and dates preserve the source values. This is a mechanics judgement, separate from L1's judgement of professional idiom. |
+
+## 4. Bridges into quotations
+
+1. **Bridge:** “I en mejlintervju beskriver Lind vad gruppen ville åstadkomma:” **Quotation:** “– Vi ville att kvällspasset skulle se vad morgonpasset redan hade gjort. Kategorierna var våra; Svale hjälpte oss att lägga in dem i loggen.” **Class (b).** “I en mejlintervju” identifies the occasion, “Lind” the speaker and “vad gruppen ville åstadkomma” the subject. The bridge does not reveal the shift-specific aim or category ownership. One could read the reference to the group's intention as a very general restatement, but naming an intention without supplying it leaves the quotation's substantive answer new; that is why (b), not (a), applies. **No-bridge status: no; a bridge is present.**
+2. **Bridge:** “Lind beskriver också förberedelserna:” **Quotation:** “– Vi lade mer tid på att komma överens om kategorierna än på att registrera de första anmälningarna. Jag skulle avsätta den tiden före starten i nästa byggnad.” **Class (b).** “Lind” supplies attribution and “förberedelserna” names the subject. Neither the relative time spent nor the advice is stated in the bridge. **No-bridge status: no; a bridge is present.**
+3. **Bridge:** “Gruppen ska först kontrollera hur kategorierna fungerar för större reparationer och därefter besluta om en utökning.” **Quotation:** “– Jag skulle välja att genomföra försöket igen. Att ha en samlad vy över anmälningarna hjälper oss, men jag skulle avsätta en extra vecka för förberedelser, säger Maya Lind.” **Class (c).** “Kontrollera hur kategorierna fungerar för större reparationer” and “därefter besluta om en utökning” supply a planned check and organisational decision absent from the quotation. The sentence can also be read as background rather than an explicit speech introduction; I count it as the bridge because it immediately situates the customer's prospective action before Lind's assessment. It contains no substantive pre-echo: the team's pending expansion decision is different from Lind's hypothetical choice to repeat the trial. The trailing “säger Maya Lind” is attribution only. **No-bridge status: no; a contextual bridge is present.**
+
+Earlier material is assessed separately: “Maya Lind är arbetsledare för underhåll” establishes her role before the first bridge; “Maya Lind värderar försöket” names the appraisal in a heading; and “Elm Quay Housing har ännu inte utökat försöket” supplies status before the third bridge. None states Lind's appraisal in advance. Category ownership in the first quotation recurs in the later narrative “Underhållsgruppen utformade själv kategorierna”; this is repetition elsewhere, not an immediate bridge or an advance paraphrase of that quotation. There is no earlier positive or qualified appraisal to count separately as a repeated judgement.
+
+**Counts:** The draft carries zero bridges of class (a), two of class (b), one of class (c), and zero quotations without a bridge.
+
+**Interviewer invention:** The draft attributes no unsupported question or utterance to an interviewer; “vad gruppen ville åstadkomma” labels the quotation's subject without inventing a question asked.
+
+**Unsupported bridges:** No bridge asserts an unsupported fact; the third bridge's check and subsequent decision come directly from the supplied material.
+
+## 5. Quoted speech
+
+- **First quotation:** The wish for evening staff to see morning work remains a wish, not proof that this happened. Customer ownership of the categories and Svale's assistance remain distinct. The collective first-person voice and concrete wording survive.
+- **Second quotation:** The comparison between time spent agreeing categories and entering initial reports is intact. The personal “Jag skulle” preserves conditional advice, and “den tiden” retains its reference to category agreement. “Starten i nästa byggnad” naturally translates the source's building-start shorthand without making expansion an accomplished or approved event.
+- **Third quotation:** The hypothetical choice to repeat the trial, the customer's own experience of a helpful shared view and the reservation about an extra preparation week all survive. It remains Lind's actual qualified assessment, not an inference from the median figures or an endorsement for every housing company. Its straightforward, practical voice is preserved.
+
+All three complete, permitted source quotations appear. None is missing, merged with another utterance or materially altered. Each contributes experience or assessment beyond its surrounding narrative.
+
+## 6. Intermediate
+
+**There are no checker findings requiring disposition lines.** The single report contains 25 claim-accounting entries, term comparisons and quotation assessments, but explicitly alleges no source-support or quotation-translation defect. Its observer duplicate adds no finding. The writer records no repair or rejection in response to the comparison. `response.md` mentions completed checks and no remaining findings, not an additional allegation with a missing report. Accordingly, there is no supported repair, disputed caution, wrong finding accepted, right finding rejected, wrong finding rejected, or unjudgeable finding to classify.
+
+The earlier draft omitted the first supplied quotation and grouped implementation material differently. The writer added that quotation and split the material before the only comparison; these changes are visible but were not responses to a checker finding. They do not justify inventing a finding or disposition.
+
+The four short `.txt` evidence files contain only `_yaml` and `yaml`; they carry no draft passage or checker finding. The version map identifies the staged copies and versions, but supplies no additional editorial finding.
+
+**Missed defects:** I found no real F1 defect or quotation-bridge defect in the judged draft that went unseen by the checker; this conclusion comes from the independent source comparison, not its clean report.
+
+## 7. Stop or delivery
+
+**Valid delivery on the supplied artifact evidence.** The delivered draft meets the requested criteria, preserves source boundaries and qualified customer speech, includes the required customer-case anatomy and supplied next step, and matches the checked prose. There is no substantive defect requiring withholding this draft. Trace-dependent configuration, lifecycle and side-effect criteria cannot be established from these staged artifacts and are not inferred from the writer's account.

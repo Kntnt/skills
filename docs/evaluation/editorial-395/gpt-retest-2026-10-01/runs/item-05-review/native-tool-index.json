@@ -1,0 +1,142 @@
+[
+  {
+    "session": "01a0f7db-20bb-7c31-901c-8c5282e7df96",
+    "line": 13,
+    "name": "exec",
+    "arguments": "const results = await Promise.allSettled([\n  tools.exec_command({cmd:\"cat .agents/skills/redline/SKILL.md\", max_output_tokens:20000}),\n  tools.exec_command({cmd:\"cat input.md\", max_output_tokens:20000})\n]);\nfor (let i = 0; i < results.length; i++) text({source: i === 0 ? \"redline/SKILL.md\" : \"input.md\", result: results[i]});\ntext(ALL_TOOLS.filter(x => /skill|proofread|agent/i.test(x.name+\" \"+x.description)).map(x=>({name:x.name,description:x.description.slice(0,300)})));\n",
+    "call_id": "call_XkVWPgOavlUs0fcP89ziWBXh"
+  },
+  {
+    "session": "01a0f7db-20bb-7c31-901c-8c5282e7df96",
+    "line": 21,
+    "name": "exec",
+    "arguments": "const r = await tools.exec_command({\ncmd:\"task_tmp=$(mktemp -d /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-gf2qohpw/scratch/redline-uv.XXXXXX)\\ntrap 'rm -rf \\\"$task_tmp\\\"' EXIT\\nprintf '%s' '--output=response input.md' | TMPDIR=\\\"$task_tmp\\\" UV_NO_CACHE=1 UV_NO_PROJECT=1 uv run \\\"$PWD/.agents/skills/redline/scripts/invoke.py\\\"\",\nmax_output_tokens:12000\n}); text(r);\ntext(await tools.exec_command({cmd:\"sed -n '110,260p' .agents/skills/redline/SKILL.md\",max_output_tokens:16000}));\n",
+    "call_id": "call_gq2cRJIgh30CARTcnZYkW4VO"
+  },
+  {
+    "session": "01a0f7db-20bb-7c31-901c-8c5282e7df96",
+    "line": 27,
+    "name": "exec",
+    "arguments": "text(await tools.exec_command({\ncmd:\"python3 - <<'PY'\\nimport os, shutil, subprocess, tempfile\\np = tempfile.mkdtemp(prefix='redline-uv-', dir='/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-gf2qohpw/scratch')\\ntry:\\n    env = dict(os.environ, TMPDIR=p, UV_NO_CACHE='1', UV_NO_PROJECT='1')\\n    r = subprocess.run(['uv', 'run', os.path.abspath('.agents/skills/redline/scripts/invoke.py')], input='--output=response input.md', text=True, env=env)\\nfinally:\\n    shutil.rmtree(p)\\nraise SystemExit(r.returncode)\\nPY\",\nmax_output_tokens:12000\n}));\ntext(await tools.exec_command({cmd:\"sed -n '110,260p' .agents/skills/redline/SKILL.md\",max_output_tokens:16000}));\n",
+    "call_id": "call_SjRmKzQuh9xp4Tsbo114dAvx"
+  },
+  {
+    "session": "01a0f7db-20bb-7c31-901c-8c5282e7df96",
+    "line": 37,
+    "name": "exec",
+    "arguments": "const reads = [\n[\"redline steps\", \"sed -n '68,109p' .agents/skills/redline/SKILL.md\"],\n[\"delivery\", \"cat .agents/skills/kntnt/library/references/delivery.md\"],\n[\"resources\", \"rg --files .agents/skills/redline .agents/skills/proofread .agents/skills/kntnt/library/references/editorial/genres .agents/skills/kntnt/library/references/editorial/techniques\"]\n];\nconst r = await Promise.allSettled(reads.map(async([label,cmd])=>({label, ...(await tools.exec_command({cmd,max_output_tokens:16000}))})));\nfor (const v of r) text(v);\n",
+    "call_id": "call_HCf4DV2Ccj7PABWtiNlb7soy"
+  },
+  {
+    "session": "01a0f7db-20bb-7c31-901c-8c5282e7df96",
+    "line": 46,
+    "name": "exec",
+    "arguments": "// @exec: {\"max_output_tokens\": 20000}\ntext(await tools.exec_command({cmd:\"sed -n '96,109p' .agents/skills/redline/SKILL.md\",max_output_tokens:9000}));\ntext(await tools.exec_command({\ncmd:\"python3 - <<'PY'\\nimport os, shutil, subprocess, tempfile\\np = tempfile.mkdtemp(prefix='redline-language-', dir='/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-gf2qohpw/scratch')\\ntry:\\n    r = subprocess.run(['uv', 'run', '--no-cache', '--no-project', os.path.abspath('.agents/skills/kntnt/library/scripts/languages.py'), 'resolve', '--scope=composition', '--scope=review', '--scope=anti-slop', 'en_US'], env=dict(os.environ, TMPDIR=p))\\nfinally:\\n    shutil.rmtree(p)\\nraise SystemExit(r.returncode)\\nPY\",\nmax_output_tokens:3000\n}));\nconst reads = [\n[\"base\", \"cat .agents/skills/kntnt/library/references/editorial/base.md .agents/skills/kntnt/library/references/editorial/base.review.md\"],\n[\"casestudy\", \"cat .agents/skills/kntnt/library/references/editorial/genres/casestudy.md .agents/skills/kntnt/library/references/editorial/genres/casestudy.review.md\"]\n];\nfor (const r of await Promise.allSettled(reads.map(async([label,cmd])=>({label,...await tools.exec_command({cmd,max_output_tokens:8000})})))) text(r);\n",
+    "call_id": "call_Vm18dTInNdBmjDm9EAw2KTAO"
+  },
+  {
+    "session": "01a0f7db-20bb-7c31-901c-8c5282e7df96",
+    "line": 56,
+    "name": "exec",
+    "arguments": "// @exec: {\"max_output_tokens\": 25000}\ntext(await tools.exec_command({cmd:\"python3 - <<'PY'\\nfrom pathlib import Path\\ns = Path('.agents/skills/redline/SKILL.md').read_text()\\nprint(s[s.index('9. Invoke'):])\\nPY\",max_output_tokens:8000}));\nconst reads = [\n[\"anti-slop\",\"cat .agents/skills/kntnt/library/references/editorial/anti-slop.md\"],\n[\"web craft\",\"cat .agents/skills/kntnt/library/references/editorial/web-craft.md .agents/skills/kntnt/library/references/editorial/web-craft.review.md\"],\n[\"anatomy\",\"cat .agents/skills/kntnt/library/references/editorial/article-anatomy.md .agents/skills/kntnt/library/references/editorial/article-anatomy.review.md\"],\n[\"headlines\",\"cat .agents/skills/kntnt/library/references/editorial/headlines.md .agents/skills/kntnt/library/references/editorial/headlines.review.md\"]\n];\nfor (const r of await Promise.allSettled(reads.map(async([label,cmd])=>({label,...await tools.exec_command({cmd,max_output_tokens:8000})})))) text(r);\n",
+    "call_id": "call_xsFvJEkVG89kZtcjc8JBtHzD"
+  },
+  {
+    "session": "01a0f7db-20bb-7c31-901c-8c5282e7df96",
+    "line": 67,
+    "name": "exec",
+    "arguments": "// @exec: {\"max_output_tokens\": 18000}\ntext(await tools.exec_command({\ncmd:\"python3 - <<'PY'\\nimport os, shutil, subprocess, tempfile\\nfrom pathlib import Path\\np = tempfile.mkdtemp(prefix='redline-anatomy-', dir='/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-gf2qohpw/scratch')\\ntry:\\n    r = subprocess.run(['uv', 'run', '--no-cache', '--no-project', os.path.abspath('.agents/skills/kntnt/library/scripts/article_anatomy.py'), '-'], input=Path('input.md').read_bytes(), env=dict(os.environ, TMPDIR=p))\\nfinally:\\n    shutil.rmtree(p)\\nraise SystemExit(r.returncode)\\nPY\",\nmax_output_tokens:8000\n}));\nfor (const r of await Promise.allSettled([\ntools.exec_command({cmd:\"cat .agents/skills/proofread/SKILL.md\",max_output_tokens:12000}),\ntools.exec_command({cmd:\"cat .agents/skills/redline/references/reply-check.md\",max_output_tokens:8000})\n])) text(r);\n",
+    "call_id": "call_sTVmSOuUObAvduHjbIZtMmNY"
+  },
+  {
+    "session": "01a0f7db-20bb-7c31-901c-8c5282e7df96",
+    "line": 78,
+    "name": "exec",
+    "arguments": "text(await tools.exec_command({\ncmd:\"python3 - <<'PY'\\nfrom pathlib import Path\\nimport tempfile\\np = Path(tempfile.mkdtemp(prefix='redline-mechanical-', dir='/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-gf2qohpw/scratch'))\\n(p / 'input.md').write_bytes(Path('input.md').read_bytes())\\nprint(str(p))\\nPY\",max_output_tokens:1000\n}));\n",
+    "call_id": "call_PX7hhiEDJrxn11Ayr3SkvHqB"
+  },
+  {
+    "session": "01a0f7db-20bb-7c31-901c-8c5282e7df96",
+    "line": 83,
+    "name": "spawn_agent",
+    "arguments": "{\"task_name\":\"mechanical_pass\",\"fork_turns\":\"none\",\"message\":\"gAAAAABqvm3pmCcceX83mbTkaIvOF6PCil3bxrUvpctI_pppdUNheB0IyYBH8tjQ2KpyAlqNeaY09sy8IZJQwiOXk57YFMnWWwKLImLw60PjGHLReViI-7-cNm77cCeyEeron9pnKsecLXbXBt7ppWkQUTHmtozVk-ytkQDNqktn_yb9hCqg4yppI4fWxhasG7m9kwdSVuNJVYk4w3TArUgkVKswFvHRKQiBgjtjEEoN9DpGo6ekdMR02-phnnWuSwQGO0qg2mx53QcLWrLgFYGnW25DlM5hnrcum9e_ESQsRnC1zus31dpV7sl3r7oyx0_-K9THJNjmqvSzNjY5xa2h3oeaTW9riJ1aSgVlA2qw6lU7wMQHmIrfw1QIUYihorQxJTz-uAX19EoBFEXdNcNuWnzu0dpDPbz1aA5bPHxh85MlVVcGJ861QwRAExMNCX28kc-IBcsBhWQ4miEDVTDTaJfBDuSiANOkq-dO_XIg9pS1yIIQxF7AZ4fJTENgbjKbvxgAApcq8HToCQqb6ztw9TrWUGidv_Us-0qWVyFnyswPNCg0hVHYBcb6J44RlcMA3iye1jdyO8TQeyHjKwVsQ9Xgc8vLvMFAQuulxYOYH2N9I0xpO6ixg5M9ayuZxWXDaKz0DdyJ4_egHiClDK8OedwUxAke8E036YnJRjspX0V3ZZ6ixIwSDmTzMmvCOxpcLu1qNTVhTnkSSdmIAO9nAAtWV6rXTME0m8SIcQIpipFy4u-sP0dvB1yaVWazkyg35rOCyG69mFbaRu655ThYXjEV1MQ37LHKZF5sDpmHQdwdqHp_z_9OXssz18flly8Vu9qHxiVByq4UorhZDfXUd-F_9Ndc1lcIvfHUlxmEy-1XppsgN-K3aIi4kibKP6YfLdIWedIOwChvrgPcQT8PD-4Td2UDVstW4onJ7xImfW_77rkYIEGtjlCCAi-fyloT3zcw-lxX7TsHS_h8qqYTIF260EahKXKAqWZGfUp4_Oh4nhGDnNp82SwfKMCFeNg3W7-b6pxYv6lhFoBlxa5YXszmS2egIAPiEV59w0eKi7cIej6IP1eO6k3_qTJXzFBYWoZ5DcPFis8rSv8Ka8OAqD3CQVwDoFe_CSB7hfcbdl4YZjT6YwuvQSrKB4oxRsJfADyzpbvMuj9o0Fnx-wEGLQcZPffynkQoIPSYeH6U5gbJT3_ApKl0N60Fc5oUZ-S5eSkVRu4snzzGERv4vT0dTYsOF0HRJChduWFIvKMG9uCj5PTkFGO6D8r4Ev_7VVG2btMAVC5Zjc8ifjp_FamZUfdLY9awQTL053L9ARBlT5SXHgZlYbDv4jhQ7dTCF7lXcHtS0vqb5z_5AdVBI0lmd0HJL6E6cKgOw42ncXNCHnkKriy47wSyxy34gAavipKAKJwIFYvOdS1GmTtDu8lxsxEqZgPoKNYiVt3A21GCpuWrFuidr1u8OMOOegAp47jhv1phkIRiii_JYfsQfLeU27WA1vYg_La14jaoe9PAGCJA_hjItgjE3akeisuWZK6kq7ST4wqwRiPT5cjWklAn_Z6em_UoohP73jAMLg5DGEkfwZiBRpfxwim4w55kYsknNCPb_r3PsVgPhL0mgy1O1ck24MSEUaNK4DvDrKH_dgONiPgrB8H0Y5MQMasJkwFrm9oaALheSlNhE-v2uE-_VPCdDzNB8Gb81eITc-y3f03BPKlFNrO_1klYx155Ka0Nkw2sov7xkuYWJE49M09bsAKYa0vLpB3Cs4-YNS6u7y-0TC3vVdOVXUNUQoXI9_UrD5rekRzHX13WH3NqusrvelgRFMsT5EMLxpvpYsXJlnX-WGAqVO9CVrDRBX9QyJ8YetYHV2MQPdAHOdAiha6EwND78HSTeyJuf1Pg9o3MQAmfMGwzh5h0wPU94DGym-fbNsVdKx7U-oEPIqj5TYKPBro6EIZJyqH8tvAdezOfqlbu2S1_xjQU7QjJe4XW21STFu02NQIx_svz2iuVhFDsACTSpxyWeM3UgaSbu32eaJ9cJj548hjNRqDGftM-xcy_brsXea6ynAhZ52AmHK1mJQ4J6obBM-xTuTmUN6RXmzBthJ_ESCFWG-3c6_iBkEm8n8sZm_J7pMg6uqr-GnXkXVzd3Bz9fA==\"}",
+    "call_id": "call_scNaGwVK1JNiPI65oSUgq3xw"
+  },
+  {
+    "session": "01a0f7db-20bb-7c31-901c-8c5282e7df96",
+    "line": 91,
+    "name": "wait_agent",
+    "arguments": "{\"timeout_ms\":10000}",
+    "call_id": "call_Cb0U19aqsjYD9dzr8GgDLliS"
+  },
+  {
+    "session": "01a0f7db-20bb-7c31-901c-8c5282e7df96",
+    "line": 98,
+    "name": "wait_agent",
+    "arguments": "{\"timeout_ms\":10000}",
+    "call_id": "call_NEHPVKlSZigP9IapBxSxP4h8"
+  },
+  {
+    "session": "01a0f7db-20bb-7c31-901c-8c5282e7df96",
+    "line": 107,
+    "name": "wait_agent",
+    "arguments": "{\"timeout_ms\":60000}",
+    "call_id": "call_fvxbWiHyURamXh5fX7Ijl7Zt"
+  },
+  {
+    "session": "01a0f7db-20bb-7c31-901c-8c5282e7df96",
+    "line": 115,
+    "name": "exec",
+    "arguments": "// @exec: {\"max_output_tokens\": 10000}\ntext(await tools.exec_command({\ncmd:\"python3 - <<'PY'\\nimport os, shutil, subprocess, tempfile\\nfrom pathlib import Path\\nprivate = Path('/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-gf2qohpw/scratch/redline-mechanical-zvu3fwv8')\\noriginal = Path('input.md').read_bytes()\\nmechanical_input = (private / 'input.md').read_bytes()\\nmechanical_output = (private / 'output.md').read_bytes()\\nassert mechanical_input == original, 'The frozen input changed'\\nprint('Frozen input unchanged:', mechanical_input == original)\\nprint('Final output byte-identical to received text:', mechanical_output == original)\\nprint('Complete final Text Artifact follows:')\\nprint(mechanical_output.decode(), end='')\\np = tempfile.mkdtemp(prefix='redline-final-anatomy-', dir='/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-gf2qohpw/scratch')\\ntry:\\n    r = subprocess.run(['uv', 'run', '--no-cache', '--no-project', os.path.abspath('.agents/skills/kntnt/library/scripts/article_anatomy.py'), '-'], input=mechanical_output, env=dict(os.environ, TMPDIR=p))\\nfinally:\\n    shutil.rmtree(p)\\nraise SystemExit(r.returncode)\\nPY\",\nmax_output_tokens:8000\n}));\n",
+    "call_id": "call_csw4Oe4hbjMtFPVv3subxV46"
+  },
+  {
+    "session": "01a0f7db-20bb-7c31-901c-8c5282e7df96",
+    "line": 122,
+    "name": "exec",
+    "arguments": "text(await tools.exec_command({\ncmd:\"python3 - <<'PY'\\nfrom pathlib import Path\\nimport shutil\\nscratch = Path('/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-gf2qohpw/scratch')\\nprivate = scratch / 'redline-mechanical-zvu3fwv8'\\nevidence = scratch / 'observer-evidence'\\nevidence.mkdir(exist_ok=True)\\nshutil.copyfile(private / 'input.md', evidence / 'mechanical-pass-input.md')\\nshutil.copyfile(private / 'output.md', evidence / 'mechanical-pass-output.md')\\nassert (evidence / 'mechanical-pass-input.md').read_bytes() == Path('input.md').read_bytes()\\nassert (evidence / 'mechanical-pass-output.md').read_bytes() == (private / 'output.md').read_bytes()\\nresponse = 'No changes needed. Reviewed as a US English case study with no technique, using the supplied metadata.'\\n(scratch / 'observer-response.md').write_text(response, encoding='utf-8')\\nassert set(p.name for p in private.iterdir()) == {'input.md', 'output.md'}\\nshutil.rmtree(private)\\nassert not private.exists()\\nprint('Observer mechanical captures and exact response saved. Private mechanical files removed. No Text Artifact is delivered, so no observer-delivered.md was created.')\\nPY\",\nmax_output_tokens:1000\n}));\n",
+    "call_id": "call_9euFDLsLf4Kum4Y3wwxcA0mn"
+  },
+  {
+    "session": "01a0f7dd-57e4-77c0-bdbd-d4fdbb495dc1",
+    "line": 15,
+    "name": "exec",
+    "arguments": "const r = await tools.exec_command({cmd:\"cat .agents/skills/proofread/SKILL.md\",workdir:\"/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-gf2qohpw/work\",max_output_tokens:12000}); text(r.output);\n",
+    "call_id": "call_brlwyIsIFCtXvj7tVQDgKQBS"
+  },
+  {
+    "session": "01a0f7dd-57e4-77c0-bdbd-d4fdbb495dc1",
+    "line": 20,
+    "name": "exec",
+    "arguments": "const r=await tools.exec_command({cmd:\"python - <<'PY'\\nimport os, subprocess, tempfile, shutil\\nscratch='/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-gf2qohpw/scratch'\\ntmp=tempfile.mkdtemp(prefix='proofread-uv-',dir=scratch)\\ntry:\\n env=os.environ.copy(); env.update(TMPDIR=tmp,UV_NO_CACHE='1',UV_NO_PROJECT='1')\\n invocation='--language=en_US --output=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-gf2qohpw/scratch/redline-mechanical-zvu3fwv8/output.md /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-gf2qohpw/scratch/redline-mechanical-zvu3fwv8/input.md'\\n result=subprocess.run(['uv','run','.agents/skills/proofread/scripts/invoke.py'],input=invocation,text=True,env=env)\\nfinally:\\n shutil.rmtree(tmp)\\nraise SystemExit(result.returncode)\\nPY\",workdir:\"/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-gf2qohpw/work\",max_output_tokens:12000});text(r);\n",
+    "call_id": "call_FVE3paX6SKPzoJDIQ0pDAL0Y"
+  },
+  {
+    "session": "01a0f7dd-57e4-77c0-bdbd-d4fdbb495dc1",
+    "line": 25,
+    "name": "exec",
+    "arguments": "const rs=await Promise.allSettled([\ntools.exec_command({cmd:\"cat .agents/skills/kntnt/library/references/delivery.md .agents/skills/kntnt/library/references/invocation-envelope.md\",workdir:\"/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-gf2qohpw/work\",max_output_tokens:18000}),\ntools.exec_command({cmd:\"python - <<'PY'\\nfrom pathlib import Path\\np=Path('/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-gf2qohpw/scratch/redline-mechanical-zvu3fwv8/input.md')\\no=Path('/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-gf2qohpw/scratch/redline-mechanical-zvu3fwv8/output.md')\\nprint('input exists:',p.is_file(),'destination distinct:',p.resolve()!=o.resolve(),'parent exists:',o.parent.is_dir())\\nprint(p.read_text())\\nPY\",workdir:\"/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-gf2qohpw/work\",max_output_tokens:24000})\n]);for(let i=0;i<rs.length;i++)text({i,result:rs[i]});\n",
+    "call_id": "call_8zBlzQ8Mdzr4d052PBR6q3Sz"
+  },
+  {
+    "session": "01a0f7dd-57e4-77c0-bdbd-d4fdbb495dc1",
+    "line": 33,
+    "name": "exec",
+    "arguments": "const r=await tools.exec_command({cmd:\"python - <<'PY'\\nimport os, subprocess, tempfile, shutil\\nscratch='/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-gf2qohpw/scratch'\\ntmp=tempfile.mkdtemp(prefix='proofread-uv-',dir=scratch)\\ntry:\\n env=os.environ.copy(); env['TMPDIR']=tmp\\n result=subprocess.run(['uv','run','--no-cache','--no-project','.agents/skills/kntnt/library/scripts/languages.py','resolve','--scope=mechanics','en_US'],env=env)\\nfinally:\\n shutil.rmtree(tmp)\\nraise SystemExit(result.returncode)\\nPY\",workdir:\"/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-gf2qohpw/work\",max_output_tokens:12000});text(r);\n",
+    "call_id": "call_5gIJiGdxQyGKQ6wfjA31e6Ed"
+  },
+  {
+    "session": "01a0f7dd-57e4-77c0-bdbd-d4fdbb495dc1",
+    "line": 38,
+    "name": "exec",
+    "arguments": "const r=await tools.exec_command({cmd:\"cat .agents/skills/kntnt/library/references/editorial/mechanics.md\",workdir:\"/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-gf2qohpw/work\",max_output_tokens:12000});text(r.output);\n",
+    "call_id": "call_chQeF76J0cP0QIVQl79mhEhC"
+  },
+  {
+    "session": "01a0f7dd-57e4-77c0-bdbd-d4fdbb495dc1",
+    "line": 45,
+    "name": "exec",
+    "arguments": "const r=await tools.exec_command({cmd:\"python - <<'PY'\\nfrom pathlib import Path\\nsource=Path('/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-gf2qohpw/scratch/redline-mechanical-zvu3fwv8/input.md')\\ndestination=Path('/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-gf2qohpw/scratch/redline-mechanical-zvu3fwv8/output.md')\\noriginal=source.read_bytes()\\ndestination.write_bytes(original)\\nassert destination.read_bytes()==original\\nassert source.read_bytes()==original\\nprint('Complete text delivered unchanged; source preserved.')\\nPY\",workdir:\"/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-gf2qohpw/work\",max_output_tokens:1000});text(r.output);\n",
+    "call_id": "call_QdtYrfsoA19gdxT38cIyaeqf"
+  }
+]

@@ -1,0 +1,44 @@
+[
+  {
+    "path": "work/input.md",
+    "sha256": "bd82c36077e900f62a9509eccca7282d03a66fcfb45aff2e40f81ca180d95ec6",
+    "capture": "0000-bd82c36077e9.md",
+    "time": 1790872409.130822
+  },
+  {
+    "path": "work/criteria.md",
+    "sha256": "2997a45c104a909e118ef4dc70e277035233b815ae7f2d5dc94482f52911dc28",
+    "capture": "0001-2997a45c104a.md",
+    "time": 1790872409.130977
+  },
+  {
+    "path": "work/response.md",
+    "sha256": "b3b6b0d51f1b58e9b5a648d4136ebfdc2de2c6424208a2f6635a8f4abd284537",
+    "capture": "0002-b3b6b0d51f1b.md",
+    "time": 1790872409.131089
+  },
+  {
+    "path": "work/brief.md",
+    "sha256": "bd82c36077e900f62a9509eccca7282d03a66fcfb45aff2e40f81ca180d95ec6",
+    "capture": "0003-bd82c36077e9.md",
+    "time": 1790872409.13124
+  },
+  {
+    "path": "work/AGENTS.md",
+    "sha256": "94c52c1a62378949dbe4bfca513e619b1cfe4266199275782f4195ef6ccede87",
+    "capture": "0004-94c52c1a6237.md",
+    "time": 1790872409.1314108
+  },
+  {
+    "path": "work/work/input.md",
+    "sha256": "1ad7c51e8984aac8a7f6dc921051b930e8eb4c3db6cbc55332ddf0f3e8a5e9a8",
+    "capture": "0005-1ad7c51e8984.md",
+    "time": 1790872409.131632
+  },
+  {
+    "path": "work/judgement.md",
+    "sha256": "cf80dfc5e811059481043379de4af293d0e76371f7e76c3e373cbbeca80724d1",
+    "capture": "0006-cf80dfc5e811.md",
+    "time": 1790872726.619027
+  }
+]

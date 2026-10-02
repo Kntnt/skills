@@ -1,0 +1,919 @@
+{
+  "at": "2026-10-01T16:51:38.950492+00:00",
+  "valid": [
+    {
+      "run": "item-01-composition",
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 800.1,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-jepbipmd",
+        "cleanup_required": true
+      },
+      "native_sessions": 2,
+      "all_tasks_complete": true,
+      "native_errors": [],
+      "seat_verified": true
+    },
+    {
+      "run": "item-01-composition-reader-a",
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 482.63,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-8ldz95b_",
+        "cleanup_required": true
+      },
+      "native_sessions": 1,
+      "all_tasks_complete": true,
+      "native_errors": [],
+      "seat_verified": true
+    },
+    {
+      "run": "item-01-composition-reader-b",
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 519.52,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-7ea15fmq",
+        "cleanup_required": true
+      },
+      "native_sessions": 1,
+      "all_tasks_complete": true,
+      "native_errors": [],
+      "seat_verified": true
+    },
+    {
+      "run": "item-01-review",
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 800.41,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-ghfz7mb9",
+        "cleanup_required": true
+      },
+      "native_sessions": 4,
+      "all_tasks_complete": true,
+      "native_errors": [],
+      "seat_verified": true
+    },
+    {
+      "run": "item-01-review-reader-a",
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 333.53,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-y3ja6pbl",
+        "cleanup_required": true
+      },
+      "native_sessions": 1,
+      "all_tasks_complete": true,
+      "native_errors": [],
+      "seat_verified": true
+    },
+    {
+      "run": "item-01-review-reader-b",
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 350.92,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-l8fk7ad4",
+        "cleanup_required": true
+      },
+      "native_sessions": 1,
+      "all_tasks_complete": true,
+      "native_errors": [],
+      "seat_verified": true
+    },
+    {
+      "run": "item-02-composition",
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 1201.47,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-mg66d7ee",
+        "cleanup_required": true
+      },
+      "native_sessions": 3,
+      "all_tasks_complete": true,
+      "native_errors": [],
+      "seat_verified": true
+    },
+    {
+      "run": "item-02-composition-reader-a",
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 707.06,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-_kwrbn11",
+        "cleanup_required": true
+      },
+      "native_sessions": 1,
+      "all_tasks_complete": true,
+      "native_errors": [],
+      "seat_verified": true
+    },
+    {
+      "run": "item-02-composition-reader-b",
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 571.34,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-46npmlt6",
+        "cleanup_required": true
+      },
+      "native_sessions": 1,
+      "all_tasks_complete": true,
+      "native_errors": [],
+      "seat_verified": true
+    },
+    {
+      "run": "item-02-review",
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 837.37,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-k1x0oubz",
+        "cleanup_required": true
+      },
+      "native_sessions": 4,
+      "all_tasks_complete": true,
+      "native_errors": [],
+      "seat_verified": true
+    },
+    {
+      "run": "item-02-review-reader-a",
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 358.57,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-7n9uk2ap",
+        "cleanup_required": true
+      },
+      "native_sessions": 1,
+      "all_tasks_complete": true,
+      "native_errors": [],
+      "seat_verified": true
+    },
+    {
+      "run": "item-02-review-reader-b",
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 324.36,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-tbyllz6u",
+        "cleanup_required": true
+      },
+      "native_sessions": 1,
+      "all_tasks_complete": true,
+      "native_errors": [],
+      "seat_verified": true
+    },
+    {
+      "run": "item-03-composition",
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 1203.26,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-7mb8qw2d",
+        "cleanup_required": true
+      },
+      "native_sessions": 3,
+      "all_tasks_complete": true,
+      "native_errors": [],
+      "seat_verified": true
+    },
+    {
+      "run": "item-03-composition-reader-a",
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 572.13,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-6ivx_nee",
+        "cleanup_required": true
+      },
+      "native_sessions": 1,
+      "all_tasks_complete": true,
+      "native_errors": [],
+      "seat_verified": true
+    },
+    {
+      "run": "item-03-composition-reader-b",
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 633.55,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-ebi0hft9",
+        "cleanup_required": true
+      },
+      "native_sessions": 1,
+      "all_tasks_complete": true,
+      "native_errors": [],
+      "seat_verified": true
+    },
+    {
+      "run": "item-03-review",
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 849.97,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-4qgxrzcm",
+        "cleanup_required": true
+      },
+      "native_sessions": 4,
+      "all_tasks_complete": true,
+      "native_errors": [],
+      "seat_verified": true
+    },
+    {
+      "run": "item-03-review-reader-a",
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 410.46,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-auntux2h",
+        "cleanup_required": true
+      },
+      "native_sessions": 1,
+      "all_tasks_complete": true,
+      "native_errors": [],
+      "seat_verified": true
+    },
+    {
+      "run": "item-03-review-reader-b",
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 348.92,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-w44mvpj8",
+        "cleanup_required": true
+      },
+      "native_sessions": 1,
+      "all_tasks_complete": true,
+      "native_errors": [],
+      "seat_verified": true
+    },
+    {
+      "run": "item-04-composition",
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 1193.04,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-uto9o939",
+        "cleanup_required": true
+      },
+      "native_sessions": 3,
+      "all_tasks_complete": true,
+      "native_errors": [],
+      "seat_verified": true
+    },
+    {
+      "run": "item-04-composition-reader-a2",
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 657.6,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-8ezzqqf3",
+        "cleanup_required": true
+      },
+      "native_sessions": 1,
+      "all_tasks_complete": true,
+      "native_errors": [],
+      "seat_verified": true
+    },
+    {
+      "run": "item-04-composition-reader-b",
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 575.2,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-suoty8kt",
+        "cleanup_required": true
+      },
+      "native_sessions": 1,
+      "all_tasks_complete": true,
+      "native_errors": [],
+      "seat_verified": true
+    },
+    {
+      "run": "item-04-review",
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 365.29,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-hr_evylq",
+        "cleanup_required": true
+      },
+      "native_sessions": 2,
+      "all_tasks_complete": true,
+      "native_errors": [],
+      "seat_verified": true
+    },
+    {
+      "run": "item-04-review-reader-a",
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 369.78,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-gynk5wh7",
+        "cleanup_required": true
+      },
+      "native_sessions": 1,
+      "all_tasks_complete": true,
+      "native_errors": [],
+      "seat_verified": true
+    },
+    {
+      "run": "item-04-review-reader-b",
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 291.81,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-pel2_3oj",
+        "cleanup_required": true
+      },
+      "native_sessions": 1,
+      "all_tasks_complete": true,
+      "native_errors": [],
+      "seat_verified": true
+    },
+    {
+      "run": "item-05-composition",
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 1313.72,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-45qvcv88",
+        "cleanup_required": true
+      },
+      "native_sessions": 3,
+      "all_tasks_complete": true,
+      "native_errors": [],
+      "seat_verified": true
+    },
+    {
+      "run": "item-05-composition-reader-a",
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 577.3,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-lgqitjos",
+        "cleanup_required": true
+      },
+      "native_sessions": 1,
+      "all_tasks_complete": true,
+      "native_errors": [],
+      "seat_verified": true
+    },
+    {
+      "run": "item-05-composition-reader-b",
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 549.78,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-k1wiadic",
+        "cleanup_required": true
+      },
+      "native_sessions": 1,
+      "all_tasks_complete": true,
+      "native_errors": [],
+      "seat_verified": true
+    },
+    {
+      "run": "item-05-review",
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 291.91,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-gf2qohpw",
+        "cleanup_required": true
+      },
+      "native_sessions": 2,
+      "all_tasks_complete": true,
+      "native_errors": [],
+      "seat_verified": true
+    },
+    {
+      "run": "item-05-review-reader-a",
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 474.48,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-tc_qggqx",
+        "cleanup_required": true
+      },
+      "native_sessions": 1,
+      "all_tasks_complete": true,
+      "native_errors": [],
+      "seat_verified": true
+    },
+    {
+      "run": "item-05-review-reader-b",
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 383.96,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-gpk3yzkp",
+        "cleanup_required": true
+      },
+      "native_sessions": 1,
+      "all_tasks_complete": true,
+      "native_errors": [],
+      "seat_verified": true
+    },
+    {
+      "run": "item-06-composition-reader-a",
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 569.29,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-v1qnlhf6",
+        "cleanup_required": true
+      },
+      "native_sessions": 1,
+      "all_tasks_complete": true,
+      "native_errors": [],
+      "seat_verified": true
+    },
+    {
+      "run": "item-06-composition-reader-b",
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 637.06,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-3hudcv_6",
+        "cleanup_required": true
+      },
+      "native_sessions": 1,
+      "all_tasks_complete": true,
+      "native_errors": [],
+      "seat_verified": true
+    },
+    {
+      "run": "item-06-composition3",
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 1180.21,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-dm4_i3l7",
+        "cleanup_required": true
+      },
+      "native_sessions": 2,
+      "all_tasks_complete": true,
+      "native_errors": [],
+      "seat_verified": true
+    },
+    {
+      "run": "item-06-review",
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 341.23,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-zdjg8iux",
+        "cleanup_required": true
+      },
+      "native_sessions": 2,
+      "all_tasks_complete": true,
+      "native_errors": [],
+      "seat_verified": true
+    },
+    {
+      "run": "item-06-review-reader-a",
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 393.86,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-2p1c3zto",
+        "cleanup_required": true
+      },
+      "native_sessions": 1,
+      "all_tasks_complete": true,
+      "native_errors": [],
+      "seat_verified": true
+    },
+    {
+      "run": "item-06-review-reader-b",
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 412.13,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-yjxdkzl3",
+        "cleanup_required": true
+      },
+      "native_sessions": 1,
+      "all_tasks_complete": true,
+      "native_errors": [],
+      "seat_verified": true
+    }
+  ],
+  "voids": [
+    {
+      "run": "item-04-composition-reader-a-attempt-1",
+      "result": {
+        "returncode": 1,
+        "timed_out": false,
+        "duration_seconds": 641.59,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-chrp3gpe",
+        "cleanup_required": true
+      },
+      "native_sessions": 1,
+      "all_tasks_complete": true,
+      "native_errors": [
+        {
+          "trace": "trace.jsonl",
+          "line": 80,
+          "payload": {
+            "type": "error",
+            "message": "Selected model is at capacity. Please try a different model."
+          }
+        },
+        {
+          "trace": "trace.jsonl",
+          "line": 81,
+          "payload": {
+            "type": "turn.failed",
+            "error": {
+              "message": "Selected model is at capacity. Please try a different model."
+            }
+          }
+        }
+      ],
+      "seat_verified": true
+    },
+    {
+      "run": "item-06-composition-attempt-1",
+      "result": {
+        "returncode": -15,
+        "timed_out": true,
+        "duration_seconds": 1800.24,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-aoxu6qeh",
+        "cleanup_required": true
+      },
+      "native_sessions": 3,
+      "all_tasks_complete": false,
+      "native_errors": [],
+      "seat_verified": true
+    },
+    {
+      "run": "item-06-composition-attempt-2",
+      "result": {
+        "returncode": -15,
+        "timed_out": true,
+        "duration_seconds": 1800.25,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-4uvtdl1m",
+        "cleanup_required": true
+      },
+      "native_sessions": 3,
+      "all_tasks_complete": false,
+      "native_errors": [],
+      "seat_verified": true
+    },
+    {
+      "run": "item-07-composition-attempt-1",
+      "result": {
+        "returncode": -15,
+        "timed_out": true,
+        "duration_seconds": 1800.23,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-od2o_11x",
+        "cleanup_required": true
+      },
+      "native_sessions": 3,
+      "all_tasks_complete": false,
+      "native_errors": [],
+      "seat_verified": true
+    },
+    {
+      "run": "item-07-composition-attempt-2",
+      "result": {
+        "returncode": -15,
+        "timed_out": true,
+        "duration_seconds": 1800.28,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-w1_y1a4a",
+        "cleanup_required": true
+      },
+      "native_sessions": 3,
+      "all_tasks_complete": false,
+      "native_errors": [],
+      "seat_verified": true
+    },
+    {
+      "run": "item-07-composition-attempt-3",
+      "result": {
+        "returncode": -15,
+        "timed_out": true,
+        "duration_seconds": 1800.24,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-8t7xxu2f",
+        "cleanup_required": true
+      },
+      "native_sessions": 3,
+      "all_tasks_complete": false,
+      "native_errors": [],
+      "seat_verified": true
+    }
+  ],
+  "processes": [
+    {
+      "run": "item-01-composition",
+      "process": {
+        "pid": 39780,
+        "process_group": 39780
+      }
+    },
+    {
+      "run": "item-01-composition-reader-a",
+      "process": {
+        "pid": 58421,
+        "process_group": 58421
+      }
+    },
+    {
+      "run": "item-01-composition-reader-b",
+      "process": {
+        "pid": 94488,
+        "process_group": 94488
+      }
+    },
+    {
+      "run": "item-01-review",
+      "process": {
+        "pid": 12863,
+        "process_group": 12863
+      }
+    },
+    {
+      "run": "item-01-review-reader-a",
+      "process": {
+        "pid": 9362,
+        "process_group": 9362
+      }
+    },
+    {
+      "run": "item-01-review-reader-b",
+      "process": {
+        "pid": 58235,
+        "process_group": 58235
+      }
+    },
+    {
+      "run": "item-02-composition",
+      "process": {
+        "pid": 39781,
+        "process_group": 39781
+      }
+    },
+    {
+      "run": "item-02-composition-reader-a",
+      "process": {
+        "pid": 80211,
+        "process_group": 80211
+      }
+    },
+    {
+      "run": "item-02-composition-reader-b",
+      "process": {
+        "pid": 27325,
+        "process_group": 27325
+      }
+    },
+    {
+      "run": "item-02-review",
+      "process": {
+        "pid": 24043,
+        "process_group": 24043
+      }
+    },
+    {
+      "run": "item-02-review-reader-a",
+      "process": {
+        "pid": 78949,
+        "process_group": 78949
+      }
+    },
+    {
+      "run": "item-02-review-reader-b",
+      "process": {
+        "pid": 87902,
+        "process_group": 87902
+      }
+    },
+    {
+      "run": "item-03-composition",
+      "process": {
+        "pid": 78161,
+        "process_group": 78161
+      }
+    },
+    {
+      "run": "item-03-composition-reader-a",
+      "process": {
+        "pid": 75884,
+        "process_group": 75884
+      }
+    },
+    {
+      "run": "item-03-composition-reader-b",
+      "process": {
+        "pid": 86285,
+        "process_group": 86285
+      }
+    },
+    {
+      "run": "item-03-review",
+      "process": {
+        "pid": 56623,
+        "process_group": 56623
+      }
+    },
+    {
+      "run": "item-03-review-reader-a",
+      "process": {
+        "pid": 93428,
+        "process_group": 93428
+      }
+    },
+    {
+      "run": "item-03-review-reader-b",
+      "process": {
+        "pid": 14072,
+        "process_group": 14072
+      }
+    },
+    {
+      "run": "item-04-composition",
+      "process": {
+        "pid": 19035,
+        "process_group": 19035
+      }
+    },
+    {
+      "run": "item-04-composition-reader-a2",
+      "process": {
+        "pid": 97190,
+        "process_group": 97190
+      }
+    },
+    {
+      "run": "item-04-composition-reader-b",
+      "process": {
+        "pid": 4703,
+        "process_group": 4703
+      }
+    },
+    {
+      "run": "item-04-review",
+      "process": {
+        "pid": 72365,
+        "process_group": 72365
+      }
+    },
+    {
+      "run": "item-04-review-reader-a",
+      "process": {
+        "pid": 10018,
+        "process_group": 10018
+      }
+    },
+    {
+      "run": "item-04-review-reader-b",
+      "process": {
+        "pid": 12391,
+        "process_group": 12391
+      }
+    },
+    {
+      "run": "item-05-composition",
+      "process": {
+        "pid": 89540,
+        "process_group": 89540
+      }
+    },
+    {
+      "run": "item-05-composition-reader-a",
+      "process": {
+        "pid": 16931,
+        "process_group": 16931
+      }
+    },
+    {
+      "run": "item-05-composition-reader-b",
+      "process": {
+        "pid": 22508,
+        "process_group": 22508
+      }
+    },
+    {
+      "run": "item-05-review",
+      "process": {
+        "pid": 14070,
+        "process_group": 14070
+      }
+    },
+    {
+      "run": "item-05-review-reader-a",
+      "process": {
+        "pid": 25994,
+        "process_group": 25994
+      }
+    },
+    {
+      "run": "item-05-review-reader-b",
+      "process": {
+        "pid": 29182,
+        "process_group": 29182
+      }
+    },
+    {
+      "run": "item-06-composition-reader-a",
+      "process": {
+        "pid": 96729,
+        "process_group": 96729
+      }
+    },
+    {
+      "run": "item-06-composition-reader-b",
+      "process": {
+        "pid": 81258,
+        "process_group": 81258
+      }
+    },
+    {
+      "run": "item-06-composition3",
+      "process": {
+        "pid": 90013,
+        "process_group": 90013
+      }
+    },
+    {
+      "run": "item-06-review",
+      "process": {
+        "pid": 17970,
+        "process_group": 17970
+      }
+    },
+    {
+      "run": "item-06-review-reader-a",
+      "process": {
+        "pid": 69027,
+        "process_group": 69027
+      }
+    },
+    {
+      "run": "item-06-review-reader-b",
+      "process": {
+        "pid": 77868,
+        "process_group": 77868
+      }
+    },
+    {
+      "run": "item-04-composition-reader-a-attempt-1",
+      "process": {
+        "pid": 80038,
+        "process_group": 80038
+      }
+    },
+    {
+      "run": "item-06-composition-attempt-1",
+      "process": {
+        "pid": 17334,
+        "process_group": 17334
+      }
+    },
+    {
+      "run": "item-06-composition-attempt-2",
+      "process": {
+        "pid": 34688,
+        "process_group": 34688
+      }
+    },
+    {
+      "run": "item-07-composition-attempt-1",
+      "process": {
+        "pid": 30268,
+        "process_group": 30268
+      }
+    },
+    {
+      "run": "item-07-composition-attempt-2",
+      "process": {
+        "pid": 55169,
+        "process_group": 55169
+      }
+    },
+    {
+      "run": "item-07-composition-attempt-3",
+      "process": {
+        "pid": 40461,
+        "process_group": 40461
+      }
+    }
+  ],
+  "counted_invocations": 36,
+  "void_invocations": 6,
+  "counted_native_sessions": 58,
+  "whole_matrix_complete": false,
+  "limits": [
+    "Cell07 wholly void; no valid delivery or paired review",
+    "Exact encrypted child dispatch unverified; actual resource returns assessed separately",
+    "Semantic verdicts remain in two independent reports; lifecycle is not a semantic pass"
+  ]
+}

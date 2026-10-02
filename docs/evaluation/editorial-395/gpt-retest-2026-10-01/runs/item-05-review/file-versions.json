@@ -1,0 +1,92 @@
+[
+  {
+    "path": "work/input.md",
+    "sha256": "543cc3883e96f8b6a1859e6067b594ffe644de32a0cdff127a26914e2fc449f6",
+    "capture": "0000-543cc3883e96.md",
+    "time": 1790864728.105271
+  },
+  {
+    "path": "work/AGENTS.md",
+    "sha256": "22aec75f7247e37cfabd677408c0efdfc5b1eb38b20c4954752af53421d86cb9",
+    "capture": "0001-22aec75f7247.md",
+    "time": 1790864728.1054342
+  },
+  {
+    "path": "scratch/redline-uv-owok_gtc/.tmphs19Lw/environments-v2/kntnt-7217d16659d6cb2c/lib/python3.12/site-packages/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0002-ae98f4215313.txt",
+    "time": 1790864765.397681
+  },
+  {
+    "path": "scratch/redline-uv-owok_gtc/.tmphs19Lw/archive-v0/wd--D0XMO61Tg2nb/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0003-ae98f4215313.txt",
+    "time": 1790864765.398216
+  },
+  {
+    "path": "scratch/redline-language-nq1h_tcr/.tmpbMybZW/environments-v2/languages-e684d6c15052506d/lib/python3.12/site-packages/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0004-ae98f4215313.txt",
+    "time": 1790864792.9206982
+  },
+  {
+    "path": "scratch/redline-language-nq1h_tcr/.tmpbMybZW/archive-v0/jFpxzpcJ5kpTCdJT/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0005-ae98f4215313.txt",
+    "time": 1790864792.92145
+  },
+  {
+    "path": "scratch/redline-mechanical-zvu3fwv8/input.md",
+    "sha256": "543cc3883e96f8b6a1859e6067b594ffe644de32a0cdff127a26914e2fc449f6",
+    "capture": "0006-543cc3883e96.md",
+    "time": 1790864855.746546
+  },
+  {
+    "path": "scratch/proofread-uv-zp7h7j4j/.tmpY61buO/environments-v2/kntnt-7217d16659d6cb2c/lib/python3.12/site-packages/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0007-ae98f4215313.txt",
+    "time": 1790864896.376746
+  },
+  {
+    "path": "scratch/proofread-uv-zp7h7j4j/.tmpY61buO/archive-v0/4bxqHPNSX8wM9NpH/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0008-ae98f4215313.txt",
+    "time": 1790864896.377476
+  },
+  {
+    "path": "scratch/proofread-uv-kks0s1j5/.tmpTB4Ojv/environments-v2/languages-e684d6c15052506d/lib/python3.12/site-packages/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0009-ae98f4215313.txt",
+    "time": 1790864919.772029
+  },
+  {
+    "path": "scratch/proofread-uv-kks0s1j5/.tmpTB4Ojv/archive-v0/RwDOjAkYCiYhq3LB/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0010-ae98f4215313.txt",
+    "time": 1790864919.77272
+  },
+  {
+    "path": "scratch/redline-mechanical-zvu3fwv8/output.md",
+    "sha256": "543cc3883e96f8b6a1859e6067b594ffe644de32a0cdff127a26914e2fc449f6",
+    "capture": "0011-543cc3883e96.md",
+    "time": 1790864955.468714
+  },
+  {
+    "path": "scratch/observer-response.md",
+    "sha256": "f2e987b9c31e1dfb880c58adf8b69fcbd5f0eea36649d4717cfde00b3a7aaece",
+    "capture": "0012-f2e987b9c31e.md",
+    "time": 1790865014.462518
+  },
+  {
+    "path": "scratch/observer-evidence/mechanical-pass-output.md",
+    "sha256": "543cc3883e96f8b6a1859e6067b594ffe644de32a0cdff127a26914e2fc449f6",
+    "capture": "0013-543cc3883e96.md",
+    "time": 1790865014.462826
+  },
+  {
+    "path": "scratch/observer-evidence/mechanical-pass-input.md",
+    "sha256": "543cc3883e96f8b6a1859e6067b594ffe644de32a0cdff127a26914e2fc449f6",
+    "capture": "0014-543cc3883e96.md",
+    "time": 1790865014.4629571
+  }
+]

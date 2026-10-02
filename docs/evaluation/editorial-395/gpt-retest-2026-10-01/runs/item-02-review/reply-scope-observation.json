@@ -1,0 +1,19 @@
+{
+  "checker": "reply_checker",
+  "criterion_components": [
+    "T1 scope",
+    "R2 scoped contract"
+  ],
+  "observed_overread": {
+    "base.review.md": "Four preceding sentences on the same paragraph line, before A claim removed because the finding named that claim itself",
+    "delivery.md": "Next section heading ## Refusals, without its body"
+  },
+  "evidence": "native-tool-index.json and actual custom_tool_call_output in reply-checker native rollout",
+  "separate_passes": [
+    "selected genre/technique/locale",
+    "one fresh reply checker",
+    "one installed Proofread",
+    "final mechanical byte relation"
+  ],
+  "encrypted_dispatch": "skipped"
+}
