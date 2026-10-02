@@ -1,0 +1,3 @@
+Headline: **supported**. Opening: **working**. Body references: **unresolved** — “Det andra alternativet” has no identifiable referent, contrary to the contract’s reference-clarity requirement.
+
+Written to [validation-b.md](/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-42b5836c/tmp/session-lcecwdh0/work/validation-b.md).

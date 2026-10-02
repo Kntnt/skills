@@ -1,0 +1,3 @@
+Headline: **supported**. Opening: **working**. Body references: **unresolved** because “Det andra alternativet” is never identified. This conflicts with the contract’s requirement for clear references; the other references resolve in context.
+
+Written to [validation-a.md](/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-42b5836c/tmp/session-vlctr94n/work/validation-a.md).

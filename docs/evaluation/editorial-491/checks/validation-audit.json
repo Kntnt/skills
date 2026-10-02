@@ -1,0 +1,103 @@
+{
+  "complete": true,
+  "count": 6,
+  "checks": "Actual complete native context, prompts, public tools/replies and reports; source/reply/file-version bytes retained separately. All working-material effects are the designated validator reports. Private Harness state/cache creation is retained in each full-root inventory.",
+  "rows": [
+    {
+      "validator": "supported-appraisal-a",
+      "exit_status": 0,
+      "timed_out": false,
+      "same_seat": true,
+      "surfaces_checked": 5,
+      "disclosures": [],
+      "authentication_changed": false,
+      "working_material_effects": {
+        "created": [
+          "work/validation-a.md"
+        ],
+        "removed": [],
+        "changed": []
+      }
+    },
+    {
+      "validator": "supported-appraisal-b",
+      "exit_status": 0,
+      "timed_out": false,
+      "same_seat": true,
+      "surfaces_checked": 5,
+      "disclosures": [],
+      "authentication_changed": false,
+      "working_material_effects": {
+        "created": [
+          "work/validation-b.md"
+        ],
+        "removed": [],
+        "changed": []
+      }
+    },
+    {
+      "validator": "unresolved-referent-a",
+      "exit_status": 0,
+      "timed_out": false,
+      "same_seat": true,
+      "surfaces_checked": 5,
+      "disclosures": [],
+      "authentication_changed": false,
+      "working_material_effects": {
+        "created": [
+          "work/validation-a.md"
+        ],
+        "removed": [],
+        "changed": []
+      }
+    },
+    {
+      "validator": "unresolved-referent-b",
+      "exit_status": 0,
+      "timed_out": false,
+      "same_seat": true,
+      "surfaces_checked": 5,
+      "disclosures": [],
+      "authentication_changed": false,
+      "working_material_effects": {
+        "created": [
+          "work/validation-b.md"
+        ],
+        "removed": [],
+        "changed": []
+      }
+    },
+    {
+      "validator": "unsupported-attribution-a",
+      "exit_status": 0,
+      "timed_out": false,
+      "same_seat": true,
+      "surfaces_checked": 5,
+      "disclosures": [],
+      "authentication_changed": false,
+      "working_material_effects": {
+        "created": [
+          "work/validation-a.md"
+        ],
+        "removed": [],
+        "changed": []
+      }
+    },
+    {
+      "validator": "unsupported-attribution-b",
+      "exit_status": 0,
+      "timed_out": false,
+      "same_seat": true,
+      "surfaces_checked": 5,
+      "disclosures": [],
+      "authentication_changed": false,
+      "working_material_effects": {
+        "created": [
+          "work/validation-b.md"
+        ],
+        "removed": [],
+        "changed": []
+      }
+    }
+  ]
+}

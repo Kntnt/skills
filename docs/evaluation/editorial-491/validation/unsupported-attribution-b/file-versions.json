@@ -1,0 +1,62 @@
+[
+  {
+    "path": "work/text.md",
+    "sha256": "6a85566b0fa64ca8a943672e0d907e550f57ff7b548c491db5af2c61ce442316",
+    "capture": "6a85566b0fa64ca8a943672e0d907e550f57ff7b548c491db5af2c61ce442316.md",
+    "time": 1790964797.476832
+  },
+  {
+    "path": "work/contract/headlines.review.md",
+    "sha256": "11be8cc4a9d009f59f78dedfe9a0059c681ca0d8f23bd37f36ef0486a74f1257",
+    "capture": "11be8cc4a9d009f59f78dedfe9a0059c681ca0d8f23bd37f36ef0486a74f1257.md",
+    "time": 1790964797.477086
+  },
+  {
+    "path": "work/contract/headlines.md",
+    "sha256": "adfb7ca612905afee03a73d58cdb07de9d0877b23af9de89f7e114f6de81df5f",
+    "capture": "adfb7ca612905afee03a73d58cdb07de9d0877b23af9de89f7e114f6de81df5f.md",
+    "time": 1790964797.47724
+  },
+  {
+    "path": "work/contract/base.md",
+    "sha256": "d4146ef134de7482e25469201aaceed7b207fba9f8bacb06a428b85f6bfc3581",
+    "capture": "d4146ef134de7482e25469201aaceed7b207fba9f8bacb06a428b85f6bfc3581.md",
+    "time": 1790964797.477382
+  },
+  {
+    "path": "work/contract/base.review.md",
+    "sha256": "d2c838c19a692104be247afd227b0baed98f3156be059c0a982ecae3513fa0ca",
+    "capture": "d2c838c19a692104be247afd227b0baed98f3156be059c0a982ecae3513fa0ca.md",
+    "time": 1790964797.477525
+  },
+  {
+    "path": "work/contract/article-anatomy.md",
+    "sha256": "c075c6fe7494dbcdc43d6af599c55ab8fc52fc48d7ed1b6cc26eca7a592cecd7",
+    "capture": "c075c6fe7494dbcdc43d6af599c55ab8fc52fc48d7ed1b6cc26eca7a592cecd7.md",
+    "time": 1790964797.477678
+  },
+  {
+    "path": "work/contract/web-craft.md",
+    "sha256": "b1ac5867d30952c3ca78da244520ab28c025102f4389f44ec206757a29f05371",
+    "capture": "b1ac5867d30952c3ca78da244520ab28c025102f4389f44ec206757a29f05371.md",
+    "time": 1790964797.477807
+  },
+  {
+    "path": "work/contract/genres/casestudy.review.md",
+    "sha256": "a7db10d0dc1970064a8887c819a8500dfdecf43dcb45fffed32994921ceb68a4",
+    "capture": "a7db10d0dc1970064a8887c819a8500dfdecf43dcb45fffed32994921ceb68a4.md",
+    "time": 1790964797.478048
+  },
+  {
+    "path": "work/contract/genres/casestudy.md",
+    "sha256": "a39054321cbd35819cfd8ac7d2823dd3d56550a6ee2d1c6ee3b30f9daaa16cc5",
+    "capture": "a39054321cbd35819cfd8ac7d2823dd3d56550a6ee2d1c6ee3b30f9daaa16cc5.md",
+    "time": 1790964797.478174
+  },
+  {
+    "path": "work/validation-b.md",
+    "sha256": "e2f1ecbad3a8a5a036d8a5f049bd48b9b656700c495c7074b57f8270d9bab85a",
+    "capture": "e2f1ecbad3a8a5a036d8a5f049bd48b9b656700c495c7074b57f8270d9bab85a.md",
+    "time": 1790965108.407584
+  }
+]

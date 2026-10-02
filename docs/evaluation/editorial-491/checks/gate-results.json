@@ -1,0 +1,35 @@
+{
+  "commands": [
+    {
+      "command": "uvx ruff check .",
+      "returncode": 0,
+      "started": 1790964652.3789701,
+      "ended": 1790964654.823925,
+      "pid": 75341
+    },
+    {
+      "command": "uvx ruff format --check .",
+      "returncode": 0,
+      "started": 1790964654.824204,
+      "ended": 1790964655.6232991,
+      "pid": 75899
+    },
+    {
+      "command": "uvx --with types-PyYAML --with pytest --with httpx==0.28.1 --with selectolax==0.4.11 --with types-tinycss2 --with types-regex mypy skills/kntnt/scripts/kntnt.py skills/kntnt/library/scripts/argument_grammar.py skills/kntnt/library/scripts/article_anatomy.py skills/kntnt/library/scripts/ship.py skills/kntnt/library/scripts/integrations.py skills/kntnt/library/scripts/languages.py skills/kntnt/library/scripts/credentials.py skills/models/model-selector/scripts/catalogue.py skills/models/model-selector/scripts/profiles.py skills/models/model-selector/scripts/evidence.py skills/models/model-selector/scripts/launch.py skills/models/model-selector/scripts/selection.py skills/models/model-selector/scripts/quota.py skills/models/model-selector/scripts/record.py skills/models/model-selector/scripts/capture.py skills/models/model-selector/scripts/grade.py skills/models/model-selector/scripts/setup_apply.py skills/models/model-selector/scripts/inventory.py skills/code/orchestrate/scripts/run.py skills/productivity/rename-invoices/scripts/rename_invoices.py skills/agents/explain/scripts/invoke.py skills/web/mirror/scripts/mirror.py skills/infrastructure/cloudns/scripts/cloudns.py skills/infrastructure/hetzner/scripts/hetzner.py skills/infrastructure/nodeping/scripts/nodeping.py skills/infrastructure/postmark/scripts/postmark.py tests",
+      "returncode": 0,
+      "started": 1790964655.623532,
+      "ended": 1790964671.869544,
+      "pid": 75969
+    },
+    {
+      "command": "uv run --with pytest --with pytest-xdist --with pyyaml pytest -n auto",
+      "returncode": 0,
+      "started": 1790964671.869914,
+      "ended": 1790964821.255949,
+      "pid": 80737
+    }
+  ],
+  "complete": true,
+  "home_preserved": true,
+  "codex_home_preserved": true
+}

@@ -1,0 +1,17 @@
+# Case-study validation brief
+
+Read `text.md` and the existing editorial contract under `contract/` in the directory named below. Read nothing else: no repository, ticket, expected classification, other reader or candidate wording. Judge the complete text against that contract as a reader meets each passage in its place.
+
+Write `validation-<your letter>.md` in that directory. Answer every question with the exact passages that decide it.
+
+1. What does the headline say, who carries its appraisal and what is its scope? Does the complete text support its attribution, certainty and scope?
+2. What does the lead say the customer aimed to do? Does it promise requirements or results that the body does not supply? Does its wording cause a concrete reader loss, or simply admit another successful wording?
+3. Read the standfirst independently and the body without the standfirst or headings. List genuinely unresolved references, explaining whether the complete text supplies the information a repair needs. Distinguish those from references that the context settles.
+4. List any other concrete editorial failure under the supplied contract. A working alternative is no failure. Identify absent information separately from something contradicted by the text.
+5. Classify the headline as supported or unsupported, the opening as working or defective, and the body's references as resolved or unresolved. Give the decisive evidence for each classification. Report any conflict with the supplied contract.
+
+Reply in at most 120 words with the classifications and the path written.
+
+---
+Run directory: /private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-42b5836c/tmp/session-lcecwdh0/work
+Your letter: b

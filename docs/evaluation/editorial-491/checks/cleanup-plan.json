@@ -1,0 +1,25 @@
+{
+  "delete_paths": [
+    "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-42b5836c/cache",
+    "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-42b5836c/gate-commands.json",
+    "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-42b5836c/gate-runner.py",
+    "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-42b5836c/inputs",
+    "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-42b5836c/logs",
+    "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-42b5836c/mypy-cache",
+    "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-42b5836c/packets",
+    "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-42b5836c/readers",
+    "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-42b5836c/resources.jsonl",
+    "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-42b5836c/ruff-cache",
+    "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-42b5836c/supported-anatomy.json",
+    "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-42b5836c/tmp",
+    "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-42b5836c/tools",
+    "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-42b5836c/uv-cache",
+    "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-42b5836c/uv-tools",
+    "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-42b5836c/v",
+    "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/491/.ruff_cache",
+    "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/491/.pytest_cache"
+  ],
+  "preserve_assigned_scratch_directory": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-42b5836c",
+  "no_background_processes_remain": true,
+  "preserved_evidence_root": "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/491/docs/evaluation/editorial-491"
+}

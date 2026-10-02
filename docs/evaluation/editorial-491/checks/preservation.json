@@ -1,0 +1,30 @@
+{
+  "start": "4cf05813f94c2fa7147898878027835e14d29859",
+  "prospective_revision": "82eea7d77bc895571115d474f27b98daf90dd790",
+  "implementation_revision": null,
+  "product_corpus_rules_tests_prior_aggregate_changes": [],
+  "prospective_working_bytes_unchanged": true,
+  "committed_prospective_hashes": {
+    "docs/evaluation/editorial-491/control-judge-brief-file.md": "5086a4c1bee9f482b7c8f70a3a54c48ab80faeee660ac5eb31d5ea9e10121b4d",
+    "docs/evaluation/editorial-491/control-judge-brief.md": "a7274ec9322729d929a1fdf1b9a5b56da2792e101a7cbe80c8c03413dd70dfef",
+    "docs/evaluation/editorial-491/harness/campaign.py": "981ba1f9141f05a71c80483ac3b6eebac4dec4728732927064781a4b16b12dc3",
+    "docs/evaluation/editorial-491/harness/env.sh": "f79b033d091b4e0075a950986f151ef65fcfde1fe1c495732f73b4016ac817d7",
+    "docs/evaluation/editorial-491/harness/run.py": "3e5e3e6ef0b4b2f132930219f30857041b1e0d896e8d8b1beffd0b8a6fab0eeb",
+    "docs/evaluation/editorial-491/inputs/case-study-clean.expectation.md": "2c0b5ae6729252fca6e9a068a4c545459e5379a0a958c56fa19c776ac7cc5b7d",
+    "docs/evaluation/editorial-491/inputs/case-study-clean.md": "2e4ef2fd4b7c03aaaceca1ad22724fdb1ed3c685cd6b4995a00285198bed42f9",
+    "docs/evaluation/editorial-491/inputs/case-study-flawed.expectation.md": "a645fd6add028dcee3402f526a5083fb5be929b516857d3775eb0c1417730b43",
+    "docs/evaluation/editorial-491/inputs/case-study-flawed.md": "ce574061bd09328ed80109a3cca07875683c2fd77d55f41d5631dc2cdcb18767",
+    "docs/evaluation/editorial-491/inputs/supported-appraisal.expectation.md": "13d23be034923fb9d625e9b41d198907eae98551b306cf53f5fdc0509a13ff0d",
+    "docs/evaluation/editorial-491/inputs/supported-appraisal.md": "9297359338e7132a3f4f89dd5ba29c87c912d02a715d19d9f83b106c9be44ac1",
+    "docs/evaluation/editorial-491/inputs/unresolved-referent.expectation.md": "0cd64fded61ad05cf1a3a27ef05cb382d549bf186c3bf4e66d461db492cd03f7",
+    "docs/evaluation/editorial-491/inputs/unresolved-referent.md": "15b7da484b29363361e7b06449a810581015f6cd2a7116e79ac61d830737b326",
+    "docs/evaluation/editorial-491/inputs/unsupported-attribution.expectation.md": "fa6c1f86de3df75813600e6361b2563d566945ae28967816f73a2aa42be835ed",
+    "docs/evaluation/editorial-491/inputs/unsupported-attribution.md": "6a85566b0fa64ca8a943672e0d907e550f57ff7b548c491db5af2c61ce442316",
+    "docs/evaluation/editorial-491/plan.md": "604d43b17f0a45843769a83722ff5825d74d051937f5868349be9eb9b570caa1",
+    "docs/evaluation/editorial-491/runs/matrix.tsv": "732050f5cc8099cb3612a3d3a7053d36b30e8f405d3718e771eca1e698fe9538",
+    "docs/evaluation/editorial-491/validation-brief.md": "5685775a0bb04f4249a8ca23092c644352cb78161b45df80c88c4430b0a80518"
+  },
+  "line_ending_normalization": [
+    "docs/evaluation/editorial-491/runs/matrix.tsv"
+  ]
+}
