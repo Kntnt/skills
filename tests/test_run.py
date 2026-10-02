@@ -10060,7 +10060,7 @@ def test_a_repository_that_numbers_nothing_is_unmoved_by_overlapping_isolates(
 def test_the_registries_the_engine_finds_are_the_ones_this_repository_keeps() -> None:
     """The detection is deterministic and unconfigured, so what it answers for
     this repository is what this repository actually keeps: the decision
-    records tracked under `docs/adr`, and nothing else in the index."""
+    records and the retest's preserved numbered captures in the index."""
 
     # Compare the engine with the same tracked-file boundary its contract names.
     found = _run().numbered_registries(REPO_ROOT)
@@ -10071,14 +10071,46 @@ def test_the_registries_the_engine_finds_are_the_ones_this_repository_keeps() ->
     )
 
     assert records, "this repository tracks no numbered decision records"
-    assert set(found) == {"docs/adr"}
+    # The frozen source inventory independently fixes each captured maximum.
+    packet = "docs/evaluation/editorial-362/gpt-retest-2026-10-01"
+    captured_maxima = {
+        "harness/smoke": 1,
+        "judges/opinion-en_GB-r1": 3,
+        "judges/opinion-en_GB-r2": 2,
+        "judges/opinion-en_GB-r3": 2,
+        "judges/opinion-en_US-r1": 2,
+        "judges/opinion-en_US-r2": 2,
+        "judges/opinion-en_US-r3": 2,
+        "judges/p3-document-scope": 3,
+        "runs/opinion-en_GB-r1": 11,
+        "runs/opinion-en_GB-r2": 8,
+        "runs/opinion-en_GB-r3": 12,
+        "runs/opinion-en_US-r1": 10,
+        "runs/opinion-en_US-r2": 11,
+        "runs/opinion-en_US-r3": 11,
+        "runs/p3-document-scope-r1": 2,
+        "runs/p3-document-scope-r2": 3,
+        "runs/p3-document-scope-r3": 2,
+        "runs/p3-document-scope-r4": 2,
+        "runs/p3-document-scope-r5": 2,
+        "runs/p3-document-scope-r6": 2,
+        "voided/scope-r1-capacity-1": 1,
+        "voided/scope-r6-capacity-1": 1,
+    }
+    assert found == {
+        "docs/adr": int(records[-1].name[:4]),
+        **{
+            f"{packet}/{sample}/file-versions": maximum
+            for sample, maximum in captured_maxima.items()
+        },
+    }
     assert found["docs/adr"] == int(records[-1].name[:4])
 
 
-def test_isolate_reserves_records_but_not_manifested_file_version_captures(
+def test_isolate_keeps_reserving_every_tracked_numbered_directory(
     tmp_path: Path,
 ) -> None:
-    """Immutable harness captures never need a number for a new authored record."""
+    """Evidence integration must not change isolate's manifest-independent rule."""
 
     # Track both real registries and the harness's distinct archived-file layout.
     repo = _init_repo(tmp_path / "proj")
@@ -10097,12 +10129,14 @@ def test_isolate_reserves_records_but_not_manifested_file_version_captures(
     _git(repo, "add", "captures")
     _git(repo, "commit", "-m", "retain the capture manifests")
 
-    # Reservation remains discoverable outside manifested capture directories.
+    # A companion manifest does not alter the original reservation contract.
     result = _engine(repo, "isolate", "--ticket", "9")
 
     assert result.returncode == 0, result.stderr
     assert json.loads(result.stdout)["reservations"] == [
+        {"directory": "captures/judge/file-versions", "number": "0002"},
         {"directory": "captures/records", "number": "0007"},
+        {"directory": "captures/run/file-versions", "number": "0001"},
         {"directory": "docs/adr", "number": "0002"},
         {"directory": "docs/other/file-versions", "number": "0005"},
     ]

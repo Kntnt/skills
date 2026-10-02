@@ -1,0 +1,32 @@
+{
+  "all_ticket_base_tests_retained": true,
+  "base_test_run_functions": 384,
+  "current_test_run_functions": 385,
+  "exact_capture_fixture_matches_independent_source_inventory": true,
+  "capture_directories": 22,
+  "amend_1_public_test_fixture_retained": true,
+  "prior_reservation_expectations_retained": [
+    {
+      "directory": "captures/records",
+      "number": "0007"
+    },
+    {
+      "directory": "docs/adr",
+      "number": "0002"
+    },
+    {
+      "directory": "docs/other/file-versions",
+      "number": "0005"
+    }
+  ],
+  "additional_original_contract_expectations": [
+    {
+      "directory": "captures/judge/file-versions",
+      "number": "0002"
+    },
+    {
+      "directory": "captures/run/file-versions",
+      "number": "0001"
+    }
+  ]
+}

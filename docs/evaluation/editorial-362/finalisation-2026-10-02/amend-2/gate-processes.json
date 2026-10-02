@@ -1,0 +1,90 @@
+[
+  {
+    "command": "uvx ruff check .",
+    "pid": 58637,
+    "process_group": 58637,
+    "started_unix": 1790941257.7849312,
+    "registration": {
+      "manifest": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-362-scratch/amend-2-temporary/registration-home/.kntnt/session-cleanup/sessions/01a0fc63-9fb0-7f30-a86d-c9f8886889c5.jsonl",
+      "recorded": {
+        "at": "2026-10-02T11:40:57+00:00",
+        "id": "58637",
+        "kind": "pid",
+        "started": "Fri Oct  2 13:40:57 2026",
+        "why": "Ticket 362 amend 2 gate command 1"
+      },
+      "session": "01a0fc63-9fb0-7f30-a86d-c9f8886889c5"
+    },
+    "output": "docs/evaluation/editorial-362/finalisation-2026-10-02/amend-2/gate-1.txt",
+    "returncode": 0,
+    "elapsed_seconds": 1.2461559772491455,
+    "completed_unix": 1790941259.031091,
+    "process_group_absent": true
+  },
+  {
+    "command": "uvx ruff format --check .",
+    "pid": 58649,
+    "process_group": 58649,
+    "started_unix": 1790941259.0313148,
+    "registration": {
+      "manifest": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-362-scratch/amend-2-temporary/registration-home/.kntnt/session-cleanup/sessions/01a0fc63-9fb0-7f30-a86d-c9f8886889c5.jsonl",
+      "recorded": {
+        "at": "2026-10-02T11:40:59+00:00",
+        "id": "58649",
+        "kind": "pid",
+        "started": "Fri Oct  2 13:40:59 2026",
+        "why": "Ticket 362 amend 2 gate command 2"
+      },
+      "session": "01a0fc63-9fb0-7f30-a86d-c9f8886889c5"
+    },
+    "output": "docs/evaluation/editorial-362/finalisation-2026-10-02/amend-2/gate-2.txt",
+    "returncode": 0,
+    "elapsed_seconds": 0.8310191631317139,
+    "completed_unix": 1790941259.862334,
+    "process_group_absent": true
+  },
+  {
+    "command": "uvx --with types-PyYAML --with pytest --with httpx==0.28.1 --with selectolax==0.4.11 --with types-tinycss2 --with types-regex mypy skills/kntnt/scripts/kntnt.py skills/kntnt/library/scripts/argument_grammar.py skills/kntnt/library/scripts/article_anatomy.py skills/kntnt/library/scripts/ship.py skills/kntnt/library/scripts/integrations.py skills/kntnt/library/scripts/languages.py skills/kntnt/library/scripts/credentials.py skills/models/model-selector/scripts/catalogue.py skills/models/model-selector/scripts/profiles.py skills/models/model-selector/scripts/evidence.py skills/models/model-selector/scripts/launch.py skills/models/model-selector/scripts/selection.py skills/models/model-selector/scripts/quota.py skills/models/model-selector/scripts/record.py skills/models/model-selector/scripts/capture.py skills/models/model-selector/scripts/grade.py skills/models/model-selector/scripts/setup_apply.py skills/models/model-selector/scripts/inventory.py skills/code/orchestrate/scripts/run.py skills/productivity/rename-invoices/scripts/rename_invoices.py skills/agents/explain/scripts/invoke.py skills/web/mirror/scripts/mirror.py skills/infrastructure/cloudns/scripts/cloudns.py skills/infrastructure/hetzner/scripts/hetzner.py skills/infrastructure/nodeping/scripts/nodeping.py skills/infrastructure/postmark/scripts/postmark.py tests",
+    "pid": 58659,
+    "process_group": 58659,
+    "started_unix": 1790941259.86252,
+    "registration": {
+      "manifest": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-362-scratch/amend-2-temporary/registration-home/.kntnt/session-cleanup/sessions/01a0fc63-9fb0-7f30-a86d-c9f8886889c5.jsonl",
+      "recorded": {
+        "at": "2026-10-02T11:40:59+00:00",
+        "id": "58659",
+        "kind": "pid",
+        "started": "Fri Oct  2 13:40:59 2026",
+        "why": "Ticket 362 amend 2 gate command 3"
+      },
+      "session": "01a0fc63-9fb0-7f30-a86d-c9f8886889c5"
+    },
+    "output": "docs/evaluation/editorial-362/finalisation-2026-10-02/amend-2/gate-3.txt",
+    "returncode": 0,
+    "elapsed_seconds": 4.401437044143677,
+    "completed_unix": 1790941264.263957,
+    "process_group_absent": true
+  },
+  {
+    "command": "uv run --with pytest --with pytest-xdist --with pyyaml pytest -n auto",
+    "pid": 58682,
+    "process_group": 58682,
+    "started_unix": 1790941264.264249,
+    "registration": {
+      "manifest": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-362-scratch/amend-2-temporary/registration-home/.kntnt/session-cleanup/sessions/01a0fc63-9fb0-7f30-a86d-c9f8886889c5.jsonl",
+      "recorded": {
+        "at": "2026-10-02T11:41:04+00:00",
+        "id": "58682",
+        "kind": "pid",
+        "started": "Fri Oct  2 13:41:04 2026",
+        "why": "Ticket 362 amend 2 gate command 4"
+      },
+      "session": "01a0fc63-9fb0-7f30-a86d-c9f8886889c5"
+    },
+    "output": "docs/evaluation/editorial-362/finalisation-2026-10-02/amend-2/gate-4.txt",
+    "returncode": 0,
+    "elapsed_seconds": 145.52546381950378,
+    "completed_unix": 1790941409.789717,
+    "process_group_absent": true
+  }
+]

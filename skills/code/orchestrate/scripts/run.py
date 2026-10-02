@@ -1273,28 +1273,20 @@ def numbered_registries(cwd: Path) -> dict[str, int]:
     """Return each directory of numbered records, with the highest number in it.
 
     A registry is found rather than configured: a directory holding files named
-    by a four-digit prefix is one, wherever in the tree it sits. Manifested
-    file-version capture directories hold immutable snapshots rather than new
-    records to allocate. Both are identified through the tracked index, keeping
-    the answer independent of ignored or untracked files.
+    by a four-digit prefix is one, wherever in the tree it sits. It is read off
+    the repository's index of tracked files, which keeps the answer the same
+    however the tree is walked and leaves out everything git ignores.
     """
 
     # The whole repository rather than the directory the verb was run from: a
     # registry the run cannot see is one two tickets go on colliding in.
     top = Path(git(cwd, "rev-parse", "--show-toplevel").strip())
 
-    # A tracked companion manifest identifies the harness's capture directory.
-    tracked_files = set(git(top, "ls-files").splitlines())
-
-    # Authored records take the next number above their directory's highest.
+    # Every tracked file named by a number puts its directory on the list, and
+    # the highest number in that directory is what the next one is read from.
     highest: dict[str, int] = {}
-    for tracked in sorted(tracked_files):
+    for tracked in git(top, "ls-files").splitlines():
         record = PurePosixPath(tracked)
-        if (
-            record.parent.name == "file-versions"
-            and str(record.parent.with_suffix(".json")) in tracked_files
-        ):
-            continue
         numbered = RECORD_NAME.match(record.name)
         if numbered is not None:
             directory = str(record.parent)

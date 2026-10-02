@@ -1,0 +1,17 @@
+{"harness": "codex", "id": "01a0fc63-9fb0-7f30-a86d-c9f8886889c5", "kind": "session", "owner_pid": 50507, "owner_started": "Fri Oct  2 13:33:02 2026", "session": "01a0fc63-9fb0-7f30-a86d-c9f8886889c5", "started": "2026-10-02T11:38:40+00:00"}
+{"at": "2026-10-02T11:38:40+00:00", "id": "56670", "kind": "pid", "started": "Fri Oct  2 13:38:40 2026", "why": "Ticket 362 amend 2 red wait"}
+{"at": "2026-10-02T11:38:40+00:00", "id": "56680", "kind": "pid", "started": "Fri Oct  2 13:38:40 2026", "why": "Ticket 362 amend 2 red supervisor"}
+{"at": "2026-10-02T11:38:40+00:00", "id": "56688", "kind": "pid", "started": "Fri Oct  2 13:38:40 2026", "why": "Ticket 362 amend 2 red command 1"}
+{"at": "2026-10-02T11:39:50+00:00", "id": "57779", "kind": "pid", "started": "Fri Oct  2 13:39:50 2026", "why": "Ticket 362 amend 2 green wait"}
+{"at": "2026-10-02T11:39:50+00:00", "id": "57792", "kind": "pid", "started": "Fri Oct  2 13:39:50 2026", "why": "Ticket 362 amend 2 green supervisor"}
+{"at": "2026-10-02T11:39:50+00:00", "id": "57801", "kind": "pid", "started": "Fri Oct  2 13:39:50 2026", "why": "Ticket 362 amend 2 green command 1"}
+{"at": "2026-10-02T11:40:57+00:00", "id": "58621", "kind": "pid", "started": "Fri Oct  2 13:40:57 2026", "why": "Ticket 362 amend 2 complete gate wait"}
+{"at": "2026-10-02T11:40:57+00:00", "id": "58629", "kind": "pid", "started": "Fri Oct  2 13:40:57 2026", "why": "Ticket 362 amend 2 gate supervisor"}
+{"at": "2026-10-02T11:40:57+00:00", "id": "58637", "kind": "pid", "started": "Fri Oct  2 13:40:57 2026", "why": "Ticket 362 amend 2 gate command 1"}
+{"at": "2026-10-02T11:40:59+00:00", "id": "58649", "kind": "pid", "started": "Fri Oct  2 13:40:59 2026", "why": "Ticket 362 amend 2 gate command 2"}
+{"at": "2026-10-02T11:40:59+00:00", "id": "58659", "kind": "pid", "started": "Fri Oct  2 13:40:59 2026", "why": "Ticket 362 amend 2 gate command 3"}
+{"at": "2026-10-02T11:41:04+00:00", "id": "58682", "kind": "pid", "started": "Fri Oct  2 13:41:04 2026", "why": "Ticket 362 amend 2 gate command 4"}
+{"at": "2026-10-02T11:44:51+00:00", "id": "62136", "kind": "pid", "started": "Fri Oct  2 13:41:48 2026", "why": "Ticket 362 amend 2 per-file audit stopped in favor of a batched hash audit"}
+{"at": "2026-10-02T11:45:43+00:00", "id": "16041", "kind": "pid", "started": "Fri Oct  2 13:45:43 2026", "why": "Ticket 362 amend 2 batched audit wait"}
+{"at": "2026-10-02T11:45:43+00:00", "id": "16049", "kind": "pid", "started": "Fri Oct  2 13:45:43 2026", "why": "Ticket 362 amend 2 audit supervisor"}
+{"at": "2026-10-02T11:45:43+00:00", "id": "16058", "kind": "pid", "started": "Fri Oct  2 13:45:43 2026", "why": "Ticket 362 amend 2 audit command 1"}

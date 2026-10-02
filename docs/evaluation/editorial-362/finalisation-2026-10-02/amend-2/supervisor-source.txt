@@ -1,0 +1,61 @@
+"""Wait for each ticket-owned command and record its process group."""
+import json
+import os
+import signal
+import subprocess
+import sys
+import time
+from pathlib import Path
+
+ROOT = Path('/Users/thomas/Projects/skills/.git/kntnt-orchestrate/362')
+RECEIPTS = ROOT / 'docs/evaluation/editorial-362/finalisation-2026-10-02/amend-2'
+ENV = os.environ | json.loads((RECEIPTS / 'environment.json').read_text())['overrides']
+ENV.pop('VIRTUAL_ENV', None)
+REG_ENV = ENV | {'KNTNT_HOME': json.loads((RECEIPTS / 'environment.json').read_text())['registration_only_KNTNT_HOME']}
+CLEANUP = ROOT / 'skills/kntnt/features/session-cleanup/scripts/session_cleanup.py'
+PHASE = sys.argv[1]
+COMMANDS = json.loads((RECEIPTS / f'{PHASE}-commands.json').read_text())
+ROWS = []
+
+def register(pid, why):
+    result = subprocess.run(['uv', 'run', str(CLEANUP), 'add', 'pid', str(pid), why], cwd=ROOT, env=REG_ENV, capture_output=True, text=True, check=True)
+    return json.loads(result.stdout)
+
+register(os.getpid(), f'Ticket 362 amend 2 {PHASE} supervisor')
+(RECEIPTS / f'{PHASE}-supervisor.json').write_text(json.dumps({'pid': os.getpid(), 'commands': COMMANDS}, indent=2) + '\n')
+for index, command in enumerate(COMMANDS, 1):
+    output = RECEIPTS / f'{PHASE}-{index}.txt'
+    started = time.time()
+    with output.open('w') as stream:
+        child = subprocess.Popen(command, shell=True, cwd=ROOT, env=ENV, stdout=stream, stderr=subprocess.STDOUT, start_new_session=True)
+        row = {'command': command, 'pid': child.pid, 'process_group': child.pid, 'started_unix': started, 'registration': register(child.pid, f'Ticket 362 amend 2 {PHASE} command {index}'), 'output': str(output.relative_to(ROOT))}
+        ROWS.append(row)
+        (RECEIPTS / f'{PHASE}-processes.json').write_text(json.dumps(ROWS, indent=2) + '\n')
+        try:
+            result = child.wait()
+        finally:
+            try:
+                os.killpg(child.pid, 0)
+            except ProcessLookupError:
+                pass
+            else:
+                os.killpg(child.pid, signal.SIGTERM)
+                time.sleep(0.5)
+                try:
+                    os.killpg(child.pid, 0)
+                except ProcessLookupError:
+                    pass
+                else:
+                    os.killpg(child.pid, signal.SIGKILL)
+    row['returncode'] = result
+    row['elapsed_seconds'] = time.time() - started
+    row['completed_unix'] = time.time()
+    try:
+        os.killpg(child.pid, 0)
+    except ProcessLookupError:
+        row['process_group_absent'] = True
+    else:
+        row['process_group_absent'] = False
+    (RECEIPTS / f'{PHASE}-processes.json').write_text(json.dumps(ROWS, indent=2) + '\n')
+    print(f'{PHASE} {index}: exit {result} in {row["elapsed_seconds"]:.2f}s', flush=True)
+print(f'{PHASE} complete', flush=True)
