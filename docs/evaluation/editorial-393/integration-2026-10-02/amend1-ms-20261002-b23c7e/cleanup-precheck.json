@@ -1,0 +1,44 @@
+{
+  "owned_process_groups": [
+    {
+      "pgid": 22985,
+      "exists": false
+    },
+    {
+      "pgid": 23113,
+      "exists": false
+    },
+    {
+      "pgid": 23223,
+      "exists": false
+    },
+    {
+      "pgid": 23262,
+      "exists": false
+    },
+    {
+      "pgid": 23269,
+      "exists": false
+    },
+    {
+      "pgid": 23484,
+      "exists": false
+    }
+  ],
+  "managed_gate_session": {
+    "id": 89716,
+    "completed": true
+  },
+  "managed_audit_session": {
+    "id": 81948,
+    "completed": true
+  },
+  "ignored_gate_created_paths": [
+    ".pytest_cache/.gitignore",
+    ".pytest_cache/CACHEDIR.TAG",
+    ".pytest_cache/README.md",
+    ".pytest_cache/v/cache/lastfailed",
+    ".pytest_cache/v/cache/nodeids",
+    "uv.lock"
+  ]
+}

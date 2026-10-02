@@ -1,0 +1,44 @@
+{
+  "attempt_id": "ms-20261002-b23c7e",
+  "completed_at": "2026-10-02T11:10:41.092379+00:00",
+  "deleted_literal_paths": [
+    "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-393-scratch/amend1-ms-20261002-b23c7e",
+    "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/393/.pytest_cache",
+    "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/393/uv.lock"
+  ],
+  "all_deleted_paths_absent": true,
+  "owned_process_groups": [
+    {
+      "pgid": 22985,
+      "exists": false
+    },
+    {
+      "pgid": 23113,
+      "exists": false
+    },
+    {
+      "pgid": 23223,
+      "exists": false
+    },
+    {
+      "pgid": 23262,
+      "exists": false
+    },
+    {
+      "pgid": 23269,
+      "exists": false
+    },
+    {
+      "pgid": 23484,
+      "exists": false
+    }
+  ],
+  "all_managed_sessions_completed": true,
+  "no_owned_process_group_present": true,
+  "scratch_alias_and_prior_deliverables_preserved": true,
+  "procedures_retained_in_packet": [
+    "runner-procedure.txt",
+    "audit-procedure.txt"
+  ],
+  "no_ignored_gate_artifact_left_in_worktree": true
+}
