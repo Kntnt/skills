@@ -1,0 +1,15 @@
+{"kind": "path", "identifier": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-a69e9ab5", "reason": "Ticket 489 isolated evaluation and tools"}
+{"kind": "pid", "identifier": "58880"}
+{"kind": "path", "identifier": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-a69e9ab5/tmp/session-w24ed33t"}
+{"kind": "pid", "identifier": "58887"}
+{"kind": "exec-session", "identifier": 16347, "reason": "native baseline runner"}
+{"kind": "exec-session", "identifier": 7819, "reason": "ruff check gate"}
+{"kind": "exec-session", "identifier": 43219, "reason": "ruff format gate"}
+{"kind": "exec-session", "identifier": 68224, "reason": "mypy gate"}
+{"kind": "exec-session", "identifier": 64148, "reason": "pytest gate"}
+{"kind": "path", "identifier": "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/489/.venv", "reason": "Created by the initial extractor test; noticed from uv output and removed after tests completed"}
+{"kind": "pid", "identifier": "75637", "reason": "Final complete project gate"}
+{"kind": "pid", "identifier": "75755", "reason": "Final complete project gate"}
+{"kind": "pid", "identifier": "75756", "reason": "Final complete project gate"}
+{"kind": "pid", "identifier": "75757", "reason": "Final complete project gate"}
+{"kind": "pid", "identifier": "75758", "reason": "Final complete project gate"}

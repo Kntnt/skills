@@ -1,0 +1,30 @@
+{
+  "commands": [
+    "uvx ruff check .",
+    "uvx ruff format --check .",
+    "uvx --with types-PyYAML --with pytest --with httpx==0.28.1 --with selectolax==0.4.11 --with types-tinycss2 --with types-regex mypy skills/kntnt/scripts/kntnt.py skills/kntnt/library/scripts/argument_grammar.py skills/kntnt/library/scripts/article_anatomy.py skills/kntnt/library/scripts/ship.py skills/kntnt/library/scripts/integrations.py skills/kntnt/library/scripts/languages.py skills/kntnt/library/scripts/credentials.py skills/models/model-selector/scripts/catalogue.py skills/models/model-selector/scripts/profiles.py skills/models/model-selector/scripts/evidence.py skills/models/model-selector/scripts/launch.py skills/models/model-selector/scripts/selection.py skills/models/model-selector/scripts/quota.py skills/models/model-selector/scripts/record.py skills/models/model-selector/scripts/capture.py skills/models/model-selector/scripts/grade.py skills/models/model-selector/scripts/setup_apply.py skills/models/model-selector/scripts/inventory.py skills/code/orchestrate/scripts/run.py skills/productivity/rename-invoices/scripts/rename_invoices.py skills/agents/explain/scripts/invoke.py skills/web/mirror/scripts/mirror.py skills/infrastructure/cloudns/scripts/cloudns.py skills/infrastructure/hetzner/scripts/hetzner.py skills/infrastructure/nodeping/scripts/nodeping.py skills/infrastructure/postmark/scripts/postmark.py tests",
+    "uv run --with pytest --with pytest-xdist --with pyyaml pytest -n auto"
+  ],
+  "exit_codes": [
+    0,
+    0,
+    0,
+    1
+  ],
+  "pytest": {
+    "passed": 2736,
+    "failed": 1,
+    "failure": "tests/test_adr.py::test_every_cited_number_has_a_record",
+    "reason": "The frozen plan cites reserved ADR-0240 before any such record exists. The prospective freeze is preserved rather than rewritten."
+  },
+  "temporary_root": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-a69e9ab5",
+  "contributing_commands_changed": false,
+  "final_exit_codes": [
+    0,
+    0,
+    0,
+    1
+  ],
+  "final_pytest_seconds": 160.9,
+  "initial_pytest_seconds": 148.52
+}

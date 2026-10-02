@@ -1,0 +1,14 @@
+{
+  "exact_states_missing": [
+    "checked-received.md",
+    "checked-delivered.md",
+    "draft-reply.md"
+  ],
+  "checker_task_encrypted": true,
+  "checker_return_preserved": true,
+  "ephemeral_capture_contains_exact_checked_reply": false,
+  "terminal_reply_preserved": true,
+  "judgements": "not launched: required transition states unavailable",
+  "classification": "unresolved capture decision; not non-reproduction",
+  "implementation_revision": null
+}

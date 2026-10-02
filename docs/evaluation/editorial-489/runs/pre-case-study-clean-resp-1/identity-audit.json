@@ -1,0 +1,54 @@
+[
+  {
+    "rollout": "native-sessions/2026/10/02/rollout-2026-10-02T20-08-51-01a0fdcd-fe4d-76f0-981a-49a7ef8ab029.jsonl",
+    "roles": [
+      "/root"
+    ],
+    "turn_contexts": [
+      {
+        "model": "gpt-6.1-sol",
+        "effort": "xhigh"
+      }
+    ],
+    "matches_seat": true
+  },
+  {
+    "rollout": "native-sessions/2026/10/02/rollout-2026-10-02T20-13-15-01a0fdd2-07b0-7a90-992e-b9daca6d408a.jsonl",
+    "roles": [
+      "/root/redline_correction"
+    ],
+    "turn_contexts": [
+      {
+        "model": "gpt-6.1-sol",
+        "effort": "xhigh"
+      }
+    ],
+    "matches_seat": true
+  },
+  {
+    "rollout": "native-sessions/2026/10/02/rollout-2026-10-02T20-16-07-01a0fdd4-a95c-7570-a52a-333be5042a02.jsonl",
+    "roles": [
+      "/root/mechanical_pass"
+    ],
+    "turn_contexts": [
+      {
+        "model": "gpt-6.1-sol",
+        "effort": "xhigh"
+      }
+    ],
+    "matches_seat": true
+  },
+  {
+    "rollout": "native-sessions/2026/10/02/rollout-2026-10-02T20-20-55-01a0fdd9-0ebf-70e2-a90d-d799728feaaf.jsonl",
+    "roles": [
+      "/root/reply_check"
+    ],
+    "turn_contexts": [
+      {
+        "model": "gpt-6.1-sol",
+        "effort": "xhigh"
+      }
+    ],
+    "matches_seat": true
+  }
+]

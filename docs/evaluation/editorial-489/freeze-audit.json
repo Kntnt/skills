@@ -1,0 +1,50 @@
+{
+  "plan.md": {
+    "sha256": "796006cd00134cbc3e9cf5b10137ea4f76e2c8c638467392ef3b3770994af32a",
+    "matches_freeze": true
+  },
+  "judge-brief.md": {
+    "sha256": "ef1228737ddafeafa83734e38c1e8caf12a07e66db2531fafd05a4dbc97b4f11",
+    "matches_freeze": true
+  },
+  "transition-judge-brief.md": {
+    "sha256": "ebc8fda76efdd8b44ddee71a0eb54bc053cd0820cdbaefb765ba42f51cdbe6fa",
+    "matches_freeze": true
+  },
+  "harness/run.py": {
+    "sha256": "6ebb763af03c5d641a37e82227c22951a083f0b9a639429abe570a914754c6f6",
+    "matches_freeze": true
+  },
+  "harness/states.py": {
+    "sha256": "695164dc91c9a63b863d29f7d044fd744a0b728fd1e66627da89a434ccbbb603",
+    "matches_freeze": true
+  },
+  "runs/matrix.tsv": {
+    "sha256": "3c6c7f359f5acdf334d8f4f67ccbef042d25e27bf1f373b486fac3d1b537ca99",
+    "matches_freeze": true
+  },
+  "inputs/denied-overclaim.md": {
+    "sha256": "17b2063a68e868b3045a3e89e356ab7c6d9b2808371455e8ac8cf16e042dd3c1",
+    "matches_freeze": true
+  },
+  "inputs/case-study-clean.md": {
+    "sha256": "2e4ef2fd4b7c03aaaceca1ad22724fdb1ed3c685cd6b4995a00285198bed42f9",
+    "matches_freeze": true
+  },
+  "inputs/withheld-overclaim.md": {
+    "sha256": "5d8de4ff16fcfd05e57c7bf5533ee521398066b677ef7b291f3465af78094975",
+    "matches_freeze": true
+  },
+  "expectations/denied-overclaim.md": {
+    "sha256": "2bd6c0523c93b1f0fa1589ac999160199e6bc3f5e44ada976cffd24a601c64b5",
+    "matches_freeze": true
+  },
+  "expectations/case-study-clean.md": {
+    "sha256": "2c0b5ae6729252fca6e9a068a4c545459e5379a0a958c56fa19c776ac7cc5b7d",
+    "matches_freeze": true
+  },
+  "expectations/withheld-overclaim.md": {
+    "sha256": "010861e85963ee25fba25b70cee1b0844ab1abff74b4cea7ca30ae844d8dd025",
+    "matches_freeze": true
+  }
+}

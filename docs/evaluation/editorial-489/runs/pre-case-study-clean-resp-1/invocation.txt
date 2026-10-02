@@ -1,0 +1,1 @@
+/redline --genre=casestudy --language=sv --output=response input.md

@@ -1,0 +1,20 @@
+{
+  "registered_pids": [
+    "58880",
+    "58887",
+    "75637",
+    "75755",
+    "75756",
+    "75757",
+    "75758"
+  ],
+  "remaining_registered_processes": [],
+  "all_exec_sessions_completed": true,
+  "native_descendant_group_stopped_by_runner": true,
+  "final_gate_groups_stopped_by_runner": true,
+  "private_authentication_will_be_removed_with_owned_tmp": true,
+  "scratch_cleanup": "complete: all owned contents removed using literal paths; assigned root retained empty",
+  "private_authentication_removed": true,
+  "cleanup_exec_session": 94792,
+  "cleanup_exec_session_completed": true
+}

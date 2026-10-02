@@ -1,0 +1,21 @@
+{
+  "source_bytes_preserved": true,
+  "source_stat_preserved": true,
+  "mechanical_captures": [
+    {
+      "path": "scratch/redline-mechanical-yxej11tg/mechanical-input.md",
+      "sha256": "271c96c64d04d577e7bbc519872cf7e6086b8a4bb52c25e86536c715ef4b07fd",
+      "capture": "271c96c64d04d577e7bbc519872cf7e6086b8a4bb52c25e86536c715ef4b07fd.md",
+      "time": 1790964952.423917
+    },
+    {
+      "path": "scratch/redline-mechanical-yxej11tg/mechanical-output.md",
+      "sha256": "271c96c64d04d577e7bbc519872cf7e6086b8a4bb52c25e86536c715ef4b07fd",
+      "capture": "271c96c64d04d577e7bbc519872cf7e6086b8a4bb52c25e86536c715ef4b07fd.md",
+      "time": 1790965072.26445
+    }
+  ],
+  "mechanical_input_output_equal": true,
+  "checker_artifact_equality": null,
+  "extra_project_or_scratch_paths_after_run": []
+}

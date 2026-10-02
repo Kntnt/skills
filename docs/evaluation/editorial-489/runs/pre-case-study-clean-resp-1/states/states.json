@@ -1,0 +1,9 @@
+{
+  "checkers": 1,
+  "x1": null,
+  "missing": [
+    "checker brief encrypted"
+  ],
+  "checker_transcript": "native-sessions/2026/10/02/rollout-2026-10-02T20-20-55-01a0fdd9-0ebf-70e2-a90d-d799728feaaf.jsonl",
+  "complete": false
+}
