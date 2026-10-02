@@ -1,0 +1,27 @@
+{
+  "runs": 18,
+  "missing_complete_plaintext_draft": [
+    "post-article-clean-file",
+    "post-opinion-flawed-1",
+    "post-opinion-flawed-2",
+    "pre-article-clean-file",
+    "pre-article-clean-response",
+    "pre-article-unnamed-2",
+    "pre-article-unnamed-3",
+    "pre-opinion-flawed-3"
+  ],
+  "files_inspected": 1681,
+  "native_rollouts_inspected": 108,
+  "captures_inspected": 267,
+  "filled_checker_brief_candidates": [
+    {
+      "path": "runs/post-article-unnamed-1/native-sessions/2026/10/02/rollout-2026-10-02T16-20-06-01a0fcfc-92fb-7c40-9466-b0f05f475cb0.jsonl",
+      "sha256": "7bc0e4d905804b4ba6950a018b70044b51614b2f4303949295f257b0fd5320fb"
+    }
+  ]
+}
+Traceback (most recent call last):
+  File "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/488/docs/evaluation/editorial-488/amend-1/recovery-probe.txt", line 245, in <module>
+    assert not missing, "Complete plaintext drafts unavailable in " + ", ".join(missing)
+           ^^^^^^^^^^^
+AssertionError: Complete plaintext drafts unavailable in post-article-clean-file, post-opinion-flawed-1, post-opinion-flawed-2, pre-article-clean-file, pre-article-clean-response, pre-article-unnamed-2, pre-article-unnamed-3, pre-opinion-flawed-3
