@@ -1,0 +1,56 @@
+[
+  {
+    "path": "work/source.md",
+    "sha256": "83265898e21c908c50a5462053175ebcf82d56fe3ea746fa67c16a5f6559dec4",
+    "capture": "0000-83265898e21c.md",
+    "time": 1790856826.338228
+  },
+  {
+    "path": "work/AGENTS.md",
+    "sha256": "0f47286d361bf700d7dc6cd087c8122b1a95afe74ce268426a7cdddf32204610",
+    "capture": "0001-0f47286d361b.md",
+    "time": 1790856826.33845
+  },
+  {
+    "path": "scratch/write-uv-_n6g8xig/.tmpO34zcF/environments-v2/kntnt-668a300c0037272f/lib/python3.12/site-packages/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0002-ae98f4215313.txt",
+    "time": 1790856858.0144289
+  },
+  {
+    "path": "scratch/write-uv-_n6g8xig/.tmpO34zcF/archive-v0/IjNmbchHnpzOLFCh/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0003-ae98f4215313.txt",
+    "time": 1790856858.0150511
+  },
+  {
+    "path": "scratch/write-uv-mvwelsqa/.tmpKSdRWh/.tmpSp8dB2/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0004-ae98f4215313.txt",
+    "time": 1790856883.665474
+  },
+  {
+    "path": "scratch/write-uv-mvwelsqa/.tmpKSdRWh/environments-v2/languages-484281a8e96ca7dd/lib/python3.12/site-packages/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0005-ae98f4215313.txt",
+    "time": 1790856883.7747462
+  },
+  {
+    "path": "scratch/write-uv-mvwelsqa/.tmpKSdRWh/archive-v0/vODkqaPhZM7c5to5/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0006-ae98f4215313.txt",
+    "time": 1790856883.7755
+  },
+  {
+    "path": "scratch/write-source-check-k_jvhkee/draft.md",
+    "sha256": "7c771be33360ea9d32de4d4953bf6c810dd09e4600d5570ddfddd87e79578e28",
+    "capture": "0007-7c771be33360.md",
+    "time": 1790857079.249822
+  },
+  {
+    "path": "scratch/write-source-check-k_jvhkee/report.md",
+    "sha256": "79a67483a2e8a89fbe527e1b3061390d322a40f4ef6c027084c6603874f9a4ea",
+    "capture": "0008-79a67483a2e8.md",
+    "time": 1790857563.5729542
+  }
+]

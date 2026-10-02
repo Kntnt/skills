@@ -1,0 +1,28 @@
+{
+  "method": "Batched raw-byte Git blob audit of every pre-amend evaluation file; complete shipped-tree/base comparison; independent source-inventory hashes. No Skill or semantic judge launched.",
+  "ticket_base": "5b0260283b1d1597ca1ed2dddc602888dac7119d",
+  "amend_base": "71987cb9c6d23ffe49ddbc01b3dcb49d526a9400",
+  "changed_shipped_paths": [],
+  "unchanged_contracts": [
+    "CONTRIBUTING.md",
+    "AGENTS.md",
+    "CONTEXT.md",
+    "CHANGELOG.md",
+    "docs/evaluation/records/README.md"
+  ],
+  "adr_and_editorial_329_unchanged": true,
+  "source_inventory_files_verified": 630,
+  "source_inventory_bytes_verified": 55473412,
+  "pre_amend_evaluation_files_unchanged": 29552,
+  "remaining_changed_surfaces": [
+    "docs/evaluation/",
+    ".kntnt-orchestrate/362.md",
+    "tests/test_run.py",
+    "tests/test_editorial_362_evidence.py"
+  ],
+  "catalog_identical_to_ticket_base": true,
+  "proposed_product_changelog_removed": true,
+  "all_four_gate_commands_unchanged": true,
+  "retained_source_worktree_accessed_or_written": false,
+  "limits": "Source-worktree preservation was independently checked before this amendment. This audit constrains local bytes only and does not infer a new source-worktree observation."
+}

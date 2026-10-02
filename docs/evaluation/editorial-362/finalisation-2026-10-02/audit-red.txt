@@ -1,0 +1,31 @@
+.F                                                                       [100%]
+=================================== FAILURES ===================================
+___ test_native_audit_accounts_for_all_counted_runs_and_final_checker_reads ____
+
+    def test_native_audit_accounts_for_all_counted_runs_and_final_checker_reads() -> None:
+        """The complete frozen matrix remains inspectable through its audit command."""
+    
+        # Run the evaluator's public read-only command in the repository working directory.
+        result = subprocess.run(
+            [sys.executable, str(FINALISATION / "audit.py")],
+            cwd=ROOT,
+            capture_output=True,
+            text=True,
+        )
+>       assert result.returncode == 0, result.stderr
+E       AssertionError: Traceback (most recent call last):
+E           File "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/362/docs/evaluation/editorial-362/finalisation-2026-10-02/audit.py", line 190, in <module>
+E             print(json.dumps(audit(), indent=2, ensure_ascii=False))
+E                              ^^^^^^^
+E           File "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/362/docs/evaluation/editorial-362/finalisation-2026-10-02/audit.py", line 104, in audit
+E             assert cleanup["root_absent_after_removal"] and cleanup["evidence_preserved"]
+E                                                             ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+E         KeyError: 'evidence_preserved'
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['/Users/thomas/Projects/skills/.git/kntnt-orchestrate/362.scratch/uv-cache/builds-v0/.tmpGqLvTM...                                                    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^\nKeyError: \'evidence_preserved\'\n').returncode
+
+tests/test_editorial_362_evidence.py:45: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_editorial_362_evidence.py::test_native_audit_accounts_for_all_counted_runs_and_final_checker_reads
+1 failed, 1 passed in 0.16s

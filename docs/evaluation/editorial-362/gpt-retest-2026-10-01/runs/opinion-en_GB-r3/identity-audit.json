@@ -1,0 +1,45 @@
+{
+  "seats": [
+    {
+      "session": "01a0f778-36c8-7653-b4e1-24cd2500f495",
+      "model": "gpt-6.1-sol",
+      "effort": "xhigh"
+    },
+    {
+      "session": "01a0f77d-5868-7a43-be28-5909f5150668",
+      "model": "gpt-6.1-sol",
+      "effort": "xhigh"
+    },
+    {
+      "session": "01a0f78b-98a3-7e41-9c67-c1340c68f96e",
+      "model": "gpt-6.1-sol",
+      "effort": "xhigh"
+    }
+  ],
+  "lineage": {
+    "01a0f778-36c8-7653-b4e1-24cd2500f495": "exec",
+    "01a0f77d-5868-7a43-be28-5909f5150668": {
+      "subagent": {
+        "thread_spawn": {
+          "parent_thread_id": "01a0f778-36c8-7653-b4e1-24cd2500f495",
+          "depth": 1,
+          "agent_path": "/root/source_comparison",
+          "agent_nickname": "Poincare",
+          "agent_role": null
+        }
+      }
+    },
+    "01a0f78b-98a3-7e41-9c67-c1340c68f96e": {
+      "subagent": {
+        "thread_spawn": {
+          "parent_thread_id": "01a0f778-36c8-7653-b4e1-24cd2500f495",
+          "depth": 1,
+          "agent_path": "/root/final_source_comparison",
+          "agent_nickname": "Pasteur",
+          "agent_role": null
+        }
+      }
+    }
+  },
+  "all_same_inherited_seat": true
+}

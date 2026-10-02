@@ -1,0 +1,74 @@
+[
+  {
+    "path": "work/source.md",
+    "sha256": "83265898e21c908c50a5462053175ebcf82d56fe3ea746fa67c16a5f6559dec4",
+    "capture": "0000-83265898e21c.md",
+    "time": 1790856826.338277
+  },
+  {
+    "path": "work/AGENTS.md",
+    "sha256": "117a1a2f6b93a12c7328db673f1ef8f89293574d05a823c0e4fccb09f9d8ba79",
+    "capture": "0001-117a1a2f6b93.md",
+    "time": 1790856826.3385012
+  },
+  {
+    "path": "scratch/write-invoke-97fluowv/.tmpolBbZV/environments-v2/kntnt-b99a33def078ed15/lib/python3.12/site-packages/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0002-ae98f4215313.txt",
+    "time": 1790856864.608695
+  },
+  {
+    "path": "scratch/write-invoke-97fluowv/.tmpolBbZV/archive-v0/cZvshFmmLq2fqecX/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0003-ae98f4215313.txt",
+    "time": 1790856864.609372
+  },
+  {
+    "path": "scratch/write-language-uto3ncmm/.tmp9oZZ9E/environments-v2/languages-af26ede06f57aca0/lib/python3.12/site-packages/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0004-ae98f4215313.txt",
+    "time": 1790856880.201483
+  },
+  {
+    "path": "scratch/write-language-uto3ncmm/.tmp9oZZ9E/archive-v0/k0YwOonzUgjHZyQd/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0005-ae98f4215313.txt",
+    "time": 1790856880.2021801
+  },
+  {
+    "path": "scratch/write-source-check-lm0do59d/draft.md",
+    "sha256": "82696bb70adfd9664a3ed0bb11773c18a515d9a5f1ab08808c0ab4862b106372",
+    "capture": "0006-82696bb70adf.md",
+    "time": 1790857051.529991
+  },
+  {
+    "path": "scratch/write-source-check-lm0do59d/report-1.md",
+    "sha256": "8d760530320cc6e614b0c32c97acce71476477467b1213fc2d11e5ff1b8b94e9",
+    "capture": "0007-8d760530320c.md",
+    "time": 1790857468.670659
+  },
+  {
+    "path": "scratch/write-source-check-lm0do59d/report-1.md",
+    "sha256": "919231106c9117f8780027b191f43a33466c63a3372072e93a972d2e88687a18",
+    "capture": "0008-919231106c91.md",
+    "time": 1790857601.535788
+  },
+  {
+    "path": "scratch/write-source-check-lm0do59d/validation-1.md",
+    "sha256": "d1e9bf76910affc2554279a38854a93851e86cc6b70a4e7970c4caaefc25178b",
+    "capture": "0009-d1e9bf76910a.md",
+    "time": 1790857659.323348
+  },
+  {
+    "path": "scratch/write-source-check-lm0do59d/draft.md",
+    "sha256": "bd5699cf5bad6a816ceb6b243247fcc8778ff51cdd02b56105d2c5a5727d0368",
+    "capture": "0010-bd5699cf5bad.md",
+    "time": 1790857659.323476
+  },
+  {
+    "path": "scratch/write-source-check-lm0do59d/report-2.md",
+    "sha256": "10ca1b7fd8ca5c05b6a6b41b61b5deef5349716da35f8772a4031cccc846208f",
+    "capture": "0011-10ca1b7fd8ca.md",
+    "time": 1790858095.241035
+  }
+]

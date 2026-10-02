@@ -1,0 +1,11 @@
+warning: No `requires-python` value found in the workspace. Defaulting to `>=3.14`.
+============================= test session starts ==============================
+platform darwin -- Python 3.14.8, pytest-9.1.1, pluggy-1.6.0
+rootdir: /Users/thomas/Projects/skills/.git/kntnt-orchestrate/362
+configfile: pyproject.toml
+plugins: xdist-3.8.0
+created: 14/14 workers
+14 workers [2 items]
+
+..                                                                       [100%]
+============================== 2 passed in 2.43s ===============================

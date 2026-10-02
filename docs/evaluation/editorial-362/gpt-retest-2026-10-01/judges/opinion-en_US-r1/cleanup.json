@@ -1,0 +1,7 @@
+{
+  "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-cx94uho2",
+  "process_group_absent_before_removal": true,
+  "root_absent_after_removal": true,
+  "evidence_preserved": true,
+  "note": "A first cleanup command mistyped the suffix and removed nothing; the observed result.json root was then removed with its exact literal path."
+}

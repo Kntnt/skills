@@ -1,0 +1,31 @@
+{
+  "artifact_extracted": true,
+  "delivered_prose_sha256": "d3eade6d05c12b0db5354a39b947f568bf7c27f4ebf3e245dae01de841522cb7",
+  "draft_versions": [
+    {
+      "path": "scratch/write-source-check-phwbhm4c/draft.md",
+      "capture": "0006-8cff94a08c24.md",
+      "time": 1790858468.808718,
+      "sha256": "8cff94a08c24e0d4a865d2d38f66841c55243f501e786aceae722342c26f094b",
+      "prose_sha256": "8cff94a08c24e0d4a865d2d38f66841c55243f501e786aceae722342c26f094b",
+      "exact_delivered_prose_match": false
+    },
+    {
+      "path": "scratch/write-source-check-phwbhm4c/draft.md",
+      "capture": "0007-17554607ec98.md",
+      "time": 1790858529.862456,
+      "sha256": "17554607ec98551dd429debcac4d018a31b5abb2dc7572cff3e6b36718d136f1",
+      "prose_sha256": "17554607ec98551dd429debcac4d018a31b5abb2dc7572cff3e6b36718d136f1",
+      "exact_delivered_prose_match": false
+    },
+    {
+      "path": "scratch/write-source-check-phwbhm4c/draft.md",
+      "capture": "0010-d3eade6d05c1.md",
+      "time": 1790859471.509242,
+      "sha256": "d3eade6d05c12b0db5354a39b947f568bf7c27f4ebf3e245dae01de841522cb7",
+      "prose_sha256": "d3eade6d05c12b0db5354a39b947f568bf7c27f4ebf3e245dae01de841522cb7",
+      "exact_delivered_prose_match": true
+    }
+  ],
+  "note": "Identify the final comparison's actual read path/version from child trace; a matching earlier draft alone does not establish V3."
+}

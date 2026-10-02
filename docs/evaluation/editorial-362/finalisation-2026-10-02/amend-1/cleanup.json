@@ -1,0 +1,34 @@
+{
+  "removed_paths": [
+    "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/362/.venv",
+    "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/362/.pytest_cache",
+    "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-362-scratch/amend-1-temporary",
+    "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-362-scratch/amend-1-run.py"
+  ],
+  "all_removed_paths_absent": true,
+  "recorded_command_and_supervisor_groups_absent": [
+    23877,
+    23447,
+    32053,
+    32090,
+    32184,
+    36211,
+    21887,
+    19287,
+    23733,
+    23314,
+    31882,
+    21746,
+    19155
+  ],
+  "remaining_owned_processes": [],
+  "services_started": [],
+  "deliverables_deleted": false,
+  "retained_scratch_deliverables": [
+    "environment-repair.json",
+    "independent-gate-output.json",
+    "independent-verdict.md"
+  ],
+  "retained_source_worktree_and_branch_touched": false,
+  "preexisting_uv_lock_retained": true
+}

@@ -1,0 +1,9 @@
+Downloading cpython-3.12.14-macos-aarch64-none (download) (23.9MiB)
+ Downloaded cpython-3.12.14-macos-aarch64-none (download)
+Using CPython 3.12.14
+Removed virtual environment at: /private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-362-scratch/amend-2-temporary/venv
+Creating virtual environment at: /private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-362-scratch/amend-2-temporary/venv
+warning: No `requires-python` value found in the workspace. Defaulting to `>=3.12`.
+Installed 6 packages in 6ms
+....                                                                     [100%]
+4 passed in 1.47s

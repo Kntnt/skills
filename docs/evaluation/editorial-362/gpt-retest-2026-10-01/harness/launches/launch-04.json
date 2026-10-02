@@ -1,0 +1,6 @@
+{
+  "index": 4,
+  "returncode": 0,
+  "stdout": "{\"returncode\": 0, \"timed_out\": false, \"duration_seconds\": 895.52, \"root\": \"/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-1jvn8o6u\", \"cleanup_required\": true}\n",
+  "stderr": ""
+}

@@ -1,0 +1,2706 @@
+[
+  {
+    "labels": [
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRUlQ",
+        "name": "bug",
+        "description": "Something isn't working",
+        "color": "d73a4a"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACw0oKnA",
+        "name": "ready-for-agent",
+        "description": "Fully specified, ready for an AFK agent",
+        "color": "0e8a16"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdF9w",
+        "name": "skill:redline",
+        "description": "Concerns the redline skill",
+        "color": "1d76db"
+      }
+    ],
+    "number": 492,
+    "state": "OPEN",
+    "title": "Redline names opinion-clean's two booking routes in the lead, where the headline and standfirst already name them"
+  },
+  {
+    "labels": [
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRUlQ",
+        "name": "bug",
+        "description": "Something isn't working",
+        "color": "d73a4a"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACw0oKnA",
+        "name": "ready-for-agent",
+        "description": "Fully specified, ready for an AFK agent",
+        "color": "0e8a16"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdF9w",
+        "name": "skill:redline",
+        "description": "Concerns the redline skill",
+        "color": "1d76db"
+      }
+    ],
+    "number": 491,
+    "state": "OPEN",
+    "title": "Redline still rewrites case-study-clean: the headline's appraisal moves from Elm Quay to its supervisor and the lead's opening is recast"
+  },
+  {
+    "labels": [
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRUlQ",
+        "name": "bug",
+        "description": "Something isn't working",
+        "color": "d73a4a"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACw0oKnA",
+        "name": "ready-for-agent",
+        "description": "Fully specified, ready for an AFK agent",
+        "color": "0e8a16"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdF9w",
+        "name": "skill:redline",
+        "description": "Concerns the redline skill",
+        "color": "1d76db"
+      }
+    ],
+    "number": 490,
+    "state": "OPEN",
+    "title": "Redline's reply says only the standfirst explained the case study's trial, where the headline names it too, and the reply checker passes it"
+  },
+  {
+    "labels": [
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRUlQ",
+        "name": "bug",
+        "description": "Something isn't working",
+        "color": "d73a4a"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACw0oKnA",
+        "name": "ready-for-agent",
+        "description": "Fully specified, ready for an AFK agent",
+        "color": "0e8a16"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdF9w",
+        "name": "skill:redline",
+        "description": "Concerns the redline skill",
+        "color": "1d76db"
+      }
+    ],
+    "number": 489,
+    "state": "OPEN",
+    "title": "Redline's corrected reply still rewords a sentence the check passed, and says the headline credits several of Elm Quay's supervisors"
+  },
+  {
+    "labels": [
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRUlQ",
+        "name": "bug",
+        "description": "Something isn't working",
+        "color": "d73a4a"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACw0oKnA",
+        "name": "ready-for-agent",
+        "description": "Fully specified, ready for an AFK agent",
+        "color": "0e8a16"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdF9w",
+        "name": "skill:redline",
+        "description": "Concerns the redline skill",
+        "color": "1d76db"
+      }
+    ],
+    "number": 488,
+    "state": "OPEN",
+    "title": "Redline's last message after a response-target delivery can be its cleanup note, so the caller's reply holds no text"
+  },
+  {
+    "labels": [
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRUlQ",
+        "name": "bug",
+        "description": "Something isn't working",
+        "color": "d73a4a"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACw0oJ7Q",
+        "name": "needs-triage",
+        "description": "Maintainer needs to evaluate this issue",
+        "color": "fbca04"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdF9w",
+        "name": "skill:redline",
+        "description": "Concerns the redline skill",
+        "color": "1d76db"
+      }
+    ],
+    "number": 487,
+    "state": "CLOSED",
+    "title": "Redline reports article-clean's lead sentence on sensor placement as an unkept promise, and once rewrote it"
+  },
+  {
+    "labels": [
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRUlQ",
+        "name": "bug",
+        "description": "Something isn't working",
+        "color": "d73a4a"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACw0oKnA",
+        "name": "ready-for-agent",
+        "description": "Fully specified, ready for an AFK agent",
+        "color": "0e8a16"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdF9w",
+        "name": "skill:redline",
+        "description": "Concerns the redline skill",
+        "color": "1d76db"
+      }
+    ],
+    "number": 486,
+    "state": "OPEN",
+    "title": "Redline reports article-clean's lead sentence on sensor placement as an unkept promise, and sometimes rewrites it"
+  },
+  {
+    "labels": [
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRUlQ",
+        "name": "bug",
+        "description": "Something isn't working",
+        "color": "d73a4a"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACw0oKnA",
+        "name": "ready-for-agent",
+        "description": "Fully specified, ready for an AFK agent",
+        "color": "0e8a16"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdGhg",
+        "name": "skill:write",
+        "description": "Concerns the write skill",
+        "color": "1d76db"
+      }
+    ],
+    "number": 485,
+    "state": "OPEN",
+    "title": "Write can stand in its own private directory and have its removal held"
+  },
+  {
+    "labels": [
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRUlQ",
+        "name": "bug",
+        "description": "Something isn't working",
+        "color": "d73a4a"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACx5MewA",
+        "name": "orchestrated",
+        "description": "Completed ticket retained for Orchestrate history",
+        "color": "6f42c1"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdF9w",
+        "name": "skill:redline",
+        "description": "Concerns the redline skill",
+        "color": "1d76db"
+      }
+    ],
+    "number": 480,
+    "state": "CLOSED",
+    "title": "Redline reports article-clean's working headline as an unresolved finding, reading när and varför at their strictest"
+  },
+  {
+    "labels": [
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRUlQ",
+        "name": "bug",
+        "description": "Something isn't working",
+        "color": "d73a4a"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACx5MewA",
+        "name": "orchestrated",
+        "description": "Completed ticket retained for Orchestrate history",
+        "color": "6f42c1"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdF9w",
+        "name": "skill:redline",
+        "description": "Concerns the redline skill",
+        "color": "1d76db"
+      }
+    ],
+    "number": 479,
+    "state": "CLOSED",
+    "title": "Redline drops a supported clause from opinion-clean's standfirst, reading a pending closure as a presupposition"
+  },
+  {
+    "labels": [
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRUlQ",
+        "name": "bug",
+        "description": "Something isn't working",
+        "color": "d73a4a"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACx5MewA",
+        "name": "orchestrated",
+        "description": "Completed ticket retained for Orchestrate history",
+        "color": "6f42c1"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdF9w",
+        "name": "skill:redline",
+        "description": "Concerns the redline skill",
+        "color": "1d76db"
+      }
+    ],
+    "number": 478,
+    "state": "CLOSED",
+    "title": "Redline's claim account says what a trial required is now Lind's to tell, without saying the narrator's own facts went with it"
+  },
+  {
+    "labels": [
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRUlQ",
+        "name": "bug",
+        "description": "Something isn't working",
+        "color": "d73a4a"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACx5MewA",
+        "name": "orchestrated",
+        "description": "Completed ticket retained for Orchestrate history",
+        "color": "6f42c1"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdF9w",
+        "name": "skill:redline",
+        "description": "Concerns the redline skill",
+        "color": "1d76db"
+      }
+    ],
+    "number": 477,
+    "state": "CLOSED",
+    "title": "Redline's finding says a case study's note explicitly rules out the software, where the note only declines to credit it"
+  },
+  {
+    "labels": [
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRUlQ",
+        "name": "bug",
+        "description": "Something isn't working",
+        "color": "d73a4a"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACx5MewA",
+        "name": "orchestrated",
+        "description": "Completed ticket retained for Orchestrate history",
+        "color": "6f42c1"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdF9w",
+        "name": "skill:redline",
+        "description": "Concerns the redline skill",
+        "color": "1d76db"
+      }
+    ],
+    "number": 476,
+    "state": "CLOSED",
+    "title": "Redline leaves its correction round's working files behind when the Harness asks to approve their removal"
+  },
+  {
+    "labels": [
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRUlQ",
+        "name": "bug",
+        "description": "Something isn't working",
+        "color": "d73a4a"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACx5MewA",
+        "name": "orchestrated",
+        "description": "Completed ticket retained for Orchestrate history",
+        "color": "6f42c1"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdF9w",
+        "name": "skill:redline",
+        "description": "Concerns the redline skill",
+        "color": "1d76db"
+      }
+    ],
+    "number": 475,
+    "state": "CLOSED",
+    "title": "Redline's reply is checked against both texts by a reader that did not write it"
+  },
+  {
+    "labels": [
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRUuQ",
+        "name": "enhancement",
+        "description": "New feature or request",
+        "color": "a2eeef"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACx5MewA",
+        "name": "orchestrated",
+        "description": "Completed ticket retained for Orchestrate history",
+        "color": "6f42c1"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWa58g",
+        "name": "library",
+        "description": "Concerns the shared Collection Library (ship.py, references)",
+        "color": "0e8a16"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdF9w",
+        "name": "skill:redline",
+        "description": "Concerns the redline skill",
+        "color": "1d76db"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdGhg",
+        "name": "skill:write",
+        "description": "Concerns the write skill",
+        "color": "1d76db"
+      }
+    ],
+    "number": 473,
+    "state": "CLOSED",
+    "title": "Pressmeddelandet följer maintainerns instruktion: rubrik på högst 70 tecken, sammanfattning på högst 60 ord och två citat på bestämda platser"
+  },
+  {
+    "labels": [
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRUuQ",
+        "name": "enhancement",
+        "description": "New feature or request",
+        "color": "a2eeef"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACx5MewA",
+        "name": "orchestrated",
+        "description": "Completed ticket retained for Orchestrate history",
+        "color": "6f42c1"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWa58g",
+        "name": "library",
+        "description": "Concerns the shared Collection Library (ship.py, references)",
+        "color": "0e8a16"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdF9w",
+        "name": "skill:redline",
+        "description": "Concerns the redline skill",
+        "color": "1d76db"
+      }
+    ],
+    "number": 472,
+    "state": "CLOSED",
+    "title": "Redline granskar mot briefmallen med tolv frågor: budskapet får vara underförstått och briefens öppna frågor är inga brister"
+  },
+  {
+    "labels": [
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRUuQ",
+        "name": "enhancement",
+        "description": "New feature or request",
+        "color": "a2eeef"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACx5MewA",
+        "name": "orchestrated",
+        "description": "Completed ticket retained for Orchestrate history",
+        "color": "6f42c1"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWa58g",
+        "name": "library",
+        "description": "Concerns the shared Collection Library (ship.py, references)",
+        "color": "0e8a16"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdF9w",
+        "name": "skill:redline",
+        "description": "Concerns the redline skill",
+        "color": "1d76db"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdGhg",
+        "name": "skill:write",
+        "description": "Concerns the write skill",
+        "color": "1d76db"
+      }
+    ],
+    "number": 470,
+    "state": "CLOSED",
+    "title": "PAC: en verklig fråga, en analys som för resonemanget framåt och en slutsats som besvarar premissen"
+  },
+  {
+    "labels": [
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRUuQ",
+        "name": "enhancement",
+        "description": "New feature or request",
+        "color": "a2eeef"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACx5MewA",
+        "name": "orchestrated",
+        "description": "Completed ticket retained for Orchestrate history",
+        "color": "6f42c1"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWa58g",
+        "name": "library",
+        "description": "Concerns the shared Collection Library (ship.py, references)",
+        "color": "0e8a16"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdF9w",
+        "name": "skill:redline",
+        "description": "Concerns the redline skill",
+        "color": "1d76db"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdGhg",
+        "name": "skill:write",
+        "description": "Concerns the write skill",
+        "color": "1d76db"
+      }
+    ],
+    "number": 469,
+    "state": "CLOSED",
+    "title": "ABT: insatsen före problemet, allmänt till konkret i varje del och en följd som svarar på orsakerna"
+  },
+  {
+    "labels": [
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRUlQ",
+        "name": "bug",
+        "description": "Something isn't working",
+        "color": "d73a4a"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACx5MewA",
+        "name": "orchestrated",
+        "description": "Completed ticket retained for Orchestrate history",
+        "color": "6f42c1"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdF9w",
+        "name": "skill:redline",
+        "description": "Concerns the redline skill",
+        "color": "1d76db"
+      }
+    ],
+    "number": 468,
+    "state": "CLOSED",
+    "title": "Redline changes a clean text over a loss no reader suffers: it drops a supported judgement and writes in an unstated premise"
+  },
+  {
+    "labels": [
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRUlQ",
+        "name": "bug",
+        "description": "Something isn't working",
+        "color": "d73a4a"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRU9g",
+        "name": "wontfix",
+        "description": "This will not be worked on",
+        "color": "ffffff"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdF9w",
+        "name": "skill:redline",
+        "description": "Concerns the redline skill",
+        "color": "1d76db"
+      }
+    ],
+    "number": 467,
+    "state": "CLOSED",
+    "title": "Redline deletes \"kort\" from article-clean's standfirst, a supported judgement in a clean text"
+  },
+  {
+    "labels": [
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRUlQ",
+        "name": "bug",
+        "description": "Something isn't working",
+        "color": "d73a4a"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRU9g",
+        "name": "wontfix",
+        "description": "This will not be worked on",
+        "color": "ffffff"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdF9w",
+        "name": "skill:redline",
+        "description": "Concerns the redline skill",
+        "color": "1d76db"
+      }
+    ],
+    "number": 466,
+    "state": "CLOSED",
+    "title": "column-flawed's headline is repaired but its missing subject of its own is no longer reported"
+  },
+  {
+    "labels": [
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRUlQ",
+        "name": "bug",
+        "description": "Something isn't working",
+        "color": "d73a4a"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRU9g",
+        "name": "wontfix",
+        "description": "This will not be worked on",
+        "color": "ffffff"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdF9w",
+        "name": "skill:redline",
+        "description": "Concerns the redline skill",
+        "color": "1d76db"
+      }
+    ],
+    "number": 465,
+    "state": "CLOSED",
+    "title": "Redline repairs \"Rutan som inte finns\" without the column's recurring \"ruta\" in one run of two"
+  },
+  {
+    "labels": [
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRUlQ",
+        "name": "bug",
+        "description": "Something isn't working",
+        "color": "d73a4a"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACx5MewA",
+        "name": "orchestrated",
+        "description": "Completed ticket retained for Orchestrate history",
+        "color": "6f42c1"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdF9w",
+        "name": "skill:redline",
+        "description": "Concerns the redline skill",
+        "color": "1d76db"
+      }
+    ],
+    "number": 464,
+    "state": "CLOSED",
+    "title": "Redline adds a subheading over column-clean's ending, reading a conforming column's ending as not a section of its own"
+  },
+  {
+    "labels": [
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRUlQ",
+        "name": "bug",
+        "description": "Something isn't working",
+        "color": "d73a4a"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACx5MewA",
+        "name": "orchestrated",
+        "description": "Completed ticket retained for Orchestrate history",
+        "color": "6f42c1"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdF9w",
+        "name": "skill:redline",
+        "description": "Concerns the redline skill",
+        "color": "1d76db"
+      }
+    ],
+    "number": 463,
+    "state": "CLOSED",
+    "title": "Redline rewrites case-study-clean's headline as an overclaim that the standfirst under it already bounds"
+  },
+  {
+    "labels": [
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRUlQ",
+        "name": "bug",
+        "description": "Something isn't working",
+        "color": "d73a4a"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRU9g",
+        "name": "wontfix",
+        "description": "This will not be worked on",
+        "color": "ffffff"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdF9w",
+        "name": "skill:redline",
+        "description": "Concerns the redline skill",
+        "color": "1d76db"
+      }
+    ],
+    "number": 462,
+    "state": "CLOSED",
+    "title": "Redline's reply does not report that a rewritten column headline loses its play on \"poängen\""
+  },
+  {
+    "labels": [
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRUlQ",
+        "name": "bug",
+        "description": "Something isn't working",
+        "color": "d73a4a"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRU9g",
+        "name": "wontfix",
+        "description": "This will not be worked on",
+        "color": "ffffff"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdF9w",
+        "name": "skill:redline",
+        "description": "Concerns the redline skill",
+        "color": "1d76db"
+      }
+    ],
+    "number": 461,
+    "state": "CLOSED",
+    "title": "Redline's claim account says a first sentence's goal \"är detsamma\" without reporting \"få ut av\" → \"se … i\""
+  },
+  {
+    "labels": [
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRUlQ",
+        "name": "bug",
+        "description": "Something isn't working",
+        "color": "d73a4a"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRU9g",
+        "name": "wontfix",
+        "description": "This will not be worked on",
+        "color": "ffffff"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdF9w",
+        "name": "skill:redline",
+        "description": "Concerns the redline skill",
+        "color": "1d76db"
+      }
+    ],
+    "number": 460,
+    "state": "CLOSED",
+    "title": "Redline's claim account quotes a standfirst as \"underhållsgruppens egna anteckningar\" where the returned standfirst has no \"egna\""
+  },
+  {
+    "labels": [
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRUlQ",
+        "name": "bug",
+        "description": "Something isn't working",
+        "color": "d73a4a"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRU9g",
+        "name": "wontfix",
+        "description": "This will not be worked on",
+        "color": "ffffff"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdF9w",
+        "name": "skill:redline",
+        "description": "Concerns the redline skill",
+        "color": "1d76db"
+      }
+    ],
+    "number": 459,
+    "state": "CLOSED",
+    "title": "Redline's claim account reports a rewritten case-study headline without saying it drops the condition in Lind's appraisal"
+  },
+  {
+    "labels": [
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRUlQ",
+        "name": "bug",
+        "description": "Something isn't working",
+        "color": "d73a4a"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRU9g",
+        "name": "wontfix",
+        "description": "This will not be worked on",
+        "color": "ffffff"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdF9w",
+        "name": "skill:redline",
+        "description": "Concerns the redline skill",
+        "color": "1d76db"
+      }
+    ],
+    "number": 458,
+    "state": "CLOSED",
+    "title": "Redline's claim account reports \"medan\" → \"och\" as removing an implied connection, and not the reading of simultaneity it also removes"
+  },
+  {
+    "labels": [
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRUlQ",
+        "name": "bug",
+        "description": "Something isn't working",
+        "color": "d73a4a"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRU9g",
+        "name": "wontfix",
+        "description": "This will not be worked on",
+        "color": "ffffff"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdF9w",
+        "name": "skill:redline",
+        "description": "Concerns the redline skill",
+        "color": "1d76db"
+      }
+    ],
+    "number": 457,
+    "state": "CLOSED",
+    "title": "Redline's claim account leaves out that a rewritten subheading narrows \"the phone or the web\" to \"why people ring\" and adds \"First\""
+  },
+  {
+    "labels": [
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRUlQ",
+        "name": "bug",
+        "description": "Something isn't working",
+        "color": "d73a4a"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRU9g",
+        "name": "wontfix",
+        "description": "This will not be worked on",
+        "color": "ffffff"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdF9w",
+        "name": "skill:redline",
+        "description": "Concerns the redline skill",
+        "color": "1d76db"
+      }
+    ],
+    "number": 456,
+    "state": "CLOSED",
+    "title": "Redline's claim account says the body carries a rewritten headline's claim that the body states only by paraphrase"
+  },
+  {
+    "labels": [
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRUlQ",
+        "name": "bug",
+        "description": "Something isn't working",
+        "color": "d73a4a"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRU9g",
+        "name": "wontfix",
+        "description": "This will not be worked on",
+        "color": "ffffff"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdF9w",
+        "name": "skill:redline",
+        "description": "Concerns the redline skill",
+        "color": "1d76db"
+      }
+    ],
+    "number": 455,
+    "state": "CLOSED",
+    "title": "Redline's claim account leaves out the framing change in a rewritten column headline (\"hoppar över\", a wish stated as the template's omission)"
+  },
+  {
+    "labels": [
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRUlQ",
+        "name": "bug",
+        "description": "Something isn't working",
+        "color": "d73a4a"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRU9g",
+        "name": "wontfix",
+        "description": "This will not be worked on",
+        "color": "ffffff"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdF9w",
+        "name": "skill:redline",
+        "description": "Concerns the redline skill",
+        "color": "1d76db"
+      }
+    ],
+    "number": 454,
+    "state": "CLOSED",
+    "title": "Redline's claim account does not say that \"poängen\" → \"syftet\" moved the headline's claim from the decision to the purpose"
+  },
+  {
+    "labels": [
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRUlQ",
+        "name": "bug",
+        "description": "Something isn't working",
+        "color": "d73a4a"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRU9g",
+        "name": "wontfix",
+        "description": "This will not be worked on",
+        "color": "ffffff"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdF9w",
+        "name": "skill:redline",
+        "description": "Concerns the redline skill",
+        "color": "1d76db"
+      }
+    ],
+    "number": 453,
+    "state": "CLOSED",
+    "title": "Redline miscounts the headings its round replaced: \"Seven headings became two\" where seven became three"
+  },
+  {
+    "labels": [
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRUlQ",
+        "name": "bug",
+        "description": "Something isn't working",
+        "color": "d73a4a"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRU9g",
+        "name": "wontfix",
+        "description": "This will not be worked on",
+        "color": "ffffff"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdF9w",
+        "name": "skill:redline",
+        "description": "Concerns the redline skill",
+        "color": "1d76db"
+      }
+    ],
+    "number": 452,
+    "state": "CLOSED",
+    "title": "Redline reports a paragraph length measured before its round: \"no paragraph is over 65 words\" over a 66-word paragraph"
+  },
+  {
+    "labels": [
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRUlQ",
+        "name": "bug",
+        "description": "Something isn't working",
+        "color": "d73a4a"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRU9g",
+        "name": "wontfix",
+        "description": "This will not be worked on",
+        "color": "ffffff"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdF9w",
+        "name": "skill:redline",
+        "description": "Concerns the redline skill",
+        "color": "1d76db"
+      }
+    ],
+    "number": 451,
+    "state": "CLOSED",
+    "title": "Redline's finding says the body never said whose proposal it was, where the body says \"Öppna beslut proposes\""
+  },
+  {
+    "labels": [
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRUuQ",
+        "name": "enhancement",
+        "description": "New feature or request",
+        "color": "a2eeef"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACx5MewA",
+        "name": "orchestrated",
+        "description": "Completed ticket retained for Orchestrate history",
+        "color": "6f42c1"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdF9w",
+        "name": "skill:redline",
+        "description": "Concerns the redline skill",
+        "color": "1d76db"
+      }
+    ],
+    "number": 445,
+    "state": "CLOSED",
+    "title": "Redline can review a text against the brief it was written to"
+  },
+  {
+    "labels": [
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRUuQ",
+        "name": "enhancement",
+        "description": "New feature or request",
+        "color": "a2eeef"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACx5MewA",
+        "name": "orchestrated",
+        "description": "Completed ticket retained for Orchestrate history",
+        "color": "6f42c1"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWa58g",
+        "name": "library",
+        "description": "Concerns the shared Collection Library (ship.py, references)",
+        "color": "0e8a16"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdF9w",
+        "name": "skill:redline",
+        "description": "Concerns the redline skill",
+        "color": "1d76db"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdGhg",
+        "name": "skill:write",
+        "description": "Concerns the write skill",
+        "color": "1d76db"
+      }
+    ],
+    "number": 443,
+    "state": "CLOSED",
+    "title": "The genres web-copy, press-release and case-study are renamed webcopy, pressrelease and casestudy"
+  },
+  {
+    "labels": [
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRUuQ",
+        "name": "enhancement",
+        "description": "New feature or request",
+        "color": "a2eeef"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACx5MewA",
+        "name": "orchestrated",
+        "description": "Completed ticket retained for Orchestrate history",
+        "color": "6f42c1"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWa58g",
+        "name": "library",
+        "description": "Concerns the shared Collection Library (ship.py, references)",
+        "color": "0e8a16"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdGhg",
+        "name": "skill:write",
+        "description": "Concerns the write skill",
+        "color": "1d76db"
+      }
+    ],
+    "number": 438,
+    "state": "CLOSED",
+    "title": "case-study: what a quotation bridge may carry is still operable only in the review half after #396"
+  },
+  {
+    "labels": [
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRUlQ",
+        "name": "bug",
+        "description": "Something isn't working",
+        "color": "d73a4a"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRU9g",
+        "name": "wontfix",
+        "description": "This will not be worked on",
+        "color": "ffffff"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdF9w",
+        "name": "skill:redline",
+        "description": "Concerns the redline skill",
+        "color": "1d76db"
+      }
+    ],
+    "number": 437,
+    "state": "CLOSED",
+    "title": "Redline's account quotes a rewritten headline without saying it brought a contraction into a text that uses none"
+  },
+  {
+    "labels": [
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRUlQ",
+        "name": "bug",
+        "description": "Something isn't working",
+        "color": "d73a4a"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACx5MewA",
+        "name": "orchestrated",
+        "description": "Completed ticket retained for Orchestrate history",
+        "color": "6f42c1"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdF9w",
+        "name": "skill:redline",
+        "description": "Concerns the redline skill",
+        "color": "1d76db"
+      }
+    ],
+    "number": 435,
+    "state": "CLOSED",
+    "title": "Redline's reply describes the text inaccurately outside the claim account — a count, a label, *moved* for *given a heading*"
+  },
+  {
+    "labels": [
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRUlQ",
+        "name": "bug",
+        "description": "Something isn't working",
+        "color": "d73a4a"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRU9g",
+        "name": "wontfix",
+        "description": "This will not be worked on",
+        "color": "ffffff"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdF9w",
+        "name": "skill:redline",
+        "description": "Concerns the redline skill",
+        "color": "1d76db"
+      }
+    ],
+    "number": 434,
+    "state": "CLOSED",
+    "title": "opinion-clean gains a sentence stating its unstated assumption, and fails C1 after #402 where it passed before"
+  },
+  {
+    "labels": [
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRUlQ",
+        "name": "bug",
+        "description": "Something isn't working",
+        "color": "d73a4a"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACx5MewA",
+        "name": "orchestrated",
+        "description": "Completed ticket retained for Orchestrate history",
+        "color": "6f42c1"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdF9w",
+        "name": "skill:redline",
+        "description": "Concerns the redline skill",
+        "color": "1d76db"
+      }
+    ],
+    "number": 433,
+    "state": "CLOSED",
+    "title": "Redline's correction agent returns headings that repeat what they stand over, and the whole-round rejection then discards opinion-flawed's ending section with them"
+  },
+  {
+    "labels": [
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRUlQ",
+        "name": "bug",
+        "description": "Something isn't working",
+        "color": "d73a4a"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACx5MewA",
+        "name": "orchestrated",
+        "description": "Completed ticket retained for Orchestrate history",
+        "color": "6f42c1"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdF9w",
+        "name": "skill:redline",
+        "description": "Concerns the redline skill",
+        "color": "1d76db"
+      }
+    ],
+    "number": 432,
+    "state": "CLOSED",
+    "title": "web-copy-clean misses C1 in both arms of #397: a heading's fact copied into the body, and a missing form link reported as a defect"
+  },
+  {
+    "labels": [
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRUlQ",
+        "name": "bug",
+        "description": "Something isn't working",
+        "color": "d73a4a"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRU9g",
+        "name": "wontfix",
+        "description": "This will not be worked on",
+        "color": "ffffff"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdF9w",
+        "name": "skill:redline",
+        "description": "Concerns the redline skill",
+        "color": "1d76db"
+      }
+    ],
+    "number": 430,
+    "state": "CLOSED",
+    "title": "article-clean and column-clean come back with a rewritten headline after #397, where they came back unchanged before"
+  },
+  {
+    "labels": [
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRUlQ",
+        "name": "bug",
+        "description": "Something isn't working",
+        "color": "d73a4a"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACx5MewA",
+        "name": "orchestrated",
+        "description": "Completed ticket retained for Orchestrate history",
+        "color": "6f42c1"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdF9w",
+        "name": "skill:redline",
+        "description": "Concerns the redline skill",
+        "color": "1d76db"
+      }
+    ],
+    "number": 429,
+    "state": "CLOSED",
+    "title": "Redline rewrites headings that work — an allusion, a figure of speech, a subheading that states its section — as if the headline rules made each a finding"
+  },
+  {
+    "labels": [
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRUlQ",
+        "name": "bug",
+        "description": "Something isn't working",
+        "color": "d73a4a"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACx5MewA",
+        "name": "orchestrated",
+        "description": "Completed ticket retained for Orchestrate history",
+        "color": "6f42c1"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWa58g",
+        "name": "library",
+        "description": "Concerns the shared Collection Library (ship.py, references)",
+        "color": "0e8a16"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdF9w",
+        "name": "skill:redline",
+        "description": "Concerns the redline skill",
+        "color": "1d76db"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdGPQ",
+        "name": "skill:unslop",
+        "description": "Concerns the unslop skill",
+        "color": "1d76db"
+      }
+    ],
+    "number": 415,
+    "state": "CLOSED",
+    "title": "A fourth form of hardening: a new unhedged assertion mounted above a limit the text keeps, which the limiting-sentence criterion cannot see"
+  },
+  {
+    "labels": [
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRUuQ",
+        "name": "enhancement",
+        "description": "New feature or request",
+        "color": "a2eeef"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACx5MewA",
+        "name": "orchestrated",
+        "description": "Completed ticket retained for Orchestrate history",
+        "color": "6f42c1"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWa58g",
+        "name": "library",
+        "description": "Concerns the shared Collection Library (ship.py, references)",
+        "color": "0e8a16"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdGhg",
+        "name": "skill:write",
+        "description": "Concerns the write skill",
+        "color": "1d76db"
+      }
+    ],
+    "number": 414,
+    "state": "CLOSED",
+    "title": "A review half carries the only operable wording for a requirement its base half states abstractly, and the writer never gets it"
+  },
+  {
+    "labels": [
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRUuQ",
+        "name": "enhancement",
+        "description": "New feature or request",
+        "color": "a2eeef"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACx5MewA",
+        "name": "orchestrated",
+        "description": "Completed ticket retained for Orchestrate history",
+        "color": "6f42c1"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdF9w",
+        "name": "skill:redline",
+        "description": "Concerns the redline skill",
+        "color": "1d76db"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdGPQ",
+        "name": "skill:unslop",
+        "description": "Concerns the unslop skill",
+        "color": "1d76db"
+      }
+    ],
+    "number": 413,
+    "state": "CLOSED",
+    "title": "Redline and Unslop: no evaluation reaches a repair-created defect established after a later round"
+  },
+  {
+    "labels": [
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRUuQ",
+        "name": "enhancement",
+        "description": "New feature or request",
+        "color": "a2eeef"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACx5MewA",
+        "name": "orchestrated",
+        "description": "Completed ticket retained for Orchestrate history",
+        "color": "6f42c1"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdF9w",
+        "name": "skill:redline",
+        "description": "Concerns the redline skill",
+        "color": "1d76db"
+      }
+    ],
+    "number": 404,
+    "state": "CLOSED",
+    "title": "A clean control's \"returned unchanged\" rests on the run's own word, because a no-change reply carries no text"
+  },
+  {
+    "labels": [
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRUlQ",
+        "name": "bug",
+        "description": "Something isn't working",
+        "color": "d73a4a"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACx5MewA",
+        "name": "orchestrated",
+        "description": "Completed ticket retained for Orchestrate history",
+        "color": "6f42c1"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWa58g",
+        "name": "library",
+        "description": "Concerns the shared Collection Library (ship.py, references)",
+        "color": "0e8a16"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdF9w",
+        "name": "skill:redline",
+        "description": "Concerns the redline skill",
+        "color": "1d76db"
+      }
+    ],
+    "number": 402,
+    "state": "CLOSED",
+    "title": "Redline reports that the anatomy conforms without deviation while an anatomy clause it never examined is unmet"
+  },
+  {
+    "labels": [
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRUlQ",
+        "name": "bug",
+        "description": "Something isn't working",
+        "color": "d73a4a"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACx5MewA",
+        "name": "orchestrated",
+        "description": "Completed ticket retained for Orchestrate history",
+        "color": "6f42c1"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdF9w",
+        "name": "skill:redline",
+        "description": "Concerns the redline skill",
+        "color": "1d76db"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdGPQ",
+        "name": "skill:unslop",
+        "description": "Concerns the unslop skill",
+        "color": "1d76db"
+      }
+    ],
+    "number": 401,
+    "state": "CLOSED",
+    "title": "A correction subagent's scratch path is shared between concurrent runs, and one run deleted another's candidate"
+  },
+  {
+    "labels": [
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRUlQ",
+        "name": "bug",
+        "description": "Something isn't working",
+        "color": "d73a4a"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACx5MewA",
+        "name": "orchestrated",
+        "description": "Completed ticket retained for Orchestrate history",
+        "color": "6f42c1"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdF9w",
+        "name": "skill:redline",
+        "description": "Concerns the redline skill",
+        "color": "1d76db"
+      }
+    ],
+    "number": 400,
+    "state": "CLOSED",
+    "title": "Redline changes a headline, a subheading or a standfirst and accounts for it as something else — on three controls and one draft"
+  },
+  {
+    "labels": [
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRUlQ",
+        "name": "bug",
+        "description": "Something isn't working",
+        "color": "d73a4a"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACx5MewA",
+        "name": "orchestrated",
+        "description": "Completed ticket retained for Orchestrate history",
+        "color": "6f42c1"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdF9w",
+        "name": "skill:redline",
+        "description": "Concerns the redline skill",
+        "color": "1d76db"
+      }
+    ],
+    "number": 399,
+    "state": "CLOSED",
+    "title": "case-study-clean missed C1 in #383's post-change arm and passed the pre-change replay, on one rewritten subheading"
+  },
+  {
+    "labels": [
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRUlQ",
+        "name": "bug",
+        "description": "Something isn't working",
+        "color": "d73a4a"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACx5MewA",
+        "name": "orchestrated",
+        "description": "Completed ticket retained for Orchestrate history",
+        "color": "6f42c1"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWa58g",
+        "name": "library",
+        "description": "Concerns the shared Collection Library (ship.py, references)",
+        "color": "0e8a16"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdF9w",
+        "name": "skill:redline",
+        "description": "Concerns the redline skill",
+        "color": "1d76db"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdGPQ",
+        "name": "skill:unslop",
+        "description": "Concerns the unslop skill",
+        "color": "1d76db"
+      }
+    ],
+    "number": 398,
+    "state": "CLOSED",
+    "title": "The claim account's assurance is written about claims received, so a run that adds a claim — or moves one in its own repair — reports that nothing happened to the claims"
+  },
+  {
+    "labels": [
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRUlQ",
+        "name": "bug",
+        "description": "Something isn't working",
+        "color": "d73a4a"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACx5MewA",
+        "name": "orchestrated",
+        "description": "Completed ticket retained for Orchestrate history",
+        "color": "6f42c1"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWa58g",
+        "name": "library",
+        "description": "Concerns the shared Collection Library (ship.py, references)",
+        "color": "0e8a16"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdF9w",
+        "name": "skill:redline",
+        "description": "Concerns the redline skill",
+        "color": "1d76db"
+      }
+    ],
+    "number": 397,
+    "state": "CLOSED",
+    "title": "Redline authors a standfirst, subheadings and a call to action into a finished text, and R1 rejects it"
+  },
+  {
+    "labels": [
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRUlQ",
+        "name": "bug",
+        "description": "Something isn't working",
+        "color": "d73a4a"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACx5MewA",
+        "name": "orchestrated",
+        "description": "Completed ticket retained for Orchestrate history",
+        "color": "6f42c1"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWa58g",
+        "name": "library",
+        "description": "Concerns the shared Collection Library (ship.py, references)",
+        "color": "0e8a16"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdF9w",
+        "name": "skill:redline",
+        "description": "Concerns the redline skill",
+        "color": "1d76db"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdGhg",
+        "name": "skill:write",
+        "description": "Concerns the write skill",
+        "color": "1d76db"
+      }
+    ],
+    "number": 396,
+    "state": "CLOSED",
+    "title": "Write: the quotation pre-echo sits in the section heading, where the bridge rule does not reach"
+  },
+  {
+    "labels": [
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRUlQ",
+        "name": "bug",
+        "description": "Something isn't working",
+        "color": "d73a4a"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACw0oKnA",
+        "name": "ready-for-agent",
+        "description": "Fully specified, ready for an AFK agent",
+        "color": "0e8a16"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdF9w",
+        "name": "skill:redline",
+        "description": "Concerns the redline skill",
+        "color": "1d76db"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdGhg",
+        "name": "skill:write",
+        "description": "Concerns the write skill",
+        "color": "1d76db"
+      }
+    ],
+    "number": 395,
+    "state": "OPEN",
+    "title": "Write: the repeating quotation bridge #364 was filed on does not reproduce in the Claude family, and stays failed in the GPT family"
+  },
+  {
+    "labels": [
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRUlQ",
+        "name": "bug",
+        "description": "Something isn't working",
+        "color": "d73a4a"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACx5MewA",
+        "name": "orchestrated",
+        "description": "Completed ticket retained for Orchestrate history",
+        "color": "6f42c1"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdF9w",
+        "name": "skill:redline",
+        "description": "Concerns the redline skill",
+        "color": "1d76db"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdGPQ",
+        "name": "skill:unslop",
+        "description": "Concerns the unslop skill",
+        "color": "1d76db"
+      }
+    ],
+    "number": 394,
+    "state": "CLOSED",
+    "title": "Redline declares the subagents capability and never confirms it, so a harness without one reviews and corrects in its own seat"
+  },
+  {
+    "labels": [
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRUlQ",
+        "name": "bug",
+        "description": "Something isn't working",
+        "color": "d73a4a"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACw0oKnA",
+        "name": "ready-for-agent",
+        "description": "Fully specified, ready for an AFK agent",
+        "color": "0e8a16"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdF9w",
+        "name": "skill:redline",
+        "description": "Concerns the redline skill",
+        "color": "1d76db"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdGhg",
+        "name": "skill:write",
+        "description": "Concerns the write skill",
+        "color": "1d76db"
+      }
+    ],
+    "number": 393,
+    "state": "OPEN",
+    "title": "The quotation defect #363 was filed on cannot be measured in the Claude family, and stays failed in the GPT family"
+  },
+  {
+    "labels": [
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRUlQ",
+        "name": "bug",
+        "description": "Something isn't working",
+        "color": "d73a4a"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACx5MewA",
+        "name": "orchestrated",
+        "description": "Completed ticket retained for Orchestrate history",
+        "color": "6f42c1"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdGhg",
+        "name": "skill:write",
+        "description": "Concerns the write skill",
+        "color": "1d76db"
+      }
+    ],
+    "number": 391,
+    "state": "CLOSED",
+    "title": "Write: an unbounded wait for the checker's report file outlives the run"
+  },
+  {
+    "labels": [
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRUlQ",
+        "name": "bug",
+        "description": "Something isn't working",
+        "color": "d73a4a"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACx5MewA",
+        "name": "orchestrated",
+        "description": "Completed ticket retained for Orchestrate history",
+        "color": "6f42c1"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWa58g",
+        "name": "library",
+        "description": "Concerns the shared Collection Library (ship.py, references)",
+        "color": "0e8a16"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdF9w",
+        "name": "skill:redline",
+        "description": "Concerns the redline skill",
+        "color": "1d76db"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdGhg",
+        "name": "skill:write",
+        "description": "Concerns the write skill",
+        "color": "1d76db"
+      }
+    ],
+    "number": 390,
+    "state": "CLOSED",
+    "title": "Write: a subheading still repeats the sentence under it, after headlines.md said how to avoid it"
+  },
+  {
+    "labels": [
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRUlQ",
+        "name": "bug",
+        "description": "Something isn't working",
+        "color": "d73a4a"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACx5MewA",
+        "name": "orchestrated",
+        "description": "Completed ticket retained for Orchestrate history",
+        "color": "6f42c1"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdF9w",
+        "name": "skill:redline",
+        "description": "Concerns the redline skill",
+        "color": "1d76db"
+      }
+    ],
+    "number": 389,
+    "state": "CLOSED",
+    "title": "Redline keeps a repair its own re-review found to add an unsupported claim"
+  },
+  {
+    "labels": [
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRUlQ",
+        "name": "bug",
+        "description": "Something isn't working",
+        "color": "d73a4a"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACx5MewA",
+        "name": "orchestrated",
+        "description": "Completed ticket retained for Orchestrate history",
+        "color": "6f42c1"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdGhg",
+        "name": "skill:write",
+        "description": "Concerns the write skill",
+        "color": "1d76db"
+      }
+    ],
+    "number": 387,
+    "state": "CLOSED",
+    "title": "Write: the comparison task files a finding against a denial the source entails"
+  },
+  {
+    "labels": [
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACw0oKnA",
+        "name": "ready-for-agent",
+        "description": "Fully specified, ready for an AFK agent",
+        "color": "0e8a16"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdF9w",
+        "name": "skill:redline",
+        "description": "Concerns the redline skill",
+        "color": "1d76db"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdGhg",
+        "name": "skill:write",
+        "description": "Concerns the write skill",
+        "color": "1d76db"
+      }
+    ],
+    "number": 386,
+    "state": "CLOSED",
+    "title": "Write and Redline: evaluate the article anatomy on the revised controls and the column and case-study rows"
+  },
+  {
+    "labels": [
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRUlQ",
+        "name": "bug",
+        "description": "Something isn't working",
+        "color": "d73a4a"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACx5MewA",
+        "name": "orchestrated",
+        "description": "Completed ticket retained for Orchestrate history",
+        "color": "6f42c1"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWa58g",
+        "name": "library",
+        "description": "Concerns the shared Collection Library (ship.py, references)",
+        "color": "0e8a16"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdFqw",
+        "name": "skill:proofread",
+        "description": "Concerns the proofread skill",
+        "color": "1d76db"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdF9w",
+        "name": "skill:redline",
+        "description": "Concerns the redline skill",
+        "color": "1d76db"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdGPQ",
+        "name": "skill:unslop",
+        "description": "Concerns the unslop skill",
+        "color": "1d76db"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdGhg",
+        "name": "skill:write",
+        "description": "Concerns the write skill",
+        "color": "1d76db"
+      }
+    ],
+    "number": 384,
+    "state": "CLOSED",
+    "title": "Redline's column-sv-r2 run returned a broken YAML frontmatter block, unreported"
+  },
+  {
+    "labels": [
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRUlQ",
+        "name": "bug",
+        "description": "Something isn't working",
+        "color": "d73a4a"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACx5MewA",
+        "name": "orchestrated",
+        "description": "Completed ticket retained for Orchestrate history",
+        "color": "6f42c1"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWa58g",
+        "name": "library",
+        "description": "Concerns the shared Collection Library (ship.py, references)",
+        "color": "0e8a16"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdF9w",
+        "name": "skill:redline",
+        "description": "Concerns the redline skill",
+        "color": "1d76db"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdGPQ",
+        "name": "skill:unslop",
+        "description": "Concerns the unslop skill",
+        "color": "1d76db"
+      }
+    ],
+    "number": 383,
+    "state": "CLOSED",
+    "title": "Redline rewrites clean passages to taste outside any finding, and mostly does not report it"
+  },
+  {
+    "labels": [
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACw0oK5A",
+        "name": "ready-for-human",
+        "description": "Requires human implementation",
+        "color": "1d76db"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWa58g",
+        "name": "library",
+        "description": "Concerns the shared Collection Library (ship.py, references)",
+        "color": "0e8a16"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdF9w",
+        "name": "skill:redline",
+        "description": "Concerns the redline skill",
+        "color": "1d76db"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdGhg",
+        "name": "skill:write",
+        "description": "Concerns the write skill",
+        "color": "1d76db"
+      }
+    ],
+    "number": 382,
+    "state": "CLOSED",
+    "title": "Land the article-anatomy branch on main and remove its worktree"
+  },
+  {
+    "labels": [
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRUlQ",
+        "name": "bug",
+        "description": "Something isn't working",
+        "color": "d73a4a"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACw0oJ7Q",
+        "name": "needs-triage",
+        "description": "Maintainer needs to evaluate this issue",
+        "color": "fbca04"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdGhg",
+        "name": "skill:write",
+        "description": "Concerns the write skill",
+        "color": "1d76db"
+      }
+    ],
+    "number": 381,
+    "state": "CLOSED",
+    "title": "Write: destruktiv källkontroll raderar färdigt arbete — bevara utkast, markera problem och skilj åsikt från fakta"
+  },
+  {
+    "labels": [
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACx5MewA",
+        "name": "orchestrated",
+        "description": "Completed ticket retained for Orchestrate history",
+        "color": "6f42c1"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdF9w",
+        "name": "skill:redline",
+        "description": "Concerns the redline skill",
+        "color": "1d76db"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdGhg",
+        "name": "skill:write",
+        "description": "Concerns the write skill",
+        "color": "1d76db"
+      }
+    ],
+    "number": 380,
+    "state": "CLOSED",
+    "title": "Write and Redline: run the corpus coverage the #362 evaluation left out"
+  },
+  {
+    "labels": [
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRUlQ",
+        "name": "bug",
+        "description": "Something isn't working",
+        "color": "d73a4a"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACx5MewA",
+        "name": "orchestrated",
+        "description": "Completed ticket retained for Orchestrate history",
+        "color": "6f42c1"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdGhg",
+        "name": "skill:write",
+        "description": "Concerns the write skill",
+        "color": "1d76db"
+      }
+    ],
+    "number": 379,
+    "state": "CLOSED",
+    "title": "Write: test a negated claim in the direction the negation needs"
+  },
+  {
+    "labels": [
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRUlQ",
+        "name": "bug",
+        "description": "Something isn't working",
+        "color": "d73a4a"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACx5MewA",
+        "name": "orchestrated",
+        "description": "Completed ticket retained for Orchestrate history",
+        "color": "6f42c1"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdGhg",
+        "name": "skill:write",
+        "description": "Concerns the write skill",
+        "color": "1d76db"
+      }
+    ],
+    "number": 378,
+    "state": "CLOSED",
+    "title": "Write: say what completes a source comparison when the checker cannot write its report file"
+  },
+  {
+    "labels": [
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRUlQ",
+        "name": "bug",
+        "description": "Something isn't working",
+        "color": "d73a4a"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACx5MewA",
+        "name": "orchestrated",
+        "description": "Completed ticket retained for Orchestrate history",
+        "color": "6f42c1"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdF9w",
+        "name": "skill:redline",
+        "description": "Concerns the redline skill",
+        "color": "1d76db"
+      }
+    ],
+    "number": 377,
+    "state": "CLOSED",
+    "title": "Redline: keep sentences that limit what a text claims, and report every change to a claim"
+  },
+  {
+    "labels": [
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRUlQ",
+        "name": "bug",
+        "description": "Something isn't working",
+        "color": "d73a4a"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACx5MewA",
+        "name": "orchestrated",
+        "description": "Completed ticket retained for Orchestrate history",
+        "color": "6f42c1"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdGhg",
+        "name": "skill:write",
+        "description": "Concerns the write skill",
+        "color": "1d76db"
+      }
+    ],
+    "number": 376,
+    "state": "CLOSED",
+    "title": "Write: a true finding at the final source comparison ends in a stop or an unchecked delivery"
+  },
+  {
+    "labels": [
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRUlQ",
+        "name": "bug",
+        "description": "Something isn't working",
+        "color": "d73a4a"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACx5MewA",
+        "name": "orchestrated",
+        "description": "Completed ticket retained for Orchestrate history",
+        "color": "6f42c1"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdF9w",
+        "name": "skill:redline",
+        "description": "Concerns the redline skill",
+        "color": "1d76db"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdGhg",
+        "name": "skill:write",
+        "description": "Concerns the write skill",
+        "color": "1d76db"
+      }
+    ],
+    "number": 364,
+    "state": "CLOSED",
+    "title": "Write: låt kundcitat bära omdömet utan upprepande citatbryggor"
+  },
+  {
+    "labels": [
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRUlQ",
+        "name": "bug",
+        "description": "Something isn't working",
+        "color": "d73a4a"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACx5MewA",
+        "name": "orchestrated",
+        "description": "Completed ticket retained for Orchestrate history",
+        "color": "6f42c1"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdF9w",
+        "name": "skill:redline",
+        "description": "Concerns the redline skill",
+        "color": "1d76db"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdGhg",
+        "name": "skill:write",
+        "description": "Concerns the write skill",
+        "color": "1d76db"
+      }
+    ],
+    "number": 363,
+    "state": "CLOSED",
+    "title": "Write och Redline: rätta bristande citatidiom utan att skriva om fungerande citat"
+  },
+  {
+    "labels": [
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRUlQ",
+        "name": "bug",
+        "description": "Something isn't working",
+        "color": "d73a4a"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACw0oKnA",
+        "name": "ready-for-agent",
+        "description": "Fully specified, ready for an AFK agent",
+        "color": "0e8a16"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdGhg",
+        "name": "skill:write",
+        "description": "Concerns the write skill",
+        "color": "1d76db"
+      }
+    ],
+    "number": 362,
+    "state": "OPEN",
+    "title": "Write: bevara faktisk betydelse i källkontrollen utan missade sakfel eller falska fynd"
+  },
+  {
+    "labels": [
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRUlQ",
+        "name": "bug",
+        "description": "Something isn't working",
+        "color": "d73a4a"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACw0oKnA",
+        "name": "ready-for-agent",
+        "description": "Fully specified, ready for an AFK agent",
+        "color": "0e8a16"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdF9w",
+        "name": "skill:redline",
+        "description": "Concerns the redline skill",
+        "color": "1d76db"
+      }
+    ],
+    "number": 346,
+    "state": "CLOSED",
+    "title": "Redline: keep whole-sentence duplication in the editorial correction boundary"
+  },
+  {
+    "labels": [
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRUlQ",
+        "name": "bug",
+        "description": "Something isn't working",
+        "color": "d73a4a"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACw0oKnA",
+        "name": "ready-for-agent",
+        "description": "Fully specified, ready for an AFK agent",
+        "color": "0e8a16"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdGhg",
+        "name": "skill:write",
+        "description": "Concerns the write skill",
+        "color": "1d76db"
+      }
+    ],
+    "number": 341,
+    "state": "CLOSED",
+    "title": "Preserve idiomatic Swedish in translated customer quotations"
+  },
+  {
+    "labels": [
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRUlQ",
+        "name": "bug",
+        "description": "Something isn't working",
+        "color": "d73a4a"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACw0oKnA",
+        "name": "ready-for-agent",
+        "description": "Fully specified, ready for an AFK agent",
+        "color": "0e8a16"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdF9w",
+        "name": "skill:redline",
+        "description": "Concerns the redline skill",
+        "color": "1d76db"
+      }
+    ],
+    "number": 340,
+    "state": "CLOSED",
+    "title": "Clean up UV effects from Redline’s fresh correction agent"
+  },
+  {
+    "labels": [
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRUlQ",
+        "name": "bug",
+        "description": "Something isn't working",
+        "color": "d73a4a"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACw0oKnA",
+        "name": "ready-for-agent",
+        "description": "Fully specified, ready for an AFK agent",
+        "color": "0e8a16"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdF9w",
+        "name": "skill:redline",
+        "description": "Concerns the redline skill",
+        "color": "1d76db"
+      }
+    ],
+    "number": 339,
+    "state": "CLOSED",
+    "title": "Preserve YAML-bearing text across Redline’s closing Proofread invocation"
+  },
+  {
+    "labels": [
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRUuQ",
+        "name": "enhancement",
+        "description": "New feature or request",
+        "color": "a2eeef"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACw0oKnA",
+        "name": "ready-for-agent",
+        "description": "Fully specified, ready for an AFK agent",
+        "color": "0e8a16"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWa58g",
+        "name": "library",
+        "description": "Concerns the shared Collection Library (ship.py, references)",
+        "color": "0e8a16"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdF9w",
+        "name": "skill:redline",
+        "description": "Concerns the redline skill",
+        "color": "1d76db"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdGhg",
+        "name": "skill:write",
+        "description": "Concerns the write skill",
+        "color": "1d76db"
+      }
+    ],
+    "number": 338,
+    "state": "CLOSED",
+    "title": "Pröva de fem omskrivna genrerna med Write och Redline på svenska och engelska"
+  },
+  {
+    "labels": [
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRUuQ",
+        "name": "enhancement",
+        "description": "New feature or request",
+        "color": "a2eeef"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACw0oKnA",
+        "name": "ready-for-agent",
+        "description": "Fully specified, ready for an AFK agent",
+        "color": "0e8a16"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWa58g",
+        "name": "library",
+        "description": "Concerns the shared Collection Library (ship.py, references)",
+        "color": "0e8a16"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdF9w",
+        "name": "skill:redline",
+        "description": "Concerns the redline skill",
+        "color": "1d76db"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdGhg",
+        "name": "skill:write",
+        "description": "Concerns the write skill",
+        "color": "1d76db"
+      }
+    ],
+    "number": 337,
+    "state": "CLOSED",
+    "title": "Skriv om web-copy till precis copy och UX-text som hjälper läsaren att handla"
+  },
+  {
+    "labels": [
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRUuQ",
+        "name": "enhancement",
+        "description": "New feature or request",
+        "color": "a2eeef"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACw0oKnA",
+        "name": "ready-for-agent",
+        "description": "Fully specified, ready for an AFK agent",
+        "color": "0e8a16"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWa58g",
+        "name": "library",
+        "description": "Concerns the shared Collection Library (ship.py, references)",
+        "color": "0e8a16"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdF9w",
+        "name": "skill:redline",
+        "description": "Concerns the redline skill",
+        "color": "1d76db"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdGhg",
+        "name": "skill:write",
+        "description": "Concerns the write skill",
+        "color": "1d76db"
+      }
+    ],
+    "number": 336,
+    "state": "CLOSED",
+    "title": "Skriv om opinion till en tydlig svensk debattartikel för webben"
+  },
+  {
+    "labels": [
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRUuQ",
+        "name": "enhancement",
+        "description": "New feature or request",
+        "color": "a2eeef"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACw0oKnA",
+        "name": "ready-for-agent",
+        "description": "Fully specified, ready for an AFK agent",
+        "color": "0e8a16"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWa58g",
+        "name": "library",
+        "description": "Concerns the shared Collection Library (ship.py, references)",
+        "color": "0e8a16"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdF9w",
+        "name": "skill:redline",
+        "description": "Concerns the redline skill",
+        "color": "1d76db"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdGhg",
+        "name": "skill:write",
+        "description": "Concerns the write skill",
+        "color": "1d76db"
+      }
+    ],
+    "number": 335,
+    "state": "CLOSED",
+    "title": "Skriv om column till en personlig webbkrönika med journalistisk precision"
+  },
+  {
+    "labels": [
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRUuQ",
+        "name": "enhancement",
+        "description": "New feature or request",
+        "color": "a2eeef"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACw0oKnA",
+        "name": "ready-for-agent",
+        "description": "Fully specified, ready for an AFK agent",
+        "color": "0e8a16"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWa58g",
+        "name": "library",
+        "description": "Concerns the shared Collection Library (ship.py, references)",
+        "color": "0e8a16"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdF9w",
+        "name": "skill:redline",
+        "description": "Concerns the redline skill",
+        "color": "1d76db"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdGhg",
+        "name": "skill:write",
+        "description": "Concerns the write skill",
+        "color": "1d76db"
+      }
+    ],
+    "number": 334,
+    "state": "CLOSED",
+    "title": "Skriv om case-study till ett journalistiskt kundcase som bärs av kundens erfarenhet"
+  },
+  {
+    "labels": [
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRUuQ",
+        "name": "enhancement",
+        "description": "New feature or request",
+        "color": "a2eeef"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACw0oKnA",
+        "name": "ready-for-agent",
+        "description": "Fully specified, ready for an AFK agent",
+        "color": "0e8a16"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWa58g",
+        "name": "library",
+        "description": "Concerns the shared Collection Library (ship.py, references)",
+        "color": "0e8a16"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdF9w",
+        "name": "skill:redline",
+        "description": "Concerns the redline skill",
+        "color": "1d76db"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdGhg",
+        "name": "skill:write",
+        "description": "Concerns the write skill",
+        "color": "1d76db"
+      }
+    ],
+    "number": 333,
+    "state": "CLOSED",
+    "title": "Skriv om article till ett konkret arbetsblad för journalistiska webbtexter"
+  },
+  {
+    "labels": [
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRUuQ",
+        "name": "enhancement",
+        "description": "New feature or request",
+        "color": "a2eeef"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACw0oKnA",
+        "name": "ready-for-agent",
+        "description": "Fully specified, ready for an AFK agent",
+        "color": "0e8a16"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWa58g",
+        "name": "library",
+        "description": "Concerns the shared Collection Library (ship.py, references)",
+        "color": "0e8a16"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdF9w",
+        "name": "skill:redline",
+        "description": "Concerns the redline skill",
+        "color": "1d76db"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdGhg",
+        "name": "skill:write",
+        "description": "Concerns the write skill",
+        "color": "1d76db"
+      }
+    ],
+    "number": 332,
+    "state": "CLOSED",
+    "title": "Förenkla ABT och PAC och ta bort automatiskt teknikval för de fem webbgenrerna"
+  },
+  {
+    "labels": [
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRUuQ",
+        "name": "enhancement",
+        "description": "New feature or request",
+        "color": "a2eeef"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACw0oKnA",
+        "name": "ready-for-agent",
+        "description": "Fully specified, ready for an AFK agent",
+        "color": "0e8a16"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWa58g",
+        "name": "library",
+        "description": "Concerns the shared Collection Library (ship.py, references)",
+        "color": "0e8a16"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdF9w",
+        "name": "skill:redline",
+        "description": "Concerns the redline skill",
+        "color": "1d76db"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdGhg",
+        "name": "skill:write",
+        "description": "Concerns the write skill",
+        "color": "1d76db"
+      }
+    ],
+    "number": 331,
+    "state": "CLOSED",
+    "title": "Gör svensk skrivtradition och webbkrav till en gemensam, faktiskt laddad skrivgrund"
+  },
+  {
+    "labels": [
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRUuQ",
+        "name": "enhancement",
+        "description": "New feature or request",
+        "color": "a2eeef"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACw0oKnA",
+        "name": "ready-for-agent",
+        "description": "Fully specified, ready for an AFK agent",
+        "color": "0e8a16"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWa58g",
+        "name": "library",
+        "description": "Concerns the shared Collection Library (ship.py, references)",
+        "color": "0e8a16"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdF9w",
+        "name": "skill:redline",
+        "description": "Concerns the redline skill",
+        "color": "1d76db"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdGhg",
+        "name": "skill:write",
+        "description": "Concerns the write skill",
+        "color": "1d76db"
+      }
+    ],
+    "number": 330,
+    "state": "CLOSED",
+    "title": "Förankra redaktionella kvalitetskrav i originalen och frys en utvärderingsmatris"
+  },
+  {
+    "labels": [
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRUuQ",
+        "name": "enhancement",
+        "description": "New feature or request",
+        "color": "a2eeef"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWa58g",
+        "name": "library",
+        "description": "Concerns the shared Collection Library (ship.py, references)",
+        "color": "0e8a16"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdF9w",
+        "name": "skill:redline",
+        "description": "Concerns the redline skill",
+        "color": "1d76db"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdGhg",
+        "name": "skill:write",
+        "description": "Concerns the write skill",
+        "color": "1d76db"
+      }
+    ],
+    "number": 329,
+    "state": "CLOSED",
+    "title": "Återställ svenskt redaktionellt hantverk i Write och Redlines fem webbgenrer"
+  },
+  {
+    "labels": [
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRUlQ",
+        "name": "bug",
+        "description": "Something isn't working",
+        "color": "d73a4a"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWa58g",
+        "name": "library",
+        "description": "Concerns the shared Collection Library (ship.py, references)",
+        "color": "0e8a16"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdFqw",
+        "name": "skill:proofread",
+        "description": "Concerns the proofread skill",
+        "color": "1d76db"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdF9w",
+        "name": "skill:redline",
+        "description": "Concerns the redline skill",
+        "color": "1d76db"
+      }
+    ],
+    "number": 328,
+    "state": "CLOSED",
+    "title": "Recover from agent-generated invocation errors without relaxing user syntax validation"
+  },
+  {
+    "labels": [
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRUuQ",
+        "name": "enhancement",
+        "description": "New feature or request",
+        "color": "a2eeef"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACw0oKnA",
+        "name": "ready-for-agent",
+        "description": "Fully specified, ready for an AFK agent",
+        "color": "0e8a16"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWa58g",
+        "name": "library",
+        "description": "Concerns the shared Collection Library (ship.py, references)",
+        "color": "0e8a16"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdF9w",
+        "name": "skill:redline",
+        "description": "Concerns the redline skill",
+        "color": "1d76db"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdGhg",
+        "name": "skill:write",
+        "description": "Concerns the write skill",
+        "color": "1d76db"
+      }
+    ],
+    "number": 325,
+    "state": "CLOSED",
+    "title": "Visa installerade genrer och tekniker under respektive flagga i Writes och Redlines hjälp"
+  },
+  {
+    "labels": [
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACwmRUuQ",
+        "name": "enhancement",
+        "description": "New feature or request",
+        "color": "a2eeef"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACw0oKnA",
+        "name": "ready-for-agent",
+        "description": "Fully specified, ready for an AFK agent",
+        "color": "0e8a16"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWa58g",
+        "name": "library",
+        "description": "Concerns the shared Collection Library (ship.py, references)",
+        "color": "0e8a16"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdF9w",
+        "name": "skill:redline",
+        "description": "Concerns the redline skill",
+        "color": "1d76db"
+      },
+      {
+        "id": "LA_kwDOT6J8Bs8AAAACzWdGhg",
+        "name": "skill:write",
+        "description": "Concerns the write skill",
+        "color": "1d76db"
+      }
+    ],
+    "number": 244,
+    "state": "CLOSED",
+    "title": "library: A genre names the technique it is ordinarily written with"
+  }
+]

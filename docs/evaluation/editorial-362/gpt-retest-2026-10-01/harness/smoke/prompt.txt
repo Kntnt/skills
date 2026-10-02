@@ -1,0 +1,1 @@
+Capability smoke test only: start one fresh subagent, without a model or effort override or history, that replies CAPABILITY_OK. Await native completion; then reply CAPABILITY_OK. Do not invoke a Skill or change any file.

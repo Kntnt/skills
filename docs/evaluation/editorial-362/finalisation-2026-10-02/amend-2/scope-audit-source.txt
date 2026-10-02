@@ -1,0 +1,42 @@
+"""Check the whole owned surface without changing historical artifacts."""
+import hashlib
+import json
+import subprocess
+from pathlib import Path
+ROOT=Path('/Users/thomas/Projects/skills/.git/kntnt-orchestrate/362')
+RECEIPTS=ROOT/'docs/evaluation/editorial-362/finalisation-2026-10-02/amend-2'
+BASE='5b0260283b1d1597ca1ed2dddc602888dac7119d'
+PREVIOUS='71987cb9c6d23ffe49ddbc01b3dcb49d526a9400'
+def git(*args, data=None):
+    return subprocess.run(['git',*args],cwd=ROOT,input=data,capture_output=True,check=True).stdout
+shipped=git('diff','--name-only',BASE,'--','skills').decode().splitlines()
+assert not shipped, shipped
+contracts=['CONTRIBUTING.md','AGENTS.md','CONTEXT.md','CHANGELOG.md','docs/evaluation/records/README.md']
+assert not git('diff','--name-only',BASE,'--',*contracts).strip()
+assert not git('diff','--name-only',BASE,'--','docs/adr','docs/evaluation/editorial-329').strip()
+inventory=json.loads((RECEIPTS.parent/'source-inventory.json').read_text())
+for entry in inventory['files']:
+    contents=(ROOT/entry['path']).read_bytes()
+    assert len(contents)==entry['bytes'],entry['path']
+    assert hashlib.sha256(contents).hexdigest()==entry['sha256'],entry['path']
+prior=git('ls-tree','-r',PREVIOUS,'--','docs/evaluation').decode().splitlines()
+expected=[]
+paths=[]
+for entry in prior:
+    metadata,path=entry.split('\t',1)
+    expected.append(metadata.split()[2])
+    paths.append(path)
+actual=git('hash-object','--no-filters','--stdin-paths',data=('\n'.join(paths)+'\n').encode()).decode().splitlines()
+assert len(actual)==len(expected)
+assert actual==expected, [p for p,e,a in zip(paths,expected,actual) if e!=a]
+changed=git('diff','--name-only',BASE).decode().splitlines()
+allowed=['docs/evaluation/','.kntnt-orchestrate/362.md','tests/test_run.py','tests/test_editorial_362_evidence.py']
+assert all(any(p==prefix or p.startswith(prefix) for prefix in allowed) for p in changed), changed
+note=(ROOT/'.kntnt-orchestrate/362.md').read_text()
+assert 'CHANGELOG.md' not in note and 'registry compatibility repair' not in note
+commands=json.loads((RECEIPTS/'gate-commands.json').read_text())
+contributing=(ROOT/'CONTRIBUTING.md').read_text()
+assert all(command in contributing for command in commands)
+result={'method':'Batched raw-byte Git blob audit of every pre-amend evaluation file; complete shipped-tree/base comparison; independent source-inventory hashes. No Skill or semantic judge launched.','ticket_base':BASE,'amend_base':PREVIOUS,'changed_shipped_paths':shipped,'unchanged_contracts':contracts,'adr_and_editorial_329_unchanged':True,'source_inventory_files_verified':len(inventory['files']),'source_inventory_bytes_verified':sum(entry['bytes'] for entry in inventory['files']),'pre_amend_evaluation_files_unchanged':len(prior),'remaining_changed_surfaces':allowed,'catalog_identical_to_ticket_base':True,'proposed_product_changelog_removed':True,'all_four_gate_commands_unchanged':True,'retained_source_worktree_accessed_or_written':False,'limits':'Source-worktree preservation was independently checked before this amendment. This audit constrains local bytes only and does not infer a new source-worktree observation.'}
+(RECEIPTS/'scope-and-preservation.json').write_text(json.dumps(result,indent=2)+'\n')
+print(json.dumps(result,indent=2))

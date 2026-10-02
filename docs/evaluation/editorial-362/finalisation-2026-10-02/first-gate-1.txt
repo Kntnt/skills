@@ -1,0 +1,64 @@
+Installed 1 package in 1ms
+EXE001 Shebang is present but file is not executable
+ --> docs/evaluation/editorial-362/finalisation-2026-10-02/audit.py:1:1
+  |
+1 | #!/usr/bin/env -S uv run --script
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2 | # /// script
+3 | # requires-python = ">=3.12"
+  |
+
+I001 [*] Import block is un-sorted or un-formatted
+  --> docs/evaluation/editorial-362/finalisation-2026-10-02/audit.py:7:1
+   |
+ 5 |   """Audit retained retest bytes and native lifecycle without running a Skill."""
+ 6 |
+ 7 | / from __future__ import annotations
+ 8 | |
+ 9 | | import hashlib
+10 | | import json
+11 | | import re
+12 | | import statistics
+13 | | from pathlib import Path
+14 | | from typing import Any
+   | |______________________^
+help: Organize imports
+   |
+15 |
+   -
+16 | HERE = Path(__file__).resolve().parent
+   |
+
+I001 [*] Import block is un-sorted or un-formatted
+ --> tests/test_editorial_362_evidence.py:3:1
+  |
+1 |   """Keep the completed retest attributable to its untouched source worktree."""
+2 |
+3 | / from __future__ import annotations
+4 | |
+5 | | import hashlib
+6 | | import json
+7 | | import subprocess
+8 | | import sys
+9 | | from pathlib import Path
+  | |________________________^
+help: Organize imports
+   |
+10 |
+   -
+11 | ROOT = Path(__file__).resolve().parents[1]
+   |
+
+PLW1510 `subprocess.run` without explicit `check` argument
+  --> tests/test_editorial_362_evidence.py:39:14
+   |
+38 |     # Run the evaluator's public read-only command in the repository working directory.
+39 |     result = subprocess.run(
+   |              ^^^^^^^^^^^^^^
+40 |         [sys.executable, str(FINALISATION / "audit.py")],
+41 |         cwd=ROOT,
+   |
+help: Add explicit `check=False`
+
+Found 4 errors.
+[*] 2 fixable with the `--fix` option.

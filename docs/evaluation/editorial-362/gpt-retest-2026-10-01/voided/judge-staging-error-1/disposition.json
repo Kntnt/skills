@@ -1,0 +1,5 @@
+{
+  "status": "not_launched",
+  "counted": false,
+  "reason": "Evaluator attempted dependent launch after input-preparation failed on the void sixth checker. Missing input prevented native process launch; no judge ran."
+}

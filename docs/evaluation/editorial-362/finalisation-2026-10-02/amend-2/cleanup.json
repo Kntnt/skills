@@ -1,0 +1,92 @@
+{
+  "recorded_processes": [
+    {
+      "pid": 16041,
+      "absent": true
+    },
+    {
+      "pid": 16049,
+      "absent": true
+    },
+    {
+      "pid": 16058,
+      "absent": true
+    },
+    {
+      "pid": 56670,
+      "absent": true
+    },
+    {
+      "pid": 56680,
+      "absent": true
+    },
+    {
+      "pid": 56688,
+      "absent": true
+    },
+    {
+      "pid": 57779,
+      "absent": true
+    },
+    {
+      "pid": 57792,
+      "absent": true
+    },
+    {
+      "pid": 57801,
+      "absent": true
+    },
+    {
+      "pid": 58621,
+      "absent": true
+    },
+    {
+      "pid": 58629,
+      "absent": true
+    },
+    {
+      "pid": 58637,
+      "absent": true
+    },
+    {
+      "pid": 58649,
+      "absent": true
+    },
+    {
+      "pid": 58659,
+      "absent": true
+    },
+    {
+      "pid": 58682,
+      "absent": true
+    },
+    {
+      "pid": 62136,
+      "absent": true
+    }
+  ],
+  "all_recorded_process_groups_absent": true,
+  "all_tool_wait_sessions_completed": true,
+  "stopped_per_file_audit_exit": 143,
+  "owned_uv_lock_existed_before_amendment": false,
+  "owned_uv_lock_after_gate_sha256": "c59e3d361f8f175c3d661018029aeb9df00761b74d70f79d6d1e3971fcc59082",
+  "owned_uv_lock_after_gate_text": "version = 1\nrevision = 3\nrequires-python = \">=3.12\"\n",
+  "ignored_status_before_cleanup": " M .kntnt-orchestrate/362.md\n M skills/code/orchestrate/scripts/run.py\n M skills/kntnt/catalog.json\n M tests/test_run.py\n?? docs/evaluation/editorial-362/finalisation-2026-10-02/amend-2/\n!! .pytest_cache/\n!! uv.lock\n",
+  "retained_deliverables": [
+    "All pre-amend evidence, handoffs, records and verdict receipts",
+    "All amendment receipts in docs/evaluation/editorial-362/finalisation-2026-10-02/amend-2/"
+  ],
+  "deletion_pending": false,
+  "registration_manifests_retained": 2,
+  "registration_method": "Retain all manifests from this amendment-owned recording root, including differing discovered shell/Harness session keys.",
+  "deleted_paths": [
+    "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-362-scratch/amend-2-temporary",
+    "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-362-scratch/amend-2-supervisor.py",
+    "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-362-scratch/amend-2-audit.py",
+    "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/362/.pytest_cache",
+    "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/362/uv.lock"
+  ],
+  "all_deleted_paths_absent": true,
+  "completed_utc": "2026-10-02T11:49:49.421134+00:00",
+  "status_after_cleanup": " M .kntnt-orchestrate/362.md\n M skills/code/orchestrate/scripts/run.py\n M skills/kntnt/catalog.json\n M tests/test_run.py\n?? docs/evaluation/editorial-362/finalisation-2026-10-02/amend-2/\n"
+}

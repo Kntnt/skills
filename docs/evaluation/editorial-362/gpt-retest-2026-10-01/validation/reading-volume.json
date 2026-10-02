@@ -1,0 +1,14 @@
+{
+  "skills/editorial/write/SKILL.md": 2839,
+  "skills/editorial/write/references/source-check.md": 2150,
+  "skills/editorial/write/references/quotations.md": 671,
+  "skills/kntnt/library/references/invocation-envelope.md": 1176,
+  "skills/kntnt/library/references/delivery.md": 2675,
+  "skills/kntnt/library/references/editorial/base.md": 597,
+  "skills/kntnt/library/references/editorial/genres/opinion.md": 216,
+  "skills/kntnt/library/references/editorial/web-craft.md": 184,
+  "skills/kntnt/library/references/editorial/article-anatomy.md": 962,
+  "skills/kntnt/library/references/editorial/headlines.md": 844,
+  "sum_unique_core_resource_words": 12314,
+  "method": "Whitespace words in each named current immutable resource, counted once, excluding supplied source and locale composition output. Native traces retain actual repeated/truncated/recovered reads; this is resource volume, not a measured token charge or causal performance claim."
+}

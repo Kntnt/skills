@@ -1,0 +1,93 @@
+Using CPython 3.14.8 interpreter at: /opt/homebrew/opt/python@3.14/bin/python3.14
+Creating virtual environment at: .venv
+warning: No `requires-python` value found in the workspace. Defaulting to `>=3.14`.
+Downloading pygments (1.2MiB)
+ Downloaded pygments
+Installed 8 packages in 7ms
+============================= test session starts ==============================
+platform darwin -- Python 3.14.8, pytest-9.1.1, pluggy-1.6.0
+rootdir: /Users/thomas/Projects/skills/.git/kntnt-orchestrate/362
+configfile: pyproject.toml
+plugins: xdist-3.8.0
+created: 14/14 workers
+14 workers [2 items]
+
+FF                                                                       [100%]
+=================================== FAILURES ===================================
+___ test_the_registries_the_engine_finds_are_the_ones_this_repository_keeps ____
+[gw0] darwin -- Python 3.14.8 /private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-362-scratch/amend-1-temporary/uv-cache/builds-v0/.tmpoOQ0iI/bin/python
+
+    def test_the_registries_the_engine_finds_are_the_ones_this_repository_keeps() -> None:
+        """The detection is deterministic and unconfigured, so what it answers for
+        this repository is what this repository actually keeps: the decision
+        records tracked under `docs/adr`, and nothing else in the index."""
+    
+        # Compare the engine with the same tracked-file boundary its contract names.
+        found = _run().numbered_registries(REPO_ROOT)
+        records = sorted(
+            Path(path)
+            for path in _git(REPO_ROOT, "ls-files", "docs/adr").stdout.splitlines()
+            if re.match(r"^docs/adr/[0-9]{4}-.+\.md$", path)
+        )
+    
+        assert records, "this repository tracks no numbered decision records"
+>       assert set(found) == {"docs/adr"}
+E       AssertionError: assert {'docs/adr', ...ersions', ...} == {'docs/adr'}
+E         
+E         Extra items in the left set:
+E         'docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r3/file-versions'
+E         'docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r4/file-versions'
+E         'docs/evaluation/editorial-362/gpt-retest-2026-10-01/harness/smoke/file-versions'
+E         'docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_US-r3/file-versions'
+E         'docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_GB-r1/file-versions'...
+E         
+E         ...Full output truncated (18 lines hidden), use '-vv' to show
+
+tests/test_run.py:10074: AssertionError
+____ test_isolate_reserves_records_but_not_manifested_file_version_captures ____
+[gw1] darwin -- Python 3.14.8 /private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-362-scratch/amend-1-temporary/uv-cache/builds-v0/.tmpoOQ0iI/bin/python
+
+tmp_path = PosixPath('/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-362-scratch/amend-1-temporary/pytest-of-thomas/pytest-0/popen-gw1/test_isolate_reserves_records_0')
+
+    def test_isolate_reserves_records_but_not_manifested_file_version_captures(
+        tmp_path: Path,
+    ) -> None:
+        """Immutable harness captures never need a number for a new authored record."""
+    
+        # Track both real registries and the harness's distinct archived-file layout.
+        repo = _init_repo(tmp_path / "proj")
+        _registry(repo, "docs/adr", "0001-the-first.md")
+        _registry(repo, "captures/run/file-versions", "0000-83265898e21c.md")
+        manifest = repo / "captures/run/file-versions.json"
+        manifest.write_text(
+            json.dumps([{"capture": "0000-83265898e21c.md"}]), encoding="utf-8"
+        )
+        _registry(repo, "captures/judge/file-versions", "0001-affecc67c51c.txt")
+        (repo / "captures/judge/file-versions.json").write_text(
+            json.dumps([{"capture": "0001-affecc67c51c.txt"}]), encoding="utf-8"
+        )
+        _registry(repo, "docs/other/file-versions", "0004-an-authored-record.md")
+        _registry(repo, "captures/records", "0006-an-authored-record.md")
+        _git(repo, "add", "captures")
+        _git(repo, "commit", "-m", "retain the capture manifests")
+    
+        # Reservation remains discoverable outside manifested capture directories.
+        result = _engine(repo, "isolate", "--ticket", "9")
+    
+        assert result.returncode == 0, result.stderr
+>       assert json.loads(result.stdout)["reservations"] == [
+            {"directory": "captures/records", "number": "0007"},
+            {"directory": "docs/adr", "number": "0002"},
+            {"directory": "docs/other/file-versions", "number": "0005"},
+        ]
+E       AssertionError: assert [{'directory'...ber': '0005'}] == [{'directory'...ber': '0005'}]
+E         
+E         At index 0 diff: {'directory': 'captures/judge/file-versions', 'number': '0002'} != {'directory': 'captures/records', 'number': '0007'}
+E         Left contains 2 more items, first extra item: {'directory': 'docs/adr', 'number': '0002'}
+E         Use -v to get more diff
+
+tests/test_run.py:10105: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_run.py::test_the_registries_the_engine_finds_are_the_ones_this_repository_keeps
+FAILED tests/test_run.py::test_isolate_reserves_records_but_not_manifested_file_version_captures
+============================== 2 failed in 2.73s ===============================

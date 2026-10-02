@@ -1,0 +1,316 @@
+Installed 1 package in 12ms
+{
+  "origin": "Kntnt/skills",
+  "manager_digest": "8a4e2d0da346db36c5f804ce72e7c5ebb431a1cb26d79371646d6cf7484b39e6",
+  "skills": [
+    {
+      "name": "agents-md",
+      "category": "agents",
+      "description": "AGENTS.md: create, shrink, or tend the current project's always-loaded file and docs/agents/ after a task when a non-discoverable fact is new, a line is stale or sprawling, or a pointer is missing; also `/agents-md` and `--force`.",
+      "digest": "03a3db85bdc39b43044c292eaed456af96048d8a525a49ddfbe8b1bd34755ae7",
+      "binaries": [
+        "git",
+        "uv"
+      ],
+      "skills": [],
+      "externals": [],
+      "capabilities": []
+    },
+    {
+      "name": "delegation",
+      "category": "agents",
+      "description": "Turn delegation mode on or off — you orchestrate, subagents execute — for this session, this project, or your user account.",
+      "digest": "43525c5d2d7a035256faa3954cac769756612dcb1cbcac36a6871d4c05cf38f7",
+      "binaries": [
+        "uv"
+      ],
+      "skills": [
+        "model-selector"
+      ],
+      "externals": [],
+      "capabilities": []
+    },
+    {
+      "name": "explain",
+      "category": "agents",
+      "description": "Explain the reply just given, or whatever the instruction names, better than it was explained the first time.",
+      "digest": "766edd2d8cdfc198014673a67f30508fa4d1b3ddf7f33d0d100e47d1ec6e7de6",
+      "binaries": [
+        "uv"
+      ],
+      "skills": [],
+      "externals": [],
+      "capabilities": []
+    },
+    {
+      "name": "commit",
+      "category": "code",
+      "description": "Commit the working tree on the current branch, without pushing.",
+      "digest": "232ea1cb3513f1848160cefbb61f0bfeef7b232b7691c08f4c460bcbc9516860",
+      "binaries": [
+        "git",
+        "uv"
+      ],
+      "skills": [],
+      "externals": [],
+      "capabilities": []
+    },
+    {
+      "name": "orchestrate",
+      "category": "code",
+      "description": "Work the tracker's ready-for-agent tickets unattended — claim, build, and independently verify them a wave at a time, integrating each wave into the current branch.",
+      "digest": "4417df39a3a5897b8b9388d4bcf746b02c322866fe57ac43f514e4c3b18bef2a",
+      "binaries": [
+        "git",
+        "gh",
+        "uv"
+      ],
+      "skills": [
+        "model-selector"
+      ],
+      "externals": [],
+      "capabilities": [
+        "subagents"
+      ]
+    },
+    {
+      "name": "push",
+      "category": "code",
+      "description": "Follow commit, then push the current branch.",
+      "digest": "0daaf04e1931c059b8aa008687596a427d784b5eb149741b8e505ebe9cf0a311",
+      "binaries": [
+        "git",
+        "uv"
+      ],
+      "skills": [
+        "commit"
+      ],
+      "externals": [],
+      "capabilities": []
+    },
+    {
+      "name": "ready-for-agent-check",
+      "category": "code",
+      "description": "Read the tracker's ready-for-agent tickets the way an unattended builder will — one subagent per ticket, in a context that did not write it — and report what would stop that builder, before a run spends a wave finding out.",
+      "digest": "e1306439af656ddc6b5869781116ab8b304ea12c44595b6e8a3f12b2c3080ac4",
+      "binaries": [
+        "gh",
+        "uv"
+      ],
+      "skills": [],
+      "externals": [],
+      "capabilities": [
+        "subagents"
+      ]
+    },
+    {
+      "name": "release",
+      "category": "code",
+      "description": "Ship a version — changelog, bump, push, tag, and GitHub release.",
+      "digest": "9b6b2700471672bf5573114915e5d9d062993de74026334657a0b340f64d3853",
+      "binaries": [
+        "git",
+        "uv"
+      ],
+      "skills": [
+        "push"
+      ],
+      "externals": [],
+      "capabilities": []
+    },
+    {
+      "name": "brief",
+      "category": "editorial",
+      "description": "Interview for, draft from supplied material, or review a Writing Brief against the Library's writing-brief template of questions to answer before you write. Start it on your own only when the literal token `/brief` appears in the request or the user explicitly asks for a brief according to this writing-brief template. Not for a bare mention of the word brief, a request for a short answer, or an unrelated project or delegation brief. A user may also invoke it by name at any time.",
+      "digest": "e83cb27411debd998afc1ff304f24f85cdd82eb41c0c99605c7c2f3be356a0a6",
+      "binaries": [
+        "uv"
+      ],
+      "skills": [],
+      "externals": [],
+      "capabilities": []
+    },
+    {
+      "name": "proofread",
+      "category": "editorial",
+      "description": "Correct only mechanical language errors — spelling, grammar, punctuation, agreement, inflection, duplicated or missing words, and locale mechanics — in one supplied text, preserving its wording, meaning, tone, structure, formatting, and metadata. Start it on your own only when a specific text is at hand and the request either uses a proofreading term (proofread, spell-check, copyedit, fix the typos, korrekturläs, rätta stavfelen) or is unambiguously limited to mechanical language errors. Not for a request to edit, rewrite, polish, improve, tighten, or review a text — each of those asks for changes this Skill refuses to make. A user may also invoke it by name at any time.",
+      "digest": "da1b20b6da6cb2bd2bb84be606e75f1acf8b3908372f390d61ce265770990809",
+      "binaries": [
+        "uv"
+      ],
+      "skills": [],
+      "externals": [],
+      "capabilities": []
+    },
+    {
+      "name": "redline",
+      "category": "editorial",
+      "description": "Review one supplied text against this collection's editorial contract — its genre, its optional technique, its language, and the shared anti-slop catalogue — and, when selected, a Writing Brief; repair what the review found through a bounded budget of fresh correction subagents, report whatever is left unresolved, and finish with exactly one mechanical pass.",
+      "digest": "f5ee3b1e7e87f649982a547e121969fe0b51c0f4ed1180d12535d4461855d452",
+      "binaries": [
+        "uv"
+      ],
+      "skills": [
+        "proofread"
+      ],
+      "externals": [],
+      "capabilities": [
+        "subagents"
+      ]
+    },
+    {
+      "name": "unslop",
+      "category": "editorial",
+      "description": "Apply this collection's anti-slop pass to one supplied text and nothing else — false contrasts, empty openings, importance inflation, vague attribution, synonym cycling, robotic rhythm, and generic conclusions — repairing what it finds through a bounded budget of fresh correction subagents and reporting whatever is left. It selects no genre, no technique, and no editorial contract, and it runs no mechanical pass.",
+      "digest": "42df38ee1dbc251e211d95872a51c09764196f8b1f88ced22b822747935e41a5",
+      "binaries": [
+        "uv"
+      ],
+      "skills": [],
+      "externals": [],
+      "capabilities": [
+        "subagents"
+      ]
+    },
+    {
+      "name": "write",
+      "category": "editorial",
+      "description": "Turn a brief and its source material into one truthful first draft in the target language, and stop there. Start it on your own only when the literal token `/write` appears in the request or in an instruction the request points at — inside a longer message, a document, or a checklist that says to run it. Not for a bare request to write, draft, compose, summarise, rewrite, edit, or review something — without `/write` in it, such a request is answered as it otherwise would be. A user may also invoke it by name at any time.",
+      "digest": "a474a1607f284a817e9e4784475431db1200f5eb269140dd42fc6f46c20b97aa",
+      "binaries": [
+        "uv"
+      ],
+      "skills": [],
+      "externals": [],
+      "capabilities": [
+        "subagents"
+      ]
+    },
+    {
+      "name": "cloudns",
+      "category": "infrastructure",
+      "description": "Read and change DNS zones and records at ClouDNS on the user's behalf. Not for DNS at any other provider, not for registering, renewing or transferring domain names, and not for web hosting, email or SSL.",
+      "digest": "b859f665bfc74a70df96c3e81da9dc2f2687faa10e7061eb7162613bcaca1df7",
+      "binaries": [
+        "uv"
+      ],
+      "skills": [],
+      "externals": [],
+      "capabilities": []
+    },
+    {
+      "name": "hetzner",
+      "category": "infrastructure",
+      "description": "Provision and operate Hetzner Cloud servers and deploy or maintain their websites and applications through hcloud, SSH, and cloud-init. Use for Hetzner Cloud infrastructure or workloads hosted there; excludes Robot dedicated servers and Object Storage.",
+      "digest": "1131b459a46d4d021bc7a46db9b29ebe50a3ef03505677b4210024f92ea220e4",
+      "binaries": [
+        "uv"
+      ],
+      "skills": [],
+      "externals": [],
+      "capabilities": []
+    },
+    {
+      "name": "nodeping",
+      "category": "infrastructure",
+      "description": "Read and change uptime monitoring at NodePing on the user's behalf — checks, results, contacts, schedules and notifications. Not for monitoring at any other provider, not for DNS, and not for server or site administration.",
+      "digest": "5049601ccb9d98ca31ab9b4aeaca4410a3a93cdaa64301e2bd7e0c2f7121f6c2",
+      "binaries": [
+        "uv"
+      ],
+      "skills": [],
+      "externals": [],
+      "capabilities": []
+    },
+    {
+      "name": "postmark",
+      "category": "infrastructure",
+      "description": "Inspect and change email at Postmark on the user's behalf — servers and message streams, domains and their DKIM and Return-Path records, sender signatures, templates, suppressions, bounces, delivery statistics, message search, webhooks, and a send the user asks for. Use for email at Postmark only; excludes other email providers, mailboxes, and setting DNS records.",
+      "digest": "982fa1971c32d99ad303fff12b09d3fb799d9e806375157b81812fe9b0286181",
+      "binaries": [
+        "uv"
+      ],
+      "skills": [],
+      "externals": [],
+      "capabilities": []
+    },
+    {
+      "name": "model-selector",
+      "category": "models",
+      "description": "Choose the model and deliberation level that completes delegated work at the lowest total cost, or in the least time where the user has chosen time. Never used implicitly: a Skill that routes work runs its script.",
+      "digest": "aaa0261f497da0a9acf8d1a6d9eb1c7ae359254c58d6898255d17bbc2bf7e529",
+      "binaries": [
+        "uv"
+      ],
+      "skills": [],
+      "externals": [],
+      "capabilities": []
+    },
+    {
+      "name": "rename-invoices",
+      "category": "productivity",
+      "description": "Safely plan and apply configurable filenames for text-based accounting PDFs.",
+      "digest": "36271de02926d11795cda4d5f9ced76157041043a3cae7975b5087bce87ec5e9",
+      "binaries": [
+        "pdftotext",
+        "uv"
+      ],
+      "skills": [],
+      "externals": [],
+      "capabilities": []
+    },
+    {
+      "name": "mirror",
+      "category": "web",
+      "description": "Copy a web page, the pages under it that its links, sitemaps and feeds reach, and everything they need to display to disk, so they open in a browser with nothing fetched from the network.",
+      "digest": "905928aa1e1bc5664a91b29d50f5d4e10df9992b9b3239a940e150e53ec57bb0",
+      "binaries": [
+        "uv",
+        "agent-browser"
+      ],
+      "skills": [],
+      "externals": [],
+      "capabilities": []
+    }
+  ],
+  "features": [
+    {
+      "name": "session-cleanup",
+      "category": "environment",
+      "description": "Leave the machine as the session found it — the agent records what it starts, and a lifecycle hook stops exactly that when the session ends or the next one begins.",
+      "digest": "3c34076d8622c22225ad8acdef02463a02451dda7ee46b2ef2606f4560acd7c3",
+      "binaries": [
+        "uv"
+      ],
+      "capabilities": [],
+      "harnesses": [
+        "claude-code",
+        "codex",
+        "opencode"
+      ],
+      "writes": [
+        "A fenced block, delimited by `<!-- kntnt.session-cleanup begin -->` and `<!-- kntnt.session-cleanup end -->`, at the end of each Harness's own global instruction file — `~/.claude/CLAUDE.md`, `~/.codex/AGENTS.md`, `~/.config/opencode/AGENTS.md`. These are files you own and read; everything above the fence is left exactly as it is, and disabling the Feature takes the fenced block away and nothing else.",
+        "One session-lifecycle entry per Harness, in that Harness's own hook table — `~/.claude/settings.json`, `~/.codex/hooks.json` — or, for OpenCode, as the plugin file `~/.config/opencode/plugins/kntnt.session-cleanup.js`.",
+        "Per-session manifests, and one log of every action taken, under `~/.kntnt/session-cleanup/`. Nothing is written outside these three places."
+      ]
+    },
+    {
+      "name": "statusline",
+      "category": "environment",
+      "description": "A two-line Claude Code status line — path, worktree, branch and working-tree state above; model, reasoning effort, context usage and subscription windows below.",
+      "digest": "c34304889f3946e4518ab169b1c9a04b64de579bc74502f10d87c55fbdd5ea30",
+      "binaries": [
+        "git",
+        "jq"
+      ],
+      "capabilities": [],
+      "harnesses": [
+        "claude-code"
+      ],
+      "writes": [
+        "`statusLine` in `~/.claude/settings.json`, pointing at the shipped `statusline.sh` inside this collection's installed Manager. It is a single-valued setting, so it cannot hold two: where it already runs a command that is not this collection's, the row names that command and the confirmation asks whether to replace it, and nothing is written until you answer yes. Nothing is kept of what is replaced, so disabling the Feature afterwards clears the setting rather than restoring the command that was there. Disabling leaves the setting alone where this collection does not hold it.",
+        "`~/.kntnt/model-selector/quota.json`, this machine's weekly subscription window as Claude Code reported it on this render: the share used, when the window resets, how long the window is, and when the line was written. It is one filter over the payload already read — nothing is fetched and no credential could go in it — written to a temporary file beside its destination and moved into place, and any failure of it is swallowed and leaves the previous file standing. Model Selector's quota guard reads it, so Enabling this Feature is what arms that guard for the Claude channel and disabling it is what disarms it. Nothing is written where the payload carries no weekly window, which is every render before a session's first API response and every machine not on a Pro or Max plan."
+      ]
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "method": "Rehash all source-inventory files after the complete gate.",
+  "verified_files": 630,
+  "all_bytes_and_hashes_match": true,
+  "source_worktree_read_or_written": false,
+  "previous_handoffs_rewritten": false
+}

@@ -1,0 +1,24 @@
+[
+  {
+    "command": "python3 /private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-362-scratch/amend-2-audit.py",
+    "pid": 16058,
+    "process_group": 16058,
+    "started_unix": 1790941543.901956,
+    "registration": {
+      "manifest": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-362-scratch/amend-2-temporary/registration-home/.kntnt/session-cleanup/sessions/01a0fc63-9fb0-7f30-a86d-c9f8886889c5.jsonl",
+      "recorded": {
+        "at": "2026-10-02T11:45:43+00:00",
+        "id": "16058",
+        "kind": "pid",
+        "started": "Fri Oct  2 13:45:43 2026",
+        "why": "Ticket 362 amend 2 audit command 1"
+      },
+      "session": "01a0fc63-9fb0-7f30-a86d-c9f8886889c5"
+    },
+    "output": "docs/evaluation/editorial-362/finalisation-2026-10-02/amend-2/audit-1.txt",
+    "returncode": 0,
+    "elapsed_seconds": 6.078497886657715,
+    "completed_unix": 1790941549.980455,
+    "process_group_absent": true
+  }
+]

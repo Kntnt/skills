@@ -1,0 +1,2529 @@
+{
+  "files": [
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/README.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/acceptance-disposition.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/criterion-scope.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/handoff.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/harness/campaign.py",
+      "origin": "committed at source head"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/harness/judge_campaign.py",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/harness/launches/campaign-results.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/harness/launches/judge-campaign-results.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/harness/launches/judge-launch-01.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/harness/launches/judge-launch-02.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/harness/launches/judge-launch-03.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/harness/launches/judge-launch-04.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/harness/launches/judge-launch-05.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/harness/launches/judge-launch-06.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/harness/launches/launch-03.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/harness/launches/launch-04.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/harness/launches/launch-05.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/harness/launches/launch-06.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/harness/launches/launch-07.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/harness/launches/launch-08.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/harness/launches/launch-09.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/harness/launches/launch-10.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/harness/launches/launch-11.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/harness/launches/launch-12.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/harness/launches/smoke-input.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/harness/launches/smoke-prompt.txt",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/harness/prepare_judge.py",
+      "origin": "uncommitted modification of source-head evaluator"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/harness/run.py",
+      "origin": "committed at source head"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/harness/smoke/cleanup.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/harness/smoke/file-versions/0000-a154cada2b08.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/harness/smoke/file-versions/0001-e7c5830fa52e.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/harness/smoke/file-versions.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/harness/smoke/filesystem-changes.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/harness/smoke/harness-config-after.toml",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/harness/smoke/harness-context.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/harness/smoke/input-stat.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/harness/smoke/inventory-after.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/harness/smoke/inventory-before.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/harness/smoke/invocation.txt",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/harness/smoke/location.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/harness/smoke/native-sessions/2026/10/01/rollout-2026-10-01T13-42-01-01a0f745-7ba4-7c61-a7aa-0868b0b81ee1.jsonl",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/harness/smoke/native-sessions/2026/10/01/rollout-2026-10-01T13-42-08-01a0f745-9883-7bc1-9f6d-37307119f9ce.jsonl",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/harness/smoke/process.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/harness/smoke/prompt.txt",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/harness/smoke/response.txt",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/harness/smoke/result.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/harness/smoke/run.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/harness/smoke/stderr.txt",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/harness/smoke/supplied-input.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/harness/smoke/trace.jsonl",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/identity.json",
+      "origin": "committed at source head"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_GB-r1/blind-input.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_GB-r1/captured-output.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_GB-r1/cleanup.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_GB-r1/file-versions/0000-be04fe6385ce.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_GB-r1/file-versions/0001-a44386629d36.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_GB-r1/file-versions/0002-affecc67c51c.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_GB-r1/file-versions/0003-1b7e0a9e7072.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_GB-r1/file-versions.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_GB-r1/filesystem-changes.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_GB-r1/harness-config-after.toml",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_GB-r1/harness-context.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_GB-r1/input-stat.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_GB-r1/inventory-after.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_GB-r1/inventory-before.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_GB-r1/invocation.txt",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_GB-r1/location.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_GB-r1/native-sessions/2026/10/01/rollout-2026-10-01T14-08-55-01a0f75e-1b94-7cc2-a049-4b71e719cc25.jsonl",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_GB-r1/process.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_GB-r1/response.txt",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_GB-r1/result.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_GB-r1/run.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_GB-r1/stderr.txt",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_GB-r1/supplied-input.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_GB-r1/trace.jsonl",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_GB-r2/blind-input.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_GB-r2/captured-output.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_GB-r2/cleanup.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_GB-r2/file-versions/0000-e73a383e94bc.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_GB-r2/file-versions/0001-f94903425ac1.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_GB-r2/file-versions/0002-73de954a8b24.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_GB-r2/file-versions.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_GB-r2/filesystem-changes.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_GB-r2/harness-config-after.toml",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_GB-r2/harness-context.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_GB-r2/input-stat.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_GB-r2/inventory-after.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_GB-r2/inventory-before.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_GB-r2/invocation.txt",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_GB-r2/location.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_GB-r2/native-sessions/2026/10/01/rollout-2026-10-01T14-29-34-01a0f771-025b-7a50-8e34-cbd6dfc781b5.jsonl",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_GB-r2/process.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_GB-r2/response.txt",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_GB-r2/result.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_GB-r2/run.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_GB-r2/stderr.txt",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_GB-r2/supplied-input.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_GB-r2/trace.jsonl",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_GB-r3/blind-input.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_GB-r3/captured-output.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_GB-r3/cleanup.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_GB-r3/file-versions/0000-48afbec82d5c.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_GB-r3/file-versions/0001-5fd1b2a4688c.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_GB-r3/file-versions/0002-d01734b2fbf9.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_GB-r3/file-versions.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_GB-r3/filesystem-changes.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_GB-r3/harness-config-after.toml",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_GB-r3/harness-context.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_GB-r3/input-stat.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_GB-r3/inventory-after.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_GB-r3/inventory-before.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_GB-r3/invocation.txt",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_GB-r3/location.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_GB-r3/native-sessions/2026/10/01/rollout-2026-10-01T15-10-40-01a0f796-a40b-7cc3-bb0a-a85067dc5554.jsonl",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_GB-r3/process.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_GB-r3/response.txt",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_GB-r3/result.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_GB-r3/run.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_GB-r3/stderr.txt",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_GB-r3/supplied-input.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_GB-r3/trace.jsonl",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_US-r1/blind-input.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_US-r1/captured-output.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_US-r1/cleanup.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_US-r1/file-versions/0000-aa8507d76e62.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_US-r1/file-versions/0001-c504d3ce2725.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_US-r1/file-versions/0002-3d059a599780.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_US-r1/file-versions.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_US-r1/filesystem-changes.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_US-r1/harness-config-after.toml",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_US-r1/harness-context.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_US-r1/input-stat.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_US-r1/inventory-after.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_US-r1/inventory-before.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_US-r1/invocation.txt",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_US-r1/location.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_US-r1/native-sessions/2026/10/01/rollout-2026-10-01T14-13-46-01a0f762-8c40-7c22-9b8f-7223b0297d0d.jsonl",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_US-r1/process.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_US-r1/response.txt",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_US-r1/result.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_US-r1/run.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_US-r1/stderr.txt",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_US-r1/supplied-input.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_US-r1/trace.jsonl",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_US-r2/blind-input.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_US-r2/captured-output.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_US-r2/cleanup.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_US-r2/file-versions/0000-4c72cf214e4d.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_US-r2/file-versions/0001-d80fd7412f7d.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_US-r2/file-versions/0002-3a69cfb650cf.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_US-r2/file-versions.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_US-r2/filesystem-changes.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_US-r2/harness-config-after.toml",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_US-r2/harness-context.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_US-r2/input-stat.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_US-r2/inventory-after.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_US-r2/inventory-before.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_US-r2/invocation.txt",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_US-r2/location.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_US-r2/native-sessions/2026/10/01/rollout-2026-10-01T14-37-26-01a0f778-37d0-7343-b0a0-1984d54f3962.jsonl",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_US-r2/process.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_US-r2/response.txt",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_US-r2/result.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_US-r2/run.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_US-r2/stderr.txt",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_US-r2/supplied-input.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_US-r2/trace.jsonl",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_US-r3/blind-input.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_US-r3/captured-output.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_US-r3/cleanup.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_US-r3/file-versions/0000-06e4a1f0cd7a.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_US-r3/file-versions/0001-be489f91f6ff.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_US-r3/file-versions/0002-bc4a3806f3da.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_US-r3/file-versions.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_US-r3/filesystem-changes.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_US-r3/harness-config-after.toml",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_US-r3/harness-context.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_US-r3/input-stat.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_US-r3/inventory-after.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_US-r3/inventory-before.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_US-r3/invocation.txt",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_US-r3/location.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_US-r3/native-sessions/2026/10/01/rollout-2026-10-01T14-48-22-01a0f782-3ae9-7641-abba-0e631af95b4b.jsonl",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_US-r3/process.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_US-r3/response.txt",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_US-r3/result.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_US-r3/run.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_US-r3/stderr.txt",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_US-r3/supplied-input.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_US-r3/trace.jsonl",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/p3-document-scope/blind-input.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/p3-document-scope/captured-output.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/p3-document-scope/cleanup.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/p3-document-scope/file-versions/0000-7c8e3f2c6515.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/p3-document-scope/file-versions/0001-da02e8f5667f.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/p3-document-scope/file-versions/0002-31d5f34413f2.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/p3-document-scope/file-versions/0003-2a5ccfb6076d.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/p3-document-scope/file-versions.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/p3-document-scope/filesystem-changes.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/p3-document-scope/harness-config-after.toml",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/p3-document-scope/harness-context.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/p3-document-scope/input-stat.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/p3-document-scope/inventory-after.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/p3-document-scope/inventory-before.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/p3-document-scope/invocation.txt",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/p3-document-scope/location.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/p3-document-scope/native-sessions/2026/10/01/rollout-2026-10-01T15-50-14-01a0f7ba-de27-7d42-b3cc-8dc9cd8d61c8.jsonl",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/p3-document-scope/process.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/p3-document-scope/response.txt",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/p3-document-scope/result.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/p3-document-scope/run.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/p3-document-scope/stderr.txt",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/p3-document-scope/supplied-input.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/p3-document-scope/trace.jsonl",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/owner-steering.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/plan.md",
+      "origin": "committed at source head"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/prompts/checker-judge.txt",
+      "origin": "committed at source head"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/prompts/checker.txt",
+      "origin": "committed at source head"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/prompts/write-en_GB.txt",
+      "origin": "committed at source head"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/prompts/write-en_US.txt",
+      "origin": "committed at source head"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/prompts/write-judge.txt",
+      "origin": "committed at source head"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r1/byte-comparisons.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r1/cleanup.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r1/draft.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r1/file-versions/0000-83265898e21c.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r1/file-versions/0001-390da9fb6689.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r1/file-versions/0002-ae98f4215313.txt",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r1/file-versions/0003-ae98f4215313.txt",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r1/file-versions/0004-ae98f4215313.txt",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r1/file-versions/0005-ae98f4215313.txt",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r1/file-versions/0006-ae98f4215313.txt",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r1/file-versions/0007-0f80bb5a7c66.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r1/file-versions/0008-af19ff7fba8f.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r1/file-versions/0009-ae969d547538.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r1/file-versions/0010-ad34c07dce83.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r1/file-versions/0011-aa935c5636da.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r1/file-versions.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r1/filesystem-changes.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r1/harness-config-after.toml",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r1/harness-context.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r1/identity-audit.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r1/input-stat.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r1/inventory-after.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r1/inventory-before.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r1/invocation.txt",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r1/judge-input-digest.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r1/location.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r1/native-sessions/2026/10/01/rollout-2026-10-01T13-43-24-01a0f746-bf0e-7cb3-80cd-9c63c2d7bef2.jsonl",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r1/native-sessions/2026/10/01/rollout-2026-10-01T13-48-17-01a0f74b-3ba7-7861-bb82-278fdabdc049.jsonl",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r1/native-sessions/2026/10/01/rollout-2026-10-01T13-57-24-01a0f753-90df-7851-b0eb-9f84a749ea4b.jsonl",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r1/process.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r1/response.txt",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r1/result.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r1/run.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r1/stderr.txt",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r1/supplied-input.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r1/trace.jsonl",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r2/byte-comparisons.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r2/cleanup.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r2/draft.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r2/file-versions/0000-83265898e21c.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r2/file-versions/0001-0f47286d361b.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r2/file-versions/0002-ae98f4215313.txt",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r2/file-versions/0003-ae98f4215313.txt",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r2/file-versions/0004-ae98f4215313.txt",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r2/file-versions/0005-ae98f4215313.txt",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r2/file-versions/0006-ae98f4215313.txt",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r2/file-versions/0007-7c771be33360.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r2/file-versions/0008-79a67483a2e8.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r2/file-versions.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r2/filesystem-changes.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r2/harness-config-after.toml",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r2/harness-context.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r2/identity-audit.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r2/input-stat.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r2/inventory-after.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r2/inventory-before.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r2/invocation.txt",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r2/judge-input-digest.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r2/location.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r2/native-sessions/2026/10/01/rollout-2026-10-01T14-13-46-01a0f762-8e99-71e3-b9ab-f624a605db34.jsonl",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r2/native-sessions/2026/10/01/rollout-2026-10-01T14-18-43-01a0f767-17fe-7320-95f9-fd16f2fb882e.jsonl",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r2/process.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r2/response.txt",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r2/result.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r2/run.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r2/stderr.txt",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r2/supplied-input.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r2/trace.jsonl",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r3/byte-comparisons.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r3/cleanup.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r3/draft.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r3/file-versions/0000-83265898e21c.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r3/file-versions/0001-d36542e35540.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r3/file-versions/0002-ae98f4215313.txt",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r3/file-versions/0003-ae98f4215313.txt",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r3/file-versions/0004-ae98f4215313.txt",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r3/file-versions/0005-ae98f4215313.txt",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r3/file-versions/0006-8cff94a08c24.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r3/file-versions/0007-17554607ec98.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r3/file-versions/0008-e1c13d040253.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r3/file-versions/0009-c94169a81f18.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r3/file-versions/0010-d3eade6d05c1.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r3/file-versions/0011-406d5826ec00.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r3/file-versions/0012-34342ce9a92a.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r3/file-versions.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r3/filesystem-changes.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r3/harness-config-after.toml",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r3/harness-context.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r3/identity-audit.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r3/input-stat.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r3/inventory-after.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r3/inventory-before.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r3/invocation.txt",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r3/judge-input-digest.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r3/location.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r3/native-sessions/2026/10/01/rollout-2026-10-01T14-37-26-01a0f778-36c8-7653-b4e1-24cd2500f495.jsonl",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r3/native-sessions/2026/10/01/rollout-2026-10-01T14-43-02-01a0f77d-5868-7a43-be28-5909f5150668.jsonl",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r3/native-sessions/2026/10/01/rollout-2026-10-01T14-58-36-01a0f78b-98a3-7e41-9c67-c1340c68f96e.jsonl",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r3/process.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r3/response.txt",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r3/result.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r3/run.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r3/stderr.txt",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r3/supplied-input.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r3/trace.jsonl",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r1/byte-comparisons.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r1/cleanup.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r1/draft.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r1/file-versions/0000-83265898e21c.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r1/file-versions/0001-efc627462912.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r1/file-versions/0002-ae98f4215313.txt",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r1/file-versions/0003-ae98f4215313.txt",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r1/file-versions/0004-ae98f4215313.txt",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r1/file-versions/0005-ae98f4215313.txt",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r1/file-versions/0006-507a6852344a.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r1/file-versions/0007-8a2a4627f1c7.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r1/file-versions/0008-76fc570ceb1c.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r1/file-versions/0009-a2268d82e2b0.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r1/file-versions/0010-9b19852be3af.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r1/file-versions.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r1/filesystem-changes.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r1/harness-config-after.toml",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r1/harness-context.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r1/identity-audit.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r1/input-stat.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r1/inventory-after.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r1/inventory-before.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r1/invocation.txt",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r1/judge-input-digest.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r1/location.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r1/native-sessions/2026/10/01/rollout-2026-10-01T13-43-24-01a0f746-bf0e-7a40-9b5a-5b653342a9f5.jsonl",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r1/native-sessions/2026/10/01/rollout-2026-10-01T13-49-47-01a0f74c-996b-70f1-94fc-4383e6784134.jsonl",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r1/native-sessions/2026/10/01/rollout-2026-10-01T13-58-11-01a0f754-4894-78a3-ba16-bd4ab085e34c.jsonl",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r1/process.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r1/response.txt",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r1/result.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r1/run.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r1/stderr.txt",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r1/supplied-input.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r1/trace.jsonl",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r2/byte-comparisons.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r2/cleanup.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r2/draft.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r2/file-versions/0000-83265898e21c.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r2/file-versions/0001-117a1a2f6b93.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r2/file-versions/0002-ae98f4215313.txt",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r2/file-versions/0003-ae98f4215313.txt",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r2/file-versions/0004-ae98f4215313.txt",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r2/file-versions/0005-ae98f4215313.txt",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r2/file-versions/0006-82696bb70adf.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r2/file-versions/0007-8d760530320c.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r2/file-versions/0008-919231106c91.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r2/file-versions/0009-d1e9bf76910a.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r2/file-versions/0010-bd5699cf5bad.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r2/file-versions/0011-10ca1b7fd8ca.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r2/file-versions.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r2/filesystem-changes.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r2/harness-config-after.toml",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r2/harness-context.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r2/identity-audit.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r2/input-stat.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r2/inventory-after.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r2/inventory-before.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r2/invocation.txt",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r2/judge-input-digest.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r2/location.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r2/native-sessions/2026/10/01/rollout-2026-10-01T14-13-46-01a0f762-8e98-7203-8735-e330899decb3.jsonl",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r2/native-sessions/2026/10/01/rollout-2026-10-01T14-18-12-01a0f766-9f61-7c02-a8d2-fd3e4e415645.jsonl",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r2/native-sessions/2026/10/01/rollout-2026-10-01T14-28-23-01a0f76f-f03a-7920-9066-349386432f84.jsonl",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r2/process.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r2/response.txt",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r2/result.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r2/run.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r2/stderr.txt",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r2/supplied-input.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r2/trace.jsonl",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r3/byte-comparisons.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r3/cleanup.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r3/draft.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r3/file-versions/0000-83265898e21c.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r3/file-versions/0001-ccf512b8cd16.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r3/file-versions/0002-ae98f4215313.txt",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r3/file-versions/0003-ae98f4215313.txt",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r3/file-versions/0004-ae98f4215313.txt",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r3/file-versions/0005-ae98f4215313.txt",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r3/file-versions/0006-ae98f4215313.txt",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r3/file-versions/0007-dc03e8747a9f.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r3/file-versions/0008-57fc0e980b4a.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r3/file-versions/0009-3106e4b13c88.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r3/file-versions/0010-11f148a9d071.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r3/file-versions/0011-e3609a7381ad.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r3/file-versions.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r3/filesystem-changes.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r3/harness-config-after.toml",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r3/harness-context.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r3/identity-audit.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r3/input-stat.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r3/inventory-after.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r3/inventory-before.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r3/invocation.txt",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r3/judge-input-digest.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r3/location.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r3/native-sessions/2026/10/01/rollout-2026-10-01T14-28-42-01a0f770-3a1d-7950-9e6c-44189fcc9fb2.jsonl",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r3/native-sessions/2026/10/01/rollout-2026-10-01T14-33-53-01a0f774-f840-7e22-9760-940233874a3c.jsonl",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r3/native-sessions/2026/10/01/rollout-2026-10-01T14-40-55-01a0f77b-6b29-77b2-9fc4-c39ee4b7fa97.jsonl",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r3/process.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r3/response.txt",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r3/result.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r3/run.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r3/stderr.txt",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r3/supplied-input.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r3/trace.jsonl",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r1/captured-output.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r1/cleanup.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r1/file-versions/0000-42b54024a484.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r1/file-versions/0001-f0a015600e33.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r1/file-versions/0002-2b79ce7f33f9.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r1/file-versions.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r1/filesystem-changes.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r1/harness-config-after.toml",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r1/harness-context.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r1/input-stat.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r1/inventory-after.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r1/inventory-before.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r1/invocation.txt",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r1/location.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r1/native-sessions/2026/10/01/rollout-2026-10-01T15-05-08-01a0f791-939f-77b0-8e7d-ac7502023b55.jsonl",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r1/process.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r1/response.txt",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r1/result.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r1/run.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r1/stderr.txt",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r1/supplied-input.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r1/trace.jsonl",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r2/captured-output.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r2/cleanup.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r2/file-versions/0000-42b54024a484.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r2/file-versions/0001-2e4550214680.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r2/file-versions/0002-b4b87dc94c51.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r2/file-versions/0003-a82971f5a889.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r2/file-versions.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r2/filesystem-changes.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r2/harness-config-after.toml",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r2/harness-context.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r2/input-stat.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r2/inventory-after.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r2/inventory-before.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r2/invocation.txt",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r2/location.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r2/native-sessions/2026/10/01/rollout-2026-10-01T14-55-28-01a0f788-ba61-7572-8ad7-37195d93720e.jsonl",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r2/process.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r2/response.txt",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r2/result.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r2/run.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r2/stderr.txt",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r2/supplied-input.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r2/trace.jsonl",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r3/captured-output.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r3/cleanup.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r3/file-versions/0000-42b54024a484.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r3/file-versions/0001-b6be6a42cc46.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r3/file-versions/0002-b0d675b98bb4.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r3/file-versions.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r3/filesystem-changes.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r3/harness-config-after.toml",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r3/harness-context.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r3/input-stat.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r3/inventory-after.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r3/inventory-before.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r3/invocation.txt",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r3/location.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r3/native-sessions/2026/10/01/rollout-2026-10-01T15-06-51-01a0f793-27ee-7673-94eb-513a48a84426.jsonl",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r3/process.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r3/response.txt",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r3/result.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r3/run.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r3/stderr.txt",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r3/supplied-input.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r3/trace.jsonl",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r4/captured-output.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r4/cleanup.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r4/file-versions/0000-42b54024a484.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r4/file-versions/0001-04703e2aa347.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r4/file-versions/0002-7e5f72726541.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r4/file-versions.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r4/filesystem-changes.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r4/harness-config-after.toml",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r4/harness-context.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r4/input-stat.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r4/inventory-after.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r4/inventory-before.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r4/invocation.txt",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r4/location.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r4/native-sessions/2026/10/01/rollout-2026-10-01T15-10-39-01a0f796-a168-7d03-8437-6ee769d096d6.jsonl",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r4/process.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r4/response.txt",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r4/result.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r4/run.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r4/stderr.txt",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r4/supplied-input.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r4/trace.jsonl",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r5/captured-output.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r5/cleanup.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r5/file-versions/0000-42b54024a484.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r5/file-versions/0001-9b62557bcd62.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r5/file-versions/0002-7337c3bfdbed.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r5/file-versions.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r5/filesystem-changes.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r5/harness-config-after.toml",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r5/harness-context.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r5/input-stat.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r5/inventory-after.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r5/inventory-before.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r5/invocation.txt",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r5/location.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r5/native-sessions/2026/10/01/rollout-2026-10-01T15-17-28-01a0f79c-ddcf-74e0-a57e-5ca20d0ff93f.jsonl",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r5/process.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r5/response.txt",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r5/result.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r5/run.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r5/stderr.txt",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r5/supplied-input.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r5/trace.jsonl",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r6/captured-output.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r6/cleanup.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r6/file-versions/0000-42b54024a484.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r6/file-versions/0001-bdbb1e1be1b4.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r6/file-versions/0002-0128a26cd664.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r6/file-versions.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r6/filesystem-changes.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r6/harness-config-after.toml",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r6/harness-context.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r6/input-stat.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r6/inventory-after.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r6/inventory-before.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r6/invocation.txt",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r6/location.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r6/native-sessions/2026/10/01/rollout-2026-10-01T15-35-47-01a0f7ad-a339-76c1-81ff-28243f279ad8.jsonl",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r6/process.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r6/response.txt",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r6/result.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r6/run.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r6/stderr.txt",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r6/supplied-input.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r6/trace.jsonl",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/scope-label-map.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/source-provenance.json",
+      "origin": "committed at source head"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/staging-location.json",
+      "origin": "committed at source head"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/tracker-drafts/comment-362.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/tracker-drafts/document-scope.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/tracker-drafts/false-known-defect.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/tracker-drafts/standfirst.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/tracker-snapshot.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/validation/checks.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/validation/environment-drift.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/validation/locale-reading-volume.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/validation/pytest-process.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/validation/pytest.txt",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/validation/reading-volume.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/validation/scope-native-audit.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/validation/transfer-manifest.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/validation/write-native-audit.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/voided/judge-staging-error-1/cleanup.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/voided/judge-staging-error-1/disposition.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/voided/judge-staging-error-1/harness-context.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/voided/judge-staging-error-1/invocation.txt",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/voided/judge-staging-error-1/location.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/voided/scope-r1-capacity-1/cleanup.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/voided/scope-r1-capacity-1/disposition.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/voided/scope-r1-capacity-1/file-versions/0000-42b54024a484.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/voided/scope-r1-capacity-1/file-versions/0001-4f291573704c.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/voided/scope-r1-capacity-1/file-versions.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/voided/scope-r1-capacity-1/filesystem-changes.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/voided/scope-r1-capacity-1/harness-config-after.toml",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/voided/scope-r1-capacity-1/harness-context.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/voided/scope-r1-capacity-1/input-stat.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/voided/scope-r1-capacity-1/inventory-after.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/voided/scope-r1-capacity-1/inventory-before.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/voided/scope-r1-capacity-1/invocation.txt",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/voided/scope-r1-capacity-1/location.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/voided/scope-r1-capacity-1/native-sessions/2026/10/01/rollout-2026-10-01T14-48-21-01a0f782-383d-73e1-a5e7-da1a9833a87c.jsonl",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/voided/scope-r1-capacity-1/process.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/voided/scope-r1-capacity-1/result.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/voided/scope-r1-capacity-1/run.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/voided/scope-r1-capacity-1/stderr.txt",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/voided/scope-r1-capacity-1/supplied-input.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/voided/scope-r1-capacity-1/trace.jsonl",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/voided/scope-r6-capacity-1/cleanup.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/voided/scope-r6-capacity-1/disposition.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/voided/scope-r6-capacity-1/file-versions/0000-42b54024a484.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/voided/scope-r6-capacity-1/file-versions/0001-71ac5d8c23a8.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/voided/scope-r6-capacity-1/file-versions.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/voided/scope-r6-capacity-1/filesystem-changes.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/voided/scope-r6-capacity-1/harness-config-after.toml",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/voided/scope-r6-capacity-1/harness-context.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/voided/scope-r6-capacity-1/input-stat.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/voided/scope-r6-capacity-1/inventory-after.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/voided/scope-r6-capacity-1/inventory-before.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/voided/scope-r6-capacity-1/invocation.txt",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/voided/scope-r6-capacity-1/location.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/voided/scope-r6-capacity-1/native-sessions/2026/10/01/rollout-2026-10-01T15-24-17-01a0f7a3-1b15-7272-93af-0e39f4f6052e.jsonl",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/voided/scope-r6-capacity-1/process.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/voided/scope-r6-capacity-1/result.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/voided/scope-r6-capacity-1/run.json",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/voided/scope-r6-capacity-1/stderr.txt",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/voided/scope-r6-capacity-1/supplied-input.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/voided/scope-r6-capacity-1/trace.jsonl",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/records/write-gpt-2026-10-01-362.md",
+      "origin": "untracked final deliverable"
+    },
+    {
+      "path": "docs/evaluation/records/source-check-gpt-2026-10-01-362.md",
+      "origin": "untracked final deliverable"
+    }
+  ],
+  "excluded": [
+    "docs/evaluation/records/README.md: append entry staged separately for the run",
+    "all source files outside the packet and two named records"
+  ],
+  "authentication_material_copied": false
+}

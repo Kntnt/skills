@@ -1,0 +1,27 @@
+{
+  "overrides": {
+    "TMPDIR": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-362-scratch",
+    "UV_CACHE_DIR": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-362-scratch/uv-cache",
+    "UV_TOOL_DIR": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-362-scratch/uv-tools",
+    "UV_PYTHON_INSTALL_DIR": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-362-scratch/uv-python",
+    "XDG_CACHE_HOME": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-362-scratch/xdg-cache",
+    "PYTHONDONTWRITEBYTECODE": "1"
+  },
+  "home_overridden": false,
+  "codex_home_overridden": false,
+  "contributing_sha256": "27051b6591f536b0aa509f420059d39172ee4210767c38a54dcd1d0337dc94b9",
+  "commands": [
+    "uvx ruff check .",
+    "uvx ruff format --check .",
+    "uvx --with types-PyYAML --with pytest --with httpx==0.28.1 --with selectolax==0.4.11 --with types-tinycss2 --with types-regex mypy skills/kntnt/scripts/kntnt.py skills/kntnt/library/scripts/argument_grammar.py skills/kntnt/library/scripts/article_anatomy.py skills/kntnt/library/scripts/ship.py skills/kntnt/library/scripts/integrations.py skills/kntnt/library/scripts/languages.py skills/kntnt/library/scripts/credentials.py skills/models/model-selector/scripts/catalogue.py skills/models/model-selector/scripts/profiles.py skills/models/model-selector/scripts/evidence.py skills/models/model-selector/scripts/launch.py skills/models/model-selector/scripts/selection.py skills/models/model-selector/scripts/quota.py skills/models/model-selector/scripts/record.py skills/models/model-selector/scripts/capture.py skills/models/model-selector/scripts/grade.py skills/models/model-selector/scripts/setup_apply.py skills/models/model-selector/scripts/inventory.py skills/code/orchestrate/scripts/run.py skills/productivity/rename-invoices/scripts/rename_invoices.py skills/agents/explain/scripts/invoke.py skills/web/mirror/scripts/mirror.py skills/infrastructure/cloudns/scripts/cloudns.py skills/infrastructure/hetzner/scripts/hetzner.py skills/infrastructure/nodeping/scripts/nodeping.py skills/infrastructure/postmark/scripts/postmark.py tests",
+    "uv run --with pytest --with pytest-xdist --with pyyaml pytest -n auto"
+  ],
+  "scratch_paths_owned": [
+    "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-362-scratch/verify-gates.py",
+    "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-362-scratch/uv-cache",
+    "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-362-scratch/uv-tools",
+    "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-362-scratch/uv-python",
+    "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-362-scratch/xdg-cache",
+    "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-362-scratch/pytest-of-thomas"
+  ]
+}

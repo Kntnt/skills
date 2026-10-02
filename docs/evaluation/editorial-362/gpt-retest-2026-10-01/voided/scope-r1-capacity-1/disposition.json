@@ -1,0 +1,6 @@
+{
+  "status": "void",
+  "reason": "Native turn.failed: Selected model is at capacity. Please try a different model.",
+  "counted": false,
+  "replacement_directory": "sample-07-rerun-1"
+}

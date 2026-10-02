@@ -1,0 +1,23 @@
+[
+  {
+    "command": "uv run --with pytest --with pytest-xdist --with pyyaml pytest -n auto tests/test_run.py::test_the_registries_the_engine_finds_are_the_ones_this_repository_keeps tests/test_run.py::test_isolate_reserves_records_but_not_manifested_file_version_captures",
+    "cwd": "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/362",
+    "pid": 21887,
+    "log": "green-1.txt",
+    "started": 1790939028.429069,
+    "registration": {
+      "manifest": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-362-scratch/amend-1-temporary/cleanup-home/.kntnt/session-cleanup/sessions/01a0fc43-b691-7101-b34e-4492d3ce7433.jsonl",
+      "recorded": {
+        "at": "2026-10-02T11:03:48+00:00",
+        "id": "21887",
+        "kind": "pid",
+        "started": "Fri Oct  2 13:03:48 2026",
+        "why": "Ticket 362 amend green command 1"
+      },
+      "session": "01a0fc43-b691-7101-b34e-4492d3ce7433"
+    },
+    "returncode": 0,
+    "process_group_absent": true,
+    "duration_seconds": 3.1635258197784424
+  }
+]

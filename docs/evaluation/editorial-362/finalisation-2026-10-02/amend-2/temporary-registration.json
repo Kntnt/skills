@@ -1,0 +1,10 @@
+{
+  "manifest": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-362-scratch/amend-2-temporary/registration-home/.kntnt/session-cleanup/sessions/unowned-56312.jsonl",
+  "recorded": {
+    "at": "2026-10-02T11:38:14+00:00",
+    "id": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-362-scratch/amend-2-temporary",
+    "kind": "path",
+    "why": "Ticket 362 amend 2 owned temporary roots and tool caches"
+  },
+  "session": "unowned-56312"
+}

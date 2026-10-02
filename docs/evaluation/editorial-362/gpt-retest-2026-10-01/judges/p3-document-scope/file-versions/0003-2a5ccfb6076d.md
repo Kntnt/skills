@@ -1,0 +1,78 @@
+# Judgement
+
+## Independent reading of the focus passage
+
+> Our submission also makes no claim to have secured the building owner’s consent for rehearsal use; it does not establish whether that consent exists.
+
+The first clause preserves the material’s statement that “The association's submission makes no representation that it has secured the building owner's consent for rehearsal use.” In ordinary contextual reading, “it” in the second clause refers to the submission. That clause asserts a limitation on the submission’s evidence, whereas the material says only that “The supplied material does not state the consent's actual status.” The underlying submission is described, not reproduced completely.
+
+The submission could, hypothetically, establish a current refusal without claiming secured consent, while the supplied summary omitted that refusal. Both source statements would hold and the draft’s second clause would fail. The second clause therefore warrants repair for its document/knowledge-scope shift; the issue is not an assertion that consent is absent.
+
+Findings repeated within a report are counted once. Cleared passages and observations without a repair request are excluded. **D** denotes the requested focus test, independent of the report named D; **X** counts all other findings.
+
+## Report A
+
+No findings are presented.
+
+| Finding | Targeted draft passage | Allegation | Class | Evidence |
+| --- | --- | --- | --- | --- |
+| None | — | — | — | — |
+
+**Focus outcome:** Discusses the passage, notices a possible counterexample, then accepts it; no finding, so **D fails**. Its decisive sentence is: “That excludes using an established actual status within the supplied submission as a surviving counterexample.” Its disposition is: “Both the assertion gap and actual-status uncertainty are preserved. No finding.”
+
+That exclusion incorrectly treats the summary’s silence as excluding evidence in the underlying submission. This is an erroneous clearance, not a finding to classify or count.
+
+## Report B
+
+| Finding | Targeted draft passage | Allegation | Class | Evidence |
+| --- | --- | --- | --- | --- |
+| F1 (D) | “Our submission also makes no claim to have secured the building owner’s consent for rehearsal use; it does not establish whether that consent exists.” | The second clause transfers the supplied package’s information gap to an unsupported claim about what the association’s submission establishes. | **supported** | The draft’s “it does not establish whether that consent exists” refers to “Our submission”, but the material locates actual-status silence in “The supplied material does not state the consent's actual status.” The separate source statement that the submission “makes no representation that it has secured” consent does not exclude other submission evidence establishing its existence or absence. |
+
+**Focus outcome:** Discusses the passage and raises F1 for the document/knowledge-scope shift; **D passes**. The decisive sentence is: “The source limits knowledge of actual status in this supplied package; it does not describe every statement or piece of evidence in the submission.”
+
+## Report C
+
+| Finding | Targeted draft passage | Allegation | Class | Evidence |
+| --- | --- | --- | --- | --- |
+| F1 (D) | “Our submission also makes no claim to have secured the building owner’s consent for rehearsal use; it does not establish whether that consent exists.” | The draft attributes the package’s lack of actual-status information to the external submission itself. | **supported** | “Our submission … it does not establish whether that consent exists” characterises the submission’s evidential contents, while the material says “The supplied material does not state the consent's actual status.” A submission establishing a current refusal would remain compatible with its supplied “no representation that it has secured” consent, so the first clause cannot support the second. |
+
+**Focus outcome:** Discusses the passage and raises F1 for the document/knowledge-scope shift; **D passes**. The decisive sentence is: “The second changes the subject and scope of the information gap.”
+
+## Report D
+
+| Finding | Targeted draft passage | Allegation | Class | Evidence |
+| --- | --- | --- | --- | --- |
+| F1 (D) | “Our submission also makes no claim to have secured the building owner’s consent for rehearsal use; it does not establish whether that consent exists.” | The second clause changes the document to which the negative knowledge claim applies. | **supported** | The draft makes “Our submission” the subject of “does not establish whether that consent exists”; the material instead makes “The supplied material” the subject of “does not state the consent's actual status.” Its narrower description that the submission “makes no representation that it has secured” consent does not establish submission-wide uncertainty about actual status. |
+
+**Focus outcome:** Discusses the passage and raises F1 for the document/knowledge-scope shift; **D passes**. The decisive sentence is: “The source package is complete as supplied material; that does not make its summary the complete text of the submission.”
+
+## Report E
+
+| Finding | Targeted draft passage | Allegation | Class | Evidence |
+| --- | --- | --- | --- | --- |
+| S1 (D) | “Our submission also makes no claim to have secured the building owner’s consent for rehearsal use; it does not establish whether that consent exists.” | The draft adds an unsupported submission-wide absence of evidence settling consent’s status. | **supported** | The draft’s “it does not establish whether that consent exists” applies to the submission, whereas “The supplied material does not state the consent's actual status” applies to the supplied package. The submission’s supported absence of a representation “that it has secured” consent allows, for example, evidence of a current refusal omitted from the supplied summary. |
+
+**Focus outcome:** Discusses the passage and raises S1 for the document/knowledge-scope shift; **D passes**. The decisive sentence is: “The draft's second clause asserts a broader absence of status-establishing information within the underlying submission.”
+
+## Report F
+
+No findings are presented.
+
+| Finding | Targeted draft passage | Allegation | Class | Evidence |
+| --- | --- | --- | --- | --- |
+| None | — | — | — | — |
+
+**Focus outcome:** Discusses and clears the passage, acknowledging the difference in document scope but accepting it; no finding, so **D fails**. The decisive sentence is: “Its scope is narrower than the package-wide statement, without adding an actual negative.” The countercase table concludes: “The draft's narrower statement is therefore supported here.”
+
+The package’s silence does not establish the underlying submission’s silence. Recognising the differing scopes and accepting the passage does not satisfy the focus test; this clearance is not counted as a finding.
+
+## Summary
+
+| Report | Supported findings | False findings | Disputed findings | X: other findings | Focus-passage outcome |
+| --- | ---: | ---: | ---: | ---: | --- |
+| A | 0 | 0 | 0 | 0 | Discussed; possible problem noticed, then accepted; no finding — **D fails** |
+| B | 1 | 0 | 0 | 0 | Discussed; F1 raises the document/knowledge-scope shift — **D passes** |
+| C | 1 | 0 | 0 | 0 | Discussed; F1 raises the document/knowledge-scope shift — **D passes** |
+| D | 1 | 0 | 0 | 0 | Discussed; F1 raises the document/knowledge-scope shift — **D passes** |
+| E | 1 | 0 | 0 | 0 | Discussed; S1 raises the document/knowledge-scope shift — **D passes** |
+| F | 0 | 0 | 0 | 0 | Discussed; scope difference acknowledged, then cleared; no finding — **D fails** |

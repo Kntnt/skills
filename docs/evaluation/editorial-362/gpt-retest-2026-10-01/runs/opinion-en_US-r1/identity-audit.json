@@ -1,0 +1,45 @@
+{
+  "seats": [
+    {
+      "session": "01a0f746-bf0e-7a40-9b5a-5b653342a9f5",
+      "model": "gpt-6.1-sol",
+      "effort": "xhigh"
+    },
+    {
+      "session": "01a0f74c-996b-70f1-94fc-4383e6784134",
+      "model": "gpt-6.1-sol",
+      "effort": "xhigh"
+    },
+    {
+      "session": "01a0f754-4894-78a3-ba16-bd4ab085e34c",
+      "model": "gpt-6.1-sol",
+      "effort": "xhigh"
+    }
+  ],
+  "lineage": {
+    "01a0f746-bf0e-7a40-9b5a-5b653342a9f5": "exec",
+    "01a0f74c-996b-70f1-94fc-4383e6784134": {
+      "subagent": {
+        "thread_spawn": {
+          "parent_thread_id": "01a0f746-bf0e-7a40-9b5a-5b653342a9f5",
+          "depth": 1,
+          "agent_path": "/root/source_comparison",
+          "agent_nickname": "Boyle",
+          "agent_role": null
+        }
+      }
+    },
+    "01a0f754-4894-78a3-ba16-bd4ab085e34c": {
+      "subagent": {
+        "thread_spawn": {
+          "parent_thread_id": "01a0f746-bf0e-7a40-9b5a-5b653342a9f5",
+          "depth": 1,
+          "agent_path": "/root/source_comparison_final",
+          "agent_nickname": "Rawls",
+          "agent_role": null
+        }
+      }
+    }
+  },
+  "all_same_inherited_seat": true
+}

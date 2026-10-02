@@ -1,0 +1,2 @@
+{"harness": "", "id": "unowned-56312", "kind": "session", "owner_pid": 0, "owner_started": "", "session": "unowned-56312", "started": "2026-10-02T11:38:14+00:00"}
+{"at": "2026-10-02T11:38:14+00:00", "id": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-362-scratch/amend-2-temporary", "kind": "path", "why": "Ticket 362 amend 2 owned temporary roots and tool caches"}

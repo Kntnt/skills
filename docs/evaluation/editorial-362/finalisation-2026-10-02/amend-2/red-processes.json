@@ -1,0 +1,24 @@
+[
+  {
+    "command": "uv run --with pytest --with pyyaml pytest tests/test_run.py::test_the_registries_the_engine_finds_are_the_ones_this_repository_keeps tests/test_run.py::test_isolate_keeps_reserving_every_tracked_numbered_directory -q",
+    "pid": 56688,
+    "process_group": 56688,
+    "started_unix": 1790941120.4547358,
+    "registration": {
+      "manifest": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-362-scratch/amend-2-temporary/registration-home/.kntnt/session-cleanup/sessions/01a0fc63-9fb0-7f30-a86d-c9f8886889c5.jsonl",
+      "recorded": {
+        "at": "2026-10-02T11:38:40+00:00",
+        "id": "56688",
+        "kind": "pid",
+        "started": "Fri Oct  2 13:38:40 2026",
+        "why": "Ticket 362 amend 2 red command 1"
+      },
+      "session": "01a0fc63-9fb0-7f30-a86d-c9f8886889c5"
+    },
+    "output": "docs/evaluation/editorial-362/finalisation-2026-10-02/amend-2/red-1.txt",
+    "returncode": 1,
+    "elapsed_seconds": 2.188176155090332,
+    "completed_unix": 1790941122.642915,
+    "process_group_absent": true
+  }
+]

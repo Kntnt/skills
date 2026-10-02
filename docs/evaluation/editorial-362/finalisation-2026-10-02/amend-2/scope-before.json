@@ -1,0 +1,8 @@
+{
+  "method": "Compare all shipped files to the ticket base, before removing the rejected shipped behavior.",
+  "base": "5b0260283b1d1597ca1ed2dddc602888dac7119d",
+  "changed_shipped_paths": [
+    "skills/code/orchestrate/scripts/run.py",
+    "skills/kntnt/catalog.json"
+  ]
+}

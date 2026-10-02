@@ -1,0 +1,6 @@
+{
+  "pid": 57792,
+  "commands": [
+    "uv run --with pytest --with pyyaml pytest tests/test_run.py::test_the_registries_the_engine_finds_are_the_ones_this_repository_keeps tests/test_run.py::test_isolate_keeps_reserving_every_tracked_numbered_directory tests/test_editorial_362_evidence.py -q"
+  ]
+}

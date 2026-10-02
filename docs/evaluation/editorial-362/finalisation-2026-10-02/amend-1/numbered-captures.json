@@ -1,0 +1,598 @@
+{
+  "method": "Enumerate every four-digit-prefixed tracked file added by the ticket, of every extension; verify manifest membership and captured hash.",
+  "base": "5b0260283b1d1597ca1ed2dddc602888dac7119d",
+  "head_before_amend": "ca72bb42caf4d135505163af13c5ab559f736040",
+  "captured_files": 117,
+  "directories": 22,
+  "extensions": {
+    ".md": 90,
+    ".txt": 27
+  },
+  "files": [
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/harness/smoke/file-versions/0000-a154cada2b08.md",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/harness/smoke/file-versions.json",
+      "sha256": "a154cada2b0829b36423e64b8a8fe18db25864b8bdd447f5e1c4922f66d98854"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/harness/smoke/file-versions/0001-e7c5830fa52e.md",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/harness/smoke/file-versions.json",
+      "sha256": "e7c5830fa52e6044d7d3454d2bde6e2ef2bdcb47e85527f24c10c23290502797"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_GB-r1/file-versions/0000-be04fe6385ce.md",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_GB-r1/file-versions.json",
+      "sha256": "be04fe6385cee71c5ce8d9156a3541474d3628283cbca440c46c641304b676b5"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_GB-r1/file-versions/0001-a44386629d36.md",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_GB-r1/file-versions.json",
+      "sha256": "a44386629d361f965e37b024db4c0ea6add575aff7b0d3d2eed75d653b25b3cd"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_GB-r1/file-versions/0002-affecc67c51c.md",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_GB-r1/file-versions.json",
+      "sha256": "affecc67c51ca84cfa90c6ab1dd84f2fb0308e3ee39014e962a0392c78c429e1"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_GB-r1/file-versions/0003-1b7e0a9e7072.md",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_GB-r1/file-versions.json",
+      "sha256": "1b7e0a9e70724c87268d56658b75a2a803398b5f77975576e6edf16c59af4dd0"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_GB-r2/file-versions/0000-e73a383e94bc.md",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_GB-r2/file-versions.json",
+      "sha256": "e73a383e94bce6b87da7c591276830bdfbb679aaba7371f3b1edc3c4eb56e62f"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_GB-r2/file-versions/0001-f94903425ac1.md",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_GB-r2/file-versions.json",
+      "sha256": "f94903425ac1847e7a2c14cf962986dc40e1cba103c97790bc4856e4eaa606df"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_GB-r2/file-versions/0002-73de954a8b24.md",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_GB-r2/file-versions.json",
+      "sha256": "73de954a8b24415ba3cf05a5a9fd7d79cc3efcd24aabff5acd1a6d6451d43c16"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_GB-r3/file-versions/0000-48afbec82d5c.md",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_GB-r3/file-versions.json",
+      "sha256": "48afbec82d5c365d8a85b9815fae54b8b68964bbaa67ee992aeb81aa246c2523"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_GB-r3/file-versions/0001-5fd1b2a4688c.md",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_GB-r3/file-versions.json",
+      "sha256": "5fd1b2a4688c4174c9a6ab820e8329675c3440a43713b726df7d6719dea4bc38"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_GB-r3/file-versions/0002-d01734b2fbf9.md",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_GB-r3/file-versions.json",
+      "sha256": "d01734b2fbf96bc9b0a390aa45c766672fd011348a3e9577c4a2e80691e792b4"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_US-r1/file-versions/0000-aa8507d76e62.md",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_US-r1/file-versions.json",
+      "sha256": "aa8507d76e62876490866a44f9f1c0e14c1b0e3ebdfdc63f5ba2375fd776c357"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_US-r1/file-versions/0001-c504d3ce2725.md",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_US-r1/file-versions.json",
+      "sha256": "c504d3ce272578af399c006c3f81044f989537ad16b1bde45c413f405172d311"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_US-r1/file-versions/0002-3d059a599780.md",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_US-r1/file-versions.json",
+      "sha256": "3d059a5997802fe25179fc8b2a3ed5c12a13cde7c8a50ecfaaa08e8d3e6953b2"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_US-r2/file-versions/0000-4c72cf214e4d.md",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_US-r2/file-versions.json",
+      "sha256": "4c72cf214e4d19e15281362eda576075c40a3e9b7774825aba9390b8e94e055e"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_US-r2/file-versions/0001-d80fd7412f7d.md",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_US-r2/file-versions.json",
+      "sha256": "d80fd7412f7dc2f1abfd91a1798b550c64debbce676545fa85f3f823e103b426"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_US-r2/file-versions/0002-3a69cfb650cf.md",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_US-r2/file-versions.json",
+      "sha256": "3a69cfb650cffbb7b883d476c01f57981bbe1e68dabc82099aa7a07807afc7eb"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_US-r3/file-versions/0000-06e4a1f0cd7a.md",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_US-r3/file-versions.json",
+      "sha256": "06e4a1f0cd7a4d5b1b78e1555c17b3213a8c77cb76e5aecd0009a313d017ce2b"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_US-r3/file-versions/0001-be489f91f6ff.md",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_US-r3/file-versions.json",
+      "sha256": "be489f91f6ffb298708f6fbf389d4fa4f678490c15509cbbac959978d6b81fb6"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_US-r3/file-versions/0002-bc4a3806f3da.md",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/opinion-en_US-r3/file-versions.json",
+      "sha256": "bc4a3806f3da23f8959b88432c37e2fa040b3b8ba44a72ce390e83611b3ecdc9"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/p3-document-scope/file-versions/0000-7c8e3f2c6515.md",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/p3-document-scope/file-versions.json",
+      "sha256": "7c8e3f2c65151d6fa93633d50ecc5dab10e3386e5aba529a38b48001022333cb"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/p3-document-scope/file-versions/0001-da02e8f5667f.md",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/p3-document-scope/file-versions.json",
+      "sha256": "da02e8f5667f1214a4f05d15f002bd2daf0bc4264a3eb4469f5f1a768f188a0e"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/p3-document-scope/file-versions/0002-31d5f34413f2.md",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/p3-document-scope/file-versions.json",
+      "sha256": "31d5f34413f2a178282b781f132c90c82f9ce491aa78e9c3c7f8ac273f3e0977"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/p3-document-scope/file-versions/0003-2a5ccfb6076d.md",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/judges/p3-document-scope/file-versions.json",
+      "sha256": "2a5ccfb6076dd0fbbd8b831e7b6f97a8771c8fb9bcbe5e267336a58daf5813a2"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r1/file-versions/0000-83265898e21c.md",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r1/file-versions.json",
+      "sha256": "83265898e21c908c50a5462053175ebcf82d56fe3ea746fa67c16a5f6559dec4"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r1/file-versions/0001-390da9fb6689.md",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r1/file-versions.json",
+      "sha256": "390da9fb66891b4e922731fdcc36579fb5f8c6f614bc51aeeebfc032e21a29c2"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r1/file-versions/0002-ae98f4215313.txt",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r1/file-versions.json",
+      "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r1/file-versions/0003-ae98f4215313.txt",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r1/file-versions.json",
+      "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r1/file-versions/0004-ae98f4215313.txt",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r1/file-versions.json",
+      "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r1/file-versions/0005-ae98f4215313.txt",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r1/file-versions.json",
+      "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r1/file-versions/0006-ae98f4215313.txt",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r1/file-versions.json",
+      "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r1/file-versions/0007-0f80bb5a7c66.md",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r1/file-versions.json",
+      "sha256": "0f80bb5a7c669f4da5e39e2d1b15eeab241209cef0c3ca77df1b1690d61dc8c6"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r1/file-versions/0008-af19ff7fba8f.md",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r1/file-versions.json",
+      "sha256": "af19ff7fba8f49acd61784af18f70a7c807aba174f60913ca9e2c29a1886beaa"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r1/file-versions/0009-ae969d547538.md",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r1/file-versions.json",
+      "sha256": "ae969d547538c6ded8e1e3cac6c693e63f5d4319eac03f4043a445d2fad5e87d"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r1/file-versions/0010-ad34c07dce83.md",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r1/file-versions.json",
+      "sha256": "ad34c07dce834283be9de0e922f3f014198e9918fab226d111896b8d167fa472"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r1/file-versions/0011-aa935c5636da.md",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r1/file-versions.json",
+      "sha256": "aa935c5636da7883176ae6d4cff7d33931f2c2d162652171adff55a90a352895"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r2/file-versions/0000-83265898e21c.md",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r2/file-versions.json",
+      "sha256": "83265898e21c908c50a5462053175ebcf82d56fe3ea746fa67c16a5f6559dec4"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r2/file-versions/0001-0f47286d361b.md",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r2/file-versions.json",
+      "sha256": "0f47286d361bf700d7dc6cd087c8122b1a95afe74ce268426a7cdddf32204610"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r2/file-versions/0002-ae98f4215313.txt",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r2/file-versions.json",
+      "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r2/file-versions/0003-ae98f4215313.txt",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r2/file-versions.json",
+      "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r2/file-versions/0004-ae98f4215313.txt",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r2/file-versions.json",
+      "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r2/file-versions/0005-ae98f4215313.txt",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r2/file-versions.json",
+      "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r2/file-versions/0006-ae98f4215313.txt",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r2/file-versions.json",
+      "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r2/file-versions/0007-7c771be33360.md",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r2/file-versions.json",
+      "sha256": "7c771be33360ea9d32de4d4953bf6c810dd09e4600d5570ddfddd87e79578e28"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r2/file-versions/0008-79a67483a2e8.md",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r2/file-versions.json",
+      "sha256": "79a67483a2e8a89fbe527e1b3061390d322a40f4ef6c027084c6603874f9a4ea"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r3/file-versions/0000-83265898e21c.md",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r3/file-versions.json",
+      "sha256": "83265898e21c908c50a5462053175ebcf82d56fe3ea746fa67c16a5f6559dec4"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r3/file-versions/0001-d36542e35540.md",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r3/file-versions.json",
+      "sha256": "d36542e35540e460825a122450606ec7b46e6756d18c627f10cf1fe33ee4c18b"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r3/file-versions/0002-ae98f4215313.txt",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r3/file-versions.json",
+      "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r3/file-versions/0003-ae98f4215313.txt",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r3/file-versions.json",
+      "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r3/file-versions/0004-ae98f4215313.txt",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r3/file-versions.json",
+      "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r3/file-versions/0005-ae98f4215313.txt",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r3/file-versions.json",
+      "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r3/file-versions/0006-8cff94a08c24.md",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r3/file-versions.json",
+      "sha256": "8cff94a08c24e0d4a865d2d38f66841c55243f501e786aceae722342c26f094b"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r3/file-versions/0007-17554607ec98.md",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r3/file-versions.json",
+      "sha256": "17554607ec98551dd429debcac4d018a31b5abb2dc7572cff3e6b36718d136f1"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r3/file-versions/0008-e1c13d040253.md",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r3/file-versions.json",
+      "sha256": "e1c13d040253fd86598faa9749c613eb2cb5eaa655daf0947f7e5280c7c4f9e8"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r3/file-versions/0009-c94169a81f18.md",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r3/file-versions.json",
+      "sha256": "c94169a81f18fcb8688118bd59c795f90063a0836154baa2b5eeca47e90daf12"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r3/file-versions/0010-d3eade6d05c1.md",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r3/file-versions.json",
+      "sha256": "d3eade6d05c12b0db5354a39b947f568bf7c27f4ebf3e245dae01de841522cb7"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r3/file-versions/0011-406d5826ec00.md",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r3/file-versions.json",
+      "sha256": "406d5826ec00036df2b86f7859705a1d125fcfb70a40bcb9c4895dcaad38a99f"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r3/file-versions/0012-34342ce9a92a.md",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r3/file-versions.json",
+      "sha256": "34342ce9a92ad76e537f8268807eb1932c864e0886b21f9dd6be6a7ca9cfdf6d"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r1/file-versions/0000-83265898e21c.md",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r1/file-versions.json",
+      "sha256": "83265898e21c908c50a5462053175ebcf82d56fe3ea746fa67c16a5f6559dec4"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r1/file-versions/0001-efc627462912.md",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r1/file-versions.json",
+      "sha256": "efc627462912a25f0f23f419f3d2b0e3c95cdd70cc1242d001374c836f21fd4e"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r1/file-versions/0002-ae98f4215313.txt",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r1/file-versions.json",
+      "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r1/file-versions/0003-ae98f4215313.txt",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r1/file-versions.json",
+      "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r1/file-versions/0004-ae98f4215313.txt",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r1/file-versions.json",
+      "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r1/file-versions/0005-ae98f4215313.txt",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r1/file-versions.json",
+      "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r1/file-versions/0006-507a6852344a.md",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r1/file-versions.json",
+      "sha256": "507a6852344a53dce6bc785b54f2e21e93987f1d13b19d61cfede559484e23b0"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r1/file-versions/0007-8a2a4627f1c7.md",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r1/file-versions.json",
+      "sha256": "8a2a4627f1c7dc21d535115c5ffb60c4cb3ecf0d142b60862a9737d93c4883da"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r1/file-versions/0008-76fc570ceb1c.md",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r1/file-versions.json",
+      "sha256": "76fc570ceb1cf99f186d3d674064dc4cf18445ef269e9c0422a60cdff53d67e0"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r1/file-versions/0009-a2268d82e2b0.md",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r1/file-versions.json",
+      "sha256": "a2268d82e2b0aa4e5f9648b306511ec9e2225baf2552d403213fee7dc0de1079"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r1/file-versions/0010-9b19852be3af.md",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r1/file-versions.json",
+      "sha256": "9b19852be3af1f9a0fe147a47f3f8b94c904b4fc3659fc3cb7b1c9270b04703e"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r2/file-versions/0000-83265898e21c.md",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r2/file-versions.json",
+      "sha256": "83265898e21c908c50a5462053175ebcf82d56fe3ea746fa67c16a5f6559dec4"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r2/file-versions/0001-117a1a2f6b93.md",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r2/file-versions.json",
+      "sha256": "117a1a2f6b93a12c7328db673f1ef8f89293574d05a823c0e4fccb09f9d8ba79"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r2/file-versions/0002-ae98f4215313.txt",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r2/file-versions.json",
+      "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r2/file-versions/0003-ae98f4215313.txt",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r2/file-versions.json",
+      "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r2/file-versions/0004-ae98f4215313.txt",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r2/file-versions.json",
+      "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r2/file-versions/0005-ae98f4215313.txt",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r2/file-versions.json",
+      "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r2/file-versions/0006-82696bb70adf.md",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r2/file-versions.json",
+      "sha256": "82696bb70adfd9664a3ed0bb11773c18a515d9a5f1ab08808c0ab4862b106372"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r2/file-versions/0007-8d760530320c.md",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r2/file-versions.json",
+      "sha256": "8d760530320cc6e614b0c32c97acce71476477467b1213fc2d11e5ff1b8b94e9"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r2/file-versions/0008-919231106c91.md",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r2/file-versions.json",
+      "sha256": "919231106c9117f8780027b191f43a33466c63a3372072e93a972d2e88687a18"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r2/file-versions/0009-d1e9bf76910a.md",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r2/file-versions.json",
+      "sha256": "d1e9bf76910affc2554279a38854a93851e86cc6b70a4e7970c4caaefc25178b"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r2/file-versions/0010-bd5699cf5bad.md",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r2/file-versions.json",
+      "sha256": "bd5699cf5bad6a816ceb6b243247fcc8778ff51cdd02b56105d2c5a5727d0368"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r2/file-versions/0011-10ca1b7fd8ca.md",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r2/file-versions.json",
+      "sha256": "10ca1b7fd8ca5c05b6a6b41b61b5deef5349716da35f8772a4031cccc846208f"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r3/file-versions/0000-83265898e21c.md",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r3/file-versions.json",
+      "sha256": "83265898e21c908c50a5462053175ebcf82d56fe3ea746fa67c16a5f6559dec4"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r3/file-versions/0001-ccf512b8cd16.md",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r3/file-versions.json",
+      "sha256": "ccf512b8cd16f6e00918d146a28a5c112af20f2cb82b7e6a592ce929ded5ab94"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r3/file-versions/0002-ae98f4215313.txt",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r3/file-versions.json",
+      "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r3/file-versions/0003-ae98f4215313.txt",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r3/file-versions.json",
+      "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r3/file-versions/0004-ae98f4215313.txt",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r3/file-versions.json",
+      "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r3/file-versions/0005-ae98f4215313.txt",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r3/file-versions.json",
+      "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r3/file-versions/0006-ae98f4215313.txt",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r3/file-versions.json",
+      "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r3/file-versions/0007-dc03e8747a9f.md",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r3/file-versions.json",
+      "sha256": "dc03e8747a9f19ae982cfab5f91972464bb2f563dfe83f41fee93f1d209d4ee4"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r3/file-versions/0008-57fc0e980b4a.md",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r3/file-versions.json",
+      "sha256": "57fc0e980b4ad1568c45fc355c0d8cd185c9b4e66acccda3f4794d6f387ed615"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r3/file-versions/0009-3106e4b13c88.md",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r3/file-versions.json",
+      "sha256": "3106e4b13c8824e8b12f19cc8721928e3514e9146f51b5a1f127d41d415dbfcc"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r3/file-versions/0010-11f148a9d071.md",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r3/file-versions.json",
+      "sha256": "11f148a9d0719aed44bf4d5478caec914de8001ee743d479c7979edd5cc2b0e8"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r3/file-versions/0011-e3609a7381ad.md",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r3/file-versions.json",
+      "sha256": "e3609a7381ad2f1328f711b15e9eb5f7be0f550114c85ef86f0745a15818fedd"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r1/file-versions/0000-42b54024a484.md",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r1/file-versions.json",
+      "sha256": "42b54024a484ebef8f8a7e92487daab176a892b0ba1cd6fa3480c60274e4efb8"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r1/file-versions/0001-f0a015600e33.md",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r1/file-versions.json",
+      "sha256": "f0a015600e33df7062116da90d17bf950ca3a6477b7c5d2f4be2ade395d5b383"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r1/file-versions/0002-2b79ce7f33f9.md",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r1/file-versions.json",
+      "sha256": "2b79ce7f33f94b3b260d0524d3d815b0c6d2b0b85b4a7a7b6490461ed3902a06"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r2/file-versions/0000-42b54024a484.md",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r2/file-versions.json",
+      "sha256": "42b54024a484ebef8f8a7e92487daab176a892b0ba1cd6fa3480c60274e4efb8"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r2/file-versions/0001-2e4550214680.md",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r2/file-versions.json",
+      "sha256": "2e4550214680afb1536d71c5f0bcc666ef00bb196c0abe170a62aa5f093eac22"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r2/file-versions/0002-b4b87dc94c51.md",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r2/file-versions.json",
+      "sha256": "b4b87dc94c5133679caf8c89b7f75234ea6c790a804e75182c5991d864e13926"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r2/file-versions/0003-a82971f5a889.md",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r2/file-versions.json",
+      "sha256": "a82971f5a889fb552cd3984d85a0e1fe4d21efd8e0820a08cf82c63e3e61d882"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r3/file-versions/0000-42b54024a484.md",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r3/file-versions.json",
+      "sha256": "42b54024a484ebef8f8a7e92487daab176a892b0ba1cd6fa3480c60274e4efb8"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r3/file-versions/0001-b6be6a42cc46.md",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r3/file-versions.json",
+      "sha256": "b6be6a42cc467dd32783002ea6d44bf50fd0e38ff79b4a707eeec54367440a3e"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r3/file-versions/0002-b0d675b98bb4.md",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r3/file-versions.json",
+      "sha256": "b0d675b98bb43fadfea5be3597a0756f6ad01c41b5a7dc0a520c92c5c5d5db28"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r4/file-versions/0000-42b54024a484.md",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r4/file-versions.json",
+      "sha256": "42b54024a484ebef8f8a7e92487daab176a892b0ba1cd6fa3480c60274e4efb8"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r4/file-versions/0001-04703e2aa347.md",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r4/file-versions.json",
+      "sha256": "04703e2aa3475c05cc8c0b2df2b5b61319ae4defd4734b86727bf28cb39fdd7a"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r4/file-versions/0002-7e5f72726541.md",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r4/file-versions.json",
+      "sha256": "7e5f72726541f8f0eb1754b2290b7e14c566cf9a1891e2e2aedefce1afb94e7e"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r5/file-versions/0000-42b54024a484.md",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r5/file-versions.json",
+      "sha256": "42b54024a484ebef8f8a7e92487daab176a892b0ba1cd6fa3480c60274e4efb8"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r5/file-versions/0001-9b62557bcd62.md",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r5/file-versions.json",
+      "sha256": "9b62557bcd624c8f5e003285b989b06ca408aaaafe88cf28ff26c3609267991d"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r5/file-versions/0002-7337c3bfdbed.md",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r5/file-versions.json",
+      "sha256": "7337c3bfdbed99093c603419bab071d4661a96b262c7b850554d1070480ccd7e"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r6/file-versions/0000-42b54024a484.md",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r6/file-versions.json",
+      "sha256": "42b54024a484ebef8f8a7e92487daab176a892b0ba1cd6fa3480c60274e4efb8"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r6/file-versions/0001-bdbb1e1be1b4.md",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r6/file-versions.json",
+      "sha256": "bdbb1e1be1b410c080ac7dcb8a3bd5f90a60368d9bf3280d8828b2e62ce31e68"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r6/file-versions/0002-0128a26cd664.md",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r6/file-versions.json",
+      "sha256": "0128a26cd6647a3d1d25bc489043f11a519419f5baea6c970027d4087f3daddb"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/voided/scope-r1-capacity-1/file-versions/0000-42b54024a484.md",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/voided/scope-r1-capacity-1/file-versions.json",
+      "sha256": "42b54024a484ebef8f8a7e92487daab176a892b0ba1cd6fa3480c60274e4efb8"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/voided/scope-r1-capacity-1/file-versions/0001-4f291573704c.md",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/voided/scope-r1-capacity-1/file-versions.json",
+      "sha256": "4f291573704c01bc0e874c6b96a1ae7d9550b17a97a570ac264fe67fbbe0fe5e"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/voided/scope-r6-capacity-1/file-versions/0000-42b54024a484.md",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/voided/scope-r6-capacity-1/file-versions.json",
+      "sha256": "42b54024a484ebef8f8a7e92487daab176a892b0ba1cd6fa3480c60274e4efb8"
+    },
+    {
+      "path": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/voided/scope-r6-capacity-1/file-versions/0001-71ac5d8c23a8.md",
+      "manifest": "docs/evaluation/editorial-362/gpt-retest-2026-10-01/voided/scope-r6-capacity-1/file-versions.json",
+      "sha256": "71ac5d8c23a84794db2781d5642fe0a90e0d6983ac48b58d1c7bb63fa7e8828e"
+    }
+  ]
+}

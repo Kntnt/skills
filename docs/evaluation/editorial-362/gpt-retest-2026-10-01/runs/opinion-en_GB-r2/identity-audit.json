@@ -1,0 +1,29 @@
+{
+  "seats": [
+    {
+      "session": "01a0f762-8e99-71e3-b9ab-f624a605db34",
+      "model": "gpt-6.1-sol",
+      "effort": "xhigh"
+    },
+    {
+      "session": "01a0f767-17fe-7320-95f9-fd16f2fb882e",
+      "model": "gpt-6.1-sol",
+      "effort": "xhigh"
+    }
+  ],
+  "lineage": {
+    "01a0f762-8e99-71e3-b9ab-f624a605db34": "exec",
+    "01a0f767-17fe-7320-95f9-fd16f2fb882e": {
+      "subagent": {
+        "thread_spawn": {
+          "parent_thread_id": "01a0f762-8e99-71e3-b9ab-f624a605db34",
+          "depth": 1,
+          "agent_path": "/root/source_comparison",
+          "agent_nickname": "Confucius",
+          "agent_role": null
+        }
+      }
+    }
+  },
+  "all_same_inherited_seat": true
+}

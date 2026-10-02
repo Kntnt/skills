@@ -1,0 +1,5 @@
+{
+  "status": "void",
+  "counted": false,
+  "reason": "Selected model is at capacity; partial finding is not counted."
+}

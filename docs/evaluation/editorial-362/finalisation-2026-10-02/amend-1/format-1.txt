@@ -1,0 +1,4 @@
+Downloading ruff (9.3MiB)
+ Downloaded ruff
+Installed 1 package in 1ms
+1 file reformatted

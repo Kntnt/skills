@@ -1,0 +1,790 @@
+{
+  "product_revision": "fb16908712c4d47a36fc6ee9dfb3eb2714a19e65",
+  "same_seat_verified": true,
+  "service_interrupted_counted_write_or_judge": false,
+  "runs": [
+    {
+      "sample": "runs/opinion-en_GB-r1",
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 1530.67,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-zhagrwr9",
+        "cleanup_required": true
+      },
+      "native_sessions": [
+        {
+          "file": "runs/opinion-en_GB-r1/native-sessions/2026/10/01/rollout-2026-10-01T13-43-24-01a0f746-bf0e-7cb3-80cd-9c63c2d7bef2.jsonl",
+          "metadata": {
+            "id": "01a0f746-bf0e-7cb3-80cd-9c63c2d7bef2",
+            "source": "exec",
+            "originator": "codex_exec",
+            "cli_version": "0.159.3"
+          },
+          "seats": [
+            {
+              "model": "gpt-6.1-sol",
+              "effort": "xhigh"
+            }
+          ],
+          "completed_turns": [
+            {
+              "turn_id": "01a0f746-c0d6-7bd0-8143-630450bece1f",
+              "completed_at": 1790856533,
+              "error": null
+            }
+          ],
+          "errors": []
+        },
+        {
+          "file": "runs/opinion-en_GB-r1/native-sessions/2026/10/01/rollout-2026-10-01T13-48-17-01a0f74b-3ba7-7861-bb82-278fdabdc049.jsonl",
+          "metadata": {
+            "id": "01a0f74b-3ba7-7861-bb82-278fdabdc049",
+            "source": {
+              "subagent": {
+                "thread_spawn": {
+                  "parent_thread_id": "01a0f746-bf0e-7cb3-80cd-9c63c2d7bef2",
+                  "depth": 1,
+                  "agent_path": "/root/source_comparison_1",
+                  "agent_nickname": "Ptolemy",
+                  "agent_role": null
+                }
+              }
+            },
+            "originator": "codex_exec",
+            "cli_version": "0.159.3"
+          },
+          "seats": [
+            {
+              "model": "gpt-6.1-sol",
+              "effort": "xhigh"
+            }
+          ],
+          "completed_turns": [
+            {
+              "turn_id": "01a0f74b-3bd7-7402-9113-cf0adae6c858",
+              "completed_at": 1790855741,
+              "error": null
+            }
+          ],
+          "errors": []
+        },
+        {
+          "file": "runs/opinion-en_GB-r1/native-sessions/2026/10/01/rollout-2026-10-01T13-57-24-01a0f753-90df-7851-b0eb-9f84a749ea4b.jsonl",
+          "metadata": {
+            "id": "01a0f753-90df-7851-b0eb-9f84a749ea4b",
+            "source": {
+              "subagent": {
+                "thread_spawn": {
+                  "parent_thread_id": "01a0f746-bf0e-7cb3-80cd-9c63c2d7bef2",
+                  "depth": 1,
+                  "agent_path": "/root/source_comparison_2",
+                  "agent_nickname": "Einstein",
+                  "agent_role": null
+                }
+              }
+            },
+            "originator": "codex_exec",
+            "cli_version": "0.159.3"
+          },
+          "seats": [
+            {
+              "model": "gpt-6.1-sol",
+              "effort": "xhigh"
+            }
+          ],
+          "completed_turns": [
+            {
+              "turn_id": "01a0f753-9108-7ca1-b4cb-d973a931519e",
+              "completed_at": 1790856285,
+              "error": null
+            }
+          ],
+          "errors": []
+        }
+      ]
+    },
+    {
+      "sample": "runs/opinion-en_GB-r2",
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 895.52,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-1jvn8o6u",
+        "cleanup_required": true
+      },
+      "native_sessions": [
+        {
+          "file": "runs/opinion-en_GB-r2/native-sessions/2026/10/01/rollout-2026-10-01T14-13-46-01a0f762-8e99-71e3-b9ab-f624a605db34.jsonl",
+          "metadata": {
+            "id": "01a0f762-8e99-71e3-b9ab-f624a605db34",
+            "source": "exec",
+            "originator": "codex_exec",
+            "cli_version": "0.159.3"
+          },
+          "seats": [
+            {
+              "model": "gpt-6.1-sol",
+              "effort": "xhigh"
+            }
+          ],
+          "completed_turns": [
+            {
+              "turn_id": "01a0f762-9069-76e1-a2d8-5de9225b568d",
+              "completed_at": 1790857721,
+              "error": null
+            }
+          ],
+          "errors": []
+        },
+        {
+          "file": "runs/opinion-en_GB-r2/native-sessions/2026/10/01/rollout-2026-10-01T14-18-43-01a0f767-17fe-7320-95f9-fd16f2fb882e.jsonl",
+          "metadata": {
+            "id": "01a0f767-17fe-7320-95f9-fd16f2fb882e",
+            "source": {
+              "subagent": {
+                "thread_spawn": {
+                  "parent_thread_id": "01a0f762-8e99-71e3-b9ab-f624a605db34",
+                  "depth": 1,
+                  "agent_path": "/root/source_comparison",
+                  "agent_nickname": "Confucius",
+                  "agent_role": null
+                }
+              }
+            },
+            "originator": "codex_exec",
+            "cli_version": "0.159.3"
+          },
+          "seats": [
+            {
+              "model": "gpt-6.1-sol",
+              "effort": "xhigh"
+            }
+          ],
+          "completed_turns": [
+            {
+              "turn_id": "01a0f767-182d-7fb3-ac15-f4b818360c85",
+              "completed_at": 1790857636,
+              "error": null
+            }
+          ],
+          "errors": []
+        }
+      ]
+    },
+    {
+      "sample": "runs/opinion-en_GB-r3",
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 1992.92,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-r95dqkak",
+        "cleanup_required": true
+      },
+      "native_sessions": [
+        {
+          "file": "runs/opinion-en_GB-r3/native-sessions/2026/10/01/rollout-2026-10-01T14-37-26-01a0f778-36c8-7653-b4e1-24cd2500f495.jsonl",
+          "metadata": {
+            "id": "01a0f778-36c8-7653-b4e1-24cd2500f495",
+            "source": "exec",
+            "originator": "codex_exec",
+            "cli_version": "0.159.3"
+          },
+          "seats": [
+            {
+              "model": "gpt-6.1-sol",
+              "effort": "xhigh"
+            }
+          ],
+          "completed_turns": [
+            {
+              "turn_id": "01a0f778-385b-76c1-b8f2-0236f45872a7",
+              "completed_at": 1790860238,
+              "error": null
+            }
+          ],
+          "errors": []
+        },
+        {
+          "file": "runs/opinion-en_GB-r3/native-sessions/2026/10/01/rollout-2026-10-01T14-43-02-01a0f77d-5868-7a43-be28-5909f5150668.jsonl",
+          "metadata": {
+            "id": "01a0f77d-5868-7a43-be28-5909f5150668",
+            "source": {
+              "subagent": {
+                "thread_spawn": {
+                  "parent_thread_id": "01a0f778-36c8-7653-b4e1-24cd2500f495",
+                  "depth": 1,
+                  "agent_path": "/root/source_comparison",
+                  "agent_nickname": "Poincare",
+                  "agent_role": null
+                }
+              }
+            },
+            "originator": "codex_exec",
+            "cli_version": "0.159.3"
+          },
+          "seats": [
+            {
+              "model": "gpt-6.1-sol",
+              "effort": "xhigh"
+            }
+          ],
+          "completed_turns": [
+            {
+              "turn_id": "01a0f77d-5896-7a82-8405-2dbb4dd56daa",
+              "completed_at": 1790859376,
+              "error": null
+            }
+          ],
+          "errors": []
+        },
+        {
+          "file": "runs/opinion-en_GB-r3/native-sessions/2026/10/01/rollout-2026-10-01T14-58-36-01a0f78b-98a3-7e41-9c67-c1340c68f96e.jsonl",
+          "metadata": {
+            "id": "01a0f78b-98a3-7e41-9c67-c1340c68f96e",
+            "source": {
+              "subagent": {
+                "thread_spawn": {
+                  "parent_thread_id": "01a0f778-36c8-7653-b4e1-24cd2500f495",
+                  "depth": 1,
+                  "agent_path": "/root/final_source_comparison",
+                  "agent_nickname": "Pasteur",
+                  "agent_role": null
+                }
+              }
+            },
+            "originator": "codex_exec",
+            "cli_version": "0.159.3"
+          },
+          "seats": [
+            {
+              "model": "gpt-6.1-sol",
+              "effort": "xhigh"
+            }
+          ],
+          "completed_turns": [
+            {
+              "turn_id": "01a0f78b-98d1-7d21-8799-e3174dcc301b",
+              "completed_at": 1790860047,
+              "error": null
+            }
+          ],
+          "errors": []
+        }
+      ]
+    },
+    {
+      "sample": "runs/opinion-en_US-r1",
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 1821.36,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-mcgh7du7",
+        "cleanup_required": true
+      },
+      "native_sessions": [
+        {
+          "file": "runs/opinion-en_US-r1/native-sessions/2026/10/01/rollout-2026-10-01T13-43-24-01a0f746-bf0e-7a40-9b5a-5b653342a9f5.jsonl",
+          "metadata": {
+            "id": "01a0f746-bf0e-7a40-9b5a-5b653342a9f5",
+            "source": "exec",
+            "originator": "codex_exec",
+            "cli_version": "0.159.3"
+          },
+          "seats": [
+            {
+              "model": "gpt-6.1-sol",
+              "effort": "xhigh"
+            }
+          ],
+          "completed_turns": [
+            {
+              "turn_id": "01a0f746-c0d6-7b50-bb1e-96b4c2ddde5e",
+              "completed_at": 1790856823,
+              "error": null
+            }
+          ],
+          "errors": []
+        },
+        {
+          "file": "runs/opinion-en_US-r1/native-sessions/2026/10/01/rollout-2026-10-01T13-49-47-01a0f74c-996b-70f1-94fc-4383e6784134.jsonl",
+          "metadata": {
+            "id": "01a0f74c-996b-70f1-94fc-4383e6784134",
+            "source": {
+              "subagent": {
+                "thread_spawn": {
+                  "parent_thread_id": "01a0f746-bf0e-7a40-9b5a-5b653342a9f5",
+                  "depth": 1,
+                  "agent_path": "/root/source_comparison",
+                  "agent_nickname": "Boyle",
+                  "agent_role": null
+                }
+              }
+            },
+            "originator": "codex_exec",
+            "cli_version": "0.159.3"
+          },
+          "seats": [
+            {
+              "model": "gpt-6.1-sol",
+              "effort": "xhigh"
+            }
+          ],
+          "completed_turns": [
+            {
+              "turn_id": "01a0f74c-9998-75c2-8ebc-4bdb8619c2dd",
+              "completed_at": 1790855752,
+              "error": null
+            }
+          ],
+          "errors": []
+        },
+        {
+          "file": "runs/opinion-en_US-r1/native-sessions/2026/10/01/rollout-2026-10-01T13-58-11-01a0f754-4894-78a3-ba16-bd4ab085e34c.jsonl",
+          "metadata": {
+            "id": "01a0f754-4894-78a3-ba16-bd4ab085e34c",
+            "source": {
+              "subagent": {
+                "thread_spawn": {
+                  "parent_thread_id": "01a0f746-bf0e-7a40-9b5a-5b653342a9f5",
+                  "depth": 1,
+                  "agent_path": "/root/source_comparison_final",
+                  "agent_nickname": "Rawls",
+                  "agent_role": null
+                }
+              }
+            },
+            "originator": "codex_exec",
+            "cli_version": "0.159.3"
+          },
+          "seats": [
+            {
+              "model": "gpt-6.1-sol",
+              "effort": "xhigh"
+            }
+          ],
+          "completed_turns": [
+            {
+              "turn_id": "01a0f754-48bf-7a61-a0d5-ab11d7513992",
+              "completed_at": 1790856525,
+              "error": null
+            }
+          ],
+          "errors": []
+        }
+      ]
+    },
+    {
+      "sample": "runs/opinion-en_US-r2",
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 1418.95,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-bgcn6qjf",
+        "cleanup_required": true
+      },
+      "native_sessions": [
+        {
+          "file": "runs/opinion-en_US-r2/native-sessions/2026/10/01/rollout-2026-10-01T14-13-46-01a0f762-8e98-7203-8735-e330899decb3.jsonl",
+          "metadata": {
+            "id": "01a0f762-8e98-7203-8735-e330899decb3",
+            "source": "exec",
+            "originator": "codex_exec",
+            "cli_version": "0.159.3"
+          },
+          "seats": [
+            {
+              "model": "gpt-6.1-sol",
+              "effort": "xhigh"
+            }
+          ],
+          "completed_turns": [
+            {
+              "turn_id": "01a0f762-9023-73a2-9c72-fa73afaf5217",
+              "completed_at": 1790858244,
+              "error": null
+            }
+          ],
+          "errors": []
+        },
+        {
+          "file": "runs/opinion-en_US-r2/native-sessions/2026/10/01/rollout-2026-10-01T14-18-12-01a0f766-9f61-7c02-a8d2-fd3e4e415645.jsonl",
+          "metadata": {
+            "id": "01a0f766-9f61-7c02-a8d2-fd3e4e415645",
+            "source": {
+              "subagent": {
+                "thread_spawn": {
+                  "parent_thread_id": "01a0f762-8e98-7203-8735-e330899decb3",
+                  "depth": 1,
+                  "agent_path": "/root/write_source_check_1",
+                  "agent_nickname": "Planck",
+                  "agent_role": null
+                }
+              }
+            },
+            "originator": "codex_exec",
+            "cli_version": "0.159.3"
+          },
+          "seats": [
+            {
+              "model": "gpt-6.1-sol",
+              "effort": "xhigh"
+            }
+          ],
+          "completed_turns": [
+            {
+              "turn_id": "01a0f766-9f93-7500-bd5e-e7b7487b82fe",
+              "completed_at": 1790857612,
+              "error": null
+            }
+          ],
+          "errors": []
+        },
+        {
+          "file": "runs/opinion-en_US-r2/native-sessions/2026/10/01/rollout-2026-10-01T14-28-23-01a0f76f-f03a-7920-9066-349386432f84.jsonl",
+          "metadata": {
+            "id": "01a0f76f-f03a-7920-9066-349386432f84",
+            "source": {
+              "subagent": {
+                "thread_spawn": {
+                  "parent_thread_id": "01a0f762-8e98-7203-8735-e330899decb3",
+                  "depth": 1,
+                  "agent_path": "/root/write_source_check_2",
+                  "agent_nickname": "Popper",
+                  "agent_role": null
+                }
+              }
+            },
+            "originator": "codex_exec",
+            "cli_version": "0.159.3"
+          },
+          "seats": [
+            {
+              "model": "gpt-6.1-sol",
+              "effort": "xhigh"
+            }
+          ],
+          "completed_turns": [
+            {
+              "turn_id": "01a0f76f-f062-7090-bc7a-221e417138db",
+              "completed_at": 1790858110,
+              "error": null
+            }
+          ],
+          "errors": []
+        }
+      ]
+    },
+    {
+      "sample": "runs/opinion-en_US-r3",
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 1178.63,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-_5ga17y5",
+        "cleanup_required": true
+      },
+      "native_sessions": [
+        {
+          "file": "runs/opinion-en_US-r3/native-sessions/2026/10/01/rollout-2026-10-01T14-28-42-01a0f770-3a1d-7950-9e6c-44189fcc9fb2.jsonl",
+          "metadata": {
+            "id": "01a0f770-3a1d-7950-9e6c-44189fcc9fb2",
+            "source": "exec",
+            "originator": "codex_exec",
+            "cli_version": "0.159.3"
+          },
+          "seats": [
+            {
+              "model": "gpt-6.1-sol",
+              "effort": "xhigh"
+            }
+          ],
+          "completed_turns": [
+            {
+              "turn_id": "01a0f770-3b92-7493-b6a2-035e600daa81",
+              "completed_at": 1790858900,
+              "error": null
+            }
+          ],
+          "errors": []
+        },
+        {
+          "file": "runs/opinion-en_US-r3/native-sessions/2026/10/01/rollout-2026-10-01T14-33-53-01a0f774-f840-7e22-9760-940233874a3c.jsonl",
+          "metadata": {
+            "id": "01a0f774-f840-7e22-9760-940233874a3c",
+            "source": {
+              "subagent": {
+                "thread_spawn": {
+                  "parent_thread_id": "01a0f770-3a1d-7950-9e6c-44189fcc9fb2",
+                  "depth": 1,
+                  "agent_path": "/root/write_source_check",
+                  "agent_nickname": "Mill",
+                  "agent_role": null
+                }
+              }
+            },
+            "originator": "codex_exec",
+            "cli_version": "0.159.3"
+          },
+          "seats": [
+            {
+              "model": "gpt-6.1-sol",
+              "effort": "xhigh"
+            }
+          ],
+          "completed_turns": [
+            {
+              "turn_id": "01a0f774-f86f-7f50-84b5-6223f87cf05e",
+              "completed_at": 1790858327,
+              "error": null
+            }
+          ],
+          "errors": []
+        },
+        {
+          "file": "runs/opinion-en_US-r3/native-sessions/2026/10/01/rollout-2026-10-01T14-40-55-01a0f77b-6b29-77b2-9fc4-c39ee4b7fa97.jsonl",
+          "metadata": {
+            "id": "01a0f77b-6b29-77b2-9fc4-c39ee4b7fa97",
+            "source": {
+              "subagent": {
+                "thread_spawn": {
+                  "parent_thread_id": "01a0f770-3a1d-7950-9e6c-44189fcc9fb2",
+                  "depth": 1,
+                  "agent_path": "/root/write_source_check_final",
+                  "agent_nickname": "Socrates",
+                  "agent_role": null
+                }
+              }
+            },
+            "originator": "codex_exec",
+            "cli_version": "0.159.3"
+          },
+          "seats": [
+            {
+              "model": "gpt-6.1-sol",
+              "effort": "xhigh"
+            }
+          ],
+          "completed_turns": [
+            {
+              "turn_id": "01a0f77b-6b5c-7132-81e2-26935159346a",
+              "completed_at": 1790858768,
+              "error": null
+            }
+          ],
+          "errors": []
+        }
+      ]
+    },
+    {
+      "sample": "judges/opinion-en_GB-r1",
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 976.19,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-nqooe5gb",
+        "cleanup_required": true
+      },
+      "native_sessions": [
+        {
+          "file": "judges/opinion-en_GB-r1/native-sessions/2026/10/01/rollout-2026-10-01T14-08-55-01a0f75e-1b94-7cc2-a049-4b71e719cc25.jsonl",
+          "metadata": {
+            "id": "01a0f75e-1b94-7cc2-a049-4b71e719cc25",
+            "source": "exec",
+            "originator": "codex_exec",
+            "cli_version": "0.159.3"
+          },
+          "seats": [
+            {
+              "model": "gpt-6.1-sol",
+              "effort": "xhigh"
+            }
+          ],
+          "completed_turns": [
+            {
+              "turn_id": "01a0f75e-1d01-7712-8318-f527f2360d9c",
+              "completed_at": 1790857510,
+              "error": null
+            }
+          ],
+          "errors": []
+        }
+      ]
+    },
+    {
+      "sample": "judges/opinion-en_GB-r2",
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 599.55,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-6pfqfnb_",
+        "cleanup_required": true
+      },
+      "native_sessions": [
+        {
+          "file": "judges/opinion-en_GB-r2/native-sessions/2026/10/01/rollout-2026-10-01T14-29-34-01a0f771-025b-7a50-8e34-cbd6dfc781b5.jsonl",
+          "metadata": {
+            "id": "01a0f771-025b-7a50-8e34-cbd6dfc781b5",
+            "source": "exec",
+            "originator": "codex_exec",
+            "cli_version": "0.159.3"
+          },
+          "seats": [
+            {
+              "model": "gpt-6.1-sol",
+              "effort": "xhigh"
+            }
+          ],
+          "completed_turns": [
+            {
+              "turn_id": "01a0f771-0417-7210-ba47-545849da02f5",
+              "completed_at": 1790858372,
+              "error": null
+            }
+          ],
+          "errors": []
+        }
+      ]
+    },
+    {
+      "sample": "judges/opinion-en_GB-r3",
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 967.35,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-42_ow3fx",
+        "cleanup_required": true
+      },
+      "native_sessions": [
+        {
+          "file": "judges/opinion-en_GB-r3/native-sessions/2026/10/01/rollout-2026-10-01T15-10-40-01a0f796-a40b-7cc3-bb0a-a85067dc5554.jsonl",
+          "metadata": {
+            "id": "01a0f796-a40b-7cc3-bb0a-a85067dc5554",
+            "source": "exec",
+            "originator": "codex_exec",
+            "cli_version": "0.159.3"
+          },
+          "seats": [
+            {
+              "model": "gpt-6.1-sol",
+              "effort": "xhigh"
+            }
+          ],
+          "completed_turns": [
+            {
+              "turn_id": "01a0f796-a576-7081-b5fa-6a28801aa2c3",
+              "completed_at": 1790861206,
+              "error": null
+            }
+          ],
+          "errors": []
+        }
+      ]
+    },
+    {
+      "sample": "judges/opinion-en_US-r1",
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 947.06,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-cx94uho2",
+        "cleanup_required": true
+      },
+      "native_sessions": [
+        {
+          "file": "judges/opinion-en_US-r1/native-sessions/2026/10/01/rollout-2026-10-01T14-13-46-01a0f762-8c40-7c22-9b8f-7223b0297d0d.jsonl",
+          "metadata": {
+            "id": "01a0f762-8c40-7c22-9b8f-7223b0297d0d",
+            "source": "exec",
+            "originator": "codex_exec",
+            "cli_version": "0.159.3"
+          },
+          "seats": [
+            {
+              "model": "gpt-6.1-sol",
+              "effort": "xhigh"
+            }
+          ],
+          "completed_turns": [
+            {
+              "turn_id": "01a0f762-8dcc-72c2-a6a0-1bf95d463c22",
+              "completed_at": 1790857771,
+              "error": null
+            }
+          ],
+          "errors": []
+        }
+      ]
+    },
+    {
+      "sample": "judges/opinion-en_US-r2",
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 828.32,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-679brvk_",
+        "cleanup_required": true
+      },
+      "native_sessions": [
+        {
+          "file": "judges/opinion-en_US-r2/native-sessions/2026/10/01/rollout-2026-10-01T14-37-26-01a0f778-37d0-7343-b0a0-1984d54f3962.jsonl",
+          "metadata": {
+            "id": "01a0f778-37d0-7343-b0a0-1984d54f3962",
+            "source": "exec",
+            "originator": "codex_exec",
+            "cli_version": "0.159.3"
+          },
+          "seats": [
+            {
+              "model": "gpt-6.1-sol",
+              "effort": "xhigh"
+            }
+          ],
+          "completed_turns": [
+            {
+              "turn_id": "01a0f778-3947-7153-8678-dad805badfe1",
+              "completed_at": 1790859073,
+              "error": null
+            }
+          ],
+          "errors": []
+        }
+      ]
+    },
+    {
+      "sample": "judges/opinion-en_US-r3",
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 896.68,
+        "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-eig07330",
+        "cleanup_required": true
+      },
+      "native_sessions": [
+        {
+          "file": "judges/opinion-en_US-r3/native-sessions/2026/10/01/rollout-2026-10-01T14-48-22-01a0f782-3ae9-7641-abba-0e631af95b4b.jsonl",
+          "metadata": {
+            "id": "01a0f782-3ae9-7641-abba-0e631af95b4b",
+            "source": "exec",
+            "originator": "codex_exec",
+            "cli_version": "0.159.3"
+          },
+          "seats": [
+            {
+              "model": "gpt-6.1-sol",
+              "effort": "xhigh"
+            }
+          ],
+          "completed_turns": [
+            {
+              "turn_id": "01a0f782-3c74-76f0-84d2-78fed6edb758",
+              "completed_at": 1790859797,
+              "error": null
+            }
+          ],
+          "errors": []
+        }
+      ]
+    }
+  ]
+}
