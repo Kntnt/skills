@@ -1,0 +1,3 @@
+D1: **pass**. C1: **pass**. The headline repair is supported and accounted for; all text after the headline is unchanged.
+
+Written to [judgement.md](/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-488-scratch/native-sbq3z8ss/work/judgement.md).

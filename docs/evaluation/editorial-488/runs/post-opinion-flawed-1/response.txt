@@ -1,0 +1,38 @@
+Granskad som svensk debatttext (opinion, sv), utan särskild teknik.
+
+```markdown
+# Telefonbokningen bör behållas och tidsåtgången mätas
+
+Sanna Ek, Öppna beslut
+
+Kommunstyrelsen borde behålla telefonbokning under ett halvårs försök i alla sju lokaler.
+
+## Piloten undersökte inte digital vana
+
+Det gjordes 96 bokningar på webben och 24 via telefon. Kommunens pilotrapport från den 8 april 2026 säger samtidigt att bokningarna inte räknar unika personer och att digital vana inte undersöktes.
+
+## Försöket saknar kostnadsberäkning
+
+Förvaltningen invänder att dubbla kanaler innebär dubbel administration. Handlingarna saknar tidsmätning. Föreningen vill att förvaltningen mäter tidsåtgång och frågar användarna varför de väljer en bokningsväg. Försökets kostnad är inte beräknad.
+
+## Försöket bör omfatta alla sju lokaler
+
+Kommunstyrelsen, behåll telefonbokning under ett halvårs försök.
+```
+
+**Kvarstående:** Ingress saknas; granskningsreglerna tillåter inte att saknade delar skrivs till. Artikelanatomin är därför inte fullt uppfylld.
+
+**Reparerade delar och ändrade påståenden:**
+
+- Huvudrubriken saknade stöd för hatanklagelsen och angav inte bokningsfrågan. Den återger nu textens befintliga förslag om att behålla telefonbokning och mäta tidsåtgången.
+- ”Bakgrund” och ”Diskussion” gav ingen saklig orientering. Deras ersättare återger nu rapportens uppgift att digital vana inte undersöktes respektive att försökets kostnad inte är beräknad; uppgifterna har också behållits i brödtexten.
+- Slutets ospecificerade uppmaning att agera nu har ersatts med en uppmaning till kommunstyrelsen att behålla telefonbokning under ett halvårs försök. Den nya mellanrubriken återger förslagets omfattning, alla sju lokaler, och avslutningen har fått ett eget avsnitt.
+
+**Borttagna påståenden:**
+
+- Vid rubrikrättningen: att kommunledningen hatar människor.
+- Vid rättningen av öppningsstyckets obelagda motiv- och besparingspåstående: att alla vet att politikerna vill stänga ute äldre för att spara miljoner.
+- Vid rättningen av slutsatsen om internetförmåga: att bokningarna bevisar att 20 procent av kommunens invånare inte kan använda internet.
+- Vid rättningen av kostnadsslutsatsen: att behållen telefonbokning kostar ingenting eftersom tidsmätning saknas. Med ”Därför” försvann också den felaktiga kopplingen mellan utebliven mätning och nollkostnad; läsaren får inte längre denna koppling som ett skäl för att telefonbokningen skulle vara gratis.
+
+Granskningen har tagit bort obelagda påståenden och anonym auktoritet, konkretiserat rubrikerna och gjort avslutningen till ett eget avsnitt med en tydlig uppmaning. Korrekturläsningen gav inga mekaniska ändringar.

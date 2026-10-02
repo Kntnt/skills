@@ -1,0 +1,3 @@
+D1: **pass**. C1: **pass**. The headline change is supported and explicitly accounted for; the remaining article bytes are unchanged.
+
+Written to [judgement.md](/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-488-scratch/native-aum3j_7r/work/judgement.md).

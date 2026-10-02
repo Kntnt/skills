@@ -1,0 +1,3 @@
+D2: **pass**. C1: **pass**. Inga skillnader; `output.md` är byteidentisk med underlaget.
+
+Bedömningen är skriven i [judgement.md](/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-488-scratch/native-mvalkcik/work/judgement.md).

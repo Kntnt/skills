@@ -1,0 +1,3 @@
+D1 (response): **pass**. C1: **pass**. Both heading changes are supported and accounted for; all other article bytes match.
+
+Written to [judgement.md](/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-488-scratch/native-q6kdyd9m/work/judgement.md).

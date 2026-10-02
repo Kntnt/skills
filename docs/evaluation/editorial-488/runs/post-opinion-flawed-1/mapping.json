@@ -1,0 +1,33 @@
+{
+  "arm": "post",
+  "row": "opinion-flawed-1",
+  "fixture": "opinion-flawed",
+  "target": "response",
+  "revision": "5457c89405aece11b325937f9f07407f01974f7c",
+  "packet": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-488-scratch/packets/04557f8364dc",
+  "launch": {
+    "returncode": 0,
+    "stdout": "{\"returncode\": 0, \"timed_out\": false, \"duration_seconds\": 1156.52, \"root\": \"/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-488-scratch/native-8vcswmwl\", \"cleanup_required\": true}\n",
+    "stderr": ""
+  },
+  "judges": [
+    {
+      "letter": "a",
+      "packet": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-488-scratch/packets/2034e2a87ca4",
+      "launch": {
+        "returncode": 0,
+        "stdout": "{\"returncode\": 0, \"timed_out\": false, \"duration_seconds\": 112.3, \"root\": \"/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-488-scratch/native-h93mzr1v\", \"cleanup_required\": true}\n",
+        "stderr": ""
+      }
+    },
+    {
+      "letter": "b",
+      "packet": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-488-scratch/packets/0e17abb731a3",
+      "launch": {
+        "returncode": 0,
+        "stdout": "{\"returncode\": 0, \"timed_out\": false, \"duration_seconds\": 102.15, \"root\": \"/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-488-scratch/native-0hccsxir\", \"cleanup_required\": true}\n",
+        "stderr": ""
+      }
+    }
+  ]
+}

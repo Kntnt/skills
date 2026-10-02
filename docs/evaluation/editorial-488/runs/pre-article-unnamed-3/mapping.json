@@ -1,0 +1,33 @@
+{
+  "arm": "pre",
+  "row": "article-unnamed-3",
+  "fixture": "article-unnamed",
+  "target": "response",
+  "revision": "5457c89405aece11b325937f9f07407f01974f7c",
+  "packet": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-488-scratch/packets/f8e7cb76adcf",
+  "launch": {
+    "returncode": 0,
+    "stdout": "{\"returncode\": 0, \"timed_out\": false, \"duration_seconds\": 768.0, \"root\": \"/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-488-scratch/native-2toeni5k\", \"cleanup_required\": true}\n",
+    "stderr": ""
+  },
+  "judges": [
+    {
+      "letter": "a",
+      "packet": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-488-scratch/packets/5e0d7249e638",
+      "launch": {
+        "returncode": 0,
+        "stdout": "{\"returncode\": 0, \"timed_out\": false, \"duration_seconds\": 94.05, \"root\": \"/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-488-scratch/native-0xkhscrm\", \"cleanup_required\": true}\n",
+        "stderr": ""
+      }
+    },
+    {
+      "letter": "b",
+      "packet": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-488-scratch/packets/7112b7ce1e72",
+      "launch": {
+        "returncode": 0,
+        "stdout": "{\"returncode\": 0, \"timed_out\": false, \"duration_seconds\": 96.44, \"root\": \"/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-488-scratch/native-snqaoe1e\", \"cleanup_required\": true}\n",
+        "stderr": ""
+      }
+    }
+  ]
+}

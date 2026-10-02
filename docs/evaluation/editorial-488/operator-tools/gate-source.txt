@@ -1,0 +1,28 @@
+import json
+import os
+import shlex
+import subprocess
+from pathlib import Path
+
+ROOT = Path('/Users/thomas/Projects/skills/.git/kntnt-orchestrate/488')
+SCRATCH = Path('/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-488-scratch')
+CLEANUP = '/Users/thomas/.agents/skills/kntnt/features/session-cleanup/scripts/session_cleanup.py'
+
+def register(pid):
+    subprocess.run(['uv','run',CLEANUP,'add','pid',str(pid),'Ticket 488 verification gate'], cwd=ROOT,env={**os.environ,'KNTNT_HOME':str(SCRATCH/'cleanup-home')},check=True,capture_output=True)
+
+if os.getpgrp() != os.getpid():
+    os.setsid()
+register(os.getpid())
+text=(ROOT/'CONTRIBUTING.md').read_text()
+block=text.split('   uvx ruff check .\n',1)[1].split('   ```',1)[0]
+commands=['uvx ruff check .',*[line.strip() for line in block.splitlines() if line.strip()]]
+results=[]
+for i,command in enumerate(commands,1):
+    with (SCRATCH/f'gate-{i}.log').open('w') as output:
+        process=subprocess.Popen(shlex.split(command),cwd=ROOT,stdout=output,stderr=subprocess.STDOUT,start_new_session=True)
+        register(process.pid)
+        code=process.wait()
+    results.append({'command':command,'returncode':code,'log':f'gate-{i}.log'})
+    (SCRATCH/'gate-results.json').write_text(json.dumps(results,indent=2)+'\n')
+    print(json.dumps(results[-1]),flush=True)

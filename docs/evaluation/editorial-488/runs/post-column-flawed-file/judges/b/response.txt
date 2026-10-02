@@ -1,0 +1,5 @@
+D2: **fail** — the artifact is present, but the reply links to a different destination.
+
+C1: **pass** — claim changes are accounted for, reflection and doubt are preserved, and the contradiction is reported.
+
+Written to [judgement.md](/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-488-scratch/native-v5c4u9my/work/judgement.md).

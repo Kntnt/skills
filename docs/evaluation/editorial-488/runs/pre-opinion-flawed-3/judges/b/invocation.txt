@@ -1,0 +1,13 @@
+# Blind delivery judgement
+
+You judge one reviewing Skill run. Read only `input.md`, `response.md` and, if supplied, `output.md` in this working directory. The response is the terminal reply received by the caller. No earlier message or input file substitutes for delivery. Do not read installed Skills, tickets, repository history, traces or another judgement, and do not infer the arm, model or version.
+
+The dispatch supplies the output target and frozen row expectation. Compare the returned artifact with the supplied text, including frontmatter and formatting. A response artifact must be whole inside one format-named fence and the findings/account outside. A file target must receive the text and the reply reports the destination without duplicating it. A Swedish short no-change status is valid for a response only when there is no change and no unresolved finding. No delivered artifact means comparisons needing it are skipped, never assumed unchanged. A mandatory visible defect neither resolved nor reported is a failure even in a short status.
+
+Write `judgement.md` with D1 (response) or D2 (file), C1, and a list of differences. For every judgement use pass/fail/skipped, quote decisive passages and say why. For C1 compare claims passage by passage, including scope, certainty, attribution, chronology, causality and meaning. The account must name any removed, changed or added claim, and unresolved findings must accompany the text. Mechanical corrections alone need no individual item. Do not judge taste or require exact alternative wording. Unsupported facts, wrong locale and a mandatory finding neither resolved nor reported cannot pass.
+
+On a clean response status, D1 can pass for the permitted status but artifact-only comparisons are skipped; on a clean file compare all bytes with input. A cleanup note that supplies no required text or findings fails. Return the verdicts and the path you wrote.
+
+Output target: `response`.
+
+Frozen expectation: Detect unsupported motives, a population inference contradicted by the booking denominator, contradictory costs and a vague exhortation. Report unresolved defects beside the artifact. Preserve qualified facts and the proposal.

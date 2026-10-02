@@ -1,0 +1,319 @@
+{
+  "packet": "04557f8364dc",
+  "terminal_timestamp": "2026-10-02T14:57:21.769Z",
+  "terminal_matches_native_final_except_final_newline": true,
+  "format_named_fences": 1,
+  "artifact_sha256": "37763ed66542bb7147686a4a2ff9625d6f77390016b8ccacd685d0f7cef45752",
+  "artifact_matches_observed_mechanical_output": true,
+  "source_inventory_unchanged": true,
+  "non_home_created": {},
+  "non_home_changed": {},
+  "non_home_removed": {},
+  "all_command_completions_before_terminal": true,
+  "parent_calls_after_terminal": [],
+  "removal_commands": [
+    {
+      "timestamp": "2026-10-02T14:52:35.612Z",
+      "session": "01a0fd0d-0c68-71c1-85b3-3cbacf5c7d0f",
+      "ordinal": 172,
+      "command": [
+        "/opt/homebrew/bin/bash",
+        "-lc",
+        "python3 - <<'PY'\nfrom pathlib import Path\nimport hashlib\nimport json\nimport os\nimport shutil\nimport subprocess\nimport tempfile\ntask_dir = Path(\"/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-488-scratch/native-8vcswmwl/scratch/redline-proofread-mc0nxtsp\")\ntask_input = Path(\"/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-488-scratch/native-8vcswmwl/scratch/redline-proofread-mc0nxtsp/mechanical-input.md\")\ntask_output = Path(\"/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-488-scratch/native-8vcswmwl/scratch/redline-proofread-mc0nxtsp/mechanical-output.md\")\nassert hashlib.sha256(task_input.read_bytes()).hexdigest() == \"37763ed66542bb7147686a4a2ff9625d6f77390016b8ccacd685d0f7cef45752\", 'Mechanical input changed'\nassert hashlib.sha256(Path('input.md').read_bytes()).hexdigest() == 'ab033d9f4c817c9eaa0efa32db93819a99291a3b22e29fb39f0d640e830ed990', 'Source changed'\ntask_final = task_output.read_bytes()\nassert task_final == task_input.read_bytes(), 'Mechanical outcome differs from reported unchanged result'\nwith tempfile.TemporaryDirectory(prefix='redline-measure-final-', dir='/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-488-scratch/native-8vcswmwl/scratch') as task_temp:\n    print(task_temp, flush=True)\n    task_env = dict(os.environ, TMPDIR=task_temp)\n    task_result = subprocess.run(['uv', 'run', '--no-cache', '--no-project', '/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-488-scratch/native-8vcswmwl/work/.agents/skills/kntnt/library/scripts/article_anatomy.py', '-'], input=task_final, capture_output=True, env=task_env)\nshutil.rmtree(task_dir)\nprint(json.dumps({'final_text': task_final.decode('utf-8'), 'measurement_exit': task_result.returncode, 'measurement': task_result.stdout.decode('utf-8'), 'measurement_stderr': task_result.stderr.decode('utf-8'), 'private_files_removed': not task_dir.exists(), 'scratch_entries': [str(p) for p in Path('/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-488-scratch/native-8vcswmwl/scratch').iterdir()]}, ensure_ascii=False))\nPY"
+      ],
+      "exit_code": 0,
+      "output": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-488-scratch/native-8vcswmwl/scratch/redline-measure-final-gsjmfbj_\n{\"final_text\": \"# Telefonbokningen bör behållas och tidsåtgången mätas\\n\\nSanna Ek, Öppna beslut\\n\\nKommunstyrelsen borde behålla telefonbokning under ett halvårs försök i alla sju lokaler.\\n\\n## Piloten undersökte inte digital vana\\n\\nDet gjordes 96 bokningar på webben och 24 via telefon. Kommunens pilotrapport från den 8 april 2026 säger samtidigt att bokningarna inte räknar unika personer och att digital vana inte undersöktes.\\n\\n## Försöket saknar kostnadsberäkning\\n\\nFörvaltningen invänder att dubbla kanaler innebär dubbel administration. Handlingarna saknar tidsmätning. Föreningen vill att förvaltningen mäter tidsåtgång och frågar användarna varför de väljer en bokningsväg. Försökets kostnad är inte beräknad.\\n\\n## Försöket bör omfatta alla sju lokaler\\n\\nKommunstyrelsen, behåll telefonbokning under ett halvårs försök.\\n\", \"measurement_exit\": 1, \"measurement\": \"{\\n  \\\"ok\\\": true,\\n  \\\"format\\\": \\\"markdown\\\",\\n  \\\"conforms\\\": false,\\n  \\\"failures\\\": [\\n    {\\n      \\\"part\\\": \\\"standfirst\\\",\\n      \\\"rule\\\": \\\"A text conforms when every part is present in the order shown.\\\",\\n      \\\"measured\\\": \\\"absent\\\",\\n      \\\"text\\\": null\\n    }\\n  ],\\n  \\\"norms\\\": [],\\n  \\\"typical\\\": {\\n    \\\"paragraphs\\\": 4,\\n    \\\"paragraphs_of_two_or_three_sentences\\\": 1,\\n    \\\"sections\\\": 3,\\n    \\\"sections_of_two_or_three_paragraphs\\\": 0\\n  },\\n  \\\"parts\\\": {\\n    \\\"headline\\\": {\\n      \\\"text\\\": \\\"Telefonbokningen bör behållas och tidsåtgången mätas\\\",\\n      \\\"characters\\\": 52,\\n      \\\"words\\\": 6\\n    },\\n    \\\"standfirst\\\": null,\\n    \\\"byline\\\": {\\n      \\\"text\\\": \\\"Sanna Ek, Öppna beslut\\\",\\n      \\\"words\\\": 4\\n    },\\n    \\\"lead\\\": {\\n      \\\"text\\\": \\\"Kommunstyrelsen borde behålla telefonbokning under ett halvårs försök …\\\",\\n      \\\"words\\\": 12,\\n      \\\"sentences_estimate\\\": 1,\\n      \\\"paragraphs\\\": 1\\n    },\\n    \\\"sections\\\": [\\n      {\\n        \\\"subheading\\\": {\\n          \\\"text\\\": \\\"Piloten undersökte inte digital vana\\\",\\n          \\\"characters\\\": 36,\\n          \\\"words\\\": 5\\n        },\\n        \\\"paragraphs\\\": [\\n          {\\n            \\\"text\\\": \\\"Det gjordes 96 bokningar på webben och 24 …\\\",\\n            \\\"words\\\": 31,\\n            \\\"sentences_estimate\\\": 2\\n          }\\n        ]\\n      },\\n      {\\n        \\\"subheading\\\": {\\n          \\\"text\\\": \\\"Försöket saknar kostnadsberäkning\\\",\\n          \\\"characters\\\": 33,\\n          \\\"words\\\": 3\\n        },\\n        \\\"paragraphs\\\": [\\n          {\\n            \\\"text\\\": \\\"Förvaltningen invänder att dubbla kanaler innebär dubbel administration. …\\\",\\n            \\\"words\\\": 30,\\n            \\\"sentences_estimate\\\": 4\\n          }\\n        ]\\n      },\\n      {\\n        \\\"subheading\\\": {\\n          \\\"text\\\": \\\"Försöket bör omfatta alla sju lokaler\\\",\\n          \\\"characters\\\": 37,\\n          \\\"words\\\": 6\\n        },\\n        \\\"paragraphs\\\": [\\n          {\\n            \\\"text\\\": \\\"Kommunstyrelsen, behåll telefonbokning under ett halvårs försök.\\\",\\n            \\\"words\\\": 7,\\n            \\\"sentences_estimate\\\": 1\\n          }\\n        ]\\n      }\\n    ],\\n    \\\"other\\\": []\\n  },\\n  \\\"heading_pairs\\\": [\\n    {\\n      \\\"id\\\": \\\"headline-standfirst\\\",\\n      \\\"kind\\\": \\\"headline-standfirst\\\",\\n      \\\"heading\\\": \\\"Telefonbokningen bör behållas och tidsåtgången mätas\\\",\\n      \\\"following\\\": null,\\n      \\\"shared_words\\\": null\\n    },\\n    {\\n      \\\"id\\\": \\\"subheading-1\\\",\\n      \\\"kind\\\": \\\"subheading-first-sentence-estimate\\\",\\n      \\\"heading\\\": \\\"Piloten undersökte inte digital vana\\\",\\n      \\\"following\\\": \\\"Det gjordes 96 bokningar på webben och 24 via telefon.\\\",\\n      \\\"shared_words\\\": []\\n    },\\n    {\\n      \\\"id\\\": \\\"subheading-2\\\",\\n      \\\"kind\\\": \\\"subheading-first-sentence-estimate\\\",\\n      \\\"heading\\\": \\\"Försöket saknar kostnadsberäkning\\\",\\n      \\\"following\\\": \\\"Förvaltningen invänder att dubbla kanaler innebär dubbel administration.\\\",\\n      \\\"shared_words\\\": []\\n    },\\n    {\\n      \\\"id\\\": \\\"subheading-3\\\",\\n      \\\"kind\\\": \\\"subheading-first-sentence-estimate\\\",\\n      \\\"heading\\\": \\\"Försöket bör omfatta alla sju lokaler\\\",\\n      \\\"following\\\": \\\"Kommunstyrelsen, behåll telefonbokning under ett halvårs försök.\\\",\\n      \\\"shared_words\\\": []\\n    }\\n  ]\\n}\\n\", \"measurement_stderr\": \"\", \"private_files_removed\": true, \"scratch_entries\": [\"/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-488-scratch/native-8vcswmwl/scratch/cache\", \"/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-488-scratch/native-8vcswmwl/scratch/uv-cache\", \"/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-488-scratch/native-8vcswmwl/scratch/data\", \"/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-488-scratch/native-8vcswmwl/scratch/tmp\"]}\n",
+      "cwd": "file:///private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-488-scratch/native-8vcswmwl/work"
+    }
+  ],
+  "sessions": [
+    {
+      "path": "native-sessions/2026/10/02/rollout-2026-10-02T16-38-06-01a0fd0d-0c68-71c1-85b3-3cbacf5c7d0f.jsonl",
+      "id": "01a0fd0d-0c68-71c1-85b3-3cbacf5c7d0f",
+      "source": "exec",
+      "parent_thread_id": null,
+      "contexts": [
+        {
+          "model": "gpt-6.1-sol",
+          "effort": "xhigh"
+        }
+      ],
+      "finals": [
+        [
+          "2026-10-02T14:57:21.769Z",
+          "Granskad som svensk debatttext (opinion, sv), utan särskild teknik.\n\n```markdown\n# Telefonbokningen bör behållas och tidsåtgången mätas\n\nSanna Ek, Öppna beslut\n\nKommunstyrelsen borde behålla telefonbokning under ett halvårs försök i alla sju lokaler.\n\n## Piloten undersökte inte digital vana\n\nDet gjordes 96 bokningar på webben och 24 via telefon. Kommunens pilotrapport från den 8 april 2026 säger samtidigt att bokningarna inte räknar unika personer och att digital vana inte undersöktes.\n\n## Försöket saknar kostnadsberäkning\n\nFörvaltningen invänder att dubbla kanaler innebär dubbel administration. Handlingarna saknar tidsmätning. Föreningen vill att förvaltningen mäter tidsåtgång och frågar användarna varför de väljer en bokningsväg. Försökets kostnad är inte beräknad.\n\n## Försöket bör omfatta alla sju lokaler\n\nKommunstyrelsen, behåll telefonbokning under ett halvårs försök.\n```\n\n**Kvarstående:** Ingress saknas; granskningsreglerna tillåter inte att saknade delar skrivs till. Artikelanatomin är därför inte fullt uppfylld.\n\n**Reparerade delar och ändrade påståenden:**\n\n- Huvudrubriken saknade stöd för hatanklagelsen och angav inte bokningsfrågan. Den återger nu textens befintliga förslag om att behålla telefonbokning och mäta tidsåtgången.\n- ”Bakgrund” och ”Diskussion” gav ingen saklig orientering. Deras ersättare återger nu rapportens uppgift att digital vana inte undersöktes respektive att försökets kostnad inte är beräknad; uppgifterna har också behållits i brödtexten.\n- Slutets ospecificerade uppmaning att agera nu har ersatts med en uppmaning till kommunstyrelsen att behålla telefonbokning under ett halvårs försök. Den nya mellanrubriken återger förslagets omfattning, alla sju lokaler, och avslutningen har fått ett eget avsnitt.\n\n**Borttagna påståenden:**\n\n- Vid rubrikrättningen: att kommunledningen hatar människor.\n- Vid rättningen av öppningsstyckets obelagda motiv- och besparingspåstående: att alla vet att politikerna vill stänga ute äldre för att spara miljoner.\n- Vid rättningen av slutsatsen om internetförmåga: att bokningarna bevisar att 20 procent av kommunens invånare inte kan använda internet.\n- Vid rättningen av kostnadsslutsatsen: att behållen telefonbokning kostar ingenting eftersom tidsmätning saknas. Med ”Därför” försvann också den felaktiga kopplingen mellan utebliven mätning och nollkostnad; läsaren får inte längre denna koppling som ett skäl för att telefonbokningen skulle vara gratis.\n\nGranskningen har tagit bort obelagda påståenden och anonym auktoritet, konkretiserat rubrikerna och gjort avslutningen till ett eget avsnitt med en tydlig uppmaning. Korrekturläsningen gav inga mekaniska ändringar."
+        ]
+      ],
+      "calls": [
+        {
+          "timestamp": "2026-10-02T14:38:13.960Z",
+          "name": "exec",
+          "ordinal": 12
+        },
+        {
+          "timestamp": "2026-10-02T14:38:34.413Z",
+          "name": "exec",
+          "ordinal": 20
+        },
+        {
+          "timestamp": "2026-10-02T14:38:55.772Z",
+          "name": "exec",
+          "ordinal": 27
+        },
+        {
+          "timestamp": "2026-10-02T14:39:25.448Z",
+          "name": "exec",
+          "ordinal": 37
+        },
+        {
+          "timestamp": "2026-10-02T14:39:44.853Z",
+          "name": "exec",
+          "ordinal": 47
+        },
+        {
+          "timestamp": "2026-10-02T14:40:08.500Z",
+          "name": "exec",
+          "ordinal": 56
+        },
+        {
+          "timestamp": "2026-10-02T14:43:21.709Z",
+          "name": "spawn_agent",
+          "ordinal": 69,
+          "task_name": "correction_1",
+          "message_encrypted": true,
+          "model": null,
+          "reasoning_effort": null
+        },
+        {
+          "timestamp": "2026-10-02T14:43:58.670Z",
+          "name": "exec",
+          "ordinal": 77
+        },
+        {
+          "timestamp": "2026-10-02T14:44:02.131Z",
+          "name": "wait_agent",
+          "ordinal": 82
+        },
+        {
+          "timestamp": "2026-10-02T14:45:14.062Z",
+          "name": "wait_agent",
+          "ordinal": 91
+        },
+        {
+          "timestamp": "2026-10-02T14:46:28.508Z",
+          "name": "wait_agent",
+          "ordinal": 100
+        },
+        {
+          "timestamp": "2026-10-02T14:47:41.137Z",
+          "name": "exec",
+          "ordinal": 109
+        },
+        {
+          "timestamp": "2026-10-02T14:47:57.358Z",
+          "name": "list_agents",
+          "ordinal": 116
+        },
+        {
+          "timestamp": "2026-10-02T14:48:00.484Z",
+          "name": "wait_agent",
+          "ordinal": 120
+        },
+        {
+          "timestamp": "2026-10-02T14:49:52.738Z",
+          "name": "exec",
+          "ordinal": 134
+        },
+        {
+          "timestamp": "2026-10-02T14:50:24.873Z",
+          "name": "exec",
+          "ordinal": 141
+        },
+        {
+          "timestamp": "2026-10-02T14:50:36.202Z",
+          "name": "spawn_agent",
+          "ordinal": 146,
+          "task_name": "mechanical_pass",
+          "message_encrypted": true,
+          "model": null,
+          "reasoning_effort": null
+        },
+        {
+          "timestamp": "2026-10-02T14:51:46.576Z",
+          "name": "wait_agent",
+          "ordinal": 158
+        },
+        {
+          "timestamp": "2026-10-02T14:52:35.383Z",
+          "name": "exec",
+          "ordinal": 170
+        },
+        {
+          "timestamp": "2026-10-02T14:54:33.980Z",
+          "name": "spawn_agent",
+          "ordinal": 179,
+          "task_name": "reply_check",
+          "message_encrypted": true,
+          "model": null,
+          "reasoning_effort": null
+        },
+        {
+          "timestamp": "2026-10-02T14:55:12.448Z",
+          "name": "wait_agent",
+          "ordinal": 189
+        },
+        {
+          "timestamp": "2026-10-02T14:56:19.222Z",
+          "name": "wait_agent",
+          "ordinal": 198
+        }
+      ]
+    },
+    {
+      "path": "native-sessions/2026/10/02/rollout-2026-10-02T16-43-21-01a0fd11-ddf1-7030-b2c8-1285f12d70f0.jsonl",
+      "id": "01a0fd11-ddf1-7030-b2c8-1285f12d70f0",
+      "source": {
+        "subagent": {
+          "thread_spawn": {
+            "parent_thread_id": "01a0fd0d-0c68-71c1-85b3-3cbacf5c7d0f",
+            "depth": 1,
+            "agent_path": "/root/correction_1",
+            "agent_nickname": "Singer",
+            "agent_role": null
+          }
+        }
+      },
+      "parent_thread_id": "01a0fd0d-0c68-71c1-85b3-3cbacf5c7d0f",
+      "contexts": [
+        {
+          "model": "gpt-6.1-sol",
+          "effort": "xhigh"
+        }
+      ],
+      "finals": [
+        [
+          "2026-10-02T14:48:45.351Z",
+          "# Telefonbokningen bör behållas och tidsåtgången mätas\n\nSanna Ek, Öppna beslut\n\nKommunstyrelsen borde behålla telefonbokning under ett halvårs försök i alla sju lokaler.\n\n## Piloten undersökte inte digital vana\n\nDet gjordes 96 bokningar på webben och 24 via telefon. Kommunens pilotrapport från den 8 april 2026 säger samtidigt att bokningarna inte räknar unika personer och att digital vana inte undersöktes.\n\n## Försöket saknar kostnadsberäkning\n\nFörvaltningen invänder att dubbla kanaler innebär dubbel administration. Handlingarna saknar tidsmätning. Föreningen vill att förvaltningen mäter tidsåtgång och frågar användarna varför de väljer en bokningsväg. Försökets kostnad är inte beräknad.\n\n## Försöket bör omfatta alla sju lokaler\n\nKommunstyrelsen, behåll telefonbokning under ett halvårs försök.\n\n---\n\nFynd 2–8 är reparerade. Fynd 1 lämnas: den saknade ingressen ska enligt uppdraget lämnas oskriven för en person att fylla.\n\nBorttagna påståenden:\n\n- Fynd 2: att kommunledningen hatar människor.\n- Fynd 3: att alla känner till politikernas avsikt att stänga ute äldre för att spara miljoner.\n- Fynd 5: att bokningarna bevisar att 20 procent av invånarna inte kan använda internet.\n- Fynd 7: att telefonbokningen kostar ingenting. Även ”Därför” är borttaget: läsaren får inte längre avsaknaden av tidsmätning presenterad som grund för noll kostnad.\n\nHuvudrubriken uttrycker nu förslagen om bevarad telefonbokning och mätt tidsåtgång. Mellanrubrikerna anger pilotens undersökningsbegränsning respektive försökets ob beräknade kostnad. Avslutningen har ett eget avsnitt och riktar det befintliga förslaget till kommunstyrelsen, med omfattningen i rubriken och åtgärden och tiden i stycket. Dessa påståenden har motsvarigheter i ursprungstexten; inga nya sakpåståenden har tillförts. Underlagets begränsningar är bevarade.\n\nArtikelmätningen gav exit 1: ingressen är `absent`, vilket bryter kravet att alla delar ska finnas i föreskriven ordning. Övriga räknade krav passerade. Mellanrubrikparen har granskats mot hela texten och tillför olika information. Rubrik–ingress kan inte jämföras eftersom ingressen saknas."
+        ]
+      ],
+      "calls": [
+        {
+          "timestamp": "2026-10-02T14:43:46.453Z",
+          "name": "exec",
+          "ordinal": 14
+        },
+        {
+          "timestamp": "2026-10-02T14:44:07.177Z",
+          "name": "exec",
+          "ordinal": 21
+        },
+        {
+          "timestamp": "2026-10-02T14:46:44.842Z",
+          "name": "exec",
+          "ordinal": 39
+        }
+      ]
+    },
+    {
+      "path": "native-sessions/2026/10/02/rollout-2026-10-02T16-50-36-01a0fd18-7f2c-7342-951e-8bd70707aa8a.jsonl",
+      "id": "01a0fd18-7f2c-7342-951e-8bd70707aa8a",
+      "source": {
+        "subagent": {
+          "thread_spawn": {
+            "parent_thread_id": "01a0fd0d-0c68-71c1-85b3-3cbacf5c7d0f",
+            "depth": 1,
+            "agent_path": "/root/mechanical_pass",
+            "agent_nickname": "Bacon",
+            "agent_role": null
+          }
+        }
+      },
+      "parent_thread_id": "01a0fd0d-0c68-71c1-85b3-3cbacf5c7d0f",
+      "contexts": [
+        {
+          "model": "gpt-6.1-sol",
+          "effort": "xhigh"
+        }
+      ],
+      "finals": [
+        [
+          "2026-10-02T14:51:49.806Z",
+          "Klart. Texten behövde inga mekaniska korrigeringar och har levererats till angiven mechanical-output.md. Indata är oförändrade och egna temporära kataloger är borttagna."
+        ]
+      ],
+      "calls": [
+        {
+          "timestamp": "2026-10-02T14:50:41.071Z",
+          "name": "exec",
+          "ordinal": 10
+        },
+        {
+          "timestamp": "2026-10-02T14:50:52.742Z",
+          "name": "exec",
+          "ordinal": 17
+        },
+        {
+          "timestamp": "2026-10-02T14:51:07.843Z",
+          "name": "exec",
+          "ordinal": 23
+        },
+        {
+          "timestamp": "2026-10-02T14:51:16.587Z",
+          "name": "exec",
+          "ordinal": 28
+        },
+        {
+          "timestamp": "2026-10-02T14:51:24.170Z",
+          "name": "exec",
+          "ordinal": 35
+        },
+        {
+          "timestamp": "2026-10-02T14:51:29.623Z",
+          "name": "exec",
+          "ordinal": 40
+        },
+        {
+          "timestamp": "2026-10-02T14:51:44.699Z",
+          "name": "exec",
+          "ordinal": 47
+        }
+      ]
+    },
+    {
+      "path": "native-sessions/2026/10/02/rollout-2026-10-02T16-54-34-01a0fd1c-2002-76d2-ab7e-22fc97430509.jsonl",
+      "id": "01a0fd1c-2002-76d2-ab7e-22fc97430509",
+      "source": {
+        "subagent": {
+          "thread_spawn": {
+            "parent_thread_id": "01a0fd0d-0c68-71c1-85b3-3cbacf5c7d0f",
+            "depth": 1,
+            "agent_path": "/root/reply_check",
+            "agent_nickname": "Hegel",
+            "agent_role": null
+          }
+        }
+      },
+      "parent_thread_id": "01a0fd0d-0c68-71c1-85b3-3cbacf5c7d0f",
+      "contexts": [
+        {
+          "model": "gpt-6.1-sol",
+          "effort": "xhigh"
+        }
+      ],
+      "finals": [
+        [
+          "2026-10-02T14:56:44.087Z",
+          "1. **False statements.**\n\nnone\n\n2. **Claim changes the account misses.**\n\nnone"
+        ]
+      ],
+      "calls": [
+        {
+          "timestamp": "2026-10-02T14:54:42.515Z",
+          "name": "exec",
+          "ordinal": 10
+        }
+      ]
+    }
+  ],
+  "limitation": "Some delegated message arguments are encrypted and inter-agent prompt contents are absent from child rollouts. Exact checked report wording is not inferable where no drafted reply was externally captured. The observed mechanical files, checker return, terminal reply and command order are separate retained evidence."
+}

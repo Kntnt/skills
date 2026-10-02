@@ -1,0 +1,9 @@
+TASK488_SCRATCH=/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-488-scratch
+export TMPDIR="$TASK488_SCRATCH/tmp"
+export UV_CACHE_DIR="$TASK488_SCRATCH/uv-cache"
+export UV_TOOL_DIR="$TASK488_SCRATCH/uv-tools"
+export UV_PYTHON_INSTALL_DIR="$TASK488_SCRATCH/uv-python"
+export PYTHONPYCACHEPREFIX="$TASK488_SCRATCH/pycache"
+export RUFF_CACHE_DIR="$TASK488_SCRATCH/ruff-cache"
+export MYPY_CACHE_DIR="$TASK488_SCRATCH/mypy-cache"
+export UV_NO_PROJECT=1

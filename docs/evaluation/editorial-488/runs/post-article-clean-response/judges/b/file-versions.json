@@ -1,0 +1,26 @@
+[
+  {
+    "path": "work/input.md",
+    "sha256": "f183e6da31cf78081cc7c7eee69570940e24802997e92d96bb111966aa4170d5",
+    "capture": "0000-f183e6da31cf.md",
+    "time": 1790954321.821056
+  },
+  {
+    "path": "work/response.md",
+    "sha256": "6dfb3e2e36d5b2de2dd519b89ecc2a105bdb98a16464109cc8b28c3a22ab466c",
+    "capture": "0001-6dfb3e2e36d5.md",
+    "time": 1790954321.8212109
+  },
+  {
+    "path": "work/AGENTS.md",
+    "sha256": "b3a9a85770a8a626d07addade9beecc18f767981ca755d3ae8b8d88eb8c54320",
+    "capture": "0002-b3a9a85770a8.md",
+    "time": 1790954321.821328
+  },
+  {
+    "path": "work/judgement.md",
+    "sha256": "02341c016fdc31ff10b9300dfd0e9ca919e3a40eebfcc50d9702d3df2a4d2e28",
+    "capture": "0003-02341c016fdc.md",
+    "time": 1790954444.526123
+  }
+]

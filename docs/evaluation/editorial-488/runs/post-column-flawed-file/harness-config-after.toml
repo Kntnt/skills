@@ -1,0 +1,6 @@
+model = "gpt-6.1-sol"
+model_reasoning_effort = "xhigh"
+service_tier = "default"
+
+[projects."/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-488-scratch/native-nwxnq6s4/work"]
+trust_level = "trusted"

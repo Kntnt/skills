@@ -1,0 +1,5 @@
+D2: **fail** — texten är levererad, men destinationslänken pekar på en annan katalog.
+
+C1: **pass** — ändringarna är redovisade och motsägelsen rapporteras som olöst.
+
+Bedömningen finns i [judgement.md](/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-488-scratch/native-rjrt75if/work/judgement.md).

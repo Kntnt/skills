@@ -1,0 +1,3 @@
+D2: **pass**. C1: **pass**. No differences; `output.md` matches `input.md` byte for byte.
+
+Written to [judgement.md](/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-488-scratch/native-9wi4ddr1/work/judgement.md).

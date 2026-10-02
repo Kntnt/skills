@@ -1,0 +1,18 @@
+{
+  "command": [
+    "uv",
+    "run",
+    "--with",
+    "pytest",
+    "--with",
+    "pytest-xdist",
+    "--with",
+    "pyyaml",
+    "pytest",
+    "tests/test_run.py::test_the_registries_the_engine_finds_are_the_ones_this_repository_keeps",
+    "-q"
+  ],
+  "pid": 62831,
+  "process_group": 62831,
+  "returncode": 0
+}

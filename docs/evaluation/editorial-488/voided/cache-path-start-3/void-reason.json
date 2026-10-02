@@ -1,0 +1,8 @@
+{
+  "reason": "Builder interrupted the launch after discovering an incorrectly typed runner UV cache path outside the authorized roots. This is operator/staging failure, not a Skill delivery verdict. The three starts had identical article-unnamed invocations; ordinal row mapping was not yet persisted. The full second arm remains unrun.",
+  "bad_cache": "/private/tmp/kntntnt-orchestrate-20261002.o7bmMK/ticket-488-scratch/uv-cache",
+  "expected_cache": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-488-scratch/uv-cache",
+  "controller_group": 41638,
+  "native_group": 41728,
+  "root": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-488-scratch/native-eknfc8v1"
+}

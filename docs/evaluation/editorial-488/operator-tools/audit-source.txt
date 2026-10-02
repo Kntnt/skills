@@ -1,0 +1,81 @@
+import hashlib
+import json
+import re
+from pathlib import Path
+
+SCRATCH=Path('/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-488-scratch')
+
+def digest(data):
+    return hashlib.sha256(data).hexdigest()
+
+def audit(packet):
+    sessions=[]
+    all_commands=[]
+    parent=None
+    for path in sorted((packet/'native-sessions').rglob('*.jsonl')):
+        events=[json.loads(line) for line in path.read_text().splitlines()]
+        meta=next(e['payload'] for e in events if e['type']=='session_meta')
+        contexts=[{k:e['payload'].get(k) for k in ('model','effort')} for e in events if e['type']=='turn_context']
+        messages=[(e['timestamp'],e['payload']) for e in events if e['type']=='response_item' and e['payload'].get('type')=='message' and e['payload'].get('role')=='assistant']
+        finals=[(stamp,''.join(c.get('text','') for c in v.get('content',[]))) for stamp,v in messages if v.get('phase')=='final_answer']
+        calls=[]
+        for e in events:
+            value=e['payload']
+            if e['type']=='response_item' and value.get('type') in ('function_call','custom_tool_call'):
+                call={'timestamp':e['timestamp'],'name':value['name'],'ordinal':e.get('ordinal')}
+                if value['name']=='spawn_agent':
+                    args=json.loads(value['arguments'])
+                    call['task_name']=args.get('task_name')
+                    call['message_encrypted']=args.get('message','').startswith('gAAAA')
+                    call['model']=args.get('model')
+                    call['reasoning_effort']=args.get('reasoning_effort')
+                calls.append(call)
+            if e['type']=='event_msg' and value.get('type')=='item_completed' and value.get('item',{}).get('type')=='CommandExecution':
+                item=value['item']
+                all_commands.append({'timestamp':e['timestamp'],'session':meta['id'],'ordinal':e.get('ordinal'),'command':item.get('command'),'exit_code':item.get('exit_code'),'output':item.get('aggregated_output'),'cwd':item.get('cwd')})
+        session={'path':str(path.relative_to(packet)),'id':meta['id'],'source':meta.get('source'),'parent_thread_id':meta.get('parent_thread_id'),'contexts':contexts,'finals':finals,'calls':calls}
+        sessions.append(session)
+        if meta.get('source')=='exec':parent=session
+    reply=(packet/'response.txt').read_text()
+    final_time,final_text=parent['finals'][-1] if parent and parent['finals'] else (None,'')
+    commands=sorted(all_commands,key=lambda v:v['timestamp'])
+    removal=[]
+    for command in commands:
+        text=' '.join(command['command'] or [])
+        if re.search(r'\brm\s|\.unlink\(|rmtree\(',text):removal.append(command)
+    delivery=None
+    fences=list(re.finditer(r'(?m)^(`{3,})(markdown|html|text)\s*\n',reply))
+    if len(fences)==1:
+        start=fences[0]
+        close=re.search(r'(?m)^'+re.escape(start.group(1))+r'\s*$',reply[start.end():])
+        if close:delivery=reply[start.end():start.end()+close.start()].encode()
+    if (packet/'captured-output.md').exists() and (packet/'invocation.txt').read_text().startswith('/redline'):
+        delivery=(packet/'captured-output.md').read_bytes()
+    captures=json.loads((packet/'file-versions.json').read_text())
+    outputs=[v for v in captures if v['path'].startswith('scratch/') and v['path'].endswith('output.md')]
+    source_key='work/input.md'
+    before=json.loads((packet/'inventory-before.json').read_text())
+    after=json.loads((packet/'inventory-after.json').read_text())
+    changes=json.loads((packet/'filesystem-changes.json').read_text())
+    value={
+        'packet':packet.name,'terminal_timestamp':final_time,
+        'terminal_matches_native_final_except_final_newline':reply.rstrip('\n')==final_text.rstrip('\n'),
+        'format_named_fences':len(fences),'artifact_sha256':digest(delivery) if delivery is not None else None,
+        'artifact_matches_observed_mechanical_output':any(digest(delivery)==v['sha256'] for v in outputs) if delivery is not None else None,
+        'source_inventory_unchanged':before.get(source_key)==after.get(source_key),
+        'non_home_created':{k:v for k,v in changes['created'].items() if not k.startswith('home/')},
+        'non_home_changed':{k:v for k,v in changes['changed'].items() if not k.startswith('home/')},
+        'non_home_removed':{k:v for k,v in changes['removed'].items() if not k.startswith('home/')},
+        'all_command_completions_before_terminal':all(c['timestamp']<=final_time for c in commands) if final_time else None,
+        'parent_calls_after_terminal':[c for c in parent['calls'] if c['timestamp']>final_time] if parent and final_time else None,
+        'removal_commands':removal,'sessions':sessions,
+        'limitation':'Some delegated message arguments are encrypted and inter-agent prompt contents are absent from child rollouts. Exact checked report wording is not inferable where no drafted reply was externally captured. The observed mechanical files, checker return, terminal reply and command order are separate retained evidence.'
+    }
+    (packet/'trace-audit.json').write_text(json.dumps(value,ensure_ascii=False,indent=2)+'\n')
+    return value
+
+if __name__=='__main__':
+    for p in sorted((SCRATCH/'packets').glob('*/result.json')):
+        if (p.parent/'invocation.txt').read_text().startswith('/redline'):
+            v=audit(p.parent)
+            print(p.parent.name,{k:v[k] for k in ['source_inventory_unchanged','artifact_matches_observed_mechanical_output','all_command_completions_before_terminal','format_named_fences']},[(s['source'],[c.get('task_name') for c in s['calls'] if c['name']=='spawn_agent']) for s in v['sessions'] if s['source']=='exec'])

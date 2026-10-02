@@ -1,0 +1,5 @@
+{
+  "returncode": 0,
+  "stdout": "{\"returncode\": 0, \"timed_out\": false, \"duration_seconds\": 923.95, \"root\": \"/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-488-scratch/native-stf905cb\", \"cleanup_required\": true}\n",
+  "stderr": ""
+}

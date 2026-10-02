@@ -1,0 +1,92 @@
+[
+  {
+    "path": "work/input.md",
+    "sha256": "f183e6da31cf78081cc7c7eee69570940e24802997e92d96bb111966aa4170d5",
+    "capture": "0000-f183e6da31cf.md",
+    "time": 1790953345.934217
+  },
+  {
+    "path": "work/AGENTS.md",
+    "sha256": "5f9ecdf990613137df88e23f9aaf4033db72c99a3a529b2697aedb2d89accd6b",
+    "capture": "0001-5f9ecdf99061.md",
+    "time": 1790953345.9344058
+  },
+  {
+    "path": "scratch/redline-invoke-uv.7xcxok/.tmpbB7gqH/.tmpSGgQxU/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0002-ae98f4215313.txt",
+    "time": 1790953398.047633
+  },
+  {
+    "path": "scratch/redline-invoke-uv.7xcxok/.tmpbB7gqH/environments-v2/kntnt-90f6e246d956f450/lib/python3.12/site-packages/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0003-ae98f4215313.txt",
+    "time": 1790953398.1571782
+  },
+  {
+    "path": "scratch/redline-invoke-uv.7xcxok/.tmpbB7gqH/archive-v0/BHXXdCzEwPiBM1k8/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0004-ae98f4215313.txt",
+    "time": 1790953398.157666
+  },
+  {
+    "path": "scratch/redline-language-uv.BysaXW/.tmpCNqNk2/environments-v2/languages-7af881649d328b0c/lib/python3.12/site-packages/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0005-ae98f4215313.txt",
+    "time": 1790953421.454381
+  },
+  {
+    "path": "scratch/redline-language-uv.BysaXW/.tmpCNqNk2/archive-v0/dj_u520dfWWnTdRq/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0006-ae98f4215313.txt",
+    "time": 1790953421.454798
+  },
+  {
+    "path": "scratch/redline-mechanical-zkf3gp03/mechanical-input.md",
+    "sha256": "f183e6da31cf78081cc7c7eee69570940e24802997e92d96bb111966aa4170d5",
+    "capture": "0007-f183e6da31cf.md",
+    "time": 1790953515.433482
+  },
+  {
+    "path": "scratch/proofread-invoke.swO6EsSv/.tmpT07AWL/environments-v2/kntnt-90f6e246d956f450/lib/python3.12/site-packages/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0008-ae98f4215313.txt",
+    "time": 1790953553.328363
+  },
+  {
+    "path": "scratch/proofread-invoke.swO6EsSv/.tmpT07AWL/archive-v0/-8GcZoCbHHE71yS0/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0009-ae98f4215313.txt",
+    "time": 1790953553.328813
+  },
+  {
+    "path": "scratch/proofread-resolve.iLOD9B56/.tmpUUshgT/.tmpNixZb2/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0010-ae98f4215313.txt",
+    "time": 1790953577.8888881
+  },
+  {
+    "path": "scratch/proofread-resolve.iLOD9B56/.tmpUUshgT/environments-v2/languages-7af881649d328b0c/lib/python3.12/site-packages/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0011-ae98f4215313.txt",
+    "time": 1790953577.997802
+  },
+  {
+    "path": "scratch/proofread-resolve.iLOD9B56/.tmpUUshgT/archive-v0/kvfUA5Idfqktid5b/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0012-ae98f4215313.txt",
+    "time": 1790953577.998316
+  },
+  {
+    "path": "scratch/redline-mechanical-zkf3gp03/mechanical-output.md",
+    "sha256": "f183e6da31cf78081cc7c7eee69570940e24802997e92d96bb111966aa4170d5",
+    "capture": "0013-f183e6da31cf.md",
+    "time": 1790953616.079679
+  },
+  {
+    "path": "work/output.md",
+    "sha256": "f183e6da31cf78081cc7c7eee69570940e24802997e92d96bb111966aa4170d5",
+    "capture": "0014-f183e6da31cf.md",
+    "time": 1790953795.414463
+  }
+]

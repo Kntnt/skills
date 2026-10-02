@@ -1,0 +1,9 @@
+{"row": "article-unnamed-2", "arm": "post", "returncode": 0}
+{"row": "article-unnamed-1", "arm": "post", "returncode": 0}
+{"row": "article-unnamed-3", "arm": "post", "returncode": 0}
+{"row": "opinion-flawed-1", "arm": "post", "returncode": 0}
+{"row": "opinion-flawed-2", "arm": "post", "returncode": 0}
+{"row": "article-clean-file", "arm": "post", "returncode": 0}
+{"row": "opinion-flawed-3", "arm": "post", "returncode": 0}
+{"row": "article-clean-response", "arm": "post", "returncode": 0}
+{"row": "column-flawed-file", "arm": "post", "returncode": 0}

@@ -1,0 +1,20 @@
+import json
+import shutil
+from pathlib import Path
+
+SCRATCH=Path('/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-488-scratch')
+DEST=Path('/Users/thomas/Projects/skills/.git/kntnt-orchestrate/488/docs/evaluation/editorial-488/runs')
+for mapping in sorted(SCRATCH.glob('mapping-*.json')):
+    row=json.loads(mapping.read_text())
+    if len(row['judges'])!=2 or any(j['launch']['returncode'] for j in row['judges']):continue
+    output=DEST/f"{row['arm']}-{row['row']}"
+    if output.exists():continue
+    packet=Path(row['packet'])
+    if not (packet/'trace-audit.json').exists():continue
+    shutil.copytree(packet,output)
+    for judge in row['judges']:
+        source=Path(judge['packet'])
+        shutil.copytree(source,output/'judges'/judge['letter'])
+        shutil.copy2(source/'captured-output.md',output/f"judgement-{judge['letter']}.md")
+    (output/'mapping.json').write_text(json.dumps(row,indent=2)+'\n')
+    print(output)

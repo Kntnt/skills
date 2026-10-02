@@ -1,0 +1,16 @@
+{
+  "attempt_id": "ms-20261002-d7a4d2",
+  "observed_at_utc": "2026-10-02T15:51:51.486206+00:00",
+  "removed_literal_path": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-488-scratch",
+  "removed_path_absent": true,
+  "alias_left_for_controller": "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/488.scratch",
+  "preserved_original_files_verified": 804,
+  "completed_run_and_judge_packets_compared_before_teardown": 54,
+  "packet_files_compared_before_teardown": 1447,
+  "registered_pid_count": 134,
+  "active_owned_processes_after_teardown": [],
+  "registered_group_members_after_teardown": [],
+  "session_owner_pids_excluded": true,
+  "teardown_changes_no_native_measurement": true,
+  "scope": "Evaluator scratch, exported native roots, caches and temporary environments only; all deliverables preserved in the assigned worktree."
+}

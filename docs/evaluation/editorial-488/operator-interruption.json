@@ -1,0 +1,22 @@
+{
+  "attempt_id": "ms-20261002-6043a7",
+  "completed_baseline": 9,
+  "completed_baseline_judgements": 18,
+  "completed_second_arm": 0,
+  "voided": [
+    "docs/evaluation/editorial-488/voided/cache-path-start-1",
+    "docs/evaluation/editorial-488/voided/cache-path-start-2",
+    "docs/evaluation/editorial-488/voided/cache-path-start-3"
+  ],
+  "unapproved_cache_left_untouched": "/private/tmp/kntntnt-orchestrate-20261002.o7bmMK/ticket-488-scratch/uv-cache",
+  "decision_required": "Authority to remove the accidentally created cache outside the two authorized write/delete roots; the user explicitly says to stop rather than guess a missing decision.",
+  "stopped_groups": [
+    41638,
+    41667,
+    41668,
+    41669,
+    41726,
+    41727,
+    41728
+  ]
+}

@@ -10060,7 +10060,7 @@ def test_a_repository_that_numbers_nothing_is_unmoved_by_overlapping_isolates(
 def test_the_registries_the_engine_finds_are_the_ones_this_repository_keeps() -> None:
     """The detection is deterministic and unconfigured, so what it answers for
     this repository is what this repository actually keeps: the decision
-    records and the retest's preserved numbered captures in the index."""
+    records and both frozen native capture inventories in the index."""
 
     # Compare the engine with the same tracked-file boundary its contract names.
     found = _run().numbered_registries(REPO_ROOT)
@@ -10097,11 +10097,76 @@ def test_the_registries_the_engine_finds_are_the_ones_this_repository_keeps() ->
         "voided/scope-r1-capacity-1": 1,
         "voided/scope-r6-capacity-1": 1,
     }
+    # The immutable #488 capture inventory supplies these additional maxima.
+    terminal_packet = "docs/evaluation/editorial-488"
+    terminal_maxima = {
+        "runs/post-article-clean-file/file-versions": 14,
+        "runs/post-article-clean-file/judges/a/file-versions": 4,
+        "runs/post-article-clean-file/judges/b/file-versions": 4,
+        "runs/post-article-clean-response/file-versions": 15,
+        "runs/post-article-clean-response/judges/a/file-versions": 3,
+        "runs/post-article-clean-response/judges/b/file-versions": 3,
+        "runs/post-article-unnamed-1/file-versions": 14,
+        "runs/post-article-unnamed-1/judges/a/file-versions": 3,
+        "runs/post-article-unnamed-1/judges/b/file-versions": 3,
+        "runs/post-article-unnamed-2/file-versions": 13,
+        "runs/post-article-unnamed-2/judges/a/file-versions": 3,
+        "runs/post-article-unnamed-2/judges/b/file-versions": 3,
+        "runs/post-article-unnamed-3/file-versions": 14,
+        "runs/post-article-unnamed-3/judges/a/file-versions": 3,
+        "runs/post-article-unnamed-3/judges/b/file-versions": 3,
+        "runs/post-column-flawed-file/file-versions": 15,
+        "runs/post-column-flawed-file/judges/a/file-versions": 4,
+        "runs/post-column-flawed-file/judges/b/file-versions": 4,
+        "runs/post-opinion-flawed-1/file-versions": 13,
+        "runs/post-opinion-flawed-1/judges/a/file-versions": 3,
+        "runs/post-opinion-flawed-1/judges/b/file-versions": 3,
+        "runs/post-opinion-flawed-2/file-versions": 13,
+        "runs/post-opinion-flawed-2/judges/a/file-versions": 3,
+        "runs/post-opinion-flawed-2/judges/b/file-versions": 3,
+        "runs/post-opinion-flawed-3/file-versions": 14,
+        "runs/post-opinion-flawed-3/judges/a/file-versions": 4,
+        "runs/post-opinion-flawed-3/judges/b/file-versions": 3,
+        "runs/pre-article-clean-file/file-versions": 12,
+        "runs/pre-article-clean-file/judges/a/file-versions": 4,
+        "runs/pre-article-clean-file/judges/b/file-versions": 4,
+        "runs/pre-article-clean-response/file-versions": 15,
+        "runs/pre-article-clean-response/judges/a/file-versions": 3,
+        "runs/pre-article-clean-response/judges/b/file-versions": 3,
+        "runs/pre-article-unnamed-1/file-versions": 14,
+        "runs/pre-article-unnamed-1/judges/a/file-versions": 3,
+        "runs/pre-article-unnamed-1/judges/b/file-versions": 3,
+        "runs/pre-article-unnamed-2/file-versions": 13,
+        "runs/pre-article-unnamed-2/judges/a/file-versions": 3,
+        "runs/pre-article-unnamed-2/judges/b/file-versions": 3,
+        "runs/pre-article-unnamed-3/file-versions": 13,
+        "runs/pre-article-unnamed-3/judges/a/file-versions": 3,
+        "runs/pre-article-unnamed-3/judges/b/file-versions": 3,
+        "runs/pre-column-flawed-file/file-versions": 16,
+        "runs/pre-column-flawed-file/judges/a/file-versions": 4,
+        "runs/pre-column-flawed-file/judges/b/file-versions": 4,
+        "runs/pre-opinion-flawed-1/file-versions": 13,
+        "runs/pre-opinion-flawed-1/judges/a/file-versions": 3,
+        "runs/pre-opinion-flawed-1/judges/b/file-versions": 3,
+        "runs/pre-opinion-flawed-2/file-versions": 13,
+        "runs/pre-opinion-flawed-2/judges/a/file-versions": 3,
+        "runs/pre-opinion-flawed-2/judges/b/file-versions": 3,
+        "runs/pre-opinion-flawed-3/file-versions": 15,
+        "runs/pre-opinion-flawed-3/judges/a/file-versions": 3,
+        "runs/pre-opinion-flawed-3/judges/b/file-versions": 3,
+        "voided/cache-path-start-1/file-versions": 5,
+        "voided/cache-path-start-2/file-versions": 5,
+        "voided/cache-path-start-3/file-versions": 6,
+    }
     assert found == {
         "docs/adr": int(records[-1].name[:4]),
         **{
             f"{packet}/{sample}/file-versions": maximum
             for sample, maximum in captured_maxima.items()
+        },
+        **{
+            f"{terminal_packet}/{sample}": maximum
+            for sample, maximum in terminal_maxima.items()
         },
     }
     assert found["docs/adr"] == int(records[-1].name[:4])

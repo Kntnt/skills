@@ -1,0 +1,92 @@
+[
+  {
+    "path": "work/input.md",
+    "sha256": "ab033d9f4c817c9eaa0efa32db93819a99291a3b22e29fb39f0d640e830ed990",
+    "capture": "0000-ab033d9f4c81.md",
+    "time": 1790952071.16381
+  },
+  {
+    "path": "work/AGENTS.md",
+    "sha256": "8d86fb0e51a3ce37464749ace36d3ddf5517981c790e971a7d90ee235aee45e1",
+    "capture": "0001-8d86fb0e51a3.md",
+    "time": 1790952071.1639612
+  },
+  {
+    "path": "scratch/redline-uv-rl3iuxb3/.tmpVAct71/environments-v2/kntnt-3e3c148662aed1c8/lib/python3.12/site-packages/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0002-ae98f4215313.txt",
+    "time": 1790952127.446369
+  },
+  {
+    "path": "scratch/redline-uv-rl3iuxb3/.tmpVAct71/archive-v0/RFSv2z2zcE18N0PL/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0003-ae98f4215313.txt",
+    "time": 1790952127.4468212
+  },
+  {
+    "path": "scratch/redline-language-uv-6ke_squ2/.tmpSQ2HwL/environments-v2/languages-d679544eeb4e05e4/lib/python3.12/site-packages/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0004-ae98f4215313.txt",
+    "time": 1790952143.5279691
+  },
+  {
+    "path": "scratch/redline-language-uv-6ke_squ2/.tmpSQ2HwL/archive-v0/3p5I1eUx-UACVszq/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0005-ae98f4215313.txt",
+    "time": 1790952143.528434
+  },
+  {
+    "path": "scratch/redline-correction.5_env467/.tmp7S8BEs/.tmphxMh15/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0006-ae98f4215313.txt",
+    "time": 1790952409.1446989
+  },
+  {
+    "path": "scratch/redline-correction.5_env467/.tmp7S8BEs/environments-v2/languages-d679544eeb4e05e4/lib/python3.12/site-packages/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0007-ae98f4215313.txt",
+    "time": 1790952409.2517362
+  },
+  {
+    "path": "scratch/redline-correction.5_env467/.tmp7S8BEs/archive-v0/p7Mxdl_DqI_sT9Q1/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0008-ae98f4215313.txt",
+    "time": 1790952409.252379
+  },
+  {
+    "path": "scratch/redline-mechanical-466q4mgl/mechanical-input.md",
+    "sha256": "391a23cd7d23dea710f4f1711605acabf5e189debf14ad64676c34ff951849ff",
+    "capture": "0009-391a23cd7d23.md",
+    "time": 1790952940.1307268
+  },
+  {
+    "path": "scratch/proofread-uv-FGiNPcIy/.tmpRugKS8/environments-v2/kntnt-3e3c148662aed1c8/lib/python3.12/site-packages/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0010-ae98f4215313.txt",
+    "time": 1790953007.364154
+  },
+  {
+    "path": "scratch/proofread-uv-FGiNPcIy/.tmpRugKS8/archive-v0/E2BbqDIEYixvFQBQ/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0011-ae98f4215313.txt",
+    "time": 1790953007.364716
+  },
+  {
+    "path": "scratch/proofread-uv-JOr316TH/.tmpjJqKD3/environments-v2/languages-d679544eeb4e05e4/lib/python3.12/site-packages/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0012-ae98f4215313.txt",
+    "time": 1790953038.511159
+  },
+  {
+    "path": "scratch/proofread-uv-JOr316TH/.tmpjJqKD3/archive-v0/a_pNCw1hAbDwNvv9/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0013-ae98f4215313.txt",
+    "time": 1790953038.511746
+  },
+  {
+    "path": "scratch/redline-mechanical-466q4mgl/mechanical-output.md",
+    "sha256": "391a23cd7d23dea710f4f1711605acabf5e189debf14ad64676c34ff951849ff",
+    "capture": "0014-391a23cd7d23.md",
+    "time": 1790953069.8173819
+  }
+]

@@ -1,0 +1,3 @@
+D1 (response): **pass**. C1: **pass**.
+
+Wrote the detailed comparisons and differences to [judgement.md](/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-488-scratch/native-33pwhniq/work/judgement.md).

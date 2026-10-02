@@ -1,0 +1,3 @@
+D2: **pass**. C1: **pass**. The delivered file is byte-identical to the input.
+
+Written to [judgement.md](/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-488-scratch/native-eqmx5mqe/work/judgement.md).

@@ -1,0 +1,5 @@
+D1: **pass**. C1: **pass**.
+
+The headline defect was repaired and reported; the remaining article is unchanged.
+
+Written to [judgement.md](/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-488-scratch/native-a46_gmj0/work/judgement.md).

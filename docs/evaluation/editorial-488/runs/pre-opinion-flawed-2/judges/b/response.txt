@@ -1,0 +1,5 @@
+D1 (response): **pass**. C1: **pass**.
+
+The mandatory defects were resolved and accounted for; qualified facts and the proposal were preserved.
+
+Written to [judgement.md](/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-488-scratch/native-eyvch4ur/work/judgement.md).
