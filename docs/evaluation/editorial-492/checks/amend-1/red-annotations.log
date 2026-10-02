@@ -1,0 +1,38 @@
+warning: No `requires-python` value found in the workspace. Defaulting to `>=3.14`.
+============================= test session starts ==============================
+platform darwin -- Python 3.14.8, pytest-9.1.1, pluggy-1.6.0
+cachedir: /private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-1ec1788d/amend-1/runtime/pytest-cache
+rootdir: /Users/thomas/Projects/skills/.git/kntnt-orchestrate/492
+configfile: pyproject.toml
+plugins: xdist-3.8.0
+collected 1 item
+
+tests/test_editorial_492.py F                                            [100%]
+
+=================================== FAILURES ===================================
+______ test_evaluator_module_declarations_have_explicit_type_annotations _______
+
+    def test_evaluator_module_declarations_have_explicit_type_annotations() -> None:
+        """Evaluator constants expose their types even outside the mypy gate list."""
+        evaluator = (
+            Path(__file__).resolve().parents[1]
+            / "docs/evaluation/editorial-492/harness/run.py"
+        )
+        module = ast.parse(evaluator.read_text(encoding="utf-8"))
+    
+        unannotated = [
+            target.id
+            for statement in module.body
+            if isinstance(statement, ast.Assign)
+            for target in statement.targets
+            if isinstance(target, ast.Name)
+        ]
+    
+>       assert not unannotated, f"Module declarations lack types: {unannotated}"
+E       AssertionError: Module declarations lack types: ['REPOSITORY', 'NATIVE_CODEX', 'CLEANUP', 'AUTHENTICATION', 'SKILLS']
+E       assert not ['REPOSITORY', 'NATIVE_CODEX', 'CLEANUP', 'AUTHENTICATION', 'SKILLS']
+
+tests/test_editorial_492.py:27: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_editorial_492.py::test_evaluator_module_declarations_have_explicit_type_annotations
+============================== 1 failed in 0.02s ===============================

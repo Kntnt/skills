@@ -26,14 +26,14 @@ import time
 from pathlib import Path
 from typing import Any
 
-REPOSITORY = Path(__file__).resolve().parents[4]
-NATIVE_CODEX = Path("/opt/homebrew/bin/codex").resolve()
-CLEANUP = Path(
+REPOSITORY: Path = Path(__file__).resolve().parents[4]
+NATIVE_CODEX: Path = Path("/opt/homebrew/bin/codex").resolve()
+CLEANUP: Path = Path(
     str(REPOSITORY / "skills/kntnt/features/session-cleanup/scripts/session_cleanup.py")
 )
-AUTHENTICATION = Path("/Users/thomas/.codex/auth.json")
+AUTHENTICATION: Path = Path("/Users/thomas/.codex/auth.json")
 
-SKILLS = {
+SKILLS: dict[str, str] = {
     "kntnt": "kntnt",
     **{
         name: f"editorial/{name}"

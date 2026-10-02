@@ -1,0 +1,58 @@
+{
+  "owned_identities": [
+    {
+      "pid": 43748,
+      "pgid": 43748,
+      "label": "red-inventory"
+    },
+    {
+      "pid": 44245,
+      "pgid": 44245,
+      "label": "green-inventory"
+    },
+    {
+      "pid": 44500,
+      "pgid": 44500,
+      "label": "red-annotations"
+    },
+    {
+      "pid": 44718,
+      "pgid": 44718,
+      "label": "green-annotations"
+    },
+    {
+      "pid": 45438,
+      "pgid": 45438,
+      "label": "format-authored-files"
+    },
+    {
+      "pid": 45591,
+      "pgid": 45591,
+      "label": "gate-1"
+    },
+    {
+      "pid": 45735,
+      "pgid": 45735,
+      "label": "gate-2"
+    },
+    {
+      "pid": 45903,
+      "pgid": 45903,
+      "label": "gate-3"
+    },
+    {
+      "pid": 46583,
+      "pgid": 46583,
+      "label": "gate-4"
+    }
+  ],
+  "surviving_owned_processes": [],
+  "disposable_runtime": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-1ec1788d/amend-1/runtime",
+  "disposable_runner": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-1ec1788d/amend-1/check.py",
+  "logs_and_lifecycle_are_deliverables": true,
+  "deleted_paths": [
+    "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-1ec1788d/amend-1/runtime",
+    "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-1ec1788d/amend-1/check.py"
+  ],
+  "deleted_paths_absent": true
+}

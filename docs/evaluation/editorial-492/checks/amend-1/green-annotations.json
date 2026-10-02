@@ -1,0 +1,18 @@
+{
+  "command": "uv run --with pytest --with pytest-xdist --with pyyaml pytest tests/test_editorial_492.py",
+  "exit_code": 0,
+  "seconds": 0.42,
+  "environment": {
+    "TMPDIR": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-1ec1788d/amend-1/runtime/tmp",
+    "UV_CACHE_DIR": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-1ec1788d/amend-1/runtime/uv-cache",
+    "UV_TOOL_DIR": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-1ec1788d/amend-1/runtime/uv-tools",
+    "UV_PYTHON_INSTALL_DIR": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-1ec1788d/amend-1/runtime/python",
+    "UV_PROJECT_ENVIRONMENT": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-1ec1788d/amend-1/runtime/venv",
+    "XDG_CACHE_HOME": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-1ec1788d/amend-1/runtime/cache",
+    "XDG_DATA_HOME": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-1ec1788d/amend-1/runtime/data",
+    "RUFF_CACHE_DIR": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-1ec1788d/amend-1/runtime/ruff",
+    "MYPY_CACHE_DIR": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-1ec1788d/amend-1/runtime/mypy",
+    "PYTHONPYCACHEPREFIX": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-1ec1788d/amend-1/runtime/pycache",
+    "PYTEST_ADDOPTS": "-o cache_dir=/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-1ec1788d/amend-1/runtime/pytest-cache --basetemp=/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-1ec1788d/amend-1/runtime/pytest-temp"
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "base_head": "cf96ff8ae306dea10d2cf88e54fb39ec5c7b3f1e",
+  "checked_code": {
+    "docs/evaluation/editorial-492/harness/run.py": "38b71eb667f7cb4b15e4814e09df3751aa726480e8a8daa3edc73c07891a8862",
+    "tests/test_run.py": "5a98cbf6d09f17617d0b1ab21a25810d8de35ae592021e5e112d4474aa0cd874",
+    "tests/test_editorial_492.py": "fffee3708d3a6e38792175019f4adc1a8874dc042472290a2276a78e5c14ecc3"
+  },
+  "gate_commands_unchanged": true,
+  "gate_exit_codes": {
+    "gate-1": 0,
+    "gate-2": 0,
+    "gate-3": 0,
+    "gate-4": 0
+  },
+  "full_pytest": "2736 passed in 123.93s",
+  "criterion_3": "unmet; original initial reader-loss allegation unavailable",
+  "owned_process_groups_absent": [
+    43748,
+    44245,
+    44500,
+    44718,
+    45438,
+    45591,
+    45735,
+    45903,
+    46583
+  ]
+}

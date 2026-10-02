@@ -1,0 +1,275 @@
+{
+  "base_head": "cf96ff8ae306dea10d2cf88e54fb39ec5c7b3f1e",
+  "correction_runs": [
+    {
+      "run": "pre-library-alternatives-clean-file-1",
+      "parent": "runs/pre-library-alternatives-clean-file-1/native-sessions/2026/10/02/rollout-2026-10-02T22-03-32-01a0fe36-fed7-7010-8bce-f30c688c2da8.jsonl.gz",
+      "spawn_ordinal": 68,
+      "spawn_timestamp": "2026-10-02T20:07:31.676Z",
+      "task": "redline_correction",
+      "sealed": true,
+      "sealed_payload_sha256": "985dded9494d657b49dea4289b9b65d6da3cc35193febcdcafacffb61cd4532d",
+      "matching_child_records": [
+        {
+          "path": "runs/pre-library-alternatives-clean-file-1/native-sessions/2026/10/02/rollout-2026-10-02T22-07-31-01a0fe3a-a65d-7f43-bca7-55c1879c13e9.jsonl.gz",
+          "ordinal": 9,
+          "timestamp": "2026-10-02T20:07:32.991Z"
+        }
+      ],
+      "captured_paths": [
+        "scratch/proofread-invoke.01SqgMLI/.tmpFu4NJM/archive-v0/Hg5O-FyaY1jc95RS/pyyaml-6.0.3.dist-info/top_level.txt",
+        "scratch/proofread-invoke.01SqgMLI/.tmpFu4NJM/environments-v2/kntnt-46b3ce231100a84c/lib/python3.12/site-packages/pyyaml-6.0.3.dist-info/top_level.txt",
+        "scratch/proofread-language.R5vfqcuY/.tmpzCB0V3/.tmpkl7kQQ/pyyaml-6.0.3.dist-info/top_level.txt",
+        "scratch/proofread-language.R5vfqcuY/.tmpzCB0V3/archive-v0/cE72k036LSYPDWHa/pyyaml-6.0.3.dist-info/top_level.txt",
+        "scratch/proofread-language.R5vfqcuY/.tmpzCB0V3/environments-v2/languages-c551ce420aa0512b/lib/python3.12/site-packages/pyyaml-6.0.3.dist-info/top_level.txt",
+        "scratch/redline-invoke-icraof71/.tmp2oeGBl/archive-v0/rzejn2Uuy77jWfxa/pyyaml-6.0.3.dist-info/top_level.txt",
+        "scratch/redline-invoke-icraof71/.tmp2oeGBl/environments-v2/kntnt-46b3ce231100a84c/lib/python3.12/site-packages/pyyaml-6.0.3.dist-info/top_level.txt",
+        "scratch/redline-language-pnm6uljx/.tmphxDPh5/.tmpzmGKEC/pyyaml-6.0.3.dist-info/top_level.txt",
+        "scratch/redline-language-pnm6uljx/.tmphxDPh5/archive-v0/5IUHZgBUYaPBJDDL/pyyaml-6.0.3.dist-info/top_level.txt",
+        "scratch/redline-language-pnm6uljx/.tmphxDPh5/environments-v2/languages-c551ce420aa0512b/lib/python3.12/site-packages/pyyaml-6.0.3.dist-info/top_level.txt",
+        "scratch/redline-language-skw3vib7/.tmpaWiPGP/archive-v0/WDEstc4XCBKDYZD6/pyyaml-6.0.3.dist-info/top_level.txt",
+        "scratch/redline-language-skw3vib7/.tmpaWiPGP/environments-v2/languages-c551ce420aa0512b/lib/python3.12/site-packages/pyyaml-6.0.3.dist-info/top_level.txt",
+        "scratch/redline-mechanical-brqx0m0g/mechanical-input.md",
+        "scratch/redline-mechanical-brqx0m0g/mechanical-output.md",
+        "work/AGENTS.md",
+        "work/input.md",
+        "work/output.md"
+      ],
+      "observable_initial_messages": [
+        {
+          "ordinal": 11,
+          "timestamp": "2026-10-02T20:03:38.187Z",
+          "text": "Jag använder projektets `/redline`-skill och läser instruktionerna samt `input.md` innan jag bearbetar texten.\n"
+        },
+        {
+          "ordinal": 30,
+          "timestamp": "2026-10-02T20:04:05.086Z",
+          "text": "Jag kan starta de separata granskare som skillen kräver. Jag granskar texten som svensk debattartikel och sparar resultatet i `output.md`.\n"
+        },
+        {
+          "ordinal": 67,
+          "timestamp": "2026-10-02T20:05:30.124Z",
+          "text": "Textens argumentation och kostnadsinvändning håller ihop. Inledningen upprepar däremot ingressens förslag och skäl. Jag låter en separat granskare försöka rätta den upprepningen inom skillens enda rättningsomgång.\n"
+        }
+      ],
+      "initial_correction_memo_status": "sealed in both parent and child records; no captured plaintext copy",
+      "observable_reader_loss_status": "The parent names repetition of the standfirst proposal/reasons, but supplies no concrete reader loss; criterion 3 remains unmet."
+    },
+    {
+      "run": "pre-library-missing-referent-file-1",
+      "parent": "runs/pre-library-missing-referent-file-1/native-sessions/2026/10/02/rollout-2026-10-02T22-10-59-01a0fe3d-cf0a-7442-8897-544091b0b324.jsonl.gz",
+      "spawn_ordinal": 69,
+      "spawn_timestamp": "2026-10-02T20:14:25.029Z",
+      "task": "correction_1",
+      "sealed": true,
+      "sealed_payload_sha256": "b166e667dfc7e4a772bd0330c17a51a861f0d680f9bd517311e0e4e02e0c3244",
+      "matching_child_records": [
+        {
+          "path": "runs/pre-library-missing-referent-file-1/native-sessions/2026/10/02/rollout-2026-10-02T22-14-25-01a0fe40-f507-7ef0-91e0-53c325de8a71.jsonl.gz",
+          "ordinal": 9,
+          "timestamp": "2026-10-02T20:14:26.590Z"
+        }
+      ],
+      "captured_paths": [
+        "scratch/correction-language-s8dd2bwf/.tmpCOeHQe/.tmpEIjTq6/pyyaml-6.0.3.dist-info/top_level.txt",
+        "scratch/correction-language-s8dd2bwf/.tmpCOeHQe/archive-v0/XvOaBhPVz476u40h/pyyaml-6.0.3.dist-info/top_level.txt",
+        "scratch/correction-language-s8dd2bwf/.tmpCOeHQe/environments-v2/languages-2ae7bdbc3ef46418/lib/python3.12/site-packages/pyyaml-6.0.3.dist-info/top_level.txt",
+        "scratch/proofread-resolve.qq0renxx/.tmp6kHyBM/archive-v0/6YplSOILGBpC2W_i/pyyaml-6.0.3.dist-info/top_level.txt",
+        "scratch/proofread-resolve.qq0renxx/.tmp6kHyBM/environments-v2/languages-2ae7bdbc3ef46418/lib/python3.12/site-packages/pyyaml-6.0.3.dist-info/top_level.txt",
+        "scratch/proofread-shim.azvi1oc5/.tmpEk9WWQ/.tmpJ06wYn/pyyaml-6.0.3.dist-info/top_level.txt",
+        "scratch/proofread-shim.azvi1oc5/.tmpEk9WWQ/archive-v0/KOMZ0sat4UwZIfD5/pyyaml-6.0.3.dist-info/top_level.txt",
+        "scratch/proofread-shim.azvi1oc5/.tmpEk9WWQ/environments-v2/kntnt-06626d9211e85ed0/lib/python3.12/site-packages/pyyaml-6.0.3.dist-info/top_level.txt",
+        "scratch/redline-mechanical-ihw58yfb/mechanical-input.md",
+        "scratch/redline-mechanical-ihw58yfb/mechanical-output.md",
+        "scratch/redline-uv-invoke-xcsu0w_3/.tmpBOn7Lk/archive-v0/PjWDTNiWP7Yp3zDE/pyyaml-6.0.3.dist-info/top_level.txt",
+        "scratch/redline-uv-invoke-xcsu0w_3/.tmpBOn7Lk/environments-v2/kntnt-06626d9211e85ed0/lib/python3.12/site-packages/pyyaml-6.0.3.dist-info/top_level.txt",
+        "scratch/redline-uv-language-xg7kooow/.tmpX3sVvd/archive-v0/xI2vPwd8Sb-hKlD-/pyyaml-6.0.3.dist-info/top_level.txt",
+        "scratch/redline-uv-language-xg7kooow/.tmpX3sVvd/environments-v2/languages-2ae7bdbc3ef46418/lib/python3.12/site-packages/pyyaml-6.0.3.dist-info/top_level.txt",
+        "work/AGENTS.md",
+        "work/input.md",
+        "work/output.md"
+      ],
+      "observable_initial_messages": [
+        {
+          "ordinal": 11,
+          "timestamp": "2026-10-02T20:11:04.601Z",
+          "text": "Jag använder projektets redline-skill och läser dess instruktioner samt input.md.\n"
+        },
+        {
+          "ordinal": 34,
+          "timestamp": "2026-10-02T20:11:29.586Z",
+          "text": "Jag kan starta separata underagenter, som redline-skillen kräver. Jag granskar texten som en svensk debattartikel; genren anger ingen särskild skrivteknik.\n"
+        },
+        {
+          "ordinal": 61,
+          "timestamp": "2026-10-02T20:12:04.153Z",
+          "text": "Ingressen ger sammanhanget, men brödtextens ”Den kartläggningen” går inte att förstå utan den. Jag granskar också om ingressen och inledningen för argumentet framåt utan att upprepa samma uppmaning.\n"
+        }
+      ],
+      "initial_correction_memo_status": "sealed in both parent and child records; no captured plaintext copy",
+      "observable_reader_loss_status": "The parent explicitly names the missing standfirst-only referent or the closure contradiction; this observable allegation is retained, without reconstructing the sealed full memo."
+    },
+    {
+      "run": "pre-library-missing-referent-resp-1",
+      "parent": "runs/pre-library-missing-referent-resp-1/native-sessions/2026/10/02/rollout-2026-10-02T21-58-05-01a0fe31-fe1c-7110-9a1f-45d90a4f422f.jsonl.gz",
+      "spawn_ordinal": 82,
+      "spawn_timestamp": "2026-10-02T20:02:18.514Z",
+      "task": "redline_correction",
+      "sealed": true,
+      "sealed_payload_sha256": "70e592558d86b1ec5eb75d0ca24f8d20d816fff514618b594433f768842689f2",
+      "matching_child_records": [
+        {
+          "path": "runs/pre-library-missing-referent-resp-1/native-sessions/2026/10/02/rollout-2026-10-02T22-02-18-01a0fe35-df14-7380-9c95-10a8a756f9ee.jsonl.gz",
+          "ordinal": 9,
+          "timestamp": "2026-10-02T20:02:19.833Z"
+        }
+      ],
+      "captured_paths": [
+        "scratch/proofread-uv.WBpINFpv/.tmpb5PcII/archive-v0/cjcUFkwBBrkTqM8f/pyyaml-6.0.3.dist-info/top_level.txt",
+        "scratch/proofread-uv.WBpINFpv/.tmpb5PcII/environments-v2/languages-94dec8bdc56f999b/lib/python3.12/site-packages/pyyaml-6.0.3.dist-info/top_level.txt",
+        "scratch/proofread-uv.i6TIdHPC/.tmp1kN0DZ/.tmpDajp4v/pyyaml-6.0.3.dist-info/top_level.txt",
+        "scratch/proofread-uv.i6TIdHPC/.tmp1kN0DZ/archive-v0/bE4ZWE2tQptXANdk/pyyaml-6.0.3.dist-info/top_level.txt",
+        "scratch/proofread-uv.i6TIdHPC/.tmp1kN0DZ/environments-v2/kntnt-a221397d89c8cb18/lib/python3.12/site-packages/pyyaml-6.0.3.dist-info/top_level.txt",
+        "scratch/redline-language-25s2aecz/.tmp7hEwnl/.tmpZsRPog/pyyaml-6.0.3.dist-info/top_level.txt",
+        "scratch/redline-language-25s2aecz/.tmp7hEwnl/archive-v0/qI0sPGAC7Yd-v3rf/pyyaml-6.0.3.dist-info/top_level.txt",
+        "scratch/redline-language-25s2aecz/.tmp7hEwnl/environments-v2/languages-94dec8bdc56f999b/lib/python3.12/site-packages/pyyaml-6.0.3.dist-info/top_level.txt",
+        "scratch/redline-language-uv-4wxe_tse/.tmplhoiXy/archive-v0/JrPbR3mrNQk6kMwI/pyyaml-6.0.3.dist-info/top_level.txt",
+        "scratch/redline-language-uv-4wxe_tse/.tmplhoiXy/environments-v2/languages-94dec8bdc56f999b/lib/python3.12/site-packages/pyyaml-6.0.3.dist-info/top_level.txt",
+        "scratch/redline-mechanical-ycju93pa/mechanical-input.md",
+        "scratch/redline-mechanical-ycju93pa/mechanical-output.md",
+        "scratch/redline-uv-j1o1lor9/.tmpDjDv0S/.tmpXGmKVG/pyyaml-6.0.3.dist-info/top_level.txt",
+        "scratch/redline-uv-j1o1lor9/.tmpDjDv0S/archive-v0/c61lXHuJe_vMsyGS/pyyaml-6.0.3.dist-info/top_level.txt",
+        "scratch/redline-uv-j1o1lor9/.tmpDjDv0S/environments-v2/kntnt-a221397d89c8cb18/lib/python3.12/site-packages/pyyaml-6.0.3.dist-info/top_level.txt",
+        "work/AGENTS.md",
+        "work/input.md"
+      ],
+      "observable_initial_messages": [
+        {
+          "ordinal": 11,
+          "timestamp": "2026-10-02T19:58:11.425Z",
+          "text": "Jag använder projektets redline-skill och läser instruktionerna tillsammans med `input.md`.\n"
+        },
+        {
+          "ordinal": 44,
+          "timestamp": "2026-10-02T19:59:10.709Z",
+          "text": "Jag kan starta de separata underagenter som skillen kräver. Jag kontrollerar nu textens argumentation, rubriker och struktur mot reglerna för svensk debatttext.\n"
+        },
+        {
+          "ordinal": 81,
+          "timestamp": "2026-10-02T20:00:18.080Z",
+          "text": "Textens mått och disposition klarar kontrollen. Jag har hittat en oklar hänvisning i brödtextens inledning: ”Den kartläggningen” kan bara förstås genom ingressen. Korrigeringsrundan får rätta den hänvisningen.\n"
+        }
+      ],
+      "initial_correction_memo_status": "sealed in both parent and child records; no captured plaintext copy",
+      "observable_reader_loss_status": "The parent explicitly names the missing standfirst-only referent or the closure contradiction; this observable allegation is retained, without reconstructing the sealed full memo."
+    },
+    {
+      "run": "pre-opinion-closure-certain-file-1",
+      "parent": "runs/pre-opinion-closure-certain-file-1/native-sessions/2026/10/02/rollout-2026-10-02T21-58-05-01a0fe31-fe1b-77b3-8934-0bdeacbbbd77.jsonl.gz",
+      "spawn_ordinal": 67,
+      "spawn_timestamp": "2026-10-02T20:02:07.995Z",
+      "task": "redline_correction",
+      "sealed": true,
+      "sealed_payload_sha256": "ed3fb2068e289c6aaf9946116dec3af5d7846338514ed65bb30d6138ef3140dc",
+      "matching_child_records": [
+        {
+          "path": "runs/pre-opinion-closure-certain-file-1/native-sessions/2026/10/02/rollout-2026-10-02T22-02-08-01a0fe35-b601-7c30-80c2-c854dacff4ae.jsonl.gz",
+          "ordinal": 9,
+          "timestamp": "2026-10-02T20:02:09.460Z"
+        }
+      ],
+      "captured_paths": [
+        "scratch/proofread-invoke.MceCzP/.tmp4sdsNp/archive-v0/Il1Ut36CRnt0YPPY/pyyaml-6.0.3.dist-info/top_level.txt",
+        "scratch/proofread-invoke.MceCzP/.tmp4sdsNp/environments-v2/kntnt-58f02df89fa96411/lib/python3.12/site-packages/pyyaml-6.0.3.dist-info/top_level.txt",
+        "scratch/proofread-resolve.ihVdet/.tmpggzB6d/archive-v0/fI7oQ9cMQuCXMHnu/pyyaml-6.0.3.dist-info/top_level.txt",
+        "scratch/proofread-resolve.ihVdet/.tmpggzB6d/environments-v2/languages-53b5a3670a84590e/lib/python3.12/site-packages/pyyaml-6.0.3.dist-info/top_level.txt",
+        "scratch/redline-correction-language.8i96n4r1/.tmpbpYFuS/archive-v0/KKpVvNjzq4wH_Ycz/pyyaml-6.0.3.dist-info/top_level.txt",
+        "scratch/redline-correction-language.8i96n4r1/.tmpbpYFuS/environments-v2/languages-53b5a3670a84590e/lib/python3.12/site-packages/pyyaml-6.0.3.dist-info/top_level.txt",
+        "scratch/redline-language-rxuh69wu/.tmp9CT8wG/archive-v0/AucdlQxX9qAfq5pB/pyyaml-6.0.3.dist-info/top_level.txt",
+        "scratch/redline-language-rxuh69wu/.tmp9CT8wG/environments-v2/languages-53b5a3670a84590e/lib/python3.12/site-packages/pyyaml-6.0.3.dist-info/top_level.txt",
+        "scratch/redline-uv-i2e403mx/.tmpGkZzc0/.tmp7jZW73/pyyaml-6.0.3.dist-info/top_level.txt",
+        "scratch/redline-uv-i2e403mx/.tmpGkZzc0/archive-v0/yYp-Zh6NqOE-Avfn/pyyaml-6.0.3.dist-info/top_level.txt",
+        "scratch/redline-uv-i2e403mx/.tmpGkZzc0/environments-v2/kntnt-58f02df89fa96411/lib/python3.12/site-packages/pyyaml-6.0.3.dist-info/top_level.txt",
+        "scratch/redline-work-bm6_mlxz/mechanical-input.md",
+        "scratch/redline-work-bm6_mlxz/mechanical-output.md",
+        "work/AGENTS.md",
+        "work/input.md",
+        "work/output.md"
+      ],
+      "observable_initial_messages": [
+        {
+          "ordinal": 11,
+          "timestamp": "2026-10-02T19:58:11.598Z",
+          "text": "Jag använder projektets redline-skill och läser instruktionerna samt input.md innan jag bearbetar texten.\n"
+        },
+        {
+          "ordinal": 38,
+          "timestamp": "2026-10-02T19:59:02.046Z",
+          "text": "Miljön kan starta de separata agenter som redline kräver. Jag granskar texten som en svensk debattartikel och kontrollerar särskilt ingressens påståenden, argumentationen och rubrikernas samband med brödtexten.\n"
+        },
+        {
+          "ordinal": 66,
+          "timestamp": "2026-10-02T20:00:03.967Z",
+          "text": "Ingressen säger att telefonbokningen ”ändå stängs för gott”, medan resten av texten lämnar beslutet öppet tills försöket har utvärderats. Jag låter en separat korrigeringsagent rätta den motsägelsen och granskar sedan ändringen. Textens uppbyggnad och mått uppfyller kraven.\n"
+        }
+      ],
+      "initial_correction_memo_status": "sealed in both parent and child records; no captured plaintext copy",
+      "observable_reader_loss_status": "The parent explicitly names the missing standfirst-only referent or the closure contradiction; this observable allegation is retained, without reconstructing the sealed full memo."
+    },
+    {
+      "run": "pre-opinion-closure-certain-file-2",
+      "parent": "runs/pre-opinion-closure-certain-file-2/native-sessions/2026/10/02/rollout-2026-10-02T22-11-28-01a0fe3e-3f90-7210-a2d3-136520c7ac3b.jsonl.gz",
+      "spawn_ordinal": 73,
+      "spawn_timestamp": "2026-10-02T20:15:18.884Z",
+      "task": "redline_correction",
+      "sealed": true,
+      "sealed_payload_sha256": "c6148788a656e40af2c31a4235a8cc904a5a79e86a7050e6a78c48b2f9c5d00f",
+      "matching_child_records": [
+        {
+          "path": "runs/pre-opinion-closure-certain-file-2/native-sessions/2026/10/02/rollout-2026-10-02T22-15-18-01a0fe41-c766-7a61-a022-58510c34a096.jsonl.gz",
+          "ordinal": 9,
+          "timestamp": "2026-10-02T20:15:20.261Z"
+        }
+      ],
+      "captured_paths": [
+        "scratch/proofread-uv.CI8zM0/.tmpYg5geS/archive-v0/IZG8mxYjHjxCi9kZ/pyyaml-6.0.3.dist-info/top_level.txt",
+        "scratch/proofread-uv.CI8zM0/.tmpYg5geS/environments-v2/languages-70707e2fd764e2e9/lib/python3.12/site-packages/pyyaml-6.0.3.dist-info/top_level.txt",
+        "scratch/proofread-uv.X138El/.tmplAsDTM/.tmpPwOEOu/pyyaml-6.0.3.dist-info/top_level.txt",
+        "scratch/proofread-uv.X138El/.tmplAsDTM/archive-v0/njvWqsg1_spsI3u9/pyyaml-6.0.3.dist-info/top_level.txt",
+        "scratch/proofread-uv.X138El/.tmplAsDTM/environments-v2/kntnt-45712eaf547d673f/lib/python3.12/site-packages/pyyaml-6.0.3.dist-info/top_level.txt",
+        "scratch/redline-correction-y3afhewa/.tmpO0nWUZ/archive-v0/T3asZnUOlqjf0TcR/pyyaml-6.0.3.dist-info/top_level.txt",
+        "scratch/redline-correction-y3afhewa/.tmpO0nWUZ/environments-v2/languages-70707e2fd764e2e9/lib/python3.12/site-packages/pyyaml-6.0.3.dist-info/top_level.txt",
+        "scratch/redline-invoke-uv-gsheocg4/.tmpt0A18D/archive-v0/6wuRmZdRLJR6MyVy/pyyaml-6.0.3.dist-info/top_level.txt",
+        "scratch/redline-invoke-uv-gsheocg4/.tmpt0A18D/environments-v2/kntnt-45712eaf547d673f/lib/python3.12/site-packages/pyyaml-6.0.3.dist-info/top_level.txt",
+        "scratch/redline-language-uv-5l2wvkqg/.tmpKW2wHa/archive-v0/ETGCFGTIgCltD0U3/pyyaml-6.0.3.dist-info/top_level.txt",
+        "scratch/redline-language-uv-5l2wvkqg/.tmpKW2wHa/environments-v2/languages-70707e2fd764e2e9/lib/python3.12/site-packages/pyyaml-6.0.3.dist-info/top_level.txt",
+        "scratch/redline-working-36uw_lmi/mechanical-input.md",
+        "scratch/redline-working-36uw_lmi/mechanical-output.md",
+        "work/AGENTS.md",
+        "work/input.md",
+        "work/output.md"
+      ],
+      "observable_initial_messages": [
+        {
+          "ordinal": 11,
+          "timestamp": "2026-10-02T20:11:32.858Z",
+          "text": "Jag använder projektets redline-skill och läser instruktionerna och texten innan jag bearbetar den.\n"
+        },
+        {
+          "ordinal": 37,
+          "timestamp": "2026-10-02T20:12:12.133Z",
+          "text": "Jag kan starta de separata agenter som skillen kräver. Jag granskar texten som svensk debattartikel, med högst en innehållslig korrigeringsomgång och en avslutande korrekturläsning.\n"
+        },
+        {
+          "ordinal": 72,
+          "timestamp": "2026-10-02T20:13:14.819Z",
+          "text": "Jag hittade en motsägelse i ingressen: ”ändå stängs för gott” säger att telefonbokningen kommer att avskaffas även efter försöket, medan resten av texten lämnar beslutet öppet. Korrigeringsomgången får hantera den formuleringen.\n"
+        }
+      ],
+      "initial_correction_memo_status": "sealed in both parent and child records; no captured plaintext copy",
+      "observable_reader_loss_status": "The parent explicitly names the missing standfirst-only referent or the closure contradiction; this observable allegation is retained, without reconstructing the sealed full memo."
+    }
+  ],
+  "criterion_3": "unmet",
+  "decision": "No authorised recovery or replacement procedure supplies the missing historic allegation."
+}

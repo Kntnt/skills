@@ -10060,7 +10060,7 @@ def test_a_repository_that_numbers_nothing_is_unmoved_by_overlapping_isolates(
 def test_the_registries_the_engine_finds_are_the_ones_this_repository_keeps() -> None:
     """The detection is deterministic and unconfigured, so what it answers for
     this repository is what this repository actually keeps: the decision
-    records and the retest's preserved numbered captures in the index."""
+    records and the evaluations' preserved numbered captures in the index."""
 
     # Compare the engine with the same tracked-file boundary its contract names.
     found = _run().numbered_registries(REPO_ROOT)
@@ -10097,11 +10097,57 @@ def test_the_registries_the_engine_finds_are_the_ones_this_repository_keeps() ->
         "voided/scope-r1-capacity-1": 1,
         "voided/scope-r6-capacity-1": 1,
     }
+    # The #492 capture manifests freeze another complete numbered inventory.
+    editorial_packet = "docs/evaluation/editorial-492"
+    editorial_maxima = {
+        "judges/pre-library-alternatives-clean-file-1-a": 5,
+        "judges/pre-library-alternatives-clean-file-1-b": 5,
+        "judges/pre-library-alternatives-clean-resp-1-a": 5,
+        "judges/pre-library-alternatives-clean-resp-1-b": 4,
+        "judges/pre-library-missing-referent-file-1-a": 5,
+        "judges/pre-library-missing-referent-file-1-b": 5,
+        "judges/pre-library-missing-referent-resp-1-a": 4,
+        "judges/pre-library-missing-referent-resp-1-b": 4,
+        "judges/pre-opinion-clean-file-1-a": 6,
+        "judges/pre-opinion-clean-file-1-b": 5,
+        "judges/pre-opinion-clean-file-2-a": 5,
+        "judges/pre-opinion-clean-file-2-b": 5,
+        "judges/pre-opinion-clean-file-3-a": 5,
+        "judges/pre-opinion-clean-file-3-b": 5,
+        "judges/pre-opinion-clean-resp-1-a": 4,
+        "judges/pre-opinion-clean-resp-1-b": 4,
+        "judges/pre-opinion-clean-resp-2-a": 4,
+        "judges/pre-opinion-clean-resp-2-b": 4,
+        "judges/pre-opinion-clean-resp-3-a": 4,
+        "judges/pre-opinion-clean-resp-3-b": 4,
+        "judges/pre-opinion-closure-certain-file-1-a": 6,
+        "judges/pre-opinion-closure-certain-file-1-b": 5,
+        "judges/pre-opinion-closure-certain-file-2-a": 5,
+        "judges/pre-opinion-closure-certain-file-2-b": 5,
+        "runs/pre-library-alternatives-clean-file-1": 16,
+        "runs/pre-library-alternatives-clean-resp-1": 14,
+        "runs/pre-library-missing-referent-file-1": 16,
+        "runs/pre-library-missing-referent-resp-1": 16,
+        "runs/pre-opinion-clean-file-1": 15,
+        "runs/pre-opinion-clean-file-2": 13,
+        "runs/pre-opinion-clean-file-3": 14,
+        "runs/pre-opinion-clean-resp-1": 11,
+        "runs/pre-opinion-clean-resp-2": 12,
+        "runs/pre-opinion-clean-resp-3": 12,
+        "runs/pre-opinion-closure-certain-file-1": 15,
+        "runs/pre-opinion-closure-certain-file-2": 15,
+        "smoke": 1,
+        "voided/smoke-format-preflight": 1,
+    }
     assert found == {
         "docs/adr": int(records[-1].name[:4]),
         **{
             f"{packet}/{sample}/file-versions": maximum
             for sample, maximum in captured_maxima.items()
+        },
+        **{
+            f"{editorial_packet}/{sample}/file-versions": maximum
+            for sample, maximum in editorial_maxima.items()
         },
     }
     assert found["docs/adr"] == int(records[-1].name[:4])
