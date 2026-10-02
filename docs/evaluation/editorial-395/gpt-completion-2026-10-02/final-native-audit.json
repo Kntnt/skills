@@ -1,0 +1,254 @@
+{
+  "counted_invocations": 6,
+  "counted_native_sessions": 9,
+  "void_invocations": 0,
+  "infrastructure_replacements_used": 0,
+  "cell_complete": true,
+  "original_matrix_unchanged_incomplete": true,
+  "same_seat_seven_cell_result": false,
+  "runs": [
+    {
+      "unit": "unit-01",
+      "run": "write",
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 1026.7,
+        "root": "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/395.scratch/native-unit-01",
+        "cleanup_required": true
+      },
+      "sessions": [
+        {
+          "id": "01a0fc0f-f339-7d73-96b8-3d38d3c5979f",
+          "source": "exec",
+          "cli_version": "0.160.0",
+          "seats": [
+            [
+              "gpt-6.1-sol",
+              "high"
+            ]
+          ],
+          "task_complete": true,
+          "trace": "native-sessions/2026/10/02/rollout-2026-10-02T12-01-39-01a0fc0f-f339-7d73-96b8-3d38d3c5979f.jsonl"
+        },
+        {
+          "id": "01a0fc13-9309-7e63-93ee-11548d542cae",
+          "source": {
+            "subagent": {
+              "thread_spawn": {
+                "parent_thread_id": "01a0fc0f-f339-7d73-96b8-3d38d3c5979f",
+                "depth": 1,
+                "agent_path": "/root/source_check_1",
+                "agent_nickname": "Plato",
+                "agent_role": null
+              }
+            }
+          },
+          "cli_version": "0.160.0",
+          "seats": [
+            [
+              "gpt-6.1-sol",
+              "high"
+            ]
+          ],
+          "task_complete": true,
+          "trace": "native-sessions/2026/10/02/rollout-2026-10-02T12-05-36-01a0fc13-9309-7e63-93ee-11548d542cae.jsonl"
+        },
+        {
+          "id": "01a0fc19-2d77-73b3-9556-d07727fa25b6",
+          "source": {
+            "subagent": {
+              "thread_spawn": {
+                "parent_thread_id": "01a0fc0f-f339-7d73-96b8-3d38d3c5979f",
+                "depth": 1,
+                "agent_path": "/root/source_check_2",
+                "agent_nickname": "Hooke",
+                "agent_role": null
+              }
+            }
+          },
+          "cli_version": "0.160.0",
+          "seats": [
+            [
+              "gpt-6.1-sol",
+              "high"
+            ]
+          ],
+          "task_complete": true,
+          "trace": "native-sessions/2026/10/02/rollout-2026-10-02T12-11-43-01a0fc19-2d77-73b3-9556-d07727fa25b6.jsonl"
+        }
+      ],
+      "native_errors": [],
+      "input_preserved": true,
+      "install_unchanged": true
+    },
+    {
+      "unit": "unit-02",
+      "run": "redline",
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 225.09,
+        "root": "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/395.scratch/native-unit-02",
+        "cleanup_required": true
+      },
+      "sessions": [
+        {
+          "id": "01a0fc24-16d2-70f1-ad08-896f8498614e",
+          "source": "exec",
+          "cli_version": "0.160.0",
+          "seats": [
+            [
+              "gpt-6.1-sol",
+              "high"
+            ]
+          ],
+          "task_complete": true,
+          "trace": "native-sessions/2026/10/02/rollout-2026-10-02T12-23-39-01a0fc24-16d2-70f1-ad08-896f8498614e.jsonl"
+        },
+        {
+          "id": "01a0fc25-b19b-7b01-bd3f-72336e2334e7",
+          "source": {
+            "subagent": {
+              "thread_spawn": {
+                "parent_thread_id": "01a0fc24-16d2-70f1-ad08-896f8498614e",
+                "depth": 1,
+                "agent_path": "/root/mechanical_pass",
+                "agent_nickname": "Hilbert",
+                "agent_role": null
+              }
+            }
+          },
+          "cli_version": "0.160.0",
+          "seats": [
+            [
+              "gpt-6.1-sol",
+              "high"
+            ]
+          ],
+          "task_complete": true,
+          "trace": "native-sessions/2026/10/02/rollout-2026-10-02T12-25-23-01a0fc25-b19b-7b01-bd3f-72336e2334e7.jsonl"
+        }
+      ],
+      "native_errors": [],
+      "input_preserved": true,
+      "install_unchanged": true
+    },
+    {
+      "unit": "unit-03",
+      "run": "write-reader-a",
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 345.51,
+        "root": "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/395.scratch/native-unit-03",
+        "cleanup_required": true
+      },
+      "sessions": [
+        {
+          "id": "01a0fc24-1b3d-76f1-94d6-9fd5b3f74955",
+          "source": "exec",
+          "cli_version": "0.160.0",
+          "seats": [
+            [
+              "gpt-6.1-sol",
+              "high"
+            ]
+          ],
+          "task_complete": true,
+          "trace": "native-sessions/2026/10/02/rollout-2026-10-02T12-23-40-01a0fc24-1b3d-76f1-94d6-9fd5b3f74955.jsonl"
+        }
+      ],
+      "native_errors": [],
+      "input_preserved": true,
+      "install_unchanged": true
+    },
+    {
+      "unit": "unit-04",
+      "run": "write-reader-b",
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 307.32,
+        "root": "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/395.scratch/native-unit-04",
+        "cleanup_required": true
+      },
+      "sessions": [
+        {
+          "id": "01a0fc28-adeb-7a73-99bb-bdd487c3480b",
+          "source": "exec",
+          "cli_version": "0.160.0",
+          "seats": [
+            [
+              "gpt-6.1-sol",
+              "high"
+            ]
+          ],
+          "task_complete": true,
+          "trace": "native-sessions/2026/10/02/rollout-2026-10-02T12-28-39-01a0fc28-adeb-7a73-99bb-bdd487c3480b.jsonl"
+        }
+      ],
+      "native_errors": [],
+      "input_preserved": true,
+      "install_unchanged": true
+    },
+    {
+      "unit": "unit-05",
+      "run": "redline-reader-a",
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 236.5,
+        "root": "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/395.scratch/native-unit-05",
+        "cleanup_required": true
+      },
+      "sessions": [
+        {
+          "id": "01a0fc2b-7f17-7dc1-8dc3-312af5308cc6",
+          "source": "exec",
+          "cli_version": "0.160.0",
+          "seats": [
+            [
+              "gpt-6.1-sol",
+              "high"
+            ]
+          ],
+          "task_complete": true,
+          "trace": "native-sessions/2026/10/02/rollout-2026-10-02T12-31-44-01a0fc2b-7f17-7dc1-8dc3-312af5308cc6.jsonl"
+        }
+      ],
+      "native_errors": [],
+      "input_preserved": true,
+      "install_unchanged": true
+    },
+    {
+      "unit": "unit-06",
+      "run": "redline-reader-b",
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 273.27,
+        "root": "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/395.scratch/native-unit-06",
+        "cleanup_required": true
+      },
+      "sessions": [
+        {
+          "id": "01a0fc2f-f7f2-7c13-82ab-bf8eb04c0ae6",
+          "source": "exec",
+          "cli_version": "0.160.0",
+          "seats": [
+            [
+              "gpt-6.1-sol",
+              "high"
+            ]
+          ],
+          "task_complete": true,
+          "trace": "native-sessions/2026/10/02/rollout-2026-10-02T12-36-37-01a0fc2f-f7f2-7c13-82ab-bf8eb04c0ae6.jsonl"
+        }
+      ],
+      "native_errors": [],
+      "input_preserved": true,
+      "install_unchanged": true
+    }
+  ]
+}

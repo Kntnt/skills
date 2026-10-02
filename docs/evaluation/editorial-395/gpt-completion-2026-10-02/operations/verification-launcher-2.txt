@@ -1,0 +1,4 @@
+Gate 1: 0
+Gate 2: 0
+Gate 3: 0
+Gate 4: 1

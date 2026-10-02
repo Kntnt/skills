@@ -1,0 +1,46 @@
+{
+  "phase": "literal_removal_completed",
+  "owned_paths": [
+    {
+      "path": "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/395.scratch",
+      "exists_before": true,
+      "exists_after": false
+    },
+    {
+      "path": "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/395/.venv",
+      "exists_before": true,
+      "exists_after": false
+    },
+    {
+      "path": "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/395/.ruff_cache",
+      "exists_before": true,
+      "exists_after": false
+    },
+    {
+      "path": "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/395/.mypy_cache",
+      "exists_before": true,
+      "exists_after": false
+    },
+    {
+      "path": "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/395/.pytest_cache",
+      "exists_before": true,
+      "exists_after": false
+    },
+    {
+      "path": "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/395/skills/models/model-selector/scripts/__pycache__",
+      "exists_before": true,
+      "exists_after": false
+    }
+  ],
+  "evidence_preserved": "evidence-copy-verification.json; lifecycle/; operations/; verification/",
+  "registered_groups_all_absent": "lifecycle/final-group-observation.json",
+  "external_unremoved_path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/pytest-of-thomas/pytest-1239/test_observer_captures_work_un0",
+  "external_path_not_inspected_or_deleted": true,
+  "whole_machine_restoration_certified": false,
+  "retained_source_branch_worktree_handoffs_untouched": true,
+  "completed_at": 1790939718.988739,
+  "removal_returncode": 0,
+  "force_flag_attempt": "Automatic command review rejected rm -rf; no deletion occurred from that invocation. Safer literal rm -r completed with exit 0.",
+  "removal_tool_session": 35371,
+  "wait_completed": true
+}

@@ -1,0 +1,39 @@
+Installed 1 package in 2ms
+I001 [*] Import block is un-sorted or un-formatted
+  --> docs/evaluation/editorial-395/gpt-completion-2026-10-02/harness/run-v2.py:11:1
+   |
+ 9 |   """
+10 |
+11 | / from __future__ import annotations
+12 | |
+13 | | import argparse
+14 | | import hashlib
+15 | | import io
+16 | | import json
+17 | | import os
+18 | | import shutil
+19 | | import signal
+20 | | import stat
+21 | | import subprocess
+22 | | import tarfile
+23 | | import threading
+24 | | import time
+25 | | from pathlib import Path
+26 | | from typing import Any
+27 | | from collections.abc import Iterator
+   | |____________________________________^
+28 |
+29 |   REPOSITORY = Path(__file__).resolve().parents[5]
+   |
+help: Organize imports
+   |
+24 | import time
+25 + from collections.abc import Iterator
+26 | from pathlib import Path
+27 | from typing import Any
+   - from collections.abc import Iterator
+28 |
+   |
+
+Found 1 error.
+[*] 1 fixable with the `--fix` option.

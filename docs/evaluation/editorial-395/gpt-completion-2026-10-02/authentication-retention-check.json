@@ -1,0 +1,8 @@
+{
+  "private_auth_files_examined": 6,
+  "secret_values_examined": 3,
+  "retained_files_checked": 2301,
+  "secret_value_matches": [],
+  "authentication_content_not_copied": true,
+  "limit": "Checks token/password/API-key strings from private auth copies, not a universal secret detector."
+}
