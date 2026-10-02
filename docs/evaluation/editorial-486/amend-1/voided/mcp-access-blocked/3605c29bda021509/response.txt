@@ -1,0 +1,3 @@
+No class assigned; `/run/validation-a.md` was not written.
+
+Reading `/run/text.md` was rejected because the tool requires approval and this session’s approval policy is `never`. I could not access the article.

@@ -1,0 +1,1 @@
+2026-10-02T15:15:39.764446Z ERROR codex_core::tools::router: error=resources/list failed: resources/list failed for `materials`: Unexpected response type

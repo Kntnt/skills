@@ -1,0 +1,28 @@
+{
+  "argv": [
+    "/opt/homebrew/Caskroom/codex/0.160.0/bin/codex",
+    "exec",
+    "--ignore-rules",
+    "-s",
+    "read-only",
+    "-C",
+    "/",
+    "--skip-git-repo-check",
+    "--json",
+    "-o",
+    "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-70ef836a/amend-1/ee78628d01dd395f/packet/response.txt",
+    "-"
+  ],
+  "environment": {
+    "HOME": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-70ef836a/amend-1/ee78628d01dd395f/home",
+    "CODEX_HOME": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-70ef836a/amend-1/ee78628d01dd395f/home/.codex",
+    "TMPDIR": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-70ef836a/amend-1/ee78628d01dd395f/tmp",
+    "XDG_CACHE_HOME": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-70ef836a/amend-1/ee78628d01dd395f/cache",
+    "XDG_DATA_HOME": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-70ef836a/amend-1/ee78628d01dd395f/data"
+  },
+  "harness": "codex-cli 0.160.0",
+  "public_directory": "/run",
+  "physical_root": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-70ef836a/amend-1/ee78628d01dd395f",
+  "source_packet": "validation/article-inference-a",
+  "brief_sha256": "ddf1dc43e0bd2608bc74f5a4bf3d2b0fc8eaec97063794a546da4ce86837f810"
+}
