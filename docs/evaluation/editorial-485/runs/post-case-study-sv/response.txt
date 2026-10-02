@@ -1,0 +1,44 @@
+Författarnamnet saknas; `[ditt namn]` är en platshållare. Här är ett kundfall på svenska utan särskild teknik. Källkontrollen lämnade inga kvarstående käll- eller översättningsanmärkningar. Underlaget saknar mätningar av kostnader, boendes nöjdhet och slutförandetid. Alla arbetsfiler har tagits bort.
+
+```markdown
+---
+kntnt:
+  genre: casestudy
+  technique: none
+  language: sv
+---
+
+# Elm Quay samlar reparationsanmälningar i en gemensam vy
+
+Ett åtta veckor långt försök i två byggnader gav Elm Quay Housing underlag för att bedöma en gemensam reparationslogg. Här beskriver underhållsteamet sina val, arbetet med kategorierna och vad mätningen kan säga. Kundfallet publiceras av leverantören Svale Systems.
+
+Av [ditt namn]
+
+Elm Quay Housing förvaltar 640 lägenheter. Tidigare förvarades telefonanmälningar och mejl separat. I september 2025 beslutade bolagets eget underhållsteam att prova en gemensam reparationslogg i två byggnader. Målet var att personal på olika skift skulle kunna se samma information.
+
+## Elm Quay behöll telefonanmälningarna
+
+Teamet valde Svale Systems efter att ha testat om loggen kunde visa status för varje reparation. Underlaget innehåller ingen jämförelse med någon annan leverantör. De boende kunde fortsätta att anmäla reparationer per telefon, medan Svale konfigurerade loggen och utbildade sex medarbetare vid två tillfällen.
+
+Arbetsledaren för underhåll, Maya Lind, beskriver i en mejlintervju vad teamet ville åstadkomma:
+
+– Vi ville att kvällsskiftet skulle kunna se vad morgonskiftet redan hade gjort. Kategorierna var våra; Svale hjälpte oss att lägga in dem i loggen.
+
+## 31 reparationsanmälningar registrerades under försöket
+
+Elm Quays interna försöksanteckning, daterad den 4 december 2025, redovisar tiden från anmälan till tilldelning. Medianen var två arbetsdagar under försöket, jämfört med tre under den föregående åttaveckorsperioden. Anmälningar som gäller nödsituationer och arbeten beställda före försöket ingår inte i anteckningens underlag.
+
+Perioderna hade olika arbetsbelastning. Anteckningen tillskriver uttryckligen inte programvaran skillnaden i tid. Det finns heller inga mätningar av kostnader, boendes nöjdhet eller tiden tills reparationerna var slutförda. Siffrorna ger därför inget besked om besparingar eller snabbare slutförda arbeten.
+
+## Teamets beslut om att utöka försöket återstår
+
+Försöket har ännu inte utökats. Teamet ska besluta efter att ha kontrollerat hur kategorierna fungerar för större reparationer. När Maya Lind ser tillbaka på förberedelserna beskriver arbetsledaren en erfarenhet inför nästa byggnad:
+
+– Vi ägnade mer tid åt att enas om kategorierna än åt att lägga in de första anmälningarna. Jag skulle avsätta den tiden innan försöket börjar i nästa byggnad.
+
+– Jag skulle välja att göra försöket igen. Att ha en gemensam vy över anmälningarna hjälper oss, men jag skulle avsätta en extra vecka för förberedelser, säger Maya Lind om försöket.
+
+## Läs checklistan inför genomförandet
+
+Elm Quays erfarenhet visar vilka val och begränsningar ett försök kan behöva belysa. För dig som vill läsa vidare finns [Svales checklista för genomförandet](https://example.invalid/svale/checklist).
+```

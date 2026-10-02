@@ -1,0 +1,5 @@
+Created [draft.md](/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-485-scratch/kntnt-editorial-485-run-343td4ng/work/draft.md) as an American English article with handoff metadata. No technique was applied, following the article genre’s default.
+
+Structure and source/quotation checks passed with no unresolved findings. The draft preserves the source’s limits on duration, causes, and adjustment effects.
+
+The byline reads “By the user” because no author name was supplied. Temporary files were removed.

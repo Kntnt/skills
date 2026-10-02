@@ -6258,6 +6258,37 @@ def test_redline_never_stands_in_a_directory_it_has_to_remove() -> None:
         )
 
 
+def test_write_never_stands_in_a_directory_it_has_to_remove() -> None:
+    """Write keeps its private paths removable and honours a cleanup refusal.
+
+    The guard covers UV and comparison scratch before either is made. The
+    existing source-check lifecycle remains responsible for task shutdown
+    and preservation of prose and findings (issue #485).
+    """
+
+    body = WRITE.read_text(encoding="utf-8")
+    paragraphs = [block for block in body.split("\n\n") if block.strip()]
+    made = [
+        index
+        for index, block in enumerate(paragraphs)
+        if block.startswith(UV_RUNTIME_CLEANUP)
+    ]
+    assert len(made) == 1
+    following = paragraphs[made[0] + 1] if made[0] + 1 < len(paragraphs) else ""
+    for phrase in (
+        "Name every private directory this run makes",
+        "for a UV command or for its own working files, by its full path",
+        *REDLINE_STANDS_OUTSIDE_ITS_OWN_FILES,
+        "A removal the Harness refuses or holds for approval",
+        "the files stay where they are",
+    ):
+        assert phrase in following, (
+            f"{WRITE}: the private-directory guard lacks {phrase!r}; Write"
+            " must keep its own directories removable and preserve a"
+            " Harness refusal (issue #485)."
+        )
+
+
 def test_text_artifact_runtime_leaves_harness_scratch_unchanged(tmp_path: Path) -> None:
     """UV commands do not turn response delivery into a filesystem write.
 

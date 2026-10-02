@@ -1,0 +1,38 @@
+{
+  "cleanup_pid": 56683,
+  "cleanup_started": "Fri Oct  2 15:58:20 2026",
+  "recorded_group": 56683,
+  "deleted": [
+    "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/485/.pytest_cache",
+    "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/485/.ruff_cache",
+    "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/485/.mypy_cache",
+    "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/485/.venv",
+    "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/485/tests/__pycache__",
+    "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/485/tests/support/__pycache__",
+    "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/485/docs/evaluation/editorial-388/harness/__pycache__",
+    "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/485/skills/web/mirror/scripts/__pycache__",
+    "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/485/skills/kntnt/features/session-cleanup/scripts/__pycache__",
+    "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/485/skills/kntnt/library/scripts/__pycache__",
+    "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/485/skills/kntnt/scripts/__pycache__",
+    "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/485/skills/code/orchestrate/scripts/__pycache__",
+    "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/485/skills/models/model-selector/scripts/__pycache__",
+    "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/485/skills/productivity/rename-invoices/scripts/__pycache__",
+    "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-485-scratch",
+    "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/485/docs/evaluation/editorial-485/runs/waves/before.json",
+    "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/485/docs/evaluation/editorial-485/runs/waves/after.json"
+  ],
+  "packet_preservation": "Six native packets, source snapshots, responses, requested draft captures, inventories, gate logs and ownership observations preserved in committed deliverable paths before deletion.",
+  "registration": {
+    "at": "2026-10-02T13:58:20+00:00",
+    "id": "56683",
+    "kind": "pid",
+    "started": "Fri Oct  2 15:58:20 2026",
+    "why": "Ticket 485 final owned-artifact cleanup"
+  },
+  "scratch_recreated_empty": true,
+  "seconds": 7.46,
+  "post_completion_ps": "",
+  "cleanup_process_alive": false,
+  "scratch_contents_after_completion": [],
+  "scratch_alias_resolves_to": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-485-scratch"
+}

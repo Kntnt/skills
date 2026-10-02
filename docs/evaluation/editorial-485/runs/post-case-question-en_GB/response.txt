@@ -1,0 +1,38 @@
+Delivered with one known defect: “The trial leaves repair duration unmeasured” extends the summary’s limitation to the whole trial. The proposed repair is “The summary does not measure repair duration”. The [write skill](/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-485-scratch/kntnt-editorial-485-run-swe0791j/work/.agents/skills/write/SKILL.md) requires “never reopen the prose after its final source comparison”, so the compared wording is preserved.
+
+British English case study, returned here; no technique selected, as the genre specifies none. The fictional material supplies no author name or call to action; the required byline identifies you as “the user”. Both comparisons completed. Temporary files were removed.
+
+```markdown
+---
+kntnt:
+  genre: casestudy
+  technique: none
+  language: en_GB
+---
+
+# Fenwick approves Benchline for new jobs
+
+A six-week workshop trial recorded 38 jobs and visibility of instruments awaiting parts. The workshop’s summary and manager Priya Vale’s account explain the status definitions behind the schedule and the limits of what the trial established.
+
+By the user
+
+Fenwick Instrument Repairs services brass and woodwind instruments. Before its team began a shared bench schedule trial in January 2026, jobs awaiting parts and jobs ready for work appeared on separate paper sheets.
+
+## The workshop defines the statuses
+
+The team chose Benchline after checking that it could distinguish these statuses. The workshop defined them and decided who would update them. Benchline configured those choices and trained four staff in one online session.
+
+In an email interview on 2 March 2026, Vale was asked what the team had to settle before the schedule was useful: ‘We had to agree what ready for work meant. A part being in the building did not always mean that it had reached the right bench.’
+
+## The trial leaves repair duration unmeasured
+
+The workshop’s summary, dated 23 February 2026, records 38 jobs entered in the schedule. It says staff could see which instruments were waiting for parts. It does not measure repair duration, revenue or customer satisfaction.
+
+The team continued to discuss collection arrangements with customers by telephone.
+
+## Vale reflects on the choice
+
+The manager approved continued use for new jobs but postponed adding the backlog until the team had reviewed its status definitions.
+
+Asked whether the choice would be the same again and what would change, Vale wrote: ‘I would use it again for new jobs. I would allow another week to check the status names before adding the backlog.’
+```
