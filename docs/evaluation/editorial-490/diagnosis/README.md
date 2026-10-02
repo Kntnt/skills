@@ -1,0 +1,7 @@
+# Historical diagnosis
+
+The #477 packet `post-case-study-clean-file-3` has one reply checker. Its saved draft says *”Försöket” fick sin referent bara från ingressen.* Its closing paragraph says *Hänvisningar som bara ingressen förklarade, eller som inget förklarade, gjordes tydliga i ingressen och inledningen.* The received headline names *loggförsöket*. The checker faults *Utöver detta* for wrongly suggesting additional edits, and does not name either exclusivity falsehood. The terminal reply rewords the finding and retains the closing sentence.
+
+Reply judge A counts both terminal statements as false; reply judge B and both correction judges do not. This is a preserved split, not consensus. The finding was false or overbroad already in the checked draft; its later rewording also falls within #489's separate application concern. Whether the article rewrite was licensed is #491's concern. The current delivery contract already requires universal claims to be read against every covered part, and the first list already includes everywhere/nowhere claims. The ticket is a residual first-list miss, not a missing generic rule.
+
+The frozen seams are those the ticket authorises: the native run's received text, drafted reply, checker return and terminal reply; and the isolated checker input/return. A native miss is needed before any product correction. A replay alone cannot establish native reproduction. Contrasts will be independently validated before any candidate wording. No product hypothesis is chosen until that red step.
