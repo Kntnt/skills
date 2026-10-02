@@ -1,0 +1,71 @@
+path /private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-4e63a209/amend-2-runtime
+{
+  "manifest": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-4e63a209/amend-2-runtime/kntnt-home/.kntnt/session-cleanup/sessions/01a0fda2-296d-7133-8466-48014a0655cd.jsonl",
+  "recorded": {
+    "at": "2026-10-02T17:29:01+00:00",
+    "id": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-4e63a209/amend-2-runtime",
+    "kind": "path",
+    "why": "Editorial #488 amend 2 project gate"
+  },
+  "session": "01a0fda2-296d-7133-8466-48014a0655cd"
+}
+pid 42563
+{
+  "manifest": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-4e63a209/amend-2-runtime/kntnt-home/.kntnt/session-cleanup/sessions/01a0fda2-296d-7133-8466-48014a0655cd.jsonl",
+  "recorded": {
+    "at": "2026-10-02T17:29:01+00:00",
+    "id": "42563",
+    "kind": "pid",
+    "started": "Fri Oct  2 19:29:00 2026",
+    "why": "Editorial #488 amend 2 project gate"
+  },
+  "session": "01a0fda2-296d-7133-8466-48014a0655cd"
+}
+pid 42702
+{
+  "manifest": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-4e63a209/amend-2-runtime/kntnt-home/.kntnt/session-cleanup/sessions/01a0fda2-296d-7133-8466-48014a0655cd.jsonl",
+  "recorded": {
+    "at": "2026-10-02T17:29:01+00:00",
+    "id": "42702",
+    "kind": "pid",
+    "started": "Fri Oct  2 19:29:01 2026",
+    "why": "Editorial #488 amend 2 project gate"
+  },
+  "session": "01a0fda2-296d-7133-8466-48014a0655cd"
+}
+pid 42726
+{
+  "manifest": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-4e63a209/amend-2-runtime/kntnt-home/.kntnt/session-cleanup/sessions/01a0fda2-296d-7133-8466-48014a0655cd.jsonl",
+  "recorded": {
+    "at": "2026-10-02T17:29:03+00:00",
+    "id": "42726",
+    "kind": "pid",
+    "started": "Fri Oct  2 19:29:02 2026",
+    "why": "Editorial #488 amend 2 project gate"
+  },
+  "session": "01a0fda2-296d-7133-8466-48014a0655cd"
+}
+pid 42743
+{
+  "manifest": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-4e63a209/amend-2-runtime/kntnt-home/.kntnt/session-cleanup/sessions/01a0fda2-296d-7133-8466-48014a0655cd.jsonl",
+  "recorded": {
+    "at": "2026-10-02T17:29:03+00:00",
+    "id": "42743",
+    "kind": "pid",
+    "started": "Fri Oct  2 19:29:03 2026",
+    "why": "Editorial #488 amend 2 project gate"
+  },
+  "session": "01a0fda2-296d-7133-8466-48014a0655cd"
+}
+pid 42830
+{
+  "manifest": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-4e63a209/amend-2-runtime/kntnt-home/.kntnt/session-cleanup/sessions/01a0fda2-296d-7133-8466-48014a0655cd.jsonl",
+  "recorded": {
+    "at": "2026-10-02T17:29:09+00:00",
+    "id": "42830",
+    "kind": "pid",
+    "started": "Fri Oct  2 19:29:09 2026",
+    "why": "Editorial #488 amend 2 project gate"
+  },
+  "session": "01a0fda2-296d-7133-8466-48014a0655cd"
+}

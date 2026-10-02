@@ -1,0 +1,2 @@
+uvx ruff format --check .
+8408 files already formatted

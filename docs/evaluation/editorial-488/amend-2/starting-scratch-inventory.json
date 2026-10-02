@@ -1,0 +1,81 @@
+{
+  "root": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-4e63a209",
+  "files": [
+    {
+      "path": "filed-miss-receipt.json",
+      "sha256": "99f1c3f5147b0554b9e33220342fe33ff07e20b36ed144988787a34fcbcd720f"
+    },
+    {
+      "path": "frozen-input-comparison.json",
+      "sha256": "a3d228aafc619c8c68e6ebfb10db479f7d4c1cd1287b3220b637475a13663a9a"
+    },
+    {
+      "path": "primary-evidence-receipt.json",
+      "sha256": "08fe5b5c7710e621ed7bfdef078624caba4479ca426bd01cec1da248724bb300"
+    },
+    {
+      "path": "strict-verdict.md",
+      "sha256": "00bf4fc1381108270713989233e2009730ea668ab6ff5089fe9ecb3e69a835a6"
+    },
+    {
+      "path": "verification-cleanup-receipt.json",
+      "sha256": "502de5131c9b1f9568704416b14b0c6fd108e038a0dad0f73a391b81db9e87fc"
+    },
+    {
+      "path": "verification-gate-1.log",
+      "sha256": "77df88f13a0087d472bef2a807f269cd8c7baa76bfef77f01992411cb8a311fe"
+    },
+    {
+      "path": "verification-gate-2.log",
+      "sha256": "e96b837349acbe95d48c080dbc945954282949597359f74d9a5fae2e014638e7"
+    },
+    {
+      "path": "verification-gate-3.log",
+      "sha256": "605c6d85100556bd252c0518c530badbb1faf3931b9635dca6f35a46463b3b6a"
+    },
+    {
+      "path": "verification-gate-4.log",
+      "sha256": "681e97c3ef860f5bc72f38ebba90da26c074aac9c0473619823d7f37e5c2ddd0"
+    },
+    {
+      "path": "verification-gate-commands.json",
+      "sha256": "f16f8e862d8eaca5e4cbfa82ba8a4ce9ce11d1e28a02b28b93b10ba3e5cb6984"
+    },
+    {
+      "path": "verification-gate-complete",
+      "sha256": "37a40f08d8548dba289b9b0bb35bcf63b359f6d37ee86044ebc6b6da080b9ec1"
+    },
+    {
+      "path": "verification-gate-results.json",
+      "sha256": "86e769ddd9bf83a399315c0b854331e5d2c433b346121ab5e8f8d8931c8e4441"
+    },
+    {
+      "path": "verification-gate-runner.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "verification-gate-runner.py",
+      "sha256": "81acfaa03868e10877bb1d2c66f7179ad5ce4165fdac57a6d00e043a101c90cd"
+    },
+    {
+      "path": "verification-owned-pid.json",
+      "sha256": "f1940d8f9973129fcf715300a8253d91da1734a216e069fe938ce559dd81c6cc"
+    },
+    {
+      "path": "verification-process-audit.json",
+      "sha256": "3d04e154c932b9bf17664bebde6f170865e79f7fcdf3b194812689a5177d77e2"
+    },
+    {
+      "path": "verification-registration.txt",
+      "sha256": "993fc49c6e97786e8f2775a96171615f9d1503dd6732dbda0c4ea19d486db28d"
+    },
+    {
+      "path": "verification-runtime-env.json",
+      "sha256": "8b0856bbd801fd18ec3f3ffdbb08f9fa84333aeea0f763cb9baf59dea0fa05bd"
+    },
+    {
+      "path": "verification-runtime-files.json",
+      "sha256": "ed64a3fdb585a21cece43e65babe01c3d3294a6d22dcd3cf927ef48223e2995c"
+    }
+  ]
+}

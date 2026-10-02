@@ -1,0 +1,108 @@
+"""Check the actual retained dispatch boundary without inferring its plaintext.
+
+This is an evidence diagnostic, not product code or another native campaign.
+Its only write is a new receipt beside this source snapshot. A nonzero exit
+means the required original checker inputs are unavailable in the owned packet.
+"""
+
+import hashlib
+import json
+from pathlib import Path
+
+
+def digest(path: Path) -> str:
+    """Identify retained primary bytes independently of the earlier audit."""
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def filled(text: str) -> bool:
+    """Distinguish the filled checker instruction from its shipped template."""
+    return all(
+        marker in text
+        for marker in (
+            "**The text as it arrived.**",
+            "**The text as delivered.**",
+            "**The reply.**",
+        )
+    ) and not any(
+        placeholder in text
+        for placeholder in ("<received>", "<delivered>", "<reply>")
+    )
+
+
+root = Path("docs/evaluation/editorial-488")
+prior = json.loads((root / "amend-1/recovery-audit.json").read_text())
+rows = []
+for previous in prior["runs"]:
+    parent = root / previous["parent"]
+    child = root / previous["checker"]
+    parent_events = [json.loads(line) for line in parent.read_text().splitlines()]
+    child_events = [json.loads(line) for line in child.read_text().splitlines()]
+    spawn = next(
+        event for event in parent_events
+        if event.get("ordinal") == previous["spawn_ordinal"]
+    )
+    arguments = json.loads(spawn["payload"]["arguments"])
+    message = arguments.get("message", "")
+    blocks = [
+        block
+        for event in child_events
+        if event["type"] == "response_item"
+        and event["payload"].get("type") == "agent_message"
+        and event["payload"].get("author") == "/root"
+        for block in event["payload"].get("content", [])
+    ]
+    assert spawn["payload"]["call_id"] == previous["spawn_call_id"]
+    assert digest(parent) == previous["parent_sha256"]
+    assert digest(child) == previous["checker_sha256"]
+    plaintext_available = (
+        not message.startswith("gAAAA") and filled(message)
+    ) or any(filled(block.get("text", "")) for block in blocks)
+    rows.append({
+        "run": previous["run"],
+        "parent": previous["parent"],
+        "parent_sha256": digest(parent),
+        "spawn_ordinal": spawn["ordinal"],
+        "spawn_call_id": spawn["payload"]["call_id"],
+        "checker": previous["checker"],
+        "checker_sha256": digest(child),
+        "encrypted_dispatch": message.startswith("gAAAA"),
+        "child_preserves_same_encrypted_payload": any(
+            block.get("encrypted_content") == message for block in blocks
+        ),
+        "complete_plaintext_at_dispatch_or_receipt": plaintext_available,
+        "earlier_separate_draft_recovered": (
+            previous["draft_return_delivery_comparison"] is not None
+        ),
+    })
+
+# Check every counted run, without reducing the requirement to recovered drafts.
+assert len(rows) == 18
+assert {row["run"] for row in rows} == {
+    packet.name for packet in (root / "runs").iterdir() if packet.is_dir()
+}
+receipt = {
+    "attempt_id": "ms-20261002-689dc4",
+    "starting_head": "9e7817803178831149945ebd8dfb3c1069e0c3cb",
+    "criterion": "Every unfaulted checked statement is delivered word for word",
+    "prior_audit_sha256": digest(root / "amend-1/recovery-audit.json"),
+    "runs": rows,
+    "complete_original_checker_inputs": sum(
+        row["complete_plaintext_at_dispatch_or_receipt"] for row in rows
+    ),
+    "limitation": "Separate drafts, partial checker quotations and final replies do not prove the bytes of an encrypted original checker instruction.",
+}
+(root / "amend-2/checked-input-receipt.json").write_text(
+    json.dumps(receipt, ensure_ascii=False, indent=2) + "\n"
+)
+print(json.dumps({
+    "runs_checked": len(rows),
+    "complete_original_checker_inputs": receipt["complete_original_checker_inputs"],
+    "runs_without_complete_original_checker_input": [
+        row["run"] for row in rows
+        if not row["complete_plaintext_at_dispatch_or_receipt"]
+    ],
+}, indent=2), flush=True)
+assert receipt["complete_original_checker_inputs"] == 18, (
+    "Acceptance criterion 5 remains unestablished: original checker inputs unavailable"
+)

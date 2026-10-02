@@ -1,0 +1,18 @@
+{
+  "checked_at": 1790962368.796869,
+  "owned_process_groups": [
+    42563,
+    42702,
+    42726,
+    42743,
+    42830
+  ],
+  "excluded_operator_ancestors": [
+    1,
+    31633,
+    72225,
+    72357
+  ],
+  "surviving_owned_processes": [],
+  "deliberately_retained_processes": []
+}

@@ -1,0 +1,10 @@
+{
+  "command": "rm -r /private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-4e63a209/amend-2-runtime",
+  "returncode": 0,
+  "runtime_absent": true,
+  "original_ticket_files_byte_identical": 1702,
+  "starting_scratch_handoff_files_byte_identical": 19,
+  "new_scratch_files_retained": [],
+  "process_audit": "process-audit.json",
+  "deliberately_retained_processes": []
+}

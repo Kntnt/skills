@@ -1,0 +1,64 @@
+{
+  "starting_head": "9e7817803178831149945ebd8dfb3c1069e0c3cb",
+  "supervisor_pid": 42563,
+  "supervisor_process_group": 42563,
+  "started": 1790962141.535664,
+  "environment": {
+    "TMPDIR": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-4e63a209/amend-2-runtime/tmp",
+    "UV_CACHE_DIR": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-4e63a209/amend-2-runtime/uv-cache",
+    "UV_TOOL_DIR": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-4e63a209/amend-2-runtime/uv-tools",
+    "UV_TOOL_BIN_DIR": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-4e63a209/amend-2-runtime/uv-bin",
+    "UV_PYTHON_INSTALL_DIR": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-4e63a209/amend-2-runtime/uv-python",
+    "UV_PROJECT_ENVIRONMENT": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-4e63a209/amend-2-runtime/project-env",
+    "PYTHONPYCACHEPREFIX": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-4e63a209/amend-2-runtime/pycache",
+    "MYPY_CACHE_DIR": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-4e63a209/amend-2-runtime/mypy-cache",
+    "RUFF_CACHE_DIR": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-4e63a209/amend-2-runtime/ruff-cache",
+    "XDG_CACHE_HOME": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-4e63a209/amend-2-runtime/xdg-cache",
+    "XDG_DATA_HOME": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-4e63a209/amend-2-runtime/xdg-data",
+    "XDG_RUNTIME_DIR": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-4e63a209/amend-2-runtime/xdg-runtime",
+    "KNTNT_HOME": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-4e63a209/amend-2-runtime/kntnt-home",
+    "PYTEST_ADDOPTS": "--basetemp=/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-4e63a209/amend-2-runtime/pytest-temp -o cache_dir=/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-4e63a209/amend-2-runtime/pytest-cache"
+  },
+  "HOME_retained": true,
+  "CODEX_HOME_retained": true,
+  "commands": [
+    {
+      "command": "uvx ruff check .",
+      "pid": 42702,
+      "process_group": 42702,
+      "started": 1790962141.720766,
+      "log": "gate-1.log",
+      "returncode": 0,
+      "finished": 1790962142.8528159
+    },
+    {
+      "command": "uvx ruff format --check .",
+      "pid": 42726,
+      "process_group": 42726,
+      "started": 1790962143.0881548,
+      "log": "gate-2.log",
+      "returncode": 0,
+      "finished": 1790962143.717738
+    },
+    {
+      "command": "uvx --with types-PyYAML --with pytest --with httpx==0.28.1 --with selectolax==0.4.11 --with types-tinycss2 --with types-regex mypy skills/kntnt/scripts/kntnt.py skills/kntnt/library/scripts/argument_grammar.py skills/kntnt/library/scripts/article_anatomy.py skills/kntnt/library/scripts/ship.py skills/kntnt/library/scripts/integrations.py skills/kntnt/library/scripts/languages.py skills/kntnt/library/scripts/credentials.py skills/models/model-selector/scripts/catalogue.py skills/models/model-selector/scripts/profiles.py skills/models/model-selector/scripts/evidence.py skills/models/model-selector/scripts/launch.py skills/models/model-selector/scripts/selection.py skills/models/model-selector/scripts/quota.py skills/models/model-selector/scripts/record.py skills/models/model-selector/scripts/capture.py skills/models/model-selector/scripts/grade.py skills/models/model-selector/scripts/setup_apply.py skills/models/model-selector/scripts/inventory.py skills/code/orchestrate/scripts/run.py skills/productivity/rename-invoices/scripts/rename_invoices.py skills/agents/explain/scripts/invoke.py skills/web/mirror/scripts/mirror.py skills/infrastructure/cloudns/scripts/cloudns.py skills/infrastructure/hetzner/scripts/hetzner.py skills/infrastructure/nodeping/scripts/nodeping.py skills/infrastructure/postmark/scripts/postmark.py tests",
+      "pid": 42743,
+      "process_group": 42743,
+      "started": 1790962143.905372,
+      "log": "gate-3.log",
+      "returncode": 0,
+      "finished": 1790962149.36537
+    },
+    {
+      "command": "uv run --with pytest --with pytest-xdist --with pyyaml pytest -n auto",
+      "pid": 42830,
+      "process_group": 42830,
+      "started": 1790962149.545342,
+      "log": "gate-4.log",
+      "returncode": 0,
+      "finished": 1790962316.9961941
+    }
+  ],
+  "finished": 1790962316.997189,
+  "all_passed": true
+}

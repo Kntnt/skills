@@ -1,0 +1,29 @@
+{
+  "runs_checked": 18,
+  "complete_original_checker_inputs": 0,
+  "runs_without_complete_original_checker_input": [
+    "post-article-clean-file",
+    "post-article-clean-response",
+    "post-article-unnamed-1",
+    "post-article-unnamed-2",
+    "post-article-unnamed-3",
+    "post-column-flawed-file",
+    "post-opinion-flawed-1",
+    "post-opinion-flawed-2",
+    "post-opinion-flawed-3",
+    "pre-article-clean-file",
+    "pre-article-clean-response",
+    "pre-article-unnamed-1",
+    "pre-article-unnamed-2",
+    "pre-article-unnamed-3",
+    "pre-column-flawed-file",
+    "pre-opinion-flawed-1",
+    "pre-opinion-flawed-2",
+    "pre-opinion-flawed-3"
+  ]
+}
+Traceback (most recent call last):
+  File "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/488/docs/evaluation/editorial-488/amend-2/checked-input-probe.txt", line 106, in <module>
+    assert receipt["complete_original_checker_inputs"] == 18, (
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Acceptance criterion 5 remains unestablished: original checker inputs unavailable
