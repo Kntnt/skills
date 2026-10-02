@@ -44,7 +44,9 @@ EXPECTATIONS = {
 
 def invoke(command: list[str], record: Path) -> dict[str, object]:
     """Wait for a native capture and preserve even an interrupted launch."""
-    result = subprocess.run(command, cwd=REPOSITORY, capture_output=True, text=True)
+    result = subprocess.run(
+        command, cwd=REPOSITORY, capture_output=True, text=True, check=False
+    )
     value = {
         "returncode": result.returncode,
         "stdout": result.stdout,
