@@ -1,0 +1,17 @@
+Sparat i [output.md](/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-ui0bdkvx/work/output.md). Granskat som `casestudy` på svenska, utan särskild teknik enligt metadata. Inga fynd kvarstår; artikelanatomin är uppfylld.
+
+Åtgärdade rubrikfynd och ändrade påståenden:
+
+- Originalets huvudrubrik generaliserade försökets median till en allmän kvartstid. Den anger nu skolans redovisade 52 tillsatta pass i försöket; uppgiften står kvar i brödtexten.
+- Originalets första mellanrubrik upprepade sektionsöppningen. Den anger nu Vikarieportalens två genomgångar av listan, vilket också står kvar i brödtexten.
+- Originalets sista mellanrubrik föregrep rektorns reservation och gjorde hennes villkorade omdöme till skolans avsikt. Den namnger nu Nina Falks återblick och lämnar omdömet till citatet.
+
+Borttagna rubrikpåståenden i samma korrigeringsomgång:
+
+- Den generella kvartstiden. Försökets median och avgränsningar står kvar.
+- Att arbetslagen själva utformade kategorierna, som uttrycklig uppgift i mellanrubriken. Brödtextens uppgift om skolans utformning står kvar.
+- Att skolan vill ge rutinerna mer tid. Falks villkorade önskemål står kvar.
+
+Tillagd inramning: sista mellanrubriken beskriver Falks omdöme som en återblick på försöket.
+
+Rubrikerna har reparerats mot övergeneralisering, upprepning och ett föregripet citatomdöme. Metadata har synkroniserats från `case-study` till `casestudy`. Ingress, brödtext, citat och förbehåll är oförändrade; den avslutande korrekturläsningen krävde inga rättelser.

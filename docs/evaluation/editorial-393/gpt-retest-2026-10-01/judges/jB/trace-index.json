@@ -1,0 +1,100 @@
+{
+  "sessions": [
+    {
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T18-01-13-01a0f832-ca1f-7c03-ab85-a1776275cb08.jsonl",
+      "id": "01a0f832-ca1f-7c03-ab85-a1776275cb08",
+      "source": "exec",
+      "first_event": "2026-10-01T16:01:13.679Z",
+      "last_event": "2026-10-01T16:25:42.139Z",
+      "lifecycle": [
+        {
+          "ordinal": 1,
+          "timestamp": "2026-10-01T16:01:13.679Z",
+          "type": "task_started"
+        },
+        {
+          "ordinal": 167,
+          "timestamp": "2026-10-01T16:25:42.139Z",
+          "type": "task_complete"
+        }
+      ],
+      "calls": [
+        {
+          "ordinal": 12,
+          "timestamp": "2026-10-01T16:01:22.965Z",
+          "name": "exec",
+          "input": "const result = await tools.exec_command({cmd: \"cat input.md\", max_output_tokens: 30000});\ntext(result.output);\n",
+          "output_ordinal": 15,
+          "output_contains_truncation_notice": true
+        },
+        {
+          "ordinal": 19,
+          "timestamp": "2026-10-01T16:01:45.458Z",
+          "name": "exec",
+          "input": "const result = await tools.exec_command({cmd: \"python3 -c 'import re; from pathlib import Path; s=Path(\\\"input.md\\\").read_text(); parts=re.split(r\\\"(?m)^## (sample-\\\\d+)\\\\n\\\",s); print(\\\"\\\\n\\\".join(parts[i]+parts[i+1] for i in range(1,len(parts),2) if 1 <= int(parts[i].split(\\\"-\\\")[1]) <= 3))'\", max_output_tokens: 14500});\ntext(result.output);\n",
+          "output_ordinal": 22,
+          "output_contains_truncation_notice": false
+        },
+        {
+          "ordinal": 26,
+          "timestamp": "2026-10-01T16:02:02.250Z",
+          "name": "exec",
+          "input": "const result = await tools.exec_command({cmd: \"python3 -c 'import re; from pathlib import Path; s=Path(\\\"input.md\\\").read_text(); parts=re.split(r\\\"(?m)^## (sample-\\\\d+)\\\\n\\\",s); print(\\\"\\\\n\\\".join(parts[i]+parts[i+1] for i in range(1,len(parts),2) if 4 <= int(parts[i].split(\\\"-\\\")[1]) <= 6))'\", max_output_tokens: 15500});\ntext(result.output);\n",
+          "output_ordinal": 29,
+          "output_contains_truncation_notice": false
+        },
+        {
+          "ordinal": 37,
+          "timestamp": "2026-10-01T16:02:14.811Z",
+          "name": "exec",
+          "input": "const result = await tools.exec_command({cmd: \"python3 -c 'import re; from pathlib import Path; s=Path(\\\"input.md\\\").read_text(); parts=re.split(r\\\"(?m)^## (sample-\\\\d+)\\\\n\\\",s); print(\\\"\\\\n\\\".join(parts[i]+parts[i+1] for i in range(1,len(parts),2) if 7 <= int(parts[i].split(\\\"-\\\")[1]) <= 9))'\", max_output_tokens: 15500});\ntext(result.output);\n",
+          "output_ordinal": 40,
+          "output_contains_truncation_notice": false
+        },
+        {
+          "ordinal": 44,
+          "timestamp": "2026-10-01T16:02:42.973Z",
+          "name": "exec",
+          "input": "const result = await tools.exec_command({cmd: \"python3 -c 'import re; from pathlib import Path; s=Path(\\\"input.md\\\").read_text(); parts=re.split(r\\\"(?m)^## (sample-\\\\d+)\\\\n\\\",s); print(\\\"\\\\n\\\".join(parts[i]+parts[i+1] for i in range(1,len(parts),2) if 10 <= int(parts[i].split(\\\"-\\\")[1]) <= 12))'\", max_output_tokens: 15500});\ntext(result.output);\n",
+          "output_ordinal": 47,
+          "output_contains_truncation_notice": false
+        },
+        {
+          "ordinal": 51,
+          "timestamp": "2026-10-01T16:03:01.033Z",
+          "name": "exec",
+          "input": "const result = await tools.exec_command({cmd: \"python3 -c 'import re; from pathlib import Path; s=Path(\\\"input.md\\\").read_text(); parts=re.split(r\\\"(?m)^## (sample-\\\\d+)\\\\n\\\",s); print(\\\"\\\\n\\\".join(parts[i]+parts[i+1] for i in range(1,len(parts),2) if 13 <= int(parts[i].split(\\\"-\\\")[1]) <= 15))'\", max_output_tokens: 15500});\ntext(result.output);\n",
+          "output_ordinal": 54,
+          "output_contains_truncation_notice": false
+        },
+        {
+          "ordinal": 60,
+          "timestamp": "2026-10-01T16:03:29.524Z",
+          "name": "exec",
+          "input": "const result = await tools.exec_command({cmd: \"python3 -c 'import re; from pathlib import Path; s=Path(\\\"input.md\\\").read_text(); parts=re.split(r\\\"(?m)^## (sample-\\\\d+)\\\\n\\\",s); print(\\\"\\\\n\\\".join(parts[i]+parts[i+1] for i in range(1,len(parts),2) if 16 <= int(parts[i].split(\\\"-\\\")[1]) <= 18))'\", max_output_tokens: 15500});\ntext(result.output);\n",
+          "output_ordinal": 63,
+          "output_contains_truncation_notice": false
+        },
+        {
+          "ordinal": 67,
+          "timestamp": "2026-10-01T16:04:14.212Z",
+          "name": "exec",
+          "input": "const result = await tools.exec_command({cmd: \"python3 - <<'PY'\\nimport re, json, difflib\\nfrom pathlib import Path\\ns=Path('input.md').read_text()\\nparts=re.split(r'(?m)^## (sample-\\\\d+)\\\\n',s)\\nfor i in range(1,len(parts),2):\\n    sample, body=parts[i:i+2]\\n    art=re.search(r'### Delivered Text Artifact\\\\n\\\\n```text\\\\n(.*?)\\\\n```',body,re.S)\\n    supplied=re.search(r'### Complete supplied input\\\\n\\\\n```text\\\\n(.*?)\\\\n```',body,re.S)\\n    if not art:\\n        print(json.dumps({'id':sample, 'artifact':False}))\\n        continue\\n    a=art.group(1)\\n    content=re.sub(r'\\\\A---\\\\n.*?\\\\n---\\\\n','',a,flags=re.S).strip()\\n    paras=re.split(r'\\\\n\\\\s*\\\\n',content)\\n    title=paras[0].removeprefix('# ')\\n    stand=re.sub(r'\\\\*\\\\*','',paras[1])\\n    heads=re.findall(r'(?m)^## (.*)$',a)\\n    out={'id':sample, 'headline_chars':len(title), 'standfirst_words':len(stand.split()), 'subhead_chars':[len(h) for h in heads], 'artifact_words':len(content.split())}\\n    print(json.dumps(out,ensure_ascii=False))\\n    if supplied:\\n        b=supplied.group(1)\\n        print('\\\\n'.join(difflib.unified_diff(b.splitlines(),a.splitlines(),n=0,lineterm='')))\\nPY\", max_output_tokens: 10500});\ntext(result.output);\n",
+          "output_ordinal": 70,
+          "output_contains_truncation_notice": false
+        },
+        {
+          "ordinal": 74,
+          "timestamp": "2026-10-01T16:04:27.097Z",
+          "name": "exec",
+          "input": "const result = await tools.exec_command({cmd: \"python3 -c 'import re; from pathlib import Path; s=Path(\\\"input.md\\\").read_text(); parts=re.split(r\\\"(?m)^## (sample-\\\\d+)\\\\n\\\",s); print(\\\"\\\\n\\\".join(parts[i]+parts[i+1] for i in range(1,len(parts),2) if 19 <= int(parts[i].split(\\\"-\\\")[1]) <= 20))'\", max_output_tokens: 10000});\ntext(result.output);\n",
+          "output_ordinal": 77,
+          "output_contains_truncation_notice": false
+        }
+      ]
+    }
+  ],
+  "native_service_events": [],
+  "stream_errors": [],
+  "limit": "An input naming a glob or a path is indexed, not credited as a complete individual resource read. Encrypted dispatch briefs remain unverified."
+}

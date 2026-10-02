@@ -1,0 +1,9 @@
+Granskningen stoppades: `input.md` anger `kntnt.genre: case-study`, men den installerade genren heter `casestudy`. Ingen text granskades eller ändrades.
+
+[Redline-färdigheten](/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-hlyi1ytl/work/.agents/skills/redline/SKILL.md) kräver att oanvändbar metadata “stops the run, unless the Formal Invocation already settled that parameter”.
+
+**/redline** [**--genre**=*GENRE*] [**--technique**=*TECHNIQUE*] [**--language**=*LANGUAGE*] [**--brief=**_PATH|URL_] [**--max**=*N*] [**--output**=*TARGET*] [*TEXT*|*PATH*|*URL*] [**--** *INSTRUCTION*]
+
+**/redline** [**--genre**=*GENRE*] [**--technique**=*TECHNIQUE*] [**--language**=*LANGUAGE*] [**--brief=**_PATH|URL_] [**--max**=*N*] **--in-place**[=**on**|**off**] *PATH* [**--** *INSTRUCTION*]
+
+Välj genren uttryckligen med `/redline --genre=casestudy --output=response input.md`. Hjälp: `/redline --help`.

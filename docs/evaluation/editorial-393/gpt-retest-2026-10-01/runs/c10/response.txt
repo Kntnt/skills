@@ -1,0 +1,9 @@
+Saved [output.md](/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-dujnnokn/work/output.md). Reviewed as `casestudy` in `en_US`; the input metadata selects no technique.
+
+- **Repaired:** the original quotation bridge previewed Lind’s preparation reservation.
+- **Claim account:** the bridge now reads “Lind’s assessment:”, removing that advance statement. The reservation remains unchanged in her quotation.
+- **Unresolved:** the author byline, body sections and separate ending section are missing. The measurement misidentifies the quotation bridge as a byline, producing misleading standfirst and lead boundaries.
+
+The [redline skill](/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-dujnnokn/work/.agents/skills/redline/SKILL.md) applies this [anatomy rule](/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-dujnnokn/work/.agents/skills/kntnt/library/references/editorial/article-anatomy.review.md): “A part the text does not have is reported, and a part it has is repaired.” Those missing parts were left for the writer.
+
+The edit removed the quotation pre-echo and synchronized the genre metadata to `casestudy`. The final proofread found no mechanical errors.

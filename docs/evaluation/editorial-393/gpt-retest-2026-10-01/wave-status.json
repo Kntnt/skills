@@ -1,0 +1,68 @@
+[
+  {
+    "run": "w01",
+    "returncode": -15,
+    "already_running": true
+  },
+  {
+    "run": "r04",
+    "returncode": 0,
+    "already_running": true
+  },
+  {
+    "run": "c03",
+    "returncode": 0
+  },
+  {
+    "run": "c04",
+    "returncode": 0
+  },
+  {
+    "run": "c05",
+    "returncode": 0
+  },
+  {
+    "run": "c06",
+    "returncode": 0
+  },
+  {
+    "run": "c07",
+    "returncode": 0
+  },
+  {
+    "run": "c08",
+    "returncode": 0
+  },
+  {
+    "run": "c09",
+    "returncode": 0
+  },
+  {
+    "run": "c10",
+    "returncode": 0
+  },
+  {
+    "run": "c11",
+    "returncode": 0
+  },
+  {
+    "run": "c12",
+    "returncode": 0
+  },
+  {
+    "run": "r13",
+    "returncode": 1
+  },
+  {
+    "run": "r14",
+    "returncode": 0
+  },
+  {
+    "run": "w02",
+    "returncode": 0
+  },
+  {
+    "run": "w03",
+    "returncode": 0
+  }
+]

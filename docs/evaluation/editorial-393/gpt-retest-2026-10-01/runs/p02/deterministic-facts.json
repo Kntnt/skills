@@ -1,0 +1,112 @@
+{
+  "result": {
+    "returncode": 0,
+    "timed_out": false,
+    "duration_seconds": 752.52,
+    "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-19exjyrd",
+    "cleanup_required": true
+  },
+  "input_sha256": "d218cf74e9682bb7f4dd6228e62b35172d99f0aa12f2005dfda9f02a2805ef14",
+  "artifact": {
+    "fenced_artifact_count": 1,
+    "present": true,
+    "source": "response-fence",
+    "sha256": "d218cf74e9682bb7f4dd6228e62b35172d99f0aa12f2005dfda9f02a2805ef14",
+    "input_identical": true
+  },
+  "identities": [
+    {
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T17-29-37-01a0f815-d9e4-7540-b11e-c8aab2725499.jsonl",
+      "id": "01a0f815-d9e4-7540-b11e-c8aab2725499",
+      "source": "exec",
+      "seats": [
+        [
+          "gpt-6.1-sol",
+          "xhigh"
+        ]
+      ]
+    },
+    {
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T17-34-33-01a0f81a-60a9-7ee1-8490-8064a8a9f939.jsonl",
+      "id": "01a0f81a-60a9-7ee1-8490-8064a8a9f939",
+      "source": {
+        "subagent": {
+          "thread_spawn": {
+            "parent_thread_id": "01a0f815-d9e4-7540-b11e-c8aab2725499",
+            "depth": 1,
+            "agent_path": "/root/redline_correction",
+            "agent_nickname": "Goodall",
+            "agent_role": null
+          }
+        }
+      },
+      "seats": [
+        [
+          "gpt-6.1-sol",
+          "xhigh"
+        ]
+      ]
+    },
+    {
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T17-41-02-01a0f820-5214-70c1-bd89-96108ec7d7fc.jsonl",
+      "id": "01a0f820-5214-70c1-bd89-96108ec7d7fc",
+      "source": {
+        "subagent": {
+          "thread_spawn": {
+            "parent_thread_id": "01a0f815-d9e4-7540-b11e-c8aab2725499",
+            "depth": 1,
+            "agent_path": "/root/redline_reply_check",
+            "agent_nickname": "Meitner",
+            "agent_role": null
+          }
+        }
+      },
+      "seats": [
+        [
+          "gpt-6.1-sol",
+          "xhigh"
+        ]
+      ]
+    }
+  ],
+  "encrypted_dispatches": [
+    {
+      "session": "01a0f815-d9e4-7540-b11e-c8aab2725499",
+      "name": "spawn_agent",
+      "call_id": "call_avynmxxD4l0XwR8LEQZcmgGI",
+      "note": "dispatch message encrypted; use actual child reads rather than infer its complete brief"
+    },
+    {
+      "session": "01a0f815-d9e4-7540-b11e-c8aab2725499",
+      "name": "spawn_agent",
+      "call_id": "call_YQQ6WexybcDLAE7HyOlYVe8E",
+      "note": "dispatch message encrypted; use actual child reads rather than infer its complete brief"
+    }
+  ],
+  "all_recorded_seats_match": true,
+  "artifact_matches_captures": [
+    {
+      "path": "work/input.md",
+      "sha256": "d218cf74e9682bb7f4dd6228e62b35172d99f0aa12f2005dfda9f02a2805ef14",
+      "capture": "0000-d218cf74e968.md",
+      "time": 1790868576.609237
+    },
+    {
+      "path": "scratch/redline-mechanical.pz1_peqj/input.md",
+      "sha256": "d218cf74e9682bb7f4dd6228e62b35172d99f0aa12f2005dfda9f02a2805ef14",
+      "capture": "0010-d218cf74e968.md",
+      "time": 1790869043.6783412
+    },
+    {
+      "path": "scratch/redline-mechanical.pz1_peqj/output.md",
+      "sha256": "d218cf74e9682bb7f4dd6228e62b35172d99f0aa12f2005dfda9f02a2805ef14",
+      "capture": "0016-d218cf74e968.md",
+      "time": 1790869107.675565
+    }
+  ],
+  "source_inventory_unchanged": true,
+  "staged_install_unchanged": true,
+  "work_created": {},
+  "work_removed": {},
+  "work_changed": {}
+}

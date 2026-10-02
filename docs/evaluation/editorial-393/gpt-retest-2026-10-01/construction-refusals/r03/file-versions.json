@@ -1,0 +1,26 @@
+[
+  {
+    "path": "work/input.md",
+    "sha256": "6648de46956c4796cff8c1fb1f3cc3a195b1a57f7cc5a4511e298f49fa1b6a36",
+    "capture": "0000-6648de46956c.md",
+    "time": 1790858039.159491
+  },
+  {
+    "path": "work/AGENTS.md",
+    "sha256": "daf0ef828239474b56bdfc9ffe8fdf6f8fea81ee146925d1e0513f0b960660c7",
+    "capture": "0001-daf0ef828239.md",
+    "time": 1790858039.159643
+  },
+  {
+    "path": "scratch/redline-uv-rxpzdcg8/.tmpZDwG0I/environments-v2/kntnt-160acac5047a781f/lib/python3.12/site-packages/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0002-ae98f4215313.txt",
+    "time": 1790858097.347897
+  },
+  {
+    "path": "scratch/redline-uv-rxpzdcg8/.tmpZDwG0I/archive-v0/uIZceLkQya4urgtT/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0003-ae98f4215313.txt",
+    "time": 1790858097.3485281
+  }
+]

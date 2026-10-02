@@ -1,0 +1,15 @@
+{
+  "method": "Exact complete expected fragments and two known extra passages matched against actual returned native tool material. This targeted audit cannot establish absence of every other possible read; trace-index.json retains all calls for inspection.",
+  "checkers": [
+    {
+      "session": "01a0f75c-facc-76e1-8ce7-4785496b3a0e",
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T14-07-41-01a0f75c-facc-76e1-8ce7-4785496b3a0e.jsonl",
+      "complete_required_fragments": [
+        "delivery-truth",
+        "base-claim-account"
+      ],
+      "returned_extra_passages": [],
+      "whole_dispatch": "encrypted and unverified"
+    }
+  ]
+}

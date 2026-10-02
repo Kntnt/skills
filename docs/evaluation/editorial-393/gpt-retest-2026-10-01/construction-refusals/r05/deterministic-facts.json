@@ -1,0 +1,38 @@
+{
+  "result": {
+    "returncode": 0,
+    "timed_out": false,
+    "duration_seconds": 103.35,
+    "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-1bwyryom",
+    "cleanup_required": true
+  },
+  "input_sha256": "bbad3ac63510344b4b174809f474dfb355c87659fdeecdf2692a730b0842d018",
+  "artifact": {
+    "fenced_artifact_count": 0,
+    "present": false,
+    "source": "none",
+    "sha256": null,
+    "input_identical": null
+  },
+  "identities": [
+    {
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T14-38-27-01a0f779-2588-7783-b4c7-e2462b8624b0.jsonl",
+      "id": "01a0f779-2588-7783-b4c7-e2462b8624b0",
+      "source": "exec",
+      "seats": [
+        [
+          "gpt-6.1-sol",
+          "xhigh"
+        ]
+      ]
+    }
+  ],
+  "encrypted_dispatches": [],
+  "all_recorded_seats_match": true,
+  "artifact_matches_captures": [],
+  "source_inventory_unchanged": true,
+  "staged_install_unchanged": true,
+  "work_created": {},
+  "work_removed": {},
+  "work_changed": {}
+}

@@ -1,0 +1,53 @@
+{
+  "method": "Last externally captured source-check draft and exact delivered prose after removing only leading handoff metadata. Complete returned-byte matches establish observed reads, not the correctness of a comparison or an encrypted dispatch.",
+  "reports_and_dispositions": [
+    {
+      "path": "scratch/write-source-check-h5y9hh9k/report-1.md",
+      "sha256": "bae87c915b114dcf1b09340464913719e7d9bbda46a0dcba7b5c325f55e7f887",
+      "capture": "0008-bae87c915b11.md",
+      "time": 1790868275.99454,
+      "readable_copy": "report-1.md"
+    },
+    {
+      "path": "scratch/write-source-check-h5y9hh9k/report-1.md",
+      "sha256": "218a40820786a61b929fd71f510f314b041a914bfdbc003cf062dad97f5e0340",
+      "capture": "0010-218a40820786.md",
+      "time": 1790868387.820066,
+      "readable_copy": "report-1.md"
+    },
+    {
+      "path": "scratch/write-source-check-h5y9hh9k/report-2.md",
+      "sha256": "bfb339f2e949c52ddd843d80cf2954393cb6528cae87bc1340a9e10dd0f1dff5",
+      "capture": "0011-bfb339f2e949.md",
+      "time": 1790868768.3109188,
+      "readable_copy": "report-2.md"
+    }
+  ],
+  "last_checked_capture": {
+    "path": "scratch/write-source-check-h5y9hh9k/draft.md",
+    "sha256": "3998a54bf768a2e801ecf75acc1c72ded6fface5b6b0d374592f3a0443369431",
+    "capture": "0009-3998a54bf768.md",
+    "time": 1790868387.8199098
+  },
+  "complete_returned_last_checked_reads": [
+    {
+      "session": "01a0f813-f16d-7d53-8a44-151543782997",
+      "source": {
+        "subagent": {
+          "thread_spawn": {
+            "parent_thread_id": "01a0f802-9cff-7e71-a231-8fafaf8b3ce1",
+            "depth": 1,
+            "agent_path": "/root/source_check_2",
+            "agent_nickname": "Chandrasekhar",
+            "agent_role": null
+          }
+        }
+      },
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T17-27-31-01a0f813-f16d-7d53-8a44-151543782997.jsonl",
+      "ordinal": 14,
+      "call_id": "call_6YBW0uB6MLBCGguGpasl2Z7K"
+    }
+  ],
+  "delivered_prose_sha256": "3998a54bf768a2e801ecf75acc1c72ded6fface5b6b0d374592f3a0443369431",
+  "delivered_prose_matches_last_checked": true
+}

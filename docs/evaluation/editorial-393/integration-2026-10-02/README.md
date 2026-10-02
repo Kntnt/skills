@@ -1,0 +1,9 @@
+# #393 evidence integration and residual handoff
+
+This additive packet integrates the completed GPT measurement; it commissions no new product run or repair. The [retained source packet](../gpt-retest-2026-10-01/README.md) and both records were copied byte for byte from `4e88c6e0d1385c52eb9e5fa82d56a52b9a89f248` onto the assigned `kntnt-orchestrate/main/393` branch, based on `5b0260283b1d1597ca1ed2dddc602888dac7119d`. The original branch `codex/retest-393-gpt-20261001` and worktree `/Users/thomas/Projects/skills-393-gpt-retest` remain deliverables.
+
+Thomas's [contextual decision](../gpt-retest-2026-10-01/owner-decision.md), frozen in `ed1d8587`, answers the human question. The completed measurement answers the GPT-retest request. Redline still has measured quotation misses; neither the whole product nor later main is accepted by these results.
+
+Read the [independent audit](audit.md) for counts, actual delivery and limits, and the [residual handoff](residual-handoff.md) before acting on any of the seven historical proposals. That handoff rejects allegations the loaded contract does not support and preserves every original raw verdict. The [issue comment](tracker-comment.md) records the bounded outcome; its publication receipt is retained alongside it. The [verification receipt](verification.md) names the full project gate and cleanup evidence. Builder completion is blocked: three scheduler tests fail because the mandated scratch root lies inside the real account home. [The gate boundary](gate-boundary.md) records the decision required before the full gate can pass.
+
+The records index receives an additive entry through [.kntnt-orchestrate/393.md](../../../../.kntnt-orchestrate/393.md). The run owns that append and preserves every sibling. No old plan, criterion, input, source, verdict, record or ADR is changed. Reserved ADR number 0235 is unused because this task authorises no new ADR.

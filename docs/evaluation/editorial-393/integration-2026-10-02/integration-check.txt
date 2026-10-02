@@ -1,0 +1,39 @@
+import hashlib
+import pathlib
+import subprocess
+import unittest
+
+ROOT = pathlib.Path('/Users/thomas/Projects/skills/.git/kntnt-orchestrate/393')
+SOURCE = '4e88c6e0d1385c52eb9e5fa82d56a52b9a89f248'
+BASE = '5b0260283b1d1597ca1ed2dddc602888dac7119d'
+PACKET = 'docs/evaluation/editorial-393/gpt-retest-2026-10-01'
+RECORDS = ['docs/evaluation/records/redline-gpt-2026-10-01-393.md',
+           'docs/evaluation/records/write-gpt-2026-10-01-393.md']
+
+def git(*args):
+    return subprocess.check_output(['git', *args], cwd=ROOT)
+
+class Integration(unittest.TestCase):
+    def test_retained_packet_and_records_are_byte_exact(self):
+        paths = git('ls-tree', '-r', '--name-only', SOURCE, '--', PACKET, *RECORDS).decode().splitlines()
+        self.assertEqual(len(paths), 1127)
+        missing = [p for p in paths if not (ROOT / p).is_file()]
+        self.assertFalse(missing, f'{len(missing)} retained files missing; first: {missing[:3]}')
+        entries = git('ls-tree', '-r', SOURCE, '--', PACKET, *RECORDS).decode().splitlines()
+        changed = []
+        for entry in entries:
+            metadata, path = entry.split('\t')
+            oid = metadata.split()[2]
+            content = (ROOT / path).read_bytes()
+            actual = hashlib.sha1(f'blob {len(content)}\0'.encode() + content).hexdigest()
+            if oid != actual:
+                changed.append(path)
+        self.assertEqual(changed, [])
+        self.assertEqual((ROOT / PACKET / 'owner-decision.md').read_bytes(), git('show', f'ed1d8587:{PACKET}/owner-decision.md'))
+
+    def test_source_deliverable_ref_and_existing_history_are_preserved(self):
+        self.assertEqual(git('rev-parse', 'codex/retest-393-gpt-20261001').decode().strip(), SOURCE)
+        self.assertEqual(git('diff', '--name-only', '--diff-filter=DMRTUXB', BASE, '--', 'skills', 'tests', 'docs/evaluation', 'docs/adr', 'CHANGELOG.md', 'CONTRIBUTING.md').decode().splitlines(), [])
+
+if __name__ == '__main__':
+    unittest.main(verbosity=2)

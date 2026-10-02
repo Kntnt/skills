@@ -1,0 +1,848 @@
+{
+  "supplied_packet_sha256": "b787098b30be5dedad08ac44f46341cb47e85c68867f52ba418ea5aaa2969d8c",
+  "frozen_packet_sha256": "b787098b30be5dedad08ac44f46341cb47e85c68867f52ba418ea5aaa2969d8c",
+  "seats": [
+    [
+      "gpt-6.1-sol",
+      "xhigh"
+    ]
+  ],
+  "sessions": 1,
+  "field_reads": [
+    {
+      "sample": "sample-01",
+      "field": "Formal Invocation",
+      "sha256": "e4e2c4c28e3e617383c5b5d89c603ec4b0864d9009b009de8451e7ce41fb3ecf",
+      "complete_actual_returned": true,
+      "output_ordinals": [
+        15,
+        22,
+        29,
+        40,
+        54,
+        63,
+        77
+      ]
+    },
+    {
+      "sample": "sample-01",
+      "field": "Complete supplied input",
+      "sha256": "5229cba75776e7f780526d3ef9d25dfda086fb63288abf93a797c8bcd3309934",
+      "complete_actual_returned": true,
+      "output_ordinals": [
+        15,
+        22,
+        29
+      ]
+    },
+    {
+      "sample": "sample-01",
+      "field": "Delivered Text Artifact",
+      "sha256": "9d05d82329a12a7922a6e7cd170324a105792b9e0328eea1e068046a03a67343",
+      "complete_actual_returned": true,
+      "output_ordinals": [
+        15,
+        22
+      ]
+    },
+    {
+      "sample": "sample-01",
+      "field": "User-facing reply",
+      "sha256": "cb3e32201cfd73eb20fd6d5991431b0e7d66e7ffd56015e07b471c1679210f16",
+      "complete_actual_returned": true,
+      "output_ordinals": [
+        15,
+        22
+      ]
+    },
+    {
+      "sample": "sample-02",
+      "field": "Formal Invocation",
+      "sha256": "bb2a02facbf58d3e176d476f3bdf40558308a301f89f1c3b1ccdbbb8a3f4536d",
+      "complete_actual_returned": true,
+      "output_ordinals": [
+        15,
+        22,
+        29,
+        63
+      ]
+    },
+    {
+      "sample": "sample-02",
+      "field": "Complete supplied input",
+      "sha256": "a1e29933326f7c5260b39e1032510e43a96eabc98aa7557664c9995bad17a3b1",
+      "complete_actual_returned": true,
+      "output_ordinals": [
+        15,
+        22,
+        29
+      ]
+    },
+    {
+      "sample": "sample-02",
+      "field": "Delivered Text Artifact",
+      "sha256": "fb515f808a3900b9bec65d5f2edd22468d7f84f9d095c8215cf7e976165426c1",
+      "complete_actual_returned": true,
+      "output_ordinals": [
+        15,
+        22
+      ]
+    },
+    {
+      "sample": "sample-02",
+      "field": "User-facing reply",
+      "sha256": "744a5b83dc3eded62b6342846d23c9a4eca2008404f774bed57905b6089e7835",
+      "complete_actual_returned": true,
+      "output_ordinals": [
+        22
+      ]
+    },
+    {
+      "sample": "sample-03",
+      "field": "Formal Invocation",
+      "sha256": "403b0edcfa89858a17f475c5e0e78f508c289f7c986e709580b99d01c775c8b3",
+      "complete_actual_returned": true,
+      "output_ordinals": [
+        22,
+        54
+      ]
+    },
+    {
+      "sample": "sample-03",
+      "field": "Complete original source",
+      "sha256": "7b4eea9c52bb330706476736a54ad99a119210a622b02083d69fba70ee6ef623",
+      "complete_actual_returned": true,
+      "output_ordinals": [
+        22,
+        54
+      ]
+    },
+    {
+      "sample": "sample-03",
+      "field": "Delivered Text Artifact",
+      "sha256": "e71c954683dbf6c4cab10613d742e9c783363a8b3bd72c332cc7c3779d35d033",
+      "complete_actual_returned": true,
+      "output_ordinals": [
+        22,
+        47
+      ]
+    },
+    {
+      "sample": "sample-03",
+      "field": "User-facing reply",
+      "sha256": "6854dcf9fe544e380c7949631b33105d058f810e0ba2150bc5a880022d5532e4",
+      "complete_actual_returned": true,
+      "output_ordinals": [
+        22
+      ]
+    },
+    {
+      "sample": "sample-04",
+      "field": "Formal Invocation",
+      "sha256": "e4e2c4c28e3e617383c5b5d89c603ec4b0864d9009b009de8451e7ce41fb3ecf",
+      "complete_actual_returned": true,
+      "output_ordinals": [
+        15,
+        22,
+        29,
+        40,
+        54,
+        63,
+        77
+      ]
+    },
+    {
+      "sample": "sample-04",
+      "field": "Complete supplied input",
+      "sha256": "a1e29933326f7c5260b39e1032510e43a96eabc98aa7557664c9995bad17a3b1",
+      "complete_actual_returned": true,
+      "output_ordinals": [
+        15,
+        22,
+        29
+      ]
+    },
+    {
+      "sample": "sample-04",
+      "field": "Delivered Text Artifact",
+      "sha256": "1a742f41d3def958e6f3d8fd0cae60aab5d187153951754323c4c9df6db7ca76",
+      "complete_actual_returned": true,
+      "output_ordinals": [
+        29
+      ]
+    },
+    {
+      "sample": "sample-04",
+      "field": "User-facing reply",
+      "sha256": "b87d061354a9c46117813257eb6daeda155abc0dedafb3a59d3ccc70f4d3a0f0",
+      "complete_actual_returned": true,
+      "output_ordinals": [
+        29
+      ]
+    },
+    {
+      "sample": "sample-05",
+      "field": "Formal Invocation",
+      "sha256": "bb2a02facbf58d3e176d476f3bdf40558308a301f89f1c3b1ccdbbb8a3f4536d",
+      "complete_actual_returned": true,
+      "output_ordinals": [
+        15,
+        22,
+        29,
+        63
+      ]
+    },
+    {
+      "sample": "sample-05",
+      "field": "Complete supplied input",
+      "sha256": "5229cba75776e7f780526d3ef9d25dfda086fb63288abf93a797c8bcd3309934",
+      "complete_actual_returned": true,
+      "output_ordinals": [
+        15,
+        22,
+        29
+      ]
+    },
+    {
+      "sample": "sample-05",
+      "field": "Delivered Text Artifact",
+      "sha256": "13be4fc61a29ed63aa48f00d9fbaa7a5381fc16326d5090101942349ede82322",
+      "complete_actual_returned": true,
+      "output_ordinals": [
+        29
+      ]
+    },
+    {
+      "sample": "sample-05",
+      "field": "User-facing reply",
+      "sha256": "773dbd11895f09a408945ed9f863ed44d4af538f6f121bfc178cfcf2550ae27c",
+      "complete_actual_returned": true,
+      "output_ordinals": [
+        29
+      ]
+    },
+    {
+      "sample": "sample-06",
+      "field": "Formal Invocation",
+      "sha256": "6a5fceac45530e9f724a812e7fa3fbe06fa7be30a7586100f65cdb91e6ba47b5",
+      "complete_actual_returned": true,
+      "output_ordinals": [
+        29,
+        40,
+        47,
+        63
+      ]
+    },
+    {
+      "sample": "sample-06",
+      "field": "Complete supplied input",
+      "sha256": "cdcde461546d2a5b4f8a64684a400659ea4212687a44c0bf2633e52d14da85d8",
+      "complete_actual_returned": true,
+      "output_ordinals": [
+        29,
+        63
+      ]
+    },
+    {
+      "sample": "sample-06",
+      "field": "Delivered Text Artifact",
+      "sha256": "7a2b770ebfac66ef4eec133ed5beae7eaf92769376a643a09d408cc54d0fbbc9",
+      "complete_actual_returned": true,
+      "output_ordinals": [
+        29
+      ]
+    },
+    {
+      "sample": "sample-06",
+      "field": "User-facing reply",
+      "sha256": "39e8f1f9fe586cb79a08183ce6d52ecc2ef27b18f8b1fd2c24af867a6ced198a",
+      "complete_actual_returned": true,
+      "output_ordinals": [
+        29
+      ]
+    },
+    {
+      "sample": "sample-07",
+      "field": "Formal Invocation",
+      "sha256": "e4e2c4c28e3e617383c5b5d89c603ec4b0864d9009b009de8451e7ce41fb3ecf",
+      "complete_actual_returned": true,
+      "output_ordinals": [
+        15,
+        22,
+        29,
+        40,
+        54,
+        63,
+        77
+      ]
+    },
+    {
+      "sample": "sample-07",
+      "field": "Complete supplied input",
+      "sha256": "52c1a86931075d30fbdc0d25e58580b37a6e0bf6cf4b9ed41fc035a019256d9e",
+      "complete_actual_returned": true,
+      "output_ordinals": [
+        40,
+        63
+      ]
+    },
+    {
+      "sample": "sample-07",
+      "field": "Delivered Text Artifact",
+      "sha256": "1b7152152678032dee636411e4a09b8f246dbf488fe4500c852e56049ac5f5b5",
+      "complete_actual_returned": true,
+      "output_ordinals": [
+        40
+      ]
+    },
+    {
+      "sample": "sample-07",
+      "field": "User-facing reply",
+      "sha256": "d995cff795866fef8475502407949b02245978ffdab8a1b7f1a3053115d32327",
+      "complete_actual_returned": true,
+      "output_ordinals": [
+        40
+      ]
+    },
+    {
+      "sample": "sample-08",
+      "field": "Formal Invocation",
+      "sha256": "6a5fceac45530e9f724a812e7fa3fbe06fa7be30a7586100f65cdb91e6ba47b5",
+      "complete_actual_returned": true,
+      "output_ordinals": [
+        29,
+        40,
+        47,
+        63
+      ]
+    },
+    {
+      "sample": "sample-08",
+      "field": "Complete supplied input",
+      "sha256": "5afb269df4b77376743974ca32025805806751dd1f75fed5154afcca970d11d6",
+      "complete_actual_returned": true,
+      "output_ordinals": [
+        40,
+        54
+      ]
+    },
+    {
+      "sample": "sample-08",
+      "field": "Delivered Text Artifact",
+      "sha256": "5afb269df4b77376743974ca32025805806751dd1f75fed5154afcca970d11d6",
+      "complete_actual_returned": true,
+      "output_ordinals": [
+        40,
+        54
+      ]
+    },
+    {
+      "sample": "sample-08",
+      "field": "User-facing reply",
+      "sha256": "5c6a628d1986a3a8a2a460f9cc9ad9efcd0f3e15e447d9e2d60b3f3429c81ed7",
+      "complete_actual_returned": true,
+      "output_ordinals": [
+        40
+      ]
+    },
+    {
+      "sample": "sample-09",
+      "field": "Formal Invocation",
+      "sha256": "6a5fceac45530e9f724a812e7fa3fbe06fa7be30a7586100f65cdb91e6ba47b5",
+      "complete_actual_returned": true,
+      "output_ordinals": [
+        29,
+        40,
+        47,
+        63
+      ]
+    },
+    {
+      "sample": "sample-09",
+      "field": "Complete supplied input",
+      "sha256": "26d513f42668617f991444616be90910a7384582f90aa8889bc5ac728075d2f8",
+      "complete_actual_returned": true,
+      "output_ordinals": [
+        40,
+        54
+      ]
+    },
+    {
+      "sample": "sample-09",
+      "field": "User-facing reply",
+      "sha256": "9fe504c7b6e4d0cffa36997dc227a44b6c66b8cf51e859f3c7049c71dc2219d7",
+      "complete_actual_returned": true,
+      "output_ordinals": [
+        40
+      ]
+    },
+    {
+      "sample": "sample-09",
+      "field": "absence-marker",
+      "complete_actual_returned": true
+    },
+    {
+      "sample": "sample-10",
+      "field": "Formal Invocation",
+      "sha256": "6a5fceac45530e9f724a812e7fa3fbe06fa7be30a7586100f65cdb91e6ba47b5",
+      "complete_actual_returned": true,
+      "output_ordinals": [
+        29,
+        40,
+        47,
+        63
+      ]
+    },
+    {
+      "sample": "sample-10",
+      "field": "Complete supplied input",
+      "sha256": "e71c954683dbf6c4cab10613d742e9c783363a8b3bd72c332cc7c3779d35d033",
+      "complete_actual_returned": true,
+      "output_ordinals": [
+        22,
+        47
+      ]
+    },
+    {
+      "sample": "sample-10",
+      "field": "Delivered Text Artifact",
+      "sha256": "e71c954683dbf6c4cab10613d742e9c783363a8b3bd72c332cc7c3779d35d033",
+      "complete_actual_returned": true,
+      "output_ordinals": [
+        22,
+        47
+      ]
+    },
+    {
+      "sample": "sample-10",
+      "field": "User-facing reply",
+      "sha256": "c627a22a5eea61f8772f6b9720edba416ca90297f3c85e7cbf07aaba3ad24d50",
+      "complete_actual_returned": true,
+      "output_ordinals": [
+        47
+      ]
+    },
+    {
+      "sample": "sample-11",
+      "field": "Formal Invocation",
+      "sha256": "6a5fceac45530e9f724a812e7fa3fbe06fa7be30a7586100f65cdb91e6ba47b5",
+      "complete_actual_returned": true,
+      "output_ordinals": [
+        29,
+        40,
+        47,
+        63
+      ]
+    },
+    {
+      "sample": "sample-11",
+      "field": "Complete supplied input",
+      "sha256": "3079e05d714e396b2fb1cb87476d569c33168a3ac31a104926a0f099c79e7dc0",
+      "complete_actual_returned": true,
+      "output_ordinals": [
+        47
+      ]
+    },
+    {
+      "sample": "sample-11",
+      "field": "Delivered Text Artifact",
+      "sha256": "c3a7c79e24faf195a512de05ad63515982b764066c826a51a3a8f712ab7c9a5b",
+      "complete_actual_returned": true,
+      "output_ordinals": [
+        47
+      ]
+    },
+    {
+      "sample": "sample-11",
+      "field": "User-facing reply",
+      "sha256": "e169e8b400afd9046e91214605f7593c7713901c8a0ef7ba7525f15593de9ed7",
+      "complete_actual_returned": true,
+      "output_ordinals": [
+        47
+      ]
+    },
+    {
+      "sample": "sample-12",
+      "field": "Formal Invocation",
+      "sha256": "5f19418296c18d0185f853a3fd1f841b74041948536e99e812fc1be73858f218",
+      "complete_actual_returned": true,
+      "output_ordinals": [
+        47
+      ]
+    },
+    {
+      "sample": "sample-12",
+      "field": "Complete supplied input",
+      "sha256": "3079e05d714e396b2fb1cb87476d569c33168a3ac31a104926a0f099c79e7dc0",
+      "complete_actual_returned": true,
+      "output_ordinals": [
+        47
+      ]
+    },
+    {
+      "sample": "sample-12",
+      "field": "Delivered Text Artifact",
+      "sha256": "4e4004eaa33e528e8601275d2cf226b040447adbca3089eb92cf49920bf615dc",
+      "complete_actual_returned": true,
+      "output_ordinals": [
+        47
+      ]
+    },
+    {
+      "sample": "sample-12",
+      "field": "User-facing reply",
+      "sha256": "c368b8dd08b226ff5e455e94ad6e5719755d3547963edf97795ec5e7a1f8ec96",
+      "complete_actual_returned": true,
+      "output_ordinals": [
+        47
+      ]
+    },
+    {
+      "sample": "sample-13",
+      "field": "Formal Invocation",
+      "sha256": "403b0edcfa89858a17f475c5e0e78f508c289f7c986e709580b99d01c775c8b3",
+      "complete_actual_returned": true,
+      "output_ordinals": [
+        22,
+        54
+      ]
+    },
+    {
+      "sample": "sample-13",
+      "field": "Complete original source",
+      "sha256": "7b4eea9c52bb330706476736a54ad99a119210a622b02083d69fba70ee6ef623",
+      "complete_actual_returned": true,
+      "output_ordinals": [
+        22,
+        54
+      ]
+    },
+    {
+      "sample": "sample-13",
+      "field": "Delivered Text Artifact",
+      "sha256": "26d513f42668617f991444616be90910a7384582f90aa8889bc5ac728075d2f8",
+      "complete_actual_returned": true,
+      "output_ordinals": [
+        40,
+        54
+      ]
+    },
+    {
+      "sample": "sample-13",
+      "field": "User-facing reply",
+      "sha256": "a96481f842c104bcf0d118a29b8c11a0ff6b186c7b076ccaf54ac53d92502875",
+      "complete_actual_returned": true,
+      "output_ordinals": [
+        54
+      ]
+    },
+    {
+      "sample": "sample-14",
+      "field": "Formal Invocation",
+      "sha256": "e4e2c4c28e3e617383c5b5d89c603ec4b0864d9009b009de8451e7ce41fb3ecf",
+      "complete_actual_returned": true,
+      "output_ordinals": [
+        15,
+        22,
+        29,
+        40,
+        54,
+        63,
+        77
+      ]
+    },
+    {
+      "sample": "sample-14",
+      "field": "Complete supplied input",
+      "sha256": "288a4119f73bcd8c8159117f3dc16febe20383b8d5323883a1ef1272fab4af13",
+      "complete_actual_returned": true,
+      "output_ordinals": [
+        15,
+        54,
+        77
+      ]
+    },
+    {
+      "sample": "sample-14",
+      "field": "Delivered Text Artifact",
+      "sha256": "16c3718b9fba8c64119a01b55dca06cc7be716d0766a81b09c024f4ebbe3f448",
+      "complete_actual_returned": true,
+      "output_ordinals": [
+        54
+      ]
+    },
+    {
+      "sample": "sample-14",
+      "field": "User-facing reply",
+      "sha256": "24fd3e8be1797189fbf6e712326549271698b881f5e6e8bc6fd939f8899a8c6d",
+      "complete_actual_returned": true,
+      "output_ordinals": [
+        54
+      ]
+    },
+    {
+      "sample": "sample-15",
+      "field": "Formal Invocation",
+      "sha256": "403b0edcfa89858a17f475c5e0e78f508c289f7c986e709580b99d01c775c8b3",
+      "complete_actual_returned": true,
+      "output_ordinals": [
+        22,
+        54
+      ]
+    },
+    {
+      "sample": "sample-15",
+      "field": "Complete original source",
+      "sha256": "7b4eea9c52bb330706476736a54ad99a119210a622b02083d69fba70ee6ef623",
+      "complete_actual_returned": true,
+      "output_ordinals": [
+        22,
+        54
+      ]
+    },
+    {
+      "sample": "sample-15",
+      "field": "Delivered Text Artifact",
+      "sha256": "5afb269df4b77376743974ca32025805806751dd1f75fed5154afcca970d11d6",
+      "complete_actual_returned": true,
+      "output_ordinals": [
+        40,
+        54
+      ]
+    },
+    {
+      "sample": "sample-15",
+      "field": "User-facing reply",
+      "sha256": "12fa1c8d9999d65f2ba8eca5f2644f2814e9d247d5a429800b4af73866ff8c44",
+      "complete_actual_returned": true,
+      "output_ordinals": [
+        54
+      ]
+    },
+    {
+      "sample": "sample-16",
+      "field": "Formal Invocation",
+      "sha256": "6a5fceac45530e9f724a812e7fa3fbe06fa7be30a7586100f65cdb91e6ba47b5",
+      "complete_actual_returned": true,
+      "output_ordinals": [
+        29,
+        40,
+        47,
+        63
+      ]
+    },
+    {
+      "sample": "sample-16",
+      "field": "Complete supplied input",
+      "sha256": "cdcde461546d2a5b4f8a64684a400659ea4212687a44c0bf2633e52d14da85d8",
+      "complete_actual_returned": true,
+      "output_ordinals": [
+        29,
+        63
+      ]
+    },
+    {
+      "sample": "sample-16",
+      "field": "Delivered Text Artifact",
+      "sha256": "7d52d1eb952117f47e1949f0d4fd6f15123b0c7f7e1a4402c4b69c01fb000838",
+      "complete_actual_returned": true,
+      "output_ordinals": [
+        63
+      ]
+    },
+    {
+      "sample": "sample-16",
+      "field": "User-facing reply",
+      "sha256": "d7925abffd7c3467c350e27485220918f5c942c185f06e0917c6be71b5b0d356",
+      "complete_actual_returned": true,
+      "output_ordinals": [
+        63
+      ]
+    },
+    {
+      "sample": "sample-17",
+      "field": "Formal Invocation",
+      "sha256": "e4e2c4c28e3e617383c5b5d89c603ec4b0864d9009b009de8451e7ce41fb3ecf",
+      "complete_actual_returned": true,
+      "output_ordinals": [
+        15,
+        22,
+        29,
+        40,
+        54,
+        63,
+        77
+      ]
+    },
+    {
+      "sample": "sample-17",
+      "field": "Complete supplied input",
+      "sha256": "52c1a86931075d30fbdc0d25e58580b37a6e0bf6cf4b9ed41fc035a019256d9e",
+      "complete_actual_returned": true,
+      "output_ordinals": [
+        40,
+        63
+      ]
+    },
+    {
+      "sample": "sample-17",
+      "field": "Delivered Text Artifact",
+      "sha256": "03330ffff2e0eeb379da35aa83e564db386785384e83b26f3f7f4a652b5e81d4",
+      "complete_actual_returned": true,
+      "output_ordinals": [
+        63
+      ]
+    },
+    {
+      "sample": "sample-17",
+      "field": "User-facing reply",
+      "sha256": "f1b26d5f93e57c9fcde18fa778742603ee9f9663062de8fa82c5734a17c771aa",
+      "complete_actual_returned": true,
+      "output_ordinals": [
+        63
+      ]
+    },
+    {
+      "sample": "sample-18",
+      "field": "Formal Invocation",
+      "sha256": "bb2a02facbf58d3e176d476f3bdf40558308a301f89f1c3b1ccdbbb8a3f4536d",
+      "complete_actual_returned": true,
+      "output_ordinals": [
+        15,
+        22,
+        29,
+        63
+      ]
+    },
+    {
+      "sample": "sample-18",
+      "field": "Complete supplied input",
+      "sha256": "c093565cef14f57e4285184a47eb7a4432a9cd5c8ca79520df5f4e2d573064f9",
+      "complete_actual_returned": true,
+      "output_ordinals": [
+        15,
+        63,
+        77
+      ]
+    },
+    {
+      "sample": "sample-18",
+      "field": "Delivered Text Artifact",
+      "sha256": "70f4366a5fc2da8d134cde58634cf472f2ab88338bdc2e48e528562f08bb15e2",
+      "complete_actual_returned": true,
+      "output_ordinals": [
+        63
+      ]
+    },
+    {
+      "sample": "sample-18",
+      "field": "User-facing reply",
+      "sha256": "acb7f8a6927925e4edcd57fef3fa1759c8d0c818622df5c6bee6d6ca141ce3d8",
+      "complete_actual_returned": true,
+      "output_ordinals": [
+        63
+      ]
+    },
+    {
+      "sample": "sample-19",
+      "field": "Formal Invocation",
+      "sha256": "e4e2c4c28e3e617383c5b5d89c603ec4b0864d9009b009de8451e7ce41fb3ecf",
+      "complete_actual_returned": true,
+      "output_ordinals": [
+        15,
+        22,
+        29,
+        40,
+        54,
+        63,
+        77
+      ]
+    },
+    {
+      "sample": "sample-19",
+      "field": "Complete supplied input",
+      "sha256": "c093565cef14f57e4285184a47eb7a4432a9cd5c8ca79520df5f4e2d573064f9",
+      "complete_actual_returned": true,
+      "output_ordinals": [
+        15,
+        63,
+        77
+      ]
+    },
+    {
+      "sample": "sample-19",
+      "field": "Delivered Text Artifact",
+      "sha256": "7916cf6ef20afd0c062db792003f1e4f5c05317a7097a1dcaad01fa8246ce41d",
+      "complete_actual_returned": true,
+      "output_ordinals": [
+        15,
+        77
+      ]
+    },
+    {
+      "sample": "sample-19",
+      "field": "User-facing reply",
+      "sha256": "f599e779cf0046f1bfb7fa8d291d4d3dec142ce2b1d0d33b1393442882ac6266",
+      "complete_actual_returned": true,
+      "output_ordinals": [
+        15,
+        77
+      ]
+    },
+    {
+      "sample": "sample-20",
+      "field": "Formal Invocation",
+      "sha256": "e4e2c4c28e3e617383c5b5d89c603ec4b0864d9009b009de8451e7ce41fb3ecf",
+      "complete_actual_returned": true,
+      "output_ordinals": [
+        15,
+        22,
+        29,
+        40,
+        54,
+        63,
+        77
+      ]
+    },
+    {
+      "sample": "sample-20",
+      "field": "Complete supplied input",
+      "sha256": "288a4119f73bcd8c8159117f3dc16febe20383b8d5323883a1ef1272fab4af13",
+      "complete_actual_returned": true,
+      "output_ordinals": [
+        15,
+        54,
+        77
+      ]
+    },
+    {
+      "sample": "sample-20",
+      "field": "Delivered Text Artifact",
+      "sha256": "8f86a14754615326422466e9d4ec7b539f234eb50eee04953d46f610f8a90b03",
+      "complete_actual_returned": true,
+      "output_ordinals": [
+        15,
+        77
+      ]
+    },
+    {
+      "sample": "sample-20",
+      "field": "User-facing reply",
+      "sha256": "edfb96a74265308723d5d8001304a0cdc63e1beda115fa53f7df11c300124f15",
+      "complete_actual_returned": true,
+      "output_ordinals": [
+        15,
+        77
+      ]
+    }
+  ],
+  "all_fields_returned": true,
+  "writable_work_scratch_changes": {
+    "created": {},
+    "removed": {},
+    "changed": {}
+  },
+  "authentication_changed": false,
+  "native_calls": 9,
+  "method": "Complete exact fenced field bodies matched against actual returned tool content; commands, in-memory parsing alone and self-reports receive no credit."
+}

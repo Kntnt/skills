@@ -1,0 +1,50 @@
+[
+  {
+    "path": "work/input.md",
+    "sha256": "3d2f9ed7390e247b388dfd62ae735272c4c35adab5f471f922046dc9ef93e7a2",
+    "capture": "0000-3d2f9ed7390e.md",
+    "time": 1790864883.885188
+  },
+  {
+    "path": "work/AGENTS.md",
+    "sha256": "6d4b24d16e405fea1f2b16c66e2949d152bc5558e5418da73478d4f59f7db2f7",
+    "capture": "0001-6d4b24d16e40.md",
+    "time": 1790864883.8853261
+  },
+  {
+    "path": "scratch/redline-uv-9h0_wkn3/.tmpmuScMn/environments-v2/kntnt-6333df3148071af2/lib/python3.12/site-packages/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0002-ae98f4215313.txt",
+    "time": 1790864925.2096498
+  },
+  {
+    "path": "scratch/redline-uv-9h0_wkn3/.tmpmuScMn/archive-v0/4aQrYOMDDEgT57IP/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0003-ae98f4215313.txt",
+    "time": 1790864925.210284
+  },
+  {
+    "path": "scratch/redline-language-x5nscvw6/.tmpBuY4PF/.tmp8a8E82/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0004-ae98f4215313.txt",
+    "time": 1790864956.82077
+  },
+  {
+    "path": "scratch/redline-language-x5nscvw6/.tmpBuY4PF/environments-v2/languages-d2e4220feba34232/lib/python3.12/site-packages/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0005-ae98f4215313.txt",
+    "time": 1790864956.936024
+  },
+  {
+    "path": "scratch/redline-language-x5nscvw6/.tmpBuY4PF/archive-v0/0sFVDEdTgZ_kG4ZT/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0006-ae98f4215313.txt",
+    "time": 1790864956.9368372
+  },
+  {
+    "path": "scratch/redline-mechanical-wxa78a0e/input.md",
+    "sha256": "3d2f9ed7390e247b388dfd62ae735272c4c35adab5f471f922046dc9ef93e7a2",
+    "capture": "0007-3d2f9ed7390e.md",
+    "time": 1790865061.555393
+  }
+]

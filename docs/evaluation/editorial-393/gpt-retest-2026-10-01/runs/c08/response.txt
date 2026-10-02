@@ -1,0 +1,18 @@
+Saved [output.md](/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-euzjpdes/work/output.md). Reviewed as casestudy in American English (en_US), with technique none from the input metadata.
+
+Two findings remain unresolved:
+
+- The author byline is missing. “Published by Svale Systems.” identifies the publisher without naming the author.
+- Section subheadings, including an ending subheading, are missing, leaving readers without headings to scan the trial and its next step.
+
+Missing parts remain unfilled under the [redline skill](/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-euzjpdes/work/.agents/skills/redline/SKILL.md) and its [anatomy rules](/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-euzjpdes/work/.agents/skills/kntnt/library/references/editorial/article-anatomy.review.md), which state: “its absence is a finding, and the part is not written.”
+
+The accepted repairs and claim account:
+
+- Clarified attribution: The first quotation now identifies supervisor Maya Lind, repeating her identity from the standfirst so the body stands alone.
+- Removed from narration: The claim that Lind’s experience “offered a preparation lesson,” because it pre-echoed the following quotation. The lesson remains in her unchanged quotation.
+- Removed from narration: The characterization that Lind “gave a qualified endorsement of repeating the trial,” because it pre-echoed her judgement and reservation. Her qualified appraisal remains in the unchanged quotation.
+
+No new claims were added.
+
+The changes clarified speaker identification, removed redundant quotation framing, and synchronized the genre metadata to casestudy. The final proofreading pass found no mechanical errors.

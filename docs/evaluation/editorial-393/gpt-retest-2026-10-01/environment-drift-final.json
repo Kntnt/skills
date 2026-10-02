@@ -1,0 +1,38 @@
+{
+  "at": "2026-10-01T16:53:52.036068+00:00",
+  "frozen_product": "fb16908712c4d47a36fc6ee9dfb3eb2714a19e65",
+  "shared_checkout_head": "5db2ec75a4145eda3449e7646eac5fc6162b85a0",
+  "shared_checkout_branch": "main",
+  "main_ref": "5db2ec75a4145eda3449e7646eac5fc6162b85a0",
+  "shared_status_porcelain": "",
+  "commits_since_previous_drift_snapshot": [
+    "5db2ec75a4145eda3449e7646eac5fc6162b85a0 Merge #479 into the run branch",
+    "9248491d0491119f75c4f1b884dda85729fe604d Format the revised #479 test so the lint gate passes",
+    "2957b4943afc508f912ce4a177a73056429217a0 Record #479's revise round: the revised opinion review keeps the clause",
+    "783f1165e1d6a9ce919235089a47e9f866727a6e Merge #480 into the run branch",
+    "73c643bd26fa664dd2b67954a3dab349d5437d7e Merge #477 into the run branch",
+    "2e6a198efa760c3c958a9863124b226504844738 Record the #477 evaluation: the reply goes out as the checker read it",
+    "684f0313700d16ac6deb3e8d59ad01d2e59a697a Record #480's evaluation: the revised allusion wording ships",
+    "8ec5b4837fe92190ea30bc7d3455078b49796e1f Correct pre-article-clean-resp-2's delivery to what its reply shows",
+    "fd58641844f7b41dc0a292f3e4fb1dd0e32e1fe3 List #479's revise round before its first run",
+    "3b1f791d27285035526265f36b76e2aac26204e4 Keep an opinion's reference to a pending change out of its finding",
+    "e4fe58907c76bdf57c378f42df9bf26f46f5e6aa Take the body's referent test out of the allusion item",
+    "7f1a638bd5d17b4c9222ff010619b488f1b59d9a Record #479's evaluation: the opinion review reads a pending step as no forecast",
+    "f39a37217356330f97718519269ea9c10485dd87 Owe a working allusion's reader its subject, not its particulars",
+    "f3851e9f9d37a99059403772ed1f7f659f9573b6 Read an opinion's step before a pending decision as no forecast",
+    "516afe2e8d0c16412687f56f7402284d03b09619 Freeze the plan for measuring #477's reply correction",
+    "51777db25bf29ea3e065a6b9e2c24ac0ee0dd419 Deliver the reply as the checker read it, corrected only where it says",
+    "43aa13fe82cef58f1b8675278e6214d470aa2d79 Freeze the #479 plan before its first run",
+    "e7dd67016c911d4f1c948bc7e6f1e913703f2437 Freeze the #480 plan before its first run",
+    "e5fcdf4f16b7d39800fd578405a9896134417e94 Freeze #480's three contrast headlines, validated blind"
+  ],
+  "product_paths_changed_since_freeze": [
+    "M\tskills/editorial/redline/SKILL.md",
+    "M\tskills/editorial/redline/help.md",
+    "M\tskills/editorial/redline/references/reply-check.md",
+    "M\tskills/kntnt/catalog.json",
+    "M\tskills/kntnt/library/references/editorial/genres/opinion.review.md",
+    "M\tskills/kntnt/library/references/editorial/headlines.review.md"
+  ],
+  "interpretation": "Later shared checkout/main state is external to this bounded retest. Every retained run.json still exports exact frozen product. No newer arm was run or causal claim made."
+}

@@ -1,0 +1,24 @@
+{
+  "pid": 85728,
+  "process_group": 85728,
+  "argv": [
+    "uv",
+    "run",
+    "--with",
+    "pytest",
+    "--with",
+    "pytest-xdist",
+    "--with",
+    "pyyaml",
+    "pytest",
+    "-n",
+    "auto",
+    "tests/test_evaluation.py",
+    "tests/test_evaluation_evidence.py",
+    "tests/test_evaluation_trace.py",
+    "tests/test_evaluation_harness.py",
+    "tests/test_clean_control_revision.py",
+    "tests/test_rules.py",
+    "tests/test_adr.py"
+  ]
+}

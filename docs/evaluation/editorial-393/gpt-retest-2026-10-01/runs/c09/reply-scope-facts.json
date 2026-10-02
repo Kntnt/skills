@@ -1,0 +1,30 @@
+{
+  "method": "Exact complete expected fragments and two known extra passages matched against actual returned native tool material. This targeted audit cannot establish absence of every other possible read; trace-index.json retains all calls for inspection.",
+  "checkers": [
+    {
+      "session": "01a0f7c8-95e5-7210-aec2-bd44353f11c1",
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T16-05-13-01a0f7c8-95e5-7210-aec2-bd44353f11c1.jsonl",
+      "complete_required_fragments": [
+        "delivery-truth",
+        "base-claim-account"
+      ],
+      "returned_extra_passages": [
+        {
+          "ordinal": 14,
+          "call_id": "call_QiX1bTjMMWjg7ohgsmVhnTBb",
+          "extra": "base paragraph prefix",
+          "words": 52,
+          "exact_returned_passage": "Make the smallest correction that removes a finding. Move or clarify existing material where it supplies the missing connection. Introduce no new evidence, experience, attribution or outcome. If repair would change a claim or a quotation's meaning, or requires information absent from the text, leave the passage and report the unresolved finding."
+        },
+        {
+          "ordinal": 14,
+          "call_id": "call_QiX1bTjMMWjg7ohgsmVhnTBb",
+          "extra": "next delivery heading",
+          "words": 2,
+          "exact_returned_passage": "## Refusals"
+        }
+      ],
+      "whole_dispatch": "encrypted and unverified"
+    }
+  ]
+}

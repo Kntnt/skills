@@ -1,0 +1,560 @@
+{
+  "r01": {
+    "O1": "pass",
+    "O1_reason": "Actual requested response/file target, unchanged source/install, no unauthorised final work/scratch effects; short no-change status p03 allowed by contract. Native private-home runtime effects fully inventoried as harness state.",
+    "C-chain": "pass",
+    "C-chain_reason": "Complete distinct private input/output files captured, input frozen and full output actually read; delivered bytes match output where an artifact exists. p03 publication match is not applicable: no text delivered. p02 nested Proofread executes in parent; fresh mechanical subagent is not required by the shipped contract.",
+    "T1-core": "pass",
+    "T1_core_gaps": [],
+    "T1-scope": "pass",
+    "T1_scope_reason": "Observed complete core/checker resources and indexed calls show no established extra prohibited reading; resource match absence is never used as negative proof.",
+    "R2-fresh": "pass",
+    "R2_fresh_reason": "Every observed correction/source/reply checker has a distinct fresh child ID, fork_turns=none and complete lifecycle; native seat matches throughout. p03 has only a short no-change status and is explicitly exempt from replychecking.",
+    "R2-complete-dispatch": "skipped",
+    "R2_dispatch_reason": "Native spawn/send message field encrypted; actual child reads establish only individually retained material, never whole filled brief.",
+    "native_seats_match": true,
+    "native_service_error_count": 0,
+    "child_roles": [
+      "redline_correction",
+      "mechanical_pass",
+      "reply_check"
+    ],
+    "correction_budget": "pass",
+    "corrections_observed": 1,
+    "side_effect_classification": "transport-facts.json for Redline; filesystem-changes.json and deterministic-facts.json for Write: every writable root, native home/cache vs Skill work/scratch classified.",
+    "write-last-check": null
+  },
+  "r02": {
+    "O1": "pass",
+    "O1_reason": "Actual requested response/file target, unchanged source/install, no unauthorised final work/scratch effects; short no-change status p03 allowed by contract. Native private-home runtime effects fully inventoried as harness state.",
+    "C-chain": "pass",
+    "C-chain_reason": "Complete distinct private input/output files captured, input frozen and full output actually read; delivered bytes match output where an artifact exists. p03 publication match is not applicable: no text delivered. p02 nested Proofread executes in parent; fresh mechanical subagent is not required by the shipped contract.",
+    "T1-core": "pass",
+    "T1_core_gaps": [],
+    "T1-scope": "pass",
+    "T1_scope_reason": "Observed complete core/checker resources and indexed calls show no established extra prohibited reading; resource match absence is never used as negative proof.",
+    "R2-fresh": "pass",
+    "R2_fresh_reason": "Every observed correction/source/reply checker has a distinct fresh child ID, fork_turns=none and complete lifecycle; native seat matches throughout. p03 has only a short no-change status and is explicitly exempt from replychecking.",
+    "R2-complete-dispatch": "skipped",
+    "R2_dispatch_reason": "Native spawn/send message field encrypted; actual child reads establish only individually retained material, never whole filled brief.",
+    "native_seats_match": true,
+    "native_service_error_count": 0,
+    "child_roles": [
+      "correction",
+      "mechanical",
+      "reply_check"
+    ],
+    "correction_budget": "pass",
+    "corrections_observed": 1,
+    "side_effect_classification": "transport-facts.json for Redline; filesystem-changes.json and deterministic-facts.json for Write: every writable root, native home/cache vs Skill work/scratch classified.",
+    "write-last-check": null
+  },
+  "c03": {
+    "O1": "pass",
+    "O1_reason": "Actual requested response/file target, unchanged source/install, no unauthorised final work/scratch effects; short no-change status p03 allowed by contract. Native private-home runtime effects fully inventoried as harness state.",
+    "C-chain": "pass",
+    "C-chain_reason": "Complete distinct private input/output files captured, input frozen and full output actually read; delivered bytes match output where an artifact exists. p03 publication match is not applicable: no text delivered. p02 nested Proofread executes in parent; fresh mechanical subagent is not required by the shipped contract.",
+    "T1-core": "pass",
+    "T1_core_gaps": [],
+    "T1-scope": "pass",
+    "T1_scope_reason": "Observed complete core/checker resources and indexed calls show no established extra prohibited reading; resource match absence is never used as negative proof.",
+    "R2-fresh": "pass",
+    "R2_fresh_reason": "Every observed correction/source/reply checker has a distinct fresh child ID, fork_turns=none and complete lifecycle; native seat matches throughout. p03 has only a short no-change status and is explicitly exempt from replychecking.",
+    "R2-complete-dispatch": "skipped",
+    "R2_dispatch_reason": "Native spawn/send message field encrypted; actual child reads establish only individually retained material, never whole filled brief.",
+    "native_seats_match": true,
+    "native_service_error_count": 0,
+    "child_roles": [
+      "redline_correction",
+      "mechanical_pass",
+      "reply_check"
+    ],
+    "correction_budget": "pass",
+    "corrections_observed": 1,
+    "side_effect_classification": "transport-facts.json for Redline; filesystem-changes.json and deterministic-facts.json for Write: every writable root, native home/cache vs Skill work/scratch classified.",
+    "write-last-check": null
+  },
+  "c04": {
+    "O1": "pass",
+    "O1_reason": "Actual requested response/file target, unchanged source/install, no unauthorised final work/scratch effects; short no-change status p03 allowed by contract. Native private-home runtime effects fully inventoried as harness state.",
+    "C-chain": "pass",
+    "C-chain_reason": "Complete distinct private input/output files captured, input frozen and full output actually read; delivered bytes match output where an artifact exists. p03 publication match is not applicable: no text delivered. p02 nested Proofread executes in parent; fresh mechanical subagent is not required by the shipped contract.",
+    "T1-core": "pass",
+    "T1_core_gaps": [],
+    "T1-scope": "pass",
+    "T1_scope_reason": "Observed complete core/checker resources and indexed calls show no established extra prohibited reading; resource match absence is never used as negative proof.",
+    "R2-fresh": "pass",
+    "R2_fresh_reason": "Every observed correction/source/reply checker has a distinct fresh child ID, fork_turns=none and complete lifecycle; native seat matches throughout. p03 has only a short no-change status and is explicitly exempt from replychecking.",
+    "R2-complete-dispatch": "skipped",
+    "R2_dispatch_reason": "Native spawn/send message field encrypted; actual child reads establish only individually retained material, never whole filled brief.",
+    "native_seats_match": true,
+    "native_service_error_count": 0,
+    "child_roles": [
+      "redline_correction",
+      "redline_proofread",
+      "redline_reply_check"
+    ],
+    "correction_budget": "pass",
+    "corrections_observed": 1,
+    "side_effect_classification": "transport-facts.json for Redline; filesystem-changes.json and deterministic-facts.json for Write: every writable root, native home/cache vs Skill work/scratch classified.",
+    "write-last-check": null
+  },
+  "c06": {
+    "O1": "pass",
+    "O1_reason": "Actual requested response/file target, unchanged source/install, no unauthorised final work/scratch effects; short no-change status p03 allowed by contract. Native private-home runtime effects fully inventoried as harness state.",
+    "C-chain": "pass",
+    "C-chain_reason": "Complete distinct private input/output files captured, input frozen and full output actually read; delivered bytes match output where an artifact exists. p03 publication match is not applicable: no text delivered. p02 nested Proofread executes in parent; fresh mechanical subagent is not required by the shipped contract.",
+    "T1-core": "skipped",
+    "T1_core_gaps": [
+      {
+        "role": "redline_correction",
+        "paths": [
+          "skills/kntnt/library/references/editorial/anti-slop.md"
+        ],
+        "scopes": []
+      }
+    ],
+    "T1-scope": "pass",
+    "T1_scope_reason": "Observed complete core/checker resources and indexed calls show no established extra prohibited reading; resource match absence is never used as negative proof.",
+    "R2-fresh": "pass",
+    "R2_fresh_reason": "Every observed correction/source/reply checker has a distinct fresh child ID, fork_turns=none and complete lifecycle; native seat matches throughout. p03 has only a short no-change status and is explicitly exempt from replychecking.",
+    "R2-complete-dispatch": "skipped",
+    "R2_dispatch_reason": "Native spawn/send message field encrypted; actual child reads establish only individually retained material, never whole filled brief.",
+    "native_seats_match": true,
+    "native_service_error_count": 0,
+    "child_roles": [
+      "redline_correction",
+      "mechanical_pass",
+      "reply_check"
+    ],
+    "correction_budget": "pass",
+    "corrections_observed": 1,
+    "side_effect_classification": "transport-facts.json for Redline; filesystem-changes.json and deterministic-facts.json for Write: every writable root, native home/cache vs Skill work/scratch classified.",
+    "write-last-check": null
+  },
+  "c05": {
+    "O1": "pass",
+    "O1_reason": "Actual requested response/file target, unchanged source/install, no unauthorised final work/scratch effects; short no-change status p03 allowed by contract. Native private-home runtime effects fully inventoried as harness state.",
+    "C-chain": "pass",
+    "C-chain_reason": "Complete distinct private input/output files captured, input frozen and full output actually read; delivered bytes match output where an artifact exists. p03 publication match is not applicable: no text delivered. p02 nested Proofread executes in parent; fresh mechanical subagent is not required by the shipped contract.",
+    "T1-core": "pass",
+    "T1_core_gaps": [],
+    "T1-scope": "pass",
+    "T1_scope_reason": "Observed complete core/checker resources and indexed calls show no established extra prohibited reading; resource match absence is never used as negative proof.",
+    "R2-fresh": "pass",
+    "R2_fresh_reason": "Every observed correction/source/reply checker has a distinct fresh child ID, fork_turns=none and complete lifecycle; native seat matches throughout. p03 has only a short no-change status and is explicitly exempt from replychecking.",
+    "R2-complete-dispatch": "skipped",
+    "R2_dispatch_reason": "Native spawn/send message field encrypted; actual child reads establish only individually retained material, never whole filled brief.",
+    "native_seats_match": true,
+    "native_service_error_count": 0,
+    "child_roles": [
+      "correction",
+      "mechanical_pass",
+      "reply_check"
+    ],
+    "correction_budget": "pass",
+    "corrections_observed": 1,
+    "side_effect_classification": "transport-facts.json for Redline; filesystem-changes.json and deterministic-facts.json for Write: every writable root, native home/cache vs Skill work/scratch classified.",
+    "write-last-check": null
+  },
+  "c07": {
+    "O1": "fail",
+    "O1_reason": "Parent removed pre-existing empty harness cache/data/tmp/uv-cache directories; not Skill-owned.",
+    "C-chain": "pass",
+    "C-chain_reason": "Complete distinct private input/output files captured, input frozen and full output actually read; delivered bytes match output where an artifact exists. p03 publication match is not applicable: no text delivered. p02 nested Proofread executes in parent; fresh mechanical subagent is not required by the shipped contract.",
+    "T1-core": "pass",
+    "T1_core_gaps": [],
+    "T1-scope": "pass",
+    "T1_scope_reason": "Observed complete core/checker resources and indexed calls show no established extra prohibited reading; resource match absence is never used as negative proof.",
+    "R2-fresh": "pass",
+    "R2_fresh_reason": "Every observed correction/source/reply checker has a distinct fresh child ID, fork_turns=none and complete lifecycle; native seat matches throughout. p03 has only a short no-change status and is explicitly exempt from replychecking.",
+    "R2-complete-dispatch": "skipped",
+    "R2_dispatch_reason": "Native spawn/send message field encrypted; actual child reads establish only individually retained material, never whole filled brief.",
+    "native_seats_match": true,
+    "native_service_error_count": 0,
+    "child_roles": [
+      "correction_1",
+      "mechanical_pass",
+      "reply_check"
+    ],
+    "correction_budget": "pass",
+    "corrections_observed": 1,
+    "side_effect_classification": "transport-facts.json for Redline; filesystem-changes.json and deterministic-facts.json for Write: every writable root, native home/cache vs Skill work/scratch classified.",
+    "write-last-check": null
+  },
+  "c08": {
+    "O1": "pass",
+    "O1_reason": "Actual requested response/file target, unchanged source/install, no unauthorised final work/scratch effects; short no-change status p03 allowed by contract. Native private-home runtime effects fully inventoried as harness state.",
+    "C-chain": "pass",
+    "C-chain_reason": "Complete distinct private input/output files captured, input frozen and full output actually read; delivered bytes match output where an artifact exists. p03 publication match is not applicable: no text delivered. p02 nested Proofread executes in parent; fresh mechanical subagent is not required by the shipped contract.",
+    "T1-core": "pass",
+    "T1_core_gaps": [],
+    "T1-scope": "fail",
+    "T1_scope_reason": "Actual replychecker returned forbidden preceding base paragraph words and/or next delivery heading; exact passages and ordinals in reply-scope-facts.",
+    "R2-fresh": "pass",
+    "R2_fresh_reason": "Every observed correction/source/reply checker has a distinct fresh child ID, fork_turns=none and complete lifecycle; native seat matches throughout. p03 has only a short no-change status and is explicitly exempt from replychecking.",
+    "R2-complete-dispatch": "skipped",
+    "R2_dispatch_reason": "Native spawn/send message field encrypted; actual child reads establish only individually retained material, never whole filled brief.",
+    "native_seats_match": true,
+    "native_service_error_count": 0,
+    "child_roles": [
+      "correction_1",
+      "mechanical_pass",
+      "reply_check"
+    ],
+    "correction_budget": "pass",
+    "corrections_observed": 1,
+    "side_effect_classification": "transport-facts.json for Redline; filesystem-changes.json and deterministic-facts.json for Write: every writable root, native home/cache vs Skill work/scratch classified.",
+    "write-last-check": null
+  },
+  "c09": {
+    "O1": "pass",
+    "O1_reason": "Actual requested response/file target, unchanged source/install, no unauthorised final work/scratch effects; short no-change status p03 allowed by contract. Native private-home runtime effects fully inventoried as harness state.",
+    "C-chain": "pass",
+    "C-chain_reason": "Complete distinct private input/output files captured, input frozen and full output actually read; delivered bytes match output where an artifact exists. p03 publication match is not applicable: no text delivered. p02 nested Proofread executes in parent; fresh mechanical subagent is not required by the shipped contract.",
+    "T1-core": "pass",
+    "T1_core_gaps": [],
+    "T1-scope": "fail",
+    "T1_scope_reason": "Actual replychecker returned forbidden preceding base paragraph words and/or next delivery heading; exact passages and ordinals in reply-scope-facts.",
+    "R2-fresh": "pass",
+    "R2_fresh_reason": "Every observed correction/source/reply checker has a distinct fresh child ID, fork_turns=none and complete lifecycle; native seat matches throughout. p03 has only a short no-change status and is explicitly exempt from replychecking.",
+    "R2-complete-dispatch": "skipped",
+    "R2_dispatch_reason": "Native spawn/send message field encrypted; actual child reads establish only individually retained material, never whole filled brief.",
+    "native_seats_match": true,
+    "native_service_error_count": 0,
+    "child_roles": [
+      "redline_correction",
+      "nested_proofread",
+      "redline_reply_check"
+    ],
+    "correction_budget": "pass",
+    "corrections_observed": 1,
+    "side_effect_classification": "transport-facts.json for Redline; filesystem-changes.json and deterministic-facts.json for Write: every writable root, native home/cache vs Skill work/scratch classified.",
+    "write-last-check": null
+  },
+  "c10": {
+    "O1": "pass",
+    "O1_reason": "Actual requested response/file target, unchanged source/install, no unauthorised final work/scratch effects; short no-change status p03 allowed by contract. Native private-home runtime effects fully inventoried as harness state.",
+    "C-chain": "pass",
+    "C-chain_reason": "Complete distinct private input/output files captured, input frozen and full output actually read; delivered bytes match output where an artifact exists. p03 publication match is not applicable: no text delivered. p02 nested Proofread executes in parent; fresh mechanical subagent is not required by the shipped contract.",
+    "T1-core": "pass",
+    "T1_core_gaps": [],
+    "T1-scope": "pass",
+    "T1_scope_reason": "Observed complete core/checker resources and indexed calls show no established extra prohibited reading; resource match absence is never used as negative proof.",
+    "R2-fresh": "pass",
+    "R2_fresh_reason": "Every observed correction/source/reply checker has a distinct fresh child ID, fork_turns=none and complete lifecycle; native seat matches throughout. p03 has only a short no-change status and is explicitly exempt from replychecking.",
+    "R2-complete-dispatch": "skipped",
+    "R2_dispatch_reason": "Native spawn/send message field encrypted; actual child reads establish only individually retained material, never whole filled brief.",
+    "native_seats_match": true,
+    "native_service_error_count": 0,
+    "child_roles": [
+      "redline_correction",
+      "mechanical_proofread",
+      "redline_reply_check"
+    ],
+    "correction_budget": "pass",
+    "corrections_observed": 1,
+    "side_effect_classification": "transport-facts.json for Redline; filesystem-changes.json and deterministic-facts.json for Write: every writable root, native home/cache vs Skill work/scratch classified.",
+    "write-last-check": null
+  },
+  "c11": {
+    "O1": "pass",
+    "O1_reason": "Actual requested response/file target, unchanged source/install, no unauthorised final work/scratch effects; short no-change status p03 allowed by contract. Native private-home runtime effects fully inventoried as harness state.",
+    "C-chain": "pass",
+    "C-chain_reason": "Complete distinct private input/output files captured, input frozen and full output actually read; delivered bytes match output where an artifact exists. p03 publication match is not applicable: no text delivered. p02 nested Proofread executes in parent; fresh mechanical subagent is not required by the shipped contract.",
+    "T1-core": "pass",
+    "T1_core_gaps": [],
+    "T1-scope": "pass",
+    "T1_scope_reason": "Observed complete core/checker resources and indexed calls show no established extra prohibited reading; resource match absence is never used as negative proof.",
+    "R2-fresh": "pass",
+    "R2_fresh_reason": "Every observed correction/source/reply checker has a distinct fresh child ID, fork_turns=none and complete lifecycle; native seat matches throughout. p03 has only a short no-change status and is explicitly exempt from replychecking.",
+    "R2-complete-dispatch": "skipped",
+    "R2_dispatch_reason": "Native spawn/send message field encrypted; actual child reads establish only individually retained material, never whole filled brief.",
+    "native_seats_match": true,
+    "native_service_error_count": 0,
+    "child_roles": [
+      "redline_correction",
+      "mechanical_pass",
+      "reply_check"
+    ],
+    "correction_budget": "pass",
+    "corrections_observed": 1,
+    "side_effect_classification": "transport-facts.json for Redline; filesystem-changes.json and deterministic-facts.json for Write: every writable root, native home/cache vs Skill work/scratch classified.",
+    "write-last-check": null
+  },
+  "c12": {
+    "O1": "pass",
+    "O1_reason": "Actual requested response/file target, unchanged source/install, no unauthorised final work/scratch effects; short no-change status p03 allowed by contract. Native private-home runtime effects fully inventoried as harness state.",
+    "C-chain": "pass",
+    "C-chain_reason": "Complete distinct private input/output files captured, input frozen and full output actually read; delivered bytes match output where an artifact exists. p03 publication match is not applicable: no text delivered. p02 nested Proofread executes in parent; fresh mechanical subagent is not required by the shipped contract.",
+    "T1-core": "pass",
+    "T1_core_gaps": [],
+    "T1-scope": "fail",
+    "T1_scope_reason": "Actual replychecker returned forbidden preceding base paragraph words and/or next delivery heading; exact passages and ordinals in reply-scope-facts.",
+    "R2-fresh": "pass",
+    "R2_fresh_reason": "Every observed correction/source/reply checker has a distinct fresh child ID, fork_turns=none and complete lifecycle; native seat matches throughout. p03 has only a short no-change status and is explicitly exempt from replychecking.",
+    "R2-complete-dispatch": "skipped",
+    "R2_dispatch_reason": "Native spawn/send message field encrypted; actual child reads establish only individually retained material, never whole filled brief.",
+    "native_seats_match": true,
+    "native_service_error_count": 0,
+    "child_roles": [
+      "redline_correction",
+      "mechanical_pass",
+      "reply_check"
+    ],
+    "correction_budget": "pass",
+    "corrections_observed": 1,
+    "side_effect_classification": "transport-facts.json for Redline; filesystem-changes.json and deterministic-facts.json for Write: every writable root, native home/cache vs Skill work/scratch classified.",
+    "write-last-check": null
+  },
+  "r14": {
+    "O1": "pass",
+    "O1_reason": "Actual requested response/file target, unchanged source/install, no unauthorised final work/scratch effects; short no-change status p03 allowed by contract. Native private-home runtime effects fully inventoried as harness state.",
+    "C-chain": "pass",
+    "C-chain_reason": "Complete distinct private input/output files captured, input frozen and full output actually read; delivered bytes match output where an artifact exists. p03 publication match is not applicable: no text delivered. p02 nested Proofread executes in parent; fresh mechanical subagent is not required by the shipped contract.",
+    "T1-core": "skipped",
+    "T1_core_gaps": [
+      {
+        "role": "parent",
+        "paths": [],
+        "scopes": [
+          "anti-slop",
+          "composition",
+          "review"
+        ]
+      }
+    ],
+    "T1-scope": "pass",
+    "T1_scope_reason": "Observed complete core/checker resources and indexed calls show no established extra prohibited reading; resource match absence is never used as negative proof.",
+    "R2-fresh": "pass",
+    "R2_fresh_reason": "Every observed correction/source/reply checker has a distinct fresh child ID, fork_turns=none and complete lifecycle; native seat matches throughout. p03 has only a short no-change status and is explicitly exempt from replychecking.",
+    "R2-complete-dispatch": "skipped",
+    "R2_dispatch_reason": "Native spawn/send message field encrypted; actual child reads establish only individually retained material, never whole filled brief.",
+    "native_seats_match": true,
+    "native_service_error_count": 0,
+    "child_roles": [
+      "redline_correction",
+      "redline_proofread",
+      "redline_reply_check"
+    ],
+    "correction_budget": "pass",
+    "corrections_observed": 1,
+    "side_effect_classification": "transport-facts.json for Redline; filesystem-changes.json and deterministic-facts.json for Write: every writable root, native home/cache vs Skill work/scratch classified.",
+    "write-last-check": null
+  },
+  "w02": {
+    "O1": "pass",
+    "O1_reason": "Actual requested response/file target, unchanged source/install, no unauthorised final work/scratch effects; short no-change status p03 allowed by contract. Native private-home runtime effects fully inventoried as harness state.",
+    "C-chain": "skipped",
+    "C-chain_reason": "Write has no Redline closing mechanical chain.",
+    "T1-core": "pass",
+    "T1_core_gaps": [],
+    "T1-scope": "pass",
+    "T1_scope_reason": "Observed complete core/checker resources and indexed calls show no established extra prohibited reading; resource match absence is never used as negative proof.",
+    "R2-fresh": "pass",
+    "R2_fresh_reason": "Every observed correction/source/reply checker has a distinct fresh child ID, fork_turns=none and complete lifecycle; native seat matches throughout. p03 has only a short no-change status and is explicitly exempt from replychecking.",
+    "R2-complete-dispatch": "skipped",
+    "R2_dispatch_reason": "Native spawn/send message field encrypted; actual child reads establish only individually retained material, never whole filled brief.",
+    "native_seats_match": true,
+    "native_service_error_count": 0,
+    "child_roles": [
+      "source_comparison_1",
+      "source_comparison_2"
+    ],
+    "correction_budget": "skipped",
+    "corrections_observed": 0,
+    "side_effect_classification": "transport-facts.json for Redline; filesystem-changes.json and deterministic-facts.json for Write: every writable root, native home/cache vs Skill work/scratch classified.",
+    "write-last-check": "pass",
+    "write-last-check_reason": "Actual second source-check draft complete bytes retained/read and exact delivered prose matches, with only leading handoff metadata excluded; known findings/reply proposals are separate from delivered artifact."
+  },
+  "w03": {
+    "O1": "pass",
+    "O1_reason": "Actual requested response/file target, unchanged source/install, no unauthorised final work/scratch effects; short no-change status p03 allowed by contract. Native private-home runtime effects fully inventoried as harness state.",
+    "C-chain": "skipped",
+    "C-chain_reason": "Write has no Redline closing mechanical chain.",
+    "T1-core": "skipped",
+    "T1_core_gaps": [
+      {
+        "role": "source_check_1",
+        "paths": [],
+        "scopes": [
+          "composition"
+        ]
+      },
+      {
+        "role": "source_check_2",
+        "paths": [],
+        "scopes": [
+          "composition"
+        ]
+      }
+    ],
+    "T1-scope": "pass",
+    "T1_scope_reason": "Observed complete core/checker resources and indexed calls show no established extra prohibited reading; resource match absence is never used as negative proof.",
+    "R2-fresh": "pass",
+    "R2_fresh_reason": "Every observed correction/source/reply checker has a distinct fresh child ID, fork_turns=none and complete lifecycle; native seat matches throughout. p03 has only a short no-change status and is explicitly exempt from replychecking.",
+    "R2-complete-dispatch": "skipped",
+    "R2_dispatch_reason": "Native spawn/send message field encrypted; actual child reads establish only individually retained material, never whole filled brief.",
+    "native_seats_match": true,
+    "native_service_error_count": 0,
+    "child_roles": [
+      "source_check_1",
+      "source_check_2"
+    ],
+    "correction_budget": "skipped",
+    "corrections_observed": 0,
+    "side_effect_classification": "transport-facts.json for Redline; filesystem-changes.json and deterministic-facts.json for Write: every writable root, native home/cache vs Skill work/scratch classified.",
+    "write-last-check": "pass",
+    "write-last-check_reason": "Actual second source-check draft complete bytes retained/read and exact delivered prose matches, with only leading handoff metadata excluded; known findings/reply proposals are separate from delivered artifact."
+  },
+  "r13-rerun": {
+    "O1": "pass",
+    "O1_reason": "Actual requested response/file target, unchanged source/install, no unauthorised final work/scratch effects; short no-change status p03 allowed by contract. Native private-home runtime effects fully inventoried as harness state.",
+    "C-chain": "pass",
+    "C-chain_reason": "Complete distinct private input/output files captured, input frozen and full output actually read; delivered bytes match output where an artifact exists. p03 publication match is not applicable: no text delivered. p02 nested Proofread executes in parent; fresh mechanical subagent is not required by the shipped contract.",
+    "T1-core": "skipped",
+    "T1_core_gaps": [
+      {
+        "role": "correction_1",
+        "paths": [
+          "skills/kntnt/library/references/editorial/anti-slop.md",
+          "skills/kntnt/library/references/editorial/article-anatomy.md",
+          "skills/kntnt/library/references/editorial/headlines.md",
+          "skills/kntnt/library/references/editorial/headlines.review.md",
+          "skills/kntnt/library/references/editorial/web-craft.md",
+          "skills/kntnt/library/references/editorial/web-craft.review.md"
+        ],
+        "scopes": []
+      }
+    ],
+    "T1-scope": "pass",
+    "T1_scope_reason": "Observed complete core/checker resources and indexed calls show no established extra prohibited reading; resource match absence is never used as negative proof.",
+    "R2-fresh": "pass",
+    "R2_fresh_reason": "Every observed correction/source/reply checker has a distinct fresh child ID, fork_turns=none and complete lifecycle; native seat matches throughout. p03 has only a short no-change status and is explicitly exempt from replychecking.",
+    "R2-complete-dispatch": "skipped",
+    "R2_dispatch_reason": "Native spawn/send message field encrypted; actual child reads establish only individually retained material, never whole filled brief.",
+    "native_seats_match": true,
+    "native_service_error_count": 0,
+    "child_roles": [
+      "correction_1",
+      "mechanical_pass",
+      "reply_check"
+    ],
+    "correction_budget": "pass",
+    "corrections_observed": 1,
+    "side_effect_classification": "transport-facts.json for Redline; filesystem-changes.json and deterministic-facts.json for Write: every writable root, native home/cache vs Skill work/scratch classified.",
+    "write-last-check": null
+  },
+  "w01-rerun": {
+    "O1": "pass",
+    "O1_reason": "Actual requested response/file target, unchanged source/install, no unauthorised final work/scratch effects; short no-change status p03 allowed by contract. Native private-home runtime effects fully inventoried as harness state.",
+    "C-chain": "skipped",
+    "C-chain_reason": "Write has no Redline closing mechanical chain.",
+    "T1-core": "skipped",
+    "T1_core_gaps": [
+      {
+        "role": "source_check_1",
+        "paths": [],
+        "scopes": [
+          "composition"
+        ]
+      },
+      {
+        "role": "source_check_2",
+        "paths": [],
+        "scopes": [
+          "composition"
+        ]
+      }
+    ],
+    "T1-scope": "pass",
+    "T1_scope_reason": "Observed complete core/checker resources and indexed calls show no established extra prohibited reading; resource match absence is never used as negative proof.",
+    "R2-fresh": "pass",
+    "R2_fresh_reason": "Every observed correction/source/reply checker has a distinct fresh child ID, fork_turns=none and complete lifecycle; native seat matches throughout. p03 has only a short no-change status and is explicitly exempt from replychecking.",
+    "R2-complete-dispatch": "skipped",
+    "R2_dispatch_reason": "Native spawn/send message field encrypted; actual child reads establish only individually retained material, never whole filled brief.",
+    "native_seats_match": true,
+    "native_service_error_count": 0,
+    "child_roles": [
+      "source_check_1",
+      "source_check_2"
+    ],
+    "correction_budget": "skipped",
+    "corrections_observed": 0,
+    "side_effect_classification": "transport-facts.json for Redline; filesystem-changes.json and deterministic-facts.json for Write: every writable root, native home/cache vs Skill work/scratch classified.",
+    "write-last-check": "pass",
+    "write-last-check_reason": "Actual second source-check draft complete bytes retained/read and exact delivered prose matches, with only leading handoff metadata excluded; known findings/reply proposals are separate from delivered artifact."
+  },
+  "p02": {
+    "O1": "pass",
+    "O1_reason": "Actual requested response/file target, unchanged source/install, no unauthorised final work/scratch effects; short no-change status p03 allowed by contract. Native private-home runtime effects fully inventoried as harness state.",
+    "C-chain": "pass",
+    "C-chain_reason": "Complete distinct private input/output files captured, input frozen and full output actually read; delivered bytes match output where an artifact exists. p03 publication match is not applicable: no text delivered. p02 nested Proofread executes in parent; fresh mechanical subagent is not required by the shipped contract.",
+    "T1-core": "pass",
+    "T1_core_gaps": [],
+    "T1-scope": "pass",
+    "T1_scope_reason": "Observed complete core/checker resources and indexed calls show no established extra prohibited reading; resource match absence is never used as negative proof.",
+    "R2-fresh": "pass",
+    "R2_fresh_reason": "Every observed correction/source/reply checker has a distinct fresh child ID, fork_turns=none and complete lifecycle; native seat matches throughout. p03 has only a short no-change status and is explicitly exempt from replychecking.",
+    "R2-complete-dispatch": "skipped",
+    "R2_dispatch_reason": "Native spawn/send message field encrypted; actual child reads establish only individually retained material, never whole filled brief.",
+    "native_seats_match": true,
+    "native_service_error_count": 0,
+    "child_roles": [
+      "redline_correction",
+      "redline_reply_check"
+    ],
+    "correction_budget": "pass",
+    "corrections_observed": 1,
+    "side_effect_classification": "transport-facts.json for Redline; filesystem-changes.json and deterministic-facts.json for Write: every writable root, native home/cache vs Skill work/scratch classified.",
+    "write-last-check": null
+  },
+  "p03": {
+    "O1": "pass",
+    "O1_reason": "Actual requested response/file target, unchanged source/install, no unauthorised final work/scratch effects; short no-change status p03 allowed by contract. Native private-home runtime effects fully inventoried as harness state.",
+    "C-chain": "pass",
+    "C-chain_reason": "Complete distinct private input/output files captured, input frozen and full output actually read; delivered bytes match output where an artifact exists. p03 publication match is not applicable: no text delivered. p02 nested Proofread executes in parent; fresh mechanical subagent is not required by the shipped contract.",
+    "T1-core": "pass",
+    "T1_core_gaps": [],
+    "T1-scope": "pass",
+    "T1_scope_reason": "Observed complete core/checker resources and indexed calls show no established extra prohibited reading; resource match absence is never used as negative proof.",
+    "R2-fresh": "pass",
+    "R2_fresh_reason": "Every observed correction/source/reply checker has a distinct fresh child ID, fork_turns=none and complete lifecycle; native seat matches throughout. p03 has only a short no-change status and is explicitly exempt from replychecking.",
+    "R2-complete-dispatch": "skipped",
+    "R2_dispatch_reason": "Native spawn/send message field encrypted; actual child reads establish only individually retained material, never whole filled brief.",
+    "native_seats_match": true,
+    "native_service_error_count": 0,
+    "child_roles": [
+      "mechanical_pass"
+    ],
+    "correction_budget": "pass",
+    "corrections_observed": 0,
+    "side_effect_classification": "transport-facts.json for Redline; filesystem-changes.json and deterministic-facts.json for Write: every writable root, native home/cache vs Skill work/scratch classified.",
+    "write-last-check": null
+  },
+  "p01": {
+    "O1": "pass",
+    "O1_reason": "Actual requested response/file target, unchanged source/install, no unauthorised final work/scratch effects; short no-change status p03 allowed by contract. Native private-home runtime effects fully inventoried as harness state.",
+    "C-chain": "pass",
+    "C-chain_reason": "Complete distinct private input/output files captured, input frozen and full output actually read; delivered bytes match output where an artifact exists. p03 publication match is not applicable: no text delivered. p02 nested Proofread executes in parent; fresh mechanical subagent is not required by the shipped contract.",
+    "T1-core": "pass",
+    "T1_core_gaps": [],
+    "T1-scope": "fail",
+    "T1_scope_reason": "Actual replychecker returned forbidden preceding base paragraph words and/or next delivery heading; exact passages and ordinals in reply-scope-facts.",
+    "R2-fresh": "pass",
+    "R2_fresh_reason": "Every observed correction/source/reply checker has a distinct fresh child ID, fork_turns=none and complete lifecycle; native seat matches throughout. p03 has only a short no-change status and is explicitly exempt from replychecking.",
+    "R2-complete-dispatch": "skipped",
+    "R2_dispatch_reason": "Native spawn/send message field encrypted; actual child reads establish only individually retained material, never whole filled brief.",
+    "native_seats_match": true,
+    "native_service_error_count": 0,
+    "child_roles": [
+      "correction_1",
+      "mechanical_pass",
+      "reply_check"
+    ],
+    "correction_budget": "pass",
+    "corrections_observed": 1,
+    "side_effect_classification": "transport-facts.json for Redline; filesystem-changes.json and deterministic-facts.json for Write: every writable root, native home/cache vs Skill work/scratch classified.",
+    "write-last-check": null
+  }
+}

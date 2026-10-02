@@ -1,0 +1,38 @@
+{
+  "source_head": "4e88c6e0d1385c52eb9e5fa82d56a52b9a89f248",
+  "integration_base": "5b0260283b1d1597ca1ed2dddc602888dac7119d",
+  "measured_revision": "fb16908712c4d47a36fc6ee9dfb3eb2714a19e65",
+  "copied_digest_entries_verified": 1062,
+  "record_entries_verified": 35,
+  "exported_product_files_verified_per_run": 83,
+  "counted_runs": 20,
+  "delivered_artifacts": 19,
+  "counted_parents": 20,
+  "counted_children": 54,
+  "all_retained_native_sessions": 86,
+  "native_invocations_including_judges": 29,
+  "construction_refusals": 5,
+  "not_invoked": 8,
+  "voids": 2,
+  "negative_targets": {
+    "fail": 3,
+    "disputed": 1,
+    "pass": 2
+  },
+  "positive_targets": {
+    "fail": 1,
+    "pass": 7
+  },
+  "translation_targets": {
+    "pass": 3
+  },
+  "pair_targets": {
+    "pass": 2,
+    "skipped": 1
+  },
+  "limits": [
+    "This verifies retained transport, identity, source integrity and counts; it does not rejudge prose or decrypt dispatches.",
+    "Original 100-ms sampling and resource-read gaps remain.",
+    "All raw verdicts stay unchanged; residual contract review is in residual-handoff.md."
+  ]
+}
