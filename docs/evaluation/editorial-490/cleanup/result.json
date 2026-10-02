@@ -1,0 +1,6 @@
+{
+  "registered_processes_remaining": 0,
+  "scratch_children_remaining": [],
+  "scratch_root_preserved": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-0125775d",
+  "cleanup_note": "All created children removed with literal paths using rm -r after evidence was copied; the forced removal form was rejected before execution."
+}

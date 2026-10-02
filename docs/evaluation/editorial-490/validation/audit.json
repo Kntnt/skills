@@ -1,0 +1,21 @@
+{
+  "frozen_bytes_preserved": true,
+  "native_identities": {
+    "validation/q1/a/identity-audit.json": true,
+    "validation/q1/b/identity-audit.json": true,
+    "validation/q2/a/identity-audit.json": true,
+    "validation/q2/b/identity-audit.json": true,
+    "validation/q5/a/identity-audit.json": true,
+    "validation/q5/b/identity-audit.json": true,
+    "validation/q4/a/identity-audit.json": true,
+    "validation/q4/b/identity-audit.json": true,
+    "validation/q3/a/identity-audit.json": true,
+    "validation/q3/b/identity-audit.json": true
+  },
+  "count": 10,
+  "product_revision": "4cf05813f94c2fa7147898878027835e14d29859",
+  "freeze_commits": [
+    "41773ae9",
+    "55c7ace2"
+  ]
+}

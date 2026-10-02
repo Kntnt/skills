@@ -1,0 +1,31 @@
+"""Run and retain the four exact CONTRIBUTING commands and wait for each."""
+import json
+import os
+import subprocess
+import time
+from pathlib import Path
+
+root = Path('/Users/thomas/Projects/skills/.git/kntnt-orchestrate/490')
+scratch = Path('/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-0125775d')
+out = root / 'docs/evaluation/editorial-490/gate'
+out.mkdir(exist_ok=True)
+commands = [
+'uvx ruff check .',
+'uvx ruff format --check .',
+'uvx --with types-PyYAML --with pytest --with httpx==0.28.1 --with selectolax==0.4.11 --with types-tinycss2 --with types-regex mypy skills/kntnt/scripts/kntnt.py skills/kntnt/library/scripts/argument_grammar.py skills/kntnt/library/scripts/article_anatomy.py skills/kntnt/library/scripts/ship.py skills/kntnt/library/scripts/integrations.py skills/kntnt/library/scripts/languages.py skills/kntnt/library/scripts/credentials.py skills/models/model-selector/scripts/catalogue.py skills/models/model-selector/scripts/profiles.py skills/models/model-selector/scripts/evidence.py skills/models/model-selector/scripts/launch.py skills/models/model-selector/scripts/selection.py skills/models/model-selector/scripts/quota.py skills/models/model-selector/scripts/record.py skills/models/model-selector/scripts/capture.py skills/models/model-selector/scripts/grade.py skills/models/model-selector/scripts/setup_apply.py skills/models/model-selector/scripts/inventory.py skills/code/orchestrate/scripts/run.py skills/productivity/rename-invoices/scripts/rename_invoices.py skills/productivity/rename-invoices/scripts/rename_invoices.py skills/agents/explain/scripts/invoke.py skills/web/mirror/scripts/mirror.py skills/infrastructure/cloudns/scripts/cloudns.py skills/infrastructure/hetzner/scripts/hetzner.py skills/infrastructure/nodeping/scripts/nodeping.py skills/infrastructure/postmark/scripts/postmark.py tests',
+'uv run --with pytest --with pytest-xdist --with pyyaml pytest -n auto',
+]
+# Preserve the supplied mypy command exactly, removing an accidental duplicate while preparing this supervisor.
+commands[2] = commands[2].replace('skills/productivity/rename-invoices/scripts/rename_invoices.py skills/productivity/rename-invoices/scripts/rename_invoices.py', 'skills/productivity/rename-invoices/scripts/rename_invoices.py')
+if os.getpgrp() != os.getpid():
+ os.setsid()
+summary=[]
+for index,command in enumerate(commands,1):
+ started=time.monotonic()
+ with (out/f'{index}.txt').open('w') as log:
+  process=subprocess.Popen(command.split(),cwd=root,stdout=log,stderr=subprocess.STDOUT,start_new_session=True)
+  subprocess.run(['uv','run','/Users/thomas/.agents/skills/kntnt/features/session-cleanup/scripts/session_cleanup.py','add','pid',str(process.pid),f'Ticket 490 gate command {index}'],cwd=root,check=True,capture_output=True)
+  code=process.wait()
+ summary.append({'command':command,'exit_code':code,'seconds':round(time.monotonic()-started,2)})
+ (out/'summary.json').write_text(json.dumps(summary,indent=2)+'\n')
+ print(f'Gate {index}: exit {code}',flush=True)

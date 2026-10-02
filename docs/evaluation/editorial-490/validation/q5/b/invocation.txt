@@ -1,0 +1,9 @@
+# Statement validation
+
+Read exactly `text.md` and `reply.md` in the directory supplied below. Independently assess every factual statement the reply makes about that text. Identify the proposition actually asserted, its scope and its predicate. Check it against all the passages its scope covers. A quality judgement is not a factual statement. You receive no expected verdict, intended defect, candidate instruction, ticket, arm or other judge's reading; do not guess or seek them.
+
+Write `validation-<your letter>.md` in that directory. For every statement: quote it; say `true`, `false` or `ambiguous`; give the scope and predicate you tested; quote the passage deciding your answer and explain what is supported. Where it matters, assess whether a passage merely names a subject or explains the particular proposition asserted; do not assume either in advance. Assess any explicitly limited body-only observation within its own scope. Reply with the report path in at most 120 words. Write no other file.
+
+---
+Run directory: /private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-0125775d/tmp/session-npp2akxv/work
+Your letter: b

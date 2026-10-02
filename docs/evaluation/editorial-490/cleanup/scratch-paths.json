@@ -1,0 +1,18 @@
+{
+  "scratch_root": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-0125775d",
+  "created_children_to_remove": [
+    "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-0125775d/cache",
+    "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-0125775d/cleanup-home",
+    "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-0125775d/data",
+    "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-0125775d/gate.py",
+    "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-0125775d/logs",
+    "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-0125775d/materials",
+    "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-0125775d/packets",
+    "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-0125775d/resources.jsonl",
+    "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-0125775d/tmp",
+    "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-0125775d/uv-cache",
+    "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-0125775d/uv-tools"
+  ],
+  "deliverable_evidence_copied_into": "docs/evaluation/editorial-490",
+  "registered_owned_processes_remaining": 0
+}
