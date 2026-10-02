@@ -1,0 +1,536 @@
+{
+  "attempt_id": "ms-20261002-adc76d",
+  "amend": 1,
+  "starting_head": "64d5288ea8d91062f091dd71eb93ced0a379c8ee",
+  "prospective_files": {
+    "docs/evaluation/editorial-491/control-judge-brief-file.md": {
+      "frozen_committed_sha256": "5086a4c1bee9f482b7c8f70a3a54c48ab80faeee660ac5eb31d5ea9e10121b4d",
+      "head_equals_frozen_commit": true,
+      "frozen_commit_matches_manifest": true,
+      "working_sha256": "5086a4c1bee9f482b7c8f70a3a54c48ab80faeee660ac5eb31d5ea9e10121b4d",
+      "working_matches_retained_manifest": true
+    },
+    "docs/evaluation/editorial-491/control-judge-brief.md": {
+      "frozen_committed_sha256": "a7274ec9322729d929a1fdf1b9a5b56da2792e101a7cbe80c8c03413dd70dfef",
+      "head_equals_frozen_commit": true,
+      "frozen_commit_matches_manifest": true,
+      "working_sha256": "a7274ec9322729d929a1fdf1b9a5b56da2792e101a7cbe80c8c03413dd70dfef",
+      "working_matches_retained_manifest": true
+    },
+    "docs/evaluation/editorial-491/harness/campaign.py": {
+      "frozen_committed_sha256": "981ba1f9141f05a71c80483ac3b6eebac4dec4728732927064781a4b16b12dc3",
+      "head_equals_frozen_commit": true,
+      "frozen_commit_matches_manifest": true,
+      "working_sha256": "981ba1f9141f05a71c80483ac3b6eebac4dec4728732927064781a4b16b12dc3",
+      "working_matches_retained_manifest": true
+    },
+    "docs/evaluation/editorial-491/harness/env.sh": {
+      "frozen_committed_sha256": "f79b033d091b4e0075a950986f151ef65fcfde1fe1c495732f73b4016ac817d7",
+      "head_equals_frozen_commit": true,
+      "frozen_commit_matches_manifest": true,
+      "working_sha256": "f79b033d091b4e0075a950986f151ef65fcfde1fe1c495732f73b4016ac817d7",
+      "working_matches_retained_manifest": true
+    },
+    "docs/evaluation/editorial-491/harness/run.py": {
+      "frozen_committed_sha256": "3e5e3e6ef0b4b2f132930219f30857041b1e0d896e8d8b1beffd0b8a6fab0eeb",
+      "head_equals_frozen_commit": true,
+      "frozen_commit_matches_manifest": true,
+      "working_sha256": "3e5e3e6ef0b4b2f132930219f30857041b1e0d896e8d8b1beffd0b8a6fab0eeb",
+      "working_matches_retained_manifest": true
+    },
+    "docs/evaluation/editorial-491/inputs/case-study-clean.expectation.md": {
+      "frozen_committed_sha256": "2c0b5ae6729252fca6e9a068a4c545459e5379a0a958c56fa19c776ac7cc5b7d",
+      "head_equals_frozen_commit": true,
+      "frozen_commit_matches_manifest": true,
+      "working_sha256": "2c0b5ae6729252fca6e9a068a4c545459e5379a0a958c56fa19c776ac7cc5b7d",
+      "working_matches_retained_manifest": true
+    },
+    "docs/evaluation/editorial-491/inputs/case-study-clean.md": {
+      "frozen_committed_sha256": "2e4ef2fd4b7c03aaaceca1ad22724fdb1ed3c685cd6b4995a00285198bed42f9",
+      "head_equals_frozen_commit": true,
+      "frozen_commit_matches_manifest": true,
+      "working_sha256": "2e4ef2fd4b7c03aaaceca1ad22724fdb1ed3c685cd6b4995a00285198bed42f9",
+      "working_matches_retained_manifest": true
+    },
+    "docs/evaluation/editorial-491/inputs/case-study-flawed.expectation.md": {
+      "frozen_committed_sha256": "a645fd6add028dcee3402f526a5083fb5be929b516857d3775eb0c1417730b43",
+      "head_equals_frozen_commit": true,
+      "frozen_commit_matches_manifest": true,
+      "working_sha256": "a645fd6add028dcee3402f526a5083fb5be929b516857d3775eb0c1417730b43",
+      "working_matches_retained_manifest": true
+    },
+    "docs/evaluation/editorial-491/inputs/case-study-flawed.md": {
+      "frozen_committed_sha256": "ce574061bd09328ed80109a3cca07875683c2fd77d55f41d5631dc2cdcb18767",
+      "head_equals_frozen_commit": true,
+      "frozen_commit_matches_manifest": true,
+      "working_sha256": "ce574061bd09328ed80109a3cca07875683c2fd77d55f41d5631dc2cdcb18767",
+      "working_matches_retained_manifest": true
+    },
+    "docs/evaluation/editorial-491/inputs/supported-appraisal.expectation.md": {
+      "frozen_committed_sha256": "13d23be034923fb9d625e9b41d198907eae98551b306cf53f5fdc0509a13ff0d",
+      "head_equals_frozen_commit": true,
+      "frozen_commit_matches_manifest": true,
+      "working_sha256": "13d23be034923fb9d625e9b41d198907eae98551b306cf53f5fdc0509a13ff0d",
+      "working_matches_retained_manifest": true
+    },
+    "docs/evaluation/editorial-491/inputs/supported-appraisal.md": {
+      "frozen_committed_sha256": "9297359338e7132a3f4f89dd5ba29c87c912d02a715d19d9f83b106c9be44ac1",
+      "head_equals_frozen_commit": true,
+      "frozen_commit_matches_manifest": true,
+      "working_sha256": "9297359338e7132a3f4f89dd5ba29c87c912d02a715d19d9f83b106c9be44ac1",
+      "working_matches_retained_manifest": true
+    },
+    "docs/evaluation/editorial-491/inputs/unresolved-referent.expectation.md": {
+      "frozen_committed_sha256": "0cd64fded61ad05cf1a3a27ef05cb382d549bf186c3bf4e66d461db492cd03f7",
+      "head_equals_frozen_commit": true,
+      "frozen_commit_matches_manifest": true,
+      "working_sha256": "0cd64fded61ad05cf1a3a27ef05cb382d549bf186c3bf4e66d461db492cd03f7",
+      "working_matches_retained_manifest": true
+    },
+    "docs/evaluation/editorial-491/inputs/unresolved-referent.md": {
+      "frozen_committed_sha256": "15b7da484b29363361e7b06449a810581015f6cd2a7116e79ac61d830737b326",
+      "head_equals_frozen_commit": true,
+      "frozen_commit_matches_manifest": true,
+      "working_sha256": "15b7da484b29363361e7b06449a810581015f6cd2a7116e79ac61d830737b326",
+      "working_matches_retained_manifest": true
+    },
+    "docs/evaluation/editorial-491/inputs/unsupported-attribution.expectation.md": {
+      "frozen_committed_sha256": "fa6c1f86de3df75813600e6361b2563d566945ae28967816f73a2aa42be835ed",
+      "head_equals_frozen_commit": true,
+      "frozen_commit_matches_manifest": true,
+      "working_sha256": "fa6c1f86de3df75813600e6361b2563d566945ae28967816f73a2aa42be835ed",
+      "working_matches_retained_manifest": true
+    },
+    "docs/evaluation/editorial-491/inputs/unsupported-attribution.md": {
+      "frozen_committed_sha256": "6a85566b0fa64ca8a943672e0d907e550f57ff7b548c491db5af2c61ce442316",
+      "head_equals_frozen_commit": true,
+      "frozen_commit_matches_manifest": true,
+      "working_sha256": "6a85566b0fa64ca8a943672e0d907e550f57ff7b548c491db5af2c61ce442316",
+      "working_matches_retained_manifest": true
+    },
+    "docs/evaluation/editorial-491/plan.md": {
+      "frozen_committed_sha256": "604d43b17f0a45843769a83722ff5825d74d051937f5868349be9eb9b570caa1",
+      "head_equals_frozen_commit": true,
+      "frozen_commit_matches_manifest": true,
+      "working_sha256": "604d43b17f0a45843769a83722ff5825d74d051937f5868349be9eb9b570caa1",
+      "working_matches_retained_manifest": true
+    },
+    "docs/evaluation/editorial-491/runs/matrix.tsv": {
+      "frozen_committed_sha256": "732050f5cc8099cb3612a3d3a7053d36b30e8f405d3718e771eca1e698fe9538",
+      "head_equals_frozen_commit": true,
+      "frozen_commit_matches_manifest": true,
+      "working_sha256": "b585de2aa262c28e1b2894dfe644d2b3bdca7ee2249180bf859aa678f2c8fa87",
+      "working_matches_retained_manifest": true
+    },
+    "docs/evaluation/editorial-491/validation-brief.md": {
+      "frozen_committed_sha256": "5685775a0bb04f4249a8ca23092c644352cb78161b45df80c88c4430b0a80518",
+      "head_equals_frozen_commit": true,
+      "frozen_commit_matches_manifest": true,
+      "working_sha256": "5685775a0bb04f4249a8ca23092c644352cb78161b45df80c88c4430b0a80518",
+      "working_matches_retained_manifest": true
+    }
+  },
+  "validation_packets": {
+    "supported-appraisal-a": {
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 308.64,
+        "root": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-42b5836c/tmp/session-f0u4m1eq",
+        "cleanup_required": true
+      },
+      "report_sha256": {
+        "validation-a.md": "a38c23330672d00c29bb9c83b67e5f74119f77dfbba4c99748af5e6618fe6726"
+      }
+    },
+    "supported-appraisal-b": {
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 229.32,
+        "root": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-42b5836c/tmp/session-7lb4tx0b",
+        "cleanup_required": true
+      },
+      "report_sha256": {
+        "validation-b.md": "d3dba4a8ea26fca1233cbefe52f799476e7023dcb7fce4b805f0ff6c54b090e5"
+      }
+    },
+    "unresolved-referent-a": {
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 236.98,
+        "root": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-42b5836c/tmp/session-vlctr94n",
+        "cleanup_required": true
+      },
+      "report_sha256": {
+        "validation-a.md": "26278ff801caf9b794212fc5a09939cc606c88373431aa94230678a417994ac3"
+      }
+    },
+    "unresolved-referent-b": {
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 201.7,
+        "root": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-42b5836c/tmp/session-lcecwdh0",
+        "cleanup_required": true
+      },
+      "report_sha256": {
+        "validation-b.md": "fca5b13eb99a3d06df741dd4ee721612ff6838ec8e4211e070ca027eedef5809"
+      }
+    },
+    "unsupported-attribution-a": {
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 250.4,
+        "root": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-42b5836c/tmp/session-7qp174uc",
+        "cleanup_required": true
+      },
+      "report_sha256": {
+        "validation-a.md": "9cf26844e169a65495daee733e8d282e4392abe595372e41d5ac0fc9345d86cd"
+      }
+    },
+    "unsupported-attribution-b": {
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 334.3,
+        "root": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-42b5836c/tmp/session-mzskdaik",
+        "cleanup_required": true
+      },
+      "report_sha256": {
+        "validation-b.md": "e2f1ecbad3a8a5a036d8a5f049bd48b9b656700c495c7074b57f8270d9bab85a"
+      }
+    }
+  },
+  "baseline_rows": [
+    {
+      "run": "pre-case-study-clean-resp-1",
+      "lane": "0",
+      "revision": "4cf05813f94c2fa7147898878027835e14d29859",
+      "input": "docs/evaluation/editorial-491/inputs/case-study-clean.md",
+      "invocation": "/redline --genre=casestudy --language=sv --output=response input.md",
+      "capture": "no"
+    },
+    {
+      "run": "pre-case-study-clean-file-1",
+      "lane": "0",
+      "revision": "4cf05813f94c2fa7147898878027835e14d29859",
+      "input": "docs/evaluation/editorial-491/inputs/case-study-clean.md",
+      "invocation": "/redline --genre=casestudy --language=sv --output=output.md input.md",
+      "capture": "yes"
+    },
+    {
+      "run": "pre-case-study-clean-resp-2",
+      "lane": "0",
+      "revision": "4cf05813f94c2fa7147898878027835e14d29859",
+      "input": "docs/evaluation/editorial-491/inputs/case-study-clean.md",
+      "invocation": "/redline --genre=casestudy --language=sv --output=response input.md",
+      "capture": "no"
+    },
+    {
+      "run": "pre-case-study-clean-file-2",
+      "lane": "0",
+      "revision": "4cf05813f94c2fa7147898878027835e14d29859",
+      "input": "docs/evaluation/editorial-491/inputs/case-study-clean.md",
+      "invocation": "/redline --genre=casestudy --language=sv --output=output.md input.md",
+      "capture": "yes"
+    },
+    {
+      "run": "pre-case-study-clean-resp-3",
+      "lane": "0",
+      "revision": "4cf05813f94c2fa7147898878027835e14d29859",
+      "input": "docs/evaluation/editorial-491/inputs/case-study-clean.md",
+      "invocation": "/redline --genre=casestudy --language=sv --output=response input.md",
+      "capture": "no"
+    },
+    {
+      "run": "pre-case-study-clean-file-3",
+      "lane": "0",
+      "revision": "4cf05813f94c2fa7147898878027835e14d29859",
+      "input": "docs/evaluation/editorial-491/inputs/case-study-clean.md",
+      "invocation": "/redline --genre=casestudy --language=sv --output=output.md input.md",
+      "capture": "yes"
+    },
+    {
+      "run": "pre-case-study-flawed-resp-1",
+      "lane": "1",
+      "revision": "4cf05813f94c2fa7147898878027835e14d29859",
+      "input": "docs/evaluation/editorial-491/inputs/case-study-flawed.md",
+      "invocation": "/redline --genre=casestudy --language=sv --output=response input.md",
+      "capture": "no"
+    },
+    {
+      "run": "pre-case-study-flawed-resp-2",
+      "lane": "1",
+      "revision": "4cf05813f94c2fa7147898878027835e14d29859",
+      "input": "docs/evaluation/editorial-491/inputs/case-study-flawed.md",
+      "invocation": "/redline --genre=casestudy --language=sv --output=response input.md",
+      "capture": "no"
+    },
+    {
+      "run": "pre-supported-appraisal-resp-1",
+      "lane": "2",
+      "revision": "4cf05813f94c2fa7147898878027835e14d29859",
+      "input": "docs/evaluation/editorial-491/inputs/supported-appraisal.md",
+      "invocation": "/redline --genre=casestudy --language=sv --output=response input.md",
+      "capture": "no"
+    },
+    {
+      "run": "pre-supported-appraisal-file-1",
+      "lane": "2",
+      "revision": "4cf05813f94c2fa7147898878027835e14d29859",
+      "input": "docs/evaluation/editorial-491/inputs/supported-appraisal.md",
+      "invocation": "/redline --genre=casestudy --language=sv --output=output.md input.md",
+      "capture": "yes"
+    },
+    {
+      "run": "pre-unsupported-attribution-resp-1",
+      "lane": "3",
+      "revision": "4cf05813f94c2fa7147898878027835e14d29859",
+      "input": "docs/evaluation/editorial-491/inputs/unsupported-attribution.md",
+      "invocation": "/redline --genre=casestudy --language=sv --output=response input.md",
+      "capture": "no"
+    },
+    {
+      "run": "pre-unsupported-attribution-file-1",
+      "lane": "3",
+      "revision": "4cf05813f94c2fa7147898878027835e14d29859",
+      "input": "docs/evaluation/editorial-491/inputs/unsupported-attribution.md",
+      "invocation": "/redline --genre=casestudy --language=sv --output=output.md input.md",
+      "capture": "yes"
+    },
+    {
+      "run": "pre-unresolved-referent-resp-1",
+      "lane": "4",
+      "revision": "4cf05813f94c2fa7147898878027835e14d29859",
+      "input": "docs/evaluation/editorial-491/inputs/unresolved-referent.md",
+      "invocation": "/redline --genre=casestudy --language=sv --output=response input.md",
+      "capture": "no"
+    },
+    {
+      "run": "pre-unresolved-referent-file-1",
+      "lane": "4",
+      "revision": "4cf05813f94c2fa7147898878027835e14d29859",
+      "input": "docs/evaluation/editorial-491/inputs/unresolved-referent.md",
+      "invocation": "/redline --genre=casestudy --language=sv --output=output.md input.md",
+      "capture": "yes"
+    }
+  ],
+  "record_unstarted_entries": 28,
+  "redline_delivered_output_paths": [],
+  "prior_ticket_owned_files_sha256": {
+    ".kntnt-orchestrate/491.md": "0f3543eb91d2fea224072c48524de1b1b9e95d437f4c92a5a1dfc788acee2d3a",
+    "docs/evaluation/editorial-491/checks/cleanup-plan.json": "6c8170260b350be3420bfaf6fc0624c3e1dc0487b20492b0f006a7ea27f62062",
+    "docs/evaluation/editorial-491/checks/cleanup.json": "869fe2eef2470b5dadd23494a0832870c62c61b5a53737e5953aae573d8f709e",
+    "docs/evaluation/editorial-491/checks/gate-1.log": "3d0fe4dd4d9524e5cc904b4d7d6353fa668bb68911d129c0148c1f497dc1cc79",
+    "docs/evaluation/editorial-491/checks/gate-2.log": "8cbf2175d135ad84b2b472b6ae984a36a23c87f9cb56f1643f59f91f1c349614",
+    "docs/evaluation/editorial-491/checks/gate-3.log": "c156fb09d00af544d0265d8d495c65086a7bda4d57155ea18ca397b245d86d84",
+    "docs/evaluation/editorial-491/checks/gate-4.log": "fc30123a603cd753fa9f4ccad80111c8cb77d8eb5d16263caf0dde2dab43a736",
+    "docs/evaluation/editorial-491/checks/gate-commands.json": "f16f8e862d8eaca5e4cbfa82ba8a4ce9ce11d1e28a02b28b93b10ba3e5cb6984",
+    "docs/evaluation/editorial-491/checks/gate-results.json": "40c0ae76da2f41c78fbf006da14ca5d00372859f7f8c21c1a40b74076f5a0d0a",
+    "docs/evaluation/editorial-491/checks/pre-cleanup-processes.json": "8d1f421cd4c7ab8376a9b39dc9973ef9d3973a1deac6d41aef4174f97cbf91a0",
+    "docs/evaluation/editorial-491/checks/preservation.json": "070fb9497740031964c4386bc7ce7ecb6f1524c456e78599fb7823d97d2cca55",
+    "docs/evaluation/editorial-491/checks/resource-ledger.jsonl": "10eedf6d7d45dce2b5ab858d4798c8631f7df763db6f2e96dff4538a024c1608",
+    "docs/evaluation/editorial-491/checks/supported-anatomy.json": "4c3a77a895468c2e78a8f7c4672ed8bcda43f2a4d66f1a4de81eb10ce505633d",
+    "docs/evaluation/editorial-491/checks/validation-audit.json": "54a5ff707316aa4e7e5f63792dac67846f948f3e689ecd556b75849166fc968b",
+    "docs/evaluation/editorial-491/control-judge-brief-file.md": "5086a4c1bee9f482b7c8f70a3a54c48ab80faeee660ac5eb31d5ea9e10121b4d",
+    "docs/evaluation/editorial-491/control-judge-brief.md": "a7274ec9322729d929a1fdf1b9a5b56da2792e101a7cbe80c8c03413dd70dfef",
+    "docs/evaluation/editorial-491/freeze.json": "687f6f83be02ee64edb8c12e9a49db5b8b38a4ce61d80e7b95be1241cb424a58",
+    "docs/evaluation/editorial-491/harness/campaign.py": "981ba1f9141f05a71c80483ac3b6eebac4dec4728732927064781a4b16b12dc3",
+    "docs/evaluation/editorial-491/harness/env.sh": "f79b033d091b4e0075a950986f151ef65fcfde1fe1c495732f73b4016ac817d7",
+    "docs/evaluation/editorial-491/harness/run.py": "3e5e3e6ef0b4b2f132930219f30857041b1e0d896e8d8b1beffd0b8a6fab0eeb",
+    "docs/evaluation/editorial-491/inputs/case-study-clean.expectation.md": "2c0b5ae6729252fca6e9a068a4c545459e5379a0a958c56fa19c776ac7cc5b7d",
+    "docs/evaluation/editorial-491/inputs/case-study-clean.md": "2e4ef2fd4b7c03aaaceca1ad22724fdb1ed3c685cd6b4995a00285198bed42f9",
+    "docs/evaluation/editorial-491/inputs/case-study-flawed.expectation.md": "a645fd6add028dcee3402f526a5083fb5be929b516857d3775eb0c1417730b43",
+    "docs/evaluation/editorial-491/inputs/case-study-flawed.md": "ce574061bd09328ed80109a3cca07875683c2fd77d55f41d5631dc2cdcb18767",
+    "docs/evaluation/editorial-491/inputs/supported-appraisal.expectation.md": "13d23be034923fb9d625e9b41d198907eae98551b306cf53f5fdc0509a13ff0d",
+    "docs/evaluation/editorial-491/inputs/supported-appraisal.md": "9297359338e7132a3f4f89dd5ba29c87c912d02a715d19d9f83b106c9be44ac1",
+    "docs/evaluation/editorial-491/inputs/unresolved-referent.expectation.md": "0cd64fded61ad05cf1a3a27ef05cb382d549bf186c3bf4e66d461db492cd03f7",
+    "docs/evaluation/editorial-491/inputs/unresolved-referent.md": "15b7da484b29363361e7b06449a810581015f6cd2a7116e79ac61d830737b326",
+    "docs/evaluation/editorial-491/inputs/unsupported-attribution.expectation.md": "fa6c1f86de3df75813600e6361b2563d566945ae28967816f73a2aa42be835ed",
+    "docs/evaluation/editorial-491/inputs/unsupported-attribution.md": "6a85566b0fa64ca8a943672e0d907e550f57ff7b548c491db5af2c61ce442316",
+    "docs/evaluation/editorial-491/plan.md": "604d43b17f0a45843769a83722ff5825d74d051937f5868349be9eb9b570caa1",
+    "docs/evaluation/editorial-491/results.md": "5083136f830add3feac319b9268c2dc27eeb6b31c83ac7da70992dcef12738f6",
+    "docs/evaluation/editorial-491/runs/matrix.tsv": "b585de2aa262c28e1b2894dfe644d2b3bdca7ee2249180bf859aa678f2c8fa87",
+    "docs/evaluation/editorial-491/runs/waves/validation-after-repo.json": "325653b996265972ac8e7d15d671b862dbd65a78eb5ade5fe8157da7fa2cfd3f",
+    "docs/evaluation/editorial-491/runs/waves/validation-after-scratch.json": "2735881b0e8efcf7ff2ae96d5adf8ec4aa5985cc278ff12ed770f508bf3a2c9f",
+    "docs/evaluation/editorial-491/runs/waves/validation-before-repo.json": "1cb2775c53419e4221211827e4962a2dec48205d4dbbfbde7877f2bf12a93efb",
+    "docs/evaluation/editorial-491/runs/waves/validation-before-scratch.json": "a359dac1a31361ed1bab4d3750a47bb487ed7cd267c1f6bfcdc38b8d498e95f1",
+    "docs/evaluation/editorial-491/validation-brief.md": "5685775a0bb04f4249a8ca23092c644352cb78161b45df80c88c4430b0a80518",
+    "docs/evaluation/editorial-491/validation/supported-appraisal-a/file-versions.json": "e23579d7abfcf4f7801f57fc08eadd1b2117c6db76487857744968400fe0d9fb",
+    "docs/evaluation/editorial-491/validation/supported-appraisal-a/file-versions/11be8cc4a9d009f59f78dedfe9a0059c681ca0d8f23bd37f36ef0486a74f1257.md": "11be8cc4a9d009f59f78dedfe9a0059c681ca0d8f23bd37f36ef0486a74f1257",
+    "docs/evaluation/editorial-491/validation/supported-appraisal-a/file-versions/9297359338e7132a3f4f89dd5ba29c87c912d02a715d19d9f83b106c9be44ac1.md": "9297359338e7132a3f4f89dd5ba29c87c912d02a715d19d9f83b106c9be44ac1",
+    "docs/evaluation/editorial-491/validation/supported-appraisal-a/file-versions/a38c23330672d00c29bb9c83b67e5f74119f77dfbba4c99748af5e6618fe6726.md": "a38c23330672d00c29bb9c83b67e5f74119f77dfbba4c99748af5e6618fe6726",
+    "docs/evaluation/editorial-491/validation/supported-appraisal-a/file-versions/a39054321cbd35819cfd8ac7d2823dd3d56550a6ee2d1c6ee3b30f9daaa16cc5.md": "a39054321cbd35819cfd8ac7d2823dd3d56550a6ee2d1c6ee3b30f9daaa16cc5",
+    "docs/evaluation/editorial-491/validation/supported-appraisal-a/file-versions/a7db10d0dc1970064a8887c819a8500dfdecf43dcb45fffed32994921ceb68a4.md": "a7db10d0dc1970064a8887c819a8500dfdecf43dcb45fffed32994921ceb68a4",
+    "docs/evaluation/editorial-491/validation/supported-appraisal-a/file-versions/adfb7ca612905afee03a73d58cdb07de9d0877b23af9de89f7e114f6de81df5f.md": "adfb7ca612905afee03a73d58cdb07de9d0877b23af9de89f7e114f6de81df5f",
+    "docs/evaluation/editorial-491/validation/supported-appraisal-a/file-versions/b1ac5867d30952c3ca78da244520ab28c025102f4389f44ec206757a29f05371.md": "b1ac5867d30952c3ca78da244520ab28c025102f4389f44ec206757a29f05371",
+    "docs/evaluation/editorial-491/validation/supported-appraisal-a/file-versions/c075c6fe7494dbcdc43d6af599c55ab8fc52fc48d7ed1b6cc26eca7a592cecd7.md": "c075c6fe7494dbcdc43d6af599c55ab8fc52fc48d7ed1b6cc26eca7a592cecd7",
+    "docs/evaluation/editorial-491/validation/supported-appraisal-a/file-versions/d2c838c19a692104be247afd227b0baed98f3156be059c0a982ecae3513fa0ca.md": "d2c838c19a692104be247afd227b0baed98f3156be059c0a982ecae3513fa0ca",
+    "docs/evaluation/editorial-491/validation/supported-appraisal-a/file-versions/d4146ef134de7482e25469201aaceed7b207fba9f8bacb06a428b85f6bfc3581.md": "d4146ef134de7482e25469201aaceed7b207fba9f8bacb06a428b85f6bfc3581",
+    "docs/evaluation/editorial-491/validation/supported-appraisal-a/filesystem-changes.json": "ceebcef1e8604b6c5c7503bdc1205fd3ecdadf53eb1e27ec5761829290d80c33",
+    "docs/evaluation/editorial-491/validation/supported-appraisal-a/harness-config-after.toml": "6c3144f9716f84058fa84c3bc9b4445f1772a46a053d93d45c52299452e5da87",
+    "docs/evaluation/editorial-491/validation/supported-appraisal-a/identity-audit.json": "d7045f0ae15c2c346a194a4b6f4b380c92b8aa7f8b432054cba3dc0ff7ed3b51",
+    "docs/evaluation/editorial-491/validation/supported-appraisal-a/input-stat.json": "2021873d9def1cfe42d28750d67b2c5d97ea24c7e2f0aae7905ded09ab81c3ea",
+    "docs/evaluation/editorial-491/validation/supported-appraisal-a/inventory-after.json": "9f8b4f09ead4b0de2106c66dbda67f76647f5bf4980e447c3a36f30235d8acc2",
+    "docs/evaluation/editorial-491/validation/supported-appraisal-a/inventory-before.json": "3e6603ff78162753ed27b364d1ff35602306efb57ef1b03d70f5fc08377c46bd",
+    "docs/evaluation/editorial-491/validation/supported-appraisal-a/invocation.txt": "c0b9de8f46aa5cd24e4c3f07738629ccc6ffa39419f3b8e2ac3cd75f256bf1b7",
+    "docs/evaluation/editorial-491/validation/supported-appraisal-a/location.json": "ff73c5873620d4317e8500f7ea95221e2309f285a537e3342e7d3c6296342c5d",
+    "docs/evaluation/editorial-491/validation/supported-appraisal-a/native-sessions/2026/10/02/rollout-2026-10-02T20-08-09-01a0fdcd-59e2-7372-baf7-f6b890679176.jsonl.gz": "505a9f33e9566cc68957482cd2066e15bb5a6c1b2b91c14f62d1a77c2aa19be7",
+    "docs/evaluation/editorial-491/validation/supported-appraisal-a/process.json": "fdd581ea5fc4cbde418708fe3bd6a890cd96c97a291784b7f0a182bb9b477217",
+    "docs/evaluation/editorial-491/validation/supported-appraisal-a/response.txt": "b1391894cdcfe42a18d4b1a56b12acb72206d24810a8d37490812b2eb0032bf1",
+    "docs/evaluation/editorial-491/validation/supported-appraisal-a/result.json": "f80d2c7a13a5dd98931b3c889baa93cbbf0096b19396439ca53beb2aea594c0b",
+    "docs/evaluation/editorial-491/validation/supported-appraisal-a/run.json": "b833ae5b4940fa146b27af7e90535d33438fede565e940ff72ef8b2975ca93bd",
+    "docs/evaluation/editorial-491/validation/supported-appraisal-a/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "docs/evaluation/editorial-491/validation/supported-appraisal-a/supplied-input.md": "9297359338e7132a3f4f89dd5ba29c87c912d02a715d19d9f83b106c9be44ac1",
+    "docs/evaluation/editorial-491/validation/supported-appraisal-a/trace.jsonl.gz": "0b06701989c09f8cae98d9c1614da313bab6c85755f39589df5bfdcbafd8b08e",
+    "docs/evaluation/editorial-491/validation/supported-appraisal-a/validation-a.md": "a38c23330672d00c29bb9c83b67e5f74119f77dfbba4c99748af5e6618fe6726",
+    "docs/evaluation/editorial-491/validation/supported-appraisal-b/file-versions.json": "fc27c913bad35af4ca5a8ee7ba1a84b53e15730d579f9d70ca825e7a6a4d6cc1",
+    "docs/evaluation/editorial-491/validation/supported-appraisal-b/file-versions/11be8cc4a9d009f59f78dedfe9a0059c681ca0d8f23bd37f36ef0486a74f1257.md": "11be8cc4a9d009f59f78dedfe9a0059c681ca0d8f23bd37f36ef0486a74f1257",
+    "docs/evaluation/editorial-491/validation/supported-appraisal-b/file-versions/9297359338e7132a3f4f89dd5ba29c87c912d02a715d19d9f83b106c9be44ac1.md": "9297359338e7132a3f4f89dd5ba29c87c912d02a715d19d9f83b106c9be44ac1",
+    "docs/evaluation/editorial-491/validation/supported-appraisal-b/file-versions/a39054321cbd35819cfd8ac7d2823dd3d56550a6ee2d1c6ee3b30f9daaa16cc5.md": "a39054321cbd35819cfd8ac7d2823dd3d56550a6ee2d1c6ee3b30f9daaa16cc5",
+    "docs/evaluation/editorial-491/validation/supported-appraisal-b/file-versions/a7db10d0dc1970064a8887c819a8500dfdecf43dcb45fffed32994921ceb68a4.md": "a7db10d0dc1970064a8887c819a8500dfdecf43dcb45fffed32994921ceb68a4",
+    "docs/evaluation/editorial-491/validation/supported-appraisal-b/file-versions/adfb7ca612905afee03a73d58cdb07de9d0877b23af9de89f7e114f6de81df5f.md": "adfb7ca612905afee03a73d58cdb07de9d0877b23af9de89f7e114f6de81df5f",
+    "docs/evaluation/editorial-491/validation/supported-appraisal-b/file-versions/b1ac5867d30952c3ca78da244520ab28c025102f4389f44ec206757a29f05371.md": "b1ac5867d30952c3ca78da244520ab28c025102f4389f44ec206757a29f05371",
+    "docs/evaluation/editorial-491/validation/supported-appraisal-b/file-versions/c075c6fe7494dbcdc43d6af599c55ab8fc52fc48d7ed1b6cc26eca7a592cecd7.md": "c075c6fe7494dbcdc43d6af599c55ab8fc52fc48d7ed1b6cc26eca7a592cecd7",
+    "docs/evaluation/editorial-491/validation/supported-appraisal-b/file-versions/d2c838c19a692104be247afd227b0baed98f3156be059c0a982ecae3513fa0ca.md": "d2c838c19a692104be247afd227b0baed98f3156be059c0a982ecae3513fa0ca",
+    "docs/evaluation/editorial-491/validation/supported-appraisal-b/file-versions/d3dba4a8ea26fca1233cbefe52f799476e7023dcb7fce4b805f0ff6c54b090e5.md": "d3dba4a8ea26fca1233cbefe52f799476e7023dcb7fce4b805f0ff6c54b090e5",
+    "docs/evaluation/editorial-491/validation/supported-appraisal-b/file-versions/d4146ef134de7482e25469201aaceed7b207fba9f8bacb06a428b85f6bfc3581.md": "d4146ef134de7482e25469201aaceed7b207fba9f8bacb06a428b85f6bfc3581",
+    "docs/evaluation/editorial-491/validation/supported-appraisal-b/filesystem-changes.json": "ffd76bf976784679c49b341d71451b15c2c6f869d144277545526719800de5bb",
+    "docs/evaluation/editorial-491/validation/supported-appraisal-b/harness-config-after.toml": "52c3bcf81922569cbc9b68290e533067d4bcce4405bbaa0219f595ba84773906",
+    "docs/evaluation/editorial-491/validation/supported-appraisal-b/identity-audit.json": "0b71ad7f06b8a9a716e09488b6d5769d07ce619cdad50c01066c5601fe2b60db",
+    "docs/evaluation/editorial-491/validation/supported-appraisal-b/input-stat.json": "0bcb13da5101e8aba85684e10fe32fcf045ccb93220d68ffcf4739b590e4292b",
+    "docs/evaluation/editorial-491/validation/supported-appraisal-b/inventory-after.json": "200dfd8d60936e242173d411a78d79bfd6b935fab14b3928817ec563d94461cf",
+    "docs/evaluation/editorial-491/validation/supported-appraisal-b/inventory-before.json": "3e6603ff78162753ed27b364d1ff35602306efb57ef1b03d70f5fc08377c46bd",
+    "docs/evaluation/editorial-491/validation/supported-appraisal-b/invocation.txt": "3c94a03845e935cfcd50f2381dcf6cc28adbba6d773234b33e45b8374980959c",
+    "docs/evaluation/editorial-491/validation/supported-appraisal-b/location.json": "68923e2d3444d14cef185bba11ad450523b32dcb17b91bc5c1011477863ade1b",
+    "docs/evaluation/editorial-491/validation/supported-appraisal-b/native-sessions/2026/10/02/rollout-2026-10-02T20-08-09-01a0fdcd-59e2-7fb3-aa16-7271144c857c.jsonl.gz": "dde52df526c002391066265900d541070ef1f23204430876c8285465efc966c6",
+    "docs/evaluation/editorial-491/validation/supported-appraisal-b/process.json": "35d1e50ea55098116bbdacc67ab2ba3df5e1810dcb03e67a2de99d488ddcf35b",
+    "docs/evaluation/editorial-491/validation/supported-appraisal-b/response.txt": "ccda4e0d0dd7cb960f7d1d5f194072d28ea3214e20227753d156f2edfed6fdda",
+    "docs/evaluation/editorial-491/validation/supported-appraisal-b/result.json": "e07324b817bce3fbd78fde5b007180740067e075de62c8ef97e3534d9f948afe",
+    "docs/evaluation/editorial-491/validation/supported-appraisal-b/run.json": "8f242644e6b8272e610ca810de15015472025f5f1d07a288dce9223e07d36f80",
+    "docs/evaluation/editorial-491/validation/supported-appraisal-b/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "docs/evaluation/editorial-491/validation/supported-appraisal-b/supplied-input.md": "9297359338e7132a3f4f89dd5ba29c87c912d02a715d19d9f83b106c9be44ac1",
+    "docs/evaluation/editorial-491/validation/supported-appraisal-b/trace.jsonl.gz": "f1b96fa0886bf1498a5d7c3aeb9933c0cbe9de7366c39699feb48783daaae172",
+    "docs/evaluation/editorial-491/validation/supported-appraisal-b/validation-b.md": "d3dba4a8ea26fca1233cbefe52f799476e7023dcb7fce4b805f0ff6c54b090e5",
+    "docs/evaluation/editorial-491/validation/unresolved-referent-a/file-versions.json": "48b73393108651512e69c6c4355fff50a545ecc19587df63b04db06d36182518",
+    "docs/evaluation/editorial-491/validation/unresolved-referent-a/file-versions/11be8cc4a9d009f59f78dedfe9a0059c681ca0d8f23bd37f36ef0486a74f1257.md": "11be8cc4a9d009f59f78dedfe9a0059c681ca0d8f23bd37f36ef0486a74f1257",
+    "docs/evaluation/editorial-491/validation/unresolved-referent-a/file-versions/15b7da484b29363361e7b06449a810581015f6cd2a7116e79ac61d830737b326.md": "15b7da484b29363361e7b06449a810581015f6cd2a7116e79ac61d830737b326",
+    "docs/evaluation/editorial-491/validation/unresolved-referent-a/file-versions/26278ff801caf9b794212fc5a09939cc606c88373431aa94230678a417994ac3.md": "26278ff801caf9b794212fc5a09939cc606c88373431aa94230678a417994ac3",
+    "docs/evaluation/editorial-491/validation/unresolved-referent-a/file-versions/a39054321cbd35819cfd8ac7d2823dd3d56550a6ee2d1c6ee3b30f9daaa16cc5.md": "a39054321cbd35819cfd8ac7d2823dd3d56550a6ee2d1c6ee3b30f9daaa16cc5",
+    "docs/evaluation/editorial-491/validation/unresolved-referent-a/file-versions/a7db10d0dc1970064a8887c819a8500dfdecf43dcb45fffed32994921ceb68a4.md": "a7db10d0dc1970064a8887c819a8500dfdecf43dcb45fffed32994921ceb68a4",
+    "docs/evaluation/editorial-491/validation/unresolved-referent-a/file-versions/adfb7ca612905afee03a73d58cdb07de9d0877b23af9de89f7e114f6de81df5f.md": "adfb7ca612905afee03a73d58cdb07de9d0877b23af9de89f7e114f6de81df5f",
+    "docs/evaluation/editorial-491/validation/unresolved-referent-a/file-versions/b1ac5867d30952c3ca78da244520ab28c025102f4389f44ec206757a29f05371.md": "b1ac5867d30952c3ca78da244520ab28c025102f4389f44ec206757a29f05371",
+    "docs/evaluation/editorial-491/validation/unresolved-referent-a/file-versions/c075c6fe7494dbcdc43d6af599c55ab8fc52fc48d7ed1b6cc26eca7a592cecd7.md": "c075c6fe7494dbcdc43d6af599c55ab8fc52fc48d7ed1b6cc26eca7a592cecd7",
+    "docs/evaluation/editorial-491/validation/unresolved-referent-a/file-versions/d2c838c19a692104be247afd227b0baed98f3156be059c0a982ecae3513fa0ca.md": "d2c838c19a692104be247afd227b0baed98f3156be059c0a982ecae3513fa0ca",
+    "docs/evaluation/editorial-491/validation/unresolved-referent-a/file-versions/d4146ef134de7482e25469201aaceed7b207fba9f8bacb06a428b85f6bfc3581.md": "d4146ef134de7482e25469201aaceed7b207fba9f8bacb06a428b85f6bfc3581",
+    "docs/evaluation/editorial-491/validation/unresolved-referent-a/filesystem-changes.json": "a9188eec8d088e8105e386e8a129cab0f70d7f0c7599552964503f00d218f3fb",
+    "docs/evaluation/editorial-491/validation/unresolved-referent-a/harness-config-after.toml": "4ea3a7f9c563cfb8e4bb9cffae9c917033797fc30c7193b73602567d59544c7f",
+    "docs/evaluation/editorial-491/validation/unresolved-referent-a/identity-audit.json": "a01d5a16b3235182a4d2c6be03a57485a74ed5d29418a2f1fc4ce5c6031c3f66",
+    "docs/evaluation/editorial-491/validation/unresolved-referent-a/input-stat.json": "70c98b61b795859e56b6336a78d5b341d1149e2101d79d15fd9fdd4ef29d74db",
+    "docs/evaluation/editorial-491/validation/unresolved-referent-a/inventory-after.json": "b6d99873c8d4c3a7571085f5244894951dd87a709652b9b20bce95eb0ae9e995",
+    "docs/evaluation/editorial-491/validation/unresolved-referent-a/inventory-before.json": "cd115631494964adbf7351c6d7de8eabb19ecb1aa08a161107bb2ad4bb8ed179",
+    "docs/evaluation/editorial-491/validation/unresolved-referent-a/invocation.txt": "38d9a12d907c14950785c53d2d6c85fe65a53e3112cf04cb61d64a81c751be9c",
+    "docs/evaluation/editorial-491/validation/unresolved-referent-a/location.json": "056e5fea4b037a23d87e6759895f39f95e486ee3d36f0cddad4bf0d56e3f83a8",
+    "docs/evaluation/editorial-491/validation/unresolved-referent-a/native-sessions/2026/10/02/rollout-2026-10-02T20-16-09-01a0fdd4-ae24-7b13-971f-933707749b42.jsonl.gz": "7e672f445ad036cd13fa139b9b9c99df73fd9fc22149b3c527037ac0cab69e9b",
+    "docs/evaluation/editorial-491/validation/unresolved-referent-a/process.json": "6ffc437f397494cd0388909b67f2e26bf3e485940d58a706b0a6275842285dc0",
+    "docs/evaluation/editorial-491/validation/unresolved-referent-a/response.txt": "ecd37f4fe2e037bf69eeb882f4c9fa462727ad6a9cd1abddd09d043b52f83ab7",
+    "docs/evaluation/editorial-491/validation/unresolved-referent-a/result.json": "613b09267d93bc5de34c884262e13d02669138dee81d02feb0e8b158bf9649ff",
+    "docs/evaluation/editorial-491/validation/unresolved-referent-a/run.json": "9a8defdeaef7d17a9692f85fe14e646e3e8842da0a9ae2919abf3f07a0102312",
+    "docs/evaluation/editorial-491/validation/unresolved-referent-a/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "docs/evaluation/editorial-491/validation/unresolved-referent-a/supplied-input.md": "15b7da484b29363361e7b06449a810581015f6cd2a7116e79ac61d830737b326",
+    "docs/evaluation/editorial-491/validation/unresolved-referent-a/trace.jsonl.gz": "477ca8f168d03f459b20b237c678a0d111bd3cc5b242f460f42fe07838221aec",
+    "docs/evaluation/editorial-491/validation/unresolved-referent-a/validation-a.md": "26278ff801caf9b794212fc5a09939cc606c88373431aa94230678a417994ac3",
+    "docs/evaluation/editorial-491/validation/unresolved-referent-b/file-versions.json": "984c65e3c00214c13a62029fda3aaeda8166476de6c10af9c346a321f25a9d8c",
+    "docs/evaluation/editorial-491/validation/unresolved-referent-b/file-versions/11be8cc4a9d009f59f78dedfe9a0059c681ca0d8f23bd37f36ef0486a74f1257.md": "11be8cc4a9d009f59f78dedfe9a0059c681ca0d8f23bd37f36ef0486a74f1257",
+    "docs/evaluation/editorial-491/validation/unresolved-referent-b/file-versions/15b7da484b29363361e7b06449a810581015f6cd2a7116e79ac61d830737b326.md": "15b7da484b29363361e7b06449a810581015f6cd2a7116e79ac61d830737b326",
+    "docs/evaluation/editorial-491/validation/unresolved-referent-b/file-versions/a39054321cbd35819cfd8ac7d2823dd3d56550a6ee2d1c6ee3b30f9daaa16cc5.md": "a39054321cbd35819cfd8ac7d2823dd3d56550a6ee2d1c6ee3b30f9daaa16cc5",
+    "docs/evaluation/editorial-491/validation/unresolved-referent-b/file-versions/a7db10d0dc1970064a8887c819a8500dfdecf43dcb45fffed32994921ceb68a4.md": "a7db10d0dc1970064a8887c819a8500dfdecf43dcb45fffed32994921ceb68a4",
+    "docs/evaluation/editorial-491/validation/unresolved-referent-b/file-versions/adfb7ca612905afee03a73d58cdb07de9d0877b23af9de89f7e114f6de81df5f.md": "adfb7ca612905afee03a73d58cdb07de9d0877b23af9de89f7e114f6de81df5f",
+    "docs/evaluation/editorial-491/validation/unresolved-referent-b/file-versions/b1ac5867d30952c3ca78da244520ab28c025102f4389f44ec206757a29f05371.md": "b1ac5867d30952c3ca78da244520ab28c025102f4389f44ec206757a29f05371",
+    "docs/evaluation/editorial-491/validation/unresolved-referent-b/file-versions/c075c6fe7494dbcdc43d6af599c55ab8fc52fc48d7ed1b6cc26eca7a592cecd7.md": "c075c6fe7494dbcdc43d6af599c55ab8fc52fc48d7ed1b6cc26eca7a592cecd7",
+    "docs/evaluation/editorial-491/validation/unresolved-referent-b/file-versions/d2c838c19a692104be247afd227b0baed98f3156be059c0a982ecae3513fa0ca.md": "d2c838c19a692104be247afd227b0baed98f3156be059c0a982ecae3513fa0ca",
+    "docs/evaluation/editorial-491/validation/unresolved-referent-b/file-versions/d4146ef134de7482e25469201aaceed7b207fba9f8bacb06a428b85f6bfc3581.md": "d4146ef134de7482e25469201aaceed7b207fba9f8bacb06a428b85f6bfc3581",
+    "docs/evaluation/editorial-491/validation/unresolved-referent-b/file-versions/fca5b13eb99a3d06df741dd4ee721612ff6838ec8e4211e070ca027eedef5809.md": "fca5b13eb99a3d06df741dd4ee721612ff6838ec8e4211e070ca027eedef5809",
+    "docs/evaluation/editorial-491/validation/unresolved-referent-b/filesystem-changes.json": "783e05aac08886277e9b6cd955ea13ece03b3f49d7aacbafd58d31221b2c0247",
+    "docs/evaluation/editorial-491/validation/unresolved-referent-b/harness-config-after.toml": "4e54360497cd9d77cdf09fd016cbef8dd9e7a3a4036428afbdcfb25b7f5b413e",
+    "docs/evaluation/editorial-491/validation/unresolved-referent-b/identity-audit.json": "8c0797ee005571f6779873c2750da847f3166a0e0432f56681a3481666027167",
+    "docs/evaluation/editorial-491/validation/unresolved-referent-b/input-stat.json": "ffd10a9b4674ea067113a1ac7f528fe3a38b44fa3902a86e1cb13b4977f5bf6b",
+    "docs/evaluation/editorial-491/validation/unresolved-referent-b/inventory-after.json": "f3d39ee83f6a88d4bda50b3be5f069cc32215d95d322f0dd11287aee8e5e6d39",
+    "docs/evaluation/editorial-491/validation/unresolved-referent-b/inventory-before.json": "cd115631494964adbf7351c6d7de8eabb19ecb1aa08a161107bb2ad4bb8ed179",
+    "docs/evaluation/editorial-491/validation/unresolved-referent-b/invocation.txt": "9069f030d7c7f71045bfc66a25892672d9fac9569eccf7e03a34e9201776a008",
+    "docs/evaluation/editorial-491/validation/unresolved-referent-b/location.json": "49e90d1dfe9355a4bc353047ad0dd79adb33b8aa533863c9f3382fd37d9692d4",
+    "docs/evaluation/editorial-491/validation/unresolved-referent-b/native-sessions/2026/10/02/rollout-2026-10-02T20-18-52-01a0fdd7-2b4a-7d10-98d2-8120cc527de9.jsonl.gz": "6f3b48c62dea1e3a299590406ee8a4e455c95e6be876cb2609f625c01e87b873",
+    "docs/evaluation/editorial-491/validation/unresolved-referent-b/process.json": "7b3cc1785257523140c155173b6ccc61c675eb55c09ccda0f45667ba4aebb6e5",
+    "docs/evaluation/editorial-491/validation/unresolved-referent-b/response.txt": "b997d0b65042b61289b2942078b342c950755f4132dd1c09f57477854eff6821",
+    "docs/evaluation/editorial-491/validation/unresolved-referent-b/result.json": "30ca0ccfa150810be3bfd3fb811cdc7997204cdb5b06c10e188bd75dbacfc46e",
+    "docs/evaluation/editorial-491/validation/unresolved-referent-b/run.json": "eef1e465e7d86ed120bfd1ce2ee9bb52b050e66fd2ef7500a106629e7f87dcc2",
+    "docs/evaluation/editorial-491/validation/unresolved-referent-b/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "docs/evaluation/editorial-491/validation/unresolved-referent-b/supplied-input.md": "15b7da484b29363361e7b06449a810581015f6cd2a7116e79ac61d830737b326",
+    "docs/evaluation/editorial-491/validation/unresolved-referent-b/trace.jsonl.gz": "6e937b6ca573bc6633623dfed86bd2accca0570828844a0e45207b18238eb1d6",
+    "docs/evaluation/editorial-491/validation/unresolved-referent-b/validation-b.md": "fca5b13eb99a3d06df741dd4ee721612ff6838ec8e4211e070ca027eedef5809",
+    "docs/evaluation/editorial-491/validation/unsupported-attribution-a/file-versions.json": "b1bac49daae38e78a472283e17130ea6341f411d554770ac215b61c6f9c41212",
+    "docs/evaluation/editorial-491/validation/unsupported-attribution-a/file-versions/11be8cc4a9d009f59f78dedfe9a0059c681ca0d8f23bd37f36ef0486a74f1257.md": "11be8cc4a9d009f59f78dedfe9a0059c681ca0d8f23bd37f36ef0486a74f1257",
+    "docs/evaluation/editorial-491/validation/unsupported-attribution-a/file-versions/6a85566b0fa64ca8a943672e0d907e550f57ff7b548c491db5af2c61ce442316.md": "6a85566b0fa64ca8a943672e0d907e550f57ff7b548c491db5af2c61ce442316",
+    "docs/evaluation/editorial-491/validation/unsupported-attribution-a/file-versions/9cf26844e169a65495daee733e8d282e4392abe595372e41d5ac0fc9345d86cd.md": "9cf26844e169a65495daee733e8d282e4392abe595372e41d5ac0fc9345d86cd",
+    "docs/evaluation/editorial-491/validation/unsupported-attribution-a/file-versions/a39054321cbd35819cfd8ac7d2823dd3d56550a6ee2d1c6ee3b30f9daaa16cc5.md": "a39054321cbd35819cfd8ac7d2823dd3d56550a6ee2d1c6ee3b30f9daaa16cc5",
+    "docs/evaluation/editorial-491/validation/unsupported-attribution-a/file-versions/a7db10d0dc1970064a8887c819a8500dfdecf43dcb45fffed32994921ceb68a4.md": "a7db10d0dc1970064a8887c819a8500dfdecf43dcb45fffed32994921ceb68a4",
+    "docs/evaluation/editorial-491/validation/unsupported-attribution-a/file-versions/adfb7ca612905afee03a73d58cdb07de9d0877b23af9de89f7e114f6de81df5f.md": "adfb7ca612905afee03a73d58cdb07de9d0877b23af9de89f7e114f6de81df5f",
+    "docs/evaluation/editorial-491/validation/unsupported-attribution-a/file-versions/b1ac5867d30952c3ca78da244520ab28c025102f4389f44ec206757a29f05371.md": "b1ac5867d30952c3ca78da244520ab28c025102f4389f44ec206757a29f05371",
+    "docs/evaluation/editorial-491/validation/unsupported-attribution-a/file-versions/c075c6fe7494dbcdc43d6af599c55ab8fc52fc48d7ed1b6cc26eca7a592cecd7.md": "c075c6fe7494dbcdc43d6af599c55ab8fc52fc48d7ed1b6cc26eca7a592cecd7",
+    "docs/evaluation/editorial-491/validation/unsupported-attribution-a/file-versions/d2c838c19a692104be247afd227b0baed98f3156be059c0a982ecae3513fa0ca.md": "d2c838c19a692104be247afd227b0baed98f3156be059c0a982ecae3513fa0ca",
+    "docs/evaluation/editorial-491/validation/unsupported-attribution-a/file-versions/d4146ef134de7482e25469201aaceed7b207fba9f8bacb06a428b85f6bfc3581.md": "d4146ef134de7482e25469201aaceed7b207fba9f8bacb06a428b85f6bfc3581",
+    "docs/evaluation/editorial-491/validation/unsupported-attribution-a/filesystem-changes.json": "383a8ae7e82c774b7a667e8aaf5259ed6af66a85194db0afad54d2131b21024f",
+    "docs/evaluation/editorial-491/validation/unsupported-attribution-a/harness-config-after.toml": "32e1bc45824351d52e4411b2c7f910166252d977d007f5b08b670558acd9f2bb",
+    "docs/evaluation/editorial-491/validation/unsupported-attribution-a/identity-audit.json": "5f039170fca70c015cbe85e150bddc2400b04f46f22b18777c73c80306e8c95e",
+    "docs/evaluation/editorial-491/validation/unsupported-attribution-a/input-stat.json": "5f92d0a20d791e82e01c65df7e43d720b9d5f38e3f4c066374dd5c57a559ed3a",
+    "docs/evaluation/editorial-491/validation/unsupported-attribution-a/inventory-after.json": "0eab6881e5e07690548cc38449f2fb7397863527793a35618bd84eef351541b7",
+    "docs/evaluation/editorial-491/validation/unsupported-attribution-a/inventory-before.json": "dbc4e3f0f0e3e542c0efd818f40e3a0dbd41d9af77ca7fd47a932a0e8037cffc",
+    "docs/evaluation/editorial-491/validation/unsupported-attribution-a/invocation.txt": "f0010dd5f2dff8774b8c0563e739b16c6aa5eaff33df4d3f199da772a89b9ef8",
+    "docs/evaluation/editorial-491/validation/unsupported-attribution-a/location.json": "fed5549ba4f5a286f6a1dbf15525f68ee3686b6a8f66bcf74bc8ba32833b7c62",
+    "docs/evaluation/editorial-491/validation/unsupported-attribution-a/native-sessions/2026/10/02/rollout-2026-10-02T20-11-58-01a0fdd0-db19-71e0-9048-09977a706442.jsonl.gz": "833d2f38f78dd393e0e21aa4b1eca91d72d9cf52760cede781f0c1427c1fd4c6",
+    "docs/evaluation/editorial-491/validation/unsupported-attribution-a/process.json": "9f5d355bee66cf32c1d8f6057d0eabf7526045ceb988a66afc9155d7760cf887",
+    "docs/evaluation/editorial-491/validation/unsupported-attribution-a/response.txt": "ad118f5adcba2756f747661df81d42e8c7ccc48586088131cd4605f92e96992f",
+    "docs/evaluation/editorial-491/validation/unsupported-attribution-a/result.json": "5d70cd995365095b68697eeded7177d7ee2bce64162bde895314df301580c33c",
+    "docs/evaluation/editorial-491/validation/unsupported-attribution-a/run.json": "095f70bfae694d4f1ef75c956aa124b3d8aae01971e96ffd814e822a99d6cc96",
+    "docs/evaluation/editorial-491/validation/unsupported-attribution-a/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "docs/evaluation/editorial-491/validation/unsupported-attribution-a/supplied-input.md": "6a85566b0fa64ca8a943672e0d907e550f57ff7b548c491db5af2c61ce442316",
+    "docs/evaluation/editorial-491/validation/unsupported-attribution-a/trace.jsonl.gz": "21069a7c62a676aef9b414daf8eeb160765f6be20e6a5b3f34704c72c7c736da",
+    "docs/evaluation/editorial-491/validation/unsupported-attribution-a/validation-a.md": "9cf26844e169a65495daee733e8d282e4392abe595372e41d5ac0fc9345d86cd",
+    "docs/evaluation/editorial-491/validation/unsupported-attribution-b/file-versions.json": "d76f47781dc565c063a934715e5103fbf78f3122c345204e84ea80ab2935157b",
+    "docs/evaluation/editorial-491/validation/unsupported-attribution-b/file-versions/11be8cc4a9d009f59f78dedfe9a0059c681ca0d8f23bd37f36ef0486a74f1257.md": "11be8cc4a9d009f59f78dedfe9a0059c681ca0d8f23bd37f36ef0486a74f1257",
+    "docs/evaluation/editorial-491/validation/unsupported-attribution-b/file-versions/6a85566b0fa64ca8a943672e0d907e550f57ff7b548c491db5af2c61ce442316.md": "6a85566b0fa64ca8a943672e0d907e550f57ff7b548c491db5af2c61ce442316",
+    "docs/evaluation/editorial-491/validation/unsupported-attribution-b/file-versions/a39054321cbd35819cfd8ac7d2823dd3d56550a6ee2d1c6ee3b30f9daaa16cc5.md": "a39054321cbd35819cfd8ac7d2823dd3d56550a6ee2d1c6ee3b30f9daaa16cc5",
+    "docs/evaluation/editorial-491/validation/unsupported-attribution-b/file-versions/a7db10d0dc1970064a8887c819a8500dfdecf43dcb45fffed32994921ceb68a4.md": "a7db10d0dc1970064a8887c819a8500dfdecf43dcb45fffed32994921ceb68a4",
+    "docs/evaluation/editorial-491/validation/unsupported-attribution-b/file-versions/adfb7ca612905afee03a73d58cdb07de9d0877b23af9de89f7e114f6de81df5f.md": "adfb7ca612905afee03a73d58cdb07de9d0877b23af9de89f7e114f6de81df5f",
+    "docs/evaluation/editorial-491/validation/unsupported-attribution-b/file-versions/b1ac5867d30952c3ca78da244520ab28c025102f4389f44ec206757a29f05371.md": "b1ac5867d30952c3ca78da244520ab28c025102f4389f44ec206757a29f05371",
+    "docs/evaluation/editorial-491/validation/unsupported-attribution-b/file-versions/c075c6fe7494dbcdc43d6af599c55ab8fc52fc48d7ed1b6cc26eca7a592cecd7.md": "c075c6fe7494dbcdc43d6af599c55ab8fc52fc48d7ed1b6cc26eca7a592cecd7",
+    "docs/evaluation/editorial-491/validation/unsupported-attribution-b/file-versions/d2c838c19a692104be247afd227b0baed98f3156be059c0a982ecae3513fa0ca.md": "d2c838c19a692104be247afd227b0baed98f3156be059c0a982ecae3513fa0ca",
+    "docs/evaluation/editorial-491/validation/unsupported-attribution-b/file-versions/d4146ef134de7482e25469201aaceed7b207fba9f8bacb06a428b85f6bfc3581.md": "d4146ef134de7482e25469201aaceed7b207fba9f8bacb06a428b85f6bfc3581",
+    "docs/evaluation/editorial-491/validation/unsupported-attribution-b/file-versions/e2f1ecbad3a8a5a036d8a5f049bd48b9b656700c495c7074b57f8270d9bab85a.md": "e2f1ecbad3a8a5a036d8a5f049bd48b9b656700c495c7074b57f8270d9bab85a",
+    "docs/evaluation/editorial-491/validation/unsupported-attribution-b/filesystem-changes.json": "f488ff8615820c5d1bd4ca49839ccc5ed562762ec3256039a6fbbdd1e5f64c79",
+    "docs/evaluation/editorial-491/validation/unsupported-attribution-b/harness-config-after.toml": "726deedfd597e3ad751136d24c9bd54cd366568d05c016c650e996ca63de65f7",
+    "docs/evaluation/editorial-491/validation/unsupported-attribution-b/identity-audit.json": "e7dda8bd57541d5d849eb2ed85a133954f66d1e9aca7ac3fbee5a1c612580a01",
+    "docs/evaluation/editorial-491/validation/unsupported-attribution-b/input-stat.json": "4c58efffdb8c54761a7b1ff783e4323469342bf2027f830deca76f70fe994945",
+    "docs/evaluation/editorial-491/validation/unsupported-attribution-b/inventory-after.json": "87486bf30ed28d490cbdb70de77eb957b04336c0d178157b103f96527f8f861c",
+    "docs/evaluation/editorial-491/validation/unsupported-attribution-b/inventory-before.json": "dbc4e3f0f0e3e542c0efd818f40e3a0dbd41d9af77ca7fd47a932a0e8037cffc",
+    "docs/evaluation/editorial-491/validation/unsupported-attribution-b/invocation.txt": "d178bd7d9035d8b01f20e8fa9a7dbe097b192471f39d4c2513fbe07eb9105101",
+    "docs/evaluation/editorial-491/validation/unsupported-attribution-b/location.json": "23afdb67d4f74b7181a67a1d452be0ecb8600d995778ce15d999786efd9beae5",
+    "docs/evaluation/editorial-491/validation/unsupported-attribution-b/native-sessions/2026/10/02/rollout-2026-10-02T20-13-17-01a0fdd2-107e-77e1-b04a-d853986603ca.jsonl.gz": "c8232a47e8a82a93b768eee4fb7079f752af8eba873637d126e6b73b1bd7c1cd",
+    "docs/evaluation/editorial-491/validation/unsupported-attribution-b/process.json": "7c825788355b3bb5a6f7b7e9c996863bee1c43663ef8ac854d0e861233bc3091",
+    "docs/evaluation/editorial-491/validation/unsupported-attribution-b/response.txt": "7392b1b7c01cac8ba070acbed9372edcecce0c12b92898b2c0c61080d1c2c8d6",
+    "docs/evaluation/editorial-491/validation/unsupported-attribution-b/result.json": "1c1cb0f2c8959cc1176d49c91b3e26ef5634e08d78f3dae8fb1a180dc44613bb",
+    "docs/evaluation/editorial-491/validation/unsupported-attribution-b/run.json": "334427b1de7bd3c2823d817a5c0fd7f01a6479f27b392b864f778d0bb391386b",
+    "docs/evaluation/editorial-491/validation/unsupported-attribution-b/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "docs/evaluation/editorial-491/validation/unsupported-attribution-b/supplied-input.md": "6a85566b0fa64ca8a943672e0d907e550f57ff7b548c491db5af2c61ce442316",
+    "docs/evaluation/editorial-491/validation/unsupported-attribution-b/trace.jsonl.gz": "d6cc4402df613b6e25d81c62ed02acde6c9aae439b8ca1b7a75e5de997f3a7b2",
+    "docs/evaluation/editorial-491/validation/unsupported-attribution-b/validation-b.md": "e2f1ecbad3a8a5a036d8a5f049bd48b9b656700c495c7074b57f8270d9bab85a",
+    "docs/evaluation/editorial-491/validation/validators.tsv": "e51fcf2f641e801e913ccdfb67394aa67f4f38d06cd6fa7cfa2df8d6dab01ab4",
+    "docs/evaluation/records/redline-gpt-2026-10-02-491.md": "f77c5545603e9c0c940cee5fc131225b66cd6ed357f36b781b90595de5686d4d"
+  },
+  "product_changes_since_ticket_start": false,
+  "decision_unresolved": true,
+  "behavioral_acceptance_met": false
+}

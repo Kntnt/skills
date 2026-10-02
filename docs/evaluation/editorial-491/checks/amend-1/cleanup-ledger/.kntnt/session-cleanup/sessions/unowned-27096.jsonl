@@ -1,0 +1,5 @@
+{"harness": "", "id": "unowned-27096", "kind": "session", "owner_pid": 0, "owner_started": "", "session": "unowned-27096", "started": "2026-10-02T18:51:31+00:00"}
+{"at": "2026-10-02T18:51:31+00:00", "id": "27105", "kind": "pid", "started": "Fri Oct  2 20:51:31 2026", "why": "#491 amend 1 gate 1"}
+{"at": "2026-10-02T18:51:32+00:00", "id": "27194", "kind": "pid", "started": "Fri Oct  2 20:51:32 2026", "why": "#491 amend 1 gate 2"}
+{"at": "2026-10-02T18:51:33+00:00", "id": "27216", "kind": "pid", "started": "Fri Oct  2 20:51:33 2026", "why": "#491 amend 1 gate 3"}
+{"at": "2026-10-02T18:51:39+00:00", "id": "27432", "kind": "pid", "started": "Fri Oct  2 20:51:39 2026", "why": "#491 amend 1 gate 4"}
