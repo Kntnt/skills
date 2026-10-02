@@ -1,0 +1,38 @@
+[
+  {
+    "path": "work/input.md",
+    "sha256": "4c8dcab8b76bd6bb913acd2c5264d1bafc8ad034a555b50776838b13b8fc4488",
+    "capture": "0000-4c8dcab8b76b.md",
+    "time": 1790971798.4705112
+  },
+  {
+    "path": "work/response.md",
+    "sha256": "55c34273bbd1a6d496809d76c1e4e1ae887823fad589a2ac3a90110dffd73fcb",
+    "capture": "0001-55c34273bbd1.md",
+    "time": 1790971798.470672
+  },
+  {
+    "path": "work/AGENTS.md",
+    "sha256": "5b2cc2ddcfd46f6cf97e4782d9e50c21438987744476b17d99acab356f64b047",
+    "capture": "0002-5b2cc2ddcfd4.md",
+    "time": 1790971798.470793
+  },
+  {
+    "path": "work/work/input.md",
+    "sha256": "141efb2a4a3b9339a6a54942c1f2d2edfaf307746c355e732ac3590a1b13075a",
+    "capture": "0003-141efb2a4a3b.md",
+    "time": 1790971798.471037
+  },
+  {
+    "path": "work/work/output.md",
+    "sha256": "141efb2a4a3b9339a6a54942c1f2d2edfaf307746c355e732ac3590a1b13075a",
+    "capture": "0004-141efb2a4a3b.md",
+    "time": 1790971798.471188
+  },
+  {
+    "path": "work/judgement-b.md",
+    "sha256": "a28602488754e0a17c51da16e55ced85ff5b13891319cb2439eba43e98f92e80",
+    "capture": "0005-a28602488754.md",
+    "time": 1790971892.439444
+  }
+]

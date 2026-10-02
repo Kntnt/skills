@@ -1,0 +1,3 @@
+**R1: Pass.** The output is unchanged. All frozen-expectation clauses were met: anatomy, voice and specified claims were preserved, and no prohibited findings or generic hedges were added. No clauses were missed.
+
+Written to [judgement-a.md](/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-1ec1788d/evaluation/kntnt-native-session-m6gfxs0z/work/judgement-a.md).

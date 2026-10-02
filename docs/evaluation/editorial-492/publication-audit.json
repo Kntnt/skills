@@ -1,0 +1,93 @@
+{
+  "published_files_scanned": 1265,
+  "private_auth_material_or_credential_values_found": false,
+  "completed_baseline_runs": 12,
+  "completed_independent_judges": 24,
+  "completed_independent_validations": 4,
+  "run_contracts": [
+    {
+      "run": "pre-opinion-clean-resp-1",
+      "source_bytes_inode_mtime_preserved": true,
+      "only_authorised_artifact_effects": true,
+      "no_surviving_skill_scratch": true,
+      "file_delivery_byte_identical": null
+    },
+    {
+      "run": "pre-opinion-clean-file-1",
+      "source_bytes_inode_mtime_preserved": true,
+      "only_authorised_artifact_effects": true,
+      "no_surviving_skill_scratch": true,
+      "file_delivery_byte_identical": true
+    },
+    {
+      "run": "pre-opinion-clean-resp-2",
+      "source_bytes_inode_mtime_preserved": true,
+      "only_authorised_artifact_effects": true,
+      "no_surviving_skill_scratch": true,
+      "file_delivery_byte_identical": null
+    },
+    {
+      "run": "pre-opinion-clean-file-2",
+      "source_bytes_inode_mtime_preserved": true,
+      "only_authorised_artifact_effects": true,
+      "no_surviving_skill_scratch": true,
+      "file_delivery_byte_identical": true
+    },
+    {
+      "run": "pre-opinion-clean-resp-3",
+      "source_bytes_inode_mtime_preserved": true,
+      "only_authorised_artifact_effects": true,
+      "no_surviving_skill_scratch": true,
+      "file_delivery_byte_identical": null
+    },
+    {
+      "run": "pre-opinion-clean-file-3",
+      "source_bytes_inode_mtime_preserved": true,
+      "only_authorised_artifact_effects": true,
+      "no_surviving_skill_scratch": true,
+      "file_delivery_byte_identical": true
+    },
+    {
+      "run": "pre-library-alternatives-clean-resp-1",
+      "source_bytes_inode_mtime_preserved": true,
+      "only_authorised_artifact_effects": true,
+      "no_surviving_skill_scratch": true,
+      "file_delivery_byte_identical": null
+    },
+    {
+      "run": "pre-library-alternatives-clean-file-1",
+      "source_bytes_inode_mtime_preserved": true,
+      "only_authorised_artifact_effects": true,
+      "no_surviving_skill_scratch": true,
+      "file_delivery_byte_identical": false
+    },
+    {
+      "run": "pre-library-missing-referent-resp-1",
+      "source_bytes_inode_mtime_preserved": true,
+      "only_authorised_artifact_effects": true,
+      "no_surviving_skill_scratch": true,
+      "file_delivery_byte_identical": null
+    },
+    {
+      "run": "pre-library-missing-referent-file-1",
+      "source_bytes_inode_mtime_preserved": true,
+      "only_authorised_artifact_effects": true,
+      "no_surviving_skill_scratch": true,
+      "file_delivery_byte_identical": false
+    },
+    {
+      "run": "pre-opinion-closure-certain-file-1",
+      "source_bytes_inode_mtime_preserved": true,
+      "only_authorised_artifact_effects": true,
+      "no_surviving_skill_scratch": true,
+      "file_delivery_byte_identical": false
+    },
+    {
+      "run": "pre-opinion-closure-certain-file-2",
+      "source_bytes_inode_mtime_preserved": true,
+      "only_authorised_artifact_effects": true,
+      "no_surviving_skill_scratch": true,
+      "file_delivery_byte_identical": false
+    }
+  ]
+}

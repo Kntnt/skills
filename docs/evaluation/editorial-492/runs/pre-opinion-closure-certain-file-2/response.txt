@@ -1,0 +1,7 @@
+Sparad i [output.md](/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-1ec1788d/evaluation/kntnt-native-session-5qzofn_5/work/output.md). Granskad som svensk debattartikel (opinion), utan särskild teknik.
+
+Åtgärdad ingress: ”ändå stängs för gott” gjorde avskaffandet givet trots att resten av texten lämnar beslutet öppet.
+
+Ändrat påstående, korrigeringsomgång 1: ingressen föreslår nu ett halvårsförsök inför den permanenta stängningen. Borttagningen av ”ändå” tar bort den uttryckliga kopplingen att stängningen sker trots försöket; tidsföljden att försöket föregår stängningen finns kvar.
+
+Bearbetningen justerade ingressens formulering. Struktur och formatering är bevarade. Den avslutande korrekturläsningen krävde inga rättelser.

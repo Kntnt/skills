@@ -1,0 +1,5 @@
+**R1: Fail.** The response supplies only an account, with no returned article. Preservation of the thesis, attribution, administrative objection, cost uncertainty, council decision and polemical ending therefore cannot be established.
+
+All rejection clauses were met: no findings challenged the compliant lengths, paragraph structures or Swedish `Text:` byline. No neutralizing rewrite or generic hedges are evidenced.
+
+Written to [judgement-a.md](/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-1ec1788d/evaluation/kntnt-native-session-k439wquy/work/judgement-a.md).

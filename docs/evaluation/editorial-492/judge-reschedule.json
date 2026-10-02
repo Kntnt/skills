@@ -1,0 +1,14 @@
+{
+  "scheduler_pid": 95908,
+  "active_at_pause": [
+    {
+      "run": "pre-opinion-clean-resp-2",
+      "producer_token": "1d319476310e",
+      "letter": "b",
+      "token": "d42e15a4888e",
+      "target": "resp",
+      "fixture": "opinion-clean"
+    }
+  ],
+  "reason": "Readiness scheduling only; finish every started native judgement before ending the waiting scheduler"
+}

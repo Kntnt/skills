@@ -1,0 +1,127 @@
+"""Publish completed blind packets and preserve reached stages without judging them."""
+from pathlib import Path
+import difflib
+import gzip
+import json
+import re
+import shutil
+root=Path('/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-1ec1788d/evaluation')
+repo=Path('/Users/thomas/Projects/skills/.git/kntnt-orchestrate/492')
+base=repo/'docs/evaluation/editorial-492'
+rows=json.loads((root/'runs-map.json').read_text())
+judges=json.loads((root/'judges-map.json').read_text())
+all_seats=[]
+
+def publish(source,target):
+    target.mkdir(parents=True,exist_ok=True)
+    for p in source.iterdir():
+        if p.is_file():
+            if p.suffix=='.jsonl':
+                with gzip.open(target/(p.name+'.gz'),'wb') as out:
+                    out.write(p.read_bytes())
+            else:
+                shutil.copy2(p,target/p.name)
+        elif p.name=='file-versions':
+            shutil.copytree(p,target/p.name,dirs_exist_ok=True)
+        elif p.name=='native-sessions':
+            for trace in p.rglob('*.jsonl'):
+                dest=target/'native-sessions'/trace.relative_to(p)
+                dest=dest.with_suffix('.jsonl.gz')
+                dest.parent.mkdir(parents=True,exist_ok=True)
+                with gzip.open(dest,'wb') as out:
+                    out.write(trace.read_bytes())
+
+def identity(packet):
+    seats=[]
+    for trace in (packet/'native-sessions').rglob('*.jsonl'):
+        events=[json.loads(x) for x in trace.read_text().splitlines()]
+        meta=next(e['payload'] for e in events if e['type']=='session_meta')
+        for event in events:
+            if event['type']=='turn_context':
+                value={'session':meta['id'],'source':meta.get('source'),'model':event['payload'].get('model'),'effort':event['payload'].get('effort')}
+                seats.append(value)
+    assert seats and all(s['model']=='gpt-6.1-sol' and s['effort']=='xhigh' for s in seats)
+    all_seats.extend(seats)
+    return seats
+
+for row in rows:
+    packet=root/row['token']
+    result=json.loads((packet/'result.json').read_text())
+    assert result['returncode']==0 and not result['timed_out']
+    identity(packet)
+    messages=json.loads((packet/'messages.json').read_text())
+    parent=[m for m in messages if m['source']=='exec']
+    child=[m for m in messages if m['source']!='exec']
+    corrections=[m for m in child if 'correct' in str(m['source']).lower() or 'repair' in str(m['source']).lower()]
+    first=min((m['timestamp'] for m in corrections),default=None)
+    pre=[m for m in parent if first is None or m['timestamp']<first]
+    later=[m for m in parent if first is not None and m['timestamp']>=first]
+    heading=(packet/'supplied-input.md').read_text().splitlines()[0]
+    starting=(packet/'supplied-input.md').read_text()
+    blocks=['# Recorded review stages\n\n','These excerpts are from native assistant messages, child identity and exact captures. They are not the run’s report substituted for its trace. All native parent and child records are retained under `native-sessions/` as lossless gzip, and the complete message timeline is `messages.json`.\n\n','## 1. Initial review\n\n']
+    if not corrections:
+        blocks.append('No editorial correction agent was launched. The parent’s initial review and mechanical-pass transition are recorded below; mechanical/reply-check agents are separately identified in `identity-audit.json`.\n\n')
+    else:
+        blocks.append('The detailed correction task is sealed in the native spawn-call payload and is not transcribed. Its full alleged reader-loss wording is unavailable; the parent’s recorded finding below is the evidence kept. This gap is named, not read as no finding.\n\n')
+    for m in pre:
+        blocks.append(f"**{m['timestamp']}**\n\n"+'\n'.join('> '+x for x in m['text'].splitlines())+'\n\n')
+    blocks.append('## 2. Correction proposals\n\n')
+    if not corrections:
+        blocks.append('None: no editorial correction round.\n\n')
+    for m in corrections:
+        source=m['source']['subagent']['thread_spawn']['agent_path']
+        blocks.append(f"**{m['timestamp']} — {source}**\n\n"+'\n'.join('> '+x for x in m['text'].splitlines())+'\n\n')
+        candidate=None
+        if m['text'].startswith(heading):
+            candidate=m['text'].split('\n---\n',1)[0].rstrip()+'\n'
+        else:
+            candidates=[b for b in re.findall(r'^```[^\n]*\n(.*?)^```[ \t]*$',m['text'],re.MULTILINE|re.DOTALL) if heading in b]
+            if len(candidates)==1:
+                candidate=candidates[0]
+        if candidate:
+            diff=''.join(difflib.unified_diff(starting.splitlines(keepends=True),candidate.splitlines(keepends=True),fromfile='supplied-input.md',tofile='correction-proposal.md'))
+            blocks.append('```diff\n'+(diff or 'No difference.\n')+'```\n\n')
+    blocks.append('## 3. Re-review and later disposition\n\n')
+    if not corrections:
+        blocks.append('No editorial candidate to accept or reject. Final mechanical/reply evidence remains in the native records and the delivered status below.\n\n')
+    for m in later[:-1]:
+        blocks.append(f"**{m['timestamp']}**\n\n"+'\n'.join('> '+x for x in m['text'].splitlines())+'\n\n')
+    blocks.append('## 4. Delivered artifact and final report\n\n')
+    diff=(packet/'delivery.diff').read_text()
+    blocks.append('```diff\n'+(diff or 'No difference: delivered file is byte-identical to supplied input.\n')+'```\n\n')
+    blocks.append((packet/'response.txt').read_text()+'\n')
+    (packet/'rounds.md').write_text(''.join(blocks))
+    target=base/'runs'/row['run']
+    publish(packet,target)
+    for task in [j for j in judges if j['run']==row['run']]:
+        jp=root/task['token']
+        jr=json.loads((jp/'result.json').read_text())
+        assert jr['returncode']==0 and not jr['timed_out']
+        seats=identity(jp)
+        (jp/'identity-audit.json').write_text(json.dumps({'identities':seats,'all_on_frozen_seat':True},indent=2)+'\n')
+        publish(jp,base/'judges'/f'{row["run"]}-{task["letter"]}')
+        shutil.copy2(jp/'captured-output.md',target/f'judgement-{task["letter"]}.md')
+        shutil.copy2(jp/'response.txt',target/f'judge-summary-{task["letter"]}.txt')
+for item in json.loads((root/'validations-map.json').read_text()):
+    identity(root/item['token'])
+identity(root/'smoke-2')
+publish(root/'smoke-2',base/'smoke')
+publish(root/'smoke',base/'voided/smoke-format-preflight')
+for name in ('runs-map.json','judges-map.json','validations-map.json','judge-reschedule.json','wave-baseline-before.json','wave-baseline-after.json'):
+    shutil.copy2(root/name,base/name)
+for name in ('campaign.py','validate.py','judge.py','judge_remaining.py','analyse.py','publish.py','gate.py'):
+    target=base/'execution'/f'{name}.txt'
+    target.parent.mkdir(exist_ok=True)
+    shutil.copy2(root/name,target)
+for n in range(1,5):
+    target=base/'checks'
+    target.mkdir(exist_ok=True)
+    shutil.copy2(root/f'gate-{n}.json',target/f'gate-{n}.json')
+    shutil.copy2(root/f'gate-{n}.log',target/f'gate-{n}.log')
+for source,name in [('new-miss.md','496.md'),('closure-miss.md','497.md')]:
+    target=base/'filed'/name
+    target.parent.mkdir(exist_ok=True)
+    shutil.copy2(root/source,target)
+unique={s['session']:s for s in all_seats}
+(base/'seat-audit.json').write_text(json.dumps({'unique_sessions':len(unique),'all_on_frozen_seat':True,'sessions':list(unique.values())},indent=2)+'\n')
+print('Published',len(rows),'runs,',len(judges),'independent judgements,',len(unique),'seat-verified native sessions.')

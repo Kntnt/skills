@@ -1,0 +1,7 @@
+{
+  "command": "uvx ruff format --check .",
+  "exit_code": 0,
+  "elapsed_seconds": 0.24,
+  "log": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-1ec1788d/evaluation/gate-2.log",
+  "index": 2
+}

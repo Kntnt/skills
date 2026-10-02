@@ -1,0 +1,45 @@
+{
+  "instruction_revision": "4cf05813f94c2fa7147898878027835e14d29859",
+  "corpus_revision": "cb446552f8177fbccaa2274ec11d32f217085cbc",
+  "harness": "Codex CLI 0.160.0",
+  "parent_identity": {
+    "model": "gpt-6.1-sol",
+    "effort": "xhigh"
+  },
+  "input_name": "input.md",
+  "input_source": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-1ec1788d/evaluation/1d319476310e/supplied-input.md",
+  "argv": [
+    "/opt/homebrew/Caskroom/codex/0.160.0/bin/codex",
+    "exec",
+    "--ignore-rules",
+    "--enable",
+    "multi_agent",
+    "-s",
+    "workspace-write",
+    "-c",
+    "sandbox_workspace_write.network_access=true",
+    "-c",
+    "sandbox_workspace_write.exclude_tmpdir_env_var=true",
+    "-c",
+    "sandbox_workspace_write.exclude_slash_tmp=true",
+    "--add-dir",
+    "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-1ec1788d/evaluation/kntnt-native-session-m2mq_buz/scratch",
+    "-C",
+    "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-1ec1788d/evaluation/kntnt-native-session-m2mq_buz/work",
+    "--skip-git-repo-check",
+    "--json",
+    "-o",
+    "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-1ec1788d/evaluation/d42e15a4888e/response.txt",
+    "-"
+  ],
+  "environment": {
+    "HOME": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-1ec1788d/evaluation/kntnt-native-session-m2mq_buz/home",
+    "CODEX_HOME": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-1ec1788d/evaluation/kntnt-native-session-m2mq_buz/home/.codex",
+    "TMPDIR": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-1ec1788d/evaluation/kntnt-native-session-m2mq_buz/scratch/tmp",
+    "UV_CACHE_DIR": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-1ec1788d/evaluation/kntnt-native-session-m2mq_buz/scratch/uv-cache",
+    "UV_PYTHON_INSTALL_DIR": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-1ec1788d/evaluation/kntnt-native-session-m2mq_buz/scratch/data/uv/python",
+    "XDG_DATA_HOME": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-1ec1788d/evaluation/kntnt-native-session-m2mq_buz/scratch/data",
+    "XDG_CACHE_HOME": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-1ec1788d/evaluation/kntnt-native-session-m2mq_buz/scratch/cache"
+  },
+  "note": "Identity must also be checked against each native turn_context after the run."
+}

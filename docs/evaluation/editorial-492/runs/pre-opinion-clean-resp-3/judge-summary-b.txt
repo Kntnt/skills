@@ -1,0 +1,5 @@
+R1: **fail**. The reply contains only an account, with no returned article. All six preservation clauses are therefore unmet: the final sentence, early thesis, attribution, administrative objection, cost uncertainty, and council decision.
+
+The run makes none of the prohibited findings, adds no generic hedges, and shows no neutralizing rewrite. Its account is consistent with accepting the input’s anatomy.
+
+Wrote [judgement-b.md](/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-1ec1788d/evaluation/kntnt-native-session-kmpdebkx/work/judgement-b.md).

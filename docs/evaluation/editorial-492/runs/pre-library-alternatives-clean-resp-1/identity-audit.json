@@ -1,0 +1,27 @@
+{
+  "identities": [
+    {
+      "session": "01a0fe31-fe1c-74e2-9dbc-794ca20663bf",
+      "source": "exec",
+      "model": "gpt-6.1-sol",
+      "effort": "xhigh"
+    },
+    {
+      "session": "01a0fe35-0316-7572-8e33-0c712586081b",
+      "source": {
+        "subagent": {
+          "thread_spawn": {
+            "parent_thread_id": "01a0fe31-fe1c-74e2-9dbc-794ca20663bf",
+            "depth": 1,
+            "agent_path": "/root/mechanical_pass",
+            "agent_nickname": "Schrodinger",
+            "agent_role": null
+          }
+        }
+      },
+      "model": "gpt-6.1-sol",
+      "effort": "xhigh"
+    }
+  ],
+  "all_on_frozen_seat": true
+}

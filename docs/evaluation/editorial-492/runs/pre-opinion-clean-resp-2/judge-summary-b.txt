@@ -1,0 +1,5 @@
+R1: **Fail for missing returned text.** The reply says the article is unchanged but does not include it, so the required preservation cannot be verified.
+
+All rejection clauses were met: no prohibited findings, neutralising rewrite or generic hedges appeared. The preservation clauses remain undemonstrated; no substantive editing loss can be inferred.
+
+Written to [judgement-b.md](/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-1ec1788d/evaluation/kntnt-native-session-m2mq_buz/work/judgement-b.md).

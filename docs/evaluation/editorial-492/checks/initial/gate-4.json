@@ -1,0 +1,7 @@
+{
+  "command": "uv run --with pytest --with pytest-xdist --with pyyaml pytest -n auto",
+  "exit_code": 0,
+  "elapsed_seconds": 124.4,
+  "log": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-1ec1788d/evaluation/gate-4.log",
+  "index": 4
+}

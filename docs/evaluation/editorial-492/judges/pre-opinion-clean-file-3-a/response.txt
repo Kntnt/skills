@@ -1,0 +1,5 @@
+R1: **Pass.** The input and output are byte-for-byte identical.
+
+All frozen-expectation clauses were met: anatomy, polemical ending, early thesis, attribution, administrative objection, cost uncertainty and council decision were preserved. No neutralisation, generic hedges or prohibited findings occurred. No clauses were unmet.
+
+Written to [judgement-a.md](/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-1ec1788d/evaluation/kntnt-native-session-q7x5bfdy/work/judgement-a.md).

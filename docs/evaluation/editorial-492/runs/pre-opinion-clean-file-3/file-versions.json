@@ -1,0 +1,92 @@
+[
+  {
+    "path": "work/input.md",
+    "sha256": "141efb2a4a3b9339a6a54942c1f2d2edfaf307746c355e732ac3590a1b13075a",
+    "capture": "0000-141efb2a4a3b.md",
+    "time": 1790972710.252087
+  },
+  {
+    "path": "work/AGENTS.md",
+    "sha256": "8026566b118a0ab1e4bb4908330ddf5c8c2206e677cd4dcbd0856afea77ffd1b",
+    "capture": "0001-8026566b118a.md",
+    "time": 1790972710.25223
+  },
+  {
+    "path": "scratch/redline-invoke-tbllz1n3/.tmpD0I71D/environments-v2/kntnt-7f82737dfdc97a42/lib/python3.12/site-packages/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0002-ae98f4215313.txt",
+    "time": 1790972755.332854
+  },
+  {
+    "path": "scratch/redline-invoke-tbllz1n3/.tmpD0I71D/archive-v0/6_EEotJzTjnpwaMY/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0003-ae98f4215313.txt",
+    "time": 1790972755.333589
+  },
+  {
+    "path": "scratch/redline-language-jmmo5lco/.tmpdHgLBR/.tmpon7dBI/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0004-ae98f4215313.txt",
+    "time": 1790972785.487932
+  },
+  {
+    "path": "scratch/redline-language-jmmo5lco/.tmpdHgLBR/environments-v2/languages-f6cf409ad150b33d/lib/python3.12/site-packages/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0005-ae98f4215313.txt",
+    "time": 1790972785.6020539
+  },
+  {
+    "path": "scratch/redline-language-jmmo5lco/.tmpdHgLBR/archive-v0/AaW4HlvPGkvrtAMc/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0006-ae98f4215313.txt",
+    "time": 1790972785.602786
+  },
+  {
+    "path": "scratch/redline-mechanical-q8e4qzkr/input.md",
+    "sha256": "141efb2a4a3b9339a6a54942c1f2d2edfaf307746c355e732ac3590a1b13075a",
+    "capture": "0007-141efb2a4a3b.md",
+    "time": 1790972838.560053
+  },
+  {
+    "path": "scratch/proofread-uv-ulghiexr/.tmp2SvR8t/.tmpFXyxlR/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0008-ae98f4215313.txt",
+    "time": 1790972872.488349
+  },
+  {
+    "path": "scratch/proofread-uv-ulghiexr/.tmp2SvR8t/environments-v2/kntnt-7f82737dfdc97a42/lib/python3.12/site-packages/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0009-ae98f4215313.txt",
+    "time": 1790972872.602355
+  },
+  {
+    "path": "scratch/proofread-uv-ulghiexr/.tmp2SvR8t/archive-v0/wCPOx0aif4Y067wo/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0010-ae98f4215313.txt",
+    "time": 1790972872.602921
+  },
+  {
+    "path": "scratch/proofread-language-uv-zruzixh2/.tmppuGJ1g/environments-v2/languages-f6cf409ad150b33d/lib/python3.12/site-packages/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0011-ae98f4215313.txt",
+    "time": 1790972891.624713
+  },
+  {
+    "path": "scratch/proofread-language-uv-zruzixh2/.tmppuGJ1g/archive-v0/dSaUgP-rM7-A36pj/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0012-ae98f4215313.txt",
+    "time": 1790972891.6252759
+  },
+  {
+    "path": "scratch/redline-mechanical-q8e4qzkr/output.md",
+    "sha256": "141efb2a4a3b9339a6a54942c1f2d2edfaf307746c355e732ac3590a1b13075a",
+    "capture": "0013-141efb2a4a3b.md",
+    "time": 1790972913.599744
+  },
+  {
+    "path": "work/output.md",
+    "sha256": "141efb2a4a3b9339a6a54942c1f2d2edfaf307746c355e732ac3590a1b13075a",
+    "capture": "0014-141efb2a4a3b.md",
+    "time": 1790973067.600176
+  }
+]

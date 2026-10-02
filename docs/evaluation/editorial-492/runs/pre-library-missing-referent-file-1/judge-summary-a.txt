@@ -1,0 +1,3 @@
+**R1: Pass.** The run detected and minimally repaired “Den kartläggningen” using information in the standfirst. All preservation clauses were met, and none of the rejected expansions, claim changes, hedges or neutralising rewrites occurred. No expectation clause was unmet.
+
+Written to [judgement-a.md](/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-1ec1788d/evaluation/kntnt-native-session-z1wy1xfl/work/judgement-a.md).

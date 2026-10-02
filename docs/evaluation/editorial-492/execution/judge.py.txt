@@ -1,0 +1,53 @@
+"""Judge completed baseline packets on independent neutral native sessions."""
+from pathlib import Path
+import concurrent.futures
+import json
+import os
+import secrets
+import subprocess
+import time
+root=Path('/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-1ec1788d/evaluation')
+repo=Path('/Users/thomas/Projects/skills/.git/kntnt-orchestrate/492')
+base=repo/'docs/evaluation/editorial-492'
+if os.getpgrp()!=os.getpid():
+    os.setsid()
+subprocess.run(['uv','run',str(repo/'skills/kntnt/features/session-cleanup/scripts/session_cleanup.py'),'add','pid',str(os.getpid()),'Ticket 492 independent native neutral-path judges'],cwd=repo,check=True,capture_output=True)
+rows=json.loads((root/'runs-map.json').read_text())
+readme=subprocess.check_output(['git','show','4cf05813:docs/evaluation/corpus/editorial-quality/README.md'],cwd=repo,text=True)
+opinion=next(l for l in readme.splitlines() if l.startswith('| opinion-clean /')).split('|')[3].strip()
+closure=next(l[2:] for l in (repo/'docs/evaluation/editorial-479/plan.md').read_text().splitlines() if l.startswith("> The standfirst's last sentence"))
+clear="Conforms to the anatomy. Preserve the early proposal to delay the self-service transition, the trial of both alternatives, the attribution and loan counts, the distinction between loans and visitors' needs, the relevant staffing-cost objection, the unknown trial cost, the council's named next step and the polemical final sentence. Reject an orientation finding or expansion merely because the lead does not repeat literal names of alternatives that a reader can follow from the headline, the lead's contrast and the subsequent account. No new claim, source verification, neutralising rewrite or generic hedge is warranted."
+missing=clear.replace('Conforms to the anatomy.', "Detect the lead's `Den kartläggningen`, whose subject only the standfirst supplies, and minimally name its mapping of opening hours from existing material at first need, or explicitly report it unresolved. Other functioning orientation is preserved; a genuine unresolved referent is not excused by a blanket ban on clarification.")
+expectations={'opinion-clean':opinion,'opinion-closure-certain':closure,'library-alternatives-clean':clear,'library-missing-referent':missing}
+tasks=[]
+for r in rows:
+    for letter in ('a','b'):
+        token=secrets.token_hex(6)
+        tasks.append({'run':r['run'],'producer_token':r['token'],'letter':letter,'token':token,'target':r['target'],'fixture':r['fixture']})
+(root/'judges-map.json').write_text(json.dumps(tasks,indent=2)+'\n')
+
+def run(t):
+    source=root/t['producer_token']
+    deadline=time.monotonic()+15000
+    while not (source/'result.json').exists():
+        if time.monotonic()>deadline:
+            raise TimeoutError('Producer did not end before the bounded judge scheduling wait')
+        time.sleep(0.5)
+    result=json.loads((source/'result.json').read_text())
+    if result['timed_out'] or result['returncode']!=0 or not (source/'response.txt').exists():
+        print(json.dumps({'run':t['run'],'letter':t['letter'],'judge_not_started':'producer needs void/completion classification'}),flush=True)
+        return
+    brief=base/('control-judge-brief-file.md' if t['target']=='file' else 'control-judge-brief.md')
+    prompt=root/f'{t["token"]}.prompt.txt'
+    expected=expectations[t['fixture']]
+    (source/'expectation.md').write_text(expected+'\n')
+    prompt.write_text(brief.read_text()+'\n---\nRun directory: your current working directory.\nYour letter: '+t['letter']+'\n\n**Frozen expectation**\n\n'+expected+'\n')
+    cmd=['uv','run',str(base/'harness/run.py'),'--revision=4cf05813','--corpus-revision=cb446552',f'--prompt={prompt}',f'--input={source/"supplied-input.md"}','--input-name=input.md',f'--output={root/t["token"]}','--judge',f'--extra-file={source/"response.txt"}',f'--capture-output-name=judgement-{t["letter"]}.md']
+    if t['target']=='file' and (source/'captured-output.md').exists():
+        cmd.append(f'--extra-file={source/"captured-output.md"}')
+    answer=subprocess.run(cmd,cwd=repo,capture_output=True,text=True)
+    record={'run':t['run'],'letter':t['letter'],'token':t['token'],'returncode':answer.returncode,'stdout':answer.stdout,'stderr':answer.stderr}
+    (root/f'{t["token"]}.launch.json').write_text(json.dumps(record,indent=2)+'\n')
+    print(json.dumps(record),flush=True)
+with concurrent.futures.ThreadPoolExecutor(max_workers=2) as pool:
+    list(pool.map(run,tasks))

@@ -1,0 +1,3 @@
+R1: **Pass.** All frozen-expectation clauses were met; none were missed. The mapping reference was minimally clarified and accurately reported. All required claims, attribution, arguments and polemical language were preserved, with no prohibited changes.
+
+Written to [judgement-b.md](/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-1ec1788d/evaluation/kntnt-native-session-kh3qe5yf/work/judgement-b.md).

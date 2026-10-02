@@ -1,0 +1,194 @@
+[
+  {
+    "run": "pre-opinion-clean-resp-1",
+    "producer_token": "722f0494197d",
+    "letter": "a",
+    "token": "5c1ae2b19418",
+    "target": "resp",
+    "fixture": "opinion-clean"
+  },
+  {
+    "run": "pre-opinion-clean-resp-1",
+    "producer_token": "722f0494197d",
+    "letter": "b",
+    "token": "f4f93f80e093",
+    "target": "resp",
+    "fixture": "opinion-clean"
+  },
+  {
+    "run": "pre-opinion-clean-file-1",
+    "producer_token": "b4dbab4a49aa",
+    "letter": "a",
+    "token": "1c0ebdac6217",
+    "target": "file",
+    "fixture": "opinion-clean"
+  },
+  {
+    "run": "pre-opinion-clean-file-1",
+    "producer_token": "b4dbab4a49aa",
+    "letter": "b",
+    "token": "5f302774cbc0",
+    "target": "file",
+    "fixture": "opinion-clean"
+  },
+  {
+    "run": "pre-opinion-clean-resp-2",
+    "producer_token": "1d319476310e",
+    "letter": "a",
+    "token": "2e6034aba25b",
+    "target": "resp",
+    "fixture": "opinion-clean"
+  },
+  {
+    "run": "pre-opinion-clean-resp-2",
+    "producer_token": "1d319476310e",
+    "letter": "b",
+    "token": "d42e15a4888e",
+    "target": "resp",
+    "fixture": "opinion-clean"
+  },
+  {
+    "run": "pre-opinion-clean-file-2",
+    "producer_token": "df2caa19f80f",
+    "letter": "a",
+    "token": "7e41cc13d25d",
+    "target": "file",
+    "fixture": "opinion-clean"
+  },
+  {
+    "run": "pre-opinion-clean-file-2",
+    "producer_token": "df2caa19f80f",
+    "letter": "b",
+    "token": "4cd1d954b447",
+    "target": "file",
+    "fixture": "opinion-clean"
+  },
+  {
+    "run": "pre-opinion-clean-resp-3",
+    "producer_token": "60043ef06d23",
+    "letter": "a",
+    "token": "e09b743225a0",
+    "target": "resp",
+    "fixture": "opinion-clean"
+  },
+  {
+    "run": "pre-opinion-clean-resp-3",
+    "producer_token": "60043ef06d23",
+    "letter": "b",
+    "token": "16b7f8d2872e",
+    "target": "resp",
+    "fixture": "opinion-clean"
+  },
+  {
+    "run": "pre-opinion-clean-file-3",
+    "producer_token": "bfeb4c8f9985",
+    "letter": "a",
+    "token": "33b1035e9c48",
+    "target": "file",
+    "fixture": "opinion-clean"
+  },
+  {
+    "run": "pre-opinion-clean-file-3",
+    "producer_token": "bfeb4c8f9985",
+    "letter": "b",
+    "token": "d3da3511225f",
+    "target": "file",
+    "fixture": "opinion-clean"
+  },
+  {
+    "run": "pre-library-alternatives-clean-resp-1",
+    "producer_token": "fb5a53685cf2",
+    "letter": "a",
+    "token": "c8f9c6eb5759",
+    "target": "resp",
+    "fixture": "library-alternatives-clean"
+  },
+  {
+    "run": "pre-library-alternatives-clean-resp-1",
+    "producer_token": "fb5a53685cf2",
+    "letter": "b",
+    "token": "fce599e434ba",
+    "target": "resp",
+    "fixture": "library-alternatives-clean"
+  },
+  {
+    "run": "pre-library-alternatives-clean-file-1",
+    "producer_token": "5f60b3b3ec0e",
+    "letter": "a",
+    "token": "60bdaf6f15c2",
+    "target": "file",
+    "fixture": "library-alternatives-clean"
+  },
+  {
+    "run": "pre-library-alternatives-clean-file-1",
+    "producer_token": "5f60b3b3ec0e",
+    "letter": "b",
+    "token": "07be2cd97f68",
+    "target": "file",
+    "fixture": "library-alternatives-clean"
+  },
+  {
+    "run": "pre-library-missing-referent-resp-1",
+    "producer_token": "70642c697f2c",
+    "letter": "a",
+    "token": "873b0f4a1ce3",
+    "target": "resp",
+    "fixture": "library-missing-referent"
+  },
+  {
+    "run": "pre-library-missing-referent-resp-1",
+    "producer_token": "70642c697f2c",
+    "letter": "b",
+    "token": "d0123671af99",
+    "target": "resp",
+    "fixture": "library-missing-referent"
+  },
+  {
+    "run": "pre-library-missing-referent-file-1",
+    "producer_token": "ff7db1746cab",
+    "letter": "a",
+    "token": "98afee73dc0d",
+    "target": "file",
+    "fixture": "library-missing-referent"
+  },
+  {
+    "run": "pre-library-missing-referent-file-1",
+    "producer_token": "ff7db1746cab",
+    "letter": "b",
+    "token": "cc1632958889",
+    "target": "file",
+    "fixture": "library-missing-referent"
+  },
+  {
+    "run": "pre-opinion-closure-certain-file-1",
+    "producer_token": "4ce4db15aa6a",
+    "letter": "a",
+    "token": "f31957624c92",
+    "target": "file",
+    "fixture": "opinion-closure-certain"
+  },
+  {
+    "run": "pre-opinion-closure-certain-file-1",
+    "producer_token": "4ce4db15aa6a",
+    "letter": "b",
+    "token": "f3f2bfa6d2fd",
+    "target": "file",
+    "fixture": "opinion-closure-certain"
+  },
+  {
+    "run": "pre-opinion-closure-certain-file-2",
+    "producer_token": "d07be156df36",
+    "letter": "a",
+    "token": "c1db47ecd4fd",
+    "target": "file",
+    "fixture": "opinion-closure-certain"
+  },
+  {
+    "run": "pre-opinion-closure-certain-file-2",
+    "producer_token": "d07be156df36",
+    "letter": "b",
+    "token": "1463ecbf18fa",
+    "target": "file",
+    "fixture": "opinion-closure-certain"
+  }
+]

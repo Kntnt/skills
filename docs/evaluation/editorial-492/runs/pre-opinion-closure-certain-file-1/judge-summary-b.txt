@@ -1,0 +1,5 @@
+**R1: Fail.** The run detected the contradiction but did not fully repair it or report it unresolved. The output still says “innan telefonbokningen stängs för gott”, while the reply claims “Inga fynd återstår.”
+
+All preservation clauses were met. No prohibited length, paragraph-structure or byline findings were made; no neutralization or generic hedges were introduced.
+
+Written to [judgement-b.md](/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-1ec1788d/evaluation/kntnt-native-session-p18bzqv9/work/judgement-b.md).

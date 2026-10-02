@@ -1,0 +1,3 @@
+R1: **Pass**. The run detects and minimally resolves “Den kartläggningen”, preserves all specified claims, attribution, figures, orientation and polemical language, and makes none of the rejected changes. All frozen-expectation clauses were met.
+
+Written to [judgement-b.md](/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-1ec1788d/evaluation/kntnt-native-session-e90pqni2/work/judgement-b.md).

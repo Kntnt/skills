@@ -1,0 +1,5 @@
+R1: **Fail**. The reply contains only a no-changes account and no returned article, so it does not deliver the required preserved thesis, attribution, objection, cost uncertainty, council decision or polemical ending.
+
+It avoids all prohibited findings, neutralizing rewrites and generic hedges. No actual edit to the input is inferred.
+
+Written to [judgement-a.md](/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-1ec1788d/evaluation/kntnt-native-session-gmqir4s2/work/judgement-a.md).

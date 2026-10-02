@@ -1,0 +1,38 @@
+"""Preserve native identity, messages and exact artifact differences without judging."""
+from pathlib import Path
+import difflib
+import json
+import re
+root=Path('/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-1ec1788d/evaluation')
+rows=json.loads((root/'runs-map.json').read_text())
+for row in rows:
+    packet=root/row['token']
+    if not (packet/'result.json').exists():
+        continue
+    identities=[]
+    messages=[]
+    for path in sorted((packet/'native-sessions').rglob('*.jsonl')):
+        events=[json.loads(x) for x in path.read_text().splitlines()]
+        meta=next(e['payload'] for e in events if e['type']=='session_meta')
+        for e in events:
+            if e['type']=='turn_context':
+                identities.append({'session':meta['id'],'source':meta.get('source'),'model':e['payload'].get('model'),'effort':e['payload'].get('effort')})
+            if e['type']=='response_item' and e['payload'].get('type')=='message' and e['payload'].get('role')=='assistant':
+                text='\n'.join(x.get('text','') for x in e['payload'].get('content',[]))
+                if text:
+                    messages.append({'timestamp':e.get('timestamp'),'session':meta['id'],'source':meta.get('source'),'text':text})
+    (packet/'identity-audit.json').write_text(json.dumps({'identities':identities,'all_on_frozen_seat':bool(identities) and all(x['model']=='gpt-6.1-sol' and x['effort']=='xhigh' for x in identities)},ensure_ascii=False,indent=2)+'\n')
+    messages.sort(key=lambda x:x['timestamp'] or '')
+    (packet/'messages.json').write_text(json.dumps(messages,ensure_ascii=False,indent=2)+'\n')
+    source=(packet/'supplied-input.md').read_text()
+    response=(packet/'response.txt').read_text()
+    delivered=(packet/'captured-output.md').read_text() if (packet/'captured-output.md').exists() else None
+    if row['target']=='resp':
+        blocks=re.findall(r'^```[^\n]*\n(.*?)^```[ \t]*$',response,re.MULTILINE|re.DOTALL)
+        artifacts=[b for b in blocks if '# ' in b and len(b)>300]
+        if len(artifacts)==1:
+            delivered=artifacts[0]
+            (packet/'extracted-output.md').write_text(delivered)
+    diff=''.join(difflib.unified_diff(source.splitlines(keepends=True),delivered.splitlines(keepends=True),fromfile='supplied-input.md',tofile='delivered-artifact.md')) if delivered is not None else 'No text delivered: response is the authorised no-change status.\n'
+    (packet/'delivery.diff').write_text(diff)
+    (packet/'artifact-audit.json').write_text(json.dumps({'artifact_delivered':delivered is not None,'exact_prose_match':delivered==source if delivered is not None else None},indent=2)+'\n')

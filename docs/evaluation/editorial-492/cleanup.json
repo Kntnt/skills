@@ -1,0 +1,516 @@
+{
+  "owned_registered_processes": [
+    {
+      "pid": 4617,
+      "why": "Editorial #492 isolated native evaluation",
+      "process_group_present": false
+    },
+    {
+      "pid": 4633,
+      "why": "Editorial #492 isolated native evaluation",
+      "process_group_present": false
+    },
+    {
+      "pid": 4645,
+      "why": "Editorial #492 isolated native evaluation",
+      "process_group_present": false
+    },
+    {
+      "pid": 4651,
+      "why": "Editorial #492 isolated native evaluation",
+      "process_group_present": false
+    },
+    {
+      "pid": 4680,
+      "why": "Editorial #492 isolated native evaluation",
+      "process_group_present": false
+    },
+    {
+      "pid": 4689,
+      "why": "Editorial #492 isolated native evaluation",
+      "process_group_present": false
+    },
+    {
+      "pid": 5796,
+      "why": "Editorial #492 isolated native evaluation",
+      "process_group_present": false
+    },
+    {
+      "pid": 5815,
+      "why": "Editorial #492 isolated native evaluation",
+      "process_group_present": false
+    },
+    {
+      "pid": 6156,
+      "why": "Editorial #492 isolated native evaluation",
+      "process_group_present": false
+    },
+    {
+      "pid": 6174,
+      "why": "Editorial #492 isolated native evaluation",
+      "process_group_present": false
+    },
+    {
+      "pid": 8270,
+      "why": "Editorial #492 isolated native evaluation",
+      "process_group_present": false
+    },
+    {
+      "pid": 8278,
+      "why": "Editorial #492 isolated native evaluation",
+      "process_group_present": false
+    },
+    {
+      "pid": 8289,
+      "why": "Editorial #492 isolated native evaluation",
+      "process_group_present": false
+    },
+    {
+      "pid": 8323,
+      "why": "Editorial #492 isolated native evaluation",
+      "process_group_present": false
+    },
+    {
+      "pid": 8336,
+      "why": "Editorial #492 isolated native evaluation",
+      "process_group_present": false
+    },
+    {
+      "pid": 8344,
+      "why": "Editorial #492 isolated native evaluation",
+      "process_group_present": false
+    },
+    {
+      "pid": 14193,
+      "why": "Ticket 492 readiness-scheduled independent judges",
+      "process_group_present": false
+    },
+    {
+      "pid": 14318,
+      "why": "Editorial #492 isolated native evaluation",
+      "process_group_present": false
+    },
+    {
+      "pid": 14319,
+      "why": "Editorial #492 isolated native evaluation",
+      "process_group_present": false
+    },
+    {
+      "pid": 14363,
+      "why": "Editorial #492 isolated native evaluation",
+      "process_group_present": false
+    },
+    {
+      "pid": 14364,
+      "why": "Editorial #492 isolated native evaluation",
+      "process_group_present": false
+    },
+    {
+      "pid": 16109,
+      "why": "Editorial #492 isolated native evaluation",
+      "process_group_present": false
+    },
+    {
+      "pid": 16129,
+      "why": "Editorial #492 isolated native evaluation",
+      "process_group_present": false
+    },
+    {
+      "pid": 17772,
+      "why": "Editorial #492 isolated native evaluation",
+      "process_group_present": false
+    },
+    {
+      "pid": 17798,
+      "why": "Editorial #492 isolated native evaluation",
+      "process_group_present": false
+    },
+    {
+      "pid": 18514,
+      "why": "Editorial #492 isolated native evaluation",
+      "process_group_present": false
+    },
+    {
+      "pid": 18536,
+      "why": "Editorial #492 isolated native evaluation",
+      "process_group_present": false
+    },
+    {
+      "pid": 20444,
+      "why": "Editorial #492 isolated native evaluation",
+      "process_group_present": false
+    },
+    {
+      "pid": 20466,
+      "why": "Editorial #492 isolated native evaluation",
+      "process_group_present": false
+    },
+    {
+      "pid": 21183,
+      "why": "Editorial #492 isolated native evaluation",
+      "process_group_present": false
+    },
+    {
+      "pid": 21202,
+      "why": "Editorial #492 isolated native evaluation",
+      "process_group_present": false
+    },
+    {
+      "pid": 21448,
+      "why": "Editorial #492 isolated native evaluation",
+      "process_group_present": false
+    },
+    {
+      "pid": 21467,
+      "why": "Editorial #492 isolated native evaluation",
+      "process_group_present": false
+    },
+    {
+      "pid": 22308,
+      "why": "Editorial #492 isolated native evaluation",
+      "process_group_present": false
+    },
+    {
+      "pid": 22326,
+      "why": "Editorial #492 isolated native evaluation",
+      "process_group_present": false
+    },
+    {
+      "pid": 24261,
+      "why": "Editorial #492 isolated native evaluation",
+      "process_group_present": false
+    },
+    {
+      "pid": 24280,
+      "why": "Editorial #492 isolated native evaluation",
+      "process_group_present": false
+    },
+    {
+      "pid": 24596,
+      "why": "Editorial #492 isolated native evaluation",
+      "process_group_present": false
+    },
+    {
+      "pid": 24614,
+      "why": "Editorial #492 isolated native evaluation",
+      "process_group_present": false
+    },
+    {
+      "pid": 26228,
+      "why": "Editorial #492 isolated native evaluation",
+      "process_group_present": false
+    },
+    {
+      "pid": 26256,
+      "why": "Editorial #492 isolated native evaluation",
+      "process_group_present": false
+    },
+    {
+      "pid": 26902,
+      "why": "Editorial #492 isolated native evaluation",
+      "process_group_present": false
+    },
+    {
+      "pid": 26921,
+      "why": "Editorial #492 isolated native evaluation",
+      "process_group_present": false
+    },
+    {
+      "pid": 28615,
+      "why": "Editorial #492 isolated native evaluation",
+      "process_group_present": false
+    },
+    {
+      "pid": 28645,
+      "why": "Editorial #492 isolated native evaluation",
+      "process_group_present": false
+    },
+    {
+      "pid": 28998,
+      "why": "Editorial #492 isolated native evaluation",
+      "process_group_present": false
+    },
+    {
+      "pid": 29018,
+      "why": "Editorial #492 isolated native evaluation",
+      "process_group_present": false
+    },
+    {
+      "pid": 30261,
+      "why": "Editorial #492 isolated native evaluation",
+      "process_group_present": false
+    },
+    {
+      "pid": 30293,
+      "why": "Editorial #492 isolated native evaluation",
+      "process_group_present": false
+    },
+    {
+      "pid": 30917,
+      "why": "Editorial #492 isolated native evaluation",
+      "process_group_present": false
+    },
+    {
+      "pid": 30937,
+      "why": "Editorial #492 isolated native evaluation",
+      "process_group_present": false
+    },
+    {
+      "pid": 31677,
+      "why": "Editorial #492 isolated native evaluation",
+      "process_group_present": false
+    },
+    {
+      "pid": 31696,
+      "why": "Editorial #492 isolated native evaluation",
+      "process_group_present": false
+    },
+    {
+      "pid": 32210,
+      "why": "Ticket 492 CONTRIBUTING gate",
+      "process_group_present": false
+    },
+    {
+      "pid": 32333,
+      "why": "Ticket 492 CONTRIBUTING gate",
+      "process_group_present": false
+    },
+    {
+      "pid": 33453,
+      "why": "Editorial #492 isolated native evaluation",
+      "process_group_present": false
+    },
+    {
+      "pid": 33563,
+      "why": "Editorial #492 isolated native evaluation",
+      "process_group_present": false
+    },
+    {
+      "pid": 42276,
+      "why": "Editorial #492 isolated native evaluation",
+      "process_group_present": false
+    },
+    {
+      "pid": 42359,
+      "why": "Editorial #492 isolated native evaluation",
+      "process_group_present": false
+    },
+    {
+      "pid": 73111,
+      "why": "Ticket 492 CONTRIBUTING gate",
+      "process_group_present": false
+    },
+    {
+      "pid": 73233,
+      "why": "Ticket 492 CONTRIBUTING gate",
+      "process_group_present": false
+    },
+    {
+      "pid": 73242,
+      "why": "Ticket 492 CONTRIBUTING gate",
+      "process_group_present": false
+    },
+    {
+      "pid": 73251,
+      "why": "Ticket 492 CONTRIBUTING gate",
+      "process_group_present": false
+    },
+    {
+      "pid": 73263,
+      "why": "Ticket 492 CONTRIBUTING gate",
+      "process_group_present": false
+    },
+    {
+      "pid": 84185,
+      "why": "Editorial #492 isolated native evaluation",
+      "process_group_present": false
+    },
+    {
+      "pid": 84205,
+      "why": "Editorial #492 isolated native evaluation",
+      "process_group_present": false
+    },
+    {
+      "pid": 86279,
+      "why": "Editorial #492 isolated native evaluation",
+      "process_group_present": false
+    },
+    {
+      "pid": 86301,
+      "why": "Editorial #492 isolated native evaluation",
+      "process_group_present": false
+    },
+    {
+      "pid": 87157,
+      "why": "Ticket 492 independent contrast validators",
+      "process_group_present": false
+    },
+    {
+      "pid": 87286,
+      "why": "Editorial #492 isolated native evaluation",
+      "process_group_present": false
+    },
+    {
+      "pid": 87287,
+      "why": "Editorial #492 isolated native evaluation",
+      "process_group_present": false
+    },
+    {
+      "pid": 87288,
+      "why": "Editorial #492 isolated native evaluation",
+      "process_group_present": false
+    },
+    {
+      "pid": 87289,
+      "why": "Editorial #492 isolated native evaluation",
+      "process_group_present": false
+    },
+    {
+      "pid": 87361,
+      "why": "Editorial #492 isolated native evaluation",
+      "process_group_present": false
+    },
+    {
+      "pid": 87362,
+      "why": "Editorial #492 isolated native evaluation",
+      "process_group_present": false
+    },
+    {
+      "pid": 87363,
+      "why": "Editorial #492 isolated native evaluation",
+      "process_group_present": false
+    },
+    {
+      "pid": 87364,
+      "why": "Editorial #492 isolated native evaluation",
+      "process_group_present": false
+    },
+    {
+      "pid": 90725,
+      "why": "Ticket 492 fresh native baseline lanes",
+      "process_group_present": false
+    },
+    {
+      "pid": 90872,
+      "why": "Editorial #492 isolated native evaluation",
+      "process_group_present": false
+    },
+    {
+      "pid": 90873,
+      "why": "Editorial #492 isolated native evaluation",
+      "process_group_present": false
+    },
+    {
+      "pid": 90874,
+      "why": "Editorial #492 isolated native evaluation",
+      "process_group_present": false
+    },
+    {
+      "pid": 90875,
+      "why": "Editorial #492 isolated native evaluation",
+      "process_group_present": false
+    },
+    {
+      "pid": 91008,
+      "why": "Editorial #492 isolated native evaluation",
+      "process_group_present": false
+    },
+    {
+      "pid": 91009,
+      "why": "Editorial #492 isolated native evaluation",
+      "process_group_present": false
+    },
+    {
+      "pid": 91010,
+      "why": "Editorial #492 isolated native evaluation",
+      "process_group_present": false
+    },
+    {
+      "pid": 91011,
+      "why": "Editorial #492 isolated native evaluation",
+      "process_group_present": false
+    },
+    {
+      "pid": 92804,
+      "why": "Ticket 492 CONTRIBUTING gate",
+      "process_group_present": false
+    },
+    {
+      "pid": 92936,
+      "why": "Ticket 492 CONTRIBUTING gate",
+      "process_group_present": false
+    },
+    {
+      "pid": 95908,
+      "why": "Ticket 492 independent native neutral-path judges",
+      "process_group_present": false
+    },
+    {
+      "pid": 97141,
+      "why": "Editorial #492 isolated native evaluation",
+      "process_group_present": false
+    },
+    {
+      "pid": 97155,
+      "why": "Editorial #492 isolated native evaluation",
+      "process_group_present": false
+    },
+    {
+      "pid": 97157,
+      "why": "Editorial #492 isolated native evaluation",
+      "process_group_present": false
+    },
+    {
+      "pid": 97192,
+      "why": "Editorial #492 isolated native evaluation",
+      "process_group_present": false
+    },
+    {
+      "pid": 97206,
+      "why": "Editorial #492 isolated native evaluation",
+      "process_group_present": false
+    },
+    {
+      "pid": 97208,
+      "why": "Editorial #492 isolated native evaluation",
+      "process_group_present": false
+    },
+    {
+      "pid": 98522,
+      "why": "Editorial #492 isolated native evaluation",
+      "process_group_present": false
+    },
+    {
+      "pid": 98540,
+      "why": "Editorial #492 isolated native evaluation",
+      "process_group_present": false
+    },
+    {
+      "pid": 98869,
+      "why": "Ticket 492 CONTRIBUTING gate",
+      "process_group_present": false
+    },
+    {
+      "pid": 98992,
+      "why": "Ticket 492 CONTRIBUTING gate",
+      "process_group_present": false
+    },
+    {
+      "pid": 99002,
+      "why": "Ticket 492 CONTRIBUTING gate",
+      "process_group_present": false
+    }
+  ],
+  "left_running": [],
+  "all_published_before_scratch_removal": true,
+  "removed_paths": [
+    "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-1ec1788d/evaluation",
+    "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-1ec1788d/tools",
+    "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/492/.ruff_cache",
+    "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/492/.mypy_cache",
+    "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/492/.pytest_cache"
+  ],
+  "status": "complete",
+  "verified_at_utc": "2026-10-02T21:10:26.323817+00:00",
+  "removal_method": "non-forced recursive removal of literal owned paths; the forced form was rejected by the automatic cleanup guard before execution"
+}

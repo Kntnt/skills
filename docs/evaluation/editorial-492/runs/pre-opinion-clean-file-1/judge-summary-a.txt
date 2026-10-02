@@ -1,0 +1,3 @@
+R1: **Pass**. All frozen-expectation clauses were met; none were unmet. The output is byte-for-byte identical to the input, preserving every protected passage and structure. The reply makes no prohibited findings.
+
+Written to [judgement-a.md](/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-1ec1788d/evaluation/kntnt-native-session-x4albgoh/work/judgement-a.md).

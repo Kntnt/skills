@@ -1,0 +1,5 @@
+R1: **Fail** because the reply contains no returned article, so the required preservation cannot be demonstrated.
+
+The no-change decision fits the conforming anatomy. No prohibited orientation finding, expansion, new article claim, source-verification finding, neutralising rewrite or generic hedge appears. The failure concerns the missing deliverable, not an inferred rewrite.
+
+Written to [judgement-b.md](/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-1ec1788d/evaluation/kntnt-native-session-sgd89u4d/work/judgement-b.md).

@@ -1,0 +1,3 @@
+**R1: Pass.** All frozen-expectation clauses were met; none were unmet. The reply minimally repairs “Den kartläggningen” using the standfirst, preserves every specified argument and claim, and avoids unnecessary expansion, hedging or source verification. Its account accurately reports the repair. Added code fences are unreported presentation changes.
+
+Written to [judgement-a.md](/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-1ec1788d/evaluation/kntnt-native-session-e67vn6y7/work/judgement-a.md).

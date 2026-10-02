@@ -1,0 +1,488 @@
+{
+  "reason": "Native session metadata exposes private creator account/user IDs. Publication replaces only private auth and creator identity values; session IDs, lineage, seat, timestamps, semantic messages and tool events remain intact. Gzip compression is lossless after these explicit redactions. No token or key is published and no authentication digest is recorded.",
+  "files": [
+    {
+      "path": "runs/pre-opinion-clean-resp-3/native-sessions/2026/10/02/rollout-2026-10-02T22-21-17-01a0fe47-3e8d-7521-b0f7-7caa30b62b0d.jsonl.gz",
+      "counts": {
+        "private-account-id": 1,
+        "private-user-id": 1
+      }
+    },
+    {
+      "path": "runs/pre-opinion-clean-resp-3/native-sessions/2026/10/02/rollout-2026-10-02T22-23-39-01a0fe49-6aa9-7df3-852c-cb156599a5a0.jsonl.gz",
+      "counts": {
+        "private-account-id": 1,
+        "private-user-id": 1
+      }
+    },
+    {
+      "path": "runs/pre-opinion-clean-resp-2/native-sessions/2026/10/02/rollout-2026-10-02T22-09-58-01a0fe3c-e38d-7b50-bca0-164509b12252.jsonl.gz",
+      "counts": {
+        "private-account-id": 1,
+        "private-user-id": 1
+      }
+    },
+    {
+      "path": "runs/pre-opinion-clean-resp-2/native-sessions/2026/10/02/rollout-2026-10-02T22-13-06-01a0fe3f-c34c-7dc0-a158-573514b52225.jsonl.gz",
+      "counts": {
+        "private-account-id": 1,
+        "private-user-id": 1
+      }
+    },
+    {
+      "path": "runs/pre-library-alternatives-clean-file-1/native-sessions/2026/10/02/rollout-2026-10-02T22-07-31-01a0fe3a-a65d-7f43-bca7-55c1879c13e9.jsonl.gz",
+      "counts": {
+        "private-account-id": 1,
+        "private-user-id": 1
+      }
+    },
+    {
+      "path": "runs/pre-library-alternatives-clean-file-1/native-sessions/2026/10/02/rollout-2026-10-02T22-17-52-01a0fe44-1ee2-7fb0-8831-64ab94670d63.jsonl.gz",
+      "counts": {
+        "private-account-id": 1,
+        "private-user-id": 1
+      }
+    },
+    {
+      "path": "runs/pre-library-alternatives-clean-file-1/native-sessions/2026/10/02/rollout-2026-10-02T22-21-22-01a0fe47-5567-7843-9110-d4ea6818c8c1.jsonl.gz",
+      "counts": {
+        "private-account-id": 1,
+        "private-user-id": 1
+      }
+    },
+    {
+      "path": "runs/pre-library-alternatives-clean-file-1/native-sessions/2026/10/02/rollout-2026-10-02T22-03-32-01a0fe36-fed7-7010-8bce-f30c688c2da8.jsonl.gz",
+      "counts": {
+        "private-account-id": 1,
+        "private-user-id": 1
+      }
+    },
+    {
+      "path": "runs/pre-opinion-closure-certain-file-1/native-sessions/2026/10/02/rollout-2026-10-02T22-05-09-01a0fe38-7a18-7143-bdde-81f448a02b33.jsonl.gz",
+      "counts": {
+        "private-account-id": 1,
+        "private-user-id": 1
+      }
+    },
+    {
+      "path": "runs/pre-opinion-closure-certain-file-1/native-sessions/2026/10/02/rollout-2026-10-02T21-58-05-01a0fe31-fe1b-77b3-8934-0bdeacbbbd77.jsonl.gz",
+      "counts": {
+        "private-account-id": 1,
+        "private-user-id": 1
+      }
+    },
+    {
+      "path": "runs/pre-opinion-closure-certain-file-1/native-sessions/2026/10/02/rollout-2026-10-02T22-02-08-01a0fe35-b601-7c30-80c2-c854dacff4ae.jsonl.gz",
+      "counts": {
+        "private-account-id": 1,
+        "private-user-id": 1
+      }
+    },
+    {
+      "path": "runs/pre-opinion-closure-certain-file-1/native-sessions/2026/10/02/rollout-2026-10-02T22-09-02-01a0fe3c-09df-7970-8fe5-cd95937cebba.jsonl.gz",
+      "counts": {
+        "private-account-id": 1,
+        "private-user-id": 1
+      }
+    },
+    {
+      "path": "runs/pre-opinion-clean-file-3/native-sessions/2026/10/02/rollout-2026-10-02T22-30-33-01a0fe4f-bd18-70b1-bd2e-611c93053f79.jsonl.gz",
+      "counts": {
+        "private-account-id": 1,
+        "private-user-id": 1
+      }
+    },
+    {
+      "path": "runs/pre-opinion-clean-file-3/native-sessions/2026/10/02/rollout-2026-10-02T22-27-31-01a0fe4c-f66e-7dd3-ab88-01ff1c536c39.jsonl.gz",
+      "counts": {
+        "private-account-id": 1,
+        "private-user-id": 1
+      }
+    },
+    {
+      "path": "runs/pre-opinion-clean-file-3/native-sessions/2026/10/02/rollout-2026-10-02T22-25-10-01a0fe4a-cde7-7ab1-877c-da3d4c844f95.jsonl.gz",
+      "counts": {
+        "private-account-id": 1,
+        "private-user-id": 1
+      }
+    },
+    {
+      "path": "runs/pre-library-alternatives-clean-resp-1/native-sessions/2026/10/02/rollout-2026-10-02T22-01-22-01a0fe35-0316-7572-8e33-0c712586081b.jsonl.gz",
+      "counts": {
+        "private-account-id": 1,
+        "private-user-id": 1
+      }
+    },
+    {
+      "path": "runs/pre-library-alternatives-clean-resp-1/native-sessions/2026/10/02/rollout-2026-10-02T21-58-05-01a0fe31-fe1c-74e2-9dbc-794ca20663bf.jsonl.gz",
+      "counts": {
+        "private-account-id": 1,
+        "private-user-id": 1
+      }
+    },
+    {
+      "path": "runs/pre-opinion-clean-file-2/native-sessions/2026/10/02/rollout-2026-10-02T22-20-39-01a0fe46-ac07-72e1-b833-d740bf830c55.jsonl.gz",
+      "counts": {
+        "private-account-id": 1,
+        "private-user-id": 1
+      }
+    },
+    {
+      "path": "runs/pre-opinion-clean-file-2/native-sessions/2026/10/02/rollout-2026-10-02T22-17-32-01a0fe43-cfd6-7d71-ad64-bd6af3d2215d.jsonl.gz",
+      "counts": {
+        "private-account-id": 1,
+        "private-user-id": 1
+      }
+    },
+    {
+      "path": "runs/pre-opinion-clean-file-2/native-sessions/2026/10/02/rollout-2026-10-02T22-14-59-01a0fe41-79aa-7703-a3a4-fba9d5498eb5.jsonl.gz",
+      "counts": {
+        "private-account-id": 1,
+        "private-user-id": 1
+      }
+    },
+    {
+      "path": "runs/pre-opinion-clean-resp-1/native-sessions/2026/10/02/rollout-2026-10-02T22-00-38-01a0fe34-58f4-7840-a7d1-6da862bffaef.jsonl.gz",
+      "counts": {
+        "private-account-id": 1,
+        "private-user-id": 1
+      }
+    },
+    {
+      "path": "runs/pre-opinion-clean-resp-1/native-sessions/2026/10/02/rollout-2026-10-02T21-58-05-01a0fe31-fe1c-7fc1-a6fa-5463a95d23c8.jsonl.gz",
+      "counts": {
+        "private-account-id": 1,
+        "private-user-id": 1
+      }
+    },
+    {
+      "path": "runs/pre-opinion-closure-certain-file-2/native-sessions/2026/10/02/rollout-2026-10-02T22-11-28-01a0fe3e-3f90-7210-a2d3-136520c7ac3b.jsonl.gz",
+      "counts": {
+        "private-account-id": 1,
+        "private-user-id": 1
+      }
+    },
+    {
+      "path": "runs/pre-opinion-closure-certain-file-2/native-sessions/2026/10/02/rollout-2026-10-02T22-22-52-01a0fe48-b225-7d23-a45a-b9f6a8446dcf.jsonl.gz",
+      "counts": {
+        "private-account-id": 1,
+        "private-user-id": 1
+      }
+    },
+    {
+      "path": "runs/pre-opinion-closure-certain-file-2/native-sessions/2026/10/02/rollout-2026-10-02T22-18-49-01a0fe44-fc4f-74d1-a23a-17fb2618ee6d.jsonl.gz",
+      "counts": {
+        "private-account-id": 1,
+        "private-user-id": 1
+      }
+    },
+    {
+      "path": "runs/pre-opinion-closure-certain-file-2/native-sessions/2026/10/02/rollout-2026-10-02T22-15-18-01a0fe41-c766-7a61-a022-58510c34a096.jsonl.gz",
+      "counts": {
+        "private-account-id": 1,
+        "private-user-id": 1
+      }
+    },
+    {
+      "path": "runs/pre-library-missing-referent-resp-1/native-sessions/2026/10/02/rollout-2026-10-02T22-10-08-01a0fe3d-0bc0-7e92-94d6-488f7581b856.jsonl.gz",
+      "counts": {
+        "private-account-id": 1,
+        "private-user-id": 1
+      }
+    },
+    {
+      "path": "runs/pre-library-missing-referent-resp-1/native-sessions/2026/10/02/rollout-2026-10-02T22-02-18-01a0fe35-df14-7380-9c95-10a8a756f9ee.jsonl.gz",
+      "counts": {
+        "private-account-id": 1,
+        "private-user-id": 1
+      }
+    },
+    {
+      "path": "runs/pre-library-missing-referent-resp-1/native-sessions/2026/10/02/rollout-2026-10-02T21-58-05-01a0fe31-fe1c-7110-9a1f-45d90a4f422f.jsonl.gz",
+      "counts": {
+        "private-account-id": 1,
+        "private-user-id": 1
+      }
+    },
+    {
+      "path": "runs/pre-library-missing-referent-resp-1/native-sessions/2026/10/02/rollout-2026-10-02T22-05-49-01a0fe39-1714-71e1-9ad3-3165079eed1f.jsonl.gz",
+      "counts": {
+        "private-account-id": 1,
+        "private-user-id": 1
+      }
+    },
+    {
+      "path": "runs/pre-opinion-clean-file-1/native-sessions/2026/10/02/rollout-2026-10-02T22-02-42-01a0fe36-39b3-7500-8aba-83e340e2a4e6.jsonl.gz",
+      "counts": {
+        "private-account-id": 1,
+        "private-user-id": 1
+      }
+    },
+    {
+      "path": "runs/pre-opinion-clean-file-1/native-sessions/2026/10/02/rollout-2026-10-02T22-05-46-01a0fe39-0c24-7b13-9f88-5ad802bb744b.jsonl.gz",
+      "counts": {
+        "private-account-id": 1,
+        "private-user-id": 1
+      }
+    },
+    {
+      "path": "runs/pre-opinion-clean-file-1/native-sessions/2026/10/02/rollout-2026-10-02T22-09-12-01a0fe3c-3065-7262-9157-13f9d02cb54a.jsonl.gz",
+      "counts": {
+        "private-account-id": 1,
+        "private-user-id": 1
+      }
+    },
+    {
+      "path": "runs/pre-library-missing-referent-file-1/native-sessions/2026/10/02/rollout-2026-10-02T22-14-25-01a0fe40-f507-7ef0-91e0-53c325de8a71.jsonl.gz",
+      "counts": {
+        "private-account-id": 1,
+        "private-user-id": 1
+      }
+    },
+    {
+      "path": "runs/pre-library-missing-referent-file-1/native-sessions/2026/10/02/rollout-2026-10-02T22-22-30-01a0fe48-5c1b-7d31-8dd4-aeca5db99be8.jsonl.gz",
+      "counts": {
+        "private-account-id": 1,
+        "private-user-id": 1
+      }
+    },
+    {
+      "path": "runs/pre-library-missing-referent-file-1/native-sessions/2026/10/02/rollout-2026-10-02T22-10-59-01a0fe3d-cf0a-7442-8897-544091b0b324.jsonl.gz",
+      "counts": {
+        "private-account-id": 1,
+        "private-user-id": 1
+      }
+    },
+    {
+      "path": "runs/pre-library-missing-referent-file-1/native-sessions/2026/10/02/rollout-2026-10-02T22-18-35-01a0fe44-c674-78c2-b51f-0a21fa44e63c.jsonl.gz",
+      "counts": {
+        "private-account-id": 1,
+        "private-user-id": 1
+      }
+    },
+    {
+      "path": "validations/library-alternatives-clean-b/rollout-2026-10-02T21-55-18-01a0fe2f-7424-7d23-9c00-29ee15ef5c3e.jsonl.gz",
+      "counts": {
+        "private-account-id": 1,
+        "private-user-id": 1
+      }
+    },
+    {
+      "path": "validations/library-missing-referent-b/rollout-2026-10-02T21-55-18-01a0fe2f-7424-7c92-bcbc-9ffcd180a25b.jsonl.gz",
+      "counts": {
+        "private-account-id": 1,
+        "private-user-id": 1
+      }
+    },
+    {
+      "path": "validations/library-alternatives-clean-a/rollout-2026-10-02T21-55-18-01a0fe2f-7424-7ff1-91db-76f2f62a10be.jsonl.gz",
+      "counts": {
+        "private-account-id": 1,
+        "private-user-id": 1
+      }
+    },
+    {
+      "path": "validations/library-missing-referent-a/rollout-2026-10-02T21-55-18-01a0fe2f-7424-7452-b68c-6e2e570ad258.jsonl.gz",
+      "counts": {
+        "private-account-id": 1,
+        "private-user-id": 1
+      }
+    },
+    {
+      "path": "judges/pre-opinion-clean-file-1-a/native-sessions/2026/10/02/rollout-2026-10-02T22-09-59-01a0fe3c-e4bd-77d2-99c2-25d2b89f6ef2.jsonl.gz",
+      "counts": {
+        "private-account-id": 1,
+        "private-user-id": 1
+      }
+    },
+    {
+      "path": "judges/pre-library-missing-referent-resp-1-a/native-sessions/2026/10/02/rollout-2026-10-02T22-24-22-01a0fe4a-12cd-7fc1-a1e3-1d8ecdd433eb.jsonl.gz",
+      "counts": {
+        "private-account-id": 1,
+        "private-user-id": 1
+      }
+    },
+    {
+      "path": "judges/pre-opinion-closure-certain-file-1-b/native-sessions/2026/10/02/rollout-2026-10-02T22-36-19-01a0fe55-007b-7023-812c-865358f0f014.jsonl.gz",
+      "counts": {
+        "private-account-id": 1,
+        "private-user-id": 1
+      }
+    },
+    {
+      "path": "judges/pre-opinion-clean-file-3-b/native-sessions/2026/10/02/rollout-2026-10-02T22-33-08-01a0fe52-1772-73d0-911b-2807ee94dd0a.jsonl.gz",
+      "counts": {
+        "private-account-id": 1,
+        "private-user-id": 1
+      }
+    },
+    {
+      "path": "judges/pre-library-alternatives-clean-file-1-b/native-sessions/2026/10/02/rollout-2026-10-02T22-28-25-01a0fe4d-c533-77e2-b1db-589ecb8b29c3.jsonl.gz",
+      "counts": {
+        "private-account-id": 1,
+        "private-user-id": 1
+      }
+    },
+    {
+      "path": "judges/pre-opinion-clean-resp-3-a/native-sessions/2026/10/02/rollout-2026-10-02T22-26-08-01a0fe4b-aff7-7613-bb8a-8aeb5386df00.jsonl.gz",
+      "counts": {
+        "private-account-id": 1,
+        "private-user-id": 1
+      }
+    },
+    {
+      "path": "judges/pre-library-missing-referent-file-1-b/native-sessions/2026/10/02/rollout-2026-10-02T22-34-41-01a0fe53-8487-7303-9400-635cac5905e5.jsonl.gz",
+      "counts": {
+        "private-account-id": 1,
+        "private-user-id": 1
+      }
+    },
+    {
+      "path": "judges/pre-opinion-clean-resp-1-b/native-sessions/2026/10/02/rollout-2026-10-02T22-02-42-01a0fe36-3a4f-7411-96ab-d0cc4b5a7450.jsonl.gz",
+      "counts": {
+        "private-account-id": 1,
+        "private-user-id": 1
+      }
+    },
+    {
+      "path": "judges/pre-library-alternatives-clean-resp-1-a/native-sessions/2026/10/02/rollout-2026-10-02T22-19-24-01a0fe45-842a-73b0-8b66-8a024e3394ed.jsonl.gz",
+      "counts": {
+        "private-account-id": 1,
+        "private-user-id": 1
+      }
+    },
+    {
+      "path": "judges/pre-opinion-clean-file-2-a/native-sessions/2026/10/02/rollout-2026-10-02T22-22-38-01a0fe48-7cb5-7400-8afa-e5193864f9da.jsonl.gz",
+      "counts": {
+        "private-account-id": 1,
+        "private-user-id": 1
+      }
+    },
+    {
+      "path": "judges/pre-opinion-closure-certain-file-2-b/native-sessions/2026/10/02/rollout-2026-10-02T22-38-07-01a0fe56-a6a7-7fc3-959d-ea529079ee33.jsonl.gz",
+      "counts": {
+        "private-account-id": 1,
+        "private-user-id": 1
+      }
+    },
+    {
+      "path": "judges/pre-opinion-clean-resp-2-b/native-sessions/2026/10/02/rollout-2026-10-02T22-14-59-01a0fe41-7a4d-78e1-81c6-9591d4709617.jsonl.gz",
+      "counts": {
+        "private-account-id": 1,
+        "private-user-id": 1
+      }
+    },
+    {
+      "path": "judges/pre-opinion-clean-file-1-b/native-sessions/2026/10/02/rollout-2026-10-02T22-09-59-01a0fe3c-e449-7373-81a0-4fedd65183bf.jsonl.gz",
+      "counts": {
+        "private-account-id": 1,
+        "private-user-id": 1
+      }
+    },
+    {
+      "path": "judges/pre-opinion-closure-certain-file-1-a/native-sessions/2026/10/02/rollout-2026-10-02T22-34-55-01a0fe53-ba07-7ae0-8bdd-f87c4545b390.jsonl.gz",
+      "counts": {
+        "private-account-id": 1,
+        "private-user-id": 1
+      }
+    },
+    {
+      "path": "judges/pre-opinion-clean-file-3-a/native-sessions/2026/10/02/rollout-2026-10-02T22-31-35-01a0fe50-aeb2-7ac2-a357-bb1e8354ab57.jsonl.gz",
+      "counts": {
+        "private-account-id": 1,
+        "private-user-id": 1
+      }
+    },
+    {
+      "path": "judges/pre-library-missing-referent-resp-1-b/native-sessions/2026/10/02/rollout-2026-10-02T22-30-53-01a0fe50-083c-77c2-922e-45b23a5a7dee.jsonl.gz",
+      "counts": {
+        "private-account-id": 1,
+        "private-user-id": 1
+      }
+    },
+    {
+      "path": "judges/pre-library-alternatives-clean-file-1-a/native-sessions/2026/10/02/rollout-2026-10-02T22-25-01-01a0fe4a-a8af-7ce3-93db-dc91892b31ab.jsonl.gz",
+      "counts": {
+        "private-account-id": 1,
+        "private-user-id": 1
+      }
+    },
+    {
+      "path": "judges/pre-library-missing-referent-file-1-a/native-sessions/2026/10/02/rollout-2026-10-02T22-33-17-01a0fe52-3b0f-78f1-8187-4adddc4b8c6d.jsonl.gz",
+      "counts": {
+        "private-account-id": 1,
+        "private-user-id": 1
+      }
+    },
+    {
+      "path": "judges/pre-opinion-clean-resp-3-b/native-sessions/2026/10/02/rollout-2026-10-02T22-28-20-01a0fe4d-b374-7b93-8ec6-009090150132.jsonl.gz",
+      "counts": {
+        "private-account-id": 1,
+        "private-user-id": 1
+      }
+    },
+    {
+      "path": "judges/pre-opinion-clean-resp-1-a/native-sessions/2026/10/02/rollout-2026-10-02T22-02-42-01a0fe36-3a50-7082-aafd-578b387799f9.jsonl.gz",
+      "counts": {
+        "private-account-id": 1,
+        "private-user-id": 1
+      }
+    },
+    {
+      "path": "judges/pre-library-alternatives-clean-resp-1-b/native-sessions/2026/10/02/rollout-2026-10-02T22-19-24-01a0fe45-842a-7f00-a883-3c529aa010d2.jsonl.gz",
+      "counts": {
+        "private-account-id": 1,
+        "private-user-id": 1
+      }
+    },
+    {
+      "path": "judges/pre-opinion-clean-file-2-b/native-sessions/2026/10/02/rollout-2026-10-02T22-23-11-01a0fe48-fb33-7a63-9f0d-e8d40413fb15.jsonl.gz",
+      "counts": {
+        "private-account-id": 1,
+        "private-user-id": 1
+      }
+    },
+    {
+      "path": "judges/pre-opinion-closure-certain-file-2-a/native-sessions/2026/10/02/rollout-2026-10-02T22-37-08-01a0fe55-c168-7f21-848f-d00286fcf675.jsonl.gz",
+      "counts": {
+        "private-account-id": 1,
+        "private-user-id": 1
+      }
+    },
+    {
+      "path": "judges/pre-opinion-clean-resp-2-a/native-sessions/2026/10/02/rollout-2026-10-02T22-14-59-01a0fe41-79f6-7c51-9db4-b357d8201e58.jsonl.gz",
+      "counts": {
+        "private-account-id": 1,
+        "private-user-id": 1
+      }
+    },
+    {
+      "path": "voided/smoke-format-preflight/native-sessions/2026/10/02/rollout-2026-10-02T21-53-03-01a0fe2d-646d-7fd3-8769-10dc903343b5.jsonl.gz",
+      "counts": {
+        "private-account-id": 1,
+        "private-user-id": 1
+      }
+    },
+    {
+      "path": "voided/smoke-format-preflight/native-sessions/2026/10/02/rollout-2026-10-02T21-53-10-01a0fe2d-80de-7ff1-a1d7-23dafeb21966.jsonl.gz",
+      "counts": {
+        "private-account-id": 1,
+        "private-user-id": 1
+      }
+    },
+    {
+      "path": "smoke/native-sessions/2026/10/02/rollout-2026-10-02T21-54-31-01a0fe2e-bf14-7561-a107-9bcf195d15a5.jsonl.gz",
+      "counts": {
+        "private-account-id": 1,
+        "private-user-id": 1
+      }
+    },
+    {
+      "path": "smoke/native-sessions/2026/10/02/rollout-2026-10-02T21-54-38-01a0fe2e-da56-7682-9921-15465cb6ada9.jsonl.gz",
+      "counts": {
+        "private-account-id": 1,
+        "private-user-id": 1
+      }
+    }
+  ]
+}

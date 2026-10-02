@@ -1,0 +1,11 @@
+{
+  "identities": [
+    {
+      "session": "01a0fe4d-c533-77e2-b1db-589ecb8b29c3",
+      "source": "exec",
+      "model": "gpt-6.1-sol",
+      "effort": "xhigh"
+    }
+  ],
+  "all_on_frozen_seat": true
+}

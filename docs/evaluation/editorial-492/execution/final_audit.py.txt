@@ -1,0 +1,76 @@
+"""Audit published bytes and input/destination contracts without exposing auth."""
+
+from pathlib import Path
+import gzip
+import hashlib
+import json
+import os
+
+repo = Path('/Users/thomas/Projects/skills/.git/kntnt-orchestrate/492')
+private = Path('/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-1ec1788d/evaluation')
+published = repo / 'docs/evaluation/editorial-492'
+
+secrets = set()
+
+def credentials(value):
+    if isinstance(value, dict):
+        for child in value.values():
+            credentials(child)
+    elif isinstance(value, list):
+        for child in value:
+            credentials(child)
+    elif isinstance(value, str) and len(value) >= 24:
+        secrets.add(value.encode())
+
+authfiles = list(private.rglob('auth.json'))
+for p in authfiles:
+    credentials(json.loads(p.read_text()))
+for key, value in os.environ.items():
+    if any(term in key.upper() for term in ('TOKEN', 'SECRET', 'PASSWORD', 'API_KEY')) and len(value) >= 12:
+        secrets.add(value.encode())
+assert authfiles and secrets, 'No private credential source available for publication audit'
+files = [p for p in published.rglob('*') if p.is_file()]
+for p in files:
+    raw = gzip.decompress(p.read_bytes()) if p.suffix == '.gz' else p.read_bytes()
+    assert not any(secret in raw for secret in secrets), f'Private credential found in {p.relative_to(repo)}'
+
+checks = []
+for row in json.loads((published / 'runs-map.json').read_text()):
+    p = published / 'runs' / row['run']
+    result = json.loads((p / 'result.json').read_text())
+    assert result['returncode'] == 0 and result['timed_out'] is False
+    before = json.loads((p / 'inventory-before.json').read_text())
+    after = json.loads((p / 'inventory-after.json').read_text())
+    stat = json.loads((p / 'input-stat.json').read_text())
+    assert stat['before'] == stat['after']
+    assert before['work/input.md'] == after['work/input.md']
+    changes = json.loads((p / 'filesystem-changes.json').read_text())
+    expected = ['work/output.md'] if row['target'] == 'file' else []
+    actual = sorted(n for n in changes['created'] if not n.startswith('home/.codex/'))
+    assert actual == expected
+    assert all(n.startswith('home/.codex/') for n in changes['changed'])
+    assert all(n.startswith('home/.codex/') for n in changes['removed'])
+    assert not any(n.startswith('scratch/') and after[n].get('type') == 'file' for n in after)
+    source = (p / 'supplied-input.md').read_bytes()
+    assert hashlib.sha256(source).hexdigest() == after['work/input.md']['sha256']
+    identical = None
+    if row['target'] == 'file':
+        target = (p / 'captured-output.md').read_bytes()
+        assert hashlib.sha256(target).hexdigest() == after['work/output.md']['sha256']
+        identical = source == target
+        if row['fixture'] == 'opinion-clean':
+            assert identical
+    checks.append({'run': row['run'], 'source_bytes_inode_mtime_preserved': True,
+                   'only_authorised_artifact_effects': True, 'no_surviving_skill_scratch': True,
+                   'file_delivery_byte_identical': identical})
+for bucket in ('judges', 'validations'):
+    entries = [p for p in (published / bucket).iterdir() if p.is_dir()]
+    assert len(entries) == (24 if bucket == 'judges' else 4)
+    for p in entries:
+        result = json.loads((p / 'result.json').read_text())
+        assert result['returncode'] == 0 and result['timed_out'] is False
+audit = {'published_files_scanned': len(files), 'private_auth_material_or_credential_values_found': False,
+         'completed_baseline_runs': 12, 'completed_independent_judges': 24,
+         'completed_independent_validations': 4, 'run_contracts': checks}
+(published / 'publication-audit.json').write_text(json.dumps(audit, indent=2) + '\n')
+print('Publication audit passed:', len(files), 'files; 12 run contracts; 24 judges; 4 validators.')

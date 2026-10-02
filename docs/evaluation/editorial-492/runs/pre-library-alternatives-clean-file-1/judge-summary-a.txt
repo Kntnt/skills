@@ -1,0 +1,5 @@
+**R1: Fail.** The run rewrote a conforming opening for repetition, deleting its direct trial instruction and explicit requirement for better evidence.
+
+All specifically named content was preserved elsewhere. The clean-text constraint was breached, and the opening’s advocacy was partly softened. No prohibited orientation rationale, new factual claim, source verification or generic hedge is evident.
+
+Written to [judgement-a.md](/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-1ec1788d/evaluation/kntnt-native-session-mikgwks4/work/judgement-a.md).

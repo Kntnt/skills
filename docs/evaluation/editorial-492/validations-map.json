@@ -1,0 +1,26 @@
+[
+  {
+    "fixture": "library-alternatives-clean",
+    "letter": "a",
+    "token": "4ea5fa561098",
+    "input": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-1ec1788d/evaluation/library-alternatives-clean.md"
+  },
+  {
+    "fixture": "library-alternatives-clean",
+    "letter": "b",
+    "token": "e14dc10d568e",
+    "input": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-1ec1788d/evaluation/library-alternatives-clean.md"
+  },
+  {
+    "fixture": "library-missing-referent",
+    "letter": "a",
+    "token": "e6a7a0f3b768",
+    "input": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-1ec1788d/evaluation/library-missing-referent.md"
+  },
+  {
+    "fixture": "library-missing-referent",
+    "letter": "b",
+    "token": "3eda3b799988",
+    "input": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-1ec1788d/evaluation/library-missing-referent.md"
+  }
+]

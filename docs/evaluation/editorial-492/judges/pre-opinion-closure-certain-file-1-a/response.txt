@@ -1,0 +1,5 @@
+**R1: Fail.** The reply detects the standfirst’s contradiction, but the returned text still treats permanent closure as settled. It neither repairs the contradiction nor reports it unresolved.
+
+All preservation clauses were met, and none of the prohibited findings about length, paragraph structure or the Swedish byline appeared.
+
+Written to [judgement-a.md](/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-1ec1788d/evaluation/kntnt-native-session-dm9cwdb_/work/judgement-a.md).

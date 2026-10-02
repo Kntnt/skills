@@ -1,0 +1,29 @@
+"""Run independent neutral-path validations of frozen contrasts."""
+from pathlib import Path
+import concurrent.futures
+import json
+import os
+import secrets
+import subprocess
+root=Path('/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-1ec1788d/evaluation')
+repo=Path('/Users/thomas/Projects/skills/.git/kntnt-orchestrate/492')
+base=repo/'docs/evaluation/editorial-492'
+if os.getpgrp()!=os.getpid():
+    os.setsid()
+subprocess.run(['uv','run',str(repo/'skills/kntnt/features/session-cleanup/scripts/session_cleanup.py'),'add','pid',str(os.getpid()),'Ticket 492 independent contrast validators'],cwd=repo,check=True,capture_output=True)
+prompt=root/'validate-prompt.txt'
+prompt.write_text((base/'validation-brief.md').read_text().replace('in the directory given here','in your current working directory').replace('in this directory','in your current working directory')+'\nReply with the class and the path you wrote.\n')
+tasks=[]
+for fixture in ('library-alternatives-clean','library-missing-referent'):
+    supplied=root/f'{fixture}.md'
+    supplied.write_bytes(subprocess.check_output(['git','show',f'cb446552:docs/evaluation/editorial-492/inputs/{fixture}.md'],cwd=repo))
+    for letter in ('a','b'):
+        token=secrets.token_hex(6)
+        tasks.append({'fixture':fixture,'letter':letter,'token':token,'input':str(supplied)})
+(root/'validations-map.json').write_text(json.dumps(tasks,indent=2)+'\n')
+def run(t):
+    cmd=['uv','run',str(base/'harness/run.py'),'--revision=4cf05813','--corpus-revision=cb446552',f'--prompt={prompt}',f'--input={t["input"]}','--input-name=input.md',f'--output={root/t["token"]}','--capture-output-name=validation.md']
+    result=subprocess.run(cmd,cwd=repo,capture_output=True,text=True)
+    print(json.dumps({'fixture':t['fixture'],'letter':t['letter'],'token':t['token'],'exit':result.returncode,'output':result.stdout,'stderr':result.stderr}),flush=True)
+with concurrent.futures.ThreadPoolExecutor(max_workers=4) as pool:
+    list(pool.map(run,tasks))

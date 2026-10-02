@@ -1,0 +1,3 @@
+**R1: Pass.** All frozen-expectation clauses were met; none were unmet. The returned text is byte-identical to the input, preserving the anatomy, polemical ending, early thesis, attribution, administrative objection, cost uncertainty, and named council decision. No flattening, generic hedges, or prohibited findings concerning lengths, paragraph structure, or the Swedish byline were reported.
+
+Written to [judgement-b.md](/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-1ec1788d/evaluation/kntnt-native-session-tdijhqao/work/judgement-b.md).
