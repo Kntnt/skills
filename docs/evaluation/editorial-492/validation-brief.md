@@ -1,0 +1,5 @@
+# Reading validation
+
+Read only `input.md` in the directory given here. Read the whole text once, then cover its bold standfirst and read the headline and body in their order. Do not read a repository, a ticket, a style guide or another sample. Judge the text as a reader meets it, allowing ordinary contextual inference.
+
+Write `validation.md` in this directory. Identify the alternatives the lead asks the reader to consider, quote what lets the reader identify them, and say whether any naming or expansion is actually needed. Separately list each pronoun, definite form or ellipsis in the lead whose referent remains unresolved with the standfirst covered. For each, quote what the standfirst supplies and the smallest clarification the existing text licenses. A preference for explicit repetition is not itself a missing referent. Finally classify the lead as `working` or `unresolved`, giving the exact passage deciding the class. Report any other visible contradiction or broken inference. Do not rewrite the text.

@@ -1,0 +1,25 @@
+run	arm	fixture	source	target	repetition	invocation
+pre-opinion-clean-resp-1	pre	opinion-clean	corpus	resp	1	/redline --genre=opinion --language=sv --output=response input.md
+pre-opinion-clean-file-1	pre	opinion-clean	corpus	file	1	/redline --genre=opinion --language=sv --output=output.md input.md
+pre-opinion-clean-resp-2	pre	opinion-clean	corpus	resp	2	/redline --genre=opinion --language=sv --output=response input.md
+pre-opinion-clean-file-2	pre	opinion-clean	corpus	file	2	/redline --genre=opinion --language=sv --output=output.md input.md
+pre-opinion-clean-resp-3	pre	opinion-clean	corpus	resp	3	/redline --genre=opinion --language=sv --output=response input.md
+pre-opinion-clean-file-3	pre	opinion-clean	corpus	file	3	/redline --genre=opinion --language=sv --output=output.md input.md
+pre-library-alternatives-clean-resp-1	pre	library-alternatives-clean	frozen	resp	1	/redline --genre=opinion --language=sv --output=response input.md
+pre-library-alternatives-clean-file-1	pre	library-alternatives-clean	frozen	file	1	/redline --genre=opinion --language=sv --output=output.md input.md
+pre-library-missing-referent-resp-1	pre	library-missing-referent	frozen	resp	1	/redline --genre=opinion --language=sv --output=response input.md
+pre-library-missing-referent-file-1	pre	library-missing-referent	frozen	file	1	/redline --genre=opinion --language=sv --output=output.md input.md
+pre-opinion-closure-certain-file-1	pre	opinion-closure-certain	frozen	file	1	/redline --genre=opinion --language=sv --output=output.md input.md
+pre-opinion-closure-certain-file-2	pre	opinion-closure-certain	frozen	file	2	/redline --genre=opinion --language=sv --output=output.md input.md
+post-opinion-clean-resp-1	post	opinion-clean	corpus	resp	1	/redline --genre=opinion --language=sv --output=response input.md
+post-opinion-clean-file-1	post	opinion-clean	corpus	file	1	/redline --genre=opinion --language=sv --output=output.md input.md
+post-opinion-clean-resp-2	post	opinion-clean	corpus	resp	2	/redline --genre=opinion --language=sv --output=response input.md
+post-opinion-clean-file-2	post	opinion-clean	corpus	file	2	/redline --genre=opinion --language=sv --output=output.md input.md
+post-opinion-clean-resp-3	post	opinion-clean	corpus	resp	3	/redline --genre=opinion --language=sv --output=response input.md
+post-opinion-clean-file-3	post	opinion-clean	corpus	file	3	/redline --genre=opinion --language=sv --output=output.md input.md
+post-library-alternatives-clean-resp-1	post	library-alternatives-clean	frozen	resp	1	/redline --genre=opinion --language=sv --output=response input.md
+post-library-alternatives-clean-file-1	post	library-alternatives-clean	frozen	file	1	/redline --genre=opinion --language=sv --output=output.md input.md
+post-library-missing-referent-resp-1	post	library-missing-referent	frozen	resp	1	/redline --genre=opinion --language=sv --output=response input.md
+post-library-missing-referent-file-1	post	library-missing-referent	frozen	file	1	/redline --genre=opinion --language=sv --output=output.md input.md
+post-opinion-closure-certain-file-1	post	opinion-closure-certain	frozen	file	1	/redline --genre=opinion --language=sv --output=output.md input.md
+post-opinion-closure-certain-file-2	post	opinion-closure-certain	frozen	file	2	/redline --genre=opinion --language=sv --output=output.md input.md
