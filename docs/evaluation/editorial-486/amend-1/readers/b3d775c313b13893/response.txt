@@ -1,0 +1,3 @@
+**R1: Fail.** The anatomy and all frozen preservation and rejection clauses were met, including the lead’s denominator-limited inference. The failure is R1’s clean-text rule: the sole edit redundantly expands an already clear lead without repairing a visible defect.
+
+Written to [judgement-b.md](/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-70ef836a/amend-1/direct/tmp/session-eknd5hjf/work/judgement-b.md).

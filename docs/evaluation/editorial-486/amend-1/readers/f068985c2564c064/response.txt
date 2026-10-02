@@ -1,0 +1,3 @@
+R1: **Fail**. The anatomy, all explicit preservation clauses and all named rejection clauses were met, including the lead’s denominator-limited inference. The Skill nevertheless expanded an already clear lead to satisfy an unsupported preference for independence from the standfirst, violating R1’s clean-text rule.
+
+Written to [judgement-a.md](/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-70ef836a/amend-1/direct/tmp/session-gu353kwb/work/judgement-a.md).

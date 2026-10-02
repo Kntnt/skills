@@ -1,0 +1,5 @@
+**R1: Pass.** Input and output are byte-for-byte identical, and the reply accurately reports no changes.
+
+All frozen expectation clauses were met: the anatomy and required passages were preserved, no technique was selected, and none of the prohibited findings or absent names appeared. No clauses were unmet.
+
+Written to [judgement-a.md](/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-70ef836a/amend-1/direct/tmp/session-zqzp11bn/work/judgement-a.md).

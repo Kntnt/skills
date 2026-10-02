@@ -1,0 +1,5 @@
+R1: **Fail.** The missing sensor details were correctly detected, and the promise was repaired using supplied content. All required passages were preserved, and every named rejection was avoided.
+
+The clause that everything outside the lead finding already conforms was breached: “Kontoret” was unnecessarily treated as defective and expanded.
+
+Written to [judgement-a.md](/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-70ef836a/amend-1/direct/tmp/session-oe7waipz/work/judgement-a.md).

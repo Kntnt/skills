@@ -1,0 +1,30 @@
+{
+  "counted_native_sessions": 24,
+  "unique_native_ids": [
+    "01a0fd32-aa14-7203-a03d-6c203a5a2e15",
+    "01a0fd32-aa15-7261-8728-15b4ae0e145c",
+    "01a0fd32-aa14-7571-9fdf-97112493889b",
+    "01a0fd32-aa15-70b2-8305-346e4409aa76",
+    "01a0fd36-67c6-7942-9623-d48960c55f3b",
+    "01a0fd36-7dad-7fc1-bbf8-eb687c2a37b7",
+    "01a0fd37-c955-7140-8d5a-a018b985ecf1",
+    "01a0fd38-fb9b-73d0-86a4-9e3b068877b9",
+    "01a0fd39-3211-71c1-a1d7-34130b962dc4",
+    "01a0fd39-78ea-76a0-9ec2-a514b512350e",
+    "01a0fd3b-bd98-7d61-9f09-5511a3a6e299",
+    "01a0fd3b-e0fc-7493-bb6b-24a823844c7c",
+    "01a0fd3f-24cf-7582-81c9-1f339448b8de",
+    "01a0fd3f-2ba0-7d00-bd86-af9d4c0ff76d",
+    "01a0fd45-9cfe-7dc1-8244-b52d253d720b",
+    "01a0fd45-9cfe-75d2-8c0e-787276d8d7d4",
+    "01a0fd45-9cfe-7593-b67a-701d99280455",
+    "01a0fd45-9cfe-7560-b779-2b256762f9d9",
+    "01a0fd47-4d1d-7453-a562-3a23e7bdb5d2",
+    "01a0fd47-4ee7-7781-b827-9ede07f4b7e2",
+    "01a0fd47-6b64-7551-a978-92aaef3de688",
+    "01a0fd47-9777-7343-97bc-204373024b53",
+    "01a0fd49-4757-7391-a9cd-5b8393e13349",
+    "01a0fd49-69e4-7b81-b898-d4c31a403f8e"
+  ],
+  "fresh_independent_readers": true
+}

@@ -1,0 +1,5 @@
+**R1: Fail.** The Skill unnecessarily replaced a valid headline, treating overlap with the standfirst as a defect.
+
+All specified preservation clauses were met. No technique was selected, and none of the prohibited findings appeared. The run failed to respect the control text’s conformity.
+
+Written to [judgement-a.md](/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-70ef836a/amend-1/direct/tmp/session-4piflveb/work/judgement-a.md).

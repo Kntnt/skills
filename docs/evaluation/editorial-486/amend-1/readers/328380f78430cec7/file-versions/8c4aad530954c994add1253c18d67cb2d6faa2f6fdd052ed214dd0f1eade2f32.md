@@ -1,0 +1,7 @@
+Sparat i [output.md](work/output.md). Granskat som artikel på svenska, utan särskild teknik.
+
+- Åtgärdat fynd: Rubriken upprepade ingressens slutsats om vad mätningarna visar.
+- Ändrat rubrikpåstående: Rubriken säger nu att Björkskolans mätvärden bör kopplas till användningstider. Rekommendationen fanns redan i brödtexten och återges nu också i rubriken.
+- Borttaget ur rubriken: Försöket visar när, inte varför. Läsaren får inte längre denna begränsning i rubriken; den står kvar i ingressen och brödtexten.
+
+Inga olösta fynd kvarstår. Rubriken har reparerats för att komplettera ingressen. Övrig text är oförändrad; den avslutande korrekturläsningen behövde inte göra några ändringar.

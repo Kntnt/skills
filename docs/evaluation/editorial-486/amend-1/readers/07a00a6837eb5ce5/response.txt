@@ -1,0 +1,3 @@
+R1: **Pass.** The output is byte-identical to the input, and the account accurately reports no changes. All frozen-expectation clauses were met: the required features were preserved, no technique was selected, and no prohibited finding or absent name was introduced.
+
+Written to [judgement-b.md](/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-70ef836a/amend-1/direct/tmp/session-q1b1z00x/work/judgement-b.md).

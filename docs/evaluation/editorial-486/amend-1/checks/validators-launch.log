@@ -1,0 +1,23 @@
+Traceback (most recent call last):
+  File "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/486/docs/evaluation/editorial-486/amend-1/readers.py", line 279, in <module>
+    main()
+  File "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/486/docs/evaluation/editorial-486/amend-1/readers.py", line 269, in main
+    rows = list(
+           ^^^^^
+  File "/Users/thomas/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/concurrent/futures/_base.py", line 619, in result_iterator
+    yield _result_or_cancel(fs.pop())
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/thomas/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/concurrent/futures/_base.py", line 317, in _result_or_cancel
+    return fut.result(timeout)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/Users/thomas/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/concurrent/futures/_base.py", line 456, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "/Users/thomas/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/concurrent/futures/_base.py", line 401, in __get_result
+    raise self._exception
+  File "/Users/thomas/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/concurrent/futures/thread.py", line 59, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/486/docs/evaluation/editorial-486/amend-1/readers.py", line 254, in read
+    raise RuntimeError(f"Interrupted/incomplete reader retained: {destination}")
+RuntimeError: Interrupted/incomplete reader retained: /Users/thomas/Projects/skills/.git/kntnt-orchestrate/486/docs/evaluation/editorial-486/amend-1/readers/ee78628d01dd395f

@@ -1,0 +1,172 @@
+[
+  {
+    "role": "judge",
+    "packet": "amend-1/readers/5caa602d96c1ad9e",
+    "source_packet": "runs/pre-article-clean-resp-1/judges/a",
+    "r1": "fail",
+    "deciding_reply": "R1: **Fail.** The Skill replaced a working headline based on taste, changing its meaning and broadening the recommendation’s scope. Its account accurately disclosed the change.\n\nAll explicit frozen-expectation clauses were met: anatomy, the named passages’ preservation, no technique selection, and avoidance of the prohibited findings.\n\nWritten to [judgement-a.md](/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-70ef836a/amend-1/direct/tmp/session-ejziv6sb/work/judgement-a.md).",
+    "r1_section": "# 4. R1\n\n**Fail.** The deciding passage is: “Åtgärdat fynd: Rubriken upprepade ingressens poäng om när och varför. Den anger nu rekommendationen att koppla mätvärdena till användningstider.”\n\nThe original headline, “Mätförsöket i Björkskolan visar när, inte varför”, is a working statement of the experiment's limits, consistent with the unchanged standfirst and body. The reply identifies no concrete defect in it. Replacing it to avoid overlap is a taste edit to a clean passage, and the replacement changes the headline's meaning and broadens the recommendation's scope. R1 forbids such rewriting even when the change is accurately disclosed and the removed point survives elsewhere.\n\nThere is no legitimate defect-based removal and no reported irreparable finding. The rejected loss is the explanatory limit from the headline; the added general recommendation is the corresponding scope change. All other claims, quotations and attributions are preserved verbatim. Accurate reporting and preservation elsewhere do not make this headline replacement a justified correction.\n"
+  },
+  {
+    "role": "judge",
+    "packet": "amend-1/readers/29633de13d497929",
+    "source_packet": "runs/pre-article-clean-resp-1/judges/b",
+    "r1": "fail",
+    "deciding_reply": "**R1: Fail.** The headline was rewritten because of repetition, changing its claim without repairing a visible defect.\n\nAll explicit frozen-expectation clauses were met: anatomy recognized; required passages preserved; no technique selected; and no prohibited findings or absent names introduced.\n\nWritten to [judgement-b.md](/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-70ef836a/amend-1/direct/tmp/session-gi1co9f_/work/judgement-b.md).",
+    "r1_section": "# 4. R1\n\n**Fail.** The deciding edit is:\n\n> Mätförsöket i Björkskolan visar när, inte varför\n\nbecoming:\n\n> Björkskolans mätvärden bör kopplas till användningstider\n\nThe claimed defect is only “Rubriken upprepade ingressens poäng om när och varför.” The input's headline accurately states the experiment's central finding and limit, while the standfirst independently explains them. No visible defect requires replacing that headline with a general recommendation. The edit changes meaning and scope, and the account expressly acknowledges the lost headline claim. This is an unsupported rewrite of working text to satisfy taste, which R1 prohibits even when the losses are reported accurately and the required body passages survive. The response's code-fence packaging does not decide the verdict.\n"
+  },
+  {
+    "role": "judge",
+    "packet": "amend-1/readers/ea049c37e218954f",
+    "source_packet": "runs/pre-article-clean-resp-2/judges/a",
+    "r1": "fail",
+    "deciding_reply": "**R1: Fail.** The Skill rewrote a valid headline for taste, changing its scope and meaning without identifying a concrete defect.\n\nAnatomical conformity was recognized. All explicit preservation, technique, and prohibited-finding clauses of the frozen expectation were met; none was breached. Those successes do not justify the headline rewrite.\n\nWritten to [judgement-a.md](/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-70ef836a/amend-1/direct/tmp/session-gkbh7dar/work/judgement-a.md).",
+    "r1_section": "# 4. R1\n\n**Fail.** The deciding passage is the reply's sole finding: “Åtgärdat fynd: Den ursprungliga rubriken upprepade ingressens besked om tidpunkter och okänd orsak.” On that basis it changes “Mätförsöket i Björkskolan visar när, inte varför” to “Björkskolans givare mätte inte elevernas upplevelse”.\n\nThe original headline concisely expresses the article's central distinction, and the independent standfirst legitimately develops that distinction with a result. Their overlap establishes no concrete visible defect. The Skill recognizes anatomical conformity yet rewrites this working headline for taste, changing its scope and meaning. Accurate reporting of the change and preservation of the original claim elsewhere do not cure that R1 failure. No unavailable-source verification, mechanical edit, invented name or unrepairable factual finding contributes to this verdict.\n"
+  },
+  {
+    "role": "judge",
+    "packet": "amend-1/readers/60571679686adca3",
+    "source_packet": "runs/pre-article-clean-resp-2/judges/b",
+    "r1": "fail",
+    "deciding_reply": "**R1: Fail.** The reply accurately reports its headline replacement, but changes a compliant headline’s meaning and scope for taste rather than repairing a visible defect.\n\nAll explicit frozen-expectation preservation and rejection clauses were met. Anatomy was correctly acknowledged, and no technique was selected.\n\nWritten: [judgement-b.md](/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-70ef836a/amend-1/direct/tmp/session-58owi0a3/work/judgement-b.md).",
+    "r1_section": "# 4. R1\n\n**Fail.** The deciding passage is the alleged finding, “Den ursprungliga rubriken upprepade ingressens besked om tidpunkter och okänd orsak,” followed by the replacement of “Mätförsöket i Björkskolan visar när, inte varför” with “Björkskolans givare mätte inte elevernas upplevelse”. Headline/standfirst overlap is not a concrete visible defect here. The replacement changes the headline's meaning and scope to satisfy an editorial preference, contrary to R1's prohibition on rewriting clean texts for taste.\n\nThe new headline's claim is supported by the supplied body text, and the account accurately discloses the removal and replacement. Those facts prevent an invention or reporting-failure finding, but they do not legitimize the change. The original headline claim's loss from the headline is rejected. All other claims, the working voice, quotation, attribution, unresolved funding and practical ending are preserved. There are no legitimate removals or irreparable findings, and no mechanical correction is counted against the reviewing Skill.\n"
+  },
+  {
+    "role": "judge",
+    "packet": "amend-1/readers/f57f999f0b4328d9",
+    "source_packet": "runs/pre-article-clean-resp-3/judges/a",
+    "r1": "fail",
+    "deciding_reply": "R1: **Fail.** The run unnecessarily expands a conforming headline, treating a preference for explicitness as a visible defect.\n\nAll specified preservation clauses were met, and all explicitly prohibited findings were avoided. The anatomy-conformity clause was not respected.\n\nWritten: [judgement-a.md](/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-70ef836a/amend-1/direct/tmp/session-lbjzsffv/work/judgement-a.md).",
+    "r1_section": "# 4. R1\n\n**Fail.** The decisive before/after passage is:\n\n> Before: Mätförsöket i Björkskolan visar när, inte varför\n>\n> After: Mätförsöket i Björkskolan visar när luften var kall, inte varför\n\nThe sole justification is that the original headline “kunde därför inte förstås ensam.” The frozen standard establishes that the text conforms to the anatomy. The original headline expresses the limiting thesis, and the independent standfirst immediately states the measured result and the unexplained cause. The addition repeats that existing referent; the account demonstrates no concrete visible defect requiring it. It is therefore an unnecessary taste edit to a conforming control, contrary to R1's protection of clean text.\n\nThe failure is narrow: all specified passages, arguments, quotations, attribution, chronology, uncertainty and causal limits are preserved. All explicitly prohibited count-, byline-, technique- and absent-name findings are avoided. The reply also accurately discloses the headline edit. Those successes do not turn the unsupported rewrite into a visible-defect repair.\n"
+  },
+  {
+    "role": "judge",
+    "packet": "amend-1/readers/66a6d2372b075d05",
+    "source_packet": "runs/pre-article-clean-resp-3/judges/b",
+    "r1": "fail",
+    "deciding_reply": "R1: **Fail.** The Skill expanded a working headline based on taste, contrary to the expectation that the text conforms to the anatomy.\n\nAll preservation clauses were met. No technique was selected, and none of the specifically prohibited findings appeared.\n\nWritten to [judgement-b.md](/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-70ef836a/amend-1/direct/tmp/session-2iz4tswh/work/judgement-b.md).",
+    "r1_section": "# 4. R1\n\n**Fail.** The deciding edit is:\n\n> Mätförsöket i Björkskolan visar när, inte varför\n\nbecoming:\n\n> Mätförsöket i Björkskolan visar när luften var kall, inte varför\n\nThe frozen expectation establishes that the text conforms to the anatomy. Expanding its working headline ellipsis is a preference for explicit wording, not repair of a concrete visible defect. R1 forbids rewriting clean text to satisfy taste. The edit is accurately disclosed and preserves the article's substantive claims, but disclosure does not make an unnecessary rewrite a legitimate correction. This is not a mechanical-pass correction, a source-verification issue, a factual invention, or a violation of a length limit asserted by the reply. All specifically protected passages and all enumerated rejection clauses are preserved or respected.\n"
+  },
+  {
+    "role": "judge",
+    "packet": "amend-1/readers/7b5a3ad4af70ab02",
+    "source_packet": "runs/pre-article-inference-resp-1/judges/a",
+    "r1": "fail",
+    "deciding_reply": "**R1: Fail.** The headline changes from an evidential limitation to advice, justified only by repetition. The lead rewrite also lacks a concrete visible defect.\n\nThe run preserves the calm explanation, standfirst, byline, quotation, undecided funding, non-commercial ending, and denominator-based inference. It selects no technique and avoids every explicitly prohibited finding. Although the anatomy remains intact, the conforming text receives unsupported rewrites.\n\nWritten to [judgement-a.md](/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-70ef836a/amend-1/direct/tmp/session-mvc3a9ds/work/judgement-a.md).",
+    "r1_section": "# 4. R1\n\n**Fail.** A clean, conforming text was rewritten to satisfy taste. The deciding passage is the headline change from “Mätförsöket i Björkskolan visar när, inte varför” to “Björkskolans mätvärden behöver kopplas till användningstider”, justified by “Rubriken upprepade ingressens slutsats om när respektive varför.” Repeating the article's central evidential limit in a working headline is not a concrete visible defect. The replacement changes what the headline says, from a finding's limitation to advice.\n\nThe lead rewrite likewise lacks an established defect, although it preserves the claims and the denominator-based inference. The other required passages and all expressly prohibited finding categories are preserved or avoided. There is no unavailable-source verification and no mechanical change to count against the reviewing Skill. Those successes do not cure the unsupported headline intervention.\n"
+  },
+  {
+    "role": "judge",
+    "packet": "amend-1/readers/d030c76f6ebee5ff",
+    "source_packet": "runs/pre-article-inference-resp-1/judges/b",
+    "r1": "fail",
+    "deciding_reply": "R1: **Fail.** The headline rewrite substitutes advice for a working result-and-limitation claim without establishing a visible defect; the lead expansion is also unnecessary.\n\nThe run preserves the calm explanation, independent standfirst, byline, quotation, undecided funding, non-commercial ending and denominator-based inference. It selects no technique and makes none of the prohibited findings. It fails to respect the expectation that the original conforms to the anatomy.\n\nWritten to [judgement-b.md](/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-70ef836a/amend-1/direct/tmp/session-ddki7vql/work/judgement-b.md).",
+    "r1_section": "# 4. R1\n\n**Fail.** The decisive change is:\n\n> Before: “Mätförsöket i Björkskolan visar när, inte varför”\n>\n> After: “Björkskolans mätvärden behöver kopplas till användningstider”\n\nThe reply justifies it with “Rubriken upprepade ingressens slutsats om när respektive varför.” The original headline gives a clear result-and-limitation framing, while the independent standfirst adds the count, duration and explanatory context. Sharing that central conclusion is not a demonstrated visible defect. Replacing it with advice changes what the headline says to satisfy an editorial preference in a text the frozen expectation identifies as conforming.\n\nThe lead's first sentence is also expanded without a demonstrated defect. Its original denominator-based inference, however, remains intact, and the run does not invent an hourly-observation requirement. The preserved quotation, factual limits, funding uncertainty, next step and absence of prohibited findings count in the run's favor. They do not cure the unsupported substantive headline rewrite. The failure does not rest on proofreading work, numerical limits, code-block presentation or unavailable-source verification.\n"
+  },
+  {
+    "role": "judge",
+    "packet": "amend-1/readers/2b71ffe528e153d5",
+    "source_packet": "runs/pre-article-promise-resp-1/judges/a",
+    "r1": "fail",
+    "deciding_reply": "**R1: Fail.** The reply detected the unsupported promise and repaired it using supplied content. It preserved the calm explanation, standfirst, byline, quotation, funding uncertainty and ending, and avoided the prohibited findings and technique selection.\n\nIt failed to preserve compliant material outside that finding: the headline lost “inte varför,” and “Kontoret” received an unnecessary clarification.\n\nWritten to [judgement-a.md](/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-70ef836a/amend-1/direct/tmp/session-44f7awe4/work/judgement-a.md).",
+    "r1_section": "# 4. R1\n\n**Fail.** The decisive passage is the headline change from “Mätförsöket i Björkskolan visar när, inte varför” to “Mätförsöket i Björkskolan visar när luften var kall”. It removes the explicit causal limitation outside the sole valid finding. The reply itself confirms the loss: “’Inte varför’ har utgått där, så rubrikläsaren får inte längre veta att försöket saknar en orsaksförklaring.”\n\nThe supported lead repair and accurate reporting of its legitimate removals satisfy the detection and repair requirements. They do not offset rewriting compliant material or losing a working claim elsewhere. Expanding “Kontoret” is a further unnecessary edit, although it preserves the underlying attribution. The protected standfirst, calm explanation, byline, quotation, funding uncertainty and ending all survive. No mechanical correction contributes to this failure.\n"
+  },
+  {
+    "role": "judge",
+    "packet": "amend-1/readers/b5c7e74fd30c20ae",
+    "source_packet": "runs/pre-article-promise-resp-1/judges/b",
+    "r1": "fail",
+    "deciding_reply": "**R1: Fail.** The run detected and legitimately removed the unfulfilled placement and window-distance promise using supplied content. It preserved the calm explanation, standfirst, byline, quotation, funding uncertainty and non-commercial ending, and avoided all specifically forbidden findings.\n\nIt failed to preserve conforming text outside the valid finding: the headline lost “inte varför,” and “Kontoret” received an unnecessary expansion. The conditional unresolved-finding requirement did not apply because removing the false promise was a supported repair.\n\nWritten to [judgement-b.md](/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-70ef836a/amend-1/direct/tmp/session-qp06tbqg/work/judgement-b.md).",
+    "r1_section": "# 4. R1\n\n**Fail.** The decisive before/after passage is the headline:\n\n> Before: Mätförsöket i Björkskolan visar när, inte varför\n>\n> After: Mätförsöket i Björkskolan visar när luften var kall\n\nThe original headline is outside the sole warranted finding and conforms under the frozen expectation. Replacing it drops the explicit limitation on causal explanation. The reply itself acknowledges that “rubrikläsaren får inte längre veta att försöket saknar en orsaksförklaring.” Preserving that limitation elsewhere does not preserve what the headline said. This is a rejected loss from working text, not a mechanical correction, and accurate reporting does not cure it.\n\nThe promise finding and its supported removal are legitimate. The unnecessary expansion of “Kontoret” is an additional change of taste outside that finding. The preserved standfirst, quotation, byline, funding uncertainty and ending, and the absence of the specifically forbidden findings, do not offset the decisive headline loss. No unavailable-source verification is required or credited.\n"
+  },
+  {
+    "role": "judge",
+    "packet": "amend-1/readers/dd18191242b34f6f",
+    "source_packet": "runs/pre-article-clean-file-1/judges/a",
+    "sanitized_response": "amend-1/file-materials/adcf41e9a99651b2/response.md",
+    "r1": "pass",
+    "deciding_reply": "**R1: Pass.** All frozen-expectation clauses were met; none were violated. The unchanged text preserves its anatomy, calm explanation, independent standfirst, byline, quoted summary, undecided funding and non-commercial next step. The reply selects no technique and makes none of the prohibited findings.\n\nWritten to [judgement-a.md](/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-70ef836a/amend-1/direct/tmp/session-i21zdre8/work/judgement-a.md).",
+    "r1_section": "# 4. R1\n\n**Pass.** This conforming text was returned without any rewriting. The deciding evidence is the byte-for-byte identity of input and output, including the preserved limitation: “Givarna mätte varken luftdrag eller elevernas upplevelse. Ett lågt värde säger alltså när luften var kall, men inte hur rummet kändes.”\n\nEvery before/after claim is identical. There are no removals to justify, rejected losses, irreparable findings, or mechanical corrections to exempt. The reply introduces no unsupported finding, and the clean text is not rewritten to satisfy taste or numerical guidelines.\n"
+  },
+  {
+    "role": "judge",
+    "packet": "amend-1/readers/07a00a6837eb5ce5",
+    "source_packet": "runs/pre-article-clean-file-1/judges/b",
+    "sanitized_response": "amend-1/file-materials/adcf41e9a99651b2/response.md",
+    "r1": "pass",
+    "deciding_reply": "R1: **Pass.** The output is byte-identical to the input, and the account accurately reports no changes. All frozen-expectation clauses were met: the required features were preserved, no technique was selected, and no prohibited finding or absent name was introduced.\n\nWritten to [judgement-b.md](/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-70ef836a/amend-1/direct/tmp/session-q1b1z00x/work/judgement-b.md).",
+    "r1_section": "# 4. R1\n\n**Pass.** The decisive evidence is the byte-identical returned text: this clean control was not rewritten to satisfy taste or numerical guidelines. Its working voice, arguments, quotations and every claim remain intact, including “men finansieringen är inte beslutad” and the ending “Lägg därför tiderna för när rummen används bredvid mätvärdena innan nästa givare sätts upp.” The reply accurately states “Inga ändringar behövdes.” There are no legitimate removals, rejected losses, mechanical changes or irreparable findings to assess, and no unavailable-source verification is claimed.\n"
+  },
+  {
+    "role": "judge",
+    "packet": "amend-1/readers/7438c3b8ea405c58",
+    "source_packet": "runs/pre-article-clean-file-2/judges/a",
+    "sanitized_response": "amend-1/file-materials/49a63fa1d928c252/response.md",
+    "r1": "pass",
+    "deciding_reply": "**R1: Pass.** Input and output are byte-for-byte identical, and the reply accurately reports no changes.\n\nAll frozen expectation clauses were met: the anatomy and required passages were preserved, no technique was selected, and none of the prohibited findings or absent names appeared. No clauses were unmet.\n\nWritten to [judgement-a.md](/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-70ef836a/amend-1/direct/tmp/session-zqzp11bn/work/judgement-a.md).",
+    "r1_section": "# 4. R1\n\n**Pass.** The output is byte-for-byte identical to the input. This clean text has not been rewritten for taste or numerical guidelines, and all claims, arguments, quotations and voice are preserved. The decisive passage retains both the recommendation and the uncertainty: “Rask rekommenderar att temperaturserierna kopplas till rummens användningstider innan styrningen ändras. Nästa försök planeras för november med likadant placerade givare, men finansieringen är inte beslutad.”\n\nThere are no removals, rejected losses or reported irreparable findings. The reply makes no claim to verification against unavailable sources. Its account of making no changes is accurate.\n"
+  },
+  {
+    "role": "judge",
+    "packet": "amend-1/readers/1f4e26d2794d35f3",
+    "source_packet": "runs/pre-article-clean-file-2/judges/b",
+    "sanitized_response": "amend-1/file-materials/49a63fa1d928c252/response.md",
+    "r1": "pass",
+    "deciding_reply": "**R1: Pass.** The returned text is unchanged. All frozen-expectation clauses were met: the anatomy and specified passages were preserved, no technique was selected, and none of the rejected findings was made. No clauses were unmet.\n\nWritten to [judgement-b.md](/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-70ef836a/amend-1/direct/tmp/session-do1r54pb/work/judgement-b.md).",
+    "r1_section": "# 4. R1\n\n**Pass.** The clean input is returned without any rewrite or unsupported finding. Every claim and quotation is identical before and after. The decisive limiting passage remains: “Hur länge temperaturen låg under den anger rapporten inte. Gränsen är kontorets egen, vald för det här försöket.” The funding qualification likewise remains “men finansieringen är inte beslutad.” Together with byte-identical preservation of the whole article and the accurate account “Inga ändringar behövdes.”, this satisfies R1’s requirement to preserve working voice, arguments, quotations and claims, and its prohibition on rewriting clean text to satisfy taste or numerical guidelines.\n"
+  },
+  {
+    "role": "judge",
+    "packet": "amend-1/readers/98644793b801504e",
+    "source_packet": "runs/pre-article-clean-file-3/judges/a",
+    "sanitized_response": "amend-1/file-materials/0fc58b2e50648162/response.md",
+    "r1": "fail",
+    "deciding_reply": "**R1: Fail.** The Skill unnecessarily replaced a valid headline, treating overlap with the standfirst as a defect.\n\nAll specified preservation clauses were met. No technique was selected, and none of the prohibited findings appeared. The run failed to respect the control text’s conformity.\n\nWritten to [judgement-a.md](/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-70ef836a/amend-1/direct/tmp/session-4piflveb/work/judgement-a.md).",
+    "r1_section": "# 4. R1\n\n**Fail.** The decisive passage is the only changed line: “Mätförsöket i Björkskolan visar när, inte varför” becomes “Björkskolans mätvärden bör kopplas till användningstider”. The input conforms to the frozen expectation; sharing the central conclusion with the independent standfirst is not a concrete visible defect. This substantive replacement of a sound headline is an unnecessary editorial rewrite of a clean text.\n\nThe replacement recommendation is supported by the unchanged body, and the original limitation survives there and in the standfirst. Those facts limit the damage but do not justify removing it from the headline. The account openly reports the loss; disclosure does not make the change a legitimate repair. All other claims, quotations, formatting, and required passages are preserved. No unavailable-source verification is attempted, and no mechanical-pass change affects this verdict.\n"
+  },
+  {
+    "role": "judge",
+    "packet": "amend-1/readers/328380f78430cec7",
+    "source_packet": "runs/pre-article-clean-file-3/judges/b",
+    "sanitized_response": "amend-1/file-materials/0fc58b2e50648162/response.md",
+    "r1": "fail",
+    "deciding_reply": "R1: **Fail.** The Skill replaced a valid headline because it overlapped with the standfirst, changing its meaning without repairing a visible defect.\n\nThe anatomy, calm explanation, independent standfirst, byline, quotation, undecided funding and non-commercial ending were preserved. No technique was selected, and none of the specifically prohibited findings occurred. The expectation to preserve the conforming text was not met.\n\nWritten: [judgement-b.md](/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-70ef836a/amend-1/direct/tmp/session-g1owqufw/work/judgement-b.md).",
+    "r1_section": "# 4. R1\n\n**Fail.** The deciding change is:\n\n> Mätförsöket i Björkskolan visar när, inte varför\n\nreplaced with:\n\n> Björkskolans mätvärden bör kopplas till användningstider\n\nThe frozen expectation identifies the original as conforming. Its headline expresses a supported limitation also carried by the standfirst and quoted summary. The Skill replaces that claim with a recommendation because it prefers a headline that complements the standfirst. This changes the headline's meaning without repairing a concrete visible defect, contrary to R1's rule that clean texts may not be rewritten to satisfy taste.\n\nThere are no legitimate defect-driven removals or mechanical changes. The rejected loss is the headline's result-and-limitation claim; its survival in the unchanged body does not justify removing it from a working headline. No irreparable finding needs to remain. The rest of the text preserves its voice, arguments, quotations and claims, and the reply accurately discloses the change, but those successes do not cure the unjustified rewrite.\n"
+  },
+  {
+    "role": "judge",
+    "packet": "amend-1/readers/f068985c2564c064",
+    "source_packet": "runs/pre-article-inference-file-1/judges/a",
+    "sanitized_response": "amend-1/file-materials/c25468d04a8ff8ac/response.md",
+    "r1": "fail",
+    "deciding_reply": "R1: **Fail**. The anatomy, all explicit preservation clauses and all named rejection clauses were met, including the lead’s denominator-limited inference. The Skill nevertheless expanded an already clear lead to satisfy an unsupported preference for independence from the standfirst, violating R1’s clean-text rule.\n\nWritten to [judgement-a.md](/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-70ef836a/amend-1/direct/tmp/session-gu353kwb/work/judgement-a.md).",
+    "r1_section": "# 4. R1\n\n**Fail.** The deciding edit is “De 14 lektionspassen ingår i de 120 som fastighetskontoret räknade” becoming “De 14 lektionspassen med minst en temperaturmätning under fastighetskontorets arbetsgräns ingår i de 120 som fastighetskontoret räknade”. The stated purpose is “så att de 14 passen går att förstå utan ingressen”.\n\nThe standfirst already identifies those periods, while the original lead correctly limits the proportion to the counted periods. Repeating the identification to satisfy an unsupported preference for an independently understandable lead is a rewrite of a clean passage, not a repair of a concrete visible defect. It therefore violates R1's clean-text rule, even though it preserves the claim and the frozen expectation's explicit safeguards.\n\nThere are no legitimate removals, rejected claim losses or irreparable findings. The verdict rests solely on the unnecessary non-mechanical addition; it does not penalize proofreading work or attempt unavailable-source verification.\n"
+  },
+  {
+    "role": "judge",
+    "packet": "amend-1/readers/b3d775c313b13893",
+    "source_packet": "runs/pre-article-inference-file-1/judges/b",
+    "sanitized_response": "amend-1/file-materials/c25468d04a8ff8ac/response.md",
+    "r1": "fail",
+    "deciding_reply": "**R1: Fail.** The anatomy and all frozen preservation and rejection clauses were met, including the lead’s denominator-limited inference. The failure is R1’s clean-text rule: the sole edit redundantly expands an already clear lead without repairing a visible defect.\n\nWritten to [judgement-b.md](/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-70ef836a/amend-1/direct/tmp/session-eknd5hjf/work/judgement-b.md).",
+    "r1_section": "# 4. R1.\n\n**Fail.** R1 says: “Clean texts may not be rewritten to satisfy taste or numerical guidelines.” The deciding passage is D1: “De 14 lektionspassen ingår i de 120 som fastighetskontoret räknade” becomes “De 14 lektionspassen med minst en temperaturmätning under fastighetskontorets arbetsgräns ingår i de 120 som fastighetskontoret räknade.” The existing standfirst already identifies those periods, and the original lead already correctly limits the inference to the counted periods. Making the lead independently repeat the standfirst's definition is an editorial preference, not a repair of a visible defect. This is a substantive editorial insertion, not a correction confined to the separate mechanical proofreading pass. Accurate reporting and preservation of the claims do not cure that clean-text rewrite.\n"
+  },
+  {
+    "role": "judge",
+    "packet": "amend-1/readers/f726c41a4349ba87",
+    "source_packet": "runs/pre-article-promise-file-1/judges/a",
+    "sanitized_response": "amend-1/file-materials/4bddb75f2e8f73db/response.md",
+    "r1": "fail",
+    "deciding_reply": "R1: **Fail.** The missing sensor details were correctly detected, and the promise was repaired using supplied content. All required passages were preserved, and every named rejection was avoided.\n\nThe clause that everything outside the lead finding already conforms was breached: “Kontoret” was unnecessarily treated as defective and expanded.\n\nWritten to [judgement-a.md](/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-70ef836a/amend-1/direct/tmp/session-oe7waipz/work/judgement-a.md).",
+    "r1_section": "# 4. R1\n\n**Fail.** The deciding passage is the substitution of “Kontoret valde 20 grader Celsius som arbetsgräns” with “Fastighetskontoret valde 20 grader Celsius som arbetsgräns,” justified in the reply as making the reference work “utan ingressen.” The input already provides the referent in “fastighetskontorets egen arbetsgräns.” The frozen expectation establishes that material outside the lead finding conforms, and the review nevertheless diagnoses and edits this working reference to satisfy an additional preference. It is a taste correction, not a mechanical correction eligible for the proofreading exemption.\n\nThe lead finding and its supported repair are legitimate. There are no rejected substantive losses, remaining irreparable findings, invented measurements or effects, or unavailable-source verification. The failure rests on the additional unsupported finding and edit.\n"
+  },
+  {
+    "role": "judge",
+    "packet": "amend-1/readers/4874ca758111e2d0",
+    "source_packet": "runs/pre-article-promise-file-1/judges/b",
+    "sanitized_response": "amend-1/file-materials/4bddb75f2e8f73db/response.md",
+    "r1": "fail",
+    "deciding_reply": "**R1: Fail.** The missing sensor-location and window-distance promise was detected and repaired using supplied content. The explanation, standfirst, byline, quotation, undecided funding and non-commercial ending were preserved. The prohibited findings and technique selection were avoided.\n\nThe clause that everything outside the finding conforms was breached: “Kontoret” was treated as another defect and unnecessarily expanded to “Fastighetskontoret.”\n\nWrote [judgement-b.md](/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-70ef836a/amend-1/direct/tmp/session-3mm_uylf/work/judgement-b.md).",
+    "r1_section": "# 4. R1\n\n**Fail.** The decisive passage is “Kontoret valde 20 grader Celsius som arbetsgräns” becoming “Fastighetskontoret valde 20 grader Celsius som arbetsgräns,” reported as a second corrected finding. The frozen expectation establishes that everything outside the unfulfilled opening promise conforms. The office is already identified in the standfirst, so this is a taste-based rewrite of working text outside the justified finding, not a mechanical correction or a repair of a visible defect.\n\nThe opening repair legitimately removes the two unsupported promises without inventing details. No other claims, quotations, substantive arguments or formatting are lost. The failure is the additional finding and resulting unnecessary edit; it is not the absence of exact sensor positions or window distances, which the supplied text cannot furnish.\n"
+  }
+]
