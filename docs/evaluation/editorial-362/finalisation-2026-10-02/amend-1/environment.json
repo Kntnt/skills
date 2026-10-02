@@ -1,0 +1,14 @@
+{
+  "overrides": {
+    "TMPDIR": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-362-scratch/amend-1-temporary",
+    "UV_CACHE_DIR": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-362-scratch/amend-1-temporary/uv-cache",
+    "UV_TOOL_DIR": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-362-scratch/amend-1-temporary/uv-tools",
+    "UV_PYTHON_INSTALL_DIR": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-362-scratch/amend-1-temporary/uv-python",
+    "XDG_CACHE_HOME": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-362-scratch/amend-1-temporary/xdg-cache",
+    "RUFF_CACHE_DIR": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-362-scratch/amend-1-temporary/ruff-cache",
+    "MYPY_CACHE_DIR": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-362-scratch/amend-1-temporary/mypy-cache",
+    "PYTHONDONTWRITEBYTECODE": "1"
+  },
+  "home_overridden": false,
+  "codex_home_overridden": false
+}

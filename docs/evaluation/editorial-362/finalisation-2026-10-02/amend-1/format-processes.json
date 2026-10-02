@@ -1,0 +1,23 @@
+[
+  {
+    "command": "uvx ruff format tests/test_run.py",
+    "cwd": "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/362",
+    "pid": 23447,
+    "log": "format-1.txt",
+    "started": 1790939068.630463,
+    "registration": {
+      "manifest": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-362-scratch/amend-1-temporary/cleanup-home/.kntnt/session-cleanup/sessions/01a0fc43-b691-7101-b34e-4492d3ce7433.jsonl",
+      "recorded": {
+        "at": "2026-10-02T11:04:28+00:00",
+        "id": "23447",
+        "kind": "pid",
+        "started": "Fri Oct  2 13:04:28 2026",
+        "why": "Ticket 362 amend format command 1"
+      },
+      "session": "01a0fc43-b691-7101-b34e-4492d3ce7433"
+    },
+    "returncode": 0,
+    "process_group_absent": true,
+    "duration_seconds": 1.0248401165008545
+  }
+]

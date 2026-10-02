@@ -1,0 +1,11 @@
+{
+  "manifest": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-362-scratch/amend-1-temporary/cleanup-home/.kntnt/session-cleanup/sessions/01a0fc43-b691-7101-b34e-4492d3ce7433.jsonl",
+  "recorded": {
+    "at": "2026-10-02T11:05:37+00:00",
+    "id": "31882",
+    "kind": "pid",
+    "started": "Fri Oct  2 13:05:37 2026",
+    "why": "Ticket 362 amend command supervisor"
+  },
+  "session": "01a0fc43-b691-7101-b34e-4492d3ce7433"
+}

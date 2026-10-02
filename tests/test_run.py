@@ -10075,6 +10075,39 @@ def test_the_registries_the_engine_finds_are_the_ones_this_repository_keeps() ->
     assert found["docs/adr"] == int(records[-1].name[:4])
 
 
+def test_isolate_reserves_records_but_not_manifested_file_version_captures(
+    tmp_path: Path,
+) -> None:
+    """Immutable harness captures never need a number for a new authored record."""
+
+    # Track both real registries and the harness's distinct archived-file layout.
+    repo = _init_repo(tmp_path / "proj")
+    _registry(repo, "docs/adr", "0001-the-first.md")
+    _registry(repo, "captures/run/file-versions", "0000-83265898e21c.md")
+    manifest = repo / "captures/run/file-versions.json"
+    manifest.write_text(
+        json.dumps([{"capture": "0000-83265898e21c.md"}]), encoding="utf-8"
+    )
+    _registry(repo, "captures/judge/file-versions", "0001-affecc67c51c.txt")
+    (repo / "captures/judge/file-versions.json").write_text(
+        json.dumps([{"capture": "0001-affecc67c51c.txt"}]), encoding="utf-8"
+    )
+    _registry(repo, "docs/other/file-versions", "0004-an-authored-record.md")
+    _registry(repo, "captures/records", "0006-an-authored-record.md")
+    _git(repo, "add", "captures")
+    _git(repo, "commit", "-m", "retain the capture manifests")
+
+    # Reservation remains discoverable outside manifested capture directories.
+    result = _engine(repo, "isolate", "--ticket", "9")
+
+    assert result.returncode == 0, result.stderr
+    assert json.loads(result.stdout)["reservations"] == [
+        {"directory": "captures/records", "number": "0007"},
+        {"directory": "docs/adr", "number": "0002"},
+        {"directory": "docs/other/file-versions", "number": "0005"},
+    ]
+
+
 def test_isolate_gives_a_ticket_a_scratch_directory_of_its_own(
     tmp_path: Path,
 ) -> None:

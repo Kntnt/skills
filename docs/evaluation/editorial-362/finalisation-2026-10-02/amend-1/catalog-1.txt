@@ -1,3 +1,4 @@
+Installed 1 package in 12ms
 {
   "origin": "Kntnt/skills",
   "manager_digest": "8a4e2d0da346db36c5f804ce72e7c5ebb431a1cb26d79371646d6cf7484b39e6",

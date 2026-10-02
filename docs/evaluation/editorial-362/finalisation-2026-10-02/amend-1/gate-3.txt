@@ -1,0 +1,8 @@
+Downloading selectolax (2.2MiB)
+Downloading ast-serialize (1.2MiB)
+Downloading mypy (13.6MiB)
+ Downloaded ast-serialize
+ Downloaded selectolax
+ Downloaded mypy
+Installed 22 packages in 42ms
+Success: no issues found in 89 source files
