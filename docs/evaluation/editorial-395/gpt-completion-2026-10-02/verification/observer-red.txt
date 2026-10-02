@@ -1,0 +1,37 @@
+warning: No `requires-python` value found in the workspace. Defaulting to `>=3.12`.
+..F                                                                      [100%]
+=================================== FAILURES ===================================
+___________ test_observer_captures_work_under_an_assigned_git_parent ___________
+
+tmp_path = PosixPath('/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/pytest-of-thomas/pytest-1239/test_observer_captures_work_un0')
+
+    def test_observer_captures_work_under_an_assigned_git_parent(tmp_path: Path) -> None:
+        """Only internal Git/install files are excluded from transient observation."""
+        import runpy
+    
+        area = tmp_path / ".git" / "private" / "work"
+        area.mkdir(parents=True)
+        (area / "source.md").write_text("source")
+        (area / ".git").mkdir()
+        (area / ".git" / "internal.md").write_text("internal")
+        (area / ".agents").mkdir()
+        (area / ".agents" / "installed.md").write_text("installed")
+        corrected = RUNNER.with_name("run-v2.py")
+>       observer = runpy.run_path(str(corrected))
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_editorial_395_completion.py:60: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+<frozen runpy>:286: in run_path
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+fname = '/Users/thomas/Projects/skills/.git/kntnt-orchestrate/395/docs/evaluation/editorial-395/gpt-completion-2026-10-02/harness/run-v2.py'
+
+>   ???
+E   FileNotFoundError: [Errno 2] No such file or directory: '/Users/thomas/Projects/skills/.git/kntnt-orchestrate/395/docs/evaluation/editorial-395/gpt-completion-2026-10-02/harness/run-v2.py'
+
+<frozen runpy>:254: FileNotFoundError
+=========================== short test summary info ============================
+FAILED tests/test_editorial_395_completion.py::test_observer_captures_work_under_an_assigned_git_parent
+1 failed, 2 passed in 0.29s

@@ -1,0 +1,6 @@
+Downloading mypy (13.7MiB)
+Downloading ast-serialize (1.2MiB)
+ Downloaded ast-serialize
+ Downloaded mypy
+Installed 6 packages in 14ms
+Success: no issues found in 3 source files
