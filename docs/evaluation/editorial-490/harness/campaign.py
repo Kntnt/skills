@@ -115,7 +115,7 @@ def reader(
         f"--corpus-revision={START}",
         f"--prompt={brief}",
         f"--input={source}",
-        "--input-name=input.md",
+        f"--input-name={'text.md' if role == 'validate' else 'input.md'}",
         f"--materials={materials}",
         f"--task={role}",
         f"--letter={letter}",
