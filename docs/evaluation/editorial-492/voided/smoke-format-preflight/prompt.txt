@@ -1,0 +1,1 @@
+This is a noneditorial native Harness capability smoke. Spawn one fresh subagent with no model or deliberation override. Ask it to return the exact word READY and do nothing else. Wait for its final answer, then reply READY. Do not read installed Skills, editorial material or any repository file. Do not start other work.

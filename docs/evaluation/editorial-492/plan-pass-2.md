@@ -1,0 +1,7 @@
+# Prospective execution freeze, pass 2
+
+Committed before any native session of this pass. The original `plan.md` at `cb446552` remains immutable and supplies every semantic criterion, matrix row, input, judge brief, validator brief, ship rule and seat. No editorial or validation run started in pass 1. Its sole noneditorial smoke completed and verified native parent/child capability on `gpt-6.1-sol/xhigh`, but a preflight `ruff format --check .` found formatting differences in the evaluator runner. That smoke is kept under `voided/smoke-format-preflight/`; it is no counted measurement of Redline.
+
+This pass uses the formatted `harness/run.py` committed with this supplemental freeze. Only Python formatting differs from its original bytes, preserved unchanged in `freeze-1/run.py.txt` and in the original freeze commit. `plan.md` itself, inputs, matrix, input digests and briefs are unchanged. The new runner is frozen from this commit onward. The smoke is repeated using it before validation or counted runs. No method, product wording, expectation or judgement changes, and no run made before this freeze is used as counted evidence.
+
+The starting baseline and corpus remain `4cf05813f94c2fa7147898878027835e14d29859`; the inputs frozen in pass 1 remain sourced from `cb446552`. Candidate and evidence commit ordering stays as `plan.md` states. Prospective history is preserved rather than amended.

@@ -35,7 +35,10 @@ AUTHENTICATION = Path("/Users/thomas/.codex/auth.json")
 
 SKILLS = {
     "kntnt": "kntnt",
-    **{name: f"editorial/{name}" for name in ("write", "redline", "proofread", "unslop")},
+    **{
+        name: f"editorial/{name}"
+        for name in ("write", "redline", "proofread", "unslop")
+    },
 }
 
 
@@ -171,16 +174,24 @@ def main() -> int:
         (work / "work").mkdir()
         shutil.copy2(args.input, work / "work/input.md")
         for extra in args.extra_file:
-            target = work / ("work/output.md" if extra.name == "captured-output.md" else "response.md")
+            target = work / (
+                "work/output.md"
+                if extra.name == "captured-output.md"
+                else "response.md"
+            )
             shutil.copy2(extra, target)
-        (work / args.input_name).write_text("This is an evaluator dispatch, not an editorial invocation.\n")
+        (work / args.input_name).write_text(
+            "This is an evaluator dispatch, not an editorial invocation.\n"
+        )
     else:
         shutil.copy2(args.input, work / args.input_name)
     shutil.copy2(args.input, output / "supplied-input.md")
 
     # Confine model writes to inventoried work and scratch, including UV caches.
     env = {
-        key: value for key, value in os.environ.items() if not key.startswith(("KNTNT_", "CLAUDE_"))
+        key: value
+        for key, value in os.environ.items()
+        if not key.startswith(("KNTNT_", "CLAUDE_"))
     }
     for key in ["CODEX_THREAD_ID", "CODEX_SESSION_ID"]:
         env.pop(key, None)
