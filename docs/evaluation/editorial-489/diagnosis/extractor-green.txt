@@ -1,0 +1,5 @@
+Using CPython 3.12.13
+Creating virtual environment at: /private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-a69e9ab5/tool-environment
+warning: No `requires-python` value found in the workspace. Defaulting to `>=3.12`.
+..                                                                       [100%]
+2 passed in 0.05s
