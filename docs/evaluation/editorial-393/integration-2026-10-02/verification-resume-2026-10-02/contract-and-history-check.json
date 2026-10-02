@@ -1,0 +1,69 @@
+{
+  "base_commit": "bb3cb3d711d96deaf8b217dceda65d1f412db2ab",
+  "contract_hashes_verified": [
+    {
+      "path": "skills/editorial/write/SKILL.md",
+      "frozen_sha256": "73186c908f6fa2c9608682947799fdac1a5e902fd6d1a265b1a088dd23c85489",
+      "current_sha256": "73186c908f6fa2c9608682947799fdac1a5e902fd6d1a265b1a088dd23c85489"
+    },
+    {
+      "path": "skills/editorial/redline/SKILL.md",
+      "frozen_sha256": "0872ac03b535f7b1d7205fdbea4647795c316d3d6fe638c2af5ce0018dd40bb0",
+      "current_sha256": "15344e90c9632ecfa89ca586ce04893c00c00073b585d51c82931b8fdb90a6c2"
+    },
+    {
+      "path": "skills/editorial/redline/references/reply-check.md",
+      "frozen_sha256": "c89fd5a2ebdbd73898adf475fee34dda5c88415de318d16378dd50fee221d9e5",
+      "current_sha256": "54d7628c1afb3bddb32f5cec30233ce4e96970e8777fee04114b080723016b3b"
+    },
+    {
+      "path": "skills/editorial/proofread/SKILL.md",
+      "frozen_sha256": "6cad45f3d50a96e43c8df9996bc748c7e09e09f456e8a9375c724b84d236404f",
+      "current_sha256": "6cad45f3d50a96e43c8df9996bc748c7e09e09f456e8a9375c724b84d236404f"
+    },
+    {
+      "path": "skills/kntnt/library/references/editorial/base.review.md",
+      "frozen_sha256": "d2c838c19a692104be247afd227b0baed98f3156be059c0a982ecae3513fa0ca",
+      "current_sha256": "d2c838c19a692104be247afd227b0baed98f3156be059c0a982ecae3513fa0ca"
+    },
+    {
+      "path": "skills/kntnt/library/references/editorial/genres/casestudy.md",
+      "frozen_sha256": "a39054321cbd35819cfd8ac7d2823dd3d56550a6ee2d1c6ee3b30f9daaa16cc5",
+      "current_sha256": "a39054321cbd35819cfd8ac7d2823dd3d56550a6ee2d1c6ee3b30f9daaa16cc5"
+    },
+    {
+      "path": "skills/kntnt/library/references/editorial/genres/casestudy.review.md",
+      "frozen_sha256": "a7db10d0dc1970064a8887c819a8500dfdecf43dcb45fffed32994921ceb68a4",
+      "current_sha256": "a7db10d0dc1970064a8887c819a8500dfdecf43dcb45fffed32994921ceb68a4"
+    },
+    {
+      "path": "skills/kntnt/library/references/editorial/article-anatomy.md",
+      "frozen_sha256": "c075c6fe7494dbcdc43d6af599c55ab8fc52fc48d7ed1b6cc26eca7a592cecd7",
+      "current_sha256": "c075c6fe7494dbcdc43d6af599c55ab8fc52fc48d7ed1b6cc26eca7a592cecd7"
+    },
+    {
+      "path": "skills/kntnt/library/references/editorial/mechanics.md",
+      "frozen_sha256": "b3103ed6da4ac9d27a0ebfb43bdb40b8e77d58d84b3745a90c0a736142438b45",
+      "current_sha256": "b3103ed6da4ac9d27a0ebfb43bdb40b8e77d58d84b3745a90c0a736142438b45"
+    },
+    {
+      "path": "skills/kntnt/library/references/languages/en_US.md",
+      "frozen_sha256": "d11fcffa9e7316dd44d8796a954e5db9965c501e7df982affe91bc624cfef73c",
+      "current_sha256": "d11fcffa9e7316dd44d8796a954e5db9965c501e7df982affe91bc624cfef73c"
+    },
+    {
+      "path": "skills/kntnt/library/references/languages/en_GB.md",
+      "frozen_sha256": "2b36899b232e65300ea15fbbb0db2abece4e1f32e7b193957355a67a34331413",
+      "current_sha256": "2b36899b232e65300ea15fbbb0db2abece4e1f32e7b193957355a67a34331413"
+    },
+    {
+      "path": "skills/kntnt/library/references/delivery.md",
+      "frozen_sha256": "71babd36f68d93cd9f7d035358c3cbaeae3179147d8dc7a4667047081c898472",
+      "current_sha256": "71babd36f68d93cd9f7d035358c3cbaeae3179147d8dc7a4667047081c898472"
+    }
+  ],
+  "protected_paths_changed": [],
+  "original_worktree_present": true,
+  "original_branch_preserved": true,
+  "scope": "No new semantic judgement; prior residual mapping remains against unchanged contracts. Original source packet, verdicts, records, failed gate receipts, product, tests, gate commands, index, changelog and ADR remain unchanged."
+}

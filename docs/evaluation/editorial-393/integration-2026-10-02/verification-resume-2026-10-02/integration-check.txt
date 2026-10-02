@@ -1,0 +1,7 @@
+test_retained_packet_and_records_are_byte_exact (__main__.Integration.test_retained_packet_and_records_are_byte_exact) ... ok
+test_source_deliverable_ref_and_existing_history_are_preserved (__main__.Integration.test_source_deliverable_ref_and_existing_history_are_preserved) ... ok
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.716s
+
+OK
