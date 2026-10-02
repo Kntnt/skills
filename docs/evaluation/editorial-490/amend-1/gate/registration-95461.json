@@ -1,0 +1,6 @@
+{
+  "pid": 95461,
+  "returncode": 0,
+  "stdout": "{\n  \"manifest\": \"/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-0125775d/amend-1-runtime/cleanup-home/.kntnt/session-cleanup/sessions/01a0fded-d5c5-7680-bfbf-2a3c9fc34a81.jsonl\",\n  \"recorded\": {\n    \"at\": \"2026-10-02T18:47:35+00:00\",\n    \"id\": \"95461\",\n    \"kind\": \"pid\",\n    \"started\": \"Fri Oct  2 20:47:35 2026\",\n    \"why\": \"Ticket 490 amend 1 gate supervisor\"\n  },\n  \"session\": \"01a0fded-d5c5-7680-bfbf-2a3c9fc34a81\"\n}\n",
+  "stderr": ""
+}

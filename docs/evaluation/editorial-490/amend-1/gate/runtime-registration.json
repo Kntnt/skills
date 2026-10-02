@@ -1,0 +1,5 @@
+{
+  "exit_code": 0,
+  "stdout": "{\n  \"manifest\": \"/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-0125775d/amend-1-runtime/cleanup-home/.kntnt/session-cleanup/sessions/01a0fded-d5c5-7680-bfbf-2a3c9fc34a81.jsonl\",\n  \"recorded\": {\n    \"at\": \"2026-10-02T18:49:09+00:00\",\n    \"id\": \"/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-0125775d/amend-1-runtime\",\n    \"kind\": \"path\",\n    \"why\": \"Ticket 490 amend 1 private gate runtime\"\n  },\n  \"session\": \"01a0fded-d5c5-7680-bfbf-2a3c9fc34a81\"\n}\n",
+  "stderr": ""
+}

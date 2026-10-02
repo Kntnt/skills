@@ -1,0 +1,9 @@
+{
+  "command": "uv run --with pytest --with pytest-xdist --with pyyaml pytest -n auto tests/test_adr.py::test_every_cited_number_has_a_record",
+  "exit_code": 1,
+  "seconds": 3.4408199170138687,
+  "pid": 95613,
+  "pgid": 95613,
+  "sid": 95613,
+  "ended_utc": "2026-10-02T18:47:39.629684+00:00"
+}

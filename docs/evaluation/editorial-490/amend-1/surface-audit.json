@@ -1,0 +1,188 @@
+{
+  "attempt_id": "ms-20261002-412757",
+  "amend": 1,
+  "head_before_amend": "7b0ae5a2ef7f14d5b3be424e462d246407640e78",
+  "manifest_digest_mismatches": [],
+  "frozen_files": [
+    {
+      "path": "plan.md",
+      "sha256": "a4b1d91863877b88c8a984c316783ac2a96f58a2171c55117ef5b7d28a1d1d84",
+      "matches_freeze": true
+    },
+    {
+      "path": "matrix.tsv",
+      "sha256": "f09dcc3e608db81038c00110d94a45f37e1b993f53135f68892917572cf82784",
+      "matches_freeze": true
+    },
+    {
+      "path": "manifest.json",
+      "sha256": "90ccbc43fe6270425f9f28d6f0edae2e0dea52c9cea36fa29c59dc3455f8f254",
+      "matches_freeze": true
+    },
+    {
+      "path": "validation-brief.md",
+      "sha256": "145b64e2acb3c3efc90dd816f0b5178fdc59f8aeebbe991401d35206929671c7",
+      "matches_freeze": true
+    },
+    {
+      "path": "judge-brief.md",
+      "sha256": "ef1228737ddafeafa83734e38c1e8caf12a07e66db2531fafd05a4dbc97b4f11",
+      "matches_freeze": true
+    },
+    {
+      "path": "transition-judge-brief.md",
+      "sha256": "ebc8fda76efdd8b44ddee71a0eb54bc053cd0820cdbaefb765ba42f51cdbe6fa",
+      "matches_freeze": true
+    },
+    {
+      "path": "state-judge-brief.md",
+      "sha256": "9ceab00ef09201d75cbe9e033fdb83d688dee9254b09d8f3bb342d5ab09b13ee",
+      "matches_freeze": true
+    },
+    {
+      "path": "inputs/case-study-clean.md",
+      "sha256": "2e4ef2fd4b7c03aaaceca1ad22724fdb1ed3c685cd6b4995a00285198bed42f9",
+      "matches_freeze": true
+    },
+    {
+      "path": "inputs/historical-check-return.md",
+      "sha256": "dda78999cce85594024e4570534ee4e38a8fdb78ffd41cefbcae4ed2ce43ba25",
+      "matches_freeze": true
+    },
+    {
+      "path": "inputs/historical-checked-delivered.md",
+      "sha256": "83ae78e1138f447c22cce920ac3c9f074473c045aee983a2b1c3cc085ecb7ff0",
+      "matches_freeze": true
+    },
+    {
+      "path": "inputs/historical-checked-received.md",
+      "sha256": "2e4ef2fd4b7c03aaaceca1ad22724fdb1ed3c685cd6b4995a00285198bed42f9",
+      "matches_freeze": true
+    },
+    {
+      "path": "inputs/historical-draft-reply.md",
+      "sha256": "46f45be5692905d6aa1a884bf977fd8d1f7923749b4dbe5874c320dbdb147508",
+      "matches_freeze": true
+    },
+    {
+      "path": "inputs/historical-final-reply.md",
+      "sha256": "5add90f0b92bb7f728d3ac48210ef44f137bd5f4b11059beb6abead55177fe84",
+      "matches_freeze": true
+    },
+    {
+      "path": "inputs/historical-prompt.txt",
+      "sha256": "972b4f73d4f73f436e5cebdacb039330f25f4d9d3d5b1cbe4c78ca2a34d8838c",
+      "matches_freeze": true
+    },
+    {
+      "path": "inputs/historical-received.md",
+      "sha256": "2e4ef2fd4b7c03aaaceca1ad22724fdb1ed3c685cd6b4995a00285198bed42f9",
+      "matches_freeze": true
+    },
+    {
+      "path": "inputs/q1/reply.md",
+      "sha256": "1240a3befeae18aa8c71f4147de28bdcca469be6bf3e6533cc0f9b4cc9d8f1cc",
+      "matches_freeze": true
+    },
+    {
+      "path": "inputs/q1/text.md",
+      "sha256": "78f9baa4778dea0d4a345b8eb225037c53e9d1503caab4e1116ccd08e354014f",
+      "matches_freeze": true
+    },
+    {
+      "path": "inputs/q2/reply.md",
+      "sha256": "3ca69761d2daa9c3e5c503929ceecc3bd36eb48c6c1093430a3d1357cea0de38",
+      "matches_freeze": true
+    },
+    {
+      "path": "inputs/q2/text.md",
+      "sha256": "78f9baa4778dea0d4a345b8eb225037c53e9d1503caab4e1116ccd08e354014f",
+      "matches_freeze": true
+    },
+    {
+      "path": "inputs/q3/reply.md",
+      "sha256": "97eff51745cb89456d1302ab39bf557645d61b382251887241c0dec1547b9365",
+      "matches_freeze": true
+    },
+    {
+      "path": "inputs/q3/text.md",
+      "sha256": "d5461acb39b6b589e79d114a8f3d182a7b6c2e4ceaa62427853d26c2f7550eec",
+      "matches_freeze": true
+    },
+    {
+      "path": "inputs/q4/reply.md",
+      "sha256": "42aaa8f0a21d31831b468fc89546898214c02da3038790bf6cdab25041893a2b",
+      "matches_freeze": true
+    },
+    {
+      "path": "inputs/q4/text.md",
+      "sha256": "06cfcb1efe579cffb808b600a682cc946e91264910c43a40f1ab19a93fdaefc5",
+      "matches_freeze": true
+    },
+    {
+      "path": "inputs/q5/reply.md",
+      "sha256": "14d03851e22f3312fbeeb3fbb84d05183498f47f775f106803aba05be969cb47",
+      "matches_freeze": true
+    },
+    {
+      "path": "inputs/q5/text.md",
+      "sha256": "eebfeee74203a593d2de2f86c3755935735ccfba205becdcf7cae13ebb7aebdd",
+      "matches_freeze": true
+    },
+    {
+      "path": "expectations/case-study-clean.md",
+      "sha256": "2c0b5ae6729252fca6e9a068a4c545459e5379a0a958c56fa19c776ac7cc5b7d",
+      "matches_freeze": true
+    },
+    {
+      "path": "expectations/q1.md",
+      "sha256": "4a7df93c3c257271736d3dda4010cc7956edd2da3e77eb1e8ece4e84573ef748",
+      "matches_freeze": true
+    },
+    {
+      "path": "expectations/q2.md",
+      "sha256": "e5d0b6054ed52862aeb765cc356c4df04a8cfcf401f83fefe612d5d932611f91",
+      "matches_freeze": true
+    },
+    {
+      "path": "expectations/q3.md",
+      "sha256": "8dbb3b5f186da4317c23f1c90928e67dc88af2ffdd10749d0901f9a248823a31",
+      "matches_freeze": true
+    },
+    {
+      "path": "expectations/q4.md",
+      "sha256": "f210b1a3098d1ee4d3310b2bef4b51063c0607ea115007d9cce62be188937fe2",
+      "matches_freeze": true
+    },
+    {
+      "path": "expectations/q5.md",
+      "sha256": "23acc52c18e015d0f176dcec54afad4799237abb24677040b270b4cac8ecb085",
+      "matches_freeze": true
+    }
+  ],
+  "owned_citations": {
+    "0241": [
+      "docs/evaluation/editorial-490/plan.md"
+    ]
+  },
+  "unresolved_owned_citations": {
+    "0241": [
+      "docs/evaluation/editorial-490/plan.md"
+    ]
+  },
+  "product_delta_from_start": [],
+  "native_redline_run_directories": [],
+  "checker_probe_directories": [],
+  "validation_packets": [
+    "validation/q1/a/result.json",
+    "validation/q1/b/result.json",
+    "validation/q2/a/result.json",
+    "validation/q2/b/result.json",
+    "validation/q3/a/result.json",
+    "validation/q3/b/result.json",
+    "validation/q4/a/result.json",
+    "validation/q4/b/result.json",
+    "validation/q5/a/result.json",
+    "validation/q5/b/result.json"
+  ]
+}

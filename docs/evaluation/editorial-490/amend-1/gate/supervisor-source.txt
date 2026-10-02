@@ -1,0 +1,108 @@
+"""Run the supplied ticket gate serially in registered private process groups."""
+import json
+import os
+import signal
+import subprocess
+import sys
+import time
+from datetime import datetime, timezone
+from pathlib import Path
+
+ROOT = Path('/Users/thomas/Projects/skills/.git/kntnt-orchestrate/490')
+SCRATCH = Path('/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-0125775d')
+RUNTIME = SCRATCH / 'amend-1-runtime'
+EVIDENCE = ROOT / 'docs/evaluation/editorial-490/amend-1/gate'
+REGISTRY = '/Users/thomas/.agents/skills/kntnt/features/session-cleanup/scripts/session_cleanup.py'
+
+
+def record(path, value):
+    """Keep receipts outside the command's output stream."""
+    path.write_text(json.dumps(value, indent=2) + '\n')
+
+
+def register(pid, reason, env):
+    """Confine the required ownership registration to ticket scratch."""
+    result = subprocess.run(['uv', 'run', REGISTRY, 'add', 'pid', str(pid), reason], cwd=ROOT, env=env, capture_output=True, text=True)
+    record(EVIDENCE / f'registration-{pid}.json', {'pid': pid, 'returncode': result.returncode, 'stdout': result.stdout, 'stderr': result.stderr})
+    result.check_returncode()
+
+
+def environment():
+    """Leave real HOME and CODEX_HOME alone while isolating tool runtime writes."""
+    env = os.environ.copy()
+    values = {
+        'TMPDIR': 'tmp',
+        'UV_CACHE_DIR': 'uv-cache',
+        'UV_TOOL_DIR': 'uv-tools',
+        'UV_PYTHON_INSTALL_DIR': 'uv-python',
+        'UV_PROJECT_ENVIRONMENT': 'venv',
+        'XDG_CACHE_HOME': 'xdg-cache',
+        'XDG_CONFIG_HOME': 'xdg-config',
+        'XDG_DATA_HOME': 'xdg-data',
+        'PYTHONPYCACHEPREFIX': 'pycache',
+        'RUFF_CACHE_DIR': 'ruff-cache',
+        'MYPY_CACHE_DIR': 'mypy-cache',
+        'KNTNT_HOME': 'cleanup-home',
+    }
+    for key, relative in values.items():
+        env[key] = str(RUNTIME / relative)
+    env['PYTEST_ADDOPTS'] = '-o cache_dir=' + str(RUNTIME / 'pytest-cache')
+    env['UV_NO_PROGRESS'] = '1'
+    for key in values:
+        if key not in {'UV_PROJECT_ENVIRONMENT'}:
+            Path(env[key]).mkdir(parents=True, exist_ok=True)
+    record(EVIDENCE / 'environment.json', {key: env.get(key) for key in ['HOME', 'CODEX_HOME', *values, 'PYTEST_ADDOPTS', 'UV_NO_PROGRESS']})
+    return env
+
+
+def worker():
+    """Do not run a gate until its private process identity has been registered."""
+    label, command = sys.argv[2:]
+    barrier = RUNTIME / (label + '.registered')
+    while not barrier.exists():
+        time.sleep(0.05)
+    start = time.monotonic()
+    completed = subprocess.run(command, shell=True, executable='/bin/bash', cwd=ROOT)
+    record(EVIDENCE / (label + '.result.json'), {'command': command, 'exit_code': completed.returncode, 'seconds': time.monotonic() - start, 'pid': os.getpid(), 'pgid': os.getpgrp(), 'sid': os.getsid(0), 'ended_utc': datetime.now(timezone.utc).isoformat()})
+
+
+def main():
+    """Wait for every command and retain a receipt even when a check fails."""
+    if os.getpgrp() != os.getpid():
+        os.setsid()
+    EVIDENCE.mkdir(parents=True, exist_ok=False)
+    env = environment()
+    identity = {'pid': os.getpid(), 'pgid': os.getpgrp(), 'sid': os.getsid(0)}
+    record(EVIDENCE / 'supervisor.identity.json', identity)
+    register(os.getpid(), 'Ticket 490 amend 1 gate supervisor', env)
+    commands = [
+        ('red-adr', 'uv run --with pytest --with pytest-xdist --with pyyaml pytest -n auto tests/test_adr.py::test_every_cited_number_has_a_record'),
+        ('gate-1', 'uvx ruff check .'),
+        ('gate-2', 'uvx ruff format --check .'),
+        ('gate-3', 'uvx --with types-PyYAML --with pytest --with httpx==0.28.1 --with selectolax==0.4.11 --with types-tinycss2 --with types-regex mypy skills/kntnt/scripts/kntnt.py skills/kntnt/library/scripts/argument_grammar.py skills/kntnt/library/scripts/article_anatomy.py skills/kntnt/library/scripts/ship.py skills/kntnt/library/scripts/integrations.py skills/kntnt/library/scripts/languages.py skills/kntnt/library/scripts/credentials.py skills/models/model-selector/scripts/catalogue.py skills/models/model-selector/scripts/profiles.py skills/models/model-selector/scripts/evidence.py skills/models/model-selector/scripts/launch.py skills/models/model-selector/scripts/selection.py skills/models/model-selector/scripts/quota.py skills/models/model-selector/scripts/record.py skills/models/model-selector/scripts/capture.py skills/models/model-selector/scripts/grade.py skills/models/model-selector/scripts/setup_apply.py skills/models/model-selector/scripts/inventory.py skills/code/orchestrate/scripts/run.py skills/productivity/rename-invoices/scripts/rename_invoices.py skills/agents/explain/scripts/invoke.py skills/web/mirror/scripts/mirror.py skills/infrastructure/cloudns/scripts/cloudns.py skills/infrastructure/hetzner/scripts/hetzner.py skills/infrastructure/nodeping/scripts/nodeping.py skills/infrastructure/postmark/scripts/postmark.py tests'),
+        ('gate-4', 'uv run --with pytest --with pytest-xdist --with pyyaml pytest -n auto'),
+    ]
+    record(EVIDENCE / 'commands.json', commands)
+    for label, command in commands:
+        with (EVIDENCE / (label + '.txt')).open('wb') as log:
+            process = subprocess.Popen([sys.executable, __file__, '--worker', label, command], cwd=ROOT, env=env, stdout=log, stderr=subprocess.STDOUT, start_new_session=True)
+            identity = {'pid': process.pid, 'pgid': os.getpgid(process.pid), 'sid': os.getsid(process.pid)}
+            record(EVIDENCE / (label + '.identity.json'), identity)
+            try:
+                register(process.pid, 'Ticket 490 amend 1 ' + label, env)
+                (RUNTIME / (label + '.registered')).touch()
+                process.wait()
+            finally:
+                if process.poll() is None:
+                    os.killpg(process.pid, signal.SIGTERM)
+                    process.wait()
+        result = json.loads((EVIDENCE / (label + '.result.json')).read_text())
+        print(json.dumps({'label': label, **result}), flush=True)
+    record(EVIDENCE / 'supervisor.result.json', {'exit_code': 0, 'ended_utc': datetime.now(timezone.utc).isoformat()})
+
+
+if __name__ == '__main__':
+    if len(sys.argv) > 1:
+        worker()
+    else:
+        main()

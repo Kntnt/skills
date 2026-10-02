@@ -1,0 +1,9 @@
+{
+  "command": "uvx ruff check .",
+  "exit_code": 0,
+  "seconds": 1.307926082983613,
+  "pid": 95751,
+  "pgid": 95751,
+  "sid": 95751,
+  "ended_utc": "2026-10-02T18:47:41.083818+00:00"
+}

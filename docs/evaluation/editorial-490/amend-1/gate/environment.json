@@ -1,0 +1,18 @@
+{
+  "HOME": "/Users/thomas",
+  "CODEX_HOME": null,
+  "TMPDIR": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-0125775d/amend-1-runtime/tmp",
+  "UV_CACHE_DIR": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-0125775d/amend-1-runtime/uv-cache",
+  "UV_TOOL_DIR": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-0125775d/amend-1-runtime/uv-tools",
+  "UV_PYTHON_INSTALL_DIR": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-0125775d/amend-1-runtime/uv-python",
+  "UV_PROJECT_ENVIRONMENT": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-0125775d/amend-1-runtime/venv",
+  "XDG_CACHE_HOME": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-0125775d/amend-1-runtime/xdg-cache",
+  "XDG_CONFIG_HOME": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-0125775d/amend-1-runtime/xdg-config",
+  "XDG_DATA_HOME": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-0125775d/amend-1-runtime/xdg-data",
+  "PYTHONPYCACHEPREFIX": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-0125775d/amend-1-runtime/pycache",
+  "RUFF_CACHE_DIR": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-0125775d/amend-1-runtime/ruff-cache",
+  "MYPY_CACHE_DIR": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-0125775d/amend-1-runtime/mypy-cache",
+  "KNTNT_HOME": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-0125775d/amend-1-runtime/cleanup-home",
+  "PYTEST_ADDOPTS": "-o cache_dir=/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-0125775d/amend-1-runtime/pytest-cache",
+  "UV_NO_PROGRESS": "1"
+}
