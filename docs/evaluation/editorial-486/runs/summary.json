@@ -1,0 +1,180 @@
+[
+  {
+    "lane": "0",
+    "run": "pre-article-clean-resp-1",
+    "arm": "pre",
+    "revision": "5457c89405aece11b325937f9f07407f01974f7c",
+    "input": "docs/evaluation/editorial-486/inputs/article-clean.md",
+    "invocation": "/redline --genre=article --language=sv --output=response input.md",
+    "capture": "no",
+    "source_sha256": "f183e6da31cf78081cc7c7eee69570940e24802997e92d96bb111966aa4170d5",
+    "artifact_sha256": "7467e5053eacc3ef7c0e31057e69c44ce5c3f1e34965ed174c2c72f314c270c3",
+    "unchanged": false,
+    "r1": "fail",
+    "target": "pass",
+    "body_unchanged": true,
+    "defects": [
+      "#480"
+    ]
+  },
+  {
+    "lane": "0",
+    "run": "pre-article-clean-file-1",
+    "arm": "pre",
+    "revision": "5457c89405aece11b325937f9f07407f01974f7c",
+    "input": "docs/evaluation/editorial-486/inputs/article-clean.md",
+    "invocation": "/redline --genre=article --language=sv --output=output.md input.md",
+    "capture": "yes",
+    "source_sha256": "f183e6da31cf78081cc7c7eee69570940e24802997e92d96bb111966aa4170d5",
+    "artifact_sha256": "f183e6da31cf78081cc7c7eee69570940e24802997e92d96bb111966aa4170d5",
+    "unchanged": true,
+    "r1": "pass",
+    "target": "pass",
+    "body_unchanged": true,
+    "defects": []
+  },
+  {
+    "lane": "0",
+    "run": "pre-article-clean-resp-2",
+    "arm": "pre",
+    "revision": "5457c89405aece11b325937f9f07407f01974f7c",
+    "input": "docs/evaluation/editorial-486/inputs/article-clean.md",
+    "invocation": "/redline --genre=article --language=sv --output=response input.md",
+    "capture": "no",
+    "source_sha256": "f183e6da31cf78081cc7c7eee69570940e24802997e92d96bb111966aa4170d5",
+    "artifact_sha256": "423f6333abbfc5351f737903e2e47e78070e35008b2ddb8f7d640d5b791a179a",
+    "unchanged": false,
+    "r1": "fail",
+    "target": "pass",
+    "body_unchanged": true,
+    "defects": [
+      "#480"
+    ]
+  },
+  {
+    "lane": "0",
+    "run": "pre-article-clean-file-2",
+    "arm": "pre",
+    "revision": "5457c89405aece11b325937f9f07407f01974f7c",
+    "input": "docs/evaluation/editorial-486/inputs/article-clean.md",
+    "invocation": "/redline --genre=article --language=sv --output=output.md input.md",
+    "capture": "yes",
+    "source_sha256": "f183e6da31cf78081cc7c7eee69570940e24802997e92d96bb111966aa4170d5",
+    "artifact_sha256": "f183e6da31cf78081cc7c7eee69570940e24802997e92d96bb111966aa4170d5",
+    "unchanged": true,
+    "r1": "pass",
+    "target": "pass",
+    "body_unchanged": true,
+    "defects": []
+  },
+  {
+    "lane": "0",
+    "run": "pre-article-clean-resp-3",
+    "arm": "pre",
+    "revision": "5457c89405aece11b325937f9f07407f01974f7c",
+    "input": "docs/evaluation/editorial-486/inputs/article-clean.md",
+    "invocation": "/redline --genre=article --language=sv --output=response input.md",
+    "capture": "no",
+    "source_sha256": "f183e6da31cf78081cc7c7eee69570940e24802997e92d96bb111966aa4170d5",
+    "artifact_sha256": "7f1a3fb70ff842ae97503e1dd47a9c261dc7717825480ec6c70f485e57a3bdca",
+    "unchanged": false,
+    "r1": "fail",
+    "target": "pass",
+    "body_unchanged": true,
+    "defects": [
+      "#480"
+    ]
+  },
+  {
+    "lane": "0",
+    "run": "pre-article-clean-file-3",
+    "arm": "pre",
+    "revision": "5457c89405aece11b325937f9f07407f01974f7c",
+    "input": "docs/evaluation/editorial-486/inputs/article-clean.md",
+    "invocation": "/redline --genre=article --language=sv --output=output.md input.md",
+    "capture": "yes",
+    "source_sha256": "f183e6da31cf78081cc7c7eee69570940e24802997e92d96bb111966aa4170d5",
+    "artifact_sha256": "7467e5053eacc3ef7c0e31057e69c44ce5c3f1e34965ed174c2c72f314c270c3",
+    "unchanged": false,
+    "r1": "fail",
+    "target": "pass",
+    "body_unchanged": true,
+    "defects": [
+      "#480"
+    ]
+  },
+  {
+    "lane": "1",
+    "run": "pre-article-inference-resp-1",
+    "arm": "pre",
+    "revision": "5457c89405aece11b325937f9f07407f01974f7c",
+    "input": "docs/evaluation/editorial-486/inputs/article-inference.md",
+    "invocation": "/redline --genre=article --language=sv --output=response input.md",
+    "capture": "no",
+    "source_sha256": "7525e134bfc1c650e451832effc4319a237e1e4382a6f88f48fd0729e8f9cf22",
+    "artifact_sha256": "05be48d3a6e97910e5905f68c87e4c0f68a9fb937fb68815da7eeea7a7339a9d",
+    "unchanged": false,
+    "r1": "fail",
+    "target": "skipped",
+    "body_unchanged": false,
+    "defects": [
+      "#493",
+      "#480"
+    ]
+  },
+  {
+    "lane": "1",
+    "run": "pre-article-inference-file-1",
+    "arm": "pre",
+    "revision": "5457c89405aece11b325937f9f07407f01974f7c",
+    "input": "docs/evaluation/editorial-486/inputs/article-inference.md",
+    "invocation": "/redline --genre=article --language=sv --output=output.md input.md",
+    "capture": "yes",
+    "source_sha256": "7525e134bfc1c650e451832effc4319a237e1e4382a6f88f48fd0729e8f9cf22",
+    "artifact_sha256": "41624777392f422ace49dfa87049977ae4df9a3bc4427b17192a7e7e3727c66c",
+    "unchanged": false,
+    "r1": "fail",
+    "target": "skipped",
+    "body_unchanged": false,
+    "defects": [
+      "#493"
+    ]
+  },
+  {
+    "lane": "2",
+    "run": "pre-article-promise-resp-1",
+    "arm": "pre",
+    "revision": "5457c89405aece11b325937f9f07407f01974f7c",
+    "input": "docs/evaluation/editorial-486/inputs/article-promise.md",
+    "invocation": "/redline --genre=article --language=sv --output=response input.md",
+    "capture": "no",
+    "source_sha256": "b04eb52d2f26242675fba76010f62e0f2ff488bac1792c398730bd0de9012cc5",
+    "artifact_sha256": "7aea9730293e8cb5a1607aea88bf73389921c0a3096eee07ede57c6807e60fbc",
+    "unchanged": false,
+    "r1": "fail",
+    "target": "skipped",
+    "body_unchanged": false,
+    "defects": [
+      "#493",
+      "#480"
+    ]
+  },
+  {
+    "lane": "2",
+    "run": "pre-article-promise-file-1",
+    "arm": "pre",
+    "revision": "5457c89405aece11b325937f9f07407f01974f7c",
+    "input": "docs/evaluation/editorial-486/inputs/article-promise.md",
+    "invocation": "/redline --genre=article --language=sv --output=output.md input.md",
+    "capture": "yes",
+    "source_sha256": "b04eb52d2f26242675fba76010f62e0f2ff488bac1792c398730bd0de9012cc5",
+    "artifact_sha256": "a27b8bcb1bceab8f8b48a11892027bf994fdc4bcc43eb116d5fd8fb7ae25c5aa",
+    "unchanged": false,
+    "r1": "fail",
+    "target": "skipped",
+    "body_unchanged": false,
+    "defects": [
+      "#493"
+    ]
+  }
+]

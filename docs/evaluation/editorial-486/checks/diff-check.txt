@@ -1,0 +1,80 @@
+docs/evaluation/editorial-486/runs/pre-article-clean-file-3/artifact.diff:6: trailing whitespace.
++ 
+docs/evaluation/editorial-486/runs/pre-article-clean-file-3/artifact.diff:8: trailing whitespace.
++ 
+docs/evaluation/editorial-486/runs/pre-article-clean-file-3/artifact.diff:8: new blank line at EOF.
+docs/evaluation/editorial-486/runs/pre-article-clean-file-3/judgement-a.md:60: new blank line at EOF.
+docs/evaluation/editorial-486/runs/pre-article-clean-file-3/judgement-b.md:53: trailing whitespace.
++> Before: Mätförsöket i Björkskolan visar när, inte varför  
+docs/evaluation/editorial-486/runs/pre-article-clean-file-3/judges/a/file-versions/e51fd772a960b789916e5910198d657a4633c0ede1b6e2cb87c583a850186a47.md:60: new blank line at EOF.
+docs/evaluation/editorial-486/runs/pre-article-clean-file-3/judges/a/judgement-a.md:60: new blank line at EOF.
+docs/evaluation/editorial-486/runs/pre-article-clean-file-3/judges/b/file-versions/1f81667b8180b65ca5a34aafc0f2c4f75e0ea24d3df0b0875e529089d32b14b3.md:53: trailing whitespace.
++> Before: Mätförsöket i Björkskolan visar när, inte varför  
+docs/evaluation/editorial-486/runs/pre-article-clean-file-3/judges/b/file-versions/aa0094e3d510385b9a5cd1002b062e5eb4dc6426f3f95a394ef03f4f71ea4b14.md:53: trailing whitespace.
++> Before: Mätförsöket i Björkskolan visar när, inte varför  
+docs/evaluation/editorial-486/runs/pre-article-clean-file-3/judges/b/file-versions/aa0094e3d510385b9a5cd1002b062e5eb4dc6426f3f95a394ef03f4f71ea4b14.md:59: new blank line at EOF.
+docs/evaluation/editorial-486/runs/pre-article-clean-file-3/judges/b/judgement-b.md:53: trailing whitespace.
++> Before: Mätförsöket i Björkskolan visar när, inte varför  
+docs/evaluation/editorial-486/runs/pre-article-clean-resp-1/artifact.diff:6: trailing whitespace.
++ 
+docs/evaluation/editorial-486/runs/pre-article-clean-resp-1/artifact.diff:8: trailing whitespace.
++ 
+docs/evaluation/editorial-486/runs/pre-article-clean-resp-1/artifact.diff:8: new blank line at EOF.
+docs/evaluation/editorial-486/runs/pre-article-clean-resp-2/artifact.diff:6: trailing whitespace.
++ 
+docs/evaluation/editorial-486/runs/pre-article-clean-resp-2/artifact.diff:8: trailing whitespace.
++ 
+docs/evaluation/editorial-486/runs/pre-article-clean-resp-2/artifact.diff:8: new blank line at EOF.
+docs/evaluation/editorial-486/runs/pre-article-clean-resp-3/artifact.diff:6: trailing whitespace.
++ 
+docs/evaluation/editorial-486/runs/pre-article-clean-resp-3/artifact.diff:8: trailing whitespace.
++ 
+docs/evaluation/editorial-486/runs/pre-article-clean-resp-3/artifact.diff:8: new blank line at EOF.
+docs/evaluation/editorial-486/runs/pre-article-inference-file-1/artifact.diff:4: trailing whitespace.
++ 
+docs/evaluation/editorial-486/runs/pre-article-inference-file-1/artifact.diff:6: trailing whitespace.
++ 
+docs/evaluation/editorial-486/runs/pre-article-inference-file-1/artifact.diff:9: trailing whitespace.
++ 
+docs/evaluation/editorial-486/runs/pre-article-inference-file-1/artifact.diff:11: trailing whitespace.
++ 
+docs/evaluation/editorial-486/runs/pre-article-inference-file-1/artifact.diff:11: new blank line at EOF.
+docs/evaluation/editorial-486/runs/pre-article-inference-resp-1/artifact.diff:6: trailing whitespace.
++ 
+docs/evaluation/editorial-486/runs/pre-article-inference-resp-1/artifact.diff:8: trailing whitespace.
++ 
+docs/evaluation/editorial-486/runs/pre-article-inference-resp-1/artifact.diff:10: trailing whitespace.
++ 
+docs/evaluation/editorial-486/runs/pre-article-inference-resp-1/artifact.diff:13: trailing whitespace.
++ 
+docs/evaluation/editorial-486/runs/pre-article-inference-resp-1/artifact.diff:15: trailing whitespace.
++ 
+docs/evaluation/editorial-486/runs/pre-article-inference-resp-1/artifact.diff:15: new blank line at EOF.
+docs/evaluation/editorial-486/runs/pre-article-promise-file-1/artifact.diff:4: trailing whitespace.
++ 
+docs/evaluation/editorial-486/runs/pre-article-promise-file-1/artifact.diff:6: trailing whitespace.
++ 
+docs/evaluation/editorial-486/runs/pre-article-promise-file-1/artifact.diff:9: trailing whitespace.
++ 
+docs/evaluation/editorial-486/runs/pre-article-promise-file-1/artifact.diff:11: trailing whitespace.
++ 
+docs/evaluation/editorial-486/runs/pre-article-promise-file-1/artifact.diff:14: trailing whitespace.
++ 
+docs/evaluation/editorial-486/runs/pre-article-promise-file-1/artifact.diff:16: trailing whitespace.
++ 
+docs/evaluation/editorial-486/runs/pre-article-promise-file-1/artifact.diff:16: new blank line at EOF.
+docs/evaluation/editorial-486/runs/pre-article-promise-resp-1/artifact.diff:6: trailing whitespace.
++ 
+docs/evaluation/editorial-486/runs/pre-article-promise-resp-1/artifact.diff:8: trailing whitespace.
++ 
+docs/evaluation/editorial-486/runs/pre-article-promise-resp-1/artifact.diff:10: trailing whitespace.
++ 
+docs/evaluation/editorial-486/runs/pre-article-promise-resp-1/artifact.diff:13: trailing whitespace.
++ 
+docs/evaluation/editorial-486/runs/pre-article-promise-resp-1/artifact.diff:15: trailing whitespace.
++ 
+docs/evaluation/editorial-486/runs/pre-article-promise-resp-1/artifact.diff:18: trailing whitespace.
++ 
+docs/evaluation/editorial-486/runs/pre-article-promise-resp-1/artifact.diff:20: trailing whitespace.
++ 
+docs/evaluation/editorial-486/runs/pre-article-promise-resp-1/artifact.diff:20: new blank line at EOF.

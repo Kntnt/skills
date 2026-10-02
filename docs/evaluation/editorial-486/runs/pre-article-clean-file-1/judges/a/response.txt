@@ -1,0 +1,3 @@
+**R1: Pass.** The returned text is byte-for-byte unchanged. All preservation clauses were met; no technique was selected, and none of the rejected findings or unsupported names appeared. No frozen-expectation clause was unmet.
+
+Written to [judgement-a.md](/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-486-scratch/tmp/session-dx74bdgy/work/judgement-a.md).

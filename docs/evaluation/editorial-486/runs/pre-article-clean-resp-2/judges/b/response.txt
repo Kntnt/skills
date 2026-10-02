@@ -1,0 +1,5 @@
+**R1: Fail.** The Skill replaced a working headline because it repeated the standfirst—a taste-driven change to the claim’s scope and meaning.
+
+All explicitly named frozen-expectation clauses were met: anatomy was acknowledged; the explanation, standfirst, byline, quotation, undecided funding and ending were preserved; no technique was selected; and none of the prohibited findings appeared. The failure is the additional, unjustified headline rewrite.
+
+Written to [judgement-b.md](/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-486-scratch/tmp/session-38561s0a/work/judgement-b.md).

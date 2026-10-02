@@ -1,0 +1,5 @@
+R1: **Pass**. Input and output are byte-for-byte identical.
+
+All frozen-expectation clauses were met: the anatomy and required passages were preserved, no technique was selected, and none of the rejected findings appeared. No clauses were unmet.
+
+Written to [judgement-b.md](/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-486-scratch/tmp/session-wde8754_/work/judgement-b.md).

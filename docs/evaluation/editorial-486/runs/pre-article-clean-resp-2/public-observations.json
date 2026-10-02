@@ -1,0 +1,80 @@
+[
+  {
+    "time": "2026-10-02T13:05:44.569Z",
+    "session": "rollout-2026-10-02T15-05-39-01a0fcb8-6704-7fe0-aa1d-3168b9ff929f.jsonl.gz",
+    "parent": true,
+    "text": "Jag använder projektets redline-skill för att granska och bearbeta artikeln i `input.md`.\n"
+  },
+  {
+    "time": "2026-10-02T13:06:37.247Z",
+    "session": "rollout-2026-10-02T15-05-39-01a0fcb8-6704-7fe0-aa1d-3168b9ff929f.jsonl.gz",
+    "parent": true,
+    "text": "Jag kan starta underagenter med egna kontextfönster, vilket redline kräver. Granskningen gäller en svensk artikel och resultatet lämnas här i svaret.\n"
+  },
+  {
+    "time": "2026-10-02T13:08:05.008Z",
+    "session": "rollout-2026-10-02T15-05-39-01a0fcb8-6704-7fe0-aa1d-3168b9ff929f.jsonl.gz",
+    "parent": true,
+    "text": "Artikelns delar och längdkrav är på plats. Jag har hittat ett eko mellan rubriken och ingressen: båda säger att mätningarna visar när det var kallt men inte varför. Jag låter korrigeringssteget pröva en ändring av rubriken utifrån artikelns innehåll.\n"
+  },
+  {
+    "time": "2026-10-02T13:10:15.175Z",
+    "session": "rollout-2026-10-02T15-09-50-01a0fcbc-3e8b-72a1-b240-e9123e60fb96.jsonl.gz",
+    "parent": false,
+    "text": "Jag läser rubrikkraven och ändrar bara den rubrik som granskningen pekar ut. Sedan kontrollerar jag textens mått och att ingressen är oförändrad.\n"
+  },
+  {
+    "time": "2026-10-02T13:11:13.732Z",
+    "session": "rollout-2026-10-02T15-05-39-01a0fcb8-6704-7fe0-aa1d-3168b9ff929f.jsonl.gz",
+    "parent": true,
+    "text": "Uppgifterna om arbetsgränsen, den okända varaktigheten och den obestämda finansieringen behöver vara kvar. När rubrikändringen har kontrollerats använder jag proofread-skill för den avslutande korrekturläsningen.\n"
+  },
+  {
+    "time": "2026-10-02T13:13:28.837Z",
+    "session": "rollout-2026-10-02T15-05-39-01a0fcb8-6704-7fe0-aa1d-3168b9ff929f.jsonl.gz",
+    "parent": true,
+    "text": "Den prövade rubriken lyfter en annan avgränsning: givarna mätte inte elevernas upplevelse. Det påståendet finns redan i brödtexten. Jag kontrollerar att rubriken fungerar med ingressen och att övriga uppgifter är bevarade.\n"
+  },
+  {
+    "time": "2026-10-02T13:13:53.400Z",
+    "session": "rollout-2026-10-02T15-09-50-01a0fcbc-3e8b-72a1-b240-e9123e60fb96.jsonl.gz",
+    "parent": false,
+    "text": "# Björkskolans givare mätte inte elevernas upplevelse\n\n**Under 14 av 120 lektionspass registrerade givarna i Björkskolan temperaturer under fastighetskontorets egen arbetsgräns. Fyra veckors mätningar pekar ut tillfällen att undersöka närmare, men förklarar inte varför luften var kall. Här är vad ett kort försök kan säga, och vad som behövs för att komma vidare.**\n\nText: Hedda Lund\n\nEn temperaturgivare mäter luften där den sitter. Det gör placeringen viktig när fastighetskontoret ska tolka fyra veckors mätningar i Björkskolans sex klassrum. Genomgången nedan visar vad värdena räcker till och var gränsen går.\n\n## En gräns för det lokala försöket\n\nKontoret valde 20 grader Celsius som arbetsgräns. Rapporten *Mätförsök i Björkskolan*, daterad 12 mars 2026, räknar 14 lektionspass av 120 med minst en mätning under den gränsen. Hur länge temperaturen låg under den anger rapporten inte. Gränsen är kontorets egen, vald för det här försöket.\n\nGivarna mätte varken luftdrag eller elevernas upplevelse. Ett lågt värde säger alltså när luften var kall, men inte hur rummet kändes.\n\nDriftteknikern Elin Rask sammanfattar: ”Vi vet när vi behöver titta närmare. Vi vet ännu inte varför det blev kallt just då.”\n\n## Nästa försök behöver mer än givare\n\nRask rekommenderar att temperaturserierna kopplas till rummens användningstider innan styrningen ändras. Nästa försök planeras för november med likadant placerade givare, men finansieringen är inte beslutad.\n\nLägg därför tiderna för när rummen används bredvid mätvärdena innan nästa givare sätts upp.\n\n---\n\nFynd 1 reparerat genom att endast rubriken ändrats. Den anger nu att givarna inte mätte elevernas upplevelse, en avgränsning som redan finns i brödtexten. Beskedet om tidpunkter och okänd orsak är borttaget ur rubriken men finns kvar i ingressen. Inga påståenden har tillkommit eller försvunnit ur texten som helhet. Inga fynd lämnades olösta.\n\nAnatomimätningen gav exit 0 utan gränsfel eller normavvikelser. Även de ej räknade anatomikraven och samtliga rubrikpar granskades; texten uppfyller anatomikraven."
+  },
+  {
+    "time": "2026-10-02T13:14:45.183Z",
+    "session": "rollout-2026-10-02T15-14-38-01a0fcc0-a4ed-7500-9760-fd9ea2d97149.jsonl.gz",
+    "parent": false,
+    "text": "Jag använder Proofread för att kontrollera den svenska textens språkfel och skriver resultatet till den angivna filen.\n"
+  },
+  {
+    "time": "2026-10-02T13:16:05.902Z",
+    "session": "rollout-2026-10-02T15-14-38-01a0fcc0-a4ed-7500-9760-fd9ea2d97149.jsonl.gz",
+    "parent": false,
+    "text": "Jag hittade inga mekaniska språkfel. Jag sparar därför en oförändrad kopia till den angivna utdatafilen.\n"
+  },
+  {
+    "time": "2026-10-02T13:16:11.106Z",
+    "session": "rollout-2026-10-02T15-05-39-01a0fcb8-6704-7fe0-aa1d-3168b9ff929f.jsonl.gz",
+    "parent": true,
+    "text": "Rubrikändringen har klarat den nya granskningen. Ingressen och brödtexten är bevarade, inklusive citatet och alla begränsningar. Korrekturläsningen pågår; därefter kontrolleras att redovisningen stämmer med den färdiga texten.\n"
+  },
+  {
+    "time": "2026-10-02T13:16:21.452Z",
+    "session": "rollout-2026-10-02T15-14-38-01a0fcc0-a4ed-7500-9760-fd9ea2d97149.jsonl.gz",
+    "parent": false,
+    "text": "Inga mekaniska språkfel hittades. En oförändrad kopia har sparats till [mechanical-output.md](/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-486-scratch/tmp/session-j8qhvxxq/scratch/redline-mechanical-brw6at_1/mechanical-output.md). Indatafilen är orörd och alla egna temporära kataloger är borttagna."
+  },
+  {
+    "time": "2026-10-02T13:19:26.744Z",
+    "session": "rollout-2026-10-02T15-18-47-01a0fcc4-7152-79a1-8b36-31dcd8bbffdd.jsonl.gz",
+    "parent": false,
+    "text": "1. **False statements.**\n\nnone\n\n2. **Claim changes the account misses.**\n\nnone"
+  },
+  {
+    "time": "2026-10-02T13:19:50.904Z",
+    "session": "rollout-2026-10-02T15-05-39-01a0fcb8-6704-7fe0-aa1d-3168b9ff929f.jsonl.gz",
+    "parent": true,
+    "text": "Granskad som svensk artikel utan särskild teknik. Texten uppfyller artikelns anatomikrav. Inga olösta fynd återstår.\n\n- Åtgärdat fynd: Den ursprungliga rubriken upprepade ingressens besked om tidpunkter och okänd orsak.\n- Borttaget ur rubriken i korrigeringen: att mätförsöket visar när, men inte varför. Beskedet finns kvar i ingressen, men möter inte längre läsaren redan i rubriken.\n- Ändrat rubrikpåstående i samma korrigering: att Björkskolans givare inte mätte elevernas upplevelse. Påståendet finns redan i brödtexten och har återgivits också i rubriken.\n\n```markdown\n# Björkskolans givare mätte inte elevernas upplevelse\n\n**Under 14 av 120 lektionspass registrerade givarna i Björkskolan temperaturer under fastighetskontorets egen arbetsgräns. Fyra veckors mätningar pekar ut tillfällen att undersöka närmare, men förklarar inte varför luften var kall. Här är vad ett kort försök kan säga, och vad som behövs för att komma vidare.**\n\nText: Hedda Lund\n\nEn temperaturgivare mäter luften där den sitter. Det gör placeringen viktig när fastighetskontoret ska tolka fyra veckors mätningar i Björkskolans sex klassrum. Genomgången nedan visar vad värdena räcker till och var gränsen går.\n\n## En gräns för det lokala försöket\n\nKontoret valde 20 grader Celsius som arbetsgräns. Rapporten *Mätförsök i Björkskolan*, daterad 12 mars 2026, räknar 14 lektionspass av 120 med minst en mätning under den gränsen. Hur länge temperaturen låg under den anger rapporten inte. Gränsen är kontorets egen, vald för det här försöket.\n\nGivarna mätte varken luftdrag eller elevernas upplevelse. Ett lågt värde säger alltså när luften var kall, men inte hur rummet kändes.\n\nDriftteknikern Elin Rask sammanfattar: ”Vi vet när vi behöver titta närmare. Vi vet ännu inte varför det blev kallt just då.”\n\n## Nästa försök behöver mer än givare\n\nRask rekommenderar att temperaturserierna kopplas till rummens användningstider innan styrningen ändras. Nästa försök planeras för november med likadant placerade givare, men finansieringen är inte beslutad.\n\nLägg därför tiderna för när rummen används bredvid mätvärdena innan nästa givare sätts upp.\n```\n\nRubrikens upprepning har åtgärdats. Ingress, byline, underrubriker, brödtext och formatering är bevarade. Den avslutande korrekturläsningen gav inga mekaniska ändringar."
+  }
+]

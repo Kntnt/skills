@@ -1,0 +1,11 @@
+{
+  "frozen_files_unchanged": 14,
+  "complete_counted_packets": 10,
+  "native_judgements": 20,
+  "scratch_empty": true,
+  "product_corpus_gate_aggregates_unchanged": true,
+  "packet_inventory_names": [
+    "inventory-before.json",
+    "inventory-after.json"
+  ]
+}

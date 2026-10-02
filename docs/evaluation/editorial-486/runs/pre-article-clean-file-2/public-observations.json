@@ -1,0 +1,56 @@
+[
+  {
+    "time": "2026-10-02T13:22:58.136Z",
+    "session": "rollout-2026-10-02T15-22-52-01a0fcc8-2b0e-79c1-985d-686a94c434f0.jsonl.gz",
+    "parent": true,
+    "text": "Jag läser instruktionerna för `/redline` och granskar sedan `input.md` enligt dem.\n"
+  },
+  {
+    "time": "2026-10-02T13:23:40.037Z",
+    "session": "rollout-2026-10-02T15-22-52-01a0fcc8-2b0e-79c1-985d-686a94c434f0.jsonl.gz",
+    "parent": true,
+    "text": "Jag använder projektets `/redline`-skill, som omfattar en redaktionell granskning, högst en korrigeringsrunda och en avslutande korrekturläsning. Resultatet sparas i `output.md`.\n"
+  },
+  {
+    "time": "2026-10-02T13:23:53.692Z",
+    "session": "rollout-2026-10-02T15-22-52-01a0fcc8-2b0e-79c1-985d-686a94c434f0.jsonl.gz",
+    "parent": true,
+    "text": "Jag kan starta underagenter med egna kontextfönster, vilket skillen kräver för korrigering och slutkontroll.\n"
+  },
+  {
+    "time": "2026-10-02T13:26:05.945Z",
+    "session": "rollout-2026-10-02T15-22-52-01a0fcc8-2b0e-79c1-985d-686a94c434f0.jsonl.gz",
+    "parent": true,
+    "text": "Texten uppfyller de uppmätta formkraven. Granskningen gav inga redaktionella fynd som behöver korrigeras, så jag går vidare till den avslutande korrekturläsningen.\n"
+  },
+  {
+    "time": "2026-10-02T13:26:31.983Z",
+    "session": "rollout-2026-10-02T15-26-23-01a0fccb-65a1-7ef0-8173-e14fad8973d2.jsonl.gz",
+    "parent": false,
+    "text": "Jag använder Proofread för den avgränsade mekaniska språkgranskningen och lämnar den frysta indatafilen oförändrad.\n"
+  },
+  {
+    "time": "2026-10-02T13:27:56.185Z",
+    "session": "rollout-2026-10-02T15-22-52-01a0fcc8-2b0e-79c1-985d-686a94c434f0.jsonl.gz",
+    "parent": true,
+    "text": "Korrekturläsningen pågår. Därefter görs en separat kontroll av att slutrapporten stämmer med den text som sparas.\n"
+  },
+  {
+    "time": "2026-10-02T13:28:09.066Z",
+    "session": "rollout-2026-10-02T15-26-23-01a0fccb-65a1-7ef0-8173-e14fad8973d2.jsonl.gz",
+    "parent": false,
+    "text": "Proofread genomförd en gång med svenska språkregler, inklusive kontroll av kongruens. Inga objektiva mekaniska fel hittades.\n\n[output.md](/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-486-scratch/tmp/session-w1znalbw/scratch/redline-mechanical-49_t639_/output.md) är byteidentisk med den oförändrade indatafilen. Egna temporära kataloger är borttagna."
+  },
+  {
+    "time": "2026-10-02T13:30:32.078Z",
+    "session": "rollout-2026-10-02T15-30-08-01a0fcce-d6b1-7011-a11c-aa74d3d6060d.jsonl.gz",
+    "parent": false,
+    "text": "1. **False statements.**\n\n   none\n\n2. **Claim changes the account misses.**\n\n   none"
+  },
+  {
+    "time": "2026-10-02T13:31:02.872Z",
+    "session": "rollout-2026-10-02T15-22-52-01a0fcc8-2b0e-79c1-985d-686a94c434f0.jsonl.gz",
+    "parent": true,
+    "text": "Sparad i [output.md](/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-486-scratch/tmp/session-w1znalbw/work/output.md).\n\nGranskad som artikel på svenska, utan särskild teknik. Inga ändringar behövdes."
+  }
+]

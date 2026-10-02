@@ -1,0 +1,92 @@
+[
+  {
+    "path": "work/input.md",
+    "sha256": "f183e6da31cf78081cc7c7eee69570940e24802997e92d96bb111966aa4170d5",
+    "capture": "f183e6da31cf78081cc7c7eee69570940e24802997e92d96bb111966aa4170d5.md",
+    "time": 1790947371.710098
+  },
+  {
+    "path": "work/AGENTS.md",
+    "sha256": "be94570b39e9de23c07bf9b992d4507b1f96beb788a3e870991a97d0d8bf2776",
+    "capture": "be94570b39e9de23c07bf9b992d4507b1f96beb788a3e870991a97d0d8bf2776.md",
+    "time": 1790947371.710252
+  },
+  {
+    "path": "scratch/redline-uv.7JCMbG/.tmphQWR9q/environments-v2/kntnt-cf719f45cab8ab2a/lib/python3.12/site-packages/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614.txt",
+    "time": 1790947428.481326
+  },
+  {
+    "path": "scratch/redline-uv.7JCMbG/.tmphQWR9q/archive-v0/ly2hYnT8pN8kGaU6/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614.txt",
+    "time": 1790947428.4818099
+  },
+  {
+    "path": "scratch/redline-language-cnqvefc2/.tmpfeUAR8/environments-v2/languages-4cc4feb6735e450b/lib/python3.12/site-packages/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614.txt",
+    "time": 1790947465.519524
+  },
+  {
+    "path": "scratch/redline-language-cnqvefc2/.tmpfeUAR8/archive-v0/dvUpLAc0KMOd3zSY/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614.txt",
+    "time": 1790947465.520101
+  },
+  {
+    "path": "scratch/redline-mechanical-49_t639_/input.md",
+    "sha256": "f183e6da31cf78081cc7c7eee69570940e24802997e92d96bb111966aa4170d5",
+    "capture": "f183e6da31cf78081cc7c7eee69570940e24802997e92d96bb111966aa4170d5.md",
+    "time": 1790947570.322709
+  },
+  {
+    "path": "scratch/proofread-invoke.c4C7Vc/.tmpu1p90p/.tmpbf0ffr/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614.txt",
+    "time": 1790947622.422358
+  },
+  {
+    "path": "scratch/proofread-invoke.c4C7Vc/.tmpu1p90p/environments-v2/kntnt-cf719f45cab8ab2a/lib/python3.12/site-packages/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614.txt",
+    "time": 1790947622.5325089
+  },
+  {
+    "path": "scratch/proofread-invoke.c4C7Vc/.tmpu1p90p/archive-v0/rBd0QJv9qLXNjOmG/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614.txt",
+    "time": 1790947622.533037
+  },
+  {
+    "path": "scratch/proofread-resolve.oNLGcn/.tmpWvoVrF/.tmpaLLYDR/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614.txt",
+    "time": 1790947642.1519518
+  },
+  {
+    "path": "scratch/proofread-resolve.oNLGcn/.tmpWvoVrF/environments-v2/languages-4cc4feb6735e450b/lib/python3.12/site-packages/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614.txt",
+    "time": 1790947642.261763
+  },
+  {
+    "path": "scratch/proofread-resolve.oNLGcn/.tmpWvoVrF/archive-v0/iDnh2oO2ig4muvLr/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614.txt",
+    "time": 1790947642.2622771
+  },
+  {
+    "path": "scratch/redline-mechanical-49_t639_/output.md",
+    "sha256": "f183e6da31cf78081cc7c7eee69570940e24802997e92d96bb111966aa4170d5",
+    "capture": "f183e6da31cf78081cc7c7eee69570940e24802997e92d96bb111966aa4170d5.md",
+    "time": 1790947681.4495292
+  },
+  {
+    "path": "work/output.md",
+    "sha256": "f183e6da31cf78081cc7c7eee69570940e24802997e92d96bb111966aa4170d5",
+    "capture": "f183e6da31cf78081cc7c7eee69570940e24802997e92d96bb111966aa4170d5.md",
+    "time": 1790947858.411411
+  }
+]

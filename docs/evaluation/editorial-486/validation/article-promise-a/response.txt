@@ -1,0 +1,3 @@
+Klass: `unfulfilled commitment`. Ingressens löfte om exakta givarplaceringar och fönsteravstånd uppfylls inte.
+
+Bedömningen är skriven i [validation-a.md](/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-486-scratch/tmp/session-i0ztgup9/work/validation-a.md).

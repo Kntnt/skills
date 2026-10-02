@@ -1,0 +1,62 @@
+[
+  {
+    "time": "2026-10-02T12:36:49.715Z",
+    "session": "rollout-2026-10-02T14-36-42-01a0fc9d-e7e2-7e51-90a6-39ddef010390.jsonl.gz",
+    "parent": true,
+    "text": "Jag använder projektets redline-skill för att bearbeta `input.md` och lämna resultatet direkt i svaret.\n"
+  },
+  {
+    "time": "2026-10-02T12:37:36.040Z",
+    "session": "rollout-2026-10-02T14-36-42-01a0fc9d-e7e2-7e51-90a6-39ddef010390.jsonl.gz",
+    "parent": true,
+    "text": "Miljön stöder de underagenter med egna kontextfönster som skillen kräver. Jag kontrollerar nu texten mot reglerna för svenska artiklar.\n"
+  },
+  {
+    "time": "2026-10-02T12:38:55.580Z",
+    "session": "rollout-2026-10-02T14-36-42-01a0fc9d-e7e2-7e51-90a6-39ddef010390.jsonl.gz",
+    "parent": true,
+    "text": "Texten klarar de uppmätta formkraven. Jag har hittat två problem i öppningen: rubriken upprepar ingressens poäng, och inledningen till brödtexten behöver ingressen för att läsaren ska förstå vilka 14 lektionspass som avses.\n"
+  },
+  {
+    "time": "2026-10-02T12:41:12.405Z",
+    "session": "rollout-2026-10-02T14-40-46-01a0fca1-a230-7101-803c-f6ed61114d1f.jsonl.gz",
+    "parent": false,
+    "text": "Jag läser den angivna artikel- och rubrikkontrakten och begränsar korrigeringen till rubriken och leadens första mening.\n"
+  },
+  {
+    "time": "2026-10-02T12:43:27.851Z",
+    "session": "rollout-2026-10-02T14-36-42-01a0fc9d-e7e2-7e51-90a6-39ddef010390.jsonl.gz",
+    "parent": true,
+    "text": "Korrigeringsförslaget gäller bara rubriken och brödtextens första mening. Nästa kontroll granskar att avgränsningarna om mätningarnas omfattning och vad de inte kan förklara finns kvar.\n"
+  },
+  {
+    "time": "2026-10-02T12:44:13.065Z",
+    "session": "rollout-2026-10-02T14-40-46-01a0fca1-a230-7101-803c-f6ed61114d1f.jsonl.gz",
+    "parent": false,
+    "text": "# Björkskolans mätvärden behöver kopplas till användningstider\n\n**Under 14 av 120 lektionspass registrerade givarna i Björkskolan temperaturer under fastighetskontorets egen arbetsgräns. Fyra veckors mätningar pekar ut tillfällen att undersöka närmare, men förklarar inte varför luften var kall. Här är vad ett kort försök kan säga, och vad som behövs för att komma vidare.**\n\nText: Hedda Lund\n\nFastighetskontoret räknade 120 lektionspass i Björkskolan, varav 14 hade minst en temperaturmätning under kontorets arbetsgräns. Andelen säger därför något om de räknade passen, inte om varje timme i Björkskolans sex klassrum. Genomgången nedan visar vad värdena räcker till och var gränsen går.\n\n## En gräns för det lokala försöket\n\nKontoret valde 20 grader Celsius som arbetsgräns. Rapporten *Mätförsök i Björkskolan*, daterad 12 mars 2026, räknar 14 lektionspass av 120 med minst en mätning under den gränsen. Hur länge temperaturen låg under den anger rapporten inte. Gränsen är kontorets egen, vald för det här försöket.\n\nGivarna mätte varken luftdrag eller elevernas upplevelse. Ett lågt värde säger alltså när luften var kall, men inte hur rummet kändes.\n\nDriftteknikern Elin Rask sammanfattar: ”Vi vet när vi behöver titta närmare. Vi vet ännu inte varför det blev kallt just då.”\n\n## Nästa försök behöver mer än givare\n\nRask rekommenderar att temperaturserierna kopplas till rummens användningstider innan styrningen ändras. Nästa försök planeras för november med likadant placerade givare, men finansieringen är inte beslutad.\n\nLägg därför tiderna för när rummen används bredvid mätvärdena innan nästa givare sätts upp.\n\n---\n\nBåda fynden är reparerade. Rubriken lyfter nu textens befintliga rekommendation att koppla mätvärden till användningstider, i stället för att upprepa ingressen. Läsaren får inte längre begränsningen ”när, inte varför” i rubriken; den står kvar i full styrka i ingressen och brödtexten. Leaden identifierar nu vad som utmärker de 14 passen och vad de 120 avser. Begränsningen till räknade pass är oförändrad.\n\nInga nya sakpåståenden har tillkommit. Övrig text är oförändrad. Anatomimätningen gav exit 0; rubriken har 60 tecken och sex ord. Även de krav som inte räknas samt samtliga rubrikpar har granskats: texten följer artikelanatomin. Inga fynd lämnades olösta."
+  },
+  {
+    "time": "2026-10-02T12:44:50.034Z",
+    "session": "rollout-2026-10-02T14-36-42-01a0fc9d-e7e2-7e51-90a6-39ddef010390.jsonl.gz",
+    "parent": true,
+    "text": "Båda problemen är rättade, och avgränsningarna finns kvar. Jag använder nu projektets proofread-skill för den avslutande korrekturläsningen och kontrollerar därefter redovisningen av ändringarna.\n"
+  },
+  {
+    "time": "2026-10-02T12:49:50.680Z",
+    "session": "rollout-2026-10-02T14-36-42-01a0fc9d-e7e2-7e51-90a6-39ddef010390.jsonl.gz",
+    "parent": true,
+    "text": "Korrekturläsningen krävde inga ändringar. Originalfilen är orörd och de tillfälliga arbetsfilerna är borttagna. Den oberoende kontrollen av ändringsredovisningen återstår.\n"
+  },
+  {
+    "time": "2026-10-02T12:50:06.300Z",
+    "session": "rollout-2026-10-02T14-48-26-01a0fca8-a825-77c0-825a-1e324c6e7832.jsonl.gz",
+    "parent": false,
+    "text": "1. **False statements.**\n\nnone\n\n2. **Claim changes the account misses.**\n\nnone"
+  },
+  {
+    "time": "2026-10-02T12:50:34.255Z",
+    "session": "rollout-2026-10-02T14-36-42-01a0fc9d-e7e2-7e51-90a6-39ddef010390.jsonl.gz",
+    "parent": true,
+    "text": "Granskad som artikel på svenska, utan särskild teknik. Inga olösta fynd återstår.\n\n```markdown\n# Björkskolans mätvärden behöver kopplas till användningstider\n\n**Under 14 av 120 lektionspass registrerade givarna i Björkskolan temperaturer under fastighetskontorets egen arbetsgräns. Fyra veckors mätningar pekar ut tillfällen att undersöka närmare, men förklarar inte varför luften var kall. Här är vad ett kort försök kan säga, och vad som behövs för att komma vidare.**\n\nText: Hedda Lund\n\nFastighetskontoret räknade 120 lektionspass i Björkskolan, varav 14 hade minst en temperaturmätning under kontorets arbetsgräns. Andelen säger därför något om de räknade passen, inte om varje timme i Björkskolans sex klassrum. Genomgången nedan visar vad värdena räcker till och var gränsen går.\n\n## En gräns för det lokala försöket\n\nKontoret valde 20 grader Celsius som arbetsgräns. Rapporten *Mätförsök i Björkskolan*, daterad 12 mars 2026, räknar 14 lektionspass av 120 med minst en mätning under den gränsen. Hur länge temperaturen låg under den anger rapporten inte. Gränsen är kontorets egen, vald för det här försöket.\n\nGivarna mätte varken luftdrag eller elevernas upplevelse. Ett lågt värde säger alltså när luften var kall, men inte hur rummet kändes.\n\nDriftteknikern Elin Rask sammanfattar: ”Vi vet när vi behöver titta närmare. Vi vet ännu inte varför det blev kallt just då.”\n\n## Nästa försök behöver mer än givare\n\nRask rekommenderar att temperaturserierna kopplas till rummens användningstider innan styrningen ändras. Nästa försök planeras för november med likadant placerade givare, men finansieringen är inte beslutad.\n\nLägg därför tiderna för när rummen används bredvid mätvärdena innan nästa givare sätts upp.\n```\n\n- Rubriken upprepade ingressens slutsats om när respektive varför. Den säger nu att mätvärden behöver kopplas till användningstider, med stöd i Rasks rekommendation och textens avslutande uppmaning. Rådet har därmed även förts in i rubriken. Begränsningen ”när, inte varför” står inte längre i rubriken men finns kvar i ingressen och brödtexten.\n- Brödtextens första mening behövde ingressen för att identifiera de 14 passen. Den anger nu att kontoret räknade 120 lektionspass i Björkskolan och att 14 hade minst en temperaturmätning under arbetsgränsen. Uppgifterna fanns redan i texten; begränsningen till räknade pass, inte varje timme i sex klassrum, är kvar.\n\nInga sakpåståenden har tagits bort ur texten eller lagts till; rubrikens råd och leadens preciseringar hade redan stöd i den ursprungliga texten.\n\nRubrikens upprepning och leadens beroende av ingressen har rättats. Korrekturläsningen gav inga mekaniska ändringar."
+  }
+]

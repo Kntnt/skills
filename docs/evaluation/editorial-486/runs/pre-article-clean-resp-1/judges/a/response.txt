@@ -1,0 +1,5 @@
+**R1: Fail.** The run replaced a sound headline for reasons of taste, removing the experiment’s explanatory limit and substituting a broader recommendation.
+
+All explicit frozen-expectation clauses were met: the required passages were preserved, no technique was imposed, and none of the prohibited findings appeared. The additional headline rewrite nevertheless violates R1.
+
+Written to [judgement-a.md](/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-486-scratch/tmp/session-_0a_y4hi/work/judgement-a.md).

@@ -1,0 +1,26 @@
+[
+  {
+    "path": "work/input.md",
+    "sha256": "7525e134bfc1c650e451832effc4319a237e1e4382a6f88f48fd0729e8f9cf22",
+    "headline": "# Mätförsöket i Björkskolan visar när, inte varför",
+    "supported_lead_present": true
+  },
+  {
+    "path": "scratch/redline-mechanical-m9wxhvc5/input.md",
+    "sha256": "41624777392f422ace49dfa87049977ae4df9a3bc4427b17192a7e7e3727c66c",
+    "headline": "# Mätförsöket i Björkskolan visar när, inte varför",
+    "supported_lead_present": true
+  },
+  {
+    "path": "scratch/redline-mechanical-m9wxhvc5/output.md",
+    "sha256": "41624777392f422ace49dfa87049977ae4df9a3bc4427b17192a7e7e3727c66c",
+    "headline": "# Mätförsöket i Björkskolan visar när, inte varför",
+    "supported_lead_present": true
+  },
+  {
+    "path": "work/output.md",
+    "sha256": "41624777392f422ace49dfa87049977ae4df9a3bc4427b17192a7e7e3727c66c",
+    "headline": "# Mätförsöket i Björkskolan visar när, inte varför",
+    "supported_lead_present": true
+  }
+]

@@ -1,0 +1,10 @@
+Downloading pygments (1.2MiB)
+Downloading ast-serialize (1.2MiB)
+Downloading selectolax (2.2MiB)
+Downloading mypy (13.6MiB)
+ Downloaded ast-serialize
+ Downloaded pygments
+ Downloaded selectolax
+ Downloaded mypy
+Installed 22 packages in 36ms
+Success: no issues found in 89 source files

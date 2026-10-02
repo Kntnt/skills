@@ -1,0 +1,3 @@
+Klass: `supported and fulfilled`.
+
+Bedömningen är skriven i [validation-b.md](/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-486-scratch/tmp/session-1gefn9_n/work/validation-b.md).

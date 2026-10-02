@@ -1,0 +1,5 @@
+**R1: Fail.** The reply detects and repairs the missing location-and-distance promise using supplied content. It preserves the calm explanation, standfirst, byline, quotation, undecided funding and final next step, and avoids the specifically prohibited findings and technique selection.
+
+It violates the requirement to preserve conforming material outside that finding: the headline unnecessarily loses “inte varför,” and the office reference receives a taste-based edit.
+
+Written to [judgement-a.md](/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-486-scratch/tmp/session-umziqlqg/work/judgement-a.md).

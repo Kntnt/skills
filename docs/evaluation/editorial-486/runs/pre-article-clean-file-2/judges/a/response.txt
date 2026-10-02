@@ -1,0 +1,5 @@
+R1: **Pass**. All frozen-expectation clauses were met: the text and formatting were preserved byte-for-byte, including the standfirst, byline, quotation, undecided funding and non-commercial ending. No technique was selected, and none of the prohibited findings or absent names appeared.
+
+No expectation clause was unmet. The reply’s delivery link points to another run directory; this account inconsistency does not affect R1.
+
+Written to [judgement-a.md](/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-486-scratch/tmp/session-61teghpd/work/judgement-a.md).
