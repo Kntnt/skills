@@ -4,6 +4,10 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ## [Unreleased]
 
+### Fixed
+
+- Write names its private directories by full path and keeps the shell outside them. It leaves an entered directory in a separate command before cleanup and preserves a Harness removal refusal, retaining and reporting the affected paths without trying another form or tool (#485).
+
 ## [0.39.0] – 2026-10-01
 
 ### Added
