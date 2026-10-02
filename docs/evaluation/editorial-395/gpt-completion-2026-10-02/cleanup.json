@@ -30,6 +30,12 @@
       "path": "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/395/skills/models/model-selector/scripts/__pycache__",
       "exists_before": true,
       "exists_after": false
+    },
+    {
+      "path": "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/395/uv.lock",
+      "exists_before": true,
+      "discovery": "Ignored generated lock found during final Git inventory; recorded before literal removal",
+      "exists_after": false
     }
   ],
   "evidence_preserved": "evidence-copy-verification.json; lifecycle/; operations/; verification/",

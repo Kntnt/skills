@@ -37,3 +37,4 @@
 {"kind": "pid", "identifier": "83680", "at": 1790938701.647352}
 {"kind": "pid", "identifier": "83706", "at": 1790938702.005729}
 {"kind": "path", "identifier": "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/395/skills/models/model-selector/scripts/__pycache__", "why": "Discovered two Python cache files with first-gate timestamps; delayed subprocess-created-path accounting, owned cleanup"}
+{"kind": "path", "identifier": "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/395/uv.lock", "why": "Discovered ignored gate-generated uv lock during final Git inventory; delayed path accounting, genuine scratch", "at": 1790939825.3063512}
