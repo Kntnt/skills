@@ -1,0 +1,98 @@
+[
+  {
+    "role": "validator",
+    "packet": "validation/article-inference-a"
+  },
+  {
+    "role": "validator",
+    "packet": "validation/article-inference-b"
+  },
+  {
+    "role": "validator",
+    "packet": "validation/article-promise-a"
+  },
+  {
+    "role": "validator",
+    "packet": "validation/article-promise-b"
+  },
+  {
+    "role": "judge",
+    "packet": "runs/pre-article-clean-file-1/judges/a"
+  },
+  {
+    "role": "judge",
+    "packet": "runs/pre-article-clean-file-1/judges/b"
+  },
+  {
+    "role": "judge",
+    "packet": "runs/pre-article-clean-file-2/judges/a"
+  },
+  {
+    "role": "judge",
+    "packet": "runs/pre-article-clean-file-2/judges/b"
+  },
+  {
+    "role": "judge",
+    "packet": "runs/pre-article-clean-file-3/judges/a"
+  },
+  {
+    "role": "judge",
+    "packet": "runs/pre-article-clean-file-3/judges/b"
+  },
+  {
+    "role": "judge",
+    "packet": "runs/pre-article-clean-resp-1/judges/a"
+  },
+  {
+    "role": "judge",
+    "packet": "runs/pre-article-clean-resp-1/judges/b"
+  },
+  {
+    "role": "judge",
+    "packet": "runs/pre-article-clean-resp-2/judges/a"
+  },
+  {
+    "role": "judge",
+    "packet": "runs/pre-article-clean-resp-2/judges/b"
+  },
+  {
+    "role": "judge",
+    "packet": "runs/pre-article-clean-resp-3/judges/a"
+  },
+  {
+    "role": "judge",
+    "packet": "runs/pre-article-clean-resp-3/judges/b"
+  },
+  {
+    "role": "judge",
+    "packet": "runs/pre-article-inference-file-1/judges/a"
+  },
+  {
+    "role": "judge",
+    "packet": "runs/pre-article-inference-file-1/judges/b"
+  },
+  {
+    "role": "judge",
+    "packet": "runs/pre-article-inference-resp-1/judges/a"
+  },
+  {
+    "role": "judge",
+    "packet": "runs/pre-article-inference-resp-1/judges/b"
+  },
+  {
+    "role": "judge",
+    "packet": "runs/pre-article-promise-file-1/judges/a"
+  },
+  {
+    "role": "judge",
+    "packet": "runs/pre-article-promise-file-1/judges/b"
+  },
+  {
+    "role": "judge",
+    "packet": "runs/pre-article-promise-resp-1/judges/a"
+  },
+  {
+    "role": "judge",
+    "packet": "runs/pre-article-promise-resp-1/judges/b"
+  }
+]

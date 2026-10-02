@@ -1,0 +1,5 @@
+R1: **fail**. The Skill made an unnecessary taste edit to a conforming text, repeating the definition of the 14 lesson periods in the lead.
+
+All specified preservation and rejection clauses were met, including the denominator-based inference and absence of promised hourly readings. The edit was accurately reported, but no concrete visible defect justified it.
+
+Written to [judgement-b.md](/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-486-scratch/tmp/session-op66zzdf/work/judgement-b.md).

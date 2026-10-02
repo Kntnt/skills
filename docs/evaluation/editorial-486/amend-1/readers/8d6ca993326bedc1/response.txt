@@ -1,0 +1,5 @@
+**R1: Fail.** The run detected and repaired the unfulfilled promise using supplied content. It preserved all specified passages, selected no technique, and avoided the explicitly rejected findings. The unresolved-finding condition was not triggered because a supported repair was possible.
+
+It failed the requirement to leave conforming material outside the finding alone: expanding “Kontoret” to “Fastighetskontoret” unnecessarily changed an already clear reference.
+
+Written to [judgement-a.md](/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-70ef836a/amend-1/direct/tmp/session-gm4iu6rg/work/judgement-a.md).

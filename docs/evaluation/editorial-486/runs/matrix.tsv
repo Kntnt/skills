@@ -1,0 +1,11 @@
+lane	run	arm	revision	input	invocation	capture
+0	pre-article-clean-resp-1	pre	5457c89405aece11b325937f9f07407f01974f7c	docs/evaluation/editorial-486/inputs/article-clean.md	/redline --genre=article --language=sv --output=response input.md	no
+0	pre-article-clean-file-1	pre	5457c89405aece11b325937f9f07407f01974f7c	docs/evaluation/editorial-486/inputs/article-clean.md	/redline --genre=article --language=sv --output=output.md input.md	yes
+0	pre-article-clean-resp-2	pre	5457c89405aece11b325937f9f07407f01974f7c	docs/evaluation/editorial-486/inputs/article-clean.md	/redline --genre=article --language=sv --output=response input.md	no
+0	pre-article-clean-file-2	pre	5457c89405aece11b325937f9f07407f01974f7c	docs/evaluation/editorial-486/inputs/article-clean.md	/redline --genre=article --language=sv --output=output.md input.md	yes
+0	pre-article-clean-resp-3	pre	5457c89405aece11b325937f9f07407f01974f7c	docs/evaluation/editorial-486/inputs/article-clean.md	/redline --genre=article --language=sv --output=response input.md	no
+0	pre-article-clean-file-3	pre	5457c89405aece11b325937f9f07407f01974f7c	docs/evaluation/editorial-486/inputs/article-clean.md	/redline --genre=article --language=sv --output=output.md input.md	yes
+1	pre-article-inference-resp-1	pre	5457c89405aece11b325937f9f07407f01974f7c	docs/evaluation/editorial-486/inputs/article-inference.md	/redline --genre=article --language=sv --output=response input.md	no
+1	pre-article-inference-file-1	pre	5457c89405aece11b325937f9f07407f01974f7c	docs/evaluation/editorial-486/inputs/article-inference.md	/redline --genre=article --language=sv --output=output.md input.md	yes
+2	pre-article-promise-resp-1	pre	5457c89405aece11b325937f9f07407f01974f7c	docs/evaluation/editorial-486/inputs/article-promise.md	/redline --genre=article --language=sv --output=response input.md	no
+2	pre-article-promise-file-1	pre	5457c89405aece11b325937f9f07407f01974f7c	docs/evaluation/editorial-486/inputs/article-promise.md	/redline --genre=article --language=sv --output=output.md input.md	yes

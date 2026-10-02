@@ -1,0 +1,14 @@
+{
+  "actual_cli_versions": [
+    "0.160.0"
+  ],
+  "model_effort_pairs": [
+    [
+      "gpt-6.1-sol",
+      "xhigh"
+    ]
+  ],
+  "session_metadata_records": 61,
+  "all_same_seat": true,
+  "capture_annotation": "run.json retains inherited 0.159.3 label; actual native version is 0.160.0"
+}

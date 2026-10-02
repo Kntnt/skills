@@ -1,0 +1,112 @@
+Using CPython 3.12.13
+Creating virtual environment at: .venv
+warning: No `requires-python` value found in the workspace. Defaulting to `>=3.12`.
+Downloading pygments (1.2MiB)
+ Downloaded pygments
+Installed 5 packages in 6ms
+F                                                                        [100%]
+=================================== FAILURES ===================================
+___ test_all_counted_readers_receive_neutral_paths_in_every_visible_surface ____
+
+    def test_all_counted_readers_receive_neutral_paths_in_every_visible_surface() -> None:
+        """A random leaf cannot conceal a ticket-bearing ancestor or native cwd."""
+    
+        # Include validators as well as both judges of every completed baseline row.
+        rows = json.loads((EVALUATION / "amend-1/counted-readers.json").read_text())
+        assert sum(row["role"] == "validator" for row in rows) == 4
+        assert sum(row["role"] == "judge" for row in rows) == 20
+        leaks = []
+    
+        # Inspect supplied prompts, actual native contexts and returned tool surfaces.
+        for row in rows:
+            packet = EVALUATION / row["packet"]
+            surfaces = {"invocation": (packet / "invocation.txt").read_text()}
+            audit = json.loads((packet / "identity-audit.json").read_text())
+            for number, lineage in enumerate(audit["lineage"]):
+                surfaces[f"native-context-{number}"] = json.dumps(lineage)
+            with gzip.open(packet / "trace.jsonl.gz", "rt") as stream:
+                surfaces["tool-and-reply-trace"] = stream.read()
+            for name, text in surfaces.items():
+                for forbidden in ("ticket-486", "editorial-486", "/486/", "pre-article-", "post-article-"):
+                    if forbidden in text:
+                        leaks.append(f"{row['packet']} {name}: {forbidden}")
+>       assert not leaks, "Reader-visible identity leaks:\n" + "\n".join(leaks)
+E       AssertionError: Reader-visible identity leaks:
+E         validation/article-inference-a invocation: ticket-486
+E         validation/article-inference-a native-context-0: ticket-486
+E         validation/article-inference-a tool-and-reply-trace: ticket-486
+E         validation/article-inference-b invocation: ticket-486
+E         validation/article-inference-b native-context-0: ticket-486
+E         validation/article-inference-b tool-and-reply-trace: ticket-486
+E         validation/article-promise-a invocation: ticket-486
+E         validation/article-promise-a native-context-0: ticket-486
+E         validation/article-promise-a tool-and-reply-trace: ticket-486
+E         validation/article-promise-b invocation: ticket-486
+E         validation/article-promise-b native-context-0: ticket-486
+E         validation/article-promise-b tool-and-reply-trace: ticket-486
+E         runs/pre-article-clean-file-1/judges/a invocation: ticket-486
+E         runs/pre-article-clean-file-1/judges/a native-context-0: ticket-486
+E         runs/pre-article-clean-file-1/judges/a tool-and-reply-trace: ticket-486
+E         runs/pre-article-clean-file-1/judges/b invocation: ticket-486
+E         runs/pre-article-clean-file-1/judges/b native-context-0: ticket-486
+E         runs/pre-article-clean-file-1/judges/b tool-and-reply-trace: ticket-486
+E         runs/pre-article-clean-file-2/judges/a invocation: ticket-486
+E         runs/pre-article-clean-file-2/judges/a native-context-0: ticket-486
+E         runs/pre-article-clean-file-2/judges/a tool-and-reply-trace: ticket-486
+E         runs/pre-article-clean-file-2/judges/b invocation: ticket-486
+E         runs/pre-article-clean-file-2/judges/b native-context-0: ticket-486
+E         runs/pre-article-clean-file-2/judges/b tool-and-reply-trace: ticket-486
+E         runs/pre-article-clean-file-3/judges/a invocation: ticket-486
+E         runs/pre-article-clean-file-3/judges/a native-context-0: ticket-486
+E         runs/pre-article-clean-file-3/judges/a tool-and-reply-trace: ticket-486
+E         runs/pre-article-clean-file-3/judges/b invocation: ticket-486
+E         runs/pre-article-clean-file-3/judges/b native-context-0: ticket-486
+E         runs/pre-article-clean-file-3/judges/b tool-and-reply-trace: ticket-486
+E         runs/pre-article-clean-resp-1/judges/a invocation: ticket-486
+E         runs/pre-article-clean-resp-1/judges/a native-context-0: ticket-486
+E         runs/pre-article-clean-resp-1/judges/a tool-and-reply-trace: ticket-486
+E         runs/pre-article-clean-resp-1/judges/b invocation: ticket-486
+E         runs/pre-article-clean-resp-1/judges/b native-context-0: ticket-486
+E         runs/pre-article-clean-resp-1/judges/b tool-and-reply-trace: ticket-486
+E         runs/pre-article-clean-resp-2/judges/a invocation: ticket-486
+E         runs/pre-article-clean-resp-2/judges/a native-context-0: ticket-486
+E         runs/pre-article-clean-resp-2/judges/a tool-and-reply-trace: ticket-486
+E         runs/pre-article-clean-resp-2/judges/b invocation: ticket-486
+E         runs/pre-article-clean-resp-2/judges/b native-context-0: ticket-486
+E         runs/pre-article-clean-resp-2/judges/b tool-and-reply-trace: ticket-486
+E         runs/pre-article-clean-resp-3/judges/a invocation: ticket-486
+E         runs/pre-article-clean-resp-3/judges/a native-context-0: ticket-486
+E         runs/pre-article-clean-resp-3/judges/a tool-and-reply-trace: ticket-486
+E         runs/pre-article-clean-resp-3/judges/b invocation: ticket-486
+E         runs/pre-article-clean-resp-3/judges/b native-context-0: ticket-486
+E         runs/pre-article-clean-resp-3/judges/b tool-and-reply-trace: ticket-486
+E         runs/pre-article-inference-file-1/judges/a invocation: ticket-486
+E         runs/pre-article-inference-file-1/judges/a native-context-0: ticket-486
+E         runs/pre-article-inference-file-1/judges/a tool-and-reply-trace: ticket-486
+E         runs/pre-article-inference-file-1/judges/b invocation: ticket-486
+E         runs/pre-article-inference-file-1/judges/b native-context-0: ticket-486
+E         runs/pre-article-inference-file-1/judges/b tool-and-reply-trace: ticket-486
+E         runs/pre-article-inference-resp-1/judges/a invocation: ticket-486
+E         runs/pre-article-inference-resp-1/judges/a native-context-0: ticket-486
+E         runs/pre-article-inference-resp-1/judges/a tool-and-reply-trace: ticket-486
+E         runs/pre-article-inference-resp-1/judges/b invocation: ticket-486
+E         runs/pre-article-inference-resp-1/judges/b native-context-0: ticket-486
+E         runs/pre-article-inference-resp-1/judges/b tool-and-reply-trace: ticket-486
+E         runs/pre-article-promise-file-1/judges/a invocation: ticket-486
+E         runs/pre-article-promise-file-1/judges/a native-context-0: ticket-486
+E         runs/pre-article-promise-file-1/judges/a tool-and-reply-trace: ticket-486
+E         runs/pre-article-promise-file-1/judges/b invocation: ticket-486
+E         runs/pre-article-promise-file-1/judges/b native-context-0: ticket-486
+E         runs/pre-article-promise-file-1/judges/b tool-and-reply-trace: ticket-486
+E         runs/pre-article-promise-resp-1/judges/a invocation: ticket-486
+E         runs/pre-article-promise-resp-1/judges/a native-context-0: ticket-486
+E         runs/pre-article-promise-resp-1/judges/a tool-and-reply-trace: ticket-486
+E         runs/pre-article-promise-resp-1/judges/b invocation: ticket-486
+E         runs/pre-article-promise-resp-1/judges/b native-context-0: ticket-486
+E         runs/pre-article-promise-resp-1/judges/b tool-and-reply-trace: ticket-486
+E       assert not ['validation/article-inference-a invocation: ticket-486', 'validation/article-inference-a native-context-0: ticket-486...icle-inference-b native-context-0: ticket-486', 'validation/article-inference-b tool-and-reply-trace: ticket-486', ...]
+
+tests/test_editorial_486_blinding.py:35: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_editorial_486_blinding.py::test_all_counted_readers_receive_neutral_paths_in_every_visible_surface
+1 failed in 0.03s

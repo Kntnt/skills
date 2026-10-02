@@ -1,0 +1,3 @@
+**R1: Pass.** The returned text is byte-for-byte unchanged. All frozen-expectation clauses were met: the required passages and anatomy are preserved, no technique is selected, and none of the prohibited findings appears. No clauses were unmet.
+
+Written to [judgement-a.md](/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-70ef836a/amend-1/direct/tmp/session-la5cy3u4/work/judgement-a.md).

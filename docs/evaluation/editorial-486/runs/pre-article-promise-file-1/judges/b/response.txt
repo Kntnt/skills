@@ -1,0 +1,5 @@
+**R1: Fail.** The run correctly detected and repaired the unfulfilled sensor-detail promise using supplied content, but also treated the working “Kontoret” reference as defective and made an unnecessary taste edit.
+
+It preserved the calm explanation, standfirst, byline, quotation, undecided funding and ending. It avoided the prohibited numerical, paragraph, byline, name and technique findings. The conditional requirement to preserve an irreparable promise was not triggered.
+
+Written to [judgement-b.md](/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-486-scratch/tmp/session-do233xu7/work/judgement-b.md).

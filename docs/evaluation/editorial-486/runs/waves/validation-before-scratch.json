@@ -1,0 +1,755 @@
+{
+  "cache": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "data": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "inference-anatomy.json": {
+    "mode": 420,
+    "type": "file",
+    "size": 3302,
+    "sha256": "d964de0afdda0ac2ba48fa79847298982e4d58a31c3d49c938317c2cc2ec4da4"
+  },
+  "inputs": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "logs": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "packets": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "promise-anatomy.json": {
+    "mode": 420,
+    "type": "file",
+    "size": 3317,
+    "sha256": "49000abbce42ca9a97e404e8db7ceed92e8720e0d837f40a74e694af1ef6cf1d"
+  },
+  "readers": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "resources.jsonl": {
+    "mode": 420,
+    "type": "file",
+    "size": 39,
+    "sha256": "81c3ef848b50741ea8e56fef2a186f526255ada26f0a5ed4dfa62ba05ff62297"
+  },
+  "tmp": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "tmp/uv-a2d16bd9bc092724.lock": {
+    "mode": 438,
+    "type": "file",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "uv-cache": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "uv-cache/.gitignore": {
+    "mode": 420,
+    "type": "file",
+    "size": 1,
+    "sha256": "684888c0ebb17f374298b65ee2807526c066094c701bcc7ebbe1c1095f494fc1"
+  },
+  "uv-cache/.lock": {
+    "mode": 438,
+    "type": "file",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "uv-cache/CACHEDIR.TAG": {
+    "mode": 420,
+    "type": "file",
+    "size": 43,
+    "sha256": "5953156d7e0c564a427251316eaf26f8870e6483ae2197f916b630e4f93e31ae"
+  },
+  "uv-cache/archive-v0": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "uv-cache/archive-v0/ilFCxqp6WmxvdA0K": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "uv-cache/archive-v0/ilFCxqp6WmxvdA0K/.gitignore": {
+    "mode": 420,
+    "type": "file",
+    "size": 1,
+    "sha256": "684888c0ebb17f374298b65ee2807526c066094c701bcc7ebbe1c1095f494fc1"
+  },
+  "uv-cache/archive-v0/ilFCxqp6WmxvdA0K/CACHEDIR.TAG": {
+    "mode": 420,
+    "type": "file",
+    "size": 43,
+    "sha256": "5953156d7e0c564a427251316eaf26f8870e6483ae2197f916b630e4f93e31ae"
+  },
+  "uv-cache/archive-v0/ilFCxqp6WmxvdA0K/bin": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "uv-cache/archive-v0/ilFCxqp6WmxvdA0K/bin/activate": {
+    "mode": 420,
+    "type": "file",
+    "size": 4118,
+    "sha256": "2233a0b7e434c75d902a2379e70d51deb6c659cae92839593d216ee89ccceb9f"
+  },
+  "uv-cache/archive-v0/ilFCxqp6WmxvdA0K/bin/activate.bat": {
+    "mode": 420,
+    "type": "file",
+    "size": 2640,
+    "sha256": "75d1ded202a504f1c3844e9966bbf5f3f93f328e598d49fc13a4386dc46889fd"
+  },
+  "uv-cache/archive-v0/ilFCxqp6WmxvdA0K/bin/activate.fish": {
+    "mode": 420,
+    "type": "file",
+    "size": 4347,
+    "sha256": "369c3941bdf3b118ebfbe8a481260be535f77eb202e731d2dd65468ded7c8942"
+  },
+  "uv-cache/archive-v0/ilFCxqp6WmxvdA0K/bin/activate.nu": {
+    "mode": 420,
+    "type": "file",
+    "size": 3950,
+    "sha256": "e77e895a7119261186a986b7b3e9f92ff0db023efb962e1ae683cd6c62efc9f6"
+  },
+  "uv-cache/archive-v0/ilFCxqp6WmxvdA0K/bin/activate.ps1": {
+    "mode": 420,
+    "type": "file",
+    "size": 2765,
+    "sha256": "78e92217a9380caaccc1a7fe0a5623a878b9ed72f515c42f718c06c908742563"
+  },
+  "uv-cache/archive-v0/ilFCxqp6WmxvdA0K/bin/activate.xsh": {
+    "mode": 420,
+    "type": "file",
+    "size": 3867,
+    "sha256": "df312406d0948f4d7aabfda405ebf28b4b59a1099a8d8f16759e15eefff0a910"
+  },
+  "uv-cache/archive-v0/ilFCxqp6WmxvdA0K/bin/activate_this.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 2383,
+    "sha256": "c1b98392cec6efb935214e1bb1f24b0df5338969b4401d3c8297ee571c6d45b4"
+  },
+  "uv-cache/archive-v0/ilFCxqp6WmxvdA0K/bin/deactivate.bat": {
+    "mode": 420,
+    "type": "file",
+    "size": 1730,
+    "sha256": "13ea86073a9ee43a66e3549312599dd47ff315758b4ca5a0406faf041fb82300"
+  },
+  "uv-cache/archive-v0/ilFCxqp6WmxvdA0K/bin/pydoc.bat": {
+    "mode": 420,
+    "type": "file",
+    "size": 1219,
+    "sha256": "09f9608d478fa48a9e49af8f413cfeaab47773effd185433088b7688ce75890e"
+  },
+  "uv-cache/archive-v0/ilFCxqp6WmxvdA0K/bin/python": {
+    "mode": 493,
+    "type": "symlink",
+    "target": "/opt/homebrew/opt/python@3.14/bin/python3.14"
+  },
+  "uv-cache/archive-v0/ilFCxqp6WmxvdA0K/bin/python3": {
+    "mode": 493,
+    "type": "symlink",
+    "target": "python"
+  },
+  "uv-cache/archive-v0/ilFCxqp6WmxvdA0K/bin/python3.14": {
+    "mode": 493,
+    "type": "symlink",
+    "target": "python"
+  },
+  "uv-cache/archive-v0/ilFCxqp6WmxvdA0K/bin/ruff": {
+    "mode": 493,
+    "type": "file",
+    "size": 21666608,
+    "sha256": "70e977860c228661a4992c9558b8350903351845fa945715584f4c176a0f6c61"
+  },
+  "uv-cache/archive-v0/ilFCxqp6WmxvdA0K/lib": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "uv-cache/archive-v0/ilFCxqp6WmxvdA0K/lib/python3.14": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "uv-cache/archive-v0/ilFCxqp6WmxvdA0K/lib/python3.14/site-packages": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "uv-cache/archive-v0/ilFCxqp6WmxvdA0K/lib/python3.14/site-packages/_virtualenv.pth": {
+    "mode": 420,
+    "type": "file",
+    "size": 18,
+    "sha256": "69ac3d8f27e679c81b94ab30b3b56e9cd138219b1ba94a1fa3606d5a76a1433d"
+  },
+  "uv-cache/archive-v0/ilFCxqp6WmxvdA0K/lib/python3.14/site-packages/_virtualenv.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 5246,
+    "sha256": "cfb3db86aaa53bb62b5ff764970bec2d71c9228590a0ebec57f6ec926cc0bf1a"
+  },
+  "uv-cache/archive-v0/ilFCxqp6WmxvdA0K/lib/python3.14/site-packages/ruff": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "uv-cache/archive-v0/ilFCxqp6WmxvdA0K/lib/python3.14/site-packages/ruff/__init__.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 103,
+    "sha256": "eba8a7f720d20a26214448eec4b4af01cfe0e717f6a773d870401e06cc10842d"
+  },
+  "uv-cache/archive-v0/ilFCxqp6WmxvdA0K/lib/python3.14/site-packages/ruff/__main__.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 547,
+    "sha256": "f28dfadbcc89b3715a2a732335f3e695b5b1609708d79e4b3a9ac2f80e55774d"
+  },
+  "uv-cache/archive-v0/ilFCxqp6WmxvdA0K/lib/python3.14/site-packages/ruff/_find_ruff.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 3250,
+    "sha256": "24dc682895e4aa24a4995ad3089fecbf83a5d12c0c05ca3311edd6ebb6dbd22a"
+  },
+  "uv-cache/archive-v0/ilFCxqp6WmxvdA0K/lib/python3.14/site-packages/ruff-0.16.10.dist-info": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "uv-cache/archive-v0/ilFCxqp6WmxvdA0K/lib/python3.14/site-packages/ruff-0.16.10.dist-info/INSTALLER": {
+    "mode": 420,
+    "type": "file",
+    "size": 2,
+    "sha256": "e6184ce10e266134fdcfa401e8f1a95005bcd4f18d16b62b757323e2833fe9a9"
+  },
+  "uv-cache/archive-v0/ilFCxqp6WmxvdA0K/lib/python3.14/site-packages/ruff-0.16.10.dist-info/METADATA": {
+    "mode": 420,
+    "type": "file",
+    "size": 20761,
+    "sha256": "2f914c8907d59fc48255be1689e1edca6679a52962fa321fb6ddea08b4a25046"
+  },
+  "uv-cache/archive-v0/ilFCxqp6WmxvdA0K/lib/python3.14/site-packages/ruff-0.16.10.dist-info/RECORD": {
+    "mode": 420,
+    "type": "file",
+    "size": 878,
+    "sha256": "1a1b70bf2611d4667a7586cf86a136612fa5d475a25e1dc46c7510940ad6192a"
+  },
+  "uv-cache/archive-v0/ilFCxqp6WmxvdA0K/lib/python3.14/site-packages/ruff-0.16.10.dist-info/REQUESTED": {
+    "mode": 420,
+    "type": "file",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "uv-cache/archive-v0/ilFCxqp6WmxvdA0K/lib/python3.14/site-packages/ruff-0.16.10.dist-info/WHEEL": {
+    "mode": 420,
+    "type": "file",
+    "size": 102,
+    "sha256": "53ddbba522ef58787979aa9c379bfbd8274c9be1d4585df8e1f28b7bc1e148e5"
+  },
+  "uv-cache/archive-v0/ilFCxqp6WmxvdA0K/lib/python3.14/site-packages/ruff-0.16.10.dist-info/licenses": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "uv-cache/archive-v0/ilFCxqp6WmxvdA0K/lib/python3.14/site-packages/ruff-0.16.10.dist-info/licenses/LICENSE": {
+    "mode": 420,
+    "type": "file",
+    "size": 20731,
+    "sha256": "2597d854122b77ddc71971564ca2350a37608575ce324adc5650a2b2051c8f18"
+  },
+  "uv-cache/archive-v0/ilFCxqp6WmxvdA0K/lib/python3.14/site-packages/ruff-0.16.10.dist-info/sboms": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "uv-cache/archive-v0/ilFCxqp6WmxvdA0K/lib/python3.14/site-packages/ruff-0.16.10.dist-info/sboms/ruff.cyclonedx.json": {
+    "mode": 420,
+    "type": "file",
+    "size": 412524,
+    "sha256": "38e4560f630eef24e8a79ea72d701e6d2ff987f61be0fc0e04a422f8694fcd5b"
+  },
+  "uv-cache/archive-v0/ilFCxqp6WmxvdA0K/pyvenv.cfg": {
+    "mode": 420,
+    "type": "file",
+    "size": 157,
+    "sha256": "6fe5031d52a91b0719c86060efff5dac8cc9b7976cb1876566fb2677b8221ec0"
+  },
+  "uv-cache/archive-v0/x-XpdqIjHwWQM2Sm": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "uv-cache/archive-v0/x-XpdqIjHwWQM2Sm/ruff": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "uv-cache/archive-v0/x-XpdqIjHwWQM2Sm/ruff/__init__.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 103,
+    "sha256": "eba8a7f720d20a26214448eec4b4af01cfe0e717f6a773d870401e06cc10842d"
+  },
+  "uv-cache/archive-v0/x-XpdqIjHwWQM2Sm/ruff/__main__.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 547,
+    "sha256": "f28dfadbcc89b3715a2a732335f3e695b5b1609708d79e4b3a9ac2f80e55774d"
+  },
+  "uv-cache/archive-v0/x-XpdqIjHwWQM2Sm/ruff/_find_ruff.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 3250,
+    "sha256": "24dc682895e4aa24a4995ad3089fecbf83a5d12c0c05ca3311edd6ebb6dbd22a"
+  },
+  "uv-cache/archive-v0/x-XpdqIjHwWQM2Sm/ruff-0.16.10.data": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "uv-cache/archive-v0/x-XpdqIjHwWQM2Sm/ruff-0.16.10.data/scripts": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "uv-cache/archive-v0/x-XpdqIjHwWQM2Sm/ruff-0.16.10.data/scripts/ruff": {
+    "mode": 493,
+    "type": "file",
+    "size": 21666608,
+    "sha256": "70e977860c228661a4992c9558b8350903351845fa945715584f4c176a0f6c61"
+  },
+  "uv-cache/archive-v0/x-XpdqIjHwWQM2Sm/ruff-0.16.10.dist-info": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "uv-cache/archive-v0/x-XpdqIjHwWQM2Sm/ruff-0.16.10.dist-info/METADATA": {
+    "mode": 420,
+    "type": "file",
+    "size": 20761,
+    "sha256": "2f914c8907d59fc48255be1689e1edca6679a52962fa321fb6ddea08b4a25046"
+  },
+  "uv-cache/archive-v0/x-XpdqIjHwWQM2Sm/ruff-0.16.10.dist-info/RECORD": {
+    "mode": 420,
+    "type": "file",
+    "size": 719,
+    "sha256": "6f829e304fd349b24776df59c0d7a33c513a72361c1c2bb8ce4af9cb366098be"
+  },
+  "uv-cache/archive-v0/x-XpdqIjHwWQM2Sm/ruff-0.16.10.dist-info/WHEEL": {
+    "mode": 420,
+    "type": "file",
+    "size": 102,
+    "sha256": "53ddbba522ef58787979aa9c379bfbd8274c9be1d4585df8e1f28b7bc1e148e5"
+  },
+  "uv-cache/archive-v0/x-XpdqIjHwWQM2Sm/ruff-0.16.10.dist-info/licenses": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "uv-cache/archive-v0/x-XpdqIjHwWQM2Sm/ruff-0.16.10.dist-info/licenses/LICENSE": {
+    "mode": 420,
+    "type": "file",
+    "size": 20731,
+    "sha256": "2597d854122b77ddc71971564ca2350a37608575ce324adc5650a2b2051c8f18"
+  },
+  "uv-cache/archive-v0/x-XpdqIjHwWQM2Sm/ruff-0.16.10.dist-info/sboms": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "uv-cache/archive-v0/x-XpdqIjHwWQM2Sm/ruff-0.16.10.dist-info/sboms/ruff.cyclonedx.json": {
+    "mode": 420,
+    "type": "file",
+    "size": 412524,
+    "sha256": "38e4560f630eef24e8a79ea72d701e6d2ff987f61be0fc0e04a422f8694fcd5b"
+  },
+  "uv-cache/builds-v0": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "uv-cache/builds-v0/.tmpsScmeB": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "uv-cache/builds-v0/.tmpsScmeB/.gitignore": {
+    "mode": 420,
+    "type": "file",
+    "size": 1,
+    "sha256": "684888c0ebb17f374298b65ee2807526c066094c701bcc7ebbe1c1095f494fc1"
+  },
+  "uv-cache/builds-v0/.tmpsScmeB/CACHEDIR.TAG": {
+    "mode": 420,
+    "type": "file",
+    "size": 43,
+    "sha256": "5953156d7e0c564a427251316eaf26f8870e6483ae2197f916b630e4f93e31ae"
+  },
+  "uv-cache/builds-v0/.tmpsScmeB/bin": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "uv-cache/builds-v0/.tmpsScmeB/bin/activate": {
+    "mode": 420,
+    "type": "file",
+    "size": 4148,
+    "sha256": "7a6d82897edad2c28fd8507a687561e6edda6c6bd4411d6dc3f835ce70d9be86"
+  },
+  "uv-cache/builds-v0/.tmpsScmeB/bin/activate.bat": {
+    "mode": 420,
+    "type": "file",
+    "size": 2728,
+    "sha256": "e6f567751f08364b9fb4b2d9bc14d51974cda4c9edbd550bcad761bfc3a0ed76"
+  },
+  "uv-cache/builds-v0/.tmpsScmeB/bin/activate.csh": {
+    "mode": 420,
+    "type": "file",
+    "size": 2678,
+    "sha256": "2f2a0c4ac8bc51584100d15c7dae1af9caae89cececd99adfbde4c4d68dcda24"
+  },
+  "uv-cache/builds-v0/.tmpsScmeB/bin/activate.fish": {
+    "mode": 420,
+    "type": "file",
+    "size": 4389,
+    "sha256": "ecc7fb3f1b81fccb2e4a09027434074b57b0741fddb3d07580ca88a3c978a885"
+  },
+  "uv-cache/builds-v0/.tmpsScmeB/bin/activate.nu": {
+    "mode": 420,
+    "type": "file",
+    "size": 4006,
+    "sha256": "584aea05d4a280a2b17b7904aa1cfd76c4be022dcc216a452ffbb8b757fdd4ee"
+  },
+  "uv-cache/builds-v0/.tmpsScmeB/bin/activate.ps1": {
+    "mode": 420,
+    "type": "file",
+    "size": 2765,
+    "sha256": "78e92217a9380caaccc1a7fe0a5623a878b9ed72f515c42f718c06c908742563"
+  },
+  "uv-cache/builds-v0/.tmpsScmeB/bin/activate.xsh": {
+    "mode": 420,
+    "type": "file",
+    "size": 3867,
+    "sha256": "df312406d0948f4d7aabfda405ebf28b4b59a1099a8d8f16759e15eefff0a910"
+  },
+  "uv-cache/builds-v0/.tmpsScmeB/bin/activate_this.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 2383,
+    "sha256": "90997a8dd17abebcf4bac8140e8ff6cdc47c65e72a9274936b8a66dab7ddfa06"
+  },
+  "uv-cache/builds-v0/.tmpsScmeB/bin/deactivate.bat": {
+    "mode": 420,
+    "type": "file",
+    "size": 1730,
+    "sha256": "13ea86073a9ee43a66e3549312599dd47ff315758b4ca5a0406faf041fb82300"
+  },
+  "uv-cache/builds-v0/.tmpsScmeB/bin/pydoc.bat": {
+    "mode": 420,
+    "type": "file",
+    "size": 1219,
+    "sha256": "09f9608d478fa48a9e49af8f413cfeaab47773effd185433088b7688ce75890e"
+  },
+  "uv-cache/builds-v0/.tmpsScmeB/bin/python": {
+    "mode": 493,
+    "type": "symlink",
+    "target": "/Users/thomas/.local/share/uv/python/cpython-3.12-macos-aarch64-none/bin/python3.12"
+  },
+  "uv-cache/builds-v0/.tmpsScmeB/bin/python3": {
+    "mode": 493,
+    "type": "symlink",
+    "target": "python"
+  },
+  "uv-cache/builds-v0/.tmpsScmeB/bin/python3.12": {
+    "mode": 493,
+    "type": "symlink",
+    "target": "python"
+  },
+  "uv-cache/builds-v0/.tmpsScmeB/lib": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "uv-cache/builds-v0/.tmpsScmeB/lib/python3.12": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "uv-cache/builds-v0/.tmpsScmeB/lib/python3.12/site-packages": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "uv-cache/builds-v0/.tmpsScmeB/lib/python3.12/site-packages/_virtualenv.pth": {
+    "mode": 420,
+    "type": "file",
+    "size": 18,
+    "sha256": "69ac3d8f27e679c81b94ab30b3b56e9cd138219b1ba94a1fa3606d5a76a1433d"
+  },
+  "uv-cache/builds-v0/.tmpsScmeB/lib/python3.12/site-packages/_virtualenv.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 5246,
+    "sha256": "cfb3db86aaa53bb62b5ff764970bec2d71c9228590a0ebec57f6ec926cc0bf1a"
+  },
+  "uv-cache/builds-v0/.tmpsScmeB/pyvenv.cfg": {
+    "mode": 420,
+    "type": "file",
+    "size": 178,
+    "sha256": "065d8b636b4b4396d2b8b7d9498e0514830a9eb4678f50cc68e1030bd4fba97e"
+  },
+  "uv-cache/environments-v2": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "uv-cache/environments-v2/2961f89c7a1a30ac": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "uv-cache/environments-v2/2961f89c7a1a30ac/5b095cc10a769704": {
+    "mode": 493,
+    "type": "symlink",
+    "target": "../../archive-v0/ilFCxqp6WmxvdA0K"
+  },
+  "uv-cache/environments-v2/article-anatomy-a2d16bd9bc092724": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "uv-cache/environments-v2/article-anatomy-a2d16bd9bc092724/.gitignore": {
+    "mode": 420,
+    "type": "file",
+    "size": 1,
+    "sha256": "684888c0ebb17f374298b65ee2807526c066094c701bcc7ebbe1c1095f494fc1"
+  },
+  "uv-cache/environments-v2/article-anatomy-a2d16bd9bc092724/.lock": {
+    "mode": 438,
+    "type": "file",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "uv-cache/environments-v2/article-anatomy-a2d16bd9bc092724/CACHEDIR.TAG": {
+    "mode": 420,
+    "type": "file",
+    "size": 43,
+    "sha256": "5953156d7e0c564a427251316eaf26f8870e6483ae2197f916b630e4f93e31ae"
+  },
+  "uv-cache/environments-v2/article-anatomy-a2d16bd9bc092724/bin": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "uv-cache/environments-v2/article-anatomy-a2d16bd9bc092724/bin/activate": {
+    "mode": 420,
+    "type": "file",
+    "size": 4212,
+    "sha256": "1e3919c9d4a04b4bf9a9659a9555c6afc95cdd20f5c6596df3ab9fe787bbeb83"
+  },
+  "uv-cache/environments-v2/article-anatomy-a2d16bd9bc092724/bin/activate.bat": {
+    "mode": 420,
+    "type": "file",
+    "size": 2774,
+    "sha256": "b40e829f99d1efc4c9c77d96e150a0bf70e8aed14594a7e9b49e4b5ab8e3c8d0"
+  },
+  "uv-cache/environments-v2/article-anatomy-a2d16bd9bc092724/bin/activate.csh": {
+    "mode": 420,
+    "type": "file",
+    "size": 2742,
+    "sha256": "2e250d069f417f34d94e71728bbbc31ea526460bb88256b31ec94a3a855da905"
+  },
+  "uv-cache/environments-v2/article-anatomy-a2d16bd9bc092724/bin/activate.fish": {
+    "mode": 420,
+    "type": "file",
+    "size": 4453,
+    "sha256": "6e7113319b57dfb1a6fb61fbd9a219d6972af34d58593a7b400a30c674fecf53"
+  },
+  "uv-cache/environments-v2/article-anatomy-a2d16bd9bc092724/bin/activate.nu": {
+    "mode": 420,
+    "type": "file",
+    "size": 4070,
+    "sha256": "3ffd9141946043af29d7c3e4def0729326d4fa971679ca415819aef87c5a6222"
+  },
+  "uv-cache/environments-v2/article-anatomy-a2d16bd9bc092724/bin/activate.ps1": {
+    "mode": 420,
+    "type": "file",
+    "size": 2801,
+    "sha256": "4d07d1edf4c590ec81cc6c936d0a52c9f4835d4651ea3a6b4a58dac19070d587"
+  },
+  "uv-cache/environments-v2/article-anatomy-a2d16bd9bc092724/bin/activate.xsh": {
+    "mode": 420,
+    "type": "file",
+    "size": 3885,
+    "sha256": "27dae2d238dc5f839782e5700c824cd867cca1265b3d85c5a03f6427d28acc7c"
+  },
+  "uv-cache/environments-v2/article-anatomy-a2d16bd9bc092724/bin/activate_this.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 2401,
+    "sha256": "a6ce4f5f93a9e6d64e3fdb2a7ae9d063a1333f1f956bae575b465519a82d1865"
+  },
+  "uv-cache/environments-v2/article-anatomy-a2d16bd9bc092724/bin/deactivate.bat": {
+    "mode": 420,
+    "type": "file",
+    "size": 1730,
+    "sha256": "13ea86073a9ee43a66e3549312599dd47ff315758b4ca5a0406faf041fb82300"
+  },
+  "uv-cache/environments-v2/article-anatomy-a2d16bd9bc092724/bin/pydoc.bat": {
+    "mode": 420,
+    "type": "file",
+    "size": 1219,
+    "sha256": "09f9608d478fa48a9e49af8f413cfeaab47773effd185433088b7688ce75890e"
+  },
+  "uv-cache/environments-v2/article-anatomy-a2d16bd9bc092724/bin/python": {
+    "mode": 493,
+    "type": "symlink",
+    "target": "/Users/thomas/.local/share/uv/python/cpython-3.12-macos-aarch64-none/bin/python3.12"
+  },
+  "uv-cache/environments-v2/article-anatomy-a2d16bd9bc092724/bin/python3": {
+    "mode": 493,
+    "type": "symlink",
+    "target": "python"
+  },
+  "uv-cache/environments-v2/article-anatomy-a2d16bd9bc092724/bin/python3.12": {
+    "mode": 493,
+    "type": "symlink",
+    "target": "python"
+  },
+  "uv-cache/environments-v2/article-anatomy-a2d16bd9bc092724/lib": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "uv-cache/environments-v2/article-anatomy-a2d16bd9bc092724/lib/python3.12": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "uv-cache/environments-v2/article-anatomy-a2d16bd9bc092724/lib/python3.12/site-packages": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "uv-cache/environments-v2/article-anatomy-a2d16bd9bc092724/lib/python3.12/site-packages/_virtualenv.pth": {
+    "mode": 420,
+    "type": "file",
+    "size": 18,
+    "sha256": "69ac3d8f27e679c81b94ab30b3b56e9cd138219b1ba94a1fa3606d5a76a1433d"
+  },
+  "uv-cache/environments-v2/article-anatomy-a2d16bd9bc092724/lib/python3.12/site-packages/_virtualenv.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 5246,
+    "sha256": "cfb3db86aaa53bb62b5ff764970bec2d71c9228590a0ebec57f6ec926cc0bf1a"
+  },
+  "uv-cache/environments-v2/article-anatomy-a2d16bd9bc092724/pyvenv.cfg": {
+    "mode": 420,
+    "type": "file",
+    "size": 206,
+    "sha256": "69c13d754a493065fce29076b57db7da676bdbafbe5458604998c0515f51a0f4"
+  },
+  "uv-cache/interpreter-v4": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "uv-cache/interpreter-v4/cde756dce160189f": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "uv-cache/interpreter-v4/cde756dce160189f/2a68cea15d36222e.msgpack": {
+    "mode": 420,
+    "type": "file",
+    "size": 1649,
+    "sha256": "892a5a9b43332f66638f81eccb5e1b294314f7920f96c76c19dc29a64e7f72eb"
+  },
+  "uv-cache/interpreter-v4/cde756dce160189f/92bcb70b0bf6ba65.msgpack": {
+    "mode": 420,
+    "type": "file",
+    "size": 1649,
+    "sha256": "892a5a9b43332f66638f81eccb5e1b294314f7920f96c76c19dc29a64e7f72eb"
+  },
+  "uv-cache/interpreter-v4/cde756dce160189f/965cd5118f4917dd.msgpack": {
+    "mode": 420,
+    "type": "file",
+    "size": 1621,
+    "sha256": "95acd9a1ba6929148d341e453f6c0eef26ec7700a7cf03222d26a0f0a18d4c92"
+  },
+  "uv-cache/interpreter-v4/cde756dce160189f/d4422bbedcf94c7b.msgpack": {
+    "mode": 420,
+    "type": "file",
+    "size": 2413,
+    "sha256": "0cfacbabe5ba7c7f2403be75c4fae830ee3a85af64ff26706251b089e88f7bce"
+  },
+  "uv-cache/interpreter-v4/cde756dce160189f/dcfdb4908084bb6a.msgpack": {
+    "mode": 420,
+    "type": "file",
+    "size": 2271,
+    "sha256": "f3d0914864ce18fe5a75d6885debf0c5c571f2fd0cc21b2ae53efe224206a87d"
+  },
+  "uv-cache/sdists-v9": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "uv-cache/sdists-v9/.git": {
+    "mode": 420,
+    "type": "file",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "uv-cache/sdists-v9/.gitignore": {
+    "mode": 420,
+    "type": "file",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "uv-cache/simple-v25": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "uv-cache/simple-v25/pypi": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "uv-cache/simple-v25/pypi/ruff.rkyv": {
+    "mode": 420,
+    "type": "file",
+    "size": 2113320,
+    "sha256": "dd3715c50e958c702d2295c7d78de5ee7ba14ae87836fe9f816bd4c20a9b4949"
+  },
+  "uv-cache/wheels-v6": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "uv-cache/wheels-v6/pypi": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "uv-cache/wheels-v6/pypi/ruff": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "uv-cache/wheels-v6/pypi/ruff/0.16.10-py3-none-macosx_11_0_arm64": {
+    "mode": 493,
+    "type": "symlink",
+    "target": "../../../archive-v0/x-XpdqIjHwWQM2Sm"
+  },
+  "uv-cache/wheels-v6/pypi/ruff/0.16.10-py3-none-macosx_11_0_arm64.http": {
+    "mode": 420,
+    "type": "file",
+    "size": 688,
+    "sha256": "a880dd1937941389779b765e13edc1eb621b30275a07ad0a829d33bcd3c6ed75"
+  },
+  "uv-cache/wheels-v6/pypi/ruff/0.16.10-py3-none-macosx_11_0_arm64.lock": {
+    "mode": 438,
+    "type": "file",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "uv-cache/wheels-v6/pypi/ruff/0.16.10-py3-none-macosx_11_0_arm64.msgpack": {
+    "mode": 420,
+    "type": "file",
+    "size": 575,
+    "sha256": "722797c39d5eb187444eb7c2d8e8522c260ce13028dcef55c82d89d97645d534"
+  },
+  "uv-tools": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "uv-tools/.gitignore": {
+    "mode": 420,
+    "type": "file",
+    "size": 1,
+    "sha256": "684888c0ebb17f374298b65ee2807526c066094c701bcc7ebbe1c1095f494fc1"
+  },
+  "uv-tools/.lock": {
+    "mode": 438,
+    "type": "file",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

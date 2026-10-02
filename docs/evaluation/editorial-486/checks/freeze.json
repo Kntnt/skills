@@ -1,0 +1,72 @@
+[
+  {
+    "path": "docs/evaluation/editorial-486/control-judge-brief-file.md",
+    "sha256": "5086a4c1bee9f482b7c8f70a3a54c48ab80faeee660ac5eb31d5ea9e10121b4d",
+    "unchanged_from_prospective_freeze": true
+  },
+  {
+    "path": "docs/evaluation/editorial-486/control-judge-brief.md",
+    "sha256": "a7274ec9322729d929a1fdf1b9a5b56da2792e101a7cbe80c8c03413dd70dfef",
+    "unchanged_from_prospective_freeze": true
+  },
+  {
+    "path": "docs/evaluation/editorial-486/harness/campaign.py",
+    "sha256": "31283b2402ff8bae693c4495b389c983412c9722ec116f528ce5ee8a1862e38a",
+    "unchanged_from_prospective_freeze": true
+  },
+  {
+    "path": "docs/evaluation/editorial-486/harness/env.sh",
+    "sha256": "667de3561b72c94cf85c70b5d438ca03424670a6381b92862ffeafa4719a0eff",
+    "unchanged_from_prospective_freeze": true
+  },
+  {
+    "path": "docs/evaluation/editorial-486/harness/run.py",
+    "sha256": "071bc3d4cba1c446f950ee717df44910567f9122c98028790227a26af2f9d7a7",
+    "unchanged_from_prospective_freeze": true
+  },
+  {
+    "path": "docs/evaluation/editorial-486/inputs/article-clean.expectation.md",
+    "sha256": "f9a0a9cc76b77afab31a916143b49eb3b45b018eb69435f0b70adc0a05a8bc94",
+    "unchanged_from_prospective_freeze": true
+  },
+  {
+    "path": "docs/evaluation/editorial-486/inputs/article-clean.md",
+    "sha256": "f183e6da31cf78081cc7c7eee69570940e24802997e92d96bb111966aa4170d5",
+    "unchanged_from_prospective_freeze": true
+  },
+  {
+    "path": "docs/evaluation/editorial-486/inputs/article-inference.expectation.md",
+    "sha256": "976767a2db19c0a95c247f9cf40cc5f9da996d527eb473282d5bb183238e6486",
+    "unchanged_from_prospective_freeze": true
+  },
+  {
+    "path": "docs/evaluation/editorial-486/inputs/article-inference.md",
+    "sha256": "7525e134bfc1c650e451832effc4319a237e1e4382a6f88f48fd0729e8f9cf22",
+    "unchanged_from_prospective_freeze": true
+  },
+  {
+    "path": "docs/evaluation/editorial-486/inputs/article-promise.expectation.md",
+    "sha256": "9a66e5941f57bfde79526f8329d0801d94bb3e5f8a727362a186ca6d4d93951d",
+    "unchanged_from_prospective_freeze": true
+  },
+  {
+    "path": "docs/evaluation/editorial-486/inputs/article-promise.md",
+    "sha256": "b04eb52d2f26242675fba76010f62e0f2ff488bac1792c398730bd0de9012cc5",
+    "unchanged_from_prospective_freeze": true
+  },
+  {
+    "path": "docs/evaluation/editorial-486/plan.md",
+    "sha256": "0678fdad05699e9e9c9410d7e3980f3243864758beeaebe607dd8b5e3034e897",
+    "unchanged_from_prospective_freeze": true
+  },
+  {
+    "path": "docs/evaluation/editorial-486/runs/matrix.tsv",
+    "sha256": "412b2f7c55f18a04d781730f7ff81f7871c723585ab224b78caefd5d2e4fc18c",
+    "unchanged_from_prospective_freeze": true
+  },
+  {
+    "path": "docs/evaluation/editorial-486/validation-brief.md",
+    "sha256": "ddf1dc43e0bd2608bc74f5a4bf3d2b0fc8eaec97063794a546da4ce86837f810",
+    "unchanged_from_prospective_freeze": true
+  }
+]

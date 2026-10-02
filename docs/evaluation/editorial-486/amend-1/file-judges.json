@@ -1,0 +1,62 @@
+[
+  {
+    "role": "judge",
+    "packet": "amend-1/readers/dd18191242b34f6f",
+    "source_packet": "runs/pre-article-clean-file-1/judges/a",
+    "sanitized_response": "amend-1/file-materials/adcf41e9a99651b2/response.md"
+  },
+  {
+    "role": "judge",
+    "packet": "amend-1/readers/07a00a6837eb5ce5",
+    "source_packet": "runs/pre-article-clean-file-1/judges/b",
+    "sanitized_response": "amend-1/file-materials/adcf41e9a99651b2/response.md"
+  },
+  {
+    "role": "judge",
+    "packet": "amend-1/readers/7438c3b8ea405c58",
+    "source_packet": "runs/pre-article-clean-file-2/judges/a",
+    "sanitized_response": "amend-1/file-materials/49a63fa1d928c252/response.md"
+  },
+  {
+    "role": "judge",
+    "packet": "amend-1/readers/1f4e26d2794d35f3",
+    "source_packet": "runs/pre-article-clean-file-2/judges/b",
+    "sanitized_response": "amend-1/file-materials/49a63fa1d928c252/response.md"
+  },
+  {
+    "role": "judge",
+    "packet": "amend-1/readers/98644793b801504e",
+    "source_packet": "runs/pre-article-clean-file-3/judges/a",
+    "sanitized_response": "amend-1/file-materials/0fc58b2e50648162/response.md"
+  },
+  {
+    "role": "judge",
+    "packet": "amend-1/readers/328380f78430cec7",
+    "source_packet": "runs/pre-article-clean-file-3/judges/b",
+    "sanitized_response": "amend-1/file-materials/0fc58b2e50648162/response.md"
+  },
+  {
+    "role": "judge",
+    "packet": "amend-1/readers/f068985c2564c064",
+    "source_packet": "runs/pre-article-inference-file-1/judges/a",
+    "sanitized_response": "amend-1/file-materials/c25468d04a8ff8ac/response.md"
+  },
+  {
+    "role": "judge",
+    "packet": "amend-1/readers/b3d775c313b13893",
+    "source_packet": "runs/pre-article-inference-file-1/judges/b",
+    "sanitized_response": "amend-1/file-materials/c25468d04a8ff8ac/response.md"
+  },
+  {
+    "role": "judge",
+    "packet": "amend-1/readers/f726c41a4349ba87",
+    "source_packet": "runs/pre-article-promise-file-1/judges/a",
+    "sanitized_response": "amend-1/file-materials/4bddb75f2e8f73db/response.md"
+  },
+  {
+    "role": "judge",
+    "packet": "amend-1/readers/4874ca758111e2d0",
+    "source_packet": "runs/pre-article-promise-file-1/judges/b",
+    "sanitized_response": "amend-1/file-materials/4bddb75f2e8f73db/response.md"
+  }
+]

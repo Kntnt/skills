@@ -1,0 +1,3 @@
+**R1: Fail.** All explicit frozen-expectation clauses were met: anatomy was recognized, the named passages were preserved, no technique was selected, and no prohibited finding was made. However, the Skill replaced the working headline’s claim based on a taste-based repetition finding.
+
+Written to [judgement-a.md](/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-486-scratch/tmp/session-dfbbraq4/work/judgement-a.md).

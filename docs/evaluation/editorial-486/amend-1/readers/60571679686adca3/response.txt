@@ -1,0 +1,5 @@
+**R1: Fail.** The reply accurately reports its headline replacement, but changes a compliant headline’s meaning and scope for taste rather than repairing a visible defect.
+
+All explicit frozen-expectation preservation and rejection clauses were met. Anatomy was correctly acknowledged, and no technique was selected.
+
+Written: [judgement-b.md](/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-70ef836a/amend-1/direct/tmp/session-58owi0a3/work/judgement-b.md).

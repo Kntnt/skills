@@ -1,0 +1,3 @@
+R1: **Pass.** The returned text is byte-for-byte unchanged. All frozen-expectation clauses were met: the anatomy, calm explanation, standfirst, byline, quotation, funding uncertainty and non-commercial ending were preserved; no technique was selected and none of the prohibited findings appeared. No clauses were unmet.
+
+Written to [judgement-b.md](/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-486-scratch/tmp/session-i750fnyq/work/judgement-b.md).

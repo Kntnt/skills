@@ -1,0 +1,62 @@
+[
+  {
+    "run": "pre-article-clean-file-1",
+    "material": "amend-1/file-materials/adcf41e9a99651b2/response.md",
+    "substitutions": [
+      {
+        "before": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-486-scratch/tmp/session-917r_n3g/work/output.md",
+        "after": "work/output.md"
+      }
+    ],
+    "raw_sha256": "692a1ce46c650cf15a211c51800b59b46cfb24c99c32a4bfc88e445fcc80e5e7",
+    "neutral_sha256": "cc67de40259c9ada0cd6fe9bc15a0f39a96b6957721a30abe0902923d127cada"
+  },
+  {
+    "run": "pre-article-clean-file-2",
+    "material": "amend-1/file-materials/49a63fa1d928c252/response.md",
+    "substitutions": [
+      {
+        "before": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-486-scratch/tmp/session-w1znalbw/work/output.md",
+        "after": "work/output.md"
+      }
+    ],
+    "raw_sha256": "c728ba8d7d144976ea855b9b22505ceb0a90867d597dca6525e71be1d9bbe2c1",
+    "neutral_sha256": "0953791274b0f7945e1ec19e909c336a882001fe8f81e13be418d21e8d74b926"
+  },
+  {
+    "run": "pre-article-clean-file-3",
+    "material": "amend-1/file-materials/0fc58b2e50648162/response.md",
+    "substitutions": [
+      {
+        "before": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-486-scratch/tmp/session-10b7b23b/work/output.md",
+        "after": "work/output.md"
+      }
+    ],
+    "raw_sha256": "4cafcf7a5ca07f1d0d28c5a89fb738f5f2b5a6ed3285e68672da5b3d81aba6c8",
+    "neutral_sha256": "8c4aad530954c994add1253c18d67cb2d6faa2f6fdd052ed214dd0f1eade2f32"
+  },
+  {
+    "run": "pre-article-inference-file-1",
+    "material": "amend-1/file-materials/c25468d04a8ff8ac/response.md",
+    "substitutions": [
+      {
+        "before": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-486-scratch/tmp/session-xmgcmivj/work/output.md",
+        "after": "work/output.md"
+      }
+    ],
+    "raw_sha256": "f0f0e06e4f5225f0cac27d7be96fcb7f5ccca8e9a183f74cd8d0a7f7b6507d09",
+    "neutral_sha256": "262ef5787c82bbe493aeae5aa1ee5ff23c04fab369966864681557ee20f96877"
+  },
+  {
+    "run": "pre-article-promise-file-1",
+    "material": "amend-1/file-materials/4bddb75f2e8f73db/response.md",
+    "substitutions": [
+      {
+        "before": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-486-scratch/tmp/session-v0p5ax86/work/output.md",
+        "after": "work/output.md"
+      }
+    ],
+    "raw_sha256": "5b2eb4dc78dafd82c9ae76ef184af914c1b5b13ebd4ff75edc8434142ac946fc",
+    "neutral_sha256": "59840a98f899100b5a95d86db9f0d9b273267c28a51eadc1736d12d4cea6f00c"
+  }
+]

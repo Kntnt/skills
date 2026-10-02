@@ -1,0 +1,5 @@
+**R1: Fail.** The reply detected the unsupported promise and repaired it using supplied content. It preserved the calm explanation, standfirst, byline, quotation, funding uncertainty and ending, and avoided the prohibited findings and technique selection.
+
+It failed to preserve compliant material outside that finding: the headline lost “inte varför,” and “Kontoret” received an unnecessary clarification.
+
+Written to [judgement-a.md](/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-70ef836a/amend-1/direct/tmp/session-44f7awe4/work/judgement-a.md).

@@ -1,0 +1,31 @@
+{
+  "method": "rm -r with full literal paths; removal command completed with exit 0",
+  "removed_paths": [
+    "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-486-scratch/cache",
+    "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-486-scratch/promise-anatomy.json",
+    "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-486-scratch/contrast-miss.md",
+    "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-486-scratch/finalize.py",
+    "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-486-scratch/inference-anatomy.json",
+    "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-486-scratch/uv-cache",
+    "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-486-scratch/logs",
+    "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-486-scratch/packets",
+    "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-486-scratch/uv-tools",
+    "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-486-scratch/gate.py",
+    "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-486-scratch/record.py",
+    "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-486-scratch/gate",
+    "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-486-scratch/readers",
+    "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-486-scratch/resources.jsonl",
+    "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-486-scratch/data",
+    "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-486-scratch/tmp",
+    "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-486-scratch/j",
+    "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-486-scratch/v",
+    "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-486-scratch/inputs",
+    "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/486/.ruff_cache",
+    "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/486/.venv",
+    "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/486/uv.lock"
+  ],
+  "all_named_paths_absent": true,
+  "assigned_scratch_empty": true,
+  "deliverables_retained": true,
+  "registered_processes_remaining": 0
+}

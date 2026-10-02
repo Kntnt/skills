@@ -1,0 +1,102 @@
+[
+  {
+    "role": "judge",
+    "packet": "amend-1/readers/8456a9f74b484e86",
+    "source_packet": "runs/pre-article-clean-file-1/judges/a"
+  },
+  {
+    "role": "judge",
+    "packet": "amend-1/readers/eb55c36709f8c3bc",
+    "source_packet": "runs/pre-article-clean-file-1/judges/b"
+  },
+  {
+    "role": "judge",
+    "packet": "amend-1/readers/b1a5b385aff4e81d",
+    "source_packet": "runs/pre-article-clean-file-2/judges/a"
+  },
+  {
+    "role": "judge",
+    "packet": "amend-1/readers/71c1b24550411ff7",
+    "source_packet": "runs/pre-article-clean-file-2/judges/b"
+  },
+  {
+    "role": "judge",
+    "packet": "amend-1/readers/4e34c640ab62e3d0",
+    "source_packet": "runs/pre-article-clean-file-3/judges/a"
+  },
+  {
+    "role": "judge",
+    "packet": "amend-1/readers/55617734827b7287",
+    "source_packet": "runs/pre-article-clean-file-3/judges/b"
+  },
+  {
+    "role": "judge",
+    "packet": "amend-1/readers/5caa602d96c1ad9e",
+    "source_packet": "runs/pre-article-clean-resp-1/judges/a"
+  },
+  {
+    "role": "judge",
+    "packet": "amend-1/readers/29633de13d497929",
+    "source_packet": "runs/pre-article-clean-resp-1/judges/b"
+  },
+  {
+    "role": "judge",
+    "packet": "amend-1/readers/ea049c37e218954f",
+    "source_packet": "runs/pre-article-clean-resp-2/judges/a"
+  },
+  {
+    "role": "judge",
+    "packet": "amend-1/readers/60571679686adca3",
+    "source_packet": "runs/pre-article-clean-resp-2/judges/b"
+  },
+  {
+    "role": "judge",
+    "packet": "amend-1/readers/f57f999f0b4328d9",
+    "source_packet": "runs/pre-article-clean-resp-3/judges/a"
+  },
+  {
+    "role": "judge",
+    "packet": "amend-1/readers/66a6d2372b075d05",
+    "source_packet": "runs/pre-article-clean-resp-3/judges/b"
+  },
+  {
+    "role": "judge",
+    "packet": "amend-1/readers/ec5e5cea3833bd43",
+    "source_packet": "runs/pre-article-inference-file-1/judges/a"
+  },
+  {
+    "role": "judge",
+    "packet": "amend-1/readers/3b930a71309d35c7",
+    "source_packet": "runs/pre-article-inference-file-1/judges/b"
+  },
+  {
+    "role": "judge",
+    "packet": "amend-1/readers/7b5a3ad4af70ab02",
+    "source_packet": "runs/pre-article-inference-resp-1/judges/a"
+  },
+  {
+    "role": "judge",
+    "packet": "amend-1/readers/d030c76f6ebee5ff",
+    "source_packet": "runs/pre-article-inference-resp-1/judges/b"
+  },
+  {
+    "role": "judge",
+    "packet": "amend-1/readers/8d6ca993326bedc1",
+    "source_packet": "runs/pre-article-promise-file-1/judges/a"
+  },
+  {
+    "role": "judge",
+    "packet": "amend-1/readers/bf8d009cf33e22a2",
+    "source_packet": "runs/pre-article-promise-file-1/judges/b"
+  },
+  {
+    "role": "judge",
+    "packet": "amend-1/readers/2b71ffe528e153d5",
+    "source_packet": "runs/pre-article-promise-resp-1/judges/a"
+  },
+  {
+    "role": "judge",
+    "packet": "amend-1/readers/b5c7e74fd30c20ae",
+    "source_packet": "runs/pre-article-promise-resp-1/judges/b"
+  }
+]

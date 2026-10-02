@@ -1,0 +1,74 @@
+[
+  {
+    "time": "2026-10-02T12:58:21.032Z",
+    "session": "rollout-2026-10-02T14-58-13-01a0fcb1-9cd2-7bf1-a7fe-93df805ddddc.jsonl.gz",
+    "parent": true,
+    "text": "Jag läser instruktionerna för `/redline` och granskar sedan `input.md` enligt dem.\n"
+  },
+  {
+    "time": "2026-10-02T12:59:06.410Z",
+    "session": "rollout-2026-10-02T14-58-13-01a0fcb1-9cd2-7bf1-a7fe-93df805ddddc.jsonl.gz",
+    "parent": true,
+    "text": "Jag använder projektets `redline`-färdighet. Jag kan starta underagenter med egna kontextfönster, vilket färdigheten kräver för rättningen och kontrollen av slutrapporten.\n"
+  },
+  {
+    "time": "2026-10-02T13:00:56.820Z",
+    "session": "rollout-2026-10-02T14-58-13-01a0fcb1-9cd2-7bf1-a7fe-93df805ddddc.jsonl.gz",
+    "parent": true,
+    "text": "Inledningen lovar exakta givarplaceringar och avstånd till fönster, men de uppgifterna finns inte i texten. Brödtextens ”Kontoret” får också sin förklaring enbart i ingressen. Jag låter rättningen hantera de två bristerna och kontrollerar sedan varje ändring.\n"
+  },
+  {
+    "time": "2026-10-02T13:03:01.532Z",
+    "session": "rollout-2026-10-02T15-02-44-01a0fcb5-bf9e-7781-93e1-acab8328528d.jsonl.gz",
+    "parent": false,
+    "text": "Jag läser artikelns regler och gör minsta möjliga ändring för de två fynden.\n"
+  },
+  {
+    "time": "2026-10-02T13:04:37.528Z",
+    "session": "rollout-2026-10-02T14-58-13-01a0fcb1-9cd2-7bf1-a7fe-93df805ddddc.jsonl.gz",
+    "parent": true,
+    "text": "Kontrollen av artikelns räknade delar visar inga längdfel. Rättningen pågår; därefter kontrollerar jag att sakuppgifter och reservationer finns kvar och avslutar med `proofread` för språkets mekaniska fel.\n"
+  },
+  {
+    "time": "2026-10-02T13:05:11.872Z",
+    "session": "rollout-2026-10-02T15-02-44-01a0fcb5-bf9e-7781-93e1-acab8328528d.jsonl.gz",
+    "parent": false,
+    "text": "# Mätförsöket i Björkskolan visar när, inte varför\n\n**Under 14 av 120 lektionspass registrerade givarna i Björkskolan temperaturer under fastighetskontorets egen arbetsgräns. Fyra veckors mätningar pekar ut tillfällen att undersöka närmare, men förklarar inte varför luften var kall. Här är vad ett kort försök kan säga, och vad som behövs för att komma vidare.**\n\nText: Hedda Lund\n\nEn temperaturgivare mäter luften där den sitter. Givarna satt i vart och ett av Björkskolans sex klassrum. Genomgången nedan visar också vad fyra veckors mätvärden räcker till och var gränsen går.\n\n## En gräns för det lokala försöket\n\nFastighetskontoret valde 20 grader Celsius som arbetsgräns. Rapporten *Mätförsök i Björkskolan*, daterad 12 mars 2026, räknar 14 lektionspass av 120 med minst en mätning under den gränsen. Hur länge temperaturen låg under den anger rapporten inte. Gränsen är kontorets egen, vald för det här försöket.\n\nGivarna mätte varken luftdrag eller elevernas upplevelse. Ett lågt värde säger alltså när luften var kall, men inte hur rummet kändes.\n\nDriftteknikern Elin Rask sammanfattar: ”Vi vet när vi behöver titta närmare. Vi vet ännu inte varför det blev kallt just då.”\n\n## Nästa försök behöver mer än givare\n\nRask rekommenderar att temperaturserierna kopplas till rummens användningstider innan styrningen ändras. Nästa försök planeras för november med likadant placerade givare, men finansieringen är inte beslutad.\n\nLägg därför tiderna för när rummen används bredvid mätvärdena innan nästa givare sätts upp.\n\n---\n\nBåda fynden reparerade. För fynd 1 togs påståendet att texten redovisar exakta givarplaceringar och fönsteravstånd bort; uppgiften om givare i vart och ett av skolans sex klassrum bevarades. För fynd 2 namngavs fastighetskontoret i brödtexten. Inga andra sakpåståenden ändrades eller tillkom; samtliga begränsningar bevarades. Inget fynd kvarstår.\n\nAnatomimätningen gav exit 0. Övriga anatomikrav och samtliga rubrikpar granskades; inga rubrikekon konstaterades. Tillfälliga arbetskataloger är borttagna."
+  },
+  {
+    "time": "2026-10-02T13:06:19.590Z",
+    "session": "rollout-2026-10-02T14-58-13-01a0fcb1-9cd2-7bf1-a7fe-93df805ddddc.jsonl.gz",
+    "parent": true,
+    "text": "De två bristerna är rättade. Uppgiften om sex klassrum och textens begränsningar finns kvar, och rättningen har inte infört någon ny brist. Jag använder nu `proofread` för den avslutande korrekturläsningen.\n"
+  },
+  {
+    "time": "2026-10-02T13:08:58.053Z",
+    "session": "rollout-2026-10-02T14-58-13-01a0fcb1-9cd2-7bf1-a7fe-93df805ddddc.jsonl.gz",
+    "parent": true,
+    "text": "Korrekturläsningen pågår. Därefter får en fristående kontroll läsa originalet, sluttexten och ändringsrapporten innan jag sparar resultatet i `output.md`.\n"
+  },
+  {
+    "time": "2026-10-02T13:08:59.062Z",
+    "session": "rollout-2026-10-02T15-07-29-01a0fcba-1766-7980-ac10-326efd6547ab.jsonl.gz",
+    "parent": false,
+    "text": "Slutfört. Inga mekaniska fel hittades efter fullständig läsning och separat kontroll av kongruensen. `output.md` är skriven till angiven destination och byteidentisk med den bevarade indatafilen. Den privata TMPDIR-katalogen är borttagen."
+  },
+  {
+    "time": "2026-10-02T13:12:03.306Z",
+    "session": "rollout-2026-10-02T15-11-25-01a0fcbd-b0ae-7ee2-a2d1-8494197655c4.jsonl.gz",
+    "parent": false,
+    "text": "1. **False statements.**\n\n   none\n\n2. **Claim changes the account misses.**\n\n   none"
+  },
+  {
+    "time": "2026-10-02T13:12:10.704Z",
+    "session": "rollout-2026-10-02T14-58-13-01a0fcb1-9cd2-7bf1-a7fe-93df805ddddc.jsonl.gz",
+    "parent": true,
+    "text": "Ändringsrapporten är kontrollerad utan anmärkningar. Jag sparar sluttexten i `output.md` och tar bort de tillfälliga arbetsfilerna.\n"
+  },
+  {
+    "time": "2026-10-02T13:12:35.342Z",
+    "session": "rollout-2026-10-02T14-58-13-01a0fcb1-9cd2-7bf1-a7fe-93df805ddddc.jsonl.gz",
+    "parent": true,
+    "text": "Sparad i [output.md](/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-486-scratch/tmp/session-v0p5ax86/work/output.md). Granskad som artikel på svenska, utan särskild teknik. Två fynd rättade; inga olösta fynd kvarstår.\n\n- Rättat: Inledningen lovade givarplaceringar och fönsteravstånd som originalet aldrig redovisade.\n- Rättat: ”Kontoret” har förtydligats till ”Fastighetskontoret”, så referensen fungerar utan ingressen.\n- Borttaget genom första rättningen: påståendet att texten redovisar givarnas exakta placeringar.\n- Borttaget genom första rättningen: påståendet att texten redovisar avstånd till närmaste fönster.\n- Ändrat genom första rättningen: inledningen anger nu direkt att givarna satt i vart och ett av Björkskolans sex klassrum, i stället för att ange detta inom ett löfte om platsredovisning.\n\nÖppningen har rättats och kontorsreferensen förtydligats. Den avslutande korrekturläsningen gav inga ytterligare ändringar."
+  }
+]

@@ -1,0 +1,92 @@
+[
+  {
+    "time": "2026-10-02T12:36:49.215Z",
+    "session": "rollout-2026-10-02T14-36-42-01a0fc9d-e7e2-73e3-881c-530d46db6770.jsonl.gz",
+    "parent": true,
+    "text": "Jag läser instruktionerna för `/redline` och texten i `input.md`.\n"
+  },
+  {
+    "time": "2026-10-02T12:37:04.474Z",
+    "session": "rollout-2026-10-02T14-36-42-01a0fc9d-e7e2-73e3-881c-530d46db6770.jsonl.gz",
+    "parent": true,
+    "text": "Jag använder projektets [redline-skill](.agents/skills/redline/SKILL.md) för granskningen, en eventuell korrigering och den avslutande korrekturläsningen.\n"
+  },
+  {
+    "time": "2026-10-02T12:37:38.783Z",
+    "session": "rollout-2026-10-02T14-36-42-01a0fc9d-e7e2-73e3-881c-530d46db6770.jsonl.gz",
+    "parent": true,
+    "text": "Jag kan starta de separata underagenter som skillen kräver. Jag kontrollerar nu texten mot reglerna för svenska artiklar och håller isär möjliga korrigeringar från uppgifter som saknas i underlaget.\n"
+  },
+  {
+    "time": "2026-10-02T12:39:22.781Z",
+    "session": "rollout-2026-10-02T14-36-42-01a0fc9d-e7e2-73e3-881c-530d46db6770.jsonl.gz",
+    "parent": true,
+    "text": "Inledningen lovar exakta givarplaceringar och fönsteravstånd, men uppgifterna finns inte längre fram i texten. Jag har också funnit att rubriken inte säger vad som mättes och att brödtextens ”Kontoret” får sin förklaring enbart i ingressen.\n"
+  },
+  {
+    "time": "2026-10-02T12:43:04.366Z",
+    "session": "rollout-2026-10-02T14-36-42-01a0fc9d-e7e2-73e3-881c-530d46db6770.jsonl.gz",
+    "parent": true,
+    "text": "Korrigeringen prövas nu mot originaltexten. Jag kontrollerar särskilt att uppgiften om sex klassrum och mätningarnas begränsningar finns kvar. Därefter kör jag projektets [proofread-skill](.agents/skills/proofread/SKILL.md) en gång.\n"
+  },
+  {
+    "time": "2026-10-02T12:45:16.172Z",
+    "session": "rollout-2026-10-02T14-36-42-01a0fc9d-e7e2-73e3-881c-530d46db6770.jsonl.gz",
+    "parent": true,
+    "text": "Korrigeringen behåller de sex klassrummen men tar bort löftet om placeringsuppgifter som saknas. Rubriken nämner nu temperaturen, och fastighetskontoret namnges i brödtexten. Jag slutför kontrollen mot originalet före korrekturläsningen.\n"
+  },
+  {
+    "time": "2026-10-02T12:46:42.663Z",
+    "session": "rollout-2026-10-02T14-36-42-01a0fc9d-e7e2-73e3-881c-530d46db6770.jsonl.gz",
+    "parent": true,
+    "text": "Kontrollen omfattar även rubrikens begränsning om orsaken till kylan. Den behöver finnas kvar i artikeln även om rubriken ändras. Därefter återstår korrekturläsning och en separat kontroll av ändringsrapporten.\n"
+  },
+  {
+    "time": "2026-10-02T12:46:44.671Z",
+    "session": "rollout-2026-10-02T14-41-28-01a0fca2-4599-79b1-bd93-ddb4b38c711d.jsonl.gz",
+    "parent": false,
+    "text": "```markdown\n# Mätförsöket i Björkskolan visar när luften var kall\n\n**Under 14 av 120 lektionspass registrerade givarna i Björkskolan temperaturer under fastighetskontorets egen arbetsgräns. Fyra veckors mätningar pekar ut tillfällen att undersöka närmare, men förklarar inte varför luften var kall. Här är vad ett kort försök kan säga, och vad som behövs för att komma vidare.**\n\nText: Hedda Lund\n\nEn temperaturgivare mäter luften där den sitter. Givarna satt i vart och ett av Björkskolans sex klassrum. Genomgången nedan visar också vad fyra veckors mätvärden räcker till och var gränsen går.\n\n## En gräns för det lokala försöket\n\nFastighetskontoret valde 20 grader Celsius som arbetsgräns. Rapporten *Mätförsök i Björkskolan*, daterad 12 mars 2026, räknar 14 lektionspass av 120 med minst en mätning under den gränsen. Hur länge temperaturen låg under den anger rapporten inte. Gränsen är kontorets egen, vald för det här försöket.\n\nGivarna mätte varken luftdrag eller elevernas upplevelse. Ett lågt värde säger alltså när luften var kall, men inte hur rummet kändes.\n\nDriftteknikern Elin Rask sammanfattar: ”Vi vet när vi behöver titta närmare. Vi vet ännu inte varför det blev kallt just då.”\n\n## Nästa försök behöver mer än givare\n\nRask rekommenderar att temperaturserierna kopplas till rummens användningstider innan styrningen ändras. Nästa försök planeras för november med likadant placerade givare, men finansieringen är inte beslutad.\n\nLägg därför tiderna för när rummen används bredvid mätvärdena innan nästa givare sätts upp.\n```\n\nSamtliga tre fynd är reparerade:\n\n- Fynd 1: Rubriken preciserar nu att försöket visar när luften var kall. ”Inte varför” har utgått ur rubriken; rubrikläsaren får alltså inte längre orsaksbegränsningen där. Den står oförändrad i ingressen och brödtexten.\n- Fynd 2: Påståendena att artikeln redovisar givarnas exakta placeringar och avstånd till närmaste fönster har tagits bort. Uppgiften om givare i vart och ett av de sex klassrummen är bevarad.\n- Fynd 3: Fastighetskontoret har namngivits i brödtexten.\n\nInga nya sakuppgifter har lagts till. Övriga påståenden och citat är bevarade. Artikelmätningen gav exit 0: rubriken är 51 tecken och åtta ord. Samtliga övriga anatomikrav och rubrikpar har granskats manuellt utan avvikelse. Inga arbetsfiler finns kvar."
+  },
+  {
+    "time": "2026-10-02T12:48:45.360Z",
+    "session": "rollout-2026-10-02T14-48-39-01a0fca8-da2b-7781-a629-8d9790dcc94f.jsonl.gz",
+    "parent": false,
+    "text": "Jag använder korrekturläsningsskillen för den mekaniska språkgranskningen.\n"
+  },
+  {
+    "time": "2026-10-02T12:49:51.066Z",
+    "session": "rollout-2026-10-02T14-36-42-01a0fc9d-e7e2-73e3-881c-530d46db6770.jsonl.gz",
+    "parent": true,
+    "text": "Jag har godkänt korrigeringen efter jämförelsen med originalet. Löftet om placeringsuppgifter är borttaget, medan uppgiften om sex klassrum finns kvar. Korrekturläsningen pågår nu.\n"
+  },
+  {
+    "time": "2026-10-02T12:50:15.022Z",
+    "session": "rollout-2026-10-02T14-48-39-01a0fca8-da2b-7781-a629-8d9790dcc94f.jsonl.gz",
+    "parent": false,
+    "text": "Texten behövde inga mekaniska rättelser. Den kompletta, oförändrade texten finns i [output.md](/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-486-scratch/tmp/session-7gh8ci4k/scratch/redline-mechanical-uc582tcb/output.md). Inga tillfälliga filer från granskningen finns kvar."
+  },
+  {
+    "time": "2026-10-02T12:52:57.571Z",
+    "session": "rollout-2026-10-02T14-52-44-01a0fcac-95c4-75f2-83f2-b474379bc5f4.jsonl.gz",
+    "parent": false,
+    "text": "Jag jämför först texterna och läser endast de två angivna regelavsnitten.\n"
+  },
+  {
+    "time": "2026-10-02T12:53:06.743Z",
+    "session": "rollout-2026-10-02T14-36-42-01a0fc9d-e7e2-73e3-881c-530d46db6770.jsonl.gz",
+    "parent": true,
+    "text": "Korrekturläsningen gav inga ytterligare ändringar. Originalfilen är oförändrad och arbetskopiorna är borttagna. Den sista kontrollen gäller att ändringsrapporten beskriver den färdiga texten korrekt.\n"
+  },
+  {
+    "time": "2026-10-02T12:53:46.431Z",
+    "session": "rollout-2026-10-02T14-52-44-01a0fcac-95c4-75f2-83f2-b474379bc5f4.jsonl.gz",
+    "parent": false,
+    "text": "1. **False statements.**\n\nnone\n\n2. **Claim changes the account misses.**\n\nnone"
+  },
+  {
+    "time": "2026-10-02T12:54:21.692Z",
+    "session": "rollout-2026-10-02T14-36-42-01a0fc9d-e7e2-73e3-881c-530d46db6770.jsonl.gz",
+    "parent": true,
+    "text": "Granskat som artikel på svenska, utan särskild teknik. Inga olösta fynd återstår.\n\n```markdown\n# Mätförsöket i Björkskolan visar när luften var kall\n\n**Under 14 av 120 lektionspass registrerade givarna i Björkskolan temperaturer under fastighetskontorets egen arbetsgräns. Fyra veckors mätningar pekar ut tillfällen att undersöka närmare, men förklarar inte varför luften var kall. Här är vad ett kort försök kan säga, och vad som behövs för att komma vidare.**\n\nText: Hedda Lund\n\nEn temperaturgivare mäter luften där den sitter. Givarna satt i vart och ett av Björkskolans sex klassrum. Genomgången nedan visar också vad fyra veckors mätvärden räcker till och var gränsen går.\n\n## En gräns för det lokala försöket\n\nFastighetskontoret valde 20 grader Celsius som arbetsgräns. Rapporten *Mätförsök i Björkskolan*, daterad 12 mars 2026, räknar 14 lektionspass av 120 med minst en mätning under den gränsen. Hur länge temperaturen låg under den anger rapporten inte. Gränsen är kontorets egen, vald för det här försöket.\n\nGivarna mätte varken luftdrag eller elevernas upplevelse. Ett lågt värde säger alltså när luften var kall, men inte hur rummet kändes.\n\nDriftteknikern Elin Rask sammanfattar: ”Vi vet när vi behöver titta närmare. Vi vet ännu inte varför det blev kallt just då.”\n\n## Nästa försök behöver mer än givare\n\nRask rekommenderar att temperaturserierna kopplas till rummens användningstider innan styrningen ändras. Nästa försök planeras för november med likadant placerade givare, men finansieringen är inte beslutad.\n\nLägg därför tiderna för när rummen används bredvid mätvärdena innan nästa givare sätts upp.\n```\n\n- Rubriken saknade uppgift om vad som mättes; den anger nu när luften var kall.\n- Inledningen lovade placeringsuppgifter och fönsteravstånd som artikeln inte redovisade. Det löftet har tagits bort, medan uppgiften om sex klassrum är kvar.\n- ”Kontoret” fick sin förklaring enbart i ingressen. Fastighetskontoret namnges nu också i brödtexten.\n\nBorttagna påståenden genom korrigeringen av inledningen:\n\n- Att artikeln redovisar givarnas exakta placering i varje klassrum.\n- Att artikeln redovisar avståndet till närmaste fönster.\n\nÄndrade påståenden:\n\n- Rubriken säger nu att försöket visar när luften var kall. ”Inte varför” har utgått där, så rubrikläsaren får inte längre veta att försöket saknar en orsaksförklaring. Den begränsningen finns kvar i ingressen och brödtexten.\n- Inledningens mening uppger nu att givarna satt i vart och ett av de sex klassrummen, i stället för att utlova en redovisning av placeringar och fönsteravstånd.\n\nRubrik och öppning har korrigerats, och kontorets namn har förtydligats i brödtexten. Korrekturläsningen gav inga ytterligare ändringar. Texten följer artikelanatomin."
+  }
+]

@@ -1,0 +1,38 @@
+{
+  "inspection_completed_utc": "2026-10-02T15:21:17.143919+00:00",
+  "all_four_confirm_original_distinction": true,
+  "rows": [
+    {
+      "role": "validator",
+      "packet": "amend-1/readers/75ee66ab02c0aa22",
+      "source_packet": "validation/article-inference-a",
+      "class": "supported and fulfilled",
+      "deciding_section": "# 4. Class\n\n**supported and fulfilled**. The session-based inference follows from the stated counting rule, and the body provides the promised account of what the measurements establish and what they cannot establish. Neither an unsupported inference nor an unfulfilled commitment applies to this lead.\n",
+      "inspected": true
+    },
+    {
+      "role": "validator",
+      "packet": "amend-1/readers/905c6bed4993ce62",
+      "source_packet": "validation/article-inference-b",
+      "class": "supported and fulfilled",
+      "deciding_section": "# 4. Class\n\n**supported and fulfilled**\n\nSlutsatsen om andelens räckvidd följer av att rapporten räknar lektionspass med minst en låg mätning och inte anger varaktigheten. Brödtexten fullföljer löftet att förklara vad mätvärdena visar och vilka begränsningar de har. Ingen ytterligare klass är motiverad.\n",
+      "inspected": true
+    },
+    {
+      "role": "validator",
+      "packet": "amend-1/readers/d67e6bf2fb9f3e81",
+      "source_packet": "validation/article-promise-a",
+      "class": "unfulfilled commitment",
+      "deciding_section": "# 4. Class\n\n**unfulfilled commitment**. Ingressen lovar exakta givarplaceringar och fönsteravstånd för samtliga sex klassrum, men dessa uppgifter saknas helt. Utfästelsen om mätvärdenas räckvidd uppfylls. Ingen unsupported inference behöver registreras för ingressen.\n",
+      "inspected": true
+    },
+    {
+      "role": "validator",
+      "packet": "amend-1/readers/c322de1f7763a052",
+      "source_packet": "validation/article-promise-b",
+      "class": "unfulfilled commitment",
+      "deciding_section": "# 4. Class\n\n**`unfulfilled commitment`**\n\nIngressen lovar exakta givarplaceringar och avstånd till närmaste fönster i samtliga sex klassrum, men dessa uppgifter saknas helt. Genomgången av mätvärdenas räckvidd och begränsningar finns. Ingen separat `unsupported inference` föreligger: ingressen gör ingen uttrycklig härledning som kräver saknade premisser. Eftersom ett av dess informationslöften inte uppfylls kan ingressen som helhet inte klassas som `supported and fulfilled`.\n",
+      "inspected": true
+    }
+  ]
+}

@@ -1,0 +1,5 @@
+**R1: Fail.** The headline was rewritten because of repetition, changing its claim without repairing a visible defect.
+
+All explicit frozen-expectation clauses were met: anatomy recognized; required passages preserved; no technique selected; and no prohibited findings or absent names introduced.
+
+Written to [judgement-b.md](/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-70ef836a/amend-1/direct/tmp/session-gi1co9f_/work/judgement-b.md).

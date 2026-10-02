@@ -1,0 +1,44 @@
+{
+  "instruction_revision": "5457c89405aece11b325937f9f07407f01974f7c",
+  "corpus_revision": "5457c89405aece11b325937f9f07407f01974f7c",
+  "harness": "Codex CLI 0.159.3",
+  "parent_identity": {
+    "model": "gpt-6.1-sol",
+    "effort": "xhigh"
+  },
+  "input_name": "input.md",
+  "input_source": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-70ef836a/amend-1/direct/materials/4874ca758111e2d0/work/input.md",
+  "argv": [
+    "/opt/homebrew/Caskroom/codex/0.160.0/bin/codex",
+    "exec",
+    "--ignore-rules",
+    "-s",
+    "workspace-write",
+    "-c",
+    "sandbox_workspace_write.network_access=true",
+    "-c",
+    "sandbox_workspace_write.exclude_tmpdir_env_var=true",
+    "-c",
+    "sandbox_workspace_write.exclude_slash_tmp=true",
+    "--add-dir",
+    "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-70ef836a/amend-1/direct/tmp/session-3mm_uylf/scratch",
+    "-C",
+    "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-70ef836a/amend-1/direct/tmp/session-3mm_uylf/work",
+    "--skip-git-repo-check",
+    "--json",
+    "-o",
+    "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-70ef836a/amend-1/direct/packets/4874ca758111e2d0/response.txt",
+    "-"
+  ],
+  "environment": {
+    "HOME": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-70ef836a/amend-1/direct/tmp/session-3mm_uylf/home",
+    "CODEX_HOME": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-70ef836a/amend-1/direct/tmp/session-3mm_uylf/home/.codex",
+    "TMPDIR": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-70ef836a/amend-1/direct/tmp/session-3mm_uylf/scratch/tmp",
+    "UV_CACHE_DIR": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-70ef836a/amend-1/direct/tmp/session-3mm_uylf/scratch/uv-cache",
+    "UV_TOOL_DIR": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-70ef836a/amend-1/direct/tmp/session-3mm_uylf/scratch/uv-tools",
+    "UV_PYTHON_INSTALL_DIR": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-70ef836a/amend-1/direct/tmp/session-3mm_uylf/scratch/data/uv/python",
+    "XDG_DATA_HOME": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-70ef836a/amend-1/direct/tmp/session-3mm_uylf/scratch/data",
+    "XDG_CACHE_HOME": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-70ef836a/amend-1/direct/tmp/session-3mm_uylf/scratch/cache"
+  },
+  "note": "Identity must also be checked against each native turn_context after the run."
+}

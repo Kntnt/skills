@@ -1,0 +1,5 @@
+**R1: Fail.** The named preservation clauses were met, including the denominator-limited inference. The reply avoided all specifically prohibited findings and selected no technique.
+
+However, it treated headline repetition and the lead’s reference to the standfirst as defects, then unnecessarily rewrote a conforming text.
+
+Written to [judgement-a.md](/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-486-scratch/tmp/session-t56h5dw_/work/judgement-a.md).

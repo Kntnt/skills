@@ -1,0 +1,26 @@
+[
+  {
+    "path": "work/input.md",
+    "sha256": "f183e6da31cf78081cc7c7eee69570940e24802997e92d96bb111966aa4170d5",
+    "headline": "# Mätförsöket i Björkskolan visar när, inte varför",
+    "supported_lead_present": true
+  },
+  {
+    "path": "scratch/redline-work-fb9gabut/mechanical-input.md",
+    "sha256": "7467e5053eacc3ef7c0e31057e69c44ce5c3f1e34965ed174c2c72f314c270c3",
+    "headline": "# Björkskolans mätvärden bör kopplas till användningstider",
+    "supported_lead_present": true
+  },
+  {
+    "path": "scratch/redline-work-fb9gabut/mechanical-output.md",
+    "sha256": "7467e5053eacc3ef7c0e31057e69c44ce5c3f1e34965ed174c2c72f314c270c3",
+    "headline": "# Björkskolans mätvärden bör kopplas till användningstider",
+    "supported_lead_present": true
+  },
+  {
+    "path": "work/output.md",
+    "sha256": "7467e5053eacc3ef7c0e31057e69c44ce5c3f1e34965ed174c2c72f314c270c3",
+    "headline": "# Björkskolans mätvärden bör kopplas till användningstider",
+    "supported_lead_present": true
+  }
+]

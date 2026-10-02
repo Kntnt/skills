@@ -1,0 +1,104 @@
+[
+  {
+    "freeze": "eee73b57a11cfad0e8350bbe05e7c24489a89a14 2026-10-02T17:15:08+02:00",
+    "file": "docs/evaluation/editorial-486/amend-1/plan.md",
+    "sha256": "db7b26c0b6bf31ed3a4716c7c0b7ed1127428c432db944a20366b7eb3e1c43b0",
+    "unchanged": true
+  },
+  {
+    "freeze": "eee73b57a11cfad0e8350bbe05e7c24489a89a14 2026-10-02T17:15:08+02:00",
+    "file": "docs/evaluation/editorial-486/amend-1/materials.py",
+    "sha256": "d9d5f2bc1b848c60f53a1cb8e8d7504b5edeca4a6771476a273b2595f9e66db0",
+    "unchanged": true
+  },
+  {
+    "freeze": "eee73b57a11cfad0e8350bbe05e7c24489a89a14 2026-10-02T17:15:08+02:00",
+    "file": "docs/evaluation/editorial-486/amend-1/readers.py",
+    "sha256": "c8c19b2262e15eac8a49e01e6af76a505d3aadc1b7565e1cff30d31c8eb75147",
+    "unchanged": true
+  },
+  {
+    "freeze": "eee73b57a11cfad0e8350bbe05e7c24489a89a14 2026-10-02T17:15:08+02:00",
+    "file": "docs/evaluation/editorial-486/amend-1/original-files.json",
+    "sha256": "51b787e4c2fd12f40e823ae9e8d65846b44c73f1a58d2711a68c67c34bbbd008",
+    "unchanged": true
+  },
+  {
+    "freeze": "eee73b57a11cfad0e8350bbe05e7c24489a89a14 2026-10-02T17:15:08+02:00",
+    "file": "docs/evaluation/editorial-486/amend-1/original-readers.json",
+    "sha256": "f4ec24f14cb369799744bf6a511390a1f31dc33961fe36eced85c707e5969996",
+    "unchanged": true
+  },
+  {
+    "freeze": "a356f07dbffa665691ae47d40540a35672095441 2026-10-02T17:19:10+02:00",
+    "file": "docs/evaluation/editorial-486/amend-1/direct-plan.md",
+    "sha256": "67387ccdd82b9cd82720dc655f3c5cb459805caf988dd92402a8ab35cc165da4",
+    "unchanged": true
+  },
+  {
+    "freeze": "a356f07dbffa665691ae47d40540a35672095441 2026-10-02T17:19:10+02:00",
+    "file": "docs/evaluation/editorial-486/amend-1/direct-one.py",
+    "sha256": "30430b5128b54938f6e646f1d12a8110afa1a6bc2bba620a544cdc85cc21647a",
+    "unchanged": true
+  },
+  {
+    "freeze": "a356f07dbffa665691ae47d40540a35672095441 2026-10-02T17:19:10+02:00",
+    "file": "docs/evaluation/editorial-486/amend-1/direct-readers.py",
+    "sha256": "50187850aca2ce6de9de85900635b71543edf074129bf7b02a473e5c67c83b50",
+    "unchanged": true
+  },
+  {
+    "freeze": "a356f07dbffa665691ae47d40540a35672095441 2026-10-02T17:19:10+02:00",
+    "file": "docs/evaluation/editorial-486/amend-1/scratch-resolution.json",
+    "sha256": "58489bda78fd1b85f74090ff805a4233d99a346967cf33fe0abc4ce33909b47f",
+    "unchanged": true
+  },
+  {
+    "freeze": "91c230205ce499bc5ecf5aca34a3ae56732507c9 2026-10-02T17:39:52+02:00",
+    "file": "docs/evaluation/editorial-486/amend-1/file-plan.md",
+    "sha256": "bc70a26f78374a91c361095fd643a91354a7c70e4fef00d84417ef7cbc1788f1",
+    "unchanged": true
+  },
+  {
+    "freeze": "91c230205ce499bc5ecf5aca34a3ae56732507c9 2026-10-02T17:39:52+02:00",
+    "file": "docs/evaluation/editorial-486/amend-1/file-judges.py",
+    "sha256": "5ec3c9ad3b404fa6682c4cc0524dfa9201a918ad1161a7ddbf27e1738586aa2d",
+    "unchanged": true
+  },
+  {
+    "freeze": "91c230205ce499bc5ecf5aca34a3ae56732507c9 2026-10-02T17:39:52+02:00",
+    "file": "docs/evaluation/editorial-486/amend-1/file-materials.json",
+    "sha256": "99bec57868bb4f051b7e60a829c623556d456dc5af2d315a74130205496385a9",
+    "unchanged": true
+  },
+  {
+    "freeze": "91c230205ce499bc5ecf5aca34a3ae56732507c9 2026-10-02T17:39:52+02:00",
+    "file": "docs/evaluation/editorial-486/amend-1/file-materials/4bddb75f2e8f73db/response.md",
+    "sha256": "59840a98f899100b5a95d86db9f0d9b273267c28a51eadc1736d12d4cea6f00c",
+    "unchanged": true
+  },
+  {
+    "freeze": "91c230205ce499bc5ecf5aca34a3ae56732507c9 2026-10-02T17:39:52+02:00",
+    "file": "docs/evaluation/editorial-486/amend-1/file-materials/0fc58b2e50648162/response.md",
+    "sha256": "8c4aad530954c994add1253c18d67cb2d6faa2f6fdd052ed214dd0f1eade2f32",
+    "unchanged": true
+  },
+  {
+    "freeze": "91c230205ce499bc5ecf5aca34a3ae56732507c9 2026-10-02T17:39:52+02:00",
+    "file": "docs/evaluation/editorial-486/amend-1/file-materials/c25468d04a8ff8ac/response.md",
+    "sha256": "262ef5787c82bbe493aeae5aa1ee5ff23c04fab369966864681557ee20f96877",
+    "unchanged": true
+  },
+  {
+    "freeze": "91c230205ce499bc5ecf5aca34a3ae56732507c9 2026-10-02T17:39:52+02:00",
+    "file": "docs/evaluation/editorial-486/amend-1/file-materials/adcf41e9a99651b2/response.md",
+    "sha256": "cc67de40259c9ada0cd6fe9bc15a0f39a96b6957721a30abe0902923d127cada",
+    "unchanged": true
+  },
+  {
+    "freeze": "91c230205ce499bc5ecf5aca34a3ae56732507c9 2026-10-02T17:39:52+02:00",
+    "file": "docs/evaluation/editorial-486/amend-1/file-materials/49a63fa1d928c252/response.md",
+    "sha256": "0953791274b0f7945e1ec19e909c336a882001fe8f81e13be418d21e8d74b926",
+    "unchanged": true
+  }
+]

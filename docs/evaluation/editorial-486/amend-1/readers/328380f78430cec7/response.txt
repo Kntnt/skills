@@ -1,0 +1,5 @@
+R1: **Fail.** The Skill replaced a valid headline because it overlapped with the standfirst, changing its meaning without repairing a visible defect.
+
+The anatomy, calm explanation, independent standfirst, byline, quotation, undecided funding and non-commercial ending were preserved. No technique was selected, and none of the specifically prohibited findings occurred. The expectation to preserve the conforming text was not met.
+
+Written: [judgement-b.md](/private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-70ef836a/amend-1/direct/tmp/session-g1owqufw/work/judgement-b.md).

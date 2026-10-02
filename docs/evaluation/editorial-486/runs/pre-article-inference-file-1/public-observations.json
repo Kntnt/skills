@@ -1,0 +1,74 @@
+[
+  {
+    "time": "2026-10-02T12:55:21.399Z",
+    "session": "rollout-2026-10-02T14-55-15-01a0fcae-e40e-7501-a553-fd56e019c3eb.jsonl.gz",
+    "parent": true,
+    "text": "Jag använder projektets `/redline`-skill och läser instruktionerna och `input.md` först.\n"
+  },
+  {
+    "time": "2026-10-02T12:56:04.759Z",
+    "session": "rollout-2026-10-02T14-55-15-01a0fcae-e40e-7501-a553-fd56e019c3eb.jsonl.gz",
+    "parent": true,
+    "text": "Jag kan starta de separata underagenter som skillen kräver. Jag granskar texten som en svensk artikel, med högst en korrigeringsomgång och en avslutande korrekturläsning.\n"
+  },
+  {
+    "time": "2026-10-02T12:57:28.951Z",
+    "session": "rollout-2026-10-02T14-55-15-01a0fcae-e40e-7501-a553-fd56e019c3eb.jsonl.gz",
+    "parent": true,
+    "text": "Inledningen behöver förklara vad som hände under ”de 14 lektionspassen”, så att brödtexten fungerar även utan ingressen. De uppmätta längdkraven är uppfyllda. Jag låter korrigeringsagenten rätta hänvisningen och kontrollerar sedan att avgränsningarna finns kvar.\n"
+  },
+  {
+    "time": "2026-10-02T12:59:40.167Z",
+    "session": "rollout-2026-10-02T14-59-18-01a0fcb2-9bd0-7633-8e95-8380efb5adbd.jsonl.gz",
+    "parent": false,
+    "text": "Jag läser textens krav och gör sedan den avgränsade korrigeringen av brödtextens inledning.\n"
+  },
+  {
+    "time": "2026-10-02T13:00:35.215Z",
+    "session": "rollout-2026-10-02T14-55-15-01a0fcae-e40e-7501-a553-fd56e019c3eb.jsonl.gz",
+    "parent": true,
+    "text": "Jag har också granskat rubrikerna, citatet och avslutningen. Avslutningen ger ett konkret nästa steg, och textens gränser för vad mätningarna visar ska finnas kvar i korrigeringen.\n"
+  },
+  {
+    "time": "2026-10-02T13:01:30.934Z",
+    "session": "rollout-2026-10-02T14-59-18-01a0fcb2-9bd0-7633-8e95-8380efb5adbd.jsonl.gz",
+    "parent": false,
+    "text": "# Mätförsöket i Björkskolan visar när, inte varför\n\n**Under 14 av 120 lektionspass registrerade givarna i Björkskolan temperaturer under fastighetskontorets egen arbetsgräns. Fyra veckors mätningar pekar ut tillfällen att undersöka närmare, men förklarar inte varför luften var kall. Här är vad ett kort försök kan säga, och vad som behövs för att komma vidare.**\n\nText: Hedda Lund\n\nDe 14 lektionspassen med minst en temperaturmätning under fastighetskontorets arbetsgräns ingår i de 120 som fastighetskontoret räknade. Andelen säger därför något om de räknade passen, inte om varje timme i Björkskolans sex klassrum. Genomgången nedan visar vad värdena räcker till och var gränsen går.\n\n## En gräns för det lokala försöket\n\nKontoret valde 20 grader Celsius som arbetsgräns. Rapporten *Mätförsök i Björkskolan*, daterad 12 mars 2026, räknar 14 lektionspass av 120 med minst en mätning under den gränsen. Hur länge temperaturen låg under den anger rapporten inte. Gränsen är kontorets egen, vald för det här försöket.\n\nGivarna mätte varken luftdrag eller elevernas upplevelse. Ett lågt värde säger alltså när luften var kall, men inte hur rummet kändes.\n\nDriftteknikern Elin Rask sammanfattar: ”Vi vet när vi behöver titta närmare. Vi vet ännu inte varför det blev kallt just då.”\n\n## Nästa försök behöver mer än givare\n\nRask rekommenderar att temperaturserierna kopplas till rummens användningstider innan styrningen ändras. Nästa försök planeras för november med likadant placerade givare, men finansieringen är inte beslutad.\n\nLägg därför tiderna för när rummen används bredvid mätvärdena innan nästa givare sätts upp.\n\n---\n\nFynd 1 åtgärdat: första meningen introducerar nu temperaturmätningarna under arbetsgränsen. Inga fynd lämnade. Alla påståenden, avgränsningar och samband är bevarade; inga nya påståenden tillförda. Endast denna mening ändrades.\n\nAnatomin kontrollerad med skript och läsning, inklusive samtliga rubrikpar: kraven uppfyllda och inga ekon konstaterade. Tillfälliga arbetskataloger borttagna."
+  },
+  {
+    "time": "2026-10-02T13:02:26.794Z",
+    "session": "rollout-2026-10-02T14-55-15-01a0fcae-e40e-7501-a553-fd56e019c3eb.jsonl.gz",
+    "parent": true,
+    "text": "Korrigeringen förklarar nu vilka mätningar de 14 passen avser och bevarar avgränsningen till de räknade passen. Jag använder nu `/proofread`-skillen för den enda avslutande korrekturläsningen.\n"
+  },
+  {
+    "time": "2026-10-02T13:02:54.412Z",
+    "session": "rollout-2026-10-02T15-02-45-01a0fcb5-c4b5-7950-b67a-34d016321bda.jsonl.gz",
+    "parent": false,
+    "text": "Jag använder Proofread för den mekaniska korrekturen och skriver resultatet till den angivna utdatafilen.\n"
+  },
+  {
+    "time": "2026-10-02T13:04:05.053Z",
+    "session": "rollout-2026-10-02T14-55-15-01a0fcae-e40e-7501-a553-fd56e019c3eb.jsonl.gz",
+    "parent": true,
+    "text": "Den redaktionella kontrollen är klar. Korrekturläsningen pågår; därefter kontrollerar jag slutversionen och sparar den i `output.md`.\n"
+  },
+  {
+    "time": "2026-10-02T13:04:05.979Z",
+    "session": "rollout-2026-10-02T15-02-45-01a0fcb5-c4b5-7950-b67a-34d016321bda.jsonl.gz",
+    "parent": false,
+    "text": "Inga mekaniska fel hittades. Den fullständiga texten är sparad oförändrad i [output.md](/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-486-scratch/tmp/session-xmgcmivj/scratch/redline-mechanical-m9wxhvc5/output.md)."
+  },
+  {
+    "time": "2026-10-02T13:06:51.112Z",
+    "session": "rollout-2026-10-02T15-06-16-01a0fcb8-fae8-7ce0-87e4-a2833e6e1429.jsonl.gz",
+    "parent": false,
+    "text": "1. **False statements.**\n\n   none\n\n2. **Claim changes the account misses.**\n\n   none"
+  },
+  {
+    "time": "2026-10-02T13:07:13.716Z",
+    "session": "rollout-2026-10-02T14-55-15-01a0fcae-e40e-7501-a553-fd56e019c3eb.jsonl.gz",
+    "parent": true,
+    "text": "Sparat i [output.md](/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-486-scratch/tmp/session-xmgcmivj/work/output.md). Granskad som artikel på svenska, utan särskild teknik.\n\nInledningen har förtydligats så att de 14 passen går att förstå utan ingressen. Uppgiften om temperaturmätningar under arbetsgränsen finns nu även där och står kvar i första avsnittet. Inga olösta fynd återstår; den avslutande korrekturläsningen gav inga ändringar."
+  }
+]

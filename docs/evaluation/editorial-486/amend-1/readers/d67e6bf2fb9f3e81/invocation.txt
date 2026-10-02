@@ -1,0 +1,19 @@
+# Lead validation brief
+
+Read one short Swedish article as a reader. It is `text.md` in the directory named in your message. Read exactly that file and nothing else: no repository file, ticket, guidance or other text. You are not told its origin or why it is being read. Assess what it says, not how you would prefer to word it.
+
+Write `validation-<your letter>.md` there, answering each heading.
+
+**1. The lead.** The lead is the first paragraph after the byline. What does it explain or assert, and what does it tell a reader they will learn by reading on? Quote the sentences that decide your answer.
+
+**2. Support.** Does each inference in the lead follow from what the article states? Identify its premises and its conclusion, and any step that would require information absent from the article.
+
+**3. Follow-through.** Does the supplied body fulfil every account or explanation the lead commits to giving? Quote the commitment and the passages fulfilling it, or identify exactly what remains absent. Distinguish an asserted explanation from a commitment to give more information.
+
+**4. Class.** Give the lead one class, with a reason: `supported and fulfilled`, `unsupported inference`, or `unfulfilled commitment`. If more than one applies, record each and explain why.
+
+Reply in at most 60 words with the class and the path written.
+
+---
+Run directory: /private/tmp/kntnt-orchestrate-20261002.o7bmMK/role-70ef836a/amend-1/direct/tmp/session-kjneg_5e/work
+Your letter: a

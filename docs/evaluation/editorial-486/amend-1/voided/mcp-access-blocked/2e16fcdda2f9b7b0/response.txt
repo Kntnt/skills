@@ -1,0 +1,3 @@
+No class determined; no report written. Reading `/run/text.md` was blocked because the tool requires approval while the approval policy is `never`.
+
+Intended report path: `/run/validation-b.md`.

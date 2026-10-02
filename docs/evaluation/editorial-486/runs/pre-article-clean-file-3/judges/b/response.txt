@@ -1,0 +1,5 @@
+**R1: Fail.** The sole change replaces a conforming headline’s claim with a recommendation. The stated reason—repetition of the standfirst—does not establish a visible defect.
+
+All explicit preservation clauses were met, and none of the specifically rejected findings appeared. The clean-text requirement failed because the headline was rewritten for taste.
+
+Written to [judgement-b.md](/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-486-scratch/tmp/session-m5tdim69/work/judgement-b.md).

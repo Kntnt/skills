@@ -1,0 +1,5 @@
+**R1: Fail.** The run treated headline overlap and the lead’s reference to the standfirst as defects, rewriting a text whose anatomy already conformed.
+
+It preserved the calm explanation, independent standfirst, byline, quotation, undecided funding, non-commercial ending and denominator-based inference without hourly claims. It avoided all named numerical, paragraph, byline, absent-name and technique mistakes.
+
+Written to [judgement-b.md](/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-486-scratch/tmp/session-ck_thghl/work/judgement-b.md).

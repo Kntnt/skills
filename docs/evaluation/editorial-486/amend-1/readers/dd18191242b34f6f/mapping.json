@@ -1,0 +1,6 @@
+{
+  "role": "judge",
+  "packet": "amend-1/readers/dd18191242b34f6f",
+  "source_packet": "runs/pre-article-clean-file-1/judges/a",
+  "sanitized_response": "amend-1/file-materials/adcf41e9a99651b2/response.md"
+}
