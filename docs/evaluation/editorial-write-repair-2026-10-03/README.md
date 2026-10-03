@@ -4,6 +4,8 @@ This packet prepares the autonomous Write repairs against `4cf05813`. It contain
 
 The durable full ownership/repair handoff is `/Users/thomas/.kntnt/editorial-repair/2026-10-03/write-plan.txt`. `source-manifest.json` names every exact historical source and digest. Original source trees, old plans, records and raw judgments remain read-only. `ticket-drafts/` preserves the four proposed scopes; ordinary tracker IDs and blocking edges will be recorded before execution.
 
+The prospective [#503 mask clarification](ticket-drafts/W4-standfirst-mask-clarification.md) supersedes the original ticket draft's all-paratext-removed criterion. Current body validation covers the standfirst while retaining permitted headline/context. The filed draft copies stay unchanged; the clarification and live thread carry the current criterion.
+
 ## Preparation boundary
 
 The method prerequisite owns evaluation protocol, native runner, static registry fixtures and temporary-root assumptions. Its selected transparent dispatch is a controlled acquisition method, distinct from uninstrumented native delegation. Do not run validation readers, baselines, candidates or source-blind Redline pairs until Root reports independent acceptance of that method. No earlier encrypted native payload becomes plaintext evidence retrospectively.
