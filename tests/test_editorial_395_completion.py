@@ -5,8 +5,8 @@ import subprocess
 import sys
 from pathlib import Path
 
-REPOSITORY = Path(__file__).resolve().parents[1]
-RUNNER = (
+REPOSITORY: Path = Path(__file__).resolve().parents[1]
+RUNNER: Path = (
     REPOSITORY
     / "docs/evaluation/editorial-395/gpt-completion-2026-10-02/harness/run.py"
 )
