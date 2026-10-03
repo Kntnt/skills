@@ -78,7 +78,9 @@ editorial result. There is one attempt and no automatic retry.
 
 Inventory every staged writable root, including private HOME and scratch;
 `.git` paths receive the same coverage. Retain directories, file kinds, modes,
-symlink destinations and file content digests. Only the explicitly enumerated
+symlink destinations and file content digests. The complete recorder packet,
+including lifecycle output and private runtime, is inventoried alongside the
+staged roots. Only the explicitly enumerated
 private native authentication path has metadata without a content digest; an
 ordinary staged file with the same basename receives its full digest. Distinguish enumerated recorder output
 from product side effects using raw inventories, rather than discarding whole

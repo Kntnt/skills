@@ -130,7 +130,14 @@ def bind_trace(
     for ordinal, row in enumerate(records, 1):
         payload = row.get("payload", {})
         if row.get("type") == "response_item" and payload.get("type") == "message":
-            if payload.get("role") == "user" and ordinal > context_ordinal:
+            kinds = payload.get("internal_chat_message_metadata_passthrough", {}).get(
+                "content_item_kinds", []
+            )
+            if payload.get("role") == "user" and (
+                ordinal > context_ordinal
+                or "user_input_order" in row.get("metadata", {})
+                or "user.text" in kinds
+            ):
                 inputs.append((ordinal, row))
             if (
                 payload.get("role") == "assistant"
@@ -375,7 +382,7 @@ def acquire(args: argparse.Namespace, prompt: bytes) -> bytes:
         "XDG_CONFIG_HOME",
     ):
         Path(env[name]).mkdir(exist_ok=True)
-    roots = [args.cwd.resolve(), runtime, *[p.resolve() for p in args.inventory_root]]
+    roots = [args.cwd.resolve(), packet, *[p.resolve() for p in args.inventory_root]]
     credentials = [native_home / "auth.json"]
     write_json(packet / "inventory-before.json", inventory(roots, credentials))
     command = [

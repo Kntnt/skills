@@ -204,6 +204,7 @@ def test_unavailable_or_conflicting_native_evidence_fails(case: str) -> None:
     "case",
     [
         "later-echo",
+        "pre-context-conflict",
         "native-input-conflict",
         "missing-thread",
         "session-conflict",
@@ -227,6 +228,10 @@ def test_initial_and_final_native_identity_conflicts_are_rejected(case: str) -> 
         echo = copy.deepcopy(records[4])
         records[4]["payload"]["content"][0]["text"] = "Different initial task"
         records.insert(6, echo)
+    elif case == "pre-context-conflict":
+        early = copy.deepcopy(records[4])
+        early["payload"]["content"][0]["text"] = "Different retained initial task"
+        records.insert(3, early)
     elif case == "native-input-conflict":
         records[5]["payload"]["item"]["content"][0]["text"] = "Different initial task"
     elif case == "missing-thread":
