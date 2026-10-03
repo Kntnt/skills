@@ -1,0 +1,42 @@
+The draft is delivered with a known source-support defect: “familiarity with digital technology” can include theoretical knowledge; the source’s “digital vana” concerns being accustomed to using it. The checker proposes “how accustomed users are to using digital technology”.
+
+Both comparisons have run. The [write skill](/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-r95dqkak/work/.agents/skills/write/SKILL.md) requires “never reopen the prose after its final source comparison”, so the compared text is preserved below. Resolved: opinion, British English, no technique, as the opinion genre specifies. Trial costs remain unspecified. No files were retained.
+
+```markdown
+---
+kntnt:
+  genre: opinion
+  technique: none
+  language: en_GB
+---
+
+# Lervik should test before ending telephone bookings
+
+Booking totals in Lervik’s pilot report do not measure residents’ ability to book online. The municipal executive board must weigh staff costs against the value of telephone access, yet the documents contain neither a time measurement nor a calculation of financial savings.
+
+By Sanna Ek, spokesperson for Öppna beslut
+
+The administrative report for Lervik’s municipal executive board meeting on 18 June proposes removing telephone booking from all seven venues for associations from September. I do not oppose digital booking. But on behalf of Öppna beslut, I urge the board to postpone a permanent switch and test telephone and web booking together for six months.
+
+## Bookings tell us too little about users
+
+The municipality’s pilot report, dated 8 April 2026, records 96 web bookings and 24 telephone bookings during an eight-week trial at two venues. Those are bookings, not unique people. The report measures neither age nor functional ability nor familiarity with digital technology.
+
+So the telephone figure cannot tell us what proportion of Lervik’s residents cannot book online. Nor does choosing the telephone prove an inability to use the web. It gives us a reason to ask why that route is still used.
+
+## Staff time needs a fair comparison
+
+The administration’s objection to keeping both routes is the administrative work across two channels: staff enter information in two workflows. That concern deserves to be taken seriously. But the documents provide no measurement of the time involved or calculation of financial savings.
+
+Removing a route before establishing its value to users and the work it requires leaves the board without the comparison it needs. Administrative simplicity is a reason to investigate the balance, not a substitute for doing so.
+
+## A wider trial can inform the choice
+
+Öppna beslut proposes keeping both booking routes for six months at all seven venues. During that trial, the administration should record the time spent on each route and ask users to say voluntarily why they choose telephone or web booking.
+
+We make no claim to have financed or costed that trial. The executive board must consider its cost. Asking for better evidence does not remove the need to decide what gathering it is worth.
+
+## Evidence should guide the final booking decision
+
+Lervik’s municipal executive board should now postpone the permanent switch and agree a six-month trial of both routes, with its cost explicitly considered. After that, it can decide whether to remove, change or retain a booking channel.
+```

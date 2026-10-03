@@ -1,0 +1,10 @@
+W2 title: Write source comparison falsely clears a submission-scope claim from package silence.
+Category bug; skill:write. What to build: diagnose the concrete r1/r6 false-clear distinction, without changing epistemic boundaries or adding a third comparison. A package can omit what an underlying submission establishes; the absence of a representation of securing consent does not state every aspect of consent knowledge. Preserve explicit real negatives (signed conversion-cost absence), absent claims, genuine unknown status, cross-clause referents and author's standpoint. Study a second checker only as a separately authorised causal experiment if local correction cannot meet target; no implementation presumption here.
+Writable: source-check.md and directly affected Write help/SKILL only; new focused source-check regression/records. Original p3 and historical records read-only.
+Acceptance:
+[ ] Baseline loop invokes actual comparison path on full p3 source/draft, at least three fresh repetitions; existing six historical outcomes remain separate.
+[ ] Independently validated paired contrasts vary only underlying-document versus supplied-package scope, explicit negative versus nonclaim, and contextually faithful short form. Two neutral judges classify detections, false clears and false findings separately; component and native pipeline evidence labelled separately.
+[ ] Candidate detects actual changed knowledge subject while clearing supported package/underlying statements and preserving warranted certainty; parent dispositions and exact delivered prose/account obey current budget/lifecycle.
+[ ] Fresh full Write controls include one English-source opinion and one Swedish-source opinion into English; no independent miss probability or resource saving asserted without measurement. Preserve full artifact/report/native-return/latency evidence and bounded ship criteria, catalog and four gates.
+Blocked by M and W1 (same source-check product surface; rebase/freeze actual baseline after predecessor).
+Written against4cf05813.

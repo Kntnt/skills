@@ -1,0 +1,125 @@
+{
+  "base": "4cf05813f94c2fa7147898878027835e14d29859",
+  "files": [
+    {
+      "retained_source": "/Users/thomas/Projects/skills/.git/editorial-repair/write/docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r2/supplied-input.md",
+      "copy": "docs/evaluation/editorial-write-repair-2026-10-03/fixtures/historical/lervik-source.md",
+      "sha256": "83265898e21c908c50a5462053175ebcf82d56fe3ea746fa67c16a5f6559dec4",
+      "role": "historical evidence, no new outcome"
+    },
+    {
+      "retained_source": "/Users/thomas/Projects/skills/.git/editorial-repair/write/docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r2/file-versions/0010-bd5699cf5bad.md",
+      "copy": "docs/evaluation/editorial-write-repair-2026-10-03/fixtures/historical/us2-compared-draft.md",
+      "sha256": "bd5699cf5bad6a816ceb6b243247fcc8778ff51cdd02b56105d2c5a5727d0368",
+      "role": "historical evidence, no new outcome"
+    },
+    {
+      "retained_source": "/Users/thomas/Projects/skills/.git/editorial-repair/write/docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r2/file-versions/0011-10ca1b7fd8ca.md",
+      "copy": "docs/evaluation/editorial-write-repair-2026-10-03/fixtures/historical/us2-report.md",
+      "sha256": "10ca1b7fd8ca5c05b6a6b41b61b5deef5349716da35f8772a4031cccc846208f",
+      "role": "historical evidence, no new outcome"
+    },
+    {
+      "retained_source": "/Users/thomas/Projects/skills/.git/editorial-repair/write/docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r2/response.txt",
+      "copy": "docs/evaluation/editorial-write-repair-2026-10-03/fixtures/historical/us2-response.md",
+      "sha256": "083e2b7a0c1617d4dc663dab9ad2b61649311f10df65b125a3a6782afce11677",
+      "role": "historical evidence, no new outcome"
+    },
+    {
+      "retained_source": "/Users/thomas/Projects/skills/.git/editorial-repair/write/docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r3/file-versions/0010-d3eade6d05c1.md",
+      "copy": "docs/evaluation/editorial-write-repair-2026-10-03/fixtures/historical/gb3-compared-draft.md",
+      "sha256": "d3eade6d05c12b0db5354a39b947f568bf7c27f4ebf3e245dae01de841522cb7",
+      "role": "historical evidence, no new outcome"
+    },
+    {
+      "retained_source": "/Users/thomas/Projects/skills/.git/editorial-repair/write/docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r3/file-versions/0012-34342ce9a92a.md",
+      "copy": "docs/evaluation/editorial-write-repair-2026-10-03/fixtures/historical/gb3-report.md",
+      "sha256": "34342ce9a92ad76e537f8268807eb1932c864e0886b21f9dd6be6a7ca9cfdf6d",
+      "role": "historical evidence, no new outcome"
+    },
+    {
+      "retained_source": "/Users/thomas/Projects/skills/.git/editorial-repair/write/docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r3/response.txt",
+      "copy": "docs/evaluation/editorial-write-repair-2026-10-03/fixtures/historical/gb3-response.md",
+      "sha256": "c8472761b77187a9e7724936eee467bb2c55c54ec792446047c2467d187c05bf",
+      "role": "historical evidence, no new outcome"
+    },
+    {
+      "retained_source": "/Users/thomas/Projects/skills/.git/editorial-repair/write/docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r1/file-versions/0009-a2268d82e2b0.md",
+      "copy": "docs/evaluation/editorial-write-repair-2026-10-03/fixtures/historical/us1-compared-draft.md",
+      "sha256": "a2268d82e2b0aa4e5f9648b306511ec9e2225baf2552d403213fee7dc0de1079",
+      "role": "historical evidence, no new outcome"
+    },
+    {
+      "retained_source": "/Users/thomas/Projects/skills/.git/editorial-repair/write/docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r1/file-versions/0007-8a2a4627f1c7.md",
+      "copy": "docs/evaluation/editorial-write-repair-2026-10-03/fixtures/historical/us1-first-report.md",
+      "sha256": "8a2a4627f1c7dc21d535115c5ffb60c4cb3ecf0d142b60862a9737d93c4883da",
+      "role": "historical evidence, no new outcome"
+    },
+    {
+      "retained_source": "/Users/thomas/Projects/skills/.git/editorial-repair/write/docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r1/file-versions/0010-9b19852be3af.md",
+      "copy": "docs/evaluation/editorial-write-repair-2026-10-03/fixtures/historical/us1-final-report.md",
+      "sha256": "9b19852be3af1f9a0fe147a47f3f8b94c904b4fc3659fc3cb7b1c9270b04703e",
+      "role": "historical evidence, no new outcome"
+    },
+    {
+      "retained_source": "/Users/thomas/Projects/skills/.git/editorial-repair/write/docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r1/response.txt",
+      "copy": "docs/evaluation/editorial-write-repair-2026-10-03/fixtures/historical/us1-response.md",
+      "sha256": "d3d0dee33bb5c5a8b7ccad05b8034f8c9c482ce160adf43c7ca087a9c9751ce1",
+      "role": "historical evidence, no new outcome"
+    },
+    {
+      "retained_source": "/Users/thomas/Projects/skills/.git/editorial-repair/write/docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r1/file-versions/0010-ad34c07dce83.md",
+      "copy": "docs/evaluation/editorial-write-repair-2026-10-03/fixtures/historical/gb1-compared-draft.md",
+      "sha256": "ad34c07dce834283be9de0e922f3f014198e9918fab226d111896b8d167fa472",
+      "role": "historical evidence, no new outcome"
+    },
+    {
+      "retained_source": "/Users/thomas/Projects/skills/.git/editorial-repair/write/docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_GB-r1/file-versions/0011-aa935c5636da.md",
+      "copy": "docs/evaluation/editorial-write-repair-2026-10-03/fixtures/historical/gb1-report.md",
+      "sha256": "aa935c5636da7883176ae6d4cff7d33931f2c2d162652171adff55a90a352895",
+      "role": "historical evidence, no new outcome"
+    },
+    {
+      "retained_source": "/Users/thomas/Projects/skills/.git/editorial-repair/write/docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/opinion-en_US-r3/draft.md",
+      "copy": "docs/evaluation/editorial-write-repair-2026-10-03/fixtures/historical/us3-artifact.md",
+      "sha256": "9868821699851cb707843780f11a78e0e4cd8082f5fe4da97d8455dd154e5dee",
+      "role": "historical evidence, no new outcome"
+    },
+    {
+      "retained_source": "/Users/thomas/Projects/skills/.git/editorial-repair/write/docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r1/supplied-input.md",
+      "copy": "docs/evaluation/editorial-write-repair-2026-10-03/fixtures/historical/scope-package.md",
+      "sha256": "42b54024a484ebef8f8a7e92487daab176a892b0ba1cd6fa3480c60274e4efb8",
+      "role": "historical evidence, no new outcome"
+    },
+    {
+      "retained_source": "/Users/thomas/Projects/skills/.git/editorial-repair/write/docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r1/file-versions/0002-2b79ce7f33f9.md",
+      "copy": "docs/evaluation/editorial-write-repair-2026-10-03/fixtures/historical/scope-report-a.md",
+      "sha256": "2b79ce7f33f94b3b260d0524d3d815b0c6d2b0b85b4a7a7b6490461ed3902a06",
+      "role": "historical evidence, no new outcome"
+    },
+    {
+      "retained_source": "/Users/thomas/Projects/skills/.git/editorial-repair/write/docs/evaluation/editorial-362/gpt-retest-2026-10-01/runs/p3-document-scope-r6/file-versions/0002-0128a26cd664.md",
+      "copy": "docs/evaluation/editorial-write-repair-2026-10-03/fixtures/historical/scope-report-b.md",
+      "sha256": "0128a26cd6647a3d1d25bc489043f11a519419f5baea6c970027d4087f3daddb",
+      "role": "historical evidence, no new outcome"
+    },
+    {
+      "retained_source": "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/393/docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/w02/supplied-input.md",
+      "copy": "docs/evaluation/editorial-write-repair-2026-10-03/fixtures/historical/elm-quay-source.md",
+      "sha256": "75188596831d5a0a28364ea4da4d1053f69900ca25237f08859696058c579f11",
+      "role": "historical evidence, no new outcome"
+    },
+    {
+      "retained_source": "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/395/docs/evaluation/editorial-395/gpt-retest-2026-10-01/runs/item-04-composition/delivered.md",
+      "copy": "docs/evaluation/editorial-write-repair-2026-10-03/fixtures/historical/elm-quay-artifact-a.md",
+      "sha256": "e5f5b32ccb7dc3c99562a86471b145dd5dc24f264d2b0537239e3f95ad2488f8",
+      "role": "historical evidence, no new outcome"
+    },
+    {
+      "retained_source": "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/395/docs/evaluation/editorial-395/gpt-retest-2026-10-01/runs/item-05-composition/delivered.md",
+      "copy": "docs/evaluation/editorial-write-repair-2026-10-03/fixtures/historical/elm-quay-artifact-b.md",
+      "sha256": "543cc3883e96f8b6a1859e6067b594ffe644de32a0cdff127a26914e2fc449f6",
+      "role": "historical evidence, no new outcome"
+    }
+  ]
+}

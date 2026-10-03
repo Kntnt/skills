@@ -1,0 +1,47 @@
+{
+  "W1": {
+    "number": 500,
+    "database_id": 5690356469,
+    "url": "https://github.com/Kntnt/skills/issues/500",
+    "blocked_by": [
+      499
+    ],
+    "title": "Write accepts false source findings and declares them known defects."
+  },
+  "W2": {
+    "number": 501,
+    "database_id": 5690356941,
+    "url": "https://github.com/Kntnt/skills/issues/501",
+    "blocked_by": [
+      499,
+      500
+    ],
+    "title": "Write source comparison falsely clears a submission-scope claim from package silence."
+  },
+  "W3": {
+    "number": 502,
+    "database_id": 5690357537,
+    "url": "https://github.com/Kntnt/skills/issues/502",
+    "blocked_by": [
+      499,
+      500,
+      501
+    ],
+    "title": "Write creates and initially clears four altered source scopes in the Lervik opinion draft."
+  },
+  "W4": {
+    "number": 503,
+    "database_id": 5690358236,
+    "url": "https://github.com/Kntnt/skills/issues/503",
+    "blocked_by": [
+      499,
+      502,
+      504,
+      505,
+      506,
+      507,
+      508
+    ],
+    "title": "Write leaves standfirst and body dependent on each other's essential context."
+  }
+}
