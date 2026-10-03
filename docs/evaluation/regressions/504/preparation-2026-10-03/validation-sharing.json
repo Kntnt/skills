@@ -1,0 +1,202 @@
+{
+  "status": "unvalidated preparation sharing; no sessions invented",
+  "complete_packet_count": 40,
+  "unique_complete_materials": 31,
+  "groups": [
+    {
+      "identity": "f6444cebe3c0c2c7c2b724fe2fb99ff4133988fdb5db025f53b7984beaffb51f",
+      "packets": [
+        "docs/evaluation/regressions/488/preparation-2026-10-03/validation-material/t03",
+        "docs/evaluation/regressions/504/preparation-2026-10-03/validation-material/t07"
+      ]
+    },
+    {
+      "identity": "bb0dda5f483627e4a084fc9524542d0a3303dd1596fca3221409c5a4d7df5475",
+      "packets": [
+        "docs/evaluation/regressions/488/preparation-2026-10-03/validation-material/t04"
+      ]
+    },
+    {
+      "identity": "ad541fd14a1a16be521d3dd0c4da00654090120d03836eede1fac2c825a1b02b",
+      "packets": [
+        "docs/evaluation/regressions/488/preparation-2026-10-03/validation-material/t02",
+        "docs/evaluation/regressions/495/preparation-2026-10-03/validation-material/t01"
+      ]
+    },
+    {
+      "identity": "c60571083d1f38751a256200ed5135436acba63cb959b5e30b8fa420f54fa509",
+      "packets": [
+        "docs/evaluation/regressions/488/preparation-2026-10-03/validation-material/t01"
+      ]
+    },
+    {
+      "identity": "7052b13f940c887d5add27ee261d3cef7588c973b2a3f62ad45f50f711f14978",
+      "packets": [
+        "docs/evaluation/regressions/489/preparation-2026-10-03/validation-material/t03"
+      ]
+    },
+    {
+      "identity": "6ac6abeea273daa5265b31d3ef5d5c78a9cf6ad9edb76236b2bc76b5da05e0b9",
+      "packets": [
+        "docs/evaluation/regressions/489/preparation-2026-10-03/validation-material/t02"
+      ]
+    },
+    {
+      "identity": "6855b518222815d79f53b96e4bdcdfc7082790021fc68193c505a67b20127650",
+      "packets": [
+        "docs/evaluation/regressions/489/preparation-2026-10-03/validation-material/t01",
+        "docs/evaluation/regressions/504/preparation-2026-10-03/validation-material/t01"
+      ]
+    },
+    {
+      "identity": "df829ff6c871ff937d85468ce2c5f96539bba955d4d4f8c4477cfc24f165348a",
+      "packets": [
+        "docs/evaluation/regressions/492/preparation-2026-10-03/validation-material/t03"
+      ]
+    },
+    {
+      "identity": "7bb404e261f0b42f862a2a2abbbd3f370bb87846dd6e9b22877e8e755d8faabc",
+      "packets": [
+        "docs/evaluation/regressions/492/preparation-2026-10-03/validation-material/t04",
+        "docs/evaluation/regressions/497/preparation-2026-10-03/validation-material/t02"
+      ]
+    },
+    {
+      "identity": "23a15dfc6dd8d6a872148369dab7798106a24e6e20b04103dde59c2cd52fdbfa",
+      "packets": [
+        "docs/evaluation/regressions/492/preparation-2026-10-03/validation-material/t02",
+        "docs/evaluation/regressions/504/preparation-2026-10-03/validation-material/t08"
+      ]
+    },
+    {
+      "identity": "a8bd42fe8651cf81b5fcee076d40938e60005452ba6cfe3441c1530dd32b2a3c",
+      "packets": [
+        "docs/evaluation/regressions/492/preparation-2026-10-03/validation-material/t01",
+        "docs/evaluation/regressions/497/preparation-2026-10-03/validation-material/t01"
+      ]
+    },
+    {
+      "identity": "dba79434223dae6d5048d9bc255f5a71306274bd184db0d6c1d3484cf1d67e3f",
+      "packets": [
+        "docs/evaluation/regressions/495/preparation-2026-10-03/validation-material/t02"
+      ]
+    },
+    {
+      "identity": "78dfaa59b1e52bb840068c0835849b63df6884008df018ebda0d1f66564514dc",
+      "packets": [
+        "docs/evaluation/regressions/497/preparation-2026-10-03/validation-material/t03"
+      ]
+    },
+    {
+      "identity": "0565f777074b544626faf52ebfc445ab61fea1e1f1e8cfd025dfd0119a6dfa84",
+      "packets": [
+        "docs/evaluation/regressions/497/preparation-2026-10-03/validation-material/t04"
+      ]
+    },
+    {
+      "identity": "56cb456bf88bd512470ac99656ab1af2784d1b36c9828397ca9ccfcb0a77b704",
+      "packets": [
+        "docs/evaluation/regressions/504/preparation-2026-10-03/validation-material/t11",
+        "docs/evaluation/regressions/505/preparation-2026-10-03/validation-material/t03"
+      ]
+    },
+    {
+      "identity": "b86f22a48cc86d6eda6acdd06febbf6a8c3bcdbcefddfdf02bfbe0e04e0439f8",
+      "packets": [
+        "docs/evaluation/regressions/504/preparation-2026-10-03/validation-material/t10",
+        "docs/evaluation/regressions/505/preparation-2026-10-03/validation-material/t05"
+      ]
+    },
+    {
+      "identity": "de61a51b428564011e7148f65cd76ccb3318bc4770fa4c715ab8969177eb1b3a",
+      "packets": [
+        "docs/evaluation/regressions/504/preparation-2026-10-03/validation-material/t03"
+      ]
+    },
+    {
+      "identity": "f6978feec5152c295bbfdc83a7a24360181a969254a271874aff20dc4a43cf8e",
+      "packets": [
+        "docs/evaluation/regressions/504/preparation-2026-10-03/validation-material/t04"
+      ]
+    },
+    {
+      "identity": "7cd00090f109b578cba6abc46fca82903c8bb6c96714d5398113cc4f37c95e1b",
+      "packets": [
+        "docs/evaluation/regressions/504/preparation-2026-10-03/validation-material/t05"
+      ]
+    },
+    {
+      "identity": "cc57f7639c81455aee432280aee0972db5184867cc3cf8384966e1e865f75758",
+      "packets": [
+        "docs/evaluation/regressions/504/preparation-2026-10-03/validation-material/t02"
+      ]
+    },
+    {
+      "identity": "0c72ae4d34d841341dadde9696f08336250c73be163464c2822e8b2bc436b220",
+      "packets": [
+        "docs/evaluation/regressions/504/preparation-2026-10-03/validation-material/t09"
+      ]
+    },
+    {
+      "identity": "fa8ff4d66246034b5478eb162486f0c1cc88384a829924e0673ed60c47db2166",
+      "packets": [
+        "docs/evaluation/regressions/504/preparation-2026-10-03/validation-material/t06"
+      ]
+    },
+    {
+      "identity": "10866594295119424f5db68632a156541923a87abfc37850a029b98615cb2291",
+      "packets": [
+        "docs/evaluation/regressions/505/preparation-2026-10-03/validation-material/t04",
+        "docs/evaluation/regressions/507/preparation-2026-10-03/validation-material/t01"
+      ]
+    },
+    {
+      "identity": "ab74ff4774917975722ae4ceefea1219bdfebd6a62f765a4e8e82191044fa9c4",
+      "packets": [
+        "docs/evaluation/regressions/505/preparation-2026-10-03/validation-material/t02"
+      ]
+    },
+    {
+      "identity": "dd9a1447410fb28daf2a5b8cf81e844bdc44ff98ae3936eb0379bb278eee708e",
+      "packets": [
+        "docs/evaluation/regressions/505/preparation-2026-10-03/validation-material/t01"
+      ]
+    },
+    {
+      "identity": "b219ab429ac616777bf2e916cc282edc06d042134edcfb7d91e4a5a8a51309e7",
+      "packets": [
+        "docs/evaluation/regressions/506/preparation-2026-10-03/validation-material/t03"
+      ]
+    },
+    {
+      "identity": "45b4484971d43c62340f63528190ea2010d6c49d65120d2e695ecf22a7e37202",
+      "packets": [
+        "docs/evaluation/regressions/506/preparation-2026-10-03/validation-material/t04"
+      ]
+    },
+    {
+      "identity": "08539c5308779464d657feead7667ca0a1dbc118bb986dc47a863963fa5b4d49",
+      "packets": [
+        "docs/evaluation/regressions/506/preparation-2026-10-03/validation-material/t05"
+      ]
+    },
+    {
+      "identity": "0491a505e377b3d12e1fec8216b0356bfbb259bd96a4e42a5ae7084eb848bc3c",
+      "packets": [
+        "docs/evaluation/regressions/506/preparation-2026-10-03/validation-material/t02"
+      ]
+    },
+    {
+      "identity": "9ded8ca6302beb817b702d50029d838c3b609af2ce6be9dc7f532b43c801a34d",
+      "packets": [
+        "docs/evaluation/regressions/506/preparation-2026-10-03/validation-material/t01"
+      ]
+    },
+    {
+      "identity": "986d5b099249f01bc592db51266a100c64bbe1287c409d3a8bb8d1d1fcd14334",
+      "packets": [
+        "docs/evaluation/regressions/506/preparation-2026-10-03/validation-material/t06"
+      ]
+    }
+  ]
+}

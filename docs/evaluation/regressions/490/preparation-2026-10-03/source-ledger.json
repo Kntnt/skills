@@ -1,0 +1,80 @@
+{
+  "base": "4cf05813f94c2fa7147898878027835e14d29859",
+  "status": "unvalidated preparation; old rejected q3 claim remains rejected",
+  "fixtures": [
+    {
+      "file": "inputs/h-received.md",
+      "source": ".git/kntnt-orchestrate/490/docs/evaluation/editorial-490/inputs/historical-checked-received.md",
+      "prepared_sha256": "2e4ef2fd4b7c03aaaceca1ad22724fdb1ed3c685cd6b4995a00285198bed42f9",
+      "derivation": "Authentic saved checker state; replay is isolated diagnosis, never native parent reproduction.",
+      "source_sha256": "2e4ef2fd4b7c03aaaceca1ad22724fdb1ed3c685cd6b4995a00285198bed42f9",
+      "is_exact_copy": true
+    },
+    {
+      "file": "inputs/h-delivered.md",
+      "source": ".git/kntnt-orchestrate/490/docs/evaluation/editorial-490/inputs/historical-checked-delivered.md",
+      "prepared_sha256": "83ae78e1138f447c22cce920ac3c9f074473c045aee983a2b1c3cc085ecb7ff0",
+      "derivation": "Authentic saved checker state; replay is isolated diagnosis, never native parent reproduction.",
+      "source_sha256": "83ae78e1138f447c22cce920ac3c9f074473c045aee983a2b1c3cc085ecb7ff0",
+      "is_exact_copy": true
+    },
+    {
+      "file": "inputs/h-reply.md",
+      "source": ".git/kntnt-orchestrate/490/docs/evaluation/editorial-490/inputs/historical-draft-reply.md",
+      "prepared_sha256": "46f45be5692905d6aa1a884bf977fd8d1f7923749b4dbe5874c320dbdb147508",
+      "derivation": "Authentic saved checker state; replay is isolated diagnosis, never native parent reproduction.",
+      "source_sha256": "46f45be5692905d6aa1a884bf977fd8d1f7923749b4dbe5874c320dbdb147508",
+      "is_exact_copy": true
+    },
+    {
+      "file": "inputs/h-return.md",
+      "source": ".git/kntnt-orchestrate/490/docs/evaluation/editorial-490/inputs/historical-check-return.md",
+      "prepared_sha256": "dda78999cce85594024e4570534ee4e38a8fdb78ffd41cefbcae4ed2ce43ba25",
+      "derivation": "Authentic saved checker state; replay is isolated diagnosis, never native parent reproduction.",
+      "source_sha256": "dda78999cce85594024e4570534ee4e38a8fdb78ffd41cefbcae4ed2ce43ba25",
+      "is_exact_copy": true
+    },
+    {
+      "file": "inputs/v01-text.md",
+      "source": ".git/kntnt-orchestrate/490/docs/evaluation/editorial-490/inputs/q1/text.md",
+      "prepared_sha256": "78f9baa4778dea0d4a345b8eb225037c53e9d1503caab4e1116ccd08e354014f",
+      "derivation": "Complete supplied isolated-checker text; not globally conforming editorial fixture.",
+      "source_sha256": "78f9baa4778dea0d4a345b8eb225037c53e9d1503caab4e1116ccd08e354014f",
+      "is_exact_copy": true
+    },
+    {
+      "file": "inputs/v02-text.md",
+      "source": ".git/kntnt-orchestrate/490/docs/evaluation/editorial-490/inputs/q1/text.md",
+      "prepared_sha256": "78f9baa4778dea0d4a345b8eb225037c53e9d1503caab4e1116ccd08e354014f",
+      "derivation": "Complete supplied isolated-checker text; not globally conforming editorial fixture.",
+      "source_sha256": "78f9baa4778dea0d4a345b8eb225037c53e9d1503caab4e1116ccd08e354014f",
+      "is_exact_copy": true
+    },
+    {
+      "file": "inputs/v03-text.md",
+      "source": ".git/kntnt-orchestrate/490/docs/evaluation/editorial-490/inputs/q3/text.md",
+      "prepared_sha256": "d5461acb39b6b589e79d114a8f3d182a7b6c2e4ceaa62427853d26c2f7550eec",
+      "derivation": "Complete supplied isolated-checker text; not globally conforming editorial fixture.",
+      "source_sha256": "d5461acb39b6b589e79d114a8f3d182a7b6c2e4ceaa62427853d26c2f7550eec",
+      "is_exact_copy": true
+    },
+    {
+      "file": "inputs/v01-reply.md",
+      "source": "new prospective checker statement",
+      "prepared_sha256": "1240a3befeae18aa8c71f4147de28bdcca469be6bf3e6533cc0f9b4cc9d8f1cc",
+      "derivation": "Exact scoped report assertion to classify blindly; no preferred repair sentence."
+    },
+    {
+      "file": "inputs/v02-reply.md",
+      "source": "new prospective checker statement",
+      "prepared_sha256": "da9f7503584a8934e09482a0a30a6efc2a6bffc0a3755340fd3ae855c4f8e685",
+      "derivation": "Exact scoped report assertion to classify blindly; no preferred repair sentence."
+    },
+    {
+      "file": "inputs/v03-reply.md",
+      "source": "new prospective checker statement",
+      "prepared_sha256": "3890f3c92f547d37d5e08e5cb3ac5f9074708cee8913ba68cc5910a68851a1cf",
+      "derivation": "Exact scoped report assertion to classify blindly; no preferred repair sentence."
+    }
+  ]
+}

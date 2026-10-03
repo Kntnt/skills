@@ -1,0 +1,17 @@
+{
+  "base": "4cf05813f94c2fa7147898878027835e14d29859",
+  "status": "unvalidated preparation; no conformance or execution freeze",
+  "genre": "casestudy",
+  "language": "en_US",
+  "fixtures": [
+    {
+      "id": "t01",
+      "file": "inputs/t01.md",
+      "source": ".git/kntnt-orchestrate/393/docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/c07/supplied-input.md",
+      "source_sha256": "244c339d163059150237f2ae3a17a5bf70b4ee242a4d0a1f57fc52bb91c36a26",
+      "prepared_sha256": "244c339d163059150237f2ae3a17a5bf70b4ee242a4d0a1f57fc52bb91c36a26",
+      "is_exact_copy": true,
+      "derivation": "English context reused from 505; foreign paths are evaluator-only sentinels."
+    }
+  ]
+}

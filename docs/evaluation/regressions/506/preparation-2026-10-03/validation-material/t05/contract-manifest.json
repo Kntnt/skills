@@ -1,0 +1,12 @@
+[
+  {
+    "role": "shared mechanics",
+    "path": "contracts/r01.md",
+    "sha256": "b3103ed6da4ac9d27a0ebfb43bdb40b8e77d58d84b3745a90c0a736142438b45"
+  },
+  {
+    "role": "locale complete resource",
+    "path": "contracts/r02.md",
+    "sha256": "2b36899b232e65300ea15fbbb0db2abece4e1f32e7b193957355a67a34331413"
+  }
+]

@@ -1,0 +1,26 @@
+{
+  "status": "unvalidated design; not a runtime helper or tested extractor",
+  "spans": [
+    {
+      "id": "delivery-truth",
+      "source": "skills/kntnt/library/references/delivery.md",
+      "source_sha256": "71babd36f68d93cd9f7d035358c3cbaeae3179147d8dc7a4667047081c898472",
+      "start_anchor": "## The truth of a report about the text",
+      "start_byte": 11675,
+      "end_byte_exclusive": 14139,
+      "span_sha256": "3596b2e07879e8559ef1866fb33eba3832a27408426ae5e936b2c69fe4955ad9",
+      "derivation": "Evaluator-only exact contract span; not shipped extractor/candidate."
+    },
+    {
+      "id": "base-claim-account",
+      "source": "skills/kntnt/library/references/editorial/base.review.md",
+      "source_sha256": "d2c838c19a692104be247afd227b0baed98f3156be059c0a982ecae3513fa0ca",
+      "start_anchor": "A claim removed because the finding named that claim itself",
+      "start_byte": 3854,
+      "end_byte_exclusive": 4920,
+      "span_sha256": "cd6ca3377f86e6ea9e722d246512375e3c416d8f7062a3331beb6e9f1c184c64",
+      "derivation": "Evaluator-only exact contract span; not shipped extractor/candidate."
+    }
+  ],
+  "native_acceptance": "Every actual checker-visible returned resource byte is within one exact admitted span; complete required spans present; no other file read. No absent state scored none/pass."
+}

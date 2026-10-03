@@ -1,0 +1,107 @@
+{
+  "base": "4cf05813f94c2fa7147898878027835e14d29859",
+  "status": "unvalidated preparation; no conformance or execution freeze",
+  "genre": null,
+  "language": null,
+  "fixtures": [
+    {
+      "id": "t01",
+      "file": "inputs/t01.md",
+      "source": "docs/evaluation/corpus/editorial-quality/controls/case-study-clean.md",
+      "source_sha256": "2e4ef2fd4b7c03aaaceca1ad22724fdb1ed3c685cd6b4995a00285198bed42f9",
+      "prepared_sha256": "2e4ef2fd4b7c03aaaceca1ad22724fdb1ed3c685cd6b4995a00285198bed42f9",
+      "is_exact_copy": true,
+      "derivation": "Exact original; global-clean label conflicts with owner-ruled quotation, preservation scope scored separately."
+    },
+    {
+      "id": "t02",
+      "file": "inputs/t02.md",
+      "source": "docs/evaluation/corpus/editorial-quality/controls/case-study-flawed.md",
+      "source_sha256": "ce574061bd09328ed80109a3cca07875683c2fd77d55f41d5631dc2cdcb18767",
+      "prepared_sha256": "ce574061bd09328ed80109a3cca07875683c2fd77d55f41d5631dc2cdcb18767",
+      "is_exact_copy": true,
+      "derivation": "Exact original flawed case control."
+    },
+    {
+      "id": "t03",
+      "file": "inputs/t03.md",
+      "source": ".git/kntnt-orchestrate/491/docs/evaluation/editorial-491/inputs/supported-appraisal.md",
+      "source_sha256": "9297359338e7132a3f4f89dd5ba29c87c912d02a715d19d9f83b106c9be44ac1",
+      "prepared_sha256": "2fc845358550e7babf13c2301bbc8eadd099a33d2363f3b7e9b00b9797488495",
+      "is_exact_copy": false,
+      "derivation": "New alternate appraisal isolate: only one rendered-speech obstruction made idiomatic; complete conformance unvalidated."
+    },
+    {
+      "id": "t04",
+      "file": "inputs/t04.md",
+      "source": ".git/kntnt-orchestrate/491/docs/evaluation/editorial-491/inputs/unsupported-attribution.md",
+      "source_sha256": "6a85566b0fa64ca8a943672e0d907e550f57ff7b548c491db5af2c61ce442316",
+      "prepared_sha256": "6a85566b0fa64ca8a943672e0d907e550f57ff7b548c491db5af2c61ce442316",
+      "is_exact_copy": true,
+      "derivation": "Exact unsupported attribution contrast; collateral quotation obstruction retained."
+    },
+    {
+      "id": "t05",
+      "file": "inputs/t05.md",
+      "source": ".git/kntnt-orchestrate/491/docs/evaluation/editorial-491/inputs/unresolved-referent.md",
+      "source_sha256": "15b7da484b29363361e7b06449a810581015f6cd2a7116e79ac61d830737b326",
+      "prepared_sha256": "15b7da484b29363361e7b06449a810581015f6cd2a7116e79ac61d830737b326",
+      "is_exact_copy": true,
+      "derivation": "Exact absent referent contrast; collateral quotation obstruction retained."
+    },
+    {
+      "id": "t06",
+      "file": "inputs/t06.md",
+      "source": "docs/evaluation/corpus/editorial-quality/controls/case-study-clean.md",
+      "source_sha256": "2e4ef2fd4b7c03aaaceca1ad22724fdb1ed3c685cd6b4995a00285198bed42f9",
+      "prepared_sha256": "058d4525ee7e550311fcde9f9eb2591f11aafea2af730e08613fe298f561d3b2",
+      "is_exact_copy": false,
+      "derivation": "New prospective idiomatic derivative; never replaces historical source or expectation."
+    },
+    {
+      "id": "t07",
+      "file": "inputs/t07.md",
+      "source": "docs/evaluation/corpus/editorial-quality/controls/article-clean.md",
+      "source_sha256": "f183e6da31cf78081cc7c7eee69570940e24802997e92d96bb111966aa4170d5",
+      "prepared_sha256": "f183e6da31cf78081cc7c7eee69570940e24802997e92d96bb111966aa4170d5",
+      "is_exact_copy": true,
+      "derivation": "Exact article heading control."
+    },
+    {
+      "id": "t08",
+      "file": "inputs/t08.md",
+      "source": ".git/kntnt-orchestrate/492/docs/evaluation/editorial-492/inputs/library-alternatives-clean.md",
+      "source_sha256": "c5929216e487d682a26e71a0167008ca9b01b8348582115359bb4164696c2808",
+      "prepared_sha256": "c5929216e487d682a26e71a0167008ca9b01b8348582115359bb4164696c2808",
+      "is_exact_copy": true,
+      "derivation": "Exact advancing library lead control."
+    },
+    {
+      "id": "t09",
+      "file": "inputs/t09.md",
+      "source": ".git/kntnt-orchestrate/492/docs/evaluation/editorial-492/inputs/library-alternatives-clean.md",
+      "source_sha256": "c5929216e487d682a26e71a0167008ca9b01b8348582115359bb4164696c2808",
+      "prepared_sha256": "1e2dc4feec9d82c18de822b99d399c213e5dc953df892a732814becf3b5c2ecf",
+      "is_exact_copy": false,
+      "derivation": "New prospective nonadvancing restart contrast; full text otherwise exact; not yet validated."
+    },
+    {
+      "id": "t10",
+      "file": "inputs/t10.md",
+      "source": ".git/kntnt-orchestrate/393/docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/c11/supplied-input.md",
+      "source_sha256": "eb04ee84e17b2b0266ef82937039bbd8729359042d2ee57967773116d4c8a463",
+      "prepared_sha256": "eb04ee84e17b2b0266ef82937039bbd8729359042d2ee57967773116d4c8a463",
+      "is_exact_copy": true,
+      "derivation": "Exact sole workgroup agency / valid ordinary Swedish figures context."
+    },
+    {
+      "id": "t11",
+      "file": "inputs/t11.md",
+      "source": ".git/kntnt-orchestrate/393/docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/c05/supplied-input.md",
+      "source_sha256": "bbad3ac63510344b4b174809f474dfb355c87659fdeecdf2692a730b0842d018",
+      "prepared_sha256": "bbad3ac63510344b4b174809f474dfb355c87659fdeecdf2692a730b0842d018",
+      "is_exact_copy": true,
+      "derivation": "Exact warehouse system-field scope and owner-ruled Swedish construction context."
+    }
+  ]
+}

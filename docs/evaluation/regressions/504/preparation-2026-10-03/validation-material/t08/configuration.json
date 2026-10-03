@@ -1,0 +1,19 @@
+{
+  "resolved_genre": "opinion",
+  "resolved_language": "sv",
+  "resolved_technique": null,
+  "writing_brief": null,
+  "source_material": "The complete supplied Text Artifact only; no external interview or source is supplied. Ordinary source-blind review applies.",
+  "counting_script": {
+    "path": "tools/count.py",
+    "sha256": "b4aae6ce979fe81b43531aac123f4077866b9efc72e244dc7203b053c07ae847",
+    "invocation": [
+      "uv",
+      "run",
+      "tools/count.py",
+      "--genre=opinion",
+      "text.md"
+    ]
+  },
+  "scope": "complete supplied artifact under all selected editorial and final mechanical contracts; target and collateral conformance distinct"
+}

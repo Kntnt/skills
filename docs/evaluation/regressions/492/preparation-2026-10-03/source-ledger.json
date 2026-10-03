@@ -1,0 +1,44 @@
+{
+  "base": "4cf05813f94c2fa7147898878027835e14d29859",
+  "status": "unvalidated preparation; no conformance or execution freeze",
+  "genre": "opinion",
+  "language": "sv",
+  "fixtures": [
+    {
+      "id": "t01",
+      "file": "inputs/t01.md",
+      "source": "docs/evaluation/corpus/editorial-quality/controls/opinion-clean.md",
+      "source_sha256": "141efb2a4a3b9339a6a54942c1f2d2edfaf307746c355e732ac3590a1b13075a",
+      "prepared_sha256": "141efb2a4a3b9339a6a54942c1f2d2edfaf307746c355e732ac3590a1b13075a",
+      "is_exact_copy": true,
+      "derivation": "Exact booking route/pending temporal control, shared with497."
+    },
+    {
+      "id": "t02",
+      "file": "inputs/t02.md",
+      "source": ".git/kntnt-orchestrate/492/docs/evaluation/editorial-492/inputs/library-alternatives-clean.md",
+      "source_sha256": "c5929216e487d682a26e71a0167008ca9b01b8348582115359bb4164696c2808",
+      "prepared_sha256": "c5929216e487d682a26e71a0167008ca9b01b8348582115359bb4164696c2808",
+      "is_exact_copy": true,
+      "derivation": "Exact clear alternatives control, shared with504."
+    },
+    {
+      "id": "t03",
+      "file": "inputs/t03.md",
+      "source": ".git/kntnt-orchestrate/492/docs/evaluation/editorial-492/inputs/library-missing-referent.md",
+      "source_sha256": "23fbaf7a2a601043e4209686eec39d5565e00d2d449fea9369e1a3d57750d556",
+      "prepared_sha256": "23fbaf7a2a601043e4209686eec39d5565e00d2d449fea9369e1a3d57750d556",
+      "is_exact_copy": true,
+      "derivation": "Exact standfirst-only missing body referent contrast."
+    },
+    {
+      "id": "t04",
+      "file": "inputs/t04.md",
+      "source": ".git/kntnt-orchestrate/492/docs/evaluation/editorial-492/inputs/opinion-closure-certain.md",
+      "source_sha256": "7e636c8bbcf9fc1fdbad4af84818b9538dc40fdfee89a3ab904609c5a6a9f0db",
+      "prepared_sha256": "7e636c8bbcf9fc1fdbad4af84818b9538dc40fdfee89a3ab904609c5a6a9f0db",
+      "is_exact_copy": true,
+      "derivation": "Exact mandatory certain closure control, shared with497."
+    }
+  ]
+}

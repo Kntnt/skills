@@ -1,0 +1,67 @@
+[
+  {
+    "role": "shared mechanics",
+    "path": "contracts/r01.md",
+    "sha256": "b3103ed6da4ac9d27a0ebfb43bdb40b8e77d58d84b3745a90c0a736142438b45"
+  },
+  {
+    "role": "locale complete resource",
+    "path": "contracts/r02.md",
+    "sha256": "241f0e5e4ca590c1d2348dc4048d15b5c8cc030c9dc91de989a758cefd4cd211"
+  },
+  {
+    "role": "shared editorial composition",
+    "path": "contracts/r03.md",
+    "sha256": "d4146ef134de7482e25469201aaceed7b207fba9f8bacb06a428b85f6bfc3581"
+  },
+  {
+    "role": "shared editorial review",
+    "path": "contracts/r04.md",
+    "sha256": "d2c838c19a692104be247afd227b0baed98f3156be059c0a982ecae3513fa0ca"
+  },
+  {
+    "role": "shared anti-slop",
+    "path": "contracts/r05.md",
+    "sha256": "9ec7fb15b3cfe22f446c6ed2df85666aaa182d8fa0a09fa3668887e4786d83c2"
+  },
+  {
+    "role": "anatomy composition",
+    "path": "contracts/r06.md",
+    "sha256": "c075c6fe7494dbcdc43d6af599c55ab8fc52fc48d7ed1b6cc26eca7a592cecd7"
+  },
+  {
+    "role": "anatomy review",
+    "path": "contracts/r07.md",
+    "sha256": "3e616f9671126ba7898123dd288a4a9bb4170f189d567a3fcbd2b17ccb82c633"
+  },
+  {
+    "role": "headlines composition",
+    "path": "contracts/r08.md",
+    "sha256": "adfb7ca612905afee03a73d58cdb07de9d0877b23af9de89f7e114f6de81df5f"
+  },
+  {
+    "role": "headlines review",
+    "path": "contracts/r09.md",
+    "sha256": "11be8cc4a9d009f59f78dedfe9a0059c681ca0d8f23bd37f36ef0486a74f1257"
+  },
+  {
+    "role": "web craft composition",
+    "path": "contracts/r10.md",
+    "sha256": "b1ac5867d30952c3ca78da244520ab28c025102f4389f44ec206757a29f05371"
+  },
+  {
+    "role": "web craft review",
+    "path": "contracts/r11.md",
+    "sha256": "169da1beeb4fb80e74f9423bdd4d7bcd57aa9b59b8e8ff5b71f3a67dfef7e923"
+  },
+  {
+    "role": "selected genre composition",
+    "path": "contracts/r12.md",
+    "sha256": "f0edbed362fe613f11cfe6232c4c7fc98202786fa909f3cd72f1b1acd0867e41"
+  },
+  {
+    "role": "selected genre review",
+    "path": "contracts/r13.md",
+    "sha256": "38f9409f2bdbe66cdc3786640bb08da94ed67eabb0a75e3ebe5028f3463b63a3"
+  }
+]

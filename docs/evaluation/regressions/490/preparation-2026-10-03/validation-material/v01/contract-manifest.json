@@ -1,0 +1,17 @@
+[
+  {
+    "role": "report truth",
+    "path": "contracts/r01.md",
+    "sha256": "3596b2e07879e8559ef1866fb33eba3832a27408426ae5e936b2c69fe4955ad9"
+  },
+  {
+    "role": "claim account",
+    "path": "contracts/r02.md",
+    "sha256": "cd6ca3377f86e6ea9e722d246512375e3c416d8f7062a3331beb6e9f1c184c64"
+  },
+  {
+    "role": "checker scope",
+    "path": "contracts/r03.md",
+    "sha256": "54d7628c1afb3bddb32f5cec30233ce4e96970e8777fee04114b080723016b3b"
+  }
+]

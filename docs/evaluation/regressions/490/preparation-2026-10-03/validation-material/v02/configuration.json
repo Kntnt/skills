@@ -1,0 +1,11 @@
+{
+  "artifact_role": "one supplied report assertion",
+  "source_material": [
+    "received.md",
+    "delivered.md"
+  ],
+  "scope": "Exact factual truth and asserted whole-text/body-only scope under the current checker first-list contract. This is an isolated checker contrast, not a global editorial-conformance fixture.",
+  "counting_script": null,
+  "intended_classification": null,
+  "instruction": "Read the complete two supplied source texts. Keep literal naming, contextual identification and an asserted explanation distinct; no expected verdict is supplied."
+}

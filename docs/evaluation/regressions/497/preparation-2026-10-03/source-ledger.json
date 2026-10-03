@@ -1,0 +1,44 @@
+{
+  "base": "4cf05813f94c2fa7147898878027835e14d29859",
+  "status": "unvalidated preparation; no conformance or execution freeze",
+  "genre": "opinion",
+  "language": "sv",
+  "fixtures": [
+    {
+      "id": "t01",
+      "file": "inputs/t01.md",
+      "source": "docs/evaluation/corpus/editorial-quality/controls/opinion-clean.md",
+      "source_sha256": "141efb2a4a3b9339a6a54942c1f2d2edfaf307746c355e732ac3590a1b13075a",
+      "prepared_sha256": "141efb2a4a3b9339a6a54942c1f2d2edfaf307746c355e732ac3590a1b13075a",
+      "is_exact_copy": true,
+      "derivation": "Exact pending temporal context."
+    },
+    {
+      "id": "t02",
+      "file": "inputs/t02.md",
+      "source": ".git/kntnt-orchestrate/492/docs/evaluation/editorial-492/inputs/opinion-closure-certain.md",
+      "source_sha256": "7e636c8bbcf9fc1fdbad4af84818b9538dc40fdfee89a3ab904609c5a6a9f0db",
+      "prepared_sha256": "7e636c8bbcf9fc1fdbad4af84818b9538dc40fdfee89a3ab904609c5a6a9f0db",
+      "is_exact_copy": true,
+      "derivation": "Exact original ändå contradiction."
+    },
+    {
+      "id": "t03",
+      "file": "inputs/t03.md",
+      "source": ".git/kntnt-orchestrate/492/docs/evaluation/editorial-492/runs/pre-opinion-closure-certain-file-1/captured-output.md",
+      "source_sha256": "e1a2e3eca27f9a17db5777115569edacb9ffd11b969ffe0130194b70abf8492c",
+      "prepared_sha256": "e1a2e3eca27f9a17db5777115569edacb9ffd11b969ffe0130194b70abf8492c",
+      "is_exact_copy": true,
+      "derivation": "Actual retained removal-only delivery; semantic disposition unvalidated."
+    },
+    {
+      "id": "t04",
+      "file": "inputs/t04.md",
+      "source": ".git/kntnt-orchestrate/492/docs/evaluation/editorial-492/inputs/opinion-closure-certain.md",
+      "source_sha256": "7e636c8bbcf9fc1fdbad4af84818b9538dc40fdfee89a3ab904609c5a6a9f0db",
+      "prepared_sha256": "d7675cbf9e15ae1e447c987f507cfaf12fe52f01a4d9608d7002c62fc68761b2",
+      "is_exact_copy": false,
+      "derivation": "New explicit whatever-the-trial-shows contrast; no product wording implied."
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "base": "4cf05813f94c2fa7147898878027835e14d29859",
+  "status": "unvalidated preparation; no conformance or execution freeze",
+  "genre": "casestudy",
+  "language": "sv",
+  "fixtures": [
+    {
+      "id": "t01",
+      "file": "inputs/t01.md",
+      "source": "docs/evaluation/corpus/editorial-quality/controls/case-study-clean.md",
+      "source_sha256": "2e4ef2fd4b7c03aaaceca1ad22724fdb1ed3c685cd6b4995a00285198bed42f9",
+      "prepared_sha256": "2e4ef2fd4b7c03aaaceca1ad22724fdb1ed3c685cd6b4995a00285198bed42f9",
+      "is_exact_copy": true,
+      "derivation": "Exact original received text; application judged independently of artifact conformance."
+    },
+    {
+      "id": "t02",
+      "file": "inputs/t02.md",
+      "source": ".git/kntnt-orchestrate/489/docs/evaluation/editorial-489/inputs/withheld-overclaim.md",
+      "source_sha256": "5d8de4ff16fcfd05e57c7bf5533ee521398066b677ef7b291f3465af78094975",
+      "prepared_sha256": "5d8de4ff16fcfd05e57c7bf5533ee521398066b677ef7b291f3465af78094975",
+      "is_exact_copy": true,
+      "derivation": "Exact withheld-attribution causal overclaim control."
+    },
+    {
+      "id": "t03",
+      "file": "inputs/t03.md",
+      "source": ".git/kntnt-orchestrate/489/docs/evaluation/editorial-489/inputs/denied-overclaim.md",
+      "source_sha256": "17b2063a68e868b3045a3e89e356ab7c6d9b2808371455e8ac8cf16e042dd3c1",
+      "prepared_sha256": "17b2063a68e868b3045a3e89e356ab7c6d9b2808371455e8ac8cf16e042dd3c1",
+      "is_exact_copy": true,
+      "derivation": "Exact explicit-denial causal overclaim control."
+    }
+  ]
+}

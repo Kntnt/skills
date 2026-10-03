@@ -1,0 +1,42 @@
+# Complete-contract preparation for the Oct3 Redline repairs
+
+This is preparation iteration 1, written against `4cf05813`. It contains proposed complete fixtures and actual contract bytes, with no validator report, conformance expectation, editorial execution or runtime candidate. The independently accepted work for #499 is a prerequisite to native execution. Root alone confirms that acceptance. Existing #393/#488–#497 evidence and Orchestrate outcomes are unchanged.
+
+## Declared seats and methods
+
+The editorial parent, ordinary native delegates, instrumented acquisition roles, independent fixture validators and blind semantic judges use actual `gpt-6.1-sol` at `xhigh` on Codex CLI `0.160.0`. Actual retained native turn contexts, rather than a requested label, establish that seat. Root's independent whole-task verification uses `gpt-6-astra/high` separately. A failed seat/capability check stops the relevant role; it never permits a silent model substitution. Historical CLI `0.159.3` observations are not this baseline.
+
+The accepted #499 complete-contract brief and acquisition runner are referenced by their actual committed revision before validation. Its known-sentinel neutral smoke, whole-task acceptance and exact evaluator overlay digest must be present. The controlled acquisition stream is explicitly instrumented: it proves the helper's actual complete child request, return and parent binding, and does not recover an ordinary opaque native delegation. Product symptom conclusions require ordinary native terminal/artifact observations separately. No extra export instruction enters a product/checker brief.
+
+## Preparation inputs and authority
+
+The source ledgers in the numbered preparation packets record exact source paths and digests. New derivatives are explicitly distinguished from exact historical copies. Source ledgers, this plan, intended predicates and historical decisions are evaluator material, excluded from neutral validators and judges. A supplied Text Artifact is the full factual material for ordinary source-blind review; no missing interview is invented into a requirement.
+
+Every `validation-material/<id>/` packet contains its full `text.md`, resolved configuration, complete contract-manifest entries with role/path/SHA256, actual selected editorial resources and final shared/locale mechanics. Where anatomy applies it also contains the exact counting script with a declared invocation. Validators receive a new random neutral directory containing only the selected complete packet and the accepted complete-contract brief. They inspect no issue, source ledger, expected class, candidate, other fixture or another reader's report. A reusable validation pair is permitted only for byte-identical text, identical resolved contract/configuration and identical material; record its actual shared identity, not several invented validation sessions.
+
+Two fresh independent native validators each enumerate every applicable rule, quote decisive text/absence and distinguish holds/fails/inapplicable/unresolved. They separately retain the full counting output and semantic anatomy assessment with the standfirst covered while preserving headline/contextual inference. They separate supported target propositions from collateral defects, and return complete disposition without a rewrite. The actual read trace/resource digest comparison and inventories accompany each report. Neither a counting pass nor lead-only inference check establishes global conformance.
+
+A clean expectation is frozen only if both complete reports establish it. A split or omitted applicable rule blocks the dependent expectation. Known owner-stipulated negatives do not acquire a global-clean label from an unrelated supported heading. The original case-study control's owner-ruled Swedish quotation and valid headline/opening are separate predicates. The new idiomatic derivative is a proposal, with no conformance assertion yet.
+
+## Finite replacement allowance
+
+Original historical/owner-ruled targets remain exact. Each new proposed clean or semantic contrast may receive at most one replacement preparation iteration if initial complete validation does not establish the intended distinction. The failed proposal, both actual reports and reason remain unchanged under iteration 1; a replacement receives a new directory, fresh committed preparation and fresh independent readers. No dependent native editorial row starts before its expectation is accepted and the final execution plan is committed. A second failed proposal is retained as an unresolved preparation result and receives no speculative product wording. This bound does not turn a requested negative construction into a clean exemption.
+
+## Execution freeze after preparation
+
+A separate final plan fixes accepted input/resource digests, native invocations, ordinary versus instrumented streams, exact evaluator overlay, all row/criterion ownership, actual seat, two blind judge briefs, split rules, all-writable-root inventories and interruption/finite exit/revise rules before the first editorial row. It names one agent-runnable real feedback command supplied by the accepted harness and its required native target assertions. That command has not run here; Phase 1 of diagnosing-bugs is incomplete. No ranked causal conclusion or runtime candidate is permitted before its exact fresh own-target red.
+
+The original #491 current continuation retains fourteen target/control rows plus a new whole-clean derivative pair. #494/#496/#393 D retain their own complete target pairs. #495 retains three flawed responses plus one file and a supported-role pair. #497 settles pending versus unconditional classification first and retains a pending pair plus two original contradiction files. A–F retain the separate fixture/mechanics/ownership/acquisition predicates in #504–#508. Existing #488/#489/#490/#492 current completion retains its explicit fresh counts and isolated probes from the live addenda. Canonical row sharing requires byte-identical inputs, resolved configuration, output target, stream/overlay and staging conditions; a shared row remains one actual invocation with several criteria.
+
+Editorial semantic feedback inherently takes minutes and remains genuine Skill execution plus independent semantic reading. Deterministic seconds-scale checks are valid only for actual byte acquisition, exact frozen states, lifecycle/terminal ordering or filesystem effects. They cannot replace reader-loss, source-support or closure semantics. After measured red, minimize only load-bearing context, publish three to five ranked falsifiable hypotheses, then change one causal variable at a time. Instrumented diagnostics and ordinary native symptom evidence remain separately attributable.
+
+Candidate arms repeat fixed own-target and every meaningful control affected by the actual changed loaded surfaces. A common base/headline/correction change resets related comparison baselines; an acquisition-only or cleanup-only change does not require unrelated grammar repeats. At most one revise uses no more than the failed subset. A current genuine non-reproduction/dispute is recorded honestly, with no speculative product clause. All actual misses and unknown stages remain in the record. No completed adverse result is retried to improve its verdict.
+
+## Final ownership and verification
+
+Redline owns ordinary current completion of #488/#489/#490/#492 and the product scopes #495/#497/#504–#508. Method owns #498/#499, shared protocol/harness/central tests/registry, and its independently accepted acquisition/preparation implementation. Write owns its separate runtime surfaces. Review halves, Redline and Proofread resources change serially on this owner branch after measured red; writer halves require Root allocation. No historical corpus/evidence, Main, protected rework, tracker closure/reconciliation, push or global installation is changed here.
+
+Independent final review verifies the whole current method, exact actual artifact/stage predicates, blindness, seat/child ancestry and historical integrity on the final combined revision. Catalog regeneration is due only after shipped changes. All four exact CONTRIBUTING commands run and retain actual receipts; their success is not semantic success. Owned resources are recorded at launch, stopped after completion, and any cleanup names literal complete paths. Durable handoffs and evidence remain deliverables.
+
+Written against `4cf05813`.
+

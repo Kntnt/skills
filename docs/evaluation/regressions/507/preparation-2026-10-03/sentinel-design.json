@@ -1,0 +1,23 @@
+{
+  "status": "design only; no sandbox created",
+  "foreign_to_skill": [
+    {
+      "relative_path": "scratch/cache",
+      "type": "empty directory"
+    },
+    {
+      "relative_path": "scratch/data",
+      "type": "directory with evaluator sentinel.txt"
+    },
+    {
+      "relative_path": "scratch/tmp",
+      "type": "empty directory"
+    },
+    {
+      "relative_path": "scratch/uv-cache",
+      "type": "directory with evaluator sentinel.txt"
+    }
+  ],
+  "required_check": "before/after existence,type,mode,contents and all owned outputs in accepted native sandbox",
+  "prohibition": "never stage genuine machine foreign paths as deletion targets"
+}

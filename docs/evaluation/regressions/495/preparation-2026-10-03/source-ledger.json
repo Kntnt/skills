@@ -1,0 +1,26 @@
+{
+  "base": "4cf05813f94c2fa7147898878027835e14d29859",
+  "status": "unvalidated preparation; no conformance or execution freeze",
+  "genre": "opinion",
+  "language": "sv",
+  "fixtures": [
+    {
+      "id": "t01",
+      "file": "inputs/t01.md",
+      "source": "docs/evaluation/corpus/editorial-quality/controls/opinion-flawed.md",
+      "source_sha256": "ab033d9f4c817c9eaa0efa32db93819a99291a3b22e29fb39f0d640e830ed990",
+      "prepared_sha256": "ab033d9f4c817c9eaa0efa32db93819a99291a3b22e29fb39f0d640e830ed990",
+      "is_exact_copy": true,
+      "derivation": "Exact four mandatory flaws / unsupported potential heading roles target."
+    },
+    {
+      "id": "t02",
+      "file": "inputs/t02.md",
+      "source": "docs/evaluation/corpus/editorial-quality/controls/opinion-flawed.md",
+      "source_sha256": "ab033d9f4c817c9eaa0efa32db93819a99291a3b22e29fb39f0d640e830ed990",
+      "prepared_sha256": "fcd090bee39d04dd523d78f69c10600caf5761c87341ea9d006f56867f2bddc2",
+      "is_exact_copy": false,
+      "derivation": "New full-text supported recipient/authority counterpart; four mandatory flaws retained; not global clean."
+    }
+  ]
+}

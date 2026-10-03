@@ -1,0 +1,44 @@
+{
+  "base": "4cf05813f94c2fa7147898878027835e14d29859",
+  "status": "unvalidated preparation; no conformance or execution freeze",
+  "genre": null,
+  "language": "sv",
+  "fixtures": [
+    {
+      "id": "t01",
+      "file": "inputs/t01.md",
+      "source": ".git/kntnt-orchestrate/488/docs/evaluation/editorial-488/inputs/article-unnamed.md",
+      "source_sha256": "5e43d4f391ba9e07920564e998ac7d764373e3d098df692ceebd4f6d01c8e374",
+      "prepared_sha256": "5e43d4f391ba9e07920564e998ac7d764373e3d098df692ceebd4f6d01c8e374",
+      "is_exact_copy": true,
+      "derivation": "Exact unnamed-article terminal-delivery target."
+    },
+    {
+      "id": "t02",
+      "file": "inputs/t02.md",
+      "source": "docs/evaluation/corpus/editorial-quality/controls/opinion-flawed.md",
+      "source_sha256": "ab033d9f4c817c9eaa0efa32db93819a99291a3b22e29fb39f0d640e830ed990",
+      "prepared_sha256": "ab033d9f4c817c9eaa0efa32db93819a99291a3b22e29fb39f0d640e830ed990",
+      "is_exact_copy": true,
+      "derivation": "Exact correcting flawed-control, shared with495."
+    },
+    {
+      "id": "t03",
+      "file": "inputs/t03.md",
+      "source": "docs/evaluation/corpus/editorial-quality/controls/article-clean.md",
+      "source_sha256": "f183e6da31cf78081cc7c7eee69570940e24802997e92d96bb111966aa4170d5",
+      "prepared_sha256": "f183e6da31cf78081cc7c7eee69570940e24802997e92d96bb111966aa4170d5",
+      "is_exact_copy": true,
+      "derivation": "Exact clean response/file control, shared with504."
+    },
+    {
+      "id": "t04",
+      "file": "inputs/t04.md",
+      "source": "docs/evaluation/corpus/editorial-quality/controls/column-flawed.md",
+      "source_sha256": "9b12ad3fb2cb74011c974feda1d7aafa8c0394ac6899417be2dbdd40ad0e96ab",
+      "prepared_sha256": "9b12ad3fb2cb74011c974feda1d7aafa8c0394ac6899417be2dbdd40ad0e96ab",
+      "is_exact_copy": true,
+      "derivation": "Exact distinct flawed file-target control."
+    }
+  ]
+}

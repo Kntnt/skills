@@ -1,0 +1,62 @@
+{
+  "base": "4cf05813f94c2fa7147898878027835e14d29859",
+  "status": "unvalidated preparation; no conformance or execution freeze",
+  "genre": null,
+  "language": "en_US",
+  "fixtures": [
+    {
+      "id": "t01",
+      "file": "inputs/t01.md",
+      "source": ".git/kntnt-orchestrate/393/docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/c09/file-versions/0008-7d809a095ae3.md",
+      "source_sha256": "7d809a095ae3a7d5e57abfe646e1af8b08a9c282d20fced5875717bc31ad4dbb",
+      "prepared_sha256": "7d809a095ae3a7d5e57abfe646e1af8b08a9c282d20fced5875717bc31ad4dbb",
+      "is_exact_copy": true,
+      "derivation": "Actual complete nested mechanical input, not reconstructed final delivery."
+    },
+    {
+      "id": "t04",
+      "file": "inputs/t04.md",
+      "source": ".git/kntnt-orchestrate/393/docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/c09/supplied-input.md",
+      "source_sha256": "75e81d07b5bdab9a91e01dbd78f5c051c8fdd0267d71f584e72334a19b36594b",
+      "prepared_sha256": "75e81d07b5bdab9a91e01dbd78f5c051c8fdd0267d71f584e72334a19b36594b",
+      "is_exact_copy": true,
+      "derivation": "Actual full original integrated Redline context."
+    },
+    {
+      "id": "t02",
+      "file": "inputs/t02.md",
+      "source": "new synthetic mechanics fixture",
+      "prepared_sha256": "e57eb41c2780268090b4938f78e617a22092d5a143a032eb00bc49b6a1bde062",
+      "is_exact_copy": false,
+      "language": "en_US",
+      "derivation": "Genuine rendered block, run-in quotation or locale speech-mark control; unvalidated."
+    },
+    {
+      "id": "t03",
+      "file": "inputs/t03.md",
+      "source": "new synthetic mechanics fixture",
+      "prepared_sha256": "a4e7b9bda728577a191d7eeb17cef1051a7de729e823c79707ea5ba5402ed9ce",
+      "is_exact_copy": false,
+      "language": "en_US",
+      "derivation": "Genuine rendered block, run-in quotation or locale speech-mark control; unvalidated."
+    },
+    {
+      "id": "t05",
+      "file": "inputs/t05.md",
+      "source": "new synthetic mechanics fixture",
+      "prepared_sha256": "ccb614595ce0600f20354daacb830ae0c410e8b173b6dd78860f5de079b622fb",
+      "is_exact_copy": false,
+      "language": "en_GB",
+      "derivation": "Genuine rendered block, run-in quotation or locale speech-mark control; unvalidated."
+    },
+    {
+      "id": "t06",
+      "file": "inputs/t06.md",
+      "source": "new synthetic mechanics fixture",
+      "prepared_sha256": "cffa2e405e3f90ef7e783acb0d524dfce32d67a5e4a2dc73bc12827690a50e74",
+      "is_exact_copy": false,
+      "language": "sv",
+      "derivation": "Genuine rendered block, run-in quotation or locale speech-mark control; unvalidated."
+    }
+  ]
+}
