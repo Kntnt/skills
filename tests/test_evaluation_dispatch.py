@@ -4,8 +4,8 @@ from __future__ import annotations
 
 import argparse
 import copy
-import io
 import importlib.util
+import io
 import os
 import subprocess
 import sys
