@@ -1,0 +1,3 @@
+## Prospective editorial seat clarification — 2026-10-03
+
+Root clarified before any validation/freeze that all editorial parents, checker/correction children and independent blind semantic judges will use gpt-6.1-sol/xhigh, actual CLI0.160.0, matching the user's Sol preference and observed operational target. Each editorial parent defines that Main Seat and delegates inherit it. Historical Sol0.159.3 remains history, never a fresh baseline. #499's gpt-6-astra/high capability is for fresh independent whole-task verdicts on Root's seat, not substituting the editorial measurement model. No native editorial invocation has begun and no execution freeze has changed.
