@@ -73,6 +73,7 @@ def trace() -> list[dict[str, Any]]:
                 "id": "fresh",
                 "session_id": "fresh",
                 "source": "exec",
+                "thread_source": "user",
                 "cli_version": "0.160.0",
             },
         },
@@ -263,6 +264,37 @@ def test_initial_and_final_native_identity_conflicts_are_rejected(case: str) -> 
     elif case == "missing-start":
         del records[1]
     with pytest.raises(DISPATCH.CaptureError):
+        DISPATCH.bind_trace(records, PROMPT, "gpt-6-astra", "high", "0.160.0")
+
+
+@pytest.mark.parametrize(
+    "field,value",
+    [
+        ("thread_source", "subagent"),
+        ("thread_source", None),
+        ("thread_source", ""),
+        ("source", None),
+        ("source", {"subagent": {"thread_spawn": {"parent_thread_id": "parent"}}}),
+        ("parent_thread_id", "parent"),
+        ("parent_thread_id", ""),
+        ("parent_thread_id", False),
+    ],
+)
+def test_missing_or_conflicting_native_freshness_is_rejected(
+    field: str, value: Any
+) -> None:
+    """Actual user/exec and subagent metadata cannot jointly certify fresh ancestry.
+
+    The intact user source is neutral child 01a10276-99b6-7f03-a1fd-bf822919cdfa;
+    actual spawn 01a10201-0a91-74b0-bdef-7cc13407e226 supplies subagent vocabulary.
+    Mutations here are synthetic negatives, not altered historical records.
+    """
+    records = trace()
+    if value is None:
+        del records[0]["payload"][field]
+    else:
+        records[0]["payload"][field] = value
+    with pytest.raises(DISPATCH.CaptureError, match="fresh top-level exec"):
         DISPATCH.bind_trace(records, PROMPT, "gpt-6-astra", "high", "0.160.0")
 
 

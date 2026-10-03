@@ -39,6 +39,8 @@ def write_json(path: Path, value: Any) -> None:
 
 def message_bytes(payload: dict[str, Any]) -> bytes:
     """Read only complete plaintext native message blocks."""
+
+    # Reject unavailable or non-text message content.
     blocks = payload.get("content", [])
     if not blocks or any(
         block.get("type") not in ("input_text", "output_text", "text")
@@ -46,11 +48,14 @@ def message_bytes(payload: dict[str, Any]) -> bytes:
         for block in blocks
     ):
         raise CaptureError("message contains unavailable or non-text content")
+
     return "".join(block["text"] for block in blocks).encode("utf-8")
 
 
 def retained_message(row: dict[str, Any], turn_id: str, role: str) -> bytes:
     """Require complete retained content and agreeing message/turn identities."""
+
+    # Reject incomplete or conflicting retained identity before reading bytes.
     payload = row["payload"]
     identity = payload.get("id")
     retained = row.get("metadata", {}).get("retained_source", {})
@@ -64,23 +69,29 @@ def retained_message(row: dict[str, Any], turn_id: str, role: str) -> bytes:
         != {"message_id": identity, "turn_id": turn_id, "role": role}
     ):
         raise CaptureError("missing or conflicting retained message identity")
+
     return message_bytes(payload)
 
 
 def native_item_bytes(payload: dict[str, Any], thread_id: str, turn_id: str) -> bytes:
     """Read the native v2 completed item independently of its retained copy."""
+
+    # Reject completed items with foreign or unavailable identity.
     item = payload["item"]
     expected_type = "text" if item["type"] == "UserMessage" else "Text"
     if payload.get("thread_id") != thread_id or payload.get("turn_id") != turn_id:
         raise CaptureError("native completed item identity disagrees")
     if not isinstance(item.get("id"), str) or not item["id"]:
         raise CaptureError("native completed item identity unavailable")
+
+    # Read only complete plaintext in the observed native item representation.
     blocks = item.get("content", [])
     if not blocks or any(
         block.get("type") != expected_type or not isinstance(block.get("text"), str)
         for block in blocks
     ):
         raise CaptureError("native completed item plaintext unavailable")
+
     return "".join(block["text"] for block in blocks).encode("utf-8")
 
 
@@ -88,7 +99,8 @@ def bind_trace(
     records: list[dict[str, Any]], prompt: bytes, model: str, effort: str, version: str
 ) -> tuple[dict[str, Any], bytes]:
     """Bind one initial v2 task and both final representations in a fresh turn."""
-    # Establish the actual fresh session and turn before selecting any content.
+
+    # Reject absent or ambiguous native session/context boundaries.
     metas = [row["payload"] for row in records if row.get("type") == "session_meta"]
     contexts = [
         (ordinal, row["payload"])
@@ -97,6 +109,8 @@ def bind_trace(
     ]
     if len(metas) != 1 or len(contexts) != 1:
         raise CaptureError("missing or ambiguous native thread/context")
+
+    # Reject inherited or contradictory native ancestry.
     meta = metas[0]
     thread_id = meta.get("id")
     if (
@@ -105,8 +119,14 @@ def bind_trace(
         or meta.get("session_id") != thread_id
     ):
         raise CaptureError("missing or conflicting native thread identity")
-    if meta.get("parent_thread_id") or meta.get("source") != "exec":
+    if (
+        meta.get("parent_thread_id") is not None
+        or meta.get("source") != "exec"
+        or meta.get("thread_source") != "user"
+    ):
         raise CaptureError("native session is not a fresh top-level exec")
+
+    # Bind the installed native version and actual effective turn seat.
     if meta.get("cli_version") != version:
         raise CaptureError("actual native version differs from freeze")
     context_ordinal, context = contexts[0]
@@ -128,6 +148,7 @@ def bind_trace(
     starts: list[tuple[int, dict[str, Any]]] = []
     completions: list[tuple[int, dict[str, Any]]] = []
     for ordinal, row in enumerate(records, 1):
+        # Collect retained message boundaries, including marked earlier tasks.
         payload = row.get("payload", {})
         if row.get("type") == "response_item" and payload.get("type") == "message":
             kinds = payload.get("internal_chat_message_metadata_passthrough", {}).get(
@@ -144,11 +165,15 @@ def bind_trace(
                 and payload.get("phase") == "final_answer"
             ):
                 finals.append((ordinal, row))
+
+        # Collect native lifecycle and completed boundaries with their identity.
         if row.get("type") == "event_msg":
             if payload.get("type") == "task_started":
                 starts.append((ordinal, payload))
             if payload.get("type") == "task_complete":
                 completions.append((ordinal, payload))
+
+            # Reject foreign completed items before retaining their boundary.
             if payload.get("type") == "item_completed":
                 if (
                     payload.get("thread_id") != thread_id
@@ -163,19 +188,23 @@ def bind_trace(
                     and item.get("phase") == "final_answer"
                 ):
                     native_finals.append((ordinal, payload))
+
+    # Reject incomplete or duplicate representations before pairing them.
     if any(
         len(items) != 1
         for items in (inputs, finals, native_inputs, native_finals, starts, completions)
     ):
         raise CaptureError("missing or ambiguous initial input/final/native completion")
 
-    # Cross-check independently recorded initial and final plaintext and identity.
+    # Pair the unique retained and independently completed boundaries.
     input_ordinal, input_row = inputs[0]
     native_input_ordinal, native_input = native_inputs[0]
     final_ordinal, final_row = finals[0]
     native_final_ordinal, native_final = native_finals[0]
     start_ordinal, start = starts[0]
     completion_ordinal, completion = completions[0]
+
+    # Reject altered or displaced initial user input.
     if (
         input_row.get("metadata", {}).get("user_input_order") != 0
         or input_row["payload"]
@@ -186,6 +215,8 @@ def bind_trace(
         or native_item_bytes(native_input, thread_id, turn_id) != prompt
     ):
         raise CaptureError("authentic initial user content or order disagrees")
+
+    # Reject conflicting final bytes, identity or completed-turn evidence.
     result = retained_message(final_row, turn_id, "assistant")
     if (
         native_final["item"].get("id") != final_row["payload"]["id"]
@@ -196,6 +227,8 @@ def bind_trace(
         or start.get("root_turn_id") != turn_id
     ):
         raise CaptureError("native terminal content or turn identity disagrees")
+
+    # Reject reordered boundaries that cannot bind the initial task to output.
     if (
         not start_ordinal
         < context_ordinal
@@ -206,6 +239,8 @@ def bind_trace(
         < completion_ordinal
     ):
         raise CaptureError("native record order does not bind initial input to result")
+
+    # Return verifiable identities and exact byte digests.
     return {
         "thread_id": thread_id,
         "turn_id": turn_id,
@@ -226,9 +261,12 @@ def inventory(
     roots: list[Path], credential_paths: list[Path] | None = None
 ) -> dict[str, Any]:
     """Track paths, kinds, modes and bytes; redact only enumerated credentials."""
+
     # Exact private paths protect credentials without hiding ordinary auth.json.
     credentials = {path.absolute() for path in credential_paths or []}
     result: dict[str, Any] = {}
+
+    # Inventory each root and descendant without following symlink targets.
     for root in roots:
         for path in [root, *sorted(root.rglob("*"))]:
             metadata = path.lstat()
@@ -249,14 +287,19 @@ def inventory(
             else:
                 entry.update(kind="other", file_type=stat.S_IFMT(metadata.st_mode))
             result[str(path)] = entry
+
     return result
 
 
 def environment(packet: Path) -> dict[str, str]:
     """Keep acquisition and lifecycle tool storage inside the owned packet."""
+
+    # Keep lifecycle receipts local and suppress recorder bytecode.
     env = dict(os.environ)
     runtime = packet / "runtime"
     env.update(KNTNT_HOME=str(packet / "lifecycle"), PYTHONDONTWRITEBYTECODE="1")
+
+    # Scope auxiliary tool storage to the owned runtime.
     for name in (
         "TMPDIR",
         "UV_CACHE_DIR",
@@ -269,30 +312,41 @@ def environment(packet: Path) -> dict[str, str]:
         "XDG_CONFIG_HOME",
     ):
         env[name] = str(runtime / name.lower())
+
     return env
 
 
 def stop_owned(child: subprocess.Popen[bytes]) -> None:
     """End an owned process group even when its leader already exited."""
+
+    # Escalate termination only within the known owned group.
     for sig in (signal.SIGTERM, signal.SIGKILL):
+        # Stop if the owned group has already vanished.
         try:
             os.killpg(child.pid, sig)
         except ProcessLookupError:
             return
+
+        # Bound the leader wait before escalating unresolved ownership.
         try:
             child.wait(timeout=5)
         except subprocess.TimeoutExpired:
             continue
-        # A completed leader can have surviving descendants.
+
+        # Check surviving descendants after the group leader exits.
         try:
             os.killpg(child.pid, 0)
         except ProcessLookupError:
             return
+
+    # Report unresolved ownership while its runtime is still reachable.
     raise CaptureError("owned native process group remains after termination")
 
 
 def register(pid: int, cleanup: Path, env: dict[str, str], packet: Path) -> None:
     """Register each group before supplying a native task."""
+
+    # Register the original group through the installed lifecycle contract.
     receipt = subprocess.run(
         [
             "uv",
@@ -310,6 +364,8 @@ def register(pid: int, cleanup: Path, env: dict[str, str], packet: Path) -> None
         check=True,
         timeout=30,
     )
+
+    # Preserve the issued registration and actual observed process group.
     with (packet / "registrations.jsonl").open("a") as stream:
         stream.write(
             json.dumps({"pid": pid, "pgid": os.getpgid(pid), "receipt": receipt.stdout})
@@ -319,13 +375,19 @@ def register(pid: int, cleanup: Path, env: dict[str, str], packet: Path) -> None
 
 def acquire(args: argparse.Namespace, prompt: bytes) -> bytes:
     """Capture one attempt, retaining unsuccessful receipts without retrying."""
+
+    # Reject unsupported dispatch bytes before invoking the native CLI.
     prompt.decode("utf-8")
     if not prompt:
         raise CaptureError("empty dispatch brief")
+
+    # Allocate private native state underneath registered task ownership.
     packet: Path = args.packet.resolve()
     runtime = packet / "runtime"
     native_home = runtime / "home" / ".codex"
     native_home.mkdir(parents=True)
+
+    # Check the frozen CLI release with a bounded owned subprocess.
     native = str(args.native.resolve())
     actual_version = subprocess.check_output(
         [native, "--version"],
@@ -336,6 +398,8 @@ def acquire(args: argparse.Namespace, prompt: bytes) -> bytes:
     ).strip()
     if actual_version != f"codex-cli {args.version}":
         raise CaptureError("installed CLI differs from frozen version")
+
+    # Retain the complete dispatch request independently of native output.
     write_json(
         packet / "request.json",
         {
@@ -351,6 +415,8 @@ def acquire(args: argparse.Namespace, prompt: bytes) -> bytes:
             "timeout_seconds": args.timeout,
         },
     )
+
+    # Copy active lifecycle hooks and native configuration into private state.
     hooks = args.auth_home / "hooks.json"
     if not hooks.is_file():
         raise CaptureError("existing lifecycle hook configuration unavailable")
@@ -358,6 +424,8 @@ def acquire(args: argparse.Namespace, prompt: bytes) -> bytes:
     config = args.auth_home / "config.toml"
     if config.is_file():
         shutil.copy2(config, native_home / "config.toml")
+
+    # Record copied configuration identities and enabled hook execution.
     write_json(
         packet / "configuration.json",
         {
@@ -366,8 +434,12 @@ def acquire(args: argparse.Namespace, prompt: bytes) -> bytes:
             "hooks_enabled_by_command": True,
         },
     )
+
+    # Protect the private credential copy with restrictive permissions.
     shutil.copy2(args.auth_home / "auth.json", native_home / "auth.json")
     (native_home / "auth.json").chmod(0o600)
+
+    # Build private HOME and auxiliary storage from the owned environment.
     env = environment(packet)
     env.update(HOME=str(runtime / "home"), CODEX_HOME=str(native_home))
     for name in (
@@ -382,9 +454,13 @@ def acquire(args: argparse.Namespace, prompt: bytes) -> bytes:
         "XDG_CONFIG_HOME",
     ):
         Path(env[name]).mkdir(exist_ok=True)
+
+    # Inventory declared writable roots with one exact credential exclusion.
     roots = [args.cwd.resolve(), packet, *[p.resolve() for p in args.inventory_root]]
     credentials = [native_home / "auth.json"]
     write_json(packet / "inventory-before.json", inventory(roots, credentials))
+
+    # Declare one native attempt and its initially unsuccessful receipt.
     command = [
         native,
         "exec",
@@ -411,7 +487,9 @@ def acquire(args: argparse.Namespace, prompt: bytes) -> bytes:
         "command": command,
         "runtime": str(runtime),
     }
+
     try:
+        # Register the new native group before sending its complete input.
         with (
             (packet / "events.jsonl").open("wb") as stdout,
             (packet / "stderr.txt").open("wb") as stderr,
@@ -428,12 +506,16 @@ def acquire(args: argparse.Namespace, prompt: bytes) -> bytes:
             receipt.update({"pid": child.pid, "pgid": child.pid})
             register(child.pid, args.cleanup_script, env, packet)
             child.communicate(prompt, timeout=args.timeout)
+
+        # Reject unsuccessful or ambiguous native completion.
         receipt["exit"] = child.returncode
         if child.returncode:
             raise CaptureError("native child did not complete successfully")
         sessions = sorted((native_home / "sessions").rglob("*.jsonl"))
         if len(sessions) != 1:
             raise CaptureError("missing or extra native sessions")
+
+        # Bind raw input/context and terminal bytes to the completed result.
         records = [json.loads(line) for line in sessions[0].read_text().splitlines()]
         binding, result = bind_trace(
             records, prompt, args.model, args.effort, args.version
@@ -441,13 +523,19 @@ def acquire(args: argparse.Namespace, prompt: bytes) -> bytes:
         terminal = (packet / "terminal.txt").read_bytes()
         if terminal != result:
             raise CaptureError("CLI terminal bytes differ from native final message")
+
+        # Retain a complete result only after all native bindings hold.
         receipt.update({"status": "complete", "binding": binding})
         (packet / "result.txt").write_bytes(result)
+
         return result
+
+    # Preserve native capture or timeout failure without fallback.
     except (CaptureError, subprocess.TimeoutExpired) as exc:
         receipt["reason"] = str(exc)
         raise CaptureError(str(exc)) from exc
     finally:
+        # Resolve group ownership before copying or removing private state.
         if child is not None:
             try:
                 stop_owned(child)
@@ -457,28 +545,41 @@ def acquire(args: argparse.Namespace, prompt: bytes) -> bytes:
                     {"pgid": child.pid, "runtime": str(runtime)},
                 )
                 raise
+
+        # Preserve raw native sessions and timing after group termination.
         receipt["elapsed_seconds"] = time.monotonic() - started
         sessions_root = native_home / "sessions"
         if sessions_root.exists():
             shutil.copytree(sessions_root, packet / "native-sessions")
+
+        # Record the full after-inventory and final acquisition disposition.
         write_json(packet / "inventory-after.json", inventory(roots, credentials))
         write_json(packet / "receipt.json", receipt)
 
 
 def run(args: argparse.Namespace, prompt: bytes | None = None) -> bytes:
     """Clean private credentials on preparation failures as well as completion."""
+
+    # Allocate a new evidence packet without overwriting an earlier attempt.
     packet = args.packet.resolve()
     packet.mkdir(parents=True, exist_ok=False)
     runtime = packet / "runtime"
+
     try:
-        # Register ownership before stdin can block or native preparation starts.
+        # Register ownership before stdin or native preparation can block.
         if os.getpid() != os.getpgrp():
             os.setsid()
         register(os.getpid(), args.cleanup_script, environment(packet), packet)
+
+        # Capture supplied stdin unchanged before native preparation begins.
         if prompt is None:
             prompt = sys.stdin.buffer.read()
         (packet / "prompt.txt").write_bytes(prompt)
+
+        # Acquire the single native child after ownership and input capture.
         return acquire(args, prompt)
+
+    # Catch all preparation errors so unexpected failures retain their receipt.
     except Exception as exc:
         if not (packet / "receipt.json").exists():
             write_json(
@@ -486,6 +587,7 @@ def run(args: argparse.Namespace, prompt: bytes | None = None) -> bytes:
             )
         raise
     finally:
+        # Remove credentials only after native ownership has been resolved.
         if runtime.exists() and not (packet / "cleanup-failed.json").exists():
             print(f"Delete owned disposable runtime: {runtime}", file=sys.stderr)
             shutil.rmtree(runtime)
@@ -501,6 +603,8 @@ def run(args: argparse.Namespace, prompt: bytes | None = None) -> bytes:
 
 def main() -> int:
     """Print only the complete child return on successful acquisition."""
+
+    # Parse declared acquisition boundaries and finite execution limits.
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--packet", type=Path, required=True)
     parser.add_argument("--cwd", type=Path, required=True)
@@ -522,12 +626,17 @@ def main() -> int:
     )
     parser.add_argument("--inventory-root", type=Path, action="append", default=[])
     args = parser.parse_args()
+
+    # Report unavailable acquisitions through failure-only stderr.
     try:
         result = run(args)
     except (CaptureError, OSError, ValueError, subprocess.SubprocessError) as exc:
         print(f"Native acquisition unavailable: {exc}", file=sys.stderr)
         return 1
+
+    # Transport the complete child result without appending bytes.
     sys.stdout.buffer.write(result)
+
     return 0
 
 
