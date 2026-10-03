@@ -1,0 +1,10 @@
+{
+  "ignored_paths_preexisting": {
+    ".pytest_cache": false,
+    ".ruff_cache": false,
+    ".mypy_cache": false,
+    "__pycache__": false
+  },
+  "scratch_root": "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/393.scratch",
+  "process_notes": "Only synchronous read/audit commands so far; all yielded sessions completed. No servers or services started."
+}

@@ -1,0 +1,152 @@
+{
+  "result": {
+    "returncode": 0,
+    "timed_out": false,
+    "duration_seconds": 1151.26,
+    "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-euzjpdes",
+    "cleanup_required": true
+  },
+  "input_sha256": "244c339d163059150237f2ae3a17a5bf70b4ee242a4d0a1f57fc52bb91c36a26",
+  "artifact": {
+    "fenced_artifact_count": 0,
+    "present": true,
+    "source": "explicit-file",
+    "sha256": "158c166eb55bd343a5735efc4a801e1508ed4dc735a879a8fe655fbeafc93084",
+    "input_identical": false
+  },
+  "identities": [
+    {
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T15-33-10-01a0f7ab-3e61-7e00-9874-af1010de6e03.jsonl",
+      "id": "01a0f7ab-3e61-7e00-9874-af1010de6e03",
+      "source": "exec",
+      "seats": [
+        [
+          "gpt-6.1-sol",
+          "xhigh"
+        ]
+      ]
+    },
+    {
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T15-38-54-01a0f7b0-7f54-7952-b6ee-bcc3c4a11a13.jsonl",
+      "id": "01a0f7b0-7f54-7952-b6ee-bcc3c4a11a13",
+      "source": {
+        "subagent": {
+          "thread_spawn": {
+            "parent_thread_id": "01a0f7ab-3e61-7e00-9874-af1010de6e03",
+            "depth": 1,
+            "agent_path": "/root/correction_1",
+            "agent_nickname": "Hypatia",
+            "agent_role": null
+          }
+        }
+      },
+      "seats": [
+        [
+          "gpt-6.1-sol",
+          "xhigh"
+        ]
+      ]
+    },
+    {
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T15-44-22-01a0f7b5-808e-79b2-9276-b753c4c142ce.jsonl",
+      "id": "01a0f7b5-808e-79b2-9276-b753c4c142ce",
+      "source": {
+        "subagent": {
+          "thread_spawn": {
+            "parent_thread_id": "01a0f7ab-3e61-7e00-9874-af1010de6e03",
+            "depth": 1,
+            "agent_path": "/root/mechanical_pass",
+            "agent_nickname": "Dirac",
+            "agent_role": null
+          }
+        }
+      },
+      "seats": [
+        [
+          "gpt-6.1-sol",
+          "xhigh"
+        ]
+      ]
+    },
+    {
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T15-49-35-01a0f7ba-4707-7e40-b24f-3cb4598ac07e.jsonl",
+      "id": "01a0f7ba-4707-7e40-b24f-3cb4598ac07e",
+      "source": {
+        "subagent": {
+          "thread_spawn": {
+            "parent_thread_id": "01a0f7ab-3e61-7e00-9874-af1010de6e03",
+            "depth": 1,
+            "agent_path": "/root/reply_check",
+            "agent_nickname": "Chandrasekhar",
+            "agent_role": null
+          }
+        }
+      },
+      "seats": [
+        [
+          "gpt-6.1-sol",
+          "xhigh"
+        ]
+      ]
+    }
+  ],
+  "encrypted_dispatches": [
+    {
+      "session": "01a0f7ab-3e61-7e00-9874-af1010de6e03",
+      "name": "spawn_agent",
+      "call_id": "call_k74tJQtIbqJUuXo0Qrt93Baa",
+      "note": "dispatch message encrypted; use actual child reads rather than infer its complete brief"
+    },
+    {
+      "session": "01a0f7ab-3e61-7e00-9874-af1010de6e03",
+      "name": "spawn_agent",
+      "call_id": "call_ZBU91XiV4P4RUrm5sVXl6Z2a",
+      "note": "dispatch message encrypted; use actual child reads rather than infer its complete brief"
+    },
+    {
+      "session": "01a0f7ab-3e61-7e00-9874-af1010de6e03",
+      "name": "spawn_agent",
+      "call_id": "call_cAe1y9ansCcUmllTWYZmxvpN",
+      "note": "dispatch message encrypted; use actual child reads rather than infer its complete brief"
+    },
+    {
+      "session": "01a0f7b0-7f54-7952-b6ee-bcc3c4a11a13",
+      "name": "send_message",
+      "call_id": "call_EIez6sS1Znj6tr5swBh8ZgH1",
+      "note": "dispatch message encrypted; use actual child reads rather than infer its complete brief"
+    }
+  ],
+  "all_recorded_seats_match": true,
+  "artifact_matches_captures": [
+    {
+      "path": "scratch/redline-mechanical-kf1fm_pl/input.md",
+      "sha256": "158c166eb55bd343a5735efc4a801e1508ed4dc735a879a8fe655fbeafc93084",
+      "capture": "0008-158c166eb55b.md",
+      "time": 1790862229.883231
+    },
+    {
+      "path": "scratch/redline-mechanical-kf1fm_pl/output.md",
+      "sha256": "158c166eb55bd343a5735efc4a801e1508ed4dc735a879a8fe655fbeafc93084",
+      "capture": "0013-158c166eb55b.md",
+      "time": 1790862347.264957
+    },
+    {
+      "path": "work/output.md",
+      "sha256": "158c166eb55bd343a5735efc4a801e1508ed4dc735a879a8fe655fbeafc93084",
+      "capture": "0014-158c166eb55b.md",
+      "time": 1790862723.8181062
+    }
+  ],
+  "source_inventory_unchanged": true,
+  "staged_install_unchanged": true,
+  "work_created": {
+    "work/output.md": {
+      "mode": 420,
+      "type": "file",
+      "size": 2334,
+      "sha256": "158c166eb55bd343a5735efc4a801e1508ed4dc735a879a8fe655fbeafc93084"
+    }
+  },
+  "work_removed": {},
+  "work_changed": {}
+}

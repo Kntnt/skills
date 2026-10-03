@@ -1,0 +1,261 @@
+{
+  "revision": "fb16908712c4d47a36fc6ee9dfb3eb2714a19e65",
+  "method": "Unicode-whitespace word count of exact committed complete resource; this catalogue does not assert that any run read a resource. Language scopes require the resolver returned content, counted separately.",
+  "resources": {
+    "skills/editorial/proofread/SKILL.md": {
+      "sha256": "6cad45f3d50a96e43c8df9996bc748c7e09e09f456e8a9375c724b84d236404f",
+      "words": 2036,
+      "bytes": 13045
+    },
+    "skills/editorial/proofread/help.md": {
+      "sha256": "5bad100c3b2bca059643a524d8730ac2d5761414295db2e9420207cf3004a43f",
+      "words": 893,
+      "bytes": 6350
+    },
+    "skills/editorial/redline/SKILL.md": {
+      "sha256": "0872ac03b535f7b1d7205fdbea4647795c316d3d6fe638c2af5ce0018dd40bb0",
+      "words": 6536,
+      "bytes": 39912
+    },
+    "skills/editorial/redline/help.md": {
+      "sha256": "49f8676eebc0a22e0571dbf554752f2ac3ad404bebdd3b49304cc97b2049a6d3",
+      "words": 2568,
+      "bytes": 17015
+    },
+    "skills/editorial/redline/references/brief-review.md": {
+      "sha256": "6aebf74a0eeb638c35f24fcc63215280ac4a4c13583d3c31fe42c5d8e9b93264",
+      "words": 1668,
+      "bytes": 10113
+    },
+    "skills/editorial/redline/references/correction.md": {
+      "sha256": "c7d164379021076cdcb09e6615b9a1155367603695836df165c889fd72189aac",
+      "words": 2640,
+      "bytes": 15881
+    },
+    "skills/editorial/redline/references/reply-check.md": {
+      "sha256": "c89fd5a2ebdbd73898adf475fee34dda5c88415de318d16378dd50fee221d9e5",
+      "words": 1044,
+      "bytes": 5987
+    },
+    "skills/editorial/write/SKILL.md": {
+      "sha256": "73186c908f6fa2c9608682947799fdac1a5e902fd6d1a265b1a088dd23c85489",
+      "words": 2839,
+      "bytes": 17876
+    },
+    "skills/editorial/write/help.md": {
+      "sha256": "84ded05edc8b0018fff553dd0f1e921ef9478155bf36ffb39fa4a9756a8650b4",
+      "words": 1834,
+      "bytes": 12201
+    },
+    "skills/editorial/write/references/quotations.md": {
+      "sha256": "89ba23a834153bf3c38372206548d2e269ff1a516c93cf393eaaf2fe5c62e881",
+      "words": 671,
+      "bytes": 4063
+    },
+    "skills/editorial/write/references/source-check.md": {
+      "sha256": "c7a8956c5d850854984cd97f802a5c7c1caf13cccf4aff351aa6bee7c1df3ce0",
+      "words": 2150,
+      "bytes": 13404
+    },
+    "skills/kntnt/library/references/changelog.md": {
+      "sha256": "ffbaa70cec4453d3fb366ca2cb0ea07359d5c4f6d86edc1882458aa9e627fb56",
+      "words": 235,
+      "bytes": 1393
+    },
+    "skills/kntnt/library/references/delivery.md": {
+      "sha256": "71babd36f68d93cd9f7d035358c3cbaeae3179147d8dc7a4667047081c898472",
+      "words": 2675,
+      "bytes": 15329
+    },
+    "skills/kntnt/library/references/editorial/README.md": {
+      "sha256": "dc78a0934449c34cf02edd4a69f7bc716dc052ca12414c53129d3e37de829eda",
+      "words": 3204,
+      "bytes": 19342
+    },
+    "skills/kntnt/library/references/editorial/anti-slop.md": {
+      "sha256": "9ec7fb15b3cfe22f446c6ed2df85666aaa182d8fa0a09fa3668887e4786d83c2",
+      "words": 1251,
+      "bytes": 7475
+    },
+    "skills/kntnt/library/references/editorial/article-anatomy.md": {
+      "sha256": "c075c6fe7494dbcdc43d6af599c55ab8fc52fc48d7ed1b6cc26eca7a592cecd7",
+      "words": 962,
+      "bytes": 5481
+    },
+    "skills/kntnt/library/references/editorial/article-anatomy.review.md": {
+      "sha256": "3e616f9671126ba7898123dd288a4a9bb4170f189d567a3fcbd2b17ccb82c633",
+      "words": 966,
+      "bytes": 5360
+    },
+    "skills/kntnt/library/references/editorial/base.md": {
+      "sha256": "d4146ef134de7482e25469201aaceed7b207fba9f8bacb06a428b85f6bfc3581",
+      "words": 597,
+      "bytes": 3948
+    },
+    "skills/kntnt/library/references/editorial/base.review.md": {
+      "sha256": "d2c838c19a692104be247afd227b0baed98f3156be059c0a982ecae3513fa0ca",
+      "words": 949,
+      "bytes": 5695
+    },
+    "skills/kntnt/library/references/editorial/genres/article.md": {
+      "sha256": "2313180d69b25de48b818629c5d761daa36eb69def33441b01c24a2135f17b4f",
+      "words": 193,
+      "bytes": 1255
+    },
+    "skills/kntnt/library/references/editorial/genres/article.review.md": {
+      "sha256": "0d992e276cb65943ceab91cb855c1fcafd2b65ed4b378a16a4ea63036de8074c",
+      "words": 148,
+      "bytes": 905
+    },
+    "skills/kntnt/library/references/editorial/genres/casestudy.md": {
+      "sha256": "a39054321cbd35819cfd8ac7d2823dd3d56550a6ee2d1c6ee3b30f9daaa16cc5",
+      "words": 338,
+      "bytes": 2249
+    },
+    "skills/kntnt/library/references/editorial/genres/casestudy.review.md": {
+      "sha256": "a7db10d0dc1970064a8887c819a8500dfdecf43dcb45fffed32994921ceb68a4",
+      "words": 167,
+      "bytes": 1110
+    },
+    "skills/kntnt/library/references/editorial/genres/column.md": {
+      "sha256": "0971c8b498535ed57bbc130e61989b477c334e53cf3fa3c37b2e1bf64a158d98",
+      "words": 260,
+      "bytes": 1716
+    },
+    "skills/kntnt/library/references/editorial/genres/column.review.md": {
+      "sha256": "8abffc59549e71a00d40200e89b656ca77d0dfd8d1f3e58293a0591373fb5c37",
+      "words": 121,
+      "bytes": 783
+    },
+    "skills/kntnt/library/references/editorial/genres/general.md": {
+      "sha256": "438d85d3016889dd994d70a989b4ab73b8b70e149aea8e45d144cf3d371c6be5",
+      "words": 521,
+      "bytes": 2873
+    },
+    "skills/kntnt/library/references/editorial/genres/opinion.md": {
+      "sha256": "f0edbed362fe613f11cfe6232c4c7fc98202786fa909f3cd72f1b1acd0867e41",
+      "words": 216,
+      "bytes": 1478
+    },
+    "skills/kntnt/library/references/editorial/genres/opinion.review.md": {
+      "sha256": "97c67a0ca701388b268b03f8dbab88e877ed259b6201f3c005ff45ea634b641d",
+      "words": 150,
+      "bytes": 984
+    },
+    "skills/kntnt/library/references/editorial/genres/pressrelease.md": {
+      "sha256": "a63b1650f22fc1af909203c8ecaaf6eb54577907ed8f72661e07f6302058c791",
+      "words": 1412,
+      "bytes": 8000
+    },
+    "skills/kntnt/library/references/editorial/genres/pressrelease.review.md": {
+      "sha256": "38c9b5570d725f6f796b10791c3a9e48d16e54ca6612723908e5a33796493d7f",
+      "words": 2673,
+      "bytes": 15799
+    },
+    "skills/kntnt/library/references/editorial/genres/report.md": {
+      "sha256": "1edaa623002a25cf60ddf2c1fe74ced72479b168857f7c79d7db6965d5d75138",
+      "words": 1573,
+      "bytes": 8648
+    },
+    "skills/kntnt/library/references/editorial/genres/report.review.md": {
+      "sha256": "8c6e3a5b5dfb224d6324026c2708d930abc009a34206caad5bf6296d7235e026",
+      "words": 2328,
+      "bytes": 13445
+    },
+    "skills/kntnt/library/references/editorial/genres/teaser.md": {
+      "sha256": "540f873055e0454cf84b08c2eccce373fe5037ba51c672f5089127a805fd9589",
+      "words": 1340,
+      "bytes": 7307
+    },
+    "skills/kntnt/library/references/editorial/genres/teaser.review.md": {
+      "sha256": "9dc18d812492b0609c827e53c00014d6c29cab477ede94d440054b49a19bcb6c",
+      "words": 1576,
+      "bytes": 9090
+    },
+    "skills/kntnt/library/references/editorial/genres/webcopy.md": {
+      "sha256": "629656792d7038f4d4572fc3f8751643f0cbfd46050892010552ed81f6d04adf",
+      "words": 309,
+      "bytes": 1964
+    },
+    "skills/kntnt/library/references/editorial/genres/webcopy.review.md": {
+      "sha256": "b06d9a72fc61dcd52370d1350520a3a0e9c2d2f19a610e5ac9f029f9e56a056e",
+      "words": 262,
+      "bytes": 1640
+    },
+    "skills/kntnt/library/references/editorial/headlines.md": {
+      "sha256": "adfb7ca612905afee03a73d58cdb07de9d0877b23af9de89f7e114f6de81df5f",
+      "words": 844,
+      "bytes": 4801
+    },
+    "skills/kntnt/library/references/editorial/headlines.review.md": {
+      "sha256": "eb8bd2e680945ef2a7f9ffc7903109e51e4bb6828b7d76000348e59635810dfd",
+      "words": 1233,
+      "bytes": 6714
+    },
+    "skills/kntnt/library/references/editorial/mechanics.md": {
+      "sha256": "b3103ed6da4ac9d27a0ebfb43bdb40b8e77d58d84b3745a90c0a736142438b45",
+      "words": 2015,
+      "bytes": 11577
+    },
+    "skills/kntnt/library/references/editorial/techniques/abt.md": {
+      "sha256": "09007e91b589e7621088b9da5310656aa70b35fd55e7fe036c8417c9517e9af9",
+      "words": 590,
+      "bytes": 3435
+    },
+    "skills/kntnt/library/references/editorial/techniques/abt.review.md": {
+      "sha256": "e422ac0b41d147563365d35c0cb6ee5b14edcd048fd8ddce225ec0a13f2845e7",
+      "words": 348,
+      "bytes": 2162
+    },
+    "skills/kntnt/library/references/editorial/techniques/pac.md": {
+      "sha256": "b7579911a42634b18c38cde72566bbae77f2aeb72ca3a643e70a6ffb18f21fa2",
+      "words": 499,
+      "bytes": 3045
+    },
+    "skills/kntnt/library/references/editorial/techniques/pac.review.md": {
+      "sha256": "f0b1e04cb0e6590635f9ef21c2cde24874a86327040282aea0be42db514e373a",
+      "words": 300,
+      "bytes": 1820
+    },
+    "skills/kntnt/library/references/editorial/web-craft.md": {
+      "sha256": "b1ac5867d30952c3ca78da244520ab28c025102f4389f44ec206757a29f05371",
+      "words": 184,
+      "bytes": 1233
+    },
+    "skills/kntnt/library/references/editorial/web-craft.review.md": {
+      "sha256": "169da1beeb4fb80e74f9423bdd4d7bcd57aa9b59b8e8ff5b71f3a67dfef7e923",
+      "words": 84,
+      "bytes": 581
+    },
+    "skills/kntnt/library/references/editorial/writing-brief.md": {
+      "sha256": "d7d2affa723de1ff71539e3034226755da4442acaabeb1868e37f4849fc7aaa0",
+      "words": 2564,
+      "bytes": 14299
+    },
+    "skills/kntnt/library/references/invocation-envelope.md": {
+      "sha256": "1f76ac87aa395a652232f5f289aef94a8652de76e88dbee3d5f7ceca14496bad",
+      "words": 1176,
+      "bytes": 7431
+    },
+    "skills/kntnt/library/references/languages/README.md": {
+      "sha256": "23929466b467620f2d5b12a2c6ea040ef381a906e0892eaa877dd5210c01a338",
+      "words": 1384,
+      "bytes": 8470
+    },
+    "skills/kntnt/library/references/languages/en_GB.md": {
+      "sha256": "2b36899b232e65300ea15fbbb0db2abece4e1f32e7b193957355a67a34331413",
+      "words": 1089,
+      "bytes": 6993
+    },
+    "skills/kntnt/library/references/languages/en_US.md": {
+      "sha256": "d11fcffa9e7316dd44d8796a954e5db9965c501e7df982affe91bc624cfef73c",
+      "words": 949,
+      "bytes": 6238
+    },
+    "skills/kntnt/library/references/languages/sv.md": {
+      "sha256": "241f0e5e4ca590c1d2348dc4048d15b5c8cc030c9dc91de989a758cefd4cd211",
+      "words": 2344,
+      "bytes": 14473
+    }
+  }
+}

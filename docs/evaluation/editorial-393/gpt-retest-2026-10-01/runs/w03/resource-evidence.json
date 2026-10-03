@@ -1,0 +1,143 @@
+{
+  "revision": "fb16908712c4d47a36fc6ee9dfb3eb2714a19e65",
+  "method": "Unique complete returned resource text per native session; whitespace word count. This is observed resource volume, not a comprehension verdict. Absent matches may reflect wrappers, truncation or partial reads and are gaps, not automatic failures. Mandatory-set costing is a separate contract comparison.",
+  "observations": [
+    {
+      "session": "01a0f7ee-f54b-78d1-959e-b54334cf62b6",
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T16-47-08-01a0f7ee-f54b-78d1-959e-b54334cf62b6.jsonl",
+      "ordinal": 16,
+      "call_id": "call_A2NL6gsQjZSiZMLY2BI1dgiZ",
+      "resource": "skills/editorial/write/SKILL.md",
+      "complete_returned_content": true,
+      "words": 2839,
+      "sha256": "73186c908f6fa2c9608682947799fdac1a5e902fd6d1a265b1a088dd23c85489"
+    },
+    {
+      "session": "01a0f7ee-f54b-78d1-959e-b54334cf62b6",
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T16-47-08-01a0f7ee-f54b-78d1-959e-b54334cf62b6.jsonl",
+      "ordinal": 39,
+      "call_id": "call_O0pt9DnW3VqhDyfLEXje6igA",
+      "resource": "skills/editorial/write/references/source-check.md",
+      "complete_returned_content": true,
+      "words": 2150,
+      "sha256": "c7a8956c5d850854984cd97f802a5c7c1caf13cccf4aff351aa6bee7c1df3ce0"
+    },
+    {
+      "session": "01a0f7ee-f54b-78d1-959e-b54334cf62b6",
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T16-47-08-01a0f7ee-f54b-78d1-959e-b54334cf62b6.jsonl",
+      "ordinal": 39,
+      "call_id": "call_O0pt9DnW3VqhDyfLEXje6igA",
+      "resource": "skills/kntnt/library/references/delivery.md",
+      "complete_returned_content": true,
+      "words": 2675,
+      "sha256": "71babd36f68d93cd9f7d035358c3cbaeae3179147d8dc7a4667047081c898472"
+    },
+    {
+      "session": "01a0f7ee-f54b-78d1-959e-b54334cf62b6",
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T16-47-08-01a0f7ee-f54b-78d1-959e-b54334cf62b6.jsonl",
+      "ordinal": 39,
+      "call_id": "call_O0pt9DnW3VqhDyfLEXje6igA",
+      "resource": "skills/kntnt/library/references/editorial/genres/casestudy.md",
+      "complete_returned_content": true,
+      "words": 338,
+      "sha256": "a39054321cbd35819cfd8ac7d2823dd3d56550a6ee2d1c6ee3b30f9daaa16cc5"
+    },
+    {
+      "session": "01a0f7ee-f54b-78d1-959e-b54334cf62b6",
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T16-47-08-01a0f7ee-f54b-78d1-959e-b54334cf62b6.jsonl",
+      "ordinal": 39,
+      "call_id": "call_O0pt9DnW3VqhDyfLEXje6igA",
+      "language": "sv",
+      "scope": "composition",
+      "source": "sv",
+      "complete_returned_content": true,
+      "words": 566,
+      "sha256": "4076dc55631e27685b2b8dec7a827880f33978b7e5a38b48fe247752572acf6f",
+      "presentation": "exact resolved guidance returned as plain text"
+    },
+    {
+      "session": "01a0f7ee-f54b-78d1-959e-b54334cf62b6",
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T16-47-08-01a0f7ee-f54b-78d1-959e-b54334cf62b6.jsonl",
+      "ordinal": 44,
+      "call_id": "call_eD74K7PR7w6AYtJ97n2L3Wjo",
+      "resource": "skills/editorial/write/references/quotations.md",
+      "complete_returned_content": true,
+      "words": 671,
+      "sha256": "89ba23a834153bf3c38372206548d2e269ff1a516c93cf393eaaf2fe5c62e881"
+    },
+    {
+      "session": "01a0f7ee-f54b-78d1-959e-b54334cf62b6",
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T16-47-08-01a0f7ee-f54b-78d1-959e-b54334cf62b6.jsonl",
+      "ordinal": 44,
+      "call_id": "call_eD74K7PR7w6AYtJ97n2L3Wjo",
+      "resource": "skills/kntnt/library/references/editorial/article-anatomy.md",
+      "complete_returned_content": true,
+      "words": 962,
+      "sha256": "c075c6fe7494dbcdc43d6af599c55ab8fc52fc48d7ed1b6cc26eca7a592cecd7"
+    },
+    {
+      "session": "01a0f7ee-f54b-78d1-959e-b54334cf62b6",
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T16-47-08-01a0f7ee-f54b-78d1-959e-b54334cf62b6.jsonl",
+      "ordinal": 44,
+      "call_id": "call_eD74K7PR7w6AYtJ97n2L3Wjo",
+      "resource": "skills/kntnt/library/references/editorial/base.md",
+      "complete_returned_content": true,
+      "words": 597,
+      "sha256": "d4146ef134de7482e25469201aaceed7b207fba9f8bacb06a428b85f6bfc3581"
+    },
+    {
+      "session": "01a0f7ee-f54b-78d1-959e-b54334cf62b6",
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T16-47-08-01a0f7ee-f54b-78d1-959e-b54334cf62b6.jsonl",
+      "ordinal": 44,
+      "call_id": "call_eD74K7PR7w6AYtJ97n2L3Wjo",
+      "resource": "skills/kntnt/library/references/editorial/headlines.md",
+      "complete_returned_content": true,
+      "words": 844,
+      "sha256": "adfb7ca612905afee03a73d58cdb07de9d0877b23af9de89f7e114f6de81df5f"
+    },
+    {
+      "session": "01a0f7ee-f54b-78d1-959e-b54334cf62b6",
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T16-47-08-01a0f7ee-f54b-78d1-959e-b54334cf62b6.jsonl",
+      "ordinal": 44,
+      "call_id": "call_eD74K7PR7w6AYtJ97n2L3Wjo",
+      "resource": "skills/kntnt/library/references/editorial/web-craft.md",
+      "complete_returned_content": true,
+      "words": 184,
+      "sha256": "b1ac5867d30952c3ca78da244520ab28c025102f4389f44ec206757a29f05371"
+    },
+    {
+      "session": "01a0f7f5-73fe-7c91-bfd3-93546e4e1c32",
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T16-54-13-01a0f7f5-73fe-7c91-bfd3-93546e4e1c32.jsonl",
+      "ordinal": 13,
+      "call_id": "call_a8R3G60gkodGW0JxZYH5r1dF",
+      "resource": "skills/editorial/write/references/quotations.md",
+      "complete_returned_content": true,
+      "words": 671,
+      "sha256": "89ba23a834153bf3c38372206548d2e269ff1a516c93cf393eaaf2fe5c62e881"
+    },
+    {
+      "session": "01a0f7fd-722d-7623-8b5a-d761fd0ae441",
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T17-02-57-01a0f7fd-722d-7623-8b5a-d761fd0ae441.jsonl",
+      "ordinal": 13,
+      "call_id": "call_JqbJruOFf2lkLn22qawCBLQ5",
+      "resource": "skills/editorial/write/references/quotations.md",
+      "complete_returned_content": true,
+      "words": 671,
+      "sha256": "89ba23a834153bf3c38372206548d2e269ff1a516c93cf393eaaf2fe5c62e881"
+    }
+  ],
+  "fragment_observations": [
+    {
+      "session": "01a0f7ee-f54b-78d1-959e-b54334cf62b6",
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T16-47-08-01a0f7ee-f54b-78d1-959e-b54334cf62b6.jsonl",
+      "ordinal": 39,
+      "call_id": "call_O0pt9DnW3VqhDyfLEXje6igA",
+      "fragment": "delivery-truth",
+      "resource": "skills/kntnt/library/references/delivery.md",
+      "complete_returned_fragment": true,
+      "words": 456,
+      "sha256": "b36acf9611107953cd78cfcdfa7192b0d2cf967ac89941270034b9a5e20fcf06"
+    }
+  ],
+  "fragment_note": "Selected reply-check passages are recorded separately. Their words must not be added again where the same session already has the complete containing resource credited. A complete fragment match does not prove that nothing else was read."
+}

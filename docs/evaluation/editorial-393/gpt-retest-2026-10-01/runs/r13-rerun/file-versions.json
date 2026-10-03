@@ -1,0 +1,92 @@
+[
+  {
+    "path": "work/input.md",
+    "sha256": "3d2f9ed7390e247b388dfd62ae735272c4c35adab5f471f922046dc9ef93e7a2",
+    "capture": "0000-3d2f9ed7390e.md",
+    "time": 1790867537.083742
+  },
+  {
+    "path": "work/AGENTS.md",
+    "sha256": "7718e5150173a6fd7ef50242a15949dd3b16776a316ecea3c029bcf8b1604364",
+    "capture": "0001-7718e5150173.md",
+    "time": 1790867537.083937
+  },
+  {
+    "path": "scratch/redline-invoke-h93m184g/.tmpHEqwgW/environments-v2/kntnt-703afa3855aff03e/lib/python3.12/site-packages/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0002-ae98f4215313.txt",
+    "time": 1790867572.592363
+  },
+  {
+    "path": "scratch/redline-invoke-h93m184g/.tmpHEqwgW/archive-v0/io_iKSHV84cbNOth/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0003-ae98f4215313.txt",
+    "time": 1790867572.5929768
+  },
+  {
+    "path": "scratch/redline-language-zojhijgi/.tmptzHKLL/.tmpH9jvhY/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0004-ae98f4215313.txt",
+    "time": 1790867592.7068238
+  },
+  {
+    "path": "scratch/redline-language-zojhijgi/.tmptzHKLL/environments-v2/languages-86b0f3b0ab63d053/lib/python3.12/site-packages/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0005-ae98f4215313.txt",
+    "time": 1790867592.819156
+  },
+  {
+    "path": "scratch/redline-language-zojhijgi/.tmptzHKLL/archive-v0/vyygQp_Uo26k5LkV/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0006-ae98f4215313.txt",
+    "time": 1790867592.819909
+  },
+  {
+    "path": "scratch/correction-language.x0AzjYmC/.tmpGlPkLC/environments-v2/languages-86b0f3b0ab63d053/lib/python3.12/site-packages/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0007-ae98f4215313.txt",
+    "time": 1790867841.76193
+  },
+  {
+    "path": "scratch/correction-language.x0AzjYmC/.tmpGlPkLC/archive-v0/mXh6vZPAOdFaQcv1/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0008-ae98f4215313.txt",
+    "time": 1790867841.762542
+  },
+  {
+    "path": "scratch/redline-mechanical-hvr2tt8f/mechanical-input.md",
+    "sha256": "3b81fc6eac2a55f07f2ff3eeb863d5dcf82299c4336c4671fec67bc8e288303a",
+    "capture": "0009-3b81fc6eac2a.md",
+    "time": 1790868113.644419
+  },
+  {
+    "path": "scratch/proofread-invoke.rONU91/.tmpFBDsIB/environments-v2/kntnt-703afa3855aff03e/lib/python3.12/site-packages/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0010-ae98f4215313.txt",
+    "time": 1790868164.720514
+  },
+  {
+    "path": "scratch/proofread-invoke.rONU91/.tmpFBDsIB/archive-v0/Exb7ZZ2OZWaJjLiK/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0011-ae98f4215313.txt",
+    "time": 1790868164.721181
+  },
+  {
+    "path": "scratch/proofread-resolve.ZApkHl/.tmppW7afy/environments-v2/languages-86b0f3b0ab63d053/lib/python3.12/site-packages/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0012-ae98f4215313.txt",
+    "time": 1790868182.916885
+  },
+  {
+    "path": "scratch/proofread-resolve.ZApkHl/.tmppW7afy/archive-v0/kB_WAAviZwg2ZDEi/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0013-ae98f4215313.txt",
+    "time": 1790868182.9174788
+  },
+  {
+    "path": "scratch/redline-mechanical-hvr2tt8f/mechanical-output.md",
+    "sha256": "fcfe45c6756eb956e67250d2b81d02f7737440bea219f7a5ebb7faf6e5ebbce8",
+    "capture": "0014-fcfe45c6756e.md",
+    "time": 1790868222.9932742
+  }
+]

@@ -1,0 +1,792 @@
+{
+  "method": "Only explicit #393 ownership registrations retained; unrelated records omitted. Each pid ownership is bound to its stored process start timestamp.",
+  "registrations": [
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T11:53:47+00:00",
+      "id": "10534",
+      "kind": "pid",
+      "started": "Thu Oct  1 13:53:47 2026",
+      "why": "Editorial #393 isolated native evaluation"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T11:53:47+00:00",
+      "id": "10533",
+      "kind": "pid",
+      "started": "Thu Oct  1 13:53:47 2026",
+      "why": "Editorial #393 isolated native evaluation"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T11:53:47+00:00",
+      "id": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-wfif5jnm",
+      "kind": "path",
+      "why": "Editorial #393 isolated native evaluation"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T11:53:47+00:00",
+      "id": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-tmjn2uqe",
+      "kind": "path",
+      "why": "Editorial #393 isolated native evaluation"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T11:53:47+00:00",
+      "id": "10574",
+      "kind": "pid",
+      "started": "Thu Oct  1 13:53:47 2026",
+      "why": "Editorial #393 isolated native evaluation"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T11:53:47+00:00",
+      "id": "10575",
+      "kind": "pid",
+      "started": "Thu Oct  1 13:53:47 2026",
+      "why": "Editorial #393 isolated native evaluation"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T11:55:01+00:00",
+      "id": "20468",
+      "kind": "pid",
+      "started": "Thu Oct  1 13:55:01 2026",
+      "why": "Editorial #393 fixed-matrix launcher"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T11:56:59+00:00",
+      "id": "42752",
+      "kind": "pid",
+      "started": "Thu Oct  1 13:56:59 2026",
+      "why": "Editorial #393 fixed-matrix launcher"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T12:08:26+00:00",
+      "id": "10851",
+      "kind": "pid",
+      "started": "Thu Oct  1 14:08:26 2026",
+      "why": "Editorial #393 fixed-matrix launcher"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T12:08:26+00:00",
+      "id": "10850",
+      "kind": "pid",
+      "started": "Thu Oct  1 14:08:26 2026",
+      "why": "Editorial #393 isolated native evaluation"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T12:08:26+00:00",
+      "id": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-b_nt8eqi",
+      "kind": "path",
+      "why": "Editorial #393 isolated native evaluation"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T12:08:27+00:00",
+      "id": "10885",
+      "kind": "pid",
+      "started": "Thu Oct  1 14:08:27 2026",
+      "why": "Editorial #393 isolated native evaluation"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T12:14:36+00:00",
+      "id": "20230",
+      "kind": "pid",
+      "started": "Thu Oct  1 14:14:36 2026",
+      "why": "Editorial #393 fixed-matrix launcher"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T12:14:36+00:00",
+      "id": "20241",
+      "kind": "pid",
+      "started": "Thu Oct  1 14:14:36 2026",
+      "why": "Editorial #393 isolated native evaluation"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T12:14:36+00:00",
+      "id": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-aofib893",
+      "kind": "path",
+      "why": "Editorial #393 isolated native evaluation"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T12:14:37+00:00",
+      "id": "20318",
+      "kind": "pid",
+      "started": "Thu Oct  1 14:14:37 2026",
+      "why": "Editorial #393 isolated native evaluation"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T12:18:27+00:00",
+      "id": "28616",
+      "kind": "pid",
+      "started": "Thu Oct  1 14:18:27 2026",
+      "why": "Editorial #393 validation supervisor"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T12:18:27+00:00",
+      "id": "28625",
+      "kind": "pid",
+      "started": "Thu Oct  1 14:18:27 2026",
+      "why": "Editorial #393 mypy check"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T12:18:31+00:00",
+      "id": "28705",
+      "kind": "pid",
+      "started": "Thu Oct  1 14:18:31 2026",
+      "why": "Editorial #393 pytest check"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T12:30:08+00:00",
+      "id": "79705",
+      "kind": "pid",
+      "started": "Thu Oct  1 14:30:08 2026",
+      "why": "Editorial #393 fixed-matrix launcher"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T12:33:58+00:00",
+      "id": "289",
+      "kind": "pid",
+      "started": "Thu Oct  1 14:33:58 2026",
+      "why": "Editorial #393 isolated native evaluation"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T12:33:58+00:00",
+      "id": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-hlyi1ytl",
+      "kind": "path",
+      "why": "Editorial #393 isolated native evaluation"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T12:33:59+00:00",
+      "id": "308",
+      "kind": "pid",
+      "started": "Thu Oct  1 14:33:59 2026",
+      "why": "Editorial #393 isolated native evaluation"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T12:36:12+00:00",
+      "id": "3377",
+      "kind": "pid",
+      "started": "Thu Oct  1 14:36:12 2026",
+      "why": "Editorial #393 isolated native evaluation"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T12:36:12+00:00",
+      "id": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-478l45pd",
+      "kind": "path",
+      "why": "Editorial #393 isolated native evaluation"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T12:36:12+00:00",
+      "id": "3401",
+      "kind": "pid",
+      "started": "Thu Oct  1 14:36:12 2026",
+      "why": "Editorial #393 isolated native evaluation"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T12:38:26+00:00",
+      "id": "7179",
+      "kind": "pid",
+      "started": "Thu Oct  1 14:38:26 2026",
+      "why": "Editorial #393 isolated native evaluation"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T12:38:26+00:00",
+      "id": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-1bwyryom",
+      "kind": "path",
+      "why": "Editorial #393 isolated native evaluation"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T12:38:26+00:00",
+      "id": "7211",
+      "kind": "pid",
+      "started": "Thu Oct  1 14:38:26 2026",
+      "why": "Editorial #393 isolated native evaluation"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T12:38:28+00:00",
+      "id": "7495",
+      "kind": "pid",
+      "started": "Thu Oct  1 14:38:28 2026",
+      "why": "Editorial #393 isolated native evaluation"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T12:38:29+00:00",
+      "id": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-1whlh9rj",
+      "kind": "path",
+      "why": "Editorial #393 isolated native evaluation"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T12:38:29+00:00",
+      "id": "7513",
+      "kind": "pid",
+      "started": "Thu Oct  1 14:38:29 2026",
+      "why": "Editorial #393 isolated native evaluation"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T12:40:34+00:00",
+      "id": "11842",
+      "kind": "pid",
+      "started": "Thu Oct  1 14:40:34 2026",
+      "why": "Editorial #393 fixed-matrix launcher"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T12:40:34+00:00",
+      "id": "11890",
+      "kind": "pid",
+      "started": "Thu Oct  1 14:40:34 2026",
+      "why": "Editorial #393 isolated native evaluation"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T12:40:34+00:00",
+      "id": "11893",
+      "kind": "pid",
+      "started": "Thu Oct  1 14:40:34 2026",
+      "why": "Editorial #393 isolated native evaluation"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T12:40:35+00:00",
+      "id": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-dg_rk1zn",
+      "kind": "path",
+      "why": "Editorial #393 isolated native evaluation"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T12:40:35+00:00",
+      "id": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-n5cht9dv",
+      "kind": "path",
+      "why": "Editorial #393 isolated native evaluation"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T12:40:35+00:00",
+      "id": "12075",
+      "kind": "pid",
+      "started": "Thu Oct  1 14:40:35 2026",
+      "why": "Editorial #393 isolated native evaluation"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T12:40:35+00:00",
+      "id": "12076",
+      "kind": "pid",
+      "started": "Thu Oct  1 14:40:35 2026",
+      "why": "Editorial #393 isolated native evaluation"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T13:04:50+00:00",
+      "id": "39799",
+      "kind": "pid",
+      "started": "Thu Oct  1 15:04:50 2026",
+      "why": "Editorial #393 isolated native evaluation"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T13:04:50+00:00",
+      "id": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-xzax0ud5",
+      "kind": "path",
+      "why": "Editorial #393 isolated native evaluation"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T13:04:50+00:00",
+      "id": "39924",
+      "kind": "pid",
+      "started": "Thu Oct  1 15:04:50 2026",
+      "why": "Editorial #393 isolated native evaluation"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T13:07:17+00:00",
+      "id": "50206",
+      "kind": "pid",
+      "started": "Thu Oct  1 15:07:17 2026",
+      "why": "Editorial #393 isolated native evaluation"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T13:07:17+00:00",
+      "id": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-y0lko_db",
+      "kind": "path",
+      "why": "Editorial #393 isolated native evaluation"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T13:07:18+00:00",
+      "id": "50225",
+      "kind": "pid",
+      "started": "Thu Oct  1 15:07:18 2026",
+      "why": "Editorial #393 isolated native evaluation"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T13:31:41+00:00",
+      "id": "83202",
+      "kind": "pid",
+      "started": "Thu Oct  1 15:31:41 2026",
+      "why": "Editorial #393 isolated native evaluation"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T13:31:41+00:00",
+      "id": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-qev9bmaz",
+      "kind": "path",
+      "why": "Editorial #393 isolated native evaluation"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T13:31:41+00:00",
+      "id": "83226",
+      "kind": "pid",
+      "started": "Thu Oct  1 15:31:41 2026",
+      "why": "Editorial #393 isolated native evaluation"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T13:33:09+00:00",
+      "id": "84586",
+      "kind": "pid",
+      "started": "Thu Oct  1 15:33:09 2026",
+      "why": "Editorial #393 isolated native evaluation"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T13:33:09+00:00",
+      "id": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-euzjpdes",
+      "kind": "path",
+      "why": "Editorial #393 isolated native evaluation"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T13:33:10+00:00",
+      "id": "84604",
+      "kind": "pid",
+      "started": "Thu Oct  1 15:33:10 2026",
+      "why": "Editorial #393 isolated native evaluation"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T13:50:39+00:00",
+      "id": "96099",
+      "kind": "pid",
+      "started": "Thu Oct  1 15:50:39 2026",
+      "why": "Editorial #393 isolated native evaluation"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T13:50:39+00:00",
+      "id": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-a9a6vvtz",
+      "kind": "path",
+      "why": "Editorial #393 isolated native evaluation"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T13:50:40+00:00",
+      "id": "96117",
+      "kind": "pid",
+      "started": "Thu Oct  1 15:50:40 2026",
+      "why": "Editorial #393 isolated native evaluation"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T13:52:21+00:00",
+      "id": "97443",
+      "kind": "pid",
+      "started": "Thu Oct  1 15:52:21 2026",
+      "why": "Editorial #393 isolated native evaluation"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T13:52:21+00:00",
+      "id": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-dujnnokn",
+      "kind": "path",
+      "why": "Editorial #393 isolated native evaluation"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T13:52:21+00:00",
+      "id": "97461",
+      "kind": "pid",
+      "started": "Thu Oct  1 15:52:21 2026",
+      "why": "Editorial #393 isolated native evaluation"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T14:07:30+00:00",
+      "id": "6612",
+      "kind": "pid",
+      "started": "Thu Oct  1 16:07:30 2026",
+      "why": "Editorial #393 isolated native evaluation"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T14:07:30+00:00",
+      "id": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-zwdv16wq",
+      "kind": "path",
+      "why": "Editorial #393 isolated native evaluation"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T14:07:30+00:00",
+      "id": "6630",
+      "kind": "pid",
+      "started": "Thu Oct  1 16:07:30 2026",
+      "why": "Editorial #393 isolated native evaluation"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T14:11:42+00:00",
+      "id": "9152",
+      "kind": "pid",
+      "started": "Thu Oct  1 16:11:41 2026",
+      "why": "Editorial #393 isolated native evaluation"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T14:11:42+00:00",
+      "id": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-ui0bdkvx",
+      "kind": "path",
+      "why": "Editorial #393 isolated native evaluation"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T14:11:42+00:00",
+      "id": "9170",
+      "kind": "pid",
+      "started": "Thu Oct  1 16:11:42 2026",
+      "why": "Editorial #393 isolated native evaluation"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T14:28:03+00:00",
+      "id": "15572",
+      "kind": "pid",
+      "started": "Thu Oct  1 16:28:03 2026",
+      "why": "Editorial #393 isolated native evaluation"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T14:28:03+00:00",
+      "id": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-qjib77lh",
+      "kind": "path",
+      "why": "Editorial #393 isolated native evaluation"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T14:28:03+00:00",
+      "id": "15590",
+      "kind": "pid",
+      "started": "Thu Oct  1 16:28:03 2026",
+      "why": "Editorial #393 isolated native evaluation"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T14:31:25+00:00",
+      "id": "17810",
+      "kind": "pid",
+      "started": "Thu Oct  1 16:31:25 2026",
+      "why": "Editorial #393 isolated native evaluation"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T14:31:25+00:00",
+      "id": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-ujmtutv1",
+      "kind": "path",
+      "why": "Editorial #393 isolated native evaluation"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T14:31:26+00:00",
+      "id": "17828",
+      "kind": "pid",
+      "started": "Thu Oct  1 16:31:26 2026",
+      "why": "Editorial #393 isolated native evaluation"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T14:33:24+00:00",
+      "id": "18875",
+      "kind": "pid",
+      "started": "Thu Oct  1 16:33:24 2026",
+      "why": "Editorial #393 isolated native evaluation"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T14:33:24+00:00",
+      "id": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-h3gc8vnj",
+      "kind": "path",
+      "why": "Editorial #393 isolated native evaluation"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T14:33:24+00:00",
+      "id": "18893",
+      "kind": "pid",
+      "started": "Thu Oct  1 16:33:24 2026",
+      "why": "Editorial #393 isolated native evaluation"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T14:47:07+00:00",
+      "id": "24243",
+      "kind": "pid",
+      "started": "Thu Oct  1 16:47:07 2026",
+      "why": "Editorial #393 isolated native evaluation"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T14:47:07+00:00",
+      "id": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-w8zwcb3a",
+      "kind": "path",
+      "why": "Editorial #393 isolated native evaluation"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T14:47:07+00:00",
+      "id": "24261",
+      "kind": "pid",
+      "started": "Thu Oct  1 16:47:07 2026",
+      "why": "Editorial #393 isolated native evaluation"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T15:07:35+00:00",
+      "id": "32927",
+      "kind": "pid",
+      "started": "Thu Oct  1 17:07:35 2026",
+      "why": "Editorial #393 fixed w01 service-boundary replacement launcher"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T15:07:36+00:00",
+      "id": "33049",
+      "kind": "pid",
+      "started": "Thu Oct  1 17:07:36 2026",
+      "why": "Editorial #393 fixed r13 capacity replacement launcher"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T15:08:35+00:00",
+      "id": "33093",
+      "kind": "pid",
+      "started": "Thu Oct  1 17:08:35 2026",
+      "why": "Editorial #393 isolated native evaluation"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T15:08:35+00:00",
+      "id": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-gfyoybhg",
+      "kind": "path",
+      "why": "Editorial #393 isolated native evaluation"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T15:08:35+00:00",
+      "id": "33111",
+      "kind": "pid",
+      "started": "Thu Oct  1 17:08:35 2026",
+      "why": "Editorial #393 isolated native evaluation"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T15:11:35+00:00",
+      "id": "35247",
+      "kind": "pid",
+      "started": "Thu Oct  1 17:11:35 2026",
+      "why": "Editorial #393 fixed source-blind p02 launcher"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T15:12:16+00:00",
+      "id": "35784",
+      "kind": "pid",
+      "started": "Thu Oct  1 17:12:16 2026",
+      "why": "Editorial #393 isolated native evaluation"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T15:12:16+00:00",
+      "id": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-lfzo1h5i",
+      "kind": "path",
+      "why": "Editorial #393 isolated native evaluation"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T15:12:17+00:00",
+      "id": "35802",
+      "kind": "pid",
+      "started": "Thu Oct  1 17:12:17 2026",
+      "why": "Editorial #393 isolated native evaluation"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T15:14:39+00:00",
+      "id": "37662",
+      "kind": "pid",
+      "started": "Thu Oct  1 17:14:39 2026",
+      "why": "Editorial #393 fixed source-blind p03 launcher"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T15:29:36+00:00",
+      "id": "47884",
+      "kind": "pid",
+      "started": "Thu Oct  1 17:29:36 2026",
+      "why": "Editorial #393 isolated native evaluation"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T15:29:36+00:00",
+      "id": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-19exjyrd",
+      "kind": "path",
+      "why": "Editorial #393 isolated native evaluation"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T15:29:36+00:00",
+      "id": "47902",
+      "kind": "pid",
+      "started": "Thu Oct  1 17:29:36 2026",
+      "why": "Editorial #393 isolated native evaluation"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T15:38:20+00:00",
+      "id": "85229",
+      "kind": "pid",
+      "started": "Thu Oct  1 17:38:20 2026",
+      "why": "Editorial #393 isolated native evaluation"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T15:38:20+00:00",
+      "id": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-8bg0x9_u",
+      "kind": "path",
+      "why": "Editorial #393 isolated native evaluation"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T15:38:20+00:00",
+      "id": "85250",
+      "kind": "pid",
+      "started": "Thu Oct  1 17:38:20 2026",
+      "why": "Editorial #393 isolated native evaluation"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T15:41:04+00:00",
+      "id": "89758",
+      "kind": "pid",
+      "started": "Thu Oct  1 17:41:04 2026",
+      "why": "Editorial #393 fixed source-blind p01 launcher"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T15:42:15+00:00",
+      "id": "90857",
+      "kind": "pid",
+      "started": "Thu Oct  1 17:42:15 2026",
+      "why": "Editorial #393 isolated native evaluation"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T15:42:15+00:00",
+      "id": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-kipogeeb",
+      "kind": "path",
+      "why": "Editorial #393 isolated native evaluation"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T15:42:15+00:00",
+      "id": "90876",
+      "kind": "pid",
+      "started": "Thu Oct  1 17:42:15 2026",
+      "why": "Editorial #393 isolated native evaluation"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T16:01:12+00:00",
+      "id": "19705",
+      "kind": "pid",
+      "started": "Thu Oct  1 18:01:12 2026",
+      "why": "Editorial #393 isolated native evaluation"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T16:01:12+00:00",
+      "id": "19706",
+      "kind": "pid",
+      "started": "Thu Oct  1 18:01:12 2026",
+      "why": "Editorial #393 isolated native evaluation"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T16:01:12+00:00",
+      "id": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-zk09mi8c",
+      "kind": "path",
+      "why": "Editorial #393 isolated native evaluation"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T16:01:12+00:00",
+      "id": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-zytzrg6p",
+      "kind": "path",
+      "why": "Editorial #393 isolated native evaluation"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T16:01:13+00:00",
+      "id": "19811",
+      "kind": "pid",
+      "started": "Thu Oct  1 18:01:13 2026",
+      "why": "Editorial #393 isolated native evaluation"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T16:01:13+00:00",
+      "id": "19809",
+      "kind": "pid",
+      "started": "Thu Oct  1 18:01:13 2026",
+      "why": "Editorial #393 isolated native evaluation"
+    },
+    {
+      "manifest_name": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+      "at": "2026-10-01T16:46:02+00:00",
+      "id": "85728",
+      "kind": "pid",
+      "started": "Thu Oct  1 18:46:02 2026",
+      "why": "#393 final documentation/evidence tests own process group"
+    }
+  ]
+}

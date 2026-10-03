@@ -1,0 +1,42 @@
+Granskat som kundcase (`casestudy`) på svenska (`sv`), utan teknik.
+
+```markdown
+# Elm Quay samlade reparationsärendena
+
+**Elm Quay Housing provade en gemensam reparationslogg i två hus. Arbetsledaren Maya Lind vill göra om försöket, men skulle avsätta mer tid för förberedelser.**
+
+För Elm Quays underhållsgrupp handlade försöket med en gemensam reparationslogg om att se samma information över skiftgränserna. Gruppen valde kategorierna; leverantören Svale konfigurerade loggen och utbildade sex medarbetare.
+
+## Maya Lind om kategorierna
+
+– Vi lade mer tid på att enas om kategorierna än på att lägga in de första ärendena. Den tiden skulle jag avsätta innan nästa hus börjar använda loggen, säger Maya Lind.
+
+## Två perioder med olika arbetsbelastning
+
+Enligt Elm Quays interna försöksanteckning från den 4 december 2025 registrerades 31 ärenden under åtta veckor. Akuta ärenden och tidigare beställda arbeten ingick inte. Mediantiden från anmälan till tilldelning var två arbetsdagar, jämfört med tre under de föregående åtta veckorna.
+
+Perioderna hade olika arbetsbelastning. Anteckningen tillskriver därför inte skillnaden programvaran.
+
+## Maya Lind om ett nytt försök
+
+– Jag skulle välja att göra försöket igen. Att ha en gemensam bild av ärendena hjälper oss, men jag skulle lägga till en vecka för förberedelser, säger Lind.
+
+Kundcaset publiceras av leverantören Svale. [Läs Svales checklista för införandet](https://example.invalid/svale/checklist).
+```
+
+Fynd:
+
+- **Olöst:** byline saknas. Texten anger ingen författare, så namnuppgiften lämnas åt skribenten.
+- **Rättat:** första citatet har fått mellanrubriken ”Maya Lind om kategorierna”, eftersom ursprungstextens två stycken före första mellanrubriken bröt mot kravet på en lead på ett stycke.
+- **Rättat:** leaden namnger nu försöket med en gemensam reparationslogg, så referensen kan förstås utan ingressen.
+- **Rättat:** den outtalade aktiviteten efter ”börjar” i första citatet har preciserats.
+- **Rättat:** slutmellanrubriken ”Maya Lind om ett nytt försök” ersätter en rubrik som föregrep citatets reservation om mer förberedelsetid.
+
+Ändrade påståenden:
+
+- Förtydligandet i första citatet anger nu att ”börjar” avser att använda loggen.
+- Slutmellanrubriken anger nu att Maya Lind uttalar sig om ett nytt försök. Det tidigare rubrikpåståendet om mer förberedelsetid har ersatts där; önskemålet finns kvar i ingressen och slutcitatet. Ändringen reparerar rubrikens upprepning av citatets reservation.
+
+Tillagt påstående: mellanrubriken ”Maya Lind om kategorierna” ramar in avsnittet som hennes uttalande om kategorierna. Den tillkom för att avskilja citatet från leaden.
+
+Granskningen har förtydligat referenser, gett första citatet en egen sektion och ändrat slutmellanrubriken. Den avslutande korrekturpassagen gjorde inga ytterligare ändringar.

@@ -1,0 +1,133 @@
+{
+  "result": {
+    "returncode": 0,
+    "timed_out": false,
+    "duration_seconds": 938.29,
+    "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-wfif5jnm",
+    "cleanup_required": true
+  },
+  "input_sha256": "8821f2ea42f723956ccb5d1127b212227d04c7035b3944e4a81be990dda82e66",
+  "artifact": {
+    "fenced_artifact_count": 1,
+    "present": true,
+    "source": "response-fence",
+    "sha256": "ab58b8989e2ef242d1cd3e9a1ad1d8e41677ba7f191b9652d7f2f42fb7fc217b",
+    "input_identical": false
+  },
+  "identities": [
+    {
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T13-53-48-01a0f750-4491-72e1-8780-981329fd203f.jsonl",
+      "id": "01a0f750-4491-72e1-8780-981329fd203f",
+      "source": "exec",
+      "seats": [
+        [
+          "gpt-6.1-sol",
+          "xhigh"
+        ]
+      ]
+    },
+    {
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T13-58-32-01a0f754-9a96-7e21-bc91-8b00757d99c1.jsonl",
+      "id": "01a0f754-9a96-7e21-bc91-8b00757d99c1",
+      "source": {
+        "subagent": {
+          "thread_spawn": {
+            "parent_thread_id": "01a0f750-4491-72e1-8780-981329fd203f",
+            "depth": 1,
+            "agent_path": "/root/redline_correction",
+            "agent_nickname": "Turing",
+            "agent_role": null
+          }
+        }
+      },
+      "seats": [
+        [
+          "gpt-6.1-sol",
+          "xhigh"
+        ]
+      ]
+    },
+    {
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T14-03-17-01a0f758-f4e1-7323-a9fe-3c11fae1eacf.jsonl",
+      "id": "01a0f758-f4e1-7323-a9fe-3c11fae1eacf",
+      "source": {
+        "subagent": {
+          "thread_spawn": {
+            "parent_thread_id": "01a0f750-4491-72e1-8780-981329fd203f",
+            "depth": 1,
+            "agent_path": "/root/mechanical_pass",
+            "agent_nickname": "Gibbs",
+            "agent_role": null
+          }
+        }
+      },
+      "seats": [
+        [
+          "gpt-6.1-sol",
+          "xhigh"
+        ]
+      ]
+    },
+    {
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T14-07-41-01a0f75c-facc-76e1-8ce7-4785496b3a0e.jsonl",
+      "id": "01a0f75c-facc-76e1-8ce7-4785496b3a0e",
+      "source": {
+        "subagent": {
+          "thread_spawn": {
+            "parent_thread_id": "01a0f750-4491-72e1-8780-981329fd203f",
+            "depth": 1,
+            "agent_path": "/root/reply_check",
+            "agent_nickname": "Godel",
+            "agent_role": null
+          }
+        }
+      },
+      "seats": [
+        [
+          "gpt-6.1-sol",
+          "xhigh"
+        ]
+      ]
+    }
+  ],
+  "encrypted_dispatches": [
+    {
+      "session": "01a0f750-4491-72e1-8780-981329fd203f",
+      "name": "spawn_agent",
+      "call_id": "call_p4EUXcLonZelEud06IJiAiIV",
+      "note": "dispatch message encrypted; use actual child reads rather than infer its complete brief"
+    },
+    {
+      "session": "01a0f750-4491-72e1-8780-981329fd203f",
+      "name": "spawn_agent",
+      "call_id": "call_dO4XRrP8R8f2N6jqItQXQEeu",
+      "note": "dispatch message encrypted; use actual child reads rather than infer its complete brief"
+    },
+    {
+      "session": "01a0f750-4491-72e1-8780-981329fd203f",
+      "name": "spawn_agent",
+      "call_id": "call_3GKa4uiYAWgNUJnSp2xliGc9",
+      "note": "dispatch message encrypted; use actual child reads rather than infer its complete brief"
+    }
+  ],
+  "all_recorded_seats_match": true,
+  "artifact_matches_captures": [
+    {
+      "path": "scratch/redline-mechanical-pmoihsis/mechanical-input.md",
+      "sha256": "ab58b8989e2ef242d1cd3e9a1ad1d8e41677ba7f191b9652d7f2f42fb7fc217b",
+      "capture": "0008-ab58b8989e2e.md",
+      "time": 1790856186.947142
+    },
+    {
+      "path": "scratch/redline-mechanical-pmoihsis/mechanical-output.md",
+      "sha256": "ab58b8989e2ef242d1cd3e9a1ad1d8e41677ba7f191b9652d7f2f42fb7fc217b",
+      "capture": "0013-ab58b8989e2e.md",
+      "time": 1790856275.085504
+    }
+  ],
+  "source_inventory_unchanged": true,
+  "staged_install_unchanged": true,
+  "work_created": {},
+  "work_removed": {},
+  "work_changed": {}
+}

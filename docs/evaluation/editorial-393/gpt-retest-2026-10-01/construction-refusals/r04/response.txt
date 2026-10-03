@@ -1,0 +1,9 @@
+Granskningen stoppades: `kntnt.genre: case-study` i `input.md` är inte installerad. Den installerade genren heter `casestudy`. Filen är oförändrad; ingen granskning eller korrekturläsning har genomförts.
+
+[redline/SKILL.md](/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-478l45pd/work/.agents/skills/redline/SKILL.md) kräver vid saknad genre: “the run reviews nothing, writes nothing, and stops.”
+
+**/redline** [**--genre**=*GENRE*] [**--technique**=*TECHNIQUE*] [**--language**=*LANGUAGE*] [**--brief=**_PATH|URL_] [**--max**=*N*] [**--output**=*TARGET*] [*TEXT*|*PATH*|*URL*] [**--** *INSTRUCTION*]
+
+**/redline** [**--genre**=*GENRE*] [**--technique**=*TECHNIQUE*] [**--language**=*LANGUAGE*] [**--brief=**_PATH|URL_] [**--max**=*N*] **--in-place**[=**on**|**off**] *PATH* [**--** *INSTRUCTION*]
+
+Du kan uttryckligen välja den installerade genren med `/redline --genre=casestudy --output=response input.md`. Hjälp: `/redline --help`.

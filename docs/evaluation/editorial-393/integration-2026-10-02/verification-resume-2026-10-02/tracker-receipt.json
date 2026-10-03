@@ -1,0 +1,53 @@
+{
+  "issue": 393,
+  "attempt_id": "ms-20261002-fa0735",
+  "url": "https://github.com/Kntnt/skills/issues/393#issuecomment-5950537069",
+  "posted_body_verified": true,
+  "comment": {
+    "url": "https://api.github.com/repos/Kntnt/skills/issues/comments/5950537069",
+    "html_url": "https://github.com/Kntnt/skills/issues/393#issuecomment-5950537069",
+    "issue_url": "https://api.github.com/repos/Kntnt/skills/issues/393",
+    "id": 5950537069,
+    "node_id": "IC_kwDOT6J8Bs8AAAABYq39bQ",
+    "user": {
+      "login": "TBarregren",
+      "id": 261837,
+      "node_id": "MDQ6VXNlcjI2MTgzNw==",
+      "avatar_url": "https://avatars.githubusercontent.com/u/261837?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/TBarregren",
+      "html_url": "https://github.com/TBarregren",
+      "followers_url": "https://api.github.com/users/TBarregren/followers",
+      "following_url": "https://api.github.com/users/TBarregren/following{/other_user}",
+      "gists_url": "https://api.github.com/users/TBarregren/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/TBarregren/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/TBarregren/subscriptions",
+      "organizations_url": "https://api.github.com/users/TBarregren/orgs",
+      "repos_url": "https://api.github.com/users/TBarregren/repos",
+      "events_url": "https://api.github.com/users/TBarregren/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/TBarregren/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "created_at": "2026-10-02T10:37:00Z",
+    "updated_at": "2026-10-02T10:37:00Z",
+    "author_association": "MEMBER",
+    "body": "## #393 continuation \u2014 storage repaired; tracked-evidence gate boundary remains\n\nThe supplied environment repair answers the prior temporary-storage stop. The assigned scratch now resolves outside the real account home. From committed evidence base `bb3cb3d7`, all four unchanged CONTRIBUTING commands ran to completion: ruff, formatting and specified mypy passed; full pytest returned **2,729 passes and one failure**. The three scheduler failures recorded in the earlier comment no longer occur. Their failed receipts remain unchanged as history.\n\nThe remaining failure is `tests/test_run.py::test_the_registries_the_engine_finds_are_the_ones_this_repository_keeps`. It expects only `docs/adr`, while the shipped tracked-file detector also recognises 29 retained native `file-versions` directories by their four-digit/hyphen filenames. Those byte-exact artifacts are already committed in this continuation's base. Resolving the detector/repository-expectation conflict requires separately scoped work: this brief authorises neither product/test changes nor historical evidence renames. No design is chosen or test narrowed here, and no numbered blocking issue has been established. The required all-green gate remains unmet, so builder completion and independent-verification closure stay pending.\n\n[Fresh verification receipts](https://github.com/Kntnt/skills/blob/main/docs/evaluation/editorial-393/integration-2026-10-02/verification-resume-2026-10-02/README.md) and [registry-boundary diagnosis](https://github.com/Kntnt/skills/blob/main/docs/evaluation/editorial-393/integration-2026-10-02/verification-resume-2026-10-02/gate-boundary.md) retain the exact commands, outputs, counts, process and cleanup checks. These are local surviving-main destinations until the maintainer publishes the integration; this task performs no push.\n\nThe repeated offline audit confirms the original source packet and both records still match retained `4e88c6e0`: twenty counted runs, nineteen delivered artifacts and one permitted no-change status. Outcomes remain two agreed Swedish negative repairs, three mandatory-finding misses and one disputed report; seven of eight positive quotation controls preserve their target, with one unnecessary English expansion; three fresh Swedish preparation translations pass; two source-blind pairs preserve delivered text, while the third supplies no artifact and keeps text-dependent criteria skipped. The twelve frozen/current contract pairs also match the existing [reviewed residual handoff](https://github.com/Kntnt/skills/blob/main/docs/evaluation/editorial-393/integration-2026-10-02/residual-handoff.md), whose six local briefs and rejected/unestablished allegations are unchanged.\n\nThomas's contextual reading and the completed GPT-family retest still answer the original request. Redline still has measured quotation misses. The measurement remains on `fb169087`, GPT `gpt-6.1-sol/xhigh`, native Codex CLI 0.159.3; it does not accept the whole product or certify later main. Disputed/skipped outcomes and instrument limits remain distinct from defects. No native trial is repeated, raw verdict changed, product repaired, new issue filed, ADR written, global installation performed or release made. Original evidence branch/worktree and all deliverables are preserved; all owned processes ended and owned temporary material is cleaned.\n\nBuilder attempt: `ms-20261002-fa0735`. This is a bounded verification stop, not a declaration that #393 is complete. Independent verification and any eventual closure remain with Orchestrate under the owner's authority clarification.\n",
+    "reactions": {
+      "url": "https://api.github.com/repos/Kntnt/skills/issues/comments/5950537069/reactions",
+      "total_count": 0,
+      "+1": 0,
+      "-1": 0,
+      "laugh": 0,
+      "hooray": 0,
+      "confused": 0,
+      "heart": 0,
+      "rocket": 0,
+      "eyes": 0
+    },
+    "performed_via_github_app": null,
+    "minimized": null,
+    "pin": null
+  }
+}

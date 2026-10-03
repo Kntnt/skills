@@ -1,0 +1,37 @@
+{
+  "original_run": "r15",
+  "outcome": "refusal before operation; genre case-study uninstalled",
+  "suppressed": [
+    "r16",
+    "r17"
+  ],
+  "launcher_stopped_process_group": 20468,
+  "method": "SIGTERM to evaluator launcher only while waiting for r01; native sessions run in their own groups",
+  "original_product_runs_interrupted": false,
+  "replacement_ids": [
+    "w01",
+    "w02",
+    "w03"
+  ],
+  "criterion_changes": false,
+  "second_launcher_stop": {
+    "process_group": 42752,
+    "reason": "Use otherwise idle slot for first corrected Write, then gate remaining matrix on both active sessions",
+    "product_runs_interrupted": false
+  },
+  "third_launcher_stop": {
+    "process_group": 10851,
+    "reason": "Count already-running w01 as one occupied executor slot instead of blocking both slots; r01 already completed",
+    "product_runs_interrupted": false
+  },
+  "timeout_launcher_restart": {
+    "process_group": 20230,
+    "reason": "Select longer outer timeout for future invocations; restarted launcher monitors already-running r02 and w01 instead of relaunching",
+    "product_runs_interrupted": false
+  },
+  "metadata_launcher_stop": {
+    "process_group": 79705,
+    "reason": "Historical artifact genre metadata case-study is also uninstalled; freeze explicit-genre invocation override before further replays",
+    "product_runs_interrupted": false
+  }
+}

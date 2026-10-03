@@ -1,0 +1,22 @@
+--- input.md
++++ delivered.md
+@@ -1,6 +1,6 @@
+ ---
+ kntnt:
+-  genre: case-study
++  genre: casestudy
+   technique: none
+   language: en_US
+ ---
+@@ -21,9 +21,9 @@
+ 
+ The note puts the median time from report to assignment at two working days during the trial, compared with three in the preceding eight-week period. The periods had different workloads, and the note explicitly does not attribute the difference to the software. These figures describe assignment, not repair completion; no completion-time, cost, or resident-satisfaction measurements are available.
+ 
+-Lind’s assessment includes a reservation about preparation:
++Lind said:
+ 
+-“I would choose to do the trial again. Having one view of the reports helps us, but I would leave an extra week for preparation.”
++I would choose to do the trial again. Having one view of the reports helps us, but I would leave an extra week for preparation.
+ 
+ The team has not yet expanded the trial. It will decide after checking how the categories work for larger repairs. Lind’s willingness to repeat the trial is a qualified judgment, rather than a recommendation of Svale for every housing company.
+ 

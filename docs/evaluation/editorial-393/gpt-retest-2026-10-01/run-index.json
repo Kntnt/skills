@@ -1,0 +1,201 @@
+{
+  "r01": {
+    "fixture": "sv-control",
+    "repeat": 1,
+    "output_target": "response"
+  },
+  "r02": {
+    "fixture": "sv-control",
+    "repeat": 2,
+    "output_target": "response"
+  },
+  "r03": {
+    "fixture": "sv-artefact",
+    "repeat": 1,
+    "output_target": "response"
+  },
+  "r04": {
+    "fixture": "sv-artefact",
+    "repeat": 2,
+    "output_target": "response"
+  },
+  "r05": {
+    "fixture": "ellipsis-sv",
+    "repeat": 1,
+    "output_target": "response"
+  },
+  "r06": {
+    "fixture": "ellipsis-sv",
+    "repeat": 2,
+    "output_target": "response"
+  },
+  "r07": {
+    "fixture": "en-positive",
+    "repeat": 1,
+    "output_target": "response"
+  },
+  "r08": {
+    "fixture": "en-positive",
+    "repeat": 1,
+    "output_target": "output.md"
+  },
+  "r09": {
+    "fixture": "en-us-r1",
+    "repeat": 1,
+    "output_target": "response"
+  },
+  "r10": {
+    "fixture": "en-us-r1",
+    "repeat": 1,
+    "output_target": "output.md"
+  },
+  "r11": {
+    "fixture": "metonymy-sv",
+    "repeat": 1,
+    "output_target": "response"
+  },
+  "r12": {
+    "fixture": "metonymy-sv",
+    "repeat": 1,
+    "output_target": "output.md"
+  },
+  "r13": {
+    "fixture": "rhythm-en_GB",
+    "repeat": 1,
+    "output_target": "response"
+  },
+  "r14": {
+    "fixture": "rhythm-en_GB",
+    "repeat": 1,
+    "output_target": "output.md"
+  },
+  "r15": {
+    "fixture": "case-study-sv",
+    "repeat": 1,
+    "output_target": "response"
+  },
+  "r16": {
+    "fixture": "case-study-sv",
+    "repeat": 2,
+    "output_target": "response"
+  },
+  "r17": {
+    "fixture": "case-study-sv",
+    "repeat": 3,
+    "output_target": "response"
+  },
+  "w01": {
+    "fixture": "case-study-sv",
+    "repeat": 1,
+    "output_target": "response",
+    "construction_repair": true
+  },
+  "w02": {
+    "fixture": "case-study-sv",
+    "repeat": 2,
+    "output_target": "response",
+    "construction_repair": true
+  },
+  "w03": {
+    "fixture": "case-study-sv",
+    "repeat": 3,
+    "output_target": "response",
+    "construction_repair": true
+  },
+  "c03": {
+    "fixture": "sv-artefact",
+    "repeat": 1,
+    "output_target": "response",
+    "metadata_construction_repair": true
+  },
+  "c04": {
+    "fixture": "sv-artefact",
+    "repeat": 2,
+    "output_target": "response",
+    "metadata_construction_repair": true
+  },
+  "c05": {
+    "fixture": "ellipsis-sv",
+    "repeat": 1,
+    "output_target": "response",
+    "metadata_construction_repair": true
+  },
+  "c06": {
+    "fixture": "ellipsis-sv",
+    "repeat": 2,
+    "output_target": "response",
+    "metadata_construction_repair": true
+  },
+  "c07": {
+    "fixture": "en-positive",
+    "repeat": 1,
+    "output_target": "response",
+    "metadata_construction_repair": true
+  },
+  "c08": {
+    "fixture": "en-positive",
+    "repeat": 1,
+    "output_target": "output.md",
+    "metadata_construction_repair": true
+  },
+  "c09": {
+    "fixture": "en-us-r1",
+    "repeat": 1,
+    "output_target": "response",
+    "metadata_construction_repair": true
+  },
+  "c10": {
+    "fixture": "en-us-r1",
+    "repeat": 1,
+    "output_target": "output.md",
+    "metadata_construction_repair": true
+  },
+  "c11": {
+    "fixture": "metonymy-sv",
+    "repeat": 1,
+    "output_target": "response",
+    "metadata_construction_repair": true
+  },
+  "c12": {
+    "fixture": "metonymy-sv",
+    "repeat": 1,
+    "output_target": "output.md",
+    "metadata_construction_repair": true
+  },
+  "w01-rerun": {
+    "fixture": "case-study-sv",
+    "repeat": 1,
+    "output_target": "response",
+    "construction_repair": true,
+    "interrupted_attempt": "w01",
+    "is_counted_replacement": true
+  },
+  "p01": {
+    "fixture": "delivered-case-study-sv-r1",
+    "repeat": 1,
+    "output_target": "response",
+    "paired_write": "w01-rerun",
+    "input_rule": "exact delivered artifact only; source package and Write reply excluded"
+  },
+  "p02": {
+    "fixture": "delivered-case-study-sv-r2",
+    "repeat": 1,
+    "output_target": "response",
+    "paired_write": "w02",
+    "input_rule": "exact delivered artifact only; source package and Write reply excluded"
+  },
+  "p03": {
+    "fixture": "delivered-case-study-sv-r3",
+    "repeat": 1,
+    "output_target": "response",
+    "paired_write": "w03",
+    "input_rule": "exact delivered artifact only; source package and Write reply excluded"
+  },
+  "r13-rerun": {
+    "fixture": "rhythm-en_GB",
+    "repeat": 1,
+    "output_target": "response",
+    "interrupted_attempt": "r13",
+    "is_counted_replacement": true
+  }
+}

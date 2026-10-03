@@ -1,0 +1,51 @@
+import datetime
+import json
+import os
+import pathlib
+import subprocess
+import time
+
+ROOT = pathlib.Path('/Users/thomas/Projects/skills/.git/kntnt-orchestrate/393')
+SCRATCH = pathlib.Path('/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-393-scratch/resume-verification')
+OUT = ROOT / 'docs/evaluation/editorial-393/integration-2026-10-02/verification-resume-2026-10-02/gate'
+OUT.mkdir(parents=True, exist_ok=True)
+try:
+    os.setsid()
+except PermissionError:
+    assert os.getpgrp() == os.getpid()
+commands = [
+ ('ruff-check', 'uvx ruff check .'),
+ ('ruff-format', 'uvx ruff format --check .'),
+ ('mypy', 'uvx --with types-PyYAML --with pytest --with httpx==0.28.1 --with selectolax==0.4.11 --with types-tinycss2 --with types-regex mypy skills/kntnt/scripts/kntnt.py skills/kntnt/library/scripts/argument_grammar.py skills/kntnt/library/scripts/article_anatomy.py skills/kntnt/library/scripts/ship.py skills/kntnt/library/scripts/integrations.py skills/kntnt/library/scripts/languages.py skills/kntnt/library/scripts/credentials.py skills/models/model-selector/scripts/catalogue.py skills/models/model-selector/scripts/profiles.py skills/models/model-selector/scripts/evidence.py skills/models/model-selector/scripts/launch.py skills/models/model-selector/scripts/selection.py skills/models/model-selector/scripts/quota.py skills/models/model-selector/scripts/record.py skills/models/model-selector/scripts/capture.py skills/models/model-selector/scripts/grade.py skills/models/model-selector/scripts/setup_apply.py skills/models/model-selector/scripts/inventory.py skills/code/orchestrate/scripts/run.py skills/productivity/rename-invoices/scripts/rename_invoices.py skills/agents/explain/scripts/invoke.py skills/web/mirror/scripts/mirror.py skills/infrastructure/cloudns/scripts/cloudns.py skills/infrastructure/hetzner/scripts/hetzner.py skills/infrastructure/nodeping/scripts/nodeping.py skills/infrastructure/postmark/scripts/postmark.py tests'),
+ ('pytest', 'uv run --with pytest --with pytest-xdist --with pyyaml pytest -n auto'),
+]
+for _,command in commands:
+    assert command in (ROOT/'CONTRIBUTING.md').read_text()
+env = os.environ.copy()
+paths = {'UV_CACHE_DIR':'uv-cache','UV_PYTHON_INSTALL_DIR':'uv-python','UV_TOOL_DIR':'uv-tools','UV_TOOL_BIN_DIR':'uv-bin','TMPDIR':'tmp','XDG_CACHE_HOME':'xdg-cache','RUFF_CACHE_DIR':'ruff-cache','MYPY_CACHE_DIR':'mypy-cache'}
+for var,name in paths.items():
+    directory=SCRATCH/name
+    directory.mkdir(exist_ok=True)
+    env[var]=str(directory)
+env['PYTHONDONTWRITEBYTECODE']='1'
+ledger={'runner_pid':os.getpid(),'runner_pgid':os.getpgrp(),'scratch_root':str(SCRATCH),'environment_overrides':{k:env[k] for k in paths}|{'PYTHONDONTWRITEBYTECODE':'1'},'commands':[]}
+(OUT/'processes.json').write_text(json.dumps(ledger,indent=2)+'\n')
+for name,command in commands:
+    start=time.monotonic()
+    with (OUT/f'{name}.txt').open('w') as log:
+        process=subprocess.Popen(command,cwd=ROOT,env=env,shell=True,executable='/bin/bash',start_new_session=True,stdout=log,stderr=subprocess.STDOUT)
+        row={'name':name,'command':command,'cwd':str(ROOT),'pid':process.pid,'pgid':process.pid,'started_at':datetime.datetime.now(datetime.timezone.utc).isoformat()}
+        ledger['commands'].append(row)
+        (OUT/'processes.json').write_text(json.dumps(ledger,indent=2)+'\n')
+        print(f'{name} started, process group {process.pid}',flush=True)
+        row['exit_code']=process.wait()
+        row['duration_seconds']=round(time.monotonic()-start,3)
+        row['finished_at']=datetime.datetime.now(datetime.timezone.utc).isoformat()
+        try:
+            os.killpg(process.pid,0)
+            row['process_group_exists_after_wait']=True
+        except ProcessLookupError:
+            row['process_group_exists_after_wait']=False
+        (OUT/'processes.json').write_text(json.dumps(ledger,indent=2)+'\n')
+        print(f"{name} finished: exit {row['exit_code']}",flush=True)
+(OUT/'complete.json').write_text(json.dumps({'all_four_executed':True,'passed':all(r['exit_code']==0 for r in ledger['commands']),'completed_at':datetime.datetime.now(datetime.timezone.utc).isoformat()},indent=2)+'\n')

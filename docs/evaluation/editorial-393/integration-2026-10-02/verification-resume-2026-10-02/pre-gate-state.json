@@ -1,0 +1,13 @@
+{
+  "attempt_id": "ms-20261002-fa0735",
+  "base_commit": "bb3cb3d711d96deaf8b217dceda65d1f412db2ab",
+  "scratch_root": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-393-scratch",
+  "owned_scratch": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-393-scratch/resume-verification",
+  "ignored_paths": {
+    ".pytest_cache": false,
+    ".venv": false,
+    "uv.lock": false,
+    ".ruff_cache": false,
+    ".mypy_cache": false
+  }
+}

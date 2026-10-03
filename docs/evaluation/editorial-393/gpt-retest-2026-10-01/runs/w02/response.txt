@@ -1,0 +1,50 @@
+Utkastet levereras med en känd källstödsbrist: ”tilldelning av arbetet” preciserar källans ospecificerade ”assignment”. Föreslagen reparation: ”Siffrorna beskriver tiden från anmälan till tilldelning.”
+
+Skillen [write](/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-h3gc8vnj/work/.agents/skills/write/SKILL.md) kräver ”never reopen the prose after its final source comparison”, så förslaget lämnas utanför den kontrollerade texten.
+
+Fallstudien är på svenska, med teknik `none` enligt genren `casestudy`. Författarnamn saknas; bylinen har en platshållare. Det fiktiva underlaget saknar kostnads-, nöjdhets- och slutförandetidsmått samt leverantörsjämförelser. Inga nya filer lämnades kvar.
+
+```markdown
+---
+kntnt:
+  genre: casestudy
+  technique: none
+  language: sv
+---
+
+# Elm Quay Housing samlar anmälningar i reparationsloggen
+
+Efter åtta veckors test i två byggnader har Elm Quay Housing både siffror och en egen bedömning att utgå från. Arbetsledaren för underhåll, Maya Lind, berättar om förberedelserna, och bolagets anteckning sätter gränserna för vilka slutsatser som kan dras. Kundfallet publiceras av leverantören Svale Systems.
+
+Av [ditt namn]
+
+Elm Quay Housing förvaltar 640 lägenheter. I september 2025 beslutade bolagets eget underhållsteam att testa en gemensam reparationslogg i två byggnader. Telefonanmälningar och mejl hade tidigare sparats var för sig. Teamet ville att personal på olika skift skulle kunna se samma information.
+
+## Teamet behåller telefonanmälan för de boende
+
+Teamet valde Svale Systems efter att ha testat om loggen kunde visa status för varje reparation. Det utformade också sina egna kategorier och höll telefonanmälan öppen för de boende.
+
+Svale konfigurerade loggen och utbildade sex medarbetare under två tillfällen. I en mejlintervju beskriver arbetsledaren för underhåll, Maya Lind, arbetet med att komma igång:
+
+– Vi lade mer tid på att komma överens om kategorierna än på att lägga in de första anmälningarna. Jag skulle avsätta den tiden innan nästa byggnad börjar använda loggen.
+
+## Anteckningen jämför två perioder
+
+Försöket pågick i åtta veckor. Enligt Elm Quay Housings interna försöksanteckning, daterad den 4 december 2025, registrerades 31 reparationsanmälningar. Akuta ärenden och arbeten som beställts före försöket ingår inte i underlaget.
+
+Mediantiden från anmälan till tilldelning var två arbetsdagar under försöket, jämfört med tre under den föregående åttaveckorsperioden. Arbetsbelastningen skilde sig mellan perioderna. Anteckningen pekar uttryckligen inte ut programvaran som orsak till skillnaden.
+
+Det finns inga mätningar av kostnader, de boendes nöjdhet eller tiden till slutförd reparation. Siffrorna beskriver tiden till tilldelning av arbetet.
+
+## Maya Lind bedömer försöket inför nästa beslut
+
+Elm Quay Housing har ännu inte utökat försöket. Teamet ska först kontrollera hur kategorierna fungerar för större reparationer och därefter besluta om försöket ska utökas.
+
+I mejlintervjun ger Lind sin bedömning:
+
+– Jag skulle välja att göra försöket igen. Att ha en gemensam vy över anmälningarna hjälper oss, men jag skulle avsätta en extra vecka för förberedelser.
+
+## Läs vidare i Svale Systems checklista
+
+För ett eget test är tiden för förberedelser en fråga att ta ställning till. Som ett frivilligt nästa steg kan du läsa [Svale Systems checklista för införande](https://example.invalid/svale/checklist).
+```

@@ -1,0 +1,320 @@
+[
+  {
+    "run": "r15",
+    "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-tmjn2uqe",
+    "verified_process_group_absent": 10574,
+    "deleted": true,
+    "time": "2026-10-01T12:00:19.200310+00:00",
+    "initial_cleanup_attempt": "rm -rf rejected by exec policy; rm -r accepted"
+  },
+  {
+    "run": "r01",
+    "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-wfif5jnm",
+    "verified_process_group_absent": 10575,
+    "deleted": true,
+    "time": "2026-10-01T12:11:05.396010+00:00"
+  },
+  {
+    "run": "r02",
+    "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-aofib893",
+    "verified_process_group_absent": 20318,
+    "deleted": true,
+    "time": "2026-10-01T12:36:54.223445+00:00"
+  },
+  {
+    "run": "r03",
+    "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-hlyi1ytl",
+    "verified_process_group_absent": 308,
+    "deleted": true,
+    "time": "2026-10-01T12:44:09.292346+00:00",
+    "void_final_scratch_preserved": false
+  },
+  {
+    "run": "r04",
+    "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-478l45pd",
+    "verified_process_group_absent": 3401,
+    "deleted": true,
+    "time": "2026-10-01T12:44:09.293050+00:00",
+    "void_final_scratch_preserved": false
+  },
+  {
+    "run": "r05",
+    "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-1bwyryom",
+    "verified_process_group_absent": 7211,
+    "deleted": true,
+    "time": "2026-10-01T12:44:09.293500+00:00",
+    "void_final_scratch_preserved": false
+  },
+  {
+    "run": "r06",
+    "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-1whlh9rj",
+    "verified_process_group_absent": 7513,
+    "deleted": true,
+    "time": "2026-10-01T12:44:09.293843+00:00",
+    "void_final_scratch_preserved": false
+  },
+  {
+    "run": "w01",
+    "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-b_nt8eqi",
+    "verified_process_group_absent": 10885,
+    "deleted": true,
+    "time": "2026-10-01T12:44:09.294217+00:00",
+    "void_final_scratch_preserved": true
+  },
+  {
+    "run": "c03",
+    "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-dg_rk1zn",
+    "verified_process_group_absent": 12076,
+    "deleted": true,
+    "time": "2026-10-01T13:10:03.284088+00:00"
+  },
+  {
+    "run": "c04",
+    "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-n5cht9dv",
+    "verified_process_group_absent": 12075,
+    "deleted": true,
+    "time": "2026-10-01T13:10:03.284450+00:00"
+  },
+  {
+    "run": "c05",
+    "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-xzax0ud5",
+    "verified_process_group_absent": 39924,
+    "deleted": true,
+    "time": "2026-10-01T13:35:54.531496+00:00"
+  },
+  {
+    "run": "c06",
+    "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-y0lko_db",
+    "verified_process_group_absent": 50225,
+    "deleted": true,
+    "time": "2026-10-01T13:35:54.531848+00:00"
+  },
+  {
+    "run": "c07",
+    "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-qev9bmaz",
+    "verified_process_group_absent": 83226,
+    "deleted": true,
+    "time": "2026-10-01T13:52:58.953437+00:00"
+  },
+  {
+    "run": "c08",
+    "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-euzjpdes",
+    "verified_process_group_absent": 84604,
+    "deleted": true,
+    "time": "2026-10-01T13:54:59.513042+00:00"
+  },
+  {
+    "run": "c09",
+    "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-a9a6vvtz",
+    "verified_process_group_absent": 96117,
+    "deleted": true,
+    "time": "2026-10-01T14:09:38.671768+00:00"
+  },
+  {
+    "run": "c10",
+    "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-dujnnokn",
+    "verified_process_group_absent": 97461,
+    "deleted": true,
+    "time": "2026-10-01T14:13:54.486976+00:00"
+  },
+  {
+    "run": "c11",
+    "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-zwdv16wq",
+    "verified_process_group_absent": 6630,
+    "deleted": true,
+    "time": "2026-10-01T14:31:30.686985+00:00"
+  },
+  {
+    "run": "r13",
+    "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-qjib77lh",
+    "verified_process_group_absent": 15590,
+    "deleted": true,
+    "time": "2026-10-01T14:33:51.449515+00:00",
+    "void_final_scratch_preserved": true
+  },
+  {
+    "run": "c12",
+    "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-ui0bdkvx",
+    "verified_process_group_absent": 9170,
+    "deleted": true,
+    "time": "2026-10-01T14:38:34.076535+00:00"
+  },
+  {
+    "run": "r14",
+    "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-ujmtutv1",
+    "verified_process_group_absent": 17828,
+    "deleted": true,
+    "time": "2026-10-01T14:51:13.804756+00:00"
+  },
+  {
+    "run": "w02",
+    "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-h3gc8vnj",
+    "verified_process_group_absent": 18893,
+    "deleted": true,
+    "time": "2026-10-01T15:11:35.373295+00:00"
+  },
+  {
+    "run": "w03",
+    "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-w8zwcb3a",
+    "verified_process_group_absent": 24261,
+    "deleted": true,
+    "time": "2026-10-01T15:14:39.371170+00:00"
+  },
+  {
+    "run": "r13-rerun",
+    "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-lfzo1h5i",
+    "verified_process_group_absent": 35802,
+    "deleted": true,
+    "time": "2026-10-01T15:31:25.455129+00:00"
+  },
+  {
+    "run": "w01-rerun",
+    "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-gfyoybhg",
+    "verified_process_group_absent": 33111,
+    "deleted": true,
+    "time": "2026-10-01T15:41:04.524303+00:00"
+  },
+  {
+    "run": "p02",
+    "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-19exjyrd",
+    "verified_process_group_absent": 47902,
+    "deleted": true,
+    "time": "2026-10-01T15:49:12.763538+00:00"
+  },
+  {
+    "run": "p03",
+    "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-8bg0x9_u",
+    "verified_process_group_absent": 85250,
+    "deleted": true,
+    "time": "2026-10-01T15:49:12.763646+00:00"
+  },
+  {
+    "run": "p01",
+    "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-kipogeeb",
+    "verified_process_group_absent": 90876,
+    "deleted": true,
+    "time": "2026-10-01T16:10:52.499962+00:00"
+  },
+  {
+    "run": "jA",
+    "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-zk09mi8c",
+    "verified_process_group_absent": 19809,
+    "deleted": true,
+    "time": "2026-10-01T16:24:32.508181+00:00"
+  },
+  {
+    "run": "jB",
+    "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-zytzrg6p",
+    "verified_process_group_absent": 19811,
+    "deleted": true,
+    "time": "2026-10-01T16:29:45.834429+00:00"
+  },
+  {
+    "path": "/Users/thomas/Projects/skills-393-gpt-retest/.mypy_cache",
+    "deleted": true,
+    "time": "2026-10-01T16:49:48.338705+00:00",
+    "reason": "owned isolated-worktree validation scratch or neutral staging after byte-verified evidence retention; no deliverable removed"
+  },
+  {
+    "path": "/Users/thomas/Projects/skills-393-gpt-retest/.pytest_cache",
+    "deleted": true,
+    "time": "2026-10-01T16:49:48.338830+00:00",
+    "reason": "owned isolated-worktree validation scratch or neutral staging after byte-verified evidence retention; no deliverable removed"
+  },
+  {
+    "path": "/Users/thomas/Projects/skills-393-gpt-retest/.ruff_cache",
+    "deleted": true,
+    "time": "2026-10-01T16:49:48.338838+00:00",
+    "reason": "owned isolated-worktree validation scratch or neutral staging after byte-verified evidence retention; no deliverable removed"
+  },
+  {
+    "path": "/Users/thomas/Projects/skills-393-gpt-retest/.venv",
+    "deleted": true,
+    "time": "2026-10-01T16:49:48.338843+00:00",
+    "reason": "owned isolated-worktree validation scratch or neutral staging after byte-verified evidence retention; no deliverable removed"
+  },
+  {
+    "path": "/Users/thomas/Projects/skills-393-gpt-retest/docs/evaluation/editorial-388/harness/__pycache__",
+    "deleted": true,
+    "time": "2026-10-01T16:49:48.338850+00:00",
+    "reason": "owned isolated-worktree validation scratch or neutral staging after byte-verified evidence retention; no deliverable removed"
+  },
+  {
+    "path": "/Users/thomas/Projects/skills-393-gpt-retest/docs/evaluation/editorial-393/gpt-retest-2026-10-01/harness/__pycache__",
+    "deleted": true,
+    "time": "2026-10-01T16:49:48.338856+00:00",
+    "reason": "owned isolated-worktree validation scratch or neutral staging after byte-verified evidence retention; no deliverable removed"
+  },
+  {
+    "path": "/Users/thomas/Projects/skills-393-gpt-retest/skills/code/orchestrate/scripts/__pycache__",
+    "deleted": true,
+    "time": "2026-10-01T16:49:48.338862+00:00",
+    "reason": "owned isolated-worktree validation scratch or neutral staging after byte-verified evidence retention; no deliverable removed"
+  },
+  {
+    "path": "/Users/thomas/Projects/skills-393-gpt-retest/skills/kntnt/features/session-cleanup/scripts/__pycache__",
+    "deleted": true,
+    "time": "2026-10-01T16:49:48.338869+00:00",
+    "reason": "owned isolated-worktree validation scratch or neutral staging after byte-verified evidence retention; no deliverable removed"
+  },
+  {
+    "path": "/Users/thomas/Projects/skills-393-gpt-retest/skills/kntnt/library/scripts/__pycache__",
+    "deleted": true,
+    "time": "2026-10-01T16:49:48.338874+00:00",
+    "reason": "owned isolated-worktree validation scratch or neutral staging after byte-verified evidence retention; no deliverable removed"
+  },
+  {
+    "path": "/Users/thomas/Projects/skills-393-gpt-retest/skills/kntnt/scripts/__pycache__",
+    "deleted": true,
+    "time": "2026-10-01T16:49:48.338879+00:00",
+    "reason": "owned isolated-worktree validation scratch or neutral staging after byte-verified evidence retention; no deliverable removed"
+  },
+  {
+    "path": "/Users/thomas/Projects/skills-393-gpt-retest/skills/models/model-selector/scripts/__pycache__",
+    "deleted": true,
+    "time": "2026-10-01T16:49:48.338885+00:00",
+    "reason": "owned isolated-worktree validation scratch or neutral staging after byte-verified evidence retention; no deliverable removed"
+  },
+  {
+    "path": "/Users/thomas/Projects/skills-393-gpt-retest/skills/productivity/rename-invoices/scripts/__pycache__",
+    "deleted": true,
+    "time": "2026-10-01T16:49:48.338891+00:00",
+    "reason": "owned isolated-worktree validation scratch or neutral staging after byte-verified evidence retention; no deliverable removed"
+  },
+  {
+    "path": "/Users/thomas/Projects/skills-393-gpt-retest/skills/web/mirror/scripts/__pycache__",
+    "deleted": true,
+    "time": "2026-10-01T16:49:48.338897+00:00",
+    "reason": "owned isolated-worktree validation scratch or neutral staging after byte-verified evidence retention; no deliverable removed"
+  },
+  {
+    "path": "/Users/thomas/Projects/skills-393-gpt-retest/tests/__pycache__",
+    "deleted": true,
+    "time": "2026-10-01T16:49:48.338902+00:00",
+    "reason": "owned isolated-worktree validation scratch or neutral staging after byte-verified evidence retention; no deliverable removed"
+  },
+  {
+    "path": "/Users/thomas/Projects/skills-393-gpt-retest/tests/support/__pycache__",
+    "deleted": true,
+    "time": "2026-10-01T16:49:48.338907+00:00",
+    "reason": "owned isolated-worktree validation scratch or neutral staging after byte-verified evidence retention; no deliverable removed"
+  },
+  {
+    "path": "/Users/thomas/Projects/skills-393-gpt-retest/uv.lock",
+    "deleted": true,
+    "time": "2026-10-01T16:49:48.338911+00:00",
+    "reason": "owned isolated-worktree validation scratch or neutral staging after byte-verified evidence retention; no deliverable removed"
+  },
+  {
+    "path": "/Users/thomas/Projects/skills/.git/evaluation-staging/6aea5e5c345f4ad3af4192edfeceff10",
+    "deleted": true,
+    "time": "2026-10-01T16:49:48.338916+00:00",
+    "reason": "owned isolated-worktree validation scratch or neutral staging after byte-verified evidence retention; no deliverable removed"
+  },
+  {
+    "path": "/Users/thomas/Projects/skills/.git/evaluation-staging",
+    "deleted": true,
+    "time": "2026-10-01T16:49:48.338920+00:00",
+    "reason": "owned isolated-worktree validation scratch or neutral staging after byte-verified evidence retention; no deliverable removed"
+  }
+]

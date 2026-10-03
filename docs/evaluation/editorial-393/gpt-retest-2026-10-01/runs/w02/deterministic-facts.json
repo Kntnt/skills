@@ -1,0 +1,117 @@
+{
+  "result": {
+    "returncode": 0,
+    "timed_out": false,
+    "duration_seconds": 2109.82,
+    "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-h3gc8vnj",
+    "cleanup_required": true
+  },
+  "input_sha256": "75188596831d5a0a28364ea4da4d1053f69900ca25237f08859696058c579f11",
+  "artifact": {
+    "fenced_artifact_count": 1,
+    "present": true,
+    "source": "response-fence",
+    "sha256": "d218cf74e9682bb7f4dd6228e62b35172d99f0aa12f2005dfda9f02a2805ef14",
+    "input_identical": false
+  },
+  "identities": [
+    {
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T16-33-24-01a0f7e2-64db-7b90-aa4d-28e8e85fe580.jsonl",
+      "id": "01a0f7e2-64db-7b90-aa4d-28e8e85fe580",
+      "source": "exec",
+      "seats": [
+        [
+          "gpt-6.1-sol",
+          "xhigh"
+        ]
+      ]
+    },
+    {
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T16-39-33-01a0f7e8-054e-7780-b076-218f55e67653.jsonl",
+      "id": "01a0f7e8-054e-7780-b076-218f55e67653",
+      "source": {
+        "subagent": {
+          "thread_spawn": {
+            "parent_thread_id": "01a0f7e2-64db-7b90-aa4d-28e8e85fe580",
+            "depth": 1,
+            "agent_path": "/root/source_comparison_1",
+            "agent_nickname": "Beauvoir",
+            "agent_role": null
+          }
+        }
+      },
+      "seats": [
+        [
+          "gpt-6.1-sol",
+          "xhigh"
+        ]
+      ]
+    },
+    {
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T16-52-29-01a0f7f3-dd92-7a22-93b2-4e01612506c1.jsonl",
+      "id": "01a0f7f3-dd92-7a22-93b2-4e01612506c1",
+      "source": {
+        "subagent": {
+          "thread_spawn": {
+            "parent_thread_id": "01a0f7e2-64db-7b90-aa4d-28e8e85fe580",
+            "depth": 1,
+            "agent_path": "/root/source_comparison_2",
+            "agent_nickname": "Tesla",
+            "agent_role": null
+          }
+        }
+      },
+      "seats": [
+        [
+          "gpt-6.1-sol",
+          "xhigh"
+        ]
+      ]
+    }
+  ],
+  "encrypted_dispatches": [
+    {
+      "session": "01a0f7e2-64db-7b90-aa4d-28e8e85fe580",
+      "name": "spawn_agent",
+      "call_id": "call_AMwJP4UOoml5lpc7MNwbwhzn",
+      "note": "dispatch message encrypted; use actual child reads rather than infer its complete brief"
+    },
+    {
+      "session": "01a0f7e2-64db-7b90-aa4d-28e8e85fe580",
+      "name": "send_message",
+      "call_id": "call_EqKWNQ0pnRWnJYIYOudTUIrE",
+      "note": "dispatch message encrypted; use actual child reads rather than infer its complete brief"
+    },
+    {
+      "session": "01a0f7e2-64db-7b90-aa4d-28e8e85fe580",
+      "name": "spawn_agent",
+      "call_id": "call_ny9wLsoQSFXawJsExjCAEBmX",
+      "note": "dispatch message encrypted; use actual child reads rather than infer its complete brief"
+    },
+    {
+      "session": "01a0f7e2-64db-7b90-aa4d-28e8e85fe580",
+      "name": "send_message",
+      "call_id": "call_ThlqxdEeGWk4OFRZXAtYREeY",
+      "note": "dispatch message encrypted; use actual child reads rather than infer its complete brief"
+    },
+    {
+      "session": "01a0f7e8-054e-7780-b076-218f55e67653",
+      "name": "send_message",
+      "call_id": "call_ndxjOLUhxqVQowhbtsRUjQoV",
+      "note": "dispatch message encrypted; use actual child reads rather than infer its complete brief"
+    },
+    {
+      "session": "01a0f7f3-dd92-7a22-93b2-4e01612506c1",
+      "name": "send_message",
+      "call_id": "call_GYd5iwFqjog7EQE8HJCcrQkK",
+      "note": "dispatch message encrypted; use actual child reads rather than infer its complete brief"
+    }
+  ],
+  "all_recorded_seats_match": true,
+  "artifact_matches_captures": [],
+  "source_inventory_unchanged": true,
+  "staged_install_unchanged": true,
+  "work_created": {},
+  "work_removed": {},
+  "work_changed": {}
+}

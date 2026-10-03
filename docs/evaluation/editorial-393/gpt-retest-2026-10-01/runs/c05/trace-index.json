@@ -1,0 +1,497 @@
+{
+  "sessions": [
+    {
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T15-04-51-01a0f791-4f82-7b50-b078-9d5f7dd0d15c.jsonl",
+      "id": "01a0f791-4f82-7b50-b078-9d5f7dd0d15c",
+      "source": "exec",
+      "first_event": "2026-10-01T13:04:51.049Z",
+      "last_event": "2026-10-01T13:33:09.070Z",
+      "lifecycle": [
+        {
+          "ordinal": 1,
+          "timestamp": "2026-10-01T13:04:51.050Z",
+          "type": "task_started"
+        },
+        {
+          "ordinal": 324,
+          "timestamp": "2026-10-01T13:33:09.070Z",
+          "type": "task_complete"
+        }
+      ],
+      "calls": [
+        {
+          "ordinal": 12,
+          "timestamp": "2026-10-01T13:05:02.944Z",
+          "name": "exec",
+          "input": "const r = await tools.exec_command({cmd:\"pwd && rg --files -g 'AGENTS.md' -g 'SKILL.md' -g 'input.md' -g '*.md' .agents . 2>/dev/null\",\"max_output_tokens\":4000});text(r.output);\ntext((await tools.exec_command({cmd:\"cat .agents/skills/redline/SKILL.md\",\"max_output_tokens\":12000})).output);\n",
+          "output_ordinal": 16,
+          "output_contains_truncation_notice": true
+        },
+        {
+          "ordinal": 20,
+          "timestamp": "2026-10-01T13:05:20.686Z",
+          "name": "exec",
+          "input": "text((await tools.exec_command({cmd:\"cat .agents/skills/redline/SKILL.md\",\"max_output_tokens\":24000})).output);\ntext((await tools.exec_command({cmd:\"redline_tmp=$(mktemp -d /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-xzax0ud5/scratch/redline-invoke.XXXXXX)\\ntrap 'rm -rf \\\"$redline_tmp\\\"' EXIT\\nTMPDIR=\\\"$redline_tmp\\\" UV_NO_CACHE=1 UV_NO_PROJECT=1 uv run .agents/skills/redline/scripts/invoke.py <<'REDLINE_INVOCATION'\\n--genre=casestudy --output=response input.md\\nREDLINE_INVOCATION\",\"max_output_tokens\":8000})).output);\n",
+          "output_ordinal": 23,
+          "output_contains_truncation_notice": true
+        },
+        {
+          "ordinal": 27,
+          "timestamp": "2026-10-01T13:05:35.826Z",
+          "name": "exec",
+          "input": "text(await tools.exec_command({cmd:\"python3 - <<'PY'\\nimport os, subprocess, tempfile\\nwith tempfile.TemporaryDirectory(prefix='redline-invoke-', dir='/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-xzax0ud5/scratch') as private:\\n    env = dict(os.environ, TMPDIR=private, UV_NO_CACHE='1', UV_NO_PROJECT='1')\\n    result = subprocess.run(['uv', 'run', '.agents/skills/redline/scripts/invoke.py'], input='--genre=casestudy --output=response input.md\\\\n', text=True, env=env)\\nraise SystemExit(result.returncode)\\nPY\",\"max_output_tokens\":8000}));\n",
+          "output_ordinal": 30,
+          "output_contains_truncation_notice": false
+        },
+        {
+          "ordinal": 36,
+          "timestamp": "2026-10-01T13:05:47.723Z",
+          "name": "exec",
+          "input": "const results = await Promise.allSettled([\ntools.exec_command({cmd:\"cat AGENTS.md input.md\",\"max_output_tokens\":9000}),\ntools.exec_command({cmd:\"cat .agents/skills/kntnt/library/references/delivery.md .agents/skills/kntnt/library/references/editorial/genres/casestudy.md .agents/skills/kntnt/library/references/editorial/genres/casestudy.review.md\",\"max_output_tokens\":11000}),\ntools.exec_command({cmd:\"cat .agents/skills/redline/references/correction.md .agents/skills/redline/references/reply-check.md\",\"max_output_tokens\":10000})\n]);for (let i=0;i<results.length;i++) text({i,...results[i]});\n",
+          "output_ordinal": 41,
+          "output_contains_truncation_notice": true
+        },
+        {
+          "ordinal": 45,
+          "timestamp": "2026-10-01T13:06:05.044Z",
+          "name": "exec",
+          "input": "text((await tools.exec_command({cmd:\"cat .agents/skills/kntnt/library/references/editorial/genres/casestudy.md .agents/skills/kntnt/library/references/editorial/genres/casestudy.review.md\",\"max_output_tokens\":3500})).output);\ntext(await tools.exec_command({cmd:\"python3 - <<'PY'\\nimport os, subprocess, tempfile\\nwith tempfile.TemporaryDirectory(prefix='redline-language-', dir='/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-xzax0ud5/scratch') as private:\\n    env = dict(os.environ, TMPDIR=private, UV_NO_CACHE='1', UV_NO_PROJECT='1')\\n    result = subprocess.run(['uv', 'run', '--no-cache', '--no-project', '.agents/skills/kntnt/library/scripts/languages.py', 'resolve', '--scope=composition', '--scope=review', '--scope=anti-slop', 'sv'], env=env)\\nraise SystemExit(result.returncode)\\nPY\",\"max_output_tokens\":3000}));\ntext((await tools.exec_command({cmd:\"cat .agents/skills/kntnt/library/references/editorial/base.md .agents/skills/kntnt/library/references/editorial/base.review.md\",\"max_output_tokens\":6500})).output);\n",
+          "output_ordinal": 50,
+          "output_contains_truncation_notice": false
+        },
+        {
+          "ordinal": 54,
+          "timestamp": "2026-10-01T13:06:13.989Z",
+          "name": "exec",
+          "input": "const r = await Promise.allSettled([\ntools.exec_command({cmd:\"cat .agents/skills/kntnt/library/references/editorial/anti-slop.md\",\"max_output_tokens\":5000}),\ntools.exec_command({cmd:\"cat .agents/skills/kntnt/library/references/editorial/web-craft.md .agents/skills/kntnt/library/references/editorial/web-craft.review.md\",\"max_output_tokens\":5000})\n]);for(let i=0;i<r.length;i++)text({i,...r[i]});\n",
+          "output_ordinal": 58,
+          "output_contains_truncation_notice": false
+        },
+        {
+          "ordinal": 60,
+          "timestamp": "2026-10-01T13:06:29.021Z",
+          "name": "exec",
+          "input": "const r = await Promise.allSettled([\ntools.exec_command({cmd:\"cat .agents/skills/kntnt/library/references/editorial/article-anatomy.md .agents/skills/kntnt/library/references/editorial/article-anatomy.review.md\",\"max_output_tokens\":5500}),\ntools.exec_command({cmd:\"cat .agents/skills/kntnt/library/references/editorial/headlines.md .agents/skills/kntnt/library/references/editorial/headlines.review.md\",\"max_output_tokens\":5500})\n]);for(let i=0;i<r.length;i++)text({i,...r[i]});\ntext(await tools.exec_command({cmd:\"python3 - <<'PY'\\nimport os, subprocess, tempfile\\nfrom pathlib import Path\\nwith tempfile.TemporaryDirectory(prefix='redline-measure-', dir='/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-xzax0ud5/scratch') as private:\\n    env = dict(os.environ, TMPDIR=private, UV_NO_CACHE='1', UV_NO_PROJECT='1')\\n    result = subprocess.run(['uv', 'run', '--no-cache', '--no-project', '.agents/skills/kntnt/library/scripts/article_anatomy.py', '-'], input=Path('input.md').read_text(), text=True, env=env)\\nraise SystemExit(result.returncode)\\nPY\",\"max_output_tokens\":3500}));\n",
+          "output_ordinal": 65,
+          "output_contains_truncation_notice": false
+        },
+        {
+          "ordinal": 75,
+          "timestamp": "2026-10-01T13:07:41.653Z",
+          "name": "exec",
+          "input": "text((await tools.exec_command({cmd:\"cat .agents/skills/redline/references/correction.md\",\"max_output_tokens\":8000})).output);\ntext((await tools.exec_command({cmd:\"cat .agents/skills/proofread/SKILL.md\",\"max_output_tokens\":5000})).output);\n",
+          "output_ordinal": 79,
+          "output_contains_truncation_notice": false
+        },
+        {
+          "ordinal": 87,
+          "timestamp": "2026-10-01T13:11:30.351Z",
+          "name": "spawn_agent",
+          "input": "{\"task_name\":\"correction\",\"fork_turns\":\"none\",\"message\":\"gAAAAABqvlwCt1ze9Oh_gfSmb1VH-GHdyEADuxXjCPzDNOahWLEPCyEvvFvqVVI42ZdIyXNKLB8nJTN626hVL0C976KxiY-uJ_cRMD5iqXG6jTN__n0l17sTAcXQDr3LHA0X3ck2CjsasEBqZQD37PC6kUsvzTHMrA7twgYLDnc6Jp4E1UvL_pl-8-nPyDNeUcqqvFipHz9yixj98rf62RWinYX1s_BWEBx8Z-esfcZ9Hyi4KNiASo0F-DvGrWmP53PhzZmHRHg48k4S3UqFfBbALcnBxAUhONiNGhkaUOzQRE59u86bYdW2nT2YMgbM042K-Ho6Wg_bX3-4s6b7O8_LT85k_AUrNi30xaISFYyCwlGukhNa9NDAZ1o-Mh8P5dokagR2H1z28kpYpwa8PdYOe7a8Xzn1SJVHRl9yAf9pE0dkrcLIJOSCYwajCzVNAsOnhYCEL0b4ELjU0JYMhutlKrWoSK0gvz48UthGsrPuIxeDWbSD0odzPJjIhqgkDLvPa2l654pWalIcFsIUzqqzWFFj2u3pRDZIOCg_jEN04OKteWfE4TOAm1MoeFh9G5m7DZjacvzw2D4AOnJ4gLsvtrcO2NlBBupss4Dk7ZE0SKgY7wlGht7If1Pl43i-P-qi6EDwyPN73vxz2ZL1Vgw4N5uw4Dgx83LzuMdIQ3EqNTxGCseL-I5iZBTKoNLMY5p6tAMSt-Uaq7BvDFalfqOQGVLKHorE977M5zc5Faa1WNWJ2jf8RqbcYfSfU2YigbnrK6xBlQ-l1nJXg9b0bDxljK4zaedSNELP832Pmw5jblosChIzbGy-N786s31GiaaLNeFmQcWqklPrKs6XHI6_6IrD-2h3jCi2foAyWHaeKJ33aPCqtkcS4wEXagaYMNvay7tBfnVJcrvf8i7Iek5HYwfL_WOJBbMERnOa2R1XVU2Wx8UuxLxiVdlPwzvnoMkmhyxfLB4JYCcrlPo6G6Snd0zDVAPGJ4ybOIobYqdq8gmDfekRPsfPhCkrDac8UIaFH2q8yedkKcs4EWBKV1mPLsdhC2rntnzmwrL1vQ4q9L_1PuDtVTQHpg326x8mTwHnGTEzoANJsRlBNYXGnmvbmEyoBBjuLaYqr7Bz8xGeQdJrl2KH2zMuvMEXlrHwXjnJNoGoy6IQUcctlKf9trnuq6J-EEg9JovSDkhNbT2VDZba48wD09o-6eywCKTe6r-ZsDw_C7Aspdn2YrZKSCvyotZtrFq7GYTVY41cOXeCf1wUu0HY6G5YzxE7tnVIul1_ajHfQdyP20Qp603Y4lQsnoZJ9SQDFvCC7_MaFhZLCk4joYXjnKolgcg3LNVhAebEb9U2l2N3RyyIrlDSifaXytZo8UhweYWXMJcWrHLgAmdcyyQiY6KfgxMUQCJv7be6xQ12ypAZZ6o_LonLJXlMqfeZuIGHP1kXf60IZPEc0eqNXDCFyF8W8kq6I_K4WxYVRcZwEeCFd-DGO9PYWola3kLGStIJFSbltwR56tzPJlO9qXVoPuz5sV8zsBVFmd2-utDmyWx1BaZOOkI-2elBM_ABI8l3nhsqDdCnqo0aA3atTx-G0aigV5pkH4rsUq3fApb01Fo87id3mTssAOj5lmYtjEgdiaHAfQPeY7bWY5oJ8rMlz_gZsp1sgbAHmYkj0bL2-S56V7imvnz_Q0qS1FMpC4aXRR9Two_OdmoycngRck_1L-a7WTMCeatHbmLV2LaVRKJulPvgqCytgeHq5O5e_-fSAkA-_QG8N7XF4dBTRCglP018FqIAx3RFxO100cE8TbTDtqFLT0gt3SewDOK1W6VA43XyvsOuUWe-9f_iAk9cJQtizE_T-UB2UP8Ka1uhKBPGATMH6fQVRPLpTzAhYodcTzOxz5QTCp-m5mXGGy6YipN9DHROpGQCwMqf3N3n0iYPa8xLNQGssglTJYOywEwKA2tskbAcWvwVcHIPhbd7etqzzYeR9lGbSyEgQpxZuOSmg20qFO22vGdwxLGyzfvmEOJNUFU-XPJAbGk7iNHsXKPUVH1OBKXTlBIpzlur7_fBocGHYS_smk7xUyjqW8-HfnD897EwP8vRMvLomk5UUa_8x1G4cT8c5dl2A2DI-cm3Z34Mk0PAj0seBKyuDZiv6W8UgLa2jQEZveeoxHbmRdK1GvijOonn6QSeeiE4Yuh3yqC39fPBW68IbbG9X5_QmP74mOA4h1JcDftJJLySgnvwrXtbB4_3Fk-6o3kJxcQ6VK46Kbf7E66Dih4JEvyPZ0S9ZSgJOeltkpLWWuXWKPuvWfulyXuJV4RM3IK4_bbJgZfQuhb1fm6RnvyUjkR3yHOGH0J5lYfYTbGhMa2ZDJUKy2rays0rcpmqGjSaawvIjP_VRIgTWO31356aTwozH-PRNgtX8NLlRZRbUPDsxL-Z1oPlyawXTlbKjYvu7zhuZaTPns1RFrqWRU_kR0Af4TI5nACee95USDreOVH-L0gQrDVFp54VB7u5h7mfJNgCtu7_EZgKu-jU4L-lCBpsMBQXpZDXEVSZBaZ3e7WIHpuX97Rhrm7SKBcBcIqWSGTzrDqHOiRTLPZUsU-XUapJPPVCiYqftajeb-wYuQKElrq8-sYy6RVakR4Ye6YlTQUVFc8430ZZ5FOVBwvdhMRBGTFQxluYgHgiUtMQaijsQ53WYE89SMLRH-4sqavDRil6fu7I5otOWYBu7THw5rtNlkt2kOSYXpAsbiXI9x5cxWS1-3ZM36xMl4EY4TlPve2Wq1T82UZ7IlePcv3e3gWaJjgtT2wOTeIBUQpSSZpyD9m7Np2jI5AolKdndsS8_3v0QFxZWApINh3wcwiMByn9fzSxekzjzOUXOzMYubwHleeciiI2Fys9AGxwL3U-ANSMc2Mc9-N4PlI_1G_Cn2MpPjMC-9xVUPGwBboDj2D2LCis-EG1p8UJmAkxhKIAWdnU78XW3pKaby45KeEWbkU6C31UPrsgQgGIU2XyWZFDXoRaM0mlSgiKj5uq4Z_f-ZezqlGVsRa6unYhRGYFk3iv1VC3eByL15vRtGCNuFnF_0wxQnnQPxvLqzR0wYAqFB15GKbHWebpoWG5YcVeyv3E_Q-F4qw2aZ3fCe8brQzvtesUz1eHMeovX9ORV-krPFsj-U1B60wmsjOkoDP3PL2RFNMlhvu7Oiip_AW9mWreb5-X4B5SU54uO7cOW9lAUbzmE7430qGrh3Q_xGkZ6XSdJbUaMWMS1oOHmbczGS56Nt8ybqTtHlZlO5PZkSAsI3q4NybMbHse0qj5_XSDOPoh7LG4jbjubf-900WR-FIHF9N_WT69ol8I1-mU4X-o4wXlaHTeSMEE2bqQqhoEY9vSEA1PDr9skL2k5UaiAVTrg9GJZXIm6JauqTIBlRfJ5qc0ik7zDRBvyYZHwZP6CdMHMaAl25G6IaBjh0ngLdw-tVtjUyOk77DdHFXJqmgfMTGIaSs89IvOxJM9spsuF-lRyX3C6yNQODqrUJqgQP8p8Bp2OmDSHrLBRzuuUVWjS0mlYWH5KcjA1c8mRcWMa6x33GlBtPNFchvEAe322j8jHCB7d0Dar5rPKXh7t3tEUEo7fKUtmU7fuyqfprGRCflmnvJKeq3OphM4cybz9Rq0YJ89B2WdVd0delA_8Vr5W2c90fOWM3IKCfnCWolcAo5h-MVYXN7RyPCo8Q3nAa0hGaz2ANzgochVXfmz3yScz1bJBGaKcHEtQnwyBv6x48vJnvdPqA4MvAjs-OtUHhSCqE3yaAic4X2PARdLjXj2WtDCkkpuL2P2ap4csHUrjQj0tVK7rL3JwEfpOu3Hncy1Mj6EB9L6nfKOkrpI8XSVuAXeGw0F1VWhfkFV4OXa9x4jFQhBVVoudNJg4EiqZjF0pC1S_y76Cc6Bpmz72-OkWT8oDrm79seJAIOmcjWS7XlM9eL5-57tL7dGuz87ZGtRPPfjhqn3waUUKjyelGxvisNToVKoqNRSxdb6bTpz4nfQf6iYvdV5_SjLnbLByCKu_wG70pV_w3xbr5vN0TpjNatPutv0xpqyMiTUvSryiCofYKzXTPa7mfJOBmga795lRcxrkGyRFjEZc93Rbtwn1DaRwLMHUK2WJNDKVXtNqHHyUe-xuEvgu8VX_egiiU14mBgdk_ObvzGXy5K4qLpIIUFlS9vuFHMYQQ8Tu1izUQCmkRmwyQGiZLPc1I2AyDH2a50IAqNZCbiKy4AU4vxE11hTtXdYMzOXfTcSNQepElkLk8MhvPNoONdTe3kReyBZMjSQEE1Ubbabewz9v53IuAcPL9Px8xm6UrdVxih3dwIIyvEol4HIz5EYyG58do5s_mVQYiAK57ku4JaOxsgUC3wIZUL_2amlb85_7yA0lvvRHzVaz8rOBWQ7BKVLqUv4pFwg_N3Es8KqSSiA2lbj32qeq4yCwAzYBhH5YAzvlvViGXJkwdc10B_MESbPdyV0aW57lthsnAOSxeFb7mSlkP7CMUic1jucBmzIFxTMmYpPPEiMjRePPuECSvHs3DbYA3sAhebevDI5s3lp13qnHlnJna66hWEhkoqro4qj3qpjSCBk0MZetvsumjZCXXonpkKiXf_Ycy-WuEWSOG0ij66f0CCFWEEo2wVqXNxSDTNq1oQ5qNDerToUX5YGes5I2SqA5g654CLoI2VjLObPNwqss_o8Je24_8OMa-CxjEnoLnRSbykNca7qS-uHRkK7FonsDjA_Chpn0QdbY2rzPwGIywbK3FcbBoaMqFyM-cwsSZbqf-5mQrmJSqKH9Ju_V-lKfF_Ey_zaPZux9-3_myCADPDmAwDAgzx-Z9cq0ez7tRp1RiUdKqG7Vo8M_ZFNPKlrPvOjXyWYH4jaTeAGvfEeAqN16Rc3iTPHPRYAqvDx4A5_wOpIwrF3UxxMy6B307ibD_HAxntOFrOf9Ux_15iVP5u38i5HXwoCz5gK45lkothz0Vi7IOHGPG1VPbdhLHdHVaRoa-AkgQbgRnT5FCAHXtj_ibn3AU0nUBNJYxNa3ou9rEqD9P7NzhFdSvWkkPMNPN68POwV6lIzmgQ-_e07YQ6MiEuaD5mftXv-VoxyZHXNMD91WsWolT7ZzyC9D20-S7CV_ehZXCmEwoRGprozuKlRKA_PvMtBnmD6usJ-Fs77fJpeTlnV7bBrA-YWV_vau-WzkjvYDtQgn7M4UDPCRqXJL-T-S3BltbLzepGqyb9BtkhO62xN__W2GWi2Al3LFYS5KbnQDjKpXhh8kjhON8IUFiRI2d8i40WLSzWut-kAdPKuM3Ird65ZuXGbAIe8TE8udMX2WybbD86naQPpmh-oRWFoOQrRTW4JthL1U8Q9uJ30oYpJvNTwX_UC9Hce91VtPiplqdjCR_BRXS6ADvr6wNDhk80aQfptTrOkDZ0_0ELEbp-Twfh3popLhQZR0gAEdowa6AOOylbOdLkKSS_cjneGYlysaxQAuywzXskMtZLmkx8WW4VmCyUKLEojtjKBGVTPJ6Re-BtqikDfhScYfR-3YirsU7HQ8LvBxnqX7Mj3FfxoIE7_vwm9yBRcrBOJ0UcWw-sjm5BAp706HCNNvUQvvaDJd9GmdqZyMd9MAGMTw8LmNdf3Ia7I5l81WyX8cr0ZKiy11rKK7pXBAyJUVarsPerlAOhhGmbV7VBc_7AYs31cJVe1QCL50ZN8HD9mLF3vdlYhV_p1oIhOat7KtmT4tfp8KMvqTNXvFrmcroJBSHHkzs4Bs6K0QwP0qV7TFe1CgWgEIdwMx2FZ0pfrBI-Pt_siURNYs2bcPvi67bQUNntlw53WfC2gMn4p_Ln5HSy9it83vVgXeeEtQMXGo-YjP8UBbYiN2BxGZbSkcymTo-YjlVc3LYhmqFb9E2Je0VMp9-IYB8iyZo2HaWDPKtlz7X_yi3ILuUMlYrBPpOk1BMZnn-wh2c6_yY656na3M4V_cYJi8LwXDXr-dMasa3E6eBwQDzCxGIGBdLBGUhbGMru_SK2MJVeq04bIZfOwyQ5CtboTDGkamHar4stpFEt1yLRCq2qeiuB2AoC_XtpCGThnETaacXV6Iz2zU-cI6eKRQpTxkggapeDc7cAjuVKtoDtKW67u5ma_kp_DY3jWWleOyiNAvgf8psy7HqK5ZbcN_fS1NB7vrOYHy4ilCmQq_3JHuK-0_sKWJbT72tJ2lAp_zfN-wSGRbuG9Cw1v0oqXTCurJmRubr93cqJNMXgTl0P7EuV6EuH2O3x_HrU-8DzmyjyTbQ4n3b7nZUehn85DYEeFytNcXw4qPxnjqE9ndIFJ7eo_CUI1N_qZHcN1rJ2ykZbd8vuTX6_XkSFmyxdttdEOARzcQkTICwFDRSKjRQBB7O_bRdmg64wK1ni6YB95WTM6LRTcDGV02vHx5xdFxBezAeaiw7-Z6H8ctD0YYDvuzy0vBByA9aa_oWQOS9Olz-P-3SGcm8vrtUAMTLbOcbpO0VES_erexxWEipnz1ryLtavOn-ybFGwvqxKT7NiwHtNzTncTvETPJ7ZgBh_G_Uw9u4J7Nb_AGLGMdsQvIooG3D_94nPOvjr-9FLH9ieEs4x4HKwVQS9RdWw7OpzQtPtG5OWCOrldUchNmaxxNouZs3xyOYh3_V_2HwlB5dq-9XH_whxdCJYOt00_mZNiKkyQHW3SuG7y_KWgCpnfTTyZazoDbiWATK0myYO1r6JrsjpWpHzup5F_2Iq9u8VRydlpFzuy3eJfvPQImwLnRCs0nW0xLWiJG9-2n6TC8HXRV2PfFLtGo5aNymgykSBkKqXsQGNaYP3yJNe_RtN-a5LsX8odLRnfk3AVVJCAqgycGHwKkP9iieqpTb1v3jvBhuPAySR6Otsr02HjIF7UuI3eQp1KCnn85Gl6gjw6xE_jn9q8BgjuhV3mL13jh-7qBVw9npUsAUvyR3dHJ6zdauPQzVs0ZITiFtup3yEQrBO1yebRAdhkWELkOxwfFxaB_RhrJIawafDwAAq7aysf1-FxuXLuqkfc_0e5c9S_aaqbccykjyjhl7oXHvNAf1RiueuIpJzyyHZAHajLNTpRNteleeY3CV8iGFc1u9xl9OrAWtWEVlErjDruLkQq3i08AWwDkeZ3FCaBGxo8PkxTXMyXN-UGwKIluuwWxziOpgJpHgeoOchdp3IPy-Y6Rh40x1Ybtsmui4y9holKb6ZJEiIERJ3hl3YRvB7ECCAiw24Alr0wAquZBO0TOjJLhKXfB8oBZ82wXGaCfYUTxKOi5cwPC3eo2ZCCcAm90YuSzEislegEVQ2j6RoQsRNCpNi7yb73HjwyRhfPOYdBWp3RAwIOzBJrXcFWAorc6drZ3UuRBOcCBbX6a8w0ZV94lpBMq5b0Thr8WDO5Q92tF_UYKvslKLmGbVmAhS58fWS2VO4k94K5shpB7rjrOIgbJazcRz_Ky3-DhcYE58YSaZr5RtNiLxrW80J0-2Rp3XHMbtk3kyp1_m5NTHies-s463ysq-XLBY0DMtr4RGtljS3OPVVccEEhf86S6a9V_c2GpYTL2ip9aeQMLYjikpBGv4VgRoNEoDwJbJMOf-AYKl8YfCu_LYqJkj4Nxa8L5sx_alSobQ72NEQwCY5ZW_rebJRsPFoxNDz47AgvsOYjxWa5vtZmXBT9qrgtr31hBHMue4_cEigK76pAPYaEYI2QtY7gCT1hQ2qura4iQhkjLTjaT11DEK0yUqWo0ADFlkYPlPy8O6WFlN3cz1XjodXp3rlhdX5ZvkHXnAe9ah5h-4cr8olekqnGWGQxiuCrfRc2UchqKYMpmlU-TW_4hqmqM_v-5FpqGX9xXsugb3fZGGioyZlRGpqG47YFCkcmnEItAvM-jXWQZ_3zS66s7O1UM4RRf-jkgrljlBsyKF02aCE4Ng-0zFNfd34IMiB9oaNddlGxbTJv3gg-pz91JPQ32Z2gU1KC_Kd7B6BjMe1ia-xkGlv7VE526z472l-RIR5Dudk979ETG2rpxPf8IO1hjogM6LlNMMDLWZeGDganLmBdRUkMY9nqNjtw2PmhgrU-_w3yWWpz8gvjmGgcVzdAYIC4gsHsrT8McOYcj1-yZ8zgyh2dQnc9Q9Tl6tjFFLeglzTgva3yZzkl40g24I6Cz4X7p6KB7Hqza5wJJ8TP2qNYiEvvpLB7oPsqLgiP_yAb2bhjtdY-L975FrsSOnDSe023ZYwX1FKF5ymtBumhTSuoT891FfpgGJXCCHbLSpOVedseuYFEqMRLj0HW-rWoXThLjq2FfSNf371UBG-wl3ccIJP32v8y1IWuuAAEWpYvwxebyAJkYZguECPWAWyjxCFj_Oh2yB3JdXISGjP0tbvtjpgEK9yBBFdozh5GuSBVb3HSvdAl8BOISjV7LxFG4IyjrSws1CzFtDwNFJ5kxO3qE8eIDGen9DOIWP1qQ4yB05LAauPjbApi-4Z78uLS5MUq2C31Diz1TJtJYiFq0yr1mvSeHEoC7R2v9gtdFV62t_pCjMdhuOvjeilzRJ5tYSE4YB35eJxxSacWFF6LhcZxQon0ObxYELBKzO4RG1QPXXNuh5Ydrp2-ZN4IgwgMhVqSoUZ5lnXug0JeA7EFD5MXo73IfyVIbR5H_bc_bREOde4LJlbN5masDQlHduQyVsqfpeav_1s58s_TxrySFI1ayANVtsIVd3UQBKbxaWRdtGZqzO-nDeLaZ-iKy6P-6MAm3o9fQTcP_u2mVXEoE3lBhWoAKTV_RImyXSpGxMn09Rw8H-CqGqNis7pv-1G4ZUNP6XoBOxdAuvCiG5Sma29pLk-jU1a7k2vfJS_IDiGPABDEFBAVjHJzKqEQutFtlmA0xmOg7n_dRhmgk8A-VJwrEG5Jrq0EV9L7jqkEKYrBcRvqgRlN29SovOOG7SPwxwvig3OPQRYYZfs0GOs_TeI7gVBGPm07LJtn4GR4Qu61n4go4vplpPkR4Xh45rni2h3Yt7QCur0Yg34D_4XTIHWgMz84WJc34mvug4_sDxE53jGtc4i_oaF7B4Nm1ZUEEdNJNSjjvM2hPjBuWY75UrausGBkYOPQzMdA5K6lVQVLfTgnjiP2xFWWIvmy8uoR5qDU0R-RdFHY1Rsa6lgEoswLeEjUhMGJstMffE8PDekUMxtZzRj9UFw2LwmhuZlvqxSOQN1lVdGNgz1JKmokEUbTycRqD3bguhz8aJdPCj2Dd4nqaOJBmE5bSUIwO50rd3zFbzkDxZse2J210XWczBcGT6UMtVexV8Ba1zhhmbXcaWTqrTNFMJE8MqaOvEUYXrS2fVkZ49Yw_orEjsg1wtCg6dyMdOxirvRVggDCZUWjSWghhQ_62qXUDAVd6avVX9SdMIMzPF0pBCeC8WkqfHZn7z79gCphtkq8ubzgZIEWzDhnTjWGFhUUpuzmJnkUkx44jUSppT5SqaPFjcKn5_22btJFth91ifsQWhDUtbUfle7islkRd8WEhqQdhsSNi6lqgmulXpPpbpwX2YfPWFe52laAzZpsuaXkv2oBEetWlfj5zRQ5-0EejLiNiUIxFi5R_FUBzUc-F8IxOO2H4mKPMZaZBtrvoRLYU1hSXeSu1riClTTkbKnCEMLPl--IMr8gK3Eu0Y-jlqCENdYByRJWEF0xEzBqJBpDCMbKfTJUaTvpY-dxnHQwf2ZzixvUdp-_lsm3btjxtEeIB7kBD3Mlk87_tI3mAwLDZKTpvyatexb9Td08Jo5XQZCae0KLPVIhD7db3VmNhByJd34fII6IzrjbnCXdKGyLeVQHU7sc1f4kGa_Xjop-TrOsikdSSGuPHOewUQMvpCypYqAzXAH-E6rw0HbpB53mYgSCOMU0zNrrTH9CYU0lExDXvN8qRR07qkmY_Brzdqb4k2uOBsWKQnjXYMH8IW_naH7T5JP4HPgEpaEsnJPdDPLc06KJ8x3hMx9kD9va-KnEmy3x5WELCe6w5t5L1aXLAQG1ywbARrIqLB9qI5PNKgUAVBto_2EgST0GE3u4Zs8Ous0LtZ2pMsZ9DdSmNfHb8JpPwtn8kh3IrN6AN0JF8Vnmug1NcuQG5ckMrC1k5lw45GzAXRZ6pAAuZWt2y2i0AiPIEvOXSTd__zu55vXSWMypURcMRqEy2Vbx1QQePs4dnGYH2zwcw06H4faVaS7a6wJZCvOPXYcJjcmCZPsNm9RQIBkhYqLIaut_XPeHp5C9-T5mMhfJ3Qo9iRS0dj5zrxBmPjLEq9dvvcQiv30dgT6bOe4BIEVVULQ2ghfqmba20H4NnenDL01vt2CzK0IGYr2Xd55cuFZ65xiytYGUPqqGzmL2uyF58UelKWPqgs1EZttvBFk56y7FX9nh8o-PSeV8AcEjDZb9QOJcQEunvHHMok9AUbZr4Fztat8vxWieVwDcz4hIqoVPN8Sx4lcE78ipoGOKvTJReHuJjlEa6zf4mVUG99vWb0GHNYrdp9-DaILjsvJpz20QBU3EcQ5Y7IdeDB82NA9DI2lSIuKEoB6oa9Y8GVEEQ17is8DtA2eGgwP4ER85_Dpff0MNcwS4xhOAZFNd7GYUVDQcmEu_kLW42Rjybzpu1UZ0BbQ1wB-CknKoqo4TKt7Uj3zHo6uJ-Nr7hTj_3RjnJbscGGDi6VJa1sF5niPPb598sREcTb14FQODibKIuJVQib7KgKDy-JXBfUzNwKxK7AOQ707-WoRs74E8urLwJYRvUakaidBhUms6_2--loVUSGZeHXta6rAi-IpA6JJAz6Ntvc-jZey70NIY-Y_5lK5pb__8_2Bpjgz-85oznGNMu85hLxsbkm0XhoHfIyNhveOC_6dWljC313bjt8UQXJ7toXlcU5eV_KURlBl89TWTVBIxHVupVsYbO7LQEVGqujhoAniSXVwoJbvYr4toBjM_gwl_DDSR4qRgoBNGxIZ8eShraE0zsfRI6NTL34QIlR5oKWA_Af7IP1mz6FYifADw26PtBkNlDrSfp8TfpCODm6S5UuF3WoCyHl0O7pRNyVWSz_NMbFX5TxPxuE1Y3G1-9sHvx7b8adyEkxdlQ8iMxuRx3_55MDQdakd-SkhXYm9HUDKun_t_1_qPIfxp0Z1Kr0cqi4PTK345U5qt4BRG9e8ZGm-602mE_6Ykm_9EYReBYxUv4nx4qTwPPN2cp8BjEB4sLxV7IDrTzGefU16JI1i_U1dFLd05wxDNfmnFD-Bo5mRDqRNqJD7w7yXRnc9Iy1jeCyU4EnYBDs1eLurF7EhRVfPN4QW2hczrtwRipm4Jp6h2SCOaNq7MUGYOLOrg6pdEOb9Un0hgcli-BYx1dNCz5bNL_6QNSAVsSrVDONH7Zzkz27_3iER83f70SVzQZRW1GydLTUYpLf6CZRZDCT1Id3NeHTd3AtJi6Hr9fbjmTS2wAxl13SUz2yVI2lKgQVUI8vkM-PMKt7MH6DnWE98ubAQBDGTZVImXBCC-8VHdaPUI_P-W5Kkfbg5TvcIjxSaP01YVVHolZAlleGDoQFFmV4eUqDD-Ak02ReN8WpemT2VJPDLA9HvS3d66OGA0vg4MugOHyOPvktVgVWPMDgppB7WGoIMY18Rhy7MAKwcmyhfAEsmXTkvubL9bX7TTsTyC5NnCe8reBeAAZa9ET_ck8v2AgF3b-ZdccVIuowHTFcMr5FywDkTPRis9w6xJwQfPwOjYLGr1QQSnidSK9AClS5ohPMz1gq8tqpvaLOKSE8VB44OUS94NCLU2ju7pr9yPWXnpq3eBsqZne_WbrNJSqPUN352lXmmokL2TpcqeMCh1cIOxQn35dQn59Ii-IXLelQ8U279-5LfffUE-1dmjk4mEpI4v6fn2vlSqQpF4HJZrxxmMjNWmv-IePOgnNNN-lyCJS29qhifSMjvXf58YjzYvZmgfezcLO8T7yoSyIBTTS3oxzsVwnwKSS1IBUkvGbdChZuXB666Rd9HNcWU4bk6BuFGBwMWWcJGFjDJnI_KQc1-PCvjgakd_Z-qbja85KqgG6pqJ9XM5SkHAgonfeBS4d_9rn2EP6OJ-Ev_qYh9ZrMkjJxBTb7TMY7Tv-IWwDgxvbI0l_mj-bsHUwC6HpXgqTbg1iiZ3k482z0n0x2GyRMKXaV78By52KUFoXVfXgPYJx5HoXDeUxJ3lGEL_CapEE_ZArDyrh6JNstXEks0z5MsPKn-hlOamBRVCTrJd-IAMo76hZjV85OruG6i7MfdE65omQQLQwwfQy9QjvP3IkjuzDcBv-ansv5pBuUaKhkuJIZqO8lK0zYDUwzlstVstL5_AfqlVxd_P8q1Ez3RlXQBYR8H10fKSfL9-DYN_lqj1YEu7NhL2Lu_v5tWxbwGQej0eMblNinRtJmYqecxLLPzVyy8O5DmQD6m6Dgh9xKlHbEZldnW4xv7wLkePlSuxTTeOPPgU7QobOHynPmafd6kup2EBWMPvzBV6WC3SRQNainRTMDikfDscXCZ5ht5GdYagW5gayjXV1mvyHLSxiL9x2Wj-obwnJajIcB_UaVlD-XI7euVdf_W3Y2MHJCsDTZaPqvNfOtYJmXJ-ZMRLvLGvteKVmdPLc2MbSBBtHJoDoLpxbUkdp0c_NHM35WFZXfqLPjakeqGpHp7VPEcksTWZMIhs55DJnb5ZxpsjwYMl3z2v4nLXKJLSOo6W9nu6euYU40EApCMfEm2KGz_TqZ4YSSg1M-5X7Ib8aTScsDCzHBFkRdK9j85HkQ2gYhkGusaAaiXMv1wJJyjEhJofO_0UqfWBhf3RSUkpHpwm3y40iOGRZxvzaFmFRwHXYzAbtvUysqpWUBGZWNGxf8CtSI1rgDiOiGpq1h_A0ikMBk508PrdTh6mpCQ_gmwszMWOcUnro-3Au3q7Az9h_Sx67_DK_BZyQnfriuT5xrvF-56BpPpYc7yF2Se4j69ZyZqKP02xwVwm9VD5Hk64kYG9WIRkbA2OvsKZ1bXLVDoCIdwPneOSnd9dn7LV9tg26cp2yCpwE78EzO4b6PizXWGsuLIcBjRfZ31eIBUcMGOba3tey2mPd2HO9oys-vJqKVZFhunY2_ZlzKub_N7AYs-Ub4ds9NGa91MqH-YMx_yF_nYuaLS1e6tcRT1ePPTJ9_QbSzFgV9WINGvXtLQGUCYDhKoJ0yDYSEQH8lRVotRGK0KAbfVXbvR0kP3H-QfzfP3taIVSQNv3tI_Ra9ahaMgAHOQe41OlFVbMLUerRxOV9QrqSHB5BkJrNpN0zMFeU9PKFEV2NVvmgIzunepms7oVGbzlEOBSXF-N8tWBans5H-iiTtXQl6Ci27J4lOEbEtRxM-ia5K4mZTDtonNs1tPtpvQpVmOUgq7dQs3ZayNUYi5OY1fWBo1dlEQM2NHu5YMyRhrpV3jJJt-fMS-hNcx8Rr3OqG3mDe3sPBLQiQea1pKEq7UM6tC_EXuM_U-FhI6M2TP56gSBrWqzdumtDznS1NTKZyzFX0yca7L5ODhufjvAdap2xzQ8xoeuoSSpaAwNsxiN4HnQ03kmcdMgn-MJlWhM6mg5t-0E4oA6UPrD59j_i4UlrLNDDvpO1p6xXE-oPpZSKW4rvVoXUEnX8RmJPgOdh30IdESZO9DT2bXu0bRnsnyEjNltcZh9lzE9FMONFFzpYZrY6tbPsQvl43SpzWfg957rXlrtwcyqw2hXW18qorjS05DdaHbengZOi_OXz5tlZoUXFUBw3JJzYyFWoafqt9UZv4lXZn_K4aYv6Es_9fDg3mHSJdbtdEr6yFMtmF4stNcbdxsUZ8NzpBlcpL9a0X-nS3db-Ua0AcEomV5IBfNB2r-HuJ0g5dnI_PK8qCzVK6ry9sxRPCzON2-kqm03ags61NrNUQUXdT9C0y9aWkamQUgpKFQ4ks8YQLu02WHcAMSHZjTrRcJxnXQOdvPXWmFRzKsfHvOhusNpy3o35y_yrlvxgG5cB1cviLFcr42NWgIk1mdeKl1JpPji7LnQkT5bZfkKrZWl-L6ABQuyBk9VT7_5SoVqfB2mHae5Z8DfwzlSp71qBgHg9EfUQHUbj9qHL8sNB6Sa4dh9A3gJT4ypSJ1H5rJg9CuMOkWsErVbDbB4bYqjOr836qrduY9dhWmqEeT0ReHPmQ96xfOFPkfDZ3Y3Fb4hH6UvWblohvO9a-6v2NLE-9iP749Ok1SbbMO9LdixhS-iuHFFJTbZXRzeCMQKtNL1vlFkcdKgKbWc_ZMv5UzEirhbenEFuFWkqqaf0pWzPgjeQivFkFTfHh-2u85KZV5l5ZVddySVkSdMiMn2l5SJG-YJ3CXKkh3eW1FsqgNXpNO0AeHfndFjLlCm4O5Qs8VB-gtzG8pk_VOZ4iw9-h1UM6JSBC_G2KnH-2hEmNO4dlPpMfFrLfxwTnlPDnCJdW8Fvu_WnCO46BNBLb916zG_gzMgrAbVTjF5f8v9fAmQeNsUp5-IJhTveQCAnXPlBDQCFmiLQnu31iZ41KMArVK4U7LNkOWc9Lt_PojxLKF7ZeGkbiON3MR5yBCv75_84fFVjXcUb6RvYYMFh2kvEn_qqXv2mpgMx5bm5T_G5jnm_zhd_Lpxf0L6PN6pYo5x5XhuWcfvucgwhnqRNUa1H47_ptcFDONwt4Mw3ckvHL8ZgPeJe9nH4rOcv3czeI8ydA1TW7Q1gC-BvVLUCp2m1vHGMiAnUGMdvYjikVzJdKp6pXxMM6Z7sv2ChGra-FO_lKgoMjKl9ryKO0YhkfxlPOkf2WqyNUQ7SYgTU32pWraGK3kVVOQ_8mJjndzyN1p88crzol1afvvhpJW2FOI0uxXj70ZoRDaJyeMOzGpLTXSHiZ4dz63ejGLF_XsedCG-n99-p1l8clTuKOBx4R7Cgxa8jH1LhRWc2dsBjvbQORgIDvOheGr7OwjmiyjWF-qX-Y9fGP3vRvVuVUi-dG6CPBX0qrBG_zBqqqOQznr7VLy8zaPEGnFgNSQdbQyOxJ7Atrstc-Bxt86rNLnWikVg0ELRL7jw_Ll9IOMSDqGKuSo-bW-R0-fV4UKUhi5961g17WXsz4wsoRR1u2mxj8pFTsjMm_VCal9tfbG3QDaJJCKa13POqeo5JmWCYAZw6tJZGGHW1tKlEaCFndckjWdz9HkDfPSJpuL2B3PdsAXGmacTxTZoJWcf_kO5XbKN5aYf_zT_a10iowldGugLIrdUHGhgJLdJxaN36_HNiOGZfwqhvvPFaaYGVqsZDeHDLmFgojpNrYP5s_lluaT4WTel1fGxj38cHaPXmuWLSjOMR4uAsBGD9MUCFkJnhQf7XQY6Y_dc-ZzjF4yWUgECnMv-418q6bnBi1lof-dbonJ8DD18rT0h_qGirPm4BowGIqRtXyCcRyVUf7giQI7yrHSR2DIhp_c6F0VgXtPJjt1W7gHiNvNFokJ55g3lEel-G7vLpIutawtdVdhV0pOQ0UhSnD3KsVE4PVvdCMb4eZ8yrYWjmeyWNG60_tAc2MrtWIFUubRtFvjvo8feCUq5b7Q9KQFYlJlEDmcyut7UhIvP6xaHnQk-dox73MhU7QemdzNQPBo-EGnjpRKMHH_rhAOOAwu3Dyb0vFRRtDMORfCWjUwG8RcWGWv1402uLxP1emm03TuOpT9e82CUms_Uaf2fD1UDI1WOZ9rH1N13zVEkeukcGjmUcerxEsiT0zQayCiJYN7y6IvyM0KVnERDjqCwFwxurnwjoabhu3of1mA3KKoQ4cvSbeLoRQd_qAgNzmnYpa6Z-ObxjNjNUfYuS-er1TFaQIz6ce6x3sh6PSVj74HjeVaVjNgTVe_jLHUPNEdgbSpIK-iRXouILWIwM8UzQm0c5UvtEuSuOvrizy11P8huu7l3NyhnGZdrZdbInqI5gtvMnCuH7dD-tWXPFcjnh_LyvjsTE-X_-fAmP7q6sSAGXv4QGltckfTmp-7FQSQWQjc6rQf5s0eyvDRX_OHZteWji0t2ZdA7cL6ZZ84hIq9gjwr-Q7fx4HvNxiLtW9hs9P_ULq4GXzQUvXEPyGIB_-hHbNtWIQszA-jOxxRCp1jPC2sJ1p64iVc5hZ73m6CM7FizxvA4FQOL3xoya8JlU4iLIf8RHG5HWbu3M5a7S7YBNJUFK_ElU42ysyaHPPifMevxpTWG_Dnd0C7Qj73s9K3rojH-5DwAnijRfZnRBR9b5mi2h8tLRaJJ7iZ62d1eXRtJ4zazEUkIhvf6jeNRq2lBPbAXRyMXKTPfHMDPhGbV9AFJ6_g-1S7ZXW5xBNJCp25XhHWuIUe5W4bb7nD6PeqrNcZ9kj5pd2ULuDaUNeHbYv_WQ-tH66bcSZKUUHnBXZEHithzZ5p-GmOe_CcstveqYH1Lqv1ON7koFp5jT4WoO0VkYUGxL2q-Pz_PpWRVtxfLhAkIvPyrQP5MNw476EN3VAn6tyhRQQDQnW6RxXQr9zH3QJf_Bsu08jTZX60etzFZVXcemvAE_6w7oX0pJJt0tl_Gnl4RpgmopV3BQFFLMCKK4utnaX4vxJuoRvDaXpPYakL9FyLyTa8ee3UFmsJ3vFV7YRg__ruDG3IGQlLEVbumsEQJpVl1BYRT2fF49nXtpw9yAp6AYvwbs9rreWLYdFmXz0ZnqUeHuITEze_nSpK-aCkAXYBsVYMAu9adyihotxJM--3rf2-ysAtsoj7rdne96JQdsmxN8N_3ZV3Z33S_wqv4BiEbEjydEPSSg3G7Bp5w4dh4KXVq7nRWtW0NnfGImj046cT1PqNjCBn_gJy6TOUfA0h5Krvx67h2BZJC4i6fazCRbRIi8_svSOs5l63SEi4q7XQtzUo1BeisWa62-NvxNlExHt85SSI4ZRWlY_bUdT_Z3R3K7XPyWvUIw5I3GCxDEpn52PEz9BHFqgx3QV4aaNdhX5fgWuoVk6C0v8VHMpLnZvGmP9yu6VgeqrIR9oUdazblVsc8Hqf8htY070FzEVdTJHb4whvJJEOPQB6vTRCWEX72pnHbEGsURgXCPoOd1QcN6VI10PG2Z0Gd6agW82_QG70ZdPOkbzJh6OItnmxOXJGCHJCNFxuiqEuEhfnvfPxZ9GTHf4aGZabp3-ioEJAYZPs5eLnNgcM2NZOu9FiCMuPMREkYkbaUFrpCfYRpboWGOfvEtfkLhwTPdDpx_kOrJOibM_cVgYSrtG-800ymFN0pw4ltTbI7Oiys02-L0IY-sf2fZg2u2mVm4lvzWNNeT5b2hhdCaBMGF7JL93h6VHLy2MnW9oyk3dhS-nbocweVicPTINHnM_B-62DLzDN9ytYmW62i1lP4Lp0XnI8hj1F9k55RZz3fMNsZLcqhMPwBi3AJJyLedAS-mKunBOfB3RGJDgah1Vn6oQ0HkFpj8B0lnB0ltnA_jJdwTniLtKKO7AuMN-g0i_zY60JF9NiIAxvbSp6mSomoDUwPXSTGhv_EnMgsx5uYu7A2rzorxwIcZl3ut4CiraWb_pLQW8WF1sIiAujn3cTSuq1c6AaEZWL-luDEyO3U3JV7g5puwJpXockuJHpVuvf-Ua1fn-p3C0d0pTeYEDW_L25hXVwm6ZU75mWMCKT4GfTkDw-7cdMl2retumA2UJmUwWPY8pYy7gK0npEM8R5EDfLRWvhqWrpLuDreVkVQnvGC-PCRmcd_UWMoKhJ7zp1qk3ulAPDeqNMs9mQR8hufk4hWhXs7AuwrsCQ-vAB9cJ0JflY3vcHBJQfU1GWlEFkIFEWJhslTo4FYN5pvY9oYuYwqxbHcBNA0IuzwYi7ybQPBWKuHNbzpmUsnATA-54zAFgEQN_fvvGZw5k_pA4o8O3P0Hb32_r4bka2Nhu6vgFx-pEgSyWSnkLcTXEds8Gi8Yq7IEHGif7KRCfOCIttt6eOlQh3706gNjT3lWDgoJ7b671qJ6o_3463_ozXm3-5ZRZLDtzl6e1jmPc3i4CayIhbb25sQ8QZIXxo2IK_DdE51l_wgogTuV0hdVeeQu9Zq2p-sPBhrag_eJoMDbLW7jhtp228Fk5bTIdfPhT5AbYd0mXh2OxX7Y5KKCg2MV1RDVNLrtomOkePIbnT9lvTXEY4Qe3D3eqpSaTonDi2XfdQCbQ99C-s-yNNT8R9k1IZi7g6BYVkv_s5iWSvnEjFNLNBZfnu8Rjj33KczIbR7VmNyVRYDmsp98z_zfZrwb-Ef7n8wh9J-sqLx3r8bsuHcBgzN2qPPb0QZMev-72-c3cc8oo_tf85ToI8JfO9YZYzbGdoixJrvjr4R-7v-JHqLVtd88A9rjEd_0IgFu9r1BWjHQ6b5zHzH5vk6zd6Fqernmyy-nqqq6XDOwMYR1FaMKrwq9qc8CMOf3fk3KSPUi5KKCEeR8vPFD_D5s3bHxibUIUbhyE0-3p_iHRfQ3qtnYmfkb37DNdqs1gjqFI_TJkqUwKsUBiCtNgWohrkemhjxgzwIQ5ltL69L8jP4bOBVi3oERuIN5hInMPQ6M5BEZnxKa9wChBVYvN3aGjQeb7aDCoBlBEcuc_oWMfcL9qlsBEOmOaqa0iWKUvL65leJPT1w6w3h1APUw7yxH1Z6x6HkNIXdJH5O5kerkjPgunJGEPrD8n4KQhlzR5we-l-G_iWO4M5u1kOPrTAWqmtmO0P7ILlAaQogU5VDkfzVcQVNzpOXy9iFCBN_e1KCnEU3G-DqVrOoAFuADX4zaAbmEGwNHrrzsHw8iHX8DVmNg6C49QSf003SA9aWtH3jS6w9Oc238hO6SI-SInvmq2Vd_gJC-WgzBsQWYfDkaS4DZgJKgdh9SfzUxdYvDt1PQV0ex_xOjTlrlaoDd0PUCXjduw0FHE5eQWsgMdsRoKs_zW67-WOodLnPD1GFeWReeA20DVvTn3X4ItMBCLIIsqQDwr7rI3of4T0Sscn-TpRKNMYkxy3m-JViJ26LJRUFjGT9K1wkETRu36M-M8_KL-GScHxlnAq9bEcMdFPl2ZOX-GbOZSWu1nFXQICcRKsIbkqMLFzkoDjZTwPOOutaTLvS0JZCWTCOn5GZLrwphWKKhm6vpYcDl7wanNahFtIAKSmKe_Yuim8M2xLC0t31CB58NU_ivZwHWTK6eWQ7c54JH7yH_sorp2oMcIPhgPFaDjnAvofOrz_lX3-3I6O7eBtjwUELJ71JlddF9Er8t33DXVbAXI8hHScSFGx5ViJvbixcMexGTmThvuzlWuYYa68Z49kfG4eyk_j_GN3q5Zetq1HmUeZYhaZTx4p9sAq-nSfXNRkI4ODLJaKhyfznJtpX0Dcv42MXIEam_Hfq3lEANdbiyl8WWD57S8EuqDSemdF_pIr61JtJn0Fiy8Kk8OHBQmLW7_8INoORR471LM6HJuGwLNnT-a3Dn7_x6fRO45JrFj_y2FVWmzRFnFRoAE5Kj4o982wNpFmbZJlelO267yYDUOof90XCi7mFRpbTRK4kKHk6Z7ECGwbOCT_VzbAr9903wS7pWv50g5S4h7c01SVBOqlVck8MWZJRU5-QekOfGOSG6tY5Awf1dYznb6xLuASlCTrVeA3VbujHbpH6TEL4y633CIvZo5zZvI-EVsmVbjVW7bcTjprN2PnFDKp2qBlV9LpZXY22WCUnYdUSb2PhNOrPBCWRw7OsSt6moc0R3ejdmwp0sOzc2p8BmJ-n8wdNKJ5L71h8lS4Jg9nkprqtsD9B1GFT30NpJXnCDQkg-4KV9_gOMGVt4T8v0b8kxzJbFJwufeQsk3dO1Cw2eo_KHVrTTxpbnfPCuYV9U_Q18kZKOVlqUtyPbUTGl4ebiAop66dN19EkwXjddW2XtzMciiBQjWD3OY8aEBFOyRatXZFJTwEkOqAJLWMCATGZ--OREy3_KMyi4IeAMU6G5XhKNUJ-9KmtUYJ2ClT3f0slQa_lvCMj5fC4QFcC7tqdIj_6VRRahEjRuavHMSaVTBbMHun4DoO5RnM7I-mRrBgtPe3irvW0BXoa2eWOPiF6-1rxpksoUSU42J_oFYdY8KAO0c9bHrDshbJv20joaDipTF53flQlpYuI7BHvUc2MxGFqM1s5LZX3H_oYwfIHsbWCS8jcMIzgEdRPMJPa7zRD2S5vHCFVgjk674OvEMmOozIf5D35_qcyGopLLu3diwhm25HUrfeDpSMnrVnhtb7snj0gdrqmptGwxIJjG799-Qr9EDkxNT05RpklZK1Mx-f33D9STjlNo7HRkhi90CCvqC-55xtA55c7BxboHN0YjqZDgjaT5rjHeuZUTFimMG9AMrc90IavB2K001r4dHOGB9koSuQLXrK_jyyOdwwchqb_YgLo54O7GYF1rCmRG_lrzpm6KAk8dw-MXmfrovjo37BdIOJYSOu8G6IdKtk2G8Hyg-gVlm2-k47bVXxVWvb6oDvyxWwbc1vKTlHwgAI7DaQVC5kziB2wPqM2OKVMJvUJf3n_Kqcdaf3YxH2IwZl9tpaBzDPo91OBCCG6ZiGvzvXH05uLIWTXhNXF8sztXEgBq8u6GwOIIh9KedCKdjGUHzLt0MQt72WdBcINFHi6KsNRT012dcTPeV2RIzGYsiV54eFdPw5q8vWjsFyUIA1DjBBjp6TMJZbnWVJVmMhnfclBgmrHIMeHO6YbFrrbrgy4zAzmq9UKWcaofxlAfB2lfNOOIfLez31eIzetXaboKLyUG2H-e2ru6aDorkIfA0xpzVEQXde3RlKJF1p_3dMECe3Hwe78rL7za5gaMYVIKc1lbo0M3vTOHDHEmwsOg2MM5llYVmCWspDgXhdir5tOFJQDTYbwvznLXFPlFDvOzIAsAY_aB8MWFNtQYqwFdCKi933J9potXaL4nsSf1BSdGClbXh2M17aE1OblDGPYI3gYA29_xk5rXqcXvJwLtxbIX7T2e4jEaae550uyikuMl8UFjevLK_GiJxoVzyyjIA5DxyxiTkadn8z4iLfGj6ozfoSgI16hOO2Uy9aCvVhJepIimQoJ_cyVv0l3CnWgfTvhtM2_6v-_TWjsQBbhSiPSMjfda9wRTfYWXeRtLvWriI9gIrmi5bXpiVnqNmLA3F1L-AQAwWCQ5a_nrtFSFt-GMqFXVwrdfK-kROhgYKgb_tsHBJSrsCG26cVVtieiHe_H-H3DrUAJXTCxWObs_ndnYEe4ab_ZZI0hrurwH96Sdt7w6k4UXGoMo5FtCSCt821R8EnVpBo4W-JN1nuTEqnL04kVqJVybOpd75FsAX3heMQCRdc3Pl8yIcSGh3qyNms1ftDOMKLUnFZq_yp4QL53026DICFY3eQB2RcjwdZTbu00haF4_DvUYIlEs8GR_K9AWzCf6czf56jCcPbYa9LTjT6gQoKKEMedhey4yXQbqAlRbkfS1OkwvXv-B6Wg9mS4niCcxGaeNSeCkgTi3GJCREBN1Rb1dCxZoBBLtsqiD-Ci9K5cZp6i_PJVyumdita_2csY42FpV-SViW6EtrcYF9wSkvFSdSCYEt01U7JmZL0drr8UKBoliB7KkFGzZjN-ogK8HlevdtGLiDKI7gEnNWMX6h75fehVTIEhSg_d2qOnik8IIpl4AEZ5cZSeTxtZgmdb91KCrkMNJfBFWCCXAWeyqWiQWXeAo_WarPTHiI4JS8gHU0psF5K92bRokU3vaz3LRiiUdcezOLXHIF9by4gAQfUNvXdAtxm19MdOvlgvqIfSMupBRVai18X1o16vInps5HTwAFW_mi6cd3_xRHa_FIoJRH76gDwv1KbKIBCv1aCISglfDQWH0MsxTqw5DJsSsg_8wuiFW9FTO0nRBOWMEQIkbdG61y1SQWhiuh1GRrgz5eM8pLC1LPHuk-D4Y_035iiTlyOtFZDxeSXdz_6b3p1dL187CFvXab1-MGkhhSq79MTMaWKVgLx82lcSvGlOjoQJJMAxBZdqkN0F24aXmkE3RD0bY6K8UGVKUQHbtOEBYpyzZwEGZVeYTQ1c9ija7WzMc6lEOFFdhNQknujYl6vOKeSZSfM94Oz8tu8SKZBNsAl3MDpQVAVFd14sT7-R6Dezfnlt6yCUWzdifmXVBKoOMkT1y8Q-tvzGN9Ve4pBm1JxdhzNzBZfRIO8OjO0dU8OZFJCr7waj2lbRBJVll35Qrs3yb4wdpGFk61yfeYhZs9yMqqPe7zTtHcOCRSMjIkN3yh99j9dK4QDCIT0D0UI_pYrBgp5lUj51WyoREwReefcwTLJJk20FHfACmEC_tzj_nx6i6qq7enUm5Bgo1p0IxRBI5pc4w3I45BKQ9KgbEwdLbGD-m1x8sB0H5YGvXWrVc3-F2U9gWUZGkQwPAY0WN2rwuyYuYtDir0zAjNihFbGWLejfTXyQjey395l0TVAoHKSj2e6U_Lum0MOwMkcOFM-FZLfl1DSvwy03nfVAtVsSULcQuJQM0IEA72inKikaJEKaGq8VPsHAaBjvudjejNNYFXRDKfPXKS3JkBTb-uJwHs5Dm7qgEQARlOOuF6d_gIFskrKMC253uXwhEF9ehDwfDTjHmUA30-YshsxYPioU_JGuHLXDTfcjSVD82__dYiZ3Koob7AAs8WVcpwHX_8YUyt-I1k1-A6AM6LNicGEaEHvWAzAMDdCmh5NHVRg4DsmMWCyeKkf2N61yWhS7-tb6qW66WziB73G-0gPyM6GykqdxptTpdcf43zWM6yqwHc4K-OWKwQV2Xk5nIEbU2ua4Rz7fye-31kgWrmc4f03jE6LGkm3tGC5oNZWtrt2A7_-vF_g4Vi1Cxv0o-E__ewICUCBuXbg6a1R6kZLXW8Zm5QZv1zdupqXX9_zARBsCwPFPKdevcpPGz3dmVbywOXYnbAPUXmjJShsO2X0IfVzkS4CALUXaFWHg2ZH1P_BQXEHk7eKqjlohO2ztfU1xiirrBLXntDiOE8PAq8NwLPlBi7htnnNykCOnktD9zI8M-txza69NcLdbV1r9ZU8spn3OdKWii9ZmNI-X73607CG9XHca_3-5x2ClHpQNye-l_faCrNtc5B12vMlxCNV7x8heFk4DzZqTJiN9FY5MMtLOsnaE4MLWWwSoEM8dxcckRWYH3YVtqBCj2DVjEAiWW0Buk_hJdER__SsMLqjXnqSITlKYS13XJ9t7EpjhMIuy7Ad69KJDXTsDUZc00Hi7y-Gwj9A7JnuaU91EZRl0kYOVnvqAldylcE11K6WBIE1JzJJTWsaNQl_lBArrZuONwAExp2sLDXXDipVlPhx0eOIjyAEBUBqW79CtVvsSoASfTuSJnBZ4ktaDsFO3nnu_Z2YloIIGFoxDirf3dhnShR8NctNf8pir8EyvXRChSScG-U380UdBLG26tjRVcGBN_ggqf_ztclN_FIWdJloCvJarlh2slHQ8NXtQ7mkfIztLuqavDc0TI2qeCqR2yJYOqgxDSd4ZTy51napKeYA5_iHUdhhQEsj9Rihkkq4WcU0jnrRwlgQKZqiOT_wAmQqu2ueUenqPPrXM2y0MJlR6bBg4cVGJ3yb0C_iW7dMy52oc2MDkGxwP1kkx1gPjPyYOTC9Xb8TFIPbH8WcgqaHCRCYCYY7QLHxGD4ehkKhFsksun0PZZT8_WZbCuE6moHYZ2TARY6Zpvr3TJE5-QY48dhl2BVHHXtZ_oNNctLLXHNICs7jDbSNSZ8-uBNIc4rh6TUlTv2SBj9AK_mGVndczBQyzYpCuzWa9ip2kBAnHWvqaiwxVdFqryAKOlXh4d1K2LmRsb0pTyhAeJNgH6YaFhEWZQsFwQ8oe-O7MSq1p1M5aGTTDWCIlqtxiwMJKJO0NQZAEsjlC-511cAZofOyOKpcENy4Pmk4vxYp1T6s7vfMJpiSxlJzyJMMjF5jOCFE4bzd2UNTkCePY7DfhFiBoNwrAovLrP81N7F-Lw0UAK3saT8w7lW_17BIgZuSBnHUCVVfXYoRuAc7HAvBtJlwj_-1Y0ido_KHvl5pen-xaeJqoIqItn3q6VMkh-ec_QtX2R6m7fAe2de8keA3SWA8fRRM_5JTihdfdWcDrD7Bdj-wC3BEKeWYzCauq9NKR_Cudttb9cPdglC53qcOW4_QNBt60tPb88kXaZ-Yt23ijn0po3MDYcPPFLJ37pQKyuuX-47p7LUzJGvUlbjL7SDSgYEfo8zznwJZFSKBqEpx0h0iqEosZTj2dXXoefmoBtdq5GN1nIigYN8BP2NH_vWW4QRF7E0WHQ3v5ibMtSh8QJ7dcopfWWuO3Hi4_KZV1WaUfMPbiH__TPv-hO9EAUSbvgSglYlEJi3Q-98gVs8eY98ovIXVxk30Ts-dqtWtb_wjHn3anArrmteg2QHuuLZRxgrjvNv1HA201p_HCYu7VVcNBDHRZeFhCO990k9XtQLuaDQqL7o9tZwwNNRQqYSsfvL5fTNVB0Qv8mKjt3xDR1KlazJVy5lWkwLI4Jz_nigXZ6yiXaab2IsVVmHR5uMuQ7izbgyPD5uRivm71jJV2kl1xnU_ORFZnOBSP46G80QLykzNiVjw5qFCZTgc-IVwDSP2iDbE7-GFtM8mUHOz_7F5UeLy3XOgSLsQ4S--0W0DzRcPz7NzlOb-znZwuvf66cZimgINgBqs7ZkeG_gYDKj155vliS_HHle_VjEVRNPZaN6gCNuIQc8v9wdAhRYihRY0fg0D64FWneY33fy8j8MpamFOSUyJqKeCVTd7PvNJ-3jVg_svYJ23M8O1jBLjbTYcSCGQzTPxgdQx7_oDua7PVmHBN2CNxauFrr06lQf9rVOK_vdx5M6ivvbOUem5KaTEkQ8ZqzQluQXpOcIZ-bapAxYBdftDgMzp0FHWAfvnBG-FqSY6CcuzAGoI-iFzwymymF8MwUvGI2boX1wabdtOE8JfDn0CvrhigBqli4jkonWoS8qZvTEdmf_pEy6KugqLRuQloRQisGR8PtYgVIMiiAm-KeZxwrV0KMurgwbAHOb1CDbK-JsP_Ps3gCatiicxBGppnu0uenm8rz7At0L4Sm4HbkhocfkfmwtY8BJviE8WpMfzEGXmzyF_0e_lXqBVEHXMQyEARRecAFimCoH9yv42zdiVvreQCmiMIo6cKXmzBZf1blyvn-3JdRX6a_XU9nKeCNkCf5Am2OvFUl5HctTgdVjh90FHvRK1MOFrzM6QR2U6ADh8iEeZmi0g3sIZtjqGSm86x_N_SOLMVFT6SOAfyVSHnuUQCG5zXRL5aES2XUZKF0ayfz_hDOv2nqK7NubGBgo5tT5SD-rnxC1K1HAWSCM7qK5oND0ab9cji947EOfoVVgZxFrTzJYXtaEK2h2Zt6FNJjgXgy8r9OBSIz_nzVDZc1K14cHFfWhtykLyuArlWCExqdY06UIkVVmwSDbGNktAHQd6a-e6AUNEFuf6jg9Wn9kj2HpROgGodKfh5PX4hhhmt9YTQioX36Z1tUJHkgS2JBfq6nGajlulemLPCIGOFn0EfqnF-IEJedEOvQK_JXc1qmbqxI56lhfR-8iW4EgUlUySF9EmSiPt_9n59UkomioNw8OJ9wREvTthcFVXGvqywqLy7wxOnxoZyw2-Gyt3G-24naR-CuwoHavsVUPDYNjn2hAo2zQrr_SmWCNgF3PKjKHcfr6ej3N_qj5sv4FG-qzQmXlSgYqaTMIqd2OnTGnyRmlURuuyPdICZoIpq0Qv5cEbjxLekGYBOKBHuQbRo-jMYYc_NTLS5rporqXn9uxlpLLmu5Gibt32NuQIHK6IExFKCRQ9BVXzwzhZE1dgSE2rLqpjhdfovFSqdHfg_6IMAqB2WoWsy1KgleRcc67RlVFzGoHsMCLXrqmlIF8aYOfA--fRj2UoiUMdaZ5lnrf_KAsMohmf2hpkBYNSzABc-Rpg8_UZcitUNdQxxsdtCnrZts4lGZO1cLi8HlcAsiUnOfMUXqZXIg-ZwgtABz54MwzCcopSGwh0BW5Qrp9AaL0qDYKexzv1F-zkkWvvZZXU9w69-sFOUdW_9ChilYSxO6cDk45qhD9GSdQsIqwl0wJLT12qXsZm9R497sYI70KhR-6CZ6l9Hn7ZW9VaWk0jlRbUskrSjGOEZdJocBWQ5e_ntDFkmhV022DtUy-qdXT_YEnNSVmV2Guu438cAlCZdIdAB2vThiM1mt27nP_aRdLD2ks0PMWT3LqcnYT17ySqD-xPNPR6yfX3RH2EKqktfkNRsdlC4o0l39ZTZ87VJABxRUK61Oq97FKYSoV8xwK2Nn-0GsLVd-iTaRljg0bPL7IFNqkGPHY_gyvo6w8SWF4n_Bh2bJgTYAhEE3YHRXBAYmojMc9azMxY48UUUdRJcZ7ELGjsxepGnRd5YcKvSPFRKuAqTGzRLHiThw9DpwDo8ygGXLur4IaDWOA71PQC57vcpfpD0Hi6RhuyRQC8Em0aRcxs9DOTD8XG9I8Sv7yv0-cRZYp1T_PkKOqgLvKERoTgCN9CBxEK4xD51Mb7TIPlXBZK04covacFJE2I1Q7S-C5w3u8ooYlp-VfrnmvrJPgS6bwubJQwwHRjUV8Nn9vdZbfdI-Hh-0KfIIrsEEUo2U8NDZ7Gg7Y1Mr-QCQ4xpopMAZWKhKO31dwoVXaz_q5pqYlq-to-I1e2CTzXDKjEOSo0HR3Jvro22NtYZptwMy9FR4SbkXJNuLkB-ds8aq_433ZXVEndxIetxO6aO2k8L5niLEHBsTwxYG3OZucTbRiYXSH9JtPHpFY5fNKdRkM5zOnI-YZpkZcxNTDwjF_aYMsL3u4mUABDJMLHtE_WXUgRRaJUW0oPMpa-Ixgs02Ox_w8YybTFpA-yNQ0ljg-zxiCpfujm94joUaQbyVVkLgGJwpnkVKPQ3gTU-owbOh1Fy9tNuU8cJQ3Im_N1aIleV7QkzuH1MkES8SDDor16d-kohCkbzX_AC7zqn240nZalxpXrQaHMiquTeT36iuUaUgwPqLHLe1eQoVXWrdkcH6jfCUTksO3Va7ntZbNJiNolVwjbBZDT3-69pdb3fJ2JWGSItc21VlQDeEIQ5zCokwQx2qLmxE8WllZx1OlOHZjHViv4wBV4zJfXEMngQhcbnUTfBxFKKic7rUXXVujvz2dIH_eV_nJZv678ReP2fKi0i8rdDzEi-9mz2K7MSaMzmBkoT9egxYCU2KSPJxHlXX4LNl_Jcii10HFNsEOgQK-RYrJn8eXcrbDeQe77xhBe60U_BxI30_Aow4jTAKLCB5Xgi69rAVPQ50YH9DBvakJAzZNCC2FI8-inU2-OgZ275T54MGCN91Z7TtWZusc7XBmYxhNU-7iAtqlsXyqcak8vWd34r97jJILEB4-AzQbr6aA_gJPZjU0tiAxGL47sUk4xtggeWY0Pzay2ltUXfhyk5owmIYLbj5ue0DDLSvpZmhLGlX-QgP1k-GUuWe57e7VarsXamcHJIyyy2JdYp0zM4Uk_LAkcCA7CtDfyL2ErVx40mp2hi1agDmuoy_pYY8v53_NXg5Notqcy9wK0LxebCPLXLPb5XxHH4CpwUer8OiQ2f7Gp3EJ5KkMw14CJqWU_LZ8x134Dmx4y6hCGfMyIa2NsHa2uDyoJ_233H8dXbHVTzoeI537YB2Me6-dDoVhxmDjq-TcUoSfm630itxmYkuLdban1k2_iR5IlE-OZANnTPROuj37Cqs2JRH72rb2Q18LfIrcqaBcmE158OPQTc4dF70KJXM7nleaC6ZJUvaXyEBuB0FTMcr4RkqcPRtykKBtUlJsWvDY-H__5iv22oLznmqqbKsM8miGNo2Z9rf5S9Xv3VAglRG06xaLE7yRoqtB05moZVKNTbGGMtVqgDh3P13zw=\"}",
+          "output_ordinal": 90,
+          "output_contains_truncation_notice": false
+        },
+        {
+          "ordinal": 95,
+          "timestamp": "2026-10-01T13:11:52.150Z",
+          "name": "exec",
+          "input": "const r = await tools.exec_command({cmd:\"python3 - <<'PY'\\nimport hashlib, json\\nfrom pathlib import Path\\nscratch = Path('/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-xzax0ud5/scratch')\\nprint(json.dumps({'original': Path('input.md').read_text(), 'input_sha256': hashlib.sha256(Path('input.md').read_bytes()).hexdigest(), 'workspace_entries': sorted(p.name for p in Path('.').iterdir()), 'scratch_entries': sorted(p.name for p in scratch.iterdir())}, ensure_ascii=False))\\nPY\",\"max_output_tokens\":3000}); const data=JSON.parse(r.output); store(\"redline_state\",data); text({original_stored:true,input_sha256:data.input_sha256,workspace_entries:data.workspace_entries,scratch_entries:data.scratch_entries});\n",
+          "output_ordinal": 98,
+          "output_contains_truncation_notice": false
+        },
+        {
+          "ordinal": 102,
+          "timestamp": "2026-10-01T13:12:29.416Z",
+          "name": "list_agents",
+          "input": "{}",
+          "output_ordinal": 104,
+          "output_contains_truncation_notice": false
+        },
+        {
+          "ordinal": 108,
+          "timestamp": "2026-10-01T13:12:39.017Z",
+          "name": "wait_agent",
+          "input": "{\"timeout_ms\":10000}",
+          "output_ordinal": 111,
+          "output_contains_truncation_notice": false
+        },
+        {
+          "ordinal": 117,
+          "timestamp": "2026-10-01T13:13:04.366Z",
+          "name": "wait_agent",
+          "input": "{\"timeout_ms\":10000}",
+          "output_ordinal": 120,
+          "output_contains_truncation_notice": false
+        },
+        {
+          "ordinal": 124,
+          "timestamp": "2026-10-01T13:13:21.477Z",
+          "name": "wait_agent",
+          "input": "{\"timeout_ms\":45000}",
+          "output_ordinal": 127,
+          "output_contains_truncation_notice": false
+        },
+        {
+          "ordinal": 133,
+          "timestamp": "2026-10-01T13:14:15.053Z",
+          "name": "wait_agent",
+          "input": "{\"timeout_ms\":45000}",
+          "output_ordinal": 136,
+          "output_contains_truncation_notice": false
+        },
+        {
+          "ordinal": 142,
+          "timestamp": "2026-10-01T13:15:13.030Z",
+          "name": "wait_agent",
+          "input": "{\"timeout_ms\":45000}",
+          "output_ordinal": 145,
+          "output_contains_truncation_notice": false
+        },
+        {
+          "ordinal": 151,
+          "timestamp": "2026-10-01T13:16:10.050Z",
+          "name": "wait_agent",
+          "input": "{\"timeout_ms\":45000}",
+          "output_ordinal": 154,
+          "output_contains_truncation_notice": false
+        },
+        {
+          "ordinal": 158,
+          "timestamp": "2026-10-01T13:17:16.229Z",
+          "name": "list_agents",
+          "input": "{}",
+          "output_ordinal": 160,
+          "output_contains_truncation_notice": false
+        },
+        {
+          "ordinal": 164,
+          "timestamp": "2026-10-01T13:17:24.503Z",
+          "name": "wait_agent",
+          "input": "{\"timeout_ms\":10000}",
+          "output_ordinal": 167,
+          "output_contains_truncation_notice": false
+        },
+        {
+          "ordinal": 173,
+          "timestamp": "2026-10-01T13:17:42.225Z",
+          "name": "wait_agent",
+          "input": "{\"timeout_ms\":45000}",
+          "output_ordinal": 176,
+          "output_contains_truncation_notice": false
+        },
+        {
+          "ordinal": 180,
+          "timestamp": "2026-10-01T13:19:01.186Z",
+          "name": "wait_agent",
+          "input": "{\"timeout_ms\":10000}",
+          "output_ordinal": 183,
+          "output_contains_truncation_notice": false
+        },
+        {
+          "ordinal": 189,
+          "timestamp": "2026-10-01T13:19:28.200Z",
+          "name": "exec",
+          "input": "text((await tools.exec_command({cmd:\"python3 - <<'PY'\\nfrom pathlib import Path\\nscratch = Path('/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-xzax0ud5/scratch')\\nprint('\\\\n'.join(sorted(p.name for p in scratch.iterdir())))\\nPY\",\"max_output_tokens\":1000})).output);\n",
+          "output_ordinal": 192,
+          "output_contains_truncation_notice": false
+        },
+        {
+          "ordinal": 194,
+          "timestamp": "2026-10-01T13:19:32.636Z",
+          "name": "wait_agent",
+          "input": "{\"timeout_ms\":45000}",
+          "output_ordinal": 198,
+          "output_contains_truncation_notice": false
+        },
+        {
+          "ordinal": 210,
+          "timestamp": "2026-10-01T13:21:55.461Z",
+          "name": "exec",
+          "input": "const state=load(\"redline_state\");\nlet candidate=state.original\n.replace(\"# Hamnfrakt flyttade lagersaldot till ett system\",\"# Hamnfrakts anteckning redovisar 340 artiklar utan plats\")\n.replace(\"## Sex veckor med dubbel registrering\",\"## Ove Ranneby beskriver övergången\")\n.replace(\"Under sex veckor registrerade personalen varje uttag både i kalkylarken och i det nya systemet. Därefter fördes kalkylarken över och stängdes.\\n\\n– Vi körde parallellt i sex veckor. Sedan gick lagret över, och först då såg vi hur mycket som hade legat i pärmar, säger Ove Ranneby.\",\"– Vi körde parallellt i sex veckor. Sedan gick lagret över, och först då såg vi hur mycket som hade legat i pärmar, säger Ove Ranneby.\\n\\nPersonalen registrerade varje uttag både i kalkylarken och i det nya systemet. Därefter fördes kalkylarken över och stängdes.\")\n.replace(\"## Vad överföringen visade\",\"## Överföringsanteckningen redovisar ingen tidsjämförelse\")\n.replace(\"## Företaget vill börja mindre nästa gång\",\"## Ranneby bedömer överföringen\");\nstore(\"redline_candidate\",candidate);\nconst code = \"import os, subprocess, tempfile, json\\ntext = json.loads(r'''\"+JSON.stringify(candidate)+\"''')\\nwith tempfile.TemporaryDirectory(prefix='redline-rereview-', dir='/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-xzax0ud5/scratch') as private:\\n    env = dict(os.environ, TMPDIR=private, UV_NO_CACHE='1', UV_NO_PROJECT='1')\\n    result = subprocess.run(['uv', 'run', '--no-cache', '--no-project', '.agents/skills/kntnt/library/scripts/article_anatomy.py', '-'], input=text, text=True, env=env)\\nraise SystemExit(result.returncode)\\n\";\ntext(await tools.exec_command({cmd:\"python3 - <<'PY'\\n\"+code+\"PY\",\"max_output_tokens\":4000}));\nconst synced=candidate.replace(\"  genre: case-study\\n\",\"  genre: casestudy\\n\");store(\"redline_synced\",synced);\nconst makePrivate=\"import tempfile, json, hashlib\\nfrom pathlib import Path\\ntext = json.loads(r'''\"+JSON.stringify(synced)+\"''')\\nprivate=Path(tempfile.mkdtemp(prefix='redline-mechanical-', dir='/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-xzax0ud5/scratch'))\\ninput_path=private/'mechanical-input.md'\\noutput_path=private/'mechanical-output.md'\\ninput_path.write_text(text)\\nprint(json.dumps({'directory': str(private), 'input': str(input_path), 'output': str(output_path), 'sha256': hashlib.sha256(input_path.read_bytes()).hexdigest()}))\\n\";\nconst r=await tools.exec_command({cmd:\"python3 - <<'PY'\\n\"+makePrivate+\"PY\",\"max_output_tokens\":1000});store(\"redline_mechanical\",JSON.parse(r.output));text(JSON.parse(r.output));\n",
+          "output_ordinal": 214,
+          "output_contains_truncation_notice": false
+        },
+        {
+          "ordinal": 218,
+          "timestamp": "2026-10-01T13:22:16.063Z",
+          "name": "spawn_agent",
+          "input": "{\"task_name\":\"mechanical_pass\",\"fork_turns\":\"none\",\"message\":\"gAAAAABqvl6IOoElYMR5nAgJEvCTyZpfmYY06yikc2OHVfDpiiIalnfV6aBGNwtckWkxrsAK4X8l109ZIEZftsWp3ApNVR0UhELN35fg9gr27Nvp7s4GCg6IlTfrOmE_k0Xkj9BB9-rsSi3XQEMn7Kj1nrQU-8d1IuosNGDc8cSTWAV2zjApYX4z_ILCI_Pd9ZBuuBO9l7o-HnXG_8xZv4EwvGpDA91hLDVg9vJebt1bxYfjPWA9xgV3a-NEx3cT4GB3amzuNj-6GclHYqrrXsxuI4WMkDHns0RJAOIGZW1wyZVDX2CX-tt_rDLqO50xjpV8OcfYWohQiCMSc8NUdmpy5U2SGNfjHb1zLSPrpyPgdE1JjGScKtchnyl38MraFbSSO9Q0LjZCqUcbg62P7-PYQeVRMIvKuvr6iY4lqfDkO31E0lZbhemNPnplXcTapnKvqBS-Qz2_rVhnY9bwL57U04eqyhHWimdzyTrlhV1-5YWcNeyY9uRGXvK8gRMa8eXBGeheeAcxJxGRrQu9_hDjMhCXPeGGiOl2AFxA5ZAn_pgiWajORYJWoxakhQPi3BX3-l-shoCLeJ1T7I6XxLgCUnM0q7UTSNriFvunZvlGSDhP18xtW4NBMc8Xxu5zgPNuiiS_gqh9fHcSwsyWo1_MFCgBH-HNfrJp80x0Uq_Fj6NSk_7qKz35jAMu0pB5IuuLmw9wHatIPhQ_jwhQdkLbXNut71wmEMUPXjwuKdmUfs1itNU_3wDFhcmPMPfxBtddumQAsSkl7AfqCGiB7ar6YfnxBgMflk3jS2JEskivjmO0jWIoo3ChNuzRSv9AzCBMu4fj8dRqaObiTqUagT3txx1bmUt_FDqy6pZYF0kQlOQoVh9BKV9pu3IxgCahK-Lb3_1Sp6iAt3C48i2ixXIbMXsIoe0kxNxz-Oqa8ZCYB2oRTs2NwopHWCkDhzpzEPviLn3ZWsV-isgfW_HO4xWzZphNaslhClmal9sFdxdEzVlxxrzf9Mv76ZrwiLaJzoKm5emFBQc6qSRZnpIpr1ZyGCqlerI5HrWR36IAm3yORP4julcK7AwuN9PN1fxbo9CVIexhd-c1oLj0ilOolkC9cWBtA2O7tLqLuOPeZmrJ-WURQHKLl3eNoKL4mzcO44kgK53SWVhgD9ppWWV0rebr4pNa4vzUr-wJqpWmrTPHDJsACMMfVpH__DwdpYgMemd985alnukQX4N2eEn95nl8AiNSjBM70Vq1HlnW81hI1w3Aamd9kc8kWi0heK03yIE1sCYx-BcrsCwfYyo06L4QENLI3HwrIrVF86msOfvE4r33ahCRmRiVf1WNibOZHMhaZfdBv_4wwJfEnS6ZxxkAH8zdzifNttYtosY0EhGF8TJpd_xEjaY=\"}",
+          "output_ordinal": 221,
+          "output_contains_truncation_notice": false
+        },
+        {
+          "ordinal": 230,
+          "timestamp": "2026-10-01T13:23:49.654Z",
+          "name": "wait_agent",
+          "input": "{\"timeout_ms\":10000}",
+          "output_ordinal": 234,
+          "output_contains_truncation_notice": false
+        },
+        {
+          "ordinal": 240,
+          "timestamp": "2026-10-01T13:24:19.159Z",
+          "name": "exec",
+          "input": "const state=load(\"redline_mechanical\");\nconst readCode=\"import hashlib, json\\nfrom pathlib import Path\\ninput_path=Path(\"+JSON.stringify(state.input)+\")\\noutput_path=Path(\"+JSON.stringify(state.output)+\")\\nprint(json.dumps({'input_sha256':hashlib.sha256(input_path.read_bytes()).hexdigest(), 'output_sha256':hashlib.sha256(output_path.read_bytes()).hexdigest(), 'final_text':output_path.read_text()},ensure_ascii=False))\\n\";\nconst r=await tools.exec_command({cmd:\"python3 - <<'PY'\\n\"+readCode+\"PY\",\"max_output_tokens\":3500});\nconst data=JSON.parse(r.output); if(data.input_sha256!==state.sha256)throw new Error(\"Mechanical input changed\"); store(\"redline_final\",data.final_text);text({input_unchanged:true,mechanical_output_identical:data.input_sha256===data.output_sha256,final_text:data.final_text});\nconst measureCode=\"import os, subprocess, tempfile\\nfrom pathlib import Path\\nwith tempfile.TemporaryDirectory(prefix='redline-final-measure-', dir='/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-xzax0ud5/scratch') as private:\\n    env=dict(os.environ,TMPDIR=private,UV_NO_CACHE='1',UV_NO_PROJECT='1')\\n    result=subprocess.run(['uv','run','--no-cache','--no-project','.agents/skills/kntnt/library/scripts/article_anatomy.py','-'],input=Path(\"+JSON.stringify(state.output)+\").read_text(),text=True,env=env)\\nraise SystemExit(result.returncode)\\n\";\nconst measurement=await tools.exec_command({cmd:\"python3 - <<'PY'\\n\"+measureCode+\"PY\",\"max_output_tokens\":4000});store(\"redline_final_measurement\",measurement.output);text(measurement);\nconst cleanupCode=\"import shutil, hashlib, json\\nfrom pathlib import Path\\nprivate=Path(\"+JSON.stringify(state.directory)+\")\\nshutil.rmtree(private)\\nscratch=Path('/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-xzax0ud5/scratch')\\nprint(json.dumps({'input_sha256':hashlib.sha256(Path('input.md').read_bytes()).hexdigest(), 'workspace_entries':sorted(p.name for p in Path('.').iterdir()), 'scratch_entries':sorted(p.name for p in scratch.iterdir())}))\\n\";\nconst cleaned=await tools.exec_command({cmd:\"python3 - <<'PY'\\n\"+cleanupCode+\"PY\",\"max_output_tokens\":1000});const finalState=JSON.parse(cleaned.output);const original=load(\"redline_state\");text({cleanup_complete:true,source_unchanged:finalState.input_sha256===original.input_sha256,workspace_entries:finalState.workspace_entries,scratch_entries:finalState.scratch_entries});\n",
+          "output_ordinal": 245,
+          "output_contains_truncation_notice": false
+        },
+        {
+          "ordinal": 253,
+          "timestamp": "2026-10-01T13:25:31.924Z",
+          "name": "exec",
+          "input": "const reply=\"Granskat som kundcase (`casestudy`) på svenska (`sv`), utan berättarteknik (`none`) enligt textens metadata. En korrigeringsomgång har genomförts.\\n\\nReparerat i omgång 1, med ändrade rubrikpåståenden:\\n\\n- Huvudrubriken upprepade ingressens systembyte. Den säger nu att Hamnfrakts anteckning redovisar 340 artiklar utan plats. Uppgiften har kopierats från brödtexten till rubriken; datumet och undantaget för utgångna artiklar står kvar i brödtexten.\\n- ”Sex veckor med dubbel registrering” föregrep tidsuppgiften i citatet. Rubriken säger nu att Ove Ranneby beskriver övergången och lämnar tidsuppgiften åt honom.\\n- ”Vad överföringen visade” angav ämnet utan någon utsaga. Rubriken säger nu att överföringsanteckningen inte redovisar någon tidsjämförelse, en uppgift som även står kvar i brödtexten.\\n- ”Företaget vill börja mindre nästa gång” föregrep Rannebys reservation och gjorde hans villkorliga omdöme till en företagsavsikt. Rubriken säger nu att Ranneby bedömer överföringen.\\n\\nBorttaget påstående i omgång 1: den tidigare mellanrubrikens påstående om att företaget vill börja mindre. Rannebys personliga ”jag skulle ta en artikelgrupp i taget” står kvar.\\n\\nRegistreringsstycket stod som upprepande citatbrygga och har flyttats efter citatet. Tidsfrasen ”Under sex veckor” togs bort ur stycket i omgång 1. Läsaren har där inte längre en uttrycklig tidsavgränsning; sexveckorsperioden framgår fortfarande av ingressen och det föregående citatet.\\n\\nOlöst: Första citatets ”lagret” och ”hur mycket som hade legat i pärmar” har oklara referenter. Läsaren får inte veta säkert vilket lager eller vad mängden avser. Citatet har därför lämnats oförändrat.\\n\\nRubrikerna har reparerats och ett berättarstycke har flyttats, med en upprepad tidsfras borttagen. Metadatafältet `genre` har synkroniserats till `casestudy`. Den avslutande mekaniska korrekturen gjorde inga ändringar.\";\nstore(\"redline_reply\",reply);\ntext({reply_drafted:true,received_retained:!!load(\"redline_state\"),final_retained:!!load(\"redline_final\"),measurement_retained:!!load(\"redline_final_measurement\")});\n",
+          "output_ordinal": 255,
+          "output_contains_truncation_notice": false
+        },
+        {
+          "ordinal": 257,
+          "timestamp": "2026-10-01T13:27:27.153Z",
+          "name": "spawn_agent",
+          "input": "{\"task_name\":\"reply_check\",\"fork_turns\":\"none\",\"message\":\"gAAAAABqvl-_IFKKzcvXUFwQt1zCz8aM_cE0V24x-UTqKCIVg3Wgvxxe8XUW1WJh9UKv_nk_CCN0eAaNPD6UxEHm1NlNpsI8xIrGJ38-uX9tPsHSG1m8_z9f33CCCca0xNCw0Yg1fpGO1tQqti60nVCuE_uw0Roha4sk_B4w_29ISzlnK9JXTaV2z2x6oDRxi9ZE7SSz1DlAeFeU8ZfqRjz83KE27pLPYWTHoskAkoe7IVFBKJscZsQABsCvkvA6DntGhMUjUZmzdWGb1dFJzWrjZvILXupvku2NV02PlTiYztXAn1RK_d3NtKVtFzvNxzKan8VWL-UmLE3NJQc2t12U2xCCssyP2VM6dnLX9BsUsNNl7nUh0ClB9Rs-aEC8b4iTq9bIBRbqAQwVG-CLQnq4PlDhmL5D6DkABuT76ExadFc7l7gBEp1nZVPuHuIU_Xr4xkDwEDZbH__FN9NQ6bs6BHJodADnVa2HD_0cjY42aobe_dX4PwUrlaokI7qyoRqXAHRW1HgPm4WG7eJ4AR73bU0J4EmPmFUizNnPZfv9yBT5i_2NRTF-Tf41Dizd_52jBOA8qKriATcPqGgwNyOcNkWFgV__M63s3hZhFfvLsrx1gwMzwgmDG802RvtJpsSCNxv2ezLywFfV8Sz0QMocdl__XFKAzbkq9hlc79Tp0BWFeK7O42IBOa9Kjl5WFkQOQqdHf9ZO0OyK1-BTYZBp1nhb3Ey46q7WyUwuv90xfihnSkD_ce6PV3qwhS6R_JSyzzGN0a--CCpdvGRPB6M5vpH4p86Wb36SwJCrpLiPdTNNme6I2ATzLfx4Qc5d8SSAYswmFcOa5r_Rw5oNnmpRoKpwvangCH-OaZ-cJhHj8i3RjS7Vdlixf_3D9j16uPcTqB_shi7lSPsjOP8C-UclrPc75VH73MiOg1wcwnLLX4Tzxe21HwGfEAHgC7iPOnIbtMWsGP1aiRp6jpABGhDDL2hhVyO1xk7-U-wHWdtvR_ud0cnft3qKxUn_Nj9OVI54xUzF2YvBwqG90fg9GxQWGpw7v19tp693pKT2i9qIRq2R-2wOaNuSMBTrHE2eWHsSL0zYrlss81aMtREmkVRr0gM58JE4-zEJqnIGXL11cbEjy4hvORlGr9UVbIT7JU8ifelvDildhvWKkrnNXtjzEdc3c1lCpdi_MlLGYPZFxM7ffZVOzk6U3hglESUX5eip56f2xIqaPknTed5iaKeSOq8lGirbtIqNgy82ieol_H7S33OHmxX3epSs8JX89PGFARU2kJcATh3nzlLOvGsM-4bBTMlHQ69ZxQkV-JBZhRK0fj02QoW9YrTnXNjp5grola4-a88zl0iqDssK1ZJGyE5O3WQs77HcKhdU64FVCxV6GCiiVk_MIFBARsFoB8pJhIIMGUO02ALcd4ZE3XtcUlb9yG6dxLqn9i99afcngLlgSs4q8FDAkT3NLetJYBA8YNWD1zFBw1OPXtS21CIltEa3IK-S1B9CQIyKTBHvw2cN5q0np-_wDKV78hfrLD5gSUma3tr8w4asrrTs9RgogEiLWVqKrfiNl5ykaveFoReXk7DP15LvV6Db4tTQbR9sL5HaErli7t9XMMnugPWT6OVxpUk3ray3QeK-cxWOfpbY391fBvYEEOIAwGxhJSI5HbEKJK9rkeYI2-PIQz0ZST3mNKsuGxE-FcU_bXzUCjqI9xGLgHz0kcJddmNlVLHK-eqeKhZRG5dI8qFql69vqyvdnwNnPZWDSFgqoun3kMLW8slJJoyYP0HlcSeBkQc8f-TY4FHQ5cwNh9aCWAWx-lsD4wIlDOCAdOzwBcclE9YmpJqdfWyLYikzANUWuiWnhnykocTmG8L5SuG6wc1hd06GHga3-13TjA6Er3_ueumPp_gKvMc_j7SKJY-DFVQjHgXxk1JvD86ZLbXNgxkiDZM2Cyef8WeR5PRqM1g9gmFpPzrd0GFMgKtJkdItaxxB98zfa-irw3VWJRwfIAcgCwClkzKacndFLm-Oqm2gQJ1aUfctJDxr9iMHZkFhTcZUmxFtJ36i6msAMXs--C8MaNGqeGR-fifh4AofUwHRstZgV4r8TjWeAYSI-MBAdRHf81hLK6wT23T8Ul0XPqdOCXB_UhD73XWf2YHRPKnrHtcbKcKIs2hmU8qavDEgdVSwoWQahaYiOYCGpFQXQ4Z_mfma0-1FfZgFbjghNBBLqstJ3rx8U28Xv80TK-I7bcpMDMFVwpA6gt9qL2rxlAaQ3K1u_obPxXtMhPy3AQOguGoLfFy1dvCQ0jr0HlwkwA9NI-oeQuMNyng1F666QFRRD6rrRU_6YyvayNwAYBRir-qcxsTUf6Vzyhqxc34DSl9WBf91jPJ1nG061YuTguJW57lqQMXNzU_2NJdDdx7fQXrr-EkSHNJlAP5J4Vbnrn6kFk1hd6uDT5WJiaV2g657Ual6z3QIkR2lTXoJKzEOMvhjCWWf4890TsU5BVfb3yffO75wgomORLt8sx1mbdaowCcPScRgCohhW3WCQqDXGf9DFzt-Wxxht-G7LK6tL5W4w-nFI3hcEuwhB_4qhG8li7WMn4yF8l-_DJ33_2GFDtNezWbEt3e4ZtyFrj9JtzPHq0-6B59Gj8lMOs-7PGAhq8jLPEnZwspony-dRDK5GSNd8aVuOHvpeyGbybedkLYB6-sOaQREsuprRcKPMvmds6g3lAB08W8RspFYqwwmklq38ZJGxkmAdBCEXKJvafOMMQwLaBhE0j6yJNur1goFEbqTXjvqG10GtZd-5lMUqWGXRvJt4Jw3e6sWIk3Rckrjme75H5DbOddJry4_-1v5LXCZgHca_AkCoiTV1SI-jYDdazNJGI-I6l-HHkAI4hQNeLMVB7b7Yr8j5dRLEvTe5LrwpMfXu2Edg6mxs1GSImZT9a5kK1_qKrOSnH5of5LPVOjCb_fvDhb_mj8NaQrtcRCIEAImi3vjyLxAToNuoTsL43cL4upvoAD-1AFtkGkkfw7mtxigDtY6xGM9fEfVryRLTu7jSoJbdCtXq3hhYLBKdGbnZr3PZDP4qRlJ9I9GVHs0nk4brF-RrR-DDpmHwOLmB0nDw_GJDujsWJ6V4VQZ9M22HmYUkYDIE2EQC1kUNAlcZOM_WfXiA9sI5kVAJtSGySKjZWGwxiMDynmaVTLGtZKdrDKzNvQMZFG-xYD4at6lCJ6TvoZRcwJWE9MZBo7E8mu2RbgbsqIGdrMduIFDdtdsbALETV51qydtpQy5SkVSu5st7HBBwC2eAVqCPN-s2777IJ_xCqLQeP_L_NChMljL5lAetfz_wYjppRPK0ZReWl7oW5q0osRvCPwCQIZ0Iyjpfm77iOvSs-9XoFqnAftuDfUtgKwYWnWUG6MK7_J84m--4vNIYzA_cukE6QG8XZxzGmK8etEaDrSlq3KQgV-cHFNlF7iSPkwlaFh7LMnMTLCYCIksPmPlerZBcfy7tRkZophA_qRW3gGp5r0Oo3Lm8HN46THKkV33J2yFuUhlvtb_QG3Wa1evk9mCxNAEi-PhnVFDQXKMgURdA9ax_NbUmH5cuXMow6yu8qq1H9TrbIQSG7vO9zzORqhbHCEnEKe41oIv2vo3V25hv7WyZHdsAKBhHx1PWOGTDBfT_T-6nWGdtYiu6UZDA07skC4eTAwmJQkNtLyV9vd6v55UBX2nBNY9l99S9rISkETWx1SNOOzmc5Ze3ttZvrIrnH_fFD1J6at5lKuL29L8ChW24rUqUCjJZM8s0cokpEqS4WRR2H2eu5dkaSoEBV6gLc9H1p-GINjTAyYKwIfBRdQ3HYKL1Lb4h95xXsoRqRyyVz8fImibPnnvE7OIQLCxjmZV9BcSA70-zHxmPcYZQS_FtYzj-niNIkxGzXh-WOH14T-N2SR6CnAvqxvV9545PdRZQ2vV5rBiO75O5r9_2dvAdBNKG3bCERO3F6XgSQz3VtiL-DmGm3TuuUXqDNoMFFiba5HrRVjm6gCrIrrBC11RxzAiigMRiBy27pL77MXx3mipz5Vto-vk1uOSKz3KiTmc5Xn-CxxxH0MWJqMufiiHvu_tgMbg4P5yrADsnZsuOUV_BDHBFfnxVWXMUJ304If3J4pUN4Z0_tzZSvYdV5-xZxajnGJaa6hyrnAuhIq7lIcSV21pCiChGztgZOmxhKi8jgib-lqaBDjWXy_0tdHve7Dm-q0Df5TX33RKbvm5MAlih0ePVJ8N53HaenKrPlGYUQTIV4KoWM1UFM4ZF9wAiMjFKzswb7n6jPnARoNJI-DlSJ4b0KSoqCo-RB_vj7y9SSEz0NYkyF-Xiat_I1_AF3k4du84h2X3S9zOUzAlk7QjTUsE6IeN8Snf2vjOSVuhSYtnSzhANoOI_p-emh5aAfy6NSvhUEb1B4owif4gX-4lc1yj1IFcSnMPkQ3OXFtBqMAYB-orMWF6jTannclECZk4c2L1JfMoJsFD8JSNWkUab4qLd2gEYLlQw-fiHKka_4QE10miJRw5Ha4F78Yd358aqUq5Y129wj7hfYr3BUu1VNuZr11jE_agUVlzqYNXb0bOnwNLfge1U6LpP_vpdKF5JYGnO7usfx5TOvmVoh3oZz_-0c86jBuu4fK81sWSOTLb4sQElM1EjanqCIFxlk5xNcFqGEP8J_E1Nk8NAi6_UF7NR6xWcbi3JLWTcqSewFR7x-0vUYx35hdITUhJA6VUrEf6O0iH8pc0ST2BF-gRtWYWlGnMLuaggTrX-uvYtt2amSWuxxCyzrnXL1dKfvQ96RBtYYDC1R51W3P3iu5hy9Q2K1ShpkNqaxo6c50mRFg3yF6Z0Gp-R8hki6-l0s7eyr3DEVh93gz2p550K_xWXsNtQkfIJ2NOfsHkww0Iwl__jGB4J-bvCI3sZFLu_jKh4CzGN1F4k-AaDAIfvQDd1gT-EzhD_FYzPrX6wwWgAoCKm1aXth81GearFIbaWIMK12WGX8Zpf1sjM4c7fPk2rx3fbqccWm1YBJ0V9UteLU9dF5IOY3TCUFIeXQ05lI3MMoBY8mLkbxkZPj9MrwbAWyxUqG9oLCPK4Oria7cR0junSREaR-OoKduGm49bncOEgMFZa5r0A_B-beBPQcYfM2adK2tOLBBGB5p4B3GXC6nSsrMZm6m2bd_Oq7W--ZQGZte3sOisG9uvxqzXvtwOgOFk9ad1e2hVvscdfFx1OoFyJzH-Q_sJTQXeFb64mKw6hWthoRN2cHwlhi309U-8859gPJCIYh5tc0YoPQMgWSgQfsVznAUwIJ7iun8gV5vSZxk_rwsUnyzfAxwS7OhrCv_e58w2CpnvUoR5A-DSXZzfIaf3vdFhRkmPCVapYzp9IcoQboIT2vNZBk7i1mssAwdtO_VlbkdCPPQ2JvFjneVYpWCDgHWFfj9LLAWTA1gEtYN93sMe6B19euTePtcfcGvXFwfKBomVGQHS673WvG_nAkxnp6whNzdCp4a9VPbbkwx8yGofsUeKEU63bNLoqc9cOKJ-uV7atJ95n_sHMvcGaK4Lply_JXEV_XMvfScFGhYMnUyQ0gOQBIzgdxDgC4vN_zom9y3m809vOAYkcBUYJ-7V7zFAVeJVZdt9ME1fvHMl5nhNtauutyyXutheyI7Od1MzugHLQsu6VDYtYq030Rld5qnFApI6dbkLSS2v8-FyraF-Hy6xaYynqxcKpf7YfzbaaqijnHZwnqcHADZSx0BKMBMXXjxxYoY4t3abXJ78XFOeJBkZZplZGXPcTZEow-Jbv0QqGDnTdfAc-CLNUbGrwcg3N6dZBGmmpUh002P6MQCYb-fiTxPokzZjPdMKlbT5siDgblLgRKEGM1OHmilvXtJFECivBt2Yc3l92hD1aoRkwnWUaIU-Vipwtx6w0Jmazjb9YHdBGv-YavCFd2bIsejs0V03fj5LWnb7ukkLz0VlYYWsnYhGxfVK3pZXuKe903tHz5lbCoZQuhoDKVq5HdhnR5kwCjpkX6o3iBaBbnuYQjVbuG-adqvfiFxebdTc437kKyhMQ7JQCUVcQLkjav9WyW3yRKt3w2G1P-tSIFsVfNynBp0yxR1ipoSOgCpKCQ_jg1C5LBKDa-FrkDixHB7fKsNAgsoUDehJ0de9-TVPhz0Qe0RTjz3a0jmGapfIFqAUjAaPZVfYvj9IOy1qgh0Nsf5LlB24zFWJqnQWsOwzIYHS80tCfSFyyqitBFMIBL3ggHqqrxS1f6aec7Org8RGJ3GJ8p0Rxv4ZCV4_f9DSrzrIGevdIszT4DZrmLygueZm3xwY2ALX5fyRliF9IDfOTjmnyET-Pmye17JGqFGHOYTPS677i1OdehuEITUFLPPRpDHHitwWAQkBu9cpEETO-h96jFnRSLUhm4TKnPQ4mPVHMQXVh0Cv6oqSW2FhgkxyeF4T_kXPvBqr-8G8uxrJ8-uywX5osMi9Rj8I6Vh_zLW1MVMxzu7FsrEiT4Z_3INYI4bRCg6g1ajR-mIRTS0MjCeJ2hrTWgdxTXxmzgasReuLyvzoimxRD7fSudxNfAMx7yqpZJt1SIw3_A7Hkdm2Ezt-VTTarSZjtasRROVpg8W0mHDkqcX49PAuQCdT_9A7iPgJQUDdrXKz8Fdf56ax2AKQmCJp6UkraOsyPYrDv2i2LRB798Em6C_Elg40bMgfqbvdX4o-qm7izUcRqO9YdOFXtJ6GAEt5zz6VSLXdiZNWGO_1BPbpQP_VtCon9kBaVTF8H2Hp9e30ZOKsWRuwY9V5RBx3Ciq2vTB6GDhjC7BQo_dLczcnLX4mPE-K2OqrggsfFwpY70wPqFN9LkxA_NGy5-XHwKq-Qra6lgwAj4HRI9FUQfhAQNdWEQRH-lIm3sSJVHnijce46Z2uxyVU7C2srcw2tOt9nywM-zpahmIdRPnN3gBzU7unke3rk2HfkgXXhTM1lvOQN5KZq6TtUI_DbJHw06GIfUMSzgES_91O7IsNssbD7yrz9F9Eduymx-UGYZAqIWJfo0PONB9KFScRAsNwYgINxxtVpWfwgs_6g9aEquf-yxsuD0KymcxKpj0CcufMuQvPlpsAA4CEZhOA9Mxxfdh2my9OG63l2njQ6ePbswzGx3958TyoXyev7xVunKZAWzGdTNrd7T0oiTH24z5d02WnLnrVN0Ktvaoecwcglm7-fPbT27PBJ_oo1lLBN4U44SDSU82CJSp3WeQB5MDDFpV2UevIRfucPehCtSKQ3tqVfXP7brEbjjxgV2RLs9T1x3vHu2ekZfSZBlW3S-Div3a1X4wpP4WQuQKg3dlBf7F8Wtd-Hri03_jY349GQLmgb61V7hP4LMrBigJKaoCtdXflVFFQ4CUWG2CkcHOFC_IdWEwkuSDPkgqVwRrg_TTje14sZZNI5RCIRt1_aBqgIMH5EXLJpSmNDpcmqliZWbH5ZDYsb9Ye5K5I0Bon-Dz7YcFqMQNcBuc6sS2sCqPgeoeTjVh4VGHtGCuWLpQmMrzSR5qPSOKKityxlx5jVsGva8wiavZIWBAukRieWXafH14MpOFsIOAt0VyMam9Us-73qdVfsGCem_ddOt5utxEJKZPhm0GFcx_hxiN2qFngylTcUcwxIaQxDFOvoB8Ti7ytPG6AZstLSyd2LaNhd-ISvkFpHDtdALaTDyQeJ_X9DnjyPUejsVOHw_IXnUlL04Etlf-FLNaz_7Zj9Zfk24vplAwsLoY3ic4ICz-oK30H6kf28J8PLVGjcDLTV0o3eG8FTGlSpfvHOOfU2xe7HZtjTzy9bLCGBq8uZRh1_ushSMq5PwqQvgfYX2dQvUhCczISQE6U23xWVCpdrKIHP3OryJmxwyk3-8upX1A_Fsk4uXSFFQXPiY-n6zmPyn6d2sexSM9_GyKezAqVuE9GMxqgu-bY8T0XPu1BZeaH33p7rtCplxSPt3mwnyMmzgXyz-8ygjN82CwtEn52XT9CjVUPGsK9ULggu3q6DsGjeIvBsGd4phcFyJpziz2ZTp_gOLvG7IOrXqLmopCu9lT_lAsSYXg9aENon9yPkBErmlZbM6LXST9sTnWFWeWJLZI-b-7ccrxhexthKF1_SapHQkMwVt6FwGR-JE7Vh9ZS58__Pj4wprAJXjRXAQil8xQhfKzeWKx_9EJv5nLbCx-YbVdBkLFic6bowodFHofMsyNy_wMV9oMfsA2BhuMd6EZGk4YKqoyC2Fd-8nkdmCSibOmTWGlpSUwEZu4LB5IXp69mZtsMnj9c48QGT2tzaO68IeBRBYt3AP8WZFpb4SWcDEzf5HhwS809PQoCBrml7goFEa10B6C0K8r3CrA1PJ9FKowGckxRSGFY0JgPT3WOCZZg7k4gP6xCb4lyEsST7SuUQ8lRW91JHMYNGJokjM_-WDWnM5_Xwqg4FvTaP30ryuP-PL07iMvXOvCf2BN77QvAx9CyZLh03a1UpDE52ZyzqU4W-UvPw7jHNyQccVs9whIotj3GH2_5uKFsZnksD0Xjnpv_LXCL63Et-A11A0khGHZOQlHpNMwVp88CGKo4MZ53XqGGkiNkJPPe-mZyHE2FAymGWv9n_e_D8xmKGMKjgM_XXKJTApjfUtJA8AAiNeWJzBDVitI8LVG_hp7-AuyFbstWfYAXn1s6aETvB754inu6qNdfxfpCV1k4svFHDRlGs45RTFgG0yljyg0SEnB5-DnOquTvHvB1hiPpvIBrvSv00KWcC2_IT1R3f9eIP1pW4PH4sMBakmIlQ2FcwOqSkhKspbcXkh54W8i4S0z2nUqEoZyYYJpMC22VbGk1r2Odaf8-R68hkXy2-czG9PFsjwQDCWxqlNgmECEKdijCFNcUyNZlqZQckgUu3-gJEhp6mJ_NrOeO-PxBrlgKxMGNKFQad5UuipfVRKN4KFvur93_Na-CB4XRZTxh_BiGfhdwfm98l47Km3A9_f1JbLGOeU67zqHZR7RkhuuM-A0x3Vr4v4orLKvAc1oYuVqJHC1Son8zJ1wGtc0sJVs3ewnhNcxsjXvf5P2pqxGliywsMhUXPYhCsAGXuhWBsdmppBXbcCdvjd0IxvPn0HhWZEOF11gVfE1i86llfszoC4T8UkpmnHIbLMIDPmDzl5eJQc6Ajo4Ksl6PfgvnUPs1UIYGz8qldyAxncvxgyQEVgVcdYKySI-lopehTW7nEQUeSabawYbO6VeNZpmX4PA9VC2T39rIO1P8FnmQMBsBWlouM6XitZdOx8lrSoSduo1k3nfE1922tSsLt2mPZuFwHkRb_XTfDsRelCger1bLcHOXF4NlPo2XKGOUldoeoxqCReMcBKvmxPVEKNbuGvcPTeAIbnJFpy2RO6hfO4ZwZ5UUud3kLWV2QOSyTrP3a6tGu0_EwR8VDx4lGIseKpHmuyy330AtznpgVoT9NySoh4y3Ac3OkQFQeRyBDaWZ_BxV56vcXk8-aKjD_DMRX-GjGx_1Vi-Qt65Nh_loD-gEeadKaFbqpB__bjcbw9EOx74f5AGlizraoTf9e2PxRqbsYAfSlbmzKXOxU57_TyziUnUA3-SBS7Cc_98OgdM7BBZzeI_kdP17laHJYjEcwjk1Fjspij5F6kmwUncg-JPcbYeQxvdpUdtiqj3ZAjlPMjVkaW6oylkmVNKKsOA5wAs_rZV-cjCu2U66ZMF_p4J2ExW8fohIrGqJgOJ3NqoipYM0zUGz5IScvJ6JdDpMsItIDxCAFIZgsoMlQpOKlQ-FLUzRuI7Vr891IaVcnvQvgzyeWzLzYL1vVEOlIGJxMikkMl7Uy4URh3mZ8AaMdF6PDZi_SGKlO9bsWXqtwG2r66iEbbBcK4J-Oi74RsZWNzR3GTa9JsdXCxLcsvEpX8jwAlslyR9sTViDBorlTo4DCBo31BI_5G1i6kRzhHWgd0CNml-g6Hs41DMToAuU1aQRCqt6pEFHBX0JvT5N_HV_YNp87J_bXdhQBqhrQ5qcPQXsGaX71uRAztgRv3XzS5aOTQ9WXAot0OGr0kf_yCQieYL3bZ0gk72XUcDVE6NiLpBKdJcKPm8DBCZvKNbGGW0Ta8r0vUiFLFa-qIXWXaDk0CwtjaIwUcjqjUuejgwUTuzaL1eDc5_aSoXKIf0FaoMLnTVkIpnw6dMkBDE88ZWTXJYCkhtWGZwEZGBS9qlVVxAFKOVdYpEhKCe_tSVWmYuHrqNxQw3oKriGLvkWgrAvVeSv8ntcwyBYehHz9yepush4GRmT1gcpRS3ZUVtPzxDX0rOxPqQYhrbw2ifg27Vh6qr0ocOgYFK_83GidR59Km6cVYyfBKx7MGuwJirIm9itmnoAvvtrIa6yNzuSVX-ktrfGBBpI7tayh2Bqnw3cBRsYNoHskHE8L5K-XKHzs5qGdSaVdfF5NWNGPvLBxRODxEM8cE7lTW14px0icYi9Ga7vk5R_gkrXkSnVBMvIHLM--ysh_soCVWp1lvSZEgWwVRCqmS_GcT9XmMFlCYR8PpV-8rjOTGO8dAvjd8rTD_eeKtFSk0EjhmsuQA3ryFEVgmpoZ3foF-sAdchT6rVNWI984hIun9FVJkGLeq_AZeS2ahkWbZQckaoeEjwwfIbeLilz2MNUgP3aUnIR6aTzcJbuyDLu7iaCuXlTwiHWrtvyTHXOHIKzt5KQomIUa0N05tXbEOxzSPHDUTk3v3pfePAwWXasbNid05D-6_AXhMTlVilbZClEgLpceJqP9Ie6U7kIsioSI-fpz1LLrX-SYsXjqBsA-yzqmZe5J7sWiwRDWgwa8Tp_yIpGe1Eri8B-aZm-znAhlJxhtU7pkkBG2mhDG72AbLfPGgTeGaJ45zILHx518eY1JY1tmfqPFHsKjlp5P_8AuXxC3UQAybDiBGwibD6_dw6YjYnGbN_bBV7ka0gMhZ7tlYkO1WpjyVRwb83UhFOdVKgQa2_J9u2sFu5dqxGdAzFFKgYHYSZTWOmliqGumqMJR-NE6M1pdHXI7qCuPRIkS_Yq3KlYfQI3yX20mLXmB1ZxyOEdBk8dW_3505WoQD8G_Lx7Kk-XnGz-1O0Xeoq2FcLuescCuOxSG-FvxEhagpLOER2tsfnlrGeDQ59mMf8O_jtkfD_IUG-OegTXdddiAZnWvzahXhs8YqOgDx_mlSm-kWIduFLDzGqnwQfNgjD_cKbQ_IUzJQWlnGwGQIsd5wqjqCc-tC6XFntEoShf6QprcTrtG4iPNJZIl0J36jCyY6X39z3WgXHivxL7VUiqvkC2UbrEY3rCioHacx6xtpAH1_b0JxMsO0mxS9GH5TfjGCCAWPDno0Ivxz8-Q0IYy-tGF3MdHwOZb3InqRO9kpvPgalf5CRbuFhL7ViBax6HSYBOitjt8abcbsWnTv33KHTQrViS23VWeotQqXfrCLB2_4qdCCaaDqA0v90TsTXcNCIQs9mWqRoA9WcZjTFLsq-fQtx5-3PchujS8ETtJcyKzUhv4bJ5sljJSvigvATUa1-ryuKqRCc2M7RIUbbSTxDzYMlCfHITjKfwnQGO_7rOeNsU9s9QJXcpVgEfs3yCQVFTuB-rGzh6cMrrJoSRNu3WuGoCAH0JzvmhfBhf-nk4_Sr-0UBQkX1olTPEB5RIlwypPjONi1do6drdhe1M9Pppjpg5DR3sGkGkOr0BxwCrPiAuv111yepJzpytwiTzOQtngmW1fKsNf9OEPt0VtduspkSja6BbygsuLPj9poIhjWmMxUBnqgO2onyyWXumoGqIZrU6kKaqkAvzrVm76eS2s1tGpHMY_tqLFD8qhFYRmKQzBUJGO7AtKsmoK9-h-9wrJu95-aS_dauFL0YQQd16PMb07xp9_bQtMEk1SD0HW7dslHN4671LUAOFxJPwqPhVzUZ6JgD2hpiHKpWkPvWbQ2GEfGOWXVHbcw6ScrpKtuZtbianFIrI-oCbHsRP0Ui_cY6w0IqkyczyDf1pRDTlJd56z_NWZ1Vqd2BzTK6zLVPTHIL7TBZQr6wbI5_xhMNGsuD810VX_sWtERypPLrDxAYVDwuJaLYyG-V9cy0K94YFAt51oQG0OxJD7HCzvgYd1Rzlhnt-XQDyQo5yztKuVeXun5RyOHdY6AjzC8QyaWan53Vf_QvjWy7PQut9V32h_LTt_miLUa71YorxOGYVmU4H5xDTIgKjjsenBvFttmvvHVEJNfGZ4bhN6mrcIIJZFiNXcnhgy7jU5JsJXPhGvP6DClPsTPzRMueWmzhnmj-BtfhlbXDqdHGJuLDuN5I3tHudZyKlp62YT33dXixFfQySZ1ufFF73qgE7wE0t1vkEqmvOA8ZYRPIdT0iuHi4VnB1plNlKI9NDMIb4OesChuOQPKHk1mKJzoYCOyZWx0ZI45XLVGfW8hTC5XvoQqp83yNtj26t-nbNfMUWsVQLz0W6HcfCiw9IDuWkBOi5LaZMq9wK6SVry7BahT9ix9u9gy6CXAhsRUhZb9-IlE9kKkLXUgIaqsHyw77w9QpZYd_Wv8KO6jzkxr6s3UVi_Yn7HWxuEjy796UITiLWyPDT8TYmeiYplvye4DznANN6YIBiuxVXm9LnWNWzJ1ilFq6LpxElKYF6a-UWJe2fy1wCgTLSjba2KHfuQl0OYQlXxwKJD_FNDUOM1kayn9AitjgK095BDT_MY2j-KSrc5kZYwkYY86BW3ImN3Tmw6xhsdzTwlpB1i0IHsnnGRftHc-Ib-6NHyJY66kn1h8Vuavofz2_n44FFlrcou4wysJfXCcA3c9p_Va9sg_NZplikuTzrRmIGfGuzI9LtbA1vrtyA-fX-VZHODR81ccgnLkoqbNabozkl0F5y4HfKAdNN_3e78fME3QX6E1gOsXq6CqL4AJOkdIweRkZ86R-pV75D45NXInSqw14S1NPtMHyTt6Y8EkY2yTwi6gwARXbYZv6G3aShpfjeygCItKwBZo-NmyPpuu5soZz8RRnDvqAmd-kffOCLLiYn2Jv4BoPcYmFsPPy_0fcPHfyYZ7F6UMiey-tYEoL72i2BPYGMH-eMDDF2McHLvm3u7rf46NyaHnQzT_HDSsfPamefpq8Tb4Ixinx8hl9PoQiHizVha9wnottSn-euFQ2gN6GSN8zfUQQ6XHjMSMjgvWWNLLXEDCb4_2U_SMGfydn95adBGkSYQlRY2MvbwcUwtNsXdWyYZTuM754GGuDtO3aP1to3AVrAhCLyoOg0n9LEj8dj9LEgRTl3TuECFgLvTWYZimD6-cr738wMT1QsyI7b2q6_kjvL3OzjbmUWkj8pbRTidx1fhibWK4xd9qWEwu-I7yVPx8ukSzOdBWNLbIVWtmguPZgzNEl2IKviyZodMP6N6WmMIImHuYunSF5OzzhLYx6ciDrL-tUU6V6fhFXmfI_LPas1Wq2gOtnqxy9LJ6U1W8gRHDSJQf7UMdV5pmB5UqKay8BDNxTLMqT5pmhCeobKxFfpTLMRmgstgNylOlbzqxvAOPijk2Ci9NeAgoY0YfUibdMObKoXsbQFDlZ6CyAABDiML1XliOkl2DkwxPw1JXzX38RkALdFQUfSi71_CWgFhTeQ_EIbbD_nOJF5ioIqYaKTnku93kP_48-GiO6bUKBW0-cnPAWLsgb06TOj123Qd4ZI4J2hy0sYmH8V3u7QiMghsT3dWOHm0MYT1NE_xkGgSV6WT5vXgfvcmetfapAVlF2PsnseWC9GEJUT5oi1JShdYRxp1s01H2PcnAgNpb16Lszaq0DwoRHuIWSpjLC2T-yT0rnAQCuwDZpNQx2WGe37MqeEL9BhYcJJXFxAMjh2rf7-ZlwQriFZaXcBw44GDhk2eG9BP15b5Q5STLrBqCKk6VROth2C31zq6fNwCu4dqcn_K9W68Dz23ZRZiwpkNL_FIMH5MOiEvQMbgfMJ99RV7DNGchiHZULBsX3w3wFZMbWlKpKJjErJ1cVncosdU834rzptk097C_gprmo8oQ39QB_N5gRajPbm2o7Sn3k0GaOXojpGiaopbQMUrPFUgn3eal4jdwjHyQB-hQ7j11sHPNDq-ztSip2TvrWLJjNUdL0lT_52Jp8UR3mJartlbuFC3WB9Mvo-zp6X2CbJP-eV98MsUBskcOxHBQJLpONkEU_F5-OO8CVbHISIGajzPgmGBUnFqLuhGrweEZtvk6oKDR2MCGD5PMXorftw_E_dQWeKn-1RibRgruvuM9791pOk6yi32izvFxwZmBcVffgTfXtUqmrTwFNKVRKQwqScCHd7UIOZp9nDCi-VWveKjKTrxXEOX44yrAyCsxdsmt68XOIidRINe3M-9bQFoyQdTPj1yJmq_37hO4ULWyaetP0yYKzJxsAClE1N11kGqWjiYQ3-Uyo9bY95UGVRf7sji2GNjIM1gpPwh_Frb5Ossli1zzlYUEVWpZJQ8eBpx9zF6qL7WDfepi-z9CSfbTxavHIJLKsIvnj-4bJv_ibLtm8k-lForh7kgJJlHTqWyCM_oKPMyhYolr8gIiIigzb2Gpg-VHtVQ9nLM7tbDk_vcKpdXq_ROauXmGrQ6gSXu-4FMY3rkui5QIt57BZXrL7tdOpm4VWI7__sSUEzbNpaJh7x3T2WgOj1Cff6TmKreegVdKaWATxJBbvMqJll3pIWsNN1On5_RBf5flPtFEhfD09SBBegj0oVy2iQtgUA8KeBxRPM4TF9EVhey6glZ8C1xYs4zMX999jrBacUZ_MrN60_9XZgud1X01qGu5ekdd0cPEcwRJ0RL7TeQsARj8IfpUMBYHtS65EvDr14m0GsUtfKiyqvIuJ0bMuyWHkS_VBYDBb1NihaRYLF3T0VMPJx-D2eYdLDqbbVFLZJQENfy184vCKCOYK6S4Zn7b-lGUr7V_-18HyynqtuH7flFyB5h63TCewb85oRSFJgsAWyR8qW7wF5l7N2vDhUdrRLiDEt_ReabbcU3cZh2betAE8YYWFxT_bH42rjjbgGto7GFsnEPa6ajIwq2pZTNqgNWDI4UX9sznHsJxVAsH0z3QOiI1Ypx-Z-KiEtmaoVftQvIM4jQaRA317Mpsn2xtsCjFXVM67Z3paUfUpU0-TlVW79f2bO6stNQC-ev0eoPAAWXIDZc0GkQr7ilpTRgtQJT2M1FUR6kfc96sTByqP6sBaOYtjRWbFkxL97ZxebwsZIX-PbZt2p7eBQ3zus1yvTtH8LCRIzhsHFY9m8UhOal7CbTkaCHn11bTv_MoS77p6DcnZ1P3lVKEJpo94FJ90I9-7GWCLDHetF3Ort7ROewOcMIxg0-lQbHk8txt0-e_9PbOMuQmoHTsvn6Xk5RZp3j3l7yw90bH1pRGNKM90UXQJnXfUODZ1v8iZ6ihi4oy-GVyPmGyJyctKWxIF_XDj0NhdkMJvqqSloHgA1qapAsvCvkKyfhph8nI8bUUBT5r8vHU0HciYC734pWKf-j3_rjECmyqm7a5fsZYQp6SBsOM3D0G2rQ_q4cYVpQHV-5S4g6wImnoKvXCFiHMGQQisA_QHNUPKF8sSV5qccmX8VQJk2mtTG4bg-qwvwXDQfCc_JzWcuQCIoB9Qpn137U9I8jWryxtIxi1xfV8cQkESiWvCd8yZcYkfBXpAlneVic-L-7W62s_350k3l24alNmBtXsFvfmTHAEMBz4cLwJ0k-gQwHZkdbh_D2vSqqN5-HtoD_IaV3eWi22s-8ntPsqGJkRgZTvKkqCTP6Swj-hopDAn7dHh8jQaOjO2ZTM7uDlXr_J6SpBMj4YE8DrS96Bt9gPxH6qIThv-WGc9ZOI16tGV-SEW0IazlDtXtC0gKn05NIHXmvD6dyrr4oHU2vJY_HlPaEk8qn8xVxrHvNRd0F0d0sCFMK5uQtEKuAagqB5qLeuX4uCi6Lairp0Qb9CqZseALjgTn7sTKw9oe3rbeli04gfVpLV2OrmVI771G1maj_ztwgw9OR6_opvyjMKiovMkB9pGfPMvsVTMqdd17-sYEqMm8jP-T102pcVajecILZ_YrN19SHWixeed-ZGzhjoGQcVlXYKUSE5a6crjpQL9ZXcvkbJ3EuX9AaLCwxVy5p72cnDZFRLZ5ib8bteH3CvVn7-MNEADO75k05rZ1on7azW-xSvcpShb0rQZ-9cZkp_ZU69SbUWl5LQcMg9wWyJzL3wfv4z5Qf0Dl_btUx7gv6d5och-Eo0hZS2SO4DqFGJMVpBxBN21cXyse5RN0gUCx1Y6RKDInu-Lkl8Hbs9pDBwFj_WVwoteYfvMNA1bFwnnmXB4-gm3P7Q6gagS1I3eI4dZYQrgFyg1gQB0NuVLDZc1KbrFQn0DcDY-4azGANRfb413vmP4VPacFK8ceT8clt0ynh52HETC6ut5XN_P2lbgIk0dQVlVMtNCez0oLhKi13GDz66CEPReot7-UhTiGzcAFd4wpp08qWcv3LouIhkFJgo0cTTbR2_WnKHgV0BZ0aBDKd-lfYPVX_mz1o1DFFmXi4BEsfNM7noyGw39yVOMHBAuNk7HYNSZWrcNb-mpDlk9CkAlT0zT5Y4WsIGMnd7p_2tlkbxJrdyP9V3W80lBuaSCsVozE45Zd39oKe1UXPF9d0_vM-suhB0JC78YX5P5wFbQLPkjXEK06r4N1sexclnq1xs814bseX4sUnCxIaHwO6hV5ZFmOzR4inMPfRTUiauOcxgGYIffP8ROIOO6PIgA6a5xGzKpaSGN3jOkjhuAZDzAWnk_tEbOR_5afK7KDOrAJ60KgYfygmtzNapKMQwM2O427BjpEU3C0OcT46oacKPHiObkds3D9b8u5YDD6Te31dmNiViToT98L4TTtQiH-9A42ooCkaE2EZi83XP-LJq7PZU6MLrDZ0GqGHopUTN9w1yh8yniLIGRHrtEsAqSxktyiQtY8hRaLr2TwpPg5n6kF--B1OiK_4D_WM94Sk3mqkDm2qTWoKA-yfJuOOU0VF4VEkwCMxFtffcEfD963E_702L5H4rA9PkJntDk_o4FlWdt4aQSyJrUoSNNjrBKdG86NFhb9boc6wf8doiAwveG-NJwGSlIeDwI8xr8lZCcGcxCbaIFVAbQkQ_RxQFRD7Ony7iXaPy6ZXRuZFrXLQvlyPIQEHcg0K_9NR0DLiVnyBLF68DoUqux_MocyOMprnRZfSQ6wILffYvNRXysOVDkQdrjSU2sXRWQ6SUbBGlVmW83ZRpOhtJ5brOpGUPCVSmhYwoN88jHJxkqIsnUGMn6BxcV4htqDiZDSZMLv20GtQ0mRCGW1JjrRyXzMWG81OkL8Bnn9UTgZtbpJ2mbLSt5HzTvqpyHMe0NN0ResKxbDmecYt-tqQjWIezJ2HOOXedAgMz1kg-kRVIyQNJUUk64C7onLwe3y2tKzRh8_rq4RNxIHviQ7GQrt1KGbM0z848eEaASglWqYdxdsPb7KC-h9R634OXSME0RxEU1U7zUE5O9l6AC_YUuozpyAJ6Rn957H6kwGHlvuC2xtNRgx5LAJEV_VajoFWnMNdXhJt6SIa1LZ73_8MrK-H07-Bdld3SKYvfu-x081cUbEMqdl5DlY0IyI8IzdPTICajyGtTk9DzwvpQEVFCTYxZTet8gTbp5BYM--qGxps2L-9o-ur7c2rJFMfdT1J1KrgU18T7C9EXf8zfDQEbu7cpKKPs-qKpkyHVaWuBBpLJse5-Yeor5PZwWsBd0xq7zBZFQZgvUJYAecG5u2WRiER77H-8q0UFCyZdYMFvUhq7sbWfcczkNBog67X7nzLYQxAdhsGxWWs1jr77kL_1mAIWHydU2CWCXyJ5q3eneKH300U3sTpZqvKZnRT3JjMPGQKtvcYAJven0DlmTPvwjwyKnylg-MZAFc80pgY32IrHFTGn7U6OdfcOvtF7QXtT0GEAI6O3D2y_00H8FuCEOl3xQkmfT3n8c0RgcSpGUz8R9dIYiHZndM9-Tv_eld9jeQPBvQQf1yUK1VjIG-xP5HyPd2qMobHEJOfOp8_XV-rrMJEAPiChGcYtIPImI-1w74OopkOG8pyMJCNaovzIENLFkIhXPUajQvCP0aW5whqKWok6Bh1NzkVvswf9g9-wOxzZOu02sPYLmKTd6u6VyNsaSGX3PHCdxaX_5fy5KNgwiNLIqXR6pYg-lFfP0iPcu9u7XAqd5g5-3FolJjDI44p8qYevGyjWwFJTZ8gX-cI45GHStpA1x9LcR01o7cC5TlRfuzv6MBoIbMHBUGfEGcUNncAZQpd133wmjZ5aib9akrAQ==\"}",
+          "output_ordinal": 260,
+          "output_contains_truncation_notice": false
+        },
+        {
+          "ordinal": 265,
+          "timestamp": "2026-10-01T13:27:53.992Z",
+          "name": "exec",
+          "input": "const finalText=load(\"redline_final\");\nconst code=\"import difflib, json\\nfrom pathlib import Path\\nfinal = json.loads(r'''\"+JSON.stringify(finalText)+\"''')\\nprint(''.join(difflib.unified_diff(Path('input.md').read_text().splitlines(keepends=True), final.splitlines(keepends=True), fromfile='received', tofile='delivered')))\\n\";\ntext((await tools.exec_command({cmd:\"python3 - <<'PY'\\n\"+code+\"PY\",\"max_output_tokens\":3500})).output);\n",
+          "output_ordinal": 268,
+          "output_contains_truncation_notice": false
+        },
+        {
+          "ordinal": 272,
+          "timestamp": "2026-10-01T13:28:31.506Z",
+          "name": "wait_agent",
+          "input": "{\"timeout_ms\":10000}",
+          "output_ordinal": 275,
+          "output_contains_truncation_notice": false
+        },
+        {
+          "ordinal": 281,
+          "timestamp": "2026-10-01T13:28:56.037Z",
+          "name": "wait_agent",
+          "input": "{\"timeout_ms\":45000}",
+          "output_ordinal": 284,
+          "output_contains_truncation_notice": false
+        },
+        {
+          "ordinal": 292,
+          "timestamp": "2026-10-01T13:30:13.536Z",
+          "name": "wait_agent",
+          "input": "{\"timeout_ms\":10000}",
+          "output_ordinal": 295,
+          "output_contains_truncation_notice": false
+        },
+        {
+          "ordinal": 301,
+          "timestamp": "2026-10-01T13:30:37.930Z",
+          "name": "wait_agent",
+          "input": "{\"timeout_ms\":45000}",
+          "output_ordinal": 305,
+          "output_contains_truncation_notice": false
+        },
+        {
+          "ordinal": 313,
+          "timestamp": "2026-10-01T13:32:11.047Z",
+          "name": "exec",
+          "input": "let reply=load(\"redline_reply\");\nreply=reply.replace(\"Uppgiften har kopierats från brödtexten till rubriken; datumet och undantaget för utgångna artiklar står kvar i brödtexten.\",\"Uppgiften har återgetts även i rubriken, men avgränsningen ”i det nya systemet” har inte följt med. ”Utan plats” kan därför också läsas som att en fysisk plats saknas. Avgränsningen, datumet och undantaget för utgångna artiklar står kvar i brödtexten.\")\n.replace(\"”Vad överföringen visade” angav ämnet utan någon utsaga.\",\"”Vad överföringen visade” gav inget besked om vad som hade framkommit.\")\n.replace(\"Borttaget påstående i omgång 1: den tidigare mellanrubrikens påstående om att företaget vill börja mindre. Rannebys personliga ”jag skulle ta en artikelgrupp i taget” står kvar.\",\"Borttagna påståenden i omgång 1:\\n\\n- Sista mellanrubrikens påstående om att företaget vill börja mindre. Rannebys personliga ”jag skulle ta en artikelgrupp i taget” står kvar.\\n- Andra mellanrubrikens framställning av avsnittets uppgifter som något överföringen visade. Rubriken anger nu i stället en begränsning i vad överföringsanteckningen redovisar.\");\nstore(\"redline_reply_final\",reply);\nconst baseline=load(\"redline_state\");\nconst r=await tools.exec_command({cmd:\"python3 - <<'PY'\\nimport hashlib, json\\nfrom pathlib import Path\\nscratch = Path('/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-xzax0ud5/scratch')\\nprint(json.dumps({'input_sha256':hashlib.sha256(Path('input.md').read_bytes()).hexdigest(), 'workspace_entries':sorted(p.name for p in Path('.').iterdir()), 'scratch_entries':sorted(p.name for p in scratch.iterdir())}))\\nPY\",\"max_output_tokens\":1000});\nconst remaining=JSON.parse(r.output);text({source_unchanged:baseline.input_sha256===remaining.input_sha256,workspace_restored:JSON.stringify(baseline.workspace_entries)===JSON.stringify(remaining.workspace_entries),scratch_restored:JSON.stringify(baseline.scratch_entries)===JSON.stringify(remaining.scratch_entries),reply_corrected:true});\n",
+          "output_ordinal": 316,
+          "output_contains_truncation_notice": false
+        }
+      ]
+    },
+    {
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T15-11-30-01a0f797-6931-7aa3-885e-c8aeb3bde8f3.jsonl",
+      "id": "01a0f797-6931-7aa3-885e-c8aeb3bde8f3",
+      "source": {
+        "subagent": {
+          "thread_spawn": {
+            "parent_thread_id": "01a0f791-4f82-7b50-b078-9d5f7dd0d15c",
+            "depth": 1,
+            "agent_path": "/root/correction",
+            "agent_nickname": "Aristotle",
+            "agent_role": null
+          }
+        }
+      },
+      "first_event": "2026-10-01T13:11:30.417Z",
+      "last_event": "2026-10-01T13:19:53.464Z",
+      "lifecycle": [
+        {
+          "ordinal": 1,
+          "timestamp": "2026-10-01T13:11:30.417Z",
+          "type": "task_started"
+        },
+        {
+          "ordinal": 74,
+          "timestamp": "2026-10-01T13:19:53.464Z",
+          "type": "task_complete"
+        }
+      ],
+      "calls": [
+        {
+          "ordinal": 14,
+          "timestamp": "2026-10-01T13:11:52.730Z",
+          "name": "exec",
+          "input": "const results = await Promise.allSettled([\n  tools.exec_command({cmd:\"cat .agents/skills/kntnt/library/references/editorial/base.md .agents/skills/kntnt/library/references/editorial/base.review.md .agents/skills/kntnt/library/references/editorial/genres/casestudy.md .agents/skills/kntnt/library/references/editorial/genres/casestudy.review.md .agents/skills/kntnt/library/references/editorial/anti-slop.md\",max_output_tokens:22000}),\n  tools.exec_command({cmd:\"cat .agents/skills/kntnt/library/references/editorial/web-craft.md .agents/skills/kntnt/library/references/editorial/web-craft.review.md .agents/skills/kntnt/library/references/editorial/article-anatomy.md .agents/skills/kntnt/library/references/editorial/article-anatomy.review.md .agents/skills/kntnt/library/references/editorial/headlines.md .agents/skills/kntnt/library/references/editorial/headlines.review.md\",max_output_tokens:22000}),\n  tools.exec_command({cmd:'round_tmp=$(mktemp -d /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-xzax0ud5/scratch/correction-language.XXXXXX)\\ntrap \\'rm -rf \"$round_tmp\"\\' EXIT\\nUV_NO_CACHE=1 UV_NO_PROJECT=1 TMPDIR=\"$round_tmp\" uv run \"/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-xzax0ud5/work/.agents/skills/kntnt/library/scripts/languages.py\" resolve --scope=composition --scope=review --scope=anti-slop \"sv\"',max_output_tokens:4000})\n]);\nfor (let i=0; i<results.length; i++) text({i,...results[i]});\n",
+          "output_ordinal": 18,
+          "output_contains_truncation_notice": true
+        },
+        {
+          "ordinal": 22,
+          "timestamp": "2026-10-01T13:12:13.610Z",
+          "name": "exec",
+          "input": "const results = await Promise.allSettled([\n  tools.exec_command({cmd:\"cat .agents/skills/kntnt/library/references/editorial/web-craft.md .agents/skills/kntnt/library/references/editorial/web-craft.review.md .agents/skills/kntnt/library/references/editorial/article-anatomy.md\",max_output_tokens:6500}),\n  tools.exec_command({cmd:\"cat .agents/skills/kntnt/library/references/editorial/article-anatomy.review.md .agents/skills/kntnt/library/references/editorial/headlines.md .agents/skills/kntnt/library/references/editorial/headlines.review.md\",max_output_tokens:8000}),\n  tools.exec_command({cmd:\"python3 - <<'PY'\\nimport os, subprocess, tempfile\\nfrom pathlib import Path\\nscratch = Path('/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-xzax0ud5/scratch')\\nwith tempfile.TemporaryDirectory(prefix='correction-language-', dir=scratch) as tmp:\\n    env = dict(os.environ, UV_NO_CACHE='1', UV_NO_PROJECT='1', TMPDIR=tmp)\\n    result = subprocess.run(['uv', 'run', '/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-xzax0ud5/work/.agents/skills/kntnt/library/scripts/languages.py', 'resolve', '--scope=composition', '--scope=review', '--scope=anti-slop', 'sv'], env=env, capture_output=True, text=True)\\n    print(result.stdout, end='')\\n    print(result.stderr, end='')\\n    status = result.returncode\\nraise SystemExit(status)\\nPY\",max_output_tokens:4000})\n]);\nfor (let i=0; i<results.length; i++) text({i,...results[i]});\n",
+          "output_ordinal": 27,
+          "output_contains_truncation_notice": false
+        },
+        {
+          "ordinal": 41,
+          "timestamp": "2026-10-01T13:14:59.376Z",
+          "name": "exec",
+          "input": "const results = await Promise.allSettled([\n  tools.exec_command({cmd:\"cat .agents/skills/kntnt/library/references/editorial/anti-slop.md\",max_output_tokens:3500}),\n  tools.exec_command({cmd:\"python3 - <<'PY'\\nimport os, subprocess, tempfile, difflib\\nfrom pathlib import Path\\noriginal = '''---\\nkntnt:\\n  genre: case-study\\n  technique: none\\n  language: sv\\n---\\n\\n# Hamnfrakt flyttade lagersaldot till ett system\\n\\n**Två av Hamnfrakt AB:s lager fick ett gemensamt system för lagersaldot. Överföringen tog sex veckor med dubbel registrering. Lagerchefen Ove Ranneby skulle göra om den, men börja med färre artikelgrupper.**\\n\\nText: Redaktionen\\n\\nHamnfrakt AB hanterar reservdelar åt verkstäder i Norrland och har omkring 9 000 artiklar i sitt sortiment. Tidigare fördes saldot för de två lagren i varsitt kalkylark, och den som ringde fick vänta medan någon slog upp siffran på rätt ställe.\\n\\n## Sex veckor med dubbel registrering\\n\\nHamnfrakt valde Saldo Nord efter att ha provat om systemet kunde visa samma saldo för båda lagren. Någon jämförelse med en annan leverantör finns inte i underlaget.\\n\\nUnder sex veckor registrerade personalen varje uttag både i kalkylarken och i det nya systemet. Därefter fördes kalkylarken över och stängdes.\\n\\n– Vi körde parallellt i sex veckor. Sedan gick lagret över, och först då såg vi hur mycket som hade legat i pärmar, säger Ove Ranneby.\\n\\n## Vad överföringen visade\\n\\nEnligt Hamnfrakts egen överföringsanteckning från den 12 januari 2026 saknade 340 av artiklarna en plats i det nya systemet. Artiklar som redan var utgångna ingår inte i den siffran.\\n\\nAnteckningen redovisar ingen mätning av hur lång tid en förfrågan tar i dag, och ingen jämförelse med tiden före överföringen. Företaget har inte heller följt upp vad överföringen kostade.\\n\\n## Företaget vill börja mindre nästa gång\\n\\n– Jag skulle göra om det. Att se samma saldo för båda lagren hjälper oss, men jag skulle ta en artikelgrupp i taget, säger Ranneby.\\n\\nDet tredje lagret är ännu inte överfört. Hamnfrakt ska först se hur de 340 artiklarna faller på plats. [Läs Saldo Nords checklista för överföringen](https://example.invalid/saldonord/checklista).\\n'''\\ncandidate = original.replace('# Hamnfrakt flyttade lagersaldot till ett system', '# Hamnfrakt har ännu inte överfört sitt tredje lager').replace('## Sex veckor med dubbel registrering', '## Ove Ranneby beskriver övergången').replace('## Vad överföringen visade', '## Överföringsanteckningen redovisar ingen tidsjämförelse').replace('## Företaget vill börja mindre nästa gång', '## Ranneby bedömer överföringen')\\nbridge = 'Under sex veckor registrerade personalen varje uttag både i kalkylarken och i det nya systemet. Därefter fördes kalkylarken över och stängdes.'\\nquote = '– Vi körde parallellt i sex veckor. Sedan gick lagret över, och först då såg vi hur mycket som hade legat i pärmar, säger Ove Ranneby.'\\nnew_details = 'Personalen registrerade varje uttag både i kalkylarken och i det nya systemet. Därefter fördes kalkylarken över och stängdes.'\\ncandidate = candidate.replace(bridge + '\\\\n\\\\n' + quote, quote + '\\\\n\\\\n' + new_details)\\nprint('DIFF')\\nprint(''.join(difflib.unified_diff(original.splitlines(keepends=True), candidate.splitlines(keepends=True), fromfile='received', tofile='corrected')))\\nscratch = Path('/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-xzax0ud5/scratch')\\nscript = '/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-xzax0ud5/work/.agents/skills/kntnt/library/scripts/article_anatomy.py'\\nfor label, source in [('RECEIVED', original), ('CORRECTED', candidate)]:\\n    with tempfile.TemporaryDirectory(prefix='correction-measure-', dir=scratch) as tmp:\\n        env = dict(os.environ, UV_NO_CACHE='1', UV_NO_PROJECT='1', TMPDIR=tmp)\\n        result = subprocess.run(['uv', 'run', script, '-'], input=source, env=env, capture_output=True, text=True)\\n        print(label + ' exit ' + str(result.returncode))\\n        print(result.stdout, end='')\\n        print(result.stderr, end='')\\nPY\",max_output_tokens:10000})\n]);\nfor (let i=0; i<results.length; i++) text({i,...results[i]});\n",
+          "output_ordinal": 45,
+          "output_contains_truncation_notice": false
+        },
+        {
+          "ordinal": 61,
+          "timestamp": "2026-10-01T13:18:28.947Z",
+          "name": "exec",
+          "input": "text(await tools.exec_command({cmd:\"python3 - <<'PY'\\nimport os, subprocess, tempfile\\nfrom pathlib import Path\\ncandidate = '''---\\nkntnt:\\n  genre: case-study\\n  technique: none\\n  language: sv\\n---\\n\\n# Hamnfrakts anteckning redovisar 340 artiklar utan plats\\n\\n**Två av Hamnfrakt AB:s lager fick ett gemensamt system för lagersaldot. Överföringen tog sex veckor med dubbel registrering. Lagerchefen Ove Ranneby skulle göra om den, men börja med färre artikelgrupper.**\\n\\nText: Redaktionen\\n\\nHamnfrakt AB hanterar reservdelar åt verkstäder i Norrland och har omkring 9 000 artiklar i sitt sortiment. Tidigare fördes saldot för de två lagren i varsitt kalkylark, och den som ringde fick vänta medan någon slog upp siffran på rätt ställe.\\n\\n## Ove Ranneby beskriver övergången\\n\\nHamnfrakt valde Saldo Nord efter att ha provat om systemet kunde visa samma saldo för båda lagren. Någon jämförelse med en annan leverantör finns inte i underlaget.\\n\\n– Vi körde parallellt i sex veckor. Sedan gick lagret över, och först då såg vi hur mycket som hade legat i pärmar, säger Ove Ranneby.\\n\\nPersonalen registrerade varje uttag både i kalkylarken och i det nya systemet. Därefter fördes kalkylarken över och stängdes.\\n\\n## Överföringsanteckningen redovisar ingen tidsjämförelse\\n\\nEnligt Hamnfrakts egen överföringsanteckning från den 12 januari 2026 saknade 340 av artiklarna en plats i det nya systemet. Artiklar som redan var utgångna ingår inte i den siffran.\\n\\nAnteckningen redovisar ingen mätning av hur lång tid en förfrågan tar i dag, och ingen jämförelse med tiden före överföringen. Företaget har inte heller följt upp vad överföringen kostade.\\n\\n## Ranneby bedömer överföringen\\n\\n– Jag skulle göra om det. Att se samma saldo för båda lagren hjälper oss, men jag skulle ta en artikelgrupp i taget, säger Ranneby.\\n\\nDet tredje lagret är ännu inte överfört. Hamnfrakt ska först se hur de 340 artiklarna faller på plats. [Läs Saldo Nords checklista för överföringen](https://example.invalid/saldonord/checklista).\\n'''\\nscratch = Path('/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-xzax0ud5/scratch')\\nwith tempfile.TemporaryDirectory(prefix='correction-final-measure-', dir=scratch) as tmp:\\n    env = dict(os.environ, UV_NO_CACHE='1', UV_NO_PROJECT='1', TMPDIR=tmp)\\n    result = subprocess.run(['uv', 'run', '/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-xzax0ud5/work/.agents/skills/kntnt/library/scripts/article_anatomy.py', '-'], input=candidate, env=env, capture_output=True, text=True)\\n    print('exit ' + str(result.returncode))\\n    print(result.stdout, end='')\\n    print(result.stderr, end='')\\nPY\",max_output_tokens:5500}));\n",
+          "output_ordinal": 64,
+          "output_contains_truncation_notice": false
+        }
+      ]
+    },
+    {
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T15-22-16-01a0f7a1-4380-77d1-ac75-52927ac7060a.jsonl",
+      "id": "01a0f7a1-4380-77d1-ac75-52927ac7060a",
+      "source": {
+        "subagent": {
+          "thread_spawn": {
+            "parent_thread_id": "01a0f791-4f82-7b50-b078-9d5f7dd0d15c",
+            "depth": 1,
+            "agent_path": "/root/mechanical_pass",
+            "agent_nickname": "Nietzsche",
+            "agent_role": null
+          }
+        }
+      },
+      "first_event": "2026-10-01T13:22:16.121Z",
+      "last_event": "2026-10-01T13:23:54.066Z",
+      "lifecycle": [
+        {
+          "ordinal": 1,
+          "timestamp": "2026-10-01T13:22:16.121Z",
+          "type": "task_started"
+        },
+        {
+          "ordinal": 54,
+          "timestamp": "2026-10-01T13:23:54.066Z",
+          "type": "task_complete"
+        }
+      ],
+      "calls": [
+        {
+          "ordinal": 14,
+          "timestamp": "2026-10-01T13:22:25.376Z",
+          "name": "exec",
+          "input": "const r = await tools.exec_command({cmd:\"cat .agents/skills/proofread/SKILL.md\",\"workdir\":\"/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-xzax0ud5/work\",\"max_output_tokens\":12000});text(r.output);\n",
+          "output_ordinal": 17,
+          "output_contains_truncation_notice": false
+        },
+        {
+          "ordinal": 19,
+          "timestamp": "2026-10-01T13:22:36.891Z",
+          "name": "exec",
+          "input": "text(await tools.exec_command({cmd:\"task_tmpdir=$(mktemp -d /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-xzax0ud5/scratch/proofread-invoke.XXXXXX)\\nTMPDIR=\\\"$task_tmpdir\\\" UV_NO_CACHE=1 UV_NO_PROJECT=1 uv run \\\"/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-xzax0ud5/work/.agents/skills/proofread/scripts/invoke.py\\\" <<'INVOKE'\\n--language=sv --output=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-xzax0ud5/scratch/redline-mechanical-9taiwwi3/mechanical-output.md /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-xzax0ud5/scratch/redline-mechanical-9taiwwi3/mechanical-input.md\\nINVOKE\\ninvoke_status=$?\\nrm -rf \\\"$task_tmpdir\\\"\\nexit \\\"$invoke_status\\\"\",\"max_output_tokens\":14000}));\n",
+          "output_ordinal": 21,
+          "output_contains_truncation_notice": false
+        },
+        {
+          "ordinal": 25,
+          "timestamp": "2026-10-01T13:22:57.679Z",
+          "name": "exec",
+          "input": "text(await tools.exec_command({cmd:\"python3 - <<'PY'\\nimport os\\nimport subprocess\\nimport tempfile\\ninvocation = '--language=sv --output=/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-xzax0ud5/scratch/redline-mechanical-9taiwwi3/mechanical-output.md /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-xzax0ud5/scratch/redline-mechanical-9taiwwi3/mechanical-input.md\\\\n'\\nwith tempfile.TemporaryDirectory(prefix='proofread-invoke-', dir='/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-xzax0ud5/scratch') as private_tmp:\\n    env = dict(os.environ, TMPDIR=private_tmp, UV_NO_CACHE='1', UV_NO_PROJECT='1')\\n    result = subprocess.run(['uv', 'run', '/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-xzax0ud5/work/.agents/skills/proofread/scripts/invoke.py'], input=invocation, text=True, env=env)\\nraise SystemExit(result.returncode)\\nPY\",\"max_output_tokens\":16000}));\n",
+          "output_ordinal": 28,
+          "output_contains_truncation_notice": false
+        },
+        {
+          "ordinal": 30,
+          "timestamp": "2026-10-01T13:23:05.757Z",
+          "name": "exec",
+          "input": "const results = await Promise.allSettled([\n  tools.exec_command({cmd:\"cat .agents/skills/kntnt/library/references/delivery.md .agents/skills/kntnt/library/references/editorial/mechanics.md\",\"max_output_tokens\":12000}),\n  tools.exec_command({cmd:\"cat /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-xzax0ud5/scratch/redline-mechanical-9taiwwi3/mechanical-input.md\\nls -ld /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-xzax0ud5/scratch/redline-mechanical-9taiwwi3\",\"max_output_tokens\":14000})\n]);results.forEach(text);\n",
+          "output_ordinal": 34,
+          "output_contains_truncation_notice": false
+        },
+        {
+          "ordinal": 36,
+          "timestamp": "2026-10-01T13:23:14.719Z",
+          "name": "exec",
+          "input": "text(await tools.exec_command({cmd:\"python3 - <<'PY'\\nimport os\\nimport subprocess\\nimport tempfile\\nwith tempfile.TemporaryDirectory(prefix='proofread-resolve-', dir='/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-xzax0ud5/scratch') as private_tmp:\\n    env = dict(os.environ, TMPDIR=private_tmp)\\n    result = subprocess.run(['uv', 'run', '--no-cache', '--no-project', '/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-xzax0ud5/work/.agents/skills/kntnt/library/scripts/languages.py', 'resolve', '--scope=mechanics', 'sv'], env=env)\\nraise SystemExit(result.returncode)\\nPY\",\"max_output_tokens\":16000}));\n",
+          "output_ordinal": 39,
+          "output_contains_truncation_notice": false
+        },
+        {
+          "ordinal": 43,
+          "timestamp": "2026-10-01T13:23:44.115Z",
+          "name": "exec",
+          "input": "text(await tools.exec_command({cmd:\"cp /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-xzax0ud5/scratch/redline-mechanical-9taiwwi3/mechanical-input.md /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-xzax0ud5/scratch/redline-mechanical-9taiwwi3/mechanical-output.md\\ncmp /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-xzax0ud5/scratch/redline-mechanical-9taiwwi3/mechanical-input.md /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-xzax0ud5/scratch/redline-mechanical-9taiwwi3/mechanical-output.md\\nls -d /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-xzax0ud5/scratch/proofread-invoke-* /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-xzax0ud5/scratch/proofread-resolve-*\",\"max_output_tokens\":1000}));\n",
+          "output_ordinal": 46,
+          "output_contains_truncation_notice": false
+        }
+      ]
+    },
+    {
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T15-27-27-01a0f7a6-02b3-7302-bcbf-5732722cfe35.jsonl",
+      "id": "01a0f7a6-02b3-7302-bcbf-5732722cfe35",
+      "source": {
+        "subagent": {
+          "thread_spawn": {
+            "parent_thread_id": "01a0f791-4f82-7b50-b078-9d5f7dd0d15c",
+            "depth": 1,
+            "agent_path": "/root/reply_check",
+            "agent_nickname": "Dewey",
+            "agent_role": null
+          }
+        }
+      },
+      "first_event": "2026-10-01T13:27:27.214Z",
+      "last_event": "2026-10-01T13:30:52.075Z",
+      "lifecycle": [
+        {
+          "ordinal": 1,
+          "timestamp": "2026-10-01T13:27:27.214Z",
+          "type": "task_started"
+        },
+        {
+          "ordinal": 36,
+          "timestamp": "2026-10-01T13:30:52.075Z",
+          "type": "task_complete"
+        }
+      ],
+      "calls": [
+        {
+          "ordinal": 10,
+          "timestamp": "2026-10-01T13:27:41.751Z",
+          "name": "exec",
+          "input": "const r = await tools.exec_command({cmd:\"python3 - <<'PY'\\nfrom pathlib import Path\\np = Path('/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-xzax0ud5/work/.agents/skills/kntnt/library/references/delivery.md')\\ns = p.read_text()\\nlines = s.splitlines()\\nstart = next(i for i, x in enumerate(lines) if x.lstrip('# ').strip() == 'The truth of a report about the text')\\nlevel = len(lines[start]) - len(lines[start].lstrip('#'))\\nend = next((i for i in range(start + 1, len(lines)) if lines[i].startswith('#') and len(lines[i]) - len(lines[i].lstrip('#')) <= level), len(lines))\\nprint('\\\\n'.join(lines[start:end]))\\np = Path('/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-xzax0ud5/work/.agents/skills/kntnt/library/references/editorial/base.review.md')\\ns = p.read_text()\\nneedle = 'A claim removed because the finding named that claim itself'\\nstart = s.index(needle)\\nend = s.find('\\\\n\\\\n', start)\\nprint(s[start:end if end >= 0 else len(s)])\\nPY\",\"max_output_tokens\":7000});\ntext(r.output);\n",
+          "output_ordinal": 13,
+          "output_contains_truncation_notice": false
+        },
+        {
+          "ordinal": 21,
+          "timestamp": "2026-10-01T13:29:09.624Z",
+          "name": "send_message",
+          "input": "{\"target\":\"/root\",\"message\":\"gAAAAABqvmAlHcakyJdYxi9jevRjZlYwxBygtYszk1zPSZeOoERvBQdIwHIzY1BiX40nVjl3bLPs1sOL4VyaSr6pKQ6FeRSEGgdqFwEApZblPlA-jV10YJ2EWhhfZZ3-ADB2F7rc1MhP9OECtFVqQg03DOjawYEVzD-3mOyOgqVWc5VzaQy9koOEC_JUZ9jGyZqh5GcN2YjNaXQSe4FD19iI9TM95JsLPguCWWl2z9bKSdJgsl4pGf8WbAKvc5p28543ol0rSSin2mh_0c9nJpmEGa-6QE197mU_Hv7WtAC9H_fIhGpfV7sM_bPE2kf4rmQmKSmWQElvV6OtuEp9wHJo3QWYyID8a_sjo2T_HAuLELWpUd6kkHOVJwuugx1IV_1oT07Wk-MiT2sTWsKuCEa1KHJK2EuTAOXwGncuNwDcbKZ0saKlbyQXasiUbuk4A4_zje3O4q_V2wj9auDvczuFSGkxM8G4Zs3tVoFIoixpgAsstTrj7aYB41yC5BSJdMsvKHUeEYeG\"}",
+          "output_ordinal": 24,
+          "output_contains_truncation_notice": false
+        }
+      ]
+    }
+  ],
+  "native_service_events": [],
+  "stream_errors": [],
+  "limit": "An input naming a glob or a path is indexed, not credited as a complete individual resource read. Encrypted dispatch briefs remain unverified."
+}
