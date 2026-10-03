@@ -55,7 +55,7 @@ An independent whole-task verifier uses the separately declared verification
 seat. Neither role's capability receipt authorizes a model substitution for the
 other. For the Oct3 repair, editorial work is GPT-6.1-Sol/xhigh and whole-task
 verification is GPT-6-Astra/high, both on CLI0.160.0; actual native contexts
-settle the launch, and a unavailable seat is an explicit capability obstacle.
+settle the launch, and an unavailable seat is an explicit capability obstacle.
 
 ## Acquire one child
 
@@ -65,7 +65,9 @@ directory, staged run root, declared seat/version, authentic parent identity,
 role, finite timeout and each additional writable inventory root. Read
 `native_dispatch.py --help` for the arguments. Existing lifecycle hooks stay
 enabled; the helper uses vetted copied hook configuration and private native
-authentication/runtime storage.
+authentication/runtime storage. The helper registers its own process group before
+reading stdin or preparing native execution; version checks are bounded and run
+inside that registered group.
 
 The helper returns the complete native final message on stdout only after
 input, actual context, completed turn and terminal bytes agree. Its stderr
@@ -75,8 +77,10 @@ when the child completed. A failed receipt is never an empty list or a negative
 editorial result. There is one attempt and no automatic retry.
 
 Inventory every staged writable root, including private HOME and scratch;
-`.git` paths receive the same coverage. The known private authentication file
-has metadata without a content digest. Distinguish enumerated recorder output
+`.git` paths receive the same coverage. Retain directories, file kinds, modes,
+symlink destinations and file content digests. Only the explicitly enumerated
+private native authentication path has metadata without a content digest; an
+ordinary staged file with the same basename receives its full digest. Distinguish enumerated recorder output
 from product side effects using raw inventories, rather than discarding whole
 directories. The helper names its owned runtime before removal and retains
 cleanup receipts. Move actual deliverables out of registered temporary roots
@@ -85,8 +89,11 @@ runtime and reports the outstanding group.
 
 ## Verify and record
 
-Use the exact native initial user item and final assistant message, retaining
-UTF-8 bytes, frontmatter and trailing newlines. A separate draft, summary,
+Require the unique initial order-0 retained user task and its native v2 completed
+UserMessage to agree on complete UTF-8 bytes and turn identity. Session/thread
+identity, task start, context, final retained message, native completed
+AgentMessage and task completion must agree in order. Retain frontmatter and
+trailing newlines. A separate draft, summary,
 matching ciphertext or later echo is no input receipt. Keep parse gaps explicit.
 Judges receive full source/artifact/report states under neutral paths and the
 frozen applicable contract; preserve splits under the campaign's existing rule.
