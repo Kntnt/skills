@@ -1,0 +1,146 @@
+[
+  {
+    "path": "work/source.md",
+    "sha256": "75188596831d5a0a28364ea4da4d1053f69900ca25237f08859696058c579f11",
+    "capture": "0000-75188596831d.md",
+    "time": 1790861975.0732028
+  },
+  {
+    "path": "work/AGENTS.md",
+    "sha256": "12bf81916e499a5768eb0076e5f06debabe837360ef0eaab14c1264636a799a6",
+    "capture": "0001-12bf81916e49.md",
+    "time": 1790861975.073355
+  },
+  {
+    "path": "scratch/write-invoke.W0AKJb/.tmptNkUk1/.tmpW2MPtH/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0002-ae98f4215313.txt",
+    "time": 1790862007.648059
+  },
+  {
+    "path": "scratch/write-invoke.W0AKJb/.tmptNkUk1/environments-v2/kntnt-c91701dc8d4b1877/lib/python3.12/site-packages/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0003-ae98f4215313.txt",
+    "time": 1790862007.763468
+  },
+  {
+    "path": "scratch/write-invoke.W0AKJb/.tmptNkUk1/archive-v0/2LIZRxA7ue1WUUdE/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0004-ae98f4215313.txt",
+    "time": 1790862007.7641852
+  },
+  {
+    "path": "scratch/write-language.PyRo7w/.tmpn3t6DS/environments-v2/languages-5b56c716bc82e1a7/lib/python3.12/site-packages/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0005-ae98f4215313.txt",
+    "time": 1790862029.217482
+  },
+  {
+    "path": "scratch/write-language.PyRo7w/.tmpn3t6DS/archive-v0/D7g0dtjzZzTZkk1e/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0006-ae98f4215313.txt",
+    "time": 1790862029.2181592
+  },
+  {
+    "path": "scratch/write-source-check-614h_4lu/draft.md",
+    "sha256": "f09b186f195583c54daa0b152355c0983bb00e577ee97e5aec6b21cec4a9428a",
+    "capture": "0007-f09b186f1955.md",
+    "time": 1790862240.631212
+  },
+  {
+    "path": "scratch/write-source-check-614h_4lu/report-1.md",
+    "sha256": "3c8695fac46656f152f27681efaaf47cc209d03d9812b6c2c92e7bc32cadb8b7",
+    "capture": "0008-3c8695fac466.md",
+    "time": 1790862611.298679
+  },
+  {
+    "path": "scratch/write-source-check-614h_4lu/report-1.md",
+    "sha256": "28806073d0e18c556d82b5490e0a213148d5e865808182ce1a91ecc3724e76d2",
+    "capture": "0009-28806073d0e1.md",
+    "time": 1790862683.247112
+  },
+  {
+    "path": "scratch/write-source-check-614h_4lu/validation-1.md",
+    "sha256": "619c0d7ca4dae97d35e438eced70ba4196a413a1eec9359faa20fee741611d8d",
+    "capture": "0010-619c0d7ca4da.md",
+    "time": 1790862751.871042
+  },
+  {
+    "path": "scratch/write-source-check-614h_4lu/draft.md",
+    "sha256": "8d300ccf1be48d0687de2f6b1f6a67fae73997a31af64eb59130ebc5b9a3ea9e",
+    "capture": "0011-8d300ccf1be4.md",
+    "time": 1790862751.871156
+  },
+  {
+    "path": "scratch/write-source-check-614h_4lu/draft-1.md",
+    "sha256": "f09b186f195583c54daa0b152355c0983bb00e577ee97e5aec6b21cec4a9428a",
+    "capture": "0012-f09b186f1955.md",
+    "time": 1790862751.871263
+  },
+  {
+    "path": "scratch/write-source-check-614h_4lu/draft-2.md",
+    "sha256": "8d300ccf1be48d0687de2f6b1f6a67fae73997a31af64eb59130ebc5b9a3ea9e",
+    "capture": "0013-8d300ccf1be4.md",
+    "time": 1790862795.763117
+  },
+  {
+    "path": "scratch/write-source-check-614h_4lu/report-2.md",
+    "sha256": "3c15f95c53fc5a08e901f9d56fc6322d9d8d5fb9cddf36d842c46f503f352dad",
+    "capture": "0014-3c15f95c53fc.md",
+    "time": 1790863135.637474
+  },
+  {
+    "path": "scratch/observer-response.md",
+    "sha256": "1002b8d1b21003325390af7c03b375c724b8f8c2eaae58f9b310cde6986ce4c1",
+    "capture": "0015-1002b8d1b210.md",
+    "time": 1790863265.95876
+  },
+  {
+    "path": "scratch/observer-delivered.md",
+    "sha256": "543cc3883e96f8b6a1859e6067b594ffe644de32a0cdff127a26914e2fc449f6",
+    "capture": "0016-543cc3883e96.md",
+    "time": 1790863265.958875
+  },
+  {
+    "path": "scratch/observer-evidence/validation-1.md",
+    "sha256": "619c0d7ca4dae97d35e438eced70ba4196a413a1eec9359faa20fee741611d8d",
+    "capture": "0017-619c0d7ca4da.md",
+    "time": 1790863265.959125
+  },
+  {
+    "path": "scratch/observer-evidence/draft.md",
+    "sha256": "8d300ccf1be48d0687de2f6b1f6a67fae73997a31af64eb59130ebc5b9a3ea9e",
+    "capture": "0018-8d300ccf1be4.md",
+    "time": 1790863265.95936
+  },
+  {
+    "path": "scratch/observer-evidence/report-2.md",
+    "sha256": "3c15f95c53fc5a08e901f9d56fc6322d9d8d5fb9cddf36d842c46f503f352dad",
+    "capture": "0019-3c15f95c53fc.md",
+    "time": 1790863265.959541
+  },
+  {
+    "path": "scratch/observer-evidence/draft-2.md",
+    "sha256": "8d300ccf1be48d0687de2f6b1f6a67fae73997a31af64eb59130ebc5b9a3ea9e",
+    "capture": "0020-8d300ccf1be4.md",
+    "time": 1790863265.959685
+  },
+  {
+    "path": "scratch/observer-evidence/draft-1.md",
+    "sha256": "f09b186f195583c54daa0b152355c0983bb00e577ee97e5aec6b21cec4a9428a",
+    "capture": "0021-f09b186f1955.md",
+    "time": 1790863265.9598022
+  },
+  {
+    "path": "scratch/observer-evidence/report-1.md",
+    "sha256": "28806073d0e18c556d82b5490e0a213148d5e865808182ce1a91ecc3724e76d2",
+    "capture": "0022-28806073d0e1.md",
+    "time": 1790863265.959936
+  },
+  {
+    "path": "scratch/observer-evidence/validation-2.md",
+    "sha256": "301c30426e071cb99f4dd3101ac5d56571e26a556f03b60a3454d21b68bb00cc",
+    "capture": "0023-301c30426e07.md",
+    "time": 1790863265.960057
+  }
+]

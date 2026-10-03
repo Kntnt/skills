@@ -1,0 +1,78 @@
+Saved to [judgement.md](/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-yjxdkzl3/work/judgement.md).
+
+# Judgement
+
+**R1: pass.** The text has no concrete visible defect requiring correction. The no-change decision preserves its useful case-study structure, restrained claims, customer voice and reservations.
+
+I read only `brief.md`, `work/input.md`, `response.md` and `criteria.md`; `delivered.md` is absent. The response explicitly says, “Inga ändringar behövdes efter redaktionell granskning och korrekturläsning.” Under the brief’s rule, the unchanged input therefore serves as the final text. All “after” descriptions below use that stipulated final text. This is not independent evidence of fidelity in a delivered artifact, and the response’s statement does not establish that its claimed review processes occurred.
+
+## 1. Every difference and every claim
+
+**Differences: none under the explicit no-change rule.** There are no mechanical corrections, visible-defect repairs, changes of taste or changes to claims to enumerate. Metadata, headings, byline, paragraphs, quotations and the checklist link are carried forward unchanged.
+
+The following inventory compares all substantive assertions and editorial promises. “Unchanged” means the same subject, strength, scope, attribution, chronology and modality in the adopted final text.
+
+| Input assertion or promise | After |
+|---|---|
+| Metadata: case study; technique `none`; Swedish (`sv`). | Unchanged. |
+| Headline: Elm Quay Housing collects reports in two houses. | Unchanged. |
+| Standfirst: the housing company tried Svale Systems’ repair log for eight weeks; the account offers operations managers preparation, bounded results and the customer’s appraisal. | Unchanged. |
+| Byline: Thomas Barregren. | Unchanged. |
+| Lead: telephone reports and email were previously kept separately; the company manages 640 apartments; its own maintenance group decided in September 2025 to try a shared repair log in two buildings. | Unchanged. |
+| First H2: telephone reporting remains available. | Unchanged. |
+| The group tested whether the log could show each repair’s status and subsequently selected Svale Systems; residents could continue reporting by telephone; the material contains no comparison with other suppliers. | Unchanged. |
+| Maya Lind is the maintenance supervisor; an email interview presents her account of the group’s aims. | Unchanged. |
+| Quotation 1: the group wanted the evening shift to see the morning shift’s work; the categories belonged to the group; Svale helped enter them into the log. | Unchanged, including the distinction between customer ownership and supplier assistance. |
+| Second H2: Svale trains six employees. | Unchanged. |
+| The maintenance group designed the categories itself; Svale configured the log and trained six employees in two sessions; Lind also describes preparations. | Unchanged. |
+| Quotation 2: agreeing on categories took more time than recording the first reports; Lind would reserve that time before starting in the next building. | Unchanged, including the comparison and conditional recommendation. |
+| Third H2: the note limits what the figures establish. | Unchanged. |
+| The trial lasted eight weeks; Elm Quay Housing’s internal trial note, dated 4 December 2025, records 31 repair reports; urgent cases and work ordered before the trial are excluded. | Unchanged, including attribution, date, count and exclusions. |
+| Median report-to-assignment time was two working days during the trial and three in the preceding eight-week period. | Unchanged, including the measured interval, working-day unit and comparator period. |
+| Workloads differed between periods; the note expressly does not attribute the difference to the software. | Unchanged; no causal upgrade. |
+| The material contains no measurements of costs, resident satisfaction or time to completed repair. | Unchanged; all three measurement limitations remain. |
+| Fourth H2: Maya Lind appraises the trial. | Unchanged. |
+| The company has not yet expanded the trial; the group will first check how the categories work for larger repairs and then decide whether to expand. | Unchanged, including the pending decision and its prerequisite. |
+| Quotation 3: Lind would choose to repeat the trial; a consolidated view helps the group; she would allow an additional preparation week; the speaker is Maya Lind. | Unchanged, including conditional language, benefit and reservation. |
+| Final H2: the reader can read Svale’s checklist. | Unchanged. |
+| Publisher disclosure: Svale Systems publishes the case study; readers preparing their own implementation are offered its checklist through the supplied link. | Unchanged, including the publisher, invitation and link target. |
+
+No legitimate removal, rejected loss or irreparable finding is present. No removal or changed claim needs disclosure. The response’s no-change account is consistent with the final-text convention and the visible text; its genre, language and technique description matches the input metadata. Assertions about what an underlying note or other material contains are assessed as written, not checked against unavailable sources.
+
+## 2. Bridges into quotations
+
+Each line identifies the immediate narrative bridge. Earlier sentences and headings are considered separately below.
+
+- **Quotation 1:** Before: “I en mejlintervju beskriver Lind vad gruppen ville åstadkomma:” — **(b)**. After: “I en mejlintervju beskriver Lind vad gruppen ville åstadkomma:” — **(b)**. “I en mejlintervju” names the occasion, “Lind” the attribution, and “vad gruppen ville åstadkomma” the subject. The bridge does not already state the shift-handover aim or category ownership. Bridge changed: no; reported bridge change: none; newly supplied event, fact, name or figure: none; loss of information absent from the quotation: none.
+- **Quotation 2:** Before: “Lind beskriver också förberedelserna:” — **(b)**. After: “Lind beskriver också förberedelserna:” — **(b)**. “Lind” supplies attribution and “förberedelserna” names the subject. The bridge does not state the time comparison or the recommendation for the next building. Bridge changed: no; reported bridge change: none; newly supplied event, fact, name or figure: none; loss of information absent from the quotation: none.
+- **Quotation 3:** Before: “Gruppen ska först kontrollera hur kategorierna fungerar för större reparationer och därefter besluta om en utökning.” — **(c)**. After: “Gruppen ska först kontrollera hur kategorierna fungerar för större reparationer och därefter besluta om en utökning.” — **(c)**. “ska först kontrollera”, “större reparationer” and “därefter besluta om en utökning” carry the planned check and subsequent decision, neither of which the quotation states. There is no substantive pre-echo clause: the bridge does not deliver Lind’s willingness to repeat the trial, her appraisal of the consolidated view or her extra-week reservation. Bridge changed: no; reported bridge change: none; newly supplied event, fact, name or figure: none; loss of information absent from the quotation: none.
+
+### Earlier context and any repeated judgement
+
+Before quotation 1, “Maya Lind är arbetsledare för underhåll” supplies her role separately from the immediate bridge. The preceding status-test paragraph concerns the log’s purpose but does not repeat the specific shift-handover aim. All this context remains.
+
+Before quotation 2, the heading “Svale utbildar sex medarbetare” and the earlier sentences preserve category ownership, configuration and training facts. “Underhållsgruppen utformade själv kategorierna” reiterates the ownership already expressed in quotation 1; it does not pre-deliver quotation 2’s time comparison or recommendation.
+
+Before quotation 3, the heading “Maya Lind värderar försöket” names the appraisal’s subject without stating the appraisal. The preceding sentence, “Elm Quay Housing har ännu inte utökat försöket”, supplies a separate status fact absent from the quotation and remains unchanged. Neither it nor the heading repeats Lind’s substantive judgement. The standfirst’s “kundens bedömning” likewise promises an appraisal without giving it. These earlier passages do not change the immediate bridge’s class.
+
+## 3. Quotations themselves
+
+- **Quotation 1, beginning “Vi ville att kvällspasset …”: unchanged under the no-change rule.** Both sentences remain. The speaker’s first-person account, intended handover benefit, ownership of categories and limited description of Svale’s help are preserved. The response reports no quotation change, consistently with the adopted final text.
+- **Quotation 2, beginning “Vi lade mer tid …”: unchanged under the no-change rule.** Both sentences remain. The comparison between preparation and initial registration, the first-person conditional “Jag skulle”, and the next-building recommendation retain their meaning, certainty and voice. No quotation change is reported.
+- **Quotation 3, beginning “Jag skulle välja …”: unchanged under the no-change rule.** Both sentences and “säger Maya Lind” remain. Willingness to repeat the trial remains conditional; “hjälper oss” remains the customer’s appraisal; “men jag skulle avsätta en extra vecka” retains its reservation and practical advice. No quotation change is reported. The trailing speech tag supplies attribution only.
+
+No quotation has been shortened, paraphrased, strengthened or stripped of a reservation in the adopted final text. There is no separate delivered artifact against which to verify these preservations.
+
+## 4. Criterion decisions
+
+| Criterion | Decision | Evidence |
+|---|---|---|
+| **G1** | **Pass** | The case study gives operations managers a recognisable angle: a limited repair-log trial in two buildings. It supplies the customer’s initial situation, selection, preparation, measured result, measurement limits, appraisal and next decision. Readers learn what preparation involved and what the trial does and does not establish. |
+| **G2** | **Pass** | The article has headline, standalone standfirst, the supported Thomas Barregren byline, a lead before the first H2, explanatory sections and a useful next-step ending. The lead begins with the customer’s earlier reporting practice; the standfirst frames the account’s duration and reader value. Headings express their sections’ angles without repeating the standfirst or the first sentence immediately below them. The customer situation/action/results/appraisal sequence is present. The ending discloses Svale’s publisher role and offers the supplied checklist, connecting the preparation lessons to the reader’s next step. |
+| **P1** | **Pass** | The reasoning proceeds from separate reporting channels through selection and preparation to a limited comparison and a pending expansion decision. The measured interval is specified as report to assignment. Different workloads, explicit non-attribution to software and absent outcome measures keep the conclusion proportionate. Category ownership, configuration and training details remain useful. |
+| **W1** | **Pass** | The headline has **8 words and 45 characters**. The **12 prose paragraphs**, excluding the byline, are all below 80 words; the longest has 43 whitespace-delimited words. The five H2 sections have **3, 2, 2, 2 and 1 paragraphs** respectively: four of five satisfy the two-or-three-paragraph preference, and none exceeds three. The two-or-three-sentence preference holds across the prose; two paragraphs end with quotation-introducing clauses. There are no headings below H2. Standfirst and lead open with different words, “Under” and “Tidigare”. The body remains complete with the standfirst covered, and there is no concrete loss from density or fragmentation. |
+| **L1** | **Pass** | The Swedish is professional and idiomatic. Expressions such as “avsätta den tiden”, “samlad vy” and “därefter besluta om en utökning” work naturally in this context. The quotations keep a plausible, direct customer voice. No concrete syntax or idiom defect warrants rewriting. |
+| **L2** | **Pass** | Swedish spelling, punctuation, dialogue dashes and date form are consistent. “den 4 december 2025”, “640 lägenheter”, “31 reparationsanmälningar” and spelled-out small quantities are acceptable forms. No visible mechanical or locale correction is required. |
+| **R1** | **Pass** | No concrete mandatory finding remains visibly unresolved. The no-change decision preserves the argument, factual limits, quotations and working voice without imposing taste. There are no removals or changed claims to report, accurately represented by the response’s no-change statement. No irreparable visible finding needs a disclosure. This decision uses the stipulated unchanged input, not an independently verified delivered copy. |
+
+None of these seven criteria is skipped. Source verification and hidden execution, configuration or side-effect claims are outside the available evidence and are not inferred from the response.

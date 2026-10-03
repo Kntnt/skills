@@ -1,0 +1,45 @@
+{
+  "instruction_revision": "fb16908712c4d47a36fc6ee9dfb3eb2714a19e65",
+  "corpus_revision": "fb16908712c4d47a36fc6ee9dfb3eb2714a19e65",
+  "harness": "codex-cli 0.160.0",
+  "deadline_seconds": 5400,
+  "inherited_identity_source": "/Users/thomas/.codex/sessions/2026/10/02/rollout-2026-10-02T11-54-24-01a0fc09-52be-7470-889b-6f244112e6da.jsonl",
+  "parent_identity": {
+    "model": "gpt-6.1-sol",
+    "effort": "high"
+  },
+  "input_name": "input.md",
+  "input_source": "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/395.scratch/packet-11/brief.md",
+  "argv": [
+    "/opt/homebrew/Caskroom/codex/0.160.0/bin/codex",
+    "exec",
+    "--ignore-rules",
+    "-s",
+    "workspace-write",
+    "-c",
+    "sandbox_workspace_write.network_access=true",
+    "-c",
+    "sandbox_workspace_write.exclude_tmpdir_env_var=true",
+    "-c",
+    "sandbox_workspace_write.exclude_slash_tmp=true",
+    "--add-dir",
+    "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/395.scratch/native-unit-03/scratch",
+    "-C",
+    "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/395.scratch/native-unit-03/work",
+    "--skip-git-repo-check",
+    "--json",
+    "-o",
+    "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/395.scratch/unit-03/response.txt",
+    "-"
+  ],
+  "environment": {
+    "HOME": "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/395.scratch/native-unit-03/home",
+    "CODEX_HOME": "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/395.scratch/native-unit-03/home/.codex",
+    "TMPDIR": "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/395.scratch/native-unit-03/scratch/tmp",
+    "UV_CACHE_DIR": "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/395.scratch/native-unit-03/scratch/uv-cache",
+    "UV_PYTHON_INSTALL_DIR": "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/395.scratch/native-unit-03/scratch/data/uv/python",
+    "XDG_DATA_HOME": "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/395.scratch/native-unit-03/scratch/data",
+    "XDG_CACHE_HOME": "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/395.scratch/native-unit-03/scratch/cache"
+  },
+  "note": "Identity must also be checked against each native turn_context after the run."
+}

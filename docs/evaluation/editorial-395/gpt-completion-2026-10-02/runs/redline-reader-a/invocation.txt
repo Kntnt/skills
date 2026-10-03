@@ -1,0 +1,1 @@
+Judge this single staged artifact by reading brief.md and executing every section it requires. The packet is in this working directory. Read only the files brief.md permits. Save the complete judgement to judgement.md and give it in your final message.

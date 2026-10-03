@@ -1,0 +1,70 @@
+Saved to [judgement.md](/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-2p1c3zto/work/judgement.md).
+
+# Judgement
+
+**R1: pass.** The text has no concrete visible defect requiring correction. The reply's no-change decision is consistent with the supplied text.
+
+Only `brief.md`, `work/input.md`, `response.md` and `criteria.md` were read. `delivered.md` is absent. The reply explicitly states: “Inga ändringar behövdes efter redaktionell granskning och korrekturläsning.” Under the brief's rule, the unchanged input is therefore the final text for this judgement. All references to the final text below use that fallback. This does **not** independently establish the fidelity of an absent delivered artifact or verify the review process.
+
+## 1. Every difference and claim preservation
+
+**Difference inventory: none.** Before: `work/input.md`; after: the same text under the permitted no-change fallback. There are no mechanical corrections, visible-defect repairs, taste changes or changes to claims to enumerate. The front matter, headings, byline, paragraphs, quotations and link are unchanged on this basis.
+
+The complete claim comparison is consequently identity, including these propositions and qualifications:
+
+| Input claims | Final-text comparison |
+|---|---|
+| Metadata specifies a Swedish case study with no technique. The headline concerns collecting reports in two houses. The standfirst describes an eight-week trial of Svale Systems' repair log and offers operations managers insight into preparation, bounded results and the customer's assessment. The byline names Thomas Barregren. | All retained unchanged. |
+| Elm Quay Housing previously kept telephone reports and email separately, manages 640 apartments, and had its own maintenance group decide in September 2025 to test a common repair log in two buildings. | All retained unchanged, including the actor, date and scope. |
+| The group tested whether the log could show each repair's status, then selected Svale Systems; residents could continue reporting by telephone; the material contains no comparison with other suppliers. Maya Lind is the maintenance supervisor and speaks in an email interview. Her first quotation states the evening/morning-shift objective, the group's ownership of the categories and Svale's help entering them. | All retained unchanged, including chronology, attribution and the comparison limitation. |
+| The maintenance group devised the categories itself. Svale configured the log and trained six employees in two sessions. Lind says agreement on categories took more time than registering the first reports and that she would allocate that time before starting in the next building. | All retained unchanged, including the division of responsibility and conditional advice. |
+| The trial lasted eight weeks. Elm Quay Housing's internal trial note, dated 4 December 2025, records 31 repair reports and excludes urgent cases and work ordered before the trial. | All retained unchanged, including the source attribution and exclusions. |
+| Median time from reporting to assignment was two working days during the trial and three during the preceding eight weeks. Workload differed; the note expressly does not attribute the difference to the software. The material has no measurements of cost, resident satisfaction or time to completed repair. | All retained unchanged, including the causal limit and all missing-measurement qualifications. |
+| The company has not yet expanded the trial. The group will first check the categories for larger repairs and then decide about expansion. Lind would choose to conduct the trial again, finds the combined view helpful, and would allocate an extra week for preparation. | All retained unchanged, including the future sequence, conditional stance and reservation. |
+| Svale Systems publishes the case study. Readers preparing their own implementation are offered Svale's implementation checklist through the supplied link. | Publisher stance, offer and link retained unchanged. Link availability was not checked; external inspection is outside the permitted scope. |
+
+There are **no legitimate removals, rejected losses or irreparable findings**. No unavailable source was used to justify either a criticism or a change.
+
+## 2. Bridges into quotations
+
+The immediate bridge is the sentence directly preceding each quotation. Earlier sentences and headings are recorded separately below, so they do not alter its class. The after column describes the final-text fallback, since no delivered artifact exists.
+
+| Quotation, in input order | Input bridge and class | Final bridge and class | Change accounting |
+|---|---|---|---|
+| 1. “Vi ville att kvällspasset …” | “I en mejlintervju beskriver Lind vad gruppen ville åstadkomma:” — **(b)**. “I en mejlintervju” names the occasion; “Lind” names the attribution; “vad gruppen ville åstadkomma” names the subject without stating the objective. | “I en mejlintervju beskriver Lind vad gruppen ville åstadkomma:” — **(b)**, for the same words and reasons. | Unchanged. No bridge change needs reporting; no new event, fact, name or figure is supplied; nothing is lost. |
+| 2. “Vi lade mer tid …” | “Lind beskriver också förberedelserna:” — **(b)**. “Lind” supplies attribution and “förberedelserna” names the subject. It does not state the comparison of time spent or Lind's advice. | “Lind beskriver också förberedelserna:” — **(b)**, for the same words and reasons. | Unchanged. No bridge change needs reporting; no new event, fact, name or figure is supplied; nothing is lost. |
+| 3. “Jag skulle välja …” | “Gruppen ska först kontrollera hur kategorierna fungerar för större reparationer och därefter besluta om en utökning.” — **(c)**. “först kontrollera”, “större reparationer” and “därefter besluta om en utökning” carry a planned check and decision sequence absent from the quotation. | “Gruppen ska först kontrollera hur kategorierna fungerar för större reparationer och därefter besluta om en utökning.” — **(c)**, for the same words and reasons. | Unchanged. No bridge change needs reporting; no new event, fact, name or figure is supplied. The independent planned check and decision sequence survive intact. |
+
+Earlier context, assessed separately from the immediate bridges:
+
+- **Quotation 1:** “Maya Lind är arbetsledare för underhåll.” supplies the speaker's role. The heading “Gruppen behåller telefonen som anmälningsväg” supplies a fact outside the quotation. Neither repeats the quotation's shift-handover objective or its allocation of category ownership and assistance.
+- **Quotation 2:** The earlier sentences establish that the group devised the categories and that Svale configured the log and trained six employees in two sessions. The heading states the training fact. None pre-delivers the quotation's comparison of preparation time or its advice for the next building.
+- **Quotation 3:** “Elm Quay Housing har ännu inte utökat försöket.” supplies another independent fact. “Maya Lind värderar försöket” names the appraisal subject without delivering Lind's judgement. The standfirst's “kundens bedömning” likewise names a subject. None pre-delivers her willingness to repeat the trial, its helpfulness or her extra-week reservation.
+
+There is no substantive pre-echo in any immediate bridge, no mixed bridge requiring an additional pre-echo classification, and no repeated quotation judgement in an earlier heading or paragraph. The postposed “säger Maya Lind” in quotation 3 supplies attribution; it is not a preceding bridge and is unchanged.
+
+## 3. Quotations themselves
+
+Each quotation is unchanged in the designated final text. That conclusion follows from the explicit no-change fallback; direct comparison with a separately delivered copy is unavailable.
+
+| Quotation | Wording and substantive preservation | Reply's change reporting |
+|---|---|---|
+| 1. “Vi ville att kvällspasset …” | Unchanged. The desired coordination between evening and morning shifts, “Kategorierna var våra”, and Svale's assistance entering them all survive. The speaker's first-person plural voice and limited description of Svale's role remain. | No change exists to report. |
+| 2. “Vi lade mer tid …” | Unchanged. The comparison between agreeing on categories and registering the first reports survives, as does “Jag skulle avsätta den tiden” before starting in the next building. Its experienced observation and conditional personal advice retain their original certainty and voice. | No change exists to report. |
+| 3. “Jag skulle välja …” | Unchanged, including the speech tag. Lind's conditional willingness to repeat the trial, the helpful combined view and “men jag skulle avsätta en extra vecka för förberedelser” all survive. The reservation is preserved; the quotation does not become an unqualified endorsement or a claim that expansion has occurred. | No change exists to report. |
+
+## 4. Criteria and reporting accuracy
+
+| Criterion | Verdict | Evidence |
+|---|---|---|
+| **G1** | **Pass** | The case study gives the named operations-manager reader a recognisable angle: a limited repair-log trial in two buildings. It presents the prior reporting situation, implementation responsibilities, measured assignment times with causal limits, and the customer's qualified appraisal. Readers learn both what was tried and what remains uncertain. |
+| **G2** | **Pass** | The anatomy appears in order: headline, standfirst, Thomas Barregren's byline, lead before the first H2, explanatory sections and a checklist call to action. The lead establishes the prior situation and decision; the sections cover action, preparation, results, appraisal and next step. Headings state their sections' angles without duplicating the standfirst or their first sentences. The ending identifies Svale as publisher and uses the supplied checklist offer and link. The existing byline matches the author named in `criteria.md`; there is no missing byline to report or fill. |
+| **P1** | **Pass** | The reasoning progresses from separate reporting channels to the shared log, preparation, bounded measurements and the decision still to come. The measured interval is clearly reporting-to-assignment, not completion. Different workloads, exclusions and the explicit refusal of software causation keep conclusions proportionate. No useful operational substance is removed. |
+| **W1** | **Pass** | The headline has **8 words and 45 characters**. The longest prose paragraph has **43 whitespace-separated words**. The five sections contain **3, 2, 2, 2 and 1 paragraphs** respectively: four of five meet the two-or-three preference, and none exceeds three. Prose paragraphs contain two or three sentences. Headings stop at H2. Standfirst and lead begin with different words, “Under” and “Tidigare”, and perform complementary jobs. The body remains complete without the standfirst. No reader loss from density or fragmentation is visible. |
+| **L1** | **Pass** | The Swedish uses professional, native phrasing, including “anmäla via telefon”, “komma överens om kategorierna” and “avsätta en extra vecka”. The narration is restrained and the quotations retain a natural first-person voice. No concrete idiom or syntax defect is visible. |
+| **L2** | **Pass** | Swedish spelling, punctuation and forms are consistent: “den 4 december 2025”, Swedish quotation dashes and the postposed “säger Maya Lind”. Numerals and spelled-out numbers are acceptable in context. No date, quantity or locale form is changed. |
+| **R1** | **Pass** | There is no mandatory visible finding left unreported. The clean text is preserved under the permitted no-change branch, with its voice, claims, quotations, attribution, chronology, scope and caveats intact. The reply's no-change statement is consistent with this judgement. No taste-driven rewriting or invented source verification is warranted. |
+
+**Removal and changed-claim reporting:** there are zero removals and zero changed claims in the evaluated comparison, so there are no individual reporting omissions or inaccuracies to list. The reply reports no changes accurately relative to the final-text fallback. Its claims to have performed editorial review and proofreading are not evidence of process compliance and have not been used to judge traces or side effects.
+
+No requested criterion is skipped. Trace criteria, model identity, configuration history, source fidelity and filesystem side effects are outside this judgement's permitted evidence.

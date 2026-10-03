@@ -1,0 +1,40 @@
+{"kind": "pid", "identifier": "95387", "at": 1790935298.503967}
+{"kind": "path", "identifier": "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/395.scratch/native-unit-01", "at": 1790935298.630142}
+{"kind": "pid", "identifier": "95402", "at": 1790935298.758389}
+{"kind": "path", "identifier": "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/395.scratch", "why": "Owned evaluator and verification scratch; manual literal cleanup"}
+{"kind": "path", "identifier": "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/395/.venv", "why": "Owned evaluator and verification scratch; manual literal cleanup"}
+{"kind": "path", "identifier": "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/395/.ruff_cache", "why": "Owned evaluator and verification scratch; manual literal cleanup"}
+{"kind": "path", "identifier": "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/395/.mypy_cache", "why": "Owned supplemental type-check cache; manual literal cleanup"}
+{"kind": "path", "identifier": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/pytest-of-thomas/pytest-1239/test_observer_captures_work_un0", "why": "Accidental red-test scratch outside authorised deletion roots; retained limitation"}
+{"kind": "path", "identifier": "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/395.scratch/packet-11", "why": "Neutral Write reader packet"}
+{"kind": "pid", "identifier": "91461", "at": 1790936618.30159}
+{"kind": "path", "identifier": "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/395.scratch/native-unit-02", "at": 1790936618.435088}
+{"kind": "pid", "identifier": "91478", "at": 1790936618.5815191}
+{"kind": "pid", "identifier": "91823", "at": 1790936619.454114}
+{"kind": "path", "identifier": "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/395.scratch/native-unit-03", "at": 1790936619.5819368}
+{"kind": "pid", "identifier": "91840", "at": 1790936619.722504}
+{"kind": "path", "identifier": "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/395.scratch/packet-12", "why": "Neutral source-blind review reader packet"}
+{"kind": "pid", "identifier": "11355", "at": 1790936918.868879}
+{"kind": "path", "identifier": "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/395.scratch/native-unit-04", "at": 1790936919.070414}
+{"kind": "pid", "identifier": "11471", "at": 1790936919.3125381}
+{"kind": "pid", "identifier": "57070", "at": 1790937103.7578912}
+{"kind": "path", "identifier": "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/395.scratch/native-unit-05", "at": 1790937103.891818}
+{"kind": "pid", "identifier": "57086", "at": 1790937104.0335429}
+{"kind": "pid", "identifier": "64107", "at": 1790937396.836826}
+{"kind": "path", "identifier": "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/395.scratch/native-unit-06", "at": 1790937396.970892}
+{"kind": "pid", "identifier": "64126", "at": 1790937397.121102}
+{"kind": "path", "identifier": "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/395/.pytest_cache", "why": "Prospectively registered current-project verification cache"}
+{"kind": "path", "identifier": "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/395/.mypy_cache", "why": "Prospectively registered current-project verification cache"}
+{"kind": "path", "identifier": "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/395/.ruff_cache", "why": "Prospectively registered current-project verification cache"}
+{"kind": "pid", "identifier": "40893", "at": 1790938255.0331461}
+{"kind": "pid", "identifier": "40907", "at": 1790938255.1343381}
+{"kind": "pid", "identifier": "40940", "at": 1790938255.8791559}
+{"kind": "pid", "identifier": "40963", "at": 1790938256.480918}
+{"kind": "pid", "identifier": "41211", "at": 1790938260.847352}
+{"kind": "pid", "identifier": "83647", "at": 1790938701.089961}
+{"kind": "pid", "identifier": "83656", "at": 1790938701.193177}
+{"kind": "pid", "identifier": "83667", "at": 1790938701.3915389}
+{"kind": "pid", "identifier": "83680", "at": 1790938701.647352}
+{"kind": "pid", "identifier": "83706", "at": 1790938702.005729}
+{"kind": "path", "identifier": "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/395/skills/models/model-selector/scripts/__pycache__", "why": "Discovered two Python cache files with first-gate timestamps; delayed subprocess-created-path accounting, owned cleanup"}
+{"kind": "path", "identifier": "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/395/uv.lock", "why": "Discovered ignored gate-generated uv lock during final Git inventory; delayed path accounting, genuine scratch", "at": 1790939825.3063512}

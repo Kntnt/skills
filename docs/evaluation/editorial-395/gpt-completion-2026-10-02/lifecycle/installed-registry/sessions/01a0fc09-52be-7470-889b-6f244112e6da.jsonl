@@ -1,0 +1,23 @@
+{"harness": "codex", "id": "01a0fc09-52be-7470-889b-6f244112e6da", "kind": "session", "owner_pid": 67650, "owner_started": "Fri Oct  2 11:54:24 2026", "session": "01a0fc09-52be-7470-889b-6f244112e6da", "started": "2026-10-02T10:01:38+00:00"}
+{"at": "2026-10-02T10:01:38+00:00", "id": "95387", "kind": "pid", "started": "Fri Oct  2 12:01:38 2026", "why": "Editorial #395 isolated completion; local lifecycle receipt"}
+{"at": "2026-10-02T10:01:38+00:00", "id": "95402", "kind": "pid", "started": "Fri Oct  2 12:01:38 2026", "why": "Editorial #395 isolated completion; local lifecycle receipt"}
+{"at": "2026-10-02T10:23:38+00:00", "id": "91461", "kind": "pid", "started": "Fri Oct  2 12:23:38 2026", "why": "Editorial #395 isolated completion; local lifecycle receipt"}
+{"at": "2026-10-02T10:23:38+00:00", "id": "91478", "kind": "pid", "started": "Fri Oct  2 12:23:38 2026", "why": "Editorial #395 isolated completion; local lifecycle receipt"}
+{"at": "2026-10-02T10:23:39+00:00", "id": "91823", "kind": "pid", "started": "Fri Oct  2 12:23:39 2026", "why": "Editorial #395 isolated completion; local lifecycle receipt"}
+{"at": "2026-10-02T10:23:39+00:00", "id": "91840", "kind": "pid", "started": "Fri Oct  2 12:23:39 2026", "why": "Editorial #395 isolated completion; local lifecycle receipt"}
+{"at": "2026-10-02T10:28:38+00:00", "id": "11355", "kind": "pid", "started": "Fri Oct  2 12:28:38 2026", "why": "Editorial #395 isolated completion; local lifecycle receipt"}
+{"at": "2026-10-02T10:28:39+00:00", "id": "11471", "kind": "pid", "started": "Fri Oct  2 12:28:39 2026", "why": "Editorial #395 isolated completion; local lifecycle receipt"}
+{"at": "2026-10-02T10:31:43+00:00", "id": "57070", "kind": "pid", "started": "Fri Oct  2 12:31:43 2026", "why": "Editorial #395 isolated completion; local lifecycle receipt"}
+{"at": "2026-10-02T10:31:44+00:00", "id": "57086", "kind": "pid", "started": "Fri Oct  2 12:31:44 2026", "why": "Editorial #395 isolated completion; local lifecycle receipt"}
+{"at": "2026-10-02T10:36:36+00:00", "id": "64107", "kind": "pid", "started": "Fri Oct  2 12:36:36 2026", "why": "Editorial #395 isolated completion; local lifecycle receipt"}
+{"at": "2026-10-02T10:36:37+00:00", "id": "64126", "kind": "pid", "started": "Fri Oct  2 12:36:37 2026", "why": "Editorial #395 isolated completion; local lifecycle receipt"}
+{"at": "2026-10-02T10:50:55+00:00", "id": "40893", "kind": "pid", "started": "Fri Oct  2 12:50:54 2026", "why": "Editorial #395 isolated completion; local lifecycle receipt"}
+{"at": "2026-10-02T10:50:55+00:00", "id": "40907", "kind": "pid", "started": "Fri Oct  2 12:50:55 2026", "why": "Editorial #395 isolated completion; local lifecycle receipt"}
+{"at": "2026-10-02T10:50:55+00:00", "id": "40940", "kind": "pid", "started": "Fri Oct  2 12:50:55 2026", "why": "Editorial #395 isolated completion; local lifecycle receipt"}
+{"at": "2026-10-02T10:50:56+00:00", "id": "40963", "kind": "pid", "started": "Fri Oct  2 12:50:56 2026", "why": "Editorial #395 isolated completion; local lifecycle receipt"}
+{"at": "2026-10-02T10:51:00+00:00", "id": "41211", "kind": "pid", "started": "Fri Oct  2 12:51:00 2026", "why": "Editorial #395 isolated completion; local lifecycle receipt"}
+{"at": "2026-10-02T10:58:21+00:00", "id": "83647", "kind": "pid", "started": "Fri Oct  2 12:58:21 2026", "why": "Editorial #395 isolated completion; local lifecycle receipt"}
+{"at": "2026-10-02T10:58:21+00:00", "id": "83656", "kind": "pid", "started": "Fri Oct  2 12:58:21 2026", "why": "Editorial #395 isolated completion; local lifecycle receipt"}
+{"at": "2026-10-02T10:58:21+00:00", "id": "83667", "kind": "pid", "started": "Fri Oct  2 12:58:21 2026", "why": "Editorial #395 isolated completion; local lifecycle receipt"}
+{"at": "2026-10-02T10:58:21+00:00", "id": "83680", "kind": "pid", "started": "Fri Oct  2 12:58:21 2026", "why": "Editorial #395 isolated completion; local lifecycle receipt"}
+{"at": "2026-10-02T10:58:22+00:00", "id": "83706", "kind": "pid", "started": "Fri Oct  2 12:58:22 2026", "why": "Editorial #395 isolated completion; local lifecycle receipt"}

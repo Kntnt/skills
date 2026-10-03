@@ -1,0 +1,89 @@
+{
+  "input_sha256": "24238d277771921361737f9c1f4ce6806708250313b823385db5e51b6e910503",
+  "input_preserved": true,
+  "input_stat_preserved": true,
+  "installed_files_unchanged": true,
+  "result": {
+    "returncode": 1,
+    "timed_out": false,
+    "duration_seconds": 641.59,
+    "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-chrp3gpe",
+    "cleanup_required": true
+  },
+  "seats": [
+    {
+      "id": "01a0f7a7-5320-77b0-8821-3f3c8c0ed508",
+      "source": "exec",
+      "cli_version": "0.159.3",
+      "seats": [
+        [
+          "gpt-6.1-sol",
+          "xhigh"
+        ]
+      ],
+      "task_complete": true,
+      "trace": "native-sessions/2026/10/01/rollout-2026-10-01T15-28-53-01a0f7a7-5320-77b0-8821-3f3c8c0ed508.jsonl"
+    }
+  ],
+  "native_errors": [
+    {
+      "trace": "trace.jsonl",
+      "line": 80,
+      "payload": {
+        "type": "error",
+        "message": "Selected model is at capacity. Please try a different model."
+      }
+    },
+    {
+      "trace": "trace.jsonl",
+      "line": 81,
+      "payload": {
+        "type": "turn.failed",
+        "error": {
+          "message": "Selected model is at capacity. Please try a different model."
+        }
+      }
+    }
+  ],
+  "native_tool_calls": 9,
+  "observer_response_matches_native": null,
+  "delivered_substring_native": null,
+  "mechanical_input_equals_output": null,
+  "mechanical_output_equals_delivered": null,
+  "mechanical_output_equals_supplied_input": null,
+  "scratch_files": {
+    "scratch/cache": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "scratch/data": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "scratch/tmp": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "scratch/uv-cache": {
+      "mode": 493,
+      "type": "directory"
+    }
+  },
+  "work_changes": {
+    "work/judgement.md": {
+      "before": null,
+      "after": {
+        "mode": 420,
+        "type": "file",
+        "size": 14933,
+        "sha256": "27fb37a8f96741a647d945b04838b0149047dda699f29e6769d79e4cc4279eda"
+      }
+    }
+  },
+  "limits": [
+    "Encrypted dispatch text is not decoded; actual child reads establish only visible scope.",
+    "A file-read command must be checked against its returned output for truncation or failure.",
+    "External captures poll at 100 ms; an uncaptured temporary version is not asserted present.",
+    "No semantic or resource-loading pass follows merely from a tool count or task completion."
+  ]
+}

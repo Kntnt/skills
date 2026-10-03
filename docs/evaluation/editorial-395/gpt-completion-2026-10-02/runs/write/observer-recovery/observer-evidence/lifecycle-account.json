@@ -1,0 +1,15 @@
+{
+  "source_check_1": {
+    "identity": "/root/source_check_1",
+    "state": "completed"
+  },
+  "source_check_2": {
+    "identity": "/root/source_check_2",
+    "state": "completed"
+  },
+  "verification": "Native collaboration.list_agents confirms both terminal states before cleanup.",
+  "outstanding_run_owned_tasks": [],
+  "wait_helpers": [],
+  "uv_commands": "All commands completed; each private TMPDIR was removed in its finally block.",
+  "construction_rejection": "First shim shell construction was refused before any effect because rm -rf is unavailable; corrected orchestration used Python shutil cleanup and ran the unchanged invocation through the same shim."
+}

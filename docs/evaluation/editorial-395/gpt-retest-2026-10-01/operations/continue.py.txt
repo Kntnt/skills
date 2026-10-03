@@ -1,0 +1,96 @@
+# /// script
+# requires-python = ">=3.12"
+# ///
+"""Execute frozen native observation cells and stage independent neutral judges."""
+from pathlib import Path
+from concurrent.futures import ThreadPoolExecutor
+import hashlib,json,os,shutil,subprocess,time
+
+REPO=Path('/Users/thomas/Projects/skills-eval-395-gpt-20261001')
+PLAN=REPO/'docs/evaluation/editorial-395/gpt-retest-2026-10-01'
+ROOT=Path('/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-observation-3q9k_53_')
+REV='fb16908712c4d47a36fc6ee9dfb3eb2714a19e65'
+
+def run(prompt:Path,source:Path,name:str,out:Path,packet:Path|None=None)->None:
+    """Launch one native invocation through the frozen isolation runner."""
+    command=['uv','run',str(PLAN/'harness/run.py'),'--revision',REV,'--corpus-revision',REV,'--prompt',str(prompt),'--input',str(source),'--input-name',name,'--output',str(out),'--timeout','1800']
+    if packet:command+=['--packet',str(packet),'--capture-output-name','judgement.md']
+    with (ROOT/f'{out.name}-launcher.log').open('w') as stream:
+        subprocess.run(command,cwd=REPO,stdout=stream,stderr=subprocess.STDOUT,check=False,start_new_session=True)
+    result=json.loads((out/'result.json').read_text())
+    if result['timed_out'] or result['returncode']:
+        raise RuntimeError(f'Interrupted native invocation requires explicit void disposition: {out}')
+
+def capture(out:Path,filename:str)->bytes|None:
+    """Read the last externally captured observer file without changing evidence."""
+    versions=json.loads((out/'file-versions.json').read_text())
+    matches=[v for v in versions if v['path'].endswith('/'+filename)]
+    if not matches:return None
+    return (out/'file-versions'/matches[-1]['capture']).read_bytes()
+
+def materialize(out:Path)->bool:
+    """Keep the exact observed artifact and user response separately."""
+    artifact=capture(out,'observer-delivered.md')
+    if artifact is not None:(out/'delivered.md').write_bytes(artifact)
+    response=capture(out,'observer-response.md')
+    (out/'response.md').write_bytes(response if response is not None else (out/'response.txt').read_bytes())
+    return artifact is not None
+
+def judges(cell:str,role:str,out:Path)->None:
+    """Give two fresh sessions the same neutral semantic packet independently."""
+    packet=ROOT/f'packet-{cell}-{role}'
+    packet.mkdir()
+    (packet/'work').mkdir()
+    input_name='source.md' if role=='composition' else 'input.md'
+    shutil.copy2(out/'supplied-input.md',packet/'work'/input_name)
+    shutil.copy2(out/'response.md',packet/'response.md')
+    if (out/'delivered.md').exists():shutil.copy2(out/'delivered.md',packet/'delivered.md')
+    shutil.copy2(PLAN/'criteria.md',packet/'criteria.md')
+    brief='write-judge-brief.md' if role=='composition' else 'redline-judge-brief.md'
+    shutil.copy2(PLAN/brief,packet/'brief.md')
+    if role=='composition':
+        evidence=packet/'evidence';evidence.mkdir()
+        versions=json.loads((out/'file-versions.json').read_text())
+        mapping=[]
+        for v in versions:
+            if v['path'].endswith('/source.md') or 'observer-delivered' in v['path'] or 'observer-response' in v['path'] or v['path'].endswith('/AGENTS.md'):
+                continue
+            shutil.copy2(out/'file-versions'/v['capture'],evidence/v['capture'])
+            mapping.append(f"{v['capture']}: {v['path']}")
+        (evidence/'version-map.txt').write_text('\n'.join(mapping)+'\n')
+    prompt=ROOT/f'judge-turn-{cell}-{role}.md'
+    prompt.write_text('Judge this single staged artifact by reading brief.md and executing every section it requires. The packet is in this working directory. Read only the files brief.md permits. Save the complete judgement to judgement.md and give it in your final message.\n')
+    for label in ['a','b']:
+        judge_out=ROOT/f'item-{cell}-{role}-reader-{label}'
+        run(prompt,packet/'brief.md','input.md',judge_out,packet)
+        judged=judge_out/'captured-output.md'
+        if not judged.exists():
+            judged=judge_out/'response.txt'
+        shutil.copy2(judged,out/f'judgement-{label}.md')
+
+def cell(row:dict)->None:
+    """Execute each frozen pair and all four independent semantic readings."""
+    n=row['cell']
+    out=ROOT/f'item-{n}-composition'
+    try:
+        if not out.exists():run(PLAN/f'turn-{n}.md',PLAN/'fixtures'/row['fixture'],'source.md',out)
+        else:
+            while not (out/'result.json').exists():time.sleep(2)
+        if not materialize(out):
+            raise RuntimeError(f'No delivered artifact: inspect stopped cell {n} and frozen re-run allowance')
+        review=ROOT/f'item-{n}-review'
+        run(PLAN/'redline-turn.md',out/'delivered.md','input.md',review)
+        materialize(review)
+        judges(n,'composition',out)
+        judges(n,'review',review)
+        (ROOT/f'cell-{n}-complete.json').write_text(json.dumps({'cell':n,'completed_at':time.time()})+'\n')
+    except Exception as error:
+        (ROOT/f'cell-{n}-error.txt').write_text(repr(error)+'\n')
+
+if __name__=='__main__':
+    if os.getpgrp()!=os.getpid():os.setsid()
+    subprocess.run(['uv','run','/Users/thomas/.agents/skills/kntnt/features/session-cleanup/scripts/session_cleanup.py','add','pid',str(os.getpid()),'Editorial #395 frozen native cell coordinator'],cwd=REPO,check=True)
+    matrix=json.loads((PLAN/'matrix.json').read_text())
+    with ThreadPoolExecutor(max_workers=2) as pool:
+        list(pool.map(cell,matrix))
+    print('All planned cells reached a terminal state',flush=True)

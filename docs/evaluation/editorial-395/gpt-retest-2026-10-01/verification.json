@@ -1,0 +1,29 @@
+{
+  "at": "2026-10-01T16:59:50.008605+00:00",
+  "frozen_inputs_verified": 16,
+  "whole_matrix_complete": false,
+  "valid_invocations": 36,
+  "void_invocations": 6,
+  "exact_artifact_chains": 6,
+  "neutral_packet_pairs_verified": 6,
+  "authored_links_verified": true,
+  "all_retained_json_parse": true,
+  "owned_process_groups_live": 0,
+  "all_logged_removed_paths_absent": true,
+  "repository_and_owned_uv_scratch_absent": [
+    "/Users/thomas/Projects/skills-eval-395-gpt-20261001/.venv",
+    "/Users/thomas/Projects/skills-eval-395-gpt-20261001/.ruff_cache",
+    "/Users/thomas/Projects/skills-eval-395-gpt-20261001/.mypy_cache",
+    "/Users/thomas/Projects/skills-eval-395-gpt-20261001/docs/evaluation/editorial-395/gpt-retest-2026-10-01/harness/__pycache__",
+    "/Users/thomas/.cache/uv/builds-v0/.tmpHBWb8r",
+    "/Users/thomas/.cache/uv/builds-v0/.tmpXq0tMj"
+  ],
+  "static_checks": {
+    "ruff_check": "pass",
+    "ruff_format": "pass, 3 files",
+    "mypy_strict": "pass, 3 source files"
+  },
+  "product_tests": "not run: no product code or contract change; native evaluations and helper audits are the relevant verification",
+  "owned_process_groups_checked": 46,
+  "controller_marker_retention_limit": "04/06 contents observed in earlier native reads; original07 controller marker unavailable; all underlying product void evidence retained"
+}

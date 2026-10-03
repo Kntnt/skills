@@ -1,0 +1,249 @@
+warning: No `requires-python` value found in the workspace. Defaulting to `>=3.12`.
+Installed 8 packages in 18ms
+============================= test session starts ==============================
+platform darwin -- Python 3.12.13, pytest-9.1.1, pluggy-1.6.0
+rootdir: /Users/thomas/Projects/skills/.git/kntnt-orchestrate/395
+configfile: pyproject.toml
+testpaths: tests
+plugins: xdist-3.8.0
+created: 14/14 workers
+14 workers [2733 items]
+
+........................................................................ [  2%]
+........................................................................ [  5%]
+........................................................................ [  7%]
+........................................................................ [ 10%]
+........................................................................ [ 13%]
+........................................................................ [ 15%]
+........................................................................ [ 18%]
+........................................................................ [ 21%]
+........................................................................ [ 23%]
+........................................................................ [ 26%]
+........................................................................ [ 28%]
+........................................................................ [ 31%]
+........................................................................ [ 34%]
+........................................................................ [ 36%]
+........................................................................ [ 39%]
+........................................................................ [ 42%]
+........................................................................ [ 44%]
+........................................................................ [ 47%]
+........................................................................ [ 50%]
+........................................................................ [ 52%]
+..F..........................................F.......................... [ 55%]
+.........F.............................................................. [ 57%]
+........................................................................ [ 60%]
+........................................................................ [ 63%]
+........................................................................ [ 65%]
+........................................................................ [ 68%]
+........................................................................ [ 71%]
+........................................................................ [ 73%]
+........................................................................ [ 76%]
+........................................................................ [ 79%]
+........................................................................ [ 81%]
+........................................................................ [ 84%]
+........................................................................ [ 86%]
+........................................................................ [ 89%]
+........................................................................ [ 92%]
+.........................................F.............................. [ 94%]
+........................................................................ [ 97%]
+..........................F.......F...F..............................    [100%]
+=================================== FAILURES ===================================
+_______________ test_the_manager_s_two_words_answer_with_the_job _______________
+[gw3] darwin -- Python 3.12.13 /Users/thomas/Projects/skills/.git/kntnt-orchestrate/395.scratch/uv-cache/builds-v0/.tmpMgiX8E/bin/python
+
+tmp_path = PosixPath('/Users/thomas/Projects/skills/.git/kntnt-orchestrate/395.scratch/pytest-of-thomas/pytest-1/popen-gw3/test_the_manager_s_two_words_a0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x10731e8a0>
+
+    def test_the_manager_s_two_words_answer_with_the_job(
+        tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        """Both answers carry the `scheduler` key the Manager is handed."""
+    
+        monkeypatch.setenv("HOME", str(tmp_path))
+        _launchctl(tmp_path, monkeypatch)
+    
+        installed = capture.install_integrations([])
+        removed = capture.remove_integrations([])
+    
+>       assert installed["scheduler"]["state"] in {"not loaded", "unsatisfied"}
+E       AssertionError: assert 'loaded' in {'not loaded', 'unsatisfied'}
+
+tests/test_ms_scheduler.py:250: AssertionError
+___ test_under_a_redirected_home_install_writes_the_plist_and_loads_nothing ____
+[gw3] darwin -- Python 3.12.13 /Users/thomas/Projects/skills/.git/kntnt-orchestrate/395.scratch/uv-cache/builds-v0/.tmpMgiX8E/bin/python
+
+tmp_path = PosixPath('/Users/thomas/Projects/skills/.git/kntnt-orchestrate/395.scratch/pytest-of-thomas/pytest-1/popen-gw3/test_under_a_redirected_home_i0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x10794b170>
+
+    def test_under_a_redirected_home_install_writes_the_plist_and_loads_nothing(
+        tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        """A Manager Sandbox redirects HOME, and the real `launchd` is never reached."""
+    
+        home = tmp_path / "home"
+        home.mkdir()
+        monkeypatch.setenv("HOME", str(home))
+        log = _launchctl(tmp_path, monkeypatch)
+    
+        report = capture.install(
+            capture.default_data(), Path.home(), [], [], platform="darwin"
+        )
+    
+>       assert report["scheduler"]["state"] == "not loaded"
+E       AssertionError: assert 'loaded' == 'not loaded'
+E         
+E         - not loaded
+E         ? ----
+E         + loaded
+
+tests/test_ms_scheduler.py:271: AssertionError
+_ test_an_install_status_and_disable_under_a_temporary_root_call_no_launchctl __
+[gw3] darwin -- Python 3.12.13 /Users/thomas/Projects/skills/.git/kntnt-orchestrate/395.scratch/uv-cache/builds-v0/.tmpMgiX8E/bin/python
+
+tmp_path = PosixPath('/Users/thomas/Projects/skills/.git/kntnt-orchestrate/395.scratch/pytest-of-thomas/pytest-1/popen-gw3/test_an_install_status_and_dis0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x10781aff0>
+
+    def test_an_install_status_and_disable_under_a_temporary_root_call_no_launchctl(
+        tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        """The gate is where the plist is written, so a temporary root never loads."""
+    
+        log = _launchctl(tmp_path, monkeypatch)
+        data, root = tmp_path / "data", tmp_path / "home"
+    
+        capture.install(data, root, [], COMMAND, platform="darwin")
+        reported = capture.status(data, root, platform="darwin")["scheduler"]
+        removed = capture.disable(data, root, [], platform="darwin")["scheduler"]
+    
+>       assert reported["health"] == "degraded"
+E       AssertionError: assert 'healthy' == 'degraded'
+E         
+E         - degraded
+E         + healthy
+
+tests/test_ms_scheduler.py:288: AssertionError
+___ test_the_registries_the_engine_finds_are_the_ones_this_repository_keeps ____
+[gw7] darwin -- Python 3.12.13 /Users/thomas/Projects/skills/.git/kntnt-orchestrate/395.scratch/uv-cache/builds-v0/.tmpMgiX8E/bin/python
+
+    def test_the_registries_the_engine_finds_are_the_ones_this_repository_keeps() -> None:
+        """The detection is deterministic and unconfigured, so what it answers for
+        this repository is what this repository actually keeps: the decision
+        records tracked under `docs/adr`, and nothing else in the index."""
+    
+        # Compare the engine with the same tracked-file boundary its contract names.
+        found = _run().numbered_registries(REPO_ROOT)
+        records = sorted(
+            Path(path)
+            for path in _git(REPO_ROOT, "ls-files", "docs/adr").stdout.splitlines()
+            if re.match(r"^docs/adr/[0-9]{4}-.+\.md$", path)
+        )
+    
+        assert records, "this repository tracks no numbered decision records"
+>       assert set(found) == {"docs/adr"}
+E       AssertionError: assert {'docs/adr', ...ersions', ...} == {'docs/adr'}
+E         
+E         Extra items in the left set:
+E         'docs/evaluation/editorial-395/gpt-retest-2026-10-01/runs/item-02-composition/file-versions'
+E         'docs/evaluation/editorial-395/gpt-retest-2026-10-01/runs/item-01-composition-reader-a/file-versions'
+E         'docs/evaluation/editorial-395/gpt-retest-2026-10-01/voids/item-06-composition-attempt-1/file-versions'
+E         'docs/evaluation/editorial-395/gpt-retest-2026-10-01/runs/item-03-composition/file-versions'
+E         'docs/evaluation/editorial-395/gpt-retest-2026-10-01/runs/item-05-composition-reader-a/file-versions'...
+E         
+E         ...Full output truncated (49 lines hidden), use '-vv' to show
+
+tests/test_run.py:10074: AssertionError
+_________ test_a_skill_that_owns_integrations_is_asked_to_remove_them __________
+[gw10] darwin -- Python 3.12.13 /Users/thomas/Projects/skills/.git/kntnt-orchestrate/395.scratch/uv-cache/builds-v0/.tmpMgiX8E/bin/python
+
+tmp_path = PosixPath('/Users/thomas/Projects/skills/.git/kntnt-orchestrate/395.scratch/pytest-of-thomas/pytest-1/popen-gw10/test_a_skill_that_owns_integra0')
+
+    def test_a_skill_that_owns_integrations_is_asked_to_remove_them(
+        tmp_path: Path,
+    ) -> None:
+        """The teardown runs while the Skill's own files are still there to run it."""
+    
+        manager = _manager()
+        layer = tmp_path / "skills"
+        layer.mkdir()
+        skill = _skill(layer, "model-selector", integrations="scripts/capture.py")
+    
+        reported = manager.teardown_integrations(["model-selector"], [layer])
+    
+        assert reported[0]["name"] == "model-selector"
+>       assert reported[0]["status"] == "removed"
+E       AssertionError: assert 'failed' == 'removed'
+E         
+E         - removed
+E         + failed
+
+tests/test_teardown.py:114: AssertionError
+_________ test_a_skill_that_owns_integrations_is_asked_to_install_them _________
+[gw10] darwin -- Python 3.12.13 /Users/thomas/Projects/skills/.git/kntnt-orchestrate/395.scratch/uv-cache/builds-v0/.tmpMgiX8E/bin/python
+
+tmp_path = PosixPath('/Users/thomas/Projects/skills/.git/kntnt-orchestrate/395.scratch/pytest-of-thomas/pytest-1/popen-gw10/test_a_skill_that_owns_integra1')
+
+    def test_a_skill_that_owns_integrations_is_asked_to_install_them(
+        tmp_path: Path,
+    ) -> None:
+        """The install runs after the Skill's files have already landed."""
+    
+        manager = _manager()
+        layer = tmp_path / "skills"
+        layer.mkdir()
+        skill = _skill(
+            layer,
+            "model-selector",
+            integrations="scripts/capture.py",
+            script_body=INSTALL_SCRIPT,
+        )
+    
+        reported = manager.install_integrations(
+            ["model-selector"], [layer], ["claude-code", "codex"]
+        )
+    
+        assert reported[0]["name"] == "model-selector"
+>       assert reported[0]["status"] == "installed"
+E       AssertionError: assert 'failed' == 'installed'
+E         
+E         - installed
+E         + failed
+
+tests/test_teardown.py:200: AssertionError
+__________ test_installing_twice_asks_the_same_convergent_word_again ___________
+[gw10] darwin -- Python 3.12.13 /Users/thomas/Projects/skills/.git/kntnt-orchestrate/395.scratch/uv-cache/builds-v0/.tmpMgiX8E/bin/python
+
+tmp_path = PosixPath('/Users/thomas/Projects/skills/.git/kntnt-orchestrate/395.scratch/pytest-of-thomas/pytest-1/popen-gw10/test_installing_twice_asks_the0')
+
+    def test_installing_twice_asks_the_same_convergent_word_again(tmp_path: Path) -> None:
+        """Install, repair, and refresh are the same convergence over what is on
+        disk (ADR-0179), so asking an already-installed Skill again is answered."""
+    
+        manager = _manager()
+        layer = tmp_path / "skills"
+        layer.mkdir()
+        _skill(
+            layer,
+            "model-selector",
+            integrations="scripts/capture.py",
+            script_body=INSTALL_SCRIPT,
+        )
+    
+        first = manager.install_integrations(["model-selector"], [layer], ["claude-code"])
+        second = manager.install_integrations(["model-selector"], [layer], ["claude-code"])
+    
+>       assert first[0]["status"] == second[0]["status"] == "installed"
+E       AssertionError: assert 'failed' == 'installed'
+E         
+E         - installed
+E         + failed
+
+tests/test_teardown.py:292: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_ms_scheduler.py::test_the_manager_s_two_words_answer_with_the_job
+FAILED tests/test_ms_scheduler.py::test_under_a_redirected_home_install_writes_the_plist_and_loads_nothing
+FAILED tests/test_ms_scheduler.py::test_an_install_status_and_disable_under_a_temporary_root_call_no_launchctl
+FAILED tests/test_run.py::test_the_registries_the_engine_finds_are_the_ones_this_repository_keeps
+FAILED tests/test_teardown.py::test_a_skill_that_owns_integrations_is_asked_to_remove_them
+FAILED tests/test_teardown.py::test_a_skill_that_owns_integrations_is_asked_to_install_them
+FAILED tests/test_teardown.py::test_installing_twice_asks_the_same_convergent_word_again
+================== 7 failed, 2726 passed in 135.71s (0:02:15) ==================

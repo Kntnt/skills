@@ -1,0 +1,104 @@
+[
+  {
+    "path": "work/delivered.md",
+    "sha256": "c5adac71858c031ddc5f5b89edbf38b74f17c5963887d5e4d3018936f4c98a3b",
+    "capture": "0000-c5adac71858c.md",
+    "time": 1790936619.7054799
+  },
+  {
+    "path": "work/input.md",
+    "sha256": "24238d277771921361737f9c1f4ce6806708250313b823385db5e51b6e910503",
+    "capture": "0001-24238d277771.md",
+    "time": 1790936619.705634
+  },
+  {
+    "path": "work/criteria.md",
+    "sha256": "2997a45c104a909e118ef4dc70e277035233b815ae7f2d5dc94482f52911dc28",
+    "capture": "0002-2997a45c104a.md",
+    "time": 1790936619.705787
+  },
+  {
+    "path": "work/response.md",
+    "sha256": "00e85029e3d38e466f681fdbf84b2c93e28a481e3cad6ef1385cc63080a22054",
+    "capture": "0003-00e85029e3d3.md",
+    "time": 1790936619.7059011
+  },
+  {
+    "path": "work/brief.md",
+    "sha256": "24238d277771921361737f9c1f4ce6806708250313b823385db5e51b6e910503",
+    "capture": "0004-24238d277771.md",
+    "time": 1790936619.706029
+  },
+  {
+    "path": "work/AGENTS.md",
+    "sha256": "f843a1188cf5bc432d23c09f495a19989b459cf95b2938e0cac95df770ce2435",
+    "capture": "0005-f843a1188cf5.md",
+    "time": 1790936619.706124
+  },
+  {
+    "path": "work/evidence/report-1-disposition.md",
+    "sha256": "0800aacf30dc7226a842e490738cc7e5f71cb7533bf23826ea64cc1ab6343d50",
+    "capture": "0006-0800aacf30dc.md",
+    "time": 1790936619.7062988
+  },
+  {
+    "path": "work/evidence/comparison-instructions.md",
+    "sha256": "c1585e9e3916348cdb1d10e47ac06d248074a4ad0edeb639a10b4b724a5217da",
+    "capture": "0007-c1585e9e3916.md",
+    "time": 1790936619.7066398
+  },
+  {
+    "path": "work/evidence/draft-before-repairs.md",
+    "sha256": "1b53485cd8f0ca31b88eaa3aaa167e08bf82c2d49351eb3028fdbf18ab80505b",
+    "capture": "0008-1b53485cd8f0.md",
+    "time": 1790936619.7067661
+  },
+  {
+    "path": "work/evidence/draft.md",
+    "sha256": "a99f6cd16cedb776552803e1aec66347354a9adadc3602270c06946a7adc0c8e",
+    "capture": "0009-a99f6cd16ced.md",
+    "time": 1790936619.706947
+  },
+  {
+    "path": "work/evidence/report-2-disposition.md",
+    "sha256": "1adf904a80138adf80d57dd0be57d49cfa797532f993901f29f1402aca14a39c",
+    "capture": "0010-1adf904a8013.md",
+    "time": 1790936619.7072792
+  },
+  {
+    "path": "work/evidence/report-2.md",
+    "sha256": "9772cdae950513ac4a9911a9795b2b193caf386d10f3a692b0d995f5c4add224",
+    "capture": "0011-9772cdae9505.md",
+    "time": 1790936619.707448
+  },
+  {
+    "path": "work/evidence/anatomy-account.md",
+    "sha256": "204dcdffcc4b0a33c911a5ea7efa47eec3dd1e7c5e6dc2ff15bb1a0dca8db610",
+    "capture": "0012-204dcdffcc4b.md",
+    "time": 1790936619.707571
+  },
+  {
+    "path": "work/evidence/report-1.md",
+    "sha256": "7dcf2c3dd36a6aea24a2bde1a3f3a535cbc955184418f30f5f6d2e89bb68bc89",
+    "capture": "0013-7dcf2c3dd36a.md",
+    "time": 1790936619.707724
+  },
+  {
+    "path": "work/evidence/comparison-instructions-2.md",
+    "sha256": "50afd257be39ac1f26cb9dbaf0d4d39c1490e7ff1524efffcdedb36b440c892a",
+    "capture": "0014-50afd257be39.md",
+    "time": 1790936619.7078478
+  },
+  {
+    "path": "work/work/source.md",
+    "sha256": "75188596831d5a0a28364ea4da4d1053f69900ca25237f08859696058c579f11",
+    "capture": "0015-75188596831d.md",
+    "time": 1790936619.708027
+  },
+  {
+    "path": "work/judgement.md",
+    "sha256": "677d29b1ced009c219a3a31c6a9877267c7aa6b38d332f5b287df53ae99c0cc0",
+    "capture": "0016-677d29b1ced0.md",
+    "time": 1790936834.0326169
+  }
+]

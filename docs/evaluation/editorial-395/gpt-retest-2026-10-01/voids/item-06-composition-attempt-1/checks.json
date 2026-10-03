@@ -1,0 +1,170 @@
+{
+  "input_sha256": "75188596831d5a0a28364ea4da4d1053f69900ca25237f08859696058c579f11",
+  "input_preserved": true,
+  "input_stat_preserved": true,
+  "installed_files_unchanged": true,
+  "result": {
+    "returncode": -15,
+    "timed_out": true,
+    "duration_seconds": 1800.24,
+    "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-aoxu6qeh",
+    "cleanup_required": true
+  },
+  "seats": [
+    {
+      "id": "01a0f7e0-74d0-70b0-87c8-69bebcc2aa80",
+      "source": "exec",
+      "cli_version": "0.159.3",
+      "seats": [
+        [
+          "gpt-6.1-sol",
+          "xhigh"
+        ]
+      ],
+      "task_complete": false,
+      "trace": "native-sessions/2026/10/01/rollout-2026-10-01T16-31-17-01a0f7e0-74d0-70b0-87c8-69bebcc2aa80.jsonl"
+    },
+    {
+      "id": "01a0f7e6-a8a3-7fa2-8dda-87e3ef96def0",
+      "source": {
+        "subagent": {
+          "thread_spawn": {
+            "parent_thread_id": "01a0f7e0-74d0-70b0-87c8-69bebcc2aa80",
+            "depth": 1,
+            "agent_path": "/root/write_source_check_1",
+            "agent_nickname": "Helmholtz",
+            "agent_role": null
+          }
+        }
+      },
+      "cli_version": "0.159.3",
+      "seats": [
+        [
+          "gpt-6.1-sol",
+          "xhigh"
+        ]
+      ],
+      "task_complete": true,
+      "trace": "native-sessions/2026/10/01/rollout-2026-10-01T16-38-03-01a0f7e6-a8a3-7fa2-8dda-87e3ef96def0.jsonl"
+    },
+    {
+      "id": "01a0f7f1-e14b-7781-8f3f-3590b13a4cde",
+      "source": {
+        "subagent": {
+          "thread_spawn": {
+            "parent_thread_id": "01a0f7e0-74d0-70b0-87c8-69bebcc2aa80",
+            "depth": 1,
+            "agent_path": "/root/write_source_check_2",
+            "agent_nickname": "Faraday",
+            "agent_role": null
+          }
+        }
+      },
+      "cli_version": "0.159.3",
+      "seats": [
+        [
+          "gpt-6.1-sol",
+          "xhigh"
+        ]
+      ],
+      "task_complete": false,
+      "trace": "native-sessions/2026/10/01/rollout-2026-10-01T16-50-19-01a0f7f1-e14b-7781-8f3f-3590b13a4cde.jsonl"
+    }
+  ],
+  "native_errors": [],
+  "native_tool_calls": 34,
+  "observer_response_matches_native": null,
+  "delivered_substring_native": null,
+  "mechanical_input_equals_output": null,
+  "mechanical_output_equals_delivered": null,
+  "mechanical_output_equals_supplied_input": null,
+  "scratch_files": {
+    "scratch/cache": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "scratch/data": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "scratch/tmp": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "scratch/uv-cache": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "scratch/write-source-check-ve7u_xk4": {
+      "mode": 448,
+      "type": "directory"
+    },
+    "scratch/write-source-check-ve7u_xk4/anatomy-report-2.json": {
+      "mode": 420,
+      "type": "file",
+      "size": 5061,
+      "sha256": "6e9b9095f22f3ff1327b333ef56beeb4416e5d833e75df7acaffcdaade1440fb"
+    },
+    "scratch/write-source-check-ve7u_xk4/anatomy-report.json": {
+      "mode": 420,
+      "type": "file",
+      "size": 5033,
+      "sha256": "6836a3a590266124e8d6a95ce20b6702f56c21d99295de9f383f594732bf37da"
+    },
+    "scratch/write-source-check-ve7u_xk4/comparison-guidance.md": {
+      "mode": 420,
+      "type": "file",
+      "size": 9360,
+      "sha256": "5511cb1841a7e912d91d3a9fba82359ae27eee151136905b6646449176f3061b"
+    },
+    "scratch/write-source-check-ve7u_xk4/draft-1.md": {
+      "mode": 420,
+      "type": "file",
+      "size": 2742,
+      "sha256": "36b458ad98e0437c07c2499fc843b58db1658441fc8855c4fe4f912fb7b80844"
+    },
+    "scratch/write-source-check-ve7u_xk4/draft-2.md": {
+      "mode": 420,
+      "type": "file",
+      "size": 2760,
+      "sha256": "228e194ff29f38eb6d4701cdce99b7f4af25f9865cc1c834c5b4f99730602ed5"
+    },
+    "scratch/write-source-check-ve7u_xk4/report-1.md": {
+      "mode": 420,
+      "type": "file",
+      "size": 27933,
+      "sha256": "2a60582315aae5fc22d3526b6dfebb9136ff4276a25f462bf572e93e5059fc9c"
+    },
+    "scratch/write-source-check-ve7u_xk4/run-account-2.md": {
+      "mode": 420,
+      "type": "file",
+      "size": 1726,
+      "sha256": "0d13ca2a7b864a8113fcc1b69f46d62a722e06953aebfb1ce18fac2feb1925f2"
+    },
+    "scratch/write-source-check-ve7u_xk4/run-account.md": {
+      "mode": 420,
+      "type": "file",
+      "size": 2760,
+      "sha256": "3b26f563968bfe57316ee92f0222ffea3c3c4acd7b80d65dd6e515d4ac1fcdb5"
+    },
+    "scratch/write-source-check-ve7u_xk4/source.md": {
+      "mode": 420,
+      "type": "file",
+      "size": 3255,
+      "sha256": "75188596831d5a0a28364ea4da4d1053f69900ca25237f08859696058c579f11"
+    },
+    "scratch/write-source-check-ve7u_xk4/validation-1.md": {
+      "mode": 420,
+      "type": "file",
+      "size": 2563,
+      "sha256": "0b270827217cf32c1a67ba6cadaf472c12514d8d43e42131e54fd520c3ed04b3"
+    }
+  },
+  "work_changes": {},
+  "limits": [
+    "Encrypted dispatch text is not decoded; actual child reads establish only visible scope.",
+    "A file-read command must be checked against its returned output for truncation or failure.",
+    "External captures poll at 100 ms; an uncaptured temporary version is not asserted present.",
+    "No semantic or resource-loading pass follows merely from a tool count or task completion."
+  ]
+}
