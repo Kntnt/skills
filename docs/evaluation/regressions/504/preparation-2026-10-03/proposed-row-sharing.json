@@ -1,0 +1,708 @@
+{
+  "status": "proposed accounting only; conformance, stream selection and execution NOT frozen",
+  "seat": {
+    "model": "gpt-6.1-sol",
+    "effort": "xhigh",
+    "cli": "0.160.0"
+  },
+  "distinct_parent_or_standalone_rows_per_arm": 62,
+  "isolated_checker_probe_rows_per_arm": 12,
+  "probe_composition": "authentic saved historical states plus three new validated contrasts, three native checker probes each",
+  "stream_rule": "Rows can share only identical ordinary/instrumented stream, overlay, staging and complete checked-state availability. Instrumented diagnostics require additional ordinary symptom observations as accepted499 specifies. Counts are not a claim that ordinary opaque rows prove checked states.",
+  "groups": [
+    {
+      "input_sha256": "2e4ef2fd4b7c03aaaceca1ad22724fdb1ed3c685cd6b4995a00285198bed42f9",
+      "genre": "casestudy",
+      "language": "sv",
+      "operation": "redline",
+      "target": "response",
+      "required_repetitions": 3,
+      "owners": [
+        504,
+        489,
+        490
+      ],
+      "fixture_aliases": [
+        "504/t01",
+        "489/t01"
+      ],
+      "staging_condition": "Accepted immutable native staging, identical input/config/target/stream/resources."
+    },
+    {
+      "input_sha256": "2e4ef2fd4b7c03aaaceca1ad22724fdb1ed3c685cd6b4995a00285198bed42f9",
+      "genre": "casestudy",
+      "language": "sv",
+      "operation": "redline",
+      "target": "file",
+      "required_repetitions": 3,
+      "owners": [
+        504,
+        489,
+        490
+      ],
+      "fixture_aliases": [
+        "504/t01",
+        "489/t01"
+      ],
+      "staging_condition": "Accepted immutable native staging, identical input/config/target/stream/resources."
+    },
+    {
+      "input_sha256": "ce574061bd09328ed80109a3cca07875683c2fd77d55f41d5631dc2cdcb18767",
+      "genre": "casestudy",
+      "language": "sv",
+      "operation": "redline",
+      "target": "response",
+      "required_repetitions": 2,
+      "owners": [
+        504
+      ],
+      "fixture_aliases": [
+        "504/t02"
+      ],
+      "staging_condition": "Accepted immutable native staging, identical input/config/target/stream/resources."
+    },
+    {
+      "input_sha256": "2fc845358550e7babf13c2301bbc8eadd099a33d2363f3b7e9b00b9797488495",
+      "genre": "casestudy",
+      "language": "sv",
+      "operation": "redline",
+      "target": "response",
+      "required_repetitions": 1,
+      "owners": [
+        504
+      ],
+      "fixture_aliases": [
+        "504/t03"
+      ],
+      "staging_condition": "Accepted immutable native staging, identical input/config/target/stream/resources."
+    },
+    {
+      "input_sha256": "2fc845358550e7babf13c2301bbc8eadd099a33d2363f3b7e9b00b9797488495",
+      "genre": "casestudy",
+      "language": "sv",
+      "operation": "redline",
+      "target": "file",
+      "required_repetitions": 1,
+      "owners": [
+        504
+      ],
+      "fixture_aliases": [
+        "504/t03"
+      ],
+      "staging_condition": "Accepted immutable native staging, identical input/config/target/stream/resources."
+    },
+    {
+      "input_sha256": "6a85566b0fa64ca8a943672e0d907e550f57ff7b548c491db5af2c61ce442316",
+      "genre": "casestudy",
+      "language": "sv",
+      "operation": "redline",
+      "target": "response",
+      "required_repetitions": 1,
+      "owners": [
+        504
+      ],
+      "fixture_aliases": [
+        "504/t04"
+      ],
+      "staging_condition": "Accepted immutable native staging, identical input/config/target/stream/resources."
+    },
+    {
+      "input_sha256": "6a85566b0fa64ca8a943672e0d907e550f57ff7b548c491db5af2c61ce442316",
+      "genre": "casestudy",
+      "language": "sv",
+      "operation": "redline",
+      "target": "file",
+      "required_repetitions": 1,
+      "owners": [
+        504
+      ],
+      "fixture_aliases": [
+        "504/t04"
+      ],
+      "staging_condition": "Accepted immutable native staging, identical input/config/target/stream/resources."
+    },
+    {
+      "input_sha256": "15b7da484b29363361e7b06449a810581015f6cd2a7116e79ac61d830737b326",
+      "genre": "casestudy",
+      "language": "sv",
+      "operation": "redline",
+      "target": "response",
+      "required_repetitions": 1,
+      "owners": [
+        504
+      ],
+      "fixture_aliases": [
+        "504/t05"
+      ],
+      "staging_condition": "Accepted immutable native staging, identical input/config/target/stream/resources."
+    },
+    {
+      "input_sha256": "15b7da484b29363361e7b06449a810581015f6cd2a7116e79ac61d830737b326",
+      "genre": "casestudy",
+      "language": "sv",
+      "operation": "redline",
+      "target": "file",
+      "required_repetitions": 1,
+      "owners": [
+        504
+      ],
+      "fixture_aliases": [
+        "504/t05"
+      ],
+      "staging_condition": "Accepted immutable native staging, identical input/config/target/stream/resources."
+    },
+    {
+      "input_sha256": "058d4525ee7e550311fcde9f9eb2591f11aafea2af730e08613fe298f561d3b2",
+      "genre": "casestudy",
+      "language": "sv",
+      "operation": "redline",
+      "target": "response",
+      "required_repetitions": 1,
+      "owners": [
+        504
+      ],
+      "fixture_aliases": [
+        "504/t06"
+      ],
+      "staging_condition": "Accepted immutable native staging, identical input/config/target/stream/resources."
+    },
+    {
+      "input_sha256": "058d4525ee7e550311fcde9f9eb2591f11aafea2af730e08613fe298f561d3b2",
+      "genre": "casestudy",
+      "language": "sv",
+      "operation": "redline",
+      "target": "file",
+      "required_repetitions": 1,
+      "owners": [
+        504
+      ],
+      "fixture_aliases": [
+        "504/t06"
+      ],
+      "staging_condition": "Accepted immutable native staging, identical input/config/target/stream/resources."
+    },
+    {
+      "input_sha256": "f183e6da31cf78081cc7c7eee69570940e24802997e92d96bb111966aa4170d5",
+      "genre": "article",
+      "language": "sv",
+      "operation": "redline",
+      "target": "response",
+      "required_repetitions": 1,
+      "owners": [
+        504,
+        488
+      ],
+      "fixture_aliases": [
+        "504/t07",
+        "488/t03"
+      ],
+      "staging_condition": "Accepted immutable native staging, identical input/config/target/stream/resources."
+    },
+    {
+      "input_sha256": "f183e6da31cf78081cc7c7eee69570940e24802997e92d96bb111966aa4170d5",
+      "genre": "article",
+      "language": "sv",
+      "operation": "redline",
+      "target": "file",
+      "required_repetitions": 1,
+      "owners": [
+        504,
+        488
+      ],
+      "fixture_aliases": [
+        "504/t07",
+        "488/t03"
+      ],
+      "staging_condition": "Accepted immutable native staging, identical input/config/target/stream/resources."
+    },
+    {
+      "input_sha256": "c5929216e487d682a26e71a0167008ca9b01b8348582115359bb4164696c2808",
+      "genre": "opinion",
+      "language": "sv",
+      "operation": "redline",
+      "target": "response",
+      "required_repetitions": 1,
+      "owners": [
+        504,
+        492
+      ],
+      "fixture_aliases": [
+        "504/t08",
+        "492/t02"
+      ],
+      "staging_condition": "Accepted immutable native staging, identical input/config/target/stream/resources."
+    },
+    {
+      "input_sha256": "c5929216e487d682a26e71a0167008ca9b01b8348582115359bb4164696c2808",
+      "genre": "opinion",
+      "language": "sv",
+      "operation": "redline",
+      "target": "file",
+      "required_repetitions": 1,
+      "owners": [
+        504,
+        492
+      ],
+      "fixture_aliases": [
+        "504/t08",
+        "492/t02"
+      ],
+      "staging_condition": "Accepted immutable native staging, identical input/config/target/stream/resources."
+    },
+    {
+      "input_sha256": "1e2dc4feec9d82c18de822b99d399c213e5dc953df892a732814becf3b5c2ecf",
+      "genre": "opinion",
+      "language": "sv",
+      "operation": "redline",
+      "target": "response",
+      "required_repetitions": 1,
+      "owners": [
+        504
+      ],
+      "fixture_aliases": [
+        "504/t09"
+      ],
+      "staging_condition": "Accepted immutable native staging, identical input/config/target/stream/resources."
+    },
+    {
+      "input_sha256": "1e2dc4feec9d82c18de822b99d399c213e5dc953df892a732814becf3b5c2ecf",
+      "genre": "opinion",
+      "language": "sv",
+      "operation": "redline",
+      "target": "file",
+      "required_repetitions": 1,
+      "owners": [
+        504
+      ],
+      "fixture_aliases": [
+        "504/t09"
+      ],
+      "staging_condition": "Accepted immutable native staging, identical input/config/target/stream/resources."
+    },
+    {
+      "input_sha256": "eb04ee84e17b2b0266ef82937039bbd8729359042d2ee57967773116d4c8a463",
+      "genre": "casestudy",
+      "language": "sv",
+      "operation": "redline",
+      "target": "response",
+      "required_repetitions": 1,
+      "owners": [
+        504,
+        505
+      ],
+      "fixture_aliases": [
+        "504/t10",
+        "505/t05"
+      ],
+      "staging_condition": "Accepted immutable native staging, identical input/config/target/stream/resources."
+    },
+    {
+      "input_sha256": "eb04ee84e17b2b0266ef82937039bbd8729359042d2ee57967773116d4c8a463",
+      "genre": "casestudy",
+      "language": "sv",
+      "operation": "redline",
+      "target": "file",
+      "required_repetitions": 1,
+      "owners": [
+        504,
+        505
+      ],
+      "fixture_aliases": [
+        "504/t10",
+        "505/t05"
+      ],
+      "staging_condition": "Accepted immutable native staging, identical input/config/target/stream/resources."
+    },
+    {
+      "input_sha256": "bbad3ac63510344b4b174809f474dfb355c87659fdeecdf2692a730b0842d018",
+      "genre": "casestudy",
+      "language": "sv",
+      "operation": "redline",
+      "target": "response",
+      "required_repetitions": 1,
+      "owners": [
+        504,
+        505
+      ],
+      "fixture_aliases": [
+        "504/t11",
+        "505/t03"
+      ],
+      "staging_condition": "Accepted immutable native staging, identical input/config/target/stream/resources."
+    },
+    {
+      "input_sha256": "bbad3ac63510344b4b174809f474dfb355c87659fdeecdf2692a730b0842d018",
+      "genre": "casestudy",
+      "language": "sv",
+      "operation": "redline",
+      "target": "file",
+      "required_repetitions": 1,
+      "owners": [
+        504,
+        505
+      ],
+      "fixture_aliases": [
+        "504/t11",
+        "505/t03"
+      ],
+      "staging_condition": "Accepted immutable native staging, identical input/config/target/stream/resources."
+    },
+    {
+      "input_sha256": "8821f2ea42f723956ccb5d1127b212227d04c7035b3944e4a81be990dda82e66",
+      "genre": "casestudy",
+      "language": "sv",
+      "operation": "redline",
+      "target": "response",
+      "required_repetitions": 1,
+      "owners": [
+        505
+      ],
+      "fixture_aliases": [
+        "505/t01"
+      ],
+      "staging_condition": "Accepted immutable native staging, identical input/config/target/stream/resources."
+    },
+    {
+      "input_sha256": "8821f2ea42f723956ccb5d1127b212227d04c7035b3944e4a81be990dda82e66",
+      "genre": "casestudy",
+      "language": "sv",
+      "operation": "redline",
+      "target": "file",
+      "required_repetitions": 1,
+      "owners": [
+        505
+      ],
+      "fixture_aliases": [
+        "505/t01"
+      ],
+      "staging_condition": "Accepted immutable native staging, identical input/config/target/stream/resources."
+    },
+    {
+      "input_sha256": "6648de46956c4796cff8c1fb1f3cc3a195b1a57f7cc5a4511e298f49fa1b6a36",
+      "genre": "casestudy",
+      "language": "sv",
+      "operation": "redline",
+      "target": "response",
+      "required_repetitions": 1,
+      "owners": [
+        505
+      ],
+      "fixture_aliases": [
+        "505/t02"
+      ],
+      "staging_condition": "Accepted immutable native staging, identical input/config/target/stream/resources."
+    },
+    {
+      "input_sha256": "6648de46956c4796cff8c1fb1f3cc3a195b1a57f7cc5a4511e298f49fa1b6a36",
+      "genre": "casestudy",
+      "language": "sv",
+      "operation": "redline",
+      "target": "file",
+      "required_repetitions": 1,
+      "owners": [
+        505
+      ],
+      "fixture_aliases": [
+        "505/t02"
+      ],
+      "staging_condition": "Accepted immutable native staging, identical input/config/target/stream/resources."
+    },
+    {
+      "input_sha256": "244c339d163059150237f2ae3a17a5bf70b4ee242a4d0a1f57fc52bb91c36a26",
+      "genre": "casestudy",
+      "language": "en_US",
+      "operation": "redline",
+      "target": "response",
+      "required_repetitions": 1,
+      "owners": [
+        505,
+        507
+      ],
+      "fixture_aliases": [
+        "505/t04",
+        "507/t01"
+      ],
+      "staging_condition": "Evaluator-owned sandbox pre-existing foreign empty/nonempty sentinel paths; exact same staging for505 and507."
+    },
+    {
+      "input_sha256": "244c339d163059150237f2ae3a17a5bf70b4ee242a4d0a1f57fc52bb91c36a26",
+      "genre": "casestudy",
+      "language": "en_US",
+      "operation": "redline",
+      "target": "file",
+      "required_repetitions": 1,
+      "owners": [
+        505,
+        507
+      ],
+      "fixture_aliases": [
+        "505/t04",
+        "507/t01"
+      ],
+      "staging_condition": "Evaluator-owned sandbox pre-existing foreign empty/nonempty sentinel paths; exact same staging for505 and507."
+    },
+    {
+      "input_sha256": "7d809a095ae3a7d5e57abfe646e1af8b08a9c282d20fced5875717bc31ad4dbb",
+      "genre": null,
+      "language": "en_US",
+      "operation": "proofread",
+      "target": "file",
+      "required_repetitions": 1,
+      "owners": [
+        506
+      ],
+      "fixture_aliases": [
+        "506/t01"
+      ],
+      "staging_condition": "Accepted immutable native staging, identical input/config/target/stream/resources."
+    },
+    {
+      "input_sha256": "e57eb41c2780268090b4938f78e617a22092d5a143a032eb00bc49b6a1bde062",
+      "genre": null,
+      "language": "en_US",
+      "operation": "proofread",
+      "target": "file",
+      "required_repetitions": 1,
+      "owners": [
+        506
+      ],
+      "fixture_aliases": [
+        "506/t02"
+      ],
+      "staging_condition": "Accepted immutable native staging, identical input/config/target/stream/resources."
+    },
+    {
+      "input_sha256": "a4e7b9bda728577a191d7eeb17cef1051a7de729e823c79707ea5ba5402ed9ce",
+      "genre": null,
+      "language": "en_US",
+      "operation": "proofread",
+      "target": "file",
+      "required_repetitions": 1,
+      "owners": [
+        506
+      ],
+      "fixture_aliases": [
+        "506/t03"
+      ],
+      "staging_condition": "Accepted immutable native staging, identical input/config/target/stream/resources."
+    },
+    {
+      "input_sha256": "75e81d07b5bdab9a91e01dbd78f5c051c8fdd0267d71f584e72334a19b36594b",
+      "genre": "casestudy",
+      "language": "en_US",
+      "operation": "redline",
+      "target": "file",
+      "required_repetitions": 1,
+      "owners": [
+        506
+      ],
+      "fixture_aliases": [
+        "506/t04"
+      ],
+      "staging_condition": "Accepted immutable native staging, identical input/config/target/stream/resources."
+    },
+    {
+      "input_sha256": "ab033d9f4c817c9eaa0efa32db93819a99291a3b22e29fb39f0d640e830ed990",
+      "genre": "opinion",
+      "language": "sv",
+      "operation": "redline",
+      "target": "response",
+      "required_repetitions": 3,
+      "owners": [
+        495,
+        488
+      ],
+      "fixture_aliases": [
+        "495/t01",
+        "488/t02"
+      ],
+      "staging_condition": "Accepted immutable native staging, identical input/config/target/stream/resources."
+    },
+    {
+      "input_sha256": "ab033d9f4c817c9eaa0efa32db93819a99291a3b22e29fb39f0d640e830ed990",
+      "genre": "opinion",
+      "language": "sv",
+      "operation": "redline",
+      "target": "file",
+      "required_repetitions": 1,
+      "owners": [
+        495
+      ],
+      "fixture_aliases": [
+        "495/t01"
+      ],
+      "staging_condition": "Accepted immutable native staging, identical input/config/target/stream/resources."
+    },
+    {
+      "input_sha256": "fcd090bee39d04dd523d78f69c10600caf5761c87341ea9d006f56867f2bddc2",
+      "genre": "opinion",
+      "language": "sv",
+      "operation": "redline",
+      "target": "response",
+      "required_repetitions": 1,
+      "owners": [
+        495
+      ],
+      "fixture_aliases": [
+        "495/t02"
+      ],
+      "staging_condition": "Accepted immutable native staging, identical input/config/target/stream/resources."
+    },
+    {
+      "input_sha256": "fcd090bee39d04dd523d78f69c10600caf5761c87341ea9d006f56867f2bddc2",
+      "genre": "opinion",
+      "language": "sv",
+      "operation": "redline",
+      "target": "file",
+      "required_repetitions": 1,
+      "owners": [
+        495
+      ],
+      "fixture_aliases": [
+        "495/t02"
+      ],
+      "staging_condition": "Accepted immutable native staging, identical input/config/target/stream/resources."
+    },
+    {
+      "input_sha256": "141efb2a4a3b9339a6a54942c1f2d2edfaf307746c355e732ac3590a1b13075a",
+      "genre": "opinion",
+      "language": "sv",
+      "operation": "redline",
+      "target": "response",
+      "required_repetitions": 3,
+      "owners": [
+        497,
+        492
+      ],
+      "fixture_aliases": [
+        "497/t01",
+        "492/t01"
+      ],
+      "staging_condition": "Accepted immutable native staging, identical input/config/target/stream/resources."
+    },
+    {
+      "input_sha256": "141efb2a4a3b9339a6a54942c1f2d2edfaf307746c355e732ac3590a1b13075a",
+      "genre": "opinion",
+      "language": "sv",
+      "operation": "redline",
+      "target": "file",
+      "required_repetitions": 3,
+      "owners": [
+        497,
+        492
+      ],
+      "fixture_aliases": [
+        "497/t01",
+        "492/t01"
+      ],
+      "staging_condition": "Accepted immutable native staging, identical input/config/target/stream/resources."
+    },
+    {
+      "input_sha256": "7e636c8bbcf9fc1fdbad4af84818b9538dc40fdfee89a3ab904609c5a6a9f0db",
+      "genre": "opinion",
+      "language": "sv",
+      "operation": "redline",
+      "target": "file",
+      "required_repetitions": 2,
+      "owners": [
+        497,
+        492
+      ],
+      "fixture_aliases": [
+        "497/t02",
+        "492/t04"
+      ],
+      "staging_condition": "Accepted immutable native staging, identical input/config/target/stream/resources."
+    },
+    {
+      "input_sha256": "5e43d4f391ba9e07920564e998ac7d764373e3d098df692ceebd4f6d01c8e374",
+      "genre": "article",
+      "language": "sv",
+      "operation": "redline",
+      "target": "response",
+      "required_repetitions": 3,
+      "owners": [
+        488
+      ],
+      "fixture_aliases": [
+        "488/t01"
+      ],
+      "staging_condition": "Accepted immutable native staging, identical input/config/target/stream/resources."
+    },
+    {
+      "input_sha256": "9b12ad3fb2cb74011c974feda1d7aafa8c0394ac6899417be2dbdd40ad0e96ab",
+      "genre": "column",
+      "language": "sv",
+      "operation": "redline",
+      "target": "file",
+      "required_repetitions": 1,
+      "owners": [
+        488
+      ],
+      "fixture_aliases": [
+        "488/t04"
+      ],
+      "staging_condition": "Accepted immutable native staging, identical input/config/target/stream/resources."
+    },
+    {
+      "input_sha256": "5d8de4ff16fcfd05e57c7bf5533ee521398066b677ef7b291f3465af78094975",
+      "genre": "casestudy",
+      "language": "sv",
+      "operation": "redline",
+      "target": "response",
+      "required_repetitions": 3,
+      "owners": [
+        489
+      ],
+      "fixture_aliases": [
+        "489/t02"
+      ],
+      "staging_condition": "Accepted immutable native staging, identical input/config/target/stream/resources."
+    },
+    {
+      "input_sha256": "17b2063a68e868b3045a3e89e356ab7c6d9b2808371455e8ac8cf16e042dd3c1",
+      "genre": "casestudy",
+      "language": "sv",
+      "operation": "redline",
+      "target": "response",
+      "required_repetitions": 3,
+      "owners": [
+        489
+      ],
+      "fixture_aliases": [
+        "489/t03"
+      ],
+      "staging_condition": "Accepted immutable native staging, identical input/config/target/stream/resources."
+    },
+    {
+      "input_sha256": "23fbaf7a2a601043e4209686eec39d5565e00d2d449fea9369e1a3d57750d556",
+      "genre": "opinion",
+      "language": "sv",
+      "operation": "redline",
+      "target": "response",
+      "required_repetitions": 1,
+      "owners": [
+        492
+      ],
+      "fixture_aliases": [
+        "492/t03"
+      ],
+      "staging_condition": "Accepted immutable native staging, identical input/config/target/stream/resources."
+    },
+    {
+      "input_sha256": "23fbaf7a2a601043e4209686eec39d5565e00d2d449fea9369e1a3d57750d556",
+      "genre": "opinion",
+      "language": "sv",
+      "operation": "redline",
+      "target": "file",
+      "required_repetitions": 1,
+      "owners": [
+        492
+      ],
+      "fixture_aliases": [
+        "492/t03"
+      ],
+      "staging_condition": "Accepted immutable native staging, identical input/config/target/stream/resources."
+    }
+  ]
+}
