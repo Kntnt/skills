@@ -69,6 +69,26 @@ What a no-change reply to a response target can be held to is the same for every
 
 ## How an evaluation is staged
 
+**Preparation before the freeze.** A clean or conforming fixture expectation
+is established against the whole actual loaded contract, not only the target
+distinction. Commit a finite preparation plan, complete selected-resource
+manifest and independent validation brief first; two fresh readers account for
+every applicable rule, counted and semantic anatomy separately. Preserve failed
+proposals and stop dependent measurement on a conflict. Then commit the final
+evaluation plan, accepted inputs, expectations and judge briefs before editorial
+runs. Read [the preparation and native acquisition guide](harness/README.md)
+when preparing a contrast or collecting exact correction/checker states
+(ADR-0244, ADR-0245).
+
+**Explicit acquisition instrumentation.** A native delegated input unavailable
+in authentic records stays unavailable. A prospective plan may name the guide's
+controlled stdin dispatch boundary, retaining its exact overlay, authentic
+native input/context/result binding and caller consumption. Both controlled arms
+share the overlay and seat. Label those rows instrumented and keep ordinary
+native parent observations separate; neither fills old gaps or establishes
+uninstrumented reproduction. A semantic candidate claim needs independent
+complete evidence and cannot rest solely on the shim.
+
 These rules hold for every evaluation of an editorial Skill, so that a ticket asking for one states only what is its own — its inputs, its criteria, the plan it copies — and its builder finds the rest here. A ticket that needs something else says so and why; where it says nothing, these rules hold. The first set binds an evaluation in any provider family. The second is how a Claude-family evaluation keeps them in the Claude Code Harness.
 
 ### In every family
@@ -109,6 +129,12 @@ The two paths are stripped by different depths on purpose: stripping `skills/knt
 **The trace runner.** Where a criterion is answered from the Harness trace, every run is made with [`editorial-388/harness/staged_run.py`](editorial-388/harness/staged_run.py), given the plan's seat; [*The trace a criterion is answered from*](#the-trace-a-criterion-is-answered-from) says why no other run can answer such a criterion. Where no criterion is, a top-level session started as above is enough. The runner starts a top-level session of its own and exports the Skills with `git archive` from the revision it is given, so a run made with it keeps *Top-level runs* and *Staging* without more.
 
 ## The recording format
+
+A new prospective campaign on another date uses its own canonical dated record
+and preserves the earlier campaign. If the same issue/family/date record is
+already occupied, give a genuinely distinct bounded campaign its own issue;
+do not invent a suffix or overwrite the first record. Lifetime amend budgets
+and historical Run Outcomes survive direct completion and Reconciliation.
 
 One record per evaluation, holding one entry per fixture run. [`record-template.md`](record-template.md) is the skeleton; records live in [`records/`](records/README.md) and are named `<skill>-<provider-family>-<YYYY-MM-DD>-<issue>.md`, the issue being the one the evaluation was run for. Every new record's name carries it, because two tickets built side by side can each evaluate one Skill in one family on one day, and neither builder can see the other's record to know that its own needs telling apart. Records written under the earlier rule, which added the issue only where a record of the same Skill, family and date already existed, keep the names they were written under.
 
