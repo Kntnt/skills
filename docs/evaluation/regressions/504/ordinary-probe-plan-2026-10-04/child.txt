@@ -1,0 +1,5 @@
+Perform one small noneditorial computation in the inherited project working directory. Use the available native command tool once, explicitly specifying that directory as cwd. Run this exact command, with an output allowance of at least 1024 tokens if the command tool exposes that setting:
+
+python3 -c 'import secrets; print("NATIVE|Åäö β|" + secrets.token_hex(16) + "|alpha|bravo|end")'
+
+Return only the whole command stdout as your final message. Preserve every UTF-8 character and the final newline; use no code fence, explanation or extra line. The nonce must come from this actual command, not a supplied or invented example. Complete this task once. Start no agents, helper CLIs, extra commands or follow-up tasks; invoke no editorial Skill and modify no files.

@@ -1,0 +1,17 @@
+Perform one bounded noneditorial native delegation. Start exactly one child through the genuine built-in spawn_agent tool and give it the exact task between CHILD_TASK_START and CHILD_TASK_END below, omitting the delimiter lines. Use the ordinary built-in/default child role with the parent's gpt-6.1-sol/xhigh seat; do not select a different or custom agent/model/effort. No second child, grandchild, restarted child, follow-up task or helper CLI is allowed.
+
+Wait for that child's final result through the genuine native coordination interface. Use at most 20 wait calls and do not restart it after an error or deadline. If it cannot complete or the native return is incomplete, report the obstacle and stop. Do not use command tools, read files, invoke editorial Skills or compute a replacement result yourself.
+
+When the child's entire final message is actually delivered, return one JSON object with exactly two string fields:
+- child_return: the complete child final message, including its exact Unicode and final newline, encoded as a JSON string.
+- reversed_nonce: the 32-character nonce from the child's actual NATIVE line, reversed.
+
+Emit the JSON object without a code fence or commentary. Preserve the whole returned child message; a status, prefix, digest or summary is insufficient. The one child must finish within the parent task's remaining 1200-second limit.
+
+CHILD_TASK_START
+Perform one small noneditorial computation in the inherited project working directory. Use the available native command tool once, explicitly specifying that directory as cwd. Run this exact command, with an output allowance of at least 1024 tokens if the command tool exposes that setting:
+
+python3 -c 'import secrets; print("NATIVE|Åäö β|" + secrets.token_hex(16) + "|alpha|bravo|end")'
+
+Return only the whole command stdout as your final message. Preserve every UTF-8 character and the final newline; use no code fence, explanation or extra line. The nonce must come from this actual command, not a supplied or invented example. Complete this task once. Start no agents, helper CLIs, extra commands or follow-up tasks; invoke no editorial Skill and modify no files.
+CHILD_TASK_END

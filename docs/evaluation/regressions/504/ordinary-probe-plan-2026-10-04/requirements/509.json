@@ -1,0 +1,102 @@
+{
+  "issue": {
+    "url": "https://api.github.com/repos/Kntnt/skills/issues/509",
+    "repository_url": "https://api.github.com/repos/Kntnt/skills",
+    "labels_url": "https://api.github.com/repos/Kntnt/skills/issues/509/labels{/name}",
+    "comments_url": "https://api.github.com/repos/Kntnt/skills/issues/509/comments",
+    "events_url": "https://api.github.com/repos/Kntnt/skills/issues/509/events",
+    "html_url": "https://github.com/Kntnt/skills/issues/509",
+    "id": 5698424566,
+    "node_id": "I_kwDOT6J8Bs8AAAABU6cO9g",
+    "number": 509,
+    "title": "Acquire complete original native messages with an explicit prospective contract",
+    "user": {
+      "login": "TBarregren",
+      "id": 261837,
+      "node_id": "MDQ6VXNlcjI2MTgzNw==",
+      "avatar_url": "https://avatars.githubusercontent.com/u/261837?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/TBarregren",
+      "html_url": "https://github.com/TBarregren",
+      "followers_url": "https://api.github.com/users/TBarregren/followers",
+      "following_url": "https://api.github.com/users/TBarregren/following{/other_user}",
+      "gists_url": "https://api.github.com/users/TBarregren/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/TBarregren/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/TBarregren/subscriptions",
+      "organizations_url": "https://api.github.com/users/TBarregren/orgs",
+      "repos_url": "https://api.github.com/users/TBarregren/repos",
+      "events_url": "https://api.github.com/users/TBarregren/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/TBarregren/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "labels": [
+      {
+        "id": 11851289785,
+        "node_id": "LA_kwDOT6J8Bs8AAAACwmRUuQ",
+        "url": "https://api.github.com/repos/Kntnt/skills/labels/enhancement",
+        "name": "enhancement",
+        "color": "a2eeef",
+        "default": true,
+        "description": "New feature or request",
+        "archived_at": null,
+        "archived_by": null
+      },
+      {
+        "id": 11866344092,
+        "node_id": "LA_kwDOT6J8Bs8AAAACw0oKnA",
+        "url": "https://api.github.com/repos/Kntnt/skills/labels/ready-for-agent",
+        "name": "ready-for-agent",
+        "color": "0e8a16",
+        "default": false,
+        "description": "Fully specified, ready for an AFK agent",
+        "archived_at": null,
+        "archived_by": null
+      }
+    ],
+    "state": "open",
+    "locked": false,
+    "assignees": [],
+    "milestone": null,
+    "comments": 0,
+    "created_at": "2026-10-04T10:29:51Z",
+    "updated_at": "2026-10-04T10:29:51Z",
+    "closed_at": null,
+    "assignee": null,
+    "author_association": "MEMBER",
+    "issue_field_values": [],
+    "type": null,
+    "active_lock_reason": null,
+    "sub_issues_summary": {
+      "total": 0,
+      "completed": 0,
+      "percent_completed": 0
+    },
+    "issue_dependencies_summary": {
+      "blocked_by": 0,
+      "total_blocked_by": 0,
+      "blocking": 6,
+      "total_blocking": 6
+    },
+    "body": "## What to build\n\nAdd an explicitly selected prospective acquisition contract for authentic original completed native input and final messages, including authenticated automatic compaction within the same original task. The existing retained-source contract remains the default with its strict completeness guards.\n\nFour completed fixture readers were rejected because their original final `response_item.metadata.retained_source.complete` was false. Their complete original native/response-item/completion/exec/terminal bytes and identities agree. A separate requirements session preserves full original initial input beside a smaller incomplete retained representation and repeated same-turn contexts across genuine compaction. This demonstrates a mismatch between the existing method's claim and the needed observation surface; it does not establish a helper defect. The source-based investigation is retained at `/Users/thomas/.kntnt/editorial-repair/2026-10-04/method-long-return-diagnosis/method-long-return-report-frozen-16cc94c6.md`, SHA256 `16cc94c6e4b293882406004e51d7aa8d4f4ea4d417a949c6d35f97310e43811b`; all 325 dispatch packet files were independently hash-checked by Root after immutable completion.\n\nUse the existing parsing, binding, recorder and receipt seam in `docs/evaluation/harness/native_dispatch.py`, reusing existing native completed-message parsing and lifecycle/inventory utilities. Preserve `bind_trace` and default behavior. Give the new boundary a distinct name and explicit selector; neither a missing flag nor a failed old guard falls through to it. It certifies complete stored original messages, not complete retained context, model memory or unrecorded provider responses. Preserve every original retained flag and representation identity. Distinct original native and retained initial message IDs remain distinct.\n\nOriginal order-0 user plaintext, genuine completed UserMessage and supplied stdin must agree exactly. Require a fresh authentic session, declared actual CLI/model/effort, a unique start and completion, original final AgentMessage and corresponding response item identity/plaintext, task-completion final text, exec JSON final and terminal equality, and ordered same-thread/turn boundaries. Every context must agree on task/root-turn/seat and be accounted for by the authentic ordered compaction-window sequence. Compaction replacement history may corroborate context transitions but cannot reconstruct missing original input/final. Contradictory, missing, partial, foreign, resumed, duplicate or unexplained boundaries fail closed. Emit complete output only after native success, binding and owned cleanup succeed.\n\nBefore implementation, observe behavioral RED at the real seam, then implement the smallest adequate change and preserve GREEN and the unchanged contract's rejections. Original immutable source cases are opaque schema inputs; synthetic mutations use new explicitly synthetic copies. Future test-first requirements have no exception. The owner's historical exception for #499 does not extend to this ticket.\n\nPrepare and commit a finite neutral proof before launches. Root allocates a maximum of eight native sessions, replacing the investigation's unallocated six-session proposal: four direct children (short final, 45,000–55,000-byte Unicode/newline final, 3,700–5,000-byte opaque initial with short final, and one fixed neutral genuine-compaction scenario), plus two neutral parents each invoking and fully consuming one own short/long helper child. Four direct + two parents + two nested children = eight. Each actual session is GPT-6.1-Sol/xhigh, CLI0.160.0, enabled hooks, at most1200seconds, one attempt, no replacements. Commit exact inputs, source expectations, finite tool-output/context bounds and instrumentation before launch. Root reviews that immutable plan before releasing the eight slots. A lower supported compaction threshold may be explicitly disclosed as neutral proof instrumentation; it cannot stand for default-condition occurrence. Stop on the first unmet proof boundary. Missing authentic compaction leaves that capability unproved rather than earning a retry.\n\nRetain full source and return records, source offsets/identities, prelaunch recorder/helper/executable digests, process-group/start-time registrations, inventories covering all writable roots and exact credential exclusions, parent/child command and whole-return consumption, failure and cleanup receipts. Use real HOME and isolated owned environments/caches. Protect all prior archives, worktrees, foreign processes and existing machine state. Update applicable current guide/protocol/brief surfaces prospectively; do not rewrite released history. Record an ADR only if the existing three-part bar is met, using the next free number at writing and naming the chosen number in the commit. Builders use `Refs` and leave acceptance/closure to Root and fresh verification.\n\n## Acceptance criteria\n\n- [ ] The new contract is explicit and separately named; unchanged default retained-source behavior still rejects all four historical long-return packets and remains ineligible for the incomplete-initial/compacted schema case. Previous #499 acceptance, all four historical method FAILs and all original ticket outcomes remain intact.\n- [ ] Complete original input/final identities and exact UTF-8/trailing-newline bytes are bound at original native completed boundaries; retained flags, distinct IDs and aggregate/per-message differences remain unchanged and separately described. No terminal-only, later-echo or reconstructed acquisition succeeds.\n- [ ] Genuine same-turn compaction supports only authenticated, ordered, stable task/root-turn/seat context transitions. Missing original source, incomplete compaction/source, unexplained contexts, foreign/resumed tasks or changed seats fail closed.\n- [ ] Actual RED precedes satisfying implementation. Meaningful positive coverage includes all five opaque original schema cases, short/long multibyte output, input retention differences and serialized-size distinctions. Negative coverage includes missing/partial/nontext originals, wrong identity/seat/root-turn, displaced order0, altered/later input, duplicates/reordering, context/compaction conflicts, native failure, deterministic timeout, byte disagreement and truncated parent consumption. Original sources are unchanged.\n- [ ] The committed finite proof was released before launch, uses at most eight actual exact-seat sessions without retry, and establishes each claimed direct-child, long-original-input, genuine-compaction and complete parent-consumption boundary. Every failure/capture gap and actual cost is retained; an unmet boundary does not pass.\n- [ ] Complete neutral raw sources, digests, actual-seat evidence, inventories and lifecycle receipts are independently inspectable; no foreign/reused process is stopped and every owned working process/runtime is cleaned after deliverable preservation.\n- [ ] Guide/protocol/receipt documentation states the prospective source claim and its limits consistently. No historical acquisition VOID is regraded and no original evaluation/amend budget is reset. Redline remains two consumed VOIDs/66 unrun-held under its old68-reader declaration; Write remains two consumed VOIDs/six unrun-held, four actual sessions and zero replacements. A later editorial campaign requires its own explicit prospective freeze/allocation.\n- [ ] A genuinely fresh independent GPT-6-Astra/high CLI0.160.0 verifier reads the full current thread and repository requirements before candidate access, then checks the entire ticket, code/standards, actual RED/native proof/lifecycle evidence and all four checks in `CONTRIBUTING.md`. Root separately verifies integrated coherence at the accepted Main head before dependent editorial launches.\n- [ ] All four checks specified by `CONTRIBUTING.md` pass using isolated owned storage, with initial failures and any justified reruns retained.\n\nBlocked by: none. Accepted #499 is the existing method source; #500 and #504–#508 wait for this separately bounded method capability before their next native campaign.\n\n---\nWritten against `68a4c1b7`.\n",
+    "closed_by": null,
+    "reactions": {
+      "url": "https://api.github.com/repos/Kntnt/skills/issues/509/reactions",
+      "total_count": 0,
+      "+1": 0,
+      "-1": 0,
+      "laugh": 0,
+      "hooray": 0,
+      "confused": 0,
+      "heart": 0,
+      "rocket": 0,
+      "eyes": 0
+    },
+    "timeline_url": "https://api.github.com/repos/Kntnt/skills/issues/509/timeline",
+    "performed_via_github_app": null,
+    "state_reason": null,
+    "pinned_comment": null
+  },
+  "comments": []
+}

@@ -1,0 +1,47 @@
+{
+  "prepared_against": "a4e25191ef9d0893d4975f7ba3a60dfc6bdb2369",
+  "source_claim": "finite noneditorial ordinary parent plus genuine built-in child; no measured capability",
+  "frozen_diagnosis": {
+    "path": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/method-long-return-diagnosis/method-long-return-report-frozen-16cc94c6.md",
+    "sha256": "16cc94c6e4b293882406004e51d7aa8d4f4ea4d417a949c6d35f97310e43811b"
+  },
+  "official_documentation": "https://learn.chatgpt.com/docs/agent-configuration/subagents",
+  "files": {
+    "child.txt": {
+      "bytes": 773,
+      "sha256": "0a06019b14c86f58962648f879aefd4d11b6b52ac007671790bd5de7943243c0"
+    },
+    "parent.txt": {
+      "bytes": 2183,
+      "sha256": "6da5e3ca917838bfee2975380a21653de983c3a41ba1270c585e3a70803603c1"
+    },
+    "plan.md": {
+      "bytes": 10877,
+      "sha256": "6d9fafd35cdc16bc2a22dc48ac06d4e89ecf36b50f8e94cf5e1f9b065de96dbf"
+    },
+    "requirements/509.json": {
+      "bytes": 11855,
+      "sha256": "ab548a3e378ae4274e4f1c84efcc7ade123a19bfabbd6e6559930e1dce543174"
+    },
+    "requirements/root-mechanical-review.txt": {
+      "bytes": 2052,
+      "sha256": "90417f4a814e1d9d23b2aff464eb7757cd7a667b9f400362732ca7184384ba3c"
+    },
+    "slots.json": {
+      "bytes": 1589,
+      "sha256": "dd31fd2ca13eb7aef69c7cc65e2f29caf43b6e1bc1f37e8eba7d5cb3f9a3b779"
+    }
+  },
+  "unchanged_code": {
+    "docs/evaluation/regressions/504/harness/ordinary_parent.py": "71b5663d7ead37ae516558c3e551bae21f06ed9c1cbc076ac7786ea02320d011",
+    "tests/test_editorial_redline_504_parent.py": "35370533861f23d62bffebaf81a90c05725bd103d9cae779ab5dafa8f4526488",
+    "docs/evaluation/harness/native_dispatch.py": "b6cf291a34711dcbe0bb247bbee6a4b8a8fb5ca662946afa2bb04aff9c52627b"
+  },
+  "cleanup": {
+    "new_scratch_paths": [],
+    "new_long_lived_processes": [],
+    "native_sessions_started": 0,
+    "tests_or_gates_run": 0,
+    "all_created_plan_paths_are_deliverables": true
+  }
+}

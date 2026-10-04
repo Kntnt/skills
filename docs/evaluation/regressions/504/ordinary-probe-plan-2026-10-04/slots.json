@@ -1,0 +1,42 @@
+{
+  "phase": "plan-only; implementation and native launch held",
+  "parent": {
+    "slot": "ordinary-parent-01",
+    "kind": "fresh ordinary native exec/user",
+    "model": "gpt-6.1-sol",
+    "effort": "xhigh",
+    "cli_version": "0.160.0",
+    "prompt": "parent.txt",
+    "timeout_seconds": 1200,
+    "attempts": 1,
+    "max_spawns": 1,
+    "max_wait_calls": 20,
+    "max_command_calls": 0,
+    "final_utf8_bytes_max": 4096,
+    "coordination_return_utf8_bytes_max": 16384
+  },
+  "child": {
+    "slot": "builtin-child-01",
+    "kind": "one genuine built-in spawn_agent child of ordinary-parent-01",
+    "model": "gpt-6.1-sol",
+    "effort": "xhigh",
+    "cli_version": "0.160.0",
+    "prompt": "child.txt",
+    "timeout_seconds_max": 1200,
+    "deadline": "at most remaining parent deadline",
+    "attempts": 1,
+    "max_command_calls": 1,
+    "max_spawns": 0,
+    "command_stdout_utf8_bytes_max": 128,
+    "final_utf8_bytes_max": 512,
+    "command_output_allowance_tokens_min": 1024
+  },
+  "total_actual_native_sessions_max": 2,
+  "native_sessions_consumed": 0,
+  "retries": 0,
+  "replacements": 0,
+  "other_native_or_editorial_sessions": 0,
+  "unexpected_session_policy": "stop known owned engine; preserve every actual source and report boundary failure, never discard extra session",
+  "inherited_context": "ordinary current supported native Harness; pinned installed context retained; no lower compaction threshold or dispatch overlay",
+  "launch_release": "accepted integrated509 + allocated consumer RED/GREEN and review + committed exact launch binding + explicit Root release"
+}
