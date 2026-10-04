@@ -1,0 +1,5 @@
+Downloading mypy (13.6MiB)
+Downloading ast-serialize (1.2MiB)
+ Downloaded ast-serialize
+ Downloaded mypy
+Installed 11 packages in 22ms

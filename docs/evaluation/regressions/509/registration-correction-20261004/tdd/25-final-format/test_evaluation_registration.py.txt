@@ -1,0 +1,370 @@
+"""Synthetic registration corruptions constrain the public original-mode run."""
+
+from __future__ import annotations
+
+import argparse
+import importlib.util
+import io
+import json
+import subprocess
+from pathlib import Path
+from types import ModuleType
+from typing import Any
+
+import pytest
+
+ROOT: Path = Path(__file__).resolve().parents[1]
+SPEC = importlib.util.spec_from_file_location(
+    "registration_dispatch", ROOT / "docs/evaluation/harness/native_dispatch.py"
+)
+assert SPEC is not None and SPEC.loader is not None
+DISPATCH: ModuleType = importlib.util.module_from_spec(SPEC)
+SPEC.loader.exec_module(DISPATCH)
+PID: int = 41001
+BIRTH: str = "Sun Oct  4 12:00:00 2026"
+
+
+def setup_run(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, raw: str
+) -> tuple[argparse.Namespace, io.BytesIO]:
+    """Replace only external OS/installed-command boundaries with synthetic data."""
+    args = argparse.Namespace(
+        packet=tmp_path / "nested/packet",
+        cleanup_script=tmp_path / "cleanup.py",
+        source_contract="original-completed-v1",
+        timeout=1200,
+    )
+    input_stream = io.BytesIO(b"")
+    monkeypatch.setattr(DISPATCH.sys, "stdin", argparse.Namespace(buffer=input_stream))
+    monkeypatch.setattr(DISPATCH.os, "getpid", lambda: PID)
+    monkeypatch.setattr(DISPATCH.os, "getpgrp", lambda: PID)
+    monkeypatch.setattr(DISPATCH.os, "getpgid", lambda pid: PID)
+
+    def external(
+        command: list[str], **options: Any
+    ) -> subprocess.CompletedProcess[Any]:
+        """Simulate installed JSON and an independent contemporary ps observation."""
+        return subprocess.CompletedProcess(
+            command,
+            0,
+            BIRTH + "\n" if command[0] == "ps" else raw.encode(),
+            "" if command[0] == "ps" else b"",
+        )
+
+    monkeypatch.setattr(DISPATCH.subprocess, "run", external)
+    return args, input_stream
+
+
+def test_original_run_rejects_empty_installed_birth_before_stdin(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """An exit0 registration with no birth must not authorize input consumption."""
+    raw = (
+        json.dumps({"recorded": {"kind": "pid", "id": str(PID), "started": ""}}) + "\n"
+    )
+    args, input_stream = setup_run(tmp_path, monkeypatch, raw)
+    # A nonempty input makes consumption observable without starting native work.
+    input_stream.write(b"not consumed")
+    input_stream.seek(0)
+    error: Exception | None = None
+    try:
+        DISPATCH.run(args)
+    except (DISPATCH.CaptureError, AttributeError) as exc:
+        error = exc
+    assert input_stream.tell() == 0
+    assert isinstance(error, DISPATCH.CaptureError)
+    assert not (args.packet / "prompt.txt").exists()
+    assert not (args.packet / "runtime").exists()
+    assert not (args.packet / "result.txt").exists()
+    receipt = json.loads((args.packet / "receipt.json").read_text())
+    assert receipt["status"] == "failed"
+    assert "registration" in receipt["reason"]
+    issued = json.loads((args.packet / "registrations.jsonl").read_text())
+    assert issued["receipt"] == raw
+
+
+@pytest.mark.parametrize(
+    "boundary",
+    [
+        "missing-record",
+        "malformed",
+        "wrong-kind",
+        "wrong-pid",
+        "pid-type",
+        "missing-birth",
+        "wrong-birth",
+        "before-empty",
+        "before-nonzero",
+        "after-empty",
+        "after-changed",
+        "group-unavailable",
+        "foreign-group",
+        "after-foreign-group",
+        "exit-failure",
+    ],
+)
+def test_original_run_rejects_synthetic_registration_conflicts_before_input(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, boundary: str
+) -> None:
+    """Unavailable registration or current ownership cannot authorize preparation."""
+    value: dict[str, Any] = {
+        "recorded": {"kind": "pid", "id": str(PID), "started": BIRTH}
+    }
+    if boundary == "missing-record":
+        value = {}
+    elif boundary == "wrong-kind":
+        value["recorded"]["kind"] = "path"
+    elif boundary == "wrong-pid":
+        value["recorded"]["id"] = str(PID + 1)
+    elif boundary == "pid-type":
+        value["recorded"]["id"] = PID
+    elif boundary == "missing-birth":
+        value["recorded"].pop("started")
+    elif boundary == "wrong-birth":
+        value["recorded"]["started"] = "different birth"
+    raw = "{partial" if boundary == "malformed" else json.dumps(value) + "\n"
+    args, input_stream = setup_run(tmp_path, monkeypatch, raw)
+    input_stream.write(b"not consumed")
+    input_stream.seek(0)
+    ps_reads = [0]
+    group_reads = [0]
+
+    def external(
+        command: list[str], **options: Any
+    ) -> subprocess.CompletedProcess[Any]:
+        """Keep synthetic failures at actual OS and installed JSON boundaries."""
+        if command[0] != "ps":
+            return subprocess.CompletedProcess(
+                command,
+                1 if boundary == "exit-failure" else 0,
+                raw.encode(),
+                b"synthetic stderr",
+            )
+        ps_reads[0] += 1
+        text = BIRTH
+        if boundary == "before-empty" or (
+            boundary == "after-empty" and ps_reads[0] > 1
+        ):
+            text = ""
+        if boundary == "after-changed" and ps_reads[0] > 1:
+            text = "different birth"
+        return subprocess.CompletedProcess(
+            command, 1 if boundary == "before-nonzero" else 0, text, ""
+        )
+
+    def group(pid: int) -> int:
+        """No actual process or destructive operation is used in these variants."""
+        group_reads[0] += 1
+        if boundary == "group-unavailable":
+            raise PermissionError("synthetic group observation denied")
+        if boundary == "foreign-group" or (
+            boundary == "after-foreign-group" and group_reads[0] > 1
+        ):
+            return PID + 1
+        return PID
+
+    monkeypatch.setattr(DISPATCH.subprocess, "run", external)
+    monkeypatch.setattr(DISPATCH.os, "getpgid", group)
+    error: Exception | None = None
+    try:
+        DISPATCH.run(args)
+    except (DISPATCH.CaptureError, AttributeError, OSError, ValueError) as exc:
+        error = exc
+    assert input_stream.tell() == 0
+    assert isinstance(error, DISPATCH.CaptureError)
+    assert not (args.packet / "prompt.txt").exists()
+    assert not (args.packet / "runtime").exists()
+    assert not (args.packet / "result.txt").exists()
+    assert json.loads((args.packet / "receipt.json").read_text())["status"] == "failed"
+    assert (args.packet / "cleanup-failed.json").exists()
+
+
+def test_original_first_registration_creates_selected_home_before_installed_probes(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """The first installed add can observe birth in a fresh nested selected home."""
+    raw = (
+        json.dumps({"recorded": {"kind": "pid", "id": str(PID), "started": BIRTH}})
+        + "\n"
+    )
+    args, _input_stream = setup_run(tmp_path, monkeypatch, raw)
+    homes: list[Path] = []
+
+    def external(
+        command: list[str], **options: Any
+    ) -> subprocess.CompletedProcess[Any]:
+        """Require the installed feature's ps working directory to exist first."""
+        if command[0] == "ps":
+            return subprocess.CompletedProcess(command, 0, BIRTH, "")
+        selected = Path(options["env"]["KNTNT_HOME"])
+        homes.append(selected)
+        assert selected.is_dir(), (
+            "selected lifecycle home absent before installed probes"
+        )
+        return subprocess.CompletedProcess(command, 0, raw.encode(), b"")
+
+    monkeypatch.setattr(DISPATCH.subprocess, "run", external)
+    with pytest.raises(DISPATCH.CaptureError, match="empty dispatch brief"):
+        DISPATCH.run(args)
+    assert homes == [args.packet / "lifecycle"]
+    issued = json.loads((args.packet / "registrations.jsonl").read_text())
+    assert issued["status"] == "authenticated"
+    assert issued["receipt"] == raw
+    assert (
+        issued["before"]
+        == issued["after"]
+        == {"pid": PID, "pgid": PID, "started": BIRTH}
+    )
+    assert not (args.packet / "cleanup-failed.json").exists()
+
+
+def test_real_installed_registration_authenticates_own_first_use_packet(
+    tmp_path: Path,
+) -> None:
+    """The owned pytest process is ready before installed probes; no model starts."""
+    import os
+
+    cleanup = (
+        Path.home()
+        / ".agents/skills/kntnt/features/session-cleanup/scripts/session_cleanup.py"
+    )
+    args = argparse.Namespace(
+        packet=tmp_path / "nested/real-packet",
+        cleanup_script=cleanup,
+        source_contract="original-completed-v1",
+        timeout=1200,
+    )
+    with pytest.raises(DISPATCH.CaptureError, match="empty dispatch brief"):
+        DISPATCH.run(args, b"")
+    issued = json.loads((args.packet / "registrations.jsonl").read_text())
+    recorded = json.loads(issued["receipt"])["recorded"]
+    assert issued["status"] == "authenticated"
+    assert issued["before"] == issued["after"]
+    assert issued["before"]["pid"] == issued["before"]["pgid"] == os.getpid()
+    assert issued["before"]["started"] == recorded["started"] != ""
+    assert os.getpgid(os.getpid()) == os.getpid()
+    assert (args.packet / f"registration-{os.getpid()}.stdout").read_bytes() == issued[
+        "receipt"
+    ].encode()
+    assert not (args.packet / "cleanup-failed.json").exists()
+
+
+def test_raw_registration_utf8_and_newlines_are_preserved(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """Actual installed response bytes remain separate from parsed observations."""
+    raw = (
+        json.dumps(
+            {
+                "recorded": {"kind": "pid", "id": str(PID), "started": BIRTH},
+                "note": "Åβ",
+            },
+            ensure_ascii=False,
+            indent=2,
+        ).replace("\n", "\r\n")
+        + "\r\n"
+    )
+    args, _input_stream = setup_run(tmp_path, monkeypatch, raw)
+    with pytest.raises(DISPATCH.CaptureError, match="empty dispatch brief"):
+        DISPATCH.run(args)
+    assert (args.packet / f"registration-{PID}.stdout").read_bytes() == raw.encode()
+    issued = json.loads((args.packet / "registrations.jsonl").read_text())
+    assert issued["receipt"] == raw
+    assert issued["status"] == "authenticated"
+
+
+def test_native_child_registration_rejects_before_native_input(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """A valid recorder registration never supplies a child with empty birth."""
+    from test_evaluation_original_dispatch import CASES, recorder, source
+    from test_evaluation_original_dispatch import DISPATCH as original
+
+    actual_register = original.register
+    args = recorder(tmp_path, monkeypatch, CASES[0])
+    monkeypatch.setattr(original, "register", actual_register)
+    calls = [0]
+
+    def external(
+        command: list[str], **options: Any
+    ) -> subprocess.CompletedProcess[Any]:
+        """Only the second installed response is a synthetic acquisition void."""
+        if command[0] == "ps":
+            return subprocess.CompletedProcess(command, 0, BIRTH, "")
+        calls[0] += 1
+        raw = json.dumps(
+            {
+                "recorded": {
+                    "kind": "pid",
+                    "id": command[5],
+                    "started": BIRTH if calls[0] == 1 else "",
+                }
+            }
+        ).encode()
+        return subprocess.CompletedProcess(command, 0, raw, b"")
+
+    monkeypatch.setattr(original.subprocess, "run", external)
+    with pytest.raises(original.CaptureError, match="registration"):
+        original.run(args, source(CASES[0], "prompt"))
+    assert calls[0] == 2
+    assert "completed" not in args.observed
+    assert not (args.packet / "result.txt").exists()
+    assert (args.packet / "cleanup-failed.json").exists()
+    assert (args.packet / "runtime").exists()
+    issued = [
+        json.loads(line)
+        for line in (args.packet / "registrations.jsonl").read_text().splitlines()
+    ]
+    assert issued[0]["status"] == "authenticated"
+    assert issued[1]["status"] == "failed"
+    assert json.loads(issued[1]["receipt"])["recorded"]["started"] == ""
+
+
+def test_installed_timeout_preserves_actual_partial_response(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """A failed installed command retains partial bytes without completing them."""
+    args, input_stream = setup_run(tmp_path, monkeypatch, "")
+
+    def external(
+        command: list[str], **options: Any
+    ) -> subprocess.CompletedProcess[Any]:
+        """Provide a synthetic partial transport failure after a valid own probe."""
+        if command[0] == "ps":
+            return subprocess.CompletedProcess(command, 0, BIRTH, "")
+        raise subprocess.TimeoutExpired(
+            command, 30, output=b'{"recorded":', stderr=b"partial stderr\n"
+        )
+
+    monkeypatch.setattr(DISPATCH.subprocess, "run", external)
+    with pytest.raises(DISPATCH.CaptureError, match="registration"):
+        DISPATCH.run(args)
+    assert input_stream.tell() == 0
+    assert (args.packet / f"registration-{PID}.stdout").read_bytes() == b'{"recorded":'
+    assert (
+        args.packet / f"registration-{PID}.stderr"
+    ).read_bytes() == b"partial stderr\n"
+    issued = json.loads((args.packet / "registrations.jsonl").read_text())
+    assert issued["status"] == "failed"
+    assert issued["installed_response_complete"] is False
+    assert not (args.packet / "result.txt").exists()
+
+
+def test_retained_default_keeps_ordinary_installed_response_behavior(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """The original selector alone adds validation; default receipt bytes persist."""
+    raw = json.dumps({"recorded": {"kind": "pid", "id": str(PID), "started": ""}}) + "\n"
+    args, _input_stream = setup_run(tmp_path, monkeypatch, raw)
+    del args.source_contract
+
+    def external(command: list[str], **options: Any) -> subprocess.CompletedProcess[Any]:
+        """Honor the actual accepted default's text capture at the OS seam."""
+        assert options["text"] is True
+        return subprocess.CompletedProcess(command, 0, raw, "")
+
+    monkeypatch.setattr(DISPATCH.subprocess, "run", external)
+    with pytest.raises(DISPATCH.CaptureError, match="empty dispatch brief"):
+        DISPATCH.run(args)
+    assert (args.packet / "prompt.txt").read_bytes() == b""
+    issued = json.loads((args.packet / "registrations.jsonl").read_text())
+    assert issued == {"pid": PID, "pgid": PID, "receipt": raw}
+    assert not (args.packet / "cleanup-failed.json").exists()

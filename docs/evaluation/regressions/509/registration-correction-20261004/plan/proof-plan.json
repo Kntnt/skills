@@ -1,0 +1,754 @@
+{
+  "status": "UNLAUNCHED / RELEASED SESSIONS ZERO: #510 acceptance, integration, active Feature update, final exact identity bind, Root review and separate releases required",
+  "native_sessions_maximum": 9,
+  "native_sessions_launched": 0,
+  "seat": {
+    "model": "gpt-6.1-sol",
+    "effort": "xhigh",
+    "cli_version": "0.160.0",
+    "hooks": "enabled",
+    "HOME": "/Users/thomas"
+  },
+  "scratch_root": "/private/tmp/kntnt-method-509-phase-20261004-original-messages",
+  "permanent_archive": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/method-509/builder/registration-correction/native-proof",
+  "stop": "first unmet boundary; no retries or replacements; unrun slots remain held",
+  "fixed_compaction": {
+    "threshold": 8192,
+    "scope": "total",
+    "commands": 2,
+    "bytes_per_command": 32768,
+    "total_tool_bytes": 65536,
+    "expected_occurrence": "genuine ordered same-turn compaction required, never guaranteed by this proposal"
+  },
+  "slots": [
+    {
+      "slot": "qualification-short",
+      "argv": [
+        "uv",
+        "run",
+        "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/docs/evaluation/harness/native_dispatch.py",
+        "--source-contract",
+        "original-completed-v1",
+        "--packet",
+        "/private/tmp/kntnt-method-509-phase-20261004-original-messages/packets/qualification-short",
+        "--cwd",
+        "/private/tmp/kntnt-method-509-phase-20261004-original-messages/work/direct-short",
+        "--model",
+        "gpt-6.1-sol",
+        "--effort",
+        "xhigh",
+        "--version",
+        "0.160.0",
+        "--parent",
+        "Root#509-separate-qualification",
+        "--role",
+        "qualification-short",
+        "--timeout",
+        "1190",
+        "--native",
+        "/opt/homebrew/Caskroom/codex/0.160.0/bin/codex",
+        "--auth-home",
+        "/Users/thomas/.codex",
+        "--cleanup-script",
+        "/Users/thomas/.agents/skills/kntnt/features/session-cleanup/scripts/session_cleanup.py",
+        "--inventory-root",
+        "/private/tmp/kntnt-method-509-phase-20261004-original-messages"
+      ],
+      "stdin": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/docs/evaluation/regressions/509/registration-correction-20261004/plan/direct-short.txt",
+      "expected": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/docs/evaluation/regressions/509/registration-correction-20261004/plan/expected-short.txt",
+      "cwd": "/private/tmp/kntnt-method-509-phase-20261004-original-messages/work/direct-short",
+      "native_sessions": 1,
+      "timeout_seconds": 1190,
+      "attempts": 1,
+      "replacements": 0,
+      "compaction_required": false,
+      "phase": "qualification-only",
+      "fresh_additional_session": true
+    },
+    {
+      "slot": "direct-long",
+      "argv": [
+        "uv",
+        "run",
+        "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/docs/evaluation/harness/native_dispatch.py",
+        "--source-contract",
+        "original-completed-v1",
+        "--packet",
+        "/private/tmp/kntnt-method-509-phase-20261004-original-messages/packets/direct-long",
+        "--cwd",
+        "/private/tmp/kntnt-method-509-phase-20261004-original-messages/work/direct-long",
+        "--model",
+        "gpt-6.1-sol",
+        "--effort",
+        "xhigh",
+        "--version",
+        "0.160.0",
+        "--parent",
+        "Root#509-neutral-proof",
+        "--role",
+        "direct-long",
+        "--timeout",
+        "1190",
+        "--native",
+        "/opt/homebrew/Caskroom/codex/0.160.0/bin/codex",
+        "--auth-home",
+        "/Users/thomas/.codex",
+        "--cleanup-script",
+        "/Users/thomas/.agents/skills/kntnt/features/session-cleanup/scripts/session_cleanup.py",
+        "--inventory-root",
+        "/private/tmp/kntnt-method-509-phase-20261004-original-messages"
+      ],
+      "stdin": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/docs/evaluation/regressions/509/registration-correction-20261004/plan/direct-long.txt",
+      "expected": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/docs/evaluation/regressions/509/registration-correction-20261004/plan/expected-long.txt",
+      "cwd": "/private/tmp/kntnt-method-509-phase-20261004-original-messages/work/direct-long",
+      "native_sessions": 1,
+      "timeout_seconds": 1190,
+      "attempts": 1,
+      "replacements": 0,
+      "compaction_required": false,
+      "phase": "original-seven-only"
+    },
+    {
+      "slot": "direct-long-input",
+      "argv": [
+        "uv",
+        "run",
+        "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/docs/evaluation/harness/native_dispatch.py",
+        "--source-contract",
+        "original-completed-v1",
+        "--packet",
+        "/private/tmp/kntnt-method-509-phase-20261004-original-messages/packets/direct-long-input",
+        "--cwd",
+        "/private/tmp/kntnt-method-509-phase-20261004-original-messages/work/direct-long-input",
+        "--model",
+        "gpt-6.1-sol",
+        "--effort",
+        "xhigh",
+        "--version",
+        "0.160.0",
+        "--parent",
+        "Root#509-neutral-proof",
+        "--role",
+        "direct-long-input",
+        "--timeout",
+        "1190",
+        "--native",
+        "/opt/homebrew/Caskroom/codex/0.160.0/bin/codex",
+        "--auth-home",
+        "/Users/thomas/.codex",
+        "--cleanup-script",
+        "/Users/thomas/.agents/skills/kntnt/features/session-cleanup/scripts/session_cleanup.py",
+        "--inventory-root",
+        "/private/tmp/kntnt-method-509-phase-20261004-original-messages"
+      ],
+      "stdin": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/docs/evaluation/regressions/509/registration-correction-20261004/plan/direct-long-input.txt",
+      "expected": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/docs/evaluation/regressions/509/registration-correction-20261004/plan/expected-short.txt",
+      "cwd": "/private/tmp/kntnt-method-509-phase-20261004-original-messages/work/direct-long-input",
+      "native_sessions": 1,
+      "timeout_seconds": 1190,
+      "attempts": 1,
+      "replacements": 0,
+      "compaction_required": false,
+      "phase": "original-seven-only"
+    },
+    {
+      "slot": "direct-compaction",
+      "argv": [
+        "uv",
+        "run",
+        "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/docs/evaluation/harness/native_dispatch.py",
+        "--source-contract",
+        "original-completed-v1",
+        "--packet",
+        "/private/tmp/kntnt-method-509-phase-20261004-original-messages/packets/direct-compaction",
+        "--cwd",
+        "/private/tmp/kntnt-method-509-phase-20261004-original-messages/work/direct-compaction",
+        "--model",
+        "gpt-6.1-sol",
+        "--effort",
+        "xhigh",
+        "--version",
+        "0.160.0",
+        "--parent",
+        "Root#509-neutral-proof",
+        "--role",
+        "direct-compaction",
+        "--timeout",
+        "1190",
+        "--native",
+        "/opt/homebrew/Caskroom/codex/0.160.0/bin/codex",
+        "--auth-home",
+        "/Users/thomas/.codex",
+        "--cleanup-script",
+        "/Users/thomas/.agents/skills/kntnt/features/session-cleanup/scripts/session_cleanup.py",
+        "--inventory-root",
+        "/private/tmp/kntnt-method-509-phase-20261004-original-messages",
+        "--auto-compact-token-limit",
+        "8192"
+      ],
+      "stdin": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/docs/evaluation/regressions/509/registration-correction-20261004/plan/direct-compaction.txt",
+      "expected": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/docs/evaluation/regressions/509/registration-correction-20261004/plan/expected-compaction.txt",
+      "cwd": "/private/tmp/kntnt-method-509-phase-20261004-original-messages/work/direct-compaction",
+      "native_sessions": 1,
+      "timeout_seconds": 1190,
+      "attempts": 1,
+      "replacements": 0,
+      "compaction_required": true,
+      "phase": "original-seven-only"
+    },
+    {
+      "slot": "parent-short",
+      "argv": [
+        "uv",
+        "run",
+        "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/docs/evaluation/harness/native_dispatch.py",
+        "--source-contract",
+        "original-completed-v1",
+        "--consume-spec",
+        "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/docs/evaluation/regressions/509/registration-correction-20261004/plan/parent-short-consume.json",
+        "--packet",
+        "/private/tmp/kntnt-method-509-phase-20261004-original-messages/packets/parent-short",
+        "--cwd",
+        "/private/tmp/kntnt-method-509-phase-20261004-original-messages/work/parent-short",
+        "--model",
+        "gpt-6.1-sol",
+        "--effort",
+        "xhigh",
+        "--version",
+        "0.160.0",
+        "--parent",
+        "Root#509-neutral-proof",
+        "--role",
+        "parent-short",
+        "--timeout",
+        "1190",
+        "--native",
+        "/opt/homebrew/Caskroom/codex/0.160.0/bin/codex",
+        "--auth-home",
+        "/Users/thomas/.codex",
+        "--cleanup-script",
+        "/Users/thomas/.agents/skills/kntnt/features/session-cleanup/scripts/session_cleanup.py",
+        "--inventory-root",
+        "/private/tmp/kntnt-method-509-phase-20261004-original-messages"
+      ],
+      "stdin": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/docs/evaluation/regressions/509/registration-correction-20261004/plan/parent-short.txt",
+      "expected": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/docs/evaluation/regressions/509/registration-correction-20261004/plan/expected-short.txt",
+      "cwd": "/private/tmp/kntnt-method-509-phase-20261004-original-messages/work/parent-short",
+      "native_sessions": 2,
+      "timeout_seconds": 1190,
+      "child_timeout_seconds": 900,
+      "launcher_wait_seconds": 930,
+      "poll_bound": 32,
+      "attempts": 1,
+      "replacements": 0,
+      "child_argv": [
+        "uv",
+        "run",
+        "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/docs/evaluation/harness/native_dispatch.py",
+        "--source-contract",
+        "original-completed-v1",
+        "--packet",
+        "/private/tmp/kntnt-method-509-phase-20261004-original-messages/packets/parent-short-child",
+        "--cwd",
+        "/private/tmp/kntnt-method-509-phase-20261004-original-messages/work/parent-short",
+        "--model",
+        "gpt-6.1-sol",
+        "--effort",
+        "xhigh",
+        "--version",
+        "0.160.0",
+        "--parent",
+        "509-neutral-parent-short",
+        "--role",
+        "parent-short-child",
+        "--timeout",
+        "900",
+        "--native",
+        "/opt/homebrew/Caskroom/codex/0.160.0/bin/codex",
+        "--auth-home",
+        "/Users/thomas/.codex",
+        "--cleanup-script",
+        "/Users/thomas/.agents/skills/kntnt/features/session-cleanup/scripts/session_cleanup.py",
+        "--inventory-root",
+        "/private/tmp/kntnt-method-509-phase-20261004-original-messages"
+      ],
+      "child_packet": "/private/tmp/kntnt-method-509-phase-20261004-original-messages/packets/parent-short-child",
+      "file_relay": "/private/tmp/kntnt-method-509-phase-20261004-original-messages/parent-short-helper-return.txt",
+      "compaction_required": false,
+      "phase": "original-seven-only",
+      "wrapper_lifecycle": "shared explicit original-mode register; current before/after identity and verbatim installed response, PIPE stdin after external launcher registration; no signal on unresolved ownership",
+      "launcher_source": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/docs/evaluation/regressions/509/registration-correction-20261004/plan/parent-short-launcher.py.txt",
+      "child_stdin": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/docs/evaluation/regressions/509/registration-correction-20261004/plan/direct-short.txt",
+      "poll_seconds": 30
+    },
+    {
+      "slot": "parent-long",
+      "argv": [
+        "uv",
+        "run",
+        "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/docs/evaluation/harness/native_dispatch.py",
+        "--source-contract",
+        "original-completed-v1",
+        "--consume-spec",
+        "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/docs/evaluation/regressions/509/registration-correction-20261004/plan/parent-long-consume.json",
+        "--packet",
+        "/private/tmp/kntnt-method-509-phase-20261004-original-messages/packets/parent-long",
+        "--cwd",
+        "/private/tmp/kntnt-method-509-phase-20261004-original-messages/work/parent-long",
+        "--model",
+        "gpt-6.1-sol",
+        "--effort",
+        "xhigh",
+        "--version",
+        "0.160.0",
+        "--parent",
+        "Root#509-neutral-proof",
+        "--role",
+        "parent-long",
+        "--timeout",
+        "1190",
+        "--native",
+        "/opt/homebrew/Caskroom/codex/0.160.0/bin/codex",
+        "--auth-home",
+        "/Users/thomas/.codex",
+        "--cleanup-script",
+        "/Users/thomas/.agents/skills/kntnt/features/session-cleanup/scripts/session_cleanup.py",
+        "--inventory-root",
+        "/private/tmp/kntnt-method-509-phase-20261004-original-messages"
+      ],
+      "stdin": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/docs/evaluation/regressions/509/registration-correction-20261004/plan/parent-long.txt",
+      "expected": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/docs/evaluation/regressions/509/registration-correction-20261004/plan/expected-long.txt",
+      "cwd": "/private/tmp/kntnt-method-509-phase-20261004-original-messages/work/parent-long",
+      "native_sessions": 2,
+      "timeout_seconds": 1190,
+      "child_timeout_seconds": 900,
+      "launcher_wait_seconds": 930,
+      "poll_bound": 32,
+      "attempts": 1,
+      "replacements": 0,
+      "child_argv": [
+        "uv",
+        "run",
+        "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/docs/evaluation/harness/native_dispatch.py",
+        "--source-contract",
+        "original-completed-v1",
+        "--packet",
+        "/private/tmp/kntnt-method-509-phase-20261004-original-messages/packets/parent-long-child",
+        "--cwd",
+        "/private/tmp/kntnt-method-509-phase-20261004-original-messages/work/parent-long",
+        "--model",
+        "gpt-6.1-sol",
+        "--effort",
+        "xhigh",
+        "--version",
+        "0.160.0",
+        "--parent",
+        "509-neutral-parent-long",
+        "--role",
+        "parent-long-child",
+        "--timeout",
+        "900",
+        "--native",
+        "/opt/homebrew/Caskroom/codex/0.160.0/bin/codex",
+        "--auth-home",
+        "/Users/thomas/.codex",
+        "--cleanup-script",
+        "/Users/thomas/.agents/skills/kntnt/features/session-cleanup/scripts/session_cleanup.py",
+        "--inventory-root",
+        "/private/tmp/kntnt-method-509-phase-20261004-original-messages"
+      ],
+      "child_packet": "/private/tmp/kntnt-method-509-phase-20261004-original-messages/packets/parent-long-child",
+      "file_relay": "/private/tmp/kntnt-method-509-phase-20261004-original-messages/parent-long-helper-return.txt",
+      "compaction_required": false,
+      "phase": "original-seven-only",
+      "wrapper_lifecycle": "shared explicit original-mode register; current before/after identity and verbatim installed response, PIPE stdin after external launcher registration; no signal on unresolved ownership",
+      "launcher_source": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/docs/evaluation/regressions/509/registration-correction-20261004/plan/parent-long-launcher.py.txt",
+      "child_stdin": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/docs/evaluation/regressions/509/registration-correction-20261004/plan/direct-long.txt",
+      "poll_seconds": 30
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "direct-compaction.txt",
+      "bytes": 1260,
+      "sha256": "5bb93d4fc8f50cd08dad1555ba7ca8fd4ef2640bea012e6bee1aee4dd1d3eba0"
+    },
+    {
+      "path": "direct-long-input.txt",
+      "bytes": 4191,
+      "sha256": "82e12bfd2ce7472dad73409be32825d99e12af08fb288ff71b498644c6f12dba"
+    },
+    {
+      "path": "direct-long.txt",
+      "bytes": 931,
+      "sha256": "973da4659cc0c1a22ba2f4a41342fc14cac6a93c5aef2f0229261b8cbd489d8c"
+    },
+    {
+      "path": "direct-short.txt",
+      "bytes": 933,
+      "sha256": "336d29dc8ac7ede30cbfcff29b7711cabf516132f2b59db8e51ba76bff2fa437"
+    },
+    {
+      "path": "expected-compaction.txt",
+      "bytes": 41,
+      "sha256": "6119fff102c2b2d52b333f6178df34ce04da3cff0f75bd6bda802ca780f98e73"
+    },
+    {
+      "path": "expected-long.txt",
+      "bytes": 50561,
+      "sha256": "35e5a0adf4ca44fcbd3b555a1c73abbf6bd8038c46eee174e58a7c010a5eef52"
+    },
+    {
+      "path": "expected-short.txt",
+      "bytes": 18,
+      "sha256": "9be4ea606281bfafdb4c77752b02eb5f015e9ab4531efabb1c0601e083defd47"
+    },
+    {
+      "path": "parent-long-consume.json",
+      "bytes": 11897,
+      "sha256": "dc70ad14951c331ac2989070f52faf8f3cceaaec1f30921d66096605143b41e0"
+    },
+    {
+      "path": "parent-long-launcher.py.txt",
+      "bytes": 2654,
+      "sha256": "5b9b99fbf8c779645e8597b846d07793edac4367592d193832f764fba1995c98"
+    },
+    {
+      "path": "parent-long.txt",
+      "bytes": 5345,
+      "sha256": "c811387a501c47478f923ff7f31d22fc08a8ea5821e867dc566ccdc0351debd7"
+    },
+    {
+      "path": "parent-short-consume.json",
+      "bytes": 11932,
+      "sha256": "82dc3aff7997aeaa70a458edbae9dd9d3822045aa2a22b2055d3cf45b04dafa1"
+    },
+    {
+      "path": "parent-short-launcher.py.txt",
+      "bytes": 2663,
+      "sha256": "fa23be45e53b8171d86fe15cc4d8cf955f03353efb7044e79b31edc5a72cd803"
+    },
+    {
+      "path": "parent-short.txt",
+      "bytes": 5357,
+      "sha256": "c23111e5844e2d770055a93ed7b31a34bb2fea93ce7dd371c2143c59fe9f5a69"
+    }
+  ],
+  "source_schema_correction": {
+    "authority_report_sha256": "e6ad3ebdfa9f976d563319a5df392d542c0445b8f8886e0bd93e829e068f03e4",
+    "previous_plan_sha256": "a9268904bf6f42921159ff9ef6bc29be8eef0d61d884018ace74b943d905cf7c",
+    "exec_command_top_level_argument": "workdir",
+    "native_command_output_property": "cwd",
+    "workdir_runtime_evidence": "205 frozen author calls and non-session-directory same-call-ID completed command/output witness",
+    "shell": "/bin/bash",
+    "login": false,
+    "exact_shell_override_previously_executed": true,
+    "exact_expected_native_argv": [
+      "/opt/homebrew/bin/bash",
+      "-c",
+      "literal frozen command"
+    ],
+    "limits": "One authentic stopped short source reports Homebrew Bash for the /bin/bash/login=false request. Official source discovers an executable by shell type. No general normalization rule, installed build/tag attestation, matching kernel execution or future builtin-child mapping is claimed. Every future actual command must independently match this prospective expectation; disagreement stops without adaptation.",
+    "path_rebindings": "New absent phase scratch and new plan references only; exact neutral output artifacts and opaque long-input data retained. Parent wrapper registration uses the shared authenticated original seam; requested shell/login/workdir remain exact and separate from reported expected argv.",
+    "one_exact_override_witness": "Stopped direct-short source only; all ten future command boundaries remain unexecuted and separately required."
+  },
+  "future_native_sessions_maximum": 8,
+  "future_native_sessions_released": 0,
+  "historical_accounting": {
+    "old_consumed_unmet": 1,
+    "old_unrun_held": 7,
+    "fresh_qualification_additional": 1,
+    "new_actual_sessions_this_stage": 0,
+    "author_workflows_counted_separately": true,
+    "retries": 0,
+    "replacements": 0,
+    "old_short_outcome": "consumed-unmet, immutable; no regrade or retry"
+  },
+  "release_boundaries": [
+    {
+      "phase": "qualification-only",
+      "sessions": 1,
+      "released": 0,
+      "requires": "accepted/integrated/actively installed #510; final exact identity bind; clean commit/Root explicit release"
+    },
+    {
+      "phase": "original-seven-only",
+      "sessions": 7,
+      "released": 0,
+      "requires": "successful fresh qualification; separate explicit Root release"
+    }
+  ],
+  "tool_boundaries": [
+    {
+      "owner": "qualification-short",
+      "occurrences": 1,
+      "requested_exec_command": {
+        "cmd": "python3 -c 'from pathlib import Path; import sys; sys.stdout.buffer.write(Path('\"'\"'/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/docs/evaluation/regressions/509/plan/expected-short.txt'\"'\"').read_bytes())'",
+        "workdir": "/private/tmp/kntnt-method-509-phase-20261004-original-messages/work/direct-short",
+        "shell": "/bin/bash",
+        "login": false,
+        "max_output_tokens": 60000,
+        "yield_time_ms": 1000
+      },
+      "expected_completed_CommandExecution_argv": [
+        "/opt/homebrew/bin/bash",
+        "-c",
+        "python3 -c 'from pathlib import Path; import sys; sys.stdout.buffer.write(Path('\"'\"'/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/docs/evaluation/regressions/509/plan/expected-short.txt'\"'\"').read_bytes())'"
+      ],
+      "expected_cwd": "file:///private/tmp/kntnt-method-509-phase-20261004-original-messages/work/direct-short",
+      "limits": "exact reported producer command only; no kernel execution or general shell normalization claim"
+    },
+    {
+      "owner": "direct-long",
+      "occurrences": 1,
+      "requested_exec_command": {
+        "cmd": "python3 -c 'from pathlib import Path; import sys; sys.stdout.buffer.write(Path('\"'\"'/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/docs/evaluation/regressions/509/plan/expected-long.txt'\"'\"').read_bytes())'",
+        "workdir": "/private/tmp/kntnt-method-509-phase-20261004-original-messages/work/direct-long",
+        "shell": "/bin/bash",
+        "login": false,
+        "max_output_tokens": 60000,
+        "yield_time_ms": 1000
+      },
+      "expected_completed_CommandExecution_argv": [
+        "/opt/homebrew/bin/bash",
+        "-c",
+        "python3 -c 'from pathlib import Path; import sys; sys.stdout.buffer.write(Path('\"'\"'/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/docs/evaluation/regressions/509/plan/expected-long.txt'\"'\"').read_bytes())'"
+      ],
+      "expected_cwd": "file:///private/tmp/kntnt-method-509-phase-20261004-original-messages/work/direct-long",
+      "limits": "exact reported producer command only; no kernel execution or general shell normalization claim"
+    },
+    {
+      "owner": "direct-long-input",
+      "occurrences": 1,
+      "requested_exec_command": {
+        "cmd": "python3 -c 'from pathlib import Path; import sys; sys.stdout.buffer.write(Path('\"'\"'/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/docs/evaluation/regressions/509/plan/expected-short.txt'\"'\"').read_bytes())'",
+        "workdir": "/private/tmp/kntnt-method-509-phase-20261004-original-messages/work/direct-long-input",
+        "shell": "/bin/bash",
+        "login": false,
+        "max_output_tokens": 60000,
+        "yield_time_ms": 1000
+      },
+      "expected_completed_CommandExecution_argv": [
+        "/opt/homebrew/bin/bash",
+        "-c",
+        "python3 -c 'from pathlib import Path; import sys; sys.stdout.buffer.write(Path('\"'\"'/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/docs/evaluation/regressions/509/plan/expected-short.txt'\"'\"').read_bytes())'"
+      ],
+      "expected_cwd": "file:///private/tmp/kntnt-method-509-phase-20261004-original-messages/work/direct-long-input",
+      "limits": "exact reported producer command only; no kernel execution or general shell normalization claim"
+    },
+    {
+      "owner": "direct-compaction",
+      "occurrences": 2,
+      "requested_exec_command": {
+        "cmd": "python3 -c 'import sys; sys.stdout.write('\"'\"''\"'\"'.join(f'\"'\"'{i:04x}'\"'\"' for i in range(8192)))'",
+        "workdir": "/private/tmp/kntnt-method-509-phase-20261004-original-messages/work/direct-compaction",
+        "shell": "/bin/bash",
+        "login": false,
+        "max_output_tokens": 20000,
+        "yield_time_ms": 1000
+      },
+      "expected_completed_CommandExecution_argv": [
+        "/opt/homebrew/bin/bash",
+        "-c",
+        "python3 -c 'import sys; sys.stdout.write('\"'\"''\"'\"'.join(f'\"'\"'{i:04x}'\"'\"' for i in range(8192)))'"
+      ],
+      "expected_cwd": "file:///private/tmp/kntnt-method-509-phase-20261004-original-messages/work/direct-compaction",
+      "limits": "exact reported producer command only; no kernel execution or general shell normalization claim"
+    },
+    {
+      "owner": "parent-short launcher",
+      "occurrences": 1,
+      "requested_exec_command": {
+        "cmd": "python3 -c 'import importlib.util,os,subprocess,sys\nfrom pathlib import Path\nwork=Path('\"'\"'/private/tmp/kntnt-method-509-phase-20261004-original-messages/work/parent-short'\"'\"')\nregistration=Path('\"'\"'/private/tmp/kntnt-method-509-phase-20261004-original-messages/launcher-records/parent-short'\"'\"')\nregistration.mkdir(parents=True,exist_ok=False)\nspec=importlib.util.spec_from_file_location(\"proof_registration\",'\"'\"'/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/docs/evaluation/harness/native_dispatch.py'\"'\"')\nmodule=importlib.util.module_from_spec(spec)\nspec.loader.exec_module(module)\nenv=module.environment(registration)\nfor key in (\"KNTNT_HOME\",\"TMPDIR\",\"UV_CACHE_DIR\",\"UV_TOOL_DIR\",\"UV_TOOL_BIN_DIR\",\"UV_PYTHON_INSTALL_DIR\",\"UV_PROJECT_ENVIRONMENT\",\"XDG_CACHE_HOME\",\"XDG_DATA_HOME\",\"XDG_CONFIG_HOME\"):\n Path(env[key]).mkdir(parents=True,exist_ok=True)\nif os.getpid()!=os.getpgrp(): os.setsid()\nmodule.register(os.getpid(),Path('\"'\"'/Users/thomas/.agents/skills/kntnt/features/session-cleanup/scripts/session_cleanup.py'\"'\"'),env,registration,True)\nwith Path('\"'\"'/private/tmp/kntnt-method-509-phase-20261004-original-messages/parent-short-helper-return.txt'\"'\"').open(\"wb\") as stdout,Path('\"'\"'/private/tmp/kntnt-method-509-phase-20261004-original-messages/parent-short-helper-stderr.txt'\"'\"').open(\"wb\") as stderr:\n child=subprocess.Popen(['\"'\"'uv'\"'\"', '\"'\"'run'\"'\"', '\"'\"'/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/docs/evaluation/harness/native_dispatch.py'\"'\"', '\"'\"'--source-contract'\"'\"', '\"'\"'original-completed-v1'\"'\"', '\"'\"'--packet'\"'\"', '\"'\"'/private/tmp/kntnt-method-509-phase-20261004-original-messages/packets/parent-short-child'\"'\"', '\"'\"'--cwd'\"'\"', '\"'\"'/private/tmp/kntnt-method-509-phase-20261004-original-messages/work/parent-short'\"'\"', '\"'\"'--model'\"'\"', '\"'\"'gpt-6.1-sol'\"'\"', '\"'\"'--effort'\"'\"', '\"'\"'xhigh'\"'\"', '\"'\"'--version'\"'\"', '\"'\"'0.160.0'\"'\"', '\"'\"'--parent'\"'\"', '\"'\"'509-neutral-parent-short'\"'\"', '\"'\"'--role'\"'\"', '\"'\"'parent-short-child'\"'\"', '\"'\"'--timeout'\"'\"', '\"'\"'900'\"'\"', '\"'\"'--native'\"'\"', '\"'\"'/opt/homebrew/Caskroom/codex/0.160.0/bin/codex'\"'\"', '\"'\"'--auth-home'\"'\"', '\"'\"'/Users/thomas/.codex'\"'\"', '\"'\"'--cleanup-script'\"'\"', '\"'\"'/Users/thomas/.agents/skills/kntnt/features/session-cleanup/scripts/session_cleanup.py'\"'\"', '\"'\"'--inventory-root'\"'\"', '\"'\"'/private/tmp/kntnt-method-509-phase-20261004-original-messages'\"'\"'],cwd=work,env=env,stdin=subprocess.PIPE,stdout=stdout,stderr=stderr,start_new_session=True)\n module.register(child.pid,Path('\"'\"'/Users/thomas/.agents/skills/kntnt/features/session-cleanup/scripts/session_cleanup.py'\"'\"'),env,registration,True)\n child.communicate(Path('\"'\"'/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/docs/evaluation/regressions/509/registration-correction-20261004/plan/direct-short.txt'\"'\"').read_bytes(),timeout=930)\nprint(\"CHILD_EXIT=\"+str(child.returncode))\nsys.exit(child.returncode)\n'",
+        "workdir": "/private/tmp/kntnt-method-509-phase-20261004-original-messages/work/parent-short",
+        "shell": "/bin/bash",
+        "login": false,
+        "max_output_tokens": 4096,
+        "yield_time_ms": 1000
+      },
+      "expected_completed_CommandExecution_argv": [
+        "/opt/homebrew/bin/bash",
+        "-c",
+        "python3 -c 'import importlib.util,os,subprocess,sys\nfrom pathlib import Path\nwork=Path('\"'\"'/private/tmp/kntnt-method-509-phase-20261004-original-messages/work/parent-short'\"'\"')\nregistration=Path('\"'\"'/private/tmp/kntnt-method-509-phase-20261004-original-messages/launcher-records/parent-short'\"'\"')\nregistration.mkdir(parents=True,exist_ok=False)\nspec=importlib.util.spec_from_file_location(\"proof_registration\",'\"'\"'/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/docs/evaluation/harness/native_dispatch.py'\"'\"')\nmodule=importlib.util.module_from_spec(spec)\nspec.loader.exec_module(module)\nenv=module.environment(registration)\nfor key in (\"KNTNT_HOME\",\"TMPDIR\",\"UV_CACHE_DIR\",\"UV_TOOL_DIR\",\"UV_TOOL_BIN_DIR\",\"UV_PYTHON_INSTALL_DIR\",\"UV_PROJECT_ENVIRONMENT\",\"XDG_CACHE_HOME\",\"XDG_DATA_HOME\",\"XDG_CONFIG_HOME\"):\n Path(env[key]).mkdir(parents=True,exist_ok=True)\nif os.getpid()!=os.getpgrp(): os.setsid()\nmodule.register(os.getpid(),Path('\"'\"'/Users/thomas/.agents/skills/kntnt/features/session-cleanup/scripts/session_cleanup.py'\"'\"'),env,registration,True)\nwith Path('\"'\"'/private/tmp/kntnt-method-509-phase-20261004-original-messages/parent-short-helper-return.txt'\"'\"').open(\"wb\") as stdout,Path('\"'\"'/private/tmp/kntnt-method-509-phase-20261004-original-messages/parent-short-helper-stderr.txt'\"'\"').open(\"wb\") as stderr:\n child=subprocess.Popen(['\"'\"'uv'\"'\"', '\"'\"'run'\"'\"', '\"'\"'/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/docs/evaluation/harness/native_dispatch.py'\"'\"', '\"'\"'--source-contract'\"'\"', '\"'\"'original-completed-v1'\"'\"', '\"'\"'--packet'\"'\"', '\"'\"'/private/tmp/kntnt-method-509-phase-20261004-original-messages/packets/parent-short-child'\"'\"', '\"'\"'--cwd'\"'\"', '\"'\"'/private/tmp/kntnt-method-509-phase-20261004-original-messages/work/parent-short'\"'\"', '\"'\"'--model'\"'\"', '\"'\"'gpt-6.1-sol'\"'\"', '\"'\"'--effort'\"'\"', '\"'\"'xhigh'\"'\"', '\"'\"'--version'\"'\"', '\"'\"'0.160.0'\"'\"', '\"'\"'--parent'\"'\"', '\"'\"'509-neutral-parent-short'\"'\"', '\"'\"'--role'\"'\"', '\"'\"'parent-short-child'\"'\"', '\"'\"'--timeout'\"'\"', '\"'\"'900'\"'\"', '\"'\"'--native'\"'\"', '\"'\"'/opt/homebrew/Caskroom/codex/0.160.0/bin/codex'\"'\"', '\"'\"'--auth-home'\"'\"', '\"'\"'/Users/thomas/.codex'\"'\"', '\"'\"'--cleanup-script'\"'\"', '\"'\"'/Users/thomas/.agents/skills/kntnt/features/session-cleanup/scripts/session_cleanup.py'\"'\"', '\"'\"'--inventory-root'\"'\"', '\"'\"'/private/tmp/kntnt-method-509-phase-20261004-original-messages'\"'\"'],cwd=work,env=env,stdin=subprocess.PIPE,stdout=stdout,stderr=stderr,start_new_session=True)\n module.register(child.pid,Path('\"'\"'/Users/thomas/.agents/skills/kntnt/features/session-cleanup/scripts/session_cleanup.py'\"'\"'),env,registration,True)\n child.communicate(Path('\"'\"'/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/docs/evaluation/regressions/509/registration-correction-20261004/plan/direct-short.txt'\"'\"').read_bytes(),timeout=930)\nprint(\"CHILD_EXIT=\"+str(child.returncode))\nsys.exit(child.returncode)\n'"
+      ],
+      "expected_cwd": "file:///private/tmp/kntnt-method-509-phase-20261004-original-messages/work/parent-short",
+      "limits": "exact reported producer command only; no kernel execution or general shell normalization claim"
+    },
+    {
+      "owner": "parent-short read",
+      "occurrences": 1,
+      "requested_exec_command": {
+        "cmd": "python3 -c 'from pathlib import Path; import sys; sys.stdout.buffer.write(Path('\"'\"'/private/tmp/kntnt-method-509-phase-20261004-original-messages/parent-short-helper-return.txt'\"'\"').read_bytes())'",
+        "workdir": "/private/tmp/kntnt-method-509-phase-20261004-original-messages/work/parent-short",
+        "shell": "/bin/bash",
+        "login": false,
+        "max_output_tokens": 60000,
+        "yield_time_ms": 1000
+      },
+      "expected_completed_CommandExecution_argv": [
+        "/opt/homebrew/bin/bash",
+        "-c",
+        "python3 -c 'from pathlib import Path; import sys; sys.stdout.buffer.write(Path('\"'\"'/private/tmp/kntnt-method-509-phase-20261004-original-messages/parent-short-helper-return.txt'\"'\"').read_bytes())'"
+      ],
+      "expected_cwd": "file:///private/tmp/kntnt-method-509-phase-20261004-original-messages/work/parent-short",
+      "limits": "exact reported producer command only; no kernel execution or general shell normalization claim"
+    },
+    {
+      "owner": "parent-short child read",
+      "occurrences": 1,
+      "requested_exec_command": {
+        "cmd": "python3 -c 'from pathlib import Path; import sys; sys.stdout.buffer.write(Path('\"'\"'/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/docs/evaluation/regressions/509/plan/expected-short.txt'\"'\"').read_bytes())'",
+        "workdir": "/private/tmp/kntnt-method-509-phase-20261004-original-messages/work/direct-short",
+        "shell": "/bin/bash",
+        "login": false,
+        "max_output_tokens": 60000,
+        "yield_time_ms": 1000
+      },
+      "expected_completed_CommandExecution_argv": [
+        "/opt/homebrew/bin/bash",
+        "-c",
+        "python3 -c 'from pathlib import Path; import sys; sys.stdout.buffer.write(Path('\"'\"'/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/docs/evaluation/regressions/509/plan/expected-short.txt'\"'\"').read_bytes())'"
+      ],
+      "expected_cwd": "file:///private/tmp/kntnt-method-509-phase-20261004-original-messages/work/direct-short",
+      "limits": "exact reported producer command only; no kernel execution or general shell normalization claim"
+    },
+    {
+      "owner": "parent-long launcher",
+      "occurrences": 1,
+      "requested_exec_command": {
+        "cmd": "python3 -c 'import importlib.util,os,subprocess,sys\nfrom pathlib import Path\nwork=Path('\"'\"'/private/tmp/kntnt-method-509-phase-20261004-original-messages/work/parent-long'\"'\"')\nregistration=Path('\"'\"'/private/tmp/kntnt-method-509-phase-20261004-original-messages/launcher-records/parent-long'\"'\"')\nregistration.mkdir(parents=True,exist_ok=False)\nspec=importlib.util.spec_from_file_location(\"proof_registration\",'\"'\"'/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/docs/evaluation/harness/native_dispatch.py'\"'\"')\nmodule=importlib.util.module_from_spec(spec)\nspec.loader.exec_module(module)\nenv=module.environment(registration)\nfor key in (\"KNTNT_HOME\",\"TMPDIR\",\"UV_CACHE_DIR\",\"UV_TOOL_DIR\",\"UV_TOOL_BIN_DIR\",\"UV_PYTHON_INSTALL_DIR\",\"UV_PROJECT_ENVIRONMENT\",\"XDG_CACHE_HOME\",\"XDG_DATA_HOME\",\"XDG_CONFIG_HOME\"):\n Path(env[key]).mkdir(parents=True,exist_ok=True)\nif os.getpid()!=os.getpgrp(): os.setsid()\nmodule.register(os.getpid(),Path('\"'\"'/Users/thomas/.agents/skills/kntnt/features/session-cleanup/scripts/session_cleanup.py'\"'\"'),env,registration,True)\nwith Path('\"'\"'/private/tmp/kntnt-method-509-phase-20261004-original-messages/parent-long-helper-return.txt'\"'\"').open(\"wb\") as stdout,Path('\"'\"'/private/tmp/kntnt-method-509-phase-20261004-original-messages/parent-long-helper-stderr.txt'\"'\"').open(\"wb\") as stderr:\n child=subprocess.Popen(['\"'\"'uv'\"'\"', '\"'\"'run'\"'\"', '\"'\"'/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/docs/evaluation/harness/native_dispatch.py'\"'\"', '\"'\"'--source-contract'\"'\"', '\"'\"'original-completed-v1'\"'\"', '\"'\"'--packet'\"'\"', '\"'\"'/private/tmp/kntnt-method-509-phase-20261004-original-messages/packets/parent-long-child'\"'\"', '\"'\"'--cwd'\"'\"', '\"'\"'/private/tmp/kntnt-method-509-phase-20261004-original-messages/work/parent-long'\"'\"', '\"'\"'--model'\"'\"', '\"'\"'gpt-6.1-sol'\"'\"', '\"'\"'--effort'\"'\"', '\"'\"'xhigh'\"'\"', '\"'\"'--version'\"'\"', '\"'\"'0.160.0'\"'\"', '\"'\"'--parent'\"'\"', '\"'\"'509-neutral-parent-long'\"'\"', '\"'\"'--role'\"'\"', '\"'\"'parent-long-child'\"'\"', '\"'\"'--timeout'\"'\"', '\"'\"'900'\"'\"', '\"'\"'--native'\"'\"', '\"'\"'/opt/homebrew/Caskroom/codex/0.160.0/bin/codex'\"'\"', '\"'\"'--auth-home'\"'\"', '\"'\"'/Users/thomas/.codex'\"'\"', '\"'\"'--cleanup-script'\"'\"', '\"'\"'/Users/thomas/.agents/skills/kntnt/features/session-cleanup/scripts/session_cleanup.py'\"'\"', '\"'\"'--inventory-root'\"'\"', '\"'\"'/private/tmp/kntnt-method-509-phase-20261004-original-messages'\"'\"'],cwd=work,env=env,stdin=subprocess.PIPE,stdout=stdout,stderr=stderr,start_new_session=True)\n module.register(child.pid,Path('\"'\"'/Users/thomas/.agents/skills/kntnt/features/session-cleanup/scripts/session_cleanup.py'\"'\"'),env,registration,True)\n child.communicate(Path('\"'\"'/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/docs/evaluation/regressions/509/registration-correction-20261004/plan/direct-long.txt'\"'\"').read_bytes(),timeout=930)\nprint(\"CHILD_EXIT=\"+str(child.returncode))\nsys.exit(child.returncode)\n'",
+        "workdir": "/private/tmp/kntnt-method-509-phase-20261004-original-messages/work/parent-long",
+        "shell": "/bin/bash",
+        "login": false,
+        "max_output_tokens": 4096,
+        "yield_time_ms": 1000
+      },
+      "expected_completed_CommandExecution_argv": [
+        "/opt/homebrew/bin/bash",
+        "-c",
+        "python3 -c 'import importlib.util,os,subprocess,sys\nfrom pathlib import Path\nwork=Path('\"'\"'/private/tmp/kntnt-method-509-phase-20261004-original-messages/work/parent-long'\"'\"')\nregistration=Path('\"'\"'/private/tmp/kntnt-method-509-phase-20261004-original-messages/launcher-records/parent-long'\"'\"')\nregistration.mkdir(parents=True,exist_ok=False)\nspec=importlib.util.spec_from_file_location(\"proof_registration\",'\"'\"'/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/docs/evaluation/harness/native_dispatch.py'\"'\"')\nmodule=importlib.util.module_from_spec(spec)\nspec.loader.exec_module(module)\nenv=module.environment(registration)\nfor key in (\"KNTNT_HOME\",\"TMPDIR\",\"UV_CACHE_DIR\",\"UV_TOOL_DIR\",\"UV_TOOL_BIN_DIR\",\"UV_PYTHON_INSTALL_DIR\",\"UV_PROJECT_ENVIRONMENT\",\"XDG_CACHE_HOME\",\"XDG_DATA_HOME\",\"XDG_CONFIG_HOME\"):\n Path(env[key]).mkdir(parents=True,exist_ok=True)\nif os.getpid()!=os.getpgrp(): os.setsid()\nmodule.register(os.getpid(),Path('\"'\"'/Users/thomas/.agents/skills/kntnt/features/session-cleanup/scripts/session_cleanup.py'\"'\"'),env,registration,True)\nwith Path('\"'\"'/private/tmp/kntnt-method-509-phase-20261004-original-messages/parent-long-helper-return.txt'\"'\"').open(\"wb\") as stdout,Path('\"'\"'/private/tmp/kntnt-method-509-phase-20261004-original-messages/parent-long-helper-stderr.txt'\"'\"').open(\"wb\") as stderr:\n child=subprocess.Popen(['\"'\"'uv'\"'\"', '\"'\"'run'\"'\"', '\"'\"'/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/docs/evaluation/harness/native_dispatch.py'\"'\"', '\"'\"'--source-contract'\"'\"', '\"'\"'original-completed-v1'\"'\"', '\"'\"'--packet'\"'\"', '\"'\"'/private/tmp/kntnt-method-509-phase-20261004-original-messages/packets/parent-long-child'\"'\"', '\"'\"'--cwd'\"'\"', '\"'\"'/private/tmp/kntnt-method-509-phase-20261004-original-messages/work/parent-long'\"'\"', '\"'\"'--model'\"'\"', '\"'\"'gpt-6.1-sol'\"'\"', '\"'\"'--effort'\"'\"', '\"'\"'xhigh'\"'\"', '\"'\"'--version'\"'\"', '\"'\"'0.160.0'\"'\"', '\"'\"'--parent'\"'\"', '\"'\"'509-neutral-parent-long'\"'\"', '\"'\"'--role'\"'\"', '\"'\"'parent-long-child'\"'\"', '\"'\"'--timeout'\"'\"', '\"'\"'900'\"'\"', '\"'\"'--native'\"'\"', '\"'\"'/opt/homebrew/Caskroom/codex/0.160.0/bin/codex'\"'\"', '\"'\"'--auth-home'\"'\"', '\"'\"'/Users/thomas/.codex'\"'\"', '\"'\"'--cleanup-script'\"'\"', '\"'\"'/Users/thomas/.agents/skills/kntnt/features/session-cleanup/scripts/session_cleanup.py'\"'\"', '\"'\"'--inventory-root'\"'\"', '\"'\"'/private/tmp/kntnt-method-509-phase-20261004-original-messages'\"'\"'],cwd=work,env=env,stdin=subprocess.PIPE,stdout=stdout,stderr=stderr,start_new_session=True)\n module.register(child.pid,Path('\"'\"'/Users/thomas/.agents/skills/kntnt/features/session-cleanup/scripts/session_cleanup.py'\"'\"'),env,registration,True)\n child.communicate(Path('\"'\"'/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/docs/evaluation/regressions/509/registration-correction-20261004/plan/direct-long.txt'\"'\"').read_bytes(),timeout=930)\nprint(\"CHILD_EXIT=\"+str(child.returncode))\nsys.exit(child.returncode)\n'"
+      ],
+      "expected_cwd": "file:///private/tmp/kntnt-method-509-phase-20261004-original-messages/work/parent-long",
+      "limits": "exact reported producer command only; no kernel execution or general shell normalization claim"
+    },
+    {
+      "owner": "parent-long read",
+      "occurrences": 1,
+      "requested_exec_command": {
+        "cmd": "python3 -c 'from pathlib import Path; import sys; sys.stdout.buffer.write(Path('\"'\"'/private/tmp/kntnt-method-509-phase-20261004-original-messages/parent-long-helper-return.txt'\"'\"').read_bytes())'",
+        "workdir": "/private/tmp/kntnt-method-509-phase-20261004-original-messages/work/parent-long",
+        "shell": "/bin/bash",
+        "login": false,
+        "max_output_tokens": 60000,
+        "yield_time_ms": 1000
+      },
+      "expected_completed_CommandExecution_argv": [
+        "/opt/homebrew/bin/bash",
+        "-c",
+        "python3 -c 'from pathlib import Path; import sys; sys.stdout.buffer.write(Path('\"'\"'/private/tmp/kntnt-method-509-phase-20261004-original-messages/parent-long-helper-return.txt'\"'\"').read_bytes())'"
+      ],
+      "expected_cwd": "file:///private/tmp/kntnt-method-509-phase-20261004-original-messages/work/parent-long",
+      "limits": "exact reported producer command only; no kernel execution or general shell normalization claim"
+    },
+    {
+      "owner": "parent-long child read",
+      "occurrences": 1,
+      "requested_exec_command": {
+        "cmd": "python3 -c 'from pathlib import Path; import sys; sys.stdout.buffer.write(Path('\"'\"'/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/docs/evaluation/regressions/509/plan/expected-long.txt'\"'\"').read_bytes())'",
+        "workdir": "/private/tmp/kntnt-method-509-phase-20261004-original-messages/work/direct-long",
+        "shell": "/bin/bash",
+        "login": false,
+        "max_output_tokens": 60000,
+        "yield_time_ms": 1000
+      },
+      "expected_completed_CommandExecution_argv": [
+        "/opt/homebrew/bin/bash",
+        "-c",
+        "python3 -c 'from pathlib import Path; import sys; sys.stdout.buffer.write(Path('\"'\"'/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/docs/evaluation/regressions/509/plan/expected-long.txt'\"'\"').read_bytes())'"
+      ],
+      "expected_cwd": "file:///private/tmp/kntnt-method-509-phase-20261004-original-messages/work/direct-long",
+      "limits": "exact reported producer command only; no kernel execution or general shell normalization claim"
+    }
+  ],
+  "prelaunch_identity_prerequisites": {
+    "current_observed_sources": [
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/docs/evaluation/harness/native_dispatch.py",
+        "resolved_path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/docs/evaluation/harness/native_dispatch.py",
+        "bytes": 71319,
+        "sha256": "9d5d4aff6f4924b6e333c4411998700e1a4ba0a739dba32e5e138f4c8aa91aeb",
+        "mode": 33188,
+        "mtime_ns": 1791134803951466695,
+        "symlink": null
+      },
+      {
+        "path": "/Users/thomas/.agents/skills/kntnt/features/session-cleanup/scripts/session_cleanup.py",
+        "resolved_path": "/Users/thomas/.agents/skills/kntnt/features/session-cleanup/scripts/session_cleanup.py",
+        "bytes": 35274,
+        "sha256": "defdd20644108e1ad4ab78b207d04b912481821c4382130ee3a8e065522ebce5",
+        "mode": 33188,
+        "mtime_ns": 1790888753262813465,
+        "symlink": null
+      },
+      {
+        "path": "/opt/homebrew/Caskroom/codex/0.160.0/bin/codex",
+        "resolved_path": "/opt/homebrew/Caskroom/codex/0.160.0/bin/codex",
+        "bytes": 241555024,
+        "sha256": "112fae7a5a1223e673c8a1791d32338f37df8b527ff1159bb8adac6c4dbf1b4b",
+        "mode": 33261,
+        "mtime_ns": 1790877265967095600,
+        "symlink": null
+      },
+      {
+        "path": "/bin/bash",
+        "resolved_path": "/bin/bash",
+        "bytes": 1290128,
+        "sha256": "16303dedab719ddb63efd9dd68092a0da37b397bfd4fcb856d5f1c86c5ee414b",
+        "mode": 33133,
+        "mtime_ns": 1786589515000000000,
+        "symlink": null
+      },
+      {
+        "path": "/opt/homebrew/bin/bash",
+        "resolved_path": "/opt/homebrew/Cellar/bash/5.3.20/bin/bash",
+        "bytes": 879408,
+        "sha256": "2c9bd30bc768f8ee44742705071558e81365487b4c8e00cd79519a8c2d83f9d6",
+        "mode": 41453,
+        "mtime_ns": 1789505302558716254,
+        "symlink": "../Cellar/bash/5.3.20/bin/bash"
+      }
+    ],
+    "helper_is_recorder": true,
+    "configuration_identity_source": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/method-509/builder/registration-correction/dispatch/launched.json",
+    "config_and_hooks_current": [
+      {
+        "path": "/Users/thomas/.codex/config.toml",
+        "bytes": 10793,
+        "sha256": "2d613b9477d206b5eece9108cb7602cfae25aca1ebff48a11dada38acc0c528d",
+        "inode": 413488596,
+        "mode": 33152,
+        "mtime_ns": 1790889042887979816
+      },
+      {
+        "path": "/Users/thomas/.codex/hooks.json",
+        "bytes": 949,
+        "sha256": "f8358cbeea4f6019fd7aa1c4c533437a0c7fb10b0abeb732cf642f55c30ad08b",
+        "inode": 227391282,
+        "mode": 33188,
+        "mtime_ns": 1790888756377064490
+      }
+    ],
+    "PATH_current": "/opt/homebrew/opt/tcl-tk/bin:/opt/homebrew/opt/curl/bin:/opt/homebrew/opt/grep/libexec/gnubin:/opt/homebrew/opt/gawk/libexec/gnubin:/opt/homebrew/opt/gnu-which/libexec/gnubin:/opt/homebrew/opt/gnu-tar/libexec/gnubin:/opt/homebrew/opt/gnu-sed/libexec/gnubin:/opt/homebrew/opt/gnu-indent/libexec/gnubin:/opt/homebrew/opt/util-linux/sbin:/opt/homebrew/opt/util-linux/bin:/opt/homebrew/opt/findutils/libexec/gnubin:/opt/homebrew/opt/coreutils/libexec/gnubin:/opt/homebrew/sbin:/opt/homebrew/bin:/Users/thomas/bin:/Users/thomas/.local/bin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/pkg/env/global/bin://Applications/Topaz Photo AI.app/Contents/Resources/bin:/opt/homebrew/bin:/opt/homebrew/Caskroom/codex/0.160.0/codex-path:/Users/thomas/.codex/tmp/arg0/codex-arg0wkgPAn:/Users/thomas/.codex/packages/app-server-daemon/releases/0.160.0-aarch64-apple-darwin/codex-path:/opt/homebrew/opt/tcl-tk/bin:/opt/homebrew/opt/curl/bin:/opt/homebrew/opt/grep/libexec/gnubin:/opt/homebrew/opt/gawk/libexec/gnubin:/opt/homebrew/opt/gnu-which/libexec/gnubin:/opt/homebrew/opt/gnu-tar/libexec/gnubin:/opt/homebrew/opt/gnu-sed/libexec/gnubin:/opt/homebrew/opt/gnu-indent/libexec/gnubin:/opt/homebrew/opt/util-linux/sbin:/opt/homebrew/opt/util-linux/bin:/opt/homebrew/opt/findutils/libexec/gnubin:/opt/homebrew/opt/coreutils/libexec/gnubin:/opt/homebrew/sbin:/Users/thomas/bin:/Users/thomas/.local/bin:/Users/thomas/.codex/tmp/arg0/codex-arg0vEYRFz:/Users/thomas/.codex/tmp/arg0/codex-arg0l1ri1A:/Users/thomas/.codex/packages/app-server-daemon/releases/0.159.3-aarch64-apple-darwin/codex-path:/Users/thomas/.codex/tmp/arg0/codex-arg0QtUh3I:/Users/thomas/.codex/packages/app-server-daemon/releases/0.159.2-aarch64-apple-darwin/codex-path:/Users/thomas/.codex/tmp/arg0/codex-arg07vgIsV:/opt/homebrew/Caskroom/codex/0.159.2/codex-path:/Applications/Ghostty.app/Contents/MacOS:/Users/thomas/.docker/bin:/Users/thomas/.docker/bin",
+    "pending_510": {
+      "accepted_commit": null,
+      "integrated_main_commit": null,
+      "active_installed_feature_sha256": null,
+      "active_integration_receipt": null,
+      "resolved": false,
+      "current_installed_hash_is_not_future_acceptance": true
+    },
+    "final_exact_bind_required_before_release": true,
+    "auth": "metadata-only exact exclusions; never contents/hash"
+  },
+  "historical_native_sessions_launched": 1
+}

@@ -1,0 +1,83 @@
+...............F                                                         [100%]
+=================================== FAILURES ===================================
+_ test_original_first_registration_creates_selected_home_before_installed_probes _
+
+tmp_path = PosixPath('/private/tmp/kntnt-method-509-registration-correction-20261004/pytest-06/test_original_first_registrati0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x107554b60>
+
+    def test_original_first_registration_creates_selected_home_before_installed_probes(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+        """The first installed add can observe birth in a fresh nested selected home."""
+        raw = json.dumps({'recorded': {'kind': 'pid', 'id': str(PID), 'started': BIRTH}}) + '\n'
+        args, _input_stream = setup_run(tmp_path, monkeypatch, raw)
+        homes: list[Path] = []
+    
+        def external(command: list[str], **options: Any) -> subprocess.CompletedProcess[Any]:
+            """Require the installed feature's ps working directory to exist first."""
+            if command[0] == 'ps':
+                return subprocess.CompletedProcess(command, 0, BIRTH, '')
+            selected = Path(options['env']['KNTNT_HOME'])
+            homes.append(selected)
+            assert selected.is_dir(), 'selected lifecycle home absent before installed probes'
+            return subprocess.CompletedProcess(command, 0, raw.encode(), b'')
+    
+        monkeypatch.setattr(DISPATCH.subprocess, 'run', external)
+        with pytest.raises(DISPATCH.CaptureError, match='empty dispatch brief'):
+>           DISPATCH.run(args)
+
+tests/test_evaluation_registration.py:142: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+docs/evaluation/harness/native_dispatch.py:1651: in run
+    result = acquire(args, prompt)
+             ^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+args = Namespace(packet=PosixPath('/private/tmp/kntnt-method-509-registration-correction-20261004/pytest-06/test_original_fir...on-correction-20261004/pytest-06/test_original_first_registrati0/cleanup.py'), source_contract='original-completed-v1')
+prompt = b''
+
+    def acquire(args: argparse.Namespace, prompt: bytes) -> bytes:
+        """Capture one attempt, retaining unsuccessful receipts without retrying."""
+    
+        source_contract = getattr(args, "source_contract", "retained-source-v1")
+        if source_contract not in ("retained-source-v1", "original-completed-v1"):
+            raise CaptureError("unknown source contract")
+        consumption = None
+        consume_spec = getattr(args, "consume_spec", None)
+        if consume_spec is not None:
+            if source_contract != "original-completed-v1":
+                raise CaptureError("consumption requires the explicit original contract")
+            data = consume_spec.read_bytes()
+            consumption = consumption_specification(data)
+            if (
+                not isinstance(consumption.get("packet"), str)
+                or not isinstance(consumption.get("command"), list)
+                or not consumption["command"]
+                or any(not isinstance(word, str) for word in consumption["command"])
+                or not isinstance(consumption.get("tool_input"), str)
+                or not consumption["tool_input"]
+                or not isinstance(consumption.get("launch_command"), list)
+                or not consumption["launch_command"]
+                or any(not isinstance(word, str) for word in consumption["launch_command"])
+                or not isinstance(consumption.get("launch_tool_input"), str)
+                or not consumption["launch_tool_input"]
+            ):
+                raise CaptureError("consumption specification unavailable")
+            (args.packet / "consumption-spec.json").write_bytes(data)
+        compact_limit = getattr(args, "auto_compact_token_limit", None)
+        if compact_limit is not None and (
+            source_contract != "original-completed-v1"
+            or type(compact_limit) is not int
+            or compact_limit <= 0
+        ):
+            raise CaptureError(
+                "compaction instrumentation requires explicit original contract and a positive integer"
+            )
+        if source_contract == "original-completed-v1" and (
+>           not math.isfinite(args.timeout) or not 0 < args.timeout <= 1200
+                              ^^^^^^^^^^^^
+        ):
+E       AttributeError: 'Namespace' object has no attribute 'timeout'
+
+docs/evaluation/harness/native_dispatch.py:1353: AttributeError
+=========================== short test summary info ============================
+FAILED tests/test_evaluation_registration.py::test_original_first_registration_creates_selected_home_before_installed_probes
+1 failed, 15 passed in 0.05s

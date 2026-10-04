@@ -1,0 +1,33 @@
+[
+  {
+    "function": "message_bytes",
+    "bytes": 541,
+    "sha256": "2d0e4cc8a6d681b0523362a8c1f012871020a8d18d40c0b34170aee123f53702",
+    "byte_unchanged_against_Main68a": true
+  },
+  {
+    "function": "retained_message",
+    "bytes": 813,
+    "sha256": "0f7e7a55afcfaa244df108a3c3959f5b1dc0345bc72caa198ec665e6f0a41e32",
+    "byte_unchanged_against_Main68a": true
+  },
+  {
+    "function": "native_item_bytes",
+    "bytes": 1030,
+    "sha256": "65003a1043822c1e74144f4d900fc61f14b76c9eafb8eaf4dc1c11bf6d2ee2c1",
+    "byte_unchanged_against_Main68a": true
+  },
+  {
+    "function": "bind_trace",
+    "bytes": 6812,
+    "sha256": "6319fcdf96664a4ec7968b6f0ee74b3a32e266cfda536375b138bfaca881fa80",
+    "byte_unchanged_against_Main68a": true
+  },
+  {
+    "function": "stop_owned",
+    "bytes": 2318,
+    "sha256": "56f5f97db264d4579ea9cf6abad81e46416e906f0d559664263b24e2189fed61",
+    "byte_unchanged_against_d40": true,
+    "whole_AST_unchanged": true
+  }
+]

@@ -1,0 +1,1965 @@
+[
+  {
+    "label": "01-empty-birth-red",
+    "classification": "infrastructure: author runner expected wrong installed response level; pytest not run",
+    "raw_registration": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/method-509/builder/registration-correction/author/executions/01-empty-birth-red/registration.stdout",
+    "historical_independent_observation_not_backfilled": true
+  },
+  {
+    "label": "02-empty-birth-red",
+    "at": "2026-10-04T17:12:49.569115+00:00",
+    "start_ns": 1791133969569221000,
+    "argv": [
+      "uv",
+      "run",
+      "--no-project",
+      "--with",
+      "pytest",
+      "pytest",
+      "-q",
+      "tests/test_evaluation_registration.py",
+      "--basetemp=/private/tmp/kntnt-method-509-registration-correction-20261004/pytest-02",
+      "-p",
+      "no:cacheprovider"
+    ],
+    "cwd": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages",
+    "pid": 6875,
+    "pgid": 6875,
+    "birth": "Sun Oct  4 19:12:49 2026",
+    "registration_argv": [
+      "uv",
+      "run",
+      "/Users/thomas/.agents/skills/kntnt/features/session-cleanup/scripts/session_cleanup.py",
+      "add",
+      "pid",
+      "6875",
+      "509 registration correction focused check 02-empty-birth-red"
+    ],
+    "raw_registration": {
+      "manifest": "/private/tmp/kntnt-method-509-registration-correction-20261004/checks/02-empty-birth-red/lifecycle/.kntnt/session-cleanup/sessions/01a1063a-fbf0-7ea3-bfd6-c0ad52516ab4.jsonl",
+      "recorded": {
+        "at": "2026-10-04T17:12:49+00:00",
+        "id": "6875",
+        "kind": "pid",
+        "started": "Sun Oct  4 19:12:49 2026",
+        "why": "509 registration correction focused check 02-empty-birth-red"
+      },
+      "session": "01a1063a-fbf0-7ea3-bfd6-c0ad52516ab4"
+    },
+    "contemporary_after": "Sun Oct  4 19:12:49 2026",
+    "sources": [
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/docs/evaluation/harness/native_dispatch.py",
+        "bytes": 67326,
+        "sha256": "5ff0c7190f05fc33cbdb89c9a9d4b981e431086a3354e8a97847f3cfde78448b"
+      },
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_registration.py",
+        "bytes": 2870,
+        "sha256": "3fb46d20d91e0ef3446c275c48ba78c352643b6f3fde4a4063382ad1215262cd"
+      },
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py",
+        "bytes": 51432,
+        "sha256": "bcaeda4c026eb12e1df9cab6be912228810b039dfcbbf8bcba7fcbe5c8c34ef0"
+      },
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_dispatch.py",
+        "bytes": 16172,
+        "sha256": "741e9fd186f10a2a747f0164486f1af6520fc62113635c55a88fafacd6cce83e"
+      }
+    ],
+    "storage": "/private/tmp/kntnt-method-509-registration-correction-20261004/checks/02-empty-birth-red",
+    "native_sessions": 0,
+    "exit": 1,
+    "end_ns": 1791133970460703000
+  },
+  {
+    "label": "03-registration-boundaries-red",
+    "at": "2026-10-04T17:14:03.865341+00:00",
+    "start_ns": 1791134043865463000,
+    "argv": [
+      "uv",
+      "run",
+      "--no-project",
+      "--with",
+      "pytest",
+      "pytest",
+      "-q",
+      "tests/test_evaluation_registration.py",
+      "--basetemp=/private/tmp/kntnt-method-509-registration-correction-20261004/pytest-03",
+      "-p",
+      "no:cacheprovider"
+    ],
+    "cwd": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages",
+    "pid": 7433,
+    "pgid": 7433,
+    "birth": "Sun Oct  4 19:14:03 2026",
+    "registration_argv": [
+      "uv",
+      "run",
+      "/Users/thomas/.agents/skills/kntnt/features/session-cleanup/scripts/session_cleanup.py",
+      "add",
+      "pid",
+      "7433",
+      "509 registration correction focused check 03-registration-boundaries-red"
+    ],
+    "raw_registration": {
+      "manifest": "/private/tmp/kntnt-method-509-registration-correction-20261004/checks/03-registration-boundaries-red/lifecycle/.kntnt/session-cleanup/sessions/01a1063a-fbf0-7ea3-bfd6-c0ad52516ab4.jsonl",
+      "recorded": {
+        "at": "2026-10-04T17:14:03+00:00",
+        "id": "7433",
+        "kind": "pid",
+        "started": "Sun Oct  4 19:14:03 2026",
+        "why": "509 registration correction focused check 03-registration-boundaries-red"
+      },
+      "session": "01a1063a-fbf0-7ea3-bfd6-c0ad52516ab4"
+    },
+    "contemporary_after": "Sun Oct  4 19:14:03 2026",
+    "sources": [
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/docs/evaluation/harness/native_dispatch.py",
+        "bytes": 67326,
+        "sha256": "5ff0c7190f05fc33cbdb89c9a9d4b981e431086a3354e8a97847f3cfde78448b"
+      },
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_registration.py",
+        "bytes": 5900,
+        "sha256": "76a16dc65d8de5ce501d1220ccd2c482d0a54fe9f987697188b0fe4978f39f8c"
+      },
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py",
+        "bytes": 51432,
+        "sha256": "bcaeda4c026eb12e1df9cab6be912228810b039dfcbbf8bcba7fcbe5c8c34ef0"
+      },
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_dispatch.py",
+        "bytes": 16172,
+        "sha256": "741e9fd186f10a2a747f0164486f1af6520fc62113635c55a88fafacd6cce83e"
+      }
+    ],
+    "storage": "/private/tmp/kntnt-method-509-registration-correction-20261004/checks/03-registration-boundaries-red",
+    "native_sessions": 0,
+    "exit": 1,
+    "end_ns": 1791134044418592000
+  },
+  {
+    "label": "04-registration-green",
+    "at": "2026-10-04T17:15:39.363028+00:00",
+    "start_ns": 1791134139363142000,
+    "argv": [
+      "uv",
+      "run",
+      "--no-project",
+      "--with",
+      "pytest",
+      "pytest",
+      "-q",
+      "tests/test_evaluation_registration.py",
+      "--basetemp=/private/tmp/kntnt-method-509-registration-correction-20261004/pytest-04",
+      "-p",
+      "no:cacheprovider"
+    ],
+    "cwd": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages",
+    "pid": 7638,
+    "pgid": 7638,
+    "birth": "Sun Oct  4 19:15:39 2026",
+    "registration_argv": [
+      "uv",
+      "run",
+      "/Users/thomas/.agents/skills/kntnt/features/session-cleanup/scripts/session_cleanup.py",
+      "add",
+      "pid",
+      "7638",
+      "509 registration correction focused check 04-registration-green"
+    ],
+    "raw_registration": {
+      "manifest": "/private/tmp/kntnt-method-509-registration-correction-20261004/checks/04-registration-green/lifecycle/.kntnt/session-cleanup/sessions/01a1063a-fbf0-7ea3-bfd6-c0ad52516ab4.jsonl",
+      "recorded": {
+        "at": "2026-10-04T17:15:39+00:00",
+        "id": "7638",
+        "kind": "pid",
+        "started": "Sun Oct  4 19:15:39 2026",
+        "why": "509 registration correction focused check 04-registration-green"
+      },
+      "session": "01a1063a-fbf0-7ea3-bfd6-c0ad52516ab4"
+    },
+    "contemporary_after": "Sun Oct  4 19:15:39 2026",
+    "sources": [
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/docs/evaluation/harness/native_dispatch.py",
+        "bytes": 70283,
+        "sha256": "c5aa556075038841e1c195eff4054ea2f33c7e360e69405716f287a4e27140c7"
+      },
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_registration.py",
+        "bytes": 5950,
+        "sha256": "5997d93cc618253a70b83ab5362d96b8f51afa8fcae26a9888e64df540d9a7a0"
+      },
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py",
+        "bytes": 51432,
+        "sha256": "bcaeda4c026eb12e1df9cab6be912228810b039dfcbbf8bcba7fcbe5c8c34ef0"
+      },
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_dispatch.py",
+        "bytes": 16172,
+        "sha256": "741e9fd186f10a2a747f0164486f1af6520fc62113635c55a88fafacd6cce83e"
+      }
+    ],
+    "storage": "/private/tmp/kntnt-method-509-registration-correction-20261004/checks/04-registration-green",
+    "native_sessions": 0,
+    "exit": 0,
+    "end_ns": 1791134139874158000
+  },
+  {
+    "label": "05-first-home-red",
+    "at": "2026-10-04T17:16:47.059377+00:00",
+    "start_ns": 1791134207059512000,
+    "argv": [
+      "uv",
+      "run",
+      "--no-project",
+      "--with",
+      "pytest",
+      "pytest",
+      "-q",
+      "tests/test_evaluation_registration.py",
+      "-k",
+      "first_registration",
+      "--basetemp=/private/tmp/kntnt-method-509-registration-correction-20261004/pytest-05",
+      "-p",
+      "no:cacheprovider"
+    ],
+    "cwd": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages",
+    "pid": 7814,
+    "pgid": 7814,
+    "birth": "Sun Oct  4 19:16:46 2026",
+    "registration_argv": [
+      "uv",
+      "run",
+      "/Users/thomas/.agents/skills/kntnt/features/session-cleanup/scripts/session_cleanup.py",
+      "add",
+      "pid",
+      "7814",
+      "509 registration correction focused check 05-first-home-red"
+    ],
+    "raw_registration": {
+      "manifest": "/private/tmp/kntnt-method-509-registration-correction-20261004/checks/05-first-home-red/lifecycle/.kntnt/session-cleanup/sessions/01a1063a-fbf0-7ea3-bfd6-c0ad52516ab4.jsonl",
+      "recorded": {
+        "at": "2026-10-04T17:16:46+00:00",
+        "id": "7814",
+        "kind": "pid",
+        "started": "Sun Oct  4 19:16:46 2026",
+        "why": "509 registration correction focused check 05-first-home-red"
+      },
+      "session": "01a1063a-fbf0-7ea3-bfd6-c0ad52516ab4"
+    },
+    "contemporary_after": "Sun Oct  4 19:16:46 2026",
+    "sources": [
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/docs/evaluation/harness/native_dispatch.py",
+        "bytes": 70283,
+        "sha256": "c5aa556075038841e1c195eff4054ea2f33c7e360e69405716f287a4e27140c7"
+      },
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_registration.py",
+        "bytes": 7416,
+        "sha256": "67168c1dfba1d194de92a79a46d1b41f94ac4c92b965e71f220a803da6797780"
+      },
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py",
+        "bytes": 51432,
+        "sha256": "bcaeda4c026eb12e1df9cab6be912228810b039dfcbbf8bcba7fcbe5c8c34ef0"
+      },
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_dispatch.py",
+        "bytes": 16172,
+        "sha256": "741e9fd186f10a2a747f0164486f1af6520fc62113635c55a88fafacd6cce83e"
+      }
+    ],
+    "storage": "/private/tmp/kntnt-method-509-registration-correction-20261004/checks/05-first-home-red",
+    "native_sessions": 0,
+    "exit": 1,
+    "end_ns": 1791134207569194000
+  },
+  {
+    "label": "06-first-home-green",
+    "at": "2026-10-04T17:17:09.083359+00:00",
+    "start_ns": 1791134229083468000,
+    "argv": [
+      "uv",
+      "run",
+      "--no-project",
+      "--with",
+      "pytest",
+      "pytest",
+      "-q",
+      "tests/test_evaluation_registration.py",
+      "--basetemp=/private/tmp/kntnt-method-509-registration-correction-20261004/pytest-06",
+      "-p",
+      "no:cacheprovider"
+    ],
+    "cwd": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages",
+    "pid": 7951,
+    "pgid": 7951,
+    "birth": "Sun Oct  4 19:17:08 2026",
+    "registration_argv": [
+      "uv",
+      "run",
+      "/Users/thomas/.agents/skills/kntnt/features/session-cleanup/scripts/session_cleanup.py",
+      "add",
+      "pid",
+      "7951",
+      "509 registration correction focused check 06-first-home-green"
+    ],
+    "raw_registration": {
+      "manifest": "/private/tmp/kntnt-method-509-registration-correction-20261004/checks/06-first-home-green/lifecycle/.kntnt/session-cleanup/sessions/01a1063a-fbf0-7ea3-bfd6-c0ad52516ab4.jsonl",
+      "recorded": {
+        "at": "2026-10-04T17:17:09+00:00",
+        "id": "7951",
+        "kind": "pid",
+        "started": "Sun Oct  4 19:17:08 2026",
+        "why": "509 registration correction focused check 06-first-home-green"
+      },
+      "session": "01a1063a-fbf0-7ea3-bfd6-c0ad52516ab4"
+    },
+    "contemporary_after": "Sun Oct  4 19:17:08 2026",
+    "sources": [
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/docs/evaluation/harness/native_dispatch.py",
+        "bytes": 70429,
+        "sha256": "3e3303fc27ffe3177c710cf046836fb2152eb7e52aa26579a7bb5f7966c64920"
+      },
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_registration.py",
+        "bytes": 7416,
+        "sha256": "67168c1dfba1d194de92a79a46d1b41f94ac4c92b965e71f220a803da6797780"
+      },
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py",
+        "bytes": 51432,
+        "sha256": "bcaeda4c026eb12e1df9cab6be912228810b039dfcbbf8bcba7fcbe5c8c34ef0"
+      },
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_dispatch.py",
+        "bytes": 16172,
+        "sha256": "741e9fd186f10a2a747f0164486f1af6520fc62113635c55a88fafacd6cce83e"
+      }
+    ],
+    "storage": "/private/tmp/kntnt-method-509-registration-correction-20261004/checks/06-first-home-green",
+    "native_sessions": 0,
+    "exit": 1,
+    "end_ns": 1791134229610225000
+  },
+  {
+    "label": "07-home-fixture-green",
+    "at": "2026-10-04T17:17:47.358182+00:00",
+    "start_ns": 1791134267358298000,
+    "argv": [
+      "uv",
+      "run",
+      "--no-project",
+      "--with",
+      "pytest",
+      "pytest",
+      "-q",
+      "tests/test_evaluation_registration.py",
+      "--basetemp=/private/tmp/kntnt-method-509-registration-correction-20261004/pytest-07",
+      "-p",
+      "no:cacheprovider"
+    ],
+    "cwd": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages",
+    "pid": 8093,
+    "pgid": 8093,
+    "birth": "Sun Oct  4 19:17:47 2026",
+    "registration_argv": [
+      "uv",
+      "run",
+      "/Users/thomas/.agents/skills/kntnt/features/session-cleanup/scripts/session_cleanup.py",
+      "add",
+      "pid",
+      "8093",
+      "509 registration correction focused check 07-home-fixture-green"
+    ],
+    "raw_registration": {
+      "manifest": "/private/tmp/kntnt-method-509-registration-correction-20261004/checks/07-home-fixture-green/lifecycle/.kntnt/session-cleanup/sessions/01a1063a-fbf0-7ea3-bfd6-c0ad52516ab4.jsonl",
+      "recorded": {
+        "at": "2026-10-04T17:17:47+00:00",
+        "id": "8093",
+        "kind": "pid",
+        "started": "Sun Oct  4 19:17:47 2026",
+        "why": "509 registration correction focused check 07-home-fixture-green"
+      },
+      "session": "01a1063a-fbf0-7ea3-bfd6-c0ad52516ab4"
+    },
+    "contemporary_after": "Sun Oct  4 19:17:47 2026",
+    "sources": [
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/docs/evaluation/harness/native_dispatch.py",
+        "bytes": 70429,
+        "sha256": "3e3303fc27ffe3177c710cf046836fb2152eb7e52aa26579a7bb5f7966c64920"
+      },
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_registration.py",
+        "bytes": 7430,
+        "sha256": "24b83728649ee85aa25fb0b0bf59c7c751a623fec162d09a3abdf407d3b914b7"
+      },
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py",
+        "bytes": 51432,
+        "sha256": "bcaeda4c026eb12e1df9cab6be912228810b039dfcbbf8bcba7fcbe5c8c34ef0"
+      },
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_dispatch.py",
+        "bytes": 16172,
+        "sha256": "741e9fd186f10a2a747f0164486f1af6520fc62113635c55a88fafacd6cce83e"
+      }
+    ],
+    "storage": "/private/tmp/kntnt-method-509-registration-correction-20261004/checks/07-home-fixture-green",
+    "native_sessions": 0,
+    "exit": 0,
+    "end_ns": 1791134267841269000
+  },
+  {
+    "label": "08-ps-exit-red",
+    "at": "2026-10-04T17:18:33.288654+00:00",
+    "start_ns": 1791134313288770000,
+    "argv": [
+      "uv",
+      "run",
+      "--no-project",
+      "--with",
+      "pytest",
+      "pytest",
+      "-q",
+      "tests/test_evaluation_registration.py",
+      "-k",
+      "before-nonzero",
+      "--basetemp=/private/tmp/kntnt-method-509-registration-correction-20261004/pytest-08",
+      "-p",
+      "no:cacheprovider"
+    ],
+    "cwd": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages",
+    "pid": 8247,
+    "pgid": 8247,
+    "birth": "Sun Oct  4 19:18:32 2026",
+    "registration_argv": [
+      "uv",
+      "run",
+      "/Users/thomas/.agents/skills/kntnt/features/session-cleanup/scripts/session_cleanup.py",
+      "add",
+      "pid",
+      "8247",
+      "509 registration correction focused check 08-ps-exit-red"
+    ],
+    "raw_registration": {
+      "manifest": "/private/tmp/kntnt-method-509-registration-correction-20261004/checks/08-ps-exit-red/lifecycle/.kntnt/session-cleanup/sessions/01a1063a-fbf0-7ea3-bfd6-c0ad52516ab4.jsonl",
+      "recorded": {
+        "at": "2026-10-04T17:18:33+00:00",
+        "id": "8247",
+        "kind": "pid",
+        "started": "Sun Oct  4 19:18:32 2026",
+        "why": "509 registration correction focused check 08-ps-exit-red"
+      },
+      "session": "01a1063a-fbf0-7ea3-bfd6-c0ad52516ab4"
+    },
+    "contemporary_after": "Sun Oct  4 19:18:32 2026",
+    "sources": [
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/docs/evaluation/harness/native_dispatch.py",
+        "bytes": 70429,
+        "sha256": "3e3303fc27ffe3177c710cf046836fb2152eb7e52aa26579a7bb5f7966c64920"
+      },
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_registration.py",
+        "bytes": 7487,
+        "sha256": "39a991eea85492ea98207998be70d16386282379e2377b0d38ed41d1defe8fb7"
+      },
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py",
+        "bytes": 51432,
+        "sha256": "bcaeda4c026eb12e1df9cab6be912228810b039dfcbbf8bcba7fcbe5c8c34ef0"
+      },
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_dispatch.py",
+        "bytes": 16172,
+        "sha256": "741e9fd186f10a2a747f0164486f1af6520fc62113635c55a88fafacd6cce83e"
+      }
+    ],
+    "storage": "/private/tmp/kntnt-method-509-registration-correction-20261004/checks/08-ps-exit-red",
+    "native_sessions": 0,
+    "exit": 1,
+    "end_ns": 1791134313760314000
+  },
+  {
+    "label": "09-ps-exit-green",
+    "at": "2026-10-04T17:19:01.130017+00:00",
+    "start_ns": 1791134341130118000,
+    "argv": [
+      "uv",
+      "run",
+      "--no-project",
+      "--with",
+      "pytest",
+      "pytest",
+      "-q",
+      "tests/test_evaluation_registration.py",
+      "--basetemp=/private/tmp/kntnt-method-509-registration-correction-20261004/pytest-09",
+      "-p",
+      "no:cacheprovider"
+    ],
+    "cwd": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages",
+    "pid": 8418,
+    "pgid": 8418,
+    "birth": "Sun Oct  4 19:19:00 2026",
+    "registration_argv": [
+      "uv",
+      "run",
+      "/Users/thomas/.agents/skills/kntnt/features/session-cleanup/scripts/session_cleanup.py",
+      "add",
+      "pid",
+      "8418",
+      "509 registration correction focused check 09-ps-exit-green"
+    ],
+    "raw_registration": {
+      "manifest": "/private/tmp/kntnt-method-509-registration-correction-20261004/checks/09-ps-exit-green/lifecycle/.kntnt/session-cleanup/sessions/01a1063a-fbf0-7ea3-bfd6-c0ad52516ab4.jsonl",
+      "recorded": {
+        "at": "2026-10-04T17:19:01+00:00",
+        "id": "8418",
+        "kind": "pid",
+        "started": "Sun Oct  4 19:19:00 2026",
+        "why": "509 registration correction focused check 09-ps-exit-green"
+      },
+      "session": "01a1063a-fbf0-7ea3-bfd6-c0ad52516ab4"
+    },
+    "contemporary_after": "Sun Oct  4 19:19:00 2026",
+    "sources": [
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/docs/evaluation/harness/native_dispatch.py",
+        "bytes": 70536,
+        "sha256": "42d63638b103e5627abd5644a47dab664bb440f0d7d69f5774f41bb8ae7c0f20"
+      },
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_registration.py",
+        "bytes": 7487,
+        "sha256": "39a991eea85492ea98207998be70d16386282379e2377b0d38ed41d1defe8fb7"
+      },
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py",
+        "bytes": 51474,
+        "sha256": "75c15edc78a6dc45462df1c48a0860a37ff2a00b9c342e631abad0a8e3444f91"
+      },
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_dispatch.py",
+        "bytes": 16172,
+        "sha256": "741e9fd186f10a2a747f0164486f1af6520fc62113635c55a88fafacd6cce83e"
+      }
+    ],
+    "storage": "/private/tmp/kntnt-method-509-registration-correction-20261004/checks/09-ps-exit-green",
+    "native_sessions": 0,
+    "exit": 0,
+    "end_ns": 1791134341661217000
+  },
+  {
+    "label": "10-authentic-registration-green",
+    "at": "2026-10-04T17:20:44.161985+00:00",
+    "start_ns": 1791134444162119000,
+    "argv": [
+      "uv",
+      "run",
+      "--no-project",
+      "--with",
+      "pytest",
+      "pytest",
+      "-q",
+      "tests/test_evaluation_registration.py",
+      "--basetemp=/private/tmp/kntnt-method-509-registration-correction-20261004/pytest-10",
+      "-p",
+      "no:cacheprovider"
+    ],
+    "cwd": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages",
+    "pid": 8879,
+    "pgid": 8879,
+    "birth": "Sun Oct  4 19:20:43 2026",
+    "registration_argv": [
+      "uv",
+      "run",
+      "/Users/thomas/.agents/skills/kntnt/features/session-cleanup/scripts/session_cleanup.py",
+      "add",
+      "pid",
+      "8879",
+      "509 registration correction focused check 10-authentic-registration-green"
+    ],
+    "raw_registration": {
+      "manifest": "/private/tmp/kntnt-method-509-registration-correction-20261004/checks/10-authentic-registration-green/lifecycle/.kntnt/session-cleanup/sessions/01a1063a-fbf0-7ea3-bfd6-c0ad52516ab4.jsonl",
+      "recorded": {
+        "at": "2026-10-04T17:20:44+00:00",
+        "id": "8879",
+        "kind": "pid",
+        "started": "Sun Oct  4 19:20:43 2026",
+        "why": "509 registration correction focused check 10-authentic-registration-green"
+      },
+      "session": "01a1063a-fbf0-7ea3-bfd6-c0ad52516ab4"
+    },
+    "contemporary_after": "Sun Oct  4 19:20:43 2026",
+    "sources": [
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/docs/evaluation/harness/native_dispatch.py",
+        "bytes": 70536,
+        "sha256": "42d63638b103e5627abd5644a47dab664bb440f0d7d69f5774f41bb8ae7c0f20"
+      },
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_registration.py",
+        "bytes": 9415,
+        "sha256": "8af868deb283ecdd01d0df2ad1b33fd541d15e061d9759c8aaa212d4b431cb80"
+      },
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py",
+        "bytes": 51474,
+        "sha256": "75c15edc78a6dc45462df1c48a0860a37ff2a00b9c342e631abad0a8e3444f91"
+      },
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_dispatch.py",
+        "bytes": 16172,
+        "sha256": "741e9fd186f10a2a747f0164486f1af6520fc62113635c55a88fafacd6cce83e"
+      }
+    ],
+    "storage": "/private/tmp/kntnt-method-509-registration-correction-20261004/checks/10-authentic-registration-green",
+    "native_sessions": 0,
+    "exit": 0,
+    "end_ns": 1791134444805575000
+  },
+  {
+    "label": "11-focused-original-default",
+    "at": "2026-10-04T17:21:25.358744+00:00",
+    "start_ns": 1791134485358838000,
+    "argv": [
+      "uv",
+      "run",
+      "--no-project",
+      "--with",
+      "pytest",
+      "pytest",
+      "-q",
+      "tests/test_evaluation_registration.py",
+      "tests/test_evaluation_original_dispatch.py",
+      "tests/test_evaluation_dispatch.py",
+      "--basetemp=/private/tmp/kntnt-method-509-registration-correction-20261004/pytest-11",
+      "-p",
+      "no:cacheprovider"
+    ],
+    "cwd": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages",
+    "pid": 9061,
+    "pgid": 9061,
+    "birth": "Sun Oct  4 19:21:25 2026",
+    "registration_argv": [
+      "uv",
+      "run",
+      "/Users/thomas/.agents/skills/kntnt/features/session-cleanup/scripts/session_cleanup.py",
+      "add",
+      "pid",
+      "9061",
+      "509 registration correction focused check 11-focused-original-default"
+    ],
+    "raw_registration": {
+      "manifest": "/private/tmp/kntnt-method-509-registration-correction-20261004/checks/11-focused-original-default/lifecycle/.kntnt/session-cleanup/sessions/01a1063a-fbf0-7ea3-bfd6-c0ad52516ab4.jsonl",
+      "recorded": {
+        "at": "2026-10-04T17:21:25+00:00",
+        "id": "9061",
+        "kind": "pid",
+        "started": "Sun Oct  4 19:21:25 2026",
+        "why": "509 registration correction focused check 11-focused-original-default"
+      },
+      "session": "01a1063a-fbf0-7ea3-bfd6-c0ad52516ab4"
+    },
+    "contemporary_after": "Sun Oct  4 19:21:25 2026",
+    "sources": [
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/docs/evaluation/harness/native_dispatch.py",
+        "bytes": 70536,
+        "sha256": "42d63638b103e5627abd5644a47dab664bb440f0d7d69f5774f41bb8ae7c0f20"
+      },
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_registration.py",
+        "bytes": 9415,
+        "sha256": "8af868deb283ecdd01d0df2ad1b33fd541d15e061d9759c8aaa212d4b431cb80"
+      },
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py",
+        "bytes": 51474,
+        "sha256": "75c15edc78a6dc45462df1c48a0860a37ff2a00b9c342e631abad0a8e3444f91"
+      },
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_dispatch.py",
+        "bytes": 17152,
+        "sha256": "d8922458f587238136b3744a2df791a237336b008955a5298af8fd7206e5809c"
+      }
+    ],
+    "storage": "/private/tmp/kntnt-method-509-registration-correction-20261004/checks/11-focused-original-default",
+    "native_sessions": 0,
+    "exit": 0,
+    "end_ns": 1791134490378136000
+  },
+  {
+    "label": "12-child-registration-green",
+    "at": "2026-10-04T17:22:17.159094+00:00",
+    "start_ns": 1791134537159209000,
+    "argv": [
+      "uv",
+      "run",
+      "--no-project",
+      "--with",
+      "pytest",
+      "pytest",
+      "-q",
+      "tests/test_evaluation_registration.py",
+      "--basetemp=/private/tmp/kntnt-method-509-registration-correction-20261004/pytest-12",
+      "-p",
+      "no:cacheprovider"
+    ],
+    "cwd": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages",
+    "pid": 9412,
+    "pgid": 9412,
+    "birth": "Sun Oct  4 19:22:16 2026",
+    "registration_argv": [
+      "uv",
+      "run",
+      "/Users/thomas/.agents/skills/kntnt/features/session-cleanup/scripts/session_cleanup.py",
+      "add",
+      "pid",
+      "9412",
+      "509 registration correction focused check 12-child-registration-green"
+    ],
+    "raw_registration": {
+      "manifest": "/private/tmp/kntnt-method-509-registration-correction-20261004/checks/12-child-registration-green/lifecycle/.kntnt/session-cleanup/sessions/01a1063a-fbf0-7ea3-bfd6-c0ad52516ab4.jsonl",
+      "recorded": {
+        "at": "2026-10-04T17:22:17+00:00",
+        "id": "9412",
+        "kind": "pid",
+        "started": "Sun Oct  4 19:22:16 2026",
+        "why": "509 registration correction focused check 12-child-registration-green"
+      },
+      "session": "01a1063a-fbf0-7ea3-bfd6-c0ad52516ab4"
+    },
+    "contemporary_after": "Sun Oct  4 19:22:16 2026",
+    "sources": [
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/docs/evaluation/harness/native_dispatch.py",
+        "bytes": 70536,
+        "sha256": "42d63638b103e5627abd5644a47dab664bb440f0d7d69f5774f41bb8ae7c0f20"
+      },
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_registration.py",
+        "bytes": 11061,
+        "sha256": "b1f1ef3bbccdbbfe539bedc56af6318242533b7adc8f932a9f14694d4e3dd546"
+      },
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py",
+        "bytes": 51474,
+        "sha256": "75c15edc78a6dc45462df1c48a0860a37ff2a00b9c342e631abad0a8e3444f91"
+      },
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_dispatch.py",
+        "bytes": 17152,
+        "sha256": "d8922458f587238136b3744a2df791a237336b008955a5298af8fd7206e5809c"
+      }
+    ],
+    "storage": "/private/tmp/kntnt-method-509-registration-correction-20261004/checks/12-child-registration-green",
+    "native_sessions": 0,
+    "exit": 0,
+    "end_ns": 1791134537797460000
+  },
+  {
+    "label": "13-scoped-lint",
+    "at": "2026-10-04T17:22:54.103140+00:00",
+    "start_ns": 1791134574103251000,
+    "argv": [
+      "uvx",
+      "ruff",
+      "check",
+      "docs/evaluation/harness/native_dispatch.py",
+      "tests/test_evaluation_registration.py",
+      "tests/test_evaluation_original_dispatch.py",
+      "tests/test_evaluation_dispatch.py"
+    ],
+    "cwd": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages",
+    "pid": 9588,
+    "pgid": 9588,
+    "birth": "Sun Oct  4 19:22:53 2026",
+    "registration_argv": [
+      "uv",
+      "run",
+      "/Users/thomas/.agents/skills/kntnt/features/session-cleanup/scripts/session_cleanup.py",
+      "add",
+      "pid",
+      "9588",
+      "509 registration correction focused check 13-scoped-lint"
+    ],
+    "raw_registration": {
+      "manifest": "/private/tmp/kntnt-method-509-registration-correction-20261004/checks/13-scoped-lint/lifecycle/.kntnt/session-cleanup/sessions/01a1063a-fbf0-7ea3-bfd6-c0ad52516ab4.jsonl",
+      "recorded": {
+        "at": "2026-10-04T17:22:54+00:00",
+        "id": "9588",
+        "kind": "pid",
+        "started": "Sun Oct  4 19:22:53 2026",
+        "why": "509 registration correction focused check 13-scoped-lint"
+      },
+      "session": "01a1063a-fbf0-7ea3-bfd6-c0ad52516ab4"
+    },
+    "contemporary_after": "Sun Oct  4 19:22:53 2026",
+    "sources": [
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/docs/evaluation/harness/native_dispatch.py",
+        "bytes": 70536,
+        "sha256": "42d63638b103e5627abd5644a47dab664bb440f0d7d69f5774f41bb8ae7c0f20"
+      },
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_registration.py",
+        "bytes": 11061,
+        "sha256": "b1f1ef3bbccdbbfe539bedc56af6318242533b7adc8f932a9f14694d4e3dd546"
+      },
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py",
+        "bytes": 51474,
+        "sha256": "75c15edc78a6dc45462df1c48a0860a37ff2a00b9c342e631abad0a8e3444f91"
+      },
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_dispatch.py",
+        "bytes": 17152,
+        "sha256": "d8922458f587238136b3744a2df791a237336b008955a5298af8fd7206e5809c"
+      }
+    ],
+    "storage": "/private/tmp/kntnt-method-509-registration-correction-20261004/checks/13-scoped-lint",
+    "native_sessions": 0,
+    "exit": 1,
+    "end_ns": 1791134575099199000
+  },
+  {
+    "label": "14-scoped-format",
+    "at": "2026-10-04T17:22:55.258228+00:00",
+    "start_ns": 1791134575258339000,
+    "argv": [
+      "uvx",
+      "ruff",
+      "format",
+      "--check",
+      "docs/evaluation/harness/native_dispatch.py",
+      "tests/test_evaluation_registration.py",
+      "tests/test_evaluation_original_dispatch.py",
+      "tests/test_evaluation_dispatch.py"
+    ],
+    "cwd": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages",
+    "pid": 9715,
+    "pgid": 9715,
+    "birth": "Sun Oct  4 19:22:54 2026",
+    "registration_argv": [
+      "uv",
+      "run",
+      "/Users/thomas/.agents/skills/kntnt/features/session-cleanup/scripts/session_cleanup.py",
+      "add",
+      "pid",
+      "9715",
+      "509 registration correction focused check 14-scoped-format"
+    ],
+    "raw_registration": {
+      "manifest": "/private/tmp/kntnt-method-509-registration-correction-20261004/checks/14-scoped-format/lifecycle/.kntnt/session-cleanup/sessions/01a1063a-fbf0-7ea3-bfd6-c0ad52516ab4.jsonl",
+      "recorded": {
+        "at": "2026-10-04T17:22:55+00:00",
+        "id": "9715",
+        "kind": "pid",
+        "started": "Sun Oct  4 19:22:54 2026",
+        "why": "509 registration correction focused check 14-scoped-format"
+      },
+      "session": "01a1063a-fbf0-7ea3-bfd6-c0ad52516ab4"
+    },
+    "contemporary_after": "Sun Oct  4 19:22:54 2026",
+    "sources": [
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/docs/evaluation/harness/native_dispatch.py",
+        "bytes": 70536,
+        "sha256": "42d63638b103e5627abd5644a47dab664bb440f0d7d69f5774f41bb8ae7c0f20"
+      },
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_registration.py",
+        "bytes": 11061,
+        "sha256": "b1f1ef3bbccdbbfe539bedc56af6318242533b7adc8f932a9f14694d4e3dd546"
+      },
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py",
+        "bytes": 51474,
+        "sha256": "75c15edc78a6dc45462df1c48a0860a37ff2a00b9c342e631abad0a8e3444f91"
+      },
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_dispatch.py",
+        "bytes": 17152,
+        "sha256": "d8922458f587238136b3744a2df791a237336b008955a5298af8fd7206e5809c"
+      }
+    ],
+    "storage": "/private/tmp/kntnt-method-509-registration-correction-20261004/checks/14-scoped-format",
+    "native_sessions": 0,
+    "exit": 1,
+    "end_ns": 1791134575288476000
+  },
+  {
+    "label": "15-scoped-format-apply",
+    "at": "2026-10-04T17:23:05.160526+00:00",
+    "start_ns": 1791134585160639000,
+    "argv": [
+      "uvx",
+      "ruff",
+      "format",
+      "docs/evaluation/harness/native_dispatch.py",
+      "tests/test_evaluation_registration.py",
+      "tests/test_evaluation_original_dispatch.py",
+      "tests/test_evaluation_dispatch.py"
+    ],
+    "cwd": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages",
+    "pid": 9870,
+    "pgid": 9870,
+    "birth": "Sun Oct  4 19:23:04 2026",
+    "registration_argv": [
+      "uv",
+      "run",
+      "/Users/thomas/.agents/skills/kntnt/features/session-cleanup/scripts/session_cleanup.py",
+      "add",
+      "pid",
+      "9870",
+      "509 registration correction focused check 15-scoped-format-apply"
+    ],
+    "raw_registration": {
+      "manifest": "/private/tmp/kntnt-method-509-registration-correction-20261004/checks/15-scoped-format-apply/lifecycle/.kntnt/session-cleanup/sessions/01a1063a-fbf0-7ea3-bfd6-c0ad52516ab4.jsonl",
+      "recorded": {
+        "at": "2026-10-04T17:23:05+00:00",
+        "id": "9870",
+        "kind": "pid",
+        "started": "Sun Oct  4 19:23:04 2026",
+        "why": "509 registration correction focused check 15-scoped-format-apply"
+      },
+      "session": "01a1063a-fbf0-7ea3-bfd6-c0ad52516ab4"
+    },
+    "contemporary_after": "Sun Oct  4 19:23:04 2026",
+    "sources": [
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/docs/evaluation/harness/native_dispatch.py",
+        "bytes": 70536,
+        "sha256": "42d63638b103e5627abd5644a47dab664bb440f0d7d69f5774f41bb8ae7c0f20"
+      },
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_registration.py",
+        "bytes": 11061,
+        "sha256": "b1f1ef3bbccdbbfe539bedc56af6318242533b7adc8f932a9f14694d4e3dd546"
+      },
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py",
+        "bytes": 51474,
+        "sha256": "75c15edc78a6dc45462df1c48a0860a37ff2a00b9c342e631abad0a8e3444f91"
+      },
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_dispatch.py",
+        "bytes": 17152,
+        "sha256": "d8922458f587238136b3744a2df791a237336b008955a5298af8fd7206e5809c"
+      }
+    ],
+    "storage": "/private/tmp/kntnt-method-509-registration-correction-20261004/checks/15-scoped-format-apply",
+    "native_sessions": 0,
+    "exit": 0,
+    "end_ns": 1791134585186667000
+  },
+  {
+    "label": "16-partial-registration-red",
+    "at": "2026-10-04T17:24:10.584607+00:00",
+    "start_ns": 1791134650584712000,
+    "argv": [
+      "uv",
+      "run",
+      "--no-project",
+      "--with",
+      "pytest",
+      "pytest",
+      "-q",
+      "tests/test_evaluation_registration.py",
+      "-k",
+      "installed_timeout",
+      "--basetemp=/private/tmp/kntnt-method-509-registration-correction-20261004/pytest-16",
+      "-p",
+      "no:cacheprovider"
+    ],
+    "cwd": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages",
+    "pid": 10044,
+    "pgid": 10044,
+    "birth": "Sun Oct  4 19:24:10 2026",
+    "registration_argv": [
+      "uv",
+      "run",
+      "/Users/thomas/.agents/skills/kntnt/features/session-cleanup/scripts/session_cleanup.py",
+      "add",
+      "pid",
+      "10044",
+      "509 registration correction focused check 16-partial-registration-red"
+    ],
+    "raw_registration": {
+      "manifest": "/private/tmp/kntnt-method-509-registration-correction-20261004/checks/16-partial-registration-red/lifecycle/.kntnt/session-cleanup/sessions/01a1063a-fbf0-7ea3-bfd6-c0ad52516ab4.jsonl",
+      "recorded": {
+        "at": "2026-10-04T17:24:10+00:00",
+        "id": "10044",
+        "kind": "pid",
+        "started": "Sun Oct  4 19:24:10 2026",
+        "why": "509 registration correction focused check 16-partial-registration-red"
+      },
+      "session": "01a1063a-fbf0-7ea3-bfd6-c0ad52516ab4"
+    },
+    "contemporary_after": "Sun Oct  4 19:24:10 2026",
+    "sources": [
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/docs/evaluation/harness/native_dispatch.py",
+        "bytes": 70734,
+        "sha256": "95b1c640a5883e5a51a0c3884e9e6b76d2c49f01112ef6cb491f344cf4ccc319"
+      },
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_registration.py",
+        "bytes": 13297,
+        "sha256": "2f247a69fdbe1259f8d24ced8f631e249e6ca114a2a675ce591a387cf55cf666"
+      },
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py",
+        "bytes": 51518,
+        "sha256": "e8dc26609ffd44d0a73b6d4a2c02fef5088a87c74509b46be9f9d0732f138d68"
+      },
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_dispatch.py",
+        "bytes": 17262,
+        "sha256": "5eba0030b2ce783ee357eb8760c130df66a28b5824889dd7261e1ee3ed8af11f"
+      }
+    ],
+    "storage": "/private/tmp/kntnt-method-509-registration-correction-20261004/checks/16-partial-registration-red",
+    "native_sessions": 0,
+    "exit": 1,
+    "end_ns": 1791134651144045000
+  },
+  {
+    "label": "17-partial-registration-green",
+    "at": "2026-10-04T17:24:48.994484+00:00",
+    "start_ns": 1791134688994601000,
+    "argv": [
+      "uv",
+      "run",
+      "--no-project",
+      "--with",
+      "pytest",
+      "pytest",
+      "-q",
+      "tests/test_evaluation_registration.py",
+      "--basetemp=/private/tmp/kntnt-method-509-registration-correction-20261004/pytest-17",
+      "-p",
+      "no:cacheprovider"
+    ],
+    "cwd": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages",
+    "pid": 10179,
+    "pgid": 10179,
+    "birth": "Sun Oct  4 19:24:48 2026",
+    "registration_argv": [
+      "uv",
+      "run",
+      "/Users/thomas/.agents/skills/kntnt/features/session-cleanup/scripts/session_cleanup.py",
+      "add",
+      "pid",
+      "10179",
+      "509 registration correction focused check 17-partial-registration-green"
+    ],
+    "raw_registration": {
+      "manifest": "/private/tmp/kntnt-method-509-registration-correction-20261004/checks/17-partial-registration-green/lifecycle/.kntnt/session-cleanup/sessions/01a1063a-fbf0-7ea3-bfd6-c0ad52516ab4.jsonl",
+      "recorded": {
+        "at": "2026-10-04T17:24:48+00:00",
+        "id": "10179",
+        "kind": "pid",
+        "started": "Sun Oct  4 19:24:48 2026",
+        "why": "509 registration correction focused check 17-partial-registration-green"
+      },
+      "session": "01a1063a-fbf0-7ea3-bfd6-c0ad52516ab4"
+    },
+    "contemporary_after": "Sun Oct  4 19:24:48 2026",
+    "sources": [
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/docs/evaluation/harness/native_dispatch.py",
+        "bytes": 71271,
+        "sha256": "20e50d781aacc740f12881e697cd64e37e6daaf937938782d195da659563a6e7"
+      },
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_registration.py",
+        "bytes": 13305,
+        "sha256": "12ffe1cbcd47b1f4463932b9680325d197e94d528c551fe19117d08937a72260"
+      },
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py",
+        "bytes": 51518,
+        "sha256": "e8dc26609ffd44d0a73b6d4a2c02fef5088a87c74509b46be9f9d0732f138d68"
+      },
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_dispatch.py",
+        "bytes": 17262,
+        "sha256": "5eba0030b2ce783ee357eb8760c130df66a28b5824889dd7261e1ee3ed8af11f"
+      }
+    ],
+    "storage": "/private/tmp/kntnt-method-509-registration-correction-20261004/checks/17-partial-registration-green",
+    "native_sessions": 0,
+    "exit": 0,
+    "end_ns": 1791134689638849000
+  },
+  {
+    "label": "18-format-final",
+    "at": "2026-10-04T17:26:43.880798+00:00",
+    "start_ns": 1791134803880912000,
+    "argv": [
+      "uvx",
+      "ruff",
+      "format",
+      "docs/evaluation/harness/native_dispatch.py",
+      "tests/test_evaluation_registration.py",
+      "tests/test_evaluation_original_dispatch.py",
+      "tests/test_evaluation_dispatch.py"
+    ],
+    "cwd": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages",
+    "pid": 10778,
+    "pgid": 10778,
+    "birth": "Sun Oct  4 19:26:43 2026",
+    "registration_argv": [
+      "uv",
+      "run",
+      "/Users/thomas/.agents/skills/kntnt/features/session-cleanup/scripts/session_cleanup.py",
+      "add",
+      "pid",
+      "10778",
+      "509 registration correction focused check 18-format-final"
+    ],
+    "raw_registration": {
+      "manifest": "/private/tmp/kntnt-method-509-registration-correction-20261004/checks/18-format-final/lifecycle/.kntnt/session-cleanup/sessions/01a1063a-fbf0-7ea3-bfd6-c0ad52516ab4.jsonl",
+      "recorded": {
+        "at": "2026-10-04T17:26:43+00:00",
+        "id": "10778",
+        "kind": "pid",
+        "started": "Sun Oct  4 19:26:43 2026",
+        "why": "509 registration correction focused check 18-format-final"
+      },
+      "session": "01a1063a-fbf0-7ea3-bfd6-c0ad52516ab4"
+    },
+    "contemporary_after": "Sun Oct  4 19:26:43 2026",
+    "sources": [
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/docs/evaluation/harness/native_dispatch.py",
+        "bytes": 71271,
+        "sha256": "20e50d781aacc740f12881e697cd64e37e6daaf937938782d195da659563a6e7"
+      },
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_registration.py",
+        "bytes": 13305,
+        "sha256": "12ffe1cbcd47b1f4463932b9680325d197e94d528c551fe19117d08937a72260"
+      },
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py",
+        "bytes": 51518,
+        "sha256": "e8dc26609ffd44d0a73b6d4a2c02fef5088a87c74509b46be9f9d0732f138d68"
+      },
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_dispatch.py",
+        "bytes": 17262,
+        "sha256": "5eba0030b2ce783ee357eb8760c130df66a28b5824889dd7261e1ee3ed8af11f"
+      }
+    ],
+    "storage": "/private/tmp/kntnt-method-509-registration-correction-20261004/checks/18-format-final",
+    "native_sessions": 0,
+    "exit": 0,
+    "end_ns": 1791134803954580000
+  },
+  {
+    "label": "19-lint-final",
+    "at": "2026-10-04T17:26:44.283844+00:00",
+    "start_ns": 1791134804283966000,
+    "argv": [
+      "uvx",
+      "ruff",
+      "check",
+      "docs/evaluation/harness/native_dispatch.py",
+      "tests/test_evaluation_registration.py",
+      "tests/test_evaluation_original_dispatch.py",
+      "tests/test_evaluation_dispatch.py"
+    ],
+    "cwd": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages",
+    "pid": 10965,
+    "pgid": 10965,
+    "birth": "Sun Oct  4 19:26:43 2026",
+    "registration_argv": [
+      "uv",
+      "run",
+      "/Users/thomas/.agents/skills/kntnt/features/session-cleanup/scripts/session_cleanup.py",
+      "add",
+      "pid",
+      "10965",
+      "509 registration correction focused check 19-lint-final"
+    ],
+    "raw_registration": {
+      "manifest": "/private/tmp/kntnt-method-509-registration-correction-20261004/checks/19-lint-final/lifecycle/.kntnt/session-cleanup/sessions/01a1063a-fbf0-7ea3-bfd6-c0ad52516ab4.jsonl",
+      "recorded": {
+        "at": "2026-10-04T17:26:44+00:00",
+        "id": "10965",
+        "kind": "pid",
+        "started": "Sun Oct  4 19:26:43 2026",
+        "why": "509 registration correction focused check 19-lint-final"
+      },
+      "session": "01a1063a-fbf0-7ea3-bfd6-c0ad52516ab4"
+    },
+    "contemporary_after": "Sun Oct  4 19:26:43 2026",
+    "sources": [
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/docs/evaluation/harness/native_dispatch.py",
+        "bytes": 71319,
+        "sha256": "9d5d4aff6f4924b6e333c4411998700e1a4ba0a739dba32e5e138f4c8aa91aeb"
+      },
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_registration.py",
+        "bytes": 13361,
+        "sha256": "b3779eef74cbc1cc119bd3c32d25cd89277d1d6eb784e0d50e16a6c56a2526db"
+      },
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py",
+        "bytes": 51518,
+        "sha256": "e8dc26609ffd44d0a73b6d4a2c02fef5088a87c74509b46be9f9d0732f138d68"
+      },
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_dispatch.py",
+        "bytes": 17262,
+        "sha256": "5eba0030b2ce783ee357eb8760c130df66a28b5824889dd7261e1ee3ed8af11f"
+      }
+    ],
+    "storage": "/private/tmp/kntnt-method-509-registration-correction-20261004/checks/19-lint-final",
+    "native_sessions": 0,
+    "exit": 0,
+    "end_ns": 1791134804313342000
+  },
+  {
+    "label": "20-type-check",
+    "at": "2026-10-04T17:26:44.634237+00:00",
+    "start_ns": 1791134804634347000,
+    "argv": [
+      "uvx",
+      "--with",
+      "pytest",
+      "mypy",
+      "docs/evaluation/harness/native_dispatch.py",
+      "tests/test_evaluation_registration.py",
+      "tests/test_evaluation_original_dispatch.py",
+      "tests/test_evaluation_dispatch.py"
+    ],
+    "cwd": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages",
+    "pid": 11157,
+    "pgid": 11157,
+    "birth": "Sun Oct  4 19:26:44 2026",
+    "registration_argv": [
+      "uv",
+      "run",
+      "/Users/thomas/.agents/skills/kntnt/features/session-cleanup/scripts/session_cleanup.py",
+      "add",
+      "pid",
+      "11157",
+      "509 registration correction focused check 20-type-check"
+    ],
+    "raw_registration": {
+      "manifest": "/private/tmp/kntnt-method-509-registration-correction-20261004/checks/20-type-check/lifecycle/.kntnt/session-cleanup/sessions/01a1063a-fbf0-7ea3-bfd6-c0ad52516ab4.jsonl",
+      "recorded": {
+        "at": "2026-10-04T17:26:44+00:00",
+        "id": "11157",
+        "kind": "pid",
+        "started": "Sun Oct  4 19:26:44 2026",
+        "why": "509 registration correction focused check 20-type-check"
+      },
+      "session": "01a1063a-fbf0-7ea3-bfd6-c0ad52516ab4"
+    },
+    "contemporary_after": "Sun Oct  4 19:26:44 2026",
+    "sources": [
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/docs/evaluation/harness/native_dispatch.py",
+        "bytes": 71319,
+        "sha256": "9d5d4aff6f4924b6e333c4411998700e1a4ba0a739dba32e5e138f4c8aa91aeb"
+      },
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_registration.py",
+        "bytes": 13361,
+        "sha256": "b3779eef74cbc1cc119bd3c32d25cd89277d1d6eb784e0d50e16a6c56a2526db"
+      },
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py",
+        "bytes": 51518,
+        "sha256": "e8dc26609ffd44d0a73b6d4a2c02fef5088a87c74509b46be9f9d0732f138d68"
+      },
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_dispatch.py",
+        "bytes": 17262,
+        "sha256": "5eba0030b2ce783ee357eb8760c130df66a28b5824889dd7261e1ee3ed8af11f"
+      }
+    ],
+    "storage": "/private/tmp/kntnt-method-509-registration-correction-20261004/checks/20-type-check",
+    "native_sessions": 0,
+    "exit": 0,
+    "end_ns": 1791134807475977000
+  },
+  {
+    "label": "21-format-check-final",
+    "at": "2026-10-04T17:27:07.853308+00:00",
+    "start_ns": 1791134827853417000,
+    "argv": [
+      "uvx",
+      "ruff",
+      "format",
+      "--check",
+      "docs/evaluation/harness/native_dispatch.py",
+      "tests/test_evaluation_registration.py",
+      "tests/test_evaluation_original_dispatch.py",
+      "tests/test_evaluation_dispatch.py"
+    ],
+    "cwd": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages",
+    "pid": 11504,
+    "pgid": 11504,
+    "birth": "Sun Oct  4 19:27:07 2026",
+    "registration_argv": [
+      "uv",
+      "run",
+      "/Users/thomas/.agents/skills/kntnt/features/session-cleanup/scripts/session_cleanup.py",
+      "add",
+      "pid",
+      "11504",
+      "509 registration correction focused check 21-format-check-final"
+    ],
+    "raw_registration": {
+      "manifest": "/private/tmp/kntnt-method-509-registration-correction-20261004/checks/21-format-check-final/lifecycle/.kntnt/session-cleanup/sessions/01a1063a-fbf0-7ea3-bfd6-c0ad52516ab4.jsonl",
+      "recorded": {
+        "at": "2026-10-04T17:27:07+00:00",
+        "id": "11504",
+        "kind": "pid",
+        "started": "Sun Oct  4 19:27:07 2026",
+        "why": "509 registration correction focused check 21-format-check-final"
+      },
+      "session": "01a1063a-fbf0-7ea3-bfd6-c0ad52516ab4"
+    },
+    "contemporary_after": "Sun Oct  4 19:27:07 2026",
+    "sources": [
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/docs/evaluation/harness/native_dispatch.py",
+        "bytes": 71319,
+        "sha256": "9d5d4aff6f4924b6e333c4411998700e1a4ba0a739dba32e5e138f4c8aa91aeb"
+      },
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_registration.py",
+        "bytes": 13361,
+        "sha256": "b3779eef74cbc1cc119bd3c32d25cd89277d1d6eb784e0d50e16a6c56a2526db"
+      },
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py",
+        "bytes": 51518,
+        "sha256": "e8dc26609ffd44d0a73b6d4a2c02fef5088a87c74509b46be9f9d0732f138d68"
+      },
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_dispatch.py",
+        "bytes": 17262,
+        "sha256": "5eba0030b2ce783ee357eb8760c130df66a28b5824889dd7261e1ee3ed8af11f"
+      }
+    ],
+    "storage": "/private/tmp/kntnt-method-509-registration-correction-20261004/checks/21-format-check-final",
+    "native_sessions": 0,
+    "exit": 0,
+    "end_ns": 1791134827877717000
+  },
+  {
+    "label": "22-focused-final",
+    "at": "2026-10-04T17:27:08.150999+00:00",
+    "start_ns": 1791134828151126000,
+    "argv": [
+      "uv",
+      "run",
+      "--no-project",
+      "--with",
+      "pytest",
+      "pytest",
+      "-q",
+      "tests/test_evaluation_registration.py",
+      "tests/test_evaluation_original_dispatch.py",
+      "tests/test_evaluation_dispatch.py",
+      "--basetemp=/private/tmp/kntnt-method-509-registration-correction-20261004/pytest-22",
+      "-p",
+      "no:cacheprovider"
+    ],
+    "cwd": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages",
+    "pid": 11631,
+    "pgid": 11631,
+    "birth": "Sun Oct  4 19:27:07 2026",
+    "registration_argv": [
+      "uv",
+      "run",
+      "/Users/thomas/.agents/skills/kntnt/features/session-cleanup/scripts/session_cleanup.py",
+      "add",
+      "pid",
+      "11631",
+      "509 registration correction focused check 22-focused-final"
+    ],
+    "raw_registration": {
+      "manifest": "/private/tmp/kntnt-method-509-registration-correction-20261004/checks/22-focused-final/lifecycle/.kntnt/session-cleanup/sessions/01a1063a-fbf0-7ea3-bfd6-c0ad52516ab4.jsonl",
+      "recorded": {
+        "at": "2026-10-04T17:27:08+00:00",
+        "id": "11631",
+        "kind": "pid",
+        "started": "Sun Oct  4 19:27:07 2026",
+        "why": "509 registration correction focused check 22-focused-final"
+      },
+      "session": "01a1063a-fbf0-7ea3-bfd6-c0ad52516ab4"
+    },
+    "contemporary_after": "Sun Oct  4 19:27:07 2026",
+    "sources": [
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/docs/evaluation/harness/native_dispatch.py",
+        "bytes": 71319,
+        "sha256": "9d5d4aff6f4924b6e333c4411998700e1a4ba0a739dba32e5e138f4c8aa91aeb"
+      },
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_registration.py",
+        "bytes": 13361,
+        "sha256": "b3779eef74cbc1cc119bd3c32d25cd89277d1d6eb784e0d50e16a6c56a2526db"
+      },
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py",
+        "bytes": 51518,
+        "sha256": "e8dc26609ffd44d0a73b6d4a2c02fef5088a87c74509b46be9f9d0732f138d68"
+      },
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_dispatch.py",
+        "bytes": 17262,
+        "sha256": "5eba0030b2ce783ee357eb8760c130df66a28b5824889dd7261e1ee3ed8af11f"
+      }
+    ],
+    "storage": "/private/tmp/kntnt-method-509-registration-correction-20261004/checks/22-focused-final",
+    "native_sessions": 0,
+    "exit": 0,
+    "end_ns": 1791134833175046000
+  },
+  {
+    "label": "23-readiness-format",
+    "at": "2026-10-04T17:34:15.921177+00:00",
+    "start_ns": 1791135255921289000,
+    "argv": [
+      "uvx",
+      "ruff",
+      "format",
+      "tests/test_evaluation_dispatch.py"
+    ],
+    "cwd": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages",
+    "pid": 13149,
+    "pgid": 13149,
+    "birth": "Sun Oct  4 19:34:15 2026",
+    "registration_argv": [
+      "uv",
+      "run",
+      "/Users/thomas/.agents/skills/kntnt/features/session-cleanup/scripts/session_cleanup.py",
+      "add",
+      "pid",
+      "13149",
+      "509 registration correction focused check 23-readiness-format"
+    ],
+    "raw_registration": {
+      "manifest": "/private/tmp/kntnt-method-509-registration-correction-20261004/checks/23-readiness-format/lifecycle/.kntnt/session-cleanup/sessions/01a1063a-fbf0-7ea3-bfd6-c0ad52516ab4.jsonl",
+      "recorded": {
+        "at": "2026-10-04T17:34:15+00:00",
+        "id": "13149",
+        "kind": "pid",
+        "started": "Sun Oct  4 19:34:15 2026",
+        "why": "509 registration correction focused check 23-readiness-format"
+      },
+      "session": "01a1063a-fbf0-7ea3-bfd6-c0ad52516ab4"
+    },
+    "contemporary_after": "Sun Oct  4 19:34:15 2026",
+    "sources": [
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/docs/evaluation/harness/native_dispatch.py",
+        "bytes": 71319,
+        "sha256": "9d5d4aff6f4924b6e333c4411998700e1a4ba0a739dba32e5e138f4c8aa91aeb"
+      },
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_registration.py",
+        "bytes": 13361,
+        "sha256": "b3779eef74cbc1cc119bd3c32d25cd89277d1d6eb784e0d50e16a6c56a2526db"
+      },
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py",
+        "bytes": 51518,
+        "sha256": "e8dc26609ffd44d0a73b6d4a2c02fef5088a87c74509b46be9f9d0732f138d68"
+      },
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_dispatch.py",
+        "bytes": 17770,
+        "sha256": "f70d9d5512d12fd3b7ac4aabd5a901bd05b86802cc6e1674c687b9169c78156b"
+      }
+    ],
+    "storage": "/private/tmp/kntnt-method-509-registration-correction-20261004/checks/23-readiness-format",
+    "native_sessions": 0,
+    "exit": 0,
+    "end_ns": 1791135256089548000
+  },
+  {
+    "label": "24-readiness-focus",
+    "at": "2026-10-04T17:34:16.224245+00:00",
+    "start_ns": 1791135256224346000,
+    "argv": [
+      "uv",
+      "run",
+      "--no-project",
+      "--with",
+      "pytest",
+      "pytest",
+      "-q",
+      "tests/test_evaluation_registration.py",
+      "tests/test_evaluation_original_dispatch.py",
+      "tests/test_evaluation_dispatch.py",
+      "--basetemp=/private/tmp/kntnt-method-509-registration-correction-20261004/pytest-24",
+      "-p",
+      "no:cacheprovider"
+    ],
+    "cwd": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages",
+    "pid": 13031,
+    "pgid": 13031,
+    "birth": "Sun Oct  4 19:34:15 2026",
+    "registration_argv": [
+      "uv",
+      "run",
+      "/Users/thomas/.agents/skills/kntnt/features/session-cleanup/scripts/session_cleanup.py",
+      "add",
+      "pid",
+      "13031",
+      "509 registration correction focused check 24-readiness-focus"
+    ],
+    "raw_registration": {
+      "manifest": "/private/tmp/kntnt-method-509-registration-correction-20261004/checks/24-readiness-focus/lifecycle/.kntnt/session-cleanup/sessions/01a1063a-fbf0-7ea3-bfd6-c0ad52516ab4.jsonl",
+      "recorded": {
+        "at": "2026-10-04T17:34:16+00:00",
+        "id": "13031",
+        "kind": "pid",
+        "started": "Sun Oct  4 19:34:15 2026",
+        "why": "509 registration correction focused check 24-readiness-focus"
+      },
+      "session": "01a1063a-fbf0-7ea3-bfd6-c0ad52516ab4"
+    },
+    "contemporary_after": "Sun Oct  4 19:34:15 2026",
+    "sources": [
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/docs/evaluation/harness/native_dispatch.py",
+        "bytes": 71319,
+        "sha256": "9d5d4aff6f4924b6e333c4411998700e1a4ba0a739dba32e5e138f4c8aa91aeb"
+      },
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_registration.py",
+        "bytes": 13361,
+        "sha256": "b3779eef74cbc1cc119bd3c32d25cd89277d1d6eb784e0d50e16a6c56a2526db"
+      },
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py",
+        "bytes": 51518,
+        "sha256": "e8dc26609ffd44d0a73b6d4a2c02fef5088a87c74509b46be9f9d0732f138d68"
+      },
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_dispatch.py",
+        "bytes": 17864,
+        "sha256": "bd5f8295a1096b5a4d7f68a1c841fa6a35af755b9d92062940cef750baa99dd2"
+      }
+    ],
+    "storage": "/private/tmp/kntnt-method-509-registration-correction-20261004/checks/24-readiness-focus",
+    "native_sessions": 0,
+    "exit": 0,
+    "end_ns": 1791135262081865000
+  },
+  {
+    "label": "25-final-format",
+    "at": "2026-10-04T17:39:00.580977+00:00",
+    "start_ns": 1791135540581100000,
+    "argv": [
+      "uvx",
+      "ruff",
+      "format",
+      "tests/test_evaluation_registration.py"
+    ],
+    "cwd": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages",
+    "pid": 39729,
+    "pgid": 39729,
+    "birth": "Sun Oct  4 19:39:00 2026",
+    "registration_argv": [
+      "uv",
+      "run",
+      "/Users/thomas/.agents/skills/kntnt/features/session-cleanup/scripts/session_cleanup.py",
+      "add",
+      "pid",
+      "39729",
+      "509 registration correction focused check 25-final-format"
+    ],
+    "raw_registration": {
+      "manifest": "/private/tmp/kntnt-method-509-registration-correction-20261004/checks/25-final-format/lifecycle/.kntnt/session-cleanup/sessions/01a1063a-fbf0-7ea3-bfd6-c0ad52516ab4.jsonl",
+      "recorded": {
+        "at": "2026-10-04T17:39:00+00:00",
+        "id": "39729",
+        "kind": "pid",
+        "started": "Sun Oct  4 19:39:00 2026",
+        "why": "509 registration correction focused check 25-final-format"
+      },
+      "session": "01a1063a-fbf0-7ea3-bfd6-c0ad52516ab4"
+    },
+    "contemporary_after": "Sun Oct  4 19:39:00 2026",
+    "sources": [
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/docs/evaluation/harness/native_dispatch.py",
+        "bytes": 71319,
+        "sha256": "9d5d4aff6f4924b6e333c4411998700e1a4ba0a739dba32e5e138f4c8aa91aeb"
+      },
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_registration.py",
+        "bytes": 14459,
+        "sha256": "08d99da07d8b273f583189297f9be2206a939aa42747b2dda191b524bcb45534"
+      },
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py",
+        "bytes": 51518,
+        "sha256": "e8dc26609ffd44d0a73b6d4a2c02fef5088a87c74509b46be9f9d0732f138d68"
+      },
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_dispatch.py",
+        "bytes": 17864,
+        "sha256": "bd5f8295a1096b5a4d7f68a1c841fa6a35af755b9d92062940cef750baa99dd2"
+      }
+    ],
+    "storage": "/private/tmp/kntnt-method-509-registration-correction-20261004/checks/25-final-format",
+    "native_sessions": 0,
+    "exit": 0,
+    "end_ns": 1791135540658722000
+  },
+  {
+    "label": "26-final-focus",
+    "at": "2026-10-04T17:39:00.793059+00:00",
+    "start_ns": 1791135540793175000,
+    "argv": [
+      "uv",
+      "run",
+      "--no-project",
+      "--with",
+      "pytest",
+      "pytest",
+      "-q",
+      "tests/test_evaluation_registration.py",
+      "tests/test_evaluation_original_dispatch.py",
+      "tests/test_evaluation_dispatch.py",
+      "--basetemp=/private/tmp/kntnt-method-509-registration-correction-20261004/pytest-26",
+      "-p",
+      "no:cacheprovider"
+    ],
+    "cwd": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages",
+    "pid": 39614,
+    "pgid": 39614,
+    "birth": "Sun Oct  4 19:39:00 2026",
+    "registration_argv": [
+      "uv",
+      "run",
+      "/Users/thomas/.agents/skills/kntnt/features/session-cleanup/scripts/session_cleanup.py",
+      "add",
+      "pid",
+      "39614",
+      "509 registration correction focused check 26-final-focus"
+    ],
+    "raw_registration": {
+      "manifest": "/private/tmp/kntnt-method-509-registration-correction-20261004/checks/26-final-focus/lifecycle/.kntnt/session-cleanup/sessions/01a1063a-fbf0-7ea3-bfd6-c0ad52516ab4.jsonl",
+      "recorded": {
+        "at": "2026-10-04T17:39:00+00:00",
+        "id": "39614",
+        "kind": "pid",
+        "started": "Sun Oct  4 19:39:00 2026",
+        "why": "509 registration correction focused check 26-final-focus"
+      },
+      "session": "01a1063a-fbf0-7ea3-bfd6-c0ad52516ab4"
+    },
+    "contemporary_after": "Sun Oct  4 19:39:00 2026",
+    "sources": [
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/docs/evaluation/harness/native_dispatch.py",
+        "bytes": 71319,
+        "sha256": "9d5d4aff6f4924b6e333c4411998700e1a4ba0a739dba32e5e138f4c8aa91aeb"
+      },
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_registration.py",
+        "bytes": 14495,
+        "sha256": "b91e889180ec78c3e5cdf430627ead0ab95fa17acfcc06ae5a0d98c443245957"
+      },
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py",
+        "bytes": 51518,
+        "sha256": "e8dc26609ffd44d0a73b6d4a2c02fef5088a87c74509b46be9f9d0732f138d68"
+      },
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_dispatch.py",
+        "bytes": 17864,
+        "sha256": "bd5f8295a1096b5a4d7f68a1c841fa6a35af755b9d92062940cef750baa99dd2"
+      }
+    ],
+    "storage": "/private/tmp/kntnt-method-509-registration-correction-20261004/checks/26-final-focus",
+    "native_sessions": 0,
+    "exit": 0,
+    "end_ns": 1791135546361130000
+  },
+  {
+    "label": "27-final-lint",
+    "at": "2026-10-04T17:41:32.871588+00:00",
+    "start_ns": 1791135692871731000,
+    "argv": [
+      "uvx",
+      "ruff",
+      "check",
+      "docs/evaluation/harness/native_dispatch.py",
+      "tests/test_evaluation_registration.py",
+      "tests/test_evaluation_original_dispatch.py",
+      "tests/test_evaluation_dispatch.py"
+    ],
+    "cwd": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages",
+    "pid": 55687,
+    "pgid": 55687,
+    "birth": "Sun Oct  4 19:41:32 2026",
+    "registration_argv": [
+      "uv",
+      "run",
+      "/Users/thomas/.agents/skills/kntnt/features/session-cleanup/scripts/session_cleanup.py",
+      "add",
+      "pid",
+      "55687",
+      "509 registration correction focused check 27-final-lint"
+    ],
+    "raw_registration": {
+      "manifest": "/private/tmp/kntnt-method-509-registration-correction-20261004/checks/27-final-lint/lifecycle/.kntnt/session-cleanup/sessions/01a1063a-fbf0-7ea3-bfd6-c0ad52516ab4.jsonl",
+      "recorded": {
+        "at": "2026-10-04T17:41:32+00:00",
+        "id": "55687",
+        "kind": "pid",
+        "started": "Sun Oct  4 19:41:32 2026",
+        "why": "509 registration correction focused check 27-final-lint"
+      },
+      "session": "01a1063a-fbf0-7ea3-bfd6-c0ad52516ab4"
+    },
+    "contemporary_after": "Sun Oct  4 19:41:32 2026",
+    "sources": [
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/docs/evaluation/harness/native_dispatch.py",
+        "bytes": 71319,
+        "sha256": "9d5d4aff6f4924b6e333c4411998700e1a4ba0a739dba32e5e138f4c8aa91aeb"
+      },
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_registration.py",
+        "bytes": 14495,
+        "sha256": "b91e889180ec78c3e5cdf430627ead0ab95fa17acfcc06ae5a0d98c443245957"
+      },
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py",
+        "bytes": 51518,
+        "sha256": "e8dc26609ffd44d0a73b6d4a2c02fef5088a87c74509b46be9f9d0732f138d68"
+      },
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_dispatch.py",
+        "bytes": 17864,
+        "sha256": "bd5f8295a1096b5a4d7f68a1c841fa6a35af755b9d92062940cef750baa99dd2"
+      }
+    ],
+    "storage": "/private/tmp/kntnt-method-509-registration-correction-20261004/checks/27-final-lint",
+    "native_sessions": 0,
+    "exit": 0,
+    "end_ns": 1791135692942444000
+  },
+  {
+    "label": "28-final-types",
+    "at": "2026-10-04T17:41:33.289346+00:00",
+    "start_ns": 1791135693289510000,
+    "argv": [
+      "uvx",
+      "--with",
+      "pytest",
+      "mypy",
+      "docs/evaluation/harness/native_dispatch.py",
+      "tests/test_evaluation_registration.py",
+      "tests/test_evaluation_original_dispatch.py",
+      "tests/test_evaluation_dispatch.py"
+    ],
+    "cwd": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages",
+    "pid": 56027,
+    "pgid": 56027,
+    "birth": "Sun Oct  4 19:41:32 2026",
+    "registration_argv": [
+      "uv",
+      "run",
+      "/Users/thomas/.agents/skills/kntnt/features/session-cleanup/scripts/session_cleanup.py",
+      "add",
+      "pid",
+      "56027",
+      "509 registration correction focused check 28-final-types"
+    ],
+    "raw_registration": {
+      "manifest": "/private/tmp/kntnt-method-509-registration-correction-20261004/checks/28-final-types/lifecycle/.kntnt/session-cleanup/sessions/01a1063a-fbf0-7ea3-bfd6-c0ad52516ab4.jsonl",
+      "recorded": {
+        "at": "2026-10-04T17:41:33+00:00",
+        "id": "56027",
+        "kind": "pid",
+        "started": "Sun Oct  4 19:41:32 2026",
+        "why": "509 registration correction focused check 28-final-types"
+      },
+      "session": "01a1063a-fbf0-7ea3-bfd6-c0ad52516ab4"
+    },
+    "contemporary_after": "Sun Oct  4 19:41:32 2026",
+    "sources": [
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/docs/evaluation/harness/native_dispatch.py",
+        "bytes": 71319,
+        "sha256": "9d5d4aff6f4924b6e333c4411998700e1a4ba0a739dba32e5e138f4c8aa91aeb"
+      },
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_registration.py",
+        "bytes": 14495,
+        "sha256": "b91e889180ec78c3e5cdf430627ead0ab95fa17acfcc06ae5a0d98c443245957"
+      },
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py",
+        "bytes": 51518,
+        "sha256": "e8dc26609ffd44d0a73b6d4a2c02fef5088a87c74509b46be9f9d0732f138d68"
+      },
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_dispatch.py",
+        "bytes": 17864,
+        "sha256": "bd5f8295a1096b5a4d7f68a1c841fa6a35af755b9d92062940cef750baa99dd2"
+      }
+    ],
+    "storage": "/private/tmp/kntnt-method-509-registration-correction-20261004/checks/28-final-types",
+    "native_sessions": 0,
+    "exit": 0,
+    "end_ns": 1791135693700616000
+  },
+  {
+    "label": "29-final-format-check",
+    "at": "2026-10-04T17:41:34.043028+00:00",
+    "start_ns": 1791135694043155000,
+    "argv": [
+      "uvx",
+      "ruff",
+      "format",
+      "--check",
+      "docs/evaluation/harness/native_dispatch.py",
+      "tests/test_evaluation_registration.py",
+      "tests/test_evaluation_original_dispatch.py",
+      "tests/test_evaluation_dispatch.py"
+    ],
+    "cwd": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages",
+    "pid": 56442,
+    "pgid": 56442,
+    "birth": "Sun Oct  4 19:41:33 2026",
+    "registration_argv": [
+      "uv",
+      "run",
+      "/Users/thomas/.agents/skills/kntnt/features/session-cleanup/scripts/session_cleanup.py",
+      "add",
+      "pid",
+      "56442",
+      "509 registration correction focused check 29-final-format-check"
+    ],
+    "raw_registration": {
+      "manifest": "/private/tmp/kntnt-method-509-registration-correction-20261004/checks/29-final-format-check/lifecycle/.kntnt/session-cleanup/sessions/01a1063a-fbf0-7ea3-bfd6-c0ad52516ab4.jsonl",
+      "recorded": {
+        "at": "2026-10-04T17:41:33+00:00",
+        "id": "56442",
+        "kind": "pid",
+        "started": "Sun Oct  4 19:41:33 2026",
+        "why": "509 registration correction focused check 29-final-format-check"
+      },
+      "session": "01a1063a-fbf0-7ea3-bfd6-c0ad52516ab4"
+    },
+    "contemporary_after": "Sun Oct  4 19:41:33 2026",
+    "sources": [
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/docs/evaluation/harness/native_dispatch.py",
+        "bytes": 71319,
+        "sha256": "9d5d4aff6f4924b6e333c4411998700e1a4ba0a739dba32e5e138f4c8aa91aeb"
+      },
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_registration.py",
+        "bytes": 14495,
+        "sha256": "b91e889180ec78c3e5cdf430627ead0ab95fa17acfcc06ae5a0d98c443245957"
+      },
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py",
+        "bytes": 51518,
+        "sha256": "e8dc26609ffd44d0a73b6d4a2c02fef5088a87c74509b46be9f9d0732f138d68"
+      },
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_dispatch.py",
+        "bytes": 17864,
+        "sha256": "bd5f8295a1096b5a4d7f68a1c841fa6a35af755b9d92062940cef750baa99dd2"
+      }
+    ],
+    "storage": "/private/tmp/kntnt-method-509-registration-correction-20261004/checks/29-final-format-check",
+    "native_sessions": 0,
+    "exit": 0,
+    "end_ns": 1791135694070383000
+  },
+  {
+    "label": "30-preservation",
+    "at": "2026-10-04T17:45:35.123333+00:00",
+    "start_ns": 1791135935123431000,
+    "argv": [
+      "python3",
+      "/Users/thomas/.kntnt/editorial-repair/2026-10-04/method-509/builder/registration-correction/author/scripts/verify_preservation.py"
+    ],
+    "cwd": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages",
+    "pid": 65913,
+    "pgid": 65913,
+    "birth": "Sun Oct  4 19:45:34 2026",
+    "registration_argv": [
+      "uv",
+      "run",
+      "/Users/thomas/.agents/skills/kntnt/features/session-cleanup/scripts/session_cleanup.py",
+      "add",
+      "pid",
+      "65913",
+      "509 registration correction focused check 30-preservation"
+    ],
+    "raw_registration": {
+      "manifest": "/private/tmp/kntnt-method-509-registration-correction-20261004/checks/30-preservation/lifecycle/.kntnt/session-cleanup/sessions/01a1063a-fbf0-7ea3-bfd6-c0ad52516ab4.jsonl",
+      "recorded": {
+        "at": "2026-10-04T17:45:35+00:00",
+        "id": "65913",
+        "kind": "pid",
+        "started": "Sun Oct  4 19:45:34 2026",
+        "why": "509 registration correction focused check 30-preservation"
+      },
+      "session": "01a1063a-fbf0-7ea3-bfd6-c0ad52516ab4"
+    },
+    "contemporary_after": "Sun Oct  4 19:45:34 2026",
+    "sources": [
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/docs/evaluation/harness/native_dispatch.py",
+        "bytes": 71319,
+        "sha256": "9d5d4aff6f4924b6e333c4411998700e1a4ba0a739dba32e5e138f4c8aa91aeb"
+      },
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_registration.py",
+        "bytes": 14495,
+        "sha256": "b91e889180ec78c3e5cdf430627ead0ab95fa17acfcc06ae5a0d98c443245957"
+      },
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py",
+        "bytes": 51518,
+        "sha256": "e8dc26609ffd44d0a73b6d4a2c02fef5088a87c74509b46be9f9d0732f138d68"
+      },
+      {
+        "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_dispatch.py",
+        "bytes": 17864,
+        "sha256": "bd5f8295a1096b5a4d7f68a1c841fa6a35af755b9d92062940cef750baa99dd2"
+      }
+    ],
+    "storage": "/private/tmp/kntnt-method-509-registration-correction-20261004/checks/30-preservation",
+    "native_sessions": 0,
+    "exit": 0,
+    "end_ns": 1791135936693208000
+  }
+]

@@ -1,0 +1,69 @@
+{
+  "label": "05-first-home-red",
+  "at": "2026-10-04T17:16:47.059377+00:00",
+  "start_ns": 1791134207059512000,
+  "argv": [
+    "uv",
+    "run",
+    "--no-project",
+    "--with",
+    "pytest",
+    "pytest",
+    "-q",
+    "tests/test_evaluation_registration.py",
+    "-k",
+    "first_registration",
+    "--basetemp=/private/tmp/kntnt-method-509-registration-correction-20261004/pytest-05",
+    "-p",
+    "no:cacheprovider"
+  ],
+  "cwd": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages",
+  "pid": 7814,
+  "pgid": 7814,
+  "birth": "Sun Oct  4 19:16:46 2026",
+  "registration_argv": [
+    "uv",
+    "run",
+    "/Users/thomas/.agents/skills/kntnt/features/session-cleanup/scripts/session_cleanup.py",
+    "add",
+    "pid",
+    "7814",
+    "509 registration correction focused check 05-first-home-red"
+  ],
+  "raw_registration": {
+    "manifest": "/private/tmp/kntnt-method-509-registration-correction-20261004/checks/05-first-home-red/lifecycle/.kntnt/session-cleanup/sessions/01a1063a-fbf0-7ea3-bfd6-c0ad52516ab4.jsonl",
+    "recorded": {
+      "at": "2026-10-04T17:16:46+00:00",
+      "id": "7814",
+      "kind": "pid",
+      "started": "Sun Oct  4 19:16:46 2026",
+      "why": "509 registration correction focused check 05-first-home-red"
+    },
+    "session": "01a1063a-fbf0-7ea3-bfd6-c0ad52516ab4"
+  },
+  "contemporary_after": "Sun Oct  4 19:16:46 2026",
+  "sources": [
+    {
+      "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/docs/evaluation/harness/native_dispatch.py",
+      "bytes": 70283,
+      "sha256": "c5aa556075038841e1c195eff4054ea2f33c7e360e69405716f287a4e27140c7"
+    },
+    {
+      "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_registration.py",
+      "bytes": 7416,
+      "sha256": "67168c1dfba1d194de92a79a46d1b41f94ac4c92b965e71f220a803da6797780"
+    },
+    {
+      "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py",
+      "bytes": 51432,
+      "sha256": "bcaeda4c026eb12e1df9cab6be912228810b039dfcbbf8bcba7fcbe5c8c34ef0"
+    },
+    {
+      "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_dispatch.py",
+      "bytes": 16172,
+      "sha256": "741e9fd186f10a2a747f0164486f1af6520fc62113635c55a88fafacd6cce83e"
+    }
+  ],
+  "storage": "/private/tmp/kntnt-method-509-registration-correction-20261004/checks/05-first-home-red",
+  "native_sessions": 0
+}

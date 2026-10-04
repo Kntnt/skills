@@ -1,0 +1,154 @@
+{
+  "prior_plan_sha256": "a9268904bf6f42921159ff9ef6bc29be8eef0d61d884018ace74b943d905cf7c",
+  "new_plan_sha256": "32957a9a5309293980ac929d7f99c5187c505253993117f6d9977831adf56adb",
+  "old_and_new_root_length": 62,
+  "opaque_long_input_bytes": 3224,
+  "opaque_long_input_sha256": "6c233195fa9471942d359b080926565877302943a8dbc5081e77a6815305e8e8",
+  "opaque_payloads_unchanged": true,
+  "full_prompt_digests_changed_are_explicit": true,
+  "artifacts": [
+    {
+      "path": "direct-compaction.txt",
+      "old": {
+        "path": "direct-compaction.txt",
+        "bytes": 1260,
+        "sha256": "9c9dc95a682098c16daf2dc8ac1c527f65fd0bfbc385ac363080feea985112e1"
+      },
+      "new": {
+        "bytes": 1260,
+        "sha256": "5bb93d4fc8f50cd08dad1555ba7ca8fd4ef2640bea012e6bee1aee4dd1d3eba0"
+      },
+      "byte_unchanged": false
+    },
+    {
+      "path": "direct-long-input.txt",
+      "old": {
+        "path": "direct-long-input.txt",
+        "bytes": 4191,
+        "sha256": "4ee6ea10e10df8ae7b60fedeac6891c0a96ba0a8820152691d3c70761bbd1407"
+      },
+      "new": {
+        "bytes": 4191,
+        "sha256": "82e12bfd2ce7472dad73409be32825d99e12af08fb288ff71b498644c6f12dba"
+      },
+      "byte_unchanged": false
+    },
+    {
+      "path": "direct-long.txt",
+      "old": {
+        "path": "direct-long.txt",
+        "bytes": 931,
+        "sha256": "26e1fb8a93fc84467da749eebaae9f0c76e72a3ea9094353bafcb936cf12c158"
+      },
+      "new": {
+        "bytes": 931,
+        "sha256": "973da4659cc0c1a22ba2f4a41342fc14cac6a93c5aef2f0229261b8cbd489d8c"
+      },
+      "byte_unchanged": false
+    },
+    {
+      "path": "direct-short.txt",
+      "old": {
+        "path": "direct-short.txt",
+        "bytes": 933,
+        "sha256": "2a6e02e1f30d09ab4598e92e9357ebb4acc01bcba55e3cb05a47a49cb0dc66aa"
+      },
+      "new": {
+        "bytes": 933,
+        "sha256": "336d29dc8ac7ede30cbfcff29b7711cabf516132f2b59db8e51ba76bff2fa437"
+      },
+      "byte_unchanged": false
+    },
+    {
+      "path": "expected-compaction.txt",
+      "old": {
+        "path": "expected-compaction.txt",
+        "bytes": 41,
+        "sha256": "6119fff102c2b2d52b333f6178df34ce04da3cff0f75bd6bda802ca780f98e73"
+      },
+      "new": {
+        "bytes": 41,
+        "sha256": "6119fff102c2b2d52b333f6178df34ce04da3cff0f75bd6bda802ca780f98e73"
+      },
+      "byte_unchanged": true
+    },
+    {
+      "path": "expected-long.txt",
+      "old": {
+        "path": "expected-long.txt",
+        "bytes": 50561,
+        "sha256": "35e5a0adf4ca44fcbd3b555a1c73abbf6bd8038c46eee174e58a7c010a5eef52"
+      },
+      "new": {
+        "bytes": 50561,
+        "sha256": "35e5a0adf4ca44fcbd3b555a1c73abbf6bd8038c46eee174e58a7c010a5eef52"
+      },
+      "byte_unchanged": true
+    },
+    {
+      "path": "expected-short.txt",
+      "old": {
+        "path": "expected-short.txt",
+        "bytes": 18,
+        "sha256": "9be4ea606281bfafdb4c77752b02eb5f015e9ab4531efabb1c0601e083defd47"
+      },
+      "new": {
+        "bytes": 18,
+        "sha256": "9be4ea606281bfafdb4c77752b02eb5f015e9ab4531efabb1c0601e083defd47"
+      },
+      "byte_unchanged": true
+    },
+    {
+      "path": "parent-long-consume.json",
+      "old": {
+        "path": "parent-long-consume.json",
+        "bytes": 12267,
+        "sha256": "09bee7defde3437a09294925687b0265596f2fc8ea48dadb9243a89d1930c685"
+      },
+      "new": {
+        "bytes": 11897,
+        "sha256": "dc70ad14951c331ac2989070f52faf8f3cceaaec1f30921d66096605143b41e0"
+      },
+      "byte_unchanged": false
+    },
+    {
+      "path": "parent-long.txt",
+      "old": {
+        "path": "parent-long.txt",
+        "bytes": 7347,
+        "sha256": "c16b5db3c4943fe29a2369c1d394a4a466085b94357a2ce8c76c56a2e996a8cd"
+      },
+      "new": {
+        "bytes": 5345,
+        "sha256": "c811387a501c47478f923ff7f31d22fc08a8ea5821e867dc566ccdc0351debd7"
+      },
+      "byte_unchanged": false
+    },
+    {
+      "path": "parent-short-consume.json",
+      "old": {
+        "path": "parent-short-consume.json",
+        "bytes": 12312,
+        "sha256": "bb82dcda048ffc523d35b5c0438baca845bc395b7529e808194f0409bb4afed0"
+      },
+      "new": {
+        "bytes": 11932,
+        "sha256": "82dc3aff7997aeaa70a458edbae9dd9d3822045aa2a22b2055d3cf45b04dafa1"
+      },
+      "byte_unchanged": false
+    },
+    {
+      "path": "parent-short.txt",
+      "old": {
+        "path": "parent-short.txt",
+        "bytes": 7370,
+        "sha256": "00ec554d0ad8ce75b5b73aea3f74350798ad0ce00111b50e696318363f92ac2b"
+      },
+      "new": {
+        "bytes": 5357,
+        "sha256": "c23111e5844e2d770055a93ed7b31a34bb2fea93ce7dd371c2143c59fe9f5a69"
+      },
+      "byte_unchanged": false
+    }
+  ]
+}

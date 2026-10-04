@@ -1,0 +1,69 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+_ test_original_run_rejects_synthetic_registration_conflicts_before_input[before-nonzero] _
+
+tmp_path = PosixPath('/private/tmp/kntnt-method-509-registration-correction-20261004/pytest-08/test_original_run_rejects_synt0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x1046e90a0>
+boundary = 'before-nonzero'
+
+    @pytest.mark.parametrize('boundary', ['missing-record', 'malformed', 'wrong-kind', 'wrong-pid', 'pid-type', 'missing-birth', 'wrong-birth', 'before-empty', 'before-nonzero', 'after-empty', 'after-changed', 'group-unavailable', 'foreign-group', 'after-foreign-group', 'exit-failure'])
+    def test_original_run_rejects_synthetic_registration_conflicts_before_input(tmp_path: Path, monkeypatch: pytest.MonkeyPatch, boundary: str) -> None:
+        """Unavailable registration or current ownership cannot authorize preparation."""
+        value: dict[str, Any] = {'recorded': {'kind': 'pid', 'id': str(PID), 'started': BIRTH}}
+        if boundary == 'missing-record':
+            value = {}
+        elif boundary == 'wrong-kind':
+            value['recorded']['kind'] = 'path'
+        elif boundary == 'wrong-pid':
+            value['recorded']['id'] = str(PID + 1)
+        elif boundary == 'pid-type':
+            value['recorded']['id'] = PID
+        elif boundary == 'missing-birth':
+            value['recorded'].pop('started')
+        elif boundary == 'wrong-birth':
+            value['recorded']['started'] = 'different birth'
+        raw = '{partial' if boundary == 'malformed' else json.dumps(value) + '\n'
+        args, input_stream = setup_run(tmp_path, monkeypatch, raw)
+        input_stream.write(b'not consumed'); input_stream.seek(0)
+        ps_reads = [0]
+        group_reads = [0]
+    
+        def external(command: list[str], **options: Any) -> subprocess.CompletedProcess[Any]:
+            """Keep synthetic failures at actual OS and installed JSON boundaries."""
+            if command[0] != 'ps':
+                return subprocess.CompletedProcess(command, 1 if boundary == 'exit-failure' else 0, raw.encode(), b'synthetic stderr')
+            ps_reads[0] += 1
+            text = BIRTH
+            if boundary == 'before-empty' or (boundary == 'after-empty' and ps_reads[0] > 1):
+                text = ''
+            if boundary == 'after-changed' and ps_reads[0] > 1:
+                text = 'different birth'
+            return subprocess.CompletedProcess(command, 1 if boundary == 'before-nonzero' else 0, text, '')
+    
+        def group(pid: int) -> int:
+            """No actual process or destructive operation is used in these variants."""
+            group_reads[0] += 1
+            if boundary == 'group-unavailable':
+                raise PermissionError('synthetic group observation denied')
+            if boundary == 'foreign-group' or (boundary == 'after-foreign-group' and group_reads[0] > 1):
+                return PID + 1
+            return PID
+    
+        monkeypatch.setattr(DISPATCH.subprocess, 'run', external)
+        monkeypatch.setattr(DISPATCH.os, 'getpgid', group)
+        error: Exception | None = None
+        try:
+            DISPATCH.run(args)
+        except (DISPATCH.CaptureError, AttributeError, OSError, ValueError) as exc:
+            error = exc
+>       assert input_stream.tell() == 0
+E       assert 12 == 0
+E        +  where 12 = <built-in method tell of _io.BytesIO object at 0x104931620>()
+E        +    where <built-in method tell of _io.BytesIO object at 0x104931620> = <_io.BytesIO object at 0x104931620>.tell
+
+tests/test_evaluation_registration.py:116: AssertionError
+----------------------------- Captured stderr call -----------------------------
+Delete owned disposable runtime: /private/tmp/kntnt-method-509-registration-correction-20261004/pytest-08/test_original_run_rejects_synt0/nested/packet/runtime
+=========================== short test summary info ============================
+FAILED tests/test_evaluation_registration.py::test_original_run_rejects_synthetic_registration_conflicts_before_input[before-nonzero]
+1 failed, 16 deselected in 0.03s

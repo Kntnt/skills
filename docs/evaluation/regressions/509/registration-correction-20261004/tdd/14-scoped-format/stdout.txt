@@ -1,0 +1,518 @@
+unformatted: File would be reformatted
+    --> docs/evaluation/harness/native_dispatch.py:1250:28
+     |
+1249 |         (packet / f"registration-{pid}.stderr").write_bytes(issued.stderr)
+     -         observation.update(exit=issued.returncode, receipt=issued.stdout.decode("utf-8"))
+1250 +         observation.update(
+1251 +             exit=issued.returncode, receipt=issued.stdout.decode("utf-8")
+1252 +         )
+1253 |
+--------------------------------------------------------------------------------
+1299 |     command = [
+     -         "uv", "run", str(cleanup), "add", "pid", str(pid),
+1300 +         "uv",
+1301 +         "run",
+1302 +         str(cleanup),
+1303 +         "add",
+1304 +         "pid",
+1305 +         str(pid),
+1306 |         "Prospective native evaluation dispatch",
+--------------------------------------------------------------------------------
+1313 |     receipt = subprocess.run(
+     -         command, env=env, cwd=packet, capture_output=True, text=True,
+     -         check=True, timeout=30,
+1314 +         command,
+1315 +         env=env,
+1316 +         cwd=packet,
+1317 +         capture_output=True,
+1318 +         text=True,
+1319 +         check=True,
+1320 +         timeout=30,
+1321 |     )
+--------------------------------------------------------------------------------
+1532 |             register(
+     -                 child.pid, args.cleanup_script, env, packet,
+1533 +                 child.pid,
+1534 +                 args.cleanup_script,
+1535 +                 env,
+1536 +                 packet,
+1537 |                 source_contract == "original-completed-v1",
+--------------------------------------------------------------------------------
+1657 |         register(
+     -             os.getpid(), args.cleanup_script, environment(packet), packet,
+     -             getattr(args, "source_contract", "retained-source-v1") == "original-completed-v1",
+1658 +             os.getpid(),
+1659 +             args.cleanup_script,
+1660 +             environment(packet),
+1661 +             packet,
+1662 +             getattr(args, "source_contract", "retained-source-v1")
+1663 +             == "original-completed-v1",
+1664 |         )
+     |
+
+unformatted: File would be reformatted
+   --> tests/test_evaluation_dispatch.py:388:23
+    |
+387 |     )
+    -     DISPATCH.register(owned.pid, Path.home() / ".agents/skills/kntnt/features/session-cleanup/scripts/session_cleanup.py", env, registrations, True)
+388 +     DISPATCH.register(
+389 +         owned.pid,
+390 +         Path.home()
+391 +         / ".agents/skills/kntnt/features/session-cleanup/scripts/session_cleanup.py",
+392 +         env,
+393 +         registrations,
+394 +         True,
+395 +     )
+396 |     owned_birth = DISPATCH.process_start(owned.pid, tmp_path)
+--------------------------------------------------------------------------------
+401 |     )
+    -     DISPATCH.register(other.pid, Path.home() / ".agents/skills/kntnt/features/session-cleanup/scripts/session_cleanup.py", env, registrations, True)
+402 +     DISPATCH.register(
+403 +         other.pid,
+404 +         Path.home()
+405 +         / ".agents/skills/kntnt/features/session-cleanup/scripts/session_cleanup.py",
+406 +         env,
+407 +         registrations,
+408 +         True,
+409 +     )
+410 |     other_birth = DISPATCH.process_start(other.pid, tmp_path)
+    |
+
+unformatted: File would be reformatted
+   --> tests/test_evaluation_original_dispatch.py:115:52
+    |
+114 |         "run",
+    -         lambda *unused, **options: SimpleNamespace(stdout="synthetic start identity", returncode=0),
+115 +         lambda *unused, **options: SimpleNamespace(
+116 +             stdout="synthetic start identity", returncode=0
+117 +         ),
+118 |     )
+--------------------------------------------------------------------------------
+489 |         )
+    -         return SimpleNamespace(stdout="" if boundary == "unknown-start" else value, returncode=0)
+490 +         return SimpleNamespace(
+491 +             stdout="" if boundary == "unknown-start" else value, returncode=0
+492 +         )
+493 |
+    |
+
+unformatted: File would be reformatted
+   --> tests/test_evaluation_registration.py:2:1
+    |
+1   | """Synthetic registration corruptions constrain the public original-mode run."""
+2   +
+3   | from __future__ import annotations
+--------------------------------------------------------------------------------
+17  | SPEC = importlib.util.spec_from_file_location(
+    -     'registration_dispatch', ROOT / 'docs/evaluation/harness/native_dispatch.py'
+18  +     "registration_dispatch", ROOT / "docs/evaluation/harness/native_dispatch.py"
+19  | )
+--------------------------------------------------------------------------------
+23  | PID: int = 41001
+    - BIRTH: str = 'Sun Oct  4 12:00:00 2026'
+24  + BIRTH: str = "Sun Oct  4 12:00:00 2026"
+25  |
+26  |
+    - def setup_run(tmp_path: Path, monkeypatch: pytest.MonkeyPatch, raw: str) -> tuple[argparse.Namespace, io.BytesIO]:
+27  + def setup_run(
+28  +     tmp_path: Path, monkeypatch: pytest.MonkeyPatch, raw: str
+29  + ) -> tuple[argparse.Namespace, io.BytesIO]:
+30  |     """Replace only external OS/installed-command boundaries with synthetic data."""
+    -     args = argparse.Namespace(packet=tmp_path / 'nested/packet', cleanup_script=tmp_path / 'cleanup.py', source_contract='original-completed-v1', timeout=1200)
+    -     input_stream = io.BytesIO(b'')
+    -     monkeypatch.setattr(DISPATCH.sys, 'stdin', argparse.Namespace(buffer=input_stream))
+    -     monkeypatch.setattr(DISPATCH.os, 'getpid', lambda: PID)
+    -     monkeypatch.setattr(DISPATCH.os, 'getpgrp', lambda: PID)
+    -     monkeypatch.setattr(DISPATCH.os, 'getpgid', lambda pid: PID)
+31  +     args = argparse.Namespace(
+32  +         packet=tmp_path / "nested/packet",
+33  +         cleanup_script=tmp_path / "cleanup.py",
+34  +         source_contract="original-completed-v1",
+35  +         timeout=1200,
+36  +     )
+37  +     input_stream = io.BytesIO(b"")
+38  +     monkeypatch.setattr(DISPATCH.sys, "stdin", argparse.Namespace(buffer=input_stream))
+39  +     monkeypatch.setattr(DISPATCH.os, "getpid", lambda: PID)
+40  +     monkeypatch.setattr(DISPATCH.os, "getpgrp", lambda: PID)
+41  +     monkeypatch.setattr(DISPATCH.os, "getpgid", lambda pid: PID)
+42  |
+    -     def external(command: list[str], **options: Any) -> subprocess.CompletedProcess[Any]:
+43  +     def external(
+44  +         command: list[str], **options: Any
+45  +     ) -> subprocess.CompletedProcess[Any]:
+46  |         """Simulate installed JSON and an independent contemporary ps observation."""
+    -         return subprocess.CompletedProcess(command, 0, BIRTH + '\n' if command[0] == 'ps' else raw.encode(), '' if command[0] == 'ps' else b'')
+47  +         return subprocess.CompletedProcess(
+48  +             command,
+49  +             0,
+50  +             BIRTH + "\n" if command[0] == "ps" else raw.encode(),
+51  +             "" if command[0] == "ps" else b"",
+52  +         )
+53  |
+    -     monkeypatch.setattr(DISPATCH.subprocess, 'run', external)
+54  +     monkeypatch.setattr(DISPATCH.subprocess, "run", external)
+55  |     return args, input_stream
+56  |
+57  |
+    - def test_original_run_rejects_empty_installed_birth_before_stdin(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+58  + def test_original_run_rejects_empty_installed_birth_before_stdin(
+59  +     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+60  + ) -> None:
+61  |     """An exit0 registration with no birth must not authorize input consumption."""
+    -     raw = json.dumps({'recorded': {'kind': 'pid', 'id': str(PID), 'started': ''}}) + '\n'
+62  +     raw = (
+63  +         json.dumps({"recorded": {"kind": "pid", "id": str(PID), "started": ""}}) + "\n"
+64  +     )
+65  |     args, input_stream = setup_run(tmp_path, monkeypatch, raw)
+66  |     # A nonempty input makes consumption observable without starting native work.
+    -     input_stream.write(b'not consumed'); input_stream.seek(0)
+67  +     input_stream.write(b"not consumed")
+68  +     input_stream.seek(0)
+69  |     error: Exception | None = None
+--------------------------------------------------------------------------------
+75  |     assert isinstance(error, DISPATCH.CaptureError)
+    -     assert not (args.packet / 'prompt.txt').exists()
+    -     assert not (args.packet / 'runtime').exists()
+    -     assert not (args.packet / 'result.txt').exists()
+    -     receipt = json.loads((args.packet / 'receipt.json').read_text())
+    -     assert receipt['status'] == 'failed'
+    -     assert 'registration' in receipt['reason']
+    -     issued = json.loads((args.packet / 'registrations.jsonl').read_text())
+    -     assert issued['receipt'] == raw
+76  +     assert not (args.packet / "prompt.txt").exists()
+77  +     assert not (args.packet / "runtime").exists()
+78  +     assert not (args.packet / "result.txt").exists()
+79  +     receipt = json.loads((args.packet / "receipt.json").read_text())
+80  +     assert receipt["status"] == "failed"
+81  +     assert "registration" in receipt["reason"]
+82  +     issued = json.loads((args.packet / "registrations.jsonl").read_text())
+83  +     assert issued["receipt"] == raw
+84  |
+85  |
+    - @pytest.mark.parametrize('boundary', ['missing-record', 'malformed', 'wrong-kind', 'wrong-pid', 'pid-type', 'missing-birth', 'wrong-birth', 'before-empty', 'before-nonzero', 'after-empty', 'after-changed', 'group-unavailable', 'foreign-group', 'after-foreign-group', 'exit-failure'])
+    - def test_original_run_rejects_synthetic_registration_conflicts_before_input(tmp_path: Path, monkeypatch: pytest.MonkeyPatch, boundary: str) -> None:
+86  + @pytest.mark.parametrize(
+87  +     "boundary",
+88  +     [
+89  +         "missing-record",
+90  +         "malformed",
+91  +         "wrong-kind",
+92  +         "wrong-pid",
+93  +         "pid-type",
+94  +         "missing-birth",
+95  +         "wrong-birth",
+96  +         "before-empty",
+97  +         "before-nonzero",
+98  +         "after-empty",
+99  +         "after-changed",
+100 +         "group-unavailable",
+101 +         "foreign-group",
+102 +         "after-foreign-group",
+103 +         "exit-failure",
+104 +     ],
+105 + )
+106 + def test_original_run_rejects_synthetic_registration_conflicts_before_input(
+107 +     tmp_path: Path, monkeypatch: pytest.MonkeyPatch, boundary: str
+108 + ) -> None:
+109 |     """Unavailable registration or current ownership cannot authorize preparation."""
+    -     value: dict[str, Any] = {'recorded': {'kind': 'pid', 'id': str(PID), 'started': BIRTH}}
+    -     if boundary == 'missing-record':
+110 +     value: dict[str, Any] = {
+111 +         "recorded": {"kind": "pid", "id": str(PID), "started": BIRTH}
+112 +     }
+113 +     if boundary == "missing-record":
+114 |         value = {}
+    -     elif boundary == 'wrong-kind':
+    -         value['recorded']['kind'] = 'path'
+    -     elif boundary == 'wrong-pid':
+    -         value['recorded']['id'] = str(PID + 1)
+    -     elif boundary == 'pid-type':
+    -         value['recorded']['id'] = PID
+    -     elif boundary == 'missing-birth':
+    -         value['recorded'].pop('started')
+    -     elif boundary == 'wrong-birth':
+    -         value['recorded']['started'] = 'different birth'
+    -     raw = '{partial' if boundary == 'malformed' else json.dumps(value) + '\n'
+115 +     elif boundary == "wrong-kind":
+116 +         value["recorded"]["kind"] = "path"
+117 +     elif boundary == "wrong-pid":
+118 +         value["recorded"]["id"] = str(PID + 1)
+119 +     elif boundary == "pid-type":
+120 +         value["recorded"]["id"] = PID
+121 +     elif boundary == "missing-birth":
+122 +         value["recorded"].pop("started")
+123 +     elif boundary == "wrong-birth":
+124 +         value["recorded"]["started"] = "different birth"
+125 +     raw = "{partial" if boundary == "malformed" else json.dumps(value) + "\n"
+126 |     args, input_stream = setup_run(tmp_path, monkeypatch, raw)
+    -     input_stream.write(b'not consumed'); input_stream.seek(0)
+127 +     input_stream.write(b"not consumed")
+128 +     input_stream.seek(0)
+129 |     ps_reads = [0]
+130 |     group_reads = [0]
+131 |
+    -     def external(command: list[str], **options: Any) -> subprocess.CompletedProcess[Any]:
+132 +     def external(
+133 +         command: list[str], **options: Any
+134 +     ) -> subprocess.CompletedProcess[Any]:
+135 |         """Keep synthetic failures at actual OS and installed JSON boundaries."""
+    -         if command[0] != 'ps':
+    -             return subprocess.CompletedProcess(command, 1 if boundary == 'exit-failure' else 0, raw.encode(), b'synthetic stderr')
+136 +         if command[0] != "ps":
+137 +             return subprocess.CompletedProcess(
+138 +                 command,
+139 +                 1 if boundary == "exit-failure" else 0,
+140 +                 raw.encode(),
+141 +                 b"synthetic stderr",
+142 +             )
+143 |         ps_reads[0] += 1
+144 |         text = BIRTH
+    -         if boundary == 'before-empty' or (boundary == 'after-empty' and ps_reads[0] > 1):
+    -             text = ''
+    -         if boundary == 'after-changed' and ps_reads[0] > 1:
+    -             text = 'different birth'
+    -         return subprocess.CompletedProcess(command, 1 if boundary == 'before-nonzero' else 0, text, '')
+145 +         if boundary == "before-empty" or (
+146 +             boundary == "after-empty" and ps_reads[0] > 1
+147 +         ):
+148 +             text = ""
+149 +         if boundary == "after-changed" and ps_reads[0] > 1:
+150 +             text = "different birth"
+151 +         return subprocess.CompletedProcess(
+152 +             command, 1 if boundary == "before-nonzero" else 0, text, ""
+153 +         )
+154 |
+155 |     def group(pid: int) -> int:
+156 |         """No actual process or destructive operation is used in these variants."""
+157 |         group_reads[0] += 1
+    -         if boundary == 'group-unavailable':
+    -             raise PermissionError('synthetic group observation denied')
+    -         if boundary == 'foreign-group' or (boundary == 'after-foreign-group' and group_reads[0] > 1):
+158 +         if boundary == "group-unavailable":
+159 +             raise PermissionError("synthetic group observation denied")
+160 +         if boundary == "foreign-group" or (
+161 +             boundary == "after-foreign-group" and group_reads[0] > 1
+162 +         ):
+163 |             return PID + 1
+164 |         return PID
+165 |
+    -     monkeypatch.setattr(DISPATCH.subprocess, 'run', external)
+    -     monkeypatch.setattr(DISPATCH.os, 'getpgid', group)
+166 +     monkeypatch.setattr(DISPATCH.subprocess, "run", external)
+167 +     monkeypatch.setattr(DISPATCH.os, "getpgid", group)
+168 |     error: Exception | None = None
+--------------------------------------------------------------------------------
+174 |     assert isinstance(error, DISPATCH.CaptureError)
+    -     assert not (args.packet / 'prompt.txt').exists()
+    -     assert not (args.packet / 'runtime').exists()
+    -     assert not (args.packet / 'result.txt').exists()
+    -     assert json.loads((args.packet / 'receipt.json').read_text())['status'] == 'failed'
+    -     assert (args.packet / 'cleanup-failed.json').exists()
+175 +     assert not (args.packet / "prompt.txt").exists()
+176 +     assert not (args.packet / "runtime").exists()
+177 +     assert not (args.packet / "result.txt").exists()
+178 +     assert json.loads((args.packet / "receipt.json").read_text())["status"] == "failed"
+179 +     assert (args.packet / "cleanup-failed.json").exists()
+180 |
+181 |
+    - def test_original_first_registration_creates_selected_home_before_installed_probes(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+182 + def test_original_first_registration_creates_selected_home_before_installed_probes(
+183 +     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+184 + ) -> None:
+185 |     """The first installed add can observe birth in a fresh nested selected home."""
+    -     raw = json.dumps({'recorded': {'kind': 'pid', 'id': str(PID), 'started': BIRTH}}) + '\n'
+186 +     raw = (
+187 +         json.dumps({"recorded": {"kind": "pid", "id": str(PID), "started": BIRTH}})
+188 +         + "\n"
+189 +     )
+190 |     args, _input_stream = setup_run(tmp_path, monkeypatch, raw)
+191 |     homes: list[Path] = []
+192 |
+    -     def external(command: list[str], **options: Any) -> subprocess.CompletedProcess[Any]:
+193 +     def external(
+194 +         command: list[str], **options: Any
+195 +     ) -> subprocess.CompletedProcess[Any]:
+196 |         """Require the installed feature's ps working directory to exist first."""
+    -         if command[0] == 'ps':
+    -             return subprocess.CompletedProcess(command, 0, BIRTH, '')
+    -         selected = Path(options['env']['KNTNT_HOME'])
+197 +         if command[0] == "ps":
+198 +             return subprocess.CompletedProcess(command, 0, BIRTH, "")
+199 +         selected = Path(options["env"]["KNTNT_HOME"])
+200 |         homes.append(selected)
+    -         assert selected.is_dir(), 'selected lifecycle home absent before installed probes'
+    -         return subprocess.CompletedProcess(command, 0, raw.encode(), b'')
+201 +         assert selected.is_dir(), (
+202 +             "selected lifecycle home absent before installed probes"
+203 +         )
+204 +         return subprocess.CompletedProcess(command, 0, raw.encode(), b"")
+205 |
+    -     monkeypatch.setattr(DISPATCH.subprocess, 'run', external)
+    -     with pytest.raises(DISPATCH.CaptureError, match='empty dispatch brief'):
+206 +     monkeypatch.setattr(DISPATCH.subprocess, "run", external)
+207 +     with pytest.raises(DISPATCH.CaptureError, match="empty dispatch brief"):
+208 |         DISPATCH.run(args)
+    -     assert homes == [args.packet / 'lifecycle']
+    -     issued = json.loads((args.packet / 'registrations.jsonl').read_text())
+    -     assert issued['status'] == 'authenticated'
+    -     assert issued['receipt'] == raw
+    -     assert issued['before'] == issued['after'] == {'pid': PID, 'pgid': PID, 'started': BIRTH}
+    -     assert not (args.packet / 'cleanup-failed.json').exists()
+209 +     assert homes == [args.packet / "lifecycle"]
+210 +     issued = json.loads((args.packet / "registrations.jsonl").read_text())
+211 +     assert issued["status"] == "authenticated"
+212 +     assert issued["receipt"] == raw
+213 +     assert (
+214 +         issued["before"]
+215 +         == issued["after"]
+216 +         == {"pid": PID, "pgid": PID, "started": BIRTH}
+217 +     )
+218 +     assert not (args.packet / "cleanup-failed.json").exists()
+219 |
+220 |
+    - def test_real_installed_registration_authenticates_own_first_use_packet(tmp_path: Path) -> None:
+221 + def test_real_installed_registration_authenticates_own_first_use_packet(
+222 +     tmp_path: Path,
+223 + ) -> None:
+224 |     """The owned pytest process is ready before installed probes; no model starts."""
+225 |     import os
+226 |
+    -     cleanup = Path.home() / '.agents/skills/kntnt/features/session-cleanup/scripts/session_cleanup.py'
+    -     args = argparse.Namespace(packet=tmp_path / 'nested/real-packet', cleanup_script=cleanup, source_contract='original-completed-v1', timeout=1200)
+    -     with pytest.raises(DISPATCH.CaptureError, match='empty dispatch brief'):
+    -         DISPATCH.run(args, b'')
+    -     issued = json.loads((args.packet / 'registrations.jsonl').read_text())
+    -     recorded = json.loads(issued['receipt'])['recorded']
+    -     assert issued['status'] == 'authenticated'
+    -     assert issued['before'] == issued['after']
+    -     assert issued['before']['pid'] == issued['before']['pgid'] == os.getpid()
+    -     assert issued['before']['started'] == recorded['started'] != ''
+227 +     cleanup = (
+228 +         Path.home()
+229 +         / ".agents/skills/kntnt/features/session-cleanup/scripts/session_cleanup.py"
+230 +     )
+231 +     args = argparse.Namespace(
+232 +         packet=tmp_path / "nested/real-packet",
+233 +         cleanup_script=cleanup,
+234 +         source_contract="original-completed-v1",
+235 +         timeout=1200,
+236 +     )
+237 +     with pytest.raises(DISPATCH.CaptureError, match="empty dispatch brief"):
+238 +         DISPATCH.run(args, b"")
+239 +     issued = json.loads((args.packet / "registrations.jsonl").read_text())
+240 +     recorded = json.loads(issued["receipt"])["recorded"]
+241 +     assert issued["status"] == "authenticated"
+242 +     assert issued["before"] == issued["after"]
+243 +     assert issued["before"]["pid"] == issued["before"]["pgid"] == os.getpid()
+244 +     assert issued["before"]["started"] == recorded["started"] != ""
+245 |     assert os.getpgid(os.getpid()) == os.getpid()
+    -     assert (args.packet / f'registration-{os.getpid()}.stdout').read_bytes() == issued['receipt'].encode()
+    -     assert not (args.packet / 'cleanup-failed.json').exists()
+246 +     assert (args.packet / f"registration-{os.getpid()}.stdout").read_bytes() == issued[
+247 +         "receipt"
+248 +     ].encode()
+249 +     assert not (args.packet / "cleanup-failed.json").exists()
+250 |
+251 |
+    - def test_raw_registration_utf8_and_newlines_are_preserved(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+252 + def test_raw_registration_utf8_and_newlines_are_preserved(
+253 +     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+254 + ) -> None:
+255 |     """Actual installed response bytes remain separate from parsed observations."""
+    -     raw = json.dumps({'recorded': {'kind': 'pid', 'id': str(PID), 'started': BIRTH}, 'note': 'Åβ'}, ensure_ascii=False, indent=2).replace('\n', '\r\n') + '\r\n'
+256 +     raw = (
+257 +         json.dumps(
+258 +             {
+259 +                 "recorded": {"kind": "pid", "id": str(PID), "started": BIRTH},
+260 +                 "note": "Åβ",
+261 +             },
+262 +             ensure_ascii=False,
+263 +             indent=2,
+264 +         ).replace("\n", "\r\n")
+265 +         + "\r\n"
+266 +     )
+267 |     args, _input_stream = setup_run(tmp_path, monkeypatch, raw)
+    -     with pytest.raises(DISPATCH.CaptureError, match='empty dispatch brief'):
+268 +     with pytest.raises(DISPATCH.CaptureError, match="empty dispatch brief"):
+269 |         DISPATCH.run(args)
+    -     assert (args.packet / f'registration-{PID}.stdout').read_bytes() == raw.encode()
+    -     issued = json.loads((args.packet / 'registrations.jsonl').read_text())
+    -     assert issued['receipt'] == raw
+    -     assert issued['status'] == 'authenticated'
+270 +     assert (args.packet / f"registration-{PID}.stdout").read_bytes() == raw.encode()
+271 +     issued = json.loads((args.packet / "registrations.jsonl").read_text())
+272 +     assert issued["receipt"] == raw
+273 +     assert issued["status"] == "authenticated"
+274 |
+275 |
+    - def test_native_child_registration_rejects_before_native_input(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+276 + def test_native_child_registration_rejects_before_native_input(
+277 +     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+278 + ) -> None:
+279 |     """A valid recorder registration never supplies a child with empty birth."""
+    -     from test_evaluation_original_dispatch import CASES, DISPATCH as original, recorder, source
+280 +     from test_evaluation_original_dispatch import (
+281 +         CASES,
+282 +         DISPATCH as original,
+283 +         recorder,
+284 +         source,
+285 +     )
+286 |
+287 |     actual_register = original.register
+288 |     args = recorder(tmp_path, monkeypatch, CASES[0])
+    -     monkeypatch.setattr(original, 'register', actual_register)
+289 +     monkeypatch.setattr(original, "register", actual_register)
+290 |     calls = [0]
+291 |
+    -     def external(command: list[str], **options: Any) -> subprocess.CompletedProcess[Any]:
+292 +     def external(
+293 +         command: list[str], **options: Any
+294 +     ) -> subprocess.CompletedProcess[Any]:
+295 |         """Only the second installed response is a synthetic acquisition void."""
+    -         if command[0] == 'ps':
+    -             return subprocess.CompletedProcess(command, 0, BIRTH, '')
+296 +         if command[0] == "ps":
+297 +             return subprocess.CompletedProcess(command, 0, BIRTH, "")
+298 |         calls[0] += 1
+    -         raw = json.dumps({'recorded': {'kind': 'pid', 'id': command[5], 'started': BIRTH if calls[0] == 1 else ''}}).encode()
+    -         return subprocess.CompletedProcess(command, 0, raw, b'')
+299 +         raw = json.dumps(
+300 +             {
+301 +                 "recorded": {
+302 +                     "kind": "pid",
+303 +                     "id": command[5],
+304 +                     "started": BIRTH if calls[0] == 1 else "",
+305 +                 }
+306 +             }
+307 +         ).encode()
+308 +         return subprocess.CompletedProcess(command, 0, raw, b"")
+309 |
+    -     monkeypatch.setattr(original.subprocess, 'run', external)
+    -     with pytest.raises(original.CaptureError, match='registration'):
+    -         original.run(args, source(CASES[0], 'prompt'))
+310 +     monkeypatch.setattr(original.subprocess, "run", external)
+311 +     with pytest.raises(original.CaptureError, match="registration"):
+312 +         original.run(args, source(CASES[0], "prompt"))
+313 |     assert calls[0] == 2
+    -     assert 'completed' not in args.observed
+    -     assert not (args.packet / 'result.txt').exists()
+    -     assert (args.packet / 'cleanup-failed.json').exists()
+    -     assert (args.packet / 'runtime').exists()
+    -     issued = [json.loads(line) for line in (args.packet / 'registrations.jsonl').read_text().splitlines()]
+    -     assert issued[0]['status'] == 'authenticated'
+    -     assert issued[1]['status'] == 'failed'
+    -     assert json.loads(issued[1]['receipt'])['recorded']['started'] == ''
+314 +     assert "completed" not in args.observed
+315 +     assert not (args.packet / "result.txt").exists()
+316 +     assert (args.packet / "cleanup-failed.json").exists()
+317 +     assert (args.packet / "runtime").exists()
+318 +     issued = [
+319 +         json.loads(line)
+320 +         for line in (args.packet / "registrations.jsonl").read_text().splitlines()
+321 +     ]
+322 +     assert issued[0]["status"] == "authenticated"
+323 +     assert issued[1]["status"] == "failed"
+324 +     assert json.loads(issued[1]["receipt"])["recorded"]["started"] == ""
+    |
+
+4 files would be reformatted

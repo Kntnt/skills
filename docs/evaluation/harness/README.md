@@ -91,10 +91,13 @@ extension's proof status. Implementation and offline tests are not a native
 capability receipt. Use a method only within its independently established
 bounds and a separately frozen prospective campaign.
 
-The current held proof is the separately preserved
-[#509 corrective freeze](../regressions/509/correction-20261004/README.md).
-Its witnessed `workdir` tool argument and unexecuted shell override boundary
-are explicit; the original preparation evidence remains unchanged.
+The first #509 proof consumed one unmet short session; seven original sessions
+remain held. The current
+[registration preparation](../regressions/509/registration-correction-20261004/README.md)
+proposes a separate short qualification and those same seven held sessions.
+Accepted/integrated/actively updated #510, final source binding and separate Root
+releases are prerequisites. Requested shell arguments and exact expected native
+argv remain separate; the stopped proof and earlier freezes remain unchanged.
 
 ## Acquire one child
 
@@ -106,7 +109,13 @@ role, finite timeout and each additional writable inventory root. Read
 enabled; the helper uses vetted copied hook configuration and private native
 authentication/runtime storage. The helper registers its own process group before
 reading stdin or preparing native execution; version checks are bounded and run
-inside that registered group.
+inside that registered group. In explicitly selected original mode, the owned
+selected lifecycle home exists before installed probes. Raw installed responses
+and partial timeout bytes are retained beside separate contemporary before/after
+PID/group/nonempty birth observations. Installed kind/PID/birth must agree exactly;
+failed or unavailable authentication stops before dependent work and keeps
+failure/runtime evidence. Independent observations never backfill installed
+fields or establish what automatic cleanup can authenticate.
 
 The helper returns the complete native final message on stdout only after
 input, actual context, completed turn and terminal bytes agree. Its stderr

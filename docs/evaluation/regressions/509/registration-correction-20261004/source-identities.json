@@ -1,0 +1,37 @@
+{
+  "base": "d40a22fd5164fed75a1cd20a398c3c893793857a",
+  "sources": [
+    {
+      "path": "docs/evaluation/harness/native_dispatch.py",
+      "bytes": 71319,
+      "sha256": "9d5d4aff6f4924b6e333c4411998700e1a4ba0a739dba32e5e138f4c8aa91aeb"
+    },
+    {
+      "path": "tests/test_evaluation_registration.py",
+      "bytes": 14495,
+      "sha256": "b91e889180ec78c3e5cdf430627ead0ab95fa17acfcc06ae5a0d98c443245957"
+    },
+    {
+      "path": "tests/test_evaluation_original_dispatch.py",
+      "bytes": 51518,
+      "sha256": "e8dc26609ffd44d0a73b6d4a2c02fef5088a87c74509b46be9f9d0732f138d68"
+    },
+    {
+      "path": "tests/test_evaluation_dispatch.py",
+      "bytes": 17864,
+      "sha256": "bd5f8295a1096b5a4d7f68a1c841fa6a35af755b9d92062940cef750baa99dd2"
+    },
+    {
+      "path": "docs/evaluation/harness/README.md",
+      "bytes": 11457,
+      "sha256": "918bbd911fa29c91d041cf80e13d64ed147b6b26d45d002b6215f297b515eb9a"
+    }
+  ],
+  "focused_final": "26-final-focus:242 passed",
+  "lint": "27-final-lint:0",
+  "mypy": "28-final-types:0",
+  "format": "29-final-format-check:0",
+  "full_gates": "NOT RUN",
+  "new_native_proof_sessions": 0,
+  "installed_510_accepted_identity": null
+}

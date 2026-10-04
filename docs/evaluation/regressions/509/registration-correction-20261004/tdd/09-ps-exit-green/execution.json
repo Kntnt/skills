@@ -1,0 +1,69 @@
+{
+  "label": "09-ps-exit-green",
+  "at": "2026-10-04T17:19:01.130017+00:00",
+  "start_ns": 1791134341130118000,
+  "argv": [
+    "uv",
+    "run",
+    "--no-project",
+    "--with",
+    "pytest",
+    "pytest",
+    "-q",
+    "tests/test_evaluation_registration.py",
+    "--basetemp=/private/tmp/kntnt-method-509-registration-correction-20261004/pytest-09",
+    "-p",
+    "no:cacheprovider"
+  ],
+  "cwd": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages",
+  "pid": 8418,
+  "pgid": 8418,
+  "birth": "Sun Oct  4 19:19:00 2026",
+  "registration_argv": [
+    "uv",
+    "run",
+    "/Users/thomas/.agents/skills/kntnt/features/session-cleanup/scripts/session_cleanup.py",
+    "add",
+    "pid",
+    "8418",
+    "509 registration correction focused check 09-ps-exit-green"
+  ],
+  "raw_registration": {
+    "manifest": "/private/tmp/kntnt-method-509-registration-correction-20261004/checks/09-ps-exit-green/lifecycle/.kntnt/session-cleanup/sessions/01a1063a-fbf0-7ea3-bfd6-c0ad52516ab4.jsonl",
+    "recorded": {
+      "at": "2026-10-04T17:19:01+00:00",
+      "id": "8418",
+      "kind": "pid",
+      "started": "Sun Oct  4 19:19:00 2026",
+      "why": "509 registration correction focused check 09-ps-exit-green"
+    },
+    "session": "01a1063a-fbf0-7ea3-bfd6-c0ad52516ab4"
+  },
+  "contemporary_after": "Sun Oct  4 19:19:00 2026",
+  "sources": [
+    {
+      "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/docs/evaluation/harness/native_dispatch.py",
+      "bytes": 70536,
+      "sha256": "42d63638b103e5627abd5644a47dab664bb440f0d7d69f5774f41bb8ae7c0f20"
+    },
+    {
+      "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_registration.py",
+      "bytes": 7487,
+      "sha256": "39a991eea85492ea98207998be70d16386282379e2377b0d38ed41d1defe8fb7"
+    },
+    {
+      "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py",
+      "bytes": 51474,
+      "sha256": "75c15edc78a6dc45462df1c48a0860a37ff2a00b9c342e631abad0a8e3444f91"
+    },
+    {
+      "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_dispatch.py",
+      "bytes": 16172,
+      "sha256": "741e9fd186f10a2a747f0164486f1af6520fc62113635c55a88fafacd6cce83e"
+    }
+  ],
+  "storage": "/private/tmp/kntnt-method-509-registration-correction-20261004/checks/09-ps-exit-green",
+  "native_sessions": 0,
+  "exit": 0,
+  "end_ns": 1791134341661217000
+}

@@ -1,0 +1,69 @@
+{
+  "label": "03-registration-boundaries-red",
+  "at": "2026-10-04T17:14:03.865341+00:00",
+  "start_ns": 1791134043865463000,
+  "argv": [
+    "uv",
+    "run",
+    "--no-project",
+    "--with",
+    "pytest",
+    "pytest",
+    "-q",
+    "tests/test_evaluation_registration.py",
+    "--basetemp=/private/tmp/kntnt-method-509-registration-correction-20261004/pytest-03",
+    "-p",
+    "no:cacheprovider"
+  ],
+  "cwd": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages",
+  "pid": 7433,
+  "pgid": 7433,
+  "birth": "Sun Oct  4 19:14:03 2026",
+  "registration_argv": [
+    "uv",
+    "run",
+    "/Users/thomas/.agents/skills/kntnt/features/session-cleanup/scripts/session_cleanup.py",
+    "add",
+    "pid",
+    "7433",
+    "509 registration correction focused check 03-registration-boundaries-red"
+  ],
+  "raw_registration": {
+    "manifest": "/private/tmp/kntnt-method-509-registration-correction-20261004/checks/03-registration-boundaries-red/lifecycle/.kntnt/session-cleanup/sessions/01a1063a-fbf0-7ea3-bfd6-c0ad52516ab4.jsonl",
+    "recorded": {
+      "at": "2026-10-04T17:14:03+00:00",
+      "id": "7433",
+      "kind": "pid",
+      "started": "Sun Oct  4 19:14:03 2026",
+      "why": "509 registration correction focused check 03-registration-boundaries-red"
+    },
+    "session": "01a1063a-fbf0-7ea3-bfd6-c0ad52516ab4"
+  },
+  "contemporary_after": "Sun Oct  4 19:14:03 2026",
+  "sources": [
+    {
+      "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/docs/evaluation/harness/native_dispatch.py",
+      "bytes": 67326,
+      "sha256": "5ff0c7190f05fc33cbdb89c9a9d4b981e431086a3354e8a97847f3cfde78448b"
+    },
+    {
+      "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_registration.py",
+      "bytes": 5900,
+      "sha256": "76a16dc65d8de5ce501d1220ccd2c482d0a54fe9f987697188b0fe4978f39f8c"
+    },
+    {
+      "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py",
+      "bytes": 51432,
+      "sha256": "bcaeda4c026eb12e1df9cab6be912228810b039dfcbbf8bcba7fcbe5c8c34ef0"
+    },
+    {
+      "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_dispatch.py",
+      "bytes": 16172,
+      "sha256": "741e9fd186f10a2a747f0164486f1af6520fc62113635c55a88fafacd6cce83e"
+    }
+  ],
+  "storage": "/private/tmp/kntnt-method-509-registration-correction-20261004/checks/03-registration-boundaries-red",
+  "native_sessions": 0,
+  "exit": 1,
+  "end_ns": 1791134044418592000
+}

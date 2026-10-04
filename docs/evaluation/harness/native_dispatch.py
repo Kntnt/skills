@@ -1147,6 +1147,8 @@ def process_start(pid: int, cwd: Path) -> str:
         )
     except (OSError, subprocess.SubprocessError) as exc:
         raise CaptureError("native ownership start identity unreadable") from exc
+    if observed.returncode != 0:
+        raise CaptureError("native ownership start identity unavailable")
     return observed.stdout.strip()
 
 
@@ -1209,20 +1211,117 @@ def stop_owned(
     raise CaptureError("owned native process group remains after termination")
 
 
-def register(pid: int, cleanup: Path, env: dict[str, str], packet: Path) -> None:
+def owned_identity(pid: int, cwd: Path) -> dict[str, Any]:
+    """Require a contemporaneous nonempty birth and this process's own group."""
+
+    # Numeric identity alone cannot authorize registration or later signals.
+    try:
+        group = os.getpgid(pid)
+    except OSError as exc:
+        raise CaptureError("registration ownership group unavailable") from exc
+    started = process_start(pid, cwd)
+    if group != pid or not started:
+        raise CaptureError("registration ownership identity unavailable")
+    return {"pid": pid, "pgid": group, "started": started}
+
+
+def register_original(
+    pid: int, command: list[str], env: dict[str, str], packet: Path
+) -> None:
+    """Authenticate issued registration without filling missing installed fields."""
+
+    # Keep independent observations separate from the actual installed response.
+    observation: dict[str, Any] = {
+        "pid": pid,
+        "command": command,
+        "receipt": None,
+        "status": "failed",
+        "installed_response_complete": False,
+        "observed_before_ns": time.time_ns(),
+    }
+    try:
+        # Installed ancestry/birth probes use this selected home as their cwd.
+        Path(env["KNTNT_HOME"]).mkdir(parents=True, exist_ok=True)
+        observation["before"] = owned_identity(pid, packet)
+        issued = subprocess.run(
+            command, env=env, cwd=packet, capture_output=True, check=False, timeout=30
+        )
+        (packet / f"registration-{pid}.stdout").write_bytes(issued.stdout)
+        (packet / f"registration-{pid}.stderr").write_bytes(issued.stderr)
+        observation["installed_response_complete"] = True
+        observation.update(
+            exit=issued.returncode, receipt=issued.stdout.decode("utf-8")
+        )
+
+        # Recheck current birth/group after the installed command finishes.
+        observation["after"] = owned_identity(pid, packet)
+        observation["observed_after_ns"] = time.time_ns()
+        if observation["after"] != observation["before"]:
+            raise CaptureError("registration ownership identity changed")
+        value = consumption_specification(issued.stdout)
+        recorded = value.get("recorded")
+        if (
+            issued.returncode != 0
+            or not isinstance(recorded, dict)
+            or recorded.get("kind") != "pid"
+            or recorded.get("id") != str(pid)
+            or recorded.get("started") != observation["before"]["started"]
+        ):
+            raise CaptureError("registration installed identity disagrees")
+        observation["status"] = "authenticated"
+
+    # Untrusted installed or platform failures retain reachable failure evidence.
+    except (CaptureError, OSError, ValueError, subprocess.SubprocessError) as exc:
+        observation["reason"] = str(exc)
+        if isinstance(exc, subprocess.TimeoutExpired):
+            # Partial timeout output remains partial, never parsed or completed.
+            for suffix, partial in (("stdout", exc.output), ("stderr", exc.stderr)):
+                if partial is not None:
+                    data = (
+                        partial.encode("utf-8") if isinstance(partial, str) else partial
+                    )
+                    (packet / f"registration-{pid}.{suffix}").write_bytes(data)
+        write_json(
+            packet / "cleanup-failed.json",
+            {
+                "pgid": pid,
+                "runtime": str(packet / "runtime"),
+                "reason": "registration authentication unavailable",
+                "registration": observation,
+            },
+        )
+        raise CaptureError(f"registration unavailable: {exc}") from exc
+    finally:
+        with (packet / "registrations.jsonl").open("a") as stream:
+            stream.write(json.dumps(observation) + "\n")
+
+
+def register(
+    pid: int,
+    cleanup: Path,
+    env: dict[str, str],
+    packet: Path,
+    original: bool = False,
+) -> None:
     """Register each group before supplying a native task."""
 
-    # Register the original group through the installed lifecycle contract.
+    # Use one installed interface; strict authentication is explicitly selected.
+    command = [
+        "uv",
+        "run",
+        str(cleanup),
+        "add",
+        "pid",
+        str(pid),
+        "Prospective native evaluation dispatch",
+    ]
+    if original:
+        register_original(pid, command, env, packet)
+        return
+
+    # Preserve the accepted retained-source registration behavior.
     receipt = subprocess.run(
-        [
-            "uv",
-            "run",
-            str(cleanup),
-            "add",
-            "pid",
-            str(pid),
-            "Prospective native evaluation dispatch",
-        ],
+        command,
         env=env,
         cwd=packet,
         capture_output=True,
@@ -1230,8 +1329,6 @@ def register(pid: int, cleanup: Path, env: dict[str, str], packet: Path) -> None
         check=True,
         timeout=30,
     )
-
-    # Preserve the issued registration and actual observed process group.
     with (packet / "registrations.jsonl").open("a") as stream:
         stream.write(
             json.dumps({"pid": pid, "pgid": os.getpgid(pid), "receipt": receipt.stdout})
@@ -1439,16 +1536,16 @@ def acquire(args: argparse.Namespace, prompt: bytes) -> bytes:
                 start_new_session=True,
             )
             receipt.update({"pid": child.pid, "pgid": child.pid})
-            register(child.pid, args.cleanup_script, env, packet)
             if source_contract == "original-completed-v1":
-                ownership = {
-                    "pid": child.pid,
-                    "pgid": os.getpgid(child.pid),
-                    "started": process_start(child.pid, packet),
-                }
+                ownership = owned_identity(child.pid, packet)
                 receipt["ownership"] = ownership
-                if ownership["pgid"] != child.pid or not ownership["started"]:
-                    raise CaptureError("native ownership identity unavailable")
+            register(
+                child.pid,
+                args.cleanup_script,
+                env,
+                packet,
+                source_contract == "original-completed-v1",
+            )
             remaining = args.timeout
             if source_contract == "original-completed-v1":
                 remaining -= time.monotonic() - started
@@ -1567,7 +1664,14 @@ def run(args: argparse.Namespace, prompt: bytes | None = None) -> bytes:
         # Register ownership before stdin or native preparation can block.
         if os.getpid() != os.getpgrp():
             os.setsid()
-        register(os.getpid(), args.cleanup_script, environment(packet), packet)
+        register(
+            os.getpid(),
+            args.cleanup_script,
+            environment(packet),
+            packet,
+            getattr(args, "source_contract", "retained-source-v1")
+            == "original-completed-v1",
+        )
 
         # Capture supplied stdin unchanged before native preparation begins.
         if prompt is None:

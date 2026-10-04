@@ -1,0 +1,50 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+___________ test_installed_timeout_preserves_actual_partial_response ___________
+
+tmp_path = PosixPath('/private/tmp/kntnt-method-509-registration-correction-20261004/pytest-16/test_installed_timeout_preserv0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x10266c260>
+
+    def test_installed_timeout_preserves_actual_partial_response(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+        """A failed installed command retains partial bytes without completing them."""
+        args, input_stream = setup_run(tmp_path, monkeypatch, "")
+    
+        def external(command: list[str], **options: Any) -> subprocess.CompletedProcess[Any]:
+            """Provide a synthetic partial transport failure after a valid own probe."""
+            if command[0] == "ps":
+                return subprocess.CompletedProcess(command, 0, BIRTH, "")
+            raise subprocess.TimeoutExpired(command, 30, output=b'{"recorded":', stderr=b"partial stderr\n")
+    
+        monkeypatch.setattr(DISPATCH.subprocess, "run", external)
+        with pytest.raises(DISPATCH.CaptureError, match="registration"):
+            DISPATCH.run(args)
+        assert input_stream.tell() == 0
+>       assert (args.packet / f"registration-{PID}.stdout").read_bytes() == b'{"recorded":'
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_evaluation_registration.py:341: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/Users/thomas/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/pathlib.py:1019: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/private/tmp/kntnt-method-509-registration-correction-20261004/pytest-16/test_installed_timeout_preserv0/nested/packet/registration-41001.stdout')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/private/tmp/kntnt-method-509-registration-correction-20261004/pytest-16/test_installed_timeout_preserv0/nested/packet/registration-41001.stdout'
+
+/Users/thomas/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/pathlib.py:1013: FileNotFoundError
+=========================== short test summary info ============================
+FAILED tests/test_evaluation_registration.py::test_installed_timeout_preserves_actual_partial_response
+1 failed, 20 deselected in 0.04s

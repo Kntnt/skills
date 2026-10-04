@@ -7,6 +7,7 @@ import copy
 import importlib.util
 import io
 import os
+import select
 import subprocess
 import sys
 from importlib.machinery import ModuleSpec
@@ -375,25 +376,69 @@ def test_timeout_cleanup_stops_owned_group_without_touching_other_process(
     tmp_path: Path,
 ) -> None:
     """A bounded helper can stop its own work without broad process matching."""
+    # The selected state and cwd exist before every installed identity probe.
+    registrations = tmp_path / "registrations"
+    registrations.mkdir()
+    env = DISPATCH.environment(registrations)
+    Path(env["KNTNT_HOME"]).mkdir()
     owned = subprocess.Popen(
-        [sys.executable, "-c", "import time; time.sleep(30)"],
+        [
+            sys.executable,
+            "-c",
+            "import time; print('READY', flush=True); time.sleep(30)",
+        ],
+        stdout=subprocess.PIPE,
         start_new_session=True,
         cwd=tmp_path,
     )
+    DISPATCH.register(
+        owned.pid,
+        Path.home()
+        / ".agents/skills/kntnt/features/session-cleanup/scripts/session_cleanup.py",
+        env,
+        registrations,
+        True,
+    )
+    owned_birth = DISPATCH.process_start(owned.pid, tmp_path)
     other = subprocess.Popen(
-        [sys.executable, "-c", "import time; time.sleep(30)"],
+        [
+            sys.executable,
+            "-c",
+            "import time; print('READY', flush=True); time.sleep(30)",
+        ],
+        stdout=subprocess.PIPE,
         start_new_session=True,
         cwd=tmp_path,
     )
+    DISPATCH.register(
+        other.pid,
+        Path.home()
+        / ".agents/skills/kntnt/features/session-cleanup/scripts/session_cleanup.py",
+        env,
+        registrations,
+        True,
+    )
+    other_birth = DISPATCH.process_start(other.pid, tmp_path)
     try:
+        # Program readiness is independent of the later termination outcome.
+        for process in (owned, other):
+            assert process.stdout is not None
+            ready, _, _ = select.select([process.stdout], [], [], 10)
+            assert ready, "owned fixture did not become ready within ten seconds"
+            assert process.stdout.readline() == b"READY\n"
+
+        # Exercise the unchanged default only after current own identity agrees.
+        assert os.getpgid(owned.pid) == owned.pid
+        assert DISPATCH.process_start(owned.pid, tmp_path) == owned_birth != ""
         DISPATCH.stop_owned(owned)
         assert owned.poll() is not None
         assert other.poll() is None
         with pytest.raises(ProcessLookupError):
             os.killpg(owned.pid, 0)
     finally:
-        DISPATCH.stop_owned(owned)
-        DISPATCH.stop_owned(other)
+        # Authentication precedes every prospective cleanup signal.
+        DISPATCH.stop_owned(owned, owned_birth, tmp_path)
+        DISPATCH.stop_owned(other, other_birth, tmp_path)
 
 
 def test_preparation_failure_removes_private_auth_and_retains_failure(

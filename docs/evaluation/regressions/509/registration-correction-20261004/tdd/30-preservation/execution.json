@@ -1,0 +1,60 @@
+{
+  "label": "30-preservation",
+  "at": "2026-10-04T17:45:35.123333+00:00",
+  "start_ns": 1791135935123431000,
+  "argv": [
+    "python3",
+    "/Users/thomas/.kntnt/editorial-repair/2026-10-04/method-509/builder/registration-correction/author/scripts/verify_preservation.py"
+  ],
+  "cwd": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages",
+  "pid": 65913,
+  "pgid": 65913,
+  "birth": "Sun Oct  4 19:45:34 2026",
+  "registration_argv": [
+    "uv",
+    "run",
+    "/Users/thomas/.agents/skills/kntnt/features/session-cleanup/scripts/session_cleanup.py",
+    "add",
+    "pid",
+    "65913",
+    "509 registration correction focused check 30-preservation"
+  ],
+  "raw_registration": {
+    "manifest": "/private/tmp/kntnt-method-509-registration-correction-20261004/checks/30-preservation/lifecycle/.kntnt/session-cleanup/sessions/01a1063a-fbf0-7ea3-bfd6-c0ad52516ab4.jsonl",
+    "recorded": {
+      "at": "2026-10-04T17:45:35+00:00",
+      "id": "65913",
+      "kind": "pid",
+      "started": "Sun Oct  4 19:45:34 2026",
+      "why": "509 registration correction focused check 30-preservation"
+    },
+    "session": "01a1063a-fbf0-7ea3-bfd6-c0ad52516ab4"
+  },
+  "contemporary_after": "Sun Oct  4 19:45:34 2026",
+  "sources": [
+    {
+      "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/docs/evaluation/harness/native_dispatch.py",
+      "bytes": 71319,
+      "sha256": "9d5d4aff6f4924b6e333c4411998700e1a4ba0a739dba32e5e138f4c8aa91aeb"
+    },
+    {
+      "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_registration.py",
+      "bytes": 14495,
+      "sha256": "b91e889180ec78c3e5cdf430627ead0ab95fa17acfcc06ae5a0d98c443245957"
+    },
+    {
+      "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py",
+      "bytes": 51518,
+      "sha256": "e8dc26609ffd44d0a73b6d4a2c02fef5088a87c74509b46be9f9d0732f138d68"
+    },
+    {
+      "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_dispatch.py",
+      "bytes": 17864,
+      "sha256": "bd5f8295a1096b5a4d7f68a1c841fa6a35af755b9d92062940cef750baa99dd2"
+    }
+  ],
+  "storage": "/private/tmp/kntnt-method-509-registration-correction-20261004/checks/30-preservation",
+  "native_sessions": 0,
+  "exit": 0,
+  "end_ns": 1791135936693208000
+}

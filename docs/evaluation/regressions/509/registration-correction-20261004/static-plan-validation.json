@@ -1,0 +1,11 @@
+{
+  "at": "2026-10-04T17:48:34.410727+00:00",
+  "artifacts": 13,
+  "tool_boundaries": 10,
+  "future_sessions": 8,
+  "old_held": 7,
+  "new_released": 0,
+  "static_only": true,
+  "plan_sha256": "32957a9a5309293980ac929d7f99c5187c505253993117f6d9977831adf56adb",
+  "all_frozen_bindings_agree": true
+}

@@ -1,0 +1,11 @@
+{
+  "manifest": "/private/tmp/kntnt-method-509-registration-correction-20261004/checks/24-readiness-focus/lifecycle/.kntnt/session-cleanup/sessions/01a1063a-fbf0-7ea3-bfd6-c0ad52516ab4.jsonl",
+  "recorded": {
+    "at": "2026-10-04T17:34:16+00:00",
+    "id": "13031",
+    "kind": "pid",
+    "started": "Sun Oct  4 19:34:15 2026",
+    "why": "509 registration correction focused check 24-readiness-focus"
+  },
+  "session": "01a1063a-fbf0-7ea3-bfd6-c0ad52516ab4"
+}

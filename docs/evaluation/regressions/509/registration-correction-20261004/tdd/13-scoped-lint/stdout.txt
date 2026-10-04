@@ -1,0 +1,21 @@
+I001 [*] Import block is un-sorted or un-formatted
+   --> tests/test_evaluation_registration.py:184:5
+    |
+182 | def test_native_child_registration_rejects_before_native_input(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+183 |     """A valid recorder registration never supplies a child with empty birth."""
+184 |     from test_evaluation_original_dispatch import CASES, DISPATCH as original, recorder, source
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+185 |
+186 |     actual_register = original.register
+    |
+help: Organize imports
+    |
+183 |     """A valid recorder registration never supplies a child with empty birth."""
+    -     from test_evaluation_original_dispatch import CASES, DISPATCH as original, recorder, source
+184 +     from test_evaluation_original_dispatch import CASES, recorder, source
+185 +     from test_evaluation_original_dispatch import DISPATCH as original
+186 |
+    |
+
+Found 1 error.
+[*] 1 fixable with the `--fix` option.

@@ -1,0 +1,69 @@
+{
+  "label": "16-partial-registration-red",
+  "at": "2026-10-04T17:24:10.584607+00:00",
+  "start_ns": 1791134650584712000,
+  "argv": [
+    "uv",
+    "run",
+    "--no-project",
+    "--with",
+    "pytest",
+    "pytest",
+    "-q",
+    "tests/test_evaluation_registration.py",
+    "-k",
+    "installed_timeout",
+    "--basetemp=/private/tmp/kntnt-method-509-registration-correction-20261004/pytest-16",
+    "-p",
+    "no:cacheprovider"
+  ],
+  "cwd": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages",
+  "pid": 10044,
+  "pgid": 10044,
+  "birth": "Sun Oct  4 19:24:10 2026",
+  "registration_argv": [
+    "uv",
+    "run",
+    "/Users/thomas/.agents/skills/kntnt/features/session-cleanup/scripts/session_cleanup.py",
+    "add",
+    "pid",
+    "10044",
+    "509 registration correction focused check 16-partial-registration-red"
+  ],
+  "raw_registration": {
+    "manifest": "/private/tmp/kntnt-method-509-registration-correction-20261004/checks/16-partial-registration-red/lifecycle/.kntnt/session-cleanup/sessions/01a1063a-fbf0-7ea3-bfd6-c0ad52516ab4.jsonl",
+    "recorded": {
+      "at": "2026-10-04T17:24:10+00:00",
+      "id": "10044",
+      "kind": "pid",
+      "started": "Sun Oct  4 19:24:10 2026",
+      "why": "509 registration correction focused check 16-partial-registration-red"
+    },
+    "session": "01a1063a-fbf0-7ea3-bfd6-c0ad52516ab4"
+  },
+  "contemporary_after": "Sun Oct  4 19:24:10 2026",
+  "sources": [
+    {
+      "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/docs/evaluation/harness/native_dispatch.py",
+      "bytes": 70734,
+      "sha256": "95b1c640a5883e5a51a0c3884e9e6b76d2c49f01112ef6cb491f344cf4ccc319"
+    },
+    {
+      "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_registration.py",
+      "bytes": 13297,
+      "sha256": "2f247a69fdbe1259f8d24ced8f631e249e6ca114a2a675ce591a387cf55cf666"
+    },
+    {
+      "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py",
+      "bytes": 51518,
+      "sha256": "e8dc26609ffd44d0a73b6d4a2c02fef5088a87c74509b46be9f9d0732f138d68"
+    },
+    {
+      "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_dispatch.py",
+      "bytes": 17262,
+      "sha256": "5eba0030b2ce783ee357eb8760c130df66a28b5824889dd7261e1ee3ed8af11f"
+    }
+  ],
+  "storage": "/private/tmp/kntnt-method-509-registration-correction-20261004/checks/16-partial-registration-red",
+  "native_sessions": 0
+}

@@ -1,0 +1,69 @@
+{
+  "label": "08-ps-exit-red",
+  "at": "2026-10-04T17:18:33.288654+00:00",
+  "start_ns": 1791134313288770000,
+  "argv": [
+    "uv",
+    "run",
+    "--no-project",
+    "--with",
+    "pytest",
+    "pytest",
+    "-q",
+    "tests/test_evaluation_registration.py",
+    "-k",
+    "before-nonzero",
+    "--basetemp=/private/tmp/kntnt-method-509-registration-correction-20261004/pytest-08",
+    "-p",
+    "no:cacheprovider"
+  ],
+  "cwd": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages",
+  "pid": 8247,
+  "pgid": 8247,
+  "birth": "Sun Oct  4 19:18:32 2026",
+  "registration_argv": [
+    "uv",
+    "run",
+    "/Users/thomas/.agents/skills/kntnt/features/session-cleanup/scripts/session_cleanup.py",
+    "add",
+    "pid",
+    "8247",
+    "509 registration correction focused check 08-ps-exit-red"
+  ],
+  "raw_registration": {
+    "manifest": "/private/tmp/kntnt-method-509-registration-correction-20261004/checks/08-ps-exit-red/lifecycle/.kntnt/session-cleanup/sessions/01a1063a-fbf0-7ea3-bfd6-c0ad52516ab4.jsonl",
+    "recorded": {
+      "at": "2026-10-04T17:18:33+00:00",
+      "id": "8247",
+      "kind": "pid",
+      "started": "Sun Oct  4 19:18:32 2026",
+      "why": "509 registration correction focused check 08-ps-exit-red"
+    },
+    "session": "01a1063a-fbf0-7ea3-bfd6-c0ad52516ab4"
+  },
+  "contemporary_after": "Sun Oct  4 19:18:32 2026",
+  "sources": [
+    {
+      "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/docs/evaluation/harness/native_dispatch.py",
+      "bytes": 70429,
+      "sha256": "3e3303fc27ffe3177c710cf046836fb2152eb7e52aa26579a7bb5f7966c64920"
+    },
+    {
+      "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_registration.py",
+      "bytes": 7487,
+      "sha256": "39a991eea85492ea98207998be70d16386282379e2377b0d38ed41d1defe8fb7"
+    },
+    {
+      "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py",
+      "bytes": 51432,
+      "sha256": "bcaeda4c026eb12e1df9cab6be912228810b039dfcbbf8bcba7fcbe5c8c34ef0"
+    },
+    {
+      "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_dispatch.py",
+      "bytes": 16172,
+      "sha256": "741e9fd186f10a2a747f0164486f1af6520fc62113635c55a88fafacd6cce83e"
+    }
+  ],
+  "storage": "/private/tmp/kntnt-method-509-registration-correction-20261004/checks/08-ps-exit-red",
+  "native_sessions": 0
+}

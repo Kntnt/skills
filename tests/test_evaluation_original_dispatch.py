@@ -112,7 +112,9 @@ def recorder(
     monkeypatch.setattr(
         DISPATCH.subprocess,
         "run",
-        lambda *unused, **options: SimpleNamespace(stdout="synthetic start identity"),
+        lambda *unused, **options: SimpleNamespace(
+            stdout="synthetic start identity", returncode=0
+        ),
     )
     monkeypatch.setattr(DISPATCH.os, "getpgid", lambda pid: pid)
     return args
@@ -485,7 +487,9 @@ def test_recorder_refuses_to_stop_unverified_identity(
             if args.observed.get("completed") and boundary == "reused-pid"
             else "synthetic start identity"
         )
-        return SimpleNamespace(stdout="" if boundary == "unknown-start" else value)
+        return SimpleNamespace(
+            stdout="" if boundary == "unknown-start" else value, returncode=0
+        )
 
     monkeypatch.setattr(DISPATCH, "stop_owned", actual_stop)
     monkeypatch.setattr(DISPATCH.subprocess, "run", start)
@@ -1182,7 +1186,7 @@ def test_owned_cleanup_platform_failure_preserves_runtime(
     def start(*unused: Any, **options: Any) -> SimpleNamespace:
         if args.observed.get("completed") and failure == "start-read":
             raise subprocess.TimeoutExpired("synthetic ps", 5)
-        return SimpleNamespace(stdout="synthetic start identity")
+        return SimpleNamespace(stdout="synthetic start identity", returncode=0)
 
     def signal_group(pid: int, sig: int) -> None:
         raise PermissionError("synthetic signal denial")

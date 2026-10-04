@@ -1,0 +1,65 @@
+{
+  "label": "13-scoped-lint",
+  "at": "2026-10-04T17:22:54.103140+00:00",
+  "start_ns": 1791134574103251000,
+  "argv": [
+    "uvx",
+    "ruff",
+    "check",
+    "docs/evaluation/harness/native_dispatch.py",
+    "tests/test_evaluation_registration.py",
+    "tests/test_evaluation_original_dispatch.py",
+    "tests/test_evaluation_dispatch.py"
+  ],
+  "cwd": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages",
+  "pid": 9588,
+  "pgid": 9588,
+  "birth": "Sun Oct  4 19:22:53 2026",
+  "registration_argv": [
+    "uv",
+    "run",
+    "/Users/thomas/.agents/skills/kntnt/features/session-cleanup/scripts/session_cleanup.py",
+    "add",
+    "pid",
+    "9588",
+    "509 registration correction focused check 13-scoped-lint"
+  ],
+  "raw_registration": {
+    "manifest": "/private/tmp/kntnt-method-509-registration-correction-20261004/checks/13-scoped-lint/lifecycle/.kntnt/session-cleanup/sessions/01a1063a-fbf0-7ea3-bfd6-c0ad52516ab4.jsonl",
+    "recorded": {
+      "at": "2026-10-04T17:22:54+00:00",
+      "id": "9588",
+      "kind": "pid",
+      "started": "Sun Oct  4 19:22:53 2026",
+      "why": "509 registration correction focused check 13-scoped-lint"
+    },
+    "session": "01a1063a-fbf0-7ea3-bfd6-c0ad52516ab4"
+  },
+  "contemporary_after": "Sun Oct  4 19:22:53 2026",
+  "sources": [
+    {
+      "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/docs/evaluation/harness/native_dispatch.py",
+      "bytes": 70536,
+      "sha256": "42d63638b103e5627abd5644a47dab664bb440f0d7d69f5774f41bb8ae7c0f20"
+    },
+    {
+      "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_registration.py",
+      "bytes": 11061,
+      "sha256": "b1f1ef3bbccdbbfe539bedc56af6318242533b7adc8f932a9f14694d4e3dd546"
+    },
+    {
+      "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py",
+      "bytes": 51474,
+      "sha256": "75c15edc78a6dc45462df1c48a0860a37ff2a00b9c342e631abad0a8e3444f91"
+    },
+    {
+      "path": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_dispatch.py",
+      "bytes": 17152,
+      "sha256": "d8922458f587238136b3744a2df791a237336b008955a5298af8fd7206e5809c"
+    }
+  ],
+  "storage": "/private/tmp/kntnt-method-509-registration-correction-20261004/checks/13-scoped-lint",
+  "native_sessions": 0,
+  "exit": 1,
+  "end_ns": 1791134575099199000
+}

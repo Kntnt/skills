@@ -1,0 +1,11 @@
+{
+  "manifest": "/private/tmp/kntnt-method-509-registration-correction-20261004/checks/05-first-home-red/lifecycle/.kntnt/session-cleanup/sessions/01a1063a-fbf0-7ea3-bfd6-c0ad52516ab4.jsonl",
+  "recorded": {
+    "at": "2026-10-04T17:16:46+00:00",
+    "id": "7814",
+    "kind": "pid",
+    "started": "Sun Oct  4 19:16:46 2026",
+    "why": "509 registration correction focused check 05-first-home-red"
+  },
+  "session": "01a1063a-fbf0-7ea3-bfd6-c0ad52516ab4"
+}

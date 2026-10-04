@@ -1,0 +1,910 @@
+FFFFFFFFFFFFFFF                                                          [100%]
+=================================== FAILURES ===================================
+_________ test_original_run_rejects_empty_installed_birth_before_stdin _________
+
+tmp_path = PosixPath('/private/tmp/kntnt-method-509-registration-correction-20261004/pytest-03/test_original_run_rejects_empt0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x1070898b0>
+
+    def test_original_run_rejects_empty_installed_birth_before_stdin(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+        """An exit0 registration with no birth must not authorize input consumption."""
+        raw = json.dumps({'recorded': {'kind': 'pid', 'id': str(PID), 'started': ''}}) + '\n'
+        args, input_stream = setup_run(tmp_path, monkeypatch, raw)
+        # A nonempty input makes consumption observable without starting native work.
+        input_stream.write(b'not consumed'); input_stream.seek(0)
+        error: Exception | None = None
+        try:
+            DISPATCH.run(args)
+        except (DISPATCH.CaptureError, AttributeError) as exc:
+            error = exc
+>       assert input_stream.tell() == 0
+E       assert 12 == 0
+E        +  where 12 = <built-in method tell of _io.BytesIO object at 0x107259300>()
+E        +    where <built-in method tell of _io.BytesIO object at 0x107259300> = <_io.BytesIO object at 0x107259300>.tell
+
+tests/test_evaluation_registration.py:54: AssertionError
+_ test_original_run_rejects_synthetic_registration_conflicts_before_input[missing-record] _
+
+tmp_path = PosixPath('/private/tmp/kntnt-method-509-registration-correction-20261004/pytest-03/test_original_run_rejects_synt0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x10708a330>
+boundary = 'missing-record'
+
+    @pytest.mark.parametrize('boundary', ['missing-record', 'malformed', 'wrong-kind', 'wrong-pid', 'pid-type', 'missing-birth', 'wrong-birth', 'before-empty', 'after-empty', 'after-changed', 'group-unavailable', 'foreign-group', 'after-foreign-group', 'exit-failure'])
+    def test_original_run_rejects_synthetic_registration_conflicts_before_input(tmp_path: Path, monkeypatch: pytest.MonkeyPatch, boundary: str) -> None:
+        """Unavailable registration or current ownership cannot authorize preparation."""
+        value: dict[str, Any] = {'recorded': {'kind': 'pid', 'id': str(PID), 'started': BIRTH}}
+        if boundary == 'missing-record':
+            value = {}
+        elif boundary == 'wrong-kind':
+            value['recorded']['kind'] = 'path'
+        elif boundary == 'wrong-pid':
+            value['recorded']['id'] = str(PID + 1)
+        elif boundary == 'pid-type':
+            value['recorded']['id'] = PID
+        elif boundary == 'missing-birth':
+            value['recorded'].pop('started')
+        elif boundary == 'wrong-birth':
+            value['recorded']['started'] = 'different birth'
+        raw = '{partial' if boundary == 'malformed' else json.dumps(value) + '\n'
+        args, input_stream = setup_run(tmp_path, monkeypatch, raw)
+        input_stream.write(b'not consumed'); input_stream.seek(0)
+        ps_reads = [0]
+        group_reads = [0]
+    
+        def external(command: list[str], **options: Any) -> subprocess.CompletedProcess[str]:
+            """Keep synthetic failures at actual OS and installed JSON boundaries."""
+            if command[0] != 'ps':
+                return subprocess.CompletedProcess(command, 1 if boundary == 'exit-failure' else 0, raw, 'synthetic stderr')
+            ps_reads[0] += 1
+            text = BIRTH
+            if boundary == 'before-empty' or (boundary == 'after-empty' and ps_reads[0] > 1):
+                text = ''
+            if boundary == 'after-changed' and ps_reads[0] > 1:
+                text = 'different birth'
+            return subprocess.CompletedProcess(command, 0, text, '')
+    
+        def group(pid: int) -> int:
+            """No actual process or destructive operation is used in these variants."""
+            group_reads[0] += 1
+            if boundary == 'group-unavailable':
+                raise PermissionError('synthetic group observation denied')
+            if boundary == 'foreign-group' or (boundary == 'after-foreign-group' and group_reads[0] > 1):
+                return PID + 1
+            return PID
+    
+        monkeypatch.setattr(DISPATCH.subprocess, 'run', external)
+        monkeypatch.setattr(DISPATCH.os, 'getpgid', group)
+        error: Exception | None = None
+        try:
+            DISPATCH.run(args)
+        except (DISPATCH.CaptureError, AttributeError, OSError, ValueError) as exc:
+            error = exc
+>       assert input_stream.tell() == 0
+E       assert 12 == 0
+E        +  where 12 = <built-in method tell of _io.BytesIO object at 0x10725b470>()
+E        +    where <built-in method tell of _io.BytesIO object at 0x10725b470> = <_io.BytesIO object at 0x10725b470>.tell
+
+tests/test_evaluation_registration.py:116: AssertionError
+_ test_original_run_rejects_synthetic_registration_conflicts_before_input[malformed] _
+
+tmp_path = PosixPath('/private/tmp/kntnt-method-509-registration-correction-20261004/pytest-03/test_original_run_rejects_synt1')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x107089af0>
+boundary = 'malformed'
+
+    @pytest.mark.parametrize('boundary', ['missing-record', 'malformed', 'wrong-kind', 'wrong-pid', 'pid-type', 'missing-birth', 'wrong-birth', 'before-empty', 'after-empty', 'after-changed', 'group-unavailable', 'foreign-group', 'after-foreign-group', 'exit-failure'])
+    def test_original_run_rejects_synthetic_registration_conflicts_before_input(tmp_path: Path, monkeypatch: pytest.MonkeyPatch, boundary: str) -> None:
+        """Unavailable registration or current ownership cannot authorize preparation."""
+        value: dict[str, Any] = {'recorded': {'kind': 'pid', 'id': str(PID), 'started': BIRTH}}
+        if boundary == 'missing-record':
+            value = {}
+        elif boundary == 'wrong-kind':
+            value['recorded']['kind'] = 'path'
+        elif boundary == 'wrong-pid':
+            value['recorded']['id'] = str(PID + 1)
+        elif boundary == 'pid-type':
+            value['recorded']['id'] = PID
+        elif boundary == 'missing-birth':
+            value['recorded'].pop('started')
+        elif boundary == 'wrong-birth':
+            value['recorded']['started'] = 'different birth'
+        raw = '{partial' if boundary == 'malformed' else json.dumps(value) + '\n'
+        args, input_stream = setup_run(tmp_path, monkeypatch, raw)
+        input_stream.write(b'not consumed'); input_stream.seek(0)
+        ps_reads = [0]
+        group_reads = [0]
+    
+        def external(command: list[str], **options: Any) -> subprocess.CompletedProcess[str]:
+            """Keep synthetic failures at actual OS and installed JSON boundaries."""
+            if command[0] != 'ps':
+                return subprocess.CompletedProcess(command, 1 if boundary == 'exit-failure' else 0, raw, 'synthetic stderr')
+            ps_reads[0] += 1
+            text = BIRTH
+            if boundary == 'before-empty' or (boundary == 'after-empty' and ps_reads[0] > 1):
+                text = ''
+            if boundary == 'after-changed' and ps_reads[0] > 1:
+                text = 'different birth'
+            return subprocess.CompletedProcess(command, 0, text, '')
+    
+        def group(pid: int) -> int:
+            """No actual process or destructive operation is used in these variants."""
+            group_reads[0] += 1
+            if boundary == 'group-unavailable':
+                raise PermissionError('synthetic group observation denied')
+            if boundary == 'foreign-group' or (boundary == 'after-foreign-group' and group_reads[0] > 1):
+                return PID + 1
+            return PID
+    
+        monkeypatch.setattr(DISPATCH.subprocess, 'run', external)
+        monkeypatch.setattr(DISPATCH.os, 'getpgid', group)
+        error: Exception | None = None
+        try:
+            DISPATCH.run(args)
+        except (DISPATCH.CaptureError, AttributeError, OSError, ValueError) as exc:
+            error = exc
+>       assert input_stream.tell() == 0
+E       assert 12 == 0
+E        +  where 12 = <built-in method tell of _io.BytesIO object at 0x10725bbf0>()
+E        +    where <built-in method tell of _io.BytesIO object at 0x10725bbf0> = <_io.BytesIO object at 0x10725bbf0>.tell
+
+tests/test_evaluation_registration.py:116: AssertionError
+_ test_original_run_rejects_synthetic_registration_conflicts_before_input[wrong-kind] _
+
+tmp_path = PosixPath('/private/tmp/kntnt-method-509-registration-correction-20261004/pytest-03/test_original_run_rejects_synt2')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x107089a30>
+boundary = 'wrong-kind'
+
+    @pytest.mark.parametrize('boundary', ['missing-record', 'malformed', 'wrong-kind', 'wrong-pid', 'pid-type', 'missing-birth', 'wrong-birth', 'before-empty', 'after-empty', 'after-changed', 'group-unavailable', 'foreign-group', 'after-foreign-group', 'exit-failure'])
+    def test_original_run_rejects_synthetic_registration_conflicts_before_input(tmp_path: Path, monkeypatch: pytest.MonkeyPatch, boundary: str) -> None:
+        """Unavailable registration or current ownership cannot authorize preparation."""
+        value: dict[str, Any] = {'recorded': {'kind': 'pid', 'id': str(PID), 'started': BIRTH}}
+        if boundary == 'missing-record':
+            value = {}
+        elif boundary == 'wrong-kind':
+            value['recorded']['kind'] = 'path'
+        elif boundary == 'wrong-pid':
+            value['recorded']['id'] = str(PID + 1)
+        elif boundary == 'pid-type':
+            value['recorded']['id'] = PID
+        elif boundary == 'missing-birth':
+            value['recorded'].pop('started')
+        elif boundary == 'wrong-birth':
+            value['recorded']['started'] = 'different birth'
+        raw = '{partial' if boundary == 'malformed' else json.dumps(value) + '\n'
+        args, input_stream = setup_run(tmp_path, monkeypatch, raw)
+        input_stream.write(b'not consumed'); input_stream.seek(0)
+        ps_reads = [0]
+        group_reads = [0]
+    
+        def external(command: list[str], **options: Any) -> subprocess.CompletedProcess[str]:
+            """Keep synthetic failures at actual OS and installed JSON boundaries."""
+            if command[0] != 'ps':
+                return subprocess.CompletedProcess(command, 1 if boundary == 'exit-failure' else 0, raw, 'synthetic stderr')
+            ps_reads[0] += 1
+            text = BIRTH
+            if boundary == 'before-empty' or (boundary == 'after-empty' and ps_reads[0] > 1):
+                text = ''
+            if boundary == 'after-changed' and ps_reads[0] > 1:
+                text = 'different birth'
+            return subprocess.CompletedProcess(command, 0, text, '')
+    
+        def group(pid: int) -> int:
+            """No actual process or destructive operation is used in these variants."""
+            group_reads[0] += 1
+            if boundary == 'group-unavailable':
+                raise PermissionError('synthetic group observation denied')
+            if boundary == 'foreign-group' or (boundary == 'after-foreign-group' and group_reads[0] > 1):
+                return PID + 1
+            return PID
+    
+        monkeypatch.setattr(DISPATCH.subprocess, 'run', external)
+        monkeypatch.setattr(DISPATCH.os, 'getpgid', group)
+        error: Exception | None = None
+        try:
+            DISPATCH.run(args)
+        except (DISPATCH.CaptureError, AttributeError, OSError, ValueError) as exc:
+            error = exc
+>       assert input_stream.tell() == 0
+E       assert 12 == 0
+E        +  where 12 = <built-in method tell of _io.BytesIO object at 0x10725b2e0>()
+E        +    where <built-in method tell of _io.BytesIO object at 0x10725b2e0> = <_io.BytesIO object at 0x10725b2e0>.tell
+
+tests/test_evaluation_registration.py:116: AssertionError
+_ test_original_run_rejects_synthetic_registration_conflicts_before_input[wrong-pid] _
+
+tmp_path = PosixPath('/private/tmp/kntnt-method-509-registration-correction-20261004/pytest-03/test_original_run_rejects_synt3')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x10708af60>
+boundary = 'wrong-pid'
+
+    @pytest.mark.parametrize('boundary', ['missing-record', 'malformed', 'wrong-kind', 'wrong-pid', 'pid-type', 'missing-birth', 'wrong-birth', 'before-empty', 'after-empty', 'after-changed', 'group-unavailable', 'foreign-group', 'after-foreign-group', 'exit-failure'])
+    def test_original_run_rejects_synthetic_registration_conflicts_before_input(tmp_path: Path, monkeypatch: pytest.MonkeyPatch, boundary: str) -> None:
+        """Unavailable registration or current ownership cannot authorize preparation."""
+        value: dict[str, Any] = {'recorded': {'kind': 'pid', 'id': str(PID), 'started': BIRTH}}
+        if boundary == 'missing-record':
+            value = {}
+        elif boundary == 'wrong-kind':
+            value['recorded']['kind'] = 'path'
+        elif boundary == 'wrong-pid':
+            value['recorded']['id'] = str(PID + 1)
+        elif boundary == 'pid-type':
+            value['recorded']['id'] = PID
+        elif boundary == 'missing-birth':
+            value['recorded'].pop('started')
+        elif boundary == 'wrong-birth':
+            value['recorded']['started'] = 'different birth'
+        raw = '{partial' if boundary == 'malformed' else json.dumps(value) + '\n'
+        args, input_stream = setup_run(tmp_path, monkeypatch, raw)
+        input_stream.write(b'not consumed'); input_stream.seek(0)
+        ps_reads = [0]
+        group_reads = [0]
+    
+        def external(command: list[str], **options: Any) -> subprocess.CompletedProcess[str]:
+            """Keep synthetic failures at actual OS and installed JSON boundaries."""
+            if command[0] != 'ps':
+                return subprocess.CompletedProcess(command, 1 if boundary == 'exit-failure' else 0, raw, 'synthetic stderr')
+            ps_reads[0] += 1
+            text = BIRTH
+            if boundary == 'before-empty' or (boundary == 'after-empty' and ps_reads[0] > 1):
+                text = ''
+            if boundary == 'after-changed' and ps_reads[0] > 1:
+                text = 'different birth'
+            return subprocess.CompletedProcess(command, 0, text, '')
+    
+        def group(pid: int) -> int:
+            """No actual process or destructive operation is used in these variants."""
+            group_reads[0] += 1
+            if boundary == 'group-unavailable':
+                raise PermissionError('synthetic group observation denied')
+            if boundary == 'foreign-group' or (boundary == 'after-foreign-group' and group_reads[0] > 1):
+                return PID + 1
+            return PID
+    
+        monkeypatch.setattr(DISPATCH.subprocess, 'run', external)
+        monkeypatch.setattr(DISPATCH.os, 'getpgid', group)
+        error: Exception | None = None
+        try:
+            DISPATCH.run(args)
+        except (DISPATCH.CaptureError, AttributeError, OSError, ValueError) as exc:
+            error = exc
+>       assert input_stream.tell() == 0
+E       assert 12 == 0
+E        +  where 12 = <built-in method tell of _io.BytesIO object at 0x10725bba0>()
+E        +    where <built-in method tell of _io.BytesIO object at 0x10725bba0> = <_io.BytesIO object at 0x10725bba0>.tell
+
+tests/test_evaluation_registration.py:116: AssertionError
+_ test_original_run_rejects_synthetic_registration_conflicts_before_input[pid-type] _
+
+tmp_path = PosixPath('/private/tmp/kntnt-method-509-registration-correction-20261004/pytest-03/test_original_run_rejects_synt4')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x10708f140>
+boundary = 'pid-type'
+
+    @pytest.mark.parametrize('boundary', ['missing-record', 'malformed', 'wrong-kind', 'wrong-pid', 'pid-type', 'missing-birth', 'wrong-birth', 'before-empty', 'after-empty', 'after-changed', 'group-unavailable', 'foreign-group', 'after-foreign-group', 'exit-failure'])
+    def test_original_run_rejects_synthetic_registration_conflicts_before_input(tmp_path: Path, monkeypatch: pytest.MonkeyPatch, boundary: str) -> None:
+        """Unavailable registration or current ownership cannot authorize preparation."""
+        value: dict[str, Any] = {'recorded': {'kind': 'pid', 'id': str(PID), 'started': BIRTH}}
+        if boundary == 'missing-record':
+            value = {}
+        elif boundary == 'wrong-kind':
+            value['recorded']['kind'] = 'path'
+        elif boundary == 'wrong-pid':
+            value['recorded']['id'] = str(PID + 1)
+        elif boundary == 'pid-type':
+            value['recorded']['id'] = PID
+        elif boundary == 'missing-birth':
+            value['recorded'].pop('started')
+        elif boundary == 'wrong-birth':
+            value['recorded']['started'] = 'different birth'
+        raw = '{partial' if boundary == 'malformed' else json.dumps(value) + '\n'
+        args, input_stream = setup_run(tmp_path, monkeypatch, raw)
+        input_stream.write(b'not consumed'); input_stream.seek(0)
+        ps_reads = [0]
+        group_reads = [0]
+    
+        def external(command: list[str], **options: Any) -> subprocess.CompletedProcess[str]:
+            """Keep synthetic failures at actual OS and installed JSON boundaries."""
+            if command[0] != 'ps':
+                return subprocess.CompletedProcess(command, 1 if boundary == 'exit-failure' else 0, raw, 'synthetic stderr')
+            ps_reads[0] += 1
+            text = BIRTH
+            if boundary == 'before-empty' or (boundary == 'after-empty' and ps_reads[0] > 1):
+                text = ''
+            if boundary == 'after-changed' and ps_reads[0] > 1:
+                text = 'different birth'
+            return subprocess.CompletedProcess(command, 0, text, '')
+    
+        def group(pid: int) -> int:
+            """No actual process or destructive operation is used in these variants."""
+            group_reads[0] += 1
+            if boundary == 'group-unavailable':
+                raise PermissionError('synthetic group observation denied')
+            if boundary == 'foreign-group' or (boundary == 'after-foreign-group' and group_reads[0] > 1):
+                return PID + 1
+            return PID
+    
+        monkeypatch.setattr(DISPATCH.subprocess, 'run', external)
+        monkeypatch.setattr(DISPATCH.os, 'getpgid', group)
+        error: Exception | None = None
+        try:
+            DISPATCH.run(args)
+        except (DISPATCH.CaptureError, AttributeError, OSError, ValueError) as exc:
+            error = exc
+>       assert input_stream.tell() == 0
+E       assert 12 == 0
+E        +  where 12 = <built-in method tell of _io.BytesIO object at 0x107264a40>()
+E        +    where <built-in method tell of _io.BytesIO object at 0x107264a40> = <_io.BytesIO object at 0x107264a40>.tell
+
+tests/test_evaluation_registration.py:116: AssertionError
+_ test_original_run_rejects_synthetic_registration_conflicts_before_input[missing-birth] _
+
+tmp_path = PosixPath('/private/tmp/kntnt-method-509-registration-correction-20261004/pytest-03/test_original_run_rejects_synt5')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x10708a750>
+boundary = 'missing-birth'
+
+    @pytest.mark.parametrize('boundary', ['missing-record', 'malformed', 'wrong-kind', 'wrong-pid', 'pid-type', 'missing-birth', 'wrong-birth', 'before-empty', 'after-empty', 'after-changed', 'group-unavailable', 'foreign-group', 'after-foreign-group', 'exit-failure'])
+    def test_original_run_rejects_synthetic_registration_conflicts_before_input(tmp_path: Path, monkeypatch: pytest.MonkeyPatch, boundary: str) -> None:
+        """Unavailable registration or current ownership cannot authorize preparation."""
+        value: dict[str, Any] = {'recorded': {'kind': 'pid', 'id': str(PID), 'started': BIRTH}}
+        if boundary == 'missing-record':
+            value = {}
+        elif boundary == 'wrong-kind':
+            value['recorded']['kind'] = 'path'
+        elif boundary == 'wrong-pid':
+            value['recorded']['id'] = str(PID + 1)
+        elif boundary == 'pid-type':
+            value['recorded']['id'] = PID
+        elif boundary == 'missing-birth':
+            value['recorded'].pop('started')
+        elif boundary == 'wrong-birth':
+            value['recorded']['started'] = 'different birth'
+        raw = '{partial' if boundary == 'malformed' else json.dumps(value) + '\n'
+        args, input_stream = setup_run(tmp_path, monkeypatch, raw)
+        input_stream.write(b'not consumed'); input_stream.seek(0)
+        ps_reads = [0]
+        group_reads = [0]
+    
+        def external(command: list[str], **options: Any) -> subprocess.CompletedProcess[str]:
+            """Keep synthetic failures at actual OS and installed JSON boundaries."""
+            if command[0] != 'ps':
+                return subprocess.CompletedProcess(command, 1 if boundary == 'exit-failure' else 0, raw, 'synthetic stderr')
+            ps_reads[0] += 1
+            text = BIRTH
+            if boundary == 'before-empty' or (boundary == 'after-empty' and ps_reads[0] > 1):
+                text = ''
+            if boundary == 'after-changed' and ps_reads[0] > 1:
+                text = 'different birth'
+            return subprocess.CompletedProcess(command, 0, text, '')
+    
+        def group(pid: int) -> int:
+            """No actual process or destructive operation is used in these variants."""
+            group_reads[0] += 1
+            if boundary == 'group-unavailable':
+                raise PermissionError('synthetic group observation denied')
+            if boundary == 'foreign-group' or (boundary == 'after-foreign-group' and group_reads[0] > 1):
+                return PID + 1
+            return PID
+    
+        monkeypatch.setattr(DISPATCH.subprocess, 'run', external)
+        monkeypatch.setattr(DISPATCH.os, 'getpgid', group)
+        error: Exception | None = None
+        try:
+            DISPATCH.run(args)
+        except (DISPATCH.CaptureError, AttributeError, OSError, ValueError) as exc:
+            error = exc
+>       assert input_stream.tell() == 0
+E       assert 12 == 0
+E        +  where 12 = <built-in method tell of _io.BytesIO object at 0x10725b1a0>()
+E        +    where <built-in method tell of _io.BytesIO object at 0x10725b1a0> = <_io.BytesIO object at 0x10725b1a0>.tell
+
+tests/test_evaluation_registration.py:116: AssertionError
+_ test_original_run_rejects_synthetic_registration_conflicts_before_input[wrong-birth] _
+
+tmp_path = PosixPath('/private/tmp/kntnt-method-509-registration-correction-20261004/pytest-03/test_original_run_rejects_synt6')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x107089af0>
+boundary = 'wrong-birth'
+
+    @pytest.mark.parametrize('boundary', ['missing-record', 'malformed', 'wrong-kind', 'wrong-pid', 'pid-type', 'missing-birth', 'wrong-birth', 'before-empty', 'after-empty', 'after-changed', 'group-unavailable', 'foreign-group', 'after-foreign-group', 'exit-failure'])
+    def test_original_run_rejects_synthetic_registration_conflicts_before_input(tmp_path: Path, monkeypatch: pytest.MonkeyPatch, boundary: str) -> None:
+        """Unavailable registration or current ownership cannot authorize preparation."""
+        value: dict[str, Any] = {'recorded': {'kind': 'pid', 'id': str(PID), 'started': BIRTH}}
+        if boundary == 'missing-record':
+            value = {}
+        elif boundary == 'wrong-kind':
+            value['recorded']['kind'] = 'path'
+        elif boundary == 'wrong-pid':
+            value['recorded']['id'] = str(PID + 1)
+        elif boundary == 'pid-type':
+            value['recorded']['id'] = PID
+        elif boundary == 'missing-birth':
+            value['recorded'].pop('started')
+        elif boundary == 'wrong-birth':
+            value['recorded']['started'] = 'different birth'
+        raw = '{partial' if boundary == 'malformed' else json.dumps(value) + '\n'
+        args, input_stream = setup_run(tmp_path, monkeypatch, raw)
+        input_stream.write(b'not consumed'); input_stream.seek(0)
+        ps_reads = [0]
+        group_reads = [0]
+    
+        def external(command: list[str], **options: Any) -> subprocess.CompletedProcess[str]:
+            """Keep synthetic failures at actual OS and installed JSON boundaries."""
+            if command[0] != 'ps':
+                return subprocess.CompletedProcess(command, 1 if boundary == 'exit-failure' else 0, raw, 'synthetic stderr')
+            ps_reads[0] += 1
+            text = BIRTH
+            if boundary == 'before-empty' or (boundary == 'after-empty' and ps_reads[0] > 1):
+                text = ''
+            if boundary == 'after-changed' and ps_reads[0] > 1:
+                text = 'different birth'
+            return subprocess.CompletedProcess(command, 0, text, '')
+    
+        def group(pid: int) -> int:
+            """No actual process or destructive operation is used in these variants."""
+            group_reads[0] += 1
+            if boundary == 'group-unavailable':
+                raise PermissionError('synthetic group observation denied')
+            if boundary == 'foreign-group' or (boundary == 'after-foreign-group' and group_reads[0] > 1):
+                return PID + 1
+            return PID
+    
+        monkeypatch.setattr(DISPATCH.subprocess, 'run', external)
+        monkeypatch.setattr(DISPATCH.os, 'getpgid', group)
+        error: Exception | None = None
+        try:
+            DISPATCH.run(args)
+        except (DISPATCH.CaptureError, AttributeError, OSError, ValueError) as exc:
+            error = exc
+>       assert input_stream.tell() == 0
+E       assert 12 == 0
+E        +  where 12 = <built-in method tell of _io.BytesIO object at 0x10725b100>()
+E        +    where <built-in method tell of _io.BytesIO object at 0x10725b100> = <_io.BytesIO object at 0x10725b100>.tell
+
+tests/test_evaluation_registration.py:116: AssertionError
+_ test_original_run_rejects_synthetic_registration_conflicts_before_input[before-empty] _
+
+tmp_path = PosixPath('/private/tmp/kntnt-method-509-registration-correction-20261004/pytest-03/test_original_run_rejects_synt7')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x10708a330>
+boundary = 'before-empty'
+
+    @pytest.mark.parametrize('boundary', ['missing-record', 'malformed', 'wrong-kind', 'wrong-pid', 'pid-type', 'missing-birth', 'wrong-birth', 'before-empty', 'after-empty', 'after-changed', 'group-unavailable', 'foreign-group', 'after-foreign-group', 'exit-failure'])
+    def test_original_run_rejects_synthetic_registration_conflicts_before_input(tmp_path: Path, monkeypatch: pytest.MonkeyPatch, boundary: str) -> None:
+        """Unavailable registration or current ownership cannot authorize preparation."""
+        value: dict[str, Any] = {'recorded': {'kind': 'pid', 'id': str(PID), 'started': BIRTH}}
+        if boundary == 'missing-record':
+            value = {}
+        elif boundary == 'wrong-kind':
+            value['recorded']['kind'] = 'path'
+        elif boundary == 'wrong-pid':
+            value['recorded']['id'] = str(PID + 1)
+        elif boundary == 'pid-type':
+            value['recorded']['id'] = PID
+        elif boundary == 'missing-birth':
+            value['recorded'].pop('started')
+        elif boundary == 'wrong-birth':
+            value['recorded']['started'] = 'different birth'
+        raw = '{partial' if boundary == 'malformed' else json.dumps(value) + '\n'
+        args, input_stream = setup_run(tmp_path, monkeypatch, raw)
+        input_stream.write(b'not consumed'); input_stream.seek(0)
+        ps_reads = [0]
+        group_reads = [0]
+    
+        def external(command: list[str], **options: Any) -> subprocess.CompletedProcess[str]:
+            """Keep synthetic failures at actual OS and installed JSON boundaries."""
+            if command[0] != 'ps':
+                return subprocess.CompletedProcess(command, 1 if boundary == 'exit-failure' else 0, raw, 'synthetic stderr')
+            ps_reads[0] += 1
+            text = BIRTH
+            if boundary == 'before-empty' or (boundary == 'after-empty' and ps_reads[0] > 1):
+                text = ''
+            if boundary == 'after-changed' and ps_reads[0] > 1:
+                text = 'different birth'
+            return subprocess.CompletedProcess(command, 0, text, '')
+    
+        def group(pid: int) -> int:
+            """No actual process or destructive operation is used in these variants."""
+            group_reads[0] += 1
+            if boundary == 'group-unavailable':
+                raise PermissionError('synthetic group observation denied')
+            if boundary == 'foreign-group' or (boundary == 'after-foreign-group' and group_reads[0] > 1):
+                return PID + 1
+            return PID
+    
+        monkeypatch.setattr(DISPATCH.subprocess, 'run', external)
+        monkeypatch.setattr(DISPATCH.os, 'getpgid', group)
+        error: Exception | None = None
+        try:
+            DISPATCH.run(args)
+        except (DISPATCH.CaptureError, AttributeError, OSError, ValueError) as exc:
+            error = exc
+>       assert input_stream.tell() == 0
+E       assert 12 == 0
+E        +  where 12 = <built-in method tell of _io.BytesIO object at 0x107266070>()
+E        +    where <built-in method tell of _io.BytesIO object at 0x107266070> = <_io.BytesIO object at 0x107266070>.tell
+
+tests/test_evaluation_registration.py:116: AssertionError
+_ test_original_run_rejects_synthetic_registration_conflicts_before_input[after-empty] _
+
+tmp_path = PosixPath('/private/tmp/kntnt-method-509-registration-correction-20261004/pytest-03/test_original_run_rejects_synt8')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x10708a030>
+boundary = 'after-empty'
+
+    @pytest.mark.parametrize('boundary', ['missing-record', 'malformed', 'wrong-kind', 'wrong-pid', 'pid-type', 'missing-birth', 'wrong-birth', 'before-empty', 'after-empty', 'after-changed', 'group-unavailable', 'foreign-group', 'after-foreign-group', 'exit-failure'])
+    def test_original_run_rejects_synthetic_registration_conflicts_before_input(tmp_path: Path, monkeypatch: pytest.MonkeyPatch, boundary: str) -> None:
+        """Unavailable registration or current ownership cannot authorize preparation."""
+        value: dict[str, Any] = {'recorded': {'kind': 'pid', 'id': str(PID), 'started': BIRTH}}
+        if boundary == 'missing-record':
+            value = {}
+        elif boundary == 'wrong-kind':
+            value['recorded']['kind'] = 'path'
+        elif boundary == 'wrong-pid':
+            value['recorded']['id'] = str(PID + 1)
+        elif boundary == 'pid-type':
+            value['recorded']['id'] = PID
+        elif boundary == 'missing-birth':
+            value['recorded'].pop('started')
+        elif boundary == 'wrong-birth':
+            value['recorded']['started'] = 'different birth'
+        raw = '{partial' if boundary == 'malformed' else json.dumps(value) + '\n'
+        args, input_stream = setup_run(tmp_path, monkeypatch, raw)
+        input_stream.write(b'not consumed'); input_stream.seek(0)
+        ps_reads = [0]
+        group_reads = [0]
+    
+        def external(command: list[str], **options: Any) -> subprocess.CompletedProcess[str]:
+            """Keep synthetic failures at actual OS and installed JSON boundaries."""
+            if command[0] != 'ps':
+                return subprocess.CompletedProcess(command, 1 if boundary == 'exit-failure' else 0, raw, 'synthetic stderr')
+            ps_reads[0] += 1
+            text = BIRTH
+            if boundary == 'before-empty' or (boundary == 'after-empty' and ps_reads[0] > 1):
+                text = ''
+            if boundary == 'after-changed' and ps_reads[0] > 1:
+                text = 'different birth'
+            return subprocess.CompletedProcess(command, 0, text, '')
+    
+        def group(pid: int) -> int:
+            """No actual process or destructive operation is used in these variants."""
+            group_reads[0] += 1
+            if boundary == 'group-unavailable':
+                raise PermissionError('synthetic group observation denied')
+            if boundary == 'foreign-group' or (boundary == 'after-foreign-group' and group_reads[0] > 1):
+                return PID + 1
+            return PID
+    
+        monkeypatch.setattr(DISPATCH.subprocess, 'run', external)
+        monkeypatch.setattr(DISPATCH.os, 'getpgid', group)
+        error: Exception | None = None
+        try:
+            DISPATCH.run(args)
+        except (DISPATCH.CaptureError, AttributeError, OSError, ValueError) as exc:
+            error = exc
+>       assert input_stream.tell() == 0
+E       assert 12 == 0
+E        +  where 12 = <built-in method tell of _io.BytesIO object at 0x1072657b0>()
+E        +    where <built-in method tell of _io.BytesIO object at 0x1072657b0> = <_io.BytesIO object at 0x1072657b0>.tell
+
+tests/test_evaluation_registration.py:116: AssertionError
+_ test_original_run_rejects_synthetic_registration_conflicts_before_input[after-changed] _
+
+tmp_path = PosixPath('/private/tmp/kntnt-method-509-registration-correction-20261004/pytest-03/test_original_run_rejects_synt9')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x10708f350>
+boundary = 'after-changed'
+
+    @pytest.mark.parametrize('boundary', ['missing-record', 'malformed', 'wrong-kind', 'wrong-pid', 'pid-type', 'missing-birth', 'wrong-birth', 'before-empty', 'after-empty', 'after-changed', 'group-unavailable', 'foreign-group', 'after-foreign-group', 'exit-failure'])
+    def test_original_run_rejects_synthetic_registration_conflicts_before_input(tmp_path: Path, monkeypatch: pytest.MonkeyPatch, boundary: str) -> None:
+        """Unavailable registration or current ownership cannot authorize preparation."""
+        value: dict[str, Any] = {'recorded': {'kind': 'pid', 'id': str(PID), 'started': BIRTH}}
+        if boundary == 'missing-record':
+            value = {}
+        elif boundary == 'wrong-kind':
+            value['recorded']['kind'] = 'path'
+        elif boundary == 'wrong-pid':
+            value['recorded']['id'] = str(PID + 1)
+        elif boundary == 'pid-type':
+            value['recorded']['id'] = PID
+        elif boundary == 'missing-birth':
+            value['recorded'].pop('started')
+        elif boundary == 'wrong-birth':
+            value['recorded']['started'] = 'different birth'
+        raw = '{partial' if boundary == 'malformed' else json.dumps(value) + '\n'
+        args, input_stream = setup_run(tmp_path, monkeypatch, raw)
+        input_stream.write(b'not consumed'); input_stream.seek(0)
+        ps_reads = [0]
+        group_reads = [0]
+    
+        def external(command: list[str], **options: Any) -> subprocess.CompletedProcess[str]:
+            """Keep synthetic failures at actual OS and installed JSON boundaries."""
+            if command[0] != 'ps':
+                return subprocess.CompletedProcess(command, 1 if boundary == 'exit-failure' else 0, raw, 'synthetic stderr')
+            ps_reads[0] += 1
+            text = BIRTH
+            if boundary == 'before-empty' or (boundary == 'after-empty' and ps_reads[0] > 1):
+                text = ''
+            if boundary == 'after-changed' and ps_reads[0] > 1:
+                text = 'different birth'
+            return subprocess.CompletedProcess(command, 0, text, '')
+    
+        def group(pid: int) -> int:
+            """No actual process or destructive operation is used in these variants."""
+            group_reads[0] += 1
+            if boundary == 'group-unavailable':
+                raise PermissionError('synthetic group observation denied')
+            if boundary == 'foreign-group' or (boundary == 'after-foreign-group' and group_reads[0] > 1):
+                return PID + 1
+            return PID
+    
+        monkeypatch.setattr(DISPATCH.subprocess, 'run', external)
+        monkeypatch.setattr(DISPATCH.os, 'getpgid', group)
+        error: Exception | None = None
+        try:
+            DISPATCH.run(args)
+        except (DISPATCH.CaptureError, AttributeError, OSError, ValueError) as exc:
+            error = exc
+>       assert input_stream.tell() == 0
+E       assert 12 == 0
+E        +  where 12 = <built-in method tell of _io.BytesIO object at 0x107266f20>()
+E        +    where <built-in method tell of _io.BytesIO object at 0x107266f20> = <_io.BytesIO object at 0x107266f20>.tell
+
+tests/test_evaluation_registration.py:116: AssertionError
+_ test_original_run_rejects_synthetic_registration_conflicts_before_input[group-unavailable] _
+
+tmp_path = PosixPath('/private/tmp/kntnt-method-509-registration-correction-20261004/pytest-03/test_original_run_rejects_synt10')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x10708eba0>
+boundary = 'group-unavailable'
+
+    @pytest.mark.parametrize('boundary', ['missing-record', 'malformed', 'wrong-kind', 'wrong-pid', 'pid-type', 'missing-birth', 'wrong-birth', 'before-empty', 'after-empty', 'after-changed', 'group-unavailable', 'foreign-group', 'after-foreign-group', 'exit-failure'])
+    def test_original_run_rejects_synthetic_registration_conflicts_before_input(tmp_path: Path, monkeypatch: pytest.MonkeyPatch, boundary: str) -> None:
+        """Unavailable registration or current ownership cannot authorize preparation."""
+        value: dict[str, Any] = {'recorded': {'kind': 'pid', 'id': str(PID), 'started': BIRTH}}
+        if boundary == 'missing-record':
+            value = {}
+        elif boundary == 'wrong-kind':
+            value['recorded']['kind'] = 'path'
+        elif boundary == 'wrong-pid':
+            value['recorded']['id'] = str(PID + 1)
+        elif boundary == 'pid-type':
+            value['recorded']['id'] = PID
+        elif boundary == 'missing-birth':
+            value['recorded'].pop('started')
+        elif boundary == 'wrong-birth':
+            value['recorded']['started'] = 'different birth'
+        raw = '{partial' if boundary == 'malformed' else json.dumps(value) + '\n'
+        args, input_stream = setup_run(tmp_path, monkeypatch, raw)
+        input_stream.write(b'not consumed'); input_stream.seek(0)
+        ps_reads = [0]
+        group_reads = [0]
+    
+        def external(command: list[str], **options: Any) -> subprocess.CompletedProcess[str]:
+            """Keep synthetic failures at actual OS and installed JSON boundaries."""
+            if command[0] != 'ps':
+                return subprocess.CompletedProcess(command, 1 if boundary == 'exit-failure' else 0, raw, 'synthetic stderr')
+            ps_reads[0] += 1
+            text = BIRTH
+            if boundary == 'before-empty' or (boundary == 'after-empty' and ps_reads[0] > 1):
+                text = ''
+            if boundary == 'after-changed' and ps_reads[0] > 1:
+                text = 'different birth'
+            return subprocess.CompletedProcess(command, 0, text, '')
+    
+        def group(pid: int) -> int:
+            """No actual process or destructive operation is used in these variants."""
+            group_reads[0] += 1
+            if boundary == 'group-unavailable':
+                raise PermissionError('synthetic group observation denied')
+            if boundary == 'foreign-group' or (boundary == 'after-foreign-group' and group_reads[0] > 1):
+                return PID + 1
+            return PID
+    
+        monkeypatch.setattr(DISPATCH.subprocess, 'run', external)
+        monkeypatch.setattr(DISPATCH.os, 'getpgid', group)
+        error: Exception | None = None
+        try:
+            DISPATCH.run(args)
+        except (DISPATCH.CaptureError, AttributeError, OSError, ValueError) as exc:
+            error = exc
+        assert input_stream.tell() == 0
+>       assert isinstance(error, DISPATCH.CaptureError)
+E       AssertionError: assert False
+E        +  where False = isinstance(PermissionError('synthetic group observation denied'), <class 'registration_dispatch.CaptureError'>)
+E        +    where <class 'registration_dispatch.CaptureError'> = DISPATCH.CaptureError
+
+tests/test_evaluation_registration.py:117: AssertionError
+_ test_original_run_rejects_synthetic_registration_conflicts_before_input[foreign-group] _
+
+tmp_path = PosixPath('/private/tmp/kntnt-method-509-registration-correction-20261004/pytest-03/test_original_run_rejects_synt11')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x10708c4a0>
+boundary = 'foreign-group'
+
+    @pytest.mark.parametrize('boundary', ['missing-record', 'malformed', 'wrong-kind', 'wrong-pid', 'pid-type', 'missing-birth', 'wrong-birth', 'before-empty', 'after-empty', 'after-changed', 'group-unavailable', 'foreign-group', 'after-foreign-group', 'exit-failure'])
+    def test_original_run_rejects_synthetic_registration_conflicts_before_input(tmp_path: Path, monkeypatch: pytest.MonkeyPatch, boundary: str) -> None:
+        """Unavailable registration or current ownership cannot authorize preparation."""
+        value: dict[str, Any] = {'recorded': {'kind': 'pid', 'id': str(PID), 'started': BIRTH}}
+        if boundary == 'missing-record':
+            value = {}
+        elif boundary == 'wrong-kind':
+            value['recorded']['kind'] = 'path'
+        elif boundary == 'wrong-pid':
+            value['recorded']['id'] = str(PID + 1)
+        elif boundary == 'pid-type':
+            value['recorded']['id'] = PID
+        elif boundary == 'missing-birth':
+            value['recorded'].pop('started')
+        elif boundary == 'wrong-birth':
+            value['recorded']['started'] = 'different birth'
+        raw = '{partial' if boundary == 'malformed' else json.dumps(value) + '\n'
+        args, input_stream = setup_run(tmp_path, monkeypatch, raw)
+        input_stream.write(b'not consumed'); input_stream.seek(0)
+        ps_reads = [0]
+        group_reads = [0]
+    
+        def external(command: list[str], **options: Any) -> subprocess.CompletedProcess[str]:
+            """Keep synthetic failures at actual OS and installed JSON boundaries."""
+            if command[0] != 'ps':
+                return subprocess.CompletedProcess(command, 1 if boundary == 'exit-failure' else 0, raw, 'synthetic stderr')
+            ps_reads[0] += 1
+            text = BIRTH
+            if boundary == 'before-empty' or (boundary == 'after-empty' and ps_reads[0] > 1):
+                text = ''
+            if boundary == 'after-changed' and ps_reads[0] > 1:
+                text = 'different birth'
+            return subprocess.CompletedProcess(command, 0, text, '')
+    
+        def group(pid: int) -> int:
+            """No actual process or destructive operation is used in these variants."""
+            group_reads[0] += 1
+            if boundary == 'group-unavailable':
+                raise PermissionError('synthetic group observation denied')
+            if boundary == 'foreign-group' or (boundary == 'after-foreign-group' and group_reads[0] > 1):
+                return PID + 1
+            return PID
+    
+        monkeypatch.setattr(DISPATCH.subprocess, 'run', external)
+        monkeypatch.setattr(DISPATCH.os, 'getpgid', group)
+        error: Exception | None = None
+        try:
+            DISPATCH.run(args)
+        except (DISPATCH.CaptureError, AttributeError, OSError, ValueError) as exc:
+            error = exc
+>       assert input_stream.tell() == 0
+E       assert 12 == 0
+E        +  where 12 = <built-in method tell of _io.BytesIO object at 0x1072674c0>()
+E        +    where <built-in method tell of _io.BytesIO object at 0x1072674c0> = <_io.BytesIO object at 0x1072674c0>.tell
+
+tests/test_evaluation_registration.py:116: AssertionError
+_ test_original_run_rejects_synthetic_registration_conflicts_before_input[after-foreign-group] _
+
+tmp_path = PosixPath('/private/tmp/kntnt-method-509-registration-correction-20261004/pytest-03/test_original_run_rejects_synt12')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x10708f380>
+boundary = 'after-foreign-group'
+
+    @pytest.mark.parametrize('boundary', ['missing-record', 'malformed', 'wrong-kind', 'wrong-pid', 'pid-type', 'missing-birth', 'wrong-birth', 'before-empty', 'after-empty', 'after-changed', 'group-unavailable', 'foreign-group', 'after-foreign-group', 'exit-failure'])
+    def test_original_run_rejects_synthetic_registration_conflicts_before_input(tmp_path: Path, monkeypatch: pytest.MonkeyPatch, boundary: str) -> None:
+        """Unavailable registration or current ownership cannot authorize preparation."""
+        value: dict[str, Any] = {'recorded': {'kind': 'pid', 'id': str(PID), 'started': BIRTH}}
+        if boundary == 'missing-record':
+            value = {}
+        elif boundary == 'wrong-kind':
+            value['recorded']['kind'] = 'path'
+        elif boundary == 'wrong-pid':
+            value['recorded']['id'] = str(PID + 1)
+        elif boundary == 'pid-type':
+            value['recorded']['id'] = PID
+        elif boundary == 'missing-birth':
+            value['recorded'].pop('started')
+        elif boundary == 'wrong-birth':
+            value['recorded']['started'] = 'different birth'
+        raw = '{partial' if boundary == 'malformed' else json.dumps(value) + '\n'
+        args, input_stream = setup_run(tmp_path, monkeypatch, raw)
+        input_stream.write(b'not consumed'); input_stream.seek(0)
+        ps_reads = [0]
+        group_reads = [0]
+    
+        def external(command: list[str], **options: Any) -> subprocess.CompletedProcess[str]:
+            """Keep synthetic failures at actual OS and installed JSON boundaries."""
+            if command[0] != 'ps':
+                return subprocess.CompletedProcess(command, 1 if boundary == 'exit-failure' else 0, raw, 'synthetic stderr')
+            ps_reads[0] += 1
+            text = BIRTH
+            if boundary == 'before-empty' or (boundary == 'after-empty' and ps_reads[0] > 1):
+                text = ''
+            if boundary == 'after-changed' and ps_reads[0] > 1:
+                text = 'different birth'
+            return subprocess.CompletedProcess(command, 0, text, '')
+    
+        def group(pid: int) -> int:
+            """No actual process or destructive operation is used in these variants."""
+            group_reads[0] += 1
+            if boundary == 'group-unavailable':
+                raise PermissionError('synthetic group observation denied')
+            if boundary == 'foreign-group' or (boundary == 'after-foreign-group' and group_reads[0] > 1):
+                return PID + 1
+            return PID
+    
+        monkeypatch.setattr(DISPATCH.subprocess, 'run', external)
+        monkeypatch.setattr(DISPATCH.os, 'getpgid', group)
+        error: Exception | None = None
+        try:
+            DISPATCH.run(args)
+        except (DISPATCH.CaptureError, AttributeError, OSError, ValueError) as exc:
+            error = exc
+>       assert input_stream.tell() == 0
+E       assert 12 == 0
+E        +  where 12 = <built-in method tell of _io.BytesIO object at 0x1072678d0>()
+E        +    where <built-in method tell of _io.BytesIO object at 0x1072678d0> = <_io.BytesIO object at 0x1072678d0>.tell
+
+tests/test_evaluation_registration.py:116: AssertionError
+_ test_original_run_rejects_synthetic_registration_conflicts_before_input[exit-failure] _
+
+tmp_path = PosixPath('/private/tmp/kntnt-method-509-registration-correction-20261004/pytest-03/test_original_run_rejects_synt13')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x10708a870>
+boundary = 'exit-failure'
+
+    @pytest.mark.parametrize('boundary', ['missing-record', 'malformed', 'wrong-kind', 'wrong-pid', 'pid-type', 'missing-birth', 'wrong-birth', 'before-empty', 'after-empty', 'after-changed', 'group-unavailable', 'foreign-group', 'after-foreign-group', 'exit-failure'])
+    def test_original_run_rejects_synthetic_registration_conflicts_before_input(tmp_path: Path, monkeypatch: pytest.MonkeyPatch, boundary: str) -> None:
+        """Unavailable registration or current ownership cannot authorize preparation."""
+        value: dict[str, Any] = {'recorded': {'kind': 'pid', 'id': str(PID), 'started': BIRTH}}
+        if boundary == 'missing-record':
+            value = {}
+        elif boundary == 'wrong-kind':
+            value['recorded']['kind'] = 'path'
+        elif boundary == 'wrong-pid':
+            value['recorded']['id'] = str(PID + 1)
+        elif boundary == 'pid-type':
+            value['recorded']['id'] = PID
+        elif boundary == 'missing-birth':
+            value['recorded'].pop('started')
+        elif boundary == 'wrong-birth':
+            value['recorded']['started'] = 'different birth'
+        raw = '{partial' if boundary == 'malformed' else json.dumps(value) + '\n'
+        args, input_stream = setup_run(tmp_path, monkeypatch, raw)
+        input_stream.write(b'not consumed'); input_stream.seek(0)
+        ps_reads = [0]
+        group_reads = [0]
+    
+        def external(command: list[str], **options: Any) -> subprocess.CompletedProcess[str]:
+            """Keep synthetic failures at actual OS and installed JSON boundaries."""
+            if command[0] != 'ps':
+                return subprocess.CompletedProcess(command, 1 if boundary == 'exit-failure' else 0, raw, 'synthetic stderr')
+            ps_reads[0] += 1
+            text = BIRTH
+            if boundary == 'before-empty' or (boundary == 'after-empty' and ps_reads[0] > 1):
+                text = ''
+            if boundary == 'after-changed' and ps_reads[0] > 1:
+                text = 'different birth'
+            return subprocess.CompletedProcess(command, 0, text, '')
+    
+        def group(pid: int) -> int:
+            """No actual process or destructive operation is used in these variants."""
+            group_reads[0] += 1
+            if boundary == 'group-unavailable':
+                raise PermissionError('synthetic group observation denied')
+            if boundary == 'foreign-group' or (boundary == 'after-foreign-group' and group_reads[0] > 1):
+                return PID + 1
+            return PID
+    
+        monkeypatch.setattr(DISPATCH.subprocess, 'run', external)
+        monkeypatch.setattr(DISPATCH.os, 'getpgid', group)
+        error: Exception | None = None
+        try:
+            DISPATCH.run(args)
+        except (DISPATCH.CaptureError, AttributeError, OSError, ValueError) as exc:
+            error = exc
+>       assert input_stream.tell() == 0
+E       assert 12 == 0
+E        +  where 12 = <built-in method tell of _io.BytesIO object at 0x107265850>()
+E        +    where <built-in method tell of _io.BytesIO object at 0x107265850> = <_io.BytesIO object at 0x107265850>.tell
+
+tests/test_evaluation_registration.py:116: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_evaluation_registration.py::test_original_run_rejects_empty_installed_birth_before_stdin
+FAILED tests/test_evaluation_registration.py::test_original_run_rejects_synthetic_registration_conflicts_before_input[missing-record]
+FAILED tests/test_evaluation_registration.py::test_original_run_rejects_synthetic_registration_conflicts_before_input[malformed]
+FAILED tests/test_evaluation_registration.py::test_original_run_rejects_synthetic_registration_conflicts_before_input[wrong-kind]
+FAILED tests/test_evaluation_registration.py::test_original_run_rejects_synthetic_registration_conflicts_before_input[wrong-pid]
+FAILED tests/test_evaluation_registration.py::test_original_run_rejects_synthetic_registration_conflicts_before_input[pid-type]
+FAILED tests/test_evaluation_registration.py::test_original_run_rejects_synthetic_registration_conflicts_before_input[missing-birth]
+FAILED tests/test_evaluation_registration.py::test_original_run_rejects_synthetic_registration_conflicts_before_input[wrong-birth]
+FAILED tests/test_evaluation_registration.py::test_original_run_rejects_synthetic_registration_conflicts_before_input[before-empty]
+FAILED tests/test_evaluation_registration.py::test_original_run_rejects_synthetic_registration_conflicts_before_input[after-empty]
+FAILED tests/test_evaluation_registration.py::test_original_run_rejects_synthetic_registration_conflicts_before_input[after-changed]
+FAILED tests/test_evaluation_registration.py::test_original_run_rejects_synthetic_registration_conflicts_before_input[group-unavailable]
+FAILED tests/test_evaluation_registration.py::test_original_run_rejects_synthetic_registration_conflicts_before_input[foreign-group]
+FAILED tests/test_evaluation_registration.py::test_original_run_rejects_synthetic_registration_conflicts_before_input[after-foreign-group]
+FAILED tests/test_evaluation_registration.py::test_original_run_rejects_synthetic_registration_conflicts_before_input[exit-failure]
+15 failed in 0.06s

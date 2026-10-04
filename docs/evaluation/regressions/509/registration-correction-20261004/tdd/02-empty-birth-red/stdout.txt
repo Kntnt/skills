@@ -1,0 +1,27 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+_________ test_original_run_rejects_empty_installed_birth_before_stdin _________
+
+tmp_path = PosixPath('/private/tmp/kntnt-method-509-registration-correction-20261004/pytest-02/test_original_run_rejects_empt0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x1073b8b00>
+
+    def test_original_run_rejects_empty_installed_birth_before_stdin(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+        """An exit0 registration with no birth must not authorize input consumption."""
+        raw = json.dumps({'recorded': {'kind': 'pid', 'id': str(PID), 'started': ''}}) + '\n'
+        args, input_stream = setup_run(tmp_path, monkeypatch, raw)
+        # A nonempty input makes consumption observable without starting native work.
+        input_stream.write(b'not consumed'); input_stream.seek(0)
+        error: Exception | None = None
+        try:
+            DISPATCH.run(args)
+        except (DISPATCH.CaptureError, AttributeError) as exc:
+            error = exc
+>       assert input_stream.tell() == 0
+E       assert 12 == 0
+E        +  where 12 = <built-in method tell of _io.BytesIO object at 0x1075ec9f0>()
+E        +    where <built-in method tell of _io.BytesIO object at 0x1075ec9f0> = <_io.BytesIO object at 0x1075ec9f0>.tell
+
+tests/test_evaluation_registration.py:54: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_evaluation_registration.py::test_original_run_rejects_empty_installed_birth_before_stdin
+1 failed in 0.02s

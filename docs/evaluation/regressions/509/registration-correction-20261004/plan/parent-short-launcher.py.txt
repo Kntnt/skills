@@ -1,0 +1,19 @@
+import importlib.util,os,subprocess,sys
+from pathlib import Path
+work=Path('/private/tmp/kntnt-method-509-phase-20261004-original-messages/work/parent-short')
+registration=Path('/private/tmp/kntnt-method-509-phase-20261004-original-messages/launcher-records/parent-short')
+registration.mkdir(parents=True,exist_ok=False)
+spec=importlib.util.spec_from_file_location("proof_registration",'/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/docs/evaluation/harness/native_dispatch.py')
+module=importlib.util.module_from_spec(spec)
+spec.loader.exec_module(module)
+env=module.environment(registration)
+for key in ("KNTNT_HOME","TMPDIR","UV_CACHE_DIR","UV_TOOL_DIR","UV_TOOL_BIN_DIR","UV_PYTHON_INSTALL_DIR","UV_PROJECT_ENVIRONMENT","XDG_CACHE_HOME","XDG_DATA_HOME","XDG_CONFIG_HOME"):
+ Path(env[key]).mkdir(parents=True,exist_ok=True)
+if os.getpid()!=os.getpgrp(): os.setsid()
+module.register(os.getpid(),Path('/Users/thomas/.agents/skills/kntnt/features/session-cleanup/scripts/session_cleanup.py'),env,registration,True)
+with Path('/private/tmp/kntnt-method-509-phase-20261004-original-messages/parent-short-helper-return.txt').open("wb") as stdout,Path('/private/tmp/kntnt-method-509-phase-20261004-original-messages/parent-short-helper-stderr.txt').open("wb") as stderr:
+ child=subprocess.Popen(['uv', 'run', '/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/docs/evaluation/harness/native_dispatch.py', '--source-contract', 'original-completed-v1', '--packet', '/private/tmp/kntnt-method-509-phase-20261004-original-messages/packets/parent-short-child', '--cwd', '/private/tmp/kntnt-method-509-phase-20261004-original-messages/work/parent-short', '--model', 'gpt-6.1-sol', '--effort', 'xhigh', '--version', '0.160.0', '--parent', '509-neutral-parent-short', '--role', 'parent-short-child', '--timeout', '900', '--native', '/opt/homebrew/Caskroom/codex/0.160.0/bin/codex', '--auth-home', '/Users/thomas/.codex', '--cleanup-script', '/Users/thomas/.agents/skills/kntnt/features/session-cleanup/scripts/session_cleanup.py', '--inventory-root', '/private/tmp/kntnt-method-509-phase-20261004-original-messages'],cwd=work,env=env,stdin=subprocess.PIPE,stdout=stdout,stderr=stderr,start_new_session=True)
+ module.register(child.pid,Path('/Users/thomas/.agents/skills/kntnt/features/session-cleanup/scripts/session_cleanup.py'),env,registration,True)
+ child.communicate(Path('/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/docs/evaluation/regressions/509/registration-correction-20261004/plan/direct-short.txt').read_bytes(),timeout=930)
+print("CHILD_EXIT="+str(child.returncode))
+sys.exit(child.returncode)

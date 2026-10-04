@@ -1,0 +1,11 @@
+{
+  "manifest": "/private/tmp/kntnt-method-509-registration-correction-20261004/checks/30-preservation/lifecycle/.kntnt/session-cleanup/sessions/01a1063a-fbf0-7ea3-bfd6-c0ad52516ab4.jsonl",
+  "recorded": {
+    "at": "2026-10-04T17:45:35+00:00",
+    "id": "65913",
+    "kind": "pid",
+    "started": "Sun Oct  4 19:45:34 2026",
+    "why": "509 registration correction focused check 30-preservation"
+  },
+  "session": "01a1063a-fbf0-7ea3-bfd6-c0ad52516ab4"
+}

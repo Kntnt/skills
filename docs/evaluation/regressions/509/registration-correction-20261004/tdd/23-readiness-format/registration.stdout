@@ -1,0 +1,11 @@
+{
+  "manifest": "/private/tmp/kntnt-method-509-registration-correction-20261004/checks/23-readiness-format/lifecycle/.kntnt/session-cleanup/sessions/01a1063a-fbf0-7ea3-bfd6-c0ad52516ab4.jsonl",
+  "recorded": {
+    "at": "2026-10-04T17:34:15+00:00",
+    "id": "13149",
+    "kind": "pid",
+    "started": "Sun Oct  4 19:34:15 2026",
+    "why": "509 registration correction focused check 23-readiness-format"
+  },
+  "session": "01a1063a-fbf0-7ea3-bfd6-c0ad52516ab4"
+}
