@@ -1,0 +1,42 @@
+[
+  {
+    "id": "q01",
+    "source_original": "/Users/thomas/Projects/skills/.git/editorial-repair/write/docs/evaluation/editorial-write-repair-2026-10-03/fixtures/historical/lervik-source.md",
+    "draft_original": "/Users/thomas/Projects/skills/.git/editorial-repair/write/docs/evaluation/editorial-write-repair-2026-10-03/fixtures/historical/us2-compared-draft.md",
+    "language": "en_US",
+    "source_sha256": "83265898e21c908c50a5462053175ebcf82d56fe3ea746fa67c16a5f6559dec4",
+    "prose_sha256": "bd5699cf5bad6a816ceb6b243247fcc8778ff51cdd02b56105d2c5a5727d0368",
+    "changed_only": "byte-preserved historical prose",
+    "neutral_staging": "/private/tmp/editorial-measure-20261004.c9zzj6z5/packets/q01"
+  },
+  {
+    "id": "q02",
+    "source_original": "/Users/thomas/Projects/skills/.git/editorial-repair/write/docs/evaluation/editorial-write-repair-2026-10-03/fixtures/historical/lervik-source.md",
+    "draft_original": "/Users/thomas/Projects/skills/.git/editorial-repair/write/docs/evaluation/editorial-write-repair-2026-10-03/fixtures/historical/gb3-compared-draft.md",
+    "language": "en_GB",
+    "source_sha256": "83265898e21c908c50a5462053175ebcf82d56fe3ea746fa67c16a5f6559dec4",
+    "prose_sha256": "d3eade6d05c12b0db5354a39b947f568bf7c27f4ebf3e245dae01de841522cb7",
+    "changed_only": "byte-preserved historical prose",
+    "neutral_staging": "/private/tmp/editorial-measure-20261004.c9zzj6z5/packets/q02"
+  },
+  {
+    "id": "q03",
+    "source_original": "/Users/thomas/Projects/skills/.git/editorial-repair/write/docs/evaluation/editorial-write-repair-2026-10-03/fixtures/historical/lervik-source.md",
+    "draft_original": "/Users/thomas/Projects/skills/.git/editorial-repair/write/docs/evaluation/editorial-write-repair-2026-10-03/fixtures/historical/us2-compared-draft.md",
+    "language": "en_US",
+    "source_sha256": "83265898e21c908c50a5462053175ebcf82d56fe3ea746fa67c16a5f6559dec4",
+    "prose_sha256": "4e15219251221ba158946171e4dbd2e92d1e41762ed624084e5e4aca7544733b",
+    "changed_only": "96 web bookings to196 web bookings",
+    "neutral_staging": "/private/tmp/editorial-measure-20261004.c9zzj6z5/packets/q03"
+  },
+  {
+    "id": "q04",
+    "source_original": "/Users/thomas/Projects/skills/.git/editorial-repair/write/docs/evaluation/editorial-write-repair-2026-10-03/fixtures/historical/lervik-source.md",
+    "draft_original": "/Users/thomas/Projects/skills/.git/editorial-repair/write/docs/evaluation/editorial-write-repair-2026-10-03/fixtures/historical/us1-compared-draft.md",
+    "language": "en_US",
+    "source_sha256": "83265898e21c908c50a5462053175ebcf82d56fe3ea746fa67c16a5f6559dec4",
+    "prose_sha256": "a2268d82e2b0aa4e5f9648b306511ec9e2225baf2552d403213fee7dc0de1079",
+    "changed_only": "byte-preserved historical prose",
+    "neutral_staging": "/private/tmp/editorial-measure-20261004.c9zzj6z5/packets/q04"
+  }
+]

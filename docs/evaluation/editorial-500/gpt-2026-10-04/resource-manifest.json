@@ -1,0 +1,58 @@
+[
+  {
+    "role": "base",
+    "path": "resources/base.md",
+    "sha256": "d4146ef134de7482e25469201aaceed7b207fba9f8bacb06a428b85f6bfc3581",
+    "product_path": "skills/kntnt/library/references/editorial/base.md"
+  },
+  {
+    "role": "genre",
+    "path": "resources/opinion.md",
+    "sha256": "f0edbed362fe613f11cfe6232c4c7fc98202786fa909f3cd72f1b1acd0867e41",
+    "product_path": "skills/kntnt/library/references/editorial/genres/opinion.md"
+  },
+  {
+    "role": "web-craft",
+    "path": "resources/web-craft.md",
+    "sha256": "b1ac5867d30952c3ca78da244520ab28c025102f4389f44ec206757a29f05371",
+    "product_path": "skills/kntnt/library/references/editorial/web-craft.md"
+  },
+  {
+    "role": "anatomy",
+    "path": "resources/article-anatomy.md",
+    "sha256": "c075c6fe7494dbcdc43d6af599c55ab8fc52fc48d7ed1b6cc26eca7a592cecd7",
+    "product_path": "skills/kntnt/library/references/editorial/article-anatomy.md"
+  },
+  {
+    "role": "headlines",
+    "path": "resources/headlines.md",
+    "sha256": "adfb7ca612905afee03a73d58cdb07de9d0877b23af9de89f7e114f6de81df5f",
+    "product_path": "skills/kntnt/library/references/editorial/headlines.md"
+  },
+  {
+    "role": "quotation-composition",
+    "path": "resources/quotations.md",
+    "sha256": "89ba23a834153bf3c38372206548d2e269ff1a516c93cf393eaaf2fe5c62e881",
+    "product_path": "skills/editorial/write/references/quotations.md"
+  },
+  {
+    "role": "counting-script",
+    "path": "resources/article_anatomy.py",
+    "sha256": "b4aae6ce979fe81b43531aac123f4077866b9efc72e244dc7203b053c07ae847",
+    "product_path": "skills/kntnt/library/scripts/article_anatomy.py"
+  },
+  {
+    "role": "composition-en_US",
+    "path": "resources/en_US-composition.md",
+    "sha256": "22720875c88650d0cf14f173f17d8c923f47a797bfed86453d87f6f8d7ed8657",
+    "product_path": "skills/kntnt/library/references/languages/en_US.md#Composition",
+    "scope_source": "en_US"
+  },
+  {
+    "role": "composition-en_GB",
+    "path": "resources/en_GB-composition.md",
+    "sha256": "ce209f83cea4501f7c04f9439e88e6c57902a9c436285c344b42a4f6a3bdc49d",
+    "product_path": "skills/kntnt/library/references/languages/en_GB.md#Composition",
+    "scope_source": "en_GB"
+  }
+]

@@ -1,0 +1,1 @@
+Neutral transport only. Use your command tool exactly once to run python3 -c "import uuid; print(uuid.uuid4())". Return exactly two lines: first "Neutral Åäö β transport" without quotation marks, then the UUID you actually observed. No other work or delegation is needed.

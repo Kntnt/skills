@@ -1,0 +1,55 @@
+{
+  "resources": [
+    {
+      "role": "base",
+      "path": "resources/base.md",
+      "sha256": "d4146ef134de7482e25469201aaceed7b207fba9f8bacb06a428b85f6bfc3581"
+    },
+    {
+      "role": "genre",
+      "path": "resources/opinion.md",
+      "sha256": "f0edbed362fe613f11cfe6232c4c7fc98202786fa909f3cd72f1b1acd0867e41"
+    },
+    {
+      "role": "web-craft",
+      "path": "resources/web-craft.md",
+      "sha256": "b1ac5867d30952c3ca78da244520ab28c025102f4389f44ec206757a29f05371"
+    },
+    {
+      "role": "anatomy",
+      "path": "resources/article-anatomy.md",
+      "sha256": "c075c6fe7494dbcdc43d6af599c55ab8fc52fc48d7ed1b6cc26eca7a592cecd7"
+    },
+    {
+      "role": "headlines",
+      "path": "resources/headlines.md",
+      "sha256": "adfb7ca612905afee03a73d58cdb07de9d0877b23af9de89f7e114f6de81df5f"
+    },
+    {
+      "role": "quotation-composition",
+      "path": "resources/quotations.md",
+      "sha256": "89ba23a834153bf3c38372206548d2e269ff1a516c93cf393eaaf2fe5c62e881"
+    },
+    {
+      "role": "counting-script",
+      "path": "resources/article_anatomy.py",
+      "sha256": "b4aae6ce979fe81b43531aac123f4077866b9efc72e244dc7203b053c07ae847"
+    },
+    {
+      "role": "composition-en_US",
+      "path": "resources/en_US-composition.md",
+      "sha256": "22720875c88650d0cf14f173f17d8c923f47a797bfed86453d87f6f8d7ed8657"
+    }
+  ],
+  "source": {
+    "path": "source.md",
+    "sha256": "83265898e21c908c50a5462053175ebcf82d56fe3ea746fa67c16a5f6559dec4"
+  },
+  "configuration": {
+    "genre": "opinion",
+    "technique": "none",
+    "language": "en_US",
+    "source_language": "sv",
+    "text_boundary": "complete source-comparison prose before handoff metadata"
+  }
+}

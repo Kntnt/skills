@@ -1,0 +1,13 @@
+British general-interest prose is understated. It states a strong claim plainly and lets the claim carry the emphasis, where American register would reach for an intensifier. Irony and litotes are available and are not read as evasion.
+
+Collective nouns take plural agreement when the members are acting and singular when the body is acting as one: *the team are arguing about it*, *the committee has published its report*. Both are correct; what matters is that the choice is consistent within a passage.
+
+The present perfect covers a recent past that still bears on now: *I've just seen the figures*, *have you eaten?* The simple past in those positions reads as American.
+
+*Have got* is ordinary British usage for possession and obligation — *I've got the file*, *you've got to see this* — and is not an informality to be edited out of general prose.
+
+Prepositions differ in a small, fixed set of places: *at the weekend*, *in hospital*, *different from* or *different to*, *write to somebody*, *meet somebody* rather than *meet with*. None of these is a preference; each is the British form.
+
+Spelling is *-ise* or *-ize* by house style — both are correct British English, *-ise* being the majority convention and *-ize* the Oxford one — but a document uses one throughout. The *-yse* group is invariant: *analyse*, *paralyse*, *catalyse*, in Oxford spelling as in any other.
+
+Quotation marks are single as the outer mark in most British house styles, with double inside; some publications invert this. Follow the document's own choice and make it consistent.
