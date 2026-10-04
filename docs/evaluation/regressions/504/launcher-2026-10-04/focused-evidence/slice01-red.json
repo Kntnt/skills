@@ -1,0 +1,15 @@
+{
+  "command": [
+    "uv",
+    "run",
+    "--with",
+    "pytest",
+    "pytest",
+    "tests/test_editorial_redline_504_parent.py",
+    "-q"
+  ],
+  "exit": 1,
+  "code_existed_before_run": false,
+  "pid": 81811,
+  "real_home": "/Users/thomas"
+}

@@ -1,0 +1,440 @@
+{
+  "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/materials/7e833bdac9694a71980092ac55a8eb4a": {
+    "mode": 493,
+    "kind": "directory"
+  },
+  "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/materials/7e833bdac9694a71980092ac55a8eb4a/brief.md": {
+    "mode": 420,
+    "kind": "file",
+    "bytes": 2147,
+    "sha256": "15126fb36bfbcdf3c6cbae765bdd29379c78e63bfb3f74e673c42449f038648e"
+  },
+  "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/materials/7e833bdac9694a71980092ac55a8eb4a/configuration.json": {
+    "mode": 420,
+    "kind": "file",
+    "bytes": 668,
+    "sha256": "3f5bee2af647603269bf3e1163b4121bc8d24b15260df0b3f65ae9970fd0b94f"
+  },
+  "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/materials/7e833bdac9694a71980092ac55a8eb4a/contract-manifest.json": {
+    "mode": 420,
+    "kind": "file",
+    "bytes": 2058,
+    "sha256": "c08aa750398a1ec61151b6ce5657939f43e05a7cfe13653e1a2cf3a22e2e3899"
+  },
+  "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/materials/7e833bdac9694a71980092ac55a8eb4a/contracts": {
+    "mode": 493,
+    "kind": "directory"
+  },
+  "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/materials/7e833bdac9694a71980092ac55a8eb4a/contracts/r01.md": {
+    "mode": 420,
+    "kind": "file",
+    "bytes": 11577,
+    "sha256": "b3103ed6da4ac9d27a0ebfb43bdb40b8e77d58d84b3745a90c0a736142438b45"
+  },
+  "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/materials/7e833bdac9694a71980092ac55a8eb4a/contracts/r02.md": {
+    "mode": 420,
+    "kind": "file",
+    "bytes": 14473,
+    "sha256": "241f0e5e4ca590c1d2348dc4048d15b5c8cc030c9dc91de989a758cefd4cd211"
+  },
+  "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/materials/7e833bdac9694a71980092ac55a8eb4a/contracts/r03.md": {
+    "mode": 420,
+    "kind": "file",
+    "bytes": 3948,
+    "sha256": "d4146ef134de7482e25469201aaceed7b207fba9f8bacb06a428b85f6bfc3581"
+  },
+  "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/materials/7e833bdac9694a71980092ac55a8eb4a/contracts/r04.md": {
+    "mode": 420,
+    "kind": "file",
+    "bytes": 5695,
+    "sha256": "d2c838c19a692104be247afd227b0baed98f3156be059c0a982ecae3513fa0ca"
+  },
+  "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/materials/7e833bdac9694a71980092ac55a8eb4a/contracts/r05.md": {
+    "mode": 420,
+    "kind": "file",
+    "bytes": 7475,
+    "sha256": "9ec7fb15b3cfe22f446c6ed2df85666aaa182d8fa0a09fa3668887e4786d83c2"
+  },
+  "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/materials/7e833bdac9694a71980092ac55a8eb4a/contracts/r06.md": {
+    "mode": 420,
+    "kind": "file",
+    "bytes": 5481,
+    "sha256": "c075c6fe7494dbcdc43d6af599c55ab8fc52fc48d7ed1b6cc26eca7a592cecd7"
+  },
+  "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/materials/7e833bdac9694a71980092ac55a8eb4a/contracts/r07.md": {
+    "mode": 420,
+    "kind": "file",
+    "bytes": 5360,
+    "sha256": "3e616f9671126ba7898123dd288a4a9bb4170f189d567a3fcbd2b17ccb82c633"
+  },
+  "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/materials/7e833bdac9694a71980092ac55a8eb4a/contracts/r08.md": {
+    "mode": 420,
+    "kind": "file",
+    "bytes": 4801,
+    "sha256": "adfb7ca612905afee03a73d58cdb07de9d0877b23af9de89f7e114f6de81df5f"
+  },
+  "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/materials/7e833bdac9694a71980092ac55a8eb4a/contracts/r09.md": {
+    "mode": 420,
+    "kind": "file",
+    "bytes": 6968,
+    "sha256": "11be8cc4a9d009f59f78dedfe9a0059c681ca0d8f23bd37f36ef0486a74f1257"
+  },
+  "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/materials/7e833bdac9694a71980092ac55a8eb4a/contracts/r10.md": {
+    "mode": 420,
+    "kind": "file",
+    "bytes": 1233,
+    "sha256": "b1ac5867d30952c3ca78da244520ab28c025102f4389f44ec206757a29f05371"
+  },
+  "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/materials/7e833bdac9694a71980092ac55a8eb4a/contracts/r11.md": {
+    "mode": 420,
+    "kind": "file",
+    "bytes": 581,
+    "sha256": "169da1beeb4fb80e74f9423bdd4d7bcd57aa9b59b8e8ff5b71f3a67dfef7e923"
+  },
+  "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/materials/7e833bdac9694a71980092ac55a8eb4a/contracts/r12.md": {
+    "mode": 420,
+    "kind": "file",
+    "bytes": 1255,
+    "sha256": "2313180d69b25de48b818629c5d761daa36eb69def33441b01c24a2135f17b4f"
+  },
+  "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/materials/7e833bdac9694a71980092ac55a8eb4a/contracts/r13.md": {
+    "mode": 420,
+    "kind": "file",
+    "bytes": 905,
+    "sha256": "0d992e276cb65943ceab91cb855c1fcafd2b65ed4b378a16a4ea63036de8074c"
+  },
+  "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/materials/7e833bdac9694a71980092ac55a8eb4a/text.md": {
+    "mode": 420,
+    "kind": "file",
+    "bytes": 1638,
+    "sha256": "f183e6da31cf78081cc7c7eee69570940e24802997e92d96bb111966aa4170d5"
+  },
+  "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/materials/7e833bdac9694a71980092ac55a8eb4a/tools": {
+    "mode": 493,
+    "kind": "directory"
+  },
+  "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/materials/7e833bdac9694a71980092ac55a8eb4a/tools/count.py": {
+    "mode": 420,
+    "kind": "file",
+    "bytes": 47727,
+    "sha256": "b4aae6ce979fe81b43531aac123f4077866b9efc72e244dc7203b053c07ae847"
+  },
+  "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/materials/7e833bdac9694a71980092ac55a8eb4a/transport-stderr.txt": {
+    "mode": 420,
+    "kind": "file",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/materials/7e833bdac9694a71980092ac55a8eb4a/transport-stdout.txt": {
+    "mode": 420,
+    "kind": "file",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/7e833bdac9694a71980092ac55a8eb4a": {
+    "mode": 493,
+    "kind": "directory"
+  },
+  "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/7e833bdac9694a71980092ac55a8eb4a/configuration.json": {
+    "mode": 420,
+    "kind": "file",
+    "bytes": 212,
+    "sha256": "bfab2a69faa146d343474e356a33410d7309193fae1e72431a6889c5bf6b5c87"
+  },
+  "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/7e833bdac9694a71980092ac55a8eb4a/lifecycle": {
+    "mode": 493,
+    "kind": "directory"
+  },
+  "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/7e833bdac9694a71980092ac55a8eb4a/lifecycle/.kntnt": {
+    "mode": 493,
+    "kind": "directory"
+  },
+  "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/7e833bdac9694a71980092ac55a8eb4a/lifecycle/.kntnt/session-cleanup": {
+    "mode": 493,
+    "kind": "directory"
+  },
+  "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/7e833bdac9694a71980092ac55a8eb4a/lifecycle/.kntnt/session-cleanup/cleanup.log": {
+    "mode": 420,
+    "kind": "file",
+    "bytes": 167,
+    "sha256": "48307ed8804b4f59c51957f094db7e9630566513c7cd21c44ce980b7434c2038"
+  },
+  "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/7e833bdac9694a71980092ac55a8eb4a/lifecycle/.kntnt/session-cleanup/sessions": {
+    "mode": 493,
+    "kind": "directory"
+  },
+  "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/7e833bdac9694a71980092ac55a8eb4a/lifecycle/.kntnt/session-cleanup/sessions/unowned-67367.jsonl": {
+    "mode": 420,
+    "kind": "file",
+    "bytes": 293,
+    "sha256": "5534ad620dafbbd1c6059cc0ddd8202aeca14c1565536aa34ff4c01c10ef3a81"
+  },
+  "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/7e833bdac9694a71980092ac55a8eb4a/prompt.txt": {
+    "mode": 420,
+    "kind": "file",
+    "bytes": 2147,
+    "sha256": "15126fb36bfbcdf3c6cbae765bdd29379c78e63bfb3f74e673c42449f038648e"
+  },
+  "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/7e833bdac9694a71980092ac55a8eb4a/registrations.jsonl": {
+    "mode": 420,
+    "kind": "file",
+    "bytes": 478,
+    "sha256": "db1cf75a1d5df186b93f134821229e799c1253a0cae58fbe65272445d47340ab"
+  },
+  "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/7e833bdac9694a71980092ac55a8eb4a/request.json": {
+    "mode": 420,
+    "kind": "file",
+    "bytes": 469,
+    "sha256": "80e2f6e66ba51e34663cc2f6f55096101182f12eb6350f335f2470a0fb2afbde"
+  },
+  "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/7e833bdac9694a71980092ac55a8eb4a/runtime": {
+    "mode": 493,
+    "kind": "directory"
+  },
+  "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/7e833bdac9694a71980092ac55a8eb4a/runtime/home": {
+    "mode": 493,
+    "kind": "directory"
+  },
+  "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/7e833bdac9694a71980092ac55a8eb4a/runtime/home/.codex": {
+    "mode": 493,
+    "kind": "directory"
+  },
+  "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/7e833bdac9694a71980092ac55a8eb4a/runtime/home/.codex/auth.json": {
+    "mode": 384,
+    "kind": "file",
+    "bytes": 4120,
+    "sha256": null,
+    "credential_redacted": true
+  },
+  "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/7e833bdac9694a71980092ac55a8eb4a/runtime/home/.codex/config.toml": {
+    "mode": 384,
+    "kind": "file",
+    "bytes": 10793,
+    "sha256": "2d613b9477d206b5eece9108cb7602cfae25aca1ebff48a11dada38acc0c528d"
+  },
+  "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/7e833bdac9694a71980092ac55a8eb4a/runtime/home/.codex/hooks.json": {
+    "mode": 420,
+    "kind": "file",
+    "bytes": 949,
+    "sha256": "f8358cbeea4f6019fd7aa1c4c533437a0c7fb10b0abeb732cf642f55c30ad08b"
+  },
+  "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/7e833bdac9694a71980092ac55a8eb4a/runtime/tmpdir": {
+    "mode": 493,
+    "kind": "directory"
+  },
+  "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/7e833bdac9694a71980092ac55a8eb4a/runtime/uv_cache_dir": {
+    "mode": 493,
+    "kind": "directory"
+  },
+  "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/7e833bdac9694a71980092ac55a8eb4a/runtime/uv_cache_dir/.gitignore": {
+    "mode": 420,
+    "kind": "file",
+    "bytes": 1,
+    "sha256": "684888c0ebb17f374298b65ee2807526c066094c701bcc7ebbe1c1095f494fc1"
+  },
+  "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/7e833bdac9694a71980092ac55a8eb4a/runtime/uv_cache_dir/.lock": {
+    "mode": 438,
+    "kind": "file",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/7e833bdac9694a71980092ac55a8eb4a/runtime/uv_cache_dir/CACHEDIR.TAG": {
+    "mode": 420,
+    "kind": "file",
+    "bytes": 43,
+    "sha256": "5953156d7e0c564a427251316eaf26f8870e6483ae2197f916b630e4f93e31ae"
+  },
+  "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/7e833bdac9694a71980092ac55a8eb4a/runtime/uv_cache_dir/environments-v2": {
+    "mode": 493,
+    "kind": "directory"
+  },
+  "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/7e833bdac9694a71980092ac55a8eb4a/runtime/uv_cache_dir/environments-v2/session-cleanup-beacf39546b11ae8": {
+    "mode": 493,
+    "kind": "directory"
+  },
+  "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/7e833bdac9694a71980092ac55a8eb4a/runtime/uv_cache_dir/environments-v2/session-cleanup-beacf39546b11ae8/.gitignore": {
+    "mode": 420,
+    "kind": "file",
+    "bytes": 1,
+    "sha256": "684888c0ebb17f374298b65ee2807526c066094c701bcc7ebbe1c1095f494fc1"
+  },
+  "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/7e833bdac9694a71980092ac55a8eb4a/runtime/uv_cache_dir/environments-v2/session-cleanup-beacf39546b11ae8/.lock": {
+    "mode": 438,
+    "kind": "file",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/7e833bdac9694a71980092ac55a8eb4a/runtime/uv_cache_dir/environments-v2/session-cleanup-beacf39546b11ae8/CACHEDIR.TAG": {
+    "mode": 420,
+    "kind": "file",
+    "bytes": 43,
+    "sha256": "5953156d7e0c564a427251316eaf26f8870e6483ae2197f916b630e4f93e31ae"
+  },
+  "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/7e833bdac9694a71980092ac55a8eb4a/runtime/uv_cache_dir/environments-v2/session-cleanup-beacf39546b11ae8/bin": {
+    "mode": 493,
+    "kind": "directory"
+  },
+  "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/7e833bdac9694a71980092ac55a8eb4a/runtime/uv_cache_dir/environments-v2/session-cleanup-beacf39546b11ae8/bin/activate": {
+    "mode": 420,
+    "kind": "file",
+    "bytes": 4269,
+    "sha256": "ae9e149a007f20240b54384ae5d013269c4fdbeb922106ab9eef4265eef1c3f9"
+  },
+  "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/7e833bdac9694a71980092ac55a8eb4a/runtime/uv_cache_dir/environments-v2/session-cleanup-beacf39546b11ae8/bin/activate.bat": {
+    "mode": 420,
+    "kind": "file",
+    "bytes": 2831,
+    "sha256": "94040a9e8dabd2de072cc4b40050a36b0215c75dff5df9a5b8a5f05c2d396ca2"
+  },
+  "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/7e833bdac9694a71980092ac55a8eb4a/runtime/uv_cache_dir/environments-v2/session-cleanup-beacf39546b11ae8/bin/activate.csh": {
+    "mode": 420,
+    "kind": "file",
+    "bytes": 2799,
+    "sha256": "9befc212f21e92ccf07b44830a62f7049f14d3bfb25f4949ca2bdee7346300d8"
+  },
+  "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/7e833bdac9694a71980092ac55a8eb4a/runtime/uv_cache_dir/environments-v2/session-cleanup-beacf39546b11ae8/bin/activate.fish": {
+    "mode": 420,
+    "kind": "file",
+    "bytes": 4510,
+    "sha256": "abde769f03f68c9e653137f65bbcd87822a5a4886b4658e916090adebf1f3d9d"
+  },
+  "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/7e833bdac9694a71980092ac55a8eb4a/runtime/uv_cache_dir/environments-v2/session-cleanup-beacf39546b11ae8/bin/activate.nu": {
+    "mode": 420,
+    "kind": "file",
+    "bytes": 4127,
+    "sha256": "136256353dc5fb54c0236b1e94336e936193496a678b09a434e12f219d294fff"
+  },
+  "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/7e833bdac9694a71980092ac55a8eb4a/runtime/uv_cache_dir/environments-v2/session-cleanup-beacf39546b11ae8/bin/activate.ps1": {
+    "mode": 420,
+    "kind": "file",
+    "bytes": 2801,
+    "sha256": "78596da07bac45be1b5bd2f01dfedd514dc6821b92d47649430ed228e54cae04"
+  },
+  "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/7e833bdac9694a71980092ac55a8eb4a/runtime/uv_cache_dir/environments-v2/session-cleanup-beacf39546b11ae8/bin/activate.xsh": {
+    "mode": 420,
+    "kind": "file",
+    "bytes": 3885,
+    "sha256": "4ea7fb9e810532f2e4d2452957476aed6815e49f26a66b2674a1aabb0b307f15"
+  },
+  "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/7e833bdac9694a71980092ac55a8eb4a/runtime/uv_cache_dir/environments-v2/session-cleanup-beacf39546b11ae8/bin/activate_this.py": {
+    "mode": 420,
+    "kind": "file",
+    "bytes": 2401,
+    "sha256": "72ecab6057183301cefd9aa72b699a2e894d80e89f1a49adc9c57649e9c6804d"
+  },
+  "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/7e833bdac9694a71980092ac55a8eb4a/runtime/uv_cache_dir/environments-v2/session-cleanup-beacf39546b11ae8/bin/deactivate.bat": {
+    "mode": 420,
+    "kind": "file",
+    "bytes": 1730,
+    "sha256": "13ea86073a9ee43a66e3549312599dd47ff315758b4ca5a0406faf041fb82300"
+  },
+  "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/7e833bdac9694a71980092ac55a8eb4a/runtime/uv_cache_dir/environments-v2/session-cleanup-beacf39546b11ae8/bin/pydoc.bat": {
+    "mode": 420,
+    "kind": "file",
+    "bytes": 1219,
+    "sha256": "09f9608d478fa48a9e49af8f413cfeaab47773effd185433088b7688ce75890e"
+  },
+  "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/7e833bdac9694a71980092ac55a8eb4a/runtime/uv_cache_dir/environments-v2/session-cleanup-beacf39546b11ae8/bin/python": {
+    "mode": 493,
+    "kind": "symlink",
+    "symlink": "/opt/homebrew/opt/python@3.14/bin/python3.14"
+  },
+  "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/7e833bdac9694a71980092ac55a8eb4a/runtime/uv_cache_dir/environments-v2/session-cleanup-beacf39546b11ae8/bin/python3": {
+    "mode": 493,
+    "kind": "symlink",
+    "symlink": "python"
+  },
+  "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/7e833bdac9694a71980092ac55a8eb4a/runtime/uv_cache_dir/environments-v2/session-cleanup-beacf39546b11ae8/bin/python3.14": {
+    "mode": 493,
+    "kind": "symlink",
+    "symlink": "python"
+  },
+  "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/7e833bdac9694a71980092ac55a8eb4a/runtime/uv_cache_dir/environments-v2/session-cleanup-beacf39546b11ae8/lib": {
+    "mode": 493,
+    "kind": "directory"
+  },
+  "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/7e833bdac9694a71980092ac55a8eb4a/runtime/uv_cache_dir/environments-v2/session-cleanup-beacf39546b11ae8/lib/python3.14": {
+    "mode": 493,
+    "kind": "directory"
+  },
+  "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/7e833bdac9694a71980092ac55a8eb4a/runtime/uv_cache_dir/environments-v2/session-cleanup-beacf39546b11ae8/lib/python3.14/site-packages": {
+    "mode": 493,
+    "kind": "directory"
+  },
+  "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/7e833bdac9694a71980092ac55a8eb4a/runtime/uv_cache_dir/environments-v2/session-cleanup-beacf39546b11ae8/lib/python3.14/site-packages/_virtualenv.pth": {
+    "mode": 420,
+    "kind": "file",
+    "bytes": 18,
+    "sha256": "69ac3d8f27e679c81b94ab30b3b56e9cd138219b1ba94a1fa3606d5a76a1433d"
+  },
+  "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/7e833bdac9694a71980092ac55a8eb4a/runtime/uv_cache_dir/environments-v2/session-cleanup-beacf39546b11ae8/lib/python3.14/site-packages/_virtualenv.py": {
+    "mode": 420,
+    "kind": "file",
+    "bytes": 5246,
+    "sha256": "cfb3db86aaa53bb62b5ff764970bec2d71c9228590a0ebec57f6ec926cc0bf1a"
+  },
+  "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/7e833bdac9694a71980092ac55a8eb4a/runtime/uv_cache_dir/environments-v2/session-cleanup-beacf39546b11ae8/pyvenv.cfg": {
+    "mode": 420,
+    "kind": "file",
+    "bytes": 166,
+    "sha256": "8f2334744f213fa14b61c401fc4b277847c952ad1a822dd1fa8b6c6df71bb04e"
+  },
+  "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/7e833bdac9694a71980092ac55a8eb4a/runtime/uv_cache_dir/interpreter-v4": {
+    "mode": 493,
+    "kind": "directory"
+  },
+  "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/7e833bdac9694a71980092ac55a8eb4a/runtime/uv_cache_dir/interpreter-v4/cde756dce160189f": {
+    "mode": 493,
+    "kind": "directory"
+  },
+  "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/7e833bdac9694a71980092ac55a8eb4a/runtime/uv_cache_dir/interpreter-v4/cde756dce160189f/92bcb70b0bf6ba65.msgpack": {
+    "mode": 420,
+    "kind": "file",
+    "bytes": 1649,
+    "sha256": "892a5a9b43332f66638f81eccb5e1b294314f7920f96c76c19dc29a64e7f72eb"
+  },
+  "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/7e833bdac9694a71980092ac55a8eb4a/runtime/uv_cache_dir/sdists-v9": {
+    "mode": 493,
+    "kind": "directory"
+  },
+  "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/7e833bdac9694a71980092ac55a8eb4a/runtime/uv_cache_dir/sdists-v9/.git": {
+    "mode": 420,
+    "kind": "file",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/7e833bdac9694a71980092ac55a8eb4a/runtime/uv_cache_dir/sdists-v9/.gitignore": {
+    "mode": 420,
+    "kind": "file",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/7e833bdac9694a71980092ac55a8eb4a/runtime/uv_project_environment": {
+    "mode": 493,
+    "kind": "directory"
+  },
+  "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/7e833bdac9694a71980092ac55a8eb4a/runtime/uv_python_install_dir": {
+    "mode": 493,
+    "kind": "directory"
+  },
+  "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/7e833bdac9694a71980092ac55a8eb4a/runtime/uv_tool_bin_dir": {
+    "mode": 493,
+    "kind": "directory"
+  },
+  "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/7e833bdac9694a71980092ac55a8eb4a/runtime/uv_tool_dir": {
+    "mode": 493,
+    "kind": "directory"
+  },
+  "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/7e833bdac9694a71980092ac55a8eb4a/runtime/xdg_cache_home": {
+    "mode": 493,
+    "kind": "directory"
+  },
+  "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/7e833bdac9694a71980092ac55a8eb4a/runtime/xdg_config_home": {
+    "mode": 493,
+    "kind": "directory"
+  },
+  "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/7e833bdac9694a71980092ac55a8eb4a/runtime/xdg_data_home": {
+    "mode": 493,
+    "kind": "directory"
+  }
+}

@@ -1,0 +1,5 @@
+{
+  "docs/evaluation/regressions/504/harness/ordinary_parent.py": "71b5663d7ead37ae516558c3e551bae21f06ed9c1cbc076ac7786ea02320d011",
+  "tests/test_editorial_redline_504_parent.py": "35370533861f23d62bffebaf81a90c05725bd103d9cae779ab5dafa8f4526488",
+  "docs/evaluation/harness/native_dispatch.py": "b6cf291a34711dcbe0bb247bbee6a4b8a8fb5ca662946afa2bb04aff9c52627b"
+}

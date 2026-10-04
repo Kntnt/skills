@@ -1,0 +1,142 @@
+...F                                                                     [100%]
+=================================== FAILURES ===================================
+_ test_public_launcher_preserves_real_home_hooks_all_sessions_and_credentials[False-False-True] _
+
+tmp_path = PosixPath('/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-redline-504-focused-thcx_6t4/pytest-of-thomas/pytest-20/test_public_launcher_preserves3')
+observe_ephemeral = False, stop_fails = False, sampling_fails = True
+
+    @pytest.mark.parametrize("observe_ephemeral,stop_fails,sampling_fails", [(False, False, False), (True, False, False), (False, True, False), (False, False, True)])
+    def test_public_launcher_preserves_real_home_hooks_all_sessions_and_credentials(
+        tmp_path: Path, observe_ephemeral: bool, stop_fails: bool, sampling_fails: bool,
+    ) -> None:
+        """One CLI attempt retains its entire ordinary parent tree and owned inventory."""
+    
+        # Arrange native-v2 records and a stand-in for the external native CLI only.
+        templates = tmp_path / "templates"
+        templates.mkdir()
+        write_sessions(templates)
+        native = tmp_path / "bin" / "codex"
+        native.parent.mkdir()
+        native.write_text(
+            "#!/usr/bin/env python3\n"
+            "import json, os, pathlib, shutil, sys, time\n"
+            "if '--version' in sys.argv:\n"
+            " print('codex-cli 0.160.0'); sys.exit(0)\n"
+            "prompt = sys.stdin.buffer.read()\n"
+            "native_home = pathlib.Path(os.environ['CODEX_HOME'])\n"
+            "sessions = native_home / 'sessions'; sessions.mkdir()\n"
+            "for p in pathlib.Path(os.environ['SYNTHETIC_SESSIONS']).glob('*.jsonl'):\n"
+            " shutil.copy2(p, sessions / p.name)\n"
+            "assert os.environ['HOME'] == os.environ['EXPECTED_REAL_HOME']\n"
+            "assert '--enable' in sys.argv and 'hooks' in sys.argv\n"
+            "assert (native_home / 'hooks.json').read_text() == '{\"hooks\":{}}'\n"
+            "work = pathlib.Path(sys.argv[sys.argv.index('-C') + 1])\n"
+            "assert (work / '.agents/skills/redline/SKILL.md').exists()\n"
+            "assert (work / '.agents/skills/kntnt/library/references/delivery.md').exists()\n"
+            "assert (work / 'input.md').read_bytes() == b'Ordinary source\\n'\n"
+            "if os.environ['SAMPLING_FAILS'] == '1':\n"
+            " version_root = work.parent / 'file-versions'\n"
+            " deadline = time.monotonic() + 5\n"
+            " while not version_root.is_dir() and time.monotonic() < deadline:\n"
+            "  time.sleep(0.01)\n"
+            " assert version_root.is_dir(), 'observer never became ready'\n"
+            " version_root.chmod(0o500)\n"
+            " (work / 'new-stage.md').write_text('New observed stage after denied storage.\\n')\n"
+            " time.sleep(0.3)\n"
+            " version_root.chmod(0o700)\n"
+            "if os.environ['OBSERVE_EPHEMERAL'] == '1':\n"
+            " stage = pathlib.Path(os.environ['TMPDIR']) / 'mechanical-input.md'\n"
+            " stage.write_text('Exact ephemeral quotation boundary.\\n')\n"
+            " version_root = work.parent / 'file-versions'\n"
+            " deadline = time.monotonic() + 5\n"
+            " observed = False\n"
+            " while time.monotonic() < deadline:\n"
+            "  if any(p.read_text() == 'Exact ephemeral quotation boundary.\\n' for p in version_root.glob('*.md')):\n"
+            "   observed = True; break\n"
+            "  time.sleep(0.05)\n"
+            " assert observed, 'recorder did not capture ready stage file'\n"
+            " stage.unlink()\n"
+            "(work / 'auth.json').write_text('ordinary artifact, not a credential')\n"
+            "target = pathlib.Path(sys.argv[sys.argv.index('--output-last-message') + 1])\n"
+            "target.write_bytes('Complete β\\n'.encode())\n"
+            "print(json.dumps({'type':'synthetic-native-test', 'input_bytes':len(prompt)}))\n"
+        )
+        native.chmod(0o755)
+    
+        # Supply private fixture authentication and a deterministic lifecycle stand-in.
+        auth = tmp_path / "auth"
+        auth.mkdir()
+        (auth / "auth.json").write_text("fixture credential never retained")
+        (auth / "hooks.json").write_text('{"hooks":{}}')
+        (auth / "config.toml").write_text('model = "gpt-6.1-sol"\n')
+        cleanup = tmp_path / "cleanup.py"
+        cleanup.write_text("import sys\nprint('registered ' + ' '.join(sys.argv[1:]))\n")
+        prompt = tmp_path / "prompt.txt"
+        prompt.write_bytes(PROMPT)
+        materials = tmp_path / "materials"
+        materials.mkdir()
+        (materials / "input.md").write_bytes(b"Ordinary source\n")
+        external = tmp_path / "external"
+        external.mkdir()
+        (external / "sentinel.txt").write_text("pre-existing evaluator-owned sentinel")
+        packet = tmp_path / "evidence"
+        env = dict(os.environ)
+        env.update(
+            SYNTHETIC_SESSIONS=str(templates),
+            EXPECTED_REAL_HOME=env["HOME"],
+            OBSERVE_EPHEMERAL="1" if observe_ephemeral else "0",
+            SAMPLING_FAILS="1" if sampling_fails else "0",
+            PYTHONDONTWRITEBYTECODE="1",
+        )
+        executable = RUNNER
+        if stop_fails:
+            executable = tmp_path / "termination_failure.py"
+            executable.write_text(
+                "import importlib.util, sys, threading\n"
+                f"spec = importlib.util.spec_from_file_location('recorder', {str(RUNNER)!r})\n"
+                "module = importlib.util.module_from_spec(spec); spec.loader.exec_module(module)\n"
+                "def failed_stop(child):\n"
+                " raise module.DISPATCH.CaptureError('injected unresolved owned group')\n"
+                "module.DISPATCH.stop_owned = failed_stop\n"
+                "base = threading.Thread\n"
+                "def confined_thread(*args, **kwargs):\n"
+                " kwargs['daemon'] = True; return base(*args, **kwargs)\n"
+                "module.threading.Thread = confined_thread\n"
+                "raise SystemExit(module.main())\n"
+            )
+    
+        # Act through the public CLI in a new group with one finite native attempt.
+        result = subprocess.run(
+            [
+                sys.executable,
+                str(executable),
+                "--revision", "68a4c1b783359c31135423fd561d763454e4674a",
+                "--prompt", str(prompt),
+                "--materials", str(materials),
+                "--packet", str(packet),
+                "--model", "gpt-6.1-sol",
+                "--effort", "xhigh",
+                "--version", "0.160.0",
+                "--native", str(native),
+                "--auth-home", str(auth),
+                "--cleanup-script", str(cleanup),
+                "--inventory-root", str(external),
+                "--timeout", "30",
+            ],
+            cwd=tmp_path,
+            env=env,
+            capture_output=True,
+            timeout=60,
+            start_new_session=True,
+        )
+    
+        # Assert the result, raw descendants, exact credential exclusion and cleanup.
+        if sampling_fails:
+>           assert result.returncode == 1
+E           AssertionError: assert 0 == 1
+E            +  where 0 = CompletedProcess(args=['/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-redline-504-focused-thcx_6t4/uv...gn/T/kntnt-redline-504-focused-thcx_6t4/pytest-of-thomas/pytest-20/test_public_launcher_preserves3/evidence/runtime\n').returncode
+
+tests/test_editorial_redline_504_parent.py:335: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_editorial_redline_504_parent.py::test_public_launcher_preserves_real_home_hooks_all_sessions_and_credentials[False-False-True]
+1 failed, 3 passed, 15 deselected in 2.17s

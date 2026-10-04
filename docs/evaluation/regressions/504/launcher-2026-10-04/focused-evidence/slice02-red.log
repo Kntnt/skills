@@ -1,0 +1,27 @@
+.F                                                                       [100%]
+=================================== FAILURES ===================================
+______ test_an_unrelated_session_cannot_be_reported_as_a_genuine_delegate ______
+
+tmp_path = PosixPath('/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-redline-504-focused-thcx_6t4/pytest-of-thomas/pytest-2/test_an_unrelated_session_cann0')
+
+    def test_an_unrelated_session_cannot_be_reported_as_a_genuine_delegate(
+        tmp_path: Path,
+    ) -> None:
+        """Parent completion does not authenticate an unrelated captured child."""
+    
+        # Arrange a completed parent beside a delegate belonging to another root.
+        paths = write_sessions(tmp_path)
+        rows = [json.loads(line) for line in paths[1].read_text().splitlines()]
+        rows[0]["payload"]["parent_thread_id"] = "other-root"
+        paths[1].write_text("".join(json.dumps(row) + "\n" for row in rows))
+        recorder = load_runner()
+    
+        # Act and assert through the capture boundary, preserving all raw evidence.
+>       with pytest.raises(recorder.DISPATCH.CaptureError, match="ancestry"):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE CaptureError
+
+tests/test_editorial_redline_504_parent.py:109: Failed
+=========================== short test summary info ============================
+FAILED tests/test_editorial_redline_504_parent.py::test_an_unrelated_session_cannot_be_reported_as_a_genuine_delegate
+1 failed, 1 passed in 0.03s

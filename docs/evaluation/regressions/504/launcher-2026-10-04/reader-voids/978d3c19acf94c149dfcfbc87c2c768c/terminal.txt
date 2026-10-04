@@ -1,0 +1,583 @@
+The complete fixture **conforms under the supplied source-blind review contract**. No actual defect, missing resource, unreadable resource or digest mismatch was found. The counting script passes; the separate semantic checks also pass. No text has been edited.
+
+## 1. Resources and scope
+
+All resources below were read completely. Every contract digest matches its entry in `contract-manifest.json`.
+
+| Resource | Selected role or purpose | Availability and integrity |
+|---|---|---|
+| `brief.md` | Validation instructions | Readable; no digest supplied |
+| `configuration.json` | Resolved genre, language, source scope and script invocation | Readable; no digest supplied |
+| `contract-manifest.json` | Contract resource identities and SHA256 values | Readable; no digest supplied |
+| `text.md` | Complete article and complete supplied Text Artifact | Readable; no digest supplied |
+| `contracts/r01.md` | Shared mechanics | SHA256 matches |
+| `contracts/r02.md` | Locale complete resource: Swedish | SHA256 matches |
+| `contracts/r03.md` | Shared editorial composition | SHA256 matches |
+| `contracts/r04.md` | Shared editorial review | SHA256 matches |
+| `contracts/r05.md` | Shared anti-slop | SHA256 matches |
+| `contracts/r06.md` | Anatomy composition | SHA256 matches |
+| `contracts/r07.md` | Anatomy review | SHA256 matches |
+| `contracts/r08.md` | Headlines composition | SHA256 matches |
+| `contracts/r09.md` | Headlines review | SHA256 matches |
+| `contracts/r10.md` | Web craft composition | SHA256 matches |
+| `contracts/r11.md` | Web craft review | SHA256 matches |
+| `contracts/r12.md` | Selected genre composition: article | SHA256 matches |
+| `contracts/r13.md` | Selected genre review: article | SHA256 matches |
+| `tools/count.py` | Supplied anatomy counting script, all 1,298 lines | SHA256 matches configuration |
+
+The counting script’s expected and actual SHA256 are both:
+
+```text
+b4aae6ce979fe81b43531aac123f4077866b9efc72e244dc7203b053c07ae847
+```
+
+The configuration selects `article`, `sv`, no technique and no writing brief. It expressly identifies the source material as:
+
+> “The complete supplied Text Artifact only; no external interview or source is supplied. Ordinary source-blind review applies.”
+
+Consequently, the report and interview mentioned inside the article are attributed sources within the supplied text, not missing packet resources. The brief requests validation; it supplies no evidence for the article’s facts. No repository, issue, other fixture or other report was examined.
+
+For the coverage tables, these passage references identify the complete text:
+
+| Reference | Passage |
+|---|---|
+| **H** | Headline, line 1 |
+| **S** | Standfirst, line 3 |
+| **B** | `Text: Hedda Lund`, line 5 |
+| **L** | Lead beginning `En temperaturgivare…`, line 7 |
+| **P1** | Threshold and report paragraph, line 11 |
+| **P2** | Unmeasured draught and experience paragraph, line 13 |
+| **Q** | Elin Rask’s quotation and attribution, line 15 |
+| **E1** | Recommendation and planned trial paragraph, line 19 |
+| **E2** | Final imperative, line 21 |
+| **SH1** | `En gräns för det lokala försöket`, line 9 |
+| **SH2** | `Nästa försök behöver mer än givare`, line 17 |
+
+## 2. Anatomy and semantic examination
+
+### Standfirst read alone
+
+**Holds.** S identifies the school, measurements, numerator and denominator, the office’s own threshold, the four-week scope, and the distinction between locating occasions and explaining causes. Its offer is explicit:
+
+> “Här är vad ett kort försök kan säga, och vad som behövs för att komma vidare.”
+
+The reader does not need the headline or body to understand that offer. The numerical threshold itself can properly be supplied in the article. The standfirst is a full, summarising paragraph rather than a deck.
+
+### Entire body read with the standfirst covered
+
+**Holds.** L begins an explanation with a new premise:
+
+> “En temperaturgivare mäter luften där den sitter.”
+
+It then introduces the particular measurement exercise and states the article’s promise. The following account covers every person, thing and event mentioned in the lead:
+
+| Lead reference | Introduction available without S | Status |
+|---|---|---|
+| A temperature sensor | Introduced by `En temperaturgivare` | **holds** |
+| The air | The ordinary object of the sensor’s measurement, introduced in that sentence | **holds** |
+| `den` | Refers directly to the temperature sensor | **holds** |
+| `Det` | Refers to the preceding proposition about where measurement occurs | **holds** |
+| Placement, `placeringen` | Introduced through `där den sitter`; the definite noun names that location | **holds** |
+| The property office, `fastighetskontoret` | Named by its institutional function in L; `Kontoret` in P1 refers back to it | **holds** |
+| Interpreting the measurements | Introduced by `ska tolka`; this does not assert that interpretation or corrective work has already been completed | **holds** |
+| Four weeks of measurements | Introduced directly in L, with its duration | **holds** |
+| Björkskolan | Named directly in L | **holds** |
+| Six classrooms | Introduced as `Björkskolans sex klassrum` | **holds** |
+| `Genomgången nedan` | Identifies the ensuing article’s explanation | **holds** |
+| `värdena` | Refers to the measurements just introduced | **holds** |
+| `var gränsen går` | Completes `vad värdena räcker till`: the boundary of the conclusions available from the values | **holds** |
+
+No person is mentioned in L. Hedda Lund is named separately in B. Elin Rask is introduced later by both occupation and full name before `Rask` is used alone.
+
+Reading the remaining body without S also leaves no stranded reference:
+
+- P1 introduces the report by title and date, the 20-degree threshold and the 14-of-120 count. `den gränsen` refers to the threshold already stated in P1.
+- P2’s `Givarna` refers to the measurement devices; `elevernas upplevelse` introduces a relevant unmeasured dimension.
+- Q introduces Rask. Her `vi` is understood in the context of the measurement work she is discussing.
+- E1’s temperature series and room-use times name the data and additional context being recommended. `styrningen` is intelligible here as the building’s temperature control; the article does not depend on an omitted explanation of a particular control system.
+- E1 introduces the next trial and its unsettled financing. E2’s `därför` connects the action to the recommendation immediately preceding it.
+
+### Opening promise and follow-through
+
+**Holds.** The lead’s commitment is:
+
+> “Genomgången nedan visar vad värdena räcker till och var gränsen går.”
+
+The body delivers that account through the local threshold, the count’s definition, the absent duration information, the distinction between air temperature and experienced conditions, Rask’s acknowledgement of unknown causes, and the recommended addition of room-use times.
+
+The lead does **not** promise sensor coordinates, a comparison of placements, or a finding that placement caused the recorded temperatures. No such information appears later. That absence does not defeat the promise actually made.
+
+### Headings, sections and quotation
+
+| Relationship | Examination | Status |
+|---|---|---|
+| H and the whole article | The timing-versus-cause distinction is supported by P1, P2 and Q. H identifies the particular trial and its explanatory limit. | **holds** |
+| H and S | S adds 14/120, four weeks, the locally chosen threshold and the reader’s offer. Its retained causal qualification makes S independently intelligible; the pair is not merely the same information presented twice. | **holds** |
+| SH1 and its whole section | The section explains a locally chosen threshold and the limits of interpreting measurements. The heading names that setting and boundary. | **holds** |
+| SH1 and its opening sentence | `Kontoret valde 20 grader Celsius som arbetsgräns` supplies the concrete decision and value that SH1 does not state. | **holds** |
+| SH1 and Q | SH1 does not disclose Rask’s judgement that the team knows when to investigate but not why it became cold. Her quotation retains its point. | **holds** |
+| Quotation bridge | `Driftteknikern Elin Rask sammanfattar:` identifies the speaker and function of the quotation without paraphrasing its concession in advance. | **holds** |
+| SH2 and its whole section | Room-use times provide the additional context named by “mer än givare”; the planned trial and financing qualification remain within the next-step subject. | **holds** |
+| SH2 and its opening sentence | E1 specifies the additional data and the action recommended by Rask, adding substance to the heading. | **holds** |
+| Last section as ending | It presents the recommendation, future plan and reservation, then a concrete action. It adds no new causal evidence on which the earlier explanation depends. | **holds** |
+
+Q is one speaker’s turn in its own paragraph. It is introduced with a colon, begins with a capital and uses Swedish quotation marks. Its final punctuation is not duplicated. It expressly presents exact wording; nothing in the text establishes a conflicting quotation convention or a repair concealed inside those marks.
+
+## 3. Claims and support
+
+Support below means support visible in the complete supplied artifact, as required by the source-blind contract.
+
+| Proposition | Speaker, scope and certainty | Visible support and classification |
+|---|---|---|
+| A temperature sensor measures air where it is situated | Author; general operational proposition, stated directly | L supplies the premise explicitly. This explains the spatial scope of a reading. |
+| Placement matters when interpreting this exercise | Author; interpretive judgement, stated directly | `Det gör placeringen viktig…` follows from the sensor’s local measurement. **Supported inference**, not a finding of incorrect placement or a causal explanation for cold air. |
+| The exercise covered four weeks and six classrooms | Author; particular exercise, stated as fact | Four weeks appears in S and L; six classrooms appears in L. Neither is contradicted elsewhere. |
+| Fourteen of 120 lesson periods contained a below-threshold reading | Author reporting the named report; lesson-period count, not a count of individual readings | P1 specifies `med minst en mätning under den gränsen`. S preserves that scope. |
+| The working threshold was 20 degrees Celsius | Author reporting the office’s choice; local exercise only | P1: `Kontoret valde 20 grader Celsius som arbetsgräns.` |
+| The threshold is the office’s own | Author; local status, stated directly | P1: `Gränsen är kontorets egen, vald för det här försöket.` No legal, national or comfort standard is asserted. |
+| The report does not give duration below the threshold | Author’s observation about the named document | P1: `Hur länge temperaturen låg under den anger rapporten inte.` This is an asserted reporting absence, not a claim that the periods were brief. |
+| Draught and pupils’ experience were not measured | Author; limits of these devices in this exercise | P2 states both exclusions directly. |
+| Low readings identify cold-air occasions but do not describe how the room felt | Author; interpretation within the local measurement context | Supported by the defined threshold, the readings and the exclusions in P2. This is an **asserted explanation of evidential limits**, not an explanation of why temperatures fell. |
+| The team knows when closer investigation is needed, but does not yet know why it became cold | Elin Rask; the particular occasions in this exercise | Q: `Vi vet när vi behöver titta närmare. Vi vet ännu inte varför det blev kallt just då.` “Ännu” preserves uncertainty rather than asserting that causes cannot be discovered. |
+| Temperature series should be linked to room-use times before control is changed | Rask; recommendation, not completed work | Explicitly attributed in E1. No outcome from carrying it out is promised. |
+| Another trial is planned for November with similarly placed sensors | Author; plan, not guaranteed event | E1 states `planeras`; it does not state that the trial has happened. No year or actual placement coordinates are supplied. |
+| Financing has not been decided | Author; qualification of that plan | E1: `men finansieringen är inte beslutad`. |
+| The reader should put room-use times alongside measurements before the next sensor is installed | Author; practical recommendation | E2 follows the recommendation for contextualising the series. Its timing is the author’s next-step advice, not a verbatim attribution to Rask. |
+| The article will explain the values’ reach, limits and useful next step | Author; commitment to subsequent content | S and L make the commitment; P1, P2, Q, E1 and E2 supply the follow-through described above. |
+
+The supported placement proposition remains separate from stronger propositions the article does not assert. There is no statement that the sensors were misplaced, that their placement caused the low readings, that 14 periods were continuously cold, that every part of every classroom was cold, or that the planned trial will resolve the causes.
+
+The article’s acknowledged unknowns are the causes of the low readings, the unreported duration below the threshold, and the undecided financing. They are limits preserved by the text, not unresolved validation coverage.
+
+## 4. Rule-by-rule coverage
+
+### `contracts/r01.md` — The mechanics contract
+
+| Heading / rule | Decisive passage or absence | Disposition |
+|---|---|---|
+| Contract scope: objective mechanics; language-specific guidance prevails | Swedish resource applied to this Swedish article; preferences have not been treated as errors | **holds** |
+| Clause boundaries: no unrelated independent clauses joined only by a comma; no unpunctuated run-on | Entire text checked; independent statements in P1 and Q have sentence boundaries | **holds** |
+| Clause boundaries: coherent explanation, specification or contrast may retain its comma | H’s `när, inte varför` is a coherent elliptical contrast; conjunctions in S, P2 and E1 express their actual relationships | **holds** |
+| Clause boundaries: judge coherence rather than length or register; retain defensible joints | No joint was rejected merely for being informal or short | **holds** |
+| Clause boundaries: repair only the erroneous joint, without rewriting or inventing a conjunction | No erroneous joint found; no correction made | **inapplicable** — repair not triggered |
+| Quotation: utterance introduction receives punctuation and sentence capitalization | Q: `sammanfattar: ”Vi…` | **holds** |
+| Quotation: grammatical quotation fragments receive the host sentence’s syntax | No quoted grammatical fragment | **inapplicable** |
+| Quotation: host and quoted sentence end once; question/exclamation punctuation and reporting clauses remain correctly joined | Q has one final stop inside the closing mark and no added host stop | **holds** |
+| Quotation: following reporting clause must not become a separate capitalized sentence | No following reporting clause | **inapplicable** |
+| Quotation: block quotation enclosure, nesting, introductory sentence and outside attribution | No block quotation | **inapplicable** |
+| Quotation: one speaker per paragraph; continuing turns identifiable | Q is a single speaker’s single paragraph | **holds** |
+| Quotation: mark additions, alterations, omissions and retained source errors | No such departure is evident in the supplied text; none is inferred from fluent wording | **holds within the required text-internal review** |
+| Abbreviations spelled out: ordinary capitalization except genuine proper names; repair only the expansion | No abbreviation or expansion | **inapplicable** |
+| Lists: consistent punctuation/capitalization appropriate to sentences or fragments; preserve final introducing-sentence stop | No list | **inapplicable** |
+| Established variants: retain valid choices, correct actual errors regardless of consistency | `ska` is used naturally; no conflicting variant or independently prohibited form found | **holds** |
+
+### `contracts/r02.md` — Swedish
+
+The resource’s language identity and scope **hold**: configuration selects base Swedish, and the text uses that language.
+
+#### Composition
+
+| Rule | Evidence | Disposition |
+|---|---|---|
+| V2 main-clause order after a fronted constituent | S: `Under … registrerade givarna`; P1: `Hur länge … anger rapporten inte` | **holds** |
+| Compounds written together | `temperaturgivare`, `lektionspass`, `fastighetskontoret`, `användningstider` | **holds** |
+| Double definiteness with an adjective | SH1: `det lokala försöket` | **holds** |
+| Ordinary s-passive; avoid unintended change-of-state passive | E1: `kopplas`, `ändras`, `planeras`; `är inte beslutad` describes a state | **holds** |
+| Default direct address rather than distancing singular `ni` | E2 uses a direct imperative | **holds** |
+| Use `man` only for genuinely generic or unknown agents | No `man`; actors and the reader’s action are identified | **holds** |
+| Ordinary speech-dash default; quotation marks identify wording as exact | Q consistently presents one exact quotation. The review scope permits no finding from that choice alone without conflicting evidence | **holds** |
+| Genitive without apostrophe; no added suffix after s/x/z | `Björkskolans`, `kontorets`, `elevernas`, `rummens` | **holds** |
+| Prefer manageable clauses and verbs over heavy subordination/nominalisation | `mäter`, `valde`, `räknar`, `rekommenderar`, `Lägg`; no overloaded subordinate structure | **holds** |
+| Established Swedish terms while retaining appropriate field vocabulary | `givare`, `mätvärden`, `arbetsgräns`, `luftdrag`, `temperaturserierna` | **holds** |
+
+#### Review
+
+| Rule | Evidence | Disposition |
+|---|---|---|
+| Check split compounds first | No split compound in the complete text | **holds** |
+| Check every non-subject clause opening | S’s fronted duration and P1’s fronted indirect question preserve V2 | **holds** |
+| Diagnose nominal style and colourless verbs | Measurement nouns denote actual data or events; no stacked nominal formulation | **holds** |
+| Diagnose heavy pre-modifiers | No bureaucratic pre-modifier construction; report date is a short post-modifier | **holds** |
+| Diagnose prepositional filler | No `i syfte att`, `avseende`, `gällande` or equivalent empty construction | **holds** |
+| Maintain one register | Plain explanatory Swedish throughout, followed by a compatible imperative | **holds** |
+| Diagnose text-internal quotation inconsistency; do not infer repair from fluency | One quotation convention; no conflicting rendering or evidence of repaired wording | **holds** |
+| Diagnose loans imported from an English draft | None of the identified problems or an equivalent unidiomatic loan found | **holds** |
+| Diagnose mechanically imported participial modifiers | No repeated `-ande` modifier pattern | **holds** |
+| Read rhythm: known before new, one main idea per sentence, no postponed clause behind several others | L supplies the sensor premise before its inference; P1 defines the threshold before using it | **holds** |
+
+#### Anti-slop
+
+| Rule | Evidence or absence | Disposition |
+|---|---|---|
+| Empty stock openings | Opening is the specific sensor premise, not a generic announcement | **holds** |
+| Stock closings | Ending gives a concrete action | **holds** |
+| Imported false contrasts | Timing/cause and reading/experience distinctions preserve actual evidential limits | **holds** |
+| Stock metaphors | None present | **holds** |
+| Superlative inflation | None present; `viktig` is supported by the local-measurement premise | **holds** |
+| Repeated paragraph-opening connective adverbs | No template; final `därför` connects an actual recommendation | **holds** |
+| Concentrated imported punctuation errors | None found in the mechanical pass | **holds** |
+| Reflexive adjective triads | None present | **holds** |
+| Translated wholesale hedging/padding | Qualifications concern real measurement or planning limits | **holds** |
+| Empty attribution | Report is titled and dated; Rask is named and identified | **holds** |
+
+#### Mechanics
+
+| Rule | Evidence or absence | Disposition |
+|---|---|---|
+| Join Swedish compounds | All relevant compounds joined | **holds** |
+| Correct `de`/`dem`; restrict `dom` to deliberately rendered speech | None used | **inapplicable** |
+| Correct location/direction and intransitive/transitive pairs | L’s `var gränsen går`, P1’s `låg`, E2’s `Lägg` and `sätts upp` have the appropriate functions | **holds** |
+| No `att` after modals; ordinary infinitive after börja/sluta/behöva | `kan säga`, `ska tolka`; no prohibited construction | **holds** |
+| Verb invariance and adjective agreement | `luften var kall`, `ett lågt värde`, `sex klassrum` | **holds** |
+| Decimal comma, thousands spacing, percentage spacing and unspaced range dash | No decimal, large grouped number, percentage sign or range | **inapplicable** |
+| Write percentages/degrees out in running prose; technical symbol spacing | P1: `20 grader Celsius`; no degree symbol | **holds** |
+| Swedish dates, lowercase months/weekdays/languages/nationalities; accepted clock formats | `12 mars 2026`, `november`; no clock time | **holds** |
+| Currency after amount with spacing | No currency | **inapplicable** |
+| No comma between sentence-initial connective and finite verb | No such comma; E2: `Lägg därför…` | **holds** |
+| Colon capitalization appropriate to utterance/explanation | Q’s direct speech starts `Vi`; byline names `Hedda Lund` | **holds** |
+| Swedish en-dash conventions; no English em dash | No dash in the article | **inapplicable** |
+| Swedish outer and nested quotation glyphs | Q uses `”…”`; no nested quotation | **holds** |
+| Exact-word promise of quotation marks versus repairable wording under speech dash | No text-internal conflict with Q’s exact-word presentation | **holds within source-blind review** |
+| Continued speech paragraphs reopen with a dash where dash form is used | No continued turn or dash-form speech | **inapplicable** |
+| No serial comma in a simple list | No simple list. S’s coordinated `vad… och vad…` clauses are not a serial-comma list | **holds** |
+| Write `och`; preserve ampersand only in proper names or quotations | `och` written out; no ampersand | **holds** |
+| Abbreviation periods, including stated exceptions | No abbreviation | **inapplicable** |
+| Initialism case and compound hyphenation | No initialism | **inapplicable** |
+| Genitive without apostrophe; none added after s/x/z | Genitives identified above are correct | **holds** |
+| Sentence case for headings and titles, with proper-name capitals | H, SH1, SH2 and `Mätförsök i Björkskolan` follow it | **holds** |
+| Greeting/closing punctuation | No greeting or correspondence closing | **inapplicable** |
+| Preserve established Swedish variants | `ska` retained; no inconsistent variant pair | **holds** |
+
+### `contracts/r03.md` — The base contract
+
+| Heading / rule | Evidence | Disposition |
+|---|---|---|
+| Base register; genre and language govern form and expression | Factual Swedish explanatory article rather than promotional or personal prose | **holds** |
+| Reader and progression: clear focus, needed concepts before reasoning, relevant technical detail | Sensor locality precedes placement inference; threshold precedes count interpretation | **holds** |
+| Reader and progression: real transitions and coherent paragraphs; supporting material beside claims | L’s `Det`, P2’s `alltså` and E2’s `därför` have stated premises | **holds** |
+| Reader and progression: body and sections intelligible without paratext as opening sentence | Covered-body examination above; P1 and E1 each make their own opening statement | **holds** |
+| Reader and progression: specific opening and earned ending; no mere announcements/flourishes | Sensor premise opens; room-use comparison closes | **holds** |
+| Expression: concrete vocabulary, useful verbs, natural cadence and clear references | Named readings, threshold, rooms and actions; no abbreviation needing introduction | **holds** |
+| Expression: rhetoric serves meaning; no fabricated comparison, scene or motive | Contrasts distinguish measurement from cause and experience; no imagined event | **holds** |
+| Expression: passages earn their place; purposeful repetition and useful formatting | Repeated limits support independent S, body explanation and attributed concession; headings orient, emphasis identifies S and report title | **holds** |
+| Expression: consistent voice, terminology and presentation | `fastighetskontoret`/`Kontoret` and `Elin Rask`/`Rask` are transparent shortened references, not new entities | **holds** |
+| Claims: supported, precisely attributed and proportionate; preserve unknown/unclaimed distinctions | Count attributed to titled report; recommendation to Rask; causes remain unknown | **holds** |
+| Claims: no invented source, quotation, experience or form-completing fact | No internal contradiction or evidence of invention; no source absence treated as disproof | **holds** |
+| Claims: circumstantial and evaluative detail needs support | Four weeks supports `kort`; defined threshold supports `lågt`; no judgement that 14/120 is excessive | **holds** |
+| Claims: sequence/correlation does not establish cause; qualifications apply everywhere | H, S, P2 and Q refrain from causal diagnosis; placement is an interpretive inference | **holds** |
+| Claims: length never licenses invention or lost qualifications; publication limit binding | Anatomy limits met; no further requested length or publication limit | **holds**; additional limit rule **inapplicable** |
+
+### `contracts/r04.md` — Reviewing the base contract
+
+This resource has no subordinate headings.
+
+| Rule | Evidence / application | Disposition |
+|---|---|---|
+| Findings require passage, requirement and actual reader loss; judge passages in context | No wording preference is reported as a defect; local threshold supplies the context for `lågt` | **holds** |
+| Keep mechanics separate; recognize substantive repetition as editorial | Separate mechanics coverage above; repetition assessed for its informational function | **holds** |
+| Find missing reader steps; cover paratext; distinguish a stated heading fact from a dependent body reference | Complete covered-body and heading examination above | **holds** |
+| Judge rhythm by effect and preserve purposeful variation/repetition | Four-sentence P1 remains one coherent account of the local threshold and count | **holds** |
+| Compare claim strength with visible support; review no unseen material, request none, add no source-verification caveat | Claim table uses the supplied article and its attributions only | **holds** |
+| Apply anti-slop by removal cost; preserve useful facts, limits and voice | Removing `ännu`, the duration exclusion or financing qualification would alter certainty | **holds** |
+| Recognize bounding sentences; diagnose only a redundant or contradictory limit inside one | No contradictory limit or useless internal qualification found | **holds** |
+| Make smallest supported correction; add no evidence; leave unresolved repairs requiring missing information | No defect requiring correction; user requires report only | **inapplicable** — no repair |
+| Account for removed, changed or added claims consistently with findings | No claims changed, added or removed | **inapplicable** |
+| Compare corrections difference by difference; reject introduced defects; preserve functioning text | No corrected text produced | **inapplicable** |
+
+### `contracts/r05.md` — The anti-slop catalogue
+
+| Heading / pattern | Evidence or absence | Disposition |
+|---|---|---|
+| The test before a pattern is recorded | Removing the timing/cause distinction or actual uncertainty would change the claims | **holds** |
+| The test before a pattern is recorded: smallest repair, preserve vocabulary, voice and rhythm | No admitted pattern and no repair | **inapplicable** — repair not triggered |
+| The seven patterns — False contrasts | The contrasts distinguish evidence from conclusions it cannot establish | **holds** |
+| Empty openings | L contributes the sensor-locality premise immediately | **holds** |
+| Importance inflation | Placement’s importance has a premise; no unsupported significance formula | **holds** |
+| Vague attribution | Report title/date and named technician | **holds** |
+| Synonym cycling | `givare`/`temperaturgivare`, `Kontoret` and `Rask` retain clear referents; values and series name related data forms | **holds** |
+| Robotic rhythm | Paragraphs and sentences vary; no repeated triad or topic-summary template | **holds** |
+| Generic conclusions | E2 is the concrete next action the explanation supports | **holds** |
+| Notice | Licence and provenance notice for the catalogue, not a requirement on the article | **inapplicable** |
+
+### `contracts/r06.md` — Article anatomy
+
+| Heading / rule | Evidence | Disposition |
+|---|---|---|
+| Anatomy’s requirement/norm/typical distinction; exact limits counted | Script output retained below; semantic requirements checked separately | **holds** |
+| Order: every required part present, ordered once except repeated sections | H → S → B → L → SH1/paragraphs → SH2/ending | **holds** |
+| Order: first subheading directly follows lead; body runs from lead through ending | One lead paragraph followed by SH1 | **holds** |
+| Order: H1 headline, H2 subheadings; two-level norm | One `#`, two `##`, no deeper headings | **holds** |
+| Headline: 20–70 characters | 48 characters | **holds** |
+| Headline: 3–8 words and at most 60 characters norm | 7 words, 48 characters | **holds** |
+| Headline: apply headline contract | Coverage of r08/r09 below | **holds** |
+| Standfirst: full summarising paragraph, not a deck | S consists of three connected sentences | **holds** |
+| Standfirst: one paragraph, at most 60 words | One paragraph, 46 words | **holds** |
+| Standfirst: self-contained, subject and benefit clear, invites reading | Standalone examination above; promise of limits and next step | **holds** |
+| Byline: one conventional line naming author | `Text: Hedda Lund`; review guidance accepts the author named by the text | **holds** |
+| Lead: first body paragraph, paragraph rules, introduces subject and expectation | One 33-word paragraph; premise, application and promise | **holds** |
+| Standfirst and lead: each independent; introduce every lead referent; no dependence on S | Referent inventory and whole-body examination above | **holds** |
+| Standfirst and lead: different first words norm | `Under` versus `En` | **holds** |
+| Standfirst and lead: advance rather than restart; repeat needed orientation only in passing | L adds sensor locality and placement relevance, then supplies scope | **holds** |
+| Paragraphs: each holds one thought; content determines length | P1 explains the working threshold and count; P2 measurement limits; Q knowledge limits; E1 next trial steps; E2 action | **holds** |
+| Paragraphs: most two/three sentences, allowing content-led exceptions | Script: 5 of 7; P1’s four sentences and E2’s one serve their content | **holds** |
+| Paragraphs: isolated breaks for a needed effect | No isolated word or dramatic fragment | **inapplicable** |
+| Paragraphs: varied sentence lengths and natural rhythm | Short sensor premise, longer application; similarly varied P1 and P2 | **holds** |
+| Paragraphs: at most 80 words norm | All body paragraphs range from 14 to 45 words | **holds** |
+| Subheadings and sections: maximum 70 characters | SH1 32; SH2 34 | **holds** |
+| Subheadings and sections: describe section; apply headline guidance | Relationships examined above | **holds** |
+| Subheadings and sections: at least one paragraph, at most three norm; most two/three | Sections contain three and two paragraphs | **holds** |
+| Ending: separate final section after another, with own subheading; short | SH2 follows the first section and contains two short paragraphs | **holds** |
+| Ending: demonstrates fulfilled expectation and calls to supported action | Limits established; E2 asks the reader to align use times and readings | **holds** |
+| Ending: closes without introducing new supporting reasons/evidence | Recommendation, plan and financing reservation close the exercise’s next-step account | **holds** |
+| Finished-text procedure: report absent parts; do not write them | No required part absent; no text written | **inapplicable** — absence procedure not triggered |
+
+### `contracts/r07.md` — Article anatomy — review guidance
+
+This resource has no subordinate headings.
+
+| Rule | Evidence / application | Disposition |
+|---|---|---|
+| Report findings in the underlying rule’s strength; count before reporting limits | Requirements, norms and typical figures distinguished above | **holds** |
+| Diagnose missing, misplaced and present-but-defective parts accurately; do not invent absent parts | Every required part is present and correctly placed | **holds** |
+| Judge ending content semantically, including content inside another section or no section | SH2 independently satisfies the ending test | **holds** |
+| Do not multiply findings caused only by another missing part or script misclassification | No missing part or script misclassification | **inapplicable** |
+| Norm departures need actual reader cost; bands alone do not justify rewriting | No norm departure; no heading or paragraph changed | **holds** |
+| Clearly descriptive subheading need not become a statement merely to fit a preference | SH1 is descriptive and leaves Q its point | **holds** |
+| Read “most” across the whole text; name a costly pattern rather than condemning an individual count | Both sections and most paragraphs meet typical forms; no costly pattern | **holds** |
+| Read S alone, then with L; cover S and read body for referents | Completed above | **holds** |
+| Use author named by text/metadata/invocation; do not presume reviewer’s user is author | B names Hedda Lund | **holds** |
+| Repair procedures for absent/misplaced parts and vague calls to action | None triggered; no editing authorized | **inapplicable** |
+
+### `contracts/r08.md` — Headlines
+
+| Heading / rule | Evidence | Disposition |
+|---|---|---|
+| Headlines: independently identify subject and core message; applies to subheadings by section | H names the Björkskolan trial and its limit; section relationships clear | **holds** |
+| Statement or label | H and SH2 state propositions. SH1’s descriptive form is permitted by the quotation and finished-anatomy guidance | **holds** |
+| What a statement headline does — states the angle rather than merely the subject | H states what the exercise establishes and leaves unknown | **holds** |
+| Simple clause, active verb, straight order, suitable present tense | H: subject + `visar`; SH2: subject + `behöver`; SH1 follows the permitted descriptive form | **holds** |
+| Important keyword first | `Mätförsöket`; section openings foreground `gräns` and `Nästa försök` | **holds** |
+| Concrete detail when it carries the message | Björkskolan identifies the particular exercise; the count belongs to the fuller summary | **holds** |
+| Reader sees the gain | H offers the distinction between temporal finding and causal explanation | **holds** |
+| As short as the angle allows; format limits respected | 48-character H; concise subheadings; no filler modifier | **holds** |
+| Natural spoken phrasing | Ordinary Swedish clauses/description | **holds** |
+| Audience-familiar words and suitable names/terms | School name identifies the subject; no unexplained acronym or opaque specialist term | **holds** |
+| Tone matches content and seriousness | Measured, explanatory wording | **holds** |
+| Plain meaning independent of cleverness/allusion | No pun or required allusion | **holds** |
+| Gives the answer; question form restricted to justified exceptions | No question heading | **holds** |
+| Verb carries the statement; no colon substitute, clipped quote or headline-speak | `visar`, `behöver`; permitted descriptive SH1 is not a clipped utterance | **holds** |
+| Complements following text in information and wording | S supplies count, duration and offer; section openings provide threshold and specific recommendation | **holds** |
+| Every word supported: preserve scope, strength and conclusions | H’s contrast supported by Q; SH1 by P1; SH2 by E1/E2 | **holds** |
+| A subheading over a quotation: leave speaker’s judgement, figure or concession fresh | SH1 names the local threshold setting, not Q’s timing/cause concession | **holds** |
+| A subheading over a quotation: distinguish heading from immediate quotation bridge | SH1 and `Driftteknikern…sammanfattar:` assessed separately | **holds** |
+| Getting there: settle audience/angle; draft three to five variants; word headings after sections | Drafting history is not supplied and is not a finished-text requirement that can be diagnosed here | **inapplicable** — composition process |
+| Getting there: heading fits complete section, differs from first sentence, leaves quotation’s point | Both section relationships satisfy those observable results | **holds** |
+
+### `contracts/r09.md` — Headlines — review guidance
+
+| Heading / rule | Evidence | Disposition |
+|---|---|---|
+| Opening review test: support, core message, tone and whether reader is misled, for every heading | All three headings assessed against complete article or complete section above | **holds** |
+| Avoid — unsupported/sharpened/generalised claim | No heading exceeds body scope | **holds** |
+| Vague/mysterious wording requiring body to identify subject | H identifies trial and school; subheadings orient within that known subject | **holds** |
+| Bare subject where an angle should be stated | H states angle; SH1 is a working descriptive heading over a quotation and local-limit section | **holds** |
+| Unknown words, names or abbreviations | No opaque heading term | **holds** |
+| Partial quote, colon substitute or stilted headline-speak | None present | **holds** |
+| Pun/reference dependent on recognizing allusion | None present | **holds** |
+| Question heading where text answers it | None present | **holds** |
+| Tone more dramatic than text | No inflated claim or drama | **holds** |
+| Repetition in substance rather than complementary heading/following text | Following text adds specific data or action; retained scope in standalone S has a function | **holds** |
+| Subheading pre-spends quotation’s judgement/figure/concession | SH1 does not state Q’s concession | **holds** |
+| Avoid: identify reader loss; repair only heading, preserve meaning and account for changed assertion | No actual heading loss found; no repair | **inapplicable** — repair procedure |
+| Leave alone: preserve working plain headings, supported angles and justified forms | All headings left unchanged | **holds** |
+| Leave alone: judge headline alone and subheading after prior orientation | H intelligible alone; SH1/SH2 intelligible in their reader position | **holds** |
+| Working allusion/image that still identifies subject | No allusion/image | **inapplicable** |
+| Working figure or signed voice; distinguish figure from factual overclaim | No such device requiring an exception | **inapplicable** |
+| Working section summary unless it spends quotation’s point | SH2 summarises its next-step section; SH1 preserves Q’s point | **holds** |
+| Shared topic words are not themselves repetition | H/S share school and angle vocabulary while S adds the concrete summary | **holds** |
+| Subject/occasion/speaker heading over quotation can work | SH1 names the exercise’s local boundary | **holds** |
+| No finding or change merely because reviewer prefers another wording | No preferred alternative or replacement supplied | **holds** |
+
+### `contracts/r10.md` — Craft for five web genres
+
+| Heading / rule | Evidence | Disposition |
+|---|---|---|
+| Genre-appropriate Swedish journalistic craft; cited publications are standards, not voices to imitate | Focused reporting and explanation, named attribution, measured qualifications | **holds** |
+| Think and write in target language; preserve editorial tradition without translated surface | Natural Swedish syntax, terminology and typography | **holds** |
+| Webcopy-specific copywriting branch | Selected genre is article | **inapplicable** |
+| Web reading: clear angle/task, useful entry points, facts/reasoning carry explanation | Headings orient; sensor premise and measurement exclusions support the account | **holds** |
+| Web reading: connected paragraphs, useful devices, varied scanning/reading rhythm | Short sections and content-led paragraph lengths | **holds** |
+| Web reading: article anatomy governs parts/order/dimensions | r06/r07 and script checks completed | **holds** |
+
+### `contracts/r11.md` — Reviewing web craft
+
+This resource has no subordinate headings.
+
+| Rule | Evidence | Disposition |
+|---|---|---|
+| Read as scanner and continuous reader; identify actual density/fragmentation cost before changing | Headings show limits and next step; continuous reasoning remains connected | **holds** |
+| Distinguish fluency from editorial craft; preserve successful voice/structure | Article explains its evidence instead of promoting a generic message; no standardising rewrite | **holds** |
+| Proposed-change procedure | No dense/fragmented passage requiring change | **inapplicable** |
+
+### `contracts/r12.md` — Article
+
+| Heading / rule | Evidence | Disposition |
+|---|---|---|
+| Article: focused journalistic explanation/account rather than personal reflection or campaign | Subject is what the measurement exercise can establish | **holds** |
+| Apply web craft, anatomy and headline contracts | All selected resources examined above | **holds** |
+| What this genre asks for: angle clear early and governs material | H/S state the evidential limit; both sections develop limits and next steps | **holds** |
+| Explain concepts and connections in reader order; technical explanation may be direct | Local measurement → threshold/count → exclusions → recommendation | **holds** |
+| People and quotations have a useful material-supported role | Rask supplies the team’s concession and recommendation | **holds** |
+| Complete article: S introduces offer; L starts explanation/reporting | S offers the account; L supplies a new sensor premise | **holds** |
+| Explicitly requested excerpt takes only needed parts | Configuration selects complete artifact | **inapplicable** |
+| Ending fulfils opening with understanding/supported conclusion and useful next action | Limits established; room-use comparison recommended and requested | **holds** |
+| Commercial action only when assignment/material warrants it | No commercial action | **holds** |
+| The technique this genre is ordinarily written with — None | Configuration selects no technique; no additional technique obligation | **holds** |
+
+### `contracts/r13.md` — Article — review guidance
+
+This resource has no subordinate headings.
+
+| Rule | Evidence | Disposition |
+|---|---|---|
+| Read opening as sequence; lead explains/reports rather than starting twice; preserve necessary orientation | L adds locality and placement relevance, then names the exercise’s scope | **holds** |
+| Follow promised angle through sections and ending | Threshold and exclusions establish limits; ending supplies useful next context | **holds** |
+| Diagnose topic accumulation, delayed concepts or unrelated sales close; preserve technical substance | None present; threshold introduced before its use; no sales close | **holds** |
+| Apply full form to complete article, not excerpt | Full anatomy checked | **holds** |
+| Report absent required parts rather than supplying them; repair existing defective opening only from existing content | No absent or defective required part; no repair made | **inapplicable** — procedure not triggered |
+
+## 5. Complete counting-script output
+
+Invocation:
+
+```text
+uv run tools/count.py --genre=article text.md
+```
+
+Exit status: **0**. Complete stdout follows; no stderr output was reported.
+
+```json
+{
+  "ok": true,
+  "format": "markdown",
+  "conforms": true,
+  "failures": [],
+  "norms": [],
+  "typical": {
+    "paragraphs": 7,
+    "paragraphs_of_two_or_three_sentences": 5,
+    "sections": 2,
+    "sections_of_two_or_three_paragraphs": 2
+  },
+  "parts": {
+    "headline": {
+      "text": "Mätförsöket i Björkskolan visar när, inte varför",
+      "characters": 48,
+      "words": 7
+    },
+    "standfirst": {
+      "text": "Under 14 av 120 lektionspass registrerade givarna i …",
+      "words": 46,
+      "sentences_estimate": 3,
+      "paragraphs": 1
+    },
+    "byline": {
+      "text": "Text: Hedda Lund",
+      "words": 3
+    },
+    "lead": {
+      "text": "En temperaturgivare mäter luften där den sitter. Det …",
+      "words": 33,
+      "sentences_estimate": 3,
+      "paragraphs": 1
+    },
+    "sections": [
+      {
+        "subheading": {
+          "text": "En gräns för det lokala försöket",
+          "characters": 32,
+          "words": 6
+        },
+        "paragraphs": [
+          {
+            "text": "Kontoret valde 20 grader Celsius som arbetsgräns. Rapporten …",
+            "words": 45,
+            "sentences_estimate": 4
+          },
+          {
+            "text": "Givarna mätte varken luftdrag eller elevernas upplevelse. Ett …",
+            "words": 21,
+            "sentences_estimate": 2
+          },
+          {
+            "text": "Driftteknikern Elin Rask sammanfattar: ”Vi vet när vi …",
+            "words": 21,
+            "sentences_estimate": 2
+          }
+        ]
+      },
+      {
+        "subheading": {
+          "text": "Nästa försök behöver mer än givare",
+          "characters": 34,
+          "words": 6
+        },
+        "paragraphs": [
+          {
+            "text": "Rask rekommenderar att temperaturserierna kopplas till rummens användningstider …",
+            "words": 25,
+            "sentences_estimate": 2
+          },
+          {
+            "text": "Lägg därför tiderna för när rummen används bredvid …",
+            "words": 14,
+            "sentences_estimate": 1
+          }
+        ]
+      }
+    ],
+    "other": []
+  },
+  "heading_pairs": [
+    {
+      "id": "headline-standfirst",
+      "kind": "headline-standfirst",
+      "heading": "Mätförsöket i Björkskolan visar när, inte varför",
+      "following": "Under 14 av 120 lektionspass registrerade givarna i Björkskolan temperaturer under fastighetskontorets egen arbetsgräns. Fyra veckors mätningar pekar ut tillfällen att undersöka närmare, men förklarar inte varför luften var kall. Här är vad ett kort försök kan säga, och vad som behövs för att komma vidare.",
+      "shared_words": [
+        "björkskolan",
+        "i",
+        "inte",
+        "varför"
+      ]
+    },
+    {
+      "id": "subheading-1",
+      "kind": "subheading-first-sentence-estimate",
+      "heading": "En gräns för det lokala försöket",
+      "following": "Kontoret valde 20 grader Celsius som arbetsgräns.",
+      "shared_words": []
+    },
+    {
+      "id": "subheading-2",
+      "kind": "subheading-first-sentence-estimate",
+      "heading": "Nästa försök behöver mer än givare",
+      "following": "Rask rekommenderar att temperaturserierna kopplas till rummens användningstider innan styrningen ändras.",
+      "shared_words": []
+    }
+  ]
+}
+```
+
+The script establishes its parsed structure, dimensions, sentence estimates and lexical overlaps. It does not establish referential independence, justified inference, heading complementarity, quotation handling in context or fulfilment of the opening. Those requirements were examined separately above.
+
+## 6. Complete disposition
+
+- **Whole-fixture conformance:** holds under every applicable supplied editorial and mechanical rule.
+- **Supported contextual proposition:** sensor placement matters to interpretation because the reading concerns air at the sensor’s location. This does not assert a placement fault or explain the low temperatures.
+- **Actual defects:** none found.
+- **Unresolved conformance questions:** none within the supplied review scope.
+- **Resource obstacles or missing coverage:** none.
+- **Replacements or edits:** none supplied or made.
+
+Validation complete

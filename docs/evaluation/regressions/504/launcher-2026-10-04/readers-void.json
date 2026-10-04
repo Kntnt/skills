@@ -1,0 +1,63 @@
+{
+  "classification": "consumed acquisition VOIDs; no semantic verdict",
+  "original_reader_bound": 68,
+  "consumed": 2,
+  "held": 66,
+  "timeout_seconds_per_reader": 1200,
+  "infrastructure_replacements": 0,
+  "new_proposal_replacement_bound": "at most one separately committed replacement proposal per new contrast; no reader retry",
+  "rows": [
+    {
+      "id": "7e833bdac9694a71980092ac55a8eb4a",
+      "native_exit": 0,
+      "helper_exit": 1,
+      "elapsed_seconds": 564.2974255410954,
+      "terminal_bytes": 47359,
+      "reason": "missing or conflicting retained message identity",
+      "semantic_status": "VOID, not interpreted",
+      "primary_receipt": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/7e833bdac9694a71980092ac55a8eb4a",
+      "original_materials": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/materials/7e833bdac9694a71980092ac55a8eb4a",
+      "copied_files": {
+        "cleanup.json": "ef7a1fad2e4873b6aa29ee67aea6e2c52138f460be9988a212ad0778902c6373",
+        "configuration.json": "bfab2a69faa146d343474e356a33410d7309193fae1e72431a6889c5bf6b5c87",
+        "events.jsonl": "10f6639c63b60485501b11c5b875193be65ad8c193c642bf6f6c0b8a6060867f",
+        "inventory-after.json": "c4b37e3adb9d603779ea8ecf0b53d0b19a68f48328e76fb0480eb5d9fc1790d2",
+        "inventory-before.json": "5ef857f034a6c10769ceb2e870c2e9c937fe516ab91395c653dcf66c06841f48",
+        "native-sessions/2026/10/04/rollout-2026-10-04T11-08-09-01a1062b-b292-7911-8587-4365788cf42d.jsonl": "356d03ce1ae20ab34373b6800bd3de97ad31b52af751fb3408a9c97c888c49c2",
+        "prompt.txt": "15126fb36bfbcdf3c6cbae765bdd29379c78e63bfb3f74e673c42449f038648e",
+        "receipt.json": "c8579913d33ee77f669fa904bf2a88a3c9830d770bf23a42c984faadb8225f22",
+        "registrations.jsonl": "d833b5fb8fe499a84304b399c5064ce3bff6a8f7bceb6d85da85b67a67dfbc76",
+        "request.json": "80e2f6e66ba51e34663cc2f6f55096101182f12eb6350f335f2470a0fb2afbde",
+        "stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "terminal.txt": "d33e54f775b25426c209b62346e0a9fa1102bafc098addca95bd9a8706184cd1",
+        "wrapper-stderr.txt": "b40292e6c9fab418c76395856f847267402c5cc6f67dd766cb0c550f2111b894"
+      }
+    },
+    {
+      "id": "978d3c19acf94c149dfcfbc87c2c768c",
+      "native_exit": 0,
+      "helper_exit": 1,
+      "elapsed_seconds": 681.5814381251112,
+      "terminal_bytes": 48735,
+      "reason": "missing or conflicting retained message identity",
+      "semantic_status": "VOID, not interpreted",
+      "primary_receipt": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/978d3c19acf94c149dfcfbc87c2c768c",
+      "original_materials": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/materials/978d3c19acf94c149dfcfbc87c2c768c",
+      "copied_files": {
+        "cleanup.json": "f73c48980599ca9b0a3bbe5f67c1d3075e09ac1a02ccf764c17cd10bb9016243",
+        "configuration.json": "bfab2a69faa146d343474e356a33410d7309193fae1e72431a6889c5bf6b5c87",
+        "events.jsonl": "d06376a6f193cd539bd319542cdf4e8571b7781176779d7a912101ef219bb72f",
+        "inventory-after.json": "30018ab194bc4008b1fce1a3519f96a82023bc1e90c1c53be9b6a210cb470ce6",
+        "inventory-before.json": "fa346b273a787f0e8b1bdae94836f7714d03befed3b80b6d904ae59d6836001a",
+        "native-sessions/2026/10/04/rollout-2026-10-04T11-08-09-01a1062b-b291-7b62-80e6-05977e67461a.jsonl": "a0ed8d87e6330926c731f22f6009069260d7c2bc6b89b4b64585e7dfea1c2dd1",
+        "prompt.txt": "15126fb36bfbcdf3c6cbae765bdd29379c78e63bfb3f74e673c42449f038648e",
+        "receipt.json": "2db1dfcd679ce7fa33e0a01aaa3ff9cc8bf5ce4d787ecf063455bd1fa9bde244",
+        "registrations.jsonl": "202198edfd0dd83f172cdb7f14f4642193f39e220ff26300d43972319b84dc29",
+        "request.json": "b96bfacad6752bbb3896e112b32f8eb13d2ee45127d375f112c99475271be691",
+        "stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "terminal.txt": "d0299474e23e2337ddf88b2c48a80fd974185028521e4c2a6b58b01dd50c33e6",
+        "wrapper-stderr.txt": "3158e7972faa758ec6b2f7806cd5eec157c9e959ac2d9099978510cfc2f742e8"
+      }
+    }
+  ]
+}

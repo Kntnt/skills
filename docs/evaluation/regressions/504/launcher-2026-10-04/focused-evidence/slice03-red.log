@@ -1,0 +1,132 @@
+..FFFF                                                                   [100%]
+=================================== FAILURES ===================================
+______ test_each_genuine_delegate_requires_its_actual_frozen_seat[model] _______
+
+tmp_path = PosixPath('/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-redline-504-focused-thcx_6t4/pytest-of-thomas/pytest-4/test_each_genuine_delegate_req0')
+case = 'model'
+
+    @pytest.mark.parametrize("case", ["model", "effort", "version", "missing-context"])
+    def test_each_genuine_delegate_requires_its_actual_frozen_seat(
+        tmp_path: Path, case: str
+    ) -> None:
+        """A parent seat cannot stand in for a child's missing or different context."""
+    
+        # Arrange one independently wrong or absent child seat boundary.
+        paths = write_sessions(tmp_path)
+        rows = [json.loads(line) for line in paths[1].read_text().splitlines()]
+        if case == "model":
+            rows[1]["payload"]["model"] = "gpt-6-astra"
+        elif case == "effort":
+            rows[1]["payload"]["effort"] = "high"
+        elif case == "version":
+            rows[0]["payload"]["cli_version"] = "0.159.3"
+        else:
+            rows.pop()
+        paths[1].write_text("".join(json.dumps(row) + "\n" for row in rows))
+        recorder = load_runner()
+    
+        # Act and assert each delegate's own seat without replacing its evidence.
+>       with pytest.raises(recorder.DISPATCH.CaptureError, match="delegate seat"):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE CaptureError
+
+tests/test_editorial_redline_504_parent.py:137: Failed
+______ test_each_genuine_delegate_requires_its_actual_frozen_seat[effort] ______
+
+tmp_path = PosixPath('/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-redline-504-focused-thcx_6t4/pytest-of-thomas/pytest-4/test_each_genuine_delegate_req1')
+case = 'effort'
+
+    @pytest.mark.parametrize("case", ["model", "effort", "version", "missing-context"])
+    def test_each_genuine_delegate_requires_its_actual_frozen_seat(
+        tmp_path: Path, case: str
+    ) -> None:
+        """A parent seat cannot stand in for a child's missing or different context."""
+    
+        # Arrange one independently wrong or absent child seat boundary.
+        paths = write_sessions(tmp_path)
+        rows = [json.loads(line) for line in paths[1].read_text().splitlines()]
+        if case == "model":
+            rows[1]["payload"]["model"] = "gpt-6-astra"
+        elif case == "effort":
+            rows[1]["payload"]["effort"] = "high"
+        elif case == "version":
+            rows[0]["payload"]["cli_version"] = "0.159.3"
+        else:
+            rows.pop()
+        paths[1].write_text("".join(json.dumps(row) + "\n" for row in rows))
+        recorder = load_runner()
+    
+        # Act and assert each delegate's own seat without replacing its evidence.
+>       with pytest.raises(recorder.DISPATCH.CaptureError, match="delegate seat"):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE CaptureError
+
+tests/test_editorial_redline_504_parent.py:137: Failed
+_____ test_each_genuine_delegate_requires_its_actual_frozen_seat[version] ______
+
+tmp_path = PosixPath('/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-redline-504-focused-thcx_6t4/pytest-of-thomas/pytest-4/test_each_genuine_delegate_req2')
+case = 'version'
+
+    @pytest.mark.parametrize("case", ["model", "effort", "version", "missing-context"])
+    def test_each_genuine_delegate_requires_its_actual_frozen_seat(
+        tmp_path: Path, case: str
+    ) -> None:
+        """A parent seat cannot stand in for a child's missing or different context."""
+    
+        # Arrange one independently wrong or absent child seat boundary.
+        paths = write_sessions(tmp_path)
+        rows = [json.loads(line) for line in paths[1].read_text().splitlines()]
+        if case == "model":
+            rows[1]["payload"]["model"] = "gpt-6-astra"
+        elif case == "effort":
+            rows[1]["payload"]["effort"] = "high"
+        elif case == "version":
+            rows[0]["payload"]["cli_version"] = "0.159.3"
+        else:
+            rows.pop()
+        paths[1].write_text("".join(json.dumps(row) + "\n" for row in rows))
+        recorder = load_runner()
+    
+        # Act and assert each delegate's own seat without replacing its evidence.
+>       with pytest.raises(recorder.DISPATCH.CaptureError, match="delegate seat"):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE CaptureError
+
+tests/test_editorial_redline_504_parent.py:137: Failed
+_ test_each_genuine_delegate_requires_its_actual_frozen_seat[missing-context] __
+
+tmp_path = PosixPath('/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-redline-504-focused-thcx_6t4/pytest-of-thomas/pytest-4/test_each_genuine_delegate_req3')
+case = 'missing-context'
+
+    @pytest.mark.parametrize("case", ["model", "effort", "version", "missing-context"])
+    def test_each_genuine_delegate_requires_its_actual_frozen_seat(
+        tmp_path: Path, case: str
+    ) -> None:
+        """A parent seat cannot stand in for a child's missing or different context."""
+    
+        # Arrange one independently wrong or absent child seat boundary.
+        paths = write_sessions(tmp_path)
+        rows = [json.loads(line) for line in paths[1].read_text().splitlines()]
+        if case == "model":
+            rows[1]["payload"]["model"] = "gpt-6-astra"
+        elif case == "effort":
+            rows[1]["payload"]["effort"] = "high"
+        elif case == "version":
+            rows[0]["payload"]["cli_version"] = "0.159.3"
+        else:
+            rows.pop()
+        paths[1].write_text("".join(json.dumps(row) + "\n" for row in rows))
+        recorder = load_runner()
+    
+        # Act and assert each delegate's own seat without replacing its evidence.
+>       with pytest.raises(recorder.DISPATCH.CaptureError, match="delegate seat"):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE CaptureError
+
+tests/test_editorial_redline_504_parent.py:137: Failed
+=========================== short test summary info ============================
+FAILED tests/test_editorial_redline_504_parent.py::test_each_genuine_delegate_requires_its_actual_frozen_seat[model]
+FAILED tests/test_editorial_redline_504_parent.py::test_each_genuine_delegate_requires_its_actual_frozen_seat[effort]
+FAILED tests/test_editorial_redline_504_parent.py::test_each_genuine_delegate_requires_its_actual_frozen_seat[version]
+FAILED tests/test_editorial_redline_504_parent.py::test_each_genuine_delegate_requires_its_actual_frozen_seat[missing-context]
+4 failed, 2 passed in 0.07s

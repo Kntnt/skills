@@ -1,0 +1,179 @@
+FFFFF                                                                    [100%]
+=================================== FAILURES ===================================
+_ test_each_delegate_has_a_distinct_identity_in_the_actual_parent_session[duplicate] _
+
+tmp_path = PosixPath('/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-redline-504-focused-thcx_6t4/pytest-of-thomas/pytest-15/test_each_delegate_has_a_disti0')
+case = 'duplicate'
+
+    @pytest.mark.parametrize("case", ["duplicate", "empty", "parent-id", "session", "source"])
+    def test_each_delegate_has_a_distinct_identity_in_the_actual_parent_session(
+        tmp_path: Path, case: str
+    ) -> None:
+        """Malformed child metadata cannot be authenticated by a parent result."""
+    
+        # Arrange one conflicting child identity without changing its retained bytes.
+        paths = write_sessions(tmp_path)
+        rows = [json.loads(line) for line in paths[1].read_text().splitlines()]
+        meta = rows[0]["payload"]
+        if case == "duplicate":
+            meta["id"] = "checker-child"
+        elif case == "empty":
+            meta["id"] = ""
+        elif case == "parent-id":
+            meta["id"] = "fresh"
+        elif case == "session":
+            meta["session_id"] = "foreign-session"
+        else:
+            meta["thread_source"] = "user"
+        paths[1].write_text("".join(json.dumps(row) + "\n" for row in rows))
+        recorder = load_runner()
+    
+        # Act and assert the same public capture boundary rejects every wrong identity.
+>       with pytest.raises(recorder.DISPATCH.CaptureError, match="identity"):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE CaptureError
+
+tests/test_editorial_redline_504_parent.py:201: Failed
+_ test_each_delegate_has_a_distinct_identity_in_the_actual_parent_session[empty] _
+
+tmp_path = PosixPath('/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-redline-504-focused-thcx_6t4/pytest-of-thomas/pytest-15/test_each_delegate_has_a_disti1')
+case = 'empty'
+
+    @pytest.mark.parametrize("case", ["duplicate", "empty", "parent-id", "session", "source"])
+    def test_each_delegate_has_a_distinct_identity_in_the_actual_parent_session(
+        tmp_path: Path, case: str
+    ) -> None:
+        """Malformed child metadata cannot be authenticated by a parent result."""
+    
+        # Arrange one conflicting child identity without changing its retained bytes.
+        paths = write_sessions(tmp_path)
+        rows = [json.loads(line) for line in paths[1].read_text().splitlines()]
+        meta = rows[0]["payload"]
+        if case == "duplicate":
+            meta["id"] = "checker-child"
+        elif case == "empty":
+            meta["id"] = ""
+        elif case == "parent-id":
+            meta["id"] = "fresh"
+        elif case == "session":
+            meta["session_id"] = "foreign-session"
+        else:
+            meta["thread_source"] = "user"
+        paths[1].write_text("".join(json.dumps(row) + "\n" for row in rows))
+        recorder = load_runner()
+    
+        # Act and assert the same public capture boundary rejects every wrong identity.
+>       with pytest.raises(recorder.DISPATCH.CaptureError, match="identity"):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE CaptureError
+
+tests/test_editorial_redline_504_parent.py:201: Failed
+_ test_each_delegate_has_a_distinct_identity_in_the_actual_parent_session[parent-id] _
+
+tmp_path = PosixPath('/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-redline-504-focused-thcx_6t4/pytest-of-thomas/pytest-15/test_each_delegate_has_a_disti2')
+case = 'parent-id'
+
+    @pytest.mark.parametrize("case", ["duplicate", "empty", "parent-id", "session", "source"])
+    def test_each_delegate_has_a_distinct_identity_in_the_actual_parent_session(
+        tmp_path: Path, case: str
+    ) -> None:
+        """Malformed child metadata cannot be authenticated by a parent result."""
+    
+        # Arrange one conflicting child identity without changing its retained bytes.
+        paths = write_sessions(tmp_path)
+        rows = [json.loads(line) for line in paths[1].read_text().splitlines()]
+        meta = rows[0]["payload"]
+        if case == "duplicate":
+            meta["id"] = "checker-child"
+        elif case == "empty":
+            meta["id"] = ""
+        elif case == "parent-id":
+            meta["id"] = "fresh"
+        elif case == "session":
+            meta["session_id"] = "foreign-session"
+        else:
+            meta["thread_source"] = "user"
+        paths[1].write_text("".join(json.dumps(row) + "\n" for row in rows))
+        recorder = load_runner()
+    
+        # Act and assert the same public capture boundary rejects every wrong identity.
+>       with pytest.raises(recorder.DISPATCH.CaptureError, match="identity"):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE CaptureError
+
+tests/test_editorial_redline_504_parent.py:201: Failed
+_ test_each_delegate_has_a_distinct_identity_in_the_actual_parent_session[session] _
+
+tmp_path = PosixPath('/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-redline-504-focused-thcx_6t4/pytest-of-thomas/pytest-15/test_each_delegate_has_a_disti3')
+case = 'session'
+
+    @pytest.mark.parametrize("case", ["duplicate", "empty", "parent-id", "session", "source"])
+    def test_each_delegate_has_a_distinct_identity_in_the_actual_parent_session(
+        tmp_path: Path, case: str
+    ) -> None:
+        """Malformed child metadata cannot be authenticated by a parent result."""
+    
+        # Arrange one conflicting child identity without changing its retained bytes.
+        paths = write_sessions(tmp_path)
+        rows = [json.loads(line) for line in paths[1].read_text().splitlines()]
+        meta = rows[0]["payload"]
+        if case == "duplicate":
+            meta["id"] = "checker-child"
+        elif case == "empty":
+            meta["id"] = ""
+        elif case == "parent-id":
+            meta["id"] = "fresh"
+        elif case == "session":
+            meta["session_id"] = "foreign-session"
+        else:
+            meta["thread_source"] = "user"
+        paths[1].write_text("".join(json.dumps(row) + "\n" for row in rows))
+        recorder = load_runner()
+    
+        # Act and assert the same public capture boundary rejects every wrong identity.
+>       with pytest.raises(recorder.DISPATCH.CaptureError, match="identity"):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE CaptureError
+
+tests/test_editorial_redline_504_parent.py:201: Failed
+_ test_each_delegate_has_a_distinct_identity_in_the_actual_parent_session[source] _
+
+tmp_path = PosixPath('/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-redline-504-focused-thcx_6t4/pytest-of-thomas/pytest-15/test_each_delegate_has_a_disti4')
+case = 'source'
+
+    @pytest.mark.parametrize("case", ["duplicate", "empty", "parent-id", "session", "source"])
+    def test_each_delegate_has_a_distinct_identity_in_the_actual_parent_session(
+        tmp_path: Path, case: str
+    ) -> None:
+        """Malformed child metadata cannot be authenticated by a parent result."""
+    
+        # Arrange one conflicting child identity without changing its retained bytes.
+        paths = write_sessions(tmp_path)
+        rows = [json.loads(line) for line in paths[1].read_text().splitlines()]
+        meta = rows[0]["payload"]
+        if case == "duplicate":
+            meta["id"] = "checker-child"
+        elif case == "empty":
+            meta["id"] = ""
+        elif case == "parent-id":
+            meta["id"] = "fresh"
+        elif case == "session":
+            meta["session_id"] = "foreign-session"
+        else:
+            meta["thread_source"] = "user"
+        paths[1].write_text("".join(json.dumps(row) + "\n" for row in rows))
+        recorder = load_runner()
+    
+        # Act and assert the same public capture boundary rejects every wrong identity.
+>       with pytest.raises(recorder.DISPATCH.CaptureError, match="identity"):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE CaptureError
+
+tests/test_editorial_redline_504_parent.py:201: Failed
+=========================== short test summary info ============================
+FAILED tests/test_editorial_redline_504_parent.py::test_each_delegate_has_a_distinct_identity_in_the_actual_parent_session[duplicate]
+FAILED tests/test_editorial_redline_504_parent.py::test_each_delegate_has_a_distinct_identity_in_the_actual_parent_session[empty]
+FAILED tests/test_editorial_redline_504_parent.py::test_each_delegate_has_a_distinct_identity_in_the_actual_parent_session[parent-id]
+FAILED tests/test_editorial_redline_504_parent.py::test_each_delegate_has_a_distinct_identity_in_the_actual_parent_session[session]
+FAILED tests/test_editorial_redline_504_parent.py::test_each_delegate_has_a_distinct_identity_in_the_actual_parent_session[source]
+5 failed, 13 deselected in 0.13s

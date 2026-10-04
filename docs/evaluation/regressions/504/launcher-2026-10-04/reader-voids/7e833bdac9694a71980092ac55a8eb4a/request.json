@@ -1,0 +1,12 @@
+{
+  "method": "instrumented-native-stdin",
+  "model": "gpt-6.1-sol",
+  "effort": "xhigh",
+  "version": "0.160.0",
+  "prompt_sha256": "15126fb36bfbcdf3c6cbae765bdd29379c78e63bfb3f74e673c42449f038648e",
+  "prompt_bytes": 2147,
+  "parent": "01a101f7-1740-7fa0-bf53-dd9592c6ed30",
+  "role": "complete-contract-reader",
+  "cwd": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/materials/7e833bdac9694a71980092ac55a8eb4a",
+  "timeout_seconds": 1200.0
+}

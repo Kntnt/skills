@@ -1,0 +1,2 @@
+Delete owned disposable runtime: /Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/978d3c19acf94c149dfcfbc87c2c768c/runtime
+Native acquisition unavailable: missing or conflicting retained message identity

@@ -1,0 +1,6 @@
+{
+  "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-redline-504-focused-thcx_6t4",
+  "registration": "{\n  \"manifest\": \"/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-redline-504-focused-thcx_6t4/lifecycle/.kntnt/session-cleanup/sessions/unowned-79525.jsonl\",\n  \"recorded\": {\n    \"at\": \"2026-10-04T09:14:58+00:00\",\n    \"id\": \"/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-redline-504-focused-thcx_6t4\",\n    \"kind\": \"path\",\n    \"why\": \"Redline504 focused launcher TDD storage\"\n  },\n  \"session\": \"unowned-79525\"\n}\n",
+  "real_home": "/Users/thomas",
+  "initial_infrastructure_attempt": "python3 -m pytest: no pytest module; not behavioral RED"
+}
