@@ -91,6 +91,11 @@ extension's proof status. Implementation and offline tests are not a native
 capability receipt. Use a method only within its independently established
 bounds and a separately frozen prospective campaign.
 
+The current held proof is the separately preserved
+[#509 corrective freeze](../regressions/509/correction-20261004/README.md).
+Its witnessed `workdir` tool argument and unexecuted shell override boundary
+are explicit; the original preparation evidence remains unchanged.
+
 ## Acquire one child
 
 Pass the complete filled brief to the helper's stdin, without a second prompt

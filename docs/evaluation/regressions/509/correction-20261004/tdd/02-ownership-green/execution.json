@@ -1,0 +1,26 @@
+{
+  "command": [
+    "uv",
+    "run",
+    "--no-project",
+    "--with",
+    "pytest==8.4.2",
+    "python",
+    "-m",
+    "pytest",
+    "-p",
+    "no:cacheprovider",
+    "--basetemp",
+    "/Users/thomas/.kntnt/editorial-repair/2026-10-04/method-509/builder/correction/author/tdd/02-ownership-green/generated-test-files",
+    "tests/test_evaluation_original_dispatch.py",
+    "-k",
+    "absent_or_unreadable_leader or genuinely_vanished_group"
+  ],
+  "cwd": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages",
+  "start_time_ns": 1791120683636101000,
+  "end_time_ns": 1791120684011780000,
+  "exit": 0,
+  "pid": 25636,
+  "pgid": 25636,
+  "native_sessions_launched": 0
+}

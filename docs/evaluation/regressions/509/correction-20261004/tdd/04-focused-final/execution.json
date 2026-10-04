@@ -1,0 +1,25 @@
+{
+  "command": [
+    "uv",
+    "run",
+    "--no-project",
+    "--with",
+    "pytest==8.4.2",
+    "python",
+    "-m",
+    "pytest",
+    "-p",
+    "no:cacheprovider",
+    "--basetemp",
+    "/Users/thomas/.kntnt/editorial-repair/2026-10-04/method-509/builder/correction/author/tdd/04-focused-final/generated-test-files",
+    "tests/test_evaluation_dispatch.py",
+    "tests/test_evaluation_original_dispatch.py"
+  ],
+  "cwd": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages",
+  "start_time_ns": 1791120923163579000,
+  "end_time_ns": 1791120927679883000,
+  "exit": 0,
+  "pid": 27570,
+  "pgid": 27570,
+  "native_sessions_launched": 0
+}

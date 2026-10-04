@@ -1,0 +1,31 @@
+{
+  "bind_trace": {
+    "unchanged": true,
+    "sha256": "6319fcdf96664a4ec7968b6f0ee74b3a32e266cfda536375b138bfaca881fa80",
+    "byte_scope": "AST source segment, excluding its terminal LF",
+    "sha256_with_terminal_lf": "4e2188ea9b334b8298eaf43d6bae87f012a113db1da580d7b95c7670f0aeda90"
+  },
+  "retained_message": {
+    "unchanged": true,
+    "sha256": "0f7e7a55afcfaa244df108a3c3959f5b1dc0345bc72caa198ec665e6f0a41e32",
+    "byte_scope": "AST source segment, excluding its terminal LF",
+    "sha256_with_terminal_lf": "a73bb6b4690e9729cf81454e81ae84b356270d4d0af25386b4ef3d9c6068d0e3"
+  },
+  "native_item_bytes": {
+    "unchanged": true,
+    "sha256": "65003a1043822c1e74144f4d900fc61f14b76c9eafb8eaf4dc1c11bf6d2ee2c1",
+    "byte_scope": "AST source segment, excluding its terminal LF",
+    "sha256_with_terminal_lf": "1073a2c341fea5bbdc5fe4e0a4fefddb8ee0c9a7b16671910ab45d8fa068508c"
+  },
+  "message_bytes": {
+    "unchanged": true,
+    "sha256": "2d0e4cc8a6d681b0523362a8c1f012871020a8d18d40c0b34170aee123f53702",
+    "byte_scope": "AST source segment, excluding its terminal LF",
+    "sha256_with_terminal_lf": "9bfd95cb2f03aa869b564485cc89ea3a9a437003bb289ae4d5c18721b4025bd2"
+  },
+  "stop_owned_default_path": {
+    "unchanged_ast_after_expected_start_branch": true,
+    "selector": "expected_start is None",
+    "change": "Only the expected_start supplied branch gains absent/unreadable leader handling."
+  }
+}

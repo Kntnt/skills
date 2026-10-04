@@ -1,0 +1,68 @@
+{
+  "plan_sha256": "a9268904bf6f42921159ff9ef6bc29be8eef0d61d884018ace74b943d905cf7c",
+  "artifacts": [
+    {
+      "path": "direct-compaction.txt",
+      "bytes": 1260,
+      "sha256": "9c9dc95a682098c16daf2dc8ac1c527f65fd0bfbc385ac363080feea985112e1"
+    },
+    {
+      "path": "direct-long-input.txt",
+      "bytes": 4191,
+      "sha256": "4ee6ea10e10df8ae7b60fedeac6891c0a96ba0a8820152691d3c70761bbd1407"
+    },
+    {
+      "path": "direct-long.txt",
+      "bytes": 931,
+      "sha256": "26e1fb8a93fc84467da749eebaae9f0c76e72a3ea9094353bafcb936cf12c158"
+    },
+    {
+      "path": "direct-short.txt",
+      "bytes": 933,
+      "sha256": "2a6e02e1f30d09ab4598e92e9357ebb4acc01bcba55e3cb05a47a49cb0dc66aa"
+    },
+    {
+      "path": "expected-compaction.txt",
+      "bytes": 41,
+      "sha256": "6119fff102c2b2d52b333f6178df34ce04da3cff0f75bd6bda802ca780f98e73"
+    },
+    {
+      "path": "expected-long.txt",
+      "bytes": 50561,
+      "sha256": "35e5a0adf4ca44fcbd3b555a1c73abbf6bd8038c46eee174e58a7c010a5eef52"
+    },
+    {
+      "path": "expected-short.txt",
+      "bytes": 18,
+      "sha256": "9be4ea606281bfafdb4c77752b02eb5f015e9ab4531efabb1c0601e083defd47"
+    },
+    {
+      "path": "parent-long-consume.json",
+      "bytes": 12267,
+      "sha256": "09bee7defde3437a09294925687b0265596f2fc8ea48dadb9243a89d1930c685"
+    },
+    {
+      "path": "parent-long.txt",
+      "bytes": 7347,
+      "sha256": "c16b5db3c4943fe29a2369c1d394a4a466085b94357a2ce8c76c56a2e996a8cd"
+    },
+    {
+      "path": "parent-short-consume.json",
+      "bytes": 12312,
+      "sha256": "bb82dcda048ffc523d35b5c0438baca845bc395b7529e808194f0409bb4afed0"
+    },
+    {
+      "path": "parent-short.txt",
+      "bytes": 7370,
+      "sha256": "00ec554d0ad8ce75b5b73aea3f74350798ad0ce00111b50e696318363f92ac2b"
+    }
+  ],
+  "boundaries_preserved": true,
+  "exact_parent_call_strings_bound": true,
+  "native_output_cwd_unchanged": true,
+  "workdir_runtime_supported_by_frozen_source": true,
+  "shell_override_executed": false,
+  "native_proof_used": 0,
+  "held_slots": 8,
+  "future_scratch_absent": true
+}

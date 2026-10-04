@@ -1,0 +1,9 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.12.13, pytest-8.4.2, pluggy-1.6.0
+rootdir: /Users/thomas/Projects/skills/.git/editorial-repair/original-messages
+configfile: pyproject.toml
+collected 181 items / 177 deselected / 4 selected
+
+tests/test_evaluation_original_dispatch.py ....                          [100%]
+
+====================== 4 passed, 177 deselected in 0.11s =======================

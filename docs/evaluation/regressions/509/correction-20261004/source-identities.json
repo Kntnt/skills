@@ -1,0 +1,22 @@
+{
+  "docs/evaluation/harness/native_dispatch.py": {
+    "bytes": 67326,
+    "sha256": "5ff0c7190f05fc33cbdb89c9a9d4b981e431086a3354e8a97847f3cfde78448b"
+  },
+  "tests/test_evaluation_original_dispatch.py": {
+    "bytes": 51432,
+    "sha256": "bcaeda4c026eb12e1df9cab6be912228810b039dfcbbf8bcba7fcbe5c8c34ef0"
+  },
+  "tests/test_evaluation_dispatch.py": {
+    "bytes": 16172,
+    "sha256": "741e9fd186f10a2a747f0164486f1af6520fc62113635c55a88fafacd6cce83e"
+  },
+  "docs/evaluation/regressions/509/correction-20261004/plan/proof-plan.json": {
+    "bytes": 17091,
+    "sha256": "a9268904bf6f42921159ff9ef6bc29be8eef0d61d884018ace74b943d905cf7c"
+  },
+  "docs/evaluation/regressions/509/correction-20261004/execution-order.json": {
+    "bytes": 8347,
+    "sha256": "8bcc3bcacc84f1815261522c676961e90252c07bce5a54367409f3ee13d93903"
+  }
+}

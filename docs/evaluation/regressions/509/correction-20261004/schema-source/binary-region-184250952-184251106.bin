@@ -1,0 +1,1 @@
+login shell is disabled by config; omit `login` or set it to false.`shell` is not supported for local zsh-fork exec; omit `shell` to use zsh-fork, or targ

@@ -1,0 +1,252 @@
+[
+  {
+    "command": [
+      "uv",
+      "run",
+      "--no-project",
+      "--with",
+      "pytest==8.4.2",
+      "python",
+      "-m",
+      "pytest",
+      "-p",
+      "no:cacheprovider",
+      "--basetemp",
+      "/Users/thomas/.kntnt/editorial-repair/2026-10-04/method-509/builder/correction/author/tdd/01-ownership-red/generated-test-files",
+      "tests/test_evaluation_original_dispatch.py",
+      "-k",
+      "absent_or_unreadable_leader or genuinely_vanished_group"
+    ],
+    "cwd": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages",
+    "start_time_ns": 1791120643433364000,
+    "end_time_ns": 1791120644158550000,
+    "exit": 1,
+    "pid": 25250,
+    "pgid": 25250,
+    "native_sessions_launched": 0,
+    "label": "01-ownership-red",
+    "before": [
+      {
+        "path": "docs/evaluation/harness/native_dispatch.py",
+        "sha256": "55df057e9a1289f13278e18280273573c7b3615bc60067371658146d230cabed",
+        "bytes": 66761
+      },
+      {
+        "path": "tests/test_evaluation_dispatch.py",
+        "sha256": "741e9fd186f10a2a747f0164486f1af6520fc62113635c55a88fafacd6cce83e",
+        "bytes": 16172
+      },
+      {
+        "path": "tests/test_evaluation_original_dispatch.py",
+        "sha256": "9ad5475183d04736abd340d85328a89a93fe3b7be8f5fe794fee76d1bca34164",
+        "bytes": 51393
+      }
+    ],
+    "after": [
+      {
+        "path": "docs/evaluation/harness/native_dispatch.py",
+        "sha256": "55df057e9a1289f13278e18280273573c7b3615bc60067371658146d230cabed",
+        "bytes": 66761
+      },
+      {
+        "path": "tests/test_evaluation_dispatch.py",
+        "sha256": "741e9fd186f10a2a747f0164486f1af6520fc62113635c55a88fafacd6cce83e",
+        "bytes": 16172
+      },
+      {
+        "path": "tests/test_evaluation_original_dispatch.py",
+        "sha256": "9ad5475183d04736abd340d85328a89a93fe3b7be8f5fe794fee76d1bca34164",
+        "bytes": 51393
+      }
+    ],
+    "stdout_sha256": "b8283f2aa61b37bd154299bea00d170541f6a1c8d7f3c3a114f650deaf840339",
+    "stderr_sha256": "d3179544a486f2d21dd5adb43e2cb3a47e515afeb783bff75f3dece818c71c85"
+  },
+  {
+    "command": [
+      "uv",
+      "run",
+      "--no-project",
+      "--with",
+      "pytest==8.4.2",
+      "python",
+      "-m",
+      "pytest",
+      "-p",
+      "no:cacheprovider",
+      "--basetemp",
+      "/Users/thomas/.kntnt/editorial-repair/2026-10-04/method-509/builder/correction/author/tdd/02-ownership-green/generated-test-files",
+      "tests/test_evaluation_original_dispatch.py",
+      "-k",
+      "absent_or_unreadable_leader or genuinely_vanished_group"
+    ],
+    "cwd": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages",
+    "start_time_ns": 1791120683636101000,
+    "end_time_ns": 1791120684011780000,
+    "exit": 0,
+    "pid": 25636,
+    "pgid": 25636,
+    "native_sessions_launched": 0,
+    "label": "02-ownership-green",
+    "before": [
+      {
+        "path": "docs/evaluation/harness/native_dispatch.py",
+        "sha256": "8f9aa7122e0c3f1bc32c42a9ba4a5c647e1bfa70ab195237ae476651ac375c8e",
+        "bytes": 67320
+      },
+      {
+        "path": "tests/test_evaluation_dispatch.py",
+        "sha256": "741e9fd186f10a2a747f0164486f1af6520fc62113635c55a88fafacd6cce83e",
+        "bytes": 16172
+      },
+      {
+        "path": "tests/test_evaluation_original_dispatch.py",
+        "sha256": "9ad5475183d04736abd340d85328a89a93fe3b7be8f5fe794fee76d1bca34164",
+        "bytes": 51393
+      }
+    ],
+    "after": [
+      {
+        "path": "docs/evaluation/harness/native_dispatch.py",
+        "sha256": "8f9aa7122e0c3f1bc32c42a9ba4a5c647e1bfa70ab195237ae476651ac375c8e",
+        "bytes": 67320
+      },
+      {
+        "path": "tests/test_evaluation_dispatch.py",
+        "sha256": "741e9fd186f10a2a747f0164486f1af6520fc62113635c55a88fafacd6cce83e",
+        "bytes": 16172
+      },
+      {
+        "path": "tests/test_evaluation_original_dispatch.py",
+        "sha256": "9ad5475183d04736abd340d85328a89a93fe3b7be8f5fe794fee76d1bca34164",
+        "bytes": 51393
+      }
+    ],
+    "stdout_sha256": "8af64cf228fca7e03fb742446bd9768374107b8641ffd2c6e8c3b723fabeaf61",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "command": [
+      "uv",
+      "run",
+      "--no-project",
+      "--with",
+      "pytest==8.4.2",
+      "python",
+      "-m",
+      "pytest",
+      "-p",
+      "no:cacheprovider",
+      "--basetemp",
+      "/Users/thomas/.kntnt/editorial-repair/2026-10-04/method-509/builder/correction/author/tdd/03-focused-green/generated-test-files",
+      "tests/test_evaluation_dispatch.py",
+      "tests/test_evaluation_original_dispatch.py"
+    ],
+    "cwd": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages",
+    "start_time_ns": 1791120876901726000,
+    "end_time_ns": 1791120881533028000,
+    "exit": 0,
+    "pid": 26789,
+    "pgid": 26789,
+    "native_sessions_launched": 0,
+    "label": "03-focused-green",
+    "before": [
+      {
+        "path": "docs/evaluation/harness/native_dispatch.py",
+        "sha256": "5ff0c7190f05fc33cbdb89c9a9d4b981e431086a3354e8a97847f3cfde78448b",
+        "bytes": 67326
+      },
+      {
+        "path": "tests/test_evaluation_dispatch.py",
+        "sha256": "741e9fd186f10a2a747f0164486f1af6520fc62113635c55a88fafacd6cce83e",
+        "bytes": 16172
+      },
+      {
+        "path": "tests/test_evaluation_original_dispatch.py",
+        "sha256": "da75717dcd3879f33a6485f301764216c056c82aaefe5a4358868027ad9ffaa3",
+        "bytes": 51409
+      }
+    ],
+    "after": [
+      {
+        "path": "docs/evaluation/harness/native_dispatch.py",
+        "sha256": "5ff0c7190f05fc33cbdb89c9a9d4b981e431086a3354e8a97847f3cfde78448b",
+        "bytes": 67326
+      },
+      {
+        "path": "tests/test_evaluation_dispatch.py",
+        "sha256": "741e9fd186f10a2a747f0164486f1af6520fc62113635c55a88fafacd6cce83e",
+        "bytes": 16172
+      },
+      {
+        "path": "tests/test_evaluation_original_dispatch.py",
+        "sha256": "da75717dcd3879f33a6485f301764216c056c82aaefe5a4358868027ad9ffaa3",
+        "bytes": 51409
+      }
+    ],
+    "stdout_sha256": "55620aea2f042c9149cdf3b9a14cbf189679dc25cfe3e43d834b7b919f163e9f",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "command": [
+      "uv",
+      "run",
+      "--no-project",
+      "--with",
+      "pytest==8.4.2",
+      "python",
+      "-m",
+      "pytest",
+      "-p",
+      "no:cacheprovider",
+      "--basetemp",
+      "/Users/thomas/.kntnt/editorial-repair/2026-10-04/method-509/builder/correction/author/tdd/04-focused-final/generated-test-files",
+      "tests/test_evaluation_dispatch.py",
+      "tests/test_evaluation_original_dispatch.py"
+    ],
+    "cwd": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages",
+    "start_time_ns": 1791120923163579000,
+    "end_time_ns": 1791120927679883000,
+    "exit": 0,
+    "pid": 27570,
+    "pgid": 27570,
+    "native_sessions_launched": 0,
+    "label": "04-focused-final",
+    "before": [
+      {
+        "path": "docs/evaluation/harness/native_dispatch.py",
+        "sha256": "5ff0c7190f05fc33cbdb89c9a9d4b981e431086a3354e8a97847f3cfde78448b",
+        "bytes": 67326
+      },
+      {
+        "path": "tests/test_evaluation_dispatch.py",
+        "sha256": "741e9fd186f10a2a747f0164486f1af6520fc62113635c55a88fafacd6cce83e",
+        "bytes": 16172
+      },
+      {
+        "path": "tests/test_evaluation_original_dispatch.py",
+        "sha256": "bcaeda4c026eb12e1df9cab6be912228810b039dfcbbf8bcba7fcbe5c8c34ef0",
+        "bytes": 51432
+      }
+    ],
+    "after": [
+      {
+        "path": "docs/evaluation/harness/native_dispatch.py",
+        "sha256": "5ff0c7190f05fc33cbdb89c9a9d4b981e431086a3354e8a97847f3cfde78448b",
+        "bytes": 67326
+      },
+      {
+        "path": "tests/test_evaluation_dispatch.py",
+        "sha256": "741e9fd186f10a2a747f0164486f1af6520fc62113635c55a88fafacd6cce83e",
+        "bytes": 16172
+      },
+      {
+        "path": "tests/test_evaluation_original_dispatch.py",
+        "sha256": "bcaeda4c026eb12e1df9cab6be912228810b039dfcbbf8bcba7fcbe5c8c34ef0",
+        "bytes": 51432
+      }
+    ],
+    "stdout_sha256": "fa7fa96f1e70179157cdb8be6754978951d1bc2963b5253412e3c9cdf1d614a8",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+]

@@ -1,0 +1,100 @@
+{
+  "old_plan": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/docs/evaluation/regressions/509/plan",
+  "new_plan": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/docs/evaluation/regressions/509/correction-20261004/plan",
+  "old_plan_sha256": "af967fc9c1672d36805549acf8f8e5af4870fff74e60399b0a99e840577734d9",
+  "new_plan_sha256": "a9268904bf6f42921159ff9ef6bc29be8eef0d61d884018ace74b943d905cf7c",
+  "changes": [
+    {
+      "path": "direct-compaction.txt",
+      "before_bytes": 1256,
+      "before_sha256": "0bbffe0ea3160d48579f6b1a65d41dcf44af126d0f509a66bf54b0a462c5b862",
+      "after_bytes": 1260,
+      "after_sha256": "9c9dc95a682098c16daf2dc8ac1c527f65fd0bfbc385ac363080feea985112e1",
+      "expected_bytes_unchanged": null
+    },
+    {
+      "path": "direct-long-input.txt",
+      "before_bytes": 4187,
+      "before_sha256": "22aafb9372a9e68027aacf72793d8a1bde96444683357e817fba9fb72af2f448",
+      "after_bytes": 4191,
+      "after_sha256": "4ee6ea10e10df8ae7b60fedeac6891c0a96ba0a8820152691d3c70761bbd1407",
+      "expected_bytes_unchanged": null
+    },
+    {
+      "path": "direct-long.txt",
+      "before_bytes": 927,
+      "before_sha256": "24e53375ff40968fd4772fbd2534230bdd49d36cfe9c9635a9a196744125a24c",
+      "after_bytes": 931,
+      "after_sha256": "26e1fb8a93fc84467da749eebaae9f0c76e72a3ea9094353bafcb936cf12c158",
+      "expected_bytes_unchanged": null
+    },
+    {
+      "path": "direct-short.txt",
+      "before_bytes": 929,
+      "before_sha256": "d4c639278f31e54cbab828bbd842a0afac8128f7f98c7131c6acf55f6e958cc8",
+      "after_bytes": 933,
+      "after_sha256": "2a6e02e1f30d09ab4598e92e9357ebb4acc01bcba55e3cb05a47a49cb0dc66aa",
+      "expected_bytes_unchanged": null
+    },
+    {
+      "path": "expected-compaction.txt",
+      "before_bytes": 41,
+      "before_sha256": "6119fff102c2b2d52b333f6178df34ce04da3cff0f75bd6bda802ca780f98e73",
+      "after_bytes": 41,
+      "after_sha256": "6119fff102c2b2d52b333f6178df34ce04da3cff0f75bd6bda802ca780f98e73",
+      "expected_bytes_unchanged": true
+    },
+    {
+      "path": "expected-long.txt",
+      "before_bytes": 50561,
+      "before_sha256": "35e5a0adf4ca44fcbd3b555a1c73abbf6bd8038c46eee174e58a7c010a5eef52",
+      "after_bytes": 50561,
+      "after_sha256": "35e5a0adf4ca44fcbd3b555a1c73abbf6bd8038c46eee174e58a7c010a5eef52",
+      "expected_bytes_unchanged": true
+    },
+    {
+      "path": "expected-short.txt",
+      "before_bytes": 18,
+      "before_sha256": "9be4ea606281bfafdb4c77752b02eb5f015e9ab4531efabb1c0601e083defd47",
+      "after_bytes": 18,
+      "after_sha256": "9be4ea606281bfafdb4c77752b02eb5f015e9ab4531efabb1c0601e083defd47",
+      "expected_bytes_unchanged": true
+    },
+    {
+      "path": "parent-long-consume.json",
+      "before_bytes": 12219,
+      "before_sha256": "e56fdc4a1128b6a4b1049171e2f01604a0d62531db1ff807492fc7a4dafcc5c7",
+      "after_bytes": 12267,
+      "after_sha256": "09bee7defde3437a09294925687b0265596f2fc8ea48dadb9243a89d1930c685",
+      "expected_bytes_unchanged": null
+    },
+    {
+      "path": "parent-long.txt",
+      "before_bytes": 7319,
+      "before_sha256": "4223440d30b1cbe3eaf96c8babda52834272bf12dc221e60be29fed83ea055bd",
+      "after_bytes": 7347,
+      "after_sha256": "c16b5db3c4943fe29a2369c1d394a4a466085b94357a2ce8c76c56a2e996a8cd",
+      "expected_bytes_unchanged": null
+    },
+    {
+      "path": "parent-short-consume.json",
+      "before_bytes": 12264,
+      "before_sha256": "7f85705f982fd0f1a1bb6b301fd36febcb3a090175db9cbcb13e672d434402ec",
+      "after_bytes": 12312,
+      "after_sha256": "bb82dcda048ffc523d35b5c0438baca845bc395b7529e808194f0409bb4afed0",
+      "expected_bytes_unchanged": null
+    },
+    {
+      "path": "parent-short.txt",
+      "before_bytes": 7342,
+      "before_sha256": "4642097df060589fac175b1fb8c20614f2cef3205f4af947db19127524e52ff0",
+      "after_bytes": 7370,
+      "after_sha256": "00ec554d0ad8ce75b5b73aea3f74350798ad0ce00111b50e696318363f92ac2b",
+      "expected_bytes_unchanged": null
+    }
+  ],
+  "proof_sessions": 0,
+  "held_slots": 8,
+  "expected_bytes_unchanged": true,
+  "shell_override_executed": false
+}

@@ -1,0 +1,12 @@
+BLE001 Do not catch blind exception: `Exception`
+    --> tests/test_evaluation_original_dispatch.py:1277:12
+     |
+1275 |     try:
+1276 |         DISPATCH.run(args, source(case, "prompt"))
+1277 |     except Exception as exc:
+     |            ^^^^^^^^^
+1278 |         # Observe the public failure and its receipt even for the old OS error.
+1279 |         error = exc
+     |
+
+Found 1 error.

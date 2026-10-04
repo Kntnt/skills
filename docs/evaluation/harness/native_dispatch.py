@@ -1166,10 +1166,21 @@ def stop_owned(
             try:
                 group = os.getpgid(child.pid)
             except ProcessLookupError:
-                group = None
-            if group is not None and (
-                group != child.pid or process_start(child.pid, cwd) != expected_start
-            ):
+                # An absent leader never authenticates an extant numeric group.
+                try:
+                    os.killpg(child.pid, 0)
+                except ProcessLookupError:
+                    return
+                except OSError as exc:
+                    raise CaptureError(
+                        "native ownership group existence unavailable"
+                    ) from exc
+                raise CaptureError("native ownership absent leader for existing group")
+            except OSError as exc:
+                raise CaptureError(
+                    "native ownership group identity unavailable"
+                ) from exc
+            if group != child.pid or process_start(child.pid, cwd) != expected_start:
                 raise CaptureError("native ownership identity changed")
 
         # Stop if the owned group has already vanished.

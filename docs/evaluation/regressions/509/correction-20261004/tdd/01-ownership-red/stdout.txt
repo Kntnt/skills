@@ -1,0 +1,205 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.12.13, pytest-8.4.2, pluggy-1.6.0
+rootdir: /Users/thomas/Projects/skills/.git/editorial-repair/original-messages
+configfile: pyproject.toml
+collected 181 items / 177 deselected / 4 selected
+
+tests/test_evaluation_original_dispatch.py FFFF                          [100%]
+
+=================================== FAILURES ===================================
+_ test_absent_or_unreadable_leader_never_authorizes_destructive_signal[extant-group] _
+
+tmp_path = PosixPath('/Users/thomas/.kntnt/editorial-repair/2026-10-04/method-509/builder/correction/author/tdd/01-ownership-red/generated-test-files/test_absent_or_unreadable_lead0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x102d19310>
+boundary = 'extant-group'
+
+    @pytest.mark.parametrize(
+        "boundary", ["extant-group", "probe-unavailable", "ownership-unavailable"]
+    )
+    def test_absent_or_unreadable_leader_never_authorizes_destructive_signal(
+        tmp_path: Path, monkeypatch: pytest.MonkeyPatch, boundary: str
+    ) -> None:
+        """Unauthenticated numeric groups preserve a failed reachable runtime."""
+        actual_stop = DISPATCH.stop_owned
+        case = CASES[0]
+        args = recorder(tmp_path, monkeypatch, case)
+        signals: list[int] = []
+    
+        def group_identity(pid: int) -> int:
+            if args.observed.get("completed"):
+                if boundary == "ownership-unavailable":
+                    raise PermissionError("synthetic group identity unavailable")
+                raise ProcessLookupError("synthetic leader absent")
+            return pid
+    
+        def signal_group(pid: int, sig: int) -> None:
+            signals.append(sig)
+            if sig == 0:
+                if boundary == "probe-unavailable":
+                    raise PermissionError("synthetic group existence unavailable")
+                return
+            # The old destructive request is observed without signalling anything.
+            raise ProcessLookupError("synthetic signal boundary")
+    
+        monkeypatch.setattr(DISPATCH, "stop_owned", actual_stop)
+        monkeypatch.setattr(DISPATCH.os, "getpgid", group_identity)
+        monkeypatch.setattr(DISPATCH.os, "killpg", signal_group)
+        error: Exception | None = None
+        try:
+            DISPATCH.run(args, source(case, "prompt"))
+        except Exception as exc:
+            # Observe the public failure and its receipt even for the old OS error.
+            error = exc
+>       assert all(sig == 0 for sig in signals), signals
+E       AssertionError: [<Signals.SIGTERM: 15>]
+E       assert False
+E        +  where False = all(<generator object test_absent_or_unreadable_leader_never_authorizes_destructive_signal.<locals>.<genexpr> at 0x1031e0c70>)
+
+tests/test_evaluation_original_dispatch.py:1280: AssertionError
+----------------------------- Captured stderr call -----------------------------
+Delete owned disposable runtime: /Users/thomas/.kntnt/editorial-repair/2026-10-04/method-509/builder/correction/author/tdd/01-ownership-red/generated-test-files/test_absent_or_unreadable_lead0/packet/runtime
+_ test_absent_or_unreadable_leader_never_authorizes_destructive_signal[probe-unavailable] _
+
+tmp_path = PosixPath('/Users/thomas/.kntnt/editorial-repair/2026-10-04/method-509/builder/correction/author/tdd/01-ownership-red/generated-test-files/test_absent_or_unreadable_lead1')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x102f417c0>
+boundary = 'probe-unavailable'
+
+    @pytest.mark.parametrize(
+        "boundary", ["extant-group", "probe-unavailable", "ownership-unavailable"]
+    )
+    def test_absent_or_unreadable_leader_never_authorizes_destructive_signal(
+        tmp_path: Path, monkeypatch: pytest.MonkeyPatch, boundary: str
+    ) -> None:
+        """Unauthenticated numeric groups preserve a failed reachable runtime."""
+        actual_stop = DISPATCH.stop_owned
+        case = CASES[0]
+        args = recorder(tmp_path, monkeypatch, case)
+        signals: list[int] = []
+    
+        def group_identity(pid: int) -> int:
+            if args.observed.get("completed"):
+                if boundary == "ownership-unavailable":
+                    raise PermissionError("synthetic group identity unavailable")
+                raise ProcessLookupError("synthetic leader absent")
+            return pid
+    
+        def signal_group(pid: int, sig: int) -> None:
+            signals.append(sig)
+            if sig == 0:
+                if boundary == "probe-unavailable":
+                    raise PermissionError("synthetic group existence unavailable")
+                return
+            # The old destructive request is observed without signalling anything.
+            raise ProcessLookupError("synthetic signal boundary")
+    
+        monkeypatch.setattr(DISPATCH, "stop_owned", actual_stop)
+        monkeypatch.setattr(DISPATCH.os, "getpgid", group_identity)
+        monkeypatch.setattr(DISPATCH.os, "killpg", signal_group)
+        error: Exception | None = None
+        try:
+            DISPATCH.run(args, source(case, "prompt"))
+        except Exception as exc:
+            # Observe the public failure and its receipt even for the old OS error.
+            error = exc
+>       assert all(sig == 0 for sig in signals), signals
+E       AssertionError: [<Signals.SIGTERM: 15>]
+E       assert False
+E        +  where False = all(<generator object test_absent_or_unreadable_leader_never_authorizes_destructive_signal.<locals>.<genexpr> at 0x1033725a0>)
+
+tests/test_evaluation_original_dispatch.py:1280: AssertionError
+----------------------------- Captured stderr call -----------------------------
+Delete owned disposable runtime: /Users/thomas/.kntnt/editorial-repair/2026-10-04/method-509/builder/correction/author/tdd/01-ownership-red/generated-test-files/test_absent_or_unreadable_lead1/packet/runtime
+_ test_absent_or_unreadable_leader_never_authorizes_destructive_signal[ownership-unavailable] _
+
+tmp_path = PosixPath('/Users/thomas/.kntnt/editorial-repair/2026-10-04/method-509/builder/correction/author/tdd/01-ownership-red/generated-test-files/test_absent_or_unreadable_lead2')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x102c0dd30>
+boundary = 'ownership-unavailable'
+
+    @pytest.mark.parametrize(
+        "boundary", ["extant-group", "probe-unavailable", "ownership-unavailable"]
+    )
+    def test_absent_or_unreadable_leader_never_authorizes_destructive_signal(
+        tmp_path: Path, monkeypatch: pytest.MonkeyPatch, boundary: str
+    ) -> None:
+        """Unauthenticated numeric groups preserve a failed reachable runtime."""
+        actual_stop = DISPATCH.stop_owned
+        case = CASES[0]
+        args = recorder(tmp_path, monkeypatch, case)
+        signals: list[int] = []
+    
+        def group_identity(pid: int) -> int:
+            if args.observed.get("completed"):
+                if boundary == "ownership-unavailable":
+                    raise PermissionError("synthetic group identity unavailable")
+                raise ProcessLookupError("synthetic leader absent")
+            return pid
+    
+        def signal_group(pid: int, sig: int) -> None:
+            signals.append(sig)
+            if sig == 0:
+                if boundary == "probe-unavailable":
+                    raise PermissionError("synthetic group existence unavailable")
+                return
+            # The old destructive request is observed without signalling anything.
+            raise ProcessLookupError("synthetic signal boundary")
+    
+        monkeypatch.setattr(DISPATCH, "stop_owned", actual_stop)
+        monkeypatch.setattr(DISPATCH.os, "getpgid", group_identity)
+        monkeypatch.setattr(DISPATCH.os, "killpg", signal_group)
+        error: Exception | None = None
+        try:
+            DISPATCH.run(args, source(case, "prompt"))
+        except Exception as exc:
+            # Observe the public failure and its receipt even for the old OS error.
+            error = exc
+        assert all(sig == 0 for sig in signals), signals
+>       assert isinstance(error, DISPATCH.CaptureError)
+E       AssertionError: assert False
+E        +  where False = isinstance(PermissionError('synthetic group identity unavailable'), <class 'original_dispatch.CaptureError'>)
+E        +    where <class 'original_dispatch.CaptureError'> = DISPATCH.CaptureError
+
+tests/test_evaluation_original_dispatch.py:1281: AssertionError
+----------------------------- Captured stderr call -----------------------------
+Delete owned disposable runtime: /Users/thomas/.kntnt/editorial-repair/2026-10-04/method-509/builder/correction/author/tdd/01-ownership-red/generated-test-files/test_absent_or_unreadable_lead2/packet/runtime
+_______ test_absent_leader_and_genuinely_vanished_group_complete_cleanup _______
+
+tmp_path = PosixPath('/Users/thomas/.kntnt/editorial-repair/2026-10-04/method-509/builder/correction/author/tdd/01-ownership-red/generated-test-files/test_absent_leader_and_genuine0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x102f40170>
+
+    def test_absent_leader_and_genuinely_vanished_group_complete_cleanup(
+        tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        """A harmless absence probe keeps completed original capture eligible."""
+        actual_stop = DISPATCH.stop_owned
+        case = CASES[0]
+        args = recorder(tmp_path, monkeypatch, case)
+        signals: list[int] = []
+    
+        def group_identity(pid: int) -> int:
+            if args.observed.get("completed"):
+                raise ProcessLookupError("synthetic leader absent")
+            return pid
+    
+        def signal_group(pid: int, sig: int) -> None:
+            signals.append(sig)
+            raise ProcessLookupError("synthetic group genuinely vanished")
+    
+        monkeypatch.setattr(DISPATCH, "stop_owned", actual_stop)
+        monkeypatch.setattr(DISPATCH.os, "getpgid", group_identity)
+        monkeypatch.setattr(DISPATCH.os, "killpg", signal_group)
+        assert DISPATCH.run(args, source(case, "prompt")) == source(case, "terminal")
+>       assert signals == [0]
+E       assert [<Signals.SIGTERM: 15>] == [0]
+E         
+E         At index 0 diff: <Signals.SIGTERM: 15> != 0
+E         Use -v to get more diff
+
+tests/test_evaluation_original_dispatch.py:1313: AssertionError
+----------------------------- Captured stderr call -----------------------------
+Delete owned disposable runtime: /Users/thomas/.kntnt/editorial-repair/2026-10-04/method-509/builder/correction/author/tdd/01-ownership-red/generated-test-files/test_absent_leader_and_genuine0/packet/runtime
+=========================== short test summary info ============================
+FAILED tests/test_evaluation_original_dispatch.py::test_absent_or_unreadable_leader_never_authorizes_destructive_signal[extant-group]
+FAILED tests/test_evaluation_original_dispatch.py::test_absent_or_unreadable_leader_never_authorizes_destructive_signal[probe-unavailable]
+FAILED tests/test_evaluation_original_dispatch.py::test_absent_or_unreadable_leader_never_authorizes_destructive_signal[ownership-unavailable]
+FAILED tests/test_evaluation_original_dispatch.py::test_absent_leader_and_genuinely_vanished_group_complete_cleanup
+====================== 4 failed, 177 deselected in 0.16s =======================

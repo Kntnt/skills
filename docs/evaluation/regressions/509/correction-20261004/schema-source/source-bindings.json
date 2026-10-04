@@ -1,0 +1,75 @@
+{
+  "original_raw_path": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/method-509/builder/dispatch/native-session.jsonl",
+  "original_raw_bytes": 17215462,
+  "original_raw_sha256": "b3738109e8287e427fe646c9616135d52197d2fa79b1fb56072c3114da1cc3c8",
+  "original_rows": [
+    {
+      "physical_line": 657,
+      "stored_ordinal": 656,
+      "offset": 12125553,
+      "bytes": 827,
+      "sha256": "6775845c98683f0d6a58b795b1d760af9f3221035a7b7300df362b2a49ac35c2"
+    },
+    {
+      "physical_line": 661,
+      "stored_ordinal": 660,
+      "offset": 12128241,
+      "bytes": 797,
+      "sha256": "a96ae7e19b6ec48289fe22ff64cd78c62608e28dd90526e58c9a5a25ec279513"
+    },
+    {
+      "physical_line": 664,
+      "stored_ordinal": 663,
+      "offset": 12130975,
+      "bytes": 22168,
+      "sha256": "17942c127443cbcaaaaa6c5ade5c5be5e09ff53b85ec3bbbbbae521e7db28517"
+    },
+    {
+      "physical_line": 665,
+      "stored_ordinal": 664,
+      "offset": 12153143,
+      "bytes": 8558,
+      "sha256": "27f53c6d387e771251089099ec2446d014a91a8bf97a79acd6f08bdca0c98d76"
+    }
+  ],
+  "call_id": "call_AmcgU0M3TJ1QzaBVZhCyreek",
+  "command_argv": [
+    "/opt/homebrew/bin/bash",
+    "-lc",
+    "sed -n '470,644p' docs/evaluation/harness/native_dispatch.py"
+  ],
+  "command_cwd": "file:///Users/thomas/Projects/skills",
+  "native_binary_path": "/opt/homebrew/Caskroom/codex/0.160.0/bin/codex",
+  "native_binary_bytes": 241555024,
+  "native_binary_sha256": "112fae7a5a1223e673c8a1791d32338f37df8b527ff1159bb8adac6c4dbf1b4b",
+  "regions": [
+    {
+      "path": "binary-region-184251106-184251296.bin",
+      "begin_byte": 184251106,
+      "end_byte_exclusive": 184251296,
+      "bytes": 190,
+      "sha256": "c687d4a844b910862790b7d904cdf010a305790f1cf844a7646f482bc25bdf3b",
+      "utf8_text": "et a remote environment where `shell` is supported.shellloginttyyield_time_mstimeout_msmax_output_tokenssandbox_permissionsadditional_permissionsjustificationprefix_ruleenvironment_idworkdir"
+    },
+    {
+      "path": "binary-region-184250952-184251106.bin",
+      "begin_byte": 184250952,
+      "end_byte_exclusive": 184251106,
+      "bytes": 154,
+      "sha256": "253cbf4f721abe617d7f131386e4bb322b6a1024b0b9f267202fc13d9c055fc7",
+      "utf8_text": "login shell is disabled by config; omit `login` or set it to false.`shell` is not supported for local zsh-fork exec; omit `shell` to use zsh-fork, or targ"
+    },
+    {
+      "path": "binary-region-184417263-184417500.bin",
+      "begin_byte": 184417263,
+      "end_byte_exclusive": 184417500,
+      "bytes": 237,
+      "sha256": "b37906d921cafaac7b2fac0227ca81cb610eaf019065afc2927bbebeab110258",
+      "utf8_text": "Shell binary to launch. Defaults to the user's default shell.\u0000\u0000\u0000\u0000\u0000True runs the shell with -l/-i semantics; false disables them. Defaults to true.Runs a command in a PTY, returning output or a session ID for ongoing interaction.Windows s"
+    }
+  ],
+  "workdir_witness_authenticated": true,
+  "cwd_top_level_runtime_exercised": false,
+  "exact_shell_login_combination_exercised": false,
+  "native_sessions_launched": 0
+}

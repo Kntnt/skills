@@ -1238,3 +1238,81 @@ def test_ambiguous_consumption_json_cannot_spend_attempt(
     with pytest.raises(DISPATCH.CaptureError):
         DISPATCH.run(args, prompt)
     assert args.observed == {}
+
+
+@pytest.mark.parametrize(
+    "boundary", ["extant-group", "probe-unavailable", "ownership-unavailable"]
+)
+def test_absent_or_unreadable_leader_never_authorizes_destructive_signal(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, boundary: str
+) -> None:
+    """Unauthenticated numeric groups preserve a failed reachable runtime."""
+    actual_stop = DISPATCH.stop_owned
+    case = CASES[0]
+    args = recorder(tmp_path, monkeypatch, case)
+    signals: list[int] = []
+
+    def group_identity(pid: int) -> int:
+        if args.observed.get("completed"):
+            if boundary == "ownership-unavailable":
+                raise PermissionError("synthetic group identity unavailable")
+            raise ProcessLookupError("synthetic leader absent")
+        return pid
+
+    def signal_group(pid: int, sig: int) -> None:
+        signals.append(sig)
+        if sig == 0:
+            if boundary == "probe-unavailable":
+                raise PermissionError("synthetic group existence unavailable")
+            return
+        # The old destructive request is observed without signalling anything.
+        raise ProcessLookupError("synthetic signal boundary")
+
+    monkeypatch.setattr(DISPATCH, "stop_owned", actual_stop)
+    monkeypatch.setattr(DISPATCH.os, "getpgid", group_identity)
+    monkeypatch.setattr(DISPATCH.os, "killpg", signal_group)
+    error: Exception | None = None
+    try:
+        DISPATCH.run(args, source(case, "prompt"))
+    except (DISPATCH.CaptureError, OSError) as exc:
+        # Observe the public failure and its receipt even for the old OS error.
+        error = exc
+    assert all(sig == 0 for sig in signals), signals
+    assert isinstance(error, DISPATCH.CaptureError)
+    assert (args.packet / "runtime").exists()
+    assert (args.packet / "cleanup-failed.json").exists()
+    assert not (args.packet / "result.txt").exists()
+    assert not (args.packet / "cleanup.json").exists()
+    receipt = json.loads((args.packet / "receipt.json").read_text())
+    assert receipt["status"] == "failed"
+    assert "ownership" in receipt["reason"]
+
+
+def test_absent_leader_and_genuinely_vanished_group_complete_cleanup(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """A harmless absence probe keeps completed original capture eligible."""
+    actual_stop = DISPATCH.stop_owned
+    case = CASES[0]
+    args = recorder(tmp_path, monkeypatch, case)
+    signals: list[int] = []
+
+    def group_identity(pid: int) -> int:
+        if args.observed.get("completed"):
+            raise ProcessLookupError("synthetic leader absent")
+        return pid
+
+    def signal_group(pid: int, sig: int) -> None:
+        signals.append(sig)
+        raise ProcessLookupError("synthetic group genuinely vanished")
+
+    monkeypatch.setattr(DISPATCH, "stop_owned", actual_stop)
+    monkeypatch.setattr(DISPATCH.os, "getpgid", group_identity)
+    monkeypatch.setattr(DISPATCH.os, "killpg", signal_group)
+    assert DISPATCH.run(args, source(case, "prompt")) == source(case, "terminal")
+    assert signals == [0]
+    assert (
+        json.loads((args.packet / "receipt.json").read_text())["status"] == "complete"
+    )
+    assert json.loads((args.packet / "cleanup.json").read_text())["exists"] is False
+    assert not (args.packet / "runtime").exists()

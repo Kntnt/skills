@@ -1,0 +1,7 @@
+This is a neutral instrumented original-source proof. The caller explicitly sets model_auto_compact_token_limit=8192 and total-context scope. It is not a claim about default compaction conditions. Use no skill, routing, subagent, other model launch or file edit. Make exactly two sequential functions.exec calls using the identical exact input below. Each command prints exactly 32768 ASCII bytes; inner and outer allowances are 20000 tokens. After both calls, return exactly the final literal two-line payload below, with its final newline. Do not call additional tools, seek a compaction, add context, repeat beyond these two calls, retry or lengthen the scenario. Any automatic compaction must be native and remains source evidence only.
+EXACT TOOL INPUT (twice, sequentially):
+// @exec: {"yield_time_ms": 1000, "max_output_tokens": 20000}
+const r = await tools.exec_command({"cmd": "python3 -c 'import sys; sys.stdout.write('\"'\"''\"'\"'.join(f'\"'\"'{i:04x}'\"'\"' for i in range(8192)))'", "workdir": "/private/tmp/kntnt-method-509-proof-20261004-original-messages/work/direct-compaction", "shell": "/bin/bash", "login": false, "max_output_tokens": 20000, "yield_time_ms": 1000}); text(r.output);
+FINAL PAYLOAD:
+Neutral compaction source Åβ🙂
+Done.
