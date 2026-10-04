@@ -1,0 +1,11 @@
+........................................................................ [ 93%]
+..FFF                                                                    [100%]
+=================================== FAILURES ===================================
+/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py:355: AssertionError: assert 'model_auto_compact_token_limit=8192' in ['/private/tmp/kntnt-method-509-builder-20261004-b2qnwsc1/tmp/pytest-of-thomas/pytest-25/test_explicit_supported_compa...pytest-25/test_explicit_supported_compac0', '--skip-git-repo-check', '--dangerously-bypass-approvals-and-sandbox', ...]
+/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py:359: AssertionError: assert None == {'model_auto_compact_token_limit': 8192, 'model_auto_compact_token_limit_scope': 'total'}
+/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py:368: AssertionError: Regex pattern did not match.
+=========================== short test summary info ============================
+FAILED tests/test_evaluation_original_dispatch.py::test_explicit_supported_compaction_instrumentation_is_recorded[command]
+FAILED tests/test_evaluation_original_dispatch.py::test_explicit_supported_compaction_instrumentation_is_recorded[receipt]
+FAILED tests/test_evaluation_original_dispatch.py::test_default_contract_cannot_silently_use_new_instrumentation
+3 failed, 74 passed in 1.88s

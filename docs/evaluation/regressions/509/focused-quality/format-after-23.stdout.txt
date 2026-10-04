@@ -1,0 +1,33 @@
+unformatted: File would be reformatted
+    --> tests/test_evaluation_original_dispatch.py:1199:26
+     |
+1198 |
+     - @pytest.mark.parametrize('field,value',[('launch_command',[]),('launch_command','foreign'),('launch_tool_input',None),('launch_tool_input','')])
+     - def test_invalid_consumption_specification_cannot_spend_attempt(tmp_path: Path, monkeypatch: pytest.MonkeyPatch, field: str, value: Any) -> None:
+1199 + @pytest.mark.parametrize(
+1200 +     "field,value",
+1201 +     [
+1202 +         ("launch_command", []),
+1203 +         ("launch_command", "foreign"),
+1204 +         ("launch_tool_input", None),
+1205 +         ("launch_tool_input", ""),
+1206 +     ],
+1207 + )
+1208 + def test_invalid_consumption_specification_cannot_spend_attempt(
+1209 +     tmp_path: Path, monkeypatch: pytest.MonkeyPatch, field: str, value: Any
+1210 + ) -> None:
+1211 |     """Prelaunch contract errors must stop before the single native attempt."""
+     -     args,prompt,_result=parent_packet(tmp_path,monkeypatch)
+     -     spec=json.loads(args.consume_spec.read_text());spec[field]=value;args.consume_spec.write_text(json.dumps(spec))
+     -     with pytest.raises(DISPATCH.CaptureError,match='consumption'):DISPATCH.run(args,prompt)
+     -     assert args.observed=={}
+1212 +     args, prompt, _result = parent_packet(tmp_path, monkeypatch)
+1213 +     spec = json.loads(args.consume_spec.read_text())
+1214 +     spec[field] = value
+1215 +     args.consume_spec.write_text(json.dumps(spec))
+1216 +     with pytest.raises(DISPATCH.CaptureError, match="consumption"):
+1217 +         DISPATCH.run(args, prompt)
+1218 +     assert args.observed == {}
+     |
+
+1 file would be reformatted, 2 files already formatted

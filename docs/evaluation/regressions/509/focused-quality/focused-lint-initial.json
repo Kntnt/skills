@@ -1,0 +1,12 @@
+{
+  "command": [
+    "uvx",
+    "ruff",
+    "check",
+    "docs/evaluation/harness/native_dispatch.py",
+    "tests/test_evaluation_original_dispatch.py",
+    "tests/test_evaluation_dispatch.py"
+  ],
+  "exit": 1,
+  "time_ns": 1791113873452310000
+}

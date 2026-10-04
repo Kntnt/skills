@@ -1,0 +1,14 @@
+........................................................................ [ 41%]
+........................................................................ [ 83%]
+.........................FFFF                                            [100%]
+=================================== FAILURES ===================================
+/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py:1205: AssertionError: assert {'command': [...516ab4', ...}} == {}
+/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py:1205: AssertionError: assert {'command': [...516ab4', ...}} == {}
+/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py:1205: AssertionError: assert {'command': [...516ab4', ...}} == {}
+/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py:1205: AssertionError: assert {'command': [...516ab4', ...}} == {}
+=========================== short test summary info ============================
+FAILED tests/test_evaluation_original_dispatch.py::test_invalid_consumption_specification_cannot_spend_attempt[launch_command-value0]
+FAILED tests/test_evaluation_original_dispatch.py::test_invalid_consumption_specification_cannot_spend_attempt[launch_command-foreign]
+FAILED tests/test_evaluation_original_dispatch.py::test_invalid_consumption_specification_cannot_spend_attempt[launch_tool_input-None]
+FAILED tests/test_evaluation_original_dispatch.py::test_invalid_consumption_specification_cannot_spend_attempt[launch_tool_input-]
+4 failed, 169 passed in 4.65s

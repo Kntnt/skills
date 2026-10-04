@@ -1,0 +1,21 @@
+........................................................................ [ 72%]
+...................FFFFFFFF                                              [100%]
+=================================== FAILURES ===================================
+/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py:485: Failed: DID NOT RAISE <class 'original_dispatch.CaptureError'>
+/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py:485: Failed: DID NOT RAISE <class 'original_dispatch.CaptureError'>
+/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py:485: Failed: DID NOT RAISE <class 'original_dispatch.CaptureError'>
+/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py:485: Failed: DID NOT RAISE <class 'original_dispatch.CaptureError'>
+/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py:485: Failed: DID NOT RAISE <class 'original_dispatch.CaptureError'>
+/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py:485: Failed: DID NOT RAISE <class 'original_dispatch.CaptureError'>
+/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py:485: Failed: DID NOT RAISE <class 'original_dispatch.CaptureError'>
+/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py:495: AssertionError: assert None == 'd33e54f775b25426c209b62346e0a9fa1102bafc098addca95bd9a8706184cd1'
+=========================== short test summary info ============================
+FAILED tests/test_evaluation_original_dispatch.py::test_synthetic_parent_partial_consumption_fails[truncated-stdout]
+FAILED tests/test_evaluation_original_dispatch.py::test_synthetic_parent_partial_consumption_fails[truncated-formatted]
+FAILED tests/test_evaluation_original_dispatch.py::test_synthetic_parent_partial_consumption_fails[truncated-parent-input]
+FAILED tests/test_evaluation_original_dispatch.py::test_synthetic_parent_partial_consumption_fails[wrong-command]
+FAILED tests/test_evaluation_original_dispatch.py::test_synthetic_parent_partial_consumption_fails[wrong-call]
+FAILED tests/test_evaluation_original_dispatch.py::test_synthetic_parent_partial_consumption_fails[failed-command]
+FAILED tests/test_evaluation_original_dispatch.py::test_synthetic_parent_partial_consumption_fails[duplicate-output]
+FAILED tests/test_evaluation_original_dispatch.py::test_parent_receipt_binds_whole_original_child_return
+8 failed, 91 passed in 2.79s

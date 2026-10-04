@@ -1,0 +1,1196 @@
+"""Prospective original-message acquisition; primary contents stay opaque."""
+
+from __future__ import annotations
+
+import argparse
+import copy
+import gzip
+import hashlib
+import importlib.util
+import json
+import os
+import subprocess
+from importlib.machinery import ModuleSpec
+from pathlib import Path
+from types import ModuleType, SimpleNamespace
+from typing import Any, cast
+
+import pytest
+
+ROOT: Path = Path(__file__).resolve().parents[1]
+EVIDENCE: Path = ROOT / "docs/evaluation/regressions/509"
+SPEC: ModuleSpec | None = importlib.util.spec_from_file_location(
+    "original_dispatch", ROOT / "docs/evaluation/harness/native_dispatch.py"
+)
+assert SPEC is not None and SPEC.loader is not None
+DISPATCH: ModuleType = importlib.util.module_from_spec(SPEC)
+SPEC.loader.exec_module(DISPATCH)
+CASES: list[dict[str, Any]] = json.loads(
+    (EVIDENCE / "opaque-originals/manifest.json").read_text()
+)
+
+
+def source(case: dict[str, Any], kind: str) -> bytes:
+    """Read lossless copies against independent original byte identities."""
+    identity = case["files"][kind]
+    data = gzip.decompress((EVIDENCE / identity["fixture"]).read_bytes())
+    assert len(data) == identity["bytes"]
+    assert hashlib.sha256(data).hexdigest() == identity["sha256"]
+    return data
+
+
+def recorder(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    case: dict[str, Any],
+    **changes: Any,
+) -> argparse.Namespace:
+    """Supply existing opaque transport at the external subprocess seam.
+
+    No native session is launched. Registration and termination are external
+    lifecycle operations replaced by inert stand-ins for this offline test.
+    """
+    auth = tmp_path / "auth"
+    auth.mkdir()
+    (auth / "hooks.json").write_text('{"hooks":{}}')
+    (auth / "auth.json").write_text("synthetic credential")
+    native = tmp_path / "native"
+    native.write_bytes(b"synthetic executable, never executed")
+    packet = tmp_path / "packet"
+    args = argparse.Namespace(
+        packet=packet,
+        cwd=tmp_path,
+        model=case["model"],
+        effort=case["effort"],
+        version=case["version"],
+        parent="synthetic-parent",
+        role="neutral",
+        timeout=1200,
+        native=native,
+        auth_home=auth,
+        cleanup_script=tmp_path / "cleanup",
+        inventory_root=[],
+        source_contract="original-completed-v1",
+    )
+    args.observed = {}
+    monkeypatch.setattr(DISPATCH.os, "getpgrp", os.getpid)
+    monkeypatch.setattr(DISPATCH, "register", lambda *args: None)
+    monkeypatch.setattr(DISPATCH, "stop_owned", lambda *unused: None)
+    monkeypatch.setattr(
+        DISPATCH.subprocess,
+        "check_output",
+        lambda *args, **kwargs: "codex-cli 0.160.0\n",
+    )
+
+    class Transport:
+        """Finish the exact stored source; mutations are explicitly synthetic."""
+
+        pid = os.getpid()
+        returncode = 0
+
+        def __init__(self, command: list[str], **kwargs: Any) -> None:
+            self.options = kwargs
+            args.observed.update(command=command, env=kwargs["env"])
+
+        def communicate(self, prompt: bytes, timeout: float) -> None:
+            assert prompt == changes.get("prompt", source(case, "prompt"))
+            if changes.get("timeout"):
+                raise subprocess.TimeoutExpired("synthetic native", timeout)
+            sessions = Path(self.options["env"]["CODEX_HOME"]) / "sessions"
+            sessions.mkdir()
+            (sessions / "original.jsonl").write_bytes(
+                changes.get("raw", source(case, "raw"))
+            )
+            self.options["stdout"].write(changes.get("events", source(case, "events")))
+            (packet / "terminal.txt").write_bytes(
+                changes.get("terminal", source(case, "terminal"))
+            )
+            self.returncode = changes.get("exit", 0)
+            args.observed["completed"] = True
+
+    monkeypatch.setattr(DISPATCH.subprocess, "Popen", Transport)
+    monkeypatch.setattr(
+        DISPATCH.subprocess,
+        "run",
+        lambda *unused, **options: SimpleNamespace(stdout="synthetic start identity"),
+    )
+    monkeypatch.setattr(DISPATCH.os, "getpgid", lambda pid: pid)
+    return args
+
+
+def test_selected_original_contract_acquires_false_retention(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """The real recorder's default guard must not decide the explicit contract."""
+    case = CASES[0]
+    args = recorder(tmp_path, monkeypatch, case)
+    result = DISPATCH.run(args, source(case, "prompt"))
+    assert hashlib.sha256(result).hexdigest() == case["files"]["terminal"]["sha256"]
+    receipt = json.loads((args.packet / "receipt.json").read_text())
+    assert receipt["binding"]["source_contract"] == "original-completed-v1"
+    assert receipt["binding"]["final_retained_source"]["complete"] is False
+    assert not (args.packet / "runtime").exists()
+
+
+@pytest.mark.parametrize("case", CASES, ids=[case["case"] for case in CASES])
+def test_all_original_sources_are_acquired_without_rewriting_retention(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, case: dict[str, Any]
+) -> None:
+    """Stored originals bind even where per-message retention is incomplete."""
+    args = recorder(tmp_path, monkeypatch, case)
+    result = DISPATCH.run(args, source(case, "prompt"))
+    assert hashlib.sha256(result).hexdigest() == case["files"]["terminal"]["sha256"]
+    rows = [json.loads(line) for line in source(case, "raw").splitlines()]
+    original = copy.deepcopy(rows)
+    binding, bound = DISPATCH.bind_original_trace(
+        rows, source(case, "prompt"), case["model"], case["effort"], case["version"]
+    )
+    assert bound == result
+    assert rows == original
+    assert binding["native_input_id"] != binding["original_input_id"]
+    if case["case"] == "A":
+        assert binding["initial_retained_source"]["complete"] is False
+        assert binding["final_retained_source"]["complete"] is True
+    else:
+        assert binding["initial_retained_source"]["complete"] is True
+        assert binding["final_retained_source"]["complete"] is False
+    with pytest.raises(DISPATCH.CaptureError):
+        DISPATCH.bind_trace(
+            rows, source(case, "prompt"), case["model"], case["effort"], case["version"]
+        )
+
+
+def original_binding(
+    rows: list[dict[str, Any]], case: dict[str, Any] | None = None
+) -> tuple[dict[str, Any], bytes]:
+    """Drive the original-source binder with frozen declared seat and input."""
+    case = case or CASES[2]
+    return cast(
+        tuple[dict[str, Any], bytes],
+        DISPATCH.bind_original_trace(
+            rows, source(case, "prompt"), case["model"], case["effort"], case["version"]
+        ),
+    )
+
+
+@pytest.mark.parametrize(
+    "field,value",
+    [
+        ("previous_window_id", "foreign-window"),
+        ("first_window_id", "foreign-window"),
+        ("window_id", ""),
+        ("window_id", "01a10630-3d5d-7091-8037-fc7c0532cd36"),
+        ("window_number", 2),
+        ("window_number", True),
+    ],
+)
+def test_synthetic_compaction_window_chain_corruption_fails(
+    field: str, value: Any
+) -> None:
+    """An original compacted task requires actual sequential window identities."""
+    rows = [json.loads(line) for line in source(CASES[2], "raw").splitlines()]
+    compacted = next(row for row in rows if row["type"] == "compacted")
+    compacted["payload"][field] = value
+    with pytest.raises(DISPATCH.CaptureError, match="window"):
+        original_binding(rows)
+
+
+@pytest.mark.parametrize(
+    "path,value",
+    [
+        ("latest_token_usage_record.thread_id", "foreign"),
+        ("latest_token_usage_record.session_id", "foreign"),
+        ("latest_token_usage_record.turn_id", "foreign"),
+        ("latest_token_usage_record.root_turn_id", "foreign"),
+        ("latest_token_usage_record.response_id", "foreign"),
+        ("compaction_response_id", ""),
+        ("resume_metadata.last_started_turn_id", "foreign"),
+        ("resume_metadata.previous_turn_settings.model", "foreign"),
+        ("resume_metadata.previous_turn_settings.comp_hash", "foreign"),
+        ("resume_metadata.multi_agent_version", "foreign"),
+        ("message", None),
+        ("replacement_history", None),
+        ("replacement_history_metadata", []),
+        ("retained_context.incomplete", True),
+        ("retained_context.user_messages_incomplete", True),
+        ("retained_context.assistant_messages_incomplete", True),
+    ],
+)
+def test_synthetic_incomplete_or_foreign_compaction_source_fails(
+    path: str, value: Any
+) -> None:
+    """Window IDs alone cannot authenticate a completed compaction source."""
+    rows = [json.loads(line) for line in source(CASES[2], "raw").splitlines()]
+    target = next(row["payload"] for row in rows if row["type"] == "compacted")
+    keys = path.split(".")
+    for key in keys[:-1]:
+        target = target[key]
+    target[keys[-1]] = value
+    with pytest.raises(DISPATCH.CaptureError, match="compaction"):
+        original_binding(rows)
+
+
+@pytest.mark.parametrize(
+    "mutation",
+    [
+        "ordinal-gap",
+        "missing-ordinal",
+        "bool-ordinal",
+        "late-meta",
+        "late-context",
+        "late-compaction",
+        "missing-window",
+        "nested-seat",
+    ],
+)
+def test_synthetic_unaccounted_original_source_order_fails(mutation: str) -> None:
+    """Stored record continuity and context scope must bound the whole task."""
+    rows = [json.loads(line) for line in source(CASES[2], "raw").splitlines()]
+    if mutation == "ordinal-gap":
+        rows[40]["ordinal"] += 1
+    elif mutation == "missing-ordinal":
+        del rows[40]["ordinal"]
+    elif mutation == "bool-ordinal":
+        rows[0]["ordinal"] = False
+    elif mutation == "late-meta":
+        rows.append(rows.pop(0))
+    elif mutation == "late-context":
+        rows.append(
+            rows.pop(
+                next(
+                    i
+                    for i, r in enumerate(rows)
+                    if r["type"] == "turn_context" and i > 20
+                )
+            )
+        )
+    elif mutation == "late-compaction":
+        rows.append(
+            rows.pop(next(i for i, r in enumerate(rows) if r["type"] == "compacted"))
+        )
+    elif mutation == "missing-window":
+        rows[0]["payload"].pop("context_window")
+    else:
+        next(r["payload"] for r in rows if r["type"] == "turn_context")[
+            "collaboration_mode"
+        ]["settings"]["reasoning_effort"] = "low"
+    if mutation.startswith("late-"):
+        for i, row in enumerate(rows):
+            row["ordinal"] = i
+    with pytest.raises(DISPATCH.CaptureError):
+        original_binding(rows)
+
+
+@pytest.mark.parametrize(
+    "path,value",
+    [
+        ("replacement_history.4.id", "foreign"),
+        ("replacement_history.4.content.0.text", "synthetic altered input"),
+        ("replacement_history_metadata.4.user_input_order", 1),
+        ("replacement_history_metadata.4.retained_source.complete", True),
+        ("retained_context.user_messages.0.message_id", "foreign"),
+        ("retained_context.user_messages.0.turn_id", "foreign"),
+        ("retained_context.user_messages.0.revision", "foreign"),
+        ("retained_context.user_messages.0.order", 1),
+        ("retained_context.user_messages.0.complete", True),
+        ("retained_context.assistant_messages.0.message_id", "foreign"),
+        ("retained_context.assistant_messages.0.complete", False),
+        ("retained_context.next_order", 99),
+    ],
+)
+def test_synthetic_compaction_corroboration_conflicts_fail(
+    path: str, value: Any
+) -> None:
+    """Replacement and retained identities corroborate, never replace originals."""
+    rows = [json.loads(line) for line in source(CASES[2], "raw").splitlines()]
+    target = next(row["payload"] for row in rows if row["type"] == "compacted")
+    keys = path.split(".")
+    for key in keys[:-1]:
+        target = target[int(key)] if isinstance(target, list) else target[key]
+    target[keys[-1]] = value
+    with pytest.raises(DISPATCH.CaptureError, match="compaction"):
+        original_binding(rows)
+
+
+@pytest.mark.parametrize(
+    "mutation",
+    [
+        "foreign-thread",
+        "missing-start",
+        "duplicate-start",
+        "missing-completion",
+        "duplicate-completion",
+        "failed-turn",
+        "altered-final",
+        "missing-final",
+        "duplicate-item",
+    ],
+)
+def test_synthetic_exec_transport_conflicts_fail(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, mutation: str
+) -> None:
+    """Native raw binding also requires an agreeing successful exec transport."""
+    case = CASES[0]
+    events = [json.loads(line) for line in source(case, "events").splitlines()]
+    finals = [
+        i
+        for i, event in enumerate(events)
+        if event.get("type") == "item.completed"
+        and event.get("item", {}).get("type") == "agent_message"
+    ]
+    if mutation == "foreign-thread":
+        events[0]["thread_id"] = "foreign"
+    elif mutation == "missing-start":
+        events = [e for e in events if e["type"] != "turn.started"]
+    elif mutation == "duplicate-start":
+        events.insert(2, {"type": "turn.started"})
+    elif mutation == "missing-completion":
+        events = [e for e in events if e["type"] != "turn.completed"]
+    elif mutation == "duplicate-completion":
+        events.append(copy.deepcopy(events[-1]))
+    elif mutation == "failed-turn":
+        events.append(
+            {"type": "turn.failed", "error": {"message": "synthetic failure"}}
+        )
+    elif mutation == "altered-final":
+        events[finals[-1]]["item"]["text"] += "synthetic mismatch"
+    elif mutation == "missing-final":
+        events.pop(finals[-1])
+    else:
+        events.insert(finals[-1] + 1, copy.deepcopy(events[finals[-1]]))
+    data = b"".join(json.dumps(e).encode() + b"\n" for e in events)
+    args = recorder(tmp_path, monkeypatch, case, events=data)
+    with pytest.raises(DISPATCH.CaptureError, match="exec"):
+        DISPATCH.run(args, source(case, "prompt"))
+    assert not (args.packet / "result.txt").exists()
+    assert json.loads((args.packet / "receipt.json").read_text())["status"] == "failed"
+
+
+@pytest.mark.parametrize("failure", ["owned-group", "runtime"])
+def test_cleanup_failure_never_publishes_complete_result(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, failure: str
+) -> None:
+    """Binding is provisional until owned group and runtime cleanup succeed."""
+    case = CASES[0]
+    args = recorder(tmp_path, monkeypatch, case)
+    if failure == "owned-group":
+
+        def stop(child: Any, *unused: Any) -> None:
+            raise DISPATCH.CaptureError("synthetic unresolved owned group")
+
+        monkeypatch.setattr(DISPATCH, "stop_owned", stop)
+    else:
+
+        def remove(path: Path) -> None:
+            raise OSError("synthetic runtime removal failure")
+
+        monkeypatch.setattr(DISPATCH.shutil, "rmtree", remove)
+    with pytest.raises((DISPATCH.CaptureError, OSError)):
+        DISPATCH.run(args, source(case, "prompt"))
+    assert not (args.packet / "result.txt").exists()
+    assert json.loads((args.packet / "receipt.json").read_text())["status"] == "failed"
+    assert (args.packet / "runtime").exists()
+
+
+def test_native_deadline_counts_registration_before_input(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """Advance the injected clock after native start; no fork/deadline race."""
+    case = CASES[0]
+    args = recorder(tmp_path, monkeypatch, case)
+    instant = [0.0]
+    registrations = [0]
+
+    def register(*unused: Any) -> None:
+        registrations[0] += 1
+        if registrations[0] == 2:
+            instant[0] = 1201.0
+
+    monkeypatch.setattr(DISPATCH, "register", register)
+    monkeypatch.setattr(DISPATCH.time, "monotonic", lambda: instant[0])
+    with pytest.raises(DISPATCH.CaptureError, match="deadline"):
+        DISPATCH.run(args, source(case, "prompt"))
+    assert registrations[0] == 2
+    assert not (args.packet / "result.txt").exists()
+
+
+@pytest.mark.parametrize("timeout", [0, -1, float("nan"), float("inf"), 1201])
+def test_original_contract_refuses_unbounded_native_deadline(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, timeout: float
+) -> None:
+    """The selected prospective contract has a finite native session ceiling."""
+    case = CASES[0]
+    args = recorder(tmp_path, monkeypatch, case)
+    args.timeout = timeout
+    with pytest.raises(DISPATCH.CaptureError, match="deadline"):
+        DISPATCH.run(args, source(case, "prompt"))
+
+
+@pytest.mark.parametrize(
+    "boundary", ["home", "contract", "helper", "recorder", "native"]
+)
+def test_original_launch_keeps_real_home_and_prelaunch_source_identities(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, boundary: str
+) -> None:
+    """The prospective request records each actual identity before launch."""
+    case = CASES[0]
+    args = recorder(tmp_path, monkeypatch, case)
+    DISPATCH.run(args, source(case, "prompt"))
+    request = json.loads((args.packet / "request.json").read_text())
+    if boundary == "home":
+        assert args.observed["env"]["HOME"] == os.environ["HOME"]
+    elif boundary == "contract":
+        assert request.get("source_contract") == "original-completed-v1"
+    else:
+        original = (
+            args.native
+            if boundary == "native"
+            else ROOT / "docs/evaluation/harness/native_dispatch.py"
+        )
+        assert (
+            request.get("prelaunch_sources", {}).get(boundary + "_sha256")
+            == hashlib.sha256(original.read_bytes()).hexdigest()
+        )
+
+
+def test_unknown_contract_fails_before_native_attempt(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """An invalid direct API selector cannot spend a native attempt."""
+    case = CASES[0]
+    args = recorder(tmp_path, monkeypatch, case)
+    args.source_contract = "synthetic-unknown"
+    with pytest.raises(DISPATCH.CaptureError, match="source contract"):
+        DISPATCH.run(args, source(case, "prompt"))
+    assert args.observed == {}
+
+
+@pytest.mark.parametrize("boundary", ["reused-pid", "unknown-start", "foreign-group"])
+def test_recorder_refuses_to_stop_unverified_identity(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, boundary: str
+) -> None:
+    """A completed leader's reused identity never authorizes a group signal."""
+    actual_stop = DISPATCH.stop_owned
+    case = CASES[0]
+    args = recorder(tmp_path, monkeypatch, case)
+    signals: list[tuple[int, int]] = []
+
+    def signal_group(pid: int, sig: int) -> None:
+        signals.append((pid, sig))
+        raise ProcessLookupError
+
+    def start(*unused: Any, **options: Any) -> SimpleNamespace:
+        value = (
+            "different start"
+            if args.observed.get("completed") and boundary == "reused-pid"
+            else "synthetic start identity"
+        )
+        return SimpleNamespace(stdout="" if boundary == "unknown-start" else value)
+
+    monkeypatch.setattr(DISPATCH, "stop_owned", actual_stop)
+    monkeypatch.setattr(DISPATCH.subprocess, "run", start)
+    monkeypatch.setattr(DISPATCH.os, "killpg", signal_group)
+    if boundary == "foreign-group":
+        monkeypatch.setattr(DISPATCH.os, "getpgid", lambda pid: pid + 1)
+    with pytest.raises(DISPATCH.CaptureError, match="ownership"):
+        DISPATCH.run(args, source(case, "prompt"))
+    assert signals == []
+    assert not (args.packet / "result.txt").exists()
+
+
+@pytest.mark.parametrize("boundary", ["command", "receipt"])
+def test_explicit_supported_compaction_instrumentation_is_recorded(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, boundary: str
+) -> None:
+    """A disclosed threshold override is confined to the new source contract."""
+    case = CASES[0]
+    args = recorder(tmp_path, monkeypatch, case)
+    args.auto_compact_token_limit = 8192
+    DISPATCH.run(args, source(case, "prompt"))
+    if boundary == "command":
+        assert "model_auto_compact_token_limit=8192" in args.observed["command"]
+        assert (
+            'model_auto_compact_token_limit_scope="total"' in args.observed["command"]
+        )
+    else:
+        request = json.loads((args.packet / "request.json").read_text())
+        assert request.get("compaction_instrumentation") == {
+            "model_auto_compact_token_limit": 8192,
+            "model_auto_compact_token_limit_scope": "total",
+        }
+
+
+def test_default_contract_cannot_silently_use_new_instrumentation(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """The retained-source default remains an independently selected boundary."""
+    case = CASES[0]
+    args = recorder(tmp_path, monkeypatch, case)
+    del args.source_contract
+    args.auto_compact_token_limit = 8192
+    with pytest.raises(DISPATCH.CaptureError, match="instrumentation"):
+        DISPATCH.run(args, source(case, "prompt"))
+    assert args.observed == {}
+
+
+@pytest.mark.parametrize(
+    "boundary", ["source-digests", "source-offsets", "compaction-flags"]
+)
+def test_receipt_describes_original_sources_and_limits(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, boundary: str
+) -> None:
+    """Source byte identities and retention limitations survive acquisition."""
+    case = CASES[2]
+    args = recorder(tmp_path, monkeypatch, case)
+    DISPATCH.run(args, source(case, "prompt"))
+    binding = json.loads((args.packet / "receipt.json").read_text())["binding"]
+    if boundary == "source-digests":
+        for kind in ("raw", "events", "prompt", "terminal"):
+            assert (
+                binding.get("sources", {}).get(kind, {}).get("sha256")
+                == case["files"][kind]["sha256"]
+            )
+    elif boundary == "source-offsets":
+        index = binding.get("record_index", [])
+        assert len(index) == 397
+        assert index[0]["offset"] == 0
+        assert index[-1]["offset"] + index[-1]["bytes"] == case["files"]["raw"]["bytes"]
+    else:
+        compactions = binding.get("compactions", [])
+        assert len(compactions) == 1
+        observed = compactions[0]
+        assert observed["retained_context"]["incomplete"] is False
+        assert observed["retained_context"]["user_messages"][0]["complete"] is False
+        assert observed["retained_context"]["user_messages"][0]["utf8_bytes"] == 3600
+        assert (
+            observed["retained_context"]["user_messages"][0]["utf8_bytes"]
+            != case["files"]["prompt"]["bytes"]
+        )
+
+
+@pytest.mark.parametrize(
+    "mutation",
+    [
+        "missing-revision",
+        "bool-order",
+        "foreign-started-item",
+        "changed-context-version",
+        "changed-context-hash",
+        "malformed-payload",
+        "malformed-block",
+        "malformed-retained",
+        "unencodable-text",
+    ],
+)
+def test_synthetic_incomplete_or_conflicting_original_identity_fails(
+    mutation: str,
+) -> None:
+    """Unsupported original shapes fail at the same binding boundary."""
+    rows = [json.loads(line) for line in source(CASES[2], "raw").splitlines()]
+    initial = rows[8]
+    if mutation == "missing-revision":
+        initial["metadata"]["retained_source"].pop("revision")
+    elif mutation == "bool-order":
+        initial["metadata"]["user_input_order"] = False
+    elif mutation == "foreign-started-item":
+        row = copy.deepcopy(rows[9])
+        row["payload"]["type"] = "item_started"
+        row["payload"]["thread_id"] = "foreign"
+        rows.insert(10, row)
+        for i, row in enumerate(rows):
+            row["ordinal"] = i
+    elif mutation == "changed-context-version":
+        rows[272]["payload"]["multi_agent_version"] = "foreign"
+    elif mutation == "changed-context-hash":
+        rows[272]["payload"]["comp_hash"] = "foreign"
+    elif mutation == "malformed-payload":
+        rows[0]["payload"] = None
+    elif mutation == "malformed-block":
+        initial["payload"]["content"][0] = None
+    elif mutation == "malformed-retained":
+        initial["metadata"]["retained_source"] = None
+    else:
+        initial["payload"]["content"][0]["text"] = "\ud800"
+    with pytest.raises(DISPATCH.CaptureError):
+        original_binding(rows)
+
+
+@pytest.mark.parametrize("kind", ["raw", "events"])
+def test_synthetic_duplicate_json_keys_cannot_hide_conflicts(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, kind: str
+) -> None:
+    """Original serialized fields are unambiguous before their bindings run."""
+    case = CASES[0]
+    data = source(case, kind)
+    lines = data.splitlines(keepends=True)
+    field = b'"ordinal":999,' if kind == "raw" else b'"thread_id":"foreign",'
+    lines[0] = b"{" + field + lines[0][1:]
+    args = recorder(tmp_path, monkeypatch, case, **{kind: b"".join(lines)})
+    with pytest.raises(DISPATCH.CaptureError, match="JSON"):
+        DISPATCH.run(args, source(case, "prompt"))
+
+
+def parent_packet(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, mutation: str = ""
+) -> tuple[argparse.Namespace, bytes, bytes]:
+    """Synthesize an ordered parent tool boundary from the observed CLI schema."""
+    child_root = tmp_path / "child"
+    child_root.mkdir()
+    case = CASES[0]
+    child = recorder(child_root, monkeypatch, case)
+    result = DISPATCH.run(child, source(case, "prompt"))
+    rows = [json.loads(line) for line in source(case, "raw").splitlines()]
+    old_thread = rows[0]["payload"]["id"]
+    old_turn = next(
+        row["payload"]["turn_id"] for row in rows if row["type"] == "turn_context"
+    )
+
+    def replace_identity(value: Any) -> Any:
+        if isinstance(value, dict):
+            return {key: replace_identity(item) for key, item in value.items()}
+        if isinstance(value, list):
+            return [replace_identity(item) for item in value]
+        if value == old_thread:
+            return "synthetic-parent-thread"
+        if value == old_turn:
+            return "synthetic-parent-turn"
+        return value
+
+    rows = replace_identity(rows)
+    command = ["/bin/bash", "-c", "synthetic frozen helper command"]
+    tool_input = "synthetic exact exec tool input"
+    passthrough = {"turn_id": "synthetic-parent-turn"}
+    launch_command = ["/bin/bash", "-c", "synthetic frozen child launcher"]
+    launch_input = "synthetic exact launcher tool input"
+    items: list[dict[str, Any]] = [
+        {
+            "type": "response_item",
+            "payload": {
+                "type": "custom_tool_call",
+                "id": "synthetic-launch-request",
+                "call_id": "synthetic-launch-call",
+                "name": "exec",
+                "input": launch_input,
+                "internal_chat_message_metadata_passthrough": passthrough,
+            },
+        },
+        {
+            "type": "event_msg",
+            "payload": {
+                "type": "item_completed",
+                "thread_id": "synthetic-parent-thread",
+                "turn_id": "synthetic-parent-turn",
+                "item": {
+                    "type": "CommandExecution",
+                    "id": "synthetic-launch-command",
+                    "command": launch_command,
+                    "cwd": str(tmp_path),
+                    "status": "completed",
+                    "exit_code": 0,
+                    "stdout": "CHILD_EXIT=0\n",
+                    "stderr": "",
+                    "formatted_output": "CHILD_EXIT=0\n",
+                },
+            },
+        },
+        {
+            "type": "response_item",
+            "payload": {
+                "type": "custom_tool_call",
+                "id": "synthetic-request",
+                "call_id": "synthetic-call",
+                "name": "exec",
+                "input": tool_input,
+                "internal_chat_message_metadata_passthrough": passthrough,
+            },
+        },
+        {
+            "type": "event_msg",
+            "payload": {
+                "type": "item_completed",
+                "thread_id": "synthetic-parent-thread",
+                "turn_id": "synthetic-parent-turn",
+                "item": {
+                    "type": "CommandExecution",
+                    "id": "synthetic-command",
+                    "command": command,
+                    "cwd": str(tmp_path),
+                    "status": "completed",
+                    "exit_code": 0,
+                    "stdout": result.decode(),
+                    "stderr": "",
+                    "formatted_output": result.decode(),
+                },
+            },
+        },
+        {
+            "type": "response_item",
+            "payload": {
+                "type": "custom_tool_call_output",
+                "id": "synthetic-output",
+                "call_id": "synthetic-call",
+                "output": [{"type": "text", "text": result.decode()}],
+                "internal_chat_message_metadata_passthrough": passthrough,
+            },
+        },
+    ]
+    if mutation == "truncated-stdout":
+        items[3]["payload"]["item"]["stdout"] = result[:-1].decode()
+    elif mutation == "truncated-formatted":
+        items[3]["payload"]["item"]["formatted_output"] = result[:100].decode()
+    elif mutation == "truncated-parent-input":
+        items[4]["payload"]["output"][0]["text"] = result[:100].decode()
+    elif mutation == "wrong-command":
+        items[3]["payload"]["item"]["command"] = ["synthetic different command"]
+    elif mutation == "wrong-call":
+        items[4]["payload"]["call_id"] = "foreign"
+    elif mutation == "failed-command":
+        items[3]["payload"]["item"]["exit_code"] = 1
+    elif mutation == "duplicate-output":
+        items.append(copy.deepcopy(items[-1]))
+    final_index = next(
+        i
+        for i, row in enumerate(rows)
+        if row["type"] == "event_msg"
+        and row["payload"].get("item", {}).get("phase") == "final_answer"
+    )
+    rows[final_index:final_index] = items
+    for i, row in enumerate(rows):
+        row["ordinal"] = i
+    events = [
+        replace_identity(json.loads(line))
+        for line in source(case, "events").splitlines()
+    ]
+    parent_root = tmp_path / "parent"
+    parent_root.mkdir()
+    args = recorder(
+        parent_root,
+        monkeypatch,
+        case,
+        raw=b"".join(json.dumps(r, ensure_ascii=False).encode() + b"\n" for r in rows),
+        events=b"".join(
+            json.dumps(e, ensure_ascii=False).encode() + b"\n" for e in events
+        ),
+    )
+    spec = tmp_path / "consumption-spec.json"
+    spec.write_text(
+        json.dumps(
+            {
+                "packet": str(child.packet),
+                "command": command,
+                "tool_input": tool_input,
+                "launch_command": launch_command,
+                "launch_tool_input": launch_input,
+            }
+        )
+    )
+    args.consume_spec = spec
+    return args, source(case, "prompt"), result
+
+
+@pytest.mark.parametrize(
+    "mutation",
+    [
+        "truncated-stdout",
+        "truncated-formatted",
+        "truncated-parent-input",
+        "wrong-command",
+        "wrong-call",
+        "failed-command",
+        "duplicate-output",
+    ],
+)
+def test_synthetic_parent_partial_consumption_fails(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, mutation: str
+) -> None:
+    """A full parent final cannot repair a truncated actual tool-return boundary."""
+    args, prompt, _result = parent_packet(tmp_path, monkeypatch, mutation)
+    with pytest.raises(DISPATCH.CaptureError, match="consumption"):
+        DISPATCH.run(args, prompt)
+    assert not (args.packet / "result.txt").exists()
+
+
+def test_parent_receipt_binds_whole_original_child_return(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """The optional proof boundary records the exact child and parent sources."""
+    args, prompt, result = parent_packet(tmp_path, monkeypatch)
+    assert DISPATCH.run(args, prompt) == result
+    binding = json.loads((args.packet / "receipt.json").read_text())["binding"]
+    assert (
+        binding.get("consumption", {}).get("result_sha256")
+        == hashlib.sha256(result).hexdigest()
+    )
+
+
+@pytest.mark.parametrize(
+    "mutation",
+    [
+        "extra-session",
+        "request-input",
+        "helper-identity",
+        "binding-identity",
+        "retention-flag",
+        "missing-original",
+        "cleanup-claim",
+    ],
+)
+def test_parent_refuses_conflicting_child_certificate(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, mutation: str
+) -> None:
+    """A child's terminal or edited receipt cannot replace its original proof."""
+    args, prompt, _result = parent_packet(tmp_path, monkeypatch)
+    child = tmp_path / "child/packet"
+    if mutation == "extra-session":
+        (child / "native-sessions/extra.jsonl").write_bytes(b"{}\n")
+    elif mutation == "missing-original":
+        # A synthetic source gap is retained; the original fixture stays intact.
+        receipt = json.loads((child / "receipt.json").read_text())
+        path = child / receipt["binding"]["sources"]["raw"]["path"]
+        path.write_bytes(b"{}\n")
+    else:
+        path = child / (
+            "request.json"
+            if mutation in ("request-input", "helper-identity")
+            else "cleanup.json"
+            if mutation == "cleanup-claim"
+            else "receipt.json"
+        )
+        data = json.loads(path.read_text())
+        if mutation == "request-input":
+            data["prompt_sha256"] = "foreign"
+        elif mutation == "helper-identity":
+            data["prelaunch_sources"]["helper_sha256"] = "foreign"
+        elif mutation == "binding-identity":
+            data["binding"]["native_input_id"] = "foreign"
+        elif mutation == "retention-flag":
+            data["binding"]["final_retained_source"]["complete"] = True
+        else:
+            data["owned_group_ended"] = False
+        path.write_text(json.dumps(data))
+    with pytest.raises(DISPATCH.CaptureError, match="consumption"):
+        DISPATCH.run(args, prompt)
+
+
+@pytest.mark.parametrize("ascii_encoding", [False, True])
+@pytest.mark.parametrize(
+    "result",
+    [
+        "Short Åβ🙂\n\n".encode(),
+        ("Åäö β🙂\n" * 3500 + "\n").encode(),
+        ("🙂" * 2000 + "\n").encode(),
+    ],
+)
+def test_synthetic_multibyte_newlines_and_serialized_size_are_exact(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, ascii_encoding: bool, result: bytes
+) -> None:
+    """Unicode serialization size never changes message bytes or retained flags."""
+    case = CASES[0]
+    prompt = ("Opaque Åβ🙂\n" * 350).encode()
+    rows = [json.loads(line) for line in source(case, "raw").splitlines()]
+    for row in rows:
+        payload = row["payload"]
+        item = payload.get("item", {})
+        if (
+            row["type"] == "response_item"
+            and row.get("metadata", {}).get("user_input_order") == 0
+        ):
+            payload["content"][0]["text"] = prompt.decode()
+            row["metadata"]["retained_source"]["complete"] = False
+        elif item.get("type") == "UserMessage":
+            item["content"][0]["text"] = prompt.decode()
+        elif item.get("type") == "AgentMessage" and item.get("phase") == "final_answer":
+            item["content"][0]["text"] = result.decode()
+        elif row["type"] == "response_item" and payload.get("phase") == "final_answer":
+            payload["content"][0]["text"] = result.decode()
+        elif payload.get("type") == "task_complete":
+            payload["last_agent_message"] = result.decode()
+    events = [json.loads(line) for line in source(case, "events").splitlines()]
+    next(
+        e for e in reversed(events) if e.get("item", {}).get("type") == "agent_message"
+    )["item"]["text"] = result.decode()
+    raw = b"".join(
+        json.dumps(r, ensure_ascii=ascii_encoding).encode() + b"\n" for r in rows
+    )
+    args = recorder(
+        tmp_path,
+        monkeypatch,
+        case,
+        raw=raw,
+        events=b"".join(
+            json.dumps(e, ensure_ascii=ascii_encoding).encode() + b"\n" for e in events
+        ),
+        terminal=result,
+        prompt=prompt,
+    )
+    assert DISPATCH.run(args, prompt) == result
+    binding = json.loads((args.packet / "receipt.json").read_text())["binding"]
+    assert binding["initial_retained_source"]["complete"] is False
+    assert binding["final_retained_source"]["complete"] is False
+    assert binding["input_sha256"] == hashlib.sha256(prompt).hexdigest()
+    if len(result) == 8001 and ascii_encoding:
+        assert len(json.dumps(result.decode(), ensure_ascii=True).encode()) > 16384
+        assert len(result) < 16384
+
+
+@pytest.mark.parametrize(
+    "mutation",
+    [
+        "missing-native-input",
+        "missing-native-final",
+        "missing-response-input",
+        "missing-response-final",
+        "missing-start",
+        "missing-completion",
+        "duplicate-native-final",
+        "duplicate-response-final",
+        "duplicate-input",
+        "duplicate-start",
+        "duplicate-completion",
+        "wrong-order",
+        "wrong-kind",
+        "altered-input",
+        "partial-native-input",
+        "partial-native-final",
+        "partial-response-final",
+        "nontext-native-input",
+        "nontext-native-final",
+        "nontext-response-input",
+        "nontext-response-final",
+        "foreign-native-item",
+        "foreign-retained-id",
+        "wrong-final-id",
+        "wrong-version",
+        "wrong-model",
+        "wrong-effort",
+        "wrong-root-turn",
+        "parent-thread",
+        "resumed-source",
+        "later-echo",
+        "reordered-final",
+    ],
+)
+def test_synthetic_missing_partial_foreign_or_later_originals_fail(
+    mutation: str,
+) -> None:
+    """Complete terminal text never replaces an absent or conflicting original."""
+    case = CASES[0]
+    rows = [json.loads(line) for line in source(case, "raw").splitlines()]
+    initial = next(
+        r for r in rows if r.get("metadata", {}).get("user_input_order") == 0
+    )
+    native_input = next(
+        r for r in rows if r["payload"].get("item", {}).get("type") == "UserMessage"
+    )
+    native_final = next(
+        r for r in rows if r["payload"].get("item", {}).get("phase") == "final_answer"
+    )
+    final = next(
+        r
+        for r in rows
+        if r["type"] == "response_item" and r["payload"].get("phase") == "final_answer"
+    )
+    start = next(r for r in rows if r["payload"].get("type") == "task_started")
+    complete = rows[-1]
+    objects = {
+        "native-input": native_input,
+        "native-final": native_final,
+        "response-input": initial,
+        "response-final": final,
+        "input": initial,
+        "start": start,
+        "completion": complete,
+    }
+    if mutation.startswith("missing-"):
+        rows.remove(objects[mutation.removeprefix("missing-")])
+    elif mutation.startswith("duplicate-"):
+        rows.insert(
+            rows.index(objects[mutation.removeprefix("duplicate-")]) + 1,
+            copy.deepcopy(objects[mutation.removeprefix("duplicate-")]),
+        )
+    elif mutation == "wrong-order":
+        initial["metadata"]["user_input_order"] = 1
+    elif mutation == "wrong-kind":
+        initial["payload"]["internal_chat_message_metadata_passthrough"][
+            "content_item_kinds"
+        ] = ["user.other"]
+    elif mutation == "altered-input":
+        initial["payload"]["content"][0]["text"] = "synthetic altered input"
+    elif mutation.startswith(("partial-", "nontext-")):
+        target = objects[mutation.split("-", 1)[1]]["payload"]
+        target = target.get("item", target)
+        if mutation.startswith("partial-"):
+            target["content"][0]["text"] = target["content"][0]["text"][:-1]
+        else:
+            target["content"][0]["type"] = "image"
+    elif mutation == "foreign-native-item":
+        native_input["payload"]["thread_id"] = "foreign"
+    elif mutation == "foreign-retained-id":
+        initial["metadata"]["retained_source"]["id"]["message_id"] = "foreign"
+    elif mutation == "wrong-final-id":
+        native_final["payload"]["item"]["id"] = "foreign"
+    elif mutation == "wrong-version":
+        rows[0]["payload"]["cli_version"] = "foreign"
+    elif mutation.startswith("wrong-"):
+        context = next(r["payload"] for r in rows if r["type"] == "turn_context")
+        context[
+            "root_turn_id"
+            if mutation == "wrong-root-turn"
+            else mutation.removeprefix("wrong-")
+        ] = "foreign"
+    elif mutation == "parent-thread":
+        rows[0]["payload"]["parent_thread_id"] = "foreign"
+    elif mutation == "resumed-source":
+        rows[0]["payload"]["source"] = "resume"
+    elif mutation == "later-echo":
+        echo = copy.deepcopy(initial)
+        initial["payload"]["content"][0]["text"] = "synthetic earlier task"
+        rows.insert(rows.index(native_final), echo)
+    else:
+        left = rows.index(native_final)
+        right = rows.index(final)
+        rows[left], rows[right] = rows[right], rows[left]
+    for i, row in enumerate(rows):
+        row["ordinal"] = i
+    with pytest.raises(DISPATCH.CaptureError):
+        original_binding(rows, case)
+
+
+@pytest.mark.parametrize(
+    "changes",
+    [
+        {"exit": 17},
+        {"timeout": True},
+        {"terminal": b"synthetic terminal-only conflict\n"},
+        {"raw": b'{"partial":'},
+        {"events": b'{"partial":'},
+    ],
+)
+def test_native_failure_timeout_or_partial_capture_retains_void(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, changes: dict[str, Any]
+) -> None:
+    """A failed single attempt retains its input and failure without a result."""
+    case = CASES[0]
+    args = recorder(tmp_path, monkeypatch, case, **changes)
+    with pytest.raises(DISPATCH.CaptureError):
+        DISPATCH.run(args, source(case, "prompt"))
+    assert not (args.packet / "result.txt").exists()
+    assert (args.packet / "prompt.txt").read_bytes() == source(case, "prompt")
+    assert json.loads((args.packet / "receipt.json").read_text())["status"] == "failed"
+    assert not (args.packet / "runtime").exists()
+
+
+@pytest.mark.parametrize("case", CASES, ids=[case["case"] for case in CASES])
+@pytest.mark.parametrize("selector", ["missing", "retained-source-v1"])
+def test_recorder_default_remains_ineligible_for_original_schema_cases(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, case: dict[str, Any], selector: str
+) -> None:
+    """No missing selector or failed retained guard can fall through."""
+    args = recorder(tmp_path, monkeypatch, case)
+    if selector == "missing":
+        del args.source_contract
+    else:
+        args.source_contract = selector
+    with pytest.raises(DISPATCH.CaptureError):
+        DISPATCH.run(args, source(case, "prompt"))
+    assert not (args.packet / "result.txt").exists()
+
+
+@pytest.mark.parametrize(
+    "mutation",
+    [
+        "missing-completed",
+        "empty-completed-id",
+        "duplicate-completed",
+        "late-completed",
+    ],
+)
+def test_synthetic_missing_native_compaction_completion_fails(mutation: str) -> None:
+    """A rewritten context needs the producer's completed compaction boundary."""
+    rows = [json.loads(line) for line in source(CASES[2], "raw").splitlines()]
+    item = next(
+        r
+        for r in rows
+        if r["payload"].get("item", {}).get("type") == "ContextCompaction"
+    )
+    if mutation == "missing-completed":
+        rows.remove(item)
+    elif mutation == "empty-completed-id":
+        item["payload"]["item"]["id"] = ""
+    elif mutation == "duplicate-completed":
+        rows.insert(rows.index(item), copy.deepcopy(item))
+    else:
+        rows.append(rows.pop(rows.index(item)))
+    for i, row in enumerate(rows):
+        row["ordinal"] = i
+    with pytest.raises(DISPATCH.CaptureError, match="compaction"):
+        original_binding(rows)
+
+
+@pytest.mark.parametrize("field", ["launch_command", "launch_tool_input"])
+def test_parent_must_authenticate_own_child_launcher(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, field: str
+) -> None:
+    """Reading a matching return alone does not establish the declared invocation."""
+    args, prompt, _result = parent_packet(tmp_path, monkeypatch)
+    spec = json.loads(args.consume_spec.read_text())
+    spec[field] = (
+        ["foreign command"] if field == "launch_command" else "foreign tool input"
+    )
+    args.consume_spec.write_text(json.dumps(spec))
+    with pytest.raises(DISPATCH.CaptureError, match="consumption"):
+        DISPATCH.run(args, prompt)
+
+
+def test_malformed_exec_record_fails_at_capture_seam(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """An invalid exec item cannot escape as an unclassified parser failure."""
+    case = CASES[0]
+    events = [json.loads(line) for line in source(case, "events").splitlines()]
+    next(e for e in events if e["type"] == "item.completed")["item"] = None
+    args = recorder(
+        tmp_path,
+        monkeypatch,
+        case,
+        events=b"".join(json.dumps(e).encode() + b"\n" for e in events),
+    )
+    with pytest.raises(DISPATCH.CaptureError):
+        DISPATCH.run(args, source(case, "prompt"))
+
+
+def test_malformed_child_receipt_retains_consumption_failure(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """A partial stored child request cannot be used as an acquisition certificate."""
+    args, prompt, _result = parent_packet(tmp_path, monkeypatch)
+    (tmp_path / "child/packet/request.json").write_bytes(b'{"partial":')
+    with pytest.raises(DISPATCH.CaptureError, match="consumption"):
+        DISPATCH.run(args, prompt)
+
+
+@pytest.mark.parametrize("failure", ["start-read", "signal"])
+def test_owned_cleanup_platform_failure_preserves_runtime(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, failure: str
+) -> None:
+    """Unavailable ownership checks or signals cannot authorize deletion."""
+    actual_stop = DISPATCH.stop_owned
+    case = CASES[0]
+    args = recorder(tmp_path, monkeypatch, case)
+    monkeypatch.setattr(DISPATCH, "stop_owned", actual_stop)
+
+    def start(*unused: Any, **options: Any) -> SimpleNamespace:
+        if args.observed.get("completed") and failure == "start-read":
+            raise subprocess.TimeoutExpired("synthetic ps", 5)
+        return SimpleNamespace(stdout="synthetic start identity")
+
+    def signal_group(pid: int, sig: int) -> None:
+        raise PermissionError("synthetic signal denial")
+
+    monkeypatch.setattr(DISPATCH.subprocess, "run", start)
+    monkeypatch.setattr(DISPATCH.os, "killpg", signal_group)
+    with pytest.raises(DISPATCH.CaptureError):
+        DISPATCH.run(args, source(case, "prompt"))
+    assert (args.packet / "cleanup-failed.json").exists()
+    assert (args.packet / "runtime").exists()
+    assert json.loads((args.packet / "receipt.json").read_text())["status"] == "failed"

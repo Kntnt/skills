@@ -1,0 +1,14 @@
+........................................................................ [ 42%]
+........................................................................ [ 85%]
+.....................FFFF                                                [100%]
+=================================== FAILURES ===================================
+/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/docs/evaluation/harness/native_dispatch.py:721: AttributeError: 'NoneType' object has no attribute 'get'
+/Users/thomas/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/json/decoder.py:356: json.decoder.JSONDecodeError: Expecting value: line 1 column 12 (char 11)
+/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py:1165: subprocess.TimeoutExpired: Command 'synthetic ps' timed out after 5 seconds
+/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py:1168: PermissionError: synthetic signal denial
+=========================== short test summary info ============================
+FAILED tests/test_evaluation_original_dispatch.py::test_malformed_exec_record_fails_at_capture_seam
+FAILED tests/test_evaluation_original_dispatch.py::test_malformed_child_receipt_retains_consumption_failure
+FAILED tests/test_evaluation_original_dispatch.py::test_owned_cleanup_platform_failure_preserves_runtime[start-read]
+FAILED tests/test_evaluation_original_dispatch.py::test_owned_cleanup_platform_failure_preserves_runtime[signal]
+4 failed, 165 passed in 4.50s

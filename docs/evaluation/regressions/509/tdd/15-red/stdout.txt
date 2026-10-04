@@ -1,0 +1,9 @@
+........................................................................ [ 79%]
+.................FF                                                      [100%]
+=================================== FAILURES ===================================
+/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py:435: Failed: DID NOT RAISE <class 'original_dispatch.CaptureError'>
+/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py:435: Failed: DID NOT RAISE <class 'original_dispatch.CaptureError'>
+=========================== short test summary info ============================
+FAILED tests/test_evaluation_original_dispatch.py::test_synthetic_duplicate_json_keys_cannot_hide_conflicts[raw]
+FAILED tests/test_evaluation_original_dispatch.py::test_synthetic_duplicate_json_keys_cannot_hide_conflicts[events]
+2 failed, 89 passed in 2.43s

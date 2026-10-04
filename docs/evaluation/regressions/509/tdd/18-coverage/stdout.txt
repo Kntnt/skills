@@ -1,0 +1,8 @@
+........................................................................ [ 45%]
+...................................................................F.... [ 90%]
+...............                                                          [100%]
+=================================== FAILURES ===================================
+/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py:583: Failed: DID NOT RAISE <class 'original_dispatch.CaptureError'>
+=========================== short test summary info ============================
+FAILED tests/test_evaluation_original_dispatch.py::test_synthetic_missing_partial_foreign_or_later_originals_fail[wrong-root-turn]
+1 failed, 158 passed in 4.16s

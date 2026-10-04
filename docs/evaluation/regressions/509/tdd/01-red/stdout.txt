@@ -1,0 +1,377 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+___________ test_selected_original_contract_acquires_false_retention ___________
+
+args = Namespace(packet=PosixPath('/private/tmp/kntnt-method-509-builder-20261004-b2qnwsc1/tmp/pytest-of-thomas/pytest-0/test...-thomas/pytest-0/test_selected_original_contrac0/cleanup'), inventory_root=[], source_contract='original-completed-v1')
+prompt = b'# Complete fixture validation\n\nRead `text.md` in the neutral packet, every contract resource listed in\n`contract-...able; otherwise finish `Validation\nincomplete` with missing coverage. Return the complete report without a rewrite.\n'
+
+    def acquire(args: argparse.Namespace, prompt: bytes) -> bytes:
+        """Capture one attempt, retaining unsuccessful receipts without retrying."""
+    
+        # Reject unsupported dispatch bytes before invoking the native CLI.
+        prompt.decode("utf-8")
+        if not prompt:
+            raise CaptureError("empty dispatch brief")
+    
+        # Allocate private native state underneath registered task ownership.
+        packet: Path = args.packet.resolve()
+        runtime = packet / "runtime"
+        native_home = runtime / "home" / ".codex"
+        native_home.mkdir(parents=True)
+    
+        # Check the frozen CLI release with a bounded owned subprocess.
+        native = str(args.native.resolve())
+        actual_version = subprocess.check_output(
+            [native, "--version"],
+            cwd=args.cwd,
+            env=environment(packet),
+            text=True,
+            timeout=15,
+        ).strip()
+        if actual_version != f"codex-cli {args.version}":
+            raise CaptureError("installed CLI differs from frozen version")
+    
+        # Retain the complete dispatch request independently of native output.
+        write_json(
+            packet / "request.json",
+            {
+                "method": "instrumented-native-stdin",
+                "model": args.model,
+                "effort": args.effort,
+                "version": args.version,
+                "prompt_sha256": digest(prompt),
+                "prompt_bytes": len(prompt),
+                "parent": args.parent,
+                "role": args.role,
+                "cwd": str(args.cwd.resolve()),
+                "timeout_seconds": args.timeout,
+            },
+        )
+    
+        # Copy active lifecycle hooks and native configuration into private state.
+        hooks = args.auth_home / "hooks.json"
+        if not hooks.is_file():
+            raise CaptureError("existing lifecycle hook configuration unavailable")
+        shutil.copy2(hooks, native_home / "hooks.json")
+        config = args.auth_home / "config.toml"
+        if config.is_file():
+            shutil.copy2(config, native_home / "config.toml")
+    
+        # Record copied configuration identities and enabled hook execution.
+        write_json(
+            packet / "configuration.json",
+            {
+                "hooks_sha256": digest(hooks.read_bytes()),
+                "config_sha256": digest(config.read_bytes()) if config.is_file() else None,
+                "hooks_enabled_by_command": True,
+            },
+        )
+    
+        # Protect the private credential copy with restrictive permissions.
+        shutil.copy2(args.auth_home / "auth.json", native_home / "auth.json")
+        (native_home / "auth.json").chmod(0o600)
+    
+        # Build private HOME and auxiliary storage from the owned environment.
+        env = environment(packet)
+        env.update(HOME=str(runtime / "home"), CODEX_HOME=str(native_home))
+        for name in (
+            "TMPDIR",
+            "UV_CACHE_DIR",
+            "UV_TOOL_DIR",
+            "UV_TOOL_BIN_DIR",
+            "UV_PYTHON_INSTALL_DIR",
+            "UV_PROJECT_ENVIRONMENT",
+            "XDG_CACHE_HOME",
+            "XDG_DATA_HOME",
+            "XDG_CONFIG_HOME",
+        ):
+            Path(env[name]).mkdir(exist_ok=True)
+    
+        # Inventory declared writable roots with one exact credential exclusion.
+        roots = [args.cwd.resolve(), packet, *[p.resolve() for p in args.inventory_root]]
+        credentials = [native_home / "auth.json"]
+        write_json(packet / "inventory-before.json", inventory(roots, credentials))
+    
+        # Declare one native attempt and its initially unsuccessful receipt.
+        command = [
+            native,
+            "exec",
+            "-C",
+            str(args.cwd.resolve()),
+            "--skip-git-repo-check",
+            "--dangerously-bypass-approvals-and-sandbox",
+            "--dangerously-bypass-hook-trust",
+            "--enable",
+            "hooks",
+            "--json",
+            "--output-last-message",
+            str(packet / "terminal.txt"),
+            "-m",
+            args.model,
+            "-c",
+            f'model_reasoning_effort="{args.effort}"',
+            "-",
+        ]
+        child: subprocess.Popen[bytes] | None = None
+        started = time.monotonic()
+        receipt: dict[str, Any] = {
+            "status": "failed",
+            "command": command,
+            "runtime": str(runtime),
+        }
+    
+        try:
+            # Register the new native group before sending its complete input.
+            with (
+                (packet / "events.jsonl").open("wb") as stdout,
+                (packet / "stderr.txt").open("wb") as stderr,
+            ):
+                child = subprocess.Popen(
+                    command,
+                    env=env,
+                    cwd=args.cwd,
+                    stdin=subprocess.PIPE,
+                    stdout=stdout,
+                    stderr=stderr,
+                    start_new_session=True,
+                )
+                receipt.update({"pid": child.pid, "pgid": child.pid})
+                register(child.pid, args.cleanup_script, env, packet)
+                child.communicate(prompt, timeout=args.timeout)
+    
+            # Reject unsuccessful or ambiguous native completion.
+            receipt["exit"] = child.returncode
+            if child.returncode:
+                raise CaptureError("native child did not complete successfully")
+            sessions = sorted((native_home / "sessions").rglob("*.jsonl"))
+            if len(sessions) != 1:
+                raise CaptureError("missing or extra native sessions")
+    
+            # Bind raw input/context and terminal bytes to the completed result.
+            records = [json.loads(line) for line in sessions[0].read_text().splitlines()]
+>           binding, result = bind_trace(
+                records, prompt, args.model, args.effort, args.version
+            )
+
+docs/evaluation/harness/native_dispatch.py:520: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+docs/evaluation/harness/native_dispatch.py:220: in bind_trace
+    result = retained_message(final_row, turn_id, "assistant")
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+row = {'metadata': {'client_authored': False, 'retained_source': {'complete': False, 'id': {'message_id': 'msg_0c8ca9662bdbe...: '01a1062b-b3f7-7e83-ac50-41f45370681c'}, 'phase': 'final_answer', ...}, 'timestamp': '2026-10-04T09:17:32.561Z', ...}
+turn_id = '01a1062b-b3f7-7e83-ac50-41f45370681c', role = 'assistant'
+
+    def retained_message(row: dict[str, Any], turn_id: str, role: str) -> bytes:
+        """Require complete retained content and agreeing message/turn identities."""
+    
+        # Reject incomplete or conflicting retained identity before reading bytes.
+        payload = row["payload"]
+        identity = payload.get("id")
+        retained = row.get("metadata", {}).get("retained_source", {})
+        if (
+            not isinstance(identity, str)
+            or not identity
+            or payload.get("internal_chat_message_metadata_passthrough", {}).get("turn_id")
+            != turn_id
+            or retained.get("complete") is not True
+            or retained.get("id")
+            != {"message_id": identity, "turn_id": turn_id, "role": role}
+        ):
+>           raise CaptureError("missing or conflicting retained message identity")
+E           original_dispatch.CaptureError: missing or conflicting retained message identity
+
+docs/evaluation/harness/native_dispatch.py:71: CaptureError
+
+The above exception was the direct cause of the following exception:
+
+tmp_path = PosixPath('/private/tmp/kntnt-method-509-builder-20261004-b2qnwsc1/tmp/pytest-of-thomas/pytest-0/test_selected_original_contrac0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x102b6faa0>
+
+    def test_selected_original_contract_acquires_false_retention(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+        """The real recorder's default guard must not decide the explicit contract."""
+        case = CASES[0]
+        args = recorder(tmp_path, monkeypatch, case)
+>       result = DISPATCH.run(args, source(case, 'prompt'))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_evaluation_original_dispatch.py:78: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+docs/evaluation/harness/native_dispatch.py:580: in run
+    return acquire(args, prompt)
+           ^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+args = Namespace(packet=PosixPath('/private/tmp/kntnt-method-509-builder-20261004-b2qnwsc1/tmp/pytest-of-thomas/pytest-0/test...-thomas/pytest-0/test_selected_original_contrac0/cleanup'), inventory_root=[], source_contract='original-completed-v1')
+prompt = b'# Complete fixture validation\n\nRead `text.md` in the neutral packet, every contract resource listed in\n`contract-...able; otherwise finish `Validation\nincomplete` with missing coverage. Return the complete report without a rewrite.\n'
+
+    def acquire(args: argparse.Namespace, prompt: bytes) -> bytes:
+        """Capture one attempt, retaining unsuccessful receipts without retrying."""
+    
+        # Reject unsupported dispatch bytes before invoking the native CLI.
+        prompt.decode("utf-8")
+        if not prompt:
+            raise CaptureError("empty dispatch brief")
+    
+        # Allocate private native state underneath registered task ownership.
+        packet: Path = args.packet.resolve()
+        runtime = packet / "runtime"
+        native_home = runtime / "home" / ".codex"
+        native_home.mkdir(parents=True)
+    
+        # Check the frozen CLI release with a bounded owned subprocess.
+        native = str(args.native.resolve())
+        actual_version = subprocess.check_output(
+            [native, "--version"],
+            cwd=args.cwd,
+            env=environment(packet),
+            text=True,
+            timeout=15,
+        ).strip()
+        if actual_version != f"codex-cli {args.version}":
+            raise CaptureError("installed CLI differs from frozen version")
+    
+        # Retain the complete dispatch request independently of native output.
+        write_json(
+            packet / "request.json",
+            {
+                "method": "instrumented-native-stdin",
+                "model": args.model,
+                "effort": args.effort,
+                "version": args.version,
+                "prompt_sha256": digest(prompt),
+                "prompt_bytes": len(prompt),
+                "parent": args.parent,
+                "role": args.role,
+                "cwd": str(args.cwd.resolve()),
+                "timeout_seconds": args.timeout,
+            },
+        )
+    
+        # Copy active lifecycle hooks and native configuration into private state.
+        hooks = args.auth_home / "hooks.json"
+        if not hooks.is_file():
+            raise CaptureError("existing lifecycle hook configuration unavailable")
+        shutil.copy2(hooks, native_home / "hooks.json")
+        config = args.auth_home / "config.toml"
+        if config.is_file():
+            shutil.copy2(config, native_home / "config.toml")
+    
+        # Record copied configuration identities and enabled hook execution.
+        write_json(
+            packet / "configuration.json",
+            {
+                "hooks_sha256": digest(hooks.read_bytes()),
+                "config_sha256": digest(config.read_bytes()) if config.is_file() else None,
+                "hooks_enabled_by_command": True,
+            },
+        )
+    
+        # Protect the private credential copy with restrictive permissions.
+        shutil.copy2(args.auth_home / "auth.json", native_home / "auth.json")
+        (native_home / "auth.json").chmod(0o600)
+    
+        # Build private HOME and auxiliary storage from the owned environment.
+        env = environment(packet)
+        env.update(HOME=str(runtime / "home"), CODEX_HOME=str(native_home))
+        for name in (
+            "TMPDIR",
+            "UV_CACHE_DIR",
+            "UV_TOOL_DIR",
+            "UV_TOOL_BIN_DIR",
+            "UV_PYTHON_INSTALL_DIR",
+            "UV_PROJECT_ENVIRONMENT",
+            "XDG_CACHE_HOME",
+            "XDG_DATA_HOME",
+            "XDG_CONFIG_HOME",
+        ):
+            Path(env[name]).mkdir(exist_ok=True)
+    
+        # Inventory declared writable roots with one exact credential exclusion.
+        roots = [args.cwd.resolve(), packet, *[p.resolve() for p in args.inventory_root]]
+        credentials = [native_home / "auth.json"]
+        write_json(packet / "inventory-before.json", inventory(roots, credentials))
+    
+        # Declare one native attempt and its initially unsuccessful receipt.
+        command = [
+            native,
+            "exec",
+            "-C",
+            str(args.cwd.resolve()),
+            "--skip-git-repo-check",
+            "--dangerously-bypass-approvals-and-sandbox",
+            "--dangerously-bypass-hook-trust",
+            "--enable",
+            "hooks",
+            "--json",
+            "--output-last-message",
+            str(packet / "terminal.txt"),
+            "-m",
+            args.model,
+            "-c",
+            f'model_reasoning_effort="{args.effort}"',
+            "-",
+        ]
+        child: subprocess.Popen[bytes] | None = None
+        started = time.monotonic()
+        receipt: dict[str, Any] = {
+            "status": "failed",
+            "command": command,
+            "runtime": str(runtime),
+        }
+    
+        try:
+            # Register the new native group before sending its complete input.
+            with (
+                (packet / "events.jsonl").open("wb") as stdout,
+                (packet / "stderr.txt").open("wb") as stderr,
+            ):
+                child = subprocess.Popen(
+                    command,
+                    env=env,
+                    cwd=args.cwd,
+                    stdin=subprocess.PIPE,
+                    stdout=stdout,
+                    stderr=stderr,
+                    start_new_session=True,
+                )
+                receipt.update({"pid": child.pid, "pgid": child.pid})
+                register(child.pid, args.cleanup_script, env, packet)
+                child.communicate(prompt, timeout=args.timeout)
+    
+            # Reject unsuccessful or ambiguous native completion.
+            receipt["exit"] = child.returncode
+            if child.returncode:
+                raise CaptureError("native child did not complete successfully")
+            sessions = sorted((native_home / "sessions").rglob("*.jsonl"))
+            if len(sessions) != 1:
+                raise CaptureError("missing or extra native sessions")
+    
+            # Bind raw input/context and terminal bytes to the completed result.
+            records = [json.loads(line) for line in sessions[0].read_text().splitlines()]
+            binding, result = bind_trace(
+                records, prompt, args.model, args.effort, args.version
+            )
+            terminal = (packet / "terminal.txt").read_bytes()
+            if terminal != result:
+                raise CaptureError("CLI terminal bytes differ from native final message")
+    
+            # Retain a complete result only after all native bindings hold.
+            receipt.update({"status": "complete", "binding": binding})
+            (packet / "result.txt").write_bytes(result)
+    
+            return result
+    
+        # Preserve native capture or timeout failure without fallback.
+        except (CaptureError, subprocess.TimeoutExpired) as exc:
+            receipt["reason"] = str(exc)
+>           raise CaptureError(str(exc)) from exc
+E           original_dispatch.CaptureError: missing or conflicting retained message identity
+
+docs/evaluation/harness/native_dispatch.py:536: CaptureError
+----------------------------- Captured stderr call -----------------------------
+Delete owned disposable runtime: /private/tmp/kntnt-method-509-builder-20261004-b2qnwsc1/tmp/pytest-of-thomas/pytest-0/test_selected_original_contrac0/packet/runtime
+=========================== short test summary info ============================
+FAILED tests/test_evaluation_original_dispatch.py::test_selected_original_contract_acquires_false_retention
+1 failed in 0.05s

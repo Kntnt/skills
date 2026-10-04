@@ -1,0 +1,4 @@
+This is a neutral byte-source proof. Use no skill, routing, subagent, model launch or file edit. Execute exactly the functions.exec input below once. Its inner and outer output allowances are 60000 tokens. Return exactly the complete payload with Unicode and all trailing newlines preserved, without fences or added text. Do not shorten, summarize, read again or retry.
+EXACT TOOL INPUT:
+// @exec: {"yield_time_ms": 1000, "max_output_tokens": 60000}
+const r = await tools.exec_command({"cmd": "python3 -c 'from pathlib import Path; import sys; sys.stdout.buffer.write(Path('\"'\"'/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/docs/evaluation/regressions/509/plan/expected-long.txt'\"'\"').read_bytes())'", "cwd": "/private/tmp/kntnt-method-509-proof-20261004-original-messages/work/direct-long", "shell": "/bin/bash", "login": false, "max_output_tokens": 60000, "yield_time_ms": 1000}); text(r.output);

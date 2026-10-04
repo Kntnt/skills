@@ -1,0 +1,15 @@
+........................................................................ [ 67%]
+...........................FFFFF..                                       [100%]
+=================================== FAILURES ===================================
+/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py:517: Failed: DID NOT RAISE <class 'original_dispatch.CaptureError'>
+/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py:517: Failed: DID NOT RAISE <class 'original_dispatch.CaptureError'>
+/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py:517: Failed: DID NOT RAISE <class 'original_dispatch.CaptureError'>
+/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py:517: Failed: DID NOT RAISE <class 'original_dispatch.CaptureError'>
+/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py:517: Failed: DID NOT RAISE <class 'original_dispatch.CaptureError'>
+=========================== short test summary info ============================
+FAILED tests/test_evaluation_original_dispatch.py::test_parent_refuses_conflicting_child_certificate[extra-session]
+FAILED tests/test_evaluation_original_dispatch.py::test_parent_refuses_conflicting_child_certificate[request-input]
+FAILED tests/test_evaluation_original_dispatch.py::test_parent_refuses_conflicting_child_certificate[helper-identity]
+FAILED tests/test_evaluation_original_dispatch.py::test_parent_refuses_conflicting_child_certificate[binding-identity]
+FAILED tests/test_evaluation_original_dispatch.py::test_parent_refuses_conflicting_child_certificate[retention-flag]
+5 failed, 101 passed in 3.26s

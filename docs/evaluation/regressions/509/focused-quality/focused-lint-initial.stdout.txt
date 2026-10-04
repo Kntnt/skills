@@ -1,0 +1,113 @@
+I001 [*] Import block is un-sorted or un-formatted
+  --> tests/test_evaluation_original_dispatch.py:3:1
+   |
+ 1 |   """Prospective original-message acquisition; primary contents stay opaque."""
+ 2 |
+ 3 | / from __future__ import annotations
+ 4 | |
+ 5 | | import argparse
+ 6 | | import copy
+ 7 | | import gzip
+ 8 | | import hashlib
+ 9 | | import importlib.util
+10 | | import json
+11 | | import os
+12 | | import signal
+13 | | import subprocess
+14 | | from types import SimpleNamespace
+15 | | from pathlib import Path
+16 | | from typing import Any
+17 | |
+18 | | import pytest
+   | |_____________^
+19 |
+20 |   ROOT = Path(__file__).resolve().parents[1]
+   |
+help: Organize imports
+   |
+13 | import subprocess
+14 + from pathlib import Path
+15 | from types import SimpleNamespace
+   - from pathlib import Path
+16 | from typing import Any
+   |
+
+F401 [*] `signal` imported but unused
+  --> tests/test_evaluation_original_dispatch.py:12:8
+   |
+10 | import json
+11 | import os
+12 | import signal
+   |        ^^^^^^
+13 | import subprocess
+14 | from types import SimpleNamespace
+   |
+help: Remove unused import: `signal`
+   |
+11 | import os
+   - import signal
+12 | import subprocess
+   |
+
+RUF059 Unpacked variable `result` is never used
+   --> tests/test_evaluation_original_dispatch.py:802:19
+    |
+800 | ) -> None:
+801 |     """A full parent final cannot repair a truncated actual tool-return boundary."""
+802 |     args, prompt, result = parent_packet(tmp_path, monkeypatch, mutation)
+    |                   ^^^^^^
+803 |     with pytest.raises(DISPATCH.CaptureError, match="consumption"):
+804 |         DISPATCH.run(args, prompt)
+    |
+help: Prefix it with an underscore or any other dummy variable pattern
+
+RUF059 Unpacked variable `result` is never used
+   --> tests/test_evaluation_original_dispatch.py:837:19
+    |
+835 | ) -> None:
+836 |     """A child's terminal or edited receipt cannot replace its original proof."""
+837 |     args, prompt, result = parent_packet(tmp_path, monkeypatch)
+    |                   ^^^^^^
+838 |     child = tmp_path / "child/packet"
+839 |     if mutation == "extra-session":
+    |
+help: Prefix it with an underscore or any other dummy variable pattern
+
+PIE810 Call `startswith` once with a `tuple`
+    --> tests/test_evaluation_original_dispatch.py:1014:10
+     |
+1012 |     elif mutation == "altered-input":
+1013 |         initial["payload"]["content"][0]["text"] = "synthetic altered input"
+1014 |     elif mutation.startswith("partial-") or mutation.startswith("nontext-"):
+     |          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+1015 |         target = objects[mutation.split("-", 1)[1]]["payload"]
+1016 |         target = target["item"] if "item" in target else target
+     |
+help: Merge into a single `startswith` call
+
+SIM401 Use `target.get("item", target)` instead of an `if` block
+    --> tests/test_evaluation_original_dispatch.py:1016:18
+     |
+1014 |     elif mutation.startswith("partial-") or mutation.startswith("nontext-"):
+1015 |         target = objects[mutation.split("-", 1)[1]]["payload"]
+1016 |         target = target["item"] if "item" in target else target
+     |                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+1017 |         if mutation.startswith("partial-"):
+1018 |             target["content"][0]["text"] = target["content"][0]["text"][:-1]
+     |
+help: Replace with `target.get("item", target)`
+
+RUF059 Unpacked variable `result` is never used
+    --> tests/test_evaluation_original_dispatch.py:1130:19
+     |
+1128 | ) -> None:
+1129 |     """Reading a matching return alone does not establish the declared invocation."""
+1130 |     args, prompt, result = parent_packet(tmp_path, monkeypatch)
+     |                   ^^^^^^
+1131 |     spec = json.loads(args.consume_spec.read_text())
+1132 |     spec[field] = (
+     |
+help: Prefix it with an underscore or any other dummy variable pattern
+
+Found 7 errors.
+[*] 2 fixable with the `--fix` option (5 hidden fixes can be enabled with the `--unsafe-fixes` option).

@@ -88,6 +88,14 @@ share the overlay and seat. Label those rows instrumented and keep ordinary
 native parent observations separate; neither fills old gaps or establishes
 uninstrumented reproduction. A semantic candidate claim needs independent
 complete evidence and cannot rest solely on the shim.
+Freeze the guide's source-contract selector explicitly when using complete
+stored originals; the retained-source default keeps its strict guards. Preserve
+false retention flags and distinct representation IDs. Authenticate repeated
+same-task contexts through original compaction windows; replacement history
+cannot recover missing original input or output. Acquisition completeness and
+fixture conformance are separate dispositions. New capability proofs and
+prospective campaigns keep their own finite allocations; historical VOIDs and
+reader/amend budgets remain unchanged.
 
 These rules hold for every evaluation of an editorial Skill, so that a ticket asking for one states only what is its own — its inputs, its criteria, the plan it copies — and its builder finds the rest here. A ticket that needs something else says so and why; where it says nothing, these rules hold. The first set binds an evaluation in any provider family. The second is how a Claude-family evaluation keeps them in the Claude Code Harness.
 

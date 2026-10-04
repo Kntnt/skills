@@ -8,8 +8,9 @@ tooling; normal editorial Skill invocations do not load it.
 ## Prepare before freezing
 
 Commit a finite preparation plan naming proposed fixtures, the actual resolved
-contract resources, two independent validators, and a bounded replacement
-allowance. Keep target classification separate from whole-text conformance.
+contract resources, two independent validators, and explicit attempt and
+replacement bounds. Zero replacements stays zero. Keep target classification
+separate from whole-text conformance.
 Give each validator a neutral packet with the complete fixture, material needed
 for source support, exact contract files, a path-and-digest manifest, and the
 [complete-contract brief](complete-contract-brief.md). The packet reveals no
@@ -57,6 +58,39 @@ other. For the Oct3 repair, editorial work is GPT-6.1-Sol/xhigh and whole-task
 verification is GPT-6-Astra/high, both on CLI0.160.0; actual native contexts
 settle the launch, and an unavailable seat is an explicit capability obstacle.
 
+## Select the source contract
+
+Freeze the selector before launching. Omitting `--source-contract` selects
+`retained-source-v1`: the accepted `bind_trace` contract still requires true
+per-message retained completeness and one actual context. A failed guard never
+switches contracts.
+
+`--source-contract original-completed-v1` selects a separate prospective claim:
+complete **stored original** input and final messages. Original order-0
+`user.text`, completed UserMessage and supplied stdin must agree exactly. The
+original final response item and completed AgentMessage agree on identity and
+bytes; task completion, exec JSON final and CLI terminal agree on bytes. The
+exec item ID has its own namespace. Preserve both initial message IDs and every
+retained flag; false remains false. Neither selector establishes unrecorded
+provider responses, complete model memory or complete retained context.
+
+The original contract requires fresh exec/user ancestry, the actual declared
+CLI/model/effort, a contiguous original ordinal sequence and unique ordered task
+boundaries. Repeated contexts need a complete authenticated compaction chain:
+original window IDs and numbers, task/response/resume identity, stable effective
+seat, the genuine completed ContextCompaction item and corroborating replacement
+and retained metadata. In the observed CLI0.160.0 source, the compacted record
+precedes the renewed context, which precedes the native ContextCompaction
+completion. Missing originals cannot be recovered from replacement history.
+This version refuses incomplete aggregate compaction source while preserving
+false per-message flags and their separately measured retained bytes. Aggregate
+false flags do not promote those messages to complete retention.
+
+The [#509 preparation packet](../regressions/509/README.md) records this
+extension's proof status. Implementation and offline tests are not a native
+capability receipt. Use a method only within its independently established
+bounds and a separately frozen prospective campaign.
+
 ## Acquire one child
 
 Pass the complete filled brief to the helper's stdin, without a second prompt
@@ -76,8 +110,10 @@ allowance carries every result byte; truncated transport fails acquisition even
 when the child completed. A failed receipt is never an empty list or a negative
 editorial result. There is one attempt and no automatic retry.
 
-Inventory every staged writable root, including private HOME and scratch;
-`.git` paths receive the same coverage. Retain directories, file kinds, modes,
+The original contract keeps real HOME and isolates CODEX_HOME, caches and
+environments inside owned runtime. The unchanged retained-source default uses
+its private HOME. Inventory every staged writable root, including runtime and
+scratch; `.git` paths receive the same coverage. Retain directories, file kinds, modes,
 symlink destinations and file content digests. The complete recorder packet,
 including lifecycle output and private runtime, is inventoried alongside the
 staged roots. Only the explicitly enumerated
@@ -89,13 +125,42 @@ cleanup receipts. Move actual deliverables out of registered temporary roots
 before session cleanup. Failed ownership verification preserves reachable
 runtime and reports the outstanding group.
 
+## Prove whole parent consumption
+
+The optional original-contract `--consume-spec` takes frozen JSON containing
+`packet`, `launch_command`, `launch_tool_input`, `command` and `tool_input`.
+Commands are exact native CommandExecution argv arrays; tool inputs are exact
+`exec` JavaScript source. The child packet is separately reauthenticated,
+including its original source digests, strict one-session boundary, declared
+seat, observed retained flags, helper identity, exit and cleanup. The parent
+must execute the declared launcher and then receive the entire child return in
+its original plaintext tool response, with agreeing completed command stdout,
+formatted output and final bytes. A later full parent final cannot repair a
+truncated tool response. This checks source consumption, not understanding or
+an editorial verdict.
+
+A frozen proof may relay the complete recorder stdout through an owned file.
+Disclose that file relay, retain the actual launcher and read commands and keep
+the original child sources. A terminal-only file, matching later echo or
+reconstructed source is insufficient. The receipt records both namespaces,
+source offsets/digests and actual consumption ordinals. It never widens the
+helper's one-native-session selector into an ordinary spawn consumer.
+
+`--auto-compact-token-limit` is explicit original-contract instrumentation.
+It passes the supported CLI token threshold with total-context scope and records
+both overrides before launch. A lowered threshold proves only the instrumented
+scenario; missing genuine compaction is an unmet boundary. Freeze finite input,
+tool-output and time bounds before any launch. There is no automatic retry.
+
 ## Verify and record
 
-Require the unique initial order-0 retained user task and its native v2 completed
-UserMessage to agree on complete UTF-8 bytes and turn identity. Session/thread
-identity, task start, context, final retained message, native completed
-AgentMessage and task completion must agree in order. Retain frontmatter and
-trailing newlines. A separate draft, summary,
+Require the selected contract's unique original order-0 task and its native v2
+completed UserMessage to agree on complete UTF-8 bytes and turn identity. Bind
+session/thread identity, task start, each authenticated context, original final
+response item, native completed AgentMessage, completion and CLI terminal bytes
+in the supported order. The original contract also binds exec transport; the
+default additionally requires complete retained messages. Retain frontmatter
+and trailing newlines. A separate draft, summary,
 matching ciphertext or later echo is no input receipt. Keep parse gaps explicit.
 Judges receive full source/artifact/report states under neutral paths and the
 frozen applicable contract; preserve splits under the campaign's existing rule.

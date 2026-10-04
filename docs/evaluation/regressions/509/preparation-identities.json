@@ -1,0 +1,17 @@
+{
+  "authority_file_sha256": "1bc67c997743ca0d070d21903f49add759e94e0bfe218e491f263834cebe1b24",
+  "base_helper_sha256": "b6cf291a34711dcbe0bb247bbee6a4b8a8fb5ca662946afa2bb04aff9c52627b",
+  "current_helper_sha256": "55df057e9a1289f13278e18280273573c7b3615bc60067371658146d230cabed",
+  "current_test_sha256": "0d4eeef4876a829ad094b131bfd82549d870a7548df08f096a6af450b594d898",
+  "sequence_count": 52,
+  "final_test_exit": 0,
+  "native_proof_sessions": 0,
+  "test_only_corrections": [
+    "04-red included an invalid empty-message mutation; original compaction message is already empty. 04-corrected-red was rerun before corrected source guard, and all16 behavioral failures observed. Initial 04-green failure retained.",
+    "18-coverage wrong-root-turn mutation used wrong field name; no production change satisfied it. 19-red uses corrected mutation and demonstrates four new missing-native-compaction failures.",
+    "19-green used the wrong assumed compaction completion order; authentic source rejects that assumption. Corrected order is compacted row -> renewed context -> completed ContextCompaction. 19-corrected-green retained.",
+    "Initial lint7 and mypy7 type/style findings were not causal RED. Lint rerun retained; first mypy tool observation remains in full author native transcript. Corrected focused static checks pass.",
+    "Final plan self-index entry was removed: a file cannot contain its own changing digest. Parent JSON formatting mismatch received authentic25-red before25-green; all committed plan artifact hashes now match."
+  ],
+  "final_test_count": 216
+}

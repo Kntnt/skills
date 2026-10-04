@@ -32,3 +32,9 @@ classification has been supplied.
 Finish with `Validation complete` only when every applicable rule is accounted
 for and every supplied resource was available; otherwise finish `Validation
 incomplete` with missing coverage. Return the complete report without a rewrite.
+
+`Validation complete` describes this report's coverage. The caller records
+native acquisition separately under its frozen source contract. Return every
+required item; preserve quoted bytes and newlines. A stored original report can
+be complete while retained context is incomplete, and this coverage statement
+does not certify retained context or model memory.

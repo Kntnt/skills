@@ -1,0 +1,11 @@
+........................................................................ [ 90%]
+.....FFF                                                                 [100%]
+=================================== FAILURES ===================================
+/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py:382: AssertionError: assert None == 'f297557163440c5c29f4ec723708097c87ed2fe3eb97c06de44c69fe7feca94f'
+/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py:385: assert 0 == 397
+/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py:390: assert 0 == 1
+=========================== short test summary info ============================
+FAILED tests/test_evaluation_original_dispatch.py::test_receipt_describes_original_sources_and_limits[source-digests]
+FAILED tests/test_evaluation_original_dispatch.py::test_receipt_describes_original_sources_and_limits[source-offsets]
+FAILED tests/test_evaluation_original_dispatch.py::test_receipt_describes_original_sources_and_limits[compaction-flags]
+3 failed, 77 passed in 2.04s

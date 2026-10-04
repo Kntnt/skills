@@ -1,0 +1,17 @@
+[
+  {
+    "path": "docs/evaluation/harness/native_dispatch.py",
+    "sha256": "705aab590ed86704c81990f40acad1f6578ef4357c1647e201bd2034c8fcca05",
+    "bytes": 32809
+  },
+  {
+    "path": "tests/test_evaluation_dispatch.py",
+    "sha256": "741e9fd186f10a2a747f0164486f1af6520fc62113635c55a88fafacd6cce83e",
+    "bytes": 16172
+  },
+  {
+    "path": "tests/test_evaluation_original_dispatch.py",
+    "sha256": "9971af2cce29bdb62df78738e104f338a222f3a79ee0ec26762bc11ec9608f26",
+    "bytes": 3925
+  }
+]

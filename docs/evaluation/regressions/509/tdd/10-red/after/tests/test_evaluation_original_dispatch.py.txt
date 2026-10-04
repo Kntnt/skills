@@ -1,0 +1,312 @@
+"""Prospective original-message acquisition; primary contents stay opaque."""
+from __future__ import annotations
+
+import argparse
+import copy
+import gzip
+import hashlib
+import importlib.util
+import json
+import os
+from pathlib import Path
+from typing import Any
+
+import pytest
+
+ROOT = Path(__file__).resolve().parents[1]
+EVIDENCE = ROOT / 'docs/evaluation/regressions/509'
+SPEC = importlib.util.spec_from_file_location('original_dispatch', ROOT / 'docs/evaluation/harness/native_dispatch.py')
+assert SPEC is not None and SPEC.loader is not None
+DISPATCH = importlib.util.module_from_spec(SPEC)
+SPEC.loader.exec_module(DISPATCH)
+CASES = json.loads((EVIDENCE / 'opaque-originals/manifest.json').read_text())
+
+
+def source(case: dict[str, Any], kind: str) -> bytes:
+    """Read lossless copies against independent original byte identities."""
+    identity = case['files'][kind]
+    data = gzip.decompress((EVIDENCE / identity['fixture']).read_bytes())
+    assert len(data) == identity['bytes']
+    assert hashlib.sha256(data).hexdigest() == identity['sha256']
+    return data
+
+
+def recorder(tmp_path: Path, monkeypatch: pytest.MonkeyPatch, case: dict[str, Any], **changes: Any) -> argparse.Namespace:
+    """Supply existing opaque transport at the external subprocess seam.
+
+    No native session is launched. Registration and termination are external
+    lifecycle operations replaced by inert stand-ins for this offline test.
+    """
+    auth = tmp_path / 'auth'
+    auth.mkdir()
+    (auth / 'hooks.json').write_text('{"hooks":{}}')
+    (auth / 'auth.json').write_text('synthetic credential')
+    native = tmp_path / 'native'
+    native.write_bytes(b'synthetic executable, never executed')
+    packet = tmp_path / 'packet'
+    args = argparse.Namespace(packet=packet, cwd=tmp_path, model=case['model'], effort=case['effort'], version=case['version'], parent='synthetic-parent', role='neutral', timeout=1200, native=native, auth_home=auth, cleanup_script=tmp_path / 'cleanup', inventory_root=[], source_contract='original-completed-v1')
+    args.observed = {}
+    monkeypatch.setattr(DISPATCH.os, 'getpgrp', os.getpid)
+    monkeypatch.setattr(DISPATCH, 'register', lambda *args: None)
+    monkeypatch.setattr(DISPATCH, 'stop_owned', lambda child: None)
+    monkeypatch.setattr(DISPATCH.subprocess, 'check_output', lambda *args, **kwargs: 'codex-cli 0.160.0\n')
+
+    class Transport:
+        """Finish the exact stored source; mutations are explicitly synthetic."""
+        pid = os.getpid()
+        returncode = 0
+
+        def __init__(self, command: list[str], **kwargs: Any) -> None:
+            self.options = kwargs
+            args.observed.update(command=command, env=kwargs['env'])
+
+        def communicate(self, prompt: bytes, timeout: float) -> None:
+            assert prompt == source(case, 'prompt')
+            sessions = Path(self.options['env']['CODEX_HOME']) / 'sessions'
+            sessions.mkdir()
+            (sessions / 'original.jsonl').write_bytes(changes.get('raw', source(case, 'raw')))
+            self.options['stdout'].write(changes.get('events', source(case, 'events')))
+            (packet / 'terminal.txt').write_bytes(changes.get('terminal', source(case, 'terminal')))
+            self.returncode = changes.get('exit', 0)
+
+    monkeypatch.setattr(DISPATCH.subprocess, 'Popen', Transport)
+    return args
+
+
+def test_selected_original_contract_acquires_false_retention(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """The real recorder's default guard must not decide the explicit contract."""
+    case = CASES[0]
+    args = recorder(tmp_path, monkeypatch, case)
+    result = DISPATCH.run(args, source(case, 'prompt'))
+    assert hashlib.sha256(result).hexdigest() == case['files']['terminal']['sha256']
+    receipt = json.loads((args.packet / 'receipt.json').read_text())
+    assert receipt['binding']['source_contract'] == 'original-completed-v1'
+    assert receipt['binding']['final_retained_source']['complete'] is False
+    assert not (args.packet / 'runtime').exists()
+
+
+@pytest.mark.parametrize('case', CASES, ids=[case['case'] for case in CASES])
+def test_all_original_sources_are_acquired_without_rewriting_retention(tmp_path: Path, monkeypatch: pytest.MonkeyPatch, case: dict[str, Any]) -> None:
+    """Stored originals bind even where per-message retention is incomplete."""
+    args = recorder(tmp_path, monkeypatch, case)
+    result = DISPATCH.run(args, source(case, 'prompt'))
+    assert hashlib.sha256(result).hexdigest() == case['files']['terminal']['sha256']
+    rows = [json.loads(line) for line in source(case, 'raw').splitlines()]
+    original = copy.deepcopy(rows)
+    binding, bound = DISPATCH.bind_original_trace(rows, source(case, 'prompt'), case['model'], case['effort'], case['version'])
+    assert bound == result
+    assert rows == original
+    assert binding['native_input_id'] != binding['original_input_id']
+    if case['case'] == 'A':
+        assert binding['initial_retained_source']['complete'] is False
+        assert binding['final_retained_source']['complete'] is True
+    else:
+        assert binding['initial_retained_source']['complete'] is True
+        assert binding['final_retained_source']['complete'] is False
+    with pytest.raises(DISPATCH.CaptureError):
+        DISPATCH.bind_trace(rows, source(case, 'prompt'), case['model'], case['effort'], case['version'])
+
+
+def original_binding(rows: list[dict[str, Any]], case: dict[str, Any] | None = None) -> tuple[dict[str, Any], bytes]:
+    """Drive the original-source binder with frozen declared seat and input."""
+    case = case or CASES[2]
+    return DISPATCH.bind_original_trace(rows, source(case, 'prompt'), case['model'], case['effort'], case['version'])
+
+
+@pytest.mark.parametrize('field,value', [
+    ('previous_window_id', 'foreign-window'), ('first_window_id', 'foreign-window'),
+    ('window_id', ''), ('window_id', '01a10630-3d5d-7091-8037-fc7c0532cd36'),
+    ('window_number', 2), ('window_number', True),
+])
+def test_synthetic_compaction_window_chain_corruption_fails(field: str, value: Any) -> None:
+    """An original compacted task requires actual sequential window identities."""
+    rows = [json.loads(line) for line in source(CASES[2], 'raw').splitlines()]
+    compacted = next(row for row in rows if row['type'] == 'compacted')
+    compacted['payload'][field] = value
+    with pytest.raises(DISPATCH.CaptureError, match='window'):
+        original_binding(rows)
+
+
+@pytest.mark.parametrize('path,value', [
+    ('latest_token_usage_record.thread_id', 'foreign'),
+    ('latest_token_usage_record.session_id', 'foreign'),
+    ('latest_token_usage_record.turn_id', 'foreign'),
+    ('latest_token_usage_record.root_turn_id', 'foreign'),
+    ('latest_token_usage_record.response_id', 'foreign'),
+    ('compaction_response_id', ''),
+    ('resume_metadata.last_started_turn_id', 'foreign'),
+    ('resume_metadata.previous_turn_settings.model', 'foreign'),
+    ('resume_metadata.previous_turn_settings.comp_hash', 'foreign'),
+    ('resume_metadata.multi_agent_version', 'foreign'),
+    ('message', None), ('replacement_history', None),
+    ('replacement_history_metadata', []), ('retained_context.incomplete', True),
+    ('retained_context.user_messages_incomplete', True),
+    ('retained_context.assistant_messages_incomplete', True),
+])
+def test_synthetic_incomplete_or_foreign_compaction_source_fails(path: str, value: Any) -> None:
+    """Window IDs alone cannot authenticate a completed compaction source."""
+    rows = [json.loads(line) for line in source(CASES[2], 'raw').splitlines()]
+    target = next(row['payload'] for row in rows if row['type'] == 'compacted')
+    keys = path.split('.')
+    for key in keys[:-1]:
+        target = target[key]
+    target[keys[-1]] = value
+    with pytest.raises(DISPATCH.CaptureError, match='compaction'):
+        original_binding(rows)
+
+
+@pytest.mark.parametrize('mutation', ['ordinal-gap', 'missing-ordinal', 'bool-ordinal', 'late-meta', 'late-context', 'late-compaction', 'missing-window', 'nested-seat'])
+def test_synthetic_unaccounted_original_source_order_fails(mutation: str) -> None:
+    """Stored record continuity and context scope must bound the whole task."""
+    rows = [json.loads(line) for line in source(CASES[2], 'raw').splitlines()]
+    if mutation == 'ordinal-gap':
+        rows[40]['ordinal'] += 1
+    elif mutation == 'missing-ordinal':
+        del rows[40]['ordinal']
+    elif mutation == 'bool-ordinal':
+        rows[0]['ordinal'] = False
+    elif mutation == 'late-meta':
+        rows.append(rows.pop(0))
+    elif mutation == 'late-context':
+        rows.append(rows.pop(next(i for i,r in enumerate(rows) if r['type'] == 'turn_context' and i > 20)))
+    elif mutation == 'late-compaction':
+        rows.append(rows.pop(next(i for i,r in enumerate(rows) if r['type'] == 'compacted')))
+    elif mutation == 'missing-window':
+        rows[0]['payload'].pop('context_window')
+    else:
+        next(r['payload'] for r in rows if r['type'] == 'turn_context')['collaboration_mode']['settings']['reasoning_effort'] = 'low'
+    if mutation.startswith('late-'):
+        for i,row in enumerate(rows):
+            row['ordinal'] = i
+    with pytest.raises(DISPATCH.CaptureError):
+        original_binding(rows)
+
+
+@pytest.mark.parametrize('path,value', [
+    ('replacement_history.4.id', 'foreign'),
+    ('replacement_history.4.content.0.text', 'synthetic altered input'),
+    ('replacement_history_metadata.4.user_input_order', 1),
+    ('replacement_history_metadata.4.retained_source.complete', True),
+    ('retained_context.user_messages.0.message_id', 'foreign'),
+    ('retained_context.user_messages.0.turn_id', 'foreign'),
+    ('retained_context.user_messages.0.revision', 'foreign'),
+    ('retained_context.user_messages.0.order', 1),
+    ('retained_context.user_messages.0.complete', True),
+    ('retained_context.assistant_messages.0.message_id', 'foreign'),
+    ('retained_context.assistant_messages.0.complete', False),
+    ('retained_context.next_order', 99),
+])
+def test_synthetic_compaction_corroboration_conflicts_fail(path: str, value: Any) -> None:
+    """Replacement and retained identities corroborate, never replace originals."""
+    rows = [json.loads(line) for line in source(CASES[2], 'raw').splitlines()]
+    target = next(row['payload'] for row in rows if row['type'] == 'compacted')
+    keys = path.split('.')
+    for key in keys[:-1]:
+        target = target[int(key)] if isinstance(target, list) else target[key]
+    target[keys[-1]] = value
+    with pytest.raises(DISPATCH.CaptureError, match='compaction'):
+        original_binding(rows)
+
+
+@pytest.mark.parametrize('mutation', ['foreign-thread', 'missing-start', 'duplicate-start', 'missing-completion', 'duplicate-completion', 'failed-turn', 'altered-final', 'missing-final', 'duplicate-item'])
+def test_synthetic_exec_transport_conflicts_fail(tmp_path: Path, monkeypatch: pytest.MonkeyPatch, mutation: str) -> None:
+    """Native raw binding also requires an agreeing successful exec transport."""
+    case = CASES[0]
+    events = [json.loads(line) for line in source(case, 'events').splitlines()]
+    finals = [i for i,event in enumerate(events) if event.get('type') == 'item.completed' and event.get('item', {}).get('type') == 'agent_message']
+    if mutation == 'foreign-thread':
+        events[0]['thread_id'] = 'foreign'
+    elif mutation == 'missing-start':
+        events = [e for e in events if e['type'] != 'turn.started']
+    elif mutation == 'duplicate-start':
+        events.insert(2, {'type': 'turn.started'})
+    elif mutation == 'missing-completion':
+        events = [e for e in events if e['type'] != 'turn.completed']
+    elif mutation == 'duplicate-completion':
+        events.append(copy.deepcopy(events[-1]))
+    elif mutation == 'failed-turn':
+        events.append({'type': 'turn.failed', 'error': {'message': 'synthetic failure'}})
+    elif mutation == 'altered-final':
+        events[finals[-1]]['item']['text'] += 'synthetic mismatch'
+    elif mutation == 'missing-final':
+        events.pop(finals[-1])
+    else:
+        events.insert(finals[-1] + 1, copy.deepcopy(events[finals[-1]]))
+    data = b''.join(json.dumps(e).encode() + b'\n' for e in events)
+    args = recorder(tmp_path, monkeypatch, case, events=data)
+    with pytest.raises(DISPATCH.CaptureError, match='exec'):
+        DISPATCH.run(args, source(case, 'prompt'))
+    assert not (args.packet / 'result.txt').exists()
+    assert json.loads((args.packet / 'receipt.json').read_text())['status'] == 'failed'
+
+
+@pytest.mark.parametrize('failure', ['owned-group', 'runtime'])
+def test_cleanup_failure_never_publishes_complete_result(tmp_path: Path, monkeypatch: pytest.MonkeyPatch, failure: str) -> None:
+    """Binding is provisional until owned group and runtime cleanup succeed."""
+    case = CASES[0]
+    args = recorder(tmp_path, monkeypatch, case)
+    if failure == 'owned-group':
+        def stop(child: Any) -> None:
+            raise DISPATCH.CaptureError('synthetic unresolved owned group')
+        monkeypatch.setattr(DISPATCH, 'stop_owned', stop)
+    else:
+        def remove(path: Path) -> None:
+            raise OSError('synthetic runtime removal failure')
+        monkeypatch.setattr(DISPATCH.shutil, 'rmtree', remove)
+    with pytest.raises((DISPATCH.CaptureError, OSError)):
+        DISPATCH.run(args, source(case, 'prompt'))
+    assert not (args.packet / 'result.txt').exists()
+    assert json.loads((args.packet / 'receipt.json').read_text())['status'] == 'failed'
+    assert (args.packet / 'runtime').exists()
+
+
+def test_native_deadline_counts_registration_before_input(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """Advance the injected clock after native start; no fork/deadline race."""
+    case = CASES[0]
+    args = recorder(tmp_path, monkeypatch, case)
+    instant = [0.0]
+    registrations = [0]
+    def register(*unused: Any) -> None:
+        registrations[0] += 1
+        if registrations[0] == 2:
+            instant[0] = 1201.0
+    monkeypatch.setattr(DISPATCH, 'register', register)
+    monkeypatch.setattr(DISPATCH.time, 'monotonic', lambda: instant[0])
+    with pytest.raises(DISPATCH.CaptureError, match='deadline'):
+        DISPATCH.run(args, source(case, 'prompt'))
+    assert registrations[0] == 2
+    assert not (args.packet / 'result.txt').exists()
+
+
+@pytest.mark.parametrize('timeout', [0, -1, float('nan'), float('inf'), 1201])
+def test_original_contract_refuses_unbounded_native_deadline(tmp_path: Path, monkeypatch: pytest.MonkeyPatch, timeout: float) -> None:
+    """The selected prospective contract has a finite native session ceiling."""
+    case = CASES[0]
+    args = recorder(tmp_path, monkeypatch, case)
+    args.timeout = timeout
+    with pytest.raises(DISPATCH.CaptureError, match='deadline'):
+        DISPATCH.run(args, source(case, 'prompt'))
+
+
+def test_original_launch_keeps_real_home_and_prelaunch_source_identities(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """The prospective request records the actual implementation before launch."""
+    case = CASES[0]
+    args = recorder(tmp_path, monkeypatch, case)
+    DISPATCH.run(args, source(case, 'prompt'))
+    assert args.observed['env']['HOME'] == os.environ['HOME']
+    request = json.loads((args.packet / 'request.json').read_text())
+    assert request.get('source_contract') == 'original-completed-v1'
+    identities = request.get('prelaunch_sources', {})
+    assert identities.get('helper_sha256') == hashlib.sha256((ROOT / 'docs/evaluation/harness/native_dispatch.py').read_bytes()).hexdigest()
+    assert identities.get('native_sha256') == hashlib.sha256(args.native.read_bytes()).hexdigest()
+    assert identities.get('recorder_sha256') == identities.get('helper_sha256')
+
+
+def test_unknown_contract_fails_before_native_attempt(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """An invalid direct API selector cannot spend a native attempt."""
+    case = CASES[0]
+    args = recorder(tmp_path, monkeypatch, case)
+    args.source_contract = 'synthetic-unknown'
+    with pytest.raises(DISPATCH.CaptureError, match='source contract'):
+        DISPATCH.run(args, source(case, 'prompt'))
+    assert args.observed == {}

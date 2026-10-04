@@ -1,0 +1,10 @@
+........................................................................ [ 43%]
+........................................................................ [ 87%]
+...................FF                                                    [100%]
+=================================== FAILURES ===================================
+/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py:632: Failed: DID NOT RAISE <class 'original_dispatch.CaptureError'>
+/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py:632: Failed: DID NOT RAISE <class 'original_dispatch.CaptureError'>
+=========================== short test summary info ============================
+FAILED tests/test_evaluation_original_dispatch.py::test_parent_must_authenticate_own_child_launcher[launch_command]
+FAILED tests/test_evaluation_original_dispatch.py::test_parent_must_authenticate_own_child_launcher[launch_tool_input]
+2 failed, 163 passed in 4.35s

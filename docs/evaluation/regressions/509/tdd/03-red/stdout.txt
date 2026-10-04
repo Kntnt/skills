@@ -1,0 +1,40 @@
+......FFFFFF                                                             [100%]
+=================================== FAILURES ===================================
+_ test_synthetic_compaction_window_chain_corruption_fails[previous_window_id-foreign-window] _
+tests/test_evaluation_original_dispatch.py:124: in test_synthetic_compaction_window_chain_corruption_fails
+    with pytest.raises(DISPATCH.CaptureError, match='window'):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE <class 'original_dispatch.CaptureError'>
+_ test_synthetic_compaction_window_chain_corruption_fails[first_window_id-foreign-window] _
+tests/test_evaluation_original_dispatch.py:124: in test_synthetic_compaction_window_chain_corruption_fails
+    with pytest.raises(DISPATCH.CaptureError, match='window'):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE <class 'original_dispatch.CaptureError'>
+_____ test_synthetic_compaction_window_chain_corruption_fails[window_id-] ______
+tests/test_evaluation_original_dispatch.py:124: in test_synthetic_compaction_window_chain_corruption_fails
+    with pytest.raises(DISPATCH.CaptureError, match='window'):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE <class 'original_dispatch.CaptureError'>
+_ test_synthetic_compaction_window_chain_corruption_fails[window_id-01a10630-3d5d-7091-8037-fc7c0532cd36] _
+tests/test_evaluation_original_dispatch.py:124: in test_synthetic_compaction_window_chain_corruption_fails
+    with pytest.raises(DISPATCH.CaptureError, match='window'):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE <class 'original_dispatch.CaptureError'>
+___ test_synthetic_compaction_window_chain_corruption_fails[window_number-2] ___
+tests/test_evaluation_original_dispatch.py:124: in test_synthetic_compaction_window_chain_corruption_fails
+    with pytest.raises(DISPATCH.CaptureError, match='window'):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE <class 'original_dispatch.CaptureError'>
+_ test_synthetic_compaction_window_chain_corruption_fails[window_number-True] __
+tests/test_evaluation_original_dispatch.py:124: in test_synthetic_compaction_window_chain_corruption_fails
+    with pytest.raises(DISPATCH.CaptureError, match='window'):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE <class 'original_dispatch.CaptureError'>
+=========================== short test summary info ============================
+FAILED tests/test_evaluation_original_dispatch.py::test_synthetic_compaction_window_chain_corruption_fails[previous_window_id-foreign-window]
+FAILED tests/test_evaluation_original_dispatch.py::test_synthetic_compaction_window_chain_corruption_fails[first_window_id-foreign-window]
+FAILED tests/test_evaluation_original_dispatch.py::test_synthetic_compaction_window_chain_corruption_fails[window_id-]
+FAILED tests/test_evaluation_original_dispatch.py::test_synthetic_compaction_window_chain_corruption_fails[window_id-01a10630-3d5d-7091-8037-fc7c0532cd36]
+FAILED tests/test_evaluation_original_dispatch.py::test_synthetic_compaction_window_chain_corruption_fails[window_number-2]
+FAILED tests/test_evaluation_original_dispatch.py::test_synthetic_compaction_window_chain_corruption_fails[window_number-True]
+6 failed, 6 passed in 0.41s

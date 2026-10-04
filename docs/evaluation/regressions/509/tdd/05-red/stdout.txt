@@ -1,0 +1,16 @@
+............................FFFFF..F                                     [100%]
+=================================== FAILURES ===================================
+/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py:179: Failed: DID NOT RAISE <class 'original_dispatch.CaptureError'>
+/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py:179: Failed: DID NOT RAISE <class 'original_dispatch.CaptureError'>
+/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py:179: Failed: DID NOT RAISE <class 'original_dispatch.CaptureError'>
+/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py:179: Failed: DID NOT RAISE <class 'original_dispatch.CaptureError'>
+/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py:179: Failed: DID NOT RAISE <class 'original_dispatch.CaptureError'>
+/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py:179: Failed: DID NOT RAISE <class 'original_dispatch.CaptureError'>
+=========================== short test summary info ============================
+FAILED tests/test_evaluation_original_dispatch.py::test_synthetic_unaccounted_original_source_order_fails[ordinal-gap]
+FAILED tests/test_evaluation_original_dispatch.py::test_synthetic_unaccounted_original_source_order_fails[missing-ordinal]
+FAILED tests/test_evaluation_original_dispatch.py::test_synthetic_unaccounted_original_source_order_fails[bool-ordinal]
+FAILED tests/test_evaluation_original_dispatch.py::test_synthetic_unaccounted_original_source_order_fails[late-meta]
+FAILED tests/test_evaluation_original_dispatch.py::test_synthetic_unaccounted_original_source_order_fails[late-context]
+FAILED tests/test_evaluation_original_dispatch.py::test_synthetic_unaccounted_original_source_order_fails[nested-seat]
+6 failed, 30 passed in 1.11s

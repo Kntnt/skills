@@ -1,0 +1,11 @@
+.......................................................................F [ 97%]
+FF                                                                       [100%]
+=================================== FAILURES ===================================
+/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py:341: Failed: DID NOT RAISE <class 'original_dispatch.CaptureError'>
+/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py:341: Failed: DID NOT RAISE <class 'original_dispatch.CaptureError'>
+/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py:341: Failed: DID NOT RAISE <class 'original_dispatch.CaptureError'>
+=========================== short test summary info ============================
+FAILED tests/test_evaluation_original_dispatch.py::test_recorder_refuses_to_stop_unverified_identity[reused-pid]
+FAILED tests/test_evaluation_original_dispatch.py::test_recorder_refuses_to_stop_unverified_identity[unknown-start]
+FAILED tests/test_evaluation_original_dispatch.py::test_recorder_refuses_to_stop_unverified_identity[foreign-group]
+3 failed, 71 passed in 1.83s

@@ -1,0 +1,22 @@
+{
+  "bind_trace": {
+    "unchanged": true,
+    "base_sha256": "4e2188ea9b334b8298eaf43d6bae87f012a113db1da580d7b95c7670f0aeda90",
+    "current_sha256": "4e2188ea9b334b8298eaf43d6bae87f012a113db1da580d7b95c7670f0aeda90"
+  },
+  "retained_message": {
+    "unchanged": true,
+    "base_sha256": "a73bb6b4690e9729cf81454e81ae84b356270d4d0af25386b4ef3d9c6068d0e3",
+    "current_sha256": "a73bb6b4690e9729cf81454e81ae84b356270d4d0af25386b4ef3d9c6068d0e3"
+  },
+  "native_item_bytes": {
+    "unchanged": true,
+    "base_sha256": "1073a2c341fea5bbdc5fe4e0a4fefddb8ee0c9a7b16671910ab45d8fa068508c",
+    "current_sha256": "1073a2c341fea5bbdc5fe4e0a4fefddb8ee0c9a7b16671910ab45d8fa068508c"
+  },
+  "message_bytes": {
+    "unchanged": true,
+    "base_sha256": "9bfd95cb2f03aa869b564485cc89ea3a9a437003bb289ae4d5c18721b4025bd2",
+    "current_sha256": "9bfd95cb2f03aa869b564485cc89ea3a9a437003bb289ae4d5c18721b4025bd2"
+  }
+}

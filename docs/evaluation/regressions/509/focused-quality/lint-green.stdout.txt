@@ -1,0 +1,36 @@
+I001 [*] Import block is un-sorted or un-formatted
+  --> tests/test_evaluation_original_dispatch.py:3:1
+   |
+ 1 |   """Prospective original-message acquisition; primary contents stay opaque."""
+ 2 |
+ 3 | / from __future__ import annotations
+ 4 | |
+ 5 | | import argparse
+ 6 | | import copy
+ 7 | | import gzip
+ 8 | | import hashlib
+ 9 | | import importlib.util
+10 | | import json
+11 | | import os
+12 | | from importlib.machinery import ModuleSpec
+13 | | import subprocess
+14 | | from pathlib import Path
+15 | | from types import ModuleType, SimpleNamespace
+16 | | from typing import Any, cast
+17 | |
+18 | | import pytest
+   | |_____________^
+19 |
+20 |   ROOT: Path = Path(__file__).resolve().parents[1]
+   |
+help: Organize imports
+   |
+11 | import os
+12 + import subprocess
+13 | from importlib.machinery import ModuleSpec
+   - import subprocess
+14 | from pathlib import Path
+   |
+
+Found 1 error.
+[*] 1 fixable with the `--fix` option.

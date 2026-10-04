@@ -1,0 +1,21 @@
+........................................................................ [ 80%]
+.........FFFFFFFF                                                        [100%]
+=================================== FAILURES ===================================
+/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py:422: Failed: DID NOT RAISE <class 'original_dispatch.CaptureError'>
+/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py:422: Failed: DID NOT RAISE <class 'original_dispatch.CaptureError'>
+/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py:422: Failed: DID NOT RAISE <class 'original_dispatch.CaptureError'>
+/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py:422: Failed: DID NOT RAISE <class 'original_dispatch.CaptureError'>
+/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/docs/evaluation/harness/native_dispatch.py:365: AttributeError: 'NoneType' object has no attribute 'get'
+/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/docs/evaluation/harness/native_dispatch.py:47: AttributeError: 'NoneType' object has no attribute 'get'
+/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/docs/evaluation/harness/native_dispatch.py:273: AttributeError: 'NoneType' object has no attribute 'get'
+/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/docs/evaluation/harness/native_dispatch.py:53: UnicodeEncodeError: 'utf-8' codec can't encode character '\ud800' in position 0: surrogates not allowed
+=========================== short test summary info ============================
+FAILED tests/test_evaluation_original_dispatch.py::test_synthetic_incomplete_or_conflicting_original_identity_fails[bool-order]
+FAILED tests/test_evaluation_original_dispatch.py::test_synthetic_incomplete_or_conflicting_original_identity_fails[foreign-started-item]
+FAILED tests/test_evaluation_original_dispatch.py::test_synthetic_incomplete_or_conflicting_original_identity_fails[changed-context-version]
+FAILED tests/test_evaluation_original_dispatch.py::test_synthetic_incomplete_or_conflicting_original_identity_fails[changed-context-hash]
+FAILED tests/test_evaluation_original_dispatch.py::test_synthetic_incomplete_or_conflicting_original_identity_fails[malformed-payload]
+FAILED tests/test_evaluation_original_dispatch.py::test_synthetic_incomplete_or_conflicting_original_identity_fails[malformed-block]
+FAILED tests/test_evaluation_original_dispatch.py::test_synthetic_incomplete_or_conflicting_original_identity_fails[malformed-retained]
+FAILED tests/test_evaluation_original_dispatch.py::test_synthetic_incomplete_or_conflicting_original_identity_fails[unencodable-text]
+8 failed, 81 passed in 2.46s

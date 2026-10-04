@@ -1,0 +1,100 @@
+............FFFFFFFFFFFFFFFF                                             [100%]
+=================================== FAILURES ===================================
+_ test_synthetic_incomplete_or_foreign_compaction_source_fails[latest_token_usage_record.thread_id-foreign] _
+tests/test_evaluation_original_dispatch.py:152: in test_synthetic_incomplete_or_foreign_compaction_source_fails
+    with pytest.raises(DISPATCH.CaptureError, match='compaction'):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE <class 'original_dispatch.CaptureError'>
+_ test_synthetic_incomplete_or_foreign_compaction_source_fails[latest_token_usage_record.session_id-foreign] _
+tests/test_evaluation_original_dispatch.py:152: in test_synthetic_incomplete_or_foreign_compaction_source_fails
+    with pytest.raises(DISPATCH.CaptureError, match='compaction'):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE <class 'original_dispatch.CaptureError'>
+_ test_synthetic_incomplete_or_foreign_compaction_source_fails[latest_token_usage_record.turn_id-foreign] _
+tests/test_evaluation_original_dispatch.py:152: in test_synthetic_incomplete_or_foreign_compaction_source_fails
+    with pytest.raises(DISPATCH.CaptureError, match='compaction'):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE <class 'original_dispatch.CaptureError'>
+_ test_synthetic_incomplete_or_foreign_compaction_source_fails[latest_token_usage_record.root_turn_id-foreign] _
+tests/test_evaluation_original_dispatch.py:152: in test_synthetic_incomplete_or_foreign_compaction_source_fails
+    with pytest.raises(DISPATCH.CaptureError, match='compaction'):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE <class 'original_dispatch.CaptureError'>
+_ test_synthetic_incomplete_or_foreign_compaction_source_fails[latest_token_usage_record.response_id-foreign] _
+tests/test_evaluation_original_dispatch.py:152: in test_synthetic_incomplete_or_foreign_compaction_source_fails
+    with pytest.raises(DISPATCH.CaptureError, match='compaction'):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE <class 'original_dispatch.CaptureError'>
+_ test_synthetic_incomplete_or_foreign_compaction_source_fails[compaction_response_id-] _
+tests/test_evaluation_original_dispatch.py:152: in test_synthetic_incomplete_or_foreign_compaction_source_fails
+    with pytest.raises(DISPATCH.CaptureError, match='compaction'):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE <class 'original_dispatch.CaptureError'>
+_ test_synthetic_incomplete_or_foreign_compaction_source_fails[resume_metadata.last_started_turn_id-foreign] _
+tests/test_evaluation_original_dispatch.py:152: in test_synthetic_incomplete_or_foreign_compaction_source_fails
+    with pytest.raises(DISPATCH.CaptureError, match='compaction'):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE <class 'original_dispatch.CaptureError'>
+_ test_synthetic_incomplete_or_foreign_compaction_source_fails[resume_metadata.previous_turn_settings.model-foreign] _
+tests/test_evaluation_original_dispatch.py:152: in test_synthetic_incomplete_or_foreign_compaction_source_fails
+    with pytest.raises(DISPATCH.CaptureError, match='compaction'):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE <class 'original_dispatch.CaptureError'>
+_ test_synthetic_incomplete_or_foreign_compaction_source_fails[resume_metadata.previous_turn_settings.comp_hash-foreign] _
+tests/test_evaluation_original_dispatch.py:152: in test_synthetic_incomplete_or_foreign_compaction_source_fails
+    with pytest.raises(DISPATCH.CaptureError, match='compaction'):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE <class 'original_dispatch.CaptureError'>
+_ test_synthetic_incomplete_or_foreign_compaction_source_fails[resume_metadata.multi_agent_version-foreign] _
+tests/test_evaluation_original_dispatch.py:152: in test_synthetic_incomplete_or_foreign_compaction_source_fails
+    with pytest.raises(DISPATCH.CaptureError, match='compaction'):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE <class 'original_dispatch.CaptureError'>
+____ test_synthetic_incomplete_or_foreign_compaction_source_fails[message-] ____
+tests/test_evaluation_original_dispatch.py:152: in test_synthetic_incomplete_or_foreign_compaction_source_fails
+    with pytest.raises(DISPATCH.CaptureError, match='compaction'):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE <class 'original_dispatch.CaptureError'>
+_ test_synthetic_incomplete_or_foreign_compaction_source_fails[replacement_history-None] _
+tests/test_evaluation_original_dispatch.py:152: in test_synthetic_incomplete_or_foreign_compaction_source_fails
+    with pytest.raises(DISPATCH.CaptureError, match='compaction'):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE <class 'original_dispatch.CaptureError'>
+_ test_synthetic_incomplete_or_foreign_compaction_source_fails[replacement_history_metadata-value12] _
+tests/test_evaluation_original_dispatch.py:152: in test_synthetic_incomplete_or_foreign_compaction_source_fails
+    with pytest.raises(DISPATCH.CaptureError, match='compaction'):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE <class 'original_dispatch.CaptureError'>
+_ test_synthetic_incomplete_or_foreign_compaction_source_fails[retained_context.incomplete-True] _
+tests/test_evaluation_original_dispatch.py:152: in test_synthetic_incomplete_or_foreign_compaction_source_fails
+    with pytest.raises(DISPATCH.CaptureError, match='compaction'):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE <class 'original_dispatch.CaptureError'>
+_ test_synthetic_incomplete_or_foreign_compaction_source_fails[retained_context.user_messages_incomplete-True] _
+tests/test_evaluation_original_dispatch.py:152: in test_synthetic_incomplete_or_foreign_compaction_source_fails
+    with pytest.raises(DISPATCH.CaptureError, match='compaction'):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE <class 'original_dispatch.CaptureError'>
+_ test_synthetic_incomplete_or_foreign_compaction_source_fails[retained_context.assistant_messages_incomplete-True] _
+tests/test_evaluation_original_dispatch.py:152: in test_synthetic_incomplete_or_foreign_compaction_source_fails
+    with pytest.raises(DISPATCH.CaptureError, match='compaction'):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: DID NOT RAISE <class 'original_dispatch.CaptureError'>
+=========================== short test summary info ============================
+FAILED tests/test_evaluation_original_dispatch.py::test_synthetic_incomplete_or_foreign_compaction_source_fails[latest_token_usage_record.thread_id-foreign]
+FAILED tests/test_evaluation_original_dispatch.py::test_synthetic_incomplete_or_foreign_compaction_source_fails[latest_token_usage_record.session_id-foreign]
+FAILED tests/test_evaluation_original_dispatch.py::test_synthetic_incomplete_or_foreign_compaction_source_fails[latest_token_usage_record.turn_id-foreign]
+FAILED tests/test_evaluation_original_dispatch.py::test_synthetic_incomplete_or_foreign_compaction_source_fails[latest_token_usage_record.root_turn_id-foreign]
+FAILED tests/test_evaluation_original_dispatch.py::test_synthetic_incomplete_or_foreign_compaction_source_fails[latest_token_usage_record.response_id-foreign]
+FAILED tests/test_evaluation_original_dispatch.py::test_synthetic_incomplete_or_foreign_compaction_source_fails[compaction_response_id-]
+FAILED tests/test_evaluation_original_dispatch.py::test_synthetic_incomplete_or_foreign_compaction_source_fails[resume_metadata.last_started_turn_id-foreign]
+FAILED tests/test_evaluation_original_dispatch.py::test_synthetic_incomplete_or_foreign_compaction_source_fails[resume_metadata.previous_turn_settings.model-foreign]
+FAILED tests/test_evaluation_original_dispatch.py::test_synthetic_incomplete_or_foreign_compaction_source_fails[resume_metadata.previous_turn_settings.comp_hash-foreign]
+FAILED tests/test_evaluation_original_dispatch.py::test_synthetic_incomplete_or_foreign_compaction_source_fails[resume_metadata.multi_agent_version-foreign]
+FAILED tests/test_evaluation_original_dispatch.py::test_synthetic_incomplete_or_foreign_compaction_source_fails[message-]
+FAILED tests/test_evaluation_original_dispatch.py::test_synthetic_incomplete_or_foreign_compaction_source_fails[replacement_history-None]
+FAILED tests/test_evaluation_original_dispatch.py::test_synthetic_incomplete_or_foreign_compaction_source_fails[replacement_history_metadata-value12]
+FAILED tests/test_evaluation_original_dispatch.py::test_synthetic_incomplete_or_foreign_compaction_source_fails[retained_context.incomplete-True]
+FAILED tests/test_evaluation_original_dispatch.py::test_synthetic_incomplete_or_foreign_compaction_source_fails[retained_context.user_messages_incomplete-True]
+FAILED tests/test_evaluation_original_dispatch.py::test_synthetic_incomplete_or_foreign_compaction_source_fails[retained_context.assistant_messages_incomplete-True]
+16 failed, 12 passed in 0.90s

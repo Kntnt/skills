@@ -1,0 +1,25 @@
+...F........................                                             [100%]
+=================================== FAILURES ===================================
+____ test_all_original_sources_are_acquired_without_rewriting_retention[A] _____
+docs/evaluation/harness/native_dispatch.py:780: in acquire
+    binding, result = binder(records, prompt, args.model, args.effort, args.version)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+docs/evaluation/harness/native_dispatch.py:388: in bind_original_trace
+    raise CaptureError("incomplete or foreign native compaction source")
+E   original_dispatch.CaptureError: incomplete or foreign native compaction source
+
+The above exception was the direct cause of the following exception:
+tests/test_evaluation_original_dispatch.py:90: in test_all_original_sources_are_acquired_without_rewriting_retention
+    result = DISPATCH.run(args, source(case, 'prompt'))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+docs/evaluation/harness/native_dispatch.py:838: in run
+    return acquire(args, prompt)
+           ^^^^^^^^^^^^^^^^^^^^^
+docs/evaluation/harness/native_dispatch.py:794: in acquire
+    raise CaptureError(str(exc)) from exc
+E   original_dispatch.CaptureError: incomplete or foreign native compaction source
+----------------------------- Captured stderr call -----------------------------
+Delete owned disposable runtime: /private/tmp/kntnt-method-509-builder-20261004-b2qnwsc1/tmp/pytest-of-thomas/pytest-7/test_all_original_sources_are_2/packet/runtime
+=========================== short test summary info ============================
+FAILED tests/test_evaluation_original_dispatch.py::test_all_original_sources_are_acquired_without_rewriting_retention[A]
+1 failed, 27 passed in 0.85s

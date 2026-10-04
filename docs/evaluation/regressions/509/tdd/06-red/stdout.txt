@@ -1,0 +1,28 @@
+....................................FFFFFFFFFFFF                         [100%]
+=================================== FAILURES ===================================
+/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py:205: Failed: DID NOT RAISE <class 'original_dispatch.CaptureError'>
+/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py:205: Failed: DID NOT RAISE <class 'original_dispatch.CaptureError'>
+/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py:205: Failed: DID NOT RAISE <class 'original_dispatch.CaptureError'>
+/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py:205: Failed: DID NOT RAISE <class 'original_dispatch.CaptureError'>
+/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py:205: Failed: DID NOT RAISE <class 'original_dispatch.CaptureError'>
+/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py:205: Failed: DID NOT RAISE <class 'original_dispatch.CaptureError'>
+/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py:205: Failed: DID NOT RAISE <class 'original_dispatch.CaptureError'>
+/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py:205: Failed: DID NOT RAISE <class 'original_dispatch.CaptureError'>
+/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py:205: Failed: DID NOT RAISE <class 'original_dispatch.CaptureError'>
+/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py:205: Failed: DID NOT RAISE <class 'original_dispatch.CaptureError'>
+/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py:205: Failed: DID NOT RAISE <class 'original_dispatch.CaptureError'>
+/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py:205: Failed: DID NOT RAISE <class 'original_dispatch.CaptureError'>
+=========================== short test summary info ============================
+FAILED tests/test_evaluation_original_dispatch.py::test_synthetic_compaction_corroboration_conflicts_fail[replacement_history.4.id-foreign]
+FAILED tests/test_evaluation_original_dispatch.py::test_synthetic_compaction_corroboration_conflicts_fail[replacement_history.4.content.0.text-synthetic altered input]
+FAILED tests/test_evaluation_original_dispatch.py::test_synthetic_compaction_corroboration_conflicts_fail[replacement_history_metadata.4.user_input_order-1]
+FAILED tests/test_evaluation_original_dispatch.py::test_synthetic_compaction_corroboration_conflicts_fail[replacement_history_metadata.4.retained_source.complete-True]
+FAILED tests/test_evaluation_original_dispatch.py::test_synthetic_compaction_corroboration_conflicts_fail[retained_context.user_messages.0.message_id-foreign]
+FAILED tests/test_evaluation_original_dispatch.py::test_synthetic_compaction_corroboration_conflicts_fail[retained_context.user_messages.0.turn_id-foreign]
+FAILED tests/test_evaluation_original_dispatch.py::test_synthetic_compaction_corroboration_conflicts_fail[retained_context.user_messages.0.revision-foreign]
+FAILED tests/test_evaluation_original_dispatch.py::test_synthetic_compaction_corroboration_conflicts_fail[retained_context.user_messages.0.order-1]
+FAILED tests/test_evaluation_original_dispatch.py::test_synthetic_compaction_corroboration_conflicts_fail[retained_context.user_messages.0.complete-True]
+FAILED tests/test_evaluation_original_dispatch.py::test_synthetic_compaction_corroboration_conflicts_fail[retained_context.assistant_messages.0.message_id-foreign]
+FAILED tests/test_evaluation_original_dispatch.py::test_synthetic_compaction_corroboration_conflicts_fail[retained_context.assistant_messages.0.complete-False]
+FAILED tests/test_evaluation_original_dispatch.py::test_synthetic_compaction_corroboration_conflicts_fail[retained_context.next_order-99]
+12 failed, 36 passed in 1.47s

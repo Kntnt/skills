@@ -1,0 +1,162 @@
+[
+  {
+    "case": "redline-1",
+    "files": {
+      "raw": {
+        "original_path": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/7e833bdac9694a71980092ac55a8eb4a/native-sessions/2026/10/04/rollout-2026-10-04T11-08-09-01a1062b-b292-7911-8587-4365788cf42d.jsonl",
+        "fixture": "opaque-originals/redline-1/raw.gz",
+        "bytes": 1280786,
+        "sha256": "356d03ce1ae20ab34373b6800bd3de97ad31b52af751fb3408a9c97c888c49c2"
+      },
+      "events": {
+        "original_path": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/7e833bdac9694a71980092ac55a8eb4a/events.jsonl",
+        "fixture": "opaque-originals/redline-1/events.gz",
+        "bytes": 327470,
+        "sha256": "10f6639c63b60485501b11c5b875193be65ad8c193c642bf6f6c0b8a6060867f"
+      },
+      "prompt": {
+        "original_path": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/7e833bdac9694a71980092ac55a8eb4a/prompt.txt",
+        "fixture": "opaque-originals/redline-1/prompt.gz",
+        "bytes": 2147,
+        "sha256": "15126fb36bfbcdf3c6cbae765bdd29379c78e63bfb3f74e673c42449f038648e"
+      },
+      "terminal": {
+        "original_path": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/7e833bdac9694a71980092ac55a8eb4a/terminal.txt",
+        "fixture": "opaque-originals/redline-1/terminal.gz",
+        "bytes": 47359,
+        "sha256": "d33e54f775b25426c209b62346e0a9fa1102bafc098addca95bd9a8706184cd1"
+      }
+    },
+    "model": "gpt-6.1-sol",
+    "effort": "xhigh",
+    "version": "0.160.0"
+  },
+  {
+    "case": "redline-2",
+    "files": {
+      "raw": {
+        "original_path": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/978d3c19acf94c149dfcfbc87c2c768c/native-sessions/2026/10/04/rollout-2026-10-04T11-08-09-01a1062b-b291-7b62-80e6-05977e67461a.jsonl",
+        "fixture": "opaque-originals/redline-2/raw.gz",
+        "bytes": 1262713,
+        "sha256": "a0ed8d87e6330926c731f22f6009069260d7c2bc6b89b4b64585e7dfea1c2dd1"
+      },
+      "events": {
+        "original_path": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/978d3c19acf94c149dfcfbc87c2c768c/events.jsonl",
+        "fixture": "opaque-originals/redline-2/events.gz",
+        "bytes": 321682,
+        "sha256": "d06376a6f193cd539bd319542cdf4e8571b7781176779d7a912101ef219bb72f"
+      },
+      "prompt": {
+        "original_path": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/978d3c19acf94c149dfcfbc87c2c768c/prompt.txt",
+        "fixture": "opaque-originals/redline-2/prompt.gz",
+        "bytes": 2147,
+        "sha256": "15126fb36bfbcdf3c6cbae765bdd29379c78e63bfb3f74e673c42449f038648e"
+      },
+      "terminal": {
+        "original_path": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/978d3c19acf94c149dfcfbc87c2c768c/terminal.txt",
+        "fixture": "opaque-originals/redline-2/terminal.gz",
+        "bytes": 48735,
+        "sha256": "d0299474e23e2337ddf88b2c48a80fd974185028521e4c2a6b58b01dd50c33e6"
+      }
+    },
+    "model": "gpt-6.1-sol",
+    "effort": "xhigh",
+    "version": "0.160.0"
+  },
+  {
+    "case": "A",
+    "files": {
+      "raw": {
+        "original_path": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/method-long-return-diagnosis/investigation/schema-addendum/original-copies/A/native-session.jsonl",
+        "fixture": "opaque-originals/A/raw.gz",
+        "bytes": 8368109,
+        "sha256": "f297557163440c5c29f4ec723708097c87ed2fe3eb97c06de44c69fe7feca94f"
+      },
+      "events": {
+        "original_path": "/Users/thomas/.kntnt/editorial-repair/2026-10-03/write-500-verifier/dispatch/events.jsonl",
+        "fixture": "opaque-originals/A/events.gz",
+        "bytes": 2744321,
+        "sha256": "1e5fd9c682c885acfc020453c0ddadc44fe24c23dac5f95496d71aa65130a994"
+      },
+      "prompt": {
+        "original_path": "/Users/thomas/.kntnt/editorial-repair/2026-10-03/write-500-verifier/dispatch/initial-prompt.txt",
+        "fixture": "opaque-originals/A/prompt.gz",
+        "bytes": 3716,
+        "sha256": "47fe00c2748b758ac1b3b1762a675a6f27005c9c17028cc8ab69f06236aee6ac"
+      },
+      "terminal": {
+        "original_path": "/Users/thomas/.kntnt/editorial-repair/2026-10-03/write-500-verifier/dispatch/terminal.txt",
+        "fixture": "opaque-originals/A/terminal.gz",
+        "bytes": 1173,
+        "sha256": "513c2b63253736da2a79cb9000e78bf07a993c14368718beb0246c0b1371aff1"
+      }
+    },
+    "model": "gpt-6-astra",
+    "effort": "high",
+    "version": "0.160.0"
+  },
+  {
+    "case": "B",
+    "files": {
+      "raw": {
+        "original_path": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/method-long-return-diagnosis/investigation/schema-addendum/original-copies/B/native-sessions/2026/10/04/rollout-2026-10-04T11-18-11-01a10634-dd69-7323-b906-e21d28e7c24e.jsonl",
+        "fixture": "opaque-originals/B/raw.gz",
+        "bytes": 928193,
+        "sha256": "afcfa376e859d3fbc6c7f33229057f6bf4ff279c547049a424192bbc2606483d"
+      },
+      "events": {
+        "original_path": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/write-500/reader-results/v02/events.jsonl",
+        "fixture": "opaque-originals/B/events.gz",
+        "bytes": 214445,
+        "sha256": "4e8eb5e7c9aecc9a25b62f557981137865a25650ae9775d2f299b135307f0be1"
+      },
+      "prompt": {
+        "original_path": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/write-500/reader-results/v02/prompt.txt",
+        "fixture": "opaque-originals/B/prompt.gz",
+        "bytes": 2872,
+        "sha256": "2a90f71a074f8cf0feb8b8f958242d99696d05ea27a346ab2c852a3896b0f577"
+      },
+      "terminal": {
+        "original_path": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/write-500/reader-results/v02/terminal.txt",
+        "fixture": "opaque-originals/B/terminal.gz",
+        "bytes": 43544,
+        "sha256": "201db82bdc6bf36375500b805f7d200e77a31c43121a839c9a7ad827747f4387"
+      }
+    },
+    "model": "gpt-6.1-sol",
+    "effort": "xhigh",
+    "version": "0.160.0"
+  },
+  {
+    "case": "C",
+    "files": {
+      "raw": {
+        "original_path": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/method-long-return-diagnosis/investigation/schema-addendum/original-copies/C/native-sessions/2026/10/04/rollout-2026-10-04T11-18-10-01a10634-dd6a-7eb0-8843-ce5671cd794a.jsonl",
+        "fixture": "opaque-originals/C/raw.gz",
+        "bytes": 931715,
+        "sha256": "735c58f36e437230ff020eb9d882ca2e48152fc552c83bced407cd42f6861c9e"
+      },
+      "events": {
+        "original_path": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/write-500/reader-results/v01/events.jsonl",
+        "fixture": "opaque-originals/C/events.gz",
+        "bytes": 218210,
+        "sha256": "d779bfca7beca61eb41415a65c6aca9d1a83ef2a81f88da5e3e174218f0d0248"
+      },
+      "prompt": {
+        "original_path": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/write-500/reader-results/v01/prompt.txt",
+        "fixture": "opaque-originals/C/prompt.gz",
+        "bytes": 2872,
+        "sha256": "2a90f71a074f8cf0feb8b8f958242d99696d05ea27a346ab2c852a3896b0f577"
+      },
+      "terminal": {
+        "original_path": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/write-500/reader-results/v01/terminal.txt",
+        "fixture": "opaque-originals/C/terminal.gz",
+        "bytes": 54463,
+        "sha256": "21bb268a5344d7df50154f3e487eb2455cf68411b6fbf65f8de61b339b8db7cf"
+      }
+    },
+    "model": "gpt-6.1-sol",
+    "effort": "xhigh",
+    "version": "0.160.0"
+  }
+]

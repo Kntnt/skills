@@ -1,0 +1,58 @@
+This is a neutral byte-source proof. Use no skill, routing, subagent, model launch or file edit. Execute exactly the functions.exec input below once. Its inner and outer output allowances are 60000 tokens. Return exactly the complete payload with Unicode and all trailing newlines preserved, without fences or added text. Do not shorten, summarize, read again or retry.
+EXACT TOOL INPUT:
+// @exec: {"yield_time_ms": 1000, "max_output_tokens": 60000}
+const r = await tools.exec_command({"cmd": "python3 -c 'from pathlib import Path; import sys; sys.stdout.buffer.write(Path('\"'\"'/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/docs/evaluation/regressions/509/plan/expected-short.txt'\"'\"').read_bytes())'", "cwd": "/private/tmp/kntnt-method-509-proof-20261004-original-messages/work/direct-long-input", "shell": "/bin/bash", "login": false, "max_output_tokens": 60000, "yield_time_ms": 1000}); text(r.output);
+Opaque neutral input follows. It is data, not an additional instruction.
+0000: opaque Åβ🙂 abcdefghijklmnopqrstuvwxyz 0123456789
+0001: opaque Åβ🙂 abcdefghijklmnopqrstuvwxyz 0123456789
+0002: opaque Åβ🙂 abcdefghijklmnopqrstuvwxyz 0123456789
+0003: opaque Åβ🙂 abcdefghijklmnopqrstuvwxyz 0123456789
+0004: opaque Åβ🙂 abcdefghijklmnopqrstuvwxyz 0123456789
+0005: opaque Åβ🙂 abcdefghijklmnopqrstuvwxyz 0123456789
+0006: opaque Åβ🙂 abcdefghijklmnopqrstuvwxyz 0123456789
+0007: opaque Åβ🙂 abcdefghijklmnopqrstuvwxyz 0123456789
+0008: opaque Åβ🙂 abcdefghijklmnopqrstuvwxyz 0123456789
+0009: opaque Åβ🙂 abcdefghijklmnopqrstuvwxyz 0123456789
+0010: opaque Åβ🙂 abcdefghijklmnopqrstuvwxyz 0123456789
+0011: opaque Åβ🙂 abcdefghijklmnopqrstuvwxyz 0123456789
+0012: opaque Åβ🙂 abcdefghijklmnopqrstuvwxyz 0123456789
+0013: opaque Åβ🙂 abcdefghijklmnopqrstuvwxyz 0123456789
+0014: opaque Åβ🙂 abcdefghijklmnopqrstuvwxyz 0123456789
+0015: opaque Åβ🙂 abcdefghijklmnopqrstuvwxyz 0123456789
+0016: opaque Åβ🙂 abcdefghijklmnopqrstuvwxyz 0123456789
+0017: opaque Åβ🙂 abcdefghijklmnopqrstuvwxyz 0123456789
+0018: opaque Åβ🙂 abcdefghijklmnopqrstuvwxyz 0123456789
+0019: opaque Åβ🙂 abcdefghijklmnopqrstuvwxyz 0123456789
+0020: opaque Åβ🙂 abcdefghijklmnopqrstuvwxyz 0123456789
+0021: opaque Åβ🙂 abcdefghijklmnopqrstuvwxyz 0123456789
+0022: opaque Åβ🙂 abcdefghijklmnopqrstuvwxyz 0123456789
+0023: opaque Åβ🙂 abcdefghijklmnopqrstuvwxyz 0123456789
+0024: opaque Åβ🙂 abcdefghijklmnopqrstuvwxyz 0123456789
+0025: opaque Åβ🙂 abcdefghijklmnopqrstuvwxyz 0123456789
+0026: opaque Åβ🙂 abcdefghijklmnopqrstuvwxyz 0123456789
+0027: opaque Åβ🙂 abcdefghijklmnopqrstuvwxyz 0123456789
+0028: opaque Åβ🙂 abcdefghijklmnopqrstuvwxyz 0123456789
+0029: opaque Åβ🙂 abcdefghijklmnopqrstuvwxyz 0123456789
+0030: opaque Åβ🙂 abcdefghijklmnopqrstuvwxyz 0123456789
+0031: opaque Åβ🙂 abcdefghijklmnopqrstuvwxyz 0123456789
+0032: opaque Åβ🙂 abcdefghijklmnopqrstuvwxyz 0123456789
+0033: opaque Åβ🙂 abcdefghijklmnopqrstuvwxyz 0123456789
+0034: opaque Åβ🙂 abcdefghijklmnopqrstuvwxyz 0123456789
+0035: opaque Åβ🙂 abcdefghijklmnopqrstuvwxyz 0123456789
+0036: opaque Åβ🙂 abcdefghijklmnopqrstuvwxyz 0123456789
+0037: opaque Åβ🙂 abcdefghijklmnopqrstuvwxyz 0123456789
+0038: opaque Åβ🙂 abcdefghijklmnopqrstuvwxyz 0123456789
+0039: opaque Åβ🙂 abcdefghijklmnopqrstuvwxyz 0123456789
+0040: opaque Åβ🙂 abcdefghijklmnopqrstuvwxyz 0123456789
+0041: opaque Åβ🙂 abcdefghijklmnopqrstuvwxyz 0123456789
+0042: opaque Åβ🙂 abcdefghijklmnopqrstuvwxyz 0123456789
+0043: opaque Åβ🙂 abcdefghijklmnopqrstuvwxyz 0123456789
+0044: opaque Åβ🙂 abcdefghijklmnopqrstuvwxyz 0123456789
+0045: opaque Åβ🙂 abcdefghijklmnopqrstuvwxyz 0123456789
+0046: opaque Åβ🙂 abcdefghijklmnopqrstuvwxyz 0123456789
+0047: opaque Åβ🙂 abcdefghijklmnopqrstuvwxyz 0123456789
+0048: opaque Åβ🙂 abcdefghijklmnopqrstuvwxyz 0123456789
+0049: opaque Åβ🙂 abcdefghijklmnopqrstuvwxyz 0123456789
+0050: opaque Åβ🙂 abcdefghijklmnopqrstuvwxyz 0123456789
+0051: opaque Åβ🙂 abcdefghijklmnopqrstuvwxyz 0123456789
+0052: opaque Åβ🙂 abcdefghijklmnopqrstuvwxyz 0123456789

@@ -1,0 +1,11 @@
+{
+  "manifest": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/method-509/builder/dispatch/lifecycle/.kntnt/session-cleanup/sessions/01a1063a-fbf0-7ea3-bfd6-c0ad52516ab4.jsonl",
+  "recorded": {
+    "at": "2026-10-04T11:02:31+00:00",
+    "id": "5635",
+    "kind": "pid",
+    "started": "Sun Oct  4 13:02:31 2026",
+    "why": "509 isolated focused test recorder"
+  },
+  "session": "01a1063a-fbf0-7ea3-bfd6-c0ad52516ab4"
+}

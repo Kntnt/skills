@@ -1,0 +1,14 @@
+........................................................................ [ 44%]
+........................................................................ [ 88%]
+...............FFFF                                                      [100%]
+=================================== FAILURES ===================================
+/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py:618: Failed: DID NOT RAISE <class 'original_dispatch.CaptureError'>
+/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py:618: Failed: DID NOT RAISE <class 'original_dispatch.CaptureError'>
+/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py:618: Failed: DID NOT RAISE <class 'original_dispatch.CaptureError'>
+/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py:618: Failed: DID NOT RAISE <class 'original_dispatch.CaptureError'>
+=========================== short test summary info ============================
+FAILED tests/test_evaluation_original_dispatch.py::test_synthetic_missing_native_compaction_completion_fails[missing-completed]
+FAILED tests/test_evaluation_original_dispatch.py::test_synthetic_missing_native_compaction_completion_fails[empty-completed-id]
+FAILED tests/test_evaluation_original_dispatch.py::test_synthetic_missing_native_compaction_completion_fails[duplicate-completed]
+FAILED tests/test_evaluation_original_dispatch.py::test_synthetic_missing_native_compaction_completion_fails[late-completed]
+4 failed, 159 passed in 4.11s

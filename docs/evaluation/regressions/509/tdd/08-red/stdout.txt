@@ -1,0 +1,8 @@
+.........................................................FF              [100%]
+=================================== FAILURES ===================================
+/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py:256: AssertionError: assert not True
+/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py:256: AssertionError: assert not True
+=========================== short test summary info ============================
+FAILED tests/test_evaluation_original_dispatch.py::test_cleanup_failure_never_publishes_complete_result[owned-group]
+FAILED tests/test_evaluation_original_dispatch.py::test_cleanup_failure_never_publishes_complete_result[runtime]
+2 failed, 57 passed in 1.71s

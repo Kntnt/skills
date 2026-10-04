@@ -1,0 +1,22 @@
+{
+  "command": [
+    "uv",
+    "run",
+    "--no-project",
+    "--with",
+    "pytest==8.4.2",
+    "python",
+    "-m",
+    "pytest",
+    "-p",
+    "no:cacheprovider",
+    "tests/test_evaluation_original_dispatch.py"
+  ],
+  "cwd": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages",
+  "start_time_ns": 1791115947412704000,
+  "end_time_ns": 1791115952376167000,
+  "exit": 1,
+  "pid": 54086,
+  "pgid": 54086,
+  "native_sessions_launched": 0
+}

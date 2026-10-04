@@ -1,0 +1,26 @@
+...F..FFFFFF............................................................ [ 44%]
+.....FFF................................................................ [ 88%]
+...................                                                      [100%]
+=================================== FAILURES ===================================
+/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/docs/evaluation/harness/native_dispatch.py:1152: original_dispatch.CaptureError: native compaction completion order disagrees
+/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py:134: AssertionError: Regex pattern did not match.
+/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py:134: AssertionError: Regex pattern did not match.
+/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py:134: AssertionError: Regex pattern did not match.
+/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py:134: AssertionError: Regex pattern did not match.
+/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py:134: AssertionError: Regex pattern did not match.
+/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py:134: AssertionError: Regex pattern did not match.
+/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/docs/evaluation/harness/native_dispatch.py:1152: original_dispatch.CaptureError: native compaction completion order disagrees
+/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/docs/evaluation/harness/native_dispatch.py:1152: original_dispatch.CaptureError: native compaction completion order disagrees
+/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/docs/evaluation/harness/native_dispatch.py:1152: original_dispatch.CaptureError: native compaction completion order disagrees
+=========================== short test summary info ============================
+FAILED tests/test_evaluation_original_dispatch.py::test_all_original_sources_are_acquired_without_rewriting_retention[A]
+FAILED tests/test_evaluation_original_dispatch.py::test_synthetic_compaction_window_chain_corruption_fails[previous_window_id-foreign-window]
+FAILED tests/test_evaluation_original_dispatch.py::test_synthetic_compaction_window_chain_corruption_fails[first_window_id-foreign-window]
+FAILED tests/test_evaluation_original_dispatch.py::test_synthetic_compaction_window_chain_corruption_fails[window_id-]
+FAILED tests/test_evaluation_original_dispatch.py::test_synthetic_compaction_window_chain_corruption_fails[window_id-01a10630-3d5d-7091-8037-fc7c0532cd36]
+FAILED tests/test_evaluation_original_dispatch.py::test_synthetic_compaction_window_chain_corruption_fails[window_number-2]
+FAILED tests/test_evaluation_original_dispatch.py::test_synthetic_compaction_window_chain_corruption_fails[window_number-True]
+FAILED tests/test_evaluation_original_dispatch.py::test_receipt_describes_original_sources_and_limits[source-digests]
+FAILED tests/test_evaluation_original_dispatch.py::test_receipt_describes_original_sources_and_limits[source-offsets]
+FAILED tests/test_evaluation_original_dispatch.py::test_receipt_describes_original_sources_and_limits[compaction-flags]
+10 failed, 153 passed in 4.16s

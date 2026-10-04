@@ -1,0 +1,22 @@
+{
+  "command": [
+    "uvx",
+    "ruff",
+    "check",
+    "docs/evaluation/harness/native_dispatch.py",
+    "tests/test_evaluation_original_dispatch.py",
+    "tests/test_evaluation_dispatch.py"
+  ],
+  "cwd": "/Users/thomas/Projects/skills/.git/editorial-repair/original-messages",
+  "start_time_ns": 1791114805822480000,
+  "end_time_ns": 1791114805851490000,
+  "exit": 0,
+  "source_sha256": {
+    "docs/evaluation/harness/native_dispatch.py": "91f92f066d4834fd31ba05d2cd803e2eda1709ccd789b35a84c952ebe72a3d95",
+    "tests/test_evaluation_original_dispatch.py": "fe7bbb54d79b87fadce9ed4d372434a33241f4b5e64f6216545cb9aaad12f56f",
+    "tests/test_evaluation_dispatch.py": "741e9fd186f10a2a747f0164486f1af6520fc62113635c55a88fafacd6cce83e"
+  },
+  "pid": 18321,
+  "pgid": 18321,
+  "scope": "focused only; no full CONTRIBUTING gate"
+}

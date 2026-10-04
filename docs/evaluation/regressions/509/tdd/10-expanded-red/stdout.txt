@@ -1,0 +1,16 @@
+.................................................................FFFFFF  [100%]
+=================================== FAILURES ===================================
+/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py:299: AssertionError: assert '/private/tmp.../runtime/home' == '/Users/thomas'
+/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py:301: AssertionError: assert None == 'original-completed-v1'
+/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py:304: assert None == '329f7e709e3ca845ce8c9903624bcb07491066437701e6627eee026faf599986'
+/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py:304: assert None == '329f7e709e3ca845ce8c9903624bcb07491066437701e6627eee026faf599986'
+/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py:304: AssertionError: assert None == '88d6cac505abf406e0c710ad69a54fd94bc143389afebdf37f9288afc7c751d7'
+/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py:314: AssertionError: assert {'command': [...516ab4', ...}} == {}
+=========================== short test summary info ============================
+FAILED tests/test_evaluation_original_dispatch.py::test_original_launch_keeps_real_home_and_prelaunch_source_identities[home]
+FAILED tests/test_evaluation_original_dispatch.py::test_original_launch_keeps_real_home_and_prelaunch_source_identities[contract]
+FAILED tests/test_evaluation_original_dispatch.py::test_original_launch_keeps_real_home_and_prelaunch_source_identities[helper]
+FAILED tests/test_evaluation_original_dispatch.py::test_original_launch_keeps_real_home_and_prelaunch_source_identities[recorder]
+FAILED tests/test_evaluation_original_dispatch.py::test_original_launch_keeps_real_home_and_prelaunch_source_identities[native]
+FAILED tests/test_evaluation_original_dispatch.py::test_unknown_contract_fails_before_native_attempt
+6 failed, 65 passed in 1.87s

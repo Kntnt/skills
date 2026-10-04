@@ -1,0 +1,16 @@
+...........................................................FFFFFF        [100%]
+=================================== FAILURES ===================================
+/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py:273: Failed: DID NOT RAISE <class 'original_dispatch.CaptureError'>
+/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py:285: Failed: DID NOT RAISE <class 'original_dispatch.CaptureError'>
+/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py:285: Failed: DID NOT RAISE <class 'original_dispatch.CaptureError'>
+/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py:285: Failed: DID NOT RAISE <class 'original_dispatch.CaptureError'>
+/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py:285: Failed: DID NOT RAISE <class 'original_dispatch.CaptureError'>
+/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py:285: Failed: DID NOT RAISE <class 'original_dispatch.CaptureError'>
+=========================== short test summary info ============================
+FAILED tests/test_evaluation_original_dispatch.py::test_native_deadline_counts_registration_before_input
+FAILED tests/test_evaluation_original_dispatch.py::test_original_contract_refuses_unbounded_native_deadline[0]
+FAILED tests/test_evaluation_original_dispatch.py::test_original_contract_refuses_unbounded_native_deadline[-1]
+FAILED tests/test_evaluation_original_dispatch.py::test_original_contract_refuses_unbounded_native_deadline[nan]
+FAILED tests/test_evaluation_original_dispatch.py::test_original_contract_refuses_unbounded_native_deadline[inf]
+FAILED tests/test_evaluation_original_dispatch.py::test_original_contract_refuses_unbounded_native_deadline[1201]
+6 failed, 59 passed in 1.81s

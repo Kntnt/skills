@@ -1,0 +1,114 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.12.13, pytest-8.4.2, pluggy-1.6.0
+rootdir: /Users/thomas/Projects/skills/.git/editorial-repair/original-messages
+configfile: pyproject.toml
+collected 177 items
+
+tests/test_evaluation_original_dispatch.py ............................. [ 16%]
+........................................................................ [ 57%]
+........................................................................ [ 97%]
+F...                                                                     [100%]
+
+=================================== FAILURES ===================================
+______ test_pretty_printed_frozen_consumption_specification_is_supported _______
+
+data = b'{\n  "packet": "/private/tmp/kntnt-method-509-builder-20261004-b2qnwsc1/tmp/pytest-of-thomas/pytest-49/test_pretty_p... "-c",\n    "synthetic frozen child launcher"\n  ],\n  "launch_tool_input": "synthetic exact launcher tool input"\n}\n'
+
+    def original_jsonl(data: bytes) -> list[dict[str, Any]]:
+        """Decode stored source while rejecting duplicate or partial JSON fields."""
+    
+        # A later duplicate key cannot silently replace a contradictory original.
+        def object_fields(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
+            """Preserve each unique decoded object field."""
+            if len({key for key, _ in pairs}) != len(pairs):
+                raise CaptureError("conflicting duplicate original JSON field")
+            return dict(pairs)
+    
+        # Malformed or non-object rows cannot establish complete source boundaries.
+        try:
+            rows = [
+>               json.loads(line, object_pairs_hook=object_fields)
+                for line in data.decode("utf-8").splitlines()
+            ]
+
+docs/evaluation/harness/native_dispatch.py:965: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/Users/thomas/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/json/__init__.py:359: in loads
+    return cls(**kw).decode(s)
+           ^^^^^^^^^^^^^^^^^^^
+/Users/thomas/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/json/decoder.py:338: in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <json.decoder.JSONDecoder object at 0x10741ed80>, s = '{', idx = 0
+
+    def raw_decode(self, s, idx=0):
+        """Decode a JSON document from ``s`` (a ``str`` beginning with
+        a JSON document) and return a 2-tuple of the Python
+        representation and the index in ``s`` where the document ended.
+    
+        This can be used to decode a JSON document from a string that may
+        have extraneous data at the end.
+    
+        """
+        try:
+>           obj, end = self.scan_once(s, idx)
+                       ^^^^^^^^^^^^^^^^^^^^^^
+E           json.decoder.JSONDecodeError: Expecting property name enclosed in double quotes: line 1 column 2 (char 1)
+
+/Users/thomas/.local/share/uv/python/cpython-3.12.13-macos-aarch64-none/lib/python3.12/json/decoder.py:354: JSONDecodeError
+
+The above exception was the direct cause of the following exception:
+
+tmp_path = PosixPath('/private/tmp/kntnt-method-509-builder-20261004-b2qnwsc1/tmp/pytest-of-thomas/pytest-49/test_pretty_printed_frozen_con0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x10791dbb0>
+
+    def test_pretty_printed_frozen_consumption_specification_is_supported(
+        tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        """The committed JSON specification is one object, not a JSONL source."""
+        args, prompt, result = parent_packet(tmp_path, monkeypatch)
+        specification = json.loads(args.consume_spec.read_text())
+        args.consume_spec.write_text(json.dumps(specification, indent=2) + "\n")
+>       assert DISPATCH.run(args, prompt) == result
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_evaluation_original_dispatch.py:1228: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+docs/evaluation/harness/native_dispatch.py:1546: in run
+    result = acquire(args, prompt)
+             ^^^^^^^^^^^^^^^^^^^^^
+docs/evaluation/harness/native_dispatch.py:1222: in acquire
+    consumption = original_jsonl(data)[0]
+                  ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+data = b'{\n  "packet": "/private/tmp/kntnt-method-509-builder-20261004-b2qnwsc1/tmp/pytest-of-thomas/pytest-49/test_pretty_p... "-c",\n    "synthetic frozen child launcher"\n  ],\n  "launch_tool_input": "synthetic exact launcher tool input"\n}\n'
+
+    def original_jsonl(data: bytes) -> list[dict[str, Any]]:
+        """Decode stored source while rejecting duplicate or partial JSON fields."""
+    
+        # A later duplicate key cannot silently replace a contradictory original.
+        def object_fields(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
+            """Preserve each unique decoded object field."""
+            if len({key for key, _ in pairs}) != len(pairs):
+                raise CaptureError("conflicting duplicate original JSON field")
+            return dict(pairs)
+    
+        # Malformed or non-object rows cannot establish complete source boundaries.
+        try:
+            rows = [
+                json.loads(line, object_pairs_hook=object_fields)
+                for line in data.decode("utf-8").splitlines()
+            ]
+        except (UnicodeError, ValueError) as exc:
+>           raise CaptureError("partial or malformed original JSON source") from exc
+E           original_dispatch.CaptureError: partial or malformed original JSON source
+
+docs/evaluation/harness/native_dispatch.py:969: CaptureError
+----------------------------- Captured stderr call -----------------------------
+Delete owned disposable runtime: /private/tmp/kntnt-method-509-builder-20261004-b2qnwsc1/tmp/pytest-of-thomas/pytest-49/test_pretty_printed_frozen_con0/child/packet/runtime
+=========================== short test summary info ============================
+FAILED tests/test_evaluation_original_dispatch.py::test_pretty_printed_frozen_consumption_specification_is_supported
+======================== 1 failed, 176 passed in 4.54s =========================

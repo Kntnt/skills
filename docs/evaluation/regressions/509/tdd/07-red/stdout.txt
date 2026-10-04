@@ -1,0 +1,22 @@
+................................................FFFFFFFFF                [100%]
+=================================== FAILURES ===================================
+/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py:235: Failed: DID NOT RAISE <class 'original_dispatch.CaptureError'>
+/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py:235: Failed: DID NOT RAISE <class 'original_dispatch.CaptureError'>
+/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py:235: Failed: DID NOT RAISE <class 'original_dispatch.CaptureError'>
+/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py:235: Failed: DID NOT RAISE <class 'original_dispatch.CaptureError'>
+/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py:235: Failed: DID NOT RAISE <class 'original_dispatch.CaptureError'>
+/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py:235: Failed: DID NOT RAISE <class 'original_dispatch.CaptureError'>
+/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py:235: Failed: DID NOT RAISE <class 'original_dispatch.CaptureError'>
+/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py:235: Failed: DID NOT RAISE <class 'original_dispatch.CaptureError'>
+/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py:235: Failed: DID NOT RAISE <class 'original_dispatch.CaptureError'>
+=========================== short test summary info ============================
+FAILED tests/test_evaluation_original_dispatch.py::test_synthetic_exec_transport_conflicts_fail[foreign-thread]
+FAILED tests/test_evaluation_original_dispatch.py::test_synthetic_exec_transport_conflicts_fail[missing-start]
+FAILED tests/test_evaluation_original_dispatch.py::test_synthetic_exec_transport_conflicts_fail[duplicate-start]
+FAILED tests/test_evaluation_original_dispatch.py::test_synthetic_exec_transport_conflicts_fail[missing-completion]
+FAILED tests/test_evaluation_original_dispatch.py::test_synthetic_exec_transport_conflicts_fail[duplicate-completion]
+FAILED tests/test_evaluation_original_dispatch.py::test_synthetic_exec_transport_conflicts_fail[failed-turn]
+FAILED tests/test_evaluation_original_dispatch.py::test_synthetic_exec_transport_conflicts_fail[altered-final]
+FAILED tests/test_evaluation_original_dispatch.py::test_synthetic_exec_transport_conflicts_fail[missing-final]
+FAILED tests/test_evaluation_original_dispatch.py::test_synthetic_exec_transport_conflicts_fail[duplicate-item]
+9 failed, 48 passed in 1.60s

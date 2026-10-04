@@ -1,0 +1,8 @@
+.................................................................FF      [100%]
+=================================== FAILURES ===================================
+/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py:296: AssertionError: assert '/private/tmp.../runtime/home' == '/Users/thomas'
+/Users/thomas/Projects/skills/.git/editorial-repair/original-messages/tests/test_evaluation_original_dispatch.py:312: AssertionError: assert {'command': [...516ab4', ...}} == {}
+=========================== short test summary info ============================
+FAILED tests/test_evaluation_original_dispatch.py::test_original_launch_keeps_real_home_and_prelaunch_source_identities
+FAILED tests/test_evaluation_original_dispatch.py::test_unknown_contract_fails_before_native_attempt
+2 failed, 65 passed in 1.72s
