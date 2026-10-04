@@ -1,0 +1,10 @@
+[
+  {
+    "cell": "07",
+    "fixture": "source-02.md",
+    "locale": "sv",
+    "invocation": "/write --genre=casestudy --language=sv --output=response source.md",
+    "redline_invocation": "/redline --output=response input.md",
+    "source_sha256": "75188596831d5a0a28364ea4da4d1053f69900ca25237f08859696058c579f11"
+  }
+]

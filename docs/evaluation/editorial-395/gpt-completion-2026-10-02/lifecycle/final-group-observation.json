@@ -1,0 +1,94 @@
+{
+  "observed_at": 1790939579.438572,
+  "groups": [
+    {
+      "registered_group": 11355,
+      "status": "absent"
+    },
+    {
+      "registered_group": 11471,
+      "status": "absent"
+    },
+    {
+      "registered_group": 40893,
+      "status": "absent"
+    },
+    {
+      "registered_group": 40907,
+      "status": "absent"
+    },
+    {
+      "registered_group": 40940,
+      "status": "absent"
+    },
+    {
+      "registered_group": 40963,
+      "status": "absent"
+    },
+    {
+      "registered_group": 41211,
+      "status": "absent"
+    },
+    {
+      "registered_group": 57070,
+      "status": "absent"
+    },
+    {
+      "registered_group": 57086,
+      "status": "absent"
+    },
+    {
+      "registered_group": 64107,
+      "status": "absent"
+    },
+    {
+      "registered_group": 64126,
+      "status": "absent"
+    },
+    {
+      "registered_group": 83647,
+      "status": "absent"
+    },
+    {
+      "registered_group": 83656,
+      "status": "absent"
+    },
+    {
+      "registered_group": 83667,
+      "status": "absent"
+    },
+    {
+      "registered_group": 83680,
+      "status": "absent"
+    },
+    {
+      "registered_group": 83706,
+      "status": "absent"
+    },
+    {
+      "registered_group": 91461,
+      "status": "absent"
+    },
+    {
+      "registered_group": 91478,
+      "status": "absent"
+    },
+    {
+      "registered_group": 91823,
+      "status": "absent"
+    },
+    {
+      "registered_group": 91840,
+      "status": "absent"
+    },
+    {
+      "registered_group": 95387,
+      "status": "absent"
+    },
+    {
+      "registered_group": 95402,
+      "status": "absent"
+    }
+  ],
+  "no_blind_recycled_pid_termination": true
+}

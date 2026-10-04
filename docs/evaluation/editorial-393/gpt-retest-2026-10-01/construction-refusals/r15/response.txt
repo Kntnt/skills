@@ -1,0 +1,7 @@
+Genren `case-study` är inte installerad. Den installerade genren heter `casestudy`. Inget utkast har skrivits och inga tillfälliga filer finns kvar.
+
+[Write-skillen](/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-tmjn2uqe/work/.agents/skills/write/SKILL.md) kräver stopp för en okänd genre: ”one that is not there is refused”.
+
+**/write** [**--genre**=*GENRE*] [**--technique**=*TECHNIQUE*] [**--language**=*LANGUAGE*] [**--frontmatter**=*BOOLEAN*] [**--output**=*TARGET*] [*BRIEF*] [**--** *INSTRUCTION*]
+
+Hjälp: `/write --help`.

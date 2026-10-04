@@ -1,0 +1,15 @@
+{
+  "all_four_unchanged_commands_run": true,
+  "ruff_check": "pass",
+  "ruff_format": "pass",
+  "mypy": "pass",
+  "pytest": "fail",
+  "pytest_passed": 2729,
+  "pytest_failed": 4,
+  "acceptance_gate_met": false,
+  "scope_blockers": [
+    "Numbered-registry detection treats preserved evaluation capture .md filenames as numbered record registries; product repair outside this brief",
+    "Scheduler test fixtures under the mandated scratch root are inside the real user home and contradict their outside-real-home premise; requires owner decision or separate fixture brief"
+  ],
+  "no_product_repair_or_gate_narrowing": true
+}

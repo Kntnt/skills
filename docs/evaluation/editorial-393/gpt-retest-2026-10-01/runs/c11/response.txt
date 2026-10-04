@@ -1,0 +1,55 @@
+Granskat som `casestudy` på svenska. Ingen teknik tillämpades, enligt textens metadata. Texten följer artikelanatomin; inga olösta fynd kvarstår.
+
+```markdown
+---
+kntnt:
+  genre: casestudy
+  technique: none
+  language: sv
+---
+
+# Vikarielistan hjälper Björkängsskolan, säger rektorn
+
+**Två arbetslag på Björkängsskolan provade en gemensam vikarielista under åtta veckor. Mediantiden till tillsatt pass var 15 minuter under försöket. Rektor Nina Falk skulle göra om det, men avsätta mer tid åt rutinerna.**
+
+Text: Redaktionen
+
+Björkängsskolan har 410 elever och 38 lärare. Tidigare ringde expeditionen runt bland kända vikarier varje morgon, och de två arbetslagen förde egna listor. Skolan ville att båda arbetslagen skulle se samma uppgifter och valde Vikarieportalen efter att ha provat om listan kunde visa vem som redan tackat ja.
+
+## Vikarieportalen gick igenom listan vid två tillfällen
+
+Skolan tog fram kategorierna för ämne och årskurs och behöll möjligheten att ringa. Vikarieportalen lade upp listan och gick igenom den med sex medarbetare vid två tillfällen.
+
+– Vi ville ha rutinen på plats innan terminen drog i gång. Det hann vi inte riktigt, men expeditionen märkte skillnaden redan första veckan, säger Nina Falk.
+
+## Kortare tid till tillsatt pass under försöket
+
+Enligt skolans egen försöksanteckning från den 3 mars 2026 tillsattes 52 pass under de åtta veckorna. Akuta sjukanmälningar efter klockan åtta ingår inte i underlaget.
+
+Mediantiden från anmälan till tillsatt pass var 15 minuter under försöket, mot 40 minuter under de åtta veckorna dessförinnan. Perioderna hade olika sjukfrånvaro, och anteckningen tillskriver därför inte listan skillnaden.
+
+Måttet gäller tiden tills ett pass var tillsatt, inte hur undervisningen fungerade. Det saknas mätningar av kostnader och av hur eleverna eller lärarna upplevde försöket.
+
+## Nina Falk ser tillbaka på försöket
+
+– Jag skulle välja att göra om försöket. Att alla ser samma lista hjälper oss, men jag skulle lägga en vecka till på rutinerna, säger Falk.
+
+Försöket har ännu inte utökats till fler arbetslag. Skolan ska först se hur listan fungerar under en hel termin. [Läs Vikarieportalens checklista för införandet](https://example.invalid/vikarieportalen/checklista).
+```
+
+Åtgärdade fynd i korrigeringsrundan:
+
+- Huvudrubriken generaliserade försökets median och upprepade ingressens tidsresultat. Den återger nu rektorns tillskrivna bedömning.
+- Första mellanrubriken upprepade uppgiften om kategoriernas utformning i första meningen. Den kompletterar nu meningen med uppgiften om genomgångarna.
+- Sista mellanrubriken föregrep Falks citerade reservation och framställde den som skolans nuvarande avsikt. Den anger nu hennes återblick och lämnar bedömningen åt citatet.
+
+Påståenden i korrigeringsrundan:
+
+- **Borttaget:** huvudrubrikens generella uppgift att skolan bokar vikarier på en kvart. Försökets median står kvar.
+- **Borttaget:** första mellanrubrikens specifika uppgift att arbetslagen själva utformade kategorierna. Utformningen tillskrivs fortfarande skolan i brödtexten; arbetslagens roll i just utformningen är inte längre uttrycklig.
+- **Borttaget:** sista mellanrubrikens uppgift att skolan vill ge rutinerna mer tid. Falks villkorade bedömning finns kvar i citatet.
+- **Ändrad rubrikuppgift:** huvudrubriken återger nu rektorns bedömning att listan hjälper skolan; den uppgiften finns också kvar i citatet.
+- **Ändrad mellanrubrikuppgift:** första mellanrubriken anger nu Vikarieportalens två genomgångar; uppgiften finns också kvar i brödtexten.
+- **Tillagd inramning:** sista mellanrubriken anger att Nina Falk ser tillbaka på försöket, utifrån hennes efterhandsbedömning.
+
+Utöver dessa påståendeändringar har rubrikernas upprepningar reparerats och metadatans genre ändrats från `case-study` till `casestudy`. Brödtext, citat och övrig formatering är oförändrade. Den avslutande korrekturläsningen gav inga ändringar. Källfilen är oförändrad, och inga arbetsfiler från körningen finns kvar.

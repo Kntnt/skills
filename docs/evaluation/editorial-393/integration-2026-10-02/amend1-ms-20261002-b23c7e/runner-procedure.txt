@@ -1,0 +1,85 @@
+"""Retain the unchanged red node and four gates in ticket-owned storage."""
+
+import datetime
+import json
+import os
+from pathlib import Path
+import signal
+import subprocess
+import time
+
+ROOT = Path('/Users/thomas/Projects/skills/.git/kntnt-orchestrate/393')
+SCRATCH = Path('/Users/thomas/Projects/skills/.git/kntnt-orchestrate/393.scratch/amend1-ms-20261002-b23c7e').resolve()
+OUT = ROOT / 'docs/evaluation/editorial-393/integration-2026-10-02/amend1-ms-20261002-b23c7e'
+OUT.mkdir(parents=True, exist_ok=True)
+try:
+    os.setsid()
+except PermissionError:
+    assert os.getpgrp() == os.getpid()
+ledger = {
+    'attempt_id': 'ms-20261002-b23c7e',
+    'tested_head': subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip(),
+    'runner_pid': os.getpid(),
+    'runner_pgid': os.getpgrp(),
+    'scratch_root': str(SCRATCH),
+    'commands': [],
+}
+ledger_path = OUT / 'gate-results.json'
+ledger_path.write_text(json.dumps(ledger, indent=2) + '\n')
+env = os.environ.copy()
+paths = {
+    'UV_CACHE_DIR': 'uv-cache',
+    'UV_PYTHON_INSTALL_DIR': 'uv-python',
+    'UV_TOOL_DIR': 'uv-tools',
+    'UV_TOOL_BIN_DIR': 'uv-bin',
+    'UV_PROJECT_ENVIRONMENT': 'project-env',
+    'TMPDIR': 'tmp',
+    'XDG_CACHE_HOME': 'xdg-cache',
+    'RUFF_CACHE_DIR': 'ruff-cache',
+    'MYPY_CACHE_DIR': 'mypy-cache',
+}
+ledger['owned_temporary_paths'] = [str(SCRATCH / name) for name in paths.values()]
+ledger_path.write_text(json.dumps(ledger, indent=2) + '\n')
+for var, name in paths.items():
+    (SCRATCH / name).mkdir(exist_ok=True)
+    env[var] = str(SCRATCH / name)
+env['PYTHONDONTWRITEBYTECODE'] = '1'
+ledger['environment_overrides'] = {key: env[key] for key in paths} | {'PYTHONDONTWRITEBYTECODE': '1'}
+ledger['preexisting_gate_paths'] = {str(ROOT / name): (ROOT / name).exists() for name in ['.pytest_cache', '.venv', 'uv.lock', '.ruff_cache', '.mypy_cache']}
+contributing = (ROOT / 'CONTRIBUTING.md').read_text()
+block = contributing.split('5. **Run the tests.**', 1)[1].split('```', 2)[1]
+commands = [line.strip() for line in block.splitlines() if line.strip()]
+assert len(commands) == 4
+assert commands[0] == 'uvx ruff check .'
+assert commands[1] == 'uvx ruff format --check .'
+assert commands[3] == 'uv run --with pytest --with pytest-xdist --with pyyaml pytest -n auto'
+red = commands[3] + ' tests/test_run.py::test_the_registries_the_engine_finds_are_the_ones_this_repository_keeps'
+rows = [('red', red), *zip(['ruff-check', 'ruff-format', 'mypy', 'pytest'], commands)]
+ledger_path.write_text(json.dumps(ledger, indent=2) + '\n')
+for name, command in rows:
+    start = time.monotonic()
+    with (OUT / f'{name}.txt').open('w') as log:
+        process = subprocess.Popen(command, cwd=ROOT, env=env, shell=True, executable='/bin/bash', start_new_session=True, stdout=log, stderr=subprocess.STDOUT)
+        row = {'name': name, 'command': command, 'cwd': str(ROOT), 'pid': process.pid, 'pgid': process.pid, 'started_at': datetime.datetime.now(datetime.timezone.utc).isoformat()}
+        ledger['commands'].append(row)
+        ledger_path.write_text(json.dumps(ledger, indent=2) + '\n')
+        print(f'{name}: started process group {process.pid}', flush=True)
+        try:
+            row['exit_code'] = process.wait()
+        except BaseException:
+            os.killpg(process.pid, signal.SIGTERM)
+            process.wait()
+            raise
+        row['duration_seconds'] = round(time.monotonic() - start, 3)
+        row['finished_at'] = datetime.datetime.now(datetime.timezone.utc).isoformat()
+        try:
+            os.killpg(process.pid, 0)
+            row['process_group_exists_after_wait'] = True
+        except ProcessLookupError:
+            row['process_group_exists_after_wait'] = False
+        ledger_path.write_text(json.dumps(ledger, indent=2) + '\n')
+        print(f"{name}: exit {row['exit_code']} after {row['duration_seconds']} seconds", flush=True)
+ledger['all_four_gates_executed'] = True
+ledger['all_four_gates_passed'] = all(row['exit_code'] == 0 for row in ledger['commands'][1:])
+ledger['completed_at'] = datetime.datetime.now(datetime.timezone.utc).isoformat()
+ledger_path.write_text(json.dumps(ledger, indent=2) + '\n')

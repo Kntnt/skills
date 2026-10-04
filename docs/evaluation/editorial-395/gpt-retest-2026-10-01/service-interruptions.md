@@ -1,0 +1,23 @@
+# Service interruptions
+
+Cell 04's first Write judge A invocation ended with native `Selected model is at capacity. Please try a different model.` and `turn.failed`, return code 1, after 641.59 seconds. It had already written judgement.md, but the whole invocation is void; no judgement from it counts. Raw parent/session/capture/inventory evidence is preserved under voids/item-04-composition-reader-a-attempt-1. A fresh independent invocation uses the identical neutral packet, brief, criteria and inherited seat, without the void report or error being shown to it.
+
+The evaluator coordinator PID 46069 was temporarily SIGSTOP'd to reserve a native slot for recovery while keeping at most two active invocations. Already-running native sessions continue unaffected. It must be SIGCONT'd after cell 04 recovery, and it remains registered for cleanup. No plan, corpus, source, product or seat changed.
+
+The fresh replacement A completed with return code 0, full native task completion and no service error. The remaining Write judge and both Redline judges also completed. The raw cell-04 error marker is retained beside the recovery completion marker; it does not describe the final cell as incomplete.
+
+The recovery script's last line used numeric signal 18, which on this platform is SIGTSTP, so its printed claim that the coordinator resumed was false. The evaluator immediately checked the process state, verified PID 46069 still named the owned coordinator, and sent Python's symbolic `signal.SIGCONT` (19). The subsequent process state was running. This operational correction changed no invocation, input, judgement or product; the observed recovery source and its stdout are preserved rather than silently corrected.
+
+Cell 06 composition attempt 1 reached the unchanged 1800-second deadline before delivery; returncode -15, timed_out true, partial parent and two source-checker traces retained as void. Fresh unchanged-input/seat attempts 2 and, only if infrastructure-interrupted, 3 remain within the frozen allowance. No timeout increase or product change. Operational recovery script preserved.
+
+Cell 07 composition attempt 1 also reached the unchanged 1800-second deadline before delivery (returncode -15, timed_out true); complete partial parent/children and temporary versions preserved as void. First allowed fresh replacement retains input, product, seat and 1800 seconds.
+
+Cell 06 composition attempt 2: unchanged 1800-second deadline reached (1800.25 s, returncode -15). Both source-checker native tasks completed, but the parent did not produce a completed delivery. Whole invocation remains void; all traces, temporary versions and inventories retained. Attempt 3 is the last infrastructure replacement permitted by the original frozen allowance and retains the same 1800-second bound, input, seat and product.
+
+Attempt 2 cell 06 did write prospective observer-delivered.md and observer-response.md files before termination, together with complete checker reports/dispositions. These retained versions are not a completed native response: response.txt is absent and parent task_complete is false. The whole invocation remains void and its prospective artifact is never scored or substituted for the final replacement.
+
+Cell 07 composition attempt 2: unchanged deadline at 1800.28 seconds, returncode -15. Full partial parent/children, temporary file versions and inventories retained as void. The last of two allowed infrastructure replacements started on unchanged input, seat, product and bound. The native CLI deadline is evaluator censorship, not a completed Skill stop or semantic finding.
+
+Cell 07 composition attempt 3 reached the unchanged 1800-second deadline (1800.24 s, returncode -15). This exhausts its two frozen infrastructure replacements. All three native invocations are void; no fourth invocation is authorized under this plan. sv-r2 therefore has no counted Write delivery, no paired Redline or independent semantic judgements. The full matrix is incomplete, never passed. Actual partial sessions/files are preserved rather than interpreting the cutoff as a product stop.
+
+Final lifecycle: cell06 attempt3 completed in 1180.21 seconds, followed by its fresh source-blind Redline and all four independent readers. Only that replacement counts. The original coordinator and all recovery groups have exited; the earlier resume instruction is historical. Six whole voids remain: cell04 reader A, two cell06 compositions and three cell07 compositions. Complete underlying native void evidence is retained. The controller error-marker retention limit is stated in environment-notes.md; it does not remove any product invocation evidence.

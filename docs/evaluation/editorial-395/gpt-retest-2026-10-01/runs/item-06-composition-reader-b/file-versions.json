@@ -1,0 +1,122 @@
+[
+  {
+    "path": "work/delivered.md",
+    "sha256": "1ad7c51e8984aac8a7f6dc921051b930e8eb4c3db6cbc55332ddf0f3e8a5e9a8",
+    "capture": "0000-1ad7c51e8984.md",
+    "time": 1790871377.477688
+  },
+  {
+    "path": "work/input.md",
+    "sha256": "24238d277771921361737f9c1f4ce6806708250313b823385db5e51b6e910503",
+    "capture": "0001-24238d277771.md",
+    "time": 1790871377.477825
+  },
+  {
+    "path": "work/criteria.md",
+    "sha256": "2997a45c104a909e118ef4dc70e277035233b815ae7f2d5dc94482f52911dc28",
+    "capture": "0002-2997a45c104a.md",
+    "time": 1790871377.477964
+  },
+  {
+    "path": "work/response.md",
+    "sha256": "33ce4e0b4031994a84231e3853a8a40774e21bf0b22a2799d0c3cf09b99e7eed",
+    "capture": "0003-33ce4e0b4031.md",
+    "time": 1790871377.4780989
+  },
+  {
+    "path": "work/brief.md",
+    "sha256": "24238d277771921361737f9c1f4ce6806708250313b823385db5e51b6e910503",
+    "capture": "0004-24238d277771.md",
+    "time": 1790871377.4782348
+  },
+  {
+    "path": "work/AGENTS.md",
+    "sha256": "4404fd231c562cdc14d9d58ee6d086b330b7519bba37e2a149ba798d8c14d83f",
+    "capture": "0005-4404fd231c56.md",
+    "time": 1790871377.478351
+  },
+  {
+    "path": "work/evidence/0012-8ea3f81491a4.md",
+    "sha256": "8ea3f81491a47e810abfa63a58e662ff8f89fe237d58c9c15c3cda7dfc44f48a",
+    "capture": "0006-8ea3f81491a4.md",
+    "time": 1790871377.47857
+  },
+  {
+    "path": "work/evidence/0009-664cd63d2f3e.md",
+    "sha256": "664cd63d2f3edd85056f75829d2c958a80b5848f68382e7eb8dce66c641051ee",
+    "capture": "0007-664cd63d2f3e.md",
+    "time": 1790871377.478702
+  },
+  {
+    "path": "work/evidence/0003-ae98f4215313.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0008-ae98f4215313.txt",
+    "time": 1790871377.4788249
+  },
+  {
+    "path": "work/evidence/0011-664cd63d2f3e.md",
+    "sha256": "664cd63d2f3edd85056f75829d2c958a80b5848f68382e7eb8dce66c641051ee",
+    "capture": "0009-664cd63d2f3e.md",
+    "time": 1790871377.47894
+  },
+  {
+    "path": "work/evidence/0002-ae98f4215313.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0010-ae98f4215313.txt",
+    "time": 1790871377.47906
+  },
+  {
+    "path": "work/evidence/0006-9b335230a3f5.md",
+    "sha256": "9b335230a3f5c118b951bb998dd610b6ac3cd782deba6439fa614c364d2f9b04",
+    "capture": "0011-9b335230a3f5.md",
+    "time": 1790871377.4791691
+  },
+  {
+    "path": "work/evidence/0005-ae98f4215313.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0012-ae98f4215313.txt",
+    "time": 1790871377.4798038
+  },
+  {
+    "path": "work/evidence/0008-8ea3f81491a4.md",
+    "sha256": "8ea3f81491a47e810abfa63a58e662ff8f89fe237d58c9c15c3cda7dfc44f48a",
+    "capture": "0013-8ea3f81491a4.md",
+    "time": 1790871377.479937
+  },
+  {
+    "path": "work/evidence/version-map.txt",
+    "sha256": "ccced49e232efc8d353b086beee7054ed249145484f9ecff3558d62a8bff50b4",
+    "capture": "0014-ccced49e232e.txt",
+    "time": 1790871377.4800892
+  },
+  {
+    "path": "work/evidence/0010-293f00381dc5.md",
+    "sha256": "293f00381dc58135c6eeb442c38b5cd3f0991be1bbaab9a59b4f0c698132742f",
+    "capture": "0015-293f00381dc5.md",
+    "time": 1790871377.480222
+  },
+  {
+    "path": "work/evidence/0007-293f00381dc5.md",
+    "sha256": "293f00381dc58135c6eeb442c38b5cd3f0991be1bbaab9a59b4f0c698132742f",
+    "capture": "0016-293f00381dc5.md",
+    "time": 1790871377.480336
+  },
+  {
+    "path": "work/evidence/0004-ae98f4215313.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0017-ae98f4215313.txt",
+    "time": 1790871377.480452
+  },
+  {
+    "path": "work/work/source.md",
+    "sha256": "75188596831d5a0a28364ea4da4d1053f69900ca25237f08859696058c579f11",
+    "capture": "0018-75188596831d.md",
+    "time": 1790871377.480611
+  },
+  {
+    "path": "work/judgement.md",
+    "sha256": "e4fd52c0684ef649c1e616ce9d7e362e1afde5c35a4235c30ca25d0d454c5717",
+    "capture": "0019-e4fd52c0684e.md",
+    "time": 1790871861.0556722
+  }
+]

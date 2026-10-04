@@ -1,0 +1,81 @@
+Saved to [judgement.md](/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-ebi0hft9/work/judgement.md).
+
+# Judgement
+
+## 1. Outcome
+
+**Delivered. Two source comparisons ran.** The first report is `evidence/0010-99670a411331.md`; the second is `evidence/0014-1d484722be39.md`. Their duplicate observer captures are copies, not additional comparisons.
+
+The judged artifact is `delivered.md`. After removing its added YAML frontmatter, its prose is byte-for-byte identical to the final checked draft, `evidence/0012-e1e708ded3f8.md`. The Markdown artifact in `response.md` also exactly matches `delivered.md`. There is no post-comparison prose change.
+
+All 23 files under `evidence/` were read. The eight observer Markdown captures are byte-identical to their corresponding earlier files. The package-metadata text files contain no draft or findings. This judgement uses the supplied source and criteria; checker approvals do not establish source support, and configuration, traces and model identities are not assessed.
+
+## 2. F1
+
+**Pass.** I find no unsupported assertion, quotation, attribution or implication in the delivered prose, and no consequentially dropped caveat.
+
+- **Decision and chronology:** “Fenwick’s manager approves Benchline for new jobs” reports the source’s managerial approval of continued use. The body supplies “continued use” and the backlog restriction, so the headline does not assert completed implementation or a general recommendation. “Postponed adding its backlog … pending a review of job status definitions” preserves the outstanding review condition. It supplies no postponement date or claim that the six weeks had ended. The lead retains January 2026 as the start month of a six-week trial, without inventing start or completion days.
+- **Actors and scope:** The workshop remains responsible for defining statuses, choosing updaters and selecting Benchline. Benchline configures those choices and trains four staff in one online session. The organisational attribution “Fenwick Instrument Repairs postponed” accurately reports its manager’s workshop decision. “Pending a review” leaves the reviewer implicit in the workshop context; it introduces no alternative reviewer or completed review.
+- **Terms:** Source and draft are both English, so there are no translated terms to test in either direction. The contextual paraphrases preserve their referents: “setup” refers to the configuration described immediately below it; “job status definitions” refers to the workshop’s statuses. “Status names” remains inside Vale’s exact quotation and is not substituted for “status definitions” in the narrative. “Documents visibility” refers to what the summary says staff could see, without adding a comparative improvement.
+- **Telephone contact:** “The team continued to discuss customer collection arrangements by telephone” is supported by the source’s calls “to discuss collection arrangements with customers”. It omits the explicit interlocutor detail but asserts no different interlocutor, automation or cessation of customer calls. This is compression of a supported activity, not removal of a limiting caveat.
+- **Results and limits:** The draft correctly attributes the 38 entries to the summary dated 23 February 2026 and retains “It says staff could see which instruments were waiting for parts”. It does not turn entries into completed repairs, customers or the entire workload, and makes no count-size judgement. “The summary does not measure repair duration, revenue or customer satisfaction” preserves the absence of those measurements in that document. It does not claim that those outcomes failed to improve, or that no measurement existed elsewhere. The article remains an account of reported experience rather than measured improvement or a recommendation for every workshop.
+- **Interview and personal attributes:** The date, email medium, name and managerial role are supplied. “Asked what would change next time” faithfully condenses the recorded hypothetical question. No visit, spoken exchange, expression, emotion, natural gender or subsequent event is invented.
+- **Byline:** “By Thomas Barregren” is expressly allowed by the judging instructions, and the response discloses its invocation-derived origin.
+
+Both customer quotations retain their full wording and qualifications, as detailed below. The two defects in the first checked draft were repaired before delivery.
+
+## 3. G1, G2, P1, W1, L1 and L2
+
+| Criterion | Verdict | Passage and reader effect |
+| --- | --- | --- |
+| **G1** | **Pass** | The customer case gives workshop managers a recognisable angle: approval for new jobs alongside a deferred backlog and a need to settle status meanings. The separate paper sheets establish the situation; the workshop’s decisions and Benchline’s configuration establish the action; the attributed visibility report and measurement limits establish the result; Vale’s additional-week appraisal supplies a practical consideration. The case stays proportionate to the available evidence. |
+| **G2** | **Fail** | The headline, standfirst, disclosed byline, lead, three sections and ending appear in the required order. Their jobs are distinct: the headline gives approval, the standfirst gives the backlog condition and scope, and the lead explains the trial and previous arrangement. The body covers situation, action, results and appraisal. It accurately describes Benchline’s contribution and leaves the customer making its own decisions, without claiming independent observation or assigning the workshop’s choices to the publisher. However, the ending — “I would allow another week to check the status names before adding the backlog” — is Vale’s appraisal, not a call to action for the reader. No supplied offer, link or contact route permits the required customer-case CTA. The response discloses this gap; disclosure does not make the anatomy complete. |
+| **P1** | **Pass** | “Jobs awaiting parts and jobs ready for work” introduces the statuses before the setup discussion. Vale’s example explains why a part’s presence in the building does not necessarily mean readiness at the right bench. The subsequent summary and measurement caveat distinguish recorded visibility from unmeasured business outcomes. The final approval and backlog deferral follow intelligibly from that discussion without inventing a causal improvement. |
+| **W1** | **Pass** | The article contains 274 words including headings and byline. The headline has seven words and 49 characters. The eight prose paragraphs range from 11 to 52 words; six have two or three sentences, and each of the three sections has two paragraphs. Only H2 section headings are used. The standfirst begins “Fenwick”; the lead begins “In”. Covering the standfirst leaves a complete account in the body. The short measurement-caveat paragraph usefully isolates the evidential limit, and the headings orient the reader through setup, evidence and appraisal. There is no material density or fragmentation loss. |
+| **L1** | **Pass** | The prose uses professional, natural English: “after checking that it could distinguish those statuses”, “pending a review” and “Asked what would change next time, Vale wrote” are idiomatic in context. “What its trial summary could establish” is abstract but intelligible and grammatically natural. The customer’s concrete bench example preserves an individual voice. No imported Swedish syntax or awkward translated idiom is evident. |
+| **L2** | **Pass** | British English mechanics are consistent: “23 February 2026” and “2 March 2026” use day–month–year forms; the customer quotations use single typographic quotation marks with sentence punctuation appropriate to the complete quoted sentences. “Six-week” is correctly hyphenated, and 38 is a plainly stated count. There is no conflicting spelling, currency conversion or invented date. |
+
+## 4. Bridges into quotations
+
+1. **Bridge, in full:** “In an email interview on 2 March 2026, manager Priya Vale explained the preparation:” **Quotation, in full:** “We had to agree what ready for work meant. A part being in the building did not always mean that it had reached the right bench.” **Class: (b).** “In an email interview on 2 March 2026” identifies the occasion, “manager Priya Vale” supplies attribution, and “explained the preparation” names the subject. The bridge leaves the agreement, its meaning and the part-at-the-bench qualification to the quotation. An alternative (c) reading counts the date and medium as facts absent from the answer; I choose (b) because the definition expressly includes naming the occasion, which is all those details do here. A bridge is present.
+2. **Bridge, in full:** “Asked what would change next time, Vale wrote:” **Quotation, in full:** “I would use it again for new jobs. I would allow another week to check the status names before adding the backlog.” **Class: (b).** “Asked what would change next time” names the recorded question’s subject and hypothetical occasion; “Vale wrote” attributes the email answer. A possible (a) reading treats the mention of change as anticipating the appraisal; I choose (b) because the bridge supplies neither the new-job choice nor the proposed additional week, so the answer still delivers its substantive content. A bridge is present.
+
+**Earlier overlap, assessed separately:** “The workshop defined the statuses and decided who would update them” overlaps with the first answer’s account of agreeing readiness meanings, but the answer adds the practical distinction between a part in the building and a part at the right bench. The headline and the paragraph “The manager approved continued use for new jobs, but postponed adding the backlog pending a review of the status definitions” already report approval for new jobs, overlapping with the second answer’s willingness to use the schedule again. Actual approval and conditional retrospective appraisal are distinct, and the extra week remains new information. “Vale considers the next step” names the appraisal’s subject without stating it. These earlier overlaps do not change either immediate bridge’s class.
+
+The draft has **zero (a), two (b) and zero (c) bridges**, with zero quotations standing without a bridge.
+
+The draft puts no unsupported utterance in an interviewer’s mouth: “Asked what would change next time” is a faithful indirect rendering of the supplied question, “Would you make the same choice again, and what would you change?”
+
+Neither bridge asserts anything unsupported by the supplied material: the email occasion, date, speaker and question are all recorded.
+
+## 5. Quoted speech
+
+**Both Vale answers are reproduced word for word.** Changing the outer double quotation marks to British-style single marks changes no speech content.
+
+The first answer retains the necessity of “We had to agree”, the specific phrase “ready for work”, and the reservation “did not always”. Its concrete building/bench distinction and collective first-person voice remain intact. It is still Vale’s reported experience, not a measured outcome or an observed scene.
+
+The second retains both instances of “would”, the limitation “for new jobs”, the proposed “another week”, and the sequence “before adding the backlog”. It remains a conditional personal appraisal rather than a scheduled event, an elapsed extra week or a universal recommendation.
+
+No approved Vale quotation is missing. Both supplied interviewer questions are omitted as direct quotations: “What did the team have to settle before the schedule was useful?” and “Would you make the same choice again, and what would you change?” The first receives subject-level framing through “explained the preparation”; the second is rendered indirectly by “Asked what would change next time”. Their verbatim omission loses no customer answer or material qualification.
+
+## 6. Intermediate findings and dispositions
+
+Duplicate captures are accounted for once below. The two source-checker findings are distinguished from the anatomy records and the limitation disclosed in the reply.
+
+| Passage | Allegation | Writer’s action | Class |
+| --- | --- | --- | --- |
+| “Fenwick keeps its shared schedule for new jobs” — first comparison F1, `evidence/0010-99670a411331.md` | Managerial approval was presented as accomplished continuation; use after approval is not established. | Accepted in `evidence/0011-8c0c0786cd5b.md`; changed to “Fenwick’s manager approves Benchline for new jobs”, retaining explicit continued-use scope in the body. The delivered headline reports the supported decision. | **supported repair** |
+| “Fenwick Instrument Repairs postponed adding its backlog after a six-week Benchline trial.” — first comparison F2 | “After” places the postponement after the completed trial, although the source gives no start day or postponement date and does not establish that sequence. | Accepted in the same disposition file; replaced with the postponement “pending a review of job status definitions”. The source’s review condition survives and the unsupported sequence is removed. | **supported repair** |
+| Standfirst and initial lead both opening “Fenwick” — anatomy record, `evidence/0009-316c3ed0b337.md` | The openings departed from the different-first-word norm. | Changed the lead to “In January 2026 …”, also keeping the six-week duration in the body. A straightforward improvement was available without factual loss. | **supported repair** |
+| “The workshop sets the terms” above “The workshop defined the statuses and decided who would update them.” — same anatomy record | The subheading repeated the first sentence’s account of setting statuses and responsibilities. | Changed the heading to “Benchline provides setup and training”. This gives the section a supported supplier-contribution angle while its first sentence continues to establish the customer’s decisions. | **supported repair** |
+| Reply: “No call to action was supplied, so the ending carries Vale’s appraisal.” | The material provides no CTA; the article ends with appraisal instead of the required reader action. | Left the ending unchanged and disclosed the limitation. The anatomy records also acknowledge the gap. No source-checker report alleges a CTA defect or records a disposition on it. | **not judgeable from the evidence** as a checker repair/rejection; the disclosed input limitation and remaining G2 failure are independently judgeable and established above. |
+
+The final source comparison contains no findings. Its clean result is consistent with my comparison, but is not the basis of the F1 pass. The response mentions no additional, uncaptured checker finding.
+
+The CTA row does not suggest that the missing ending is unknowable: it records the absence of a checker repair/rejection to classify. The writer acknowledged an input limitation and reported the resulting gap rather than accepting or rejecting a proposed source repair.
+
+I found no remaining F1 defect, unsupported interviewer utterance, unsupported bridge or substantive bridge pre-echo that escaped both checkers. The G2 CTA problem was explicitly disclosed and is separate from the source-support findings.
+
+## 7. Stop or delivery
+
+**Valid delivery, with a reported remaining G2 quality problem.** The final prose is source-supported, preserves the customer’s approved answers and is identical to the last checked prose. The two source defects were repaired and checked again. A source-supported customer-case CTA cannot be built from this packet because it contains no offer, link or contact route. The response explicitly reports that gap. Under `criteria.md`, reporting an irreparable finding satisfies the reporting requirement while the text remains labelled as having a quality problem; the missing CTA therefore warrants the G2 failure, but does not make this a delivery that should not have happened.

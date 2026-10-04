@@ -1,0 +1,10 @@
+{
+  "sha256": "b787098b30be5dedad08ac44f46341cb47e85c68867f52ba418ea5aaa2969d8c",
+  "bytes": 162744,
+  "whitespace_words": 22748,
+  "neutral_samples": 20,
+  "input_path_at_execution": "/Users/thomas/Projects/skills/.git/evaluation-staging/6aea5e5c345f4ad3af4192edfeceff10/bundle.md",
+  "brief": "judge-brief.md",
+  "frozen_product_revision": "fb16908712c4d47a36fc6ee9dfb3eb2714a19e65",
+  "no_model_arm_ticket_or_historical_result_in_packet": true
+}

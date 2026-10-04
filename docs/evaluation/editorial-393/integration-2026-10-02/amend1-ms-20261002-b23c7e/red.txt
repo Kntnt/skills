@@ -1,0 +1,49 @@
+Using CPython 3.14.8 interpreter at: /opt/homebrew/opt/python@3.14/bin/python3.14
+Creating virtual environment at: /private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-393-scratch/amend1-ms-20261002-b23c7e/project-env
+warning: No `requires-python` value found in the workspace. Defaulting to `>=3.14`.
+Downloading pygments (1.2MiB)
+ Downloaded pygments
+Installed 8 packages in 7ms
+============================= test session starts ==============================
+platform darwin -- Python 3.14.8, pytest-9.1.1, pluggy-1.6.0
+rootdir: /Users/thomas/Projects/skills/.git/kntnt-orchestrate/393
+configfile: pyproject.toml
+plugins: xdist-3.8.0
+created: 14/14 workers
+14 workers [1 item]
+
+F                                                                        [100%]
+=================================== FAILURES ===================================
+___ test_the_registries_the_engine_finds_are_the_ones_this_repository_keeps ____
+[gw0] darwin -- Python 3.14.8 /private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-393-scratch/amend1-ms-20261002-b23c7e/uv-cache/builds-v0/.tmp7rSUHo/bin/python
+
+    def test_the_registries_the_engine_finds_are_the_ones_this_repository_keeps() -> None:
+        """The detection is deterministic and unconfigured, so what it answers for
+        this repository is what this repository actually keeps: the decision
+        records tracked under `docs/adr`, and nothing else in the index."""
+    
+        # Compare the engine with the same tracked-file boundary its contract names.
+        found = _run().numbered_registries(REPO_ROOT)
+        records = sorted(
+            Path(path)
+            for path in _git(REPO_ROOT, "ls-files", "docs/adr").stdout.splitlines()
+            if re.match(r"^docs/adr/[0-9]{4}-.+\.md$", path)
+        )
+    
+        assert records, "this repository tracks no numbered decision records"
+>       assert set(found) == {"docs/adr"}
+E       AssertionError: assert {'docs/adr', ...ersions', ...} == {'docs/adr'}
+E         
+E         Extra items in the left set:
+E         'docs/evaluation/editorial-393/gpt-retest-2026-10-01/construction-refusals/r05/file-versions'
+E         'docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/c10/file-versions'
+E         'docs/evaluation/editorial-393/gpt-retest-2026-10-01/construction-refusals/r06/file-versions'
+E         'docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/r13-rerun/file-versions'
+E         'docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/c11/file-versions'...
+E         
+E         ...Full output truncated (25 lines hidden), use '-vv' to show
+
+tests/test_run.py:10074: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_run.py::test_the_registries_the_engine_finds_are_the_ones_this_repository_keeps
+============================== 1 failed in 2.21s ===============================

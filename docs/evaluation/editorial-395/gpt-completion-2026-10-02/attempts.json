@@ -1,0 +1,90 @@
+{
+  "cell": "07",
+  "max_infrastructure_replacements": 2,
+  "replacements_used": 0,
+  "attempts": [
+    {
+      "unit": "unit-01",
+      "role": "write",
+      "disposition": "counted delivered parent; external polling method error retained",
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 1026.7,
+        "root": "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/395.scratch/native-unit-01",
+        "cleanup_required": true
+      },
+      "artifact_sha256": "c5adac71858c031ddc5f5b89edbf38b74f17c5963887d5e4d3018936f4c98a3b"
+    },
+    {
+      "unit": "unit-02",
+      "role": "redline",
+      "disposition": "counted completed parent",
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 225.09,
+        "root": "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/395.scratch/native-unit-02",
+        "cleanup_required": true
+      },
+      "input_sha256": "c5adac71858c031ddc5f5b89edbf38b74f17c5963887d5e4d3018936f4c98a3b",
+      "delivered_artifact": false
+    },
+    {
+      "unit": "unit-03",
+      "role": "write-reader-a",
+      "disposition": "counted completed independent reader",
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 345.51,
+        "root": "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/395.scratch/native-unit-03",
+        "cleanup_required": true
+      },
+      "judgement_sha256": "677d29b1ced009c219a3a31c6a9877267c7aa6b38d332f5b287df53ae99c0cc0"
+    },
+    {
+      "unit": "unit-04",
+      "role": "write-reader-b",
+      "disposition": "counted completed independent reader",
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 307.32,
+        "root": "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/395.scratch/native-unit-04",
+        "cleanup_required": true
+      },
+      "judgement_sha256": "9ec970cf6da08918cf95d6001b7717f86697e9dec0ae0b6bbdaac0617d4cf0e2"
+    },
+    {
+      "unit": "unit-05",
+      "role": "redline-reader-a",
+      "disposition": "counted completed independent reader",
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 236.5,
+        "root": "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/395.scratch/native-unit-05",
+        "cleanup_required": true
+      },
+      "judgement_sha256": "fbbeb92de300e4a2c5a3423451571ee39646a4c0370f105f0c4eaa1013ebc8bc"
+    },
+    {
+      "unit": "unit-06",
+      "role": "redline-reader-b",
+      "disposition": "counted completed independent reader",
+      "result": {
+        "returncode": 0,
+        "timed_out": false,
+        "duration_seconds": 273.27,
+        "root": "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/395.scratch/native-unit-06",
+        "cleanup_required": true
+      },
+      "judgement_sha256": "827a90cd437f90ffb13c55dc7307d6b47e8bda5c0078c4d7f4dfcfdb7a3c2f59"
+    }
+  ],
+  "all_scheduled_units_completed": true,
+  "unrun_dependents": [],
+  "voids": [],
+  "valid_stops": []
+}

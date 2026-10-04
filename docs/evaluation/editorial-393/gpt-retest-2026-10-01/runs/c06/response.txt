@@ -1,0 +1,52 @@
+Granskad som `casestudy` på svenska, utan berättarteknik enligt textens metadata. Inga olösta fynd återstår. Texten följer artikelanatomin.
+
+```markdown
+---
+kntnt:
+  genre: casestudy
+  technique: none
+  language: sv
+---
+
+# Hamnfrakt flyttade lagersaldot till ett system
+
+**Två av Hamnfrakt AB:s lager fick ett gemensamt system för lagersaldot. Överföringen tog sex veckor med dubbel registrering. Lagerchefen Ove Ranneby skulle göra om den, men börja med färre artikelgrupper.**
+
+Text: Redaktionen
+
+Hamnfrakt AB hanterar reservdelar åt verkstäder i Norrland och har omkring 9 000 artiklar i sitt sortiment. Tidigare fördes saldot för de två lagren i varsitt kalkylark, och den som ringde fick vänta medan någon slog upp siffran på rätt ställe.
+
+## Ove Ranneby beskriver övergången
+
+Hamnfrakt valde Saldo Nord efter att ha provat om systemet kunde visa samma saldo för båda lagren. Någon jämförelse med en annan leverantör finns inte i underlaget.
+
+– Vi körde parallellt i sex veckor. Sedan gick lagret över till det nya systemet, och först då såg vi hur mycket som hade legat i pärmar, säger lagerchefen Ove Ranneby.
+
+Under de veckorna registrerade personalen varje uttag både i kalkylarken och i det nya systemet. Därefter fördes kalkylarken över och stängdes.
+
+## Hamnfrakt har inte följt upp kostnaden
+
+Enligt Hamnfrakts egen överföringsanteckning från den 12 januari 2026 saknade 340 av artiklarna en plats i det nya systemet. Artiklar som redan var utgångna ingår inte i den siffran.
+
+Anteckningen redovisar ingen mätning av hur lång tid en förfrågan tar i dag, och ingen jämförelse med tiden före överföringen. Företaget har inte heller följt upp vad överföringen kostade.
+
+## Det tredje lagret är ännu inte överfört
+
+– Jag skulle göra om det. Att se samma saldo för båda lagren hjälper oss, men jag skulle ta en artikelgrupp i taget, säger Ranneby.
+
+Det tredje lagret är ännu inte överfört. Hamnfrakt ska först se hur de 340 artiklarna faller på plats. [Läs Saldo Nords checklista för överföringen](https://example.invalid/saldonord/checklista).
+```
+
+Reparerade fynd och ändrade påståenden:
+
+- Första mellanrubriken föregrep citatets tidsuppgift. Den anger nu att Ove Ranneby beskriver övergången. Registreringsstycket står efter citatet och hänvisar till dess sex veckor i stället för att föregripa uppgiften.
+- Första citatet saknade ett uttryckligt mål för övergången. Det anger nu att lagret gick över till det nya systemet. Attributionen presenterar också Ranneby som lagerchef, så att brödtexten fungerar utan ingressens presentation.
+- ”Vad överföringen visade” gav inget konkret besked om avsnittets innehåll. Mellanrubriken anger nu att Hamnfrakt inte har följt upp kostnaden; den uppgiften finns också kvar i brödtexten.
+- Sista mellanrubriken föregrep Rannebys bedömning och tillskrev företaget hans personliga vilja. Den anger nu att det tredje lagret ännu inte är överfört; den uppgiften finns också kvar i avslutningsstycket.
+
+Borttagna rubrikpåståenden:
+
+- Uppgiften om sex veckor med dubbel registrering har tagits bort ur första mellanrubriken. Den finns kvar i ingressen och utvecklas i citatet och registreringsstycket.
+- Påståendet att företaget vill börja mindre nästa gång har tagits bort vid reparationen av sista mellanrubriken. Rannebys egen villkorade bedömning står kvar.
+
+Jag har reparerat mellanrubrikerna, flyttat registreringsstycket, förtydligat citatets syftning och presenterat talarens roll i brödtexten. Genremetadata har synkroniserats till `casestudy`. Den avslutande korrekturläsningen gav inga ytterligare ändringar. Originalfilen är oförändrad och arbetsfilerna är borttagna.

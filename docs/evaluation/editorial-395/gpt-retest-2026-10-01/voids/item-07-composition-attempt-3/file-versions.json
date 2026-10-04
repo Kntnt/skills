@@ -1,0 +1,158 @@
+[
+  {
+    "path": "work/source.md",
+    "sha256": "75188596831d5a0a28364ea4da4d1053f69900ca25237f08859696058c579f11",
+    "capture": "0000-75188596831d.md",
+    "time": 1790870560.167847
+  },
+  {
+    "path": "work/AGENTS.md",
+    "sha256": "99d90540a08c2f577b73d5067261a6130dd9987de205314d110d087c62631cfa",
+    "capture": "0001-99d90540a08c.md",
+    "time": 1790870560.167999
+  },
+  {
+    "path": "scratch/write-invoke.jDkFzY/.tmpXJcCen/environments-v2/kntnt-99a3849d53139224/lib/python3.12/site-packages/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0002-ae98f4215313.txt",
+    "time": 1790870592.295252
+  },
+  {
+    "path": "scratch/write-invoke.jDkFzY/.tmpXJcCen/archive-v0/316UD22zukMSDT0W/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0003-ae98f4215313.txt",
+    "time": 1790870592.296226
+  },
+  {
+    "path": "scratch/write-language.nFPolJ/.tmpxNluqk/environments-v2/languages-30f03bd8662eb4fe/lib/python3.12/site-packages/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0004-ae98f4215313.txt",
+    "time": 1790870621.5529668
+  },
+  {
+    "path": "scratch/write-language.nFPolJ/.tmpxNluqk/archive-v0/HRDB97ff8Il96Q_t/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0005-ae98f4215313.txt",
+    "time": 1790870621.5538838
+  },
+  {
+    "path": "scratch/write-source-check.rkt4lp8v/draft.md",
+    "sha256": "1221bf1346863965f8a36db7d4d70e03d997f636392182113e3ed703d44bb5d3",
+    "capture": "0006-1221bf134686.md",
+    "time": 1790870771.625204
+  },
+  {
+    "path": "scratch/write-source-check.rkt4lp8v/draft.md",
+    "sha256": "364d6fd2bf42a31045d514c4f5fd649d76e8a27bbb62d827c7774ce15a55e2a0",
+    "capture": "0007-364d6fd2bf42.md",
+    "time": 1790870845.408992
+  },
+  {
+    "path": "scratch/write-source-check.rkt4lp8v/anatomy-validation.md",
+    "sha256": "6ff820c88965afb1762afebf89184e4ea0a672e724e9627fdbf3c75125948f6c",
+    "capture": "0008-6ff820c88965.md",
+    "time": 1790870987.024586
+  },
+  {
+    "path": "scratch/write-source-check.rkt4lp8v/report-1.md",
+    "sha256": "ea54f1c36daa90b2d925696a60053923febe8378cc73d6224c0c55a99b5652b2",
+    "capture": "0009-ea54f1c36daa.md",
+    "time": 1790871269.284308
+  },
+  {
+    "path": "scratch/write-source-check.rkt4lp8v/validation-1.md",
+    "sha256": "493d02e147840ffb67aa489114a3b04a9ae63d6f72c533c7190f79edea3c9de1",
+    "capture": "0010-493d02e14784.md",
+    "time": 1790871347.14143
+  },
+  {
+    "path": "scratch/write-source-check.rkt4lp8v/draft-2.md",
+    "sha256": "974e9e9d508a4e4378ef31c7fdbb735a5284b6a3d9afa4aa0b468c3324cc0991",
+    "capture": "0011-974e9e9d508a.md",
+    "time": 1790871347.141616
+  },
+  {
+    "path": "scratch/write-source-check.rkt4lp8v/anatomy-final-validation.md",
+    "sha256": "baa4e30b4536738dd7f3275174e4dd9b80b2a80eb35fbf0d46f2ac801d267608",
+    "capture": "0012-baa4e30b4536.md",
+    "time": 1790871683.4012742
+  },
+  {
+    "path": "scratch/write-source-check.rkt4lp8v/report-2.md",
+    "sha256": "49c1767c39839850b5acb759c13e4cdcd0f6d2710a0eb6ef8a3be82d6e7f62e7",
+    "capture": "0013-49c1767c3983.md",
+    "time": 1790871784.4275599
+  },
+  {
+    "path": "scratch/write-source-check.rkt4lp8v/report-2.md",
+    "sha256": "fff5665f636379eeba1c3a8d95a85678dcdf0aad3289ebddde4e65fea944b4a1",
+    "capture": "0014-fff5665f6363.md",
+    "time": 1790872004.529686
+  },
+  {
+    "path": "scratch/write-source-check.rkt4lp8v/validation-2.md",
+    "sha256": "a80de9b6700b4128e100aa1359ab19c2a672f33ba555a40b50f1fa32b62c35c5",
+    "capture": "0015-a80de9b6700b.md",
+    "time": 1790872189.687267
+  },
+  {
+    "path": "scratch/observer-evidence/anatomy-validation.md",
+    "sha256": "6ff820c88965afb1762afebf89184e4ea0a672e724e9627fdbf3c75125948f6c",
+    "capture": "0016-6ff820c88965.md",
+    "time": 1790872260.1101482
+  },
+  {
+    "path": "scratch/observer-evidence/validation-1.md",
+    "sha256": "493d02e147840ffb67aa489114a3b04a9ae63d6f72c533c7190f79edea3c9de1",
+    "capture": "0017-493d02e14784.md",
+    "time": 1790872260.110284
+  },
+  {
+    "path": "scratch/observer-evidence/draft.md",
+    "sha256": "364d6fd2bf42a31045d514c4f5fd649d76e8a27bbb62d827c7774ce15a55e2a0",
+    "capture": "0018-364d6fd2bf42.md",
+    "time": 1790872260.1104
+  },
+  {
+    "path": "scratch/observer-evidence/report-2.md",
+    "sha256": "fff5665f636379eeba1c3a8d95a85678dcdf0aad3289ebddde4e65fea944b4a1",
+    "capture": "0019-fff5665f6363.md",
+    "time": 1790872260.110562
+  },
+  {
+    "path": "scratch/observer-evidence/draft-2.md",
+    "sha256": "974e9e9d508a4e4378ef31c7fdbb735a5284b6a3d9afa4aa0b468c3324cc0991",
+    "capture": "0020-974e9e9d508a.md",
+    "time": 1790872260.110686
+  },
+  {
+    "path": "scratch/observer-evidence/anatomy-final-validation.md",
+    "sha256": "baa4e30b4536738dd7f3275174e4dd9b80b2a80eb35fbf0d46f2ac801d267608",
+    "capture": "0021-baa4e30b4536.md",
+    "time": 1790872260.1107998
+  },
+  {
+    "path": "scratch/observer-evidence/report-1.md",
+    "sha256": "ea54f1c36daa90b2d925696a60053923febe8378cc73d6224c0c55a99b5652b2",
+    "capture": "0022-ea54f1c36daa.md",
+    "time": 1790872260.110931
+  },
+  {
+    "path": "scratch/observer-evidence/validation-2.md",
+    "sha256": "a80de9b6700b4128e100aa1359ab19c2a672f33ba555a40b50f1fa32b62c35c5",
+    "capture": "0023-a80de9b6700b.md",
+    "time": 1790872260.11105
+  },
+  {
+    "path": "scratch/observer-response.md",
+    "sha256": "29106e4624cd0c7a0d106bc49012fd13c6bf2cc18d23042536a8d497d8faeea8",
+    "capture": "0024-29106e4624cd.md",
+    "time": 1790872339.492159
+  },
+  {
+    "path": "scratch/observer-delivered.md",
+    "sha256": "1e7bf6690febf9cfc8add1376d9d8a23ce247b30a8e1f8383d067d841063f703",
+    "capture": "0025-1e7bf6690feb.md",
+    "time": 1790872339.492308
+  }
+]

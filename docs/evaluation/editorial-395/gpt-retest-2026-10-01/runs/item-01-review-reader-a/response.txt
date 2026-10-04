@@ -1,0 +1,79 @@
+Saved to [judgement.md](/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-y3ja6pbl/work/judgement.md).
+
+# Judgement
+
+**R1: pass.** The review preserves the text and accurately reports its unresolved missing call to action. **The delivered text still fails G2** because that required ending is absent.
+
+Evidence is limited to brief.md, work/input.md, response.md and delivered.md, and criteria.md. The input and delivered files are byte-for-byte identical. The Markdown text in response.md also matches delivered.md. Fidelity is established by comparison, independently of the reply’s no-change statement. No sources, traces or model identities were inspected.
+
+## 1. Every difference and every claim
+
+**Differences: none.** There are no mechanical corrections, repairs, changes of taste, changes to claims, removals or additions. Metadata, formatting, headings, byline, narrative and quotations are unchanged.
+
+The following inventory compares all claim-bearing passages, including attribution and modality. Every entry is identical before and after.
+
+| Passage | Claims preserved in both versions | Comparison |
+|---|---|---|
+| Headline | Fenwick staff could see which instruments awaited parts. | Unchanged. |
+| Standfirst, first sentence | Fenwick Instrument Repairs’ trial summary records 38 jobs entered in a shared bench schedule. | Unchanged. |
+| Standfirst, second sentence | The manager approved continued use for new jobs; the backlog awaited a review of status definitions. | Unchanged. |
+| Byline | Thomas Barregren is the author. | Unchanged; matches the invoking user identified in criteria.md. |
+| Lead, first sentence | Jobs awaiting parts and jobs ready for work appeared on separate paper sheets; Fenwick services brass and woodwind instruments. | Unchanged. |
+| Lead, second sentence | In January 2026, the team began a six-week Benchline trial after checking that it could distinguish those statuses. | Unchanged; timing, duration and sequence preserved. |
+| First H2 | Benchline configures the workshop’s choices. | Unchanged; the body supplies the configuration action. |
+| First section, first sentence | The team defined the statuses and decided who would update them. | Unchanged. |
+| First section, second sentence | Benchline configured those choices and trained four staff in one online session. | Unchanged. |
+| First section, third sentence | The team continued telephone calls about customer collection arrangements. | Unchanged. |
+| First quotation’s bridge | Manager Priya Vale was asked in an email interview on 2 March 2026 what the team had to settle, and wrote the quoted response. | Unchanged; name, role, medium, date and attribution preserved. |
+| First quotation | Agreement was needed about “ready for work”; a part being in the building did not always mean it had reached the right bench. | Unchanged; the “did not always” reservation preserved. |
+| Second H2 | The summary does not measure repair duration. | Unchanged. |
+| Second section, first sentence | The trial summary is dated 23 February 2026, records 38 scheduled jobs, and says staff could see instruments waiting for parts. | Unchanged; date, figure and documentary attribution preserved. |
+| Second section, second sentence | The summary does not measure repair duration, revenue or customer satisfaction. | Unchanged; all three evidential limits preserved. |
+| Second section, final sentence | Vale approved continued use for new jobs but postponed adding the backlog until the team had reviewed its status definitions. | Unchanged; scope and condition preserved. |
+| Third H2 | Vale reflects on the next steps. | Unchanged; describes the reflective quotation. |
+| Second quotation’s bridge | Vale was asked about making the same choice again and what would change, and wrote the quoted response. | Unchanged; attribution and hypothetical subject preserved. |
+| Second quotation | Vale would use it again for new jobs and would allow another week to check status names before adding the backlog. | Unchanged; conditional appraisal preserved, without turning it into an event that happened. |
+
+**Removal and finding account:** There are no legitimate removals, rejected losses or changed claims to classify. The only reported unresolved finding is the absent reader call to action. It is a legitimate anatomy finding and cannot be completed from this text’s supplied offers, links or contact routes, because it contains none. Leaving it reported is appropriate; the delivered text retains that quality problem.
+
+## 2. Bridges into quotations
+
+Each row gives the complete immediate bridge, in input order, and exactly one class for each version.
+
+| Quotation | Input bridge and class | Delivered bridge and class | Words establishing the class |
+|---|---|---|---|
+| 1 | “Asked in an email interview on 2 March 2026 what the team had to settle, manager Priya Vale wrote:” — **(b)** | “Asked in an email interview on 2 March 2026 what the team had to settle, manager Priya Vale wrote:” — **(b)** | “in an email interview on 2 March 2026” names the occasion; “what the team had to settle” names the subject; “manager Priya Vale wrote” supplies attribution. The bridge has not already stated either the required agreement about readiness or the distinction between arrival in the building and arrival at the right bench. |
+| 2 | “Asked about making the same choice again and what would change, Vale wrote:” — **(b)** | “Asked about making the same choice again and what would change, Vale wrote:” — **(b)** | “making the same choice again and what would change” names the subjects of the question; “Vale wrote” attributes the response. The bridge does not give Vale’s affirmative appraisal or her proposed extra week. |
+
+Neither bridge changed. No bridge change therefore needs to be named in the reply; none introduces a new event, fact, name or figure, and no information carried by an input bridge is lost. Neither bridge contains a substantive pre-echo clause mixed with an independent fact.
+
+**Separate log of earlier overlap:** Before quotation 1, “The team defined the statuses and decided who would update them” establishes the broader status-definition work. The quotation adds the specific readiness distinction and the right-bench reservation. The heading “Benchline configures the workshop’s choices” describes configuration, without giving that quoted explanation.
+
+Before quotation 2, the standfirst and “Vale approved continued use for new jobs but postponed adding the backlog until the team had reviewed its status definitions” already establish the approval and backlog deferral. The quotation returns to those subjects as a conditional appraisal and adds the proposed extra week. “Vale reflects on the next steps” names that reflective subject without stating the appraisal. This earlier overlap does not alter either immediate bridge’s **(b)** classification.
+
+## 3. Quotations themselves
+
+| Quotation | Wording in both input and delivery | Fidelity and reporting |
+|---|---|---|
+| 1 | ‘We had to agree what ready for work meant. A part being in the building did not always mean that it had reached the right bench.’ | Unchanged, including punctuation. The need for agreement, the “did not always” reservation, the bench distinction and the speaker’s practical voice all survive. No quotation change required reporting. |
+| 2 | ‘I would use it again for new jobs. I would allow another week to check the status names before adding the backlog.’ | Unchanged, including punctuation. The first-person appraisal, repeated “would”, restriction to new jobs and proposed timing before adding the backlog all survive. No quotation change required reporting. |
+
+The reply’s statement that the complete text is unchanged accurately includes both quotations.
+
+## 4. Criterion decisions and reporting accuracy
+
+| Criterion | Decision | Evidence |
+|---|---|---|
+| **G1** | **Pass** | The case study has a recognisable status-visibility angle. It presents the customer’s paper-sheet situation, the trial and configuration actions, the recorded visibility result, the rollout decision and Vale’s appraisal. Readers learn what was tried and what the evidence does and does not establish. No particular target reader is named in this packet; no additional audience requirement is assumed. The missing required action is recorded under G2. |
+| **G2** | **Fail** | Headline, standalone standfirst, correct byline, lead before the first H2, explanatory sections and customer appraisal appear in order and perform useful jobs. The lead’s status-distinction expectation is met by the reported visibility result. However, the ending offers Vale’s appraisal rather than a call to action for the reader. The reply explicitly and accurately reports this mandatory omission. The text supplies no offer, link or contact route from which to construct the required case-study action. |
+| **P1** | **Pass** | The distinction between waiting for parts and readiness for work is introduced before the quotation explains it. Configuration, the trial summary, its limits and the continued-use decision follow coherently. Visibility is not inflated into shorter repairs, higher revenue or better satisfaction; those measurements are expressly absent. The useful status-definition and bench-arrival detail remains. |
+| **W1** | **Pass** | The headline has **8 words and 55 characters**. All seven prose paragraphs are below 80 words; the longest has 45. Sections contain **2, 2 and 1 paragraphs**, with no heading below H2. Six of seven prose paragraphs have two or three sentences; two of three sections have two paragraphs, satisfying the whole-text “most” preferences. The standfirst opens “Fenwick” and the lead “Jobs”; they complement one another. The body remains complete without the standfirst. No reader loss from density, fragmentation or heading presentation is evident. |
+| **L1** | **Pass** | The prose uses professional, idiomatic English. Workshop terms and the plainspoken quotations are understandable in context. No visible translated syntax or unnatural idiom requires correction. |
+| **L2** | **Pass** | British English is retained, including single quotation marks and day–month–year dates. Number forms and punctuation are consistent. No locale correction, invented date or conversion is needed. |
+| **R1** | **Pass** | The review identifies the concrete missing call to action, reports it as unresolved and preserves all working prose, claims, attribution, reservations and quotations. It makes no taste-driven rewrite or unsupported repair. The finding’s reporting satisfies the review obligation while G2 remains failed. |
+
+**Every removal and changed claim:** There are none. The reply reports “No claims were removed, changed or added” and “The complete text is unchanged”; both statements are accurate against the delivered artifact. “The mechanical pass needed no corrections” is consistent with the visible text, although the actual execution of that pass cannot be established from these files.
+
+The reply’s “measured anatomy limits pass” is consistent with the visible counts; it does not establish complete G2 compliance, and the reply separately acknowledges the missing action. Its correction-round and stopping claims are process claims that this artifact-only judgement does not verify.
+
+**No requested criterion is skipped.** The review passes R1; the unchanged delivery retains the explicitly reported G2 quality problem.

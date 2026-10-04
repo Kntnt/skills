@@ -1,0 +1,30 @@
+[
+  {
+    "unit": "unit-03",
+    "role": "write",
+    "staged_input_sha256": "75188596831d5a0a28364ea4da4d1053f69900ca25237f08859696058c579f11",
+    "no_other_judgement_staged": true,
+    "no_source_package_staged": false
+  },
+  {
+    "unit": "unit-04",
+    "role": "write",
+    "staged_input_sha256": "75188596831d5a0a28364ea4da4d1053f69900ca25237f08859696058c579f11",
+    "no_other_judgement_staged": true,
+    "no_source_package_staged": false
+  },
+  {
+    "unit": "unit-05",
+    "role": "redline",
+    "staged_input_sha256": "c5adac71858c031ddc5f5b89edbf38b74f17c5963887d5e4d3018936f4c98a3b",
+    "no_other_judgement_staged": true,
+    "no_source_package_staged": true
+  },
+  {
+    "unit": "unit-06",
+    "role": "redline",
+    "staged_input_sha256": "c5adac71858c031ddc5f5b89edbf38b74f17c5963887d5e4d3018936f4c98a3b",
+    "no_other_judgement_staged": true,
+    "no_source_package_staged": true
+  }
+]

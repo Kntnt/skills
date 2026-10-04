@@ -1,0 +1,58 @@
+[
+  {
+    "cell": "01",
+    "fixture": "source-01.md",
+    "locale": "en_GB",
+    "invocation": "/write --genre=casestudy --language=en_GB --output=response source.md",
+    "redline_invocation": "/redline --output=response input.md",
+    "source_sha256": "75160dbc12d41294eccfc615f4a8e1b2df1b5202185f5ba1f24a2f3d5fd69afc"
+  },
+  {
+    "cell": "02",
+    "fixture": "source-01.md",
+    "locale": "en_GB",
+    "invocation": "/write --genre=casestudy --language=en_GB --output=response source.md",
+    "redline_invocation": "/redline --output=response input.md",
+    "source_sha256": "75160dbc12d41294eccfc615f4a8e1b2df1b5202185f5ba1f24a2f3d5fd69afc"
+  },
+  {
+    "cell": "03",
+    "fixture": "source-01.md",
+    "locale": "en_GB",
+    "invocation": "/write --genre=casestudy --language=en_GB --output=response source.md",
+    "redline_invocation": "/redline --output=response input.md",
+    "source_sha256": "75160dbc12d41294eccfc615f4a8e1b2df1b5202185f5ba1f24a2f3d5fd69afc"
+  },
+  {
+    "cell": "04",
+    "fixture": "source-02.md",
+    "locale": "en_US",
+    "invocation": "/write --genre=casestudy --language=en_US --output=response source.md",
+    "redline_invocation": "/redline --output=response input.md",
+    "source_sha256": "75188596831d5a0a28364ea4da4d1053f69900ca25237f08859696058c579f11"
+  },
+  {
+    "cell": "05",
+    "fixture": "source-02.md",
+    "locale": "en_US",
+    "invocation": "/write --genre=casestudy --language=en_US --output=response source.md",
+    "redline_invocation": "/redline --output=response input.md",
+    "source_sha256": "75188596831d5a0a28364ea4da4d1053f69900ca25237f08859696058c579f11"
+  },
+  {
+    "cell": "06",
+    "fixture": "source-02.md",
+    "locale": "sv",
+    "invocation": "/write --genre=casestudy --language=sv --output=response source.md",
+    "redline_invocation": "/redline --output=response input.md",
+    "source_sha256": "75188596831d5a0a28364ea4da4d1053f69900ca25237f08859696058c579f11"
+  },
+  {
+    "cell": "07",
+    "fixture": "source-02.md",
+    "locale": "sv",
+    "invocation": "/write --genre=casestudy --language=sv --output=response source.md",
+    "redline_invocation": "/redline --output=response input.md",
+    "source_sha256": "75188596831d5a0a28364ea4da4d1053f69900ca25237f08859696058c579f11"
+  }
+]

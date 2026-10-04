@@ -1,0 +1,164 @@
+{
+  "input_sha256": "75188596831d5a0a28364ea4da4d1053f69900ca25237f08859696058c579f11",
+  "input_preserved": true,
+  "input_stat_preserved": true,
+  "installed_files_unchanged": true,
+  "result": {
+    "returncode": -15,
+    "timed_out": true,
+    "duration_seconds": 1800.25,
+    "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-4uvtdl1m",
+    "cleanup_required": true
+  },
+  "seats": [
+    {
+      "id": "01a0f805-3068-78b3-9a95-9932c5d83bac",
+      "source": "exec",
+      "cli_version": "0.159.3",
+      "seats": [
+        [
+          "gpt-6.1-sol",
+          "xhigh"
+        ]
+      ],
+      "task_complete": false,
+      "trace": "native-sessions/2026/10/01/rollout-2026-10-01T17-11-25-01a0f805-3068-78b3-9a95-9932c5d83bac.jsonl"
+    },
+    {
+      "id": "01a0f80c-ea7a-71c2-ab19-8fc7e0722730",
+      "source": {
+        "subagent": {
+          "thread_spawn": {
+            "parent_thread_id": "01a0f805-3068-78b3-9a95-9932c5d83bac",
+            "depth": 1,
+            "agent_path": "/root/source_check_1",
+            "agent_nickname": "Noether",
+            "agent_role": null
+          }
+        }
+      },
+      "cli_version": "0.159.3",
+      "seats": [
+        [
+          "gpt-6.1-sol",
+          "xhigh"
+        ]
+      ],
+      "task_complete": true,
+      "trace": "native-sessions/2026/10/01/rollout-2026-10-01T17-19-51-01a0f80c-ea7a-71c2-ab19-8fc7e0722730.jsonl"
+    },
+    {
+      "id": "01a0f818-1ca6-72b0-a59f-ad79f52e4815",
+      "source": {
+        "subagent": {
+          "thread_spawn": {
+            "parent_thread_id": "01a0f805-3068-78b3-9a95-9932c5d83bac",
+            "depth": 1,
+            "agent_path": "/root/source_check_2",
+            "agent_nickname": "Harvey",
+            "agent_role": null
+          }
+        }
+      },
+      "cli_version": "0.159.3",
+      "seats": [
+        [
+          "gpt-6.1-sol",
+          "xhigh"
+        ]
+      ],
+      "task_complete": true,
+      "trace": "native-sessions/2026/10/01/rollout-2026-10-01T17-32-04-01a0f818-1ca6-72b0-a59f-ad79f52e4815.jsonl"
+    }
+  ],
+  "native_errors": [],
+  "native_tool_calls": 42,
+  "observer_response_matches_native": null,
+  "delivered_substring_native": null,
+  "mechanical_input_equals_output": null,
+  "mechanical_output_equals_delivered": null,
+  "mechanical_output_equals_supplied_input": null,
+  "scratch_files": {
+    "scratch/cache": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "scratch/data": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "scratch/observer-delivered.md": {
+      "mode": 420,
+      "type": "file",
+      "size": 2732,
+      "sha256": "f2c50bada3e2b9bea6f05b9fae4bf11217a70642e2a393bf5099c335da6dd39c"
+    },
+    "scratch/observer-evidence": {
+      "mode": 448,
+      "type": "directory"
+    },
+    "scratch/observer-evidence/disposition-1.md": {
+      "mode": 420,
+      "type": "file",
+      "size": 1822,
+      "sha256": "4110f62e112efcfcb8adc75db287c813c599fb57306ffce039607806856907e2"
+    },
+    "scratch/observer-evidence/disposition-2.md": {
+      "mode": 420,
+      "type": "file",
+      "size": 2310,
+      "sha256": "70d2d13c3ba4b31ef2150219fafc255d9725c568e5158a70a2a4685ae471798d"
+    },
+    "scratch/observer-evidence/draft-2.md": {
+      "mode": 420,
+      "type": "file",
+      "size": 2664,
+      "sha256": "c96eeee804a406aed6e3b43b5206d7cf379952ed895679e01ea622a3319446ac"
+    },
+    "scratch/observer-evidence/draft.md": {
+      "mode": 420,
+      "type": "file",
+      "size": 2680,
+      "sha256": "78040fc2d601a0dbbfa0aa217d4d8be307e78425877b46571de27c806b4a42b6"
+    },
+    "scratch/observer-evidence/report-1.md": {
+      "mode": 420,
+      "type": "file",
+      "size": 28091,
+      "sha256": "6465c09722a58db33e439d7fa3139f1610ba2ed9785560e47934b11491eb3406"
+    },
+    "scratch/observer-evidence/report-2.md": {
+      "mode": 420,
+      "type": "file",
+      "size": 26904,
+      "sha256": "95302319b9d3c9f3c3d2b63a8dbd08f03e24d4f9e72ea1a9fb1fd0d90075f24f"
+    },
+    "scratch/observer-evidence/run-notes.md": {
+      "mode": 420,
+      "type": "file",
+      "size": 2685,
+      "sha256": "1a32f0603b83e272a0a8c5825afc494aac095da53cdd37ab3b3648c9442ef667"
+    },
+    "scratch/observer-response.md": {
+      "mode": 420,
+      "type": "file",
+      "size": 3388,
+      "sha256": "e3296b98c14d6495602395cb6878afecae29e6041b2648861500fc6845fe739c"
+    },
+    "scratch/tmp": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "scratch/uv-cache": {
+      "mode": 493,
+      "type": "directory"
+    }
+  },
+  "work_changes": {},
+  "limits": [
+    "Encrypted dispatch text is not decoded; actual child reads establish only visible scope.",
+    "A file-read command must be checked against its returned output for truncation or failure.",
+    "External captures poll at 100 ms; an uncaptured temporary version is not asserted present.",
+    "No semantic or resource-loading pass follows merely from a tool count or task completion."
+  ]
+}

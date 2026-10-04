@@ -1,0 +1,43 @@
+[
+  {
+    "command": "uvx ruff check .",
+    "returncode": 0,
+    "evidence": "tool result copied to ruff-check.txt"
+  },
+  {
+    "command": "uvx ruff format --check .",
+    "returncode": 0,
+    "evidence": "tool result copied to ruff-format.txt"
+  },
+  {
+    "command": "uvx --with types-PyYAML --with pytest --with httpx==0.28.1 --with selectolax==0.4.11 --with types-tinycss2 --with types-regex mypy skills/kntnt/scripts/kntnt.py skills/kntnt/library/scripts/argument_grammar.py skills/kntnt/library/scripts/article_anatomy.py skills/kntnt/library/scripts/ship.py skills/kntnt/library/scripts/integrations.py skills/kntnt/library/scripts/languages.py skills/kntnt/library/scripts/credentials.py skills/models/model-selector/scripts/catalogue.py skills/models/model-selector/scripts/profiles.py skills/models/model-selector/scripts/evidence.py skills/models/model-selector/scripts/launch.py skills/models/model-selector/scripts/selection.py skills/models/model-selector/scripts/quota.py skills/models/model-selector/scripts/record.py skills/models/model-selector/scripts/capture.py skills/models/model-selector/scripts/grade.py skills/models/model-selector/scripts/setup_apply.py skills/models/model-selector/scripts/inventory.py skills/code/orchestrate/scripts/run.py skills/productivity/rename-invoices/scripts/rename_invoices.py skills/agents/explain/scripts/invoke.py skills/web/mirror/scripts/mirror.py skills/infrastructure/cloudns/scripts/cloudns.py skills/infrastructure/hetzner/scripts/hetzner.py skills/infrastructure/nodeping/scripts/nodeping.py skills/infrastructure/postmark/scripts/postmark.py tests",
+    "returncode": 0,
+    "process_group": 28625
+  },
+  {
+    "command": "uv run --with pytest --with pytest-xdist --with pyyaml pytest -n auto",
+    "returncode": 0,
+    "process_group": 28705
+  },
+  {
+    "command": "uvx ruff check .",
+    "returncode": 0,
+    "evidence": "final ruff tool output: All checks passed!"
+  },
+  {
+    "command": "uvx ruff format --check .",
+    "returncode": 0,
+    "evidence": "final ruff tool output: 6968 files already formatted"
+  },
+  {
+    "command": "uv run --with pytest --with pytest-xdist --with pyyaml pytest -n auto tests/test_evaluation.py tests/test_evaluation_evidence.py tests/test_evaluation_trace.py tests/test_evaluation_harness.py tests/test_clean_control_revision.py tests/test_rules.py tests/test_adr.py",
+    "observed_result": "152 passed in 1.83s",
+    "returncode_retained": false,
+    "evidence": "final-documentation-pytest.txt; parent launch did not retain wait status, so completion is evidenced by full pytest summary rather than an invented exit code"
+  },
+  {
+    "command": "retained-copy hashes and authored Markdown links",
+    "observed_result": "1062 file digests match; 215 local links resolve; no registered owned process alive",
+    "evidence": "final-integrity.json and ../final-process-audit.json"
+  }
+]

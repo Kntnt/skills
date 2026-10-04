@@ -1,0 +1,110 @@
+[
+  {
+    "path": "work/input.md",
+    "sha256": "e5f5b32ccb7dc3c99562a86471b145dd5dc24f264d2b0537239e3f95ad2488f8",
+    "capture": "0000-e5f5b32ccb7d.md",
+    "time": 1790860967.509074
+  },
+  {
+    "path": "work/AGENTS.md",
+    "sha256": "7262bde137d0e2325957ab25a5d3dbc6e3fe73a0da01e4d519afb530b9a760b1",
+    "capture": "0001-7262bde137d0.md",
+    "time": 1790860967.509242
+  },
+  {
+    "path": "scratch/redline-uv-1u5li61d/.tmpRN3a79/environments-v2/kntnt-26ecf10725cdbf02/lib/python3.12/site-packages/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0002-ae98f4215313.txt",
+    "time": 1790861014.694004
+  },
+  {
+    "path": "scratch/redline-uv-1u5li61d/.tmpRN3a79/archive-v0/Ii_RTH8gni66v0n2/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0003-ae98f4215313.txt",
+    "time": 1790861014.6947122
+  },
+  {
+    "path": "scratch/redline-language-uv-c23t8y7f/.tmpKSffxC/.tmpOyRX7P/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0004-ae98f4215313.txt",
+    "time": 1790861039.6016629
+  },
+  {
+    "path": "scratch/redline-language-uv-c23t8y7f/.tmpKSffxC/environments-v2/languages-eef71a5d4bfedae1/lib/python3.12/site-packages/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0005-ae98f4215313.txt",
+    "time": 1790861039.710955
+  },
+  {
+    "path": "scratch/redline-language-uv-c23t8y7f/.tmpKSffxC/archive-v0/QgOxbaeZpxpTW1bt/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0006-ae98f4215313.txt",
+    "time": 1790861039.711692
+  },
+  {
+    "path": "scratch/redline-mechanical-lvoq72mj/input.md",
+    "sha256": "e5f5b32ccb7dc3c99562a86471b145dd5dc24f264d2b0537239e3f95ad2488f8",
+    "capture": "0007-e5f5b32ccb7d.md",
+    "time": 1790861113.4229262
+  },
+  {
+    "path": "scratch/proofread-invoke.j3xN7p/.tmpcg77yQ/.tmpRc05ev/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0008-ae98f4215313.txt",
+    "time": 1790861176.4236171
+  },
+  {
+    "path": "scratch/proofread-invoke.j3xN7p/.tmpcg77yQ/environments-v2/kntnt-26ecf10725cdbf02/lib/python3.12/site-packages/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0009-ae98f4215313.txt",
+    "time": 1790861176.537515
+  },
+  {
+    "path": "scratch/proofread-invoke.j3xN7p/.tmpcg77yQ/archive-v0/nfLWAerH0_LsJc1d/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0010-ae98f4215313.txt",
+    "time": 1790861176.538172
+  },
+  {
+    "path": "scratch/proofread-resolve.3ttecg/.tmp9rYg6C/.tmp9LB3PK/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0011-ae98f4215313.txt",
+    "time": 1790861200.0184882
+  },
+  {
+    "path": "scratch/proofread-resolve.3ttecg/.tmp9rYg6C/environments-v2/languages-eef71a5d4bfedae1/lib/python3.12/site-packages/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0012-ae98f4215313.txt",
+    "time": 1790861200.132087
+  },
+  {
+    "path": "scratch/proofread-resolve.3ttecg/.tmp9rYg6C/archive-v0/03J8otX56U0g_Qxl/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0013-ae98f4215313.txt",
+    "time": 1790861200.132828
+  },
+  {
+    "path": "scratch/redline-mechanical-lvoq72mj/output.md",
+    "sha256": "e5f5b32ccb7dc3c99562a86471b145dd5dc24f264d2b0537239e3f95ad2488f8",
+    "capture": "0014-e5f5b32ccb7d.md",
+    "time": 1790861233.706383
+  },
+  {
+    "path": "scratch/observer-response.md",
+    "sha256": "c3ae0f0d15eeea2e1bf8c456918373e73707285b876a9c383d83b173338a8c8a",
+    "capture": "0015-c3ae0f0d15ee.md",
+    "time": 1790861294.280256
+  },
+  {
+    "path": "scratch/observer-evidence/mechanical-pass-output.md",
+    "sha256": "e5f5b32ccb7dc3c99562a86471b145dd5dc24f264d2b0537239e3f95ad2488f8",
+    "capture": "0016-e5f5b32ccb7d.md",
+    "time": 1790861294.28051
+  },
+  {
+    "path": "scratch/observer-evidence/mechanical-pass-input.md",
+    "sha256": "e5f5b32ccb7dc3c99562a86471b145dd5dc24f264d2b0537239e3f95ad2488f8",
+    "capture": "0017-e5f5b32ccb7d.md",
+    "time": 1790861294.2806249
+  }
+]

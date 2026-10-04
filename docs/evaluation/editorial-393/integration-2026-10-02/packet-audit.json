@@ -1,0 +1,240 @@
+{
+  "source_head": "4e88c6e0d1385c52eb9e5fa82d56a52b9a89f248",
+  "integration_base": "5b0260283b1d1597ca1ed2dddc602888dac7119d",
+  "measured_revision": "fb16908712c4d47a36fc6ee9dfb3eb2714a19e65",
+  "copied_digest_entries_verified": 1062,
+  "record_entries_verified": 35,
+  "exported_product_files_verified_per_run": 83,
+  "counted_runs": 20,
+  "delivered_artifacts": 19,
+  "counted_parents": 20,
+  "counted_children": 54,
+  "all_retained_native_sessions": 86,
+  "native_invocations_including_judges": 29,
+  "construction_refusals": 5,
+  "not_invoked": 8,
+  "voids": 2,
+  "negative_targets": {
+    "fail": 3,
+    "disputed": 1,
+    "pass": 2
+  },
+  "positive_targets": {
+    "fail": 1,
+    "pass": 7
+  },
+  "translation_targets": {
+    "pass": 3
+  },
+  "pair_targets": {
+    "pass": 2,
+    "skipped": 1
+  },
+  "runs": [
+    {
+      "run": "c03",
+      "fixture": "sv-artefact",
+      "target": "response",
+      "delivery": "completed-artifact",
+      "artifact_sha256": "7749177b1bef16949d4b8e9272ad00da0e2a3c44d617adba4acdf2087fbc51f7",
+      "target_quotation": "fail",
+      "native_sessions": 4,
+      "children": 3
+    },
+    {
+      "run": "c04",
+      "fixture": "sv-artefact",
+      "target": "response",
+      "delivery": "completed-artifact",
+      "artifact_sha256": "3472f9e7a77e1fc479bcb6c970247bc452ac6c05814b57c8c9fddb33f9047cc7",
+      "target_quotation": "fail",
+      "native_sessions": 4,
+      "children": 3
+    },
+    {
+      "run": "c05",
+      "fixture": "ellipsis-sv",
+      "target": "response",
+      "delivery": "completed-artifact",
+      "artifact_sha256": "377fc879799b305c36eb98d4550a462ccfcd8d47f7997acbc0de09aec1dde6f0",
+      "target_quotation": "disputed",
+      "native_sessions": 4,
+      "children": 3
+    },
+    {
+      "run": "c06",
+      "fixture": "ellipsis-sv",
+      "target": "response",
+      "delivery": "completed-artifact",
+      "artifact_sha256": "68817c49ce27cd806a3b13b9b801fa27390ad8fb49b3d4b48ca593fad6aead98",
+      "target_quotation": "pass",
+      "native_sessions": 4,
+      "children": 3
+    },
+    {
+      "run": "c07",
+      "fixture": "en-positive",
+      "target": "response",
+      "delivery": "completed-artifact",
+      "artifact_sha256": "de624f7c59fe69c37d2ccc4b5ce42a80b6d80f659abccb097569f714fb5a06b1",
+      "target_quotation": "fail",
+      "native_sessions": 4,
+      "children": 3
+    },
+    {
+      "run": "c08",
+      "fixture": "en-positive",
+      "target": "output.md",
+      "delivery": "completed-file-artifact",
+      "artifact_sha256": "158c166eb55bd343a5735efc4a801e1508ed4dc735a879a8fe655fbeafc93084",
+      "target_quotation": "pass",
+      "native_sessions": 4,
+      "children": 3
+    },
+    {
+      "run": "c09",
+      "fixture": "en-us-r1",
+      "target": "response",
+      "delivery": "completed-artifact",
+      "artifact_sha256": "6b5acf2767e6cdc8acb444d987ef170a5e88d3f1c813b77c27c7345312dc72e1",
+      "target_quotation": "pass",
+      "native_sessions": 4,
+      "children": 3
+    },
+    {
+      "run": "c10",
+      "fixture": "en-us-r1",
+      "target": "output.md",
+      "delivery": "completed-file-artifact",
+      "artifact_sha256": "ce1916241a3f2244789e7bc0c19baefdd5e7b7d0d1865f8a4d3ee528ffe92749",
+      "target_quotation": "pass",
+      "native_sessions": 4,
+      "children": 3
+    },
+    {
+      "run": "c11",
+      "fixture": "metonymy-sv",
+      "target": "response",
+      "delivery": "completed-artifact",
+      "artifact_sha256": "d124d0a77921dd36c28438a455d04fc6c382e72a3ea5f2ffc2ca149099ae89a4",
+      "target_quotation": "pass",
+      "native_sessions": 4,
+      "children": 3
+    },
+    {
+      "run": "c12",
+      "fixture": "metonymy-sv",
+      "target": "output.md",
+      "delivery": "completed-file-artifact",
+      "artifact_sha256": "6ea07def5a65516e1324e57f21b57cbac1000593b93fae9409b3a8dc59362b6f",
+      "target_quotation": "pass",
+      "native_sessions": 4,
+      "children": 3
+    },
+    {
+      "run": "p01",
+      "fixture": "delivered-case-study-sv-r1",
+      "target": "response",
+      "delivery": "completed-unchanged-artifact-with-unresolved-findings",
+      "artifact_sha256": "b9cf81d03da73fe686e7943bd93aa76e14967780f265414838909b743e1018ff",
+      "target_quotation": "pass",
+      "native_sessions": 4,
+      "children": 3
+    },
+    {
+      "run": "p02",
+      "fixture": "delivered-case-study-sv-r2",
+      "target": "response",
+      "delivery": "completed-unchanged-artifact-with-unresolved-findings",
+      "artifact_sha256": "d218cf74e9682bb7f4dd6228e62b35172d99f0aa12f2005dfda9f02a2805ef14",
+      "target_quotation": "pass",
+      "native_sessions": 3,
+      "children": 2
+    },
+    {
+      "run": "p03",
+      "fixture": "delivered-case-study-sv-r3",
+      "target": "response",
+      "delivery": "completed-no-change-status",
+      "artifact_sha256": null,
+      "target_quotation": "skipped",
+      "native_sessions": 2,
+      "children": 1
+    },
+    {
+      "run": "r01",
+      "fixture": "sv-control",
+      "target": "response",
+      "delivery": "completed-artifact",
+      "artifact_sha256": "ab58b8989e2ef242d1cd3e9a1ad1d8e41677ba7f191b9652d7f2f42fb7fc217b",
+      "target_quotation": "fail",
+      "native_sessions": 4,
+      "children": 3
+    },
+    {
+      "run": "r02",
+      "fixture": "sv-control",
+      "target": "response",
+      "delivery": "completed-artifact",
+      "artifact_sha256": "95271e0db4b4d690c502aaa775528f61daa0773da92b86f5faea6bb9511c5353",
+      "target_quotation": "pass",
+      "native_sessions": 4,
+      "children": 3
+    },
+    {
+      "run": "r13-rerun",
+      "fixture": "rhythm-en_GB",
+      "target": "response",
+      "delivery": "completed-artifact",
+      "artifact_sha256": "fcfe45c6756eb956e67250d2b81d02f7737440bea219f7a5ebb7faf6e5ebbce8",
+      "target_quotation": "pass",
+      "native_sessions": 4,
+      "children": 3
+    },
+    {
+      "run": "r14",
+      "fixture": "rhythm-en_GB",
+      "target": "output.md",
+      "delivery": "completed-file-artifact",
+      "artifact_sha256": "7a48b66be7dea353cda89ea0e1632f28f94eb3e04a3f04f89433c345c02570f6",
+      "target_quotation": "pass",
+      "native_sessions": 4,
+      "children": 3
+    },
+    {
+      "run": "w01-rerun",
+      "fixture": "case-study-sv",
+      "target": "response",
+      "delivery": "completed-artifact",
+      "artifact_sha256": "b9cf81d03da73fe686e7943bd93aa76e14967780f265414838909b743e1018ff",
+      "target_quotation": "pass",
+      "native_sessions": 3,
+      "children": 2
+    },
+    {
+      "run": "w02",
+      "fixture": "case-study-sv",
+      "target": "response",
+      "delivery": "completed-artifact",
+      "artifact_sha256": "d218cf74e9682bb7f4dd6228e62b35172d99f0aa12f2005dfda9f02a2805ef14",
+      "target_quotation": "pass",
+      "native_sessions": 3,
+      "children": 2
+    },
+    {
+      "run": "w03",
+      "fixture": "case-study-sv",
+      "target": "response",
+      "delivery": "completed-artifact",
+      "artifact_sha256": "01f8cd3ecc13ee93c8f7bf024d6abc770622c127b2cf0f02ac3973ef06a5d2e9",
+      "target_quotation": "pass",
+      "native_sessions": 3,
+      "children": 2
+    }
+  ],
+  "limits": [
+    "This verifies retained transport, identity, source integrity and counts; it does not rejudge prose or decrypt dispatches.",
+    "Original 100-ms sampling and resource-read gaps remain.",
+    "All raw verdicts stay unchanged; residual contract review is in residual-handoff.md."
+  ]
+}

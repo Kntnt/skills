@@ -1,0 +1,49 @@
+"""Run the unchanged repository gate with owned groups and retained receipts."""
+
+import json
+import os
+import runpy
+import shlex
+import signal
+import subprocess
+import time
+from pathlib import Path
+
+REPOSITORY = Path('/Users/thomas/Projects/skills/.git/kntnt-orchestrate/395')
+SCRATCH = Path('/Users/thomas/Projects/skills/.git/kntnt-orchestrate/395.scratch')
+PACKET = REPOSITORY / 'docs/evaluation/editorial-395/gpt-completion-2026-10-02'
+
+if os.getpgrp() != os.getpid():
+    os.setsid()
+register = runpy.run_path(str(PACKET / 'harness/run-v2.py'))['register']
+register('pid', str(os.getpid()), SCRATCH)
+env = dict(os.environ, UV_CACHE_DIR=str(SCRATCH / 'uv-cache'), TMPDIR=str(SCRATCH),
+           UV_PROJECT_ENVIRONMENT=str(SCRATCH / 'venv'),
+           UV_PYTHON_INSTALL_DIR=str(SCRATCH / 'uv-python'),
+           XDG_CACHE_HOME=str(SCRATCH / 'cache'), XDG_DATA_HOME=str(SCRATCH / 'data'),
+           KNTNT_HOME=str(SCRATCH / 'gate-home'), PYTHONDONTWRITEBYTECODE='1')
+commands = json.loads((PACKET / 'verification/gate-commands.json').read_text())
+receipts = []
+for number, command in enumerate(commands, 1):
+    started = time.time()
+    with (PACKET / f'verification/gate-{number}.txt').open('w') as stream:
+        process = subprocess.Popen(shlex.split(command), cwd=REPOSITORY, env=env,
+                                   stdout=stream, stderr=subprocess.STDOUT,
+                                   start_new_session=True)
+        register('pid', str(process.pid), SCRATCH)
+        returncode = process.wait()
+    remaining_group = False
+    try:
+        os.killpg(process.pid, 0)
+        remaining_group = True
+        os.killpg(process.pid, signal.SIGTERM)
+        time.sleep(0.2)
+        os.killpg(process.pid, signal.SIGKILL)
+    except ProcessLookupError:
+        pass
+    receipts.append({'command': command, 'returncode': returncode,
+                     'process_group': process.pid, 'started_at': started,
+                     'ended_at': time.time(), 'remaining_group_stopped': remaining_group})
+    (PACKET / 'verification/gate-receipts.json').write_text(json.dumps(receipts, indent=2)+'\n')
+    print(f'Gate {number}: {returncode}', flush=True)
+raise SystemExit(int(any(r['returncode'] for r in receipts)))

@@ -1,0 +1,6 @@
+model = "gpt-6.1-sol"
+model_reasoning_effort = "xhigh"
+service_tier = "default"
+
+[projects."/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-suoty8kt/work"]
+trust_level = "trusted"

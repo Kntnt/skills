@@ -1,0 +1,117 @@
+{
+  "result": {
+    "returncode": 0,
+    "timed_out": false,
+    "duration_seconds": 1507.69,
+    "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-w8zwcb3a",
+    "cleanup_required": true
+  },
+  "input_sha256": "75188596831d5a0a28364ea4da4d1053f69900ca25237f08859696058c579f11",
+  "artifact": {
+    "fenced_artifact_count": 1,
+    "present": true,
+    "source": "response-fence",
+    "sha256": "01f8cd3ecc13ee93c8f7bf024d6abc770622c127b2cf0f02ac3973ef06a5d2e9",
+    "input_identical": false
+  },
+  "identities": [
+    {
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T16-47-08-01a0f7ee-f54b-78d1-959e-b54334cf62b6.jsonl",
+      "id": "01a0f7ee-f54b-78d1-959e-b54334cf62b6",
+      "source": "exec",
+      "seats": [
+        [
+          "gpt-6.1-sol",
+          "xhigh"
+        ]
+      ]
+    },
+    {
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T16-54-13-01a0f7f5-73fe-7c91-bfd3-93546e4e1c32.jsonl",
+      "id": "01a0f7f5-73fe-7c91-bfd3-93546e4e1c32",
+      "source": {
+        "subagent": {
+          "thread_spawn": {
+            "parent_thread_id": "01a0f7ee-f54b-78d1-959e-b54334cf62b6",
+            "depth": 1,
+            "agent_path": "/root/source_check_1",
+            "agent_nickname": "Einstein",
+            "agent_role": null
+          }
+        }
+      },
+      "seats": [
+        [
+          "gpt-6.1-sol",
+          "xhigh"
+        ]
+      ]
+    },
+    {
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T17-02-57-01a0f7fd-722d-7623-8b5a-d761fd0ae441.jsonl",
+      "id": "01a0f7fd-722d-7623-8b5a-d761fd0ae441",
+      "source": {
+        "subagent": {
+          "thread_spawn": {
+            "parent_thread_id": "01a0f7ee-f54b-78d1-959e-b54334cf62b6",
+            "depth": 1,
+            "agent_path": "/root/source_check_2",
+            "agent_nickname": "Sartre",
+            "agent_role": null
+          }
+        }
+      },
+      "seats": [
+        [
+          "gpt-6.1-sol",
+          "xhigh"
+        ]
+      ]
+    }
+  ],
+  "encrypted_dispatches": [
+    {
+      "session": "01a0f7ee-f54b-78d1-959e-b54334cf62b6",
+      "name": "spawn_agent",
+      "call_id": "call_fkB41NUzcM2Jt5lYUQNV79sn",
+      "note": "dispatch message encrypted; use actual child reads rather than infer its complete brief"
+    },
+    {
+      "session": "01a0f7ee-f54b-78d1-959e-b54334cf62b6",
+      "name": "send_message",
+      "call_id": "call_4HsCy1l2FgRuiD43O8s7cjA1",
+      "note": "dispatch message encrypted; use actual child reads rather than infer its complete brief"
+    },
+    {
+      "session": "01a0f7ee-f54b-78d1-959e-b54334cf62b6",
+      "name": "spawn_agent",
+      "call_id": "call_UsGTlWLL0J3PUV5ULNC5wkHs",
+      "note": "dispatch message encrypted; use actual child reads rather than infer its complete brief"
+    },
+    {
+      "session": "01a0f7f5-73fe-7c91-bfd3-93546e4e1c32",
+      "name": "send_message",
+      "call_id": "call_qGeE3sQrnLamGSP4ugi3KIbJ",
+      "note": "dispatch message encrypted; use actual child reads rather than infer its complete brief"
+    },
+    {
+      "session": "01a0f7fd-722d-7623-8b5a-d761fd0ae441",
+      "name": "send_message",
+      "call_id": "call_gugBdChI4YNlUyQqkKdHjT50",
+      "note": "dispatch message encrypted; use actual child reads rather than infer its complete brief"
+    },
+    {
+      "session": "01a0f7fd-722d-7623-8b5a-d761fd0ae441",
+      "name": "send_message",
+      "call_id": "call_eJslQuiNm7SuSTVrUqJEisRA",
+      "note": "dispatch message encrypted; use actual child reads rather than infer its complete brief"
+    }
+  ],
+  "all_recorded_seats_match": true,
+  "artifact_matches_captures": [],
+  "source_inventory_unchanged": true,
+  "staged_install_unchanged": true,
+  "work_created": {},
+  "work_removed": {},
+  "work_changed": {}
+}

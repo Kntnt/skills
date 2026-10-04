@@ -1,5 +1,10 @@
 # Focused behavioural regressions
 
+When preparing semantic controls or capturing an exact delegated input, use the
+[prospective preparation and native acquisition guide](../harness/README.md).
+Its complete-contract preparation precedes the evaluation freeze; instrumented
+dispatch rows and ordinary native observations remain distinct.
+
 These packets record native Skill runs aimed at one behavioural seam rather than at the shared fixture corpus. Each packet preserves the exact invocation material, relevant artifacts, observed sequence, result, filesystem account and limitations needed to assess that run. The corpus protocol and its `records/` format do not govern these packets, with one exception: [how an evaluation is staged](../protocol.md#how-an-evaluation-is-staged). *The frozen plan*, *Interrupted runs are void*, *Top-level runs* and *A scratchpad* bind every focused regression, and each other staging rule binds a regression that does what the rule governs, such as comparing against a pre-change arm, sending its runs to a judge or staging an install.
 
 - [`328/`](328/README.md) — Redline repairs its own malformed nested Proofread invocation and resumes from the refused file-path handoff.

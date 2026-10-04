@@ -1,0 +1,12 @@
+{
+  "manifest": "/Users/thomas/.kntnt/session-cleanup/sessions/01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+  "recorded": {
+    "at": "2026-10-01T15:11:24+00:00",
+    "id": "34660",
+    "kind": "pid",
+    "started": "Thu Oct  1 17:11:24 2026",
+    "why": "Editorial #395 unchanged-input recovery for cell 06 infrastructure timeout"
+  },
+  "session": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd"
+}
+Cell 06 recovery completed with unchanged frozen input and seat

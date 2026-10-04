@@ -1,0 +1,35 @@
+{
+  "real_account_home": "/Users/thomas",
+  "required_scratch_root": "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/393.scratch",
+  "scratch_is_inside_real_account_home": true,
+  "gate_groups": [
+    {
+      "name": "ruff-check",
+      "pgid": 29817,
+      "exists": false
+    },
+    {
+      "name": "ruff-format",
+      "pgid": 29828,
+      "exists": false
+    },
+    {
+      "name": "mypy",
+      "pgid": 29837,
+      "exists": false
+    },
+    {
+      "name": "pytest",
+      "pgid": 29894,
+      "exists": false
+    }
+  ],
+  "gate_passed": false,
+  "failed_tests": [
+    "tests/test_ms_scheduler.py::test_the_manager_s_two_words_answer_with_the_job",
+    "tests/test_ms_scheduler.py::test_under_a_redirected_home_install_writes_the_plist_and_loads_nothing",
+    "tests/test_ms_scheduler.py::test_an_install_status_and_disable_under_a_temporary_root_call_no_launchctl"
+  ],
+  "source_changed": false,
+  "decision_required": "Allow test temporary files outside the two assigned roots, or separately authorise correcting the scheduler tests to isolate the native-account gate. Neither is authorised by #393."
+}

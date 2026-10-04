@@ -1,0 +1,5 @@
+A user has typed a Skill invocation. Run the installed project Skill exactly as shipped, including its shim, bounded resources, fresh subagents and cleanup. The invoking user is Thomas Barregren. The only supplied material is source.md. Every command runs in the working directory, and temporary work belongs to the separate harness scratch area named in AGENTS.md. Read only the installed project Skills, source.md and your own scratch.
+
+/write --genre=casestudy --language=en_GB --output=response source.md
+
+Evaluator captures, separate from the Skill: before removing source-check scratch, copy its complete contents into scratch observer-evidence. Save the exact complete delivered Text Artifact, including its frontmatter and without the delivery account, to scratch observer-delivered.md; where nothing is delivered, create no such file. Save the complete user-facing reply to scratch observer-response.md. These captures are observer additions and may remain for external capture. Do not change Skill decisions for them. Give the complete user-facing reply as your final message.

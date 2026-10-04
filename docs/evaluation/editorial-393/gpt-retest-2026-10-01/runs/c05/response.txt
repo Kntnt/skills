@@ -1,0 +1,56 @@
+Granskat som kundcase (`casestudy`) på svenska (`sv`), utan berättarteknik (`none`) enligt textens metadata. En korrigeringsomgång har genomförts.
+
+```markdown
+---
+kntnt:
+  genre: casestudy
+  technique: none
+  language: sv
+---
+
+# Hamnfrakts anteckning redovisar 340 artiklar utan plats
+
+**Två av Hamnfrakt AB:s lager fick ett gemensamt system för lagersaldot. Överföringen tog sex veckor med dubbel registrering. Lagerchefen Ove Ranneby skulle göra om den, men börja med färre artikelgrupper.**
+
+Text: Redaktionen
+
+Hamnfrakt AB hanterar reservdelar åt verkstäder i Norrland och har omkring 9 000 artiklar i sitt sortiment. Tidigare fördes saldot för de två lagren i varsitt kalkylark, och den som ringde fick vänta medan någon slog upp siffran på rätt ställe.
+
+## Ove Ranneby beskriver övergången
+
+Hamnfrakt valde Saldo Nord efter att ha provat om systemet kunde visa samma saldo för båda lagren. Någon jämförelse med en annan leverantör finns inte i underlaget.
+
+– Vi körde parallellt i sex veckor. Sedan gick lagret över, och först då såg vi hur mycket som hade legat i pärmar, säger Ove Ranneby.
+
+Personalen registrerade varje uttag både i kalkylarken och i det nya systemet. Därefter fördes kalkylarken över och stängdes.
+
+## Överföringsanteckningen redovisar ingen tidsjämförelse
+
+Enligt Hamnfrakts egen överföringsanteckning från den 12 januari 2026 saknade 340 av artiklarna en plats i det nya systemet. Artiklar som redan var utgångna ingår inte i den siffran.
+
+Anteckningen redovisar ingen mätning av hur lång tid en förfrågan tar i dag, och ingen jämförelse med tiden före överföringen. Företaget har inte heller följt upp vad överföringen kostade.
+
+## Ranneby bedömer överföringen
+
+– Jag skulle göra om det. Att se samma saldo för båda lagren hjälper oss, men jag skulle ta en artikelgrupp i taget, säger Ranneby.
+
+Det tredje lagret är ännu inte överfört. Hamnfrakt ska först se hur de 340 artiklarna faller på plats. [Läs Saldo Nords checklista för överföringen](https://example.invalid/saldonord/checklista).
+```
+
+Reparerat i omgång 1, med ändrade rubrikpåståenden:
+
+- Huvudrubriken upprepade ingressens systembyte. Den säger nu att Hamnfrakts anteckning redovisar 340 artiklar utan plats. Uppgiften har återgetts även i rubriken, men avgränsningen ”i det nya systemet” har inte följt med. ”Utan plats” kan därför också läsas som att en fysisk plats saknas. Avgränsningen, datumet och undantaget för utgångna artiklar står kvar i brödtexten.
+- ”Sex veckor med dubbel registrering” föregrep tidsuppgiften i citatet. Rubriken säger nu att Ove Ranneby beskriver övergången och lämnar tidsuppgiften åt honom.
+- ”Vad överföringen visade” gav inget besked om vad som hade framkommit. Rubriken säger nu att överföringsanteckningen inte redovisar någon tidsjämförelse, en uppgift som även står kvar i brödtexten.
+- ”Företaget vill börja mindre nästa gång” föregrep Rannebys reservation och gjorde hans villkorliga omdöme till en företagsavsikt. Rubriken säger nu att Ranneby bedömer överföringen.
+
+Borttagna påståenden i omgång 1:
+
+- Sista mellanrubrikens påstående om att företaget vill börja mindre. Rannebys personliga ”jag skulle ta en artikelgrupp i taget” står kvar.
+- Andra mellanrubrikens framställning av avsnittets uppgifter som något överföringen visade. Rubriken anger nu i stället en begränsning i vad överföringsanteckningen redovisar.
+
+Registreringsstycket stod som upprepande citatbrygga och har flyttats efter citatet. Tidsfrasen ”Under sex veckor” togs bort ur stycket i omgång 1. Läsaren har där inte längre en uttrycklig tidsavgränsning; sexveckorsperioden framgår fortfarande av ingressen och det föregående citatet.
+
+Olöst: Första citatets ”lagret” och ”hur mycket som hade legat i pärmar” har oklara referenter. Läsaren får inte veta säkert vilket lager eller vad mängden avser. Citatet har därför lämnats oförändrat.
+
+Rubrikerna har reparerats och ett berättarstycke har flyttats, med en upprepad tidsfras borttagen. Metadatafältet `genre` har synkroniserats till `casestudy`. Den avslutande mekaniska korrekturen gjorde inga ändringar.

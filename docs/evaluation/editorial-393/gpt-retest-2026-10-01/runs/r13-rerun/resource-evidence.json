@@ -1,0 +1,396 @@
+{
+  "revision": "fb16908712c4d47a36fc6ee9dfb3eb2714a19e65",
+  "method": "Unique complete returned resource text per native session; whitespace word count. This is observed resource volume, not a comprehension verdict. Absent matches may reflect wrappers, truncation or partial reads and are gaps, not automatic failures. Mandatory-set costing is a separate contract comparison.",
+  "observations": [
+    {
+      "session": "01a0f805-fd3a-7340-84a9-8dc270e0dcdf",
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T17-12-17-01a0f805-fd3a-7340-84a9-8dc270e0dcdf.jsonl",
+      "ordinal": 37,
+      "call_id": "call_zRlBfjhlWUBBK51qL8E12Kc0",
+      "resource": "skills/kntnt/library/references/delivery.md",
+      "complete_returned_content": true,
+      "words": 2675,
+      "sha256": "71babd36f68d93cd9f7d035358c3cbaeae3179147d8dc7a4667047081c898472"
+    },
+    {
+      "session": "01a0f805-fd3a-7340-84a9-8dc270e0dcdf",
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T17-12-17-01a0f805-fd3a-7340-84a9-8dc270e0dcdf.jsonl",
+      "ordinal": 37,
+      "call_id": "call_zRlBfjhlWUBBK51qL8E12Kc0",
+      "language": "en_GB",
+      "scope": "composition",
+      "source": "en_GB",
+      "complete_returned_content": true,
+      "words": 258,
+      "sha256": "ce209f83cea4501f7c04f9439e88e6c57902a9c436285c344b42a4f6a3bdc49d",
+      "presentation": "exact resolved guidance returned as plain text"
+    },
+    {
+      "session": "01a0f805-fd3a-7340-84a9-8dc270e0dcdf",
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T17-12-17-01a0f805-fd3a-7340-84a9-8dc270e0dcdf.jsonl",
+      "ordinal": 37,
+      "call_id": "call_zRlBfjhlWUBBK51qL8E12Kc0",
+      "language": "en_GB",
+      "scope": "review",
+      "source": "en_GB",
+      "complete_returned_content": true,
+      "words": 241,
+      "sha256": "d7eae114d6de42a72220359087857329931df685d349385cbbdbdb13678fa7a8",
+      "presentation": "exact resolved guidance returned as plain text"
+    },
+    {
+      "session": "01a0f805-fd3a-7340-84a9-8dc270e0dcdf",
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T17-12-17-01a0f805-fd3a-7340-84a9-8dc270e0dcdf.jsonl",
+      "ordinal": 37,
+      "call_id": "call_zRlBfjhlWUBBK51qL8E12Kc0",
+      "language": "en_GB",
+      "scope": "anti-slop",
+      "source": "en_GB",
+      "complete_returned_content": true,
+      "words": 199,
+      "sha256": "49f5d95b9c9cf7859eadddd9827ac892fd012f333c472ee9cb7f1148649a5bb7",
+      "presentation": "exact resolved guidance returned as plain text"
+    },
+    {
+      "session": "01a0f805-fd3a-7340-84a9-8dc270e0dcdf",
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T17-12-17-01a0f805-fd3a-7340-84a9-8dc270e0dcdf.jsonl",
+      "ordinal": 46,
+      "call_id": "call_FSNJhIwwn3LLFKvXrKuWKrYc",
+      "resource": "skills/editorial/redline/references/reply-check.md",
+      "complete_returned_content": true,
+      "words": 1044,
+      "sha256": "c89fd5a2ebdbd73898adf475fee34dda5c88415de318d16378dd50fee221d9e5"
+    },
+    {
+      "session": "01a0f805-fd3a-7340-84a9-8dc270e0dcdf",
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T17-12-17-01a0f805-fd3a-7340-84a9-8dc270e0dcdf.jsonl",
+      "ordinal": 46,
+      "call_id": "call_FSNJhIwwn3LLFKvXrKuWKrYc",
+      "resource": "skills/kntnt/library/references/editorial/anti-slop.md",
+      "complete_returned_content": true,
+      "words": 1251,
+      "sha256": "9ec7fb15b3cfe22f446c6ed2df85666aaa182d8fa0a09fa3668887e4786d83c2"
+    },
+    {
+      "session": "01a0f805-fd3a-7340-84a9-8dc270e0dcdf",
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T17-12-17-01a0f805-fd3a-7340-84a9-8dc270e0dcdf.jsonl",
+      "ordinal": 46,
+      "call_id": "call_FSNJhIwwn3LLFKvXrKuWKrYc",
+      "resource": "skills/kntnt/library/references/editorial/base.md",
+      "complete_returned_content": true,
+      "words": 597,
+      "sha256": "d4146ef134de7482e25469201aaceed7b207fba9f8bacb06a428b85f6bfc3581"
+    },
+    {
+      "session": "01a0f805-fd3a-7340-84a9-8dc270e0dcdf",
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T17-12-17-01a0f805-fd3a-7340-84a9-8dc270e0dcdf.jsonl",
+      "ordinal": 46,
+      "call_id": "call_FSNJhIwwn3LLFKvXrKuWKrYc",
+      "resource": "skills/kntnt/library/references/editorial/base.review.md",
+      "complete_returned_content": true,
+      "words": 949,
+      "sha256": "d2c838c19a692104be247afd227b0baed98f3156be059c0a982ecae3513fa0ca"
+    },
+    {
+      "session": "01a0f805-fd3a-7340-84a9-8dc270e0dcdf",
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T17-12-17-01a0f805-fd3a-7340-84a9-8dc270e0dcdf.jsonl",
+      "ordinal": 46,
+      "call_id": "call_FSNJhIwwn3LLFKvXrKuWKrYc",
+      "resource": "skills/kntnt/library/references/editorial/genres/article.md",
+      "complete_returned_content": true,
+      "words": 193,
+      "sha256": "2313180d69b25de48b818629c5d761daa36eb69def33441b01c24a2135f17b4f"
+    },
+    {
+      "session": "01a0f805-fd3a-7340-84a9-8dc270e0dcdf",
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T17-12-17-01a0f805-fd3a-7340-84a9-8dc270e0dcdf.jsonl",
+      "ordinal": 46,
+      "call_id": "call_FSNJhIwwn3LLFKvXrKuWKrYc",
+      "resource": "skills/kntnt/library/references/editorial/genres/article.review.md",
+      "complete_returned_content": true,
+      "words": 148,
+      "sha256": "0d992e276cb65943ceab91cb855c1fcafd2b65ed4b378a16a4ea63036de8074c"
+    },
+    {
+      "session": "01a0f805-fd3a-7340-84a9-8dc270e0dcdf",
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T17-12-17-01a0f805-fd3a-7340-84a9-8dc270e0dcdf.jsonl",
+      "ordinal": 55,
+      "call_id": "call_qXzVPW1gpjuSXzFzuyn1ouKD",
+      "resource": "skills/editorial/redline/references/correction.md",
+      "complete_returned_content": true,
+      "words": 2640,
+      "sha256": "c7d164379021076cdcb09e6615b9a1155367603695836df165c889fd72189aac"
+    },
+    {
+      "session": "01a0f805-fd3a-7340-84a9-8dc270e0dcdf",
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T17-12-17-01a0f805-fd3a-7340-84a9-8dc270e0dcdf.jsonl",
+      "ordinal": 55,
+      "call_id": "call_qXzVPW1gpjuSXzFzuyn1ouKD",
+      "resource": "skills/kntnt/library/references/editorial/article-anatomy.md",
+      "complete_returned_content": true,
+      "words": 962,
+      "sha256": "c075c6fe7494dbcdc43d6af599c55ab8fc52fc48d7ed1b6cc26eca7a592cecd7"
+    },
+    {
+      "session": "01a0f805-fd3a-7340-84a9-8dc270e0dcdf",
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T17-12-17-01a0f805-fd3a-7340-84a9-8dc270e0dcdf.jsonl",
+      "ordinal": 55,
+      "call_id": "call_qXzVPW1gpjuSXzFzuyn1ouKD",
+      "resource": "skills/kntnt/library/references/editorial/article-anatomy.review.md",
+      "complete_returned_content": true,
+      "words": 966,
+      "sha256": "3e616f9671126ba7898123dd288a4a9bb4170f189d567a3fcbd2b17ccb82c633"
+    },
+    {
+      "session": "01a0f805-fd3a-7340-84a9-8dc270e0dcdf",
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T17-12-17-01a0f805-fd3a-7340-84a9-8dc270e0dcdf.jsonl",
+      "ordinal": 55,
+      "call_id": "call_qXzVPW1gpjuSXzFzuyn1ouKD",
+      "resource": "skills/kntnt/library/references/editorial/headlines.md",
+      "complete_returned_content": true,
+      "words": 844,
+      "sha256": "adfb7ca612905afee03a73d58cdb07de9d0877b23af9de89f7e114f6de81df5f"
+    },
+    {
+      "session": "01a0f805-fd3a-7340-84a9-8dc270e0dcdf",
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T17-12-17-01a0f805-fd3a-7340-84a9-8dc270e0dcdf.jsonl",
+      "ordinal": 55,
+      "call_id": "call_qXzVPW1gpjuSXzFzuyn1ouKD",
+      "resource": "skills/kntnt/library/references/editorial/headlines.review.md",
+      "complete_returned_content": true,
+      "words": 1233,
+      "sha256": "eb8bd2e680945ef2a7f9ffc7903109e51e4bb6828b7d76000348e59635810dfd"
+    },
+    {
+      "session": "01a0f805-fd3a-7340-84a9-8dc270e0dcdf",
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T17-12-17-01a0f805-fd3a-7340-84a9-8dc270e0dcdf.jsonl",
+      "ordinal": 55,
+      "call_id": "call_qXzVPW1gpjuSXzFzuyn1ouKD",
+      "resource": "skills/kntnt/library/references/editorial/web-craft.md",
+      "complete_returned_content": true,
+      "words": 184,
+      "sha256": "b1ac5867d30952c3ca78da244520ab28c025102f4389f44ec206757a29f05371"
+    },
+    {
+      "session": "01a0f805-fd3a-7340-84a9-8dc270e0dcdf",
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T17-12-17-01a0f805-fd3a-7340-84a9-8dc270e0dcdf.jsonl",
+      "ordinal": 55,
+      "call_id": "call_qXzVPW1gpjuSXzFzuyn1ouKD",
+      "resource": "skills/kntnt/library/references/editorial/web-craft.review.md",
+      "complete_returned_content": true,
+      "words": 84,
+      "sha256": "169da1beeb4fb80e74f9423bdd4d7bcd57aa9b59b8e8ff5b71f3a67dfef7e923"
+    },
+    {
+      "session": "01a0f805-fd3a-7340-84a9-8dc270e0dcdf",
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T17-12-17-01a0f805-fd3a-7340-84a9-8dc270e0dcdf.jsonl",
+      "ordinal": 75,
+      "call_id": "call_Hfk8SX5o308Rlr4pT0DyCVOc",
+      "resource": "skills/editorial/proofread/SKILL.md",
+      "complete_returned_content": true,
+      "words": 2036,
+      "sha256": "6cad45f3d50a96e43c8df9996bc748c7e09e09f456e8a9375c724b84d236404f"
+    },
+    {
+      "session": "01a0f809-d88d-7d13-ae71-95603ac61688",
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T17-16-29-01a0f809-d88d-7d13-ae71-95603ac61688.jsonl",
+      "ordinal": 19,
+      "call_id": "call_Q8RvAsRd6kRywLnkDhb4htUY",
+      "resource": "skills/kntnt/library/references/editorial/base.md",
+      "complete_returned_content": true,
+      "words": 597,
+      "sha256": "d4146ef134de7482e25469201aaceed7b207fba9f8bacb06a428b85f6bfc3581"
+    },
+    {
+      "session": "01a0f809-d88d-7d13-ae71-95603ac61688",
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T17-16-29-01a0f809-d88d-7d13-ae71-95603ac61688.jsonl",
+      "ordinal": 19,
+      "call_id": "call_Q8RvAsRd6kRywLnkDhb4htUY",
+      "resource": "skills/kntnt/library/references/editorial/base.review.md",
+      "complete_returned_content": true,
+      "words": 949,
+      "sha256": "d2c838c19a692104be247afd227b0baed98f3156be059c0a982ecae3513fa0ca"
+    },
+    {
+      "session": "01a0f809-d88d-7d13-ae71-95603ac61688",
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T17-16-29-01a0f809-d88d-7d13-ae71-95603ac61688.jsonl",
+      "ordinal": 19,
+      "call_id": "call_Q8RvAsRd6kRywLnkDhb4htUY",
+      "resource": "skills/kntnt/library/references/editorial/genres/article.md",
+      "complete_returned_content": true,
+      "words": 193,
+      "sha256": "2313180d69b25de48b818629c5d761daa36eb69def33441b01c24a2135f17b4f"
+    },
+    {
+      "session": "01a0f809-d88d-7d13-ae71-95603ac61688",
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T17-16-29-01a0f809-d88d-7d13-ae71-95603ac61688.jsonl",
+      "ordinal": 19,
+      "call_id": "call_Q8RvAsRd6kRywLnkDhb4htUY",
+      "resource": "skills/kntnt/library/references/editorial/genres/article.review.md",
+      "complete_returned_content": true,
+      "words": 148,
+      "sha256": "0d992e276cb65943ceab91cb855c1fcafd2b65ed4b378a16a4ea63036de8074c"
+    },
+    {
+      "session": "01a0f809-d88d-7d13-ae71-95603ac61688",
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T17-16-29-01a0f809-d88d-7d13-ae71-95603ac61688.jsonl",
+      "ordinal": 27,
+      "call_id": "call_Pf6SvPhuqWki5QS7lvxLVxD6",
+      "resource": "skills/kntnt/library/references/editorial/article-anatomy.review.md",
+      "complete_returned_content": true,
+      "words": 966,
+      "sha256": "3e616f9671126ba7898123dd288a4a9bb4170f189d567a3fcbd2b17ccb82c633"
+    },
+    {
+      "session": "01a0f809-d88d-7d13-ae71-95603ac61688",
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T17-16-29-01a0f809-d88d-7d13-ae71-95603ac61688.jsonl",
+      "ordinal": 27,
+      "call_id": "call_Pf6SvPhuqWki5QS7lvxLVxD6",
+      "language": "en_GB",
+      "scope": "composition",
+      "source": "en_GB",
+      "complete_returned_content": true,
+      "words": 258,
+      "sha256": "ce209f83cea4501f7c04f9439e88e6c57902a9c436285c344b42a4f6a3bdc49d",
+      "presentation": "exact resolved guidance returned as plain text"
+    },
+    {
+      "session": "01a0f809-d88d-7d13-ae71-95603ac61688",
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T17-16-29-01a0f809-d88d-7d13-ae71-95603ac61688.jsonl",
+      "ordinal": 27,
+      "call_id": "call_Pf6SvPhuqWki5QS7lvxLVxD6",
+      "language": "en_GB",
+      "scope": "review",
+      "source": "en_GB",
+      "complete_returned_content": true,
+      "words": 241,
+      "sha256": "d7eae114d6de42a72220359087857329931df685d349385cbbdbdb13678fa7a8",
+      "presentation": "exact resolved guidance returned as plain text"
+    },
+    {
+      "session": "01a0f809-d88d-7d13-ae71-95603ac61688",
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T17-16-29-01a0f809-d88d-7d13-ae71-95603ac61688.jsonl",
+      "ordinal": 27,
+      "call_id": "call_Pf6SvPhuqWki5QS7lvxLVxD6",
+      "language": "en_GB",
+      "scope": "anti-slop",
+      "source": "en_GB",
+      "complete_returned_content": true,
+      "words": 199,
+      "sha256": "49f5d95b9c9cf7859eadddd9827ac892fd012f333c472ee9cb7f1148649a5bb7",
+      "presentation": "exact resolved guidance returned as plain text"
+    },
+    {
+      "session": "01a0f80f-03d3-7d61-999d-2bf29f93deff",
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T17-22-08-01a0f80f-03d3-7d61-999d-2bf29f93deff.jsonl",
+      "ordinal": 17,
+      "call_id": "call_4H3XzZ1ixK8e9qcdywKeu1FT",
+      "resource": "skills/editorial/proofread/SKILL.md",
+      "complete_returned_content": true,
+      "words": 2036,
+      "sha256": "6cad45f3d50a96e43c8df9996bc748c7e09e09f456e8a9375c724b84d236404f"
+    },
+    {
+      "session": "01a0f80f-03d3-7d61-999d-2bf29f93deff",
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T17-22-08-01a0f80f-03d3-7d61-999d-2bf29f93deff.jsonl",
+      "ordinal": 35,
+      "call_id": "call_K6PvDLMWMyTGQgOn8IAqEgFg",
+      "resource": "skills/kntnt/library/references/delivery.md",
+      "complete_returned_content": true,
+      "words": 2675,
+      "sha256": "71babd36f68d93cd9f7d035358c3cbaeae3179147d8dc7a4667047081c898472"
+    },
+    {
+      "session": "01a0f80f-03d3-7d61-999d-2bf29f93deff",
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T17-22-08-01a0f80f-03d3-7d61-999d-2bf29f93deff.jsonl",
+      "ordinal": 40,
+      "call_id": "call_O9w0BZy0slwavu3Y5w2DcEdM",
+      "language": "en_GB",
+      "scope": "mechanics",
+      "source": "en_GB",
+      "complete_returned_content": true,
+      "words": 341,
+      "sha256": "713d18e283df62493af837aedfd61829b1c67c0aff115e400acbd9ae70a23430",
+      "presentation": "exact resolved guidance returned as plain text"
+    },
+    {
+      "session": "01a0f80f-03d3-7d61-999d-2bf29f93deff",
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T17-22-08-01a0f80f-03d3-7d61-999d-2bf29f93deff.jsonl",
+      "ordinal": 45,
+      "call_id": "call_IdOZ8VKMBRezQ5GihTiznVdh",
+      "resource": "skills/kntnt/library/references/editorial/mechanics.md",
+      "complete_returned_content": true,
+      "words": 2015,
+      "sha256": "b3103ed6da4ac9d27a0ebfb43bdb40b8e77d58d84b3745a90c0a736142438b45"
+    }
+  ],
+  "fragment_observations": [
+    {
+      "session": "01a0f805-fd3a-7340-84a9-8dc270e0dcdf",
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T17-12-17-01a0f805-fd3a-7340-84a9-8dc270e0dcdf.jsonl",
+      "ordinal": 37,
+      "call_id": "call_zRlBfjhlWUBBK51qL8E12Kc0",
+      "fragment": "delivery-truth",
+      "resource": "skills/kntnt/library/references/delivery.md",
+      "complete_returned_fragment": true,
+      "words": 456,
+      "sha256": "b36acf9611107953cd78cfcdfa7192b0d2cf967ac89941270034b9a5e20fcf06"
+    },
+    {
+      "session": "01a0f805-fd3a-7340-84a9-8dc270e0dcdf",
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T17-12-17-01a0f805-fd3a-7340-84a9-8dc270e0dcdf.jsonl",
+      "ordinal": 46,
+      "call_id": "call_FSNJhIwwn3LLFKvXrKuWKrYc",
+      "fragment": "base-claim-account",
+      "resource": "skills/kntnt/library/references/editorial/base.review.md",
+      "complete_returned_fragment": true,
+      "words": 189,
+      "sha256": "cd6ca3377f86e6ea9e722d246512375e3c416d8f7062a3331beb6e9f1c184c64"
+    },
+    {
+      "session": "01a0f809-d88d-7d13-ae71-95603ac61688",
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T17-16-29-01a0f809-d88d-7d13-ae71-95603ac61688.jsonl",
+      "ordinal": 19,
+      "call_id": "call_Q8RvAsRd6kRywLnkDhb4htUY",
+      "fragment": "base-claim-account",
+      "resource": "skills/kntnt/library/references/editorial/base.review.md",
+      "complete_returned_fragment": true,
+      "words": 189,
+      "sha256": "cd6ca3377f86e6ea9e722d246512375e3c416d8f7062a3331beb6e9f1c184c64"
+    },
+    {
+      "session": "01a0f80f-03d3-7d61-999d-2bf29f93deff",
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T17-22-08-01a0f80f-03d3-7d61-999d-2bf29f93deff.jsonl",
+      "ordinal": 35,
+      "call_id": "call_K6PvDLMWMyTGQgOn8IAqEgFg",
+      "fragment": "delivery-truth",
+      "resource": "skills/kntnt/library/references/delivery.md",
+      "complete_returned_fragment": true,
+      "words": 456,
+      "sha256": "b36acf9611107953cd78cfcdfa7192b0d2cf967ac89941270034b9a5e20fcf06"
+    },
+    {
+      "session": "01a0f813-58de-78d1-b91b-4b4b4ec5611f",
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T17-26-52-01a0f813-58de-78d1-b91b-4b4b4ec5611f.jsonl",
+      "ordinal": 14,
+      "call_id": "call_9sDX9YzMM2HAJ8RElKh9Kbiw",
+      "fragment": "delivery-truth",
+      "resource": "skills/kntnt/library/references/delivery.md",
+      "complete_returned_fragment": true,
+      "words": 456,
+      "sha256": "b36acf9611107953cd78cfcdfa7192b0d2cf967ac89941270034b9a5e20fcf06"
+    },
+    {
+      "session": "01a0f813-58de-78d1-b91b-4b4b4ec5611f",
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T17-26-52-01a0f813-58de-78d1-b91b-4b4b4ec5611f.jsonl",
+      "ordinal": 14,
+      "call_id": "call_9sDX9YzMM2HAJ8RElKh9Kbiw",
+      "fragment": "base-claim-account",
+      "resource": "skills/kntnt/library/references/editorial/base.review.md",
+      "complete_returned_fragment": true,
+      "words": 189,
+      "sha256": "cd6ca3377f86e6ea9e722d246512375e3c416d8f7062a3331beb6e9f1c184c64"
+    }
+  ],
+  "fragment_note": "Selected reply-check passages are recorded separately. Their words must not be added again where the same session already has the complete containing resource credited. A complete fragment match does not prove that nothing else was read."
+}
