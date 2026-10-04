@@ -1,0 +1,151 @@
+{
+  "result": {
+    "returncode": 0,
+    "timed_out": false,
+    "duration_seconds": 1602.2,
+    "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-dg_rk1zn",
+    "cleanup_required": true
+  },
+  "input_sha256": "6648de46956c4796cff8c1fb1f3cc3a195b1a57f7cc5a4511e298f49fa1b6a36",
+  "artifact": {
+    "fenced_artifact_count": 1,
+    "present": true,
+    "source": "response-fence",
+    "sha256": "7749177b1bef16949d4b8e9272ad00da0e2a3c44d617adba4acdf2087fbc51f7",
+    "input_identical": false
+  },
+  "identities": [
+    {
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T14-40-36-01a0f77b-1d27-7981-b398-c1a009c41a37.jsonl",
+      "id": "01a0f77b-1d27-7981-b398-c1a009c41a37",
+      "source": "exec",
+      "seats": [
+        [
+          "gpt-6.1-sol",
+          "xhigh"
+        ]
+      ]
+    },
+    {
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T14-47-29-01a0f781-6b92-7cf0-9b9f-e9ec5b83d872.jsonl",
+      "id": "01a0f781-6b92-7cf0-9b9f-e9ec5b83d872",
+      "source": {
+        "subagent": {
+          "thread_spawn": {
+            "parent_thread_id": "01a0f77b-1d27-7981-b398-c1a009c41a37",
+            "depth": 1,
+            "agent_path": "/root/redline_correction",
+            "agent_nickname": "Cicero",
+            "agent_role": null
+          }
+        }
+      },
+      "seats": [
+        [
+          "gpt-6.1-sol",
+          "xhigh"
+        ]
+      ]
+    },
+    {
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T14-54-34-01a0f787-e966-7313-b70e-3eab13b75aa1.jsonl",
+      "id": "01a0f787-e966-7313-b70e-3eab13b75aa1",
+      "source": {
+        "subagent": {
+          "thread_spawn": {
+            "parent_thread_id": "01a0f77b-1d27-7981-b398-c1a009c41a37",
+            "depth": 1,
+            "agent_path": "/root/mechanical_pass",
+            "agent_nickname": "Ptolemy",
+            "agent_role": null
+          }
+        }
+      },
+      "seats": [
+        [
+          "gpt-6.1-sol",
+          "xhigh"
+        ]
+      ]
+    },
+    {
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T15-01-31-01a0f78e-45f1-78f0-8c06-2d74dadba7cf.jsonl",
+      "id": "01a0f78e-45f1-78f0-8c06-2d74dadba7cf",
+      "source": {
+        "subagent": {
+          "thread_spawn": {
+            "parent_thread_id": "01a0f77b-1d27-7981-b398-c1a009c41a37",
+            "depth": 1,
+            "agent_path": "/root/reply_check",
+            "agent_nickname": "Archimedes",
+            "agent_role": null
+          }
+        }
+      },
+      "seats": [
+        [
+          "gpt-6.1-sol",
+          "xhigh"
+        ]
+      ]
+    }
+  ],
+  "encrypted_dispatches": [
+    {
+      "session": "01a0f77b-1d27-7981-b398-c1a009c41a37",
+      "name": "spawn_agent",
+      "call_id": "call_hPtQnPVF6fnJUELm7aItOzxS",
+      "note": "dispatch message encrypted; use actual child reads rather than infer its complete brief"
+    },
+    {
+      "session": "01a0f77b-1d27-7981-b398-c1a009c41a37",
+      "name": "spawn_agent",
+      "call_id": "call_WZyxrKprolMONDcJHA6gElz3",
+      "note": "dispatch message encrypted; use actual child reads rather than infer its complete brief"
+    },
+    {
+      "session": "01a0f77b-1d27-7981-b398-c1a009c41a37",
+      "name": "spawn_agent",
+      "call_id": "call_ZEuGKRD8RgKvuLDx3Ua0qvjD",
+      "note": "dispatch message encrypted; use actual child reads rather than infer its complete brief"
+    },
+    {
+      "session": "01a0f78e-45f1-78f0-8c06-2d74dadba7cf",
+      "name": "send_message",
+      "call_id": "call_g7L6W8ixG8ffB5cwmhIQUC53",
+      "note": "dispatch message encrypted; use actual child reads rather than infer its complete brief"
+    },
+    {
+      "session": "01a0f78e-45f1-78f0-8c06-2d74dadba7cf",
+      "name": "send_message",
+      "call_id": "call_jcz7UJp7uz2JzfkZiAkT2GHn",
+      "note": "dispatch message encrypted; use actual child reads rather than infer its complete brief"
+    },
+    {
+      "session": "01a0f78e-45f1-78f0-8c06-2d74dadba7cf",
+      "name": "send_message",
+      "call_id": "call_HOonpFKTr8TfnaaSthPner7y",
+      "note": "dispatch message encrypted; use actual child reads rather than infer its complete brief"
+    }
+  ],
+  "all_recorded_seats_match": true,
+  "artifact_matches_captures": [
+    {
+      "path": "scratch/redline-mechanical-ixlu1_ei/mechanical-input.md",
+      "sha256": "7749177b1bef16949d4b8e9272ad00da0e2a3c44d617adba4acdf2087fbc51f7",
+      "capture": "0009-7749177b1bef.md",
+      "time": 1790859254.6882062
+    },
+    {
+      "path": "scratch/redline-mechanical-ixlu1_ei/mechanical-output.md",
+      "sha256": "7749177b1bef16949d4b8e9272ad00da0e2a3c44d617adba4acdf2087fbc51f7",
+      "capture": "0014-7749177b1bef.md",
+      "time": 1790859379.750454
+    }
+  ],
+  "source_inventory_unchanged": true,
+  "staged_install_unchanged": true,
+  "work_created": {},
+  "work_removed": {},
+  "work_changed": {}
+}

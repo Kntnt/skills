@@ -1,0 +1,85 @@
+{
+  "01a0f820-a9fc-7600-a807-9ca88f6675a8": {
+    "source": "exec",
+    "resources": [
+      {
+        "path": ".agents/skills/kntnt/library/references/delivery.md",
+        "full_resource_text_in_returned_output": true,
+        "all_nonblank_lines_visible_across_returns": true,
+        "missing_nonblank_lines": []
+      },
+      {
+        "path": ".agents/skills/kntnt/library/references/editorial/article-anatomy.md",
+        "full_resource_text_in_returned_output": true,
+        "all_nonblank_lines_visible_across_returns": true,
+        "missing_nonblank_lines": []
+      },
+      {
+        "path": ".agents/skills/kntnt/library/references/editorial/base.md",
+        "full_resource_text_in_returned_output": true,
+        "all_nonblank_lines_visible_across_returns": true,
+        "missing_nonblank_lines": []
+      },
+      {
+        "path": ".agents/skills/kntnt/library/references/editorial/genres/casestudy.md",
+        "full_resource_text_in_returned_output": true,
+        "all_nonblank_lines_visible_across_returns": true,
+        "missing_nonblank_lines": []
+      },
+      {
+        "path": ".agents/skills/kntnt/library/references/editorial/headlines.md",
+        "full_resource_text_in_returned_output": true,
+        "all_nonblank_lines_visible_across_returns": true,
+        "missing_nonblank_lines": []
+      },
+      {
+        "path": ".agents/skills/kntnt/library/references/editorial/web-craft.md",
+        "full_resource_text_in_returned_output": true,
+        "all_nonblank_lines_visible_across_returns": true,
+        "missing_nonblank_lines": []
+      },
+      {
+        "path": ".agents/skills/write/SKILL.md",
+        "full_resource_text_in_returned_output": true,
+        "all_nonblank_lines_visible_across_returns": true,
+        "missing_nonblank_lines": []
+      },
+      {
+        "path": ".agents/skills/write/references/quotations.md",
+        "full_resource_text_in_returned_output": true,
+        "all_nonblank_lines_visible_across_returns": true,
+        "missing_nonblank_lines": []
+      },
+      {
+        "path": ".agents/skills/write/references/source-check.md",
+        "full_resource_text_in_returned_output": true,
+        "all_nonblank_lines_visible_across_returns": true,
+        "missing_nonblank_lines": []
+      }
+    ],
+    "language_scopes": [
+      {
+        "path": ".agents/skills/kntnt/library/references/languages/sv.md",
+        "scope": "composition",
+        "complete_scope_content_in_returned_output": true
+      }
+    ],
+    "limit": "Line coverage across separate returns does not prove order or exact encrypted dispatch scope."
+  },
+  "01a0f828-5b89-7490-b22e-351d78abf3b8": {
+    "source": {
+      "subagent": {
+        "thread_spawn": {
+          "parent_thread_id": "01a0f820-a9fc-7600-a807-9ca88f6675a8",
+          "depth": 1,
+          "agent_path": "/root/source_check_1",
+          "agent_nickname": "Avicenna",
+          "agent_role": null
+        }
+      }
+    },
+    "resources": [],
+    "language_scopes": [],
+    "limit": "Line coverage across separate returns does not prove order or exact encrypted dispatch scope."
+  }
+}

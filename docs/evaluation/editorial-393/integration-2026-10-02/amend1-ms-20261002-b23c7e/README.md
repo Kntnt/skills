@@ -1,0 +1,19 @@
+# Amendment 1: unresolved evidence integration boundary
+
+Attempt `ms-20261002-b23c7e` starts from `01da4f65d8162dfa42d1ba8903ddf9275e3d3c30`. The preceding implementation and verification receipts are preserved. No satisfying implementation was selected: the latest thread does not settle the scope decision needed to reconcile the immutable native packet with the repository's tracked-file registry contract. Acceptance criterion 6 remains unmet; this amendment does not authorize closure.
+
+The [observed red step](red.txt) reruns the exact failing node before any implementation change:
+
+```text
+uv run --with pytest --with pytest-xdist --with pyyaml pytest -n auto tests/test_run.py::test_the_registries_the_engine_finds_are_the_ones_this_repository_keeps
+```
+
+It exits 1 at `tests/test_run.py:10074`, the same registry-set assertion. The shipped `numbered_registries` contract in `skills/code/orchestrate/scripts/run.py` treats every tracked basename beginning with four digits and a hyphen as a numbered record, regardless of directory. The test requires this repository to contain only the `docs/adr` registry.
+
+The [complete surface audit](surface-audit.json) checks the whole ticket-owned import, not only the example cited in the verdict. It identifies **340 source-exact native capture files across all 29 additional directories**, including counted, refused and voided runs. All matching ticket-owned filenames belong to those captures; there are no further ticket-owned collisions. All 1,127 source-branch additions match the retained source head and working bytes. Every integration-base blob is unchanged, and the owner decision matches its frozen `ed1d8587` blob. The audit does not repeat a product trial or reinterpret a judgement.
+
+The requirements conflict at this boundary. The latest Agent Brief requires an all-green gate while permitting only additive evaluator/evidence documentation and excluding product changes and historical evidence changes. The amendment instructions additionally forbid weakening, skipping or deleting tests, and the supplied verdict excludes historical filename rewrites and assertion bypasses. Changing the registry detector would change a shipped product contract; changing the assertion would change a test; renaming or withdrawing the capture files would change the immutable evidence surface. No established tracked-archive convention was found in the repository. Choosing a new packaging policy, with different tracked paths and evidence access, is not authority supplied by this ticket. The owner's later clarification authorizes closure after fulfillment and independent verification; it does not expand these boundaries.
+
+A further instruction must authorize the reconciliation surface and its constraints, whether that is a registry-contract repair or an archival packaging policy preserving the original evidence. This amendment chooses neither. It adds only this diagnosis, offline audit and fresh verification/cleanup receipts. It leaves the previously verified owner reading, completed GPT measurement, residual handoff, original source branch/worktree, historical records and publication boundaries intact. No new issue or tracker comment is published, no ADR is written, and no product/test, guide, record index or append note is changed.
+
+[Gate receipts](gate-results.json) retain the red step and all four unchanged CONTRIBUTING commands, their exact invocation, resolved temporary environment, process identities and exit statuses. Ruff checking, Ruff formatting and the specified mypy command pass. Full pytest returns **1 failed, 2,729 passed in 170.80 seconds**; its only failure is the same registry assertion. The required full gate is therefore not accepted. [Cleanup](cleanup.json) records removal of owned temporary material and the absence of owned process groups. No prior deliverable is removed.

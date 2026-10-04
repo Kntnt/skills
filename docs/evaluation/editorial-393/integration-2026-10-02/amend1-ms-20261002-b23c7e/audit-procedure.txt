@@ -1,0 +1,92 @@
+"""Audit the whole ticket-owned registry collision without changing evidence."""
+
+import datetime
+import hashlib
+import json
+from pathlib import Path, PurePosixPath
+import re
+import subprocess
+
+ROOT = Path('/Users/thomas/Projects/skills/.git/kntnt-orchestrate/393')
+OUT = ROOT / 'docs/evaluation/editorial-393/integration-2026-10-02/amend1-ms-20261002-b23c7e'
+SOURCE = '4e88c6e0d1385c52eb9e5fa82d56a52b9a89f248'
+BASE = '5b026028'
+
+
+def git(*args: str) -> bytes:
+    """Read this repository's recorded state, preserving raw bytes."""
+    return subprocess.check_output(['git', *args], cwd=ROOT)
+
+
+def tree(rev: str) -> dict[str, str]:
+    """Map paths to Git blob identities for a revision."""
+    found = {}
+    for row in git('ls-tree', '-r', '-z', rev).split(b'\0'):
+        if row:
+            info, path = row.split(b'\t', 1)
+            found[path.decode()] = info.split()[2].decode()
+    return found
+
+
+head = git('rev-parse', 'HEAD').decode().strip()
+source_tree = tree(SOURCE)
+head_tree = tree(head)
+base_tree = tree(BASE)
+source_additions = git('diff', '--diff-filter=A', '--name-only', '-z', 'fb169087', SOURCE).decode().split('\0')[:-1]
+source_check = {}
+for path in source_additions:
+    blob = git('cat-file', 'blob', source_tree[path])
+    working = (ROOT / path).read_bytes()
+    source_check[path] = {
+        'source_blob': source_tree[path],
+        'head_blob': head_tree.get(path),
+        'working_sha256': hashlib.sha256(working).hexdigest(),
+        'source_sha256': hashlib.sha256(blob).hexdigest(),
+        'source_head_working_equal': head_tree.get(path) == source_tree[path] and working == blob,
+    }
+assert all(row['source_head_working_equal'] for row in source_check.values())
+
+tracked = git('ls-files', '-z').decode().split('\0')[:-1]
+registries = {}
+for path in tracked:
+    match = re.match(r'^(\d{4})-', PurePosixPath(path).name)
+    if match:
+        directory = str(PurePosixPath(path).parent)
+        registries.setdefault(directory, []).append(path)
+extra = {path: files for path, files in registries.items() if path != 'docs/adr'}
+assert len(extra) == 29
+assert all(path.startswith('docs/evaluation/editorial-393/gpt-retest-2026-10-01/') for path in extra)
+assert all(path.endswith('/file-versions') for path in extra)
+collisions = {
+    directory: {path: source_check[path] for path in sorted(files)}
+    for directory, files in sorted(extra.items())
+}
+additions = set(head_tree) - set(base_tree)
+assert all(path in additions for files in extra.values() for path in files)
+matching_owned = sorted(path for path in additions if re.match(r'^\d{4}-', PurePosixPath(path).name))
+assert matching_owned == sorted(path for files in extra.values() for path in files)
+assert all(head_tree[path] == blob for path, blob in base_tree.items())
+
+owner = 'docs/evaluation/editorial-393/gpt-retest-2026-10-01/owner-decision.md'
+assert git('show', f'ed1d8587:{owner}') == (ROOT / owner).read_bytes()
+source_ref = git('rev-parse', 'codex/retest-393-gpt-20261001').decode().strip()
+assert source_ref == SOURCE
+report = {
+    'attempt_id': 'ms-20261002-b23c7e',
+    'audited_at': datetime.datetime.now(datetime.timezone.utc).isoformat(),
+    'audited_head': head,
+    'integration_base': BASE,
+    'retained_source_head': source_ref,
+    'source_addition_count': len(source_additions),
+    'all_source_additions_head_and_working_byte_exact': True,
+    'all_integration_base_blobs_unchanged': True,
+    'owner_decision_matches_frozen_ed1d8587': True,
+    'extra_registry_count': len(extra),
+    'matching_ticket_owned_file_count': len(matching_owned),
+    'all_matching_ticket_owned_files_are_retained_native_captures': True,
+    'collisions': collisions,
+    'tracked_archives': sorted(path for path in tracked if path.endswith(('.tar', '.tar.gz', '.tgz', '.zip', '.xz', '.zst'))),
+    'source_imports': source_check,
+}
+(OUT / 'surface-audit.json').write_text(json.dumps(report, indent=2) + '\n')
+print(json.dumps({key: value for key, value in report.items() if key not in {'collisions', 'source_imports'}}, indent=2))

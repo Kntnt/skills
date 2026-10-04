@@ -1,0 +1,474 @@
+{
+  "c03": [
+    {
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T14-40-36-01a0f77b-1d27-7981-b398-c1a009c41a37.jsonl",
+      "ordinal": 87,
+      "call_id": "call_hPtQnPVF6fnJUELm7aItOzxS",
+      "task_name": "redline_correction",
+      "fork_turns": "none",
+      "message_encrypted": true
+    },
+    {
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T14-40-36-01a0f77b-1d27-7981-b398-c1a009c41a37.jsonl",
+      "ordinal": 156,
+      "call_id": "call_WZyxrKprolMONDcJHA6gElz3",
+      "task_name": "mechanical_pass",
+      "fork_turns": "none",
+      "message_encrypted": true
+    },
+    {
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T14-40-36-01a0f77b-1d27-7981-b398-c1a009c41a37.jsonl",
+      "ordinal": 198,
+      "call_id": "call_ZEuGKRD8RgKvuLDx3Ua0qvjD",
+      "task_name": "reply_check",
+      "fork_turns": "none",
+      "message_encrypted": true
+    }
+  ],
+  "c04": [
+    {
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T14-40-36-01a0f77b-1d27-7603-b0d5-75ca5a303c42.jsonl",
+      "ordinal": 89,
+      "call_id": "call_ABxxyd7FtYgnSCtlA8A4QUlY",
+      "task_name": "redline_correction",
+      "fork_turns": "none",
+      "message_encrypted": true
+    },
+    {
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T14-40-36-01a0f77b-1d27-7603-b0d5-75ca5a303c42.jsonl",
+      "ordinal": 187,
+      "call_id": "call_1sPHEctTSrL6haWJJDXbHEO3",
+      "task_name": "redline_proofread",
+      "fork_turns": "none",
+      "message_encrypted": true
+    },
+    {
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T14-40-36-01a0f77b-1d27-7603-b0d5-75ca5a303c42.jsonl",
+      "ordinal": 236,
+      "call_id": "call_o5DnS6sXQl032jC2L6Y1t4hF",
+      "task_name": "redline_reply_check",
+      "fork_turns": "none",
+      "message_encrypted": true
+    }
+  ],
+  "c05": [
+    {
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T15-04-51-01a0f791-4f82-7b50-b078-9d5f7dd0d15c.jsonl",
+      "ordinal": 87,
+      "call_id": "call_JlTO9srl7RXEFmYZVtJ0AwRW",
+      "task_name": "correction",
+      "fork_turns": "none",
+      "message_encrypted": true
+    },
+    {
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T15-04-51-01a0f791-4f82-7b50-b078-9d5f7dd0d15c.jsonl",
+      "ordinal": 218,
+      "call_id": "call_pzXYplKKsGRWIZIVAuKU9JuN",
+      "task_name": "mechanical_pass",
+      "fork_turns": "none",
+      "message_encrypted": true
+    },
+    {
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T15-04-51-01a0f791-4f82-7b50-b078-9d5f7dd0d15c.jsonl",
+      "ordinal": 257,
+      "call_id": "call_fTXBcTxP6eBxC4IYMZliKviO",
+      "task_name": "reply_check",
+      "fork_turns": "none",
+      "message_encrypted": true
+    }
+  ],
+  "c06": [
+    {
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T15-07-18-01a0f793-9066-7430-94ef-7d970c473bb1.jsonl",
+      "ordinal": 78,
+      "call_id": "call_oa7xLAppAvNcH2fe0JJB37Ws",
+      "task_name": "redline_correction",
+      "fork_turns": "none",
+      "message_encrypted": true
+    },
+    {
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T15-07-18-01a0f793-9066-7430-94ef-7d970c473bb1.jsonl",
+      "ordinal": 177,
+      "call_id": "call_GirIoWR3BNSwK0kWiE3tr6Vp",
+      "task_name": "mechanical_pass",
+      "fork_turns": "none",
+      "message_encrypted": true
+    },
+    {
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T15-07-18-01a0f793-9066-7430-94ef-7d970c473bb1.jsonl",
+      "ordinal": 216,
+      "call_id": "call_RI2IWrqXg41Gwn4IVL6C3wBK",
+      "task_name": "reply_check",
+      "fork_turns": "none",
+      "message_encrypted": true
+    }
+  ],
+  "c07": [
+    {
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T15-31-42-01a0f7a9-e5d9-7bb3-b8ee-6b248ef1c0b8.jsonl",
+      "ordinal": 78,
+      "call_id": "call_KNYu9r9aP8j0rui9yEqx3vuz",
+      "task_name": "correction_1",
+      "fork_turns": "none",
+      "message_encrypted": true
+    },
+    {
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T15-31-42-01a0f7a9-e5d9-7bb3-b8ee-6b248ef1c0b8.jsonl",
+      "ordinal": 158,
+      "call_id": "call_Rxsv1miIZhJ9SCQSoQ6WqyfZ",
+      "task_name": "mechanical_pass",
+      "fork_turns": "none",
+      "message_encrypted": true
+    },
+    {
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T15-31-42-01a0f7a9-e5d9-7bb3-b8ee-6b248ef1c0b8.jsonl",
+      "ordinal": 207,
+      "call_id": "call_v4SK2JCCwbq2DLng2pJalZGg",
+      "task_name": "reply_check",
+      "fork_turns": "none",
+      "message_encrypted": true
+    }
+  ],
+  "c08": [
+    {
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T15-33-10-01a0f7ab-3e61-7e00-9874-af1010de6e03.jsonl",
+      "ordinal": 70,
+      "call_id": "call_k74tJQtIbqJUuXo0Qrt93Baa",
+      "task_name": "correction_1",
+      "fork_turns": "none",
+      "message_encrypted": true
+    },
+    {
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T15-33-10-01a0f7ab-3e61-7e00-9874-af1010de6e03.jsonl",
+      "ordinal": 160,
+      "call_id": "call_ZBU91XiV4P4RUrm5sVXl6Z2a",
+      "task_name": "mechanical_pass",
+      "fork_turns": "none",
+      "message_encrypted": true
+    },
+    {
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T15-33-10-01a0f7ab-3e61-7e00-9874-af1010de6e03.jsonl",
+      "ordinal": 211,
+      "call_id": "call_cAe1y9ansCcUmllTWYZmxvpN",
+      "task_name": "reply_check",
+      "fork_turns": "none",
+      "message_encrypted": true
+    }
+  ],
+  "c09": [
+    {
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T15-50-40-01a0f7bb-4448-7633-b2bc-cdc17289323a.jsonl",
+      "ordinal": 88,
+      "call_id": "call_mX3KpKSNvzNNo4B8UOEw0kXV",
+      "task_name": "redline_correction",
+      "fork_turns": "none",
+      "message_encrypted": true
+    },
+    {
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T15-50-40-01a0f7bb-4448-7633-b2bc-cdc17289323a.jsonl",
+      "ordinal": 162,
+      "call_id": "call_hFCiTCCvVCTubbkIPfCJp9jA",
+      "task_name": "nested_proofread",
+      "fork_turns": "none",
+      "message_encrypted": true
+    },
+    {
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T15-50-40-01a0f7bb-4448-7633-b2bc-cdc17289323a.jsonl",
+      "ordinal": 193,
+      "call_id": "call_sLkmyFXJNdrV8dipQNbAUDJ0",
+      "task_name": "redline_reply_check",
+      "fork_turns": "none",
+      "message_encrypted": true
+    }
+  ],
+  "c10": [
+    {
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T15-52-22-01a0f7bc-d0b7-7df2-bd1d-b2a87bee0565.jsonl",
+      "ordinal": 79,
+      "call_id": "call_1RXTtUaElyo2sXQUfLgyCRNr",
+      "task_name": "redline_correction",
+      "fork_turns": "none",
+      "message_encrypted": true
+    },
+    {
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T15-52-22-01a0f7bc-d0b7-7df2-bd1d-b2a87bee0565.jsonl",
+      "ordinal": 144,
+      "call_id": "call_H763X5usVUvHNcySR8sB0nGm",
+      "task_name": "mechanical_proofread",
+      "fork_turns": "none",
+      "message_encrypted": true
+    },
+    {
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T15-52-22-01a0f7bc-d0b7-7df2-bd1d-b2a87bee0565.jsonl",
+      "ordinal": 176,
+      "call_id": "call_DrpIteng5SgB120jEqw19W1P",
+      "task_name": "redline_reply_check",
+      "fork_turns": "none",
+      "message_encrypted": true
+    }
+  ],
+  "c11": [
+    {
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T16-07-31-01a0f7ca-aedc-7312-9282-f31affbe6b6a.jsonl",
+      "ordinal": 69,
+      "call_id": "call_As9oSHuhte11jecgSgmKXCoB",
+      "task_name": "redline_correction",
+      "fork_turns": "none",
+      "message_encrypted": true
+    },
+    {
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T16-07-31-01a0f7ca-aedc-7312-9282-f31affbe6b6a.jsonl",
+      "ordinal": 165,
+      "call_id": "call_I38Zn0n0HETpNsMPXr1fZS0D",
+      "task_name": "mechanical_pass",
+      "fork_turns": "none",
+      "message_encrypted": true
+    },
+    {
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T16-07-31-01a0f7ca-aedc-7312-9282-f31affbe6b6a.jsonl",
+      "ordinal": 209,
+      "call_id": "call_X8m7sLC94Kq6qg6FrJlwo2Yu",
+      "task_name": "reply_check",
+      "fork_turns": "none",
+      "message_encrypted": true
+    }
+  ],
+  "c12": [
+    {
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T16-11-42-01a0f7ce-86b5-7b50-b52d-0a6cd104cd53.jsonl",
+      "ordinal": 78,
+      "call_id": "call_LhJ4VsTeyKeIecRrCRIMTTaJ",
+      "task_name": "redline_correction",
+      "fork_turns": "none",
+      "message_encrypted": true
+    },
+    {
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T16-11-42-01a0f7ce-86b5-7b50-b52d-0a6cd104cd53.jsonl",
+      "ordinal": 164,
+      "call_id": "call_mxXLtbU6Cc08D9YJqweHrt4I",
+      "task_name": "mechanical_pass",
+      "fork_turns": "none",
+      "message_encrypted": true
+    },
+    {
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T16-11-42-01a0f7ce-86b5-7b50-b52d-0a6cd104cd53.jsonl",
+      "ordinal": 197,
+      "call_id": "call_yn4Zb83nIBtYEp0I2uBtjaDR",
+      "task_name": "reply_check",
+      "fork_turns": "none",
+      "message_encrypted": true
+    }
+  ],
+  "p01": [
+    {
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T17-42-15-01a0f821-6dd5-7c50-b5ed-f593b03ca8a1.jsonl",
+      "ordinal": 74,
+      "call_id": "call_pwhdSOQDfluIPltEkNZVGJA0",
+      "task_name": "correction_1",
+      "fork_turns": "none",
+      "message_encrypted": true
+    },
+    {
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T17-42-15-01a0f821-6dd5-7c50-b5ed-f593b03ca8a1.jsonl",
+      "ordinal": 138,
+      "call_id": "call_WTdjXECAwAFhqWObsJcsAiLu",
+      "task_name": "mechanical_pass",
+      "fork_turns": "none",
+      "message_encrypted": true
+    },
+    {
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T17-42-15-01a0f821-6dd5-7c50-b5ed-f593b03ca8a1.jsonl",
+      "ordinal": 180,
+      "call_id": "call_t11IxUazBNPcBVnwzuS4Y7hH",
+      "task_name": "reply_check",
+      "fork_turns": "none",
+      "message_encrypted": true
+    }
+  ],
+  "p02": [
+    {
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T17-29-37-01a0f815-d9e4-7540-b11e-c8aab2725499.jsonl",
+      "ordinal": 92,
+      "call_id": "call_avynmxxD4l0XwR8LEQZcmgGI",
+      "task_name": "redline_correction",
+      "fork_turns": "none",
+      "message_encrypted": true
+    },
+    {
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T17-29-37-01a0f815-d9e4-7540-b11e-c8aab2725499.jsonl",
+      "ordinal": 177,
+      "call_id": "call_YQQ6WexybcDLAE7HyOlYVe8E",
+      "task_name": "redline_reply_check",
+      "fork_turns": "none",
+      "message_encrypted": true
+    }
+  ],
+  "p03": [
+    {
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T17-38-21-01a0f81d-d9d0-77f2-8647-0d898d6296ba.jsonl",
+      "ordinal": 86,
+      "call_id": "call_MqUG44idDoQcFmRbCjRIVvKH",
+      "task_name": "mechanical_pass",
+      "fork_turns": "none",
+      "message_encrypted": true
+    }
+  ],
+  "r01": [
+    {
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T13-53-48-01a0f750-4491-72e1-8780-981329fd203f.jsonl",
+      "ordinal": 74,
+      "call_id": "call_p4EUXcLonZelEud06IJiAiIV",
+      "task_name": "redline_correction",
+      "fork_turns": "none",
+      "message_encrypted": true
+    },
+    {
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T13-53-48-01a0f750-4491-72e1-8780-981329fd203f.jsonl",
+      "ordinal": 154,
+      "call_id": "call_dO4XRrP8R8f2N6jqItQXQEeu",
+      "task_name": "mechanical_pass",
+      "fork_turns": "none",
+      "message_encrypted": true
+    },
+    {
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T13-53-48-01a0f750-4491-72e1-8780-981329fd203f.jsonl",
+      "ordinal": 191,
+      "call_id": "call_3GKa4uiYAWgNUJnSp2xliGc9",
+      "task_name": "reply_check",
+      "fork_turns": "none",
+      "message_encrypted": true
+    }
+  ],
+  "r02": [
+    {
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T14-14-37-01a0f763-5532-70c0-a8db-322feed757bd.jsonl",
+      "ordinal": 69,
+      "call_id": "call_BsMVvkZmNpq2tNaR7BhA2dU2",
+      "task_name": "correction",
+      "fork_turns": "none",
+      "message_encrypted": true
+    },
+    {
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T14-14-37-01a0f763-5532-70c0-a8db-322feed757bd.jsonl",
+      "ordinal": 154,
+      "call_id": "call_oZS30VI01d5pOuW3pgPTF0RH",
+      "task_name": "mechanical",
+      "fork_turns": "none",
+      "message_encrypted": true
+    },
+    {
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T14-14-37-01a0f763-5532-70c0-a8db-322feed757bd.jsonl",
+      "ordinal": 183,
+      "call_id": "call_THbPhAQNeWuyXfc8STuhjujZ",
+      "task_name": "reply_check",
+      "fork_turns": "none",
+      "message_encrypted": true
+    }
+  ],
+  "r13-rerun": [
+    {
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T17-12-17-01a0f805-fd3a-7340-84a9-8dc270e0dcdf.jsonl",
+      "ordinal": 63,
+      "call_id": "call_2Om2NR7mjtMGpjlBGHak9e3v",
+      "task_name": "correction_1",
+      "fork_turns": "none",
+      "message_encrypted": true
+    },
+    {
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T17-12-17-01a0f805-fd3a-7340-84a9-8dc270e0dcdf.jsonl",
+      "ordinal": 121,
+      "call_id": "call_w0vLQe3nWBQWfaOXLMyW7X6R",
+      "task_name": "mechanical_pass",
+      "fork_turns": "none",
+      "message_encrypted": true
+    },
+    {
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T17-12-17-01a0f805-fd3a-7340-84a9-8dc270e0dcdf.jsonl",
+      "ordinal": 164,
+      "call_id": "call_mg0xcXxbXFweseEMi4hwnk3E",
+      "task_name": "reply_check",
+      "fork_turns": "none",
+      "message_encrypted": true
+    }
+  ],
+  "r14": [
+    {
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T16-31-26-01a0f7e0-96ce-79d3-ae7f-2b22eb12eb6f.jsonl",
+      "ordinal": 81,
+      "call_id": "call_kBTL28efwj3JAHdWeY27Evdj",
+      "task_name": "redline_correction",
+      "fork_turns": "none",
+      "message_encrypted": true
+    },
+    {
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T16-31-26-01a0f7e0-96ce-79d3-ae7f-2b22eb12eb6f.jsonl",
+      "ordinal": 151,
+      "call_id": "call_V0vUm6uxH3kkdtxjXaON89ow",
+      "task_name": "redline_proofread",
+      "fork_turns": "none",
+      "message_encrypted": true
+    },
+    {
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T16-31-26-01a0f7e0-96ce-79d3-ae7f-2b22eb12eb6f.jsonl",
+      "ordinal": 191,
+      "call_id": "call_ayCZNVjQVnJrKUtvouuvbM6k",
+      "task_name": "redline_reply_check",
+      "fork_turns": "none",
+      "message_encrypted": true
+    }
+  ],
+  "w01-rerun": [
+    {
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T17-08-36-01a0f802-9cff-7e71-a231-8fafaf8b3ce1.jsonl",
+      "ordinal": 109,
+      "call_id": "call_bqjSChVPVjDQswJbMFBt7xEO",
+      "task_name": "source_check_1",
+      "fork_turns": "none",
+      "message_encrypted": true
+    },
+    {
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T17-08-36-01a0f802-9cff-7e71-a231-8fafaf8b3ce1.jsonl",
+      "ordinal": 201,
+      "call_id": "call_iKFCf8xYzT5CcuZGeglyfv88",
+      "task_name": "source_check_2",
+      "fork_turns": "none",
+      "message_encrypted": true
+    }
+  ],
+  "w02": [
+    {
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T16-33-24-01a0f7e2-64db-7b90-aa4d-28e8e85fe580.jsonl",
+      "ordinal": 95,
+      "call_id": "call_AMwJP4UOoml5lpc7MNwbwhzn",
+      "task_name": "source_comparison_1",
+      "fork_turns": "none",
+      "message_encrypted": true
+    },
+    {
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T16-33-24-01a0f7e2-64db-7b90-aa4d-28e8e85fe580.jsonl",
+      "ordinal": 208,
+      "call_id": "call_ny9wLsoQSFXawJsExjCAEBmX",
+      "task_name": "source_comparison_2",
+      "fork_turns": "none",
+      "message_encrypted": true
+    }
+  ],
+  "w03": [
+    {
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T16-47-08-01a0f7ee-f54b-78d1-959e-b54334cf62b6.jsonl",
+      "ordinal": 97,
+      "call_id": "call_fkB41NUzcM2Jt5lYUQNV79sn",
+      "task_name": "source_check_1",
+      "fork_turns": "none",
+      "message_encrypted": true
+    },
+    {
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T16-47-08-01a0f7ee-f54b-78d1-959e-b54334cf62b6.jsonl",
+      "ordinal": 185,
+      "call_id": "call_UsGTlWLL0J3PUV5ULNC5wkHs",
+      "task_name": "source_check_2",
+      "fork_turns": "none",
+      "message_encrypted": true
+    }
+  ]
+}

@@ -1,0 +1,71 @@
+# Judgement
+
+## 1. Outcome
+
+**Delivered. Two source comparisons ran.** The judged text is the Swedish case in delivered.md. Its prose is identical to evidence/draft.md, the repaired draft compared in report-2.md. The fenced artifact in response.md also matches delivered.md. Delivery adds front matter, not a prose change.
+
+This judgement uses only brief.md, criteria.md, work/source.md, response.md, delivered.md and every staged file under evidence/. Checker approvals and writer dispositions have been assessed against the source, rather than treated as proof. Configuration, traces, identities and unstaged files are outside this judgement.
+
+## 2. F1 — Pass
+
+I find no unsupported assertion, attribution, implication or quotation in the delivered draft, and no dropped qualification that changes a claim.
+
+- **Scope, chronology and agency:** “I september 2025 beslutade företagets eget underhållsteam att pröva en gemensam reparationslogg i två byggnader” preserves the source's decision, date, trial scope and customer initiative. The eight-week duration and 4 December 2025 note date are accurate. “Försöket har ännu inte utökats” and the subsequent category check preserve the pending expansion decision.
+- **Headline:** “Elm Quay samlar reparationsanmälningar i en logg” uses conventional narrative headline present. The standfirst immediately identifies a two-building trial; the lead dates it; the body gives its duration and pending expansion. In that context it describes the trial's supported activity. It does not assert continuing entry after the trial or company-wide adoption. Continued use is unknown, not known absent. A possible pause after the trial would contradict a current-operation interpretation, but does not contradict the headline's contextual narrative interpretation.
+- **Roles and translated terms, tested in both directions:** “Arbetsledaren för underhåll” preserves “maintenance supervisor”: directing maintenance work is the relevant supervisory function, without claiming overall maintenance responsibility. “Nödfall” preserves “emergencies” in this repair context; urgent nonemergency work need not be a nödfall in either language. “Tilldelning” preserves assignment, not completion; a repair can be assigned without being completed, and completion is not the event measured in either text. “Sex medarbetare vid två tillfällen” preserves six staff trained during two sessions; the sentence counts training occasions, without asserting separate calendar days or session lengths. I find no contextual case where the final terms change the source categories in either direction.
+- **Figures and caveats:** The draft preserves 640 flats, 31 entered repair reports, both exclusions, the median rather than mean, working-day units, two versus three days, and the preceding eight-week comparison period. It retains different workloads and explicitly attributes the refusal of causal attribution to the note. It neither labels 31 high or low nor converts assignment time into completion time.
+- **Knowledge and causality:** “Underlaget innehåller ingen jämförelse med någon annan leverantör” concerns available material, not whether a comparison ever happened. The missing cost, resident-satisfaction and completion-time measurements remain missing measurements, not evidence of absent effects. “Siffrorna ger därför inget svar på dessa frågor” is a supported explanation of those limits.
+- **Perspective and modality:** “Personalen på olika skift skulle kunna se samma information” expresses the intended capability after the trial decision, rather than a measured achievement. Lind's benefit remains her assessment, her willingness to repeat remains conditional, and the extra preparation week remains a reservation. No universal supplier recommendation is added.
+- **Publication and provenance:** The supplier is named in third person and disclosed as publisher. Email interviews and the internal note are correctly identified. No scene, emotion, remembered dialogue, cost saving or resident response is invented. The checklist invitation describes reading the supplied document. The invocation-derived Thomas Barregren byline is explicitly disclosed in response.md and allowed by the judging brief.
+
+The standfirst's “underlag för att bedöma ett nytt arbetssätt” is a warranted synthesis of the trial record and customer appraisal; it does not claim a completed rollout decision or causal proof.
+
+## 3. G1, G2, P1, W1, L1 and L2
+
+- **G1 — Pass.** The customer case gives operations managers a practical angle: shared repair information, customer-designed categories, preparation effort and limited trial evidence. “Vi ägnade mer tid åt att komma överens om kategorierna …” provides usable experience rather than generic supplier praise. The documentary caveats temper the sales setting without obscuring the customer's appraisal.
+- **G2 — Pass.** Headline, standfirst, disclosed byline, lead, four H2 sections and a closing call to action appear in the required order. The headline states the activity; the standfirst previews experience and evidential limits; the lead establishes the situation and decision. The headings identify distinct subjects without repeating their first sentences. The body supplies customer situation, action, results and appraisal. The team selects the supplier, owns the categories, preserves telephone reporting and retains the expansion decision. The ending offers “[Svales checklista för införande](https://example.invalid/svale/checklist)” to read and discloses supplier publication. Lind's shared-view assessment answers the lead's expectation, while the pending decision keeps the ending proportionate.
+- **P1 — Pass.** The movement from separate reporting stores to trial setup, measurements, customer experience and next step is clear. “Mediantiden från anmälan till tilldelning” names the metric's endpoints before drawing limits from it. The different workloads and missing measurements explain why the figures cannot establish wider benefits. Useful operational details remain: categories, repair status, telephone access, training and preparation time.
+- **W1 — Pass.** Independent counting gives a seven-word, 48-character headline; 11 body paragraphs including the lead, all with two or three sentences; and section paragraph counts of 3, 3, 3 and 1. No prose paragraph exceeds 80 words, and no heading falls below H2. Three of four sections meet the two-or-three-paragraph preference; the single-paragraph ending does its job without fragmentation. The standfirst starts “Ett”, the lead “Elm”; covering the standfirst leaves a complete body. The text is close to the approximately 400-word brief. Evidence/anatomy-account.md's claim of 12 body paragraphs is a counting discrepancy, not evidence of a defect in the artifact.
+- **L1 — Pass.** The Swedish has native syntax and professional idiom: “lagrade var för sig”, “komma överens om kategorierna” and “avsätta en extra vecka för förberedelser” read naturally. “Arbetsledaren för underhåll” is somewhat formal but clear. The quotations retain practical, restrained speech without importing English sentence structure.
+- **L2 — Pass.** Swedish spelling, compounds, speech dashes, bare-s genitives (“Elm Quays”, “Svales”), lower-case month names and “den 4 december 2025” are consistent. Numerals and spelled-out small numbers are acceptable in this prose. No locale conversion creates a new fact.
+
+## 4. Bridges into quotations
+
+Each item below gives the full quotation paragraph. A heading is recorded separately from an immediate narrative bridge.
+
+1. **Bridge:** “I en mejlintervju beskriver arbetsledaren för underhåll Maya Lind utgångspunkten för arbetet:” **Quotation:** “– Vi ville att kvällsskiftet skulle se vad morgonskiftet redan hade gjort. Kategorierna var våra; Svale hjälpte oss att lägga in dem i loggen.” **Class (b).** “I en mejlintervju” names the occasion/medium, “arbetsledaren för underhåll Maya Lind” supplies attribution, and “utgångspunkten för arbetet” names the subject. The bridge leaves the actual shift purpose, category ownership and supplier assistance to the quotation. Although email medium is a fact not expressed inside the quotation, it belongs to the occasion/attribution expressly covered by (b), rather than a substantive independent fact under (c).
+2. **Bridge:** None. **Quotation:** “– Vi ägnade mer tid åt att komma överens om kategorierna än åt att registrera de första anmälningarna. Jag skulle avsätta den tiden innan nästa byggnad börjar använda loggen, säger Lind i mejlintervjun.” **No bridge; no class assigned.** The preceding heading, “Maya Lind ser tillbaka på försöket”, names the speaker and retrospective subject but is not a narrative sentence leading into the quotation. The trailing “säger Lind i mejlintervjun” attributes this quotation and adds no substantive assessment.
+3. **Bridge:** None. **Quotation:** “– Jag skulle välja att göra försöket igen. En samlad vy över anmälningarna hjälper oss, men jag skulle avsätta en extra vecka för förberedelser.” **No bridge; no class assigned.** This follows the preceding quotation directly; that quotation and its trailing attribution are not a narrative bridge into this one. Lind remains the identifiable speaker.
+
+**Earlier repetition, assessed separately:** Before quotation 1, the lead already says that staff on different shifts should see the same information, so its first sentence develops an already introduced goal with specific morning/evening shifts; category ownership and supplier assistance add experience. The standfirst previews preparations and experiences without delivering either later appraisal. Before quotation 3, quotation 2 has already advocated reserving preparation time, but quotation 3 adds willingness to repeat, the shared-view benefit and a quantified extra week. These overlaps do not change an immediate bridge's class. No mixed bridge contains a substantive pre-echo clause concealed by an independent fact.
+
+**Counts:** The draft has zero class (a) bridges, one class (b) bridge, zero class (c) bridges and two quotations without a narrative bridge.
+
+**Interviewer invention:** The draft attributes no unsupported question or utterance to an interviewer.
+
+**Unsupported bridge claims:** No bridge asserts anything unsupported by the supplied material.
+
+## 5. Quoted speech
+
+All three supplied, usable quotations appear in full translated form; none is missing.
+
+1. **Shift purpose and categories:** “Vi ville …” retains desire rather than proven achievement, and “Kategorierna var våra” retains customer ownership and the plain emphasis of “The categories were ours”; Svale's role remains assistance.
+2. **Preparation effort:** The comparison between agreeing categories and entering first reports is unchanged. “Jag skulle avsätta den tiden” preserves conditional personal advice. “Börjar använda loggen” makes the contextual meaning of “the next building starts” explicit without declaring expansion approved.
+3. **Qualified appraisal:** “Jag skulle välja att göra försöket igen” preserves the actual conditional assessment. “En samlad vy … hjälper oss” preserves the speaker's stated benefit, and “men … en extra vecka för förberedelser” preserves both the reservation and its amount. It does not become a universal recommendation or a conclusion inferred from the time figures.
+
+Meaning, stance, certainty and reservations are preserved throughout. The source's voice is plain and practical; the Swedish remains so. Speech dashes do not manufacture an oral encounter because the text explicitly identifies the email interview.
+
+## 6. Intermediate findings and dispositions
+
+- **Report 1, S1:** Passage: “underhållsansvariga Maya Lind” in the standfirst and first quotation's bridge; allegation: “maintenance supervisor” was changed into a title potentially assigning overall maintenance responsibility; action: both instances became “arbetsledaren för underhåll Maya Lind”; **class: supported repair**. A supervisor may lack overall maintenance responsibility, and a maintenance-responsible coordinator may supervise nobody, so the original terms differ in both directions.
+- **Report 1, S2:** Passage: “Akuta ärenden … ingår inte”; allegation: excluding emergencies became exclusion of all urgent cases, potentially removing urgent nonemergency repairs from the reported set; action: “Akuta ärenden” became “Nödfall”; **class: supported repair**. Urgent nonemergency work supplies a real scope difference; an emergency normally falls within both terms, so no converse difference is established. The report's counterexample labels are faulty, but its substantive finding and repair are supported.
+- **Report 2, S1, also discussed in response.md:** Passage: “Elm Quay samlar reparationsanmälningar i en logg”; allegation: present tense asserts ongoing collection after the completed trial; action: the writer retained the headline and cited the dated, bounded trial context; **class: wrong finding rejected (correct)**. The report's pause scenario challenges a conceivable current-operation reading, not the conventional narrative reading established by the complete draft.
+
+No additional finding without a report file is identified in response.md. Evidence/anatomy-account.md mentions two earlier repair rounds but supplies no individual allegations or before/after passages for them; those rounds are **not judgeable from the evidence**. Its clean-anatomy assertion does not replace the independent counts above.
+
+**Unseen defects:** I found no remaining F1 defect or point-4 bridge defect that escaped the checkers.
+
+## 7. Stop or delivery
+
+**Valid delivery.** The two supported source defects were repaired before the second complete comparison; the disputed headline finding was correctly rejected on contextual grounds. The delivered prose matches the last compared prose, retains all quotation reservations and measurement limits, meets the requested case anatomy and language, and offers the supplied reading route. No unresolved supported defect required stopping.
+

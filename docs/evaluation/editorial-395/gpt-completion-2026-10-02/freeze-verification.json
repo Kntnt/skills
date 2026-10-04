@@ -1,0 +1,10 @@
+{
+  "plan_freeze": "42b7fe2f",
+  "all_original_frozen_inputs_unchanged": true,
+  "retained_evidence_and_original_records_unchanged": true,
+  "observer_correction_commit": "37aea70e",
+  "observer_correction_note_unchanged": true,
+  "as_executed_runner_archive_matches_correction_freeze": true,
+  "live_runner_import_order_only_changed_after_native_tasks": "post-run-tool-formatting.json",
+  "measured_product_corpus": "fb16908712c4d47a36fc6ee9dfb3eb2714a19e65"
+}

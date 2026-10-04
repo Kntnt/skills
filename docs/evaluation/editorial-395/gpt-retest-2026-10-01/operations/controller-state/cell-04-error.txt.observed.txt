@@ -1,0 +1,1 @@
+RuntimeError('Interrupted native invocation requires explicit void disposition: /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-observation-3q9k_53_/item-04-composition-reader-a')

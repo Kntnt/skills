@@ -1,0 +1,60 @@
+{
+  "method": "Last externally captured source-check draft and exact delivered prose after removing only leading handoff metadata. Complete returned-byte matches establish observed reads, not the correctness of a comparison or an encrypted dispatch.",
+  "reports_and_dispositions": [
+    {
+      "path": "scratch/write-source-check-23l320gd/report-1.md",
+      "sha256": "41d611507441eb29eaffba6728762ea30260a757afda6e2c0c0b80a67d187888",
+      "capture": "0008-41d611507441.md",
+      "time": 1790866176.791512,
+      "readable_copy": "report-1.md"
+    },
+    {
+      "path": "scratch/write-source-check-23l320gd/validation-1.md",
+      "sha256": "ee7dfe7788f7a7a256465d582122565c1f27378da6bacf94551c160d07e349a2",
+      "capture": "0009-ee7dfe7788f7.md",
+      "time": 1790866299.883732,
+      "readable_copy": "validation-1.md"
+    },
+    {
+      "path": "scratch/write-source-check-23l320gd/report-2.md",
+      "sha256": "90828c7ee9ac643fb8614b5347ee497589d87be512f61a4634e20068b2bb48e5",
+      "capture": "0011-90828c7ee9ac.md",
+      "time": 1790866845.374838,
+      "readable_copy": "report-2.md"
+    },
+    {
+      "path": "scratch/write-source-check-23l320gd/validation-2.md",
+      "sha256": "9112c35de7d35f2eec85c3db3553e1ed4111e0bd5c68678c1d97023648de6f96",
+      "capture": "0012-9112c35de7d3.md",
+      "time": 1790867239.1373482,
+      "readable_copy": "validation-2.md"
+    }
+  ],
+  "last_checked_capture": {
+    "path": "scratch/write-source-check-23l320gd/draft-2.md",
+    "sha256": "5a097d4ff02c1d9d6f189123b4d3b2366181861bed9556df7f2e650019e8bc59",
+    "capture": "0010-5a097d4ff02c.md",
+    "time": 1790866299.883884
+  },
+  "complete_returned_last_checked_reads": [
+    {
+      "session": "01a0f7f3-dd92-7a22-93b2-4e01612506c1",
+      "source": {
+        "subagent": {
+          "thread_spawn": {
+            "parent_thread_id": "01a0f7e2-64db-7b90-aa4d-28e8e85fe580",
+            "depth": 1,
+            "agent_path": "/root/source_comparison_2",
+            "agent_nickname": "Tesla",
+            "agent_role": null
+          }
+        }
+      },
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T16-52-29-01a0f7f3-dd92-7a22-93b2-4e01612506c1.jsonl",
+      "ordinal": 15,
+      "call_id": "call_Chs4HKlYqBuB52Z4bXVbqiTs"
+    }
+  ],
+  "delivered_prose_sha256": "5a097d4ff02c1d9d6f189123b4d3b2366181861bed9556df7f2e650019e8bc59",
+  "delivered_prose_matches_last_checked": true
+}

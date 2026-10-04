@@ -1,0 +1,59 @@
+{
+  "repo": "Kntnt/skills",
+  "observed_at": "2026-10-02T10:04:49.967175+00:00",
+  "query": "gh issue list --repo Kntnt/skills --state all --limit 600 --json number,title,state,labels",
+  "returned": 492,
+  "open_issue_identities": [
+    {
+      "number": 492,
+      "title": "Redline names opinion-clean's two booking routes in the lead, where the headline and standfirst already name them",
+      "state": "OPEN"
+    },
+    {
+      "number": 491,
+      "title": "Redline still rewrites case-study-clean: the headline's appraisal moves from Elm Quay to its supervisor and the lead's opening is recast",
+      "state": "OPEN"
+    },
+    {
+      "number": 490,
+      "title": "Redline's reply says only the standfirst explained the case study's trial, where the headline names it too, and the reply checker passes it",
+      "state": "OPEN"
+    },
+    {
+      "number": 489,
+      "title": "Redline's corrected reply still rewords a sentence the check passed, and says the headline credits several of Elm Quay's supervisors",
+      "state": "OPEN"
+    },
+    {
+      "number": 488,
+      "title": "Redline's last message after a response-target delivery can be its cleanup note, so the caller's reply holds no text",
+      "state": "OPEN"
+    },
+    {
+      "number": 486,
+      "title": "Redline reports article-clean's lead sentence on sensor placement as an unkept promise, and sometimes rewrites it",
+      "state": "OPEN"
+    },
+    {
+      "number": 485,
+      "title": "Write can stand in its own private directory and have its removal held",
+      "state": "OPEN"
+    },
+    {
+      "number": 395,
+      "title": "Write: the repeating quotation bridge #364 was filed on does not reproduce in the Claude family, and stays failed in the GPT family",
+      "state": "OPEN"
+    },
+    {
+      "number": 393,
+      "title": "The quotation defect #363 was filed on cannot be measured in the Claude family, and stays failed in the GPT family",
+      "state": "OPEN"
+    },
+    {
+      "number": 362,
+      "title": "Write: bevara faktisk betydelse i källkontrollen utan missade sakfel eller falska fynd",
+      "state": "OPEN"
+    }
+  ],
+  "scope": "Read only to reconcile residual ownership; no sibling builds inspected."
+}

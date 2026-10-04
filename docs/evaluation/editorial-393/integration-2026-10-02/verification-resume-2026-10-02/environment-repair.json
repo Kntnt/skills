@@ -1,0 +1,6 @@
+{
+  "ticket": 393,
+  "alias": "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/393.scratch",
+  "physical_scratch": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-393-scratch",
+  "condition": "Prior scheduler failures were caused by HOME-local TMPDIR. This same assigned scratch is now backed by system temp outside real HOME. Use the resolved physical path for TMPDIR and evaluator roots. No code, test, gate, permission, model or ticket requirement changed."
+}

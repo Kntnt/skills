@@ -1,0 +1,64 @@
+{
+  "interim": false,
+  "whole_matrix_complete": false,
+  "joins": [
+    {
+      "cell": "01",
+      "source_sha256": "75160dbc12d41294eccfc615f4a8e1b2df1b5202185f5ba1f24a2f3d5fd69afc",
+      "write_artifact_sha256": "eadd3eabaa135c1588928a1b6be4d1b92c7119cd5bc7e91c0b9e5d9ef10eaf48",
+      "redline_received_sha256": "eadd3eabaa135c1588928a1b6be4d1b92c7119cd5bc7e91c0b9e5d9ef10eaf48",
+      "exact_chain": true,
+      "write_run": "item-01-composition",
+      "redline_run": "item-01-review"
+    },
+    {
+      "cell": "02",
+      "source_sha256": "75160dbc12d41294eccfc615f4a8e1b2df1b5202185f5ba1f24a2f3d5fd69afc",
+      "write_artifact_sha256": "a22d3a8d1d9e026319cf8449908b5e11b8418528de64bde2f8a28c83e7f2d873",
+      "redline_received_sha256": "a22d3a8d1d9e026319cf8449908b5e11b8418528de64bde2f8a28c83e7f2d873",
+      "exact_chain": true,
+      "write_run": "item-02-composition",
+      "redline_run": "item-02-review"
+    },
+    {
+      "cell": "03",
+      "source_sha256": "75160dbc12d41294eccfc615f4a8e1b2df1b5202185f5ba1f24a2f3d5fd69afc",
+      "write_artifact_sha256": "8069d92f3c09f73c6c7739b93b953f628e13542ce45b39bbdb778e97d4bf5599",
+      "redline_received_sha256": "8069d92f3c09f73c6c7739b93b953f628e13542ce45b39bbdb778e97d4bf5599",
+      "exact_chain": true,
+      "write_run": "item-03-composition",
+      "redline_run": "item-03-review"
+    },
+    {
+      "cell": "04",
+      "source_sha256": "75188596831d5a0a28364ea4da4d1053f69900ca25237f08859696058c579f11",
+      "write_artifact_sha256": "e5f5b32ccb7dc3c99562a86471b145dd5dc24f264d2b0537239e3f95ad2488f8",
+      "redline_received_sha256": "e5f5b32ccb7dc3c99562a86471b145dd5dc24f264d2b0537239e3f95ad2488f8",
+      "exact_chain": true,
+      "write_run": "item-04-composition",
+      "redline_run": "item-04-review"
+    },
+    {
+      "cell": "05",
+      "source_sha256": "75188596831d5a0a28364ea4da4d1053f69900ca25237f08859696058c579f11",
+      "write_artifact_sha256": "543cc3883e96f8b6a1859e6067b594ffe644de32a0cdff127a26914e2fc449f6",
+      "redline_received_sha256": "543cc3883e96f8b6a1859e6067b594ffe644de32a0cdff127a26914e2fc449f6",
+      "exact_chain": true,
+      "write_run": "item-05-composition",
+      "redline_run": "item-05-review"
+    },
+    {
+      "cell": "06",
+      "source_sha256": "75188596831d5a0a28364ea4da4d1053f69900ca25237f08859696058c579f11",
+      "write_artifact_sha256": "1ad7c51e8984aac8a7f6dc921051b930e8eb4c3db6cbc55332ddf0f3e8a5e9a8",
+      "redline_received_sha256": "1ad7c51e8984aac8a7f6dc921051b930e8eb4c3db6cbc55332ddf0f3e8a5e9a8",
+      "exact_chain": true,
+      "write_run": "item-06-composition3",
+      "redline_run": "item-06-review"
+    }
+  ],
+  "incomplete_cells": [
+    "07"
+  ],
+  "limit": "No completed delivery is inferred from a void observer file"
+}

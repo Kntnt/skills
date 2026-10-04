@@ -1,0 +1,17 @@
+{
+  "manifest": "/Users/thomas/.kntnt/session-cleanup/sessions/01a0f73b-efe6-7a71-b4a9-fca49fe341fd.jsonl",
+  "recorded": {
+    "at": "2026-10-01T15:32:38+00:00",
+    "id": "55070",
+    "kind": "pid",
+    "started": "Thu Oct  1 17:32:38 2026",
+    "why": "Editorial #395 unchanged-input recovery for cell 07 infrastructure timeout"
+  },
+  "session": "01a0f73b-efe6-7a71-b4a9-fca49fe341fd"
+}
+Traceback (most recent call last):
+  File "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-observation-3q9k_53_/recover07.py", line 27, in <module>
+    module.run(PLAN/'turn-07.md',PLAN/'fixtures'/row['fixture'],'source.md',out)
+  File "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-observation-3q9k_53_/continue.py", line 22, in run
+    raise RuntimeError(f'Interrupted native invocation requires explicit void disposition: {out}')
+RuntimeError: Interrupted native invocation requires explicit void disposition: /private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-observation-3q9k_53_/item-07-composition3

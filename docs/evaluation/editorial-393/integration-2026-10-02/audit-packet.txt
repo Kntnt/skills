@@ -1,0 +1,181 @@
+import collections
+import hashlib
+import json
+import pathlib
+import re
+import io
+import tarfile
+import subprocess
+
+ROOT = pathlib.Path('/Users/thomas/Projects/skills/.git/kntnt-orchestrate/393')
+P = ROOT / 'docs/evaluation/editorial-393/gpt-retest-2026-10-01'
+OUT = ROOT / 'docs/evaluation/editorial-393/integration-2026-10-02'
+REV = 'fb16908712c4d47a36fc6ee9dfb3eb2714a19e65'
+
+def read(p):
+    return json.loads(p.read_text())
+
+def sha(b):
+    return hashlib.sha256(b).hexdigest()
+
+def git(*args):
+    return subprocess.check_output(['git', *args], cwd=ROOT)
+
+def unfold(value, depth=0):
+    if depth > 8:
+        return []
+    if isinstance(value, dict):
+        return sum((unfold(v, depth + 1) for v in value.values()), [])
+    if isinstance(value, list):
+        return sum((unfold(v, depth + 1) for v in value), [])
+    if not isinstance(value, str):
+        return []
+    out = [value]
+    for candidate in [value, *value.splitlines()]:
+        try:
+            decoded = json.loads(candidate)
+        except (ValueError, TypeError):
+            continue
+        if decoded != value:
+            out.extend(unfold(decoded, depth + 1))
+    return out
+
+def native(directory):
+    sessions = []
+    for file in sorted((directory / 'native-sessions').rglob('*.jsonl')):
+        rows = [json.loads(line) for line in file.read_text().splitlines()]
+        metas = [x['payload'] for x in rows if x['type'] == 'session_meta']
+        assert len(metas) == 1
+        contexts = [x['payload'] for x in rows if x['type'] == 'turn_context']
+        assert contexts and all((x['model'], x['effort']) == ('gpt-6.1-sol', 'xhigh') for x in contexts)
+        calls = [x['payload'] for x in rows if x['type'] == 'response_item' and x['payload'].get('type') == 'function_call']
+        starts = [json.loads(x['arguments']) for x in calls if x.get('name') == 'spawn_agent']
+        assert all(x['fork_turns'] == 'none' and 'model' not in x and 'reasoning_effort' not in x for x in starts)
+        outputs = []
+        for row in rows:
+            payload = row['payload']
+            if row['type'] == 'response_item' and payload.get('type') in ['function_call_output', 'custom_tool_call_output']:
+                outputs.extend(unfold(payload.get('output')))
+        events = [x['payload'] for x in rows if x['type'] == 'event_msg']
+        sessions.append({'file': str(file.relative_to(P)), 'id': metas[0]['id'], 'source': metas[0]['source'], 'started': any(x['type'] == 'task_started' for x in events), 'completed': any(x['type'] == 'task_complete' for x in events), 'spawn_count': len(starts), 'outputs': outputs, 'finals': [x.get('last_agent_message') for x in events if x['type'] == 'task_complete']})
+    return sessions
+
+OUT.mkdir(parents=True, exist_ok=True)
+dispositions = read(P / 'dispositions.json')
+index = read(P / 'run-index.json')
+manifest = read(P / 'input-manifest.json')
+merged = read(P / 'semantic-judgements.json')['merged']
+counted = sorted(k for k,v in dispositions.items() if v['counted'])
+assert len(counted) == 20
+assert sum(v['disposition'] == 'refused-before-operation' for v in dispositions.values()) == 5
+assert sum(v['disposition'] == 'not-invoked' for v in dispositions.values()) == 8
+assert sum(v['disposition'].startswith('void-') for v in dispositions.values()) == 2
+assert len(read(P / 'evidence-locations.json')['files']) == 1062
+archive = git('archive', REV, 'skills/editorial/write', 'skills/editorial/redline', 'skills/editorial/proofread', 'skills/kntnt')
+with tarfile.open(fileobj=io.BytesIO(archive)) as tar:
+    exported = {f'export/{m.name}': sha(tar.extractfile(m).read()) for m in tar.getmembers() if m.isfile()}
+for item in read(P / 'evidence-locations.json')['files']:
+    b = (P / item['path']).read_bytes()
+    assert len(b) == item['bytes'] and sha(b) == item['sha256']
+rows = []
+all_counted_sessions = []
+for key in counted:
+    d = P / 'runs' / key
+    meta = read(d / 'run.json')
+    assert meta['instruction_revision'] == meta['corpus_revision'] == REV
+    result = read(d / 'result.json')
+    assert result['returncode'] == 0 and not result['timed_out']
+    inp = (d / 'supplied-input.md').read_bytes()
+    fixture = index[key]['fixture']
+    if fixture in manifest:
+        assert sha(inp) == manifest[fixture]['sha256']
+        assert inp == git('show', f"{REV}:{manifest[fixture]['path']}")
+    if key.startswith('p0'):
+        assert inp == (P / 'runs' / index[key]['paired_write'] / 'delivered.md').read_bytes()
+    sessions = native(d)
+    parents = [s for s in sessions if s['source'] == 'exec']
+    children = [s for s in sessions if s['source'] != 'exec']
+    assert len(parents) == 1 and all(s['started'] and s['completed'] for s in sessions)
+    assert sum(s['spawn_count'] for s in sessions) == len(children)
+    response = (d / 'response.txt').read_text()
+    assert response in parents[0]['finals']
+    stream = [json.loads(line) for line in (d/'trace.jsonl').read_text().splitlines()]
+    assert not any(x.get('type') in ['error','turn.failed'] for x in stream), key
+    versions = read(d / 'file-versions.json')
+    for v in versions:
+        assert sha((d / 'file-versions' / v['capture']).read_bytes()) == v['sha256']
+    artifact_file = d / 'delivered.md'
+    delivered = artifact_file.exists()
+    assert delivered == dispositions[key]['delivered']
+    if delivered:
+        artifact = artifact_file.read_bytes()
+        if index[key]['output_target'] == 'response':
+            fences = re.findall(r'^```(?:markdown|md)?[^\n]*\n(.*?)^```\s*$',response,re.M|re.S)
+            assert any(text.encode() == artifact for text in fences), key
+        else:
+            matches = [v for v in versions if v['path'] == 'work/output.md' and v['sha256'] == sha(artifact)]
+            assert matches, key
+    else:
+        assert key == 'p03' and not re.search(r'^```',response,re.M)
+    before,after = read(d / 'inventory-before.json'),read(d / 'inventory-after.json')
+    for path, expected in exported.items():
+        assert before[path]['sha256'] == after[path]['sha256'] == expected, (key,path)
+    protected = [k for k in set(before)|set(after) if k.startswith('export/') or k.startswith('work/.agents/') or k in ['work/input.md','work/source.md']]
+    assert all(before.get(k) == after.get(k) for k in protected)
+    if key.startswith('w'):
+        assert (d/'last-checked-draft.md').read_bytes() == re.sub(rb'\A---\n.*?\n---\n\n?',b'',artifact,flags=re.S)
+    if not key.startswith('w'):
+        transport = read(d / 'transport-facts.json')
+        closing = transport['closing_pass_files']
+        assert len(set(v['path'] for v in closing)) >= 2
+        if delivered:
+            assert any(v['matches_delivered_artifact'] and v['sha256'] == sha(artifact) for v in closing)
+    row = {'run':key,'fixture':fixture,'target':index[key]['output_target'],'delivery':dispositions[key]['disposition'],'artifact_sha256':sha(artifact_file.read_bytes()) if delivered else None,'target_quotation':merged[key]['target_quotation'],'native_sessions':len(sessions),'children':len(children)}
+    rows.append(row)
+    all_counted_sessions.extend(sessions)
+assert len(all_counted_sessions) == 74
+assert sum(s['source'] != 'exec' for s in all_counted_sessions) == 54
+all_native = list(P.rglob('native-sessions/**/*.jsonl'))
+assert len(all_native) == 86
+for d in [*sorted((P/'construction-refusals').iterdir()),*sorted((P/'voided').iterdir()),P/'judges/jA',P/'judges/jB']:
+    native(d)
+for judge in ['jA','jB']:
+    d = P/'judges'/judge
+    assert (d/'supplied-input.md').read_bytes() == (P/'judges/input.md').read_bytes()
+    sessions = native(d)
+    assert len(sessions) == 1 and sessions[0]['completed'] and sessions[0]['spawn_count'] == 0
+    actual = sessions[0]['outputs']
+    fields = [m.group(2) for m in re.finditer(r'^(`{3,})text\n(.*?)^\1[ \t]*$',(P/'judges/input.md').read_text(),re.M|re.S)]
+    assert len(fields) == 79
+    missing = [sha(x.encode()) for x in fields if not any(x.rstrip('\n') in y for y in actual)]
+    assert not missing, (judge,missing)
+    before,after = read(d/'inventory-before.json'),read(d/'inventory-after.json')
+    assert all(before.get(k)==after.get(k) for k in set(before)|set(after) if k.startswith(('work/','scratch/')))
+for run in ['c08','c09','c12','p01']:
+    d=P/'runs'/run
+    sessions=native(d)
+    for checker in read(d/'reply-scope-facts.json')['checkers']:
+        s=next(s for s in sessions if s['id']==checker['session'])
+        for extra in checker['returned_extra_passages']:
+            assert any(extra['exact_returned_passage'] in t for t in s['outputs'])
+record_rows = []
+for skill in ['redline','write']:
+    text = (ROOT/f'docs/evaluation/records/{skill}-gpt-2026-10-01-393.md').read_text()
+    for match in re.finditer(r'^## (.*?) — (.*?)\n(.*?)(?=^## |\Z)',text,re.M|re.S):
+        fixture,key,body = match.groups()
+        assert key in dispositions
+        assert f"**observed delivery** — {dispositions[key]['disposition']}" in body
+        assert f"**output target** — `{index[key]['output_target']}`" in body
+        if dispositions[key]['counted']:
+            assert f"Q-{'translation' if skill=='write' else 'negative' if key in ['r01','r02','c03','c04','c05','c06'] else 'preservation'} — {merged[key]['target_quotation']}" in body
+            row = next(r for r in rows if r['run']==key)
+            assert str(bool(row['artifact_sha256'])) in body
+            if row['artifact_sha256']:
+                assert row['artifact_sha256'] in body
+        else:
+            assert 'All substantive criteria — skipped' in body
+        record_rows.append(key)
+assert len(record_rows)==35 and set(record_rows)==set(dispositions)
+summary={'source_head':'4e88c6e0d1385c52eb9e5fa82d56a52b9a89f248','integration_base':git('rev-parse','HEAD').decode().strip(),'measured_revision':REV,'copied_digest_entries_verified':1062,'record_entries_verified':len(record_rows),'exported_product_files_verified_per_run':len(exported),'counted_runs':len(rows),'delivered_artifacts':sum(r['artifact_sha256'] is not None for r in rows),'counted_parents':20,'counted_children':54,'all_retained_native_sessions':len(all_native),'native_invocations_including_judges':29,'construction_refusals':5,'not_invoked':8,'voids':2,'negative_targets':dict(collections.Counter(r['target_quotation'] for r in rows if r['run'] in ['r01','r02','c03','c04','c05','c06'])),'positive_targets':dict(collections.Counter(r['target_quotation'] for r in rows if r['run'] in ['c07','c08','c09','c10','c11','c12','r13-rerun','r14'])),'translation_targets':dict(collections.Counter(r['target_quotation'] for r in rows if r['run'].startswith('w'))),'pair_targets':dict(collections.Counter(r['target_quotation'] for r in rows if r['run'].startswith('p'))),'runs':rows,'limits':['This verifies retained transport, identity, source integrity and counts; it does not rejudge prose or decrypt dispatches.','Original 100-ms sampling and resource-read gaps remain.','All raw verdicts stay unchanged; residual contract review is in residual-handoff.md.']}
+(OUT/'packet-audit.json').write_text(json.dumps(summary,ensure_ascii=False,indent=2)+'\n')
+print(json.dumps({k:v for k,v in summary.items() if k!='runs'},ensure_ascii=False,indent=2))

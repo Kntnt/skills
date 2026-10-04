@@ -1,0 +1,84 @@
+{
+  "sessions": [
+    {
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T18-01-13-01a0f832-ca20-77a0-83a6-c4d08566bf95.jsonl",
+      "id": "01a0f832-ca20-77a0-83a6-c4d08566bf95",
+      "source": "exec",
+      "first_event": "2026-10-01T16:01:13.643Z",
+      "last_event": "2026-10-01T16:16:13.474Z",
+      "lifecycle": [
+        {
+          "ordinal": 1,
+          "timestamp": "2026-10-01T16:01:13.643Z",
+          "type": "task_started"
+        },
+        {
+          "ordinal": 109,
+          "timestamp": "2026-10-01T16:16:13.474Z",
+          "type": "task_complete"
+        }
+      ],
+      "calls": [
+        {
+          "ordinal": 12,
+          "timestamp": "2026-10-01T16:01:20.926Z",
+          "name": "exec",
+          "input": "const r = await tools.exec_command({cmd:\"cat input.md\",max_output_tokens:30000});text(r.output);\n",
+          "output_ordinal": 15,
+          "output_contains_truncation_notice": true
+        },
+        {
+          "ordinal": 19,
+          "timestamp": "2026-10-01T16:01:41.397Z",
+          "name": "exec",
+          "input": "text(await tools.exec_command({cmd:\"python3 -c 'import re; s=open(\\\"input.md\\\").read(); print(s[:s.index(\\\"## sample-04\\\")])'\",\"max_output_tokens\":12500}));\n",
+          "output_ordinal": 22,
+          "output_contains_truncation_notice": false
+        },
+        {
+          "ordinal": 26,
+          "timestamp": "2026-10-01T16:02:01.464Z",
+          "name": "exec",
+          "input": "const r = await tools.exec_command({cmd:\"python3 -c 's=open(\\\"input.md\\\").read(); print(s[s.index(\\\"## sample-04\\\"):s.index(\\\"## sample-08\\\")])'\",\"max_output_tokens\":16000});text(r.output);\n",
+          "output_ordinal": 29,
+          "output_contains_truncation_notice": false
+        },
+        {
+          "ordinal": 33,
+          "timestamp": "2026-10-01T16:02:19.004Z",
+          "name": "exec",
+          "input": "const r = await tools.exec_command({cmd:\"python3 -c 's=open(\\\"input.md\\\").read(); print(s[s.index(\\\"## sample-08\\\"):s.index(\\\"## sample-12\\\")])'\",\"max_output_tokens\":14500});text(r.output);\n",
+          "output_ordinal": 36,
+          "output_contains_truncation_notice": false
+        },
+        {
+          "ordinal": 42,
+          "timestamp": "2026-10-01T16:02:29.392Z",
+          "name": "exec",
+          "input": "const r = await tools.exec_command({cmd:\"python3 -c 's=open(\\\"input.md\\\").read(); print(s[s.index(\\\"## sample-12\\\"):s.index(\\\"## sample-16\\\")])'\",\"max_output_tokens\":16000});text(r.output);\n",
+          "output_ordinal": 45,
+          "output_contains_truncation_notice": false
+        },
+        {
+          "ordinal": 49,
+          "timestamp": "2026-10-01T16:02:52.850Z",
+          "name": "exec",
+          "input": "const r = await tools.exec_command({cmd:\"python3 -c 's=open(\\\"input.md\\\").read(); print(s[s.index(\\\"## sample-16\\\"):s.index(\\\"## sample-19\\\")])'\",\"max_output_tokens\":14500});text(r.output);\n",
+          "output_ordinal": 52,
+          "output_contains_truncation_notice": false
+        },
+        {
+          "ordinal": 56,
+          "timestamp": "2026-10-01T16:03:21.318Z",
+          "name": "exec",
+          "input": "const r = await tools.exec_command({cmd:\"python3 - <<'PY'\\nimport re,difflib\\ns=open('input.md').read()\\nfor part in re.split(r'^## (?=sample-\\\\d+)',s,flags=re.M)[1:]:\\n    sid=part.splitlines()[0]\\n    am=re.search(r'### Delivered Text Artifact\\\\s*\\\\n```text\\\\n(.*?)\\\\n```',part,re.S)\\n    print(sid)\\n    if not am:\\n        print('NO ARTIFACT')\\n        continue\\n    a=am.group(1)\\n    h=re.search(r'^# (.+)$',a,re.M).group(1)\\n    aft=a[a.index('# '+h)+len(h)+2:].strip()\\n    stand=aft.split('\\\\n\\\\n')[0].strip('*')\\n    heads=re.findall(r'^## (.+)$',a,re.M)\\n    print('headline_chars=',len(h),'standfirst_words=',len(stand.split()),'subheading_chars=',[len(x) for x in heads])\\n    before=aft.split('\\\\n## ',1)[0]\\n    paragraphs=before.split('\\\\n\\\\n')\\n    print('prefirst_heading_paragraphs=',[(len(p.split()),p[:70]) for p in paragraphs])\\n    im=re.search(r'### Complete supplied input\\\\s*\\\\n```text\\\\n(.*?)\\\\n```',part,re.S)\\n    if im:\\n        original=im.group(1)\\n        print('exact_identical=',original==a)\\n        for line in difflib.unified_diff(original.splitlines(),a.splitlines(),n=0):\\n            if not line.startswith(('---','+++','@@')):\\n                print(line)\\n    print()\\nPY\",\"max_output_tokens\":10500});text(r.output);\n",
+          "output_ordinal": 59,
+          "output_contains_truncation_notice": false
+        }
+      ]
+    }
+  ],
+  "native_service_events": [],
+  "stream_errors": [],
+  "limit": "An input naming a glob or a path is indexed, not credited as a complete individual resource read. Encrypted dispatch briefs remain unverified."
+}

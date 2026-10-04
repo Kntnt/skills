@@ -1,0 +1,76 @@
+{
+  "sessions": [
+    {
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T14-36-13-01a0f777-1a0d-7fa1-8500-2e853d0b0aac.jsonl",
+      "id": "01a0f777-1a0d-7fa1-8500-2e853d0b0aac",
+      "source": "exec",
+      "first_event": "2026-10-01T12:36:13.329Z",
+      "last_event": "2026-10-01T12:38:25.861Z",
+      "lifecycle": [
+        {
+          "ordinal": 1,
+          "timestamp": "2026-10-01T12:36:13.329Z",
+          "type": "task_started"
+        },
+        {
+          "ordinal": 61,
+          "timestamp": "2026-10-01T12:38:25.861Z",
+          "type": "task_complete"
+        }
+      ],
+      "calls": [
+        {
+          "ordinal": 12,
+          "timestamp": "2026-10-01T12:36:21.386Z",
+          "name": "exec",
+          "input": "const r = await tools.exec_command({cmd:\"pwd && rg --files -g AGENTS.md -g SKILL.md -g input.md -g '*.md' .agents . 2>/dev/null\",\"max_output_tokens\":4000});text(r.output);\n",
+          "output_ordinal": 15,
+          "output_contains_truncation_notice": false
+        },
+        {
+          "ordinal": 17,
+          "timestamp": "2026-10-01T12:36:26.725Z",
+          "name": "exec",
+          "input": "const rs=await Promise.allSettled([\ntools.exec_command({cmd:\"cat AGENTS.md .agents/skills/redline/SKILL.md\",\"max_output_tokens\":12000}),\ntools.exec_command({cmd:\"cat input.md\",\"max_output_tokens\":16000})\n]);for(let i=0;i<rs.length;i++)text({part:i,...rs[i]});\n",
+          "output_ordinal": 21,
+          "output_contains_truncation_notice": true
+        },
+        {
+          "ordinal": 25,
+          "timestamp": "2026-10-01T12:36:40.245Z",
+          "name": "exec",
+          "input": "const rs=await Promise.allSettled([\ntools.exec_command({cmd:\"sed -n '1,135p' .agents/skills/redline/SKILL.md\",\"max_output_tokens\":12000}),\ntools.exec_command({cmd:\"sed -n '136,275p' .agents/skills/redline/SKILL.md\",\"max_output_tokens\":12000})\n]);for(let i=0;i<rs.length;i++)text({part:i,result:rs[i]});\n",
+          "output_ordinal": 29,
+          "output_contains_truncation_notice": true
+        },
+        {
+          "ordinal": 33,
+          "timestamp": "2026-10-01T12:36:57.938Z",
+          "name": "exec",
+          "input": "const rs=await Promise.allSettled([\ntools.exec_command({cmd:\"redline_uv_tmp=$(mktemp -d \\\"$PWD/.redline-uv.XXXXXX\\\")\\ntrap 'rm -rf \\\"$redline_uv_tmp\\\"' EXIT\\nTMPDIR=\\\"$redline_uv_tmp\\\" UV_NO_CACHE=1 UV_NO_PROJECT=1 uv run .agents/skills/redline/scripts/invoke.py <<'REDLINE_INVOCATION'\\n--output=response input.md\\nREDLINE_INVOCATION\",\"max_output_tokens\":6000}),\ntools.exec_command({cmd:\"cat .agents/skills/kntnt/library/references/invocation-envelope.md .agents/skills/kntnt/library/references/delivery.md\\nrg --files .agents/skills/kntnt/library/references/editorial/genres .agents/skills/kntnt/library/references/editorial/techniques\",\"max_output_tokens\":12000})\n]);for(let i=0;i<rs.length;i++)text({part:i,result:rs[i]});\n",
+          "output_ordinal": 36,
+          "output_contains_truncation_notice": false
+        },
+        {
+          "ordinal": 40,
+          "timestamp": "2026-10-01T12:37:12.058Z",
+          "name": "exec",
+          "input": "text(await tools.exec_command({cmd:\"python3 - <<'PY'\\nimport os\\nimport shutil\\nimport subprocess\\nimport tempfile\\nfrom pathlib import Path\\nwith tempfile.TemporaryDirectory(prefix='.redline-uv-', dir=Path.cwd()) as redline_uv_tmp:\\n    env = os.environ.copy()\\n    env.update(TMPDIR=redline_uv_tmp, UV_NO_CACHE='1', UV_NO_PROJECT='1')\\n    result = subprocess.run(['uv', 'run', str(Path('.agents/skills/redline/scripts/invoke.py').resolve())], input='--output=response input.md\\\\n', text=True, env=env)\\n    raise SystemExit(result.returncode)\\nPY\",\"max_output_tokens\":6000}));\n",
+          "output_ordinal": 43,
+          "output_contains_truncation_notice": false
+        },
+        {
+          "ordinal": 49,
+          "timestamp": "2026-10-01T12:37:51.670Z",
+          "name": "exec",
+          "input": "const rs=await Promise.allSettled([\ntools.exec_command({cmd:\"cat .agents/skills/redline/help.md\\nsed -n '94,97p' .agents/skills/redline/SKILL.md\",\"max_output_tokens\":8000}),\ntools.exec_command({cmd:\"python3 - <<'PY'\\nfrom pathlib import Path\\nwork = Path.cwd()\\ngenres = work / '.agents/skills/kntnt/library/references/editorial/genres'\\nprint('case-study installed:', (genres / 'case-study.md').is_file())\\nprint('Installed genres:', ', '.join(sorted(p.stem for p in genres.glob('*.md') if not p.name.endswith('.review.md'))))\\nprint('Temporary invocation directories remaining:', [p.name for p in work.glob('.redline-uv*')])\\nscratch = work.parent / 'scratch'\\nprint('Harness scratch entries:', [p.name for p in scratch.iterdir()] if scratch.exists() else [])\\nPY\",\"max_output_tokens\":2000})\n]);for(let i=0;i<rs.length;i++)text({part:i,result:rs[i]});\n",
+          "output_ordinal": 53,
+          "output_contains_truncation_notice": false
+        }
+      ]
+    }
+  ],
+  "native_service_events": [],
+  "stream_errors": [],
+  "limit": "An input naming a glob or a path is indexed, not credited as a complete individual resource read. Encrypted dispatch briefs remain unverified."
+}

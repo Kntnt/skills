@@ -1,0 +1,1 @@
+Inga ändringar behövdes. Texten är granskad som kundcase på svenska, utan teknik enligt metadata.

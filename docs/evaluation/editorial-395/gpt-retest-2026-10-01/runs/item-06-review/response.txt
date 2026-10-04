@@ -1,0 +1,1 @@
+Inga ändringar behövdes efter redaktionell granskning och korrekturläsning. Texten granskades som kundfall på svenska, utan teknik enligt dess metadata.

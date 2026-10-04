@@ -1,0 +1,191 @@
+{
+  "ok": true,
+  "format": "markdown",
+  "conforms": true,
+  "failures": [],
+  "norms": [],
+  "typical": {
+    "paragraphs": 13,
+    "paragraphs_of_two_or_three_sentences": 11,
+    "sections": 5,
+    "sections_of_two_or_three_paragraphs": 4
+  },
+  "parts": {
+    "headline": {
+      "text": "Elm Quay Housing samlar reparationsanmälningar",
+      "characters": 46,
+      "words": 5
+    },
+    "standfirst": {
+      "text": "Underhållsteamet på Elm Quay Housing ville att personal …",
+      "words": 40,
+      "sentences_estimate": 3,
+      "paragraphs": 1
+    },
+    "byline": {
+      "text": "Av Thomas Barregren",
+      "words": 3
+    },
+    "lead": {
+      "text": "Bostadsföretaget Elm Quay Housing förvaltar 640 lägenheter. I …",
+      "words": 32,
+      "sentences_estimate": 3,
+      "paragraphs": 1
+    },
+    "sections": [
+      {
+        "subheading": {
+          "text": "Teamet behåller telefonanmälan",
+          "characters": 30,
+          "words": 3
+        },
+        "paragraphs": [
+          {
+            "text": "Valet föll på Svale Systems efter att teamet …",
+            "words": 34,
+            "sentences_estimate": 3
+          },
+          {
+            "text": "– Vi ville att kvällsskiftet skulle se vad …",
+            "words": 32,
+            "sentences_estimate": 2
+          }
+        ]
+      },
+      {
+        "subheading": {
+          "text": "Teamet prövar loggen i åtta veckor",
+          "characters": 34,
+          "words": 6
+        },
+        "paragraphs": [
+          {
+            "text": "Svale konfigurerade loggen och utbildade sex medarbetare vid …",
+            "words": 15,
+            "sentences_estimate": 2
+          },
+          {
+            "text": "– Vi lade mer tid på att komma …",
+            "words": 29,
+            "sentences_estimate": 2
+          }
+        ]
+      },
+      {
+        "subheading": {
+          "text": "Försöksnoteringen skiljer på mätning och orsak",
+          "characters": 46,
+          "words": 6
+        },
+        "paragraphs": [
+          {
+            "text": "I Elm Quays interna försöksnotering, daterad den 4 …",
+            "words": 23,
+            "sentences_estimate": 2
+          },
+          {
+            "text": "Mediantiden från anmälan till tilldelning var två arbetsdagar …",
+            "words": 27,
+            "sentences_estimate": 3
+          },
+          {
+            "text": "Det finns inga mätningar av kostnader, de boendes …",
+            "words": 15,
+            "sentences_estimate": 1
+          }
+        ]
+      },
+      {
+        "subheading": {
+          "text": "Teamet avvaktar med fler byggnader",
+          "characters": 34,
+          "words": 5
+        },
+        "paragraphs": [
+          {
+            "text": "Maya Lind ger sin bedömning av försöket i …",
+            "words": 9,
+            "sentences_estimate": 1
+          },
+          {
+            "text": "– Jag skulle välja att göra försöket igen. …",
+            "words": 26,
+            "sentences_estimate": 2
+          },
+          {
+            "text": "Försöket har ännu inte utökats. Teamet ska besluta …",
+            "words": 18,
+            "sentences_estimate": 2
+          }
+        ]
+      },
+      {
+        "subheading": {
+          "text": "Du kan läsa mer inför ett eget införande",
+          "characters": 40,
+          "words": 8
+        },
+        "paragraphs": [
+          {
+            "text": "Kundberättelsen publiceras av leverantören Svale Systems. Om du …",
+            "words": 24,
+            "sentences_estimate": 3
+          }
+        ]
+      }
+    ],
+    "other": []
+  },
+  "heading_pairs": [
+    {
+      "id": "headline-standfirst",
+      "kind": "headline-standfirst",
+      "heading": "Elm Quay Housing samlar reparationsanmälningar",
+      "following": "Underhållsteamet på Elm Quay Housing ville att personal på olika skift skulle se samma information. I två byggnader prövade teamet därför en logg från Svale Systems. Försöket ger erfarenheter av förberedelserna, men siffrorna säger inte att programvaran gjorde tilldelningen snabbare.",
+      "shared_words": [
+        "elm",
+        "housing",
+        "quay"
+      ]
+    },
+    {
+      "id": "subheading-1",
+      "kind": "subheading-first-sentence-estimate",
+      "heading": "Teamet behåller telefonanmälan",
+      "following": "Valet föll på Svale Systems efter att teamet testat om loggen kunde visa status för varje reparation.",
+      "shared_words": [
+        "teamet"
+      ]
+    },
+    {
+      "id": "subheading-2",
+      "kind": "subheading-first-sentence-estimate",
+      "heading": "Teamet prövar loggen i åtta veckor",
+      "following": "Svale konfigurerade loggen och utbildade sex medarbetare vid två tillfällen.",
+      "shared_words": [
+        "loggen"
+      ]
+    },
+    {
+      "id": "subheading-3",
+      "kind": "subheading-first-sentence-estimate",
+      "heading": "Försöksnoteringen skiljer på mätning och orsak",
+      "following": "I Elm Quays interna försöksnotering, daterad den 4 december 2025, redovisas 31 reparationsanmälningar.",
+      "shared_words": []
+    },
+    {
+      "id": "subheading-4",
+      "kind": "subheading-first-sentence-estimate",
+      "heading": "Teamet avvaktar med fler byggnader",
+      "following": "Maya Lind ger sin bedömning av försöket i intervjun:",
+      "shared_words": []
+    },
+    {
+      "id": "subheading-5",
+      "kind": "subheading-first-sentence-estimate",
+      "heading": "Du kan läsa mer inför ett eget införande",
+      "following": "Kundberättelsen publiceras av leverantören Svale Systems.",
+      "shared_words": []
+    }
+  ]
+}

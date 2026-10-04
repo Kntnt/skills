@@ -1,0 +1,42 @@
+{
+  "attempt_id": "ms-20261002-fa0735",
+  "gate_runner_completed": true,
+  "gate_process_groups_absent": [
+    {
+      "name": "ruff-check",
+      "pgid": 29817,
+      "exists": false
+    },
+    {
+      "name": "ruff-format",
+      "pgid": 29828,
+      "exists": false
+    },
+    {
+      "name": "mypy",
+      "pgid": 29837,
+      "exists": false
+    },
+    {
+      "name": "pytest",
+      "pgid": 29894,
+      "exists": false
+    }
+  ],
+  "services_started": [],
+  "left_running": [],
+  "original_evidence_branch": "codex/retest-393-gpt-20261001",
+  "original_evidence_head": "4e88c6e0d1385c52eb9e5fa82d56a52b9a89f248",
+  "original_worktree_preserved": "/Users/thomas/Projects/skills-393-gpt-retest",
+  "deletion_paths": [
+    "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/393.scratch",
+    "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/393/.pytest_cache",
+    "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/393/.venv",
+    "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/393/uv.lock",
+    "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/393/skills/models/model-selector/scripts/__pycache__"
+  ],
+  "deletion_verified": true,
+  "deliverables_preserved": "All packet files, records, integration audit/handoff/receipts and per-ticket index note. Scratch procedures needed for review have retained text copies.",
+  "scope": "Only assigned scratch root and gate-created ignored files. .venv, uv.lock and nested bytecode birth times follow gate launch; pre-gate cache receipt records .pytest_cache absent.",
+  "verified_at": "2026-10-02T10:20:42.508873+00:00"
+}

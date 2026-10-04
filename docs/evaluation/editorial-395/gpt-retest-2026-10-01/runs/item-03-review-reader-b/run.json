@@ -1,0 +1,43 @@
+{
+  "instruction_revision": "fb16908712c4d47a36fc6ee9dfb3eb2714a19e65",
+  "corpus_revision": "fb16908712c4d47a36fc6ee9dfb3eb2714a19e65",
+  "harness": "Codex CLI 0.159.3",
+  "parent_identity": {
+    "model": "gpt-6.1-sol",
+    "effort": "xhigh"
+  },
+  "input_name": "input.md",
+  "input_source": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-observation-3q9k_53_/packet-03-review/brief.md",
+  "argv": [
+    "/opt/homebrew/Caskroom/codex/0.159.3/bin/codex",
+    "exec",
+    "--ignore-rules",
+    "-s",
+    "workspace-write",
+    "-c",
+    "sandbox_workspace_write.network_access=true",
+    "-c",
+    "sandbox_workspace_write.exclude_tmpdir_env_var=true",
+    "-c",
+    "sandbox_workspace_write.exclude_slash_tmp=true",
+    "--add-dir",
+    "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-w44mvpj8/scratch",
+    "-C",
+    "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-w44mvpj8/work",
+    "--skip-git-repo-check",
+    "--json",
+    "-o",
+    "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-observation-3q9k_53_/item-03-review-reader-b/response.txt",
+    "-"
+  ],
+  "environment": {
+    "HOME": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-w44mvpj8/home",
+    "CODEX_HOME": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-w44mvpj8/home/.codex",
+    "TMPDIR": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-w44mvpj8/scratch/tmp",
+    "UV_CACHE_DIR": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-w44mvpj8/scratch/uv-cache",
+    "UV_PYTHON_INSTALL_DIR": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-w44mvpj8/scratch/data/uv/python",
+    "XDG_DATA_HOME": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-w44mvpj8/scratch/data",
+    "XDG_CACHE_HOME": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-w44mvpj8/scratch/cache"
+  },
+  "note": "Identity must also be checked against each native turn_context after the run."
+}

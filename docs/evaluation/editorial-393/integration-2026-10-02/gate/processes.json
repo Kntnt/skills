@@ -1,0 +1,66 @@
+{
+  "runner_pid": 29699,
+  "runner_pgid": 29699,
+  "scratch_root": "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/393.scratch",
+  "environment_overrides": {
+    "UV_CACHE_DIR": "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/393.scratch/uv-cache",
+    "UV_PYTHON_INSTALL_DIR": "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/393.scratch/uv-python",
+    "UV_TOOL_DIR": "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/393.scratch/uv-tools",
+    "UV_TOOL_BIN_DIR": "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/393.scratch/uv-bin",
+    "TMPDIR": "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/393.scratch/tmp",
+    "XDG_CACHE_HOME": "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/393.scratch/xdg-cache",
+    "RUFF_CACHE_DIR": "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/393.scratch/ruff-cache",
+    "MYPY_CACHE_DIR": "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/393.scratch/mypy-cache",
+    "PYTHONDONTWRITEBYTECODE": "1"
+  },
+  "commands": [
+    {
+      "name": "ruff-check",
+      "command": "uvx ruff check .",
+      "cwd": "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/393",
+      "pid": 29817,
+      "pgid": 29817,
+      "started_at": "2026-10-02T10:11:48.814444+00:00",
+      "exit_code": 0,
+      "duration_seconds": 1.171,
+      "finished_at": "2026-10-02T10:11:49.983867+00:00",
+      "process_group_exists_after_wait": false
+    },
+    {
+      "name": "ruff-format",
+      "command": "uvx ruff format --check .",
+      "cwd": "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/393",
+      "pid": 29828,
+      "pgid": 29828,
+      "started_at": "2026-10-02T10:11:49.985321+00:00",
+      "exit_code": 0,
+      "duration_seconds": 0.515,
+      "finished_at": "2026-10-02T10:11:50.499376+00:00",
+      "process_group_exists_after_wait": false
+    },
+    {
+      "name": "mypy",
+      "command": "uvx --with types-PyYAML --with pytest --with httpx==0.28.1 --with selectolax==0.4.11 --with types-tinycss2 --with types-regex mypy skills/kntnt/scripts/kntnt.py skills/kntnt/library/scripts/argument_grammar.py skills/kntnt/library/scripts/article_anatomy.py skills/kntnt/library/scripts/ship.py skills/kntnt/library/scripts/integrations.py skills/kntnt/library/scripts/languages.py skills/kntnt/library/scripts/credentials.py skills/models/model-selector/scripts/catalogue.py skills/models/model-selector/scripts/profiles.py skills/models/model-selector/scripts/evidence.py skills/models/model-selector/scripts/launch.py skills/models/model-selector/scripts/selection.py skills/models/model-selector/scripts/quota.py skills/models/model-selector/scripts/record.py skills/models/model-selector/scripts/capture.py skills/models/model-selector/scripts/grade.py skills/models/model-selector/scripts/setup_apply.py skills/models/model-selector/scripts/inventory.py skills/code/orchestrate/scripts/run.py skills/productivity/rename-invoices/scripts/rename_invoices.py skills/agents/explain/scripts/invoke.py skills/web/mirror/scripts/mirror.py skills/infrastructure/cloudns/scripts/cloudns.py skills/infrastructure/hetzner/scripts/hetzner.py skills/infrastructure/nodeping/scripts/nodeping.py skills/infrastructure/postmark/scripts/postmark.py tests",
+      "cwd": "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/393",
+      "pid": 29837,
+      "pgid": 29837,
+      "started_at": "2026-10-02T10:11:50.500746+00:00",
+      "exit_code": 0,
+      "duration_seconds": 4.721,
+      "finished_at": "2026-10-02T10:11:55.220833+00:00",
+      "process_group_exists_after_wait": false
+    },
+    {
+      "name": "pytest",
+      "command": "uv run --with pytest --with pytest-xdist --with pyyaml pytest -n auto",
+      "cwd": "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/393",
+      "pid": 29894,
+      "pgid": 29894,
+      "started_at": "2026-10-02T10:11:55.222424+00:00",
+      "exit_code": 1,
+      "duration_seconds": 123.717,
+      "finished_at": "2026-10-02T10:13:58.940522+00:00",
+      "process_group_exists_after_wait": false
+    }
+  ]
+}

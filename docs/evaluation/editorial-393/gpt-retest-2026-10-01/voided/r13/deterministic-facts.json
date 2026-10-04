@@ -1,0 +1,66 @@
+{
+  "result": {
+    "returncode": 1,
+    "timed_out": false,
+    "duration_seconds": 201.85,
+    "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-qjib77lh",
+    "cleanup_required": true
+  },
+  "input_sha256": "3d2f9ed7390e247b388dfd62ae735272c4c35adab5f471f922046dc9ef93e7a2",
+  "artifact": {
+    "fenced_artifact_count": 0,
+    "present": false,
+    "source": "none",
+    "sha256": null,
+    "input_identical": null
+  },
+  "identities": [
+    {
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T16-28-04-01a0f7dd-8141-71b3-9915-3f68a145eef1.jsonl",
+      "id": "01a0f7dd-8141-71b3-9915-3f68a145eef1",
+      "source": "exec",
+      "seats": [
+        [
+          "gpt-6.1-sol",
+          "xhigh"
+        ]
+      ]
+    },
+    {
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T16-31-23-01a0f7e0-8b14-71c0-94fd-dc47c43a6084.jsonl",
+      "id": "01a0f7e0-8b14-71c0-94fd-dc47c43a6084",
+      "source": {
+        "subagent": {
+          "thread_spawn": {
+            "parent_thread_id": "01a0f7dd-8141-71b3-9915-3f68a145eef1",
+            "depth": 1,
+            "agent_path": "/root/mechanical_pass",
+            "agent_nickname": "Socrates",
+            "agent_role": null
+          }
+        }
+      },
+      "seats": [
+        [
+          "gpt-6.1-sol",
+          "xhigh"
+        ]
+      ]
+    }
+  ],
+  "encrypted_dispatches": [
+    {
+      "session": "01a0f7dd-8141-71b3-9915-3f68a145eef1",
+      "name": "spawn_agent",
+      "call_id": "call_hJyYU4ep4hTHtSJY5rz10MzW",
+      "note": "dispatch message encrypted; use actual child reads rather than infer its complete brief"
+    }
+  ],
+  "all_recorded_seats_match": true,
+  "artifact_matches_captures": [],
+  "source_inventory_unchanged": true,
+  "staged_install_unchanged": true,
+  "work_created": {},
+  "work_removed": {},
+  "work_changed": {}
+}

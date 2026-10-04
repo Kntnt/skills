@@ -1,0 +1,156 @@
+{
+  "01a0f832-ae8e-7d60-9e19-56ee7c7fdffa": {
+    "source": "exec",
+    "resources": [
+      {
+        "path": ".agents/skills/kntnt/library/references/delivery.md",
+        "full_resource_text_in_returned_output": true,
+        "all_nonblank_lines_visible_across_returns": true,
+        "missing_nonblank_lines": []
+      },
+      {
+        "path": ".agents/skills/kntnt/library/references/editorial/anti-slop.md",
+        "full_resource_text_in_returned_output": true,
+        "all_nonblank_lines_visible_across_returns": true,
+        "missing_nonblank_lines": []
+      },
+      {
+        "path": ".agents/skills/kntnt/library/references/editorial/article-anatomy.md",
+        "full_resource_text_in_returned_output": true,
+        "all_nonblank_lines_visible_across_returns": true,
+        "missing_nonblank_lines": []
+      },
+      {
+        "path": ".agents/skills/kntnt/library/references/editorial/article-anatomy.review.md",
+        "full_resource_text_in_returned_output": true,
+        "all_nonblank_lines_visible_across_returns": true,
+        "missing_nonblank_lines": []
+      },
+      {
+        "path": ".agents/skills/kntnt/library/references/editorial/base.md",
+        "full_resource_text_in_returned_output": true,
+        "all_nonblank_lines_visible_across_returns": true,
+        "missing_nonblank_lines": []
+      },
+      {
+        "path": ".agents/skills/kntnt/library/references/editorial/base.review.md",
+        "full_resource_text_in_returned_output": true,
+        "all_nonblank_lines_visible_across_returns": true,
+        "missing_nonblank_lines": []
+      },
+      {
+        "path": ".agents/skills/kntnt/library/references/editorial/genres/casestudy.md",
+        "full_resource_text_in_returned_output": true,
+        "all_nonblank_lines_visible_across_returns": true,
+        "missing_nonblank_lines": []
+      },
+      {
+        "path": ".agents/skills/kntnt/library/references/editorial/genres/casestudy.review.md",
+        "full_resource_text_in_returned_output": true,
+        "all_nonblank_lines_visible_across_returns": true,
+        "missing_nonblank_lines": []
+      },
+      {
+        "path": ".agents/skills/kntnt/library/references/editorial/headlines.md",
+        "full_resource_text_in_returned_output": true,
+        "all_nonblank_lines_visible_across_returns": true,
+        "missing_nonblank_lines": []
+      },
+      {
+        "path": ".agents/skills/kntnt/library/references/editorial/headlines.review.md",
+        "full_resource_text_in_returned_output": true,
+        "all_nonblank_lines_visible_across_returns": true,
+        "missing_nonblank_lines": []
+      },
+      {
+        "path": ".agents/skills/kntnt/library/references/editorial/web-craft.md",
+        "full_resource_text_in_returned_output": true,
+        "all_nonblank_lines_visible_across_returns": true,
+        "missing_nonblank_lines": []
+      },
+      {
+        "path": ".agents/skills/kntnt/library/references/editorial/web-craft.review.md",
+        "full_resource_text_in_returned_output": true,
+        "all_nonblank_lines_visible_across_returns": true,
+        "missing_nonblank_lines": []
+      },
+      {
+        "path": ".agents/skills/proofread/SKILL.md",
+        "full_resource_text_in_returned_output": true,
+        "all_nonblank_lines_visible_across_returns": true,
+        "missing_nonblank_lines": []
+      },
+      {
+        "path": ".agents/skills/redline/SKILL.md",
+        "full_resource_text_in_returned_output": true,
+        "all_nonblank_lines_visible_across_returns": true,
+        "missing_nonblank_lines": []
+      },
+      {
+        "path": ".agents/skills/redline/references/reply-check.md",
+        "full_resource_text_in_returned_output": true,
+        "all_nonblank_lines_visible_across_returns": true,
+        "missing_nonblank_lines": []
+      }
+    ],
+    "language_scopes": [
+      {
+        "path": ".agents/skills/kntnt/library/references/languages/sv.md",
+        "scope": "composition",
+        "complete_scope_content_in_returned_output": true
+      },
+      {
+        "path": ".agents/skills/kntnt/library/references/languages/sv.md",
+        "scope": "review",
+        "complete_scope_content_in_returned_output": true
+      },
+      {
+        "path": ".agents/skills/kntnt/library/references/languages/sv.md",
+        "scope": "anti-slop",
+        "complete_scope_content_in_returned_output": true
+      }
+    ],
+    "limit": "Line coverage across separate returns does not prove order or exact encrypted dispatch scope."
+  },
+  "01a0f835-26e5-77a2-b959-e48c7927f581": {
+    "source": {
+      "subagent": {
+        "thread_spawn": {
+          "parent_thread_id": "01a0f832-ae8e-7d60-9e19-56ee7c7fdffa",
+          "depth": 1,
+          "agent_path": "/root/mechanical_proofread",
+          "agent_nickname": "Godel",
+          "agent_role": null
+        }
+      }
+    },
+    "resources": [
+      {
+        "path": ".agents/skills/kntnt/library/references/delivery.md",
+        "full_resource_text_in_returned_output": true,
+        "all_nonblank_lines_visible_across_returns": true,
+        "missing_nonblank_lines": []
+      },
+      {
+        "path": ".agents/skills/kntnt/library/references/editorial/mechanics.md",
+        "full_resource_text_in_returned_output": true,
+        "all_nonblank_lines_visible_across_returns": true,
+        "missing_nonblank_lines": []
+      },
+      {
+        "path": ".agents/skills/proofread/SKILL.md",
+        "full_resource_text_in_returned_output": true,
+        "all_nonblank_lines_visible_across_returns": true,
+        "missing_nonblank_lines": []
+      }
+    ],
+    "language_scopes": [
+      {
+        "path": ".agents/skills/kntnt/library/references/languages/sv.md",
+        "scope": "mechanics",
+        "complete_scope_content_in_returned_output": true
+      }
+    ],
+    "limit": "Line coverage across separate returns does not prove order or exact encrypted dispatch scope."
+  }
+}

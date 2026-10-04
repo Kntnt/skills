@@ -1,0 +1,9 @@
+{
+  "local_links_checked": 55,
+  "missing": [],
+  "records_index_unchanged": true,
+  "existing_index_sha256": "e738149d1da727dea83b1b51fad1037cd69685ef060742474f5c685bc732ea80",
+  "projected_index_sha256": "a5de8a4764eabef2dc7ee9e435e8af519d9205afc2d78308a3350b9d2833ac4f",
+  "existing_sibling_bytes_preserved": true,
+  "index_write_deferred_to_run": true
+}

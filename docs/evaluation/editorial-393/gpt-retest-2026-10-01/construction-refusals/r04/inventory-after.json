@@ -1,0 +1,3425 @@
+{
+  "export": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "export/skills": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "export/skills/editorial": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "export/skills/editorial/proofread": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "export/skills/editorial/proofread/SKILL.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 13045,
+    "sha256": "6cad45f3d50a96e43c8df9996bc748c7e09e09f456e8a9375c724b84d236404f"
+  },
+  "export/skills/editorial/proofread/agents": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "export/skills/editorial/proofread/agents/openai.yaml": {
+    "mode": 420,
+    "type": "file",
+    "size": 144,
+    "sha256": "ef05500ed19dff98c0181872ac5ff04d99ba241f992f70284629119c0451883a"
+  },
+  "export/skills/editorial/proofread/help.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 6350,
+    "sha256": "5bad100c3b2bca059643a524d8730ac2d5761414295db2e9420207cf3004a43f"
+  },
+  "export/skills/editorial/proofread/scripts": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "export/skills/editorial/proofread/scripts/invoke.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 4938,
+    "sha256": "1986301369b22e298280544bfd889e460af2e4f8acb187a7967f994ae93daa2a"
+  },
+  "export/skills/editorial/redline": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "export/skills/editorial/redline/SKILL.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 39912,
+    "sha256": "0872ac03b535f7b1d7205fdbea4647795c316d3d6fe638c2af5ce0018dd40bb0"
+  },
+  "export/skills/editorial/redline/agents": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "export/skills/editorial/redline/agents/openai.yaml": {
+    "mode": 420,
+    "type": "file",
+    "size": 176,
+    "sha256": "a9ff49ac5ec1f2d858911e08212525c5d8404c5d1a6789c3bf2713f25f388973"
+  },
+  "export/skills/editorial/redline/help.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 17015,
+    "sha256": "49f8676eebc0a22e0571dbf554752f2ac3ad404bebdd3b49304cc97b2049a6d3"
+  },
+  "export/skills/editorial/redline/references": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "export/skills/editorial/redline/references/brief-review.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 10113,
+    "sha256": "6aebf74a0eeb638c35f24fcc63215280ac4a4c13583d3c31fe42c5d8e9b93264"
+  },
+  "export/skills/editorial/redline/references/correction.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 15881,
+    "sha256": "c7d164379021076cdcb09e6615b9a1155367603695836df165c889fd72189aac"
+  },
+  "export/skills/editorial/redline/references/reply-check.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 5987,
+    "sha256": "c89fd5a2ebdbd73898adf475fee34dda5c88415de318d16378dd50fee221d9e5"
+  },
+  "export/skills/editorial/redline/scripts": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "export/skills/editorial/redline/scripts/invoke.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 4938,
+    "sha256": "1986301369b22e298280544bfd889e460af2e4f8acb187a7967f994ae93daa2a"
+  },
+  "export/skills/editorial/write": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "export/skills/editorial/write/SKILL.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 17876,
+    "sha256": "73186c908f6fa2c9608682947799fdac1a5e902fd6d1a265b1a088dd23c85489"
+  },
+  "export/skills/editorial/write/agents": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "export/skills/editorial/write/agents/openai.yaml": {
+    "mode": 420,
+    "type": "file",
+    "size": 144,
+    "sha256": "6c2c5457f3b5d6e237a9cc7c147763d13115065ac7c8dc96da16b17017fd1953"
+  },
+  "export/skills/editorial/write/help.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 12201,
+    "sha256": "84ded05edc8b0018fff553dd0f1e921ef9478155bf36ffb39fa4a9756a8650b4"
+  },
+  "export/skills/editorial/write/references": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "export/skills/editorial/write/references/quotations.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 4063,
+    "sha256": "89ba23a834153bf3c38372206548d2e269ff1a516c93cf393eaaf2fe5c62e881"
+  },
+  "export/skills/editorial/write/references/source-check.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 13404,
+    "sha256": "c7a8956c5d850854984cd97f802a5c7c1caf13cccf4aff351aa6bee7c1df3ce0"
+  },
+  "export/skills/editorial/write/scripts": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "export/skills/editorial/write/scripts/invoke.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 4938,
+    "sha256": "1986301369b22e298280544bfd889e460af2e4f8acb187a7967f994ae93daa2a"
+  },
+  "export/skills/kntnt": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "export/skills/kntnt/SKILL.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 4021,
+    "sha256": "750ad3f09e8c896f9992e41ed7e3e8557d8727f643e8ba8894f2ad48fa6517c7"
+  },
+  "export/skills/kntnt/agents": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "export/skills/kntnt/agents/openai.yaml": {
+    "mode": 420,
+    "type": "file",
+    "size": 148,
+    "sha256": "709b566f6698b9a6c2a3ba4d95a6e33b7a590608f66b5af515069234ac0dbd91"
+  },
+  "export/skills/kntnt/catalog.json": {
+    "mode": 420,
+    "type": "file",
+    "size": 14623,
+    "sha256": "ff7492bf1fc998d20e95c3466666222c218cfdaa4902fead712594a66076933e"
+  },
+  "export/skills/kntnt/features": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "export/skills/kntnt/features/session-cleanup": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "export/skills/kntnt/features/session-cleanup/FEATURE.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 6256,
+    "sha256": "afdd1a67dc15229b9542711ed681777cdcae35fe9c8ab788456f11eaadc7560b"
+  },
+  "export/skills/kntnt/features/session-cleanup/instructions.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 1194,
+    "sha256": "64434359eaccc208e0d9c52038dd08b6349c42459c58d8e3af846086c7f25e36"
+  },
+  "export/skills/kntnt/features/session-cleanup/scripts": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "export/skills/kntnt/features/session-cleanup/scripts/session_cleanup.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 35274,
+    "sha256": "defdd20644108e1ad4ab78b207d04b912481821c4382130ee3a8e065522ebce5"
+  },
+  "export/skills/kntnt/features/statusline": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "export/skills/kntnt/features/statusline/FEATURE.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 3909,
+    "sha256": "68f3dacf20ee5dd582ef0440a0bc4cef839251e3546c3f2876dcc2412ba6a4a5"
+  },
+  "export/skills/kntnt/features/statusline/scripts": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "export/skills/kntnt/features/statusline/scripts/statusline_feature.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 7126,
+    "sha256": "3596f97853a1d1adfc654a91c8778ebf57fbf90c0a3dfb051f95e8399248d220"
+  },
+  "export/skills/kntnt/features/statusline/statusline.sh": {
+    "mode": 493,
+    "type": "file",
+    "size": 11700,
+    "sha256": "4262bf72da77714d6abe95f3e7c84d5f2c9572f29e84469af676d672a9907166"
+  },
+  "export/skills/kntnt/harness-paths.json": {
+    "mode": 420,
+    "type": "file",
+    "size": 5922,
+    "sha256": "4d288adb766da2b686bfcdb7dc082f7938de7e68c359d29c9f3b5529dcbb4b81"
+  },
+  "export/skills/kntnt/help": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "export/skills/kntnt/help/help.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 2922,
+    "sha256": "bdec86da77423da4d51a9439c5135d75085af57699ab001381524a31faf71f8b"
+  },
+  "export/skills/kntnt/help/select.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 6752,
+    "sha256": "8fbbe07776916cd3bf5dd2af29372b914485a59525af926cf440eec8717f0484"
+  },
+  "export/skills/kntnt/help/uninstall.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 3404,
+    "sha256": "0ff8e829c2bad18d2f288b2fbc3faa53e3b50501f62114a2f5a780217abf194e"
+  },
+  "export/skills/kntnt/help/update.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 3888,
+    "sha256": "571931337a9d2b7cc5bce9027ffd278180b3307a60907a686bac5cc4e8ae3437"
+  },
+  "export/skills/kntnt/help.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 4615,
+    "sha256": "df827f0005357fbcea8e88af1fd8c7c0ac4ae5cbd86aba629ec11c84ab1fb501"
+  },
+  "export/skills/kntnt/library": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "export/skills/kntnt/library/references": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "export/skills/kntnt/library/references/changelog.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 1393,
+    "sha256": "ffbaa70cec4453d3fb366ca2cb0ea07359d5c4f6d86edc1882458aa9e627fb56"
+  },
+  "export/skills/kntnt/library/references/delivery.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 15329,
+    "sha256": "71babd36f68d93cd9f7d035358c3cbaeae3179147d8dc7a4667047081c898472"
+  },
+  "export/skills/kntnt/library/references/editorial": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "export/skills/kntnt/library/references/editorial/README.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 19342,
+    "sha256": "dc78a0934449c34cf02edd4a69f7bc716dc052ca12414c53129d3e37de829eda"
+  },
+  "export/skills/kntnt/library/references/editorial/anti-slop.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 7475,
+    "sha256": "9ec7fb15b3cfe22f446c6ed2df85666aaa182d8fa0a09fa3668887e4786d83c2"
+  },
+  "export/skills/kntnt/library/references/editorial/article-anatomy.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 5481,
+    "sha256": "c075c6fe7494dbcdc43d6af599c55ab8fc52fc48d7ed1b6cc26eca7a592cecd7"
+  },
+  "export/skills/kntnt/library/references/editorial/article-anatomy.review.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 5360,
+    "sha256": "3e616f9671126ba7898123dd288a4a9bb4170f189d567a3fcbd2b17ccb82c633"
+  },
+  "export/skills/kntnt/library/references/editorial/base.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 3948,
+    "sha256": "d4146ef134de7482e25469201aaceed7b207fba9f8bacb06a428b85f6bfc3581"
+  },
+  "export/skills/kntnt/library/references/editorial/base.review.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 5695,
+    "sha256": "d2c838c19a692104be247afd227b0baed98f3156be059c0a982ecae3513fa0ca"
+  },
+  "export/skills/kntnt/library/references/editorial/genres": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "export/skills/kntnt/library/references/editorial/genres/article.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 1255,
+    "sha256": "2313180d69b25de48b818629c5d761daa36eb69def33441b01c24a2135f17b4f"
+  },
+  "export/skills/kntnt/library/references/editorial/genres/article.review.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 905,
+    "sha256": "0d992e276cb65943ceab91cb855c1fcafd2b65ed4b378a16a4ea63036de8074c"
+  },
+  "export/skills/kntnt/library/references/editorial/genres/casestudy.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 2249,
+    "sha256": "a39054321cbd35819cfd8ac7d2823dd3d56550a6ee2d1c6ee3b30f9daaa16cc5"
+  },
+  "export/skills/kntnt/library/references/editorial/genres/casestudy.review.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 1110,
+    "sha256": "a7db10d0dc1970064a8887c819a8500dfdecf43dcb45fffed32994921ceb68a4"
+  },
+  "export/skills/kntnt/library/references/editorial/genres/column.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 1716,
+    "sha256": "0971c8b498535ed57bbc130e61989b477c334e53cf3fa3c37b2e1bf64a158d98"
+  },
+  "export/skills/kntnt/library/references/editorial/genres/column.review.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 783,
+    "sha256": "8abffc59549e71a00d40200e89b656ca77d0dfd8d1f3e58293a0591373fb5c37"
+  },
+  "export/skills/kntnt/library/references/editorial/genres/general.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 2873,
+    "sha256": "438d85d3016889dd994d70a989b4ab73b8b70e149aea8e45d144cf3d371c6be5"
+  },
+  "export/skills/kntnt/library/references/editorial/genres/opinion.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 1478,
+    "sha256": "f0edbed362fe613f11cfe6232c4c7fc98202786fa909f3cd72f1b1acd0867e41"
+  },
+  "export/skills/kntnt/library/references/editorial/genres/opinion.review.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 984,
+    "sha256": "97c67a0ca701388b268b03f8dbab88e877ed259b6201f3c005ff45ea634b641d"
+  },
+  "export/skills/kntnt/library/references/editorial/genres/pressrelease.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 8000,
+    "sha256": "a63b1650f22fc1af909203c8ecaaf6eb54577907ed8f72661e07f6302058c791"
+  },
+  "export/skills/kntnt/library/references/editorial/genres/pressrelease.review.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 15799,
+    "sha256": "38c9b5570d725f6f796b10791c3a9e48d16e54ca6612723908e5a33796493d7f"
+  },
+  "export/skills/kntnt/library/references/editorial/genres/report.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 8648,
+    "sha256": "1edaa623002a25cf60ddf2c1fe74ced72479b168857f7c79d7db6965d5d75138"
+  },
+  "export/skills/kntnt/library/references/editorial/genres/report.review.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 13445,
+    "sha256": "8c6e3a5b5dfb224d6324026c2708d930abc009a34206caad5bf6296d7235e026"
+  },
+  "export/skills/kntnt/library/references/editorial/genres/teaser.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 7307,
+    "sha256": "540f873055e0454cf84b08c2eccce373fe5037ba51c672f5089127a805fd9589"
+  },
+  "export/skills/kntnt/library/references/editorial/genres/teaser.review.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 9090,
+    "sha256": "9dc18d812492b0609c827e53c00014d6c29cab477ede94d440054b49a19bcb6c"
+  },
+  "export/skills/kntnt/library/references/editorial/genres/webcopy.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 1964,
+    "sha256": "629656792d7038f4d4572fc3f8751643f0cbfd46050892010552ed81f6d04adf"
+  },
+  "export/skills/kntnt/library/references/editorial/genres/webcopy.review.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 1640,
+    "sha256": "b06d9a72fc61dcd52370d1350520a3a0e9c2d2f19a610e5ac9f029f9e56a056e"
+  },
+  "export/skills/kntnt/library/references/editorial/headlines.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 4801,
+    "sha256": "adfb7ca612905afee03a73d58cdb07de9d0877b23af9de89f7e114f6de81df5f"
+  },
+  "export/skills/kntnt/library/references/editorial/headlines.review.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 6714,
+    "sha256": "eb8bd2e680945ef2a7f9ffc7903109e51e4bb6828b7d76000348e59635810dfd"
+  },
+  "export/skills/kntnt/library/references/editorial/mechanics.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 11577,
+    "sha256": "b3103ed6da4ac9d27a0ebfb43bdb40b8e77d58d84b3745a90c0a736142438b45"
+  },
+  "export/skills/kntnt/library/references/editorial/techniques": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "export/skills/kntnt/library/references/editorial/techniques/abt.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 3435,
+    "sha256": "09007e91b589e7621088b9da5310656aa70b35fd55e7fe036c8417c9517e9af9"
+  },
+  "export/skills/kntnt/library/references/editorial/techniques/abt.review.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 2162,
+    "sha256": "e422ac0b41d147563365d35c0cb6ee5b14edcd048fd8ddce225ec0a13f2845e7"
+  },
+  "export/skills/kntnt/library/references/editorial/techniques/pac.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 3045,
+    "sha256": "b7579911a42634b18c38cde72566bbae77f2aeb72ca3a643e70a6ffb18f21fa2"
+  },
+  "export/skills/kntnt/library/references/editorial/techniques/pac.review.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 1820,
+    "sha256": "f0b1e04cb0e6590635f9ef21c2cde24874a86327040282aea0be42db514e373a"
+  },
+  "export/skills/kntnt/library/references/editorial/web-craft.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 1233,
+    "sha256": "b1ac5867d30952c3ca78da244520ab28c025102f4389f44ec206757a29f05371"
+  },
+  "export/skills/kntnt/library/references/editorial/web-craft.review.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 581,
+    "sha256": "169da1beeb4fb80e74f9423bdd4d7bcd57aa9b59b8e8ff5b71f3a67dfef7e923"
+  },
+  "export/skills/kntnt/library/references/editorial/writing-brief.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 14299,
+    "sha256": "d7d2affa723de1ff71539e3034226755da4442acaabeb1868e37f4849fc7aaa0"
+  },
+  "export/skills/kntnt/library/references/invocation-envelope.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 7431,
+    "sha256": "1f76ac87aa395a652232f5f289aef94a8652de76e88dbee3d5f7ceca14496bad"
+  },
+  "export/skills/kntnt/library/references/languages": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "export/skills/kntnt/library/references/languages/README.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 8470,
+    "sha256": "23929466b467620f2d5b12a2c6ea040ef381a906e0892eaa877dd5210c01a338"
+  },
+  "export/skills/kntnt/library/references/languages/en_GB.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 6993,
+    "sha256": "2b36899b232e65300ea15fbbb0db2abece4e1f32e7b193957355a67a34331413"
+  },
+  "export/skills/kntnt/library/references/languages/en_US.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 6238,
+    "sha256": "d11fcffa9e7316dd44d8796a954e5db9965c501e7df982affe91bc624cfef73c"
+  },
+  "export/skills/kntnt/library/references/languages/sv.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 14473,
+    "sha256": "241f0e5e4ca590c1d2348dc4048d15b5c8cc030c9dc91de989a758cefd4cd211"
+  },
+  "export/skills/kntnt/library/scripts": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "export/skills/kntnt/library/scripts/argument_grammar.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 3961,
+    "sha256": "b796b7d716a45a693c62ab3760e634cb422c83a336669a99ecc385d2fe36af29"
+  },
+  "export/skills/kntnt/library/scripts/article_anatomy.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 47727,
+    "sha256": "b4aae6ce979fe81b43531aac123f4077866b9efc72e244dc7203b053c07ae847"
+  },
+  "export/skills/kntnt/library/scripts/credentials.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 21772,
+    "sha256": "6ea3731d5390de0d408a19878d47e06a0e68f2b4531ec3a70c9b15367dc0385c"
+  },
+  "export/skills/kntnt/library/scripts/integrations.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 61037,
+    "sha256": "60d5dc8dfebac1497bf155ad9016ba4cead3eda7532f8173e2f0ebd061858c61"
+  },
+  "export/skills/kntnt/library/scripts/languages.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 24089,
+    "sha256": "6d09120fc7ab52ba69db24bb6db6e85ff9ab304d5d5ebe04ec5f2f2dd0042d70"
+  },
+  "export/skills/kntnt/library/scripts/ship.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 24521,
+    "sha256": "e66d1eaec0d1f875559e6d1b89a4ab2065917f38763fc67e36b9ebbc378fdc47"
+  },
+  "export/skills/kntnt/scripts": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "export/skills/kntnt/scripts/kntnt.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 215979,
+    "sha256": "89947ecf1bf1ceb58408b8e73e8a3584e0b5060ef8d5662f4bfe985320f37ef2"
+  },
+  "export/skills/kntnt/steps": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "export/skills/kntnt/steps/help.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 969,
+    "sha256": "164fbedbb50b1ce31f56575e134f1e5d9b21a7b51e236f4a15c57561f95a03c9"
+  },
+  "export/skills/kntnt/steps/select.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 17390,
+    "sha256": "eda226bbdcdbaaf9b539695d9593cece194204e1c4d9fb8932b2146a9801faa0"
+  },
+  "export/skills/kntnt/steps/uninstall.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 5826,
+    "sha256": "5dc6650fd7c885bbd551b5d94fffc966c60b70005a8ca3da67a5944a218515bf"
+  },
+  "export/skills/kntnt/steps/update.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 11279,
+    "sha256": "095e9d0d950793f69a8171b80639ec2039ee995055b495f2cd117c253ce96b45"
+  },
+  "home": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/auth.json": {
+    "mode": 384,
+    "type": "file",
+    "size": 4120
+  },
+  "home/.codex/cache": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/cache/codex_apps_server_info": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/cache/codex_apps_server_info/bd86f6d7e19a30ce9a3935a747ba6f3fef3ac183.json": {
+    "mode": 384,
+    "type": "file",
+    "size": 189,
+    "sha256": "f5e83c8930c8f6d836e30a364b508fc29ce7cd691551cb64239778686bf66b5c"
+  },
+  "home/.codex/cache/codex_apps_tools": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/cache/codex_apps_tools/bd86f6d7e19a30ce9a3935a747ba6f3fef3ac183.json": {
+    "mode": 384,
+    "type": "file",
+    "size": 1254956,
+    "sha256": "04ea0f6939dce0a8e15d54c2f92299773c9ff963eb74cc023c9831f8efd58075"
+  },
+  "home/.codex/cache/remote_plugin_catalog": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/cache/remote_plugin_catalog/ff69ce30add57050.json": {
+    "mode": 384,
+    "type": "file",
+    "size": 28861007,
+    "sha256": "30d70f9838c515fb4493609001c918b812fa49327ab0112875469bc78ac3e7cd"
+  },
+  "home/.codex/config.toml": {
+    "mode": 384,
+    "type": "file",
+    "size": 210,
+    "sha256": "30d289c7a6dbec2713688fd27ac8cf9944b7dff7bb06e5e7aa13e394b9d7ff3a"
+  },
+  "home/.codex/goals_1.sqlite": {
+    "mode": 420,
+    "type": "file",
+    "size": 32768,
+    "sha256": "9a85940e45cd9454746776e35665a1007e38b1c569c1ca1dd709819fe87e5b5b"
+  },
+  "home/.codex/installation_id": {
+    "mode": 420,
+    "type": "file",
+    "size": 36,
+    "sha256": "ab5c7a6efe92f44a5614fc1d7f5958caec3c89925da9045327249d53b8473207"
+  },
+  "home/.codex/logs_2.sqlite": {
+    "mode": 420,
+    "type": "file",
+    "size": 49152,
+    "sha256": "f51a99aff12e26881d3e59d37e6b426b5bb71ae8283646b9220f44de842b3b09"
+  },
+  "home/.codex/memories_1.sqlite": {
+    "mode": 420,
+    "type": "file",
+    "size": 45056,
+    "sha256": "57891acce6dc2ccf578fb420ce18238d8b0887b3e6e06423a71dd5353ea74a14"
+  },
+  "home/.codex/models_cache.json": {
+    "mode": 420,
+    "type": "file",
+    "size": 418902,
+    "sha256": "f4f088096f0b7f7912a46b6962fbe2d5fd49f41e549c7950e7b969d503238cd8"
+  },
+  "home/.codex/plugins": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/plugins/.remote-plugin-install-staging": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/plugins/cache": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/gmail": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/gmail/.codex-remote-plugin-install.json": {
+    "mode": 384,
+    "type": "file",
+    "size": 104,
+    "sha256": "2dd221fd3ef4505a113708b31b59b44061ba601ebdff78990af858b2240f4e3c"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/gmail/0.1.10": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/gmail/0.1.10/.app.json": {
+    "mode": 420,
+    "type": "file",
+    "size": 122,
+    "sha256": "f695c97fe318845970a6fd4bea00289d72d902a6d5504367bbd914ea9f621620"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/gmail/0.1.10/.codex-plugin": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/gmail/0.1.10/.codex-plugin/plugin.json": {
+    "mode": 436,
+    "type": "file",
+    "size": 1675,
+    "sha256": "79332756fee94eb5251c57984c8412d43e31c6716f47f28305f3b556a14ff5c6"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/gmail/0.1.10/README.md": {
+    "mode": 436,
+    "type": "file",
+    "size": 255,
+    "sha256": "9ad9e0f535f036107cf1e7ed4af8f05f6d1691ff25bfd773c76a7b21f0d175d4"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/gmail/0.1.10/assets": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/gmail/0.1.10/assets/gmail-small.svg": {
+    "mode": 420,
+    "type": "file",
+    "size": 1343,
+    "sha256": "9b521eebe4b0f3d15dd0642cb3d44ae40ef303f8b00ad35eb4480efd872f8e1c"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/gmail/0.1.10/assets/gmail.png": {
+    "mode": 436,
+    "type": "file",
+    "size": 41731,
+    "sha256": "94b90b1c5fca7defb96588f4d7032af87f9514c895cc9f2f3846d829ca9c7cba"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/gmail/0.1.10/tests": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/gmail/0.1.10/tests/test_gmail_plugin_contract.py": {
+    "mode": 436,
+    "type": "file",
+    "size": 1464,
+    "sha256": "35fdf090b1d5179147a3d4742291712cde1d3524d0bf7fba1ee75942b382f529"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/.codex-remote-plugin-install.json": {
+    "mode": 384,
+    "type": "file",
+    "size": 104,
+    "sha256": "19277971b3d9154d117a44a5c461bb655164aee1777f86a44f90cf8d4fc073ac"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/.app.json": {
+    "mode": 420,
+    "type": "file",
+    "size": 126,
+    "sha256": "99b8ba5f9f9ec198071ef338d2d0f621c91593ea5fa1fe324648e2a0533dfafc"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/.codex-plugin": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/.codex-plugin/plugin.json": {
+    "mode": 420,
+    "type": "file",
+    "size": 1610,
+    "sha256": "d2cbbd434a5c8123a9e1612663f0598cdd13ba71bfb55e172e8132ed9e5d4474"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/README.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 1190,
+    "sha256": "3a742d5e415c2c3570463cd81a65fdc7edb0602dda8c6ca454a797bdb42fde10"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/assets": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/assets/icon.svg": {
+    "mode": 420,
+    "type": "file",
+    "size": 1049,
+    "sha256": "dbeb0de8f84fea16c89a9d00f83a71eef4a7062392d741ac5ba56b557e7649c3"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-analytics-dashboard": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-analytics-dashboard/SKILL.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 1497,
+    "sha256": "cf5360fd8b197673bb237c52c603c97fa319c875c3dfa2cd8efff52d4422f513"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-analytics-dashboard/agents": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-analytics-dashboard/agents/openai.yaml": {
+    "mode": 420,
+    "type": "file",
+    "size": 275,
+    "sha256": "392f620a50c2a39bb3b3e80e376a27385d312ba7a8abf14cfabb7f02f761a273"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-analytics-dashboard/artifact-template.json": {
+    "mode": 420,
+    "type": "file",
+    "size": 125,
+    "sha256": "7aea630ddafb1add3869c6c046e2b8c83464771a29f7e47a59d482480d13d0be"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-analytics-dashboard/assets": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-analytics-dashboard/assets/preview.png": {
+    "mode": 420,
+    "type": "file",
+    "size": 63062,
+    "sha256": "b5c458e744d46ef4211d167d3451864148853aa73708323068504da956ce03b3"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-analytics-dashboard/assets/reference.xlsx": {
+    "mode": 420,
+    "type": "file",
+    "size": 26606,
+    "sha256": "ab655c867ea1c9eed617ec0eeec643946c1e49e9d5227e9db740c95daba26e46"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-business-review": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-business-review/SKILL.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 1475,
+    "sha256": "27721fc1d67d1b41949caa75ac8f94f81952ff124406878af6524047929e60d2"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-business-review/agents": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-business-review/agents/openai.yaml": {
+    "mode": 420,
+    "type": "file",
+    "size": 269,
+    "sha256": "cde1beac06ca33c9a0a12c1cbf2b5834dd208a5f732069fd790d7bf9483bcbdd"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-business-review/artifact-template.json": {
+    "mode": 420,
+    "type": "file",
+    "size": 126,
+    "sha256": "809c64b42be1f603434873698306295e5344a7871d8a173d6665b89470f62b78"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-business-review/assets": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-business-review/assets/preview.png": {
+    "mode": 420,
+    "type": "file",
+    "size": 30573,
+    "sha256": "af6b092987472013920bb251e0e9d60b97fdb02cc1fd3109abf2b0951bc6aa3c"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-business-review/assets/reference.pptx": {
+    "mode": 420,
+    "type": "file",
+    "size": 2035231,
+    "sha256": "595b9a314c7e8e9b5f22180e7c7db167afba2437c8623d57e3f9dbc20af392c1"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-design-report": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-design-report/SKILL.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 1437,
+    "sha256": "563722f53854e606f8a9f87e37e72d7ef70a22d46d5836b8e4d6abfb1b79e9e0"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-design-report/agents": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-design-report/agents/openai.yaml": {
+    "mode": 420,
+    "type": "file",
+    "size": 257,
+    "sha256": "bd8e8ba79937d8fc087ced20bab5f25fa9a160303762f7567ef2bdcb739d3f9a"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-design-report/artifact-template.json": {
+    "mode": 420,
+    "type": "file",
+    "size": 122,
+    "sha256": "54586c722449d873eb16ed211e8591a179f31da5e245dcc82800df649380b127"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-design-report/assets": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-design-report/assets/preview.png": {
+    "mode": 420,
+    "type": "file",
+    "size": 202622,
+    "sha256": "19cd1f36fbc8d7efbf27a674004f2c22145514e77bee3459fb8cc4a89caf870d"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-design-report/assets/reference.docx": {
+    "mode": 420,
+    "type": "file",
+    "size": 2920999,
+    "sha256": "ba1e11258ff52659318a321462a5e598c7bed33cf991329eb91150788fcd1a7b"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-experiment-analysis": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-experiment-analysis/SKILL.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 1456,
+    "sha256": "0b05effc47df0a14f8e0c3e3597e6722224747435546385d38a2cae279bd20b9"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-experiment-analysis/agents": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-experiment-analysis/agents/openai.yaml": {
+    "mode": 420,
+    "type": "file",
+    "size": 269,
+    "sha256": "861a34c68d0d899bb17029316ca8a3d3951a20c206cb8c1890652c2ff06ca626"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-experiment-analysis/artifact-template.json": {
+    "mode": 420,
+    "type": "file",
+    "size": 122,
+    "sha256": "54586c722449d873eb16ed211e8591a179f31da5e245dcc82800df649380b127"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-experiment-analysis/assets": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-experiment-analysis/assets/preview.png": {
+    "mode": 420,
+    "type": "file",
+    "size": 15138,
+    "sha256": "847743ae181c5547e9244823c236408765cff5038e2264e3d72c9e958d30929c"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-experiment-analysis/assets/reference.docx": {
+    "mode": 420,
+    "type": "file",
+    "size": 204643,
+    "sha256": "d823cd0115186b34c01c6e4b4da3be28b64ee73cac849dbd62d6f4bb6385b0fb"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-financial-budget": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-financial-budget/SKILL.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 1486,
+    "sha256": "c0b6b7a62a15597aaf2b1ec679e21da48f533b756127f0aef957cdfe9f3da738"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-financial-budget/agents": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-financial-budget/agents/openai.yaml": {
+    "mode": 420,
+    "type": "file",
+    "size": 269,
+    "sha256": "ac5c29e75dc2e335aa4cab9999d291c081cb07b3eaab6eaaae7f6e6068aba2a4"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-financial-budget/artifact-template.json": {
+    "mode": 420,
+    "type": "file",
+    "size": 125,
+    "sha256": "7aea630ddafb1add3869c6c046e2b8c83464771a29f7e47a59d482480d13d0be"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-financial-budget/assets": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-financial-budget/assets/preview.png": {
+    "mode": 420,
+    "type": "file",
+    "size": 39032,
+    "sha256": "ed0298a7e15051887ad2e9ca775314de1dfae41de33f7f82fee89f39cdcf20e3"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-financial-budget/assets/reference.xlsx": {
+    "mode": 420,
+    "type": "file",
+    "size": 38153,
+    "sha256": "b15aecd03ee94fc3e29fb5c6de33c6090b75287845ab337afe0376cc0330e052"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-investment-committee-memo": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-investment-committee-memo/SKILL.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 1496,
+    "sha256": "68abd08cfe5e073e3c446a3f675f44c5bf98f57434dba679e8acd8a763379a8b"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-investment-committee-memo/agents": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-investment-committee-memo/agents/openai.yaml": {
+    "mode": 420,
+    "type": "file",
+    "size": 281,
+    "sha256": "0264537a7b51ef28e41907d34bd09c3e0259045a84f0591e13fd2efd44a3ac69"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-investment-committee-memo/artifact-template.json": {
+    "mode": 420,
+    "type": "file",
+    "size": 122,
+    "sha256": "54586c722449d873eb16ed211e8591a179f31da5e245dcc82800df649380b127"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-investment-committee-memo/assets": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-investment-committee-memo/assets/preview.png": {
+    "mode": 420,
+    "type": "file",
+    "size": 30330,
+    "sha256": "4f5efed31db5f4468e8619e6ca579be1c57d84d4a023fe9a7c5ec0deafb0812a"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-investment-committee-memo/assets/reference.docx": {
+    "mode": 420,
+    "type": "file",
+    "size": 285035,
+    "sha256": "0a8a4c5b8b1d8c055e19c9eadcc7eac898899f067cbbd20602c4e7c078e545de"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-legal-memorandum": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-legal-memorandum/SKILL.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 1434,
+    "sha256": "51fb9d21baf6119c4ccb1903638a6bac0e859210de63460fffa7025d52e997e0"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-legal-memorandum/agents": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-legal-memorandum/agents/openai.yaml": {
+    "mode": 420,
+    "type": "file",
+    "size": 263,
+    "sha256": "bfd77de2f34d5222e9db4b469aab576426c73b0850f5c3a628e4a5e8f8587887"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-legal-memorandum/artifact-template.json": {
+    "mode": 420,
+    "type": "file",
+    "size": 122,
+    "sha256": "54586c722449d873eb16ed211e8591a179f31da5e245dcc82800df649380b127"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-legal-memorandum/assets": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-legal-memorandum/assets/preview.png": {
+    "mode": 420,
+    "type": "file",
+    "size": 64126,
+    "sha256": "362e4d26521d6eadc5be3c0dec37d7000ef8c967883485e94db60149e4f28660"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-legal-memorandum/assets/reference.docx": {
+    "mode": 420,
+    "type": "file",
+    "size": 593894,
+    "sha256": "d3006f9074e46823d103fe283be19901f55f75c19811558455d7a16c61797355"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-market-trends-report": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-market-trends-report/SKILL.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 1498,
+    "sha256": "d58d019b89cb6f292ac3ab991d561489eef477ff53ce05fb024a0c936f5af26a"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-market-trends-report/agents": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-market-trends-report/agents/openai.yaml": {
+    "mode": 420,
+    "type": "file",
+    "size": 279,
+    "sha256": "fe84725e0c898778a5ed33bfab12a99beb171b08e98a834ebdc55860ac0d4efd"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-market-trends-report/artifact-template.json": {
+    "mode": 420,
+    "type": "file",
+    "size": 126,
+    "sha256": "809c64b42be1f603434873698306295e5344a7871d8a173d6665b89470f62b78"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-market-trends-report/assets": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-market-trends-report/assets/preview.png": {
+    "mode": 420,
+    "type": "file",
+    "size": 19232,
+    "sha256": "a27d80525678a8b0b4e2242dd13aca95f7920ac790b1a66e96d8b39cc4a74e8f"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-market-trends-report/assets/reference.pptx": {
+    "mode": 420,
+    "type": "file",
+    "size": 1972113,
+    "sha256": "52396c3a70dc11d35989bb4e3f9a96d2c728c5eba8a1aad96920cfe24cff59fa"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-minimal-letterhead": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-minimal-letterhead/SKILL.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 1470,
+    "sha256": "880ef094d4d0c89a7bde5ce9bbe4086625c186651e9e6efc8ba8bdd7cc77f9d5"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-minimal-letterhead/agents": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-minimal-letterhead/agents/openai.yaml": {
+    "mode": 420,
+    "type": "file",
+    "size": 267,
+    "sha256": "f5b9311a53150e4d19c5c90664942a1537a73cec687b128dc6c6301261b803ad"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-minimal-letterhead/artifact-template.json": {
+    "mode": 420,
+    "type": "file",
+    "size": 122,
+    "sha256": "54586c722449d873eb16ed211e8591a179f31da5e245dcc82800df649380b127"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-minimal-letterhead/assets": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-minimal-letterhead/assets/preview.png": {
+    "mode": 420,
+    "type": "file",
+    "size": 59454,
+    "sha256": "827df9ab20cdcf07a62955c568343c27f1c597336444c84ad98d7c0ca7983b6b"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-minimal-letterhead/assets/reference.docx": {
+    "mode": 420,
+    "type": "file",
+    "size": 10301,
+    "sha256": "5dd55e0f5bbdb603d98db5b8560b8babc6005cbb7f31ce8ed63569417c5cae86"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-operating-calendar": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-operating-calendar/SKILL.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 1500,
+    "sha256": "33bb660791a0b9a21628a42c34934932220203b6aabd84e98cb1b45327d0384c"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-operating-calendar/agents": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-operating-calendar/agents/openai.yaml": {
+    "mode": 420,
+    "type": "file",
+    "size": 273,
+    "sha256": "cd41437c7fd39159b21d5decedcb3b53c9737e3854b7f9e46efcddfb73f610d5"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-operating-calendar/artifact-template.json": {
+    "mode": 420,
+    "type": "file",
+    "size": 125,
+    "sha256": "7aea630ddafb1add3869c6c046e2b8c83464771a29f7e47a59d482480d13d0be"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-operating-calendar/assets": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-operating-calendar/assets/preview.png": {
+    "mode": 420,
+    "type": "file",
+    "size": 91416,
+    "sha256": "9511212decb870cdded2c5ef0388c1bf4b3ee1747020a61f1c3a7078b2cfa6f2"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-operating-calendar/assets/reference.xlsx": {
+    "mode": 420,
+    "type": "file",
+    "size": 46268,
+    "sha256": "fef758154889db179aa701a3916d6e6d30c61935b92ad259dd603322888e7f5f"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-operating-review": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-operating-review/SKILL.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 1483,
+    "sha256": "6d63c5cd025ffe936e7bab5db3023672bbaec26af55c2bb8b057d38c202c9c32"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-operating-review/agents": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-operating-review/agents/openai.yaml": {
+    "mode": 420,
+    "type": "file",
+    "size": 271,
+    "sha256": "871a705a344c2461bb3fa43495ac9fb9724ee583649cafce9b97a054702b6cae"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-operating-review/artifact-template.json": {
+    "mode": 420,
+    "type": "file",
+    "size": 126,
+    "sha256": "809c64b42be1f603434873698306295e5344a7871d8a173d6665b89470f62b78"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-operating-review/assets": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-operating-review/assets/preview.png": {
+    "mode": 420,
+    "type": "file",
+    "size": 37218,
+    "sha256": "e8f1dd91d1258c3bb06d2b1d0c52a49fce454e6682732e2e8f43b37c494e3c19"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-operating-review/assets/reference.pptx": {
+    "mode": 420,
+    "type": "file",
+    "size": 306716,
+    "sha256": "ec2084d143a4d52857cc06c24129abbb45c45d04b90cca06e319ac26d3cadd4f"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-project-kickoff": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-project-kickoff/SKILL.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 1463,
+    "sha256": "aa893ebd89e7c8d1db4261d01cc2b1add35d78d00785871ccaaa5fc8db783ec9"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-project-kickoff/agents": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-project-kickoff/agents/openai.yaml": {
+    "mode": 420,
+    "type": "file",
+    "size": 269,
+    "sha256": "3f62c61df6cd23f81c6f412994f40ff176b006d40b913b3c423480279eb4aff5"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-project-kickoff/artifact-template.json": {
+    "mode": 420,
+    "type": "file",
+    "size": 126,
+    "sha256": "809c64b42be1f603434873698306295e5344a7871d8a173d6665b89470f62b78"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-project-kickoff/assets": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-project-kickoff/assets/preview.png": {
+    "mode": 420,
+    "type": "file",
+    "size": 25166,
+    "sha256": "02823427c2552cc894d333fb96fd2fb3e3ac04503904ab6f73643ca877362df5"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-project-kickoff/assets/reference.pptx": {
+    "mode": 420,
+    "type": "file",
+    "size": 2082300,
+    "sha256": "b1b15cb0c23ad524f9832749ec31b775719bae2bdba897de9c9d8556ca00a44c"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-project-tracker": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-project-tracker/SKILL.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 1484,
+    "sha256": "d97d5be20189b7f53dd269b6e1c5f694eaf53e5a72f6559fcb1578911b7cda82"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-project-tracker/agents": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-project-tracker/agents/openai.yaml": {
+    "mode": 420,
+    "type": "file",
+    "size": 267,
+    "sha256": "e858f66b2cd5a17a12ce7059be560d47c429faf34c1665b716c62e67b6b10496"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-project-tracker/artifact-template.json": {
+    "mode": 420,
+    "type": "file",
+    "size": 125,
+    "sha256": "7aea630ddafb1add3869c6c046e2b8c83464771a29f7e47a59d482480d13d0be"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-project-tracker/assets": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-project-tracker/assets/preview.png": {
+    "mode": 420,
+    "type": "file",
+    "size": 40120,
+    "sha256": "02811cec6d9b7d493342e03e08b6b56719af1eb6087a50dc6696c600ada90381"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-project-tracker/assets/reference.xlsx": {
+    "mode": 420,
+    "type": "file",
+    "size": 14846,
+    "sha256": "dd8bd283784a189061a328040e845a6d26807e2ee1005a9a195e6dc7baeefe80"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-sales-pipeline": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-sales-pipeline/SKILL.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 1482,
+    "sha256": "15cfeeedf440021f16ed3f3ad8c7c1ef6d48898b9447741e223d2fb41cfc9800"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-sales-pipeline/agents": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-sales-pipeline/agents/openai.yaml": {
+    "mode": 420,
+    "type": "file",
+    "size": 265,
+    "sha256": "ea4d9150379ec34447137c436a7459c5f8863e7532a6a87ef1d0871412ee4410"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-sales-pipeline/artifact-template.json": {
+    "mode": 420,
+    "type": "file",
+    "size": 125,
+    "sha256": "7aea630ddafb1add3869c6c046e2b8c83464771a29f7e47a59d482480d13d0be"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-sales-pipeline/assets": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-sales-pipeline/assets/preview.png": {
+    "mode": 420,
+    "type": "file",
+    "size": 53355,
+    "sha256": "3208ad8051412202774cfe3f34de468d89a6c1e27cf00166933085f6a167cabe"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-sales-pipeline/assets/reference.xlsx": {
+    "mode": 420,
+    "type": "file",
+    "size": 16979,
+    "sha256": "a6ac1045a0602cbb4d90878949c2970d0e815dd9f98fe34d0ff92b69ebbb4db3"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-simple-dark-mode": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-simple-dark-mode/SKILL.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 1478,
+    "sha256": "b7c8d0c05f75878b9bc21e56a57c41ec1aa29700aca0a24822be0f9f1bd53207"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-simple-dark-mode/agents": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-simple-dark-mode/agents/openai.yaml": {
+    "mode": 420,
+    "type": "file",
+    "size": 271,
+    "sha256": "a5c3103290b5e28efec73cf5ad7af7c5a9212ff422256e2e831f11b456e995b9"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-simple-dark-mode/artifact-template.json": {
+    "mode": 420,
+    "type": "file",
+    "size": 126,
+    "sha256": "809c64b42be1f603434873698306295e5344a7871d8a173d6665b89470f62b78"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-simple-dark-mode/assets": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-simple-dark-mode/assets/preview.png": {
+    "mode": 420,
+    "type": "file",
+    "size": 115324,
+    "sha256": "2082897b4e30c9a2ed137e51fa32503b1e85afb53c8555521ba374b75df622ec"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-simple-dark-mode/assets/reference.pptx": {
+    "mode": 420,
+    "type": "file",
+    "size": 3244996,
+    "sha256": "042ef2fcb8726524a1e773e3c73bf8b8c10b98f67ae675eb01c4501b9365a897"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-simple-light-mode": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-simple-light-mode/SKILL.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 1487,
+    "sha256": "7c68430c6cf57b55b457d4735dbd1a46b889bef135a32222902dd0848b6e1752"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-simple-light-mode/agents": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-simple-light-mode/agents/openai.yaml": {
+    "mode": 420,
+    "type": "file",
+    "size": 273,
+    "sha256": "82d2ce0edb52134049718151db345ad1748a358ae1d20c2efe9e274404a1d029"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-simple-light-mode/artifact-template.json": {
+    "mode": 420,
+    "type": "file",
+    "size": 126,
+    "sha256": "809c64b42be1f603434873698306295e5344a7871d8a173d6665b89470f62b78"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-simple-light-mode/assets": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-simple-light-mode/assets/preview.png": {
+    "mode": 420,
+    "type": "file",
+    "size": 28676,
+    "sha256": "9c12751105bbdea9e74df059b0b86c6eef22b3af34ba38c090edb7e2e4acf3ac"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-simple-light-mode/assets/reference.pptx": {
+    "mode": 420,
+    "type": "file",
+    "size": 1519451,
+    "sha256": "2ae8105571f68403f438458cd51e6ad14f0d989c7af64239e280437a4ac2a633"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-strategy-memorandum": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-strategy-memorandum/SKILL.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 1446,
+    "sha256": "51d7882ac94e8e57b323394825728c33925af878806e37277217c2dc12a912e5"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-strategy-memorandum/agents": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-strategy-memorandum/agents/openai.yaml": {
+    "mode": 420,
+    "type": "file",
+    "size": 269,
+    "sha256": "1a277cd3a6fd6be41fee1546183f5ea1119ea7c661e1cf156c6cce9b55c65bd3"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-strategy-memorandum/artifact-template.json": {
+    "mode": 420,
+    "type": "file",
+    "size": 122,
+    "sha256": "54586c722449d873eb16ed211e8591a179f31da5e245dcc82800df649380b127"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-strategy-memorandum/assets": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-strategy-memorandum/assets/preview.png": {
+    "mode": 420,
+    "type": "file",
+    "size": 16294,
+    "sha256": "2a615bd6c983a2a747b8cb5ea82e47e92ff3b1736a1d94742c57a9ce42aa1d55"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-strategy-memorandum/assets/reference.docx": {
+    "mode": 420,
+    "type": "file",
+    "size": 2686019,
+    "sha256": "13bd3ae7aef4b3ae76c5d65200acd654c922782974dac18672e973fad93bd453"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-system-design": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-system-design/SKILL.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 1445,
+    "sha256": "87f7b7ed1b0d8410f5e5971cd7f7db9a4165e2f37069e97e52dbfb469b75a57c"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-system-design/agents": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-system-design/agents/openai.yaml": {
+    "mode": 420,
+    "type": "file",
+    "size": 257,
+    "sha256": "fe728562ab2857373f460a25b5954ef532034ab21e10c38b36c739bc5c5ffd77"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-system-design/artifact-template.json": {
+    "mode": 420,
+    "type": "file",
+    "size": 122,
+    "sha256": "54586c722449d873eb16ed211e8591a179f31da5e245dcc82800df649380b127"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-system-design/assets": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-system-design/assets/preview.png": {
+    "mode": 420,
+    "type": "file",
+    "size": 23946,
+    "sha256": "703c8a85a22ebaaa129dc99f82e530532b5b46ad862d7cb253716e9759d5dfe0"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-system-design/assets/reference.docx": {
+    "mode": 420,
+    "type": "file",
+    "size": 501311,
+    "sha256": "13504f6c221a42c1726460a9e865e563355539ff97d702d6c9b2267b4b261d76"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-team-alignment": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-team-alignment/SKILL.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 1473,
+    "sha256": "26d7cafdcd1899a937b325c5d02ac57c162d45002153be33a934d35f81eb6110"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-team-alignment/agents": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-team-alignment/agents/openai.yaml": {
+    "mode": 420,
+    "type": "file",
+    "size": 267,
+    "sha256": "dea3d32230b1e7e62d3f4844d3b1ddceb5f2855cd5fbe31e0849e51e1aa11c1d"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-team-alignment/artifact-template.json": {
+    "mode": 420,
+    "type": "file",
+    "size": 126,
+    "sha256": "809c64b42be1f603434873698306295e5344a7871d8a173d6665b89470f62b78"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-team-alignment/assets": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-team-alignment/assets/preview.png": {
+    "mode": 420,
+    "type": "file",
+    "size": 66065,
+    "sha256": "8b91c66156be4dec9eca517ca330c246ca8e863ee9b97b3b93cc159eee362c2d"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-team-alignment/assets/reference.pptx": {
+    "mode": 420,
+    "type": "file",
+    "size": 7330920,
+    "sha256": "72b9f23a07bfd679cde36757acb11ec99900b4be0f5d393a5b4e8c6fdce4286d"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-three-statement-forecast": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-three-statement-forecast/SKILL.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 1552,
+    "sha256": "74f4a5cccec0107b861548b157e04c51d9b58ec13a990c86394b4c529b8ecf41"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-three-statement-forecast/agents": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-three-statement-forecast/agents/openai.yaml": {
+    "mode": 420,
+    "type": "file",
+    "size": 285,
+    "sha256": "240d75e1e7b2f33a16a10538e125342ee6c701637e12c0fbe0d8aad5919b48eb"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-three-statement-forecast/artifact-template.json": {
+    "mode": 420,
+    "type": "file",
+    "size": 125,
+    "sha256": "7aea630ddafb1add3869c6c046e2b8c83464771a29f7e47a59d482480d13d0be"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-three-statement-forecast/assets": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-three-statement-forecast/assets/preview.png": {
+    "mode": 420,
+    "type": "file",
+    "size": 53375,
+    "sha256": "2fb61600384025e1266d5f8b9c641cba4b535b78a03173b5d051662f4df48e68"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/skills/artifact-template-three-statement-forecast/assets/reference.xlsx": {
+    "mode": 420,
+    "type": "file",
+    "size": 136927,
+    "sha256": "4a4709ff9b860f762f4c3bb224c5084e9820d9a8d8085395aa121728c899d0c2"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/tests": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/tests/__pycache__": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/tests/__pycache__/test_openai_templates_plugin.cpython-312-pytest-9.0.3.pyc": {
+    "mode": 420,
+    "type": "file",
+    "size": 31707,
+    "sha256": "291fdbce57a5836481ae303e51cea26ba116e37a69691f2d0b53c1019b55d22c"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/openai-templates/0.1.1/tests/test_openai_templates_plugin.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 9266,
+    "sha256": "e2250e07a0e9f24e011a578eef4f801cf87cf5210c295ae31da0741e626044c2"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/pages": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/pages/.codex-remote-plugin-install.json": {
+    "mode": 384,
+    "type": "file",
+    "size": 104,
+    "sha256": "15ddc5e25edb3291a9d469a262a426399779b146340237a053cbbdf064b302ea"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/pages/0.1.18": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/pages/0.1.18/.app.json": {
+    "mode": 420,
+    "type": "file",
+    "size": 102,
+    "sha256": "e65e95ae0ce0680547a5ed0d125b381b6b84315e956c5b5d8a3295ad62c748d9"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/pages/0.1.18/.codex-plugin": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/pages/0.1.18/.codex-plugin/plugin.json": {
+    "mode": 420,
+    "type": "file",
+    "size": 926,
+    "sha256": "01201c9aab2a4a2025b37a32a5ee7e6fd03e8571e62f5c7d988ddb2d73ca44d9"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/pages/0.1.18/OWNERS": {
+    "mode": 420,
+    "type": "file",
+    "size": 34,
+    "sha256": "2906faa39a61a19282209cd92c0e387d86de33866aceb37b827d0085f2bf4c50"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/pages/0.1.18/assets": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/pages/0.1.18/assets/composer-icon.svg": {
+    "mode": 420,
+    "type": "file",
+    "size": 1549,
+    "sha256": "57bef949ed7df636c4a5a87f4bfcbc96491ac851ec52323e18f95c0ba3cf3c3d"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/pages/0.1.18/assets/composer.svg": {
+    "mode": 420,
+    "type": "file",
+    "size": 1549,
+    "sha256": "57bef949ed7df636c4a5a87f4bfcbc96491ac851ec52323e18f95c0ba3cf3c3d"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/pages/0.1.18/assets/logo-dark.svg": {
+    "mode": 420,
+    "type": "file",
+    "size": 1546,
+    "sha256": "78f7eb94927109ecf10af6fca0da1358b4753521e277e5c9b131665b8a07ee88"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/pages/0.1.18/assets/logo.svg": {
+    "mode": 420,
+    "type": "file",
+    "size": 1546,
+    "sha256": "5192460b8512158aa91a42f302eacb21e716462cdb5c6675232068d3e9a8e8a9"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/pages/0.1.18/skills": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/pages/0.1.18/skills/maintain-space": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/pages/0.1.18/skills/maintain-space/SKILL.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 6406,
+    "sha256": "334bf85b62e733cf6a392ab8421ef768a9f6e5d74c16db2c4cb3fcbb3f8c496c"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/pages/0.1.18/skills/maintain-space/agents": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/pages/0.1.18/skills/maintain-space/agents/openai.yaml": {
+    "mode": 420,
+    "type": "file",
+    "size": 239,
+    "sha256": "3c7b43e378888955e9be6f02133b7522a0614f94f86d7066d72322ce2dc71325"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/pages/0.1.18/skills/manage-schedules": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/pages/0.1.18/skills/manage-schedules/SKILL.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 7719,
+    "sha256": "e0a464a83f15a6e896c5536cab775f667ebd0dd61eb64fe3c877a41935d64bd9"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/pages/0.1.18/skills/manage-schedules/agents": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/pages/0.1.18/skills/manage-schedules/agents/openai.yaml": {
+    "mode": 420,
+    "type": "file",
+    "size": 201,
+    "sha256": "502b266f394596a35919f7d77948e803fecc8f0ab7044893918b87a6fa8e45f6"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/pages/0.1.18/skills/organize-space": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/pages/0.1.18/skills/organize-space/SKILL.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 6605,
+    "sha256": "dfa8bfae86785a98e43b1ca0af67a9c89b90c658eee7fc7ad4ccfe8cc84a267b"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/pages/0.1.18/skills/organize-space/agents": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/pages/0.1.18/skills/organize-space/agents/openai.yaml": {
+    "mode": 420,
+    "type": "file",
+    "size": 235,
+    "sha256": "a6e28b204d44f1312cdf715a73c9dacfda8b3d742ed5a57ef926bf4a15219f8f"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/pages/0.1.18/skills/write-page": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/pages/0.1.18/skills/write-page/SKILL.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 9987,
+    "sha256": "553c41b3d9716ac0f35608cc31aecc9a36c2d25b0486207c2a41b2b27b162387"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/pages/0.1.18/skills/write-page/agents": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/pages/0.1.18/skills/write-page/agents/openai.yaml": {
+    "mode": 420,
+    "type": "file",
+    "size": 252,
+    "sha256": "b33464c83ab6cf5506a5097fb96ff13a0e3956a4ddf852b5c538b46580fa27a0"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/pages/0.1.18/skills/write-page/references": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/pages/0.1.18/skills/write-page/references/page-content.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 15970,
+    "sha256": "905ba4f805f3f832ae924e748659341448c0d4c1f22349a836ebfc596da177a3"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/pages/0.1.18/skills/write-page/writing_quality.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 6234,
+    "sha256": "aba5dc15cc0ac8f1d4db686a0b449d6fe0f3879a22b1e52c217fa9398a02b2b1"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/plugin-management": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/plugin-management/.codex-remote-plugin-install.json": {
+    "mode": 384,
+    "type": "file",
+    "size": 104,
+    "sha256": "d076184ddee9188e7fc19a074b8e07f7a60ca6a4b038daaebd0c9f40f8eda1da"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/plugin-management/0.1.0": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/plugin-management/0.1.0/.app.json": {
+    "mode": 420,
+    "type": "file",
+    "size": 126,
+    "sha256": "8392e042417a3de2db3a9f2e2385f4bd80f462c98ed2d8a6ef60dff002e2f06c"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/plugin-management/0.1.0/.codex-plugin": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/plugin-management/0.1.0/.codex-plugin/plugin.json": {
+    "mode": 420,
+    "type": "file",
+    "size": 1538,
+    "sha256": "5deb3b2f943fff03a928e1faed2b040bad7dabcf71c11f183fc67dcc0793e3c3"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/plugin-management/0.1.0/assets": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/plugin-management/0.1.0/assets/plugin-management.svg": {
+    "mode": 420,
+    "type": "file",
+    "size": 455,
+    "sha256": "6776a53774519dab5c8e338a6e9fa058932e0ef4dfcc053735f10683081d30ef"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/plugin-management/0.1.0/skills": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/plugin-management/0.1.0/skills/plugin-management": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/plugin-management/0.1.0/skills/plugin-management/SKILL.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 2983,
+    "sha256": "653841cc21205269f08b0ce135891e1518dac616a766bcfb0b57d788d3f68b10"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/work-pets": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/work-pets/.codex-remote-plugin-install.json": {
+    "mode": 384,
+    "type": "file",
+    "size": 104,
+    "sha256": "85162fb01074ce886c40546d6afd973e78736e8f1f9bfbfab9cd5496f9a9e117"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/work-pets/0.1.6": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/work-pets/0.1.6/.app.json": {
+    "mode": 420,
+    "type": "file",
+    "size": 116,
+    "sha256": "05d6956723a574eabf56e6018311930f4ddca56ba59ceb685fb95a3c36535477"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/work-pets/0.1.6/.codex-plugin": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/work-pets/0.1.6/.codex-plugin/plugin.json": {
+    "mode": 420,
+    "type": "file",
+    "size": 1837,
+    "sha256": "c1f27c0864bec7c88e14d3369da870202e98cff4df4ee786747bd22cc93ac29a"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/work-pets/0.1.6/assets": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/work-pets/0.1.6/assets/egg.svg": {
+    "mode": 420,
+    "type": "file",
+    "size": 1440,
+    "sha256": "6385c8fa77bfb72903af49e8a5c2b9db42a864e4fd49e17465236f935822e9f0"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/work-pets/0.1.6/references": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/work-pets/0.1.6/references/sprite-sheet-contract.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 22252,
+    "sha256": "88d05bfbc76c3a2a64d128cafe5792cc43f78170fee85496d50cb3925934d093"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/work-pets/0.1.6/references/upload-session.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 1215,
+    "sha256": "59afd4f37755ce5cda6a49ec2f31c6f8c5f3df271c18f6c4073012b70d37e6e6"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/work-pets/0.1.6/skills": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/work-pets/0.1.6/skills/create-pet": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/work-pets/0.1.6/skills/create-pet/SKILL.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 17353,
+    "sha256": "841354fb8116f8fdfd3b643b30828f5180196c594d3fed9b669b948b88892af1"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/work-pets/0.1.6/skills/create-pet/agents": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/work-pets/0.1.6/skills/create-pet/agents/openai.yaml": {
+    "mode": 420,
+    "type": "file",
+    "size": 219,
+    "sha256": "16690f3d631222d7479bd052c7fda536b4553224a61109fe663f414605d3e27a"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/work-pets/0.1.6/skills/create-pet/references": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/work-pets/0.1.6/skills/create-pet/references/animation-rows.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 2583,
+    "sha256": "d27b08d599e73cf6a65a03d2b8ad49e9ad408e18292636164e7b2d2f1815615f"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/work-pets/0.1.6/skills/create-pet/scripts": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/work-pets/0.1.6/skills/create-pet/scripts/assemble_extended_atlas.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 21681,
+    "sha256": "a8684c22e9409f1add388688218c8fa7e267b88b91fcb3edc3280dc87ebf1c3e"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/work-pets/0.1.6/skills/create-pet/scripts/combine_direction_blind_verdicts.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 1962,
+    "sha256": "4dad56adaad032a4e6d070494b0ab2ca316429cf69363450f9fbf7135d1c2d42"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/work-pets/0.1.6/skills/create-pet/scripts/compose_atlas.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 5756,
+    "sha256": "d690f42252746b3306007b269168e62cff08b36d58e9aef246b78d986b6a10d5"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/work-pets/0.1.6/skills/create-pet/scripts/compose_cardinal_anchor_strip.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 1401,
+    "sha256": "e67ac9816a909cad136189bf23eddf8b16e0fcb430ade2262556bbd12db2bca5"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/work-pets/0.1.6/skills/create-pet/scripts/derive_running_left_from_running_right.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 5183,
+    "sha256": "ae42859720220fe8a407fc0dfff06e8344e535c6c8019220b1f63db7714baa77"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/work-pets/0.1.6/skills/create-pet/scripts/despill_chroma_edges.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 10839,
+    "sha256": "dc93a5e752f4100e55010205462a8e7272bac451ee7e29b525abd6157a7fe309"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/work-pets/0.1.6/skills/create-pet/scripts/extract_cardinal_anchors.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 5006,
+    "sha256": "55434d06bc328b1879d98c821f2586963910f89926f4dcbe92682b25555a8cde"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/work-pets/0.1.6/skills/create-pet/scripts/extract_strip_frames.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 14090,
+    "sha256": "af2cfea385189df30674c91f4658a49e5b51e58471057fbca0b3319cf932c75e"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/work-pets/0.1.6/skills/create-pet/scripts/inspect_frames.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 9456,
+    "sha256": "d8a43f01970c511c74f77d256c2c81d41e70cfb7ec234f5bbd76b60b3ebbdfe4"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/work-pets/0.1.6/skills/create-pet/scripts/make_contact_sheet.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 3450,
+    "sha256": "721399a805ae58d91a85a4d27e8bb3503eb20f4132fe4261e83acc166adc6a56"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/work-pets/0.1.6/skills/create-pet/scripts/make_direction_blind_qa_sheet.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 5370,
+    "sha256": "52f2a29251872449fed51c7744c3f9f503274ee288eb23efc29a2c568b0d52bd"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/work-pets/0.1.6/skills/create-pet/scripts/make_direction_qa_sheet.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 4929,
+    "sha256": "ed09a31b3bc9b68f929a7a85be367c5b7d5639215260f98af6c97df896197908"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/work-pets/0.1.6/skills/create-pet/scripts/measure_direction_continuity.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 6706,
+    "sha256": "e24b7065af82eab5638f1fcdeb627d497391a2f1e9ba19801827d1db3a6d8c2d"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/work-pets/0.1.6/skills/create-pet/scripts/prepare_pet_run.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 51327,
+    "sha256": "cf806ef4bed67b6ca0a568fdc3a47b178272a82d1ce5949ebc2b3c59e4f253d9"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/work-pets/0.1.6/skills/create-pet/scripts/render_animation_previews.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 2549,
+    "sha256": "5fe50707052f815964cc5bfc35addc79b2d55f3331fc7562645e56835211a400"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/work-pets/0.1.6/skills/create-pet/scripts/validate_atlas.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 10678,
+    "sha256": "cd28f7e3ed4fc7d879239cbf4d4a5ae1fb603f457b14560ef2c8e15899507b6b"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/work-pets/0.1.6/skills/create-pet/scripts/validate_direction_blind_verdicts.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 3836,
+    "sha256": "7871667432918e0ffcdbb9beaf88a01c0af4b9e2809c5000f7b533a9ddc6e13d"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/work-pets/0.1.6/skills/create-pet/scripts/validate_pet_quality.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 12965,
+    "sha256": "2e83db1c5a2a16d4ddc3ef22c4c9856310c438a8426bad99f962f99e9597e555"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/work-pets/0.1.6/skills/pets": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/work-pets/0.1.6/skills/pets/SKILL.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 3552,
+    "sha256": "1bf5d45fd6a6390aab777229293fb05cef7cf898aac882f8955e40c378e52fcd"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/work-pets/0.1.6/skills/pets/agents": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/work-pets/0.1.6/skills/pets/agents/openai.yaml": {
+    "mode": 420,
+    "type": "file",
+    "size": 204,
+    "sha256": "2570b140c41a0080edcdb323235690ae8f18b0e3c40dbe08a7dc57ce006b8cf2"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/work-pets/0.1.6/skills/update-pet": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/work-pets/0.1.6/skills/update-pet/SKILL.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 4272,
+    "sha256": "c63c98d67b6ad781a72a8f9837ba1fb5e2d2a8054a2562e4025890a97d8a0e67"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/work-pets/0.1.6/skills/update-pet/agents": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/plugins/cache/openai-curated-remote/work-pets/0.1.6/skills/update-pet/agents/openai.yaml": {
+    "mode": 420,
+    "type": "file",
+    "size": 220,
+    "sha256": "b031edf7b860302fc56ff938ee90906dd09e9d6c3e44447847a068417eaf80b9"
+  },
+  "home/.codex/queue_1.sqlite": {
+    "mode": 420,
+    "type": "file",
+    "size": 40960,
+    "sha256": "1214da308dee2a009aba9b85d6dfa4cad665050be0968e6bfe04ed0e51465fbd"
+  },
+  "home/.codex/sessions": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/sessions/2026": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/sessions/2026/10": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/sessions/2026/10/01": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/sessions/2026/10/01/rollout-2026-10-01T14-36-13-01a0f777-1a0d-7fa1-8500-2e853d0b0aac.jsonl": {
+    "mode": 420,
+    "type": "file",
+    "size": 624504,
+    "sha256": "4f43bfc2f5962be5745ae9209758d507aebab56f7a6eb8c94d714dfc870d91d6"
+  },
+  "home/.codex/shell_snapshots": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/skills": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/skills/.system": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/skills/.system/.codex-system-skills.marker": {
+    "mode": 420,
+    "type": "file",
+    "size": 17,
+    "sha256": "4b857d61192f2fa2df02f1200356167abf381eb1080de74972acd52a365eefca"
+  },
+  "home/.codex/skills/.system/imagegen": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/skills/.system/imagegen/LICENSE.txt": {
+    "mode": 420,
+    "type": "file",
+    "size": 10776,
+    "sha256": "4dd13869245e356246a5b770723247bbb80a8f07a181d1d3d873a1734297cdb9"
+  },
+  "home/.codex/skills/.system/imagegen/SKILL.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 19201,
+    "sha256": "681ddb4ad6d06a2acc78a3535b583f8d0c1ea800ecda3d56370d3310fd2cd4ba"
+  },
+  "home/.codex/skills/.system/imagegen/agents": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/skills/.system/imagegen/agents/openai.yaml": {
+    "mode": 420,
+    "type": "file",
+    "size": 275,
+    "sha256": "9ca574af14580dc7a2a3dc37a1796d17f93cb8850be66501f0799ef8603e9dc0"
+  },
+  "home/.codex/skills/.system/imagegen/assets": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/skills/.system/imagegen/assets/imagegen-small.svg": {
+    "mode": 420,
+    "type": "file",
+    "size": 2889,
+    "sha256": "cff5f34f57ff60b3ee92eaedd17b15e96dd4b9e776df3e78936c9e00d42be294"
+  },
+  "home/.codex/skills/.system/imagegen/assets/imagegen.png": {
+    "mode": 420,
+    "type": "file",
+    "size": 1711,
+    "sha256": "95952f644064eb9e890f98d8db07216347186526e4c41ad66d3420629eb86e20"
+  },
+  "home/.codex/skills/.system/imagegen/references": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/skills/.system/imagegen/references/cli.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 9655,
+    "sha256": "ecfc2e09261a0feb3482517a5fa0ff410cb7d1958e3cbd2ac6b61586f5b81405"
+  },
+  "home/.codex/skills/.system/imagegen/references/codex-network.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 1779,
+    "sha256": "c88298ca4481f6116a16fa7987434fc977f8b311c1bbc0c3d862ffd0c5981148"
+  },
+  "home/.codex/skills/.system/imagegen/references/image-api.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 6072,
+    "sha256": "dc975d7af8a4888967251a0276014b4a71ea30455294944b762256373ce3e569"
+  },
+  "home/.codex/skills/.system/imagegen/references/prompting.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 8282,
+    "sha256": "b210b051c775860267080941eba968212bf0ac7fce581d75c5dcc217d8293f8b"
+  },
+  "home/.codex/skills/.system/imagegen/references/sample-prompts.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 17617,
+    "sha256": "70474177d151855b175c6133de2aae1d90b7f146b0dab50ec830972c47d72183"
+  },
+  "home/.codex/skills/.system/imagegen/scripts": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/skills/.system/imagegen/scripts/image_gen.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 34667,
+    "sha256": "b4345cf835e5b593b97df6bb2b70bda493b8a97eee4cabbc99b2fa57dba9b448"
+  },
+  "home/.codex/skills/.system/imagegen/scripts/remove_chroma_key.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 13905,
+    "sha256": "a5893c4bd04b21abced33731ea89d2ac428e81d92a0368eb18ffbe4fda5253e2"
+  },
+  "home/.codex/skills/.system/openai-docs": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/skills/.system/openai-docs/LICENSE.txt": {
+    "mode": 420,
+    "type": "file",
+    "size": 10776,
+    "sha256": "4dd13869245e356246a5b770723247bbb80a8f07a181d1d3d873a1734297cdb9"
+  },
+  "home/.codex/skills/.system/openai-docs/SKILL.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 5437,
+    "sha256": "aa6829e21df2223167c85d2e49b6337a7345c84c1033f1ec10182c7882b36d45"
+  },
+  "home/.codex/skills/.system/openai-docs/agents": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/skills/.system/openai-docs/agents/openai.yaml": {
+    "mode": 420,
+    "type": "file",
+    "size": 370,
+    "sha256": "44b9efac6be1bae32d869aa2942fecbe4dcae82682ee03e4120f2f9b7d4658ec"
+  },
+  "home/.codex/skills/.system/openai-docs/assets": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/skills/.system/openai-docs/assets/openai-small.svg": {
+    "mode": 420,
+    "type": "file",
+    "size": 1091,
+    "sha256": "45be1f0757eb18889eefb1e7db79668ef46a275dc4e0e78e8df5ebd7f6cdeadc"
+  },
+  "home/.codex/skills/.system/openai-docs/assets/openai.png": {
+    "mode": 420,
+    "type": "file",
+    "size": 1429,
+    "sha256": "156cc84d7332bfe95b310350bd470b690d22aa33d65340cc6c2e06022946194c"
+  },
+  "home/.codex/skills/.system/openai-docs/references": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/skills/.system/openai-docs/references/codex-self-knowledge.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 7417,
+    "sha256": "8c8fb00e6e5cb1977924f5164684a6095427fa828bbc765225f17d9aeb79a912"
+  },
+  "home/.codex/skills/.system/openai-docs/references/latest-model.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 2147,
+    "sha256": "bdf241d505eb071b1c7b0b732f842b701348cf6eab95d1c36fd97edac64dd158"
+  },
+  "home/.codex/skills/.system/openai-docs/references/mcp-diagnostics.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 2318,
+    "sha256": "49bbd2f73df7bbd7f86c80425dea4da2d301c22046080399a36bfc0ca49509e9"
+  },
+  "home/.codex/skills/.system/openai-docs/references/model-migration.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 5094,
+    "sha256": "bef46671036c8e483b7f65df931171217d55a8d26098851c2f89784db8edca2f"
+  },
+  "home/.codex/skills/.system/openai-docs/references/model-selection.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 1344,
+    "sha256": "ba2d164abbca30435a460a0bc3a7d82398dce2bdf092705c98ba55b3f3af38a8"
+  },
+  "home/.codex/skills/.system/openai-docs/references/official-docs.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 3337,
+    "sha256": "7962f2dce55089b93bde4115bb89fd42f20993c1597a2b13edd4956f463875b9"
+  },
+  "home/.codex/skills/.system/openai-docs/references/prompting-guide.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 10166,
+    "sha256": "548d4ca73a34cd4b0041ef05a899592e8c50772b8f3a76c579ec941e403e19f6"
+  },
+  "home/.codex/skills/.system/openai-docs/references/upgrade-guide.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 1027,
+    "sha256": "ecac89155f910f064fd306e89c74585cabdb2142aba4f2acc0cead092ae1d1a5"
+  },
+  "home/.codex/skills/.system/openai-docs/references/upgrading-to-gpt-6-astra.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 18993,
+    "sha256": "62ef6d22684662a019d203834fe1205a07e4ca4c65dddcbabe1bb51efe1aa840"
+  },
+  "home/.codex/skills/.system/openai-docs/scripts": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/skills/.system/openai-docs/scripts/fetch-codex-manual.mjs": {
+    "mode": 420,
+    "type": "file",
+    "size": 16085,
+    "sha256": "f53eb6d2f286e9efcc397e8bee93a938e37296c90953e4e06e94899ef1b6c363"
+  },
+  "home/.codex/skills/.system/openai-docs/scripts/resolve-latest-model-info": {
+    "mode": 420,
+    "type": "file",
+    "size": 1038,
+    "sha256": "7354dbb030ca0736dd633a7ca1b930cf640abd40370725dea3a458cb51d49523"
+  },
+  "home/.codex/skills/.system/openai-docs/scripts/resolve-latest-model-info.cjs": {
+    "mode": 420,
+    "type": "file",
+    "size": 3937,
+    "sha256": "eeb1bb486018e16b37edfc06b1a37179dbc672982d501040d4f7142f29dd2e64"
+  },
+  "home/.codex/skills/.system/review-agent": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/skills/.system/review-agent/SKILL.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 2661,
+    "sha256": "07079efd0dc76f05fade424e5dfb048dce1de2df7626e1a4f56292a4f3f92228"
+  },
+  "home/.codex/skills/.system/review-agent/agents": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/skills/.system/review-agent/agents/openai.yaml": {
+    "mode": 420,
+    "type": "file",
+    "size": 252,
+    "sha256": "4d867a46d15e36ac880176484aae160f59855340c6059b2ea6ab9fbc9af084de"
+  },
+  "home/.codex/skills/.system/skill-creator": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/skills/.system/skill-creator/SKILL.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 15311,
+    "sha256": "6656e54755638e8efcf275a472b9672eaa8a9a1b9e59dc210e275b03b59e1e66"
+  },
+  "home/.codex/skills/.system/skill-creator/agents": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/skills/.system/skill-creator/agents/openai.yaml": {
+    "mode": 420,
+    "type": "file",
+    "size": 183,
+    "sha256": "d07d21b93fcf3d4dc8d9a3399c05fc226a49a333a96d3e1c68b451b8dd9eade6"
+  },
+  "home/.codex/skills/.system/skill-creator/assets": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/skills/.system/skill-creator/assets/skill-creator-small.svg": {
+    "mode": 420,
+    "type": "file",
+    "size": 1319,
+    "sha256": "6591bf8ea9bb9435890dbdea299e0d2bd05f3aa893a335d26e4c535e93c8e7fb"
+  },
+  "home/.codex/skills/.system/skill-creator/assets/skill-creator.png": {
+    "mode": 420,
+    "type": "file",
+    "size": 1563,
+    "sha256": "a4024b0306ddb05847e1012879d37aaf1e658205199da596f5145ed7a88d9162"
+  },
+  "home/.codex/skills/.system/skill-creator/license.txt": {
+    "mode": 420,
+    "type": "file",
+    "size": 11358,
+    "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+  },
+  "home/.codex/skills/.system/skill-creator/references": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/skills/.system/skill-creator/references/openai_yaml.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 2356,
+    "sha256": "ffac39318e408108141d40f820968e59f70434a891694f9bf1d25be8237b150c"
+  },
+  "home/.codex/skills/.system/skill-creator/scripts": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/skills/.system/skill-creator/scripts/generate_openai_yaml.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 6669,
+    "sha256": "816df12072d74faf924d802a6599a139997e1441e90bfe4869ec304f2e5e2851"
+  },
+  "home/.codex/skills/.system/skill-creator/scripts/init_skill.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 10314,
+    "sha256": "bf0656a5f9d8d8cdecf0245eaf27e1df8e0e9b6d40ccdda814eb8e3d5f6992c8"
+  },
+  "home/.codex/skills/.system/skill-creator/scripts/quick_validate.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 4249,
+    "sha256": "ee6dba90f44d37171c5a6edb8095979c54919ff6822c1a907afca2e78c48738c"
+  },
+  "home/.codex/skills/.system/skill-installer": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/skills/.system/skill-installer/LICENSE.txt": {
+    "mode": 420,
+    "type": "file",
+    "size": 11358,
+    "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+  },
+  "home/.codex/skills/.system/skill-installer/SKILL.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 3367,
+    "sha256": "d68b77e5bbb34dedab89d134da52855f140fc4b4299b80104f534e3b9e98f8ee"
+  },
+  "home/.codex/skills/.system/skill-installer/agents": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/skills/.system/skill-installer/agents/openai.yaml": {
+    "mode": 420,
+    "type": "file",
+    "size": 221,
+    "sha256": "5ce223d8b1070b82c42298538f1b8d376f788eb9e7a42a987e8c094070d73f0e"
+  },
+  "home/.codex/skills/.system/skill-installer/assets": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/skills/.system/skill-installer/assets/skill-installer-small.svg": {
+    "mode": 420,
+    "type": "file",
+    "size": 923,
+    "sha256": "3928703ff00dc1a681e7a22401843b7edcbd4b2051651ce4c43b75f7e140504e"
+  },
+  "home/.codex/skills/.system/skill-installer/assets/skill-installer.png": {
+    "mode": 420,
+    "type": "file",
+    "size": 1086,
+    "sha256": "d0a230b1a79b71b858b7c215a0fbb0768d6459c14ea4ef80c61592629bf0e605"
+  },
+  "home/.codex/skills/.system/skill-installer/scripts": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/skills/.system/skill-installer/scripts/github_utils.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 659,
+    "sha256": "61c1bbe2ae217433b4b6f9f09f21aca4df52c12598068343ade719f706e4859b"
+  },
+  "home/.codex/skills/.system/skill-installer/scripts/install-skill-from-github.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 11917,
+    "sha256": "38f311b75664bb063808f982c600271ebc4b560830f491705190f88a94e3e781"
+  },
+  "home/.codex/skills/.system/skill-installer/scripts/list-skills.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 2948,
+    "sha256": "9d6dfb2abf3afeee7f027a89fb1626b918a973da18f4eb6c25681286301beb41"
+  },
+  "home/.codex/state_5.sqlite": {
+    "mode": 420,
+    "type": "file",
+    "size": 4096,
+    "sha256": "4eeb710c739848e62f0d53d04057e17375b4af741c9b441f2a546f6ed860c79f"
+  },
+  "home/.codex/state_5.sqlite-shm": {
+    "mode": 420,
+    "type": "file",
+    "size": 32768,
+    "sha256": "5f50a699c52f1c82a1127799412e4b6d6257c36926cb9ebcf207f0731fa4ea21"
+  },
+  "home/.codex/state_5.sqlite-wal": {
+    "mode": 420,
+    "type": "file",
+    "size": 4021152,
+    "sha256": "065e4bfe0a1de6566479b6601629e6e744e122cfb54e693b8532e013160b07e6"
+  },
+  "home/.codex/thread-writer-locks": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/thread-writer-locks/.coordination.lock": {
+    "mode": 420,
+    "type": "file",
+    "size": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "home/.codex/thread_history_1.sqlite": {
+    "mode": 420,
+    "type": "file",
+    "size": 4096,
+    "sha256": "4eeb710c739848e62f0d53d04057e17375b4af741c9b441f2a546f6ed860c79f"
+  },
+  "home/.codex/thread_history_1.sqlite-shm": {
+    "mode": 420,
+    "type": "file",
+    "size": 32768,
+    "sha256": "f7842d80e0bd74d9e4723ef6d49f84616144a2f1a2e75fa3fe830e6a2211c781"
+  },
+  "home/.codex/thread_history_1.sqlite-wal": {
+    "mode": 420,
+    "type": "file",
+    "size": 1182472,
+    "sha256": "34fd7b372bd29f7f6da93d6472a14c4654cc4395622d9f83a31b4aa22d6f4491"
+  },
+  "home/.codex/tmp": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "home/.codex/tmp/arg0": {
+    "mode": 448,
+    "type": "directory"
+  },
+  "scratch": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "scratch/cache": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "scratch/data": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "scratch/tmp": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "scratch/uv-cache": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "work": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "work/.agents": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "work/.agents/skills": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "work/.agents/skills/kntnt": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "work/.agents/skills/kntnt/SKILL.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 4021,
+    "sha256": "750ad3f09e8c896f9992e41ed7e3e8557d8727f643e8ba8894f2ad48fa6517c7"
+  },
+  "work/.agents/skills/kntnt/agents": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "work/.agents/skills/kntnt/agents/openai.yaml": {
+    "mode": 420,
+    "type": "file",
+    "size": 148,
+    "sha256": "709b566f6698b9a6c2a3ba4d95a6e33b7a590608f66b5af515069234ac0dbd91"
+  },
+  "work/.agents/skills/kntnt/catalog.json": {
+    "mode": 420,
+    "type": "file",
+    "size": 14623,
+    "sha256": "ff7492bf1fc998d20e95c3466666222c218cfdaa4902fead712594a66076933e"
+  },
+  "work/.agents/skills/kntnt/features": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "work/.agents/skills/kntnt/features/session-cleanup": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "work/.agents/skills/kntnt/features/session-cleanup/FEATURE.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 6256,
+    "sha256": "afdd1a67dc15229b9542711ed681777cdcae35fe9c8ab788456f11eaadc7560b"
+  },
+  "work/.agents/skills/kntnt/features/session-cleanup/instructions.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 1194,
+    "sha256": "64434359eaccc208e0d9c52038dd08b6349c42459c58d8e3af846086c7f25e36"
+  },
+  "work/.agents/skills/kntnt/features/session-cleanup/scripts": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "work/.agents/skills/kntnt/features/session-cleanup/scripts/session_cleanup.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 35274,
+    "sha256": "defdd20644108e1ad4ab78b207d04b912481821c4382130ee3a8e065522ebce5"
+  },
+  "work/.agents/skills/kntnt/features/statusline": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "work/.agents/skills/kntnt/features/statusline/FEATURE.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 3909,
+    "sha256": "68f3dacf20ee5dd582ef0440a0bc4cef839251e3546c3f2876dcc2412ba6a4a5"
+  },
+  "work/.agents/skills/kntnt/features/statusline/scripts": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "work/.agents/skills/kntnt/features/statusline/scripts/statusline_feature.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 7126,
+    "sha256": "3596f97853a1d1adfc654a91c8778ebf57fbf90c0a3dfb051f95e8399248d220"
+  },
+  "work/.agents/skills/kntnt/features/statusline/statusline.sh": {
+    "mode": 493,
+    "type": "file",
+    "size": 11700,
+    "sha256": "4262bf72da77714d6abe95f3e7c84d5f2c9572f29e84469af676d672a9907166"
+  },
+  "work/.agents/skills/kntnt/harness-paths.json": {
+    "mode": 420,
+    "type": "file",
+    "size": 5922,
+    "sha256": "4d288adb766da2b686bfcdb7dc082f7938de7e68c359d29c9f3b5529dcbb4b81"
+  },
+  "work/.agents/skills/kntnt/help": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "work/.agents/skills/kntnt/help/help.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 2922,
+    "sha256": "bdec86da77423da4d51a9439c5135d75085af57699ab001381524a31faf71f8b"
+  },
+  "work/.agents/skills/kntnt/help/select.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 6752,
+    "sha256": "8fbbe07776916cd3bf5dd2af29372b914485a59525af926cf440eec8717f0484"
+  },
+  "work/.agents/skills/kntnt/help/uninstall.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 3404,
+    "sha256": "0ff8e829c2bad18d2f288b2fbc3faa53e3b50501f62114a2f5a780217abf194e"
+  },
+  "work/.agents/skills/kntnt/help/update.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 3888,
+    "sha256": "571931337a9d2b7cc5bce9027ffd278180b3307a60907a686bac5cc4e8ae3437"
+  },
+  "work/.agents/skills/kntnt/help.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 4615,
+    "sha256": "df827f0005357fbcea8e88af1fd8c7c0ac4ae5cbd86aba629ec11c84ab1fb501"
+  },
+  "work/.agents/skills/kntnt/library": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "work/.agents/skills/kntnt/library/references": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "work/.agents/skills/kntnt/library/references/changelog.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 1393,
+    "sha256": "ffbaa70cec4453d3fb366ca2cb0ea07359d5c4f6d86edc1882458aa9e627fb56"
+  },
+  "work/.agents/skills/kntnt/library/references/delivery.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 15329,
+    "sha256": "71babd36f68d93cd9f7d035358c3cbaeae3179147d8dc7a4667047081c898472"
+  },
+  "work/.agents/skills/kntnt/library/references/editorial": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "work/.agents/skills/kntnt/library/references/editorial/README.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 19342,
+    "sha256": "dc78a0934449c34cf02edd4a69f7bc716dc052ca12414c53129d3e37de829eda"
+  },
+  "work/.agents/skills/kntnt/library/references/editorial/anti-slop.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 7475,
+    "sha256": "9ec7fb15b3cfe22f446c6ed2df85666aaa182d8fa0a09fa3668887e4786d83c2"
+  },
+  "work/.agents/skills/kntnt/library/references/editorial/article-anatomy.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 5481,
+    "sha256": "c075c6fe7494dbcdc43d6af599c55ab8fc52fc48d7ed1b6cc26eca7a592cecd7"
+  },
+  "work/.agents/skills/kntnt/library/references/editorial/article-anatomy.review.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 5360,
+    "sha256": "3e616f9671126ba7898123dd288a4a9bb4170f189d567a3fcbd2b17ccb82c633"
+  },
+  "work/.agents/skills/kntnt/library/references/editorial/base.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 3948,
+    "sha256": "d4146ef134de7482e25469201aaceed7b207fba9f8bacb06a428b85f6bfc3581"
+  },
+  "work/.agents/skills/kntnt/library/references/editorial/base.review.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 5695,
+    "sha256": "d2c838c19a692104be247afd227b0baed98f3156be059c0a982ecae3513fa0ca"
+  },
+  "work/.agents/skills/kntnt/library/references/editorial/genres": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "work/.agents/skills/kntnt/library/references/editorial/genres/article.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 1255,
+    "sha256": "2313180d69b25de48b818629c5d761daa36eb69def33441b01c24a2135f17b4f"
+  },
+  "work/.agents/skills/kntnt/library/references/editorial/genres/article.review.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 905,
+    "sha256": "0d992e276cb65943ceab91cb855c1fcafd2b65ed4b378a16a4ea63036de8074c"
+  },
+  "work/.agents/skills/kntnt/library/references/editorial/genres/casestudy.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 2249,
+    "sha256": "a39054321cbd35819cfd8ac7d2823dd3d56550a6ee2d1c6ee3b30f9daaa16cc5"
+  },
+  "work/.agents/skills/kntnt/library/references/editorial/genres/casestudy.review.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 1110,
+    "sha256": "a7db10d0dc1970064a8887c819a8500dfdecf43dcb45fffed32994921ceb68a4"
+  },
+  "work/.agents/skills/kntnt/library/references/editorial/genres/column.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 1716,
+    "sha256": "0971c8b498535ed57bbc130e61989b477c334e53cf3fa3c37b2e1bf64a158d98"
+  },
+  "work/.agents/skills/kntnt/library/references/editorial/genres/column.review.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 783,
+    "sha256": "8abffc59549e71a00d40200e89b656ca77d0dfd8d1f3e58293a0591373fb5c37"
+  },
+  "work/.agents/skills/kntnt/library/references/editorial/genres/general.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 2873,
+    "sha256": "438d85d3016889dd994d70a989b4ab73b8b70e149aea8e45d144cf3d371c6be5"
+  },
+  "work/.agents/skills/kntnt/library/references/editorial/genres/opinion.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 1478,
+    "sha256": "f0edbed362fe613f11cfe6232c4c7fc98202786fa909f3cd72f1b1acd0867e41"
+  },
+  "work/.agents/skills/kntnt/library/references/editorial/genres/opinion.review.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 984,
+    "sha256": "97c67a0ca701388b268b03f8dbab88e877ed259b6201f3c005ff45ea634b641d"
+  },
+  "work/.agents/skills/kntnt/library/references/editorial/genres/pressrelease.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 8000,
+    "sha256": "a63b1650f22fc1af909203c8ecaaf6eb54577907ed8f72661e07f6302058c791"
+  },
+  "work/.agents/skills/kntnt/library/references/editorial/genres/pressrelease.review.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 15799,
+    "sha256": "38c9b5570d725f6f796b10791c3a9e48d16e54ca6612723908e5a33796493d7f"
+  },
+  "work/.agents/skills/kntnt/library/references/editorial/genres/report.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 8648,
+    "sha256": "1edaa623002a25cf60ddf2c1fe74ced72479b168857f7c79d7db6965d5d75138"
+  },
+  "work/.agents/skills/kntnt/library/references/editorial/genres/report.review.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 13445,
+    "sha256": "8c6e3a5b5dfb224d6324026c2708d930abc009a34206caad5bf6296d7235e026"
+  },
+  "work/.agents/skills/kntnt/library/references/editorial/genres/teaser.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 7307,
+    "sha256": "540f873055e0454cf84b08c2eccce373fe5037ba51c672f5089127a805fd9589"
+  },
+  "work/.agents/skills/kntnt/library/references/editorial/genres/teaser.review.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 9090,
+    "sha256": "9dc18d812492b0609c827e53c00014d6c29cab477ede94d440054b49a19bcb6c"
+  },
+  "work/.agents/skills/kntnt/library/references/editorial/genres/webcopy.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 1964,
+    "sha256": "629656792d7038f4d4572fc3f8751643f0cbfd46050892010552ed81f6d04adf"
+  },
+  "work/.agents/skills/kntnt/library/references/editorial/genres/webcopy.review.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 1640,
+    "sha256": "b06d9a72fc61dcd52370d1350520a3a0e9c2d2f19a610e5ac9f029f9e56a056e"
+  },
+  "work/.agents/skills/kntnt/library/references/editorial/headlines.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 4801,
+    "sha256": "adfb7ca612905afee03a73d58cdb07de9d0877b23af9de89f7e114f6de81df5f"
+  },
+  "work/.agents/skills/kntnt/library/references/editorial/headlines.review.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 6714,
+    "sha256": "eb8bd2e680945ef2a7f9ffc7903109e51e4bb6828b7d76000348e59635810dfd"
+  },
+  "work/.agents/skills/kntnt/library/references/editorial/mechanics.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 11577,
+    "sha256": "b3103ed6da4ac9d27a0ebfb43bdb40b8e77d58d84b3745a90c0a736142438b45"
+  },
+  "work/.agents/skills/kntnt/library/references/editorial/techniques": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "work/.agents/skills/kntnt/library/references/editorial/techniques/abt.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 3435,
+    "sha256": "09007e91b589e7621088b9da5310656aa70b35fd55e7fe036c8417c9517e9af9"
+  },
+  "work/.agents/skills/kntnt/library/references/editorial/techniques/abt.review.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 2162,
+    "sha256": "e422ac0b41d147563365d35c0cb6ee5b14edcd048fd8ddce225ec0a13f2845e7"
+  },
+  "work/.agents/skills/kntnt/library/references/editorial/techniques/pac.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 3045,
+    "sha256": "b7579911a42634b18c38cde72566bbae77f2aeb72ca3a643e70a6ffb18f21fa2"
+  },
+  "work/.agents/skills/kntnt/library/references/editorial/techniques/pac.review.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 1820,
+    "sha256": "f0b1e04cb0e6590635f9ef21c2cde24874a86327040282aea0be42db514e373a"
+  },
+  "work/.agents/skills/kntnt/library/references/editorial/web-craft.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 1233,
+    "sha256": "b1ac5867d30952c3ca78da244520ab28c025102f4389f44ec206757a29f05371"
+  },
+  "work/.agents/skills/kntnt/library/references/editorial/web-craft.review.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 581,
+    "sha256": "169da1beeb4fb80e74f9423bdd4d7bcd57aa9b59b8e8ff5b71f3a67dfef7e923"
+  },
+  "work/.agents/skills/kntnt/library/references/editorial/writing-brief.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 14299,
+    "sha256": "d7d2affa723de1ff71539e3034226755da4442acaabeb1868e37f4849fc7aaa0"
+  },
+  "work/.agents/skills/kntnt/library/references/invocation-envelope.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 7431,
+    "sha256": "1f76ac87aa395a652232f5f289aef94a8652de76e88dbee3d5f7ceca14496bad"
+  },
+  "work/.agents/skills/kntnt/library/references/languages": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "work/.agents/skills/kntnt/library/references/languages/README.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 8470,
+    "sha256": "23929466b467620f2d5b12a2c6ea040ef381a906e0892eaa877dd5210c01a338"
+  },
+  "work/.agents/skills/kntnt/library/references/languages/en_GB.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 6993,
+    "sha256": "2b36899b232e65300ea15fbbb0db2abece4e1f32e7b193957355a67a34331413"
+  },
+  "work/.agents/skills/kntnt/library/references/languages/en_US.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 6238,
+    "sha256": "d11fcffa9e7316dd44d8796a954e5db9965c501e7df982affe91bc624cfef73c"
+  },
+  "work/.agents/skills/kntnt/library/references/languages/sv.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 14473,
+    "sha256": "241f0e5e4ca590c1d2348dc4048d15b5c8cc030c9dc91de989a758cefd4cd211"
+  },
+  "work/.agents/skills/kntnt/library/scripts": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "work/.agents/skills/kntnt/library/scripts/argument_grammar.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 3961,
+    "sha256": "b796b7d716a45a693c62ab3760e634cb422c83a336669a99ecc385d2fe36af29"
+  },
+  "work/.agents/skills/kntnt/library/scripts/article_anatomy.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 47727,
+    "sha256": "b4aae6ce979fe81b43531aac123f4077866b9efc72e244dc7203b053c07ae847"
+  },
+  "work/.agents/skills/kntnt/library/scripts/credentials.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 21772,
+    "sha256": "6ea3731d5390de0d408a19878d47e06a0e68f2b4531ec3a70c9b15367dc0385c"
+  },
+  "work/.agents/skills/kntnt/library/scripts/integrations.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 61037,
+    "sha256": "60d5dc8dfebac1497bf155ad9016ba4cead3eda7532f8173e2f0ebd061858c61"
+  },
+  "work/.agents/skills/kntnt/library/scripts/languages.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 24089,
+    "sha256": "6d09120fc7ab52ba69db24bb6db6e85ff9ab304d5d5ebe04ec5f2f2dd0042d70"
+  },
+  "work/.agents/skills/kntnt/library/scripts/ship.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 24521,
+    "sha256": "e66d1eaec0d1f875559e6d1b89a4ab2065917f38763fc67e36b9ebbc378fdc47"
+  },
+  "work/.agents/skills/kntnt/scripts": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "work/.agents/skills/kntnt/scripts/kntnt.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 215979,
+    "sha256": "89947ecf1bf1ceb58408b8e73e8a3584e0b5060ef8d5662f4bfe985320f37ef2"
+  },
+  "work/.agents/skills/kntnt/steps": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "work/.agents/skills/kntnt/steps/help.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 969,
+    "sha256": "164fbedbb50b1ce31f56575e134f1e5d9b21a7b51e236f4a15c57561f95a03c9"
+  },
+  "work/.agents/skills/kntnt/steps/select.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 17390,
+    "sha256": "eda226bbdcdbaaf9b539695d9593cece194204e1c4d9fb8932b2146a9801faa0"
+  },
+  "work/.agents/skills/kntnt/steps/uninstall.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 5826,
+    "sha256": "5dc6650fd7c885bbd551b5d94fffc966c60b70005a8ca3da67a5944a218515bf"
+  },
+  "work/.agents/skills/kntnt/steps/update.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 11279,
+    "sha256": "095e9d0d950793f69a8171b80639ec2039ee995055b495f2cd117c253ce96b45"
+  },
+  "work/.agents/skills/proofread": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "work/.agents/skills/proofread/SKILL.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 13045,
+    "sha256": "6cad45f3d50a96e43c8df9996bc748c7e09e09f456e8a9375c724b84d236404f"
+  },
+  "work/.agents/skills/proofread/agents": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "work/.agents/skills/proofread/agents/openai.yaml": {
+    "mode": 420,
+    "type": "file",
+    "size": 144,
+    "sha256": "ef05500ed19dff98c0181872ac5ff04d99ba241f992f70284629119c0451883a"
+  },
+  "work/.agents/skills/proofread/help.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 6350,
+    "sha256": "5bad100c3b2bca059643a524d8730ac2d5761414295db2e9420207cf3004a43f"
+  },
+  "work/.agents/skills/proofread/scripts": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "work/.agents/skills/proofread/scripts/invoke.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 4938,
+    "sha256": "1986301369b22e298280544bfd889e460af2e4f8acb187a7967f994ae93daa2a"
+  },
+  "work/.agents/skills/redline": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "work/.agents/skills/redline/SKILL.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 39912,
+    "sha256": "0872ac03b535f7b1d7205fdbea4647795c316d3d6fe638c2af5ce0018dd40bb0"
+  },
+  "work/.agents/skills/redline/agents": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "work/.agents/skills/redline/agents/openai.yaml": {
+    "mode": 420,
+    "type": "file",
+    "size": 176,
+    "sha256": "a9ff49ac5ec1f2d858911e08212525c5d8404c5d1a6789c3bf2713f25f388973"
+  },
+  "work/.agents/skills/redline/help.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 17015,
+    "sha256": "49f8676eebc0a22e0571dbf554752f2ac3ad404bebdd3b49304cc97b2049a6d3"
+  },
+  "work/.agents/skills/redline/references": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "work/.agents/skills/redline/references/brief-review.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 10113,
+    "sha256": "6aebf74a0eeb638c35f24fcc63215280ac4a4c13583d3c31fe42c5d8e9b93264"
+  },
+  "work/.agents/skills/redline/references/correction.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 15881,
+    "sha256": "c7d164379021076cdcb09e6615b9a1155367603695836df165c889fd72189aac"
+  },
+  "work/.agents/skills/redline/references/reply-check.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 5987,
+    "sha256": "c89fd5a2ebdbd73898adf475fee34dda5c88415de318d16378dd50fee221d9e5"
+  },
+  "work/.agents/skills/redline/scripts": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "work/.agents/skills/redline/scripts/invoke.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 4938,
+    "sha256": "1986301369b22e298280544bfd889e460af2e4f8acb187a7967f994ae93daa2a"
+  },
+  "work/.agents/skills/write": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "work/.agents/skills/write/SKILL.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 17876,
+    "sha256": "73186c908f6fa2c9608682947799fdac1a5e902fd6d1a265b1a088dd23c85489"
+  },
+  "work/.agents/skills/write/agents": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "work/.agents/skills/write/agents/openai.yaml": {
+    "mode": 420,
+    "type": "file",
+    "size": 144,
+    "sha256": "6c2c5457f3b5d6e237a9cc7c147763d13115065ac7c8dc96da16b17017fd1953"
+  },
+  "work/.agents/skills/write/help.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 12201,
+    "sha256": "84ded05edc8b0018fff553dd0f1e921ef9478155bf36ffb39fa4a9756a8650b4"
+  },
+  "work/.agents/skills/write/references": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "work/.agents/skills/write/references/quotations.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 4063,
+    "sha256": "89ba23a834153bf3c38372206548d2e269ff1a516c93cf393eaaf2fe5c62e881"
+  },
+  "work/.agents/skills/write/references/source-check.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 13404,
+    "sha256": "c7a8956c5d850854984cd97f802a5c7c1caf13cccf4aff351aa6bee7c1df3ce0"
+  },
+  "work/.agents/skills/write/scripts": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "work/.agents/skills/write/scripts/invoke.py": {
+    "mode": 420,
+    "type": "file",
+    "size": 4938,
+    "sha256": "1986301369b22e298280544bfd889e460af2e4f8acb187a7967f994ae93daa2a"
+  },
+  "work/.git": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "work/.git/HEAD": {
+    "mode": 420,
+    "type": "file",
+    "size": 21,
+    "sha256": "28d25bf82af4c0e2b72f50959b2beb859e3e60b9630a5e8c603dad4ddb2b6e80"
+  },
+  "work/.git/config": {
+    "mode": 420,
+    "type": "file",
+    "size": 137,
+    "sha256": "cae33efdb02cf774435c1ff9cb16bcc1014606908530c6e1dc727615fe3e8cda"
+  },
+  "work/.git/description": {
+    "mode": 420,
+    "type": "file",
+    "size": 73,
+    "sha256": "85ab6c163d43a17ea9cf7788308bca1466f1b0a8d1cc92e26e9bf63da4062aee"
+  },
+  "work/.git/hooks": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "work/.git/hooks/applypatch-msg.sample": {
+    "mode": 493,
+    "type": "file",
+    "size": 478,
+    "sha256": "0223497a0b8b033aa58a3a521b8629869386cf7ab0e2f101963d328aa62193f7"
+  },
+  "work/.git/hooks/commit-msg.sample": {
+    "mode": 493,
+    "type": "file",
+    "size": 1972,
+    "sha256": "efc1401b0e99d1ff51494d154d98b46c1e99059bcd8bf9f73cecde19fd3eb23b"
+  },
+  "work/.git/hooks/fsmonitor-watchman.sample": {
+    "mode": 493,
+    "type": "file",
+    "size": 4611,
+    "sha256": "9159720099ad5595b8e66645cbfd47763c1e920f46e0b50ae75e642bbec57ef0"
+  },
+  "work/.git/hooks/post-update.sample": {
+    "mode": 493,
+    "type": "file",
+    "size": 189,
+    "sha256": "81765af2daef323061dcbc5e61fc16481cb74b3bac9ad8a174b186523586f6c5"
+  },
+  "work/.git/hooks/pre-applypatch.sample": {
+    "mode": 493,
+    "type": "file",
+    "size": 424,
+    "sha256": "e15c5b469ea3e0a695bea6f2c82bcf8e62821074939ddd85b77e0007ff165475"
+  },
+  "work/.git/hooks/pre-commit.sample": {
+    "mode": 493,
+    "type": "file",
+    "size": 1649,
+    "sha256": "57185b7b9f05239d7ab52db045f5b89eb31348d7b2177eab214f5eb872e1971b"
+  },
+  "work/.git/hooks/pre-merge-commit.sample": {
+    "mode": 493,
+    "type": "file",
+    "size": 416,
+    "sha256": "d3825a70337940ebbd0a5c072984e13245920cdf8898bd225c8d27a6dfc9cb53"
+  },
+  "work/.git/hooks/pre-push.sample": {
+    "mode": 493,
+    "type": "file",
+    "size": 1374,
+    "sha256": "ecce9c7e04d3f5dd9d8ada81753dd1d549a9634b26770042b58dda00217d086a"
+  },
+  "work/.git/hooks/pre-rebase.sample": {
+    "mode": 493,
+    "type": "file",
+    "size": 4898,
+    "sha256": "4febce867790052338076f4e66cc47efb14879d18097d1d61c8261859eaaa7b3"
+  },
+  "work/.git/hooks/pre-receive.sample": {
+    "mode": 493,
+    "type": "file",
+    "size": 544,
+    "sha256": "a4c3d2b9c7bb3fd8d1441c31bd4ee71a595d66b44fcf49ddb310252320169989"
+  },
+  "work/.git/hooks/prepare-commit-msg.sample": {
+    "mode": 493,
+    "type": "file",
+    "size": 1492,
+    "sha256": "e9ddcaa4189fddd25ed97fc8c789eca7b6ca16390b2392ae3276f0c8e1aa4619"
+  },
+  "work/.git/hooks/push-to-checkout.sample": {
+    "mode": 493,
+    "type": "file",
+    "size": 2783,
+    "sha256": "a53d0741798b287c6dd7afa64aee473f305e65d3f49463bb9d7408ec3b12bf5f"
+  },
+  "work/.git/hooks/sendemail-validate.sample": {
+    "mode": 493,
+    "type": "file",
+    "size": 2308,
+    "sha256": "44ebfc923dc5466bc009602f0ecf067b9c65459abfe8868ddc49b78e6ced7a92"
+  },
+  "work/.git/hooks/update.sample": {
+    "mode": 493,
+    "type": "file",
+    "size": 3650,
+    "sha256": "8d5f2fa83e103cf08b57eaa67521df9194f45cbdbcb37da52ad586097a14d106"
+  },
+  "work/.git/info": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "work/.git/info/exclude": {
+    "mode": 420,
+    "type": "file",
+    "size": 240,
+    "sha256": "6671fe83b7a07c8932ee89164d1f2793b2318058eb8b98dc5c06ee0a5a3b0ec1"
+  },
+  "work/.git/objects": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "work/.git/objects/info": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "work/.git/objects/pack": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "work/.git/refs": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "work/.git/refs/heads": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "work/.git/refs/tags": {
+    "mode": 493,
+    "type": "directory"
+  },
+  "work/AGENTS.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 444,
+    "sha256": "fd6201ee2bdbcc27ef9d46cf83a2f57efd7de8456a7af4384ec8380c15aeae3f"
+  },
+  "work/input.md": {
+    "mode": 420,
+    "type": "file",
+    "size": 2893,
+    "sha256": "6648de46956c4796cff8c1fb1f3cc3a195b1a57f7cc5a4511e298f49fa1b6a36"
+  }
+}

@@ -1,0 +1,200 @@
+{
+  "input_sha256": "75188596831d5a0a28364ea4da4d1053f69900ca25237f08859696058c579f11",
+  "input_preserved": true,
+  "input_stat_preserved": true,
+  "installed_files_unchanged": true,
+  "result": {
+    "returncode": 0,
+    "timed_out": false,
+    "duration_seconds": 1026.7,
+    "root": "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/395.scratch/native-unit-01",
+    "cleanup_required": true
+  },
+  "seats": [
+    {
+      "id": "01a0fc0f-f339-7d73-96b8-3d38d3c5979f",
+      "source": "exec",
+      "cli_version": "0.160.0",
+      "seats": [
+        [
+          "gpt-6.1-sol",
+          "high"
+        ]
+      ],
+      "task_complete": true,
+      "trace": "native-sessions/2026/10/02/rollout-2026-10-02T12-01-39-01a0fc0f-f339-7d73-96b8-3d38d3c5979f.jsonl"
+    },
+    {
+      "id": "01a0fc13-9309-7e63-93ee-11548d542cae",
+      "source": {
+        "subagent": {
+          "thread_spawn": {
+            "parent_thread_id": "01a0fc0f-f339-7d73-96b8-3d38d3c5979f",
+            "depth": 1,
+            "agent_path": "/root/source_check_1",
+            "agent_nickname": "Plato",
+            "agent_role": null
+          }
+        }
+      },
+      "cli_version": "0.160.0",
+      "seats": [
+        [
+          "gpt-6.1-sol",
+          "high"
+        ]
+      ],
+      "task_complete": true,
+      "trace": "native-sessions/2026/10/02/rollout-2026-10-02T12-05-36-01a0fc13-9309-7e63-93ee-11548d542cae.jsonl"
+    },
+    {
+      "id": "01a0fc19-2d77-73b3-9556-d07727fa25b6",
+      "source": {
+        "subagent": {
+          "thread_spawn": {
+            "parent_thread_id": "01a0fc0f-f339-7d73-96b8-3d38d3c5979f",
+            "depth": 1,
+            "agent_path": "/root/source_check_2",
+            "agent_nickname": "Hooke",
+            "agent_role": null
+          }
+        }
+      },
+      "cli_version": "0.160.0",
+      "seats": [
+        [
+          "gpt-6.1-sol",
+          "high"
+        ]
+      ],
+      "task_complete": true,
+      "trace": "native-sessions/2026/10/02/rollout-2026-10-02T12-11-43-01a0fc19-2d77-73b3-9556-d07727fa25b6.jsonl"
+    }
+  ],
+  "native_errors": [],
+  "native_tool_calls": 41,
+  "observer_response_matches_native": null,
+  "delivered_substring_native": true,
+  "mechanical_input_equals_output": null,
+  "mechanical_output_equals_delivered": null,
+  "mechanical_output_equals_supplied_input": null,
+  "scratch_files": {
+    "scratch/cache": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "scratch/data": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "scratch/observer-delivered.md": {
+      "mode": 420,
+      "type": "file",
+      "size": 2892,
+      "sha256": "c5adac71858c031ddc5f5b89edbf38b74f17c5963887d5e4d3018936f4c98a3b"
+    },
+    "scratch/observer-evidence": {
+      "mode": 448,
+      "type": "directory"
+    },
+    "scratch/observer-evidence/anatomy-account.md": {
+      "mode": 420,
+      "type": "file",
+      "size": 993,
+      "sha256": "204dcdffcc4b0a33c911a5ea7efa47eec3dd1e7c5e6dc2ff15bb1a0dca8db610"
+    },
+    "scratch/observer-evidence/anatomy-after-source-repairs.json": {
+      "mode": 420,
+      "type": "file",
+      "size": 4976,
+      "sha256": "fd3577922cc813d302e568be0b3bad3faee3e1f458787706dd38d11e15cd3dda"
+    },
+    "scratch/observer-evidence/anatomy.json": {
+      "mode": 420,
+      "type": "file",
+      "size": 4967,
+      "sha256": "b209ccbac2c5c1500f781be6d9d55007a0789cf485d2fb3b58ee0a2f38d4452a"
+    },
+    "scratch/observer-evidence/comparison-instructions-2.md": {
+      "mode": 420,
+      "type": "file",
+      "size": 13720,
+      "sha256": "50afd257be39ac1f26cb9dbaf0d4d39c1490e7ff1524efffcdedb36b440c892a"
+    },
+    "scratch/observer-evidence/comparison-instructions.md": {
+      "mode": 420,
+      "type": "file",
+      "size": 13720,
+      "sha256": "c1585e9e3916348cdb1d10e47ac06d248074a4ad0edeb639a10b4b724a5217da"
+    },
+    "scratch/observer-evidence/draft-before-repairs.md": {
+      "mode": 420,
+      "type": "file",
+      "size": 2812,
+      "sha256": "1b53485cd8f0ca31b88eaa3aaa167e08bf82c2d49351eb3028fdbf18ab80505b"
+    },
+    "scratch/observer-evidence/draft.md": {
+      "mode": 420,
+      "type": "file",
+      "size": 2824,
+      "sha256": "a99f6cd16cedb776552803e1aec66347354a9adadc3602270c06946a7adc0c8e"
+    },
+    "scratch/observer-evidence/lifecycle-account.json": {
+      "mode": 420,
+      "type": "file",
+      "size": 673,
+      "sha256": "e260b6f6882a71541676906e12d069158a958edadf33551cd09cd52a6ef3b6a5"
+    },
+    "scratch/observer-evidence/report-1-disposition.md": {
+      "mode": 420,
+      "type": "file",
+      "size": 1460,
+      "sha256": "0800aacf30dc7226a842e490738cc7e5f71cb7533bf23826ea64cc1ab6343d50"
+    },
+    "scratch/observer-evidence/report-1.md": {
+      "mode": 420,
+      "type": "file",
+      "size": 25499,
+      "sha256": "7dcf2c3dd36a6aea24a2bde1a3f3a535cbc955184418f30f5f6d2e89bb68bc89"
+    },
+    "scratch/observer-evidence/report-2-disposition.md": {
+      "mode": 420,
+      "type": "file",
+      "size": 2435,
+      "sha256": "1adf904a80138adf80d57dd0be57d49cfa797532f993901f29f1402aca14a39c"
+    },
+    "scratch/observer-evidence/report-2.md": {
+      "mode": 420,
+      "type": "file",
+      "size": 26058,
+      "sha256": "9772cdae950513ac4a9911a9795b2b193caf386d10f3a692b0d995f5c4add224"
+    },
+    "scratch/observer-evidence/source.md": {
+      "mode": 420,
+      "type": "file",
+      "size": 3255,
+      "sha256": "75188596831d5a0a28364ea4da4d1053f69900ca25237f08859696058c579f11"
+    },
+    "scratch/observer-response.md": {
+      "mode": 420,
+      "type": "file",
+      "size": 3576,
+      "sha256": "00e85029e3d38e466f681fdbf84b2c93e28a481e3cad6ef1385cc63080a22054"
+    },
+    "scratch/tmp": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "scratch/uv-cache": {
+      "mode": 493,
+      "type": "directory"
+    }
+  },
+  "work_changes": {},
+  "limits": [
+    "Encrypted dispatch text is not decoded; actual child reads establish only visible scope.",
+    "A file-read command must be checked against its returned output for truncation or failure.",
+    "External captures poll at 100 ms; an uncaptured temporary version is not asserted present.",
+    "No semantic or resource-loading pass follows merely from a tool count or task completion."
+  ]
+}

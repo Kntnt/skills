@@ -1,0 +1,42 @@
+# /// script
+# requires-python = ">=3.12"
+# ///
+"""Replace one infrastructure interruption with unchanged frozen input and seat."""
+from pathlib import Path
+import importlib.util,json,os,shutil,subprocess,sys,time
+
+sys.dont_write_bytecode=True
+ROOT=Path('/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-observation-3q9k_53_')
+REPO=Path('/Users/thomas/Projects/skills-eval-395-gpt-20261001')
+PLAN=REPO/'docs/evaluation/editorial-395/gpt-retest-2026-10-01'
+spec=importlib.util.spec_from_file_location('frozen_coordinator',ROOT/'continue.py')
+module=importlib.util.module_from_spec(spec)
+spec.loader.exec_module(module)
+
+def active():
+    return sum((p/'location.json').exists() and not (p/'result.json').exists() for p in ROOT.glob('item-*') if p.is_dir())
+
+if __name__=='__main__':
+    if os.getpgrp()!=os.getpid():os.setsid()
+    subprocess.run(['uv','run','/Users/thomas/.agents/skills/kntnt/features/session-cleanup/scripts/session_cleanup.py','add','pid',str(os.getpid()),'Editorial #395 unchanged-input recovery for cell 07 infrastructure timeout'],cwd=REPO,check=True)
+    row=json.loads((PLAN/'matrix.json').read_text())[6]
+    for attempt in (2,3):
+        while active()>=2:time.sleep(2)
+        out=ROOT/f'item-07-composition{attempt}'
+        try:
+            module.run(PLAN/'turn-07.md',PLAN/'fixtures'/row['fixture'],'source.md',out)
+        except RuntimeError:
+            shutil.copytree(out,PLAN/'voids'/f'item-07-composition-attempt-{attempt}')
+            if attempt==3:raise
+            continue
+        if not module.materialize(out):
+            raise RuntimeError('Completed source-faithful stop requires manual disposition; no infrastructure retry')
+        break
+    while active()>=2:time.sleep(2)
+    review=ROOT/'item-07-review'
+    module.run(PLAN/'redline-turn.md',out/'delivered.md','input.md',review)
+    module.materialize(review)
+    module.judges('07','composition',out)
+    module.judges('07','review',review)
+    (ROOT/'cell-07-complete.json').write_text(json.dumps({'cell':'07','completed_at':time.time(),'write_output':out.name,'service_void_replaced':True})+'\n')
+    print('Cell 07 recovery completed with unchanged frozen input and seat',flush=True)

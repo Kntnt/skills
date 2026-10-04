@@ -1,0 +1,66 @@
+{
+  "runner_pid": 1642,
+  "runner_pgid": 1642,
+  "scratch_root": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-393-scratch/resume-verification",
+  "environment_overrides": {
+    "UV_CACHE_DIR": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-393-scratch/resume-verification/uv-cache",
+    "UV_PYTHON_INSTALL_DIR": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-393-scratch/resume-verification/uv-python",
+    "UV_TOOL_DIR": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-393-scratch/resume-verification/uv-tools",
+    "UV_TOOL_BIN_DIR": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-393-scratch/resume-verification/uv-bin",
+    "TMPDIR": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-393-scratch/resume-verification/tmp",
+    "XDG_CACHE_HOME": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-393-scratch/resume-verification/xdg-cache",
+    "RUFF_CACHE_DIR": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-393-scratch/resume-verification/ruff-cache",
+    "MYPY_CACHE_DIR": "/private/tmp/kntnt-orchestrate-20261002.o7bmMK/ticket-393-scratch/resume-verification/mypy-cache",
+    "PYTHONDONTWRITEBYTECODE": "1"
+  },
+  "commands": [
+    {
+      "name": "ruff-check",
+      "command": "uvx ruff check .",
+      "cwd": "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/393",
+      "pid": 1798,
+      "pgid": 1798,
+      "started_at": "2026-10-02T10:27:32.719012+00:00",
+      "exit_code": 0,
+      "duration_seconds": 1.79,
+      "finished_at": "2026-10-02T10:27:34.507479+00:00",
+      "process_group_exists_after_wait": false
+    },
+    {
+      "name": "ruff-format",
+      "command": "uvx ruff format --check .",
+      "cwd": "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/393",
+      "pid": 2069,
+      "pgid": 2069,
+      "started_at": "2026-10-02T10:27:34.509155+00:00",
+      "exit_code": 0,
+      "duration_seconds": 0.758,
+      "finished_at": "2026-10-02T10:27:35.266156+00:00",
+      "process_group_exists_after_wait": false
+    },
+    {
+      "name": "mypy",
+      "command": "uvx --with types-PyYAML --with pytest --with httpx==0.28.1 --with selectolax==0.4.11 --with types-tinycss2 --with types-regex mypy skills/kntnt/scripts/kntnt.py skills/kntnt/library/scripts/argument_grammar.py skills/kntnt/library/scripts/article_anatomy.py skills/kntnt/library/scripts/ship.py skills/kntnt/library/scripts/integrations.py skills/kntnt/library/scripts/languages.py skills/kntnt/library/scripts/credentials.py skills/models/model-selector/scripts/catalogue.py skills/models/model-selector/scripts/profiles.py skills/models/model-selector/scripts/evidence.py skills/models/model-selector/scripts/launch.py skills/models/model-selector/scripts/selection.py skills/models/model-selector/scripts/quota.py skills/models/model-selector/scripts/record.py skills/models/model-selector/scripts/capture.py skills/models/model-selector/scripts/grade.py skills/models/model-selector/scripts/setup_apply.py skills/models/model-selector/scripts/inventory.py skills/code/orchestrate/scripts/run.py skills/productivity/rename-invoices/scripts/rename_invoices.py skills/agents/explain/scripts/invoke.py skills/web/mirror/scripts/mirror.py skills/infrastructure/cloudns/scripts/cloudns.py skills/infrastructure/hetzner/scripts/hetzner.py skills/infrastructure/nodeping/scripts/nodeping.py skills/infrastructure/postmark/scripts/postmark.py tests",
+      "cwd": "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/393",
+      "pid": 2133,
+      "pgid": 2133,
+      "started_at": "2026-10-02T10:27:35.269684+00:00",
+      "exit_code": 0,
+      "duration_seconds": 11.935,
+      "finished_at": "2026-10-02T10:27:47.201599+00:00",
+      "process_group_exists_after_wait": false
+    },
+    {
+      "name": "pytest",
+      "command": "uv run --with pytest --with pytest-xdist --with pyyaml pytest -n auto",
+      "cwd": "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/393",
+      "pid": 3275,
+      "pgid": 3275,
+      "started_at": "2026-10-02T10:27:47.203439+00:00",
+      "exit_code": 1,
+      "duration_seconds": 222.764,
+      "finished_at": "2026-10-02T10:31:29.967213+00:00",
+      "process_group_exists_after_wait": false
+    }
+  ]
+}

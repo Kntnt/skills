@@ -1,0 +1,123 @@
+{
+  "result": {
+    "returncode": -15,
+    "timed_out": true,
+    "duration_seconds": 1800.24,
+    "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-b_nt8eqi",
+    "cleanup_required": true
+  },
+  "input_sha256": "75188596831d5a0a28364ea4da4d1053f69900ca25237f08859696058c579f11",
+  "artifact": {
+    "fenced_artifact_count": 0,
+    "present": false,
+    "source": "none",
+    "sha256": null,
+    "input_identical": null
+  },
+  "identities": [
+    {
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T14-08-27-01a0f75d-af8e-7ec0-8a01-238b41c7b0ef.jsonl",
+      "id": "01a0f75d-af8e-7ec0-8a01-238b41c7b0ef",
+      "source": "exec",
+      "seats": [
+        [
+          "gpt-6.1-sol",
+          "xhigh"
+        ]
+      ]
+    },
+    {
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T14-15-03-01a0f763-baad-7d60-9b23-d0fe102b059a.jsonl",
+      "id": "01a0f763-baad-7d60-9b23-d0fe102b059a",
+      "source": {
+        "subagent": {
+          "thread_spawn": {
+            "parent_thread_id": "01a0f75d-af8e-7ec0-8a01-238b41c7b0ef",
+            "depth": 1,
+            "agent_path": "/root/source_comparison_1",
+            "agent_nickname": "Poincare",
+            "agent_role": null
+          }
+        }
+      },
+      "seats": [
+        [
+          "gpt-6.1-sol",
+          "xhigh"
+        ]
+      ]
+    },
+    {
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T14-29-04-01a0f770-91a8-7643-a540-242c9b6c307a.jsonl",
+      "id": "01a0f770-91a8-7643-a540-242c9b6c307a",
+      "source": {
+        "subagent": {
+          "thread_spawn": {
+            "parent_thread_id": "01a0f75d-af8e-7ec0-8a01-238b41c7b0ef",
+            "depth": 1,
+            "agent_path": "/root/source_comparison_2",
+            "agent_nickname": "Hegel",
+            "agent_role": null
+          }
+        }
+      },
+      "seats": [
+        [
+          "gpt-6.1-sol",
+          "xhigh"
+        ]
+      ]
+    }
+  ],
+  "encrypted_dispatches": [
+    {
+      "session": "01a0f75d-af8e-7ec0-8a01-238b41c7b0ef",
+      "name": "spawn_agent",
+      "call_id": "call_Y8vF9qlxrt1wWmZlZqI3dkdu",
+      "note": "dispatch message encrypted; use actual child reads rather than infer its complete brief"
+    },
+    {
+      "session": "01a0f75d-af8e-7ec0-8a01-238b41c7b0ef",
+      "name": "send_message",
+      "call_id": "call_wHTDqNQZX8ZzksRJyMm27Qp9",
+      "note": "dispatch message encrypted; use actual child reads rather than infer its complete brief"
+    },
+    {
+      "session": "01a0f75d-af8e-7ec0-8a01-238b41c7b0ef",
+      "name": "send_message",
+      "call_id": "call_Ho7A7dc62H0hOWQfWlGsv8S9",
+      "note": "dispatch message encrypted; use actual child reads rather than infer its complete brief"
+    },
+    {
+      "session": "01a0f75d-af8e-7ec0-8a01-238b41c7b0ef",
+      "name": "send_message",
+      "call_id": "call_kLtsP1POwfizwYmU33mp945J",
+      "note": "dispatch message encrypted; use actual child reads rather than infer its complete brief"
+    },
+    {
+      "session": "01a0f75d-af8e-7ec0-8a01-238b41c7b0ef",
+      "name": "spawn_agent",
+      "call_id": "call_UFK08H6aEXe8WmwkNIRnNm1d",
+      "note": "dispatch message encrypted; use actual child reads rather than infer its complete brief"
+    },
+    {
+      "session": "01a0f75d-af8e-7ec0-8a01-238b41c7b0ef",
+      "name": "send_message",
+      "call_id": "call_rmLADvv6uEdOSH8P10c2Clg1",
+      "note": "dispatch message encrypted; use actual child reads rather than infer its complete brief"
+    },
+    {
+      "session": "01a0f763-baad-7d60-9b23-d0fe102b059a",
+      "name": "send_message",
+      "call_id": "call_ROHjjr1Y1qUlu9DfSwgVlmTF",
+      "note": "dispatch message encrypted; use actual child reads rather than infer its complete brief"
+    }
+  ],
+  "all_recorded_seats_match": true,
+  "artifact_matches_captures": [],
+  "source_inventory_unchanged": true,
+  "staged_install_unchanged": true,
+  "work_created": {},
+  "work_removed": {},
+  "work_changed": {}
+}

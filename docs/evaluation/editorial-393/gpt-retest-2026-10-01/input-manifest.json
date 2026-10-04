@@ -1,0 +1,34 @@
+{
+  "sv-control": {
+    "path": "docs/evaluation/editorial-329/followup/runs/final-idiom-control/redline/supplied-input.md",
+    "sha256": "8821f2ea42f723956ccb5d1127b212227d04c7035b3944e4a81be990dda82e66"
+  },
+  "sv-artefact": {
+    "path": "docs/evaluation/editorial-329/followup/runs/final-delivery-original/case-study-sv-r1/draft.md",
+    "sha256": "6648de46956c4796cff8c1fb1f3cc3a195b1a57f7cc5a4511e298f49fa1b6a36"
+  },
+  "ellipsis-sv": {
+    "path": "docs/evaluation/editorial-363/fixtures/ellipsis-sv.md",
+    "sha256": "bbad3ac63510344b4b174809f474dfb355c87659fdeecdf2692a730b0842d018"
+  },
+  "en-positive": {
+    "path": "docs/evaluation/editorial-329/followup/runs/third-candidate/case-study-en_US-r2/draft.md",
+    "sha256": "244c339d163059150237f2ae3a17a5bf70b4ee242a4d0a1f57fc52bb91c36a26"
+  },
+  "en-us-r1": {
+    "path": "docs/evaluation/editorial-329/followup/runs/account-candidate/case-study-en_US-r1/redline/supplied-input.md",
+    "sha256": "75e81d07b5bdab9a91e01dbd78f5c051c8fdd0267d71f584e72334a19b36594b"
+  },
+  "metonymy-sv": {
+    "path": "docs/evaluation/editorial-363/fixtures/metonymy-sv.md",
+    "sha256": "eb04ee84e17b2b0266ef82937039bbd8729359042d2ee57967773116d4c8a463"
+  },
+  "rhythm-en_GB": {
+    "path": "docs/evaluation/editorial-363/fixtures/rhythm-en_GB.md",
+    "sha256": "3d2f9ed7390e247b388dfd62ae735272c4c35adab5f471f922046dc9ef93e7a2"
+  },
+  "case-study-sv": {
+    "path": "docs/evaluation/corpus/editorial-quality/sources/case-study.md",
+    "sha256": "75188596831d5a0a28364ea4da4d1053f69900ca25237f08859696058c579f11"
+  }
+}

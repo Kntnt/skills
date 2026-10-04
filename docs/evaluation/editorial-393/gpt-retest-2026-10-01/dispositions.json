@@ -1,0 +1,197 @@
+{
+  "r01": {
+    "counted": true,
+    "delivered": true,
+    "disposition": "completed-artifact"
+  },
+  "r02": {
+    "counted": true,
+    "delivered": true,
+    "disposition": "completed-artifact"
+  },
+  "c03": {
+    "counted": true,
+    "delivered": true,
+    "disposition": "completed-artifact"
+  },
+  "c04": {
+    "counted": true,
+    "delivered": true,
+    "disposition": "completed-artifact"
+  },
+  "r03": {
+    "counted": false,
+    "delivered": false,
+    "disposition": "refused-before-operation",
+    "reason": "uninstalled historical genre identifier"
+  },
+  "r04": {
+    "counted": false,
+    "delivered": false,
+    "disposition": "refused-before-operation",
+    "reason": "uninstalled historical genre identifier"
+  },
+  "r05": {
+    "counted": false,
+    "delivered": false,
+    "disposition": "refused-before-operation",
+    "reason": "uninstalled historical genre identifier"
+  },
+  "r06": {
+    "counted": false,
+    "delivered": false,
+    "disposition": "refused-before-operation",
+    "reason": "uninstalled historical genre identifier"
+  },
+  "r15": {
+    "counted": false,
+    "delivered": false,
+    "disposition": "refused-before-operation",
+    "reason": "uninstalled historical genre identifier"
+  },
+  "w01": {
+    "counted": false,
+    "delivered": false,
+    "disposition": "void-outer-timeout",
+    "reason": "1800-second runner boundary; replaced by same intended repetition"
+  },
+  "r07": {
+    "counted": false,
+    "delivered": false,
+    "disposition": "not-invoked",
+    "reason": "known genre construction; corrected counterpart executes unchanged material"
+  },
+  "r08": {
+    "counted": false,
+    "delivered": false,
+    "disposition": "not-invoked",
+    "reason": "known genre construction; corrected counterpart executes unchanged material"
+  },
+  "r09": {
+    "counted": false,
+    "delivered": false,
+    "disposition": "not-invoked",
+    "reason": "known genre construction; corrected counterpart executes unchanged material"
+  },
+  "r10": {
+    "counted": false,
+    "delivered": false,
+    "disposition": "not-invoked",
+    "reason": "known genre construction; corrected counterpart executes unchanged material"
+  },
+  "r11": {
+    "counted": false,
+    "delivered": false,
+    "disposition": "not-invoked",
+    "reason": "known genre construction; corrected counterpart executes unchanged material"
+  },
+  "r12": {
+    "counted": false,
+    "delivered": false,
+    "disposition": "not-invoked",
+    "reason": "known genre construction; corrected counterpart executes unchanged material"
+  },
+  "r16": {
+    "counted": false,
+    "delivered": false,
+    "disposition": "not-invoked",
+    "reason": "known genre construction; corrected counterpart executes unchanged material"
+  },
+  "r17": {
+    "counted": false,
+    "delivered": false,
+    "disposition": "not-invoked",
+    "reason": "known genre construction; corrected counterpart executes unchanged material"
+  },
+  "c06": {
+    "counted": true,
+    "delivered": true,
+    "disposition": "completed-artifact"
+  },
+  "c05": {
+    "counted": true,
+    "delivered": true,
+    "disposition": "completed-artifact"
+  },
+  "c07": {
+    "counted": true,
+    "delivered": true,
+    "disposition": "completed-artifact"
+  },
+  "c08": {
+    "counted": true,
+    "delivered": true,
+    "disposition": "completed-file-artifact"
+  },
+  "c09": {
+    "counted": true,
+    "delivered": true,
+    "disposition": "completed-artifact"
+  },
+  "c10": {
+    "counted": true,
+    "delivered": true,
+    "disposition": "completed-file-artifact"
+  },
+  "c11": {
+    "counted": true,
+    "delivered": true,
+    "disposition": "completed-artifact"
+  },
+  "r13": {
+    "counted": false,
+    "delivered": false,
+    "disposition": "void-service-capacity",
+    "reason": "native error and turn.failed: Selected model is at capacity; repeat same input and inherited seat"
+  },
+  "c12": {
+    "counted": true,
+    "delivered": true,
+    "disposition": "completed-file-artifact"
+  },
+  "r14": {
+    "counted": true,
+    "delivered": true,
+    "disposition": "completed-file-artifact"
+  },
+  "w02": {
+    "counted": true,
+    "delivered": true,
+    "disposition": "completed-artifact",
+    "known_findings_reported": true
+  },
+  "w03": {
+    "counted": true,
+    "delivered": true,
+    "disposition": "completed-artifact",
+    "known_findings_reported": false
+  },
+  "r13-rerun": {
+    "counted": true,
+    "delivered": true,
+    "disposition": "completed-artifact",
+    "replaces_void": "r13"
+  },
+  "w01-rerun": {
+    "counted": true,
+    "delivered": true,
+    "disposition": "completed-artifact",
+    "known_findings_reported": true,
+    "replaces_void": "w01"
+  },
+  "p02": {
+    "counted": true,
+    "delivered": true,
+    "disposition": "completed-unchanged-artifact-with-unresolved-findings"
+  },
+  "p03": {
+    "counted": true,
+    "delivered": false,
+    "disposition": "completed-no-change-status"
+  },
+  "p01": {
+    "counted": true,
+    "delivered": true,
+    "disposition": "completed-unchanged-artifact-with-unresolved-findings"
+  }
+}

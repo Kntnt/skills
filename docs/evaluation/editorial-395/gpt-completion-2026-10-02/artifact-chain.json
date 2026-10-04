@@ -1,0 +1,43 @@
+{
+  "product_corpus": "fb16908712c4d47a36fc6ee9dfb3eb2714a19e65",
+  "write_delivered_sha256": "c5adac71858c031ddc5f5b89edbf38b74f17c5963887d5e4d3018936f4c98a3b",
+  "redline_supplied_sha256": "c5adac71858c031ddc5f5b89edbf38b74f17c5963887d5e4d3018936f4c98a3b",
+  "exact_write_to_redline_bytes": true,
+  "final_prose_sha256": "a99f6cd16cedb776552803e1aec66347354a9adadc3602270c06946a7adc0c8e",
+  "artifact_equals_final_prose_with_declared_frontmatter": true,
+  "source_checker_return_observations": [
+    {
+      "session": "01a0fc19-2d77-73b3-9556-d07727fa25b6",
+      "parent": {
+        "subagent": {
+          "thread_spawn": {
+            "parent_thread_id": "01a0fc0f-f339-7d73-96b8-3d38d3c5979f",
+            "depth": 1,
+            "agent_path": "/root/source_check_2",
+            "agent_nickname": "Hooke",
+            "agent_role": null
+          }
+        }
+      },
+      "final_checked_prose_visible_in_actual_returns": true
+    },
+    {
+      "session": "01a0fc13-9309-7e63-93ee-11548d542cae",
+      "parent": {
+        "subagent": {
+          "thread_spawn": {
+            "parent_thread_id": "01a0fc0f-f339-7d73-96b8-3d38d3c5979f",
+            "depth": 1,
+            "agent_path": "/root/source_check_1",
+            "agent_nickname": "Plato",
+            "agent_role": null
+          }
+        }
+      },
+      "final_checked_prose_visible_in_actual_returns": false
+    }
+  ],
+  "redline_delivered_artifact": false,
+  "redline_mechanical_input_output_and_supplied_input_equal": true,
+  "redline_no_change_status_is_not_delivered_fidelity": true
+}

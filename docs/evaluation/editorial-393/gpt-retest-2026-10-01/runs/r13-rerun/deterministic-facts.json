@@ -1,0 +1,127 @@
+{
+  "result": {
+    "returncode": 0,
+    "timed_out": false,
+    "duration_seconds": 1029.82,
+    "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-lfzo1h5i",
+    "cleanup_required": true
+  },
+  "input_sha256": "3d2f9ed7390e247b388dfd62ae735272c4c35adab5f471f922046dc9ef93e7a2",
+  "artifact": {
+    "fenced_artifact_count": 1,
+    "present": true,
+    "source": "response-fence",
+    "sha256": "fcfe45c6756eb956e67250d2b81d02f7737440bea219f7a5ebb7faf6e5ebbce8",
+    "input_identical": false
+  },
+  "identities": [
+    {
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T17-12-17-01a0f805-fd3a-7340-84a9-8dc270e0dcdf.jsonl",
+      "id": "01a0f805-fd3a-7340-84a9-8dc270e0dcdf",
+      "source": "exec",
+      "seats": [
+        [
+          "gpt-6.1-sol",
+          "xhigh"
+        ]
+      ]
+    },
+    {
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T17-16-29-01a0f809-d88d-7d13-ae71-95603ac61688.jsonl",
+      "id": "01a0f809-d88d-7d13-ae71-95603ac61688",
+      "source": {
+        "subagent": {
+          "thread_spawn": {
+            "parent_thread_id": "01a0f805-fd3a-7340-84a9-8dc270e0dcdf",
+            "depth": 1,
+            "agent_path": "/root/correction_1",
+            "agent_nickname": "Descartes",
+            "agent_role": null
+          }
+        }
+      },
+      "seats": [
+        [
+          "gpt-6.1-sol",
+          "xhigh"
+        ]
+      ]
+    },
+    {
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T17-22-08-01a0f80f-03d3-7d61-999d-2bf29f93deff.jsonl",
+      "id": "01a0f80f-03d3-7d61-999d-2bf29f93deff",
+      "source": {
+        "subagent": {
+          "thread_spawn": {
+            "parent_thread_id": "01a0f805-fd3a-7340-84a9-8dc270e0dcdf",
+            "depth": 1,
+            "agent_path": "/root/mechanical_pass",
+            "agent_nickname": "McClintock",
+            "agent_role": null
+          }
+        }
+      },
+      "seats": [
+        [
+          "gpt-6.1-sol",
+          "xhigh"
+        ]
+      ]
+    },
+    {
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T17-26-52-01a0f813-58de-78d1-b91b-4b4b4ec5611f.jsonl",
+      "id": "01a0f813-58de-78d1-b91b-4b4b4ec5611f",
+      "source": {
+        "subagent": {
+          "thread_spawn": {
+            "parent_thread_id": "01a0f805-fd3a-7340-84a9-8dc270e0dcdf",
+            "depth": 1,
+            "agent_path": "/root/reply_check",
+            "agent_nickname": "Dalton",
+            "agent_role": null
+          }
+        }
+      },
+      "seats": [
+        [
+          "gpt-6.1-sol",
+          "xhigh"
+        ]
+      ]
+    }
+  ],
+  "encrypted_dispatches": [
+    {
+      "session": "01a0f805-fd3a-7340-84a9-8dc270e0dcdf",
+      "name": "spawn_agent",
+      "call_id": "call_2Om2NR7mjtMGpjlBGHak9e3v",
+      "note": "dispatch message encrypted; use actual child reads rather than infer its complete brief"
+    },
+    {
+      "session": "01a0f805-fd3a-7340-84a9-8dc270e0dcdf",
+      "name": "spawn_agent",
+      "call_id": "call_w0vLQe3nWBQWfaOXLMyW7X6R",
+      "note": "dispatch message encrypted; use actual child reads rather than infer its complete brief"
+    },
+    {
+      "session": "01a0f805-fd3a-7340-84a9-8dc270e0dcdf",
+      "name": "spawn_agent",
+      "call_id": "call_mg0xcXxbXFweseEMi4hwnk3E",
+      "note": "dispatch message encrypted; use actual child reads rather than infer its complete brief"
+    }
+  ],
+  "all_recorded_seats_match": true,
+  "artifact_matches_captures": [
+    {
+      "path": "scratch/redline-mechanical-hvr2tt8f/mechanical-output.md",
+      "sha256": "fcfe45c6756eb956e67250d2b81d02f7737440bea219f7a5ebb7faf6e5ebbce8",
+      "capture": "0014-fcfe45c6756e.md",
+      "time": 1790868222.9932742
+    }
+  ],
+  "source_inventory_unchanged": true,
+  "staged_install_unchanged": true,
+  "work_created": {},
+  "work_removed": {},
+  "work_changed": {}
+}

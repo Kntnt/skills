@@ -1,0 +1,1741 @@
+{
+  "runs": {
+    "r01": {
+      "skill": "redline",
+      "target": "response",
+      "seconds": 938.29,
+      "sessions": [
+        {
+          "id": "01a0f750-4491-72e1-8780-981329fd203f",
+          "role": "parent",
+          "unique_complete_resource_words": 14618,
+          "separately_returned_fragment_words": 456,
+          "required_core_resource_paths": [
+            "skills/kntnt/library/references/editorial/anti-slop.md",
+            "skills/kntnt/library/references/editorial/article-anatomy.md",
+            "skills/kntnt/library/references/editorial/article-anatomy.review.md",
+            "skills/kntnt/library/references/editorial/base.md",
+            "skills/kntnt/library/references/editorial/base.review.md",
+            "skills/kntnt/library/references/editorial/genres/casestudy.md",
+            "skills/kntnt/library/references/editorial/genres/casestudy.review.md",
+            "skills/kntnt/library/references/editorial/headlines.md",
+            "skills/kntnt/library/references/editorial/headlines.review.md",
+            "skills/kntnt/library/references/editorial/web-craft.md",
+            "skills/kntnt/library/references/editorial/web-craft.review.md"
+          ],
+          "core_missing_complete_read_proof": [],
+          "required_scopes": [
+            "anti-slop",
+            "composition",
+            "review"
+          ],
+          "scope_missing_complete_read_proof": [],
+          "observed_core_words": 8898,
+          "complete_core": true,
+          "fresh_lifecycle_complete": true
+        },
+        {
+          "id": "01a0f754-9a96-7e21-bc91-8b00757d99c1",
+          "role": "redline_correction",
+          "unique_complete_resource_words": 8898,
+          "separately_returned_fragment_words": 0,
+          "required_core_resource_paths": [
+            "skills/kntnt/library/references/editorial/anti-slop.md",
+            "skills/kntnt/library/references/editorial/article-anatomy.md",
+            "skills/kntnt/library/references/editorial/article-anatomy.review.md",
+            "skills/kntnt/library/references/editorial/base.md",
+            "skills/kntnt/library/references/editorial/base.review.md",
+            "skills/kntnt/library/references/editorial/genres/casestudy.md",
+            "skills/kntnt/library/references/editorial/genres/casestudy.review.md",
+            "skills/kntnt/library/references/editorial/headlines.md",
+            "skills/kntnt/library/references/editorial/headlines.review.md",
+            "skills/kntnt/library/references/editorial/web-craft.md",
+            "skills/kntnt/library/references/editorial/web-craft.review.md"
+          ],
+          "core_missing_complete_read_proof": [],
+          "required_scopes": [
+            "anti-slop",
+            "composition",
+            "review"
+          ],
+          "scope_missing_complete_read_proof": [],
+          "observed_core_words": 8898,
+          "complete_core": true,
+          "fresh_lifecycle_complete": true
+        },
+        {
+          "id": "01a0f758-f4e1-7323-a9fe-3c11fae1eacf",
+          "role": "mechanical_pass",
+          "unique_complete_resource_words": 8863,
+          "separately_returned_fragment_words": 0,
+          "required_core_resource_paths": [],
+          "core_missing_complete_read_proof": [],
+          "required_scopes": [],
+          "scope_missing_complete_read_proof": [],
+          "observed_core_words": 0,
+          "complete_core": true,
+          "fresh_lifecycle_complete": true
+        },
+        {
+          "id": "01a0f75c-facc-76e1-8ce7-4785496b3a0e",
+          "role": "reply_check",
+          "unique_complete_resource_words": 0,
+          "separately_returned_fragment_words": 645,
+          "required_core_resource_paths": [],
+          "core_missing_complete_read_proof": [],
+          "required_scopes": [],
+          "scope_missing_complete_read_proof": [],
+          "observed_core_words": 0,
+          "complete_core": true,
+          "fresh_lifecycle_complete": true
+        }
+      ],
+      "structured_service_errors": 0
+    },
+    "r02": {
+      "skill": "redline",
+      "target": "response",
+      "seconds": 1160.44,
+      "sessions": [
+        {
+          "id": "01a0f763-5532-70c0-a8db-322feed757bd",
+          "role": "parent",
+          "unique_complete_resource_words": 17293,
+          "separately_returned_fragment_words": 0,
+          "required_core_resource_paths": [
+            "skills/kntnt/library/references/editorial/anti-slop.md",
+            "skills/kntnt/library/references/editorial/article-anatomy.md",
+            "skills/kntnt/library/references/editorial/article-anatomy.review.md",
+            "skills/kntnt/library/references/editorial/base.md",
+            "skills/kntnt/library/references/editorial/base.review.md",
+            "skills/kntnt/library/references/editorial/genres/casestudy.md",
+            "skills/kntnt/library/references/editorial/genres/casestudy.review.md",
+            "skills/kntnt/library/references/editorial/headlines.md",
+            "skills/kntnt/library/references/editorial/headlines.review.md",
+            "skills/kntnt/library/references/editorial/web-craft.md",
+            "skills/kntnt/library/references/editorial/web-craft.review.md"
+          ],
+          "core_missing_complete_read_proof": [],
+          "required_scopes": [
+            "anti-slop",
+            "composition",
+            "review"
+          ],
+          "scope_missing_complete_read_proof": [],
+          "observed_core_words": 8898,
+          "complete_core": true,
+          "fresh_lifecycle_complete": true
+        },
+        {
+          "id": "01a0f767-eb3f-7af2-922e-593554127651",
+          "role": "correction",
+          "unique_complete_resource_words": 8898,
+          "separately_returned_fragment_words": 0,
+          "required_core_resource_paths": [
+            "skills/kntnt/library/references/editorial/anti-slop.md",
+            "skills/kntnt/library/references/editorial/article-anatomy.md",
+            "skills/kntnt/library/references/editorial/article-anatomy.review.md",
+            "skills/kntnt/library/references/editorial/base.md",
+            "skills/kntnt/library/references/editorial/base.review.md",
+            "skills/kntnt/library/references/editorial/genres/casestudy.md",
+            "skills/kntnt/library/references/editorial/genres/casestudy.review.md",
+            "skills/kntnt/library/references/editorial/headlines.md",
+            "skills/kntnt/library/references/editorial/headlines.review.md",
+            "skills/kntnt/library/references/editorial/web-craft.md",
+            "skills/kntnt/library/references/editorial/web-craft.review.md"
+          ],
+          "core_missing_complete_read_proof": [],
+          "required_scopes": [
+            "anti-slop",
+            "composition",
+            "review"
+          ],
+          "scope_missing_complete_read_proof": [],
+          "observed_core_words": 8898,
+          "complete_core": true,
+          "fresh_lifecycle_complete": true
+        },
+        {
+          "id": "01a0f76d-41c3-7772-8407-a4f091a67201",
+          "role": "mechanical",
+          "unique_complete_resource_words": 7687,
+          "separately_returned_fragment_words": 0,
+          "required_core_resource_paths": [],
+          "core_missing_complete_read_proof": [],
+          "required_scopes": [],
+          "scope_missing_complete_read_proof": [],
+          "observed_core_words": 0,
+          "complete_core": true,
+          "fresh_lifecycle_complete": true
+        },
+        {
+          "id": "01a0f771-4772-74d0-9d14-2ac53f7c800d",
+          "role": "reply_check",
+          "unique_complete_resource_words": 0,
+          "separately_returned_fragment_words": 645,
+          "required_core_resource_paths": [],
+          "core_missing_complete_read_proof": [],
+          "required_scopes": [],
+          "scope_missing_complete_read_proof": [],
+          "observed_core_words": 0,
+          "complete_core": true,
+          "fresh_lifecycle_complete": true
+        }
+      ],
+      "structured_service_errors": 0
+    },
+    "c03": {
+      "skill": "redline",
+      "target": "response",
+      "seconds": 1602.2,
+      "sessions": [
+        {
+          "id": "01a0f77b-1d27-7981-b398-c1a009c41a37",
+          "role": "parent",
+          "unique_complete_resource_words": 17293,
+          "separately_returned_fragment_words": 0,
+          "required_core_resource_paths": [
+            "skills/kntnt/library/references/editorial/anti-slop.md",
+            "skills/kntnt/library/references/editorial/article-anatomy.md",
+            "skills/kntnt/library/references/editorial/article-anatomy.review.md",
+            "skills/kntnt/library/references/editorial/base.md",
+            "skills/kntnt/library/references/editorial/base.review.md",
+            "skills/kntnt/library/references/editorial/genres/casestudy.md",
+            "skills/kntnt/library/references/editorial/genres/casestudy.review.md",
+            "skills/kntnt/library/references/editorial/headlines.md",
+            "skills/kntnt/library/references/editorial/headlines.review.md",
+            "skills/kntnt/library/references/editorial/web-craft.md",
+            "skills/kntnt/library/references/editorial/web-craft.review.md"
+          ],
+          "core_missing_complete_read_proof": [],
+          "required_scopes": [
+            "anti-slop",
+            "composition",
+            "review"
+          ],
+          "scope_missing_complete_read_proof": [],
+          "observed_core_words": 8898,
+          "complete_core": true,
+          "fresh_lifecycle_complete": true
+        },
+        {
+          "id": "01a0f781-6b92-7cf0-9b9f-e9ec5b83d872",
+          "role": "redline_correction",
+          "unique_complete_resource_words": 8898,
+          "separately_returned_fragment_words": 0,
+          "required_core_resource_paths": [
+            "skills/kntnt/library/references/editorial/anti-slop.md",
+            "skills/kntnt/library/references/editorial/article-anatomy.md",
+            "skills/kntnt/library/references/editorial/article-anatomy.review.md",
+            "skills/kntnt/library/references/editorial/base.md",
+            "skills/kntnt/library/references/editorial/base.review.md",
+            "skills/kntnt/library/references/editorial/genres/casestudy.md",
+            "skills/kntnt/library/references/editorial/genres/casestudy.review.md",
+            "skills/kntnt/library/references/editorial/headlines.md",
+            "skills/kntnt/library/references/editorial/headlines.review.md",
+            "skills/kntnt/library/references/editorial/web-craft.md",
+            "skills/kntnt/library/references/editorial/web-craft.review.md"
+          ],
+          "core_missing_complete_read_proof": [],
+          "required_scopes": [
+            "anti-slop",
+            "composition",
+            "review"
+          ],
+          "scope_missing_complete_read_proof": [],
+          "observed_core_words": 8898,
+          "complete_core": true,
+          "fresh_lifecycle_complete": true
+        },
+        {
+          "id": "01a0f787-e966-7313-b70e-3eab13b75aa1",
+          "role": "mechanical_pass",
+          "unique_complete_resource_words": 8863,
+          "separately_returned_fragment_words": 0,
+          "required_core_resource_paths": [],
+          "core_missing_complete_read_proof": [],
+          "required_scopes": [],
+          "scope_missing_complete_read_proof": [],
+          "observed_core_words": 0,
+          "complete_core": true,
+          "fresh_lifecycle_complete": true
+        },
+        {
+          "id": "01a0f78e-45f1-78f0-8c06-2d74dadba7cf",
+          "role": "reply_check",
+          "unique_complete_resource_words": 0,
+          "separately_returned_fragment_words": 645,
+          "required_core_resource_paths": [],
+          "core_missing_complete_read_proof": [],
+          "required_scopes": [],
+          "scope_missing_complete_read_proof": [],
+          "observed_core_words": 0,
+          "complete_core": true,
+          "fresh_lifecycle_complete": true
+        }
+      ],
+      "structured_service_errors": 0
+    },
+    "c04": {
+      "skill": "redline",
+      "target": "response",
+      "seconds": 1454.41,
+      "sessions": [
+        {
+          "id": "01a0f77b-1d27-7603-b0d5-75ca5a303c42",
+          "role": "parent",
+          "unique_complete_resource_words": 17293,
+          "separately_returned_fragment_words": 0,
+          "required_core_resource_paths": [
+            "skills/kntnt/library/references/editorial/anti-slop.md",
+            "skills/kntnt/library/references/editorial/article-anatomy.md",
+            "skills/kntnt/library/references/editorial/article-anatomy.review.md",
+            "skills/kntnt/library/references/editorial/base.md",
+            "skills/kntnt/library/references/editorial/base.review.md",
+            "skills/kntnt/library/references/editorial/genres/casestudy.md",
+            "skills/kntnt/library/references/editorial/genres/casestudy.review.md",
+            "skills/kntnt/library/references/editorial/headlines.md",
+            "skills/kntnt/library/references/editorial/headlines.review.md",
+            "skills/kntnt/library/references/editorial/web-craft.md",
+            "skills/kntnt/library/references/editorial/web-craft.review.md"
+          ],
+          "core_missing_complete_read_proof": [],
+          "required_scopes": [
+            "anti-slop",
+            "composition",
+            "review"
+          ],
+          "scope_missing_complete_read_proof": [],
+          "observed_core_words": 8898,
+          "complete_core": true,
+          "fresh_lifecycle_complete": true
+        },
+        {
+          "id": "01a0f780-ff22-7161-aec7-3af51fdf9ffb",
+          "role": "redline_correction",
+          "unique_complete_resource_words": 8898,
+          "separately_returned_fragment_words": 0,
+          "required_core_resource_paths": [
+            "skills/kntnt/library/references/editorial/anti-slop.md",
+            "skills/kntnt/library/references/editorial/article-anatomy.md",
+            "skills/kntnt/library/references/editorial/article-anatomy.review.md",
+            "skills/kntnt/library/references/editorial/base.md",
+            "skills/kntnt/library/references/editorial/base.review.md",
+            "skills/kntnt/library/references/editorial/genres/casestudy.md",
+            "skills/kntnt/library/references/editorial/genres/casestudy.review.md",
+            "skills/kntnt/library/references/editorial/headlines.md",
+            "skills/kntnt/library/references/editorial/headlines.review.md",
+            "skills/kntnt/library/references/editorial/web-craft.md",
+            "skills/kntnt/library/references/editorial/web-craft.review.md"
+          ],
+          "core_missing_complete_read_proof": [],
+          "required_scopes": [
+            "anti-slop",
+            "composition",
+            "review"
+          ],
+          "scope_missing_complete_read_proof": [],
+          "observed_core_words": 8898,
+          "complete_core": true,
+          "fresh_lifecycle_complete": true
+        },
+        {
+          "id": "01a0f788-0c46-79b0-8656-060f962b827b",
+          "role": "redline_proofread",
+          "unique_complete_resource_words": 8863,
+          "separately_returned_fragment_words": 0,
+          "required_core_resource_paths": [],
+          "core_missing_complete_read_proof": [],
+          "required_scopes": [],
+          "scope_missing_complete_read_proof": [],
+          "observed_core_words": 0,
+          "complete_core": true,
+          "fresh_lifecycle_complete": true
+        },
+        {
+          "id": "01a0f78e-330e-7b32-a390-a051ac0ecddb",
+          "role": "redline_reply_check",
+          "unique_complete_resource_words": 0,
+          "separately_returned_fragment_words": 645,
+          "required_core_resource_paths": [],
+          "core_missing_complete_read_proof": [],
+          "required_scopes": [],
+          "scope_missing_complete_read_proof": [],
+          "observed_core_words": 0,
+          "complete_core": true,
+          "fresh_lifecycle_complete": true
+        }
+      ],
+      "structured_service_errors": 0
+    },
+    "c06": {
+      "skill": "redline",
+      "target": "response",
+      "seconds": 1463.2,
+      "sessions": [
+        {
+          "id": "01a0f793-9066-7430-94ef-7d970c473bb1",
+          "role": "parent",
+          "unique_complete_resource_words": 17293,
+          "separately_returned_fragment_words": 0,
+          "required_core_resource_paths": [
+            "skills/kntnt/library/references/editorial/anti-slop.md",
+            "skills/kntnt/library/references/editorial/article-anatomy.md",
+            "skills/kntnt/library/references/editorial/article-anatomy.review.md",
+            "skills/kntnt/library/references/editorial/base.md",
+            "skills/kntnt/library/references/editorial/base.review.md",
+            "skills/kntnt/library/references/editorial/genres/casestudy.md",
+            "skills/kntnt/library/references/editorial/genres/casestudy.review.md",
+            "skills/kntnt/library/references/editorial/headlines.md",
+            "skills/kntnt/library/references/editorial/headlines.review.md",
+            "skills/kntnt/library/references/editorial/web-craft.md",
+            "skills/kntnt/library/references/editorial/web-craft.review.md"
+          ],
+          "core_missing_complete_read_proof": [],
+          "required_scopes": [
+            "anti-slop",
+            "composition",
+            "review"
+          ],
+          "scope_missing_complete_read_proof": [],
+          "observed_core_words": 8898,
+          "complete_core": true,
+          "fresh_lifecycle_complete": true
+        },
+        {
+          "id": "01a0f799-c38e-7ec1-a310-b7dd6146e1ed",
+          "role": "redline_correction",
+          "unique_complete_resource_words": 7647,
+          "separately_returned_fragment_words": 0,
+          "required_core_resource_paths": [
+            "skills/kntnt/library/references/editorial/anti-slop.md",
+            "skills/kntnt/library/references/editorial/article-anatomy.md",
+            "skills/kntnt/library/references/editorial/article-anatomy.review.md",
+            "skills/kntnt/library/references/editorial/base.md",
+            "skills/kntnt/library/references/editorial/base.review.md",
+            "skills/kntnt/library/references/editorial/genres/casestudy.md",
+            "skills/kntnt/library/references/editorial/genres/casestudy.review.md",
+            "skills/kntnt/library/references/editorial/headlines.md",
+            "skills/kntnt/library/references/editorial/headlines.review.md",
+            "skills/kntnt/library/references/editorial/web-craft.md",
+            "skills/kntnt/library/references/editorial/web-craft.review.md"
+          ],
+          "core_missing_complete_read_proof": [
+            "skills/kntnt/library/references/editorial/anti-slop.md"
+          ],
+          "required_scopes": [
+            "anti-slop",
+            "composition",
+            "review"
+          ],
+          "scope_missing_complete_read_proof": [],
+          "observed_core_words": 7647,
+          "complete_core": false,
+          "fresh_lifecycle_complete": true
+        },
+        {
+          "id": "01a0f7a1-c2ff-7c83-a6ec-74c449ebe66f",
+          "role": "mechanical_pass",
+          "unique_complete_resource_words": 7687,
+          "separately_returned_fragment_words": 0,
+          "required_core_resource_paths": [],
+          "core_missing_complete_read_proof": [],
+          "required_scopes": [],
+          "scope_missing_complete_read_proof": [],
+          "observed_core_words": 0,
+          "complete_core": true,
+          "fresh_lifecycle_complete": true
+        },
+        {
+          "id": "01a0f7a7-2add-7fa2-8d74-c45083421c0b",
+          "role": "reply_check",
+          "unique_complete_resource_words": 0,
+          "separately_returned_fragment_words": 645,
+          "required_core_resource_paths": [],
+          "core_missing_complete_read_proof": [],
+          "required_scopes": [],
+          "scope_missing_complete_read_proof": [],
+          "observed_core_words": 0,
+          "complete_core": true,
+          "fresh_lifecycle_complete": true
+        }
+      ],
+      "structured_service_errors": 0
+    },
+    "c05": {
+      "skill": "redline",
+      "target": "response",
+      "seconds": 1699.2,
+      "sessions": [
+        {
+          "id": "01a0f791-4f82-7b50-b078-9d5f7dd0d15c",
+          "role": "parent",
+          "unique_complete_resource_words": 13574,
+          "separately_returned_fragment_words": 0,
+          "required_core_resource_paths": [
+            "skills/kntnt/library/references/editorial/anti-slop.md",
+            "skills/kntnt/library/references/editorial/article-anatomy.md",
+            "skills/kntnt/library/references/editorial/article-anatomy.review.md",
+            "skills/kntnt/library/references/editorial/base.md",
+            "skills/kntnt/library/references/editorial/base.review.md",
+            "skills/kntnt/library/references/editorial/genres/casestudy.md",
+            "skills/kntnt/library/references/editorial/genres/casestudy.review.md",
+            "skills/kntnt/library/references/editorial/headlines.md",
+            "skills/kntnt/library/references/editorial/headlines.review.md",
+            "skills/kntnt/library/references/editorial/web-craft.md",
+            "skills/kntnt/library/references/editorial/web-craft.review.md"
+          ],
+          "core_missing_complete_read_proof": [],
+          "required_scopes": [
+            "anti-slop",
+            "composition",
+            "review"
+          ],
+          "scope_missing_complete_read_proof": [],
+          "observed_core_words": 8898,
+          "complete_core": true,
+          "fresh_lifecycle_complete": true
+        },
+        {
+          "id": "01a0f797-6931-7aa3-885e-c8aeb3bde8f3",
+          "role": "correction",
+          "unique_complete_resource_words": 8898,
+          "separately_returned_fragment_words": 0,
+          "required_core_resource_paths": [
+            "skills/kntnt/library/references/editorial/anti-slop.md",
+            "skills/kntnt/library/references/editorial/article-anatomy.md",
+            "skills/kntnt/library/references/editorial/article-anatomy.review.md",
+            "skills/kntnt/library/references/editorial/base.md",
+            "skills/kntnt/library/references/editorial/base.review.md",
+            "skills/kntnt/library/references/editorial/genres/casestudy.md",
+            "skills/kntnt/library/references/editorial/genres/casestudy.review.md",
+            "skills/kntnt/library/references/editorial/headlines.md",
+            "skills/kntnt/library/references/editorial/headlines.review.md",
+            "skills/kntnt/library/references/editorial/web-craft.md",
+            "skills/kntnt/library/references/editorial/web-craft.review.md"
+          ],
+          "core_missing_complete_read_proof": [],
+          "required_scopes": [
+            "anti-slop",
+            "composition",
+            "review"
+          ],
+          "scope_missing_complete_read_proof": [],
+          "observed_core_words": 8898,
+          "complete_core": true,
+          "fresh_lifecycle_complete": true
+        },
+        {
+          "id": "01a0f7a1-4380-77d1-ac75-52927ac7060a",
+          "role": "mechanical_pass",
+          "unique_complete_resource_words": 7687,
+          "separately_returned_fragment_words": 0,
+          "required_core_resource_paths": [],
+          "core_missing_complete_read_proof": [],
+          "required_scopes": [],
+          "scope_missing_complete_read_proof": [],
+          "observed_core_words": 0,
+          "complete_core": true,
+          "fresh_lifecycle_complete": true
+        },
+        {
+          "id": "01a0f7a6-02b3-7302-bcbf-5732722cfe35",
+          "role": "reply_check",
+          "unique_complete_resource_words": 0,
+          "separately_returned_fragment_words": 645,
+          "required_core_resource_paths": [],
+          "core_missing_complete_read_proof": [],
+          "required_scopes": [],
+          "scope_missing_complete_read_proof": [],
+          "observed_core_words": 0,
+          "complete_core": true,
+          "fresh_lifecycle_complete": true
+        }
+      ],
+      "structured_service_errors": 0
+    },
+    "c07": {
+      "skill": "redline",
+      "target": "response",
+      "seconds": 1137.96,
+      "sessions": [
+        {
+          "id": "01a0f7a9-e5d9-7bb3-b8ee-6b248ef1c0b8",
+          "role": "parent",
+          "unique_complete_resource_words": 23126,
+          "separately_returned_fragment_words": 0,
+          "required_core_resource_paths": [
+            "skills/kntnt/library/references/editorial/anti-slop.md",
+            "skills/kntnt/library/references/editorial/article-anatomy.md",
+            "skills/kntnt/library/references/editorial/article-anatomy.review.md",
+            "skills/kntnt/library/references/editorial/base.md",
+            "skills/kntnt/library/references/editorial/base.review.md",
+            "skills/kntnt/library/references/editorial/genres/casestudy.md",
+            "skills/kntnt/library/references/editorial/genres/casestudy.review.md",
+            "skills/kntnt/library/references/editorial/headlines.md",
+            "skills/kntnt/library/references/editorial/headlines.review.md",
+            "skills/kntnt/library/references/editorial/web-craft.md",
+            "skills/kntnt/library/references/editorial/web-craft.review.md"
+          ],
+          "core_missing_complete_read_proof": [],
+          "required_scopes": [
+            "anti-slop",
+            "composition",
+            "review"
+          ],
+          "scope_missing_complete_read_proof": [],
+          "observed_core_words": 8195,
+          "complete_core": true,
+          "fresh_lifecycle_complete": true
+        },
+        {
+          "id": "01a0f7ae-e459-7142-bf53-991c9f209110",
+          "role": "correction_1",
+          "unique_complete_resource_words": 8195,
+          "separately_returned_fragment_words": 0,
+          "required_core_resource_paths": [
+            "skills/kntnt/library/references/editorial/anti-slop.md",
+            "skills/kntnt/library/references/editorial/article-anatomy.md",
+            "skills/kntnt/library/references/editorial/article-anatomy.review.md",
+            "skills/kntnt/library/references/editorial/base.md",
+            "skills/kntnt/library/references/editorial/base.review.md",
+            "skills/kntnt/library/references/editorial/genres/casestudy.md",
+            "skills/kntnt/library/references/editorial/genres/casestudy.review.md",
+            "skills/kntnt/library/references/editorial/headlines.md",
+            "skills/kntnt/library/references/editorial/headlines.review.md",
+            "skills/kntnt/library/references/editorial/web-craft.md",
+            "skills/kntnt/library/references/editorial/web-craft.review.md"
+          ],
+          "core_missing_complete_read_proof": [],
+          "required_scopes": [
+            "anti-slop",
+            "composition",
+            "review"
+          ],
+          "scope_missing_complete_read_proof": [],
+          "observed_core_words": 8195,
+          "complete_core": true,
+          "fresh_lifecycle_complete": true
+        },
+        {
+          "id": "01a0f7b3-f774-72a0-9d9c-2fd627b81978",
+          "role": "mechanical_pass",
+          "unique_complete_resource_words": 8181,
+          "separately_returned_fragment_words": 0,
+          "required_core_resource_paths": [],
+          "core_missing_complete_read_proof": [],
+          "required_scopes": [],
+          "scope_missing_complete_read_proof": [],
+          "observed_core_words": 0,
+          "complete_core": true,
+          "fresh_lifecycle_complete": true
+        },
+        {
+          "id": "01a0f7b8-a145-7922-9cf6-24bff51cfedf",
+          "role": "reply_check",
+          "unique_complete_resource_words": 0,
+          "separately_returned_fragment_words": 645,
+          "required_core_resource_paths": [],
+          "core_missing_complete_read_proof": [],
+          "required_scopes": [],
+          "scope_missing_complete_read_proof": [],
+          "observed_core_words": 0,
+          "complete_core": true,
+          "fresh_lifecycle_complete": true
+        }
+      ],
+      "structured_service_errors": 0
+    },
+    "c08": {
+      "skill": "redline",
+      "target": "output.md",
+      "seconds": 1151.26,
+      "sessions": [
+        {
+          "id": "01a0f7ab-3e61-7e00-9874-af1010de6e03",
+          "role": "parent",
+          "unique_complete_resource_words": 13915,
+          "separately_returned_fragment_words": 456,
+          "required_core_resource_paths": [
+            "skills/kntnt/library/references/editorial/anti-slop.md",
+            "skills/kntnt/library/references/editorial/article-anatomy.md",
+            "skills/kntnt/library/references/editorial/article-anatomy.review.md",
+            "skills/kntnt/library/references/editorial/base.md",
+            "skills/kntnt/library/references/editorial/base.review.md",
+            "skills/kntnt/library/references/editorial/genres/casestudy.md",
+            "skills/kntnt/library/references/editorial/genres/casestudy.review.md",
+            "skills/kntnt/library/references/editorial/headlines.md",
+            "skills/kntnt/library/references/editorial/headlines.review.md",
+            "skills/kntnt/library/references/editorial/web-craft.md",
+            "skills/kntnt/library/references/editorial/web-craft.review.md"
+          ],
+          "core_missing_complete_read_proof": [],
+          "required_scopes": [
+            "anti-slop",
+            "composition",
+            "review"
+          ],
+          "scope_missing_complete_read_proof": [],
+          "observed_core_words": 8195,
+          "complete_core": true,
+          "fresh_lifecycle_complete": true
+        },
+        {
+          "id": "01a0f7b0-7f54-7952-b6ee-bcc3c4a11a13",
+          "role": "correction_1",
+          "unique_complete_resource_words": 8195,
+          "separately_returned_fragment_words": 0,
+          "required_core_resource_paths": [
+            "skills/kntnt/library/references/editorial/anti-slop.md",
+            "skills/kntnt/library/references/editorial/article-anatomy.md",
+            "skills/kntnt/library/references/editorial/article-anatomy.review.md",
+            "skills/kntnt/library/references/editorial/base.md",
+            "skills/kntnt/library/references/editorial/base.review.md",
+            "skills/kntnt/library/references/editorial/genres/casestudy.md",
+            "skills/kntnt/library/references/editorial/genres/casestudy.review.md",
+            "skills/kntnt/library/references/editorial/headlines.md",
+            "skills/kntnt/library/references/editorial/headlines.review.md",
+            "skills/kntnt/library/references/editorial/web-craft.md",
+            "skills/kntnt/library/references/editorial/web-craft.review.md"
+          ],
+          "core_missing_complete_read_proof": [],
+          "required_scopes": [
+            "anti-slop",
+            "composition",
+            "review"
+          ],
+          "scope_missing_complete_read_proof": [],
+          "observed_core_words": 8195,
+          "complete_core": true,
+          "fresh_lifecycle_complete": true
+        },
+        {
+          "id": "01a0f7b5-808e-79b2-9276-b753c4c142ce",
+          "role": "mechanical_pass",
+          "unique_complete_resource_words": 7005,
+          "separately_returned_fragment_words": 0,
+          "required_core_resource_paths": [],
+          "core_missing_complete_read_proof": [],
+          "required_scopes": [],
+          "scope_missing_complete_read_proof": [],
+          "observed_core_words": 0,
+          "complete_core": true,
+          "fresh_lifecycle_complete": true
+        },
+        {
+          "id": "01a0f7ba-4707-7e40-b24f-3cb4598ac07e",
+          "role": "reply_check",
+          "unique_complete_resource_words": 0,
+          "separately_returned_fragment_words": 645,
+          "required_core_resource_paths": [],
+          "core_missing_complete_read_proof": [],
+          "required_scopes": [],
+          "scope_missing_complete_read_proof": [],
+          "observed_core_words": 0,
+          "complete_core": true,
+          "fresh_lifecycle_complete": true
+        }
+      ],
+      "structured_service_errors": 0
+    },
+    "c09": {
+      "skill": "redline",
+      "target": "response",
+      "seconds": 1010.0,
+      "sessions": [
+        {
+          "id": "01a0f7bb-4448-7633-b2bc-cdc17289323a",
+          "role": "parent",
+          "unique_complete_resource_words": 16590,
+          "separately_returned_fragment_words": 0,
+          "required_core_resource_paths": [
+            "skills/kntnt/library/references/editorial/anti-slop.md",
+            "skills/kntnt/library/references/editorial/article-anatomy.md",
+            "skills/kntnt/library/references/editorial/article-anatomy.review.md",
+            "skills/kntnt/library/references/editorial/base.md",
+            "skills/kntnt/library/references/editorial/base.review.md",
+            "skills/kntnt/library/references/editorial/genres/casestudy.md",
+            "skills/kntnt/library/references/editorial/genres/casestudy.review.md",
+            "skills/kntnt/library/references/editorial/headlines.md",
+            "skills/kntnt/library/references/editorial/headlines.review.md",
+            "skills/kntnt/library/references/editorial/web-craft.md",
+            "skills/kntnt/library/references/editorial/web-craft.review.md"
+          ],
+          "core_missing_complete_read_proof": [],
+          "required_scopes": [
+            "anti-slop",
+            "composition",
+            "review"
+          ],
+          "scope_missing_complete_read_proof": [],
+          "observed_core_words": 8195,
+          "complete_core": true,
+          "fresh_lifecycle_complete": true
+        },
+        {
+          "id": "01a0f7bf-fdb2-70f2-b6c5-27ef3c611019",
+          "role": "redline_correction",
+          "unique_complete_resource_words": 8195,
+          "separately_returned_fragment_words": 0,
+          "required_core_resource_paths": [
+            "skills/kntnt/library/references/editorial/anti-slop.md",
+            "skills/kntnt/library/references/editorial/article-anatomy.md",
+            "skills/kntnt/library/references/editorial/article-anatomy.review.md",
+            "skills/kntnt/library/references/editorial/base.md",
+            "skills/kntnt/library/references/editorial/base.review.md",
+            "skills/kntnt/library/references/editorial/genres/casestudy.md",
+            "skills/kntnt/library/references/editorial/genres/casestudy.review.md",
+            "skills/kntnt/library/references/editorial/headlines.md",
+            "skills/kntnt/library/references/editorial/headlines.review.md",
+            "skills/kntnt/library/references/editorial/web-craft.md",
+            "skills/kntnt/library/references/editorial/web-craft.review.md"
+          ],
+          "core_missing_complete_read_proof": [],
+          "required_scopes": [
+            "anti-slop",
+            "composition",
+            "review"
+          ],
+          "scope_missing_complete_read_proof": [],
+          "observed_core_words": 8195,
+          "complete_core": true,
+          "fresh_lifecycle_complete": true
+        },
+        {
+          "id": "01a0f7c4-253c-7071-b355-a6e0334da8ca",
+          "role": "nested_proofread",
+          "unique_complete_resource_words": 7005,
+          "separately_returned_fragment_words": 0,
+          "required_core_resource_paths": [],
+          "core_missing_complete_read_proof": [],
+          "required_scopes": [],
+          "scope_missing_complete_read_proof": [],
+          "observed_core_words": 0,
+          "complete_core": true,
+          "fresh_lifecycle_complete": true
+        },
+        {
+          "id": "01a0f7c8-95e5-7210-aec2-bd44353f11c1",
+          "role": "redline_reply_check",
+          "unique_complete_resource_words": 0,
+          "separately_returned_fragment_words": 645,
+          "required_core_resource_paths": [],
+          "core_missing_complete_read_proof": [],
+          "required_scopes": [],
+          "scope_missing_complete_read_proof": [],
+          "observed_core_words": 0,
+          "complete_core": true,
+          "fresh_lifecycle_complete": true
+        }
+      ],
+      "structured_service_errors": 0
+    },
+    "c10": {
+      "skill": "redline",
+      "target": "output.md",
+      "seconds": 1160.37,
+      "sessions": [
+        {
+          "id": "01a0f7bc-d0b7-7df2-bd1d-b2a87bee0565",
+          "role": "parent",
+          "unique_complete_resource_words": 16590,
+          "separately_returned_fragment_words": 0,
+          "required_core_resource_paths": [
+            "skills/kntnt/library/references/editorial/anti-slop.md",
+            "skills/kntnt/library/references/editorial/article-anatomy.md",
+            "skills/kntnt/library/references/editorial/article-anatomy.review.md",
+            "skills/kntnt/library/references/editorial/base.md",
+            "skills/kntnt/library/references/editorial/base.review.md",
+            "skills/kntnt/library/references/editorial/genres/casestudy.md",
+            "skills/kntnt/library/references/editorial/genres/casestudy.review.md",
+            "skills/kntnt/library/references/editorial/headlines.md",
+            "skills/kntnt/library/references/editorial/headlines.review.md",
+            "skills/kntnt/library/references/editorial/web-craft.md",
+            "skills/kntnt/library/references/editorial/web-craft.review.md"
+          ],
+          "core_missing_complete_read_proof": [],
+          "required_scopes": [
+            "anti-slop",
+            "composition",
+            "review"
+          ],
+          "scope_missing_complete_read_proof": [],
+          "observed_core_words": 8195,
+          "complete_core": true,
+          "fresh_lifecycle_complete": true
+        },
+        {
+          "id": "01a0f7c2-45ab-7681-8154-5704b4a90125",
+          "role": "redline_correction",
+          "unique_complete_resource_words": 8195,
+          "separately_returned_fragment_words": 0,
+          "required_core_resource_paths": [
+            "skills/kntnt/library/references/editorial/anti-slop.md",
+            "skills/kntnt/library/references/editorial/article-anatomy.md",
+            "skills/kntnt/library/references/editorial/article-anatomy.review.md",
+            "skills/kntnt/library/references/editorial/base.md",
+            "skills/kntnt/library/references/editorial/base.review.md",
+            "skills/kntnt/library/references/editorial/genres/casestudy.md",
+            "skills/kntnt/library/references/editorial/genres/casestudy.review.md",
+            "skills/kntnt/library/references/editorial/headlines.md",
+            "skills/kntnt/library/references/editorial/headlines.review.md",
+            "skills/kntnt/library/references/editorial/web-craft.md",
+            "skills/kntnt/library/references/editorial/web-craft.review.md"
+          ],
+          "core_missing_complete_read_proof": [],
+          "required_scopes": [
+            "anti-slop",
+            "composition",
+            "review"
+          ],
+          "scope_missing_complete_read_proof": [],
+          "observed_core_words": 8195,
+          "complete_core": true,
+          "fresh_lifecycle_complete": true
+        },
+        {
+          "id": "01a0f7c7-6858-7ee0-9ae7-b76faf2b8dc8",
+          "role": "mechanical_proofread",
+          "unique_complete_resource_words": 8181,
+          "separately_returned_fragment_words": 0,
+          "required_core_resource_paths": [],
+          "core_missing_complete_read_proof": [],
+          "required_scopes": [],
+          "scope_missing_complete_read_proof": [],
+          "observed_core_words": 0,
+          "complete_core": true,
+          "fresh_lifecycle_complete": true
+        },
+        {
+          "id": "01a0f7cb-d0c2-75f2-ac56-0e1d936dcedf",
+          "role": "redline_reply_check",
+          "unique_complete_resource_words": 0,
+          "separately_returned_fragment_words": 645,
+          "required_core_resource_paths": [],
+          "core_missing_complete_read_proof": [],
+          "required_scopes": [],
+          "scope_missing_complete_read_proof": [],
+          "observed_core_words": 0,
+          "complete_core": true,
+          "fresh_lifecycle_complete": true
+        }
+      ],
+      "structured_service_errors": 0
+    },
+    "c11": {
+      "skill": "redline",
+      "target": "response",
+      "seconds": 1233.2,
+      "sessions": [
+        {
+          "id": "01a0f7ca-aedc-7312-9282-f31affbe6b6a",
+          "role": "parent",
+          "unique_complete_resource_words": 17293,
+          "separately_returned_fragment_words": 0,
+          "required_core_resource_paths": [
+            "skills/kntnt/library/references/editorial/anti-slop.md",
+            "skills/kntnt/library/references/editorial/article-anatomy.md",
+            "skills/kntnt/library/references/editorial/article-anatomy.review.md",
+            "skills/kntnt/library/references/editorial/base.md",
+            "skills/kntnt/library/references/editorial/base.review.md",
+            "skills/kntnt/library/references/editorial/genres/casestudy.md",
+            "skills/kntnt/library/references/editorial/genres/casestudy.review.md",
+            "skills/kntnt/library/references/editorial/headlines.md",
+            "skills/kntnt/library/references/editorial/headlines.review.md",
+            "skills/kntnt/library/references/editorial/web-craft.md",
+            "skills/kntnt/library/references/editorial/web-craft.review.md"
+          ],
+          "core_missing_complete_read_proof": [],
+          "required_scopes": [
+            "anti-slop",
+            "composition",
+            "review"
+          ],
+          "scope_missing_complete_read_proof": [],
+          "observed_core_words": 8898,
+          "complete_core": true,
+          "fresh_lifecycle_complete": true
+        },
+        {
+          "id": "01a0f7ce-c25e-7c82-8b66-d09828c130bf",
+          "role": "redline_correction",
+          "unique_complete_resource_words": 8898,
+          "separately_returned_fragment_words": 0,
+          "required_core_resource_paths": [
+            "skills/kntnt/library/references/editorial/anti-slop.md",
+            "skills/kntnt/library/references/editorial/article-anatomy.md",
+            "skills/kntnt/library/references/editorial/article-anatomy.review.md",
+            "skills/kntnt/library/references/editorial/base.md",
+            "skills/kntnt/library/references/editorial/base.review.md",
+            "skills/kntnt/library/references/editorial/genres/casestudy.md",
+            "skills/kntnt/library/references/editorial/genres/casestudy.review.md",
+            "skills/kntnt/library/references/editorial/headlines.md",
+            "skills/kntnt/library/references/editorial/headlines.review.md",
+            "skills/kntnt/library/references/editorial/web-craft.md",
+            "skills/kntnt/library/references/editorial/web-craft.review.md"
+          ],
+          "core_missing_complete_read_proof": [],
+          "required_scopes": [
+            "anti-slop",
+            "composition",
+            "review"
+          ],
+          "scope_missing_complete_read_proof": [],
+          "observed_core_words": 8898,
+          "complete_core": true,
+          "fresh_lifecycle_complete": true
+        },
+        {
+          "id": "01a0f7d5-8108-7d90-8358-5e8cfdbb7fc6",
+          "role": "mechanical_pass",
+          "unique_complete_resource_words": 7687,
+          "separately_returned_fragment_words": 0,
+          "required_core_resource_paths": [],
+          "core_missing_complete_read_proof": [],
+          "required_scopes": [],
+          "scope_missing_complete_read_proof": [],
+          "observed_core_words": 0,
+          "complete_core": true,
+          "fresh_lifecycle_complete": true
+        },
+        {
+          "id": "01a0f7db-074d-7c90-b9ee-09324a399201",
+          "role": "reply_check",
+          "unique_complete_resource_words": 0,
+          "separately_returned_fragment_words": 645,
+          "required_core_resource_paths": [],
+          "core_missing_complete_read_proof": [],
+          "required_scopes": [],
+          "scope_missing_complete_read_proof": [],
+          "observed_core_words": 0,
+          "complete_core": true,
+          "fresh_lifecycle_complete": true
+        }
+      ],
+      "structured_service_errors": 0
+    },
+    "c12": {
+      "skill": "redline",
+      "target": "output.md",
+      "seconds": 1301.76,
+      "sessions": [
+        {
+          "id": "01a0f7ce-86b5-7b50-b52d-0a6cd104cd53",
+          "role": "parent",
+          "unique_complete_resource_words": 14653,
+          "separately_returned_fragment_words": 0,
+          "required_core_resource_paths": [
+            "skills/kntnt/library/references/editorial/anti-slop.md",
+            "skills/kntnt/library/references/editorial/article-anatomy.md",
+            "skills/kntnt/library/references/editorial/article-anatomy.review.md",
+            "skills/kntnt/library/references/editorial/base.md",
+            "skills/kntnt/library/references/editorial/base.review.md",
+            "skills/kntnt/library/references/editorial/genres/casestudy.md",
+            "skills/kntnt/library/references/editorial/genres/casestudy.review.md",
+            "skills/kntnt/library/references/editorial/headlines.md",
+            "skills/kntnt/library/references/editorial/headlines.review.md",
+            "skills/kntnt/library/references/editorial/web-craft.md",
+            "skills/kntnt/library/references/editorial/web-craft.review.md"
+          ],
+          "core_missing_complete_read_proof": [],
+          "required_scopes": [
+            "anti-slop",
+            "composition",
+            "review"
+          ],
+          "scope_missing_complete_read_proof": [],
+          "observed_core_words": 8898,
+          "complete_core": true,
+          "fresh_lifecycle_complete": true
+        },
+        {
+          "id": "01a0f7d3-a92d-7041-8e07-ae02f31f86e2",
+          "role": "redline_correction",
+          "unique_complete_resource_words": 8898,
+          "separately_returned_fragment_words": 0,
+          "required_core_resource_paths": [
+            "skills/kntnt/library/references/editorial/anti-slop.md",
+            "skills/kntnt/library/references/editorial/article-anatomy.md",
+            "skills/kntnt/library/references/editorial/article-anatomy.review.md",
+            "skills/kntnt/library/references/editorial/base.md",
+            "skills/kntnt/library/references/editorial/base.review.md",
+            "skills/kntnt/library/references/editorial/genres/casestudy.md",
+            "skills/kntnt/library/references/editorial/genres/casestudy.review.md",
+            "skills/kntnt/library/references/editorial/headlines.md",
+            "skills/kntnt/library/references/editorial/headlines.review.md",
+            "skills/kntnt/library/references/editorial/web-craft.md",
+            "skills/kntnt/library/references/editorial/web-craft.review.md"
+          ],
+          "core_missing_complete_read_proof": [],
+          "required_scopes": [
+            "anti-slop",
+            "composition",
+            "review"
+          ],
+          "scope_missing_complete_read_proof": [],
+          "observed_core_words": 8898,
+          "complete_core": true,
+          "fresh_lifecycle_complete": true
+        },
+        {
+          "id": "01a0f7db-0b48-74d1-ac1b-ee5ebfdaabb2",
+          "role": "mechanical_pass",
+          "unique_complete_resource_words": 7687,
+          "separately_returned_fragment_words": 0,
+          "required_core_resource_paths": [],
+          "core_missing_complete_read_proof": [],
+          "required_scopes": [],
+          "scope_missing_complete_read_proof": [],
+          "observed_core_words": 0,
+          "complete_core": true,
+          "fresh_lifecycle_complete": true
+        },
+        {
+          "id": "01a0f7df-5c9d-7c63-abc2-75b399994ea5",
+          "role": "reply_check",
+          "unique_complete_resource_words": 0,
+          "separately_returned_fragment_words": 645,
+          "required_core_resource_paths": [],
+          "core_missing_complete_read_proof": [],
+          "required_scopes": [],
+          "scope_missing_complete_read_proof": [],
+          "observed_core_words": 0,
+          "complete_core": true,
+          "fresh_lifecycle_complete": true
+        }
+      ],
+      "structured_service_errors": 0
+    },
+    "r14": {
+      "skill": "redline",
+      "target": "output.md",
+      "seconds": 941.36,
+      "sessions": [
+        {
+          "id": "01a0f7e0-96ce-79d3-ae7f-2b22eb12eb6f",
+          "role": "parent",
+          "unique_complete_resource_words": 15806,
+          "separately_returned_fragment_words": 0,
+          "required_core_resource_paths": [
+            "skills/kntnt/library/references/editorial/anti-slop.md",
+            "skills/kntnt/library/references/editorial/article-anatomy.md",
+            "skills/kntnt/library/references/editorial/article-anatomy.review.md",
+            "skills/kntnt/library/references/editorial/base.md",
+            "skills/kntnt/library/references/editorial/base.review.md",
+            "skills/kntnt/library/references/editorial/genres/article.md",
+            "skills/kntnt/library/references/editorial/genres/article.review.md",
+            "skills/kntnt/library/references/editorial/headlines.md",
+            "skills/kntnt/library/references/editorial/headlines.review.md",
+            "skills/kntnt/library/references/editorial/web-craft.md",
+            "skills/kntnt/library/references/editorial/web-craft.review.md"
+          ],
+          "core_missing_complete_read_proof": [],
+          "required_scopes": [
+            "anti-slop",
+            "composition",
+            "review"
+          ],
+          "scope_missing_complete_read_proof": [
+            "anti-slop",
+            "composition",
+            "review"
+          ],
+          "observed_core_words": 7411,
+          "complete_core": false,
+          "fresh_lifecycle_complete": true
+        },
+        {
+          "id": "01a0f7e4-a43e-7e42-a78e-ca8a9fb3dcaa",
+          "role": "redline_correction",
+          "unique_complete_resource_words": 8109,
+          "separately_returned_fragment_words": 0,
+          "required_core_resource_paths": [
+            "skills/kntnt/library/references/editorial/anti-slop.md",
+            "skills/kntnt/library/references/editorial/article-anatomy.md",
+            "skills/kntnt/library/references/editorial/article-anatomy.review.md",
+            "skills/kntnt/library/references/editorial/base.md",
+            "skills/kntnt/library/references/editorial/base.review.md",
+            "skills/kntnt/library/references/editorial/genres/article.md",
+            "skills/kntnt/library/references/editorial/genres/article.review.md",
+            "skills/kntnt/library/references/editorial/headlines.md",
+            "skills/kntnt/library/references/editorial/headlines.review.md",
+            "skills/kntnt/library/references/editorial/web-craft.md",
+            "skills/kntnt/library/references/editorial/web-craft.review.md"
+          ],
+          "core_missing_complete_read_proof": [],
+          "required_scopes": [
+            "anti-slop",
+            "composition",
+            "review"
+          ],
+          "scope_missing_complete_read_proof": [],
+          "observed_core_words": 8109,
+          "complete_core": true,
+          "fresh_lifecycle_complete": true
+        },
+        {
+          "id": "01a0f7e9-c014-7590-89cc-4d243b7f9bdc",
+          "role": "redline_proofread",
+          "unique_complete_resource_words": 8243,
+          "separately_returned_fragment_words": 0,
+          "required_core_resource_paths": [],
+          "core_missing_complete_read_proof": [],
+          "required_scopes": [],
+          "scope_missing_complete_read_proof": [],
+          "observed_core_words": 0,
+          "complete_core": true,
+          "fresh_lifecycle_complete": true
+        },
+        {
+          "id": "01a0f7ed-ba94-7bc2-a7a0-32b42eba979d",
+          "role": "redline_reply_check",
+          "unique_complete_resource_words": 0,
+          "separately_returned_fragment_words": 645,
+          "required_core_resource_paths": [],
+          "core_missing_complete_read_proof": [],
+          "required_scopes": [],
+          "scope_missing_complete_read_proof": [],
+          "observed_core_words": 0,
+          "complete_core": true,
+          "fresh_lifecycle_complete": true
+        }
+      ],
+      "structured_service_errors": 0
+    },
+    "w02": {
+      "skill": "write",
+      "target": "response",
+      "seconds": 2109.82,
+      "sessions": [
+        {
+          "id": "01a0f7e2-64db-7b90-aa4d-28e8e85fe580",
+          "role": "parent",
+          "unique_complete_resource_words": 11826,
+          "separately_returned_fragment_words": 0,
+          "required_core_resource_paths": [
+            "skills/kntnt/library/references/editorial/article-anatomy.md",
+            "skills/kntnt/library/references/editorial/base.md",
+            "skills/kntnt/library/references/editorial/genres/casestudy.md",
+            "skills/kntnt/library/references/editorial/headlines.md",
+            "skills/kntnt/library/references/editorial/web-craft.md"
+          ],
+          "core_missing_complete_read_proof": [],
+          "required_scopes": [
+            "composition"
+          ],
+          "scope_missing_complete_read_proof": [],
+          "observed_core_words": 3491,
+          "complete_core": true,
+          "fresh_lifecycle_complete": true
+        },
+        {
+          "id": "01a0f7e8-054e-7780-b076-218f55e67653",
+          "role": "source_comparison_1",
+          "unique_complete_resource_words": 1237,
+          "separately_returned_fragment_words": 0,
+          "required_core_resource_paths": [],
+          "core_missing_complete_read_proof": [],
+          "required_scopes": [
+            "composition"
+          ],
+          "scope_missing_complete_read_proof": [],
+          "observed_core_words": 566,
+          "complete_core": true,
+          "fresh_lifecycle_complete": true
+        },
+        {
+          "id": "01a0f7f3-dd92-7a22-93b2-4e01612506c1",
+          "role": "source_comparison_2",
+          "unique_complete_resource_words": 1237,
+          "separately_returned_fragment_words": 0,
+          "required_core_resource_paths": [],
+          "core_missing_complete_read_proof": [],
+          "required_scopes": [
+            "composition"
+          ],
+          "scope_missing_complete_read_proof": [],
+          "observed_core_words": 566,
+          "complete_core": true,
+          "fresh_lifecycle_complete": true
+        }
+      ],
+      "structured_service_errors": 0
+    },
+    "w03": {
+      "skill": "write",
+      "target": "response",
+      "seconds": 1507.69,
+      "sessions": [
+        {
+          "id": "01a0f7ee-f54b-78d1-959e-b54334cf62b6",
+          "role": "parent",
+          "unique_complete_resource_words": 11826,
+          "separately_returned_fragment_words": 0,
+          "required_core_resource_paths": [
+            "skills/kntnt/library/references/editorial/article-anatomy.md",
+            "skills/kntnt/library/references/editorial/base.md",
+            "skills/kntnt/library/references/editorial/genres/casestudy.md",
+            "skills/kntnt/library/references/editorial/headlines.md",
+            "skills/kntnt/library/references/editorial/web-craft.md"
+          ],
+          "core_missing_complete_read_proof": [],
+          "required_scopes": [
+            "composition"
+          ],
+          "scope_missing_complete_read_proof": [],
+          "observed_core_words": 3491,
+          "complete_core": true,
+          "fresh_lifecycle_complete": true
+        },
+        {
+          "id": "01a0f7f5-73fe-7c91-bfd3-93546e4e1c32",
+          "role": "source_check_1",
+          "unique_complete_resource_words": 671,
+          "separately_returned_fragment_words": 0,
+          "required_core_resource_paths": [],
+          "core_missing_complete_read_proof": [],
+          "required_scopes": [
+            "composition"
+          ],
+          "scope_missing_complete_read_proof": [
+            "composition"
+          ],
+          "observed_core_words": 0,
+          "complete_core": false,
+          "fresh_lifecycle_complete": true
+        },
+        {
+          "id": "01a0f7fd-722d-7623-8b5a-d761fd0ae441",
+          "role": "source_check_2",
+          "unique_complete_resource_words": 671,
+          "separately_returned_fragment_words": 0,
+          "required_core_resource_paths": [],
+          "core_missing_complete_read_proof": [],
+          "required_scopes": [
+            "composition"
+          ],
+          "scope_missing_complete_read_proof": [
+            "composition"
+          ],
+          "observed_core_words": 0,
+          "complete_core": false,
+          "fresh_lifecycle_complete": true
+        }
+      ],
+      "structured_service_errors": 0
+    },
+    "r13-rerun": {
+      "skill": "redline",
+      "target": "response",
+      "seconds": 1029.82,
+      "sessions": [
+        {
+          "id": "01a0f805-fd3a-7340-84a9-8dc270e0dcdf",
+          "role": "parent",
+          "unique_complete_resource_words": 16504,
+          "separately_returned_fragment_words": 0,
+          "required_core_resource_paths": [
+            "skills/kntnt/library/references/editorial/anti-slop.md",
+            "skills/kntnt/library/references/editorial/article-anatomy.md",
+            "skills/kntnt/library/references/editorial/article-anatomy.review.md",
+            "skills/kntnt/library/references/editorial/base.md",
+            "skills/kntnt/library/references/editorial/base.review.md",
+            "skills/kntnt/library/references/editorial/genres/article.md",
+            "skills/kntnt/library/references/editorial/genres/article.review.md",
+            "skills/kntnt/library/references/editorial/headlines.md",
+            "skills/kntnt/library/references/editorial/headlines.review.md",
+            "skills/kntnt/library/references/editorial/web-craft.md",
+            "skills/kntnt/library/references/editorial/web-craft.review.md"
+          ],
+          "core_missing_complete_read_proof": [],
+          "required_scopes": [
+            "anti-slop",
+            "composition",
+            "review"
+          ],
+          "scope_missing_complete_read_proof": [],
+          "observed_core_words": 8109,
+          "complete_core": true,
+          "fresh_lifecycle_complete": true
+        },
+        {
+          "id": "01a0f809-d88d-7d13-ae71-95603ac61688",
+          "role": "correction_1",
+          "unique_complete_resource_words": 3551,
+          "separately_returned_fragment_words": 0,
+          "required_core_resource_paths": [
+            "skills/kntnt/library/references/editorial/anti-slop.md",
+            "skills/kntnt/library/references/editorial/article-anatomy.md",
+            "skills/kntnt/library/references/editorial/article-anatomy.review.md",
+            "skills/kntnt/library/references/editorial/base.md",
+            "skills/kntnt/library/references/editorial/base.review.md",
+            "skills/kntnt/library/references/editorial/genres/article.md",
+            "skills/kntnt/library/references/editorial/genres/article.review.md",
+            "skills/kntnt/library/references/editorial/headlines.md",
+            "skills/kntnt/library/references/editorial/headlines.review.md",
+            "skills/kntnt/library/references/editorial/web-craft.md",
+            "skills/kntnt/library/references/editorial/web-craft.review.md"
+          ],
+          "core_missing_complete_read_proof": [
+            "skills/kntnt/library/references/editorial/anti-slop.md",
+            "skills/kntnt/library/references/editorial/article-anatomy.md",
+            "skills/kntnt/library/references/editorial/headlines.md",
+            "skills/kntnt/library/references/editorial/headlines.review.md",
+            "skills/kntnt/library/references/editorial/web-craft.md",
+            "skills/kntnt/library/references/editorial/web-craft.review.md"
+          ],
+          "required_scopes": [
+            "anti-slop",
+            "composition",
+            "review"
+          ],
+          "scope_missing_complete_read_proof": [],
+          "observed_core_words": 3551,
+          "complete_core": false,
+          "fresh_lifecycle_complete": true
+        },
+        {
+          "id": "01a0f80f-03d3-7d61-999d-2bf29f93deff",
+          "role": "mechanical_pass",
+          "unique_complete_resource_words": 7067,
+          "separately_returned_fragment_words": 0,
+          "required_core_resource_paths": [],
+          "core_missing_complete_read_proof": [],
+          "required_scopes": [],
+          "scope_missing_complete_read_proof": [],
+          "observed_core_words": 0,
+          "complete_core": true,
+          "fresh_lifecycle_complete": true
+        },
+        {
+          "id": "01a0f813-58de-78d1-b91b-4b4b4ec5611f",
+          "role": "reply_check",
+          "unique_complete_resource_words": 0,
+          "separately_returned_fragment_words": 645,
+          "required_core_resource_paths": [],
+          "core_missing_complete_read_proof": [],
+          "required_scopes": [],
+          "scope_missing_complete_read_proof": [],
+          "observed_core_words": 0,
+          "complete_core": true,
+          "fresh_lifecycle_complete": true
+        }
+      ],
+      "structured_service_errors": 0
+    },
+    "w01-rerun": {
+      "skill": "write",
+      "target": "response",
+      "seconds": 1780.24,
+      "sessions": [
+        {
+          "id": "01a0f802-9cff-7e71-a231-8fafaf8b3ce1",
+          "role": "parent",
+          "unique_complete_resource_words": 11826,
+          "separately_returned_fragment_words": 0,
+          "required_core_resource_paths": [
+            "skills/kntnt/library/references/editorial/article-anatomy.md",
+            "skills/kntnt/library/references/editorial/base.md",
+            "skills/kntnt/library/references/editorial/genres/casestudy.md",
+            "skills/kntnt/library/references/editorial/headlines.md",
+            "skills/kntnt/library/references/editorial/web-craft.md"
+          ],
+          "core_missing_complete_read_proof": [],
+          "required_scopes": [
+            "composition"
+          ],
+          "scope_missing_complete_read_proof": [],
+          "observed_core_words": 3491,
+          "complete_core": true,
+          "fresh_lifecycle_complete": true
+        },
+        {
+          "id": "01a0f80b-81d8-75c2-a1de-1fea2e9359e9",
+          "role": "source_check_1",
+          "unique_complete_resource_words": 0,
+          "separately_returned_fragment_words": 0,
+          "required_core_resource_paths": [],
+          "core_missing_complete_read_proof": [],
+          "required_scopes": [
+            "composition"
+          ],
+          "scope_missing_complete_read_proof": [
+            "composition"
+          ],
+          "observed_core_words": 0,
+          "complete_core": false,
+          "fresh_lifecycle_complete": true
+        },
+        {
+          "id": "01a0f813-f16d-7d53-8a44-151543782997",
+          "role": "source_check_2",
+          "unique_complete_resource_words": 0,
+          "separately_returned_fragment_words": 0,
+          "required_core_resource_paths": [],
+          "core_missing_complete_read_proof": [],
+          "required_scopes": [
+            "composition"
+          ],
+          "scope_missing_complete_read_proof": [
+            "composition"
+          ],
+          "observed_core_words": 0,
+          "complete_core": false,
+          "fresh_lifecycle_complete": true
+        }
+      ],
+      "structured_service_errors": 0
+    },
+    "p02": {
+      "skill": "redline",
+      "target": "response",
+      "seconds": 752.52,
+      "sessions": [
+        {
+          "id": "01a0f815-d9e4-7540-b11e-c8aab2725499",
+          "role": "parent",
+          "unique_complete_resource_words": 20269,
+          "separately_returned_fragment_words": 0,
+          "required_core_resource_paths": [
+            "skills/kntnt/library/references/editorial/anti-slop.md",
+            "skills/kntnt/library/references/editorial/article-anatomy.md",
+            "skills/kntnt/library/references/editorial/article-anatomy.review.md",
+            "skills/kntnt/library/references/editorial/base.md",
+            "skills/kntnt/library/references/editorial/base.review.md",
+            "skills/kntnt/library/references/editorial/genres/casestudy.md",
+            "skills/kntnt/library/references/editorial/genres/casestudy.review.md",
+            "skills/kntnt/library/references/editorial/headlines.md",
+            "skills/kntnt/library/references/editorial/headlines.review.md",
+            "skills/kntnt/library/references/editorial/web-craft.md",
+            "skills/kntnt/library/references/editorial/web-craft.review.md"
+          ],
+          "core_missing_complete_read_proof": [],
+          "required_scopes": [
+            "anti-slop",
+            "composition",
+            "review"
+          ],
+          "scope_missing_complete_read_proof": [],
+          "observed_core_words": 8898,
+          "complete_core": true,
+          "fresh_lifecycle_complete": true
+        },
+        {
+          "id": "01a0f81a-60a9-7ee1-8490-8064a8a9f939",
+          "role": "redline_correction",
+          "unique_complete_resource_words": 8898,
+          "separately_returned_fragment_words": 0,
+          "required_core_resource_paths": [
+            "skills/kntnt/library/references/editorial/anti-slop.md",
+            "skills/kntnt/library/references/editorial/article-anatomy.md",
+            "skills/kntnt/library/references/editorial/article-anatomy.review.md",
+            "skills/kntnt/library/references/editorial/base.md",
+            "skills/kntnt/library/references/editorial/base.review.md",
+            "skills/kntnt/library/references/editorial/genres/casestudy.md",
+            "skills/kntnt/library/references/editorial/genres/casestudy.review.md",
+            "skills/kntnt/library/references/editorial/headlines.md",
+            "skills/kntnt/library/references/editorial/headlines.review.md",
+            "skills/kntnt/library/references/editorial/web-craft.md",
+            "skills/kntnt/library/references/editorial/web-craft.review.md"
+          ],
+          "core_missing_complete_read_proof": [],
+          "required_scopes": [
+            "anti-slop",
+            "composition",
+            "review"
+          ],
+          "scope_missing_complete_read_proof": [],
+          "observed_core_words": 8898,
+          "complete_core": true,
+          "fresh_lifecycle_complete": true
+        },
+        {
+          "id": "01a0f820-5214-70c1-bd89-96108ec7d7fc",
+          "role": "redline_reply_check",
+          "unique_complete_resource_words": 0,
+          "separately_returned_fragment_words": 645,
+          "required_core_resource_paths": [],
+          "core_missing_complete_read_proof": [],
+          "required_scopes": [],
+          "scope_missing_complete_read_proof": [],
+          "observed_core_words": 0,
+          "complete_core": true,
+          "fresh_lifecycle_complete": true
+        }
+      ],
+      "structured_service_errors": 0
+    },
+    "p03": {
+      "skill": "redline",
+      "target": "response",
+      "seconds": 311.97,
+      "sessions": [
+        {
+          "id": "01a0f81d-d9d0-77f2-8647-0d898d6296ba",
+          "role": "parent",
+          "unique_complete_resource_words": 14653,
+          "separately_returned_fragment_words": 0,
+          "required_core_resource_paths": [
+            "skills/kntnt/library/references/editorial/anti-slop.md",
+            "skills/kntnt/library/references/editorial/article-anatomy.md",
+            "skills/kntnt/library/references/editorial/article-anatomy.review.md",
+            "skills/kntnt/library/references/editorial/base.md",
+            "skills/kntnt/library/references/editorial/base.review.md",
+            "skills/kntnt/library/references/editorial/genres/casestudy.md",
+            "skills/kntnt/library/references/editorial/genres/casestudy.review.md",
+            "skills/kntnt/library/references/editorial/headlines.md",
+            "skills/kntnt/library/references/editorial/headlines.review.md",
+            "skills/kntnt/library/references/editorial/web-craft.md",
+            "skills/kntnt/library/references/editorial/web-craft.review.md"
+          ],
+          "core_missing_complete_read_proof": [],
+          "required_scopes": [
+            "anti-slop",
+            "composition",
+            "review"
+          ],
+          "scope_missing_complete_read_proof": [],
+          "observed_core_words": 8898,
+          "complete_core": true,
+          "fresh_lifecycle_complete": true
+        },
+        {
+          "id": "01a0f820-213b-77c3-bab8-e109d79465bd",
+          "role": "mechanical_pass",
+          "unique_complete_resource_words": 8863,
+          "separately_returned_fragment_words": 0,
+          "required_core_resource_paths": [],
+          "core_missing_complete_read_proof": [],
+          "required_scopes": [],
+          "scope_missing_complete_read_proof": [],
+          "observed_core_words": 0,
+          "complete_core": true,
+          "fresh_lifecycle_complete": true
+        }
+      ],
+      "structured_service_errors": 0
+    },
+    "p01": {
+      "skill": "redline",
+      "target": "response",
+      "seconds": 770.34,
+      "sessions": [
+        {
+          "id": "01a0f821-6dd5-7c50-b5ed-f593b03ca8a1",
+          "role": "parent",
+          "unique_complete_resource_words": 17293,
+          "separately_returned_fragment_words": 0,
+          "required_core_resource_paths": [
+            "skills/kntnt/library/references/editorial/anti-slop.md",
+            "skills/kntnt/library/references/editorial/article-anatomy.md",
+            "skills/kntnt/library/references/editorial/article-anatomy.review.md",
+            "skills/kntnt/library/references/editorial/base.md",
+            "skills/kntnt/library/references/editorial/base.review.md",
+            "skills/kntnt/library/references/editorial/genres/casestudy.md",
+            "skills/kntnt/library/references/editorial/genres/casestudy.review.md",
+            "skills/kntnt/library/references/editorial/headlines.md",
+            "skills/kntnt/library/references/editorial/headlines.review.md",
+            "skills/kntnt/library/references/editorial/web-craft.md",
+            "skills/kntnt/library/references/editorial/web-craft.review.md"
+          ],
+          "core_missing_complete_read_proof": [],
+          "required_scopes": [
+            "anti-slop",
+            "composition",
+            "review"
+          ],
+          "scope_missing_complete_read_proof": [],
+          "observed_core_words": 8898,
+          "complete_core": true,
+          "fresh_lifecycle_complete": true
+        },
+        {
+          "id": "01a0f825-3c59-7800-9182-4a81f2796df0",
+          "role": "correction_1",
+          "unique_complete_resource_words": 8898,
+          "separately_returned_fragment_words": 0,
+          "required_core_resource_paths": [
+            "skills/kntnt/library/references/editorial/anti-slop.md",
+            "skills/kntnt/library/references/editorial/article-anatomy.md",
+            "skills/kntnt/library/references/editorial/article-anatomy.review.md",
+            "skills/kntnt/library/references/editorial/base.md",
+            "skills/kntnt/library/references/editorial/base.review.md",
+            "skills/kntnt/library/references/editorial/genres/casestudy.md",
+            "skills/kntnt/library/references/editorial/genres/casestudy.review.md",
+            "skills/kntnt/library/references/editorial/headlines.md",
+            "skills/kntnt/library/references/editorial/headlines.review.md",
+            "skills/kntnt/library/references/editorial/web-craft.md",
+            "skills/kntnt/library/references/editorial/web-craft.review.md"
+          ],
+          "core_missing_complete_read_proof": [],
+          "required_scopes": [
+            "anti-slop",
+            "composition",
+            "review"
+          ],
+          "scope_missing_complete_read_proof": [],
+          "observed_core_words": 8898,
+          "complete_core": true,
+          "fresh_lifecycle_complete": true
+        },
+        {
+          "id": "01a0f828-007a-7932-97c2-489ddc1cea37",
+          "role": "mechanical_pass",
+          "unique_complete_resource_words": 7687,
+          "separately_returned_fragment_words": 0,
+          "required_core_resource_paths": [],
+          "core_missing_complete_read_proof": [],
+          "required_scopes": [],
+          "scope_missing_complete_read_proof": [],
+          "observed_core_words": 0,
+          "complete_core": true,
+          "fresh_lifecycle_complete": true
+        },
+        {
+          "id": "01a0f82c-3188-7df0-b425-379447a13894",
+          "role": "reply_check",
+          "unique_complete_resource_words": 0,
+          "separately_returned_fragment_words": 645,
+          "required_core_resource_paths": [],
+          "core_missing_complete_read_proof": [],
+          "required_scopes": [],
+          "scope_missing_complete_read_proof": [],
+          "observed_core_words": 0,
+          "complete_core": true,
+          "fresh_lifecycle_complete": true
+        }
+      ],
+      "structured_service_errors": 0
+    }
+  },
+  "timing_groups": {
+    "redline/response": {
+      "n": 13,
+      "median_seconds": 1137.96,
+      "min_seconds": 311.97,
+      "max_seconds": 1699.2
+    },
+    "redline/output.md": {
+      "n": 4,
+      "median_seconds": 1155.815,
+      "min_seconds": 941.36,
+      "max_seconds": 1301.76
+    },
+    "write/response": {
+      "n": 3,
+      "median_seconds": 1780.24,
+      "min_seconds": 1507.69,
+      "max_seconds": 2109.82
+    }
+  },
+  "noncounted_native_duration_seconds": {
+    "r03": 133.26,
+    "r04": 133.62,
+    "r05": 103.35,
+    "r06": 120.09,
+    "r15": 108.11,
+    "w01": 1800.24,
+    "r13": 201.85
+  },
+  "method": "Each complete actual named resource or resolved scope is counted once per native session; selected reply fragments count separately only if their complete containing file is not also credited in that session. Mandatory composition/review core is compared explicitly; operational Skill/delivery/checker instructions stay in unique observed volume. Missing proof is a gap, not absence of a read. Source checker quotation guidance is operational; incoming composition guidance is required but encrypted dispatch alone is skipped. Wall duration includes native parent/checkers, not evaluator judging or construction/void overhead."
+}

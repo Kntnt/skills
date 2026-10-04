@@ -1,0 +1,92 @@
+[
+  {
+    "path": "work/input.md",
+    "sha256": "75e81d07b5bdab9a91e01dbd78f5c051c8fdd0267d71f584e72334a19b36594b",
+    "capture": "0000-75e81d07b5bd.md",
+    "time": 1790862640.074972
+  },
+  {
+    "path": "work/AGENTS.md",
+    "sha256": "996a820fe46d0584fcb6156390a0096341e552e7fcb7644085f79c26da854a4b",
+    "capture": "0001-996a820fe46d.md",
+    "time": 1790862640.075197
+  },
+  {
+    "path": "scratch/redline-uv-u4x_py_n/.tmpaKhMDL/environments-v2/kntnt-1de59bb3761a3b26/lib/python3.12/site-packages/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0002-ae98f4215313.txt",
+    "time": 1790862690.527789
+  },
+  {
+    "path": "scratch/redline-uv-u4x_py_n/.tmpaKhMDL/archive-v0/Fjj5XhmStZYhOyDO/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0003-ae98f4215313.txt",
+    "time": 1790862690.528594
+  },
+  {
+    "path": "scratch/redline-language-c9iv27hy/.tmpUnwckL/environments-v2/languages-ebaf34415b614a16/lib/python3.12/site-packages/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0004-ae98f4215313.txt",
+    "time": 1790862708.138287
+  },
+  {
+    "path": "scratch/redline-language-c9iv27hy/.tmpUnwckL/archive-v0/yya1JadUjNS-eCoh/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0005-ae98f4215313.txt",
+    "time": 1790862708.138947
+  },
+  {
+    "path": "scratch/redline-language-50y3i5nj/.tmppMEjVT/environments-v2/languages-ebaf34415b614a16/lib/python3.12/site-packages/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0006-ae98f4215313.txt",
+    "time": 1790863008.796682
+  },
+  {
+    "path": "scratch/redline-language-50y3i5nj/.tmppMEjVT/archive-v0/uOxDBzwxzwKbzv7A/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0007-ae98f4215313.txt",
+    "time": 1790863008.79727
+  },
+  {
+    "path": "scratch/redline-mechanical-mazz6pkf/input.md",
+    "sha256": "7d809a095ae3a7d5e57abfe646e1af8b08a9c282d20fced5875717bc31ad4dbb",
+    "capture": "0008-7d809a095ae3.md",
+    "time": 1790863205.986133
+  },
+  {
+    "path": "scratch/proofread-invoke-ko298olm/.tmpDblsDZ/environments-v2/kntnt-1de59bb3761a3b26/lib/python3.12/site-packages/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0009-ae98f4215313.txt",
+    "time": 1790863248.740331
+  },
+  {
+    "path": "scratch/proofread-invoke-ko298olm/.tmpDblsDZ/archive-v0/mQy478_iaPa0QVt7/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0010-ae98f4215313.txt",
+    "time": 1790863248.740973
+  },
+  {
+    "path": "scratch/proofread-resolve-hp520ere/.tmpz80Gnc/.tmpUmVHx1/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0011-ae98f4215313.txt",
+    "time": 1790863275.330219
+  },
+  {
+    "path": "scratch/proofread-resolve-hp520ere/.tmpz80Gnc/environments-v2/languages-ebaf34415b614a16/lib/python3.12/site-packages/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0012-ae98f4215313.txt",
+    "time": 1790863275.444593
+  },
+  {
+    "path": "scratch/proofread-resolve-hp520ere/.tmpz80Gnc/archive-v0/ITi8YvWM0ABOU7IO/pyyaml-6.0.3.dist-info/top_level.txt",
+    "sha256": "ae98f42153138ac02387fd6f1b709c7fdbf98e9090c00cfa703d48554e597614",
+    "capture": "0013-ae98f4215313.txt",
+    "time": 1790863275.4452639
+  },
+  {
+    "path": "scratch/redline-mechanical-mazz6pkf/output.md",
+    "sha256": "6b5acf2767e6cdc8acb444d987ef170a5e88d3f1c813b77c27c7345312dc72e1",
+    "capture": "0014-6b5acf2767e6.md",
+    "time": 1790863315.0542212
+  }
+]

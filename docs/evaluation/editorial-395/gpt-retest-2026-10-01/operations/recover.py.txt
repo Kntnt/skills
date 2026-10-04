@@ -1,0 +1,36 @@
+# /// script
+# requires-python = ">=3.12"
+# ///
+"""Replace one infrastructure-void judge without changing its frozen packet."""
+from pathlib import Path
+import importlib.util,json,os,shutil,subprocess,time
+ROOT=Path('/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-observation-3q9k_53_')
+spec=importlib.util.spec_from_file_location('frozen_execution',ROOT/'continue.py')
+assert spec and spec.loader
+module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
+if os.getpgrp()!=os.getpid():os.setsid()
+subprocess.run(['uv','run','/Users/thomas/.agents/skills/kntnt/features/session-cleanup/scripts/session_cleanup.py','add','pid',str(os.getpid()),'Editorial #395 infrastructure-void judge replacement'],cwd=module.REPO,check=True)
+while sum(d.is_dir() and (d/'location.json').exists() and not (d/'result.json').exists() for d in ROOT.glob('item-*'))>=2:time.sleep(2)
+packet=ROOT/'packet-04-composition'
+prompt=ROOT/'judge-turn-04-composition.md'
+completed=False
+for attempt in [2,3]:
+    output=ROOT/f'item-04-composition-reader-a{attempt}'
+    try:
+        module.run(prompt,packet/'brief.md','input.md',output,packet)
+        report=output/'captured-output.md'
+        if not report.exists():report=output/'response.txt'
+        shutil.copy2(report,ROOT/'item-04-composition/judgement-a.md')
+        completed=True;break
+    except RuntimeError:
+        void=module.PLAN/f'voids/item-04-composition-reader-a-attempt-{attempt}'
+        shutil.copytree(output,void)
+if not completed:raise RuntimeError('Two infrastructure replacements exhausted; no A judgement counts')
+module.run(prompt,packet/'brief.md','input.md',ROOT/'item-04-composition-reader-b',packet)
+report=ROOT/'item-04-composition-reader-b/captured-output.md'
+if not report.exists():report=ROOT/'item-04-composition-reader-b/response.txt'
+shutil.copy2(report,ROOT/'item-04-composition/judgement-b.md')
+module.judges('04','review',ROOT/'item-04-review')
+(ROOT/'cell-04-complete.json').write_text(json.dumps({'cell':'04','completed_at':time.time(),'service_void_replaced':True})+'\n')
+os.kill(46069,18)
+print('Cell04 recovery completed and coordinator resumed',flush=True)

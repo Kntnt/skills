@@ -1,0 +1,265 @@
+{
+  "attempt_id": "ms-20261002-fa0735",
+  "observed_at": "2026-10-02T10:32:45.296517+00:00",
+  "all_four_commands_executed": true,
+  "gate_passed": false,
+  "pytest": {
+    "passed": 2729,
+    "failed": 1,
+    "failure": "tests/test_run.py::test_the_registries_the_engine_finds_are_the_ones_this_repository_keeps"
+  },
+  "prior_scheduler_failures_reproduced": false,
+  "actual_registries": {
+    "docs/adr": 233,
+    "docs/evaluation/editorial-393/gpt-retest-2026-10-01/construction-refusals/r03/file-versions": 3,
+    "docs/evaluation/editorial-393/gpt-retest-2026-10-01/construction-refusals/r04/file-versions": 3,
+    "docs/evaluation/editorial-393/gpt-retest-2026-10-01/construction-refusals/r05/file-versions": 5,
+    "docs/evaluation/editorial-393/gpt-retest-2026-10-01/construction-refusals/r06/file-versions": 3,
+    "docs/evaluation/editorial-393/gpt-retest-2026-10-01/construction-refusals/r15/file-versions": 6,
+    "docs/evaluation/editorial-393/gpt-retest-2026-10-01/judges/jA/file-versions": 1,
+    "docs/evaluation/editorial-393/gpt-retest-2026-10-01/judges/jB/file-versions": 1,
+    "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/c03/file-versions": 14,
+    "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/c04/file-versions": 15,
+    "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/c05/file-versions": 13,
+    "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/c06/file-versions": 13,
+    "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/c07/file-versions": 14,
+    "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/c08/file-versions": 14,
+    "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/c09/file-versions": 14,
+    "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/c10/file-versions": 14,
+    "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/c11/file-versions": 14,
+    "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/c12/file-versions": 15,
+    "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/p01/file-versions": 14,
+    "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/p02/file-versions": 16,
+    "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/p03/file-versions": 11,
+    "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/r01/file-versions": 13,
+    "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/r02/file-versions": 14,
+    "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/r13-rerun/file-versions": 14,
+    "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/r14/file-versions": 15,
+    "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/w01-rerun/file-versions": 11,
+    "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/w02/file-versions": 12,
+    "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/w03/file-versions": 11,
+    "docs/evaluation/editorial-393/gpt-retest-2026-10-01/voided/r13/file-versions": 7,
+    "docs/evaluation/editorial-393/gpt-retest-2026-10-01/voided/w01/file-versions": 11
+  },
+  "additional_retained_artifact_registries": {
+    "docs/evaluation/editorial-393/gpt-retest-2026-10-01/construction-refusals/r03/file-versions": [
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/construction-refusals/r03/file-versions/0000-6648de46956c.md",
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/construction-refusals/r03/file-versions/0001-daf0ef828239.md"
+    ],
+    "docs/evaluation/editorial-393/gpt-retest-2026-10-01/construction-refusals/r04/file-versions": [
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/construction-refusals/r04/file-versions/0000-6648de46956c.md",
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/construction-refusals/r04/file-versions/0001-fd6201ee2bdb.md"
+    ],
+    "docs/evaluation/editorial-393/gpt-retest-2026-10-01/construction-refusals/r05/file-versions": [
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/construction-refusals/r05/file-versions/0000-bbad3ac63510.md",
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/construction-refusals/r05/file-versions/0001-400f0c130c50.md"
+    ],
+    "docs/evaluation/editorial-393/gpt-retest-2026-10-01/construction-refusals/r06/file-versions": [
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/construction-refusals/r06/file-versions/0000-bbad3ac63510.md",
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/construction-refusals/r06/file-versions/0001-505db4a4dbce.md"
+    ],
+    "docs/evaluation/editorial-393/gpt-retest-2026-10-01/construction-refusals/r15/file-versions": [
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/construction-refusals/r15/file-versions/0000-75188596831d.md",
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/construction-refusals/r15/file-versions/0001-da9d5ddc0a7c.md"
+    ],
+    "docs/evaluation/editorial-393/gpt-retest-2026-10-01/judges/jA/file-versions": [
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/judges/jA/file-versions/0000-b787098b30be.md",
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/judges/jA/file-versions/0001-96f2d8afb388.md"
+    ],
+    "docs/evaluation/editorial-393/gpt-retest-2026-10-01/judges/jB/file-versions": [
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/judges/jB/file-versions/0000-b787098b30be.md",
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/judges/jB/file-versions/0001-08c3b42914ef.md"
+    ],
+    "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/c03/file-versions": [
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/c03/file-versions/0000-6648de46956c.md",
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/c03/file-versions/0001-5b76750ece5b.md",
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/c03/file-versions/0009-7749177b1bef.md",
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/c03/file-versions/0014-7749177b1bef.md"
+    ],
+    "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/c04/file-versions": [
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/c04/file-versions/0000-6648de46956c.md",
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/c04/file-versions/0001-09dd3eaa57a2.md",
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/c04/file-versions/0010-3472f9e7a77e.md",
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/c04/file-versions/0015-3472f9e7a77e.md"
+    ],
+    "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/c05/file-versions": [
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/c05/file-versions/0000-bbad3ac63510.md",
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/c05/file-versions/0001-8494c5465050.md",
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/c05/file-versions/0008-377fc879799b.md",
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/c05/file-versions/0013-377fc879799b.md"
+    ],
+    "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/c06/file-versions": [
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/c06/file-versions/0000-bbad3ac63510.md",
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/c06/file-versions/0001-3917d96c9864.md",
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/c06/file-versions/0008-68817c49ce27.md",
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/c06/file-versions/0013-68817c49ce27.md"
+    ],
+    "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/c07/file-versions": [
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/c07/file-versions/0000-244c339d1630.md",
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/c07/file-versions/0001-c01908c4d4f2.md",
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/c07/file-versions/0008-de624f7c59fe.md",
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/c07/file-versions/0014-de624f7c59fe.md"
+    ],
+    "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/c08/file-versions": [
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/c08/file-versions/0000-244c339d1630.md",
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/c08/file-versions/0001-088dcdcc8090.md",
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/c08/file-versions/0008-158c166eb55b.md",
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/c08/file-versions/0013-158c166eb55b.md",
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/c08/file-versions/0014-158c166eb55b.md"
+    ],
+    "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/c09/file-versions": [
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/c09/file-versions/0000-75e81d07b5bd.md",
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/c09/file-versions/0001-996a820fe46d.md",
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/c09/file-versions/0008-7d809a095ae3.md",
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/c09/file-versions/0014-6b5acf2767e6.md"
+    ],
+    "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/c10/file-versions": [
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/c10/file-versions/0000-75e81d07b5bd.md",
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/c10/file-versions/0001-51f840751c87.md",
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/c10/file-versions/0008-ce1916241a3f.md",
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/c10/file-versions/0013-ce1916241a3f.md",
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/c10/file-versions/0014-ce1916241a3f.md"
+    ],
+    "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/c11/file-versions": [
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/c11/file-versions/0000-eb04ee84e17b.md",
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/c11/file-versions/0001-ac9f9e588d16.md",
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/c11/file-versions/0009-d124d0a77921.md",
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/c11/file-versions/0014-d124d0a77921.md"
+    ],
+    "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/c12/file-versions": [
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/c12/file-versions/0000-eb04ee84e17b.md",
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/c12/file-versions/0001-40a0e7beae9c.md",
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/c12/file-versions/0009-6ea07def5a65.md",
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/c12/file-versions/0014-6ea07def5a65.md",
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/c12/file-versions/0015-6ea07def5a65.md"
+    ],
+    "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/p01/file-versions": [
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/p01/file-versions/0000-b9cf81d03da7.md",
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/p01/file-versions/0001-6257330f1ca3.md",
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/p01/file-versions/0008-b9cf81d03da7.md",
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/p01/file-versions/0014-b9cf81d03da7.md"
+    ],
+    "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/p02/file-versions": [
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/p02/file-versions/0000-d218cf74e968.md",
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/p02/file-versions/0001-0b0d78a5160a.md",
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/p02/file-versions/0010-d218cf74e968.md",
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/p02/file-versions/0016-d218cf74e968.md"
+    ],
+    "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/p03/file-versions": [
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/p03/file-versions/0000-01f8cd3ecc13.md",
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/p03/file-versions/0001-0fe35301a5a5.md",
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/p03/file-versions/0006-01f8cd3ecc13.md",
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/p03/file-versions/0011-01f8cd3ecc13.md"
+    ],
+    "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/r01/file-versions": [
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/r01/file-versions/0000-8821f2ea42f7.md",
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/r01/file-versions/0001-7f11f4e37b00.md",
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/r01/file-versions/0008-ab58b8989e2e.md",
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/r01/file-versions/0013-ab58b8989e2e.md"
+    ],
+    "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/r02/file-versions": [
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/r02/file-versions/0000-8821f2ea42f7.md",
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/r02/file-versions/0001-73405460682e.md",
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/r02/file-versions/0009-95271e0db4b4.md",
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/r02/file-versions/0014-95271e0db4b4.md"
+    ],
+    "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/r13-rerun/file-versions": [
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/r13-rerun/file-versions/0000-3d2f9ed7390e.md",
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/r13-rerun/file-versions/0001-7718e5150173.md",
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/r13-rerun/file-versions/0009-3b81fc6eac2a.md",
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/r13-rerun/file-versions/0014-fcfe45c6756e.md"
+    ],
+    "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/r14/file-versions": [
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/r14/file-versions/0000-3d2f9ed7390e.md",
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/r14/file-versions/0001-e8d352fcebb5.md",
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/r14/file-versions/0009-9f54c67cd838.md",
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/r14/file-versions/0014-7a48b66be7de.md",
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/r14/file-versions/0015-7a48b66be7de.md"
+    ],
+    "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/w01-rerun/file-versions": [
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/w01-rerun/file-versions/0000-75188596831d.md",
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/w01-rerun/file-versions/0001-46c89e5a9eb3.md",
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/w01-rerun/file-versions/0007-f8a72c13d239.md",
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/w01-rerun/file-versions/0008-bae87c915b11.md",
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/w01-rerun/file-versions/0009-3998a54bf768.md",
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/w01-rerun/file-versions/0010-218a40820786.md",
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/w01-rerun/file-versions/0011-bfb339f2e949.md"
+    ],
+    "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/w02/file-versions": [
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/w02/file-versions/0000-75188596831d.md",
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/w02/file-versions/0001-c5321ad73e62.md",
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/w02/file-versions/0006-7b603371b190.md",
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/w02/file-versions/0007-81f636c983f2.md",
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/w02/file-versions/0008-41d611507441.md",
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/w02/file-versions/0009-ee7dfe7788f7.md",
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/w02/file-versions/0010-5a097d4ff02c.md",
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/w02/file-versions/0011-90828c7ee9ac.md",
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/w02/file-versions/0012-9112c35de7d3.md"
+    ],
+    "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/w03/file-versions": [
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/w03/file-versions/0000-75188596831d.md",
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/w03/file-versions/0001-f386ad161b07.md",
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/w03/file-versions/0006-d907a0244624.md",
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/w03/file-versions/0007-331f88b0fcac.md",
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/w03/file-versions/0008-7a04f0e01965.md",
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/w03/file-versions/0009-5c9ac817235f.md",
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/w03/file-versions/0010-d30136747dbb.md",
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/runs/w03/file-versions/0011-ca3d20f79535.md"
+    ],
+    "docs/evaluation/editorial-393/gpt-retest-2026-10-01/voided/r13/file-versions": [
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/voided/r13/file-versions/0000-3d2f9ed7390e.md",
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/voided/r13/file-versions/0001-6d4b24d16e40.md",
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/voided/r13/file-versions/0007-3d2f9ed7390e.md"
+    ],
+    "docs/evaluation/editorial-393/gpt-retest-2026-10-01/voided/w01/file-versions": [
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/voided/w01/file-versions/0000-75188596831d.md",
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/voided/w01/file-versions/0001-fcd031799f06.md",
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/voided/w01/file-versions/0006-40c80543ba51.md",
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/voided/w01/file-versions/0007-45568ec77439.md",
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/voided/w01/file-versions/0008-32afb7122869.md",
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/voided/w01/file-versions/0009-083a72d24515.md",
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/voided/w01/file-versions/0010-f2792f4a108a.md",
+      "docs/evaluation/editorial-393/gpt-retest-2026-10-01/voided/w01/file-versions/0011-06f7f0002c92.md"
+    ]
+  },
+  "additional_directory_count": 29,
+  "expected_registries": [
+    "docs/adr"
+  ],
+  "cause": "Tracked retained file-version Markdown names match the automatic four-digit/hyphen record-name detector. Prior integration ran its gate before these imports were committed/tracked. The continuation base includes them.",
+  "required_decision": "Separately scope reconciliation of automatic numbered-registry detection and its repository expectation with immutable evaluation file-version evidence. Product/test changes and historical renames remain outside #393.",
+  "identified_blocking_issue": null,
+  "process_groups": [
+    {
+      "name": "gate-runner",
+      "pid": 1642,
+      "pgid": 1642,
+      "process_group_exists": false
+    },
+    {
+      "name": "ruff-check",
+      "pid": 1798,
+      "pgid": 1798,
+      "process_group_exists": false
+    },
+    {
+      "name": "ruff-format",
+      "pid": 2069,
+      "pgid": 2069,
+      "process_group_exists": false
+    },
+    {
+      "name": "mypy",
+      "pid": 2133,
+      "pgid": 2133,
+      "process_group_exists": false
+    },
+    {
+      "name": "pytest",
+      "pid": 3275,
+      "pgid": 3275,
+      "process_group_exists": false
+    }
+  ],
+  "fresh_native_product_trials": 0
+}

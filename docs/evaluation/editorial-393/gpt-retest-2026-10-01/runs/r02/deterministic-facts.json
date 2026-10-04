@@ -1,0 +1,133 @@
+{
+  "result": {
+    "returncode": 0,
+    "timed_out": false,
+    "duration_seconds": 1160.44,
+    "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-aofib893",
+    "cleanup_required": true
+  },
+  "input_sha256": "8821f2ea42f723956ccb5d1127b212227d04c7035b3944e4a81be990dda82e66",
+  "artifact": {
+    "fenced_artifact_count": 1,
+    "present": true,
+    "source": "response-fence",
+    "sha256": "95271e0db4b4d690c502aaa775528f61daa0773da92b86f5faea6bb9511c5353",
+    "input_identical": false
+  },
+  "identities": [
+    {
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T14-14-37-01a0f763-5532-70c0-a8db-322feed757bd.jsonl",
+      "id": "01a0f763-5532-70c0-a8db-322feed757bd",
+      "source": "exec",
+      "seats": [
+        [
+          "gpt-6.1-sol",
+          "xhigh"
+        ]
+      ]
+    },
+    {
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T14-19-37-01a0f767-eb3f-7af2-922e-593554127651.jsonl",
+      "id": "01a0f767-eb3f-7af2-922e-593554127651",
+      "source": {
+        "subagent": {
+          "thread_spawn": {
+            "parent_thread_id": "01a0f763-5532-70c0-a8db-322feed757bd",
+            "depth": 1,
+            "agent_path": "/root/correction",
+            "agent_nickname": "Lagrange",
+            "agent_role": null
+          }
+        }
+      },
+      "seats": [
+        [
+          "gpt-6.1-sol",
+          "xhigh"
+        ]
+      ]
+    },
+    {
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T14-25-27-01a0f76d-41c3-7772-8407-a4f091a67201.jsonl",
+      "id": "01a0f76d-41c3-7772-8407-a4f091a67201",
+      "source": {
+        "subagent": {
+          "thread_spawn": {
+            "parent_thread_id": "01a0f763-5532-70c0-a8db-322feed757bd",
+            "depth": 1,
+            "agent_path": "/root/mechanical",
+            "agent_nickname": "Planck",
+            "agent_role": null
+          }
+        }
+      },
+      "seats": [
+        [
+          "gpt-6.1-sol",
+          "xhigh"
+        ]
+      ]
+    },
+    {
+      "file": "native-sessions/2026/10/01/rollout-2026-10-01T14-29-51-01a0f771-4772-74d0-9d14-2ac53f7c800d.jsonl",
+      "id": "01a0f771-4772-74d0-9d14-2ac53f7c800d",
+      "source": {
+        "subagent": {
+          "thread_spawn": {
+            "parent_thread_id": "01a0f763-5532-70c0-a8db-322feed757bd",
+            "depth": 1,
+            "agent_path": "/root/reply_check",
+            "agent_nickname": "Ptolemy",
+            "agent_role": null
+          }
+        }
+      },
+      "seats": [
+        [
+          "gpt-6.1-sol",
+          "xhigh"
+        ]
+      ]
+    }
+  ],
+  "encrypted_dispatches": [
+    {
+      "session": "01a0f763-5532-70c0-a8db-322feed757bd",
+      "name": "spawn_agent",
+      "call_id": "call_BsMVvkZmNpq2tNaR7BhA2dU2",
+      "note": "dispatch message encrypted; use actual child reads rather than infer its complete brief"
+    },
+    {
+      "session": "01a0f763-5532-70c0-a8db-322feed757bd",
+      "name": "spawn_agent",
+      "call_id": "call_oZS30VI01d5pOuW3pgPTF0RH",
+      "note": "dispatch message encrypted; use actual child reads rather than infer its complete brief"
+    },
+    {
+      "session": "01a0f763-5532-70c0-a8db-322feed757bd",
+      "name": "spawn_agent",
+      "call_id": "call_THbPhAQNeWuyXfc8STuhjujZ",
+      "note": "dispatch message encrypted; use actual child reads rather than infer its complete brief"
+    }
+  ],
+  "all_recorded_seats_match": true,
+  "artifact_matches_captures": [
+    {
+      "path": "scratch/redline-mechanical-2cncv0v8/mechanical-input.md",
+      "sha256": "95271e0db4b4d690c502aaa775528f61daa0773da92b86f5faea6bb9511c5353",
+      "capture": "0009-95271e0db4b4.md",
+      "time": 1790857507.952731
+    },
+    {
+      "path": "scratch/redline-mechanical-2cncv0v8/mechanical-output.md",
+      "sha256": "95271e0db4b4d690c502aaa775528f61daa0773da92b86f5faea6bb9511c5353",
+      "capture": "0014-95271e0db4b4.md",
+      "time": 1790857605.65654
+    }
+  ],
+  "source_inventory_unchanged": true,
+  "staged_install_unchanged": true,
+  "work_created": {},
+  "work_removed": {},
+  "work_changed": {}
+}

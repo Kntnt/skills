@@ -1,0 +1,5 @@
+Using CPython 3.12.13
+Creating virtual environment at: /Users/thomas/Projects/skills/.git/kntnt-orchestrate/395.scratch/venv
+warning: No `requires-python` value found in the workspace. Defaulting to `>=3.12`.
+..                                                                       [100%]
+2 passed in 0.07s

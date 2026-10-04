@@ -1,0 +1,556 @@
+[
+  {
+    "id": "10534",
+    "registered_start": "Thu Oct  1 13:53:47 2026",
+    "observed_start": null,
+    "owned_process_still_alive": false
+  },
+  {
+    "id": "10533",
+    "registered_start": "Thu Oct  1 13:53:47 2026",
+    "observed_start": null,
+    "owned_process_still_alive": false
+  },
+  {
+    "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-wfif5jnm",
+    "exists": false
+  },
+  {
+    "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-tmjn2uqe",
+    "exists": false
+  },
+  {
+    "id": "10574",
+    "registered_start": "Thu Oct  1 13:53:47 2026",
+    "observed_start": null,
+    "owned_process_still_alive": false
+  },
+  {
+    "id": "10575",
+    "registered_start": "Thu Oct  1 13:53:47 2026",
+    "observed_start": null,
+    "owned_process_still_alive": false
+  },
+  {
+    "id": "20468",
+    "registered_start": "Thu Oct  1 13:55:01 2026",
+    "observed_start": null,
+    "owned_process_still_alive": false
+  },
+  {
+    "id": "42752",
+    "registered_start": "Thu Oct  1 13:56:59 2026",
+    "observed_start": null,
+    "owned_process_still_alive": false
+  },
+  {
+    "id": "10851",
+    "registered_start": "Thu Oct  1 14:08:26 2026",
+    "observed_start": null,
+    "owned_process_still_alive": false
+  },
+  {
+    "id": "10850",
+    "registered_start": "Thu Oct  1 14:08:26 2026",
+    "observed_start": null,
+    "owned_process_still_alive": false
+  },
+  {
+    "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-b_nt8eqi",
+    "exists": false
+  },
+  {
+    "id": "10885",
+    "registered_start": "Thu Oct  1 14:08:27 2026",
+    "observed_start": null,
+    "owned_process_still_alive": false
+  },
+  {
+    "id": "20230",
+    "registered_start": "Thu Oct  1 14:14:36 2026",
+    "observed_start": null,
+    "owned_process_still_alive": false
+  },
+  {
+    "id": "20241",
+    "registered_start": "Thu Oct  1 14:14:36 2026",
+    "observed_start": null,
+    "owned_process_still_alive": false
+  },
+  {
+    "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-aofib893",
+    "exists": false
+  },
+  {
+    "id": "20318",
+    "registered_start": "Thu Oct  1 14:14:37 2026",
+    "observed_start": null,
+    "owned_process_still_alive": false
+  },
+  {
+    "id": "28616",
+    "registered_start": "Thu Oct  1 14:18:27 2026",
+    "observed_start": null,
+    "owned_process_still_alive": false
+  },
+  {
+    "id": "28625",
+    "registered_start": "Thu Oct  1 14:18:27 2026",
+    "observed_start": null,
+    "owned_process_still_alive": false
+  },
+  {
+    "id": "28705",
+    "registered_start": "Thu Oct  1 14:18:31 2026",
+    "observed_start": null,
+    "owned_process_still_alive": false
+  },
+  {
+    "id": "79705",
+    "registered_start": "Thu Oct  1 14:30:08 2026",
+    "observed_start": null,
+    "owned_process_still_alive": false
+  },
+  {
+    "id": "289",
+    "registered_start": "Thu Oct  1 14:33:58 2026",
+    "observed_start": null,
+    "owned_process_still_alive": false
+  },
+  {
+    "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-hlyi1ytl",
+    "exists": false
+  },
+  {
+    "id": "308",
+    "registered_start": "Thu Oct  1 14:33:59 2026",
+    "observed_start": null,
+    "owned_process_still_alive": false
+  },
+  {
+    "id": "3377",
+    "registered_start": "Thu Oct  1 14:36:12 2026",
+    "observed_start": null,
+    "owned_process_still_alive": false
+  },
+  {
+    "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-478l45pd",
+    "exists": false
+  },
+  {
+    "id": "3401",
+    "registered_start": "Thu Oct  1 14:36:12 2026",
+    "observed_start": null,
+    "owned_process_still_alive": false
+  },
+  {
+    "id": "7179",
+    "registered_start": "Thu Oct  1 14:38:26 2026",
+    "observed_start": null,
+    "owned_process_still_alive": false
+  },
+  {
+    "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-1bwyryom",
+    "exists": false
+  },
+  {
+    "id": "7211",
+    "registered_start": "Thu Oct  1 14:38:26 2026",
+    "observed_start": null,
+    "owned_process_still_alive": false
+  },
+  {
+    "id": "7495",
+    "registered_start": "Thu Oct  1 14:38:28 2026",
+    "observed_start": null,
+    "owned_process_still_alive": false
+  },
+  {
+    "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-1whlh9rj",
+    "exists": false
+  },
+  {
+    "id": "7513",
+    "registered_start": "Thu Oct  1 14:38:29 2026",
+    "observed_start": null,
+    "owned_process_still_alive": false
+  },
+  {
+    "id": "11842",
+    "registered_start": "Thu Oct  1 14:40:34 2026",
+    "observed_start": null,
+    "owned_process_still_alive": false
+  },
+  {
+    "id": "11890",
+    "registered_start": "Thu Oct  1 14:40:34 2026",
+    "observed_start": null,
+    "owned_process_still_alive": false
+  },
+  {
+    "id": "11893",
+    "registered_start": "Thu Oct  1 14:40:34 2026",
+    "observed_start": null,
+    "owned_process_still_alive": false
+  },
+  {
+    "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-dg_rk1zn",
+    "exists": false
+  },
+  {
+    "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-n5cht9dv",
+    "exists": false
+  },
+  {
+    "id": "12075",
+    "registered_start": "Thu Oct  1 14:40:35 2026",
+    "observed_start": null,
+    "owned_process_still_alive": false
+  },
+  {
+    "id": "12076",
+    "registered_start": "Thu Oct  1 14:40:35 2026",
+    "observed_start": null,
+    "owned_process_still_alive": false
+  },
+  {
+    "id": "39799",
+    "registered_start": "Thu Oct  1 15:04:50 2026",
+    "observed_start": null,
+    "owned_process_still_alive": false
+  },
+  {
+    "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-xzax0ud5",
+    "exists": false
+  },
+  {
+    "id": "39924",
+    "registered_start": "Thu Oct  1 15:04:50 2026",
+    "observed_start": null,
+    "owned_process_still_alive": false
+  },
+  {
+    "id": "50206",
+    "registered_start": "Thu Oct  1 15:07:17 2026",
+    "observed_start": null,
+    "owned_process_still_alive": false
+  },
+  {
+    "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-y0lko_db",
+    "exists": false
+  },
+  {
+    "id": "50225",
+    "registered_start": "Thu Oct  1 15:07:18 2026",
+    "observed_start": null,
+    "owned_process_still_alive": false
+  },
+  {
+    "id": "83202",
+    "registered_start": "Thu Oct  1 15:31:41 2026",
+    "observed_start": null,
+    "owned_process_still_alive": false
+  },
+  {
+    "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-qev9bmaz",
+    "exists": false
+  },
+  {
+    "id": "83226",
+    "registered_start": "Thu Oct  1 15:31:41 2026",
+    "observed_start": null,
+    "owned_process_still_alive": false
+  },
+  {
+    "id": "84586",
+    "registered_start": "Thu Oct  1 15:33:09 2026",
+    "observed_start": null,
+    "owned_process_still_alive": false
+  },
+  {
+    "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-euzjpdes",
+    "exists": false
+  },
+  {
+    "id": "84604",
+    "registered_start": "Thu Oct  1 15:33:10 2026",
+    "observed_start": null,
+    "owned_process_still_alive": false
+  },
+  {
+    "id": "96099",
+    "registered_start": "Thu Oct  1 15:50:39 2026",
+    "observed_start": null,
+    "owned_process_still_alive": false
+  },
+  {
+    "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-a9a6vvtz",
+    "exists": false
+  },
+  {
+    "id": "96117",
+    "registered_start": "Thu Oct  1 15:50:40 2026",
+    "observed_start": null,
+    "owned_process_still_alive": false
+  },
+  {
+    "id": "97443",
+    "registered_start": "Thu Oct  1 15:52:21 2026",
+    "observed_start": null,
+    "owned_process_still_alive": false
+  },
+  {
+    "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-dujnnokn",
+    "exists": false
+  },
+  {
+    "id": "97461",
+    "registered_start": "Thu Oct  1 15:52:21 2026",
+    "observed_start": null,
+    "owned_process_still_alive": false
+  },
+  {
+    "id": "6612",
+    "registered_start": "Thu Oct  1 16:07:30 2026",
+    "observed_start": null,
+    "owned_process_still_alive": false
+  },
+  {
+    "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-zwdv16wq",
+    "exists": false
+  },
+  {
+    "id": "6630",
+    "registered_start": "Thu Oct  1 16:07:30 2026",
+    "observed_start": null,
+    "owned_process_still_alive": false
+  },
+  {
+    "id": "9152",
+    "registered_start": "Thu Oct  1 16:11:41 2026",
+    "observed_start": null,
+    "owned_process_still_alive": false
+  },
+  {
+    "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-ui0bdkvx",
+    "exists": false
+  },
+  {
+    "id": "9170",
+    "registered_start": "Thu Oct  1 16:11:42 2026",
+    "observed_start": null,
+    "owned_process_still_alive": false
+  },
+  {
+    "id": "15572",
+    "registered_start": "Thu Oct  1 16:28:03 2026",
+    "observed_start": null,
+    "owned_process_still_alive": false
+  },
+  {
+    "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-qjib77lh",
+    "exists": false
+  },
+  {
+    "id": "15590",
+    "registered_start": "Thu Oct  1 16:28:03 2026",
+    "observed_start": null,
+    "owned_process_still_alive": false
+  },
+  {
+    "id": "17810",
+    "registered_start": "Thu Oct  1 16:31:25 2026",
+    "observed_start": null,
+    "owned_process_still_alive": false
+  },
+  {
+    "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-ujmtutv1",
+    "exists": false
+  },
+  {
+    "id": "17828",
+    "registered_start": "Thu Oct  1 16:31:26 2026",
+    "observed_start": null,
+    "owned_process_still_alive": false
+  },
+  {
+    "id": "18875",
+    "registered_start": "Thu Oct  1 16:33:24 2026",
+    "observed_start": null,
+    "owned_process_still_alive": false
+  },
+  {
+    "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-h3gc8vnj",
+    "exists": false
+  },
+  {
+    "id": "18893",
+    "registered_start": "Thu Oct  1 16:33:24 2026",
+    "observed_start": null,
+    "owned_process_still_alive": false
+  },
+  {
+    "id": "24243",
+    "registered_start": "Thu Oct  1 16:47:07 2026",
+    "observed_start": null,
+    "owned_process_still_alive": false
+  },
+  {
+    "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-w8zwcb3a",
+    "exists": false
+  },
+  {
+    "id": "24261",
+    "registered_start": "Thu Oct  1 16:47:07 2026",
+    "observed_start": null,
+    "owned_process_still_alive": false
+  },
+  {
+    "id": "32927",
+    "registered_start": "Thu Oct  1 17:07:35 2026",
+    "observed_start": null,
+    "owned_process_still_alive": false
+  },
+  {
+    "id": "33049",
+    "registered_start": "Thu Oct  1 17:07:36 2026",
+    "observed_start": null,
+    "owned_process_still_alive": false
+  },
+  {
+    "id": "33093",
+    "registered_start": "Thu Oct  1 17:08:35 2026",
+    "observed_start": null,
+    "owned_process_still_alive": false
+  },
+  {
+    "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-gfyoybhg",
+    "exists": false
+  },
+  {
+    "id": "33111",
+    "registered_start": "Thu Oct  1 17:08:35 2026",
+    "observed_start": null,
+    "owned_process_still_alive": false
+  },
+  {
+    "id": "35247",
+    "registered_start": "Thu Oct  1 17:11:35 2026",
+    "observed_start": null,
+    "owned_process_still_alive": false
+  },
+  {
+    "id": "35784",
+    "registered_start": "Thu Oct  1 17:12:16 2026",
+    "observed_start": null,
+    "owned_process_still_alive": false
+  },
+  {
+    "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-lfzo1h5i",
+    "exists": false
+  },
+  {
+    "id": "35802",
+    "registered_start": "Thu Oct  1 17:12:17 2026",
+    "observed_start": null,
+    "owned_process_still_alive": false
+  },
+  {
+    "id": "37662",
+    "registered_start": "Thu Oct  1 17:14:39 2026",
+    "observed_start": null,
+    "owned_process_still_alive": false
+  },
+  {
+    "id": "47884",
+    "registered_start": "Thu Oct  1 17:29:36 2026",
+    "observed_start": null,
+    "owned_process_still_alive": false
+  },
+  {
+    "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-19exjyrd",
+    "exists": false
+  },
+  {
+    "id": "47902",
+    "registered_start": "Thu Oct  1 17:29:36 2026",
+    "observed_start": null,
+    "owned_process_still_alive": false
+  },
+  {
+    "id": "85229",
+    "registered_start": "Thu Oct  1 17:38:20 2026",
+    "observed_start": null,
+    "owned_process_still_alive": false
+  },
+  {
+    "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-8bg0x9_u",
+    "exists": false
+  },
+  {
+    "id": "85250",
+    "registered_start": "Thu Oct  1 17:38:20 2026",
+    "observed_start": null,
+    "owned_process_still_alive": false
+  },
+  {
+    "id": "89758",
+    "registered_start": "Thu Oct  1 17:41:04 2026",
+    "observed_start": null,
+    "owned_process_still_alive": false
+  },
+  {
+    "id": "90857",
+    "registered_start": "Thu Oct  1 17:42:15 2026",
+    "observed_start": null,
+    "owned_process_still_alive": false
+  },
+  {
+    "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-kipogeeb",
+    "exists": false
+  },
+  {
+    "id": "90876",
+    "registered_start": "Thu Oct  1 17:42:15 2026",
+    "observed_start": null,
+    "owned_process_still_alive": false
+  },
+  {
+    "id": "19705",
+    "registered_start": "Thu Oct  1 18:01:12 2026",
+    "observed_start": null,
+    "owned_process_still_alive": false
+  },
+  {
+    "id": "19706",
+    "registered_start": "Thu Oct  1 18:01:12 2026",
+    "observed_start": null,
+    "owned_process_still_alive": false
+  },
+  {
+    "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-zk09mi8c",
+    "exists": false
+  },
+  {
+    "path": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-zytzrg6p",
+    "exists": false
+  },
+  {
+    "id": "19811",
+    "registered_start": "Thu Oct  1 18:01:13 2026",
+    "observed_start": null,
+    "owned_process_still_alive": false
+  },
+  {
+    "id": "19809",
+    "registered_start": "Thu Oct  1 18:01:13 2026",
+    "observed_start": null,
+    "owned_process_still_alive": false
+  },
+  {
+    "id": "85728",
+    "registered_start": "Thu Oct  1 18:46:02 2026",
+    "observed_start": null,
+    "owned_process_still_alive": false
+  }
+]

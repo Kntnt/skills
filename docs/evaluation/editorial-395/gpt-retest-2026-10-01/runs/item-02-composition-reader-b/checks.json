@@ -1,0 +1,70 @@
+{
+  "input_sha256": "24238d277771921361737f9c1f4ce6806708250313b823385db5e51b6e910503",
+  "input_preserved": true,
+  "input_stat_preserved": true,
+  "installed_files_unchanged": true,
+  "result": {
+    "returncode": 0,
+    "timed_out": false,
+    "duration_seconds": 571.34,
+    "root": "/private/var/folders/cs/vgp_x_353zd9frkjpysp7zdw0000gn/T/kntnt-native-session-46npmlt6",
+    "cleanup_required": true
+  },
+  "seats": [
+    {
+      "id": "01a0f77c-60bc-7233-8546-7d6d52158993",
+      "source": "exec",
+      "cli_version": "0.159.3",
+      "seats": [
+        [
+          "gpt-6.1-sol",
+          "xhigh"
+        ]
+      ],
+      "task_complete": true,
+      "trace": "native-sessions/2026/10/01/rollout-2026-10-01T14-41-59-01a0f77c-60bc-7233-8546-7d6d52158993.jsonl"
+    }
+  ],
+  "native_errors": [],
+  "native_tool_calls": 10,
+  "observer_response_matches_native": null,
+  "delivered_substring_native": null,
+  "mechanical_input_equals_output": null,
+  "mechanical_output_equals_delivered": null,
+  "mechanical_output_equals_supplied_input": null,
+  "scratch_files": {
+    "scratch/cache": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "scratch/data": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "scratch/tmp": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "scratch/uv-cache": {
+      "mode": 493,
+      "type": "directory"
+    }
+  },
+  "work_changes": {
+    "work/judgement.md": {
+      "before": null,
+      "after": {
+        "mode": 420,
+        "type": "file",
+        "size": 14211,
+        "sha256": "d6d1d0a59a629b31d9a01e53d27f888086ba2239e8c8030b5b035f419371cd96"
+      }
+    }
+  },
+  "limits": [
+    "Encrypted dispatch text is not decoded; actual child reads establish only visible scope.",
+    "A file-read command must be checked against its returned output for truncation or failure.",
+    "External captures poll at 100 ms; an uncaptured temporary version is not asserted present.",
+    "No semantic or resource-loading pass follows merely from a tool count or task completion."
+  ]
+}

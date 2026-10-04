@@ -1,0 +1,105 @@
+{
+  "input_sha256": "c5adac71858c031ddc5f5b89edbf38b74f17c5963887d5e4d3018936f4c98a3b",
+  "input_preserved": true,
+  "input_stat_preserved": true,
+  "installed_files_unchanged": true,
+  "result": {
+    "returncode": 0,
+    "timed_out": false,
+    "duration_seconds": 225.09,
+    "root": "/Users/thomas/Projects/skills/.git/kntnt-orchestrate/395.scratch/native-unit-02",
+    "cleanup_required": true
+  },
+  "seats": [
+    {
+      "id": "01a0fc24-16d2-70f1-ad08-896f8498614e",
+      "source": "exec",
+      "cli_version": "0.160.0",
+      "seats": [
+        [
+          "gpt-6.1-sol",
+          "high"
+        ]
+      ],
+      "task_complete": true,
+      "trace": "native-sessions/2026/10/02/rollout-2026-10-02T12-23-39-01a0fc24-16d2-70f1-ad08-896f8498614e.jsonl"
+    },
+    {
+      "id": "01a0fc25-b19b-7b01-bd3f-72336e2334e7",
+      "source": {
+        "subagent": {
+          "thread_spawn": {
+            "parent_thread_id": "01a0fc24-16d2-70f1-ad08-896f8498614e",
+            "depth": 1,
+            "agent_path": "/root/mechanical_pass",
+            "agent_nickname": "Hilbert",
+            "agent_role": null
+          }
+        }
+      },
+      "cli_version": "0.160.0",
+      "seats": [
+        [
+          "gpt-6.1-sol",
+          "high"
+        ]
+      ],
+      "task_complete": true,
+      "trace": "native-sessions/2026/10/02/rollout-2026-10-02T12-25-23-01a0fc25-b19b-7b01-bd3f-72336e2334e7.jsonl"
+    }
+  ],
+  "native_errors": [],
+  "native_tool_calls": 21,
+  "observer_response_matches_native": true,
+  "delivered_substring_native": null,
+  "mechanical_input_equals_output": true,
+  "mechanical_output_equals_delivered": null,
+  "mechanical_output_equals_supplied_input": true,
+  "scratch_files": {
+    "scratch/cache": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "scratch/data": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "scratch/observer-evidence": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "scratch/observer-evidence/mechanical-pass-input.md": {
+      "mode": 420,
+      "type": "file",
+      "size": 2892,
+      "sha256": "c5adac71858c031ddc5f5b89edbf38b74f17c5963887d5e4d3018936f4c98a3b"
+    },
+    "scratch/observer-evidence/mechanical-pass-output.md": {
+      "mode": 420,
+      "type": "file",
+      "size": 2892,
+      "sha256": "c5adac71858c031ddc5f5b89edbf38b74f17c5963887d5e4d3018936f4c98a3b"
+    },
+    "scratch/observer-response.md": {
+      "mode": 420,
+      "type": "file",
+      "size": 101,
+      "sha256": "b79c44f495a1d1573cd7e154519fd41f90868fd0f4f778fea3e3a732c843beb1"
+    },
+    "scratch/tmp": {
+      "mode": 493,
+      "type": "directory"
+    },
+    "scratch/uv-cache": {
+      "mode": 493,
+      "type": "directory"
+    }
+  },
+  "work_changes": {},
+  "limits": [
+    "Encrypted dispatch text is not decoded; actual child reads establish only visible scope.",
+    "A file-read command must be checked against its returned output for truncation or failure.",
+    "External captures poll at 100 ms; an uncaptured temporary version is not asserted present.",
+    "No semantic or resource-loading pass follows merely from a tool count or task completion."
+  ]
+}

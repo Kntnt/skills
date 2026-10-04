@@ -1,0 +1,11 @@
+{
+  "attempt_id": "ms-20261002-b23c7e",
+  "checked_at": "2026-10-02T11:11:24.326597+00:00",
+  "staged_additions_only": true,
+  "scope": "Only this amendment receipt directory",
+  "extra_registry_count": 29,
+  "matching_native_capture_count": 340,
+  "registry_collision_surface_unchanged_after_staging_receipts": true,
+  "new_receipt_basenames_matching_registry_detector": [],
+  "raw_log_whitespace": "git diff --cached --check reports whitespace in the unmodified pytest failure output; original emitted logs are retained. This is not a CONTRIBUTING gate command."
+}

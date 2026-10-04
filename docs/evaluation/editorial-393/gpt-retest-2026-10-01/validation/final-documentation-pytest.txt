@@ -1,0 +1,13 @@
+warning: No `requires-python` value found in the workspace. Defaulting to `>=3.12`.
+============================= test session starts ==============================
+platform darwin -- Python 3.12.13, pytest-9.1.1, pluggy-1.6.0
+rootdir: /Users/thomas/Projects/skills-393-gpt-retest
+configfile: pyproject.toml
+plugins: xdist-3.8.0
+created: 14/14 workers
+14 workers [152 items]
+
+........................................................................ [ 47%]
+........................................................................ [ 94%]
+........                                                                 [100%]
+============================= 152 passed in 1.83s ==============================
