@@ -15,9 +15,10 @@ session's work from another's at all.
 
 So this feature does not guess. The instruction block it installs asks the agent
 to record what it starts; this hook stops exactly what is recorded and nothing
-else. What that costs is that an unrecorded process survives; what it buys is
-that no process anybody else owns is ever killed, which is the failure that
-cannot be undone.
+else. An unrecorded process survives. Both destructive signal boundaries require
+a nonempty matching recorded and current birth and the intended process group.
+These OS observations are not atomic with a signal and do not provide a kernel
+ownership guarantee; unreadable or changed evidence refuses cleanup.
 
 Both halves are installed together and removed together, because either alone is
 worse than neither: the block without the hook asks for records nothing reads,
@@ -89,16 +90,21 @@ class RecordingError(RuntimeError):
     """A manifest line this feature refuses to write."""
 
 
-def home() -> Path:
+def home(*, initialize: bool = False) -> Path:
     """Return the home this feature resolves its own state against.
 
     `KNTNT_HOME` first, exactly as the Manager's own `home()` resolves it, so a
     dry run against a sandbox home reaches this feature's state too and a real
-    run is never reached by one.
+    run is never reached by one. Identity probes initialize this Feature's
+    state first, so a fresh selected home is a valid working directory.
+    Ordinary path resolution, including health, remains read-only.
     """
 
     override = os.environ.get("KNTNT_HOME")
-    return Path(override) if override else Path.home()
+    root = Path(override) if override else Path.home()
+    if initialize:
+        (root / ".kntnt" / "session-cleanup").mkdir(parents=True, exist_ok=True)
+    return root
 
 
 def data_dir() -> Path:
@@ -246,13 +252,13 @@ def started_at(pid: int) -> str:
     try:
         completed = subprocess.run(
             ["ps", "-o", "lstart=", "-p", str(pid)],
-            cwd=home(),
+            cwd=home(initialize=True),
             text=True,
             capture_output=True,
             check=False,
             timeout=5,
         )
-    except (OSError, subprocess.SubprocessError):
+    except (OSError, RuntimeError, subprocess.SubprocessError):
         return ""
     return completed.stdout.strip() if completed.returncode == 0 else ""
 
@@ -427,6 +433,11 @@ def stop_pid(entry: dict[str, Any]) -> dict[str, Any]:
     reach far past anything this feature was told about. So a leader is stopped
     with everything it spawned and a follower is stopped alone, which is the
     honest half of the job rather than a guess at the whole of it.
+
+    Birth and group membership are checked again before each signal. A missing
+    leader cannot authorize stopping its surviving group. ps start times have
+    second resolution, and observation and signaling are separate OS calls:
+    exit, PID reuse, or group changes in between cannot be excluded atomically.
     """
 
     try:
@@ -436,11 +447,39 @@ def stop_pid(entry: dict[str, Any]) -> dict[str, Any]:
 
     if pid <= 1 or pid == os.getpid():
         return {"outcome": "refused", "detail": "that is not a process to stop"}
+
+    def group_remains() -> bool:
+        """Treat a surviving or unreadable group as unresolved ownership."""
+
+        try:
+            os.kill(-pid, 0)
+        except ProcessLookupError:
+            return False
+        except OSError:
+            return True
+        return True
+
     if not alive(pid):
+        if group_remains():
+            return {
+                "outcome": "refused",
+                "detail": "a leaderless process group remains or is unreadable",
+            }
         return {"outcome": "gone", "detail": None}
 
-    recorded = str(entry.get("started") or "")
-    if recorded and started_at(pid) != recorded:
+    recorded = str(entry.get("started") or "").strip()
+    if not recorded:
+        return {
+            "outcome": "refused",
+            "detail": "the recorded start identity is missing",
+        }
+    current = started_at(pid)
+    if not current:
+        return {
+            "outcome": "refused",
+            "detail": "the current start identity is unreadable",
+        }
+    if current != recorded:
         return {
             "outcome": "reused",
             "detail": "the process id now names something else and was left alone",
@@ -448,10 +487,46 @@ def stop_pid(entry: dict[str, Any]) -> dict[str, Any]:
 
     target, scope = pid, "process"
     try:
-        if os.getpgid(pid) == pid:
+        group = os.getpgid(pid)
+        if group == pid:
             target, scope = -pid, "group"
     except OSError:
-        pass
+        return {
+            "outcome": "refused",
+            "detail": "the current process group is unreadable",
+        }
+
+    def identity_failure() -> dict[str, Any] | None:
+        """Recheck the intended scope and birth at each destructive boundary."""
+
+        try:
+            current_group = os.getpgid(pid)
+        except OSError:
+            return {
+                "outcome": "refused",
+                "detail": "the current process group is unreadable",
+            }
+        current = started_at(pid)
+        if not current:
+            return {
+                "outcome": "refused",
+                "detail": "the current start identity is unreadable",
+            }
+        if current != recorded:
+            return {
+                "outcome": "reused",
+                "detail": "the process id now names something else and was left alone",
+            }
+        if current_group != group:
+            return {
+                "outcome": "refused",
+                "detail": "the intended process group changed",
+            }
+        return None
+
+    failure = identity_failure()
+    if failure is not None:
+        return failure
 
     try:
         os.kill(target, signal.SIGTERM)
@@ -462,11 +537,24 @@ def stop_pid(entry: dict[str, Any]) -> dict[str, Any]:
     while time.monotonic() < deadline and alive(pid):
         time.sleep(0.1)
     if alive(pid):
+        failure = identity_failure()
+        if failure is not None:
+            return failure
         try:
             os.kill(target, signal.SIGKILL)
         except OSError as exc:
             return {"outcome": "failed", "detail": str(exc)}
+        if alive(pid) or (scope == "group" and group_remains()):
+            return {
+                "outcome": "failed",
+                "detail": "the process or group remains after KILL; cleanup is unresolved",
+            }
         return {"outcome": "killed", "detail": scope}
+    if scope == "group" and group_remains():
+        return {
+            "outcome": "refused",
+            "detail": "a leaderless process group remains or is unreadable",
+        }
     return {"outcome": "stopped", "detail": scope}
 
 
@@ -529,12 +617,14 @@ ACTIONS = {"pid": stop_pid, "container": stop_container, "path": remove_path}
 def sweep(
     path: Path, *, why: str, sweeper_session: str = "", sweeper_harness: str = ""
 ) -> dict[str, Any]:
-    """Act on every entry one manifest holds, log all of it, and take it away.
+    """Act on every entry, retaining the original manifest for unresolved PIDs.
 
     A manifest that recorded nothing is logged as exactly that. Recording is
     the one step of this design that depends on an agent remembering to take
     it, so whether it happens has to be visible somewhere, and a session that
-    ended having written nothing down is the evidence that it did not.
+    ended having written nothing down is the evidence that it did not. A kept
+    manifest is unchanged, including completed path/container entries; a retry
+    encounters those again rather than rewriting historical ownership fields.
     """
 
     header, entries = read_manifest(path)
@@ -570,10 +660,19 @@ def sweep(
             harness=header.get("harness"),
         )
 
-    try:
-        path.unlink(missing_ok=True)
-    except OSError as exc:
-        log("manifest-kept", session=path.stem, detail=str(exc))
+    # Keep original ownership and historical birth fields intact on refusal.
+    unresolved = any(
+        result["kind"] == "pid"
+        and result["outcome"] not in {"gone", "stopped", "killed"}
+        for result in acted
+    )
+    if unresolved:
+        log("manifest-kept", session=path.stem, detail="unresolved process cleanup")
+    else:
+        try:
+            path.unlink(missing_ok=True)
+        except OSError as exc:
+            log("manifest-kept", session=path.stem, detail=str(exc))
 
     return {
         "session": header.get("id") or path.stem,
@@ -598,7 +697,7 @@ def process_chain() -> list[tuple[int, str]] | None:
     try:
         completed = subprocess.run(
             ["ps", "-axo", "pid=,ppid=,comm="],
-            cwd=home(),
+            cwd=home(initialize=True),
             text=True,
             capture_output=True,
             check=False,
@@ -612,7 +711,7 @@ def process_chain() -> list[tuple[int, str]] | None:
                 line.split(maxsplit=2) for line in completed.stdout.splitlines()
             )
         }
-    except (OSError, subprocess.SubprocessError, ValueError):
+    except (OSError, RuntimeError, subprocess.SubprocessError, ValueError):
         return None
 
     # A missing link cannot establish which Harness owns the calling shell.
@@ -773,6 +872,10 @@ def add(kind: str, identifier: str, why: str) -> dict[str, Any]:
         if not alive(pid):
             raise RecordingError(f"process {pid} is not running")
         record["started"] = started_at(pid)
+        if not record["started"]:
+            raise RecordingError(
+                f"cannot establish the start identity of process {pid}"
+            )
     if kind == "path" and under_temp(Path(identifier)) is None:
         raise RecordingError(
             f"'{identifier}' is not under a temp root, and only a temp root is "
