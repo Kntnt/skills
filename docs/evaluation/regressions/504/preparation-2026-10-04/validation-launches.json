@@ -1,0 +1,2848 @@
+{
+  "status": "unrun committed complete-contract preparation; final editorial freeze not established",
+  "date": "2026-10-04",
+  "method_commit": "68a4c1b783359c31135423fd561d763454e4674a",
+  "helper_sha256": "b6cf291a34711dcbe0bb247bbee6a4b8a8fb5ca662946afa2bb04aff9c52627b",
+  "seat": {
+    "model": "gpt-6.1-sol",
+    "effort": "xhigh",
+    "version": "0.160.0"
+  },
+  "timeout_seconds_per_reader": 1200,
+  "attempts_per_reader": 1,
+  "replacement_proposals_per_new_contrast": 1,
+  "count": 68,
+  "groups": [
+    {
+      "material_identity": "f6444cebe3c0c2c7c2b724fe2fb99ff4133988fdb5db025f53b7984beaffb51f",
+      "source_packets": [
+        "docs/evaluation/regressions/488/preparation-2026-10-03/validation-material/t03",
+        "docs/evaluation/regressions/504/preparation-2026-10-03/validation-material/t07"
+      ],
+      "contracts": [
+        {
+          "role": "shared mechanics",
+          "path": "contracts/r01.md",
+          "sha256": "b3103ed6da4ac9d27a0ebfb43bdb40b8e77d58d84b3745a90c0a736142438b45",
+          "resolved_source": "skills/kntnt/library/references/editorial/mechanics.md"
+        },
+        {
+          "role": "locale complete resource",
+          "path": "contracts/r02.md",
+          "sha256": "241f0e5e4ca590c1d2348dc4048d15b5c8cc030c9dc91de989a758cefd4cd211",
+          "resolved_source": "skills/kntnt/library/references/languages/sv.md"
+        },
+        {
+          "role": "shared editorial composition",
+          "path": "contracts/r03.md",
+          "sha256": "d4146ef134de7482e25469201aaceed7b207fba9f8bacb06a428b85f6bfc3581",
+          "resolved_source": "skills/kntnt/library/references/editorial/base.md"
+        },
+        {
+          "role": "shared editorial review",
+          "path": "contracts/r04.md",
+          "sha256": "d2c838c19a692104be247afd227b0baed98f3156be059c0a982ecae3513fa0ca",
+          "resolved_source": "skills/kntnt/library/references/editorial/base.review.md"
+        },
+        {
+          "role": "shared anti-slop",
+          "path": "contracts/r05.md",
+          "sha256": "9ec7fb15b3cfe22f446c6ed2df85666aaa182d8fa0a09fa3668887e4786d83c2",
+          "resolved_source": "skills/kntnt/library/references/editorial/anti-slop.md"
+        },
+        {
+          "role": "anatomy composition",
+          "path": "contracts/r06.md",
+          "sha256": "c075c6fe7494dbcdc43d6af599c55ab8fc52fc48d7ed1b6cc26eca7a592cecd7",
+          "resolved_source": "skills/kntnt/library/references/editorial/article-anatomy.md"
+        },
+        {
+          "role": "anatomy review",
+          "path": "contracts/r07.md",
+          "sha256": "3e616f9671126ba7898123dd288a4a9bb4170f189d567a3fcbd2b17ccb82c633",
+          "resolved_source": "skills/kntnt/library/references/editorial/article-anatomy.review.md"
+        },
+        {
+          "role": "headlines composition",
+          "path": "contracts/r08.md",
+          "sha256": "adfb7ca612905afee03a73d58cdb07de9d0877b23af9de89f7e114f6de81df5f",
+          "resolved_source": "skills/kntnt/library/references/editorial/headlines.md"
+        },
+        {
+          "role": "headlines review",
+          "path": "contracts/r09.md",
+          "sha256": "11be8cc4a9d009f59f78dedfe9a0059c681ca0d8f23bd37f36ef0486a74f1257",
+          "resolved_source": "skills/kntnt/library/references/editorial/headlines.review.md"
+        },
+        {
+          "role": "web craft composition",
+          "path": "contracts/r10.md",
+          "sha256": "b1ac5867d30952c3ca78da244520ab28c025102f4389f44ec206757a29f05371",
+          "resolved_source": "skills/kntnt/library/references/editorial/web-craft.md"
+        },
+        {
+          "role": "web craft review",
+          "path": "contracts/r11.md",
+          "sha256": "169da1beeb4fb80e74f9423bdd4d7bcd57aa9b59b8e8ff5b71f3a67dfef7e923",
+          "resolved_source": "skills/kntnt/library/references/editorial/web-craft.review.md"
+        },
+        {
+          "role": "selected genre composition",
+          "path": "contracts/r12.md",
+          "sha256": "2313180d69b25de48b818629c5d761daa36eb69def33441b01c24a2135f17b4f",
+          "resolved_source": "skills/kntnt/library/references/editorial/genres/article.md"
+        },
+        {
+          "role": "selected genre review",
+          "path": "contracts/r13.md",
+          "sha256": "0d992e276cb65943ceab91cb855c1fcafd2b65ed4b378a16a4ea63036de8074c",
+          "resolved_source": "skills/kntnt/library/references/editorial/genres/article.review.md"
+        }
+      ],
+      "readers": [
+        {
+          "reader": "7e833bdac9694a71980092ac55a8eb4a",
+          "cwd": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/materials/7e833bdac9694a71980092ac55a8eb4a",
+          "receipt": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/7e833bdac9694a71980092ac55a8eb4a"
+        },
+        {
+          "reader": "978d3c19acf94c149dfcfbc87c2c768c",
+          "cwd": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/materials/978d3c19acf94c149dfcfbc87c2c768c",
+          "receipt": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/978d3c19acf94c149dfcfbc87c2c768c"
+        }
+      ]
+    },
+    {
+      "material_identity": "bb0dda5f483627e4a084fc9524542d0a3303dd1596fca3221409c5a4d7df5475",
+      "source_packets": [
+        "docs/evaluation/regressions/488/preparation-2026-10-03/validation-material/t04"
+      ],
+      "contracts": [
+        {
+          "role": "shared mechanics",
+          "path": "contracts/r01.md",
+          "sha256": "b3103ed6da4ac9d27a0ebfb43bdb40b8e77d58d84b3745a90c0a736142438b45",
+          "resolved_source": "skills/kntnt/library/references/editorial/mechanics.md"
+        },
+        {
+          "role": "locale complete resource",
+          "path": "contracts/r02.md",
+          "sha256": "241f0e5e4ca590c1d2348dc4048d15b5c8cc030c9dc91de989a758cefd4cd211",
+          "resolved_source": "skills/kntnt/library/references/languages/sv.md"
+        },
+        {
+          "role": "shared editorial composition",
+          "path": "contracts/r03.md",
+          "sha256": "d4146ef134de7482e25469201aaceed7b207fba9f8bacb06a428b85f6bfc3581",
+          "resolved_source": "skills/kntnt/library/references/editorial/base.md"
+        },
+        {
+          "role": "shared editorial review",
+          "path": "contracts/r04.md",
+          "sha256": "d2c838c19a692104be247afd227b0baed98f3156be059c0a982ecae3513fa0ca",
+          "resolved_source": "skills/kntnt/library/references/editorial/base.review.md"
+        },
+        {
+          "role": "shared anti-slop",
+          "path": "contracts/r05.md",
+          "sha256": "9ec7fb15b3cfe22f446c6ed2df85666aaa182d8fa0a09fa3668887e4786d83c2",
+          "resolved_source": "skills/kntnt/library/references/editorial/anti-slop.md"
+        },
+        {
+          "role": "anatomy composition",
+          "path": "contracts/r06.md",
+          "sha256": "c075c6fe7494dbcdc43d6af599c55ab8fc52fc48d7ed1b6cc26eca7a592cecd7",
+          "resolved_source": "skills/kntnt/library/references/editorial/article-anatomy.md"
+        },
+        {
+          "role": "anatomy review",
+          "path": "contracts/r07.md",
+          "sha256": "3e616f9671126ba7898123dd288a4a9bb4170f189d567a3fcbd2b17ccb82c633",
+          "resolved_source": "skills/kntnt/library/references/editorial/article-anatomy.review.md"
+        },
+        {
+          "role": "headlines composition",
+          "path": "contracts/r08.md",
+          "sha256": "adfb7ca612905afee03a73d58cdb07de9d0877b23af9de89f7e114f6de81df5f",
+          "resolved_source": "skills/kntnt/library/references/editorial/headlines.md"
+        },
+        {
+          "role": "headlines review",
+          "path": "contracts/r09.md",
+          "sha256": "11be8cc4a9d009f59f78dedfe9a0059c681ca0d8f23bd37f36ef0486a74f1257",
+          "resolved_source": "skills/kntnt/library/references/editorial/headlines.review.md"
+        },
+        {
+          "role": "web craft composition",
+          "path": "contracts/r10.md",
+          "sha256": "b1ac5867d30952c3ca78da244520ab28c025102f4389f44ec206757a29f05371",
+          "resolved_source": "skills/kntnt/library/references/editorial/web-craft.md"
+        },
+        {
+          "role": "web craft review",
+          "path": "contracts/r11.md",
+          "sha256": "169da1beeb4fb80e74f9423bdd4d7bcd57aa9b59b8e8ff5b71f3a67dfef7e923",
+          "resolved_source": "skills/kntnt/library/references/editorial/web-craft.review.md"
+        },
+        {
+          "role": "selected genre composition",
+          "path": "contracts/r12.md",
+          "sha256": "0971c8b498535ed57bbc130e61989b477c334e53cf3fa3c37b2e1bf64a158d98",
+          "resolved_source": "skills/kntnt/library/references/editorial/genres/column.md"
+        },
+        {
+          "role": "selected genre review",
+          "path": "contracts/r13.md",
+          "sha256": "8abffc59549e71a00d40200e89b656ca77d0dfd8d1f3e58293a0591373fb5c37",
+          "resolved_source": "skills/kntnt/library/references/editorial/genres/column.review.md"
+        }
+      ],
+      "readers": [
+        {
+          "reader": "98276d70e106452488159e672258639d",
+          "cwd": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/materials/98276d70e106452488159e672258639d",
+          "receipt": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/98276d70e106452488159e672258639d"
+        },
+        {
+          "reader": "fa2853d4eb574820adb28b726be81edf",
+          "cwd": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/materials/fa2853d4eb574820adb28b726be81edf",
+          "receipt": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/fa2853d4eb574820adb28b726be81edf"
+        }
+      ]
+    },
+    {
+      "material_identity": "ad541fd14a1a16be521d3dd0c4da00654090120d03836eede1fac2c825a1b02b",
+      "source_packets": [
+        "docs/evaluation/regressions/488/preparation-2026-10-03/validation-material/t02",
+        "docs/evaluation/regressions/495/preparation-2026-10-03/validation-material/t01"
+      ],
+      "contracts": [
+        {
+          "role": "shared mechanics",
+          "path": "contracts/r01.md",
+          "sha256": "b3103ed6da4ac9d27a0ebfb43bdb40b8e77d58d84b3745a90c0a736142438b45",
+          "resolved_source": "skills/kntnt/library/references/editorial/mechanics.md"
+        },
+        {
+          "role": "locale complete resource",
+          "path": "contracts/r02.md",
+          "sha256": "241f0e5e4ca590c1d2348dc4048d15b5c8cc030c9dc91de989a758cefd4cd211",
+          "resolved_source": "skills/kntnt/library/references/languages/sv.md"
+        },
+        {
+          "role": "shared editorial composition",
+          "path": "contracts/r03.md",
+          "sha256": "d4146ef134de7482e25469201aaceed7b207fba9f8bacb06a428b85f6bfc3581",
+          "resolved_source": "skills/kntnt/library/references/editorial/base.md"
+        },
+        {
+          "role": "shared editorial review",
+          "path": "contracts/r04.md",
+          "sha256": "d2c838c19a692104be247afd227b0baed98f3156be059c0a982ecae3513fa0ca",
+          "resolved_source": "skills/kntnt/library/references/editorial/base.review.md"
+        },
+        {
+          "role": "shared anti-slop",
+          "path": "contracts/r05.md",
+          "sha256": "9ec7fb15b3cfe22f446c6ed2df85666aaa182d8fa0a09fa3668887e4786d83c2",
+          "resolved_source": "skills/kntnt/library/references/editorial/anti-slop.md"
+        },
+        {
+          "role": "anatomy composition",
+          "path": "contracts/r06.md",
+          "sha256": "c075c6fe7494dbcdc43d6af599c55ab8fc52fc48d7ed1b6cc26eca7a592cecd7",
+          "resolved_source": "skills/kntnt/library/references/editorial/article-anatomy.md"
+        },
+        {
+          "role": "anatomy review",
+          "path": "contracts/r07.md",
+          "sha256": "3e616f9671126ba7898123dd288a4a9bb4170f189d567a3fcbd2b17ccb82c633",
+          "resolved_source": "skills/kntnt/library/references/editorial/article-anatomy.review.md"
+        },
+        {
+          "role": "headlines composition",
+          "path": "contracts/r08.md",
+          "sha256": "adfb7ca612905afee03a73d58cdb07de9d0877b23af9de89f7e114f6de81df5f",
+          "resolved_source": "skills/kntnt/library/references/editorial/headlines.md"
+        },
+        {
+          "role": "headlines review",
+          "path": "contracts/r09.md",
+          "sha256": "11be8cc4a9d009f59f78dedfe9a0059c681ca0d8f23bd37f36ef0486a74f1257",
+          "resolved_source": "skills/kntnt/library/references/editorial/headlines.review.md"
+        },
+        {
+          "role": "web craft composition",
+          "path": "contracts/r10.md",
+          "sha256": "b1ac5867d30952c3ca78da244520ab28c025102f4389f44ec206757a29f05371",
+          "resolved_source": "skills/kntnt/library/references/editorial/web-craft.md"
+        },
+        {
+          "role": "web craft review",
+          "path": "contracts/r11.md",
+          "sha256": "169da1beeb4fb80e74f9423bdd4d7bcd57aa9b59b8e8ff5b71f3a67dfef7e923",
+          "resolved_source": "skills/kntnt/library/references/editorial/web-craft.review.md"
+        },
+        {
+          "role": "selected genre composition",
+          "path": "contracts/r12.md",
+          "sha256": "f0edbed362fe613f11cfe6232c4c7fc98202786fa909f3cd72f1b1acd0867e41",
+          "resolved_source": "skills/kntnt/library/references/editorial/genres/opinion.md"
+        },
+        {
+          "role": "selected genre review",
+          "path": "contracts/r13.md",
+          "sha256": "38f9409f2bdbe66cdc3786640bb08da94ed67eabb0a75e3ebe5028f3463b63a3",
+          "resolved_source": "skills/kntnt/library/references/editorial/genres/opinion.review.md"
+        }
+      ],
+      "readers": [
+        {
+          "reader": "f6148cdb66074c03bc80ee64c4a166cf",
+          "cwd": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/materials/f6148cdb66074c03bc80ee64c4a166cf",
+          "receipt": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/f6148cdb66074c03bc80ee64c4a166cf"
+        },
+        {
+          "reader": "1709cdde68464010a164dbc18698e363",
+          "cwd": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/materials/1709cdde68464010a164dbc18698e363",
+          "receipt": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/1709cdde68464010a164dbc18698e363"
+        }
+      ]
+    },
+    {
+      "material_identity": "c60571083d1f38751a256200ed5135436acba63cb959b5e30b8fa420f54fa509",
+      "source_packets": [
+        "docs/evaluation/regressions/488/preparation-2026-10-03/validation-material/t01"
+      ],
+      "contracts": [
+        {
+          "role": "shared mechanics",
+          "path": "contracts/r01.md",
+          "sha256": "b3103ed6da4ac9d27a0ebfb43bdb40b8e77d58d84b3745a90c0a736142438b45",
+          "resolved_source": "skills/kntnt/library/references/editorial/mechanics.md"
+        },
+        {
+          "role": "locale complete resource",
+          "path": "contracts/r02.md",
+          "sha256": "241f0e5e4ca590c1d2348dc4048d15b5c8cc030c9dc91de989a758cefd4cd211",
+          "resolved_source": "skills/kntnt/library/references/languages/sv.md"
+        },
+        {
+          "role": "shared editorial composition",
+          "path": "contracts/r03.md",
+          "sha256": "d4146ef134de7482e25469201aaceed7b207fba9f8bacb06a428b85f6bfc3581",
+          "resolved_source": "skills/kntnt/library/references/editorial/base.md"
+        },
+        {
+          "role": "shared editorial review",
+          "path": "contracts/r04.md",
+          "sha256": "d2c838c19a692104be247afd227b0baed98f3156be059c0a982ecae3513fa0ca",
+          "resolved_source": "skills/kntnt/library/references/editorial/base.review.md"
+        },
+        {
+          "role": "shared anti-slop",
+          "path": "contracts/r05.md",
+          "sha256": "9ec7fb15b3cfe22f446c6ed2df85666aaa182d8fa0a09fa3668887e4786d83c2",
+          "resolved_source": "skills/kntnt/library/references/editorial/anti-slop.md"
+        },
+        {
+          "role": "anatomy composition",
+          "path": "contracts/r06.md",
+          "sha256": "c075c6fe7494dbcdc43d6af599c55ab8fc52fc48d7ed1b6cc26eca7a592cecd7",
+          "resolved_source": "skills/kntnt/library/references/editorial/article-anatomy.md"
+        },
+        {
+          "role": "anatomy review",
+          "path": "contracts/r07.md",
+          "sha256": "3e616f9671126ba7898123dd288a4a9bb4170f189d567a3fcbd2b17ccb82c633",
+          "resolved_source": "skills/kntnt/library/references/editorial/article-anatomy.review.md"
+        },
+        {
+          "role": "headlines composition",
+          "path": "contracts/r08.md",
+          "sha256": "adfb7ca612905afee03a73d58cdb07de9d0877b23af9de89f7e114f6de81df5f",
+          "resolved_source": "skills/kntnt/library/references/editorial/headlines.md"
+        },
+        {
+          "role": "headlines review",
+          "path": "contracts/r09.md",
+          "sha256": "11be8cc4a9d009f59f78dedfe9a0059c681ca0d8f23bd37f36ef0486a74f1257",
+          "resolved_source": "skills/kntnt/library/references/editorial/headlines.review.md"
+        },
+        {
+          "role": "web craft composition",
+          "path": "contracts/r10.md",
+          "sha256": "b1ac5867d30952c3ca78da244520ab28c025102f4389f44ec206757a29f05371",
+          "resolved_source": "skills/kntnt/library/references/editorial/web-craft.md"
+        },
+        {
+          "role": "web craft review",
+          "path": "contracts/r11.md",
+          "sha256": "169da1beeb4fb80e74f9423bdd4d7bcd57aa9b59b8e8ff5b71f3a67dfef7e923",
+          "resolved_source": "skills/kntnt/library/references/editorial/web-craft.review.md"
+        },
+        {
+          "role": "selected genre composition",
+          "path": "contracts/r12.md",
+          "sha256": "2313180d69b25de48b818629c5d761daa36eb69def33441b01c24a2135f17b4f",
+          "resolved_source": "skills/kntnt/library/references/editorial/genres/article.md"
+        },
+        {
+          "role": "selected genre review",
+          "path": "contracts/r13.md",
+          "sha256": "0d992e276cb65943ceab91cb855c1fcafd2b65ed4b378a16a4ea63036de8074c",
+          "resolved_source": "skills/kntnt/library/references/editorial/genres/article.review.md"
+        }
+      ],
+      "readers": [
+        {
+          "reader": "f6dd0eb41aae44b1bf9f2a1e526e6fbc",
+          "cwd": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/materials/f6dd0eb41aae44b1bf9f2a1e526e6fbc",
+          "receipt": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/f6dd0eb41aae44b1bf9f2a1e526e6fbc"
+        },
+        {
+          "reader": "931e9de0f36a4c62bc8b1a4b73aa8932",
+          "cwd": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/materials/931e9de0f36a4c62bc8b1a4b73aa8932",
+          "receipt": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/931e9de0f36a4c62bc8b1a4b73aa8932"
+        }
+      ]
+    },
+    {
+      "material_identity": "7052b13f940c887d5add27ee261d3cef7588c973b2a3f62ad45f50f711f14978",
+      "source_packets": [
+        "docs/evaluation/regressions/489/preparation-2026-10-03/validation-material/t03"
+      ],
+      "contracts": [
+        {
+          "role": "shared mechanics",
+          "path": "contracts/r01.md",
+          "sha256": "b3103ed6da4ac9d27a0ebfb43bdb40b8e77d58d84b3745a90c0a736142438b45",
+          "resolved_source": "skills/kntnt/library/references/editorial/mechanics.md"
+        },
+        {
+          "role": "locale complete resource",
+          "path": "contracts/r02.md",
+          "sha256": "241f0e5e4ca590c1d2348dc4048d15b5c8cc030c9dc91de989a758cefd4cd211",
+          "resolved_source": "skills/kntnt/library/references/languages/sv.md"
+        },
+        {
+          "role": "shared editorial composition",
+          "path": "contracts/r03.md",
+          "sha256": "d4146ef134de7482e25469201aaceed7b207fba9f8bacb06a428b85f6bfc3581",
+          "resolved_source": "skills/kntnt/library/references/editorial/base.md"
+        },
+        {
+          "role": "shared editorial review",
+          "path": "contracts/r04.md",
+          "sha256": "d2c838c19a692104be247afd227b0baed98f3156be059c0a982ecae3513fa0ca",
+          "resolved_source": "skills/kntnt/library/references/editorial/base.review.md"
+        },
+        {
+          "role": "shared anti-slop",
+          "path": "contracts/r05.md",
+          "sha256": "9ec7fb15b3cfe22f446c6ed2df85666aaa182d8fa0a09fa3668887e4786d83c2",
+          "resolved_source": "skills/kntnt/library/references/editorial/anti-slop.md"
+        },
+        {
+          "role": "anatomy composition",
+          "path": "contracts/r06.md",
+          "sha256": "c075c6fe7494dbcdc43d6af599c55ab8fc52fc48d7ed1b6cc26eca7a592cecd7",
+          "resolved_source": "skills/kntnt/library/references/editorial/article-anatomy.md"
+        },
+        {
+          "role": "anatomy review",
+          "path": "contracts/r07.md",
+          "sha256": "3e616f9671126ba7898123dd288a4a9bb4170f189d567a3fcbd2b17ccb82c633",
+          "resolved_source": "skills/kntnt/library/references/editorial/article-anatomy.review.md"
+        },
+        {
+          "role": "headlines composition",
+          "path": "contracts/r08.md",
+          "sha256": "adfb7ca612905afee03a73d58cdb07de9d0877b23af9de89f7e114f6de81df5f",
+          "resolved_source": "skills/kntnt/library/references/editorial/headlines.md"
+        },
+        {
+          "role": "headlines review",
+          "path": "contracts/r09.md",
+          "sha256": "11be8cc4a9d009f59f78dedfe9a0059c681ca0d8f23bd37f36ef0486a74f1257",
+          "resolved_source": "skills/kntnt/library/references/editorial/headlines.review.md"
+        },
+        {
+          "role": "web craft composition",
+          "path": "contracts/r10.md",
+          "sha256": "b1ac5867d30952c3ca78da244520ab28c025102f4389f44ec206757a29f05371",
+          "resolved_source": "skills/kntnt/library/references/editorial/web-craft.md"
+        },
+        {
+          "role": "web craft review",
+          "path": "contracts/r11.md",
+          "sha256": "169da1beeb4fb80e74f9423bdd4d7bcd57aa9b59b8e8ff5b71f3a67dfef7e923",
+          "resolved_source": "skills/kntnt/library/references/editorial/web-craft.review.md"
+        },
+        {
+          "role": "selected genre composition",
+          "path": "contracts/r12.md",
+          "sha256": "a39054321cbd35819cfd8ac7d2823dd3d56550a6ee2d1c6ee3b30f9daaa16cc5",
+          "resolved_source": "skills/kntnt/library/references/editorial/genres/casestudy.md"
+        },
+        {
+          "role": "selected genre review",
+          "path": "contracts/r13.md",
+          "sha256": "a7db10d0dc1970064a8887c819a8500dfdecf43dcb45fffed32994921ceb68a4",
+          "resolved_source": "skills/kntnt/library/references/editorial/genres/casestudy.review.md"
+        }
+      ],
+      "readers": [
+        {
+          "reader": "a8d266bfc02a42d093ee1d233434cadb",
+          "cwd": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/materials/a8d266bfc02a42d093ee1d233434cadb",
+          "receipt": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/a8d266bfc02a42d093ee1d233434cadb"
+        },
+        {
+          "reader": "1db4e4edfb1f48bc868674ffc42e2393",
+          "cwd": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/materials/1db4e4edfb1f48bc868674ffc42e2393",
+          "receipt": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/1db4e4edfb1f48bc868674ffc42e2393"
+        }
+      ]
+    },
+    {
+      "material_identity": "6ac6abeea273daa5265b31d3ef5d5c78a9cf6ad9edb76236b2bc76b5da05e0b9",
+      "source_packets": [
+        "docs/evaluation/regressions/489/preparation-2026-10-03/validation-material/t02"
+      ],
+      "contracts": [
+        {
+          "role": "shared mechanics",
+          "path": "contracts/r01.md",
+          "sha256": "b3103ed6da4ac9d27a0ebfb43bdb40b8e77d58d84b3745a90c0a736142438b45",
+          "resolved_source": "skills/kntnt/library/references/editorial/mechanics.md"
+        },
+        {
+          "role": "locale complete resource",
+          "path": "contracts/r02.md",
+          "sha256": "241f0e5e4ca590c1d2348dc4048d15b5c8cc030c9dc91de989a758cefd4cd211",
+          "resolved_source": "skills/kntnt/library/references/languages/sv.md"
+        },
+        {
+          "role": "shared editorial composition",
+          "path": "contracts/r03.md",
+          "sha256": "d4146ef134de7482e25469201aaceed7b207fba9f8bacb06a428b85f6bfc3581",
+          "resolved_source": "skills/kntnt/library/references/editorial/base.md"
+        },
+        {
+          "role": "shared editorial review",
+          "path": "contracts/r04.md",
+          "sha256": "d2c838c19a692104be247afd227b0baed98f3156be059c0a982ecae3513fa0ca",
+          "resolved_source": "skills/kntnt/library/references/editorial/base.review.md"
+        },
+        {
+          "role": "shared anti-slop",
+          "path": "contracts/r05.md",
+          "sha256": "9ec7fb15b3cfe22f446c6ed2df85666aaa182d8fa0a09fa3668887e4786d83c2",
+          "resolved_source": "skills/kntnt/library/references/editorial/anti-slop.md"
+        },
+        {
+          "role": "anatomy composition",
+          "path": "contracts/r06.md",
+          "sha256": "c075c6fe7494dbcdc43d6af599c55ab8fc52fc48d7ed1b6cc26eca7a592cecd7",
+          "resolved_source": "skills/kntnt/library/references/editorial/article-anatomy.md"
+        },
+        {
+          "role": "anatomy review",
+          "path": "contracts/r07.md",
+          "sha256": "3e616f9671126ba7898123dd288a4a9bb4170f189d567a3fcbd2b17ccb82c633",
+          "resolved_source": "skills/kntnt/library/references/editorial/article-anatomy.review.md"
+        },
+        {
+          "role": "headlines composition",
+          "path": "contracts/r08.md",
+          "sha256": "adfb7ca612905afee03a73d58cdb07de9d0877b23af9de89f7e114f6de81df5f",
+          "resolved_source": "skills/kntnt/library/references/editorial/headlines.md"
+        },
+        {
+          "role": "headlines review",
+          "path": "contracts/r09.md",
+          "sha256": "11be8cc4a9d009f59f78dedfe9a0059c681ca0d8f23bd37f36ef0486a74f1257",
+          "resolved_source": "skills/kntnt/library/references/editorial/headlines.review.md"
+        },
+        {
+          "role": "web craft composition",
+          "path": "contracts/r10.md",
+          "sha256": "b1ac5867d30952c3ca78da244520ab28c025102f4389f44ec206757a29f05371",
+          "resolved_source": "skills/kntnt/library/references/editorial/web-craft.md"
+        },
+        {
+          "role": "web craft review",
+          "path": "contracts/r11.md",
+          "sha256": "169da1beeb4fb80e74f9423bdd4d7bcd57aa9b59b8e8ff5b71f3a67dfef7e923",
+          "resolved_source": "skills/kntnt/library/references/editorial/web-craft.review.md"
+        },
+        {
+          "role": "selected genre composition",
+          "path": "contracts/r12.md",
+          "sha256": "a39054321cbd35819cfd8ac7d2823dd3d56550a6ee2d1c6ee3b30f9daaa16cc5",
+          "resolved_source": "skills/kntnt/library/references/editorial/genres/casestudy.md"
+        },
+        {
+          "role": "selected genre review",
+          "path": "contracts/r13.md",
+          "sha256": "a7db10d0dc1970064a8887c819a8500dfdecf43dcb45fffed32994921ceb68a4",
+          "resolved_source": "skills/kntnt/library/references/editorial/genres/casestudy.review.md"
+        }
+      ],
+      "readers": [
+        {
+          "reader": "ceb57c9cb8e64519a4cc4965da77e805",
+          "cwd": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/materials/ceb57c9cb8e64519a4cc4965da77e805",
+          "receipt": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/ceb57c9cb8e64519a4cc4965da77e805"
+        },
+        {
+          "reader": "41e3391afdf844598e2a620102e249a4",
+          "cwd": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/materials/41e3391afdf844598e2a620102e249a4",
+          "receipt": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/41e3391afdf844598e2a620102e249a4"
+        }
+      ]
+    },
+    {
+      "material_identity": "6855b518222815d79f53b96e4bdcdfc7082790021fc68193c505a67b20127650",
+      "source_packets": [
+        "docs/evaluation/regressions/489/preparation-2026-10-03/validation-material/t01",
+        "docs/evaluation/regressions/504/preparation-2026-10-03/validation-material/t01"
+      ],
+      "contracts": [
+        {
+          "role": "shared mechanics",
+          "path": "contracts/r01.md",
+          "sha256": "b3103ed6da4ac9d27a0ebfb43bdb40b8e77d58d84b3745a90c0a736142438b45",
+          "resolved_source": "skills/kntnt/library/references/editorial/mechanics.md"
+        },
+        {
+          "role": "locale complete resource",
+          "path": "contracts/r02.md",
+          "sha256": "241f0e5e4ca590c1d2348dc4048d15b5c8cc030c9dc91de989a758cefd4cd211",
+          "resolved_source": "skills/kntnt/library/references/languages/sv.md"
+        },
+        {
+          "role": "shared editorial composition",
+          "path": "contracts/r03.md",
+          "sha256": "d4146ef134de7482e25469201aaceed7b207fba9f8bacb06a428b85f6bfc3581",
+          "resolved_source": "skills/kntnt/library/references/editorial/base.md"
+        },
+        {
+          "role": "shared editorial review",
+          "path": "contracts/r04.md",
+          "sha256": "d2c838c19a692104be247afd227b0baed98f3156be059c0a982ecae3513fa0ca",
+          "resolved_source": "skills/kntnt/library/references/editorial/base.review.md"
+        },
+        {
+          "role": "shared anti-slop",
+          "path": "contracts/r05.md",
+          "sha256": "9ec7fb15b3cfe22f446c6ed2df85666aaa182d8fa0a09fa3668887e4786d83c2",
+          "resolved_source": "skills/kntnt/library/references/editorial/anti-slop.md"
+        },
+        {
+          "role": "anatomy composition",
+          "path": "contracts/r06.md",
+          "sha256": "c075c6fe7494dbcdc43d6af599c55ab8fc52fc48d7ed1b6cc26eca7a592cecd7",
+          "resolved_source": "skills/kntnt/library/references/editorial/article-anatomy.md"
+        },
+        {
+          "role": "anatomy review",
+          "path": "contracts/r07.md",
+          "sha256": "3e616f9671126ba7898123dd288a4a9bb4170f189d567a3fcbd2b17ccb82c633",
+          "resolved_source": "skills/kntnt/library/references/editorial/article-anatomy.review.md"
+        },
+        {
+          "role": "headlines composition",
+          "path": "contracts/r08.md",
+          "sha256": "adfb7ca612905afee03a73d58cdb07de9d0877b23af9de89f7e114f6de81df5f",
+          "resolved_source": "skills/kntnt/library/references/editorial/headlines.md"
+        },
+        {
+          "role": "headlines review",
+          "path": "contracts/r09.md",
+          "sha256": "11be8cc4a9d009f59f78dedfe9a0059c681ca0d8f23bd37f36ef0486a74f1257",
+          "resolved_source": "skills/kntnt/library/references/editorial/headlines.review.md"
+        },
+        {
+          "role": "web craft composition",
+          "path": "contracts/r10.md",
+          "sha256": "b1ac5867d30952c3ca78da244520ab28c025102f4389f44ec206757a29f05371",
+          "resolved_source": "skills/kntnt/library/references/editorial/web-craft.md"
+        },
+        {
+          "role": "web craft review",
+          "path": "contracts/r11.md",
+          "sha256": "169da1beeb4fb80e74f9423bdd4d7bcd57aa9b59b8e8ff5b71f3a67dfef7e923",
+          "resolved_source": "skills/kntnt/library/references/editorial/web-craft.review.md"
+        },
+        {
+          "role": "selected genre composition",
+          "path": "contracts/r12.md",
+          "sha256": "a39054321cbd35819cfd8ac7d2823dd3d56550a6ee2d1c6ee3b30f9daaa16cc5",
+          "resolved_source": "skills/kntnt/library/references/editorial/genres/casestudy.md"
+        },
+        {
+          "role": "selected genre review",
+          "path": "contracts/r13.md",
+          "sha256": "a7db10d0dc1970064a8887c819a8500dfdecf43dcb45fffed32994921ceb68a4",
+          "resolved_source": "skills/kntnt/library/references/editorial/genres/casestudy.review.md"
+        }
+      ],
+      "readers": [
+        {
+          "reader": "e7227e7a64494fff90a3a49c173ae491",
+          "cwd": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/materials/e7227e7a64494fff90a3a49c173ae491",
+          "receipt": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/e7227e7a64494fff90a3a49c173ae491"
+        },
+        {
+          "reader": "e1f457e10b254221a7d3ff96c1bbf511",
+          "cwd": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/materials/e1f457e10b254221a7d3ff96c1bbf511",
+          "receipt": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/e1f457e10b254221a7d3ff96c1bbf511"
+        }
+      ]
+    },
+    {
+      "material_identity": "df829ff6c871ff937d85468ce2c5f96539bba955d4d4f8c4477cfc24f165348a",
+      "source_packets": [
+        "docs/evaluation/regressions/492/preparation-2026-10-03/validation-material/t03"
+      ],
+      "contracts": [
+        {
+          "role": "shared mechanics",
+          "path": "contracts/r01.md",
+          "sha256": "b3103ed6da4ac9d27a0ebfb43bdb40b8e77d58d84b3745a90c0a736142438b45",
+          "resolved_source": "skills/kntnt/library/references/editorial/mechanics.md"
+        },
+        {
+          "role": "locale complete resource",
+          "path": "contracts/r02.md",
+          "sha256": "241f0e5e4ca590c1d2348dc4048d15b5c8cc030c9dc91de989a758cefd4cd211",
+          "resolved_source": "skills/kntnt/library/references/languages/sv.md"
+        },
+        {
+          "role": "shared editorial composition",
+          "path": "contracts/r03.md",
+          "sha256": "d4146ef134de7482e25469201aaceed7b207fba9f8bacb06a428b85f6bfc3581",
+          "resolved_source": "skills/kntnt/library/references/editorial/base.md"
+        },
+        {
+          "role": "shared editorial review",
+          "path": "contracts/r04.md",
+          "sha256": "d2c838c19a692104be247afd227b0baed98f3156be059c0a982ecae3513fa0ca",
+          "resolved_source": "skills/kntnt/library/references/editorial/base.review.md"
+        },
+        {
+          "role": "shared anti-slop",
+          "path": "contracts/r05.md",
+          "sha256": "9ec7fb15b3cfe22f446c6ed2df85666aaa182d8fa0a09fa3668887e4786d83c2",
+          "resolved_source": "skills/kntnt/library/references/editorial/anti-slop.md"
+        },
+        {
+          "role": "anatomy composition",
+          "path": "contracts/r06.md",
+          "sha256": "c075c6fe7494dbcdc43d6af599c55ab8fc52fc48d7ed1b6cc26eca7a592cecd7",
+          "resolved_source": "skills/kntnt/library/references/editorial/article-anatomy.md"
+        },
+        {
+          "role": "anatomy review",
+          "path": "contracts/r07.md",
+          "sha256": "3e616f9671126ba7898123dd288a4a9bb4170f189d567a3fcbd2b17ccb82c633",
+          "resolved_source": "skills/kntnt/library/references/editorial/article-anatomy.review.md"
+        },
+        {
+          "role": "headlines composition",
+          "path": "contracts/r08.md",
+          "sha256": "adfb7ca612905afee03a73d58cdb07de9d0877b23af9de89f7e114f6de81df5f",
+          "resolved_source": "skills/kntnt/library/references/editorial/headlines.md"
+        },
+        {
+          "role": "headlines review",
+          "path": "contracts/r09.md",
+          "sha256": "11be8cc4a9d009f59f78dedfe9a0059c681ca0d8f23bd37f36ef0486a74f1257",
+          "resolved_source": "skills/kntnt/library/references/editorial/headlines.review.md"
+        },
+        {
+          "role": "web craft composition",
+          "path": "contracts/r10.md",
+          "sha256": "b1ac5867d30952c3ca78da244520ab28c025102f4389f44ec206757a29f05371",
+          "resolved_source": "skills/kntnt/library/references/editorial/web-craft.md"
+        },
+        {
+          "role": "web craft review",
+          "path": "contracts/r11.md",
+          "sha256": "169da1beeb4fb80e74f9423bdd4d7bcd57aa9b59b8e8ff5b71f3a67dfef7e923",
+          "resolved_source": "skills/kntnt/library/references/editorial/web-craft.review.md"
+        },
+        {
+          "role": "selected genre composition",
+          "path": "contracts/r12.md",
+          "sha256": "f0edbed362fe613f11cfe6232c4c7fc98202786fa909f3cd72f1b1acd0867e41",
+          "resolved_source": "skills/kntnt/library/references/editorial/genres/opinion.md"
+        },
+        {
+          "role": "selected genre review",
+          "path": "contracts/r13.md",
+          "sha256": "38f9409f2bdbe66cdc3786640bb08da94ed67eabb0a75e3ebe5028f3463b63a3",
+          "resolved_source": "skills/kntnt/library/references/editorial/genres/opinion.review.md"
+        }
+      ],
+      "readers": [
+        {
+          "reader": "e0515eafa7f84c30949ca11b0a9d5703",
+          "cwd": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/materials/e0515eafa7f84c30949ca11b0a9d5703",
+          "receipt": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/e0515eafa7f84c30949ca11b0a9d5703"
+        },
+        {
+          "reader": "d50a214f61a24cec945f0e3b1c5d03a5",
+          "cwd": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/materials/d50a214f61a24cec945f0e3b1c5d03a5",
+          "receipt": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/d50a214f61a24cec945f0e3b1c5d03a5"
+        }
+      ]
+    },
+    {
+      "material_identity": "7bb404e261f0b42f862a2a2abbbd3f370bb87846dd6e9b22877e8e755d8faabc",
+      "source_packets": [
+        "docs/evaluation/regressions/492/preparation-2026-10-03/validation-material/t04",
+        "docs/evaluation/regressions/497/preparation-2026-10-03/validation-material/t02"
+      ],
+      "contracts": [
+        {
+          "role": "shared mechanics",
+          "path": "contracts/r01.md",
+          "sha256": "b3103ed6da4ac9d27a0ebfb43bdb40b8e77d58d84b3745a90c0a736142438b45",
+          "resolved_source": "skills/kntnt/library/references/editorial/mechanics.md"
+        },
+        {
+          "role": "locale complete resource",
+          "path": "contracts/r02.md",
+          "sha256": "241f0e5e4ca590c1d2348dc4048d15b5c8cc030c9dc91de989a758cefd4cd211",
+          "resolved_source": "skills/kntnt/library/references/languages/sv.md"
+        },
+        {
+          "role": "shared editorial composition",
+          "path": "contracts/r03.md",
+          "sha256": "d4146ef134de7482e25469201aaceed7b207fba9f8bacb06a428b85f6bfc3581",
+          "resolved_source": "skills/kntnt/library/references/editorial/base.md"
+        },
+        {
+          "role": "shared editorial review",
+          "path": "contracts/r04.md",
+          "sha256": "d2c838c19a692104be247afd227b0baed98f3156be059c0a982ecae3513fa0ca",
+          "resolved_source": "skills/kntnt/library/references/editorial/base.review.md"
+        },
+        {
+          "role": "shared anti-slop",
+          "path": "contracts/r05.md",
+          "sha256": "9ec7fb15b3cfe22f446c6ed2df85666aaa182d8fa0a09fa3668887e4786d83c2",
+          "resolved_source": "skills/kntnt/library/references/editorial/anti-slop.md"
+        },
+        {
+          "role": "anatomy composition",
+          "path": "contracts/r06.md",
+          "sha256": "c075c6fe7494dbcdc43d6af599c55ab8fc52fc48d7ed1b6cc26eca7a592cecd7",
+          "resolved_source": "skills/kntnt/library/references/editorial/article-anatomy.md"
+        },
+        {
+          "role": "anatomy review",
+          "path": "contracts/r07.md",
+          "sha256": "3e616f9671126ba7898123dd288a4a9bb4170f189d567a3fcbd2b17ccb82c633",
+          "resolved_source": "skills/kntnt/library/references/editorial/article-anatomy.review.md"
+        },
+        {
+          "role": "headlines composition",
+          "path": "contracts/r08.md",
+          "sha256": "adfb7ca612905afee03a73d58cdb07de9d0877b23af9de89f7e114f6de81df5f",
+          "resolved_source": "skills/kntnt/library/references/editorial/headlines.md"
+        },
+        {
+          "role": "headlines review",
+          "path": "contracts/r09.md",
+          "sha256": "11be8cc4a9d009f59f78dedfe9a0059c681ca0d8f23bd37f36ef0486a74f1257",
+          "resolved_source": "skills/kntnt/library/references/editorial/headlines.review.md"
+        },
+        {
+          "role": "web craft composition",
+          "path": "contracts/r10.md",
+          "sha256": "b1ac5867d30952c3ca78da244520ab28c025102f4389f44ec206757a29f05371",
+          "resolved_source": "skills/kntnt/library/references/editorial/web-craft.md"
+        },
+        {
+          "role": "web craft review",
+          "path": "contracts/r11.md",
+          "sha256": "169da1beeb4fb80e74f9423bdd4d7bcd57aa9b59b8e8ff5b71f3a67dfef7e923",
+          "resolved_source": "skills/kntnt/library/references/editorial/web-craft.review.md"
+        },
+        {
+          "role": "selected genre composition",
+          "path": "contracts/r12.md",
+          "sha256": "f0edbed362fe613f11cfe6232c4c7fc98202786fa909f3cd72f1b1acd0867e41",
+          "resolved_source": "skills/kntnt/library/references/editorial/genres/opinion.md"
+        },
+        {
+          "role": "selected genre review",
+          "path": "contracts/r13.md",
+          "sha256": "38f9409f2bdbe66cdc3786640bb08da94ed67eabb0a75e3ebe5028f3463b63a3",
+          "resolved_source": "skills/kntnt/library/references/editorial/genres/opinion.review.md"
+        }
+      ],
+      "readers": [
+        {
+          "reader": "9a954a67dd9a404998b781d6ad8d7af6",
+          "cwd": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/materials/9a954a67dd9a404998b781d6ad8d7af6",
+          "receipt": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/9a954a67dd9a404998b781d6ad8d7af6"
+        },
+        {
+          "reader": "a4e9ba74eb3746d9abc9f1e37685aeae",
+          "cwd": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/materials/a4e9ba74eb3746d9abc9f1e37685aeae",
+          "receipt": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/a4e9ba74eb3746d9abc9f1e37685aeae"
+        }
+      ]
+    },
+    {
+      "material_identity": "23a15dfc6dd8d6a872148369dab7798106a24e6e20b04103dde59c2cd52fdbfa",
+      "source_packets": [
+        "docs/evaluation/regressions/492/preparation-2026-10-03/validation-material/t02",
+        "docs/evaluation/regressions/504/preparation-2026-10-03/validation-material/t08"
+      ],
+      "contracts": [
+        {
+          "role": "shared mechanics",
+          "path": "contracts/r01.md",
+          "sha256": "b3103ed6da4ac9d27a0ebfb43bdb40b8e77d58d84b3745a90c0a736142438b45",
+          "resolved_source": "skills/kntnt/library/references/editorial/mechanics.md"
+        },
+        {
+          "role": "locale complete resource",
+          "path": "contracts/r02.md",
+          "sha256": "241f0e5e4ca590c1d2348dc4048d15b5c8cc030c9dc91de989a758cefd4cd211",
+          "resolved_source": "skills/kntnt/library/references/languages/sv.md"
+        },
+        {
+          "role": "shared editorial composition",
+          "path": "contracts/r03.md",
+          "sha256": "d4146ef134de7482e25469201aaceed7b207fba9f8bacb06a428b85f6bfc3581",
+          "resolved_source": "skills/kntnt/library/references/editorial/base.md"
+        },
+        {
+          "role": "shared editorial review",
+          "path": "contracts/r04.md",
+          "sha256": "d2c838c19a692104be247afd227b0baed98f3156be059c0a982ecae3513fa0ca",
+          "resolved_source": "skills/kntnt/library/references/editorial/base.review.md"
+        },
+        {
+          "role": "shared anti-slop",
+          "path": "contracts/r05.md",
+          "sha256": "9ec7fb15b3cfe22f446c6ed2df85666aaa182d8fa0a09fa3668887e4786d83c2",
+          "resolved_source": "skills/kntnt/library/references/editorial/anti-slop.md"
+        },
+        {
+          "role": "anatomy composition",
+          "path": "contracts/r06.md",
+          "sha256": "c075c6fe7494dbcdc43d6af599c55ab8fc52fc48d7ed1b6cc26eca7a592cecd7",
+          "resolved_source": "skills/kntnt/library/references/editorial/article-anatomy.md"
+        },
+        {
+          "role": "anatomy review",
+          "path": "contracts/r07.md",
+          "sha256": "3e616f9671126ba7898123dd288a4a9bb4170f189d567a3fcbd2b17ccb82c633",
+          "resolved_source": "skills/kntnt/library/references/editorial/article-anatomy.review.md"
+        },
+        {
+          "role": "headlines composition",
+          "path": "contracts/r08.md",
+          "sha256": "adfb7ca612905afee03a73d58cdb07de9d0877b23af9de89f7e114f6de81df5f",
+          "resolved_source": "skills/kntnt/library/references/editorial/headlines.md"
+        },
+        {
+          "role": "headlines review",
+          "path": "contracts/r09.md",
+          "sha256": "11be8cc4a9d009f59f78dedfe9a0059c681ca0d8f23bd37f36ef0486a74f1257",
+          "resolved_source": "skills/kntnt/library/references/editorial/headlines.review.md"
+        },
+        {
+          "role": "web craft composition",
+          "path": "contracts/r10.md",
+          "sha256": "b1ac5867d30952c3ca78da244520ab28c025102f4389f44ec206757a29f05371",
+          "resolved_source": "skills/kntnt/library/references/editorial/web-craft.md"
+        },
+        {
+          "role": "web craft review",
+          "path": "contracts/r11.md",
+          "sha256": "169da1beeb4fb80e74f9423bdd4d7bcd57aa9b59b8e8ff5b71f3a67dfef7e923",
+          "resolved_source": "skills/kntnt/library/references/editorial/web-craft.review.md"
+        },
+        {
+          "role": "selected genre composition",
+          "path": "contracts/r12.md",
+          "sha256": "f0edbed362fe613f11cfe6232c4c7fc98202786fa909f3cd72f1b1acd0867e41",
+          "resolved_source": "skills/kntnt/library/references/editorial/genres/opinion.md"
+        },
+        {
+          "role": "selected genre review",
+          "path": "contracts/r13.md",
+          "sha256": "38f9409f2bdbe66cdc3786640bb08da94ed67eabb0a75e3ebe5028f3463b63a3",
+          "resolved_source": "skills/kntnt/library/references/editorial/genres/opinion.review.md"
+        }
+      ],
+      "readers": [
+        {
+          "reader": "97d955595d0f4ccdb5d2d5cc005b4065",
+          "cwd": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/materials/97d955595d0f4ccdb5d2d5cc005b4065",
+          "receipt": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/97d955595d0f4ccdb5d2d5cc005b4065"
+        },
+        {
+          "reader": "adb457670c6942d19184444c4606a636",
+          "cwd": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/materials/adb457670c6942d19184444c4606a636",
+          "receipt": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/adb457670c6942d19184444c4606a636"
+        }
+      ]
+    },
+    {
+      "material_identity": "a8bd42fe8651cf81b5fcee076d40938e60005452ba6cfe3441c1530dd32b2a3c",
+      "source_packets": [
+        "docs/evaluation/regressions/492/preparation-2026-10-03/validation-material/t01",
+        "docs/evaluation/regressions/497/preparation-2026-10-03/validation-material/t01"
+      ],
+      "contracts": [
+        {
+          "role": "shared mechanics",
+          "path": "contracts/r01.md",
+          "sha256": "b3103ed6da4ac9d27a0ebfb43bdb40b8e77d58d84b3745a90c0a736142438b45",
+          "resolved_source": "skills/kntnt/library/references/editorial/mechanics.md"
+        },
+        {
+          "role": "locale complete resource",
+          "path": "contracts/r02.md",
+          "sha256": "241f0e5e4ca590c1d2348dc4048d15b5c8cc030c9dc91de989a758cefd4cd211",
+          "resolved_source": "skills/kntnt/library/references/languages/sv.md"
+        },
+        {
+          "role": "shared editorial composition",
+          "path": "contracts/r03.md",
+          "sha256": "d4146ef134de7482e25469201aaceed7b207fba9f8bacb06a428b85f6bfc3581",
+          "resolved_source": "skills/kntnt/library/references/editorial/base.md"
+        },
+        {
+          "role": "shared editorial review",
+          "path": "contracts/r04.md",
+          "sha256": "d2c838c19a692104be247afd227b0baed98f3156be059c0a982ecae3513fa0ca",
+          "resolved_source": "skills/kntnt/library/references/editorial/base.review.md"
+        },
+        {
+          "role": "shared anti-slop",
+          "path": "contracts/r05.md",
+          "sha256": "9ec7fb15b3cfe22f446c6ed2df85666aaa182d8fa0a09fa3668887e4786d83c2",
+          "resolved_source": "skills/kntnt/library/references/editorial/anti-slop.md"
+        },
+        {
+          "role": "anatomy composition",
+          "path": "contracts/r06.md",
+          "sha256": "c075c6fe7494dbcdc43d6af599c55ab8fc52fc48d7ed1b6cc26eca7a592cecd7",
+          "resolved_source": "skills/kntnt/library/references/editorial/article-anatomy.md"
+        },
+        {
+          "role": "anatomy review",
+          "path": "contracts/r07.md",
+          "sha256": "3e616f9671126ba7898123dd288a4a9bb4170f189d567a3fcbd2b17ccb82c633",
+          "resolved_source": "skills/kntnt/library/references/editorial/article-anatomy.review.md"
+        },
+        {
+          "role": "headlines composition",
+          "path": "contracts/r08.md",
+          "sha256": "adfb7ca612905afee03a73d58cdb07de9d0877b23af9de89f7e114f6de81df5f",
+          "resolved_source": "skills/kntnt/library/references/editorial/headlines.md"
+        },
+        {
+          "role": "headlines review",
+          "path": "contracts/r09.md",
+          "sha256": "11be8cc4a9d009f59f78dedfe9a0059c681ca0d8f23bd37f36ef0486a74f1257",
+          "resolved_source": "skills/kntnt/library/references/editorial/headlines.review.md"
+        },
+        {
+          "role": "web craft composition",
+          "path": "contracts/r10.md",
+          "sha256": "b1ac5867d30952c3ca78da244520ab28c025102f4389f44ec206757a29f05371",
+          "resolved_source": "skills/kntnt/library/references/editorial/web-craft.md"
+        },
+        {
+          "role": "web craft review",
+          "path": "contracts/r11.md",
+          "sha256": "169da1beeb4fb80e74f9423bdd4d7bcd57aa9b59b8e8ff5b71f3a67dfef7e923",
+          "resolved_source": "skills/kntnt/library/references/editorial/web-craft.review.md"
+        },
+        {
+          "role": "selected genre composition",
+          "path": "contracts/r12.md",
+          "sha256": "f0edbed362fe613f11cfe6232c4c7fc98202786fa909f3cd72f1b1acd0867e41",
+          "resolved_source": "skills/kntnt/library/references/editorial/genres/opinion.md"
+        },
+        {
+          "role": "selected genre review",
+          "path": "contracts/r13.md",
+          "sha256": "38f9409f2bdbe66cdc3786640bb08da94ed67eabb0a75e3ebe5028f3463b63a3",
+          "resolved_source": "skills/kntnt/library/references/editorial/genres/opinion.review.md"
+        }
+      ],
+      "readers": [
+        {
+          "reader": "78f94b9841c94c1bafe6355102979071",
+          "cwd": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/materials/78f94b9841c94c1bafe6355102979071",
+          "receipt": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/78f94b9841c94c1bafe6355102979071"
+        },
+        {
+          "reader": "910fd60dc8c04c689b84f1b5d95d2c88",
+          "cwd": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/materials/910fd60dc8c04c689b84f1b5d95d2c88",
+          "receipt": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/910fd60dc8c04c689b84f1b5d95d2c88"
+        }
+      ]
+    },
+    {
+      "material_identity": "dba79434223dae6d5048d9bc255f5a71306274bd184db0d6c1d3484cf1d67e3f",
+      "source_packets": [
+        "docs/evaluation/regressions/495/preparation-2026-10-03/validation-material/t02"
+      ],
+      "contracts": [
+        {
+          "role": "shared mechanics",
+          "path": "contracts/r01.md",
+          "sha256": "b3103ed6da4ac9d27a0ebfb43bdb40b8e77d58d84b3745a90c0a736142438b45",
+          "resolved_source": "skills/kntnt/library/references/editorial/mechanics.md"
+        },
+        {
+          "role": "locale complete resource",
+          "path": "contracts/r02.md",
+          "sha256": "241f0e5e4ca590c1d2348dc4048d15b5c8cc030c9dc91de989a758cefd4cd211",
+          "resolved_source": "skills/kntnt/library/references/languages/sv.md"
+        },
+        {
+          "role": "shared editorial composition",
+          "path": "contracts/r03.md",
+          "sha256": "d4146ef134de7482e25469201aaceed7b207fba9f8bacb06a428b85f6bfc3581",
+          "resolved_source": "skills/kntnt/library/references/editorial/base.md"
+        },
+        {
+          "role": "shared editorial review",
+          "path": "contracts/r04.md",
+          "sha256": "d2c838c19a692104be247afd227b0baed98f3156be059c0a982ecae3513fa0ca",
+          "resolved_source": "skills/kntnt/library/references/editorial/base.review.md"
+        },
+        {
+          "role": "shared anti-slop",
+          "path": "contracts/r05.md",
+          "sha256": "9ec7fb15b3cfe22f446c6ed2df85666aaa182d8fa0a09fa3668887e4786d83c2",
+          "resolved_source": "skills/kntnt/library/references/editorial/anti-slop.md"
+        },
+        {
+          "role": "anatomy composition",
+          "path": "contracts/r06.md",
+          "sha256": "c075c6fe7494dbcdc43d6af599c55ab8fc52fc48d7ed1b6cc26eca7a592cecd7",
+          "resolved_source": "skills/kntnt/library/references/editorial/article-anatomy.md"
+        },
+        {
+          "role": "anatomy review",
+          "path": "contracts/r07.md",
+          "sha256": "3e616f9671126ba7898123dd288a4a9bb4170f189d567a3fcbd2b17ccb82c633",
+          "resolved_source": "skills/kntnt/library/references/editorial/article-anatomy.review.md"
+        },
+        {
+          "role": "headlines composition",
+          "path": "contracts/r08.md",
+          "sha256": "adfb7ca612905afee03a73d58cdb07de9d0877b23af9de89f7e114f6de81df5f",
+          "resolved_source": "skills/kntnt/library/references/editorial/headlines.md"
+        },
+        {
+          "role": "headlines review",
+          "path": "contracts/r09.md",
+          "sha256": "11be8cc4a9d009f59f78dedfe9a0059c681ca0d8f23bd37f36ef0486a74f1257",
+          "resolved_source": "skills/kntnt/library/references/editorial/headlines.review.md"
+        },
+        {
+          "role": "web craft composition",
+          "path": "contracts/r10.md",
+          "sha256": "b1ac5867d30952c3ca78da244520ab28c025102f4389f44ec206757a29f05371",
+          "resolved_source": "skills/kntnt/library/references/editorial/web-craft.md"
+        },
+        {
+          "role": "web craft review",
+          "path": "contracts/r11.md",
+          "sha256": "169da1beeb4fb80e74f9423bdd4d7bcd57aa9b59b8e8ff5b71f3a67dfef7e923",
+          "resolved_source": "skills/kntnt/library/references/editorial/web-craft.review.md"
+        },
+        {
+          "role": "selected genre composition",
+          "path": "contracts/r12.md",
+          "sha256": "f0edbed362fe613f11cfe6232c4c7fc98202786fa909f3cd72f1b1acd0867e41",
+          "resolved_source": "skills/kntnt/library/references/editorial/genres/opinion.md"
+        },
+        {
+          "role": "selected genre review",
+          "path": "contracts/r13.md",
+          "sha256": "38f9409f2bdbe66cdc3786640bb08da94ed67eabb0a75e3ebe5028f3463b63a3",
+          "resolved_source": "skills/kntnt/library/references/editorial/genres/opinion.review.md"
+        }
+      ],
+      "readers": [
+        {
+          "reader": "4fd82b0989814cc1ada718128c88ab2a",
+          "cwd": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/materials/4fd82b0989814cc1ada718128c88ab2a",
+          "receipt": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/4fd82b0989814cc1ada718128c88ab2a"
+        },
+        {
+          "reader": "0ccc2f79035f4c8786a255dfcf8ad2ff",
+          "cwd": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/materials/0ccc2f79035f4c8786a255dfcf8ad2ff",
+          "receipt": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/0ccc2f79035f4c8786a255dfcf8ad2ff"
+        }
+      ]
+    },
+    {
+      "material_identity": "78dfaa59b1e52bb840068c0835849b63df6884008df018ebda0d1f66564514dc",
+      "source_packets": [
+        "docs/evaluation/regressions/497/preparation-2026-10-03/validation-material/t03"
+      ],
+      "contracts": [
+        {
+          "role": "shared mechanics",
+          "path": "contracts/r01.md",
+          "sha256": "b3103ed6da4ac9d27a0ebfb43bdb40b8e77d58d84b3745a90c0a736142438b45",
+          "resolved_source": "skills/kntnt/library/references/editorial/mechanics.md"
+        },
+        {
+          "role": "locale complete resource",
+          "path": "contracts/r02.md",
+          "sha256": "241f0e5e4ca590c1d2348dc4048d15b5c8cc030c9dc91de989a758cefd4cd211",
+          "resolved_source": "skills/kntnt/library/references/languages/sv.md"
+        },
+        {
+          "role": "shared editorial composition",
+          "path": "contracts/r03.md",
+          "sha256": "d4146ef134de7482e25469201aaceed7b207fba9f8bacb06a428b85f6bfc3581",
+          "resolved_source": "skills/kntnt/library/references/editorial/base.md"
+        },
+        {
+          "role": "shared editorial review",
+          "path": "contracts/r04.md",
+          "sha256": "d2c838c19a692104be247afd227b0baed98f3156be059c0a982ecae3513fa0ca",
+          "resolved_source": "skills/kntnt/library/references/editorial/base.review.md"
+        },
+        {
+          "role": "shared anti-slop",
+          "path": "contracts/r05.md",
+          "sha256": "9ec7fb15b3cfe22f446c6ed2df85666aaa182d8fa0a09fa3668887e4786d83c2",
+          "resolved_source": "skills/kntnt/library/references/editorial/anti-slop.md"
+        },
+        {
+          "role": "anatomy composition",
+          "path": "contracts/r06.md",
+          "sha256": "c075c6fe7494dbcdc43d6af599c55ab8fc52fc48d7ed1b6cc26eca7a592cecd7",
+          "resolved_source": "skills/kntnt/library/references/editorial/article-anatomy.md"
+        },
+        {
+          "role": "anatomy review",
+          "path": "contracts/r07.md",
+          "sha256": "3e616f9671126ba7898123dd288a4a9bb4170f189d567a3fcbd2b17ccb82c633",
+          "resolved_source": "skills/kntnt/library/references/editorial/article-anatomy.review.md"
+        },
+        {
+          "role": "headlines composition",
+          "path": "contracts/r08.md",
+          "sha256": "adfb7ca612905afee03a73d58cdb07de9d0877b23af9de89f7e114f6de81df5f",
+          "resolved_source": "skills/kntnt/library/references/editorial/headlines.md"
+        },
+        {
+          "role": "headlines review",
+          "path": "contracts/r09.md",
+          "sha256": "11be8cc4a9d009f59f78dedfe9a0059c681ca0d8f23bd37f36ef0486a74f1257",
+          "resolved_source": "skills/kntnt/library/references/editorial/headlines.review.md"
+        },
+        {
+          "role": "web craft composition",
+          "path": "contracts/r10.md",
+          "sha256": "b1ac5867d30952c3ca78da244520ab28c025102f4389f44ec206757a29f05371",
+          "resolved_source": "skills/kntnt/library/references/editorial/web-craft.md"
+        },
+        {
+          "role": "web craft review",
+          "path": "contracts/r11.md",
+          "sha256": "169da1beeb4fb80e74f9423bdd4d7bcd57aa9b59b8e8ff5b71f3a67dfef7e923",
+          "resolved_source": "skills/kntnt/library/references/editorial/web-craft.review.md"
+        },
+        {
+          "role": "selected genre composition",
+          "path": "contracts/r12.md",
+          "sha256": "f0edbed362fe613f11cfe6232c4c7fc98202786fa909f3cd72f1b1acd0867e41",
+          "resolved_source": "skills/kntnt/library/references/editorial/genres/opinion.md"
+        },
+        {
+          "role": "selected genre review",
+          "path": "contracts/r13.md",
+          "sha256": "38f9409f2bdbe66cdc3786640bb08da94ed67eabb0a75e3ebe5028f3463b63a3",
+          "resolved_source": "skills/kntnt/library/references/editorial/genres/opinion.review.md"
+        }
+      ],
+      "readers": [
+        {
+          "reader": "506cccb64afa49f2808d7a82f71a2998",
+          "cwd": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/materials/506cccb64afa49f2808d7a82f71a2998",
+          "receipt": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/506cccb64afa49f2808d7a82f71a2998"
+        },
+        {
+          "reader": "4a13738bc2ec4caaa8264ae6a4351bb9",
+          "cwd": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/materials/4a13738bc2ec4caaa8264ae6a4351bb9",
+          "receipt": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/4a13738bc2ec4caaa8264ae6a4351bb9"
+        }
+      ]
+    },
+    {
+      "material_identity": "0565f777074b544626faf52ebfc445ab61fea1e1f1e8cfd025dfd0119a6dfa84",
+      "source_packets": [
+        "docs/evaluation/regressions/497/preparation-2026-10-03/validation-material/t04"
+      ],
+      "contracts": [
+        {
+          "role": "shared mechanics",
+          "path": "contracts/r01.md",
+          "sha256": "b3103ed6da4ac9d27a0ebfb43bdb40b8e77d58d84b3745a90c0a736142438b45",
+          "resolved_source": "skills/kntnt/library/references/editorial/mechanics.md"
+        },
+        {
+          "role": "locale complete resource",
+          "path": "contracts/r02.md",
+          "sha256": "241f0e5e4ca590c1d2348dc4048d15b5c8cc030c9dc91de989a758cefd4cd211",
+          "resolved_source": "skills/kntnt/library/references/languages/sv.md"
+        },
+        {
+          "role": "shared editorial composition",
+          "path": "contracts/r03.md",
+          "sha256": "d4146ef134de7482e25469201aaceed7b207fba9f8bacb06a428b85f6bfc3581",
+          "resolved_source": "skills/kntnt/library/references/editorial/base.md"
+        },
+        {
+          "role": "shared editorial review",
+          "path": "contracts/r04.md",
+          "sha256": "d2c838c19a692104be247afd227b0baed98f3156be059c0a982ecae3513fa0ca",
+          "resolved_source": "skills/kntnt/library/references/editorial/base.review.md"
+        },
+        {
+          "role": "shared anti-slop",
+          "path": "contracts/r05.md",
+          "sha256": "9ec7fb15b3cfe22f446c6ed2df85666aaa182d8fa0a09fa3668887e4786d83c2",
+          "resolved_source": "skills/kntnt/library/references/editorial/anti-slop.md"
+        },
+        {
+          "role": "anatomy composition",
+          "path": "contracts/r06.md",
+          "sha256": "c075c6fe7494dbcdc43d6af599c55ab8fc52fc48d7ed1b6cc26eca7a592cecd7",
+          "resolved_source": "skills/kntnt/library/references/editorial/article-anatomy.md"
+        },
+        {
+          "role": "anatomy review",
+          "path": "contracts/r07.md",
+          "sha256": "3e616f9671126ba7898123dd288a4a9bb4170f189d567a3fcbd2b17ccb82c633",
+          "resolved_source": "skills/kntnt/library/references/editorial/article-anatomy.review.md"
+        },
+        {
+          "role": "headlines composition",
+          "path": "contracts/r08.md",
+          "sha256": "adfb7ca612905afee03a73d58cdb07de9d0877b23af9de89f7e114f6de81df5f",
+          "resolved_source": "skills/kntnt/library/references/editorial/headlines.md"
+        },
+        {
+          "role": "headlines review",
+          "path": "contracts/r09.md",
+          "sha256": "11be8cc4a9d009f59f78dedfe9a0059c681ca0d8f23bd37f36ef0486a74f1257",
+          "resolved_source": "skills/kntnt/library/references/editorial/headlines.review.md"
+        },
+        {
+          "role": "web craft composition",
+          "path": "contracts/r10.md",
+          "sha256": "b1ac5867d30952c3ca78da244520ab28c025102f4389f44ec206757a29f05371",
+          "resolved_source": "skills/kntnt/library/references/editorial/web-craft.md"
+        },
+        {
+          "role": "web craft review",
+          "path": "contracts/r11.md",
+          "sha256": "169da1beeb4fb80e74f9423bdd4d7bcd57aa9b59b8e8ff5b71f3a67dfef7e923",
+          "resolved_source": "skills/kntnt/library/references/editorial/web-craft.review.md"
+        },
+        {
+          "role": "selected genre composition",
+          "path": "contracts/r12.md",
+          "sha256": "f0edbed362fe613f11cfe6232c4c7fc98202786fa909f3cd72f1b1acd0867e41",
+          "resolved_source": "skills/kntnt/library/references/editorial/genres/opinion.md"
+        },
+        {
+          "role": "selected genre review",
+          "path": "contracts/r13.md",
+          "sha256": "38f9409f2bdbe66cdc3786640bb08da94ed67eabb0a75e3ebe5028f3463b63a3",
+          "resolved_source": "skills/kntnt/library/references/editorial/genres/opinion.review.md"
+        }
+      ],
+      "readers": [
+        {
+          "reader": "eff841ca08314efcb52ed03782c2eb8f",
+          "cwd": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/materials/eff841ca08314efcb52ed03782c2eb8f",
+          "receipt": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/eff841ca08314efcb52ed03782c2eb8f"
+        },
+        {
+          "reader": "461e6ce0a00b43819b52d22d48c8aa0d",
+          "cwd": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/materials/461e6ce0a00b43819b52d22d48c8aa0d",
+          "receipt": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/461e6ce0a00b43819b52d22d48c8aa0d"
+        }
+      ]
+    },
+    {
+      "material_identity": "56cb456bf88bd512470ac99656ab1af2784d1b36c9828397ca9ccfcb0a77b704",
+      "source_packets": [
+        "docs/evaluation/regressions/504/preparation-2026-10-03/validation-material/t11",
+        "docs/evaluation/regressions/505/preparation-2026-10-03/validation-material/t03"
+      ],
+      "contracts": [
+        {
+          "role": "shared mechanics",
+          "path": "contracts/r01.md",
+          "sha256": "b3103ed6da4ac9d27a0ebfb43bdb40b8e77d58d84b3745a90c0a736142438b45",
+          "resolved_source": "skills/kntnt/library/references/editorial/mechanics.md"
+        },
+        {
+          "role": "locale complete resource",
+          "path": "contracts/r02.md",
+          "sha256": "241f0e5e4ca590c1d2348dc4048d15b5c8cc030c9dc91de989a758cefd4cd211",
+          "resolved_source": "skills/kntnt/library/references/languages/sv.md"
+        },
+        {
+          "role": "shared editorial composition",
+          "path": "contracts/r03.md",
+          "sha256": "d4146ef134de7482e25469201aaceed7b207fba9f8bacb06a428b85f6bfc3581",
+          "resolved_source": "skills/kntnt/library/references/editorial/base.md"
+        },
+        {
+          "role": "shared editorial review",
+          "path": "contracts/r04.md",
+          "sha256": "d2c838c19a692104be247afd227b0baed98f3156be059c0a982ecae3513fa0ca",
+          "resolved_source": "skills/kntnt/library/references/editorial/base.review.md"
+        },
+        {
+          "role": "shared anti-slop",
+          "path": "contracts/r05.md",
+          "sha256": "9ec7fb15b3cfe22f446c6ed2df85666aaa182d8fa0a09fa3668887e4786d83c2",
+          "resolved_source": "skills/kntnt/library/references/editorial/anti-slop.md"
+        },
+        {
+          "role": "anatomy composition",
+          "path": "contracts/r06.md",
+          "sha256": "c075c6fe7494dbcdc43d6af599c55ab8fc52fc48d7ed1b6cc26eca7a592cecd7",
+          "resolved_source": "skills/kntnt/library/references/editorial/article-anatomy.md"
+        },
+        {
+          "role": "anatomy review",
+          "path": "contracts/r07.md",
+          "sha256": "3e616f9671126ba7898123dd288a4a9bb4170f189d567a3fcbd2b17ccb82c633",
+          "resolved_source": "skills/kntnt/library/references/editorial/article-anatomy.review.md"
+        },
+        {
+          "role": "headlines composition",
+          "path": "contracts/r08.md",
+          "sha256": "adfb7ca612905afee03a73d58cdb07de9d0877b23af9de89f7e114f6de81df5f",
+          "resolved_source": "skills/kntnt/library/references/editorial/headlines.md"
+        },
+        {
+          "role": "headlines review",
+          "path": "contracts/r09.md",
+          "sha256": "11be8cc4a9d009f59f78dedfe9a0059c681ca0d8f23bd37f36ef0486a74f1257",
+          "resolved_source": "skills/kntnt/library/references/editorial/headlines.review.md"
+        },
+        {
+          "role": "web craft composition",
+          "path": "contracts/r10.md",
+          "sha256": "b1ac5867d30952c3ca78da244520ab28c025102f4389f44ec206757a29f05371",
+          "resolved_source": "skills/kntnt/library/references/editorial/web-craft.md"
+        },
+        {
+          "role": "web craft review",
+          "path": "contracts/r11.md",
+          "sha256": "169da1beeb4fb80e74f9423bdd4d7bcd57aa9b59b8e8ff5b71f3a67dfef7e923",
+          "resolved_source": "skills/kntnt/library/references/editorial/web-craft.review.md"
+        },
+        {
+          "role": "selected genre composition",
+          "path": "contracts/r12.md",
+          "sha256": "a39054321cbd35819cfd8ac7d2823dd3d56550a6ee2d1c6ee3b30f9daaa16cc5",
+          "resolved_source": "skills/kntnt/library/references/editorial/genres/casestudy.md"
+        },
+        {
+          "role": "selected genre review",
+          "path": "contracts/r13.md",
+          "sha256": "a7db10d0dc1970064a8887c819a8500dfdecf43dcb45fffed32994921ceb68a4",
+          "resolved_source": "skills/kntnt/library/references/editorial/genres/casestudy.review.md"
+        }
+      ],
+      "readers": [
+        {
+          "reader": "08e4a01d17db44ca895ba9a85cc1887a",
+          "cwd": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/materials/08e4a01d17db44ca895ba9a85cc1887a",
+          "receipt": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/08e4a01d17db44ca895ba9a85cc1887a"
+        },
+        {
+          "reader": "0ce64fdce1f74f0fbd7f431c1873539a",
+          "cwd": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/materials/0ce64fdce1f74f0fbd7f431c1873539a",
+          "receipt": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/0ce64fdce1f74f0fbd7f431c1873539a"
+        }
+      ]
+    },
+    {
+      "material_identity": "b86f22a48cc86d6eda6acdd06febbf6a8c3bcdbcefddfdf02bfbe0e04e0439f8",
+      "source_packets": [
+        "docs/evaluation/regressions/504/preparation-2026-10-03/validation-material/t10",
+        "docs/evaluation/regressions/505/preparation-2026-10-03/validation-material/t05"
+      ],
+      "contracts": [
+        {
+          "role": "shared mechanics",
+          "path": "contracts/r01.md",
+          "sha256": "b3103ed6da4ac9d27a0ebfb43bdb40b8e77d58d84b3745a90c0a736142438b45",
+          "resolved_source": "skills/kntnt/library/references/editorial/mechanics.md"
+        },
+        {
+          "role": "locale complete resource",
+          "path": "contracts/r02.md",
+          "sha256": "241f0e5e4ca590c1d2348dc4048d15b5c8cc030c9dc91de989a758cefd4cd211",
+          "resolved_source": "skills/kntnt/library/references/languages/sv.md"
+        },
+        {
+          "role": "shared editorial composition",
+          "path": "contracts/r03.md",
+          "sha256": "d4146ef134de7482e25469201aaceed7b207fba9f8bacb06a428b85f6bfc3581",
+          "resolved_source": "skills/kntnt/library/references/editorial/base.md"
+        },
+        {
+          "role": "shared editorial review",
+          "path": "contracts/r04.md",
+          "sha256": "d2c838c19a692104be247afd227b0baed98f3156be059c0a982ecae3513fa0ca",
+          "resolved_source": "skills/kntnt/library/references/editorial/base.review.md"
+        },
+        {
+          "role": "shared anti-slop",
+          "path": "contracts/r05.md",
+          "sha256": "9ec7fb15b3cfe22f446c6ed2df85666aaa182d8fa0a09fa3668887e4786d83c2",
+          "resolved_source": "skills/kntnt/library/references/editorial/anti-slop.md"
+        },
+        {
+          "role": "anatomy composition",
+          "path": "contracts/r06.md",
+          "sha256": "c075c6fe7494dbcdc43d6af599c55ab8fc52fc48d7ed1b6cc26eca7a592cecd7",
+          "resolved_source": "skills/kntnt/library/references/editorial/article-anatomy.md"
+        },
+        {
+          "role": "anatomy review",
+          "path": "contracts/r07.md",
+          "sha256": "3e616f9671126ba7898123dd288a4a9bb4170f189d567a3fcbd2b17ccb82c633",
+          "resolved_source": "skills/kntnt/library/references/editorial/article-anatomy.review.md"
+        },
+        {
+          "role": "headlines composition",
+          "path": "contracts/r08.md",
+          "sha256": "adfb7ca612905afee03a73d58cdb07de9d0877b23af9de89f7e114f6de81df5f",
+          "resolved_source": "skills/kntnt/library/references/editorial/headlines.md"
+        },
+        {
+          "role": "headlines review",
+          "path": "contracts/r09.md",
+          "sha256": "11be8cc4a9d009f59f78dedfe9a0059c681ca0d8f23bd37f36ef0486a74f1257",
+          "resolved_source": "skills/kntnt/library/references/editorial/headlines.review.md"
+        },
+        {
+          "role": "web craft composition",
+          "path": "contracts/r10.md",
+          "sha256": "b1ac5867d30952c3ca78da244520ab28c025102f4389f44ec206757a29f05371",
+          "resolved_source": "skills/kntnt/library/references/editorial/web-craft.md"
+        },
+        {
+          "role": "web craft review",
+          "path": "contracts/r11.md",
+          "sha256": "169da1beeb4fb80e74f9423bdd4d7bcd57aa9b59b8e8ff5b71f3a67dfef7e923",
+          "resolved_source": "skills/kntnt/library/references/editorial/web-craft.review.md"
+        },
+        {
+          "role": "selected genre composition",
+          "path": "contracts/r12.md",
+          "sha256": "a39054321cbd35819cfd8ac7d2823dd3d56550a6ee2d1c6ee3b30f9daaa16cc5",
+          "resolved_source": "skills/kntnt/library/references/editorial/genres/casestudy.md"
+        },
+        {
+          "role": "selected genre review",
+          "path": "contracts/r13.md",
+          "sha256": "a7db10d0dc1970064a8887c819a8500dfdecf43dcb45fffed32994921ceb68a4",
+          "resolved_source": "skills/kntnt/library/references/editorial/genres/casestudy.review.md"
+        }
+      ],
+      "readers": [
+        {
+          "reader": "bdc0c5082ac54ff893e4558b00399714",
+          "cwd": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/materials/bdc0c5082ac54ff893e4558b00399714",
+          "receipt": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/bdc0c5082ac54ff893e4558b00399714"
+        },
+        {
+          "reader": "9fa23af292644f0080280e49c5e8efc3",
+          "cwd": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/materials/9fa23af292644f0080280e49c5e8efc3",
+          "receipt": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/9fa23af292644f0080280e49c5e8efc3"
+        }
+      ]
+    },
+    {
+      "material_identity": "de61a51b428564011e7148f65cd76ccb3318bc4770fa4c715ab8969177eb1b3a",
+      "source_packets": [
+        "docs/evaluation/regressions/504/preparation-2026-10-03/validation-material/t03"
+      ],
+      "contracts": [
+        {
+          "role": "shared mechanics",
+          "path": "contracts/r01.md",
+          "sha256": "b3103ed6da4ac9d27a0ebfb43bdb40b8e77d58d84b3745a90c0a736142438b45",
+          "resolved_source": "skills/kntnt/library/references/editorial/mechanics.md"
+        },
+        {
+          "role": "locale complete resource",
+          "path": "contracts/r02.md",
+          "sha256": "241f0e5e4ca590c1d2348dc4048d15b5c8cc030c9dc91de989a758cefd4cd211",
+          "resolved_source": "skills/kntnt/library/references/languages/sv.md"
+        },
+        {
+          "role": "shared editorial composition",
+          "path": "contracts/r03.md",
+          "sha256": "d4146ef134de7482e25469201aaceed7b207fba9f8bacb06a428b85f6bfc3581",
+          "resolved_source": "skills/kntnt/library/references/editorial/base.md"
+        },
+        {
+          "role": "shared editorial review",
+          "path": "contracts/r04.md",
+          "sha256": "d2c838c19a692104be247afd227b0baed98f3156be059c0a982ecae3513fa0ca",
+          "resolved_source": "skills/kntnt/library/references/editorial/base.review.md"
+        },
+        {
+          "role": "shared anti-slop",
+          "path": "contracts/r05.md",
+          "sha256": "9ec7fb15b3cfe22f446c6ed2df85666aaa182d8fa0a09fa3668887e4786d83c2",
+          "resolved_source": "skills/kntnt/library/references/editorial/anti-slop.md"
+        },
+        {
+          "role": "anatomy composition",
+          "path": "contracts/r06.md",
+          "sha256": "c075c6fe7494dbcdc43d6af599c55ab8fc52fc48d7ed1b6cc26eca7a592cecd7",
+          "resolved_source": "skills/kntnt/library/references/editorial/article-anatomy.md"
+        },
+        {
+          "role": "anatomy review",
+          "path": "contracts/r07.md",
+          "sha256": "3e616f9671126ba7898123dd288a4a9bb4170f189d567a3fcbd2b17ccb82c633",
+          "resolved_source": "skills/kntnt/library/references/editorial/article-anatomy.review.md"
+        },
+        {
+          "role": "headlines composition",
+          "path": "contracts/r08.md",
+          "sha256": "adfb7ca612905afee03a73d58cdb07de9d0877b23af9de89f7e114f6de81df5f",
+          "resolved_source": "skills/kntnt/library/references/editorial/headlines.md"
+        },
+        {
+          "role": "headlines review",
+          "path": "contracts/r09.md",
+          "sha256": "11be8cc4a9d009f59f78dedfe9a0059c681ca0d8f23bd37f36ef0486a74f1257",
+          "resolved_source": "skills/kntnt/library/references/editorial/headlines.review.md"
+        },
+        {
+          "role": "web craft composition",
+          "path": "contracts/r10.md",
+          "sha256": "b1ac5867d30952c3ca78da244520ab28c025102f4389f44ec206757a29f05371",
+          "resolved_source": "skills/kntnt/library/references/editorial/web-craft.md"
+        },
+        {
+          "role": "web craft review",
+          "path": "contracts/r11.md",
+          "sha256": "169da1beeb4fb80e74f9423bdd4d7bcd57aa9b59b8e8ff5b71f3a67dfef7e923",
+          "resolved_source": "skills/kntnt/library/references/editorial/web-craft.review.md"
+        },
+        {
+          "role": "selected genre composition",
+          "path": "contracts/r12.md",
+          "sha256": "a39054321cbd35819cfd8ac7d2823dd3d56550a6ee2d1c6ee3b30f9daaa16cc5",
+          "resolved_source": "skills/kntnt/library/references/editorial/genres/casestudy.md"
+        },
+        {
+          "role": "selected genre review",
+          "path": "contracts/r13.md",
+          "sha256": "a7db10d0dc1970064a8887c819a8500dfdecf43dcb45fffed32994921ceb68a4",
+          "resolved_source": "skills/kntnt/library/references/editorial/genres/casestudy.review.md"
+        }
+      ],
+      "readers": [
+        {
+          "reader": "9754bc99a2ce444bbaa997d1524226c8",
+          "cwd": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/materials/9754bc99a2ce444bbaa997d1524226c8",
+          "receipt": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/9754bc99a2ce444bbaa997d1524226c8"
+        },
+        {
+          "reader": "11c1db2fe67043028502de8b8ace4b2f",
+          "cwd": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/materials/11c1db2fe67043028502de8b8ace4b2f",
+          "receipt": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/11c1db2fe67043028502de8b8ace4b2f"
+        }
+      ]
+    },
+    {
+      "material_identity": "f6978feec5152c295bbfdc83a7a24360181a969254a271874aff20dc4a43cf8e",
+      "source_packets": [
+        "docs/evaluation/regressions/504/preparation-2026-10-03/validation-material/t04"
+      ],
+      "contracts": [
+        {
+          "role": "shared mechanics",
+          "path": "contracts/r01.md",
+          "sha256": "b3103ed6da4ac9d27a0ebfb43bdb40b8e77d58d84b3745a90c0a736142438b45",
+          "resolved_source": "skills/kntnt/library/references/editorial/mechanics.md"
+        },
+        {
+          "role": "locale complete resource",
+          "path": "contracts/r02.md",
+          "sha256": "241f0e5e4ca590c1d2348dc4048d15b5c8cc030c9dc91de989a758cefd4cd211",
+          "resolved_source": "skills/kntnt/library/references/languages/sv.md"
+        },
+        {
+          "role": "shared editorial composition",
+          "path": "contracts/r03.md",
+          "sha256": "d4146ef134de7482e25469201aaceed7b207fba9f8bacb06a428b85f6bfc3581",
+          "resolved_source": "skills/kntnt/library/references/editorial/base.md"
+        },
+        {
+          "role": "shared editorial review",
+          "path": "contracts/r04.md",
+          "sha256": "d2c838c19a692104be247afd227b0baed98f3156be059c0a982ecae3513fa0ca",
+          "resolved_source": "skills/kntnt/library/references/editorial/base.review.md"
+        },
+        {
+          "role": "shared anti-slop",
+          "path": "contracts/r05.md",
+          "sha256": "9ec7fb15b3cfe22f446c6ed2df85666aaa182d8fa0a09fa3668887e4786d83c2",
+          "resolved_source": "skills/kntnt/library/references/editorial/anti-slop.md"
+        },
+        {
+          "role": "anatomy composition",
+          "path": "contracts/r06.md",
+          "sha256": "c075c6fe7494dbcdc43d6af599c55ab8fc52fc48d7ed1b6cc26eca7a592cecd7",
+          "resolved_source": "skills/kntnt/library/references/editorial/article-anatomy.md"
+        },
+        {
+          "role": "anatomy review",
+          "path": "contracts/r07.md",
+          "sha256": "3e616f9671126ba7898123dd288a4a9bb4170f189d567a3fcbd2b17ccb82c633",
+          "resolved_source": "skills/kntnt/library/references/editorial/article-anatomy.review.md"
+        },
+        {
+          "role": "headlines composition",
+          "path": "contracts/r08.md",
+          "sha256": "adfb7ca612905afee03a73d58cdb07de9d0877b23af9de89f7e114f6de81df5f",
+          "resolved_source": "skills/kntnt/library/references/editorial/headlines.md"
+        },
+        {
+          "role": "headlines review",
+          "path": "contracts/r09.md",
+          "sha256": "11be8cc4a9d009f59f78dedfe9a0059c681ca0d8f23bd37f36ef0486a74f1257",
+          "resolved_source": "skills/kntnt/library/references/editorial/headlines.review.md"
+        },
+        {
+          "role": "web craft composition",
+          "path": "contracts/r10.md",
+          "sha256": "b1ac5867d30952c3ca78da244520ab28c025102f4389f44ec206757a29f05371",
+          "resolved_source": "skills/kntnt/library/references/editorial/web-craft.md"
+        },
+        {
+          "role": "web craft review",
+          "path": "contracts/r11.md",
+          "sha256": "169da1beeb4fb80e74f9423bdd4d7bcd57aa9b59b8e8ff5b71f3a67dfef7e923",
+          "resolved_source": "skills/kntnt/library/references/editorial/web-craft.review.md"
+        },
+        {
+          "role": "selected genre composition",
+          "path": "contracts/r12.md",
+          "sha256": "a39054321cbd35819cfd8ac7d2823dd3d56550a6ee2d1c6ee3b30f9daaa16cc5",
+          "resolved_source": "skills/kntnt/library/references/editorial/genres/casestudy.md"
+        },
+        {
+          "role": "selected genre review",
+          "path": "contracts/r13.md",
+          "sha256": "a7db10d0dc1970064a8887c819a8500dfdecf43dcb45fffed32994921ceb68a4",
+          "resolved_source": "skills/kntnt/library/references/editorial/genres/casestudy.review.md"
+        }
+      ],
+      "readers": [
+        {
+          "reader": "2e6cc75f8bc64193af9a3dfbb4841778",
+          "cwd": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/materials/2e6cc75f8bc64193af9a3dfbb4841778",
+          "receipt": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/2e6cc75f8bc64193af9a3dfbb4841778"
+        },
+        {
+          "reader": "2c4f343d7fc24b418296893bdf067fd3",
+          "cwd": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/materials/2c4f343d7fc24b418296893bdf067fd3",
+          "receipt": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/2c4f343d7fc24b418296893bdf067fd3"
+        }
+      ]
+    },
+    {
+      "material_identity": "7cd00090f109b578cba6abc46fca82903c8bb6c96714d5398113cc4f37c95e1b",
+      "source_packets": [
+        "docs/evaluation/regressions/504/preparation-2026-10-03/validation-material/t05"
+      ],
+      "contracts": [
+        {
+          "role": "shared mechanics",
+          "path": "contracts/r01.md",
+          "sha256": "b3103ed6da4ac9d27a0ebfb43bdb40b8e77d58d84b3745a90c0a736142438b45",
+          "resolved_source": "skills/kntnt/library/references/editorial/mechanics.md"
+        },
+        {
+          "role": "locale complete resource",
+          "path": "contracts/r02.md",
+          "sha256": "241f0e5e4ca590c1d2348dc4048d15b5c8cc030c9dc91de989a758cefd4cd211",
+          "resolved_source": "skills/kntnt/library/references/languages/sv.md"
+        },
+        {
+          "role": "shared editorial composition",
+          "path": "contracts/r03.md",
+          "sha256": "d4146ef134de7482e25469201aaceed7b207fba9f8bacb06a428b85f6bfc3581",
+          "resolved_source": "skills/kntnt/library/references/editorial/base.md"
+        },
+        {
+          "role": "shared editorial review",
+          "path": "contracts/r04.md",
+          "sha256": "d2c838c19a692104be247afd227b0baed98f3156be059c0a982ecae3513fa0ca",
+          "resolved_source": "skills/kntnt/library/references/editorial/base.review.md"
+        },
+        {
+          "role": "shared anti-slop",
+          "path": "contracts/r05.md",
+          "sha256": "9ec7fb15b3cfe22f446c6ed2df85666aaa182d8fa0a09fa3668887e4786d83c2",
+          "resolved_source": "skills/kntnt/library/references/editorial/anti-slop.md"
+        },
+        {
+          "role": "anatomy composition",
+          "path": "contracts/r06.md",
+          "sha256": "c075c6fe7494dbcdc43d6af599c55ab8fc52fc48d7ed1b6cc26eca7a592cecd7",
+          "resolved_source": "skills/kntnt/library/references/editorial/article-anatomy.md"
+        },
+        {
+          "role": "anatomy review",
+          "path": "contracts/r07.md",
+          "sha256": "3e616f9671126ba7898123dd288a4a9bb4170f189d567a3fcbd2b17ccb82c633",
+          "resolved_source": "skills/kntnt/library/references/editorial/article-anatomy.review.md"
+        },
+        {
+          "role": "headlines composition",
+          "path": "contracts/r08.md",
+          "sha256": "adfb7ca612905afee03a73d58cdb07de9d0877b23af9de89f7e114f6de81df5f",
+          "resolved_source": "skills/kntnt/library/references/editorial/headlines.md"
+        },
+        {
+          "role": "headlines review",
+          "path": "contracts/r09.md",
+          "sha256": "11be8cc4a9d009f59f78dedfe9a0059c681ca0d8f23bd37f36ef0486a74f1257",
+          "resolved_source": "skills/kntnt/library/references/editorial/headlines.review.md"
+        },
+        {
+          "role": "web craft composition",
+          "path": "contracts/r10.md",
+          "sha256": "b1ac5867d30952c3ca78da244520ab28c025102f4389f44ec206757a29f05371",
+          "resolved_source": "skills/kntnt/library/references/editorial/web-craft.md"
+        },
+        {
+          "role": "web craft review",
+          "path": "contracts/r11.md",
+          "sha256": "169da1beeb4fb80e74f9423bdd4d7bcd57aa9b59b8e8ff5b71f3a67dfef7e923",
+          "resolved_source": "skills/kntnt/library/references/editorial/web-craft.review.md"
+        },
+        {
+          "role": "selected genre composition",
+          "path": "contracts/r12.md",
+          "sha256": "a39054321cbd35819cfd8ac7d2823dd3d56550a6ee2d1c6ee3b30f9daaa16cc5",
+          "resolved_source": "skills/kntnt/library/references/editorial/genres/casestudy.md"
+        },
+        {
+          "role": "selected genre review",
+          "path": "contracts/r13.md",
+          "sha256": "a7db10d0dc1970064a8887c819a8500dfdecf43dcb45fffed32994921ceb68a4",
+          "resolved_source": "skills/kntnt/library/references/editorial/genres/casestudy.review.md"
+        }
+      ],
+      "readers": [
+        {
+          "reader": "b7d7a5bcfdff4dc6b1cbe8467e8cde5b",
+          "cwd": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/materials/b7d7a5bcfdff4dc6b1cbe8467e8cde5b",
+          "receipt": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/b7d7a5bcfdff4dc6b1cbe8467e8cde5b"
+        },
+        {
+          "reader": "28a18b10fe3f46aab27db9ec7e6b599b",
+          "cwd": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/materials/28a18b10fe3f46aab27db9ec7e6b599b",
+          "receipt": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/28a18b10fe3f46aab27db9ec7e6b599b"
+        }
+      ]
+    },
+    {
+      "material_identity": "cc57f7639c81455aee432280aee0972db5184867cc3cf8384966e1e865f75758",
+      "source_packets": [
+        "docs/evaluation/regressions/504/preparation-2026-10-03/validation-material/t02"
+      ],
+      "contracts": [
+        {
+          "role": "shared mechanics",
+          "path": "contracts/r01.md",
+          "sha256": "b3103ed6da4ac9d27a0ebfb43bdb40b8e77d58d84b3745a90c0a736142438b45",
+          "resolved_source": "skills/kntnt/library/references/editorial/mechanics.md"
+        },
+        {
+          "role": "locale complete resource",
+          "path": "contracts/r02.md",
+          "sha256": "241f0e5e4ca590c1d2348dc4048d15b5c8cc030c9dc91de989a758cefd4cd211",
+          "resolved_source": "skills/kntnt/library/references/languages/sv.md"
+        },
+        {
+          "role": "shared editorial composition",
+          "path": "contracts/r03.md",
+          "sha256": "d4146ef134de7482e25469201aaceed7b207fba9f8bacb06a428b85f6bfc3581",
+          "resolved_source": "skills/kntnt/library/references/editorial/base.md"
+        },
+        {
+          "role": "shared editorial review",
+          "path": "contracts/r04.md",
+          "sha256": "d2c838c19a692104be247afd227b0baed98f3156be059c0a982ecae3513fa0ca",
+          "resolved_source": "skills/kntnt/library/references/editorial/base.review.md"
+        },
+        {
+          "role": "shared anti-slop",
+          "path": "contracts/r05.md",
+          "sha256": "9ec7fb15b3cfe22f446c6ed2df85666aaa182d8fa0a09fa3668887e4786d83c2",
+          "resolved_source": "skills/kntnt/library/references/editorial/anti-slop.md"
+        },
+        {
+          "role": "anatomy composition",
+          "path": "contracts/r06.md",
+          "sha256": "c075c6fe7494dbcdc43d6af599c55ab8fc52fc48d7ed1b6cc26eca7a592cecd7",
+          "resolved_source": "skills/kntnt/library/references/editorial/article-anatomy.md"
+        },
+        {
+          "role": "anatomy review",
+          "path": "contracts/r07.md",
+          "sha256": "3e616f9671126ba7898123dd288a4a9bb4170f189d567a3fcbd2b17ccb82c633",
+          "resolved_source": "skills/kntnt/library/references/editorial/article-anatomy.review.md"
+        },
+        {
+          "role": "headlines composition",
+          "path": "contracts/r08.md",
+          "sha256": "adfb7ca612905afee03a73d58cdb07de9d0877b23af9de89f7e114f6de81df5f",
+          "resolved_source": "skills/kntnt/library/references/editorial/headlines.md"
+        },
+        {
+          "role": "headlines review",
+          "path": "contracts/r09.md",
+          "sha256": "11be8cc4a9d009f59f78dedfe9a0059c681ca0d8f23bd37f36ef0486a74f1257",
+          "resolved_source": "skills/kntnt/library/references/editorial/headlines.review.md"
+        },
+        {
+          "role": "web craft composition",
+          "path": "contracts/r10.md",
+          "sha256": "b1ac5867d30952c3ca78da244520ab28c025102f4389f44ec206757a29f05371",
+          "resolved_source": "skills/kntnt/library/references/editorial/web-craft.md"
+        },
+        {
+          "role": "web craft review",
+          "path": "contracts/r11.md",
+          "sha256": "169da1beeb4fb80e74f9423bdd4d7bcd57aa9b59b8e8ff5b71f3a67dfef7e923",
+          "resolved_source": "skills/kntnt/library/references/editorial/web-craft.review.md"
+        },
+        {
+          "role": "selected genre composition",
+          "path": "contracts/r12.md",
+          "sha256": "a39054321cbd35819cfd8ac7d2823dd3d56550a6ee2d1c6ee3b30f9daaa16cc5",
+          "resolved_source": "skills/kntnt/library/references/editorial/genres/casestudy.md"
+        },
+        {
+          "role": "selected genre review",
+          "path": "contracts/r13.md",
+          "sha256": "a7db10d0dc1970064a8887c819a8500dfdecf43dcb45fffed32994921ceb68a4",
+          "resolved_source": "skills/kntnt/library/references/editorial/genres/casestudy.review.md"
+        }
+      ],
+      "readers": [
+        {
+          "reader": "e8ee6c64ae734c26971638d37acd287d",
+          "cwd": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/materials/e8ee6c64ae734c26971638d37acd287d",
+          "receipt": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/e8ee6c64ae734c26971638d37acd287d"
+        },
+        {
+          "reader": "6bd28381983a4ee2bde8176dc2827160",
+          "cwd": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/materials/6bd28381983a4ee2bde8176dc2827160",
+          "receipt": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/6bd28381983a4ee2bde8176dc2827160"
+        }
+      ]
+    },
+    {
+      "material_identity": "0c72ae4d34d841341dadde9696f08336250c73be163464c2822e8b2bc436b220",
+      "source_packets": [
+        "docs/evaluation/regressions/504/preparation-2026-10-03/validation-material/t09"
+      ],
+      "contracts": [
+        {
+          "role": "shared mechanics",
+          "path": "contracts/r01.md",
+          "sha256": "b3103ed6da4ac9d27a0ebfb43bdb40b8e77d58d84b3745a90c0a736142438b45",
+          "resolved_source": "skills/kntnt/library/references/editorial/mechanics.md"
+        },
+        {
+          "role": "locale complete resource",
+          "path": "contracts/r02.md",
+          "sha256": "241f0e5e4ca590c1d2348dc4048d15b5c8cc030c9dc91de989a758cefd4cd211",
+          "resolved_source": "skills/kntnt/library/references/languages/sv.md"
+        },
+        {
+          "role": "shared editorial composition",
+          "path": "contracts/r03.md",
+          "sha256": "d4146ef134de7482e25469201aaceed7b207fba9f8bacb06a428b85f6bfc3581",
+          "resolved_source": "skills/kntnt/library/references/editorial/base.md"
+        },
+        {
+          "role": "shared editorial review",
+          "path": "contracts/r04.md",
+          "sha256": "d2c838c19a692104be247afd227b0baed98f3156be059c0a982ecae3513fa0ca",
+          "resolved_source": "skills/kntnt/library/references/editorial/base.review.md"
+        },
+        {
+          "role": "shared anti-slop",
+          "path": "contracts/r05.md",
+          "sha256": "9ec7fb15b3cfe22f446c6ed2df85666aaa182d8fa0a09fa3668887e4786d83c2",
+          "resolved_source": "skills/kntnt/library/references/editorial/anti-slop.md"
+        },
+        {
+          "role": "anatomy composition",
+          "path": "contracts/r06.md",
+          "sha256": "c075c6fe7494dbcdc43d6af599c55ab8fc52fc48d7ed1b6cc26eca7a592cecd7",
+          "resolved_source": "skills/kntnt/library/references/editorial/article-anatomy.md"
+        },
+        {
+          "role": "anatomy review",
+          "path": "contracts/r07.md",
+          "sha256": "3e616f9671126ba7898123dd288a4a9bb4170f189d567a3fcbd2b17ccb82c633",
+          "resolved_source": "skills/kntnt/library/references/editorial/article-anatomy.review.md"
+        },
+        {
+          "role": "headlines composition",
+          "path": "contracts/r08.md",
+          "sha256": "adfb7ca612905afee03a73d58cdb07de9d0877b23af9de89f7e114f6de81df5f",
+          "resolved_source": "skills/kntnt/library/references/editorial/headlines.md"
+        },
+        {
+          "role": "headlines review",
+          "path": "contracts/r09.md",
+          "sha256": "11be8cc4a9d009f59f78dedfe9a0059c681ca0d8f23bd37f36ef0486a74f1257",
+          "resolved_source": "skills/kntnt/library/references/editorial/headlines.review.md"
+        },
+        {
+          "role": "web craft composition",
+          "path": "contracts/r10.md",
+          "sha256": "b1ac5867d30952c3ca78da244520ab28c025102f4389f44ec206757a29f05371",
+          "resolved_source": "skills/kntnt/library/references/editorial/web-craft.md"
+        },
+        {
+          "role": "web craft review",
+          "path": "contracts/r11.md",
+          "sha256": "169da1beeb4fb80e74f9423bdd4d7bcd57aa9b59b8e8ff5b71f3a67dfef7e923",
+          "resolved_source": "skills/kntnt/library/references/editorial/web-craft.review.md"
+        },
+        {
+          "role": "selected genre composition",
+          "path": "contracts/r12.md",
+          "sha256": "f0edbed362fe613f11cfe6232c4c7fc98202786fa909f3cd72f1b1acd0867e41",
+          "resolved_source": "skills/kntnt/library/references/editorial/genres/opinion.md"
+        },
+        {
+          "role": "selected genre review",
+          "path": "contracts/r13.md",
+          "sha256": "38f9409f2bdbe66cdc3786640bb08da94ed67eabb0a75e3ebe5028f3463b63a3",
+          "resolved_source": "skills/kntnt/library/references/editorial/genres/opinion.review.md"
+        }
+      ],
+      "readers": [
+        {
+          "reader": "ad2e42f1f6ef4fd18d3f5c3e148d16b7",
+          "cwd": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/materials/ad2e42f1f6ef4fd18d3f5c3e148d16b7",
+          "receipt": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/ad2e42f1f6ef4fd18d3f5c3e148d16b7"
+        },
+        {
+          "reader": "86c34d30a4a6453a8b49fde51534bb0b",
+          "cwd": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/materials/86c34d30a4a6453a8b49fde51534bb0b",
+          "receipt": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/86c34d30a4a6453a8b49fde51534bb0b"
+        }
+      ]
+    },
+    {
+      "material_identity": "fa8ff4d66246034b5478eb162486f0c1cc88384a829924e0673ed60c47db2166",
+      "source_packets": [
+        "docs/evaluation/regressions/504/preparation-2026-10-03/validation-material/t06"
+      ],
+      "contracts": [
+        {
+          "role": "shared mechanics",
+          "path": "contracts/r01.md",
+          "sha256": "b3103ed6da4ac9d27a0ebfb43bdb40b8e77d58d84b3745a90c0a736142438b45",
+          "resolved_source": "skills/kntnt/library/references/editorial/mechanics.md"
+        },
+        {
+          "role": "locale complete resource",
+          "path": "contracts/r02.md",
+          "sha256": "241f0e5e4ca590c1d2348dc4048d15b5c8cc030c9dc91de989a758cefd4cd211",
+          "resolved_source": "skills/kntnt/library/references/languages/sv.md"
+        },
+        {
+          "role": "shared editorial composition",
+          "path": "contracts/r03.md",
+          "sha256": "d4146ef134de7482e25469201aaceed7b207fba9f8bacb06a428b85f6bfc3581",
+          "resolved_source": "skills/kntnt/library/references/editorial/base.md"
+        },
+        {
+          "role": "shared editorial review",
+          "path": "contracts/r04.md",
+          "sha256": "d2c838c19a692104be247afd227b0baed98f3156be059c0a982ecae3513fa0ca",
+          "resolved_source": "skills/kntnt/library/references/editorial/base.review.md"
+        },
+        {
+          "role": "shared anti-slop",
+          "path": "contracts/r05.md",
+          "sha256": "9ec7fb15b3cfe22f446c6ed2df85666aaa182d8fa0a09fa3668887e4786d83c2",
+          "resolved_source": "skills/kntnt/library/references/editorial/anti-slop.md"
+        },
+        {
+          "role": "anatomy composition",
+          "path": "contracts/r06.md",
+          "sha256": "c075c6fe7494dbcdc43d6af599c55ab8fc52fc48d7ed1b6cc26eca7a592cecd7",
+          "resolved_source": "skills/kntnt/library/references/editorial/article-anatomy.md"
+        },
+        {
+          "role": "anatomy review",
+          "path": "contracts/r07.md",
+          "sha256": "3e616f9671126ba7898123dd288a4a9bb4170f189d567a3fcbd2b17ccb82c633",
+          "resolved_source": "skills/kntnt/library/references/editorial/article-anatomy.review.md"
+        },
+        {
+          "role": "headlines composition",
+          "path": "contracts/r08.md",
+          "sha256": "adfb7ca612905afee03a73d58cdb07de9d0877b23af9de89f7e114f6de81df5f",
+          "resolved_source": "skills/kntnt/library/references/editorial/headlines.md"
+        },
+        {
+          "role": "headlines review",
+          "path": "contracts/r09.md",
+          "sha256": "11be8cc4a9d009f59f78dedfe9a0059c681ca0d8f23bd37f36ef0486a74f1257",
+          "resolved_source": "skills/kntnt/library/references/editorial/headlines.review.md"
+        },
+        {
+          "role": "web craft composition",
+          "path": "contracts/r10.md",
+          "sha256": "b1ac5867d30952c3ca78da244520ab28c025102f4389f44ec206757a29f05371",
+          "resolved_source": "skills/kntnt/library/references/editorial/web-craft.md"
+        },
+        {
+          "role": "web craft review",
+          "path": "contracts/r11.md",
+          "sha256": "169da1beeb4fb80e74f9423bdd4d7bcd57aa9b59b8e8ff5b71f3a67dfef7e923",
+          "resolved_source": "skills/kntnt/library/references/editorial/web-craft.review.md"
+        },
+        {
+          "role": "selected genre composition",
+          "path": "contracts/r12.md",
+          "sha256": "a39054321cbd35819cfd8ac7d2823dd3d56550a6ee2d1c6ee3b30f9daaa16cc5",
+          "resolved_source": "skills/kntnt/library/references/editorial/genres/casestudy.md"
+        },
+        {
+          "role": "selected genre review",
+          "path": "contracts/r13.md",
+          "sha256": "a7db10d0dc1970064a8887c819a8500dfdecf43dcb45fffed32994921ceb68a4",
+          "resolved_source": "skills/kntnt/library/references/editorial/genres/casestudy.review.md"
+        }
+      ],
+      "readers": [
+        {
+          "reader": "220d0bef5b2b45e3b6be07b68e339c47",
+          "cwd": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/materials/220d0bef5b2b45e3b6be07b68e339c47",
+          "receipt": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/220d0bef5b2b45e3b6be07b68e339c47"
+        },
+        {
+          "reader": "ea7fda006978491da1e9e62ee6d2de5d",
+          "cwd": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/materials/ea7fda006978491da1e9e62ee6d2de5d",
+          "receipt": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/ea7fda006978491da1e9e62ee6d2de5d"
+        }
+      ]
+    },
+    {
+      "material_identity": "10866594295119424f5db68632a156541923a87abfc37850a029b98615cb2291",
+      "source_packets": [
+        "docs/evaluation/regressions/505/preparation-2026-10-03/validation-material/t04",
+        "docs/evaluation/regressions/507/preparation-2026-10-03/validation-material/t01"
+      ],
+      "contracts": [
+        {
+          "role": "shared mechanics",
+          "path": "contracts/r01.md",
+          "sha256": "b3103ed6da4ac9d27a0ebfb43bdb40b8e77d58d84b3745a90c0a736142438b45",
+          "resolved_source": "skills/kntnt/library/references/editorial/mechanics.md"
+        },
+        {
+          "role": "locale complete resource",
+          "path": "contracts/r02.md",
+          "sha256": "d11fcffa9e7316dd44d8796a954e5db9965c501e7df982affe91bc624cfef73c",
+          "resolved_source": "skills/kntnt/library/references/languages/en_US.md"
+        },
+        {
+          "role": "shared editorial composition",
+          "path": "contracts/r03.md",
+          "sha256": "d4146ef134de7482e25469201aaceed7b207fba9f8bacb06a428b85f6bfc3581",
+          "resolved_source": "skills/kntnt/library/references/editorial/base.md"
+        },
+        {
+          "role": "shared editorial review",
+          "path": "contracts/r04.md",
+          "sha256": "d2c838c19a692104be247afd227b0baed98f3156be059c0a982ecae3513fa0ca",
+          "resolved_source": "skills/kntnt/library/references/editorial/base.review.md"
+        },
+        {
+          "role": "shared anti-slop",
+          "path": "contracts/r05.md",
+          "sha256": "9ec7fb15b3cfe22f446c6ed2df85666aaa182d8fa0a09fa3668887e4786d83c2",
+          "resolved_source": "skills/kntnt/library/references/editorial/anti-slop.md"
+        },
+        {
+          "role": "anatomy composition",
+          "path": "contracts/r06.md",
+          "sha256": "c075c6fe7494dbcdc43d6af599c55ab8fc52fc48d7ed1b6cc26eca7a592cecd7",
+          "resolved_source": "skills/kntnt/library/references/editorial/article-anatomy.md"
+        },
+        {
+          "role": "anatomy review",
+          "path": "contracts/r07.md",
+          "sha256": "3e616f9671126ba7898123dd288a4a9bb4170f189d567a3fcbd2b17ccb82c633",
+          "resolved_source": "skills/kntnt/library/references/editorial/article-anatomy.review.md"
+        },
+        {
+          "role": "headlines composition",
+          "path": "contracts/r08.md",
+          "sha256": "adfb7ca612905afee03a73d58cdb07de9d0877b23af9de89f7e114f6de81df5f",
+          "resolved_source": "skills/kntnt/library/references/editorial/headlines.md"
+        },
+        {
+          "role": "headlines review",
+          "path": "contracts/r09.md",
+          "sha256": "11be8cc4a9d009f59f78dedfe9a0059c681ca0d8f23bd37f36ef0486a74f1257",
+          "resolved_source": "skills/kntnt/library/references/editorial/headlines.review.md"
+        },
+        {
+          "role": "web craft composition",
+          "path": "contracts/r10.md",
+          "sha256": "b1ac5867d30952c3ca78da244520ab28c025102f4389f44ec206757a29f05371",
+          "resolved_source": "skills/kntnt/library/references/editorial/web-craft.md"
+        },
+        {
+          "role": "web craft review",
+          "path": "contracts/r11.md",
+          "sha256": "169da1beeb4fb80e74f9423bdd4d7bcd57aa9b59b8e8ff5b71f3a67dfef7e923",
+          "resolved_source": "skills/kntnt/library/references/editorial/web-craft.review.md"
+        },
+        {
+          "role": "selected genre composition",
+          "path": "contracts/r12.md",
+          "sha256": "a39054321cbd35819cfd8ac7d2823dd3d56550a6ee2d1c6ee3b30f9daaa16cc5",
+          "resolved_source": "skills/kntnt/library/references/editorial/genres/casestudy.md"
+        },
+        {
+          "role": "selected genre review",
+          "path": "contracts/r13.md",
+          "sha256": "a7db10d0dc1970064a8887c819a8500dfdecf43dcb45fffed32994921ceb68a4",
+          "resolved_source": "skills/kntnt/library/references/editorial/genres/casestudy.review.md"
+        }
+      ],
+      "readers": [
+        {
+          "reader": "a33e52e5baa34914a8095e62b3e67afa",
+          "cwd": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/materials/a33e52e5baa34914a8095e62b3e67afa",
+          "receipt": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/a33e52e5baa34914a8095e62b3e67afa"
+        },
+        {
+          "reader": "27b369d7bc0f4cfbaf3ae24368ec4761",
+          "cwd": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/materials/27b369d7bc0f4cfbaf3ae24368ec4761",
+          "receipt": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/27b369d7bc0f4cfbaf3ae24368ec4761"
+        }
+      ]
+    },
+    {
+      "material_identity": "ab74ff4774917975722ae4ceefea1219bdfebd6a62f765a4e8e82191044fa9c4",
+      "source_packets": [
+        "docs/evaluation/regressions/505/preparation-2026-10-03/validation-material/t02"
+      ],
+      "contracts": [
+        {
+          "role": "shared mechanics",
+          "path": "contracts/r01.md",
+          "sha256": "b3103ed6da4ac9d27a0ebfb43bdb40b8e77d58d84b3745a90c0a736142438b45",
+          "resolved_source": "skills/kntnt/library/references/editorial/mechanics.md"
+        },
+        {
+          "role": "locale complete resource",
+          "path": "contracts/r02.md",
+          "sha256": "241f0e5e4ca590c1d2348dc4048d15b5c8cc030c9dc91de989a758cefd4cd211",
+          "resolved_source": "skills/kntnt/library/references/languages/sv.md"
+        },
+        {
+          "role": "shared editorial composition",
+          "path": "contracts/r03.md",
+          "sha256": "d4146ef134de7482e25469201aaceed7b207fba9f8bacb06a428b85f6bfc3581",
+          "resolved_source": "skills/kntnt/library/references/editorial/base.md"
+        },
+        {
+          "role": "shared editorial review",
+          "path": "contracts/r04.md",
+          "sha256": "d2c838c19a692104be247afd227b0baed98f3156be059c0a982ecae3513fa0ca",
+          "resolved_source": "skills/kntnt/library/references/editorial/base.review.md"
+        },
+        {
+          "role": "shared anti-slop",
+          "path": "contracts/r05.md",
+          "sha256": "9ec7fb15b3cfe22f446c6ed2df85666aaa182d8fa0a09fa3668887e4786d83c2",
+          "resolved_source": "skills/kntnt/library/references/editorial/anti-slop.md"
+        },
+        {
+          "role": "anatomy composition",
+          "path": "contracts/r06.md",
+          "sha256": "c075c6fe7494dbcdc43d6af599c55ab8fc52fc48d7ed1b6cc26eca7a592cecd7",
+          "resolved_source": "skills/kntnt/library/references/editorial/article-anatomy.md"
+        },
+        {
+          "role": "anatomy review",
+          "path": "contracts/r07.md",
+          "sha256": "3e616f9671126ba7898123dd288a4a9bb4170f189d567a3fcbd2b17ccb82c633",
+          "resolved_source": "skills/kntnt/library/references/editorial/article-anatomy.review.md"
+        },
+        {
+          "role": "headlines composition",
+          "path": "contracts/r08.md",
+          "sha256": "adfb7ca612905afee03a73d58cdb07de9d0877b23af9de89f7e114f6de81df5f",
+          "resolved_source": "skills/kntnt/library/references/editorial/headlines.md"
+        },
+        {
+          "role": "headlines review",
+          "path": "contracts/r09.md",
+          "sha256": "11be8cc4a9d009f59f78dedfe9a0059c681ca0d8f23bd37f36ef0486a74f1257",
+          "resolved_source": "skills/kntnt/library/references/editorial/headlines.review.md"
+        },
+        {
+          "role": "web craft composition",
+          "path": "contracts/r10.md",
+          "sha256": "b1ac5867d30952c3ca78da244520ab28c025102f4389f44ec206757a29f05371",
+          "resolved_source": "skills/kntnt/library/references/editorial/web-craft.md"
+        },
+        {
+          "role": "web craft review",
+          "path": "contracts/r11.md",
+          "sha256": "169da1beeb4fb80e74f9423bdd4d7bcd57aa9b59b8e8ff5b71f3a67dfef7e923",
+          "resolved_source": "skills/kntnt/library/references/editorial/web-craft.review.md"
+        },
+        {
+          "role": "selected genre composition",
+          "path": "contracts/r12.md",
+          "sha256": "a39054321cbd35819cfd8ac7d2823dd3d56550a6ee2d1c6ee3b30f9daaa16cc5",
+          "resolved_source": "skills/kntnt/library/references/editorial/genres/casestudy.md"
+        },
+        {
+          "role": "selected genre review",
+          "path": "contracts/r13.md",
+          "sha256": "a7db10d0dc1970064a8887c819a8500dfdecf43dcb45fffed32994921ceb68a4",
+          "resolved_source": "skills/kntnt/library/references/editorial/genres/casestudy.review.md"
+        }
+      ],
+      "readers": [
+        {
+          "reader": "254768ca3daa4d42b79d000a48baa434",
+          "cwd": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/materials/254768ca3daa4d42b79d000a48baa434",
+          "receipt": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/254768ca3daa4d42b79d000a48baa434"
+        },
+        {
+          "reader": "56033de7e984419a91683e222cb74345",
+          "cwd": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/materials/56033de7e984419a91683e222cb74345",
+          "receipt": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/56033de7e984419a91683e222cb74345"
+        }
+      ]
+    },
+    {
+      "material_identity": "dd9a1447410fb28daf2a5b8cf81e844bdc44ff98ae3936eb0379bb278eee708e",
+      "source_packets": [
+        "docs/evaluation/regressions/505/preparation-2026-10-03/validation-material/t01"
+      ],
+      "contracts": [
+        {
+          "role": "shared mechanics",
+          "path": "contracts/r01.md",
+          "sha256": "b3103ed6da4ac9d27a0ebfb43bdb40b8e77d58d84b3745a90c0a736142438b45",
+          "resolved_source": "skills/kntnt/library/references/editorial/mechanics.md"
+        },
+        {
+          "role": "locale complete resource",
+          "path": "contracts/r02.md",
+          "sha256": "241f0e5e4ca590c1d2348dc4048d15b5c8cc030c9dc91de989a758cefd4cd211",
+          "resolved_source": "skills/kntnt/library/references/languages/sv.md"
+        },
+        {
+          "role": "shared editorial composition",
+          "path": "contracts/r03.md",
+          "sha256": "d4146ef134de7482e25469201aaceed7b207fba9f8bacb06a428b85f6bfc3581",
+          "resolved_source": "skills/kntnt/library/references/editorial/base.md"
+        },
+        {
+          "role": "shared editorial review",
+          "path": "contracts/r04.md",
+          "sha256": "d2c838c19a692104be247afd227b0baed98f3156be059c0a982ecae3513fa0ca",
+          "resolved_source": "skills/kntnt/library/references/editorial/base.review.md"
+        },
+        {
+          "role": "shared anti-slop",
+          "path": "contracts/r05.md",
+          "sha256": "9ec7fb15b3cfe22f446c6ed2df85666aaa182d8fa0a09fa3668887e4786d83c2",
+          "resolved_source": "skills/kntnt/library/references/editorial/anti-slop.md"
+        },
+        {
+          "role": "anatomy composition",
+          "path": "contracts/r06.md",
+          "sha256": "c075c6fe7494dbcdc43d6af599c55ab8fc52fc48d7ed1b6cc26eca7a592cecd7",
+          "resolved_source": "skills/kntnt/library/references/editorial/article-anatomy.md"
+        },
+        {
+          "role": "anatomy review",
+          "path": "contracts/r07.md",
+          "sha256": "3e616f9671126ba7898123dd288a4a9bb4170f189d567a3fcbd2b17ccb82c633",
+          "resolved_source": "skills/kntnt/library/references/editorial/article-anatomy.review.md"
+        },
+        {
+          "role": "headlines composition",
+          "path": "contracts/r08.md",
+          "sha256": "adfb7ca612905afee03a73d58cdb07de9d0877b23af9de89f7e114f6de81df5f",
+          "resolved_source": "skills/kntnt/library/references/editorial/headlines.md"
+        },
+        {
+          "role": "headlines review",
+          "path": "contracts/r09.md",
+          "sha256": "11be8cc4a9d009f59f78dedfe9a0059c681ca0d8f23bd37f36ef0486a74f1257",
+          "resolved_source": "skills/kntnt/library/references/editorial/headlines.review.md"
+        },
+        {
+          "role": "web craft composition",
+          "path": "contracts/r10.md",
+          "sha256": "b1ac5867d30952c3ca78da244520ab28c025102f4389f44ec206757a29f05371",
+          "resolved_source": "skills/kntnt/library/references/editorial/web-craft.md"
+        },
+        {
+          "role": "web craft review",
+          "path": "contracts/r11.md",
+          "sha256": "169da1beeb4fb80e74f9423bdd4d7bcd57aa9b59b8e8ff5b71f3a67dfef7e923",
+          "resolved_source": "skills/kntnt/library/references/editorial/web-craft.review.md"
+        },
+        {
+          "role": "selected genre composition",
+          "path": "contracts/r12.md",
+          "sha256": "a39054321cbd35819cfd8ac7d2823dd3d56550a6ee2d1c6ee3b30f9daaa16cc5",
+          "resolved_source": "skills/kntnt/library/references/editorial/genres/casestudy.md"
+        },
+        {
+          "role": "selected genre review",
+          "path": "contracts/r13.md",
+          "sha256": "a7db10d0dc1970064a8887c819a8500dfdecf43dcb45fffed32994921ceb68a4",
+          "resolved_source": "skills/kntnt/library/references/editorial/genres/casestudy.review.md"
+        }
+      ],
+      "readers": [
+        {
+          "reader": "71583bb66ffe4c01aa1030c6b7bf1311",
+          "cwd": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/materials/71583bb66ffe4c01aa1030c6b7bf1311",
+          "receipt": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/71583bb66ffe4c01aa1030c6b7bf1311"
+        },
+        {
+          "reader": "2465cff2b398493fb5cef1dfbdb5c4e6",
+          "cwd": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/materials/2465cff2b398493fb5cef1dfbdb5c4e6",
+          "receipt": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/2465cff2b398493fb5cef1dfbdb5c4e6"
+        }
+      ]
+    },
+    {
+      "material_identity": "b219ab429ac616777bf2e916cc282edc06d042134edcfb7d91e4a5a8a51309e7",
+      "source_packets": [
+        "docs/evaluation/regressions/506/preparation-2026-10-03/validation-material/t03"
+      ],
+      "contracts": [
+        {
+          "role": "shared mechanics",
+          "path": "contracts/r01.md",
+          "sha256": "b3103ed6da4ac9d27a0ebfb43bdb40b8e77d58d84b3745a90c0a736142438b45",
+          "resolved_source": "skills/kntnt/library/references/editorial/mechanics.md"
+        },
+        {
+          "role": "locale complete resource",
+          "path": "contracts/r02.md",
+          "sha256": "d11fcffa9e7316dd44d8796a954e5db9965c501e7df982affe91bc624cfef73c",
+          "resolved_source": "skills/kntnt/library/references/languages/en_US.md"
+        }
+      ],
+      "readers": [
+        {
+          "reader": "56437733fd574bea9f58a6f3170f4b00",
+          "cwd": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/materials/56437733fd574bea9f58a6f3170f4b00",
+          "receipt": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/56437733fd574bea9f58a6f3170f4b00"
+        },
+        {
+          "reader": "58da0b2b994a4ed3a4ec7555b9b777f7",
+          "cwd": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/materials/58da0b2b994a4ed3a4ec7555b9b777f7",
+          "receipt": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/58da0b2b994a4ed3a4ec7555b9b777f7"
+        }
+      ]
+    },
+    {
+      "material_identity": "45b4484971d43c62340f63528190ea2010d6c49d65120d2e695ecf22a7e37202",
+      "source_packets": [
+        "docs/evaluation/regressions/506/preparation-2026-10-03/validation-material/t04"
+      ],
+      "contracts": [
+        {
+          "role": "shared mechanics",
+          "path": "contracts/r01.md",
+          "sha256": "b3103ed6da4ac9d27a0ebfb43bdb40b8e77d58d84b3745a90c0a736142438b45",
+          "resolved_source": "skills/kntnt/library/references/editorial/mechanics.md"
+        },
+        {
+          "role": "locale complete resource",
+          "path": "contracts/r02.md",
+          "sha256": "d11fcffa9e7316dd44d8796a954e5db9965c501e7df982affe91bc624cfef73c",
+          "resolved_source": "skills/kntnt/library/references/languages/en_US.md"
+        },
+        {
+          "role": "shared editorial composition",
+          "path": "contracts/r03.md",
+          "sha256": "d4146ef134de7482e25469201aaceed7b207fba9f8bacb06a428b85f6bfc3581",
+          "resolved_source": "skills/kntnt/library/references/editorial/base.md"
+        },
+        {
+          "role": "shared editorial review",
+          "path": "contracts/r04.md",
+          "sha256": "d2c838c19a692104be247afd227b0baed98f3156be059c0a982ecae3513fa0ca",
+          "resolved_source": "skills/kntnt/library/references/editorial/base.review.md"
+        },
+        {
+          "role": "shared anti-slop",
+          "path": "contracts/r05.md",
+          "sha256": "9ec7fb15b3cfe22f446c6ed2df85666aaa182d8fa0a09fa3668887e4786d83c2",
+          "resolved_source": "skills/kntnt/library/references/editorial/anti-slop.md"
+        },
+        {
+          "role": "anatomy composition",
+          "path": "contracts/r06.md",
+          "sha256": "c075c6fe7494dbcdc43d6af599c55ab8fc52fc48d7ed1b6cc26eca7a592cecd7",
+          "resolved_source": "skills/kntnt/library/references/editorial/article-anatomy.md"
+        },
+        {
+          "role": "anatomy review",
+          "path": "contracts/r07.md",
+          "sha256": "3e616f9671126ba7898123dd288a4a9bb4170f189d567a3fcbd2b17ccb82c633",
+          "resolved_source": "skills/kntnt/library/references/editorial/article-anatomy.review.md"
+        },
+        {
+          "role": "headlines composition",
+          "path": "contracts/r08.md",
+          "sha256": "adfb7ca612905afee03a73d58cdb07de9d0877b23af9de89f7e114f6de81df5f",
+          "resolved_source": "skills/kntnt/library/references/editorial/headlines.md"
+        },
+        {
+          "role": "headlines review",
+          "path": "contracts/r09.md",
+          "sha256": "11be8cc4a9d009f59f78dedfe9a0059c681ca0d8f23bd37f36ef0486a74f1257",
+          "resolved_source": "skills/kntnt/library/references/editorial/headlines.review.md"
+        },
+        {
+          "role": "web craft composition",
+          "path": "contracts/r10.md",
+          "sha256": "b1ac5867d30952c3ca78da244520ab28c025102f4389f44ec206757a29f05371",
+          "resolved_source": "skills/kntnt/library/references/editorial/web-craft.md"
+        },
+        {
+          "role": "web craft review",
+          "path": "contracts/r11.md",
+          "sha256": "169da1beeb4fb80e74f9423bdd4d7bcd57aa9b59b8e8ff5b71f3a67dfef7e923",
+          "resolved_source": "skills/kntnt/library/references/editorial/web-craft.review.md"
+        },
+        {
+          "role": "selected genre composition",
+          "path": "contracts/r12.md",
+          "sha256": "a39054321cbd35819cfd8ac7d2823dd3d56550a6ee2d1c6ee3b30f9daaa16cc5",
+          "resolved_source": "skills/kntnt/library/references/editorial/genres/casestudy.md"
+        },
+        {
+          "role": "selected genre review",
+          "path": "contracts/r13.md",
+          "sha256": "a7db10d0dc1970064a8887c819a8500dfdecf43dcb45fffed32994921ceb68a4",
+          "resolved_source": "skills/kntnt/library/references/editorial/genres/casestudy.review.md"
+        }
+      ],
+      "readers": [
+        {
+          "reader": "2fc5fbdedab5407095458d145c395fa6",
+          "cwd": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/materials/2fc5fbdedab5407095458d145c395fa6",
+          "receipt": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/2fc5fbdedab5407095458d145c395fa6"
+        },
+        {
+          "reader": "d4840aed9ffc4b99a436bc3dd252100a",
+          "cwd": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/materials/d4840aed9ffc4b99a436bc3dd252100a",
+          "receipt": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/d4840aed9ffc4b99a436bc3dd252100a"
+        }
+      ]
+    },
+    {
+      "material_identity": "08539c5308779464d657feead7667ca0a1dbc118bb986dc47a863963fa5b4d49",
+      "source_packets": [
+        "docs/evaluation/regressions/506/preparation-2026-10-03/validation-material/t05"
+      ],
+      "contracts": [
+        {
+          "role": "shared mechanics",
+          "path": "contracts/r01.md",
+          "sha256": "b3103ed6da4ac9d27a0ebfb43bdb40b8e77d58d84b3745a90c0a736142438b45",
+          "resolved_source": "skills/kntnt/library/references/editorial/mechanics.md"
+        },
+        {
+          "role": "locale complete resource",
+          "path": "contracts/r02.md",
+          "sha256": "2b36899b232e65300ea15fbbb0db2abece4e1f32e7b193957355a67a34331413",
+          "resolved_source": "skills/kntnt/library/references/languages/en_GB.md"
+        }
+      ],
+      "readers": [
+        {
+          "reader": "cc76f6772f5143cdb8caba70b377976a",
+          "cwd": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/materials/cc76f6772f5143cdb8caba70b377976a",
+          "receipt": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/cc76f6772f5143cdb8caba70b377976a"
+        },
+        {
+          "reader": "80ef2980685a4bbfbd28f8ea8c376e85",
+          "cwd": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/materials/80ef2980685a4bbfbd28f8ea8c376e85",
+          "receipt": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/80ef2980685a4bbfbd28f8ea8c376e85"
+        }
+      ]
+    },
+    {
+      "material_identity": "0491a505e377b3d12e1fec8216b0356bfbb259bd96a4e42a5ae7084eb848bc3c",
+      "source_packets": [
+        "docs/evaluation/regressions/506/preparation-2026-10-03/validation-material/t02"
+      ],
+      "contracts": [
+        {
+          "role": "shared mechanics",
+          "path": "contracts/r01.md",
+          "sha256": "b3103ed6da4ac9d27a0ebfb43bdb40b8e77d58d84b3745a90c0a736142438b45",
+          "resolved_source": "skills/kntnt/library/references/editorial/mechanics.md"
+        },
+        {
+          "role": "locale complete resource",
+          "path": "contracts/r02.md",
+          "sha256": "d11fcffa9e7316dd44d8796a954e5db9965c501e7df982affe91bc624cfef73c",
+          "resolved_source": "skills/kntnt/library/references/languages/en_US.md"
+        }
+      ],
+      "readers": [
+        {
+          "reader": "e48f18ce3a0043048dce823cbb9ce45a",
+          "cwd": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/materials/e48f18ce3a0043048dce823cbb9ce45a",
+          "receipt": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/e48f18ce3a0043048dce823cbb9ce45a"
+        },
+        {
+          "reader": "4f82a9da71da442c8f32f752983d12ba",
+          "cwd": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/materials/4f82a9da71da442c8f32f752983d12ba",
+          "receipt": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/4f82a9da71da442c8f32f752983d12ba"
+        }
+      ]
+    },
+    {
+      "material_identity": "9ded8ca6302beb817b702d50029d838c3b609af2ce6be9dc7f532b43c801a34d",
+      "source_packets": [
+        "docs/evaluation/regressions/506/preparation-2026-10-03/validation-material/t01"
+      ],
+      "contracts": [
+        {
+          "role": "shared mechanics",
+          "path": "contracts/r01.md",
+          "sha256": "b3103ed6da4ac9d27a0ebfb43bdb40b8e77d58d84b3745a90c0a736142438b45",
+          "resolved_source": "skills/kntnt/library/references/editorial/mechanics.md"
+        },
+        {
+          "role": "locale complete resource",
+          "path": "contracts/r02.md",
+          "sha256": "d11fcffa9e7316dd44d8796a954e5db9965c501e7df982affe91bc624cfef73c",
+          "resolved_source": "skills/kntnt/library/references/languages/en_US.md"
+        }
+      ],
+      "readers": [
+        {
+          "reader": "d568be4b215f4903a22b48bf029503c0",
+          "cwd": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/materials/d568be4b215f4903a22b48bf029503c0",
+          "receipt": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/d568be4b215f4903a22b48bf029503c0"
+        },
+        {
+          "reader": "67298dd3c07f48aaa1048255c414d8bd",
+          "cwd": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/materials/67298dd3c07f48aaa1048255c414d8bd",
+          "receipt": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/67298dd3c07f48aaa1048255c414d8bd"
+        }
+      ]
+    },
+    {
+      "material_identity": "986d5b099249f01bc592db51266a100c64bbe1287c409d3a8bb8d1d1fcd14334",
+      "source_packets": [
+        "docs/evaluation/regressions/506/preparation-2026-10-03/validation-material/t06"
+      ],
+      "contracts": [
+        {
+          "role": "shared mechanics",
+          "path": "contracts/r01.md",
+          "sha256": "b3103ed6da4ac9d27a0ebfb43bdb40b8e77d58d84b3745a90c0a736142438b45",
+          "resolved_source": "skills/kntnt/library/references/editorial/mechanics.md"
+        },
+        {
+          "role": "locale complete resource",
+          "path": "contracts/r02.md",
+          "sha256": "241f0e5e4ca590c1d2348dc4048d15b5c8cc030c9dc91de989a758cefd4cd211",
+          "resolved_source": "skills/kntnt/library/references/languages/sv.md"
+        }
+      ],
+      "readers": [
+        {
+          "reader": "42200ecf35944367ac91d4bac86bda14",
+          "cwd": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/materials/42200ecf35944367ac91d4bac86bda14",
+          "receipt": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/42200ecf35944367ac91d4bac86bda14"
+        },
+        {
+          "reader": "dc335fe2d2b940beb476ab0450edb07a",
+          "cwd": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/materials/dc335fe2d2b940beb476ab0450edb07a",
+          "receipt": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/dc335fe2d2b940beb476ab0450edb07a"
+        }
+      ]
+    },
+    {
+      "material_identity": "3bcf32767f97212b995126fa021aad3014d7c6f883dccf7f08b13aaf8926635e",
+      "source_packets": [
+        "docs/evaluation/regressions/490/preparation-2026-10-03/validation-material/v01"
+      ],
+      "contracts": [
+        {
+          "role": "report truth",
+          "path": "contracts/r01.md",
+          "sha256": "3596b2e07879e8559ef1866fb33eba3832a27408426ae5e936b2c69fe4955ad9",
+          "resolved_source": "evaluated local exact excerpt/template"
+        },
+        {
+          "role": "claim account",
+          "path": "contracts/r02.md",
+          "sha256": "cd6ca3377f86e6ea9e722d246512375e3c416d8f7062a3331beb6e9f1c184c64",
+          "resolved_source": "evaluated local exact excerpt/template"
+        },
+        {
+          "role": "checker scope",
+          "path": "contracts/r03.md",
+          "sha256": "54d7628c1afb3bddb32f5cec30233ce4e96970e8777fee04114b080723016b3b",
+          "resolved_source": "evaluated local exact excerpt/template"
+        }
+      ],
+      "readers": [
+        {
+          "reader": "01ca12899e6e445296f272f2b8fcecf9",
+          "cwd": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/materials/01ca12899e6e445296f272f2b8fcecf9",
+          "receipt": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/01ca12899e6e445296f272f2b8fcecf9"
+        },
+        {
+          "reader": "f9b6d46d75f447ddae5d11e1dc0dc029",
+          "cwd": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/materials/f9b6d46d75f447ddae5d11e1dc0dc029",
+          "receipt": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/f9b6d46d75f447ddae5d11e1dc0dc029"
+        }
+      ]
+    },
+    {
+      "material_identity": "ff07b6ff45c36783ef22f04904967cd1ec994965fe141266200c92d1d8211719",
+      "source_packets": [
+        "docs/evaluation/regressions/490/preparation-2026-10-03/validation-material/v02"
+      ],
+      "contracts": [
+        {
+          "role": "report truth",
+          "path": "contracts/r01.md",
+          "sha256": "3596b2e07879e8559ef1866fb33eba3832a27408426ae5e936b2c69fe4955ad9",
+          "resolved_source": "evaluated local exact excerpt/template"
+        },
+        {
+          "role": "claim account",
+          "path": "contracts/r02.md",
+          "sha256": "cd6ca3377f86e6ea9e722d246512375e3c416d8f7062a3331beb6e9f1c184c64",
+          "resolved_source": "evaluated local exact excerpt/template"
+        },
+        {
+          "role": "checker scope",
+          "path": "contracts/r03.md",
+          "sha256": "54d7628c1afb3bddb32f5cec30233ce4e96970e8777fee04114b080723016b3b",
+          "resolved_source": "evaluated local exact excerpt/template"
+        }
+      ],
+      "readers": [
+        {
+          "reader": "486022eaf93243939c7d638ee05a30bf",
+          "cwd": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/materials/486022eaf93243939c7d638ee05a30bf",
+          "receipt": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/486022eaf93243939c7d638ee05a30bf"
+        },
+        {
+          "reader": "2152b00b04be477c885eee4fe0997645",
+          "cwd": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/materials/2152b00b04be477c885eee4fe0997645",
+          "receipt": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/2152b00b04be477c885eee4fe0997645"
+        }
+      ]
+    },
+    {
+      "material_identity": "19103c438e8c02a6aeb63f6bb5da3847a4253d7eac9549528ab35b3401f0d37d",
+      "source_packets": [
+        "docs/evaluation/regressions/490/preparation-2026-10-03/validation-material/v03"
+      ],
+      "contracts": [
+        {
+          "role": "report truth",
+          "path": "contracts/r01.md",
+          "sha256": "3596b2e07879e8559ef1866fb33eba3832a27408426ae5e936b2c69fe4955ad9",
+          "resolved_source": "evaluated local exact excerpt/template"
+        },
+        {
+          "role": "claim account",
+          "path": "contracts/r02.md",
+          "sha256": "cd6ca3377f86e6ea9e722d246512375e3c416d8f7062a3331beb6e9f1c184c64",
+          "resolved_source": "evaluated local exact excerpt/template"
+        },
+        {
+          "role": "checker scope",
+          "path": "contracts/r03.md",
+          "sha256": "54d7628c1afb3bddb32f5cec30233ce4e96970e8777fee04114b080723016b3b",
+          "resolved_source": "evaluated local exact excerpt/template"
+        }
+      ],
+      "readers": [
+        {
+          "reader": "a7e25480ab6a42729ac0e9f48dcce427",
+          "cwd": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/materials/a7e25480ab6a42729ac0e9f48dcce427",
+          "receipt": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/a7e25480ab6a42729ac0e9f48dcce427"
+        },
+        {
+          "reader": "1a3ea24b76504c2d8e48941ce2817a4a",
+          "cwd": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/materials/1a3ea24b76504c2d8e48941ce2817a4a",
+          "receipt": "/Users/thomas/.kntnt/editorial-repair/2026-10-04/redline-preparation/receipts/1a3ea24b76504c2d8e48941ce2817a4a"
+        }
+      ]
+    }
+  ]
+}
