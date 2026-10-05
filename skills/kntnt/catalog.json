@@ -1,6 +1,6 @@
 {
   "origin": "Kntnt/skills",
-  "manager_digest": "828d3c1bf0b60ea12e97fe312b19224ffcf5c0f33b30179677d73b6cf12277c9",
+  "manager_digest": "b6ad27d507d2fc630d24c551bbf3c7c508ed5433558f8a358ee4a849330371eb",
   "skills": [
     {
       "name": "agents-md",
@@ -277,7 +277,7 @@
       "name": "session-cleanup",
       "category": "environment",
       "description": "Leave the machine as the session found it — the agent records what it starts, and a lifecycle hook stops exactly that when the session ends or the next one begins.",
-      "digest": "d4b6db928708764b7fcbdcdd2c5e75f92a7ccf3655d4a84fb154003ed74a8d0b",
+      "digest": "7693b555fb58f65578544f95aee04f12fe623b2cff2cf38b1ba45d075aa63cd3",
       "binaries": [
         "uv"
       ],

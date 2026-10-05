@@ -729,6 +729,26 @@ def _sweep(
             detail=str(exc),
         )
         return {"session": path.stem, "entries": None, "acted": []}
+
+    # A recovered read must establish eligibility before a start acts.
+    if why == "start" and sweeper_session:
+        ancestors = process_ancestors()
+        pending = [entry for _, entry in entries]
+        if ancestors is None or not _start_eligible(path, header, pending, ancestors):
+            log(
+                "manifest-kept",
+                why=why,
+                sweeper_session=sweeper_session,
+                sweeper_harness=sweeper_harness,
+                session=header.get("id") or path.stem,
+                detail="live or uncertain start-sweep ownership",
+            )
+            return {
+                "session": header.get("id") or path.stem,
+                "entries": len(entries),
+                "acted": [],
+            }
+
     acted: list[dict[str, Any]] = []
     for position, entry in entries:
         if entry.get("kind") != "pid":
@@ -871,12 +891,42 @@ def live_recorded_processes(entries: list[dict[str, Any]]) -> set[int]:
     return processes
 
 
-def foreign_manifests(mine: str) -> list[Path]:
-    """Select ended owners, retaining live or unreadable known identities.
+def _start_eligible(
+    path: Path,
+    header: dict[str, Any],
+    entries: list[dict[str, Any]],
+    ancestors: set[int],
+) -> bool:
+    """Apply the same lifetime, ancestor and age policy to observed history.
 
     A missing owner (including legacy SID headers) waits for the age fallback.
     Recorded ancestors protect the entire manifest regardless of age or header.
     A known owner is released only by death or a changed process start time.
+    """
+
+    # Retain recorded ancestors before considering owner death or fallback age.
+    if ancestors & live_recorded_processes(entries):
+        return False
+
+    # Only observed death or a different birth releases a known owner.
+    try:
+        pid = int(header.get("owner_pid") or 0)
+    except (TypeError, ValueError):
+        pid = 0
+    recorded = str(header.get("owner_started") or "")
+    if pid > 1 and recorded:
+        if not alive(pid):
+            return True
+        current = started_at(pid)
+        return bool(current and current != recorded)
+    return stale(path)
+
+
+def foreign_manifests(mine: str) -> list[Path]:
+    """Select candidates whose observed ownership permits a start sweep.
+
+    Selection can miss ownership after a read failure. The hook-start sweep
+    reapplies the same policy to its recovered history before any action.
     """
 
     found: list[Path] = []
@@ -892,24 +942,7 @@ def foreign_manifests(mine: str) -> list[Path]:
         if path.stem == safe_key(mine):
             continue
         header, entries = read_manifest(path)
-        processes = live_recorded_processes(entries)
-        if ancestors & processes:
-            continue
-        try:
-            pid = int(header.get("owner_pid") or 0)
-        except (TypeError, ValueError):
-            pid = 0
-        recorded = str(header.get("owner_started") or "")
-        if pid > 1 and recorded:
-            if not alive(pid):
-                found.append(path)
-                continue
-            current = started_at(pid)
-            if current and current != recorded:
-                found.append(path)
-            # A live owner or unreadable identity overrides the age fallback.
-            continue
-        if stale(path):
+        if _start_eligible(path, header, entries, ancestors):
             found.append(path)
     return found
 
