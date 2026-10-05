@@ -37,6 +37,7 @@ the start makes cleanup converge over disk, as ADR-0179 requires.
 from __future__ import annotations
 
 import argparse
+import fcntl
 import json
 import os
 import re
@@ -46,6 +47,8 @@ import subprocess
 import sys
 import tempfile
 import time
+from collections.abc import Iterator
+from contextlib import contextmanager
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
@@ -360,7 +363,7 @@ def current_key() -> str:
 
 
 def read_manifest(path: Path) -> tuple[dict[str, Any], list[dict[str, Any]]]:
-    """Return one manifest's header and its entries, skipping what will not parse.
+    """Return one manifest's header and pending entries, skipping invalid lines.
 
     A line that is not JSON is a line some interrupted write left half-finished
     or some hand edit mistyped. It is skipped rather than raised about: the
@@ -368,14 +371,27 @@ def read_manifest(path: Path) -> tuple[dict[str, Any], list[dict[str, Any]]]:
     bad line would leave every one of them running.
     """
 
+    header, entries = _pending_manifest(path)
+    return header, [entry for _, entry in entries]
+
+
+def _pending_manifest(
+    path: Path,
+) -> tuple[dict[str, Any], list[tuple[int, dict[str, Any]]]]:
+    """Keep raw history while identifying unconsumed resource lines by position.
+
+    Consumption records refer only to earlier resource lines. An appended new
+    registration remains distinct even when its values match an older entry.
+    """
+
     header: dict[str, Any] = {}
-    entries: list[dict[str, Any]] = []
+    entries: dict[int, dict[str, Any]] = {}
     try:
         text = path.read_text(encoding="utf-8")
     except (OSError, UnicodeDecodeError):
-        return header, entries
+        return header, []
 
-    for line in text.splitlines():
+    for position, line in enumerate(text.splitlines()):
         if not line.strip():
             continue
         try:
@@ -387,16 +403,56 @@ def read_manifest(path: Path) -> tuple[dict[str, Any], list[dict[str, Any]]]:
         if loaded.get("kind") == "session":
             header = loaded
         elif loaded.get("kind") in KINDS:
-            entries.append(loaded)
-    return header, entries
+            entries[position] = loaded
+        elif loaded.get("kind") == "consumed":
+            reference = loaded.get("line")
+            if type(reference) is int:
+                entries.pop(reference, None)
+    return header, list(entries.items())
 
 
-def append(path: Path, record: dict[str, Any]) -> None:
-    """Append one JSON line to a manifest, creating what it needs."""
+@contextmanager
+def _state_lock() -> Iterator[None]:
+    """Coordinate sweeps and registrations across deletion of a manifest.
+
+    The stable lock belongs to the selected Feature state, not a manifest
+    inode that a completed sweep unlinks. Closing releases it after failures.
+    """
+
+    data_dir().mkdir(parents=True, exist_ok=True)
+    with (data_dir() / ".sweep.lock").open("a") as guard:
+        fcntl.flock(guard, fcntl.LOCK_EX)
+        yield
+
+
+def append(path: Path, record: dict[str, Any], *, consuming: bool = False) -> None:
+    """Append new work under the state lock, or consumption already holding it.
+
+    A consumption record starts a new line even after an interrupted write and
+    preserves the unknown-owner age. Only new registrations refresh that age.
+    Consumption callers hold the lock for their entire sweep; ordinary writes
+    acquire it here so a new registration's timestamp cannot be overwritten.
+    """
+
+    if consuming:
+        _append(path, record, consuming=True)
+        return
+    with _state_lock():
+        _append(path, record, consuming=False)
+
+
+def _append(path: Path, record: dict[str, Any], *, consuming: bool) -> None:
+    """Write a line while the caller holds the selected state's lock."""
 
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("a", encoding="utf-8") as handle:
+        previous = os.fstat(handle.fileno()) if consuming else None
+        if consuming:
+            handle.write("\n")
         handle.write(json.dumps(record, sort_keys=True) + "\n")
+        if previous is not None:
+            handle.flush()
+            os.utime(handle.fileno(), ns=(previous.st_atime_ns, previous.st_mtime_ns))
 
 
 def open_session(key: str, harness: str, session: str) -> None:
@@ -617,19 +673,39 @@ ACTIONS = {"pid": stop_pid, "container": stop_container, "path": remove_path}
 def sweep(
     path: Path, *, why: str, sweeper_session: str = "", sweeper_harness: str = ""
 ) -> dict[str, Any]:
-    """Act on every entry, retaining the original manifest for unresolved PIDs.
+    """Act on pending entries, preserving raw history for unresolved PIDs.
 
     A manifest that recorded nothing is logged as exactly that. Recording is
     the one step of this design that depends on an agent remembering to take
     it, so whether it happens has to be visible somewhere, and a session that
     ended having written nothing down is the evidence that it did not. A kept
-    manifest is unchanged, including completed path/container entries; a retry
-    encounters those again rather than rewriting historical ownership fields.
+    manifest retains its original lines. Name-based actions consume their
+    authorization before removal; completed PID actions consume it afterwards.
+    A retry never re-authorizes a removal at an old path or container name.
+    Failure to append consumption prevents the name-based action from running.
+    A stable state lock serializes sweeps, including across manifest deletion,
+    so a concurrent sweep reads the preceding sweep's consumption records.
     """
 
-    header, entries = read_manifest(path)
+    with _state_lock():
+        return _sweep(
+            path,
+            why=why,
+            sweeper_session=sweeper_session,
+            sweeper_harness=sweeper_harness,
+        )
+
+
+def _sweep(
+    path: Path, *, why: str, sweeper_session: str, sweeper_harness: str
+) -> dict[str, Any]:
+    """Apply pending actions while the caller holds the state sweep lock."""
+
+    header, entries = _pending_manifest(path)
     acted: list[dict[str, Any]] = []
-    for entry in entries:
+    for position, entry in entries:
+        if entry.get("kind") != "pid":
+            append(path, {"kind": "consumed", "line": position}, consuming=True)
         action = ACTIONS.get(str(entry.get("kind")))
         result = (
             action(entry)
@@ -649,6 +725,12 @@ def sweep(
             outcome=result["outcome"],
             detail=result["detail"],
         )
+        if entry.get("kind") == "pid" and result["outcome"] in {
+            "gone",
+            "stopped",
+            "killed",
+        }:
+            append(path, {"kind": "consumed", "line": position}, consuming=True)
 
     if not entries:
         log(
@@ -714,11 +796,13 @@ def process_chain() -> list[tuple[int, str]] | None:
     except (OSError, RuntimeError, subprocess.SubprocessError, ValueError):
         return None
 
-    # A missing link cannot establish which Harness owns the calling shell.
+    # A missing link or cycle cannot establish the calling shell's owner.
     chain: list[tuple[int, str]] = []
     seen: set[int] = set()
     pid = os.getpid()
-    while pid > 1 and pid not in seen:
+    while pid > 1:
+        if pid in seen:
+            return None
         seen.add(pid)
         if pid not in parents:
             return None
