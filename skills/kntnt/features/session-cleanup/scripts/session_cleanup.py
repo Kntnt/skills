@@ -369,27 +369,37 @@ def read_manifest(path: Path) -> tuple[dict[str, Any], list[dict[str, Any]]]:
     or some hand edit mistyped. It is skipped rather than raised about: the
     entries around it name real processes, and refusing the whole file over one
     bad line would leave every one of them running.
+    An unreadable file supplies no owner or pending targets to this reader;
+    the sweep separately reports that uncertainty and retains the manifest.
     """
 
-    header, entries = _pending_manifest(path)
+    try:
+        header, entries, _ = _pending_manifest(path)
+    except (OSError, UnicodeDecodeError, ValueError):
+        return {}, []
     return header, [entry for _, entry in entries]
 
 
 def _pending_manifest(
     path: Path,
-) -> tuple[dict[str, Any], list[tuple[int, dict[str, Any]]]]:
+) -> tuple[dict[str, Any], list[tuple[int, dict[str, Any]]], bool]:
     """Keep raw history while identifying unconsumed resource lines by position.
 
     Consumption records refer only to earlier resource lines. An appended new
     registration remains distinct even when its values match an older entry.
+    The final flag remembers resource history even after all entries have been
+    consumed. Read failures propagate; invalid lines with no readable resource
+    history cannot establish an empty count either.
     """
 
     header: dict[str, Any] = {}
     entries: dict[int, dict[str, Any]] = {}
+    recorded = False
+    invalid = False
     try:
         text = path.read_text(encoding="utf-8")
-    except (OSError, UnicodeDecodeError):
-        return header, []
+    except FileNotFoundError:
+        return header, [], recorded
 
     for position, line in enumerate(text.splitlines()):
         if not line.strip():
@@ -397,18 +407,23 @@ def _pending_manifest(
         try:
             loaded = json.loads(line)
         except ValueError:
+            invalid = True
             continue
         if not isinstance(loaded, dict):
+            invalid = True
             continue
         if loaded.get("kind") == "session":
             header = loaded
         elif loaded.get("kind") in KINDS:
+            recorded = True
             entries[position] = loaded
         elif loaded.get("kind") == "consumed":
             reference = loaded.get("line")
             if type(reference) is int:
                 entries.pop(reference, None)
-    return header, list(entries.items())
+    if invalid and not recorded:
+        raise ValueError("manifest history is unreadable; no resource count is known")
+    return header, list(entries.items()), recorded
 
 
 @contextmanager
@@ -685,6 +700,9 @@ def sweep(
     Failure to append consumption prevents the name-based action from running.
     A stable state lock serializes sweeps, including across manifest deletion,
     so a concurrent sweep reads the preceding sweep's consumption records.
+    Retiring fully consumed history emits no empty audit or repeated action.
+    Unreadable history is kept and reported with an unknown entry count, not
+    as a manifest that recorded nothing.
     """
 
     with _state_lock():
@@ -699,9 +717,21 @@ def sweep(
 def _sweep(
     path: Path, *, why: str, sweeper_session: str, sweeper_harness: str
 ) -> dict[str, Any]:
-    """Apply pending actions while the caller holds the state sweep lock."""
+    """Apply pending actions under the lock, retaining unreadable history."""
 
-    header, entries = _pending_manifest(path)
+    # An unreadable history establishes neither an empty audit nor retirement.
+    try:
+        header, entries, recorded = _pending_manifest(path)
+    except (OSError, UnicodeDecodeError, ValueError) as exc:
+        log(
+            "manifest-kept",
+            why=why,
+            sweeper_session=sweeper_session,
+            sweeper_harness=sweeper_harness,
+            session=path.stem,
+            detail=str(exc),
+        )
+        return {"session": path.stem, "entries": None, "acted": []}
     acted: list[dict[str, Any]] = []
     for position, entry in entries:
         if entry.get("kind") != "pid":
@@ -732,7 +762,7 @@ def _sweep(
         }:
             append(path, {"kind": "consumed", "line": position}, consuming=True)
 
-    if not entries:
+    if not recorded:
         log(
             "recorded-nothing",
             why=why,
