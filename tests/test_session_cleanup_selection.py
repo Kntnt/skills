@@ -12,7 +12,7 @@ from typing import Any
 
 import pytest
 
-SCRIPT = (
+SCRIPT: Path = (
     Path(__file__).resolve().parents[1]
     / "skills/kntnt/features/session-cleanup/scripts/session_cleanup.py"
 )
