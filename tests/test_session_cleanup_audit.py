@@ -206,3 +206,40 @@ def test_unreadable_history_is_retained_without_an_invented_empty_audit(
         assert recovered["swept"][0]["acted"][0]["outcome"] == "removed"
         assert len(calls) == 1
         assert not path.exists()
+
+
+@pytest.mark.parametrize("moment", ["SessionEnd", "SessionStart"])
+def test_a_missing_read_cannot_deny_the_selected_manifest_history(
+    cleanup: Any, monkeypatch: pytest.MonkeyPatch, moment: str
+) -> None:
+    """A failed selected-file read is uncertainty even when it reports absence."""
+
+    cleanup.open_session("unobserved", "codex", "unobserved")
+    path = cleanup.manifest_path("unobserved")
+    cleanup.append(path, {"kind": "container", "id": "intercepted", "why": "owned"})
+    original = path.read_bytes()
+    os.utime(path, (1, 1))
+    original_read = Path.read_text
+
+    def vanished_read(named: Path, *args: Any, **kwargs: Any) -> str:
+        """Fail the selected observation without authorizing real resource work."""
+
+        if named == path:
+            raise FileNotFoundError("controlled selected manifest read absence")
+        return original_read(named, *args, **kwargs)
+
+    monkeypatch.setattr(Path, "read_text", vanished_read)
+    session = "sweeper" if moment == "SessionStart" else "unobserved"
+
+    answer = cleanup.hook("codex", moment, {"session_id": session})
+
+    assert path.exists(), "a failed absence read cannot retire resource history"
+    assert path.read_bytes() == original
+    assert path.stat().st_mtime_ns == 1_000_000_000
+    assert answer["swept"] == [{"session": "unobserved", "entries": None, "acted": []}]
+    rows = [json.loads(line) for line in cleanup.log_path().read_text().splitlines()]
+    assert not any(row["event"] == "recorded-nothing" for row in rows)
+    assert any(
+        row["event"] == "manifest-kept" and row["session"] == "unobserved"
+        for row in rows
+    )

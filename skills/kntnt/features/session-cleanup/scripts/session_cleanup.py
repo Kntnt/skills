@@ -396,10 +396,7 @@ def _pending_manifest(
     entries: dict[int, dict[str, Any]] = {}
     recorded = False
     invalid = False
-    try:
-        text = path.read_text(encoding="utf-8")
-    except FileNotFoundError:
-        return header, [], recorded
+    text = path.read_text(encoding="utf-8")
 
     for position, line in enumerate(text.splitlines()):
         if not line.strip():
