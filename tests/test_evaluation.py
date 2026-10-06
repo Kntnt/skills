@@ -1175,7 +1175,7 @@ def test_the_staging_example_lays_out_the_install_the_shim_reads(
         f" `<rev>` and `<install>`, so they cannot be run as written."
     )
 
-    # Run the exact archive commands on a committed layout fixture, not a native campaign.
+    # Run the archive commands on a committed fixture, with no native run.
     source = archive_source(tmp_path / "source", tuple(EDITORIAL_SKILLS))
     install = tmp_path / "install"
     install.mkdir()

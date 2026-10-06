@@ -89,7 +89,7 @@
         }
       ],
       "unresolved_conditions": [
-        "Whole candidate review and owner release confirmation pending."
+        "Owner publication confirmation remains required by Release step 5."
       ],
       "co_delivery_groups": [],
       "maintainer_delivery_records": []
@@ -195,7 +195,7 @@
         }
       ],
       "unresolved_conditions": [
-        "Whole candidate review and owner release confirmation pending."
+        "Owner publication confirmation remains required by Release step 5."
       ],
       "co_delivery_groups": [],
       "maintainer_delivery_records": []
@@ -258,7 +258,7 @@
         }
       ],
       "unresolved_conditions": [
-        "Whole candidate review and owner release confirmation pending."
+        "Owner publication confirmation remains required by Release step 5."
       ],
       "co_delivery_groups": [],
       "maintainer_delivery_records": [],
@@ -289,7 +289,7 @@
         }
       ],
       "maintainer_delivery_evidence_scope": "These maintainer-authored integrated source changes establish the product delivery history; #328 establishes only invocation recovery. Current behavior and exact source still require whole-candidate verification, independent review and the owner release confirmation.",
-      "current_approval": "Pending final independent whole-candidate re-review. Owner publication confirmation remains required."
+      "current_approval": "Current technical Spec acceptance established by independent whole-candidate review after delivery-history/source/test/transport binding. Final gate, follow-up and integration identities are recorded in the release evidence receipt; owner publication confirmation remains required."
     },
     {
       "name": "commit",
@@ -376,7 +376,7 @@
         }
       ],
       "unresolved_conditions": [
-        "Whole candidate review and owner release confirmation pending."
+        "Owner publication confirmation remains required by Release step 5."
       ],
       "co_delivery_groups": [],
       "maintainer_delivery_records": []
@@ -481,7 +481,7 @@
         }
       ],
       "unresolved_conditions": [
-        "Whole candidate review and owner release confirmation pending."
+        "Owner publication confirmation remains required by Release step 5."
       ],
       "co_delivery_groups": [],
       "maintainer_delivery_records": []
@@ -564,7 +564,7 @@
         }
       ],
       "unresolved_conditions": [
-        "Whole candidate review and owner release confirmation pending."
+        "Owner publication confirmation remains required by Release step 5."
       ],
       "co_delivery_groups": [],
       "maintainer_delivery_records": []
@@ -634,7 +634,7 @@
         }
       ],
       "unresolved_conditions": [
-        "Whole candidate review and owner release confirmation pending."
+        "Owner publication confirmation remains required by Release step 5."
       ],
       "co_delivery_groups": [],
       "maintainer_delivery_records": []
@@ -717,7 +717,7 @@
         }
       ],
       "unresolved_conditions": [
-        "Whole candidate review and owner release confirmation pending."
+        "Owner publication confirmation remains required by Release step 5."
       ],
       "co_delivery_groups": [],
       "maintainer_delivery_records": []
@@ -754,7 +754,9 @@
         "manager",
         "invocation-envelope",
         "text-delivery",
-        "editorial-resources"
+        "editorial-resources",
+        "language-resolver",
+        "language-resources"
       ],
       "disposition": "held",
       "reason": "Current rejected about-page preparation is unresolved in #511/#517; no approved replacement. Prior #471 approval is preserved, but no exact older approved compatible chain is selected.",
@@ -1027,7 +1029,8 @@
         "text-delivery",
         "editorial-resources",
         "language-resolver",
-        "language-resources"
+        "language-resources",
+        "article-anatomy"
       ],
       "disposition": "held",
       "reason": "Current source comparison and draft defects remain open in #500\u2013#503; #485 approves only a cleanup correction, not this cooperating chain.",
@@ -1130,7 +1133,7 @@
         }
       ],
       "unresolved_conditions": [
-        "Whole candidate review and owner release confirmation pending."
+        "Owner publication confirmation remains required by Release step 5."
       ],
       "co_delivery_groups": [],
       "maintainer_delivery_records": []
@@ -1223,7 +1226,7 @@
         }
       ],
       "unresolved_conditions": [
-        "Whole candidate review and owner release confirmation pending."
+        "Owner publication confirmation remains required by Release step 5."
       ],
       "co_delivery_groups": [],
       "maintainer_delivery_records": []
@@ -1327,7 +1330,7 @@
         }
       ],
       "unresolved_conditions": [
-        "Whole candidate review and owner release confirmation pending."
+        "Owner publication confirmation remains required by Release step 5."
       ],
       "co_delivery_groups": [],
       "maintainer_delivery_records": [
@@ -1419,7 +1422,7 @@
         }
       ],
       "unresolved_conditions": [
-        "Whole candidate review and owner release confirmation pending."
+        "Owner publication confirmation remains required by Release step 5."
       ],
       "co_delivery_groups": [],
       "maintainer_delivery_records": []
@@ -1610,7 +1613,7 @@
         }
       ],
       "unresolved_conditions": [
-        "Whole candidate review and owner release confirmation pending."
+        "Owner publication confirmation remains required by Release step 5."
       ],
       "co_delivery_groups": [],
       "maintainer_delivery_records": []
@@ -1739,7 +1742,7 @@
         }
       ],
       "unresolved_conditions": [
-        "Whole candidate review and owner release confirmation pending."
+        "Owner publication confirmation remains required by Release step 5."
       ],
       "co_delivery_groups": [],
       "maintainer_delivery_records": [
@@ -1830,7 +1833,7 @@
         }
       ],
       "unresolved_conditions": [
-        "Whole candidate review and owner release confirmation pending."
+        "Owner publication confirmation remains required by Release step 5."
       ],
       "co_delivery_groups": [],
       "maintainer_delivery_records": [],
@@ -1975,7 +1978,7 @@
         }
       ],
       "maintainer_delivery_evidence_scope": "These maintainer-authored integrated source changes establish the product delivery history; #328 establishes only invocation recovery. Current behavior and exact source still require whole-candidate verification, independent review and the owner release confirmation.",
-      "current_approval": "Pending final independent whole-candidate re-review. Owner publication confirmation remains required."
+      "current_approval": "Current technical Spec acceptance established by independent whole-candidate review after delivery-history/source/test/transport binding. Final gate, follow-up and integration identities are recorded in the release evidence receipt; owner publication confirmation remains required."
     },
     {
       "name": "session-cleanup",
@@ -2032,7 +2035,7 @@
         }
       ],
       "unresolved_conditions": [
-        "Whole candidate review and owner release confirmation pending."
+        "Owner publication confirmation remains required by Release step 5."
       ],
       "co_delivery_groups": [
         "manager-bundle"
@@ -2095,7 +2098,7 @@
         }
       ],
       "unresolved_conditions": [
-        "Whole candidate review and owner release confirmation pending."
+        "Owner publication confirmation remains required by Release step 5."
       ],
       "co_delivery_groups": [
         "manager-bundle"
@@ -2335,7 +2338,7 @@
         }
       ],
       "unresolved_conditions": [
-        "Whole candidate review and owner release confirmation pending."
+        "Owner publication confirmation remains required by Release step 5."
       ],
       "co_delivery_groups": [
         "manager-bundle"
@@ -2558,7 +2561,7 @@
         }
       ],
       "unresolved_conditions": [
-        "Whole candidate review and owner release confirmation pending."
+        "Owner publication confirmation remains required by Release step 5."
       ],
       "co_delivery_groups": [
         "manager-bundle"
@@ -2607,7 +2610,7 @@
         }
       ],
       "unresolved_conditions": [
-        "Whole candidate review and owner release confirmation pending."
+        "Owner publication confirmation remains required by Release step 5."
       ],
       "co_delivery_groups": [
         "manager-bundle"
@@ -2657,7 +2660,7 @@
         }
       ],
       "unresolved_conditions": [
-        "Whole candidate review and owner release confirmation pending."
+        "Owner publication confirmation remains required by Release step 5."
       ],
       "co_delivery_groups": [
         "manager-bundle"
@@ -2702,7 +2705,7 @@
         }
       ],
       "unresolved_conditions": [
-        "Whole candidate review and owner release confirmation pending."
+        "Owner publication confirmation remains required by Release step 5."
       ],
       "co_delivery_groups": [
         "manager-bundle"
@@ -2751,7 +2754,7 @@
         }
       ],
       "unresolved_conditions": [
-        "Whole candidate review and owner release confirmation pending."
+        "Owner publication confirmation remains required by Release step 5."
       ],
       "co_delivery_groups": [
         "manager-bundle"
@@ -2797,7 +2800,7 @@
         }
       ],
       "unresolved_conditions": [
-        "Whole candidate review and owner release confirmation pending."
+        "Owner publication confirmation remains required by Release step 5."
       ],
       "co_delivery_groups": [
         "manager-bundle"
@@ -2827,12 +2830,13 @@
       ],
       "approval_records": [],
       "unresolved_conditions": [
-        "Whole candidate review and owner release confirmation pending."
+        "Owner publication confirmation remains required by Release step 5."
       ],
       "co_delivery_groups": [
         "manager-bundle"
       ],
       "maintainer_delivery_records": []
     }
-  ]
+  ],
+  "verification_receipt": "/Users/thomas/.kntnt/selective-release-20261006/acceptance.json"
 }
