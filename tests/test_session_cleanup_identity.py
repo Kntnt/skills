@@ -17,18 +17,18 @@ from typing import Any
 
 import pytest
 
-ROOT = Path(__file__).resolve().parents[1]
-SCRIPT = Path(
+ROOT: Path = Path(__file__).resolve().parents[1]
+SCRIPT: Path = Path(
     os.environ.get(
         "KNTNT_SESSION_CLEANUP_SUBJECT_SCRIPT",
         str(ROOT / "skills/kntnt/features/session-cleanup/scripts/session_cleanup.py"),
     )
 )
-PID = 98765432
-BIRTH = "Sun Oct  4 12:00:00 2026"
+PID: int = 98765432
+BIRTH: str = "Sun Oct  4 12:00:00 2026"
 
 # Preserve actual ps responses at the OS boundary while running the public CLI.
-PROBE_DRIVER = """
+PROBE_DRIVER: str = """
 import json, runpy, subprocess, sys, time
 from pathlib import Path
 destination = Path(sys.argv.pop())
@@ -465,6 +465,32 @@ sys.stdin.read()
             )
             assert registered_identity == identity
 
+            # Authenticate the child's parent independently before release.
+            ancestry_before = subprocess.run(
+                ["ps", "-axo", "pid=,ppid=,comm="],
+                cwd=tmp_path,
+                capture_output=True,
+                text=True,
+                check=True,
+            )
+            (folder / "ancestry-before.stdout").write_text(ancestry_before.stdout)
+            parents = {
+                int(fields[0]): int(fields[1])
+                for line in ancestry_before.stdout.splitlines()
+                if len(fields := line.split(maxsplit=2)) == 3
+            }
+            assert parents[child.pid] == os.getpid()
+            (folder / "ownership-before.json").write_text(
+                json.dumps(
+                    {
+                        "at": time.time(),
+                        "child": child.pid,
+                        "parent": os.getpid(),
+                        "observed_parent": parents[child.pid],
+                    }
+                )
+            )
+
             # Readiness has a separate generous bound.
             assert child.stdout is not None and child.stdin is not None
             with selectors.DefaultSelector() as selector:
@@ -474,6 +500,9 @@ sys.stdin.read()
             assert child.stdout.readline().strip() == "READY"
             (folder / "readiness.json").write_text(json.dumps({"ready": ready}))
             assert not fresh.exists()
+            (folder / "public-release.json").write_text(
+                json.dumps({"at": time.time(), "child": child.pid})
+            )
             child.stdin.write("record\n")
             child.stdin.flush()
             with selectors.DefaultSelector() as selector:
