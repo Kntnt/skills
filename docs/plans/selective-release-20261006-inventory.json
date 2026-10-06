@@ -261,7 +261,35 @@
         "Whole candidate review and owner release confirmation pending."
       ],
       "co_delivery_groups": [],
-      "maintainer_delivery_records": []
+      "maintainer_delivery_records": [],
+      "maintainer_delivery_history": [
+        {
+          "commit": "c9c03eb1cc1fa79993670ac1cc0716d14f399d7e",
+          "author": "Thomas Barregren",
+          "date": "2026-09-11T18:51:13+02:00",
+          "subject": "Replace /tldr and /brief with /explain on the shim form"
+        },
+        {
+          "commit": "6a03fd5d4d7e75e129c96a427858f95af84d774d",
+          "author": "Thomas Barregren",
+          "date": "2026-09-11T19:21:01+02:00",
+          "subject": "Give /explain two steps and one reader, and the terms and sentences it writes with"
+        },
+        {
+          "commit": "2d5c944c642aac55ca0ae755c69602a5d2e883b2",
+          "author": "Thomas Barregren",
+          "date": "2026-09-19T14:22:04+02:00",
+          "subject": "Release 0.31.2: concise explanations, symbolic-link instruction bridges"
+        },
+        {
+          "commit": "e5d0ff630678830470632c5ed8afc3e708423811",
+          "author": "Thomas Barregren",
+          "date": "2026-09-20T09:04:22+02:00",
+          "subject": "Resume caller-owned invocation errors (ADR-0198, #328)"
+        }
+      ],
+      "maintainer_delivery_evidence_scope": "These maintainer-authored integrated source changes establish the product delivery history; #328 establishes only invocation recovery. Current behavior and exact source still require whole-candidate verification, independent review and the owner release confirmation.",
+      "current_approval": "Pending final independent whole-candidate re-review. Owner publication confirmation remains required."
     },
     {
       "name": "commit",
@@ -724,7 +752,9 @@
       },
       "support_dependencies": [
         "manager",
-        "invocation-envelope"
+        "invocation-envelope",
+        "text-delivery",
+        "editorial-resources"
       ],
       "disposition": "held",
       "reason": "Current rejected about-page preparation is unresolved in #511/#517; no approved replacement. Prior #471 approval is preserved, but no exact older approved compatible chain is selected.",
@@ -747,9 +777,7 @@
       "unresolved_conditions": [
         "Current rejected about-page preparation is unresolved in #511/#517; no approved replacement. Prior #471 approval is preserved, but no exact older approved compatible chain is selected."
       ],
-      "co_delivery_groups": [
-        "editorial-held"
-      ],
+      "co_delivery_groups": [],
       "maintainer_delivery_records": []
     },
     {
@@ -782,7 +810,11 @@
       },
       "support_dependencies": [
         "manager",
-        "invocation-envelope"
+        "invocation-envelope",
+        "text-delivery",
+        "editorial-resources",
+        "language-resolver",
+        "language-resources"
       ],
       "disposition": "held",
       "reason": "Open #506 has an actual mechanical quotation-boundary miss; prospective acceptance is blocked and paused.",
@@ -808,9 +840,7 @@
       "unresolved_conditions": [
         "Open #506 has an actual mechanical quotation-boundary miss; prospective acceptance is blocked and paused."
       ],
-      "co_delivery_groups": [
-        "editorial-held"
-      ],
+      "co_delivery_groups": [],
       "maintainer_delivery_records": []
     },
     {
@@ -855,7 +885,12 @@
       },
       "support_dependencies": [
         "manager",
-        "invocation-envelope"
+        "invocation-envelope",
+        "text-delivery",
+        "editorial-resources",
+        "language-resolver",
+        "language-resources",
+        "article-anatomy"
       ],
       "disposition": "held",
       "reason": "Open #504/#505/#507/#508 plus incomplete current acceptance; mandatory Proofread dependency held.",
@@ -866,10 +901,11 @@
       "unresolved_conditions": [
         "Open #504/#505/#507/#508 plus incomplete current acceptance; mandatory Proofread dependency held."
       ],
-      "co_delivery_groups": [
-        "editorial-held"
-      ],
-      "maintainer_delivery_records": []
+      "co_delivery_groups": [],
+      "maintainer_delivery_records": [],
+      "required_peer_skills": [
+        "proofread"
+      ]
     },
     {
       "name": "unslop",
@@ -905,7 +941,11 @@
       },
       "support_dependencies": [
         "manager",
-        "invocation-envelope"
+        "invocation-envelope",
+        "text-delivery",
+        "editorial-resources",
+        "language-resolver",
+        "language-resources"
       ],
       "disposition": "held",
       "reason": "Current extended correction contract includes a promised later-discovered earlier-round rejection without native verification (protocol); latest shared reply checks were measured on Redline, not a complete standalone current Unslop acceptance. Uncertain readiness is held.",
@@ -941,9 +981,7 @@
       "unresolved_conditions": [
         "Current extended correction contract includes a promised later-discovered earlier-round rejection without native verification (protocol); latest shared reply checks were measured on Redline, not a complete standalone current Unslop acceptance. Uncertain readiness is held."
       ],
-      "co_delivery_groups": [
-        "editorial-held"
-      ],
+      "co_delivery_groups": [],
       "maintainer_delivery_records": []
     },
     {
@@ -985,7 +1023,11 @@
       },
       "support_dependencies": [
         "manager",
-        "invocation-envelope"
+        "invocation-envelope",
+        "text-delivery",
+        "editorial-resources",
+        "language-resolver",
+        "language-resources"
       ],
       "disposition": "held",
       "reason": "Current source comparison and draft defects remain open in #500\u2013#503; #485 approves only a cleanup correction, not this cooperating chain.",
@@ -1006,10 +1048,11 @@
       "unresolved_conditions": [
         "Current source comparison and draft defects remain open in #500\u2013#503; #485 approves only a cleanup correction, not this cooperating chain."
       ],
-      "co_delivery_groups": [
-        "editorial-held"
-      ],
-      "maintainer_delivery_records": []
+      "co_delivery_groups": [],
+      "maintainer_delivery_records": [],
+      "optional_peer_skills": [
+        "redline"
+      ]
     },
     {
       "name": "cloudns",
@@ -1790,7 +1833,149 @@
         "Whole candidate review and owner release confirmation pending."
       ],
       "co_delivery_groups": [],
-      "maintainer_delivery_records": []
+      "maintainer_delivery_records": [],
+      "maintainer_delivery_history": [
+        {
+          "commit": "21b43cad96cf57c52de6cd9379e05c6e8046acac",
+          "author": "Thomas Barregren",
+          "date": "2026-09-13T11:18:02+02:00",
+          "subject": "Add /mirror: save one page with everything it needs, browsable offline"
+        },
+        {
+          "commit": "f4ba1aee931ef10938d0e3528ac77e118ad70f85",
+          "author": "Thomas Barregren",
+          "date": "2026-09-13T11:27:28+02:00",
+          "subject": "Keep every --header on every redirect hop"
+        },
+        {
+          "commit": "a0937d46e9ecddc08c57e574c49681888658e115",
+          "author": "Thomas Barregren",
+          "date": "2026-09-13T11:36:26+02:00",
+          "subject": "Say exit 0 means everything was fetched, not only what is in scope"
+        },
+        {
+          "commit": "cbc5db85c3a0013c9ecd811d716e1217b242085f",
+          "author": "Thomas Barregren",
+          "date": "2026-09-13T12:00:37+02:00",
+          "subject": "Crawl every page under the root in /mirror"
+        },
+        {
+          "commit": "c12d8318368cfc1b779d651db1f6db9c63e12168",
+          "author": "Thomas Barregren",
+          "date": "2026-09-13T12:18:04+02:00",
+          "subject": "Feed the /mirror crawl from sitemaps and feeds"
+        },
+        {
+          "commit": "02710f4bdebeca6cc2367c80e4b2fd859f7b7fc3",
+          "author": "Thomas Barregren",
+          "date": "2026-09-13T12:25:32+02:00",
+          "subject": "Bring /mirror help in line with robots and sitemap discovery"
+        },
+        {
+          "commit": "6ff69aaa8bc4c693cf71bf8c42601e9f61047097",
+          "author": "Thomas Barregren",
+          "date": "2026-09-13T12:36:21+02:00",
+          "subject": "Widen and narrow the /mirror scope with --include and --exclude"
+        },
+        {
+          "commit": "ac4a24b6f96cee526a14e0ae7f5dc1a092288528",
+          "author": "Thomas Barregren",
+          "date": "2026-09-13T12:43:56+02:00",
+          "subject": "Bring /mirror's scope wording in line with --include and --exclude"
+        },
+        {
+          "commit": "b123baf4d66dd09b0f84d8b42e2a77d939f0a346",
+          "author": "Thomas Barregren",
+          "date": "2026-09-13T12:48:15+02:00",
+          "subject": "Bring /mirror's --exclude entry and module docstring in line with its scope rules"
+        },
+        {
+          "commit": "bc2d54807415e8f7bde83ff7d9666f819d251a1c",
+          "author": "Thomas Barregren",
+          "date": "2026-09-13T12:51:59+02:00",
+          "subject": "Name the start page's redirects as the exception to /mirror's exclude rules"
+        },
+        {
+          "commit": "246ab1aaa5bef36b1bdf5fe727334e2e95cdaa2e",
+          "author": "Thomas Barregren",
+          "date": "2026-09-13T12:55:56+02:00",
+          "subject": "Name the start page's redirects as the exception in /mirror's SKILL.md exclude rule"
+        },
+        {
+          "commit": "d8d281cab4f9b6ac683d088d11c61b955d1733f0",
+          "author": "Thomas Barregren",
+          "date": "2026-09-13T13:09:08+02:00",
+          "subject": "Make a second /mirror run fetch only what is missing or changed"
+        },
+        {
+          "commit": "6dc446520f4e8126d3c2a4422752d7966c34c7bf",
+          "author": "Thomas Barregren",
+          "date": "2026-09-13T13:24:49+02:00",
+          "subject": "Make /mirror climb to a Chrome identity on a host that blocks it"
+        },
+        {
+          "commit": "dd149946c5385907f2bb90819a0d6124a415b488",
+          "author": "Thomas Barregren",
+          "date": "2026-09-13T13:32:46+02:00",
+          "subject": "Match /mirror's block markers on every answer, failed and redirecting alike"
+        },
+        {
+          "commit": "1393cd134d3775ea8bffc5ddce8a2c159e11b9e0",
+          "author": "Thomas Barregren",
+          "date": "2026-09-13T14:03:16+02:00",
+          "subject": "Give /mirror a headless and a visible browser for what HTTP cannot fetch"
+        },
+        {
+          "commit": "f9de8e5a604ac905e1980278c191198dbc3832c0",
+          "author": "Thomas Barregren",
+          "date": "2026-09-13T14:12:06+02:00",
+          "subject": "Bring /mirror's docs and report up to the browser rungs"
+        },
+        {
+          "commit": "f037fdd3042ab74ba202d6b9cb0ddf1380c0937b",
+          "author": "Thomas Barregren",
+          "date": "2026-09-13T14:18:17+02:00",
+          "subject": "Limit /mirror's never-requested promise to plain HTTP"
+        },
+        {
+          "commit": "58c30c6b79c18133669b44d6894e02dd89a7dfd4",
+          "author": "Thomas Barregren",
+          "date": "2026-09-13T14:23:24+02:00",
+          "subject": "Say what the browser rungs request and save in /mirror's remaining sentences"
+        },
+        {
+          "commit": "6d87b2aa2d44589dbfdc08ad0922cbb0ab63a999",
+          "author": "Thomas Barregren",
+          "date": "2026-09-13T14:28:26+02:00",
+          "subject": "Say /mirror's exit 2 covers any host that needs the browser"
+        },
+        {
+          "commit": "81949fed382c39e2592dd2f050dcbf15ffccdd65",
+          "author": "Thomas Barregren",
+          "date": "2026-09-13T16:13:31+02:00",
+          "subject": "Release 0.29.0: /mirror copies a site for offline browsing, crawling links, sitemaps and feeds, rerunning incrementally, obeying robots.txt and nofollow, and climbing to a browser when blocked"
+        },
+        {
+          "commit": "b8f8146a2a99a6d51529c405fc7e7e37b97548b1",
+          "author": "Thomas Barregren",
+          "date": "2026-09-13T19:25:05+02:00",
+          "subject": "Release 0.29.1: render executable JavaScript automatically, improve browser snapshot fidelity, harden offline resources and paths"
+        },
+        {
+          "commit": "49fb8fa08d8646f445f32cc297a98354f0712018",
+          "author": "Thomas Barregren",
+          "date": "2026-09-18T19:20:27+02:00",
+          "subject": "Make argument hints state exactly the forms each Skill accepts"
+        },
+        {
+          "commit": "e5d0ff630678830470632c5ed8afc3e708423811",
+          "author": "Thomas Barregren",
+          "date": "2026-09-20T09:04:22+02:00",
+          "subject": "Resume caller-owned invocation errors (ADR-0198, #328)"
+        }
+      ],
+      "maintainer_delivery_evidence_scope": "These maintainer-authored integrated source changes establish the product delivery history; #328 establishes only invocation recovery. Current behavior and exact source still require whole-candidate verification, independent review and the owner release confirmation.",
+      "current_approval": "Pending final independent whole-candidate re-review. Owner publication confirmation remains required."
     },
     {
       "name": "session-cleanup",
@@ -2239,9 +2424,7 @@
       "unresolved_conditions": [
         "No eligible consumer; co-delivery support for the held Editorial contracts."
       ],
-      "co_delivery_groups": [
-        "editorial-held"
-      ],
+      "co_delivery_groups": [],
       "maintainer_delivery_records": []
     },
     {
@@ -2268,9 +2451,7 @@
       "unresolved_conditions": [
         "Scoped editorial support has no eligible consumer."
       ],
-      "co_delivery_groups": [
-        "editorial-held"
-      ],
+      "co_delivery_groups": [],
       "maintainer_delivery_records": []
     },
     {
@@ -2291,10 +2472,11 @@
       "unresolved_conditions": [
         "Editorial counted structure and heading support has no eligible consumer."
       ],
-      "co_delivery_groups": [
-        "editorial-held"
-      ],
-      "maintainer_delivery_records": []
+      "co_delivery_groups": [],
+      "maintainer_delivery_records": [],
+      "support_dependencies": [
+        "editorial-resources"
+      ]
     },
     {
       "name": "language-resolver",
@@ -2314,10 +2496,11 @@
       "unresolved_conditions": [
         "Scoped editorial resolver has no eligible consumer."
       ],
-      "co_delivery_groups": [
-        "editorial-held"
-      ],
-      "maintainer_delivery_records": []
+      "co_delivery_groups": [],
+      "maintainer_delivery_records": [],
+      "support_dependencies": [
+        "language-resources"
+      ]
     },
     {
       "name": "text-delivery",
@@ -2337,9 +2520,7 @@
       "unresolved_conditions": [
         "Co-delivery Text Artifact contract has no eligible consumer."
       ],
-      "co_delivery_groups": [
-        "editorial-held"
-      ],
+      "co_delivery_groups": [],
       "maintainer_delivery_records": []
     },
     {

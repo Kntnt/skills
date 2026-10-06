@@ -7,6 +7,7 @@ import subprocess
 from pathlib import Path
 
 from support.editorial import ordinary_technique, ordinary_technique_section
+from support.staging import archive_source
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 EVALUATION = REPO_ROOT / "docs" / "evaluation"
@@ -1152,7 +1153,7 @@ def test_the_protocol_states_how_an_evaluation_is_staged() -> None:
 def test_the_staging_example_lays_out_the_install_the_shim_reads(
     tmp_path: Path,
 ) -> None:
-    """The protocol's staging commands, run as written, stage a usable install.
+    """The protocol's staging commands, run as written, preserve the install layout.
 
     Each Skill's shim looks for the Manager in a `kntnt/` directory beside the
     Skill's own, so an install holds the editorial Skills and `kntnt/` side by
@@ -1174,13 +1175,12 @@ def test_the_staging_example_lays_out_the_install_the_shim_reads(
         f" `<rev>` and `<install>`, so they cannot be run as written."
     )
 
-    # Run them against the commit checked out, into an empty install.
+    # Run the exact archive commands on a committed layout fixture, not a native campaign.
+    source = archive_source(tmp_path / "source", tuple(EDITORIAL_SKILLS))
     install = tmp_path / "install"
     install.mkdir()
     script = blocks[0].replace("<rev>", "HEAD").replace("<install>", str(install))
-    subprocess.run(
-        ["bash", "-euo", "pipefail", "-c", script], cwd=REPO_ROOT, check=True
-    )
+    subprocess.run(["bash", "-euo", "pipefail", "-c", script], cwd=source, check=True)
 
     # Require each Skill and the Manager side by side, and nothing spilled.
     for skill in EDITORIAL_SKILLS:

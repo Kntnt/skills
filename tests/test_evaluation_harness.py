@@ -13,6 +13,9 @@ import time
 from pathlib import Path
 from typing import Any
 
+import pytest
+from support.staging import archive_source
+
 REPO_ROOT: Path = Path(__file__).resolve().parent.parent
 HARNESS: Path = REPO_ROOT / "docs" / "evaluation" / "editorial-388" / "harness"
 
@@ -261,8 +264,15 @@ def test_every_turn_after_the_first_resumes_the_same_session(tmp_path: Path) -> 
     assert first[4:] == later[4:]
 
 
-def test_a_further_skill_is_installed_beside_the_manager(tmp_path: Path) -> None:
-    staged_run.stage(tmp_path, "HEAD", staged_run.staged_skills(["brief"]))
+def test_a_further_skill_is_installed_beside_the_manager(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    skills = staged_run.staged_skills(["brief"])
+    source = archive_source(
+        tmp_path / "source", tuple(name for name in skills if name != "kntnt")
+    )
+    monkeypatch.setattr(staged_run, "REPOSITORY", source)
+    staged_run.stage(tmp_path, "HEAD", skills)
 
     installed = tmp_path / "home" / ".claude" / "skills"
     assert (installed / "brief" / "SKILL.md").is_file()

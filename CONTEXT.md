@@ -31,7 +31,7 @@ A Catalog entry that owns Harness Integrations and nothing else (ADR-0173). No H
 _Avoid_: setup, integration skill, plugin, add-on, hook
 
 **Language Resource**:
-The single installed source for one language or locale's editorial guidance. It carries the canonical language code, a bounded set of selector aliases, and separate scopes for composing, reviewing, catching machine-sounding prose, and correcting mechanics; a scope is named for the guidance it holds rather than for the Skill that reads it, and a locale variant may inherit the scopes of its base language. What may be written into one is stated in `skills/kntnt/library/references/languages/README.md`.
+The single installed source for one language or locale's editorial guidance. It carries the canonical language code, a bounded set of selector aliases, and separate scopes for composing, reviewing, catching machine-sounding prose, and correcting mechanics; a scope is named for the guidance it holds rather than for the Skill that reads it, and a locale variant may inherit the scopes of its base language. Language Resources are held outside the current delivery; their format contract is preserved on `preserve/selective-release-20261006` at `skills/kntnt/library/references/languages/README.md`.
 _Avoid_: language pack, translation, alias registry
 
 **Source Fidelity**:
