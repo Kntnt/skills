@@ -4,6 +4,8 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ## [Unreleased]
 
+## [0.40.0] – 2026-10-06
+
 ### Removed
 
 - Editorial Skills (`brief`, `write`, `redline`, `proofread`, `unslop`) and their bundled Library resources are held outside the deliverable tree pending complete current acceptance. The full previous tree is preserved on `preserve/selective-release-20261006`. Update removes their marked installed copies as Withdrawn in its targeted layer.
