@@ -88,6 +88,9 @@ CONTAINER_ID = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$")
 
 KINDS = ("pid", "container", "path")
 
+# Only successful PID outcomes retire their recorded cleanup obligation.
+RESOLVED_PID_OUTCOMES: frozenset[str] = frozenset({"gone", "stopped", "killed"})
+
 
 class RecordingError(RuntimeError):
     """A manifest line this feature refuses to write."""
@@ -541,17 +544,26 @@ def stop_pid(entry: dict[str, Any]) -> dict[str, Any]:
             "outcome": "refused",
             "detail": "the recorded start identity is missing",
         }
-    current = started_at(pid)
-    if not current:
-        return {
-            "outcome": "refused",
-            "detail": "the current start identity is unreadable",
-        }
-    if current != recorded:
-        return {
-            "outcome": "reused",
-            "detail": "the process id now names something else and was left alone",
-        }
+
+    def birth_failure() -> dict[str, Any] | None:
+        """Validate the same recorded birth at preflight and signal boundaries."""
+
+        current = started_at(pid)
+        if not current:
+            return {
+                "outcome": "refused",
+                "detail": "the current start identity is unreadable",
+            }
+        if current != recorded:
+            return {
+                "outcome": "reused",
+                "detail": "the process id now names something else and was left alone",
+            }
+        return None
+
+    failure = birth_failure()
+    if failure is not None:
+        return failure
 
     target, scope = pid, "process"
     try:
@@ -574,17 +586,9 @@ def stop_pid(entry: dict[str, Any]) -> dict[str, Any]:
                 "outcome": "refused",
                 "detail": "the current process group is unreadable",
             }
-        current = started_at(pid)
-        if not current:
-            return {
-                "outcome": "refused",
-                "detail": "the current start identity is unreadable",
-            }
-        if current != recorded:
-            return {
-                "outcome": "reused",
-                "detail": "the process id now names something else and was left alone",
-            }
+        failure = birth_failure()
+        if failure is not None:
+            return failure
         if current_group != group:
             return {
                 "outcome": "refused",
@@ -772,11 +776,7 @@ def _sweep(
             outcome=result["outcome"],
             detail=result["detail"],
         )
-        if entry.get("kind") == "pid" and result["outcome"] in {
-            "gone",
-            "stopped",
-            "killed",
-        }:
+        if entry.get("kind") == "pid" and result["outcome"] in RESOLVED_PID_OUTCOMES:
             append(path, {"kind": "consumed", "line": position}, consuming=True)
 
     if not recorded:
@@ -791,8 +791,7 @@ def _sweep(
 
     # Keep original ownership and historical birth fields intact on refusal.
     unresolved = any(
-        result["kind"] == "pid"
-        and result["outcome"] not in {"gone", "stopped", "killed"}
+        result["kind"] == "pid" and result["outcome"] not in RESOLVED_PID_OUTCOMES
         for result in acted
     )
     if unresolved:
