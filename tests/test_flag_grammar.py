@@ -514,10 +514,14 @@ def test_the_valued_set_is_derived_from_the_collections_own_declarations() -> No
     assert documented and declared
     assert VALUED_FLAGS == documented | declared
 
-    # Each source carries flags the other does not, which is why the set is the
-    # union of both rather than either one alone.
-    assert documented - declared
-    assert declared - documented
+
+def test_valued_flags_include_page_only_and_engine_only_declarations() -> None:
+    """Neither declaration surface can silently fall out of the registry."""
+
+    page = "\n## OPTIONS\n\n**--destination=**_PATH_\n"
+    engine = 'parser.add_argument("--source")\nparser.add_argument("--yes", action="store_true")'
+
+    assert derived_valued_flags([page], [engine]) == {"--destination", "--source"}
 
     # A flag declared to take no value is under no part of this rule.
     assert VALUED_FLAGS.isdisjoint(

@@ -1,4 +1,6 @@
-"""Two limits on what a review of web copy may report.
+"""Historical contract provenance for two limits on a review of web copy.
+
+These assertions read the frozen held source; they do not qualify runtime delivery.
 
 On `web-copy-clean`, in about six runs of ten across #397, #398 and #402,
 Redline reported the page's form as missing and asked for a link or a location,
@@ -20,7 +22,7 @@ from __future__ import annotations
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
-EDITORIAL = REPO_ROOT / "skills" / "kntnt" / "library" / "references" / "editorial"
+EDITORIAL = REPO_ROOT / "docs" / "evaluation" / "held-source-28330ae1" / "editorial"
 WEBCOPY_REVIEW = EDITORIAL / "genres" / "webcopy.review.md"
 BASE_REVIEW = EDITORIAL / "base.review.md"
 

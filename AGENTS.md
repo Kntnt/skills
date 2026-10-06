@@ -20,6 +20,8 @@ Precedence over any conflicting skill, README, or other doc unless the user over
 
 ## References
 
+- `docs/plans/selective-release-20261006.md` — read when preparing a release, changing delivery scope, or locating held Editorial source
+
 - `docs/plans/engineering-workflow.md` — read when planning, continuing, or reporting progress on the independent engineering workflow and the use of rework source material
 - `docs/agents/frame-handoff.md` — read when preparing or implementing the first Frame delivery on main
 - `CONTEXT.md` — read when using a Collection term
@@ -34,7 +36,5 @@ Precedence over any conflicting skill, README, or other doc unless the user over
 - `docs/rules/docs.md` — read when deciding where a rule or a document belongs, writing a decision record, authoring a document an agent loads, adding a pointer to this list, or changing what is already written down here
 - `docs/evaluation/protocol.md` — read when writing an evaluation ticket, or when staging, running, judging, recording or verifying an evaluation of an editorial Skill
 - `docs/evaluation/regressions/README.md` — read when running or verifying a focused behavioural regression
-- `skills/kntnt/library/references/languages/README.md` — read when adding or changing a Language Resource
-- `skills/kntnt/library/references/editorial/README.md` — read when adding or changing the editorial base contract, a genre, a technique, the anti-slop catalogue, or the shared mechanics contract
 - `docs/agents/user-configuration.md` — read when adding or changing user-owned configuration for a Skill
 - `CONTRIBUTING.md` — read when running tests or opening a PR

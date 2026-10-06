@@ -3,17 +3,13 @@
 [![License](https://img.shields.io/github/license/Kntnt/skills)](LICENSE)
 [![Latest release](https://img.shields.io/github/v/release/Kntnt/skills)](https://github.com/Kntnt/skills/releases/latest)
 
-You are in the right place if you want practical [agent skills](https://agentskills.io) for maintaining agent instructions, delegating work, shipping code, preparing tickets, editing prose, choosing AI models, organizing accounting PDFs, and saving web pages for offline reading.
+You are in the right place if you want practical [agent skills](https://agentskills.io) for maintaining agent instructions, delegating work, shipping code, preparing tickets, choosing AI models, organizing accounting PDFs, and saving web pages for offline reading.
 
 The collection works across Claude Code, Codex, OpenCode, and other harnesses. Its `kntnt` manager installs the skills you choose into every detected harness, while keeping machine-wide skills separate from project-specific ones.
 
 ## Quick start
 
 Make sure you have the prerequisites in place: [uv](https://docs.astral.sh/uv/), [npx](https://docs.npmjs.com/cli/v8/commands/npx), and network access.
-
-```sh
-TODO
-```
 
 Install Kntnt Skills:
 
@@ -28,6 +24,12 @@ Open the catalog of available skills:
 ```
 
 Choose the skills you want in plain text. You can ask to read any skill's help before confirming the list.
+
+## Current delivery scope
+
+The current collection includes the engineering, agent, model, infrastructure, accounting and offline web tools below, plus the two Features. Editorial development is held: `brief`, `write`, `redline`, `proofread`, `unslop` and their editorial Library resources are absent from this delivery.
+
+A reachable `/kntnt update` removes these five Skills as Withdrawn from the targeted layer. A Global update also replaces the Manager with the selected Library. Two former Library filenames carry only withdrawal notices so older Managers can validate that replacement; they provide no Editorial behavior. A Global update affects Global copies; Project copies remain until that Project is updated. Other collections and unmarked user files are preserved. The previous source is preserved on `preserve/selective-release-20261006`; see [the selection evidence](docs/plans/selective-release-20261006.md).
 
 ## Choose where skills apply
 
@@ -106,36 +108,6 @@ Run `/orchestrate [--dry-run] [--at-once=N] [--model=NAME] [--deliberation=LEVEL
 
 Use `/orchestrate reconcile [--commit=COMMIT] [--yes] #ticket` when a failed or conflicted attempt was completed outside orchestrate.
 
-### brief
-
-Interview for, draft or review a writing brief using the Library's questions to answer before you write: the assignment, the sender and its message, the reader, the angle, the hook, a sketch of the structure, the conclusion and the intended effect. A brief is a direction rather than a finished dossier, so it marks gaps and suggestions without grading answers or demanding sources, writes down how the answers hang together, says when the direction is settled enough to write, and supplies settled metadata for a later `/write` invocation.
-
-Run `/brief [--output=TARGET] [material]`, or `/brief` to begin an interview.
-
-### proofread
-
-Correct mechanical language errors in one text while preserving wording, meaning, tone, structure, formatting, code, and metadata. The result goes to the response unless another output or explicit in-place editing is selected.
-
-Run `/proofread [--language=LANGUAGE] [--output=TARGET] [text|path|url]` or use `--in-place path`.
-
-### redline
-
-Review one text against the editorial contract, correct findings within a bounded correction budget, and finish with one proofreading pass. Remaining findings are reported with the delivered text. An explicitly selected Writing Brief adds a question-by-question fulfilment report; name it with `--brief=PATH`, in the Contextual Instruction, or in applicable Conversation Context, in that order of precedence.
-
-Run `/redline [--genre=GENRE] [--technique=TECHNIQUE] [--language=LANGUAGE] [--brief=PATH|URL] [--max=N] [--output=TARGET] [text|path|url]` or use `--in-place path`.
-
-### unslop
-
-Remove seven defined patterns of machine-sounding prose from one otherwise finished text. It does not apply the wider editorial contract or correct spelling, grammar, and punctuation.
-
-Run `/unslop [--language=LANGUAGE] [--max=N] [--output=TARGET] [text|path|url]` or use `--in-place path`.
-
-### write
-
-Turn a brief and one or more sources into a first draft, with an independent comparison of source support and translated quotations and evidence-based validation of its findings before delivery. It resolves genre, technique, and language, and can attach handoff metadata for later editorial review.
-
-Run `/write [--genre=GENRE] [--technique=TECHNIQUE] [--language=LANGUAGE] [--frontmatter=BOOLEAN] [--output=TARGET] [brief]`.
-
 ### model-selector
 
 Describe a piece of work and get back the model and reasoning effort expected to finish it for the least money, or in the least time where `/model-selector objective time` has made that your standing choice — among the points it has actually measured doing that kind of work, the one whose price divided by its chance of success is lowest, and where none of those measurements reaches the bar the cheapest of the ones they cannot tell apart from the best of them, a cheap run that has to be redone being the expensive one, rather than the cheapest sticker, the strongest model, or an estimate nothing here has ever tested, or whichever measured point happens to be cheapest — with what that estimate rests on, and the alternatives it beat. It is advice and never a refusal: with no profile, or nothing reachable, the answer is the seat you already have and a note saying why. Once Enabled it also measures substantial units of work in the harnesses on this machine — delegated work, and a session's own work that ran ten minutes or more, never quick exchanges — grades what nothing else judged with one bought model call, and keeps counts, prices and dates, never your prompts, code, or paths.
@@ -208,9 +180,9 @@ Every skill requires `uv` and the manager: the manager ships the engine that rea
 
 Git workflows also require `git`; ticket workflows require `gh`; `rename-invoices` requires Poppler's `pdftotext`; `mirror` requires `agent-browser`, which fetches in a real browser what plain HTTP cannot, installed with `brew install agent-browser` and then `agent-browser install`. `release` can finish without `gh`, but then skips the GitHub release.
 
-`push` requires `commit`; `release` requires `push`; `delegation` and `orchestrate` require `model-selector`; `redline` requires `proofread`.
+`push` requires `commit`; `release` requires `push`; `delegation` and `orchestrate` require `model-selector`.
 
-Orchestrate, ready for agent check, write, redline, and unslop require a harness that can spawn subagents; delegation works in any harness, but the mode it turns on delegates only where one can. Select shows skill and harness requirements before enablement.
+Orchestrate and ready for agent check require a harness that can spawn subagents; delegation works in any harness, but the mode it turns on delegates only where one can. Select shows skill and harness requirements before enablement.
 
 ## Contributing and license
 

@@ -92,9 +92,7 @@ PATH = re.compile(r"`([A-Za-z0-9_./-]+\.(?:md|txt))`")
 # the shared catalogue whenever a Skill applies the anti-slop pass in Swedish.
 # Its items are Swedish strings rather than patterns to be read semantically,
 # so a fixture either carries them or does not.
-SWEDISH = (
-    REPO_ROOT / "skills" / "kntnt" / "library" / "references" / "languages" / "sv.md"
-)
+SWEDISH = EVALUATION / "held-source-28330ae1" / "languages" / "sv.md"
 
 # How an item is written inside that scope, and the shortest one worth
 # matching on: the scope also italicises punctuation samples, which are not
@@ -109,9 +107,7 @@ SWEDISH_ITEMS = 12
 # The installed genres a Skill resolves a selection against. The directory is
 # the list, so what a genre supplies is read from the files here rather than
 # from anything enumerating them.
-GENRES = (
-    REPO_ROOT / "skills" / "kntnt" / "library" / "references" / "editorial" / "genres"
-)
+GENRES = EVALUATION / "held-source-28330ae1" / "editorial" / "genres"
 
 # The three forms a code sample takes in Markdown. A pass reads past all of
 # them, so a fixture staging only the fenced one leaves the other two to be
@@ -193,8 +189,8 @@ BLINDED_HEADING = "## Blinded semantic judging"
 # reached, worded as both Skills' correction step words it, and the regression
 # packet whose runs establish that it is unreached.
 REVIEWING_SKILLS = (
-    REPO_ROOT / "skills" / "editorial" / "redline" / "SKILL.md",
-    REPO_ROOT / "skills" / "editorial" / "unslop" / "SKILL.md",
+    EVALUATION / "held-source-28330ae1" / "redline-body.md",
+    EVALUATION / "held-source-28330ae1" / "unslop-body.md",
 )
 UNREACHED_CLAUSE = (
     "where the round that introduced it is not the last, restore the state"

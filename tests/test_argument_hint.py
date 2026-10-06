@@ -25,7 +25,6 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 SKILLS = REPO_ROOT / "skills"
 MANAGER_DIR = SKILLS / "kntnt"
 KNTNT_PY = MANAGER_DIR / "scripts" / "kntnt.py"
-PROOFREAD_DIR = SKILLS / "editorial" / "proofread"
 
 EXIT_VALID = 0
 EXIT_REFUSED = 2
@@ -168,6 +167,28 @@ def test_no_hint_writes_a_flag_twice_for_one_command_path(directory: Path) -> No
     )
 
 
+def _destination_skill(root: Path) -> Path:
+    """Keep the two-destination grammar regression independent of shipped Skills."""
+
+    from test_invoke import _fixture
+
+    return _fixture(
+        root,
+        "destination",
+        "[--language=<language>] ([--output=response|<path>] [<text>|<path>|<url>]"
+        " | --in-place[=on|off] <path>) [-- <instruction>]",
+        [
+            "**/destination** [**--language=***LANGUAGE*] [**--output=response**|*PATH*] [*TEXT*|*PATH*|*URL*]",
+            "**/destination** [**--language=***LANGUAGE*] **--in-place**[=**on**|**off**] *PATH*",
+        ],
+        [
+            "**--language=**_LANGUAGE_",
+            "**--output=response**|_PATH_",
+            "**--in-place**[=**on**|**off**]",
+        ],
+    )
+
+
 SUFFIX = " [-- <instruction>]"
 
 
@@ -190,7 +211,7 @@ SUFFIX = " [-- <instruction>]"
         # Destinations offered side by side advertise a combination the page
         # refuses.
         (
-            PROOFREAD_DIR,
+            None,
             "[--language=<language>] [--output=response|<path>]"
             " [--in-place[=on|off]] [<text>|<path>|<url>]" + SUFFIX,
         ),
@@ -203,15 +224,16 @@ SUFFIX = " [-- <instruction>]"
     ],
 )
 def test_the_form_check_fails_a_hint_that_misstates_its_forms(
-    directory: Path, hint: str
+    directory: Path | None, hint: str, tmp_path: Path
 ) -> None:
     """Each fault the form check exists for is one it reports."""
 
+    directory = directory or _destination_skill(tmp_path)
     assert hint != read_hint(directory)
     assert _grammar_faults(directory, hint)
 
 
-def test_the_repetition_check_fails_one_path_and_passes_many() -> None:
+def test_the_repetition_check_fails_one_path_and_passes_many(tmp_path: Path) -> None:
     """A flag written per form of one path is caught; one written per path is not.
 
     The Proofread hint before issue #324 is the fault: two forms of the root
@@ -224,9 +246,10 @@ def test_the_repetition_check_fails_one_path_and_passes_many() -> None:
         " | [--language=<language>] --in-place[=on|off] <path>" + SUFFIX
     )
     selector = SKILLS / "models" / "model-selector"
+    directory = _destination_skill(tmp_path)
 
-    assert _repeated_flags(PROOFREAD_DIR, written_twice)
-    assert not _grammar_faults(PROOFREAD_DIR, written_twice)
+    assert _repeated_flags(directory, written_twice)
+    assert not _grammar_faults(directory, written_twice)
     assert not _repeated_flags(selector, read_hint(selector))
 
 
@@ -248,11 +271,12 @@ def test_no_hint_puts_literal_values_inside_a_metavariable(directory: Path) -> N
     )
 
 
-def test_proofreads_hint_shares_language_across_both_destinations() -> None:
+def test_a_hint_shares_language_across_both_destinations(tmp_path: Path) -> None:
     """Issue #324's case: `--language` once, and the destinations exclusive."""
 
-    hint = read_hint(PROOFREAD_DIR)
-    advertised = _advertised(PROOFREAD_DIR, hint)
+    directory = _destination_skill(tmp_path)
+    hint = read_hint(directory)
+    advertised = _advertised(directory, hint)
     flag_sets = [
         {
             spec.name
@@ -280,5 +304,5 @@ def test_proofreads_hint_shares_language_across_both_destinations() -> None:
         ("--language=sv --in-place", EXIT_REFUSED),
         ("--language=sv --output=out.md --in-place report.md", EXIT_REFUSED),
     ):
-        reading = ENGINE.read_invocation(PROOFREAD_DIR, payload)
+        reading = ENGINE.read_invocation(directory, payload)
         assert reading.status == status, (payload, reading.text)

@@ -4,9 +4,14 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ## [Unreleased]
 
+### Removed
+
+- Editorial Skills (`brief`, `write`, `redline`, `proofread`, `unslop`) and their bundled Library resources are held outside the deliverable tree pending complete current acceptance. The full previous tree is preserved on `preserve/selective-release-20261006`. Update removes their marked installed copies as Withdrawn in its targeted layer.
+
 ### Fixed
 
-- Write names its private directories by full path and keeps the shell outside them. It leaves an entered directory in a separate command before cleanup and preserves a Harness removal refusal, retaining and reporting the affected paths without trying another form or tool (#485).
+- Session cleanup refuses destructive process signals without matching nonempty live birth identities, initializes fresh state before probes, consumes completed resource actions without replay, preserves truthful retained audit history, and rechecks recovered session ownership (#510). Acceptance uses Thomas's prospective #510-only historical F2 exception; earlier failures and Editorial proof budgets remain unchanged.
+- Manager refresh accepts the selected generation while retaining candidate validation, atomic publication, rollback and integration behavior. Withdrawal-only compatibility files let existing Managers acquire it without bundling the withheld Editorial implementation.
 
 ## [0.39.0] – 2026-10-01
 

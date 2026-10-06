@@ -472,210 +472,6 @@ def test_nested_help_keeps_all_forms_flags_and_immediate_commands(
     assert root.stdout != parent.stdout != leaf.stdout
 
 
-# Compact help keeps dynamic editorial choices under the declaring options.
-EDITORIAL_HELP_RULE = (
-    "Installed editorial choices come from the invocation's Library, preserving "
-    "complete syntax and help status; see docs/rules/skills.md, `help.md` (issue #484)."
-)
-
-
-def _editorial_skill(root: Path, name: str) -> Path:
-    """Copy shipped grammar, omitting dependencies unrelated to help rendering."""
-
-    source = SKILLS / "editorial" / name
-    skill = root / name
-    declaration = re.sub(
-        r"(?m)^(  kntnt\.(?:binaries|skills|externals|capabilities):).*$",
-        r'\1 ""',
-        (source / "SKILL.md").read_text(encoding="utf-8"),
-    )
-    _write(skill / "SKILL.md", declaration)
-    _write(skill / "help.md", (source / "help.md").read_text(encoding="utf-8"))
-    return skill
-
-
-@pytest.mark.parametrize("name", ["write", "redline"])
-@pytest.mark.parametrize("payload", ["help", "--help", "-h"])
-def test_editorial_help_lists_installed_choices_under_their_flags(
-    tmp_path: Path, name: str, payload: str
-) -> None:
-    """The same Library used by a valid invocation supplies help's choices."""
-
-    # Install the shipped grammar beside a distinct fixture Library.
-    skill = _editorial_skill(tmp_path, name)
-    manager = tmp_path / "installed" / "kntnt"
-    library = manager / "library"
-    editorial = library / "references" / "editorial"
-    _write(editorial / "genres" / "zebra.md", "# Zebra\n\nThe last genre.\n")
-    _write(
-        editorial / "genres" / "alpha.md",
-        "# Display name\n\nThe first genre,\nwith a wrapped opening.\n\n## Rules\n\nNot help.\n",
-    )
-    _write(editorial / "techniques" / "arc.md", "# Arc\n\nA chosen arc.\n")
-    for support in ("alpha.review.md", "README.md", "none.md"):
-        _write(editorial / "genres" / support, "# Support\n\nNot a choice.\n")
-
-    result = _invoke(skill, payload, tmp_path, manager=manager)
-
-    # Each flag owns its complete, ordered list; help cannot enter the Skill.
-    assert result.returncode == EXIT_HELP, (result.stderr, EDITORIAL_HELP_RULE)
-    assert result.stderr == "", EDITORIAL_HELP_RULE
-    genre = result.stdout.partition("## OPTIONS\n")[2].partition("**--technique**")[0]
-    technique = (
-        result.stdout.partition("## OPTIONS\n")[2]
-        .partition("**--technique**")[2]
-        .partition("**--language**")[0]
-    )
-    assert "Installed choices: `alpha`, `zebra`" in genre, EDITORIAL_HELP_RULE
-    assert "The last genre." not in genre, EDITORIAL_HELP_RULE
-    assert genre.index("`alpha`") < genre.index("`zebra`"), EDITORIAL_HELP_RULE
-    assert "Installed choices: `arc`" in technique, EDITORIAL_HELP_RULE
-    assert result.stdout.count("`alpha`") == 1, EDITORIAL_HELP_RULE
-    assert "Not help." not in result.stdout, EDITORIAL_HELP_RULE
-    assert "Not a choice." not in result.stdout, EDITORIAL_HELP_RULE
-    assert "<!-- kntnt:" not in result.stdout, EDITORIAL_HELP_RULE
-    assert "Invocation read." not in result.stdout, EDITORIAL_HELP_RULE
-
-    _assert_compact(result.stdout, skill / "help.md")
-
-    # Normal execution receives the exact Library whose resources help used.
-    valid = _invoke(skill, "", tmp_path, manager=manager)
-    assert valid.returncode == EXIT_VALID, (valid.stderr, EDITORIAL_HELP_RULE)
-    assert f"`$LIBRARY` is `{library}`." in valid.stdout, EDITORIAL_HELP_RULE
-
-
-@pytest.mark.parametrize("name", ["write", "redline"])
-@pytest.mark.parametrize("kind", ["genres", "techniques"])
-@pytest.mark.parametrize("filename", ["web-copy.md", "web_copy.md", "v2.md"])
-def test_editorial_help_lists_only_names_of_lowercase_letters(
-    tmp_path: Path, name: str, kind: str, filename: str
-) -> None:
-    """A name with a hyphen, another separator or a digit is not a choice.
-
-    The editorial README fixes a genre or technique name as lowercase letters
-    only, with no hyphen or other separator (issue #443), so help lists only
-    base files named that way.
-    """
-
-    # Install one canonical choice per category beside a non-canonical one.
-    skill = _editorial_skill(tmp_path, name)
-    manager = tmp_path / "installed" / "kntnt"
-    editorial = manager / "library" / "references" / "editorial"
-    for category in ("genres", "techniques"):
-        _write(editorial / category / "baseline.md", "# Baseline\n\nA choice.\n")
-    _write(editorial / kind / filename, "# Stray\n\nNot a choice.\n")
-
-    result = _invoke(skill, "help", tmp_path, manager=manager)
-
-    # Help still stops, and lists the canonical choice but not the stray file.
-    assert result.returncode == EXIT_HELP, (result.stderr, EDITORIAL_HELP_RULE)
-    assert "Installed choices: `baseline`" in result.stdout, EDITORIAL_HELP_RULE
-    assert f"`{Path(filename).stem}`" not in result.stdout, EDITORIAL_HELP_RULE
-    assert "Not a choice." not in result.stdout, EDITORIAL_HELP_RULE
-
-
-@pytest.mark.parametrize("name", ["write", "redline"])
-@pytest.mark.parametrize("kind", ["genres", "techniques"])
-def test_editorial_help_reads_resource_changes_on_every_call(
-    tmp_path: Path, name: str, kind: str
-) -> None:
-    """Adding, renaming, editing and removing needs no help or registry edit."""
-
-    # Install the shipped grammar with isolated resources.
-    skill = _editorial_skill(tmp_path, name)
-    manager = tmp_path / "installed" / "kntnt"
-    editorial = manager / "library" / "references" / "editorial"
-    for category in ("genres", "techniques"):
-        _write(editorial / category / "baseline.md", "# Baseline\n\nOriginal choice.\n")
-    resource = editorial / kind / "newchoice.md"
-
-    # Observe each resource edit through the next invocation, without caching.
-    before = _invoke(skill, "help", tmp_path, manager=manager)
-    _write(resource, "# New\n\nA new choice.\n")
-    added = _invoke(skill, "help", tmp_path, manager=manager)
-    renamed = resource.with_name("renamed.md")
-    resource.rename(renamed)
-    moved = _invoke(skill, "help", tmp_path, manager=manager)
-    _write(renamed, "# New\n\nAn updated description.\n")
-    edited = _invoke(skill, "help", tmp_path, manager=manager)
-    renamed.unlink()
-    removed = _invoke(skill, "help", tmp_path, manager=manager)
-
-    # Every transition keeps help's stop status and reflects only current data.
-    assert all(
-        result.returncode == EXIT_HELP
-        for result in (before, added, moved, edited, removed)
-    ), EDITORIAL_HELP_RULE
-    assert "`newchoice`" not in before.stdout, EDITORIAL_HELP_RULE
-    assert "`newchoice`" in added.stdout, EDITORIAL_HELP_RULE
-    assert "`newchoice`" not in moved.stdout, EDITORIAL_HELP_RULE
-    assert "`renamed`" in moved.stdout, EDITORIAL_HELP_RULE
-    assert "`renamed`" in edited.stdout, EDITORIAL_HELP_RULE
-    assert "An updated description." not in edited.stdout, EDITORIAL_HELP_RULE
-    assert edited.stdout == moved.stdout, EDITORIAL_HELP_RULE
-    assert removed.stdout == before.stdout, EDITORIAL_HELP_RULE
-
-
-@pytest.mark.parametrize(
-    "fault", ["missing", "empty", "unreadable", "invalid-utf8", "no-opening"]
-)
-def test_editorial_help_reports_unavailable_lists_without_partial_choices(
-    tmp_path: Path, fault: str
-) -> None:
-    """A broken installation still answers help, with an explicit list failure."""
-
-    # Break one resource set while keeping the other readable.
-    skill = _editorial_skill(tmp_path, "write")
-    manager = tmp_path / "installed" / "kntnt"
-    editorial = manager / "library" / "references" / "editorial"
-    _write(editorial / "techniques" / "arc.md", "# Arc\n\nThe healthy list.\n")
-    genres = editorial / "genres"
-    if fault != "missing":
-        genres.mkdir()
-    if fault not in ("missing", "empty"):
-        _write(genres / "alpha.md", "# Alpha\n\nA partial choice.\n")
-        broken = genres / "broken.md"
-        if fault == "unreadable":
-            broken.symlink_to(genres / "absent.md")
-        elif fault == "invalid-utf8":
-            broken.write_bytes(b"\xff")
-        else:
-            _write(broken, "# Broken\n\n## Requirements\n\nNo introduction.\n")
-
-    result = _invoke(skill, "help", tmp_path, manager=manager)
-
-    # Hide the broken list as a whole and preserve the healthy list beside it.
-    assert result.returncode == EXIT_HELP, (result.stderr, EDITORIAL_HELP_RULE)
-    assert result.stderr == "", EDITORIAL_HELP_RULE
-    assert "Installed choices unavailable" in result.stdout, EDITORIAL_HELP_RULE
-    assert str(genres) in result.stdout, EDITORIAL_HELP_RULE
-    assert "`alpha`" not in result.stdout, EDITORIAL_HELP_RULE
-    assert "Installed choices: `arc`" in result.stdout, EDITORIAL_HELP_RULE
-    assert "/kntnt update" in result.stdout, EDITORIAL_HELP_RULE
-
-
-@pytest.mark.parametrize("name", ["write", "redline"])
-@pytest.mark.parametrize(
-    "payload", ["--help -- Explain", "--help --", "--help --genre=general"]
-)
-def test_invalid_editorial_help_never_reads_or_renders_resource_lists(
-    tmp_path: Path, name: str, payload: str
-) -> None:
-    """A missing Library cannot change the existing refusal for a bad help form."""
-
-    # Install the shipped grammar with isolated resources.
-    skill = _editorial_skill(tmp_path, name)
-
-    result = _invoke(skill, payload, tmp_path, manager=tmp_path / "absent")
-
-    # Refusal happens before either list or normal Skill execution is reached.
-    assert result.returncode == EXIT_REFUSED, (result.stderr, EDITORIAL_HELP_RULE)
-    assert result.stderr == "", EDITORIAL_HELP_RULE
-    assert "Installed choices" not in result.stdout, EDITORIAL_HELP_RULE
-    assert "## OPTIONS" not in result.stdout, EDITORIAL_HELP_RULE
-    assert "Invocation read." not in result.stdout, EDITORIAL_HELP_RULE
-
-
 def test_a_help_form_beside_an_instruction_is_refused_without_the_page(
     tmp_path: Path,
 ) -> None:
@@ -706,30 +502,28 @@ def test_an_invalid_form_is_refused_in_the_collections_shape(tmp_path: Path) -> 
     assert rest.rstrip("\n").endswith("see '/skill --help'")
 
 
-@pytest.mark.parametrize(
-    "payload",
-    [
-        "--brief=brief.md draft.md",
-        "--brief=https://example.org/brief --in-place draft.md",
-        "--brief=brief.md draft.md -- Review against other.md instead.",
-    ],
-)
-def test_redline_accepts_a_brief_separately_from_its_text(payload: str) -> None:
-    """The brief is a valued option in both delivery forms, never an operand."""
-
-    result = _engine().read_invocation(SKILLS / "editorial/redline", payload)
-
-    assert result.status == EXIT_VALID, result.text
-
-
-def test_redline_proofread_handoff_keeps_strict_parsing_and_exact_artifact(
+def test_nested_handoff_keeps_strict_parsing_and_exact_artifact(
     tmp_path: Path,
 ) -> None:
     """Invocation repair changes the caller's construction, never the grammar."""
 
     engine = _engine()
-    redline = SKILLS / "editorial" / "redline"
-    proofread = SKILLS / "editorial" / "proofread"
+    review = _fixture(
+        tmp_path,
+        "review",
+        "[--in-place] [--max=<n>] <text> [-- <instruction>]",
+        ["**/review** [**--in-place**] [**--max=**_N_] *TEXT* [**--** *INSTRUCTION*]"],
+        ["**--in-place**", "**--max=**_N_"],
+    )
+    correct = _fixture(
+        tmp_path,
+        "correct",
+        "[--language=<language>] [--output=<path>] <text> [-- <instruction>]",
+        [
+            "**/correct** [**--language=**_LANGUAGE_] [**--output=**_PATH_] *TEXT* [**--** *INSTRUCTION*]"
+        ],
+        ["**--language=**_LANGUAGE_", "**--output=**_PATH_"],
+    )
     historical_artifact = """---
 kntnt:
   genre: web-article
@@ -740,13 +534,13 @@ kntnt:
 Example article text.
 """
 
-    outer = engine.read_invocation(redline, "--in-place --max=3 vawt-article.md")
+    outer = engine.read_invocation(review, "--in-place --max=3 vawt-article.md")
     malformed = engine.read_invocation(
-        proofread,
+        correct,
         f"--language=en_GB --output=response\n{historical_artifact}",
     )
     corrected = engine.read_invocation(
-        proofread,
+        correct,
         f'--language=en_GB --output=response "{historical_artifact}"',
     )
 
@@ -758,7 +552,7 @@ Example article text.
     assert corrected.status == EXIT_VALID, corrected.text
     assert corrected.invocation["operands"] == [historical_artifact]
 
-    # The current Redline handoff transports artifact bytes through a file.
+    # A file handoff transports artifact bytes without changing their content.
     # Quotes are content here, not a shell or invocation-grammar exercise.
     current_artifact = """---
 kntnt:
@@ -774,7 +568,7 @@ The editor's note says "keep this".
     mechanical_output = tmp_path / "mechanical-output.md"
     mechanical_input.write_text(current_artifact, encoding="utf-8")
     handoff = engine.read_invocation(
-        proofread,
+        correct,
         " ".join(
             (
                 "--language=en_GB",
@@ -1155,73 +949,6 @@ SHIPPED_CASES: dict[str, list[Case]] = {
         ("1.2.3", {"operands": ["1.2.3"]}),
         ("--bogus", None),
         ("--yes=on", None),
-    ],
-    "editorial/proofread": [
-        ("", {"flags": {}, "operands": []}),
-        (
-            "--language=sv report.md",
-            {"flags": {"--language": "sv"}, "operands": ["report.md"]},
-        ),
-        (
-            "--in-place report.md",
-            {"flags": {"--in-place": True}, "operands": ["report.md"]},
-        ),
-        ("--in-place=off report.md", {"flags": {"--in-place": "off"}}),
-        (
-            "--output=out.md Some inline text",
-            {"flags": {"--output": "out.md"}, "operands": ["Some inline text"]},
-        ),
-        (
-            "Här är en text att korrekturläsa.",
-            {"operands": ["Här är en text att korrekturläsa."]},
-        ),
-        ("--language", None),
-        ("--in-place", None),
-        ("--in-place --output=out.md report.md", None),
-        ("--language=sv --language=en report.md", None),
-    ],
-    "editorial/redline": [
-        (
-            "--genre=essay --max=2 report.md",
-            {"flags": {"--genre": "essay", "--max": "2"}},
-        ),
-        ("--in-place report.md", {"flags": {"--in-place": True}}),
-        ("--max", None),
-        ("--in-place", None),
-        ("--in-place --output=x report.md", None),
-    ],
-    "editorial/unslop": [
-        (
-            "--language=sv --max=0 report.md",
-            {"flags": {"--language": "sv", "--max": "0"}},
-        ),
-        ("--in-place=on report.md", {"flags": {"--in-place": "on"}}),
-        ("--genre=essay report.md", None),
-        ("--in-place", None),
-    ],
-    "editorial/brief": [
-        ("", {"path": [], "operands": []}),
-        ("notes.md", {"operands": ["notes.md"]}),
-        (
-            "--output=brief.md notes.md",
-            {"flags": {"--output": "brief.md"}, "operands": ["notes.md"]},
-        ),
-        ("--output", None),
-        ("--in-place notes.md", None),
-        ("notes.md --output=brief.md", None),
-    ],
-    "editorial/write": [
-        ("", {"operands": []}),
-        (
-            "--genre=essay --frontmatter=no brief.md",
-            {
-                "flags": {"--genre": "essay", "--frontmatter": "no"},
-                "operands": ["brief.md"],
-            },
-        ),
-        ("Write me a letter", {"operands": ["Write me a letter"]}),
-        ("--in-place brief.md", None),
-        ("--genre", None),
     ],
     "kntnt": [
         ("", {"path": [], "flags": {}, "operands": []}),

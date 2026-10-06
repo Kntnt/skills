@@ -500,52 +500,6 @@ def test_the_sidecar_says_what_the_frontmatter_says_about_invocation() -> None:
         )
 
 
-def test_proofread_bounds_the_trigger_its_description_advertises() -> None:
-    """A Skill a model may start is reached by its description and nothing else.
-
-    Proofread corrects mechanics and preserves everything else, so a
-    description reading as general editing invites exactly the invocation the
-    contract exists to refuse — and the user never typed anything for the
-    refusal to answer. The trigger is therefore written narrow, a specific text
-    plus an explicit proofreading request, and the generic verbs are named as
-    exclusions rather than left to be inferred from what the Skill offers
-    (ADR-0177).
-    """
-
-    skill_md = SKILLS / "editorial" / "proofread" / "SKILL.md"
-    frontmatter = _frontmatter("editorial/proofread/SKILL.md")
-
-    assert frontmatter.get("disable-model-invocation") is False, (
-        f"{skill_md}: a model may start this Skill, so the field says so"
-        f" rather than being left out — an absent field is a decision nobody"
-        f" wrote, and the Codex sidecar beside it has to agree with something"
-        f" (ADR-0177). See {STANDARD}."
-    )
-
-    description = str(frontmatter.get("description", "")).lower()
-    for term in ("proofread", "mechanical"):
-        assert term in description, (
-            f"{skill_md}: the description does not name {term!r}. It is the"
-            f" only hook a harness has for deciding when the Skill applies"
-            f" (ADR-0177), so the narrow trigger has to be in it and nowhere"
-            f" else. See {STANDARD}."
-        )
-
-    assert "not for" in description, (
-        f"{skill_md}: the description states no exclusion. A model reads what"
-        f" the Skill offers and matches on it, so the requests this Skill must"
-        f" not be started for are named as exclusions rather than left to be"
-        f" inferred (ADR-0177). See {STANDARD}."
-    )
-    for excluded in ("edit", "rewrite", "polish", "improve", "review"):
-        assert excluded in description, (
-            f"{skill_md}: the description does not name {excluded!r} among the"
-            f" requests a model must not start this Skill for. Each of them is"
-            f" a request for changes the Skill refuses to make (ADR-0177). See"
-            f" {STANDARD}."
-        )
-
-
 def test_model_selector_is_never_model_invoked() -> None:
     """Nothing reaches the router by loading its body.
 

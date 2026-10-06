@@ -1041,9 +1041,7 @@ def validate_manager_candidate(candidate: Path) -> None:
         "help/uninstall.md",
         "help/update.md",
         "library/references/changelog.md",
-        "library/references/delivery.md",
         "library/scripts/integrations.py",
-        "library/scripts/languages.py",
         "library/scripts/ship.py",
         "scripts/kntnt.py",
         "steps/help.md",
@@ -4038,13 +4036,11 @@ def help_text(name: str | None) -> str:
 
     # Bare help, and the manager's own name, both mean the Manager's compact help.
     if not name or name == MANAGER:
-        return render_invocation_help(
-            compact_help(here(), here() / "help.md"), here() / "library"
-        )
+        return compact_help(here(), here() / "help.md")
 
     verb = subcommand_manpage(name)
     if verb is not None:
-        return render_invocation_help(compact_help(here(), verb), here() / "library")
+        return compact_help(here(), verb)
 
     skill = enabled_skill(name)
     if skill is None:
@@ -4053,9 +4049,7 @@ def help_text(name: str | None) -> str:
             "Enabled here; '/kntnt select' reads the help of one you do not have"
         )
 
-    return render_invocation_help(
-        compact_help(skill, skill / "help.md"), here() / "library"
-    )
+    return compact_help(skill, skill / "help.md")
 
 
 def cmd_help(name: str | None) -> int:
@@ -4923,7 +4917,7 @@ def compact_help(skill_dir: Path, page: Path) -> str:
             purpose = _help_section(read_manpage(child), "NAME").partition(" - ")[2]
             lines.extend([_help_wrap(f"**{child.stem}** - {purpose}"), ""])
 
-    # Preserve each complete option term and its live resource marker. Only a
+    # Preserve each complete option term. Only a
     # short first sentence earns space beside it; the reference holds the rest.
     options = _help_section(text, "OPTIONS")
     if options:
@@ -4936,77 +4930,9 @@ def compact_help(skill_dir: Path, page: Path) -> str:
                     sentence = re.split(r"(?<=[.!?])\s+", paragraphs[index + 1])[0]
                     if len(sentence.split()) <= 20:
                         lines.extend([_help_wrap(sentence), ""])
-            elif paragraph.startswith("<!-- kntnt:editorial-"):
-                lines.extend([paragraph, ""])
 
     lines.append(f"Full reference: `{page.absolute()}`")
     return "\n".join(lines)
-
-
-def editorial_choices(directory: Path) -> str:
-    """List base resources in name order, or fail rather than return a partial list.
-
-    Filesystem and decoding failures propagate to the help renderer; a
-    missing introduction or an empty directory is likewise unavailable.
-    """
-
-    # Only canonical base filenames, lowercase letters with no separator, are
-    # selectable; review halves and support documents do not name choices, and
-    # `none` is metadata, never a flag value.
-    rows: list[str] = []
-    for path in sorted(directory.iterdir()):
-        # Ignore entries outside the resource format's selectable namespace.
-        if not re.fullmatch(r"[a-z]+\.md", path.name) or path.stem in {
-            "none",
-            "readme",
-        }:
-            continue
-
-        # A damaged base resource cannot supply an honest inventory.
-        paragraphs = re.split(
-            r"\n\s*\n", path.read_text(encoding="utf-8").strip(), maxsplit=2
-        )
-        if (
-            len(paragraphs) < 2
-            or not re.fullmatch(r"# [^\n]+", paragraphs[0])
-            or paragraphs[1].startswith(("#", "<!--", "```", "- ", "* "))
-        ):
-            raise ManagerError(f"'{path}' has no opening paragraph after its title")
-
-        # Show only the name after validating the resource, never its prose.
-        rows.append(f"`{path.stem}`")
-
-    # An empty installation has no complete inventory to show.
-    if not rows:
-        raise ManagerError("no selectable base resources found")
-    return "Installed choices: " + ", ".join(rows)
-
-
-def render_invocation_help(page: str, library: Path) -> str:
-    """Expand the two editorial slots in compact help from this invocation's Library.
-
-    This runs only after an exact help form has been accepted. Grammar and
-    refusals continue to read the authored page, without touching resources.
-    """
-
-    for kind in ("genres", "techniques"):
-        # Only the two published slots cause a resource lookup.
-        marker = f"<!-- kntnt:editorial-{kind} -->"
-        if marker in page:
-            directory = library / "references" / "editorial" / kind
-
-            # An unreadable install must not masquerade as a complete list.
-            try:
-                choices = editorial_choices(directory)
-            except (OSError, UnicodeError, ManagerError) as exc:
-                choices = (
-                    f"Installed choices unavailable from `{directory}`: {exc}. "
-                    "No list is shown; repair the resources or run `/kntnt update`."
-                )
-
-            page = page.replace(marker, _help_wrap(choices))
-
-    return page
 
 
 def cmd_invoke(skill_dir: Path) -> int:
@@ -5025,7 +4951,7 @@ def cmd_invoke(skill_dir: Path) -> int:
 
     reading = read_invocation(skill_dir, sys.stdin.read())
     if reading.status == EXIT_HELP:
-        print(render_invocation_help(reading.text, here() / "library"))
+        print(reading.text)
         return reading.status
     if reading.status != 0:
         print(reading.text)

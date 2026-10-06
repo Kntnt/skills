@@ -1,6 +1,6 @@
 {
   "origin": "Kntnt/skills",
-  "manager_digest": "f6f699403e2e33bb56f51edcce8327694fcdea7c6c35597abf7d8edd78c3fe96",
+  "manager_digest": "2ca70933a67008e56e1fb91e04d27040c4e2cb64b4068c791ba092fef03bd235",
   "skills": [
     {
       "name": "agents-md",
@@ -116,74 +116,6 @@
       ],
       "externals": [],
       "capabilities": []
-    },
-    {
-      "name": "brief",
-      "category": "editorial",
-      "description": "Interview for, draft from supplied material, or review a Writing Brief against the Library's writing-brief template of questions to answer before you write. Start it on your own only when the literal token `/brief` appears in the request or the user explicitly asks for a brief according to this writing-brief template. Not for a bare mention of the word brief, a request for a short answer, or an unrelated project or delegation brief. A user may also invoke it by name at any time.",
-      "digest": "e83cb27411debd998afc1ff304f24f85cdd82eb41c0c99605c7c2f3be356a0a6",
-      "binaries": [
-        "uv"
-      ],
-      "skills": [],
-      "externals": [],
-      "capabilities": []
-    },
-    {
-      "name": "proofread",
-      "category": "editorial",
-      "description": "Correct only mechanical language errors — spelling, grammar, punctuation, agreement, inflection, duplicated or missing words, and locale mechanics — in one supplied text, preserving its wording, meaning, tone, structure, formatting, and metadata. Start it on your own only when a specific text is at hand and the request either uses a proofreading term (proofread, spell-check, copyedit, fix the typos, korrekturläs, rätta stavfelen) or is unambiguously limited to mechanical language errors. Not for a request to edit, rewrite, polish, improve, tighten, or review a text — each of those asks for changes this Skill refuses to make. A user may also invoke it by name at any time.",
-      "digest": "da1b20b6da6cb2bd2bb84be606e75f1acf8b3908372f390d61ce265770990809",
-      "binaries": [
-        "uv"
-      ],
-      "skills": [],
-      "externals": [],
-      "capabilities": []
-    },
-    {
-      "name": "redline",
-      "category": "editorial",
-      "description": "Review one supplied text against this collection's editorial contract — its genre, its optional technique, its language, and the shared anti-slop catalogue — and, when selected, a Writing Brief; repair what the review found through a bounded budget of fresh correction subagents, report whatever is left unresolved, and finish with exactly one mechanical pass.",
-      "digest": "f5ee3b1e7e87f649982a547e121969fe0b51c0f4ed1180d12535d4461855d452",
-      "binaries": [
-        "uv"
-      ],
-      "skills": [
-        "proofread"
-      ],
-      "externals": [],
-      "capabilities": [
-        "subagents"
-      ]
-    },
-    {
-      "name": "unslop",
-      "category": "editorial",
-      "description": "Apply this collection's anti-slop pass to one supplied text and nothing else — false contrasts, empty openings, importance inflation, vague attribution, synonym cycling, robotic rhythm, and generic conclusions — repairing what it finds through a bounded budget of fresh correction subagents and reporting whatever is left. It selects no genre, no technique, and no editorial contract, and it runs no mechanical pass.",
-      "digest": "42df38ee1dbc251e211d95872a51c09764196f8b1f88ced22b822747935e41a5",
-      "binaries": [
-        "uv"
-      ],
-      "skills": [],
-      "externals": [],
-      "capabilities": [
-        "subagents"
-      ]
-    },
-    {
-      "name": "write",
-      "category": "editorial",
-      "description": "Turn a brief and its source material into one truthful first draft in the target language, and stop there. Start it on your own only when the literal token `/write` appears in the request or in an instruction the request points at — inside a longer message, a document, or a checklist that says to run it. Not for a bare request to write, draft, compose, summarise, rewrite, edit, or review something — without `/write` in it, such a request is answered as it otherwise would be. A user may also invoke it by name at any time.",
-      "digest": "ad5a60b9968645b1acdb5fb7716244b2965dd6c605251b3c59967fc0cbcbb665",
-      "binaries": [
-        "uv"
-      ],
-      "skills": [],
-      "externals": [],
-      "capabilities": [
-        "subagents"
-      ]
     },
     {
       "name": "cloudns",
