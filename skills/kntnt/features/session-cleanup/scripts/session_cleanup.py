@@ -15,9 +15,10 @@ session's work from another's at all.
 
 So this feature does not guess. The instruction block it installs asks the agent
 to record what it starts; this hook stops exactly what is recorded and nothing
-else. What that costs is that an unrecorded process survives; what it buys is
-that no process anybody else owns is ever killed, which is the failure that
-cannot be undone.
+else. An unrecorded process survives. Both destructive signal boundaries require
+a nonempty matching recorded and current birth and the intended process group.
+These OS observations are not atomic with a signal and do not provide a kernel
+ownership guarantee; unreadable or changed evidence refuses cleanup.
 
 Both halves are installed together and removed together, because either alone is
 worse than neither: the block without the hook asks for records nothing reads,
@@ -36,6 +37,7 @@ the start makes cleanup converge over disk, as ADR-0179 requires.
 from __future__ import annotations
 
 import argparse
+import fcntl
 import json
 import os
 import re
@@ -45,6 +47,8 @@ import subprocess
 import sys
 import tempfile
 import time
+from collections.abc import Iterator
+from contextlib import contextmanager
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
@@ -84,21 +88,29 @@ CONTAINER_ID = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$")
 
 KINDS = ("pid", "container", "path")
 
+# Only successful PID outcomes retire their recorded cleanup obligation.
+RESOLVED_PID_OUTCOMES: frozenset[str] = frozenset({"gone", "stopped", "killed"})
+
 
 class RecordingError(RuntimeError):
     """A manifest line this feature refuses to write."""
 
 
-def home() -> Path:
+def home(*, initialize: bool = False) -> Path:
     """Return the home this feature resolves its own state against.
 
     `KNTNT_HOME` first, exactly as the Manager's own `home()` resolves it, so a
     dry run against a sandbox home reaches this feature's state too and a real
-    run is never reached by one.
+    run is never reached by one. Identity probes initialize this Feature's
+    state first, so a fresh selected home is a valid working directory.
+    Ordinary path resolution, including health, remains read-only.
     """
 
     override = os.environ.get("KNTNT_HOME")
-    return Path(override) if override else Path.home()
+    root = Path(override) if override else Path.home()
+    if initialize:
+        (root / ".kntnt" / "session-cleanup").mkdir(parents=True, exist_ok=True)
+    return root
 
 
 def data_dir() -> Path:
@@ -246,13 +258,13 @@ def started_at(pid: int) -> str:
     try:
         completed = subprocess.run(
             ["ps", "-o", "lstart=", "-p", str(pid)],
-            cwd=home(),
+            cwd=home(initialize=True),
             text=True,
             capture_output=True,
             check=False,
             timeout=5,
         )
-    except (OSError, subprocess.SubprocessError):
+    except (OSError, RuntimeError, subprocess.SubprocessError):
         return ""
     return completed.stdout.strip() if completed.returncode == 0 else ""
 
@@ -354,43 +366,108 @@ def current_key() -> str:
 
 
 def read_manifest(path: Path) -> tuple[dict[str, Any], list[dict[str, Any]]]:
-    """Return one manifest's header and its entries, skipping what will not parse.
+    """Return one manifest's header and pending entries, skipping invalid lines.
 
     A line that is not JSON is a line some interrupted write left half-finished
     or some hand edit mistyped. It is skipped rather than raised about: the
     entries around it name real processes, and refusing the whole file over one
     bad line would leave every one of them running.
+    An unreadable file supplies no owner or pending targets to this reader;
+    the sweep separately reports that uncertainty and retains the manifest.
+    """
+
+    try:
+        header, entries, _ = _pending_manifest(path)
+    except (OSError, UnicodeDecodeError, ValueError):
+        return {}, []
+    return header, [entry for _, entry in entries]
+
+
+def _pending_manifest(
+    path: Path,
+) -> tuple[dict[str, Any], list[tuple[int, dict[str, Any]]], bool]:
+    """Keep raw history while identifying unconsumed resource lines by position.
+
+    Consumption records refer only to earlier resource lines. An appended new
+    registration remains distinct even when its values match an older entry.
+    The final flag remembers resource history even after all entries have been
+    consumed. Read failures propagate; invalid lines with no readable resource
+    history cannot establish an empty count either.
     """
 
     header: dict[str, Any] = {}
-    entries: list[dict[str, Any]] = []
-    try:
-        text = path.read_text(encoding="utf-8")
-    except (OSError, UnicodeDecodeError):
-        return header, entries
+    entries: dict[int, dict[str, Any]] = {}
+    recorded = False
+    invalid = False
+    text = path.read_text(encoding="utf-8")
 
-    for line in text.splitlines():
+    for position, line in enumerate(text.splitlines()):
         if not line.strip():
             continue
         try:
             loaded = json.loads(line)
         except ValueError:
+            invalid = True
             continue
         if not isinstance(loaded, dict):
+            invalid = True
             continue
         if loaded.get("kind") == "session":
             header = loaded
         elif loaded.get("kind") in KINDS:
-            entries.append(loaded)
-    return header, entries
+            recorded = True
+            entries[position] = loaded
+        elif loaded.get("kind") == "consumed":
+            reference = loaded.get("line")
+            if type(reference) is int:
+                entries.pop(reference, None)
+    if invalid and not recorded:
+        raise ValueError("manifest history is unreadable; no resource count is known")
+    return header, list(entries.items()), recorded
 
 
-def append(path: Path, record: dict[str, Any]) -> None:
-    """Append one JSON line to a manifest, creating what it needs."""
+@contextmanager
+def _state_lock() -> Iterator[None]:
+    """Coordinate sweeps and registrations across deletion of a manifest.
+
+    The stable lock belongs to the selected Feature state, not a manifest
+    inode that a completed sweep unlinks. Closing releases it after failures.
+    """
+
+    data_dir().mkdir(parents=True, exist_ok=True)
+    with (data_dir() / ".sweep.lock").open("a") as guard:
+        fcntl.flock(guard, fcntl.LOCK_EX)
+        yield
+
+
+def append(path: Path, record: dict[str, Any], *, consuming: bool = False) -> None:
+    """Append new work under the state lock, or consumption already holding it.
+
+    A consumption record starts a new line even after an interrupted write and
+    preserves the unknown-owner age. Only new registrations refresh that age.
+    Consumption callers hold the lock for their entire sweep; ordinary writes
+    acquire it here so a new registration's timestamp cannot be overwritten.
+    """
+
+    if consuming:
+        _append(path, record, consuming=True)
+        return
+    with _state_lock():
+        _append(path, record, consuming=False)
+
+
+def _append(path: Path, record: dict[str, Any], *, consuming: bool) -> None:
+    """Write a line while the caller holds the selected state's lock."""
 
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("a", encoding="utf-8") as handle:
+        previous = os.fstat(handle.fileno()) if consuming else None
+        if consuming:
+            handle.write("\n")
         handle.write(json.dumps(record, sort_keys=True) + "\n")
+        if previous is not None:
+            handle.flush()
+            os.utime(handle.fileno(), ns=(previous.st_atime_ns, previous.st_mtime_ns))
 
 
 def open_session(key: str, harness: str, session: str) -> None:
@@ -427,6 +504,11 @@ def stop_pid(entry: dict[str, Any]) -> dict[str, Any]:
     reach far past anything this feature was told about. So a leader is stopped
     with everything it spawned and a follower is stopped alone, which is the
     honest half of the job rather than a guess at the whole of it.
+
+    Birth and group membership are checked again before each signal. A missing
+    leader cannot authorize stopping its surviving group. ps start times have
+    second resolution, and observation and signaling are separate OS calls:
+    exit, PID reuse, or group changes in between cannot be excluded atomically.
     """
 
     try:
@@ -436,22 +518,87 @@ def stop_pid(entry: dict[str, Any]) -> dict[str, Any]:
 
     if pid <= 1 or pid == os.getpid():
         return {"outcome": "refused", "detail": "that is not a process to stop"}
+
+    def group_remains() -> bool:
+        """Treat a surviving or unreadable group as unresolved ownership."""
+
+        try:
+            os.kill(-pid, 0)
+        except ProcessLookupError:
+            return False
+        except OSError:
+            return True
+        return True
+
     if not alive(pid):
+        if group_remains():
+            return {
+                "outcome": "refused",
+                "detail": "a leaderless process group remains or is unreadable",
+            }
         return {"outcome": "gone", "detail": None}
 
-    recorded = str(entry.get("started") or "")
-    if recorded and started_at(pid) != recorded:
+    recorded = str(entry.get("started") or "").strip()
+    if not recorded:
         return {
-            "outcome": "reused",
-            "detail": "the process id now names something else and was left alone",
+            "outcome": "refused",
+            "detail": "the recorded start identity is missing",
         }
+
+    def birth_failure() -> dict[str, Any] | None:
+        """Validate the same recorded birth at preflight and signal boundaries."""
+
+        current = started_at(pid)
+        if not current:
+            return {
+                "outcome": "refused",
+                "detail": "the current start identity is unreadable",
+            }
+        if current != recorded:
+            return {
+                "outcome": "reused",
+                "detail": "the process id now names something else and was left alone",
+            }
+        return None
+
+    failure = birth_failure()
+    if failure is not None:
+        return failure
 
     target, scope = pid, "process"
     try:
-        if os.getpgid(pid) == pid:
+        group = os.getpgid(pid)
+        if group == pid:
             target, scope = -pid, "group"
     except OSError:
-        pass
+        return {
+            "outcome": "refused",
+            "detail": "the current process group is unreadable",
+        }
+
+    def identity_failure() -> dict[str, Any] | None:
+        """Recheck the intended scope and birth at each destructive boundary."""
+
+        try:
+            current_group = os.getpgid(pid)
+        except OSError:
+            return {
+                "outcome": "refused",
+                "detail": "the current process group is unreadable",
+            }
+        failure = birth_failure()
+        if failure is not None:
+            return failure
+        if current_group != group:
+            return {
+                "outcome": "refused",
+                "detail": "the intended process group changed",
+            }
+        return None
+
+    failure = identity_failure()
+    if failure is not None:
+        return failure
 
     try:
         os.kill(target, signal.SIGTERM)
@@ -462,11 +609,24 @@ def stop_pid(entry: dict[str, Any]) -> dict[str, Any]:
     while time.monotonic() < deadline and alive(pid):
         time.sleep(0.1)
     if alive(pid):
+        failure = identity_failure()
+        if failure is not None:
+            return failure
         try:
             os.kill(target, signal.SIGKILL)
         except OSError as exc:
             return {"outcome": "failed", "detail": str(exc)}
+        if alive(pid) or (scope == "group" and group_remains()):
+            return {
+                "outcome": "failed",
+                "detail": "the process or group remains after KILL; cleanup is unresolved",
+            }
         return {"outcome": "killed", "detail": scope}
+    if scope == "group" and group_remains():
+        return {
+            "outcome": "refused",
+            "detail": "a leaderless process group remains or is unreadable",
+        }
     return {"outcome": "stopped", "detail": scope}
 
 
@@ -529,17 +689,74 @@ ACTIONS = {"pid": stop_pid, "container": stop_container, "path": remove_path}
 def sweep(
     path: Path, *, why: str, sweeper_session: str = "", sweeper_harness: str = ""
 ) -> dict[str, Any]:
-    """Act on every entry one manifest holds, log all of it, and take it away.
+    """Act on pending entries, preserving raw history for unresolved PIDs.
 
     A manifest that recorded nothing is logged as exactly that. Recording is
     the one step of this design that depends on an agent remembering to take
     it, so whether it happens has to be visible somewhere, and a session that
-    ended having written nothing down is the evidence that it did not.
+    ended having written nothing down is the evidence that it did not. A kept
+    manifest retains its original lines. Name-based actions consume their
+    authorization before removal; completed PID actions consume it afterwards.
+    A retry never re-authorizes a removal at an old path or container name.
+    Failure to append consumption prevents the name-based action from running.
+    A stable state lock serializes sweeps, including across manifest deletion,
+    so a concurrent sweep reads the preceding sweep's consumption records.
+    Retiring fully consumed history emits no empty audit or repeated action.
+    Unreadable history is kept and reported with an unknown entry count, not
+    as a manifest that recorded nothing.
     """
 
-    header, entries = read_manifest(path)
+    with _state_lock():
+        return _sweep(
+            path,
+            why=why,
+            sweeper_session=sweeper_session,
+            sweeper_harness=sweeper_harness,
+        )
+
+
+def _sweep(
+    path: Path, *, why: str, sweeper_session: str, sweeper_harness: str
+) -> dict[str, Any]:
+    """Apply pending actions under the lock, retaining unreadable history."""
+
+    # An unreadable history establishes neither an empty audit nor retirement.
+    try:
+        header, entries, recorded = _pending_manifest(path)
+    except (OSError, UnicodeDecodeError, ValueError) as exc:
+        log(
+            "manifest-kept",
+            why=why,
+            sweeper_session=sweeper_session,
+            sweeper_harness=sweeper_harness,
+            session=path.stem,
+            detail=str(exc),
+        )
+        return {"session": path.stem, "entries": None, "acted": []}
+
+    # A recovered read must establish eligibility before a start acts.
+    if why == "start" and sweeper_session:
+        ancestors = process_ancestors()
+        pending = [entry for _, entry in entries]
+        if ancestors is None or not _start_eligible(path, header, pending, ancestors):
+            log(
+                "manifest-kept",
+                why=why,
+                sweeper_session=sweeper_session,
+                sweeper_harness=sweeper_harness,
+                session=header.get("id") or path.stem,
+                detail="live or uncertain start-sweep ownership",
+            )
+            return {
+                "session": header.get("id") or path.stem,
+                "entries": len(entries),
+                "acted": [],
+            }
+
     acted: list[dict[str, Any]] = []
-    for entry in entries:
+    for position, entry in entries:
+        if entry.get("kind") != "pid":
+            append(path, {"kind": "consumed", "line": position}, consuming=True)
         action = ACTIONS.get(str(entry.get("kind")))
         result = (
             action(entry)
@@ -559,8 +776,10 @@ def sweep(
             outcome=result["outcome"],
             detail=result["detail"],
         )
+        if entry.get("kind") == "pid" and result["outcome"] in RESOLVED_PID_OUTCOMES:
+            append(path, {"kind": "consumed", "line": position}, consuming=True)
 
-    if not entries:
+    if not recorded:
         log(
             "recorded-nothing",
             why=why,
@@ -570,10 +789,18 @@ def sweep(
             harness=header.get("harness"),
         )
 
-    try:
-        path.unlink(missing_ok=True)
-    except OSError as exc:
-        log("manifest-kept", session=path.stem, detail=str(exc))
+    # Keep original ownership and historical birth fields intact on refusal.
+    unresolved = any(
+        result["kind"] == "pid" and result["outcome"] not in RESOLVED_PID_OUTCOMES
+        for result in acted
+    )
+    if unresolved:
+        log("manifest-kept", session=path.stem, detail="unresolved process cleanup")
+    else:
+        try:
+            path.unlink(missing_ok=True)
+        except OSError as exc:
+            log("manifest-kept", session=path.stem, detail=str(exc))
 
     return {
         "session": header.get("id") or path.stem,
@@ -598,7 +825,7 @@ def process_chain() -> list[tuple[int, str]] | None:
     try:
         completed = subprocess.run(
             ["ps", "-axo", "pid=,ppid=,comm="],
-            cwd=home(),
+            cwd=home(initialize=True),
             text=True,
             capture_output=True,
             check=False,
@@ -612,14 +839,16 @@ def process_chain() -> list[tuple[int, str]] | None:
                 line.split(maxsplit=2) for line in completed.stdout.splitlines()
             )
         }
-    except (OSError, subprocess.SubprocessError, ValueError):
+    except (OSError, RuntimeError, subprocess.SubprocessError, ValueError):
         return None
 
-    # A missing link cannot establish which Harness owns the calling shell.
+    # A missing link or cycle cannot establish the calling shell's owner.
     chain: list[tuple[int, str]] = []
     seen: set[int] = set()
     pid = os.getpid()
-    while pid > 1 and pid not in seen:
+    while pid > 1:
+        if pid in seen:
+            return None
         seen.add(pid)
         if pid not in parents:
             return None
@@ -661,12 +890,42 @@ def live_recorded_processes(entries: list[dict[str, Any]]) -> set[int]:
     return processes
 
 
-def foreign_manifests(mine: str) -> list[Path]:
-    """Select ended owners, retaining live or unreadable known identities.
+def _start_eligible(
+    path: Path,
+    header: dict[str, Any],
+    entries: list[dict[str, Any]],
+    ancestors: set[int],
+) -> bool:
+    """Apply the same lifetime, ancestor and age policy to observed history.
 
     A missing owner (including legacy SID headers) waits for the age fallback.
     Recorded ancestors protect the entire manifest regardless of age or header.
     A known owner is released only by death or a changed process start time.
+    """
+
+    # Retain recorded ancestors before considering owner death or fallback age.
+    if ancestors & live_recorded_processes(entries):
+        return False
+
+    # Only observed death or a different birth releases a known owner.
+    try:
+        pid = int(header.get("owner_pid") or 0)
+    except (TypeError, ValueError):
+        pid = 0
+    recorded = str(header.get("owner_started") or "")
+    if pid > 1 and recorded:
+        if not alive(pid):
+            return True
+        current = started_at(pid)
+        return bool(current and current != recorded)
+    return stale(path)
+
+
+def foreign_manifests(mine: str) -> list[Path]:
+    """Select candidates whose observed ownership permits a start sweep.
+
+    Selection can miss ownership after a read failure. The hook-start sweep
+    reapplies the same policy to its recovered history before any action.
     """
 
     found: list[Path] = []
@@ -682,24 +941,7 @@ def foreign_manifests(mine: str) -> list[Path]:
         if path.stem == safe_key(mine):
             continue
         header, entries = read_manifest(path)
-        processes = live_recorded_processes(entries)
-        if ancestors & processes:
-            continue
-        try:
-            pid = int(header.get("owner_pid") or 0)
-        except (TypeError, ValueError):
-            pid = 0
-        recorded = str(header.get("owner_started") or "")
-        if pid > 1 and recorded:
-            if not alive(pid):
-                found.append(path)
-                continue
-            current = started_at(pid)
-            if current and current != recorded:
-                found.append(path)
-            # A live owner or unreadable identity overrides the age fallback.
-            continue
-        if stale(path):
+        if _start_eligible(path, header, entries, ancestors):
             found.append(path)
     return found
 
@@ -773,6 +1015,10 @@ def add(kind: str, identifier: str, why: str) -> dict[str, Any]:
         if not alive(pid):
             raise RecordingError(f"process {pid} is not running")
         record["started"] = started_at(pid)
+        if not record["started"]:
+            raise RecordingError(
+                f"cannot establish the start identity of process {pid}"
+            )
     if kind == "path" and under_temp(Path(identifier)) is None:
         raise RecordingError(
             f"'{identifier}' is not under a temp root, and only a temp root is "

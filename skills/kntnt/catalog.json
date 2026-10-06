@@ -1,6 +1,6 @@
 {
   "origin": "Kntnt/skills",
-  "manager_digest": "8a4e2d0da346db36c5f804ce72e7c5ebb431a1cb26d79371646d6cf7484b39e6",
+  "manager_digest": "f6f699403e2e33bb56f51edcce8327694fcdea7c6c35597abf7d8edd78c3fe96",
   "skills": [
     {
       "name": "agents-md",
@@ -277,7 +277,7 @@
       "name": "session-cleanup",
       "category": "environment",
       "description": "Leave the machine as the session found it — the agent records what it starts, and a lifecycle hook stops exactly that when the session ends or the next one begins.",
-      "digest": "3c34076d8622c22225ad8acdef02463a02451dda7ee46b2ef2606f4560acd7c3",
+      "digest": "d2ad72e4fd418e20c80610fe4334cd74642c3e7d97a301bf669b9889095ebad0",
       "binaries": [
         "uv"
       ],
@@ -290,7 +290,7 @@
       "writes": [
         "A fenced block, delimited by `<!-- kntnt.session-cleanup begin -->` and `<!-- kntnt.session-cleanup end -->`, at the end of each Harness's own global instruction file — `~/.claude/CLAUDE.md`, `~/.codex/AGENTS.md`, `~/.config/opencode/AGENTS.md`. These are files you own and read; everything above the fence is left exactly as it is, and disabling the Feature takes the fenced block away and nothing else.",
         "One session-lifecycle entry per Harness, in that Harness's own hook table — `~/.claude/settings.json`, `~/.codex/hooks.json` — or, for OpenCode, as the plugin file `~/.config/opencode/plugins/kntnt.session-cleanup.js`.",
-        "Per-session manifests, and one log of every action taken, under `~/.kntnt/session-cleanup/`. Nothing is written outside these three places."
+        "Per-session manifests, a lock coordinating sweeps, and one log of every action taken, under `~/.kntnt/session-cleanup/`. Nothing is written outside these three places."
       ]
     },
     {
