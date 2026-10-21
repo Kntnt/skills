@@ -12,6 +12,8 @@ release - publish a version from the default branch
 
 `release` turns `[Unreleased]` into a published version from the default branch. It reconciles regardless of the working tree and promotes the changelog under the current date, updates the file that carries the version (`package.json`, `composer.json`, `pyproject.toml`, `Cargo.toml`, `.claude-plugin/plugin.json`, a WordPress plugin header, or a `VERSION` file; a Project with none of these is versioned by its tag alone), commits and pushes through the `push` Skill, creates an annotated tag, builds any release assets, then pushes the tag and publishes a GitHub release from the promoted changelog section.
 
+If the changelog ends in Keep a Changelog link references, the release points `[Unreleased]` at a comparison from the new tag and adds a link for the new version shaped like the one for the version before it, a release page or a comparison. A changelog without link references gets none.
+
 If the Project has an executable `bin/build-release-assets`, written in any language, the release empties `release-assets/`, runs it while HEAD carries the new tag, and creates the GitHub release with every file it leaves there, so the release never appears without its assets. A Project without it attaches nothing, and neither does a release made with `--no-build`, whatever `release-assets/` holds. The plan, changelog diff, selected version, and build command are shown before anything is written unless `--yes` is present.
 
 The displayed plan includes the complete changelog commit inventory; a request to see every commit is answered by re-running the plan with its full-inventory option.
@@ -47,6 +49,8 @@ Release without waiting for confirmation.
 An invalid argument or option is refused rather than ignored. The Skill names the error, prints the SYNOPSIS, publishes nothing, and points to `/release --help`. An operand written before an option is out of order and is refused the same way.
 
 A branch other than the default branch, an empty `[Unreleased]`, or a version that cannot be rewritten unambiguously stops the release before a partial bump is left behind.
+
+Link references the release cannot follow are left as they were, and the release warns and goes on. It follows them only when `[Unreleased]` compares from a tag to `HEAD` and the link right below it is the one for that tag.
 
 If `gh` is unavailable or the remote is not GitHub, no release assets are built, the tag is pushed, and the Skill reports that the GitHub release step was skipped. The rest of the release remains complete.
 

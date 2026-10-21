@@ -4,9 +4,11 @@ from __future__ import annotations
 
 import json
 import os
+import re
 import subprocess
 from pathlib import Path
 
+import pytest
 from support.contract import STANDARD
 from support.fake_binary import fake_binary_on_path
 
@@ -818,6 +820,181 @@ def test_apply_bump_writes_version_and_promotes_changelog(tmp_path: Path) -> Non
     assert "## [0.2.0]" in changelog
     assert "## [Unreleased]" in changelog
     assert _git(repo, "tag", "-l", "v0.2.0").stdout.strip() == ""
+
+
+def _linked_changelog(links: str) -> str:
+    """Return a changelog with one release behind it, ending in *links*."""
+
+    return CHANGELOG + "\n### Added\n\n- A first greeting.\n\n" + links
+
+
+def _bump_changelog(
+    tmp_path: Path, changelog: str, version: str
+) -> tuple[subprocess.CompletedProcess[str], str]:
+    """Bump a Project holding only *changelog*. Return the run and the file."""
+
+    repo = _init_repo(tmp_path / "proj")
+    (repo / "CHANGELOG.md").write_text(changelog, encoding="utf-8")
+    _git(repo, "add", "CHANGELOG.md")
+    _git(repo, "commit", "-m", "changelog")
+    result = _ship(repo, "apply", "bump", "--version", version)
+    return result, (repo / "CHANGELOG.md").read_text(encoding="utf-8")
+
+
+def _links(text: str) -> list[str]:
+    """Return the link reference definitions in *text*, in order."""
+
+    return [line for line in text.splitlines() if re.match(r"^\[[^\]]+\]: ", line)]
+
+
+def test_apply_bump_links_the_new_release_page_and_compares_unreleased_from_it(
+    tmp_path: Path,
+) -> None:
+    changelog = _linked_changelog(
+        "[Unreleased]: https://github.com/example/proj/compare/v0.1.0...HEAD\n"
+        "[0.1.0]: https://github.com/example/proj/releases/tag/v0.1.0\n"
+    )
+
+    result, text = _bump_changelog(tmp_path, changelog, "0.2.0")
+
+    assert result.returncode == 0, result.stderr
+    assert result.stdout == "0.2.0\n"
+    assert result.stderr == ""
+    assert "## [0.2.0] – " in text
+    assert _links(text) == [
+        "[Unreleased]: https://github.com/example/proj/compare/v0.2.0...HEAD",
+        "[0.2.0]: https://github.com/example/proj/releases/tag/v0.2.0",
+        "[0.1.0]: https://github.com/example/proj/releases/tag/v0.1.0",
+    ]
+
+
+def test_apply_bump_links_the_new_release_as_a_comparison_when_the_last_one_is(
+    tmp_path: Path,
+) -> None:
+    changelog = _linked_changelog(
+        "[unreleased]: https://git.example.org/team/proj/compare/v0.1.0...HEAD\n"
+        "[0.1.0]: https://git.example.org/team/proj/compare/v0.0.1...v0.1.0\n"
+        "[0.0.1]: https://git.example.org/team/proj/releases/tag/v0.0.1\n"
+    )
+
+    result, text = _bump_changelog(tmp_path, changelog, "0.2.0")
+
+    assert result.returncode == 0, result.stderr
+    assert result.stdout == "0.2.0\n"
+    assert result.stderr == ""
+    assert _links(text) == [
+        "[unreleased]: https://git.example.org/team/proj/compare/v0.2.0...HEAD",
+        "[0.2.0]: https://git.example.org/team/proj/compare/v0.1.0...v0.2.0",
+        "[0.1.0]: https://git.example.org/team/proj/compare/v0.0.1...v0.1.0",
+        "[0.0.1]: https://git.example.org/team/proj/releases/tag/v0.0.1",
+    ]
+
+
+def test_apply_bump_links_the_tag_it_creates_after_a_tag_without_v_prefix(
+    tmp_path: Path,
+) -> None:
+    changelog = _linked_changelog(
+        "[Unreleased]: https://github.com/example/proj/compare/0.1.0...HEAD\n"
+        "[0.1.0]: https://github.com/example/proj/releases/tag/0.1.0\n"
+    )
+
+    result, text = _bump_changelog(tmp_path, changelog, "0.2.0")
+
+    assert result.returncode == 0, result.stderr
+    assert result.stderr == ""
+    assert _links(text) == [
+        "[Unreleased]: https://github.com/example/proj/compare/v0.2.0...HEAD",
+        "[0.2.0]: https://github.com/example/proj/releases/tag/v0.2.0",
+        "[0.1.0]: https://github.com/example/proj/releases/tag/0.1.0",
+    ]
+
+
+def test_apply_bump_adds_no_link_reference_to_a_changelog_without_them(
+    tmp_path: Path,
+) -> None:
+    result, text = _bump_changelog(tmp_path, CHANGELOG, "0.2.0")
+
+    assert result.returncode == 0, result.stderr
+    assert result.stderr == ""
+    assert _links(text) == []
+
+
+def test_apply_bump_keeps_link_references_that_already_name_the_new_release(
+    tmp_path: Path,
+) -> None:
+    links = (
+        "[Unreleased]: https://github.com/example/proj/compare/v0.2.0...HEAD\n"
+        "[0.2.0]: https://github.com/example/proj/releases/tag/v0.2.0\n"
+        "[0.1.0]: https://github.com/example/proj/releases/tag/v0.1.0\n"
+    )
+
+    result, text = _bump_changelog(tmp_path, _linked_changelog(links), "0.2.0")
+
+    assert result.returncode == 0, result.stderr
+    assert result.stderr == ""
+    assert _links(text) == links.splitlines()
+
+
+@pytest.mark.parametrize(
+    "links",
+    [
+        pytest.param(
+            "[0.1.0]: https://github.com/example/proj/releases/tag/v0.1.0\n",
+            id="no-unreleased",
+        ),
+        pytest.param(
+            "[Unreleased]: https://github.com/example/proj/commits/main\n"
+            "[0.1.0]: https://github.com/example/proj/releases/tag/v0.1.0\n",
+            id="unreleased-not-a-comparison",
+        ),
+        pytest.param(
+            "[Unreleased]: https://github.com/example/proj/compare/v0.0.9...HEAD\n"
+            "[0.1.0]: https://github.com/example/proj/releases/tag/v0.1.0\n",
+            id="unreleased-from-another-tag",
+        ),
+        pytest.param(
+            "[Unreleased]: https://github.com/example/proj/compare/v0.1.0...HEAD\n"
+            "[0.1.0]: https://example.org/downloads?release=v0.1.0\n",
+            id="release-link-of-unknown-shape",
+        ),
+        pytest.param(
+            "[0.1.0]: https://github.com/example/proj/releases/tag/v0.1.0\n"
+            "[Unreleased]: https://github.com/example/proj/compare/v0.1.0...HEAD\n",
+            id="oldest-first",
+        ),
+    ],
+)
+def test_apply_bump_leaves_link_references_it_cannot_follow_and_warns(
+    tmp_path: Path, links: str
+) -> None:
+    result, text = _bump_changelog(tmp_path, _linked_changelog(links), "0.2.0")
+
+    assert result.returncode == 0, result.stderr
+    assert result.stdout == "0.2.0\n"
+    assert result.stderr.startswith("warning: ")
+    assert "link reference" in result.stderr
+    assert "## [0.2.0] – " in text
+    assert _links(text) == links.splitlines()
+
+
+def test_apply_publish_notes_stop_before_the_link_references(tmp_path: Path) -> None:
+    repo, _remote = _github_repo(tmp_path)
+    (repo / "CHANGELOG.md").write_text(
+        "# Changelog\n\n## [Unreleased]\n\n## [0.2.0] – 2026-02-02\n\n"
+        "### Added\n\n- A shipped thing.\n\n"
+        "[Unreleased]: https://github.com/example/proj/compare/v0.2.0...HEAD\n"
+        "[0.2.0]: https://github.com/example/proj/releases/tag/v0.2.0\n",
+        encoding="utf-8",
+    )
+    _git(repo, "commit", "-am", "First release")
+    _tag_locally(repo)
+    env, log = _recording_gh(tmp_path)
+
+    result = _ship(repo, "apply", "publish", "--version", "0.2.0", env=env)
+
+    assert result.returncode == 0, result.stderr
+    call = _gh_calls(log)[0]
+    assert call[call.index("--notes") + 1] == "## Added\n\n- A shipped thing."
 
 
 def test_apply_bump_refuses_empty_unreleased(tmp_path: Path) -> None:

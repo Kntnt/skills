@@ -25,6 +25,11 @@ JSON_VERSION_RE = re.compile(r'("version"\s*:\s*")([^"]+)(")')
 TOML_VERSION_RE = re.compile(r'^(version\s*=\s*")([^"]+)(")', re.MULTILINE)
 WORDPRESS_VERSION_RE = re.compile(r"^([ \t/*#@]*Version:[ \t]*)(\S+)", re.MULTILINE)
 VERSION_FILE_RE = re.compile(r"\A(\s*)(\S+)")
+LINK_DEFINITION_RE = re.compile(r"^\[(?P<label>[^\]\n]+)\]:[ \t]*(?P<url>\S+)[ \t]*$")
+COMPARE_URL_RE = re.compile(
+    r"^(?P<base>\S+/compare/)(?P<base_tag>[^/\s]+?)(?P<dots>\.{2,3})(?P<head>[^/\s]+)$"
+)
+TAG_URL_RE = re.compile(r"^(?P<base>\S+/)(?P<tag>[^/?#\s]+)$")
 
 # WordPress reads a plugin's header from the first 8 KiB of its main file.
 WORDPRESS_HEADER_LENGTH: Final = 8192
@@ -63,6 +68,12 @@ def fail(message: str, code: int = 1) -> int:
 
     print(f"error: {message}", file=sys.stderr)
     return code
+
+
+def warn(message: str) -> None:
+    """Print a warning to stderr, leaving stdout to the verb's one-line result."""
+
+    print(f"warning: {message}", file=sys.stderr)
 
 
 def git(cwd: Path, *args: str) -> str:
@@ -596,6 +607,85 @@ def promote_changelog(text: str, version: str, date: str) -> str:
     return text.replace(heading, f"{heading}\n\n## [{version}] – {date}", 1)
 
 
+def link_release(text: str, version: str, tag: str) -> tuple[str, str | None]:
+    """Point the changelog's link references at release *version*, tagged *tag*.
+
+    Returns the text and, when its references cannot be followed, a reason
+    they were left as they were. The new definitions are copied from the ones
+    already there rather than built from a guess about the host:
+    ``[Unreleased]`` keeps its ``compare/<tag>...HEAD`` shape and moves its
+    base to *tag*, and the release it compared from, which must be the very
+    next definition, is the model for the one inserted between them — a
+    release page becomes the new tag's page, a comparison becomes one from the
+    previous tag to the new. A changelog with no ``[Unreleased]`` or version
+    definition is left alone without a reason, and one that already names
+    *tag* comes back unchanged, so a second run changes nothing.
+    """
+
+    lines = text.splitlines(keepends=True)
+    definitions = {
+        index: found
+        for index, line in enumerate(lines)
+        if (found := LINK_DEFINITION_RE.match(line.rstrip("\r\n")))
+    }
+    unreleased = next(
+        (i for i, m in definitions.items() if m["label"].lower() == "unreleased"),
+        None,
+    )
+    released = any(VERSION_RE.match(m["label"]) for m in definitions.values())
+    if unreleased is None:
+        if not released:
+            return text, None
+        return text, "no [Unreleased] link reference"
+
+    compare = COMPARE_URL_RE.match(definitions[unreleased]["url"])
+    if compare is None or compare["head"] != "HEAD":
+        return text, "[Unreleased] does not link a comparison from a tag to HEAD"
+    previous_tag = compare["base_tag"]
+    has_version = any(m["label"] == version for m in definitions.values())
+    if previous_tag == tag and has_version:
+        return text, None
+    if has_version:
+        return text, f"[{version}] already has a link reference"
+
+    # The definition right below [Unreleased] has to be the release it compares
+    # from: that is what newest-first order means, and it is the only evidence
+    # of the shape this changelog gives a release's link.
+    model = definitions.get(unreleased + 1)
+    url = _next_release_url(model["url"], previous_tag, tag) if model else None
+    if model is None or not VERSION_RE.match(model["label"]) or url is None:
+        return text, (
+            f"the link reference after [Unreleased] is not one for {previous_tag}"
+            " in a shape this can follow"
+        )
+
+    line = lines[unreleased]
+    ending = line[len(line.rstrip("\r\n")) :] or "\n"
+    label = definitions[unreleased]["label"]
+    unreleased_url = f"{compare['base']}{tag}{compare['dots']}HEAD"
+    lines[unreleased] = f"[{label}]: {unreleased_url}{ending}"
+    lines.insert(unreleased + 1, f"[{version}]: {url}{ending}")
+    return "".join(lines), None
+
+
+def _next_release_url(url: str, previous_tag: str, tag: str) -> str | None:
+    """Return the link for *tag* shaped like *url*, the link for *previous_tag*.
+
+    A comparison ending at the previous tag becomes one from it to *tag*; any
+    other link whose last path segment is the previous tag gets *tag* there
+    instead. Anything else returns None.
+    """
+
+    if compare := COMPARE_URL_RE.match(url):
+        if compare["head"] != previous_tag:
+            return None
+        return f"{compare['base']}{previous_tag}{compare['dots']}{tag}"
+    page = TAG_URL_RE.match(url)
+    if page is None or page["tag"] != previous_tag:
+        return None
+    return f"{page['base']}{tag}"
+
+
 def extract_release_notes(text: str, version: str) -> str:
     """Return the body of ``## [version]`` with headings shifted up one level."""
 
@@ -631,7 +721,12 @@ def _require_default_branch(cwd: Path) -> None:
 
 
 def apply_bump(cwd: Path, version: str) -> str:
-    """Bump version files and promote the changelog. Return the version."""
+    """Bump version files, promote the changelog and link it. Return the version.
+
+    Link references the bump cannot follow are left as they were, and the
+    reason goes to stderr as a warning: stdout stays the bare version, and a
+    release is not worth stopping over a link.
+    """
 
     tag = _require_version(version)
     _require_default_branch(cwd)
@@ -641,10 +736,13 @@ def apply_bump(cwd: Path, version: str) -> str:
     if unreleased_is_empty(changelog) is not False:
         raise GitError("nothing to release")
 
-    bump_version_files(cwd, version)
     date = datetime.datetime.now(tz=datetime.UTC).date().isoformat()
     new_text = promote_changelog(changelog.read_text(encoding="utf-8"), version, date)
+    new_text, unlinked = link_release(new_text, version, tag)
+    bump_version_files(cwd, version)
     changelog.write_text(new_text, encoding="utf-8")
+    if unlinked:
+        warn(f"CHANGELOG.md link references left unchanged: {unlinked}")
     return version
 
 
