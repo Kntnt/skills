@@ -14,6 +14,7 @@ import shutil
 import subprocess
 import sys
 import tomllib
+from collections.abc import Callable
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
 from typing import Final
@@ -22,16 +23,14 @@ from urllib.parse import urlparse
 VERSION_RE = re.compile(r"^\d+\.\d+\.\d+(?:[-+][0-9A-Za-z.-]+)?$")
 JSON_VERSION_RE = re.compile(r'("version"\s*:\s*")([^"]+)(")')
 TOML_VERSION_RE = re.compile(r'^(version\s*=\s*")([^"]+)(")', re.MULTILINE)
-MAKE_TARGET_RE = re.compile(r"^([A-Za-z][A-Za-z0-9_-]*):")
+WORDPRESS_VERSION_RE = re.compile(r"^([ \t/*#@]*Version:[ \t]*)(\S+)", re.MULTILINE)
+VERSION_FILE_RE = re.compile(r"\A(\s*)(\S+)")
 
-BUILD_SCRIPTS = (
-    "scripts/build-zip.sh",
-    "scripts/build-release.sh",
-    "scripts/package.sh",
-    "build-release-zip.sh",
-)
-MAKE_TARGETS = ("zip", "dist", "archive", "release-zip")
-NPM_SCRIPTS = ("zip", "build:zip", "archive")
+# WordPress reads a plugin's header from the first 8 KiB of its main file.
+WORDPRESS_HEADER_LENGTH: Final = 8192
+
+RELEASE_ASSETS_COMMAND: Final = "bin/build-release-assets"
+RELEASE_ASSETS_DIR: Final = "release-assets"
 COMMIT_EXCERPT_HEAD: Final = 3
 COMMIT_EXCERPT_TAIL: Final = 3
 
@@ -109,19 +108,6 @@ def _gh(cwd: Path, *args: str) -> str:
         detail = (result.stderr or result.stdout).strip()
         raise GitError(detail or f"gh {' '.join(args)} failed")
     return result.stdout
-
-
-def _gh_ok(cwd: Path, *args: str) -> bool:
-    """Return True when a gh command exits 0."""
-
-    result = subprocess.run(
-        ["gh", *args],
-        cwd=cwd,
-        text=True,
-        capture_output=True,
-        check=False,
-    )
-    return result.returncode == 0
 
 
 @dataclass
@@ -276,51 +262,16 @@ def gitignore_proposal(cwd: Path) -> str | None:
     return "\n".join(part.rstrip() for part in parts) + "\n"
 
 
-def make_targets(path: Path) -> set[str]:
-    """Return Makefile target names declared at column 0."""
-
-    names: set[str] = set()
-    for line in path.read_text(encoding="utf-8").splitlines():
-        match = MAKE_TARGET_RE.match(line)
-        if match:
-            names.add(match.group(1))
-    return names
-
-
-def json_scripts(path: Path) -> set[str]:
-    """Return package.json script names."""
-
-    try:
-        data = json.loads(path.read_text(encoding="utf-8"))
-    except json.JSONDecodeError:
-        return set()
-    scripts = data.get("scripts")
-    if not isinstance(scripts, dict):
-        return set()
-    return {name for name in scripts if isinstance(name, str)}
-
-
 def detect_build(cwd: Path) -> dict[str, str] | None:
-    """Return the first conventional archive build command, or None."""
+    """Return the release-assets command and its directory, or None.
 
-    for relative in BUILD_SCRIPTS:
-        if (cwd / relative).is_file():
-            return {"command": relative}
+    One convention covers every kind of Project, whatever its language: an
+    executable `bin/build-release-assets` leaves the files to attach in
+    `release-assets/`. A Project without it attaches nothing.
+    """
 
-    makefile = cwd / "Makefile"
-    if makefile.is_file():
-        targets = make_targets(makefile)
-        for name in MAKE_TARGETS:
-            if name in targets:
-                return {"command": f"make {name}"}
-
-    package = cwd / "package.json"
-    if package.is_file():
-        scripts = json_scripts(package)
-        for name in NPM_SCRIPTS:
-            if name in scripts:
-                return {"command": f"npm run {name}"}
-
+    if (cwd / RELEASE_ASSETS_COMMAND).is_file():
+        return {"command": RELEASE_ASSETS_COMMAND, "directory": RELEASE_ASSETS_DIR}
     return None
 
 
@@ -431,12 +382,76 @@ def detect_versions(cwd: Path) -> list[tuple[str, str]]:
         version = toml_version(pyproject)
         if version:
             found.append(("pyproject.toml", version))
+    cargo = cwd / "Cargo.toml"
+    if cargo.is_file():
+        version = toml_version(cargo)
+        if version:
+            found.append(("Cargo.toml", version))
     plugin = cwd / ".claude-plugin" / "plugin.json"
     if plugin.is_file():
         version = json_version(plugin)
         if version:
             found.append((".claude-plugin/plugin.json", version))
+    for main_file in wordpress_plugin_files(cwd):
+        version = wordpress_reader(main_file.read_text(encoding="utf-8"))
+        if version:
+            found.append((main_file.name, version))
+    version_file = cwd / "VERSION"
+    if version_file.is_file():
+        version = version_file_reader(version_file.read_text(encoding="utf-8"))
+        if version:
+            found.append(("VERSION", version))
     return found
+
+
+def wordpress_plugin_files(cwd: Path) -> list[Path]:
+    """Return the PHP files at the root that carry a WordPress plugin header.
+
+    WordPress recognises a plugin's main file by a `Plugin Name:` header in its
+    first 8 KiB, so that is the test here too. A file that is not UTF-8 is not
+    one this can rewrite safely, and is passed over.
+    """
+
+    found: list[Path] = []
+    for path in sorted(cwd.glob("*.php")):
+        try:
+            head = path.read_text(encoding="utf-8")[:WORDPRESS_HEADER_LENGTH]
+        except (OSError, UnicodeDecodeError):
+            continue
+        if "Plugin Name:" in head:
+            found.append(path)
+    return found
+
+
+def wordpress_reader(text: str) -> str | None:
+    """Return the `Version:` of a WordPress plugin header in *text*, or None."""
+
+    head = text[:WORDPRESS_HEADER_LENGTH]
+    if "Plugin Name:" not in head:
+        return None
+    match = WORDPRESS_VERSION_RE.search(head)
+    return match[2] if match else None
+
+
+def version_file_reader(text: str) -> str | None:
+    """Return the version a `VERSION` file holds: its first word, or None."""
+
+    words = text.split()
+    return words[0] if words else None
+
+
+def version_format(
+    relative: str,
+) -> tuple[Callable[[str], str | None], re.Pattern[str]]:
+    """Return the reader and the rewrite pattern for a version location."""
+
+    if relative == "VERSION":
+        return version_file_reader, VERSION_FILE_RE
+    if relative.endswith(".toml"):
+        return toml_reader, TOML_VERSION_RE
+    if relative.endswith(".php"):
+        return wordpress_reader, WORDPRESS_VERSION_RE
+    return json_reader, JSON_VERSION_RE
 
 
 def json_version(path: Path) -> str | None:
@@ -466,8 +481,9 @@ def toml_reader(text: str) -> str | None:
     """Return the declared version from TOML *text*, or None.
 
     Reads `[project]` first, then `[tool.poetry]` — the two places a Python
-    project's own version conventionally lives. A dynamic version is absent
-    from both, which is the correct answer: there is nothing here to bump.
+    project's own version conventionally lives — and then Cargo's `[package]`.
+    A dynamic or workspace-inherited version is absent from all three, which
+    is the correct answer: there is nothing here to bump.
     """
 
     try:
@@ -477,7 +493,7 @@ def toml_reader(text: str) -> str | None:
 
     tool = data.get("tool")
     poetry = tool.get("poetry") if isinstance(tool, dict) else None
-    for table in (data.get("project"), poetry):
+    for table in (data.get("project"), poetry, data.get("package")):
         if isinstance(table, dict):
             value = table.get("version")
             if isinstance(value, str):
@@ -522,7 +538,7 @@ def _confirm_version(path: Path, updated: str, version: str, relative: str) -> N
     the identical string and no value match can tell the two apart.
     """
 
-    reader = toml_reader if path.suffix == ".toml" else json_reader
+    reader, _pattern = version_format(relative)
     if reader(updated) != version:
         raise GitError(f"could not bump version in {relative}")
 
@@ -559,7 +575,7 @@ def bump_version_files(cwd: Path, version: str) -> list[Path]:
     resolved: list[tuple[Path, str]] = []
     for relative, current in detect_versions(cwd):
         path = cwd / relative
-        pattern = TOML_VERSION_RE if path.suffix == ".toml" else JSON_VERSION_RE
+        _reader, pattern = version_format(relative)
         updated = _rewrite_version(
             path.read_text(encoding="utf-8"), pattern, current, version, relative
         )
@@ -643,28 +659,76 @@ def apply_tag(cwd: Path, version: str) -> str:
     return tag
 
 
-def apply_publish(cwd: Path, version: str, asset: str | None) -> str:
-    """Create a GitHub release, or upload *asset* onto an existing one."""
+def apply_publish(cwd: Path, version: str) -> str:
+    """Create the GitHub release from the version's changelog section."""
 
     tag = _require_version(version)
-    if not shutil.which("gh"):
-        raise GitError("gh not available")
-    if "github" not in _remote_host(_origin_url(cwd)):
-        raise GitError("origin is not GitHub")
-
-    if asset and _gh_ok(cwd, "release", "view", tag):
-        _gh(cwd, "release", "upload", tag, asset)
-        return "uploaded"
+    _require_github(cwd)
 
     notes = ""
     changelog = cwd / "CHANGELOG.md"
     if changelog.is_file():
         notes = extract_release_notes(changelog.read_text(encoding="utf-8"), version)
-    args = ["release", "create", tag, "--title", tag, "--notes", notes]
-    if asset:
-        args.append(asset)
-    _gh(cwd, *args)
+    _gh(cwd, "release", "create", tag, "--title", tag, "--notes", notes)
     return "released"
+
+
+def apply_assets(cwd: Path, version: str) -> str:
+    """Build the release assets and attach them to the published release.
+
+    Empties `release-assets/`, runs `bin/build-release-assets`, and uploads
+    every file it leaves there, so nothing from an earlier build rides along.
+    Refuses before running anything when git tracks a file in that directory:
+    emptying it would then destroy committed work rather than build output.
+    """
+
+    tag = _require_version(version)
+    _require_github(cwd)
+    command = cwd / RELEASE_ASSETS_COMMAND
+    if not command.is_file():
+        raise GitError(f"no {RELEASE_ASSETS_COMMAND}")
+    if git(cwd, "ls-files", "--", RELEASE_ASSETS_DIR).strip():
+        raise GitError(
+            f"{RELEASE_ASSETS_DIR}/ holds files git tracks; refusing to empty it"
+        )
+
+    directory = cwd / RELEASE_ASSETS_DIR
+    shutil.rmtree(directory, ignore_errors=True)
+    directory.mkdir()
+
+    # The command's own output is progress for whoever watches the release,
+    # so it goes to stderr and stdout stays this verb's one-line result.
+    try:
+        built = subprocess.run([str(command)], cwd=cwd, stdout=sys.stderr, check=False)
+    except OSError as exc:
+        raise GitError(f"cannot run {RELEASE_ASSETS_COMMAND}: {exc}") from exc
+    if built.returncode != 0:
+        raise GitError(
+            f"{RELEASE_ASSETS_COMMAND} failed with exit code {built.returncode}"
+        )
+
+    entries = sorted(directory.iterdir())
+    nested = [entry.name for entry in entries if not entry.is_file()]
+    if nested:
+        raise GitError(
+            f"{RELEASE_ASSETS_DIR}/ must hold only files, not {', '.join(nested)}"
+        )
+    if not entries:
+        raise GitError(
+            f"{RELEASE_ASSETS_COMMAND} left nothing in {RELEASE_ASSETS_DIR}/"
+        )
+
+    _gh(cwd, "release", "upload", tag, *(str(entry) for entry in entries), "--clobber")
+    return "uploaded " + ", ".join(entry.name for entry in entries)
+
+
+def _require_github(cwd: Path) -> None:
+    """Raise unless gh is available and origin is on GitHub."""
+
+    if not shutil.which("gh"):
+        raise GitError("gh not available")
+    if "github" not in _remote_host(_origin_url(cwd)):
+        raise GitError("origin is not GitHub")
 
 
 def _origin_url(cwd: Path) -> str:
@@ -714,8 +778,10 @@ def cmd_apply(cwd: Path, args: argparse.Namespace) -> int:
             result = apply_bump(cwd, args.version)
         elif args.mode == "tag":
             result = apply_tag(cwd, args.version)
+        elif args.mode == "publish":
+            result = apply_publish(cwd, args.version)
         else:
-            result = apply_publish(cwd, args.version, args.asset)
+            result = apply_assets(cwd, args.version)
     except GitError as exc:
         text = str(exc)
         if text == "nothing to commit":
@@ -768,8 +834,13 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
         "publish", help="Create or update the GitHub release."
     )
     publish.add_argument("--version", required=True)
-    publish.add_argument("--asset")
     add_yes_flag(publish)
+
+    assets = apply_sub.add_parser(
+        "assets", help="Build the release assets and attach them to the release."
+    )
+    assets.add_argument("--version", required=True)
+    add_yes_flag(assets)
 
     return parser.parse_args(argv)
 

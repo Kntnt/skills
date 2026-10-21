@@ -14,13 +14,13 @@ metadata:
 
 # release
 
-Ship a version from the default branch: changelog, bump, push, tag, GitHub release, optional archive.
+Ship a version from the default branch: changelog, bump, push, tag, GitHub release, optional release assets.
 
 Run `uv run "$HERE/scripts/invoke.py"` — `$HERE` is the directory that holds this SKILL.md — with everything the user typed after `/release`, verbatim and however many lines, on stdin. Exit 0: do what it prints. On any other exit, if you introduced a known construction error and can correct it while preserving the user's request and authority, account for effects already produced, submit the corrected invocation through the same shim, and continue from the failed boundary; a refusal before the operation starts consumes no operation. Otherwise show what it printed to the user verbatim and stop. Never repair input the user supplied, or automatically retry exact help, an unmet dependency, an unrelated failure, or a failure whose origin or valid correction is unknown.
 
 ## Arguments
 
-The operand is the version to ship — `X.Y.Z` exactly, or `minor` or `major` as the bump to apply — and step 4 says what its absence means. `--no-build` skips the archive step 10 would build and attach; `--yes` answers the wait in step 5. `gh` is required only for the GitHub release step.
+The operand is the version to ship — `X.Y.Z` exactly, or `minor` or `major` as the bump to apply — and step 4 says what its absence means. `--no-build` skips the release assets step 10 would build and attach; `--yes` answers the wait in step 5. `gh` is required only for the GitHub release step.
 
 ## Steps
 
@@ -33,4 +33,4 @@ The operand is the version to ship — `X.Y.Z` exactly, or `minor` or `major` as
 7. Follow `$HERE/../push/SKILL.md` with the Formal Invocation `--yes "Release X.Y.Z: <summary>"`. Summary is a short comma-separated reading of the changelog highlights. If the outer Contextual Instruction contains guidance relevant to push, append only that guidance after an explicit `--`; otherwise pass no Contextual Instruction. Done when stdout contains `pushed`.
 8. Run `uv run "$LIBRARY/scripts/ship.py" apply tag --version=X.Y.Z`. Done when stdout contains the tag.
 9. Run `uv run "$LIBRARY/scripts/ship.py" apply publish --version=X.Y.Z`. If it fails because `gh` is missing or origin is not GitHub, say the tag is pushed and stop after reporting that. Done when stdout contains `released`, or that report is given.
-10. If the plan has `build` and `--no-build` was not given: run the build command, then `uv run "$LIBRARY/scripts/ship.py" apply publish --version=X.Y.Z --asset=<zip>`. Done when stdout contains `uploaded` or `released`, or there was no archive to attach.
+10. If the plan has `build` and `--no-build` was not given: run `uv run "$LIBRARY/scripts/ship.py" apply assets --version=X.Y.Z`, which empties `release-assets/`, runs `bin/build-release-assets` and attaches every file it leaves there. Done when stdout starts with `uploaded`, or the plan has no `build`.

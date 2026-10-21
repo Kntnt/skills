@@ -415,57 +415,195 @@ def test_plan_commit_dirty_tree_keeps_complete_inventory(tmp_path: Path) -> None
     assert plan["commit_count"] == len(expected)
 
 
-def test_plan_release_detects_zip_script(tmp_path: Path) -> None:
+def _github_repo(tmp_path: Path) -> Path:
     repo = _init_repo(tmp_path / "proj")
-    scripts = repo / "scripts"
-    scripts.mkdir()
-    (scripts / "build-zip.sh").write_text("#!/bin/sh\n", encoding="utf-8")
+    _git(repo, "remote", "add", "origin", "git@github.com:example/proj.git")
+    return repo
+
+
+def _release_assets_command(repo: Path, script: str) -> None:
+    command = repo / "bin" / "build-release-assets"
+    command.parent.mkdir(exist_ok=True)
+    command.write_text(script, encoding="utf-8")
+    command.chmod(0o755)
+
+
+def _recording_gh(tmp_path: Path) -> tuple[dict[str, str], Path]:
+    log = tmp_path / "gh.log"
+    env = fake_binary_on_path(tmp_path, "gh", '#!/bin/sh\necho "$@" >> "$GH_LOG"\n')
+    return env | {"GH_LOG": str(log)}, log
+
+
+def test_plan_release_reports_the_release_assets_command(tmp_path: Path) -> None:
+    repo = _init_repo(tmp_path / "proj")
+    _release_assets_command(repo, "#!/bin/sh\n")
     (repo / "CHANGELOG.md").write_text(CHANGELOG, encoding="utf-8")
 
     result = _ship(repo, "plan", "release")
 
     assert result.returncode == 0, result.stderr
     plan = json.loads(result.stdout)
-    assert plan["build"]["command"] == "scripts/build-zip.sh"
+    assert plan["build"] == {
+        "command": "bin/build-release-assets",
+        "directory": "release-assets",
+    }
 
 
-def test_plan_release_detects_root_build_release_zip_script(tmp_path: Path) -> None:
-    repo = _init_repo(tmp_path / "proj")
-    (repo / "build-release-zip.sh").write_text("#!/bin/sh\n", encoding="utf-8")
-    (repo / "CHANGELOG.md").write_text(CHANGELOG, encoding="utf-8")
-
-    result = _ship(repo, "plan", "release")
-
-    assert result.returncode == 0, result.stderr
-    plan = json.loads(result.stdout)
-    assert plan["build"]["command"] == "build-release-zip.sh"
-
-
-def test_plan_release_detects_make_zip_target(tmp_path: Path) -> None:
-    repo = _init_repo(tmp_path / "proj")
-    (repo / "Makefile").write_text("zip:\n\techo zip\n", encoding="utf-8")
-    (repo / "CHANGELOG.md").write_text(CHANGELOG, encoding="utf-8")
-
-    result = _ship(repo, "plan", "release")
-
-    assert result.returncode == 0, result.stderr
-    plan = json.loads(result.stdout)
-    assert plan["build"]["command"] == "make zip"
-
-
-def test_plan_release_detects_npm_zip_script(tmp_path: Path) -> None:
-    repo = _init_repo(tmp_path / "proj")
-    (repo / "package.json").write_text(
-        '{"version": "0.1.0", "scripts": {"build:zip": "true"}}\n',
-        encoding="utf-8",
+def test_apply_assets_attaches_every_file_the_command_leaves(tmp_path: Path) -> None:
+    repo = _github_repo(tmp_path)
+    _release_assets_command(
+        repo,
+        "#!/bin/sh\n"
+        "echo pdf > release-assets/book.pdf\n"
+        "echo epub > release-assets/book.epub\n",
     )
-    (repo / "CHANGELOG.md").write_text(CHANGELOG, encoding="utf-8")
+    stale = repo / "release-assets" / "old.zip"
+    stale.parent.mkdir()
+    stale.write_text("from an earlier build", encoding="utf-8")
+    env, log = _recording_gh(tmp_path)
 
-    result = _ship(repo, "plan", "release")
+    result = _ship(repo, "apply", "assets", "--version", "0.2.0", env=env)
 
     assert result.returncode == 0, result.stderr
-    plan = json.loads(result.stdout)
-    assert plan["build"]["command"] == "npm run build:zip"
+    assert result.stdout.startswith("uploaded")
+    recorded = log.read_text(encoding="utf-8")
+    assert "release upload v0.2.0" in recorded
+    assert "book.epub" in recorded
+    assert "book.pdf" in recorded
+    assert "old.zip" not in recorded
+    assert not stale.exists()
+
+
+def test_apply_assets_refuses_to_empty_tracked_files(tmp_path: Path) -> None:
+    repo = _github_repo(tmp_path)
+    marker = tmp_path / "ran"
+    _release_assets_command(repo, f"#!/bin/sh\ntouch {marker}\n")
+    tracked = repo / "release-assets" / "kept.txt"
+    tracked.parent.mkdir()
+    tracked.write_text("committed", encoding="utf-8")
+    _git(repo, "add", "release-assets/kept.txt")
+    _git(repo, "commit", "-m", "Track a file in release-assets")
+    env, log = _recording_gh(tmp_path)
+
+    result = _ship(repo, "apply", "assets", "--version", "0.2.0", env=env)
+
+    assert result.returncode != 0
+    assert "release-assets" in result.stderr
+    assert tracked.read_text(encoding="utf-8") == "committed"
+    assert not marker.exists()
+    assert not log.exists()
+
+
+def test_apply_assets_uploads_nothing_when_the_command_fails(tmp_path: Path) -> None:
+    repo = _github_repo(tmp_path)
+    _release_assets_command(
+        repo, "#!/bin/sh\necho half > release-assets/half.zip\nexit 3\n"
+    )
+    env, log = _recording_gh(tmp_path)
+
+    result = _ship(repo, "apply", "assets", "--version", "0.2.0", env=env)
+
+    assert result.returncode != 0
+    assert "bin/build-release-assets" in result.stderr
+    assert not log.exists()
+
+
+def test_apply_assets_fails_when_the_command_leaves_nothing(tmp_path: Path) -> None:
+    repo = _github_repo(tmp_path)
+    _release_assets_command(repo, "#!/bin/sh\n")
+    env, log = _recording_gh(tmp_path)
+
+    result = _ship(repo, "apply", "assets", "--version", "0.2.0", env=env)
+
+    assert result.returncode != 0
+    assert "release-assets" in result.stderr
+    assert not log.exists()
+
+
+def test_apply_assets_refuses_a_directory_in_release_assets(tmp_path: Path) -> None:
+    repo = _github_repo(tmp_path)
+    _release_assets_command(
+        repo, "#!/bin/sh\nmkdir release-assets/nested\necho x > release-assets/a.zip\n"
+    )
+    env, log = _recording_gh(tmp_path)
+
+    result = _ship(repo, "apply", "assets", "--version", "0.2.0", env=env)
+
+    assert result.returncode != 0
+    assert "nested" in result.stderr
+    assert not log.exists()
+
+
+WORDPRESS_PLUGIN = """<?php
+/**
+ * Plugin Name:       Demo
+ * Version:           0.1.0
+ * Requires PHP:      8.3
+ */
+
+// Version: not a header, just a comment further down.
+"""
+
+
+def test_apply_bump_writes_a_wordpress_plugin_header(tmp_path: Path) -> None:
+    repo = _init_repo(tmp_path / "proj")
+    (repo / "demo.php").write_text(WORDPRESS_PLUGIN, encoding="utf-8")
+    (repo / "helpers.php").write_text("<?php\n// Version: 9.9.9\n", encoding="utf-8")
+    (repo / "CHANGELOG.md").write_text(CHANGELOG, encoding="utf-8")
+    _git(repo, "add", ".")
+    _git(repo, "commit", "-m", "Add plugin")
+
+    plan = json.loads(_ship(repo, "plan", "release").stdout)
+    result = _ship(repo, "apply", "bump", "--version", "0.2.0")
+
+    assert plan["version_files"] == ["demo.php:0.1.0"]
+    assert result.returncode == 0, result.stderr
+    assert (repo / "demo.php").read_text(encoding="utf-8") == WORDPRESS_PLUGIN.replace(
+        " * Version:           0.1.0", " * Version:           0.2.0"
+    )
+    assert (repo / "helpers.php").read_text(encoding="utf-8") == (
+        "<?php\n// Version: 9.9.9\n"
+    )
+
+
+def test_apply_bump_writes_the_cargo_package_version(tmp_path: Path) -> None:
+    repo = _init_repo(tmp_path / "proj")
+    cargo = (
+        "[package]\n"
+        'name = "demo"\n'
+        'version = "0.1.0"\n'
+        "\n"
+        "[dependencies.serde]\n"
+        'version = "0.1.0"\n'
+    )
+    (repo / "Cargo.toml").write_text(cargo, encoding="utf-8")
+    (repo / "CHANGELOG.md").write_text(CHANGELOG, encoding="utf-8")
+    _git(repo, "add", ".")
+    _git(repo, "commit", "-m", "Add crate")
+
+    plan = json.loads(_ship(repo, "plan", "release").stdout)
+    result = _ship(repo, "apply", "bump", "--version", "0.2.0")
+
+    assert plan["version_files"] == ["Cargo.toml:0.1.0"]
+    assert result.returncode == 0, result.stderr
+    assert (repo / "Cargo.toml").read_text(encoding="utf-8") == cargo.replace(
+        'name = "demo"\nversion = "0.1.0"', 'name = "demo"\nversion = "0.2.0"'
+    )
+
+
+def test_apply_bump_writes_a_version_file(tmp_path: Path) -> None:
+    repo = _init_repo(tmp_path / "proj")
+    (repo / "VERSION").write_text("0.1.0\n", encoding="utf-8")
+    (repo / "CHANGELOG.md").write_text(CHANGELOG, encoding="utf-8")
+    _git(repo, "add", ".")
+    _git(repo, "commit", "-m", "Add version file")
+
+    plan = json.loads(_ship(repo, "plan", "release").stdout)
+    result = _ship(repo, "apply", "bump", "--version", "0.2.0")
+
+    assert plan["version_files"] == ["VERSION:0.1.0"]
+    assert result.returncode == 0, result.stderr
+    assert (repo / "VERSION").read_text(encoding="utf-8") == "0.2.0\n"
 
 
 def test_apply_bump_writes_version_and_promotes_changelog(tmp_path: Path) -> None:
@@ -564,37 +702,6 @@ def test_apply_publish_creates_github_release(tmp_path: Path) -> None:
     assert "released" in result.stdout
     recorded = log.read_text(encoding="utf-8")
     assert "release create v0.2.0" in recorded
-
-
-def test_apply_publish_uploads_asset_when_release_exists(tmp_path: Path) -> None:
-    repo = _init_repo(tmp_path / "proj")
-    asset = repo / "proj.zip"
-    asset.write_text("zip", encoding="utf-8")
-    _git(repo, "remote", "add", "origin", "https://github.com/example/proj.git")
-    log = tmp_path / "gh.log"
-    env = fake_binary_on_path(
-        tmp_path,
-        "gh",
-        "#!/bin/sh\n"
-        'echo "$@" >> "$GH_LOG"\n'
-        'if [ "$1" = release ] && [ "$2" = view ]; then exit 0; fi\n',
-    )
-
-    result = _ship(
-        repo,
-        "apply",
-        "publish",
-        "--version",
-        "0.2.0",
-        "--asset",
-        str(asset),
-        env=env | {"GH_LOG": str(log)},
-    )
-
-    assert result.returncode == 0, result.stderr
-    assert "uploaded" in result.stdout
-    recorded = log.read_text(encoding="utf-8")
-    assert "release upload v0.2.0" in recorded
 
 
 def test_apply_bump_ignores_a_nested_version_key(tmp_path: Path) -> None:
@@ -841,7 +948,7 @@ def test_release_follows_push_after_bump() -> None:
         f" what carries the commit before the tag is cut (ADR-0177). See"
         f" {STANDARD}."
     )
-    for verb in ("apply bump", "apply tag", "apply publish"):
+    for verb in ("apply bump", "apply tag", "apply publish", "apply assets"):
         assert verb in text, (
             f"{body}: the body reaches `ship.py {verb}` rather than doing that"
             f" step in prose. Every deterministic step lives behind the"

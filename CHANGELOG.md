@@ -6,7 +6,11 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ### Added
 
-- `/release` also recognises `build-release-zip.sh` at the repository root as the archive build command.
+- `/release` also bumps the version in `Cargo.toml`, in a WordPress plugin header and in a `VERSION` file.
+
+### Changed
+
+- `/release` attaches release assets by one convention for every kind of Project: an executable `bin/build-release-assets`, in any language, writes the files to `release-assets/`. The release empties that directory, runs the command and attaches every file it leaves there, and refuses to empty it when git tracks a file in it. Build commands are no longer guessed from other names (`scripts/build-zip.sh`, `make zip`, `npm run zip` and the like).
 
 ## [0.40.0] – 2026-10-06
 

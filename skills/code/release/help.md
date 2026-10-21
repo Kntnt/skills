@@ -10,9 +10,9 @@ release - publish a version from the default branch
 
 ## DESCRIPTION
 
-`release` turns `[Unreleased]` into a published version from the default branch. It reconciles regardless of the working tree and promotes the changelog under the current date, updates the files that carry the version, commits and pushes through the `push` Skill, creates and pushes an annotated tag, and publishes a GitHub release from the promoted changelog section.
+`release` turns `[Unreleased]` into a published version from the default branch. It reconciles regardless of the working tree and promotes the changelog under the current date, updates the file that carries the version (`package.json`, `composer.json`, `pyproject.toml`, `Cargo.toml`, `.claude-plugin/plugin.json`, a WordPress plugin header, or a `VERSION` file; a Project with none of these is versioned by its tag alone), commits and pushes through the `push` Skill, creates and pushes an annotated tag, and publishes a GitHub release from the promoted changelog section.
 
-If the Project provides a conventional archive build, the resulting archive is attached to the release. The plan, changelog diff, selected version, and build command are shown before anything is written unless `--yes` is present.
+If the Project has an executable `bin/build-release-assets`, written in any language, the release empties `release-assets/`, runs it, and attaches every file it leaves there. A Project without it attaches nothing. The plan, changelog diff, selected version, and build command are shown before anything is written unless `--yes` is present.
 
 The displayed plan includes the complete changelog commit inventory; a request to see every commit is answered by re-running the plan with its full-inventory option.
 
@@ -36,7 +36,7 @@ Publish this exact semantic version.
 
 **--no-build**
 
-Skip the archive even when the Project has a build command.
+Skip the release assets even when the Project has `bin/build-release-assets`.
 
 **--yes**
 
@@ -50,6 +50,8 @@ A branch other than the default branch, an empty `[Unreleased]`, or a version th
 
 If `gh` is unavailable or the remote is not GitHub, the tag is pushed and the Skill reports that the GitHub release step was skipped. The rest of the release remains complete.
 
+If git tracks a file in `release-assets/`, the release refuses to empty that directory and attaches nothing; the same holds when `bin/build-release-assets` fails or leaves nothing there. The published release then stands without assets.
+
 ## INVOCATION ENVELOPE
 
 Every form above ends with [**--** *INSTRUCTION*]. The first standalone, unquoted `--` token is the reserved separator: everything before it is the Formal Invocation and everything after it is a Contextual Instruction, natural-language guidance that may clarify or narrow choices this Skill leaves open but cannot contradict the formal input, widen the Skill, or disable a required gate.
@@ -60,7 +62,7 @@ That contract belongs to the collection rather than to this page, and it is stat
 
 **Binaries**
 
-`git` and `uv` on `PATH`. `gh` is required only to publish the GitHub release and attach an archive.
+`git` and `uv` on `PATH`. `gh` is required only to publish the GitHub release and attach its assets.
 
 **Skills**
 
