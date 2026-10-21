@@ -28,6 +28,7 @@ BUILD_SCRIPTS = (
     "scripts/build-zip.sh",
     "scripts/build-release.sh",
     "scripts/package.sh",
+    "build-release-zip.sh",
 )
 MAKE_TARGETS = ("zip", "dist", "archive", "release-zip")
 NPM_SCRIPTS = ("zip", "build:zip", "archive")

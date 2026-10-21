@@ -429,6 +429,18 @@ def test_plan_release_detects_zip_script(tmp_path: Path) -> None:
     assert plan["build"]["command"] == "scripts/build-zip.sh"
 
 
+def test_plan_release_detects_root_build_release_zip_script(tmp_path: Path) -> None:
+    repo = _init_repo(tmp_path / "proj")
+    (repo / "build-release-zip.sh").write_text("#!/bin/sh\n", encoding="utf-8")
+    (repo / "CHANGELOG.md").write_text(CHANGELOG, encoding="utf-8")
+
+    result = _ship(repo, "plan", "release")
+
+    assert result.returncode == 0, result.stderr
+    plan = json.loads(result.stdout)
+    assert plan["build"]["command"] == "build-release-zip.sh"
+
+
 def test_plan_release_detects_make_zip_target(tmp_path: Path) -> None:
     repo = _init_repo(tmp_path / "proj")
     (repo / "Makefile").write_text("zip:\n\techo zip\n", encoding="utf-8")

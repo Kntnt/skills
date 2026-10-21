@@ -4,6 +4,10 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ## [Unreleased]
 
+### Added
+
+- `/release` also recognises `build-release-zip.sh` at the repository root as the archive build command.
+
 ## [0.40.0] – 2026-10-06
 
 ### Removed
