@@ -4,6 +4,10 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ## [Unreleased]
 
+### Changed
+
+- `/release` builds the release assets before anything is published and creates the GitHub release with its notes and every asset at once, so a release never stands without its files. A failing build publishes nothing: the tag stays local and no release is created.
+
 ## [0.41.0] – 2026-10-21
 
 ### Added

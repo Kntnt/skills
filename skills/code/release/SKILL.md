@@ -20,7 +20,7 @@ Run `uv run "$HERE/scripts/invoke.py"` — `$HERE` is the directory that holds t
 
 ## Arguments
 
-The operand is the version to ship — `X.Y.Z` exactly, or `minor` or `major` as the bump to apply — and step 4 says what its absence means. `--no-build` skips the release assets step 10 would build and attach; `--yes` answers the wait in step 5. `gh` is required only for the GitHub release step.
+The operand is the version to ship — `X.Y.Z` exactly, or `minor` or `major` as the bump to apply — and step 4 says what its absence means. `--no-build` makes step 9 build and attach no release assets; `--yes` answers the wait in step 5. `gh` is required only for the GitHub release step.
 
 ## Steps
 
@@ -31,6 +31,5 @@ The operand is the version to ship — `X.Y.Z` exactly, or `minor` or `major` as
 5. Show the plan, the changelog diff, the version, and the build command if any. If the user asks to see every commit, re-run `plan --full release` and show that plan. Wait unless `--yes`. Done when the user confirms or `--yes` is set.
 6. Run `uv run "$LIBRARY/scripts/ship.py" apply bump --version=X.Y.Z`. Done when stdout is the version.
 7. Follow `$HERE/../push/SKILL.md` with the Formal Invocation `--yes "Release X.Y.Z: <summary>"`. Summary is a short comma-separated reading of the changelog highlights. If the outer Contextual Instruction contains guidance relevant to push, append only that guidance after an explicit `--`; otherwise pass no Contextual Instruction. Done when stdout contains `pushed`.
-8. Run `uv run "$LIBRARY/scripts/ship.py" apply tag --version=X.Y.Z`. Done when stdout contains the tag.
-9. Run `uv run "$LIBRARY/scripts/ship.py" apply publish --version=X.Y.Z`. If it fails because `gh` is missing or origin is not GitHub, say the tag is pushed and stop after reporting that. Done when stdout contains `released`, or that report is given.
-10. If the plan has `build` and `--no-build` was not given: run `uv run "$LIBRARY/scripts/ship.py" apply assets --version=X.Y.Z`, which empties `release-assets/`, runs `bin/build-release-assets` and attaches every file it leaves there. Done when stdout starts with `uploaded`, or the plan has no `build`.
+8. Run `uv run "$LIBRARY/scripts/ship.py" apply tag --version=X.Y.Z`, which tags HEAD locally. Done when stdout contains the tag.
+9. Run `uv run "$LIBRARY/scripts/ship.py" apply publish --version=X.Y.Z`, adding `--no-build` when the user gave it. It builds the release assets when the Project has `bin/build-release-assets`, pushes the tag, and creates the GitHub release with its notes and every asset in one step. If it fails because `gh` is missing or origin is not GitHub, say the tag is pushed and stop after reporting that. On any other failure, show the error, which says whether the tag left the machine, and stop. Done when stdout starts with `released`, or that report is given.

@@ -1,6 +1,6 @@
 {
   "origin": "Kntnt/skills",
-  "manager_digest": "89f729170ddfaf36e9f22c55b98fe5673ebebc1ca8007b8e508b23613d7f7b65",
+  "manager_digest": "7f4d84dab4208a258f1828a115de2cc3033d40b717f9d3a4032d343ba790b7c7",
   "skills": [
     {
       "name": "agents-md",
@@ -106,7 +106,7 @@
       "name": "release",
       "category": "code",
       "description": "Ship a version — changelog, bump, push, tag, and GitHub release.",
-      "digest": "a5ce5d490ce18d67a68c491ad6f1814350cbddb74ef851f215db2b55d4f38169",
+      "digest": "1bedac8f1ed2508f3b3573bf3b089b7f369238b7f60b5de34e9c036c145935b3",
       "binaries": [
         "git",
         "uv"

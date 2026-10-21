@@ -415,10 +415,45 @@ def test_plan_commit_dirty_tree_keeps_complete_inventory(tmp_path: Path) -> None
     assert plan["commit_count"] == len(expected)
 
 
-def _github_repo(tmp_path: Path) -> Path:
+RELEASED_CHANGELOG = """# Changelog
+
+## [Unreleased]
+
+## [0.2.0] – 2026-02-02
+
+### Added
+
+- A shipped thing.
+
+## [0.1.0] – 2026-01-01
+
+### Added
+
+- An older thing.
+"""
+
+
+def _github_repo(tmp_path: Path) -> tuple[Path, Path]:
+    """Return a released Project on a GitHub origin, and where its pushes land.
+
+    The origin reads as GitHub, which is what the engine checks before it calls
+    `gh`, while its push URL is a local bare repository, so a test can see what
+    reached the remote without a network.
+    """
+
     repo = _init_repo(tmp_path / "proj")
+    (repo / "CHANGELOG.md").write_text(RELEASED_CHANGELOG, encoding="utf-8")
+    _git(repo, "add", "CHANGELOG.md")
+    _git(repo, "commit", "-m", "Release 0.2.0")
+    remote = _bare_remote(tmp_path)
     _git(repo, "remote", "add", "origin", "git@github.com:example/proj.git")
-    return repo
+    _git(repo, "remote", "set-url", "--push", "origin", str(remote))
+    _git(repo, "push", "origin", "main")
+    return repo, remote
+
+
+def _tag_locally(repo: Path, version: str = "0.2.0") -> None:
+    _git(repo, "tag", "-a", f"v{version}", "-m", f"v{version}")
 
 
 def _release_assets_command(repo: Path, script: str) -> None:
@@ -426,12 +461,33 @@ def _release_assets_command(repo: Path, script: str) -> None:
     command.parent.mkdir(exist_ok=True)
     command.write_text(script, encoding="utf-8")
     command.chmod(0o755)
+    _git(repo, "add", "bin/build-release-assets")
+    _git(repo, "commit", "-m", "Build release assets")
 
 
 def _recording_gh(tmp_path: Path) -> tuple[dict[str, str], Path]:
+    """Stand in for gh, recording each call's arguments as one record."""
+
     log = tmp_path / "gh.log"
-    env = fake_binary_on_path(tmp_path, "gh", '#!/bin/sh\necho "$@" >> "$GH_LOG"\n')
+    env = fake_binary_on_path(
+        tmp_path,
+        "gh",
+        '#!/bin/sh\nprintf \'%s\\037\' "$@" >> "$GH_LOG"\nprintf \'\\036\' >> "$GH_LOG"\n',
+    )
     return env | {"GH_LOG": str(log)}, log
+
+
+def _gh_calls(log: Path) -> list[list[str]]:
+    """Return every recorded gh call as its list of arguments."""
+
+    if not log.exists():
+        return []
+    records = log.read_text(encoding="utf-8").split("\036")[:-1]
+    return [record.split("\037")[:-1] for record in records]
+
+
+def _remote_has_tag(remote: Path, tag: str = "v0.2.0") -> bool:
+    return _git(remote, "tag", "-l", tag).stdout.strip() == tag
 
 
 def test_plan_release_reports_the_release_assets_command(tmp_path: Path) -> None:
@@ -449,33 +505,133 @@ def test_plan_release_reports_the_release_assets_command(tmp_path: Path) -> None
     }
 
 
-def test_apply_assets_attaches_every_file_the_command_leaves(tmp_path: Path) -> None:
-    repo = _github_repo(tmp_path)
+def test_apply_tag_creates_the_tag_without_pushing_it(tmp_path: Path) -> None:
+    repo, remote = _github_repo(tmp_path)
+
+    result = _ship(repo, "apply", "tag", "--version", "0.2.0")
+
+    assert result.returncode == 0, result.stderr
+    assert "v0.2.0" in result.stdout
+    assert _git(repo, "tag", "-l", "v0.2.0").stdout.strip() == "v0.2.0"
+    assert not _remote_has_tag(remote)
+
+
+def test_apply_publish_creates_the_release_with_notes_and_every_asset_at_once(
+    tmp_path: Path,
+) -> None:
+    repo, remote = _github_repo(tmp_path)
+    # The build sees HEAD carrying the version's tag, which is what lets a
+    # build check the Project's version against it.
     _release_assets_command(
         repo,
         "#!/bin/sh\n"
+        "git describe --exact-match --tags HEAD > release-assets/tag.txt\n"
         "echo pdf > release-assets/book.pdf\n"
         "echo epub > release-assets/book.epub\n",
     )
     stale = repo / "release-assets" / "old.zip"
     stale.parent.mkdir()
     stale.write_text("from an earlier build", encoding="utf-8")
+    _tag_locally(repo)
     env, log = _recording_gh(tmp_path)
 
-    result = _ship(repo, "apply", "assets", "--version", "0.2.0", env=env)
+    result = _ship(repo, "apply", "publish", "--version", "0.2.0", env=env)
 
     assert result.returncode == 0, result.stderr
-    assert result.stdout.startswith("uploaded")
-    recorded = log.read_text(encoding="utf-8")
-    assert "release upload v0.2.0" in recorded
-    assert "book.epub" in recorded
-    assert "book.pdf" in recorded
-    assert "old.zip" not in recorded
+    assert result.stdout.startswith("released v0.2.0")
+    calls = _gh_calls(log)
+    assert len(calls) == 1
+    call = calls[0]
+    assert call[:3] == ["release", "create", "v0.2.0"]
+    assert "--verify-tag" in call
+    notes = call[call.index("--notes") + 1]
+    assert "- A shipped thing." in notes
+    assert "## Added" in notes
+    assert "An older thing" not in notes
+    attached = [Path(arg).name for arg in call if Path(arg).is_absolute()]
+    assert attached == ["book.epub", "book.pdf", "tag.txt"]
+    assert (repo / "release-assets" / "tag.txt").read_text().strip() == "v0.2.0"
     assert not stale.exists()
+    assert _remote_has_tag(remote)
 
 
-def test_apply_assets_refuses_to_empty_tracked_files(tmp_path: Path) -> None:
-    repo = _github_repo(tmp_path)
+def test_apply_publish_without_a_build_attaches_no_stale_asset(
+    tmp_path: Path,
+) -> None:
+    repo, remote = _github_repo(tmp_path)
+    stale = repo / "release-assets" / "old.zip"
+    stale.parent.mkdir()
+    stale.write_text("from a build by hand", encoding="utf-8")
+    _tag_locally(repo)
+    env, log = _recording_gh(tmp_path)
+
+    result = _ship(repo, "apply", "publish", "--version", "0.2.0", env=env)
+
+    assert result.returncode == 0, result.stderr
+    calls = _gh_calls(log)
+    assert len(calls) == 1
+    assert "old.zip" not in "".join(calls[0])
+    assert not any(Path(arg).is_absolute() for arg in calls[0])
+    assert stale.exists()
+    assert _remote_has_tag(remote)
+
+
+def test_apply_publish_no_build_neither_builds_nor_attaches(tmp_path: Path) -> None:
+    repo, remote = _github_repo(tmp_path)
+    marker = tmp_path / "ran"
+    _release_assets_command(repo, f"#!/bin/sh\ntouch {marker}\n")
+    stale = repo / "release-assets" / "old.zip"
+    stale.parent.mkdir()
+    stale.write_text("from a build by hand", encoding="utf-8")
+    _tag_locally(repo)
+    env, log = _recording_gh(tmp_path)
+
+    result = _ship(
+        repo, "apply", "publish", "--no-build", "--version", "0.2.0", env=env
+    )
+
+    assert result.returncode == 0, result.stderr
+    assert not marker.exists()
+    calls = _gh_calls(log)
+    assert len(calls) == 1
+    assert not any(Path(arg).is_absolute() for arg in calls[0])
+    assert stale.exists()
+    assert _remote_has_tag(remote)
+
+
+def test_apply_publish_publishes_nothing_when_the_build_fails(tmp_path: Path) -> None:
+    repo, remote = _github_repo(tmp_path)
+    _release_assets_command(
+        repo, "#!/bin/sh\necho half > release-assets/half.zip\nexit 3\n"
+    )
+    _tag_locally(repo)
+    env, log = _recording_gh(tmp_path)
+
+    result = _ship(repo, "apply", "publish", "--version", "0.2.0", env=env)
+
+    assert result.returncode != 0
+    assert "bin/build-release-assets" in result.stderr
+    assert "locally" in result.stderr
+    assert not log.exists()
+    assert not _remote_has_tag(remote)
+    assert _git(repo, "tag", "-l", "v0.2.0").stdout.strip() == "v0.2.0"
+
+
+def test_apply_publish_reports_the_pushed_tag_when_gh_fails(tmp_path: Path) -> None:
+    repo, remote = _github_repo(tmp_path)
+    _tag_locally(repo)
+    env = fake_binary_on_path(tmp_path, "gh", "#!/bin/sh\necho refused >&2\nexit 1\n")
+
+    result = _ship(repo, "apply", "publish", "--version", "0.2.0", env=env)
+
+    assert result.returncode != 0
+    assert "refused" in result.stderr
+    assert "pushed without a GitHub release" in result.stderr
+    assert _remote_has_tag(remote)
+
+
+def test_apply_publish_refuses_to_empty_tracked_files(tmp_path: Path) -> None:
+    repo, remote = _github_repo(tmp_path)
     marker = tmp_path / "ran"
     _release_assets_command(repo, f"#!/bin/sh\ntouch {marker}\n")
     tracked = repo / "release-assets" / "kept.txt"
@@ -483,55 +639,93 @@ def test_apply_assets_refuses_to_empty_tracked_files(tmp_path: Path) -> None:
     tracked.write_text("committed", encoding="utf-8")
     _git(repo, "add", "release-assets/kept.txt")
     _git(repo, "commit", "-m", "Track a file in release-assets")
+    _tag_locally(repo)
     env, log = _recording_gh(tmp_path)
 
-    result = _ship(repo, "apply", "assets", "--version", "0.2.0", env=env)
+    result = _ship(repo, "apply", "publish", "--version", "0.2.0", env=env)
 
     assert result.returncode != 0
     assert "release-assets" in result.stderr
     assert tracked.read_text(encoding="utf-8") == "committed"
     assert not marker.exists()
     assert not log.exists()
+    assert not _remote_has_tag(remote)
 
 
-def test_apply_assets_uploads_nothing_when_the_command_fails(tmp_path: Path) -> None:
-    repo = _github_repo(tmp_path)
-    _release_assets_command(
-        repo, "#!/bin/sh\necho half > release-assets/half.zip\nexit 3\n"
-    )
-    env, log = _recording_gh(tmp_path)
-
-    result = _ship(repo, "apply", "assets", "--version", "0.2.0", env=env)
-
-    assert result.returncode != 0
-    assert "bin/build-release-assets" in result.stderr
-    assert not log.exists()
-
-
-def test_apply_assets_fails_when_the_command_leaves_nothing(tmp_path: Path) -> None:
-    repo = _github_repo(tmp_path)
+def test_apply_publish_fails_when_the_command_leaves_nothing(tmp_path: Path) -> None:
+    repo, remote = _github_repo(tmp_path)
     _release_assets_command(repo, "#!/bin/sh\n")
+    _tag_locally(repo)
     env, log = _recording_gh(tmp_path)
 
-    result = _ship(repo, "apply", "assets", "--version", "0.2.0", env=env)
+    result = _ship(repo, "apply", "publish", "--version", "0.2.0", env=env)
 
     assert result.returncode != 0
     assert "release-assets" in result.stderr
     assert not log.exists()
+    assert not _remote_has_tag(remote)
 
 
-def test_apply_assets_refuses_a_directory_in_release_assets(tmp_path: Path) -> None:
-    repo = _github_repo(tmp_path)
+def test_apply_publish_refuses_a_directory_in_release_assets(tmp_path: Path) -> None:
+    repo, remote = _github_repo(tmp_path)
     _release_assets_command(
         repo, "#!/bin/sh\nmkdir release-assets/nested\necho x > release-assets/a.zip\n"
     )
+    _tag_locally(repo)
     env, log = _recording_gh(tmp_path)
 
-    result = _ship(repo, "apply", "assets", "--version", "0.2.0", env=env)
+    result = _ship(repo, "apply", "publish", "--version", "0.2.0", env=env)
 
     assert result.returncode != 0
     assert "nested" in result.stderr
     assert not log.exists()
+    assert not _remote_has_tag(remote)
+
+
+def test_apply_publish_refuses_a_tag_that_is_not_on_head(tmp_path: Path) -> None:
+    repo, remote = _github_repo(tmp_path)
+    _tag_locally(repo)
+    (repo / "README.md").write_text("fixed after tagging\n", encoding="utf-8")
+    _git(repo, "commit", "-am", "Fix after tagging")
+    env, log = _recording_gh(tmp_path)
+
+    result = _ship(repo, "apply", "publish", "--version", "0.2.0", env=env)
+
+    assert result.returncode != 0
+    assert "HEAD" in result.stderr
+    assert not log.exists()
+    assert not _remote_has_tag(remote)
+
+
+def test_apply_publish_refuses_without_the_tag(tmp_path: Path) -> None:
+    repo, remote = _github_repo(tmp_path)
+    env, log = _recording_gh(tmp_path)
+
+    result = _ship(repo, "apply", "publish", "--version", "0.2.0", env=env)
+
+    assert result.returncode != 0
+    assert "no tag v0.2.0" in result.stderr
+    assert not log.exists()
+    assert not _remote_has_tag(remote)
+
+
+def test_apply_publish_pushes_the_tag_when_origin_is_not_github(
+    tmp_path: Path,
+) -> None:
+    repo, remote = _github_repo(tmp_path)
+    _git(repo, "remote", "set-url", "origin", str(remote))
+    marker = tmp_path / "ran"
+    _release_assets_command(repo, f"#!/bin/sh\ntouch {marker}\n")
+    _tag_locally(repo)
+    env, log = _recording_gh(tmp_path)
+
+    result = _ship(repo, "apply", "publish", "--version", "0.2.0", env=env)
+
+    assert result.returncode != 0
+    assert "not GitHub" in result.stderr
+    assert not marker.exists()
+    assert not log.exists()
+    assert _remote_has_tag(remote)
 
 
 WORDPRESS_PLUGIN = """<?php
@@ -666,44 +860,6 @@ def test_apply_bump_refuses_when_not_on_default_branch(tmp_path: Path) -> None:
     assert "default branch" in result.stderr
 
 
-def test_apply_tag_creates_and_pushes_tag(tmp_path: Path) -> None:
-    repo = _init_repo(tmp_path / "proj")
-    remote = _bare_remote(tmp_path)
-    _git(repo, "remote", "add", "origin", str(remote))
-    _git(repo, "push", "-u", "origin", "main")
-
-    result = _ship(repo, "apply", "tag", "--version", "0.2.0")
-
-    assert result.returncode == 0, result.stderr
-    assert "v0.2.0" in result.stdout
-    assert _git(repo, "tag", "-l", "v0.2.0").stdout.strip() == "v0.2.0"
-    assert _git(remote, "tag", "-l", "v0.2.0").stdout.strip() == "v0.2.0"
-
-
-def test_apply_publish_creates_github_release(tmp_path: Path) -> None:
-    repo = _init_repo(tmp_path / "proj")
-    (repo / "CHANGELOG.md").write_text(CHANGELOG, encoding="utf-8")
-    _git(repo, "add", "CHANGELOG.md")
-    _git(repo, "commit", "-m", "changelog")
-    _git(repo, "remote", "add", "origin", "git@github.com:example/proj.git")
-    log = tmp_path / "gh.log"
-    env = fake_binary_on_path(tmp_path, "gh", '#!/bin/sh\necho "$@" >> "$GH_LOG"\n')
-
-    result = _ship(
-        repo,
-        "apply",
-        "publish",
-        "--version",
-        "0.2.0",
-        env=env | {"GH_LOG": str(log)},
-    )
-
-    assert result.returncode == 0, result.stderr
-    assert "released" in result.stdout
-    recorded = log.read_text(encoding="utf-8")
-    assert "release create v0.2.0" in recorded
-
-
 def test_apply_bump_ignores_a_nested_version_key(tmp_path: Path) -> None:
     repo = _init_repo(tmp_path / "proj")
     (repo / "composer.json").write_text(
@@ -801,50 +957,6 @@ def test_apply_bump_writes_nothing_when_one_file_cannot_be_bumped(
     )
     assert (repo / "composer.json").read_text(encoding="utf-8") == ambiguous
     assert "## [0.2.0]" not in (repo / "CHANGELOG.md").read_text(encoding="utf-8")
-
-
-def test_apply_publish_passes_changelog_notes_with_shifted_headings(
-    tmp_path: Path,
-) -> None:
-    repo = _init_repo(tmp_path / "proj")
-    (repo / "CHANGELOG.md").write_text(
-        "# Changelog\n"
-        "\n"
-        "## [Unreleased]\n"
-        "\n"
-        "## [0.2.0] – 2026-02-02\n"
-        "\n"
-        "### Added\n"
-        "\n"
-        "- A shipped thing.\n"
-        "\n"
-        "## [0.1.0] – 2026-01-01\n"
-        "\n"
-        "### Added\n"
-        "\n"
-        "- An older thing.\n",
-        encoding="utf-8",
-    )
-    _git(repo, "add", "CHANGELOG.md")
-    _git(repo, "commit", "-m", "changelog")
-    _git(repo, "remote", "add", "origin", "git@github.com:example/proj.git")
-    log = tmp_path / "gh.log"
-    env = fake_binary_on_path(tmp_path, "gh", '#!/bin/sh\necho "$@" >> "$GH_LOG"\n')
-
-    result = _ship(
-        repo,
-        "apply",
-        "publish",
-        "--version",
-        "0.2.0",
-        env=env | {"GH_LOG": str(log)},
-    )
-
-    assert result.returncode == 0, result.stderr
-    recorded = log.read_text(encoding="utf-8")
-    assert "- A shipped thing." in recorded
-    assert "## Added" in recorded
-    assert "An older thing" not in recorded
 
 
 def test_plan_commit_reports_a_non_ascii_path_unescaped(tmp_path: Path) -> None:
@@ -948,7 +1060,7 @@ def test_release_follows_push_after_bump() -> None:
         f" what carries the commit before the tag is cut (ADR-0177). See"
         f" {STANDARD}."
     )
-    for verb in ("apply bump", "apply tag", "apply publish", "apply assets"):
+    for verb in ("apply bump", "apply tag", "apply publish"):
         assert verb in text, (
             f"{body}: the body reaches `ship.py {verb}` rather than doing that"
             f" step in prose. Every deterministic step lives behind the"

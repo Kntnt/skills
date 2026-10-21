@@ -649,44 +649,89 @@ def apply_bump(cwd: Path, version: str) -> str:
 
 
 def apply_tag(cwd: Path, version: str) -> str:
-    """Create an annotated tag on HEAD and push it. Return the tag name."""
+    """Create an annotated tag on HEAD, locally. Return the tag name.
+
+    The tag stays local until `apply publish` has built the release assets:
+    a build can then check the Project's version against the tag HEAD carries,
+    and a failed build leaves nothing on the remote to take back.
+    """
 
     tag = _require_version(version)
     if git(cwd, "tag", "-l", tag).strip():
         raise GitError(f"tag {tag} already exists")
     git(cwd, "tag", "-a", tag, "-m", tag)
-    git(cwd, "push", "origin", tag)
     return tag
 
 
-def apply_publish(cwd: Path, version: str) -> str:
-    """Create the GitHub release from the version's changelog section."""
+def apply_publish(cwd: Path, version: str, build: bool = True) -> str:
+    """Build the release assets, push the tag, and create the GitHub release.
+
+    The release is created with its notes and every asset in one `gh` call, so
+    no reader of GitHub ever sees the version without its files. A failed
+    build raises before anything leaves the machine: the tag stays local and
+    no release exists. Without GitHub the tag is still pushed, a Project being
+    versioned by its tag alone, and the missing release is the error.
+    Without *build*, or without `bin/build-release-assets`, the release
+    carries no files, whatever an earlier build left in `release-assets/`.
+    """
 
     tag = _require_version(version)
-    _require_github(cwd)
+    tag_ref = f"refs/tags/{tag}^{{commit}}"
+    if not git_ok(cwd, "rev-parse", "--verify", "--quiet", tag_ref):
+        raise GitError(f"no tag {tag}; create it with apply tag first")
+    # Assets are built from HEAD, so a tag elsewhere would publish files that
+    # were not built from the commit the release names.
+    if git(cwd, "rev-parse", tag_ref) != git(cwd, "rev-parse", "HEAD"):
+        raise GitError(f"tag {tag} does not point at HEAD")
+    unavailable = _github_unavailable(cwd)
+
+    assets: list[Path] = []
+    if build and not unavailable and (cwd / RELEASE_ASSETS_COMMAND).is_file():
+        try:
+            assets = _build_release_assets(cwd)
+        except GitError as exc:
+            raise GitError(
+                f"{exc}; {tag} is tagged locally only and nothing is published"
+            ) from exc
+
+    git(cwd, "push", "origin", tag)
+    if unavailable:
+        raise GitError(f"{unavailable}; {tag} is pushed without a GitHub release")
 
     notes = ""
     changelog = cwd / "CHANGELOG.md"
     if changelog.is_file():
         notes = extract_release_notes(changelog.read_text(encoding="utf-8"), version)
-    _gh(cwd, "release", "create", tag, "--title", tag, "--notes", notes)
-    return "released"
+    try:
+        _gh(
+            cwd,
+            "release",
+            "create",
+            tag,
+            "--verify-tag",
+            "--title",
+            tag,
+            "--notes",
+            notes,
+            *(str(asset) for asset in assets),
+        )
+    except GitError as exc:
+        raise GitError(f"{exc}; {tag} is pushed without a GitHub release") from exc
+    if not assets:
+        return f"released {tag}"
+    return f"released {tag} with " + ", ".join(asset.name for asset in assets)
 
 
-def apply_assets(cwd: Path, version: str) -> str:
-    """Build the release assets and attach them to the published release.
+def _build_release_assets(cwd: Path) -> list[Path]:
+    """Build the release assets afresh and return every file, sorted.
 
-    Empties `release-assets/`, runs `bin/build-release-assets`, and uploads
-    every file it leaves there, so nothing from an earlier build rides along.
-    Refuses before running anything when git tracks a file in that directory:
-    emptying it would then destroy committed work rather than build output.
+    Empties `release-assets/` and runs `bin/build-release-assets`, so nothing
+    from an earlier build rides along. Refuses before running anything when
+    git tracks a file in that directory: emptying it would then destroy
+    committed work rather than build output.
     """
 
-    tag = _require_version(version)
-    _require_github(cwd)
     command = cwd / RELEASE_ASSETS_COMMAND
-    if not command.is_file():
-        raise GitError(f"no {RELEASE_ASSETS_COMMAND}")
     if git(cwd, "ls-files", "--", RELEASE_ASSETS_DIR).strip():
         raise GitError(
             f"{RELEASE_ASSETS_DIR}/ holds files git tracks; refusing to empty it"
@@ -717,18 +762,17 @@ def apply_assets(cwd: Path, version: str) -> str:
         raise GitError(
             f"{RELEASE_ASSETS_COMMAND} left nothing in {RELEASE_ASSETS_DIR}/"
         )
-
-    _gh(cwd, "release", "upload", tag, *(str(entry) for entry in entries), "--clobber")
-    return "uploaded " + ", ".join(entry.name for entry in entries)
+    return entries
 
 
-def _require_github(cwd: Path) -> None:
-    """Raise unless gh is available and origin is on GitHub."""
+def _github_unavailable(cwd: Path) -> str | None:
+    """Return why no GitHub release can be made, or None when one can."""
 
     if not shutil.which("gh"):
-        raise GitError("gh not available")
+        return "gh not available"
     if "github" not in _remote_host(_origin_url(cwd)):
-        raise GitError("origin is not GitHub")
+        return "origin is not GitHub"
+    return None
 
 
 def _origin_url(cwd: Path) -> str:
@@ -778,10 +822,8 @@ def cmd_apply(cwd: Path, args: argparse.Namespace) -> int:
             result = apply_bump(cwd, args.version)
         elif args.mode == "tag":
             result = apply_tag(cwd, args.version)
-        elif args.mode == "publish":
-            result = apply_publish(cwd, args.version)
         else:
-            result = apply_assets(cwd, args.version)
+            result = apply_publish(cwd, args.version, build=not args.no_build)
     except GitError as exc:
         text = str(exc)
         if text == "nothing to commit":
@@ -826,21 +868,19 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     bump.add_argument("--version", required=True)
     add_yes_flag(bump)
 
-    tag = apply_sub.add_parser("tag", help="Tag HEAD and push the tag.")
+    tag = apply_sub.add_parser("tag", help="Tag HEAD locally.")
     tag.add_argument("--version", required=True)
     add_yes_flag(tag)
 
     publish = apply_sub.add_parser(
-        "publish", help="Create or update the GitHub release."
+        "publish",
+        help="Build the release assets, push the tag, and create the GitHub release.",
     )
     publish.add_argument("--version", required=True)
-    add_yes_flag(publish)
-
-    assets = apply_sub.add_parser(
-        "assets", help="Build the release assets and attach them to the release."
+    publish.add_argument(
+        "--no-build", action="store_true", help="Attach no release assets."
     )
-    assets.add_argument("--version", required=True)
-    add_yes_flag(assets)
+    add_yes_flag(publish)
 
     return parser.parse_args(argv)
 
